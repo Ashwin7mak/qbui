@@ -1,0 +1,11 @@
+/* app css master stylesheet */
+/* imports */
+
+@import "colors";
+
+.quickbase-app {
+
+  @import "dashboard";
+  @import "report";
+
+}

@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>Quickbase Home</title>
+
+    <!-- build:css quickbase/assets/realm.css -->
+    <link rel="stylesheet" href="quickbase/assets/css/realm.css"/>
+    <!-- injector:css -->
+    <!-- endinjector -->
+    <!-- endbuild -->
+
+    <!-- build:js quickbase/bower/realm.bower.js -->
+    <script src="bower_components/angular/angular.js"></script>
+    <script src="bower_components/angular-resource/angular-resource.js"></script>
+    <script src="bower_components/angular-ui-router/release/angular-ui-router.js"></script>  <!-- ui-router -->
+    <!-- endbuild -->
+
+    <!-- build:js quickbase/realm.common.js -->
+    <script src="quickbase/common/logger/log.js"></script>
+    <!-- endbuild -->
+
+</head>
+<body  class="quickbase" ng-app="quickbase.realm">
+    <div  class="quickbase-realm" ui-view="realmHomeView"></div>
+
+    <!-- build:js quickbase/realm.js -->
+    <script src="quickbase/realm/realm.modules.js"></script>
+    <script src="quickbase/realm/realm.routes.js"></script>
+    <script src="quickbase/realm/dashboard/realmDashboard.controller.js"></script>
+
+    <!-- injector:js -->
+    <!-- endinjector -->
+    <!-- endbuild -->
+
+</body>
+</html>

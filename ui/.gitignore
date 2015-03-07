@@ -1,0 +1,27 @@
+# gitignore file for the ui folder in the qbui project
+
+# SASS cache files
+.sass-cache/
+
+
+# build support folders
+dist/
+.tmp/
+
+
+# exclude the compass compiled css and sprite images (for now)
+#client/quickbase/assets/css/
+
+
+# exclude express server local configuration
+server/config/environment/*local.js
+
+
+# miscellaneous files to not track
+npm-debug.log
+
+
+# Grunt intermediate storage (http://gruntjs.com/creating-plugins#storing-task-files)
+.grunt
+
+

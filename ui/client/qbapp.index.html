@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>Application Home</title>
+
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/foundation/4.1.2/css/foundation.min.css">
+
+    <!-- build:css quickbase/assets/qbapp.css -->
+    <link rel="stylesheet" href="quickbase/assets/css/app.css"/>
+    <!-- injector:css -->
+    <!-- endinjector -->
+    <!-- endbuild -->
+
+    <!-- build:js quickbase/bower/qbapp.bower.js -->
+    <script src="bower_components/angular/angular.js"></script>
+    <script src="bower_components/angular-resource/angular-resource.js"></script>
+    <script src="bower_components/angular-ui-router/release/angular-ui-router.js"></script>  <!-- ui-router -->
+    <!-- endbuild -->
+
+    <!-- build:js quickbase/qbapp.common.js -->
+    <script src="quickbase/common/logger/log.js"></script>
+    <!-- endbuild -->
+
+</head>
+<body  class="quickbase" ng-app="quickbase.qbapp">
+    <div  class="quickbase-app" ui-view="qbappHomeView"></div>
+
+    <!-- build:js quickbase/qbapp.js -->
+    <script src="quickbase/qbapp/app.modules.js"></script>
+    <script src="quickbase/qbapp/app.routes.js"></script>
+    <script src="quickbase/qbapp/dashboard/appDashboard.controller.js"></script>
+    <script src="quickbase/qbapp/reports/dashboard/reportsDashboard.controller.js"></script>
+    <script src="quickbase/qbapp/reports/dashboard/reportsDashboard.model.js"></script>
+    <script src="quickbase/qbapp/reports/dashboard/reportsDashboard.service.js"></script>
+    <script src="quickbase/qbapp/reports/reportManager/reportManager.controller.js"></script>
+
+    <!-- injector:js -->
+    <!-- endinjector -->
+
+    <!-- endbuild -->
+
+</body>
+</html>

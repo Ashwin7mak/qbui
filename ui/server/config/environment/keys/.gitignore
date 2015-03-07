@@ -1,0 +1,3 @@
+# a folder to hold certs...but do not want any of the folder contents tracked
+*
+!.gitignore
