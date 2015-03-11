@@ -17,32 +17,38 @@ Overview of the UI directory
      │  │    ├── assets
      │  │    │    ├──images
      │  │    │    ├──css                    - compass generated css and sprite images
-     │  │    │    │     
+     │  │    │    │
      │  │    │    ├── _partial1.scss        - scss partial
      │  │    │    ├── _partial2.scss        - scss partial
      │  │    │    ├── _partialN.scss        - scss partial
-     │  │    │    │              
+     │  │    │    │
      │  │    │    ├── app.scss              - scss file for the quickbase app module
      │  │    │    ├── realm.scss            - scss file for the quickbase realm module
      │  │    │    └── <...>.scss
      │  │    │
      │  │    ├── common                     - common shared angular modules
      │  │    │    └──<1..n common modules>  - ie: logger, spinner, etc.
+     │  │    │      └──\test\<1..n common test>  - ie: logger\test, spinner\test, etc.
+     │  │    │          └── <...>.spec.js   - test spec
      │  │    │
      │  │    ├── qbapp                      - a quickbase angular module named 'app'
      │  │    │    ├──assets
      │  │    │    │   ├──images
      │  │    │    │   └──styles
      │  │    │    └──<1..n qbapp modules>   - ie: tables, reports, etc.
+     │  │    │        └──<1..n qbapp test>   - ie: tables\test, reports\test, etc.
+     │  │    │          └── <...>.spec.js   - test spec
      │  │    │
      │  │    ├── realm                      - a quickbase angular module named 'realm'
      │  │    │    ├──assets
      │  │    │    │   ├──images
      │  │    │    │   └──styles
      │  │    │    └──<1..n realm modules>
+     │  │    │      └──<1..n realm test>
+     │  │    │          └── <...>.spec.js   - test specs
      │  │    │
      │  │    └── <...>
-     │  │         
+     │  │
      │  ├── app.index.html                  - entry point html file associated with the angular module named 'app'
      │  ├── realm.index.html                - entry point html file associated with the angular module named 'realm'
      │  └── <...>.index.html
@@ -51,7 +57,7 @@ Overview of the UI directory
      │
     e2e                                     - protractor end to end tests
      │
-    node_modules                            - the application's npm library
+    node_modules                            - the application&#39;s npm library
      │
     server                                  - express Node server
      │  │
@@ -66,7 +72,9 @@ Overview of the UI directory
      │  │
      │  ├── app.js                          - express server start script
      │  └── routes.js                       - express server routes script
-     │
+     │  └── test                            - express server test scripts
+     │       ├── app.spec.js                - express server start script
+     │       └── routes.spec.js
     Gruntfile.js                            - grunt build file for express and angular application
     karma.conf.js                           - karma test configuration file
     bower.json                              - application bower dependency definitions
@@ -91,7 +99,7 @@ Example folder structure of a quickbase Angular module.
          │    ├── realmDashboard.service.js
          │    ├── realmDashboard.html
          │    │
-         │    └── test                                 - test folder for the dashboard component
+         │    └── test                                - test folder for the dashboard component
          │         ├── realmDashboard.controller.spec.js
          │         ├── realmDashboard.directive.spec.js
          │         ├── realmDashboard.model.spec.js
@@ -126,8 +134,7 @@ Example folder structure of a quickbase Angular module.
 The application requires a run-time environment to be defined and configured.  By default, the server will run in local development mode,
 meaning a local configuration file must be defined. As this file is not tracked by git, to run locally, you will need to do the following:
 
-- create an empty file here: <project root>/server/config/environment/local.js
-- copy the following into the local.js and save:
+- copy <project root>/server/config/environment/local.sample.js into the local.js and save:
 
         (function () {
             'use strict';
@@ -167,11 +174,11 @@ meaning a local configuration file must be defined. As this file is not tracked 
 To explicitly set or override the default configuration, add the following run-time environment:
 
         NODE_ENV=<environment>
-        
-        where <environment> == local, development, test or production
-        
 
-A configuration file of the same name exists in your config/environment folder; this file will be used to define your run-time environment and override the default settings. 
+        where <environment> == local, development, test or production
+
+
+A configuration file of the same name exists in your config/environment folder; this file will be used to define your run-time environment and override the default settings.
 
 Notes about the above configuration:
 - SSL support is commented out.  See the section at the bottom of this README for setup instruction.
@@ -272,7 +279,7 @@ A compass configuration file, config.rb, is located at the project root level.  
 
 You can manually compile your styles by running the grunt task: compass-compile
 
-In addition, to automatically compile your styles on a file change, start the grunt task: compass-watch 
+In addition, to automatically compile your styles on a file change, start the grunt task: compass-watch
 
 NOTE:  the CSS files used by the application are always generated by the compass compiler.  Directly manipulating the css will result in your css
 getting overwritten when the compass compiler is invoked.
