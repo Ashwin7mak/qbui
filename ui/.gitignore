@@ -5,7 +5,7 @@
 
 
 # build support folders
-dist/
+/dist/
 .tmp/
 
 

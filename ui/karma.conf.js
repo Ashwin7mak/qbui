@@ -52,6 +52,8 @@ module.exports = function (config) {
             stripPrefix: 'client/'
         },
 
+        reporters: ['progress'],
+        
         // web server port
         port: 8080,
 
