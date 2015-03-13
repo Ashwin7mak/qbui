@@ -1,0 +1,34 @@
+/**
+ * An example of a button module
+ */
+
+%button {
+	background: #111;
+	color: #fff;
+	border: 0;
+	padding: 0.5em 1em;
+}
+
+%button-large {
+	@extend %button;
+	font-size: 1.3em;
+}
+
+%button-primary {
+	@extend %button;
+	background: #27aae2;
+}
+
+%button-primary-large {
+	@extend %button-primary;
+	@extend %button-large;
+}
+
+
+/**
+ * Applying the button
+ */
+
+.download-whitepaper {
+	@extend %button-primary-large;
+}
