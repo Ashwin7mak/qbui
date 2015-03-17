@@ -1,4 +1,4 @@
-describe('Controller: RealmDashboardCtrl', function () {
+describe('Controller: RealmDashboardCtrl', function() {
     'use strict';
     // load the controller's module
     beforeEach(module('realm.dashboard'));
@@ -6,7 +6,7 @@ describe('Controller: RealmDashboardCtrl', function () {
     var RealmDashboardCtrl, scope;
 
     // Initialize the controller and a mock scope
-    beforeEach(inject(function ($controller, $rootScope) {
+    beforeEach(inject(function($controller, $rootScope) {
         scope = $rootScope.$new();
         RealmDashboardCtrl = $controller('RealmDashboardCtrl', {
             $scope: scope
@@ -14,7 +14,7 @@ describe('Controller: RealmDashboardCtrl', function () {
     }));
 
     //placeholder till code is in RealmDashboardCtrl
-    it('should have a test...', function () {
+    it('should have a test...', function() {
         expect(1).toEqual(1);
     });
 });

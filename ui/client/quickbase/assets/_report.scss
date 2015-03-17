@@ -3,30 +3,30 @@
   .report-header {
     margin: 25px;
     .left {
-      float:left;
+      float: left;
       width: 50%;
       padding: 0px 50px;
       p {
         font-size: 12px;
       }
       p.header {
-          font-size: 14px;
-          font-weight: bold;
+        font-size: 14px;
+        font-weight: bold;
       }
     }
 
     .right {
       font-size: 14px;
-      float:left;
+      float: left;
       width: 50%;
       padding: 0px 50px;
       .time {
-        float : left;
+        float: left;
         width: 50%;
         padding: 0px 25px;
       }
       .reminder {
-        float : left;
+        float: left;
         width: 50%;
         padding: 0px 25px;
       }
@@ -35,28 +35,28 @@
   }
 
   .report-content {
-    float:left;
-    clear:left;
+    float: left;
+    clear: left;
     width: 100%;
     padding: 50px 70px;
 
     .grid-table {
-      width:100%;
-      border-bottom-color:#cedcea;
+      width: 100%;
+      border-bottom-color: #cedcea;
       .grid-cell {
         padding: 3px;
         text-align: left;
-         &.header {
+        &.header {
           height: $grid-header-height;
-           background-color: $grid-header-background-color;
-           color: $grid-header-color;
-         }
-         &.data {
-           font-size: 12px;
-           &.currency {
-             text-align:right;
-           }
-         }
+          background-color: $grid-header-background-color;
+          color: $grid-header-color;
+        }
+        &.data {
+          font-size: 12px;
+          &.currency {
+            text-align: right;
+          }
+        }
       }
     }
   }

@@ -1,4 +1,4 @@
-(function () {
+(function() {
     'use strict';
 
     //  define angular modules to be referenced by the apps application
@@ -14,7 +14,7 @@
             'qbapp.reports.dashboard',
             'qbapp.reports.manager'
         ]).
-        config(['$routeProvider', function ($routeProvider, $locationProvider) {
+        config(['$routeProvider', function($routeProvider, $locationProvider) {
             $routeProvider.otherwise({redirectTo: ''});
             $locationProvider.html5Mode(true);
         }]);

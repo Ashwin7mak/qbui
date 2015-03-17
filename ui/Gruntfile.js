@@ -131,6 +131,31 @@ module.exports = function (grunt) {
             }
         },
 
+        jscs: {
+            client: {
+                files:{
+                    src:['<%= quickbase.client.root %>/**/*.js',
+                    ]
+                },
+                options: {
+                    config: "./.jscsrc",
+                    "excludeFiles": ['<%= quickbase.client.root %>/bower_components/**/*.js',
+                                    '<%= quickbase.client.root %>/**/*.spec.js'
+                    ]
+                }
+            },
+            server: {
+                files: {
+                    src:["server/**/*.js"]
+                },
+                options: {
+                    config: "./.jscsrc",
+                    "excludeFiles": ['server/**/*.spec.js'
+                    ]
+                }
+            }
+        },
+
         // Make sure code styles are up to par and there are no obvious mistakes
         jshint: {
             options: {
@@ -744,4 +769,6 @@ module.exports = function (grunt) {
         'test',
         'build'
     ]);
+
+    grunt.loadNpmTasks("grunt-jscs");
 };

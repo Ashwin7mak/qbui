@@ -1,9 +1,9 @@
-(function () {
+(function() {
     'use strict';
 
-    angular.module('qbapp.reports.dashboard').service('ReportsDashboardService', function () {
+    angular.module('qbapp.reports.dashboard').service('ReportsDashboardService', function() {
         var service = {};
-        service.get = function () {
+        service.get = function() {
             var menu = [];
             menu.push({id: 1, name: 'Report 1'});
             menu.push({id: 2, name: 'Report 2'});

@@ -1,15 +1,13 @@
 /* realm application master css stylesheet */
-
 /* imports */
-
 @import "icons";
 
 .quickbase-realm {
 
   .intuit-logo {
-    width:68px;
-    height:20px;
-    background: sprite($icons,intuitLogo) no-repeat;
+    width: 68px;
+    height: 20px;
+    background: sprite($icons, intuitLogo) no-repeat;
   }
 
 }

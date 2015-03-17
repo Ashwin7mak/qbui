@@ -1,8 +1,8 @@
-(function () {
+(function() {
     'use strict';
 
     var reportsApp = angular.module('quickbase.qbapp', ['ui.router', 'qbapp.dashboard', 'qbapp.reports.dashboard', 'qbapp.reports.manager']),
-        reportsAppConfig = reportsApp.config(['$stateProvider', '$urlRouterProvider', function ($stateProvider) {
+        reportsAppConfig = reportsApp.config(['$stateProvider', '$urlRouterProvider', function($stateProvider) {
 
             $stateProvider
                 .state('qbapp', {
@@ -44,7 +44,7 @@
                 });
         }]);
 
-    reportsAppConfig.run(['$state', function ($state) {
+    reportsAppConfig.run(['$state', function($state) {
         $state.transitionTo('qbapp');
     }]);
 

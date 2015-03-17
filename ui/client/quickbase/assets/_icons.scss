@@ -1,4 +1,9 @@
 $icons: sprite-map("images/*.png");
 
-.attach-clip { background: sprite($icons, attach); }
-.intuit-logo { background: sprite($icons, intuitLogo); }
+.attach-clip {
+  background: sprite($icons, attach);
+}
+
+.intuit-logo {
+  background: sprite($icons, intuitLogo);
+}

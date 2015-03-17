@@ -1,8 +1,8 @@
-(function () {
+(function() {
     'use strict';
 
     var reportsApp = angular.module('quickbase.realm', ['ui.router', 'realm.dashboard']),
-        reportsAppConfig = reportsApp.config(['$stateProvider', '$urlRouterProvider', function ($stateProvider) {
+        reportsAppConfig = reportsApp.config(['$stateProvider', '$urlRouterProvider', function($stateProvider) {
 
             $stateProvider
                 .state('home', {
@@ -17,7 +17,7 @@
 
         }]);
 
-    reportsAppConfig.run(['$state', function ($state) {
+    reportsAppConfig.run(['$state', function($state) {
         $state.transitionTo('home');
     }]);
 
