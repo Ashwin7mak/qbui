@@ -14,7 +14,7 @@
 
 
 # exclude express server local configuration
-server/config/environment/*local.js
+server/config/environment/local.js
 
 
 # miscellaneous files to not track

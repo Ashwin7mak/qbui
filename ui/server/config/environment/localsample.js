@@ -8,7 +8,7 @@
     // Use local.js for environment variables that grunt will set when the server starts locally.
     // The local.js should not be tracked by git.
 
-    //var path = require('path');
+    var path = require('path');
 
     module.exports = {
 
@@ -23,15 +23,17 @@
         //},
 
         // allow for override of default ports
-        port    : 9000,
-        sslPort : 9443,
+        port: 9000,
+        sslPort: 9443,
 
         //REST endpoint (protocol,server,port)
         //javaHost: 'https://localhost.intuit.com:8443',
-        javaHost: 'http://localhost.intuit.com:8080',
+        //javaHost: 'http://localhost.intuit.com:8080'
+        javaHost: 'http://pppdc9prd2jx.corp.intuit.net:80',
 
         //Express Server
         //DOMAIN: 'https://localhost.intuit.com:9443'
         DOMAIN  : 'https://localhost.intuit.com:9000'
+
     };
-});
+}());
