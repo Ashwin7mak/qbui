@@ -7,83 +7,97 @@ This project has the files needed to startup the node.js express server in suppo
 
 Overview of the UI directory
 
-    .tmp                                    - temporary output folder used by build  (not tracked by git)
+    ui
      │
-    client                                  - angular UI client code folder
-     │  │
-     │  ├── bower_components                - components downloaded by bower
-     │  ├── quickbase                       - 1..n quickbase angular modules
-     │  │    │
-     │  │    ├── assets
-     │  │    │    ├──images
-     │  │    │    ├──css                    - compass generated css and sprite images
-     │  │    │    │
-     │  │    │    ├── _partial1.scss        - scss partial
-     │  │    │    ├── _partial2.scss        - scss partial
-     │  │    │    ├── _partialN.scss        - scss partial
-     │  │    │    │
-     │  │    │    ├── app.scss              - scss file for the quickbase app module
-     │  │    │    ├── realm.scss            - scss file for the quickbase realm module
-     │  │    │    └── <...>.scss
-     │  │    │
-     │  │    ├── common                     - common shared angular modules
-     │  │    │    └──<1..n common modules>  - ie: logger, spinner, etc.
-     │  │    │      └──\test\<1..n common test>  - ie: logger\test, spinner\test, etc.
-     │  │    │          └── <...>.spec.js   - test spec
-     │  │    │
-     │  │    ├── qbapp                      - a quickbase angular module named 'app'
-     │  │    │    ├──assets
-     │  │    │    │   ├──images
-     │  │    │    │   └──styles
-     │  │    │    └──<1..n qbapp modules>   - ie: tables, reports, etc.
-     │  │    │        └──<1..n qbapp test>   - ie: tables\test, reports\test, etc.
-     │  │    │          └── <...>.spec.js   - test spec
-     │  │    │
-     │  │    ├── realm                      - a quickbase angular module named 'realm'
-     │  │    │    ├──assets
-     │  │    │    │   ├──images
-     │  │    │    │   └──styles
-     │  │    │    └──<1..n realm modules>
-     │  │    │      └──<1..n realm test>
-     │  │    │          └── <...>.spec.js   - test specs
-     │  │    │
-     │  │    └── <...>
-     │  │
-     │  ├── app.index.html                  - entry point html file associated with the angular module named 'app'
-     │  ├── realm.index.html                - entry point html file associated with the angular module named 'realm'
-     │  └── <...>.index.html
-     │
-    dist                                    - build distribution output folder   (not tracked by git)
-     │
-    e2e                                     - protractor end to end tests
-     │
-    node_modules                            - the application&#39;s npm library
-     │
-    server                                  - express Node server
-     │  │
-     │  ├── api                             - app server folder
-     │  ├── components                      - app-wide component's
-     │  ├── config
-     │  │    │
-     │  │    └── environment                - configuration per environment (local, test, production)
-     │  │         └── keys                  - ssl keys for the server (content is not tracked by git)
-     │  ├── routes                          - quickbase server routes (rest endpoints, angular)
-     │  ├── views                           - server rendered views
-     │  │
-     │  ├── app.js                          - express server start script
-     │  └── routes.js                       - express server routes script
-     │  └── test                            - express server test scripts
-     │       ├── app.spec.js                - express server start script
-     │       └── routes.spec.js
-    Gruntfile.js                            - grunt build file for express and angular application
-    karma.conf.js                           - karma test configuration file
-    bower.json                              - application bower dependency definitions
-    config.rb                               - compass configuration file
-    protractor.conf.js                      - protractor configuration file
-    .gitignore                              - application (client and server) git ignore configuration file
-    .yo-rc.json                             - yeoman configuration file
+     └─ .tmp                                    - temporary output folder used by build  (not tracked by git)
+         │
+        client                                  - angular UI client code folder
+         │  │
+         │  ├── bower_components                - components downloaded by bower
+         │  ├── quickbase                       - 1..n quickbase angular modules
+         │  │    │
+         │  │    ├── assets
+         │  │    │    ├──images
+         │  │    │    ├──css                    - compass generated css and sprite images
+         │  │    │    │
+         │  │    │    ├── _partial1.scss        - scss partial
+         │  │    │    ├── _partial2.scss        - scss partial
+         │  │    │    ├── _partialN.scss        - scss partial
+         │  │    │    │
+         │  │    │    ├── app.scss              - scss file for the quickbase app module
+         │  │    │    ├── realm.scss            - scss file for the quickbase realm module
+         │  │    │    └── <...>.scss
+         │  │    │
+         │  │    ├── common                     - common shared angular modules
+         │  │    │    └──<1..n common modules>  - ie: logger, spinner, etc.
+         │  │    │      └──\test\<1..n common test>  - ie: logger\test, spinner\test, etc.
+         │  │    │          └── <...>.spec.js   - test spec
+         │  │    │
+         │  │    ├── qbapp                      - a quickbase angular module named 'app'
+         │  │    │    ├──assets
+         │  │    │    │   ├──images
+         │  │    │    │   └──styles
+         │  │    │    └──<1..n qbapp modules>   - ie: tables, reports, etc.
+         │  │    │        └──<1..n qbapp test>   - ie: tables\test, reports\test, etc.
+         │  │    │          └── <...>.spec.js   - test spec
+         │  │    │
+         │  │    ├── realm                      - a quickbase angular module named 'realm'
+         │  │    │    ├──assets
+         │  │    │    │   ├──images
+         │  │    │    │   └──styles
+         │  │    │    └──<1..n realm modules>
+         │  │    │      └──<1..n realm test>
+         │  │    │          └── <...>.spec.js   - test specs
+         │  │    │
+         │  │    └── <...>
+         │  │
+         │  ├── app.index.html                  - entry point html file associated with the angular module named 'app'
+         │  ├── realm.index.html                - entry point html file associated with the angular module named 'realm'
+         │  └── <...>.index.html
+         │
+        build                                   - gradle build output folder   (not tracked by git)
+         │  │
+         │  ├── distributions                   - folder to hold zip/jar/etc file
+         │  └── reports
+         │       ├──server                      - folder to hold test and coverage output
+         │       └──client                      - folder to hold test and coverage output
+         │
+        dist                                    - grunt build output folder   (not tracked by git)
+         │
+        e2e                                     - protractor end to end tests
+         │
+        node_modules                            - the application&#39;s npm library
+         │
+        server                                  - express Node server
+         │  │
+         │  ├── api                             - app server folder
+         │  ├── components                      - app-wide component's
+         │  ├── config
+         │  │    │
+         │  │    └── environment                - configuration per environment (local, test, production)
+         │  │         └── keys                  - ssl keys for the server (content is not tracked by git)
+         │  ├── routes                          - quickbase server routes (rest endpoints, angular)
+         │  ├── views                           - server rendered views
+         │  │
+         │  ├── app.js                          - express server start script
+         │  └── routes.js                       - express server routes script
+         │  └── test                            - express server test scripts
+         │       ├── app.spec.js                - express server start script
+         │       └── routes.spec.js
+         │
+        gruntfile.js                            - grunt build file for express and angular application
+        build.gradle                            - gradle build file.
+        karma.conf.js                           - karma test configuration file
+        bower.json                              - application bower dependency definitions
+        package.json                            - list of npm dependencies
+        config.rb                               - compass configuration file
+        protractor.conf.js                      - protractor configuration file
+        .gitignore                              - application (client and server) git ignore configuration file
+        .yo-rc.json                             - yeoman configuration file
+        .jscsrc                                 - js code style linter configuration
 
-Example folder structure of a quickbase Angular module.
+
+Example folder structure of a QuickBase Angular module.
 
 * name:   `app`;
 * folder: `client/quickbase/qbapp`
@@ -114,7 +128,7 @@ Example folder structure of a quickbase Angular module.
 
 * Make sure you have Ruby installed (Macs should have it already `which ruby` otherwise get Ruby here)
 
-* Run `gem install sass`
+* Run `gem install compass -v 1.0.1`   (may need sudo)
 
 * Make sure you have grunt and bower installed
     * Run  `npm install bower grunt-cli`
@@ -131,7 +145,7 @@ Example folder structure of a quickbase Angular module.
     * http://localhost:9000/
 
 #Configuring
-The application requires a run-time environment to be defined and configured.  By default, the server will run in local development mode,
+The application requires a run-time environment to be defined and configured.  By default, the server runs in local development mode,
 meaning a local configuration file must be defined. As this file is not tracked by git, to run locally, you will need to do the following:
 
 - copy <project root>/server/config/environment/localsample.js into the local.js and save:
@@ -171,18 +185,21 @@ meaning a local configuration file must be defined. As this file is not tracked 
             };
         }());
 
-To explicitly set or override the default configuration, add the following run-time environment:
+Notes about the above configuration:
+
+        SSL support is commented out.  See the section at the bottom of this README for setup instruction.
+        Environment variable 'javaHost' points to a local instance rest endpoint.  Change to point to another server instance.  ie: pppdc9prd2jx.corp.intuit.net
+
+RUN-TIME configuration.
+
+The following run-time environment variables are supported:
 
         NODE_ENV=<environment>
+        HOST=<express server host>
 
-        where <environment> == local, development, test or production
+        For example:
 
-
-A configuration file of the same name exists in your config/environment folder; this file will be used to define your run-time environment and override the default settings.
-
-Notes about the above configuration:
-- SSL support is commented out.  See the section at the bottom of this README for setup instruction.
-- javaHost points to a local instance rest endpoint.  This can be updated to point to any other server (pppdc9prd2jx.corp.intuit.net)
+        NODE_ENV=test;HOST=localhost-test.intuit.com
 
 # Testing
 
@@ -272,39 +289,56 @@ Produces:
 More yeoman angular fullstack details [here](https://www.npmjs.org/package/generator-angular-fullstack#endpoint)
 
 ##Compass
-Compass is an open-source CSS authoring framework which uses the Sass stylesheet language to make writing stylesheets powerful and easy.
-If you're not familiar with Compass, go to the [Compass homepage](http://compass-style.org/) for an overview.
+Compass is an open-source CSS authoring framework which uses the Sass stylesheet language.
 
-A compass configuration file, config.rb, is located at the project root level.  It's used in the grunt build to compile the sass files into css.
+If you're not familiar with Compass, go to the [Compass homepage](http://compass-style.org/) for an overview.  
+For developer's, [click here to install compass on your dev machine](http://compass-style.org/install/). 
 
-You can manually compile your styles by running the grunt task: compass-compile
+ 
+Grunt build: 
 
-In addition, to automatically compile your styles on a file change, start the grunt task: compass-watch
+        A compass configuration file, config.rb, is located at the project root level.  It's used in the grunt build to compile the sass files into css.
 
-NOTE:  the CSS files used by the application are always generated by the compass compiler.  Directly manipulating the css will result in your css
-getting overwritten when the compass compiler is invoked.
+        You can also manually compile your styles, without running a full build, by running the grunt task: compass-compile
 
-#Running the distribution node server
-The production version of the nodeserver and client are built using
-`gradle build` which generates a dist directory under ui
-or  `gradle zip` which does the build as well as creates the zip file of the generated dist directory
-to run the production server and client
+Grunt watch:
 
-- cd to the dist dir and run `npm install --production` which will install all the necessary modules for the release in node_modules under dist
-    - note using --production will not include all the development node_modules needed to build/compile/compress/test the code.
+        To automatically compile your styles on a file change, start the grunt task: compass-watch
 
-- then to run the production distribution node server run (may need sudo)
-    - NODE_ENV=production PORT=9000 node server/app.js
-    - or
-    - NODE_ENV=production PORT=9000 npm start
-    - you can not run development version from the dist directory as the dir structure differs under dist
+NOTE:  the CSS files used by the application are always generated by the compass compiler.  Directly manipulating a css file will result in your changes getting overwritten when a new build is invoked.
+
+#Using Gradle to build distribution node server
+Gradle is used to build a production version of the node server and client application. 
+
+Output from the Gradle Build and Test task is saved under the /build folder. 
+
+Supported Gradle tasks include:
+
+        gradle build - cleans dist and build folder; builds deployable code in dist folder; runs unit tests; runs code coverage; creates zip file.
+        gradle clean - cleans gradle build folder AND grunt dist folder
+        gradle test  - cleans dist folder; runs unit tests; runs code coverage.  Equivalent to 'gradle clean test'
+        gradle (default) - equivalent to 'gradle clean test build' 
+  
+To run a gradle task, cd to the dist dir and run:
+ 
+        `npm install --production` 
+        
+        which will install all the necessary modules for the release in node_modules under dist.
+        NOTE: using --production will not include all the development node_modules needed to build/compile/compress/test the code.
+
+To run the production distribution node server, run one of the following (may need sudo):
+       
+        NODE_ENV=production PORT=9000 node server/app.js
+        NODE_ENV=production PORT=9000 npm start
 
 ##Running with Forever
-- To Run node server with forever which ensures that a given node script runs continuously
+To start a node server with forever which ensures that a given node script runs continuously:
 
-    - NODE_ENV=production PORT=9000 node_modules/forever/bin/forever start server/app.js
-    to stop the server
-    - NODE_ENV=production PORT=9000 node_modules/forever/bin/forever stop server/app.js
+        NODE_ENV=production PORT=9000 node_modules/forever/bin/forever start server/app.js
+    
+To stop a running node server with forever:
+
+        NODE_ENV=production PORT=9000 node_modules/forever/bin/forever stop server/app.js
 
 add forever option -w to automatically restart server on change to js files
 other forever options

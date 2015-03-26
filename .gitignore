@@ -7,12 +7,10 @@
 
 .gradle/
 
-
 # Miscellaneous files to not track #
 ######################
 atlassian-ide-plugin.xml
 npm-debug.log
-
 
 # OS generated files #
 ######################

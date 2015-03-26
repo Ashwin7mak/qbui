@@ -12,21 +12,24 @@
         http = require('http'),
         config = require('./config/environment');
 
-    console.log('app.js...starting server.');
-
     // Setup server
     var app = module.exports = express();
 
     require('./config/express')(app);
     require('./routes')(app, config);
 
+    console.log('Starting express server');
+    console.log('ENVIRONMENT: %s', app.get('env'));
+
     /**************
      * Start HTTP Server
      **************/
     var server = http.createServer(app);
     server.listen(config.port, config.ip, function () {
-        console.log('Express server listening on %d, in %s mode', config.port, app.get('env'));
+        console.log('Server started. Listening on PORT: %d', server.address().port);
     });
+
+    //TODO - determine if we need to redirect all server traffic over https on production
 
     /**************
      * Start HTTPS Server
@@ -41,9 +44,9 @@
             rejectUnauthorized: false
         };
 
-        var serverHttp = https.createServer(options, app);
-        serverHttp.listen(config.sslPort, config.ip, function () {
-            console.log('Express server listening on %d, in %s mode', config.sslPort, app.get('env'));
+        var serverHttps = https.createServer(options, app);
+        serverHttps.listen(config.sslPort, config.ip, function () {
+            console.log('Server started. Listening on PORT: %d', serverHttps.address().port);
         });
     }
 }());
