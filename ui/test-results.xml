@@ -1,0 +1,13 @@
+<?xml version="1.0"?>
+<testsuites>
+  <testsuite name="PhantomJS 1.9.8 (Mac OS X)" package="" timestamp="2015-03-23T20:13:50" id="0" hostname="WTML11fe1362b.local" tests="1" errors="0" failures="0" time="0.009">
+    <properties>
+      <property name="browser.fullName" value="Mozilla/5.0 (Macintosh; Intel Mac OS X) AppleWebKit/534.34 (KHTML, like Gecko) PhantomJS/1.9.8 Safari/534.34"/>
+    </properties>
+    <testcase name="should have a test..." time="0.009" classname="PhantomJS 1.9.8 (Mac OS X).Controller: RealmDashboardCtrl"/>
+    <system-out><![CDATA[PhantomJS 1.9.8 (Mac OS X) LOG: 'realm dashboard controller called..'
+
+]]></system-out>
+    <system-err/>
+  </testsuite>
+</testsuites>
