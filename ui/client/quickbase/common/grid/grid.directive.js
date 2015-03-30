@@ -4,7 +4,12 @@
      * This module is used to expand on the angular ui directive
      * to support Quickbase grid features on a various lists of data
      * it also provides some default settings for the grid options for consistency
-     * in user experience
+     * in user experience.
+     *
+     * If we need to workaround/extend the ui-grid code we will use the decorator pattern
+     * to add features if they can not be tacked on here
+     * I created an example of this pattern in plunker http://plnkr.co/edit/bXYL19
+     *
      */
 
     var gridModule = angular.module('qbse.grid', [
