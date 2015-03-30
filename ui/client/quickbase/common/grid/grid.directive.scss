@@ -1,0 +1,63 @@
+$PALE_BLUE: #E3E9F3;
+$DARK_TEXT : #404040;
+$GREYISH : #DCDCDC;
+$GREYSOFT : #9D9D9D;
+$GREY_BLUE_TEXT : #486C8F;
+$GREY_BLUE_BORDER_COLOR :#D2DCE7;
+
+$BASE_FONT_SIZE : 13px;;
+
+$GRID_TITLE_TEXT_COLOR : $DARK_TEXT;
+$GRID_HEADER_BACKGROUND_COLOR : $PALE_BLUE;
+$GRID_HEADER_TEXT_COLOR : $GREY_BLUE_TEXT;
+$GRID_ROW_HORIZONTAL_BORDER_COLOR : $GREYISH;
+$GRID_ROW_VERITCAL_BORDER_COLOR : $GREYSOFT;
+
+.gridStyle {
+  height:500px;
+  min-height: 500px;
+  width: 99%;
+}
+
+.gridTitle {
+  color: $GRID_TITLE_TEXT_COLOR;
+  font-family: "Helvetica Neue LT Bold", HelveticaNeue,"Helvetica Neue",Helvetica,Arial,sans-serif;
+}
+
+// override ui-grids styling
+.gridStyle.ui-grid{
+  font-family:"Helvetica Neue LT Roman", HelveticaNeue,"Helvetica Neue",Helvetica,Arial,sans-serif;
+  border: 0;
+  font-size: $BASE_FONT_SIZE;
+  color: $GRID_TITLE_TEXT_COLOR;
+  border-bottom:2px solid $GRID_ROW_HORIZONTAL_BORDER_COLOR ;
+}
+
+.gridStyle .ui-grid-header-canvas {
+  background-color :$GRID_HEADER_BACKGROUND_COLOR ;
+  color :$GRID_HEADER_TEXT_COLOR;
+  text-transform: uppercase;
+  font-weight: normal;
+  border-bottom:2px solid $GREY_BLUE_BORDER_COLOR ;
+}
+.gridStyle .ui-grid-header-cell {
+ padding: 8px 0 2px 0;
+}
+.gridStyle .ui-grid-icon-angle-down:before {
+  content: ''; // overrides the arrow character ui_grid inserts '\c35e';
+}
+
+.gridStyle .ui-grid-cell {
+  border-right: 1px dotted $GRID_ROW_VERITCAL_BORDER_COLOR;
+  height: 43px;
+  line-height:1.2em;
+  vertical-align: middle;
+}
+
+.gridStyle .ui-grid-row {
+  border-bottom: 1px solid $GRID_ROW_HORIZONTAL_BORDER_COLOR ;
+}
+
+.gridStyle .ui-grid-footer-info {
+  margin-top: 7px;
+}

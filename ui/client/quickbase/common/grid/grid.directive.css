@@ -1,0 +1,42 @@
+.gridStyle {
+  height: 500px;
+  min-height: 500px;
+  width: 99%; }
+
+.gridTitle {
+  color: #404040;
+  font-family: "Helvetica Neue LT Bold", HelveticaNeue,"Helvetica Neue",Helvetica,Arial,sans-serif; }
+
+.gridStyle.ui-grid {
+  font-family: "Helvetica Neue LT Roman", HelveticaNeue,"Helvetica Neue",Helvetica,Arial,sans-serif;
+  border: 0;
+  font-size: 13px;
+  color: #404040;
+  border-bottom: 2px solid #DCDCDC; }
+
+.gridStyle .ui-grid-header-canvas {
+  background-color: #E3E9F3;
+  color: #486C8F;
+  text-transform: uppercase;
+  font-weight: normal;
+  border-bottom: 2px solid #D2DCE7; }
+
+.gridStyle .ui-grid-header-cell {
+  padding: 8px 0 2px 0; }
+
+.gridStyle .ui-grid-icon-angle-down:before {
+  content: ''; }
+
+.gridStyle .ui-grid-cell {
+  border-right: 1px dotted #9D9D9D;
+  height: 43px;
+  line-height: 1.2em;
+  vertical-align: middle; }
+
+.gridStyle .ui-grid-row {
+  border-bottom: 1px solid #DCDCDC; }
+
+.gridStyle .ui-grid-footer-info {
+  margin-top: 7px; }
+
+/*# sourceMappingURL=grid.directive.css.map */
