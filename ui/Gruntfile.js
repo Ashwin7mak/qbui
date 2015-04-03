@@ -156,12 +156,12 @@ module.exports = function (grunt) {
                 },
                 src: ['<%= express.root %>/**/*.spec.js']
             },
-            all: [
+            client: [
                 '<%= quickbase.client.components %>/**/*.js',
                 '!<%= quickbase.client.components %>/**/*.spec.js',
                 '!<%= quickbase.client.components %>/**/*.mock.js'
             ],
-            test: {
+            clientTest: {
                 src: [
                     '<%= quickbase.client.components %>/**/*.spec.js',
                     '<%= quickbase.client.components %>/**/*.mock.js'
@@ -697,7 +697,7 @@ module.exports = function (grunt) {
     });
 
     grunt.registerTask('testClientOnly', function () {
-        grunt.task.run(['karma']);
+        grunt.task.run(['jshint:client', 'jscs:client', 'karma']);
     });
 
     grunt.registerTask('test', function (target) {
