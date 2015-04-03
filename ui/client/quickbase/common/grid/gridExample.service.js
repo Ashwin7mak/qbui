@@ -3,15 +3,14 @@
      * Example calling of service
      */
     'use strict';
-    var dataModule = angular.module("DataServiceModule", []);
+    var dataModule = angular.module('gridExampleService', []);
 
     //example data &schema
-    dataModule.factory('ExampleData', ['$resource',
+    dataModule.factory('exampleData', ['$resource',
         function($resource){
-            return $resource('../mockdata/:file:size.json', {file:'@file', size:'@size'}, {
+            return $resource('quickbase/common/mockdata/:file:size.json', {file:'@file', size:'@size'}, {
                 get: {method:'GET', isArray:true}
             });
         }]);
-
 }());
 

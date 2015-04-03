@@ -1,7 +1,7 @@
 (function() {
     'use strict';
     /***
-     * This module is used to expand on the angular ui directive
+     * This module is used to expand on the angular ui.grid directive
      * to support Quickbase grid features on a various lists of data
      * it also provides some default settings for the grid options for consistency
      * in user experience.
@@ -10,49 +10,53 @@
      * to add features if they can not be tacked on here
      * I created an example of this pattern in plunker http://plnkr.co/edit/bXYL19
      *
-     */
-
-    var gridModule = angular.module('qbse.grid', [
-        'ui.grid',
-        'ui.grid.selection'
-    ]);
-
-    /**
-     * Setup some consts
      *
+     * TODO : Which additional features:
+     *      use ui.grid.autoResize for sizing to container? - see: http://ui-grid.info/docs/#/tutorial/213_auto_resizing
+     *      use export to csv or pdf - http://ui-grid.info/docs/#/tutorial/206_exporting_data
      */
-    gridModule.value('gbseGridConsts', {
-        'MAX_ROWS_PER_PAGE': 500
-    });
 
-    /**
-     * a quickbase grid element directive
-    **/
-    gridModule.directive('qbseGrid', function() {
+    angular
+        // define the QuickBase (qbse) Grid Module
+        //depends on the ui-grid and ui-selection see: http://ui-grid.info/
+        .module('qbse.grid', [
+            'ui.grid',
+            'ui.grid.selection'
+        ])
+        // Setup some consts
+        .constant('gridConstants', {
+            'MAX_ROWS_PER_PAGE': 500
+        })
+
+         // the quickbase grid element directive
+        .directive('qbseGrid', GridDirective);
+
+    // its implementation
+    function GridDirective() {
         return {
             restrict   : 'E',
-            templateUrl: 'grid.template.html',
+            templateUrl: 'quickbase/common/grid/grid.template.html',
             scope      : {
-                title: '@',
+                title: '@', //one way bind
                 items: '=',
                 cols: '=',
+                testdata: '=',
                 selectedItems: '=',
                 customOptions: '='
             },
             replace    : true,
             transclude : false,
-            controller : qbseGridController
+            controller : GridController
         };
-
-    });
-
+    }
 
     /**
     * this internal controller for this grid directive
     * keeps track of selected items
     * and defines default options for initializing the directive
     */
-   function qbseGridController($scope, $http, $log, $interval, uiGridConstants, gbseGridConsts){
+   GridController.$inject = ['$scope', '$log', 'uiGridConstants', 'gridConstants'];
+   function GridController($scope, $log, uiGridConstants, gridConstants){
         $scope.selectedItems = [];
 
         // user of this directive can provide their own customizations to override the defaults
@@ -61,13 +65,13 @@
 
         // the definition of the columns and data
         // in ui-grid terms, required minimally
-        var fixedOptions = {
+       $scope.fixedOptions = {
             columnDefs: $scope.cols,
             data      : $scope.items
         };
 
         // the defaults we'll use for grids
-        var defaultOptions = {
+        $scope.defaultOptions = {
             enableColumnResizing     : true,
             enableFiltering          : false,
             enableGridMenu           : false,
@@ -83,26 +87,28 @@
             showGridFooter           : false,
             showSelectionCheckbox    : false
         };
+
+        $scope.checkForTooLargeData = function(resolveData) {
+            if (resolveData.length > gridConstants.MAX_ROWS_PER_PAGE) {
+                $scope.totalRows = resolveData.length;
+                $scope.gridOptions.data.slice(0, gridConstants.MAX_ROWS_PER_PAGE);
+                $scope.tooManyToShow = true;
+            }
+        };
+
         //TODO: Paging
         // if data size is > some MAX for browser
-        // truncate a copy of the set until we get to
-        // paging implementation
-        $scope.items.$promise.then(function(resolveData) {
-            if (resolveData.length > gbseGridConsts.MAX_ROWS_PER_PAGE){
-                fixedOptions.data = resolveData.slice(0).slice(0,gbseGridConsts.MAX_ROWS_PER_PAGE);
-                $scope.tooManyToShow = fixedOptions.data.length;
-            }
-        });
+        // truncate the set until we get to
+        // paging implementation work
+        $scope.items.$promise.then($scope.checkForTooLargeData);
+
         //TODO : Sorting initialization
 
         //combine the defaults and the overrides
         $scope.gridOptions = {};
-        angular.extend($scope.gridOptions, defaultOptions);
+        angular.extend($scope.gridOptions, $scope.defaultOptions);
         angular.extend($scope.gridOptions, customOptions);
-        angular.extend($scope.gridOptions, fixedOptions);
-
-        // make sure it what we expect
-        $log.debug($scope.gridOptions);
+        angular.extend($scope.gridOptions, $scope.fixedOptions);
 
         // gridApi is how we can hook into the grid events
         $scope.gridOptions.onRegisterApi = function(gridApi){
@@ -123,27 +129,15 @@
         // full table search is no longer supported in ui-grid,
         // see http://ui-grid.info/docs/#/tutorial/103_filtering
         // only in ng-grid we may need to provide it for small tables
-        $scope.$watch('scopeItemThatChanges', function(value) {
+
+       //wn
+        $scope.$watch('scopeItemThatChanges', function() {
             if ($scope.gridApi) {
                 $scope.gridApi.core.notifyDataChange(uiGridConstants.dataChange.OPTIONS);
             }
         });
-
-        // way to load up data from url specified
-        if (customOptions.asyncLoad) {
-            $http.get('https://cdn.rawgit.com/angular-ui/ui-grid.info/gh-pages/data/500_complex.json')
-                //$http.get(asyncLoad)
-                .success(function(data) {
-                    $scope.gridOptions.data = data;
-
-                    // $interval whilst we wait for the grid to digest the data we just gave it
-                    $interval(function() {
-                        if ($scope.gridApi) {
-                            $scope.gridApi.selection.selectRow($scope.gridOptions.data[0]);
-                        }
-                    }, 0, 1);
-                });
-        }
     }
+
+
 
 })();

@@ -696,6 +696,10 @@ module.exports = function (grunt) {
         }
     });
 
+    grunt.registerTask('testClientOnly', function () {
+        grunt.task.run(['karma']);
+    });
+
     grunt.registerTask('test', function (target) {
         //  need this folder to exist or mocha tests will fail
         grunt.file.mkdir(serverReportDir + "/unit/");
