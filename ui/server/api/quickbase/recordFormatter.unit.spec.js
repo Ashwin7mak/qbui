@@ -11,7 +11,6 @@ describe('RECORDS formatter unit test', function () {
         var recordsInput =  [[{
                 "id": 7,
                 "value": "12345678"}]];
-
         var expectedRecords =
             [[{
                 "id": 7,
@@ -22,7 +21,6 @@ describe('RECORDS formatter unit test', function () {
         var largeInput =  [[{
             "id": 7,
             "value": "1234567890123"}]];
-
         var largeExpected =
             [[{
                 "id": 7,
@@ -33,7 +31,6 @@ describe('RECORDS formatter unit test', function () {
         var emptyPhoneRecords =  [[{
             "id": 7,
             "value": ""}]];
-
         var expectedEmptyPhoneRecords =
             [[{
                 "id": 7,
@@ -44,7 +41,6 @@ describe('RECORDS formatter unit test', function () {
         var nullPhoneRecords =  [[{
             "id": 7,
             "value": null}]];
-
         var nullExpectedPhoneRecords =
             [[{
                 "id": 7,
@@ -59,27 +55,12 @@ describe('RECORDS formatter unit test', function () {
         ];
     }
 
-
-    it('should format a phone number display value', function () {
+    it('should format a phone number for display', function () {
         var phoneFieldInfo = [
             {
                 "id": 7,
                 "name": "phone",
-                "type": "PHONE_NUMBER",
-                "tableId": "0duiiaaae63",
-                "builtIn": false,
-                "dataIsCopyable": true,
-                "includeInQuickSearch": true,
-                "clientSideAttributes": {
-                    "width": 50,
-                    "bold": false,
-                    "word_wrap": false
-                },
-                "userEditableValue": true,
-                "required": false,
-                "multiChoiceSourceAllowed": false,
-                "includeExtension": true,
-                "defaultIndexed": false
+                "type": "PHONE_NUMBER"
             }
         ];
         provider().forEach(function(entry){
