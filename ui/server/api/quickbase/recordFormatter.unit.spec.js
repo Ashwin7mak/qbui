@@ -83,9 +83,7 @@ describe('RECORDS formatter unit test', function () {
             }
         ];
         provider().forEach(function(entry){
-            console.log(entry.message);
             var formattedRecords = recordFormatter.formatRecords(entry.records, phoneFieldInfo);
-            console.log(formattedRecords);
             assert.deepEqual(formattedRecords, entry.expectedRecords, entry.message);
         });
     });
