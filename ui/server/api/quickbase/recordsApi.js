@@ -42,7 +42,7 @@
     var request = require('request');
     module.exports = function (config) {
         var requestHelper = require('./requestHelper')(config);
-        var recordFormatter = require('./recordFormatter')(config);
+        var recordFormatter = require('./recordFormatter')();
 
         //Module constants:
         var PHONE_NUMBER = 'PHONE_NUMBER';
@@ -122,7 +122,7 @@
                         //format records for display if requested with the flag format=display
                         if(req.param(FORMAT) === DISPLAY) {
                             //display format the record field values
-                            records = recordFormatter.formatRecords(records, fields, req);
+                            records = recordFormatter.formatRecords(records, fields);
                         }
                         responseObject = {};
                         responseObject[FIELDS] = fields;

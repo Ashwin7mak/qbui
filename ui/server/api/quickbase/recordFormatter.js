@@ -4,9 +4,7 @@
 */
 (function () {
     'use strict';
-    module.exports = function (config) {
-        var requestHelper = require('./requestHelper')(config);
-
+    module.exports = function () {
         //Module constants:
         var OPEN_PAREN = '(';
         var CLOSE_PAREN = ') ';
@@ -15,7 +13,7 @@
 
         //Given a raw number as input, formats as a legacy QuickBase phone number. Note, not internationalized
         function formatPhoneNumber(fieldValue, fieldInfo) {
-            if(!fieldValue || !fieldValue.value) {
+            if(!fieldValue || fieldValue.value === undefined || fieldValue.value === null) {
                 return null;
             }
             var baseValue = fieldValue.value;
@@ -46,6 +44,10 @@
                         }
                         areaCode = OPEN_PAREN + baseValue.slice(startIndex, middle3Start) + CLOSE_PAREN;
                     }
+                    //Pad the rest of the the digits to the left of the parens.  Such is life
+                    if(first3Start > 0) {
+                        areaCode = baseValue.slice(0, startIndex) + ' ' + areaCode;
+                    }
                 }
             } else {
                 finalFour = fieldValue.value;
@@ -67,13 +69,13 @@
         }
 
         var recordsFormatter = {
-            //Given an array of records, array of fields, and the request context, format the record values for display
-            formatRecords: function (records, fields, req) {
-                if(records && fields && req) {
+            //Given an array of records, array of fields format the record values for display
+            formatRecords: function (records, fields) {
+                if(records && fields) {
                     var fieldsMap = {};
                     var formattedRecords = [];
                     fields.forEach(function(entry) {
-                        fieldsMap[entry.id.toString()] = entry;
+                        fieldsMap[entry.id] = entry;
                     });
                     records.forEach(function(record) {
                         var formattedRecord = [];
