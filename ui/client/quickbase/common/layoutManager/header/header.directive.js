@@ -1,7 +1,7 @@
 (function() {
     'use strict';
 
-    angular.module('qbapp.common').directive('globalHeader', function() {
+    angular.module('qbapp.common').directive('qbGlobalHeader', function() {
         return {
             restrict: 'E',
             templateUrl: 'quickbase/common/layoutManager/header/header.html',

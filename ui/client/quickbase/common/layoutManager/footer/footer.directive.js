@@ -1,7 +1,7 @@
 (function() {
     'use strict';
 
-    angular.module('qbapp.common').directive('globalFooter', function() {
+    angular.module('qbapp.common').directive('qbGlobalFooter', function() {
         return {
             restrict: 'E',
             templateUrl: 'quickbase/common/layoutManager/footer/footer.html',
