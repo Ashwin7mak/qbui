@@ -14,18 +14,15 @@
         app.route('/api/v1/apps/:appId/tables/:tableId/records').get(
             function(req, res) {
                 requestHelper.logRoute(req);
-                recordsApi.fetchRecordsAndFields(req).then(
-                    //success handler
-                    function(response) {
+                recordsApi.fetchRecordsAndFields(req)
+                    .then(function(response) {
                         res.send(response);
-                    },
-                    //error handler
-                    function(error) {
+                    })
+                    .catch(function(error) {
                         requestHelper.copyHeadersToResponse(res, error.headers);
                         res.status(error.statusCode)
                             .send(error.body);
-                    }
-                );
+                    });
             }
         );
         app.route('/api/*').all(function (req, res) {

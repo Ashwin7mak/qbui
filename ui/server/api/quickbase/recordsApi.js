@@ -32,7 +32,7 @@
  */
 (function () {
     'use strict';
-    var q = require('q');
+    var Promise = require('bluebird');
     var request = require('request');
 
     module.exports = function (config) {
@@ -161,38 +161,32 @@
             //Returns a promise that is resolved with the records and fields meta data
             //or is rejected with a descriptive error code
             fetchRecordsAndFields: function(req) {
-                var deferred = q.defer();
-                var context = this;
-                q.all([
+                var deferred = Promise.pending();
+                Promise.all([
                     this.fetchRecords(req),
                     this.fetchFields(req)
-                ]).then(
-                    //success callback
-                    function(response){
-                        var records = JSON.parse(response[0].body);
-                        var responseObject;
-                        if(req.param(FORMAT) === RAW) {
-                            //return raw undecorated record values due to flag format=raw
-                            responseObject = records;
-                        } else {
-                            //response object will include a fields meta data block plus record values
-                            var fields = removeUnusedFields(records, JSON.parse(response[1].body));
-                            //format records for display if requested with the flag format=display
-                            if(req.param(FORMAT) === DISPLAY) {
-                                //display format the record field values
-                                records = formatRecords(records, fields, req);
-                            }
-                            responseObject = {};
-                            responseObject[FIELDS] = fields;
-                            responseObject[RECORDS] = records;
+                ]).then(function(response) {
+                    var records = JSON.parse(response[0].body);
+                    var responseObject;
+                    if(req.param(FORMAT) === RAW) {
+                        //return raw undecorated record values due to flag format=raw
+                        responseObject = records;
+                    } else {
+                        //response object will include a fields meta data block plus record values
+                        var fields = removeUnusedFields(records, JSON.parse(response[1].body));
+                        //format records for display if requested with the flag format=display
+                        if(req.param(FORMAT) === DISPLAY) {
+                            //display format the record field values
+                            records = formatRecords(records, fields, req);
                         }
-                        deferred.resolve(responseObject);
-                    },
-                    //error callback
-                    function(response) {
-                        deferred.reject(response);
+                        responseObject = {};
+                        responseObject[FIELDS] = fields;
+                        responseObject[RECORDS] = records;
                     }
-                );
+                    deferred.resolve(responseObject);
+                }).catch(function(error) {
+                    deferred.reject(error);
+                });
                 return deferred.promise;
             },
 
@@ -213,7 +207,7 @@
 
             //the immediately resolve flag is set, resolve the deferred without making a call
             executeRequest: function(opts, immediatelyResolve) {
-                var deferred = q.defer();
+                var deferred = Promise.pending();
                 if(immediatelyResolve) {
                     deferred.resolve(null);
                 } else {
