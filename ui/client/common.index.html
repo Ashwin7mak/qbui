@@ -4,6 +4,15 @@
     <meta charset="utf-8">
     <title>Quickbase Component Examples</title>
 
+    <!--
+        You can see the grid component via the url
+            http://localhost:63342/qbui/ui/client/common.index.html#/grid
+        note: to see the small data set use
+            http://localhost:63342/qbui/ui/client/common.index.html?size=Small#/grid
+        or for the default large use:
+            http://localhost:63342/qbui/ui/client/common.index.html?size=Large#/grid
+    -->
+
     <link rel="styleSheet" href="bower_components/angular-ui-grid/ui-grid.css"/>
     <!-- build:css quickbase/assets/common.css -->
     <link rel="stylesheet" href="quickbase/common/grid/grid.directive.css"/>
@@ -45,9 +54,11 @@
 
 <!-- build:js quickbase/common.js -->
 <script src="quickbase/common/logger/log.js"></script>
+<script src="quickbase/common/common.modules.js"></script>
 <script src="quickbase/common/common.routes.js"></script>
-<script src="quickbase/common/grid/gridExample.controller.js"></script>
+<script src="quickbase/common/grid/gridExample.modules.js"></script>
 <script src="quickbase/common/grid/gridExample.service.js"></script>
+<script src="quickbase/common/grid/gridExample.controller.js"></script>
 <script src="quickbase/common/grid/grid.directive.js"></script>
 <!-- injector:js -->
 <!-- endinjector -->

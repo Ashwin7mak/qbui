@@ -36,10 +36,9 @@ module.exports = function (config) {
             'client/bower_components/angular-resource/angular-resource.js',
             'client/bower_components/angular-cookies/angular-cookies.js',
             'client/bower_components/angular-sanitize/angular-sanitize.js',
-            'client/bower_components/angular-ui-grid/ui-grid.js',
-            'client/bower_components/ng-lodash/build/ng-lodash.min.js',
             'client/bower_components/angular-bootstrap/ui-bootstrap-tpls.js',
-            'client/bower_components/lodash/dist/lodash.compat.js',
+            'client/bower_components/ng-lodash/build/ng-lodash.js',
+            'client/bower_components/angular-ui-grid/ui-grid.js',
             'client/bower_components/angular-ui-router/release/angular-ui-router.js',
             'client/bower_components/angular-mocks/angular-mocks.js',
             //endbower:
@@ -48,6 +47,7 @@ module.exports = function (config) {
             // to narrowest.
             'client/*.index.html',
             'client/quickbase/**/**/*.html',
+            'client/quickbase/common/**/*Example.modules.js',
             'client/quickbase/common/**/*.js',
             'client/quickbase/**/*.modules.js',
             'client/quickbase/**/**/*.js'

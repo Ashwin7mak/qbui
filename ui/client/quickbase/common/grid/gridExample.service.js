@@ -1,16 +1,26 @@
 (function() {
-    /**
-     * Example calling of service
-     */
     'use strict';
-    var dataModule = angular.module('gridExampleService', []);
 
-    //example data &schema
-    dataModule.factory('exampleData', ['$resource',
-        function($resource){
+    /**
+     * Service for loading example data for grid
+     */
+    angular
+        .module('common.gridExample')
+
+        //define example data &schema
+        .factory('ExampleData', ExampleData);
+
+        //inject what it needs
+        ExampleData.$inject = ['$resource'];
+
+        // the factory implementation
+        function ExampleData($resource){
             return $resource('quickbase/common/mockdata/:file:size.json', {file:'@file', size:'@size'}, {
-                get: {method:'GET', isArray:true}
-            });
-        }]);
+                    get: {
+                        method:'GET', isArray:true
+                    }
+                }
+            );
+        }
 }());
 
