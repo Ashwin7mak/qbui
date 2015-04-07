@@ -1,0 +1,48 @@
+{
+    //defines globals exposed by modern browsers
+    "browser": true,
+    //prohibits the use of bitwise operators usually its a mistyped &&
+    "bitwise": true,
+    //requires you to always put curly braces around blocks
+    "curly": true,
+    //require === or !=== (don't do any coercion)
+    "eqeqeq": true,
+    //enables new javascript syntax
+    "esnext": true,
+    //prohibits overwriting prototypes of native objects such as Array, Date etc.
+    "freeze":true,
+    //warnings about the use of identifiers which are defined in future versions of JavaScript.
+    "futurehostile":true,
+    //prohibits the use of a variable before it was defined
+    "latedef": true,
+    //capitalize names of constructor functions
+    "newcap": true,
+    //prohibits the use of soon deprecated for performance arguments.caller and arguments.callee
+    "noarg": true,
+    //enforces the consistency of quotation marks used
+    "quotmark": "single",
+    //prohibits the use of explicitly undeclared variable, catches typos
+    "undef": true,
+    //warns when you define and never use your variables
+    "unused": true,
+    //third party usage
+    "globals": {
+        "jQuery": true,
+        "angular": true,
+        "console": true,
+        "$": true,
+        "_": true,
+        "moment": true,
+        "describe": true,
+        "beforeEach": true,
+        "module": true,
+        "inject": true,
+        "it": true,
+        "expect": true,
+        "browser": true,
+        "element": true,
+        "by": true,
+        "xit" : true,
+        "xdescribe": true
+    }
+}
