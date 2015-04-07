@@ -60,7 +60,7 @@
                 if (!this.isGet(req) && !this.isDelete(req)) {
                     headers = req.headers;
                 }
-                return req.headers;
+                return headers;
             },
 
             setBodyOption: function (req, opts) {
