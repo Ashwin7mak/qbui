@@ -3,13 +3,15 @@
 
     //  define angular modules to be referenced by the apps application
     angular.module('qbapp.dashboard', []);
-    angular.module('qbapp.reports.dashboard', []);
-    angular.module('qbapp.reports.manager', []);
+    angular.module('qbapp.common', []);
+    angular.module('qbapp.reports.dashboard', ['qbapp.common']);
+    angular.module('qbapp.reports.manager', ['ngSanitize', 'qbapp.common']);
 
     //  define the angular apps module
     angular.module('quickbase.qbapp',
         [
             'ui.router',
+            'qbapp.common',
             'qbapp.dashboard',
             'qbapp.reports.dashboard',
             'qbapp.reports.manager'

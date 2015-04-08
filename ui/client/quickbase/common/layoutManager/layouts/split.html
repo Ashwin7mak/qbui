@@ -1,0 +1,43 @@
+<!-- NOTE: placeholder..should it be a directive like header/footer?? -->
+<div class="shell">
+    <div class="nav-container">
+
+        <nav class="nav-shell">
+            <div class="nav-links">
+                <div ng-include="getNavigationContent()"></div>
+            </div>
+        </nav>
+
+    </div>
+
+    <div class="layout-container">
+
+        <qb-global-header></qb-global-header>
+
+        <div class="shell" >
+            <div class="split-container">
+
+                <nav class="split-shell">
+                    <div class="split-links">
+                        <div ng-include="getNavigationSplitContent()"></div>
+                    </div>
+                </nav>
+
+            </div>
+
+            <div class="layout-container" style="">
+
+                <div class="layout-stage">
+                    <div ng-include="getStageContent()"></div>
+                </div>
+
+                <div class="layout-content">
+                    <div ng-include="getContent()"></div>
+                </div>
+
+            </div>
+         </div>
+    </div>
+</div>
+
+

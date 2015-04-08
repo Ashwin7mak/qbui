@@ -1,9 +1,25 @@
 (function() {
     'use strict';
 
-    angular.module('qbapp.reports.dashboard').controller('ReportsDashboardCtrl', function($scope, $state, ReportsDashboardModel) {
+    angular.module('qbapp.reports.dashboard')
+        .controller('ReportsDashboardCtrl', ReportDashboardController);
 
-        $scope.menus = ReportsDashboardModel.get();
+    ReportDashboardController.$inject = ['$scope', '$state', 'ReportsDashboardModel'];
+
+    function ReportDashboardController($scope, $state, ReportsDashboardModel) {
+
+        var model = ReportsDashboardModel.get();
+
+        $scope.menus = model.menu;
+
+        $scope.header = {
+            leftContent: 'Beta > Reports'
+        };
+
+        $scope.getNavigationContent = function() {
+            return 'quickbase/qbapp/reports/dashboard/reportsDashboardMenu.html';
+        };
+
         $scope.goToPage = function(menu) {
             if (menu.id === 1) {
                 $state.transitionTo('reports/report', {id: menu.id});
@@ -15,6 +31,6 @@
                 $state.transitionTo('reports/report', {id: menu.id});
             }
         };
+    }
 
-    });
 }());

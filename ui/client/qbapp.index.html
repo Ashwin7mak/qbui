@@ -16,13 +16,11 @@
     <!-- build:js quickbase/bower/qbapp.bower.js -->
     <script src="bower_components/angular/angular.js"></script>
     <script src="bower_components/angular-resource/angular-resource.js"></script>
+    <script src="bower_components/angular-sanitize/angular-sanitize.js"></script>
     <script src="bower_components/angular-ui-router/release/angular-ui-router.js"></script>  <!-- ui-router -->
     <script src="bower_components/angular-ui-grid/ui-grid.min.js"></script>  <!-- ui-grid -->
     <!-- endbuild -->
 
-    <!-- build:js quickbase/qbapp.common.js -->
-    <script src="quickbase/common/logger/log.js"></script>
-    <!-- endbuild -->
 
 </head>
 <body  class="quickbase" ng-app="quickbase.qbapp">
@@ -36,11 +34,17 @@
     <script src="quickbase/qbapp/reports/dashboard/reportsDashboard.model.js"></script>
     <script src="quickbase/qbapp/reports/dashboard/reportsDashboard.service.js"></script>
     <script src="quickbase/qbapp/reports/reportManager/reportManager.controller.js"></script>
+    <script src="quickbase/qbapp/reports/reportManager/reportManager.model.js"></script>
+    <script src="quickbase/qbapp/reports/reportManager/reportManager.service.js"></script>
+
+    <script src="quickbase/common/logger/log.js"></script>
+    <script src="quickbase/common/layoutManager/footer/footer.directive.js"></script>
+    <script src="quickbase/common/layoutManager/header/header.directive.js"></script>
+    <!-- endbuild -->
 
     <!-- injector:js -->
     <!-- endinjector -->
 
-    <!-- endbuild -->
 
 </body>
 </html>
