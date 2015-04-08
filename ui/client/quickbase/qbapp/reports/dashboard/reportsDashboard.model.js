@@ -1,7 +1,10 @@
 (function() {
     'use strict';
 
-    angular.module('qbapp.reports.dashboard').factory('ReportsDashboardModel', function(ReportsDashboardService) {
+    angular.module('qbapp.reports.dashboard')
+        .factory('ReportsDashboardModel', ReportsDashboardModel);
+
+    function ReportsDashboardModel(ReportsDashboardService) {
 
         var model = [];
         model.get = function() {
@@ -11,6 +14,6 @@
 
         return model;
 
-    });
+    }
 
 }());

@@ -1,7 +1,10 @@
 (function() {
     'use strict';
 
-    angular.module('qbapp.reports.manager').factory('ReportModel', function(ReportService) {
+    angular.module('qbapp.reports.manager')
+        .factory('ReportModel', ReportModel);
+
+    function ReportModel(ReportService) {
 
         var model = [];
         model.get = function(reportId) {
@@ -11,6 +14,6 @@
 
         return model;
 
-    });
+    }
 
 }());

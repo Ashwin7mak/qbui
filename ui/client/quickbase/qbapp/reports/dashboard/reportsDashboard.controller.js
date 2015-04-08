@@ -1,12 +1,18 @@
 (function() {
     'use strict';
 
-    angular.module('qbapp.reports.dashboard').controller('ReportsDashboardCtrl', function($scope, $state, ReportsDashboardModel) {
+    angular.module('qbapp.reports.dashboard')
+        .controller('ReportsDashboardCtrl', ReportDashboard);
+
+    function ReportDashboard($scope, $state, ReportsDashboardModel) {
+
+        var model = ReportsDashboardModel.get();
+
+        $scope.menus = model.menu;
 
         $scope.header = {
-            companyName: 'ABC Enterprises'
+            leftContent: 'Beta > Reports'
         };
-        $scope.menus = ReportsDashboardModel.get();
 
         $scope.getNavigationContent = function() {
             return 'quickbase/qbapp/reports/dashboard/reportsDashboardMenu.html';
@@ -23,6 +29,6 @@
                 $state.transitionTo('reports/report', {id: menu.id});
             }
         };
+    }
 
-    });
 }());

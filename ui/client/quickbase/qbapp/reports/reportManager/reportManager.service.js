@@ -1,7 +1,10 @@
 (function() {
     'use strict';
 
-    angular.module('qbapp.reports.manager').service('ReportService', function() {
+    angular.module('qbapp.reports.manager')
+        .service('ReportService', ReportService);
+
+    function ReportService() {
 
         var d = new Date();
         d.setDate(d.getDate() - 1);
@@ -41,6 +44,6 @@
         };
 
         return service;
-    });
+    }
 
 }());

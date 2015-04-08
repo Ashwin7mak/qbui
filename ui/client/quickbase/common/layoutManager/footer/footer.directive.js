@@ -1,7 +1,10 @@
 (function() {
     'use strict';
 
-    angular.module('qbapp.common').directive('qbGlobalFooter', function() {
+    angular.module('qbapp.common')
+        .directive('qbGlobalFooter', GlobalFooter);
+
+    function GlobalFooter() {
         return {
             restrict: 'E',
             templateUrl: 'quickbase/common/layoutManager/footer/footer.html',
@@ -15,5 +18,5 @@
                 //  if (isCloseShowButton) {  blah...   }
             }
         };
-    });
+    }
 }());
