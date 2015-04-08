@@ -2,9 +2,11 @@
     'use strict';
 
     angular.module('qbapp.reports.manager')
-        .factory('ReportModel', ReportModel);
+        .factory('ReportModel', ReportManagerModel);
 
-    function ReportModel(ReportService) {
+    ReportManagerModel.$inject = ['ReportService'];
+
+    function ReportManagerModel(ReportService) {
 
         var model = [];
         model.get = function(reportId) {

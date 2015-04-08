@@ -2,9 +2,11 @@
     'use strict';
 
     angular.module('qbapp.reports.manager')
-        .controller('ReportCtrl', ReportController);
+        .controller('ReportCtrl', ReportManagerController);
 
-    function ReportController($scope, $stateParams, ReportModel) {
+    ReportManagerController.$inject = ['$scope', '$stateParams', 'ReportModel'];
+
+    function ReportManagerController($scope, $stateParams, ReportModel) {
 
         //  get the report data model
         $scope.report = ReportModel.get($stateParams.id);

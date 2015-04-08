@@ -4,6 +4,8 @@
     angular.module('qbapp.reports.dashboard')
         .factory('ReportsDashboardModel', ReportsDashboardModel);
 
+    ReportsDashboardModel.$inject = ['ReportsDashboardService'];
+
     function ReportsDashboardModel(ReportsDashboardService) {
 
         var model = [];

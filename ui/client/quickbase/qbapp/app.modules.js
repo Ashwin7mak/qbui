@@ -11,10 +11,10 @@
     angular.module('quickbase.qbapp',
         [
             'ui.router',
+            'qbapp.common',
             'qbapp.dashboard',
             'qbapp.reports.dashboard',
-            'qbapp.reports.manager',
-            'qbapp.common'
+            'qbapp.reports.manager'
         ]).
         config(['$routeProvider', function($routeProvider, $locationProvider) {
             $routeProvider.otherwise({redirectTo: ''});

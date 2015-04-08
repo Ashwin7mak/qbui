@@ -373,7 +373,8 @@ module.exports = function (grunt) {
         ngtemplates: {
             'quickbase.realm': {
                 cwd: '<%= quickbase.client.root %>',
-                src: ['quickbase/realm/**/*.html'],     // look for all html files within the realm folder
+                src: ['quickbase/common/**/*.html',
+                      'quickbase/realm/**/*.html'],     // look for all html files required for this angular application
                 dest: '.tmp/realmTemplates.js',
                 options: {
                     usemin: 'quickbase/realm.js'        // maps to reference in realm.index.html
@@ -381,7 +382,8 @@ module.exports = function (grunt) {
             },
             'quickbase.qbapp': {
                 cwd: '<%= quickbase.client.root %>',
-                src: ['quickbase/qbapp/**/*.html'],     // look for all html files within the app folder
+                src: ['quickbase/common/**/*.html',
+                      'quickbase/qbapp/**/*.html'],     // look for all html files required for this angular application
                 dest: '.tmp/appTemplates.js',
                 options: {
                     usemin: 'quickbase/qbapp.js'        // maps to reference in app.index.html

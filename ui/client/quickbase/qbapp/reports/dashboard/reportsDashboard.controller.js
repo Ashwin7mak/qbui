@@ -2,9 +2,11 @@
     'use strict';
 
     angular.module('qbapp.reports.dashboard')
-        .controller('ReportsDashboardCtrl', ReportDashboard);
+        .controller('ReportsDashboardCtrl', ReportDashboardController);
 
-    function ReportDashboard($scope, $state, ReportsDashboardModel) {
+    ReportDashboardController.$inject = ['$scope', '$state', 'ReportsDashboardModel'];
+
+    function ReportDashboardController($scope, $state, ReportsDashboardModel) {
 
         var model = ReportsDashboardModel.get();
 

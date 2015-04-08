@@ -2,9 +2,9 @@
     'use strict';
 
     angular.module('qbapp.reports.manager')
-        .service('ReportService', ReportService);
+        .service('ReportService', ReportManagerService);
 
-    function ReportService() {
+    function ReportManagerService() {
 
         var d = new Date();
         d.setDate(d.getDate() - 1);
