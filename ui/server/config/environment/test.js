@@ -28,7 +28,7 @@
 
         //Express Server
         //DOMAIN: 'https://localhost.intuit.com:9443'
-        DOMAIN  : 'https://localhost.intuit.com:9000'
+        DOMAIN  : 'http://localhost:9000'
 
     };
 

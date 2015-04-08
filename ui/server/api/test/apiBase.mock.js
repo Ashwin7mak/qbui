@@ -6,7 +6,7 @@
 
     module.exports = function (config) {
         //Module constants
-        var HTTPS = 'http://';
+        var HTTP = 'http://';
         var BASE_ENDPOINT = '/api/v1';
         var REALMS_ENDPOINT = BASE_ENDPOINT + '/realms/';
         var TICKET_ENDPOINT = BASE_ENDPOINT + '/ticket?uid=1000000&realmID=';
@@ -24,10 +24,10 @@
         function resolveFullUrl(path, realmSubdomain) {
             var fullPath;
             if(realmSubdomain === '') {
-                fullPath = config.javaHost + path;
+                fullPath = config.DOMAIN + path;
             } else {
-                var methodLess = config.javaHost.replace(HTTPS, '');
-                fullPath = HTTPS + realmSubdomain + '.' + methodLess + path;
+                var methodLess = config.DOMAIN.replace(HTTP, '');
+                fullPath = HTTP + realmSubdomain + '.' + methodLess + path;
             }
             return fullPath;
         }
