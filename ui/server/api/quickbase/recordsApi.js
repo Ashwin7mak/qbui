@@ -51,7 +51,7 @@
         var RECORDS = 'records';
         var CONTENT_TYPE = 'Content-Type';
         var APPLICATION_JSON = 'application/json';
-        var FORMAT = 'format'
+        var FORMAT = 'format';
         var DISPLAY = 'display';
         var RAW = 'raw';
 
