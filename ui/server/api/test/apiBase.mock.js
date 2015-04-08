@@ -112,6 +112,7 @@
                                 });
                         }).catch(function(realmError){
                             deferred.reject(realmError);
+                            assert(false, 'failed to create realm: ' + JSON.stringify(realmError));
                         });
                 } else {
                     //The realm already exists, no-op
