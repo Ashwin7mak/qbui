@@ -83,32 +83,314 @@
   background-image: -webkit-linear-gradient(top, #4f8aea 0%, #3e67e5 100%);
   background-image: linear-gradient(to bottom, #4f8aea 0%, #3e67e5 100%);
 }
-/* line 89, ../_dashboard.scss */
-.quickbase-app .dashboard .harmony-header {
-  background-color: #6e8ba8;
-  height: 40px;
-  float: left;
-  position: relative;
-  width: 66.67%;
-  min-width: 640px;
+/* line 2, ../_layout.scss */
+.quickbase-app .shell {
+  font-family: "HelveticaNeue-Roman", "HelveticaNeue", "Helvetica Neue", "Helvetica", "Arial", sans-serif;
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  transform: translate3d(0px, 0px, 0px);
+  display: flex;
+  flex-direction: row;
 }
-/* line 97, ../_dashboard.scss */
-.quickbase-app .dashboard .harmony-subHeader {
-  height: 230px;
+/* line 12, ../_layout.scss */
+.quickbase-app .shell .nav-container {
+  flex: 0 0 auto;
+  display: flex;
+}
+/* line 16, ../_layout.scss */
+.quickbase-app .shell .nav-container .nav-shell {
+  width: 165px;
+  min-width: 165px;
   background-color: #193048;
-  float: left;
-  position: relative;
-  width: 66.67%;
-  min-width: 640px;
+  box-shadow: -3px 0px rgba(0, 0, 0, 0.15) inset;
+  overflow: auto;
+  transform: translate3d(0px, 0px, 0px);
+  transition: width 0.5s ease 0s;
 }
-/* line 106, ../_dashboard.scss */
-.quickbase-app .dashboard .harmony-footer {
-  background-color: #6e8ba8;
-  height: 40px;
-  float: left;
+/* line 24, ../_layout.scss */
+.quickbase-app .shell .nav-container .nav-shell.split-shell {
+  background-color: whitesmoke;
+}
+/* line 29, ../_layout.scss */
+.quickbase-app .shell .nav-container .nav-links {
   position: relative;
-  width: 66.67%;
-  min-width: 640px;
+  padding: 10px;
+}
+/* line 33, ../_layout.scss */
+.quickbase-app .shell .nav-container .nav-links a {
+  cursor: pointer;
+  color: whitesmoke;
+}
+/* line 37, ../_layout.scss */
+.quickbase-app .shell .nav-container .nav-links a.ng-binding:hover {
+  border-left-color: #fff;
+  box-shadow: inset 0 0 0 1px rgba(0, 0, 0, 0.1), -1px 0 rgba(255, 255, 255, 0.15);
+  background-image: -webkit-linear-gradient(top, #4f8aea 0%, #3e67e5 100%);
+  background-image: linear-gradient(to bottom, #4f8aea 0%, #3e67e5 100%);
+}
+/* line 46, ../_layout.scss */
+.quickbase-app .shell .split-container {
+  flex: 0 0 auto;
+  display: flex;
+}
+/* line 50, ../_layout.scss */
+.quickbase-app .shell .split-container .split-shell {
+  width: 165px;
+  min-width: 165px;
+  background-color: whitesmoke;
+  box-shadow: -3px 0px rgba(0, 0, 0, 0.15) inset;
+  overflow: auto;
+  transform: translate3d(0px, 0px, 0px);
+  transition: width 0.5s ease 0s;
+}
+/* line 60, ../_layout.scss */
+.quickbase-app .shell .split-container .split-links {
+  position: relative;
+  padding: 10px;
+}
+/* line 64, ../_layout.scss */
+.quickbase-app .shell .split-container .split-links a {
+  cursor: pointer;
+  color: whitesmoke;
+}
+/* line 68, ../_layout.scss */
+.quickbase-app .shell .split-container .split-links a.ng-binding:hover {
+  border-left-color: #fff;
+  box-shadow: inset 0 0 0 1px rgba(0, 0, 0, 0.1), -1px 0 rgba(255, 255, 255, 0.15);
+  background-image: -webkit-linear-gradient(top, #4f8aea 0%, #3e67e5 100%);
+  background-image: linear-gradient(to bottom, #4f8aea 0%, #3e67e5 100%);
+}
+/* line 77, ../_layout.scss */
+.quickbase-app .shell .drawer-container {
+  flex: 0 0 auto;
+  display: flex;
+}
+/* line 81, ../_layout.scss */
+.quickbase-app .shell .drawer-container .drawer-shell {
+  padding-right: 10px;
+  position: absolute;
+  top: 0;
+  border-left: 1px solid gainsboro;
+  -webkit-transition: transform 350ms cubic-bezier(0.32, 1.25, 0.32, 1);
+  transition: transform 350ms cubic-bezier(0.32, 1.25, 0.32, 1);
+  background: #f3f5f8;
+  color: gainsboro;
+  box-shadow: -3px 0px rgba(0, 0, 0, 0.15) inset;
+  height: 100%;
+}
+/* line 97, ../_layout.scss */
+.quickbase-app .shell .drawer-container .drawer-shell.small {
+  width: 265px;
+  min-width: 265px;
+  right: -275px;
+}
+/* line 102, ../_layout.scss */
+.quickbase-app .shell .drawer-container .drawer-shell.small.slide-in {
+  -webkit-transform: translateZ(0) translateX(-275px);
+  transform: translateZ(0) translateX(-275px);
+}
+/* line 106, ../_layout.scss */
+.quickbase-app .shell .drawer-container .drawer-shell.small .drawer-content {
+  padding: 30px 20px 0px 20px;
+}
+/* line 110, ../_layout.scss */
+.quickbase-app .shell .drawer-container .drawer-shell.large {
+  width: 565px;
+  min-width: 565px;
+  right: -575px;
+}
+/* line 114, ../_layout.scss */
+.quickbase-app .shell .drawer-container .drawer-shell.large.slide-in {
+  -webkit-transform: translateZ(0) translateX(-575px);
+  transform: translateZ(0) translateX(-575px);
+}
+/* line 118, ../_layout.scss */
+.quickbase-app .shell .drawer-container .drawer-shell.large .drawer-content {
+  padding: 30px 45px 0px 30px;
+}
+/* line 122, ../_layout.scss */
+.quickbase-app .shell .drawer-container .drawer-shell .drawer-header {
+  width: 100%;
+  height: 55px;
+  position: relative;
+  background-color: #f3f5f8;
+}
+/* line 128, ../_layout.scss */
+.quickbase-app .shell .drawer-container .drawer-shell .drawer-header .drawer-title {
+  height: 20px;
+  font-size: 20px;
+  position: absolute;
+  top: 30px;
+  left: 30px;
+  font-family: "HelveticaNeue-Light";
+  color: #404040;
+}
+/* line 138, ../_layout.scss */
+.quickbase-app .shell .drawer-container .drawer-shell .drawer-header .drawer-close {
+  display: block;
+  width: 10px;
+  height: 20px;
+  line-height: 20px;
+  position: absolute;
+  top: 15px;
+  right: 15px;
+  transition: 0.3s all ease;
+  cursor: pointer;
+}
+/* line 149, ../_layout.scss */
+.quickbase-app .shell .drawer-container .drawer-shell .drawer-header .drawer-close:hover {
+  color: #2c4d9c;
+}
+/* line 154, ../_layout.scss */
+.quickbase-app .shell .drawer-container .drawer-shell .drawer-footer {
+  width: 100%;
+  height: 55px;
+  position: absolute;
+  bottom: 0;
+  text-align: right;
+  padding: 12px 0px;
+  background: #c0d0e4;
+  opacity: .75;
+}
+/* line 163, ../_layout.scss */
+.quickbase-app .shell .drawer-container .drawer-shell .drawer-footer button {
+  padding: 10px 10px;
+  margin: 10px 10px;
+}
+/* line 169, ../_layout.scss */
+.quickbase-app .shell .drawer-container .drawer-shell .drawer-content {
+  background-color: #f3f5f8;
+  scroll: auto;
+}
+/* line 176, ../_layout.scss */
+.quickbase-app .shell .popout-container {
+  flex: 0 0 auto;
+  display: flex;
+}
+/* line 180, ../_layout.scss */
+.quickbase-app .shell .popout-container .popout-shell {
+  position: absolute;
+  top: 0;
+  border: 1px solid gainsboro;
+  -webkit-transition: transform 350ms cubic-bezier(0.32, 1.25, 0.32, 1);
+  transition: transform 350ms cubic-bezier(0.32, 1.25, 0.32, 1);
+  background: #f3f5f8;
+  color: gainsboro;
+  min-width: 450px;
+  min-height: 450px;
+}
+/* line 192, ../_layout.scss */
+.quickbase-app .shell .popout-container .popout-shell .popout-header {
+  width: 100%;
+  height: 55px;
+  position: relative;
+  background-color: #193048;
+}
+/* line 198, ../_layout.scss */
+.quickbase-app .shell .popout-container .popout-shell .popout-header .popout-title {
+  height: 20px;
+  font-size: 20px;
+  position: absolute;
+  top: 10px;
+  left: 10px;
+  font-family: "HelveticaNeue-Light";
+  color: whitesmoke;
+}
+/* line 208, ../_layout.scss */
+.quickbase-app .shell .popout-container .popout-shell .popout-header .popout-close {
+  display: block;
+  width: 10px;
+  height: 20px;
+  line-height: 20px;
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  transition: 0.3s all ease;
+  cursor: pointer;
+}
+/* line 219, ../_layout.scss */
+.quickbase-app .shell .popout-container .popout-shell .popout-header .popout-close:hover {
+  color: #2c4d9c;
+}
+/* line 225, ../_layout.scss */
+.quickbase-app .shell .popout-container .popout-shell .popout-content {
+  background-color: #f3f5f8;
+  padding: 20px;
+  scroll: auto;
+}
+/* line 233, ../_layout.scss */
+.quickbase-app .shell .layout-container {
+  flex: 1 1 0%;
+  overflow: auto;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  width: 100%;
+}
+/* line 241, ../_layout.scss */
+.quickbase-app .shell .layout-container .layout-header {
+  background-color: #c0d0e4;
+  height: 40px;
+  line-height: 40px;
+}
+/* line 246, ../_layout.scss */
+.quickbase-app .shell .layout-container .layout-header .leftContent {
+  padding-left: 5px;
+  float: left;
+}
+/* line 250, ../_layout.scss */
+.quickbase-app .shell .layout-container .layout-header .rightContent {
+  padding-right: 15px;
+  float: right;
+}
+/* line 256, ../_layout.scss */
+.quickbase-app .shell .layout-container .layout-stage {
+  border-bottom: 1px solid #e3eaf3;
+  background-image: linear-gradient(to top, #f6f8fb 0%, #f9fafb 100%);
+  box-sizing: border-box;
+  position: relative;
+  background-color: #f3f5f8;
+  padding: 24px 15px 0px;
+  transition: padding 0.5s ease 0s;
+  min-height: 100px;
+}
+/* line 266, ../_layout.scss */
+.quickbase-app .shell .layout-container .layout-stage.layout-stageClose {
+  height: 80px !important;
+  transition: height 0.2s linear 0.1s;
+}
+/* line 272, ../_layout.scss */
+.quickbase-app .shell .layout-container .layout-content {
+  padding: 24px 15px 0px;
+  min-height: 200px;
+}
+/* line 277, ../_layout.scss */
+.quickbase-app .shell .layout-container .layout-footer {
+  height: 40px;
+  line-height: 40px;
+  width: 100%;
+  font-size: 0.8rem;
+}
+/* line 282, ../_layout.scss */
+.quickbase-app .shell .layout-container .layout-footer .layout-footer-content {
+  color: #404040;
+  padding: 10px;
+}
+/* line 288, ../_layout.scss */
+.quickbase-app .shell .layout-container .trowser-footer {
+  width: 100%;
+  height: 55px;
+  position: absolute;
+  bottom: 0;
+  text-align: right;
+  padding: 12px 0px;
+  background: #193048;
+}
+/* line 296, ../_layout.scss */
+.quickbase-app .shell .layout-container .trowser-footer button {
+  padding: 10px 10px;
+  margin: 10px 20px;
 }
 /* line 1, ../_report.scss */
 .quickbase-app .report {
@@ -117,69 +399,71 @@
 /* line 3, ../_report.scss */
 .quickbase-app .report .report-header {
   margin: 25px;
+  float: left;
 }
-/* line 5, ../_report.scss */
+/* line 7, ../_report.scss */
 .quickbase-app .report .report-header .left {
   float: left;
   width: 50%;
-  padding: 0px 50px;
 }
-/* line 9, ../_report.scss */
-.quickbase-app .report .report-header .left p {
+/* line 10, ../_report.scss */
+.quickbase-app .report .report-header .left div {
   font-size: 12px;
+  padding: 10px 30px;
 }
-/* line 12, ../_report.scss */
-.quickbase-app .report .report-header .left p.header {
+/* line 14, ../_report.scss */
+.quickbase-app .report .report-header .left div.header {
   font-size: 14px;
   font-weight: bold;
 }
-/* line 18, ../_report.scss */
+/* line 20, ../_report.scss */
 .quickbase-app .report .report-header .right {
   font-size: 14px;
   float: left;
   width: 50%;
-  padding: 0px 50px;
 }
-/* line 23, ../_report.scss */
+/* line 21, ../_report.scss */
+.quickbase-app .report .report-header .right div {
+  font-size: 12px;
+}
+/* line 27, ../_report.scss */
 .quickbase-app .report .report-header .right .time {
   float: left;
   width: 50%;
-  padding: 0px 25px;
 }
-/* line 28, ../_report.scss */
+/* line 31, ../_report.scss */
 .quickbase-app .report .report-header .right .reminder {
   float: left;
   width: 50%;
-  padding: 0px 25px;
 }
-/* line 37, ../_report.scss */
+/* line 39, ../_report.scss */
 .quickbase-app .report .report-content {
   float: left;
   clear: left;
   width: 100%;
-  padding: 50px 70px;
+  padding: 0px 0px;
 }
-/* line 43, ../_report.scss */
+/* line 45, ../_report.scss */
 .quickbase-app .report .report-content .grid-table {
   width: 100%;
   border-bottom-color: #cedcea;
 }
-/* line 46, ../_report.scss */
+/* line 48, ../_report.scss */
 .quickbase-app .report .report-content .grid-table .grid-cell {
   padding: 3px;
   text-align: left;
 }
-/* line 49, ../_report.scss */
+/* line 51, ../_report.scss */
 .quickbase-app .report .report-content .grid-table .grid-cell.header {
   height: 32px;
   background-color: #e3eaf3;
   color: #6e8ba8;
 }
-/* line 54, ../_report.scss */
+/* line 56, ../_report.scss */
 .quickbase-app .report .report-content .grid-table .grid-cell.data {
   font-size: 12px;
 }
-/* line 56, ../_report.scss */
+/* line 58, ../_report.scss */
 .quickbase-app .report .report-content .grid-table .grid-cell.data.currency {
   text-align: right;
 }
