@@ -8,14 +8,14 @@
 /build/
 /dist/
 .tmp/
+/lib/
 
 # in the event a local build is configured to download node, don't want
 # to track the working directory where node is unpacked
 /nodejs/
 
-# exclude the compass compiled css and sprite images (for now)
-#client/quickbase/assets/css/
-
+# exclude the compass compiled css and sprite images they are generated
+client/quickbase/assets/css
 
 # exclude express server local configuration
 server/config/environment/local.js

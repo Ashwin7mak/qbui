@@ -43,6 +43,16 @@
                 return agentOptions;
             },
 
+            //Given an express response object and POJO, copy POJO attributes to the response headers object
+            copyHeadersToResponse: function (res, headers) {
+                for(var key in headers) {
+                    if(headers.hasOwnProperty(key)) {
+                        res.set(key, headers[key]);
+                    }
+                }
+            },
+
+            //TODO: remove this
             getHeaders: function (req) {
                 // unit tests currently fail if passing in headers on get..
                 // TODO: this shouldn't be a restriction..understand why and fix??
@@ -66,7 +76,7 @@
                     url: this.getRequestUrl(req),
                     method: req.method,
                     agentOptions: this.getAgentOptions(req),
-                    headers: this.getHeaders(req)
+                    headers: req.headers
                 };
 
                 this.setBodyOption(req, opts);

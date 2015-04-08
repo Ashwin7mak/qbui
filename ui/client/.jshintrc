@@ -14,7 +14,7 @@
     //warnings about the use of identifiers which are defined in future versions of JavaScript.
     "futurehostile":true,
     //prohibits the use of a variable before it was defined
-    "latedef": true,
+    "latedef": false,
     //capitalize names of constructor functions
     "newcap": true,
     //prohibits the use of soon deprecated for performance arguments.caller and arguments.callee
