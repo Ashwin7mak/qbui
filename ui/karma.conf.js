@@ -48,8 +48,8 @@ module.exports = function (config) {
             'client/*.index.html',
             'client/quickbase/**/**/*.html',
             'client/quickbase/common/**/*Example.modules.js',
-            'client/quickbase/common/**/*.js',
             'client/quickbase/**/*.modules.js',
+            'client/quickbase/common/**/*.js',
             'client/quickbase/**/**/*.js'
         ],
 
@@ -72,7 +72,7 @@ module.exports = function (config) {
             stripPrefix: 'client/'
         },
 
-        reporters: ['progress', 'coverage', 'junit'],
+        reporters: ['progress', 'coverage'],
 
         coverageReporter: {
             // specify a common output directory

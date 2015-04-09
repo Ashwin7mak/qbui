@@ -12,25 +12,15 @@ describe('Controller: ReportCtrl', function() {
             _scope = $rootScope.$new();
         })
     );
-    var $rootScope, $controller, $q, $httpBackend, appConfig, scope;
-    beforeEach(inject(function(_$rootScope_, _$controller_, _$q_, _$httpBackend_, _appConfig_) {
-        $q = _$q_;
-        $rootScope = _$rootScope_;
-        $controller = _$controller_;
-        $httpBackend = _$httpBackend_;
-        appConfig = _appConfig_;
-        scope = $rootScope.$new();
-    }));
 
     it('should a valid controller and scope reference', function() {
         var scope = {};
         var params = {};
-        _controller('ReportCtrl', {$scope:scope, $stateParams:params})
+        _controller('ReportCtrl', {$scope:scope, $stateParams:params});
 
-        //  all reports to have staging and content
+        //  all reports expected to have staging and content template defined
         expect(scope.getStageContent().length).toBeGreaterThan(0);
         expect(scope.getContent().length).toBeGreaterThan(0);
-
 
     });
 
