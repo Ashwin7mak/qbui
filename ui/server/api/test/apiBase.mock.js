@@ -13,7 +13,7 @@
         var POST = 'POST';
         var GET = 'GET';
         var DELETE = 'DELETE';
-        var SUBDOMAIN_CHARS = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+        var SUBDOMAIN_CHARS = 'abcdefghijklmnopqrstuvwxyz0123456789';
         var CONTENT_TYPE = 'Content-Type';
         var APPLICATION_JSON = 'application/json';
         var TICKET_HEADER_KEY = 'ticket';
@@ -50,6 +50,7 @@
         }
 
         var apiBase = {
+            defaultHeaders: DEFAULT_HEADERS,
             //Executes a REST request against the instance's realm using the configured javaHost
             executeRequest: function(stringPath, method, body, headers) {
                 //if there is a realm & we're not making a ticket or realm request, use the realm subdomain request URL
@@ -68,12 +69,12 @@
                 if(headers) {
                     opts.headers = headers;
                 } else {
-                    opts.headers = {};
+                    opts.headers = DEFAULT_HEADERS;
                 }
                 if(this.authTicket) {
                     opts.headers[TICKET_HEADER_KEY] = this.authTicket;
                 }
-
+                console.log('About to execute request: ' + JSON.stringify(opts));
                 //Make request and return promise
                 var deferred = Promise.pending();
                 request(opts, function (error, response) {
@@ -101,7 +102,8 @@
                             //Realm creation succeeded, now create a ticket
                             context.createTicket(context.realm.id)
                                 .then(function(authResponse){
-                                    context.authTicket = authResponse.body;
+                                    //TODO: tickets come back quoted, invalid JSON, we regex the quotes away.  hack.
+                                    context.authTicket = authResponse.body.replace(/"/g, '');
                                     deferred.resolve(context.realm);
                                     console.log('Ticket created: ' + context.authTicket);
                                 }).catch(function(authError){
@@ -155,7 +157,7 @@
                 } else {
                     deferred.resolve();
                 }
-                return deferred;
+                return deferred.promise;
             }
         }
 
