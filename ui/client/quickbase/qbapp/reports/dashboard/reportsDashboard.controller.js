@@ -12,8 +12,10 @@
 
         $scope.menus = model.menu;
 
+        //  set appropriate header object data
         $scope.header = {
-            leftContent: 'Beta > Reports'
+            leftContent: 'Beta > Reports',
+            rightContent: ''
         };
 
         $scope.getNavigationContent = function() {

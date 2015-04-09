@@ -13,12 +13,13 @@
 
         //  set appropriate header object data
         $scope.header = {
-            leftContent: 'Beta > Reports > ' + $scope.report.name
+            leftContent: 'Beta > Reports > ' + $scope.report.name,
+            rightContent: ''
         };
 
         //  set appropriate footer object data
         $scope.footer = {
-            content: ''
+            content: ''//'&#169;2015 Intuit Inc. All rights reserved'
         };
 
         //  set the stage object based on the model data

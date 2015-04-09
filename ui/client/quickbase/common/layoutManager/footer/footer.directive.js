@@ -4,13 +4,13 @@
     angular.module('qbapp.common')
         .directive('qbGlobalFooter', GlobalFooter);
 
-    directiveController.$inject = ['$scope'];
-
     function GlobalFooter() {
         return {
             restrict: 'E',
             templateUrl: 'quickbase/common/layoutManager/footer/footer.html',
-            controller: directiveController
+            scope: {
+                footerInfo: '=info'
+            }
         };
     }
 
