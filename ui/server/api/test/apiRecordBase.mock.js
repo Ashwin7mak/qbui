@@ -9,12 +9,12 @@
         var recordBase = {
             apiBase: apiBase,
             //Helper method to create an app, can be used by multiple test cases
-            createApp: function(appToCreate) {
+            createApp: function (appToCreate) {
                 var deferred = Promise.pending();
-                init.then(function(createdRealm){
-                    apiBase.executeRequest(apiBase.resolveAppsEndpoint(), apiBase.constants.POST, appToCreate).then(function(appResponse){
+                init.then(function (createdRealm) {
+                    apiBase.executeRequest(apiBase.resolveAppsEndpoint(), apiBase.constants.POST, appToCreate).then(function (appResponse) {
                         deferred.resolve(appResponse);
-                    }).catch(function(error){
+                    }).catch(function (error) {
                         deferred.reject(error);
                         assert(false, 'failed to create app: ' + JSON.stringify(error));
                     });
@@ -24,21 +24,21 @@
 
             // Creates and fetches a record, returning a promise that is resolved or rejected on successful
             // record GET following the create
-            createAndFetchRecord: function(recordsEndpoint, record, params) {
+            createAndFetchRecord: function (recordsEndpoint, record, params) {
                 var fetchRecordDeferred = Promise.pending();
 
-                init.then(function(){
+                init.then(function () {
                     apiBase.executeRequest(recordsEndpoint, apiBase.constants.POST, record)
-                        .then(function(recordIdResponse){
+                        .then(function (recordIdResponse) {
                             var getEndpoint = recordsEndpoint + JSON.parse(recordIdResponse.body).id;
-                            if(params) {
+                            if (params) {
                                 getEndpoint += params;
                             }
                             apiBase.executeRequest(getEndpoint, apiBase.constants.GET)
-                                .then(function(fetchedRecordResponse){
+                                .then(function (fetchedRecordResponse) {
                                     var fetchedRecord = JSON.parse(fetchedRecordResponse.body);
                                     fetchRecordDeferred.resolve(fetchedRecord);
-                                }).catch(function(error){
+                                }).catch(function (error) {
                                     fetchRecordDeferred.reject(error);
                                 });
                         });
