@@ -21,7 +21,7 @@ describe('API - RECORDS test cases', function () {
     };
 
     function providePhoneRecords(fid) {
-        //Incomplete number
+        //Standard US phone number
         var recordsInput = [{"id": fid, "value": "12345678"}];
         var expectedRecords = {"id": fid, "value": "12345678", "display": "(1) 234-5678"};
 
@@ -38,11 +38,14 @@ describe('API - RECORDS test cases', function () {
         var nullExpectedPhoneRecords = {"id": fid, "value": null, "display": null};
 
         return [
-            {message: "Phone number", record: recordsInput, expectedFieldValue: expectedRecords},
-            {message: "Empty phone number", record: emptyPhoneRecords, expectedFieldValue: expectedEmptyPhoneRecords},
-            {message: "Too-long phone number", record: largeInput, expectedFieldValue: largeExpected},
-            {message: "null phone number", record: nullPhoneRecords, expectedFieldValue: nullExpectedPhoneRecords}
-        ];
+            { message: "display phone number", record: recordsInput, format: "display", expectedFieldValue: expectedRecords },
+            { message: "raw phone number", record: recordsInput, format: "raw", expectedFieldValue: recordsInput },
+            { message: "display empty phone number", record: emptyPhoneRecords, format: "display", expectedFieldValue: expectedEmptyPhoneRecords},
+            { message: "raw empty phone number", record: emptyPhoneRecords, format: "raw", expectedFieldValue: emptyPhoneRecords},
+            { message: "display too-long phone number", record: largeInput, format: "display", expectedFieldValue: largeExpected },
+            { message: "raw too-long phone number", record: largeInput, format: "raw", expectedFieldValue: largeInput },
+            { message: "display null phone number", record: nullPhoneRecords, format: "display", expectedFieldValue: nullExpectedPhoneRecords },
+            { message: "raw null phone number", record: nullPhoneRecords, format: "raw", expectedFieldValue: nullPhoneRecords }]
     }
 
     it('Should create and retrieve display formatted phone records', function (done) {
@@ -61,15 +64,18 @@ describe('API - RECORDS test cases', function () {
             var fetchRecordPromises = [];
             records.forEach(function (currentRecord) {
                 var recordsEndpoint = recordBase.apiBase.resolveRecordsEndpoint(app.id, app.tables[0].id);
-                //var recordsEndpoint = '/api/v1/apps/'+ app.id +'/tables/' + app.tables[0].id + '/records/';
-                fetchRecordPromises.push(recordBase.createAndFetchRecord(recordsEndpoint, currentRecord.record, '?format=display'));
+                fetchRecordPromises.push(recordBase.createAndFetchRecord(recordsEndpoint, currentRecord.record, '?format='+currentRecord.format));
             });
 
             //When all the records have been created and fetched, assert the values match expectations
             Promise.all(fetchRecordPromises)
                 .then(function (results) {
                     for (var i = 0; i < results.length; i++) {
-                        results[i].record.forEach(function (fieldValue) {
+                        var currentRecord = results[i];
+                        if(results[i].record) {
+                            currentRecord = results[i].record;
+                        }
+                        currentRecord.forEach(function (fieldValue) {
                             if (fieldValue.id === records[i].expectedFieldValue.id) {
                                 assert.deepEqual(fieldValue, records[i].expectedFieldValue, 'Unexpected field value returned: '
                                 + JSON.stringify(fieldValue) + ', ' + JSON.stringify(records[i].expectedFieldValue));
