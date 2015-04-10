@@ -15,7 +15,7 @@
 /nodejs/
 
 # exclude the compass compiled css and sprite images they are generated
-client/quickbase/assets/css
+client/quickbase/assets/css/
 
 # exclude express server local configuration
 server/config/environment/local.js
