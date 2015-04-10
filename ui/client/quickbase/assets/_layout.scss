@@ -278,6 +278,7 @@
     &.stage-open {
       height: 180px !important;
       min-height: 180px !important;
+      transition: height .20s linear .10s;
     }
 
     &.stage-close {
@@ -288,7 +289,8 @@
       .layout-stage-content {
           opacity: 0;
           max-height: 0;
-          overflow: hidden;
+          visibility: hidden;
+          transition: visibility 0s .20s, opacity .20s linear;
       }
 
       .tab {
