@@ -8,11 +8,11 @@
         //Module constants
         var HTTP = 'http://';
         var BASE_ENDPOINT = '/api/v1';
-        var REALMS_ENDPOINT = BASE_ENDPOINT + '/realms/';
-        var TICKET_ENDPOINT = BASE_ENDPOINT + '/ticket?uid=1000000&realmID=';
-        var POST = 'POST';
-        var GET = 'GET';
-        var DELETE = 'DELETE';
+        var APPS_ENDPOINT = '/apps/';
+        var TABLES_ENDPOINT = '/tables/';
+        var RECORDS_ENDPOINT = '/records/';
+        var REALMS_ENDPOINT =  '/realms/';
+        var TICKETS_ENDPOINT = '/ticket?uid=1000000&realmID=';
         var SUBDOMAIN_CHARS = 'abcdefghijklmnopqrstuvwxyz0123456789';
         var CONTENT_TYPE = 'Content-Type';
         var APPLICATION_JSON = 'application/json';
@@ -50,13 +50,51 @@
         }
 
         var apiBase = {
+            constants: {
+                POST : 'POST',
+                GET : 'GET',
+                DELETE : 'DELETE'
+            },
+
+            resolveAppsEndpoint: function(appId) {
+                var appsEndpoint =  BASE_ENDPOINT + APPS_ENDPOINT;
+                if(appId) {
+                    appsEndpoint = appsEndpoint + appId;
+                }
+                return appsEndpoint;
+            },
+            resolveRecordsEndpoint: function(appId, tableId, recordId) {
+                var endpoint =  this.resolveTablesEndpoint(appId, tableId) + RECORDS_ENDPOINT;
+                if(recordId) {
+                    endpoint = endpoint + recordId;
+                }
+                return endpoint;
+            },
+            resolveTablesEndpoint: function(appId, tableId) {
+                var tableEndpoint =  this.resolveAppsEndpoint(appId) + TABLES_ENDPOINT;
+                if(tableId) {
+                    tableEndpoint = tableEndpoint + tableId;
+                }
+                return tableEndpoint;
+            },
+            resolveRealmsEndpoint: function(realmId) {
+                var endpoint =  BASE_ENDPOINT + REALMS_ENDPOINT;
+                if(realmId) {
+                    endpoint = endpoint + realmId;
+                }
+                return endpoint;
+            },
+            resolveTicketEndpoint: function() {
+                return BASE_ENDPOINT + TICKETS_ENDPOINT;
+            },
+
             defaultHeaders: DEFAULT_HEADERS,
             //Executes a REST request against the instance's realm using the configured javaHost
             executeRequest: function(stringPath, method, body, headers) {
                 //if there is a realm & we're not making a ticket or realm request, use the realm subdomain request URL
                 var subdomain = '';
                 if(this.realm
-                    && stringPath.indexOf(TICKET_ENDPOINT) === -1
+                    && stringPath.indexOf(TICKETS_ENDPOINT) === -1
                     && stringPath.indexOf(REALMS_ENDPOINT) === -1) {
                     subdomain = this.realm.subdomain;
                 }
@@ -128,12 +166,12 @@
                     "subdomain": generateRandomString(),
                     "name": generateRandomString()
                 };
-                return this.executeRequest(REALMS_ENDPOINT, POST, realmToMake, DEFAULT_HEADERS);
+                return this.executeRequest(this.resolveRealmsEndpoint(), this.constants.POST, realmToMake, DEFAULT_HEADERS);
             },
 
             //Helper method creates a ticket given a realm ID.  Returns a promise
             createTicket: function(realmId) {
-                return this.executeRequest(TICKET_ENDPOINT + realmId, GET, '', DEFAULT_HEADERS);
+                return this.executeRequest(this.resolveTicketEndpoint() + realmId, this.constants.GET, '', DEFAULT_HEADERS);
             },
 
             //Deletes a realm, if one is set on the instance, returns a promise
@@ -142,7 +180,8 @@
                 var context = this;
                 var deferred = Promise.pending();
                 if(context.realm) {
-                    context.executeRequest(REALMS_ENDPOINT + context.realm.id, DELETE, '', DEFAULT_HEADERS)
+                    context.executeRequest(context.resolveRealmsEndpoint(context.realm.id),
+                        context.constants.DELETE, '', DEFAULT_HEADERS)
                         .then(function (response) {
                             deferred.resolve(response);
                             context.realm = null;

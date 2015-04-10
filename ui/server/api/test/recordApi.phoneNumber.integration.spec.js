@@ -3,14 +3,12 @@ var should = require('should');
 var assert = require('assert');
 var app = require('../../app');
 var config = require('../../config/environment');
-var apiBase = require('./apiBase.mock')(config);
+var recordBase = require('./apiRecordBase.mock')(config);
 var Promise = require('bluebird');
 var _ = require('lodash');
 
 describe('API - APPS test cases', function () {
     //Cache the init promise so that test methods can use it as init.then(function(){...})
-    var init = apiBase.initialize();
-
     var exampleApp = {
         "name":"Mark's App",
         "tables":[
@@ -21,82 +19,22 @@ describe('API - APPS test cases', function () {
         ]
     };
 
-    //Helper method to create an app, can be used by multiple test cases
-    function createApp() {
-        var deferred = Promise.pending();
-        init.then(function(createdRealm){
-            apiBase.executeRequest('/api/v1/apps', 'POST', exampleApp).then(function(appResponse){
-                deferred.resolve(appResponse);
-            }).catch(function(error){
-                deferred.reject(error);
-                assert(false, 'failed to create app: ' + JSON.stringify(error));
-            });
-        });
-        return deferred.promise;
-    }
-
-    // Creates and fetches a record, returning a promise that is resolved or rejected on successful
-    // record GET following the create
-    function createAndFetchRecord(recordsEndpoint, record, params) {
-        var fetchRecordDeferred = Promise.pending();
-
-        apiBase.executeRequest(recordsEndpoint, 'POST', record)
-            .then(function(recordIdResponse){
-                var getEndpoint = recordsEndpoint + JSON.parse(recordIdResponse.body).id;
-                if(params) {
-                    getEndpoint += params;
-                }
-                apiBase.executeRequest(getEndpoint, 'GET')
-                    .then(function(fetchedRecordResponse){
-                        var fetchedRecord = JSON.parse(fetchedRecordResponse.body);
-                        fetchRecordDeferred.resolve(fetchedRecord);
-                    }).catch(function(error){
-                        fetchRecordDeferred.reject(error);
-                    });
-            });
-
-        return fetchRecordDeferred.promise;
-    }
-
     function providePhoneRecords(fid) {
         //Incomplete number
-        var recordsInput =
-            [{
-            "id": fid,
-            "value": "12345678"}]
-        ;
-        var expectedRecords = {
-                "id": fid,
-                "value": "12345678",
-                "display": "(1) 234-5678"};
+        var recordsInput = [{"id": fid, "value": "12345678"}];
+        var expectedRecords = {"id": fid, "value": "12345678", "display": "(1) 234-5678"};
 
         //More than 10 digit number
-        var largeInput =  [{
-            "id": fid,
-            "value": "1234567890123"}];
-
-        var largeExpected = {
-                "id": fid,
-                "value": "1234567890123",
-                "display": "123 (456) 789-0123"};
+        var largeInput =  [{"id": fid, "value": "1234567890123"}];
+        var largeExpected = { "id": fid, "value": "1234567890123", "display": "123 (456) 789-0123"};
 
         //Empty records
-        var emptyPhoneRecords =  [{
-            "id": fid,
-            "value": ""}];
-        var expectedEmptyPhoneRecords = {
-                "id": fid,
-                "value": null,
-                "display": null};
+        var emptyPhoneRecords =  [{"id": fid, "value": ""}];
+        var expectedEmptyPhoneRecords = {"id": fid, "value": null, "display": null};
 
         //null record value
-        var nullPhoneRecords =  [{
-            "id": fid,
-            "value": null}];
-        var nullExpectedPhoneRecords = {
-                "id": fid,
-                "value": null,
-                "display": null};
+        var nullPhoneRecords =  [{"id": fid, "value": null}];
+        var nullExpectedPhoneRecords = {"id": fid, "value": null, "display": null};
 
         return [
             { message: "Phone number", record: recordsInput, expectedFieldValue: expectedRecords },
@@ -108,7 +46,7 @@ describe('API - APPS test cases', function () {
 
     it('Should create and retrieve display formatted records', function (done) {
         this.timeout(20000);
-        createApp().then(function(appResponse){
+        recordBase.createApp(exampleApp).then(function(appResponse){
             var app = JSON.parse(appResponse.body);
             var phoneField;
             app.tables[0].fields.forEach(function(field){
@@ -121,8 +59,9 @@ describe('API - APPS test cases', function () {
             //For each of the cases, create the record and execute the request
             var fetchRecordPromises = [];
             records.forEach(function(currentRecord) {
-                var recordsEndpoint = '/api/v1/apps/'+ app.id +'/tables/' + app.tables[0].id + '/records/';
-                fetchRecordPromises.push(createAndFetchRecord(recordsEndpoint, currentRecord.record, '?format=display'));
+                var recordsEndpoint = recordBase.apiBase.resolveRecordsEndpoint(app.id, app.tables[0].id);
+                //var recordsEndpoint = '/api/v1/apps/'+ app.id +'/tables/' + app.tables[0].id + '/records/';
+                fetchRecordPromises.push(recordBase.createAndFetchRecord(recordsEndpoint, currentRecord.record, '?format=display'));
             });
 
             //When all the records have been created and fetched, assert the values match expectations
@@ -148,7 +87,7 @@ describe('API - APPS test cases', function () {
     after(function(done) {
         //Realm deletion takes time, bump the timeout
         this.timeout(10000);
-        apiBase.cleanup().then(function(){
+        recordBase.apiBase.cleanup().then(function(){
             done();
         });
     });
