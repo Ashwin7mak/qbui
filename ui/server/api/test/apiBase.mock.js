@@ -1,7 +1,7 @@
 (function () {
     'use strict';
     var request = require('request');
-    var Promise = require('bluebird');
+    var promise = require('bluebird');
     var assert = require('assert');
 
     module.exports = function (config) {
@@ -41,7 +41,7 @@
         }
 
         //Generates and returns a psuedo-random 32 char string that is URL safe
-        function generateRandomString() {
+        function generateValidSubdomainString() {
             var text = '';
             for (var i = 0; i < 32; i++) {
                 text += SUBDOMAIN_CHARS.charAt(Math.floor(Math.random() * SUBDOMAIN_CHARS.length));
@@ -114,7 +114,7 @@
                 }
                 console.log('about to exex: ' + JSON.stringify(opts));
                 //Make request and return promise
-                var deferred = Promise.pending();
+                var deferred = promise.pending();
                 request(opts, function (error, response) {
                     if (error) {
                         deferred.reject(new Error(error));
@@ -130,7 +130,7 @@
             //Create a realm for API tests to run against and generates a ticket
             initialize: function () {
                 var context = this;
-                var deferred = Promise.pending();
+                var deferred = promise.pending();
                 if (!context.realm) {
                     //Create a realm to use for API tests
                     this.createRealm()
@@ -164,8 +164,8 @@
             createRealm: function () {
                 var realmToMake = {
                     "id": Math.floor(Math.random() * 100000000 - 0),
-                    "subdomain": generateRandomString(),
-                    "name": generateRandomString()
+                    "subdomain": generateValidSubdomainString(),
+                    "name": generateValidSubdomainString()
                 };
                 return this.executeRequest(this.resolveRealmsEndpoint(), this.constants.POST, realmToMake, DEFAULT_HEADERS);
             },
@@ -179,7 +179,7 @@
             cleanup: function () {
                 //delete the realm  if not null
                 var context = this;
-                var deferred = Promise.pending();
+                var deferred = promise.pending();
                 if (context.realm) {
                     context.executeRequest(context.resolveRealmsEndpoint(context.realm.id),
                         context.constants.DELETE, '', DEFAULT_HEADERS)

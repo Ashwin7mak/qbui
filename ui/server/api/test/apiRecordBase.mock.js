@@ -1,6 +1,6 @@
 (function () {
     'use strict';
-    var Promise = require('bluebird');
+    var promise = require('bluebird');
     var assert = require('assert');
     module.exports = function (config) {
         var apiBase = require('./apiBase.mock.js')(config);
@@ -10,7 +10,7 @@
             apiBase: apiBase,
             //Helper method to create an app, can be used by multiple test cases
             createApp: function (appToCreate) {
-                var deferred = Promise.pending();
+                var deferred = promise.pending();
                 init.then(function (createdRealm) {
                     apiBase.executeRequest(apiBase.resolveAppsEndpoint(), apiBase.constants.POST, appToCreate).then(function (appResponse) {
                         deferred.resolve(appResponse);
@@ -25,7 +25,7 @@
             // Creates and fetches a record, returning a promise that is resolved or rejected on successful
             // record GET following the create
             createAndFetchRecord: function (recordsEndpoint, record, params) {
-                var fetchRecordDeferred = Promise.pending();
+                var fetchRecordDeferred = promise.pending();
 
                 init.then(function () {
                     apiBase.executeRequest(recordsEndpoint, apiBase.constants.POST, record)
