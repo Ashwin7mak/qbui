@@ -74,7 +74,6 @@
                 if(this.authTicket) {
                     opts.headers[TICKET_HEADER_KEY] = this.authTicket;
                 }
-                console.log('About to execute request: ' + JSON.stringify(opts));
                 //Make request and return promise
                 var deferred = Promise.pending();
                 request(opts, function (error, response) {
@@ -98,14 +97,12 @@
                     this.createRealm()
                         .then(function(realmResponse) {
                             context.realm = JSON.parse(realmResponse.body);
-                            console.log('Realm created: ' + realmResponse.body);
                             //Realm creation succeeded, now create a ticket
                             context.createTicket(context.realm.id)
                                 .then(function(authResponse){
                                     //TODO: tickets come back quoted, invalid JSON, we regex the quotes away.  hack.
                                     context.authTicket = authResponse.body.replace(/"/g, '');
                                     deferred.resolve(context.realm);
-                                    console.log('Ticket created: ' + context.authTicket);
                                 }).catch(function(authError){
                                     //If auth request fails, delete the realm & fail the tests
                                     context.cleanup();
