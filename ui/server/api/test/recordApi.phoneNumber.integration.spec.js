@@ -7,7 +7,7 @@ var recordBase = require('./apiRecordBase.mock')(config);
 var Promise = require('bluebird');
 var _ = require('lodash');
 
-describe('API - APPS test cases', function () {
+describe('API - RECORDS test cases', function () {
     //Cache the init promise so that test methods can use it as init.then(function(){...})
     var exampleApp = {
         "name":"Mark's App",
@@ -44,7 +44,7 @@ describe('API - APPS test cases', function () {
         ];
     }
 
-    it('Should create and retrieve display formatted records', function (done) {
+    it('Should create and retrieve display formatted phone records', function (done) {
         this.timeout(20000);
         recordBase.createApp(exampleApp).then(function(appResponse){
             var app = JSON.parse(appResponse.body);
@@ -76,7 +76,7 @@ describe('API - APPS test cases', function () {
                         });
                     }
                     done();
-                }).catch(function(error){
+                }).catch(function(){
                     assert(false, 'unable to resolve all records');
                     done();
                 });
