@@ -8,24 +8,25 @@
       width: 50%;
       div {
         font-size: 12px;
-        padding: 10px 30px;
-      }
-      div.header {
-        font-size: 14px;
-        font-weight: bold;
+        padding: 0px 30px 15px;
+        &.header {
+          font-size: 14px;
+          font-weight: bold;
+        }
       }
     }
 
     .right {
-      div {
-        font-size: 12px;
-      }
-      font-size: 14px;
+      font-size: 12px;
       float: left;
       width: 50%;
       .time {
         float: left;
-        width: 50%
+        width: 50%;
+        .title {
+          font-weight:bold;
+          padding: 0px 5px 3px 0px;
+        }
       }
       .reminder {
         float: left;
@@ -50,29 +51,17 @@
       width: 50%;
       div {
         font-size: 12px;
-        padding: 10px 30px;
-      }
-      div.header {
-        font-size: 14px;
-        font-weight: bold;
+        padding: 0px 30px 15px;
+        &.header {
+          font-size: 14px;
+          font-weight: bold;
+        }
       }
     }
-
     .right {
-      div {
-        font-size: 12px;
-      }
-      font-size: 14px;
+      font-size: 12px;
       float: left;
       width: 50%;
-      .time {
-        float: left;
-        width: 50%
-      }
-      .reminder {
-        float: left;
-        width: 50%;
-      }
     }
 
   }
