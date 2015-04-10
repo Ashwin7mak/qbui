@@ -1,10 +1,12 @@
 /* app css master stylesheet */
 /* imports */
 @import "colors";
+@import "svgs";
 
 .quickbase-app {
 
   @import "dashboard";
+  @import "grid";
   @import "layout";
   @import "report";
 

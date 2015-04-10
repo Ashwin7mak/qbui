@@ -27,8 +27,11 @@
 
             <div class="layout-container" style="">
 
-                <div class="layout-stage">
-                    <div ng-include="getStageContent()"></div>
+                <div class="layout-stage" ng-class="{'stage-open':!isClosed, 'stage-close': isClosed}">
+                    <div class="layout-stage-content">
+                        <div ng-include="getStageContent()"></div>
+                    </div>
+                    <button class="tab arrow" ng-click="isClosed = !isClosed"></button>
                 </div>
 
                 <div class="layout-content">

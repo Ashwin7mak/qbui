@@ -1,56 +1,56 @@
 /* app css master stylesheet */
 /* imports */
-/* line 4, ../_dashboard.scss */
+/* line 4, /Users/dhatch/Projects/qbui/ui/client/quickbase/assets/_dashboard.scss */
 .quickbase-app .dashboard ul, .quickbase-app .dashboard ol, .quickbase-app .dashboard dl {
   list-style-type: none;
 }
-/* line 8, ../_dashboard.scss */
+/* line 8, /Users/dhatch/Projects/qbui/ui/client/quickbase/assets/_dashboard.scss */
 .quickbase-app .dashboard h5 {
   background-color: #c7c7c7;
 }
-/* line 11, ../_dashboard.scss */
+/* line 11, /Users/dhatch/Projects/qbui/ui/client/quickbase/assets/_dashboard.scss */
 .quickbase-app .dashboard h3 {
   background-color: #6e8ba8;
 }
-/* line 14, ../_dashboard.scss */
+/* line 14, /Users/dhatch/Projects/qbui/ui/client/quickbase/assets/_dashboard.scss */
 .quickbase-app .dashboard h4 {
   background-color: #6e8ba8;
 }
-/* line 17, ../_dashboard.scss */
+/* line 17, /Users/dhatch/Projects/qbui/ui/client/quickbase/assets/_dashboard.scss */
 .quickbase-app .dashboard .menu {
   list-style: none;
   border-bottom: 0.1em solid black;
   margin-bottom: 2em;
   padding: 0 0 0.5em;
 }
-/* line 25, ../_dashboard.scss */
+/* line 25, /Users/dhatch/Projects/qbui/ui/client/quickbase/assets/_dashboard.scss */
 .quickbase-app .dashboard .menu:before {
   content: "[";
 }
-/* line 29, ../_dashboard.scss */
+/* line 29, /Users/dhatch/Projects/qbui/ui/client/quickbase/assets/_dashboard.scss */
 .quickbase-app .dashboard .menu:after {
   content: "]";
 }
-/* line 33, ../_dashboard.scss */
+/* line 33, /Users/dhatch/Projects/qbui/ui/client/quickbase/assets/_dashboard.scss */
 .quickbase-app .dashboard .menu > li {
   display: inline;
 }
-/* line 37, ../_dashboard.scss */
+/* line 37, /Users/dhatch/Projects/qbui/ui/client/quickbase/assets/_dashboard.scss */
 .quickbase-app .dashboard .menu > li:before {
   content: "|";
   padding-right: 0.3em;
 }
-/* line 42, ../_dashboard.scss */
+/* line 42, /Users/dhatch/Projects/qbui/ui/client/quickbase/assets/_dashboard.scss */
 .quickbase-app .dashboard .menu > li:nth-child(1):before {
   content: "";
   padding: 0;
 }
-/* line 47, ../_dashboard.scss */
+/* line 47, /Users/dhatch/Projects/qbui/ui/client/quickbase/assets/_dashboard.scss */
 .quickbase-app .dashboard ul, .quickbase-app .dashboard ol, .quickbase-app .dashboard dl {
   list-style-type: none;
   margin: 10px;
 }
-/* line 52, ../_dashboard.scss */
+/* line 52, /Users/dhatch/Projects/qbui/ui/client/quickbase/assets/_dashboard.scss */
 .quickbase-app .dashboard .content {
   float: left;
   height: 500px;
@@ -58,7 +58,7 @@
   position: relative;
   width: 66.67%;
 }
-/* line 62, ../_dashboard.scss */
+/* line 62, /Users/dhatch/Projects/qbui/ui/client/quickbase/assets/_dashboard.scss */
 .quickbase-app .dashboard .nav-content {
   background-color: #6e8ba8;
   width: 165px;
@@ -66,40 +66,104 @@
   position: relative;
   height: 1000px;
 }
-/* line 69, ../_dashboard.scss */
+/* line 69, /Users/dhatch/Projects/qbui/ui/client/quickbase/assets/_dashboard.scss */
 .quickbase-app .dashboard .nav-content button {
   margin: 20px;
   height: 51px;
 }
-/* line 77, ../_dashboard.scss */
+/* line 77, /Users/dhatch/Projects/qbui/ui/client/quickbase/assets/_dashboard.scss */
 .quickbase-app .dashboard ul a.ng-binding {
   cursor: pointer;
   color: #131f2b;
 }
-/* line 81, ../_dashboard.scss */
+/* line 81, /Users/dhatch/Projects/qbui/ui/client/quickbase/assets/_dashboard.scss */
 .quickbase-app .dashboard ul a.ng-binding:hover {
   border-left-color: #fff;
   box-shadow: inset 0 0 0 1px rgba(0, 0, 0, 0.1), -1px 0 rgba(255, 255, 255, 0.15);
   background-image: -webkit-linear-gradient(top, #4f8aea 0%, #3e67e5 100%);
   background-image: linear-gradient(to bottom, #4f8aea 0%, #3e67e5 100%);
 }
-/* line 2, ../_layout.scss */
+/* line 2, /Users/dhatch/Projects/qbui/ui/client/quickbase/assets/_grid.scss */
+.quickbase-app .gridTitle {
+  color: #969696;
+  font-family: "Helvetica Neue LT Bold", HelveticaNeue,"Helvetica Neue",Helvetica,Arial,sans-serif;
+}
+/* line 7, /Users/dhatch/Projects/qbui/ui/client/quickbase/assets/_grid.scss */
+.quickbase-app .report-grid {
+  height: 701px;
+}
+/* line 11, /Users/dhatch/Projects/qbui/ui/client/quickbase/assets/_grid.scss */
+.quickbase-app .ui-grid {
+  font-family: "Helvetica Neue LT Roman", HelveticaNeue, "Helvetica Neue", Helvetica, Arial, sans-serif;
+  border: 1;
+  color: #404040;
+  border: 2px solid gainsboro;
+  font-size: 12px;
+}
+/* line 19, /Users/dhatch/Projects/qbui/ui/client/quickbase/assets/_grid.scss */
+.quickbase-app .ui-grid-header-canvas {
+  background-color: #e3eaf3;
+  color: #6e8ba8;
+  text-transform: uppercase;
+  font-weight: normal;
+  border-bottom: 2px solid #cedcea;
+  height: 32px;
+}
+/* line 28, /Users/dhatch/Projects/qbui/ui/client/quickbase/assets/_grid.scss */
+.quickbase-app .ui-grid-header-cell {
+  padding: 8px 0 2px 0;
+}
+/* line 32, /Users/dhatch/Projects/qbui/ui/client/quickbase/assets/_grid.scss */
+.quickbase-app .ui-grid-header-cell:hover {
+  background-color: #6e8ba8;
+  color: #e3eaf3;
+}
+/* line 37, /Users/dhatch/Projects/qbui/ui/client/quickbase/assets/_grid.scss */
+.quickbase-app .ui-grid-icon-angle-down:before {
+  content: '';
+}
+/* line 41, /Users/dhatch/Projects/qbui/ui/client/quickbase/assets/_grid.scss */
+.quickbase-app .ui-grid-cell {
+  border-right: 1px dotted #969696;
+  height: 43px;
+  line-height: 1.2em;
+  vertical-align: middle;
+}
+/* line 48, /Users/dhatch/Projects/qbui/ui/client/quickbase/assets/_grid.scss */
+.quickbase-app .ui-grid-row {
+  border-bottom: 1px solid #969696;
+}
+/* line 52, /Users/dhatch/Projects/qbui/ui/client/quickbase/assets/_grid.scss */
+.quickbase-app .ui-grid-footer-info {
+  margin-top: 7px;
+}
+/* line 57, /Users/dhatch/Projects/qbui/ui/client/quickbase/assets/_grid.scss */
+.quickbase-app .ui-grid-coluiGrid-007 {
+  text-align: right;
+}
+/* line 2, /Users/dhatch/Projects/qbui/ui/client/quickbase/assets/_layout.scss */
 .quickbase-app .shell {
   font-family: "HelveticaNeue-Roman", "HelveticaNeue", "Helvetica Neue", "Helvetica", "Arial", sans-serif;
-  width: 100%;
-  height: 100%;
+  min-width: 640px;
+  width: 98%;
+  height: 98%;
   position: absolute;
   transform: translate3d(0px, 0px, 0px);
   display: flex;
   flex-direction: row;
 }
-/* line 12, ../_layout.scss */
-.quickbase-app .shell .nav-container {
+/* line 14, /Users/dhatch/Projects/qbui/ui/client/quickbase/assets/_layout.scss */
+.quickbase-app .nav-target {
+  width: 100%;
+}
+/* line 18, /Users/dhatch/Projects/qbui/ui/client/quickbase/assets/_layout.scss */
+.quickbase-app .nav-container {
   flex: 0 0 auto;
   display: flex;
+  height: 100%;
 }
-/* line 16, ../_layout.scss */
-.quickbase-app .shell .nav-container .nav-shell {
+/* line 23, /Users/dhatch/Projects/qbui/ui/client/quickbase/assets/_layout.scss */
+.quickbase-app .nav-container .nav-shell {
   width: 165px;
   min-width: 165px;
   background-color: #193048;
@@ -108,34 +172,34 @@
   transform: translate3d(0px, 0px, 0px);
   transition: width 0.5s ease 0s;
 }
-/* line 24, ../_layout.scss */
-.quickbase-app .shell .nav-container .nav-shell.split-shell {
+/* line 31, /Users/dhatch/Projects/qbui/ui/client/quickbase/assets/_layout.scss */
+.quickbase-app .nav-container .nav-shell.split-shell {
   background-color: whitesmoke;
 }
-/* line 29, ../_layout.scss */
-.quickbase-app .shell .nav-container .nav-links {
+/* line 36, /Users/dhatch/Projects/qbui/ui/client/quickbase/assets/_layout.scss */
+.quickbase-app .nav-container .nav-links {
   position: relative;
   padding: 10px;
 }
-/* line 33, ../_layout.scss */
-.quickbase-app .shell .nav-container .nav-links a {
+/* line 40, /Users/dhatch/Projects/qbui/ui/client/quickbase/assets/_layout.scss */
+.quickbase-app .nav-container .nav-links a {
   cursor: pointer;
   color: whitesmoke;
 }
-/* line 37, ../_layout.scss */
-.quickbase-app .shell .nav-container .nav-links a.ng-binding:hover {
+/* line 44, /Users/dhatch/Projects/qbui/ui/client/quickbase/assets/_layout.scss */
+.quickbase-app .nav-container .nav-links a.ng-binding:hover {
   border-left-color: #fff;
   box-shadow: inset 0 0 0 1px rgba(0, 0, 0, 0.1), -1px 0 rgba(255, 255, 255, 0.15);
   background-image: -webkit-linear-gradient(top, #4f8aea 0%, #3e67e5 100%);
   background-image: linear-gradient(to bottom, #4f8aea 0%, #3e67e5 100%);
 }
-/* line 46, ../_layout.scss */
-.quickbase-app .shell .split-container {
+/* line 53, /Users/dhatch/Projects/qbui/ui/client/quickbase/assets/_layout.scss */
+.quickbase-app .split-container {
   flex: 0 0 auto;
   display: flex;
 }
-/* line 50, ../_layout.scss */
-.quickbase-app .shell .split-container .split-shell {
+/* line 57, /Users/dhatch/Projects/qbui/ui/client/quickbase/assets/_layout.scss */
+.quickbase-app .split-container .split-shell {
   width: 165px;
   min-width: 165px;
   background-color: whitesmoke;
@@ -144,30 +208,30 @@
   transform: translate3d(0px, 0px, 0px);
   transition: width 0.5s ease 0s;
 }
-/* line 60, ../_layout.scss */
-.quickbase-app .shell .split-container .split-links {
+/* line 67, /Users/dhatch/Projects/qbui/ui/client/quickbase/assets/_layout.scss */
+.quickbase-app .split-container .split-links {
   position: relative;
   padding: 10px;
 }
-/* line 64, ../_layout.scss */
-.quickbase-app .shell .split-container .split-links a {
+/* line 71, /Users/dhatch/Projects/qbui/ui/client/quickbase/assets/_layout.scss */
+.quickbase-app .split-container .split-links a {
   cursor: pointer;
   color: whitesmoke;
 }
-/* line 68, ../_layout.scss */
-.quickbase-app .shell .split-container .split-links a.ng-binding:hover {
+/* line 75, /Users/dhatch/Projects/qbui/ui/client/quickbase/assets/_layout.scss */
+.quickbase-app .split-container .split-links a.ng-binding:hover {
   border-left-color: #fff;
   box-shadow: inset 0 0 0 1px rgba(0, 0, 0, 0.1), -1px 0 rgba(255, 255, 255, 0.15);
   background-image: -webkit-linear-gradient(top, #4f8aea 0%, #3e67e5 100%);
   background-image: linear-gradient(to bottom, #4f8aea 0%, #3e67e5 100%);
 }
-/* line 77, ../_layout.scss */
-.quickbase-app .shell .drawer-container {
+/* line 84, /Users/dhatch/Projects/qbui/ui/client/quickbase/assets/_layout.scss */
+.quickbase-app .drawer-container {
   flex: 0 0 auto;
   display: flex;
 }
-/* line 81, ../_layout.scss */
-.quickbase-app .shell .drawer-container .drawer-shell {
+/* line 88, /Users/dhatch/Projects/qbui/ui/client/quickbase/assets/_layout.scss */
+.quickbase-app .drawer-container .drawer-shell {
   padding-right: 10px;
   position: absolute;
   top: 0;
@@ -179,45 +243,45 @@
   box-shadow: -3px 0px rgba(0, 0, 0, 0.15) inset;
   height: 100%;
 }
-/* line 97, ../_layout.scss */
-.quickbase-app .shell .drawer-container .drawer-shell.small {
+/* line 104, /Users/dhatch/Projects/qbui/ui/client/quickbase/assets/_layout.scss */
+.quickbase-app .drawer-container .drawer-shell.small {
   width: 265px;
   min-width: 265px;
   right: -275px;
 }
-/* line 102, ../_layout.scss */
-.quickbase-app .shell .drawer-container .drawer-shell.small.slide-in {
+/* line 109, /Users/dhatch/Projects/qbui/ui/client/quickbase/assets/_layout.scss */
+.quickbase-app .drawer-container .drawer-shell.small.slide-in {
   -webkit-transform: translateZ(0) translateX(-275px);
   transform: translateZ(0) translateX(-275px);
 }
-/* line 106, ../_layout.scss */
-.quickbase-app .shell .drawer-container .drawer-shell.small .drawer-content {
+/* line 113, /Users/dhatch/Projects/qbui/ui/client/quickbase/assets/_layout.scss */
+.quickbase-app .drawer-container .drawer-shell.small .drawer-content {
   padding: 30px 20px 0px 20px;
 }
-/* line 110, ../_layout.scss */
-.quickbase-app .shell .drawer-container .drawer-shell.large {
+/* line 117, /Users/dhatch/Projects/qbui/ui/client/quickbase/assets/_layout.scss */
+.quickbase-app .drawer-container .drawer-shell.large {
   width: 565px;
   min-width: 565px;
   right: -575px;
 }
-/* line 114, ../_layout.scss */
-.quickbase-app .shell .drawer-container .drawer-shell.large.slide-in {
+/* line 121, /Users/dhatch/Projects/qbui/ui/client/quickbase/assets/_layout.scss */
+.quickbase-app .drawer-container .drawer-shell.large.slide-in {
   -webkit-transform: translateZ(0) translateX(-575px);
   transform: translateZ(0) translateX(-575px);
 }
-/* line 118, ../_layout.scss */
-.quickbase-app .shell .drawer-container .drawer-shell.large .drawer-content {
+/* line 125, /Users/dhatch/Projects/qbui/ui/client/quickbase/assets/_layout.scss */
+.quickbase-app .drawer-container .drawer-shell.large .drawer-content {
   padding: 30px 45px 0px 30px;
 }
-/* line 122, ../_layout.scss */
-.quickbase-app .shell .drawer-container .drawer-shell .drawer-header {
+/* line 129, /Users/dhatch/Projects/qbui/ui/client/quickbase/assets/_layout.scss */
+.quickbase-app .drawer-container .drawer-shell .drawer-header {
   width: 100%;
   height: 55px;
   position: relative;
   background-color: #f3f5f8;
 }
-/* line 128, ../_layout.scss */
-.quickbase-app .shell .drawer-container .drawer-shell .drawer-header .drawer-title {
+/* line 135, /Users/dhatch/Projects/qbui/ui/client/quickbase/assets/_layout.scss */
+.quickbase-app .drawer-container .drawer-shell .drawer-header .drawer-title {
   height: 20px;
   font-size: 20px;
   position: absolute;
@@ -226,8 +290,8 @@
   font-family: "HelveticaNeue-Light";
   color: #404040;
 }
-/* line 138, ../_layout.scss */
-.quickbase-app .shell .drawer-container .drawer-shell .drawer-header .drawer-close {
+/* line 145, /Users/dhatch/Projects/qbui/ui/client/quickbase/assets/_layout.scss */
+.quickbase-app .drawer-container .drawer-shell .drawer-header .drawer-close {
   display: block;
   width: 10px;
   height: 20px;
@@ -238,12 +302,12 @@
   transition: 0.3s all ease;
   cursor: pointer;
 }
-/* line 149, ../_layout.scss */
-.quickbase-app .shell .drawer-container .drawer-shell .drawer-header .drawer-close:hover {
+/* line 156, /Users/dhatch/Projects/qbui/ui/client/quickbase/assets/_layout.scss */
+.quickbase-app .drawer-container .drawer-shell .drawer-header .drawer-close:hover {
   color: #2c4d9c;
 }
-/* line 154, ../_layout.scss */
-.quickbase-app .shell .drawer-container .drawer-shell .drawer-footer {
+/* line 161, /Users/dhatch/Projects/qbui/ui/client/quickbase/assets/_layout.scss */
+.quickbase-app .drawer-container .drawer-shell .drawer-footer {
   width: 100%;
   height: 55px;
   position: absolute;
@@ -253,23 +317,23 @@
   background: #c0d0e4;
   opacity: .75;
 }
-/* line 163, ../_layout.scss */
-.quickbase-app .shell .drawer-container .drawer-shell .drawer-footer button {
+/* line 170, /Users/dhatch/Projects/qbui/ui/client/quickbase/assets/_layout.scss */
+.quickbase-app .drawer-container .drawer-shell .drawer-footer button {
   padding: 10px 10px;
   margin: 10px 10px;
 }
-/* line 169, ../_layout.scss */
-.quickbase-app .shell .drawer-container .drawer-shell .drawer-content {
+/* line 176, /Users/dhatch/Projects/qbui/ui/client/quickbase/assets/_layout.scss */
+.quickbase-app .drawer-container .drawer-shell .drawer-content {
   background-color: #f3f5f8;
   scroll: auto;
 }
-/* line 176, ../_layout.scss */
-.quickbase-app .shell .popout-container {
+/* line 183, /Users/dhatch/Projects/qbui/ui/client/quickbase/assets/_layout.scss */
+.quickbase-app .popout-container {
   flex: 0 0 auto;
   display: flex;
 }
-/* line 180, ../_layout.scss */
-.quickbase-app .shell .popout-container .popout-shell {
+/* line 187, /Users/dhatch/Projects/qbui/ui/client/quickbase/assets/_layout.scss */
+.quickbase-app .popout-container .popout-shell {
   position: absolute;
   top: 0;
   border: 1px solid gainsboro;
@@ -280,15 +344,15 @@
   min-width: 450px;
   min-height: 450px;
 }
-/* line 192, ../_layout.scss */
-.quickbase-app .shell .popout-container .popout-shell .popout-header {
+/* line 199, /Users/dhatch/Projects/qbui/ui/client/quickbase/assets/_layout.scss */
+.quickbase-app .popout-container .popout-shell .popout-header {
   width: 100%;
   height: 55px;
   position: relative;
   background-color: #193048;
 }
-/* line 198, ../_layout.scss */
-.quickbase-app .shell .popout-container .popout-shell .popout-header .popout-title {
+/* line 205, /Users/dhatch/Projects/qbui/ui/client/quickbase/assets/_layout.scss */
+.quickbase-app .popout-container .popout-shell .popout-header .popout-title {
   height: 20px;
   font-size: 20px;
   position: absolute;
@@ -297,8 +361,8 @@
   font-family: "HelveticaNeue-Light";
   color: whitesmoke;
 }
-/* line 208, ../_layout.scss */
-.quickbase-app .shell .popout-container .popout-shell .popout-header .popout-close {
+/* line 215, /Users/dhatch/Projects/qbui/ui/client/quickbase/assets/_layout.scss */
+.quickbase-app .popout-container .popout-shell .popout-header .popout-close {
   display: block;
   width: 10px;
   height: 20px;
@@ -309,18 +373,18 @@
   transition: 0.3s all ease;
   cursor: pointer;
 }
-/* line 219, ../_layout.scss */
-.quickbase-app .shell .popout-container .popout-shell .popout-header .popout-close:hover {
+/* line 226, /Users/dhatch/Projects/qbui/ui/client/quickbase/assets/_layout.scss */
+.quickbase-app .popout-container .popout-shell .popout-header .popout-close:hover {
   color: #2c4d9c;
 }
-/* line 225, ../_layout.scss */
-.quickbase-app .shell .popout-container .popout-shell .popout-content {
+/* line 232, /Users/dhatch/Projects/qbui/ui/client/quickbase/assets/_layout.scss */
+.quickbase-app .popout-container .popout-shell .popout-content {
   background-color: #f3f5f8;
   padding: 20px;
   scroll: auto;
 }
-/* line 233, ../_layout.scss */
-.quickbase-app .shell .layout-container {
+/* line 240, /Users/dhatch/Projects/qbui/ui/client/quickbase/assets/_layout.scss */
+.quickbase-app .layout-container {
   flex: 1 1 0%;
   overflow: auto;
   display: flex;
@@ -328,57 +392,99 @@
   height: 100%;
   width: 100%;
 }
-/* line 241, ../_layout.scss */
-.quickbase-app .shell .layout-container .layout-header {
+/* line 248, /Users/dhatch/Projects/qbui/ui/client/quickbase/assets/_layout.scss */
+.quickbase-app .layout-container .layout-header {
   background-color: #c0d0e4;
+  color: #3a4d61;
   height: 40px;
+  min-height: 40px;
   line-height: 40px;
+  padding: 0px 15px;
 }
-/* line 246, ../_layout.scss */
-.quickbase-app .shell .layout-container .layout-header .leftContent {
-  padding-left: 5px;
+/* line 256, /Users/dhatch/Projects/qbui/ui/client/quickbase/assets/_layout.scss */
+.quickbase-app .layout-container .layout-header .leftContent {
   float: left;
 }
-/* line 250, ../_layout.scss */
-.quickbase-app .shell .layout-container .layout-header .rightContent {
-  padding-right: 15px;
+/* line 259, /Users/dhatch/Projects/qbui/ui/client/quickbase/assets/_layout.scss */
+.quickbase-app .layout-container .layout-header .rightContent {
   float: right;
 }
-/* line 256, ../_layout.scss */
-.quickbase-app .shell .layout-container .layout-stage {
+/* line 264, /Users/dhatch/Projects/qbui/ui/client/quickbase/assets/_layout.scss */
+.quickbase-app .layout-container .layout-stage {
   border-bottom: 1px solid #e3eaf3;
   background-image: linear-gradient(to top, #f6f8fb 0%, #f9fafb 100%);
   box-sizing: border-box;
   position: relative;
   background-color: #f3f5f8;
-  padding: 24px 15px 0px;
+  padding: 15px 15px 15px;
+  margin-bottom: 20px;
   transition: padding 0.5s ease 0s;
-  min-height: 100px;
 }
-/* line 266, ../_layout.scss */
-.quickbase-app .shell .layout-container .layout-stage.layout-stageClose {
-  height: 80px !important;
-  transition: height 0.2s linear 0.1s;
+/* line 274, /Users/dhatch/Projects/qbui/ui/client/quickbase/assets/_layout.scss */
+.quickbase-app .layout-container .layout-stage .layout-stage-content {
+  transition: opacity .10s linear .20s, max-height .05s linear .20s;
 }
-/* line 272, ../_layout.scss */
-.quickbase-app .shell .layout-container .layout-content {
+/* line 278, /Users/dhatch/Projects/qbui/ui/client/quickbase/assets/_layout.scss */
+.quickbase-app .layout-container .layout-stage.stage-open {
+  height: 180px !important;
+  min-height: 180px !important;
+}
+/* line 283, /Users/dhatch/Projects/qbui/ui/client/quickbase/assets/_layout.scss */
+.quickbase-app .layout-container .layout-stage.stage-close {
+  height: 40px !important;
+  min-height: 40px !important;
+  transition: height .20s linear .10s;
+}
+/* line 288, /Users/dhatch/Projects/qbui/ui/client/quickbase/assets/_layout.scss */
+.quickbase-app .layout-container .layout-stage.stage-close .layout-stage-content {
+  opacity: 0;
+  max-height: 0;
+  overflow: hidden;
+}
+/* line 294, /Users/dhatch/Projects/qbui/ui/client/quickbase/assets/_layout.scss */
+.quickbase-app .layout-container .layout-stage.stage-close .tab {
+  background-position: -121px -20px;
+}
+/* line 299, /Users/dhatch/Projects/qbui/ui/client/quickbase/assets/_layout.scss */
+.quickbase-app .layout-container .layout-stage .tab {
+  cursor: pointer;
+  position: absolute;
+  bottom: -24px;
+  right: 0px;
+  margin-right: 25px;
+  height: 24px;
+  width: 27px;
+  border: 1px solid #E3EAF3;
+  border-radius: 0px 0px 2px 2px;
+  background-position: -80px -20px;
+  background-size: 144px auto;
+  background-color: #F3F5F8;
+  outline: medium none;
+}
+/* line 313, /Users/dhatch/Projects/qbui/ui/client/quickbase/assets/_layout.scss */
+.quickbase-app .layout-container .layout-stage .tab.arrow {
+  background-repeat: no-repeat;
+  background-image: url('../images/arrow-sprite.png?1399484790');
+}
+/* line 320, /Users/dhatch/Projects/qbui/ui/client/quickbase/assets/_layout.scss */
+.quickbase-app .layout-container .layout-content {
   padding: 24px 15px 0px;
   min-height: 200px;
 }
-/* line 277, ../_layout.scss */
-.quickbase-app .shell .layout-container .layout-footer {
+/* line 325, /Users/dhatch/Projects/qbui/ui/client/quickbase/assets/_layout.scss */
+.quickbase-app .layout-container .layout-footer {
   height: 40px;
   line-height: 40px;
   width: 100%;
   font-size: 0.8rem;
 }
-/* line 282, ../_layout.scss */
-.quickbase-app .shell .layout-container .layout-footer .layout-footer-content {
+/* line 330, /Users/dhatch/Projects/qbui/ui/client/quickbase/assets/_layout.scss */
+.quickbase-app .layout-container .layout-footer .layout-footer-content {
   color: #404040;
   padding: 10px;
 }
-/* line 288, ../_layout.scss */
-.quickbase-app .shell .layout-container .trowser-footer {
+/* line 337, /Users/dhatch/Projects/qbui/ui/client/quickbase/assets/_layout.scss */
+.quickbase-app .trowser-footer {
   width: 100%;
   height: 55px;
   position: absolute;
@@ -387,83 +493,99 @@
   padding: 12px 0px;
   background: #193048;
 }
-/* line 296, ../_layout.scss */
-.quickbase-app .shell .layout-container .trowser-footer button {
+/* line 345, /Users/dhatch/Projects/qbui/ui/client/quickbase/assets/_layout.scss */
+.quickbase-app .trowser-footer button {
   padding: 10px 10px;
   margin: 10px 20px;
 }
-/* line 1, ../_report.scss */
+/* line 1, /Users/dhatch/Projects/qbui/ui/client/quickbase/assets/_report.scss */
 .quickbase-app .report {
   min-width: 640px;
 }
-/* line 3, ../_report.scss */
-.quickbase-app .report .report-header {
-  margin: 25px;
+/* line 6, /Users/dhatch/Projects/qbui/ui/client/quickbase/assets/_report.scss */
+.quickbase-app .report .report-stage .left {
   float: left;
+  width: 50%;
 }
-/* line 7, ../_report.scss */
+/* line 9, /Users/dhatch/Projects/qbui/ui/client/quickbase/assets/_report.scss */
+.quickbase-app .report .report-stage .left div {
+  font-size: 12px;
+  padding: 10px 30px;
+}
+/* line 13, /Users/dhatch/Projects/qbui/ui/client/quickbase/assets/_report.scss */
+.quickbase-app .report .report-stage .left div.header {
+  font-size: 14px;
+  font-weight: bold;
+}
+/* line 19, /Users/dhatch/Projects/qbui/ui/client/quickbase/assets/_report.scss */
+.quickbase-app .report .report-stage .right {
+  font-size: 14px;
+  float: left;
+  width: 50%;
+}
+/* line 20, /Users/dhatch/Projects/qbui/ui/client/quickbase/assets/_report.scss */
+.quickbase-app .report .report-stage .right div {
+  font-size: 12px;
+}
+/* line 26, /Users/dhatch/Projects/qbui/ui/client/quickbase/assets/_report.scss */
+.quickbase-app .report .report-stage .right .time {
+  float: left;
+  width: 50%;
+}
+/* line 30, /Users/dhatch/Projects/qbui/ui/client/quickbase/assets/_report.scss */
+.quickbase-app .report .report-stage .right .reminder {
+  float: left;
+  width: 50%;
+}
+/* line 37, /Users/dhatch/Projects/qbui/ui/client/quickbase/assets/_report.scss */
+.quickbase-app .report .report-header {
+  background-image: linear-gradient(to top, #f6f8fb 0%, #f9fafb 100%);
+  background-color: #f3f5f8;
+  border: 1px solid #e3eaf3;
+  box-sizing: border-box;
+  position: relative;
+  padding: 24px 15px 0px;
+  transition: padding 0.5s ease 0s;
+  min-height: 50px;
+  height: 50px;
+}
+/* line 48, /Users/dhatch/Projects/qbui/ui/client/quickbase/assets/_report.scss */
 .quickbase-app .report .report-header .left {
   float: left;
   width: 50%;
 }
-/* line 10, ../_report.scss */
+/* line 51, /Users/dhatch/Projects/qbui/ui/client/quickbase/assets/_report.scss */
 .quickbase-app .report .report-header .left div {
   font-size: 12px;
   padding: 10px 30px;
 }
-/* line 14, ../_report.scss */
+/* line 55, /Users/dhatch/Projects/qbui/ui/client/quickbase/assets/_report.scss */
 .quickbase-app .report .report-header .left div.header {
   font-size: 14px;
   font-weight: bold;
 }
-/* line 20, ../_report.scss */
+/* line 61, /Users/dhatch/Projects/qbui/ui/client/quickbase/assets/_report.scss */
 .quickbase-app .report .report-header .right {
   font-size: 14px;
   float: left;
   width: 50%;
 }
-/* line 21, ../_report.scss */
+/* line 62, /Users/dhatch/Projects/qbui/ui/client/quickbase/assets/_report.scss */
 .quickbase-app .report .report-header .right div {
   font-size: 12px;
 }
-/* line 27, ../_report.scss */
+/* line 68, /Users/dhatch/Projects/qbui/ui/client/quickbase/assets/_report.scss */
 .quickbase-app .report .report-header .right .time {
   float: left;
   width: 50%;
 }
-/* line 31, ../_report.scss */
+/* line 72, /Users/dhatch/Projects/qbui/ui/client/quickbase/assets/_report.scss */
 .quickbase-app .report .report-header .right .reminder {
   float: left;
   width: 50%;
 }
-/* line 39, ../_report.scss */
+/* line 80, /Users/dhatch/Projects/qbui/ui/client/quickbase/assets/_report.scss */
 .quickbase-app .report .report-content {
-  float: left;
-  clear: left;
   width: 100%;
   padding: 0px 0px;
-}
-/* line 45, ../_report.scss */
-.quickbase-app .report .report-content .grid-table {
-  width: 100%;
-  border-bottom-color: #cedcea;
-}
-/* line 48, ../_report.scss */
-.quickbase-app .report .report-content .grid-table .grid-cell {
-  padding: 3px;
-  text-align: left;
-}
-/* line 51, ../_report.scss */
-.quickbase-app .report .report-content .grid-table .grid-cell.header {
-  height: 32px;
-  background-color: #e3eaf3;
-  color: #6e8ba8;
-}
-/* line 56, ../_report.scss */
-.quickbase-app .report .report-content .grid-table .grid-cell.data {
-  font-size: 12px;
-}
-/* line 58, ../_report.scss */
-.quickbase-app .report .report-content .grid-table .grid-cell.data.currency {
-  text-align: right;
 }

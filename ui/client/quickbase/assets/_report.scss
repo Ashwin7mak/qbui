@@ -1,8 +1,49 @@
 .report {
+
   min-width: 640px;
+
+  .report-stage {
+    .left {
+      float: left;
+      width: 50%;
+      div {
+        font-size: 12px;
+        padding: 10px 30px;
+      }
+      div.header {
+        font-size: 14px;
+        font-weight: bold;
+      }
+    }
+
+    .right {
+      div {
+        font-size: 12px;
+      }
+      font-size: 14px;
+      float: left;
+      width: 50%;
+      .time {
+        float: left;
+        width: 50%
+      }
+      .reminder {
+        float: left;
+        width: 50%;
+      }
+    }
+  }
+
   .report-header {
-    margin: 25px;
-    float: left;
+    background-image: linear-gradient(to top, $lighter-blue 0%, $lightest-blue 100%);
+    background-color: $lighter-gray;
+    border: 1px solid $lighter-slate;
+    box-sizing: border-box;
+    position: relative;
+    padding: 24px 15px 0px;
+    transition: padding 0.5s ease 0s;
+    min-height: 50px;
+    height: 50px;
 
     .left {
       float: left;
@@ -37,29 +78,7 @@
   }
 
   .report-content {
-    float: left;
-    clear: left;
     width: 100%;
     padding: 0px 0px;
-
-    .grid-table {
-      width: 100%;
-      border-bottom-color: #cedcea;
-      .grid-cell {
-        padding: 3px;
-        text-align: left;
-        &.header {
-          height: $grid-header-height;
-          background-color: $grid-header-background-color;
-          color: $grid-header-color;
-        }
-        &.data {
-          font-size: 12px;
-          &.currency {
-            text-align: right;
-          }
-        }
-      }
-    }
   }
 }

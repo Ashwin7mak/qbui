@@ -5,13 +5,12 @@
     angular.module('qbapp.dashboard', []);
     angular.module('qbapp.common', []);
     angular.module('qbapp.reports.dashboard', ['qbapp.common']);
-    angular.module('qbapp.reports.manager', ['ngSanitize', 'qbapp.common']);
+    angular.module('qbapp.reports.manager', ['ngSanitize', 'qbapp.common', 'ui.grid']);
 
     //  define the angular apps module
     angular.module('quickbase.qbapp',
         [
             'ui.router',
-            'qbapp.common',
             'qbapp.dashboard',
             'qbapp.reports.dashboard',
             'qbapp.reports.manager'

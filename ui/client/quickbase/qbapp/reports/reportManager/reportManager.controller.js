@@ -11,6 +11,12 @@
         //  get the report data model
         $scope.report = ReportModel.get($stateParams.id);
 
+        //  ui grid options
+        $scope.gridOptions = {
+            showGridFooter: true,
+            data: $scope.report.data
+        };
+
         //  set appropriate header object data
         $scope.header = {
             leftContent: 'Beta > Reports > ' + $scope.report.name,
@@ -19,13 +25,14 @@
 
         //  set appropriate footer object data
         $scope.footer = {
-            content: ''//'&#169;2015 Intuit Inc. All rights reserved'
+            content: '&#169;2015 Intuit Inc. All rights reserved'
         };
 
         //  set the stage object based on the model data
         $scope.stage = {
+            visible: true,
             companyName: $scope.report.company,
-            lastSnapshot: $scope.report.snapshot
+            lastSnapshot: $scope.report.snapshot,
         };
 
         //  get the stage content template
@@ -35,8 +42,9 @@
 
         //  get the primary content template
         $scope.getContent = function() {
-            return 'quickbase/qbapp/reports/reportManager/reportContent.html';
+            return 'quickbase/qbapp/reports/reportManager/reportGridContent.html';
         };
+
 
     }
 
