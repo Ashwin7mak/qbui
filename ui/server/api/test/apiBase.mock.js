@@ -111,8 +111,7 @@
                 }
                 if (this.authTicket) {
                     opts.headers[TICKET_HEADER_KEY] = this.authTicket;
-                }
-                console.log('about to exex: ' + JSON.stringify(opts));
+                }   
                 //Make request and return promise
                 var deferred = promise.pending();
                 request(opts, function (error, response) {
