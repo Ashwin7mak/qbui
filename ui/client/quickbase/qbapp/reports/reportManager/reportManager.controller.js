@@ -32,7 +32,7 @@
         $scope.stage = {
             visible: true,
             companyName: $scope.report.company,
-            lastSnapshot: $scope.report.snapshot,
+            lastSnapshot: $scope.report.snapshot
         };
 
         //  get the stage content template

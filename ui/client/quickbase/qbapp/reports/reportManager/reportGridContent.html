@@ -1,26 +1,9 @@
 <div class="report">
     <div class="report-header"></div>
     <div class="report-content">
-        <div class="report-grid" ui-grid="gridOptions"></div>
-
-        <!--
-        <table class="grid-table">
-            <tr>
-                <th class="grid-cell header">Id</th>
-                <th class="grid-cell header">Name</th>
-                <th class="grid-cell header">Phone Number</th>
-                <th class="grid-cell header">Email Address</th>
-                <th class="grid-cell header">Balance</th>
-            </tr>
-            <tr ng-repeat="rd in report.data">
-                <td class="grid-cell data">{{rd.id}}</td>
-                <td class="grid-cell data">{{rd.name}}</td>
-                <td class="grid-cell data">{{rd.phoneNumber}}</td>
-                <td class="grid-cell data">{{rd.email}}</td>
-                <td class="grid-cell data currency">{{rd.balance}}</td>
-            </tr>
-        </table>
-        -->
+        <!-- TODO: most likely should be referencing a common grid template..  -->
+        <!-- TODO: ..but need to review the common/grid folder content??       -->
+        <div class="report-grid" ui-grid="gridOptions" ui-grid-selection></div>
     </div>
 
 </div>
