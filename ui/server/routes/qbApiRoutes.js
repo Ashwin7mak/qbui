@@ -8,10 +8,24 @@
         var requestHelper = require('../api/quickbase/requestHelper')(config);
         var recordsApi = require('../api/quickbase/recordsApi')(config);
 
-        //  TODO: need to figure out the routing..swagger doc vs 'real' api data call vs other.
-        //  TODO: .right now we are routing through this one definition...
-        //  TODO: ..may want to refine...as it's probably a bit too broad...tbd
-        app.route('/api/v1/apps/:appId/tables/:tableId/records').get(
+        //Route for returning a single record
+        app.route('/api/:version/apps/:appId/tables/:tableId/records/:recordId').get(
+            function(req, res) {
+                requestHelper.logRoute(req);
+                recordsApi.fetchSingleRecordAndFields(req)
+                    .then(function(response) {
+                        res.send(response);
+                    })
+                    .catch(function(error) {
+                        requestHelper.copyHeadersToResponse(res, error.headers);
+                        res.status(error.statusCode)
+                            .send(error.body);
+                    });
+            }
+        );
+
+        //Route for returning an array of records
+        app.route('/api/:version/apps/:appId/tables/:tableId/records').get(
             function(req, res) {
                 requestHelper.logRoute(req);
                 recordsApi.fetchRecordsAndFields(req)
@@ -25,6 +39,10 @@
                     });
             }
         );
+
+        //  TODO: need to figure out the routing..swagger doc vs 'real' api data call vs other.
+        //  TODO: .right now we are routing through this one definition...
+        //  TODO: ..may want to refine...as it's probably a bit too broad...tbd
         app.route('/api/*').all(function (req, res) {
             //  log some route info and set the request options
             requestHelper.logRoute(req);

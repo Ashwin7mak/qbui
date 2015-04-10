@@ -21,11 +21,14 @@
         port: 9000,
         sslPort: 9443,
 
-        //QA REST endpoint (protocol,server,port)
-        javaHost: '',
+        //REST endpoint (protocol,server,port)
+        //javaHost: 'https://localhost.intuit.com:8443',
+        //javaHost: 'http://localhost.intuit.com:8080'
+        javaHost: 'http://localhost:8085/api',
 
-        //QA Express Server
-        DOMAIN: ''
+        //Express Server
+        //DOMAIN: 'https://localhost.intuit.com:9443'
+        DOMAIN  : 'http://localhost:9000'
 
     };
 

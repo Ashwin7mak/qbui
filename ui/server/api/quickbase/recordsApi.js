@@ -49,21 +49,21 @@
         var SLASH = '/';
         var FIELDS = 'fields';
         var RECORDS = 'records';
+        var RECORD = 'record';
         var CONTENT_TYPE = 'Content-Type';
         var APPLICATION_JSON = 'application/json';
-        var FORMAT = 'format'
+        var FORMAT = 'format';
         var DISPLAY = 'display';
         var RAW = 'raw';
 
         //Given an array of records and array of fields, remove any fields
         //not referenced in the records
-        function removeUnusedFields(records, fields) {
+        function removeUnusedFields(record, fields) {
             var returnFields = fields;
-            if(records && fields &&
-                records.length > 0 &&
-                records[0].length != fields.length) {
+            if(record && fields &&
+                record.length != fields.length) {
                 returnFields = [];
-                for (var v in records[0]) {
+                for (var v in record) {
                     var f = findFieldById(v.id, fields);
                     if(f) {
                         returnFields.push(f);
@@ -103,6 +103,36 @@
 
         //TODO: only application/json is supported for content type.  Need a plan to support XML
         var recordsApi = {
+            fetchSingleRecordAndFields: function(req) {
+                var deferred = Promise.pending();
+                Promise.all([
+                    this.fetchRecords(req),
+                    this.fetchFields(req)
+                ]).then(function(response) {
+                    var record = JSON.parse(response[0].body);
+                    var responseObject;
+                    if(req.param(FORMAT) === RAW) {
+                        //return raw undecorated record values due to flag format=raw
+                        responseObject = record;
+                    } else {
+                        //response object will include a fields meta data block plus record values
+                        var fields = removeUnusedFields(record, JSON.parse(response[1].body));
+                        //format records for display if requested with the flag format=display
+                        if(req.param(FORMAT) === DISPLAY) {
+                            //display format the record field values
+                            record = recordFormatter.formatRecords([record], fields)[0];
+                        }
+                        responseObject = {};
+                        responseObject[FIELDS] = fields;
+                        responseObject[RECORD] = record;
+                    }
+                    deferred.resolve(responseObject);
+                }).catch(function(error) {
+                    deferred.reject(error);
+                });
+                return deferred.promise;
+            },
+
             //Returns a promise that is resolved with the records and fields meta data
             //or is rejected with a descriptive error code
             fetchRecordsAndFields: function(req) {
@@ -118,7 +148,7 @@
                         responseObject = records;
                     } else {
                         //response object will include a fields meta data block plus record values
-                        var fields = removeUnusedFields(records, JSON.parse(response[1].body));
+                        var fields = removeUnusedFields(records[0], JSON.parse(response[1].body));
                         //format records for display if requested with the flag format=display
                         if(req.param(FORMAT) === DISPLAY) {
                             //display format the record field values
@@ -146,7 +176,7 @@
             fetchFields: function(req) {
                 var opts = requestHelper.setOptions(req);
                 opts.headers[CONTENT_TYPE] = APPLICATION_JSON;
-                opts.url = opts.url.replace(SLASH + RECORDS, SLASH + FIELDS);
+                opts.url = opts.url.substring(0, opts.url.indexOf(RECORDS)) + FIELDS;
                 return executeRequest(opts, (req.param(FORMAT) === RAW));
             }
         };
