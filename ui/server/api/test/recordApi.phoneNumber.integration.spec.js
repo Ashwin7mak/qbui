@@ -21,7 +21,7 @@ describe('API - RECORDS test cases', function () {
     };
 
     function providePhoneRecords(fid) {
-        //Standard US phone number
+        //Standard phone number
         var recordsInput = [{"id": fid, "value": "12345678"}];
         var expectedRecords = {"id": fid, "value": "12345678", "display": "(1) 234-5678"};
 
