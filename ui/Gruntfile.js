@@ -3,9 +3,9 @@
 
 module.exports = function (grunt) {
 
-    var buildDir = __dirname + "/build";
-    var serverReportDir = buildDir + "/reports/server";
-    var clientReportDir = buildDir + "/reports/client";
+    var buildDir = __dirname + '/build';
+    var serverReportDir = buildDir + '/reports/server';
+    var clientReportDir = buildDir + '/reports/client';
 
     // Load grunt tasks automatically, when needed
     require('jit-grunt')(grunt, {
@@ -119,18 +119,18 @@ module.exports = function (grunt) {
                     src: ['<%= quickbase.client.root %>/**/*.js']
                 },
                 options: {
-                    config: "./.jscsrc",
-                    "excludeFiles": ['<%= quickbase.client.root %>/bower_components/**/*.js',
+                    config: './.jscsrc',
+                    excludeFiles: ['<%= quickbase.client.root %>/bower_components/**/*.js',
                         '<%= quickbase.client.root %>/**/*.spec.js']
                 }
             },
             server: {
                 files: {
-                    src: ["<%= express.root %>/**/*.js"]
+                    src: ['<%= express.root %>/**/*.js']
                 },
                 options: {
-                    config: "./.jscsrc",
-                    "excludeFiles": ['<%= express.root %>/**/*.spec.js']
+                    config: './.jscsrc',
+                    excludeFiles: ['<%= express.root %>/**/*.spec.js']
                 }
             }
         },
@@ -587,8 +587,8 @@ module.exports = function (grunt) {
         // does not contain the absolute path and thus sonar cannot use the report file
         // for coverage, an issue is open on this https://github.com/karma-runner/karma/issues/528
         // meanwhile we can workaround it by fixing the paths in the client coverage file
-        var clientCoverageReport = clientReportDir + "/coverage/lcov.info";
-        var absoluteFilePrefix = "SF:" + __dirname + "/";
+        var clientCoverageReport = clientReportDir + '/coverage/lcov.info';
+        var absoluteFilePrefix = 'SF:' + __dirname + '/';
         if (grunt.file.exists(clientCoverageReport)) {
             var lcovString = grunt.file.read(clientCoverageReport);
             var newLcovString = lcovString.replace(/SF\:\.\//g, absoluteFilePrefix);
@@ -689,8 +689,8 @@ module.exports = function (grunt) {
         // does not contain the absolute path and thus sonar cannot use the report file
         // for coverage, an issue is open on this https://github.com/karma-runner/karma/issues/528
         // meanwhile we can workaround it by fixing the paths in the client coverage file
-        var clientCoverageReport = clientReportDir + "/coverage/lcov.info";
-        var absoluteFilePrefix = "SF:" + __dirname + "/";
+        var clientCoverageReport = clientReportDir + '/coverage/lcov.info';
+        var absoluteFilePrefix = 'SF:' + __dirname + '/';
         if (grunt.file.exists(clientCoverageReport)) {
             var lcovString = grunt.file.read(clientCoverageReport);
             var newLcovString = lcovString.replace(/SF\:\.\//g, absoluteFilePrefix);
@@ -704,7 +704,7 @@ module.exports = function (grunt) {
 
     grunt.registerTask('test', function (target) {
         //  need this folder to exist or mocha tests will fail
-        grunt.file.mkdir(serverReportDir + "/unit/");
+        grunt.file.mkdir(serverReportDir + '/unit/');
 
         if (target === 'server') {
             return grunt.task.run([
@@ -740,8 +740,8 @@ module.exports = function (grunt) {
 
         //  default task if no target specified
         grunt.task.run([
-            'test:server',
-            'test:client'
+            'test:client',
+            'test:server'
         ]);
 
     });
@@ -769,5 +769,5 @@ module.exports = function (grunt) {
         'build'
     ]);
 
-    grunt.loadNpmTasks("grunt-jscs");
+    grunt.loadNpmTasks('grunt-jscs');
 };
