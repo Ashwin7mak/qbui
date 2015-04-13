@@ -709,7 +709,7 @@ module.exports = function (grunt) {
         if (target === 'server') {
             return grunt.task.run([
                 'clean:server',
-                'env:test',
+                'env:local',
                 'mochaTest',
                 'mocha_istanbul'
             ]);
