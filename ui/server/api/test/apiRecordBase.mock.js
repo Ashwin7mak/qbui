@@ -2,6 +2,8 @@
     'use strict';
     var promise = require('bluebird');
     var assert = require('assert');
+    var consts = require('../../constants');
+
     module.exports = function (config) {
         var apiBase = require('./apiBase.mock.js')(config);
         var init = apiBase.initialize();
@@ -12,7 +14,7 @@
             createApp: function (appToCreate) {
                 var deferred = promise.pending();
                 init.then(function (createdRealm) {
-                    apiBase.executeRequest(apiBase.resolveAppsEndpoint(), apiBase.constants.POST, appToCreate).then(function (appResponse) {
+                    apiBase.executeRequest(apiBase.resolveAppsEndpoint(), consts.POST, appToCreate).then(function (appResponse) {
                         deferred.resolve(appResponse);
                     }).catch(function (error) {
                         deferred.reject(error);
@@ -28,13 +30,13 @@
                 var fetchRecordDeferred = promise.pending();
 
                 init.then(function () {
-                    apiBase.executeRequest(recordsEndpoint, apiBase.constants.POST, record)
+                    apiBase.executeRequest(recordsEndpoint, consts.POST, record)
                         .then(function (recordIdResponse) {
                             var getEndpoint = recordsEndpoint + JSON.parse(recordIdResponse.body).id;
                             if (params) {
                                 getEndpoint += params;
                             }
-                            apiBase.executeRequest(getEndpoint, apiBase.constants.GET)
+                            apiBase.executeRequest(getEndpoint, consts.GET)
                                 .then(function (fetchedRecordResponse) {
                                     var fetchedRecord = JSON.parse(fetchedRecordResponse.body);
                                     fetchRecordDeferred.resolve(fetchedRecord);

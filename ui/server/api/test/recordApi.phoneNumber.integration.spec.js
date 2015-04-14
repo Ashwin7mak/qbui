@@ -49,7 +49,7 @@ describe('API - RECORDS test cases', function () {
     }
 
     it('Should create and retrieve display formatted phone records', function (done) {
-        this.timeout(20000);
+        this.timeout(30000);
         recordBase.createApp(exampleApp).then(function (appResponse) {
             var app = JSON.parse(appResponse.body);
             var phoneField;
@@ -93,7 +93,7 @@ describe('API - RECORDS test cases', function () {
     //Cleanup the test realm after all tests in the block
     after(function (done) {
         //Realm deletion takes time, bump the timeout
-        this.timeout(10000);
+        this.timeout(20000);
         recordBase.apiBase.cleanup().then(function () {
             done();
         });
