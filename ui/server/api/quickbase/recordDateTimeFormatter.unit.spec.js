@@ -39,7 +39,6 @@ describe('RECORDS date time formatter unit test', function () {
         ];
         provider().forEach(function(entry){
             var formattedRecords = recordFormatter.formatRecords(entry.records, dateFieldInfo);
-            console.log();
             assert.deepEqual(formattedRecords, entry.expectedRecords, entry.message);
         });
     });
