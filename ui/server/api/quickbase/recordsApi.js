@@ -176,7 +176,10 @@
             fetchFields: function(req) {
                 var opts = requestHelper.setOptions(req);
                 opts.headers[CONTENT_TYPE] = APPLICATION_JSON;
-                opts.url = opts.url.substring(0, opts.url.indexOf(RECORDS)) + FIELDS;
+                //If the endpoint provided is the records endpoint, replace records with the /fields path
+                if(opts.url.indexOf(RECORDS) != -1) {
+                    opts.url = opts.url.substring(0, opts.url.indexOf(RECORDS)) + FIELDS;
+                }
                 return executeRequest(opts, (req.param(FORMAT) === RAW));
             }
         };

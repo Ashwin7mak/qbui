@@ -20,7 +20,7 @@ describe('API - RECORDS test cases', function () {
         ]
     };
 
-    function providePhoneRecords(fid) {
+    function phoneRecordsDataProvider(fid) {
         //Standard phone number
         var recordsInput = [{"id": fid, "value": "12345678"}];
         var expectedRecords = {"id": fid, "value": "12345678", "display": "(1) 234-5678"};
@@ -59,7 +59,7 @@ describe('API - RECORDS test cases', function () {
                 }
             });
             assert(phoneField, 'failed to find phone field');
-            var records = providePhoneRecords(phoneField.id);
+            var records = phoneRecordsDataProvider(phoneField.id);
             //For each of the cases, create the record and execute the request
             var fetchRecordPromises = [];
             records.forEach(function (currentRecord) {

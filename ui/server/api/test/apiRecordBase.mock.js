@@ -2,7 +2,7 @@
     'use strict';
     var promise = require('bluebird');
     var assert = require('assert');
-    var consts = require('../../constants');
+    var consts = require('../constants');
 
     module.exports = function (config) {
         var apiBase = require('./apiBase.mock.js')(config);
