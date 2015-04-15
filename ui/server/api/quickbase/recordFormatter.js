@@ -4,7 +4,7 @@
 */
 (function () {
     'use strict';
-    var moment = require('moment');
+    var moment = require('moment-timezone');
     module.exports = function () {
         //Module constants:
         var OPEN_PAREN = '(';
@@ -48,6 +48,7 @@
 
         function hideYearIfCurrent(dateInput){
             //TODO: uh oh, figure this out
+            return dateInput;
         }
 
         function showTime(formatString) {
@@ -55,7 +56,7 @@
         }
 
         function showTimeZone(formatString, timeZone){
-            return formatString + ' ([' + timeZone + '])';
+            return formatString + ' z';
         }
 
         function validValue(fieldValue) {
@@ -70,8 +71,11 @@
             }
             //Date constructor expects ISO8601 date
             var d = new Date(fieldValue.value);
-            var m = moment(d);
-            //TODO: get the date time format on the field info in the java code
+            var timeZone = fieldInfo.timeZone;
+            if(!timeZone) {
+                timeZone = 'America/Los_Angeles';
+            }
+            var m = moment.tz(d, timeZone);
             var jsDateFormat = JAVA_TO_JS_DATE_FORMATS[fieldInfo.format];
             if(!jsDateFormat) {
                 jsDateFormat = DATE_FORMATS.MM_DD_YYYY;
@@ -80,8 +84,7 @@
                 jsDateFormat = showTime(jsDateFormat);
             }
             if(fieldInfo.showTimeZone){
-                //TODO: figure out how to get the app timezone into the field info
-                jsDateFormat = showTimeZone(jsDateFormat, 'PST');
+                jsDateFormat = showTimeZone(jsDateFormat);
             }
             if(fieldInfo.showMonthAsName){
                 jsDateFormat = showMonthAsName(jsDateFormat);
