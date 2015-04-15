@@ -3,6 +3,7 @@
     var request = require('request');
     var promise = require('bluebird');
     var assert = require('assert');
+    var consts = require('../constants');
 
     module.exports = function (config) {
         //Module constants
@@ -50,12 +51,6 @@
         }
 
         var apiBase = {
-            constants: {
-                POST: 'POST',
-                GET: 'GET',
-                DELETE: 'DELETE'
-            },
-
             resolveAppsEndpoint: function (appId) {
                 var appsEndpoint = BASE_ENDPOINT + APPS_ENDPOINT;
                 if (appId) {
@@ -111,7 +106,9 @@
                 }
                 if (this.authTicket) {
                     opts.headers[TICKET_HEADER_KEY] = this.authTicket;
-                }   
+                }
+
+                console.log('About to execute the request: ' + JSON.stringify(opts));
                 //Make request and return promise
                 var deferred = promise.pending();
                 request(opts, function (error, response) {
@@ -166,12 +163,12 @@
                     "subdomain": generateValidSubdomainString(),
                     "name": generateValidSubdomainString()
                 };
-                return this.executeRequest(this.resolveRealmsEndpoint(), this.constants.POST, realmToMake, DEFAULT_HEADERS);
+                return this.executeRequest(this.resolveRealmsEndpoint(), consts.POST, realmToMake, DEFAULT_HEADERS);
             },
 
             //Helper method creates a ticket given a realm ID.  Returns a promise
             createTicket: function (realmId) {
-                return this.executeRequest(this.resolveTicketEndpoint() + realmId, this.constants.GET, '', DEFAULT_HEADERS);
+                return this.executeRequest(this.resolveTicketEndpoint() + realmId, consts.GET, '', DEFAULT_HEADERS);
             },
 
             //Deletes a realm, if one is set on the instance, returns a promise
@@ -181,7 +178,7 @@
                 var deferred = promise.pending();
                 if (context.realm) {
                     context.executeRequest(context.resolveRealmsEndpoint(context.realm.id),
-                        context.constants.DELETE, '', DEFAULT_HEADERS)
+                        consts.DELETE, '', DEFAULT_HEADERS)
                         .then(function (response) {
                             deferred.resolve(response);
                             context.realm = null;

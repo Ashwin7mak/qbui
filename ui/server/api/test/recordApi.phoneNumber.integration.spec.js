@@ -20,7 +20,7 @@ describe('API - RECORDS test cases', function () {
         ]
     };
 
-    function providePhoneRecords(fid) {
+    function phoneRecordsDataProvider(fid) {
         //Standard phone number
         var recordsInput = [{"id": fid, "value": "12345678"}];
         var expectedRecords = {"id": fid, "value": "12345678", "display": "(1) 234-5678"};
@@ -49,7 +49,7 @@ describe('API - RECORDS test cases', function () {
     }
 
     it('Should create and retrieve display formatted phone records', function (done) {
-        this.timeout(20000);
+        this.timeout(30000);
         recordBase.createApp(exampleApp).then(function (appResponse) {
             var app = JSON.parse(appResponse.body);
             var phoneField;
@@ -59,7 +59,7 @@ describe('API - RECORDS test cases', function () {
                 }
             });
             assert(phoneField, 'failed to find phone field');
-            var records = providePhoneRecords(phoneField.id);
+            var records = phoneRecordsDataProvider(phoneField.id);
             //For each of the cases, create the record and execute the request
             var fetchRecordPromises = [];
             records.forEach(function (currentRecord) {
@@ -93,7 +93,7 @@ describe('API - RECORDS test cases', function () {
     //Cleanup the test realm after all tests in the block
     after(function (done) {
         //Realm deletion takes time, bump the timeout
-        this.timeout(10000);
+        this.timeout(20000);
         recordBase.apiBase.cleanup().then(function () {
             done();
         });
