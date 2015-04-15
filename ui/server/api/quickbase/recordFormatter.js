@@ -4,16 +4,103 @@
 */
 (function () {
     'use strict';
+    var moment = require('moment');
     module.exports = function () {
         //Module constants:
         var OPEN_PAREN = '(';
         var CLOSE_PAREN = ') ';
         var DASH = '-';
         var PHONE_NUMBER = 'PHONE_NUMBER';
+        var DATE = 'DATE';
+        var DATE_TIME = 'DATE_TIME';
+        var DATE_FORMATS = {
+            //FORMATTING COMPONENTS
+            TWO_DIGIT_MONTH: 'MM',
+            MONTH_ABBREV: 'MMM',
+            DAY_OF_WEEK: 'dddd, ',
+            TIME: 'h:mm A',
+            FOUR_DIGIT_YEAR: 'YYYY',
+            TWO_DIGIT_YEAR: 'YY',
+            TWO_DIGIT_DAY: 'DD',
+            //FULL FORMATS:
+            MM_DD_YY:   this.TWO_DIGIT_MONTH + DASH + this.TWO_DIGIT_DAY + DASH + this.TWO_DIGIT_YEAR,
+            MM_DD_YYYY: this.TWO_DIGIT_MONTH + DASH + this.TWO_DIGIT_DAY + DASH + this.FOUR_DIGIT_YEAR,
+            DD_MM_YYYY: this.TWO_DIGIT_DAY + DASH + this.TWO_DIGIT_MONTH + DASH + this.TWO_DIGIT_YEAR,
+            DD_DD_YY:   this.TWO_DIGIT_MONTH + DASH + this.TWO_DIGIT_DAY + DASH + this.TWO_DIGIT_YEAR,
+            YYYY_MM_DD: this.FOUR_DIGIT_YEAR + DASH + this.TWO_DIGIT_MONTH +  + DASH + this.TWO_DIGIT_DAY
+        };
+
+        var JAVA_TO_JS_DATE_FORMATS = {
+            'MM-dd-uu': DATE_FORMATS.MM_DD_YY,
+            'MM-dd-uuuu': DATE_FORMATS.MM_DD_YYYY,
+            'dd-MM-uuuu': DATE_FORMATS.DD_MM_YYYY,
+            'dd-MM-uu': DATE_FORMATS.DD_MM_YY,
+            'uuuu-MM-dd': DATE_FORMATS.YYYY_MM_DD
+        };
+
+        function showMonthAsName(formatString) {
+            return formatString.replace(DATE_FORMATS.TWO_DIGIT_MONTH, DATE_FORMATS.MONTH_ABBREV);
+        }
+
+        function showDayOfWeek(formatString) {
+            return DATE_FORMATS + formatString;
+        }
+
+        function hideYearIfCurrent(dateInput){
+            //TODO: uh oh, figure this out
+        }
+
+        function showTime(formatString) {
+            return formatString + DATE_FORMATS.TIME;
+        }
+
+        function showTimeZone(formatString, timeZone){
+            return formatString + ' ([' + timeZone + '])';
+        }
+
+        function validValue(fieldValue) {
+            if(!fieldValue || fieldValue.value === undefined || fieldValue.value === null) {
+                return false;
+            }
+            return true;
+        }
+        function formatDateTime(fieldValue, fieldInfo) {
+            if(!validValue(fieldvalue) || !validValue(fieldInfo)) {
+                return null;
+            }
+            //Date constructor expects ISO8601 date
+            var d = new Date(fieldValue);
+            var m = moment(d);
+            //TODO: get the date time format on the field info in the java code
+            var jsDateFormat = JAVA_TO_JS_DATE_FORMATS[fieldInfo.format];
+            if(!jsDateFormat) {
+                jsDateFormat = DATE_FORMATS.MM_DD_YYYY;
+            }
+            if(fieldInfo.showTime){
+                jsDateFormat = showTime(jsDateFormat);
+            }
+            if(fieldInfo.showTimeZone){
+                //TODO: figure out how to get the app timezone into the field info
+                jsDateFormat = showTimeZone(jsDateFormat, 'PST');
+            }
+            if(fieldInfo.showMonthAsName){
+                jsDateFormat = showMonthAsName(jsDateFormat);
+            }
+            if(fieldInfo.showDayOfWeek){
+                jsDateFormat = showDayOfWeek(jsDateFormat);
+            }
+
+            //produce the formatted date string
+            var formattedDateString = m.format(jsDateFormat);
+            if(fieldInfo.hideYearIfCurrent){
+                formattedDateString = hideYearIfCurrent(formattedDateString);
+            }
+            return formattedDateString;
+        }
 
         //Given a raw number as input, formats as a legacy QuickBase phone number. Note, not internationalized
         function formatPhoneNumber(fieldValue, fieldInfo) {
-            if(!fieldValue || fieldValue.value === undefined || fieldValue.value === null) {
+            if(!validValue(fieldValue)) {
                 return null;
             }
             var baseValue = fieldValue.value;
@@ -61,6 +148,9 @@
             switch(fieldInfo.type) {
                 case PHONE_NUMBER:
                     fieldValue.display = formatPhoneNumber(fieldValue, fieldInfo);
+                    break;
+                case DATE_TIME:
+                    fieldValue.display = formatDateTime(fieldValue, fieldInfo);
                     break;
                 default:
                     break;
