@@ -13,21 +13,21 @@
         var PHONE_NUMBER = 'PHONE_NUMBER';
         var DATE = 'DATE';
         var DATE_TIME = 'DATE_TIME';
+        //FORMATTING COMPONENTS
+        var TWO_DIGIT_MONTH = 'MM';
+        var MONTH_ABBREV = 'MMM';
+        var DAY_OF_WEEK = 'dddd, ';
+        var TIME = ' h:mm A';
+        var FOUR_DIGIT_YEAR = 'YYYY';
+        var TWO_DIGIT_YEAR = 'YY';
+        var TWO_DIGIT_DAY = 'DD';
         var DATE_FORMATS = {
-            //FORMATTING COMPONENTS
-            TWO_DIGIT_MONTH: 'MM',
-            MONTH_ABBREV: 'MMM',
-            DAY_OF_WEEK: 'dddd, ',
-            TIME: 'h:mm A',
-            FOUR_DIGIT_YEAR: 'YYYY',
-            TWO_DIGIT_YEAR: 'YY',
-            TWO_DIGIT_DAY: 'DD',
             //FULL FORMATS:
-            MM_DD_YY:   this.TWO_DIGIT_MONTH + DASH + this.TWO_DIGIT_DAY + DASH + this.TWO_DIGIT_YEAR,
-            MM_DD_YYYY: this.TWO_DIGIT_MONTH + DASH + this.TWO_DIGIT_DAY + DASH + this.FOUR_DIGIT_YEAR,
-            DD_MM_YYYY: this.TWO_DIGIT_DAY + DASH + this.TWO_DIGIT_MONTH + DASH + this.TWO_DIGIT_YEAR,
-            DD_DD_YY:   this.TWO_DIGIT_MONTH + DASH + this.TWO_DIGIT_DAY + DASH + this.TWO_DIGIT_YEAR,
-            YYYY_MM_DD: this.FOUR_DIGIT_YEAR + DASH + this.TWO_DIGIT_MONTH +  + DASH + this.TWO_DIGIT_DAY
+            MM_DD_YY:   TWO_DIGIT_MONTH + DASH + TWO_DIGIT_DAY + DASH + TWO_DIGIT_YEAR,
+            MM_DD_YYYY: TWO_DIGIT_MONTH + DASH + TWO_DIGIT_DAY + DASH + FOUR_DIGIT_YEAR,
+            DD_MM_YYYY: TWO_DIGIT_DAY + DASH + TWO_DIGIT_MONTH + DASH + TWO_DIGIT_YEAR,
+            DD_DD_YY:   TWO_DIGIT_MONTH + DASH + TWO_DIGIT_DAY + DASH + TWO_DIGIT_YEAR,
+            YYYY_MM_DD: FOUR_DIGIT_YEAR + DASH + TWO_DIGIT_MONTH +  + DASH + TWO_DIGIT_DAY
         };
 
         var JAVA_TO_JS_DATE_FORMATS = {
@@ -39,11 +39,11 @@
         };
 
         function showMonthAsName(formatString) {
-            return formatString.replace(DATE_FORMATS.TWO_DIGIT_MONTH, DATE_FORMATS.MONTH_ABBREV);
+            return formatString.replace(TWO_DIGIT_MONTH, MONTH_ABBREV);
         }
 
         function showDayOfWeek(formatString) {
-            return DATE_FORMATS + formatString;
+            return DAY_OF_WEEK + formatString;
         }
 
         function hideYearIfCurrent(dateInput){
@@ -51,7 +51,7 @@
         }
 
         function showTime(formatString) {
-            return formatString + DATE_FORMATS.TIME;
+            return formatString + TIME;
         }
 
         function showTimeZone(formatString, timeZone){
@@ -65,11 +65,11 @@
             return true;
         }
         function formatDateTime(fieldValue, fieldInfo) {
-            if(!validValue(fieldvalue) || !validValue(fieldInfo)) {
+            if(!validValue(fieldValue)) {
                 return null;
             }
             //Date constructor expects ISO8601 date
-            var d = new Date(fieldValue);
+            var d = new Date(fieldValue.value);
             var m = moment(d);
             //TODO: get the date time format on the field info in the java code
             var jsDateFormat = JAVA_TO_JS_DATE_FORMATS[fieldInfo.format];
@@ -89,7 +89,6 @@
             if(fieldInfo.showDayOfWeek){
                 jsDateFormat = showDayOfWeek(jsDateFormat);
             }
-
             //produce the formatted date string
             var formattedDateString = m.format(jsDateFormat);
             if(fieldInfo.hideYearIfCurrent){
