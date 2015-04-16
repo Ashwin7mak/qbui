@@ -4,7 +4,7 @@ var should = require('should');
 var recordFormatter = require('./recordFormatter')();
 var assert = require('assert');
 
-describe('RECORDS - TIME_OF_DAY formatter unit test', function () {
+describe('Time of day record formatter unit test', function () {
 
     function provider() {
         var inputTod = "1970-01-01T18:51:21Z";
