@@ -8,6 +8,9 @@
     var phoneFormatter = require('./phoneNumberFormatter');
     var PHONE_NUMBER = 'PHONE_NUMBER';
     var DATE_TIME = 'DATE_TIME';
+    var FORMULA_DATE_TIME = 'FORMULA_DATE_TIME';
+    var DATE = 'DATE';
+    var FORMULA_DATE = 'FORMULA_DATE';
 
     module.exports = function () {
         //Display formats record field values according to the field's display settings
@@ -17,6 +20,9 @@
                     fieldValue.display = phoneFormatter.format(fieldValue, fieldInfo);
                     break;
                 case DATE_TIME:
+                case DATE:
+                case FORMULA_DATE_TIME:
+                case FORMULA_DATE:
                     fieldValue.display = dateFormatter.format(fieldValue, fieldInfo);
                     break;
                 default:

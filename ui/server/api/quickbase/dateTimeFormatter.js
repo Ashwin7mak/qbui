@@ -42,9 +42,11 @@
         return DAY_OF_WEEK + formatString;
     }
 
-    function hideYearIfCurrent(dateInput){
-        //TODO: uh oh, figure this out
-        return dateInput;
+    function hideYear(formatString){
+        var noYearString = formatString.replace(DASH + FOUR_DIGIT_YEAR, '');
+        noYearString = noYearString.replace(FOUR_DIGIT_YEAR + DASH, '');
+        noYearString = noYearString.replace(DASH + TWO_DIGIT_YEAR, '');
+        return noYearString;
     }
 
     function showTime(formatString) {
@@ -90,12 +92,10 @@
             if(fieldInfo.showDayOfWeek){
                 jsDateFormat = showDayOfWeek(jsDateFormat);
             }
-            //produce the formatted date string
-            var formattedDateString = m.format(jsDateFormat);
-            if(fieldInfo.hideYearIfCurrent){
-                formattedDateString = hideYearIfCurrent(formattedDateString);
+            if(fieldInfo.hideYearIfCurrent && d.getFullYear() === new Date().getFullYear()){
+                jsDateFormat = hideYear(jsDateFormat);
             }
-            return formattedDateString;
+            return m.format(jsDateFormat);
         }
     };
 }());
