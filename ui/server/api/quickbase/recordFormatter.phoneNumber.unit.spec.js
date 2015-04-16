@@ -45,7 +45,7 @@ describe('Phone number record formatter unit test', function () {
             [[{
                 "id": 7,
                 "value": null,
-                "display": null}]];
+                "display": ""}]];
 
         return [
             { message: "phone number", records: recordsInput, expectedRecords: expectedRecords },

@@ -221,7 +221,7 @@ describe('DateTime record formatter unit test', function () {
             [[{
                 "id": 7,
                 "value": null,
-                "display": null}]];
+                "display": ""}]];
 
         return [
             { message: "dateTime with MM_DD_YYYY format and no flags", records: recordsInput, fieldInfo: fieldInfo_MMDDYYYY, expectedRecords: expectedRecords_MMDDYYYY },
@@ -249,9 +249,6 @@ describe('DateTime record formatter unit test', function () {
     it('should format various MM_DD_YYYY DateTime records for display', function () {
         mmddyyyyDataProvider().forEach(function(entry){
             var formattedRecords = recordFormatter.formatRecords(entry.records, entry.fieldInfo);
-            console.log('TEST CASE: ' + JSON.stringify(entry.message));
-            console.log('RET RECS: ' + JSON.stringify(formattedRecords));
-            console.log('EXP RECS: ' + JSON.stringify(entry.expectedRecords));
             assert.deepEqual(formattedRecords, entry.expectedRecords, entry.message);
         });
     });
@@ -471,7 +468,7 @@ describe('DateTime record formatter unit test', function () {
             [[{
                 "id": 7,
                 "value": null,
-                "display": null}]];
+                "display": ""}]];
 
         return [
             { message: "dateTime with MM_DD_YY format and no flags", records: recordsInput, fieldInfo: fieldInfo_MMDDYY, expectedRecords: expectedRecords_MMDDYY },
@@ -499,9 +496,6 @@ describe('DateTime record formatter unit test', function () {
     it('should format various MM_DD_YY DateTime records for display', function () {
         mmddyyDataProvider().forEach(function(entry){
             var formattedRecords = recordFormatter.formatRecords(entry.records, entry.fieldInfo);
-            console.log('TEST CASE: ' + JSON.stringify(entry.message));
-            console.log('RET RECS: ' + JSON.stringify(formattedRecords));
-            console.log('EXP RECS: ' + JSON.stringify(entry.expectedRecords));
             assert.deepEqual(formattedRecords, entry.expectedRecords, entry.message);
         });
     });
@@ -721,7 +715,7 @@ describe('DateTime record formatter unit test', function () {
             [[{
                 "id": 7,
                 "value": null,
-                "display": null}]];
+                "display": ""}]];
 
         return [
             { message: "dateTime with DD_MM_YY format and no flags", records: recordsInput, fieldInfo: fieldInfo_DDMMYY, expectedRecords: expectedRecords_DDMMYY },
@@ -749,9 +743,6 @@ describe('DateTime record formatter unit test', function () {
     it('should format various DD_MM_YY DateTime records for display', function () {
         ddmmyyDataProvider().forEach(function(entry){
             var formattedRecords = recordFormatter.formatRecords(entry.records, entry.fieldInfo);
-            console.log('TEST CASE: ' + JSON.stringify(entry.message));
-            console.log('RET RECS: ' + JSON.stringify(formattedRecords));
-            console.log('EXP RECS: ' + JSON.stringify(entry.expectedRecords));
             assert.deepEqual(formattedRecords, entry.expectedRecords, entry.message);
         });
     });
@@ -971,7 +962,7 @@ describe('DateTime record formatter unit test', function () {
             [[{
                 "id": 7,
                 "value": null,
-                "display": null}]];
+                "display": ""}]];
 
         return [
             { message: "dateTime with DD_MM_YYYY format and no flags", records: recordsInput, fieldInfo: fieldInfo_DDMMYYYY, expectedRecords: expectedRecords_DDMMYYYY },
@@ -999,9 +990,6 @@ describe('DateTime record formatter unit test', function () {
     it('should format various DD_MM_YYYY DateTime records for display', function () {
         ddmmyyyyDataProvider().forEach(function(entry){
             var formattedRecords = recordFormatter.formatRecords(entry.records, entry.fieldInfo);
-            console.log('TEST CASE: ' + JSON.stringify(entry.message));
-            console.log('RET RECS: ' + JSON.stringify(formattedRecords));
-            console.log('EXP RECS: ' + JSON.stringify(entry.expectedRecords));
             assert.deepEqual(formattedRecords, entry.expectedRecords, entry.message);
         });
     });
@@ -1221,7 +1209,7 @@ describe('DateTime record formatter unit test', function () {
             [[{
                 "id": 7,
                 "value": null,
-                "display": null}]];
+                "display": ""}]];
 
         return [
             { message: "dateTime with YYYY_MM_DD format and no flags", records: recordsInput, fieldInfo: fieldInfo_YYYYMMDD, expectedRecords: expectedRecords_YYYYMMDD },
@@ -1249,9 +1237,6 @@ describe('DateTime record formatter unit test', function () {
     it('should format various YYYY_MM_DD DateTime records for display', function () {
         yyyymmddDataProvider().forEach(function(entry){
             var formattedRecords = recordFormatter.formatRecords(entry.records, entry.fieldInfo);
-            console.log('TEST CASE: ' + JSON.stringify(entry.message));
-            console.log('RET RECS: ' + JSON.stringify(formattedRecords));
-            console.log('EXP RECS: ' + JSON.stringify(entry.expectedRecords));
             assert.deepEqual(formattedRecords, entry.expectedRecords, entry.message);
         });
     });

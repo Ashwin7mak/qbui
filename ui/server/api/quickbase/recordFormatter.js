@@ -6,11 +6,15 @@
     'use strict';
     var dateFormatter = require('./dateTimeFormatter');
     var phoneFormatter = require('./phoneNumberFormatter');
+    var todFormatter = require('./timeOfDayFormatter');
+    //module constants
     var PHONE_NUMBER = 'PHONE_NUMBER';
     var DATE_TIME = 'DATE_TIME';
     var FORMULA_DATE_TIME = 'FORMULA_DATE_TIME';
     var DATE = 'DATE';
     var FORMULA_DATE = 'FORMULA_DATE';
+    var FORMULA_TIME_OF_DAY = 'FORMULA_TIME_OF_DAY';
+    var TIME_OF_DAY = 'TIME_OF_DAY';
 
     module.exports = function () {
         //Display formats record field values according to the field's display settings
@@ -24,6 +28,10 @@
                 case FORMULA_DATE_TIME:
                 case FORMULA_DATE:
                     fieldValue.display = dateFormatter.format(fieldValue, fieldInfo);
+                    break;
+                case TIME_OF_DAY:
+                case FORMULA_TIME_OF_DAY:
+                    fieldValue.display = todFormatter.format(fieldValue, fieldInfo);
                     break;
                 default:
                     break;
