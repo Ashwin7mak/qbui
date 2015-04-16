@@ -108,7 +108,9 @@
                     opts.headers[TICKET_HEADER_KEY] = this.authTicket;
                 }
 
-                console.log('About to execute the request: ' + JSON.stringify(opts));
+                // TODO: Add back in for debugging purposes
+                //console.log('About to execute the request: ' + JSON.stringify(opts));
+
                 //Make request and return promise
                 var deferred = promise.pending();
                 request(opts, function (error, response) {

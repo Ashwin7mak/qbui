@@ -409,9 +409,9 @@ describe('DateTime record formatter unit test', function () {
     it('should format various MM_DD_YYYY DateTime records for display', function () {
         mmddyyyyDataProvider().forEach(function(entry){
             var formattedRecords = recordFormatter.formatRecords(entry.records, entry.fieldInfo);
-            console.log('TEST CASE: ' + JSON.stringify(entry.message));
-            console.log('RET RECS: ' + JSON.stringify(formattedRecords));
-            console.log('EXP RECS: ' + JSON.stringify(entry.expectedRecords));
+            //console.log('TEST CASE: ' + JSON.stringify(entry.message));
+            //console.log('RET RECS: ' + JSON.stringify(formattedRecords));
+            //console.log('EXP RECS: ' + JSON.stringify(entry.expectedRecords));
             assert.deepEqual(formattedRecords, entry.expectedRecords, entry.message);
         });
     });
@@ -2465,9 +2465,9 @@ describe('DateTime record formatter unit test', function () {
     it('should format various DateTime records with invalid format for display', function () {
         invalidFormatDataProvider().forEach(function(entry){
             var formattedRecords = recordFormatter.formatRecords(entry.records, entry.fieldInfo);
-            console.log('TEST CASE: ' + JSON.stringify(entry.message));
-            console.log('RET RECS: ' + JSON.stringify(formattedRecords));
-            console.log('EXP RECS: ' + JSON.stringify(entry.expectedRecords));
+            //console.log('TEST CASE: ' + JSON.stringify(entry.message));
+            //console.log('RET RECS: ' + JSON.stringify(formattedRecords));
+            //console.log('EXP RECS: ' + JSON.stringify(entry.expectedRecords));
             assert.deepEqual(formattedRecords, entry.expectedRecords, entry.message);
         });
     });
