@@ -14,6 +14,9 @@
     var FOUR_DIGIT_YEAR = 'YYYY';
     var TWO_DIGIT_YEAR = 'YY';
     var TWO_DIGIT_DAY = 'DD';
+    var DATE_TIME = 'DATE_TIME';
+    var FORMULA_DATE_TIME = 'FORMULA_DATE_TIME';
+    var UNIVERSAL_TIMEZONE = 'Universal';
     var DEFAULT_TIMEZONE = 'America/Los_Angeles';
     var TIMEZONE_FORMATTER = ' z';
     //Base formats
@@ -63,9 +66,12 @@
             }
             //Date constructor expects ISO 8601 date
             var d = new Date(fieldValue.value);
-            var timeZone = fieldInfo.timeZone;
-            if(!timeZone) {
-                timeZone = DEFAULT_TIMEZONE;
+            var timeZone = UNIVERSAL_TIMEZONE;
+            if(fieldInfo.type === DATE_TIME || fieldInfo.type === FORMULA_DATE_TIME) {
+                timeZone = fieldInfo.timeZone;
+                if(!timeZone) {
+                    timeZone = DEFAULT_TIMEZONE;
+                }
             }
             var m = moment.tz(d, timeZone);
             var jsDateFormat = JAVA_TO_JS_DATE_FORMATS[fieldInfo.format];
