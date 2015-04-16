@@ -14,7 +14,7 @@ exports.config = {
 
   // If true, only chromedriver will be started, not a standalone selenium.
   // Tests for browsers other than chrome will not run.
-  chromeOnly: true,
+  //chromeOnly: true,
 
   // list of files / patterns to load in the browser
   specs: [
@@ -31,7 +31,7 @@ exports.config = {
   // and
   // https://code.google.com/p/selenium/source/browse/javascript/webdriver/capabilities.js
   capabilities: {
-    'browserName': 'chrome'
+    'browserName': 'firefox'
   },
 
   // ----- The test framework -----
