@@ -6,6 +6,9 @@ var assert = require('assert');
 
 describe('DateTime record formatter unit test', function () {
 
+    /**
+     * DataProvider containing Records, FieldProperties and record display expectations for MM_DD_YYYY format
+     */
     function mmddyyyyDataProvider() {
 
         // Default DateTime record input
@@ -35,7 +38,7 @@ describe('DateTime record formatter unit test', function () {
                 "value": "2015-04-12T18:51:19z",
                 "display": "04-12-2015"}]];
 
-        // FieldInfo and record expectation for field with MM_DD_YYYY format and showDayOfWeek flag
+        // FieldInfo and record expectation for field with MM_DD_YYYY format and ShowTime flag
         var fieldInfo_MMDDYYYY_ShowTime = JSON.parse(JSON.stringify(mmddyyyy));
         fieldInfo_MMDDYYYY_ShowTime.showTime = true;
         fieldInfo_MMDDYYYY_ShowTime = [fieldInfo_MMDDYYYY_ShowTime];
@@ -96,7 +99,7 @@ describe('DateTime record formatter unit test', function () {
                 "value": "2000-04-12T18:51:19z",
                 "display": "04-12-2000 2:51 PM"}]];
 
-        // FieldInfo and record expectation for field with MM_DD_YYYY format and ShowTime, ShowDayOfWeek flag
+        // FieldInfo and record expectation for field with MM_DD_YYYY format and ShowTime, ShowTimeZone, ShowMonthAsName flag
         var fieldInfo_MMDDYYYY_ShowTime_ShowTimeZone_ShowMonthAsName = JSON.parse(JSON.stringify(mmddyyyy));
         fieldInfo_MMDDYYYY_ShowTime_ShowTimeZone_ShowMonthAsName.showTime = true;
         fieldInfo_MMDDYYYY_ShowTime_ShowTimeZone_ShowMonthAsName.showTimeZone = true;
@@ -108,7 +111,7 @@ describe('DateTime record formatter unit test', function () {
                 "value": "2015-04-12T18:51:19z",
                 "display": "Apr-12-2015 2:51 PM EDT"}]];
 
-        // FieldInfo and record expectation for field with MM_DD_YYYY format and ShowTime, ShowDayOfWeek, HideYearIfCurrent flag
+        // FieldInfo and record expectation for field with MM_DD_YYYY format and ShowTime, ShowTimeZone, ShowMonthAsName, HideYearIfCurrent flag
         var fieldInfo_MMDDYYYY_ShowTime_ShowTimeZone_ShowMonthAsName_HideYearIfCurrent = JSON.parse(JSON.stringify(mmddyyyy));
         fieldInfo_MMDDYYYY_ShowTime_ShowTimeZone_ShowMonthAsName_HideYearIfCurrent.showTime = true;
         fieldInfo_MMDDYYYY_ShowTime_ShowTimeZone_ShowMonthAsName_HideYearIfCurrent.showTimeZone = true;
@@ -271,7 +274,7 @@ describe('DateTime record formatter unit test', function () {
                 "value": "2015-04-12T18:51:19z",
                 "display": "Apr-12 EDT"}]];
 
-        // FieldInfo and record expectation for field with MM_DD_YYYY format and ShowTimeZone, ShowMonthAsName, HideYearIfCurrent flag
+        // FieldInfo and record expectation for field with MM_DD_YYYY format and ShowTimeZone, ShowDayOfWeek, HideYearIfCurrent flag
         var fieldInfo_MMDDYYYY_ShowTimeZone_ShowDayOfWeek_HideYearIfCurrent = JSON.parse(JSON.stringify(mmddyyyy));
         fieldInfo_MMDDYYYY_ShowTimeZone_ShowDayOfWeek_HideYearIfCurrent.showTimeZone = true;
         fieldInfo_MMDDYYYY_ShowTimeZone_ShowDayOfWeek_HideYearIfCurrent.showDayOfWeek = true;
@@ -406,6 +409,9 @@ describe('DateTime record formatter unit test', function () {
         ];
     }
 
+    /**
+     * Unit test that validates Date records with MM_DD_YYYY format and various field property flags set
+     */
     it('should format various MM_DD_YYYY DateTime records for display', function () {
         mmddyyyyDataProvider().forEach(function(entry){
             var formattedRecords = recordFormatter.formatRecords(entry.records, entry.fieldInfo);
@@ -416,6 +422,9 @@ describe('DateTime record formatter unit test', function () {
         });
     });
 
+    /**
+     * DataProvider containing Records, FieldProperties and record display expectations for MM_DD_YY format
+     */
     function mmddyyDataProvider() {
 
         //// Default DateTime record input
@@ -445,7 +454,7 @@ describe('DateTime record formatter unit test', function () {
                 "value": "2015-04-12T05:51:19z",
                 "display": "04-12-15"}]];
 
-        // FieldInfo and record expectation for field with MM_DD_YY format and showDayOfWeek flag
+        // FieldInfo and record expectation for field with MM_DD_YY format and ShowTime flag
         var fieldInfo_MMDDYY_ShowTime = JSON.parse(JSON.stringify(mmddyy));
         fieldInfo_MMDDYY_ShowTime.showTime = true;
         fieldInfo_MMDDYY_ShowTime = [fieldInfo_MMDDYY_ShowTime];
@@ -506,7 +515,7 @@ describe('DateTime record formatter unit test', function () {
                 "value": "2000-04-12T05:51:19z",
                 "display": "04-12-00 1:51 AM"}]];
 
-        // FieldInfo and record expectation for field with MM_DD_YY format and ShowTime, ShowDayOfWeek flag
+        // FieldInfo and record expectation for field with MM_DD_YY format and ShowTime, ShowTimeZone, ShowMonthAsName flag
         var fieldInfo_MMDDYY_ShowTime_ShowTimeZone_ShowMonthAsName = JSON.parse(JSON.stringify(mmddyy));
         fieldInfo_MMDDYY_ShowTime_ShowTimeZone_ShowMonthAsName.showTime = true;
         fieldInfo_MMDDYY_ShowTime_ShowTimeZone_ShowMonthAsName.showTimeZone = true;
@@ -555,7 +564,7 @@ describe('DateTime record formatter unit test', function () {
                 "value": "2015-04-12T05:51:19z",
                 "display": "Sunday, 04-12 1:51 AM EDT"}]];
 
-        // FieldInfo and record expectation for field with MM_DD_YY format and ShowTime, ShowTimeZone, ShowDayOfWeek, HideYearIfCurrent flag
+        // FieldInfo and record expectation for field with MM_DD_YY format and ShowTime, ShowTimeZone, ShowMonthAsName, HideYearIfCurrent flag
         var fieldInfo_MMDDYY_ShowTime_ShowTimeZone_ShowMonthAsName_HideYearIfCurrent = JSON.parse(JSON.stringify(mmddyy));
         fieldInfo_MMDDYY_ShowTime_ShowTimeZone_ShowMonthAsName_HideYearIfCurrent.showTime = true;
         fieldInfo_MMDDYY_ShowTime_ShowTimeZone_ShowMonthAsName_HideYearIfCurrent.showTimeZone = true;
@@ -818,6 +827,9 @@ describe('DateTime record formatter unit test', function () {
         ];
     }
 
+    /**
+     * Unit test that validates Date records with MM_DD_YY format and various field property flags set
+     */
     it('should format various MM_DD_YY DateTime records for display', function () {
         mmddyyDataProvider().forEach(function(entry){
             var formattedRecords = recordFormatter.formatRecords(entry.records, entry.fieldInfo);
@@ -828,6 +840,9 @@ describe('DateTime record formatter unit test', function () {
         });
     });
 
+    /**
+     * DataProvider containing Records, FieldProperties and record display expectations for DD_MM_YY format
+     */
     function ddmmyyDataProvider() {
 
         //// Default DateTime record input
@@ -918,7 +933,7 @@ describe('DateTime record formatter unit test', function () {
                 "value": "2000-04-12T05:51:19z",
                 "display": "12-04-00 1:51 AM"}]];
 
-        // FieldInfo and record expectation for field with DD_MM_YY format and ShowTime, ShowDayOfWeek flag
+        // FieldInfo and record expectation for field with DD_MM_YY format and ShowTime, ShowTimeZone, ShowMonthAsName flag
         var fieldInfo_DDMMYY_ShowTime_ShowTimeZone_ShowMonthAsName = JSON.parse(JSON.stringify(ddmmyy));
         fieldInfo_DDMMYY_ShowTime_ShowTimeZone_ShowMonthAsName.showTime = true;
         fieldInfo_DDMMYY_ShowTime_ShowTimeZone_ShowMonthAsName.showTimeZone = true;
@@ -967,7 +982,7 @@ describe('DateTime record formatter unit test', function () {
                 "value": "2015-04-12T05:51:19z",
                 "display": "Sunday, 12-04 1:51 AM EDT"}]];
 
-        // FieldInfo and record expectation for field with DD_MM_YY format and ShowTime, ShowTimeZone, ShowDayOfWeek, HideYearIfCurrent flag
+        // FieldInfo and record expectation for field with DD_MM_YY format and ShowTime, ShowTimeZone, ShowMonthAsName, HideYearIfCurrent flag
         var fieldInfo_DDMMYY_ShowTime_ShowTimeZone_ShowMonthAsName_HideYearIfCurrent = JSON.parse(JSON.stringify(ddmmyy));
         fieldInfo_DDMMYY_ShowTime_ShowTimeZone_ShowMonthAsName_HideYearIfCurrent.showTime = true;
         fieldInfo_DDMMYY_ShowTime_ShowTimeZone_ShowMonthAsName_HideYearIfCurrent.showTimeZone = true;
@@ -1230,6 +1245,9 @@ describe('DateTime record formatter unit test', function () {
         ];
     }
 
+    /**
+     * Unit test that validates Date records with DD_MM_YY format and various field property flags set
+     */
     it('should format various DD_MM_YY DateTime records for display', function () {
         ddmmyyDataProvider().forEach(function(entry){
             var formattedRecords = recordFormatter.formatRecords(entry.records, entry.fieldInfo);
@@ -1240,6 +1258,9 @@ describe('DateTime record formatter unit test', function () {
         });
     });
 
+    /**
+     * DataProvider containing Records, FieldProperties and record display expectations for DD_MM_YYYY format
+     */
     function ddmmyyyyDataProvider() {
 
         // Default DateTime record input
@@ -1330,7 +1351,7 @@ describe('DateTime record formatter unit test', function () {
                 "value": "2000-04-12T18:51:19z",
                 "display": "12-04-2000 2:51 PM"}]];
 
-        // FieldInfo and record expectation for field with DD_MM_YYYY format and ShowTime, ShowDayOfWeek flag
+        // FieldInfo and record expectation for field with DD_MM_YYYY format and ShowTime, ShowTimeZone, ShowMonthAsName flag
         var fieldInfo_DDMMYYYY_ShowTime_ShowTimeZone_ShowMonthAsName = JSON.parse(JSON.stringify(ddmmyyyy));
         fieldInfo_DDMMYYYY_ShowTime_ShowTimeZone_ShowMonthAsName.showTime = true;
         fieldInfo_DDMMYYYY_ShowTime_ShowTimeZone_ShowMonthAsName.showTimeZone = true;
@@ -1342,7 +1363,7 @@ describe('DateTime record formatter unit test', function () {
                 "value": "2015-04-12T18:51:19z",
                 "display": "12-Apr-2015 2:51 PM EDT"}]];
 
-        // FieldInfo and record expectation for field with DD_MM_YYYY format and ShowTime, ShowDayOfWeek, HideYearIfCurrent flag
+        // FieldInfo and record expectation for field with DD_MM_YYYY format and ShowTime, ShowDayOfWeek, ShowMonthAsName, HideYearIfCurrent flag
         var fieldInfo_DDMMYYYY_ShowTime_ShowTimeZone_ShowMonthAsName_HideYearIfCurrent = JSON.parse(JSON.stringify(ddmmyyyy));
         fieldInfo_DDMMYYYY_ShowTime_ShowTimeZone_ShowMonthAsName_HideYearIfCurrent.showTime = true;
         fieldInfo_DDMMYYYY_ShowTime_ShowTimeZone_ShowMonthAsName_HideYearIfCurrent.showTimeZone = true;
@@ -1505,7 +1526,7 @@ describe('DateTime record formatter unit test', function () {
                 "value": "2015-04-12T18:51:19z",
                 "display": "12-Apr EDT"}]];
 
-        // FieldInfo and record expectation for field with DD_MM_YYYY format and ShowTimeZone, ShowMonthAsName, HideYearIfCurrent flag
+        // FieldInfo and record expectation for field with DD_MM_YYYY format and ShowTimeZone, ShowDayOfWeek, HideYearIfCurrent flag
         var fieldInfo_DDMMYYYY_ShowTimeZone_ShowDayOfWeek_HideYearIfCurrent = JSON.parse(JSON.stringify(ddmmyyyy));
         fieldInfo_DDMMYYYY_ShowTimeZone_ShowDayOfWeek_HideYearIfCurrent.showTimeZone = true;
         fieldInfo_DDMMYYYY_ShowTimeZone_ShowDayOfWeek_HideYearIfCurrent.showDayOfWeek = true;
@@ -1640,6 +1661,9 @@ describe('DateTime record formatter unit test', function () {
         ];
     }
 
+    /**
+     * Unit test that validates Date records with DD_MM_YYYY format and various field property flags set
+     */
     it('should format various DD_MM_YYYY DateTime records for display', function () {
         ddmmyyyyDataProvider().forEach(function(entry){
             var formattedRecords = recordFormatter.formatRecords(entry.records, entry.fieldInfo);
@@ -1650,6 +1674,9 @@ describe('DateTime record formatter unit test', function () {
         });
     });
 
+    /**
+     * DataProvider containing Records, FieldProperties and record display expectations for YYYY_MM_DD format
+     */
     function yyyymmddDataProvider() {
 
         //// Default DateTime record input
@@ -1740,7 +1767,7 @@ describe('DateTime record formatter unit test', function () {
                 "value": "2000-04-12T05:51:19z",
                 "display": "2000-04-12 1:51 AM"}]];
 
-        // FieldInfo and record expectation for field with YYYY_MM_DD format and ShowTime, ShowDayOfWeek flag
+        // FieldInfo and record expectation for field with YYYY_MM_DD format and ShowTime, ShowTimeZone, ShowMonthAsName flag
         var fieldInfo_YYYYMMDD_ShowTime_ShowTimeZone_ShowMonthAsName = JSON.parse(JSON.stringify(yyyymmdd));
         fieldInfo_YYYYMMDD_ShowTime_ShowTimeZone_ShowMonthAsName.showTime = true;
         fieldInfo_YYYYMMDD_ShowTime_ShowTimeZone_ShowMonthAsName.showTimeZone = true;
@@ -1789,7 +1816,7 @@ describe('DateTime record formatter unit test', function () {
                 "value": "2015-04-12T05:51:19z",
                 "display": "Sunday, 04-12 1:51 AM EDT"}]];
 
-        // FieldInfo and record expectation for field with YYYY_MM_DD format and ShowTime, ShowTimeZone, ShowDayOfWeek, HideYearIfCurrent flag
+        // FieldInfo and record expectation for field with YYYY_MM_DD format and ShowTime, ShowTimeZone, ShowMonthAsName, HideYearIfCurrent flag
         var fieldInfo_YYYYMMDD_ShowTime_ShowTimeZone_ShowMonthAsName_HideYearIfCurrent = JSON.parse(JSON.stringify(yyyymmdd));
         fieldInfo_YYYYMMDD_ShowTime_ShowTimeZone_ShowMonthAsName_HideYearIfCurrent.showTime = true;
         fieldInfo_YYYYMMDD_ShowTime_ShowTimeZone_ShowMonthAsName_HideYearIfCurrent.showTimeZone = true;
@@ -2052,6 +2079,9 @@ describe('DateTime record formatter unit test', function () {
         ];
     }
 
+    /**
+     * Unit test that validates Date records with YYYY_MM_DD format and various field property flags set
+     */
     it('should format various YYYY_MM_DD DateTime records for display', function () {
         yyyymmddDataProvider().forEach(function(entry){
             var formattedRecords = recordFormatter.formatRecords(entry.records, entry.fieldInfo);
@@ -2062,6 +2092,10 @@ describe('DateTime record formatter unit test', function () {
         });
     });
 
+    /**
+     * DataProvider containing Records, FieldProperties and record display expectations for an invalid format, which
+     * then defaults to MM_DD_YYYY
+     */
     function invalidFormatDataProvider() {
 
         // Default DateTime record input
@@ -2152,7 +2186,7 @@ describe('DateTime record formatter unit test', function () {
                 "value": "2000-04-12T18:51:19z",
                 "display": "04-12-2000 2:51 PM"}]];
 
-        // FieldInfo and record expectation for field with invalid format and ShowTime, ShowDayOfWeek flag
+        // FieldInfo and record expectation for field with invalid format and ShowTime, ShowTimeZone, ShowMonthAsName flag
         var fieldInfo_InvalidFormat_ShowTime_ShowTimeZone_ShowMonthAsName = JSON.parse(JSON.stringify(invalidFormat));
         fieldInfo_InvalidFormat_ShowTime_ShowTimeZone_ShowMonthAsName.showTime = true;
         fieldInfo_InvalidFormat_ShowTime_ShowTimeZone_ShowMonthAsName.showTimeZone = true;
@@ -2164,7 +2198,7 @@ describe('DateTime record formatter unit test', function () {
                 "value": "2015-04-12T18:51:19z",
                 "display": "Apr-12-2015 2:51 PM EDT"}]];
 
-        // FieldInfo and record expectation for field with invalid format and ShowTime, ShowDayOfWeek, HideYearIfCurrent flag
+        // FieldInfo and record expectation for field with invalid format and ShowTime, ShowTimeZone, ShowDayOfWeek, HideYearIfCurrent flag
         var fieldInfo_InvalidFormat_ShowTime_ShowTimeZone_ShowMonthAsName_HideYearIfCurrent = JSON.parse(JSON.stringify(invalidFormat));
         fieldInfo_InvalidFormat_ShowTime_ShowTimeZone_ShowMonthAsName_HideYearIfCurrent.showTime = true;
         fieldInfo_InvalidFormat_ShowTime_ShowTimeZone_ShowMonthAsName_HideYearIfCurrent.showTimeZone = true;
@@ -2327,7 +2361,7 @@ describe('DateTime record formatter unit test', function () {
                 "value": "2015-04-12T18:51:19z",
                 "display": "Apr-12 EDT"}]];
 
-        // FieldInfo and record expectation for field with invalid format and ShowTimeZone, ShowMonthAsName, HideYearIfCurrent flag
+        // FieldInfo and record expectation for field with invalid format and ShowTimeZone, ShowDayOfWeek, HideYearIfCurrent flag
         var fieldInfo_InvalidFormat_ShowTimeZone_ShowDayOfWeek_HideYearIfCurrent = JSON.parse(JSON.stringify(invalidFormat));
         fieldInfo_InvalidFormat_ShowTimeZone_ShowDayOfWeek_HideYearIfCurrent.showTimeZone = true;
         fieldInfo_InvalidFormat_ShowTimeZone_ShowDayOfWeek_HideYearIfCurrent.showDayOfWeek = true;
@@ -2462,6 +2496,10 @@ describe('DateTime record formatter unit test', function () {
         ];
     }
 
+    /**
+     * Unit test that validates DateTime records with an invalid format and various field property flags set.
+     * That should ignore the invalid format and default to MM_DD_YYYY
+     */
     it('should format various DateTime records with invalid format for display', function () {
         invalidFormatDataProvider().forEach(function(entry){
             var formattedRecords = recordFormatter.formatRecords(entry.records, entry.fieldInfo);

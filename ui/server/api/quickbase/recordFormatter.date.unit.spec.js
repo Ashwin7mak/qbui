@@ -6,13 +6,15 @@ var assert = require('assert');
 
 describe('Date record formatter unit test', function () {
 
+    /**
+     * DataProvider containing Records, FieldProperties and record display expectations for MM_DD_YYYY format
+     */
     function mmddyyyyDataProvider() {
 
         // Default Date record input
         var recordsInput =  [[{
             "id": 7,
             "value": "2015-04-12T18:51:19z"}]];
-
         var recordsInputDiffYear =  [[{
             "id": 7,
             "value": "2000-04-12T18:51:19z"}]];
@@ -140,6 +142,7 @@ describe('Date record formatter unit test', function () {
                 "display": ""}]];
 
         return [
+            { message: "date with MM_DD_YYYY format no flag", records: recordsInput, fieldInfo: fieldInfo_MMDDYYYY, expectedRecords: expectedRecords_MMDDYYYY },
             { message: "date with MM_DD_YYYY format and showDayOfWeek flag", records: recordsInput, fieldInfo: fieldInfo_MMDDYYYY_ShowDayOfWeek, expectedRecords: expectedRecords_MMDDYYYY_ShowDayOfWeek },
             { message: "date with MM_DD_YYYY format and showDayOfWeek, hideYearIfCurrent flag", records: recordsInput, fieldInfo: fieldInfo_MMDDYYYY_ShowDayOfWeek_HideYearIfCurrent, expectedRecords: expectedRecords_MMDDYYYY_ShowDayOfWeek_HideYearIfCurrent },
             { message: "date with MM_DD_YYYY format and showDayOfWeek, showMonthAsName flag", records: recordsInput, fieldInfo: fieldInfo_MMDDYYYY_ShowDayOfWeek_ShowMonthAsName, expectedRecords: expectedRecords_MMDDYYYY_ShowDayOfWeek_ShowMonthAsName },
@@ -156,6 +159,9 @@ describe('Date record formatter unit test', function () {
         ];
     }
 
+    /**
+     * Unit test that validates Date records with MM_DD_YYYY format and various field property flags set
+     */
     it('should format various MM_DD_YYYY Date records for display', function () {
         mmddyyyyDataProvider().forEach(function(entry){
             var formattedRecords = recordFormatter.formatRecords(entry.records, entry.fieldInfo);
@@ -166,6 +172,9 @@ describe('Date record formatter unit test', function () {
         });
     });
 
+    /**
+     * DataProvider containing Records, FieldProperties and record display expectations for MM_DD_YY format
+     */
     function mmddyyDataProvider() {
 
         //// Default Date record input
@@ -235,17 +244,6 @@ describe('Date record formatter unit test', function () {
                 "value": "2015-04-12T05:51:19z",
                 "display": "Apr-12-15"}]];
 
-        // FieldInfo and record expectation for field with MM_DD_YY format and ShowMonthAsName, ShowDayOfWeek flag
-        var fieldInfo_MMDDYY_ShowMonthAsName_ShowDayOfWeek = JSON.parse(JSON.stringify(mmddyy));
-        fieldInfo_MMDDYY_ShowMonthAsName_ShowDayOfWeek.showMonthAsName = true;
-        fieldInfo_MMDDYY_ShowMonthAsName_ShowDayOfWeek.showDayOfWeek = true;
-        fieldInfo_MMDDYY_ShowMonthAsName_ShowDayOfWeek = [fieldInfo_MMDDYY_ShowMonthAsName_ShowDayOfWeek];
-        var expectedRecords_MMDDYY_ShowMonthAsName_ShowDayOfWeek =
-            [[{
-                "id": 7,
-                "value": "2015-04-12T05:51:19z",
-                "display": "Sunday, Apr-12-15"}]];
-
         // FieldInfo and record expectation for field with MM_DD_YY format and ShowMonthAsName, HideYearIfCurrent flag
         var fieldInfo_MMDDYY_ShowMonthAsName_HideYearIfCurrent = JSON.parse(JSON.stringify(mmddyy));
         fieldInfo_MMDDYY_ShowMonthAsName_HideYearIfCurrent.showMonthAsName = true;
@@ -311,6 +309,7 @@ describe('Date record formatter unit test', function () {
                 "display": ""}]];
 
         return [
+            { message: "date with MM_DD_YY format no flag", records: recordsInput, fieldInfo: fieldInfo_MMDDYY, expectedRecords: expectedRecords_MMDDYY },
             { message: "date with MM_DD_YY format and showDayOfWeek flag", records: recordsInput, fieldInfo: fieldInfo_MMDDYY_ShowDayOfWeek, expectedRecords: expectedRecords_MMDDYY_ShowDayOfWeek },
             { message: "date with MM_DD_YY format and showDayOfWeek, hideYearIfCurrent flag", records: recordsInput, fieldInfo: fieldInfo_MMDDYY_ShowDayOfWeek_HideYearIfCurrent, expectedRecords: expectedRecords_MMDDYY_ShowDayOfWeek_HideYearIfCurrent },
             { message: "date with MM_DD_YY format and showDayOfWeek, showMonthAsName flag", records: recordsInput, fieldInfo: fieldInfo_MMDDYY_ShowDayOfWeek_ShowMonthAsName, expectedRecords: expectedRecords_MMDDYY_ShowDayOfWeek_ShowMonthAsName },
@@ -327,6 +326,9 @@ describe('Date record formatter unit test', function () {
         ];
     }
 
+    /**
+     * Unit test that validates Date records with MM_DD_YY format and various field property flags set
+     */
     it('should format various MM_DD_YY Date records for display', function () {
         mmddyyDataProvider().forEach(function(entry){
             var formattedRecords = recordFormatter.formatRecords(entry.records, entry.fieldInfo);
@@ -337,6 +339,9 @@ describe('Date record formatter unit test', function () {
         });
     });
 
+    /**
+     * DataProvider containing Records, FieldProperties and record display expectations for DD_MM_YY format
+     */
     function ddmmyyDataProvider() {
 
         //// Default Date record input
@@ -407,17 +412,6 @@ describe('Date record formatter unit test', function () {
                 "value": "2015-04-12T05:51:19z",
                 "display": "12-Apr-15"}]];
 
-        // FieldInfo and record expectation for field with DD_MM_YY format and ShowMonthAsName, ShowDayOfWeek flag
-        var fieldInfo_DDMMYY_ShowMonthAsName_ShowDayOfWeek = JSON.parse(JSON.stringify(ddmmyy));
-        fieldInfo_DDMMYY_ShowMonthAsName_ShowDayOfWeek.showMonthAsName = true;
-        fieldInfo_DDMMYY_ShowMonthAsName_ShowDayOfWeek.showDayOfWeek = true;
-        fieldInfo_DDMMYY_ShowMonthAsName_ShowDayOfWeek = [fieldInfo_DDMMYY_ShowMonthAsName_ShowDayOfWeek];
-        var expectedRecords_DDMMYY_ShowMonthAsName_ShowDayOfWeek =
-            [[{
-                "id": 7,
-                "value": "2015-04-12T05:51:19z",
-                "display": "Sunday, 12-Apr-15"}]];
-
         // FieldInfo and record expectation for field with DD_MM_YY format and ShowMonthAsName, HideYearIfCurrent flag
         var fieldInfo_DDMMYY_ShowMonthAsName_HideYearIfCurrent = JSON.parse(JSON.stringify(ddmmyy));
         fieldInfo_DDMMYY_ShowMonthAsName_HideYearIfCurrent.showMonthAsName = true;
@@ -483,6 +477,7 @@ describe('Date record formatter unit test', function () {
                 "display": ""}]];
 
         return [
+            { message: "date with DD_MM_YY format and no flag", records: recordsInput, fieldInfo: fieldInfo_DDMMYY, expectedRecords: expectedRecords_DDMMYY },
             { message: "date with DD_MM_YY format and showDayOfWeek flag", records: recordsInput, fieldInfo: fieldInfo_DDMMYY_ShowDayOfWeek, expectedRecords: expectedRecords_DDMMYY_ShowDayOfWeek },
             { message: "date with DD_MM_YY format and showDayOfWeek, hideYearIfCurrent flag", records: recordsInput, fieldInfo: fieldInfo_DDMMYY_ShowDayOfWeek_HideYearIfCurrent, expectedRecords: expectedRecords_DDMMYY_ShowDayOfWeek_HideYearIfCurrent },
             { message: "date with DD_MM_YY format and showDayOfWeek, showMonthAsName flag", records: recordsInput, fieldInfo: fieldInfo_DDMMYY_ShowDayOfWeek_ShowMonthAsName, expectedRecords: expectedRecords_DDMMYY_ShowDayOfWeek_ShowMonthAsName },
@@ -499,6 +494,9 @@ describe('Date record formatter unit test', function () {
          ];
     }
 
+    /**
+     * Unit test that validates Date records with DD_MM_YY format and various field property flags set
+     */
     it('should format various DD_MM_YY Date records for display', function () {
         ddmmyyDataProvider().forEach(function(entry){
             var formattedRecords = recordFormatter.formatRecords(entry.records, entry.fieldInfo);
@@ -509,6 +507,9 @@ describe('Date record formatter unit test', function () {
         });
     });
 
+    /**
+     * DataProvider containing Records, FieldProperties and record display expectations for DD_MM_YYYY format
+     */
     function ddmmyyyyDataProvider() {
 
         // Default Date record input
@@ -578,17 +579,6 @@ describe('Date record formatter unit test', function () {
                 "value": "2015-04-12T18:51:19z",
                 "display": "12-Apr-2015"}]];
 
-        // FieldInfo and record expectation for field with DD_MM_YYYY format and ShowMonthAsName, ShowDayOfWeek flag
-        var fieldInfo_DDMMYYYY_ShowMonthAsName_ShowDayOfWeek = JSON.parse(JSON.stringify(ddmmyyyy));
-        fieldInfo_DDMMYYYY_ShowMonthAsName_ShowDayOfWeek.showMonthAsName = true;
-        fieldInfo_DDMMYYYY_ShowMonthAsName_ShowDayOfWeek.showDayOfWeek = true;
-        fieldInfo_DDMMYYYY_ShowMonthAsName_ShowDayOfWeek = [fieldInfo_DDMMYYYY_ShowMonthAsName_ShowDayOfWeek];
-        var expectedRecords_DDMMYYYY_ShowMonthAsName_ShowDayOfWeek =
-            [[{
-                "id": 7,
-                "value": "2015-04-12T18:51:19z",
-                "display": "Sunday, 12-Apr-2015"}]];
-
         // FieldInfo and record expectation for field with DD_MM_YYYY format and ShowMonthAsName, HideYearIfCurrent flag
         var fieldInfo_DDMMYYYY_ShowMonthAsName_HideYearIfCurrent = JSON.parse(JSON.stringify(ddmmyyyy));
         fieldInfo_DDMMYYYY_ShowMonthAsName_HideYearIfCurrent.showMonthAsName = true;
@@ -654,6 +644,7 @@ describe('Date record formatter unit test', function () {
                 "display": ""}]];
 
         return [
+            { message: "date with DD_MM_YYYY format and no flag", records: recordsInput, fieldInfo: fieldInfo_DDMMYYYY, expectedRecords: expectedRecords_DDMMYYYY },
             { message: "date with DD_MM_YYYY format and showDayOfWeek flag", records: recordsInput, fieldInfo: fieldInfo_DDMMYYYY_ShowDayOfWeek, expectedRecords: expectedRecords_DDMMYYYY_ShowDayOfWeek },
             { message: "date with DD_MM_YYYY format and showDayOfWeek, hideYearIfCurrent flag", records: recordsInput, fieldInfo: fieldInfo_DDMMYYYY_ShowDayOfWeek_HideYearIfCurrent, expectedRecords: expectedRecords_DDMMYYYY_ShowDayOfWeek_HideYearIfCurrent },
             { message: "date with DD_MM_YYYY format and showDayOfWeek, showMonthAsName flag", records: recordsInput, fieldInfo: fieldInfo_DDMMYYYY_ShowDayOfWeek_ShowMonthAsName, expectedRecords: expectedRecords_DDMMYYYY_ShowDayOfWeek_ShowMonthAsName },
@@ -670,6 +661,9 @@ describe('Date record formatter unit test', function () {
          ];
     }
 
+    /**
+     * Unit test that validates Date records with DD_MM_YYYY format and various field property flags set
+     */
     it('should format various DD_MM_YYYY Date records for display', function () {
         ddmmyyyyDataProvider().forEach(function(entry){
             var formattedRecords = recordFormatter.formatRecords(entry.records, entry.fieldInfo);
@@ -680,6 +674,9 @@ describe('Date record formatter unit test', function () {
         });
     });
 
+    /**
+     * DataProvider containing Records, FieldProperties and record display expectations for YYYY_MM_DD format
+     */
     function yyyymmddDataProvider() {
 
         //// Default Date record input
@@ -749,17 +746,6 @@ describe('Date record formatter unit test', function () {
                 "value": "2015-04-12T05:51:19z",
                 "display": "2015-Apr-12"}]];
 
-        // FieldInfo and record expectation for field with YYYY_MM_DD format and ShowMonthAsName, ShowDayOfWeek flag
-        var fieldInfo_YYYYMMDD_ShowMonthAsName_ShowDayOfWeek = JSON.parse(JSON.stringify(yyyymmdd));
-        fieldInfo_YYYYMMDD_ShowMonthAsName_ShowDayOfWeek.showMonthAsName = true;
-        fieldInfo_YYYYMMDD_ShowMonthAsName_ShowDayOfWeek.showDayOfWeek = true;
-        fieldInfo_YYYYMMDD_ShowMonthAsName_ShowDayOfWeek = [fieldInfo_YYYYMMDD_ShowMonthAsName_ShowDayOfWeek];
-        var expectedRecords_YYYYMMDD_ShowMonthAsName_ShowDayOfWeek =
-            [[{
-                "id": 7,
-                "value": "2015-04-12T05:51:19z",
-                "display": "Sunday, 2015-Apr-12"}]];
-
         // FieldInfo and record expectation for field with YYYY_MM_DD format and ShowMonthAsName, HideYearIfCurrent flag
         var fieldInfo_YYYYMMDD_ShowMonthAsName_HideYearIfCurrent = JSON.parse(JSON.stringify(yyyymmdd));
         fieldInfo_YYYYMMDD_ShowMonthAsName_HideYearIfCurrent.showMonthAsName = true;
@@ -824,6 +810,7 @@ describe('Date record formatter unit test', function () {
                 "display": ""}]];
 
         return [
+            { message: "date with YYYY_MM_DD format and no flag", records: recordsInput, fieldInfo: fieldInfo_YYYYMMDD, expectedRecords: expectedRecords_YYYYMMDD },
             { message: "date with YYYY_MM_DD format and showDayOfWeek flag", records: recordsInput, fieldInfo: fieldInfo_YYYYMMDD_ShowDayOfWeek, expectedRecords: expectedRecords_YYYYMMDD_ShowDayOfWeek },
             { message: "date with YYYY_MM_DD format and showDayOfWeek, hideYearIfCurrent flag", records: recordsInput, fieldInfo: fieldInfo_YYYYMMDD_ShowDayOfWeek_HideYearIfCurrent, expectedRecords: expectedRecords_YYYYMMDD_ShowDayOfWeek_HideYearIfCurrent },
             { message: "date with YYYY_MM_DD format and showDayOfWeek, showMonthAsName flag", records: recordsInput, fieldInfo: fieldInfo_YYYYMMDD_ShowDayOfWeek_ShowMonthAsName, expectedRecords: expectedRecords_YYYYMMDD_ShowDayOfWeek_ShowMonthAsName },
@@ -840,6 +827,9 @@ describe('Date record formatter unit test', function () {
         ];
     }
 
+    /**
+     * Unit test that validates Date records with YYYY_MM_DD format and various field property flags set
+     */
     it('should format various YYYY_MM_DD Date records for display', function () {
         yyyymmddDataProvider().forEach(function(entry){
             var formattedRecords = recordFormatter.formatRecords(entry.records, entry.fieldInfo);
@@ -850,6 +840,10 @@ describe('Date record formatter unit test', function () {
         });
     });
 
+    /**
+     * DataProvider containing Records, FieldProperties and record display expectations for an invalid format, which
+     * then defaults to MM_DD_YYYY
+     */
     function invalidFormatDataProvider() {
 
         // Default Date record input
@@ -984,6 +978,7 @@ describe('Date record formatter unit test', function () {
                 "display": ""}]];
 
         return [
+            { message: "date with invalid format and no flag", records: recordsInput, fieldInfo: fieldInfo_InvalidFormat, expectedRecords: expectedRecords_InvalidFormat },
             { message: "date with invalid format and showDayOfWeek flag", records: recordsInput, fieldInfo: fieldInfo_InvalidFormat_ShowDayOfWeek, expectedRecords: expectedRecords_InvalidFormat_ShowDayOfWeek },
             { message: "date with invalid format and showDayOfWeek, hideYearIfCurrent flag", records: recordsInput, fieldInfo: fieldInfo_InvalidFormat_ShowDayOfWeek_HideYearIfCurrent, expectedRecords: expectedRecords_InvalidFormat_ShowDayOfWeek_HideYearIfCurrent },
             { message: "date with invalid format and showDayOfWeek, showMonthAsName flag", records: recordsInput, fieldInfo: fieldInfo_InvalidFormat_ShowDayOfWeek_ShowMonthAsName, expectedRecords: expectedRecords_InvalidFormat_ShowDayOfWeek_ShowMonthAsName },
@@ -1000,6 +995,10 @@ describe('Date record formatter unit test', function () {
         ];
     }
 
+    /**
+     * Unit test that validates Date records with an invalid format and various field property flags set.
+     * That should ignore the invalid format and default to MM_DD_YYYY
+     */
     it('should format various Date records with invalid format for display', function () {
         invalidFormatDataProvider().forEach(function(entry){
             var formattedRecords = recordFormatter.formatRecords(entry.records, entry.fieldInfo);

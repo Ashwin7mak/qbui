@@ -6,6 +6,9 @@ var assert = require('assert');
 
 describe('Phone number record formatter unit test', function () {
 
+    /**
+     * DataProvider containing Records, FieldProperties and record display expectations PhoneNumber fields
+     */
     function provider() {
         //Incomplete number
         var recordsInput =  [[{
@@ -16,6 +19,16 @@ describe('Phone number record formatter unit test', function () {
                 "id": 7,
                 "value": "12345678",
                 "display": "(1) 234-5678"}]];
+
+        // 10 digit number
+        var standardInput =  [[{
+            "id": 7,
+            "value": "5557779999"}]];
+        var expectedStandardExpected =
+            [[{
+                "id": 7,
+                "value": "5557779999",
+                "display": "(555) 777-9999"}]];
 
         //More than 10 digit number
         var largeInput =  [[{
@@ -48,13 +61,17 @@ describe('Phone number record formatter unit test', function () {
                 "display": ""}]];
 
         return [
-            { message: "phone number", records: recordsInput, expectedRecords: expectedRecords },
+            { message: "small phone number", records: recordsInput, expectedRecords: expectedRecords },
+            { message: "standard phone number", records: standardInput, expectedRecords: expectedStandardExpected },
             { message: "empty phone number", records: emptyRecords, expectedRecords: expectedEmptyRecords},
             { message: "too-long phone number", records: largeInput, expectedRecords: largeExpected },
             { message: "null phone number", records: nullRecords, expectedRecords: nullExpectedRecords }
         ];
     }
 
+    /**
+     * Unit test that validates transformation of PhoneNumber records
+     */
     it('should format a phone number for display', function () {
         var fieldInfo = [
             {
