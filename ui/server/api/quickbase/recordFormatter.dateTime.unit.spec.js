@@ -19,71 +19,189 @@ describe('DateTime record formatter unit test', function () {
                 "id": 7,
                 "name": "datetime",
                 "type": "DATE_TIME",
-                "showTime": true,
+                "showTime": false,
                 "showTimeZone": false,
                 "showMonthAsName": false,
                 "showDayOfWeek": false,
                 "format": "MM-dd-uuuu",
                 "timeZone": "America/New_York"};
-        var mmddyyyy_FieldInfo = [mmddyyyy];
+        var fieldInfo_MMDDYYYY = [mmddyyyy];
         var expectedRecords_MMDDYYYY =
+            [[{
+                "id": 7,
+                "value": "2015-04-12T18:51:19+00:00",
+                "display": "04-12-2015"}]];
+
+        // FieldInfo and record expectation for field with MM_DD_YYYY format and showDayOfWeek flag
+        var fieldInfo_MMDDYYYY_ShowTime = JSON.parse(JSON.stringify(mmddyyyy));
+        fieldInfo_MMDDYYYY_ShowTime.showTime = true;
+        fieldInfo_MMDDYYYY_ShowTime = [fieldInfo_MMDDYYYY_ShowTime];
+        var expectedRecords_MMDDYYYY_ShowTime =
             [[{
                 "id": 7,
                 "value": "2015-04-12T18:51:19+00:00",
                 "display": "04-12-2015 2:51 PM"}]];
 
-        // FieldInfo and record expectation for field with MM_DD_YYYY format and showDayOfWeek flag
-        var mmddyyyy_ShowDayOfWeek_FieldInfo = JSON.parse(JSON.stringify(mmddyyyy));
-        mmddyyyy_ShowDayOfWeek_FieldInfo.showDayOfWeek = true;
-        mmddyyyy_ShowDayOfWeek_FieldInfo = [mmddyyyy_ShowDayOfWeek_FieldInfo];
-        var expectedRecords_MMDDYYYY_ShowDayOfWeek =
-            [[{
-                "id": 7,
-                "value": "2015-04-12T18:51:19+00:00",
-                "display": "Sunday, 04-12-2015 2:51 PM"}]];
-
-        // FieldInfo and record expectation for field with MM_DD_YYYY format and showTimeZone flag
-        var mmddyyyy_ShowTimeZone_FieldInfo = JSON.parse(JSON.stringify(mmddyyyy));
-        mmddyyyy_ShowTimeZone_FieldInfo.showTimeZone = true;
-        mmddyyyy_ShowTimeZone_FieldInfo = [mmddyyyy_ShowTimeZone_FieldInfo];
-        var expectedRecords_MMDDYYYY_ShowTimeZone =
+        // FieldInfo and record expectation for field with MM_DD_YYYY format and ShowTime, ShowTimeZone flag
+        var fieldInfo_MMDDYYYY_ShowTime_ShowTimeZone = JSON.parse(JSON.stringify(mmddyyyy));
+        fieldInfo_MMDDYYYY_ShowTime_ShowTimeZone.showTime = true;
+        fieldInfo_MMDDYYYY_ShowTime_ShowTimeZone.showTimeZone = true;
+        fieldInfo_MMDDYYYY_ShowTime_ShowTimeZone = [fieldInfo_MMDDYYYY_ShowTime_ShowTimeZone];
+        var expectedRecords_MMDDYYYY_ShowTime_ShowTimeZone =
             [[{
                 "id": 7,
                 "value": "2015-04-12T18:51:19+00:00",
                 "display": "04-12-2015 2:51 PM EDT"}]];
 
-        // FieldInfo and record expectation for field with MM_DD_YYYY format and showTimeZone flag
-        var mmddyyyy_ShowMonthAsName_FieldInfo = JSON.parse(JSON.stringify(mmddyyyy));
-        mmddyyyy_ShowMonthAsName_FieldInfo.showMonthAsName = true;
-        mmddyyyy_ShowMonthAsName_FieldInfo = [mmddyyyy_ShowMonthAsName_FieldInfo];
-        var expectedRecords_MMDDYYYY_ShowMonthAsName =
+
+        // FieldInfo and record expectation for field with MM_DD_YYYY format and ShowTime, ShowMonthAsName flag
+        var fieldInfo_MMDDYYYY_ShowTime_ShowMonthAsName = JSON.parse(JSON.stringify(mmddyyyy));
+        fieldInfo_MMDDYYYY_ShowTime_ShowMonthAsName.showTime = true;
+        fieldInfo_MMDDYYYY_ShowTime_ShowMonthAsName.showMonthAsName = true;
+        fieldInfo_MMDDYYYY_ShowTime_ShowMonthAsName = [fieldInfo_MMDDYYYY_ShowTime_ShowMonthAsName];
+        var expectedRecords_MMDDYYYY_ShowTime_ShowMonthAsName =
             [[{
                 "id": 7,
                 "value": "2015-04-12T18:51:19+00:00",
                 "display": "Apr-12-2015 2:51 PM"}]];
 
+
+        // FieldInfo and record expectation for field with MM_DD_YYYY format and ShowTime, ShowDayOfWeek flag
+        var fieldInfo_MMDDYYYY_ShowTime_ShowDayOfWeek = JSON.parse(JSON.stringify(mmddyyyy));
+        fieldInfo_MMDDYYYY_ShowTime_ShowDayOfWeek.showTime = true;
+        fieldInfo_MMDDYYYY_ShowTime_ShowDayOfWeek.showDayOfWeek = true;
+        fieldInfo_MMDDYYYY_ShowTime_ShowDayOfWeek = [fieldInfo_MMDDYYYY_ShowTime_ShowDayOfWeek];
+        var expectedRecords_MMDDYYYY_ShowTime_ShowDayOfWeek =
+            [[{
+                "id": 7,
+                "value": "2015-04-12T18:51:19+00:00",
+                "display": "Sunday, 04-12-2015 2:51 PM"}]];
+
+        // FieldInfo and record expectation for field with MM_DD_YYYY format and ShowTime, ShowDayOfWeek flag
+        var fieldInfo_MMDDYYYY_ShowTime_ShowTimeZone_ShowMonthAsName = JSON.parse(JSON.stringify(mmddyyyy));
+        fieldInfo_MMDDYYYY_ShowTime_ShowTimeZone_ShowMonthAsName.showTime = true;
+        fieldInfo_MMDDYYYY_ShowTime_ShowTimeZone_ShowMonthAsName.showTimeZone = true;
+        fieldInfo_MMDDYYYY_ShowTime_ShowTimeZone_ShowMonthAsName.showMonthAsName = true;
+        fieldInfo_MMDDYYYY_ShowTime_ShowTimeZone_ShowMonthAsName = [fieldInfo_MMDDYYYY_ShowTime_ShowTimeZone_ShowMonthAsName];
+        var expectedRecords_MMDDYYYY_ShowTime_ShowTimeZone_ShowMonthAsName =
+            [[{
+                "id": 7,
+                "value": "2015-04-12T18:51:19+00:00",
+                "display": "Apr-12-2015 2:51 PM EDT"}]];
+
+        // FieldInfo and record expectation for field with MM_DD_YYYY format and ShowTime, ShowTimeZone, ShowDayOfWeek flag
+        var fieldInfo_MMDDYYYY_ShowTime_ShowTimeZone_ShowDayOfWeek = JSON.parse(JSON.stringify(mmddyyyy));
+        fieldInfo_MMDDYYYY_ShowTime_ShowTimeZone_ShowDayOfWeek.showTime = true;
+        fieldInfo_MMDDYYYY_ShowTime_ShowTimeZone_ShowDayOfWeek.showTimeZone = true;
+        fieldInfo_MMDDYYYY_ShowTime_ShowTimeZone_ShowDayOfWeek.showDayOfWeek = true;
+        fieldInfo_MMDDYYYY_ShowTime_ShowTimeZone_ShowDayOfWeek = [fieldInfo_MMDDYYYY_ShowTime_ShowTimeZone_ShowDayOfWeek];
+        var expectedRecords_MMDDYYYY_ShowTime_ShowTimeZone_ShowDayOfWeek =
+            [[{
+                "id": 7,
+                "value": "2015-04-12T18:51:19+00:00",
+                "display": "Sunday, 04-12-2015 2:51 PM EDT"}]];
+
+        // FieldInfo and record expectation for field with MM_DD_YYYY format and ShowTime, ShowMonthAsName, ShowDayOfWeek flag
+        var fieldInfo_MMDDYYYY_ShowTime_ShowMonthAsName_ShowDayOfWeek = JSON.parse(JSON.stringify(mmddyyyy));
+        fieldInfo_MMDDYYYY_ShowTime_ShowMonthAsName_ShowDayOfWeek.showTime = true;
+        fieldInfo_MMDDYYYY_ShowTime_ShowMonthAsName_ShowDayOfWeek.showMonthAsName = true;
+        fieldInfo_MMDDYYYY_ShowTime_ShowMonthAsName_ShowDayOfWeek.showDayOfWeek = true;
+        fieldInfo_MMDDYYYY_ShowTime_ShowMonthAsName_ShowDayOfWeek = [fieldInfo_MMDDYYYY_ShowTime_ShowMonthAsName_ShowDayOfWeek];
+        var expectedRecords_MMDDYYYY_ShowTime_ShowMonthAsName_ShowDayOfWeek =
+            [[{
+                "id": 7,
+                "value": "2015-04-12T18:51:19+00:00",
+                "display": "Sunday, Apr-12-2015 2:51 PM"}]];
+
+
+        // FieldInfo and record expectation for field with MM_DD_YYYY format and showDayOfWeek flag
+        var fieldInfo_MMDDYYYY_ShowDayOfWeek = JSON.parse(JSON.stringify(mmddyyyy));
+        fieldInfo_MMDDYYYY_ShowDayOfWeek.showDayOfWeek = true;
+        fieldInfo_MMDDYYYY_ShowDayOfWeek = [fieldInfo_MMDDYYYY_ShowDayOfWeek];
+        var expectedRecords_MMDDYYYY_ShowDayOfWeek =
+            [[{
+                "id": 7,
+                "value": "2015-04-12T18:51:19+00:00",
+                "display": "Sunday, 04-12-2015"}]];
+
+        // FieldInfo and record expectation for field with MM_DD_YYYY format and showTimeZone flag
+        var fieldInfo_MMDDYYYY_ShowTimeZone = JSON.parse(JSON.stringify(mmddyyyy));
+        fieldInfo_MMDDYYYY_ShowTimeZone.showTimeZone = true;
+        fieldInfo_MMDDYYYY_ShowTimeZone = [fieldInfo_MMDDYYYY_ShowTimeZone];
+        var expectedRecords_MMDDYYYY_ShowTimeZone =
+            [[{
+                "id": 7,
+                "value": "2015-04-12T18:51:19+00:00",
+                "display": "04-12-2015 EDT"}]];
+
+        // FieldInfo and record expectation for field with MM_DD_YYYY format and ShowTimeZone, ShowMonthAsName flag
+        var fieldInfo_MMDDYYYY_ShowTimeZone_ShowMonthAsName = JSON.parse(JSON.stringify(mmddyyyy));
+        fieldInfo_MMDDYYYY_ShowTimeZone_ShowMonthAsName.showTimeZone = true;
+        fieldInfo_MMDDYYYY_ShowTimeZone_ShowMonthAsName.showMonthAsName = true;
+        fieldInfo_MMDDYYYY_ShowTimeZone_ShowMonthAsName = [fieldInfo_MMDDYYYY_ShowTimeZone_ShowMonthAsName];
+        var expectedRecords_MMDDYYYY_ShowTimeZone_ShowMonthAsName =
+            [[{
+                "id": 7,
+                "value": "2015-04-12T18:51:19+00:00",
+                "display": "Apr-12-2015 EDT"}]];
+
+        // FieldInfo and record expectation for field with MM_DD_YYYY format and ShowTimeZone, ShowDayOfWeek flag
+        var fieldInfo_MMDDYYYY_ShowTimeZone_ShowDayOfWeek = JSON.parse(JSON.stringify(mmddyyyy));
+        fieldInfo_MMDDYYYY_ShowTimeZone_ShowDayOfWeek.showTimeZone = true;
+        fieldInfo_MMDDYYYY_ShowTimeZone_ShowDayOfWeek.showDayOfWeek = true;
+        fieldInfo_MMDDYYYY_ShowTimeZone_ShowDayOfWeek = [fieldInfo_MMDDYYYY_ShowTimeZone_ShowDayOfWeek];
+        var expectedRecords_MMDDYYYY_ShowTimeZone_ShowDayOfWeek =
+            [[{
+                "id": 7,
+                "value": "2015-04-12T18:51:19+00:00",
+                "display": "Sunday, 04-12-2015 EDT"}]];
+
+        // FieldInfo and record expectation for field with MM_DD_YYYY format and ShowTimeZone, ShowMonthAsName, ShowDayOfWeek flag
+        var fieldInfo_MMDDYYYY_ShowTimeZone_ShowMonthAsName_ShowDayOfWeek = JSON.parse(JSON.stringify(mmddyyyy));
+        fieldInfo_MMDDYYYY_ShowTimeZone_ShowMonthAsName_ShowDayOfWeek.showTimeZone = true;
+        fieldInfo_MMDDYYYY_ShowTimeZone_ShowMonthAsName_ShowDayOfWeek.showMonthAsName = true;
+        fieldInfo_MMDDYYYY_ShowTimeZone_ShowMonthAsName_ShowDayOfWeek.showDayOfWeek = true;
+        fieldInfo_MMDDYYYY_ShowTimeZone_ShowMonthAsName_ShowDayOfWeek = [fieldInfo_MMDDYYYY_ShowTimeZone_ShowMonthAsName_ShowDayOfWeek];
+        var expectedRecords_MMDDYYYY_ShowTimeZone_ShowMonthAsName_ShowDayOfWeek =
+            [[{
+                "id": 7,
+                "value": "2015-04-12T18:51:19+00:00",
+                "display": "Sunday, Apr-12-2015 EDT"}]];
+
+        // FieldInfo and record expectation for field with MM_DD_YYYY format and ShowMonthAsName flag
+        var fieldInfo_MMDDYYYY_ShowMonthAsName = JSON.parse(JSON.stringify(mmddyyyy));
+        fieldInfo_MMDDYYYY_ShowMonthAsName.showMonthAsName = true;
+        fieldInfo_MMDDYYYY_ShowMonthAsName = [fieldInfo_MMDDYYYY_ShowMonthAsName];
+        var expectedRecords_MMDDYYYY_ShowMonthAsName =
+            [[{
+                "id": 7,
+                "value": "2015-04-12T18:51:19+00:00",
+                "display": "Apr-12-2015"}]];
+
+        // FieldInfo and record expectation for field with MM_DD_YYYY format and ShowMonthAsName, ShowDayOfWeek flag
+        var fieldInfo_MMDDYYYY_ShowMonthAsName_ShowDayOfWeek = JSON.parse(JSON.stringify(mmddyyyy));
+        fieldInfo_MMDDYYYY_ShowMonthAsName_ShowDayOfWeek.showMonthAsName = true;
+        fieldInfo_MMDDYYYY_ShowMonthAsName_ShowDayOfWeek.showDayOfWeek = true;
+        fieldInfo_MMDDYYYY_ShowMonthAsName_ShowDayOfWeek = [fieldInfo_MMDDYYYY_ShowMonthAsName_ShowDayOfWeek];
+        var expectedRecords_MMDDYYYY_ShowMonthAsName_ShowDayOfWeek =
+            [[{
+                "id": 7,
+                "value": "2015-04-12T18:51:19+00:00",
+                "display": "Sunday, Apr-12-2015"}]];
+
         // FieldInfo and record expectation for field with MM_DD_YYYY format and all flags enabled
-        var mmddyyyy_AllFlags_FieldInfo = JSON.parse(JSON.stringify(mmddyyyy));
-        mmddyyyy_AllFlags_FieldInfo.showTime = true;
-        mmddyyyy_AllFlags_FieldInfo.showTimeZone = true;
-        mmddyyyy_AllFlags_FieldInfo.showMonthAsName = true;
-        mmddyyyy_AllFlags_FieldInfo.showDayOfWeek = true;
-        mmddyyyy_AllFlags_FieldInfo = [mmddyyyy_AllFlags_FieldInfo];
+        var fieldInfo_MMDDYYYY_AllFlags = JSON.parse(JSON.stringify(mmddyyyy));
+        fieldInfo_MMDDYYYY_AllFlags.showTime = true;
+        fieldInfo_MMDDYYYY_AllFlags.showTimeZone = true;
+        fieldInfo_MMDDYYYY_AllFlags.showMonthAsName = true;
+        fieldInfo_MMDDYYYY_AllFlags.showDayOfWeek = true;
+        fieldInfo_MMDDYYYY_AllFlags = [fieldInfo_MMDDYYYY_AllFlags];
         var expectedRecords_MMDDYYYY_AllFlags =
             [[{
                 "id": 7,
                 "value": "2015-04-12T18:51:19+00:00",
                 "display": "Sunday, Apr-12-2015 2:51 PM EDT"}]];
 
-        // FieldInfo and record expectation for field with MM_DD_YYYY format and showTime flag set to false
-        var mmddyyyy_ShowTimeDisabled_FieldInfo = JSON.parse(JSON.stringify(mmddyyyy));
-        mmddyyyy_ShowTimeDisabled_FieldInfo.showTime = false;
-        mmddyyyy_ShowTimeDisabled_FieldInfo = [mmddyyyy_ShowTimeDisabled_FieldInfo];
-        var expectedRecords_MMDDYYYY_ShowTimeDisabled =
-            [[{
-                "id": 7,
-                "value": "2015-04-12T18:51:19+00:00",
-                "display": "04-12-2015"}]];
 
         //Empty records
         var emptyRecords =  [[{
@@ -106,22 +224,32 @@ describe('DateTime record formatter unit test', function () {
                 "display": null}]];
 
         return [
-            { message: "dateTime with MM_DD_YYYY format and showTime flag", records: recordsInput, fieldInfo: mmddyyyy_FieldInfo, expectedRecords: expectedRecords_MMDDYYYY },
-            { message: "dateTime with MM_DD_YYYY format and showDayOfWeek flag", records: recordsInput, fieldInfo: mmddyyyy_ShowDayOfWeek_FieldInfo, expectedRecords: expectedRecords_MMDDYYYY_ShowDayOfWeek },
-            { message: "dateTime with MM_DD_YYYY format and showTimeZone flag", records: recordsInput, fieldInfo: mmddyyyy_ShowTimeZone_FieldInfo, expectedRecords: expectedRecords_MMDDYYYY_ShowTimeZone },
-            { message: "dateTime with MM_DD_YYYY format and showMonthAsName flag", records: recordsInput, fieldInfo: mmddyyyy_ShowMonthAsName_FieldInfo, expectedRecords: expectedRecords_MMDDYYYY_ShowMonthAsName },
-            { message: "dateTime with MM_DD_YYYY format and with all flags", records: recordsInput, fieldInfo: mmddyyyy_AllFlags_FieldInfo, expectedRecords: expectedRecords_MMDDYYYY_AllFlags },
-            { message: "dateTime with MM_DD_YYYY format and showTime flag disabled", records: recordsInput, fieldInfo: mmddyyyy_ShowTimeDisabled_FieldInfo, expectedRecords: expectedRecords_MMDDYYYY_ShowTimeDisabled },
+            { message: "dateTime with MM_DD_YYYY format and no flags", records: recordsInput, fieldInfo: fieldInfo_MMDDYYYY, expectedRecords: expectedRecords_MMDDYYYY },
+            { message: "dateTime with MM_DD_YYYY format and showTime flag", records: recordsInput, fieldInfo: fieldInfo_MMDDYYYY_ShowTime, expectedRecords: expectedRecords_MMDDYYYY_ShowTime },
+            { message: "dateTime with MM_DD_YYYY format and showTime, showTimeZone flag", records: recordsInput, fieldInfo: fieldInfo_MMDDYYYY_ShowTime_ShowTimeZone, expectedRecords: expectedRecords_MMDDYYYY_ShowTime_ShowTimeZone },
+            { message: "dateTime with MM_DD_YYYY format and showTime, showMonthAsName flag", records: recordsInput, fieldInfo: fieldInfo_MMDDYYYY_ShowTime_ShowMonthAsName, expectedRecords: expectedRecords_MMDDYYYY_ShowTime_ShowMonthAsName },
+            { message: "dateTime with MM_DD_YYYY format and showTime, showDayOfWeek flag", records: recordsInput, fieldInfo: fieldInfo_MMDDYYYY_ShowTime_ShowDayOfWeek, expectedRecords: expectedRecords_MMDDYYYY_ShowTime_ShowDayOfWeek },
+            { message: "dateTime with MM_DD_YYYY format and showTime, showTimeZone, showMonthAsName flag", records: recordsInput, fieldInfo: fieldInfo_MMDDYYYY_ShowTime_ShowTimeZone_ShowMonthAsName, expectedRecords: expectedRecords_MMDDYYYY_ShowTime_ShowTimeZone_ShowMonthAsName },
+            { message: "dateTime with MM_DD_YYYY format and showTime, showTimeZone, showDayOfWeek flag", records: recordsInput, fieldInfo: fieldInfo_MMDDYYYY_ShowTime_ShowTimeZone_ShowDayOfWeek, expectedRecords: expectedRecords_MMDDYYYY_ShowTime_ShowTimeZone_ShowDayOfWeek },
+            { message: "dateTime with MM_DD_YYYY format and showTime, showMonthAsName, showDayOfWeek flag", records: recordsInput, fieldInfo: fieldInfo_MMDDYYYY_ShowTime_ShowMonthAsName_ShowDayOfWeek, expectedRecords: expectedRecords_MMDDYYYY_ShowTime_ShowMonthAsName_ShowDayOfWeek },
+            { message: "dateTime with MM_DD_YYYY format and showTimZone flag", records: recordsInput, fieldInfo: fieldInfo_MMDDYYYY_ShowTimeZone, expectedRecords: expectedRecords_MMDDYYYY_ShowTimeZone },
+            { message: "dateTime with MM_DD_YYYY format and showTimZone, showMonthAsName flag", records: recordsInput, fieldInfo: fieldInfo_MMDDYYYY_ShowTimeZone_ShowMonthAsName, expectedRecords: expectedRecords_MMDDYYYY_ShowTimeZone_ShowMonthAsName },
+            { message: "dateTime with MM_DD_YYYY format and showTimZone, showDayOfWeek flag", records: recordsInput, fieldInfo: fieldInfo_MMDDYYYY_ShowTimeZone_ShowDayOfWeek, expectedRecords: expectedRecords_MMDDYYYY_ShowTimeZone_ShowDayOfWeek },
+            { message: "dateTime with MM_DD_YYYY format and showTimZone, showMonthAsName, showDayOfWeek flag", records: recordsInput, fieldInfo: fieldInfo_MMDDYYYY_ShowTimeZone_ShowMonthAsName_ShowDayOfWeek, expectedRecords: expectedRecords_MMDDYYYY_ShowTimeZone_ShowMonthAsName_ShowDayOfWeek },
+            { message: "dateTime with MM_DD_YYYY format and showMonthAsName flag", records: recordsInput, fieldInfo: fieldInfo_MMDDYYYY_ShowMonthAsName, expectedRecords: expectedRecords_MMDDYYYY_ShowMonthAsName },
+            { message: "dateTime with MM_DD_YYYY format and showMonthAsName, showDayOfWeek flag", records: recordsInput, fieldInfo: fieldInfo_MMDDYYYY_ShowMonthAsName_ShowDayOfWeek, expectedRecords: expectedRecords_MMDDYYYY_ShowMonthAsName_ShowDayOfWeek },
+            { message: "dateTime with MM_DD_YYYY format and showDayOfWeek flag", records: recordsInput, fieldInfo: fieldInfo_MMDDYYYY_ShowDayOfWeek, expectedRecords: expectedRecords_MMDDYYYY_ShowDayOfWeek },
+            { message: "dateTime with MM_DD_YYYY format and all flag", records: recordsInput, fieldInfo: fieldInfo_MMDDYYYY_AllFlags, expectedRecords: expectedRecords_MMDDYYYY_AllFlags },
             // TODO: Current returns "Invalid date" in display for empty date
             //{ message: "empty dateTime with MM_DD_YYYY format", records: emptyRecords, fieldInfo: mmddyyyy_FieldInfo, expectedRecords: expectedEmptyRecords},
-            { message: "null dateTime with MM_DD_YYYY format", records: nullRecords, fieldInfo: mmddyyyy_FieldInfo, expectedRecords: nullExpectedRecords }
+            { message: "null dateTime with MM_DD_YYYY format", records: nullRecords, fieldInfo: fieldInfo_MMDDYYYY, expectedRecords: nullExpectedRecords }
         ];
     }
 
     it('should format various MM_DD_YYYY DateTime records for display', function () {
         mmddyyyyDataProvider().forEach(function(entry){
             var formattedRecords = recordFormatter.formatRecords(entry.records, entry.fieldInfo);
-            console.log('FIELD INFO: ' + JSON.stringify(entry.fieldInfo));
+            console.log('TEST CASE: ' + JSON.stringify(entry.message));
             console.log('RET RECS: ' + JSON.stringify(formattedRecords));
             console.log('EXP RECS: ' + JSON.stringify(entry.expectedRecords));
             assert.deepEqual(formattedRecords, entry.expectedRecords, entry.message);
@@ -133,7 +261,7 @@ describe('DateTime record formatter unit test', function () {
         // Default DateTime record input
         var recordsInput =  [[{
             "id": 7,
-            "value": "2015-04-12T05:51:19+00:00"}]];
+            "value": "2015-04-12T05:51:19z"}]];
 
         // FieldInfo and record expectation for field with MM_DD_YY format
         // TODO: Determine how to use the constants in dateTime formatter to set format???
@@ -141,71 +269,189 @@ describe('DateTime record formatter unit test', function () {
             "id": 7,
             "name": "datetime",
             "type": "DATE_TIME",
-            "showTime": true,
+            "showTime": false,
             "showTimeZone": false,
             "showMonthAsName": false,
             "showDayOfWeek": false,
             "format": "MM-dd-uu",
             "timeZone": "America/New_York"};
-        var mmddyy_FieldInfo = [mmddyy];
+        var fieldInfo_MMDDYY = [mmddyy];
         var expectedRecords_MMDDYY =
             [[{
                 "id": 7,
-                "value": "2015-04-12T05:51:19+00:00",
-                "display": "04-12-15 1:51 AM"}]];
+                "value": "2015-04-12T05:51:19z",
+                "display": "04-12-15"}]];
 
         // FieldInfo and record expectation for field with MM_DD_YY format and showDayOfWeek flag
-        var mmddyy_ShowDayOfWeek_FieldInfo = JSON.parse(JSON.stringify(mmddyy));
-        mmddyy_ShowDayOfWeek_FieldInfo.showDayOfWeek = true;
-        mmddyy_ShowDayOfWeek_FieldInfo = [mmddyy_ShowDayOfWeek_FieldInfo];
+        var fieldInfo_MMDDYY_ShowTime = JSON.parse(JSON.stringify(mmddyy));
+        fieldInfo_MMDDYY_ShowTime.showTime = true;
+        fieldInfo_MMDDYY_ShowTime = [fieldInfo_MMDDYY_ShowTime];
+        var expectedRecords_MMDDYY_ShowTime =
+            [[{
+                "id": 7,
+                "value": "2015-04-12T05:51:19z",
+                "display": "04-12-15 1:51 AM"}]];
+
+        // FieldInfo and record expectation for field with MM_DD_YY format and ShowTime, ShowTimeZone flag
+        var fieldInfo_MMDDYY_ShowTime_ShowTimeZone = JSON.parse(JSON.stringify(mmddyy));
+        fieldInfo_MMDDYY_ShowTime_ShowTimeZone.showTime = true;
+        fieldInfo_MMDDYY_ShowTime_ShowTimeZone.showTimeZone = true;
+        fieldInfo_MMDDYY_ShowTime_ShowTimeZone = [fieldInfo_MMDDYY_ShowTime_ShowTimeZone];
+        var expectedRecords_MMDDYY_ShowTime_ShowTimeZone =
+            [[{
+                "id": 7,
+                "value": "2015-04-12T05:51:19z",
+                "display": "04-12-15 1:51 AM EDT"}]];
+
+
+        // FieldInfo and record expectation for field with MM_DD_YY format and ShowTime, ShowMonthAsName flag
+        var fieldInfo_MMDDYY_ShowTime_ShowMonthAsName = JSON.parse(JSON.stringify(mmddyy));
+        fieldInfo_MMDDYY_ShowTime_ShowMonthAsName.showTime = true;
+        fieldInfo_MMDDYY_ShowTime_ShowMonthAsName.showMonthAsName = true;
+        fieldInfo_MMDDYY_ShowTime_ShowMonthAsName = [fieldInfo_MMDDYY_ShowTime_ShowMonthAsName];
+        var expectedRecords_MMDDYY_ShowTime_ShowMonthAsName =
+            [[{
+                "id": 7,
+                "value": "2015-04-12T05:51:19z",
+                "display": "Apr-12-15 1:51 AM"}]];
+
+
+        // FieldInfo and record expectation for field with MM_DD_YY format and ShowTime, ShowDayOfWeek flag
+        var fieldInfo_MMDDYY_ShowTime_ShowDayOfWeek = JSON.parse(JSON.stringify(mmddyy));
+        fieldInfo_MMDDYY_ShowTime_ShowDayOfWeek.showTime = true;
+        fieldInfo_MMDDYY_ShowTime_ShowDayOfWeek.showDayOfWeek = true;
+        fieldInfo_MMDDYY_ShowTime_ShowDayOfWeek = [fieldInfo_MMDDYY_ShowTime_ShowDayOfWeek];
+        var expectedRecords_MMDDYY_ShowTime_ShowDayOfWeek =
+            [[{
+                "id": 7,
+                "value": "2015-04-12T05:51:19z",
+                "display": "Sunday, 04-12-15 1:51 AM"}]];
+
+        // FieldInfo and record expectation for field with MM_DD_YY format and ShowTime, ShowDayOfWeek flag
+        var fieldInfo_MMDDYY_ShowTime_ShowTimeZone_ShowMonthAsName = JSON.parse(JSON.stringify(mmddyy));
+        fieldInfo_MMDDYY_ShowTime_ShowTimeZone_ShowMonthAsName.showTime = true;
+        fieldInfo_MMDDYY_ShowTime_ShowTimeZone_ShowMonthAsName.showTimeZone = true;
+        fieldInfo_MMDDYY_ShowTime_ShowTimeZone_ShowMonthAsName.showMonthAsName = true;
+        fieldInfo_MMDDYY_ShowTime_ShowTimeZone_ShowMonthAsName = [fieldInfo_MMDDYY_ShowTime_ShowTimeZone_ShowMonthAsName];
+        var expectedRecords_MMDDYY_ShowTime_ShowTimeZone_ShowMonthAsName =
+            [[{
+                "id": 7,
+                "value": "2015-04-12T05:51:19z",
+                "display": "Apr-12-15 1:51 AM EDT"}]];
+
+        // FieldInfo and record expectation for field with MM_DD_YY format and ShowTime, ShowTimeZone, ShowDayOfWeek flag
+        var fieldInfo_MMDDYY_ShowTime_ShowTimeZone_ShowDayOfWeek = JSON.parse(JSON.stringify(mmddyy));
+        fieldInfo_MMDDYY_ShowTime_ShowTimeZone_ShowDayOfWeek.showTime = true;
+        fieldInfo_MMDDYY_ShowTime_ShowTimeZone_ShowDayOfWeek.showTimeZone = true;
+        fieldInfo_MMDDYY_ShowTime_ShowTimeZone_ShowDayOfWeek.showDayOfWeek = true;
+        fieldInfo_MMDDYY_ShowTime_ShowTimeZone_ShowDayOfWeek = [fieldInfo_MMDDYY_ShowTime_ShowTimeZone_ShowDayOfWeek];
+        var expectedRecords_MMDDYY_ShowTime_ShowTimeZone_ShowDayOfWeek =
+            [[{
+                "id": 7,
+                "value": "2015-04-12T05:51:19z",
+                "display": "Sunday, 04-12-15 1:51 AM EDT"}]];
+
+        // FieldInfo and record expectation for field with MM_DD_YY format and ShowTime, ShowMonthAsName, ShowDayOfWeek flag
+        var fieldInfo_MMDDYY_ShowTime_ShowMonthAsName_ShowDayOfWeek = JSON.parse(JSON.stringify(mmddyy));
+        fieldInfo_MMDDYY_ShowTime_ShowMonthAsName_ShowDayOfWeek.showTime = true;
+        fieldInfo_MMDDYY_ShowTime_ShowMonthAsName_ShowDayOfWeek.showMonthAsName = true;
+        fieldInfo_MMDDYY_ShowTime_ShowMonthAsName_ShowDayOfWeek.showDayOfWeek = true;
+        fieldInfo_MMDDYY_ShowTime_ShowMonthAsName_ShowDayOfWeek = [fieldInfo_MMDDYY_ShowTime_ShowMonthAsName_ShowDayOfWeek];
+        var expectedRecords_MMDDYY_ShowTime_ShowMonthAsName_ShowDayOfWeek =
+            [[{
+                "id": 7,
+                "value": "2015-04-12T05:51:19z",
+                "display": "Sunday, Apr-12-15 1:51 AM"}]];
+
+
+        // FieldInfo and record expectation for field with MM_DD_YY format and showDayOfWeek flag
+        var fieldInfo_MMDDYY_ShowDayOfWeek = JSON.parse(JSON.stringify(mmddyy));
+        fieldInfo_MMDDYY_ShowDayOfWeek.showDayOfWeek = true;
+        fieldInfo_MMDDYY_ShowDayOfWeek = [fieldInfo_MMDDYY_ShowDayOfWeek];
         var expectedRecords_MMDDYY_ShowDayOfWeek =
             [[{
                 "id": 7,
-                "value": "2015-04-12T05:51:19+00:00",
-                "display": "Sunday, 04-12-15 1:51 AM"}]];
+                "value": "2015-04-12T05:51:19z",
+                "display": "Sunday, 04-12-15"}]];
 
         // FieldInfo and record expectation for field with MM_DD_YY format and showTimeZone flag
-        var mmddyy_ShowTimeZone_FieldInfo = JSON.parse(JSON.stringify(mmddyy));
-        mmddyy_ShowTimeZone_FieldInfo.showTimeZone = true;
-        mmddyy_ShowTimeZone_FieldInfo = [mmddyy_ShowTimeZone_FieldInfo];
+        var fieldInfo_MMDDYY_ShowTimeZone = JSON.parse(JSON.stringify(mmddyy));
+        fieldInfo_MMDDYY_ShowTimeZone.showTimeZone = true;
+        fieldInfo_MMDDYY_ShowTimeZone = [fieldInfo_MMDDYY_ShowTimeZone];
         var expectedRecords_MMDDYY_ShowTimeZone =
             [[{
                 "id": 7,
-                "value": "2015-04-12T05:51:19+00:00",
-                "display": "04-12-15 1:51 AM EDT"}]];
+                "value": "2015-04-12T05:51:19z",
+                "display": "04-12-15 EDT"}]];
 
-        // FieldInfo and record expectation for field with MM_DD_YY format and showTimeZone flag
-        var mmddyy_ShowMonthAsName_FieldInfo = JSON.parse(JSON.stringify(mmddyy));
-        mmddyy_ShowMonthAsName_FieldInfo.showMonthAsName = true;
-        mmddyy_ShowMonthAsName_FieldInfo = [mmddyy_ShowMonthAsName_FieldInfo];
+        // FieldInfo and record expectation for field with MM_DD_YY format and ShowTimeZone, ShowMonthAsName flag
+        var fieldInfo_MMDDYY_ShowTimeZone_ShowMonthAsName = JSON.parse(JSON.stringify(mmddyy));
+        fieldInfo_MMDDYY_ShowTimeZone_ShowMonthAsName.showTimeZone = true;
+        fieldInfo_MMDDYY_ShowTimeZone_ShowMonthAsName.showMonthAsName = true;
+        fieldInfo_MMDDYY_ShowTimeZone_ShowMonthAsName = [fieldInfo_MMDDYY_ShowTimeZone_ShowMonthAsName];
+        var expectedRecords_MMDDYY_ShowTimeZone_ShowMonthAsName =
+            [[{
+                "id": 7,
+                "value": "2015-04-12T05:51:19z",
+                "display": "Apr-12-15 EDT"}]];
+
+        // FieldInfo and record expectation for field with MM_DD_YY format and ShowTimeZone, ShowDayOfWeek flag
+        var fieldInfo_MMDDYY_ShowTimeZone_ShowDayOfWeek = JSON.parse(JSON.stringify(mmddyy));
+        fieldInfo_MMDDYY_ShowTimeZone_ShowDayOfWeek.showTimeZone = true;
+        fieldInfo_MMDDYY_ShowTimeZone_ShowDayOfWeek.showDayOfWeek = true;
+        fieldInfo_MMDDYY_ShowTimeZone_ShowDayOfWeek = [fieldInfo_MMDDYY_ShowTimeZone_ShowDayOfWeek];
+        var expectedRecords_MMDDYY_ShowTimeZone_ShowDayOfWeek =
+            [[{
+                "id": 7,
+                "value": "2015-04-12T05:51:19z",
+                "display": "Sunday, 04-12-15 EDT"}]];
+
+        // FieldInfo and record expectation for field with MM_DD_YY format and ShowTimeZone, ShowMonthAsName, ShowDayOfWeek flag
+        var fieldInfo_MMDDYY_ShowTimeZone_ShowMonthAsName_ShowDayOfWeek = JSON.parse(JSON.stringify(mmddyy));
+        fieldInfo_MMDDYY_ShowTimeZone_ShowMonthAsName_ShowDayOfWeek.showTimeZone = true;
+        fieldInfo_MMDDYY_ShowTimeZone_ShowMonthAsName_ShowDayOfWeek.showMonthAsName = true;
+        fieldInfo_MMDDYY_ShowTimeZone_ShowMonthAsName_ShowDayOfWeek.showDayOfWeek = true;
+        fieldInfo_MMDDYY_ShowTimeZone_ShowMonthAsName_ShowDayOfWeek = [fieldInfo_MMDDYY_ShowTimeZone_ShowMonthAsName_ShowDayOfWeek];
+        var expectedRecords_MMDDYY_ShowTimeZone_ShowMonthAsName_ShowDayOfWeek =
+            [[{
+                "id": 7,
+                "value": "2015-04-12T05:51:19z",
+                "display": "Sunday, Apr-12-15 EDT"}]];
+
+        // FieldInfo and record expectation for field with MM_DD_YY format and ShowMonthAsName flag
+        var fieldInfo_MMDDYY_ShowMonthAsName = JSON.parse(JSON.stringify(mmddyy));
+        fieldInfo_MMDDYY_ShowMonthAsName.showMonthAsName = true;
+        fieldInfo_MMDDYY_ShowMonthAsName = [fieldInfo_MMDDYY_ShowMonthAsName];
         var expectedRecords_MMDDYY_ShowMonthAsName =
             [[{
                 "id": 7,
-                "value": "2015-04-12T05:51:19+00:00",
-                "display": "Apr-12-15 1:51 AM"}]];
+                "value": "2015-04-12T05:51:19z",
+                "display": "Apr-12-15"}]];
+
+        // FieldInfo and record expectation for field with MM_DD_YY format and ShowMonthAsName, ShowDayOfWeek flag
+        var fieldInfo_MMDDYY_ShowMonthAsName_ShowDayOfWeek = JSON.parse(JSON.stringify(mmddyy));
+        fieldInfo_MMDDYY_ShowMonthAsName_ShowDayOfWeek.showMonthAsName = true;
+        fieldInfo_MMDDYY_ShowMonthAsName_ShowDayOfWeek.showDayOfWeek = true;
+        fieldInfo_MMDDYY_ShowMonthAsName_ShowDayOfWeek = [fieldInfo_MMDDYY_ShowMonthAsName_ShowDayOfWeek];
+        var expectedRecords_MMDDYY_ShowMonthAsName_ShowDayOfWeek =
+            [[{
+                "id": 7,
+                "value": "2015-04-12T05:51:19z",
+                "display": "Sunday, Apr-12-15"}]];
 
         // FieldInfo and record expectation for field with MM_DD_YY format and all flags enabled
-        var mmddyy_AllFlags_FieldInfo = JSON.parse(JSON.stringify(mmddyy));
-        mmddyy_AllFlags_FieldInfo.showTime = true;
-        mmddyy_AllFlags_FieldInfo.showTimeZone = true;
-        mmddyy_AllFlags_FieldInfo.showMonthAsName = true;
-        mmddyy_AllFlags_FieldInfo.showDayOfWeek = true;
-        mmddyy_AllFlags_FieldInfo = [mmddyy_AllFlags_FieldInfo];
+        var fieldInfo_MMDDYY_AllFlags = JSON.parse(JSON.stringify(mmddyy));
+        fieldInfo_MMDDYY_AllFlags.showTime = true;
+        fieldInfo_MMDDYY_AllFlags.showTimeZone = true;
+        fieldInfo_MMDDYY_AllFlags.showMonthAsName = true;
+        fieldInfo_MMDDYY_AllFlags.showDayOfWeek = true;
+        fieldInfo_MMDDYY_AllFlags = [fieldInfo_MMDDYY_AllFlags];
         var expectedRecords_MMDDYY_AllFlags =
             [[{
                 "id": 7,
-                "value": "2015-04-12T05:51:19+00:00",
+                "value": "2015-04-12T05:51:19z",
                 "display": "Sunday, Apr-12-15 1:51 AM EDT"}]];
 
-        // FieldInfo and record expectation for field with MM_DD_YY format and showTime flag set to false
-        var mmddyy_ShowTimeDisabled_FieldInfo = JSON.parse(JSON.stringify(mmddyy));
-        mmddyy_ShowTimeDisabled_FieldInfo.showTime = false;
-        mmddyy_ShowTimeDisabled_FieldInfo = [mmddyy_ShowTimeDisabled_FieldInfo];
-        var expectedRecords_MMDDYY_ShowTimeDisabled =
-            [[{
-                "id": 7,
-                "value": "2015-04-12T05:51:19+00:00",
-                "display": "04-12-15"}]];
 
         //Empty records
         var emptyRecords =  [[{
@@ -228,22 +474,282 @@ describe('DateTime record formatter unit test', function () {
                 "display": null}]];
 
         return [
-            { message: "dateTime with MM_DD_YY format and showTime flag", records: recordsInput, fieldInfo: mmddyy_FieldInfo, expectedRecords: expectedRecords_MMDDYY },
-            { message: "dateTime with MM_DD_YY format and showDayOfWeek flag", records: recordsInput, fieldInfo: mmddyy_ShowDayOfWeek_FieldInfo, expectedRecords: expectedRecords_MMDDYY_ShowDayOfWeek },
-            { message: "dateTime with MM_DD_YY format and showTimeZone flag", records: recordsInput, fieldInfo: mmddyy_ShowTimeZone_FieldInfo, expectedRecords: expectedRecords_MMDDYY_ShowTimeZone },
-            { message: "dateTime with MM_DD_YY format and showMonthAsName flag", records: recordsInput, fieldInfo: mmddyy_ShowMonthAsName_FieldInfo, expectedRecords: expectedRecords_MMDDYY_ShowMonthAsName },
-            { message: "dateTime with MM_DD_YY format and with all flags", records: recordsInput, fieldInfo: mmddyy_AllFlags_FieldInfo, expectedRecords: expectedRecords_MMDDYY_AllFlags },
-            { message: "dateTime with MM_DD_YY format and showTime flag disabled", records: recordsInput, fieldInfo: mmddyy_ShowTimeDisabled_FieldInfo, expectedRecords: expectedRecords_MMDDYY_ShowTimeDisabled },
+            { message: "dateTime with MM_DD_YY format and no flags", records: recordsInput, fieldInfo: fieldInfo_MMDDYY, expectedRecords: expectedRecords_MMDDYY },
+            { message: "dateTime with MM_DD_YY format and showTime flag", records: recordsInput, fieldInfo: fieldInfo_MMDDYY_ShowTime, expectedRecords: expectedRecords_MMDDYY_ShowTime },
+            { message: "dateTime with MM_DD_YY format and showTime, showTimeZone flag", records: recordsInput, fieldInfo: fieldInfo_MMDDYY_ShowTime_ShowTimeZone, expectedRecords: expectedRecords_MMDDYY_ShowTime_ShowTimeZone },
+            { message: "dateTime with MM_DD_YY format and showTime, showMonthAsName flag", records: recordsInput, fieldInfo: fieldInfo_MMDDYY_ShowTime_ShowMonthAsName, expectedRecords: expectedRecords_MMDDYY_ShowTime_ShowMonthAsName },
+            { message: "dateTime with MM_DD_YY format and showTime, showDayOfWeek flag", records: recordsInput, fieldInfo: fieldInfo_MMDDYY_ShowTime_ShowDayOfWeek, expectedRecords: expectedRecords_MMDDYY_ShowTime_ShowDayOfWeek },
+            { message: "dateTime with MM_DD_YY format and showTime, showTimeZone, showMonthAsName flag", records: recordsInput, fieldInfo: fieldInfo_MMDDYY_ShowTime_ShowTimeZone_ShowMonthAsName, expectedRecords: expectedRecords_MMDDYY_ShowTime_ShowTimeZone_ShowMonthAsName },
+            { message: "dateTime with MM_DD_YY format and showTime, showTimeZone, showDayOfWeek flag", records: recordsInput, fieldInfo: fieldInfo_MMDDYY_ShowTime_ShowTimeZone_ShowDayOfWeek, expectedRecords: expectedRecords_MMDDYY_ShowTime_ShowTimeZone_ShowDayOfWeek },
+            { message: "dateTime with MM_DD_YY format and showTime, showMonthAsName, showDayOfWeek flag", records: recordsInput, fieldInfo: fieldInfo_MMDDYY_ShowTime_ShowMonthAsName_ShowDayOfWeek, expectedRecords: expectedRecords_MMDDYY_ShowTime_ShowMonthAsName_ShowDayOfWeek },
+            { message: "dateTime with MM_DD_YY format and showTimZone flag", records: recordsInput, fieldInfo: fieldInfo_MMDDYY_ShowTimeZone, expectedRecords: expectedRecords_MMDDYY_ShowTimeZone },
+            { message: "dateTime with MM_DD_YY format and showTimZone, showMonthAsName flag", records: recordsInput, fieldInfo: fieldInfo_MMDDYY_ShowTimeZone_ShowMonthAsName, expectedRecords: expectedRecords_MMDDYY_ShowTimeZone_ShowMonthAsName },
+            { message: "dateTime with MM_DD_YY format and showTimZone, showDayOfWeek flag", records: recordsInput, fieldInfo: fieldInfo_MMDDYY_ShowTimeZone_ShowDayOfWeek, expectedRecords: expectedRecords_MMDDYY_ShowTimeZone_ShowDayOfWeek },
+            { message: "dateTime with MM_DD_YY format and showTimZone, showMonthAsName, showDayOfWeek flag", records: recordsInput, fieldInfo: fieldInfo_MMDDYY_ShowTimeZone_ShowMonthAsName_ShowDayOfWeek, expectedRecords: expectedRecords_MMDDYY_ShowTimeZone_ShowMonthAsName_ShowDayOfWeek },
+            { message: "dateTime with MM_DD_YY format and showMonthAsName flag", records: recordsInput, fieldInfo: fieldInfo_MMDDYY_ShowMonthAsName, expectedRecords: expectedRecords_MMDDYY_ShowMonthAsName },
+            { message: "dateTime with MM_DD_YY format and showMonthAsName, showDayOfWeek flag", records: recordsInput, fieldInfo: fieldInfo_MMDDYY_ShowMonthAsName_ShowDayOfWeek, expectedRecords: expectedRecords_MMDDYY_ShowMonthAsName_ShowDayOfWeek },
+            { message: "dateTime with MM_DD_YY format and showDayOfWeek flag", records: recordsInput, fieldInfo: fieldInfo_MMDDYY_ShowDayOfWeek, expectedRecords: expectedRecords_MMDDYY_ShowDayOfWeek },
+            { message: "dateTime with MM_DD_YY format and all flag", records: recordsInput, fieldInfo: fieldInfo_MMDDYY_AllFlags, expectedRecords: expectedRecords_MMDDYY_AllFlags },
             // TODO: Current returns "Invalid date" in display for empty date
-            //{ message: "empty dateTime with MM_DD_YY format", records: emptyRecords, fieldInfo: mmddyy_FieldInfo, expectedRecords: expectedEmptyRecords},
-            { message: "null dateTime with MM_DD_YY format", records: nullRecords, fieldInfo: mmddyy_FieldInfo, expectedRecords: nullExpectedRecords }
+            //{ message: "empty dateTime with MM_DD_YY format", records: emptyRecords, fieldInfo: fieldInfo_MMDDYY, expectedRecords: expectedEmptyRecords},
+            { message: "null dateTime with MM_DD_YY format", records: nullRecords, fieldInfo: fieldInfo_MMDDYY, expectedRecords: nullExpectedRecords }
         ];
     }
 
     it('should format various MM_DD_YY DateTime records for display', function () {
         mmddyyDataProvider().forEach(function(entry){
             var formattedRecords = recordFormatter.formatRecords(entry.records, entry.fieldInfo);
-            console.log('FIELD INFO: ' + JSON.stringify(entry.fieldInfo));
+            console.log('TEST CASE: ' + JSON.stringify(entry.message));
+            console.log('RET RECS: ' + JSON.stringify(formattedRecords));
+            console.log('EXP RECS: ' + JSON.stringify(entry.expectedRecords));
+            assert.deepEqual(formattedRecords, entry.expectedRecords, entry.message);
+        });
+    });
+
+    function ddmmyyDataProvider() {
+
+        // Default DateTime record input
+        var recordsInput =  [[{
+            "id": 7,
+            "value": "2015-04-12T05:51:19z"}]];
+
+        // FieldInfo and record expectation for field with DD_MM_YY format
+        // TODO: Determine how to use the constants in dateTime formatter to set format???
+        var ddmmyy = {
+            "id": 7,
+            "name": "datetime",
+            "type": "DATE_TIME",
+            "showTime": false,
+            "showTimeZone": false,
+            "showMonthAsName": false,
+            "showDayOfWeek": false,
+            "format": "dd-MM-uu",
+            "timeZone": "America/New_York"};
+        var fieldInfo_DDMMYY = [ddmmyy];
+        var expectedRecords_DDMMYY =
+            [[{
+                "id": 7,
+                "value": "2015-04-12T05:51:19z",
+                "display": "12-04-15"}]];
+
+        // FieldInfo and record expectation for field with DD_MM_YY format and showDayOfWeek flag
+        var fieldInfo_DDMMYY_ShowTime = JSON.parse(JSON.stringify(ddmmyy));
+        fieldInfo_DDMMYY_ShowTime.showTime = true;
+        fieldInfo_DDMMYY_ShowTime = [fieldInfo_DDMMYY_ShowTime];
+        var expectedRecords_DDMMYY_ShowTime =
+            [[{
+                "id": 7,
+                "value": "2015-04-12T05:51:19z",
+                "display": "12-04-15 1:51 AM"}]];
+
+        // FieldInfo and record expectation for field with DD_MM_YY format and ShowTime, ShowTimeZone flag
+        var fieldInfo_DDMMYY_ShowTime_ShowTimeZone = JSON.parse(JSON.stringify(ddmmyy));
+        fieldInfo_DDMMYY_ShowTime_ShowTimeZone.showTime = true;
+        fieldInfo_DDMMYY_ShowTime_ShowTimeZone.showTimeZone = true;
+        fieldInfo_DDMMYY_ShowTime_ShowTimeZone = [fieldInfo_DDMMYY_ShowTime_ShowTimeZone];
+        var expectedRecords_DDMMYY_ShowTime_ShowTimeZone =
+            [[{
+                "id": 7,
+                "value": "2015-04-12T05:51:19z",
+                "display": "12-04-15 1:51 AM EDT"}]];
+
+
+        // FieldInfo and record expectation for field with DD_MM_YY format and ShowTime, ShowMonthAsName flag
+        var fieldInfo_DDMMYY_ShowTime_ShowMonthAsName = JSON.parse(JSON.stringify(ddmmyy));
+        fieldInfo_DDMMYY_ShowTime_ShowMonthAsName.showTime = true;
+        fieldInfo_DDMMYY_ShowTime_ShowMonthAsName.showMonthAsName = true;
+        fieldInfo_DDMMYY_ShowTime_ShowMonthAsName = [fieldInfo_DDMMYY_ShowTime_ShowMonthAsName];
+        var expectedRecords_DDMMYY_ShowTime_ShowMonthAsName =
+            [[{
+                "id": 7,
+                "value": "2015-04-12T05:51:19z",
+                "display": "12-Apr-15 1:51 AM"}]];
+
+
+        // FieldInfo and record expectation for field with DD_MM_YY format and ShowTime, ShowDayOfWeek flag
+        var fieldInfo_DDMMYY_ShowTime_ShowDayOfWeek = JSON.parse(JSON.stringify(ddmmyy));
+        fieldInfo_DDMMYY_ShowTime_ShowDayOfWeek.showTime = true;
+        fieldInfo_DDMMYY_ShowTime_ShowDayOfWeek.showDayOfWeek = true;
+        fieldInfo_DDMMYY_ShowTime_ShowDayOfWeek = [fieldInfo_DDMMYY_ShowTime_ShowDayOfWeek];
+        var expectedRecords_DDMMYY_ShowTime_ShowDayOfWeek =
+            [[{
+                "id": 7,
+                "value": "2015-04-12T05:51:19z",
+                "display": "Sunday, 12-04-15 1:51 AM"}]];
+
+        // FieldInfo and record expectation for field with DD_MM_YY format and ShowTime, ShowDayOfWeek flag
+        var fieldInfo_DDMMYY_ShowTime_ShowTimeZone_ShowMonthAsName = JSON.parse(JSON.stringify(ddmmyy));
+        fieldInfo_DDMMYY_ShowTime_ShowTimeZone_ShowMonthAsName.showTime = true;
+        fieldInfo_DDMMYY_ShowTime_ShowTimeZone_ShowMonthAsName.showTimeZone = true;
+        fieldInfo_DDMMYY_ShowTime_ShowTimeZone_ShowMonthAsName.showMonthAsName = true;
+        fieldInfo_DDMMYY_ShowTime_ShowTimeZone_ShowMonthAsName = [fieldInfo_DDMMYY_ShowTime_ShowTimeZone_ShowMonthAsName];
+        var expectedRecords_DDMMYY_ShowTime_ShowTimeZone_ShowMonthAsName =
+            [[{
+                "id": 7,
+                "value": "2015-04-12T05:51:19z",
+                "display": "12-Apr-15 1:51 AM EDT"}]];
+
+        // FieldInfo and record expectation for field with DD_MM_YY format and ShowTime, ShowTimeZone, ShowDayOfWeek flag
+        var fieldInfo_DDMMYY_ShowTime_ShowTimeZone_ShowDayOfWeek = JSON.parse(JSON.stringify(ddmmyy));
+        fieldInfo_DDMMYY_ShowTime_ShowTimeZone_ShowDayOfWeek.showTime = true;
+        fieldInfo_DDMMYY_ShowTime_ShowTimeZone_ShowDayOfWeek.showTimeZone = true;
+        fieldInfo_DDMMYY_ShowTime_ShowTimeZone_ShowDayOfWeek.showDayOfWeek = true;
+        fieldInfo_DDMMYY_ShowTime_ShowTimeZone_ShowDayOfWeek = [fieldInfo_DDMMYY_ShowTime_ShowTimeZone_ShowDayOfWeek];
+        var expectedRecords_DDMMYY_ShowTime_ShowTimeZone_ShowDayOfWeek =
+            [[{
+                "id": 7,
+                "value": "2015-04-12T05:51:19z",
+                "display": "Sunday, 12-04-15 1:51 AM EDT"}]];
+
+        // FieldInfo and record expectation for field with DD_MM_YY format and ShowTime, ShowMonthAsName, ShowDayOfWeek flag
+        var fieldInfo_DDMMYY_ShowTime_ShowMonthAsName_ShowDayOfWeek = JSON.parse(JSON.stringify(ddmmyy));
+        fieldInfo_DDMMYY_ShowTime_ShowMonthAsName_ShowDayOfWeek.showTime = true;
+        fieldInfo_DDMMYY_ShowTime_ShowMonthAsName_ShowDayOfWeek.showMonthAsName = true;
+        fieldInfo_DDMMYY_ShowTime_ShowMonthAsName_ShowDayOfWeek.showDayOfWeek = true;
+        fieldInfo_DDMMYY_ShowTime_ShowMonthAsName_ShowDayOfWeek = [fieldInfo_DDMMYY_ShowTime_ShowMonthAsName_ShowDayOfWeek];
+        var expectedRecords_DDMMYY_ShowTime_ShowMonthAsName_ShowDayOfWeek =
+            [[{
+                "id": 7,
+                "value": "2015-04-12T05:51:19z",
+                "display": "Sunday, 12-Apr-15 1:51 AM"}]];
+
+
+        // FieldInfo and record expectation for field with DD_MM_YY format and showDayOfWeek flag
+        var fieldInfo_DDMMYY_ShowDayOfWeek = JSON.parse(JSON.stringify(ddmmyy));
+        fieldInfo_DDMMYY_ShowDayOfWeek.showDayOfWeek = true;
+        fieldInfo_DDMMYY_ShowDayOfWeek = [fieldInfo_DDMMYY_ShowDayOfWeek];
+        var expectedRecords_DDMMYY_ShowDayOfWeek =
+            [[{
+                "id": 7,
+                "value": "2015-04-12T05:51:19z",
+                "display": "Sunday, 12-04-15"}]];
+
+        // FieldInfo and record expectation for field with DD_MM_YY format and showTimeZone flag
+        var fieldInfo_DDMMYY_ShowTimeZone = JSON.parse(JSON.stringify(ddmmyy));
+        fieldInfo_DDMMYY_ShowTimeZone.showTimeZone = true;
+        fieldInfo_DDMMYY_ShowTimeZone = [fieldInfo_DDMMYY_ShowTimeZone];
+        var expectedRecords_DDMMYY_ShowTimeZone =
+            [[{
+                "id": 7,
+                "value": "2015-04-12T05:51:19z",
+                "display": "12-04-15 EDT"}]];
+
+        // FieldInfo and record expectation for field with DD_MM_YY format and ShowTimeZone, ShowMonthAsName flag
+        var fieldInfo_DDMMYY_ShowTimeZone_ShowMonthAsName = JSON.parse(JSON.stringify(ddmmyy));
+        fieldInfo_DDMMYY_ShowTimeZone_ShowMonthAsName.showTimeZone = true;
+        fieldInfo_DDMMYY_ShowTimeZone_ShowMonthAsName.showMonthAsName = true;
+        fieldInfo_DDMMYY_ShowTimeZone_ShowMonthAsName = [fieldInfo_DDMMYY_ShowTimeZone_ShowMonthAsName];
+        var expectedRecords_DDMMYY_ShowTimeZone_ShowMonthAsName =
+            [[{
+                "id": 7,
+                "value": "2015-04-12T05:51:19z",
+                "display": "12-Apr-15 EDT"}]];
+
+        // FieldInfo and record expectation for field with DD_MM_YY format and ShowTimeZone, ShowDayOfWeek flag
+        var fieldInfo_DDMMYY_ShowTimeZone_ShowDayOfWeek = JSON.parse(JSON.stringify(ddmmyy));
+        fieldInfo_DDMMYY_ShowTimeZone_ShowDayOfWeek.showTimeZone = true;
+        fieldInfo_DDMMYY_ShowTimeZone_ShowDayOfWeek.showDayOfWeek = true;
+        fieldInfo_DDMMYY_ShowTimeZone_ShowDayOfWeek = [fieldInfo_DDMMYY_ShowTimeZone_ShowDayOfWeek];
+        var expectedRecords_DDMMYY_ShowTimeZone_ShowDayOfWeek =
+            [[{
+                "id": 7,
+                "value": "2015-04-12T05:51:19z",
+                "display": "Sunday, 12-04-15 EDT"}]];
+
+        // FieldInfo and record expectation for field with DD_MM_YY format and ShowTimeZone, ShowMonthAsName, ShowDayOfWeek flag
+        var fieldInfo_DDMMYY_ShowTimeZone_ShowMonthAsName_ShowDayOfWeek = JSON.parse(JSON.stringify(ddmmyy));
+        fieldInfo_DDMMYY_ShowTimeZone_ShowMonthAsName_ShowDayOfWeek.showTimeZone = true;
+        fieldInfo_DDMMYY_ShowTimeZone_ShowMonthAsName_ShowDayOfWeek.showMonthAsName = true;
+        fieldInfo_DDMMYY_ShowTimeZone_ShowMonthAsName_ShowDayOfWeek.showDayOfWeek = true;
+        fieldInfo_DDMMYY_ShowTimeZone_ShowMonthAsName_ShowDayOfWeek = [fieldInfo_DDMMYY_ShowTimeZone_ShowMonthAsName_ShowDayOfWeek];
+        var expectedRecords_DDMMYY_ShowTimeZone_ShowMonthAsName_ShowDayOfWeek =
+            [[{
+                "id": 7,
+                "value": "2015-04-12T05:51:19z",
+                "display": "Sunday, 12-Apr-15 EDT"}]];
+
+        // FieldInfo and record expectation for field with DD_MM_YY format and ShowMonthAsName flag
+        var fieldInfo_DDMMYY_ShowMonthAsName = JSON.parse(JSON.stringify(ddmmyy));
+        fieldInfo_DDMMYY_ShowMonthAsName.showMonthAsName = true;
+        fieldInfo_DDMMYY_ShowMonthAsName = [fieldInfo_DDMMYY_ShowMonthAsName];
+        var expectedRecords_DDMMYY_ShowMonthAsName =
+            [[{
+                "id": 7,
+                "value": "2015-04-12T05:51:19z",
+                "display": "12-Apr-15"}]];
+
+        // FieldInfo and record expectation for field with DD_MM_YY format and ShowMonthAsName, ShowDayOfWeek flag
+        var fieldInfo_DDMMYY_ShowMonthAsName_ShowDayOfWeek = JSON.parse(JSON.stringify(ddmmyy));
+        fieldInfo_DDMMYY_ShowMonthAsName_ShowDayOfWeek.showMonthAsName = true;
+        fieldInfo_DDMMYY_ShowMonthAsName_ShowDayOfWeek.showDayOfWeek = true;
+        fieldInfo_DDMMYY_ShowMonthAsName_ShowDayOfWeek = [fieldInfo_DDMMYY_ShowMonthAsName_ShowDayOfWeek];
+        var expectedRecords_DDMMYY_ShowMonthAsName_ShowDayOfWeek =
+            [[{
+                "id": 7,
+                "value": "2015-04-12T05:51:19z",
+                "display": "Sunday, 12-Apr-15"}]];
+
+        // FieldInfo and record expectation for field with DD_MM_YY format and all flags enabled
+        var fieldInfo_DDMMYY_AllFlags = JSON.parse(JSON.stringify(ddmmyy));
+        fieldInfo_DDMMYY_AllFlags.showTime = true;
+        fieldInfo_DDMMYY_AllFlags.showTimeZone = true;
+        fieldInfo_DDMMYY_AllFlags.showMonthAsName = true;
+        fieldInfo_DDMMYY_AllFlags.showDayOfWeek = true;
+        fieldInfo_DDMMYY_AllFlags = [fieldInfo_DDMMYY_AllFlags];
+        var expectedRecords_DDMMYY_AllFlags =
+            [[{
+                "id": 7,
+                "value": "2015-04-12T05:51:19z",
+                "display": "Sunday, 12-Apr-15 1:51 AM EDT"}]];
+
+
+        //Empty records
+        var emptyRecords =  [[{
+            "id": 7,
+            "value": ""}]];
+        var expectedEmptyRecords =
+            [[{
+                "id": 7,
+                "value": "",
+                "display": ""}]];
+
+        //null record value
+        var nullRecords =  [[{
+            "id": 7,
+            "value": null}]];
+        var nullExpectedRecords =
+            [[{
+                "id": 7,
+                "value": null,
+                "display": null}]];
+
+        return [
+            { message: "dateTime with DD_MM_YY format and no flags", records: recordsInput, fieldInfo: fieldInfo_DDMMYY, expectedRecords: expectedRecords_DDMMYY },
+            { message: "dateTime with DD_MM_YY format and showTime flag", records: recordsInput, fieldInfo: fieldInfo_DDMMYY_ShowTime, expectedRecords: expectedRecords_DDMMYY_ShowTime },
+            { message: "dateTime with DD_MM_YY format and showTime, showTimeZone flag", records: recordsInput, fieldInfo: fieldInfo_DDMMYY_ShowTime_ShowTimeZone, expectedRecords: expectedRecords_DDMMYY_ShowTime_ShowTimeZone },
+            { message: "dateTime with DD_MM_YY format and showTime, showMonthAsName flag", records: recordsInput, fieldInfo: fieldInfo_DDMMYY_ShowTime_ShowMonthAsName, expectedRecords: expectedRecords_DDMMYY_ShowTime_ShowMonthAsName },
+            { message: "dateTime with DD_MM_YY format and showTime, showDayOfWeek flag", records: recordsInput, fieldInfo: fieldInfo_DDMMYY_ShowTime_ShowDayOfWeek, expectedRecords: expectedRecords_DDMMYY_ShowTime_ShowDayOfWeek },
+            { message: "dateTime with DD_MM_YY format and showTime, showTimeZone, showMonthAsName flag", records: recordsInput, fieldInfo: fieldInfo_DDMMYY_ShowTime_ShowTimeZone_ShowMonthAsName, expectedRecords: expectedRecords_DDMMYY_ShowTime_ShowTimeZone_ShowMonthAsName },
+            { message: "dateTime with DD_MM_YY format and showTime, showTimeZone, showDayOfWeek flag", records: recordsInput, fieldInfo: fieldInfo_DDMMYY_ShowTime_ShowTimeZone_ShowDayOfWeek, expectedRecords: expectedRecords_DDMMYY_ShowTime_ShowTimeZone_ShowDayOfWeek },
+            { message: "dateTime with DD_MM_YY format and showTime, showMonthAsName, showDayOfWeek flag", records: recordsInput, fieldInfo: fieldInfo_DDMMYY_ShowTime_ShowMonthAsName_ShowDayOfWeek, expectedRecords: expectedRecords_DDMMYY_ShowTime_ShowMonthAsName_ShowDayOfWeek },
+            { message: "dateTime with DD_MM_YY format and showTimZone flag", records: recordsInput, fieldInfo: fieldInfo_DDMMYY_ShowTimeZone, expectedRecords: expectedRecords_DDMMYY_ShowTimeZone },
+            { message: "dateTime with DD_MM_YY format and showTimZone, showMonthAsName flag", records: recordsInput, fieldInfo: fieldInfo_DDMMYY_ShowTimeZone_ShowMonthAsName, expectedRecords: expectedRecords_DDMMYY_ShowTimeZone_ShowMonthAsName },
+            { message: "dateTime with DD_MM_YY format and showTimZone, showDayOfWeek flag", records: recordsInput, fieldInfo: fieldInfo_DDMMYY_ShowTimeZone_ShowDayOfWeek, expectedRecords: expectedRecords_DDMMYY_ShowTimeZone_ShowDayOfWeek },
+            { message: "dateTime with DD_MM_YY format and showTimZone, showMonthAsName, showDayOfWeek flag", records: recordsInput, fieldInfo: fieldInfo_DDMMYY_ShowTimeZone_ShowMonthAsName_ShowDayOfWeek, expectedRecords: expectedRecords_DDMMYY_ShowTimeZone_ShowMonthAsName_ShowDayOfWeek },
+            { message: "dateTime with DD_MM_YY format and showMonthAsName flag", records: recordsInput, fieldInfo: fieldInfo_DDMMYY_ShowMonthAsName, expectedRecords: expectedRecords_DDMMYY_ShowMonthAsName },
+            { message: "dateTime with DD_MM_YY format and showMonthAsName, showDayOfWeek flag", records: recordsInput, fieldInfo: fieldInfo_DDMMYY_ShowMonthAsName_ShowDayOfWeek, expectedRecords: expectedRecords_DDMMYY_ShowMonthAsName_ShowDayOfWeek },
+            { message: "dateTime with DD_MM_YY format and showDayOfWeek flag", records: recordsInput, fieldInfo: fieldInfo_DDMMYY_ShowDayOfWeek, expectedRecords: expectedRecords_DDMMYY_ShowDayOfWeek },
+            { message: "dateTime with DD_MM_YY format and all flag", records: recordsInput, fieldInfo: fieldInfo_DDMMYY_AllFlags, expectedRecords: expectedRecords_DDMMYY_AllFlags },
+            // TODO: Current returns "Invalid date" in display for empty date
+            //{ message: "empty dateTime with DD_MM_YY format", records: emptyRecords, fieldInfo: fieldInfo_DDMMYY, expectedRecords: expectedEmptyRecords},
+            { message: "null dateTime with DD_MM_YY format", records: nullRecords, fieldInfo: fieldInfo_DDMMYY, expectedRecords: nullExpectedRecords }
+        ];
+    }
+
+    it('should format various DD_MM_YY DateTime records for display', function () {
+        ddmmyyDataProvider().forEach(function(entry){
+            var formattedRecords = recordFormatter.formatRecords(entry.records, entry.fieldInfo);
+            console.log('TEST CASE: ' + JSON.stringify(entry.message));
             console.log('RET RECS: ' + JSON.stringify(formattedRecords));
             console.log('EXP RECS: ' + JSON.stringify(entry.expectedRecords));
             assert.deepEqual(formattedRecords, entry.expectedRecords, entry.message);
