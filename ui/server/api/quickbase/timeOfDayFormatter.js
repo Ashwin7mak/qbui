@@ -6,7 +6,7 @@
     'use strict';
     var moment = require('moment-timezone');
     //Module constants:
-    var UTC_TIMEZONE = 'Universal"';
+    var UTC_TIMEZONE = 'Universal';
     var TWENTY_FOUR_HOUR_CLOCK = 'HH:';
     var TWELVE_HOUR_CLOCK = 'h:';
     var MM = 'mm';
