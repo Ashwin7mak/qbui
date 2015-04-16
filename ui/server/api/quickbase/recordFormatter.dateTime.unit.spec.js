@@ -18,7 +18,6 @@ describe('DateTime record formatter unit test', function () {
             "value": "2000-04-12T18:51:19z"}]];
 
         // FieldInfo and record expectation for field with MM_DD_YYYY format
-        // TODO: Determine how to use the constants in dateTime formatter to set format???
         var mmddyyyy = {
                 "id": 7,
                 "name": "datetime",
@@ -369,7 +368,7 @@ describe('DateTime record formatter unit test', function () {
             [[{
                 "id": 7,
                 "value": null,
-                "display": null}]];
+                "display": ""}]];
 
         return [
             { message: "dateTime with MM_DD_YYYY format and no flags", records: recordsInput, fieldInfo: fieldInfo_MMDDYYYY, expectedRecords: expectedRecords_MMDDYYYY },
@@ -402,8 +401,7 @@ describe('DateTime record formatter unit test', function () {
             { message: "dateTime with MM_DD_YYYY format and hideYearIfCurrent flag and different year", records: recordsInputDiffYear, fieldInfo: fieldInfo_MMDDYYYY_HideYearIfCurrent, expectedRecords: expectedRecords_MMDDYYYY_HideYearIfCurrent_DiffYear },
             { message: "dateTime with MM_DD_YYYY format and all flag", records: recordsInput, fieldInfo: fieldInfo_MMDDYYYY_AllFlags, expectedRecords: expectedRecords_MMDDYYYY_AllFlags },
             { message: "dateTime with MM_DD_YYYY format and all flag and different year", records: recordsInputDiffYear, fieldInfo: fieldInfo_MMDDYYYY_AllFlags, expectedRecords: expectedRecords_MMDDYYYY_AllFlags_DiffYear },
-            // TODO: Current returns "Invalid date" in display for empty date
-            //{ message: "empty dateTime with MM_DD_YYYY format", records: emptyRecords, fieldInfo: fieldInfo_MMDDYYYY, expectedRecords: expectedEmptyRecords},
+            { message: "empty dateTime with MM_DD_YYYY format", records: emptyRecords, fieldInfo: fieldInfo_MMDDYYYY, expectedRecords: expectedEmptyRecords},
             { message: "null dateTime with MM_DD_YYYY format", records: nullRecords, fieldInfo: fieldInfo_MMDDYYYY, expectedRecords: nullExpectedRecords }
         ];
     }
@@ -411,9 +409,9 @@ describe('DateTime record formatter unit test', function () {
     it('should format various MM_DD_YYYY DateTime records for display', function () {
         mmddyyyyDataProvider().forEach(function(entry){
             var formattedRecords = recordFormatter.formatRecords(entry.records, entry.fieldInfo);
-            //console.log('TEST CASE: ' + JSON.stringify(entry.message));
-            //console.log('RET RECS: ' + JSON.stringify(formattedRecords));
-            //console.log('EXP RECS: ' + JSON.stringify(entry.expectedRecords));
+            console.log('TEST CASE: ' + JSON.stringify(entry.message));
+            console.log('RET RECS: ' + JSON.stringify(formattedRecords));
+            console.log('EXP RECS: ' + JSON.stringify(entry.expectedRecords));
             assert.deepEqual(formattedRecords, entry.expectedRecords, entry.message);
         });
     });
@@ -430,7 +428,6 @@ describe('DateTime record formatter unit test', function () {
             "value": "2000-04-12T05:51:19z"}]];
 
         // FieldInfo and record expectation for field with MM_DD_YY format
-        // TODO: Determine how to use the constants in dateTime formatter to set format???
         var mmddyy = {
             "id": 7,
             "name": "datetime",
@@ -783,7 +780,7 @@ describe('DateTime record formatter unit test', function () {
             [[{
                 "id": 7,
                 "value": null,
-                "display": null}]];
+                "display": ""}]];
 
         return [
             { message: "dateTime with MM_DD_YY format and no flags", records: recordsInput, fieldInfo: fieldInfo_MMDDYY, expectedRecords: expectedRecords_MMDDYY },
@@ -816,8 +813,7 @@ describe('DateTime record formatter unit test', function () {
             { message: "dateTime with MM_DD_YY format and hideYearIfCurrent flag and different year", records: recordsInputDiffYear, fieldInfo: fieldInfo_MMDDYY_HideYearIfCurrent, expectedRecords: expectedRecords_MMDDYY_HideYearIfCurrent_DiffYear },
             { message: "dateTime with MM_DD_YY format and all flag", records: recordsInput, fieldInfo: fieldInfo_MMDDYY_AllFlags, expectedRecords: expectedRecords_MMDDYY_AllFlags },
             { message: "dateTime with MM_DD_YY format and all flag and different year", records: recordsInputDiffYear, fieldInfo: fieldInfo_MMDDYY_AllFlags, expectedRecords: expectedRecords_MMDDYY_AllFlags_DiffYear },
-            // TODO: Current returns "Invalid date" in display for empty date
-            //{ message: "empty dateTime with MM_DD_YY format", records: emptyRecords, fieldInfo: fieldInfo_MMDDYY, expectedRecords: expectedEmptyRecords},
+            { message: "empty dateTime with MM_DD_YY format", records: emptyRecords, fieldInfo: fieldInfo_MMDDYY, expectedRecords: expectedEmptyRecords},
             { message: "null dateTime with MM_DD_YY format", records: nullRecords, fieldInfo: fieldInfo_MMDDYY, expectedRecords: nullExpectedRecords }
         ];
     }
@@ -844,7 +840,6 @@ describe('DateTime record formatter unit test', function () {
             "value": "2000-04-12T05:51:19z"}]];
 
         // FieldInfo and record expectation for field with DD_MM_YY format
-        // TODO: Determine how to use the constants in dateTime formatter to set format???
         var ddmmyy = {
             "id": 7,
             "name": "datetime",
@@ -1197,7 +1192,7 @@ describe('DateTime record formatter unit test', function () {
             [[{
                 "id": 7,
                 "value": null,
-                "display": null}]];
+                "display": ""}]];
 
         return [
             { message: "dateTime with DD_MM_YY format and no flags", records: recordsInput, fieldInfo: fieldInfo_DDMMYY, expectedRecords: expectedRecords_DDMMYY },
@@ -1230,8 +1225,7 @@ describe('DateTime record formatter unit test', function () {
             { message: "dateTime with DD_MM_YY format and hideYearIfCurrent flag and different year", records: recordsInputDiffYear, fieldInfo: fieldInfo_DDMMYY_HideYearIfCurrent, expectedRecords: expectedRecords_DDMMYY_HideYearIfCurrent_DiffYear },
             { message: "dateTime with DD_MM_YY format and all flag", records: recordsInput, fieldInfo: fieldInfo_DDMMYY_AllFlags, expectedRecords: expectedRecords_DDMMYY_AllFlags },
             { message: "dateTime with DD_MM_YY format and all flag and different year", records: recordsInputDiffYear, fieldInfo: fieldInfo_DDMMYY_AllFlags, expectedRecords: expectedRecords_DDMMYY_AllFlags_DiffYear },
-            // TODO: Current returns "Invalid date" in display for empty date
-            //{ message: "empty dateTime with DD_MM_YY format", records: emptyRecords, fieldInfo: fieldInfo_DDMMYY, expectedRecords: expectedEmptyRecords},
+            { message: "empty dateTime with DD_MM_YY format", records: emptyRecords, fieldInfo: fieldInfo_DDMMYY, expectedRecords: expectedEmptyRecords},
             { message: "null dateTime with DD_MM_YY format", records: nullRecords, fieldInfo: fieldInfo_DDMMYY, expectedRecords: nullExpectedRecords }
         ];
     }
@@ -1258,7 +1252,6 @@ describe('DateTime record formatter unit test', function () {
             "value": "2000-04-12T18:51:19z"}]];
 
         // FieldInfo and record expectation for field with DD_MM_YYYY format
-        // TODO: Determine how to use the constants in dateTime formatter to set format???
         var ddmmyyyy = {
             "id": 7,
             "name": "datetime",
@@ -1609,7 +1602,7 @@ describe('DateTime record formatter unit test', function () {
             [[{
                 "id": 7,
                 "value": null,
-                "display": null}]];
+                "display": ""}]];
 
         return [
             { message: "dateTime with DD_MM_YYYY format and no flags", records: recordsInput, fieldInfo: fieldInfo_DDMMYYYY, expectedRecords: expectedRecords_DDMMYYYY },
@@ -1642,8 +1635,7 @@ describe('DateTime record formatter unit test', function () {
             { message: "dateTime with DD_MM_YYYY format and hideYearIfCurrent flag and different year", records: recordsInputDiffYear, fieldInfo: fieldInfo_DDMMYYYY_HideYearIfCurrent, expectedRecords: expectedRecords_DDMMYYYY_HideYearIfCurrent_DiffYear },
             { message: "dateTime with DD_MM_YYYY format and all flag", records: recordsInput, fieldInfo: fieldInfo_DDMMYYYY_AllFlags, expectedRecords: expectedRecords_DDMMYYYY_AllFlags },
             { message: "dateTime with DD_MM_YYYY format and all flag and different year", records: recordsInputDiffYear, fieldInfo: fieldInfo_DDMMYYYY_AllFlags, expectedRecords: expectedRecords_DDMMYYYY_AllFlags_DiffYear },
-            // TODO: Current returns "Invalid date" in display for empty date
-            //{ message: "empty dateTime with DD_MM_YYYY format", records: emptyRecords, fieldInfo: fieldInfo_DDMMYYYY, expectedRecords: expectedEmptyRecords},
+            { message: "empty dateTime with DD_MM_YYYY format", records: emptyRecords, fieldInfo: fieldInfo_DDMMYYYY, expectedRecords: expectedEmptyRecords},
             { message: "null dateTime with DD_MM_YYYY format", records: nullRecords, fieldInfo: fieldInfo_DDMMYYYY, expectedRecords: nullExpectedRecords }
         ];
     }
@@ -1670,7 +1662,6 @@ describe('DateTime record formatter unit test', function () {
             "value": "2000-04-12T05:51:19z"}]];
 
         // FieldInfo and record expectation for field with YYYY_MM_DD format
-        // TODO: Determine how to use the constants in dateTime formatter to set format???
         var yyyymmdd = {
             "id": 7,
             "name": "datetime",
@@ -2023,7 +2014,7 @@ describe('DateTime record formatter unit test', function () {
             [[{
                 "id": 7,
                 "value": null,
-                "display": null}]];
+                "display": ""}]];
 
         return [
             { message: "dateTime with YYYY_MM_DD format and no flags", records: recordsInput, fieldInfo: fieldInfo_YYYYMMDD, expectedRecords: expectedRecords_YYYYMMDD },
@@ -2056,8 +2047,7 @@ describe('DateTime record formatter unit test', function () {
             { message: "dateTime with YYYY_MM_DD format and hideYearIfCurrent flag and different year", records: recordsInputDiffYear, fieldInfo: fieldInfo_YYYYMMDD_HideYearIfCurrent, expectedRecords: expectedRecords_YYYYMMDD_HideYearIfCurrent_DiffYear },
             { message: "dateTime with YYYY_MM_DD format and all flag", records: recordsInput, fieldInfo: fieldInfo_YYYYMMDD_AllFlags, expectedRecords: expectedRecords_YYYYMMDD_AllFlags },
             { message: "dateTime with YYYY_MM_DD format and all flag and different year", records: recordsInputDiffYear, fieldInfo: fieldInfo_YYYYMMDD_AllFlags, expectedRecords: expectedRecords_YYYYMMDD_AllFlags_DiffYear },
-            // TODO: Current returns "Invalid date" in display for empty date
-            //{ message: "empty dateTime with YYYY_MM_DD format", records: emptyRecords, fieldInfo: fieldInfo_YYYYMMDD, expectedRecords: expectedEmptyRecords},
+            { message: "empty dateTime with YYYY_MM_DD format", records: emptyRecords, fieldInfo: fieldInfo_YYYYMMDD, expectedRecords: expectedEmptyRecords},
             { message: "null dateTime with YYYY_MM_DD format", records: nullRecords, fieldInfo: fieldInfo_YYYYMMDD, expectedRecords: nullExpectedRecords }
         ];
     }
@@ -2071,4 +2061,415 @@ describe('DateTime record formatter unit test', function () {
             assert.deepEqual(formattedRecords, entry.expectedRecords, entry.message);
         });
     });
+
+    function invalidFormatDataProvider() {
+
+        // Default DateTime record input
+        var recordsInput =  [[{
+            "id": 7,
+            "value": "2015-04-12T18:51:19z"}]];
+
+        var recordsInputDiffYear =  [[{
+            "id": 7,
+            "value": "2000-04-12T18:51:19z"}]];
+
+        // FieldInfo and record expectation for field with invalid format
+        var invalidFormat = {
+            "id": 7,
+            "name": "datetime",
+            "type": "DATE_TIME",
+            "showTime": false,
+            "showTimeZone": false,
+            "showMonthAsName": false,
+            "showDayOfWeek": false,
+            "format": "invalid_date_format",
+            "timeZone": "America/New_York"};
+        var fieldInfo_InvalidFormat = [invalidFormat];
+        var expectedRecords_InvalidFormat =
+            [[{
+                "id": 7,
+                "value": "2015-04-12T18:51:19z",
+                "display": "04-12-2015"}]];
+
+        // FieldInfo and record expectation for field with invalid format and showDayOfWeek flag
+        var fieldInfo_InvalidFormat_ShowTime = JSON.parse(JSON.stringify(invalidFormat));
+        fieldInfo_InvalidFormat_ShowTime.showTime = true;
+        fieldInfo_InvalidFormat_ShowTime = [fieldInfo_InvalidFormat_ShowTime];
+        var expectedRecords_InvalidFormat_ShowTime =
+            [[{
+                "id": 7,
+                "value": "2015-04-12T18:51:19z",
+                "display": "04-12-2015 2:51 PM"}]];
+
+        // FieldInfo and record expectation for field with invalid format and ShowTime, ShowTimeZone flag
+        var fieldInfo_InvalidFormat_ShowTime_ShowTimeZone = JSON.parse(JSON.stringify(invalidFormat));
+        fieldInfo_InvalidFormat_ShowTime_ShowTimeZone.showTime = true;
+        fieldInfo_InvalidFormat_ShowTime_ShowTimeZone.showTimeZone = true;
+        fieldInfo_InvalidFormat_ShowTime_ShowTimeZone = [fieldInfo_InvalidFormat_ShowTime_ShowTimeZone];
+        var expectedRecords_InvalidFormat_ShowTime_ShowTimeZone =
+            [[{
+                "id": 7,
+                "value": "2015-04-12T18:51:19z",
+                "display": "04-12-2015 2:51 PM EDT"}]];
+
+
+        // FieldInfo and record expectation for field with invalid format and ShowTime, ShowMonthAsName flag
+        var fieldInfo_InvalidFormat_ShowTime_ShowMonthAsName = JSON.parse(JSON.stringify(invalidFormat));
+        fieldInfo_InvalidFormat_ShowTime_ShowMonthAsName.showTime = true;
+        fieldInfo_InvalidFormat_ShowTime_ShowMonthAsName.showMonthAsName = true;
+        fieldInfo_InvalidFormat_ShowTime_ShowMonthAsName = [fieldInfo_InvalidFormat_ShowTime_ShowMonthAsName];
+        var expectedRecords_InvalidFormat_ShowTime_ShowMonthAsName =
+            [[{
+                "id": 7,
+                "value": "2015-04-12T18:51:19z",
+                "display": "Apr-12-2015 2:51 PM"}]];
+
+
+        // FieldInfo and record expectation for field with invalid format and ShowTime, ShowDayOfWeek flag
+        var fieldInfo_InvalidFormat_ShowTime_ShowDayOfWeek = JSON.parse(JSON.stringify(invalidFormat));
+        fieldInfo_InvalidFormat_ShowTime_ShowDayOfWeek.showTime = true;
+        fieldInfo_InvalidFormat_ShowTime_ShowDayOfWeek.showDayOfWeek = true;
+        fieldInfo_InvalidFormat_ShowTime_ShowDayOfWeek = [fieldInfo_InvalidFormat_ShowTime_ShowDayOfWeek];
+        var expectedRecords_InvalidFormat_ShowTime_ShowDayOfWeek =
+            [[{
+                "id": 7,
+                "value": "2015-04-12T18:51:19z",
+                "display": "Sunday, 04-12-2015 2:51 PM"}]];
+
+        // FieldInfo and record expectation for field with invalid format and ShowTime, HideYearIfCurrent flag
+        var fieldInfo_InvalidFormat_ShowTime_HideYearIfCurrent = JSON.parse(JSON.stringify(invalidFormat));
+        fieldInfo_InvalidFormat_ShowTime_HideYearIfCurrent.showTime = true;
+        fieldInfo_InvalidFormat_ShowTime_HideYearIfCurrent.hideYearIfCurrent = true;
+        fieldInfo_InvalidFormat_ShowTime_HideYearIfCurrent = [fieldInfo_InvalidFormat_ShowTime_HideYearIfCurrent];
+        var expectedRecords_InvalidFormat_ShowTime_HideYearIfCurrent =
+            [[{
+                "id": 7,
+                "value": "2015-04-12T18:51:19z",
+                "display": "04-12 2:51 PM"}]];
+        var expectedRecords_InvalidFormat_ShowTime_HideYearIfCurrent_DiffYear =
+            [[{
+                "id": 7,
+                "value": "2000-04-12T18:51:19z",
+                "display": "04-12-2000 2:51 PM"}]];
+
+        // FieldInfo and record expectation for field with invalid format and ShowTime, ShowDayOfWeek flag
+        var fieldInfo_InvalidFormat_ShowTime_ShowTimeZone_ShowMonthAsName = JSON.parse(JSON.stringify(invalidFormat));
+        fieldInfo_InvalidFormat_ShowTime_ShowTimeZone_ShowMonthAsName.showTime = true;
+        fieldInfo_InvalidFormat_ShowTime_ShowTimeZone_ShowMonthAsName.showTimeZone = true;
+        fieldInfo_InvalidFormat_ShowTime_ShowTimeZone_ShowMonthAsName.showMonthAsName = true;
+        fieldInfo_InvalidFormat_ShowTime_ShowTimeZone_ShowMonthAsName = [fieldInfo_InvalidFormat_ShowTime_ShowTimeZone_ShowMonthAsName];
+        var expectedRecords_InvalidFormat_ShowTime_ShowTimeZone_ShowMonthAsName =
+            [[{
+                "id": 7,
+                "value": "2015-04-12T18:51:19z",
+                "display": "Apr-12-2015 2:51 PM EDT"}]];
+
+        // FieldInfo and record expectation for field with invalid format and ShowTime, ShowDayOfWeek, HideYearIfCurrent flag
+        var fieldInfo_InvalidFormat_ShowTime_ShowTimeZone_ShowMonthAsName_HideYearIfCurrent = JSON.parse(JSON.stringify(invalidFormat));
+        fieldInfo_InvalidFormat_ShowTime_ShowTimeZone_ShowMonthAsName_HideYearIfCurrent.showTime = true;
+        fieldInfo_InvalidFormat_ShowTime_ShowTimeZone_ShowMonthAsName_HideYearIfCurrent.showTimeZone = true;
+        fieldInfo_InvalidFormat_ShowTime_ShowTimeZone_ShowMonthAsName_HideYearIfCurrent.showMonthAsName = true;
+        fieldInfo_InvalidFormat_ShowTime_ShowTimeZone_ShowMonthAsName_HideYearIfCurrent.hideYearIfCurrent = true;
+        fieldInfo_InvalidFormat_ShowTime_ShowTimeZone_ShowMonthAsName_HideYearIfCurrent = [fieldInfo_InvalidFormat_ShowTime_ShowTimeZone_ShowMonthAsName_HideYearIfCurrent];
+        var expectedRecords_InvalidFormat_ShowTime_ShowTimeZone_ShowMonthAsName_HideYearIfCurrent =
+            [[{
+                "id": 7,
+                "value": "2015-04-12T18:51:19z",
+                "display": "Apr-12 2:51 PM EDT"}]];
+
+        // FieldInfo and record expectation for field with invalid format and ShowTime, ShowTimeZone, ShowDayOfWeek flag
+        var fieldInfo_InvalidFormat_ShowTime_ShowTimeZone_ShowDayOfWeek = JSON.parse(JSON.stringify(invalidFormat));
+        fieldInfo_InvalidFormat_ShowTime_ShowTimeZone_ShowDayOfWeek.showTime = true;
+        fieldInfo_InvalidFormat_ShowTime_ShowTimeZone_ShowDayOfWeek.showTimeZone = true;
+        fieldInfo_InvalidFormat_ShowTime_ShowTimeZone_ShowDayOfWeek.showDayOfWeek = true;
+        fieldInfo_InvalidFormat_ShowTime_ShowTimeZone_ShowDayOfWeek = [fieldInfo_InvalidFormat_ShowTime_ShowTimeZone_ShowDayOfWeek];
+        var expectedRecords_InvalidFormat_ShowTime_ShowTimeZone_ShowDayOfWeek =
+            [[{
+                "id": 7,
+                "value": "2015-04-12T18:51:19z",
+                "display": "Sunday, 04-12-2015 2:51 PM EDT"}]];
+
+        // FieldInfo and record expectation for field with invalid format and ShowTime, ShowTimeZone, HideYearIfCurrent flag
+        var fieldInfo_InvalidFormat_ShowTime_ShowTimeZone_HideYearIfCurrent = JSON.parse(JSON.stringify(invalidFormat));
+        fieldInfo_InvalidFormat_ShowTime_ShowTimeZone_HideYearIfCurrent.showTime = true;
+        fieldInfo_InvalidFormat_ShowTime_ShowTimeZone_HideYearIfCurrent.showTimeZone = true;
+        fieldInfo_InvalidFormat_ShowTime_ShowTimeZone_HideYearIfCurrent.hideYearIfCurrent = true;
+        fieldInfo_InvalidFormat_ShowTime_ShowTimeZone_HideYearIfCurrent = [fieldInfo_InvalidFormat_ShowTime_ShowTimeZone_HideYearIfCurrent];
+        var expectedRecords_InvalidFormat_ShowTime_ShowTimeZone_HideYearIfCurrent =
+            [[{
+                "id": 7,
+                "value": "2015-04-12T18:51:19z",
+                "display": "04-12 2:51 PM EDT"}]];
+
+        // FieldInfo and record expectation for field with invalid format and ShowTime, ShowTimeZone, ShowDayOfWeek, HideYearIfCurrent flag
+        var fieldInfo_InvalidFormat_ShowTime_ShowTimeZone_ShowDayOfWeek_HideYearIfCurrent = JSON.parse(JSON.stringify(invalidFormat));
+        fieldInfo_InvalidFormat_ShowTime_ShowTimeZone_ShowDayOfWeek_HideYearIfCurrent.showTime = true;
+        fieldInfo_InvalidFormat_ShowTime_ShowTimeZone_ShowDayOfWeek_HideYearIfCurrent.showTimeZone = true;
+        fieldInfo_InvalidFormat_ShowTime_ShowTimeZone_ShowDayOfWeek_HideYearIfCurrent.showDayOfWeek = true;
+        fieldInfo_InvalidFormat_ShowTime_ShowTimeZone_ShowDayOfWeek_HideYearIfCurrent.hideYearIfCurrent = true;
+        fieldInfo_InvalidFormat_ShowTime_ShowTimeZone_ShowDayOfWeek_HideYearIfCurrent = [fieldInfo_InvalidFormat_ShowTime_ShowTimeZone_ShowDayOfWeek_HideYearIfCurrent];
+        var expectedRecords_InvalidFormat_ShowTime_ShowTimeZone_ShowDayOfWeek_HideYearIfCurrent =
+            [[{
+                "id": 7,
+                "value": "2015-04-12T18:51:19z",
+                "display": "Sunday, 04-12 2:51 PM EDT"}]];
+
+        // FieldInfo and record expectation for field with invalid format and ShowTime, ShowMonthAsName, ShowDayOfWeek flag
+        var fieldInfo_InvalidFormat_ShowTime_ShowMonthAsName_ShowDayOfWeek = JSON.parse(JSON.stringify(invalidFormat));
+        fieldInfo_InvalidFormat_ShowTime_ShowMonthAsName_ShowDayOfWeek.showTime = true;
+        fieldInfo_InvalidFormat_ShowTime_ShowMonthAsName_ShowDayOfWeek.showMonthAsName = true;
+        fieldInfo_InvalidFormat_ShowTime_ShowMonthAsName_ShowDayOfWeek.showDayOfWeek = true;
+        fieldInfo_InvalidFormat_ShowTime_ShowMonthAsName_ShowDayOfWeek = [fieldInfo_InvalidFormat_ShowTime_ShowMonthAsName_ShowDayOfWeek];
+        var expectedRecords_InvalidFormat_ShowTime_ShowMonthAsName_ShowDayOfWeek =
+            [[{
+                "id": 7,
+                "value": "2015-04-12T18:51:19z",
+                "display": "Sunday, Apr-12-2015 2:51 PM"}]];
+
+        // FieldInfo and record expectation for field with invalid format and ShowTime, ShowMonthAsName, ShowDayOfWeek, HideYearIfCurrent flag
+        var fieldInfo_InvalidFormat_ShowTime_ShowMonthAsName_ShowDayOfWeek_HideYearIfCurrent = JSON.parse(JSON.stringify(invalidFormat));
+        fieldInfo_InvalidFormat_ShowTime_ShowMonthAsName_ShowDayOfWeek_HideYearIfCurrent.showTime = true;
+        fieldInfo_InvalidFormat_ShowTime_ShowMonthAsName_ShowDayOfWeek_HideYearIfCurrent.showMonthAsName = true;
+        fieldInfo_InvalidFormat_ShowTime_ShowMonthAsName_ShowDayOfWeek_HideYearIfCurrent.showDayOfWeek = true;
+        fieldInfo_InvalidFormat_ShowTime_ShowMonthAsName_ShowDayOfWeek_HideYearIfCurrent.hideYearIfCurrent = true;
+        fieldInfo_InvalidFormat_ShowTime_ShowMonthAsName_ShowDayOfWeek_HideYearIfCurrent = [fieldInfo_InvalidFormat_ShowTime_ShowMonthAsName_ShowDayOfWeek_HideYearIfCurrent];
+        var expectedRecords_InvalidFormat_ShowTime_ShowMonthAsName_ShowDayOfWeek_HideYearIfCurrent =
+            [[{
+                "id": 7,
+                "value": "2015-04-12T18:51:19z",
+                "display": "Sunday, Apr-12 2:51 PM"}]];
+
+        // FieldInfo and record expectation for field with invalid format and ShowDayOfWeek flag
+        var fieldInfo_InvalidFormat_ShowDayOfWeek = JSON.parse(JSON.stringify(invalidFormat));
+        fieldInfo_InvalidFormat_ShowDayOfWeek.showDayOfWeek = true;
+        fieldInfo_InvalidFormat_ShowDayOfWeek = [fieldInfo_InvalidFormat_ShowDayOfWeek];
+        var expectedRecords_InvalidFormat_ShowDayOfWeek =
+            [[{
+                "id": 7,
+                "value": "2015-04-12T18:51:19z",
+                "display": "Sunday, 04-12-2015"}]];
+
+        // FieldInfo and record expectation for field with invalid format and ShowDayOfWeek, HideYearIfCurrent flag
+        var fieldInfo_InvalidFormat_ShowDayOfWeek_HideYearIfCurrent = JSON.parse(JSON.stringify(invalidFormat));
+        fieldInfo_InvalidFormat_ShowDayOfWeek_HideYearIfCurrent.showDayOfWeek = true;
+        fieldInfo_InvalidFormat_ShowDayOfWeek_HideYearIfCurrent.hideYearIfCurrent = true;
+        fieldInfo_InvalidFormat_ShowDayOfWeek_HideYearIfCurrent = [fieldInfo_InvalidFormat_ShowDayOfWeek_HideYearIfCurrent];
+        var expectedRecords_InvalidFormat_ShowDayOfWeek_HideYearIfCurrent =
+            [[{
+                "id": 7,
+                "value": "2015-04-12T18:51:19z",
+                "display": "Sunday, 04-12"}]];
+
+        // FieldInfo and record expectation for field with invalid format and showTimeZone flag
+        var fieldInfo_InvalidFormat_ShowTimeZone = JSON.parse(JSON.stringify(invalidFormat));
+        fieldInfo_InvalidFormat_ShowTimeZone.showTimeZone = true;
+        fieldInfo_InvalidFormat_ShowTimeZone = [fieldInfo_InvalidFormat_ShowTimeZone];
+        var expectedRecords_InvalidFormat_ShowTimeZone =
+            [[{
+                "id": 7,
+                "value": "2015-04-12T18:51:19z",
+                "display": "04-12-2015 EDT"}]];
+
+        // FieldInfo and record expectation for field with invalid format and ShowTimeZone, ShowMonthAsName flag
+        var fieldInfo_InvalidFormat_ShowTimeZone_ShowMonthAsName = JSON.parse(JSON.stringify(invalidFormat));
+        fieldInfo_InvalidFormat_ShowTimeZone_ShowMonthAsName.showTimeZone = true;
+        fieldInfo_InvalidFormat_ShowTimeZone_ShowMonthAsName.showMonthAsName = true;
+        fieldInfo_InvalidFormat_ShowTimeZone_ShowMonthAsName = [fieldInfo_InvalidFormat_ShowTimeZone_ShowMonthAsName];
+        var expectedRecords_InvalidFormat_ShowTimeZone_ShowMonthAsName =
+            [[{
+                "id": 7,
+                "value": "2015-04-12T18:51:19z",
+                "display": "Apr-12-2015 EDT"}]];
+
+        // FieldInfo and record expectation for field with invalid format and ShowTimeZone, ShowDayOfWeek flag
+        var fieldInfo_InvalidFormat_ShowTimeZone_ShowDayOfWeek = JSON.parse(JSON.stringify(invalidFormat));
+        fieldInfo_InvalidFormat_ShowTimeZone_ShowDayOfWeek.showTimeZone = true;
+        fieldInfo_InvalidFormat_ShowTimeZone_ShowDayOfWeek.showDayOfWeek = true;
+        fieldInfo_InvalidFormat_ShowTimeZone_ShowDayOfWeek = [fieldInfo_InvalidFormat_ShowTimeZone_ShowDayOfWeek];
+        var expectedRecords_InvalidFormat_ShowTimeZone_ShowDayOfWeek =
+            [[{
+                "id": 7,
+                "value": "2015-04-12T18:51:19z",
+                "display": "Sunday, 04-12-2015 EDT"}]];
+
+        // FieldInfo and record expectation for field with invalid format and ShowTimeZone, HideYearIfCurrent flag
+        var fieldInfo_InvalidFormat_ShowTimeZone_HideYearIfCurrent = JSON.parse(JSON.stringify(invalidFormat));
+        fieldInfo_InvalidFormat_ShowTimeZone_HideYearIfCurrent.showTimeZone = true;
+        fieldInfo_InvalidFormat_ShowTimeZone_HideYearIfCurrent.hideYearIfCurrent = true;
+        fieldInfo_InvalidFormat_ShowTimeZone_HideYearIfCurrent = [fieldInfo_InvalidFormat_ShowTimeZone_HideYearIfCurrent];
+        var expectedRecords_InvalidFormat_ShowTimeZone_HideYearIfCurrent =
+            [[{
+                "id": 7,
+                "value": "2015-04-12T18:51:19z",
+                "display": "04-12 EDT"}]];
+
+        // FieldInfo and record expectation for field with invalid format and ShowTimeZone, ShowMonthAsName, ShowDayOfWeek flag
+        var fieldInfo_InvalidFormat_ShowTimeZone_ShowMonthAsName_ShowDayOfWeek = JSON.parse(JSON.stringify(invalidFormat));
+        fieldInfo_InvalidFormat_ShowTimeZone_ShowMonthAsName_ShowDayOfWeek.showTimeZone = true;
+        fieldInfo_InvalidFormat_ShowTimeZone_ShowMonthAsName_ShowDayOfWeek.showMonthAsName = true;
+        fieldInfo_InvalidFormat_ShowTimeZone_ShowMonthAsName_ShowDayOfWeek.showDayOfWeek = true;
+        fieldInfo_InvalidFormat_ShowTimeZone_ShowMonthAsName_ShowDayOfWeek = [fieldInfo_InvalidFormat_ShowTimeZone_ShowMonthAsName_ShowDayOfWeek];
+        var expectedRecords_InvalidFormat_ShowTimeZone_ShowMonthAsName_ShowDayOfWeek =
+            [[{
+                "id": 7,
+                "value": "2015-04-12T18:51:19z",
+                "display": "Sunday, Apr-12-2015 EDT"}]];
+
+        // FieldInfo and record expectation for field with invalid format and ShowTimeZone, ShowMonthAsName, HideYearIfCurrent flag
+        var fieldInfo_InvalidFormat_ShowTimeZone_ShowMonthAsName_HideYearIfCurrent = JSON.parse(JSON.stringify(invalidFormat));
+        fieldInfo_InvalidFormat_ShowTimeZone_ShowMonthAsName_HideYearIfCurrent.showTimeZone = true;
+        fieldInfo_InvalidFormat_ShowTimeZone_ShowMonthAsName_HideYearIfCurrent.showMonthAsName = true;
+        fieldInfo_InvalidFormat_ShowTimeZone_ShowMonthAsName_HideYearIfCurrent.hideYearIfCurrent = true;
+        fieldInfo_InvalidFormat_ShowTimeZone_ShowMonthAsName_HideYearIfCurrent = [fieldInfo_InvalidFormat_ShowTimeZone_ShowMonthAsName_HideYearIfCurrent];
+        var expectedRecords_InvalidFormat_ShowTimeZone_ShowMonthAsName_HideYearIfCurrent =
+            [[{
+                "id": 7,
+                "value": "2015-04-12T18:51:19z",
+                "display": "Apr-12 EDT"}]];
+
+        // FieldInfo and record expectation for field with invalid format and ShowTimeZone, ShowMonthAsName, HideYearIfCurrent flag
+        var fieldInfo_InvalidFormat_ShowTimeZone_ShowDayOfWeek_HideYearIfCurrent = JSON.parse(JSON.stringify(invalidFormat));
+        fieldInfo_InvalidFormat_ShowTimeZone_ShowDayOfWeek_HideYearIfCurrent.showTimeZone = true;
+        fieldInfo_InvalidFormat_ShowTimeZone_ShowDayOfWeek_HideYearIfCurrent.showDayOfWeek = true;
+        fieldInfo_InvalidFormat_ShowTimeZone_ShowDayOfWeek_HideYearIfCurrent.hideYearIfCurrent = true;
+        fieldInfo_InvalidFormat_ShowTimeZone_ShowDayOfWeek_HideYearIfCurrent = [fieldInfo_InvalidFormat_ShowTimeZone_ShowDayOfWeek_HideYearIfCurrent];
+        var expectedRecords_InvalidFormat_ShowTimeZone_ShowDayOfWeek_HideYearIfCurrent =
+            [[{
+                "id": 7,
+                "value": "2015-04-12T18:51:19z",
+                "display": "Sunday, 04-12 EDT"}]];
+
+        // FieldInfo and record expectation for field with invalid format and ShowMonthAsName flag
+        var fieldInfo_InvalidFormat_ShowMonthAsName = JSON.parse(JSON.stringify(invalidFormat));
+        fieldInfo_InvalidFormat_ShowMonthAsName.showMonthAsName = true;
+        fieldInfo_InvalidFormat_ShowMonthAsName = [fieldInfo_InvalidFormat_ShowMonthAsName];
+        var expectedRecords_InvalidFormat_ShowMonthAsName =
+            [[{
+                "id": 7,
+                "value": "2015-04-12T18:51:19z",
+                "display": "Apr-12-2015"}]];
+
+        // FieldInfo and record expectation for field with invalid format and ShowMonthAsName, ShowDayOfWeek flag
+        var fieldInfo_InvalidFormat_ShowMonthAsName_ShowDayOfWeek = JSON.parse(JSON.stringify(invalidFormat));
+        fieldInfo_InvalidFormat_ShowMonthAsName_ShowDayOfWeek.showMonthAsName = true;
+        fieldInfo_InvalidFormat_ShowMonthAsName_ShowDayOfWeek.showDayOfWeek = true;
+        fieldInfo_InvalidFormat_ShowMonthAsName_ShowDayOfWeek = [fieldInfo_InvalidFormat_ShowMonthAsName_ShowDayOfWeek];
+        var expectedRecords_InvalidFormat_ShowMonthAsName_ShowDayOfWeek =
+            [[{
+                "id": 7,
+                "value": "2015-04-12T18:51:19z",
+                "display": "Sunday, Apr-12-2015"}]];
+
+        // FieldInfo and record expectation for field with invalid format and ShowMonthAsName, HideYearIfCurrent flag
+        var fieldInfo_InvalidFormat_ShowMonthAsName_HideYearIfCurrent = JSON.parse(JSON.stringify(invalidFormat));
+        fieldInfo_InvalidFormat_ShowMonthAsName_HideYearIfCurrent.showMonthAsName = true;
+        fieldInfo_InvalidFormat_ShowMonthAsName_HideYearIfCurrent.hideYearIfCurrent = true;
+        fieldInfo_InvalidFormat_ShowMonthAsName_HideYearIfCurrent = [fieldInfo_InvalidFormat_ShowMonthAsName_HideYearIfCurrent];
+        var expectedRecords_InvalidFormat_ShowMonthAsName_HideYearIfCurrent =
+            [[{
+                "id": 7,
+                "value": "2015-04-12T18:51:19z",
+                "display": "Apr-12"}]];
+
+        // FieldInfo and record expectation for field with invalid format and HideYearIfCurrent flag
+        var fieldInfo_InvalidFormat_HideYearIfCurrent = JSON.parse(JSON.stringify(invalidFormat));
+        fieldInfo_InvalidFormat_HideYearIfCurrent.hideYearIfCurrent = true;
+        fieldInfo_InvalidFormat_HideYearIfCurrent = [fieldInfo_InvalidFormat_HideYearIfCurrent];
+        var expectedRecords_InvalidFormat_HideYearIfCurrent =
+            [[{
+                "id": 7,
+                "value": "2015-04-12T18:51:19z",
+                "display": "04-12"}]];
+        var expectedRecords_InvalidFormat_HideYearIfCurrent_DiffYear =
+            [[{
+                "id": 7,
+                "value": "2000-04-12T18:51:19z",
+                "display": "04-12-2000"}]];
+
+        // FieldInfo and record expectation for field with invalid format and all flags enabled
+        var fieldInfo_InvalidFormat_AllFlags = JSON.parse(JSON.stringify(invalidFormat));
+        fieldInfo_InvalidFormat_AllFlags.showTime = true;
+        fieldInfo_InvalidFormat_AllFlags.showTimeZone = true;
+        fieldInfo_InvalidFormat_AllFlags.showMonthAsName = true;
+        fieldInfo_InvalidFormat_AllFlags.showDayOfWeek = true;
+        fieldInfo_InvalidFormat_AllFlags.hideYearIfCurrent = true;
+        fieldInfo_InvalidFormat_AllFlags = [fieldInfo_InvalidFormat_AllFlags];
+        var expectedRecords_InvalidFormat_AllFlags =
+            [[{
+                "id": 7,
+                "value": "2015-04-12T18:51:19z",
+                "display": "Sunday, Apr-12 2:51 PM EDT"}]];
+        var expectedRecords_InvalidFormat_AllFlags_DiffYear =
+            [[{
+                "id": 7,
+                "value": "2000-04-12T18:51:19z",
+                "display": "Wednesday, Apr-12-2000 2:51 PM EDT"}]];
+
+
+        //Empty records
+        var emptyRecords =  [[{
+            "id": 7,
+            "value": ""}]];
+        var expectedEmptyRecords =
+            [[{
+                "id": 7,
+                "value": "",
+                "display": ""}]];
+
+        //null record value
+        var nullRecords =  [[{
+            "id": 7,
+            "value": null}]];
+        var nullExpectedRecords =
+            [[{
+                "id": 7,
+                "value": null,
+                "display": ""}]];
+
+        return [
+            { message: "dateTime with invalid format and no flags", records: recordsInput, fieldInfo: fieldInfo_InvalidFormat, expectedRecords: expectedRecords_InvalidFormat },
+            { message: "dateTime with invalid format and showTime flag", records: recordsInput, fieldInfo: fieldInfo_InvalidFormat_ShowTime, expectedRecords: expectedRecords_InvalidFormat_ShowTime },
+            { message: "dateTime with invalid format and showTime, showTimeZone flag", records: recordsInput, fieldInfo: fieldInfo_InvalidFormat_ShowTime_ShowTimeZone, expectedRecords: expectedRecords_InvalidFormat_ShowTime_ShowTimeZone },
+            { message: "dateTime with invalid format and showTime, showMonthAsName flag", records: recordsInput, fieldInfo: fieldInfo_InvalidFormat_ShowTime_ShowMonthAsName, expectedRecords: expectedRecords_InvalidFormat_ShowTime_ShowMonthAsName },
+            { message: "dateTime with invalid format and showTime, showDayOfWeek flag", records: recordsInput, fieldInfo: fieldInfo_InvalidFormat_ShowTime_ShowDayOfWeek, expectedRecords: expectedRecords_InvalidFormat_ShowTime_ShowDayOfWeek },
+            { message: "dateTime with invalid format and showTime, hideYearIfCurrent flag", records: recordsInput, fieldInfo: fieldInfo_InvalidFormat_ShowTime_HideYearIfCurrent, expectedRecords: expectedRecords_InvalidFormat_ShowTime_HideYearIfCurrent },
+            { message: "dateTime with invalid format and showTime, hideYearIfCurrent flag and different year", records: recordsInputDiffYear, fieldInfo: fieldInfo_InvalidFormat_ShowTime_HideYearIfCurrent, expectedRecords: expectedRecords_InvalidFormat_ShowTime_HideYearIfCurrent_DiffYear },
+            { message: "dateTime with invalid format and showTime, showTimeZone, showMonthAsName flag", records: recordsInput, fieldInfo: fieldInfo_InvalidFormat_ShowTime_ShowTimeZone_ShowMonthAsName, expectedRecords: expectedRecords_InvalidFormat_ShowTime_ShowTimeZone_ShowMonthAsName },
+            { message: "dateTime with invalid format and showTime, showTimeZone, showDayOfWeek flag", records: recordsInput, fieldInfo: fieldInfo_InvalidFormat_ShowTime_ShowTimeZone_ShowDayOfWeek, expectedRecords: expectedRecords_InvalidFormat_ShowTime_ShowTimeZone_ShowDayOfWeek },
+            { message: "dateTime with invalid format and showTime, showTimeZone, hideYearIfCurrent flag", records: recordsInput, fieldInfo: fieldInfo_InvalidFormat_ShowTime_ShowTimeZone_HideYearIfCurrent, expectedRecords: expectedRecords_InvalidFormat_ShowTime_ShowTimeZone_HideYearIfCurrent },
+            { message: "dateTime with invalid format and showTime, showTimeZone, showDayOfWeek, hideYearIfCurrent flag", records: recordsInput, fieldInfo: fieldInfo_InvalidFormat_ShowTime_ShowTimeZone_ShowDayOfWeek_HideYearIfCurrent, expectedRecords: expectedRecords_InvalidFormat_ShowTime_ShowTimeZone_ShowDayOfWeek_HideYearIfCurrent },
+            { message: "dateTime with invalid format and showTime, showTimeZone, showMonthAsName, hideYearIfCurrent flag", records: recordsInput, fieldInfo: fieldInfo_InvalidFormat_ShowTime_ShowTimeZone_ShowMonthAsName_HideYearIfCurrent, expectedRecords: expectedRecords_InvalidFormat_ShowTime_ShowTimeZone_ShowMonthAsName_HideYearIfCurrent },
+            { message: "dateTime with invalid format and showTime, showMonthAsName, showDayOfWeek flag", records: recordsInput, fieldInfo: fieldInfo_InvalidFormat_ShowTime_ShowMonthAsName_ShowDayOfWeek, expectedRecords: expectedRecords_InvalidFormat_ShowTime_ShowMonthAsName_ShowDayOfWeek },
+            { message: "dateTime with invalid format and showTime, showMonthAsName, showDayOfWeek, hideYearIfCurrent flag", records: recordsInput, fieldInfo: fieldInfo_InvalidFormat_ShowTime_ShowMonthAsName_ShowDayOfWeek_HideYearIfCurrent, expectedRecords: expectedRecords_InvalidFormat_ShowTime_ShowMonthAsName_ShowDayOfWeek_HideYearIfCurrent },
+            { message: "dateTime with invalid format and showTimZone flag", records: recordsInput, fieldInfo: fieldInfo_InvalidFormat_ShowTimeZone, expectedRecords: expectedRecords_InvalidFormat_ShowTimeZone },
+            { message: "dateTime with invalid format and showTimZone, showMonthAsName flag", records: recordsInput, fieldInfo: fieldInfo_InvalidFormat_ShowTimeZone_ShowMonthAsName, expectedRecords: expectedRecords_InvalidFormat_ShowTimeZone_ShowMonthAsName },
+            { message: "dateTime with invalid format and showTimZone, showDayOfWeek flag", records: recordsInput, fieldInfo: fieldInfo_InvalidFormat_ShowTimeZone_ShowDayOfWeek, expectedRecords: expectedRecords_InvalidFormat_ShowTimeZone_ShowDayOfWeek },
+            { message: "dateTime with invalid format and showTimZone, hideYearIfCurrent flag", records: recordsInput, fieldInfo: fieldInfo_InvalidFormat_ShowTimeZone_HideYearIfCurrent, expectedRecords: expectedRecords_InvalidFormat_ShowTimeZone_HideYearIfCurrent },
+            { message: "dateTime with invalid format and showTimZone, showMonthAsName, showDayOfWeek flag", records: recordsInput, fieldInfo: fieldInfo_InvalidFormat_ShowTimeZone_ShowMonthAsName_ShowDayOfWeek, expectedRecords: expectedRecords_InvalidFormat_ShowTimeZone_ShowMonthAsName_ShowDayOfWeek },
+            { message: "dateTime with invalid format and showTimZone, showMonthAsName, hideYearIfCurrent flag", records: recordsInput, fieldInfo: fieldInfo_InvalidFormat_ShowTimeZone_ShowMonthAsName_HideYearIfCurrent, expectedRecords: expectedRecords_InvalidFormat_ShowTimeZone_ShowMonthAsName_HideYearIfCurrent },
+            { message: "dateTime with invalid format and showTimZone, showDayOfWeek, hideYearIfCurrent flag", records: recordsInput, fieldInfo: fieldInfo_InvalidFormat_ShowTimeZone_ShowDayOfWeek_HideYearIfCurrent, expectedRecords: expectedRecords_InvalidFormat_ShowTimeZone_ShowDayOfWeek_HideYearIfCurrent },
+            { message: "dateTime with invalid format and showMonthAsName flag", records: recordsInput, fieldInfo: fieldInfo_InvalidFormat_ShowMonthAsName, expectedRecords: expectedRecords_InvalidFormat_ShowMonthAsName },
+            { message: "dateTime with invalid format and showMonthAsName, showDayOfWeek flag", records: recordsInput, fieldInfo: fieldInfo_InvalidFormat_ShowMonthAsName_ShowDayOfWeek, expectedRecords: expectedRecords_InvalidFormat_ShowMonthAsName_ShowDayOfWeek },
+            { message: "dateTime with invalid format and showMonthAsName, hideYearIfCurrent flag", records: recordsInput, fieldInfo: fieldInfo_InvalidFormat_ShowMonthAsName_HideYearIfCurrent, expectedRecords: expectedRecords_InvalidFormat_ShowMonthAsName_HideYearIfCurrent },
+            { message: "dateTime with invalid format and showDayOfWeek flag", records: recordsInput, fieldInfo: fieldInfo_InvalidFormat_ShowDayOfWeek, expectedRecords: expectedRecords_InvalidFormat_ShowDayOfWeek },
+            { message: "dateTime with invalid format and showDayOfWeek, hideYearIfCurrent flag", records: recordsInput, fieldInfo: fieldInfo_InvalidFormat_ShowDayOfWeek_HideYearIfCurrent, expectedRecords: expectedRecords_InvalidFormat_ShowDayOfWeek_HideYearIfCurrent },
+            { message: "dateTime with invalid format and hideYearIfCurrent flag", records: recordsInput, fieldInfo: fieldInfo_InvalidFormat_HideYearIfCurrent, expectedRecords: expectedRecords_InvalidFormat_HideYearIfCurrent },
+            { message: "dateTime with invalid format and hideYearIfCurrent flag and different year", records: recordsInputDiffYear, fieldInfo: fieldInfo_InvalidFormat_HideYearIfCurrent, expectedRecords: expectedRecords_InvalidFormat_HideYearIfCurrent_DiffYear },
+            { message: "dateTime with invalid format and all flag", records: recordsInput, fieldInfo: fieldInfo_InvalidFormat_AllFlags, expectedRecords: expectedRecords_InvalidFormat_AllFlags },
+            { message: "dateTime with invalid format and all flag and different year", records: recordsInputDiffYear, fieldInfo: fieldInfo_InvalidFormat_AllFlags, expectedRecords: expectedRecords_InvalidFormat_AllFlags_DiffYear },
+            { message: "empty dateTime with invalid format", records: emptyRecords, fieldInfo: fieldInfo_InvalidFormat, expectedRecords: expectedEmptyRecords},
+            { message: "null dateTime with invalid format", records: nullRecords, fieldInfo: fieldInfo_InvalidFormat, expectedRecords: nullExpectedRecords }
+        ];
+    }
+
+    it('should format various DateTime records with invalid format for display', function () {
+        invalidFormatDataProvider().forEach(function(entry){
+            var formattedRecords = recordFormatter.formatRecords(entry.records, entry.fieldInfo);
+            console.log('TEST CASE: ' + JSON.stringify(entry.message));
+            console.log('RET RECS: ' + JSON.stringify(formattedRecords));
+            console.log('EXP RECS: ' + JSON.stringify(entry.expectedRecords));
+            assert.deepEqual(formattedRecords, entry.expectedRecords, entry.message);
+        });
+    });
+
 });
