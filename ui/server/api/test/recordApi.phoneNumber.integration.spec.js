@@ -31,11 +31,11 @@ describe('API - RECORDS test cases', function () {
 
         //Empty records
         var emptyPhoneRecords = [{"id": fid, "value": ""}];
-        var expectedEmptyPhoneRecords = {"id": fid, "value": null, "display": null};
+        var expectedEmptyPhoneRecords = {"id": fid, "value": null, "display": ""};
 
         //null record value
         var nullPhoneRecords = [{"id": fid, "value": null}];
-        var nullExpectedPhoneRecords = {"id": fid, "value": null, "display": null};
+        var nullExpectedPhoneRecords = {"id": fid, "value": null, "display": ""};
 
         return [
             { message: "display phone number", record: recordsInput, format: "display", expectedFieldValue: expectedRecords },
@@ -83,8 +83,8 @@ describe('API - RECORDS test cases', function () {
                         });
                     }
                     done();
-                }).catch(function () {
-                    assert(false, 'unable to resolve all records');
+                }).catch(function (errorMsg) {
+                    assert(false, 'unable to resolve all records: ' + JSON.stringify(errorMsg));
                     done();
                 });
         });

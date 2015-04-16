@@ -18,14 +18,13 @@
     var TIMEZONE_FORMATTER = ' z';
     //Base formats
     var DATE_FORMATS = Object.freeze({
-        //FULL FORMATS:
         MM_DD_YY:   TWO_DIGIT_MONTH + DASH + TWO_DIGIT_DAY + DASH + TWO_DIGIT_YEAR,
         MM_DD_YYYY: TWO_DIGIT_MONTH + DASH + TWO_DIGIT_DAY + DASH + FOUR_DIGIT_YEAR,
         DD_MM_YYYY: TWO_DIGIT_DAY + DASH + TWO_DIGIT_MONTH + DASH + FOUR_DIGIT_YEAR,
         DD_MM_YY:   TWO_DIGIT_DAY + DASH + TWO_DIGIT_MONTH + DASH + TWO_DIGIT_YEAR,
         YYYY_MM_DD: FOUR_DIGIT_YEAR + DASH + TWO_DIGIT_MONTH + DASH + TWO_DIGIT_DAY
     });
-
+    //resolves the moment.js format string from the JAVA 8 date format string
     var JAVA_TO_JS_DATE_FORMATS = Object.freeze({
         'MM-dd-uu': DATE_FORMATS.MM_DD_YY,
         'MM-dd-uuuu': DATE_FORMATS.MM_DD_YYYY,
@@ -57,17 +56,10 @@
         return formatString + TIMEZONE_FORMATTER;
     }
 
-    function validValue(fieldValue) {
-        if(!fieldValue || fieldValue.value === undefined || fieldValue.value === null) {
-            return false;
-        }
-        return true;
-    }
-
     module.exports = {
         format: function (fieldValue, fieldInfo) {
-            if(!validValue(fieldValue)) {
-                return null;
+            if(!fieldValue || !fieldValue.value) {
+                return '';
             }
             //Date constructor expects ISO 8601 date
             var d = new Date(fieldValue.value);

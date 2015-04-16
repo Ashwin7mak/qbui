@@ -9,18 +9,11 @@
     var CLOSE_PAREN = ') ';
     var DASH = '-';
 
-    function validValue(fieldValue) {
-        if(!fieldValue || fieldValue.value === undefined || fieldValue.value === null) {
-            return false;
-        }
-        return true;
-    }
-
     module.exports = {
         //Given a raw number as input, formats as a legacy QuickBase phone number. Note, not internationalized
         format: function (fieldValue, fieldInfo) {
-            if(!validValue(fieldValue)) {
-                return null;
+            if(!fieldValue || !fieldValue.value) {
+                return '';
             }
             var baseValue = fieldValue.value;
             var len = baseValue.length;
