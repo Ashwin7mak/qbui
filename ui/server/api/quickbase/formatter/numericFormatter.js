@@ -67,7 +67,7 @@
         var ret = [];
         if(inputString.length - lastPos + charsPerSubstring > 0) {
             for (var i = lastPos - charsPerSubstring; i > 0; i -= charsPerSubstring) {
-                ret.unshift(inputString.substr(i, n));
+                ret.unshift(inputString.substr(i, charsPerSubstring));
             }
         }
         return ret;

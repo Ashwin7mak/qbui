@@ -7,6 +7,7 @@
     var dateFormatter = require('./dateTimeFormatter');
     var phoneFormatter = require('./phoneNumberFormatter');
     var todFormatter = require('./timeOfDayFormatter');
+    var numericFormatter = require('./numericFormatter');
     //module constants
     var PHONE_NUMBER = 'PHONE_NUMBER';
     var DATE_TIME = 'DATE_TIME';
@@ -15,6 +16,8 @@
     var FORMULA_DATE = 'FORMULA_DATE';
     var FORMULA_TIME_OF_DAY = 'FORMULA_TIME_OF_DAY';
     var TIME_OF_DAY = 'TIME_OF_DAY';
+    var NUMERIC = 'NUMERIC';
+    var FORMULA_NUMERIC = 'FORMULA_NUMERIC';
 
     /**
      * Certain fields may require generation of a formatter string that will be used for each record in the
@@ -58,6 +61,10 @@
                 case TIME_OF_DAY:
                 case FORMULA_TIME_OF_DAY:
                     fieldValue.display = todFormatter.format(fieldValue, fieldInfo);
+                    break;
+                case NUMERIC:
+                case FORMULA_NUMERIC:
+                    fieldValue.display = numericFormatter.format(fieldValue, fieldInfo);
                     break;
                 default:
                     break;
