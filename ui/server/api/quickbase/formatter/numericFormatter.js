@@ -66,8 +66,17 @@
     function splitString(inputString, lastPos, charsPerSubstring) {
         var ret = [];
         if(inputString.length - lastPos + charsPerSubstring > 0) {
-            for (var i = lastPos - charsPerSubstring; i > 0; i -= charsPerSubstring) {
-                ret.unshift(inputString.substr(i, charsPerSubstring));
+            for (var i = lastPos - charsPerSubstring; i > 0 - charsPerSubstring; i -= charsPerSubstring) {
+                console.log('current i: ' + i);
+                var start = i;
+                var len = charsPerSubstring;
+                if(i < 0) {
+                    start = 0;
+                    len = charsPerSubstring + i;
+                }
+                console.log('current start ' + start + ' current len: ' + len);
+                console.log('current substring: ' + inputString.substr(start, len));
+                ret.unshift(inputString.substr(start, len));
             }
         }
         return ret;
@@ -113,12 +122,14 @@
         var numParts = numString.split(PERIOD);
         var mantissaString = numParts[0];
         var characteristicString = numParts[1];
+        console.log('mantissa: ' + mantissaString);
+        console.log('charstring: ' + characteristicString);
         //Format the mantissa, if its long enough to need formatting
         if (opts.separatorMark && mantissaString.length > opts.separatorStart) {
             var mantissaLength = mantissaString.length;
             //apply the separator pattern
             if (opts.separatorPattern === PATTERN_EVERY_THREE) {
-                mantissaString = splitString(mantissaString, mantissaLength - 1, 3).join(opts.separatorMark);
+                mantissaString = splitString(mantissaString, mantissaLength, 3).join(opts.separatorMark);
             } else if (opts.separatorPattern === PATTERN_THREE_THEN_TWO) {
                 var ret = [];
                 var n = 2;
