@@ -6,7 +6,7 @@
     'use strict';
     var dateFormatter = require('./dateTimeFormatter');
     var phoneFormatter = require('./phoneNumberFormatter');
-    var todFormatter = require('./timeOfDayFormatter');
+    var todFormatter = require('./../timeOfDayFormatter');
     //module constants
     var PHONE_NUMBER = 'PHONE_NUMBER';
     var DATE_TIME = 'DATE_TIME';
