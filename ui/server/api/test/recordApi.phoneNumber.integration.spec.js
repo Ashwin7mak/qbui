@@ -3,7 +3,7 @@ var should = require('should');
 var assert = require('assert');
 var app = require('../../app');
 var config = require('../../config/environment');
-var recordBase = require('./apiRecordBase.mock')(config);
+var recordBase = require('./recordApi.base')(config);
 var Promise = require('bluebird');
 var _ = require('lodash');
 
