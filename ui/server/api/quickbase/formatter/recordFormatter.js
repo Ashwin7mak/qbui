@@ -16,6 +16,31 @@
     var FORMULA_TIME_OF_DAY = 'FORMULA_TIME_OF_DAY';
     var TIME_OF_DAY = 'TIME_OF_DAY';
 
+    /*
+     * Certain fields may require generation of a formatter string that will be used for each record in the
+     * field for example, Date, DateTime and TimeOfDay fields. Rather than recalculate this formatter string
+     * for each record value encountered, we generate it once, and cache it on the fieldInfo for the field
+     * in question.  The display formatter will then look for this value 'jsFormatString' and if populated,
+     * use it instead of recalculating the formatter string.
+     */
+    function addFormatterStringsToFields(fieldInfos) {
+        for(var i = 0; i < fieldInfos.length; i++) {
+            switch (fieldInfos[i].type) {
+                case DATE_TIME:
+                case DATE:
+                case FORMULA_DATE_TIME:
+                case FORMULA_DATE:
+                    fieldInfos[i].jsFormatString = dateFormatter.generateFormatterString(fieldInfos[i]);
+                    break;
+                case TIME_OF_DAY:
+                case FORMULA_TIME_OF_DAY:
+                    fieldInfos[i].jsFormatString = todFormatter.generateFormatterString(fieldInfos[i]);
+                    break;
+                default:
+                    break;
+            }
+        }
+    }
     module.exports = function () {
         //Display formats record field values according to the field's display settings
         function formatRecordValue(fieldValue, fieldInfo) {
@@ -45,9 +70,13 @@
                 if (records && fields) {
                     var fieldsMap = {};
                     var formattedRecords = [];
+                    //Precalculate any formatter strings
+                    addFormatterStringsToFields(fields);
+                    //Generate a map for O(1) lookup on each field get
                     fields.forEach(function (entry) {
                         fieldsMap[entry.id] = entry;
                     });
+                    //For each record, for each value, display format it!
                     records.forEach(function (record) {
                         var formattedRecord = [];
                         record.forEach(function (fieldValue) {

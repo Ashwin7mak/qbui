@@ -60,6 +60,28 @@
     }
 
     module.exports = {
+        generateFormatterString: function(fieldInfo) {
+            var jsDateFormat;
+            if(fieldInfo) {
+                jsDateFormat = JAVA_TO_JS_DATE_FORMATS[fieldInfo.format];
+            }
+            if (!jsDateFormat) {
+                jsDateFormat = DATE_FORMATS.MM_DD_YYYY;
+            }
+            if (fieldInfo.showTime) {
+                jsDateFormat = showTime(jsDateFormat);
+            }
+            if (fieldInfo.showTimeZone) {
+                jsDateFormat = showTimeZone(jsDateFormat);
+            }
+            if (fieldInfo.showMonthAsName) {
+                jsDateFormat = showMonthAsName(jsDateFormat);
+            }
+            if (fieldInfo.showDayOfWeek) {
+                jsDateFormat = showDayOfWeek(jsDateFormat);
+            }
+            return jsDateFormat;
+        },
         format: function (fieldValue, fieldInfo) {
             if (!fieldValue || !fieldValue.value) {
                 return '';
@@ -80,22 +102,11 @@
                 }
             }
             var m = moment.tz(d, timeZone);
-            var jsDateFormat = JAVA_TO_JS_DATE_FORMATS[fieldInfo.format];
-            if (!jsDateFormat) {
-                jsDateFormat = DATE_FORMATS.MM_DD_YYYY;
+            var jsDateFormat = fieldInfo.jsFormatString;
+            if(!jsDateFormat) {
+                jsDateFormat = this.generateFormatterString(fieldInfo);
             }
-            if (fieldInfo.showTime) {
-                jsDateFormat = showTime(jsDateFormat);
-            }
-            if (fieldInfo.showTimeZone) {
-                jsDateFormat = showTimeZone(jsDateFormat);
-            }
-            if (fieldInfo.showMonthAsName) {
-                jsDateFormat = showMonthAsName(jsDateFormat);
-            }
-            if (fieldInfo.showDayOfWeek) {
-                jsDateFormat = showDayOfWeek(jsDateFormat);
-            }
+            //If the date is the current year and hideYearIfCurrent is true, remove the date from the formatter string
             if (fieldInfo.hideYearIfCurrent && d.getFullYear() === new Date().getFullYear()) {
                 jsDateFormat = hideYear(jsDateFormat);
             }
