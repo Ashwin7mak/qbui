@@ -42,7 +42,7 @@
     var request = require('request');
     module.exports = function (config) {
         var requestHelper = require('./requestHelper')(config);
-        var recordFormatter = require('./recordFormatter')();
+        var recordFormatter = require('./formatter/recordFormatter')();
 
         //Module constants:
         var PHONE_NUMBER = 'PHONE_NUMBER';
