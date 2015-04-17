@@ -16,14 +16,15 @@
     var FORMULA_TIME_OF_DAY = 'FORMULA_TIME_OF_DAY';
     var TIME_OF_DAY = 'TIME_OF_DAY';
 
-    /*
+    /**
      * Certain fields may require generation of a formatter string that will be used for each record in the
      * field for example, Date, DateTime and TimeOfDay fields. Rather than recalculate this formatter string
      * for each record value encountered, we generate it once, and cache it on the fieldInfo for the field
      * in question.  The display formatter will then look for this value 'jsFormatString' and if populated,
      * use it instead of recalculating the formatter string.
+     * @param fieldInfos The array of field meta data for the fields in the records
      */
-    function addFormatterStringsToFields(fieldInfos) {
+    function precalculateFormatterStringsForFields(fieldInfos) {
         for(var i = 0; i < fieldInfos.length; i++) {
             switch (fieldInfos[i].type) {
                 case DATE_TIME:
@@ -71,7 +72,7 @@
                     var fieldsMap = {};
                     var formattedRecords = [];
                     //Precalculate any formatter strings
-                    addFormatterStringsToFields(fields);
+                    precalculateFormatterStringsForFields(fields);
                     //Generate a map for O(1) lookup on each field get
                     fields.forEach(function (entry) {
                         fieldsMap[entry.id] = entry;

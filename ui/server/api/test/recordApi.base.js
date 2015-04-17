@@ -5,7 +5,7 @@
     var consts = require('../constants');
 
     module.exports = function (config) {
-        var apiBase = require('./apiBase.mock.js')(config);
+        var apiBase = require('./api.base.js')(config);
         var init = apiBase.initialize();
 
         var recordBase = {
@@ -18,6 +18,7 @@
                         deferred.resolve(appResponse);
                     }).catch(function (error) {
                         deferred.reject(error);
+                        //TODO: figure out how we want to handle
                         assert(false, 'failed to create app: ' + JSON.stringify(error));
                     });
                 });

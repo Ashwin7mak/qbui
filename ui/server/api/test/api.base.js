@@ -197,7 +197,7 @@
                 }
                 return deferred.promise;
             }
-        }
+        };
 
         return apiBase;
     }

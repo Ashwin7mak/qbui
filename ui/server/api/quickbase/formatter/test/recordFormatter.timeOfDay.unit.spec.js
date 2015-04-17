@@ -1,7 +1,7 @@
 'use strict';
 
 var should = require('should');
-var recordFormatter = require('./recordFormatter')();
+var recordFormatter = require('./../recordFormatter')();
 var assert = require('assert');
 
 describe('Time of day record formatter unit test', function () {
