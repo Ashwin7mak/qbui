@@ -64,8 +64,14 @@
             if (!fieldValue || !fieldValue.value) {
                 return '';
             }
-            //Date constructor expects ISO 8601 date
-            var d = new Date(fieldValue.value);
+            var d;
+            try {
+                //Date constructor expects ISO 8601 date
+                d = new Date(fieldValue.value);
+            } catch (err) {
+                console.log('failed to parse a valid date attempting to display format a date. ' + fieldValue.value);
+                return '';
+            }
             var timeZone = UNIVERSAL_TIMEZONE;
             if (fieldInfo.type === DATE_TIME || fieldInfo.type === FORMULA_DATE_TIME) {
                 timeZone = fieldInfo.timeZone;
