@@ -21,10 +21,10 @@
     var TIMEZONE_FORMATTER = ' z';
     //Base formats
     var DATE_FORMATS = Object.freeze({
-        MM_DD_YY:   TWO_DIGIT_MONTH + DASH + TWO_DIGIT_DAY + DASH + TWO_DIGIT_YEAR,
+        MM_DD_YY: TWO_DIGIT_MONTH + DASH + TWO_DIGIT_DAY + DASH + TWO_DIGIT_YEAR,
         MM_DD_YYYY: TWO_DIGIT_MONTH + DASH + TWO_DIGIT_DAY + DASH + FOUR_DIGIT_YEAR,
         DD_MM_YYYY: TWO_DIGIT_DAY + DASH + TWO_DIGIT_MONTH + DASH + FOUR_DIGIT_YEAR,
-        DD_MM_YY:   TWO_DIGIT_DAY + DASH + TWO_DIGIT_MONTH + DASH + TWO_DIGIT_YEAR,
+        DD_MM_YY: TWO_DIGIT_DAY + DASH + TWO_DIGIT_MONTH + DASH + TWO_DIGIT_YEAR,
         YYYY_MM_DD: FOUR_DIGIT_YEAR + DASH + TWO_DIGIT_MONTH + DASH + TWO_DIGIT_DAY
     });
     //resolves the moment.js format string from the JAVA 8 date format string
@@ -44,7 +44,7 @@
         return DAY_OF_WEEK + formatString;
     }
 
-    function hideYear(formatString){
+    function hideYear(formatString) {
         var noYearString = formatString.replace(DASH + FOUR_DIGIT_YEAR, '');
         noYearString = noYearString.replace(FOUR_DIGIT_YEAR + DASH, '');
         noYearString = noYearString.replace(DASH + TWO_DIGIT_YEAR, '');
@@ -55,42 +55,42 @@
         return formatString + TIME;
     }
 
-    function showTimeZone(formatString){
+    function showTimeZone(formatString) {
         return formatString + TIMEZONE_FORMATTER;
     }
 
     module.exports = {
         format: function (fieldValue, fieldInfo) {
-            if(!fieldValue || !fieldValue.value) {
+            if (!fieldValue || !fieldValue.value) {
                 return '';
             }
             //Date constructor expects ISO 8601 date
             var d = new Date(fieldValue.value);
             var timeZone = UNIVERSAL_TIMEZONE;
-            if(fieldInfo.type === DATE_TIME || fieldInfo.type === FORMULA_DATE_TIME) {
+            if (fieldInfo.type === DATE_TIME || fieldInfo.type === FORMULA_DATE_TIME) {
                 timeZone = fieldInfo.timeZone;
-                if(!timeZone) {
+                if (!timeZone) {
                     timeZone = DEFAULT_TIMEZONE;
                 }
             }
             var m = moment.tz(d, timeZone);
             var jsDateFormat = JAVA_TO_JS_DATE_FORMATS[fieldInfo.format];
-            if(!jsDateFormat) {
+            if (!jsDateFormat) {
                 jsDateFormat = DATE_FORMATS.MM_DD_YYYY;
             }
-            if(fieldInfo.showTime){
+            if (fieldInfo.showTime) {
                 jsDateFormat = showTime(jsDateFormat);
             }
-            if(fieldInfo.showTimeZone){
+            if (fieldInfo.showTimeZone) {
                 jsDateFormat = showTimeZone(jsDateFormat);
             }
-            if(fieldInfo.showMonthAsName){
+            if (fieldInfo.showMonthAsName) {
                 jsDateFormat = showMonthAsName(jsDateFormat);
             }
-            if(fieldInfo.showDayOfWeek){
+            if (fieldInfo.showDayOfWeek) {
                 jsDateFormat = showDayOfWeek(jsDateFormat);
             }
-            if(fieldInfo.hideYearIfCurrent && d.getFullYear() === new Date().getFullYear()){
+            if (fieldInfo.hideYearIfCurrent && d.getFullYear() === new Date().getFullYear()) {
                 jsDateFormat = hideYear(jsDateFormat);
             }
             return m.format(jsDateFormat);

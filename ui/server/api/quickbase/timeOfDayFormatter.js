@@ -21,7 +21,7 @@
     module.exports = {
         //Given a raw number as input, formats as a legacy QuickBase phone number. Note, not internationalized
         format: function (fieldValue, fieldInfo) {
-            if(!fieldValue || !fieldValue.value) {
+            if (!fieldValue || !fieldValue.value) {
                 return '';
             }
 
@@ -29,9 +29,9 @@
             var d = new Date(fieldValue.value);
             //Resolve whether or not to shift based on timezone
             var timeZone = UTC_TIMEZONE;
-            if(fieldInfo.useTimezone) {
+            if (fieldInfo.useTimezone) {
                 timeZone = fieldInfo.timeZone;
-                if(!timeZone) {
+                if (!timeZone) {
                     timeZone = DEFAULT_TIMEZONE;
                 }
             }
@@ -39,12 +39,12 @@
 
             //Resolve formatting options
             var formatString = JAVA_FORMAT_TO_JS_FORMAT[fieldInfo.scale];
-            if(!formatString) {
+            if (!formatString) {
                 formatString = MM;
             }
 
             //resolve 12 vs. 24 hour clock
-            if(fieldInfo.use24HourClock) {
+            if (fieldInfo.use24HourClock) {
                 formatString = TWENTY_FOUR_HOUR_CLOCK + formatString;
             } else {
                 formatString = TWELVE_HOUR_CLOCK + formatString + AM_PM;
