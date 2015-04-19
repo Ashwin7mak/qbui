@@ -14,6 +14,7 @@
     //Defaults & supported values
     var DEFAULT_SEPARATOR_START = 3;
     var DEFAULT_SEPARATOR_MARK = null;
+    var DEFAULT_DECIMAL_PLACES = null;
     var DEFAULT_DECIMAL_MARK = PERIOD;
     var DEFAULT_SEPARATOR_PATTERN = PATTERN_EVERY_THREE;
     var SUPPORTED_DELIMETERS = {};
@@ -39,10 +40,14 @@
             opts.decimalMark = fieldInfo.clientSideAttributes.decimalMark;
         }
         opts.decimalPlaces = fieldInfo.decimalPlaces;
-        if (!opts.separatorStart) {
+        //If decimal places is not a number or less than 0, set it to default value
+        if(opts.decimalPlaces && (isNaN(opts.decimalPlaces) || opts.decimalPlaces < 0)) {
+            opts.decimalPlaces = DEFAULT_DECIMAL_PLACES;
+        }
+        if (!opts.separatorStart || isNaN(opts.separatorStart)) {
             opts.separatorStart = DEFAULT_SEPARATOR_START;
         }
-        if (!opts.separatorMark) {
+        if (!opts.separatorMark || opts.separatorMark.length !== 1) {
             opts.separatorMark = DEFAULT_SEPARATOR_MARK;
         }
         if (!opts.separatorPattern || !SUPPORTED_SEPARATOR_PATTERNS[opts.separatorPattern]) {

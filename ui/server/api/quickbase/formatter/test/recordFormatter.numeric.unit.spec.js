@@ -612,19 +612,15 @@ describe('Numeric record formatter unit test', function () {
             { message: "Numeric - no separator with separatorStart, separatorMark, separatorPattern, decimalMark format flags", records: recordInputNoSeparator, fieldInfo: fieldInfo_SS_SM_SP_DM, expectedRecords: expectedNoSeparator_SS_SM_SP_DM },
             { message: "Numeric - multiple separators with separatorStart, separatorMark, separatorPattern, decimalMark format flags", records: recordInputMultipleSeparators, fieldInfo: fieldInfo_SS_SM_SP_DM, expectedRecords: expectedMultiSeparators_SS_SM_SP_DM },
 
-            //{ message: "Numeric - decimal with all format flags", records: recordInputDecimalOnly, fieldInfo: allFlagsFieldInfo, expectedRecords: expectedDecimal_AllFlags },
+            { message: "Numeric - decimal with all format flags", records: recordInputDecimalOnly, fieldInfo: allFlagsFieldInfo, expectedRecords: expectedDecimal_AllFlags },
             { message: "Numeric - double with all format flags", records: recordInputDouble, fieldInfo: allFlagsFieldInfo, expectedRecords: expectedDouble_AllFlags },
-            //{ message: "Numeric - no separator with all format flags", records: recordInputNoSeparator, fieldInfo: allFlagsFieldInfo, expectedRecords: expectedNoSeparator_AllFlags },
+            { message: "Numeric - no separator with all format flags", records: recordInputNoSeparator, fieldInfo: allFlagsFieldInfo, expectedRecords: expectedNoSeparator_AllFlags },
             { message: "Numeric - multiple separators with all format flags", records: recordInputMultipleSeparators, fieldInfo: allFlagsFieldInfo, expectedRecords: expectedMultiSeparators_AllFlags },
 
-            // TODO: Returns 0 expected 0.74765432
-            //{ message: "Numeric - decimal with invalid format flags", records: recordInputDecimalOnly, fieldInfo: invalidFlagsFieldInfo, expectedRecords: expectedDecimal_InvalidFlags },
-            // TODO: Returns "98invalid765invalid432invalid100" expected 98765432100.74765
-            //{ message: "Numeric - double with invalid format flags", records: recordInputDouble, fieldInfo: invalidFlagsFieldInfo, expectedRecords: expectedDouble_InvalidFlags },
-            // TODO: Returns 100 expected 99
-            //{ message: "Numeric - no separator with invalid format flags", records: recordInputNoSeparator, fieldInfo: invalidFlagsFieldInfo, expectedRecords: expectedNoSeparator_InvalidFlags },
-            // TODO: Returns "98invalid765invalid432invalid100" expected 98765432100
-            //{ message: "Numeric - multiple separators with invalid format flags", records: recordInputMultipleSeparators, fieldInfo: invalidFlagsFieldInfo, expectedRecords: expectedMultiSeparators_InvalidFlags },
+            { message: "Numeric - decimal with invalid format flags", records: recordInputDecimalOnly, fieldInfo: invalidFlagsFieldInfo, expectedRecords: expectedDecimal_InvalidFlags },
+            { message: "Numeric - double with invalid format flags", records: recordInputDouble, fieldInfo: invalidFlagsFieldInfo, expectedRecords: expectedDouble_InvalidFlags },
+            { message: "Numeric - no separator with invalid format flags", records: recordInputNoSeparator, fieldInfo: invalidFlagsFieldInfo, expectedRecords: expectedNoSeparator_InvalidFlags },
+            { message: "Numeric - multiple separators with invalid format flags", records: recordInputMultipleSeparators, fieldInfo: invalidFlagsFieldInfo, expectedRecords: expectedMultiSeparators_InvalidFlags },
 
         ];
 
