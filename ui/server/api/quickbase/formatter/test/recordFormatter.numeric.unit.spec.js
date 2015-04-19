@@ -94,14 +94,12 @@ describe('Numeric record formatter unit test', function () {
 
         // Separator start only flag - double number
         var expectedDouble_SeparatorStartFlags = JSON.parse(JSON.stringify(expectedDouble_NoFlags));
-        expectedDouble_SeparatorStartFlags[0][0].display = "987654,32100.74765";
 
         // Separator start only flag - no separator
         var expectedNoSeparator_SeparatorStartFlags = JSON.parse(JSON.stringify(expectedNoSeparator_NoFlags));
 
         // Separator start only flag - multiple separators
         var expectedMultiSeparators_SeparatorStartFlags = JSON.parse(JSON.stringify(expectedMultiSeparators_NoFlags));
-        expectedMultiSeparators_SeparatorStartFlags[0][0].display = "987654,32100";
 
         /**
          * FieldInfo and expectations for flag: separator mark
@@ -134,14 +132,12 @@ describe('Numeric record formatter unit test', function () {
 
         // Separator pattern only flag - double number
         var expectedDouble_SeparatorPatternFlags = JSON.parse(JSON.stringify(expectedDouble_NoFlags));
-        expectedDouble_SeparatorPatternFlags[0][0].display = "98,76,54,32,100.74765";
 
         // Separator mark pattern flag - no separator
         var expectedNoSeparator_SeparatorPatternFlags = JSON.parse(JSON.stringify(expectedNoSeparator_NoFlags));
 
         // Separator mark pattern flag - multiple separators
         var expectedMultiSeparators_SeparatorPatternFlags = JSON.parse(JSON.stringify(expectedMultiSeparators_NoFlags));
-        expectedMultiSeparators_SeparatorPatternFlags[0][0].display = "98,76,54,32,100";
 
         /**
          * FieldInfo and expectations for flag: decimal mark
@@ -191,7 +187,7 @@ describe('Numeric record formatter unit test', function () {
          */
         var fieldInfo_DP_SS = JSON.parse(JSON.stringify(noFlagsFieldInfo));
         fieldInfo_DP_SS[0].decimalPlaces = 3;
-        fieldInfo_DP_SS[0].separatorStart = 3;
+        fieldInfo_DP_SS[0].clientSideAttributes.separatorStart = 3;
 
         // Decimal places, separator start - decimal only
         var expectedDecimal_DP_SS = JSON.parse(JSON.stringify(expectedDecimal_NoFlags));
@@ -214,7 +210,7 @@ describe('Numeric record formatter unit test', function () {
          */
         var fieldInfo_DP_SM = JSON.parse(JSON.stringify(noFlagsFieldInfo));
         fieldInfo_DP_SM[0].decimalPlaces = 3;
-        fieldInfo_DP_SM[0].separatorMark = ".";
+        fieldInfo_DP_SM[0].clientSideAttributes.separatorMark = ".";
 
         // Decimal places, separator mark - decimal only
         var expectedDecimal_DP_SM = JSON.parse(JSON.stringify(expectedDecimal_NoFlags));
@@ -222,7 +218,7 @@ describe('Numeric record formatter unit test', function () {
 
         // Decimal places, separator mark - double number
         var expectedDouble_DP_SM = JSON.parse(JSON.stringify(expectedDouble_NoFlags));
-        expectedDouble_DP_SM[0][0].display = "98765432100.748";
+        expectedDouble_DP_SM[0][0].display = "98.765.432.100.748";
 
         // Decimal places, separator mark - no separator
         var expectedNoSeparator_DP_SM = JSON.parse(JSON.stringify(expectedNoSeparator_NoFlags));
@@ -230,14 +226,14 @@ describe('Numeric record formatter unit test', function () {
 
         // Decimal places, separator mark - multiple separators
         var expectedMultiSeparators_DP_SM = JSON.parse(JSON.stringify(expectedMultiSeparators_NoFlags));
-        expectedMultiSeparators_DP_SM[0][0].display = "98765432100.000";
+        expectedMultiSeparators_DP_SM[0][0].display = "98.765.432.100.000";
 
         /**
          * FieldInfo and expectations for flag: decimal places and separator pattern
          */
         var fieldInfo_DP_SP = JSON.parse(JSON.stringify(noFlagsFieldInfo));
         fieldInfo_DP_SP[0].decimalPlaces = 3;
-        fieldInfo_DP_SP[0].separatorPattern = "THREE_THEN_TWO";
+        fieldInfo_DP_SP[0].clientSideAttributes.separatorPattern = "THREE_THEN_TWO";
 
         // Decimal places, separator pattern - decimal only
         var expectedDecimal_DP_SP = JSON.parse(JSON.stringify(expectedDecimal_NoFlags));
@@ -256,11 +252,51 @@ describe('Numeric record formatter unit test', function () {
         expectedMultiSeparators_DP_SP[0][0].display = "98765432100.000";
 
         /**
+         * FieldInfo and expectations for flag: separator start and separator pattern
+         */
+        var fieldInfo_SS_SP = JSON.parse(JSON.stringify(noFlagsFieldInfo));
+        fieldInfo_SS_SP[0].clientSideAttributes.separatorStart = 3;
+        fieldInfo_SS_SP[0].clientSideAttributes.separatorPattern = "THREE_THEN_TWO";
+
+        // Separator start, separator pattern - decimal only
+        var expectedDecimal_SS_SP = JSON.parse(JSON.stringify(expectedDecimal_NoFlags));
+
+        // Separator start, separator pattern - double number
+        var expectedDouble_SS_SP = JSON.parse(JSON.stringify(expectedDouble_NoFlags));
+
+        // Separator start, separator pattern - no separator
+        var expectedNoSeparator_SS_SP = JSON.parse(JSON.stringify(expectedNoSeparator_NoFlags));
+
+        // Separator start, separator pattern - multiple separators
+        var expectedMultiSeparators_SS_SP = JSON.parse(JSON.stringify(expectedMultiSeparators_NoFlags));
+
+        /**
+         * FieldInfo and expectations for flag: separator start and decimal mark
+         */
+        var fieldInfo_SS_DM = JSON.parse(JSON.stringify(noFlagsFieldInfo));
+        fieldInfo_SS_DM[0].clientSideAttributes.separatorStart = 3;
+        fieldInfo_SS_DM[0].clientSideAttributes.decimalMark = ",";
+
+        // Separator start, decimal mark - decimal only
+        var expectedDecimal_SS_DM = JSON.parse(JSON.stringify(expectedDecimal_NoFlags));
+        expectedDecimal_SS_DM[0][0].display = "0,74765432";
+
+        // Separator start, decimal mark - double number
+        var expectedDouble_SS_DM = JSON.parse(JSON.stringify(expectedDouble_NoFlags));
+        expectedDouble_SS_DM[0][0].display = "98765432100,74765";
+
+        // Separator start, decimal mark - no separator
+        var expectedNoSeparator_SS_DM = JSON.parse(JSON.stringify(expectedNoSeparator_NoFlags));
+
+        // Separator start, decimal mark - multiple separators
+        var expectedMultiSeparators_SS_DM = JSON.parse(JSON.stringify(expectedMultiSeparators_NoFlags));
+
+        /**
          * FieldInfo and expectations for flag: decimalMark and separatorMark
          */
         var fieldInfo_DM_SM = JSON.parse(JSON.stringify(noFlagsFieldInfo));
-        fieldInfo_DM_SM[0].decimalMark = ",";
-        fieldInfo_DM_SM[0].separatorMark = ".";
+        fieldInfo_DM_SM[0].clientSideAttributes.decimalMark = ",";
+        fieldInfo_DM_SM[0].clientSideAttributes.separatorMark = ".";
 
         // Decimal mark, separator mark - decimal only
         var expectedDecimal_DM_SM = JSON.parse(JSON.stringify(expectedDecimal_NoFlags));
@@ -268,7 +304,7 @@ describe('Numeric record formatter unit test', function () {
 
         //  Decimal mark, separator mark - double number
         var expectedDouble_DM_SM = JSON.parse(JSON.stringify(expectedDouble_NoFlags));
-        expectedDouble_DM_SM[0][0].display = "98765432100,74765";
+        expectedDouble_DM_SM[0][0].display = "98.765.432.100,74765";
 
         //  Decimal mark, separator mark - no separator
         var expectedNoSeparator_DM_SM = JSON.parse(JSON.stringify(expectedNoSeparator_NoFlags));
@@ -276,28 +312,27 @@ describe('Numeric record formatter unit test', function () {
 
         // Decimal mark, separator mark - multiple separators
         var expectedMultiSeparators_DM_SM = JSON.parse(JSON.stringify(expectedMultiSeparators_NoFlags));
-        expectedMultiSeparators_DM_SM[0][0].display = "98765432100";
+        expectedMultiSeparators_DM_SM[0][0].display = "98.765.432.100";
 
         /**
          * FieldInfo and expectations for flags: separator start, separator mark
          */
         var fieldInfo_SS_SM = JSON.parse(JSON.stringify(noFlagsFieldInfo));
         fieldInfo_SS_SM[0].clientSideAttributes.separatorStart = 5;
-        fieldInfo_SS_SM[0].clientSideAttributes.separatorStart = ".";
+        fieldInfo_SS_SM[0].clientSideAttributes.separatorMark = ",";
 
         // Separator start, separator mark flags - decimal only
         var expectedDecimal_SS_SM = JSON.parse(JSON.stringify(expectedDecimal_NoFlags));
 
         // Separator start, separator mark flags - double number
         var expectedDouble_SS_SM = JSON.parse(JSON.stringify(expectedDouble_NoFlags));
-        expectedDouble_SS_SM[0][0].display = "9.87654.32100.74765";
+        expectedDouble_SS_SM[0][0].display = "98,765,432,100.74765";
 
         // Separator start, separator mark flags - no separator
         var expectedNoSeparator_SS_SM = JSON.parse(JSON.stringify(expectedNoSeparator_NoFlags));
 
         // Separator start, separator mark flags - multiple separators
         var expectedMultiSeparators_SS_SM = JSON.parse(JSON.stringify(expectedMultiSeparators_NoFlags));
-        expectedMultiSeparators_SS_SM[0][0].display = "9.87654.32100";
 
         /**
          * FieldInfo and expectations for decimal places, separator start, separator mark, separator pattern flags
@@ -492,15 +527,9 @@ describe('Numeric record formatter unit test', function () {
             { message: "Numeric - multiple separators with decimalPlaces format", records: recordInputMultipleSeparators, fieldInfo: dpFlagFieldInfo, expectedRecords: expectedMultiSeparators_DPFlags },
 
             { message: "Numeric - decimal with separatorStart format", records: recordInputDecimalOnly, fieldInfo: separatorStartFlagFieldInfo, expectedRecords: expectedDecimal_SeparatorStartFlags },
-            // TODO: Returns 98765432100.74765 expected 987654,32100.74765
-                //@mroper: the expextation is wrong. If you set separatorStart: 5 but have no separatorMark, then there will be no separator marks inserted.
-                //Also, the only valid values for separator mark
-            //{ message: "Numeric - double with separatorStart format", records: recordInputDouble, fieldInfo: separatorStartFlagFieldInfo, expectedRecords: expectedDouble_SeparatorStartFlags },
+            { message: "Numeric - double with separatorStart format", records: recordInputDouble, fieldInfo: separatorStartFlagFieldInfo, expectedRecords: expectedDouble_SeparatorStartFlags },
             { message: "Numeric - no separator with separatorStart format", records: recordInputNoSeparator, fieldInfo: separatorStartFlagFieldInfo, expectedRecords: expectedNoSeparator_SeparatorStartFlags },
-            // TODO: Returns 98765432100 expected 987654,32100
-                //@mroper: the expextation is wrong. If you set separatorStart: 5 but have no separatorMark, then there will be no separator marks inserted.
-                //Also, the only valid values for separator mark
-            //{ message: "Numeric - multiple separators with separatorStart format", records: recordInputMultipleSeparators, fieldInfo: separatorStartFlagFieldInfo, expectedRecords: expectedMultiSeparators_SeparatorStartFlags },
+            { message: "Numeric - multiple separators with separatorStart format", records: recordInputMultipleSeparators, fieldInfo: separatorStartFlagFieldInfo, expectedRecords: expectedMultiSeparators_SeparatorStartFlags },
 
             { message: "Numeric - decimal with separatorMark format", records: recordInputDecimalOnly, fieldInfo: separatorMarkFlagFieldInfo, expectedRecords: expectedDecimal_SeparatorMarkFlags },
             { message: "Numeric - double with separatorMark format", records: recordInputDouble, fieldInfo: separatorMarkFlagFieldInfo, expectedRecords: expectedDouble_SeparatorMarkFlags },
@@ -508,13 +537,9 @@ describe('Numeric record formatter unit test', function () {
             { message: "Numeric - multiple separators with separatorMark format", records: recordInputMultipleSeparators, fieldInfo: separatorMarkFlagFieldInfo, expectedRecords: expectedMultiSeparators_SeparatorMarkFlags },
 
             { message: "Numeric - decimal with separatorPattern format", records: recordInputDecimalOnly, fieldInfo: separatorPatternFlagFieldInfo, expectedRecords: expectedDecimal_SeparatorPatternFlags },
-            // TODO: Returns 98765432100.74765 expected 98,76,54,32,100.74765
-                //@mroper: the pattern THREE_THEN_TWO is set, but there is no separator char set, and it defaults to zero, so no separators are inserted.
-            //{ message: "Numeric - double with separatorPattern format", records: recordInputDouble, fieldInfo: separatorPatternFlagFieldInfo, expectedRecords: expectedDouble_SeparatorPatternFlags },
+            { message: "Numeric - double with separatorPattern format", records: recordInputDouble, fieldInfo: separatorPatternFlagFieldInfo, expectedRecords: expectedDouble_SeparatorPatternFlags },
             { message: "Numeric - no separator with separatorPattern format", records: recordInputNoSeparator, fieldInfo: separatorPatternFlagFieldInfo, expectedRecords: expectedNoSeparator_SeparatorPatternFlags },
-            // TODO: Returns 98765432100 expected 98,76,54,32,100
-                //@mroper: the pattern THREE_THEN_TWO is set, but there is no separator char set, and it defaults to zero, so no separators are inserted.
-            //{ message: "Numeric - multiple separators with separatorPattern format", records: recordInputMultipleSeparators, fieldInfo: separatorPatternFlagFieldInfo, expectedRecords: expectedMultiSeparators_SeparatorPatternFlags },
+            { message: "Numeric - multiple separators with separatorPattern format", records: recordInputMultipleSeparators, fieldInfo: separatorPatternFlagFieldInfo, expectedRecords: expectedMultiSeparators_SeparatorPatternFlags },
 
             { message: "Numeric - decimal with decimalMark format", records: recordInputDecimalOnly, fieldInfo: decimalMarkFlagFieldInfo, expectedRecords: expectedDecimal_DecimalMarkFlags },
             { message: "Numeric - double with decimalMark format", records: recordInputDouble, fieldInfo: decimalMarkFlagFieldInfo, expectedRecords: expectedDouble_DecimalMarkFlags },
@@ -541,16 +566,24 @@ describe('Numeric record formatter unit test', function () {
             { message: "Numeric - no separator with decimalPlaces, separatorPattern formats", records: recordInputNoSeparator, fieldInfo: fieldInfo_DP_SP, expectedRecords: expectedNoSeparator_DP_SP },
             { message: "Numeric - multiple separators with decimalPlaces, separatorPattern formats", records: recordInputMultipleSeparators, fieldInfo: fieldInfo_DP_SP, expectedRecords: expectedMultiSeparators_DP_SP },
 
-            // TODO: Returns 0.74765432 expected 0,74765432
-            //{ message: "Numeric - decimal with decimalMark, separatorMark formats", records: recordInputDecimalOnly, fieldInfo: fieldInfo_DM_SM, expectedRecords: expectedDecimal_DM_SM },
-            // TODO: Returns 98765432100.74765 expected 98765432100,74765
-            //{ message: "Numeric - double with decimalMark, separatorMark formats", records: recordInputDouble, fieldInfo: fieldInfo_DM_SM, expectedRecords: expectedDouble_DM_SM },
+            { message: "Numeric - decimal with separatorStart, separatorPattern formats", records: recordInputDecimalOnly, fieldInfo: fieldInfo_SS_SP, expectedRecords: expectedDecimal_SS_SP },
+            { message: "Numeric - double with separatorStart, separatorPattern formats", records: recordInputDouble, fieldInfo: fieldInfo_SS_SP, expectedRecords: expectedDouble_SS_SP },
+            { message: "Numeric - no separator with separatorStart, separatorPattern formats", records: recordInputNoSeparator, fieldInfo: fieldInfo_SS_SP, expectedRecords: expectedNoSeparator_SS_SP },
+            { message: "Numeric - multiple separators with separatorStart, separatorPattern formats", records: recordInputMultipleSeparators, fieldInfo: fieldInfo_SS_SP, expectedRecords: expectedMultiSeparators_SS_SP },
+
+            { message: "Numeric - decimal with separatorStart, decimalMark formats", records: recordInputDecimalOnly, fieldInfo: fieldInfo_SS_DM, expectedRecords: expectedDecimal_SS_DM },
+            { message: "Numeric - double with separatorStart, decimalMark formats", records: recordInputDouble, fieldInfo: fieldInfo_SS_DM, expectedRecords: expectedDouble_SS_DM },
+            { message: "Numeric - no separator with separatorStart, decimalMark formats", records: recordInputNoSeparator, fieldInfo: fieldInfo_SS_DM, expectedRecords: expectedNoSeparator_SS_DM },
+            { message: "Numeric - multiple separators with separatorStart, decimalMark formats", records: recordInputMultipleSeparators, fieldInfo: fieldInfo_SS_DM, expectedRecords: expectedMultiSeparators_SS_DM },
+
+            { message: "Numeric - decimal with decimalMark, separatorMark formats", records: recordInputDecimalOnly, fieldInfo: fieldInfo_DM_SM, expectedRecords: expectedDecimal_DM_SM },
+            { message: "Numeric - double with decimalMark, separatorMark formats", records: recordInputDouble, fieldInfo: fieldInfo_DM_SM, expectedRecords: expectedDouble_DM_SM },
             { message: "Numeric - no separator with decimalMark, separatorMark formats", records: recordInputNoSeparator, fieldInfo: fieldInfo_DM_SM, expectedRecords: expectedNoSeparator_DM_SM },
             { message: "Numeric - multiple separators with decimalMark, separatorMark formats", records: recordInputMultipleSeparators, fieldInfo: fieldInfo_DM_SM, expectedRecords: expectedMultiSeparators_DM_SM },
 
             { message: "Numeric - decimal with separatorStart, separatorMark formats", records: recordInputDecimalOnly, fieldInfo: fieldInfo_SS_SM, expectedRecords: expectedDecimal_SS_SM },
-            // TODO: Returns 98765432100.74765 expected 9.87654.32100.74765
-            //{ message: "Numeric - double with separatorStart, separatorMark formats", records: recordInputDouble, fieldInfo: fieldInfo_SS_SM, expectedRecords: expectedDouble_SS_SM },
+            // TODO: Returns 98,765,432,100.74765 expected 9,87654,32100.74765
+            { message: "Numeric - double with separatorStart, separatorMark formats", records: recordInputDouble, fieldInfo: fieldInfo_SS_SM, expectedRecords: expectedDouble_SS_SM },
             { message: "Numeric - no separator with separatorStart, separatorMark formats", records: recordInputNoSeparator, fieldInfo: fieldInfo_SS_SM, expectedRecords: expectedNoSeparator_SS_SM },
             // TODO: Returns 98765432100 expected 9.87654.32100
             //{ message: "Numeric - multiple separators with separatorStart, separatorMark formats", records: recordInputMultipleSeparators, fieldInfo: fieldInfo_SS_SM, expectedRecords: expectedMultiSeparators_SS_SM },
