@@ -603,15 +603,12 @@ describe('Numeric record formatter unit test', function () {
             { message: "Numeric - multiple separators with decimalPlaces, separatorStart, separatorPattern, decimalMark format flags", records: recordInputMultipleSeparators, fieldInfo: fieldInfo_DP_SS_SP_DM, expectedRecords: expectedMultiSeparators_DP_SS_SP_DM },
 
             { message: "Numeric - decimal with decimalPlaces, separatorMark, separatorPattern, decimalMark format flags", records: recordInputDecimalOnly, fieldInfo: fieldInfo_DP_SM_SP_DM, expectedRecords: expectedDecimal_DP_SM_SP_DM },
-            // TODO: Returns 98,76,54,32.100,748 expected 98.76.54.32.100,748
-            //{ message: "Numeric - double with decimalPlaces, separatorMark, separatorPattern, decimalMark format flags", records: recordInputDouble, fieldInfo: fieldInfo_DP_SM_SP_DM, expectedRecords: expectedDouble_DP_SM_SP_DM },
+            { message: "Numeric - double with decimalPlaces, separatorMark, separatorPattern, decimalMark format flags", records: recordInputDouble, fieldInfo: fieldInfo_DP_SM_SP_DM, expectedRecords: expectedDouble_DP_SM_SP_DM },
             { message: "Numeric - no separator with decimalPlaces, separatorMark, separatorPattern, decimalMark format flags", records: recordInputNoSeparator, fieldInfo: fieldInfo_DP_SM_SP_DM, expectedRecords: expectedNoSeparator_DP_SM_SP_DM },
-            // TODO: Returns 98,76,54,32.100,000 expected 98.76.54.32.100,000
-            //{ message: "Numeric - multiple separators with decimalPlaces, separatorMark, separatorPattern, decimalMark format flags", records: recordInputMultipleSeparators, fieldInfo: fieldInfo_DP_SM_SP_DM, expectedRecords: expectedMultiSeparators_DP_SM_SP_DM },
+            { message: "Numeric - multiple separators with decimalPlaces, separatorMark, separatorPattern, decimalMark format flags", records: recordInputMultipleSeparators, fieldInfo: fieldInfo_DP_SM_SP_DM, expectedRecords: expectedMultiSeparators_DP_SM_SP_DM },
 
             { message: "Numeric - decimal with separatorStart, separatorMark, separatorPattern, decimalMark format flags", records: recordInputDecimalOnly, fieldInfo: fieldInfo_SS_SM_SP_DM, expectedRecords: expectedDecimal_SS_SM_SP_DM },
-            // TODO: Returns 98,76,54,32.100,74765 expected 98.76.54.32.100,74765
-            //{ message: "Numeric - double with separatorStart, separatorMark, separatorPattern, decimalMark format flags", records: recordInputDouble, fieldInfo: fieldInfo_SS_SM_SP_DM, expectedRecords: expectedDouble_SS_SM_SP_DM },
+            { message: "Numeric - double with separatorStart, separatorMark, separatorPattern, decimalMark format flags", records: recordInputDouble, fieldInfo: fieldInfo_SS_SM_SP_DM, expectedRecords: expectedDouble_SS_SM_SP_DM },
             { message: "Numeric - no separator with separatorStart, separatorMark, separatorPattern, decimalMark format flags", records: recordInputNoSeparator, fieldInfo: fieldInfo_SS_SM_SP_DM, expectedRecords: expectedNoSeparator_SS_SM_SP_DM },
             // TODO: Returns 98,76,54,32.100 expected 98.76.54.32.100
             //{ message: "Numeric - multiple separators with separatorStart, separatorMark, separatorPattern, decimalMark format flags", records: recordInputMultipleSeparators, fieldInfo: fieldInfo_SS_SM_SP_DM, expectedRecords: expectedMultiSeparators_SS_SM_SP_DM },
