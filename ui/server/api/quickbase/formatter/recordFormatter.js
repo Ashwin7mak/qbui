@@ -23,7 +23,7 @@
      * Certain fields may require generation of a formatter string that will be used for each record in the
      * field for example, Date, DateTime and TimeOfDay fields. Rather than recalculate this formatter string
      * for each record value encountered, we generate it once, and cache it on the fieldInfo for the field
-     * in question.  The display formatter will then look for this value 'jsFormatString' and if populated,
+     * in question.  The display formatter will then look for this value 'jsFormat' and if populated,
      * use it instead of recalculating the formatter string.
      * @param fieldInfos The array of field meta data for the fields in the records
      */
@@ -34,12 +34,15 @@
                 case DATE:
                 case FORMULA_DATE_TIME:
                 case FORMULA_DATE:
-                    fieldInfos[i].jsFormatString = dateFormatter.generateFormatterString(fieldInfos[i]);
+                    fieldInfos[i].jsFormat = dateFormatter.generateFormat(fieldInfos[i]);
                     break;
                 case TIME_OF_DAY:
                 case FORMULA_TIME_OF_DAY:
-                    fieldInfos[i].jsFormatString = todFormatter.generateFormatterString(fieldInfos[i]);
+                    fieldInfos[i].jsFormat = todFormatter.generateFormat(fieldInfos[i]);
                     break;
+                case NUMERIC:
+                case FORMULA_NUMERIC:
+                    fieldInfos[i].jsFormat = numericFormatter.generateFormat(fieldInfos[i]);
                 default:
                     break;
             }

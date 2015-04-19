@@ -60,7 +60,7 @@
     }
 
     module.exports = {
-        generateFormatterString: function(fieldInfo) {
+        generateFormat: function(fieldInfo) {
             var jsDateFormat;
             if(fieldInfo) {
                 jsDateFormat = JAVA_TO_JS_DATE_FORMATS[fieldInfo.format];
@@ -102,7 +102,7 @@
                 }
             }
             var m = moment.tz(d, timeZone);
-            var jsDateFormat = fieldInfo.jsFormatString;
+            var jsDateFormat = fieldInfo.jsFormat;
             if(!jsDateFormat) {
                 jsDateFormat = this.generateFormatterString(fieldInfo);
             }

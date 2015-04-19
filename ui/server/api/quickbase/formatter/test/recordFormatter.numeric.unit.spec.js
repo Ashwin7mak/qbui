@@ -630,9 +630,7 @@ describe('Numeric record formatter unit test', function () {
     it('should format a numeric record with various properties for display', function () {
         provider().forEach(function(entry){
             var formattedRecords = recordFormatter.formatRecords(entry.records, entry.fieldInfo);
-            console.log('entry: ' + JSON.stringify(entry));
-            console.log('ACT: ' + JSON.stringify(formattedRecords));
-            console.log('EXP: ' + JSON.stringify(entry.expectedRecords));
+            //console.log('entry: ' + JSON.stringify(entry));
             assert.deepEqual(formattedRecords, entry.expectedRecords, entry.message);
         });
     });

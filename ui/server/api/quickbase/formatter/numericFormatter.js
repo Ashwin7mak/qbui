@@ -25,41 +25,6 @@
     SUPPORTED_SEPARATOR_PATTERNS[PATTERN_THREE_THEN_TWO] = true;
 
     /**
-     * Given a numeric field's meta data, construct the formatting options, setting defaults
-     * where none are provided.
-     *
-     * @param fieldInfo a field meta data object
-     * @returns a display options object
-     */
-    function resolveFormattingOptions(fieldInfo) {
-        var opts = {};
-        if (fieldInfo && fieldInfo.clientSideAttributes) {
-            opts.separatorStart = fieldInfo.clientSideAttributes.separatorStart;
-            opts.separatorMark = fieldInfo.clientSideAttributes.separatorMark;
-            opts.separatorPattern = fieldInfo.clientSideAttributes.separatorPattern;
-            opts.decimalMark = fieldInfo.clientSideAttributes.decimalMark;
-        }
-        opts.decimalPlaces = fieldInfo.decimalPlaces;
-        //If decimal places is not a number or less than 0, set it to default value
-        if(opts.decimalPlaces && (isNaN(opts.decimalPlaces) || opts.decimalPlaces < 0)) {
-            opts.decimalPlaces = DEFAULT_DECIMAL_PLACES;
-        }
-        if (!opts.separatorStart || isNaN(opts.separatorStart)) {
-            opts.separatorStart = DEFAULT_SEPARATOR_START;
-        }
-        if (!opts.separatorMark || opts.separatorMark.length !== 1) {
-            opts.separatorMark = DEFAULT_SEPARATOR_MARK;
-        }
-        if (!opts.separatorPattern || !SUPPORTED_SEPARATOR_PATTERNS[opts.separatorPattern]) {
-            opts.separatorPattern = DEFAULT_SEPARATOR_PATTERN;
-        }
-        if (!opts.decimalMark || opts.decimalMark.length !== 1) {
-            opts.decimalMark = DEFAULT_DECIMAL_MARK;
-        }
-        return opts;
-    }
-
-    /**
      * Splits a string into an array of strings of length charsPerSubstring ending with the substring
      * whose end position is at position lastPos. The array is populated right to left using unshift() and thus
      * the first substring in the array can have less than charsPerSubstring number of characters in it.
@@ -151,6 +116,40 @@
 
     module.exports = {
         /**
+         * Given a numeric field's meta data, construct the formatting options, setting defaults
+         * where none are provided.
+         *
+         * @param fieldInfo a field meta data object
+         * @returns a display options object
+         */
+        generateFormat: function (fieldInfo) {
+            var opts = {};
+            if (fieldInfo && fieldInfo.clientSideAttributes) {
+                opts.separatorStart = fieldInfo.clientSideAttributes.separatorStart;
+                opts.separatorMark = fieldInfo.clientSideAttributes.separatorMark;
+                opts.separatorPattern = fieldInfo.clientSideAttributes.separatorPattern;
+                opts.decimalMark = fieldInfo.clientSideAttributes.decimalMark;
+            }
+            opts.decimalPlaces = fieldInfo.decimalPlaces;
+            //If decimal places is not a number or less than 0, set it to default value
+            if(opts.decimalPlaces && (isNaN(opts.decimalPlaces) || opts.decimalPlaces < 0)) {
+                opts.decimalPlaces = DEFAULT_DECIMAL_PLACES;
+            }
+            if (!opts.separatorStart || isNaN(opts.separatorStart)) {
+                opts.separatorStart = DEFAULT_SEPARATOR_START;
+            }
+            if (!opts.separatorMark || opts.separatorMark.length !== 1) {
+                opts.separatorMark = DEFAULT_SEPARATOR_MARK;
+            }
+            if (!opts.separatorPattern || !SUPPORTED_SEPARATOR_PATTERNS[opts.separatorPattern]) {
+                opts.separatorPattern = DEFAULT_SEPARATOR_PATTERN;
+            }
+            if (!opts.decimalMark || opts.decimalMark.length !== 1) {
+                opts.decimalMark = DEFAULT_DECIMAL_MARK;
+            }
+            return opts;
+        },
+        /**
          * Given a raw number as input, formats the numeric value for display.
          * @param fieldValue the field value object
          * @param fieldInfo the meta data about the field
@@ -160,7 +159,10 @@
             if (!fieldValue || !fieldValue.value) {
                 return '';
             }
-            var opts = resolveFormattingOptions(fieldInfo);
+            var opts = fieldInfo.jsFormat;
+            if(!opts) {
+                opts = this.generateFormat(fieldInfo);
+            }
             var formattedValue = formatNumericValue(fieldValue.value, opts);
             return formattedValue;
         }
