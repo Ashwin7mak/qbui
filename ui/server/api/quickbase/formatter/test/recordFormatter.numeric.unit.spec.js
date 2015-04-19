@@ -788,7 +788,6 @@ describe('Numeric record formatter unit test', function () {
         expectedMultiSeparators_InvalidFlags[0][0].display = numberMultipleSeparators;
 
         var cases =[
-            // TODO: Invalid options return NaN for example when decimalPlaces set to ","
             { message: "Numeric - decimal with no format", records: recordInputDecimalOnly, fieldInfo: noFlagsFieldInfo, expectedRecords: expectedDecimal_NoFlags },
             { message: "Numeric - double with no format", records: recordInputDouble, fieldInfo: noFlagsFieldInfo, expectedRecords: expectedDouble_NoFlags },
             { message: "Numeric - no separator with no format", records: recordInputNoSeparator, fieldInfo: noFlagsFieldInfo, expectedRecords: expectedNoSeparator_NoFlags },
@@ -917,7 +916,6 @@ describe('Numeric record formatter unit test', function () {
             { message: "Numeric - no separator with separatorStart, separatorPattern, decimalMark formats", records: recordInputNoSeparator, fieldInfo: fieldInfo_SS_SP_DM, expectedRecords: expectedNoSeparator_SS_SP_DM },
             { message: "Numeric - multiple separators with separatorStart, separatorPattern, decimalMark formats", records: recordInputMultipleSeparators, fieldInfo: fieldInfo_SS_SP_DM, expectedRecords: expectedMultiSeparators_SS_SP_DM },
 
-            //SM, SP, DM
             { message: "Numeric - decimal with separatorMark, separatorPattern, decimalMark formats", records: recordInputDecimalOnly, fieldInfo: fieldInfo_SM_SP_DM, expectedRecords: expectedDecimal_SM_SP_DM },
             { message: "Numeric - double with separatorMark, separatorPattern, decimalMark formats", records: recordInputDouble, fieldInfo: fieldInfo_SM_SP_DM, expectedRecords: expectedDouble_SM_SP_DM },
             { message: "Numeric - no separator with separatorMark, separatorPattern, decimalMark formats", records: recordInputNoSeparator, fieldInfo: fieldInfo_SM_SP_DM, expectedRecords: expectedNoSeparator_SM_SP_DM },
@@ -949,6 +947,7 @@ describe('Numeric record formatter unit test', function () {
             { message: "Numeric - no separator with separatorStart, separatorMark, separatorPattern, decimalMark format flags", records: recordInputNoSeparator, fieldInfo: fieldInfo_SS_SM_SP_DM, expectedRecords: expectedNoSeparator_SS_SM_SP_DM },
             { message: "Numeric - multiple separators with separatorStart, separatorMark, separatorPattern, decimalMark format flags", records: recordInputMultipleSeparators, fieldInfo: fieldInfo_SS_SM_SP_DM, expectedRecords: expectedMultiSeparators_SS_SM_SP_DM },
 
+            // All flags
             { message: "Numeric - decimal with all format flags", records: recordInputDecimalOnly, fieldInfo: allFlagsFieldInfo, expectedRecords: expectedDecimal_AllFlags },
             { message: "Numeric - double with all format flags", records: recordInputDouble, fieldInfo: allFlagsFieldInfo, expectedRecords: expectedDouble_AllFlags },
             { message: "Numeric - no separator with all format flags", records: recordInputNoSeparator, fieldInfo: allFlagsFieldInfo, expectedRecords: expectedNoSeparator_AllFlags },
