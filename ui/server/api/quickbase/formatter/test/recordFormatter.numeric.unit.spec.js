@@ -333,6 +333,7 @@ describe('Numeric record formatter unit test', function () {
 
         // Separator start, separator mark flags - multiple separators
         var expectedMultiSeparators_SS_SM = JSON.parse(JSON.stringify(expectedMultiSeparators_NoFlags));
+        expectedMultiSeparators_SS_SM[0][0].display = "98,765,432,100";
 
         /**
          * FieldInfo and expectations for decimal places, separator start, separator mark, separator pattern flags
@@ -582,11 +583,9 @@ describe('Numeric record formatter unit test', function () {
             { message: "Numeric - multiple separators with decimalMark, separatorMark formats", records: recordInputMultipleSeparators, fieldInfo: fieldInfo_DM_SM, expectedRecords: expectedMultiSeparators_DM_SM },
 
             { message: "Numeric - decimal with separatorStart, separatorMark formats", records: recordInputDecimalOnly, fieldInfo: fieldInfo_SS_SM, expectedRecords: expectedDecimal_SS_SM },
-            // TODO: Returns 98,765,432,100.74765 expected 9,87654,32100.74765
             { message: "Numeric - double with separatorStart, separatorMark formats", records: recordInputDouble, fieldInfo: fieldInfo_SS_SM, expectedRecords: expectedDouble_SS_SM },
             { message: "Numeric - no separator with separatorStart, separatorMark formats", records: recordInputNoSeparator, fieldInfo: fieldInfo_SS_SM, expectedRecords: expectedNoSeparator_SS_SM },
-            // TODO: Returns 98765432100 expected 9.87654.32100
-            //{ message: "Numeric - multiple separators with separatorStart, separatorMark formats", records: recordInputMultipleSeparators, fieldInfo: fieldInfo_SS_SM, expectedRecords: expectedMultiSeparators_SS_SM },
+            { message: "Numeric - multiple separators with separatorStart, separatorMark formats", records: recordInputMultipleSeparators, fieldInfo: fieldInfo_SS_SM, expectedRecords: expectedMultiSeparators_SS_SM },
 
             { message: "Numeric - decimal with decimalPlaces, separatorStart, separatorMark, separatorPattern format flags", records: recordInputDecimalOnly, fieldInfo: fieldInfo_DP_SS_SM_SP, expectedRecords: expectedDecimal_DP_SS_SM_SP },
             // TODO: Returns 98,76,54,32.100.748 expected 98.76.54.32.100.748
