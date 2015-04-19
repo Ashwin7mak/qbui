@@ -131,11 +131,10 @@
             if (opts.separatorPattern === PATTERN_EVERY_THREE) {
                 mantissaString = splitString(mantissaString, mantissaLength, 3).join(opts.separatorMark);
             } else if (opts.separatorPattern === PATTERN_THREE_THEN_TWO) {
-                var ret = [];
                 var n = 2;
                 var rightMostStart = mantissaLength - 3;
+                var ret = splitString(mantissaString, rightMostStart, n);
                 ret.push(mantissaString.substr(rightMostStart));
-                ret.unshift(splitString(mantissaString, rightMostStart, n));
                 mantissaString = ret.join(opts.separatorMark);
             } else {
                 console.log('Number separator pattern not supported in display formatting numeric values: '
