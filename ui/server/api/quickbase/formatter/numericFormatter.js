@@ -96,15 +96,10 @@
             if (opts.separatorPattern === PATTERN_EVERY_THREE) {
                 mantissaString = splitString(mantissaString, mantissaLength, 3).join(opts.separatorMark);
             } else if (opts.separatorPattern === PATTERN_THREE_THEN_TWO) {
-                var n = 2;
                 var rightMostStart = mantissaLength - 3;
-                var ret = splitString(mantissaString, rightMostStart, n);
+                var ret = splitString(mantissaString, rightMostStart, 2);
                 ret.push(mantissaString.substr(rightMostStart));
                 mantissaString = ret.join(opts.separatorMark);
-            } else {
-                console.log('Number separator pattern not supported in display formatting numeric values: '
-                    + opts.separatorPattern);
-                return numString;
             }
         }
         var returnValue = mantissaString;
