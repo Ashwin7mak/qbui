@@ -4,6 +4,9 @@ var should = require('should');
 var recordFormatter = require('./../recordFormatter')();
 var assert = require('assert');
 
+/**
+ * Unit tests for DateTime field formatting
+ */
 describe('DateTime record formatter unit test', function () {
 
     /**

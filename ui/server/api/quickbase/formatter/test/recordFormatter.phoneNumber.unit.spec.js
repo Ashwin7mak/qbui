@@ -4,6 +4,9 @@ var should = require('should');
 var recordFormatter = require('./../recordFormatter')();
 var assert = require('assert');
 
+/**
+ * Unit tests for PhoneNumber field formatting
+ */
 describe('Phone number record formatter unit test', function () {
 
     /**
