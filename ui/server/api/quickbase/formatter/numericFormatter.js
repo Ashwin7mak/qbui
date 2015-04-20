@@ -10,7 +10,7 @@
     var DASH = '-';
     var PERIOD = '.';
     var PATTERN_EVERY_THREE = 'EVERY_THREE';
-    var PATTERN_THREE_THEN_TWO = 'THREE_THEN_TWO'
+    var PATTERN_THREE_THEN_TWO = 'THREE_THEN_TWO';
     //Defaults & supported values
     var DEFAULT_SEPARATOR_START = 3;
     var DEFAULT_SEPARATOR_MARK = null;
@@ -35,11 +35,11 @@
      */
     function splitString(inputString, lastPos, charsPerSubstring) {
         var ret = [];
-        if(inputString.length - lastPos + charsPerSubstring > 0) {
+        if (inputString.length - lastPos + charsPerSubstring > 0) {
             for (var i = lastPos - charsPerSubstring; i > 0 - charsPerSubstring; i -= charsPerSubstring) {
                 var start = i;
                 var len = charsPerSubstring;
-                if(i < 0) {
+                if (i < 0) {
                     start = 0;
                     len = charsPerSubstring + i;
                 }
@@ -80,7 +80,7 @@
     function formatNumericValue(numeric, opts) {
         //Resolve the number value as a string with the proper decimal places
         var numString;
-        if(!opts.decimalPlaces && opts.decimalPlaces !== 0) {
+        if (!opts.decimalPlaces && opts.decimalPlaces !== 0) {
             numString = numeric.toString();
         } else {
             numString = toRoundedDisplayDecimal(numeric, opts.decimalPlaces);
@@ -108,7 +108,7 @@
             }
         }
         var returnValue = mantissaString;
-        if(characteristicString) {
+        if (characteristicString) {
             returnValue = returnValue + opts.decimalMark + characteristicString;
         }
         return returnValue;
@@ -132,7 +132,7 @@
             }
             opts.decimalPlaces = fieldInfo.decimalPlaces;
             //If decimal places is not a number or less than 0, set it to default value
-            if(opts.decimalPlaces && (isNaN(opts.decimalPlaces) || opts.decimalPlaces < 0)) {
+            if (opts.decimalPlaces && (isNaN(opts.decimalPlaces) || opts.decimalPlaces < 0)) {
                 opts.decimalPlaces = DEFAULT_DECIMAL_PLACES;
             }
             if (!opts.separatorStart || isNaN(opts.separatorStart)) {
@@ -160,7 +160,7 @@
                 return '';
             }
             var opts = fieldInfo.jsFormat;
-            if(!opts) {
+            if (!opts) {
                 opts = this.generateFormat(fieldInfo);
             }
             var formattedValue = formatNumericValue(fieldValue.value, opts);

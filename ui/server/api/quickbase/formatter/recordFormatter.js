@@ -28,7 +28,7 @@
      * @param fieldInfos The array of field meta data for the fields in the records
      */
     function precalculateFormatterStringsForFields(fieldInfos) {
-        for(var i = 0; i < fieldInfos.length; i++) {
+        for (var i = 0; i < fieldInfos.length; i++) {
             switch (fieldInfos[i].type) {
                 case DATE_TIME:
                 case DATE:
@@ -48,6 +48,7 @@
             }
         }
     }
+
     module.exports = function () {
         //Display formats record field values according to the field's display settings
         function formatRecordValue(fieldValue, fieldInfo) {
