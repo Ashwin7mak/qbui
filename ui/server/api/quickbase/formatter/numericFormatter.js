@@ -60,7 +60,7 @@
         var precision = precision || 0,
             power = Math.pow(10, precision),
             absValue = Math.abs(Math.round(value * power)),
-            result = (value < 0 ? DASH : '') + String(Math.floor(absValue / power));
+            result = Math.round(value*power)/power;
 
         if (precision > 0) {
             var fraction = String(absValue % power),
@@ -86,9 +86,12 @@
             numString = toRoundedDisplayDecimal(numeric, opts.decimalPlaces);
         }
         //Split the string on the decimal point, if there is one
-        var numParts = numString.split(PERIOD);
+        var numParts = numString.toString().split(PERIOD);
         var mantissaString = numParts[0];
-        var characteristicString = numParts[1];
+        var characteristicString = null;
+        if(numParts.length > 1) {
+            characteristicString = numParts[1];
+        }
         //Format the mantissa, if its long enough to need formatting
         if (opts.separatorMark && mantissaString.length > opts.separatorStart) {
             var mantissaLength = mantissaString.length;
