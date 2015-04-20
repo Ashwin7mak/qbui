@@ -112,7 +112,7 @@
     module.exports = {
         /**
          * Given a numeric field's meta data, construct the formatting options, setting defaults
-         * where none are provided.
+         * where none are provided or where invalid values are provided
          *
          * @param fieldInfo a field meta data object
          * @returns a display options object
@@ -120,10 +120,10 @@
         generateFormat: function (fieldInfo) {
             var opts = {};
             if (fieldInfo && fieldInfo.clientSideAttributes) {
-                opts.separatorStart = fieldInfo.clientSideAttributes.separatorStart;
-                opts.separatorMark = fieldInfo.clientSideAttributes.separatorMark;
-                opts.separatorPattern = fieldInfo.clientSideAttributes.separatorPattern;
-                opts.decimalMark = fieldInfo.clientSideAttributes.decimalMark;
+                opts.separatorStart = fieldInfo.clientSideAttributes.separator_start;
+                opts.separatorMark = fieldInfo.clientSideAttributes.separator_mark;
+                opts.separatorPattern = fieldInfo.clientSideAttributes.separator_pattern;
+                opts.decimalMark = fieldInfo.clientSideAttributes.decimal_mark;
             }
             opts.decimalPlaces = fieldInfo.decimalPlaces;
             //If decimal places is not a number or less than 0, set it to default value

@@ -87,7 +87,7 @@ describe('Numeric record formatter unit test', function () {
          * FieldInfo and expectations for flag: separator start
          */
         var separatorStartFlagFieldInfo = JSON.parse(JSON.stringify(noFlagsFieldInfo));
-        separatorStartFlagFieldInfo[0].clientSideAttributes.separatorStart = 5;
+        separatorStartFlagFieldInfo[0].clientSideAttributes.separator_start = 5;
 
         // Separator start only flag - decimal only
         var expectedDecimal_SeparatorStartFlags = JSON.parse(JSON.stringify(expectedDecimal_NoFlags));
@@ -105,7 +105,7 @@ describe('Numeric record formatter unit test', function () {
          * FieldInfo and expectations for flag: separator mark
          */
         var separatorMarkFlagFieldInfo = JSON.parse(JSON.stringify(noFlagsFieldInfo));
-        separatorMarkFlagFieldInfo[0].clientSideAttributes.separatorMark = ".";
+        separatorMarkFlagFieldInfo[0].clientSideAttributes.separator_mark = ".";
 
         // Separator mark only flag - decimal only
         var expectedDecimal_SeparatorMarkFlags = JSON.parse(JSON.stringify(expectedDecimal_NoFlags));
@@ -125,7 +125,7 @@ describe('Numeric record formatter unit test', function () {
          * FieldInfo and expectations for flag: separator pattern
          */
         var separatorPatternFlagFieldInfo = JSON.parse(JSON.stringify(noFlagsFieldInfo));
-        separatorPatternFlagFieldInfo[0].clientSideAttributes.separatorPattern = "THREE_THEN_TWO";
+        separatorPatternFlagFieldInfo[0].clientSideAttributes.separator_pattern = "THREE_THEN_TWO";
 
         // Separator pattern only flag - decimal only
         var expectedDecimal_SeparatorPatternFlags = JSON.parse(JSON.stringify(expectedDecimal_NoFlags));
@@ -143,7 +143,7 @@ describe('Numeric record formatter unit test', function () {
          * FieldInfo and expectations for flag: decimal mark
          */
         var decimalMarkFlagFieldInfo = JSON.parse(JSON.stringify(noFlagsFieldInfo));
-        decimalMarkFlagFieldInfo[0].clientSideAttributes.decimalMark = ",";
+        decimalMarkFlagFieldInfo[0].clientSideAttributes.decimal_mark = ",";
 
         // Decimal mark only flag - decimal only
         var expectedDecimal_DecimalMarkFlags = JSON.parse(JSON.stringify(expectedDecimal_NoFlags));
@@ -164,7 +164,7 @@ describe('Numeric record formatter unit test', function () {
          */
         var fieldInfo_DP_DM = JSON.parse(JSON.stringify(noFlagsFieldInfo));
         fieldInfo_DP_DM[0].decimalPlaces = 3;
-        fieldInfo_DP_DM[0].clientSideAttributes.decimalMark = ",";
+        fieldInfo_DP_DM[0].clientSideAttributes.decimal_mark = ",";
 
         // Decimal places, decimal mark - decimal only
         var expectedDecimal_DP_DM = JSON.parse(JSON.stringify(expectedDecimal_NoFlags));
@@ -187,7 +187,7 @@ describe('Numeric record formatter unit test', function () {
          */
         var fieldInfo_DP_SS = JSON.parse(JSON.stringify(noFlagsFieldInfo));
         fieldInfo_DP_SS[0].decimalPlaces = 3;
-        fieldInfo_DP_SS[0].clientSideAttributes.separatorStart = 3;
+        fieldInfo_DP_SS[0].clientSideAttributes.separator_start = 3;
 
         // Decimal places, separator start - decimal only
         var expectedDecimal_DP_SS = JSON.parse(JSON.stringify(expectedDecimal_NoFlags));
@@ -210,7 +210,7 @@ describe('Numeric record formatter unit test', function () {
          */
         var fieldInfo_DP_SM = JSON.parse(JSON.stringify(noFlagsFieldInfo));
         fieldInfo_DP_SM[0].decimalPlaces = 3;
-        fieldInfo_DP_SM[0].clientSideAttributes.separatorMark = ".";
+        fieldInfo_DP_SM[0].clientSideAttributes.separator_mark = ".";
 
         // Decimal places, separator mark - decimal only
         var expectedDecimal_DP_SM = JSON.parse(JSON.stringify(expectedDecimal_NoFlags));
@@ -233,7 +233,7 @@ describe('Numeric record formatter unit test', function () {
          */
         var fieldInfo_DP_SP = JSON.parse(JSON.stringify(noFlagsFieldInfo));
         fieldInfo_DP_SP[0].decimalPlaces = 3;
-        fieldInfo_DP_SP[0].clientSideAttributes.separatorPattern = "THREE_THEN_TWO";
+        fieldInfo_DP_SP[0].clientSideAttributes.separator_pattern = "THREE_THEN_TWO";
 
         // Decimal places, separator pattern - decimal only
         var expectedDecimal_DP_SP = JSON.parse(JSON.stringify(expectedDecimal_NoFlags));
@@ -255,8 +255,8 @@ describe('Numeric record formatter unit test', function () {
          * FieldInfo and expectations for flag: separator start and separator pattern
          */
         var fieldInfo_SS_SP = JSON.parse(JSON.stringify(noFlagsFieldInfo));
-        fieldInfo_SS_SP[0].clientSideAttributes.separatorStart = 3;
-        fieldInfo_SS_SP[0].clientSideAttributes.separatorPattern = "THREE_THEN_TWO";
+        fieldInfo_SS_SP[0].clientSideAttributes.separator_start = 3;
+        fieldInfo_SS_SP[0].clientSideAttributes.separator_pattern = "THREE_THEN_TWO";
 
         // Separator start, separator pattern - decimal only
         var expectedDecimal_SS_SP = JSON.parse(JSON.stringify(expectedDecimal_NoFlags));
@@ -274,8 +274,8 @@ describe('Numeric record formatter unit test', function () {
          * FieldInfo and expectations for flag: separator start and decimal mark
          */
         var fieldInfo_SS_DM = JSON.parse(JSON.stringify(noFlagsFieldInfo));
-        fieldInfo_SS_DM[0].clientSideAttributes.separatorStart = 3;
-        fieldInfo_SS_DM[0].clientSideAttributes.decimalMark = ",";
+        fieldInfo_SS_DM[0].clientSideAttributes.separator_start = 3;
+        fieldInfo_SS_DM[0].clientSideAttributes.decimal_mark = ",";
 
         // Separator start, decimal mark - decimal only
         var expectedDecimal_SS_DM = JSON.parse(JSON.stringify(expectedDecimal_NoFlags));
@@ -295,8 +295,8 @@ describe('Numeric record formatter unit test', function () {
          * FieldInfo and expectations for flag: decimalMark and separatorMark
          */
         var fieldInfo_DM_SM = JSON.parse(JSON.stringify(noFlagsFieldInfo));
-        fieldInfo_DM_SM[0].clientSideAttributes.decimalMark = ",";
-        fieldInfo_DM_SM[0].clientSideAttributes.separatorMark = ".";
+        fieldInfo_DM_SM[0].clientSideAttributes.decimal_mark = ",";
+        fieldInfo_DM_SM[0].clientSideAttributes.separator_mark = ".";
 
         // Decimal mark, separator mark - decimal only
         var expectedDecimal_DM_SM = JSON.parse(JSON.stringify(expectedDecimal_NoFlags));
@@ -318,8 +318,8 @@ describe('Numeric record formatter unit test', function () {
          * FieldInfo and expectations for flags: separator start, separator mark
          */
         var fieldInfo_SS_SM = JSON.parse(JSON.stringify(noFlagsFieldInfo));
-        fieldInfo_SS_SM[0].clientSideAttributes.separatorStart = 5;
-        fieldInfo_SS_SM[0].clientSideAttributes.separatorMark = ",";
+        fieldInfo_SS_SM[0].clientSideAttributes.separator_start = 5;
+        fieldInfo_SS_SM[0].clientSideAttributes.separator_mark = ",";
 
         // Separator start, separator mark flags - decimal only
         var expectedDecimal_SS_SM = JSON.parse(JSON.stringify(expectedDecimal_NoFlags));
@@ -339,8 +339,8 @@ describe('Numeric record formatter unit test', function () {
          * FieldInfo and expectations for flags: separator mark, separator pattern
          */
         var fieldInfo_SM_SP = JSON.parse(JSON.stringify(noFlagsFieldInfo));
-        fieldInfo_SM_SP[0].clientSideAttributes.separatorMark = ",";
-        fieldInfo_SM_SP[0].clientSideAttributes.separatorPattern = "THREE_THEN_TWO";
+        fieldInfo_SM_SP[0].clientSideAttributes.separator_mark = ",";
+        fieldInfo_SM_SP[0].clientSideAttributes.separator_pattern = "THREE_THEN_TWO";
 
         // Separator start, separator mark flags - decimal only
         var expectedDecimal_SM_SP = JSON.parse(JSON.stringify(expectedDecimal_NoFlags));
@@ -360,8 +360,8 @@ describe('Numeric record formatter unit test', function () {
          * FieldInfo and expectations for flags: separator pattern, decimal mark
          */
         var fieldInfo_SP_DM = JSON.parse(JSON.stringify(noFlagsFieldInfo));
-        fieldInfo_SP_DM[0].clientSideAttributes.separatorPattern = "THREE_THEN_TWO";
-        fieldInfo_SP_DM[0].clientSideAttributes.decimalMark = ",";
+        fieldInfo_SP_DM[0].clientSideAttributes.separator_pattern = "THREE_THEN_TWO";
+        fieldInfo_SP_DM[0].clientSideAttributes.decimal_mark = ",";
 
         // Separator pattern, decimal mark flags - decimal only
         var expectedDecimal_SP_DM = JSON.parse(JSON.stringify(expectedDecimal_NoFlags));
@@ -382,8 +382,8 @@ describe('Numeric record formatter unit test', function () {
          */
         var fieldInfo_DP_SS_SM = JSON.parse(JSON.stringify(noFlagsFieldInfo));
         fieldInfo_DP_SS_SM[0].decimalPlaces = 3;
-        fieldInfo_DP_SS_SM[0].clientSideAttributes.separatorStart = 12;
-        fieldInfo_DP_SS_SM[0].clientSideAttributes.separatorMark = ",";
+        fieldInfo_DP_SS_SM[0].clientSideAttributes.separator_start = 12;
+        fieldInfo_DP_SS_SM[0].clientSideAttributes.separator_mark = ",";
 
         // Decimal places, separator start, separator mark - decimal only
         var expectedDecimal_DP_SS_SM = JSON.parse(JSON.stringify(expectedDecimal_NoFlags));
@@ -406,8 +406,8 @@ describe('Numeric record formatter unit test', function () {
          */
         var fieldInfo_DP_SS_SP = JSON.parse(JSON.stringify(noFlagsFieldInfo));
         fieldInfo_DP_SS_SP[0].decimalPlaces = 2;
-        fieldInfo_DP_SS_SP[0].clientSideAttributes.separatorStart = 1;
-        fieldInfo_DP_SS_SP[0].clientSideAttributes.separatorPattern = "THREE_THEN_TWO";
+        fieldInfo_DP_SS_SP[0].clientSideAttributes.separator_start = 1;
+        fieldInfo_DP_SS_SP[0].clientSideAttributes.separator_pattern = "THREE_THEN_TWO";
 
         // Decimal places, separator start, separator pattern - decimal only
         var expectedDecimal_DP_SS_SP = JSON.parse(JSON.stringify(expectedDecimal_NoFlags));
@@ -430,8 +430,8 @@ describe('Numeric record formatter unit test', function () {
          */
         var fieldInfo_DP_SS_DM = JSON.parse(JSON.stringify(noFlagsFieldInfo));
         fieldInfo_DP_SS_DM[0].decimalPlaces = 2;
-        fieldInfo_DP_SS_DM[0].clientSideAttributes.separatorStart = 1;
-        fieldInfo_DP_SS_DM[0].clientSideAttributes.decimalMark = ",";
+        fieldInfo_DP_SS_DM[0].clientSideAttributes.separator_start = 1;
+        fieldInfo_DP_SS_DM[0].clientSideAttributes.decimal_mark = ",";
 
         // Decimal places, separator start, decimal mark - decimal only
         var expectedDecimal_DP_SS_DM = JSON.parse(JSON.stringify(expectedDecimal_NoFlags));
@@ -454,8 +454,8 @@ describe('Numeric record formatter unit test', function () {
          */
         var fieldInfo_DP_SM_SP = JSON.parse(JSON.stringify(noFlagsFieldInfo));
         fieldInfo_DP_SM_SP[0].decimalPlaces = 2;
-        fieldInfo_DP_SM_SP[0].clientSideAttributes.separatorMark = ".";
-        fieldInfo_DP_SM_SP[0].clientSideAttributes.separatorPattern = "EVERY_THREE";
+        fieldInfo_DP_SM_SP[0].clientSideAttributes.separator_mark = ".";
+        fieldInfo_DP_SM_SP[0].clientSideAttributes.separator_pattern = "EVERY_THREE";
 
         // Decimal places, separator mark, separator pattern - decimal only
         var expectedDecimal_DP_SM_SP = JSON.parse(JSON.stringify(expectedDecimal_NoFlags));
@@ -478,8 +478,8 @@ describe('Numeric record formatter unit test', function () {
          */
         var fieldInfo_DP_SM_DM = JSON.parse(JSON.stringify(noFlagsFieldInfo));
         fieldInfo_DP_SM_DM[0].decimalPlaces = 2;
-        fieldInfo_DP_SM_DM[0].clientSideAttributes.separatorMark = ".";
-        fieldInfo_DP_SM_DM[0].clientSideAttributes.decimalMark = ",";
+        fieldInfo_DP_SM_DM[0].clientSideAttributes.separator_mark = ".";
+        fieldInfo_DP_SM_DM[0].clientSideAttributes.decimal_mark = ",";
 
         // Decimal places, separator mark, decimal mark - decimal only
         var expectedDecimal_DP_SM_DM = JSON.parse(JSON.stringify(expectedDecimal_NoFlags));
@@ -502,8 +502,8 @@ describe('Numeric record formatter unit test', function () {
          */
         var fieldInfo_DP_SP_DM = JSON.parse(JSON.stringify(noFlagsFieldInfo));
         fieldInfo_DP_SP_DM[0].decimalPlaces = 2;
-        fieldInfo_DP_SP_DM[0].clientSideAttributes.separatorPattern = "EVERY_THREE";
-        fieldInfo_DP_SP_DM[0].clientSideAttributes.decimalMark = ",";
+        fieldInfo_DP_SP_DM[0].clientSideAttributes.separator_pattern = "EVERY_THREE";
+        fieldInfo_DP_SP_DM[0].clientSideAttributes.decimal_mark = ",";
 
         // Decimal places, separator pattern, decimal mark - decimal only
         var expectedDecimal_DP_SP_DM = JSON.parse(JSON.stringify(expectedDecimal_NoFlags));
@@ -525,9 +525,9 @@ describe('Numeric record formatter unit test', function () {
          * FieldInfo and expectations for flags: separator start, separator mark, separator pattern
          */
         var fieldInfo_SS_SM_SP = JSON.parse(JSON.stringify(noFlagsFieldInfo));
-        fieldInfo_SS_SM_SP[0].clientSideAttributes.separatorStart = 12;
-        fieldInfo_SS_SM_SP[0].clientSideAttributes.separatorMark = ",";
-        fieldInfo_SS_SM_SP[0].clientSideAttributes.separatorPattern = "EVERY_THREE";
+        fieldInfo_SS_SM_SP[0].clientSideAttributes.separator_start = 12;
+        fieldInfo_SS_SM_SP[0].clientSideAttributes.separator_mark = ",";
+        fieldInfo_SS_SM_SP[0].clientSideAttributes.separator_pattern = "EVERY_THREE";
 
         // Separator start, separator mark, separator pattern - decimal only
         var expectedDecimal_SS_SM_SP = JSON.parse(JSON.stringify(expectedDecimal_NoFlags));
@@ -545,9 +545,9 @@ describe('Numeric record formatter unit test', function () {
         * FieldInfo and expectations for flags: separator start, separator mark, decimal mark
         */
         var fieldInfo_SS_SM_DM = JSON.parse(JSON.stringify(noFlagsFieldInfo));
-        fieldInfo_SS_SM_DM[0].clientSideAttributes.separatorStart = 1;
-        fieldInfo_SS_SM_DM[0].clientSideAttributes.separatorMark = ".";
-        fieldInfo_SS_SM_DM[0].clientSideAttributes.decimalMark = ",";
+        fieldInfo_SS_SM_DM[0].clientSideAttributes.separator_start = 1;
+        fieldInfo_SS_SM_DM[0].clientSideAttributes.separator_mark = ".";
+        fieldInfo_SS_SM_DM[0].clientSideAttributes.decimal_mark = ",";
 
         // Separator start, separator mark, decimal mark - decimal only
         var expectedDecimal_SS_SM_DM = JSON.parse(JSON.stringify(expectedDecimal_NoFlags));
@@ -568,9 +568,9 @@ describe('Numeric record formatter unit test', function () {
          * FieldInfo and expectations for flags: separator start, separator pattern, decimal mark
          */
         var fieldInfo_SS_SP_DM = JSON.parse(JSON.stringify(noFlagsFieldInfo));
-        fieldInfo_SS_SP_DM[0].clientSideAttributes.separatorStart = 1;
-        fieldInfo_SS_SP_DM[0].clientSideAttributes.separatorPattern = "THREE_THEN_TWO";
-        fieldInfo_SS_SP_DM[0].clientSideAttributes.decimalMark = ",";
+        fieldInfo_SS_SP_DM[0].clientSideAttributes.separator_start = 1;
+        fieldInfo_SS_SP_DM[0].clientSideAttributes.separator_pattern = "THREE_THEN_TWO";
+        fieldInfo_SS_SP_DM[0].clientSideAttributes.decimal_mark = ",";
 
         // Separator start, separator pattern, decimal mark - decimal only
         var expectedDecimal_SS_SP_DM = JSON.parse(JSON.stringify(expectedDecimal_NoFlags));
@@ -590,9 +590,9 @@ describe('Numeric record formatter unit test', function () {
          * FieldInfo and expectations for flags: separator mark, separator pattern, decimal mark
          */
         var fieldInfo_SM_SP_DM = JSON.parse(JSON.stringify(noFlagsFieldInfo));
-        fieldInfo_SM_SP_DM[0].clientSideAttributes.separatorMark = ".";
-        fieldInfo_SM_SP_DM[0].clientSideAttributes.separatorPattern = "THREE_THEN_TWO";
-        fieldInfo_SM_SP_DM[0].clientSideAttributes.decimalMark = ",";
+        fieldInfo_SM_SP_DM[0].clientSideAttributes.separator_mark = ".";
+        fieldInfo_SM_SP_DM[0].clientSideAttributes.separator_pattern = "THREE_THEN_TWO";
+        fieldInfo_SM_SP_DM[0].clientSideAttributes.decimal_mark = ",";
 
         // Separator mark, separator pattern, decimal mark - decimal only
         var expectedDecimal_SM_SP_DM = JSON.parse(JSON.stringify(expectedDecimal_NoFlags));
@@ -614,9 +614,9 @@ describe('Numeric record formatter unit test', function () {
          */
         var fieldInfo_DP_SS_SM_SP = JSON.parse(JSON.stringify(noFlagsFieldInfo));
         fieldInfo_DP_SS_SM_SP[0].decimalPlaces = 3;
-        fieldInfo_DP_SS_SM_SP[0].clientSideAttributes.separatorStart = 3;
-        fieldInfo_DP_SS_SM_SP[0].clientSideAttributes.separatorMark = ".";
-        fieldInfo_DP_SS_SM_SP[0].clientSideAttributes.separatorPattern = "THREE_THEN_TWO";
+        fieldInfo_DP_SS_SM_SP[0].clientSideAttributes.separator_start = 3;
+        fieldInfo_DP_SS_SM_SP[0].clientSideAttributes.separator_mark = ".";
+        fieldInfo_DP_SS_SM_SP[0].clientSideAttributes.separator_pattern = "THREE_THEN_TWO";
 
         // Decimal places, separator start, separator mark, and separator pattern flags - decimal only
         var expectedDecimal_DP_SS_SM_SP = JSON.parse(JSON.stringify(expectedDecimal_NoFlags));
@@ -639,9 +639,9 @@ describe('Numeric record formatter unit test', function () {
          */
         var fieldInfo_DP_SS_SM_DM = JSON.parse(JSON.stringify(noFlagsFieldInfo));
         fieldInfo_DP_SS_SM_DM[0].decimalPlaces = 3;
-        fieldInfo_DP_SS_SM_DM[0].clientSideAttributes.separatorStart = 3;
-        fieldInfo_DP_SS_SM_DM[0].clientSideAttributes.separatorMark = ".";
-        fieldInfo_DP_SS_SM_DM[0].clientSideAttributes.decimalMark = ",";
+        fieldInfo_DP_SS_SM_DM[0].clientSideAttributes.separator_start = 3;
+        fieldInfo_DP_SS_SM_DM[0].clientSideAttributes.separator_mark = ".";
+        fieldInfo_DP_SS_SM_DM[0].clientSideAttributes.decimal_mark = ",";
 
         // Decimal places, separator start, separator mark, and decimal mark flags - decimal only
         var expectedDecimal_DP_SS_SM_DM = JSON.parse(JSON.stringify(expectedDecimal_NoFlags));
@@ -664,9 +664,9 @@ describe('Numeric record formatter unit test', function () {
          */
         var fieldInfo_DP_SS_SP_DM = JSON.parse(JSON.stringify(noFlagsFieldInfo));
         fieldInfo_DP_SS_SP_DM[0].decimalPlaces = 3;
-        fieldInfo_DP_SS_SP_DM[0].clientSideAttributes.separatorStart = 3;
-        fieldInfo_DP_SS_SP_DM[0].clientSideAttributes.separatorPattern = "THREE_THEN_TWO";
-        fieldInfo_DP_SS_SP_DM[0].clientSideAttributes.decimalMark = ",";
+        fieldInfo_DP_SS_SP_DM[0].clientSideAttributes.separator_start = 3;
+        fieldInfo_DP_SS_SP_DM[0].clientSideAttributes.separator_pattern = "THREE_THEN_TWO";
+        fieldInfo_DP_SS_SP_DM[0].clientSideAttributes.decimal_mark = ",";
 
         // Decimal places, separator start, separator pattern, and decimal mark flags - decimal only
         var expectedDecimal_DP_SS_SP_DM = JSON.parse(JSON.stringify(expectedDecimal_NoFlags));
@@ -690,9 +690,9 @@ describe('Numeric record formatter unit test', function () {
          */
         var fieldInfo_DP_SM_SP_DM = JSON.parse(JSON.stringify(noFlagsFieldInfo));
         fieldInfo_DP_SM_SP_DM[0].decimalPlaces = 3;
-        fieldInfo_DP_SM_SP_DM[0].clientSideAttributes.separatorMark = ".";
-        fieldInfo_DP_SM_SP_DM[0].clientSideAttributes.separatorPattern = "THREE_THEN_TWO";
-        fieldInfo_DP_SM_SP_DM[0].clientSideAttributes.decimalMark = ",";
+        fieldInfo_DP_SM_SP_DM[0].clientSideAttributes.separator_mark = ".";
+        fieldInfo_DP_SM_SP_DM[0].clientSideAttributes.separator_pattern = "THREE_THEN_TWO";
+        fieldInfo_DP_SM_SP_DM[0].clientSideAttributes.decimal_mark = ",";
 
         // Decimal places, separator mark, separator pattern, and decimal mark flags - decimal only
         var expectedDecimal_DP_SM_SP_DM = JSON.parse(JSON.stringify(expectedDecimal_NoFlags));
@@ -714,10 +714,10 @@ describe('Numeric record formatter unit test', function () {
          * FieldInfo and expectations for separator start, separator mark, separator pattern, decimal mark flags
          */
         var fieldInfo_SS_SM_SP_DM = JSON.parse(JSON.stringify(noFlagsFieldInfo));
-        fieldInfo_SS_SM_SP_DM[0].clientSideAttributes.separatorStart = 3;
-        fieldInfo_SS_SM_SP_DM[0].clientSideAttributes.separatorMark = ".";
-        fieldInfo_SS_SM_SP_DM[0].clientSideAttributes.separatorPattern = "THREE_THEN_TWO";
-        fieldInfo_SS_SM_SP_DM[0].clientSideAttributes.decimalMark = ",";
+        fieldInfo_SS_SM_SP_DM[0].clientSideAttributes.separator_start = 3;
+        fieldInfo_SS_SM_SP_DM[0].clientSideAttributes.separator_mark = ".";
+        fieldInfo_SS_SM_SP_DM[0].clientSideAttributes.separator_pattern = "THREE_THEN_TWO";
+        fieldInfo_SS_SM_SP_DM[0].clientSideAttributes.decimal_mark = ",";
 
         // Separator start, separator mark, separator pattern, and decimal mark flags - decimal only
         var expectedDecimal_SS_SM_SP_DM = JSON.parse(JSON.stringify(expectedDecimal_NoFlags));
@@ -739,10 +739,10 @@ describe('Numeric record formatter unit test', function () {
          */
         var allFlagsFieldInfo = JSON.parse(JSON.stringify(noFlagsFieldInfo));
         allFlagsFieldInfo[0].decimalPlaces = 1;
-        allFlagsFieldInfo[0].clientSideAttributes.separatorStart = 3;
-        allFlagsFieldInfo[0].clientSideAttributes.separatorMark = ".";
-        allFlagsFieldInfo[0].clientSideAttributes.separatorPattern = "THREE_THEN_TWO";
-        allFlagsFieldInfo[0].clientSideAttributes.decimalMark = ",";
+        allFlagsFieldInfo[0].clientSideAttributes.separator_start = 3;
+        allFlagsFieldInfo[0].clientSideAttributes.separator_mark = ".";
+        allFlagsFieldInfo[0].clientSideAttributes.separator_pattern = "THREE_THEN_TWO";
+        allFlagsFieldInfo[0].clientSideAttributes.decimal_mark = ",";
 
         // All flags - decimal only
         var expectedDecimal_AllFlags = JSON.parse(JSON.stringify(expectedDecimal_NoFlags));
@@ -766,10 +766,10 @@ describe('Numeric record formatter unit test', function () {
          */
         var invalidFlagsFieldInfo = JSON.parse(JSON.stringify(noFlagsFieldInfo));
         invalidFlagsFieldInfo[0].decimalPlaces = -1;
-        invalidFlagsFieldInfo[0].clientSideAttributes.separatorStart = -1;
-        invalidFlagsFieldInfo[0].clientSideAttributes.separatorMark = "invalid";
-        invalidFlagsFieldInfo[0].clientSideAttributes.separatorPattern = "invalid";
-        invalidFlagsFieldInfo[0].clientSideAttributes.decimalMark = "invalid";
+        invalidFlagsFieldInfo[0].clientSideAttributes.separator_start = -1;
+        invalidFlagsFieldInfo[0].clientSideAttributes.separator_mark = "invalid";
+        invalidFlagsFieldInfo[0].clientSideAttributes.separator_pattern = "invalid";
+        invalidFlagsFieldInfo[0].clientSideAttributes.decimal_mark = "invalid";
 
         // Invalid flags - decimal only
         var expectedDecimal_InvalidFlags = JSON.parse(JSON.stringify(expectedDecimal_NoFlags));
