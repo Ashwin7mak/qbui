@@ -742,6 +742,11 @@ module.exports = function (grunt) {
 
     });
 
+    grunt.registerTask('ciTest', [
+        'env:test',
+        'test'
+    ]);
+
     grunt.registerTask('build', [
         'clean:dist',
         'concurrent:dist',
