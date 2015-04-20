@@ -53,11 +53,11 @@ describe('API - Numeric record test cases', function () {
     function  noFlagsNumericDataProvider(fid) {
         // Decimal number
         var decimalInput = [{"id": fid, "value": numberDecimalOnly}];
-        var expectedDecimalRecord = {"id": fid, "value": numberDecimalOnly, "display": "0.74765432000000"};
+        var expectedDecimalRecord = {"id": fid, "value": numberDecimalOnly, "display": "0.74765432"};
 
         // Double number
         var doubleInput = [{"id": fid, "value": numberDouble}];
-        var expectedDoubleRecord = {"id": fid, "value": numberDouble, "display": "98765432100.74765000000000"};
+        var expectedDoubleRecord = {"id": fid, "value": numberDouble, "display": "98765432100.74765"};
 
         // No separator number
         var noSeparatorInput = [{"id": fid, "value": numberNoSeparator}];
@@ -74,7 +74,7 @@ describe('API - Numeric record test cases', function () {
         return [
             { message: "display decimal number with no format flags", record: decimalInput, format: "display", expectedFieldValue: expectedDecimalRecord },
             { message: "raw decimal number with no format flags", record: decimalInput, format: "raw", expectedFieldValue: decimalInput },
-            // TODO: Returns 98765432100.74766045085696 expected 98765432100.74765000000000
+            // TODO: Returns 98765432100.74767 expected 98765432100.74765
             //{ message: "display double number with no format flags", record: doubleInput, format: "display", expectedFieldValue: expectedDoubleRecord },
             { message: "raw double number with no format flags", record: doubleInput, format: "raw", expectedFieldValue: doubleInput },
             { message: "display no separator number with no format flags", record: noSeparatorInput, format: "display", expectedFieldValue: expectedNoSeparatorRecord },
