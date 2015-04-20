@@ -30,15 +30,16 @@ describe('API - Numeric record test cases', function () {
                 "name": "numeric",
                 "type": "NUMERIC",
                 "decimalPlaces": 2,
-                "clientSideAttributes": [{
+                "clientSideAttributes": {
                     "width": 10,
                     "bold": false,
                     "word_wrap": false,
+                    "help_text": "help",
                     "separator_start": 3,
                     "separator_mark": ".",
                     "separator_pattern": "THREE_THEN_TWO",
                     "decimal_mark": ","
-                }]
+                }
             }
             ]}
         ]};
@@ -69,18 +70,18 @@ describe('API - Numeric record test cases', function () {
     //    var expectedNullRecord = {"id": fid, "value": null, "display": ""};
     //
     //    return [
-    //        { message: "display decimal number", record: decimalInput, format: "display", expectedFieldValue: expectedDecimalRecord },
-    //        { message: "raw decimal number", record: decimalInput, format: "raw", expectedFieldValue: decimalInput },
-    //        { message: "display double number", record: doubleInput, format: "display", expectedFieldValue: expectedDoubleRecord },
-    //        { message: "raw double number", record: doubleInput, format: "raw", expectedFieldValue: doubleInput },
-    //        { message: "display no separator number", record: noSeparatorInput, format: "display", expectedFieldValue: expectedNoSeparatorRecord },
-    //        { message: "raw no separator number", record: noSeparatorInput, format: "raw", expectedFieldValue: noSeparatorInput },
-    //        { message: "display multiple separator number", record: multiSeparatorInput, format: "display", expectedFieldValue: expectedMultiSeparatorRecord },
-    //        { message: "raw multiple separator number", record: multiSeparatorInput, format: "raw", expectedFieldValue: multiSeparatorInput },
-    //        { message: "display empty number", record: emptyInput, format: "display", expectedFieldValue: expectedEmptyRecord },
-    //        { message: "raw empty number", record: emptyInput, format: "raw", expectedFieldValue: emptyInput },
-    //        { message: "display null number", record: nullInput, format: "display", expectedFieldValue: expectedNullRecord },
-    //        { message: "raw null number", record: nullInput, format: "raw", expectedFieldValue: nullInput }
+    //        { message: "display decimal number with no format flags", record: decimalInput, format: "display", expectedFieldValue: expectedDecimalRecord },
+    //        { message: "raw decimal number with no format flags", record: decimalInput, format: "raw", expectedFieldValue: decimalInput },
+    //        { message: "display double number with no format flags", record: doubleInput, format: "display", expectedFieldValue: expectedDoubleRecord },
+    //        { message: "raw double number with no format flags", record: doubleInput, format: "raw", expectedFieldValue: doubleInput },
+    //        { message: "display no separator number with no format flags", record: noSeparatorInput, format: "display", expectedFieldValue: expectedNoSeparatorRecord },
+    //        { message: "raw no separator number with no format flags", record: noSeparatorInput, format: "raw", expectedFieldValue: noSeparatorInput },
+    //        { message: "display multiple separator number with no format flags", record: multiSeparatorInput, format: "display", expectedFieldValue: expectedMultiSeparatorRecord },
+    //        { message: "raw multiple separator number with no format flags", record: multiSeparatorInput, format: "raw", expectedFieldValue: multiSeparatorInput },
+    //        { message: "display empty number with no format flags", record: emptyInput, format: "display", expectedFieldValue: expectedEmptyRecord },
+    //        { message: "raw empty number with no format flags", record: emptyInput, format: "raw", expectedFieldValue: emptyInput },
+    //        { message: "display null number with no format flags", record: nullInput, format: "display", expectedFieldValue: expectedNullRecord },
+    //        { message: "raw null number with no format flags", record: nullInput, format: "raw", expectedFieldValue: nullInput }
     //    ]
     //}
     //
@@ -155,18 +156,18 @@ describe('API - Numeric record test cases', function () {
         var expectedNullRecord = {"id": fid, "value": null, "display": ""};
 
         return [
-            { message: "display decimal number", record: decimalInput, format: "display", expectedFieldValue: expectedDecimalRecord },
-            { message: "raw decimal number", record: decimalInput, format: "raw", expectedFieldValue: decimalInput },
-            { message: "display double number", record: doubleInput, format: "display", expectedFieldValue: expectedDoubleRecord },
-            { message: "raw double number", record: doubleInput, format: "raw", expectedFieldValue: doubleInput },
-            { message: "display no separator number", record: noSeparatorInput, format: "display", expectedFieldValue: expectedNoSeparatorRecord },
-            { message: "raw no separator number", record: noSeparatorInput, format: "raw", expectedFieldValue: noSeparatorInput },
-            { message: "display multiple separator number", record: multiSeparatorInput, format: "display", expectedFieldValue: expectedMultiSeparatorRecord },
-            { message: "raw multiple separator number", record: multiSeparatorInput, format: "raw", expectedFieldValue: multiSeparatorInput },
-            { message: "display empty number", record: emptyInput, format: "display", expectedFieldValue: expectedEmptyRecord },
-            { message: "raw empty number", record: emptyInput, format: "raw", expectedFieldValue: emptyInput },
-            { message: "display null number", record: nullInput, format: "display", expectedFieldValue: expectedNullRecord },
-            { message: "raw null number", record: nullInput, format: "raw", expectedFieldValue: nullInput }
+            { message: "display decimal number with all format flags", record: decimalInput, format: "display", expectedFieldValue: expectedDecimalRecord },
+            { message: "raw decimal number with all format flags", record: decimalInput, format: "raw", expectedFieldValue: decimalInput },
+            { message: "display double number with all format flags", record: doubleInput, format: "display", expectedFieldValue: expectedDoubleRecord },
+            { message: "raw double number with all format flags", record: doubleInput, format: "raw", expectedFieldValue: doubleInput },
+            { message: "display no separator number with all format flags", record: noSeparatorInput, format: "display", expectedFieldValue: expectedNoSeparatorRecord },
+            { message: "raw no separator number with all format flags", record: noSeparatorInput, format: "raw", expectedFieldValue: noSeparatorInput },
+            { message: "display multiple separator number with all format flags", record: multiSeparatorInput, format: "display", expectedFieldValue: expectedMultiSeparatorRecord },
+            { message: "raw multiple separator number with all format flags", record: multiSeparatorInput, format: "raw", expectedFieldValue: multiSeparatorInput },
+            { message: "display empty number with all format flags", record: emptyInput, format: "display", expectedFieldValue: expectedEmptyRecord },
+            { message: "raw empty number with all format flags", record: emptyInput, format: "raw", expectedFieldValue: emptyInput },
+            { message: "display null number with all format flags", record: nullInput, format: "display", expectedFieldValue: expectedNullRecord },
+            { message: "raw null number with all format flags", record: nullInput, format: "raw", expectedFieldValue: nullInput }
         ]
     }
 
