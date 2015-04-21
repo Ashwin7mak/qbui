@@ -17,6 +17,7 @@
                         res.send(response);
                     })
                     .catch(function(error) {
+                        console.log("ERROR " + JSON.stringify(error));
                         requestHelper.copyHeadersToResponse(res, error.headers);
                         res.status(error.statusCode)
                             .send(error.body);
