@@ -10,7 +10,7 @@ var _ = require('lodash');
 /**
  * Integration test for PhoneNumber field formatting
  */
-describe('API - RECORDS test cases', function () {
+describe('API - PhoneNumber record test cases', function () {
     //Cache the init promise so that test methods can use it as init.then(function(){...})
     var exampleApp = {
         "name": "Mark's App",
