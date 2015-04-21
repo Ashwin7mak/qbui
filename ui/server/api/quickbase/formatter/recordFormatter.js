@@ -7,6 +7,7 @@
     var dateFormatter = require('./dateTimeFormatter');
     var phoneFormatter = require('./phoneNumberFormatter');
     var todFormatter = require('./timeOfDayFormatter');
+    var numericFormatter = require('./numericFormatter');
     //module constants
     var PHONE_NUMBER = 'PHONE_NUMBER';
     var DATE_TIME = 'DATE_TIME';
@@ -15,33 +16,39 @@
     var FORMULA_DATE = 'FORMULA_DATE';
     var FORMULA_TIME_OF_DAY = 'FORMULA_TIME_OF_DAY';
     var TIME_OF_DAY = 'TIME_OF_DAY';
+    var NUMERIC = 'NUMERIC';
+    var FORMULA_NUMERIC = 'FORMULA_NUMERIC';
 
     /**
      * Certain fields may require generation of a formatter string that will be used for each record in the
      * field for example, Date, DateTime and TimeOfDay fields. Rather than recalculate this formatter string
      * for each record value encountered, we generate it once, and cache it on the fieldInfo for the field
-     * in question.  The display formatter will then look for this value 'jsFormatString' and if populated,
+     * in question.  The display formatter will then look for this value 'jsFormat' and if populated,
      * use it instead of recalculating the formatter string.
      * @param fieldInfos The array of field meta data for the fields in the records
      */
     function precalculateFormatterStringsForFields(fieldInfos) {
-        for(var i = 0; i < fieldInfos.length; i++) {
+        for (var i = 0; i < fieldInfos.length; i++) {
             switch (fieldInfos[i].type) {
                 case DATE_TIME:
                 case DATE:
                 case FORMULA_DATE_TIME:
                 case FORMULA_DATE:
-                    fieldInfos[i].jsFormatString = dateFormatter.generateFormatterString(fieldInfos[i]);
+                    fieldInfos[i].jsFormat = dateFormatter.generateFormat(fieldInfos[i]);
                     break;
                 case TIME_OF_DAY:
                 case FORMULA_TIME_OF_DAY:
-                    fieldInfos[i].jsFormatString = todFormatter.generateFormatterString(fieldInfos[i]);
+                    fieldInfos[i].jsFormat = todFormatter.generateFormat(fieldInfos[i]);
                     break;
+                case NUMERIC:
+                case FORMULA_NUMERIC:
+                    fieldInfos[i].jsFormat = numericFormatter.generateFormat(fieldInfos[i]);
                 default:
                     break;
             }
         }
     }
+
     module.exports = function () {
         //Display formats record field values according to the field's display settings
         function formatRecordValue(fieldValue, fieldInfo) {
@@ -58,6 +65,10 @@
                 case TIME_OF_DAY:
                 case FORMULA_TIME_OF_DAY:
                     fieldValue.display = todFormatter.format(fieldValue, fieldInfo);
+                    break;
+                case NUMERIC:
+                case FORMULA_NUMERIC:
+                    fieldValue.display = numericFormatter.format(fieldValue, fieldInfo);
                     break;
                 default:
                     break;

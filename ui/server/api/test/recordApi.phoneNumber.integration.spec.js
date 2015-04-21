@@ -7,7 +7,10 @@ var recordBase = require('./recordApi.base')(config);
 var Promise = require('bluebird');
 var _ = require('lodash');
 
-describe('API - RECORDS test cases', function () {
+/**
+ * Integration test for PhoneNumber field formatting
+ */
+describe('API - PhoneNumber record test cases', function () {
     //Cache the init promise so that test methods can use it as init.then(function(){...})
     var exampleApp = {
         "name": "Mark's App",
@@ -20,6 +23,9 @@ describe('API - RECORDS test cases', function () {
         ]
     };
 
+    /**
+     * DataProvider containing Records and record display expectations for PhoneNumber field with various record values
+     */
     function phoneRecordsDataProvider(fid) {
         //Standard phone number
         var recordsInput = [{"id": fid, "value": "12345678"}];
@@ -48,6 +54,9 @@ describe('API - RECORDS test cases', function () {
             { message: "raw null phone number", record: nullPhoneRecords, format: "raw", expectedFieldValue: nullPhoneRecords }]
     }
 
+    /**
+     * Integration test that validates PhoneNumber records formatting 
+     */
     it('Should create and retrieve display formatted phone records', function (done) {
         this.timeout(30000);
         recordBase.createApp(exampleApp).then(function (appResponse) {

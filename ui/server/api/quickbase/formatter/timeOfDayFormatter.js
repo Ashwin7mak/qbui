@@ -19,7 +19,7 @@
     };
 
     module.exports = {
-        generateFormatterString: function(fieldInfo) {
+        generateFormat: function(fieldInfo) {
             //Resolve formatting options
             var formatString;
             if(fieldInfo) {
@@ -55,7 +55,7 @@
             var m = moment.tz(d, timeZone);
 
             //Resolve formatting options
-            var formatString = fieldInfo.jsFormatString;
+            var formatString = fieldInfo.jsFormat;
             if(!formatString) {
                 formatString = this.generateFormatterString(fieldInfo);
             }
