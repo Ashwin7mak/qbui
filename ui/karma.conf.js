@@ -41,6 +41,7 @@ module.exports = function (config) {
             'client/bower_components/angular-ui-grid/ui-grid.js',
             'client/bower_components/angular-ui-router/release/angular-ui-router.js',
             'client/bower_components/angular-mocks/angular-mocks.js',
+            'client/bower_components/bluebird/js/browser/bluebird.js',
             //endbower:
 
             // load the application dependencies - loading order is important; broadest
