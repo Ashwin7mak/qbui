@@ -515,14 +515,40 @@ module.exports = function (grunt) {
                         return 'mocha-jenkins-reporter';
                     }())
                 },
-                src: ['server/**/*.spec.js']
+                src: ['server/**/test/*.spec.js', '!server/**/test/*.integration.spec.js']
+            },
+            integration: {
+                options: {
+                    reporter: (function () {
+                        process.env.MOCHA_COLORS = false;
+                        process.env.JUNIT_REPORT_PATH = serverReportDir + '/unit/server_integration_report.xml';
+                        return 'mocha-jenkins-reporter';
+                    }())
+                },
+                src: ['server/**/test/*.integration.spec.js']
             }
+
         },
 
         //  Code coverage against the express code
         mocha_istanbul: {
             coverage: {
-                src: ['server/**/*.spec.js'],
+                src: ['server/**/test/*.spec.js', '!server/**/test/*.integration.spec.js'],
+                options: {
+                    mask: '**/*.spec.js',
+                    check: {
+                       //will fail if not meeting coverage %
+                       //lines:90,
+                       //statements:90
+                    },
+                    root: 'server',
+                    noColors: true,
+                    reportFormats: ['lcov'],
+                    coverageFolder: 'build/reports/server/coverage'
+                }
+            } ,
+            integrationCoverage: {
+                src: ['!server/**/test/*.integration.spec.js'],
                 options: {
                     mask: '**/*.spec.js',
                     check: {
@@ -706,10 +732,19 @@ module.exports = function (grunt) {
         grunt.file.mkdir(serverReportDir + '/unit/');
 
         if (target === 'server') {
+            //server unit tests
             return grunt.task.run([
                 'clean:server',
-                'mochaTest',
-                'mocha_istanbul'
+                'mochaTest:test',
+                'mocha_istanbul:coverage'
+            ]);
+        }
+        if (target === 'integration') {
+            //server integration tests
+            return grunt.task.run([
+                'clean:server',
+                'mochaTest:integration',
+                'mocha_istanbul:integration'
             ]);
         }
         if (target === 'client') {
