@@ -124,7 +124,7 @@ task gruntBuildDebugVerbose(type: GruntTask) {
 }
 
 task gruntTestDebugVerbose(type: GruntTask) {
-    args = ["test", "--no-color", "--debug", "--verbose", "--stacktrace"]
+    args = ["ciTest", "--no-color", "--debug", "--verbose", "--stacktrace"]
 }
 
 task gruntSassDebugVerbose(type: GruntTask) {
@@ -136,7 +136,7 @@ task gruntBuildNoColor(type: GruntTask) {
 }
 
 task gruntUnitTestsNoColor(type: GruntTask) {
-    args = ["test", "--no-color"]
+    args = ["ciTest", "--no-color"]
 }
 
 //browser tests not yet supported on ci

@@ -648,7 +648,6 @@ module.exports = function (grunt) {
         if (target === 'dist') {
             return grunt.task.run([
                 'build',
-                'env:prod',
                 'express:prod',
                 'wait',
                 'open',
@@ -709,7 +708,6 @@ module.exports = function (grunt) {
         if (target === 'server') {
             return grunt.task.run([
                 'clean:server',
-                'env:local',
                 'mochaTest',
                 'mocha_istanbul'
             ]);
@@ -717,7 +715,6 @@ module.exports = function (grunt) {
         if (target === 'client') {
             return grunt.task.run([
                 'clean:client',
-                'env:local',
                 'concurrent:test',
                 'autoprefixer',
                 'wiredep:test',
@@ -729,7 +726,6 @@ module.exports = function (grunt) {
         if (target === 'e2e') {
             return grunt.task.run([
                 'clean:server',
-                'env:test',
                 'concurrent:test',
                 'wiredep:app',
                 'autoprefixer',
@@ -745,6 +741,11 @@ module.exports = function (grunt) {
         ]);
 
     });
+
+    grunt.registerTask('ciTest', [
+        'env:test',
+        'test'
+    ]);
 
     grunt.registerTask('build', [
         'clean:dist',
