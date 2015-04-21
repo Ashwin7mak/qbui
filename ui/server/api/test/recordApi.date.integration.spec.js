@@ -27,14 +27,14 @@ describe('API - Date record test cases - ', function () {
     var appWithAllFlags_DD_MM_YYYY = {
         "name": "Date App - all flags",
         "dateFormat": "dd-MM-uuuu",
+        "timeZone": "America/New_York",
         "tables": [{
             "name": "table1", "fields": [{
                 "name": "date",
                 "type": "DATE",
                 "showMonthAsName": true,
                 "showDayOfWeek": true,
-                "hideYearIfCurrent": true,
-                "timeZone": "America/New_York"
+                "hideYearIfCurrent": true
             }
             ]}
         ]};
@@ -73,8 +73,8 @@ describe('API - Date record test cases - ', function () {
             { message: "raw current year date with no format flags", record: currentYearInput, format: "raw", expectedFieldValue: currentYearInput },
             { message: "display different year date with no format flags", record: diffYearInput, format: "display", expectedFieldValue: expectedDiffYearRecord },
             { message: "raw different year date with no format flags", record: diffYearInput, format: "raw", expectedFieldValue: diffYearInput },
-            { message: "display null year with no format flags", record: nullInput, format: "display", expectedFieldValue: expectedNullRecord },
-            { message: "raw null year with no format flags", record: nullInput, format: "raw", expectedFieldValue: nullInput }
+            { message: "display null date with no format flags", record: nullInput, format: "display", expectedFieldValue: expectedNullRecord },
+            { message: "raw null date with no format flags", record: nullInput, format: "raw", expectedFieldValue: nullInput }
         ]
     }
 
@@ -146,8 +146,8 @@ describe('API - Date record test cases - ', function () {
             { message: "raw current year date with all format flags", record: currentYearInput, format: "raw", expectedFieldValue: currentYearInput },
             { message: "display different year date with all format flags", record: diffYearInput, format: "display", expectedFieldValue: expectedDiffYearRecord },
             { message: "raw different year date with all format flags", record: diffYearInput, format: "raw", expectedFieldValue: diffYearInput },
-            { message: "display null year with all format flags", record: nullInput, format: "display", expectedFieldValue: expectedNullRecord },
-            { message: "raw null year with all format flags", record: nullInput, format: "raw", expectedFieldValue: nullInput }
+            { message: "display null date with all format flags", record: nullInput, format: "display", expectedFieldValue: expectedNullRecord },
+            { message: "raw null date with all format flags", record: nullInput, format: "raw", expectedFieldValue: nullInput }
         ]
     }
 
@@ -158,7 +158,7 @@ describe('API - Date record test cases - ', function () {
         this.timeout(30000);
         recordBase.createApp(appWithAllFlags_DD_MM_YYYY).then(function (appResponse) {
             var app = JSON.parse(appResponse.body);
-            console.log('APP: ' +JSON.stringify(app));
+            console.log('DATE APP: ' +JSON.stringify(app));
             var dateField;
             app.tables[0].fields.forEach(function (field) {
                 if (field.name === 'date') {
@@ -186,8 +186,8 @@ describe('API - Date record test cases - ', function () {
 
                         currentRecord.forEach(function (fieldValue) {
                             if (fieldValue.id === records[i].expectedFieldValue.id) {
-                                console.log('EXPECTED: ' +JSON.stringify(records[i].expectedFieldValue));
-                                console.log('ACTUAL: ' +JSON.stringify(fieldValue));
+                                console.log('EXPECTED DATE: ' +JSON.stringify(records[i].expectedFieldValue));
+                                console.log('ACTUAL DATE: ' +JSON.stringify(fieldValue));
                                 assert.deepEqual(fieldValue, records[i].expectedFieldValue, 'Unexpected field value returned: '
                                 + JSON.stringify(fieldValue) + ', ' + JSON.stringify(records[i].expectedFieldValue));
                             }
@@ -223,8 +223,8 @@ describe('API - Date record test cases - ', function () {
     //        { message: "raw current year date with all format flags", record: currentYearInput, format: "raw", expectedFieldValue: currentYearInput },
     //        { message: "display different year date with all format flags", record: diffYearInput, format: "display", expectedFieldValue: expectedDiffYearRecord },
     //        { message: "raw different year date with all format flags", record: diffYearInput, format: "raw", expectedFieldValue: diffYearInput },
-    //        { message: "display null year with all format flags", record: nullInput, format: "display", expectedFieldValue: expectedNullRecord },
-    //        { message: "raw null year with all format flags", record: nullInput, format: "raw", expectedFieldValue: nullInput }
+    //        { message: "display null date with all format flags", record: nullInput, format: "display", expectedFieldValue: expectedNullRecord },
+    //        { message: "raw null date with all format flags", record: nullInput, format: "raw", expectedFieldValue: nullInput }
     //    ]
     //}
     //
@@ -296,8 +296,8 @@ describe('API - Date record test cases - ', function () {
     //        { message: "raw current year date with all format flags", record: currentYearInput, format: "raw", expectedFieldValue: currentYearInput },
     //        { message: "display different year date with all format flags", record: diffYearInput, format: "display", expectedFieldValue: expectedDiffYearRecord },
     //        { message: "raw different year date with all format flags", record: diffYearInput, format: "raw", expectedFieldValue: diffYearInput },
-    //        { message: "display null year with all format flags", record: nullInput, format: "display", expectedFieldValue: expectedNullRecord },
-    //        { message: "raw null year with all format flags", record: nullInput, format: "raw", expectedFieldValue: nullInput }
+    //        { message: "display null date with all format flags", record: nullInput, format: "display", expectedFieldValue: expectedNullRecord },
+    //        { message: "raw null date with all format flags", record: nullInput, format: "raw", expectedFieldValue: nullInput }
     //    ]
     //}
     //
@@ -369,8 +369,8 @@ describe('API - Date record test cases - ', function () {
     //        { message: "raw current year date with all format flags", record: currentYearInput, format: "raw", expectedFieldValue: currentYearInput },
     //        { message: "display different year date with all format flags", record: diffYearInput, format: "display", expectedFieldValue: expectedDiffYearRecord },
     //        { message: "raw different year date with all format flags", record: diffYearInput, format: "raw", expectedFieldValue: diffYearInput },
-    //        { message: "display null year with all format flags", record: nullInput, format: "display", expectedFieldValue: expectedNullRecord },
-    //        { message: "raw null year with all format flags", record: nullInput, format: "raw", expectedFieldValue: nullInput }
+    //        { message: "display null date with all format flags", record: nullInput, format: "display", expectedFieldValue: expectedNullRecord },
+    //        { message: "raw null date with all format flags", record: nullInput, format: "raw", expectedFieldValue: nullInput }
     //    ]
     //}
     //
@@ -442,8 +442,8 @@ describe('API - Date record test cases - ', function () {
     //        { message: "raw current year date with all format flags", record: currentYearInput, format: "raw", expectedFieldValue: currentYearInput },
     //        { message: "display different year date with all format flags", record: diffYearInput, format: "display", expectedFieldValue: expectedDiffYearRecord },
     //        { message: "raw different year date with all format flags", record: diffYearInput, format: "raw", expectedFieldValue: diffYearInput },
-    //        { message: "display null year with all format flags", record: nullInput, format: "display", expectedFieldValue: expectedNullRecord },
-    //        { message: "raw null year with all format flags", record: nullInput, format: "raw", expectedFieldValue: nullInput }
+    //        { message: "display null date with all format flags", record: nullInput, format: "display", expectedFieldValue: expectedNullRecord },
+    //        { message: "raw null date with all format flags", record: nullInput, format: "raw", expectedFieldValue: nullInput }
     //    ]
     //}
     //
