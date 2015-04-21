@@ -53,11 +53,11 @@ describe('API - Numeric record test cases', function () {
     function  noFlagsNumericDataProvider(fid) {
         // Decimal number
         var decimalInput = [{"id": fid, "value": numberDecimalOnly}];
-        var expectedDecimalRecord = {"id": fid, "value": numberDecimalOnly, "display": "0.74765432"};
+        var expectedDecimalRecord = {"id": fid, "value": numberDecimalOnly, "display": "0.74765432000000"};
 
         // Double number
         var doubleInput = [{"id": fid, "value": numberDouble}];
-        var expectedDoubleRecord = {"id": fid, "value": numberDouble, "display": "98765432100.74765"};
+        var expectedDoubleRecord = {"id": fid, "value": numberDouble, "display": "98765432100.74765000000000"};
 
         // No separator number
         var noSeparatorInput = [{"id": fid, "value": numberNoSeparator}];
@@ -74,13 +74,11 @@ describe('API - Numeric record test cases', function () {
         return [
             { message: "display decimal number with no format flags", record: decimalInput, format: "display", expectedFieldValue: expectedDecimalRecord },
             { message: "raw decimal number with no format flags", record: decimalInput, format: "raw", expectedFieldValue: decimalInput },
-            // TODO: Returns 98765432100.74767 expected 98765432100.74765
-            //{ message: "display double number with no format flags", record: doubleInput, format: "display", expectedFieldValue: expectedDoubleRecord },
+            { message: "display double number with no format flags", record: doubleInput, format: "display", expectedFieldValue: expectedDoubleRecord },
             { message: "raw double number with no format flags", record: doubleInput, format: "raw", expectedFieldValue: doubleInput },
             { message: "display no separator number with no format flags", record: noSeparatorInput, format: "display", expectedFieldValue: expectedNoSeparatorRecord },
             { message: "raw no separator number with no format flags", record: noSeparatorInput, format: "raw", expectedFieldValue: noSeparatorInput },
-            // TODO: Returns 98765432100.99999254396928 expected 98765432100.00000000000000
-            //{ message: "display multiple separator number with no format flags", record: multiSeparatorInput, format: "display", expectedFieldValue: expectedMultiSeparatorRecord },
+            { message: "display multiple separator number with no format flags", record: multiSeparatorInput, format: "display", expectedFieldValue: expectedMultiSeparatorRecord },
             { message: "raw multiple separator number with no format flags", record: multiSeparatorInput, format: "raw", expectedFieldValue: multiSeparatorInput },
             { message: "display null number with no format flags", record: nullInput, format: "display", expectedFieldValue: expectedNullRecord },
             { message: "raw null number with no format flags", record: nullInput, format: "raw", expectedFieldValue: nullInput }
@@ -100,7 +98,6 @@ describe('API - Numeric record test cases', function () {
                     numericField = field;
                 }
             });
-            console.log('NUMERIC FIELD: ' +JSON.stringify(numericField));
             assert(numericField, 'failed to find numeric field');
             var records = noFlagsNumericDataProvider(numericField.id);
             //For each of the cases, create the record and execute the request
@@ -120,8 +117,6 @@ describe('API - Numeric record test cases', function () {
                         }
                         currentRecord.forEach(function (fieldValue) {
                             if (fieldValue.id === records[i].expectedFieldValue.id) {
-                                console.log('EXPECTED: ' +JSON.stringify(records[i].expectedFieldValue));
-                                console.log('ACTUAL: ' +JSON.stringify(fieldValue));
                                 assert.deepEqual(fieldValue, records[i].expectedFieldValue, 'Unexpected field value returned: '
                                 + JSON.stringify(fieldValue) + ', ' + JSON.stringify(records[i].expectedFieldValue));
                             }

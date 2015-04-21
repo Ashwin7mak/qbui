@@ -50,24 +50,33 @@
     }
 
     /**
-     * given a numeric value, rounds the value to the decimal precision specifies and returns
-     * the value as a string with the number of decimal places equal to the precision value.
+     * given a numeric characteristic value as a string, rounds the value to the precision specified and
+     * returns the value as a string.
      * @param value the numeric value to round and stringify
      * @param precision the number of decimal places to return in the formatted string
      * @returns the rounded numeric as a string with number of decimal places equal to precision
      */
-    function toRoundedDisplayDecimal(value, precision) {
-        var precision = precision || 0,
-            power = Math.pow(10, precision),
-            absValue = Math.abs(Math.round(value * power)),
-            result = Math.round(value*power)/power;
-
-        if (precision > 0) {
-            var fraction = String(absValue % power),
-                padding = new Array(Math.max(precision - fraction.length, 0) + 1).join(ZERO_CHAR);
-            result += PERIOD + padding + fraction;
+    function toRoundedDisplayDecimal(characteristicString, precision) {
+        if(precision === 0) {
+            return null;
+        } else if(!precision) {
+            return characteristicString;
+        } else if(characteristicString === null){
+            characteristicString = '';
         }
-        return result;
+        if(characteristicString.length > precision) {
+            //round
+            var charNum = Number(characteristicString);
+            charNum = Math.round(charNum / (Math.pow(10, characteristicString.length - precision)));
+            characteristicString = charNum.toString();
+        }
+        //Pad if needed to fill out the precision
+        if(characteristicString.length < precision) {
+            while(characteristicString.length < precision) {
+                characteristicString = characteristicString + ZERO_CHAR;
+            }
+        }
+        return characteristicString;
     }
 
     /**
@@ -79,12 +88,7 @@
      */
     function formatNumericValue(numeric, opts) {
         //Resolve the number value as a string with the proper decimal places
-        var numString;
-        if (!opts.decimalPlaces && opts.decimalPlaces !== 0) {
-            numString = numeric.toString();
-        } else {
-            numString = toRoundedDisplayDecimal(numeric, opts.decimalPlaces);
-        }
+        var numString = numeric.toString();
         //Split the string on the decimal point, if there is one
         var numParts = numString.toString().split(PERIOD);
         var mantissaString = numParts[0];
@@ -92,6 +96,7 @@
         if(numParts.length > 1) {
             characteristicString = numParts[1];
         }
+        characteristicString = toRoundedDisplayDecimal(characteristicString, opts.decimalPlaces);
         //Format the mantissa, if its long enough to need formatting
         if (opts.separatorMark && mantissaString.length > opts.separatorStart) {
             var mantissaLength = mantissaString.length;
