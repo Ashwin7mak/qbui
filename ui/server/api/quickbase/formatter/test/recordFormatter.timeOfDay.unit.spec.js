@@ -76,10 +76,14 @@ describe('Time of day record formatter unit test', function () {
     /**
      * Unit test that validates TimeOfDay records formatting with various field property flags set
      */
-    it('should format a time of day for display', function () {
+    describe('should format a time of day record with various properties for display',function(){
         provider().forEach(function(entry){
-            var formattedRecords = recordFormatter.formatRecords(entry.records, entry.fieldInfo);
-            assert.deepEqual(formattedRecords, entry.expectedRecords, entry.message);
+            it('Test case: ' + entry.message, function (done) {
+                var formattedRecords = recordFormatter.formatRecords(entry.records, entry.fieldInfo);
+                //console.log('entry: ' + JSON.stringify(entry));
+                assert.deepEqual(formattedRecords, entry.expectedRecords, entry.message);
+                done();
+            });
         });
     });
 });

@@ -963,7 +963,6 @@ describe('Numeric record formatter unit test', function () {
             { message: "Numeric - double with invalid format flags", records: recordInputDouble, fieldInfo: invalidFlagsFieldInfo, expectedRecords: expectedDouble_InvalidFlags },
             { message: "Numeric - no separator with invalid format flags", records: recordInputNoSeparator, fieldInfo: invalidFlagsFieldInfo, expectedRecords: expectedNoSeparator_InvalidFlags },
             { message: "Numeric - multiple separators with invalid format flags", records: recordInputMultipleSeparators, fieldInfo: invalidFlagsFieldInfo, expectedRecords: expectedMultiSeparators_InvalidFlags },
-
         ];
 
         return cases;
@@ -972,11 +971,14 @@ describe('Numeric record formatter unit test', function () {
     /**
      * Unit test that validates Numeric records formatting with various field property flags set
      */
-    it('should format a numeric record with various properties for display', function () {
+    describe('should format a numeric record with various properties for display',function(){
         provider().forEach(function(entry){
-            var formattedRecords = recordFormatter.formatRecords(entry.records, entry.fieldInfo);
-            //console.log('entry: ' + JSON.stringify(entry));
-            assert.deepEqual(formattedRecords, entry.expectedRecords, entry.message);
+            it('Test case: ' + entry.message, function (done) {
+                var formattedRecords = recordFormatter.formatRecords(entry.records, entry.fieldInfo);
+                //console.log('entry: ' + JSON.stringify(entry));
+                assert.deepEqual(formattedRecords, entry.expectedRecords, entry.message);
+                done();
+            });
         });
     });
 });

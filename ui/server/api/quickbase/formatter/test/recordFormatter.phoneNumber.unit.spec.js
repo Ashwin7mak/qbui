@@ -73,9 +73,9 @@ describe('Phone number record formatter unit test', function () {
     }
 
     /**
-     * Unit test that validates transformation of PhoneNumber records
+     * Unit test that validates PhoneNumber records formatting
      */
-    it('should format a phone number for display', function () {
+    describe('should format a phone number for display',function(){
         var fieldInfo = [
             {
                 "id": 7,
@@ -84,8 +84,12 @@ describe('Phone number record formatter unit test', function () {
             }
         ];
         provider().forEach(function(entry){
-            var formattedRecords = recordFormatter.formatRecords(entry.records, fieldInfo);
-            assert.deepEqual(formattedRecords, entry.expectedRecords, entry.message);
+            it('Test case: ' + entry.message, function (done) {
+                var formattedRecords = recordFormatter.formatRecords(entry.records, fieldInfo);
+                //console.log('entry: ' + JSON.stringify(entry));
+                assert.deepEqual(formattedRecords, entry.expectedRecords, entry.message);
+                done();
+            });
         });
     });
 });

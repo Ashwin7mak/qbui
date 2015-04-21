@@ -413,15 +413,16 @@ describe('DateTime record formatter unit test', function () {
     }
 
     /**
-     * Unit test that validates Date records with MM_DD_YYYY format and various field property flags set
+     * Unit test that validates DateTime records with MM_DD_YYYY format and various field property flags set
      */
-    it('should format various MM_DD_YYYY DateTime records for display', function () {
+    describe('should format various MM_DD_YYYY DateTime records for display',function(){
         mmddyyyyDataProvider().forEach(function(entry){
-            var formattedRecords = recordFormatter.formatRecords(entry.records, entry.fieldInfo);
-            //console.log('TEST CASE: ' + JSON.stringify(entry.message));
-            //console.log('RET RECS: ' + JSON.stringify(formattedRecords));
-            //console.log('EXP RECS: ' + JSON.stringify(entry.expectedRecords));
-            assert.deepEqual(formattedRecords, entry.expectedRecords, entry.message);
+            it('Test case: ' + entry.message, function (done) {
+                var formattedRecords = recordFormatter.formatRecords(entry.records, entry.fieldInfo);
+                //console.log('entry: ' + JSON.stringify(entry));
+                assert.deepEqual(formattedRecords, entry.expectedRecords, entry.message);
+                done();
+            });
         });
     });
 
@@ -831,15 +832,16 @@ describe('DateTime record formatter unit test', function () {
     }
 
     /**
-     * Unit test that validates Date records with MM_DD_YY format and various field property flags set
+     * Unit test that validates DateTime records with MM_DD_YY format and various field property flags set
      */
-    it('should format various MM_DD_YY DateTime records for display', function () {
+    describe('should format various MM_DD_YY DateTime records for display',function(){
         mmddyyDataProvider().forEach(function(entry){
-            var formattedRecords = recordFormatter.formatRecords(entry.records, entry.fieldInfo);
-            //console.log('TEST CASE: ' + JSON.stringify(entry.message));
-            //console.log('RET RECS: ' + JSON.stringify(formattedRecords));
-            //console.log('EXP RECS: ' + JSON.stringify(entry.expectedRecords));
-            assert.deepEqual(formattedRecords, entry.expectedRecords, entry.message);
+            it('Test case: ' + entry.message, function (done) {
+                var formattedRecords = recordFormatter.formatRecords(entry.records, entry.fieldInfo);
+                //console.log('entry: ' + JSON.stringify(entry));
+                assert.deepEqual(formattedRecords, entry.expectedRecords, entry.message);
+                done();
+            });
         });
     });
 
@@ -1249,15 +1251,16 @@ describe('DateTime record formatter unit test', function () {
     }
 
     /**
-     * Unit test that validates Date records with DD_MM_YY format and various field property flags set
+     * Unit test that validates DateTime records with DD_MM_YY format and various field property flags set
      */
-    it('should format various DD_MM_YY DateTime records for display', function () {
+    describe('should format various DD_MM_YY DateTime records for display',function(){
         ddmmyyDataProvider().forEach(function(entry){
-            var formattedRecords = recordFormatter.formatRecords(entry.records, entry.fieldInfo);
-            //console.log('TEST CASE: ' + JSON.stringify(entry.message));
-            //console.log('RET RECS: ' + JSON.stringify(formattedRecords));
-            //console.log('EXP RECS: ' + JSON.stringify(entry.expectedRecords));
-            assert.deepEqual(formattedRecords, entry.expectedRecords, entry.message);
+            it('Test case: ' + entry.message, function (done) {
+                var formattedRecords = recordFormatter.formatRecords(entry.records, entry.fieldInfo);
+                //console.log('entry: ' + JSON.stringify(entry));
+                assert.deepEqual(formattedRecords, entry.expectedRecords, entry.message);
+                done();
+            });
         });
     });
 
@@ -1665,15 +1668,16 @@ describe('DateTime record formatter unit test', function () {
     }
 
     /**
-     * Unit test that validates Date records with DD_MM_YYYY format and various field property flags set
+     * Unit test that validates DateTime records with DD_MM_YYYY format and various field property flags set
      */
-    it('should format various DD_MM_YYYY DateTime records for display', function () {
+    describe('should format various DD_MM_YYYY DateTime records for display',function(){
         ddmmyyyyDataProvider().forEach(function(entry){
-            var formattedRecords = recordFormatter.formatRecords(entry.records, entry.fieldInfo);
-            //console.log('TEST CASE: ' + JSON.stringify(entry.message));
-            //console.log('RET RECS: ' + JSON.stringify(formattedRecords));
-            //console.log('EXP RECS: ' + JSON.stringify(entry.expectedRecords));
-            assert.deepEqual(formattedRecords, entry.expectedRecords, entry.message);
+            it('Test case: ' + entry.message, function (done) {
+                var formattedRecords = recordFormatter.formatRecords(entry.records, entry.fieldInfo);
+                //console.log('entry: ' + JSON.stringify(entry));
+                assert.deepEqual(formattedRecords, entry.expectedRecords, entry.message);
+                done();
+            });
         });
     });
 
@@ -2083,15 +2087,16 @@ describe('DateTime record formatter unit test', function () {
     }
 
     /**
-     * Unit test that validates Date records with YYYY_MM_DD format and various field property flags set
+     * Unit test that validates DateTime records with YYYY_MM_DD format and various field property flags set
      */
-    it('should format various YYYY_MM_DD DateTime records for display', function () {
+    describe('should format various YYYY_MM_DD DateTime records for display',function(){
         yyyymmddDataProvider().forEach(function(entry){
-            var formattedRecords = recordFormatter.formatRecords(entry.records, entry.fieldInfo);
-            //console.log('TEST CASE: ' + JSON.stringify(entry.message));
-            //console.log('RET RECS: ' + JSON.stringify(formattedRecords));
-            //console.log('EXP RECS: ' + JSON.stringify(entry.expectedRecords));
-            assert.deepEqual(formattedRecords, entry.expectedRecords, entry.message);
+            it('Test case: ' + entry.message, function (done) {
+                var formattedRecords = recordFormatter.formatRecords(entry.records, entry.fieldInfo);
+                //console.log('entry: ' + JSON.stringify(entry));
+                assert.deepEqual(formattedRecords, entry.expectedRecords, entry.message);
+                done();
+            });
         });
     });
 
@@ -2503,13 +2508,14 @@ describe('DateTime record formatter unit test', function () {
      * Unit test that validates DateTime records with an invalid format and various field property flags set.
      * That should ignore the invalid format and default to MM_DD_YYYY
      */
-    it('should format various DateTime records with invalid format for display', function () {
+    describe('should format various DateTime records with invalid format for display',function(){
         invalidFormatDataProvider().forEach(function(entry){
-            var formattedRecords = recordFormatter.formatRecords(entry.records, entry.fieldInfo);
-            //console.log('TEST CASE: ' + JSON.stringify(entry.message));
-            //console.log('RET RECS: ' + JSON.stringify(formattedRecords));
-            //console.log('EXP RECS: ' + JSON.stringify(entry.expectedRecords));
-            assert.deepEqual(formattedRecords, entry.expectedRecords, entry.message);
+            it('Test case: ' + entry.message, function (done) {
+                var formattedRecords = recordFormatter.formatRecords(entry.records, entry.fieldInfo);
+                //console.log('entry: ' + JSON.stringify(entry));
+                assert.deepEqual(formattedRecords, entry.expectedRecords, entry.message);
+                done();
+            });
         });
     });
 
