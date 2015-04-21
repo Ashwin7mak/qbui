@@ -515,7 +515,7 @@ module.exports = function (grunt) {
                         return 'mocha-jenkins-reporter';
                     }())
                 },
-                src: ['server/**/test/*.unit.spec.js', '!server/**/test/*.integration.spec.js']
+                src: ['server/**/test/*.unit.spec.js']
             },
             integration: {
                 options: {
@@ -533,7 +533,7 @@ module.exports = function (grunt) {
         //  Code coverage against the express code
         mocha_istanbul: {
             coverage: {
-                src: ['server/**/test/*.unit.spec.js', '!server/**/test/*.integration.spec.js'],
+                src: ['server/**/test/*.unit.spec.js'],
                 options: {
                     mask: '**/*.spec.js',
                     check: {
@@ -715,6 +715,7 @@ module.exports = function (grunt) {
     grunt.registerTask('test', function (target) {
         //  need this folder to exist or mocha tests will fail
         grunt.file.mkdir(serverReportDir + '/unit/');
+        grunt.file.mkdir(serverReportDir + '/integration/');
 
         if (target === 'server') {
             //server unit tests
@@ -764,6 +765,12 @@ module.exports = function (grunt) {
     grunt.registerTask('ciTest', [
         'env:test',
         'test'
+    ]);
+
+
+    grunt.registerTask('ciIntegration', [
+        'env:test',
+        'test:integration'
     ]);
 
     grunt.registerTask('build', [
