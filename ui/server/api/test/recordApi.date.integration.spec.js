@@ -110,7 +110,6 @@ describe('API - Date record test cases - ', function () {
 
                         currentRecord.forEach(function (fieldValue) {
                             if (fieldValue.id === records[i].expectedFieldValue.id) {
-                                console.log('expected dat: ' + JSON.stringify(records[i].expectedFieldValue) + ' actual: ' + JSON.stringify(fieldValue));
                                  assert.deepEqual(fieldValue, records[i].expectedFieldValue, 'Unexpected field value returned: '
                                 + JSON.stringify(fieldValue) + ', ' + JSON.stringify(records[i].expectedFieldValue));
                             }
@@ -176,7 +175,6 @@ describe('API - Date record test cases - ', function () {
             //When all the records have been created and fetched, assert the values match expectations
             Promise.all(fetchRecordPromises)
                 .then(function (results) {
-                    console.log(JSON.stringify(results));
                     for (var i = 0; i < results.length; i++) {
                         var currentRecord = results[i];
                         if(results[i].record) {
@@ -185,7 +183,6 @@ describe('API - Date record test cases - ', function () {
 
                         currentRecord.forEach(function (fieldValue) {
                             if (fieldValue.id === records[i].expectedFieldValue.id) {
-                                console.log('expected date: ' + JSON.stringify(records[i].expectedFieldValue) + ' actual: ' + JSON.stringify(fieldValue));
                                 assert.deepEqual(fieldValue, records[i].expectedFieldValue, 'Unexpected field value returned: '
                                 + JSON.stringify(fieldValue) + ', ' + JSON.stringify(records[i].expectedFieldValue));
                             }
