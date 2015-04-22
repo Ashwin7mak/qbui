@@ -17,6 +17,7 @@ describe('API - DateTime record test cases - ', function () {
 
     var appWithNoFlags = {
         "name": "DateTime App - no flags",
+        "timeZone": "America/New_York",
         "tables": [{
                 "name": "table1", "fields": [{
                     "name": "dateTime",
@@ -55,442 +56,445 @@ describe('API - DateTime record test cases - ', function () {
     appWithAllFlags_YYYY_MM_DD.dateFormat = "uuuu-MM-dd";
 
 
-    ///**
-    //* DataProvider containing Records and record display expectations for DateTime field with no display props set
-    //*/
-    //function  noFlagsDateTimeDataProvider(fid) {
-    //    // DateTime in current year
-    //    var currentYearInput = [{"id": fid, "value": dateCurrentYear}];
-    //    var expectedCurrentYearRecord = {"id": fid, "value": dateCurrentYear+UTC, "display": "04-12-2015 1:51"};
-    //
-    //    // DateTime in different year
-    //    var diffYearInput = [{"id": fid, "value": dateDiffYear}];
-    //    var expectedDiffYearRecord = {"id": fid, "value": dateDiffYear+UTC, "display": "04-12-2000 1:51"};
-    //
-    //    // Null date
-    //    var nullInput = [{"id": fid, "value": null}];
-    //    var expectedNullRecord = {"id": fid, "value": null, "display": ""};
-    //
-    //    return [
-    //        { message: "display current year dateTime with no format flags", record: currentYearInput, format: "display", expectedFieldValue: expectedCurrentYearRecord },
-    //        { message: "raw current year dateTime with no format flags", record: currentYearInput, format: "raw", expectedFieldValue: currentYearInput },
-    //        { message: "display different year dateTime with no format flags", record: diffYearInput, format: "display", expectedFieldValue: expectedDiffYearRecord },
-    //        { message: "raw different year dateTime with no format flags", record: diffYearInput, format: "raw", expectedFieldValue: diffYearInput },
-    //        { message: "display null dateTime with no format flags", record: nullInput, format: "display", expectedFieldValue: expectedNullRecord },
-    //        { message: "raw null dateTime with no format flags", record: nullInput, format: "raw", expectedFieldValue: nullInput }
-    //    ]
-    //}
-    //
-    ///**
-    //* Integration test that validates DateTime records formatting with no field property flags set
-    //*/
-    //it('Should create and retrieve dateTime display records when no format flags set', function (done) {
-    //    this.timeout(30000);
-    //    recordBase.createApp(appWithNoFlags).then(function (appResponse) {
-    //        var app = JSON.parse(appResponse.body);
-    //        var dateTimeField;
-    //        app.tables[0].fields.forEach(function (field) {
-    //            if (field.name === 'dateTime') {
-    //                dateTimeField = field;
-    //            }
-    //        });
-    //        assert(dateTimeField, 'failed to find dateTime field');
-    //        var records = noFlagsDateTimeDataProvider(dateTimeField.id);
-    //        //For each of the cases, create the record and execute the request
-    //        var fetchRecordPromises = [];
-    //        records.forEach(function (currentRecord) {
-    //            var recordsEndpoint = recordBase.apiBase.resolveRecordsEndpoint(app.id, app.tables[0].id);
-    //            fetchRecordPromises.push(recordBase.createAndFetchRecord(recordsEndpoint, currentRecord.record, '?format='+currentRecord.format));
-    //        });
-    //
-    //        //When all the records have been created and fetched, assert the values match expectations
-    //        Promise.all(fetchRecordPromises)
-    //            .then(function (results) {
-    //                for (var i = 0; i < results.length; i++) {
-    //                    var currentRecord = results[i];
-    //                    if(results[i].record) {
-    //                        currentRecord = results[i].record;
-    //                    }
-    //
-    //                    currentRecord.forEach(function (fieldValue) {
-    //                        if (fieldValue.id === records[i].expectedFieldValue.id) {
-    //                            assert.deepEqual(fieldValue, records[i].expectedFieldValue, 'Unexpected field value returned: '
-    //                            + JSON.stringify(fieldValue) + ', ' + JSON.stringify(records[i].expectedFieldValue));
-    //                        }
-    //                    });
-    //                }
-    //                done();
-    //            }).catch(function (errorMsg) {
-    //                assert(false, 'unable to resolve all records: ' + JSON.stringify(errorMsg));
-    //                done();
-    //            });
-    //    });
-    //});
-    //
-    ///**
-    //* DataProvider containing Records and record display expectations for DD_MM_YYYY DateTime field with all display props set
-    //*/
-    //function  allFlagsDateTimeDataProvider_DD_MM_YYYY(fid) {
-    //
-    //    // DateTime in current year
-    //    var currentYearInput = [{"id": fid, "value": dateCurrentYear}];
-    //    var expectedCurrentYearRecord = {"id": fid, "value": dateCurrentYear+UTC, "display": "Sunday, 12-Apr 1:51 AM EDT"};
-    //
-    //    // DateTime in different year
-    //    var diffYearInput = [{"id": fid, "value": dateDiffYear}];
-    //    var expectedDiffYearRecord = {"id": fid, "value": dateDiffYear+UTC, "display": "Wednesday, 12-Apr-2000 1:51 AM EDT"};
-    //
-    //    // Null date
-    //    var nullInput = [{"id": fid, "value": null}];
-    //    var expectedNullRecord = {"id": fid, "value": null, "display": ""};
-    //
-    //    return [
-    //        { message: "display current year dateTime with all format flags", record: currentYearInput, format: "display", expectedFieldValue: expectedCurrentYearRecord },
-    //        { message: "raw current year dateTime with all format flags", record: currentYearInput, format: "raw", expectedFieldValue: currentYearInput },
-    //        { message: "display different year dateTime with all format flags", record: diffYearInput, format: "display", expectedFieldValue: expectedDiffYearRecord },
-    //        { message: "raw different year dateTime with all format flags", record: diffYearInput, format: "raw", expectedFieldValue: diffYearInput },
-    //        { message: "display null dateTime with all format flags", record: nullInput, format: "display", expectedFieldValue: expectedNullRecord },
-    //        { message: "raw null dateTime with all format flags", record: nullInput, format: "raw", expectedFieldValue: nullInput }
-    //    ]
-    //}
-    //
-    ///**
-    //* Integration test that validates DD_MM_YYYY DateTime records formatting with all field property flags set
-    //*/
-    //it('Should create and retrieve DD_MM_YYYY dateTime display records when all format flags set', function (done) {
-    //    this.timeout(30000);
-    //    recordBase.createApp(appWithAllFlags_DD_MM_YYYY).then(function (appResponse) {
-    //        var app = JSON.parse(appResponse.body);
-    //        var dateTimeField;
-    //        app.tables[0].fields.forEach(function (field) {
-    //            if (field.name === 'dateTime') {
-    //                dateTimeField = field;
-    //            }
-    //        });
-    //        assert(dateTimeField, 'failed to find dateTime field');
-    //        var records = allFlagsDateTimeDataProvider_DD_MM_YYYY(dateTimeField.id);
-    //        //For each of the cases, create the record and execute the request
-    //        var fetchRecordPromises = [];
-    //        records.forEach(function (currentRecord) {
-    //            var recordsEndpoint = recordBase.apiBase.resolveRecordsEndpoint(app.id, app.tables[0].id);
-    //            fetchRecordPromises.push(recordBase.createAndFetchRecord(recordsEndpoint, currentRecord.record, '?format='+currentRecord.format));
-    //        });
-    //
-    //        //When all the records have been created and fetched, assert the values match expectations
-    //        Promise.all(fetchRecordPromises)
-    //            .then(function (results) {
-    //                for (var i = 0; i < results.length; i++) {
-    //                    var currentRecord = results[i];
-    //                    if(results[i].record) {
-    //                        currentRecord = results[i].record;
-    //                    }
-    //
-    //                    currentRecord.forEach(function (fieldValue) {
-    //                        if (fieldValue.id === records[i].expectedFieldValue.id) {
-    //                            assert.deepEqual(fieldValue, records[i].expectedFieldValue, 'Unexpected field value returned: '
-    //                            + JSON.stringify(fieldValue) + ', ' + JSON.stringify(records[i].expectedFieldValue));
-    //                        }
-    //                    });
-    //                }
-    //                done();
-    //            }).catch(function (errorMsg) {
-    //                assert(false, 'unable to resolve all records: ' + JSON.stringify(errorMsg));
-    //                done();
-    //            });
-    //    });
-    //});
-    //
-    ///**
-    //* DataProvider containing Records and record display expectations for MM_DD_YYYY DateTime field with all display props set
-    //*/
-    //function  allFlagsDateTimeDataProvider_MM_DD_YYYY(fid) {
-    //
-    //    // DateTime in current year
-    //    var currentYearInput = [{"id": fid, "value": dateCurrentYear}];
-    //    var expectedCurrentYearRecord = {"id": fid, "value": dateCurrentYear, "display": "Sunday, Apr-12 1:51 AM EDT"};
-    //
-    //    // DateTime in different year
-    //    var diffYearInput = [{"id": fid, "value": dateDiffYear}];
-    //    var expectedDiffYearRecord = {"id": fid, "value": dateDiffYear, "display": "Wednesday, Apr-12-2000 1:51 AM EDT"};
-    //
-    //    // Null date
-    //    var nullInput = [{"id": fid, "value": null}];
-    //    var expectedNullRecord = {"id": fid, "value": null, "display": ""};
-    //
-    //    return [
-    //        { message: "display current year dateTime with all format flags", record: currentYearInput, format: "display", expectedFieldValue: expectedCurrentYearRecord },
-    //        { message: "raw current year dateTime with all format flags", record: currentYearInput, format: "raw", expectedFieldValue: currentYearInput },
-    //        { message: "display different year dateTime with all format flags", record: diffYearInput, format: "display", expectedFieldValue: expectedDiffYearRecord },
-    //        { message: "raw different year dateTime with all format flags", record: diffYearInput, format: "raw", expectedFieldValue: diffYearInput },
-    //        { message: "display null dateTime with all format flags", record: nullInput, format: "display", expectedFieldValue: expectedNullRecord },
-    //        { message: "raw null dateTime with all format flags", record: nullInput, format: "raw", expectedFieldValue: nullInput }
-    //    ]
-    //}
-    //
-    ///**
-    //* Integration test that validates MM_DD_YYYY DateTime records formatting with all field property flags set
-    //*/
-    //it('Should create and retrieve MM_DD_YYYY dateTime display records when all format flags set', function (done) {
-    //    this.timeout(30000);
-    //    recordBase.createApp(appWithAllFlags_MM_DD_YYYY).then(function (appResponse) {
-    //        var app = JSON.parse(appResponse.body);
-    //        var dateTimeField;
-    //        app.tables[0].fields.forEach(function (field) {
-    //            if (field.name === 'dateTime') {
-    //                dateTimeField = field;
-    //            }
-    //        });
-    //        assert(dateTimeField, 'failed to find dateTime field');
-    //        var records = allFlagsDateTimeDataProvider_MM_DD_YYYY(dateTimeField.id);
-    //        //For each of the cases, create the record and execute the request
-    //        var fetchRecordPromises = [];
-    //        records.forEach(function (currentRecord) {
-    //            var recordsEndpoint = recordBase.apiBase.resolveRecordsEndpoint(app.id, app.tables[0].id);
-    //            fetchRecordPromises.push(recordBase.createAndFetchRecord(recordsEndpoint, currentRecord.record, '?format='+currentRecord.format));
-    //        });
-    //
-    //        //When all the records have been created and fetched, assert the values match expectations
-    //        Promise.all(fetchRecordPromises)
-    //            .then(function (results) {
-    //                for (var i = 0; i < results.length; i++) {
-    //                    var currentRecord = results[i];
-    //                    if(results[i].record) {
-    //                        currentRecord = results[i].record;
-    //                    }
-    //
-    //                    currentRecord.forEach(function (fieldValue) {
-    //                        if (fieldValue.id === records[i].expectedFieldValue.id) {
-    //                            assert.deepEqual(fieldValue, records[i].expectedFieldValue, 'Unexpected field value returned: '
-    //                            + JSON.stringify(fieldValue) + ', ' + JSON.stringify(records[i].expectedFieldValue));
-    //                        }
-    //                    });
-    //                }
-    //                done();
-    //            }).catch(function (errorMsg) {
-    //                assert(false, 'unable to resolve all records: ' + JSON.stringify(errorMsg));
-    //                done();
-    //            });
-    //    });
-    //});
-    //
-    ///**
-    //* DataProvider containing Records and record display expectations for MM_DD_YY DateTime field with all display props set
-    //*/
-    //function  allFlagsDateTimeDataProvider_MM_DD_YY(fid) {
-    //
-    //    // DateTime in current year
-    //    var currentYearInput = [{"id": fid, "value": dateCurrentYear}];
-    //    var expectedCurrentYearRecord = {"id": fid, "value": dateCurrentYear, "display": "Sunday, Apr-12 1:51 AM EDT"};
-    //
-    //    // DateTime in different year
-    //    var diffYearInput = [{"id": fid, "value": dateDiffYear}];
-    //    var expectedDiffYearRecord = {"id": fid, "value": dateDiffYear, "display": "Wednesday, Apr-12-00 1:51 AM EDT"};
-    //
-    //    // Null date
-    //    var nullInput = [{"id": fid, "value": null}];
-    //    var expectedNullRecord = {"id": fid, "value": null, "display": ""};
-    //
-    //    return [
-    //        { message: "display current year dateTime with all format flags", record: currentYearInput, format: "display", expectedFieldValue: expectedCurrentYearRecord },
-    //        { message: "raw current year dateTime with all format flags", record: currentYearInput, format: "raw", expectedFieldValue: currentYearInput },
-    //        { message: "display different year dateTime with all format flags", record: diffYearInput, format: "display", expectedFieldValue: expectedDiffYearRecord },
-    //        { message: "raw different year dateTime with all format flags", record: diffYearInput, format: "raw", expectedFieldValue: diffYearInput },
-    //        { message: "display null dateTime with all format flags", record: nullInput, format: "display", expectedFieldValue: expectedNullRecord },
-    //        { message: "raw null dateTime with all format flags", record: nullInput, format: "raw", expectedFieldValue: nullInput }
-    //    ]
-    //}
-    //
-    ///**
-    //* Integration test that validates MM_DD_YY DateTime records formatting with all field property flags set
-    //*/
-    //it('Should create and retrieve MM_DD_YY dateTime display records when all format flags set', function (done) {
-    //    this.timeout(30000);
-    //    recordBase.createApp(appWithAllFlags_MM_DD_YY).then(function (appResponse) {
-    //        var app = JSON.parse(appResponse.body);
-    //        var dateTimeField;
-    //        app.tables[0].fields.forEach(function (field) {
-    //            if (field.name === 'dateTime') {
-    //                dateTimeField = field;
-    //            }
-    //        });
-    //        assert(dateTimeField, 'failed to find dateTime field');
-    //        var records = allFlagsDateTimeDataProvider_MM_DD_YY(dateTimeField.id);
-    //        //For each of the cases, create the record and execute the request
-    //        var fetchRecordPromises = [];
-    //        records.forEach(function (currentRecord) {
-    //            var recordsEndpoint = recordBase.apiBase.resolveRecordsEndpoint(app.id, app.tables[0].id);
-    //            fetchRecordPromises.push(recordBase.createAndFetchRecord(recordsEndpoint, currentRecord.record, '?format='+currentRecord.format));
-    //        });
-    //
-    //        //When all the records have been created and fetched, assert the values match expectations
-    //        Promise.all(fetchRecordPromises)
-    //            .then(function (results) {
-    //                for (var i = 0; i < results.length; i++) {
-    //                    var currentRecord = results[i];
-    //                    if(results[i].record) {
-    //                        currentRecord = results[i].record;
-    //                    }
-    //
-    //                    currentRecord.forEach(function (fieldValue) {
-    //                        if (fieldValue.id === records[i].expectedFieldValue.id) {
-    //                            assert.deepEqual(fieldValue, records[i].expectedFieldValue, 'Unexpected field value returned: '
-    //                            + JSON.stringify(fieldValue) + ', ' + JSON.stringify(records[i].expectedFieldValue));
-    //                        }
-    //                    });
-    //                }
-    //                done();
-    //            }).catch(function (errorMsg) {
-    //                assert(false, 'unable to resolve all records: ' + JSON.stringify(errorMsg));
-    //                done();
-    //            });
-    //    });
-    //});
-    //
-    ///**
-    //* DataProvider containing Records and record display expectations for DD_MM_YY DateTime field with all display props set
-    //*/
-    //function  allFlagsDateTimeDataProvider_DD_MM_YY(fid) {
-    //
-    //    // DateTime in current year
-    //    var currentYearInput = [{"id": fid, "value": dateCurrentYear}];
-    //    var expectedCurrentYearRecord = {"id": fid, "value": dateCurrentYear, "display": "Sunday, 12-Apr 1:51 AM EDT"};
-    //
-    //    // DateTime in different year
-    //    var diffYearInput = [{"id": fid, "value": dateDiffYear}];
-    //    var expectedDiffYearRecord = {"id": fid, "value": dateDiffYear, "display": "Wednesday, 12-Apr-00 1:51 AM EDT"};
-    //
-    //    // Null date
-    //    var nullInput = [{"id": fid, "value": null}];
-    //    var expectedNullRecord = {"id": fid, "value": null, "display": ""};
-    //
-    //    return [
-    //        { message: "display current year dateTime with all format flags", record: currentYearInput, format: "display", expectedFieldValue: expectedCurrentYearRecord },
-    //        { message: "raw current year dateTime with all format flags", record: currentYearInput, format: "raw", expectedFieldValue: currentYearInput },
-    //        { message: "display different year dateTime with all format flags", record: diffYearInput, format: "display", expectedFieldValue: expectedDiffYearRecord },
-    //        { message: "raw different year dateTime with all format flags", record: diffYearInput, format: "raw", expectedFieldValue: diffYearInput },
-    //        { message: "display null dateTime with all format flags", record: nullInput, format: "display", expectedFieldValue: expectedNullRecord },
-    //        { message: "raw null dateTime with all format flags", record: nullInput, format: "raw", expectedFieldValue: nullInput }
-    //    ]
-    //}
-    //
-    ///**
-    //* Integration test that validates DD_MM_YY DateTime records formatting with all field property flags set
-    //*/
-    //it('Should create and retrieve DD_MM_YY dateTime display records when all format flags set', function (done) {
-    //    this.timeout(30000);
-    //    recordBase.createApp(appWithAllFlags_DD_MM_YY).then(function (appResponse) {
-    //        var app = JSON.parse(appResponse.body);
-    //        var dateTimeField;
-    //        app.tables[0].fields.forEach(function (field) {
-    //            if (field.name === 'dateTime') {
-    //                dateTimeField = field;
-    //            }
-    //        });
-    //        assert(dateTimeField, 'failed to find dateTime field');
-    //        var records = allFlagsDateTimeDataProvider_DD_MM_YY(dateTimeField.id);
-    //        //For each of the cases, create the record and execute the request
-    //        var fetchRecordPromises = [];
-    //        records.forEach(function (currentRecord) {
-    //            var recordsEndpoint = recordBase.apiBase.resolveRecordsEndpoint(app.id, app.tables[0].id);
-    //            fetchRecordPromises.push(recordBase.createAndFetchRecord(recordsEndpoint, currentRecord.record, '?format='+currentRecord.format));
-    //        });
-    //
-    //        //When all the records have been created and fetched, assert the values match expectations
-    //        Promise.all(fetchRecordPromises)
-    //            .then(function (results) {
-    //                for (var i = 0; i < results.length; i++) {
-    //                    var currentRecord = results[i];
-    //                    if(results[i].record) {
-    //                        currentRecord = results[i].record;
-    //                    }
-    //
-    //                    currentRecord.forEach(function (fieldValue) {
-    //                        if (fieldValue.id === records[i].expectedFieldValue.id) {
-    //                            assert.deepEqual(fieldValue, records[i].expectedFieldValue, 'Unexpected field value returned: '
-    //                            + JSON.stringify(fieldValue) + ', ' + JSON.stringify(records[i].expectedFieldValue));
-    //                        }
-    //                    });
-    //                }
-    //                done();
-    //            }).catch(function (errorMsg) {
-    //                assert(false, 'unable to resolve all records: ' + JSON.stringify(errorMsg));
-    //                done();
-    //            });
-    //    });
-    //});
-    //
-    ///**
-    //* DataProvider containing Records and record display expectations for YYYY_MM_DD DateTime field with all display props set
-    //*/
-    //function  allFlagsDateTimeDataProvider_YYYY_MM_DD(fid) {
-    //
-    //    // DateTime in current year
-    //    var currentYearInput = [{"id": fid, "value": dateCurrentYear}];
-    //    var expectedCurrentYearRecord = {"id": fid, "value": dateCurrentYear, "display": "Sunday, Apr-12 1:51 AM EDT"};
-    //
-    //    // DateTime in different year
-    //    var diffYearInput = [{"id": fid, "value": dateDiffYear}];
-    //    var expectedDiffYearRecord = {"id": fid, "value": dateDiffYear, "display": "Wednesday, 2000-Apr-12 1:51 AM EDT"};
-    //
-    //    // Null date
-    //    var nullInput = [{"id": fid, "value": null}];
-    //    var expectedNullRecord = {"id": fid, "value": null, "display": ""};
-    //
-    //    return [
-    //        { message: "display current year dateTime with all format flags", record: currentYearInput, format: "display", expectedFieldValue: expectedCurrentYearRecord },
-    //        { message: "raw current year dateTime with all format flags", record: currentYearInput, format: "raw", expectedFieldValue: currentYearInput },
-    //        { message: "display different year dateTime with all format flags", record: diffYearInput, format: "display", expectedFieldValue: expectedDiffYearRecord },
-    //        { message: "raw different year dateTime with all format flags", record: diffYearInput, format: "raw", expectedFieldValue: diffYearInput },
-    //        { message: "display null dateTime with all format flags", record: nullInput, format: "display", expectedFieldValue: expectedNullRecord },
-    //        { message: "raw null dateTime with all format flags", record: nullInput, format: "raw", expectedFieldValue: nullInput }
-    //    ]
-    //}
-    //
-    ///**
-    //* Integration test that validates YYYY_MM_DD DateTime records formatting with all field property flags set
-    //*/
-    //it('Should create and retrieve YYYY_MM_DD dateTime display records when all format flags set', function (done) {
-    //    this.timeout(30000);
-    //    recordBase.createApp(appWithAllFlags_YYYY_MM_DD).then(function (appResponse) {
-    //        var app = JSON.parse(appResponse.body);
-    //        var dateTimeField;
-    //        app.tables[0].fields.forEach(function (field) {
-    //            if (field.name === 'dateTime') {
-    //                dateTimeField = field;
-    //            }
-    //        });
-    //        assert(dateTimeField, 'failed to find dateTime field');
-    //        var records = allFlagsDateTimeDataProvider_YYYY_MM_DD(dateTimeField.id);
-    //        //For each of the cases, create the record and execute the request
-    //        var fetchRecordPromises = [];
-    //        records.forEach(function (currentRecord) {
-    //            var recordsEndpoint = recordBase.apiBase.resolveRecordsEndpoint(app.id, app.tables[0].id);
-    //            fetchRecordPromises.push(recordBase.createAndFetchRecord(recordsEndpoint, currentRecord.record, '?format='+currentRecord.format));
-    //        });
-    //
-    //        //When all the records have been created and fetched, assert the values match expectations
-    //        Promise.all(fetchRecordPromises)
-    //            .then(function (results) {
-    //                for (var i = 0; i < results.length; i++) {
-    //                    var currentRecord = results[i];
-    //                    if(results[i].record) {
-    //                        currentRecord = results[i].record;
-    //                    }
-    //
-    //                    currentRecord.forEach(function (fieldValue) {
-    //                        if (fieldValue.id === records[i].expectedFieldValue.id) {
-    //                             assert.deepEqual(fieldValue, records[i].expectedFieldValue, 'Unexpected field value returned: '
-    //                            + JSON.stringify(fieldValue) + ', ' + JSON.stringify(records[i].expectedFieldValue));
-    //                        }
-    //                    });
-    //                }
-    //                done();
-    //            }).catch(function (errorMsg) {
-    //                assert(false, 'unable to resolve all records: ' + JSON.stringify(errorMsg));
-    //                done();
-    //            });
-    //    });
-    //});
+    /**
+    * DataProvider containing Records and record display expectations for DateTime field with no display props set
+    */
+    function  noFlagsDateTimeDataProvider(fid) {
+        // DateTime in current year
+        var currentYearInput = [{"id": fid, "value": dateCurrentYear}];
+        var expectedCurrentYearRecord = {"id": fid, "value": dateCurrentYear+UTC, "display": "04-12-2015 1:51 AM"};
+
+        // DateTime in different year
+        var diffYearInput = [{"id": fid, "value": dateDiffYear}];
+        var expectedDiffYearRecord = {"id": fid, "value": dateDiffYear+UTC, "display": "04-12-2000 1:51 AM"};
+
+        // Null date
+        var nullInput = [{"id": fid, "value": null}];
+        var expectedNullRecord = {"id": fid, "value": null, "display": ""};
+
+        return [
+            { message: "display current year dateTime with no format flags", record: currentYearInput, format: "display", expectedFieldValue: expectedCurrentYearRecord },
+            { message: "raw current year dateTime with no format flags", record: currentYearInput, format: "raw", expectedFieldValue: currentYearInput },
+            { message: "display different year dateTime with no format flags", record: diffYearInput, format: "display", expectedFieldValue: expectedDiffYearRecord },
+            { message: "raw different year dateTime with no format flags", record: diffYearInput, format: "raw", expectedFieldValue: diffYearInput },
+            { message: "display null dateTime with no format flags", record: nullInput, format: "display", expectedFieldValue: expectedNullRecord },
+            { message: "raw null dateTime with no format flags", record: nullInput, format: "raw", expectedFieldValue: nullInput }
+        ]
+    }
+
+    /**
+    * Integration test that validates DateTime records formatting with no field property flags set
+    */
+    it('Should create and retrieve dateTime display records when no format flags set', function (done) {
+        this.timeout(30000);
+        recordBase.createApp(appWithNoFlags).then(function (appResponse) {
+            var app = JSON.parse(appResponse.body);
+            var dateTimeField;
+            app.tables[0].fields.forEach(function (field) {
+                if (field.name === 'dateTime') {
+                    dateTimeField = field;
+                }
+            });
+            assert(dateTimeField, 'failed to find dateTime field');
+            var records = noFlagsDateTimeDataProvider(dateTimeField.id);
+            //For each of the cases, create the record and execute the request
+            var fetchRecordPromises = [];
+            records.forEach(function (currentRecord) {
+                var recordsEndpoint = recordBase.apiBase.resolveRecordsEndpoint(app.id, app.tables[0].id);
+                fetchRecordPromises.push(recordBase.createAndFetchRecord(recordsEndpoint, currentRecord.record, '?format='+currentRecord.format));
+            });
+
+            //When all the records have been created and fetched, assert the values match expectations
+            Promise.all(fetchRecordPromises)
+                .then(function (results) {
+                    for (var i = 0; i < results.length; i++) {
+                        var currentRecord = results[i];
+                        if(results[i].record) {
+                            currentRecord = results[i].record;
+                        }
+
+                        currentRecord.forEach(function (fieldValue) {
+                            if (fieldValue.id === records[i].expectedFieldValue.id) {
+                                console.log('!!!!!!!!!!!!!!!!!!!');
+                               console.log(JSON.stringify(fieldValue));
+                                console.log(JSON.stringify(records[i].expectedFieldValue));
+                                assert.deepEqual(fieldValue, records[i].expectedFieldValue, 'Unexpected field value returned: '
+                                + JSON.stringify(fieldValue) + ', ' + JSON.stringify(records[i].expectedFieldValue));
+                            }
+                        });
+                    }
+                    done();
+                }).catch(function (errorMsg) {
+                    assert(false, 'unable to resolve all records: ' + JSON.stringify(errorMsg));
+                    done();
+                });
+        });
+    });
+
+    /**
+    * DataProvider containing Records and record display expectations for DD_MM_YYYY DateTime field with all display props set
+    */
+    function  allFlagsDateTimeDataProvider_DD_MM_YYYY(fid) {
+
+        // DateTime in current year
+        var currentYearInput = [{"id": fid, "value": dateCurrentYear}];
+        var expectedCurrentYearRecord = {"id": fid, "value": dateCurrentYear+UTC, "display": "Sunday, 12-Apr 1:51 AM EDT"};
+
+        // DateTime in different year
+        var diffYearInput = [{"id": fid, "value": dateDiffYear}];
+        var expectedDiffYearRecord = {"id": fid, "value": dateDiffYear+UTC, "display": "Wednesday, 12-Apr-2000 1:51 AM EDT"};
+
+        // Null date
+        var nullInput = [{"id": fid, "value": null}];
+        var expectedNullRecord = {"id": fid, "value": null, "display": ""};
+
+        return [
+            { message: "display current year dateTime with all format flags", record: currentYearInput, format: "display", expectedFieldValue: expectedCurrentYearRecord },
+            { message: "raw current year dateTime with all format flags", record: currentYearInput, format: "raw", expectedFieldValue: currentYearInput },
+            { message: "display different year dateTime with all format flags", record: diffYearInput, format: "display", expectedFieldValue: expectedDiffYearRecord },
+            { message: "raw different year dateTime with all format flags", record: diffYearInput, format: "raw", expectedFieldValue: diffYearInput },
+            { message: "display null dateTime with all format flags", record: nullInput, format: "display", expectedFieldValue: expectedNullRecord },
+            { message: "raw null dateTime with all format flags", record: nullInput, format: "raw", expectedFieldValue: nullInput }
+        ]
+    }
+
+    /**
+    * Integration test that validates DD_MM_YYYY DateTime records formatting with all field property flags set
+    */
+    it('Should create and retrieve DD_MM_YYYY dateTime display records when all format flags set', function (done) {
+        this.timeout(30000);
+        recordBase.createApp(appWithAllFlags_DD_MM_YYYY).then(function (appResponse) {
+            var app = JSON.parse(appResponse.body);
+            var dateTimeField;
+            app.tables[0].fields.forEach(function (field) {
+                if (field.name === 'dateTime') {
+                    dateTimeField = field;
+                }
+            });
+            assert(dateTimeField, 'failed to find dateTime field');
+            var records = allFlagsDateTimeDataProvider_DD_MM_YYYY(dateTimeField.id);
+            //For each of the cases, create the record and execute the request
+            var fetchRecordPromises = [];
+            records.forEach(function (currentRecord) {
+                var recordsEndpoint = recordBase.apiBase.resolveRecordsEndpoint(app.id, app.tables[0].id);
+                fetchRecordPromises.push(recordBase.createAndFetchRecord(recordsEndpoint, currentRecord.record, '?format='+currentRecord.format));
+            });
+
+            //When all the records have been created and fetched, assert the values match expectations
+            Promise.all(fetchRecordPromises)
+                .then(function (results) {
+                    for (var i = 0; i < results.length; i++) {
+                        var currentRecord = results[i];
+                        if(results[i].record) {
+                            currentRecord = results[i].record;
+                        }
+
+                        currentRecord.forEach(function (fieldValue) {
+                            if (fieldValue.id === records[i].expectedFieldValue.id) {
+                                assert.deepEqual(fieldValue, records[i].expectedFieldValue, 'Unexpected field value returned: '
+                                + JSON.stringify(fieldValue) + ', ' + JSON.stringify(records[i].expectedFieldValue));
+                            }
+                        });
+                    }
+                    done();
+                }).catch(function (errorMsg) {
+                    assert(false, 'unable to resolve all records: ' + JSON.stringify(errorMsg));
+                    done();
+                });
+        });
+    });
+
+    /**
+    * DataProvider containing Records and record display expectations for MM_DD_YYYY DateTime field with all display props set
+    */
+    function  allFlagsDateTimeDataProvider_MM_DD_YYYY(fid) {
+
+        // DateTime in current year
+        var currentYearInput = [{"id": fid, "value": dateCurrentYear}];
+        var expectedCurrentYearRecord = {"id": fid, "value": dateCurrentYear+UTC, "display": "Sunday, Apr-12 1:51 AM EDT"};
+
+        // DateTime in different year
+        var diffYearInput = [{"id": fid, "value": dateDiffYear}];
+        var expectedDiffYearRecord = {"id": fid, "value": dateDiffYear+UTC, "display": "Wednesday, Apr-12-2000 1:51 AM EDT"};
+
+        // Null date
+        var nullInput = [{"id": fid, "value": null}];
+        var expectedNullRecord = {"id": fid, "value": null, "display": ""};
+
+        return [
+            { message: "display current year dateTime with all format flags", record: currentYearInput, format: "display", expectedFieldValue: expectedCurrentYearRecord },
+            { message: "raw current year dateTime with all format flags", record: currentYearInput, format: "raw", expectedFieldValue: currentYearInput },
+            { message: "display different year dateTime with all format flags", record: diffYearInput, format: "display", expectedFieldValue: expectedDiffYearRecord },
+            { message: "raw different year dateTime with all format flags", record: diffYearInput, format: "raw", expectedFieldValue: diffYearInput },
+            { message: "display null dateTime with all format flags", record: nullInput, format: "display", expectedFieldValue: expectedNullRecord },
+            { message: "raw null dateTime with all format flags", record: nullInput, format: "raw", expectedFieldValue: nullInput }
+        ]
+    }
+
+    /**
+    * Integration test that validates MM_DD_YYYY DateTime records formatting with all field property flags set
+    */
+    it('Should create and retrieve MM_DD_YYYY dateTime display records when all format flags set', function (done) {
+        this.timeout(30000);
+        recordBase.createApp(appWithAllFlags_MM_DD_YYYY).then(function (appResponse) {
+            var app = JSON.parse(appResponse.body);
+            var dateTimeField;
+            app.tables[0].fields.forEach(function (field) {
+                if (field.name === 'dateTime') {
+                    dateTimeField = field;
+                }
+            });
+            assert(dateTimeField, 'failed to find dateTime field');
+            var records = allFlagsDateTimeDataProvider_MM_DD_YYYY(dateTimeField.id);
+            //For each of the cases, create the record and execute the request
+            var fetchRecordPromises = [];
+            records.forEach(function (currentRecord) {
+                var recordsEndpoint = recordBase.apiBase.resolveRecordsEndpoint(app.id, app.tables[0].id);
+                fetchRecordPromises.push(recordBase.createAndFetchRecord(recordsEndpoint, currentRecord.record, '?format='+currentRecord.format));
+            });
+
+            //When all the records have been created and fetched, assert the values match expectations
+            Promise.all(fetchRecordPromises)
+                .then(function (results) {
+                    for (var i = 0; i < results.length; i++) {
+                        var currentRecord = results[i];
+                        if(results[i].record) {
+                            currentRecord = results[i].record;
+                        }
+
+                        currentRecord.forEach(function (fieldValue) {
+                            if (fieldValue.id === records[i].expectedFieldValue.id) {
+                                assert.deepEqual(fieldValue, records[i].expectedFieldValue, 'Unexpected field value returned: '
+                                + JSON.stringify(fieldValue) + ', ' + JSON.stringify(records[i].expectedFieldValue));
+                            }
+                        });
+                    }
+                    done();
+                }).catch(function (errorMsg) {
+                    assert(false, 'unable to resolve all records: ' + JSON.stringify(errorMsg));
+                    done();
+                });
+        });
+    });
+
+    /**
+    * DataProvider containing Records and record display expectations for MM_DD_YY DateTime field with all display props set
+    */
+    function  allFlagsDateTimeDataProvider_MM_DD_YY(fid) {
+
+        // DateTime in current year
+        var currentYearInput = [{"id": fid, "value": dateCurrentYear}];
+        var expectedCurrentYearRecord = {"id": fid, "value": dateCurrentYear+UTC, "display": "Sunday, Apr-12 1:51 AM EDT"};
+
+        // DateTime in different year
+        var diffYearInput = [{"id": fid, "value": dateDiffYear}];
+        var expectedDiffYearRecord = {"id": fid, "value": dateDiffYear+UTC, "display": "Wednesday, Apr-12-00 1:51 AM EDT"};
+
+        // Null date
+        var nullInput = [{"id": fid, "value": null}];
+        var expectedNullRecord = {"id": fid, "value": null, "display": ""};
+
+        return [
+            { message: "display current year dateTime with all format flags", record: currentYearInput, format: "display", expectedFieldValue: expectedCurrentYearRecord },
+            { message: "raw current year dateTime with all format flags", record: currentYearInput, format: "raw", expectedFieldValue: currentYearInput },
+            { message: "display different year dateTime with all format flags", record: diffYearInput, format: "display", expectedFieldValue: expectedDiffYearRecord },
+            { message: "raw different year dateTime with all format flags", record: diffYearInput, format: "raw", expectedFieldValue: diffYearInput },
+            { message: "display null dateTime with all format flags", record: nullInput, format: "display", expectedFieldValue: expectedNullRecord },
+            { message: "raw null dateTime with all format flags", record: nullInput, format: "raw", expectedFieldValue: nullInput }
+        ]
+    }
+
+    /**
+    * Integration test that validates MM_DD_YY DateTime records formatting with all field property flags set
+    */
+    it('Should create and retrieve MM_DD_YY dateTime display records when all format flags set', function (done) {
+        this.timeout(30000);
+        recordBase.createApp(appWithAllFlags_MM_DD_YY).then(function (appResponse) {
+            var app = JSON.parse(appResponse.body);
+            var dateTimeField;
+            app.tables[0].fields.forEach(function (field) {
+                if (field.name === 'dateTime') {
+                    dateTimeField = field;
+                }
+            });
+            assert(dateTimeField, 'failed to find dateTime field');
+            var records = allFlagsDateTimeDataProvider_MM_DD_YY(dateTimeField.id);
+            //For each of the cases, create the record and execute the request
+            var fetchRecordPromises = [];
+            records.forEach(function (currentRecord) {
+                var recordsEndpoint = recordBase.apiBase.resolveRecordsEndpoint(app.id, app.tables[0].id);
+                fetchRecordPromises.push(recordBase.createAndFetchRecord(recordsEndpoint, currentRecord.record, '?format='+currentRecord.format));
+            });
+
+            //When all the records have been created and fetched, assert the values match expectations
+            Promise.all(fetchRecordPromises)
+                .then(function (results) {
+                    for (var i = 0; i < results.length; i++) {
+                        var currentRecord = results[i];
+                        if(results[i].record) {
+                            currentRecord = results[i].record;
+                        }
+
+                        currentRecord.forEach(function (fieldValue) {
+                            if (fieldValue.id === records[i].expectedFieldValue.id) {
+                                assert.deepEqual(fieldValue, records[i].expectedFieldValue, 'Unexpected field value returned: '
+                                + JSON.stringify(fieldValue) + ', ' + JSON.stringify(records[i].expectedFieldValue));
+                            }
+                        });
+                    }
+                    done();
+                }).catch(function (errorMsg) {
+                    assert(false, 'unable to resolve all records: ' + JSON.stringify(errorMsg));
+                    done();
+                });
+        });
+    });
+
+    /**
+    * DataProvider containing Records and record display expectations for DD_MM_YY DateTime field with all display props set
+    */
+    function  allFlagsDateTimeDataProvider_DD_MM_YY(fid) {
+
+        // DateTime in current year
+        var currentYearInput = [{"id": fid, "value": dateCurrentYear}];
+        var expectedCurrentYearRecord = {"id": fid, "value": dateCurrentYear+UTC, "display": "Sunday, 12-Apr 1:51 AM EDT"};
+
+        // DateTime in different year
+        var diffYearInput = [{"id": fid, "value": dateDiffYear}];
+        var expectedDiffYearRecord = {"id": fid, "value": dateDiffYear+UTC, "display": "Wednesday, 12-Apr-00 1:51 AM EDT"};
+
+        // Null date
+        var nullInput = [{"id": fid, "value": null}];
+        var expectedNullRecord = {"id": fid, "value": null, "display": ""};
+
+        return [
+            { message: "display current year dateTime with all format flags", record: currentYearInput, format: "display", expectedFieldValue: expectedCurrentYearRecord },
+            { message: "raw current year dateTime with all format flags", record: currentYearInput, format: "raw", expectedFieldValue: currentYearInput },
+            { message: "display different year dateTime with all format flags", record: diffYearInput, format: "display", expectedFieldValue: expectedDiffYearRecord },
+            { message: "raw different year dateTime with all format flags", record: diffYearInput, format: "raw", expectedFieldValue: diffYearInput },
+            { message: "display null dateTime with all format flags", record: nullInput, format: "display", expectedFieldValue: expectedNullRecord },
+            { message: "raw null dateTime with all format flags", record: nullInput, format: "raw", expectedFieldValue: nullInput }
+        ]
+    }
+
+    /**
+    * Integration test that validates DD_MM_YY DateTime records formatting with all field property flags set
+    */
+    it('Should create and retrieve DD_MM_YY dateTime display records when all format flags set', function (done) {
+        this.timeout(30000);
+        recordBase.createApp(appWithAllFlags_DD_MM_YY).then(function (appResponse) {
+            var app = JSON.parse(appResponse.body);
+            var dateTimeField;
+            app.tables[0].fields.forEach(function (field) {
+                if (field.name === 'dateTime') {
+                    dateTimeField = field;
+                }
+            });
+            assert(dateTimeField, 'failed to find dateTime field');
+            var records = allFlagsDateTimeDataProvider_DD_MM_YY(dateTimeField.id);
+            //For each of the cases, create the record and execute the request
+            var fetchRecordPromises = [];
+            records.forEach(function (currentRecord) {
+                var recordsEndpoint = recordBase.apiBase.resolveRecordsEndpoint(app.id, app.tables[0].id);
+                fetchRecordPromises.push(recordBase.createAndFetchRecord(recordsEndpoint, currentRecord.record, '?format='+currentRecord.format));
+            });
+
+            //When all the records have been created and fetched, assert the values match expectations
+            Promise.all(fetchRecordPromises)
+                .then(function (results) {
+                    for (var i = 0; i < results.length; i++) {
+                        var currentRecord = results[i];
+                        if(results[i].record) {
+                            currentRecord = results[i].record;
+                        }
+
+                        currentRecord.forEach(function (fieldValue) {
+                            if (fieldValue.id === records[i].expectedFieldValue.id) {
+                                assert.deepEqual(fieldValue, records[i].expectedFieldValue, 'Unexpected field value returned: '
+                                + JSON.stringify(fieldValue) + ', ' + JSON.stringify(records[i].expectedFieldValue));
+                            }
+                        });
+                    }
+                    done();
+                }).catch(function (errorMsg) {
+                    assert(false, 'unable to resolve all records: ' + JSON.stringify(errorMsg));
+                    done();
+                });
+        });
+    });
+
+    /**
+    * DataProvider containing Records and record display expectations for YYYY_MM_DD DateTime field with all display props set
+    */
+    function  allFlagsDateTimeDataProvider_YYYY_MM_DD(fid) {
+
+        // DateTime in current year
+        var currentYearInput = [{"id": fid, "value": dateCurrentYear}];
+        var expectedCurrentYearRecord = {"id": fid, "value": dateCurrentYear+UTC, "display": "Sunday, Apr-12 1:51 AM EDT"};
+
+        // DateTime in different year
+        var diffYearInput = [{"id": fid, "value": dateDiffYear}];
+        var expectedDiffYearRecord = {"id": fid, "value": dateDiffYear+UTC, "display": "Wednesday, 2000-Apr-12 1:51 AM EDT"};
+
+        // Null date
+        var nullInput = [{"id": fid, "value": null}];
+        var expectedNullRecord = {"id": fid, "value": null, "display": ""};
+
+        return [
+            { message: "display current year dateTime with all format flags", record: currentYearInput, format: "display", expectedFieldValue: expectedCurrentYearRecord },
+            { message: "raw current year dateTime with all format flags", record: currentYearInput, format: "raw", expectedFieldValue: currentYearInput },
+            { message: "display different year dateTime with all format flags", record: diffYearInput, format: "display", expectedFieldValue: expectedDiffYearRecord },
+            { message: "raw different year dateTime with all format flags", record: diffYearInput, format: "raw", expectedFieldValue: diffYearInput },
+            { message: "display null dateTime with all format flags", record: nullInput, format: "display", expectedFieldValue: expectedNullRecord },
+            { message: "raw null dateTime with all format flags", record: nullInput, format: "raw", expectedFieldValue: nullInput }
+        ]
+    }
+
+    /**
+    * Integration test that validates YYYY_MM_DD DateTime records formatting with all field property flags set
+    */
+    it('Should create and retrieve YYYY_MM_DD dateTime display records when all format flags set', function (done) {
+        this.timeout(30000);
+        recordBase.createApp(appWithAllFlags_YYYY_MM_DD).then(function (appResponse) {
+            var app = JSON.parse(appResponse.body);
+            var dateTimeField;
+            app.tables[0].fields.forEach(function (field) {
+                if (field.name === 'dateTime') {
+                    dateTimeField = field;
+                }
+            });
+            assert(dateTimeField, 'failed to find dateTime field');
+            var records = allFlagsDateTimeDataProvider_YYYY_MM_DD(dateTimeField.id);
+            //For each of the cases, create the record and execute the request
+            var fetchRecordPromises = [];
+            records.forEach(function (currentRecord) {
+                var recordsEndpoint = recordBase.apiBase.resolveRecordsEndpoint(app.id, app.tables[0].id);
+                fetchRecordPromises.push(recordBase.createAndFetchRecord(recordsEndpoint, currentRecord.record, '?format='+currentRecord.format));
+            });
+
+            //When all the records have been created and fetched, assert the values match expectations
+            Promise.all(fetchRecordPromises)
+                .then(function (results) {
+                    for (var i = 0; i < results.length; i++) {
+                        var currentRecord = results[i];
+                        if(results[i].record) {
+                            currentRecord = results[i].record;
+                        }
+
+                        currentRecord.forEach(function (fieldValue) {
+                            if (fieldValue.id === records[i].expectedFieldValue.id) {
+                                 assert.deepEqual(fieldValue, records[i].expectedFieldValue, 'Unexpected field value returned: '
+                                + JSON.stringify(fieldValue) + ', ' + JSON.stringify(records[i].expectedFieldValue));
+                            }
+                        });
+                    }
+                    done();
+                }).catch(function (errorMsg) {
+                    assert(false, 'unable to resolve all records: ' + JSON.stringify(errorMsg));
+                    done();
+                });
+        });
+    });
 
     //Cleanup the test realm after all tests in the block
     after(function (done) {
