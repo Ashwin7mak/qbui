@@ -44,8 +44,8 @@
                                 }).catch(function (error) {
                                     fetchRecordDeferred.reject(error);
                                 });
-                        });
-                });
+                        }).catch(function(currError){console.log(JSON.stringify(currError));});
+                }).catch(function(err){console.log(JSON.stringify(err));});
                 return fetchRecordDeferred.promise;
             }
         };

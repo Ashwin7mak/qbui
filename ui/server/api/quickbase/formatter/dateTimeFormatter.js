@@ -19,7 +19,6 @@
     var UNIVERSAL_TIMEZONE = 'Universal';
     var DEFAULT_TIMEZONE = 'America/Los_Angeles';
     var TIMEZONE_FORMATTER = ' z';
-    var UTC_STRING = '[UTC]';
     //Base formats
     var DATE_FORMATS = Object.freeze({
         MM_DD_YY: TWO_DIGIT_MONTH + DASH + TWO_DIGIT_DAY + DASH + TWO_DIGIT_YEAR,
@@ -94,7 +93,7 @@
                     timeZone = DEFAULT_TIMEZONE;
                 }
             }
-            var rawInput = fieldValue.value.replace(UTC_STRING, '');
+            var rawInput = fieldValue.value.replace(/(\[.*?\])/, '');
             var d;
             try {
                 //Date constructor expects ISO 8601 date

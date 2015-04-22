@@ -43,7 +43,7 @@
             }
 
             //Declare the date and moment formatter
-            var d = new Date(fieldValue.value);
+            var d = new Date(fieldValue.value.replace(/(\[.*?\])/, ''));
             //Resolve whether or not to shift based on timezone
             var timeZone = UTC_TIMEZONE;
             if (fieldInfo.useTimezone) {
