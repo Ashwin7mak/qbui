@@ -31,6 +31,11 @@
                 fullPath = config.javaHost + path;
             } else {
                 var methodLess = config.DOMAIN.replace(HTTP, '');
+                //If we're dealing with a delete realm, use the javaHost and not the node server, which doesn't
+                //proxy realm requests to the javahost for security reasons
+                if(path.indexOf(REALMS_ENDPOINT) !== -1) {
+                    methodLess = config.javaHost.replace(HTTP, '');
+                }
                 fullPath = HTTP + realmSubdomain + '.' + methodLess + path;
             }
             return fullPath;
