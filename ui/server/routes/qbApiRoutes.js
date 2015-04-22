@@ -40,6 +40,14 @@
             }
         );
 
+        //Disable proxying of realm and ticket requests via the node webserver
+        app.route(['/api/:version/realms*', '/api/:version/ticket*']).all(
+            function(req, res) {
+                requestHelper.logRoute(req);
+                res.status(404).send();
+            }
+        );
+
         //  TODO: need to figure out the routing..swagger doc vs 'real' api data call vs other.
         //  TODO: .right now we are routing through this one definition...
         //  TODO: ..may want to refine...as it's probably a bit too broad...tbd
