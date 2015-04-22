@@ -29,7 +29,7 @@ describe('Date record formatter unit test', function () {
                 "type": "DATE",
                 "showMonthAsName": false,
                 "showDayOfWeek": false,
-                "format": "MM-dd-uuuu",
+                "dateFormat": "MM-dd-uuuu",
                 "timeZone": "America/New_York"};
         var fieldInfo_MMDDYYYY = [mmddyyyy];
         var expectedRecords_MMDDYYYY =
@@ -197,7 +197,7 @@ describe('Date record formatter unit test', function () {
             "type": "DATE",
             "showMonthAsName": false,
             "showDayOfWeek": false,
-            "format": "MM-dd-uu",
+            "dateFormat": "MM-dd-uu",
             "timeZone": "America/New_York"};
         var fieldInfo_MMDDYY = [mmddyy];
         var expectedRecords_MMDDYY =
@@ -365,7 +365,7 @@ describe('Date record formatter unit test', function () {
             "type": "DATE",
             "showMonthAsName": false,
             "showDayOfWeek": false,
-            "format": "dd-MM-uu",
+            "dateFormat": "dd-MM-uu",
             "timeZone": "America/New_York"};
         var fieldInfo_DDMMYY = [ddmmyy];
         var expectedRecords_DDMMYY =
@@ -534,7 +534,7 @@ describe('Date record formatter unit test', function () {
             "type": "DATE",
             "showMonthAsName": false,
             "showDayOfWeek": false,
-            "format": "dd-MM-uuuu",
+            "dateFormat": "dd-MM-uuuu",
             "timeZone": "America/New_York"};
         var fieldInfo_DDMMYYYY = [ddmmyyyy];
         var expectedRecords_DDMMYYYY =
@@ -702,7 +702,7 @@ describe('Date record formatter unit test', function () {
             "type": "DATE",
             "showMonthAsName": false,
             "showDayOfWeek": false,
-            "format": "uuuu-MM-dd",
+            "dateFormat": "uuuu-MM-dd",
             "timeZone": "America/New_York"};
         var fieldInfo_YYYYMMDD = [yyyymmdd];
         var expectedRecords_YYYYMMDD =
@@ -870,7 +870,7 @@ describe('Date record formatter unit test', function () {
             "type": "DATE",
             "showMonthAsName": false,
             "showDayOfWeek": false,
-            "format": "invalid_date_format",
+            "dateFormat": "invalid_date_format",
             "timeZone": "America/New_York"};
         var fieldInfo_InvalidFormat = [invalidFormat];
         var expectedRecords_InvalidFormat =

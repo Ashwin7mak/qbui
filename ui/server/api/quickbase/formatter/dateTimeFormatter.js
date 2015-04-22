@@ -63,7 +63,7 @@
         generateFormat: function(fieldInfo) {
             var jsDateFormat;
             if(fieldInfo) {
-                jsDateFormat = JAVA_TO_JS_DATE_FORMATS[fieldInfo.format];
+                jsDateFormat = JAVA_TO_JS_DATE_FORMATS[fieldInfo.dateFormat];
             }
             if (!jsDateFormat) {
                 jsDateFormat = DATE_FORMATS.MM_DD_YYYY;
@@ -86,14 +86,6 @@
             if (!fieldValue || !fieldValue.value) {
                 return '';
             }
-            var d;
-            try {
-                //Date constructor expects ISO 8601 date
-                d = new Date(fieldValue.value);
-            } catch (err) {
-                console.log('failed to parse a valid date attempting to display format a date. ' + fieldValue.value);
-                return '';
-            }
             var timeZone = UNIVERSAL_TIMEZONE;
             if (fieldInfo.type === DATE_TIME || fieldInfo.type === FORMULA_DATE_TIME) {
                 timeZone = fieldInfo.timeZone;
@@ -101,13 +93,22 @@
                     timeZone = DEFAULT_TIMEZONE;
                 }
             }
+            var rawInput = fieldValue.value.replace(/(\[.*?\])/, '');
+            var d;
+            try {
+                //Date constructor expects ISO 8601 date
+                d = new Date(rawInput);
+            } catch (err) {
+                console.log('failed to parse a valid date attempting to display format a date. ' + fieldValue.value);
+                return '';
+            }
             var m = moment.tz(d, timeZone);
             var jsDateFormat = fieldInfo.jsFormat;
             if(!jsDateFormat) {
                 jsDateFormat = this.generateFormatterString(fieldInfo);
             }
             //If the date is the current year and hideYearIfCurrent is true, remove the date from the formatter string
-            if (fieldInfo.hideYearIfCurrent && d.getFullYear() === new Date().getFullYear()) {
+            if (fieldInfo.hideYearIfCurrent && m.format(FOUR_DIGIT_YEAR) == new Date().getFullYear()) {
                 jsDateFormat = hideYear(jsDateFormat);
             }
             return m.format(jsDateFormat);

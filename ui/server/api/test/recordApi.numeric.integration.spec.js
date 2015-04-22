@@ -181,7 +181,6 @@ describe('API - Numeric record test cases', function () {
                     numericField = field;
                 }
             });
-            //console.log('NUMERIC FIELD: ' +JSON.stringify(numericField));
             assert(numericField, 'failed to find numeric field');
             var records = allFlagsNumericDataProvider(numericField.id);
             //For each of the cases, create the record and execute the request
@@ -201,8 +200,6 @@ describe('API - Numeric record test cases', function () {
                         }
                         currentRecord.forEach(function (fieldValue) {
                             if (fieldValue.id === records[i].expectedFieldValue.id) {
-                                //console.log('EXPECTED: ' +JSON.stringify(records[i].expectedFieldValue));
-                                //console.log('ACTUAL: ' +JSON.stringify(fieldValue));
                                 assert.deepEqual(fieldValue, records[i].expectedFieldValue, 'Unexpected field value returned: '
                                 + JSON.stringify(fieldValue) + ', ' + JSON.stringify(records[i].expectedFieldValue));
                             }
