@@ -9,7 +9,7 @@ var apiBase = require('./api.base.js')(config);
  * Negative integration test for  realm and ticket creation, which are not proxied to the javahost
  * by a running node server
  */
-describe('API - PhoneNumber record test cases', function () {
+describe('API - negative realm & ticket test cases', function () {
 
     it('Should fail to create a realm with a 404', function (done) {
         var opts = {
