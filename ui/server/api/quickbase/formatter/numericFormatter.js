@@ -7,12 +7,22 @@
     //Module constants:
     var COMMA = ',';
     var ZERO_CHAR = '0';
-    var DASH = '-';
     var PERIOD = '.';
     var PATTERN_EVERY_THREE = 'EVERY_THREE';
     var PATTERN_THREE_THEN_TWO = 'THREE_THEN_TWO';
+    var CURRENCY_LEFT = "LEFT";
+    var CURRENCY_RIGHT = "RIGHT";
+    var CURRENCY_SYMBOL = "$";
+    var PERCENT_SYMBOL = "%";
+    var NUMERIC = "NUMERIC";
+    var PERCENT = "PERCENT";
+    var FORMULA_PERCENT = "FORMULA_" + PERCENT;
+    var CURRENCY = "CURRENCY";
+    var FORMULA_CURRENCY = "FORMULA_" + CURRENCY;
     //Defaults & supported values
     var DEFAULT_SEPARATOR_START = 3;
+    var DEFAULT_CURRENCY_SYMBOL = CURRENCY_SYMBOL;
+    var DEFAULT_CURRENCY_SYMBOL_POSITION = CURRENCY_LEFT;
     var DEFAULT_SEPARATOR_MARK = null;
     var DEFAULT_DECIMAL_PLACES = null;
     var DEFAULT_DECIMAL_MARK = PERIOD;
@@ -110,9 +120,20 @@
                 mantissaString = ret.join(opts.separatorMark);
             }
         }
+        //Construct the return string
         var returnValue = mantissaString;
         if (characteristicString) {
             returnValue = returnValue + opts.decimalMark + characteristicString;
+        }
+        //Handle percent and currency subtypes
+        if(opts.type === FORMULA_CURRENCY || opts.type === CURRENCY) {
+            if(opts.position === CURRENCY_RIGHT) {
+                returnValue = returnValue + ' ' + opts.symbol;
+            } else {
+                returnValue = opts.symbol + returnValue;
+            }
+        } else if(opts.type === PERCENT || opts.type === FORMULA_PERCENT) {
+            returnValue = returnValue + PERCENT_SYMBOL;
         }
         return returnValue;
     }
@@ -132,6 +153,11 @@
                 opts.separatorMark = fieldInfo.clientSideAttributes.separator_mark;
                 opts.separatorPattern = fieldInfo.clientSideAttributes.separator_pattern;
                 opts.decimalMark = fieldInfo.clientSideAttributes.decimal_mark;
+                opts.type = fieldInfo.type;
+                if(opts.type === CURRENCY || opts.type === FORMULA_CURRENCY) {
+                    opts.symbol = fieldInfo.clientSideAttributes.symbol;
+                    opts.position = fieldInfo.clientSideAttributes.position;
+                }
             }
             opts.decimalPlaces = fieldInfo.decimalPlaces;
             //If decimal places is not a number or less than 0, set it to default value
@@ -149,6 +175,18 @@
             }
             if (!opts.decimalMark || opts.decimalMark.length !== 1) {
                 opts.decimalMark = DEFAULT_DECIMAL_MARK;
+            }
+            if(!opts.type) {
+                opts.type = NUMERIC;
+            }
+            //Add any additional currency options, if this is a currency field
+            if(opts.type === CURRENCY || opts.type === FORMULA_CURRENCY) {
+                if(!opts.symbol) {
+                    opts.symbol = DEFAULT_CURRENCY_SYMBOL;
+                }
+                if(!opts.position) {
+                    opts.position = DEFAULT_CURRENCY_SYMBOL_POSITION;
+                }
             }
             return opts;
         },

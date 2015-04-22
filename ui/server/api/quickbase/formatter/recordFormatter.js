@@ -18,6 +18,10 @@
     var TIME_OF_DAY = 'TIME_OF_DAY';
     var NUMERIC = 'NUMERIC';
     var FORMULA_NUMERIC = 'FORMULA_NUMERIC';
+    var CURRENCY = 'CURRENCY';
+    var FORMULA_CURRENCY = 'FORMULA_CURRENCY';
+    var PERCENT = 'PERCENT';
+    var FORMULA_PERCENT = 'FORMULA_PERCENT';
 
     /**
      * Certain fields may require generation of a formatter string that will be used for each record in the
@@ -42,6 +46,10 @@
                     break;
                 case NUMERIC:
                 case FORMULA_NUMERIC:
+                case CURRENCY:
+                case FORMULA_CURRENCY:
+                case PERCENT:
+                case FORMULA_PERCENT:
                     fieldInfos[i].jsFormat = numericFormatter.generateFormat(fieldInfos[i]);
                 default:
                     break;
@@ -68,6 +76,10 @@
                     break;
                 case NUMERIC:
                 case FORMULA_NUMERIC:
+                case CURRENCY:
+                case FORMULA_CURRENCY:
+                case PERCENT:
+                case FORMULA_PERCENT:
                     fieldValue.display = numericFormatter.format(fieldValue, fieldInfo);
                     break;
                 default:
