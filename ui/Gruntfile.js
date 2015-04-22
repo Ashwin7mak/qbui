@@ -515,14 +515,25 @@ module.exports = function (grunt) {
                         return 'mocha-jenkins-reporter';
                     }())
                 },
-                src: ['server/**/*.spec.js']
+                src: ['server/**/test/*.unit.spec.js']
+            },
+            integration: {
+                options: {
+                    reporter: (function () {
+                        process.env.MOCHA_COLORS = false;
+                        process.env.JUNIT_REPORT_PATH = serverReportDir + '/integration/server_report.xml';
+                        return 'mocha-jenkins-reporter';
+                    }())
+                },
+                src: ['server/**/test/*.integration.spec.js']
             }
+
         },
 
         //  Code coverage against the express code
         mocha_istanbul: {
             coverage: {
-                src: ['server/**/*.spec.js'],
+                src: ['server/**/test/*.unit.spec.js'],
                 options: {
                     mask: '**/*.spec.js',
                     check: {
@@ -704,15 +715,24 @@ module.exports = function (grunt) {
     grunt.registerTask('test', function (target) {
         //  need this folder to exist or mocha tests will fail
         grunt.file.mkdir(serverReportDir + '/unit/');
+        grunt.file.mkdir(serverReportDir + '/integration/');
 
         if (target === 'server') {
+            //server unit tests
             return grunt.task.run([
                 'clean:server',
-                'mochaTest',
-                'mocha_istanbul'
+                'mocha_istanbul:coverage'
+            ]);
+        }
+        if (target === 'integration') {
+            //server integration tests
+            return grunt.task.run([
+                'clean:server',
+                'mochaTest:integration',
             ]);
         }
         if (target === 'client') {
+            //client unit tests
             return grunt.task.run([
                 'clean:client',
                 'concurrent:test',
@@ -745,6 +765,12 @@ module.exports = function (grunt) {
     grunt.registerTask('ciTest', [
         'env:test',
         'test'
+    ]);
+
+
+    grunt.registerTask('ciIntegration', [
+        'env:test',
+        'test:integration'
     ]);
 
     grunt.registerTask('build', [
