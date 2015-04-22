@@ -133,7 +133,7 @@
                 if (!context.realm) {
                     /*
                      * What follows are the steps needed to create a realm and a ticket for that realm such that
-                     * subsequent requests can be made that are realm specific without worrying about ticket creation
+                     * subsequent requests can be made to that are realm without worrying about ticket creation
                      * or realm subdomain resolution.  The steps:
                      *  1) create an admin ticket
                      *  2) use the admin ticket to create a realm
