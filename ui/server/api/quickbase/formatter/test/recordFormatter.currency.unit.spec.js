@@ -72,12 +72,22 @@ describe('Currency record formatter unit test', function () {
         var rightEuroExpected = JSON.parse(JSON.stringify(rightOfSignInput));
         rightEuroExpected[0][0].display = '-2.88 €';
 
+        //Test for right of sign
+        var rightOfSignPositiveEuroFieldInfo = JSON.parse(JSON.stringify(noFlagsFieldInfo));
+        rightOfSignPositiveEuroFieldInfo[0].clientSideAttributes.position = 'RIGHT_OF_SIGN';
+        rightOfSignPositiveEuroFieldInfo[0].clientSideAttributes.symbol = '€';
+        var rightOfSignPositiveEuroInput = JSON.parse(JSON.stringify(defaultRecordInput));
+        rightOfSignPositiveEuroInput[0][0].value = 2.883;
+        var rightOfSignPositiveEuroExpected = JSON.parse(JSON.stringify(rightOfSignPositiveEuroInput));
+        rightOfSignPositiveEuroExpected[0][0].display = '€2.88';
+
         var cases =[
             { message: "Currency - decimal with no format -> symbol left", records: recordInputDecimalOnly, fieldInfo: noFlagsFieldInfo, expectedRecords: expectedDecimal_NoFlags },
             { message: "Currency - right of sign positioning of symbol", records: rightOfSignInput, fieldInfo: rightOfSignFieldInfo, expectedRecords: rightOfSignExpected },
             { message: "Currency - symbol to the right of the number", records: rightInput, fieldInfo: rightFieldInfo, expectedRecords: rightExpected },
             { message: "Currency - euro symbol right of sign positioning", records: rightOfSignEuroInput, fieldInfo: rightOfSignEuroFieldInfo, expectedRecords: rightOfSignEuroExpected },
-            { message: "Currency - euro symbol to the right of the number", records: rightEuroInput, fieldInfo: rightEuroFieldInfo, expectedRecords: rightEuroExpected }
+            { message: "Currency - euro symbol to the right of the number", records: rightEuroInput, fieldInfo: rightEuroFieldInfo, expectedRecords: rightEuroExpected },
+            { message: "Currency - euro symbol RIGHT_OF_SIGN for positive value", records: rightOfSignPositiveEuroInput, fieldInfo: rightOfSignPositiveEuroFieldInfo, expectedRecords: rightOfSignPositiveEuroExpected }
         ];
 
         return cases;
@@ -87,6 +97,8 @@ describe('Currency record formatter unit test', function () {
         provider().forEach(function(entry){
             it('Test case: ' + entry.message, function (done) {
                 var formattedRecords = recordFormatter.formatRecords(entry.records, entry.fieldInfo);
+                //console.log('input: ' + JSON.stringify(entry.expectedRecords));
+                //console.log('Returned value: ' + JSON.stringify(formattedRecords));
                 assert.deepEqual(formattedRecords, entry.expectedRecords, entry.message);
                 done();
             });
