@@ -131,7 +131,7 @@
         if(opts.type === FORMULA_CURRENCY || opts.type === CURRENCY) {
             if(opts.position === CURRENCY_RIGHT) {
                 returnValue = returnValue + ' ' + opts.symbol;
-            } else if(opts.position === CURRENCY_RIGHT_OF_SIGN) {
+            } else if(opts.position === CURRENCY_RIGHT_OF_SIGN && returnValue.charAt(0) === DASH) {
                 //Place the currency symbol between the - and the number itself
                 returnValue = returnValue.replace(/^(-)/, DASH + opts.symbol);
             } else {
