@@ -6,12 +6,14 @@
     'use strict';
     //Module constants:
     var COMMA = ',';
+    var DASH = '-';
     var ZERO_CHAR = '0';
     var PERIOD = '.';
     var PATTERN_EVERY_THREE = 'EVERY_THREE';
     var PATTERN_THREE_THEN_TWO = 'THREE_THEN_TWO';
     var CURRENCY_LEFT = "LEFT";
     var CURRENCY_RIGHT = "RIGHT";
+    var CURRENCY_RIGHT_OF_SIGN = "RIGHT_OF_SIGN";
     var CURRENCY_SYMBOL = "$";
     var PERCENT_SYMBOL = "%";
     var NUMERIC = "NUMERIC";
@@ -129,6 +131,9 @@
         if(opts.type === FORMULA_CURRENCY || opts.type === CURRENCY) {
             if(opts.position === CURRENCY_RIGHT) {
                 returnValue = returnValue + ' ' + opts.symbol;
+            } else if(opts.position === CURRENCY_RIGHT_OF_SIGN) {
+                //Place the currency symbol between the - and the number itself
+                returnValue = returnValue.replace(/^(-)/, DASH + opts.symbol);
             } else {
                 returnValue = opts.symbol + returnValue;
             }

@@ -11,6 +11,7 @@ describe('Currency record formatter unit test', function () {
     function provider() {
         var numberDecimalOnly = .74765432;
 
+
         //Incomplete number
         var defaultRecordInput =  [[{
             "id": 7,
@@ -36,9 +37,18 @@ describe('Currency record formatter unit test', function () {
         expectedDecimal_NoFlags[0][0].value = numberDecimalOnly;
         expectedDecimal_NoFlags[0][0].display = "$0.75";
 
+        //Test for right of sign
+        var rightOfSignFieldInfo = JSON.parse(JSON.stringify(noFlagsFieldInfo));
+        rightOfSignFieldInfo[0].clientSideAttributes.position = 'RIGHT_OF_SIGN';
+        var rightOfSignInput = JSON.parse(JSON.stringify(defaultRecordInput));
+        rightOfSignInput[0][0].value = -2.883;
+        var rightOfSignExpected = JSON.parse(JSON.stringify(rightOfSignInput));
+        rightOfSignExpected[0][0].display = '-$2.88';
+
 
         var cases =[
-            { message: "Numeric - decimal with no format", records: recordInputDecimalOnly, fieldInfo: noFlagsFieldInfo, expectedRecords: expectedDecimal_NoFlags }
+            { message: "Currency - decimal with no format", records: recordInputDecimalOnly, fieldInfo: noFlagsFieldInfo, expectedRecords: expectedDecimal_NoFlags },
+            { message: "Currency - right of sign positioning of symbol", records: rightOfSignInput, fieldInfo: rightOfSignFieldInfo, expectedRecords: rightOfSignExpected }
         ];
 
         return cases;
