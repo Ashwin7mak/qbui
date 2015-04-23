@@ -15,6 +15,8 @@ describe('API - Numeric record test cases', function () {
     var numberDouble = 98765432100.74765;
     var numberNoSeparator = 99;
     var numberMultipleSeparators = 98765432100;
+    var numberMax = 77777777777777777777777777777777777777;
+    var numberMin = -1111111111111111111111111111111111111;
 
     var appWithNoFlags = {
         "name": "Numeric App - no flags",
@@ -72,12 +74,12 @@ describe('API - Numeric record test cases', function () {
         var expectedNullRecord = {"id": fid, "value": 0, "display": ""};
 
         // Max number
-        var maxInput = [{"id": fid, "value": 77777777777777777777777777777777777777}];
-        var expectedMaxRecord = {"id": fid, "value": 77777777777777777777777777777777777777, "display": "77777777777777777777777777777777777777"};
+        var maxInput = [{"id": fid, "value": numberMax}];
+        var expectedMaxRecord = {"id": fid, "value": numberMax, "display": "77777777777777777777777777777777777777"};
 
         // Min number
-        var minInput = [{"id": fid, "value": -1111111111111111111111111111111111111}];
-        var expectedMinRecord = {"id": fid, "value": -1111111111111111111111111111111111111, "display": "-1111111111111111111111111111111111111"};
+        var minInput = [{"id": fid, "value": numberMin}];
+        var expectedMinRecord = {"id": fid, "value": numberMin, "display": "-1111111111111111111111111111111111111"};
 
         return [
             { message: "display decimal number with no format flags", record: decimalInput, format: "display", expectedFieldValue: expectedDecimalRecord },
@@ -163,12 +165,12 @@ describe('API - Numeric record test cases', function () {
         var expectedMultiSeparatorRecord = {"id": fid, "value": numberMultipleSeparators, "display": "98.76.54.32.100,00"};
 
         // Max number
-        var maxInput = [{"id": fid, "value": 33333333333333333333333333333333333333}];
-        var expectedMaxRecord = {"id": fid, "value": 33333333333333333333333333333333333333, "display": "3.33.33.33.33.33.33.33.33.33.33.33.33.33.33.33.33.33.333,00"};
+        var maxInput = [{"id": fid, "value": numberMax}];
+        var expectedMaxRecord = {"id": fid, "value": numberMax, "display": "7.77.77.77.77.77.77.77.77.77.77.77.77.77.77.77.77.77.777,00"};
 
         // Min number
-        var minInput = [{"id": fid, "value": -1111111111111111111111111111111111111}];
-        var expectedMinRecord = {"id": fid, "value": -1111111111111111111111111111111111111, "display": "-11.11.11.11.11.11.11.11.11.11.11.11.11.11.11.11.11.111,00"};
+        var minInput = [{"id": fid, "value": numberMin}];
+        var expectedMinRecord = {"id": fid, "value": numberMin, "display": "-11.11.11.11.11.11.11.11.11.11.11.11.11.11.11.11.11.111,00"};
 
         // Null number
         var nullInput = [{"id": fid, "value": null}];
@@ -238,11 +240,11 @@ describe('API - Numeric record test cases', function () {
     });
 
     //Cleanup the test realm after all tests in the block
-    //after(function (done) {
-    //    //Realm deletion takes time, bump the timeout
-    //    this.timeout(20000);
-    //    recordBase.apiBase.cleanup().then(function () {
-    //        done();
-    //    });
-    //});
+    after(function (done) {
+        //Realm deletion takes time, bump the timeout
+        this.timeout(20000);
+        recordBase.apiBase.cleanup().then(function () {
+            done();
+        });
+    });
 });
