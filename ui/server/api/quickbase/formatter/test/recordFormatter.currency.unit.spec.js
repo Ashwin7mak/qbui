@@ -72,7 +72,7 @@ describe('Currency record formatter unit test', function () {
         var rightEuroExpected = JSON.parse(JSON.stringify(rightOfSignInput));
         rightEuroExpected[0][0].display = '-2.88 €';
 
-        //Test for right of sign
+        //Test for right of sign positive value
         var rightOfSignPositiveEuroFieldInfo = JSON.parse(JSON.stringify(noFlagsFieldInfo));
         rightOfSignPositiveEuroFieldInfo[0].clientSideAttributes.position = 'RIGHT_OF_SIGN';
         rightOfSignPositiveEuroFieldInfo[0].clientSideAttributes.symbol = '€';
@@ -89,7 +89,6 @@ describe('Currency record formatter unit test', function () {
             { message: "Currency - euro symbol to the right of the number", records: rightEuroInput, fieldInfo: rightEuroFieldInfo, expectedRecords: rightEuroExpected },
             { message: "Currency - euro symbol RIGHT_OF_SIGN for positive value", records: rightOfSignPositiveEuroInput, fieldInfo: rightOfSignPositiveEuroFieldInfo, expectedRecords: rightOfSignPositiveEuroExpected }
         ];
-
         return cases;
     }
 
