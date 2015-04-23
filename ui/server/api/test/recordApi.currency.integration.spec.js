@@ -187,11 +187,11 @@ describe('API - Currency record test cases', function () {
     function  allRightOfSignFlagsCurrencyDataProvider(fid) {
         // Decimal number
         var decimalInput = [{"id": fid, "value": numberDecimalOnly}];
-        var expectedDecimalRecord = {"id": fid, "value": numberDecimalOnly, "display": "0,75"};
+        var expectedDecimalRecord = {"id": fid, "value": numberDecimalOnly, "display": "X0,75"};
 
         // Double number
         var doubleInput = [{"id": fid, "value": numberDouble}];
-        var expectedDoubleRecord = {"id": fid, "value": numberDouble, "display": "98.76.54.32.100,75"};
+        var expectedDoubleRecord = {"id": fid, "value": numberDouble, "display": "X98.76.54.32.100,75"};
 
         // Negative number
         var negativeInput = [{"id": fid, "value": numberNegative}];
@@ -199,7 +199,7 @@ describe('API - Currency record test cases', function () {
 
         // Int number
         var intInput = [{"id": fid, "value": numberInt}];
-        var expectedIntRecord = {"id": fid, "value": numberInt, "display": "99,00"};
+        var expectedIntRecord = {"id": fid, "value": numberInt, "display": "X99,00"};
 
         // Null number
         var nullInput = [{"id": fid, "value": null}];
