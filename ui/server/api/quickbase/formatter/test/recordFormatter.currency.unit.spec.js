@@ -3,6 +3,7 @@
 var should = require('should');
 var recordFormatter = require('./../recordFormatter')();
 var assert = require('assert');
+var jBigNum = require('json-bignum');
 
 describe('Currency record formatter unit test', function () {
     /**
@@ -22,7 +23,7 @@ describe('Currency record formatter unit test', function () {
             "display": ""}]];
 
         // Setup the record inputs
-        var recordInputDecimalOnly = JSON.parse(JSON.stringify(defaultRecordInput));
+        var recordInputDecimalOnly = jBigNum.parse(jBigNum.stringify(defaultRecordInput));
 
         var noFlagsFieldInfo = [{
             "id": 7,
@@ -34,52 +35,61 @@ describe('Currency record formatter unit test', function () {
         }];
 
         //Default behavior
-        var expectedDecimal_NoFlags = JSON.parse(JSON.stringify(defaultRecordExp));
+        var expectedDecimal_NoFlags = jBigNum.parse(jBigNum.stringify(defaultRecordExp));
         expectedDecimal_NoFlags[0][0].value = numberDecimalOnly;
         expectedDecimal_NoFlags[0][0].display = "$0.75";
 
         //Test for right of sign
-        var rightOfSignFieldInfo = JSON.parse(JSON.stringify(noFlagsFieldInfo));
+        var rightOfSignFieldInfo = jBigNum.parse(jBigNum.stringify(noFlagsFieldInfo));
         rightOfSignFieldInfo[0].clientSideAttributes.position = 'RIGHT_OF_SIGN';
-        var rightOfSignInput = JSON.parse(JSON.stringify(defaultRecordInput));
+        var rightOfSignInput = jBigNum.parse(jBigNum.stringify(defaultRecordInput));
         rightOfSignInput[0][0].value = -2.883;
-        var rightOfSignExpected = JSON.parse(JSON.stringify(rightOfSignInput));
+        var rightOfSignExpected = jBigNum.parse(jBigNum.stringify(rightOfSignInput));
         rightOfSignExpected[0][0].display = '-$2.88';
 
         //Right of the number
-        var rightFieldInfo = JSON.parse(JSON.stringify(noFlagsFieldInfo));
+        var rightFieldInfo = jBigNum.parse(jBigNum.stringify(noFlagsFieldInfo));
         rightFieldInfo[0].clientSideAttributes.position = 'RIGHT';
-        var rightInput = JSON.parse(JSON.stringify(defaultRecordInput));
+        var rightInput = jBigNum.parse(jBigNum.stringify(defaultRecordInput));
         rightInput[0][0].value = -2.883;
-        var rightExpected = JSON.parse(JSON.stringify(rightOfSignInput));
+        var rightExpected = jBigNum.parse(jBigNum.stringify(rightOfSignInput));
         rightExpected[0][0].display = '-2.88 $';
 
         //Test for right of sign
-        var rightOfSignEuroFieldInfo = JSON.parse(JSON.stringify(noFlagsFieldInfo));
+        var rightOfSignEuroFieldInfo = jBigNum.parse(jBigNum.stringify(noFlagsFieldInfo));
         rightOfSignEuroFieldInfo[0].clientSideAttributes.position = 'RIGHT_OF_SIGN';
         rightOfSignEuroFieldInfo[0].clientSideAttributes.symbol = '€';
-        var rightOfSignEuroInput = JSON.parse(JSON.stringify(defaultRecordInput));
+        var rightOfSignEuroInput = jBigNum.parse(jBigNum.stringify(defaultRecordInput));
         rightOfSignEuroInput[0][0].value = -2.883;
-        var rightOfSignEuroExpected = JSON.parse(JSON.stringify(rightOfSignInput));
+        var rightOfSignEuroExpected = jBigNum.parse(jBigNum.stringify(rightOfSignInput));
         rightOfSignEuroExpected[0][0].display = '-€2.88';
 
         //Right of the number
-        var rightEuroFieldInfo = JSON.parse(JSON.stringify(noFlagsFieldInfo));
+        var rightEuroFieldInfo = jBigNum.parse(jBigNum.stringify(noFlagsFieldInfo));
         rightEuroFieldInfo[0].clientSideAttributes.position = 'RIGHT';
         rightEuroFieldInfo[0].clientSideAttributes.symbol = '€';
-        var rightEuroInput = JSON.parse(JSON.stringify(defaultRecordInput));
+        var rightEuroInput = jBigNum.parse(jBigNum.stringify(defaultRecordInput));
         rightEuroInput[0][0].value = -2.883;
-        var rightEuroExpected = JSON.parse(JSON.stringify(rightOfSignInput));
+        var rightEuroExpected = jBigNum.parse(jBigNum.stringify(rightOfSignInput));
         rightEuroExpected[0][0].display = '-2.88 €';
 
         //Test for right of sign positive value
-        var rightOfSignPositiveEuroFieldInfo = JSON.parse(JSON.stringify(noFlagsFieldInfo));
+        var rightOfSignPositiveEuroFieldInfo = jBigNum.parse(jBigNum.stringify(noFlagsFieldInfo));
         rightOfSignPositiveEuroFieldInfo[0].clientSideAttributes.position = 'RIGHT_OF_SIGN';
         rightOfSignPositiveEuroFieldInfo[0].clientSideAttributes.symbol = '€';
-        var rightOfSignPositiveEuroInput = JSON.parse(JSON.stringify(defaultRecordInput));
+        var rightOfSignPositiveEuroInput = jBigNum.parse(jBigNum.stringify(defaultRecordInput));
         rightOfSignPositiveEuroInput[0][0].value = 2.883;
-        var rightOfSignPositiveEuroExpected = JSON.parse(JSON.stringify(rightOfSignPositiveEuroInput));
+        var rightOfSignPositiveEuroExpected = jBigNum.parse(jBigNum.stringify(rightOfSignPositiveEuroInput));
         rightOfSignPositiveEuroExpected[0][0].display = '€2.88';
+
+        //Greater than 16 digits of precision
+        var rightOfSignPositiveEuroFieldInfo = jBigNum.parse(jBigNum.stringify(noFlagsFieldInfo));
+        rightOfSignPositiveEuroFieldInfo[0].clientSideAttributes.position = 'RIGHT_OF_SIGN';
+        rightOfSignPositiveEuroFieldInfo[0].clientSideAttributes.symbol = '€';
+        rightOfSignPositiveEuroFieldInfo[0].decimalPlaces= 6;
+        var rightOfSignPositiveEuroInput = jBigNum.parse('[[{"id":7,"value":2232323232323.88356267}]]');
+        var rightOfSignPositiveEuroExpected = jBigNum.parse(jBigNum.stringify(rightOfSignPositiveEuroInput));
+        rightOfSignPositiveEuroExpected[0][0].display = '€2232323232323.883563';
 
         var cases =[
             { message: "Currency - decimal with no format -> symbol left", records: recordInputDecimalOnly, fieldInfo: noFlagsFieldInfo, expectedRecords: expectedDecimal_NoFlags },
@@ -96,8 +106,8 @@ describe('Currency record formatter unit test', function () {
         provider().forEach(function(entry){
             it('Test case: ' + entry.message, function (done) {
                 var formattedRecords = recordFormatter.formatRecords(entry.records, entry.fieldInfo);
-                //console.log('input: ' + JSON.stringify(entry.expectedRecords));
-                //console.log('Returned value: ' + JSON.stringify(formattedRecords));
+                //console.log('input: ' + jBigNum.stringify(entry.expectedRecords));
+                //console.log('Returned value: ' + jBigNum.stringify(formattedRecords));
                 assert.deepEqual(formattedRecords, entry.expectedRecords, entry.message);
                 done();
             });

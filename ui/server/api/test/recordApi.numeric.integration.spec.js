@@ -6,17 +6,31 @@ var config = require('../../config/environment');
 var recordBase = require('./recordApi.base')(config);
 var Promise = require('bluebird');
 var _ = require('lodash');
+/*
+ * We can't use JSON.parse() with records because it is possible to lose decimal precision as a
+ * result of the JavaScript implementation of its single numeric data type. In JS, all numbers are
+ * 64 bit floating points where bits 0-51 store values, bits 52-62 store the exponent and
+ * bit 63 is the sign bit. This is the IEEE 754 standard. Practically speaking, this means
+ * that a java Long, which uses all bits 0-62 to store values, cannot be expressed in a JS
+ * number without a loss of precision.  For this reason, we use a special implementation of
+ * JSON.parse/stringify that depends on an implementation of BigDecimal, which is capable of
+ * expressing all the precision of numeric values we expect to get from the java capabilities
+ * APIs.  This is slower than using JSON.parse/stringify, but is necessary to avoid the loss
+ * of precision. For more info, google it!
+ */
+var jsonBigNum = require('json-bignum');
+var BigDecimal = require('bigdecimal');
 
 /**
  * Integration test for Numeric field formatting
  */
 describe('API - Numeric record test cases', function () {
-    var numberDecimalOnly = .74765432;
-    var numberDouble = 98765432100.74765;
-    var numberNoSeparator = 99;
-    var numberMultipleSeparators = 98765432100;
-    var numberMax = 77777777777777777777777777777777777777;
-    var numberMin = -1111111111111111111111111111111111111;
+    var numberDecimalOnly = '0.74765432';
+    var numberDouble = '9.876543210074765E10';
+    var numberNoSeparator = '99';
+    var numberMultipleSeparators = '98765432100';
+    var numberMax = '7777777777777777777';
+    var numberMin = '-1111111111111111111';
 
     var appWithNoFlags = {
         "name": "Numeric App - no flags",
@@ -54,32 +68,32 @@ describe('API - Numeric record test cases', function () {
      */
     function  noFlagsNumericDataProvider(fid) {
         // Decimal number
-        var decimalInput = [{"id": fid, "value": numberDecimalOnly}];
-        var expectedDecimalRecord = {"id": fid, "value": numberDecimalOnly, "display": "0.74765432000000"};
+        var decimalInput = '[{"id": ' + fid + ', "value": ' + numberDecimalOnly + '}]';
+        var expectedDecimalRecord = '{"id": ' + fid + ', "value": '+ numberDecimalOnly + ', "display": "0.74765432000000"}';
 
         // Double number
-        var doubleInput = [{"id": fid, "value": numberDouble}];
-        var expectedDoubleRecord = {"id": fid, "value": numberDouble, "display": "98765432100.74765000000000"};
+        var doubleInput = '[{"id": ' + fid + ', "value": '+ numberDouble + '}]';
+        var expectedDoubleRecord = '{"id": ' + fid + ', "value": ' + numberDouble +', "display": "98765432100.74765000000000"}';
 
         // No separator number
-        var noSeparatorInput = [{"id": fid, "value": numberNoSeparator}];
-        var expectedNoSeparatorRecord = {"id": fid, "value": numberNoSeparator, "display": "99.00000000000000"};
+        var noSeparatorInput = '[{"id": ' + fid + ', "value": '+ numberNoSeparator +'}]';
+        var expectedNoSeparatorRecord = '{"id": ' + fid + ', "value": ' + numberNoSeparator + ', "display": "99.00000000000000"}';
 
         // Multiple separator number
-        var multiSeparatorInput = [{"id": fid, "value": numberMultipleSeparators}];
-        var expectedMultiSeparatorRecord = {"id": fid, "value": numberMultipleSeparators, "display": "98765432100.00000000000000"};
+        var multiSeparatorInput = '[{"id": ' + fid + ', "value": '+ numberMultipleSeparators + '}]';
+        var expectedMultiSeparatorRecord = '{"id": ' + fid + ', "value": ' + numberMultipleSeparators + ', "display": "98765432100.00000000000000"}';
 
         // Null number
-        var nullInput = [{"id": fid, "value": null}];
-        var expectedNullRecord = {"id": fid, "value": 0, "display": ""};
+        var nullInput = '[{"id": ' + fid + ', "value": null}]';
+        var expectedNullRecord = '{"id": ' + fid + ', "value": 0, "display": ""}';
 
         // Max number
-        var maxInput = [{"id": fid, "value": numberMax}];
-        var expectedMaxRecord = {"id": fid, "value": numberMax, "display": "77777777777777777777777777777777777777"};
+        var maxInput = '[{"id": ' + fid + ', "value": ' + numberMax + '}]';
+        var expectedMaxRecord = '{"id": ' + fid + ', "value": ' + numberMax + ', "display": "7777777777777777777.00000000000000"}';
 
         // Min number
-        var minInput = [{"id": fid, "value": numberMin}];
-        var expectedMinRecord = {"id": fid, "value": numberMin, "display": "-1111111111111111111111111111111111111"};
+        var minInput = '[{"id": ' + fid + ', "value":' + numberMin + '}]';
+        var expectedMinRecord = '{"id": ' + fid + ', "value": ' + numberMin + ', "display": "-1111111111111111111.00000000000000"}';
 
         return [
             { message: "display decimal number with no format flags", record: decimalInput, format: "display", expectedFieldValue: expectedDecimalRecord },
@@ -90,10 +104,10 @@ describe('API - Numeric record test cases', function () {
             { message: "raw no separator number with no format flags", record: noSeparatorInput, format: "raw", expectedFieldValue: noSeparatorInput },
             { message: "display multiple separator number with no format flags", record: multiSeparatorInput, format: "display", expectedFieldValue: expectedMultiSeparatorRecord },
             { message: "raw multiple separator number with no format flags", record: multiSeparatorInput, format: "raw", expectedFieldValue: multiSeparatorInput },
-            //{ message: "display max number with no format flags", record: maxInput, format: "display", expectedFieldValue: expectedMaxRecord },
-            //{ message: "raw max number with no format flags", record: maxInput, format: "raw", expectedFieldValue: maxInput },
-            //{ message: "display min number with no format flags", record: minInput, format: "display", expectedFieldValue: expectedMinRecord },
-            //{ message: "raw min number with no format flags", record: minInput, format: "raw", expectedFieldValue: minInput },
+            { message: "display max number with no format flags", record: maxInput, format: "display", expectedFieldValue: expectedMaxRecord },
+            { message: "raw max number with no format flags", record: maxInput, format: "raw", expectedFieldValue: maxInput },
+            { message: "display min number with no format flags", record: minInput, format: "display", expectedFieldValue: expectedMinRecord },
+            { message: "raw min number with no format flags", record: minInput, format: "raw", expectedFieldValue: minInput },
             { message: "display null number with no format flags", record: nullInput, format: "display", expectedFieldValue: expectedNullRecord },
             { message: "raw null number with no format flags", record: nullInput, format: "raw", expectedFieldValue: nullInput },
         ]
@@ -118,9 +132,10 @@ describe('API - Numeric record test cases', function () {
             var fetchRecordPromises = [];
             records.forEach(function (currentRecord) {
                 var recordsEndpoint = recordBase.apiBase.resolveRecordsEndpoint(app.id, app.tables[0].id);
-                fetchRecordPromises.push(recordBase.createAndFetchRecord(recordsEndpoint, currentRecord.record, '?format='+currentRecord.format));
+                fetchRecordPromises.push(
+                    recordBase.createAndFetchRecord(recordsEndpoint, jsonBigNum.parse(currentRecord.record), '?format='+currentRecord.format)
+                );
             });
-
             //When all the records have been created and fetched, assert the values match expectations
             Promise.all(fetchRecordPromises)
                 .then(function (results) {
@@ -130,9 +145,9 @@ describe('API - Numeric record test cases', function () {
                             currentRecord = results[i].record;
                         }
                         currentRecord.forEach(function (fieldValue) {
-                            if (fieldValue.id === records[i].expectedFieldValue.id) {
-                                assert.deepEqual(fieldValue, records[i].expectedFieldValue, 'Unexpected field value returned: '
-                                + JSON.stringify(fieldValue) + ', ' + JSON.stringify(records[i].expectedFieldValue));
+                            if (fieldValue.id === jsonBigNum.parse(records[i].expectedFieldValue).id) {
+                                assert.deepEqual(fieldValue, jsonBigNum.parse(records[i].expectedFieldValue), 'Unexpected field value returned: '
+                                + jsonBigNum.stringify(fieldValue) + ', ' + records[i].expectedFieldValue);
                             }
                         });
                     }
@@ -149,32 +164,32 @@ describe('API - Numeric record test cases', function () {
      */
     function  allFlagsNumericDataProvider(fid) {
         // Decimal number
-        var decimalInput = [{"id": fid, "value": numberDecimalOnly}];
-        var expectedDecimalRecord = {"id": fid, "value": numberDecimalOnly, "display": "0,75"};
+        var decimalInput = '[{"id": ' + fid + ', "value": ' + numberDecimalOnly + '}]';
+        var expectedDecimalRecord = '{"id": ' + fid + ', "value": ' + numberDecimalOnly + ', "display": "0,75"}';
 
         // Double number
-        var doubleInput = [{"id": fid, "value": numberDouble}];
-        var expectedDoubleRecord = {"id": fid, "value": numberDouble, "display": "98.76.54.32.100,75"};
+        var doubleInput = '[{"id": ' + fid + ', "value": ' + numberDouble + '}]';
+        var expectedDoubleRecord = '{"id": ' + fid + ', "value": ' + numberDouble + ', "display": "98.76.54.32.100,75"}';
 
         // No separator number
-        var noSeparatorInput = [{"id": fid, "value": numberNoSeparator}];
-        var expectedNoSeparatorRecord = {"id": fid, "value": numberNoSeparator, "display": "99,00"};
+        var noSeparatorInput = '[{"id": ' + fid + ', "value": ' + numberNoSeparator + '}]';
+        var expectedNoSeparatorRecord = '{"id": ' + fid + ', "value": ' + numberNoSeparator + ', "display": "99,00"}';
 
         // Multiple separator number
-        var multiSeparatorInput = [{"id": fid, "value": numberMultipleSeparators}];
-        var expectedMultiSeparatorRecord = {"id": fid, "value": numberMultipleSeparators, "display": "98.76.54.32.100,00"};
+        var multiSeparatorInput = '[{"id": ' + fid + ', "value": ' + numberMultipleSeparators + '}]';
+        var expectedMultiSeparatorRecord = '{"id": ' + fid + ', "value": ' + numberMultipleSeparators + ', "display": "98.76.54.32.100,00"}';
 
         // Max number
-        var maxInput = [{"id": fid, "value": numberMax}];
-        var expectedMaxRecord = {"id": fid, "value": numberMax, "display": "7.77.77.77.77.77.77.77.77.77.77.77.77.77.77.77.77.77.777,00"};
+        var maxInput = '[{"id": ' + fid + ', "value": ' + numberMax + '}]';
+        var expectedMaxRecord = '{"id": ' + fid + ', "value": ' + numberMax + ', "display": "7.77.77.77.77.77.77.77.77.77,00"}';
 
         // Min number
-        var minInput = [{"id": fid, "value": numberMin}];
-        var expectedMinRecord = {"id": fid, "value": numberMin, "display": "-11.11.11.11.11.11.11.11.11.11.11.11.11.11.11.11.11.111,00"};
+        var minInput = '[{"id": ' + fid + ', "value": ' + numberMin + '}]';
+        var expectedMinRecord = '{"id": ' + fid + ', "value": ' + numberMin + ', "display": "-1.11.11.11.11.11.11.11.11.11,00"}';
 
         // Null number
-        var nullInput = [{"id": fid, "value": null}];
-        var expectedNullRecord = {"id": fid, "value": 0, "display": ""};
+        var nullInput = '[{"id": ' + fid + ', "value": null}]';
+        var expectedNullRecord = '{"id": ' + fid + ', "value": 0, "display": ""}';
 
         return [
             { message: "display decimal number with all format flags", record: decimalInput, format: "display", expectedFieldValue: expectedDecimalRecord },
@@ -185,10 +200,10 @@ describe('API - Numeric record test cases', function () {
             { message: "raw no separator number with all format flags", record: noSeparatorInput, format: "raw", expectedFieldValue: noSeparatorInput },
             { message: "display multiple separator number with all format flags", record: multiSeparatorInput, format: "display", expectedFieldValue: expectedMultiSeparatorRecord },
             { message: "raw multiple separator number with all format flags", record: multiSeparatorInput, format: "raw", expectedFieldValue: multiSeparatorInput },
-            //{ message: "display max number with all format flags", record: maxInput, format: "display", expectedFieldValue: expectedMaxRecord },
-            //{ message: "raw max number with all format flags", record: maxInput, format: "raw", expectedFieldValue: maxInput },
-            //{ message: "display min number with all format flags", record: minInput, format: "display", expectedFieldValue: expectedMinRecord },
-            //{ message: "raw min number with all format flags", record: minInput, format: "raw", expectedFieldValue: minInput },
+            { message: "display max number with all format flags", record: maxInput, format: "display", expectedFieldValue: expectedMaxRecord },
+            { message: "raw max number with all format flags", record: maxInput, format: "raw", expectedFieldValue: maxInput },
+            { message: "display min number with all format flags", record: minInput, format: "display", expectedFieldValue: expectedMinRecord },
+            { message: "raw min number with all format flags", record: minInput, format: "raw", expectedFieldValue: minInput },
             { message: "display null number with all format flags", record: nullInput, format: "display", expectedFieldValue: expectedNullRecord },
             { message: "raw null number with all format flags", record: nullInput, format: "raw", expectedFieldValue: nullInput }
         ]
@@ -213,7 +228,7 @@ describe('API - Numeric record test cases', function () {
             var fetchRecordPromises = [];
             records.forEach(function (currentRecord) {
                 var recordsEndpoint = recordBase.apiBase.resolveRecordsEndpoint(app.id, app.tables[0].id);
-                fetchRecordPromises.push(recordBase.createAndFetchRecord(recordsEndpoint, currentRecord.record, '?format='+currentRecord.format));
+                fetchRecordPromises.push(recordBase.createAndFetchRecord(recordsEndpoint, jsonBigNum.parse(currentRecord.record), '?format='+currentRecord.format));
             });
 
             //When all the records have been created and fetched, assert the values match expectations
@@ -226,8 +241,8 @@ describe('API - Numeric record test cases', function () {
                         }
                         currentRecord.forEach(function (fieldValue) {
                             if (fieldValue.id === records[i].expectedFieldValue.id) {
-                                assert.deepEqual(fieldValue, records[i].expectedFieldValue, 'Unexpected field value returned: '
-                                + JSON.stringify(fieldValue) + ', ' + JSON.stringify(records[i].expectedFieldValue));
+                                assert.deepEqual(fieldValue, jsonBigNum.parse(records[i].expectedFieldValue), 'Unexpected field value returned: '
+                                + JSON.stringify(fieldValue) + ', ' + records[i].expectedFieldValue);
                             }
                         });
                     }

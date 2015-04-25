@@ -4,11 +4,25 @@
  */
 (function () {
     'use strict';
+    /*
+     * We can't use the JS native number data type when handling records because it is possible to lose
+     * decimal precision as a result of the JS implementation the number data type. In JS, all numbers are
+     * 64 bit floating points where bits 0-51 store values, bits 52-62 store the exponent and
+     * bit 63 is the sign bit. This is the IEEE 754 standard. Practically speaking, this means
+     * that a java Long, which uses all bits 0-62 to store values, cannot be expressed in a JS
+     * number without a loss of precision.  For this reason, we use a special implementation of
+     * JSON.parse/stringify that depends on an implementation of BigDecimal, which is capable of
+     * expressing all the precision of numeric values we expect to get from the java capabilities
+     * APIs.  This is slower than using JSON.parse/stringify, but is necessary to avoid the loss
+     * of precision. For more info, google it!
+     */
+    var bigDecimal = require('bigdecimal');
     //Module constants:
     var COMMA = ',';
     var DASH = '-';
     var ZERO_CHAR = '0';
     var PERIOD = '.';
+    var EXPONENT_CHAR = 'E';
     var PATTERN_EVERY_THREE = 'EVERY_THREE';
     var PATTERN_THREE_THEN_TWO = 'THREE_THEN_TWO';
     var CURRENCY_LEFT = "LEFT";
@@ -78,9 +92,11 @@
         }
         if(characteristicString.length > precision) {
             //round
-            var charNum = Number(characteristicString);
-            charNum = Math.round(charNum / (Math.pow(10, characteristicString.length - precision)));
-            characteristicString = charNum.toString();
+            var c = new bigDecimal.BigDecimal(characteristicString);
+            c = c.divide(new bigDecimal.BigDecimal(Math.pow(10, characteristicString.length - precision)));
+            c = c.setScale(0, bigDecimal.RoundingMode.HALF_UP());
+            var cStr = c.toString();
+            characteristicString = cStr;
         }
         //Pad if needed to fill out the precision
         if(characteristicString.length < precision) {
@@ -101,12 +117,25 @@
     function formatNumericValue(numeric, opts) {
         //Resolve the number value as a string with the proper decimal places
         var numString = numeric.toString();
-        //Split the string on the decimal point, if there is one
-        var numParts = numString.toString().split(PERIOD);
-        var mantissaString = numParts[0];
-        var characteristicString = null;
-        if(numParts.length > 1) {
-            characteristicString = numParts[1];
+        var mantissaString, characteristicString;
+        if(numString.indexOf(EXPONENT_CHAR) != -1) {
+            var parts = numString.split(EXPONENT_CHAR);
+            var exponent = new Number(parts[1]);
+            var decimalSplits = parts[0].split(PERIOD);
+            if(decimalSplits[1].length >= exponent) {
+                mantissaString = decimalSplits[0] + decimalSplits[1].substring(0, exponent);
+                if(decimalSplits[1].length > exponent) {
+                    characteristicString = decimalSplits[1].substring(exponent);
+                }
+            }
+        } else {
+            //Split the string on the decimal point, if there is one
+            var numParts = numString.toString().split(PERIOD);
+            mantissaString = numParts[0];
+            characteristicString = null;
+            if(numParts.length > 1) {
+                characteristicString = numParts[1];
+            }
         }
         characteristicString = toRoundedDisplayDecimal(characteristicString, opts.decimalPlaces);
         //Format the mantissa, if its long enough to need formatting

@@ -6,15 +6,29 @@ var config = require('../../config/environment');
 var recordBase = require('./recordApi.base')(config);
 var Promise = require('bluebird');
 var _ = require('lodash');
+/*
+ * We can't use JSON.parse() with records because it is possible to lose decimal precision as a
+ * result of the JavaScript implementation of its single numeric data type. In JS, all numbers are
+ * 64 bit floating points where bits 0-51 store values, bits 52-62 store the exponent and
+ * bit 63 is the sign bit. This is the IEEE 754 standard. Practically speaking, this means
+ * that a java Long, which uses all bits 0-62 to store values, cannot be expressed in a JS
+ * number without a loss of precision.  For this reason, we use a special implementation of
+ * JSON.parse/stringify that depends on an implementation of BigDecimal, which is capable of
+ * expressing all the precision of numeric values we expect to get from the java capabilities
+ * APIs.  This is slower than using JSON.parse/stringify, but is necessary to avoid the loss
+ * of precision. For more info, google it!
+ */
+var jsonBigNum = require('json-bignum');
+var BigDecimal = require('bigdecimal');
 
 /**
  * Integration test for Currency field formatting
  */
 describe('API - Currency record test cases', function () {
-    var numberDecimalOnly = .74765432;
-    var numberDouble = 98765432100.74765;
-    var numberInt = 99;
-    var numberNegative = -88.22;
+    var numberDecimalOnly = '0.74765432';
+    var numberDouble = '9.876543210074765E10';
+    var numberInt = '99';
+    var numberNegative = '-88.22';
 
     var appWithNoFlags = {
         "name": "Currency App - no flags",
@@ -103,24 +117,24 @@ describe('API - Currency record test cases', function () {
      */
     function  noFlagsCurrencyDataProvider(fid) {
         // Decimal number
-        var decimalInput = [{"id": fid, "value": numberDecimalOnly}];
-        var expectedDecimalRecord = {"id": fid, "value": numberDecimalOnly, "display": "$0.74765432000000"};
+        var decimalInput = '[{"id": ' + fid + ', "value": ' + numberDecimalOnly + '}]';
+        var expectedDecimalRecord = '{"id": ' + fid + ', "value": ' + numberDecimalOnly + ', "display": "$0.74765432000000"}';
 
         // Double number
-        var doubleInput = [{"id": fid, "value": numberDouble}];
-        var expectedDoubleRecord = {"id": fid, "value": numberDouble, "display": "$98765432100.74765000000000"};
+        var doubleInput = '[{"id": ' + fid + ', "value": ' + numberDouble + '}]';
+        var expectedDoubleRecord = '{"id": ' + fid + ', "value": ' + numberDouble + ', "display": "$98765432100.74765000000000"}';
 
         // Negative number
-        var negativeInput = [{"id": fid, "value": numberNegative}];
-        var expectedNegativeRecord = {"id": fid, "value": numberNegative, "display": "$-88.22000000000000"};
+        var negativeInput = '[{"id": ' + fid + ', "value": ' + numberNegative + '}]';
+        var expectedNegativeRecord = '{"id": ' + fid + ', "value": ' + numberNegative + ', "display": "$-88.22000000000000"}';
 
         // Int number
-        var intInput = [{"id": fid, "value": numberInt}];
-        var expectedIntRecord = {"id": fid, "value": numberInt, "display": "$99.00000000000000"};
+        var intInput = '[{"id": ' + fid + ', "value": ' + numberInt + '}]';
+        var expectedIntRecord = '{"id": ' + fid + ', "value": ' + numberInt + ', "display": "$99.00000000000000"}';
 
         // Null number
-        var nullInput = [{"id": fid, "value": null}];
-        var expectedNullRecord = {"id": fid, "value": 0, "display": ""};
+        var nullInput = '[{"id": ' + fid + ', "value": null}]';
+        var expectedNullRecord = '{"id": ' + fid + ', "value": 0, "display": ""}';
 
         return [
             { message: "display decimal number with no format flags", record: decimalInput, format: "display", expectedFieldValue: expectedDecimalRecord },
@@ -155,7 +169,7 @@ describe('API - Currency record test cases', function () {
             var fetchRecordPromises = [];
             records.forEach(function (currentRecord) {
                 var recordsEndpoint = recordBase.apiBase.resolveRecordsEndpoint(app.id, app.tables[0].id);
-                fetchRecordPromises.push(recordBase.createAndFetchRecord(recordsEndpoint, currentRecord.record, '?format='+currentRecord.format));
+                fetchRecordPromises.push(recordBase.createAndFetchRecord(recordsEndpoint, jsonBigNum.parse(currentRecord.record), '?format='+currentRecord.format));
             });
 
             //When all the records have been created and fetched, assert the values match expectations
@@ -167,9 +181,9 @@ describe('API - Currency record test cases', function () {
                             currentRecord = results[i].record;
                         }
                         currentRecord.forEach(function (fieldValue) {
-                            if (fieldValue.id === records[i].expectedFieldValue.id) {
-                                assert.deepEqual(fieldValue, records[i].expectedFieldValue, 'Unexpected field value returned: '
-                                + JSON.stringify(fieldValue) + ', ' + JSON.stringify(records[i].expectedFieldValue));
+                            if (fieldValue.id === jsonBigNum.parse(records[i].expectedFieldValue).id) {
+                                assert.deepEqual(fieldValue, jsonBigNum.parse(records[i].expectedFieldValue), 'Unexpected field value returned: '
+                                + jsonBigNum.stringify(fieldValue) + ', ' + records[i].expectedFieldValue);
                             }
                         });
                     }
@@ -186,24 +200,24 @@ describe('API - Currency record test cases', function () {
      */
     function  allRightOfSignFlagsCurrencyDataProvider(fid) {
         // Decimal number
-        var decimalInput = [{"id": fid, "value": numberDecimalOnly}];
-        var expectedDecimalRecord = {"id": fid, "value": numberDecimalOnly, "display": "X0,75"};
+        var decimalInput = '[{"id": ' + fid + ', "value": ' + numberDecimalOnly + '}]';
+        var expectedDecimalRecord = '{"id": ' + fid + ', "value": ' + numberDecimalOnly + ', "display": "X0,75"}';
 
         // Double number
-        var doubleInput = [{"id": fid, "value": numberDouble}];
-        var expectedDoubleRecord = {"id": fid, "value": numberDouble, "display": "X98.76.54.32.100,75"};
+        var doubleInput = '[{"id": ' + fid + ', "value": ' + numberDouble + '}]';
+        var expectedDoubleRecord = '{"id": ' + fid + ', "value": ' + numberDouble + ', "display": "X98.76.54.32.100,75"}';
 
         // Negative number
-        var negativeInput = [{"id": fid, "value": numberNegative}];
-        var expectedNegativeRecord = {"id": fid, "value": numberNegative, "display": "-X88,22"};
+        var negativeInput = '[{"id": ' + fid + ', "value": ' + numberNegative + '}]';
+        var expectedNegativeRecord = '{"id": ' + fid + ', "value": ' + numberNegative + ', "display": "-X88,22"}';
 
         // Int number
-        var intInput = [{"id": fid, "value": numberInt}];
-        var expectedIntRecord = {"id": fid, "value": numberInt, "display": "X99,00"};
+        var intInput = '[{"id": ' + fid + ', "value": ' + numberInt + '}]';
+        var expectedIntRecord = '{"id": ' + fid + ', "value": ' + numberInt + ', "display": "X99,00"}';
 
         // Null number
-        var nullInput = [{"id": fid, "value": null}];
-        var expectedNullRecord = {"id": fid, "value": 0, "display": ""};
+        var nullInput = '[{"id": ' + fid + ', "value": null}]';
+        var expectedNullRecord = '{"id": ' + fid + ', "value": 0, "display": ""}';
 
         return [
             { message: "display decimal number with all 'right of sign' format flags", record: decimalInput, format: "display", expectedFieldValue: expectedDecimalRecord },
@@ -238,7 +252,7 @@ describe('API - Currency record test cases', function () {
             var fetchRecordPromises = [];
             records.forEach(function (currentRecord) {
                 var recordsEndpoint = recordBase.apiBase.resolveRecordsEndpoint(app.id, app.tables[0].id);
-                fetchRecordPromises.push(recordBase.createAndFetchRecord(recordsEndpoint, currentRecord.record, '?format='+currentRecord.format));
+                fetchRecordPromises.push(recordBase.createAndFetchRecord(recordsEndpoint, jsonBigNum.parse(currentRecord.record), '?format='+currentRecord.format));
             });
 
             //When all the records have been created and fetched, assert the values match expectations
@@ -250,9 +264,9 @@ describe('API - Currency record test cases', function () {
                             currentRecord = results[i].record;
                         }
                         currentRecord.forEach(function (fieldValue) {
-                            if (fieldValue.id === records[i].expectedFieldValue.id) {
-                                assert.deepEqual(fieldValue, records[i].expectedFieldValue, 'Unexpected field value returned: '
-                                + JSON.stringify(fieldValue) + ', ' + JSON.stringify(records[i].expectedFieldValue));
+                            if (fieldValue.id === jsonBigNum.parse(records[i].expectedFieldValue).id) {
+                                assert.deepEqual(fieldValue, jsonBigNum.parse(records[i].expectedFieldValue), 'Unexpected field value returned: '
+                                + jsonBigNum.stringify(fieldValue) + ', ' + records[i].expectedFieldValue);
                             }
                         });
                     }
@@ -269,24 +283,24 @@ describe('API - Currency record test cases', function () {
     */
     function  allRightFlagsCurrencyDataProvider(fid) {
         // Decimal number
-        var decimalInput = [{"id": fid, "value": numberDecimalOnly}];
-        var expectedDecimalRecord = {"id": fid, "value": numberDecimalOnly, "display": "0,75 !"};
+        var decimalInput = '[{"id": ' + fid + ', "value": ' + numberDecimalOnly + '}]';
+        var expectedDecimalRecord = '{"id": ' + fid + ', "value": ' + numberDecimalOnly + ', "display": "0,75 !"}';
 
         // Double number
-        var doubleInput = [{"id": fid, "value": numberDouble}];
-        var expectedDoubleRecord = {"id": fid, "value": numberDouble, "display": "98.76.54.32.100,75 !"};
+        var doubleInput = '[{"id": ' + fid + ', "value": ' + numberDouble + '}]';
+        var expectedDoubleRecord = '{"id": ' + fid + ', "value": ' + numberDouble + ', "display": "98.76.54.32.100,75 !"}';
 
         // Negative number
-        var negativeInput = [{"id": fid, "value": numberNegative}];
-        var expectedNegativeRecord = {"id": fid, "value": numberNegative, "display": "-88,22 !"};
+        var negativeInput = '[{"id": ' + fid + ', "value": ' + numberNegative + '}]';
+        var expectedNegativeRecord = '{"id": ' + fid + ', "value": ' + numberNegative + ', "display": "-88,22 !"}';
 
         // Int number
-        var intInput = [{"id": fid, "value": numberInt}];
-        var expectedIntRecord = {"id": fid, "value": numberInt, "display": "99,00 !"};
+        var intInput = '[{"id": ' + fid + ', "value": ' + numberInt + '}]';
+        var expectedIntRecord = '{"id": ' + fid + ', "value": ' + numberInt + ', "display": "99,00 !"}';
 
         // Null number
-        var nullInput = [{"id": fid, "value": null}];
-        var expectedNullRecord = {"id": fid, "value": 0, "display": ""};
+        var nullInput = '[{"id": ' + fid + ', "value": null}]';
+        var expectedNullRecord = '{"id": ' + fid + ', "value": 0, "display": ""}';
 
         return [
             { message: "display decimal number with all 'right' format flags", record: decimalInput, format: "display", expectedFieldValue: expectedDecimalRecord },
@@ -321,7 +335,7 @@ describe('API - Currency record test cases', function () {
             var fetchRecordPromises = [];
             records.forEach(function (currentRecord) {
                 var recordsEndpoint = recordBase.apiBase.resolveRecordsEndpoint(app.id, app.tables[0].id);
-                fetchRecordPromises.push(recordBase.createAndFetchRecord(recordsEndpoint, currentRecord.record, '?format='+currentRecord.format));
+                fetchRecordPromises.push(recordBase.createAndFetchRecord(recordsEndpoint, jsonBigNum.parse(currentRecord.record), '?format='+currentRecord.format));
             });
 
             //When all the records have been created and fetched, assert the values match expectations
@@ -333,9 +347,9 @@ describe('API - Currency record test cases', function () {
                             currentRecord = results[i].record;
                         }
                         currentRecord.forEach(function (fieldValue) {
-                            if (fieldValue.id === records[i].expectedFieldValue.id) {
-                                assert.deepEqual(fieldValue, records[i].expectedFieldValue, 'Unexpected field value returned: '
-                                + JSON.stringify(fieldValue) + ', ' + JSON.stringify(records[i].expectedFieldValue));
+                            if (fieldValue.id === jsonBigNum.parse(records[i].expectedFieldValue).id) {
+                                assert.deepEqual(fieldValue, jsonBigNum.parse(records[i].expectedFieldValue), 'Unexpected field value returned: '
+                                + jsonBigNum.stringify(fieldValue) + ', ' + records[i].expectedFieldValue);
                             }
                         });
                     }
@@ -352,24 +366,24 @@ describe('API - Currency record test cases', function () {
      */
     function  allLeftFlagsCurrencyDataProvider(fid) {
         // Decimal number
-        var decimalInput = [{"id": fid, "value": numberDecimalOnly}];
-        var expectedDecimalRecord = {"id": fid, "value": numberDecimalOnly, "display": "\u20BD0,75"};
+        var decimalInput = '[{"id": ' + fid + ', "value": ' + numberDecimalOnly + '}]';
+        var expectedDecimalRecord = '{"id": ' + fid + ', "value": ' + numberDecimalOnly + ', "display": "\u20BD0,75"}';
 
         // Double number
-        var doubleInput = [{"id": fid, "value": numberDouble}];
-        var expectedDoubleRecord = {"id": fid, "value": numberDouble, "display": "\u20BD98.76.54.32.100,75"};
+        var doubleInput = '[{"id": ' + fid + ', "value": ' + numberDouble + '}]';
+        var expectedDoubleRecord = '{"id": ' + fid + ', "value": ' + numberDouble + ', "display": "\u20BD98.76.54.32.100,75"}';
 
         // Negative number
-        var negativeInput = [{"id": fid, "value": numberNegative}];
-        var expectedNegativeRecord = {"id": fid, "value": numberNegative, "display": "\u20BD-88,22"};
+        var negativeInput = '[{"id": ' + fid + ', "value": ' + numberNegative + '}]';
+        var expectedNegativeRecord = '{"id": ' + fid + ', "value": ' + numberNegative + ', "display": "\u20BD-88,22"}';
 
         // Int number
-        var intInput = [{"id": fid, "value": numberInt}];
-        var expectedIntRecord = {"id": fid, "value": numberInt, "display": "\u20BD99,00"};
+        var intInput = '[{"id": ' + fid + ', "value": ' + numberInt + '}]';
+        var expectedIntRecord = '{"id": ' + fid + ', "value": ' + numberInt + ', "display": "\u20BD99,00"}';
 
         // Null number
-        var nullInput = [{"id": fid, "value": null}];
-        var expectedNullRecord = {"id": fid, "value": 0, "display": ""};
+        var nullInput = '[{"id": ' + fid + ', "value": null}]';
+        var expectedNullRecord = '{"id": ' + fid + ', "value": 0, "display": ""}';
 
         return [
             { message: "display decimal number with all 'left' format flags", record: decimalInput, format: "display", expectedFieldValue: expectedDecimalRecord },
@@ -404,7 +418,7 @@ describe('API - Currency record test cases', function () {
             var fetchRecordPromises = [];
             records.forEach(function (currentRecord) {
                 var recordsEndpoint = recordBase.apiBase.resolveRecordsEndpoint(app.id, app.tables[0].id);
-                fetchRecordPromises.push(recordBase.createAndFetchRecord(recordsEndpoint, currentRecord.record, '?format='+currentRecord.format));
+                fetchRecordPromises.push(recordBase.createAndFetchRecord(recordsEndpoint, jsonBigNum.parse(currentRecord.record), '?format='+currentRecord.format));
             });
 
             //When all the records have been created and fetched, assert the values match expectations
@@ -416,9 +430,9 @@ describe('API - Currency record test cases', function () {
                             currentRecord = results[i].record;
                         }
                         currentRecord.forEach(function (fieldValue) {
-                            if (fieldValue.id === records[i].expectedFieldValue.id) {
-                                assert.deepEqual(fieldValue, records[i].expectedFieldValue, 'Unexpected field value returned: '
-                                + JSON.stringify(fieldValue) + ', ' + JSON.stringify(records[i].expectedFieldValue));
+                            if (fieldValue.id === jsonBigNum.parse(records[i].expectedFieldValue).id) {
+                                assert.deepEqual(fieldValue, jsonBigNum.parse(records[i].expectedFieldValue), 'Unexpected field value returned: '
+                                + jsonBigNum.stringify(fieldValue) + ', ' + records[i].expectedFieldValue);
                             }
                         });
                     }
