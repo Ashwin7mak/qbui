@@ -17,6 +17,7 @@
      * of precision. For more info, google it!
      */
     var bigDecimal = require('bigdecimal');
+    var consts = require('../../constants');
     //Module constants:
     var COMMA = ',';
     var DASH = '-';
@@ -30,11 +31,6 @@
     var CURRENCY_RIGHT_OF_SIGN = "RIGHT_OF_SIGN";
     var CURRENCY_SYMBOL = "$";
     var PERCENT_SYMBOL = "%";
-    var NUMERIC = "NUMERIC";
-    var PERCENT = "PERCENT";
-    var FORMULA_PERCENT = "FORMULA_" + PERCENT;
-    var CURRENCY = "CURRENCY";
-    var FORMULA_CURRENCY = "FORMULA_" + CURRENCY;
     //Defaults & supported values
     var DEFAULT_SEPARATOR_START = 3;
     var DEFAULT_CURRENCY_SYMBOL = CURRENCY_SYMBOL;
@@ -108,6 +104,30 @@
     }
 
     /**
+     * Given a raw mantissaString and formatting options object, format and return a display-ready
+     * mantissa string.
+     * @param mantissaString
+     * @param opts
+     * @returns {*}
+     */
+    function toFormattedMantissaString(mantissaString, opts) {
+        var formattedMantissa = mantissaString;
+        //Format the mantissa, if its long enough to need formatting
+        if (opts.separatorMark && mantissaString.length > opts.separatorStart) {
+            var mantissaLength = mantissaString.length;
+            //apply the separator pattern
+            if (opts.separatorPattern === PATTERN_EVERY_THREE) {
+                formattedMantissa = splitString(mantissaString, mantissaLength, 3).join(opts.separatorMark);
+            } else if (opts.separatorPattern === PATTERN_THREE_THEN_TWO) {
+                var rightMostStart = mantissaLength - 3;
+                var ret = splitString(mantissaString, rightMostStart, 2);
+                ret.push(mantissaString.substr(rightMostStart));
+                formattedMantissa = ret.join(opts.separatorMark);
+            }
+        }
+        return formattedMantissa;
+    }
+    /**
      * Given a numeric value and an options object with display config properties set on it, this method
      * formats the numeric value as a string and returns the formatted string.
      * @param numeric A numeric value
@@ -118,6 +138,7 @@
         //Resolve the number value as a string with the proper decimal places
         var numString = numeric.toString();
         var mantissaString, characteristicString;
+        //Parse either scientific notation string or a raw numeric string
         if(numString.indexOf(EXPONENT_CHAR) != -1) {
             var parts = numString.split(EXPONENT_CHAR);
             var exponent = new Number(parts[1]);
@@ -138,26 +159,14 @@
             }
         }
         characteristicString = toRoundedDisplayDecimal(characteristicString, opts.decimalPlaces);
-        //Format the mantissa, if its long enough to need formatting
-        if (opts.separatorMark && mantissaString.length > opts.separatorStart) {
-            var mantissaLength = mantissaString.length;
-            //apply the separator pattern
-            if (opts.separatorPattern === PATTERN_EVERY_THREE) {
-                mantissaString = splitString(mantissaString, mantissaLength, 3).join(opts.separatorMark);
-            } else if (opts.separatorPattern === PATTERN_THREE_THEN_TWO) {
-                var rightMostStart = mantissaLength - 3;
-                var ret = splitString(mantissaString, rightMostStart, 2);
-                ret.push(mantissaString.substr(rightMostStart));
-                mantissaString = ret.join(opts.separatorMark);
-            }
-        }
+        mantissaString = toFormattedMantissaString(mantissaString, opts);
         //Construct the return string
         var returnValue = mantissaString;
         if (characteristicString) {
             returnValue = returnValue + opts.decimalMark + characteristicString;
         }
         //Handle percent and currency subtypes
-        if(opts.type === FORMULA_CURRENCY || opts.type === CURRENCY) {
+        if(opts.type === consts.FORMULA_CURRENCY || opts.type === consts.CURRENCY) {
             if(opts.position === CURRENCY_RIGHT) {
                 returnValue = returnValue + ' ' + opts.symbol;
             } else if(opts.position === CURRENCY_RIGHT_OF_SIGN && returnValue.charAt(0) === DASH) {
@@ -166,7 +175,7 @@
             } else {
                 returnValue = opts.symbol + returnValue;
             }
-        } else if(opts.type === PERCENT || opts.type === FORMULA_PERCENT) {
+        } else if(opts.type === consts.PERCENT || opts.type === consts.FORMULA_PERCENT) {
             returnValue = returnValue + PERCENT_SYMBOL;
         }
         return returnValue;
@@ -188,7 +197,7 @@
                 opts.separatorPattern = fieldInfo.clientSideAttributes.separator_pattern;
                 opts.decimalMark = fieldInfo.clientSideAttributes.decimal_mark;
                 opts.type = fieldInfo.type;
-                if(opts.type === CURRENCY || opts.type === FORMULA_CURRENCY) {
+                if(opts.type === consts.CURRENCY || opts.type === consts.FORMULA_CURRENCY) {
                     opts.symbol = fieldInfo.clientSideAttributes.symbol;
                     opts.position = fieldInfo.clientSideAttributes.position;
                 }
@@ -211,10 +220,10 @@
                 opts.decimalMark = DEFAULT_DECIMAL_MARK;
             }
             if(!opts.type) {
-                opts.type = NUMERIC;
+                opts.type = consts.NUMERIC;
             }
             //Add any additional currency options, if this is a currency field
-            if(opts.type === CURRENCY || opts.type === FORMULA_CURRENCY) {
+            if(opts.type === consts.CURRENCY || opts.type === consts.FORMULA_CURRENCY) {
                 if(!opts.symbol) {
                     opts.symbol = DEFAULT_CURRENCY_SYMBOL;
                 }
