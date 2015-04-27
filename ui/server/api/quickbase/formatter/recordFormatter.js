@@ -4,20 +4,11 @@
  */
 (function () {
     'use strict';
+    var consts = require('../../constants');
     var dateFormatter = require('./dateTimeFormatter');
     var phoneFormatter = require('./phoneNumberFormatter');
     var todFormatter = require('./timeOfDayFormatter');
     var numericFormatter = require('./numericFormatter');
-    //module constants
-    var PHONE_NUMBER = 'PHONE_NUMBER';
-    var DATE_TIME = 'DATE_TIME';
-    var FORMULA_DATE_TIME = 'FORMULA_DATE_TIME';
-    var DATE = 'DATE';
-    var FORMULA_DATE = 'FORMULA_DATE';
-    var FORMULA_TIME_OF_DAY = 'FORMULA_TIME_OF_DAY';
-    var TIME_OF_DAY = 'TIME_OF_DAY';
-    var NUMERIC = 'NUMERIC';
-    var FORMULA_NUMERIC = 'FORMULA_NUMERIC';
 
     /**
      * Certain fields may require generation of a formatter string that will be used for each record in the
@@ -30,18 +21,22 @@
     function precalculateFormatterStringsForFields(fieldInfos) {
         for (var i = 0; i < fieldInfos.length; i++) {
             switch (fieldInfos[i].type) {
-                case DATE_TIME:
-                case DATE:
-                case FORMULA_DATE_TIME:
-                case FORMULA_DATE:
+                case consts.DATE_TIME:
+                case consts.DATE:
+                case consts.FORMULA_DATE_TIME:
+                case consts.FORMULA_DATE:
                     fieldInfos[i].jsFormat = dateFormatter.generateFormat(fieldInfos[i]);
                     break;
-                case TIME_OF_DAY:
-                case FORMULA_TIME_OF_DAY:
+                case consts.TIME_OF_DAY:
+                case consts.FORMULA_TIME_OF_DAY:
                     fieldInfos[i].jsFormat = todFormatter.generateFormat(fieldInfos[i]);
                     break;
-                case NUMERIC:
-                case FORMULA_NUMERIC:
+                case consts.NUMERIC:
+                case consts.FORMULA_NUMERIC:
+                case consts.CURRENCY:
+                case consts.FORMULA_CURRENCY:
+                case consts.PERCENT:
+                case consts.FORMULA_PERCENT:
                     fieldInfos[i].jsFormat = numericFormatter.generateFormat(fieldInfos[i]);
                 default:
                     break;
@@ -53,21 +48,25 @@
         //Display formats record field values according to the field's display settings
         function formatRecordValue(fieldValue, fieldInfo) {
             switch (fieldInfo.type) {
-                case PHONE_NUMBER:
+                case consts.PHONE_NUMBER:
                     fieldValue.display = phoneFormatter.format(fieldValue, fieldInfo);
                     break;
-                case DATE_TIME:
-                case DATE:
-                case FORMULA_DATE_TIME:
-                case FORMULA_DATE:
+                case consts.DATE_TIME:
+                case consts.DATE:
+                case consts.FORMULA_DATE_TIME:
+                case consts.FORMULA_DATE:
                     fieldValue.display = dateFormatter.format(fieldValue, fieldInfo);
                     break;
-                case TIME_OF_DAY:
-                case FORMULA_TIME_OF_DAY:
+                case consts.TIME_OF_DAY:
+                case consts.FORMULA_TIME_OF_DAY:
                     fieldValue.display = todFormatter.format(fieldValue, fieldInfo);
                     break;
-                case NUMERIC:
-                case FORMULA_NUMERIC:
+                case consts.NUMERIC:
+                case consts.FORMULA_NUMERIC:
+                case consts.CURRENCY:
+                case consts.FORMULA_CURRENCY:
+                case consts.PERCENT:
+                case consts.FORMULA_PERCENT:
                     fieldValue.display = numericFormatter.format(fieldValue, fieldInfo);
                     break;
                 default:

@@ -5,6 +5,7 @@
 (function () {
     'use strict';
     var moment = require('moment-timezone');
+    var consts = require('../../constants');
     //FORMATTING COMPONENTS
     var DASH = '-';
     var TWO_DIGIT_MONTH = 'MM';
@@ -14,9 +15,6 @@
     var FOUR_DIGIT_YEAR = 'YYYY';
     var TWO_DIGIT_YEAR = 'YY';
     var TWO_DIGIT_DAY = 'DD';
-    var DATE_TIME = 'DATE_TIME';
-    var FORMULA_DATE_TIME = 'FORMULA_DATE_TIME';
-    var UNIVERSAL_TIMEZONE = 'Universal';
     var DEFAULT_TIMEZONE = 'America/Los_Angeles';
     var TIMEZONE_FORMATTER = ' z';
     //Base formats
@@ -86,8 +84,8 @@
             if (!fieldValue || !fieldValue.value) {
                 return '';
             }
-            var timeZone = UNIVERSAL_TIMEZONE;
-            if (fieldInfo.type === DATE_TIME || fieldInfo.type === FORMULA_DATE_TIME) {
+            var timeZone = consts.UTC_TIMEZONE;
+            if (fieldInfo.type === consts.DATE_TIME || fieldInfo.type === consts.FORMULA_DATE_TIME) {
                 timeZone = fieldInfo.timeZone;
                 if (!timeZone) {
                     timeZone = DEFAULT_TIMEZONE;

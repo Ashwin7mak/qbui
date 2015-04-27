@@ -21,33 +21,31 @@ var _ = require('lodash');
 var jsonBigNum = require('json-bignum');
 var BigDecimal = require('bigdecimal');
 
+
 /**
- * Integration test for Numeric field formatting
+ * Integration test for Percent field formatting
  */
-describe('API - Numeric record test cases', function () {
+describe('API - Percent record test cases', function () {
     var numberDecimalOnly = '0.74765432';
     var numberDouble = '9.876543210074765E10';
-    var numberNoSeparator = '99';
-    var numberMultipleSeparators = '98765432100';
-    var numberMax = '7777777777777777777';
-    var numberMin = '-1111111111111111111';
+    var numberInt = '99';
 
     var appWithNoFlags = {
-        "name": "Numeric App - no flags",
+        "name": "Percent App - no flags",
         "tables": [{
                 "name": "table1", "fields": [{
-                    "name": "numeric",
-                    "type": "NUMERIC"
+                    "name": "percent",
+                    "type": "PERCENT"
                 }
          ]}
     ]};
 
     var appWithAllFlags = {
-        "name": "Numeric App - all flags",
+        "name": "Percent App - all flags",
         "tables": [{
             "name": "table1", "fields": [{
-                "name": "numeric",
-                "type": "NUMERIC",
+                "name": "percent",
+                "type": "PERCENT",
                 "decimalPlaces": 2,
                 "clientSideAttributes": {
                     "width": 10,
@@ -64,78 +62,59 @@ describe('API - Numeric record test cases', function () {
         ]};
 
     /**
-     * DataProvider containing Records and record display expectations for Numeric field with no display props set
+     * DataProvider containing Records and record display expectations for Percent field with no display props set
      */
-    function  noFlagsNumericDataProvider(fid) {
+    function  noFlagsPercentDataProvider(fid) {
         // Decimal number
         var decimalInput = '[{"id": ' + fid + ', "value": ' + numberDecimalOnly + '}]';
-        var expectedDecimalRecord = '{"id": ' + fid + ', "value": '+ numberDecimalOnly + ', "display": "0.74765432000000"}';
+        var expectedDecimalRecord = '{"id": ' + fid + ', "value": ' + numberDecimalOnly + ', "display": "0.74765432000000%"}';
 
         // Double number
-        var doubleInput = '[{"id": ' + fid + ', "value": '+ numberDouble + '}]';
-        var expectedDoubleRecord = '{"id": ' + fid + ', "value": ' + numberDouble +', "display": "98765432100.74765000000000"}';
+        var doubleInput = '[{"id": ' + fid + ', "value": ' + numberDouble + '}]';
+        var expectedDoubleRecord = '{"id": ' + fid + ', "value": ' + numberDouble + ', "display": "98765432100.74765000000000%"}';
 
-        // No separator number
-        var noSeparatorInput = '[{"id": ' + fid + ', "value": '+ numberNoSeparator +'}]';
-        var expectedNoSeparatorRecord = '{"id": ' + fid + ', "value": ' + numberNoSeparator + ', "display": "99.00000000000000"}';
-
-        // Multiple separator number
-        var multiSeparatorInput = '[{"id": ' + fid + ', "value": '+ numberMultipleSeparators + '}]';
-        var expectedMultiSeparatorRecord = '{"id": ' + fid + ', "value": ' + numberMultipleSeparators + ', "display": "98765432100.00000000000000"}';
+        // Int number
+        var intInput = '[{"id": ' + fid + ', "value": ' + numberInt+ '}]';
+        var expectedIntRecord = '{"id": ' + fid + ', "value": ' + numberInt + ', "display": "99.00000000000000%"}';
 
         // Null number
         var nullInput = '[{"id": ' + fid + ', "value": null}]';
         var expectedNullRecord = '{"id": ' + fid + ', "value": 0, "display": ""}';
-
-        // Max number
-        var maxInput = '[{"id": ' + fid + ', "value": ' + numberMax + '}]';
-        var expectedMaxRecord = '{"id": ' + fid + ', "value": ' + numberMax + ', "display": "7777777777777777777.00000000000000"}';
-
-        // Min number
-        var minInput = '[{"id": ' + fid + ', "value":' + numberMin + '}]';
-        var expectedMinRecord = '{"id": ' + fid + ', "value": ' + numberMin + ', "display": "-1111111111111111111.00000000000000"}';
 
         return [
             { message: "display decimal number with no format flags", record: decimalInput, format: "display", expectedFieldValue: expectedDecimalRecord },
             { message: "raw decimal number with no format flags", record: decimalInput, format: "raw", expectedFieldValue: decimalInput },
             { message: "display double number with no format flags", record: doubleInput, format: "display", expectedFieldValue: expectedDoubleRecord },
             { message: "raw double number with no format flags", record: doubleInput, format: "raw", expectedFieldValue: doubleInput },
-            { message: "display no separator number with no format flags", record: noSeparatorInput, format: "display", expectedFieldValue: expectedNoSeparatorRecord },
-            { message: "raw no separator number with no format flags", record: noSeparatorInput, format: "raw", expectedFieldValue: noSeparatorInput },
-            { message: "display multiple separator number with no format flags", record: multiSeparatorInput, format: "display", expectedFieldValue: expectedMultiSeparatorRecord },
-            { message: "raw multiple separator number with no format flags", record: multiSeparatorInput, format: "raw", expectedFieldValue: multiSeparatorInput },
-            { message: "display max number with no format flags", record: maxInput, format: "display", expectedFieldValue: expectedMaxRecord },
-            { message: "raw max number with no format flags", record: maxInput, format: "raw", expectedFieldValue: maxInput },
-            { message: "display min number with no format flags", record: minInput, format: "display", expectedFieldValue: expectedMinRecord },
-            { message: "raw min number with no format flags", record: minInput, format: "raw", expectedFieldValue: minInput },
+            { message: "display int number with no format flags", record: intInput, format: "display", expectedFieldValue: expectedIntRecord },
+            { message: "raw int number with no format flags", record: intInput, format: "raw", expectedFieldValue: intInput },
             { message: "display null number with no format flags", record: nullInput, format: "display", expectedFieldValue: expectedNullRecord },
-            { message: "raw null number with no format flags", record: nullInput, format: "raw", expectedFieldValue: nullInput },
+            { message: "raw null number with no format flags", record: nullInput, format: "raw", expectedFieldValue: nullInput }
         ]
     }
 
     /**
-     * Integration test that validates Numeric records formatting with no field property flags set
+     * Integration test that validates Percent records formatting with no field property flags set
      */
-    it('Should create and retrieve numeric display records when no format flags set', function (done) {
+    it('Should create and retrieve percent display records when no format flags set', function (done) {
         this.timeout(30000);
         recordBase.createApp(appWithNoFlags).then(function (appResponse) {
             var app = JSON.parse(appResponse.body);
-            var numericField;
+            var percentField;
             app.tables[0].fields.forEach(function (field) {
-                if (field.name === 'numeric') {
-                    numericField = field;
+                if (field.name === 'percent') {
+                    percentField = field;
                 }
             });
-            assert(numericField, 'failed to find numeric field');
-            var records = noFlagsNumericDataProvider(numericField.id);
+            assert(percentField, 'failed to find percent field');
+            var records = noFlagsPercentDataProvider(percentField.id);
             //For each of the cases, create the record and execute the request
             var fetchRecordPromises = [];
             records.forEach(function (currentRecord) {
                 var recordsEndpoint = recordBase.apiBase.resolveRecordsEndpoint(app.id, app.tables[0].id);
-                fetchRecordPromises.push(
-                    recordBase.createAndFetchRecord(recordsEndpoint, jsonBigNum.parse(currentRecord.record), '?format='+currentRecord.format)
-                );
+                fetchRecordPromises.push(recordBase.createAndFetchRecord(recordsEndpoint, jsonBigNum.parse(currentRecord.record), '?format='+currentRecord.format));
             });
+
             //When all the records have been created and fetched, assert the values match expectations
             Promise.all(fetchRecordPromises)
                 .then(function (results) {
@@ -160,32 +139,20 @@ describe('API - Numeric record test cases', function () {
     });
 
     /**
-     * DataProvider containing Records and record display expectations for Numeric field with all display props set
+     * DataProvider containing Records and record display expectations for Percent field with all display props set
      */
-    function  allFlagsNumericDataProvider(fid) {
+    function  allFlagsPercentDataProvider(fid) {
         // Decimal number
         var decimalInput = '[{"id": ' + fid + ', "value": ' + numberDecimalOnly + '}]';
-        var expectedDecimalRecord = '{"id": ' + fid + ', "value": ' + numberDecimalOnly + ', "display": "0,75"}';
+        var expectedDecimalRecord = '{"id": ' + fid + ', "value": ' + numberDecimalOnly + ', "display": "0,75%"}';
 
         // Double number
         var doubleInput = '[{"id": ' + fid + ', "value": ' + numberDouble + '}]';
-        var expectedDoubleRecord = '{"id": ' + fid + ', "value": ' + numberDouble + ', "display": "98.76.54.32.100,75"}';
+        var expectedDoubleRecord = '{"id": ' + fid + ', "value": ' + numberDouble + ', "display": "98.76.54.32.100,75%"}';
 
-        // No separator number
-        var noSeparatorInput = '[{"id": ' + fid + ', "value": ' + numberNoSeparator + '}]';
-        var expectedNoSeparatorRecord = '{"id": ' + fid + ', "value": ' + numberNoSeparator + ', "display": "99,00"}';
-
-        // Multiple separator number
-        var multiSeparatorInput = '[{"id": ' + fid + ', "value": ' + numberMultipleSeparators + '}]';
-        var expectedMultiSeparatorRecord = '{"id": ' + fid + ', "value": ' + numberMultipleSeparators + ', "display": "98.76.54.32.100,00"}';
-
-        // Max number
-        var maxInput = '[{"id": ' + fid + ', "value": ' + numberMax + '}]';
-        var expectedMaxRecord = '{"id": ' + fid + ', "value": ' + numberMax + ', "display": "7.77.77.77.77.77.77.77.77.77,00"}';
-
-        // Min number
-        var minInput = '[{"id": ' + fid + ', "value": ' + numberMin + '}]';
-        var expectedMinRecord = '{"id": ' + fid + ', "value": ' + numberMin + ', "display": "-1.11.11.11.11.11.11.11.11.11,00"}';
+        // Int number
+        var intInput = '[{"id": ' + fid + ', "value": ' + numberInt + '}]';
+        var expectedIntRecord = '{"id": ' + fid + ', "value": ' + numberInt + ', "display": "99,00%"}';
 
         // Null number
         var nullInput = '[{"id": ' + fid + ', "value": null}]';
@@ -196,34 +163,28 @@ describe('API - Numeric record test cases', function () {
             { message: "raw decimal number with all format flags", record: decimalInput, format: "raw", expectedFieldValue: decimalInput },
             { message: "display double number with all format flags", record: doubleInput, format: "display", expectedFieldValue: expectedDoubleRecord },
             { message: "raw double number with all format flags", record: doubleInput, format: "raw", expectedFieldValue: doubleInput },
-            { message: "display no separator number with all format flags", record: noSeparatorInput, format: "display", expectedFieldValue: expectedNoSeparatorRecord },
-            { message: "raw no separator number with all format flags", record: noSeparatorInput, format: "raw", expectedFieldValue: noSeparatorInput },
-            { message: "display multiple separator number with all format flags", record: multiSeparatorInput, format: "display", expectedFieldValue: expectedMultiSeparatorRecord },
-            { message: "raw multiple separator number with all format flags", record: multiSeparatorInput, format: "raw", expectedFieldValue: multiSeparatorInput },
-            { message: "display max number with all format flags", record: maxInput, format: "display", expectedFieldValue: expectedMaxRecord },
-            { message: "raw max number with all format flags", record: maxInput, format: "raw", expectedFieldValue: maxInput },
-            { message: "display min number with all format flags", record: minInput, format: "display", expectedFieldValue: expectedMinRecord },
-            { message: "raw min number with all format flags", record: minInput, format: "raw", expectedFieldValue: minInput },
+            { message: "display int number with all format flags", record: intInput, format: "display", expectedFieldValue: expectedIntRecord },
+            { message: "raw int number with all format flags", record: intInput, format: "raw", expectedFieldValue: intInput },
             { message: "display null number with all format flags", record: nullInput, format: "display", expectedFieldValue: expectedNullRecord },
             { message: "raw null number with all format flags", record: nullInput, format: "raw", expectedFieldValue: nullInput }
         ]
     }
 
     /**
-     * Integration test that validates Numeric records formatting with all field property flags set
+     * Integration test that validates Percent records formatting with all field property flags set
      */
-    it('Should create and retrieve numeric display records when all format flags set', function (done) {
+    it('Should create and retrieve percent display records when all format flags set', function (done) {
         this.timeout(30000);
         recordBase.createApp(appWithAllFlags).then(function (appResponse) {
             var app = JSON.parse(appResponse.body);
-            var numericField;
+            var percentField;
             app.tables[0].fields.forEach(function (field) {
-                if (field.name === 'numeric') {
-                    numericField = field;
+                if (field.name === 'percent') {
+                    percentField = field;
                 }
             });
-            assert(numericField, 'failed to find numeric field');
-            var records = allFlagsNumericDataProvider(numericField.id);
+            assert(percentField, 'failed to find percent field');
+            var records = allFlagsPercentDataProvider(percentField.id);
             //For each of the cases, create the record and execute the request
             var fetchRecordPromises = [];
             records.forEach(function (currentRecord) {
@@ -240,9 +201,9 @@ describe('API - Numeric record test cases', function () {
                             currentRecord = results[i].record;
                         }
                         currentRecord.forEach(function (fieldValue) {
-                            if (fieldValue.id === records[i].expectedFieldValue.id) {
+                            if (fieldValue.id === jsonBigNum.parse(records[i].expectedFieldValue).id) {
                                 assert.deepEqual(fieldValue, jsonBigNum.parse(records[i].expectedFieldValue), 'Unexpected field value returned: '
-                                + JSON.stringify(fieldValue) + ', ' + records[i].expectedFieldValue);
+                                + jsonBigNum.stringify(fieldValue) + ', ' + records[i].expectedFieldValue);
                             }
                         });
                     }
