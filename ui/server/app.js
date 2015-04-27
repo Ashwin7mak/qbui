@@ -15,6 +15,21 @@
     // Setup server
     var app = module.exports = express();
 
+    /*
+     * Express automatically populates the req.body attribute with a JSON parsed object in the case
+     * where Content-Type is application/json. Because there may be numeric values with greater precision
+     * than the Javascript number data type supports, we need to cache the raw body as a string so that
+     * we can parse this string without the default JSON.parse() behavior to capture 64 bit longs and decimal
+     * precision that
+     */
+    app.use(function(req, res, next) {
+        req.rawBody = '';
+        req.on('data', function(chunk) {
+            req.rawBody += chunk;
+        });
+        next();
+    });
+
     require('./config/express')(app);
     require('./routes')(app, config);
 

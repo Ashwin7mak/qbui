@@ -5,8 +5,8 @@
 (function () {
     'use strict';
     var moment = require('moment-timezone');
+    var consts = require('../../constants');
     //Module constants:
-    var UTC_TIMEZONE = 'Universal';
     var TWENTY_FOUR_HOUR_CLOCK = 'HH:';
     var TWELVE_HOUR_CLOCK = 'h:';
     var MM = 'mm';
@@ -45,7 +45,7 @@
             //Declare the date and moment formatter
             var d = new Date(fieldValue.value.replace(/(\[.*?\])/, ''));
             //Resolve whether or not to shift based on timezone
-            var timeZone = UTC_TIMEZONE;
+            var timeZone = consts.UTC_TIMEZONE;
             if (fieldInfo.useTimezone) {
                 timeZone = fieldInfo.timeZone;
                 if (!timeZone) {

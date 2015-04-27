@@ -4,11 +4,26 @@
  */
 (function () {
     'use strict';
+    /*
+     * We can't use the JS native number data type when handling records because it is possible to lose
+     * decimal precision as a result of the JS implementation the number data type. In JS, all numbers are
+     * 64 bit floating points where bits 0-51 store values, bits 52-62 store the exponent and
+     * bit 63 is the sign bit. This is the IEEE 754 standard. Practically speaking, this means
+     * that a java Long, which uses all bits 0-62 to store values, cannot be expressed in a JS
+     * number without a loss of precision.  For this reason, we use a special implementation of
+     * JSON.parse/stringify that depends on an implementation of BigDecimal, which is capable of
+     * expressing all the precision of numeric values we expect to get from the java capabilities
+     * APIs.  This is slower than using JSON.parse/stringify, but is necessary to avoid the loss
+     * of precision. For more info, google it!
+     */
+    var bigDecimal = require('bigdecimal');
+    var consts = require('../../constants');
     //Module constants:
     var COMMA = ',';
     var DASH = '-';
     var ZERO_CHAR = '0';
     var PERIOD = '.';
+    var EXPONENT_CHAR = 'E';
     var PATTERN_EVERY_THREE = 'EVERY_THREE';
     var PATTERN_THREE_THEN_TWO = 'THREE_THEN_TWO';
     var CURRENCY_LEFT = "LEFT";
@@ -16,11 +31,6 @@
     var CURRENCY_RIGHT_OF_SIGN = "RIGHT_OF_SIGN";
     var CURRENCY_SYMBOL = "$";
     var PERCENT_SYMBOL = "%";
-    var NUMERIC = "NUMERIC";
-    var PERCENT = "PERCENT";
-    var FORMULA_PERCENT = "FORMULA_" + PERCENT;
-    var CURRENCY = "CURRENCY";
-    var FORMULA_CURRENCY = "FORMULA_" + CURRENCY;
     //Defaults & supported values
     var DEFAULT_SEPARATOR_START = 3;
     var DEFAULT_CURRENCY_SYMBOL = CURRENCY_SYMBOL;
@@ -78,9 +88,11 @@
         }
         if(characteristicString.length > precision) {
             //round
-            var charNum = Number(characteristicString);
-            charNum = Math.round(charNum / (Math.pow(10, characteristicString.length - precision)));
-            characteristicString = charNum.toString();
+            var c = new bigDecimal.BigDecimal(characteristicString);
+            c = c.divide(new bigDecimal.BigDecimal(Math.pow(10, characteristicString.length - precision)));
+            c = c.setScale(0, bigDecimal.RoundingMode.HALF_UP());
+            var cStr = c.toString();
+            characteristicString = cStr;
         }
         //Pad if needed to fill out the precision
         if(characteristicString.length < precision) {
@@ -92,6 +104,30 @@
     }
 
     /**
+     * Given a raw mantissaString and formatting options object, format and return a display-ready
+     * mantissa string.
+     * @param mantissaString
+     * @param opts
+     * @returns {*}
+     */
+    function toFormattedMantissaString(mantissaString, opts) {
+        var formattedMantissa = mantissaString;
+        //Format the mantissa, if its long enough to need formatting
+        if (opts.separatorMark && mantissaString.length > opts.separatorStart) {
+            var mantissaLength = mantissaString.length;
+            //apply the separator pattern
+            if (opts.separatorPattern === PATTERN_EVERY_THREE) {
+                formattedMantissa = splitString(mantissaString, mantissaLength, 3).join(opts.separatorMark);
+            } else if (opts.separatorPattern === PATTERN_THREE_THEN_TWO) {
+                var rightMostStart = mantissaLength - 3;
+                var ret = splitString(mantissaString, rightMostStart, 2);
+                ret.push(mantissaString.substr(rightMostStart));
+                formattedMantissa = ret.join(opts.separatorMark);
+            }
+        }
+        return formattedMantissa;
+    }
+    /**
      * Given a numeric value and an options object with display config properties set on it, this method
      * formats the numeric value as a string and returns the formatted string.
      * @param numeric A numeric value
@@ -101,34 +137,36 @@
     function formatNumericValue(numeric, opts) {
         //Resolve the number value as a string with the proper decimal places
         var numString = numeric.toString();
-        //Split the string on the decimal point, if there is one
-        var numParts = numString.toString().split(PERIOD);
-        var mantissaString = numParts[0];
-        var characteristicString = null;
-        if(numParts.length > 1) {
-            characteristicString = numParts[1];
-        }
-        characteristicString = toRoundedDisplayDecimal(characteristicString, opts.decimalPlaces);
-        //Format the mantissa, if its long enough to need formatting
-        if (opts.separatorMark && mantissaString.length > opts.separatorStart) {
-            var mantissaLength = mantissaString.length;
-            //apply the separator pattern
-            if (opts.separatorPattern === PATTERN_EVERY_THREE) {
-                mantissaString = splitString(mantissaString, mantissaLength, 3).join(opts.separatorMark);
-            } else if (opts.separatorPattern === PATTERN_THREE_THEN_TWO) {
-                var rightMostStart = mantissaLength - 3;
-                var ret = splitString(mantissaString, rightMostStart, 2);
-                ret.push(mantissaString.substr(rightMostStart));
-                mantissaString = ret.join(opts.separatorMark);
+        var mantissaString, characteristicString;
+        //Parse either scientific notation string or a raw numeric string
+        if(numString.indexOf(EXPONENT_CHAR) != -1) {
+            var parts = numString.split(EXPONENT_CHAR);
+            var exponent = new Number(parts[1]);
+            var decimalSplits = parts[0].split(PERIOD);
+            if(decimalSplits[1].length >= exponent) {
+                mantissaString = decimalSplits[0] + decimalSplits[1].substring(0, exponent);
+                if(decimalSplits[1].length > exponent) {
+                    characteristicString = decimalSplits[1].substring(exponent);
+                }
+            }
+        } else {
+            //Split the string on the decimal point, if there is one
+            var numParts = numString.toString().split(PERIOD);
+            mantissaString = numParts[0];
+            characteristicString = null;
+            if(numParts.length > 1) {
+                characteristicString = numParts[1];
             }
         }
+        characteristicString = toRoundedDisplayDecimal(characteristicString, opts.decimalPlaces);
+        mantissaString = toFormattedMantissaString(mantissaString, opts);
         //Construct the return string
         var returnValue = mantissaString;
         if (characteristicString) {
             returnValue = returnValue + opts.decimalMark + characteristicString;
         }
         //Handle percent and currency subtypes
-        if(opts.type === FORMULA_CURRENCY || opts.type === CURRENCY) {
+        if(opts.type === consts.FORMULA_CURRENCY || opts.type === consts.CURRENCY) {
             if(opts.position === CURRENCY_RIGHT) {
                 returnValue = returnValue + ' ' + opts.symbol;
             } else if(opts.position === CURRENCY_RIGHT_OF_SIGN && returnValue.charAt(0) === DASH) {
@@ -137,7 +175,7 @@
             } else {
                 returnValue = opts.symbol + returnValue;
             }
-        } else if(opts.type === PERCENT || opts.type === FORMULA_PERCENT) {
+        } else if(opts.type === consts.PERCENT || opts.type === consts.FORMULA_PERCENT) {
             returnValue = returnValue + PERCENT_SYMBOL;
         }
         return returnValue;
@@ -159,7 +197,7 @@
                 opts.separatorPattern = fieldInfo.clientSideAttributes.separator_pattern;
                 opts.decimalMark = fieldInfo.clientSideAttributes.decimal_mark;
                 opts.type = fieldInfo.type;
-                if(opts.type === CURRENCY || opts.type === FORMULA_CURRENCY) {
+                if(opts.type === consts.CURRENCY || opts.type === consts.FORMULA_CURRENCY) {
                     opts.symbol = fieldInfo.clientSideAttributes.symbol;
                     opts.position = fieldInfo.clientSideAttributes.position;
                 }
@@ -182,10 +220,10 @@
                 opts.decimalMark = DEFAULT_DECIMAL_MARK;
             }
             if(!opts.type) {
-                opts.type = NUMERIC;
+                opts.type = consts.NUMERIC;
             }
             //Add any additional currency options, if this is a currency field
-            if(opts.type === CURRENCY || opts.type === FORMULA_CURRENCY) {
+            if(opts.type === consts.CURRENCY || opts.type === consts.FORMULA_CURRENCY) {
                 if(!opts.symbol) {
                     opts.symbol = DEFAULT_CURRENCY_SYMBOL;
                 }
