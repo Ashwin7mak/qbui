@@ -3,7 +3,7 @@
   height: 500px;
   min-height: 500px;
   width: 99%; }
-  .gridStyle .ui-grid {
+  .gridStyle.ui-grid {
     font-family: "Helvetica Neue LT Roman", HelveticaNeue, "Helvetica Neue", Helvetica, Arial, sans-serif;
     border: 0;
     font-size: 13px;

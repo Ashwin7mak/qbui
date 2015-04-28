@@ -41,7 +41,7 @@ $BUTTON_BACKGROUND_COLOR : $WHITE;
     width      : 99%;
 
     // override ui-grids styling
-    .ui-grid {
+    &.ui-grid {
         font-family   : "Helvetica Neue LT Roman", HelveticaNeue, "Helvetica Neue", Helvetica, Arial, sans-serif;
         border        : 0;
         font-size     : $BASE_FONT_SIZE;
