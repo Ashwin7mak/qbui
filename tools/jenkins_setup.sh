@@ -22,6 +22,7 @@ if [ ! -d "$JRUBY_INSTALL_DIR" ]; then
  echo unpacking jruby
   tar -xf  $JRUBY_TMP/$JRUBY_TARBALL -C $TOOLS_DIR
   ls "$TOOLS_DIR"
+  jruby -S gem install compass
 else
   echo "Ruby install dir $JRUBY_INSTALL_DIR already exists"
 fi
