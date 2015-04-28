@@ -1,0 +1,19 @@
+<div class="shell">
+    <div class="nav-container">
+        <nav class="nav-shell">
+            <div class="nav-links">
+                <div ng-include="getNavigationContent()"></div>
+            </div>
+        </nav>
+    </div>
+    <div class="nav-target" ui-view="navigationTarget">
+
+        <div class="layout-container">
+            <qb-global-header info="header"></qb-global-header>
+        </div>
+
+        <div>Default content for the reports dashboard</div>
+
+    </div>
+
+</div>

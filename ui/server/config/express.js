@@ -28,26 +28,36 @@
         app.use(methodOverride());
         app.use(cookieParser());
 
-        if ('production' === env) {
-            app.use(favicon(path.join(config.root, 'public', 'favicon.ico')));
+        if ('production' === env || 'test' === env || 'development' === env) {
+            if ('development' === env) {
+                app.use(require('connect-livereload')());
+            }
+
+            if ('production' === env) {
+                app.use(favicon(path.join(config.root, 'public', 'favicon.ico')));
+            }
+
             app.use(express.static(path.join(config.root, 'public')));
             app.set('appPath', config.root + '/public');
-            app.use(morgan('dev'));
-        }
 
-        if ('development' === env || 'test' === env) {
-            app.use(require('connect-livereload')());
-            app.use(express.static(path.join(config.root, '.tmp')));
-            app.use(express.static(path.join(config.root, 'client')));
-            app.set('appPath', 'client');
-            app.use(morgan('dev'));
-            app.use(errorHandler()); // Error handler - has to be last
+            //  configure to output to a file...combine out with bunyan?
+            app.use(morgan(':date[iso] :remote-addr :req :status :method :url :response-time ms'));
+
+            //  Error handler - has to be last.
+            //  Do not activate in production as full error stack traces are outputted
+            if ('test' === env || 'development' === env) {
+                app.use(errorHandler());
+            }
         }
 
         if ('local' === env) {
             app.use(express.static(path.join(config.root, '.tmp')));
             app.use(express.static(path.join(config.root, 'client')));
             app.set('appPath', config.root + '/client');
+
+            //  configure to output to a file...combine out with bunyan?
+            app.use(morgan(':date[iso] :remote-addr :req :status :method :url :response-time ms'));
+            //"ROUTE: " + req.route.path + "; URL: " + this.getRequestUrl(req)
         }
 
     };

@@ -4,9 +4,8 @@
     <meta charset="utf-8">
     <title>Application Home</title>
 
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/foundation/4.1.2/css/foundation.min.css">
-
     <!-- build:css quickbase/assets/qbapp.css -->
+    <link rel="styleSheet" href="bower_components/angular-ui-grid/ui-grid.css"/>
     <link rel="stylesheet" href="quickbase/assets/css/app.css"/>
     <!-- injector:css -->
     <!-- endinjector -->
@@ -15,12 +14,11 @@
     <!-- build:js quickbase/bower/qbapp.bower.js -->
     <script src="bower_components/angular/angular.js"></script>
     <script src="bower_components/angular-resource/angular-resource.js"></script>
+    <script src="bower_components/angular-sanitize/angular-sanitize.js"></script>
     <script src="bower_components/angular-ui-router/release/angular-ui-router.js"></script>  <!-- ui-router -->
+    <script src="bower_components/angular-ui-grid/ui-grid.js"></script>  <!-- ui-grid -->
     <!-- endbuild -->
 
-    <!-- build:js quickbase/qbapp.common.js -->
-    <script src="quickbase/common/logger/log.js"></script>
-    <!-- endbuild -->
 
 </head>
 <body  class="quickbase" ng-app="quickbase.qbapp">
@@ -34,11 +32,18 @@
     <script src="quickbase/qbapp/reports/dashboard/reportsDashboard.model.js"></script>
     <script src="quickbase/qbapp/reports/dashboard/reportsDashboard.service.js"></script>
     <script src="quickbase/qbapp/reports/reportManager/reportManager.controller.js"></script>
+    <script src="quickbase/qbapp/reports/reportManager/reportManager.model.js"></script>
+    <script src="quickbase/qbapp/reports/reportManager/reportManager.service.js"></script>
+
+    <script src="quickbase/common/logger/log.js"></script>
+    <script src="quickbase/common/layoutManager/header/header.directive.js"></script>
+    <script src="quickbase/common/layoutManager/stage/stage.directive.js"></script>
+    <script src="quickbase/common/layoutManager/footer/footer.directive.js"></script>
+    <!-- endbuild -->
 
     <!-- injector:js -->
     <!-- endinjector -->
 
-    <!-- endbuild -->
 
 </body>
 </html>

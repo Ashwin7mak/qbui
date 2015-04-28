@@ -1,19 +1,28 @@
 {
-  "node": true,
-  "esnext": true,
+  //prohibits the use of bitwise operators usually its a mistyped && - JSHint boolean option which is shared with JSLint
   "bitwise": true,
-  "eqeqeq": true,
-  "globals": ["describe", "it", "angular"],
-  "immed": true,
-  "jasmine": true,
-  "latedef": "nofunc",
-  "newcap": true,
-  "noarg": true,
-  "regexp": true,
-  "undef": true,
-  "smarttabs": true,
-  "asi": true,
+  //suppresses warnings about the `debugger` statements in your code.
   "debug": true,
+  //require === or !=== (don't do any coercion)
+  "eqeqeq": true,
+  //enables new javascript syntax
+  "esnext": true,
+  //defines globals exposed by frameworks listed
+  "globals": ["describe", "it", "angular"],
+  //defines globals exposed by [the Jasmine unit testing
+  "jasmine": true,
+  //prohibits the use of a variable before it was defined, nofunc will allow function declarations to be ignored.
+  "latedef": "nofunc",
+  //JSHint boolean option which is shared with JSLint
+  "newcap": true,
+  // prohibits the use of `arguments.caller` and `arguments.callee`
+  "noarg": true,
+  //defines globals available in node, skips some warnings that make sense in the browser environments but don't make sense in node
+  "node": true,
+  //JSHint boolean option which are shared with JSLint
+  "regexp": true,
+  //JSHint boolean option which are shared with JSLint
+  "undef": true,
   "predef": [
       "alert",
       "angular",

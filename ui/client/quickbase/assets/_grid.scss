@@ -1,0 +1,59 @@
+
+.gridTitle {
+  color: $dark-gray;
+  font-family: "Helvetica Neue LT Bold", HelveticaNeue,"Helvetica Neue",Helvetica,Arial,sans-serif;
+}
+
+.report-grid {
+  height: 701px;
+}
+// override ui-grids styling
+.ui-grid {
+  font-family: "Helvetica Neue LT Roman", HelveticaNeue, "Helvetica Neue", Helvetica, Arial, sans-serif;
+  border: 1;
+  color: $darker-gray;
+  border: 2px solid $light-gray;
+  font-size: 12px;
+}
+
+.ui-grid-header-canvas {
+  background-color: $grid-header-background-color;
+  color: $grid-header-color;
+  text-transform: uppercase;
+  font-weight: normal;
+  border-bottom: 2px solid $grid-header-bottom-border-color;
+  height: $grid-header-height;
+}
+
+.ui-grid-header-cell {
+  padding: 8px 0 2px 0;
+}
+
+.ui-grid-header-cell:hover {
+  background-color: $slate;
+  color: $lighter-slate;
+}
+
+.ui-grid-icon-angle-down:before {
+  content: ''; // overrides the arrow character ui_grid inserts '\c35e';
+}
+
+.ui-grid-cell {
+  border-right: 1px dotted $dark-gray;
+  height: 43px;
+  line-height: 1.2em;
+  vertical-align: middle;
+}
+
+.ui-grid-row {
+  border-bottom: 1px solid $dark-gray;
+}
+
+.ui-grid-footer-info {
+  margin-top: 7px;
+}
+
+//  this seems suspect as it requires knowledge of the data in a column
+.ui-grid-coluiGrid-007 {
+  text-align: right;
+}

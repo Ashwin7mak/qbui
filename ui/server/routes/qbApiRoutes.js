@@ -1,12 +1,53 @@
 (function () {
     'use strict';
-
     var request = require("request");
 
     module.exports = function (app, config) {
 
         //  request helper class
         var requestHelper = require('../api/quickbase/requestHelper')(config);
+        var recordsApi = require('../api/quickbase/recordsApi')(config);
+
+        //Route for returning a single record
+        app.route('/api/:version/apps/:appId/tables/:tableId/records/:recordId').get(
+            function(req, res) {
+                requestHelper.logRoute(req);
+                recordsApi.fetchSingleRecordAndFields(req)
+                    .then(function(response) {
+                        res.send(response);
+                    })
+                    .catch(function(error) {
+                        console.log("ERROR " + JSON.stringify(error));
+                        requestHelper.copyHeadersToResponse(res, error.headers);
+                        res.status(error.statusCode)
+                            .send(error.body);
+                    });
+            }
+        );
+
+        //Route for returning an array of records
+        app.route('/api/:version/apps/:appId/tables/:tableId/records').get(
+            function(req, res) {
+                requestHelper.logRoute(req);
+                recordsApi.fetchRecordsAndFields(req)
+                    .then(function(response) {
+                        res.send(response);
+                    })
+                    .catch(function(error) {
+                        requestHelper.copyHeadersToResponse(res, error.headers);
+                        res.status(error.statusCode)
+                            .send(error.body);
+                    });
+            }
+        );
+
+        //Disable proxying of realm and ticket requests via the node webserver
+        app.route(['/api/:version/realms*', '/api/:version/ticket*']).all(
+            function(req, res) {
+                requestHelper.logRoute(req);
+                res.status(404).send();
+            }
+        );
 
         //  TODO: need to figure out the routing..swagger doc vs 'real' api data call vs other.
         //  TODO: .right now we are routing through this one definition...

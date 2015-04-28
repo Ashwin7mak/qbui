@@ -1,0 +1,319 @@
+//
+//  MOVE TO Root project FOLDER ONCE gradle-grunt-plugin IS UPDATED TO ALLOW
+//  FOR GruntFile.js to be located in a folder other than where the gradle
+//  build script is located.
+//
+//  Next rev of gradle-grunt plugin should include this new functionality
+//
+
+description = "Package for Node.js application and UI files"
+
+//******************************************************
+// declare the plugins we are going to use
+//******************************************************
+apply plugin: 'com.moowork.grunt'
+apply plugin: 'com.moowork.node'
+apply plugin: 'sonar-runner'
+
+
+//******************************************************
+//  Build dependencies...local
+//******************************************************
+buildscript {
+    repositories {
+        flatDir name: 'ExternalJars', dirs: '../lib/plugins'
+        dependencies {
+            classpath 'com.moowork.gradle:gradle-grunt-plugin:0.9'
+            classpath 'com.moowork.gradle:gradle-node-plugin:0.9'
+            //COMMENT out until proven we need to include
+            //Caused by: java.lang.ClassNotFoundException: org.codehaus.groovy.runtime.typehandling.ShortTypeHandling
+            //classpath 'org.codehaus.groovy:groovy-backports-compat23:2.3.5'
+        }
+    }
+}
+
+//  CI Builds need the following properties to properly package and archive the build artifacts
+println("CI Build: " + isCIBuild() )
+if (isCIBuild()) {
+    rootProject.ext.allServicePrefix = getServicePrefix() + "_"
+    rootProject.ext.CISystemUser = getCiSystemUser()
+    rootProject.ext.releasePrefix = getReleasePrefix();
+    rootProject.ext.buildTime = "." + getBuildTime();
+}
+println( "Assembling: " + getProjectArchive() )
+
+
+node {
+    // Version of node to use.
+    version = '0.10.31'
+
+    // Base URL for fetching node distributions (change if you have a mirror).
+    //distBaseUrl = 'http://nodejs.org/dist'
+    // full URL is http://nodejs.org/dist/v0.10.31/node-v0.10.31-darwin-x64.tar.gz
+
+    // We use the local Cloud9 repository the file URL will be
+    // http://pppdc9prd0t4:8081/nexus/service/local/repositories/phoenix/content/nodejs/node/v0.10.31/node-v0.10.31-darwin-x64.tar
+    // to update the file, upload a new node.js binary for each supported OS in Nexus with:
+    // group: nodejs
+    // artifact: node
+    // version: v0.10.35  // put in the new version
+    // packaging: gz
+    // filename:  (filled in by upload)
+    // classifier: darwin-x64  // use whatever is in that section of the original file name for the OS
+    // extension: gz
+
+    distBaseUrl = 'http://pppdc9prd0t4:8081/nexus/service/local/repositories/phoenix/content/nodejs/node'
+    //distBaseUrl = 'http://nodejs.org/dist'
+
+
+    // Download node if running a CI build; otherwise use globally installed node.
+    download = isCIBuild()
+
+    // Set the work directory for unpacking node...can't be under build directory as the clean task will wipe out the directory
+    workDir = file("$projectDir/nodejs")
+
+}
+
+//******************************************************
+//  Gradle tasks
+//******************************************************
+
+task zip(type: Zip) {
+
+    archiveName = getProjectArchive()
+    destinationDir = file("$buildDir/distributions/")
+
+    from ('dist') {
+        into('dist')
+    }
+}
+
+task clean_node_modules(type: Delete) {
+    delete 'node_modules'
+}
+
+npm_install {
+    args = ['--verbose']
+}
+
+task npmCacheClean (type: NpmTask) {
+    args = ["cache", "clean", "--verbose"]
+}
+task npmInstallVerbose(type: NpmTask) {
+    args = ['install', '--verbose', '--debug' ]
+}
+
+task npmPruneProduction (type: NpmTask) {
+    args = ['prune', '--production']
+}
+
+task npmRebuildJpegtran (type: NpmTask) {
+    args =['rebuild', 'jpegtran-bin']
+}
+
+task npmRmJpegtran (type: NpmTask) {
+    args = ['rm', 'jpegtran-bin']
+}
+
+task npmInstallJpegtran (type: NpmTask) {
+    args = [ 'install', 'jpegtran-bin@0.1.0']
+}
+
+task gruntBuildDebugVerbose(type: GruntTask) {
+    args = ["build",  "--no-color", "--debug", "--verbose", "--stacktrace"]
+}
+
+task gruntTestDebugVerbose(type: GruntTask) {
+    args = ["ciTest", "--no-color", "--debug", "--verbose", "--stacktrace"]
+}
+
+task gruntSassDebugVerbose(type: GruntTask) {
+    args = ["sass", "--debug", "--verbose", "--no-color"]
+}
+
+task gruntBuildNoColor(type: GruntTask) {
+    args = ["build", "--no-color"]
+}
+
+task gruntUnitTestsNoColor(type: GruntTask) {
+    args = ["ciTest", "--no-color"]
+}
+
+task gruntIntegrationTestsNoColor(type: GruntTask) {
+    args = ["ciIntegration", "--no-color"]
+}
+
+//browser tests not yet supported on ci
+task gruntCiE2ETestsNoColor(type: GruntTask) {
+    args = ["test:e2e", "--no-color"]
+}
+
+task cleanBuildDir (type: Delete) {
+    delete 'build'
+}
+
+//******************************************************
+//  Define task dependencies
+//******************************************************
+
+zip.dependsOn clean, grunt_build
+build.dependsOn clean, grunt_build
+clean.dependsOn grunt_clean, cleanBuildDir
+test.dependsOn clean, gruntUnitTestsNoColor
+
+
+// the directory for nightly builds used to release from
+project.group = "build_rpms"
+artifacts {
+    archives file: file("build/distributions/" + getProjectArchive()),
+        name: "${project.name}",
+        type: "zip",
+        builtBy: zip
+}
+
+def ivyPasswd = System.getProperty("ivyPasswd", "");         // The IVY password for the Nexus repository
+def ivyUser = System.getProperty("ivyUser", "qbbuilds");     // By default use the qbbuilds user, password needs to be provided
+
+/*
+ Push the zip file with the build to the Nexus Repository.
+ The repo is located at
+http://pppdc9prd0t4:8081/nexus/index.html#welcome
+
+username is admin
+pw is qbtst987!!!!
+
+The zips go to the Phoenix repository under QuickBase/ui/ if they are versioned, and to the Snapshots repository if
+they are not versioned.
+
+ */
+uploadArchives {
+    def uploadUrl = "http://pppdc9prd0t4:8081/nexus/content/repositories"
+    def layoutStr = "[organisation]/[module]/[revision]/[artifact]-[revision](.[ext])"
+    // release archives vs dev  have different archive path on repo server dev builds go to nonrelease snapshot dir
+    // repo server policy for snapshots(update-able rpms) cannot live on release repo dirs
+    // organisation - Project.getGroup(): build_rpms
+    // module - Project.getName(): ui
+    // revision - Project.getVersion(): phoenix-1.0
+    if (isCIBuild()) {
+        uploadUrl += "/phoenix/"
+        layoutStr = getArchiveLayoutStr(false)
+    } else {
+        uploadUrl += "/snapshots/"
+        layoutStr = getArchiveLayoutStr(true)
+    }
+    repositories {
+        ivy {
+            credentials {
+                username "${ivyUser}"
+                password "${ivyPasswd}"
+            }
+            url "${uploadUrl}"
+            layout 'pattern' , {
+                artifact "${layoutStr}"
+            }
+        }
+    }
+}
+
+//******************************************************
+// Sonar task that performs coverage and analysis of the ui project
+//******************************************************
+
+sonarRunner {
+    //Resolve the executing user's name
+    def user = System.getProperty("user.name")
+    //Resolve the branch name
+    def proc = "git rev-parse --abbrev-ref HEAD".execute()
+    proc.waitFor()
+    def branchName = proc.in.text.replace("\n", "").replace("\r", "").trim()
+
+    sonarProperties{
+        // the user name becomes part of the project key, this way Jenkins builds are separated from the commoners, meaning you...
+        // for UI we analyse the angulr client and the nodejs server as 2 modules
+        // see: http://docs.codehaus.org/display/SONAR/Analyzing+with+SonarQube+Runner#AnalyzingwithSonarQubeRunner-Multi-moduleProject
+        property "sonar.projectKey", "QuickBase:${branchName}:${user}"
+        property "sonar.projectVersion", "0.1"
+        property "sonar.projectName", "${user}:QuickBase:${branchName}:ui"
+        property "sonar.host.url", "http://pppdc9prd01j:9000/"
+        property "sonar.jdbc.url", "jdbc:mysql://pppdc9prd01j:3306/sonar?autoReconnect=true&useUnicode=true&characterEncoding=utf8"
+        property "sonar.language", "js"
+        property "sonar.jdbc.username", "sonar"
+        property "sonar.jdbc.password", "sonar"
+        property "sonar.sources", "."
+        property "sonar.modules", "client,server"
+        property "sonar.coverage.exclusions", "**/*.spec.js"
+
+        property "client.sonar.projectName", "${user}:QuickBase:${branchName}:ui:client"
+        property "client.sonar.sources", "$projectDir/client"
+        property "client.sonar.exclusions", "**/codemirror/**,**/bower_components/**"
+        //  import the ui LCOV coverage report
+        property "client.sonar.javascript.lcov.reportPath","${projectDir}/build/reports/client/coverage/lcov.info"
+
+        property "server.sonar.projectName", "${user}:QuickBase:${branchName}:ui:server"
+        property "server.sonar.sources", "$projectDir/server"
+        //  import the ui LCOV coverage report
+        property "server.sonar.javascript.lcov.reportPath","${projectDir}/build/reports/server/coverage/lcov.info"
+
+        // Can be added back in for debugging purposes
+        //property "sonar.verbose", "true"
+    }
+}
+
+//******************************************************
+//  Supporting Groovy functions
+//******************************************************
+import java.text.SimpleDateFormat
+def getRpmVersion() {
+    return "1.0"
+}
+def getServicePrefix() {
+    return "phoenix"
+}
+def getCiSystemUser() {
+    return "jenkins"
+}
+
+def getReleasePrefix() {
+    def prefix = getServicePrefix()
+    def ciUser = getCiSystemUser()
+    def user = System.getProperty("user.name");
+
+    //dev builds get user info for rpm war etc
+    if (!user.equals(ciUser) && isReleaseSnapshot()) {
+        prefix += "_${user}"
+    }
+    return prefix
+}
+
+def getProjectArchive() {
+    return "${project.name}-${getReleasePrefix()}_${getRpmVersion()}-${getRelease()}.zip"
+}
+
+def getArchiveLayoutStr(useBuildTime) {
+    def base = "[organisation]/[module]/[revision]/[artifact]-${getReleasePrefix()}_${getRpmVersion()}"
+    if (useBuildTime) {
+        base += getBuildTime()
+    }
+    else {
+        base += "-${getRelease()}"
+    }
+    return "${base}(.[ext])"
+}
+
+def getBuildTime() {
+    def df = new SimpleDateFormat("yyyyMMdd:HHmmss")
+    df.setTimeZone(TimeZone.getTimeZone("UTC"))
+    return df.format(new Date())
+}
+
+def getRelease() {
+    return System.getProperty("releaseNumber", "SNAPSHOT")
+}
+
+def isReleaseSnapshot() {
+    return getRelease().equals("SNAPSHOT")
+}
+
+def isCIBuild() {
+    return getReleasePrefix().equals(getServicePrefix())
+}

@@ -1,0 +1,33 @@
+description = "QuickBase UI Root Project"
+group = "com.quickbase.phoenix"
+
+defaultTasks 'clean', 'test', 'build'
+
+repositories {
+    jcenter()
+    mavenCentral()
+}
+
+//
+ext.webProject=true
+
+task wrapper(type: Wrapper) {
+    gradleVersion = '2.2.1'
+}
+
+tasks.withType(Test) {
+    systemProperties = System.getProperties()
+    testLogging.showStandardStreams = true
+    maxParallelForks = 3;
+    ignoreFailures=false
+}
+
+//Tasks defined here will be made available in any sub-modules' build.gradle file
+subprojects {
+    apply plugin: 'java'
+    repositories {
+        flatDir name: 'ExternalJars', dirs: '../lib/plugins'
+    }
+}
+
+

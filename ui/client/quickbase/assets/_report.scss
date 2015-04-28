@@ -1,63 +1,73 @@
 .report {
+
   min-width: 640px;
-  .report-header {
-    margin: 25px;
+
+  .report-stage {
     .left {
-      float:left;
+      float: left;
       width: 50%;
-      padding: 0px 50px;
-      p {
+      div {
         font-size: 12px;
-      }
-      p.header {
+        padding: 0px 30px 15px;
+        &.header {
           font-size: 14px;
           font-weight: bold;
+        }
       }
     }
 
     .right {
-      font-size: 14px;
-      float:left;
+      font-size: 12px;
+      float: left;
       width: 50%;
-      padding: 0px 50px;
       .time {
-        float : left;
+        float: left;
         width: 50%;
-        padding: 0px 25px;
+        .title {
+          font-weight:bold;
+          padding: 0px 5px 3px 0px;
+        }
       }
       .reminder {
-        float : left;
+        float: left;
         width: 50%;
-        padding: 0px 25px;
       }
+    }
+  }
+
+  .report-header {
+    background-image: linear-gradient(to top, $lighter-blue 0%, $lightest-blue 100%);
+    background-color: $lighter-gray;
+    border: 1px solid $lighter-slate;
+    box-sizing: border-box;
+    position: relative;
+    padding: 24px 15px 0px;
+    transition: padding 0.5s ease 0s;
+    min-height: 50px;
+    height: 50px;
+
+    .left {
+      float: left;
+      width: 50%;
+      div {
+        font-size: 12px;
+        padding: 0px 30px 15px;
+        &.header {
+          font-size: 14px;
+          font-weight: bold;
+        }
+      }
+    }
+    .right {
+      font-size: 12px;
+      float: left;
+      width: 50%;
     }
 
   }
 
   .report-content {
-    float:left;
-    clear:left;
     width: 100%;
-    padding: 50px 70px;
-
-    .grid-table {
-      width:100%;
-      border-bottom-color:#cedcea;
-      .grid-cell {
-        padding: 3px;
-        text-align: left;
-         &.header {
-          height: $grid-header-height;
-           background-color: $grid-header-background-color;
-           color: $grid-header-color;
-         }
-         &.data {
-           font-size: 12px;
-           &.currency {
-             text-align:right;
-           }
-         }
-      }
-    }
+    padding: 0px 0px;
   }
 }
