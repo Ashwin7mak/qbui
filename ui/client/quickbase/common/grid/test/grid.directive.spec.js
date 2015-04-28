@@ -5,7 +5,9 @@ describe('Directive: qbseGrid', function() {
      *
      */
      // load the directive's module & load the template
-    beforeEach(module('qbse.grid', 'common.gridExample', 'quickbase/common/grid/grid.template.html'));
+    beforeEach(module('qbse.grid', 'common.gridExample',
+        'quickbase/common/grid/grid.template.html',
+        'quickbase/common/grid/gridPagination.template.html'));
 
     // The problem with testing a directive with a templateUrl is that Angular uses an HTTP request to go
     // get the file. However, in a unit-testing environment, you don't have the full web server environment

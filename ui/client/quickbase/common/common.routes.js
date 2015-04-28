@@ -28,7 +28,7 @@
                         var gridInfo = $q.defer();
 
                         // decide what data to use
-                        var exampleSize = 'Large';
+                        var exampleSize = 'Small';
                         var requestSize = location.search.replace(/^.*?\=/, '');
                         if (requestSize.toLowerCase() === 'large' || requestSize.toLowerCase() === 'small') {
                             exampleSize = requestSize;

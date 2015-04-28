@@ -1,0 +1,14 @@
+
+<div class="ui-grid-pager  right">
+    <ul class="pagination">
+        <li  ng-class="{disabled: noPrevious()}">
+            <a href ng-click="paginationApi.previousPage()">
+                Previous</a>
+        </li>
+        <li ng-class="{disabled: noNext()}">
+            <a ng-click="paginationApi.nextPage()">
+                Next</a>
+        </li>
+    </ul>
+
+</div>
