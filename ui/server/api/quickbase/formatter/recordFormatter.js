@@ -9,6 +9,7 @@
     var phoneFormatter = require('./phoneNumberFormatter');
     var todFormatter = require('./timeOfDayFormatter');
     var numericFormatter = require('./numericFormatter');
+    var urlFormatter = require('./urlFormatter');
 
     /**
      * Certain fields may require generation of a formatter string that will be used for each record in the
@@ -69,7 +70,11 @@
                 case consts.FORMULA_PERCENT:
                     fieldValue.display = numericFormatter.format(fieldValue, fieldInfo);
                     break;
+                case consts.URL:
+                    fieldValue.display = urlFormatter.format(fieldValue, fieldInfo);
+                    break;
                 default:
+                    fieldValue.display = fieldValue.value;
                     break;
             }
             return fieldValue;

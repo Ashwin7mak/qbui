@@ -35,7 +35,7 @@ describe('API - URL record test cases - ', function () {
             "name": "table1", "fields": [{
                 "name": "url",
                 "type": "URL",
-                "dontShowHttp": true
+                "displayProtocol": false
             }
             ]}
         ]};
@@ -47,7 +47,7 @@ describe('API - URL record test cases - ', function () {
                 "name": "url",
                 "type": "URL",
                 "linkText": linkText,
-                "dontShowHttp": true
+                "displayProtocol": false
             }
             ]}
         ]};
