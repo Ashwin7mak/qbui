@@ -75,6 +75,9 @@
                     break;
                 default:
                     fieldValue.display = fieldValue.value;
+                    if(!fieldValue.display) {
+                        fieldValue.display = '';
+                    }
                     break;
             }
             return fieldValue;

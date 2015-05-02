@@ -41,7 +41,7 @@ describe('API - Text record test cases', function () {
      */
     function textRecordsDataProvider(fid) {
         var smallText = generateRandomString(10);
-        var maxText = generateRandomString(4000);
+        var maxText = generateRandomString(3990);
 
         // Small text value
         var smallInput = [{"id": fid, "value": smallText}];

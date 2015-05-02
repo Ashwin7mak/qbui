@@ -85,7 +85,7 @@ describe('Text record formatter unit test', function () {
                 "type": "TEXT"
             }
         ];
-        provider().forEach(function(entry){
+        dataProvider().forEach(function(entry){
             it('Test case: ' + entry.message, function (done) {
                 var formattedRecords = recordFormatter.formatRecords(entry.records, fieldInfo);
                 //console.log('entry: ' + JSON.stringify(entry));
