@@ -78,9 +78,9 @@ describe('Email address record formatter unit test', function () {
         var fieldInfo_BeforeAtSign = JSON.parse(JSON.stringify(fieldInfo_NoFlags));
         fieldInfo_BeforeAtSign[0].clientSideAttributes.format = "UP_TO_AT_SIGN";
         var expectedEmail_BeforeAtSignFlag = JSON.parse(JSON.stringify(expectedEmail_NoFlags));
-        expectedEmail_BeforeAtSignFlag[0].display = "firstName_lastName";
+        expectedEmail_BeforeAtSignFlag[0][0].display = "firstName_lastName";
         var expectedMaxEmail_BeforeAtSignFlag = JSON.parse(JSON.stringify(expectedMaxEmail_NoFlags));
-        expectedMaxEmail_BeforeAtSignFlag[0].display = fullName;
+        expectedMaxEmail_BeforeAtSignFlag[0][0].display = fullName;
 
         /**
          * FieldInfo and expectations for flag: before first "_" flag
@@ -88,9 +88,9 @@ describe('Email address record formatter unit test', function () {
         var fieldInfo_BeforeUnderscore = JSON.parse(JSON.stringify(fieldInfo_NoFlags));
         fieldInfo_BeforeUnderscore[0].clientSideAttributes.format = "UP_TO_UNDERSCORE";
         var expectedEmail_BeforeUnderscoreFlag = JSON.parse(JSON.stringify(expectedEmail_NoFlags));
-        expectedEmail_BeforeUnderscoreFlag[0].display = "firstName";
+        expectedEmail_BeforeUnderscoreFlag[0][0].display = "firstName";
         var expectedMaxEmail_BeforeUnderscoreFlag = JSON.parse(JSON.stringify(expectedMaxEmail_NoFlags));
-        expectedMaxEmail_BeforeUnderscoreFlag[0].display = firstName;
+        expectedMaxEmail_BeforeUnderscoreFlag[0][0].display = firstName;
 
         /**
          * FieldInfo and expectations for flag: link text flag
@@ -98,9 +98,9 @@ describe('Email address record formatter unit test', function () {
         var fieldInfo_LinkText = JSON.parse(JSON.stringify(fieldInfo_NoFlags));
         fieldInfo_LinkText[0].clientSideAttributes.linkText = linkText;
         var expectedEmail_LinkTextFlag = JSON.parse(JSON.stringify(expectedEmail_NoFlags));
-        expectedEmail_LinkTextFlag[0].display = linkText;
+        expectedEmail_LinkTextFlag[0][0].display = linkText;
         var expectedMaxEmail_LinkTextFlag = JSON.parse(JSON.stringify(expectedMaxEmail_NoFlags));
-        expectedMaxEmail_LinkTextFlag[0].display = linkText;
+        expectedMaxEmail_LinkTextFlag[0][0].display = linkText;
 
         /**
          * FieldInfo and expectations for flag: all flags
@@ -109,9 +109,9 @@ describe('Email address record formatter unit test', function () {
         fieldInfo_AllFlags[0].clientSideAttributes.format = "WHOLE";
         fieldInfo_AllFlags[0].clientSideAttributes.linkText = linkText;
         var expectedEmail_AllFlags = JSON.parse(JSON.stringify(expectedEmail_NoFlags));
-        expectedEmail_AllFlags[0].display = linkText;
+        expectedEmail_AllFlags[0][0].display = linkText;
         var expectedMaxEmail_AllFlags = JSON.parse(JSON.stringify(expectedMaxEmail_NoFlags));
-        expectedMaxEmail_AllFlags[0].display = linkText;
+        expectedMaxEmail_AllFlags[0][0].display = linkText;
 
         var recordsNull = JSON.parse(JSON.stringify(inputEmailRecord));
         recordsNull[0][0].value = null;
@@ -157,8 +157,9 @@ describe('Email address record formatter unit test', function () {
         emailDataProvider().forEach(function(entry){
             it('Test case: ' + entry.message, function (done) {
                 var formattedRecords = recordFormatter.formatRecords(entry.records, entry.fieldInfo);
-                //console.log('expected: ' + JSON.stringify(entry.expectedRecords));
-                //console.log('actual  : ' + JSON.stringify(formattedRecords));
+                console.log('fieldInfo: ' + JSON.stringify(entry.fieldInfo));
+                console.log('expected: ' + JSON.stringify(entry.expectedRecords));
+                console.log('actual  : ' + JSON.stringify(formattedRecords));
                 assert.equal(JSON.stringify(formattedRecords), JSON.stringify(entry.expectedRecords), entry.message);
                 done();
             });
