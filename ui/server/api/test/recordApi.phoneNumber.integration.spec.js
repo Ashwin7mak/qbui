@@ -29,11 +29,11 @@ describe('API - PhoneNumber record test cases', function () {
     function phoneRecordsDataProvider(fid) {
         //Standard phone number
         var recordsInput = [{"id": fid, "value": "12345678"}];
-        var expectedRecords = {"id": fid, "value": "12345678", "display": "(1) 234-5678"};
+        var expectedRecords = {"id": fid, "value": "(1) 234-5678", "display": "(1) 234-5678"};
 
         //More than 10 digit number
         var largeInput = [{"id": fid, "value": "1234567890123"}];
-        var largeExpected = {"id": fid, "value": "1234567890123", "display": "123 (456) 789-0123"};
+        var largeExpected = {"id": fid, "value": "123 (456) 789-0123", "display": "123 (456) 789-0123"};
 
         //Empty records
         var emptyPhoneRecords = [{"id": fid, "value": ""}];
