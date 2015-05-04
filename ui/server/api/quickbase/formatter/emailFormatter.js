@@ -10,12 +10,10 @@
     var UP_TO_AT_SIGN = 'UP_TO_AT_SIGN';
     var AT_SIGN = '@';
     var UNDERSCORE = '_';
-    var FORMAT_DEFAULT = WHOLE;
     var SUPPORTED_FORMATS = {};
     SUPPORTED_FORMATS[WHOLE] = true;
     SUPPORTED_FORMATS[UP_TO_UNDERSCORE] = true;
     SUPPORTED_FORMATS[UP_TO_AT_SIGN] = true;
-
 
     module.exports = {
         //Given a email string as input, formats as a email with display preferences applied.
