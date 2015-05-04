@@ -13,7 +13,7 @@ var _ = require('lodash');
 describe('API - PhoneNumber record test cases', function () {
     //Cache the init promise so that test methods can use it as init.then(function(){...})
     var exampleApp = {
-        "name": "Mark's App",
+        "name": "PhoneNumber App",
         "tables": [
             {
                 "name": "table1", "fields": [
