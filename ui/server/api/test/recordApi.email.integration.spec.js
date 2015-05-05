@@ -31,6 +31,10 @@ describe('API - Email record test cases - ', function () {
                 "name": "email",
                 "type": "EMAIL_ADDRESS",
                 "clientSideAttributes": {
+                    "width": 10,
+                    "bold": false,
+                    "word_wrap": false,
+                    "help_text": "help",
                     "format": "WHOLE"
                 }
             }
@@ -44,6 +48,10 @@ describe('API - Email record test cases - ', function () {
                 "name": "email",
                 "type": "EMAIL_ADDRESS",
                 "clientSideAttributes": {
+                    "width": 10,
+                    "bold": false,
+                    "word_wrap": false,
+                    "help_text": "help",
                     "format": "UP_TO_AT_SIGN"
                 }
             }
@@ -57,6 +65,10 @@ describe('API - Email record test cases - ', function () {
                 "name": "email",
                 "type": "EMAIL_ADDRESS",
                 "clientSideAttributes": {
+                    "width": 10,
+                    "bold": false,
+                    "word_wrap": false,
+                    "help_text": "help",
                     "format": "UP_TO_UNDERSCORE"
                 }
             }
@@ -70,6 +82,10 @@ describe('API - Email record test cases - ', function () {
                 "name": "email",
                 "type": "EMAIL_ADDRESS",
                 "clientSideAttributes": {
+                    "width": 10,
+                    "bold": false,
+                    "word_wrap": false,
+                    "help_text": "help",
                     "linkText": linkText
                 }
             }
@@ -83,6 +99,10 @@ describe('API - Email record test cases - ', function () {
                 "name": "email",
                 "type": "EMAIL_ADDRESS",
                 "clientSideAttributes": {
+                    "width": 10,
+                    "bold": false,
+                    "word_wrap": false,
+                    "help_text": "help",
                     "format": "WHOLE",
                     "linkText": linkText
                 }
