@@ -157,9 +157,8 @@ describe('Email address record formatter unit test', function () {
         emailDataProvider().forEach(function(entry){
             it('Test case: ' + entry.message, function (done) {
                 var formattedRecords = recordFormatter.formatRecords(entry.records, entry.fieldInfo);
-                console.log('fieldInfo: ' + JSON.stringify(entry.fieldInfo));
-                console.log('expected: ' + JSON.stringify(entry.expectedRecords));
-                console.log('actual  : ' + JSON.stringify(formattedRecords));
+                //console.log('entry: ' + JSON.stringify(entry));
+                //console.log('actual value: ' + JSON.stringify(formattedRecords));
                 assert.equal(JSON.stringify(formattedRecords), JSON.stringify(entry.expectedRecords), entry.message);
                 done();
             });
