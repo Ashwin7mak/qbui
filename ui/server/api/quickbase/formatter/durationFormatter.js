@@ -20,6 +20,7 @@
     var consts = require('../../constants');
 
     //Module constants:
+    var DECIMAL_DEFAULTS = 8;
     var MILLIS_PER_SECOND = new bigDecimal.BigDecimal(1000);
     var MILLIS_PER_MIN = new bigDecimal.BigDecimal(60000);
     var MILLIS_PER_HOUR = new bigDecimal.BigDecimal(3600000);
@@ -27,7 +28,6 @@
     var MILLIS_PER_WEEK = new bigDecimal.BigDecimal(604800000);
     var SECONDS_PER_MINUTE = new bigDecimal.BigDecimal(60);
     var MINUTES_PER_HOUR = new bigDecimal.BigDecimal(60);
-
     var TEN = new bigDecimal.BigDecimal(10);
     var NEGATIVE_TEN = new bigDecimal.BigDecimal(-10);
     var ZERO = new bigDecimal.BigDecimal(0);
@@ -51,17 +51,14 @@
      * @returns the duration value formatted as a string
      */
     function formatDurationValue(millis, opts) {
-        //console.log('in formatDurationValue with millis: ' + millis + ' and opts ' + JSON.stringify(opts));
         millis = new bigDecimal.BigDecimal(millis.toString());
-
-        console.log('in formatDurationValue with millis: ' + millis + ' and opts ' + JSON.stringify(opts));
         var seconds, minutes, hours, days, weeks;
         if (millis.compareTo(ZERO) != 0) {
-            seconds = millis.divide(MILLIS_PER_SECOND);
-            minutes = millis.divide(MILLIS_PER_MIN);
-            hours = millis.divide(MILLIS_PER_HOUR);
-            days = millis.divide(MILLIS_PER_DAY);
-            weeks = millis.divide(MILLIS_PER_WEEK);
+            seconds = millis.divide(MILLIS_PER_SECOND, opts.decimalPlaces, bigDecimal.RoundingMode.HALF_UP());
+            minutes = millis.divide(MILLIS_PER_MIN, opts.decimalPlaces, bigDecimal.RoundingMode.HALF_UP());
+            hours = millis.divide(MILLIS_PER_HOUR, opts.decimalPlaces, bigDecimal.RoundingMode.HALF_UP());
+            days = millis.divide(MILLIS_PER_DAY, opts.decimalPlaces, bigDecimal.RoundingMode.HALF_UP());
+            weeks = millis.divide(MILLIS_PER_WEEK, opts.decimalPlaces, bigDecimal.RoundingMode.HALF_UP());
         } else {
             seconds = 0;
             minutes = 0;
@@ -69,36 +66,31 @@
             days = 0;
             weeks = 0;
         }
-        console.log('~~~~ resolved hours:'+ hours.toString() +', minutes: '
-            + minutes.toString()+', seconds: '
-            + seconds.toString()+', days: '
-            + days.toString()+', weeks: '
-            + weeks.toString());
         var returnValue = '';
         switch (opts.scale) {
                 case HHMM:
                 case HHMMSS:
                 case MM:
                 case MMSS:
-                    returnValue = generateTimeUnits(millis, hours, minutes, seconds);
+                    returnValue = generateTimeUnits(millis, hours, minutes, seconds, opts);
                     break;
                 case SMART_UNITS:
-                    returnValue = generateSmartUnit(millis, weeks, days, hours, minutes, seconds);
+                    returnValue = generateSmartUnit(millis, weeks, days, hours, minutes, seconds, opts);
                     break;
                 case WEEKS:
-                    returnValue = millis.divide(MILLIS_PER_WEEK).toString();
+                    returnValue = millis.divide(MILLIS_PER_WEEK, opts.decimalPlaces, bigDecimal.RoundingMode.HALF_UP()).stripTrailingZeros().toString();
                     break;
                 case DAYS:
-                    returnValue = millis.divide(MILLIS_PER_DAY).toString();
+                    returnValue = millis.divide(MILLIS_PER_DAY, opts.decimalPlaces, bigDecimal.RoundingMode.HALF_UP()).stripTrailingZeros().toString();
                     break;
                 case HOURS:
-                    returnValue = millis.divide(MILLIS_PER_HOUR).toString();
+                    returnValue = millis.divide(MILLIS_PER_HOUR, opts.decimalPlaces, bigDecimal.RoundingMode.HALF_UP()).stripTrailingZeros().toString();
                     break;
                 case MINUTES:
-                    returnValue = millis.divide(MILLIS_PER_MIN).toString();
+                    returnValue = millis.divide(MILLIS_PER_MIN, opts.decimalPlaces, bigDecimal.RoundingMode.HALF_UP()).stripTrailingZeros().toString();
                     break;
                 case SECONDS:
-                    returnValue = millis.divide(MILLIS_PER_SECOND).toString();
+                    returnValue = millis.divide(MILLIS_PER_SECOND, opts.decimalPlaces, bigDecimal.RoundingMode.HALF_UP()).stripTrailingZeros().toString();
                     break;
                 default:
                     break;
@@ -118,41 +110,38 @@
      *
      * @returns the duration value formatted as a string
      */
-    function generateTimeUnits(millis, hours, minutes, seconds) {
-        seconds.setScale(0, bigDecimal.RoundingMode.HALF_UP());
-        minutes.setScale(0, bigDecimal.RoundingMode.ROUND_DOWN());
-        hours.setScale(0, bigDecimal.RoundingMode.ROUND_DOWN());
-
+    function generateTimeUnits(millis, hours, minutes, seconds, opts) {
         var timeUnits = '';
-        if(millis.compareTo(ZERO) < 0) {
+        if(millis.signum() < 0) {
            timeUnits += '-';
         }
-        if(hours.compareTo(ZERO) != 0) {
+        var h =  Math.round(hours.abs().longValue());
+        if(h != 0) {
             //If its less than 10 and greater than negative ten, prepend a '0'
             if(hours.compareTo(TEN) === -1 && hours.compareTo(NEGATIVE_TEN) === 1) {
                 timeUnits += '0';
             }
-            timeUnits += hours.abs().toString() + ':';
-        } else if(this == HHMM || this == HHMMSS) {
+            timeUnits += Math.round(hours.abs().longValue()) + ':';
+        } else if(opts.scale == HHMM || opts.scale == HHMMSS) {
             timeUnits += '00:';
         }
-        var extraMinutes = minutes - hours * MINUTES_PER_HOUR;
-        if(extraMinutes != 0) {
-            if(extraMinutes < 10 && extraMinutes > -10) {
+        var extraMinutes = minutes.subtract(hours.multiply(MINUTES_PER_HOUR));
+        if(extraMinutes.signum() != 0) {
+            if(extraMinutes.compareTo(TEN) === -1 && extraMinutes.compareTo(NEGATIVE_TEN) === 1) {
                 timeUnits += '0';
             }
-            timeUnits += extraMinutes.abs().toString();
+            timeUnits += Math.round(extraMinutes.abs().longValue());
         } else {
             timeUnits += '00';
         }
-        var extraSeconds = seconds.subtract(minutes).multiply(SECONDS_PER_MINUTE);
-        if(this == MMSS || this == HHMMSS) {
+        var extraSeconds =seconds.subtract(minutes.multiply(SECONDS_PER_MINUTE));
+        if(opts.scale === MMSS || opts.scale == HHMMSS) {
             if(extraSeconds.compareTo(ZERO) != 0) {
-                timeUnits + ':';
+                timeUnits += ':';
                 if(extraSeconds.compareTo(TEN) === -1 && extraSeconds.compareTo(NEGATIVE_TEN) === 1) {
                     timeUnits += '0';
                 }
-                timeUnits += extraSeconds.abs().toString();
+                timeUnits += Math.round(extraSeconds.abs().longValue());
             } else {
                 timeUnits += ':00';
             }
@@ -173,28 +162,27 @@
      *
      * @returns the duration value formatted as a string
      */
-    function generateSmartUnit(millis, weeks, days, hours, minutes, seconds) {
+    function generateSmartUnit(millis, weeks, days, hours, minutes, seconds, opts) {
         //Entered as days
         var smartUnits = '';
-        if(Math.abs(weeks) > 0) {
-            smartUnits += millis.divide(MILLIS_PER_WEEK).toString();
+        if(weeks.abs().compareTo(ZERO) > 0) {
+            smartUnits += millis.divide(MILLIS_PER_WEEK, opts.decimalPlaces, bigDecimal.RoundingMode.HALF_UP()).toString();
             smartUnits += ' weeks';
-        } else if(Math.abs(days) > 0) {
-            smartUnits +=  millis.divide(MILLIS_PER_DAY).toString();
+        } else if(days.abs().compareTo(ZERO) > 0) {
+            smartUnits +=  millis.divide(MILLIS_PER_DAY, opts.decimalPlaces, bigDecimal.RoundingMode.HALF_UP()).toString();
             smartUnits += ' days';
-        } else if(Math.abs(hours) > 0) {
-            smartUnits += millis.divide(MILLIS_PER_HOUR).toString();
+        } else if(hours.abs().compareTo(ZERO) > 0) {
+            smartUnits += millis.divide(MILLIS_PER_HOUR, opts.decimalPlaces, bigDecimal.RoundingMode.HALF_UP()).toString();
             smartUnits += ' hours';
-        } else if(Math.abs(minutes) > 0) {
-            smartUnits += millis.divide(MILLIS_PER_MIN).toString();
+        } else if(minutes.abs().compareTo(ZERO) > 0) {
+            smartUnits += millis.divide(MILLIS_PER_MIN, opts.decimalPlaces, bigDecimal.RoundingMode.HALF_UP()).toString();
             smartUnits += ' mins';
-        } else if(Math.abs(seconds) > 0) {
-            smartUnits += millis.divide(MILLIS_PER_SECOND).toString();
+        } else if(seconds.abs().compareTo(ZERO) > 0) {
+            smartUnits += millis.divide(MILLIS_PER_SECOND, opts.decimalPlaces, bigDecimal.RoundingMode.HALF_UP()).toString();
             smartUnits += ' secs';
         } else {
             smartUnits += millis.toString() + ' msecs';
         }
-
         return smartUnits;
     }
 
@@ -210,10 +198,15 @@
             var opts = {};
             if (fieldInfo) {
                 opts.scale = fieldInfo.scale;
+                opts.decimalPlaces = fieldInfo.decimalPlaces;
             }
             if (!opts.scale) {
                 opts.scale = SMART_UNITS;
             }
+            if(!opts.decimalPlaces && opts.decimalPlaces !== 0) {
+                opts.decimalPlaces = DECIMAL_DEFAULTS;
+            }
+
 
             return opts;
         },

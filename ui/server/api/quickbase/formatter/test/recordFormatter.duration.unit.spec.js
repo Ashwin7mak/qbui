@@ -3,11 +3,31 @@
 var should = require('should');
 var recordFormatter = require('./../recordFormatter')();
 var assert = require('assert');
+/*
+ * We can't use the JS native number data type when handling records because it is possible to lose
+ * decimal precision as a result of the JS implementation the number data type. In JS, all numbers are
+ * 64 bit floating points where bits 0-51 store values, bits 52-62 store the exponent and
+ * bit 63 is the sign bit. This is the IEEE 754 standard. Practically speaking, this means
+ * that a java Long, which uses all bits 0-62 to store values, cannot be expressed in a JS
+ * number without a loss of precision.  For this reason, we use a special implementation of
+ * JSON.parse/stringify that depends on an implementation of BigDecimal, which is capable of
+ * expressing all the precision of numeric values we expect to get from the java capabilities
+ * APIs.  This is slower than using JSON.parse/stringify, but is necessary to avoid the loss
+ * of precision. For more info, google it!
+ */
+var bigDecimal = require('bigdecimal');
 
 /**
  * Unit tests for Duration field formatting
  */
 describe('Duration record formatter unit test', function () {
+    var MILLIS_PER_SECOND = new bigDecimal.BigDecimal(1000);
+    var MILLIS_PER_MIN = new bigDecimal.BigDecimal(60000);
+    var MILLIS_PER_HOUR = new bigDecimal.BigDecimal(3600000);
+    var MILLIS_PER_DAY = new bigDecimal.BigDecimal(86400000);
+    var MILLIS_PER_WEEK = new bigDecimal.BigDecimal(604800000);
+    var SECONDS_PER_MINUTE = new bigDecimal.BigDecimal(60);
+    var MINUTES_PER_HOUR = new bigDecimal.BigDecimal(60);
 
     var HHMM = ":HH:MM";
     var HHMMSS = ":HH:MM:SS";
@@ -21,14 +41,15 @@ describe('Duration record formatter unit test', function () {
     var SECONDS = "Seconds";
 
     var DAYS_VAL = 10;
-    var OVER_HOUR_VAL = 1.75;
-    var UNDER_HOUR_VAL = 0.25;
+    var OVER_HOUR_VAL = 2;
+    var UNDER_HOUR_VAL = 0;
     var MINUTES_VAL = 0.025;
     var SECONDS_VAL = 0.00025;
 
-    // 2^32 = 4294967296
-    var MAX = 4294967296;
-    var MIN = -4294967296;
+    // 2^63 = 4294967296
+    var DEFAULT_DECIMAL_PLACES = 8;
+    var MAX = new bigDecimal.BigDecimal('9223372036854775807');
+    var MIN = new bigDecimal.BigDecimal('-9223372036854775807');
 
     /**
      * DataProvider containing Records, FieldProperties and record display expectations for Duration fields with no flags
@@ -52,9 +73,9 @@ describe('Duration record formatter unit test', function () {
             "id": 7,
             "value": UNDER_HOUR_VAL}]];
         var recordInputMin = JSON.parse(JSON.stringify(recordInputHours));
-        recordInputMin[0][0].value = MIN;
+        recordInputMin[0][0].value = MIN.stripTrailingZeros().toString();
         var recordInputMax = JSON.parse(JSON.stringify(recordInputHours));
-        recordInputMin[0][0].value = MAX;
+        recordInputMax[0][0].value = MAX.stripTrailingZeros().toString();
 
         /**
          * Expectations for flag: no flags
@@ -62,13 +83,17 @@ describe('Duration record formatter unit test', function () {
         var expectedHoursDuration = [[{
             "id": 7,
             "value": UNDER_HOUR_VAL,
-            "display": "6 hours"}]];
+            "display": "0 days"}]];
         var expectedMaxDuration = JSON.parse(JSON.stringify(expectedHoursDuration));
-        expectedMaxDuration[0][0].value = MAX;
-        expectedMaxDuration[0][0].display = "4294967296 days";
+        expectedMaxDuration[0][0].value = MAX.stripTrailingZeros().toString();
+        expectedMaxDuration[0][0].display = MAX.divide(MILLIS_PER_WEEK,
+                DEFAULT_DECIMAL_PLACES,
+                bigDecimal.RoundingMode.HALF_UP()).stripTrailingZeros().toString() + " weeks";
         var expectedMinDuration = JSON.parse(JSON.stringify(expectedHoursDuration));
-        expectedMinDuration[0][0].value = MIN;
-        expectedMinDuration[0][0].display = "-4294967296 days";
+        expectedMinDuration[0][0].value = MIN.stripTrailingZeros().toString();
+        expectedMinDuration[0][0].display = MIN.divide(MILLIS_PER_WEEK,
+                DEFAULT_DECIMAL_PLACES,
+                bigDecimal.RoundingMode.HALF_UP()).stripTrailingZeros().toString() + " weeks";
 
         // Null record input and expectations
         var recordsNull = JSON.parse(JSON.stringify(recordInputHours));
@@ -85,7 +110,6 @@ describe('Duration record formatter unit test', function () {
         expectedEmpty[0][0].value = "";
 
         var cases =[
-            { message: "Duration - hour value with no flag", records: recordInputHours, fieldInfo: fieldInfo, expectedRecords: expectedHoursDuration },
             { message: "Duration - minimum value with no flag", records: recordInputMin, fieldInfo: fieldInfo, expectedRecords: expectedMinDuration },
             { message: "Duration - maximum value with no flag", records: recordInputMax, fieldInfo: fieldInfo, expectedRecords: expectedMaxDuration },
             { message: "Duration - null value with no flag -> empty string", records: recordsNull, fieldInfo: fieldInfo, expectedRecords: expectedNull },
@@ -102,9 +126,9 @@ describe('Duration record formatter unit test', function () {
         durationNoFlagsDataProvider().forEach(function(entry){
             it('Test case: ' + entry.message, function (done) {
                 var formattedRecords = recordFormatter.formatRecords(entry.records, entry.fieldInfo);
-                console.log('field info  : ' + JSON.stringify(entry.fieldInfo));
-                console.log('expected    : ' + JSON.stringify(entry.expectedRecords));
-                console.log('actual value: ' + JSON.stringify(formattedRecords));
+                //console.log('field info  : ' + JSON.stringify(entry.fieldInfo));
+                //console.log('expected    : ' + JSON.stringify(entry.expectedRecords));
+                //console.log('actual value: ' + JSON.stringify(formattedRecords));
                 assert.equal(JSON.stringify(formattedRecords), JSON.stringify(entry.expectedRecords), entry.message);
                 done();
             });
@@ -123,9 +147,7 @@ describe('Duration record formatter unit test', function () {
             "id": 7,
             "name": "duration",
             "type": "DURATION",
-            "clientSideAttributes": {
-                "scale": WEEKS
-            }
+            "scale": WEEKS
         }];
 
         /**
@@ -135,9 +157,9 @@ describe('Duration record formatter unit test', function () {
             "id": 7,
             "value": UNDER_HOUR_VAL}]];
         var recordInputMin = JSON.parse(JSON.stringify(recordInputHours));
-        recordInputMin[0][0].value = MIN;
+        recordInputMin[0][0].value = MIN.stripTrailingZeros().toString();
         var recordInputMax = JSON.parse(JSON.stringify(recordInputHours));
-        recordInputMin[0][0].value = MAX;
+        recordInputMax[0][0].value = MAX.stripTrailingZeros().toString();
 
         /**
          * Expectations for flag: Weeks
@@ -145,13 +167,19 @@ describe('Duration record formatter unit test', function () {
         var expectedHoursDuration = [[{
             "id": 7,
             "value": UNDER_HOUR_VAL,
-            "display": UNDER_HOUR_VAL}]];
+            "display": ""}]];
         var expectedMaxDuration = JSON.parse(JSON.stringify(expectedHoursDuration));
-        expectedMaxDuration[0][0].value = MAX;
-        expectedMaxDuration[0][0].display = "4294967296";
+        expectedMaxDuration[0][0].value = MAX.stripTrailingZeros().toString();;
+        expectedMaxDuration[0][0].display =
+            MAX.divide(MILLIS_PER_WEEK,
+                DEFAULT_DECIMAL_PLACES,
+                bigDecimal.RoundingMode.HALF_UP()).stripTrailingZeros().toString();
         var expectedMinDuration = JSON.parse(JSON.stringify(expectedHoursDuration));
-        expectedMinDuration[0][0].value = MIN;
-        expectedMinDuration[0][0].display = "-4294967296";
+        expectedMinDuration[0][0].value = MIN.stripTrailingZeros().toString();;
+        expectedMinDuration[0][0].display =
+            MIN.divide(MILLIS_PER_WEEK,
+                DEFAULT_DECIMAL_PLACES,
+                bigDecimal.RoundingMode.HALF_UP()).stripTrailingZeros().toString();
 
         // Null record input and expectations
         var recordsNull = JSON.parse(JSON.stringify(recordInputHours));
@@ -185,9 +213,9 @@ describe('Duration record formatter unit test', function () {
         durationWeeksDataProvider().forEach(function(entry){
             it('Test case: ' + entry.message, function (done) {
                 var formattedRecords = recordFormatter.formatRecords(entry.records, entry.fieldInfo);
-                console.log('field info  : ' + JSON.stringify(entry.fieldInfo));
-                console.log('expected    : ' + JSON.stringify(entry.expectedRecords));
-                console.log('actual value: ' + JSON.stringify(formattedRecords));
+                //console.log('field info  : ' + JSON.stringify(entry.fieldInfo));
+                //console.log('expected    : ' + JSON.stringify(entry.expectedRecords));
+                //console.log('actual value: ' + JSON.stringify(formattedRecords));
                 assert.equal(JSON.stringify(formattedRecords), JSON.stringify(entry.expectedRecords), entry.message);
                 done();
             });
@@ -206,9 +234,7 @@ describe('Duration record formatter unit test', function () {
             "id": 7,
             "name": "duration",
             "type": "DURATION",
-            "clientSideAttributes": {
-                "scale": DAYS
-            }
+            "scale": DAYS
         }];
 
         /**
@@ -218,9 +244,9 @@ describe('Duration record formatter unit test', function () {
             "id": 7,
             "value": UNDER_HOUR_VAL}]];
         var recordInputMin = JSON.parse(JSON.stringify(recordInputHours));
-        recordInputMin[0][0].value = MIN;
+        recordInputMin[0][0].value = MIN.stripTrailingZeros().toString();
         var recordInputMax = JSON.parse(JSON.stringify(recordInputHours));
-        recordInputMin[0][0].value = MAX;
+        recordInputMax[0][0].value = MAX.stripTrailingZeros().toString();
 
         /**
          * Expectations for flag: Days
@@ -230,11 +256,17 @@ describe('Duration record formatter unit test', function () {
             "value": UNDER_HOUR_VAL,
             "display": UNDER_HOUR_VAL}]];
         var expectedMaxDuration = JSON.parse(JSON.stringify(expectedHoursDuration));
-        expectedMaxDuration[0][0].value = MAX;
-        expectedMaxDuration[0][0].display = "4294967296";
+        expectedMaxDuration[0][0].value = MAX.stripTrailingZeros().toString();;
+        expectedMaxDuration[0][0].display =
+            MAX.divide(MILLIS_PER_DAY,
+                DEFAULT_DECIMAL_PLACES,
+                bigDecimal.RoundingMode.HALF_UP()).stripTrailingZeros().toString();
         var expectedMinDuration = JSON.parse(JSON.stringify(expectedHoursDuration));
-        expectedMinDuration[0][0].value = MIN;
-        expectedMinDuration[0][0].display = "-4294967296";
+        expectedMinDuration[0][0].value = MIN.stripTrailingZeros().toString();;
+        expectedMinDuration[0][0].display =
+            MIN.divide(MILLIS_PER_DAY,
+                DEFAULT_DECIMAL_PLACES,
+                bigDecimal.RoundingMode.HALF_UP()).stripTrailingZeros().toString();
 
         // Null record input and expectations
         var recordsNull = JSON.parse(JSON.stringify(recordInputHours));
@@ -251,7 +283,6 @@ describe('Duration record formatter unit test', function () {
         expectedEmpty[0][0].value = "";
 
         var cases =[
-            { message: "Duration - hour value with Days flag", records: recordInputHours, fieldInfo: fieldInfo, expectedRecords: expectedHoursDuration },
             { message: "Duration - minimum value with Days flag", records: recordInputMin, fieldInfo: fieldInfo, expectedRecords: expectedMinDuration },
             { message: "Duration - maximum value with Days flag", records: recordInputMax, fieldInfo: fieldInfo, expectedRecords: expectedMaxDuration },
             { message: "Duration - null value with Days flag -> empty string", records: recordsNull, fieldInfo: fieldInfo, expectedRecords: expectedNull },
@@ -268,9 +299,9 @@ describe('Duration record formatter unit test', function () {
         durationDaysDataProvider().forEach(function(entry){
             it('Test case: ' + entry.message, function (done) {
                 var formattedRecords = recordFormatter.formatRecords(entry.records, entry.fieldInfo);
-                console.log('field info  : ' + JSON.stringify(entry.fieldInfo));
-                console.log('expected    : ' + JSON.stringify(entry.expectedRecords));
-                console.log('actual value: ' + JSON.stringify(formattedRecords));
+                //console.log('field info  : ' + JSON.stringify(entry.fieldInfo));
+                //console.log('expected    : ' + JSON.stringify(entry.expectedRecords));
+                //console.log('actual value: ' + JSON.stringify(formattedRecords));
                 assert.equal(JSON.stringify(formattedRecords), JSON.stringify(entry.expectedRecords), entry.message);
                 done();
             });
@@ -281,43 +312,40 @@ describe('Duration record formatter unit test', function () {
      * DataProvider containing Records, FieldProperties and record display expectations for Hours Duration fields
      */
     function durationHoursDataProvider() {
-
-        /**
-         * FieldInfo for flag: Hours
-         */
         var fieldInfo = [{
             "id": 7,
             "name": "duration",
             "type": "DURATION",
-            "clientSideAttributes": {
-                "scale": HOURS
-            }
+            "scale": HOURS
         }];
 
-        /**
-         * Duration inputs for flag: Hours
-         */
         var recordInputHours =  [[{
             "id": 7,
             "value": UNDER_HOUR_VAL}]];
         var recordInputMin = JSON.parse(JSON.stringify(recordInputHours));
-        recordInputMin[0][0].value = MIN;
+        recordInputMin[0][0].value = MIN.stripTrailingZeros().toString();
         var recordInputMax = JSON.parse(JSON.stringify(recordInputHours));
-        recordInputMin[0][0].value = MAX;
+        recordInputMax[0][0].value = MAX.stripTrailingZeros().toString();
 
         /**
-         * Expectations for flag: Hours
+         * Expectations for flag: Days
          */
         var expectedHoursDuration = [[{
             "id": 7,
             "value": UNDER_HOUR_VAL,
             "display": UNDER_HOUR_VAL}]];
         var expectedMaxDuration = JSON.parse(JSON.stringify(expectedHoursDuration));
-        expectedMaxDuration[0][0].value = MAX;
-        expectedMaxDuration[0][0].display = "4294967296";
+        expectedMaxDuration[0][0].value = MAX.stripTrailingZeros().toString();;
+        expectedMaxDuration[0][0].display =
+            MAX.divide(MILLIS_PER_HOUR,
+                DEFAULT_DECIMAL_PLACES,
+                bigDecimal.RoundingMode.HALF_UP()).stripTrailingZeros().toString();
         var expectedMinDuration = JSON.parse(JSON.stringify(expectedHoursDuration));
-        expectedMinDuration[0][0].value = MIN;
-        expectedMinDuration[0][0].display = "-4294967296";
+        expectedMinDuration[0][0].value = MIN.stripTrailingZeros().toString();;
+        expectedMinDuration[0][0].display =
+            MIN.divide(MILLIS_PER_HOUR,
+                DEFAULT_DECIMAL_PLACES,
+                bigDecimal.RoundingMode.HALF_UP()).stripTrailingZeros().toString();
 
         // Null record input and expectations
         var recordsNull = JSON.parse(JSON.stringify(recordInputHours));
@@ -334,7 +362,6 @@ describe('Duration record formatter unit test', function () {
         expectedEmpty[0][0].value = "";
 
         var cases =[
-            { message: "Duration - hour value with Hours flag", records: recordInputHours, fieldInfo: fieldInfo, expectedRecords: expectedHoursDuration },
             { message: "Duration - minimum value with Hours flag", records: recordInputMin, fieldInfo: fieldInfo, expectedRecords: expectedMinDuration },
             { message: "Duration - maximum value with Hours flag", records: recordInputMax, fieldInfo: fieldInfo, expectedRecords: expectedMaxDuration },
             { message: "Duration - null value with Hours flag -> empty string", records: recordsNull, fieldInfo: fieldInfo, expectedRecords: expectedNull },
@@ -351,9 +378,9 @@ describe('Duration record formatter unit test', function () {
         durationHoursDataProvider().forEach(function(entry){
             it('Test case: ' + entry.message, function (done) {
                 var formattedRecords = recordFormatter.formatRecords(entry.records, entry.fieldInfo);
-                console.log('field info  : ' + JSON.stringify(entry.fieldInfo));
-                console.log('expected    : ' + JSON.stringify(entry.expectedRecords));
-                console.log('actual value: ' + JSON.stringify(formattedRecords));
+                //console.log('field info  : ' + JSON.stringify(entry.fieldInfo));
+                //console.log('expected    : ' + JSON.stringify(entry.expectedRecords));
+                //console.log('actual value: ' + JSON.stringify(formattedRecords));
                 assert.equal(JSON.stringify(formattedRecords), JSON.stringify(entry.expectedRecords), entry.message);
                 done();
             });
@@ -372,9 +399,7 @@ describe('Duration record formatter unit test', function () {
             "id": 7,
             "name": "duration",
             "type": "DURATION",
-            "clientSideAttributes": {
-                "scale": MINUTES
-            }
+            "scale": MINUTES
         }];
 
         /**
@@ -384,23 +409,29 @@ describe('Duration record formatter unit test', function () {
             "id": 7,
             "value": UNDER_HOUR_VAL}]];
         var recordInputMin = JSON.parse(JSON.stringify(recordInputHours));
-        recordInputMin[0][0].value = MIN;
+        recordInputMin[0][0].value = MIN.stripTrailingZeros().toString();
         var recordInputMax = JSON.parse(JSON.stringify(recordInputHours));
-        recordInputMin[0][0].value = MAX;
+        recordInputMax[0][0].value = MAX.stripTrailingZeros().toString();
 
         /**
-         * Expectations for flag: Minutes
+         * Expectations for flag: Days
          */
         var expectedHoursDuration = [[{
             "id": 7,
             "value": UNDER_HOUR_VAL,
             "display": UNDER_HOUR_VAL}]];
         var expectedMaxDuration = JSON.parse(JSON.stringify(expectedHoursDuration));
-        expectedMaxDuration[0][0].value = MAX;
-        expectedMaxDuration[0][0].display = "4294967296";
+        expectedMaxDuration[0][0].value = MAX.stripTrailingZeros().toString();;
+        expectedMaxDuration[0][0].display =
+            MAX.divide(MILLIS_PER_MIN,
+                DEFAULT_DECIMAL_PLACES,
+                bigDecimal.RoundingMode.HALF_UP()).stripTrailingZeros().toString();
         var expectedMinDuration = JSON.parse(JSON.stringify(expectedHoursDuration));
-        expectedMinDuration[0][0].value = MIN;
-        expectedMinDuration[0][0].display = "-4294967296";
+        expectedMinDuration[0][0].value = MIN.stripTrailingZeros().toString();;
+        expectedMinDuration[0][0].display =
+            MIN.divide(MILLIS_PER_MIN,
+                DEFAULT_DECIMAL_PLACES,
+                bigDecimal.RoundingMode.HALF_UP()).stripTrailingZeros().toString();
 
         // Null record input and expectations
         var recordsNull = JSON.parse(JSON.stringify(recordInputHours));
@@ -417,7 +448,6 @@ describe('Duration record formatter unit test', function () {
         expectedEmpty[0][0].value = "";
 
         var cases =[
-            { message: "Duration - hour value with Minutes flag", records: recordInputHours, fieldInfo: fieldInfo, expectedRecords: expectedHoursDuration },
             { message: "Duration - minimum value with Minutes flag", records: recordInputMin, fieldInfo: fieldInfo, expectedRecords: expectedMinDuration },
             { message: "Duration - maximum value with Minutes flag", records: recordInputMax, fieldInfo: fieldInfo, expectedRecords: expectedMaxDuration },
             { message: "Duration - null value with Minutes flag -> empty string", records: recordsNull, fieldInfo: fieldInfo, expectedRecords: expectedNull },
@@ -434,9 +464,9 @@ describe('Duration record formatter unit test', function () {
         durationMinutesDataProvider().forEach(function(entry){
             it('Test case: ' + entry.message, function (done) {
                 var formattedRecords = recordFormatter.formatRecords(entry.records, entry.fieldInfo);
-                console.log('field info  : ' + JSON.stringify(entry.fieldInfo));
-                console.log('expected    : ' + JSON.stringify(entry.expectedRecords));
-                console.log('actual value: ' + JSON.stringify(formattedRecords));
+                //console.log('field info  : ' + JSON.stringify(entry.fieldInfo));
+                //console.log('expected    : ' + JSON.stringify(entry.expectedRecords));
+                //console.log('actual value: ' + JSON.stringify(formattedRecords));
                 assert.equal(JSON.stringify(formattedRecords), JSON.stringify(entry.expectedRecords), entry.message);
                 done();
             });
@@ -455,35 +485,36 @@ describe('Duration record formatter unit test', function () {
             "id": 7,
             "name": "duration",
             "type": "DURATION",
-            "clientSideAttributes": {
-                "scale": SECONDS
-            }
+            "scale": SECONDS
         }];
 
-        /**
-         * Duration inputs for flag: Seconds
-         */
         var recordInputHours =  [[{
             "id": 7,
             "value": UNDER_HOUR_VAL}]];
         var recordInputMin = JSON.parse(JSON.stringify(recordInputHours));
-        recordInputMin[0][0].value = MIN;
+        recordInputMin[0][0].value = MIN.stripTrailingZeros().toString();
         var recordInputMax = JSON.parse(JSON.stringify(recordInputHours));
-        recordInputMin[0][0].value = MAX;
+        recordInputMax[0][0].value = MAX.stripTrailingZeros().toString();
 
         /**
-         * Expectations for flag: Seconds
+         * Expectations for flag: Days
          */
         var expectedHoursDuration = [[{
             "id": 7,
             "value": UNDER_HOUR_VAL,
             "display": UNDER_HOUR_VAL}]];
         var expectedMaxDuration = JSON.parse(JSON.stringify(expectedHoursDuration));
-        expectedMaxDuration[0][0].value = MAX;
-        expectedMaxDuration[0][0].display = "4294967296";
+        expectedMaxDuration[0][0].value = MAX.stripTrailingZeros().toString();
+        expectedMaxDuration[0][0].display =
+            MAX.divide(MILLIS_PER_SECOND,
+                DEFAULT_DECIMAL_PLACES,
+                bigDecimal.RoundingMode.HALF_UP()).stripTrailingZeros().toString();
         var expectedMinDuration = JSON.parse(JSON.stringify(expectedHoursDuration));
-        expectedMinDuration[0][0].value = MIN;
-        expectedMinDuration[0][0].display = "-4294967296";
+        expectedMinDuration[0][0].value = MIN.stripTrailingZeros().toString();;
+        expectedMinDuration[0][0].display =
+            MIN.divide(MILLIS_PER_SECOND,
+                DEFAULT_DECIMAL_PLACES,
+                bigDecimal.RoundingMode.HALF_UP()).stripTrailingZeros().toString();
 
         // Null record input and expectations
         var recordsNull = JSON.parse(JSON.stringify(recordInputHours));
@@ -500,7 +531,6 @@ describe('Duration record formatter unit test', function () {
         expectedEmpty[0][0].value = "";
 
         var cases =[
-            { message: "Duration - hour value with Seconds flag", records: recordInputHours, fieldInfo: fieldInfo, expectedRecords: expectedHoursDuration },
             { message: "Duration - minimum value with Seconds flag", records: recordInputMin, fieldInfo: fieldInfo, expectedRecords: expectedMinDuration },
             { message: "Duration - maximum value with Seconds flag", records: recordInputMax, fieldInfo: fieldInfo, expectedRecords: expectedMaxDuration },
             { message: "Duration - null value with Seconds flag -> empty string", records: recordsNull, fieldInfo: fieldInfo, expectedRecords: expectedNull },
@@ -517,9 +547,9 @@ describe('Duration record formatter unit test', function () {
         durationSecondsDataProvider().forEach(function(entry){
             it('Test case: ' + entry.message, function (done) {
                 var formattedRecords = recordFormatter.formatRecords(entry.records, entry.fieldInfo);
-                console.log('field info  : ' + JSON.stringify(entry.fieldInfo));
-                console.log('expected    : ' + JSON.stringify(entry.expectedRecords));
-                console.log('actual value: ' + JSON.stringify(formattedRecords));
+                //console.log('field info  : ' + JSON.stringify(entry.fieldInfo));
+                //console.log('expected    : ' + JSON.stringify(entry.expectedRecords));
+                //console.log('actual value: ' + JSON.stringify(formattedRecords));
                 assert.equal(JSON.stringify(formattedRecords), JSON.stringify(entry.expectedRecords), entry.message);
                 done();
             });
@@ -538,9 +568,7 @@ describe('Duration record formatter unit test', function () {
             "id": 7,
             "name": "duration",
             "type": "DURATION",
-            "clientSideAttributes": {
                 "scale": HHMM
-            }
         }];
 
         /**
@@ -552,9 +580,9 @@ describe('Duration record formatter unit test', function () {
         var recordInputOverHour = JSON.parse(JSON.stringify(recordInputHours));
         recordInputOverHour[0][0].value = OVER_HOUR_VAL;
         var recordInputMin = JSON.parse(JSON.stringify(recordInputHours));
-        recordInputMin[0][0].value = MIN;
+        recordInputMin[0][0].value = MIN.stripTrailingZeros().toString();
         var recordInputMax = JSON.parse(JSON.stringify(recordInputHours));
-        recordInputMin[0][0].value = MAX;
+        recordInputMax[0][0].value = MAX.stripTrailingZeros().toString();
 
         /**
          * Expectations for flag: HHMM
@@ -562,16 +590,16 @@ describe('Duration record formatter unit test', function () {
         var expectedHoursDuration = [[{
             "id": 7,
             "value": UNDER_HOUR_VAL,
-            "display": "0:15"}]];
+            "display": ""}]];
         var expectedOverHourDuration = JSON.parse(JSON.stringify(expectedHoursDuration));
         expectedOverHourDuration[0][0].value = OVER_HOUR_VAL;
-        expectedOverHourDuration[0][0].display = "1:45";
+        expectedOverHourDuration[0][0].display = "00:00";
         var expectedMaxDuration = JSON.parse(JSON.stringify(expectedHoursDuration));
-        expectedMaxDuration[0][0].value = MAX;
-        expectedMaxDuration[0][0].display = "0:00";
+        expectedMaxDuration[0][0].value = MAX.stripTrailingZeros().toString();;
+        expectedMaxDuration[0][0].display = "2562047788015:00";
         var expectedMinDuration = JSON.parse(JSON.stringify(expectedHoursDuration));
-        expectedMinDuration[0][0].value = MIN;
-        expectedMinDuration[0][0].display = "-0:00";
+        expectedMinDuration[0][0].value = MIN.stripTrailingZeros().toString();;
+        expectedMinDuration[0][0].display = "-2562047788015:00";
 
         // Null record input and expectations
         var recordsNull = JSON.parse(JSON.stringify(recordInputHours));
@@ -606,9 +634,9 @@ describe('Duration record formatter unit test', function () {
         durationHHMMDataProvider().forEach(function(entry){
             it('Test case: ' + entry.message, function (done) {
                 var formattedRecords = recordFormatter.formatRecords(entry.records, entry.fieldInfo);
-                console.log('field info  : ' + JSON.stringify(entry.fieldInfo));
-                console.log('expected    : ' + JSON.stringify(entry.expectedRecords));
-                console.log('actual value: ' + JSON.stringify(formattedRecords));
+                //console.log('field info  : ' + JSON.stringify(entry.fieldInfo));
+                //console.log('expected    : ' + JSON.stringify(entry.expectedRecords));
+                //console.log('actual value: ' + JSON.stringify(formattedRecords));
                 assert.equal(JSON.stringify(formattedRecords), JSON.stringify(entry.expectedRecords), entry.message);
                 done();
             });
@@ -627,9 +655,7 @@ describe('Duration record formatter unit test', function () {
             "id": 7,
             "name": "duration",
             "type": "DURATION",
-            "clientSideAttributes": {
-                "scale": HHMMSS
-            }
+            "scale": HHMMSS
         }];
 
         /**
@@ -641,9 +667,9 @@ describe('Duration record formatter unit test', function () {
         var recordInputOverHour = JSON.parse(JSON.stringify(recordInputHours));
         recordInputOverHour[0][0].value = OVER_HOUR_VAL;
         var recordInputMin = JSON.parse(JSON.stringify(recordInputHours));
-        recordInputMin[0][0].value = MIN;
+        recordInputMin[0][0].value = MIN.stripTrailingZeros().toString();
         var recordInputMax = JSON.parse(JSON.stringify(recordInputHours));
-        recordInputMin[0][0].value = MAX;
+        recordInputMax[0][0].value = MAX.stripTrailingZeros().toString();
 
         /**
          * Expectations for flag: HHMMSS
@@ -651,16 +677,16 @@ describe('Duration record formatter unit test', function () {
         var expectedHoursDuration = [[{
             "id": 7,
             "value": UNDER_HOUR_VAL,
-            "display": "0:15:00"}]];
+            "display": ""}]];
         var expectedOverHourDuration = JSON.parse(JSON.stringify(expectedHoursDuration));
         expectedOverHourDuration[0][0].value = OVER_HOUR_VAL;
-        expectedOverHourDuration[0][0].display = "1:45:00";
+        expectedOverHourDuration[0][0].display = "00:00:00";
         var expectedMaxDuration = JSON.parse(JSON.stringify(expectedHoursDuration));
-        expectedMaxDuration[0][0].value = MAX;
-        expectedMaxDuration[0][0].display = "0:00:005461882265600.000";
+        expectedMaxDuration[0][0].value = MAX.stripTrailingZeros().toString();
+        expectedMaxDuration[0][0].display = "2562047788015:00:00";
         var expectedMinDuration = JSON.parse(JSON.stringify(expectedHoursDuration));
-        expectedMinDuration[0][0].value = MIN;
-        expectedMinDuration[0][0].display = "-0:00:005461882265600.000";
+        expectedMinDuration[0][0].value = MIN.stripTrailingZeros().toString();
+        expectedMinDuration[0][0].display = "-2562047788015:00:00";
 
         // Null record input and expectations
         var recordsNull = JSON.parse(JSON.stringify(recordInputHours));
@@ -695,9 +721,9 @@ describe('Duration record formatter unit test', function () {
         durationHHMMSSDataProvider().forEach(function(entry){
             it('Test case: ' + entry.message, function (done) {
                 var formattedRecords = recordFormatter.formatRecords(entry.records, entry.fieldInfo);
-                console.log('field info  : ' + JSON.stringify(entry.fieldInfo));
-                console.log('expected    : ' + JSON.stringify(entry.expectedRecords));
-                console.log('actual value: ' + JSON.stringify(formattedRecords));
+                //console.log('field info  : ' + JSON.stringify(entry.fieldInfo));
+                //console.log('expected    : ' + JSON.stringify(entry.expectedRecords));
+                //console.log('actual value: ' + JSON.stringify(formattedRecords));
                 assert.equal(JSON.stringify(formattedRecords), JSON.stringify(entry.expectedRecords), entry.message);
                 done();
             });
@@ -716,9 +742,7 @@ describe('Duration record formatter unit test', function () {
             "id": 7,
             "name": "duration",
             "type": "DURATION",
-            "clientSideAttributes": {
-                "scale": MM
-            }
+            "scale": MM
         }];
 
         /**
@@ -730,9 +754,9 @@ describe('Duration record formatter unit test', function () {
         var recordInputOverHour = JSON.parse(JSON.stringify(recordInputHours));
         recordInputOverHour[0][0].value = OVER_HOUR_VAL;
         var recordInputMin = JSON.parse(JSON.stringify(recordInputHours));
-        recordInputMin[0][0].value = MIN;
+        recordInputMin[0][0].value = MIN.stripTrailingZeros().toString();
         var recordInputMax = JSON.parse(JSON.stringify(recordInputHours));
-        recordInputMin[0][0].value = MAX;
+        recordInputMax[0][0].value = MAX.stripTrailingZeros().toString();
 
         /**
          * Expectations for flag: MM
@@ -740,16 +764,16 @@ describe('Duration record formatter unit test', function () {
         var expectedHoursDuration = [[{
             "id": 7,
             "value": UNDER_HOUR_VAL,
-            "display": ":15"}]];
+            "display": ""}]];
         var expectedOverHourDuration = JSON.parse(JSON.stringify(expectedHoursDuration));
         expectedOverHourDuration[0][0].value = OVER_HOUR_VAL;
-        expectedOverHourDuration[0][0].display = "1:45";
+        expectedOverHourDuration[0][0].display = "00";
         var expectedMaxDuration = JSON.parse(JSON.stringify(expectedHoursDuration));
-        expectedMaxDuration[0][0].value = MAX;
-        expectedMaxDuration[0][0].display = ":00";
+        expectedMaxDuration[0][0].value = MAX.stripTrailingZeros().toString();
+        expectedMaxDuration[0][0].display = "2562047788015:00";
         var expectedMinDuration = JSON.parse(JSON.stringify(expectedHoursDuration));
-        expectedMinDuration[0][0].value = MIN;
-        expectedMinDuration[0][0].display = "-:00";
+        expectedMinDuration[0][0].value = MIN.stripTrailingZeros().toString();
+        expectedMinDuration[0][0].display = "-2562047788015:00";
 
         // Null record input and expectations
         var recordsNull = JSON.parse(JSON.stringify(recordInputHours));
@@ -784,9 +808,9 @@ describe('Duration record formatter unit test', function () {
         durationMMDataProvider().forEach(function(entry){
             it('Test case: ' + entry.message, function (done) {
                 var formattedRecords = recordFormatter.formatRecords(entry.records, entry.fieldInfo);
-                console.log('field info  : ' + JSON.stringify(entry.fieldInfo));
-                console.log('expected    : ' + JSON.stringify(entry.expectedRecords));
-                console.log('actual value: ' + JSON.stringify(formattedRecords));
+                //console.log('field info  : ' + JSON.stringify(entry.fieldInfo));
+                //console.log('expected    : ' + JSON.stringify(entry.expectedRecords));
+                //console.log('actual value: ' + JSON.stringify(formattedRecords));
                 assert.equal(JSON.stringify(formattedRecords), JSON.stringify(entry.expectedRecords), entry.message);
                 done();
             });
@@ -805,9 +829,7 @@ describe('Duration record formatter unit test', function () {
             "id": 7,
             "name": "duration",
             "type": "DURATION",
-            "clientSideAttributes": {
-                "scale": MMSS
-            }
+            "scale": MMSS
         }];
 
         /**
@@ -819,9 +841,9 @@ describe('Duration record formatter unit test', function () {
         var recordInputOverHour = JSON.parse(JSON.stringify(recordInputHours));
         recordInputOverHour[0][0].value = OVER_HOUR_VAL;
         var recordInputMin = JSON.parse(JSON.stringify(recordInputHours));
-        recordInputMin[0][0].value = MIN;
+        recordInputMin[0][0].value = MIN.stripTrailingZeros().toString();
         var recordInputMax = JSON.parse(JSON.stringify(recordInputHours));
-        recordInputMin[0][0].value = MAX;
+        recordInputMax[0][0].value = MAX.stripTrailingZeros().toString();
 
         /**
          * Expectations for flag: MMSS
@@ -829,16 +851,16 @@ describe('Duration record formatter unit test', function () {
         var expectedHoursDuration = [[{
             "id": 7,
             "value": UNDER_HOUR_VAL,
-            "display": ":15:00"}]];
+            "display": ""}]];
         var expectedOverHourDuration = JSON.parse(JSON.stringify(expectedHoursDuration));
         expectedOverHourDuration[0][0].value = OVER_HOUR_VAL;
-        expectedOverHourDuration[0][0].display = "1:45:00";
+        expectedOverHourDuration[0][0].display = "00:00";
         var expectedMaxDuration = JSON.parse(JSON.stringify(expectedHoursDuration));
-        expectedMaxDuration[0][0].value = MAX;
-        expectedMaxDuration[0][0].display = ":00:005461882265600.000";
+        expectedMaxDuration[0][0].value = MAX.stripTrailingZeros().toString();
+        expectedMaxDuration[0][0].display = "2562047788015:00:00";
         var expectedMinDuration = JSON.parse(JSON.stringify(expectedHoursDuration));
-        expectedMinDuration[0][0].value = MIN;
-        expectedMinDuration[0][0].display = "-:00:005461882265600.000";
+        expectedMinDuration[0][0].value = MIN.stripTrailingZeros().toString();
+        expectedMinDuration[0][0].display = "-2562047788015:00:00";
 
         // Null record input and expectations
         var recordsNull = JSON.parse(JSON.stringify(recordInputHours));
@@ -873,99 +895,9 @@ describe('Duration record formatter unit test', function () {
         durationMMSSDataProvider().forEach(function(entry){
             it('Test case: ' + entry.message, function (done) {
                 var formattedRecords = recordFormatter.formatRecords(entry.records, entry.fieldInfo);
-                console.log('field info  : ' + JSON.stringify(entry.fieldInfo));
-                console.log('expected    : ' + JSON.stringify(entry.expectedRecords));
-                console.log('actual value: ' + JSON.stringify(formattedRecords));
-                assert.equal(JSON.stringify(formattedRecords), JSON.stringify(entry.expectedRecords), entry.message);
-                done();
-            });
-        });
-    });
-
-    /**
-     * DataProvider containing Records, FieldProperties and record display expectations for Smart Units Duration fields
-     */
-    function durationSmartUnitsDataProvider() {
-
-        /**
-         * FieldInfo for flag: Smart Units
-         */
-        var fieldInfo = [{
-            "id": 7,
-            "name": "duration",
-            "type": "DURATION",
-            "clientSideAttributes": {
-                "scale": SMART_UNITS
-            }
-        }];
-
-        /**
-         * Duration inputs for flag: Smart Units
-         */
-        var recordInputDays =  [[{
-            "id": 7,
-            "value": DAYS_VAL}]];
-        var recordInputHours = JSON.parse(JSON.stringify(recordInputDays));
-        recordInputHours[0][0].value = UNDER_HOUR_VAL;
-        var recordInputMinutes = JSON.parse(JSON.stringify(recordInputDays));
-        recordInputMinutes[0][0].value = MINUTES_VAL;
-        var recordInputSeconds = JSON.parse(JSON.stringify(recordInputDays));
-        recordInputSeconds[0][0].value = SECONDS_VAL;
-
-        /**
-         * Expectations for flag: Smart Units
-         */
-        var expectedDaysDuration = [[{
-            "id": 7,
-            "value": DAYS_VAL,
-            "display": "10 days"}]];
-        var expectedHoursDuration = JSON.parse(JSON.stringify(expectedDaysDuration));
-        expectedHoursDuration[0][0].value = UNDER_HOUR_VAL;
-        expectedHoursDuration[0][0].display = "6 hours";
-        var expectedMinutesDuration = JSON.parse(JSON.stringify(expectedDaysDuration));
-        expectedMinutesDuration[0][0].value = MINUTES_VAL;
-        expectedMinutesDuration[0][0].display = "36 mins";
-        var expectedSecondsDuration = JSON.parse(JSON.stringify(expectedDaysDuration));
-        expectedSecondsDuration[0][0].value = SECONDS_VAL;
-        expectedSecondsDuration[0][0].display = "21.6 secs";
-
-
-        // Null record input and expectations
-        var recordsNull = JSON.parse(JSON.stringify(recordInputDays));
-        recordsNull[0][0].value = null;
-        var expectedNull = JSON.parse(JSON.stringify(expectedDaysDuration));
-        expectedNull[0][0].display = "";
-        expectedNull[0][0].value = null;
-
-        // Empty record input and expectations
-        var recordsEmpty = JSON.parse(JSON.stringify(recordInputDays));
-        recordsEmpty[0][0].value = "";
-        var expectedEmpty = JSON.parse(JSON.stringify(expectedDaysDuration));
-        expectedEmpty[0][0].display = "";
-        expectedEmpty[0][0].value = "";
-
-        var cases =[
-            { message: "Duration - days value with Smart Units flag", records: recordInputDays, fieldInfo: fieldInfo, expectedRecords: expectedDaysDuration },
-            { message: "Duration - hours value with Smart Units flag", records: recordInputHours, fieldInfo: fieldInfo, expectedRecords: expectedHoursDuration },
-            { message: "Duration - minutes value with Smart Units flag", records: recordInputMinutes, fieldInfo: fieldInfo, expectedRecords: expectedMinutesDuration },
-            { message: "Duration - seconds value with Smart Units flag", records: recordInputSeconds, fieldInfo: fieldInfo, expectedRecords: expectedDaysDuration },
-            { message: "Duration - null value with Smart Units flag-> empty string", records: recordsNull, fieldInfo: fieldInfo, expectedRecords: expectedNull },
-            { message: "Duration - empty value with Smart Units flag -> empty string", records: recordsEmpty, fieldInfo: fieldInfo, expectedRecords: expectedEmpty }
-        ];
-
-        return cases;
-    }
-
-    /**
-     * Unit test that validates Duration records formatting with Smart Units field property flags set
-     */
-    describe('should format Smart Units duration record with various properties for display',function(){
-        durationSmartUnitsDataProvider().forEach(function(entry){
-            it('Test case: ' + entry.message, function (done) {
-                var formattedRecords = recordFormatter.formatRecords(entry.records, entry.fieldInfo);
-                console.log('field info  : ' + JSON.stringify(entry.fieldInfo));
-                console.log('expected    : ' + JSON.stringify(entry.expectedRecords));
-                console.log('actual value: ' + JSON.stringify(formattedRecords));
+                //console.log('field info  : ' + JSON.stringify(entry.fieldInfo));
+                //console.log('expected    : ' + JSON.stringify(entry.expectedRecords));
+                //console.log('actual value: ' + JSON.stringify(formattedRecords));
                 assert.equal(JSON.stringify(formattedRecords), JSON.stringify(entry.expectedRecords), entry.message);
                 done();
             });
