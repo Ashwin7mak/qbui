@@ -305,7 +305,7 @@ module.exports = function (grunt) {
         //   <!-- endbuild -->
         useminPrepare: {
             html: [
-                '<%= quickbase.client.root %>/*.index.html'],         // look for entry point html files
+                '<%= quickbase.client.root %>/*.index.html', '!<%= quickbase.client.root %>/gallery/*.index.html'],         // look for entry point html files
             options: {
                 dest: '<%= quickbase.distPublic %>'
             }

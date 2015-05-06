@@ -16,7 +16,7 @@ xdescribe('Directive: qbseGrid', function() {
     var $compile, $rootScope, $element, $q, $scope, $http, $httpBackend;
 
     // load the directive's module & load the template
-    beforeEach(module('qbse.grid', 'common.gridExample',
+    beforeEach(module('qbse.grid', 'gallery.gridExample',
         'quickbase/common/grid/grid.template.html',
         'quickbase/common/grid/gridPagination.template.html', 'ngMockE2E'));
 

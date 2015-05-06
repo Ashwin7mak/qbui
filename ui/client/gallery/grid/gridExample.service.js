@@ -5,7 +5,7 @@
      * Service for loading example data for grid
      */
     angular
-        .module('common.gridExample')
+        .module('gallery.gridExample')
 
         //define example data &schema
         .factory('ExampleData', ExampleData);

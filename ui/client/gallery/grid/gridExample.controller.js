@@ -3,7 +3,7 @@
 
     //get the module
     angular
-        .module('common.gridExample')
+        .module('gallery.gridExample')
 
         // instantiate the controller
         .controller('GridExampleController', GridExampleController);
@@ -18,7 +18,7 @@
             angular.extend(this, {
                 listid : 2349823904820348,
                 type :'report',
-                title : gridData.exampleSize + ' Dataset',
+                title : 'Example Dataset',
                 selectedItems : [],
                 persons : gridData.data(),
 

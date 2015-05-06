@@ -6,7 +6,7 @@
      * for developers internally.
      */
     angular
-        .module('quickbase.common')
+        .module('quickbase.gallery')
         .config(['$stateProvider', '$urlRouterProvider','ExampleDataProvider', CommonRoutes]);
 
     CommonRoutes.$inject = ['$stateProvider', '$urlRouterProvider'];
@@ -20,7 +20,7 @@
             })
             .state('grid', {
                 url: '/grid',
-                templateUrl: 'quickbase/common/grid/gridExample.html',
+                templateUrl: 'gallery/grid/gridExample.html',
                 controller:'GridExampleController',
                 controllerAs:'example',
                 resolve: {
