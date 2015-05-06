@@ -11,6 +11,7 @@
     var numericFormatter = require('./numericFormatter');
     var urlFormatter = require('./urlFormatter');
     var emailFormatter = require('./emailFormatter');
+    var durationFormatter = require('./durationFormatter');
 
     /**
      * Certain fields may require generation of a formatter string that will be used for each record in the
@@ -40,6 +41,11 @@
                 case consts.PERCENT:
                 case consts.FORMULA_PERCENT:
                     fieldInfos[i].jsFormat = numericFormatter.generateFormat(fieldInfos[i]);
+                    break;
+                case consts.DURATION:
+                case consts.FORMULA_DURATION:
+                    fieldInfos[i].jsFormat = durationFormatter.generateFormat(fieldInfos[i]);
+                    break;
                 default:
                     break;
             }
@@ -76,6 +82,10 @@
                     break;
                 case consts.EMAIL_ADDRESS:
                     fieldValue.display = emailFormatter.format(fieldValue, fieldInfo);
+                    break;
+                case consts.DURATION:
+                case consts.FORMULA_DURATION:
+                    fieldValue.display = durationFormatter.format(fieldValue, fieldInfo);
                     break;
                 default:
                     fieldValue.display = fieldValue.value;

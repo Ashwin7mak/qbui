@@ -102,8 +102,9 @@ describe('Duration record formatter unit test', function () {
         durationNoFlagsDataProvider().forEach(function(entry){
             it('Test case: ' + entry.message, function (done) {
                 var formattedRecords = recordFormatter.formatRecords(entry.records, entry.fieldInfo);
-                //console.log('entry: ' + JSON.stringify(entry));
-                //console.log('actual value: ' + JSON.stringify(formattedRecords));
+                console.log('field info  : ' + JSON.stringify(entry.fieldInfo));
+                console.log('expected    : ' + JSON.stringify(entry.expectedRecords));
+                console.log('actual value: ' + JSON.stringify(formattedRecords));
                 assert.equal(JSON.stringify(formattedRecords), JSON.stringify(entry.expectedRecords), entry.message);
                 done();
             });
@@ -184,8 +185,9 @@ describe('Duration record formatter unit test', function () {
         durationWeeksDataProvider().forEach(function(entry){
             it('Test case: ' + entry.message, function (done) {
                 var formattedRecords = recordFormatter.formatRecords(entry.records, entry.fieldInfo);
-                //console.log('entry: ' + JSON.stringify(entry));
-                //console.log('actual value: ' + JSON.stringify(formattedRecords));
+                console.log('field info  : ' + JSON.stringify(entry.fieldInfo));
+                console.log('expected    : ' + JSON.stringify(entry.expectedRecords));
+                console.log('actual value: ' + JSON.stringify(formattedRecords));
                 assert.equal(JSON.stringify(formattedRecords), JSON.stringify(entry.expectedRecords), entry.message);
                 done();
             });
@@ -266,8 +268,9 @@ describe('Duration record formatter unit test', function () {
         durationDaysDataProvider().forEach(function(entry){
             it('Test case: ' + entry.message, function (done) {
                 var formattedRecords = recordFormatter.formatRecords(entry.records, entry.fieldInfo);
-                //console.log('entry: ' + JSON.stringify(entry));
-                //console.log('actual value: ' + JSON.stringify(formattedRecords));
+                console.log('field info  : ' + JSON.stringify(entry.fieldInfo));
+                console.log('expected    : ' + JSON.stringify(entry.expectedRecords));
+                console.log('actual value: ' + JSON.stringify(formattedRecords));
                 assert.equal(JSON.stringify(formattedRecords), JSON.stringify(entry.expectedRecords), entry.message);
                 done();
             });
@@ -348,8 +351,9 @@ describe('Duration record formatter unit test', function () {
         durationHoursDataProvider().forEach(function(entry){
             it('Test case: ' + entry.message, function (done) {
                 var formattedRecords = recordFormatter.formatRecords(entry.records, entry.fieldInfo);
-                //console.log('entry: ' + JSON.stringify(entry));
-                //console.log('actual value: ' + JSON.stringify(formattedRecords));
+                console.log('field info  : ' + JSON.stringify(entry.fieldInfo));
+                console.log('expected    : ' + JSON.stringify(entry.expectedRecords));
+                console.log('actual value: ' + JSON.stringify(formattedRecords));
                 assert.equal(JSON.stringify(formattedRecords), JSON.stringify(entry.expectedRecords), entry.message);
                 done();
             });
@@ -430,8 +434,9 @@ describe('Duration record formatter unit test', function () {
         durationMinutesDataProvider().forEach(function(entry){
             it('Test case: ' + entry.message, function (done) {
                 var formattedRecords = recordFormatter.formatRecords(entry.records, entry.fieldInfo);
-                //console.log('entry: ' + JSON.stringify(entry));
-                //console.log('actual value: ' + JSON.stringify(formattedRecords));
+                console.log('field info  : ' + JSON.stringify(entry.fieldInfo));
+                console.log('expected    : ' + JSON.stringify(entry.expectedRecords));
+                console.log('actual value: ' + JSON.stringify(formattedRecords));
                 assert.equal(JSON.stringify(formattedRecords), JSON.stringify(entry.expectedRecords), entry.message);
                 done();
             });
@@ -512,8 +517,9 @@ describe('Duration record formatter unit test', function () {
         durationSecondsDataProvider().forEach(function(entry){
             it('Test case: ' + entry.message, function (done) {
                 var formattedRecords = recordFormatter.formatRecords(entry.records, entry.fieldInfo);
-                //console.log('entry: ' + JSON.stringify(entry));
-                //console.log('actual value: ' + JSON.stringify(formattedRecords));
+                console.log('field info  : ' + JSON.stringify(entry.fieldInfo));
+                console.log('expected    : ' + JSON.stringify(entry.expectedRecords));
+                console.log('actual value: ' + JSON.stringify(formattedRecords));
                 assert.equal(JSON.stringify(formattedRecords), JSON.stringify(entry.expectedRecords), entry.message);
                 done();
             });
@@ -583,7 +589,7 @@ describe('Duration record formatter unit test', function () {
 
         var cases =[
             { message: "Duration - under hour value with HHMM flag", records: recordInputHours, fieldInfo: fieldInfo, expectedRecords: expectedHoursDuration },
-            { message: "Duration - over hour value with HHMM flag", records: recordInputOverHours, fieldInfo: fieldInfo, expectedRecords: expectedOverHoursDuration },
+            { message: "Duration - over hour value with HHMM flag", records: recordInputOverHour, fieldInfo: fieldInfo, expectedRecords: expectedOverHourDuration },
             { message: "Duration - minimum value with HHMM flag", records: recordInputMin, fieldInfo: fieldInfo, expectedRecords: expectedMinDuration },
             { message: "Duration - maximum value with HHMM flag", records: recordInputMax, fieldInfo: fieldInfo, expectedRecords: expectedMaxDuration },
             { message: "Duration - null value with HHMM flag -> empty string", records: recordsNull, fieldInfo: fieldInfo, expectedRecords: expectedNull },
@@ -600,8 +606,9 @@ describe('Duration record formatter unit test', function () {
         durationHHMMDataProvider().forEach(function(entry){
             it('Test case: ' + entry.message, function (done) {
                 var formattedRecords = recordFormatter.formatRecords(entry.records, entry.fieldInfo);
-                //console.log('entry: ' + JSON.stringify(entry));
-                //console.log('actual value: ' + JSON.stringify(formattedRecords));
+                console.log('field info  : ' + JSON.stringify(entry.fieldInfo));
+                console.log('expected    : ' + JSON.stringify(entry.expectedRecords));
+                console.log('actual value: ' + JSON.stringify(formattedRecords));
                 assert.equal(JSON.stringify(formattedRecords), JSON.stringify(entry.expectedRecords), entry.message);
                 done();
             });
@@ -688,8 +695,9 @@ describe('Duration record formatter unit test', function () {
         durationHHMMSSDataProvider().forEach(function(entry){
             it('Test case: ' + entry.message, function (done) {
                 var formattedRecords = recordFormatter.formatRecords(entry.records, entry.fieldInfo);
-                //console.log('entry: ' + JSON.stringify(entry));
-                //console.log('actual value: ' + JSON.stringify(formattedRecords));
+                console.log('field info  : ' + JSON.stringify(entry.fieldInfo));
+                console.log('expected    : ' + JSON.stringify(entry.expectedRecords));
+                console.log('actual value: ' + JSON.stringify(formattedRecords));
                 assert.equal(JSON.stringify(formattedRecords), JSON.stringify(entry.expectedRecords), entry.message);
                 done();
             });
@@ -776,8 +784,9 @@ describe('Duration record formatter unit test', function () {
         durationMMDataProvider().forEach(function(entry){
             it('Test case: ' + entry.message, function (done) {
                 var formattedRecords = recordFormatter.formatRecords(entry.records, entry.fieldInfo);
-                //console.log('entry: ' + JSON.stringify(entry));
-                //console.log('actual value: ' + JSON.stringify(formattedRecords));
+                console.log('field info  : ' + JSON.stringify(entry.fieldInfo));
+                console.log('expected    : ' + JSON.stringify(entry.expectedRecords));
+                console.log('actual value: ' + JSON.stringify(formattedRecords));
                 assert.equal(JSON.stringify(formattedRecords), JSON.stringify(entry.expectedRecords), entry.message);
                 done();
             });
@@ -864,8 +873,9 @@ describe('Duration record formatter unit test', function () {
         durationMMSSDataProvider().forEach(function(entry){
             it('Test case: ' + entry.message, function (done) {
                 var formattedRecords = recordFormatter.formatRecords(entry.records, entry.fieldInfo);
-                //console.log('entry: ' + JSON.stringify(entry));
-                //console.log('actual value: ' + JSON.stringify(formattedRecords));
+                console.log('field info  : ' + JSON.stringify(entry.fieldInfo));
+                console.log('expected    : ' + JSON.stringify(entry.expectedRecords));
+                console.log('actual value: ' + JSON.stringify(formattedRecords));
                 assert.equal(JSON.stringify(formattedRecords), JSON.stringify(entry.expectedRecords), entry.message);
                 done();
             });
@@ -953,8 +963,9 @@ describe('Duration record formatter unit test', function () {
         durationSmartUnitsDataProvider().forEach(function(entry){
             it('Test case: ' + entry.message, function (done) {
                 var formattedRecords = recordFormatter.formatRecords(entry.records, entry.fieldInfo);
-                //console.log('entry: ' + JSON.stringify(entry));
-                //console.log('actual value: ' + JSON.stringify(formattedRecords));
+                console.log('field info  : ' + JSON.stringify(entry.fieldInfo));
+                console.log('expected    : ' + JSON.stringify(entry.expectedRecords));
+                console.log('actual value: ' + JSON.stringify(formattedRecords));
                 assert.equal(JSON.stringify(formattedRecords), JSON.stringify(entry.expectedRecords), entry.message);
                 done();
             });

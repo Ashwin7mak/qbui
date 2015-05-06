@@ -28,6 +28,10 @@
     var SECONDS_PER_MINUTE = new bigDecimal.BigDecimal(60);
     var MINUTES_PER_HOUR = new bigDecimal.BigDecimal(60);
 
+    var TEN = new bigDecimal.BigDecimal(10);
+    var NEGATIVE_TEN = new bigDecimal.BigDecimal(-10);
+    var ZERO = new bigDecimal.BigDecimal(0);
+
     var HHMM = ':HH:MM';
     var HHMMSS = ':HH:MM:SS';
     var MM = ':MM';
@@ -47,9 +51,12 @@
      * @returns the duration value formatted as a string
      */
     function formatDurationValue(millis, opts) {
-        var seconds, minutes, hours, days, weeks;
+        //console.log('in formatDurationValue with millis: ' + millis + ' and opts ' + JSON.stringify(opts));
+        millis = new bigDecimal.BigDecimal(millis.toString());
 
-        if (millis != 0) {
+        console.log('in formatDurationValue with millis: ' + millis + ' and opts ' + JSON.stringify(opts));
+        var seconds, minutes, hours, days, weeks;
+        if (millis.compareTo(ZERO) != 0) {
             seconds = millis.divide(MILLIS_PER_SECOND);
             minutes = millis.divide(MILLIS_PER_MIN);
             hours = millis.divide(MILLIS_PER_HOUR);
@@ -62,7 +69,12 @@
             days = 0;
             weeks = 0;
         }
-        var returnValue;
+        console.log('~~~~ resolved hours:'+ hours.toString() +', minutes: '
+            + minutes.toString()+', seconds: '
+            + seconds.toString()+', days: '
+            + days.toString()+', weeks: '
+            + weeks.toString());
+        var returnValue = '';
         switch (opts.scale) {
                 case HHMM:
                 case HHMMSS:
@@ -74,19 +86,19 @@
                     returnValue = generateSmartUnit(millis, weeks, days, hours, minutes, seconds);
                     break;
                 case WEEKS:
-                    returnValue = millis.divide(MILLIS_PER_WEEK);
+                    returnValue = millis.divide(MILLIS_PER_WEEK).toString();
                     break;
                 case DAYS:
-                    returnValue = millis.divide(MILLIS_PER_DAY);
+                    returnValue = millis.divide(MILLIS_PER_DAY).toString();
                     break;
                 case HOURS:
-                    returnValue = millis.divide(MILLIS_PER_HOUR);
+                    returnValue = millis.divide(MILLIS_PER_HOUR).toString();
                     break;
                 case MINUTES:
-                    returnValue = millis.divide(MILLIS_PER_MIN);
+                    returnValue = millis.divide(MILLIS_PER_MIN).toString();
                     break;
                 case SECONDS:
-                    returnValue = millis.divide(MILLIS_PER_SECOND);
+                    returnValue = millis.divide(MILLIS_PER_SECOND).toString();
                     break;
                 default:
                     break;
@@ -107,15 +119,20 @@
      * @returns the duration value formatted as a string
      */
     function generateTimeUnits(millis, hours, minutes, seconds) {
-        var timeUnits;
-        if(millis < 0) {
+        seconds.setScale(0, bigDecimal.RoundingMode.HALF_UP());
+        minutes.setScale(0, bigDecimal.RoundingMode.ROUND_DOWN());
+        hours.setScale(0, bigDecimal.RoundingMode.ROUND_DOWN());
+
+        var timeUnits = '';
+        if(millis.compareTo(ZERO) < 0) {
            timeUnits += '-';
         }
-        if(hours != 0) {
-            if(hours < 10 && hours > -10) {
+        if(hours.compareTo(ZERO) != 0) {
+            //If its less than 10 and greater than negative ten, prepend a '0'
+            if(hours.compareTo(TEN) === -1 && hours.compareTo(NEGATIVE_TEN) === 1) {
                 timeUnits += '0';
             }
-            timeUnits += Math.abs(hours) + ':';
+            timeUnits += hours.abs().toString() + ':';
         } else if(this == HHMM || this == HHMMSS) {
             timeUnits += '00:';
         }
@@ -124,18 +141,18 @@
             if(extraMinutes < 10 && extraMinutes > -10) {
                 timeUnits += '0';
             }
-            timeUnits += Math.abs(extraMinutes);
+            timeUnits += extraMinutes.abs().toString();
         } else {
             timeUnits += '00';
         }
-        var extraSeconds = seconds - minutes * SECONDS_PER_MINUTE;
+        var extraSeconds = seconds.subtract(minutes).multiply(SECONDS_PER_MINUTE);
         if(this == MMSS || this == HHMMSS) {
-            if(extraSeconds != 0) {
+            if(extraSeconds.compareTo(ZERO) != 0) {
                 timeUnits + ':';
-                if(extraSeconds < 10 && extraSeconds > -10) {
+                if(extraSeconds.compareTo(TEN) === -1 && extraSeconds.compareTo(NEGATIVE_TEN) === 1) {
                     timeUnits += '0';
                 }
-                timeUnits += Math.abs(extraSeconds);
+                timeUnits += extraSeconds.abs().toString();
             } else {
                 timeUnits += ':00';
             }
@@ -158,24 +175,24 @@
      */
     function generateSmartUnit(millis, weeks, days, hours, minutes, seconds) {
         //Entered as days
-        var smartUnits;
+        var smartUnits = '';
         if(Math.abs(weeks) > 0) {
-            smartUnits += millis.divide(MILLIS_PER_WEEK);
+            smartUnits += millis.divide(MILLIS_PER_WEEK).toString();
             smartUnits += ' weeks';
         } else if(Math.abs(days) > 0) {
-            smartUnits +=  millis.divide(MILLIS_PER_DAY);
+            smartUnits +=  millis.divide(MILLIS_PER_DAY).toString();
             smartUnits += ' days';
         } else if(Math.abs(hours) > 0) {
-            smartUnits += millis.divide(MILLIS_PER_HOUR);
+            smartUnits += millis.divide(MILLIS_PER_HOUR).toString();
             smartUnits += ' hours';
         } else if(Math.abs(minutes) > 0) {
-            smartUnits += millis.divide(MILLIS_PER_MIN);
+            smartUnits += millis.divide(MILLIS_PER_MIN).toString();
             smartUnits += ' mins';
         } else if(Math.abs(seconds) > 0) {
-            smartUnits += millis.divide(MILLIS_PER_SECOND);
+            smartUnits += millis.divide(MILLIS_PER_SECOND).toString();
             smartUnits += ' secs';
         } else {
-            smartUnits += millis + ' msecs';
+            smartUnits += millis.toString() + ' msecs';
         }
 
         return smartUnits;
