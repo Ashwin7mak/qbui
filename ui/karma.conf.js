@@ -50,7 +50,18 @@ module.exports = function (config) {
             'client/quickbase/common/**/*Example.modules.js',
             'client/quickbase/**/*.modules.js',
             'client/quickbase/common/**/*.js',
-            'client/quickbase/**/**/*.js'
+            'client/quickbase/**/**/*.js',
+
+
+            // fixtures
+            {
+                pattern: "**/mockdata/*.json",
+                watched: 'true',
+                served:  'true',
+                included: 'false'
+            }
+
+
         ],
 
         // list of files / patterns to exclude
@@ -59,6 +70,7 @@ module.exports = function (config) {
         preprocessors: {
             //'**/*.jade': 'ng-jade2js',
             '**/*.html': 'html2js',
+            //'**/mockdata/*.json': 'html2js',
             //'**/*.coffee': 'coffee',
             //if any 3rd party vendor plugin within code coverage target folder, need to exclude (ie: jasmine, angular, etc)
             'client/{quickbase/**/*.js,*.js}' : ['coverage']

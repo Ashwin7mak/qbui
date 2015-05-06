@@ -9,10 +9,10 @@
         .controller('GridExampleController', GridExampleController);
 
         // inject what it needs
-        GridExampleController.$inject = ['$scope', 'gridData', 'lodash'];
+        GridExampleController.$inject = ['$scope', 'gridData'];
 
         // Implement the controller
-        function GridExampleController($scope, gridData, _) {
+        function GridExampleController($scope, gridData) {
 
             // setup the view model info
             angular.extend(this, {
@@ -29,6 +29,5 @@
                     showGroupPanel: false
                 }
             });
-
         }
 }());

@@ -28,11 +28,13 @@
         //depends on the ui-grid and ui-selection see: http://ui-grid.info/
         .module('qbse.grid', [
             'ui.grid',
-            'ui.grid.selection'
+            'ui.grid.selection',
+            'ui.grid.pagination'
         ])
         // Setup some consts
         .constant('gridConstants', {
-            'MAX_ROWS_PER_PAGE': 500
+            'MAX_ROWS_PER_PAGE': 10000, //will truncate data at this point
+            'ROWS_PER_PAGE': 50
         })
 
          // the quickbase grid element directive
@@ -61,12 +63,23 @@
     * keeps track of selected items
     * and defines default options for initializing the directive
     */
-   GridController.$inject = ['$scope', '$q', 'uiGridConstants', 'gridConstants'];
-   function GridController($scope, $q, uiGridConstants, gridConstants){
+   GridController.$inject = ['$scope', '$q', 'uiGridConstants', 'gridConstants', '$http'];
+   function GridController($scope, $q, uiGridConstants, gridConstants, $http){
         $scope.selectedItems = [];
         $scope.validatedItems = [];
         $scope.itemsPromise = $q.defer();
 
+       //state and handling of grid pages
+       $scope.pagesHandler =
+       {
+           current: {
+               pageSize  : gridConstants.ROWS_PER_PAGE,
+               totalPages: Number.MAX_VALUE,
+               pageNumber: 1,
+               pageTopRow: 0,
+               sort      : null
+           }
+       };
         // the defaults we'll use for grids
         $scope.defaultOptions = {
             enableColumnResizing     : true,
@@ -82,7 +95,12 @@
             showColumnFooter         : false,
             showFooter               : true,
             showGridFooter           : false,
-            showSelectionCheckbox    : false
+            showSelectionCheckbox    : false,
+            paginationPageSizes     : [25, 50, 75],
+            paginationPageSize      : $scope.pagesHandler.current.pageSize,
+            useExternalPagination   : true,
+            useExternalSorting      : false,
+            enablePaginationControls: false
         };
 
        // user of this directive can provide their own customizations to override the defaults
@@ -92,7 +110,14 @@
        // the definition of the columns and data
        // in ui-grid terms, required minimally
        $scope.dataOptions = {
-           columnDefs: $scope.cols,
+           //columnDefs: $scope.cols,
+           //TODO : dynamically get defs from grid config service
+           columnDefs : [
+           {name: 'firstName'},
+           {name: 'lastName'},
+           {name: 'employed', enableSorting: false},
+           {name: 'company', enableSorting: false}
+                 ],
            data      : [] // empty until scope.items promise is resolved, and data valiated
        };
 
@@ -120,23 +145,102 @@
            }
        };
 
+       // handle paging of rows
+       $scope.pagesHandler.sortList = function(grid, sortColumns) {
+           if (sortColumns.length === 0) {
+               $scope.pagesHandler.current.sort = null;
+           } else {
+               $scope.pagesHandler.current.sort = sortColumns[0].sort.direction;
+           }
+           getPage();
+       };
+       $scope.pagesHandler.updatePages = function(newPage, pageSize) {
+           $scope.pagesHandler.current.pageNumber = newPage;
+           $scope.pagesHandler.current.pageSize = pageSize;
+           $scope.pagesHandler.current.pageTopRow = (newPage - 1) * pageSize;
 
-       //TODO: Paging
-       // if data size is > some MAX for browser
-       // truncate the set until we get to
-       // paging implementation work
+           getPage();
+           $scope.pagesHandler.current.totalPages = $scope.gridApi.pagination.getTotalPages();
+           $scope.pagesHandler.current.pageBottomRow = $scope.pagesHandler.current.pageTopRow + $scope.gridOptions.data.length;
+       };
+
+       $scope.pagesHandler.getTotalPagesMsg = function() {
+           if ($scope.pagesHandler.current.foundEnd) {
+               return $scope.pagesHandler.current.totalRows;
+           }
+       };
 
        // data items array or promise of data validated when available
-        $q.when($scope.items).then($scope.checkForTooLargeData);
+       //TODO : disabled old service fetch for getData below resync
+        //$q.when($scope.items).then($scope.checkForTooLargeData);
 
 
         // gridApi is how we can hook into the grid events, keep api handle on scope
-        $scope.gridOptions.onRegisterApi = function(gridApi){
+        $scope.gridOptions.onRegisterApi = function(gridApi) {
             $scope.gridApi = gridApi;
+            $scope.gridApi.core.on.sortChanged($scope, $scope.pagesHandler.sortList);
+            gridApi.pagination.on.paginationChanged($scope, $scope.pagesHandler.updatePages);
+
+            //override default getTotalPage to support unknown size until end it reached
+            gridApi.pagination.getTotalPages = function() {
+                if (!$scope.gridOptions.enablePagination) {
+                    return null;
+                }
+                if ($scope.pagesHandler.current.morePages) {
+                    return ($scope.pagesHandler.current.foundEnd) ? $scope.pagesHandler.current.foundEnd : Number.MAX_VALUE;
+                } else {
+                    return $scope.pagesHandler.current.pageNumber;
+                }
+                //return ($scope.gridOptions.totalItems === 0) ? 1 :
+                //Math.ceil($scope.gridOptions.totalItems / $scope.gridOptions.paginationPageSize);
+            };
         };
 
+       //TODO: move static data to a service
+       var getPage = function() {
+           var url;
+           var testdataurl = 'quickbase/common/mockdata/1000.json';
 
-        // full table search is no longer supported in ui-grid,
+           switch ( $scope.pagesHandler.current.sort) {
+               case uiGridConstants.ASC:
+                   url = testdataurl;
+                   break;
+               case uiGridConstants.DESC:
+                   url = testdataurl;
+                   break;
+               default:
+                   url = testdataurl;
+                   break;
+           }
+
+           $http.get(url)
+               .success(function(data) {
+                   $scope.gridOptions.totalItems = 1000;
+
+                   var current = $scope.pagesHandler.current;
+
+                   var firstRow = ( current.pageNumber - 1) *
+                                    current.pageSize;
+                   $scope.gridOptions.data = data.slice(firstRow, firstRow +  current.pageSize);
+                   //console.log("firstrow " + firstRow)
+                   //console.log("current.pageSize " +  current.pageSize)
+                   //console.log("scope.gridOptions.totalItems " + $scope.gridOptions.totalItems)
+                   current.totalPages = $scope.gridApi.pagination.getTotalPages();
+                   current.pageBottomRow =  current.pageTopRow +  $scope.gridOptions.data.length;
+
+                   if (( current.foundEnd &&  current.pageNumber < current.foundEnd ) ||
+                       (firstRow +  current.pageSize) < $scope.gridOptions.totalItems) {
+                       current.morePages = true;
+                   } else {
+                       current.morePages = false;
+                       current.foundEnd =  current.pageNumber;
+                       current.totalRows =  current.pageTopRow +  $scope.gridOptions.data.length;
+                   }
+               });
+       };
+
+       getPage();
+       // full table search is no longer supported in ui-grid,
         // see http://ui-grid.info/docs/#/tutorial/103_filtering
         // ui-grid has filtering per column
         // only in ng-grid we may need to provide it for small tables
