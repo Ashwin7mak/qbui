@@ -26,8 +26,6 @@ describe('Duration record formatter unit test', function () {
     var MILLIS_PER_HOUR = new bigDecimal.BigDecimal(3600000);
     var MILLIS_PER_DAY = new bigDecimal.BigDecimal(86400000);
     var MILLIS_PER_WEEK = new bigDecimal.BigDecimal(604800000);
-    var SECONDS_PER_MINUTE = new bigDecimal.BigDecimal(60);
-    var MINUTES_PER_HOUR = new bigDecimal.BigDecimal(60);
 
     var HHMM = ":HH:MM";
     var HHMMSS = ":HH:MM:SS";

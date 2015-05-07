@@ -19,16 +19,21 @@ var _ = require('lodash');
  * of precision. For more info, google it!
  */
 var jsonBigNum = require('json-bignum');
+var bigDecimal = require('bigdecimal');
 
 /**
  * Integration test for Duration field formatting
  */
 describe('API - Duration record test cases', function () {
 
-    var duration = 0.25;
+    var duration = 1234456;
     // 2^32 = 4294967296
-    var durationMax = 4294967296;
-    var durationMin = -4294967296;
+    var durationMax = '9223372036854775807';
+    var durationMin = '-9223372036854775807';
+    var DEFAULT_DECIMAL_PLACES = 14;
+    var ALL_FLAGS_DECIMAL_PLACES = 4;
+    var MILLIS_PER_DAY = new bigDecimal.BigDecimal(86400000);
+    var MILLIS_PER_WEEK = new bigDecimal.BigDecimal(604800000);
 
     var appWithNoFlags = {
         "name": "Duration App - no flags",
@@ -46,9 +51,8 @@ describe('API - Duration record test cases', function () {
             "name": "table1", "fields": [{
                 "name": "duration",
                 "type": "DURATION",
-                "clientSideAttributes": {
-                    "scale": "Weeks"
-                }
+                "scale": "Days",
+                "decimalPlaces": 4
             }
             ]}
         ]};
@@ -60,7 +64,10 @@ describe('API - Duration record test cases', function () {
 
         // Default duration
         var durationInput = '[{"id": ' + fid + ', "value": '+ duration + '}]';
-        var expectedDurationRecord = '{"id": ' + fid + ', "value": ' + duration + ', "display": "6 hours"}';
+        var durationExpectedDisplay = new bigDecimal.BigDecimal(duration).divide(MILLIS_PER_WEEK,
+                DEFAULT_DECIMAL_PLACES,
+                bigDecimal.RoundingMode.HALF_UP()).stripTrailingZeros().toString() + " weeks";
+        var expectedDurationRecord = '{"id": ' + fid + ', "value": ' + duration + ', "display": "' + durationExpectedDisplay + '"}';
 
         // Null number
         var nullInput = '[{"id": ' + fid + ', "value": null}]';
@@ -68,11 +75,17 @@ describe('API - Duration record test cases', function () {
 
         // Max number
         var maxInput = '[{"id": ' + fid + ', "value": ' + durationMax + '}]';
-        var expectedMaxRecord = '{"id": ' + fid + ', "value": ' + durationMax + ', "display": "4294967296 days"}';
+        var maxExpectedDisplay = new bigDecimal.BigDecimal(durationMax).divide(MILLIS_PER_WEEK,
+            DEFAULT_DECIMAL_PLACES,
+            bigDecimal.RoundingMode.HALF_UP()).stripTrailingZeros().toString() + " weeks";
+        var expectedMaxRecord = '{"id": ' + fid + ', "value": ' + durationMax + ', "display": "'+ maxExpectedDisplay +'"}';
 
         // Min number
         var minInput = '[{"id": ' + fid + ', "value":' + durationMin + '}]';
-        var expectedMinRecord = '{"id": ' + fid + ', "value": ' + durationMin + ', "display": "-4294967296 days"}';
+        var minExpectedDisplay = new bigDecimal.BigDecimal(durationMin).divide(MILLIS_PER_WEEK,
+                DEFAULT_DECIMAL_PLACES,
+                bigDecimal.RoundingMode.HALF_UP()).stripTrailingZeros().toString() + " weeks";
+        var expectedMinRecord = '{"id": ' + fid + ', "value": ' + durationMin + ', "display": "' + minExpectedDisplay + '"}';
 
         return [
             { message: "display duration with no format flags", record: durationInput, format: "display", expectedFieldValue: expectedDurationRecord },
@@ -119,6 +132,9 @@ describe('API - Duration record test cases', function () {
                         }
                         currentRecord.forEach(function (fieldValue) {
                             if (fieldValue.id === jsonBigNum.parse(records[i].expectedFieldValue).id) {
+                                //console.log('field info  : ' + jsonBigNum.stringify(appWithNoFlags));
+                                //console.log('expected    : ' + jsonBigNum.stringify(records[i].expectedFieldValue));
+                                //console.log('actual value: ' + jsonBigNum.stringify(fieldValue));
                                 assert.deepEqual(fieldValue, jsonBigNum.parse(records[i].expectedFieldValue), 'Unexpected field value returned: '
                                 + jsonBigNum.stringify(fieldValue) + ', ' + records[i].expectedFieldValue);
                             }
@@ -137,20 +153,29 @@ describe('API - Duration record test cases', function () {
      */
     function  allFlagsDurationDataProvider(fid) {
         // Default duration
-        var durationInput = '[{"id": ' + fid + ', "value": ' + duration + '}]';
-        var expectedDurationRecord = '{"id": ' + fid + ', "value": ' + duration + ', "display": ' + duration + '}';
+        var durationInput = '[{"id": ' + fid + ', "value": '+ duration + '}]';
+        var durationExpectedDisplay = new bigDecimal.BigDecimal(duration).divide(MILLIS_PER_DAY,
+                DEFAULT_DECIMAL_PLACES,
+                bigDecimal.RoundingMode.HALF_UP()).stripTrailingZeros().toString() + " weeks";
+        var expectedDurationRecord = '{"id": ' + fid + ', "value": ' + duration + ', "display": "' + durationExpectedDisplay + '"}';
 
-        // Max duration
-        var maxInput = '[{"id": ' + fid + ', "value": ' + durationMax + '}]';
-        var expectedMaxRecord = '{"id": ' + fid + ', "value": ' + durationMax + ', "display": ' + maxInput + '}';
-
-        // Min duration
-        var minInput = '[{"id": ' + fid + ', "value": ' + durationMin + '}]';
-        var expectedMinRecord = '{"id": ' + fid + ', "value": ' + durationMin + ', "display": ' + minInput + '}';
-
-        // Null duration
+        // Null number
         var nullInput = '[{"id": ' + fid + ', "value": null}]';
-        var expectedNullRecord = '{"id": ' + fid + ', "value": 0, "display": ""}';
+        var expectedNullRecord = '{"id": ' + fid + ', "value": null, "display": ""}';
+
+        // Max number
+        var maxInput = '[{"id": ' + fid + ', "value": ' + durationMax + '}]';
+        var maxExpectedDisplay = new bigDecimal.BigDecimal(durationMax).divide(MILLIS_PER_DAY,
+                ALL_FLAGS_DECIMAL_PLACES,
+                bigDecimal.RoundingMode.HALF_UP()).stripTrailingZeros().toString() + " days";
+        var expectedMaxRecord = '{"id": ' + fid + ', "value": ' + durationMax + ', "display": "'+ maxExpectedDisplay +'"}';
+
+        // Min number
+        var minInput = '[{"id": ' + fid + ', "value":' + durationMin + '}]';
+        var minExpectedDisplay = new bigDecimal.BigDecimal(durationMin).divide(MILLIS_PER_DAY,
+                ALL_FLAGS_DECIMAL_PLACES,
+                bigDecimal.RoundingMode.HALF_UP()).stripTrailingZeros().toString() + " days";
+        var expectedMinRecord = '{"id": ' + fid + ', "value": ' + durationMin + ', "display": "' + minExpectedDisplay + '"}';
 
         return [
             { message: "display duration with all format flags", record:durationInput, format: "display", expectedFieldValue: expectedDurationRecord },
@@ -196,6 +221,9 @@ describe('API - Duration record test cases', function () {
                         }
                         currentRecord.forEach(function (fieldValue) {
                             if (fieldValue.id === records[i].expectedFieldValue.id) {
+                                //console.log('field info  : ' + jsonBigNum.stringify(appWithAllFlags));
+                                //console.log('expected    : ' + jsonBigNum.stringify(records[i].expectedFieldValue));
+                                //console.log('actual value: ' + jsonBigNum.stringify(fieldValue));
                                 assert.deepEqual(fieldValue, jsonBigNum.parse(records[i].expectedFieldValue), 'Unexpected field value returned: '
                                 + JSON.stringify(fieldValue) + ', ' + records[i].expectedFieldValue);
                             }

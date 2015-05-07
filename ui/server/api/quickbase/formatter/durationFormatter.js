@@ -20,7 +20,7 @@
     var consts = require('../../constants');
 
     //Module constants:
-    var DECIMAL_DEFAULTS = 8;
+    var DECIMAL_DEFAULTS = 14;
     var MILLIS_PER_SECOND = new bigDecimal.BigDecimal(1000);
     var MILLIS_PER_MIN = new bigDecimal.BigDecimal(60000);
     var MILLIS_PER_HOUR = new bigDecimal.BigDecimal(3600000);
@@ -44,6 +44,27 @@
     var SECONDS = 'Seconds';
 
     /**
+     * Takes two BigDecimal inputs, divides them using the opts.decimalPlaces property for precision,
+     * and then stringifies the quotient, removing any trailing zeros.
+     * @param numerator
+     * @param denominator
+     * @param opts
+     * @returns {*}
+     */
+    function divideToString(numerator, denominator, opts) {
+        return divideBigDecimals(numerator, denominator, opts).stripTrailingZeros().toString();
+    }
+    /**
+     * Takes two BigDecimal inputs, divides them using the opts.decimalPlaces property for precision
+     * and returns the quotient as a BigDecimal instance.
+     * @param numerator
+     * @param denominator
+     * @param opts
+     */
+    function divideBigDecimals(numerator, denominator, opts) {
+        return numerator.divide(denominator, opts.decimalPlaces, bigDecimal.RoundingMode.HALF_UP());
+    }
+    /**
      * Given a duration value and an options object with display config properties set on it, this method
      * formats the duration value as a string and returns the formatted string.
      * @param millis A millisecond value to format
@@ -54,11 +75,11 @@
         millis = new bigDecimal.BigDecimal(millis.toString());
         var seconds, minutes, hours, days, weeks;
         if (millis.compareTo(ZERO) != 0) {
-            seconds = millis.divide(MILLIS_PER_SECOND, opts.decimalPlaces, bigDecimal.RoundingMode.HALF_UP());
-            minutes = millis.divide(MILLIS_PER_MIN, opts.decimalPlaces, bigDecimal.RoundingMode.HALF_UP());
-            hours = millis.divide(MILLIS_PER_HOUR, opts.decimalPlaces, bigDecimal.RoundingMode.HALF_UP());
-            days = millis.divide(MILLIS_PER_DAY, opts.decimalPlaces, bigDecimal.RoundingMode.HALF_UP());
-            weeks = millis.divide(MILLIS_PER_WEEK, opts.decimalPlaces, bigDecimal.RoundingMode.HALF_UP());
+            seconds = divideBigDecimals(millis, MILLIS_PER_SECOND, opts);
+            minutes = divideBigDecimals(millis, MILLIS_PER_MIN, opts);
+            hours = divideBigDecimals(millis, MILLIS_PER_HOUR, opts);
+            days = divideBigDecimals(millis, MILLIS_PER_DAY, opts);
+            weeks = divideBigDecimals(millis, MILLIS_PER_WEEK, opts);
         } else {
             seconds = 0;
             minutes = 0;
@@ -78,19 +99,19 @@
                     returnValue = generateSmartUnit(millis, weeks, days, hours, minutes, seconds, opts);
                     break;
                 case WEEKS:
-                    returnValue = millis.divide(MILLIS_PER_WEEK, opts.decimalPlaces, bigDecimal.RoundingMode.HALF_UP()).stripTrailingZeros().toString();
+                    returnValue = divideToString(millis, MILLIS_PER_WEEK, opts);
                     break;
                 case DAYS:
-                    returnValue = millis.divide(MILLIS_PER_DAY, opts.decimalPlaces, bigDecimal.RoundingMode.HALF_UP()).stripTrailingZeros().toString();
+                    returnValue = divideToString(millis, MILLIS_PER_DAY, opts);
                     break;
                 case HOURS:
-                    returnValue = millis.divide(MILLIS_PER_HOUR, opts.decimalPlaces, bigDecimal.RoundingMode.HALF_UP()).stripTrailingZeros().toString();
+                    returnValue = divideToString(millis, MILLIS_PER_HOUR, opts);
                     break;
                 case MINUTES:
-                    returnValue = millis.divide(MILLIS_PER_MIN, opts.decimalPlaces, bigDecimal.RoundingMode.HALF_UP()).stripTrailingZeros().toString();
+                    returnValue = divideToString(millis, MILLIS_PER_MIN, opts);
                     break;
                 case SECONDS:
-                    returnValue = millis.divide(MILLIS_PER_SECOND, opts.decimalPlaces, bigDecimal.RoundingMode.HALF_UP()).stripTrailingZeros().toString();
+                    returnValue = divideToString(millis, MILLIS_PER_SECOND, opts);
                     break;
                 default:
                     break;
@@ -121,7 +142,7 @@
             if(hours.compareTo(TEN) === -1 && hours.compareTo(NEGATIVE_TEN) === 1) {
                 timeUnits += '0';
             }
-            timeUnits += Math.round(hours.abs().longValue()) + ':';
+            timeUnits += h + ':';
         } else if(opts.scale == HHMM || opts.scale == HHMMSS) {
             timeUnits += '00:';
         }
@@ -166,19 +187,19 @@
         //Entered as days
         var smartUnits = '';
         if(weeks.abs().compareTo(ZERO) > 0) {
-            smartUnits += millis.divide(MILLIS_PER_WEEK, opts.decimalPlaces, bigDecimal.RoundingMode.HALF_UP()).toString();
+            smartUnits += divideToString(millis, MILLIS_PER_WEEK, opts);
             smartUnits += ' weeks';
         } else if(days.abs().compareTo(ZERO) > 0) {
-            smartUnits +=  millis.divide(MILLIS_PER_DAY, opts.decimalPlaces, bigDecimal.RoundingMode.HALF_UP()).toString();
+            smartUnits +=  divideToString(millis, MILLIS_PER_DAY, opts);
             smartUnits += ' days';
         } else if(hours.abs().compareTo(ZERO) > 0) {
-            smartUnits += millis.divide(MILLIS_PER_HOUR, opts.decimalPlaces, bigDecimal.RoundingMode.HALF_UP()).toString();
+            smartUnits += divideToString(millis, MILLIS_PER_HOUR, opts);
             smartUnits += ' hours';
         } else if(minutes.abs().compareTo(ZERO) > 0) {
-            smartUnits += millis.divide(MILLIS_PER_MIN, opts.decimalPlaces, bigDecimal.RoundingMode.HALF_UP()).toString();
+            smartUnits += divideToString(millis, MILLIS_PER_MIN, opts);
             smartUnits += ' mins';
         } else if(seconds.abs().compareTo(ZERO) > 0) {
-            smartUnits += millis.divide(MILLIS_PER_SECOND, opts.decimalPlaces, bigDecimal.RoundingMode.HALF_UP()).toString();
+            smartUnits += divideToString(millis, MILLIS_PER_SECOND, opts);
             smartUnits += ' secs';
         } else {
             smartUnits += millis.toString() + ' msecs';
@@ -206,8 +227,6 @@
             if(!opts.decimalPlaces && opts.decimalPlaces !== 0) {
                 opts.decimalPlaces = DECIMAL_DEFAULTS;
             }
-
-
             return opts;
         },
 
