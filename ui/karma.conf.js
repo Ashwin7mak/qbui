@@ -47,7 +47,7 @@ module.exports = function (config) {
             // to narrowest.
             'client/*.index.html',
             'client/quickbase/**/**/*.html',
-            'client/quickbase/gallery/**/*Example.modules.js',
+            'client/gallery/**/*Example.modules.js',
             'client/quickbase/**/*.modules.js',
             'client/quickbase/common/**/*.js',
             'client/quickbase/**/**/*.js',

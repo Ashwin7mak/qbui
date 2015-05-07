@@ -197,7 +197,8 @@ module.exports = function (grunt) {
                     dot: true,
                     src: [
                         serverReportDir + '/coverage/*',
-                        serverReportDir + '/unit/*'
+                        serverReportDir + '/unit/*',
+                        serverReportDir + '/integration/*'
                     ]
                 }]
             }
@@ -257,7 +258,7 @@ module.exports = function (grunt) {
             app: {
                 src: '<%= quickbase.client.root %>/*.index.html',
                 ignorePath: '<%= quickbase.client.root %>/',
-                exclude: [/bootstrap-sass-official/, /bootstrap.js/, '/json3/', '/es5-shim/', /bootstrap.css/, /font-awesome.css/]
+                exclude: [/bootstrap-sass-official/, /bootstrap.js/, '/json3/', '/es5-shim/', /bootstrap.css/, /font-awesome.css/ ]
             },
             test: {
                 src: 'karma.conf.js',
@@ -426,7 +427,9 @@ module.exports = function (grunt) {
                         '*.{ico,png,txt}',
                         '.htaccess',
                         'bower_components/**/*',
-                        '*.index.html'
+                        '*.index.html',
+                        '!gallery.index.html',
+                        '!**/gallery/*'
                     ]
                 }, {
                     flatten: true,
