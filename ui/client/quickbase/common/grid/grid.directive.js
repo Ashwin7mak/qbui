@@ -99,6 +99,7 @@
             paginationPageSizes     : [25, 50, 75],
             paginationPageSize      : $scope.pagesHandler.current.pageSize,
             useExternalPagination   : true,
+            enableSorting           : false,
             useExternalSorting      : false,
             enablePaginationControls: false
         };
@@ -115,8 +116,8 @@
            columnDefs : [
            {name: 'firstName'},
            {name: 'lastName'},
-           {name: 'employed', enableSorting: false},
-           {name: 'company', enableSorting: false}
+           {name: 'employed'},
+           {name: 'company'}
                  ],
            data      : [] // empty until scope.items promise is resolved, and data valiated
        };

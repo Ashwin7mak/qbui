@@ -3,7 +3,16 @@
     <div class="report-content">
         <!-- TODO: most likely should be referencing a common grid template..  -->
         <!-- TODO: ..but need to review the common/grid folder content??       -->
-        <div class="report-grid" ui-grid="gridOptions" ui-grid-selection></div>
+        <div>
+            <qbse-grid
+                    grid-id="report-{{report.id}}"
+                    grid-type="report"
+                    title="{{report.name}}"
+                    items="report.data"
+                    custom-options="report.qbseGridOptions">
+            </qbse-grid>
+        </div>
+
     </div>
 
 </div>

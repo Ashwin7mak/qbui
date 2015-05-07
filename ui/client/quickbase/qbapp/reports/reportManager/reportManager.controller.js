@@ -12,7 +12,7 @@
         $scope.report = ReportModel.get($stateParams.id);
 
         //  ui grid options
-        $scope.gridOptions = {
+        $scope.qbseGridOptions  = {
             showGridFooter: true,
             data: $scope.report.data
         };
