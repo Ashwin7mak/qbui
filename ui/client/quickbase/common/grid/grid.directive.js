@@ -34,7 +34,6 @@
         ])
         // Setup some consts
         .constant('gridConstants', {
-            'MAX_ROWS_PER_PAGE': 10000, //will truncate data at this point
             'ROWS_PER_PAGE': 50
         })
 
@@ -64,8 +63,8 @@
     * keeps track of selected items
     * and defines default options for initializing the directive
     */
-   GridController.$inject = ['$scope', '$q', 'uiGridConstants', 'gridConstants', '$http', 'PagesHandler' ];
-   function GridController($scope, $q, uiGridConstants, gridConstants, $http, PagesHandler){
+   GridController.$inject = ['$scope', '$q', 'uiGridConstants', 'gridConstants', 'PagesHandler' ];
+   function GridController($scope, $q, uiGridConstants, gridConstants, PagesHandler){
         $scope.selectedItems = [];
         $scope.validatedItems = [];
         $scope.itemsPromise = $q.defer();
@@ -128,24 +127,6 @@
            return $scope.pagesHandler.getTotalPages();
        };
        $scope.pagesHandler = new PagesHandler(gridConstants, $scope.gridOptions, getTotalPagesMethod);
-
-       // method to validate data is within supported limit
-       // data items array or promise of data validated when available
-       $scope.checkForTooLargeData = function(resolveData) {
-           var validList = resolveData;
-           $scope.origTotalRows = resolveData.length;
-           if (resolveData && (resolveData.length > gridConstants.MAX_ROWS_PER_PAGE)) {
-               //update the result
-               validList = validList.slice(0).slice(0, gridConstants.MAX_ROWS_PER_PAGE);
-               $scope.tooManyToShow = true;
-           }
-           // update the items for the list;
-           $scope.itemsPromise.resolve(validList);
-           $scope.gridOptions.data = $scope.validatedItems = validList;
-           if ($scope.gridApi){
-               $scope.gridApi.core.notifyDataChange(uiGridConstants.dataChange.ALL);
-           }
-       };
 
         // gridApi is how we can hook into the grid events, keep api handle on scope
         $scope.gridOptions.onRegisterApi = function(gridApi) {

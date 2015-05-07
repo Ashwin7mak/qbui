@@ -125,26 +125,5 @@ xdescribe('Directive: qbseGrid', function() {
         expect(isolateScope.defaultOptions.showColumnFooter).toEqual(false);
     });
 
-    it('qbseGrid should have limited to max rows', function() {
-        var largeList = [];
-        for (var i = 0; i <= gridConstants.MAX_ROWS_PER_PAGE; i++) {
-            largeList.push({item: i});
-        }
-        $scope.settings.columnDefs = [{'name': 'index'}];
-        $scope.settings.items = $q.when(largeList);
-        $scope.$digest();
-
-        // make sure the validated data is truncated to the maxrows limit
-        var isolateScope = element.isolateScope();
-        isolateScope.itemsPromise.promise.then(function(gottenData) {
-            expect(isolateScope.tooManyToShow).toEqual(true);
-            expect(gottenData.length).toEqual(gridConstants.MAX_ROWS_PER_PAGE);
-        });
-
-        // must hand-crank the digest cycle to process deferreds
-        // see ;http://brianmcd.com/2014/03/27/a-tip-for-angular-unit-tests-with-promises.html
-        $rootScope.$digest();
-        console.log("done client tests")
-    });
 
 });
