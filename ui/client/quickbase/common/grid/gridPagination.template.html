@@ -8,7 +8,7 @@
         <li>
             <span ng-class="pageNumber">
                 {{pagesHandler.current.pageTopRow}} - {{pagesHandler.current.pageBottomRow}}
-                {{ pagesHandler.current.foundEnd ? ("of " + pagesHandler.getTotalPagesMsg()) : "" }}</span>
+                {{ pagesHandler.current.foundEnd ? ("of " + pagesHandler.getTotalRowsMsg()) : "" }}</span>
         </li>
         <li ng-class="{disabled: noNext()}">
             <a ng-click="gridApi.pagination.nextPage()">
