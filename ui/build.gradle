@@ -139,6 +139,10 @@ task gruntUnitTestsNoColor(type: GruntTask) {
     args = ["ciTest", "--no-color"]
 }
 
+task gruntIntegrationTestsNoColor(type: GruntTask) {
+    args = ["ciIntegration", "--no-color"]
+}
+
 //browser tests not yet supported on ci
 task gruntCiE2ETestsNoColor(type: GruntTask) {
     args = ["test:e2e", "--no-color"]

@@ -5,8 +5,8 @@
 (function () {
     'use strict';
     var moment = require('moment-timezone');
+    var consts = require('../../constants');
     //Module constants:
-    var UTC_TIMEZONE = 'Universal';
     var TWENTY_FOUR_HOUR_CLOCK = 'HH:';
     var TWELVE_HOUR_CLOCK = 'h:';
     var MM = 'mm';
@@ -19,7 +19,7 @@
     };
 
     module.exports = {
-        generateFormatterString: function(fieldInfo) {
+        generateFormat: function(fieldInfo) {
             //Resolve formatting options
             var formatString;
             if(fieldInfo) {
@@ -43,9 +43,9 @@
             }
 
             //Declare the date and moment formatter
-            var d = new Date(fieldValue.value);
+            var d = new Date(fieldValue.value.replace(/(\[.*?\])/, ''));
             //Resolve whether or not to shift based on timezone
-            var timeZone = UTC_TIMEZONE;
+            var timeZone = consts.UTC_TIMEZONE;
             if (fieldInfo.useTimezone) {
                 timeZone = fieldInfo.timeZone;
                 if (!timeZone) {
@@ -55,7 +55,7 @@
             var m = moment.tz(d, timeZone);
 
             //Resolve formatting options
-            var formatString = fieldInfo.jsFormatString;
+            var formatString = fieldInfo.jsFormat;
             if(!formatString) {
                 formatString = this.generateFormatterString(fieldInfo);
             }

@@ -4,62 +4,94 @@
  */
 (function () {
     'use strict';
+    var consts = require('../../constants');
     var dateFormatter = require('./dateTimeFormatter');
     var phoneFormatter = require('./phoneNumberFormatter');
     var todFormatter = require('./timeOfDayFormatter');
-    //module constants
-    var PHONE_NUMBER = 'PHONE_NUMBER';
-    var DATE_TIME = 'DATE_TIME';
-    var FORMULA_DATE_TIME = 'FORMULA_DATE_TIME';
-    var DATE = 'DATE';
-    var FORMULA_DATE = 'FORMULA_DATE';
-    var FORMULA_TIME_OF_DAY = 'FORMULA_TIME_OF_DAY';
-    var TIME_OF_DAY = 'TIME_OF_DAY';
+    var numericFormatter = require('./numericFormatter');
+    var urlFormatter = require('./urlFormatter');
+    var emailFormatter = require('./emailFormatter');
+    var durationFormatter = require('./durationFormatter');
 
     /**
      * Certain fields may require generation of a formatter string that will be used for each record in the
      * field for example, Date, DateTime and TimeOfDay fields. Rather than recalculate this formatter string
      * for each record value encountered, we generate it once, and cache it on the fieldInfo for the field
-     * in question.  The display formatter will then look for this value 'jsFormatString' and if populated,
+     * in question.  The display formatter will then look for this value 'jsFormat' and if populated,
      * use it instead of recalculating the formatter string.
      * @param fieldInfos The array of field meta data for the fields in the records
      */
     function precalculateFormatterStringsForFields(fieldInfos) {
-        for(var i = 0; i < fieldInfos.length; i++) {
+        for (var i = 0; i < fieldInfos.length; i++) {
             switch (fieldInfos[i].type) {
-                case DATE_TIME:
-                case DATE:
-                case FORMULA_DATE_TIME:
-                case FORMULA_DATE:
-                    fieldInfos[i].jsFormatString = dateFormatter.generateFormatterString(fieldInfos[i]);
+                case consts.DATE_TIME:
+                case consts.DATE:
+                case consts.FORMULA_DATE_TIME:
+                case consts.FORMULA_DATE:
+                    fieldInfos[i].jsFormat = dateFormatter.generateFormat(fieldInfos[i]);
                     break;
-                case TIME_OF_DAY:
-                case FORMULA_TIME_OF_DAY:
-                    fieldInfos[i].jsFormatString = todFormatter.generateFormatterString(fieldInfos[i]);
+                case consts.TIME_OF_DAY:
+                case consts.FORMULA_TIME_OF_DAY:
+                    fieldInfos[i].jsFormat = todFormatter.generateFormat(fieldInfos[i]);
+                    break;
+                case consts.NUMERIC:
+                case consts.FORMULA_NUMERIC:
+                case consts.CURRENCY:
+                case consts.FORMULA_CURRENCY:
+                case consts.PERCENT:
+                case consts.FORMULA_PERCENT:
+                    fieldInfos[i].jsFormat = numericFormatter.generateFormat(fieldInfos[i]);
+                    break;
+                case consts.DURATION:
+                case consts.FORMULA_DURATION:
+                    fieldInfos[i].jsFormat = durationFormatter.generateFormat(fieldInfos[i]);
                     break;
                 default:
                     break;
             }
         }
     }
+
     module.exports = function () {
         //Display formats record field values according to the field's display settings
         function formatRecordValue(fieldValue, fieldInfo) {
             switch (fieldInfo.type) {
-                case PHONE_NUMBER:
+                case consts.PHONE_NUMBER:
                     fieldValue.display = phoneFormatter.format(fieldValue, fieldInfo);
                     break;
-                case DATE_TIME:
-                case DATE:
-                case FORMULA_DATE_TIME:
-                case FORMULA_DATE:
+                case consts.DATE_TIME:
+                case consts.DATE:
+                case consts.FORMULA_DATE_TIME:
+                case consts.FORMULA_DATE:
                     fieldValue.display = dateFormatter.format(fieldValue, fieldInfo);
                     break;
-                case TIME_OF_DAY:
-                case FORMULA_TIME_OF_DAY:
+                case consts.TIME_OF_DAY:
+                case consts.FORMULA_TIME_OF_DAY:
                     fieldValue.display = todFormatter.format(fieldValue, fieldInfo);
                     break;
+                case consts.NUMERIC:
+                case consts.FORMULA_NUMERIC:
+                case consts.CURRENCY:
+                case consts.FORMULA_CURRENCY:
+                case consts.PERCENT:
+                case consts.FORMULA_PERCENT:
+                    fieldValue.display = numericFormatter.format(fieldValue, fieldInfo);
+                    break;
+                case consts.URL:
+                    fieldValue.display = urlFormatter.format(fieldValue, fieldInfo);
+                    break;
+                case consts.EMAIL_ADDRESS:
+                    fieldValue.display = emailFormatter.format(fieldValue, fieldInfo);
+                    break;
+                case consts.DURATION:
+                case consts.FORMULA_DURATION:
+                    fieldValue.display = durationFormatter.format(fieldValue, fieldInfo);
+                    break;
                 default:
+                    fieldValue.display = fieldValue.value;
+                    if (!fieldValue.display) {
+                        fieldValue.display = '';
+                    }
                     break;
             }
             return fieldValue;

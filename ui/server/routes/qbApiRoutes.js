@@ -17,6 +17,7 @@
                         res.send(response);
                     })
                     .catch(function(error) {
+                        console.log("ERROR " + JSON.stringify(error));
                         requestHelper.copyHeadersToResponse(res, error.headers);
                         res.status(error.statusCode)
                             .send(error.body);
@@ -37,6 +38,14 @@
                         res.status(error.statusCode)
                             .send(error.body);
                     });
+            }
+        );
+
+        //Disable proxying of realm and ticket requests via the node webserver
+        app.route(['/api/:version/realms*', '/api/:version/ticket*']).all(
+            function(req, res) {
+                requestHelper.logRoute(req);
+                res.status(404).send();
             }
         );
 

@@ -4,6 +4,9 @@ var should = require('should');
 var recordFormatter = require('./../recordFormatter')();
 var assert = require('assert');
 
+/**
+ * Unit tests for DateTime field formatting
+ */
 describe('DateTime record formatter unit test', function () {
 
     /**
@@ -29,7 +32,7 @@ describe('DateTime record formatter unit test', function () {
                 "showTimeZone": false,
                 "showMonthAsName": false,
                 "showDayOfWeek": false,
-                "format": "MM-dd-uuuu",
+                "dateFormat": "MM-dd-uuuu",
                 "timeZone": "America/New_York"};
         var fieldInfo_MMDDYYYY = [mmddyyyy];
         var expectedRecords_MMDDYYYY =
@@ -410,15 +413,16 @@ describe('DateTime record formatter unit test', function () {
     }
 
     /**
-     * Unit test that validates Date records with MM_DD_YYYY format and various field property flags set
+     * Unit test that validates DateTime records with MM_DD_YYYY format and various field property flags set
      */
-    it('should format various MM_DD_YYYY DateTime records for display', function () {
+    describe('should format various MM_DD_YYYY DateTime records for display',function(){
         mmddyyyyDataProvider().forEach(function(entry){
-            var formattedRecords = recordFormatter.formatRecords(entry.records, entry.fieldInfo);
-            //console.log('TEST CASE: ' + JSON.stringify(entry.message));
-            //console.log('RET RECS: ' + JSON.stringify(formattedRecords));
-            //console.log('EXP RECS: ' + JSON.stringify(entry.expectedRecords));
-            assert.deepEqual(formattedRecords, entry.expectedRecords, entry.message);
+            it('Test case: ' + entry.message, function (done) {
+                var formattedRecords = recordFormatter.formatRecords(entry.records, entry.fieldInfo);
+                //console.log('entry: ' + JSON.stringify(entry));
+                assert.deepEqual(formattedRecords, entry.expectedRecords, entry.message);
+                done();
+            });
         });
     });
 
@@ -445,7 +449,7 @@ describe('DateTime record formatter unit test', function () {
             "showTimeZone": false,
             "showMonthAsName": false,
             "showDayOfWeek": false,
-            "format": "MM-dd-uu",
+            "dateFormat": "MM-dd-uu",
             "timeZone": "America/New_York"};
         var fieldInfo_MMDDYY = [mmddyy];
         var expectedRecords_MMDDYY =
@@ -828,15 +832,16 @@ describe('DateTime record formatter unit test', function () {
     }
 
     /**
-     * Unit test that validates Date records with MM_DD_YY format and various field property flags set
+     * Unit test that validates DateTime records with MM_DD_YY format and various field property flags set
      */
-    it('should format various MM_DD_YY DateTime records for display', function () {
+    describe('should format various MM_DD_YY DateTime records for display',function(){
         mmddyyDataProvider().forEach(function(entry){
-            var formattedRecords = recordFormatter.formatRecords(entry.records, entry.fieldInfo);
-            //console.log('TEST CASE: ' + JSON.stringify(entry.message));
-            //console.log('RET RECS: ' + JSON.stringify(formattedRecords));
-            //console.log('EXP RECS: ' + JSON.stringify(entry.expectedRecords));
-            assert.deepEqual(formattedRecords, entry.expectedRecords, entry.message);
+            it('Test case: ' + entry.message, function (done) {
+                var formattedRecords = recordFormatter.formatRecords(entry.records, entry.fieldInfo);
+                //console.log('entry: ' + JSON.stringify(entry));
+                assert.deepEqual(formattedRecords, entry.expectedRecords, entry.message);
+                done();
+            });
         });
     });
 
@@ -863,7 +868,7 @@ describe('DateTime record formatter unit test', function () {
             "showTimeZone": false,
             "showMonthAsName": false,
             "showDayOfWeek": false,
-            "format": "dd-MM-uu",
+            "dateFormat": "dd-MM-uu",
             "timeZone": "America/New_York"};
         var fieldInfo_DDMMYY = [ddmmyy];
         var expectedRecords_DDMMYY =
@@ -1246,15 +1251,16 @@ describe('DateTime record formatter unit test', function () {
     }
 
     /**
-     * Unit test that validates Date records with DD_MM_YY format and various field property flags set
+     * Unit test that validates DateTime records with DD_MM_YY format and various field property flags set
      */
-    it('should format various DD_MM_YY DateTime records for display', function () {
+    describe('should format various DD_MM_YY DateTime records for display',function(){
         ddmmyyDataProvider().forEach(function(entry){
-            var formattedRecords = recordFormatter.formatRecords(entry.records, entry.fieldInfo);
-            //console.log('TEST CASE: ' + JSON.stringify(entry.message));
-            //console.log('RET RECS: ' + JSON.stringify(formattedRecords));
-            //console.log('EXP RECS: ' + JSON.stringify(entry.expectedRecords));
-            assert.deepEqual(formattedRecords, entry.expectedRecords, entry.message);
+            it('Test case: ' + entry.message, function (done) {
+                var formattedRecords = recordFormatter.formatRecords(entry.records, entry.fieldInfo);
+                //console.log('entry: ' + JSON.stringify(entry));
+                assert.deepEqual(formattedRecords, entry.expectedRecords, entry.message);
+                done();
+            });
         });
     });
 
@@ -1281,7 +1287,7 @@ describe('DateTime record formatter unit test', function () {
             "showTimeZone": false,
             "showMonthAsName": false,
             "showDayOfWeek": false,
-            "format": "dd-MM-uuuu",
+            "dateFormat": "dd-MM-uuuu",
             "timeZone": "America/New_York"};
         var fieldInfo_DDMMYYYY = [ddmmyyyy];
         var expectedRecords_DDMMYYYY =
@@ -1662,15 +1668,16 @@ describe('DateTime record formatter unit test', function () {
     }
 
     /**
-     * Unit test that validates Date records with DD_MM_YYYY format and various field property flags set
+     * Unit test that validates DateTime records with DD_MM_YYYY format and various field property flags set
      */
-    it('should format various DD_MM_YYYY DateTime records for display', function () {
+    describe('should format various DD_MM_YYYY DateTime records for display',function(){
         ddmmyyyyDataProvider().forEach(function(entry){
-            var formattedRecords = recordFormatter.formatRecords(entry.records, entry.fieldInfo);
-            //console.log('TEST CASE: ' + JSON.stringify(entry.message));
-            //console.log('RET RECS: ' + JSON.stringify(formattedRecords));
-            //console.log('EXP RECS: ' + JSON.stringify(entry.expectedRecords));
-            assert.deepEqual(formattedRecords, entry.expectedRecords, entry.message);
+            it('Test case: ' + entry.message, function (done) {
+                var formattedRecords = recordFormatter.formatRecords(entry.records, entry.fieldInfo);
+                //console.log('entry: ' + JSON.stringify(entry));
+                assert.deepEqual(formattedRecords, entry.expectedRecords, entry.message);
+                done();
+            });
         });
     });
 
@@ -1697,7 +1704,7 @@ describe('DateTime record formatter unit test', function () {
             "showTimeZone": false,
             "showMonthAsName": false,
             "showDayOfWeek": false,
-            "format": "uuuu-MM-dd",
+            "dateFormat": "uuuu-MM-dd",
             "timeZone": "America/New_York"};
         var fieldInfo_YYYYMMDD = [yyyymmdd];
         var expectedRecords_YYYYMMDD =
@@ -2080,15 +2087,16 @@ describe('DateTime record formatter unit test', function () {
     }
 
     /**
-     * Unit test that validates Date records with YYYY_MM_DD format and various field property flags set
+     * Unit test that validates DateTime records with YYYY_MM_DD format and various field property flags set
      */
-    it('should format various YYYY_MM_DD DateTime records for display', function () {
+    describe('should format various YYYY_MM_DD DateTime records for display',function(){
         yyyymmddDataProvider().forEach(function(entry){
-            var formattedRecords = recordFormatter.formatRecords(entry.records, entry.fieldInfo);
-            //console.log('TEST CASE: ' + JSON.stringify(entry.message));
-            //console.log('RET RECS: ' + JSON.stringify(formattedRecords));
-            //console.log('EXP RECS: ' + JSON.stringify(entry.expectedRecords));
-            assert.deepEqual(formattedRecords, entry.expectedRecords, entry.message);
+            it('Test case: ' + entry.message, function (done) {
+                var formattedRecords = recordFormatter.formatRecords(entry.records, entry.fieldInfo);
+                //console.log('entry: ' + JSON.stringify(entry));
+                assert.deepEqual(formattedRecords, entry.expectedRecords, entry.message);
+                done();
+            });
         });
     });
 
@@ -2116,7 +2124,7 @@ describe('DateTime record formatter unit test', function () {
             "showTimeZone": false,
             "showMonthAsName": false,
             "showDayOfWeek": false,
-            "format": "invalid_date_format",
+            "dateFormat": "invalid_date_format",
             "timeZone": "America/New_York"};
         var fieldInfo_InvalidFormat = [invalidFormat];
         var expectedRecords_InvalidFormat =
@@ -2500,13 +2508,14 @@ describe('DateTime record formatter unit test', function () {
      * Unit test that validates DateTime records with an invalid format and various field property flags set.
      * That should ignore the invalid format and default to MM_DD_YYYY
      */
-    it('should format various DateTime records with invalid format for display', function () {
+    describe('should format various DateTime records with invalid format for display',function(){
         invalidFormatDataProvider().forEach(function(entry){
-            var formattedRecords = recordFormatter.formatRecords(entry.records, entry.fieldInfo);
-            //console.log('TEST CASE: ' + JSON.stringify(entry.message));
-            //console.log('RET RECS: ' + JSON.stringify(formattedRecords));
-            //console.log('EXP RECS: ' + JSON.stringify(entry.expectedRecords));
-            assert.deepEqual(formattedRecords, entry.expectedRecords, entry.message);
+            it('Test case: ' + entry.message, function (done) {
+                var formattedRecords = recordFormatter.formatRecords(entry.records, entry.fieldInfo);
+                //console.log('entry: ' + JSON.stringify(entry));
+                assert.deepEqual(formattedRecords, entry.expectedRecords, entry.message);
+                done();
+            });
         });
     });
 
