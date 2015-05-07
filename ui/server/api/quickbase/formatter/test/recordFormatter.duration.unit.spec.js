@@ -45,7 +45,7 @@ describe('Duration record formatter unit test', function () {
     var SECONDS_VAL = 0.00025;
 
     // 2^63 = 4294967296
-    var DEFAULT_DECIMAL_PLACES = 8;
+    var DEFAULT_DECIMAL_PLACES = 14;
     var MAX = new bigDecimal.BigDecimal('9223372036854775807');
     var MIN = new bigDecimal.BigDecimal('-9223372036854775807');
 

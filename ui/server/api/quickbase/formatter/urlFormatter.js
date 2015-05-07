@@ -27,9 +27,7 @@
                 }
                 //If displayProtocol is false, split off the protocol, if there is one on the value
                 if (!displayProtocol) {
-                    console.log("display protocol false, attempting to parse off the protocol");
                     var protocolIndex = baseValue.indexOf(PROTOCOL_SPLIT_STRING);
-                    console.log("protocol intex: " + protocolIndex);
                     if (protocolIndex !== -1) {
                         baseValue = baseValue.slice(protocolIndex + PROTOCOL_SPLIT_STRING.length);
                     }
