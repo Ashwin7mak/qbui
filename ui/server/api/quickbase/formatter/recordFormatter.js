@@ -89,7 +89,7 @@
                     break;
                 default:
                     fieldValue.display = fieldValue.value;
-                    if(!fieldValue.display) {
+                    if (!fieldValue.display) {
                         fieldValue.display = '';
                     }
                     break;
