@@ -27,7 +27,7 @@ var bigDecimal = require('bigdecimal');
 describe('API - Duration record test cases', function () {
 
     var duration = 1234456;
-    // 2^32 = 4294967296
+    // 2^63 = 9223372036854775807
     var durationMax = '9223372036854775807';
     var durationMin = '-9223372036854775807';
     var DEFAULT_DECIMAL_PLACES = 14;
