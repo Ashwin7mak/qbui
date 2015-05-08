@@ -17,9 +17,7 @@ describe('User record formatter unit test', function () {
             '"deactivated":false, "anonymous":false, "administrator":false, "intuitID":"rc0isu4jlxqmjvqfhnp9", "userProps":null, ' +
             '"sysRights":null, "challengeQuestion":"who is your favorite scrum team?", "challengeAnswer":"blue", ' +
             '"password":"rxrr4z2ci1pvwhax2lr1", "placeHolderId":null, "ticketVersion":0}';
-        console.log('user: ' + userString);
         var user = JSON.parse(userString);
-        console.log('user: ' + JSON.stringify(user));
         var fullName = "dave isaman";
         var lastThenFirst = "isaman, dave";
         var userName = "disaman";
