@@ -35,6 +35,7 @@
                 case consts.FORMULA_TIME_OF_DAY:
                     fieldInfos[i].jsFormat = todFormatter.generateFormat(fieldInfos[i]);
                     break;
+                case consts.SUMMARY:
                 case consts.NUMERIC:
                 case consts.FORMULA_NUMERIC:
                 case consts.CURRENCY:
@@ -70,6 +71,7 @@
                 case consts.FORMULA_TIME_OF_DAY:
                     fieldValue.display = todFormatter.format(fieldValue, fieldInfo);
                     break;
+                case consts.SUMMARY:
                 case consts.NUMERIC:
                 case consts.FORMULA_NUMERIC:
                 case consts.CURRENCY:
@@ -95,6 +97,7 @@
                     fieldValue.display = userFormatter.format(fieldValue, fieldInfo);
                     break;
                 default:
+                    //TODO: handle LOOKUP fields, need to return rootFieldType in the fieldInfo in order to display format properly
                     fieldValue.display = fieldValue.value;
                     if (!fieldValue.display) {
                         fieldValue.display = '';
