@@ -20,7 +20,8 @@ describe('API - User record test cases - ', function () {
         "tables": [{
             "name": "table1", "fields": [{
                 "name": "user",
-                "type": "User"
+                "type": "USER",
+                "indexed": true
             }
             ]}
         ]};
@@ -30,8 +31,9 @@ describe('API - User record test cases - ', function () {
         "tables": [{
             "name": "table1", "fields": [{
                 "name": "user",
-                "type": "User",
-                "userDisplayFormat": "FULL_NAME"
+                "type": "USER",
+                "userDisplayFormat": "LAST_THEN_FIRST",
+                "indexed": true
             }
             ]}
         ]};
@@ -57,27 +59,55 @@ describe('API - User record test cases - ', function () {
         var firstName = generateRandomString(10);
         var lastName = generateRandomString(10);
         var email = firstName + "_" + lastName + "@intuit.com";
-        var lastThenFirst = lastName + " " + firstName;
-        // TODO: Will need to generate User object
-        var user = "{userId=null, firstName='" + firstName + "', lastName='" + lastName + "', screenName='" + email + "', email='" + email +"', " +
-            "deactivated=false, anonymous=false, administrator=false, intuitID='rc0isu4jlxqmjvqfhnp9', userProps=null, " +
-            "sysRights=null, challengeQuestion='who is your favorite scrum team?', challengeAnswer='blue', " +
-            "password='quickbase', placeHolderId='null', ticketVersion=0}";
+        var firstThenLast = firstName + " " + lastName;
+        var user = {
+                "id": null,
+                "firstName": firstName,
+                "lastName": lastName,
+                "screenName": email,
+                "email": email,
+                "challengeQuestion": 'who is your favorite scrum team?',
+                "challengeAnswer": 'blue',
+                "password": 'quickbase',
+                "deactivated": false
+        };
 
-        // User
-        var userInput = [{"id": fid, "value": user}];
-        var expectedUserRecord = {"id": fid, "value": user, "display": lastThenFirst};
+        var retUser = {
+            "userId": {
+                "id": null
+            },
+            "firstName": firstName,
+            "lastName": lastName,
+            "screenName": email,
+            "email": email,
+            "deactivated": false
+        };
+        var userId;
 
-        // Null User
-        var nullInput = [{"id": fid, "value": null}];
-        var expectedNullRecord = {"id": fid, "value": null, "display": ""};
+        var deferred = Promise.pending();
+        recordBase.apiBase.createSpecificUser(user)
+            .then(function (userResponse) {
+                userId = JSON.parse(userResponse.body).id;
+                retUser.userId.id = userId;
+                // User
+                var userInput = [{"id": fid, "value": userId}];
+                var expectedUserRecord = {"id": fid, "value": retUser, "display": firstThenLast};
 
-        return [
-            { message: "display user with no format flags", record: userInput, format: "display", expectedFieldValue: expectedUserRecord },
-            { message: "raw user with no format flags", record: userInput, format: "raw", expectedFieldValue: userInput },
-            { message: "display null user with no format flags", record: nullInput, format: "display", expectedFieldValue: expectedNullRecord },
-            { message: "raw null user with no format flags", record: nullInput, format: "raw", expectedFieldValue: nullInput }
-        ]
+                // Null User
+                var nullInput = [{"id": fid, "value": null}];
+                var expectedNullRecord = {"id": fid, "value": null, "display": ""};
+
+                deferred.resolve([
+                    { message: "display user with no format flags", record: userInput, format: "display", expectedFieldValue: expectedUserRecord },
+                    { message: "raw user with no format flags", record: userInput, format: "raw", expectedFieldValue: userInput },
+                    { message: "display null user with no format flags", record: nullInput, format: "display", expectedFieldValue: expectedNullRecord },
+                    { message: "raw null user with no format flags", record: nullInput, format: "raw", expectedFieldValue: nullInput }
+                ]);
+            }).catch(function (userError) {
+                deferred.reject(userError);
+                assert(false, 'failed to create user: ' + JSON.stringify(userError));
+            });
+        return deferred.promise;
     }
 
     /**
@@ -94,36 +124,37 @@ describe('API - User record test cases - ', function () {
                 }
             });
             assert(userField, 'failed to find user field');
-            var records = noFlagsUserDataProvider(userField.id);
-            //For each of the cases, create the record and execute the request
-            var fetchRecordPromises = [];
-            records.forEach(function (currentRecord) {
-                var recordsEndpoint = recordBase.apiBase.resolveRecordsEndpoint(app.id, app.tables[0].id);
-                fetchRecordPromises.push(recordBase.createAndFetchRecord(recordsEndpoint, currentRecord.record, '?format='+currentRecord.format));
-            });
-
-            //When all the records have been created and fetched, assert the values match expectations
-            Promise.all(fetchRecordPromises)
-                .then(function (results) {
-                    for (var i = 0; i < results.length; i++) {
-                        var currentRecord = results[i];
-                        if(results[i].record) {
-                            currentRecord = results[i].record;
-                        }
-
-                        currentRecord.forEach(function (fieldValue) {
-                            if (fieldValue.id === records[i].expectedFieldValue.id) {
-                                assert.deepEqual(fieldValue, records[i].expectedFieldValue, 'Unexpected field value returned: '
-                                + JSON.stringify(fieldValue) + ', ' + JSON.stringify(records[i].expectedFieldValue));
-                            }
-                        });
-                    }
-                    done();
-                }).catch(function (errorMsg) {
-                    assert(false, 'unable to resolve all records: ' + JSON.stringify(errorMsg));
-                    done();
+            noFlagsUserDataProvider(userField.id).then(function (records){
+                //For each of the cases, create the record and execute the request
+                var fetchRecordPromises = [];
+                records.forEach(function (currentRecord) {
+                    var recordsEndpoint = recordBase.apiBase.resolveRecordsEndpoint(app.id, app.tables[0].id);
+                    fetchRecordPromises.push(recordBase.createAndFetchRecord(recordsEndpoint, currentRecord.record, '?format='+currentRecord.format));
                 });
-        });
+
+                //When all the records have been created and fetched, assert the values match expectations
+                Promise.all(fetchRecordPromises)
+                    .then(function (results) {
+                        for (var i = 0; i < results.length; i++) {
+                            var currentRecord = results[i];
+                            if(results[i].record) {
+                                currentRecord = results[i].record;
+                            }
+
+                            currentRecord.forEach(function (fieldValue) {
+                                if (fieldValue.id === records[i].expectedFieldValue.id) {
+                                    assert.deepEqual(fieldValue, records[i].expectedFieldValue, 'Unexpected field value returned: '
+                                    + JSON.stringify(fieldValue) + ', ' + JSON.stringify(records[i].expectedFieldValue));
+                                }
+                            });
+                        }
+                        done();
+                    }).catch(function (errorMsg) {
+                        assert(false, 'unable to resolve all records: ' + JSON.stringify(errorMsg));
+                        done();
+                    });
+                });
+            });
     });
 
     /**
@@ -135,27 +166,55 @@ describe('API - User record test cases - ', function () {
         var firstName = generateRandomString(10);
         var lastName = generateRandomString(10);
         var email = firstName + "_" + lastName + "@intuit.com";
-        var fullName = firstName + " " + lastName;
-        // TODO: Will need to generate User object
-        var user = "{userId=null, firstName='" + firstName + "', lastName='" + lastName + "', screenName='" + email + "', email='" + email +"', " +
-            "deactivated=false, anonymous=false, administrator=false, intuitID='rc0isu4jlxqmjvqfhnp9', userProps=null, " +
-            "sysRights=null, challengeQuestion='who is your favorite scrum team?', challengeAnswer='blue', " +
-            "password='quickbase', placeHolderId='null', ticketVersion=0}";
+        var lastThenFirst = lastName + ", " + firstName;
+        var user = {
+            "id": null,
+            "firstName": firstName,
+            "lastName": lastName,
+            "screenName": email,
+            "email": email,
+            "challengeQuestion": 'who is your favorite scrum team?',
+            "challengeAnswer": 'blue',
+            "password": 'quickbase',
+            "deactivated": false
+        };
 
-        // User
-        var userInput = [{"id": fid, "value": user}];
-        var expectedUserRecord = {"id": fid, "value": user, "display": fullName};
+        var retUser = {
+            "userId": {
+                "id": null
+            },
+            "firstName": firstName,
+            "lastName": lastName,
+            "screenName": email,
+            "email": email,
+            "deactivated": false
+        };
+        var userId;
 
-        // Null User
-        var nullInput = [{"id": fid, "value": null}];
-        var expectedNullRecord = {"id": fid, "value": null, "display": ""};
+        var deferred = Promise.pending();
+        recordBase.apiBase.createSpecificUser(user)
+            .then(function (userResponse) {
+                userId = JSON.parse(userResponse.body).id;
+                retUser.userId.id = userId;
+                // User
+                var userInput = [{"id": fid, "value": userId}];
+                var expectedUserRecord = {"id": fid, "value": retUser, "display": lastThenFirst};
 
-        return [
-            { message: "display user with all format flags", record: userInput, format: "display", expectedFieldValue: expectedUserRecord },
-            { message: "raw user with all format flags", record: userInput, format: "raw", expectedFieldValue: userInput },
-            { message: "display null user with all format flags", record: nullInput, format: "display", expectedFieldValue: expectedNullRecord },
-            { message: "raw null user with all format flags", record: nullInput, format: "raw", expectedFieldValue: nullInput }
-        ]
+                // Null User
+                var nullInput = [{"id": fid, "value": null}];
+                var expectedNullRecord = {"id": fid, "value": null, "display": ""};
+
+                deferred.resolve([
+                    { message: "display user with all format flags", record: userInput, format: "display", expectedFieldValue: expectedUserRecord },
+                    { message: "raw user with all format flags", record: userInput, format: "raw", expectedFieldValue: userInput },
+                    { message: "display null user with all format flags", record: nullInput, format: "display", expectedFieldValue: expectedNullRecord },
+                    { message: "raw null user with all format flags", record: nullInput, format: "raw", expectedFieldValue: nullInput }
+                ]);
+            }).catch(function (userError) {
+                deferred.reject(userError);
+                assert(false, 'failed to create user: ' + JSON.stringify(userError));
+            });
+        return deferred.promise;
     }
 
     /**
@@ -172,35 +231,36 @@ describe('API - User record test cases - ', function () {
                 }
             });
             assert(userField, 'failed to find user field');
-            var records = allFlagsUserDataProvider(userField.id);
-            //For each of the cases, create the record and execute the request
-            var fetchRecordPromises = [];
-            records.forEach(function (currentRecord) {
-                var recordsEndpoint = recordBase.apiBase.resolveRecordsEndpoint(app.id, app.tables[0].id);
-                fetchRecordPromises.push(recordBase.createAndFetchRecord(recordsEndpoint, currentRecord.record, '?format='+currentRecord.format));
-            });
-
-            //When all the records have been created and fetched, assert the values match expectations
-            Promise.all(fetchRecordPromises)
-                .then(function (results) {
-                    for (var i = 0; i < results.length; i++) {
-                        var currentRecord = results[i];
-                        if(results[i].record) {
-                            currentRecord = results[i].record;
-                        }
-
-                        currentRecord.forEach(function (fieldValue) {
-                            if (fieldValue.id === records[i].expectedFieldValue.id) {
-                                assert.deepEqual(fieldValue, records[i].expectedFieldValue, 'Unexpected field value returned: '
-                                + JSON.stringify(fieldValue) + ', ' + JSON.stringify(records[i].expectedFieldValue));
-                            }
-                        });
-                    }
-                    done();
-                }).catch(function (errorMsg) {
-                    assert(false, 'unable to resolve all records: ' + JSON.stringify(errorMsg));
-                    done();
+            allFlagsUserDataProvider(userField.id).then(function (records){
+                //For each of the cases, create the record and execute the request
+                var fetchRecordPromises = [];
+                records.forEach(function (currentRecord) {
+                    var recordsEndpoint = recordBase.apiBase.resolveRecordsEndpoint(app.id, app.tables[0].id);
+                    fetchRecordPromises.push(recordBase.createAndFetchRecord(recordsEndpoint, currentRecord.record, '?format='+currentRecord.format));
                 });
+
+                //When all the records have been created and fetched, assert the values match expectations
+                Promise.all(fetchRecordPromises)
+                    .then(function (results) {
+                        for (var i = 0; i < results.length; i++) {
+                            var currentRecord = results[i];
+                            if(results[i].record) {
+                                currentRecord = results[i].record;
+                            }
+
+                            currentRecord.forEach(function (fieldValue) {
+                                if (fieldValue.id === records[i].expectedFieldValue.id) {
+                                    assert.deepEqual(fieldValue, records[i].expectedFieldValue, 'Unexpected field value returned: '
+                                    + JSON.stringify(fieldValue) + ', ' + JSON.stringify(records[i].expectedFieldValue));
+                                }
+                            });
+                        }
+                        done();
+                    }).catch(function (errorMsg) {
+                        assert(false, 'unable to resolve all records: ' + JSON.stringify(errorMsg));
+                        done();
+                    });
+            });
         });
     });
 
