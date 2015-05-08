@@ -9,7 +9,7 @@
     var phoneFormatter = require('./phoneNumberFormatter');
     var todFormatter = require('./timeOfDayFormatter');
     var numericFormatter = require('./numericFormatter');
-    var urlFormatter = require('./urlFormatter');
+    var urlAndFileReportLinkFormatter = require('./urlFileAttachmentReportLinkFormatter');
     var emailFormatter = require('./emailFormatter');
     var durationFormatter = require('./durationFormatter');
     var userFormatter = require('./userFormatter');
@@ -80,7 +80,8 @@
                     break;
                 case consts.URL:
                 case consts.FILE_ATTACHMENT:
-                    fieldValue.display = urlFormatter.format(fieldValue, fieldInfo);
+                case consts.REPORT_LINK:
+                    fieldValue.display = urlAndFileReportLinkFormatter.format(fieldValue, fieldInfo);
                     break;
                 case consts.EMAIL_ADDRESS:
                     fieldValue.display = emailFormatter.format(fieldValue, fieldInfo);
