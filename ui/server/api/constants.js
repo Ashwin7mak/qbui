@@ -27,6 +27,8 @@
         PERCENT: 'PERCENT',
         FORMULA_PERCENT: 'FORMULA_PERCENT',
         URL: 'URL',
-        EMAIL_ADDRESS: 'EMAIL_ADDRESS'
+        EMAIL_ADDRESS: 'EMAIL_ADDRESS',
+        USER: 'USER',
+        FORMULA_USER: 'FORMULA_USER'
     });
 }());

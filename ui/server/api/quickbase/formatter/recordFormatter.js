@@ -12,6 +12,7 @@
     var urlFormatter = require('./urlFormatter');
     var emailFormatter = require('./emailFormatter');
     var durationFormatter = require('./durationFormatter');
+    var userFormatter = require('./userFormatter');
 
     /**
      * Certain fields may require generation of a formatter string that will be used for each record in the
@@ -87,6 +88,10 @@
                 case consts.FORMULA_DURATION:
                     fieldValue.display = durationFormatter.format(fieldValue, fieldInfo);
                     break;
+                case consts.USER:
+                case consts.FORMULA_USER:
+                    fieldValue.display = userFormatter.format(fieldValue, fieldInfo);
+                    break;
                 default:
                     fieldValue.display = fieldValue.value;
                     if (!fieldValue.display) {
@@ -103,12 +108,13 @@
                 if (records && fields) {
                     var fieldsMap = {};
                     var formattedRecords = [];
-                    //Precalculate any formatter strings
+
+                    //Precalculate any formatter strings & Generate a map for O(1) lookup on each field get
                     precalculateFormatterStringsForFields(fields);
-                    //Generate a map for O(1) lookup on each field get
                     fields.forEach(function (entry) {
                         fieldsMap[entry.id] = entry;
                     });
+
                     //For each record, for each value, display format it!
                     records.forEach(function (record) {
                         var formattedRecord = [];

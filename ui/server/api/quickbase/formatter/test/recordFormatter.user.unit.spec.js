@@ -13,14 +13,17 @@ describe('User record formatter unit test', function () {
      * DataProvider containing Records, FieldProperties and record display expectations User fields
      */
     function userDataProvider() {
-
-        var user = "{userId=RYVP73_UB, firstName='dave', lastName='isaman', screenName='disaman', email='disaman@intuit.com', " +
-            "deactivated=false, anonymous=false, administrator=false, intuitID='rc0isu4jlxqmjvqfhnp9', userProps=null, " +
-            "sysRights=null, challengeQuestion='who is your favorite scrum team?', challengeAnswer='blue', " +
-            "password='rxrr4z2ci1pvwhax2lr1', placeHolderId='null', ticketVersion=0}";
+        var userString = '{"userId":"RYVP73_UB", "firstName":"dave", "lastName":"isaman", "screenName":"disaman", "email":"disaman@intuit.com", ' +
+            '"deactivated":false, "anonymous":false, "administrator":false, "intuitID":"rc0isu4jlxqmjvqfhnp9", "userProps":null, ' +
+            '"sysRights":null, "challengeQuestion":"who is your favorite scrum team?", "challengeAnswer":"blue", ' +
+            '"password":"rxrr4z2ci1pvwhax2lr1", "placeHolderId":null, "ticketVersion":0}';
+        console.log('user: ' + userString);
+        var user = JSON.parse(userString);
+        console.log('user: ' + JSON.stringify(user));
         var fullName = "dave isaman";
         var lastThenFirst = "isaman, dave";
         var userName = "disaman";
+        var userId = "RYVP73_UB";
 
         /**
          * FieldInfo and expectations for no flags
@@ -43,7 +46,7 @@ describe('User record formatter unit test', function () {
          * FieldInfo and expectations for enabled flag: userDisplayFormat = FULL_NAME
          */
         var fieldInfo_FullNameFormat = JSON.parse(JSON.stringify(fieldInfo_NoFlags));
-        fieldInfo_FullNameFormat[0].userDisplayFormat = "FULL_NAME";
+        fieldInfo_FullNameFormat[0].userDisplayFormat = "FIRST_THEN_LAST";
         var expectedUser_FullNameFormat = JSON.parse(JSON.stringify(expectedUser_NoFlags));
         expectedUser_FullNameFormat[0][0].display = fullName;
 
@@ -59,9 +62,17 @@ describe('User record formatter unit test', function () {
          * FieldInfo and expectations for flag: userDisplayFormat = USER_NAME
          */
         var fieldInfo_UserNameFormat = JSON.parse(JSON.stringify(fieldInfo_NoFlags));
-        fieldInfo_UserNameFormat[0].userDisplayFormat = "USER_NAME";
+        fieldInfo_UserNameFormat[0].userDisplayFormat = "SCREEN_NAME";
         var expectedUser_UserNameFormat = JSON.parse(JSON.stringify(expectedUser_NoFlags));
         expectedUser_UserNameFormat[0][0].display = userName;
+
+        /**
+         * FieldInfo and expectations for flag: userDisplayFormat = USER_NAME
+         */
+        var fieldInfo_UserIdFormat = JSON.parse(JSON.stringify(fieldInfo_NoFlags));
+        fieldInfo_UserIdFormat[0].userDisplayFormat = "USER_ID";
+        var expectedUser_UserIdFormat = JSON.parse(JSON.stringify(expectedUser_NoFlags));
+        expectedUser_UserIdFormat[0][0].display = userId;
 
         /**
          * Expectations for empty and null URL values
@@ -91,6 +102,9 @@ describe('User record formatter unit test', function () {
             // UserName DisplayFormat flag
             { message: "User - user with 'userName' flag", records: recordInputUser, fieldInfo: fieldInfo_UserNameFormat, expectedRecords: expectedUser_UserNameFormat },
 
+            // UserName DisplayFormat flag
+            { message: "User - user with 'userId' flag", records: recordInputUser, fieldInfo: fieldInfo_UserIdFormat, expectedRecords: expectedUser_UserIdFormat },
+
             // Null and Empty User strings
             { message: "User - null -> empty string", records: recordsNull, fieldInfo: fieldInfo_NoFlags, expectedRecords: expectedNull },
             { message: "User - empty string -> empty string", records: recordsEmpty, fieldInfo: fieldInfo_NoFlags, expectedRecords: expectedEmpty }
@@ -106,8 +120,8 @@ describe('User record formatter unit test', function () {
         userDataProvider().forEach(function(entry){
             it('Test case: ' + entry.message, function (done) {
                 var formattedRecords = recordFormatter.formatRecords(entry.records, entry.fieldInfo);
-                //console.log('entry: ' + JSON.stringify(entry));
-                //console.log('formatted value: ' + JSON.stringify(formattedRecords));
+                //console.log('expected : ' + JSON.stringify(entry.expectedRecords));
+                //console.log('formatted: ' + JSON.stringify(formattedRecords));
                 assert.deepEqual(formattedRecords, entry.expectedRecords, entry.message);
                 done();
             });
