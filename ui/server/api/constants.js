@@ -29,6 +29,7 @@
         URL: 'URL',
         EMAIL_ADDRESS: 'EMAIL_ADDRESS',
         USER: 'USER',
-        FORMULA_USER: 'FORMULA_USER'
+        FORMULA_USER: 'FORMULA_USER',
+        FILE_ATTACHMENT: 'FILE_ATTACHMENT'
     });
 }());

@@ -79,6 +79,7 @@
                     fieldValue.display = numericFormatter.format(fieldValue, fieldInfo);
                     break;
                 case consts.URL:
+                case consts.FILE_ATTACHMENT:
                     fieldValue.display = urlFormatter.format(fieldValue, fieldInfo);
                     break;
                 case consts.EMAIL_ADDRESS:
