@@ -6,6 +6,8 @@ module.exports = function (grunt) {
     var buildDir = __dirname + '/build';
     var serverReportDir = buildDir + '/reports/server';
     var clientReportDir = buildDir + '/reports/client';
+    var mochaUnitTest = grunt.option('test') || '*.unit.spec.js';
+    var mochaIntTest = grunt.option('test') || '*.integration.spec.js';
 
     // Load grunt tasks automatically, when needed
     require('jit-grunt')(grunt, {
@@ -515,8 +517,9 @@ module.exports = function (grunt) {
                         return 'mocha-jenkins-reporter';
                     }())
                 },
-                src: ['server/**/test/*.unit.spec.js']
+                src: ['server/**/test/' + mochaUnitTest ]
             },
+
             integration: {
                 options: {
                     reporter: (function () {
@@ -525,8 +528,8 @@ module.exports = function (grunt) {
                         return 'mocha-jenkins-reporter';
                     }())
                 },
-                src: ['server/**/test/*.integration.spec.js']
-            }
+                src: ['server/**/test/' + mochaIntTest ]
+             }
 
         },
 

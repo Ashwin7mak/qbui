@@ -26,6 +26,7 @@
         var TABLES_ENDPOINT = '/tables/';
         var RECORDS_ENDPOINT = '/records/';
         var REALMS_ENDPOINT = '/realms/';
+        var USERS_ENDPOINT = "/users/";
         var LOCALHOST_REALM = 117000;
         var TICKETS_ENDPOINT = '/ticket?uid=1000000&realmID=';
         var SUBDOMAIN_CHARS = 'abcdefghijklmnopqrstuvwxyz0123456789';
@@ -71,6 +72,20 @@
             return text;
         }
 
+        //Generates and returns a psuedo-random char string of specified length
+        function generateString(length) {
+            var text = '';
+            for (var i = 0; i < length; i++) {
+                text += SUBDOMAIN_CHARS.charAt(Math.floor(Math.random() * SUBDOMAIN_CHARS.length));
+            }
+            return text;
+        }
+
+        //Generates and returns a psuedo-random email string
+        function generateEmail() {
+            return generateString(10) + "_" + generateString(10) + "@intuit.com";
+        }
+
         var apiBase = {
             resolveAppsEndpoint: function (appId) {
                 var appsEndpoint = BASE_ENDPOINT + APPS_ENDPOINT;
@@ -102,6 +117,13 @@
             },
             resolveTicketEndpoint: function () {
                 return BASE_ENDPOINT + TICKETS_ENDPOINT;
+            },
+            resolveUsersEndpoint: function (userId) {
+                var endpoint = BASE_ENDPOINT + USERS_ENDPOINT;
+                if (userId) {
+                    endpoint = endpoint + userId;
+                }
+                return endpoint;
             },
             defaultHeaders: DEFAULT_HEADERS,
             //Executes a REST request against the instance's realm using the configured javaHost
@@ -193,6 +215,23 @@
                     "name": generateValidSubdomainString()
                 };
                 return this.executeRequest(this.resolveRealmsEndpoint(), consts.POST, realmToMake, DEFAULT_HEADERS);
+            },
+            //Create user helper method generates an specific user, calls execute request and returns a promise
+            createSpecificUser: function (userToMake) {
+                return this.executeRequest(this.resolveUsersEndpoint(), consts.POST, userToMake, DEFAULT_HEADERS);
+            },
+            //Create user helper method generates an arbitrary user, calls execute request and returns a promise
+            createUser: function () {
+                var userToMake = {
+                    "firstName":  generateString(10),
+                    "lastName": generateString(10),
+                    "screenName": generateString(10),
+                    "email": generateEmail(),
+                    "password": "quickbase",
+                    "challengeQuestion": "who is your favorite scrum team?",
+                    "challengeAnswer": "blue"
+                };
+                return this.createSpecificUser(userToMake);
             },
             //Helper method creates a ticket given a realm ID.  Returns a promise
             createTicket: function (realmId) {
