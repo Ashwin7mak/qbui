@@ -15,8 +15,8 @@
     var userFormatter = require('./userFormatter');
 
     /**
-     * Certain fields may require generation of a formatter string that will be used for each record in the
-     * field for example, Date, DateTime and TimeOfDay fields. Rather than recalculate this formatter string
+     * Certain fields may require generation of a formatter options that will be used for each record in the
+     * field, for example, Date, DateTime and TimeOfDay fields. Rather than recalculate this formatter string
      * for each record value encountered, we generate it once, and cache it on the fieldInfo for the field
      * in question.  The display formatter will then look for this value 'jsFormat' and if populated,
      * use it instead of recalculating the formatter string.
