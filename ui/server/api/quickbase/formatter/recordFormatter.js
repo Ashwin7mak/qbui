@@ -4,18 +4,20 @@
  */
 (function () {
     'use strict';
+    var _ = require('lodash');
     var consts = require('../../constants');
     var dateFormatter = require('./dateTimeFormatter');
     var phoneFormatter = require('./phoneNumberFormatter');
     var todFormatter = require('./timeOfDayFormatter');
     var numericFormatter = require('./numericFormatter');
-    var urlFormatter = require('./urlFormatter');
+    var urlAndFileReportLinkFormatter = require('./urlFileAttachmentReportLinkFormatter');
     var emailFormatter = require('./emailFormatter');
     var durationFormatter = require('./durationFormatter');
+    var userFormatter = require('./userFormatter');
 
     /**
-     * Certain fields may require generation of a formatter string that will be used for each record in the
-     * field for example, Date, DateTime and TimeOfDay fields. Rather than recalculate this formatter string
+     * Certain fields may require generation of a formatter options that will be used for each record in the
+     * field, for example, Date, DateTime and TimeOfDay fields. Rather than recalculate this formatter string
      * for each record value encountered, we generate it once, and cache it on the fieldInfo for the field
      * in question.  The display formatter will then look for this value 'jsFormat' and if populated,
      * use it instead of recalculating the formatter string.
@@ -34,6 +36,7 @@
                 case consts.FORMULA_TIME_OF_DAY:
                     fieldInfos[i].jsFormat = todFormatter.generateFormat(fieldInfos[i]);
                     break;
+                case consts.SUMMARY:
                 case consts.NUMERIC:
                 case consts.FORMULA_NUMERIC:
                 case consts.CURRENCY:
@@ -55,19 +58,25 @@
     module.exports = function () {
         //Display formats record field values according to the field's display settings
         function formatRecordValue(fieldValue, fieldInfo) {
-            switch (fieldInfo.type) {
+            var tempFieldInfo = fieldInfo;
+            //Lookup and summary fields need to be formatted according to their root reference field's type
+            if(fieldInfo.type === consts.SUMMARY || fieldInfo.type === consts.LOOKUP) {
+                tempFieldInfo = _.cloneDeep(fieldInfo);
+                tempFieldInfo.type = fieldInfo.scalarFieldType;
+            }
+            switch (tempFieldInfo.type) {
                 case consts.PHONE_NUMBER:
-                    fieldValue.display = phoneFormatter.format(fieldValue, fieldInfo);
+                    fieldValue.display = phoneFormatter.format(fieldValue, tempFieldInfo);
                     break;
                 case consts.DATE_TIME:
                 case consts.DATE:
                 case consts.FORMULA_DATE_TIME:
                 case consts.FORMULA_DATE:
-                    fieldValue.display = dateFormatter.format(fieldValue, fieldInfo);
+                    fieldValue.display = dateFormatter.format(fieldValue, tempFieldInfo);
                     break;
                 case consts.TIME_OF_DAY:
                 case consts.FORMULA_TIME_OF_DAY:
-                    fieldValue.display = todFormatter.format(fieldValue, fieldInfo);
+                    fieldValue.display = todFormatter.format(fieldValue, tempFieldInfo);
                     break;
                 case consts.NUMERIC:
                 case consts.FORMULA_NUMERIC:
@@ -75,19 +84,26 @@
                 case consts.FORMULA_CURRENCY:
                 case consts.PERCENT:
                 case consts.FORMULA_PERCENT:
-                    fieldValue.display = numericFormatter.format(fieldValue, fieldInfo);
+                    fieldValue.display = numericFormatter.format(fieldValue, tempFieldInfo);
                     break;
                 case consts.URL:
-                    fieldValue.display = urlFormatter.format(fieldValue, fieldInfo);
+                case consts.FILE_ATTACHMENT:
+                case consts.REPORT_LINK:
+                    fieldValue.display = urlAndFileReportLinkFormatter.format(fieldValue, tempFieldInfo);
                     break;
                 case consts.EMAIL_ADDRESS:
-                    fieldValue.display = emailFormatter.format(fieldValue, fieldInfo);
+                    fieldValue.display = emailFormatter.format(fieldValue, tempFieldInfo);
                     break;
                 case consts.DURATION:
                 case consts.FORMULA_DURATION:
-                    fieldValue.display = durationFormatter.format(fieldValue, fieldInfo);
+                    fieldValue.display = durationFormatter.format(fieldValue, tempFieldInfo);
+                    break;
+                case consts.USER:
+                case consts.FORMULA_USER:
+                    fieldValue.display = userFormatter.format(fieldValue, tempFieldInfo);
                     break;
                 default:
+                    //TODO: handle LOOKUP fields, need to return rootFieldType in the fieldInfo in order to display format properly
                     fieldValue.display = fieldValue.value;
                     if (!fieldValue.display) {
                         fieldValue.display = '';
@@ -103,12 +119,13 @@
                 if (records && fields) {
                     var fieldsMap = {};
                     var formattedRecords = [];
-                    //Precalculate any formatter strings
+
+                    //Precalculate any formatter strings & Generate a map for O(1) lookup on each field get
                     precalculateFormatterStringsForFields(fields);
-                    //Generate a map for O(1) lookup on each field get
                     fields.forEach(function (entry) {
                         fieldsMap[entry.id] = entry;
                     });
+
                     //For each record, for each value, display format it!
                     records.forEach(function (record) {
                         var formattedRecord = [];
