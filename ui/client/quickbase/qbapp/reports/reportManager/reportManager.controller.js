@@ -19,8 +19,7 @@
 
         //  ui grid options
         $scope.report.qbseGridOptions  = {
-            showGridFooter: true,
-           // data: $scope.report.data
+            showGridFooter: false
         };
 
         //  set appropriate header object data

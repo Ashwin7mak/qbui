@@ -10,8 +10,6 @@
         d.setDate(d.getDate() - 1);
 
         var service = {
-            //  TODO: use promise
-
             getDataPromise : function(reportId) {
                 return $q.when(this.get(reportId).data);
             },
@@ -68,12 +66,12 @@
             getColumns: function(reportId) {
                 // jshint unused:false
 
-        return [
-                        {name: 'id', displayName: 'ID', fieldType:'numeric'},
-                        {name: 'name', displayName: 'Name', fieldType:'text'},
-                        {name: 'phoneNumber', displayName: 'Phone', fieldType:'phone'},
-                        {name: 'email', displayName: 'Email', fieldType:'email'},
-                        {name: 'balance', displayName: 'Balance',  fieldType:'currency'}
+                return [
+                        {name: 'id', displayName: 'ID', fieldType:'NUMERIC'},
+                        {name: 'name', displayName: 'Name', fieldType:'TEXT'},
+                        {name: 'phoneNumber', displayName: 'Phone', fieldType:'PHONE_NUMBER'},
+                        {name: 'email', displayName: 'Email', fieldType:'EMAIL_ADDRESS'},
+                        {name: 'balance', displayName: 'Balance',  fieldType:'CURRENCY'}
                     ];
             }
         };

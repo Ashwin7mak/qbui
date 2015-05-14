@@ -20,7 +20,7 @@
      *        });
      */
     angular
-        .module('qbse.api', ['ngResource'])
+        .module('qbse.api')
 
         .factory('ApiService', ['$resource', function($resource) {
 
@@ -72,4 +72,4 @@
             };
         }]
     );
-}());
+})();

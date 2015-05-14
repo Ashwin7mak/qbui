@@ -48,6 +48,7 @@ module.exports = function (config) {
             'client/*.index.html',
             'client/quickbase/**/**/*.html',
             'client/gallery/**/*Example.modules.js',
+            'client/quickbase/common/**/*.modules.js',
             'client/quickbase/**/*.modules.js',
             'client/quickbase/common/**/*.js',
             'client/quickbase/**/**/*.js',

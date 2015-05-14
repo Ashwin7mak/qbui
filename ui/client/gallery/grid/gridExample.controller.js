@@ -14,7 +14,7 @@
         // Implement the controller
         function GridExampleController($scope, gridData) {
             var self = this;
-            $scope.rowsPerPage = 100;
+            $scope.rowsPerPage = 1000;
             // setup the view model info
             angular.extend(this, {
                 listid : 2349823904820348,

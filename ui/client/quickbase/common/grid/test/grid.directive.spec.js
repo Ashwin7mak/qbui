@@ -16,7 +16,7 @@ xdescribe('Directive: qbseGrid', function() {
     var $compile, $rootScope, $element, $q, $scope, $http, $httpBackend;
 
     // load the directive's module & load the template
-    beforeEach(module('qbse.grid', 'gallery.gridExample',
+    beforeEach(module('qbse.grid','gallery.gridExample',
         'quickbase/common/grid/grid.template.html',
         'quickbase/common/grid/gridPagination.template.html', 'ngMockE2E'));
 
@@ -36,9 +36,9 @@ xdescribe('Directive: qbseGrid', function() {
             'grid-id="listid" ' +
             'grid-type=type" ' +
             'title={{title}} ' +
-            'items="settings.items" ' +
+            //'items="settings.items" ' +
             'selected-items="settings.selectedItems" ' +
-            'cols="settings.columnDefs" ' +
+            //'cols="settings.columnDefs" ' +
             'custom-options="settings.gridOptionsOverrides"> ' +
             'service="settings.service"> ' +
             'This gets replaced with data - loading...' +
@@ -55,24 +55,25 @@ xdescribe('Directive: qbseGrid', function() {
         // expects a promise for the data, so wrap array in a promise
         $scope.settings.items = $q.when(dataArray);
         $scope.settings.selectedItems = [];
-        $scope.settings.columnDefs = [{'name': 'name', 'displayName': 'Team'},
+        var columnDefs = [{'name': 'name', 'displayName': 'Team'},
             {'name': 'count', 'displayName': 'Size'}];
         $scope.settings.gridOptionsOverrides = {};
 
         //service to supply data and column given fixed values
-        $scope.settings.service = angular.module('qbse.grid')
-            .factory('testDataService', ['$q', function(dataArray, columns){
-                var serviceAnswer = function() {
-                        this.getDataPromise = function() {
-                            return $q.when(dataArray);
-                        };
-                        this.getColumns = function() {
-                            return columns;
-                        };
-                    };
-                return serviceAnswer;
-            }]);
 
+        var TestDataService = angular.module('qbse.grid').
+                            factory('testDataService', ['$q', function(dataArray, columns){
+                                return {
+                                        getDataPromise:function() {
+                                            return $q.when(dataArray);
+                                        },
+                                        getColumns : function() {
+                                            return columns;
+                                        }
+                                    };
+                            }]);
+
+        $scope.settings.service = new TestDataService(dataArray, columnDefs);
 
 
         // create the html dom fragment and process the angular

@@ -1,8 +1,9 @@
 <h2> Example use of grid component </h2>
 
 <div>
-    Rows Per page : <input type="number"
-                           value="example.rowsPerPage"
+    Rows Per page : <input ng-init="example.rowsPerPage = 1000"
+                           type="number"
+                           value="{{example.rowsPerPage}}"
                            ng-model=example.rowsPerPage
                            ng-model-options="{debounce:1000}"
                            ng-pattern="/^\d{0,9}(\.\d{1,9})?$/"
@@ -17,7 +18,7 @@
            cols="example.columnDefs"
            custom-options="example.qbseGridOptions"
            grid-api="example.qbseGridApi"
-           data-service="example.dataService">
+           service="example.dataService">
            To be replaced with data - loading...
     </qbse-grid>
 </div>

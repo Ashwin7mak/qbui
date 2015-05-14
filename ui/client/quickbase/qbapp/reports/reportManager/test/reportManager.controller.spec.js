@@ -20,7 +20,7 @@ describe('Controller: ReportCtrl', function() {
         //  all reports expected to have these scope variables
         expect(scope.report.id).toEqual(1);
 
-        expect(scope.qbseGridOptions.showGridFooter).toBeTruthy();
+        expect(scope.report.qbseGridOptions.showGridFooter).not.toBeTruthy();
         expect(scope.stage.visible).toBeTruthy();
     });
 

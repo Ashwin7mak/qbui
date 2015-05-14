@@ -50,14 +50,7 @@
     angular
         // define the QuickBase (qbse) Grid Module
         //depends on the ui-grid and ui-selection see: http://ui-grid.info/
-        .module('qbse.grid', [
-            'ui.grid',
-            'ui.grid.selection',
-            'ui.grid.pagination',
-            'ui.grid.autoResize',
-            'ngResource',
-            'ngLodash'
-        ])
+        .module('qbse.grid')
         // Setup some consts
         .constant('gridConstants', {
             'MAX_ROWS_PER_PAGE': 5000,
@@ -74,8 +67,8 @@
             templateUrl: 'quickbase/common/grid/grid.template.html',
             scope      : {
                 title: '@?', //one way bind, optional
-                items: '=?', // required
-                cols: '=?', // required
+                items: '=?',
+                cols: '=?',
                 selectedItems: '=?', // optional option
                 customOptions: '=?',  // optional option
                 gridApi: '=?',  // optional returns reference to the grid api interface
@@ -92,8 +85,8 @@
     * keeps track of selected items
     * and defines default options for initializing the directive
     */
-   GridController.$inject = ['$scope', '$q', '$resource', 'uiGridConstants', 'gridConstants', 'PagesHandler', 'lodash' ];
-   function GridController($scope, $q, $resource, uiGridConstants, gridConstants, PagesHandler, _){
+   GridController.$inject = ['$scope', '$q', '$resource', 'uiGridConstants', 'gridConstants', 'apiConstants', 'PagesHandler', 'lodash' ];
+   function GridController($scope, $q, $resource, uiGridConstants, gridConstants, apiConstants, PagesHandler, _){
         $scope.selectedItems = [];
         $scope.validatedItems = [];
         $scope.itemsPromise = $q.defer();
@@ -141,15 +134,16 @@
 
 
        //add alignment based on type
-       //rightalign numbers
+       //right align numbers
        var numberClass = 'ui-grid-number-align';
        function addAlignment(col){
-           if (col.fieldType && (col.fieldType == 'numeric' ||
-                                col.fieldType == 'currency' ||
-                                col.fieldType == 'phone')) {
+           if (col.fieldType && !col.cellClass &&  (col.fieldType.indexOf(apiConstants.NUMERIC) !== -1 ||
+                                 col.fieldType.indexOf(apiConstants.CURRENCY)!== -1 ||
+                                 col.fieldType.indexOf(apiConstants.PHONE_NUMBER)!== -1)) {
                    col.cellClass = numberClass;
                }
        }
+       // update the alignments for unspecified numeric types
        _.map($scope.cols, addAlignment);
 
 

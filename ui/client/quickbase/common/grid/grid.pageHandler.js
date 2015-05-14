@@ -45,9 +45,9 @@
 
         // go to a 1st with given page sizing
         PagesHandler.prototype.updatePageSize = function(pageSize) {
-            if (pageSize > 0 && pageSize < this.gridConstants.MAX_ROWS_PER_PAGE){
+            if (pageSize > 0 && pageSize <= this.gridConstants.MAX_ROWS_PER_PAGE){
                 this.gridOptions.paginationPageSize = pageSize;
-                this.updatePages(1, pageSize);
+                this.gridOptions.paginationCurrentPage = 1;
             }
         };
 
@@ -64,7 +64,7 @@
 
         PagesHandler.prototype.noPrev = function() {
             var noPrev = false;
-            if (this.current.pageTopRow == 0) {
+            if (this.current.pageTopRow === 0) {
                 // check if this page 1st row is the start
                 noPrev = true;
             }
