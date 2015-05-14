@@ -4,17 +4,23 @@
     angular.module('qbapp.reports.manager')
         .controller('ReportCtrl', ReportManagerController);
 
-    ReportManagerController.$inject = ['$scope', '$stateParams', 'ReportModel'];
+    ReportManagerController.$inject = ['$scope', '$stateParams', 'ReportModel', 'ReportService'];
 
-    function ReportManagerController($scope, $stateParams, ReportModel) {
+    function ReportManagerController($scope, $stateParams, ReportModel, ReportService) {
 
         //  get the report data model
-        $scope.report = ReportModel.get($stateParams.id);
+        var aReport = ReportModel.get($stateParams.id);
+
+        $scope.report = {};
+        $scope.report.dataService = ReportService;
+        $scope.report.name = aReport.name;
+        $scope.report.id = aReport.id;
+        $scope.report.data = aReport.data;
 
         //  ui grid options
-        $scope.qbseGridOptions  = {
+        $scope.report.qbseGridOptions  = {
             showGridFooter: true,
-            data: $scope.report.data
+           // data: $scope.report.data
         };
 
         //  set appropriate header object data

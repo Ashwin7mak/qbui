@@ -5,47 +5,96 @@
      **/
     angular
         .module('qbse.grid')
-        .factory('PagesHandler',[ '$http', PagesHandlerFactory]);
+        .factory('PagesHandler', ['$http','GridDataFactory', PagesHandlerFactory]);
 
-    function PagesHandlerFactory($http) {
+    function PagesHandlerFactory($http, GridDataFactory) {
 
-        var PagesHandler = function(gridConstants, gridOptions, getTotalPagesMethod) {
+        var PagesHandler = function(dataService, gridConstants, gridOptions) {
             this.http = $http;
             this.gridConstants = gridConstants;
             this.gridOptions = gridOptions;
+            this.dataService = dataService;
             this.current = {
-                pageSize  : this.gridConstants.ROWS_PER_PAGE,
+                pageSize  : this.gridOptions.paginationPageSize,
                 pageNumber: 1,
                 pageTopRow: 0,
                 sort      : null
-            }
+            };
+            //data fetcher
+            this.dataFact = new GridDataFactory(this.dataService);
         };
 
-        // handle paging of rows
+        PagesHandler.prototype.loadCurrentPage = function() {
+            var self = this;
+            this.dataFact.getData(this.current).then(function(resolved){
+                self.current = resolved.newState;
+                self.gridOptions.data = resolved.data;
+            });
+        };
+
+        // resort requires new ordering of pages
         PagesHandler.prototype.sortList = function(grid, sortColumns) {
             if (sortColumns.length === 0) {
                 this.current.sort = null;
             } else {
                 this.current.sort = sortColumns[0].sort.direction;
             }
-            this.getPage();
+            this.loadCurrentPage();
         };
 
+
+        // go to a 1st with given page sizing
+        PagesHandler.prototype.updatePageSize = function(pageSize) {
+            if (pageSize > 0 && pageSize < this.gridConstants.MAX_ROWS_PER_PAGE){
+                this.gridOptions.paginationPageSize = pageSize;
+                this.updatePages(1, pageSize);
+            }
+        };
+
+        PagesHandler.prototype.noNext = function() {
+            var noNext = false;
+            if (this.current.foundEnd) {
+                // check if this page last row is the end
+                if (this.current.pageBottomRow >= this.current.totalRows) {
+                    noNext = true;
+                }
+            }
+            return noNext;
+        };
+
+        PagesHandler.prototype.noPrev = function() {
+            var noPrev = false;
+            if (this.current.pageTopRow == 0) {
+                // check if this page 1st row is the start
+                noPrev = true;
+            }
+            return noPrev;
+        };
+
+        // go to a new page with given page sizing
         PagesHandler.prototype.updatePages = function(newPage, pageSize) {
+            if (this.current.foundEnd) {
+                // make sure this page is within the known end to continue
+                if ((newPage - 1) * pageSize >= this.current.totalRows) {
+                    return;
+                }
+            }
             this.current.pageNumber = newPage;
             this.current.pageSize = pageSize;
             this.current.pageTopRow = (newPage - 1) * pageSize;
 
-            this.getPage();
+            this.loadCurrentPage();
             this.current.pageBottomRow = this.current.pageTopRow + this.gridOptions.data.length;
         };
 
+        // return the total number of row if it has been determined
         PagesHandler.prototype.getTotalRowsMsg = function() {
             if (this.current.foundEnd) {
                 return this.current.totalRows;
             }
         };
 
+        // get the total number of pages if its known
         PagesHandler.prototype.getTotalPages = function() {
             if (this.current.morePages) {
                 return (this.current.foundEnd) ? this.current.foundEnd : Number.MAX_VALUE;
@@ -54,31 +103,7 @@
             }
         };
 
-        PagesHandler.prototype.getPage = function() {
-            var url = 'quickbase/common/mockdata/1000.json';
-            var self = this;
-            $http.get(url)
-                .success(function(data) {
-                    self.gridOptions.totalItems = 1000;
-
-                    var current = self.current;
-
-                    var firstRow = ( current.pageNumber - 1) *
-                        current.pageSize;
-                    self.gridOptions.data = data.slice(firstRow, firstRow +  current.pageSize);
-                    current.pageBottomRow =  current.pageTopRow +  self.gridOptions.data.length;
-
-                    if (( current.foundEnd &&  current.pageNumber < current.foundEnd ) ||
-                        (firstRow +  current.pageSize) < self.gridOptions.totalItems) {
-                        current.morePages = true;
-                    } else {
-                        current.morePages = false;
-                        current.foundEnd =  current.pageNumber;
-                        current.totalRows =  current.pageTopRow +  self.gridOptions.data.length;
-                    }
-                });
-        };
-    return PagesHandler;
+        return PagesHandler;
     }
 
 })();

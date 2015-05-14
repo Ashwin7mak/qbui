@@ -2,15 +2,19 @@
     'use strict';
 
     angular.module('qbapp.reports.manager')
-        .service('ReportService', ReportManagerService);
+        .service('ReportService',['$q', ReportManagerService]);
 
-    function ReportManagerService() {
+    function ReportManagerService($q) {
 
         var d = new Date();
         d.setDate(d.getDate() - 1);
 
         var service = {
             //  TODO: use promise
+
+            getDataPromise : function(reportId) {
+                return $q.when(this.get(reportId).data);
+            },
             get: function(reportId) {
                 var report = {
                     id: reportId,
@@ -60,6 +64,17 @@
                             {id: '40', name: 'REI Hiking', phoneNumber: '508-990-1111', email:'Mary@rei.com', balance:'$111.83'}
                 ]};
                 return report;
+            },
+            getColumns: function(reportId) {
+                // jshint unused:false
+
+        return [
+                        {name: 'id', displayName: 'ID', fieldType:'numeric'},
+                        {name: 'name', displayName: 'Name', fieldType:'text'},
+                        {name: 'phoneNumber', displayName: 'Phone', fieldType:'phone'},
+                        {name: 'email', displayName: 'Email', fieldType:'email'},
+                        {name: 'balance', displayName: 'Balance',  fieldType:'currency'}
+                    ];
             }
         };
 

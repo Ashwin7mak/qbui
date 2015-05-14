@@ -13,21 +13,26 @@
 
         // Implement the controller
         function GridExampleController($scope, gridData) {
-
+            var self = this;
+            $scope.rowsPerPage = 100;
             // setup the view model info
             angular.extend(this, {
                 listid : 2349823904820348,
                 type :'report',
                 title : 'Example Dataset',
                 selectedItems : [],
-                persons : gridData.data(),
+                dataService : gridData,
+                persons : gridData.getDataPromise(),
 
                 // Define Grid settings
-                columnDefs : gridData.columns(),
+                columnDefs : gridData.getColumns(),
                 qbseGridOptions : {
                     showColumnMenu: false,
-                    showGroupPanel: false
-                }
+                    showGroupPanel: false,
+                    paginationPageSize : $scope.rowsPerPage
+                },
+                qbseGridApi : {}
             });
+
         }
 }());

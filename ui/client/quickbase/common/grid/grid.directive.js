@@ -13,8 +13,32 @@
      * Expects :
      * items - value to be a promise of data values array
      * cols -  expected to be an array with displayname and/or name member for each of cols to display
-     * title is optional
-     * customOptions - any overrides to the default grid settings
+     *    options that can be set in cols for column definitions and example values are as follows: (From https://github.com/angular-ui/ng-grid/wiki/Defining-columns)
+     *    TODO:Determine which options are not overridable for a qbse.grid
+     *      width: 60
+     *      minWidth: 50
+     *      maxWidth: 9000
+     *      visible: true
+     *      field: "foo" Can also be a property path on your data model. "foo.bar.myField", "Name.First", etc..
+     *      displayName: "Pretty Foo"
+     *      sortable: true
+     *      resizable: true
+     *      groupable: true allows the column to be grouped with drag and drop, but has no effect on gridOptions.groups
+     *      pinnable: true allows the column to be pinned when enablePinning is set to true
+     *      editableCellTemplate: true the template to use while editing
+     *      enableCellEdit: true allows the cell to use an edit template when focused (grid option enableCellSelection must be enabled)
+     *      cellEditableCondition: 'true' controls when to use the edit template on per-row basis using an angular expression (enableCellEdit must also be true for editing)
+     *      sortFn: function(a,b){return a > b} (see Sorting and Filtering)
+     *      cellTemplate: ""(see Templating)
+     *      cellClass: "userDefinedCSSClass"
+     *      headerClass: "userDefinedCSSClass"
+     *      headerCellTemplate: "" (see Templating)
+     *      cellFilter: string name for filter to use on the cell ('currency', 'date', etc..)
+     *      aggLabelFilter: string name for filter to use on the aggregate label ('currency', 'date', etc..) defaults
+     *      to cellFilter if not set.
+     *
+     * title - grid title which optional
+     * customOptions - optional any overrides to the default grid settings
      *
      * Possible additional later features:
      *      selectedItems - array of row index to select (TODO)
@@ -30,11 +54,14 @@
             'ui.grid',
             'ui.grid.selection',
             'ui.grid.pagination',
-            'ui.grid.autoResize'
+            'ui.grid.autoResize',
+            'ngResource',
+            'ngLodash'
         ])
         // Setup some consts
         .constant('gridConstants', {
-            'ROWS_PER_PAGE': 50
+            'MAX_ROWS_PER_PAGE': 5000,
+            'ROWS_PER_PAGE': 100
         })
 
          // the quickbase grid element directive
@@ -46,11 +73,13 @@
             restrict   : 'E',
             templateUrl: 'quickbase/common/grid/grid.template.html',
             scope      : {
-                title: '@?', //one way bind
-                items: '=', // required
-                cols: '=', // required
+                title: '@?', //one way bind, optional
+                items: '=?', // required
+                cols: '=?', // required
                 selectedItems: '=?', // optional option
-                customOptions: '=?'  // optional option
+                customOptions: '=?',  // optional option
+                gridApi: '=?',  // optional returns reference to the grid api interface
+                service : '=' // data service with supplies content and column definition
             },
             replace    : true,
             transclude : false,
@@ -63,12 +92,17 @@
     * keeps track of selected items
     * and defines default options for initializing the directive
     */
-   GridController.$inject = ['$scope', '$q', 'uiGridConstants', 'gridConstants', 'PagesHandler' ];
-   function GridController($scope, $q, uiGridConstants, gridConstants, PagesHandler){
+   GridController.$inject = ['$scope', '$q', '$resource', 'uiGridConstants', 'gridConstants', 'PagesHandler', 'lodash' ];
+   function GridController($scope, $q, $resource, uiGridConstants, gridConstants, PagesHandler, _){
         $scope.selectedItems = [];
         $scope.validatedItems = [];
         $scope.itemsPromise = $q.defer();
         angular.extend(gridConstants, uiGridConstants);
+
+        if ($scope.service) {
+            $scope.dataPromise = $scope.service.getDataPromise();
+            $scope.columnInfo = $scope.service.getColumns();
+        }
 
         // the defaults we'll use for grids
         $scope.defaultOptions = {
@@ -98,18 +132,32 @@
        // we can control which are allowed here but currently anything goes for overrides
        // in $scope.customOptions;
 
-       // the definition of the columns and data
-       // in ui-grid terms, required minimally
-       $scope.dataOptions = {
-           //columnDefs: $scope.cols,
-           //TODO : dynamically get defs from grid config service
-           columnDefs : [
+       $scope.cols =  $scope.columnInfo || [
            {name: 'firstName'},
            {name: 'lastName'},
            {name: 'employed'},
            {name: 'company'}
-                 ],
-           data      : [] // empty until scope.items promise is resolved, and data valiated
+       ];
+
+
+       //add alignment based on type
+       //rightalign numbers
+       var numberClass = 'ui-grid-number-align';
+       function addAlignment(col){
+           if (col.fieldType && (col.fieldType == 'numeric' ||
+                                col.fieldType == 'currency' ||
+                                col.fieldType == 'phone')) {
+                   col.cellClass = numberClass;
+               }
+       }
+       _.map($scope.cols, addAlignment);
+
+
+       // the definition of the columns and data
+       // in ui-grid terms, required minimally
+       $scope.dataOptions = {
+           columnDefs: $scope.cols,
+           data      : [] // empty until scope.items promise is resolved, and data validated
        };
 
 
@@ -126,11 +174,17 @@
            }
            return $scope.pagesHandler.getTotalPages();
        };
-       $scope.pagesHandler = new PagesHandler(gridConstants, $scope.gridOptions, getTotalPagesMethod);
+       // initially just a file
+       //var resource = $resource('quickbase/common/mockdata/1000.json');
+       $scope.pagesHandler = new PagesHandler($scope.service, gridConstants, $scope.gridOptions);
 
         // gridApi is how we can hook into the grid events, keep api handle on scope
         $scope.gridOptions.onRegisterApi = function(gridApi) {
             $scope.gridApi = gridApi;
+
+            //add our api extensions ( TBD -keep our api separate to allow switching grid implementations?)
+            $scope.gridApi.loadPage = $scope.pagesHandler.loadCurrentPage.bind($scope.pagesHandler);
+            $scope.gridApi.updatePageSize =  $scope.pagesHandler.updatePageSize.bind($scope.pagesHandler);
 
             //set up handling of sorting and next/prev page actions
             gridApi.core.on.sortChanged($scope, $scope.pagesHandler.sortList.bind($scope.pagesHandler));
@@ -138,14 +192,16 @@
 
             //override default getTotalPage to support unknown data size until end is reached
             gridApi.pagination.getTotalPages = getTotalPagesMethod;
+
+            //note :
+            // full table search is no longer supported in ui-grid,
+            // see http://ui-grid.info/docs/#/tutorial/103_filtering
+            // ui-grid has filtering per column
+            // only in ng-grid we may need to provide it for small tables
+            // will need to add to api for this cross column filtering
         };
 
-
-       $scope.pagesHandler.getPage();
-       // full table search is no longer supported in ui-grid,
-        // see http://ui-grid.info/docs/#/tutorial/103_filtering
-        // ui-grid has filtering per column
-        // only in ng-grid we may need to provide it for small tables
+       $scope.pagesHandler.loadCurrentPage();
 
     }
 

@@ -30,7 +30,8 @@
                         // decide what data to use
                         var exampleSize = 'Small';
                         var requestSize = location.search.replace(/^.*?\=/, '');
-                        if (requestSize.toLowerCase() === 'large' || requestSize.toLowerCase() === 'small') {
+                        if (requestSize.toLowerCase() === 'large' ||
+                            requestSize.toLowerCase() === 'small') {
                             exampleSize = requestSize;
                         }
                         // load up example data &schema
@@ -41,11 +42,11 @@
                         $q.all([schemaPromise.$promise, dataPromise.$promise]).then(function(resolvedGridData) {
                             gridInfo.resolve({
                                 exampleSize : exampleSize,
-                                columns: function() {
+                                getColumns: function() {
                                     //ui-grid expects array of column header names
                                     return resolvedGridData[0];
                                 },
-                                data   : function() {
+                                getDataPromise   : function() {
                                     // ui-grid expects promise of data
                                     return dataPromise.$promise;
                                 }

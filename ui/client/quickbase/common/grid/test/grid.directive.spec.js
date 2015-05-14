@@ -40,6 +40,7 @@ xdescribe('Directive: qbseGrid', function() {
             'selected-items="settings.selectedItems" ' +
             'cols="settings.columnDefs" ' +
             'custom-options="settings.gridOptionsOverrides"> ' +
+            'service="settings.service"> ' +
             'This gets replaced with data - loading...' +
             '</qbse-grid>';
 
@@ -57,6 +58,22 @@ xdescribe('Directive: qbseGrid', function() {
         $scope.settings.columnDefs = [{'name': 'name', 'displayName': 'Team'},
             {'name': 'count', 'displayName': 'Size'}];
         $scope.settings.gridOptionsOverrides = {};
+
+        //service to supply data and column given fixed values
+        $scope.settings.service = angular.module('qbse.grid')
+            .factory('testDataService', ['$q', function(dataArray, columns){
+                var serviceAnswer = function() {
+                        this.getDataPromise = function() {
+                            return $q.when(dataArray);
+                        };
+                        this.getColumns = function() {
+                            return columns;
+                        };
+                    };
+                return serviceAnswer;
+            }]);
+
+
 
         // create the html dom fragment and process the angular
         $element = angular.element(elementHtml);

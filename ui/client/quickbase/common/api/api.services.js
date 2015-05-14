@@ -9,6 +9,15 @@
      *    'query'
      *    'remove'
      *    'delete'
+     *
+     *    TODO?:: replace $resource with Restangular
+     *    https://github.com/mgonto/restangular#decoupled-restangular-service
+     *    i.e.
+     *
+     *    angular.module('qbse.api').factory('realmApiService', function(Restangular){
+     *        return Restangular.service('realms');
+
+     *        });
      */
     angular
         .module('qbse.api', ['ngResource'])

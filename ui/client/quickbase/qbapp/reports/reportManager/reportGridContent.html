@@ -1,15 +1,14 @@
 <div class="report">
     <div class="report-header"></div>
     <div class="report-content">
-        <!-- TODO: most likely should be referencing a common grid template..  -->
-        <!-- TODO: ..but need to review the common/grid folder content??       -->
         <div>
             <qbse-grid
                     grid-id="report-{{report.id}}"
                     grid-type="report"
                     title="{{report.name}}"
                     items="report.data"
-                    custom-options="report.qbseGridOptions">
+                    custom-options="report.qbseGridOptions"
+                    service="report.dataService">
             </qbse-grid>
         </div>
 

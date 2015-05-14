@@ -1,8 +1,8 @@
 
 <div class="ui-grid-pager  right">
     <ul class="pagination">
-        <li  ng-class="{disabled: noPrevious()}">
-            <a href ng-click="gridApi.pagination.previousPage()">
+        <li ng-class="{disabled: pagesHandler.noPrev()}">
+            <a ng-click="gridApi.pagination.previousPage()">
                 Previous</a>
         </li>
         <li>
@@ -10,7 +10,7 @@
                 {{pagesHandler.current.pageTopRow}} - {{pagesHandler.current.pageBottomRow}}
                 {{ pagesHandler.current.foundEnd ? ("of " + pagesHandler.getTotalRowsMsg()) : "" }}</span>
         </li>
-        <li ng-class="{disabled: noNext()}">
+        <li ng-class="{disabled: pagesHandler.noNext()}">
             <a ng-click="gridApi.pagination.nextPage()">
                 Next</a>
         </li>

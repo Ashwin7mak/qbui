@@ -1,14 +1,23 @@
 <h2> Example use of grid component </h2>
 
 <div>
+    Rows Per page : <input type="number"
+                           value="example.rowsPerPage"
+                           ng-model=example.rowsPerPage
+                           ng-model-options="{debounce:1000}"
+                           ng-pattern="/^\d{0,9}(\.\d{1,9})?$/"
+                           ng-change="example.qbseGridApi.updatePageSize(example.rowsPerPage)" />
     <qbse-grid
+           id="{{example.listid}}"
            grid-id="{{example.listid}}"
            grid-type="{{example.type}}"
            title="{{example.title}}"
            items="example.persons"
            selected-items="example.selectedItems"
            cols="example.columnDefs"
-           custom-options="example.qbseGridOptions">
-            This gets replaced with data - loading...
+           custom-options="example.qbseGridOptions"
+           grid-api="example.qbseGridApi"
+           data-service="example.dataService">
+           To be replaced with data - loading...
     </qbse-grid>
 </div>
