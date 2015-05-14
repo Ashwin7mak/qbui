@@ -8,6 +8,7 @@
         .module('qbse.api')
         .constant('apiConstants', {
             //Field types
+            CHECKBOX           : 'CHECKBOX',
             CURRENCY           : 'CURRENCY',
             DATE               : 'DATE',
             DATE_TIME          : 'DATE_TIME',

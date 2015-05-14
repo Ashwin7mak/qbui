@@ -41,6 +41,7 @@ module.exports = function (config) {
             'client/bower_components/angular-ui-grid/ui-grid.js',
             'client/bower_components/angular-ui-router/release/angular-ui-router.js',
             'client/bower_components/angular-mocks/angular-mocks.js',
+            'node_modules/chance/chance.js',
             //endbower:
 
             // load the application dependencies - loading order is important; broadest
@@ -52,7 +53,6 @@ module.exports = function (config) {
             'client/quickbase/**/*.modules.js',
             'client/quickbase/common/**/*.js',
             'client/quickbase/**/**/*.js',
-
 
             // fixtures
             {

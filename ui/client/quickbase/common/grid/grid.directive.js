@@ -85,11 +85,9 @@
     * keeps track of selected items
     * and defines default options for initializing the directive
     */
-   GridController.$inject = ['$scope', '$q', '$resource', 'uiGridConstants', 'gridConstants', 'apiConstants', 'PagesHandler', 'lodash' ];
-   function GridController($scope, $q, $resource, uiGridConstants, gridConstants, apiConstants, PagesHandler, _){
+   GridController.$inject = ['$scope', '$q', 'uiGridConstants', 'gridConstants', 'apiConstants', 'PagesHandler', 'lodash' ];
+   function GridController($scope, $q, uiGridConstants, gridConstants, apiConstants, PagesHandler, _){
         $scope.selectedItems = [];
-        $scope.validatedItems = [];
-        $scope.itemsPromise = $q.defer();
         angular.extend(gridConstants, uiGridConstants);
 
         if ($scope.service) {
@@ -125,16 +123,10 @@
        // we can control which are allowed here but currently anything goes for overrides
        // in $scope.customOptions;
 
-       $scope.cols =  $scope.columnInfo || [
-           {name: 'firstName'},
-           {name: 'lastName'},
-           {name: 'employed'},
-           {name: 'company'}
-       ];
+       $scope.cols =  $scope.columnInfo || [];
 
 
-       //add alignment based on type
-       //right align numbers
+       //add column alignment classes based on datatype : right aligns numbers
        var numberClass = 'ui-grid-number-align';
        function addAlignment(col){
            if (col.fieldType && !col.cellClass &&  (col.fieldType.indexOf(apiConstants.NUMERIC) !== -1 ||
@@ -151,9 +143,8 @@
        // in ui-grid terms, required minimally
        $scope.dataOptions = {
            columnDefs: $scope.cols,
-           data      : [] // empty until scope.items promise is resolved, and data validated
+           data      : [] // empty until scope.dataPromise promise is resolved
        };
-
 
         //TODO : Sorting initialization
 
@@ -168,8 +159,8 @@
            }
            return $scope.pagesHandler.getTotalPages();
        };
-       // initially just a file
-       //var resource = $resource('quickbase/common/mockdata/1000.json');
+
+       // the page handler manages getting  data from the service as needed
        $scope.pagesHandler = new PagesHandler($scope.service, gridConstants, $scope.gridOptions);
 
         // gridApi is how we can hook into the grid events, keep api handle on scope
@@ -195,6 +186,7 @@
             // will need to add to api for this cross column filtering
         };
 
+       // load up the initial page
        $scope.pagesHandler.loadCurrentPage();
 
     }
