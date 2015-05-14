@@ -9,16 +9,21 @@
 var integrationBase = require('./../common/integrationBase')();
 
 // Groups tests by functionality
-describe('Realm Dashboard', function() {
+describe('Realm Dashboard', function(){
     // Variable to hold the page object
     var page;
+    // Variable to keep track of the page status
+    var pageLoaded = false;
 
     // Setup method
     beforeEach(function() {
-        // Call the main node.js page
-        browser.get('/');
-        // Load the page object model
-        page = require('./realmDashboard.po');
+        if ( ! pageLoaded) {
+            // Load the page object model
+            page = require('./realmDashboard.po');
+            // Call the app dashboard page
+            browser.get('/');
+            pageLoaded = true;
+        }
     });
 
     // Test expectation
@@ -37,12 +42,14 @@ describe('Realm Dashboard', function() {
         });
     });
 
-    it('should take the user to the application dashboard', function(){
+    it('link should take the user to the application dashboard', function(){
         // Grab all the links out of the div
         element.all(by.tagName('a')).then(function(links) {
             links[0].click();
             // Check the title of the next page
             expect(browser.getTitle()).toBe('Application Home');
+            // Set the page to be reloaded for the next test
+            pageLoaded = false;
         });
     });
 
