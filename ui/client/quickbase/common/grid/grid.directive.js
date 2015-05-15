@@ -171,8 +171,7 @@
             $scope.gridApi.loadPage = $scope.pagesHandler.loadCurrentPage.bind($scope.pagesHandler);
             $scope.gridApi.updatePageSize =  $scope.pagesHandler.updatePageSize.bind($scope.pagesHandler);
 
-            //set up handling of sorting and next/prev page actions
-            gridApi.core.on.sortChanged($scope, $scope.pagesHandler.sortList.bind($scope.pagesHandler));
+            //set up handling of next/prev page actions
             gridApi.pagination.on.paginationChanged($scope,  $scope.pagesHandler.updatePages.bind($scope.pagesHandler));
 
             //override default getTotalPage to support unknown data size until end is reached

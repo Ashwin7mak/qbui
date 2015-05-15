@@ -7,8 +7,8 @@ When using the grid for rendering customer data the schema of that data is dynam
 
 ##Low level Angular Service
 
-$Resource for all api endpoints
-with abilitity to do all the following crud ops if implemented:
+Resource for all api endpoints
+with ability to do all the following crud ops if implemented:
 
 ```
  var Entity = $resource('/api/entity/:id', { id: '@id' }, { 
@@ -34,17 +34,16 @@ i.e.
         user.$save();
   });
   
+TODO - look at Restangular more flexible that $resource and supports resource relationships
 
   
 ```
  for the following Entities : realms, apps, tables, table, record, report, field
  
 ##Angular layer APIs to add for lighthouse
-These pass thu angular reosurce apis will call to the Node layer
+These pass thu angular resource apis will call to the Node layer
 
-* Ticket 
-	* validation ? (Heard that ticket interface is being disabled at node layer)
-	
+* health
 * app.table.Report
 	* run a report : given app, table, report id params
 		* get datarecords with formatted data, (using reports clist) 		* get starting offset and numrows
@@ -62,16 +61,17 @@ These pass thu angular reosurce apis will call to the Node layer
 		* Roles
 
 
-## Grid config service 
-pass in $resource object which transforms API response
+## Grid data Services 
+pass in service object which transforms API response
 
-* given the resource and type construct the grid options
+* given the service construct the grid data options
+	* a promise returning method to get a page of data from the resource give a page number and size of pages 
 	* add promised method to the resource to calc or return set the fixed column names
-		* if dynamic data get column info from $resource
+		* dynamic data gets column info from dataservice
 		* (later) get the sort information
-			* on the report resource load from report decription
+			* on the report resource load from report description
 			* on other resource sort by name or by user local settings
-		* set the column alignment based 
+		* set the column alignment based on 
 			* loaded data types
 
 
@@ -84,6 +84,8 @@ pass in $resource object which transforms API response
 * current page starting offset in record list ( record **10** - 20 of ? )
 * end of page offset in record list ( record 10 - **20** of ? )
 * end of data offset ( record 10 - 20 of **100** ) 
+
+
 
 
 

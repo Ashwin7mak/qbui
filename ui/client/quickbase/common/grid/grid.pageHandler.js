@@ -18,6 +18,9 @@
                 pageSize  : this.gridOptions.paginationPageSize,
                 pageNumber: 1,
                 pageTopRow: 0,
+                pageBottomRow: null, //gets set once data is fetched
+                totalRows: null, //gets set once end of data is reached
+                foundEnd : null, // get set once end of data is encountered
                 sort      : null
             };
             //data fetcher
@@ -29,19 +32,12 @@
             this.dataFact.getData(this.current).then(function(resolved){
                 self.current = resolved.newState;
                 self.gridOptions.data = resolved.data;
+            }, function(error) {
+                // getData rejected, log the error with: console.log('error', error);
+                //TODO error message to screen & change to use tbd logging interface and emit notification
+                console.log("ERROR " + JSON.stringify(error));
             });
         };
-
-        // resort requires new ordering of pages
-        PagesHandler.prototype.sortList = function(grid, sortColumns) {
-            if (sortColumns.length === 0) {
-                this.current.sort = null;
-            } else {
-                this.current.sort = sortColumns[0].sort.direction;
-            }
-            this.loadCurrentPage();
-        };
-
 
         // go to a 1st with given page sizing
         PagesHandler.prototype.updatePageSize = function(pageSize) {
