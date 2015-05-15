@@ -40,17 +40,30 @@ module.exports = function (config) {
             'client/bower_components/ng-lodash/build/ng-lodash.js',
             'client/bower_components/angular-ui-grid/ui-grid.js',
             'client/bower_components/angular-ui-router/release/angular-ui-router.js',
+            'client/bower_components/chance/chance.js',
             'client/bower_components/angular-mocks/angular-mocks.js',
             //endbower:
+
 
             // load the application dependencies - loading order is important; broadest
             // to narrowest.
             'client/*.index.html',
             'client/quickbase/**/**/*.html',
-            'client/quickbase/common/**/*Example.modules.js',
+            'client/gallery/**/*Example.modules.js',
+            'client/quickbase/common/**/*.modules.js',
             'client/quickbase/**/*.modules.js',
             'client/quickbase/common/**/*.js',
-            'client/quickbase/**/**/*.js'
+            'client/quickbase/**/**/*.js',
+
+            // fixtures
+            {
+                pattern: "**/mockdata/*.json",
+                watched: 'true',
+                served:  'true',
+                included: 'false'
+            }
+
+
         ],
 
         // list of files / patterns to exclude
@@ -59,6 +72,7 @@ module.exports = function (config) {
         preprocessors: {
             //'**/*.jade': 'ng-jade2js',
             '**/*.html': 'html2js',
+            //'**/mockdata/*.json': 'html2js',
             //'**/*.coffee': 'coffee',
             //if any 3rd party vendor plugin within code coverage target folder, need to exclude (ie: jasmine, angular, etc)
             'client/{quickbase/**/*.js,*.js}' : ['coverage']
@@ -95,6 +109,11 @@ module.exports = function (config) {
 
         // enable / disable watching file and executing tests whenever any file changes
         autoWatch: false,
+
+        // to avoid DISCONNECTED messages
+        browserDisconnectTimeout : 10000, // default 2000
+        browserDisconnectTolerance : 1, // default 0
+        browserNoActivityTimeout : 60000, //default 10000
 
 
         // Start these browsers, currently available:

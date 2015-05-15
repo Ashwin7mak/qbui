@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>Quickbase Component Examples</title>
+
+    <!--
+        You can see the grid component via the url
+            http://localhost:63342/qbui/ui/client/common.index.html#/grid
+    -->
+
+    <link rel="styleSheet" href="bower_components/angular-ui-grid/ui-grid.css"/>
+    <!-- build:css quickbase/assets/common.css -->
+    <link rel="stylesheet" href="quickbase/common/grid/grid.directive.css"/>
+    <link rel="stylesheet" href="quickbase/assets/css/realm.css"/>
+    <!-- injector:css -->
+    <!-- endinjector -->
+    <!-- endbuild -->
+</head>
+
+<body class="quickbase" ng-app="quickbase.gallery">
+<h1>Dev Gallery of Components</h1>
+<div class="intuit-logo"></div>
+
+<p>Welcome to Quickbase Component Gallery. This is your examples page</p>
+<p>Here are common components to preview</p>
+
+<!-- UI Router Directive for template insertion -->
+    <a ui-sref="home">Home</a><br>
+    <div id="components">
+        <a ui-sref="grid">Grid</a><br>
+        <a ui-sref="home">TBD Component 1</a><br>
+        <a ui-sref="home">TBD Component 2</a><br>
+    </div>
+
+
+<!-- THIS IS WHERE WE WILL INJECT OUR COMPONENT CONTENT ===================== -->
+<div>
+    <div ui-view></div>
+</div>
+
+
+<!-- build:js quickbase/bower/common.bower.js -->
+<script src="bower_components/angular/angular.js"></script>
+<script src="bower_components/angular-resource/angular-resource.js"></script>
+<script src="bower_components/angular-ui-router/release/angular-ui-router.js"></script>  <!-- ui-router -->
+<script src="bower_components/angular-ui-grid/ui-grid.js"></script>
+<script src="bower_components/ng-lodash/build/ng-lodash.min.js"></script>
+<!-- endbuild -->
+
+<!-- build:js quickbase/common.js -->
+<script src="quickbase/common/logger/log.js"></script>
+<script src="gallery/gallery.modules.js"></script>
+<script src="gallery/gallery.routes.js"></script>
+<script src="gallery/grid/gridExample.modules.js"></script>
+<script src="gallery/grid/gridExample.service.js"></script>
+<script src="gallery/grid/gridExample.controller.js"></script>
+<script src="quickbase/common/grid/grid.modules.js"></script>
+<script src="quickbase/common/grid/grid.directive.js"></script>
+<script src="quickbase/common/grid/grid.dataFactory.js"></script>
+<script src="quickbase/common/grid/grid.pageHandler.js"></script>
+<script src="quickbase/common/api/api.modules.js"></script>
+<script src="quickbase/common/api/api.services.js"></script>
+<script src="quickbase/common/api/api.constants.js"></script>
+
+<!-- injector:js -->
+<!-- endinjector -->
+<!-- endbuild -->
+
+</body>
+</html>
