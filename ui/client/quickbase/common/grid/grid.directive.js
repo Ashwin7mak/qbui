@@ -12,7 +12,7 @@
      *
      * Expects :
      * items - value to be a promise of data values array
-     * cols -  expected to be an array with displayname and/or name member for each of cols to display
+     * cols -  expected to be an array with display name and/or name member for each of cols to display
      *    options that can be set in cols for column definitions and example values are as follows: (From https://github.com/angular-ui/ng-grid/wiki/Defining-columns)
      *    TODO:Determine which options are not overridable for a qbse.grid
      *      width: 60
@@ -53,7 +53,7 @@
         .module('qbse.grid')
         // Setup some consts
         .constant('gridConstants', {
-            'MAX_ROWS_PER_PAGE': 5000,
+            'MAX_ROWS_PER_PAGE': 10000,
             'ROWS_PER_PAGE': 100
         })
 
@@ -85,8 +85,8 @@
     * keeps track of selected items
     * and defines default options for initializing the directive
     */
-   GridController.$inject = ['$scope', '$q', 'uiGridConstants', 'gridConstants', 'apiConstants', 'PagesHandler', 'lodash' ];
-   function GridController($scope, $q, uiGridConstants, gridConstants, apiConstants, PagesHandler, _){
+   GridController.$inject = ['$scope', 'uiGridConstants', 'gridConstants', 'apiConstants', 'PagesHandler', 'lodash' ];
+   function GridController($scope, uiGridConstants, gridConstants, apiConstants, PagesHandler, _){
         $scope.selectedItems = [];
         angular.extend(gridConstants, uiGridConstants);
 
@@ -126,7 +126,7 @@
        $scope.cols =  $scope.columnInfo || [];
 
 
-       //add column alignment classes based on datatype : right aligns numbers
+       //add column alignment classes based on data type : right aligns numbers
        var numberClass = 'ui-grid-number-align';
        function addAlignment(col){
            if (col.fieldType && !col.cellClass &&  (col.fieldType.indexOf(apiConstants.NUMERIC) !== -1 ||

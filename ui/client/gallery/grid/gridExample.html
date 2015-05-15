@@ -1,13 +1,16 @@
 <h2> Example use of grid component </h2>
 
 <div>
-    Rows Per page : <input ng-init="example.rowsPerPage = 1000"
-                           type="number"
-                           value="{{example.rowsPerPage}}"
-                           ng-model=example.rowsPerPage
-                           ng-model-options="{debounce:1000}"
-                           ng-pattern="/^\d{0,9}(\.\d{1,9})?$/"
-                           ng-change="example.qbseGridApi.updatePageSize(example.rowsPerPage)" />
+    <label>
+        Rows Per page :
+        <input ng-init="example.rowsPerPage = 1000"
+               type="number"
+               value="{{example.rowsPerPage}}"
+               ng-model=example.rowsPerPage
+               ng-model-options="{debounce:1000}"
+               ng-pattern="/^\d{0,9}(\.\d{1,9})?$/"
+               ng-change="example.qbseGridApi.updatePageSize(example.rowsPerPage)"/>
+    </label>
     <qbse-grid
            id="{{example.listid}}"
            grid-id="{{example.listid}}"

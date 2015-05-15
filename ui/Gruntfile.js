@@ -802,5 +802,13 @@ module.exports = function (grunt) {
         'build'
     ]);
 
+
+    grunt.registerTask('codeStandards', [
+        'jshint',
+        'jscs',
+    ]);
+
     grunt.loadNpmTasks('grunt-jscs');
+    grunt.loadNpmTasks('grunt-contrib-jshint');
+
 };

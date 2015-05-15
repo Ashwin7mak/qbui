@@ -32,6 +32,7 @@
         "jQuery": true,
         "angular": true,
         "console": true,
+        "Chance" : true,
         "$": true,
         "_": true,
         "moment": true,

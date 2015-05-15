@@ -28,6 +28,7 @@
       "angular",
       "clearTimeout",
       "console",
+      "Chance",
       "define",
       "document",
       "HTMLElement",

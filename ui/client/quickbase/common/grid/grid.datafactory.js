@@ -11,13 +11,12 @@ angular.module('qbse.grid')
     .factory('GridDataFactory', ['$q', GridDataFactory]);
 
 function GridDataFactory($q) {
-   var gridData = function(service){
+    return function(service) {
         this.service = service;
         this.$q = $q;
         this.getData = getData.bind(this);
         this.getColumns = getColumns.bind(this);
     };
-    return gridData;
 }
 
 function getColumns() {

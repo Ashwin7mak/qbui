@@ -11,13 +11,8 @@ describe('Directive: qbseGrid', function() {
     // into Javascript, which can be testing without any need for HTTP requests, this is done in the karma
     // config with ngHtml2JsPreprocessor
     //
-    var element, elementHtml, gridConstants
+    var element, elementHtml, gridConstants;
     var $compile, $rootScope, $element, $scope, $http, $httpBackend, testDataService;
-    var expectedTotalRows;
-
-    var maxTestRecordsToGenerate = 2000;
-    var rowsPerPageTest = 100;
-    var maxTestColumnsToGenerate = 6;
 
     // load the directive's module & load the template
     beforeEach(module('qbse.grid','gallery.gridExample','test.dataGeneratorService',
@@ -89,7 +84,6 @@ describe('Directive: qbseGrid', function() {
 
     it('should have a column data in body', function() {
         $scope.$digest();
-        var isolateScope = element.isolateScope();
 
         var body = element.find('.ui-grid-viewport');
         var bodytext = body.text();

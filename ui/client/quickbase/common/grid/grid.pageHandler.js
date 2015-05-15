@@ -35,7 +35,7 @@
             }, function(error) {
                 // getData rejected, log the error with: console.log('error', error);
                 //TODO error message to screen & change to use tbd logging interface and emit notification
-                console.log("ERROR " + JSON.stringify(error));
+                console.log('ERROR ' + JSON.stringify(error));
             });
         };
 
