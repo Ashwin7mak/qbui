@@ -16,7 +16,7 @@ describe('Directive: qbseGrid pagination - ', function() {
     var expectedTotalRows;
 
     var minTestRecordsToGenerate = 100;
-    var maxTestRecordsToGenerate = 5000;
+    var maxTestRecordsToGenerate = 500;
     var expectedPageSize = 100;
     var maxTestColumnsToGenerate = 6;
 

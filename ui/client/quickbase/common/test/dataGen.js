@@ -3,7 +3,7 @@
 
     // Instantiate chancejs so it can be used here
     //see http://chancejs.com lightweight generator
-    var chance = new Chance();
+    var chance = new Chance(12345); //seed value makes random tests repeatable
 
     /**
      * This service provides test grid data
