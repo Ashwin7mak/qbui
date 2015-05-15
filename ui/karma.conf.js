@@ -110,6 +110,11 @@ module.exports = function (config) {
         // enable / disable watching file and executing tests whenever any file changes
         autoWatch: false,
 
+        // to avoid DISCONNECTED messages
+        browserDisconnectTimeout : 10000, // default 2000
+        browserDisconnectTolerance : 1, // default 0
+        browserNoActivityTimeout : 60000, //default 10000
+
 
         // Start these browsers, currently available:
         // - Chrome
