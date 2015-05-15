@@ -9,12 +9,14 @@
     var phoneFormatter = require('./phoneNumberFormatter');
     var todFormatter = require('./timeOfDayFormatter');
     var numericFormatter = require('./numericFormatter');
-    var urlFormatter = require('./urlFormatter');
+    var urlAndFileReportLinkFormatter = require('./urlFileAttachmentReportLinkFormatter');
     var emailFormatter = require('./emailFormatter');
+    var durationFormatter = require('./durationFormatter');
+    var userFormatter = require('./userFormatter');
 
     /**
-     * Certain fields may require generation of a formatter string that will be used for each record in the
-     * field for example, Date, DateTime and TimeOfDay fields. Rather than recalculate this formatter string
+     * Certain fields may require generation of a formatter options that will be used for each record in the
+     * field, for example, Date, DateTime and TimeOfDay fields. Rather than recalculate this formatter string
      * for each record value encountered, we generate it once, and cache it on the fieldInfo for the field
      * in question.  The display formatter will then look for this value 'jsFormat' and if populated,
      * use it instead of recalculating the formatter string.
@@ -33,6 +35,7 @@
                 case consts.FORMULA_TIME_OF_DAY:
                     fieldInfos[i].jsFormat = todFormatter.generateFormat(fieldInfos[i]);
                     break;
+                case consts.SUMMARY:
                 case consts.NUMERIC:
                 case consts.FORMULA_NUMERIC:
                 case consts.CURRENCY:
@@ -40,6 +43,11 @@
                 case consts.PERCENT:
                 case consts.FORMULA_PERCENT:
                     fieldInfos[i].jsFormat = numericFormatter.generateFormat(fieldInfos[i]);
+                    break;
+                case consts.DURATION:
+                case consts.FORMULA_DURATION:
+                    fieldInfos[i].jsFormat = durationFormatter.generateFormat(fieldInfos[i]);
+                    break;
                 default:
                     break;
             }
@@ -63,6 +71,7 @@
                 case consts.FORMULA_TIME_OF_DAY:
                     fieldValue.display = todFormatter.format(fieldValue, fieldInfo);
                     break;
+                case consts.SUMMARY:
                 case consts.NUMERIC:
                 case consts.FORMULA_NUMERIC:
                 case consts.CURRENCY:
@@ -72,14 +81,25 @@
                     fieldValue.display = numericFormatter.format(fieldValue, fieldInfo);
                     break;
                 case consts.URL:
-                    fieldValue.display = urlFormatter.format(fieldValue, fieldInfo);
+                case consts.FILE_ATTACHMENT:
+                case consts.REPORT_LINK:
+                    fieldValue.display = urlAndFileReportLinkFormatter.format(fieldValue, fieldInfo);
                     break;
                 case consts.EMAIL_ADDRESS:
                     fieldValue.display = emailFormatter.format(fieldValue, fieldInfo);
                     break;
+                case consts.DURATION:
+                case consts.FORMULA_DURATION:
+                    fieldValue.display = durationFormatter.format(fieldValue, fieldInfo);
+                    break;
+                case consts.USER:
+                case consts.FORMULA_USER:
+                    fieldValue.display = userFormatter.format(fieldValue, fieldInfo);
+                    break;
                 default:
+                    //TODO: handle LOOKUP fields, need to return rootFieldType in the fieldInfo in order to display format properly
                     fieldValue.display = fieldValue.value;
-                    if(!fieldValue.display) {
+                    if (!fieldValue.display) {
                         fieldValue.display = '';
                     }
                     break;
@@ -93,12 +113,13 @@
                 if (records && fields) {
                     var fieldsMap = {};
                     var formattedRecords = [];
-                    //Precalculate any formatter strings
+
+                    //Precalculate any formatter strings & Generate a map for O(1) lookup on each field get
                     precalculateFormatterStringsForFields(fields);
-                    //Generate a map for O(1) lookup on each field get
                     fields.forEach(function (entry) {
                         fieldsMap[entry.id] = entry;
                     });
+
                     //For each record, for each value, display format it!
                     records.forEach(function (record) {
                         var formattedRecord = [];
