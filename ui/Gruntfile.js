@@ -199,7 +199,8 @@ module.exports = function (grunt) {
                     dot: true,
                     src: [
                         serverReportDir + '/coverage/*',
-                        serverReportDir + '/unit/*'
+                        serverReportDir + '/unit/*',
+                        serverReportDir + '/integration/*'
                     ]
                 }]
             }
@@ -259,7 +260,7 @@ module.exports = function (grunt) {
             app: {
                 src: '<%= quickbase.client.root %>/*.index.html',
                 ignorePath: '<%= quickbase.client.root %>/',
-                exclude: [/bootstrap-sass-official/, /bootstrap.js/, '/json3/', '/es5-shim/', /bootstrap.css/, /font-awesome.css/]
+                exclude: [/bootstrap-sass-official/, /bootstrap.js/, '/json3/', '/es5-shim/', /bootstrap.css/, /font-awesome.css/ ]
             },
             test: {
                 src: 'karma.conf.js',
@@ -307,7 +308,7 @@ module.exports = function (grunt) {
         //   <!-- endbuild -->
         useminPrepare: {
             html: [
-                '<%= quickbase.client.root %>/*.index.html'],         // look for entry point html files
+                '<%= quickbase.client.root %>/*.index.html', '!<%= quickbase.client.root %>/gallery/*.index.html'],         // look for entry point html files
             options: {
                 dest: '<%= quickbase.distPublic %>'
             }
@@ -428,7 +429,9 @@ module.exports = function (grunt) {
                         '*.{ico,png,txt}',
                         '.htaccess',
                         'bower_components/**/*',
-                        '*.index.html'
+                        '*.index.html',
+                        '!gallery.index.html',
+                        '!**/gallery/*'
                     ]
                 }, {
                     flatten: true,
@@ -799,5 +802,13 @@ module.exports = function (grunt) {
         'build'
     ]);
 
+
+    grunt.registerTask('codeStandards', [
+        'jshint',
+        'jscs',
+    ]);
+
     grunt.loadNpmTasks('grunt-jscs');
+    grunt.loadNpmTasks('grunt-contrib-jshint');
+
 };
