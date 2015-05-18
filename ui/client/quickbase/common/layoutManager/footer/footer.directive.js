@@ -1,7 +1,7 @@
 (function() {
     'use strict';
 
-    angular.module('qbapp.common')
+    angular.module('qbse.layout')
         .directive('qbGlobalFooter', GlobalFooter);
 
     function GlobalFooter() {

@@ -1,7 +1,7 @@
 describe('Service: ReportService', function() {
     'use strict';
     // load the controller's module
-    beforeEach(module('qbapp.reports.manager'));
+    beforeEach(module('qbse.qbapp.reports.manager'));
 
     var ReportService;
 

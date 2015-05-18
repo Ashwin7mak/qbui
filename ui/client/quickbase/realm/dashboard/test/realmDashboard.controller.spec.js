@@ -2,7 +2,7 @@
 describe('Controller: RealmDashboardCtrl', function() {
     'use strict';
     // load the controller's module
-    beforeEach(module('realm.dashboard'));
+    beforeEach(module('qbse.realm.dashboard'));
 
     var RealmDashboardCtrl, scope;
 

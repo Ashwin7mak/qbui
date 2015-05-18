@@ -1,7 +1,7 @@
 (function() {
     'use strict';
 
-    angular.module('qbapp.reports.dashboard')
+    angular.module('qbse.qbapp.reports.dashboard')
         .factory('ReportsDashboardModel', ReportsDashboardModel);
 
     ReportsDashboardModel.$inject = ['ReportsDashboardService'];

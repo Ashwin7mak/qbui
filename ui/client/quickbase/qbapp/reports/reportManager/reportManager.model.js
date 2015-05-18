@@ -1,7 +1,7 @@
 (function() {
     'use strict';
 
-    angular.module('qbapp.reports.manager')
+    angular.module('qbse.qbapp.reports.manager')
         .factory('ReportModel', ReportManagerModel);
 
     ReportManagerModel.$inject = ['ReportService'];
