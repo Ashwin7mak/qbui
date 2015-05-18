@@ -68,19 +68,15 @@ describe('API - User record test cases - ', function () {
                 "email": email,
                 "challengeQuestion": 'who is your favorite scrum team?',
                 "challengeAnswer": 'blue',
-                "password": 'quickbase',
-                "deactivated": false
+                "password": 'quickbase'
         };
 
         var retUser = {
-            "userId": {
-                "id": null
-            },
+            "id": null,
             "firstName": firstName,
             "lastName": lastName,
             "screenName": email,
-            "email": email,
-            "deactivated": false
+            "email": email
         };
         var userId;
 
@@ -88,7 +84,7 @@ describe('API - User record test cases - ', function () {
         recordBase.apiBase.createSpecificUser(user)
             .then(function (userResponse) {
                 userId = JSON.parse(userResponse.body).id;
-                retUser.userId.id = userId;
+                retUser.id = userId;
                 // User
                 var userInput = [{"id": fid, "value": userId}];
                 var expectedUserRecord = {"id": fid, "value": retUser, "display": firstThenLast};
@@ -175,19 +171,15 @@ describe('API - User record test cases - ', function () {
             "email": email,
             "challengeQuestion": 'who is your favorite scrum team?',
             "challengeAnswer": 'blue',
-            "password": 'quickbase',
-            "deactivated": false
+            "password": 'quickbase'
         };
 
         var retUser = {
-            "userId": {
-                "id": null
-            },
+            "id": null,
             "firstName": firstName,
             "lastName": lastName,
             "screenName": email,
-            "email": email,
-            "deactivated": false
+            "email": email
         };
         var userId;
 
@@ -195,7 +187,7 @@ describe('API - User record test cases - ', function () {
         recordBase.apiBase.createSpecificUser(user)
             .then(function (userResponse) {
                 userId = JSON.parse(userResponse.body).id;
-                retUser.userId.id = userId;
+                retUser.id = userId;
                 // User
                 var userInput = [{"id": fid, "value": userId}];
                 var expectedUserRecord = {"id": fid, "value": retUser, "display": lastThenFirst};
