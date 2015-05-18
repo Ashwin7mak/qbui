@@ -1,7 +1,7 @@
 (function() {
     'use strict';
 
-    angular.module('qbapp.reports.manager')
+    angular.module('qbse.qbapp.reports.manager')
         .controller('ReportCtrl', ReportManagerController);
 
     ReportManagerController.$inject = ['$scope', '$stateParams', 'ReportModel', 'ReportService'];

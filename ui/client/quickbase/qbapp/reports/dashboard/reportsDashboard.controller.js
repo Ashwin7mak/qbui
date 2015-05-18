@@ -1,7 +1,7 @@
 (function() {
     'use strict';
 
-    angular.module('qbapp.reports.dashboard')
+    angular.module('qbse.qbapp.reports.dashboard')
         .controller('ReportsDashboardCtrl', ReportDashboardController);
 
     ReportDashboardController.$inject = ['$scope', '$state', 'ReportsDashboardModel'];

@@ -1,19 +1,18 @@
 (function() {
     'use strict';
 
-    //  define angular modules to be referenced by the apps application
-    angular.module('qbapp.dashboard', []);
-    angular.module('qbapp.common', []);
-    angular.module('qbapp.reports.dashboard', ['qbapp.common']);
-    angular.module('qbapp.reports.manager', ['ngSanitize', 'qbapp.common', 'qbse.grid']);
+    //  define sub-modules to be referenced by the quickBase apps application
+    angular.module('qbse.qbapp.dashboard', []);
+    angular.module('qbse.qbapp.reports.dashboard', ['qbse.layout']);
+    angular.module('qbse.qbapp.reports.manager', ['ngSanitize', 'qbse.layout', 'qbse.grid']);
 
-    //  define the angular apps module
+    //  define the quickBase angular apps module
     angular.module('quickbase.qbapp',
         [
             'ui.router',
-            'qbapp.dashboard',
-            'qbapp.reports.dashboard',
-            'qbapp.reports.manager'
+            'qbse.qbapp.dashboard',
+            'qbse.qbapp.reports.dashboard',
+            'qbse.qbapp.reports.manager'
         ]).
         config(['$routeProvider', function($routeProvider, $locationProvider) {
             $routeProvider.otherwise({redirectTo: ''});
