@@ -1,6 +1,6 @@
 #!/bin/sh
 # this is a script used by Jenkins to prepare the environment for building and testing the ui
-set -x #echo on   
+#set -x #echo on
 echo PATH=$PATH
 echo JRUBY_JAR=$JRUBY_JAR
 echo GEM_PATH=$GEM_PATH
@@ -26,6 +26,7 @@ if [ ! -d "$JRUBY_INSTALL_DIR" ]; then
   $JRUBY_INSTALL_DIR/bin/jruby -S gem install compass
 else
   echo "Ruby install dir $JRUBY_INSTALL_DIR already exists"
+  $JRUBY_INSTALL_DIR/bin/jruby -S gem install compass
 fi
 
 echo Ruby version:

@@ -15,8 +15,10 @@
     "angular-bootstrap": "~0.11.0",
     "font-awesome": "~4.3.0",
     "ng-lodash": "~0.2.0",
-    "angular-ui-grid":"~3.0.0-rc.20",
-    "angular-ui-router": "~0.2.13"
+    "angular-ui-grid": "~3.0.0-rc.20",
+    "angular-ui-router": "~0.2.13",
+    "chance": "~0.7.5",
+    "restangular": "~1.5.1"
   },
   "devDependencies": {
     "angular-mocks": ">=1.2.*"

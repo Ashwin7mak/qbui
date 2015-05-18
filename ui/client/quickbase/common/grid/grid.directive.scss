@@ -1,63 +1,187 @@
-$PALE_BLUE: #E3E9F3;
-$DARK_TEXT : #404040;
-$GREYISH : #DCDCDC;
-$GREYSOFT : #9D9D9D;
-$GREY_BLUE_TEXT : #486C8F;
-$GREY_BLUE_BORDER_COLOR :#D2DCE7;
+/* imports */
+@import "../../assets/utils";
 
-$BASE_FONT_SIZE : 13px;;
+//Common Colors and Spacing
+$WHITE                   : #FFF;
+$PALE_BLUE               : #E3E9F3;
+$GREY_BLUE_BORDER_COLOR  : #D2DCE7;
+$GREYISH                 : #DCDCDC;
+$GREY                    : #999;
+$GREYSOFT                : #969696;
+$DARKER_GREY             : #777;
+$GREY_BLUE_TEXT          : #486C8F;
+$STRONG_BLUE             : #365EBF;
+$DEEP_BLUE               : #243f7f;
+$NAVY_BLUE               : #29478f;
+$DARK_TEXT               : #404040;
+
+$BASE_FONT_SIZE          : 13px;
+$LINE_HEIGHT_COMPUTED    : 20px;
+$BORDER_RADIUS_BASE      : 2px;
+$PADDING_BASE_VERTICAL   : 5px;
+$PADDING_BASE_HORIZONTAL : 10px;
+$LINE_HEIGHT_BASE        : 1.42857143;
+
+//Grid Pagination elements
+//
+// Pagination (multiple pages)
+// --------------------------------------------------
 
 $GRID_TITLE_TEXT_COLOR : $DARK_TEXT;
 $GRID_HEADER_BACKGROUND_COLOR : $PALE_BLUE;
 $GRID_HEADER_TEXT_COLOR : $GREY_BLUE_TEXT;
 $GRID_ROW_HORIZONTAL_BORDER_COLOR : $GREYISH;
 $GRID_ROW_VERITCAL_BORDER_COLOR : $GREYSOFT;
+$DISABLED_BUTTON_COLOR : $GREY;
+$BUTTON_BACKGROUND_COLOR : $WHITE;
 
 .gridStyle {
-  height:500px;
-  min-height: 500px;
-  width: 99%;
+    height     : 500px;
+    min-height : 500px;
+    width      : 99%;
+
+    // override ui-grids styling
+    &.ui-grid {
+        font-family   : "Helvetica Neue LT Roman", HelveticaNeue, "Helvetica Neue", Helvetica, Arial, sans-serif;
+        border        : 0;
+        font-size     : $BASE_FONT_SIZE;
+        color         : $GRID_TITLE_TEXT_COLOR;
+        border-bottom : 2px solid $GRID_ROW_HORIZONTAL_BORDER_COLOR;
+    }
+    .ui-grid-header-canvas {
+        background-color : $GRID_HEADER_BACKGROUND_COLOR;
+        color            : $GRID_HEADER_TEXT_COLOR;
+        text-transform   : uppercase;
+        font-weight      : normal;
+        border-bottom    : 2px solid $GREY_BLUE_BORDER_COLOR;
+    }
+    .ui-grid-header-cell {
+        padding : 8px 0 2px 0;
+    }
+    .ui-grid-icon-angle-down:before {
+        content : ''; // overrides the arrow character ui_grid inserts '\c35e';
+    }
+    .ui-grid-cell {
+        border-right   : 1px dotted $GRID_ROW_VERITCAL_BORDER_COLOR;
+        height         : 43px;
+        line-height    : 1.2em;
+        vertical-align : middle;
+    }
+    .ui-grid-row {
+        border-bottom : 1px solid $GRID_ROW_HORIZONTAL_BORDER_COLOR;
+    }
+    .ui-grid-footer-info {
+        margin-top : 7px;
+    }
 }
 
 .gridTitle {
-  color: $GRID_TITLE_TEXT_COLOR;
-  font-family: "Helvetica Neue LT Bold", HelveticaNeue,"Helvetica Neue",Helvetica,Arial,sans-serif;
+    color       : $GRID_TITLE_TEXT_COLOR;
+    font-family : "Helvetica Neue LT Bold", HelveticaNeue, "Helvetica Neue", Helvetica, Arial, sans-serif;
 }
 
-// override ui-grids styling
-.gridStyle.ui-grid{
-  font-family:"Helvetica Neue LT Roman", HelveticaNeue,"Helvetica Neue",Helvetica,Arial,sans-serif;
-  border: 0;
-  font-size: $BASE_FONT_SIZE;
-  color: $GRID_TITLE_TEXT_COLOR;
-  border-bottom:2px solid $GRID_ROW_HORIZONTAL_BORDER_COLOR ;
+.ui-grid-pagination ul {
+    list-style-type : none;
 }
 
-.gridStyle .ui-grid-header-canvas {
-  background-color :$GRID_HEADER_BACKGROUND_COLOR ;
-  color :$GRID_HEADER_TEXT_COLOR;
-  text-transform: uppercase;
-  font-weight: normal;
-  border-bottom:2px solid $GREY_BLUE_BORDER_COLOR ;
-}
-.gridStyle .ui-grid-header-cell {
- padding: 8px 0 2px 0;
-}
-.gridStyle .ui-grid-icon-angle-down:before {
-  content: ''; // overrides the arrow character ui_grid inserts '\c35e';
+.disabled {
+    color            : $DISABLED_BUTTON_COLOR;
+    cursor           : default;
+    background-color : $BUTTON_BACKGROUND_COLOR;
 }
 
-.gridStyle .ui-grid-cell {
-  border-right: 1px dotted $GRID_ROW_VERITCAL_BORDER_COLOR;
-  height: 43px;
-  line-height:1.2em;
-  vertical-align: middle;
+$PAGINATION_COLOR           : $STRONG_BLUE;
+$PAGINATION_BG              : $WHITE;
+$PAGINATION_BORDER          : $GREYISH;
+$PAGINATION_HOVER_COLOR     : $DEEP_BLUE;
+$PAGINATION_HOVER_BG        : $WHITE;
+$PAGINATION_HOVER_BORDER    : $GREYISH;
+$PAGINATION_ACTIVE_COLOR    : $WHITE;
+$PAGINATION_ACTIVE_BG       : $STRONG_BLUE;
+$PAGINATION_ACTIVE_BORDER   : $NAVY_BLUE;
+$PAGINATION_DISABLED_COLOR  : $DARKER_GREY;
+$PAGINATION_DISABLED_BG     : $WHITE;
+$PAGINATION_DISABLED_BORDER : $GREYISH;
+
+//Grid Pagination elements
+//
+// Pagination (multiple pages)
+// --------------------------------------------------
+.right {
+    float : right;
 }
 
-.gridStyle .ui-grid-row {
-  border-bottom: 1px solid $GRID_ROW_HORIZONTAL_BORDER_COLOR ;
+.pagination {
+    display       : inline-block;
+    padding-left  : 0;
+    margin        : $LINE_HEIGHT_COMPUTED 0;
+    border-radius : $BORDER_RADIUS_BASE;
+    box-sizing    : border-box;
+
+    > li {
+        display : inline; // Remove list-style and block-level defaults
+        > a,
+        > span {
+            position         : relative;
+            float            : left; // Collapse white-space
+            padding          : $PADDING_BASE_VERTICAL $PADDING_BASE_HORIZONTAL;
+            line-height      : $LINE_HEIGHT_BASE;
+            text-decoration  : none;
+            color            : $PAGINATION_COLOR;
+            background-color : $PAGINATION_BG;
+            border           : 1px solid $PAGINATION_BORDER;
+            margin-left      : -1px;
+        }
+        &:first-child {
+            > a,
+            > span {
+                margin-left : 0;
+                @include border-left-radius($BORDER_RADIUS_BASE)
+            }
+        }
+        &:last-child {
+            > a,
+            > span {
+                @include border-right-radius($BORDER_RADIUS_BASE)
+            }
+        }
+    }
+
+    > li > a,
+    > li > span {
+        &:hover,
+        &:focus {
+            color            : $PAGINATION_HOVER_COLOR;
+            background-color : $PAGINATION_HOVER_BG;
+            border-color     : $PAGINATION_HOVER_BORDER;
+        }
+    }
+
+    > .active > a,
+    > .active > span {
+        &,
+        &:hover,
+        &:focus {
+            z-index          : 2;
+            color            : $PAGINATION_ACTIVE_COLOR;
+            background-color : $PAGINATION_ACTIVE_BG;
+            border-color     : $PAGINATION_ACTIVE_BORDER;
+            cursor           : default;
+        }
+    }
+
+    > .disabled {
+        > span,
+        > span:hover,
+        > span:focus,
+        > a,
+        > a:hover,
+        > a:focus {
+            color            : $PAGINATION_DISABLED_COLOR;
+            background-color : $PAGINATION_DISABLED_BG;
+            border-color     : $PAGINATION_DISABLED_BORDER;
+            cursor           : not-allowed;
+        }
+    }
 }
 
-.gridStyle .ui-grid-footer-info {
-  margin-top: 7px;
-}
