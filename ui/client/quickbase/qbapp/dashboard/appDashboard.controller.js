@@ -1,7 +1,7 @@
 (function() {
     'use strict';
 
-    angular.module('qbapp.dashboard')
+    angular.module('qbse.qbapp.dashboard')
         .controller('AppDashboardCtrl', AppDashboardController);
 
     function AppDashboardController($scope, $state) {

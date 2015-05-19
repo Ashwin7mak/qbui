@@ -103,7 +103,7 @@
             var m = moment.tz(d, timeZone);
             var jsDateFormat = fieldInfo.jsFormat;
             if(!jsDateFormat) {
-                jsDateFormat = this.generateFormatterString(fieldInfo);
+                jsDateFormat = this.generateFormat(fieldInfo);
             }
             //If the date is the current year and hideYearIfCurrent is true, remove the date from the formatter string
             if (fieldInfo.hideYearIfCurrent && m.format(FOUR_DIGIT_YEAR) == new Date().getFullYear()) {

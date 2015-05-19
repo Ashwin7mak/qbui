@@ -1,7 +1,7 @@
 (function() {
     'use strict';
 
-    var reportsApp = angular.module('quickbase.realm', ['ui.router', 'realm.dashboard']);
+    var reportsApp = angular.module('quickbase.realm', ['ui.router', 'qbse.realm.dashboard']);
     var reportsAppConfig = reportsApp.config(['$stateProvider', '$urlRouterProvider', function($stateProvider) {
 
         $stateProvider

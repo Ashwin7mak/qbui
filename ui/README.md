@@ -202,14 +202,72 @@ The following run-time environment variables are supported:
         NODE_ENV=test;HOST=localhost-test.intuit.com
 
 # Testing
-
+**Unit tests**
 Running `grunt test` will run the client and server unit tests with karma and mocha.
 
 Use `grunt test:server` to only run server tests.
 
 Use `grunt test:client` to only run client tests.
 
-**Protractor tests**
+**Mocha Integration tests**
+
+In order to run the integration tests you will need to have your Node.js express server and your Java API service (aka Monolith) running
+
+Make sure you have configured your local.js file properly (as described above):
+
+        //REST endpoint (protocol,server,port)
+        javaHost: 'http://localhost:8080/api/'
+        //Express Server
+        DOMAIN: 'http://localhost:9000'
+
+Because the integration tests create a realm and the Mac OS by default does not handle loopback calls to localhost, we need to setup / configure
+a local DNS server (Dnsmasq):
+
+        # Update your homebrew installation
+        brew up
+        # Install Dnsmasq
+        brew install dnsmasq
+
+        # Copy the default configuration file:
+        cp $(brew list dnsmasq | grep /dnsmasq.conf.example$) /usr/local/etc/dnsmasq.conf
+
+        # Copy the daemon configuration file into place:
+        sudo cp $(brew list dnsmasq | grep /homebrew.mxcl.dnsmasq.plist$) /Library/LaunchDaemons/
+
+        # Start Dnsmasq automatically when the OS starts:
+        sudo launchctl load /Library/LaunchDaemons/homebrew.mxcl.dnsmasq.plist
+
+        # Configure Dnsmasq: The configuration file lives at `/usr/local/etc/dnsmasq.conf` by default, so open this file in your favourite editor.
+        # Add / uncomment to config file:
+        address=/localhost/127.0.0.1
+
+        # Restart Dnsmasq:
+        sudo launchctl stop homebrew.mxcl.dnsmasq
+        sudo launchctl start homebrew.mxcl.dnsmasq
+
+At this point Dnsmasq is being used for all DNS requests. We want to configure the Mac OS to just use Dnsmasq for localhost callbacks:
+
+        sudo mkdir -p /etc/resolver
+        sudo tee /etc/resolver/localhost >/dev/null <<EOF
+        nameserver 127.0.0.1
+        EOF
+
+For more documentation on Dnsmasq see: `http://passingcuriosity.com/2013/dnsmasq-dev-osx/`
+
+To make sure it's working properly run Monolith and in your web browser hit:
+`http://blah.localhost:8080/api/`
+If swagger comes up then Dnsmasq is configured properly.
+
+Now try to hit an external website like `http://www.google.com` to make sure the OS is handling non localhost calls.
+
+Now you should be able to run your Mocha integration tests!
+With the Java API service running, from the qbui/ui directory run:
+
+        grunt mochaTest:integration
+
+Note that this command will launch your Node express server if it's not running.
+
+**Protractor E2E tests**
 
 To setup protractor e2e tests, you must first run
 
