@@ -9,6 +9,7 @@
         CONTENT_TYPE: 'Content-Type',
         APPLICATION_JSON: 'application/json',
         APPLICATION_XML: 'application/xml',
+        TEXT_HTML: 'text/html',
         UTC_TIMEZONE: 'Universal',
         //Field types
         PHONE_NUMBER: 'PHONE_NUMBER',
