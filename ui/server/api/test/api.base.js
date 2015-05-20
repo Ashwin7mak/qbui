@@ -29,6 +29,7 @@
         var USERS_ENDPOINT = "/users/";
         var LOCALHOST_REALM = 117000;
         var TICKETS_ENDPOINT = '/ticket?uid=1000000&realmID=';
+        var HEALTH_ENDPOINT  = '/health';
         var SUBDOMAIN_CHARS = 'abcdefghijklmnopqrstuvwxyz0123456789';
         var CONTENT_TYPE = 'Content-Type';
         var APPLICATION_JSON = 'application/json';
@@ -117,6 +118,9 @@
             },
             resolveTicketEndpoint: function () {
                 return BASE_ENDPOINT + TICKETS_ENDPOINT;
+            },
+            resolveHealthEndpoint: function () {
+                return BASE_ENDPOINT + HEALTH_ENDPOINT;
             },
             resolveUsersEndpoint: function (userId) {
                 var endpoint = BASE_ENDPOINT + USERS_ENDPOINT;
