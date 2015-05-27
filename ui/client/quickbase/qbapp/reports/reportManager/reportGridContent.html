@@ -1,17 +1,14 @@
 <div class="report">
-    <div class="report-header"></div>
     <div class="report-content">
         <div>
             <qbse-grid
                     grid-id="report-{{report.id}}"
                     grid-type="report"
                     title="{{report.name}}"
-                    items="report.data"
                     custom-options="report.qbseGridOptions"
                     service="report.dataService">
+                <strong>Please wait while we retrieve your report data.</strong>
             </qbse-grid>
         </div>
-
     </div>
-
 </div>

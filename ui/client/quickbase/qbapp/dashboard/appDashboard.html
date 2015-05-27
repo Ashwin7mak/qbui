@@ -1,15 +1,19 @@
 <div>
 
-    <p>Application</p>
+    <p>A pretend Quickbase HomePage for Application X.</p>
 
-    <p>This is the home page for Application X</p>
+    <div ng-if="appId">
+        <a href="/apps/tables">Tables Home</a><br>
+        <a ng-click="goToReports()" style="color:-webkit-link; text-decoration: underline; cursor:pointer;">Reports Home(only works with report id of 1,2 or 3)</a><br>
+        <p>
+            <a ng-click="goToReport('{{reportId}}')" style="color:-webkit-link; text-decoration: underline; cursor:pointer;">Open Report {{reportId}}</a><br>
+        </p>
+    </div>
+    <div ng-if="!appId">
+        <p>To use this page, append a report appId and tableId to the url.<br>
+            Change http://localhost:9000/qbapp#/// to http://localhost:9000/qbapp#/0duiiaaabw6/0duiiaaabw7/2 where 0duiiaaabw6 is an appId and
+            0duiiaaabw7 is a tableId and 2 is a reportId; refresh the page.
+        </p>
+    </div>
 
-    <a href="/apps/tables">Tables</a><br>
-    <a ng-click="goToReports()" style="color:-webkit-link; text-decoration: underline; cursor:pointer;">Reports</a><br>
-    <a href="/apps/settings">Settings</a><br>
-
-    <p>
-        <a ng-click="goToReport('1')" style="color:-webkit-link; text-decoration: underline; cursor:pointer;">Report
-            1</a><br>
-    </p>
 </div>

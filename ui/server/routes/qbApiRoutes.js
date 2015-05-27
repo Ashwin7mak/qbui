@@ -42,7 +42,7 @@
         );
 
         //Disable proxying of realm and ticket requests via the node webserver
-        app.route(['/api/:version/realms*', '/api/:version/ticket*']).all(
+        app.route(['/api/:version/realms*']).all(
             function(req, res) {
                 requestHelper.logRoute(req);
                 res.status(404).send();

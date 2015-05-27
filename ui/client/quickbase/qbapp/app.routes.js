@@ -56,7 +56,7 @@
             })
             //***  Temporary routes END...to be removed....  ***//
             .state('qbapp', {
-                url: '/',
+                url: '/:appId/:tableId/:reportId',
                 views: {
                     qbappHomeView: {
                         templateUrl: 'quickbase/qbapp/dashboard/appDashboard.html',
@@ -65,7 +65,7 @@
                 }
             })
             .state('reports', {
-                url: '/reports',
+                url: '/reports/:appId/:tableId',
                 views: {
                     qbappHomeView: {
                         templateUrl: 'quickbase/qbapp/reports/dashboard/reportsDashboard.html',
@@ -74,23 +74,25 @@
                 }
             })
             .state('reports/report', {
-                url: '/report/:id',
+                url: '/apps/:appId/tables/:tableId/report/:id',
                 parent: 'reports',
                 views: {
                     navigationTarget: {
                         templateUrl: 'quickbase/qbapp/reports/reportManager/reportLayout.html',
                         controller: function($scope) {
+                            $scope.showLayout = false;
                             $scope.layout = 'quickbase/common/layoutManager/layouts/default.html';
                         }
                     }
                 }
             })
             .state('report', {
-                url: '/report/:id',
+                url: '/apps/:appId/tables/:tableId/report/:id',
                 views: {
                     qbappHomeView: {
                         templateUrl: 'quickbase/qbapp/reports/reportManager/reportLayout.html',
                         controller: function($scope) {
+                            $scope.showPage = false;
                             $scope.layout = 'quickbase/common/layoutManager/shellNoNav.html';
                         }
                     }
