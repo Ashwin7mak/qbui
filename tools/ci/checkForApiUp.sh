@@ -15,6 +15,14 @@ done
 
 if [ "$SERVER_RESPONSE" != "\"200\"" ]; then
     echo "Waited a long time. That server is not coming up..."
+
+    PID=$(ps -ef | grep org.apache.catalina.startup.Bootstrap | grep -v grep | awk '{ print $2 }')
+
+    if [[ -n "$PID" ]]; then
+        echo "Forcefully shutting down tomcat"
+        kill -9 $PID
+    fi
+
     exit 1;
 fi
 
