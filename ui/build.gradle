@@ -163,7 +163,7 @@ task checkForApiUp {
 
 task invokeCheckForApiUp(type:Exec) {
     executable cwd + "/../tools/ci/checkForApiUp.sh"
-    args '1000'
+    args '300'
 }
 
 //******************************************************
