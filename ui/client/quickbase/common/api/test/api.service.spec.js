@@ -15,8 +15,8 @@ describe("quickbase api service", function () {
         $httpBackend.whenGET("/api/apps").respond([]);
         expect(ApiService).toBeDefined();
         expect(ApiService.inValidProperty).toBeUndefined();
-        expect(ApiService.apps.query).toBeDefined();
-        ApiService.apps.query().$promise.then(function(response) {
+        expect(ApiService.getApp).toBeDefined();
+        ApiService.getApp('test').then(function(response) {
             expect(response).not.toBeNull();
         });
     });
