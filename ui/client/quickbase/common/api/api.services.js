@@ -61,6 +61,11 @@
                 return Restangular.one('apps', appId).one('tables',tableId).one('reports',reportId).withHttpConfig(httpHeaders).get();
             },
 
+            getReports: function(appId, tableId) {
+                var httpHeaders = {ticket: getTicket()};
+                return Restangular.one('apps', appId).one('tables',tableId).one('reports').withHttpConfig(httpHeaders).get();
+            },
+
             getFormattedRecords: function(appId, tableId, offset, rows) {
                 //  TODO move into constants
                 var queryParams = setFormattedRecordsQueryParams('display', offset, rows);

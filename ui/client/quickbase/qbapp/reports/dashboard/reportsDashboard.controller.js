@@ -8,13 +8,19 @@
 
     function ReportDashboardController($scope, $state, $stateParams, ReportsDashboardModel) {
 
-        var model = ReportsDashboardModel.get();
+        $scope.appId = $stateParams.appId;
+        $scope.tableId = $stateParams.tableId;
 
-        $scope.menus = model.menu;
-
-        //  TODO: this probably is not the right way to fetch the appid and tableid..model call?
-        var appId = $stateParams.appId;
-        var tableId = $stateParams.tableId;
+        if ($scope.appId && $scope.tableId) {
+            $scope.reports = [];
+            ReportsDashboardModel.get($scope.appId, $scope.tableId).then(
+                function (reports) {
+                    reports.forEach(function (report) {
+                        $scope.reports.push({id: report.id, name: report.name});
+                    });
+                }
+            );
+        }
 
         //  set appropriate header object data
         $scope.header = {
@@ -26,15 +32,15 @@
             return 'quickbase/qbapp/reports/dashboard/reportsDashboardMenu.html';
         };
 
-        $scope.goToPage = function(menu) {
-            if (menu.id === 1) {
-                $state.transitionTo('reports/report', {appId:appId, tableId:tableId,id: menu.id});
+        $scope.goToPage = function(report) {
+            if (report.id === 1) {
+                $state.transitionTo('reports/report', {appId:$scope.appId, tableId:$scope.tableId,id: report.id});
             }
-            if (menu.id === 2) {
-                $state.transitionTo('reports/report', {appId:appId, tableId:tableId,id: menu.id});
+            if (report.id === 2) {
+                $state.transitionTo('reports/report', {appId:$scope.appId, tableId:$scope.tableId,id: report.id});
             }
-            if (menu.id === 3) {
-                $state.transitionTo('reports/report', {appId:appId, tableId:tableId,id: menu.id});
+            if (report.id === 3) {
+                $state.transitionTo('reports/report', {appId:$scope.appId, tableId:$scope.tableId,id: report.id});
             }
         };
     }

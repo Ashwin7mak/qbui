@@ -56,7 +56,7 @@
             })
             //***  Temporary routes END...to be removed....  ***//
             .state('qbapp', {
-                url: '/:appId/:tableId/:reportId',
+                url: '/:appId/:tableId',
                 views: {
                     qbappHomeView: {
                         templateUrl: 'quickbase/qbapp/dashboard/appDashboard.html',
