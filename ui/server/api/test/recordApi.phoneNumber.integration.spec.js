@@ -6,6 +6,8 @@ var config = require('../../config/environment');
 var recordBase = require('./recordApi.base')(config);
 var Promise = require('bluebird');
 var _ = require('lodash');
+var testConsts = require('./api.test.constants');
+
 
 /**
  * Integration test for PhoneNumber field formatting
@@ -58,7 +60,7 @@ describe('API - PhoneNumber record test cases', function () {
      * Integration test that validates PhoneNumber records formatting 
      */
     it('Should create and retrieve display formatted phone records', function (done) {
-        this.timeout(30000);
+        this.timeout(testConsts.INTEGRATION_TIMEOUT);
         recordBase.createApp(exampleApp).then(function (appResponse) {
             var app = JSON.parse(appResponse.body);
             var phoneField;

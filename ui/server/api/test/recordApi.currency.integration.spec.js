@@ -6,6 +6,7 @@ var config = require('../../config/environment');
 var recordBase = require('./recordApi.base')(config);
 var Promise = require('bluebird');
 var _ = require('lodash');
+var testConsts = require('./api.test.constants');
 /*
  * We can't use JSON.parse() with records because it is possible to lose decimal precision as a
  * result of the JavaScript implementation of its single numeric data type. In JS, all numbers are
@@ -154,7 +155,7 @@ describe('API - Currency record test cases', function () {
      * Integration test that validates Currency records formatting with no field property flags set
      */
     it('Should create and retrieve currency display records when no format flags set', function (done) {
-        this.timeout(30000);
+        this.timeout(testConsts.INTEGRATION_TIMEOUT);
         recordBase.createApp(appWithNoFlags).then(function (appResponse) {
             var app = JSON.parse(appResponse.body);
             var currencyField;
@@ -237,7 +238,7 @@ describe('API - Currency record test cases', function () {
      * Integration test that validates Currency records formatting with all 'right of sign' field property flags set
      */
     it('Should create and retrieve currency display records when all "right of sign" format flags set', function (done) {
-        this.timeout(30000);
+        this.timeout(testConsts.INTEGRATION_TIMEOUT);
         recordBase.createApp(appWithAllRightOfSignFlags).then(function (appResponse) {
             var app = JSON.parse(appResponse.body);
             var currencyField;
@@ -320,7 +321,7 @@ describe('API - Currency record test cases', function () {
     * Integration test that validates Currency records formatting with all 'right' field property flags set
     */
     it('Should create and retrieve currency display records when all "right" format flags set', function (done) {
-        this.timeout(30000);
+        this.timeout(testConsts.INTEGRATION_TIMEOUT);
         recordBase.createApp(appWithAllRightFlags).then(function (appResponse) {
             var app = JSON.parse(appResponse.body);
             var currencyField;
@@ -403,7 +404,7 @@ describe('API - Currency record test cases', function () {
      * Integration test that validates Currency records formatting with all 'left' field property flags set
      */
     it('Should create and retrieve currency display records when all "left" format flags set', function (done) {
-        this.timeout(30000);
+        this.timeout(testConsts.INTEGRATION_TIMEOUT);
         recordBase.createApp(appWithAllLeftFlags).then(function (appResponse) {
             var app = JSON.parse(appResponse.body);
             var currencyField;

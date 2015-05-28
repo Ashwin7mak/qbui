@@ -6,6 +6,7 @@ var config = require('../../config/environment');
 var recordBase = require('./recordApi.base')(config);
 var Promise = require('bluebird');
 var _ = require('lodash');
+var testConsts = require('./api.test.constants');
 
 /**
  * Integration test for TimeOfDay field formatting
@@ -83,7 +84,7 @@ describe('API - TimeOfDay record test cases - ', function () {
     * Integration test that validates TimeOfDay records formatting with no field property flags set
     */
     it('Should create and retrieve timeOfDay display records when no format flags set', function (done) {
-        this.timeout(30000);
+        this.timeout(testConsts.INTEGRATION_TIMEOUT);
         recordBase.createApp(appWithNoFlags).then(function (appResponse) {
             var app = JSON.parse(appResponse.body);
             var timeOfDayField;
@@ -156,7 +157,7 @@ describe('API - TimeOfDay record test cases - ', function () {
     * Integration test that validates HH_MM TimeOfDay records formatting with all field property flags set
     */
     it('Should create and retrieve HH_MM timeOfDay display records when all format flags set', function (done) {
-        this.timeout(30000);
+        this.timeout(testConsts.INTEGRATION_TIMEOUT);
         recordBase.createApp(appWithAllFlags_HH_MM).then(function (appResponse) {
             var app = JSON.parse(appResponse.body);
             var timeOfDayField;
@@ -229,7 +230,7 @@ describe('API - TimeOfDay record test cases - ', function () {
      * Integration test that validates HH_MM_SS TimeOfDay records formatting with all field property flags set
      */
     it('Should create and retrieve HH_MM_SS timeOfDay display records when all format flags set', function (done) {
-        this.timeout(30000);
+        this.timeout(testConsts.INTEGRATION_TIMEOUT);
         recordBase.createApp(appWithAllFlags_HH_MM_SS).then(function (appResponse) {
             var app = JSON.parse(appResponse.body);
             var timeOfDayField;

@@ -6,6 +6,7 @@ var config = require('../../config/environment');
 var recordBase = require('./recordApi.base')(config);
 var Promise = require('bluebird');
 var _ = require('lodash');
+var testConsts = require('./api.test.constants');
 
 /**
  * Integration test for DateTime field formatting
@@ -86,7 +87,7 @@ describe('API - DateTime record test cases - ', function () {
     * Integration test that validates DateTime records formatting with no field property flags set
     */
     it('Should create and retrieve dateTime display records when no format flags set', function (done) {
-        this.timeout(30000);
+        this.timeout(testConsts.INTEGRATION_TIMEOUT);
         recordBase.createApp(appWithNoFlags).then(function (appResponse) {
             var app = JSON.parse(appResponse.body);
             var dateTimeField;
@@ -159,7 +160,7 @@ describe('API - DateTime record test cases - ', function () {
     * Integration test that validates DD_MM_YYYY DateTime records formatting with all field property flags set
     */
     it('Should create and retrieve DD_MM_YYYY dateTime display records when all format flags set', function (done) {
-        this.timeout(30000);
+        this.timeout(testConsts.INTEGRATION_TIMEOUT);
         recordBase.createApp(appWithAllFlags_DD_MM_YYYY).then(function (appResponse) {
             var app = JSON.parse(appResponse.body);
             var dateTimeField;
@@ -232,7 +233,7 @@ describe('API - DateTime record test cases - ', function () {
     * Integration test that validates MM_DD_YYYY DateTime records formatting with all field property flags set
     */
     it('Should create and retrieve MM_DD_YYYY dateTime display records when all format flags set', function (done) {
-        this.timeout(30000);
+        this.timeout(testConsts.INTEGRATION_TIMEOUT);
         recordBase.createApp(appWithAllFlags_MM_DD_YYYY).then(function (appResponse) {
             var app = JSON.parse(appResponse.body);
             var dateTimeField;
@@ -305,7 +306,7 @@ describe('API - DateTime record test cases - ', function () {
     * Integration test that validates MM_DD_YY DateTime records formatting with all field property flags set
     */
     it('Should create and retrieve MM_DD_YY dateTime display records when all format flags set', function (done) {
-        this.timeout(30000);
+        this.timeout(testConsts.INTEGRATION_TIMEOUT);
         recordBase.createApp(appWithAllFlags_MM_DD_YY).then(function (appResponse) {
             var app = JSON.parse(appResponse.body);
             var dateTimeField;
@@ -378,7 +379,7 @@ describe('API - DateTime record test cases - ', function () {
     * Integration test that validates DD_MM_YY DateTime records formatting with all field property flags set
     */
     it('Should create and retrieve DD_MM_YY dateTime display records when all format flags set', function (done) {
-        this.timeout(30000);
+        this.timeout(testConsts.INTEGRATION_TIMEOUT);
         recordBase.createApp(appWithAllFlags_DD_MM_YY).then(function (appResponse) {
             var app = JSON.parse(appResponse.body);
             var dateTimeField;
@@ -451,7 +452,7 @@ describe('API - DateTime record test cases - ', function () {
     * Integration test that validates YYYY_MM_DD DateTime records formatting with all field property flags set
     */
     it('Should create and retrieve YYYY_MM_DD dateTime display records when all format flags set', function (done) {
-        this.timeout(30000);
+        this.timeout(testConsts.INTEGRATION_TIMEOUT);
         recordBase.createApp(appWithAllFlags_YYYY_MM_DD).then(function (appResponse) {
             var app = JSON.parse(appResponse.body);
             var dateTimeField;

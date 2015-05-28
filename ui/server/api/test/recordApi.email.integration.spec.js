@@ -6,6 +6,8 @@ var config = require('../../config/environment');
 var recordBase = require('./recordApi.base')(config);
 var Promise = require('bluebird');
 var _ = require('lodash');
+var testConsts = require('./api.test.constants');
+
 
 /**
  * Integration test for Email field formatting
@@ -140,7 +142,7 @@ describe('API - Email record test cases - ', function () {
     * Integration test that validates Email records formatting with no field property flags set
     */
     it('Should create and retrieve email display records when no format flags set', function (done) {
-        this.timeout(30000);
+        this.timeout(testConsts.INTEGRATION_TIMEOUT);
         recordBase.createApp(appWithNoFlags).then(function (appResponse) {
             var app = JSON.parse(appResponse.body);
             var emailField;
@@ -212,7 +214,7 @@ describe('API - Email record test cases - ', function () {
     * Integration test that validates Email records formatting with 'Entire Email' field property flags set
     */
     it('Should create and retrieve email display records when "entire email" format flag set', function (done) {
-        this.timeout(30000);
+        this.timeout(testConsts.INTEGRATION_TIMEOUT);
         recordBase.createApp(appWithEntireEmailFlag).then(function (appResponse) {
             var app = JSON.parse(appResponse.body);
             var emailField;
@@ -284,7 +286,7 @@ describe('API - Email record test cases - ', function () {
      * Integration test that validates Email records formatting with 'before @' field property flags set
      */
     it('Should create and retrieve email display records when "before @" format flag set', function (done) {
-        this.timeout(30000);
+        this.timeout(testConsts.INTEGRATION_TIMEOUT);
         recordBase.createApp(appWithBeforeAtSignFlag).then(function (appResponse) {
             var app = JSON.parse(appResponse.body);
             var emailField;
@@ -356,7 +358,7 @@ describe('API - Email record test cases - ', function () {
      * Integration test that validates Email records formatting with 'before _' field property flags set
      */
     it('Should create and retrieve email display records when "before _" format flag set', function (done) {
-        this.timeout(30000);
+        this.timeout(testConsts.INTEGRATION_TIMEOUT);
         recordBase.createApp(appWithBeforeUnderscoreFlag).then(function (appResponse) {
             var app = JSON.parse(appResponse.body);
             var emailField;
@@ -428,7 +430,7 @@ describe('API - Email record test cases - ', function () {
      * Integration test that validates Email records formatting with 'link text' field property flags set
      */
     it('Should create and retrieve email display records when "link text" format flag set', function (done) {
-        this.timeout(30000);
+        this.timeout(testConsts.INTEGRATION_TIMEOUT);
         recordBase.createApp(appWithLinkTextFlag).then(function (appResponse) {
             var app = JSON.parse(appResponse.body);
             var emailField;
@@ -500,7 +502,7 @@ describe('API - Email record test cases - ', function () {
      * Integration test that validates Email records formatting with all field property flags set
      */
     it('Should create and retrieve email display records when all format flags set', function (done) {
-        this.timeout(30000);
+        this.timeout(testConsts.INTEGRATION_TIMEOUT);
         recordBase.createApp(appWithAllFlags).then(function (appResponse) {
             var app = JSON.parse(appResponse.body);
             var emailField;
