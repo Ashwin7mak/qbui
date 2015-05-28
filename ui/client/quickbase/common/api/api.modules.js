@@ -18,10 +18,10 @@
                     return false;
                 }
 
-                //  Will redirect all 403 exceptions to unauthorized error page.
-                //  TODO: post lighthouse: provide mechanism to callback
-                //  TODO: to the original request after a successful login.
-                if (response.status === 403) {
+                //  Will redirect all 401(unauthorized) and 403(forbidden) exceptions to unauthorized error page (for now).
+                //  TODO: post lighthouse: if unauthorized, provide mechanism to callback
+                //  TODO: to the original request after a successful login...for 403..need to define??
+                if (response.status === 401 || response.status === 403) {
                     window.location.href = '/unauthorized';
                     return false;
                 }
