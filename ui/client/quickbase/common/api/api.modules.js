@@ -4,6 +4,7 @@
         //  define the quickBase angular apps module
     angular.module('qbse.api',
         [
+            'qbse.helper',
             'restangular',
             'ngCookies'
         ]).
@@ -19,8 +20,8 @@
                 }
 
                 //  Will redirect all 401(unauthorized) and 403(forbidden) exceptions to unauthorized error page (for now).
-                //  TODO: post lighthouse: if unauthorized, provide mechanism to callback
-                //  TODO: to the original request after a successful login...for 403..need to define??
+                //  TODO: post lighthouse: if unauthorized(401), provide mechanism to callback to original request;
+                //  TODO: for 403's(we know who you are but access denied)..what to do??
                 if (response.status === 401 || response.status === 403) {
                     window.location.href = '/unauthorized';
                     return false;

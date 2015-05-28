@@ -8,9 +8,6 @@
 
     function AppDashboardController($scope, $state, $stateParams, ReportsDashboardModel) {
 
-        //  TODO: replace with model call to fetch app and table info
-        //$scope.appId = '0duiiaaabw6';
-        //$scope.tableId = '0duiiaaabw7';
         $scope.appId = $stateParams.appId;
         $scope.tableId = $stateParams.tableId;
 

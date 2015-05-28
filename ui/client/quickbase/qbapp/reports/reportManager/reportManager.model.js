@@ -16,12 +16,14 @@
 
             var deferred = $q.defer();
 
+            //  TODO: get metaData(company,snapshot date) of logged in customer
             var metaData = {
                 appId: appId,
                 tableId: tableId,
                 reportId: reportId,
                 name: 'Report name ' + reportId,
                 description: 'Report description ' + reportId,
+                company: 'ABC Test Company',
                 snapshot: d.toLocaleString()
             };
 

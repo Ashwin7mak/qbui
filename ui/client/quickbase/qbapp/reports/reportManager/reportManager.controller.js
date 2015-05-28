@@ -14,25 +14,25 @@
         var appId = $stateParams.appId;
         var tableId = $stateParams.tableId;
         var reportId = $stateParams.id;
-        var companyName = 'ABC Company';
 
         $scope.dataGridReportService = function(requestType, offset, rows) {
-            // service request type can be COLUMN_ONLY, DATA_ONLY or BOTH.  If no request type or an invalid/unsupport
-            // request type, then BOTH is returned.
-            var reqServiceFunc;
+            // service request type can be COLUMN_ONLY, DATA_ONLY or BOTH.
+            // If no request type or an invalid/unsupported request type, then BOTH is returned.
+            var deferred = $q.defer();
+            var promise;
+
             switch (requestType) {
                 case gridConstants.SERVICE_REQ.COLS:
-                    reqServiceFunc = ReportModel.getColumnData;
+                    promise = ReportModel.getColumnData(appId, tableId, reportId);
                     break;
                 case gridConstants.SERVICE_REQ.DATA:
-                    reqServiceFunc = ReportModel.getData;
+                    promise = ReportModel.getData(appId, tableId, reportId, offset, rows);
                     break;
                 default:
-                    reqServiceFunc = ReportModel.getAll;
+                    promise = ReportModel.getAll(appId, tableId, reportId, offset, rows);
             }
 
-            var deferred = $q.defer();
-            reqServiceFunc(appId, tableId, reportId, offset, rows).then (
+            promise.then (
                 function(data) {
                     return deferred.resolve(data);
                 },
@@ -40,6 +40,7 @@
                     return deferred.reject(resp);
                 }
             );
+
             return deferred.promise;
         };
 
@@ -77,7 +78,7 @@
 
                 //  set the stage object based on the model data
                 $scope.stage = {
-                    companyName: companyName,
+                    companyName: metaData.company,
                     lastSnapshot: $scope.report.snapshot
                 };
 
