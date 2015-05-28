@@ -4,6 +4,6 @@
 (function (){
     module.exports = Object.freeze({
         //test constants
-        INTEGRATION_TIMEOUT : 45000
+        INTEGRATION_TIMEOUT : 60000
     });
 }());
