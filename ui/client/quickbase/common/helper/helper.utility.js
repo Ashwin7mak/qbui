@@ -18,7 +18,7 @@
          */
         utilityFunctions.isInt = function(val) {
             return (typeof val==='number' && (val%1)===0);
-        }
+        };
 
         return utilityFunctions;
 

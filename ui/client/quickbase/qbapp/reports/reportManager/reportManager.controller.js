@@ -15,7 +15,7 @@
         var tableId = $stateParams.tableId;
         var reportId = $stateParams.id;
 
-        $scope.dataGridReportService = function(requestType, offset, rows) {
+        function dataGridReportService (requestType, offset, rows) {
             // service request type can be COLUMN_ONLY, DATA_ONLY or BOTH.
             // If no request type or an invalid/unsupported request type, then BOTH is returned.
             var deferred = $q.defer();
@@ -42,7 +42,7 @@
             );
 
             return deferred.promise;
-        };
+        }
 
         ReportModel.getMetaData(appId, tableId, reportId).then (
             function(metaData) {
@@ -53,11 +53,13 @@
                 $scope.showLayout = true;
 
                 $scope.report = {};
-                $scope.report.dataService = $scope.dataGridReportService;
+                $scope.report.id = metaData.reportId;
+                $scope.report.appId = metaData.appId;
+                $scope.report.tableId = metaData.tableId;
+                $scope.report.dataService = dataGridReportService;
                 $scope.report.name = metaData.name;
                 $scope.report.company = metaData.company;
                 $scope.report.snapshot = metaData.snapshot;
-                $scope.report.id = metaData.id;
 
                 //  ui grid options
                 $scope.report.qbseGridOptions = {
@@ -83,6 +85,7 @@
                 };
 
                 //  get the stage content template
+                // TODO: the close/open of the stage area is choppy..
                 $scope.getStageContent = function () {
                     return 'quickbase/qbapp/reports/reportManager/reportStage.html';
                 };
@@ -91,14 +94,11 @@
                 $scope.getContent = function () {
                     return 'quickbase/qbapp/reports/reportManager/reportGridContent.html';
                 };
-
             },
             function(resp) {
                 console.log('Error fetching model data in controller.  Status:' + resp.status);
             }
-
         );
-
 
     }
 

@@ -95,23 +95,21 @@
                     var records = data.records;
                     var reportData = [];
 
-                    fields.forEach(function (field) {
-                        fieldMap.set(field.id, field);
-                    });
-
-                    records.forEach(function (record) {
-                        var columns = {};
-                        columns.phoneNumber = '978-888-0090';
-                        columns.email = 'bill@abccampgrounds.com';
-                        columns.balance = '$209.87';
-                        record.forEach(function (column) {
-                            var fld = fieldMap.get(column.id);
-                            columns[fld.name] = column.display;
+                    if (fields && records) {
+                        fields.forEach(function (field) {
+                            fieldMap.set(field.id, field);
                         });
-                        reportData.push(columns);
 
-                    });
+                        records.forEach(function (record) {
+                            var columns = {};
+                            record.forEach(function (column) {
+                                var fld = fieldMap.get(column.id);
+                                columns[fld.name] = column.display;
+                            });
+                            reportData.push(columns);
 
+                        });
+                    }
                     deferred.resolve(reportData);
                 },
                 function (resp) {

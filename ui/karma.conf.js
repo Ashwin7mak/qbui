@@ -52,7 +52,6 @@ module.exports = function (config) {
             // to narrowest.
             'client/*.index.html',
             'client/quickbase/**/**/*.html',
-            'client/gallery/**/*Example.modules.js',
             'client/quickbase/common/**/*.modules.js',
             'client/quickbase/**/*.modules.js',
             'client/quickbase/common/**/*.js',
@@ -70,7 +69,7 @@ module.exports = function (config) {
         ],
 
         // list of files / patterns to exclude
-        exclude: [],
+        exclude: ['client/gallery/**/*', 'client/gallery.index.html'],
 
         preprocessors: {
             //'**/*.jade': 'ng-jade2js',
