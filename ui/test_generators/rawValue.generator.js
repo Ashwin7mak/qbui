@@ -4,7 +4,6 @@
  */
 (function () {
     'use strict';
-    var consts = require('../constants');
 
     //Generates and returns a psuedo-random 32 char string that is URL safe
     function generateValidSubdomainString() {
