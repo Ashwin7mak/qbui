@@ -7,7 +7,7 @@
     'use strict';
     var consts = require('../server/api/quickbase/constants');
     var fieldConstants = require('./field.constants');
-    var fieldDefaultConstants = require('./field.defaults.constants');
+    var fieldDefaultConstants = require('./field.schema.defaults.js');
 
     //Generate a json field blob based on field type
 
