@@ -30,8 +30,18 @@
     }
 
     //Generates and returns a psuedo-random us phone number
-    function generateUsPhoneNumber() {
-        return "(" + generateInt(100, 999) + ")" + generateInt(100, 999) + "-" + generateInt(1000, 9999);
+    function generateUsPhoneNumber(includeExt) {
+        var phoneNumber = "(" + generateInt(100, 999) + ")" + generateInt(100, 999) + "-" + generateInt(1000, 9999);
+        if(includeExt){
+            phoneNumber = phoneNumber + "x"+generateInt(1000, 9999);
+        }
+        return phoneNumber;
+    }
+
+    //Generates and returns a psuedo-random url with prefix http://<randomString>.<randomString>
+    function generateUrl() {
+        var url = "http://" + generateString(12) + "." + generateString(3);
+        return url;
     }
 
     //Generates and returns a psuedo-random double
