@@ -6,330 +6,334 @@
 (function () {
     'use strict';
     var consts = require('../server/api/quickbase/constants');
-    var fieldConstants = require('./field.constants');
-    var fieldDefaultConstants = require('./field.schema.defaults.js');
+    var fieldConsts = require('./field.constants');
+    var defaultConsts = require('./field.schema.defaults');
+    var rawValueGenerator = require('./rawValue.generator');
+    var fieldBuilder = require('./field.builder');
 
-    //Generate a json field blob based on field type
+    module.exports = {
+        getFieldBuilder : function(){
+            return fieldBuilder;
+        },
+
+        //Generate a json field blob based on field type
+        generateBaseField : function(type){
+            var field = {};
+            var fieldName = rawValueGenerator.generateString();
+            field = fieldBuilder.setName(fieldName, field);
+            field = fieldBuilder.setType(type, field);
+            return field;
+        },
+
+        fieldToJsonString : function(field){
+            return JSON.stringify(field);
+        },
+
+        validateFieldProperties : function(field){
+            var fieldConstSubTypeKeys = Object.keys(fieldConsts);
+            var fieldKeys = Object.keys(field);
+            var foundKey = false;
+            var valueValid = false;
+            var typesKeyWord = 'types';
+
+            fieldKeys.forEach(function (fieldKey) {
+                fieldConstSubTypeKeys.forEach( function (constKey) {
+                    //each constant field definition has a types section to help
+                    //with property value validation. This should be ignored here
+                    if(constKey === typesKeyWord){
+                        return;
+                    }
+
+                    //if the constant key matches our field key, then we have a valid json key
+                    if(fieldKey === constKey){
+                        foundKey = true;
+                        //validate the property type
+                        var fieldConstantSubset = consts[constKey];
+
+                        if(!fieldConstantSubset[typesKeyWord][fieldKey]){
+                            alert('Type is not defiend for keyWord "' + fieldKey + '. Validating field');
+                        }
+
+                        var actualTypeOfProperty = typeof field[fieldKey];
+                        var expectedTypeOfProperty = fieldConstantSubset[typesKeyWord][fieldKey];
+
+                        if(actualTypeOfProperty === expectedTypeOfProperty){
+                            valueValid = true;
+                        }
+                    }
+                });
+
+                if(foundKey == false){
+                    alert('We could not find this key in our key constants for a field. Key in question: ' +fieldKey+ 'Field ' + field);
+                }else{
+                    foundKey = false;
+                }
+            });
+        },
+
+        //For a given field type, apply any default values that are not currently present in the map
+        applyDefaults : function(fieldToModify) {
+            if(!fieldTypeToFunctionCalls[fieldConsts.fieldKeys.TYPE]){
+                alert('Field type not found in fieldTypeToFunctionCalls');
+            }
+
+            var type = fieldTypeToFunctionCalls[fieldConsts.fieldKeys.TYPE];
+
+            fieldTypeToFunctionCalls[type].forEach(function (functionToCall) {
+                functionToCall(fieldToModify);
+            })
+        }
+    };
 
 
-    /************************************************************/
-    /*                      Field Properties                    */
-    /************************************************************/
+    var fieldTypeToFunctionCalls = {};
 
-    function withId(id, fieldUnderConstruction){
-        fieldUnderConstruction.fieldConstants.fieldKeys.ID =  id;
-        return fieldUnderConstruction;
+    //map fields by type so that we can know what to do fairly easily by grabbing keys
+    //formula fields
+    fieldTypeToFunctionCalls[consts.FORMULA_DATE_TIME] = [ applyFieldDefaults, applyFormulaDefaults, applyDateDefaults, applyDateTimeDefaults];
+    fieldTypeToFunctionCalls[consts.FORMULA_DATE] = [applyFieldDefaults, applyFormulaDefaults, applyDateDefaults];
+    fieldTypeToFunctionCalls[consts.FORMULA_TIME_OF_DAY] = [ applyFieldDefaults, applyFormulaDefaults, applyDateDefaults, applyDateTimeDefaults, applyTimeOfDayDefaults];
+    fieldTypeToFunctionCalls[consts.FORMULA_NUMERIC] = [ applyFieldDefaults, applyFormulaDefaults,  applyNumericDefaults ];
+    fieldTypeToFunctionCalls[consts.FORMULA_CURRENCY] = [ applyFieldDefaults, applyFormulaDefaults,  applyNumericDefaults ];
+    fieldTypeToFunctionCalls[consts.FORMULA_PERCENT] = [ applyFieldDefaults, applyFormulaDefaults,  applyNumericDefaults ];
+    fieldTypeToFunctionCalls[consts.FORMULA_DURATION] = [ applyFieldDefaults, applyFormulaDefaults,  applyNumericDefaults, applyDurationDefaults ];
+    fieldTypeToFunctionCalls[consts.FORMULA_USER] = [ applyFieldDefaults, applyFormulaDefaults];
+    fieldTypeToFunctionCalls[consts.FORMULA_TEXT] = [ applyFieldDefaults, applyFormulaDefaults];
+    fieldTypeToFunctionCalls[consts.FORMULA_PHONE_NUMBER] = [ applyFieldDefaults, applyFormulaDefaults, applyPhoneNumberDefaults];
+    fieldTypeToFunctionCalls[consts.FORMULA_EMAIL_ADDRESS] = [ applyFieldDefaults, applyFormulaDefaults, applyEmailDefaults];
+    fieldTypeToFunctionCalls[consts.FORMULA_URL] = [ applyFieldDefaults, applyFormulaDefaults];
+    fieldTypeToFunctionCalls[consts.FORMULA_CHECKBOX] = [ applyFieldDefaults, applyFormulaDefaults];
+    fieldTypeToFunctionCalls[consts.FORMULA_USER] = [ applyFieldDefaults, applyFormulaDefaults, applyUserDefaults];
+
+    //concrete/scalar fields
+    fieldTypeToFunctionCalls[consts.PERCENT] = [ applyFieldDefaults, applyConcreteDefaults, applyScalarDefaults, applyNumericDefaults ];
+    fieldTypeToFunctionCalls[consts.NUMERIC] = [ applyFieldDefaults, applyConcreteDefaults, applyScalarDefaults, applyNumericDefaults ];
+    fieldTypeToFunctionCalls[consts.CURRENCY] = [ applyFieldDefaults, applyConcreteDefaults, applyScalarDefaults, applyNumericDefaults ];
+    fieldTypeToFunctionCalls[consts.RATING] = [ applyFieldDefaults, applyConcreteDefaults, applyScalarDefaults, applyNumericDefaults ];
+    fieldTypeToFunctionCalls[consts.DURATION] = [ applyFieldDefaults, applyConcreteDefaults, applyScalarDefaults, applyNumericDefaults, applyDurationDefaults ];
+    fieldTypeToFunctionCalls[consts.TEXT] = [ applyFieldDefaults, applyConcreteDefaults, applyScalarDefaults, applyTextDefaults ];
+    fieldTypeToFunctionCalls[consts.MULTI_LINE_TEXT] = [ applyFieldDefaults, applyConcreteDefaults, applyScalarDefaults ];
+    fieldTypeToFunctionCalls[consts.BIGTEXT] = [ applyFieldDefaults, applyConcreteDefaults, applyScalarDefaults ];
+    fieldTypeToFunctionCalls[consts.URL] = [ applyFieldDefaults, applyConcreteDefaults, applyScalarDefaults, applyUrlDefaults];
+    fieldTypeToFunctionCalls[consts.EMAIL_ADDRESS] = [ applyFieldDefaults, applyConcreteDefaults, applyScalarDefaults, applyEmailDefaults ];
+    fieldTypeToFunctionCalls[consts.PHONE_NUMBER] = [ applyFieldDefaults, applyConcreteDefaults, applyScalarDefaults, applyPhoneNumberDefaults ];
+    fieldTypeToFunctionCalls[consts.DATE_TIME] = [ applyFieldDefaults, applyConcreteDefaults, applyScalarDefaults, applyDateDefaults, applyDateTimeDefaults];
+    fieldTypeToFunctionCalls[consts.DATE] = [ applyFieldDefaults, applyConcreteDefaults, applyScalarDefaults, applyDateDefaults];
+    fieldTypeToFunctionCalls[consts.TIME_OF_DAY] = [ applyFieldDefaults, applyConcreteDefaults, applyScalarDefaults, applyDateDefaults, applyDateTimeDefaults, applyTimeOfDayDefaults];
+    fieldTypeToFunctionCalls[consts.CHECKBOX] = [ applyFieldDefaults, applyConcreteDefaults, applyScalarDefaults ];
+    fieldTypeToFunctionCalls[consts.FILE_ATTACHMENT] = [ applyFieldDefaults, applyConcreteDefaults];
+    fieldTypeToFunctionCalls[consts.USER] = [ applyFieldDefaults, applyConcreteDefaults, applyScalarDefaults, applyUserDefaults ];
+
+    //virtuals
+    fieldTypeToFunctionCalls[consts.LOOKUP] = [ applyFieldDefaults];
+    fieldTypeToFunctionCalls[consts.SUMMARY] = [ applyFieldDefaults, applySummaryFieldDefaults];
+
+    //weirdos
+    fieldTypeToFunctionCalls[consts.REPORT_LINK] = [ applyFieldDefaults, applyReportLinkDefaults];
+    fieldTypeToFunctionCalls[consts.FILE_ATTACHMENT] = [ applyFieldDefaults, applyFileAttachmentDefaults];
+
+    function applyFieldDefaults(fieldToModify){
+        //apply all high level field properties that are missing
+        //we can't apply an id as that will be assigned by the api
+        if(!fieldToModify.fieldKeys.BUILT_IN) {
+            fieldBuilder.setBuiltIn(defaultConsts.fieldDefaults.BUILTIN_DEFAULT, fieldToModify);
+        }
+
+        if(!fieldToModify.fieldKeys.DATA_IS_COPYABLE) {
+            fieldBuilder.setDataIsCopyable(defaultConsts.fieldDefaults.DATA_COPYABLE_DEFAULT, fieldToModify);
+        }
+
+        if(!fieldToModify.fieldKeys.INCLUDE_IN_QUICKSEARCH) {
+            fieldBuilder.setIncludeInQuickSearch(defaultConsts.fieldDefaults.USE_IN_QUICKSEARCH_DEFAULT, fieldToModify);
+        }
     }
 
-    function withName(name, fieldUnderConstruction){
-        fieldUnderConstruction.fieldConstants.fieldKeys.NAME =  name;
-        return fieldUnderConstruction;
+    //TODO: make this thing use the fieldBuilder!
+    function applyConcreteDefaults(fieldToModify){
+
+        if(!fieldToModify[fieldConsts.concreteFieldKeys.REQUIRED]){
+            fieldToModify[fieldConsts.concreteFieldKeys.REQUIRED] = defaultConsts.concreteDefaults.REQUIRED_DEFAULT;
+        }
+
+        if(!fieldToModify[fieldConsts.concreteFieldKeys.USER_EDITABLE_VALUE]){
+            fieldToModify[fieldConsts.concreteFieldKeys.USER_EDITABLE_VALUE] = defaultConsts.concreteDefaults.USER_EDITABLE_DEFAULT;
+        }
     }
 
-    function withType(type, fieldUnderConstruction){
-        fieldUnderConstruction.fieldConstants.fieldKeys.TYPE =  type;
-        return fieldUnderConstruction;
+    function applyFormulaDefaults(fieldToModify){
+
+        if(!fieldToModify[fieldConsts.formulaFieldKeys.FORMULA]){
+            fieldToModify[fieldConsts.formulaFieldKeys.FORMULA] = defaultConsts.formulaDefaults.FORMULA_STRING_DEFAULT;
+        }
     }
 
-    function withTableId(tableId, fieldUnderConstruction){
-        fieldUnderConstruction.fieldConstants.fieldKeys.TABLE_ID =  tableId;
-        return fieldUnderConstruction;
+    function applyNumericDefaults(fieldToModify){
+
+        if(!fieldToModify[fieldConsts.numericAndNumericFormulaFieldKeys.DECIMAL_PLACES]){
+            fieldToModify[fieldConsts.numericAndNumericFormulaFieldKeys.DECIMAL_PLACES] = defaultConsts.numericDefaults.DECIMAL_PLACES_DEFAULT;
+        }
+
+        if(!fieldToModify[fieldConsts.numericAndNumericFormulaFieldKeys.TREAT_NULL_AS_ZERO]){
+            fieldToModify[fieldConsts.numericAndNumericFormulaFieldKeys.TREAT_NULL_AS_ZERO] = defaultConsts.numericDefaults.TREAT_NULL_AS_ZERO_DEFAULT;
+        }
     }
 
-    function withBuiltIn(isBuiltIn, fieldUnderConstruction){
-        fieldUnderConstruction.fieldConstants.fieldKeys.BUILT_IN =  isBuiltIn;
-        return fieldUnderConstruction;
+    function applyScalarDefaults(fieldToModify) {
+
+        if (!fieldToModify[fieldConsts.scalarFieldKeys.UNIQUE]) {
+            fieldToModify[fieldConsts.scalarFieldKeys.UNIQUE] = defaultConsts.scalarDefaults.UNIQUE_DEFAULT;
+        }
+
+        if (!fieldToModify[fieldConsts.scalarFieldKeys.INDEXED]) {
+            fieldToModify[fieldConsts.scalarFieldKeys.INDEXED] = defaultConsts.scalarDefaults.INDEXED_DEFAULT;
+        }
+
+        if (!fieldToModify[fieldConsts.scalarFieldKeys.MULTIPLE_CHOICE_SOURCE_ALLOWED]) {
+            fieldToModify[fieldConsts.scalarFieldKeys.MULTIPLE_CHOICE_SOURCE_ALLOWED] = defaultConsts.scalarDefaults.MULTI_CHOICE_SOURCE_ALLOWED_DEFAULT;
+        }
     }
 
-    function withDataIsCopyable(isDataCopyable, fieldUnderConstruction){
-        fieldUnderConstruction.fieldConstants.fieldKeys.DATA_IS_COPYABLE =  isDataCopyable;
-        return fieldUnderConstruction;
+    function applyDateDefaults(fieldToModify){
+        if (!fieldToModify[fieldConsts.dateAndDateFormulaFieldKeys.SHOW_MONTH_AS_NAME]) {
+            fieldToModify[fieldConsts.dateAndDateFormulaFieldKeys.SHOW_MONTH_AS_NAME] = defaultConsts.dateDefaults.SHOW_MONTH_AS_NAME_DEFAULT;
+        }
+
+        if (!fieldToModify[fieldConsts.dateAndDateFormulaFieldKeys.SHOW_DAY_OF_WEEK]) {
+            fieldToModify[fieldConsts.dateAndDateFormulaFieldKeys.SHOW_DAY_OF_WEEK] = defaultConsts.dateDefaults.SHOW_DAY_OF_WEEK_DEFAULT;
+        }
+
+        if (!fieldToModify[fieldConsts.dateAndDateFormulaFieldKeys.HIDE_YEAR_IF_CURRENT]) {
+            fieldToModify[fieldConsts.dateAndDateFormulaFieldKeys.HIDE_YEAR_IF_CURRENT] = defaultConsts.dateDefaults.HIDE_YEAR_IF_CURRENT_DEFAULT;
+        }
     }
 
-    function withIncludeInQuickSearch(includeInQuickSearch , fieldUnderConstruction){
-        fieldUnderConstruction.fieldConstants.fieldKeys.INCLUDE_IN_QUICKSEARCH =  includeInQuickSearch;
-        return fieldUnderConstruction;
+    function applyDateTimeDefaults(fieldToModify){
+        if (!fieldToModify[fieldConsts.dateTimeAndDateTimeFormulatFieldKeys.SHOW_TIME]) {
+            fieldToModify[fieldConsts.dateTimeAndDateTimeFormulatFieldKeys.SHOW_TIME] = defaultConsts.dateTimeDefaults.SHOW_TIME_DEFAULT;
+        }
+
+        if (!fieldToModify[fieldConsts.dateTimeAndDateTimeFormulatFieldKeys.SHOW_TIME_ZONE]) {
+            fieldToModify[fieldConsts.dateTimeAndDateTimeFormulatFieldKeys.SHOW_TIME_ZONE] = defaultConsts.dateTimeDefaults.SHOW_TIME_ZONE_DEFAULT;
+        }
+
     }
 
-    function withClientSideAttributes(clientSideAttributes , fieldUnderConstruction){
-        fieldUnderConstruction.fieldConstants.fieldKeys.CLIENT_SIDE_ATTRIBUTES =  clientSideAttributes;
-        return fieldUnderConstruction;
+    function applyTimeOfDayDefaults(fieldToModify){
+        if (!fieldToModify[fieldConsts.dateTimeAndDateTimeFormulatFieldKeys.SHOW_TIME]) {
+            fieldToModify[fieldConsts.dateTimeAndDateTimeFormulatFieldKeys.SHOW_TIME] = defaultConsts.dateTimeDefaults.SHOW_TIME_DEFAULT;
+        }
+
+        if (!fieldToModify[fieldConsts.dateTimeAndDateTimeFormulatFieldKeys.SHOW_TIME_ZONE]) {
+            fieldToModify[fieldConsts.dateTimeAndDateTimeFormulatFieldKeys.SHOW_TIME_ZONE] = defaultConsts.dateTimeDefaults.SHOW_TIME_ZONE_DEFAULT;
+        }
+
     }
 
-    /************************************************************/
-    /*               Formula Field Properties                   */
-    /************************************************************/
-
-    function withFormula(formula , fieldUnderConstruction){
-        fieldUnderConstruction.fieldConstants.formulaFieldKeys.FORMULA =  formula;
-        return fieldUnderConstruction;
+    function applyDurationDefaults(fieldToModify){
+        if (!fieldToModify[fieldConsts.durationAndDurationFormulaFieldKeys.SCALE]) {
+            fieldToModify[fieldConsts.durationAndDurationFormulaFieldKeys.SCALE] = defaultConsts.durationDefaults.SCALE_DEFAULT;
+        }
     }
 
-    /************************************************************/
-    /*               Virtual Field Properties                   */
-    /************************************************************/
-    function withRelationshipId(relationshipId, fieldUnderConstruction){
-        fieldUnderConstruction.fieldConstants.virtualFieldKeys.RELATIONSHIP_ID =  relationshipId;
-        return fieldUnderConstruction;
+    function applyEmailDefaults(fieldToModify) {
+
+        if (!fieldToModify[fieldConsts.emailAndEmailFormulaFieldKeys.DEFAULT_DOMAIN]) {
+            fieldToModify[fieldConsts.emailAndEmailFormulaFieldKeys.DEFAULT_DOMAIN] = defaultConsts.emailDefaults.DOMAIN_DEFAULT_VALUE_DEFAULT;
+        }
+
+        if (!fieldToModify[fieldConsts.emailAndEmailFormulaFieldKeys.SORT_BY_DOMAIN]) {
+            fieldToModify[fieldConsts.emailAndEmailFormulaFieldKeys.SORT_BY_DOMAIN] = defaultConsts.emailDefaults.SORT_BY_DOMAIN_DEFAULT;
+        }
+
+        if (!fieldToModify[fieldConsts.emailAndEmailFormulaFieldKeys.SHOW_EMAIL_EVERYONE]) {
+            fieldToModify[fieldConsts.emailAndEmailFormulaFieldKeys.SHOW_EMAIL_EVERYONE] = defaultConsts.emailDefaults.SHOW_EMAIL_EVERYONE_DEFAULT;
+        }
+
     }
 
-    function withReferenceFieldId(referenceFieldId, fieldUnderConstruction){
-        fieldUnderConstruction.fieldConstants.virtualFieldKeys.REFERENCE_FIELD_ID =  referenceFieldId;
-        return fieldUnderConstruction;
+    function applyFileAttachmentDefaults(fieldToModify) {
+
+        if (!fieldToModify[fieldConsts.fileAttachmentFieldKeys.LINK_TEXT]) {
+            fieldToModify[fieldConsts.fileAttachmentFieldKeys.LINK_TEXT] = defaultConsts.fileAttachmentDefaults.LINK_TEXT_DEFAULT;
+        }
+
+        if (!fieldToModify[fieldConsts.fileAttachmentFieldKeys.KEEP_ALL_REVISIONS]) {
+            fieldToModify[fieldConsts.fileAttachmentFieldKeys.KEEP_ALL_REVISIONS] = defaultConsts.fileAttachmentDefaults.KEEP_ALL_REVISIONS_DEFAULT;
+        }
+
+        if (!fieldToModify[fieldConsts.fileAttachmentFieldKeys.REVISIONS_TO_KEEP]) {
+            fieldToModify[fieldConsts.fileAttachmentFieldKeys.REVISIONS_TO_KEEP] = defaultConsts.fileAttachmentDefaults.REVISIONS_TO_KEEP_DEFAULT;
+        }
+
+        if (!fieldToModify[fieldConsts.fileAttachmentFieldKeys.ALLOW_USERS_TO_MAKE_OLDER_VERSIONS_THE_CURRENT_VERSION]) {
+            fieldToModify[fieldConsts.fileAttachmentFieldKeys.ALLOW_USERS_TO_MAKE_OLDER_VERSIONS_THE_CURRENT_VERSION] = defaultConsts.fileAttachmentDefaults.ALLOW_USERS_TO_SET_CURRENT_VERSION_DEFAULT;
+        }
+
     }
 
-    /************************************************************/
-    /*               Concrete Field Properties                  */
-    /************************************************************/
-
-    function withUserEditable(isUserEditable, fieldUnderConstruction){
-        fieldUnderConstruction.fieldConstants.concreteFieldKeys.USER_EDITABLE_VALUE =  isUserEditable;
-        return fieldUnderConstruction;
-    }
-    function withRequired(isRequired, fieldUnderConstruction){
-        fieldUnderConstruction.fieldConstants.concreteFieldKeys.REQUIRED =  isRequired;
-        return fieldUnderConstruction;
+    function applyPhoneNumberDefaults(fieldToModify){
+        if (!fieldToModify[fieldConsts.phoneNumberAndPhoneNumberFormulaFieldKeys.INCLUDE_EXTENSION]) {
+            fieldToModify[fieldConsts.phoneNumberAndPhoneNumberFormulaFieldKeys.INCLUDE_EXTENSION] = defaultConsts.phoneNumberDefaults.INCLUDE_EXTENSION_DEFAULT;
+        }
     }
 
-    /************************************************************/
-    /*               Scalar Field Properties                    */
-    /************************************************************/
+    function applyReportLinkDefaults(fieldToModify){
+        if (!fieldToModify[fieldConsts.reportLinkFieldKeys.DISPLAY_PROTOCOL]) {
+            fieldToModify[fieldConsts.reportLinkFieldKeys.DISPLAY_PROTOCOL] = defaultConsts.reportDefaults.DISPLAY_PROTOCOL_DEFAULT;
+        }
 
-    function withUnique(isUnique, fieldUnderConstruction){
-        fieldUnderConstruction.fieldConstants.scalarFieldKeys.UNIQUE =  isUnique;
-        return fieldUnderConstruction;
+        if (!fieldToModify[fieldConsts.reportLinkFieldKeys.LINK_TEXT]) {
+            fieldToModify[fieldConsts.reportLinkFieldKeys.LINK_TEXT] = defaultConsts.reportDefaults.LINK_TEXT_DEFAULT;
+        }
+
+        if (!fieldToModify[fieldConsts.reportLinkFieldKeys.EXACT_MATCH]) {
+            fieldToModify[fieldConsts.reportLinkFieldKeys.EXACT_MATCH] = defaultConsts.reportDefaults.EXACT_MATCH_DEFAULT;
+        }
+
+        if (!fieldToModify[fieldConsts.reportLinkFieldKeys.MULTI_CHOICE_SOURCE_ALLOWED]) {
+            fieldToModify[fieldConsts.reportLinkFieldKeys.MULTI_CHOICE_SOURCE_ALLOWED] = defaultConsts.reportDefaults.MULTI_CHOICE_SOURCE_ALLOWED_DEFAULT;
+        }
     }
 
-    function withIndexed(isIndexed, fieldUnderConstruction){
-        fieldUnderConstruction.fieldConstants.scalarFieldKeys.INDEXED =  isIndexed;
-        return fieldUnderConstruction;
+    function applySummaryFieldDefaults(fieldToModify){
+        if (!fieldToModify[fieldConsts.summaryFieldKeys.AGGREGATE_FUNCTION]) {
+            fieldToModify[fieldConsts.summaryFieldKeys.AGGREGATE_FUNCTION] = defaultConsts.summaryDefaults.AGGREGATE_FUNCTION_DEFAULT;
+        }
+
+        if (!fieldToModify[fieldConsts.summaryFieldKeys.DECIMAL_PLACES]) {
+            fieldToModify[fieldConsts.summaryFieldKeys.DECIMAL_PLACES] = defaultConsts.summaryDefaults.DECIMAL_PLACES_DEFAULT;
+        }
+
+        if (!fieldToModify[fieldConsts.summaryFieldKeys.TREAT_NULL_AS_ZERO]) {
+            fieldToModify[fieldConsts.summaryFieldKeys.TREAT_NULL_AS_ZERO] = defaultConsts.summaryDefaults.TREAT_NULL_AS_ZERO_DEFAULT;
+        }
     }
 
-    function withKeyField(isKeyField, fieldUnderConstruction){
-        fieldUnderConstruction.fieldConstants.scalarFieldKeys.KEY_FIELD =  isKeyField;
-        return fieldUnderConstruction;
+    function applyTextDefaults(fieldToModify){
+        if (!fieldToModify[fieldConsts.textAndTextFormulaFieldKeys.HTML_ALLOWED]) {
+            fieldToModify[fieldConsts.textAndTextFormulaFieldKeys.HTML_ALLOWED] = defaultConsts.textDefaults.HTML_ALLOWED_DEFAULT;
+        }
     }
 
-    function withForeignKey(isForeignKey, fieldUnderConstruction){
-        fieldUnderConstruction.fieldConstants.scalarFieldKeys.FOREIGN_KEY =  isForeignKey;
-        return fieldUnderConstruction;
+    function applyUrlDefaults(fieldToModify){
+        if (!fieldToModify[fieldConsts.urlAndUrlFormulaFieldKeys.DISPLAY_PROTOCOL]) {
+            fieldToModify[fieldConsts.urlAndUrlFormulaFieldKeys.DISPLAY_PROTOCOL] = defaultConsts.urlDefaults.URL_DISPLAY_PROTOCOL_DEFAULT;
+        }
+
+        if (!fieldToModify[fieldConsts.urlAndUrlFormulaFieldKeys.LINK_TEXT]) {
+            fieldToModify[fieldConsts.urlAndUrlFormulaFieldKeys.LINK_TEXT] = defaultConsts.urlDefaults.URL_DEFAULT_LINK_TEXT;
+        }
     }
 
-    function withProxyFieldId(proxyFieldId, fieldUnderConstruction){
-        fieldUnderConstruction.fieldConstants.scalarFieldKeys.PROXY_FIELD_ID =  proxyFieldId;
-        return fieldUnderConstruction;
+    function applyUserDefaults(fieldToModify){
+        if (!fieldToModify[fieldConsts.userAndUserFormulaFieldKeys.SEND_INVITES_TO_USERS]) {
+            fieldToModify[fieldConsts.userAndUserFormulaFieldKeys.SEND_INVITES_TO_USERS] = defaultConsts.userDefaults.SEND_INVITES_TO_USERS_DEFAULT;
+        }
+
+        if (!fieldToModify[fieldConsts.userAndUserFormulaFieldKeys.USER_DISPLAY_FORMAT]) {
+            fieldToModify[fieldConsts.userAndUserFormulaFieldKeys.USER_DISPLAY_FORMAT] = defaultConsts.userDefaults.USER_DISPLAY_FORMAT_DEFAULT;
+        }
     }
 
-    function withDefaultValue(defaultValue, fieldUnderConstruction){
-        fieldUnderConstruction.fieldConstants.scalarFieldKeys.DEFAULT_VALUE =  defaultValue;
-        return fieldUnderConstruction;
-    }
-
-    function withMultipleChoice(multipleChoice, fieldUnderConstruction){
-        fieldUnderConstruction.fieldConstants.scalarFieldKeys.MULTIPLE_CHOICE =  multipleChoice;
-        return fieldUnderConstruction;
-    }
-
-    function withMultipleChoiceSourceAllowed(isMultipleChoiceSourceAllowed, fieldUnderConstruction){
-        fieldUnderConstruction.fieldConstants.scalarFieldKeys.MULTIPLE_CHOICE_SOURCE_ALLOWED =  isMultipleChoiceSourceAllowed;
-        return fieldUnderConstruction;
-    }
-
-    /************************************************************/
-    /*               Specific Field Properties                  */
-    /************************************************************/
-
-    //DATE STUFF
-    function withShowMonthAsName(showMonthAsName, fieldUnderConstruction){
-        fieldUnderConstruction.fieldConstants.dateAndDateFormulaFieldKeys.SHOW_MONTH_AS_NAME =  showMonthAsName;
-        return fieldUnderConstruction;
-    }
-
-    function withShowDayOfWeek(showDayOfWeek, fieldUnderConstruction){
-        fieldUnderConstruction.fieldConstants.dateAndDateFormulaFieldKeys.SHOW_DAY_OF_WEEK =  showDayOfWeek;
-        return fieldUnderConstruction;
-    }
-
-    function withHideYearIfCurrent(hideYearIfCurrent, fieldUnderConstruction){
-        fieldUnderConstruction.fieldConstants.dateAndDateFormulaFieldKeys.HIDE_YEAR_IF_CURRENT =  hideYearIfCurrent;
-        return fieldUnderConstruction;
-    }
-
-    function withDateFormat(dateFormat, fieldUnderConstruction){
-        fieldUnderConstruction.fieldConstants.dateAndDateFormulaFieldKeys.DATE_FORMAT =  dateFormat;
-        return fieldUnderConstruction;
-    }
-
-    //DATE TIME STUFF
-    function withShowTime(showTime, fieldUnderConstruction){
-        fieldUnderConstruction.fieldConstants.dateTimeAndDateTimeFormulatFieldKeys.SHOW_TIME =  showTime;
-        return fieldUnderConstruction;
-    }
-
-    function withShowTimeZone(showTimeZone, fieldUnderConstruction){
-        fieldUnderConstruction.fieldConstants.dateTimeAndDateTimeFormulatFieldKeys.SHOW_TIME_ZONE =  showTimeZone;
-        return fieldUnderConstruction;
-    }
-
-    function withTimeZone(timeZone, fieldUnderConstruction){
-        fieldUnderConstruction.fieldConstants.dateTimeAndDateTimeFormulatFieldKeys.TIME_ZONE =  timeZone;
-        return fieldUnderConstruction;
-    }
-
-    function withSortOrderAscending(sortOrderAscending, fieldUnderConstruction){
-        fieldUnderConstruction.fieldConstants.dateTimeFormulaFieldKeys.SORT_ORDER_ASCENDING =  sortOrderAscending;
-        return fieldUnderConstruction;
-    }
-
-    //DURATION STUFF
-    function withDurationScale(durationScale, fieldUnderConstruction){
-        fieldUnderConstruction.fieldConstants.durationAndDurationFormulaFieldKeys.SCALE =  durationScale;
-        return fieldUnderConstruction;
-    }
-
-    //EMAIL STUFF
-    function withDefaultDomain(defaultDomain, fieldUnderConstruction){
-        fieldUnderConstruction.fieldConstants.emailAndEmailFormulaFieldKeys.DEFAULT_DOMAIN =  defaultDomain;
-        return fieldUnderConstruction;
-    }
-
-    function withSortByDomain(sortByDomain, fieldUnderConstruction){
-        fieldUnderConstruction.fieldConstants.emailAndEmailFormulaFieldKeys.SORT_BY_DOMAIN =  sortByDomain;
-        return fieldUnderConstruction;
-    }
-
-    function withShowEmailEveryone(showEmailEveryone, fieldUnderConstruction){
-        fieldUnderConstruction.fieldConstants.emailAndEmailFormulaFieldKeys.SHOW_EMAIL_EVERYONE =  showEmailEveryone;
-        return fieldUnderConstruction;
-    }
-
-    //FILE ATTACHMENT STUFF
-    function withFileLinkText(linkText, fieldUnderConstruction){
-        fieldUnderConstruction.fieldConstants.fileAttachmentFieldKeys.LINK_TEXT =  linkText;
-        return fieldUnderConstruction;
-    }
-
-    function withFileKeepAllRevisions(keepAllRevisions, fieldUnderConstruction){
-        fieldUnderConstruction.fieldConstants.fileAttachmentFieldKeys.KEEP_ALL_REVISIONS =  keepAllRevisions;
-        return fieldUnderConstruction;
-    }
-
-    function withRevisionsToKeep(numRevisionsToKeep, fieldUnderConstruction){
-        fieldUnderConstruction.fieldConstants.fileAttachmentFieldKeys.REVISIONS_TO_KEEP =  numRevisionsToKeep;
-        return fieldUnderConstruction;
-    }
-
-    function withAllowUsersToMakeOlderVersionCurrentVersion(allowUsersToMakeOlderVersionCurrentVersion, fieldUnderConstruction){
-        fieldUnderConstruction.fieldConstants.fileAttachmentFieldKeys.ALLOW_USERS_TO_MAKE_OLDER_VERSIONS_THE_CURRENT_VERSION =  allowUsersToMakeOlderVersionCurrentVersion;
-        return fieldUnderConstruction;
-    }
-
-    //NUMERIC STUFF
-    function withDecimalPlaces(decimalPlaces, fieldUnderConstruction){
-        fieldUnderConstruction.fieldConstants.numericAndNumericFormulaFieldKeys.DECIMAL_PLACES =  decimalPlaces;
-        return fieldUnderConstruction;
-    }
-
-    function withTreatNullAsZero(treatNullAsZero, fieldUnderConstruction){
-        fieldUnderConstruction.fieldConstants.numericAndNumericFormulaFieldKeys.TREAT_NULL_AS_ZERO =  treatNullAsZero;
-        return fieldUnderConstruction;
-    }
-
-    //PHONE NUMBER STUFF
-    function withIncludeExtension(includeExtension, fieldUnderConstruction){
-        fieldUnderConstruction.fieldConstants.phoneNumberAndPhoneNumberFormulaFieldKeys.INCLUDE_EXTENSION =  includeExtension;
-        return fieldUnderConstruction;
-    }
-
-    //REPORT LINK STUFF
-    function withReportLinkText(linkText, fieldUnderConstruction){
-        fieldUnderConstruction.fieldConstants.reportLinkFieldKeys.LINK_TEXT =  linkText;
-        return fieldUnderConstruction;
-    }
-
-    function withLinkRelationshipId(relationshipId, fieldUnderConstruction){
-        fieldUnderConstruction.fieldConstants.reportLinkFieldKeys.RELATIONSHIP_ID =  relationshipId;
-        return fieldUnderConstruction;
-    }
-
-    function withExactMatch(exactMatch, fieldUnderConstruction){
-        fieldUnderConstruction.fieldConstants.reportLinkFieldKeys.EXACT_MATCH =  exactMatch;
-        return fieldUnderConstruction;
-    }
-
-    function withReportDisplayProtocol(displayProtocol, fieldUnderConstruction){
-        fieldUnderConstruction.fieldConstants.reportLinkFieldKeys.DISPLAY_PROTOCOL =  displayProtocol;
-        return fieldUnderConstruction;
-    }
-
-    function withMultiChoiceSourceAllowed(multiChoiceSourceAllowed, fieldUnderConstruction){
-        fieldUnderConstruction.fieldConstants.reportLinkFieldKeys.MULTI_CHOICE_SOURCE_ALLOWED =  multiChoiceSourceAllowed;
-        return fieldUnderConstruction;
-    }
-
-    //SUMMARY FIELD STUFF
-    function withAggregateFunction(aggregateFunction, fieldUnderConstruction){
-        fieldUnderConstruction.fieldConstants.summaryFieldKeys.AGGREGATE_FUNCTION =  aggregateFunction;
-        return fieldUnderConstruction;
-    }
-
-    function withSummaryDecimalPlaces(decimalPlaces, fieldUnderConstruction){
-        fieldUnderConstruction.fieldConstants.summaryFieldKeys.DECIMAL_PLACES =  decimalPlaces;
-        return fieldUnderConstruction;
-    }
-
-    function withTreatNullAsZero(treatNullAsZero, fieldUnderConstruction){
-        fieldUnderConstruction.fieldConstants.summaryFieldKeys.TREAT_NULL_AS_ZERO =  treatNullAsZero;
-        return fieldUnderConstruction;
-    }
-
-    function withExpression(expression, fieldUnderConstruction){
-        fieldUnderConstruction.fieldConstants.summaryFieldKeys.EXPRESSION =  expression;
-        return fieldUnderConstruction;
-    }
-
-    //TEXT STUFF
-    function withHtmlAllowed(htmlAllowed, fieldUnderConstruction){
-        fieldUnderConstruction.fieldConstants.textAndTextFormulaFieldKeys.HTML_ALLOWED =  htmlAllowed;
-        return fieldUnderConstruction;
-    }
-
-    //TIME OF DAY STUFF
-    function withTimeScale(scale, fieldUnderConstruction){
-        fieldUnderConstruction.fieldConstants.timeOfDayAndTimeOfDayFormulaFieldKeys.SCALE =  scale;
-        return fieldUnderConstruction;
-    }
-
-    function withUse24HourClock(use24HourClock, fieldUnderConstruction){
-        fieldUnderConstruction.fieldConstants.timeOfDayAndTimeOfDayFormulaFieldKeys.USE_24_HOUR_CLOCK =  use24HourClock;
-        return fieldUnderConstruction;
-    }
-
-    function withUseTimezone(useTimezone, fieldUnderConstruction){
-        fieldUnderConstruction.fieldConstants.timeOfDayAndTimeOfDayFormulaFieldKeys.USE_TIMEZONE =  useTimezone;
-        return fieldUnderConstruction;
-    }
-
-    //URL STUFF
-    function withUrlDisplayProtocol(displayProtocol, fieldUnderConstruction){
-        fieldUnderConstruction.fieldConstants.urlAndUrlFormulaFieldKeys.DISPLAY_PROTOCOL =  displayProtocol;
-        return fieldUnderConstruction;
-    }
-
-    function withUrlLinkText(linkText, fieldUnderConstruction){
-        fieldUnderConstruction.fieldConstants.urlAndUrlFormulaFieldKeys.LINK_TEXT =  linkText;
-        return fieldUnderConstruction;
-    }
-
-    //USER STUFF
-    function withSendInvitesToUsers(sendInvitesToUsers, fieldUnderConstruction){
-        fieldUnderConstruction.fieldConstants.userAndUserFormulaFieldKeys.SEND_INVITES_TO_USERS =  sendInvitesToUsers;
-        return fieldUnderConstruction;
-    }
-
-    function withUserDisplayFormat(userDisplayFormat, fieldUnderConstruction){
-        fieldUnderConstruction.fieldConstants.userAndUserFormulaFieldKeys.USER_DISPLAY_FORMAT =  userDisplayFormat;
-        return fieldUnderConstruction;
-    }
 
 }());
