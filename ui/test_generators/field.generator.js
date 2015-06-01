@@ -5,7 +5,7 @@
  */
 (function () {
     'use strict';
-    var consts = require('../server/api/quickbase/constants');
+    var consts = require('../server/api/constants');
     var fieldConsts = require('./field.constants');
     var defaultConsts = require('./field.schema.defaults');
     var rawValueGenerator = require('./rawValue.generator');
@@ -18,8 +18,8 @@
 
         //Generate a json field blob based on field type
         generateBaseField : function(type){
-            var builder = fieldBuilder.Builder();
-            var fieldName = rawValueGenerator.generateString();
+            var builder = fieldBuilder.builder();
+            var fieldName = rawValueGenerator.generateString(15);
             var field = builder.withName(fieldName).withType(type).build();
             return field;
         },
@@ -29,37 +29,41 @@
         },
 
         validateFieldProperties : function(field){
-            var fieldConstSubTypeKeys = Object.keys(fieldConsts);
+            var fieldConstCategoryKeys = Object.keys(fieldConsts);
             var fieldKeys = Object.keys(field);
             var foundKey = false;
             var valueValid = false;
             var typesKeyWord = 'types';
+            var fieldConstSubKeys;
 
             fieldKeys.forEach(function (fieldKey) {
-                fieldConstSubTypeKeys.forEach( function (constKey) {
+                fieldConstCategoryKeys.forEach( function (constKey) {
+
+                    fieldConstSubKeys = Object.keys(fieldConsts[constKey]);
+
                     //each constant field definition has a types section to help
                     //with property value validation. This should be ignored here
-                    if(constKey === typesKeyWord){
+                    if(constSubKey === typesKeyWord){
                         return;
                     }
 
-                    //if the constant key matches our field key, then we have a valid json key
-                    if(fieldKey === constKey){
-                        foundKey = true;
-                        //validate the property type
-                        var fieldConstantSubset = consts[constKey];
+                    if(fieldConstSubKeys.contains(fieldKey)){
 
-                        if(!fieldConstantSubset[typesKeyWord][fieldKey]){
-                            alert('Type is not defiend for keyWord "' + fieldKey + '. Validating field');
+                        foundKey = true;
+
+                        //check that we have defined the type for this key word
+                        if(!consts[constKey][typesKeyWord][fieldKey]){
+                            alert('Type is not defiend for keyWord "' + fieldKey + '. Validating field ' + field);
                         }
 
                         var actualTypeOfProperty = typeof field[fieldKey];
-                        var expectedTypeOfProperty = fieldConstantSubset[typesKeyWord][fieldKey];
+                        var expectedTypeOfProperty = consts[constKey][typesKeyWord][fieldKey];
 
                         if(actualTypeOfProperty === expectedTypeOfProperty){
                             valueValid = true;
                         }
                     }
+
                 });
 
                 if(foundKey == false){
@@ -72,18 +76,17 @@
 
         //For a given field type, apply any default values that are not currently present in the map
         applyDefaults : function(fieldToModify) {
-            if(!fieldTypeToFunctionCalls[fieldConsts.fieldKeys.TYPE]){
+            var type = fieldToModify[fieldConsts.fieldKeys.TYPE];
+
+            if(!fieldTypeToFunctionCalls[type]){
                 alert('Field type not found in fieldTypeToFunctionCalls');
             }
-
-            var type = fieldTypeToFunctionCalls[fieldConsts.fieldKeys.TYPE];
 
             fieldTypeToFunctionCalls[type].forEach(function (functionToCall) {
                 functionToCall(fieldToModify);
             })
         }
     };
-
 
     var fieldTypeToFunctionCalls = {};
 
@@ -111,7 +114,7 @@
     fieldTypeToFunctionCalls[consts.RATING] = [ applyFieldDefaults, applyConcreteDefaults, applyScalarDefaults, applyNumericDefaults ];
     fieldTypeToFunctionCalls[consts.DURATION] = [ applyFieldDefaults, applyConcreteDefaults, applyScalarDefaults, applyNumericDefaults, applyDurationDefaults ];
     fieldTypeToFunctionCalls[consts.TEXT] = [ applyFieldDefaults, applyConcreteDefaults, applyScalarDefaults, applyTextDefaults ];
-    fieldTypeToFunctionCalls[consts.MULTI_LINE_TEXT] = [ applyFieldDefaults, applyConcreteDefaults, applyScalarDefaults ];
+    fieldTypeToFunctionCalls[consts.MULTI_LINE_TEXT] = [ applyFieldDefaults, applyConcreteDefaults, applyScalarDefaults, applyTextDefaults ];
     fieldTypeToFunctionCalls[consts.BIGTEXT] = [ applyFieldDefaults, applyConcreteDefaults, applyScalarDefaults ];
     fieldTypeToFunctionCalls[consts.URL] = [ applyFieldDefaults, applyConcreteDefaults, applyScalarDefaults, applyUrlDefaults];
     fieldTypeToFunctionCalls[consts.EMAIL_ADDRESS] = [ applyFieldDefaults, applyConcreteDefaults, applyScalarDefaults, applyEmailDefaults ];
@@ -129,21 +132,21 @@
 
     //weirdos
     fieldTypeToFunctionCalls[consts.REPORT_LINK] = [ applyFieldDefaults, applyReportLinkDefaults];
-    fieldTypeToFunctionCalls[consts.FILE_ATTACHMENT] = [ applyFieldDefaults, applyFileAttachmentDefaults];
+    fieldTypeToFunctionCalls[consts.FILE_ATTACHMENT] = [ applyFieldDefaults, applyConcreteDefaults, applyFileAttachmentDefaults];
 
     function applyFieldDefaults(fieldToModify){
         //apply all high level field properties that are missing
         //we can't apply an id as that will be assigned by the api
-        if(!fieldToModify.fieldKeys.BUILT_IN) {
-            fieldToModify.fieldKeys.BUILT_IN = defaultConsts.fieldDefaults.BUILTIN_DEFAULT;
+        if(!fieldToModify[fieldConsts.fieldKeys.BUILT_IN]) {
+            fieldToModify[fieldConsts.fieldKeys.BUILT_IN] = defaultConsts.fieldDefaults.BUILTIN_DEFAULT;
         }
 
-        if(!fieldToModify.fieldKeys.DATA_IS_COPYABLE) {
-            fieldToModify.fieldKeys.DATA_IS_COPYABLE = defaultConsts.fieldDefaults.DATA_COPYABLE_DEFAULT;
+        if(!fieldToModify[fieldConsts.fieldKeys.DATA_IS_COPYABLE]) {
+            fieldToModify[fieldConsts.fieldKeys.DATA_IS_COPYABLE] = defaultConsts.fieldDefaults.DATA_COPYABLE_DEFAULT;
         }
 
-        if(!fieldToModify.fieldKeys.INCLUDE_IN_QUICKSEARCH) {
-            fieldToModify.fieldKeys.INCLUDE_IN_QUICKSEARCH = defaultConsts.fieldDefaults.USE_IN_QUICKSEARCH_DEFAULT;
+        if(!fieldToModify[fieldConsts.fieldKeys.INCLUDE_IN_QUICKSEARCH]) {
+            fieldToModify[fieldConsts.fieldKeys.INCLUDE_IN_QUICKSEARCH] = defaultConsts.fieldDefaults.USE_IN_QUICKSEARCH_DEFAULT;
         }
     }
 

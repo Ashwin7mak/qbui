@@ -4,63 +4,70 @@
  */
 (function () {
     'use strict';
+    var Chance = require('chance');
+    var chance = new Chance();
+    var SUBDOMAIN_CHARS = 'abcdefghijklmnopqrstuvwxyz0123456789';
 
     //These are constants common to all fields
-    module.exports = Object.freeze({
+    module.exports = {
+
         //Generates and returns a psuedo-random 32 char string that is URL safe
         generateValidSubdomainString : function()
         {
-            var text = '';
-            for (var i = 0; i < 32; i++) {
-                text += SUBDOMAIN_CHARS.charAt(Math.floor(Math.random() * SUBDOMAIN_CHARS.length));
-            }
-            return text;
+            return chance.string({pool: SUBDOMAIN_CHARS, length: 32});
         },
 
         //Generates and returns a psuedo-random char string of specified length
         generateString : function(length) {
-            var text = '';
-            for (var i = 0; i < length; i++) {
-                text += SUBDOMAIN_CHARS.charAt(Math.floor(Math.random() * SUBDOMAIN_CHARS.length));
-            }
-            return text;
+            return chance.string({length: length});
         },
 
         //Generates and returns a psuedo-random email string
         generateEmail : function() {
-            return generateString(10) + "_" + generateString(10) + "@intuit.com";
+            return chance.email();
+        },
+
+        //Generates and returns a psuedo-random email string
+        generateEmailInDomain : function(domain) {
+            return chance.email({domain: domain});
         },
 
         //Generates and returns a psuedo-random us phone number
-        generateUsPhoneNumber : function(includeExt) {
-            var phoneNumber = "(" + generateInt(100, 999) + ")" + generateInt(100, 999) + "-" + generateInt(1000, 9999);
+        generatePhoneNumber : function(includeExt) {
+            var phoneNumber = chance.phone();
             if (includeExt) {
-                phoneNumber = phoneNumber + "x" + generateInt(1000, 9999);
+                phoneNumber = phoneNumber + "x" + this.generateInt(1000, 9999);
             }
+            return phoneNumber;
+        },
+
+        //Generates and returns a psuedo-random us phone number
+        generatePhoneNumberForCountry : function(country) {
+            var phoneNumber = chance.phone({country: country});
+
             return phoneNumber;
         },
 
         //Generates and returns a psuedo-random url with prefix http://<randomString>.<randomString>
         generateUrl : function() {
-            var url = "http://" + generateString(12) + "." + generateString(3);
+            var url = chance.url();
             return url;
         },
 
         //Generates and returns a psuedo-random double
         generateDouble : function(min, max) {
-            var relativeMax = max - min;
-            return Math.random() * relativeMax + min;
+            return chance.floating({min: min, max: max});
         },
 
         //Generates and returns a psuedo-random integer
         generateInt : function(min, max) {
-            return Math.floor(generateDouble(min, max));
+            return chance.integer({min: min, max: max});
         },
 
         //Generates a pseudo-randomly chosen true or false
         generateBool : function() {
-            return Math.random() >= .5;
+            return chance.bool();
         }
-    });
+    };
 
 }());

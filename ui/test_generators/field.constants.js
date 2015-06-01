@@ -4,8 +4,6 @@
  * Created by cschneider1 on 5/29/15.
  */
 (function(){
-    var consts = require('../server/api/quickbase/constants');
-    var fieldConsts = require(this);
 
     //These are constants common to all fields
     module.exports = Object.freeze({
