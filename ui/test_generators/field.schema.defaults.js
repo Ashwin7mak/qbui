@@ -122,7 +122,7 @@
 
             //URL and URLFormula
             urlDefaults: {
-                URL_DISPLAY_PROTOCOL_DEFAULT: true,
+                URL_DISPLAY_PROTOCOL_DEFAULT: '',
                 URL_DEFAULT_LINK_TEXT: ''
             },
 

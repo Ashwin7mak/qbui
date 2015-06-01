@@ -36,21 +36,21 @@
             var foundKey = true;
             var valueValid = true;
             var typesKeyWord = 'types';
+            var validFieldTypesKeyWord = 'fieldTypes';
             var fieldConstSubKeys;
             var prevKey = '';
+            var fieldType = field[fieldConsts.fieldKeys.TYPE];
 
             fieldKeys.forEach(function (fieldKey) {
 
                 if(foundKey == false){
-                    console.error('We could not find this key in our key constants for a field. Key in question: ' +fieldKey+ 'Field ' + field);
+                    console.error('We could not find this key in our key constants for a field. Key in question: ' +prevKey+ ' Field ' + field);
                 }else{
                     foundKey = false;
                 }
 
                 if(valueValid == false){
-                    console.error('There was a value type mismatch. Key in question: ' +fieldKey+ 'Field ' + field);
-                }else{
-                    valueValid = false;
+                    console.error('There was a value type mismatch. Key in question: ' +prevKey+ ' Field ' + field);
                 }
 
                 fieldConstCategoryKeys.forEach( function (constKey) {
@@ -60,7 +60,7 @@
                     fieldConstSubKeys.forEach(function (constSubKey)
                     {
 
-                        if (fieldConsts[constKey][constSubKey] === fieldKey) {
+                        if (contains(fieldConsts[constKey][validFieldTypesKeyWord], fieldType) && fieldConsts[constKey][constSubKey] === fieldKey) {
 
                             foundKey = true;
 
@@ -346,5 +346,13 @@
         }
     }
 
+    function contains(array, thingToCheckFor){
+        for(var index in array){
+            if(array[index] === thingToCheckFor){
+                return true;
+            }
+        }
+        return false;
+    }
 
 }());

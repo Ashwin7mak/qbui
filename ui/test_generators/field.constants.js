@@ -4,6 +4,7 @@
  * Created by cschneider1 on 5/29/15.
  */
 (function(){
+    var consts = require('../server/api/constants');
 
     //These are constants common to all fields
     module.exports = Object.freeze({
@@ -32,7 +33,43 @@
                 DATA_IS_COPYABLE : 'boolean',
                 INCLUDE_IN_QUICKSEARCH : 'boolean',
                 CLIENT_SIDE_ATTRIBUTES : 'object'
-            }
+            },
+            fieldTypes : [
+                consts.CHECKBOX,
+                consts.TEXT,
+                consts.MULTI_LINE_TEXT,
+                consts.BIGTEXT,
+                consts.PHONE_NUMBER,
+                consts.DATE_TIME,
+                consts.FORMULA_DATE_TIME,
+                consts.DATE,
+                consts.DURATION,
+                consts.FORMULA_DURATION,
+                consts.FORMULA_DATE,
+                consts.FORMULA_TIME_OF_DAY,
+                consts.TIME_OF_DAY,
+                consts.NUMERIC,
+                consts.FORMULA_NUMERIC,
+                consts.CURRENCY,
+                consts.RATING ,
+                consts.FORMULA_CURRENCY,
+                consts.PERCENT,
+                consts.FORMULA_PERCENT,
+                consts.URL,
+                consts.EMAIL_ADDRESS,
+                consts.USER,
+                consts.FORMULA_USER,
+                consts.FILE_ATTACHMENT,
+                consts.REPORT_LINK,
+                consts.SUMMARY,
+                consts.LOOKUP,
+                consts.FORMULA_PHONE_NUMBER ,
+                consts.FORMULA_URL,
+                consts.FORMULA_CHECKBOX,
+                consts.FORMULA_TEXT,
+                consts.FORMULA_EMAIL_ADDRESS
+            ]
+
         },
 
         //formula field property keys
@@ -42,7 +79,22 @@
             types : {
                 //FormulaField property names
                 FORMULA : 'string'
-            }
+            },
+            fieldTypes : [
+                consts.FORMULA_DATE_TIME,
+                consts.FORMULA_DURATION,
+                consts.FORMULA_DATE,
+                consts.FORMULA_TIME_OF_DAY,
+                consts.FORMULA_NUMERIC,
+                consts.FORMULA_CURRENCY,
+                consts.FORMULA_PERCENT,
+                consts.FORMULA_USER,
+                consts.FORMULA_PHONE_NUMBER ,
+                consts.FORMULA_URL,
+                consts.FORMULA_CHECKBOX,
+                consts.FORMULA_TEXT,
+                consts.FORMULA_EMAIL_ADDRESS
+            ]
         },
 
         //VirtualField property names
@@ -52,7 +104,8 @@
             types : {
                 RELATIONSHIP_ID : 'string',
                 REFERENCE_FIELD_ID : 'number'
-            }
+            },
+            fieldTypes : [consts.SUMMARY, consts.LOOKUP]
         },
 
         //ConcreteField property names
@@ -62,7 +115,26 @@
             types : {
                 USER_EDITABLE_VALUE : 'boolean',
                 REQUIRED : 'boolean'
-            }
+            },
+            fieldTypes : [
+                consts.CHECKBOX,
+                consts.TEXT,
+                consts.MULTI_LINE_TEXT,
+                consts.BIGTEXT,
+                consts.PHONE_NUMBER,
+                consts.DATE_TIME,
+                consts.DATE,
+                consts.TIME_OF_DAY,
+                consts.DURATION,
+                consts.NUMERIC,
+                consts.CURRENCY,
+                consts.RATING ,
+                consts.PERCENT,
+                consts.URL,
+                consts.EMAIL_ADDRESS,
+                consts.USER,
+                consts.FILE_ATTACHMENT
+            ]
         },
 
         //ScalarField property names
@@ -84,7 +156,25 @@
                 DEFAULT_VALUE : 'object',
                 MULTIPLE_CHOICE : 'object',
                 MULTIPLE_CHOICE_SOURCE_ALLOWED : 'boolean'
-            }
+            },
+            fieldTypes : [
+                consts.CHECKBOX,
+                consts.TEXT,
+                consts.MULTI_LINE_TEXT,
+                consts.BIGTEXT,
+                consts.PHONE_NUMBER,
+                consts.DATE_TIME,
+                consts.DATE,
+                consts.TIME_OF_DAY,
+                consts.DURATION,
+                consts.NUMERIC,
+                consts.CURRENCY,
+                consts.RATING ,
+                consts.PERCENT,
+                consts.URL,
+                consts.EMAIL_ADDRESS,
+                consts.USER,
+            ]
         },
 
         dateAndDateFormulaFieldKeys : {
@@ -97,7 +187,8 @@
                 SHOW_DAY_OF_WEEK : 'boolean',
                 HIDE_YEAR_IF_CURRENT : 'boolean',
                 DATE_FORMAT : 'string'
-            }
+            },
+            fieldTypes : [consts.DATE, consts.DATE_TIME, consts.TIME_OF_DAY, consts.FORMULA_DATE, consts.FORMULA_DATE_TIME, consts.FORMULA_TIME_OF_DAY]
         },
 
         dateTimeAndDateTimeFormulatFieldKeys : {
@@ -108,21 +199,24 @@
                 SHOW_TIME : 'boolean',
                 SHOW_TIME_ZONE : 'boolean',
                 TIME_ZONE : 'string'
-            }
+            },
+            fieldTypes : [consts.DATE_TIME, consts.TIME_OF_DAY, consts.FORMULA_DATE_TIME, consts.FORMULA_TIME_OF_DAY]
         },
 
         dateTimeFormulaFieldKeys : {
             SORT_ORDER_ASCENDING : 'sortOrderAscending',
             types : {
                 SORT_ORDER_ASCENDING : 'boolean'
-            }
+            },
+            fieldTypes : [consts.DATE_TIME, consts.TIME_OF_DAY, consts.FORMULA_DATE_TIME, consts.FORMULA_TIME_OF_DAY]
         },
 
         durationAndDurationFormulaFieldKeys : {
             SCALE : 'scale',
             types : {
                 SCALE : 'string'
-            }
+            },
+            fieldTypes : [consts.DURATION, consts.FORMULA_DURATION]
         },
 
         emailAndEmailFormulaFieldKeys : {
@@ -130,10 +224,11 @@
             SORT_BY_DOMAIN : 'sortByDomain',
             SHOW_EMAIL_EVERYONE : 'showEmailEveryone',
             types : {
-                DEFAULT_DOMAIN : 'string',
+                DEFAULT_DOMAIN : 'boolean',
                 SORT_BY_DOMAIN : 'boolean',
                 SHOW_EMAIL_EVERYONE : 'boolean'
-            }
+            },
+            fieldTypes : [consts.EMAIL_ADDRESS, consts.FORMULA_EMAIL_ADDRESS]
         },
 
         fileAttachmentFieldKeys : {
@@ -146,7 +241,8 @@
                 KEEP_ALL_REVISIONS : 'boolean',
                 REVISIONS_TO_KEEP : 'number',
                 ALLOW_USERS_TO_MAKE_OLDER_VERSIONS_THE_CURRENT_VERSION : 'boolean'
-            }
+            },
+            fieldTypes : [consts.FILE_ATTACHMENT]
         },
 
         numericAndNumericFormulaFieldKeys : {
@@ -155,14 +251,26 @@
             types : {
                 DECIMAL_PLACES : 'number',
                 TREAT_NULL_AS_ZERO : 'boolean'
-            }
+            },
+            fieldTypes : [
+                consts.DURATION,
+                consts.FORMULA_DURATION,
+                consts.NUMERIC,
+                consts.FORMULA_NUMERIC,
+                consts.CURRENCY,
+                consts.RATING ,
+                consts.FORMULA_CURRENCY,
+                consts.PERCENT,
+                consts.FORMULA_PERCENT
+            ]
         },
 
         phoneNumberAndPhoneNumberFormulaFieldKeys : {
             INCLUDE_EXTENSION : 'includeExtension',
             types : {
                 INCLUDE_EXTENSION : 'boolean'
-            }
+            },
+            fieldTypes : [consts.PHONE_NUMBER, consts.FORMULA_PHONE_NUMBER]
         },
 
         reportLinkFieldKeys : {
@@ -173,11 +281,12 @@
             MULTI_CHOICE_SOURCE_ALLOWED : 'multiChoiceSourceAllowed',
             types : {
                 RELATIONSHIP_ID : 'string',
-                DISPLAY_PROTOCOL : 'string',
+                DISPLAY_PROTOCOL : 'boolean',
                 LINK_TEXT : 'string',
                 EXACT_MATCH : 'boolean',
                 MULTI_CHOICE_SOURCE_ALLOWED : 'boolean'
-            }
+            },
+            fieldTypes : [consts.REPORT_LINK]
         },
 
         summaryFieldKeys : {
@@ -190,14 +299,17 @@
                 DECIMAL_PLACES : 'number',
                 TREAT_NULL_AS_ZERO : 'boolean',
                 EXPRESSION : 'string'
-            }
+            },
+            fieldTypes : [consts.SUMMARY]
         },
 
         textAndTextFormulaFieldKeys : {
             HTML_ALLOWED : 'htmlAllowed',
             types : {
                 HTML_ALLOWED : 'boolean'
-            }
+            },
+            fieldTypes : [consts.TEXT, consts.FORMULA_TEXT, consts.MULTI_LINE_TEXT]
+
         },
 
         timeOfDayAndTimeOfDayFormulaFieldKeys : {
@@ -205,10 +317,11 @@
             USE_24_HOUR_CLOCK : 'use24HourClock',
             USE_TIMEZONE : 'useTimezone',
             types : {
-                SCALE : 'number',
+                SCALE : 'string',
                 USE_24_HOUR_CLOCK : 'boolean',
                 USE_TIMEZONE : 'boolean'
-            }
+            },
+            fieldTypes : [consts.TIME_OF_DAY, consts.FORMULA_TIME_OF_DAY]
         },
 
         urlAndUrlFormulaFieldKeys : {
@@ -217,7 +330,8 @@
             types : {
                 DISPLAY_PROTOCOL : 'string',
                 LINK_TEXT : 'string'
-            }
+            },
+            fieldTypes : [consts.URL, consts.FORMULA_URL]
         },
 
         userAndUserFormulaFieldKeys : {
@@ -226,7 +340,8 @@
             types : {
                 SEND_INVITES_TO_USERS : 'boolean',
                 USER_DISPLAY_FORMAT : 'string'
-            }
+            },
+            fieldTypes : [consts.USER, consts.FORMULA_USER]
         }
     });
     
