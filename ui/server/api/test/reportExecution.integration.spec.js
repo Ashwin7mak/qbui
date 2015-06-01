@@ -46,7 +46,7 @@ describe('API - Validate report execution', function () {
             var testCase = recordProvider(percentField.id);
             //For each of the cases, create the record and execute the request
             var recordsEndpoint = recordBase.apiBase.resolveRecordsEndpoint(app.id, app.tables[0].id);
-            recordBase.createAndFetchRecord(recordsEndpoint, jsonBigNum.parse(testCase.record), '?format=' + testCase.format);
+            recordBase.createAndFetchRecord(recordsEndpoint, JSON.parse(testCase.record), '?format=' + testCase.format);
 
             var reportEndpoint = recordBase.apiBase.resolveReportsEndpoint(app.id, app.tables[0].id);
             var reportToCreate = {
@@ -56,24 +56,23 @@ describe('API - Validate report execution', function () {
             };
             recordBase.apiBase.executeRequest(reportEndpoint, consts.POST, reportToCreate)
                 .then(function(report) {
-                    recordBase.apiBase.executeRequest(reportEndpoint + report.id + '/results?format=' + testCase.format, consts.GET)
+                    var r = JSON.parse(report.body);
+                    recordBase.apiBase.executeRequest(reportEndpoint + r.id + '/results?format=' + testCase.format, consts.GET)
                         .then(function(reportResults) {
-                            for (var i = 0; i < reportResults.length; i++) {
-                                var currentRecord = reportResults[i];
-                                if(results[i].record) {
-                                    currentRecord = reportResults[i].record;
-                                }
+                            var results = JSON.parse(reportResults.body);
+                            for (var i = 0; i < results.records.length; i++) {
+                                var currentRecord = results.records[i];
                                 currentRecord.forEach(function (fieldValue) {
-                                    if (fieldValue.id === JSON.parse(records[i].expectedFieldValue).id) {
-                                        assert.deepEqual(fieldValue, JSON.parse(records[i].expectedFieldValue),
+                                    if (fieldValue.id === JSON.parse(testCase.expectedFieldValue).id) {
+                                        assert.deepEqual(fieldValue, JSON.parse(testCase.expectedFieldValue),
                                             'Unexpected field value returned: '
-                                            + JSON.stringify(fieldValue) + ', ' + records[i].expectedFieldValue);
+                                            + JSON.stringify(fieldValue) + ', ' + testCase.expectedFieldValue);
                                     }
                                 });
                             }
                             done();
                         });
-                });
+                }).catch(function(errpr){ console.log(JSON.stringify(error)); });
         });
     });
 
