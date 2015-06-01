@@ -46,7 +46,7 @@
             //Numeric and Numeric formula defaults
             numericDefaults: {
                 DECIMAL_PLACES_DEFAULT: 14,
-                TREAT_NULL_AS_ZERO: true
+                TREAT_NULL_AS_ZERO_DEFAULT: true
             },
 
             //Date and Date Formula defaults

@@ -108,7 +108,7 @@ ddescribe('Field generator unit test', function () {
                 }
 
                 var fieldIsValidWithDefaultValues = fieldGenerator.validateFieldProperties(field);
-                assert.equal(fieldIsValidWithDefaultValues, true, 'Found field property that is not valid for' + field);
+                assert.equal(fieldIsValidWithDefaultValues, true, 'Found field property that is not valid for' + JSON.stringify(field));
                 done();
             });
         });

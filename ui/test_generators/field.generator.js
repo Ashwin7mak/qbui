@@ -31,47 +31,57 @@
         validateFieldProperties : function(field){
             var fieldConstCategoryKeys = Object.keys(fieldConsts);
             var fieldKeys = Object.keys(field);
-            var foundKey = false;
-            var valueValid = false;
+            //these will be initialized in the loop to be false
+            //let's start out assuming the best and let the loop tell us if we're in trouble
+            var foundKey = true;
+            var valueValid = true;
             var typesKeyWord = 'types';
             var fieldConstSubKeys;
+            var prevKey = '';
 
             fieldKeys.forEach(function (fieldKey) {
+
+                if(foundKey == false){
+                    console.error('We could not find this key in our key constants for a field. Key in question: ' +fieldKey+ 'Field ' + field);
+                }else{
+                    foundKey = false;
+                }
+
+                if(valueValid == false){
+                    console.error('There was a value type mismatch. Key in question: ' +fieldKey+ 'Field ' + field);
+                }else{
+                    valueValid = false;
+                }
+
                 fieldConstCategoryKeys.forEach( function (constKey) {
 
                     fieldConstSubKeys = Object.keys(fieldConsts[constKey]);
 
-                    //each constant field definition has a types section to help
-                    //with property value validation. This should be ignored here
-                    if(constSubKey === typesKeyWord){
-                        return;
-                    }
+                    fieldConstSubKeys.forEach(function (constSubKey)
+                    {
 
-                    if(fieldConstSubKeys.contains(fieldKey)){
+                        if (fieldConsts[constKey][constSubKey] === fieldKey) {
 
-                        foundKey = true;
+                            foundKey = true;
 
-                        //check that we have defined the type for this key word
-                        if(!consts[constKey][typesKeyWord][fieldKey]){
-                            alert('Type is not defiend for keyWord "' + fieldKey + '. Validating field ' + field);
+                            //check that we have defined the type for this key word
+                            if (typeof fieldConsts[constKey][typesKeyWord][constSubKey] === 'undefined') {
+                                console.error('Type is not undefined for keyWord "' + fieldKey + '. Validating field ' + field);
+                            }
+
+                            var actualTypeOfProperty = typeof field[fieldKey];
+                            var expectedTypeOfProperty = fieldConsts[constKey][typesKeyWord][constSubKey];
+
+                            if (actualTypeOfProperty !== expectedTypeOfProperty) {
+                                valueValid = false;
+                            }
                         }
-
-                        var actualTypeOfProperty = typeof field[fieldKey];
-                        var expectedTypeOfProperty = consts[constKey][typesKeyWord][fieldKey];
-
-                        if(actualTypeOfProperty === expectedTypeOfProperty){
-                            valueValid = true;
-                        }
-                    }
-
+                    });
                 });
 
-                if(foundKey == false){
-                    alert('We could not find this key in our key constants for a field. Key in question: ' +fieldKey+ 'Field ' + field);
-                }else{
-                    foundKey = false;
-                }
+                prevKey = fieldKey;
             });
+            return foundKey && valueValid;
         },
 
         //For a given field type, apply any default values that are not currently present in the map
@@ -98,7 +108,7 @@
     fieldTypeToFunctionCalls[consts.FORMULA_NUMERIC] = [ applyFieldDefaults, applyFormulaDefaults,  applyNumericDefaults ];
     fieldTypeToFunctionCalls[consts.FORMULA_CURRENCY] = [ applyFieldDefaults, applyFormulaDefaults,  applyNumericDefaults ];
     fieldTypeToFunctionCalls[consts.FORMULA_PERCENT] = [ applyFieldDefaults, applyFormulaDefaults,  applyNumericDefaults ];
-    fieldTypeToFunctionCalls[consts.FORMULA_DURATION] = [ applyFieldDefaults, applyFormulaDefaults,  applyNumericDefaults, applyDurationDefaults ];
+    fieldTypeToFunctionCalls[consts.FORMULA_DURATION] = [ applyFieldDefaults, applyFormulaDefaults, applyNumericDefaults, applyDurationDefaults ];
     fieldTypeToFunctionCalls[consts.FORMULA_USER] = [ applyFieldDefaults, applyFormulaDefaults];
     fieldTypeToFunctionCalls[consts.FORMULA_TEXT] = [ applyFieldDefaults, applyFormulaDefaults];
     fieldTypeToFunctionCalls[consts.FORMULA_PHONE_NUMBER] = [ applyFieldDefaults, applyFormulaDefaults, applyPhoneNumberDefaults];

@@ -57,7 +57,7 @@
 
         //ConcreteField property names
         concreteFieldKeys : {
-            USER_EDITABLE_VALUE : 'userEdtiableValue',
+            USER_EDITABLE_VALUE : 'userEditableValue',
             REQUIRED : 'required',
             types : {
                 USER_EDITABLE_VALUE : 'boolean',
