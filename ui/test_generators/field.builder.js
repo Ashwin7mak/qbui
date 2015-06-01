@@ -6,325 +6,337 @@
 (function() {
     //These are constants common to all fields
     module.exports = {
-            /************************************************************/
-            /*                      Field Properties                    */
-            /************************************************************/
 
-            setId : function(id, fieldUnderConstruction){
-                fieldUnderConstruction[fieldConstants.fieldKeys.ID] =  id;
-                return fieldUnderConstruction;
-            },
+        Builder : function() {
+            var fieldUnderConstruction = {};
+            module.exports = {
+                build : function() {
+                    return fieldUnderConstruction;
+                },
 
-            setName : function(name, fieldUnderConstruction){
-                fieldUnderConstruction[fieldConstants.fieldKeys.NAME] =  name;
-                return fieldUnderConstruction;
-            },
+                /************************************************************/
+                /*                      Field Properties                    */
+                /************************************************************/
 
-            setType : function(type, fieldUnderConstruction){
-                fieldUnderConstruction[fieldConstants.fieldKeys.TYPE] =  type;
-                return fieldUnderConstruction;
-            },
+                withId :  function(id) {
+                    fieldUnderConstruction.fieldConstants.fieldKeys.ID = id;
+                    return this;
+                },
 
-            setTableId : function(tableId, fieldUnderConstruction){
-                fieldUnderConstruction[fieldConstants.fieldKeys.TABLE_ID] =  tableId;
-                return fieldUnderConstruction;
-            },
+                withName :  function(name) {
+                    fieldUnderConstruction.fieldConstants.fieldKeys.NAME = name;
+                    return this;
+                },
 
-            setBuiltIn : function(isBuiltIn, fieldUnderConstruction){
-                fieldUnderConstruction[fieldConstants.fieldKeys.BUILT_IN] =  isBuiltIn;
-                return fieldUnderConstruction;
-            },
+                withType :  function(type) {
+                    fieldUnderConstruction.fieldConstants.fieldKeys.TYPE = type;
+                    return this;
+                },
 
-            setDataIsCopyable : function(isDataCopyable, fieldUnderConstruction){
-                fieldUnderConstruction[fieldConstants.fieldKeys.DATA_IS_COPYABLE] =  isDataCopyable;
-                return fieldUnderConstruction;
-            },
+                withTableId :  function(tableId) {
+                    fieldUnderConstruction.fieldConstants.fieldKeys.TABLE_ID = tableId;
+                    return this;
+                },
 
-            setIncludeInQuickSearch : function(includeInQuickSearch , fieldUnderConstruction){
-                fieldUnderConstruction[fieldConstants.fieldKeys.INCLUDE_IN_QUICKSEARCH] =  includeInQuickSearch;
-                return fieldUnderConstruction;
-            },
+                withBuiltIn :  function(isBuiltIn) {
+                    fieldUnderConstruction.fieldConstants.fieldKeys.BUILT_IN = isBuiltIn;
+                    return this;
+                },
 
-            setClientSideAttributes : function(clientSideAttributes , fieldUnderConstruction){
-                fieldUnderConstruction[fieldConstants.fieldKeys.CLIENT_SIDE_ATTRIBUTES] =  clientSideAttributes;
-                return fieldUnderConstruction;
-            },
+                withDataIsCopyable :  function(isDataCopyable) {
+                    fieldUnderConstruction.fieldConstants.fieldKeys.DATA_IS_COPYABLE = isDataCopyable;
+                    return this;
+                },
 
-            /************************************************************/
-            /*               Formula Field Properties                   */
-            /************************************************************/
+                withIncludeInQuickSearch :  function(includeInQuickSearch) {
+                    fieldUnderConstruction.fieldConstants.fieldKeys.INCLUDE_IN_QUICKSEARCH = includeInQuickSearch;
+                    return this;
+                },
 
-            setFormula : function(formula , fieldUnderConstruction){
-                fieldUnderConstruction[fieldConstants.formulaFieldKeys.FORMULA] =  formula;
-                return fieldUnderConstruction;
-            },
+                withClientSideAttributes :  function(clientSideAttributes) {
+                    fieldUnderConstruction.fieldConstants.fieldKeys.CLIENT_SIDE_ATTRIBUTES = clientSideAttributes;
+                    return this;
+                },
 
-            /************************************************************/
-            /*               Virtual Field Properties                   */
-            /************************************************************/
-            setRelationshipId : function(relationshipId, fieldUnderConstruction){
-                fieldUnderConstruction[fieldConstants.virtualFieldKeys.RELATIONSHIP_ID] =  relationshipId;
-                return fieldUnderConstruction;
-            },
+                /************************************************************/
+                /*               Formula Field Properties                   */
+                /************************************************************/
 
-            setReferenceFieldId : function(referenceFieldId, fieldUnderConstruction){
-                fieldUnderConstruction[fieldConstants.virtualFieldKeys.REFERENCE_FIELD_ID] =  referenceFieldId;
-                return fieldUnderConstruction;
-            },
+                withFormula :  function(formula) {
+                    fieldUnderConstruction.fieldConstants.formulaFieldKeys.FORMULA = formula;
+                    return this;
+                },
 
-            /************************************************************/
-            /*               Concrete Field Properties                  */
-            /************************************************************/
+                /************************************************************/
+                /*               Virtual Field Properties                   */
+                /************************************************************/
+                withRelationshipId :  function(relationshipId) {
+                    fieldUnderConstruction.fieldConstants.virtualFieldKeys.RELATIONSHIP_ID = relationshipId;
+                    return this;
+                },
 
-            setUserEditable : function(isUserEditable, fieldUnderConstruction){
-                fieldUnderConstruction[fieldConstants.concreteFieldKeys.USER_EDITABLE_VALUE] =  isUserEditable;
-                return fieldUnderConstruction;
-            },
-            setRequired : function(isRequired, fieldUnderConstruction){
-                fieldUnderConstruction[fieldConstants.concreteFieldKeys.REQUIRED] =  isRequired;
-                return fieldUnderConstruction;
-            },
+                withReferenceFieldId :  function(referenceFieldId) {
+                    fieldUnderConstruction.fieldConstants.virtualFieldKeys.REFERENCE_FIELD_ID = referenceFieldId;
+                    return this;
+                },
 
-            /************************************************************/
-            /*               Scalar Field Properties                    */
-            /************************************************************/
+                /************************************************************/
+                /*               Concrete Field Properties                  */
+                /************************************************************/
 
-            setUnique : function(isUnique, fieldUnderConstruction){
-                fieldUnderConstruction[fieldConstants.scalarFieldKeys.UNIQUE] =  isUnique;
-                return fieldUnderConstruction;
-            },
+                withUserEditable :  function(isUserEditable) {
+                    fieldUnderConstruction.fieldConstants.concreteFieldKeys.USER_EDITABLE_VALUE = isUserEditable;
+                    return this;
+                },
 
-            setIndexed : function(isIndexed, fieldUnderConstruction){
-                fieldUnderConstruction[fieldConstants.scalarFieldKeys.INDEXED] =  isIndexed;
-                return fieldUnderConstruction;
-            },
+                withRequired :  function(isRequired) {
+                    fieldUnderConstruction.fieldConstants.concreteFieldKeys.REQUIRED = isRequired;
+                    return this;
+                },
 
-            setKeyField : function(isKeyField, fieldUnderConstruction){
-                fieldUnderConstruction[fieldConstants.scalarFieldKeys.KEY_FIELD] =  isKeyField;
-                return fieldUnderConstruction;
-            },
+                /************************************************************/
+                /*               Scalar Field Properties                    */
+                /************************************************************/
 
-            setForeignKey : function(isForeignKey, fieldUnderConstruction){
-                fieldUnderConstruction[fieldConstants.scalarFieldKeys.FOREIGN_KEY] =  isForeignKey;
-                return fieldUnderConstruction;
-            },
+                withUnique :  function(isUnique) {
+                    fieldUnderConstruction.fieldConstants.scalarFieldKeys.UNIQUE = isUnique;
+                    return this;
+                },
 
-            setProxyFieldId : function(proxyFieldId, fieldUnderConstruction){
-                fieldUnderConstruction[fieldConstants.scalarFieldKeys.PROXY_FIELD_ID] =  proxyFieldId;
-                return fieldUnderConstruction;
-            },
+                withIndexed :  function(isIndexed) {
+                    fieldUnderConstruction.fieldConstants.scalarFieldKeys.INDEXED = isIndexed;
+                    return this;
+                },
 
-            setDefaultValue : function(defaultValue, fieldUnderConstruction){
-                fieldUnderConstruction[fieldConstants.scalarFieldKeys.DEFAULT_VALUE] =  defaultValue;
-                return fieldUnderConstruction;
-            },
+                withKeyField :  function(isKeyField) {
+                    fieldUnderConstruction.fieldConstants.scalarFieldKeys.KEY_FIELD = isKeyField;
+                    return this;
+                },
 
-            setMultipleChoice : function(multipleChoice, fieldUnderConstruction){
-                fieldUnderConstruction[fieldConstants.scalarFieldKeys.MULTIPLE_CHOICE] =  multipleChoice;
-                return fieldUnderConstruction;
-            },
+                withForeignKey :  function(isForeignKey) {
+                    fieldUnderConstruction.fieldConstants.scalarFieldKeys.FOREIGN_KEY = isForeignKey;
+                    return this;
+                },
 
-            setMultipleChoiceSourceAllowed : function(isMultipleChoiceSourceAllowed, fieldUnderConstruction){
-                fieldUnderConstruction[fieldConstants.scalarFieldKeys.MULTIPLE_CHOICE_SOURCE_ALLOWED] =  isMultipleChoiceSourceAllowed;
-                return fieldUnderConstruction;
-            },
+                withProxyFieldId :  function(proxyFieldId) {
+                    fieldUnderConstruction.fieldConstants.scalarFieldKeys.PROXY_FIELD_ID = proxyFieldId;
+                    return this;
+                },
 
-            /************************************************************/
-            /*               Specific Field Properties                  */
-            /************************************************************/
+                withDefaultValue :  function(defaultValue) {
+                    fieldUnderConstruction.fieldConstants.scalarFieldKeys.DEFAULT_VALUE = defaultValue;
+                    return this;
+                },
 
-            //DATE STUFF
-            setShowMonthAsName : function(showMonthAsName, fieldUnderConstruction){
-                fieldUnderConstruction[fieldConstants.dateAndDateFormulaFieldKeys.SHOW_MONTH_AS_NAME] =  showMonthAsName;
-                return fieldUnderConstruction;
-            },
+                withMultipleChoice :  function(multipleChoice) {
+                    fieldUnderConstruction.fieldConstants.scalarFieldKeys.MULTIPLE_CHOICE = multipleChoice;
+                    return this;
+                },
 
-            setShowDayOfWeek : function(showDayOfWeek, fieldUnderConstruction){
-                fieldUnderConstruction[fieldConstants.dateAndDateFormulaFieldKeys.SHOW_DAY_OF_WEEK] =  showDayOfWeek;
-                return fieldUnderConstruction;
-            },
+                withMultipleChoiceSourceAllowed :  function(isMultipleChoiceSourceAllowed) {
+                    fieldUnderConstruction.fieldConstants.scalarFieldKeys.MULTIPLE_CHOICE_SOURCE_ALLOWED = isMultipleChoiceSourceAllowed;
+                    return this;
+                },
 
-            setHideYearIfCurrent : function(hideYearIfCurrent, fieldUnderConstruction){
-                fieldUnderConstruction[fieldConstants.dateAndDateFormulaFieldKeys.HIDE_YEAR_IF_CURRENT] =  hideYearIfCurrent;
-                return fieldUnderConstruction;
-            },
+                /************************************************************/
+                /*               Specific Field Properties                  */
+                /************************************************************/
 
-            setDateFormat : function(dateFormat, fieldUnderConstruction){
-                fieldUnderConstruction[fieldConstants.dateAndDateFormulaFieldKeys.DATE_FORMAT] =  dateFormat;
-                return fieldUnderConstruction;
-            },
+                //DATE STUFF
+                withShowMonthAsName :  function(showMonthAsName) {
+                    fieldUnderConstruction.fieldConstants.dateAndDateFormulaFieldKeys.SHOW_MONTH_AS_NAME = showMonthAsName;
+                    return this;
+                },
 
-            //DATE TIME STUFF
-            setShowTime : function(showTime, fieldUnderConstruction){
-                fieldUnderConstruction[fieldConstants.dateTimeAndDateTimeFormulatFieldKeys.SHOW_TIME] =  showTime;
-                return fieldUnderConstruction;
-            },
+                withShowDayOfWeek :  function(showDayOfWeek) {
+                    fieldUnderConstruction.fieldConstants.dateAndDateFormulaFieldKeys.SHOW_DAY_OF_WEEK = showDayOfWeek;
+                    return this;
+                },
 
-            setShowTimeZone : function(showTimeZone, fieldUnderConstruction){
-                fieldUnderConstruction[fieldConstants.dateTimeAndDateTimeFormulatFieldKeys.SHOW_TIME_ZONE] =  showTimeZone;
-                return fieldUnderConstruction;
-            },
+                withHideYearIfCurrent :  function(hideYearIfCurrent) {
+                    fieldUnderConstruction.fieldConstants.dateAndDateFormulaFieldKeys.HIDE_YEAR_IF_CURRENT = hideYearIfCurrent;
+                    return this;
+                },
 
-            setTimeZone : function(timeZone, fieldUnderConstruction){
-                fieldUnderConstruction[fieldConstants.dateTimeAndDateTimeFormulatFieldKeys.TIME_ZONE] =  timeZone;
-                return fieldUnderConstruction;
-            },
+                withDateFormat :  function(dateFormat) {
+                    fieldUnderConstruction.fieldConstants.dateAndDateFormulaFieldKeys.DATE_FORMAT = dateFormat;
+                    return this;
+                },
 
-            setSortOrderAscending : function(sortOrderAscending, fieldUnderConstruction){
-                fieldUnderConstruction[fieldConstants.dateTimeFormulaFieldKeys.SORT_ORDER_ASCENDING] =  sortOrderAscending;
-                return fieldUnderConstruction;
-            },
+                //DATE TIME STUFF
+                withShowTime :  function(showTime) {
+                    fieldUnderConstruction.fieldConstants.dateTimeAndDateTimeFormulatFieldKeys.SHOW_TIME = showTime;
+                    return this;
+                },
 
-            //DURATION STUFF
-            setDurationScale : function(durationScale, fieldUnderConstruction){
-                fieldUnderConstruction[fieldConstants.durationAndDurationFormulaFieldKeys.SCALE] =  durationScale;
-                return fieldUnderConstruction;
-            },
+                withShowTimeZone :  function(showTimeZone) {
+                    fieldUnderConstruction.fieldConstants.dateTimeAndDateTimeFormulatFieldKeys.SHOW_TIME_ZONE = showTimeZone;
+                    return this;
+                },
 
-            //EMAIL STUFF
-            setDefaultDomain : function(defaultDomain, fieldUnderConstruction){
-                fieldUnderConstruction[fieldConstants.emailAndEmailFormulaFieldKeys.DEFAULT_DOMAIN] =  defaultDomain;
-                return fieldUnderConstruction;
-            },
+                withTimeZone :  function(timeZone) {
+                    fieldUnderConstruction.fieldConstants.dateTimeAndDateTimeFormulatFieldKeys.TIME_ZONE = timeZone;
+                    return this;
+                },
 
-            setSortByDomain : function(sortByDomain, fieldUnderConstruction){
-                fieldUnderConstruction[fieldConstants.emailAndEmailFormulaFieldKeys.SORT_BY_DOMAIN] =  sortByDomain;
-                return fieldUnderConstruction;
-            },
+                withSortOrderAscending :  function(sortOrderAscending) {
+                    fieldUnderConstruction.fieldConstants.dateTimeFormulaFieldKeys.SORT_ORDER_ASCENDING = sortOrderAscending;
+                    return this;
+                },
 
-            setShowEmailEveryone : function(showEmailEveryone, fieldUnderConstruction){
-                fieldUnderConstruction[fieldConstants.emailAndEmailFormulaFieldKeys.SHOW_EMAIL_EVERYONE] =  showEmailEveryone;
-                return fieldUnderConstruction;
-            },
+                //DURATION STUFF
+                withDurationScale :  function(durationScale) {
+                    fieldUnderConstruction.fieldConstants.durationAndDurationFormulaFieldKeys.SCALE = durationScale;
+                    return this;
+                },
 
-            //FILE ATTACHMENT STUFF
-            setFileLinkText : function(linkText, fieldUnderConstruction){
-                fieldUnderConstruction[fieldConstants.fileAttachmentFieldKeys.LINK_TEXT] =  linkText;
-                return fieldUnderConstruction;
-            },
+                //EMAIL STUFF
+                withDefaultDomain :  function(defaultDomain) {
+                    fieldUnderConstruction.fieldConstants.emailAndEmailFormulaFieldKeys.DEFAULT_DOMAIN = defaultDomain;
+                    return this;
+                },
 
-            setFileKeepAllRevisions : function(keepAllRevisions, fieldUnderConstruction){
-                fieldUnderConstruction[fieldConstants.fileAttachmentFieldKeys.KEEP_ALL_REVISIONS] =  keepAllRevisions;
-                return fieldUnderConstruction;
-            },
+                withSortByDomain :  function(sortByDomain) {
+                    fieldUnderConstruction.fieldConstants.emailAndEmailFormulaFieldKeys.SORT_BY_DOMAIN = sortByDomain;
+                    return this;
+                },
 
-            setRevisionsToKeep : function(numRevisionsToKeep, fieldUnderConstruction){
-                fieldUnderConstruction[fieldConstants.fileAttachmentFieldKeys.REVISIONS_TO_KEEP] =  numRevisionsToKeep;
-                return fieldUnderConstruction;
-            },
+                withShowEmailEveryone :  function(showEmailEveryone) {
+                    fieldUnderConstruction.fieldConstants.emailAndEmailFormulaFieldKeys.SHOW_EMAIL_EVERYONE = showEmailEveryone;
+                    return this;
+                },
 
-            setAllowUsersToMakeOlderVersionCurrentVersion : function(allowUsersToMakeOlderVersionCurrentVersion, fieldUnderConstruction){
-                fieldUnderConstruction[fieldConstants.fileAttachmentFieldKeys.ALLOW_USERS_TO_MAKE_OLDER_VERSIONS_THE_CURRENT_VERSION] =  allowUsersToMakeOlderVersionCurrentVersion;
-                return fieldUnderConstruction;
-            },
+                //FILE ATTACHMENT STUFF
+                withFileLinkText :  function(linkText) {
+                    fieldUnderConstruction.fieldConstants.fileAttachmentFieldKeys.LINK_TEXT = linkText;
+                    return this;
+                },
 
-            //NUMERIC STUFF
-            setDecimalPlaces : function(decimalPlaces, fieldUnderConstruction){
-                fieldUnderConstruction[fieldConstants.numericAndNumericFormulaFieldKeys.DECIMAL_PLACES] =  decimalPlaces;
-                return fieldUnderConstruction;
-            },
+                withFileKeepAllRevisions :  function(keepAllRevisions) {
+                    fieldUnderConstruction.fieldConstants.fileAttachmentFieldKeys.KEEP_ALL_REVISIONS = keepAllRevisions;
+                    return this;
+                },
 
-            setTreatNullAsZero : function(treatNullAsZero, fieldUnderConstruction){
-                fieldUnderConstruction[fieldConstants.numericAndNumericFormulaFieldKeys.TREAT_NULL_AS_ZERO] =  treatNullAsZero;
-                return fieldUnderConstruction;
-            },
+                withRevisionsToKeep :  function(numRevisionsToKeep) {
+                    fieldUnderConstruction.fieldConstants.fileAttachmentFieldKeys.REVISIONS_TO_KEEP = numRevisionsToKeep;
+                    return this;
+                },
 
-            //PHONE NUMBER STUFF
-            setIncludeExtension : function(includeExtension, fieldUnderConstruction){
-                fieldUnderConstruction[fieldConstants.phoneNumberAndPhoneNumberFormulaFieldKeys.INCLUDE_EXTENSION] =  includeExtension;
-                return fieldUnderConstruction;
-            },
+                withAllowUsersToMakeOlderVersionCurrentVersion :  function(allowUsersToMakeOlderVersionCurrentVersion) {
+                    fieldUnderConstruction.fieldConstants.fileAttachmentFieldKeys.ALLOW_USERS_TO_MAKE_OLDER_VERSIONS_THE_CURRENT_VERSION = allowUsersToMakeOlderVersionCurrentVersion;
+                    return this;
+                },
 
-            //REPORT LINK STUFF
-            setReportLinkText : function(linkText, fieldUnderConstruction){
-                fieldUnderConstruction[fieldConstants.reportLinkFieldKeys.LINK_TEXT] =  linkText;
-                return fieldUnderConstruction;
-            },
+                //NUMERIC STUFF
+                withDecimalPlaces :  function(decimalPlaces) {
+                    fieldUnderConstruction.fieldConstants.numericAndNumericFormulaFieldKeys.DECIMAL_PLACES = decimalPlaces;
+                    return this;
+                },
 
-            setLinkRelationshipId : function(relationshipId, fieldUnderConstruction){
-                fieldUnderConstruction[fieldConstants.reportLinkFieldKeys.RELATIONSHIP_ID] =  relationshipId;
-                return fieldUnderConstruction;
-            },
+                withTreatNullAsZero :  function(treatNullAsZero) {
+                    fieldUnderConstruction.fieldConstants.numericAndNumericFormulaFieldKeys.TREAT_NULL_AS_ZERO = treatNullAsZero;
+                    return this;
+                },
 
-            setExactMatch : function(exactMatch, fieldUnderConstruction){
-                fieldUnderConstruction[fieldConstants.reportLinkFieldKeys.EXACT_MATCH] =  exactMatch;
-                return fieldUnderConstruction;
-            },
+                //PHONE NUMBER STUFF
+                withIncludeExtension :  function(includeExtension) {
+                    fieldUnderConstruction.fieldConstants.phoneNumberAndPhoneNumberFormulaFieldKeys.INCLUDE_EXTENSION = includeExtension;
+                    return this;
+                },
 
-            setReportDisplayProtocol : function(displayProtocol, fieldUnderConstruction){
-                fieldUnderConstruction[fieldConstants.reportLinkFieldKeys.DISPLAY_PROTOCOL] =  displayProtocol;
-                return fieldUnderConstruction;
-            },
+                //REPORT LINK STUFF
+                withReportLinkText :  function(linkText) {
+                    fieldUnderConstruction.fieldConstants.reportLinkFieldKeys.LINK_TEXT = linkText;
+                    return this;
+                },
 
-            setMultiChoiceSourceAllowed : function(multiChoiceSourceAllowed, fieldUnderConstruction){
-                fieldUnderConstruction[fieldConstants.reportLinkFieldKeys.MULTI_CHOICE_SOURCE_ALLOWED] =  multiChoiceSourceAllowed;
-                return fieldUnderConstruction;
-            },
+                withLinkRelationshipId :  function(relationshipId) {
+                    fieldUnderConstruction.fieldConstants.reportLinkFieldKeys.RELATIONSHIP_ID = relationshipId;
+                    return this;
+                },
 
-            //SUMMARY FIELD STUFF
-            setAggregateFunction : function(aggregateFunction, fieldUnderConstruction){
-                fieldUnderConstruction[fieldConstants.summaryFieldKeys.AGGREGATE_FUNCTION] =  aggregateFunction;
-                return fieldUnderConstruction;
-            },
+                withExactMatch :  function(exactMatch) {
+                    fieldUnderConstruction.fieldConstants.reportLinkFieldKeys.EXACT_MATCH = exactMatch;
+                    return this;
+                },
 
-            setSummaryDecimalPlaces : function(decimalPlaces, fieldUnderConstruction){
-                fieldUnderConstruction[fieldConstants.summaryFieldKeys.DECIMAL_PLACES] =  decimalPlaces;
-                return fieldUnderConstruction;
-            },
+                withReportDisplayProtocol :  function(displayProtocol) {
+                    fieldUnderConstruction.fieldConstants.reportLinkFieldKeys.DISPLAY_PROTOCOL = displayProtocol;
+                    return this;
+                },
 
-            setTreatNullAsZero : function(treatNullAsZero, fieldUnderConstruction){
-                fieldUnderConstruction[fieldConstants.summaryFieldKeys.TREAT_NULL_AS_ZERO] =  treatNullAsZero;
-                return fieldUnderConstruction;
-            },
+                withMultiChoiceSourceAllowed :  function(multiChoiceSourceAllowed) {
+                    fieldUnderConstruction.fieldConstants.reportLinkFieldKeys.MULTI_CHOICE_SOURCE_ALLOWED = multiChoiceSourceAllowed;
+                    return this;
+                },
 
-            setExpression : function(expression, fieldUnderConstruction){
-                fieldUnderConstruction[fieldConstants.summaryFieldKeys.EXPRESSION] =  expression;
-                return fieldUnderConstruction;
-            },
+                //SUMMARY FIELD STUFF
+                withAggregateFunction :  function(aggregateFunction) {
+                    fieldUnderConstruction.fieldConstants.summaryFieldKeys.AGGREGATE_FUNCTION = aggregateFunction;
+                    return this;
+                },
 
-            //TEXT STUFF
-            setHtmlAllowed : function(htmlAllowed, fieldUnderConstruction){
-                fieldUnderConstruction[fieldConstants.textAndTextFormulaFieldKeys.HTML_ALLOWED] =  htmlAllowed;
-                return fieldUnderConstruction;
-            },
+                withSummaryDecimalPlaces :  function(decimalPlaces) {
+                    fieldUnderConstruction.fieldConstants.summaryFieldKeys.DECIMAL_PLACES = decimalPlaces;
+                    return this;
+                },
 
-            //TIME OF DAY STUFF
-            setTimeScale : function(scale, fieldUnderConstruction){
-                fieldUnderConstruction[fieldConstants.timeOfDayAndTimeOfDayFormulaFieldKeys.SCALE] =  scale;
-                return fieldUnderConstruction;
-            },
+                withTreatNullAsZero :  function(treatNullAsZero) {
+                    fieldUnderConstruction.fieldConstants.summaryFieldKeys.TREAT_NULL_AS_ZERO = treatNullAsZero;
+                    return this;
+                },
 
-            setUse24HourClock : function(use24HourClock, fieldUnderConstruction){
-                fieldUnderConstruction[fieldConstants.timeOfDayAndTimeOfDayFormulaFieldKeys.USE_24_HOUR_CLOCK] =  use24HourClock;
-                return fieldUnderConstruction;
-            },
+                withExpression :  function(expression) {
+                    fieldUnderConstruction.fieldConstants.summaryFieldKeys.EXPRESSION = expression;
+                    return this;
+                },
 
-            setUseTimezone : function(useTimezone, fieldUnderConstruction){
-                fieldUnderConstruction[fieldConstants.timeOfDayAndTimeOfDayFormulaFieldKeys.USE_TIMEZONE] =  useTimezone;
-                return fieldUnderConstruction;
-            },
+                //TEXT STUFF
+                withHtmlAllowed :  function(htmlAllowed) {
+                    fieldUnderConstruction.fieldConstants.textAndTextFormulaFieldKeys.HTML_ALLOWED = htmlAllowed;
+                    return this;
+                },
 
-            //URL STUFF
-            setUrlDisplayProtocol : function(displayProtocol, fieldUnderConstruction){
-                fieldUnderConstruction[fieldConstants.urlAndUrlFormulaFieldKeys.DISPLAY_PROTOCOL] =  displayProtocol;
-                return fieldUnderConstruction;
-            },
+                //TIME OF DAY STUFF
+                withTimeScale :  function(scale) {
+                    fieldUnderConstruction.fieldConstants.timeOfDayAndTimeOfDayFormulaFieldKeys.SCALE = scale;
+                    return this;
+                },
 
-            setUrlLinkText : function(linkText, fieldUnderConstruction){
-                fieldUnderConstruction[fieldConstants.urlAndUrlFormulaFieldKeys.LINK_TEXT] =  linkText;
-                return fieldUnderConstruction;
-            },
+                withUse24HourClock :  function(use24HourClock) {
+                    fieldUnderConstruction.fieldConstants.timeOfDayAndTimeOfDayFormulaFieldKeys.USE_24_HOUR_CLOCK = use24HourClock;
+                    return this;
+                },
 
-            //USER STUFF
-            setSendInvitesToUsers : function(sendInvitesToUsers, fieldUnderConstruction){
-                fieldUnderConstruction[fieldConstants.userAndUserFormulaFieldKeys.SEND_INVITES_TO_USERS] =  sendInvitesToUsers;
-                return fieldUnderConstruction;
-            },
+                withUseTimezone :  function(useTimezone) {
+                    fieldUnderConstruction.fieldConstants.timeOfDayAndTimeOfDayFormulaFieldKeys.USE_TIMEZONE = useTimezone;
+                    return this;
+                },
 
-            setUserDisplayFormat : function(userDisplayFormat, fieldUnderConstruction){
-                fieldUnderConstruction[fieldConstants.userAndUserFormulaFieldKeys.USER_DISPLAY_FORMAT] =  userDisplayFormat;
-                return fieldUnderConstruction;
-            }
-        };
+                //URL STUFF
+                withUrlDisplayProtocol :  function(displayProtocol) {
+                    fieldUnderConstruction.fieldConstants.urlAndUrlFormulaFieldKeys.DISPLAY_PROTOCOL = displayProtocol;
+                    return this;
+                },
+
+                withUrlLinkText :  function(linkText) {
+                    fieldUnderConstruction.fieldConstants.urlAndUrlFormulaFieldKeys.LINK_TEXT = linkText;
+                    return this;
+                },
+
+                //USER STUFF
+                withSendInvitesToUsers :  function(sendInvitesToUsers) {
+                    fieldUnderConstruction.fieldConstants.userAndUserFormulaFieldKeys.SEND_INVITES_TO_USERS = sendInvitesToUsers;
+                    return this;
+                },
+
+                withUserDisplayFormat : function(userDisplayFormat) {
+                    fieldUnderConstruction.fieldConstants.userAndUserFormulaFieldKeys.USER_DISPLAY_FORMAT = userDisplayFormat;
+                    return this;
+                }
+            };
+        }
+
+    };
 
 }());

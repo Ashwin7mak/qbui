@@ -13,15 +13,14 @@
 
     module.exports = {
         getFieldBuilder : function(){
-            return fieldBuilder;
+            return fieldBuilder.Builder();
         },
 
         //Generate a json field blob based on field type
         generateBaseField : function(type){
-            var field = {};
+            var builder = fieldBuilder.Builder();
             var fieldName = rawValueGenerator.generateString();
-            field = fieldBuilder.setName(fieldName, field);
-            field = fieldBuilder.setType(type, field);
+            var field = builder.withName(fieldName).withType(type).build();
             return field;
         },
 
@@ -136,19 +135,18 @@
         //apply all high level field properties that are missing
         //we can't apply an id as that will be assigned by the api
         if(!fieldToModify.fieldKeys.BUILT_IN) {
-            fieldBuilder.setBuiltIn(defaultConsts.fieldDefaults.BUILTIN_DEFAULT, fieldToModify);
+            fieldToModify.fieldKeys.BUILT_IN = defaultConsts.fieldDefaults.BUILTIN_DEFAULT;
         }
 
         if(!fieldToModify.fieldKeys.DATA_IS_COPYABLE) {
-            fieldBuilder.setDataIsCopyable(defaultConsts.fieldDefaults.DATA_COPYABLE_DEFAULT, fieldToModify);
+            fieldToModify.fieldKeys.DATA_IS_COPYABLE = defaultConsts.fieldDefaults.DATA_COPYABLE_DEFAULT;
         }
 
         if(!fieldToModify.fieldKeys.INCLUDE_IN_QUICKSEARCH) {
-            fieldBuilder.setIncludeInQuickSearch(defaultConsts.fieldDefaults.USE_IN_QUICKSEARCH_DEFAULT, fieldToModify);
+            fieldToModify.fieldKeys.INCLUDE_IN_QUICKSEARCH = defaultConsts.fieldDefaults.USE_IN_QUICKSEARCH_DEFAULT;
         }
     }
 
-    //TODO: make this thing use the fieldBuilder!
     function applyConcreteDefaults(fieldToModify){
 
         if(!fieldToModify[fieldConsts.concreteFieldKeys.REQUIRED]){

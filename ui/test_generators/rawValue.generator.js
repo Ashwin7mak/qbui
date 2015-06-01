@@ -5,7 +5,7 @@
 (function () {
     'use strict';
 
-//These are constants common to all fields
+    //These are constants common to all fields
     module.exports = Object.freeze({
         //Generates and returns a psuedo-random 32 char string that is URL safe
         generateValidSubdomainString : function()
