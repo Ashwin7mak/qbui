@@ -13,7 +13,7 @@
 
     module.exports = {
         getFieldBuilder : function(){
-            return fieldBuilder.Builder();
+            return fieldBuilder.builder();
         },
 
         //Generate a json field blob based on field type
