@@ -24,6 +24,7 @@
         var BASE_ENDPOINT = '/api/v1';
         var APPS_ENDPOINT = '/apps/';
         var TABLES_ENDPOINT = '/tables/';
+        var REPORTS_ENDPOINT = '/reports/';
         var RECORDS_ENDPOINT = '/records/';
         var REALMS_ENDPOINT = '/realms/';
         var USERS_ENDPOINT = "/users/";
@@ -108,6 +109,13 @@
                     tableEndpoint = tableEndpoint + tableId;
                 }
                 return tableEndpoint;
+            },
+            resolveReportsEndpoint: function (appId, tableId, reportId) {
+                var reportEndpoint = this.resolveTablesEndpoint(appId, tableId) + REPORTS_ENDPOINT;
+                if(reportId) {
+                    reportEndpoint = reportEndpoint + reportId;
+                }
+                return reportEndpoint;
             },
             resolveRealmsEndpoint: function (realmId) {
                 var endpoint = BASE_ENDPOINT + REALMS_ENDPOINT;
