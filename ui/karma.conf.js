@@ -48,8 +48,7 @@ module.exports = function (config) {
             //endbower:
 
 
-            // load the application dependencies - loading order is important; broadest
-            // to narrowest.
+            // load the application dependencies - loading order is important; broadest to narrowest.
             'client/*.index.html',
             'client/quickbase/**/**/*.html',
             'client/quickbase/common/**/*.modules.js',
@@ -65,7 +64,6 @@ module.exports = function (config) {
                 included: 'false'
             }
 
-
         ],
 
         // list of files / patterns to exclude
@@ -73,15 +71,17 @@ module.exports = function (config) {
 
         preprocessors: {
             //'**/*.jade': 'ng-jade2js',
-            '**/*.html': 'html2js',
+            'client/quickbase/**/**/*.html': ['html2js'],
             //'**/mockdata/*.json': 'html2js',
             //'**/*.coffee': 'coffee',
             //if any 3rd party vendor plugin within code coverage target folder, need to exclude (ie: jasmine, angular, etc)
             'client/{quickbase/**/*.js,*.js}' : ['coverage']
         },
 
+        //  load the templates for pre-processing...needed for unit testing
         ngHtml2JsPreprocessor: {
-            stripPrefix: 'client/'
+            stripPrefix: 'client/',
+            moduleName: 'qbse.templates'
         },
 
         ngJade2JsPreprocessor: {
