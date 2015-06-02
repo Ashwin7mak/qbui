@@ -65,24 +65,39 @@
             return maxRandomFields;
         },
 
+        addFieldsOfType : function(tableBuilder, numFieldsToAdd, fieldType){
+            var fields = generateFieldList(numFieldsToAdd, fieldType);
+            tableBuilder.withAdditionalFields(fields);
+            return tableBuilder;
+        },
+
+        /**
+         * Generate a json table blob with between 0 and 10 fields with the specified appId populated on the table
+         */
+        generateEmptyTableForApp : function(appId){
+            var builderInstance = getTableBuilderWithName();
+            var tableInstance = builderInstance.withAppId(appId).build();
+            return tableInstance;
+        },
+
         /**
          * Generate a json table blob with between 0 and 10 fields with the specified appId populated on the table
          */
         generateTableWithAllFieldTypesForApp : function(appId){
-            var builder = generateTableWithAllFieldTypes();
-            builder.withAppId(appId);
-            table = builder.build();
-            return table;
+            var builderInstance = generateTableWithAllFieldTypes();
+            builderInstance.withAppId(appId);
+            var tableInstance = builderInstance.build();
+            return tableInstance;
         },
 
         /**
          * Generate a json table blob with between 0 and 10 fields with the specified appId populated on the table
          */
         generateTableForApp : function(appId){
-            var builder = generateRandomTable();
-            builder.withAppId(appId);
-            table = builder.build();
-            return table;
+            var builderInstance = generateRandomTable();
+            builderInstance.withAppId(appId);
+            var tableInstance = builderInstance.build();
+            return tableInstance;
         },
 
         /**
@@ -93,10 +108,10 @@
          * @returns {*} the table object with numFields of type fieldType
          */
         generateTableWithFieldsOfTypeForApp : function(appId, numFields, fieldType){
-            var builder = generateTableWithFieldsOfType(numFields, fieldType);
-            builder.withAppId(appId);
-            table = builder.build();
-            return table;
+            var builderInstance = generateTableWithFieldsOfType(numFields, fieldType);
+            builderInstance.withAppId(appId);
+            var tableInstance = builderInstance.build();
+            return tableInstance;
         },
 
         /**
@@ -115,28 +130,37 @@
          * @returns {*}
          */
         generateTableWithFieldMapForApp : function(appId, fieldNameToTypeMap){
-            var builder = generateTableWithFieldMapForApp(fieldNameToTypeMap);
-            builder.withAppId(appId);
-            var table = builder.build();
-            return table;
+            var builderInstance = generateTableWithFieldMapForApp(fieldNameToTypeMap);
+            builderInstance.withAppId(appId);
+            var tableInstance = builderInstance.build();
+            return tableInstance;
+        },
+
+        /**
+         * Generate a json table blob with between 0 and 10 fields with the specified appId populated on the table
+         */
+        generateEmptyTable : function(){
+            var builderInstance = getTableBuilderWithName();
+            var tableInstance = builderInstance.build();
+            return tableInstance;
         },
 
         /**
          * Generate a json table blob with between 0 and 10 fields with the specified appId populated on the table
          */
         generateTableWithAllFieldTypes : function(){
-            var builder = generateTableWithAllFieldTypes();
-            var table = builder.build();
-            return table;
+            var builderInstance = generateTableWithAllFieldTypes();
+            var tableInstance = builderInstance.build();
+            return tableInstance;
         },
 
         /**
          * Generate a json table blob with between 0 and 10 fields with the specified appId populated on the table
          */
         generateTable : function(){
-            var builder = generateRandomTable();
-            var table = builder.build();
-            return table;
+            var builderInstance = generateRandomTable();
+            var tableInstance = builderInstance.build();
+            return tableInstance;
         },
 
         /**
@@ -147,9 +171,9 @@
          * @returns {*} the table object with numFields of type fieldType
          */
         generateTableWithFieldsOfType : function(numFields, fieldType){
-            var builder = generateTableWithFieldsOfType(numFields, fieldType);
-            var table = builder.build();
-            return table;
+            var builderInstance = generateTableWithFieldsOfType(numFields, fieldType);
+            var tableInstance = builderInstance.build();
+            return tableInstance;
         },
 
         /**
@@ -168,9 +192,9 @@
          * @returns {*}
          */
         generateTableWithFieldMap : function(fieldNameToTypeMap){
-            var builder = generateTableWithFieldMapForApp(fieldNameToTypeMap);
-            var table = builder.build();
-            return table;
+            var builderInstance = generateTableWithFieldMapForApp(fieldNameToTypeMap);
+            var tableInstance = builderInstance.build();
+            return tableInstance;
         },
 
         tableToJsonString : function(table){
@@ -215,24 +239,24 @@
     };
 
     function getTableBuilderWithName(){
-        var builder = tableBuilder.builder();
+        var builderInstance = tableBuilder.builder();
         var tableName = rawValueGenerator.generateString(15);
-        builder.withName(tableName);
-        return builder;
+        builderInstance.withName(tableName);
+        return builderInstance;
     }
 
     /**
      * Generate a json table blob with between 0 and 10 fields with the specified appId populated on the table
      */
     function generateTableWithAllFieldTypes(){
-        var builder = getTableBuilderWithName();
+        var builderInstance = getTableBuilderWithName();
 
         for(var i= 0; i< availableFieldTypes.length; i++){
             var field = fieldGenerator.generateBaseField(availableFieldTypes[i]);
-            builder.withField(field);
+            builderInstance.withField(field);
         }
 
-        return builder;
+        return builderInstance;
     }
 
     /**
@@ -240,7 +264,7 @@
      * @return the table builder
      */
     function generateRandomTable(){
-        var builder = getTableBuilderWithName();
+        var builderInstance = getTableBuilderWithName();
 
         var numFields = chance.integer({min:1, max:maxRandomFields});
         for(var i= 0; i< numFields; i++){
@@ -248,10 +272,10 @@
 
             var field = fieldGenerator.generateBaseField(availableFieldTypes[fieldTypeIndex]);
 
-            builder.withField(field);
+            builderInstance.withField(field);
         }
 
-        return builder;
+        return builderInstance;
     }
 
     /**
@@ -262,14 +286,14 @@
      * @returns {*} the table object with numFields of type fieldType
      */
     function generateTableWithFieldsOfType(numFields, fieldType){
-        var builder = getTableBuilderWithName();
+        var builderInstance = getTableBuilderWithName();
 
         for(var i= 0; i< numFields; i++){
             var field = fieldGenerator.generateBaseField(fieldType);
-            builder.withField(field);
+            builderInstance.withField(field);
         }
 
-        return builder;
+        return builderInstance;
     }
 
     /**
@@ -288,7 +312,7 @@
      * @returns {*}
      */
     function generateTableWithFieldMapForApp(fieldNameToTypeMap){
-        var builder = getTableBuilderWithName();
+        var builderInstance = getTableBuilderWithName();
 
         var fieldNameKeys = Object.keys(fieldNameToTypeMap);
 
@@ -296,9 +320,22 @@
             var fieldType = fieldNameToTypeMap[fieldName];
             var fieldBuilder = fieldGenerator.getFieldBuilder();
             var field = fieldBuilder.withName(fieldName).withType(fieldType).build();
-            builder.withField(field);
+            builderInstance.withField(field);
         });
 
-        return builder;
+        return builderInstance;
+    }
+
+    /**
+     * Generate a list of field objects using the field generator
+     * @param numFields
+     * @param fieldType
+     */
+    function generateFieldList(numFields, fieldType){
+        var fields = [];
+        for(var i= 0; i< numFields; i++){
+            fields.push(fieldGenerator.generateBaseField(fieldType));
+        }
+        return fields;
     }
 }());
