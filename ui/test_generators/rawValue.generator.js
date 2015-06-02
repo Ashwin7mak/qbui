@@ -8,6 +8,29 @@
     var chance = new Chance();
     var SUBDOMAIN_CHARS = 'abcdefghijklmnopqrstuvwxyz0123456789';
 
+    chance.mixin({
+
+        'timezone' : function (options) {
+            var isPositive = chance.bool();
+            var timeZone = isPositive ? '+' + chance.integer({min: 0, max: 14}) : '-' + chance.integer({min: 0, max: 12});
+
+            return timeZone;
+        },
+
+        'dateFormat' : function(options) {
+            var dateFormat = options['dateFormat'];
+
+            if(undefined === dateFormat || !_(appConsts.DATE_FORMATS).contains(appConsts.DATE_FORMATS, dateFormat)){
+                dateFormat = chance.pick(appConsts.DATE_FORMATS);
+            }
+            return dateFormat;
+        },
+
+        'phoneNumberWithExtension' : function() {
+            phoneNumber = chance.phone() + "x" + chance.integer({min: min, max: max});;
+        }
+    });
+
     //These are constants common to all fields
     module.exports = {
 
@@ -34,9 +57,10 @@
 
         //Generates and returns a psuedo-random us phone number
         generatePhoneNumber : function(includeExt) {
-            var phoneNumber = chance.phone();
             if (includeExt) {
-                phoneNumber = phoneNumber + "x" + this.generateInt(1000, 9999);
+                chance.phoneNumberWithExtension();
+            }else {
+                var phoneNumber = chance.phone();
             }
             return phoneNumber;
         },
@@ -67,7 +91,17 @@
         //Generates a pseudo-randomly chosen true or false
         generateBool : function() {
             return chance.bool();
+        },
+
+        generateTimezone : function() {
+            return chance.timeZone();
+        },
+
+        generateDateFormat : function() {
+            return chance.dateFormat();
         }
     };
+
+
 
 }());

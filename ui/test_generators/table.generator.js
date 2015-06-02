@@ -65,75 +65,33 @@
             return maxRandomFields;
         },
 
+        /**
+         * Generate a list of field objects using the field generator
+         * {
+        *  field1 : CHECKBOX,
+        *  field2 : NUMERIC,
+        *  iLoveEmail : EMAIL_ADDRESS,
+        *  youCanToo : EMAIL_ADDRESS
+        * }
+         */
+        generateFieldListFromMap: function(fieldMap){
+            var fields = [];
+            var fieldNameKeys = Object.keys(fieldNameToTypeMap);
+
+            fieldNameKeys.forEach(function (fieldName){
+                var fieldType = fieldNameToTypeMap[fieldName];
+                var fieldBuilder = fieldGenerator.getFieldBuilder();
+                var field = fieldBuilder.withName(fieldName).withType(fieldType).build();
+                fields.push(field);
+            });
+
+            return fields;
+        },
+
         addFieldsOfType : function(tableBuilder, numFieldsToAdd, fieldType){
             var fields = generateFieldList(numFieldsToAdd, fieldType);
             tableBuilder.withAdditionalFields(fields);
             return tableBuilder;
-        },
-
-        /**
-         * Generate a json table blob with between 0 and 10 fields with the specified appId populated on the table
-         */
-        generateEmptyTableForApp : function(appId){
-            var builderInstance = getTableBuilderWithName();
-            var tableInstance = builderInstance.withAppId(appId).build();
-            return tableInstance;
-        },
-
-        /**
-         * Generate a json table blob with between 0 and 10 fields with the specified appId populated on the table
-         */
-        generateTableWithAllFieldTypesForApp : function(appId){
-            var builderInstance = generateTableWithAllFieldTypes();
-            builderInstance.withAppId(appId);
-            var tableInstance = builderInstance.build();
-            return tableInstance;
-        },
-
-        /**
-         * Generate a json table blob with between 0 and 10 fields with the specified appId populated on the table
-         */
-        generateTableForApp : function(appId){
-            var builderInstance = generateRandomTable();
-            builderInstance.withAppId(appId);
-            var tableInstance = builderInstance.build();
-            return tableInstance;
-        },
-
-        /**
-         * Generate a table with numFields number of fields all of type fieldType
-         * @param appId the app id of the parent app
-         * @param numFields the number of fields to generate
-         * @param fieldType the field type for all fields
-         * @returns {*} the table object with numFields of type fieldType
-         */
-        generateTableWithFieldsOfTypeForApp : function(appId, numFields, fieldType){
-            var builderInstance = generateTableWithFieldsOfType(numFields, fieldType);
-            builderInstance.withAppId(appId);
-            var tableInstance = builderInstance.build();
-            return tableInstance;
-        },
-
-        /**
-         * Generate a table with the fields as described in the fieldNameToTypeMap
-         * </p>
-         * The map should appear as:
-         * {
-         *  field1 : CHECKBOX,
-         *  field2 : NUMERIC,
-         *  iLoveEmail : EMAIL_ADDRESS,
-         *  youCanToo : EMAIL_ADDRESS
-         * }
-         * </p>
-         * We will then return a table with fields of those names and types
-         * @param fieldNameToTypeMap
-         * @returns {*}
-         */
-        generateTableWithFieldMapForApp : function(appId, fieldNameToTypeMap){
-            var builderInstance = generateTableWithFieldMapForApp(fieldNameToTypeMap);
-            builderInstance.withAppId(appId);
-            var tableInstance = builderInstance.build();
-            return tableInstance;
         },
 
         /**
@@ -157,8 +115,8 @@
         /**
          * Generate a json table blob with between 0 and 10 fields with the specified appId populated on the table
          */
-        generateTable : function(){
-            var builderInstance = generateRandomTable();
+        generateTable : function(size){
+            var builderInstance = generateRandomTable(size);
             var tableInstance = builderInstance.build();
             return tableInstance;
         },
@@ -192,7 +150,7 @@
          * @returns {*}
          */
         generateTableWithFieldMap : function(fieldNameToTypeMap){
-            var builderInstance = generateTableWithFieldMapForApp(fieldNameToTypeMap);
+            var builderInstance = generateTableWithFieldMap(fieldNameToTypeMap);
             var tableInstance = builderInstance.build();
             return tableInstance;
         },
@@ -263,10 +221,11 @@
      * Generate a json table blob with between 0 and 10 fields with the specified appId populated on the table
      * @return the table builder
      */
-    function generateRandomTable(){
+    function generateRandomTable(size){
         var builderInstance = getTableBuilderWithName();
 
-        var numFields = chance.integer({min:1, max:maxRandomFields});
+        var numFields = undefined === size ? chance.integer({min:1, max:maxRandomFields}) : size;
+
         for(var i= 0; i< numFields; i++){
             var fieldTypeIndex = chance.integer({min:1, max:availableFieldTypes.length-1});
 
@@ -311,7 +270,7 @@
      * @param fieldNameToTypeMap
      * @returns {*}
      */
-    function generateTableWithFieldMapForApp(fieldNameToTypeMap){
+    function generateTableWithFieldMap(fieldNameToTypeMap){
         var builderInstance = getTableBuilderWithName();
 
         var fieldNameKeys = Object.keys(fieldNameToTypeMap);

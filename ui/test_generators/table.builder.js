@@ -19,6 +19,28 @@
                     return tableUnderConstruction;
                 },
 
+                cloneIntoBuilder: function (table) {
+                    if(table[tableConsts.ID]) {
+                        tableUnderConstruction[tableConsts.ID] = table[tableConsts.ID];
+                    }
+
+                    if(table[tableConsts.NAME]) {
+                        tableUnderConstruction[tableConsts.NAME] = table[tableConsts.NAME];
+                    }
+
+                    if(table[tableConsts.APP_ID]) {
+                        tableUnderConstruction[tableConsts.APP_ID] = table[tableConsts.APP_ID];
+                    }
+
+                    if(table[tableConsts.TABLE_ALIAS]) {
+                        tableUnderConstruction[tableConsts.TABLE_ALIAS] = table[tableConsts.TABLE_ALIAS];
+                    }
+
+                    tableFields = _.cloneDeep(table[tableConsts.FIELDS]);
+
+                    return this;
+                },
+
                 withId : function(id){
                     tableUnderConstruction[tableConsts.ID] = id;
                 },
