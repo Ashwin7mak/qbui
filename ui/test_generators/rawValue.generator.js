@@ -9,7 +9,6 @@
     var SUBDOMAIN_CHARS = 'abcdefghijklmnopqrstuvwxyz0123456789';
 
     chance.mixin({
-
         'timezone' : function (options) {
             var isPositive = chance.bool();
             var timeZone = isPositive ? '+' + chance.integer({min: 0, max: 14}) : '-' + chance.integer({min: 0, max: 12});

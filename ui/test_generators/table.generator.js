@@ -76,10 +76,10 @@
          */
         generateFieldListFromMap: function(fieldMap){
             var fields = [];
-            var fieldNameKeys = Object.keys(fieldNameToTypeMap);
+            var fieldNameKeys = Object.keys(fieldMap);
 
             fieldNameKeys.forEach(function (fieldName){
-                var fieldType = fieldNameToTypeMap[fieldName];
+                var fieldType = fieldMap[fieldName];
                 var fieldBuilder = fieldGenerator.getFieldBuilder();
                 var field = fieldBuilder.withName(fieldName).withType(fieldType).build();
                 fields.push(field);

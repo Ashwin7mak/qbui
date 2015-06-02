@@ -15,7 +15,7 @@ var assert = require('assert');
 /**
  * Unit tests for field generator
  */
-ddescribe('Table generator unit test', function () {
+describe('Table generator unit test', function () {
 
     /**
      * Unit test that validates generating a table with all field types
