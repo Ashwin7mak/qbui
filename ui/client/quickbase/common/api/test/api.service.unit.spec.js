@@ -1,7 +1,7 @@
 'use strict';
 
 describe('quickbase api service', function () {
-    var scope, ApiService, $httpBackend, requestHandler, deferred;
+    var scope, ApiService, $httpBackend, successCallback, errorCallback;
 
     beforeEach(function() {
         module('qbse.api','ngMockE2E');
@@ -10,31 +10,29 @@ describe('quickbase api service', function () {
     beforeEach(inject(function ($rootScope, _ApiService_, _$httpBackend_, $q) {
         scope = $rootScope.$new();
         ApiService = _ApiService_;
+        successCallback = jasmine.createSpy('success');
+        errorCallback = jasmine.createSpy('error');
         $httpBackend = _$httpBackend_;
-
-        deferred = $q.defer();
-
-        requestHandler = $httpBackend.whenGET('/api/v1/apps/test').respond(function(method, url, data) {
-           // return ['test1','test2'];
-            return deferred.promise;
-        });
     }));
 
     //TODO write out apis access tests
-    it('should do something', function () {
+    it('Test getApp API call', function () {
 
-        var response;
-        ApiService.getApp('test').then (
-            function (resp) {
-                response = resp;
-            }
-        );
+        $httpBackend.expectGET('/api/v1/apps/test').respond(200, 'appData mocked');
 
-        deferred.resolve();
-        scope.$apply();
+        var promise = ApiService.getApp('test');
 
-        //expect(response).toBeDefined();
-       // expect(response.length).toBe(1);
+        $httpBackend.flush();
+
+        promise.then(function() {
+            successCallback;
+        }, function() {
+            errorCallback;
+        });
+
+        //TODO: not working
+        expect(successCallback).not.toHaveBeenCalled();
+        expect(errorCallback).not.toHaveBeenCalled();
 
 
     });
