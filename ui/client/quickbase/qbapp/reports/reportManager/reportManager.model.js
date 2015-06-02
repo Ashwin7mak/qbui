@@ -4,9 +4,9 @@
     angular.module('qbse.qbapp.reports.manager')
         .factory('ReportModel', ReportManagerModel);
 
-    ReportManagerModel.$inject = ['$q', 'ReportService'];
+    ReportManagerModel.$inject = ['$q', 'ReportService', 'qbMap'];
 
-    function ReportManagerModel($q, ReportService) {
+    function ReportManagerModel($q, ReportService, qbMap) {
 
         //  private functions
         function fetchMetaData(appId, tableId, reportId) {
@@ -54,7 +54,7 @@
                 function (data) {
                     //  process the fields
                     var cols = [];
-                    var fieldMap = new Map();
+                    var fieldMap = new qbMap();
                     data.forEach(function (field) {
                         fieldMap.set(field.id, field);
                     });
@@ -85,7 +85,7 @@
 
             //  If need to support IE8 (or older browser that doesn't support Map), create a polyfill..
             //  https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/map#Polyfill
-            var fieldMap = new Map();
+            var fieldMap = new qbUtility.Map();
 
             ReportService.getFormattedRecords(appId, tableId, offset, rows).then(
                 function (data) {

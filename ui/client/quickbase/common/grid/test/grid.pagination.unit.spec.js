@@ -28,7 +28,7 @@ describe('Directive: qbseGrid pagination - ', function() {
     console.info ('maxTestColumns ' + normalTestColumnsToGenerate);
 
     // generate some records and field definitions to use
-    function generateTestsData(testDataService, $scope, minRecords, maxRecords, maxCols ){
+    function generateTestData(testDataService, $scope, minRecords, maxRecords, maxCols ){
         expectedTotalRows = testDataService.getRandomInt(minRecords, maxRecords);
         console.info (' random expectedTotalRows : ' + expectedTotalRows);
 
@@ -36,15 +36,14 @@ describe('Directive: qbseGrid pagination - ', function() {
             numRows : expectedTotalRows,
             numColumns : maxCols
         };
-        $scope.settings.testData = testDataService.configuredGridData(config);
-        //console.debug(' random fields: (' +$scope.settings.testData.forDebug._Cols.length+') ' , JSON.stringify($scope.settings.testData.forDebug._Cols));
+        testDataService.setConfiguredGridData(config);
+
         return expectedTotalRows;
     }
 
     // load the directive's module & load the template
     beforeEach(module('qbse.grid','test.dataGeneratorService',
-        //'quickbase/common/grid/grid.template.html',
-       // 'quickbase/common/grid/gridPagination.template.html',
+        'qbse.templates',
         'ngMockE2E'));
 
 
@@ -55,30 +54,28 @@ describe('Directive: qbseGrid pagination - ', function() {
         $scope = $rootScope.$new();
         $compile = _$compile_;
         $http = _$http_;
-        $httpBackend = $injector.get('$httpBackend');
         gridConstants = _gridConstants_;
         testDataService = TestDataService;
 
-        //configure the grid with pagination
+        $httpBackend = $injector.get('$httpBackend');
+
         $scope.settings = {};
-        $scope.settings.type = 'test';
+        $scope.settings.id = '1';
+        $scope.settings.type = 'report';
         $scope.settings.title = 'Grid Test';
         $scope.settings.selectedItems = [];
-        $scope.settings.gridOptionsOverrides = {
+        $scope.settings.customOptions = {
+            showColumnFooter:true,
             paginationPageSize : expectedPageSize
         };
+        $scope.settings.service = TestDataService.dataGridReportService;
 
-        //set up a grid element to test pages with
-       elementHtml =
+        elementHtml =
             '<qbse-grid ' +
-            'grid-id="paging123" ' +
-            'grid-type="settings.type" ' +
             'title={{settings.title}} ' +
-                //'items="settings.items" ' +
             'selected-items="settings.selectedItems" ' +
-                //'cols="settings.columnDefs" ' +
-            'custom-options="settings.gridOptionsOverrides" ' +
-            'service="settings.testData"> ' +
+            'custom-options="settings.customOptions" ' +
+            'service="settings.service"> ' +
             'This gets replaced with data - loading...' +
             '</qbse-grid>';
 
@@ -86,35 +83,23 @@ describe('Directive: qbseGrid pagination - ', function() {
         $element = angular.element(elementHtml);
         element = $compile($element)($scope);
 
+        $scope.$digest();
+
     }));
 
     it('should have a element with a ui-grid', function() {
         // create the html dom fragment and process the angular directive
-        generateTestsData(testDataService, $scope, minTestRecordsToGenerate, maxTestRecordsToGenerate, normalTestColumnsToGenerate);
+        generateTestData(testDataService, $scope, minTestRecordsToGenerate, maxTestRecordsToGenerate, normalTestColumnsToGenerate);
         $element = angular.element(elementHtml);
         element = $compile($element)($scope);
-        //$scope.$digest();
 
         expect(element.find('.ui-grid')).toBeDefined();
     });
-    /*
 
-    it('should have all the data of a given config initialized', function() {
-        // create the html dom fragment and process the angular directive
-        generateTestsData(testDataService, $scope, minTestRecordsToGenerate, maxTestRecordsToGenerate, normalTestColumnsToGenerate);
-        $element = angular.element(elementHtml);
-        element = $compile($element)($scope);
-        $scope.$digest();
-
-        var isolateScope = element.isolateScope();
-        isolateScope.dataPromise.then(function(data) {
-            expect(data.length).toBe(expectedTotalRows);
-        });
-    });
 
     it('qbseGrid should have pagehandler setup and initialized', function() {
         // create the html dom fragment and process the angular directive
-        generateTestsData(testDataService, $scope, minTestRecordsToGenerate, maxTestRecordsToGenerate, normalTestColumnsToGenerate);
+        generateTestData(testDataService, $scope, minTestRecordsToGenerate, maxTestRecordsToGenerate, normalTestColumnsToGenerate);
         $element = angular.element(elementHtml);
         element = $compile($element)($scope);
         $scope.$digest();
@@ -130,7 +115,7 @@ describe('Directive: qbseGrid pagination - ', function() {
 
     it('should support empty record set', function() {
         // create the html dom fragment and process the angular directive
-        generateTestsData(testDataService, $scope, 0, 0, normalTestColumnsToGenerate);
+        generateTestData(testDataService, $scope, 0, 0, normalTestColumnsToGenerate);
         $element = angular.element(elementHtml);
         element = $compile($element)($scope);
         $scope.$digest();
@@ -148,7 +133,7 @@ describe('Directive: qbseGrid pagination - ', function() {
 
     it('should support empty fields set', function() {
         // create the html dom fragment and process the angular directive
-        var rowsMade = generateTestsData(testDataService, $scope, 1, 200, 0);
+        var rowsMade = generateTestData(testDataService, $scope, 1, 200, 0);
         $element = angular.element(elementHtml);
         element = $compile($element)($scope);
         $scope.$digest();
@@ -167,7 +152,7 @@ describe('Directive: qbseGrid pagination - ', function() {
 
     it('should support large fields set', function() {
         // create the html dom fragment and process the angular directive
-        var rowsMade = generateTestsData(testDataService, $scope, 1, 200, megaTestColumnsToGenerate);
+        var rowsMade = generateTestData(testDataService, $scope, 1, 200, megaTestColumnsToGenerate);
         $element = angular.element(elementHtml);
         element = $compile($element)($scope);
         $scope.$digest();
@@ -185,7 +170,7 @@ describe('Directive: qbseGrid pagination - ', function() {
 
     it('should support unfull page', function() {
         // create the html dom fragment and process the angular directive
-        var rowsMade = generateTestsData(testDataService, $scope, 1, expectedPageSize-1, normalTestColumnsToGenerate);
+        var rowsMade = generateTestData(testDataService, $scope, 1, expectedPageSize-1, normalTestColumnsToGenerate);
         $element = angular.element(elementHtml);
         element = $compile($element)($scope);
         $scope.$digest();
@@ -205,7 +190,7 @@ describe('Directive: qbseGrid pagination - ', function() {
     describe('paging via next to end ', function() {
         it('qbseGrid should have correct page state at next page', function() {
             // create the html dom fragment and process the angular directive
-            generateTestsData(testDataService, $scope, minTestRecordsToGenerate, maxTestRecordsToGenerate, normalTestColumnsToGenerate);
+            generateTestData(testDataService, $scope, minTestRecordsToGenerate, maxTestRecordsToGenerate, normalTestColumnsToGenerate);
             $element = angular.element(elementHtml);
             element = $compile($element)($scope);
             $scope.$digest();
@@ -235,13 +220,13 @@ describe('Directive: qbseGrid pagination - ', function() {
                 expect(isolateScope.pagesHandler.current.totalRows).toBe(expectedTotalRows);
             }
 
-        })
+        });
     });
 
     describe('paging prev to start ', function() {
         it('qbseGrid should have correct page state at each prev page', function() {
             // create the html dom fragment and process the angular directive
-            generateTestsData(testDataService, $scope, minTestRecordsToGenerate, maxTestRecordsToGenerate, normalTestColumnsToGenerate);
+            generateTestData(testDataService, $scope, minTestRecordsToGenerate, maxTestRecordsToGenerate, normalTestColumnsToGenerate);
             $element = angular.element(elementHtml);
             element = $compile($element)($scope);
             $scope.$digest();
@@ -269,5 +254,5 @@ describe('Directive: qbseGrid pagination - ', function() {
 
         });
     });
-    */
+
 });

@@ -120,8 +120,8 @@
         $scope.gridOptions = {};
         angular.extend($scope.gridOptions, $scope.defaultOptions, $scope.customOptions);
 
-        //  initialize the grid, get the cols (if defined) to display for this grid instance.  When both
-        //  the grid is initialized and the columns are retrieved, we can load the first page for display.
+        //  initialize the grid, get the cols (if defined) to display for this grid instance and page one instance of
+        //  of the data grid.
         $q.all({
             grid: initGrid(),
             cols: initGridColumns($scope.dataServiceFunc)
@@ -139,6 +139,9 @@
 
                 // load up the initial page
                 $scope.pagesHandler.loadCurrentPage();
+            },
+            function(resp) {
+                console.log('Error loading init grid data.  Resp:' + resp);
             }
         );
 
