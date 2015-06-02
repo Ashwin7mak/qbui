@@ -47,10 +47,22 @@
         consts.FORMULA_TEXT,
         consts.FORMULA_EMAIL_ADDRESS];
 
+    //The max number of fields we will generate at random
+    var maxRandomFields = 10;
+
     module.exports = {
+
 
         getTableBuilder : function(){
             return tableBuilder.builder();
+        },
+
+        getAvailableFieldTypes : function(){
+            return availableFieldTypes;
+        },
+
+        getMaxNumberRandomFields : function(){
+            return maxRandomFields;
         },
 
         /**
@@ -105,7 +117,7 @@
         generateTableWithFieldMapForApp : function(appId, fieldNameToTypeMap){
             var builder = generateTableWithFieldMapForApp(fieldNameToTypeMap);
             builder.withAppId(appId);
-            table = builder.build();
+            var table = builder.build();
             return table;
         },
 
@@ -114,7 +126,7 @@
          */
         generateTableWithAllFieldTypes : function(){
             var builder = generateTableWithAllFieldTypes();
-            table = builder.build();
+            var table = builder.build();
             return table;
         },
 
@@ -123,7 +135,7 @@
          */
         generateTable : function(){
             var builder = generateRandomTable();
-            table = builder.build();
+            var table = builder.build();
             return table;
         },
 
@@ -136,7 +148,7 @@
          */
         generateTableWithFieldsOfType : function(numFields, fieldType){
             var builder = generateTableWithFieldsOfType(numFields, fieldType);
-            table = builder.build();
+            var table = builder.build();
             return table;
         },
 
@@ -157,7 +169,7 @@
          */
         generateTableWithFieldMap : function(fieldNameToTypeMap){
             var builder = generateTableWithFieldMapForApp(fieldNameToTypeMap);
-            table = builder.build();
+            var table = builder.build();
             return table;
         },
 
@@ -230,9 +242,9 @@
     function generateRandomTable(){
         var builder = getTableBuilderWithName();
 
-        var numFields = chance.integer({min:0, max:10});
+        var numFields = chance.integer({min:1, max:maxRandomFields});
         for(var i= 0; i< numFields; i++){
-            var fieldTypeIndex = chance.integer({min:0, max:availableFieldTypes.length-1});
+            var fieldTypeIndex = chance.integer({min:1, max:availableFieldTypes.length-1});
 
             var field = fieldGenerator.generateBaseField(availableFieldTypes[fieldTypeIndex]);
 
@@ -253,12 +265,11 @@
         var builder = getTableBuilderWithName();
 
         for(var i= 0; i< numFields; i++){
-            var field = fieldGenerator.generateBaseField(availableFieldTypes[fieldType]);
+            var field = fieldGenerator.generateBaseField(fieldType);
             builder.withField(field);
         }
 
-        table = builder.build();
-        return table;
+        return builder;
     }
 
     /**
@@ -278,7 +289,6 @@
      */
     function generateTableWithFieldMapForApp(fieldNameToTypeMap){
         var builder = getTableBuilderWithName();
-        builder.withAppId(appId);
 
         var fieldNameKeys = Object.keys(fieldNameToTypeMap);
 
