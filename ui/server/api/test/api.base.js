@@ -24,11 +24,13 @@
         var BASE_ENDPOINT = '/api/v1';
         var APPS_ENDPOINT = '/apps/';
         var TABLES_ENDPOINT = '/tables/';
+        var REPORTS_ENDPOINT = '/reports/';
         var RECORDS_ENDPOINT = '/records/';
         var REALMS_ENDPOINT = '/realms/';
         var USERS_ENDPOINT = "/users/";
         var LOCALHOST_REALM = 117000;
         var TICKETS_ENDPOINT = '/ticket?uid=1000000&realmID=';
+        var HEALTH_ENDPOINT  = '/health';
         var SUBDOMAIN_CHARS = 'abcdefghijklmnopqrstuvwxyz0123456789';
         var CONTENT_TYPE = 'Content-Type';
         var APPLICATION_JSON = 'application/json';
@@ -108,6 +110,13 @@
                 }
                 return tableEndpoint;
             },
+            resolveReportsEndpoint: function (appId, tableId, reportId) {
+                var reportEndpoint = this.resolveTablesEndpoint(appId, tableId) + REPORTS_ENDPOINT;
+                if(reportId) {
+                    reportEndpoint = reportEndpoint + reportId;
+                }
+                return reportEndpoint;
+            },
             resolveRealmsEndpoint: function (realmId) {
                 var endpoint = BASE_ENDPOINT + REALMS_ENDPOINT;
                 if (realmId) {
@@ -117,6 +126,9 @@
             },
             resolveTicketEndpoint: function () {
                 return BASE_ENDPOINT + TICKETS_ENDPOINT;
+            },
+            resolveHealthEndpoint: function () {
+                return BASE_ENDPOINT + HEALTH_ENDPOINT;
             },
             resolveUsersEndpoint: function (userId) {
                 var endpoint = BASE_ENDPOINT + USERS_ENDPOINT;

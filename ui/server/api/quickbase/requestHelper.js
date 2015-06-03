@@ -36,7 +36,6 @@
             getRequestUrl: function (req) {
                 return config.javaHost + req.url;
             },
-
             getAgentOptions: function (req) {
                 var agentOptions = {
                     rejectUnauthorized: false

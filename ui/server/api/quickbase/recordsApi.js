@@ -62,6 +62,7 @@
         var SLASH = '/';
         var FIELDS = 'fields';
         var RECORDS = 'records';
+        var REPORTS = 'reports';
         var RECORD = 'record';
         var CONTENT_TYPE = 'Content-Type';
         var APPLICATION_JSON = 'application/json';
@@ -189,9 +190,13 @@
             fetchFields: function (req) {
                 var opts = requestHelper.setOptions(req);
                 opts.headers[CONTENT_TYPE] = APPLICATION_JSON;
-                //If the endpoint provided is the records endpoint, replace records with the /fields path
-                if (opts.url.indexOf(RECORDS) != -1) {
-                    opts.url = opts.url.substring(0, opts.url.indexOf(RECORDS)) + FIELDS;
+                var inputUrl = opts.url.toLowerCase();
+                //If the endpoint provided is the records or report execution endpoint,
+                // replace records or reports with the /fields path
+                if (inputUrl.indexOf(RECORDS) != -1) {
+                    opts.url = inputUrl.substring(0, inputUrl.indexOf(RECORDS)) + FIELDS;
+                } else if(inputUrl.indexOf(REPORTS) != -1) {
+                    opts.url = inputUrl.substring(0, inputUrl.indexOf(REPORTS)) + FIELDS;
                 }
                 return executeRequest(opts, (req.param(FORMAT) === RAW));
             }
