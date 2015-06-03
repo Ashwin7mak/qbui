@@ -21,15 +21,11 @@
             var deferred = $q.defer();
             var promise;
 
-            switch (requestType) {
-                case gridConstants.SERVICE_REQ.COLS:
-                    promise = ReportModel.getColumnData(appId, tableId, reportId);
-                    break;
-                case gridConstants.SERVICE_REQ.DATA:
-                    promise = ReportModel.getData(appId, tableId, reportId, offset, rows);
-                    break;
-                default:
-                    promise = ReportModel.getAll(appId, tableId, reportId, offset, rows);
+            if (requestType === gridConstants.SERVICE_REQ.COLS) {
+                promise = ReportModel.getColumnData(appId, tableId, reportId);
+            }
+            else {
+                promise = ReportModel.getReportData(appId, tableId, reportId, offset, rows);
             }
 
             promise.then (

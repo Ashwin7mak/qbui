@@ -27,7 +27,7 @@
                 snapshot: d.toLocaleString()
             };
 
-            ReportService.getReport(appId, tableId, reportId).then(
+            ReportService.getMetaReport(appId, tableId, reportId).then(
                 function (data) {
                     //  get the report meta info
                     metaData.name = data.name;
@@ -46,16 +46,16 @@
 
         }
 
-        function fetchColumnData(appId, tableId, reportId) {
+        function fetchColumns(appId, tableId, reportId) {
 
             var deferred = $q.defer();
 
-            ReportService.getFields( appId, tableId).then(
-                function (data) {
+            ReportService.getReportFields( appId, tableId, reportId).then(
+                function (fields) {
                     //  process the fields
                     var cols = [];
                     var fieldMap = new Map();
-                    data.forEach(function (field) {
+                    fields.forEach(function (field) {
                         fieldMap.set(field.id, field);
                     });
 
@@ -79,7 +79,7 @@
 
         }
 
-        function fetchData(appId, tableId, reportId, offset, rows) {
+        function fetchReport(appId, tableId, reportId, offset, rows) {
 
             var deferred = $q.defer();
 
@@ -87,9 +87,9 @@
             //  https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/map#Polyfill
             var fieldMap = new Map();
 
-            ReportService.getFormattedRecords(appId, tableId, offset, rows).then(
+            ReportService.getReport(appId, tableId, reportId, offset, rows).then(
                 function (data) {
-                    console.log('formatted records callback successful');
+                    console.log('formatted report callback successful');
 
                     var fields = data.fields;
                     var records = data.records;
@@ -113,7 +113,7 @@
                     deferred.resolve(reportData);
                 },
                 function (resp) {
-                    console.log('formatted records callback failure' + resp.status);
+                    console.log('formatted report callback failure' + resp.status);
                     deferred.reject(resp);
                 }
             );
@@ -124,55 +124,6 @@
 
         //  Public functions
         return {
-            /**
-             * Return report meta data, column data and report data for a given appId,
-             * tableId and reportId.
-             *
-             * @param appId
-             * @param tableId
-             * @param reportId
-             * @returns {deferred.promise|{then, always}}
-             */
-            getAll: function (appId, tableId, reportId, offset, rows) {
-                var deferred = $q.defer();
-                $q.all({
-                    data: fetchData(appId, tableId, reportId, offset, rows),
-                    cols: fetchColumnData(appId, tableId, reportId),
-                    meta: fetchMetaData(appId, tableId, reportId)
-                }).then(
-                    function (reportInfo) {
-                        console.log('Report info callback success');
-                        deferred.resolve(reportInfo);
-                    },
-                    function (resp) {
-                        console.log('Error getting report information.  Status: ' + resp.status);
-                        deferred.reject(resp);
-                    }
-                );
-                return deferred.promise;
-            },
-            /**
-             * Return report data for a given appId, tableId and reportId
-             *
-             * @param appId
-             * @param tableId
-             * @param reportId
-             * @returns {deferred.promise|{then, always}}
-             */
-            getData: function(appId, tableId, reportId, offset, rows) {
-                var deferred = $q.defer();
-                fetchData(appId, tableId, reportId, offset, rows).then(
-                    function (data) {
-                        console.log('Report data info callback success');
-                        deferred.resolve(data);
-                    },
-                    function (resp) {
-                        console.log('Error getting report data information.  Status: ' + resp.status);
-                        deferred.reject(resp);
-                    }
-                );
-                return deferred.promise;
-            },
             /**
              * Return report meta data for a given appId, tableId and reportId
              *
@@ -205,13 +156,35 @@
              */
             getColumnData: function(appId, tableId, reportId) {
                 var deferred = $q.defer();
-                fetchColumnData(appId, tableId, reportId).then(
+                fetchColumns(appId, tableId, reportId).then(
                     function (columns) {
                         console.log('Report column data info callback success');
                         deferred.resolve(columns);
                     },
                     function (resp) {
                         console.log('Error getting report column data information.  Status: ' + resp.status);
+                        deferred.reject(resp);
+                    }
+                );
+                return deferred.promise;
+            },
+            /**
+             * Return report data for a given appId, tableId and reportId
+             *
+             * @param appId
+             * @param tableId
+             * @param reportId
+             * @returns {deferred.promise|{then, always}}
+             */
+            getReportData: function(appId, tableId, reportId, offset, rows) {
+                var deferred = $q.defer();
+                fetchReport(appId, tableId, reportId, offset, rows).then(
+                    function (data) {
+                        console.log('Report info callback success');
+                        deferred.resolve(data);
+                    },
+                    function (resp) {
+                        console.log('Error getting report information.  Status: ' + resp.status);
                         deferred.reject(resp);
                     }
                 );

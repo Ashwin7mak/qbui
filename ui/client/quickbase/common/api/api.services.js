@@ -19,20 +19,33 @@
     function ApiService(Restangular, qbUtility, apiConstants, $cookies) {
 
         // get the auth session ticket from the cookie.  If it's invalid or not found, the
-        // requested endPoint will respond with a 403 status, which is handles in api.modules.js by
-        // the RestangularProvider.setErrorInterceptor.
+        // requested endPoint will respond with a 403 status, which is handled in api.modules.js
+        // by the RestangularProvider.setErrorInterceptor.
         //
         function getTicket() {
             return $cookies.get(apiConstants.TICKET_COOKIE);
         }
 
-        function setFormattedRecordsQueryParams(type, offset, rows) {
-            var queryParams = {format: 'display'};
+        function setQueryParams(format, offset, rows) {
+            var queryParams = {};
+            if (format) {
+                queryParams.format = format;
+            }
             if (qbUtility.isInt(offset) && qbUtility.isInt(rows)) {
                 queryParams.offset = offset;
                 queryParams.numRows = rows;
             }
             return queryParams;
+        }
+
+        function runTheReport(appId, tableId, reportId, queryParams) {
+            var httpHeaders = {ticket: getTicket()};
+            return Restangular.one(apiConstants.APPS, appId).one(apiConstants.TABLES,tableId).one(apiConstants.REPORTS,reportId).one('results').withHttpConfig(httpHeaders).get(queryParams);
+        }
+
+        function getTheRecords(appId, tableId, queryParams) {
+            var httpHeaders = {ticket: getTicket()};
+            return Restangular.one(apiConstants.APPS, appId).one(apiConstants.TABLES,tableId).one(apiConstants.RECORDS).withHttpConfig(httpHeaders).get(queryParams);
         }
 
         var service = {
@@ -51,17 +64,13 @@
                 return Restangular.one(apiConstants.APPS,appId).one(apiConstants.TABLES,tableId).one(apiConstants.FIELDS,fieldId).withHttpConfig(httpHeaders).get();
             },
 
+            getRecords: function(appId, tableId, offset, rows) {
+                var queryParams = setQueryParams(null, offset, rows);
+                return getTheRecords(appId, tableId, queryParams);
+            },
             getFormattedRecords: function(appId, tableId, offset, rows) {
-                var queryParams = setFormattedRecordsQueryParams('display', offset, rows);
-                return this.getRecords(appId, tableId, queryParams);
-            },
-            getRawRecords: function(appId, tableId, offset, rows) {
-                var queryParams = setFormattedRecordsQueryParams('raw', offset, rows);
-                return this.getRecords(appId, tableId, queryParams);
-            },
-            getRecords: function(appId, tableId, queryParams) {
-                var httpHeaders = {ticket: getTicket()};
-                return Restangular.one(apiConstants.APPS, appId).one(apiConstants.TABLES,tableId).one(apiConstants.RECORDS).withHttpConfig(httpHeaders).get(queryParams ? queryParams : {});
+                var queryParams = setQueryParams('display', offset, rows);
+                return getTheRecords(appId, tableId, queryParams);
             },
 
             getReport: function(appId, tableId, reportId) {
@@ -74,9 +83,13 @@
                 return Restangular.one(apiConstants.APPS, appId).one(apiConstants.TABLES,tableId).one(apiConstants.REPORTS).withHttpConfig(httpHeaders).get();
             },
 
-            runReport: function(appId, tableId, reportId) {
-                var httpHeaders = {ticket: getTicket()};
-                return Restangular.one(apiConstants.APPS, appId).one(apiConstants.TABLES,tableId).one(apiConstants.REPORTS,reportId).one('results').withHttpConfig(httpHeaders).get();
+            runReport: function(appId, tableId, reportId, offset, rows) {
+                var queryParams = setQueryParams(null, offset, rows);
+                return runTheReport(appId, tableId, reportId, queryParams);
+            },
+            runFormattedReport: function(appId, tableId, reportId, offset, rows) {
+                var queryParams = setQueryParams('display', offset, rows);
+                return runTheReport(appId, tableId, reportId, queryParams);
             }
         };
 

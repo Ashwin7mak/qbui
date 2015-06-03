@@ -7,14 +7,14 @@
     function ReportManagerService($q, ApiService) {
 
         /**
-         * Return the report for the given appId, tableId and reportId
+         * Return the meta report information for the given appId, tableId and reportId
          *
          * @param appId
          * @param tableId
          * @param reportId
          * @returns {deferred.promise|{then, always}}
          */
-        this.getReport = function(appId, tableId, reportId) {
+        this.getMetaReport = function(appId, tableId, reportId) {
             var deferred = $q.defer();
 
             ApiService.getReport(appId, tableId, reportId ).then(
@@ -74,6 +74,59 @@
                 },
                 function(resp) {
                     console.log('GetFields: failure callback');
+                    deferred.reject(resp);
+                }
+            );
+
+            return deferred.promise;
+        };
+
+        this.getReportFields = function(appId, tableId, reportId) {
+            var deferred = $q.defer();
+
+            var offset=0;
+            var rows=1;
+            ApiService.runFormattedReport(appId, tableId, reportId, offset, rows).then(
+                function(report) {
+                    console.log('runFormattedReport: Success callback');
+                    deferred.resolve(report.fields);
+                },
+                function(resp) {
+                    console.log('runFormattedReport: failure callback');
+                    deferred.reject(resp);
+                }
+            );
+
+            return deferred.promise;
+        };
+
+        this.getReportRecords = function(appId, tableId, reportId, offset, rows) {
+            var deferred = $q.defer();
+
+            ApiService.runFormattedReport(appId, tableId, reportId, offset, rows).then(
+                function(report) {
+                    console.log('runFormattedReport: Success callback');
+                    deferred.resolve(report.records);
+                },
+                function(resp) {
+                    console.log('runFormattedReport: failure callback');
+                    deferred.reject(resp);
+                }
+            );
+
+            return deferred.promise;
+        };
+
+        this.getReport = function(appId, tableId, reportId, offset, rows) {
+            var deferred = $q.defer();
+
+            ApiService.runFormattedReport(appId, tableId, reportId, offset, rows).then(
+                function(report) {
+                    console.log('runFormattedReport: Success callback');
+                    deferred.resolve(report);
+                },
+                function(resp) {
+                    console.log('runFormattedReport: failure callback');
                     deferred.reject(resp);
                 }
             );
