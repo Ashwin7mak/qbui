@@ -26,7 +26,7 @@
         },
 
         'phoneNumberWithExtension' : function() {
-            phoneNumber = chance.phone() + "x" + chance.integer({min: min, max: max});;
+            var phoneNumber = chance.phone() + "x" + chance.integer({min: min, max: max});;
         }
     });
 
