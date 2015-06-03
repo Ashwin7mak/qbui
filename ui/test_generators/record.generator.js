@@ -60,10 +60,10 @@
     recordTypeMapping[consts.PHONE_NUMBER] = function (){ return rawValueGenerator.generatePhoneNumber() };
     recordTypeMapping[consts.CHECKBOX] = function (){ return rawValueGenerator.generateBool()};
     // TODO: Write generators for Date/DateTime/TOD/FileAttach/User fields
-    recordTypeMapping[consts.DATE_TIME] = function (){ return '2015-04-12' };
-    recordTypeMapping[consts.DATE] = function (){ return '2015-04-12T05:51:19Z' };
-    recordTypeMapping[consts.TIME_OF_DAY] = function (){ return '1970-01-01T09:00:00Z[UTC]'};
-    recordTypeMapping[consts.FILE_ATTACHMENT] = function (){ return 'www.intuit.com/some/file/zipFile.zip'};
+    recordTypeMapping[consts.DATE_TIME] = function (){ return rawValueGenerator.generateDate() };
+    recordTypeMapping[consts.DATE] = function (){ return rawValueGenerator.generateDateTime() };
+    recordTypeMapping[consts.TIME_OF_DAY] = function (){ return rawValueGenerator.generateTime()};
+    recordTypeMapping[consts.FILE_ATTACHMENT] = function (){ return rawValueGenerator.generateUrl();};
     recordTypeMapping[consts.USER] = function (){ return 'uid' };
 
 }());

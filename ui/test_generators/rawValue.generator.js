@@ -6,6 +6,10 @@
     'use strict';
     var Chance = require('chance');
     var chance = new Chance();
+    var appConsts = require('./app.constants');
+    var dateTimeFormatter = require('../server/api/quickbase/formatter/dateTimeFormatter');
+
+
     var SUBDOMAIN_CHARS = 'abcdefghijklmnopqrstuvwxyz0123456789';
 
     chance.mixin({
@@ -16,7 +20,7 @@
             return timeZone;
         },
 
-        'dateFormat' : function(options) {
+        'appDateFormat' : function(options) {
             var dateFormat = options['dateFormat'];
 
             if(undefined === dateFormat || !_(appConsts.DATE_FORMATS).contains(appConsts.DATE_FORMATS, dateFormat)){
@@ -27,6 +31,30 @@
 
         'phoneNumberWithExtension' : function() {
             phoneNumber = chance.phone() + "x" + chance.integer({min: min, max: max});;
+        },
+
+        'apiFormattedDate' : function(options) {
+            var date = chance.date(options);
+
+            var year = date.year;
+            var month = date.month;
+            var day = date.day;
+
+            return year + '-' + month + '-' day;
+        },
+
+        'apiFormattedDateTime' : function(options) {
+            var date = chance.date(options);
+
+            var year = date.getYear();
+            var month = date.getMonth();
+            var day = date.getDay();
+            var hour = date.getHours();
+            var minute = date.getMinutes();
+            var seconds = date.getSeconds();
+            var milliseconds = date.getMilliseconds();
+
+            return year + '-' + month + '-' day + 'T' + hour + ':' + minute + ':' + seconds + '.' + milliseconds + 'Z';
         }
     });
 
@@ -52,6 +80,21 @@
         //Generates and returns a psuedo-random email string
         generateEmailInDomain : function(domain) {
             return chance.email({domain: domain});
+        },
+
+        //Generates and returns a date
+        generateDate : function(){
+            return chance.apiFormattedDate();
+        },
+
+        //Generates and returns a dateTime that can be sent to the api
+        generateDateTime : function(){
+            return chance.apiFormattedDateTime();
+        },
+
+        //Generates and returns a dateTime that can be sent to the api
+        generateTime : function(){
+            return chance.apiFormattedDateTime({year: 1970, month: 1, day: 1});
         },
 
         //Generates and returns a psuedo-random us phone number

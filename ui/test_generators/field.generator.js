@@ -133,7 +133,6 @@
     fieldTypeToFunctionCalls[consts.DATE] = [ applyFieldDefaults, applyConcreteDefaults, applyScalarDefaults, applyDateDefaults];
     fieldTypeToFunctionCalls[consts.TIME_OF_DAY] = [ applyFieldDefaults, applyConcreteDefaults, applyScalarDefaults, applyDateDefaults, applyDateTimeDefaults, applyTimeOfDayDefaults];
     fieldTypeToFunctionCalls[consts.CHECKBOX] = [ applyFieldDefaults, applyConcreteDefaults, applyScalarDefaults ];
-    fieldTypeToFunctionCalls[consts.FILE_ATTACHMENT] = [ applyFieldDefaults, applyConcreteDefaults];
     fieldTypeToFunctionCalls[consts.USER] = [ applyFieldDefaults, applyConcreteDefaults, applyScalarDefaults, applyUserDefaults ];
 
     //virtuals
