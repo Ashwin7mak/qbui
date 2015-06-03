@@ -38,7 +38,7 @@
             var month = date.month;
             var day = date.day;
 
-            return year + '-' + month + '-' day;
+            return year + '-' + month + '-' + day;
         },
 
         'apiFormattedDateTime' : function(options) {
@@ -52,7 +52,7 @@
             var seconds = date.getSeconds();
             var milliseconds = date.getMilliseconds();
 
-            return year + '-' + month + '-' day + 'T' + hour + ':' + minute + ':' + seconds + '.' + milliseconds + 'Z';
+            return year + '-' + month + '-' + day + 'T' + hour + ':' + minute + ':' + seconds + '.' + milliseconds + 'Z';
         },
 
         'userId' : function(options) {

@@ -8,15 +8,16 @@
 var consts = require('../../server/api/constants');
 var fieldGenerator = require('./../field.generator.js');
 var recordGenerator = require('./../record.generator.js');
+var tableGenerator = require('./../table.generator.js');
 var assert = require('assert');
 var should = require('should');
 
-describe('Record generator unit test', function () {
+describe('Record generator', function () {
 
     /**
      * DataProvider containing the field types to include in the generated record
      */
-    function positiveProvider() {
+    function fieldProvider() {
         return [
             {message: "checkbox field", fieldType: consts.CHECKBOX},
             {message: "text field", fieldType: consts.TEXT},
@@ -36,11 +37,13 @@ describe('Record generator unit test', function () {
         ];
     }
 
-    // Positive test case
-    it('should generate a record with values based on the fields provided', function (){
+    /**
+     * Positive test cases
+     */
+    it('should generate a record with values based on the list of fields provided', function (){
         // Setup the list of fields
         var fields = [];
-        positiveProvider().forEach(function(entry) {
+        fieldProvider().forEach(function(entry) {
             // Generate the field and add it to the list
             var field = fieldGenerator.generateBaseField(entry.fieldType);
             fields.push(field);
@@ -58,7 +61,19 @@ describe('Record generator unit test', function () {
         };
     });
 
-    // Negative test case
+    it('should generate a record if given a table', function (){
+        // Generate a table
+        var table = tableGenerator.generateTable(5);
+        console.log('table: ' + JSON.stringify(table));
+
+        // Generate a record for that table
+        var recordJson = recordGenerator.generateRecordForTable(table);
+        console.log(recordJson);
+    });
+
+    /**
+     * Negative test cases
+     */
     it('should not generate a value for a formula or virtual field type', function (){
         // Generate fields
         var dateTimeFormulaField = fieldGenerator.generateBaseField(consts.FORMULA_DATE);

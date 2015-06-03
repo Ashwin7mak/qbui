@@ -8,30 +8,29 @@
     'use strict';
     var consts = require('../server/api/constants');
     var fieldConsts = require('./field.constants');
+    var tableConsts = require('./table.constants');
     var rawValueGenerator = require('./rawValue.generator');
 
     module.exports = {
-        /*
+        /**
          @params: List of generated fields
          For each field type do the following:
          Generate the value for the field based on type (call the appropriate rawValue generator)
          Add it to the JSON blob
 
          This method assumes you have already added the field to the table and generated a proper field ID,
-         otherwise the id will come back as undefined.
+         otherwise the id will come back as 'undefined'.
          */
         generateRecord : function (fields) {
             var recordJson = [];
 
             for (var i = 0; i < fields.length; i++) {
-
                 var field = fields[i];
 
                 // Check that there is a mapping for the field type (otherwise don't generate a value for it)
                 if (typeof recordTypeMapping[field[fieldConsts.fieldKeys.TYPE]] === 'undefined') {
                     console.error('Record data generator is undefined for field type ' + field[fieldConsts.fieldKeys.TYPE]);
                 }
-
                 else {
                     console.log('Generating field value for type ' + field[fieldConsts.fieldKeys.TYPE]);
                     recordJson.push({
@@ -41,9 +40,19 @@
                 }
             }
             return recordJson;
-        }
+        },
 
-        //TODO: Method to generate a record if you give it a table instead of the list of fields
+        /**
+         @params: Table containing generated fields
+         Helper method if you just want to generate a record for a table. Extracts the fields and passes them into
+         generateRecord.
+         */
+        generateRecordForTable : function (table) {
+            var fields = table[tableConsts.FIELDS];
+            var recordJson = module.exports.generateRecord(fields);
+
+            return recordJson;
+        }
     };
 
     //For a given field type, apply any default values that are not currently present in the map
