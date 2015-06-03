@@ -16,7 +16,7 @@ var assert = require('assert');
 /**
  * Unit tests for app generator
  */
-describe('App generator unit test', function () {
+ddescribe('App generator unit test', function () {
 
     function appWithNumTablesProvider(){
         return [

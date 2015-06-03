@@ -4,7 +4,6 @@
  */
 (function () {
 
-    var consts = require('../server/api/constants');
     var Chance = require('chance');
     var chance = new Chance();
 
@@ -27,6 +26,15 @@
     });
 
     module.exports = {
+
+        /**
+         * Generate a user with random properties
+         * @param options
+         * @returns {*}
+         */
+        userToJson: function(user){
+            return JSON.stringify(user);
+        },
 
         /**
          * Generate a user with random properties
