@@ -1,4 +1,5 @@
 #!/bin/sh
+set -x #echo on
 
 export http_proxy=http://qypprdproxy02.ie.intuit.net:80
 export no_proxy='.intuit.net, .intuit.com, 10.*.*.*, localhost, 127.0.0.1'
