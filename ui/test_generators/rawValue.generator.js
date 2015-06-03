@@ -53,6 +53,10 @@
             var milliseconds = date.getMilliseconds();
 
             return year + '-' + month + '-' day + 'T' + hour + ':' + minute + ':' + seconds + '.' + milliseconds + 'Z';
+        },
+
+        'userId' : function(options) {
+            return options['userIds'] ? chance.pick(options['userIds']) : 1000000;
         }
     });
 
@@ -139,6 +143,10 @@
 
         generateDateFormat : function() {
             return chance.dateFormat();
+        },
+
+        pickUserIdFromList : function(userIds) {
+            return chance.userId({userIds : userIds})
         }
     };
 
