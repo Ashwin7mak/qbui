@@ -41,6 +41,22 @@
             }
         );
 
+        //Route for returning a report
+        app.route('/api/:version/apps/:appId/tables/:tableId/reports/:reportId/results').get(
+            function(req, res) {
+                requestHelper.logRoute(req);
+                recordsApi.fetchRecordsAndFields(req)
+                    .then(function(response) {
+                        res.send(response);
+                    })
+                    .catch(function(error) {
+                        requestHelper.copyHeadersToResponse(res, error.headers);
+                        res.status(error.statusCode)
+                            .send(error.body);
+                    });
+            }
+        );
+
         //Disable proxying of realm and ticket requests via the node webserver
         app.route(['/api/:version/realms*']).all(
             function(req, res) {

@@ -74,12 +74,11 @@
         //not referenced in the records
         function removeUnusedFields(record, fields) {
             var returnFields = fields;
-            if (record && fields &&
-                record.length != fields.length) {
+            if (record && fields && record.length !== fields.length) {
                 returnFields = [];
-                for (var v in record) {
-                    var f = findFieldById(v.id, fields);
-                    if (f) {
+                for (var idx=0; idx<record.length; idx++) {
+                    var f = findFieldById(record[idx].id, fields);
+                    if (f !== null) {
                         returnFields.push(f);
                     }
                 }
@@ -89,11 +88,12 @@
 
         //Given a field id and collection of fields, find and return the field ID
         function findFieldById(fieldId, fields) {
-            for (var f in fields) {
-                if (f.id === fieldId) {
-                    return f;
+            for (var idx=0; idx<fields.length; idx++) {
+                if (fields[idx].id === fieldId) {
+                    return fields[idx];
                 }
             }
+            return null;
         }
 
         //the immediately resolve flag is set, resolve the deferred without making a call
