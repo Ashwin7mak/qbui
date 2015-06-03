@@ -22,14 +22,23 @@
          */
         generateRecord : function (fields) {
             var recordJson = [];
-            for (var i = 0; i < fields.length; i++) {
-                var field = fields[i];
-                console.log('Generating field value for type ' + field[fieldConsts.fieldKeys.TYPE]);
 
-                recordJson.push({
-                    id: field[fieldConsts.fieldKeys.ID],
-                    value: generateRecordValueForFieldType(field[fieldConsts.fieldKeys.TYPE])
-                });
+            for (var i = 0; i < fields.length; i++) {
+
+                var field = fields[i];
+
+                // Check that there is a mapping for the field type (otherwise don't generate a value for it)
+                if (typeof recordTypeMapping[field[fieldConsts.fieldKeys.TYPE]] === 'undefined') {
+                    console.error('Record data generator is undefined for field type ' + field[fieldConsts.fieldKeys.TYPE]);
+                }
+
+                else {
+                    console.log('Generating field value for type ' + field[fieldConsts.fieldKeys.TYPE]);
+                    recordJson.push({
+                        id: field[fieldConsts.fieldKeys.ID],
+                        value: generateRecordValueForFieldType(field[fieldConsts.fieldKeys.TYPE])
+                    });
+                }
             }
             return recordJson;
         }

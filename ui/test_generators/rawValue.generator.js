@@ -7,8 +7,6 @@
     var Chance = require('chance');
     var chance = new Chance();
     var appConsts = require('./app.constants');
-    var dateTimeFormatter = require('../server/api/quickbase/formatter/dateTimeFormatter');
-
 
     var SUBDOMAIN_CHARS = 'abcdefghijklmnopqrstuvwxyz0123456789';
 
@@ -30,7 +28,7 @@
         },
 
         'phoneNumberWithExtension' : function() {
-            phoneNumber = chance.phone() + "x" + chance.integer({min: min, max: max});;
+            return chance.phone() + "x" + chance.integer({min: 1000, max: 9999});
         },
 
         'apiFormattedDate' : function(options) {
