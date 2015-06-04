@@ -13,7 +13,7 @@ var assert = require('assert');
 /**
  * Unit tests for user generator
  */
-describe('User generator unit test', function () {
+ddescribe('User generator unit test', function () {
 
     /**
      * Unit test that validates generating a user with no options present

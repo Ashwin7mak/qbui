@@ -15,7 +15,9 @@
             var tableFields = [];
             return {
                 build : function() {
-                    tableUnderConstruction[tableConsts.FIELDS] = tableFields;
+                    if(table[tableConsts.FIELDS]) {
+                        tableUnderConstruction[tableConsts.FIELDS] = tableFields;
+                    }
                     return tableUnderConstruction;
                 },
 

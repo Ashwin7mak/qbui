@@ -16,21 +16,49 @@
 
             return {
                 build: function () {
-                    appUnderConstruction[appConstants.TABLES] = appTables;
-                    appUnderConstruction[appRelationships.RELATIONSHIPS] = appRelationships;
+                    if(appUnderConstruction[appRelationships.TABLES]) {
+                        appUnderConstruction[appConstants.TABLES] = appTables;
+                    }
+
+                    if(appUnderConstruction[appRelationships.RELATIONSHIPS]) {
+                        appUnderConstruction[appRelationships.RELATIONSHIPS] = appRelationships;
+                    }
+
                     return appUnderConstruction;
                 },
 
                 cloneIntoBuilder: function (app) {
-                    appUnderConstruction[appConstants.ID] = app[appConstants.ID];
-                    appUnderConstruction[appConstants.NAME] = app[appConstants.NAME];
-                    appUnderConstruction[appConstants.LAST_ACCESSED] = app[appConstants.LAST_ACCESSED];
-                    appUnderConstruction[appConstants.DATE_FORMAT] = app[appConstants.DATE_FORMAT];
-                    appUnderConstruction[appConstants.TIME_ZONE] = app[appConstants.TIME_ZONE]
+                    if(app[appRelationships.ID]) {
+                        appUnderConstruction[appConstants.ID] = app[appConstants.ID];
+                    }
 
-                    appTables = _.cloneDeep(app[appConstants.TABLES]);
+                    if(app[appRelationships.NAME]) {
 
-                    appRelationships = _.cloneDeep(app[appConstants.TABLES]);
+                        appUnderConstruction[appConstants.NAME] = app[appConstants.NAME];
+                    }
+                    if(app[appRelationships.LAST_ACCESSED]) {
+
+                        appUnderConstruction[appConstants.LAST_ACCESSED] = app[appConstants.LAST_ACCESSED];
+                    }
+
+                    if(app[appRelationships.DATE_FORMAT]) {
+
+                        appUnderConstruction[appConstants.DATE_FORMAT] = app[appConstants.DATE_FORMAT];
+                    }
+
+                    if(app[appRelationships.TIME_ZONE]) {
+
+                        appUnderConstruction[appConstants.TIME_ZONE] = app[appConstants.TIME_ZONE];
+                    }
+
+                    if(app[appRelationships.TABLES]) {
+                        appTables = _.cloneDeep(app[appConstants.TABLES]);
+                    }
+
+                    if(app[appRelationships.RELATIONSHIPS]) {
+                        appRelationships = _.cloneDeep(app[appConstants.RELATIONSHIPS]);
+                    }
+
                     return this;
                 },
 

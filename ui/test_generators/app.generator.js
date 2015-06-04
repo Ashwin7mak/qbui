@@ -110,30 +110,30 @@
 
         validateAppProperties : function(app){
 
-            var tables = table[appConsts.TABLES];
+            var tables = app[appConsts.TABLES];
             //TODO: add relationship generator and validation
 
             var tablesValid = true;
             var appPropsValid = true;
 
-            if(typeof table[appConsts.NAME] !== 'string'){
+            if(typeof app[appConsts.NAME] !== 'string'){
                 appPropsValid = false;
-                console.error('The name of the app was not a string. App: ' + JSON.stringify(table));
+                console.error('The name of the app was not a string. App: ' + JSON.stringify(app));
             }
 
-            if(typeof table[appConsts.LAST_ACCESSED] !== 'undefined' && typeof table[appConsts.APP_ID] !== 'string'){
+            if(typeof app[appConsts.LAST_ACCESSED] !== 'undefined' && typeof app[appConsts.APP_ID] !== 'string'){
                 appPropsValid = false;
-                console.error('The app property last accessed was not a string. App: ' + JSON.stringify(table));
+                console.error('The app property last accessed was not a string. App: ' + JSON.stringify(app));
             }
 
-            if(typeof table[appConsts.TIME_ZONE] !== 'undefined' && typeof table[appConsts.TIME_ZONE] !== 'string'){
+            if(typeof app[appConsts.TIME_ZONE] !== 'undefined' && typeof app[appConsts.TIME_ZONE] !== 'string'){
                 appPropsValid = false;
-                console.error('The app property last accessed was not a string. App: ' + JSON.stringify(table));
+                console.error('The app property last accessed was not a string. App: ' + JSON.stringify(app));
             }
 
-            if(typeof table[appConsts.DATE_FORMAT] !== 'undefined' && typeof table[appConsts.DATE_FORMAT] !== 'string'){
+            if(typeof app[appConsts.DATE_FORMAT] !== 'undefined' && typeof app[appConsts.DATE_FORMAT] !== 'string'){
                 appPropsValid = false;
-                console.error('The app property date format was not a string. App: ' + JSON.stringify(table));
+                console.error('The app property date format was not a string. App: ' + JSON.stringify(app));
             }
 
             for(var index in tables){
