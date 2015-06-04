@@ -16,19 +16,8 @@ function GridDataFactory($q, gridConstants) {
         this.$q = $q;
         this.gridConstants = gridConstants;
         this.getData = getData.bind(this);
-        //this.getColumns = getColumns.bind(this);
     };
 }
-
-//function getColumns() {
-    /*jshint validthis:true */
-//    if (this.service.getColumns) {
-//        return this.service.getColumns();
-//    }
-//    else {
-//        return this.$q.then([]);
-//    }
-//}
 
 function getData(current) {
     /*jshint validthis:true */
@@ -37,10 +26,11 @@ function getData(current) {
 
     if (this.dataServiceFunc && typeof this.dataServiceFunc === 'function') {
 
-        //var offset = (current.pageNumber - 1) * current.pageSize;
-        //var rows = current.pageSize;
+        var offset = (current.pageNumber - 1) * current.pageSize;
+        var rows = current.pageSize;
 
-        this.$q.when(this.dataServiceFunc(this.gridConstants.SERVICE_REQ.DATA)).then(
+        //  get one extra row so that we know if there is more data to retrieve
+        this.$q.when(this.dataServiceFunc(this.gridConstants.SERVICE_REQ.DATA , offset, rows+1 )).then(
             function (data) {
                 var newState = {};
                 var newData;
@@ -49,20 +39,25 @@ function getData(current) {
 
                 // the first row is the the current page number * the current page size
                 // (page number is 1 based)
-                var firstRow = (newState.pageNumber - 1) * newState.pageSize;
+                //var firstRow = (newState.pageNumber - 1) * newState.pageSize;
 
                 // request the data starting from the current pages 1st row
                 // for page number of pages
-                newData = data.slice(firstRow, firstRow + newState.pageSize);
+                newData = data.length > rows ? data.slice(0, rows) : data;
                 newState.pageBottomRow = newState.pageTopRow + newData.length;
 
-                // the files size is known in this jsonfile case
-                // todo : remove
-                var totalItems = data.length;
+                // is there additional data to show beyond the current page
+                if (data.length > rows) {
+                    newState.morePages = true;
+                }
+                else {
+                    newState.morePages = false;
+                    newState.foundEnd = newState.pageNumber;
+                    newState.totalRows = ((newState.pageNumber - 1) * newState.pageSize) + data.length;
+                }
 
-                // determine if there is more data
-                // there is more if we know the end page and we are less that that or
-                // if we the pages starting row + page size is less than total rows
+
+                /*
                 if ((newState.foundEnd && newState.pageNumber < newState.foundEnd) ||
                     (firstRow + newState.pageSize) < totalItems) {
                     newState.morePages = true;
@@ -71,7 +66,7 @@ function getData(current) {
                     newState.foundEnd = newState.pageNumber;
                     newState.totalRows = newState.pageTopRow + newData.length;
                 }
-
+                */
                 deferred.resolve({
                     newState: newState,
                     data: newData
