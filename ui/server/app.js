@@ -35,6 +35,7 @@
 
     console.log('Starting express server');
     console.log('ENVIRONMENT: %s', app.get('env'));
+    console.log('CONFIG: %o', config);
 
     /**************
      * Start HTTP Server
