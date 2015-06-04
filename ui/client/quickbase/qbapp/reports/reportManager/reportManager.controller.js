@@ -58,8 +58,8 @@
 
                 //  ui grid options
                 $scope.report.qbseGridOptions = {
-                    showGridFooter: false,
-                    paginationPageSize: 2
+                    paginationPageSize: 25,
+                    showGridFooter: false
                 };
 
                 //  set appropriate header object data
