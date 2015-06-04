@@ -74,7 +74,7 @@ Overview of the UI directory
          │  ├── components                      - app-wide component's
          │  ├── config
          │  │    │
-         │  │    └── environment                - configuration per environment (local, test, production)
+         │  │    └── environment                - configuration per environment (local, test, aws)
          │  │         └── keys                  - ssl keys for the server (content is not tracked by git)
          │  ├── routes                          - quickbase server routes (rest endpoints, angular)
          │  ├── views                           - server rendered views
@@ -148,7 +148,7 @@ Example folder structure of a QuickBase Angular module.
 The application requires a run-time environment to be defined and configured.  By default, the server runs in local development mode,
 meaning a local configuration file must be defined. As this file is not tracked by git, to run locally, you will need to do the following:
 
-- copy <project root>/server/config/environment/localsample.js into the local.js and save:
+- copy <project root>/server/config/environment/local.js.sample into the local.js and save:
 
         (function () {
             'use strict';
@@ -386,17 +386,17 @@ To run a gradle task, cd to the dist dir and run:
 
 To run the production distribution node server, run one of the following (may need sudo):
        
-        NODE_ENV=production PORT=9000 node server/app.js
-        NODE_ENV=production PORT=9000 npm start
+        NODE_ENV=aws PORT=9000 node server/app.js
+        NODE_ENV=aws PORT=9000 npm start
 
 ##Running with Forever
 To start a node server with forever which ensures that a given node script runs continuously:
 
-        NODE_ENV=production PORT=9000 node_modules/forever/bin/forever start server/app.js
+        NODE_ENV=aws PORT=9000 node_modules/forever/bin/forever start server/app.js
     
 To stop a running node server with forever:
 
-        NODE_ENV=production PORT=9000 node_modules/forever/bin/forever stop server/app.js
+        NODE_ENV=aws PORT=9000 node_modules/forever/bin/forever stop server/app.js
 
 add forever option -w to automatically restart server on change to js files
 other forever options

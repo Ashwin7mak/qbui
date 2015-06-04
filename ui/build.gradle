@@ -88,6 +88,10 @@ task zip(type: Zip) {
     from ('dist') {
         into('dist')
     }
+    from ('node_modules') {
+        into ('node_modules')
+    }
+
 }
 
 task clean_node_modules(type: Delete) {

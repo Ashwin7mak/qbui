@@ -43,6 +43,22 @@
             }
         );
 
+        //Route for returning an array of records that is the result of executing a report
+        app.route('/api/:version/apps/:appId/tables/:tableId/reports/:reportId/results').get(
+            function(req, res) {
+                requestHelper.logRoute(req);
+                recordsApi.fetchRecordsAndFields(req)
+                    .then(function(response) {
+                        res.send(response);
+                    })
+                    .catch(function(error) {
+                        requestHelper.copyHeadersToResponse(res, error.headers);
+                        res.status(error.statusCode)
+                            .send(error.body);
+                    });
+            }
+        );
+
         //Route for returning swagger api page
         app.route(['/api']).get(
             function(req, res) {
