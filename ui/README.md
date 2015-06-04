@@ -148,7 +148,7 @@ Example folder structure of a QuickBase Angular module.
 The application requires a run-time environment to be defined and configured.  By default, the server runs in local development mode,
 meaning a local configuration file must be defined. As this file is not tracked by git, to run locally, you will need to do the following:
 
-- copy <project root>/server/config/environment/localsample.js into the local.js and save:
+- copy <project root>/server/config/environment/local.js.sample into the local.js and save:
 
         (function () {
             'use strict';
