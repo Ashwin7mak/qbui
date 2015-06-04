@@ -81,6 +81,14 @@
             return deferred.promise;
         };
 
+        /**
+         * Return the fields for a given report
+         *
+         * @param appId
+         * @param tableId
+         * @param reportId
+         * @returns {*}
+         */
         this.getReportFields = function(appId, tableId, reportId) {
             var deferred = $q.defer();
 
@@ -100,6 +108,17 @@
             return deferred.promise;
         };
 
+        /**
+         * Return the data records for a given report, offset and rows.
+         * If no offset and/or rows, then all data is returned.
+         *
+         * @param appId
+         * @param tableId
+         * @param reportId
+         * @param offset
+         * @param rows
+         * @returns {*}
+         */
         this.getReportRecords = function(appId, tableId, reportId, offset, rows) {
             var deferred = $q.defer();
 
@@ -117,6 +136,17 @@
             return deferred.promise;
         };
 
+        /**
+         * Return formatted report data(fields, data) for a given report, offset and rows.
+         * If no offset and/or rows, then all data is returned.
+         *
+         * @param appId
+         * @param tableId
+         * @param reportId
+         * @param offset
+         * @param rows
+         * @returns {*}
+         */
         this.getReport = function(appId, tableId, reportId, offset, rows) {
             var deferred = $q.defer();
 

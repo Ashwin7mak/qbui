@@ -16,8 +16,7 @@
         var reportId = $stateParams.id;
 
         function dataGridReportService (requestType, offset, rows) {
-            // service request type can be COLUMN_ONLY, DATA_ONLY or BOTH.
-            // If no request type or an invalid/unsupported request type, then BOTH is returned.
+            // service request type can be COLUMN_ONLY OR DATA_ONLY.  DEFAULT is DATA.
             var deferred = $q.defer();
             var promise;
 
