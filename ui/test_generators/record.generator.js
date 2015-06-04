@@ -49,7 +49,7 @@
          */
         generateRecordForTable : function (table) {
             var fields = table[tableConsts.FIELDS];
-            var recordJson = module.exports.generateRecord(fields);
+            var recordJson = this.generateRecord(fields);
 
             return recordJson;
         }
@@ -82,6 +82,6 @@
     recordTypeMapping[consts.DATE] = function (){ return rawValueGenerator.generateDateTime() };
     recordTypeMapping[consts.TIME_OF_DAY] = function (){ return rawValueGenerator.generateTime()};
     recordTypeMapping[consts.FILE_ATTACHMENT] = function (){ return rawValueGenerator.generateUrl();};
-    recordTypeMapping[consts.USER] = function (){ return 'uid' };
+    recordTypeMapping[consts.USER] = function (userIdsToPickFrom){ return rawValueGenerator.pickUserIdFromList(userIdsToPickFrom)};
 
 }());
