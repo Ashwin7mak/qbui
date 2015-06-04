@@ -1,20 +1,13 @@
-#!/bin/sh
-set -x #echo on
-
-export http_proxy=http://qypprdproxy02.ie.intuit.net:80
-export no_proxy='.intuit.net, .intuit.com, 10.*.*.*, localhost, 127.0.0.1'
-
+#!/bin/sh -x
 BUCKET=s3://${S3_BUCKET:="quickbase-preprod-software"}
 cd ${WORKSPACE}
 
 FILES=$(find -name 'ui-phoenix*.zip')
-S3=/app/jenkins/s3cmd-1.5.0-rc1/s3cmd
 
 echo $BUILD_NUMBER > /tmp/ui.latest.version
-
-$S3 put /tmp/ui.latest.version $BUCKET/rpms/
+aws s3 cp /tmp/ui.latest.version $BUCKET/rpms/
+rm -f /tmp/ui.latest.version
 
 for file in $FILES; do
-	component=$(echo $file | awk -F'/' '{ print $2 }')
-	$S3 put $file $BUCKET/rpms/ui/
+    aws s3 cp $file $BUCKET/rpms/ui/
 done
