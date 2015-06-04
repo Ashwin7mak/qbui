@@ -9,11 +9,11 @@
 
     chance.mixin({
         'user' : function (options){
-            var first = options.first ? options.first : chance.first(options);
-            var last = options.last ? options.last : chance.last(options);
-            var screenName = options.screenName ? options.screenName : first.substring(0,1) + last;
-            var email = options.email ? options.email : chance.email(options);
-            var deactivated = options.deactivated ? options.deactivated : false;
+            var first = options && options.firstName ? options.firstName : chance.first(options);
+            var last = options && options.lastName ? options.lastName : chance.last(options);
+            var screenName = options && options.screenName ? options.screenName : first.substring(0,1) + last;
+            var email = options && options.email ? options.email : chance.email(options);
+            var deactivated = options && (typeof options.deactivated !== 'undefined') ? options.deactivated : chance.bool();
 
             return {
                 "firstName": first,
