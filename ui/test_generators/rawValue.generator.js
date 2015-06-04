@@ -38,7 +38,7 @@
             var month = date.month;
             var day = date.day;
 
-            return year + '-' + month + '-' +day;
+            return year + '-' + month + '-' + day;
         },
 
         'apiFormattedDateTime' : function(options) {
