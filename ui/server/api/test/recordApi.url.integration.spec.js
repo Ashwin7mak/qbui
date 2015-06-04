@@ -6,6 +6,7 @@ var config = require('../../config/environment');
 var recordBase = require('./recordApi.base')(config);
 var Promise = require('bluebird');
 var _ = require('lodash');
+var testConsts = require('./api.test.constants');
 
 /**
  * Integration test for URL field formatting
@@ -88,7 +89,7 @@ describe('API - URL record test cases - ', function () {
     * Integration test that validates URL records formatting with no field property flags set
     */
     it('Should create and retrieve url display records when no format flags set', function (done) {
-        this.timeout(30000);
+        this.timeout(testConsts.INTEGRATION_TIMEOUT);
         recordBase.createApp(appWithNoFlags).then(function (appResponse) {
             var app = JSON.parse(appResponse.body);
             var urlField;
@@ -167,7 +168,7 @@ describe('API - URL record test cases - ', function () {
     * Integration test that validates URL records formatting with 'Don't Show HTTP' field property flags set
     */
     it('Should create and retrieve url display records when "dont show http" format flags set', function (done) {
-        this.timeout(30000);
+        this.timeout(testConsts.INTEGRATION_TIMEOUT);
         recordBase.createApp(appWithDontShowHttpFlag).then(function (appResponse) {
             var app = JSON.parse(appResponse.body);
             var urlField;
@@ -246,7 +247,7 @@ describe('API - URL record test cases - ', function () {
      * Integration test that validates URL records formatting with all field property flags set
      */
     it('Should create and retrieve url display records when all format flags set', function (done) {
-        this.timeout(30000);
+        this.timeout(testConsts.INTEGRATION_TIMEOUT);
         recordBase.createApp(appWithAllFlags).then(function (appResponse) {
             var app = JSON.parse(appResponse.body);
             var urlField;

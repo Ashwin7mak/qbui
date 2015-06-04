@@ -15,6 +15,8 @@ apply plugin: 'com.moowork.grunt'
 apply plugin: 'com.moowork.node'
 apply plugin: 'sonar-runner'
 
+//grab the current working directory to use later on
+def cwd = project.getProjectDir().absolutePath
 
 //******************************************************
 //  Build dependencies...local
@@ -154,6 +156,18 @@ task gruntCiE2ETestsNoColor(type: GruntTask) {
 
 task cleanBuildDir (type: Delete) {
     delete 'build'
+}
+
+//in cloud9 check if the server is up
+task checkForApiUp {
+    doFirst {
+        tasks.invokeCheckForApiUp.execute()
+    }
+}
+
+task invokeCheckForApiUp(type:Exec) {
+    executable cwd + "/../tools/ci/checkForApiUp.sh"
+    args '300'
 }
 
 //******************************************************
