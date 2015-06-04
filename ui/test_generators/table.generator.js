@@ -12,41 +12,6 @@
     var Chance = require('chance');
     var chance = new Chance();
 
-    var availableFieldTypes = [
-        consts.CHECKBOX,
-        consts.TEXT,
-        consts.MULTI_LINE_TEXT,
-        consts.BIGTEXT,
-        consts.PHONE_NUMBER,
-        consts.DATE_TIME,
-        consts.FORMULA_DATE_TIME,
-        consts.DATE,
-        consts.DURATION,
-        consts.FORMULA_DURATION,
-        consts.FORMULA_DATE,
-        consts.FORMULA_TIME_OF_DAY,
-        consts.TIME_OF_DAY,
-        consts.NUMERIC,
-        consts.FORMULA_NUMERIC,
-        consts.CURRENCY,
-        consts.RATING,
-        consts.FORMULA_CURRENCY,
-        consts.PERCENT,
-        consts.FORMULA_PERCENT,
-        consts.URL,
-        consts.EMAIL_ADDRESS,
-        consts.USER,
-        consts.FORMULA_USER,
-        consts.FILE_ATTACHMENT,
-        consts.REPORT_LINK,
-        consts.SUMMARY,
-        consts.LOOKUP,
-        consts.FORMULA_PHONE_NUMBER,
-        consts.FORMULA_URL,
-        consts.FORMULA_CHECKBOX,
-        consts.FORMULA_TEXT,
-        consts.FORMULA_EMAIL_ADDRESS];
-
     //The max number of fields we will generate at random
     var maxRandomFields = 10;
 
@@ -55,10 +20,6 @@
 
         getTableBuilder : function(){
             return tableBuilder.builder();
-        },
-
-        getAvailableFieldTypes : function(){
-            return availableFieldTypes;
         },
 
         getMaxNumberRandomFields : function(){
@@ -208,7 +169,7 @@
      */
     function generateTableWithAllFieldTypes(){
         var builderInstance = getTableBuilderWithName();
-
+        var availableFieldTypes = fieldGenerator.getAvailableFieldTypes()
         for(var i= 0; i< availableFieldTypes.length; i++){
             var field = fieldGenerator.generateBaseField(availableFieldTypes[i]);
             builderInstance.withField(field);

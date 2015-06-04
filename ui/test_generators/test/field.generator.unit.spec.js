@@ -13,7 +13,7 @@ var assert = require('assert');
 /**
  * Unit tests for field generator
  */
-describe('Field generator unit test', function () {
+ddescribe('Field generator unit test', function () {
     /**
      * DataProvider containing Records, FieldProperties and record display expectations PhoneNumber fields
      */
@@ -63,15 +63,15 @@ describe('Field generator unit test', function () {
 
                 console.log('field: ' + JSON.stringify(field));
 
-                if(!field[fieldConsts.fieldKeys.NAME]){
+                if(!field[fieldConsts.NAME]){
                     assert.fail('Fields should be generated with a name');
                 }
 
-                if(!field[fieldConsts.fieldKeys.TYPE]){
+                if(!field[fieldConsts.TYPE]){
                     assert.fail('Fields should be generated with a type');
                 }
 
-                assert.equal(field[fieldConsts.fieldKeys.TYPE], entry.fieldType, 'The type passed should now appear on the object' + field);
+                assert.equal(field[fieldConsts.TYPE], entry.fieldType, 'The type passed should now appear on the object' + field);
                 done();
             });
         });
@@ -87,23 +87,23 @@ describe('Field generator unit test', function () {
                 fieldGenerator.applyDefaults(field);
                 console.log('field: ' + JSON.stringify(field));
 
-                if(!field[fieldConsts.fieldKeys.NAME]){
+                if(!field[fieldConsts.NAME]){
                     assert.fail('Fields should be generated with a name');
                 }
 
-                if(!field[fieldConsts.fieldKeys.TYPE]){
+                if(!field[fieldConsts.TYPE]){
                     assert.fail('Fields should be generated with a type');
                 }
 
-                if(field[fieldConsts.fieldKeys.BUILT_IN] == true){
+                if(field[fieldConsts.BUILT_IN] == true){
                     assert.fail('Fields should be have builtin set after applying defaults');
                 }
 
-                if(!field[fieldConsts.fieldKeys.DATA_IS_COPYABLE] == true){
+                if(!field[fieldConsts.DATA_IS_COPYABLE] == true){
                     assert.fail('Fields should have dataIsCopyable set after applying defaults');
                 }
 
-                if(!field[fieldConsts.fieldKeys.INCLUDE_IN_QUICKSEARCH] == true){
+                if(!field[fieldConsts.INCLUDE_IN_QUICKSEARCH] == true){
                     assert.fail('Fields should have includeInQuicksearch set after applying defaults');
                 }
 

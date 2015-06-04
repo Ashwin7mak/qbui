@@ -1,6 +1,5 @@
 /**
- * relationship.generator.js will generate valid json for a relationship object given a master and detail table id and
- * a master and detail field id
+ * relationship.generator.js will generate valid json for a relationship object given a master and detail table
  * Created by cschneider1 on 5/28/15.
  */
 (function () {
@@ -9,7 +8,6 @@
     var tableConsts = require('./table.constants')
     var fieldConsts = require('./field.constants')
     var appConsts = require('./app.constants')
-    var rawValueGenerator = require('./rawValue.generator');
     var Chance = require('chance');
     var chance = new Chance();
     var _ = require('lodash');
@@ -17,20 +15,35 @@
 
     module.exports = {
 
+        /**
+         * Retrieve the relationship builder to build a field peicemeal
+         * @returns {*|{build, cloneIntoBuilder, withId, withAppId, withDescription, withMasterAppId,
+         *     withMasterTableId, withMasterFieldId, withDetailAppId, withDetailTableId, withDetailFieldId,
+         *     withReferentialIntegrity, withCascadeDelete}}
+         */
         getRelationshipBuilder: function () {
             var builderInstance = relationshipBuilder.builder();
             return builderInstance;
         },
 
-
+        /**
+         * Return the string representation of the relationship object
+         * @param relationship
+         */
         relationshipToJsonString: function (relationship) {
             return JSON.stringify(relationship);
         },
 
         /**
-         * Generate an app object with a specified number of tables. Fields on those tables will be generated at random
-         * @param numTables
-         * @returns {*|{singleRun, autoWatch}} the app object
+         * Generate a relationship based on two existing tables that are extracted from the app by id. This method will fail if we are unable to find
+         * a field with unique=true on the master table and a field of the same type on the detail table.
+         * </p>
+         * This relationship also relies on the fact that the app has been fully populated with id's as those are used
+         * as reference within the relationship object.
+         * @param app
+         * @param masterTableId
+         * @param detailTableId
+         * @returns {*|{singleRun, autoWatch}}
          */
         generateRelationshipFromApp: function (app, masterTableId, detailTableId) {
 
@@ -60,20 +73,29 @@
         },
 
         /**
-         * Generate an app object with a specified number of tables. Fields on those tables will be generated at random
-         * @param numTables
-         * @returns {*|{singleRun, autoWatch}} the app object
+         * Generate a relationship based on two existing tables. This method will fail if we are unable to find
+         * a field with unique= true on the master table and a field of the same type on the detail table.
+         * </p>
+         * This relationship also relies on the fact that the app has been fully populated with id's as those are used
+         * as reference within the relationship object.
+         *
+         * @param masterTable
+         * @param detailTable
+         * @returns {*|{singleRun, autoWatch}}
          */
         generateRelationship: function (masterTable, detailTable) {
 
             var finalMasterField;
             var finalDetailField;
             var detailField;
+            var fieldType;
 
             //loop over all of the fields in the master table and pick a matching master and detail field
             //start at the end of the list so that we can pick fields that are not recordId
             _.eachRight(masterTable[tableConsts.FIELDS], function(masterField){
-                if(masterField[fieldConsts.scalarFieldKeys.UNIQUE]) {
+                fieldType = masterField[fieldConsts.TYPE];
+
+                if(masterField[fieldConsts[fieldType].UNIQUE]) {
                     detailField = pickDetailField(masterField, detailTable);
 
                     if (!finalDetailField && detailField) {
@@ -92,9 +114,16 @@
         },
 
         /**
-         * Generate an app object with a specified number of tables. Fields on those tables will be generated at random
-         * @param numTables
-         * @returns {*|{singleRun, autoWatch}} the app object
+         * Leverage the relationship builder to build a relationship with the specified values. This will not check for
+         * undefined properties. Caller beware.
+         * @param description
+         * @param masterTable
+         * @param masterField
+         * @param detailTable
+         * @param detailField
+         * @param referentialIntegrity
+         * @param cascadeDelete
+         * @returns {*|{singleRun, autoWatch}}
          */
         generateRelationshipWithValues: function (description, masterTable, masterField, detailTable, detailField, referentialIntegrity, cascadeDelete) {
             var builderInstance = this.getRelationshipBuilder();
@@ -107,16 +136,22 @@
             builderInstance.withDescription(description);
             builderInstance.withMasterAppId(masterAppId);
             builderInstance.withMasterTableId(masterTableId);
-            builderInstance.withMasterFieldId(masterField[fieldConsts.fieldKeys.ID]);
+            builderInstance.withMasterFieldId(masterField[fieldConsts.ID]);
             builderInstance.withDetailAppId(detailAppId);
             builderInstance.withDetailTableId(detailTableId);
-            builderInstance.withDetailFieldId(detailField[fieldConsts.fieldKeys.ID]);
+            builderInstance.withDetailFieldId(detailField[fieldConsts.ID]);
             builderInstance.withReferentialIntegrity(referentialIntegrity);
             builderInstance.withCascadeDelete(cascadeDelete);
 
             return builderInstance.build();
         },
 
+        /**
+         * Validate that all properties have been set and are of the correct type. This method will not check that
+         * the table or field ids are valid and exist on the app. Caller beware.
+         * @param relationship
+         * @returns {boolean}
+         */
         validateRelationshipProperties : function(relationship){
 
            var relationshipPropsValid = true;
@@ -166,8 +201,15 @@
 
     };
 
+    /**
+     * Given a master field chosen for a relationship. Find a corresponding field of the same type in the detail table.
+     * This method will return undefined if no field of the correct type exists on the detail table.
+     * @param masterField
+     * @param detailTable
+     * @returns {*}
+     */
     function pickDetailField(masterField, detailTable) {
-        var fieldType = masterField[fieldConsts.fieldKeys.TYPE];
+        var fieldType = masterField[fieldConsts.TYPE];
 
         var detailField;
         _.forEach(detailTable[tableConsts.FIELDS], function (candidateField) {
@@ -176,7 +218,7 @@
                 return;
             }
 
-            if (candidateField[fieldConsts.fieldKeys.TYPE] === fieldType) {
+            if (candidateField[fieldConsts.TYPE] === fieldType) {
                 detailField = candidateField;
             }
         });

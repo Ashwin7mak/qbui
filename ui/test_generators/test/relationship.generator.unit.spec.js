@@ -48,6 +48,7 @@ ddescribe('User generator unit test', function () {
         var generatedTables = generatedApp[appConsts.TABLES];
         var fieldIndex;
         var currentFields;
+        var currentFieldType;
 
         var generatedTableMap = {};
 
@@ -63,8 +64,9 @@ ddescribe('User generator unit test', function () {
             currentFields = table[tableConsts.FIELDS];
 
             _.forEach(currentFields, function(field){
-                field[fieldConsts.fieldKeys.ID] = fieldIndex;
-                field[fieldConsts.scalarFieldKeys.UNIQUE] = true;
+                currentFieldType = field[fieldConsts.TYPE];
+                field[fieldConsts.ID] = fieldIndex;
+                field[fieldConsts[currentFieldType].UNIQUE] = true;
                 fieldIndex++;
             });
         });
