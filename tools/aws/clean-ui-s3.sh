@@ -1,25 +1,17 @@
-#!/bin/sh
-set -x #echo on
-
-export http_proxy=http://qypprdproxy02.ie.intuit.net:80
-export no_proxy='.intuit.net, .intuit.com, 10.*.*.*, localhost, 127.0.0.1'
-
-# Number of builds difference between current and prior we want to keep 5 builds around the value would be 5
+#!/bin/sh -x
 NUM_OF_BUILDS_TO_KEEP=5
 BUCKET=s3://${S3_BUCKET:="quickbase-preprod-software"}
-cd ${WORKSPACE}
-S3=/app/jenkins/s3cmd-1.5.0-rc1/s3cmd
 SERVICES="ui"
 for service in $SERVICES; do
-	for line in $($S3 ls $BUCKET/rpms/$service/ | grep '\.zip'); do
-		file=$(echo $line | grep '\.zip')
-		if [[ ! -z "$file" ]]; then
-			id=$(echo $file | awk -F'.' '{ print $2 }' | awk -F'-' '{ print $2 }')
-			diff=$(($BUILD_NUMBER-$id))
-			if (( $diff > $NUM_OF_BUILDS_TO_KEEP )); then
-				echo "Removing S3 artifact: $file"
-				$S3 rm $file
-			fi
-		fi
-	done
+    aws s3 ls $BUCKET/rpms/$service/ | while read -r line; do
+        file=$(echo $line | awk '{print $4}')
+        if [[ ! -z "$file" ]]; then
+            id=$(echo $file | awk 'match($0, /ui-phoenix_[0-9]+\.[0-9]+-([0-9]+)\.zip/, m) { print m[1] }')
+            diff=$(($BUILD_NUMBER-$id))
+            if (( $diff > $NUM_OF_BUILDS_TO_KEEP )); then
+                echo "Removing S3 artifact: $file"
+                aws s3 rm $BUCKET/rpms/$service/$file
+            fi
+        fi
+    done
 done
