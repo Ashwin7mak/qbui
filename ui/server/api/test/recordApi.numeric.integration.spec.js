@@ -6,6 +6,8 @@ var config = require('../../config/environment');
 var recordBase = require('./recordApi.base')(config);
 var Promise = require('bluebird');
 var _ = require('lodash');
+var testConsts = require('./api.test.constants');
+
 /*
  * We can't use JSON.parse() with records because it is possible to lose decimal precision as a
  * result of the JavaScript implementation of its single numeric data type. In JS, all numbers are
@@ -117,7 +119,7 @@ describe('API - Numeric record test cases', function () {
      * Integration test that validates Numeric records formatting with no field property flags set
      */
     it('Should create and retrieve numeric display records when no format flags set', function (done) {
-        this.timeout(30000);
+        this.timeout(testConsts.INTEGRATION_TIMEOUT);
         recordBase.createApp(appWithNoFlags).then(function (appResponse) {
             var app = JSON.parse(appResponse.body);
             var numericField;
@@ -213,7 +215,7 @@ describe('API - Numeric record test cases', function () {
      * Integration test that validates Numeric records formatting with all field property flags set
      */
     it('Should create and retrieve numeric display records when all format flags set', function (done) {
-        this.timeout(30000);
+        this.timeout(testConsts.INTEGRATION_TIMEOUT);
         recordBase.createApp(appWithAllFlags).then(function (appResponse) {
             var app = JSON.parse(appResponse.body);
             var numericField;
