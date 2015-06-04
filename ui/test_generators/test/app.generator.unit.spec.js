@@ -16,7 +16,7 @@ var assert = require('assert');
 /**
  * Unit tests for app generator
  */
-ddescribe('App generator unit test', function () {
+describe('App generator unit test', function () {
 
     function appWithNumTablesProvider(){
         return [
@@ -115,9 +115,9 @@ ddescribe('App generator unit test', function () {
 
         tableToFieldToFieldTypeMap['table 2'] = {};
         tableToFieldToFieldTypeMap['table 2']['field 1'] = consts.NUMERIC;
-        tableToFieldToFieldTypeMap['table 2']['field 1'] = consts.NUMERIC;
-        tableToFieldToFieldTypeMap['table 2']['field 1'] = consts.NUMERIC;
-        tableToFieldToFieldTypeMap['table 2']['field 1'] = consts.NUMERIC;
+        tableToFieldToFieldTypeMap['table 2']['field 2'] = consts.NUMERIC;
+        tableToFieldToFieldTypeMap['table 2']['field 3'] = consts.NUMERIC;
+        tableToFieldToFieldTypeMap['table 2']['field 4'] = consts.NUMERIC;
 
 
         return [

@@ -7,6 +7,9 @@
 var should = require('should');
 var relationshipGenerator = require('../relationship.generator');
 var relationshipConsts = require('../relationship.constants');
+var appConsts = require('../app.constants');
+var tableConsts = require('../table.constants');
+var fieldConsts = require('../field.constants');
 var consts = require('../../server/api/constants');
 var appGenerator = require('../app.generator');
 var _ = require('lodash');
@@ -15,87 +18,189 @@ var assert = require('assert');
 /**
  * Unit tests for relationship generator
  */
-describe('User generator unit test', function () {
+ddescribe('User generator unit test', function () {
 
     function relationshipProvider(){
         var tableMap = {};
+        tableMap['App1Table0'] = {};
         tableMap['App1Table1'] = {};
         tableMap['App1Table2'] = {};
         tableMap['App1Table3'] = {};
-        tableMap['App1Table4'] = {};
 
-        tableMap['App1Table1']['textField1'] = consts.TEXT;
-        tableMap['App1Table1']['numericField1'] = consts.NUMERIC;
+        tableMap['App1Table0']['textField0'] = consts.TEXT;
+        tableMap['App1Table0']['numericField0'] = consts.NUMERIC;
+        tableMap['App1Table0']['dateField0'] = consts.DATE;
+
         tableMap['App1Table1']['dateField1'] = consts.DATE;
 
-        tableMap['Table2']['dateField2'] = consts.DATE;
+        tableMap['App1Table2']['numericField2'] = consts.NUMERIC;
 
-        tableMap['Table3']['numericField3'] = consts.NUMERIC;
+        tableMap['App1Table3']['textField3'] = consts.TEXT;
 
-        tableMap['Table4']['numericField3'] = consts.TEXT;
+        var generatedApp = appGenerator.generateAppWithTablesFromMap(tableMap);
 
-        appGenerator.generateAppWithTablesFromMap();
+        var appId = 'A_0';
+        generatedApp[appConsts.ID] = appId;
+
+        var tableIdPrefix = 'T_';
+        var tableIndex = 0;
+
+        var generatedTables = generatedApp[appConsts.TABLES];
+        var fieldIndex;
+        var currentFields;
+
+        var generatedTableMap = {};
+
+        _.forEach(generatedTables, function(table){
+
+            table[tableConsts.ID] = tableIdPrefix + tableIndex;
+            table[tableConsts.APP_ID] = appId;
+            generatedTableMap[tableIdPrefix + tableIndex] = table;
+            tableIndex++;
+
+            fieldIndex = 0;
+
+            currentFields = table[tableConsts.FIELDS];
+
+            _.forEach(currentFields, function(field){
+                field[fieldConsts.fieldKeys.ID] = fieldIndex;
+                field[fieldConsts.scalarFieldKeys.UNIQUE] = true;
+                fieldIndex++;
+            });
+        });
+
         return [
-            {message: "Generate a relationship on App1->Table1->dateField1", userOptions : {firstName: 'Cleo'}, expectedKeyValue: { firstName: 'Cleo'}},
-            {message: "Generate user override last name", userOptions : {lastName: 'Schneider'}, expectedKeyValue: { lastName: 'Schneider'}},
-            {message: "Generate user override screen name", userOptions : {screenName: 'cschneider'}, expectedKeyValue: { screenName: 'cschneider'}},
-            {message: "Generate user override email", userOptions : {email: 'cleo_schneider@intuit.com'}, expectedKeyValue: { email: 'cleo_schneider@intuit.com'}},
-            {message: "Generate user override deactivated", userOptions : {deactivated: true}, expectedKeyValue: { deactivated: true}},
-            {message: "Generate user override everything", userOptions : {firstName: 'Cleo', lastName: 'Schneider', screenName: 'cschneider', email: 'cleo_schneider@intuit.com', deactivated: true}, expectedKeyValue: { firstName: 'Cleo', lastName: 'Schneider', screenName: 'cschneider', email: 'cleo_schneider@intuit.com', deactivated: true} }
+            {message: "Generate a relationship on App1->Table1->dateField1: App1->Table2->dateField2", app: generatedApp, masterTable : generatedTableMap['T_0'],
+            detailTable: generatedTableMap['T_1'], expectedRelationship: { appId:appId,  masterAppId: appId, masterTableId: 'T_0',
+            masterFieldId: 2, detailAppId: appId, detailTableId: 'T_1', detailFieldId: 0}},
+
+            {message: "Generate a relationship on App1->Table1->numericField1 : App1->Table3->numericField3", app: generatedApp, masterTable : generatedTableMap['T_0'],
+                detailTable: generatedTableMap['T_2'], expectedRelationship: { appId:appId,  masterAppId: appId, masterTableId: 'T_0',
+                masterFieldId: 1, detailAppId: appId, detailTableId: 'T_2', detailFieldId: 0}},
+
+            {message: "Generate a relationship on App1->Table1->textField1 : App1->Table4->textField4", app: generatedApp, masterTable : generatedTableMap['T_0'],
+                detailTable: generatedTableMap['T_3'], expectedRelationship: { appId:appId,  masterAppId: appId, masterTableId: 'T_0',
+                masterFieldId: 0, detailAppId: appId, detailTableId: 'T_3', detailFieldId: 0}}
         ];
     }
 
     /**
-     * Unit test that validates generating a user with a specified number of tables and a specified number of fields
+     * Unit test that validates generating a relationship with a specified master and detail table
      */
-    describe('test generating a user with some defined values',function(){
-        userWithOverridesGenerator().forEach(function(entry) {
+    describe('test generating a relationship given 2 tables',function(){
+        relationshipProvider().forEach(function(entry) {
             it('Test case: ' + entry.message, function (done) {
-                var options = entry.userOptions;
-                var expectedKeyValuePairs = entry.expectedKeyValue;
+                var expectedRelationship = entry.expectedRelationship;
+                var masterTable = entry.masterTable;
+                var detailTable = entry.detailTable;
 
-                var user = userGenerator.generatePopulatedUser(options);
+                var relationship = relationshipGenerator.generateRelationship(masterTable, detailTable);
 
-                console.log('app: ' + JSON.stringify(user));
+                console.log('relationship: ' + relationshipGenerator.relationshipToJsonString(relationship));
 
-                if(!user[userConsts.FIRST]){
-                    assert.fail('User should be generated with a first name');
+                var validRelationshipObject = relationshipGenerator.validateRelationshipProperties(relationship);
+
+                if(!validRelationshipObject){
+                    assert.fail('Relationship was found invalid ' + relationship);
                 }
 
-                if(!user[userConsts.LAST]){
-                    assert.fail('User should be generated with a last name');
+                if(expectedRelationship[relationshipConsts.APP_ID] !== relationship[relationshipConsts.APP_ID]){
+                    assert.fail('Expected appId ' + expectedRelationship[relationshipConsts.APP_ID] + ' to match actual appId ' + relationship[relationshipConsts.APP_ID]);
                 }
 
-                if(!user[userConsts.SCREEN_NAME]){
-                    assert.fail('User should be generated with a screen name');
+                if(expectedRelationship[relationshipConsts.MASTER_APP_ID] !== relationship[relationshipConsts.MASTER_APP_ID]){
+                    assert.fail('Expected masterAppId ' + expectedRelationship[relationshipConsts.MASTER_APP_ID] + ' to match actual masterAppId ' + relationship[relationshipConsts.APP_ID]);
                 }
 
-                if(!user[userConsts.EMAIL]){
-                    assert.fail('User should be generated with a email');
+                if(expectedRelationship[relationshipConsts.MASTER_TABLE_ID] !== relationship[relationshipConsts.MASTER_TABLE_ID]){
+                    assert.fail('Expected masterTableId ' + expectedRelationship[relationshipConsts.MASTER_TABLE_ID] + ' to match actual masterTableId ' + relationship[relationshipConsts.MASTER_TABLE_ID]);
                 }
 
-                if(typeof user[userConsts.DEACTIVATED] === 'undefined'){
-                    assert.fail('User should be generated with a deactivated value');
+                if(expectedRelationship[relationshipConsts.MASTER_FIELD_ID] !== relationship[relationshipConsts.MASTER_FIELD_ID]){
+                    assert.fail('Expected masterFieldId ' + expectedRelationship[relationshipConsts.MASTER_FIELD_ID] + ' to match actual masterFieldId ' + relationship[relationshipConsts.MASTER_FIELD_ID]);
                 }
 
-                if(expectedKeyValuePairs[userConsts.FIRST] && expectedKeyValuePairs[userConsts.FIRST] !== user[userConsts.FIRST]){
-                    assert.fail('Expected first name ' + expectedKeyValuePairs[userConsts.FIRST] + ' to match actual first name ' + user[userConsts.FIRST]);
+                if(expectedRelationship[relationshipConsts.DETAIL_APP_ID] !== relationship[relationshipConsts.DETAIL_APP_ID]){
+                    assert.fail('Expected detailAppid ' + expectedRelationship[relationshipConsts.DETAIL_APP_ID] + ' to match actual detailAppid ' + relationship[relationshipConsts.DETAIL_APP_ID]);
                 }
 
-                if(expectedKeyValuePairs[userConsts.LAST] && expectedKeyValuePairs[userConsts.LAST] !== user[userConsts.LAST]){
-                    assert.fail('Expected last name ' + expectedKeyValuePairs[userConsts.LAST] + ' to match actual last name ' + user[userConsts.LAST]);
+                if(expectedRelationship[relationshipConsts.DETAIL_TABLE_ID] !== relationship[relationshipConsts.DETAIL_TABLE_ID]){
+                    assert.fail('Expected detailTableId ' + expectedRelationship[relationshipConsts.DETAIL_TABLE_ID] + ' to match actual detailTableId ' + relationship[relationshipConsts.DETAIL_TABLE_ID]);
                 }
 
-                if(expectedKeyValuePairs[userConsts.SCREEN_NAME] && expectedKeyValuePairs[userConsts.SCREEN_NAME] !== user[userConsts.SCREEN_NAME]){
-                    assert.fail('Expected screen name ' + expectedKeyValuePairs[userConsts.SCREEN_NAME] + ' to match actual screen name ' + user[userConsts.SCREEN_NAME]);
+                if(expectedRelationship[relationshipConsts.DETAIL_FIELD_ID] !== relationship[relationshipConsts.DETAIL_FIELD_ID]){
+                    assert.fail('Expected detailFieldId ' + expectedRelationship[relationshipConsts.DETAIL_FIELD_ID] + ' to match actual detailFieldId ' + relationship[relationshipConsts.DETAIL_FIELD_ID]);
                 }
 
-                if(expectedKeyValuePairs[userConsts.EMAIL] && expectedKeyValuePairs[userConsts.EMAIL] !== user[userConsts.EMAIL]){
-                    assert.fail('Expected first email ' + expectedKeyValuePairs[userConsts.EMAIL] + ' to match actual email ' + user[userConsts.EMAIL]);
+                if(typeof expectedRelationship[relationshipConsts.REFERENTIAL_INTEGRITY] === 'boolean' && expectedRelationship[relationshipConsts.REFERENTIAL_INTEGRITY] !== relationship[relationshipConsts.REFERENTIAL_INTEGRITY]){
+                    assert.fail('Expected referentialIntegrity ' + expectedRelationship[relationshipConsts.REFERENTIAL_INTEGRITY] + ' to match actual referentialIntegrity ' + relationship[relationshipConsts.REFERENTIAL_INTEGRITY]);
                 }
 
-                if(typeof expectedKeyValuePairs[userConsts.DEACTIVATED] !== 'undefined' && expectedKeyValuePairs[userConsts.DEACTIVATED] !== user[userConsts.DEACTIVATED] ){
-                    assert.fail('Expected deactivated = ' + expectedKeyValuePairs[userConsts.DEACTIVATED] + ' to match actual deactivated = ' + user[userConsts.DEACTIVATED]);
+                if(typeof expectedRelationship[relationshipConsts.CASCADE_DELETE] === 'boolean' && expectedRelationship[relationshipConsts.CASCADE_DELETE] !== relationship[relationshipConsts.CASCADE_DELETE]){
+                    assert.fail('Expected cascadeDelete ' + expectedRelationship[relationshipConsts.CASCADE_DELETE] + ' to match actual cascadeDelete ' + relationship[relationshipConsts.CASCADE_DELETE]);
+                }
+
+                done();
+            });
+        });
+    });
+
+    /**
+     * Unit test that validates generating a relationship with a specified app and master and detail tableIds
+     */
+    describe('test generating a relationship given an app and two table ids',function(){
+        relationshipProvider().forEach(function(entry) {
+            it('Test case: ' + entry.message, function (done) {
+                var expectedRelationship = entry.expectedRelationship;
+                var masterTable = entry.masterTable;
+                var detailTable = entry.detailTable;
+
+                var app = entry.app;
+
+                var relationship = relationshipGenerator.generateRelationshipFromApp(app, masterTable[tableConsts.ID], detailTable[tableConsts.ID]);
+
+                console.log('relationship: ' + relationshipGenerator.relationshipToJsonString(relationship));
+
+                var validRelationshipObject = relationshipGenerator.validateRelationshipProperties(relationship);
+
+                if(!validRelationshipObject){
+                    assert.fail('Relationship was found invalid ' + relationship);
+                }
+
+                if(expectedRelationship[relationshipConsts.APP_ID] !== relationship[relationshipConsts.APP_ID]){
+                    assert.fail('Expected appId ' + expectedRelationship[relationshipConsts.APP_ID] + ' to match actual appId ' + relationship[relationshipConsts.APP_ID]);
+                }
+
+                if(expectedRelationship[relationshipConsts.MASTER_APP_ID] !== relationship[relationshipConsts.MASTER_APP_ID]){
+                    assert.fail('Expected masterAppId ' + expectedRelationship[relationshipConsts.MASTER_APP_ID] + ' to match actual masterAppId ' + relationship[relationshipConsts.APP_ID]);
+                }
+
+                if(expectedRelationship[relationshipConsts.MASTER_TABLE_ID] !== relationship[relationshipConsts.MASTER_TABLE_ID]){
+                    assert.fail('Expected masterTableId ' + expectedRelationship[relationshipConsts.MASTER_TABLE_ID] + ' to match actual masterTableId ' + relationship[relationshipConsts.MASTER_TABLE_ID]);
+                }
+
+                if(expectedRelationship[relationshipConsts.MASTER_FIELD_ID] !== relationship[relationshipConsts.MASTER_FIELD_ID]){
+                    assert.fail('Expected masterFieldId ' + expectedRelationship[relationshipConsts.MASTER_FIELD_ID] + ' to match actual masterFieldId ' + relationship[relationshipConsts.MASTER_FIELD_ID]);
+                }
+
+                if(expectedRelationship[relationshipConsts.DETAIL_APP_ID] !== relationship[relationshipConsts.DETAIL_APP_ID]){
+                    assert.fail('Expected detailAppid ' + expectedRelationship[relationshipConsts.DETAIL_APP_ID] + ' to match actual detailAppid ' + relationship[relationshipConsts.DETAIL_APP_ID]);
+                }
+
+                if(expectedRelationship[relationshipConsts.DETAIL_TABLE_ID] !== relationship[relationshipConsts.DETAIL_TABLE_ID]){
+                    assert.fail('Expected detailTableId ' + expectedRelationship[relationshipConsts.DETAIL_TABLE_ID] + ' to match actual detailTableId ' + relationship[relationshipConsts.DETAIL_TABLE_ID]);
+                }
+
+                if(expectedRelationship[relationshipConsts.DETAIL_FIELD_ID] !== relationship[relationshipConsts.DETAIL_FIELD_ID]){
+                    assert.fail('Expected detailFieldId ' + expectedRelationship[relationshipConsts.DETAIL_FIELD_ID] + ' to match actual detailFieldId ' + relationship[relationshipConsts.DETAIL_FIELD_ID]);
+                }
+
+                if(typeof expectedRelationship[relationshipConsts.REFERENTIAL_INTEGRITY] === 'boolean' && expectedRelationship[relationshipConsts.REFERENTIAL_INTEGRITY] !== relationship[relationshipConsts.REFERENTIAL_INTEGRITY]){
+                    assert.fail('Expected referentialIntegrity ' + expectedRelationship[relationshipConsts.REFERENTIAL_INTEGRITY] + ' to match actual referentialIntegrity ' + relationship[relationshipConsts.REFERENTIAL_INTEGRITY]);
+                }
+
+                if(typeof expectedRelationship[relationshipConsts.CASCADE_DELETE] === 'boolean' && expectedRelationship[relationshipConsts.CASCADE_DELETE] !== relationship[relationshipConsts.CASCADE_DELETE]){
+                    assert.fail('Expected cascadeDelete ' + expectedRelationship[relationshipConsts.CASCADE_DELETE] + ' to match actual cascadeDelete ' + relationship[relationshipConsts.CASCADE_DELETE]);
                 }
 
                 done();

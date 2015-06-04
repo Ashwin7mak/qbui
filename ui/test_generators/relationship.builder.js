@@ -18,17 +18,50 @@
                 },
 
                 cloneIntoBuilder: function (relationship) {
-                    relationshipUnderConstruction[relationshipConstants.ID] = relationship[relationshipConstants.ID];
-                    relationshipUnderConstruction[relationshipConstants.APP_ID] = relationship[relationshipConstants.APP_ID];
-                    relationshipUnderConstruction[relationshipConstants.DESCRIPTION] = relationship[relationshipConstants.DESCRIPTION];
-                    relationshipUnderConstruction[relationshipConstants.MASTER_APP_ID] = relationship[relationshipConstants.MASTER_APP_ID];
-                    relationshipUnderConstruction[relationshipConstants.MASTER_TABLE_ID] = relationship[relationshipConstants.MASTER_TABLE_ID]
-                    relationshipUnderConstruction[relationshipConstants.MASTER_FIELD_ID] = relationship[relationshipConstants.MASTER_FIELD_ID]
-                    relationshipUnderConstruction[relationshipConstants.DETAIL_APP_ID] = relationship[relationshipConstants.DETAIL_APP_ID]
-                    relationshipUnderConstruction[relationshipConstants.DETAIL_TABLE_ID] = relationship[relationshipConstants.DETAIL_TABLE_ID]
-                    relationshipUnderConstruction[relationshipConstants.DETAIL_FIELD_ID] = relationship[relationshipConstants.DETAIL_FIELD_ID]
-                    relationshipUnderConstruction[relationshipConstants.REFERENTIAL_INTEGRITY] = relationship[relationshipConstants.REFERENTIAL_INTEGRITY]
-                    relationshipUnderConstruction[relationshipConstants.CASCADE_DELETE] = relationship[relationshipConstants.CASCADE_DELETE]
+                    if(relationship[relationshipConstants.ID]) {
+                        relationshipUnderConstruction[relationshipConstants.ID] = relationship[relationshipConstants.ID];
+                    }
+
+                    if(relationship[relationshipConstants.APP_ID]) {
+                        relationshipUnderConstruction[relationshipConstants.APP_ID] = relationship[relationshipConstants.APP_ID];
+                    }
+
+                    if(relationship[relationshipConstants.DESCRIPTION]) {
+                        relationshipUnderConstruction[relationshipConstants.DESCRIPTION] = relationship[relationshipConstants.DESCRIPTION];
+                    }
+
+                    if(relationship[relationshipConstants.MASTER_APP_ID]) {
+                        relationshipUnderConstruction[relationshipConstants.MASTER_APP_ID] = relationship[relationshipConstants.MASTER_APP_ID];
+                    }
+
+                    if(relationship[relationshipConstants.MASTER_TABLE_ID]) {
+                        relationshipUnderConstruction[relationshipConstants.MASTER_TABLE_ID] = relationship[relationshipConstants.MASTER_TABLE_ID];
+                    }
+
+                    if(relationship[relationshipConstants.MASTER_FIELD_ID]) {
+
+                        relationshipUnderConstruction[relationshipConstants.MASTER_FIELD_ID] = relationship[relationshipConstants.MASTER_FIELD_ID];
+                    }
+
+                    if(relationship[relationshipConstants.DETAIL_APP_ID]) {
+                        relationshipUnderConstruction[relationshipConstants.DETAIL_APP_ID] = relationship[relationshipConstants.DETAIL_APP_ID];
+                    }
+
+                    if(relationship[relationshipConstants.DETAIL_TABLE_ID]) {
+                        relationshipUnderConstruction[relationshipConstants.DETAIL_TABLE_ID] = relationship[relationshipConstants.DETAIL_TABLE_ID];
+                    }
+
+                    if(relationship[relationshipConstants.DETAIL_FIELD_ID]) {
+                        relationshipUnderConstruction[relationshipConstants.DETAIL_FIELD_ID] = relationship[relationshipConstants.DETAIL_FIELD_ID];
+                    }
+
+                    if(typeof relationship[relationshipConstants.REFERENTIAL_INTEGRITY] === 'boolean') {
+                        relationshipUnderConstruction[relationshipConstants.REFERENTIAL_INTEGRITY] = relationship[relationshipConstants.REFERENTIAL_INTEGRITY];
+                    }
+
+                    if(typeof relationship[relationshipConstants.CASCADE_DELETE] === 'boolean') {
+                        relationshipUnderConstruction[relationshipConstants.CASCADE_DELETE] = relationship[relationshipConstants.CASCADE_DELETE];
+                    }
 
                     return this;
                 },
@@ -78,7 +111,7 @@
                 },
 
                 withDetailFieldId : function(detailFieldId){
-                    relationshipUnderConstruction[relationshipConstants.REFERENTIAL_INTEGRITY] = referentialIntegrity;
+                    relationshipUnderConstruction[relationshipConstants.DETAIL_FIELD_ID] = detailFieldId;
                     return this;
                 },
 
