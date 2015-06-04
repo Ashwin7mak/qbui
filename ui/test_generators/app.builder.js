@@ -16,11 +16,11 @@
 
             return {
                 build: function () {
-                    if(appUnderConstruction[appRelationships.TABLES]) {
+                    if(appTables.length > 0) {
                         appUnderConstruction[appConstants.TABLES] = appTables;
                     }
 
-                    if(appUnderConstruction[appRelationships.RELATIONSHIPS]) {
+                    if(appRelationships.length > 0) {
                         appUnderConstruction[appRelationships.RELATIONSHIPS] = appRelationships;
                     }
 

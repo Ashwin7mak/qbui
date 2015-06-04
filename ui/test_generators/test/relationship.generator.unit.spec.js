@@ -5,49 +5,38 @@
 'use strict';
 
 var should = require('should');
-var userGenerator = require('../user.generator');
-var userConsts = require('../user.constants');
+var relationshipGenerator = require('../relationship.generator');
+var relationshipConsts = require('../relationship.constants');
+var consts = require('../../server/api/constants');
+var appGenerator = require('../app.generator');
 var _ = require('lodash');
 var assert = require('assert');
 
 /**
- * Unit tests for user generator
+ * Unit tests for relationship generator
  */
-ddescribe('User generator unit test', function () {
+describe('User generator unit test', function () {
 
-    /**
-     * Unit test that validates generating a user with no options present
-     */
-    describe('test generating an app with a specified number of tables',function(){
+    function relationshipProvider(){
+        var tableMap = {};
+        tableMap['App1Table1'] = {};
+        tableMap['App1Table2'] = {};
+        tableMap['App1Table3'] = {};
+        tableMap['App1Table4'] = {};
 
-        var user = userGenerator.generateUser();
+        tableMap['App1Table1']['textField1'] = consts.TEXT;
+        tableMap['App1Table1']['numericField1'] = consts.NUMERIC;
+        tableMap['App1Table1']['dateField1'] = consts.DATE;
 
-        console.log('user: ' + JSON.stringify(user));
+        tableMap['Table2']['dateField2'] = consts.DATE;
 
-        if(!user[userConsts.FIRST]){
-            assert.fail('User should be generated with a first name');
-        }
+        tableMap['Table3']['numericField3'] = consts.NUMERIC;
 
-        if(!user[userConsts.LAST]){
-            assert.fail('User should be generated with a last name');
-        }
+        tableMap['Table4']['numericField3'] = consts.TEXT;
 
-        if(!user[userConsts.SCREEN_NAME]){
-            assert.fail('User should be generated with a screen name');
-        }
-
-        if(!user[userConsts.EMAIL]){
-            assert.fail('User should be generated with a email');
-        }
-
-        if(typeof user[userConsts.DEACTIVATED] === 'undefined'){
-            assert.fail('User should be generated with a deactivated value');
-        }
-    });
-
-    function userWithOverridesGenerator(){
+        appGenerator.generateAppWithTablesFromMap();
         return [
-            {message: "Generate user override first name", userOptions : {firstName: 'Cleo'}, expectedKeyValue: { firstName: 'Cleo'}},
+            {message: "Generate a relationship on App1->Table1->dateField1", userOptions : {firstName: 'Cleo'}, expectedKeyValue: { firstName: 'Cleo'}},
             {message: "Generate user override last name", userOptions : {lastName: 'Schneider'}, expectedKeyValue: { lastName: 'Schneider'}},
             {message: "Generate user override screen name", userOptions : {screenName: 'cschneider'}, expectedKeyValue: { screenName: 'cschneider'}},
             {message: "Generate user override email", userOptions : {email: 'cleo_schneider@intuit.com'}, expectedKeyValue: { email: 'cleo_schneider@intuit.com'}},

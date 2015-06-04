@@ -16,7 +16,7 @@ var assert = require('assert');
 /**
  * Unit tests for app generator
  */
-describe('App generator unit test', function () {
+ddescribe('App generator unit test', function () {
 
     function appWithNumTablesProvider(){
         return [
@@ -43,7 +43,7 @@ describe('App generator unit test', function () {
 
                 var tables = app[appConsts.TABLES];
 
-                if(tables.length !== numTables){
+                if(tables && tables.length !== numTables){
                     assert.fail('Did not find the right number of fields. Expected ' +
                     numTables + '. Table: ' +
                     appGenerator.appToJsonString(app));
@@ -90,7 +90,7 @@ describe('App generator unit test', function () {
                 var fieldsPerTable;
                 _.forEach(tables, function(table) {
                     fieldsPerTable = table[tableConsts.FIELDS];
-                    if(fieldsPerTable.length !== numFields){
+                    if(fieldsPerTable && fieldsPerTable.length !== numFields){
                         assert.fail('Did not find the right number of fields on table. Expected ' +
                         numFields + ' on table named '+ table[tableConsts.NAME] +'. App: ' +
                         appGenerator.appToJsonString(app));
