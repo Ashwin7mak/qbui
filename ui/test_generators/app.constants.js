@@ -1,5 +1,5 @@
 /**
- * app.constants.js holds all constants associated with the app object throughout the entire
+ * app.constants.js holds all constants associated with the app object
  * Created by cschneider1 on 5/29/15.
  */
 (function(){

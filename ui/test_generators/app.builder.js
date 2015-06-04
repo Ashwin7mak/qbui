@@ -35,7 +35,7 @@
                 },
 
                 /************************************************************/
-                /*                      Field Properties                    */
+                /*                      App Properties                      */
                 /************************************************************/
 
                 withId: function (id) {
@@ -70,10 +70,12 @@
 
                 withAdditionalTables : function(tables){
                     appTables.concat(tables)
+                    return this;
                 },
 
                 withTables : function(tables){
                     appTables = tables;
+                    return this;
                 },
 
                 withRelationship : function(relationship){
@@ -82,11 +84,13 @@
                 },
 
                 withAdditionalRelationships : function(relationships){
-                    appTables.concat(relationships)
+                    appTables.concat(relationships);
+                    return this;
                 },
 
                 withRelationships : function(relationships){
                     appTables = relationships;
+                    return this;
                 }
             }
         }
