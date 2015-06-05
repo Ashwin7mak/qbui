@@ -1,7 +1,9 @@
 'use strict';
 
 describe('quickbase api service', function () {
-    var scope, ApiService, $httpBackend, successCallback, errorCallback;
+    var scope, ApiService, $httpBackend;
+    var appId = '1', tableId = '2', fieldId = '3', recordId = '4', reportId = '5';
+    var offset = 0, rows = 10;
 
     beforeEach(function() {
         module('qbse.api','ngMockE2E');
@@ -10,31 +12,71 @@ describe('quickbase api service', function () {
     beforeEach(inject(function ($rootScope, _ApiService_, _$httpBackend_, $q) {
         scope = $rootScope.$new();
         ApiService = _ApiService_;
-        successCallback = jasmine.createSpy('success');
-        errorCallback = jasmine.createSpy('error');
         $httpBackend = _$httpBackend_;
     }));
 
-    //TODO write out apis access tests
-    it('Test getApp API call', function () {
-
-        $httpBackend.expectGET('/api/v1/apps/test').respond(200, 'appData mocked');
-
-        var promise = ApiService.getApp('test');
-
-        $httpBackend.flush();
-
-        promise.then(function() {
-            successCallback;
-        }, function() {
-            errorCallback;
-        });
-
-        //TODO: not working
-        expect(successCallback).not.toHaveBeenCalled();
-        expect(errorCallback).not.toHaveBeenCalled();
-
-
+    afterEach(function() {
+        $httpBackend.verifyNoOutstandingExpectation();
+        $httpBackend.verifyNoOutstandingRequest();
     });
 
+    it('Test getApp API call', function () {
+        $httpBackend.expectGET('/api/v1/apps/' + appId).respond(200);
+        ApiService.getApp(appId);
+        $httpBackend.flush();
+    });
+
+    it('Test getFields API call', function () {
+        $httpBackend.expectGET('/api/v1/apps/' + appId + '/tables/' + tableId + '/fields').respond(200);
+        ApiService.getFields(appId, tableId);
+        $httpBackend.flush();
+    });
+
+    it('Test getField API call', function () {
+        $httpBackend.expectGET('/api/v1/apps/' + appId + '/tables/' + tableId + '/fields/' + fieldId, function(headers) {
+            return !headers.ticket;
+        }).respond(200);
+        ApiService.getField(appId, tableId, fieldId);
+        $httpBackend.flush();
+    });
+
+    it('Test getRecords API call', function () {
+        var queryParams = '?numRows=10&offset=0';
+        $httpBackend.expectGET('/api/v1/apps/' + appId + '/tables/' + tableId + '/records' + queryParams).respond(200);
+        ApiService.getRecords(appId, tableId, offset, rows);
+        $httpBackend.flush();
+    });
+
+    it('Test formatted getRecords API call', function () {
+        var queryParams = '?format=display&numRows=10&offset=0';
+        $httpBackend.expectGET('/api/v1/apps/' + appId + '/tables/' + tableId + '/records' + queryParams).respond(200);
+        ApiService.getFormattedRecords(appId, tableId, offset, rows);
+        $httpBackend.flush();
+    });
+
+    it('Test getReport API call', function () {
+        $httpBackend.expectGET('/api/v1/apps/' + appId + '/tables/' + tableId + '/reports/' + reportId).respond(200);
+        ApiService.getReport(appId, tableId, reportId);
+        $httpBackend.flush();
+    });
+
+    it('Test getReports API call', function () {
+        $httpBackend.expectGET('/api/v1/apps/' + appId + '/tables/' + tableId + '/reports').respond(200);
+        ApiService.getReports(appId, tableId);
+        $httpBackend.flush();
+    });
+
+    it('Test runReport API call', function () {
+        var queryParams = '?numRows=10&offset=0';
+        $httpBackend.expectGET('/api/v1/apps/' + appId + '/tables/' + tableId + '/reports/' + reportId + '/results' + queryParams).respond(200);
+        ApiService.runReport(appId, tableId, reportId, offset, rows);
+        $httpBackend.flush();
+    });
+
+    it('Test formatted runReport API call', function () {
+        var queryParams = '?format=display&numRows=10&offset=0';
+        $httpBackend.expectGET('/api/v1/apps/' + appId + '/tables/' + tableId + '/reports/' + reportId + '/results' + queryParams).respond(200);
+        ApiService.runFormattedReport(appId, tableId, reportId, offset, rows);
+        $httpBackend.flush();
+    });
 });

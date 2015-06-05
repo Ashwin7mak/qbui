@@ -9,7 +9,6 @@
             'ngCookies'
         ]).
         config( function(RestangularProvider) {
-            //TODO move baseUrl  to constants
             RestangularProvider.setBaseUrl('/api/v1');
 
             RestangularProvider.setErrorInterceptor(function(response) {
