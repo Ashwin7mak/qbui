@@ -17,13 +17,13 @@ describe('Factory: ReportModel', function() {
 
             deferred = $q.defer();
 
-            spyOn(ReportService, 'getFields').and.callFake(function() {
+            spyOn(ReportService, 'getReportFields').and.callFake(function() {
                 return deferred.promise;
             });
             spyOn(ReportService, 'getReport').and.callFake(function() {
                 return deferred.promise;
             });
-            spyOn(ReportService, 'getFormattedRecords').and.callFake(function() {
+            spyOn(ReportService, 'getMetaData').and.callFake(function() {
                 return deferred.promise;
             });
 
@@ -47,7 +47,7 @@ describe('Factory: ReportModel', function() {
         scope.$apply();
 
         //  NOTE: the expectations will get tested until after the above promise is fulfilled
-        expect(ReportService.getFields).toHaveBeenCalledWith(appId, tableId);
+        expect(ReportService.getReportFields).toHaveBeenCalledWith(appId, tableId, reportId);
 
         //  expect 2 columns array with the below data
         expect(columns.length).toEqual(2);
@@ -75,7 +75,7 @@ describe('Factory: ReportModel', function() {
         scope.$apply();
 
         //  NOTE: the expectations will get tested until after the above promise is fulfilled
-        expect(ReportService.getReport).toHaveBeenCalledWith(appId, tableId, reportId);
+        expect(ReportService.getMetaData).toHaveBeenCalledWith(appId, tableId, reportId);
 
         //  expect 2 columns array with the below data
         expect(metaData.appId).toEqual(appId);
@@ -89,7 +89,7 @@ describe('Factory: ReportModel', function() {
     it('validate the getData service call', function() {
 
         var reportData, offset=30, rows=10;
-        ReportModel.getData(appId, tableId, reportId, offset, rows).then (
+        ReportModel.getReportData(appId, tableId, reportId, offset, rows).then (
              function (value) {
                  reportData = value;
              }
@@ -104,7 +104,7 @@ describe('Factory: ReportModel', function() {
         scope.$apply();
 
         //  NOTE: the expectations will get tested until after the above promise is fulfilled
-        expect(ReportService.getFormattedRecords).toHaveBeenCalledWith(appId, tableId, offset, rows);
+        expect(ReportService.getReport).toHaveBeenCalledWith(appId, tableId, reportId, offset, rows);
         expect(reportData.length).toEqual(0);
 
     });

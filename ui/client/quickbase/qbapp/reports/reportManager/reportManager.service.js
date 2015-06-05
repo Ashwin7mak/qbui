@@ -14,7 +14,7 @@
          * @param reportId
          * @returns {deferred.promise|{then, always}}
          */
-        this.getMetaReport = function(appId, tableId, reportId) {
+        this.getMetaData = function(appId, tableId, reportId) {
             var deferred = $q.defer();
 
             ApiService.getReport(appId, tableId, reportId ).then(

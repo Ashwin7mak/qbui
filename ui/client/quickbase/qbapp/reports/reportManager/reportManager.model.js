@@ -35,7 +35,7 @@
                     snapshot: d.toLocaleString()
                 };
 
-                ReportService.getMetaReport(appId, tableId, reportId).then(
+                ReportService.getMetaData(appId, tableId, reportId).then(
                     function (data) {
                         //  get the report meta info
                         metaData.name = data.name;
