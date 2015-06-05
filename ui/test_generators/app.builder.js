@@ -105,11 +105,6 @@
                     return this;
                 },
 
-                withAdditionalTables : function(tables){
-                    appTables.concat(tables)
-                    return this;
-                },
-
                 withTables : function(tables){
                     appTables = tables;
                     return this;
