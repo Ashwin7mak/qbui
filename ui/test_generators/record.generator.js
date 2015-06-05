@@ -75,9 +75,8 @@
     recordTypeMapping[consts.BIGTEXT] = function (){ return rawValueGenerator.generateString(1000); };
     recordTypeMapping[consts.URL] = function (){ return rawValueGenerator.generateUrl(); };
     recordTypeMapping[consts.EMAIL_ADDRESS] = function (){ return rawValueGenerator.generateEmailInDomain('gmail.com'); };
-    recordTypeMapping[consts.PHONE_NUMBER] = function (){ return rawValueGenerator.generatePhoneNumber() };
+    recordTypeMapping[consts.PHONE_NUMBER] = function (){ return rawValueGenerator.generatePhoneNumber(); };
     recordTypeMapping[consts.CHECKBOX] = function (){ return rawValueGenerator.generateBool()};
-    // TODO: Write generators for Date/DateTime/TOD/FileAttach/User fields
     recordTypeMapping[consts.DATE_TIME] = function (){ return rawValueGenerator.generateDate() };
     recordTypeMapping[consts.DATE] = function (){ return rawValueGenerator.generateDateTime() };
     recordTypeMapping[consts.TIME_OF_DAY] = function (){ return rawValueGenerator.generateTime()};
