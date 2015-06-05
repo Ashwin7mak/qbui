@@ -9,8 +9,7 @@
     var tableBuilder = require('./table.builder');
     var tableConsts = require('./table.constants');
     var fieldGenerator = require('./field.generator');
-    var Chance = require('chance');
-    var chance = new Chance();
+    var chance = new require('chance');
 
     //The max number of fields we will generate at random
     var maxRandomFields = 10;

@@ -15,6 +15,10 @@
             var appRelationships = [];
 
             return {
+                /**
+                 * Return the app with tables and realtionships populated if they exist
+                 * @returns {{}}
+                 */
                 build: function () {
                     if(appTables.length > 0) {
                         appUnderConstruction[appConstants.TABLES] = appTables;
@@ -27,6 +31,11 @@
                     return appUnderConstruction;
                 },
 
+                /**
+                 * Clone an existing app object into the builder so that we can modify it
+                 * @param app
+                 * @returns {exports}
+                 */
                 cloneIntoBuilder: function (app) {
                     if(app[appRelationships.ID]) {
                         appUnderConstruction[appConstants.ID] = app[appConstants.ID];

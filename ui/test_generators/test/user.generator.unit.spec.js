@@ -22,8 +22,6 @@ describe('User generator unit test', function () {
 
         var user = userGenerator.generateUser();
 
-        console.log('user: ' + JSON.stringify(user));
-
         if(!user[userConsts.FIRST]){
             assert.fail('User should be generated with a first name');
         }
@@ -66,8 +64,6 @@ describe('User generator unit test', function () {
                 var expectedKeyValuePairs = entry.expectedKeyValue;
 
                 var user = userGenerator.generatePopulatedUser(options);
-
-                console.log('app: ' + JSON.stringify(user));
 
                 if(!user[userConsts.FIRST]){
                     assert.fail('User should be generated with a first name');

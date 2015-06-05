@@ -13,10 +13,20 @@
             var relationshipUnderConstruction = {};
 
             return {
+                /**
+                 * Return the relationship under construction as "built"
+                 * @returns {{}}
+                 */
                 build: function () {
                     return relationshipUnderConstruction;
                 },
 
+                /**
+                 * Clone a relationship into a builder so that we can modify it or append
+                 * properties to it.
+                 * @param relationship
+                 * @returns {exports}
+                 */
                 cloneIntoBuilder: function (relationship) {
                     if(relationship[relationshipConstants.ID]) {
                         relationshipUnderConstruction[relationshipConstants.ID] = relationship[relationshipConstants.ID];

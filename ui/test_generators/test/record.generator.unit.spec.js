@@ -64,11 +64,9 @@ describe('Record generator', function () {
     it('should generate a record if given a table', function (){
         // Generate a table
         var table = tableGenerator.generateTable(5);
-        console.log('table: ' + JSON.stringify(table));
 
         // Generate a record for that table
         var recordJson = recordGenerator.generateRecordForTable(table);
-        console.log(recordJson);
     });
 
     /**
@@ -77,10 +75,8 @@ describe('Record generator', function () {
     it('should not generate a value for a formula or virtual field type', function (){
         // Generate fields
         var dateTimeFormulaField = fieldGenerator.generateBaseField(consts.FORMULA_DATE);
-        console.log('field: ' + JSON.stringify(dateTimeFormulaField));
 
         var lookupField = fieldGenerator.generateBaseField(consts.LOOKUP);
-        console.log('field: ' + JSON.stringify(lookupField));
 
         var fields = [];
         fields.push(dateTimeFormulaField);

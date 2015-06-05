@@ -18,7 +18,7 @@ var assert = require('assert');
 /**
  * Unit tests for relationship generator
  */
-ddescribe('User generator unit test', function () {
+describe('User generator unit test', function () {
 
     function relationshipProvider(){
         var tableMap = {};
@@ -98,8 +98,6 @@ ddescribe('User generator unit test', function () {
 
                 var relationship = relationshipGenerator.generateRelationship(masterTable, detailTable);
 
-                console.log('relationship: ' + relationshipGenerator.relationshipToJsonString(relationship));
-
                 var validRelationshipObject = relationshipGenerator.validateRelationshipProperties(relationship);
 
                 if(!validRelationshipObject){
@@ -160,8 +158,6 @@ ddescribe('User generator unit test', function () {
                 var app = entry.app;
 
                 var relationship = relationshipGenerator.generateRelationshipFromApp(app, masterTable[tableConsts.ID], detailTable[tableConsts.ID]);
-
-                console.log('relationship: ' + relationshipGenerator.relationshipToJsonString(relationship));
 
                 var validRelationshipObject = relationshipGenerator.validateRelationshipProperties(relationship);
 

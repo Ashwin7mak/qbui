@@ -61,8 +61,6 @@ ddescribe('Field generator unit test', function () {
             it('Test case: ' + entry.message, function (done) {
                 var field = fieldGenerator.generateBaseField(entry.fieldType);
 
-                console.log('field: ' + JSON.stringify(field));
-
                 if(!field[fieldConsts.NAME]){
                     assert.fail('Fields should be generated with a name');
                 }
@@ -85,7 +83,6 @@ ddescribe('Field generator unit test', function () {
             it('Test case: ' + entry.message, function (done) {
                 var field = fieldGenerator.generateBaseField(entry.fieldType);
                 fieldGenerator.applyDefaults(field);
-                console.log('field: ' + JSON.stringify(field));
 
                 if(!field[fieldConsts.NAME]){
                     assert.fail('Fields should be generated with a name');

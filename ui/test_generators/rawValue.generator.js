@@ -4,14 +4,13 @@
  */
 (function () {
     'use strict';
-    var Chance = require('chance');
-    var chance = new Chance();
+    var chance = new require('chance');
     var appConsts = require('./app.constants');
 
     var SUBDOMAIN_CHARS = 'abcdefghijklmnopqrstuvwxyz0123456789';
 
     chance.mixin({
-        'timezone' : function (options) {
+        'timezone' : function () {
             var isPositive = chance.bool();
             var timeZone = isPositive ? '+' + chance.integer({min: 0, max: 14}) : '-' + chance.integer({min: 0, max: 12});
 

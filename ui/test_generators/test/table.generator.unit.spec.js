@@ -23,8 +23,6 @@ describe('Table generator unit test', function () {
     describe('test generating a table with all field types',function(){
         var table = tableGenerator.generateTableWithAllFieldTypes();
 
-        console.log('table: ' + JSON.stringify(table));
-
         if(!table[tableConsts.NAME]){
             assert.fail('Table should be generated with a name');
         }
@@ -50,7 +48,7 @@ describe('Table generator unit test', function () {
         });
 
         _.forEach(availableFieldTypes, function(fieldTypeCount){
-            assert.equal(fieldsCreated[fieldTypeCount], 1, 'We should have a single field per type')
+            assert.equal(fieldsCreated[fieldTypeCount], 1, 'We should have a single field per type');
         });
     });
 
@@ -59,8 +57,6 @@ describe('Table generator unit test', function () {
      */
     describe('test generating a table with all field types',function(){
         var table = tableGenerator.generateTable();
-
-        console.log('table: ' + JSON.stringify(table));
 
         if(!table[tableConsts.NAME]){
             assert.fail('Table should be generated with a name');
@@ -121,8 +117,6 @@ describe('Table generator unit test', function () {
                 var numFields = 14;
                 var fieldType = consts.CHECKBOX;
                 var table = tableGenerator.generateTableWithFieldsOfType(numFields, fieldType);
-
-                console.log('table: ' + JSON.stringify(table));
 
                 if (!table[tableConsts.NAME]) {
                     assert.fail('Table should be generated with a name');
@@ -196,8 +190,6 @@ describe('Table generator unit test', function () {
             it('Test case: ' + entry.message, function (done) {
                 var fieldMap = entry.fieldMap;
                 var table = tableGenerator.generateTableWithFieldMap(fieldMap);
-
-                console.log('table: ' + JSON.stringify(table));
 
                 if (!table[tableConsts.NAME]) {
                     assert.fail('Table should be generated with a name');

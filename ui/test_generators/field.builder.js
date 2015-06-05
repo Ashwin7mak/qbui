@@ -73,12 +73,12 @@
                 /************************************************************/
                 /*               Virtual Field Properties                   */
                 /************************************************************/
-                withRelationshipId :  function(relationshipId, fieldType, fieldType) {
+                withRelationshipId :  function(relationshipId, fieldType) {
                     fieldUnderConstruction[fieldConstants[fieldType].RELATIONSHIP_ID] = relationshipId;
                     return this;
                 },
 
-                withReferenceFieldId :  function(referenceFieldId, fieldType, fieldType) {
+                withReferenceFieldId :  function(referenceFieldId, fieldType) {
                     fieldUnderConstruction[fieldConstants[fieldType].REFERENCE_FIELD_ID] = referenceFieldId;
                     return this;
                 },

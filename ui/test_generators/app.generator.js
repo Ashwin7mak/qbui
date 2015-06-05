@@ -1,6 +1,10 @@
 /**
  * app.generator.js will generate valid json for an application and allow you to create an arbitrary number of
- * tables, fields, relationships, and roles
+ * tables, fields, relationships, and roles.
+ * </p>
+ * This generator will not build an app with relationships on it.
+ * This is because relationships rely on ids that will not exist until it has been routed through to
+ * the java api.
  * Created by cschneider1 on 5/28/15.
  */
 (function () {

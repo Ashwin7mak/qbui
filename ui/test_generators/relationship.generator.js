@@ -8,8 +8,7 @@
     var tableConsts = require('./table.constants')
     var fieldConsts = require('./field.constants')
     var appConsts = require('./app.constants')
-    var Chance = require('chance');
-    var chance = new Chance();
+    var chance = new require('chance');
     var _ = require('lodash');
 
 
@@ -211,18 +210,9 @@
     function pickDetailField(masterField, detailTable) {
         var fieldType = masterField[fieldConsts.TYPE];
 
-        var detailField;
-        _.forEach(detailTable[tableConsts.FIELDS], function (candidateField) {
-            //there is no way to break out of here, so just return quickly if we've found a good field
-            if (typeof detailField !== 'undefined') {
-                return;
-            }
+        return _.find(detailTable[tableConsts.FIELDS], function(candidateField){
 
-            if (candidateField[fieldConsts.TYPE] === fieldType) {
-                detailField = candidateField;
-            }
+            return candidateField[fieldConsts.TYPE] === fieldType;
         });
-
-        return detailField;
     }
 }());
