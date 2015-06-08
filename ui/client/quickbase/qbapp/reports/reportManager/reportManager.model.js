@@ -24,7 +24,7 @@
 
                 var deferred = $q.defer();
 
-                //  TODO: get metaData(company,snapshot date) of logged in customer
+                //  TODO: get metaData(company,snapshot date) of logged in customer -- jira: qbse-12508
                 var metaData = {
                     appId: appId,
                     tableId: tableId,

@@ -2,14 +2,14 @@
 
 describe('quickbase api service', function () {
     var scope, ApiService, $httpBackend;
-    var appId = '1', tableId = '2', fieldId = '3', recordId = '4', reportId = '5';
+    var appId = '1', tableId = '2', fieldId = '3', reportId = '5';
     var offset = 0, rows = 10;
 
     beforeEach(function() {
         module('qbse.api','ngMockE2E');
     });
 
-    beforeEach(inject(function ($rootScope, _ApiService_, _$httpBackend_, $q) {
+    beforeEach(inject(function ($rootScope, _ApiService_, _$httpBackend_) {
         scope = $rootScope.$new();
         ApiService = _ApiService_;
         $httpBackend = _$httpBackend_;
@@ -20,6 +20,7 @@ describe('quickbase api service', function () {
         $httpBackend.verifyNoOutstandingRequest();
     });
 
+    // todo: as we build out, consider implementing a weaver: jira-12366 / subtask: qbse-12506
     it('Test getApp API call', function () {
         $httpBackend.expectGET('/api/v1/apps/' + appId).respond(200);
         ApiService.getApp(appId);

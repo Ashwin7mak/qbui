@@ -48,10 +48,9 @@
      */
 
     angular
-        // define the QuickBase (qbse) Grid Module
         //depends on the ui-grid and ui-selection see: http://ui-grid.info/
         .module('qbse.grid')
-        // Setup some consts
+        // Setup some module constants used by the grid
         .constant('gridConstants', {
             'MAX_ROWS_PER_PAGE': 10000,
             'ROWS_PER_PAGE': 100,
@@ -187,6 +186,10 @@
                     // ui-grid has filtering per column
                     // only in ng-grid we may need to provide it for small tables
                     // will need to add to api for this cross column filtering
+                    //
+                    // CODE REVIEW Comment:  Just a note on the note - wouldn't we need to have this happen in
+                    // the database? Whenever someone is doing cross column filtering, we want to operate on
+                    // the full data set not just what is present in the table.
                 };
 
                 resolve();

@@ -1,17 +1,12 @@
 (function() {
     'use strict';
 
-    // Instantiate chancejs so it can be used here
-    //see http://chancejs.com lightweight generator
-    var chance = new Chance(12345); //seed value makes random tests repeatable
-
     /**
      * This service provides test grid data
      **/
     angular.module('test.dataGeneratorService', ['ngLodash', 'qbse.api', 'qbse.grid'])
         .factory('TestDataService', ['$q', 'lodash', 'apiConstants', 'gridConstants', TestDataService]);
 
-    //todo expend this service to generate data for grid
     //service to supply data and column given fixed values
     function TestDataService($q, _, apiConstants, gridConstants) {
 
@@ -25,7 +20,7 @@
         /**
          *  Creates some random column data and add to the resultArray(argument) array
          */
-        function createColumns(numColumns, colsTypes, resultArray) {
+        function createColumns(chance, numColumns, colsTypes, resultArray) {
             for (var i = 0; i <numColumns; i++) {
                 // get a field type from possible specified field types
                 var findex = chance.integer({min: 0, max: colsTypes.length - 1});
@@ -45,7 +40,7 @@
         /**
          * Creates some random rows data and add to the resultData(argument) array
          */
-        function createRows(numRows, colDesc, resultData) {
+        function createRows(chance, numRows, colDesc, resultData) {
             var numCols = colDesc.length;
             for (var i = 0; i < numRows; i++) {
                 var row ={};
@@ -172,10 +167,10 @@
         /**
          * Returns a random integer between min (inclusive) and max (inclusive)
          */
-        factory.getRandomInt = function(min, max) {
+        factory.getRandomInt = function(chance, min, max) {
             return chance.integer({min: min, max: max});
         };
-        factory.chance = chance;
+
         return factory;
     }
 })();

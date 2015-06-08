@@ -1,7 +1,10 @@
 (function() {
     'use strict';
     /**
-     * A library of common utility functions
+     * A library of common utility functions.
+     *
+     * This module is intended to hold general utility functions that can be used and shared by other modules.
+     *
      **/
     angular.module('qbse.helper')
         .factory('qbUtility', UtilityFactory);

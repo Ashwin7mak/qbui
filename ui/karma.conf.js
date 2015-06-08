@@ -58,7 +58,7 @@ module.exports = function (config) {
 
             // fixtures
             {
-                pattern: "**/mockdata/*.json",
+                pattern: '**/mockdata/*.json',
                 watched: 'true',
                 served:  'true',
                 included: 'false'
