@@ -9,11 +9,11 @@
 
     function PagesHandlerFactory($http, GridDataFactory) {
 
-        var PagesHandler = function(dataService, gridConstants, gridOptions) {
+        var PagesHandler = function(dataServiceFunc, gridConstants, gridOptions) {
             this.http = $http;
             this.gridConstants = gridConstants;
             this.gridOptions = gridOptions;
-            this.dataService = dataService;
+            this.dataServiceFunc = dataServiceFunc;
             this.current = {
                 pageSize  : this.gridOptions.paginationPageSize,
                 pageNumber: 1,
@@ -24,7 +24,11 @@
                 sort      : null
             };
             //data fetcher
-            this.dataFact = new GridDataFactory(this.dataService);
+            this.dataFact = new GridDataFactory(this.dataServiceFunc);
+        };
+
+        PagesHandler.prototype.setGridOptions = function(gridOptions) {
+            this.gridOptions = gridOptions;
         };
 
         PagesHandler.prototype.loadCurrentPage = function() {

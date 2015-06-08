@@ -136,13 +136,13 @@ $PAGINATION_DISABLED_BORDER : $GREYISH;
             > a,
             > span {
                 margin-left : 0;
-                @include border-left-radius($BORDER_RADIUS_BASE)
+                @include border-left-radius($BORDER_RADIUS_BASE);
             }
         }
         &:last-child {
             > a,
             > span {
-                @include border-right-radius($BORDER_RADIUS_BASE)
+                @include border-right-radius($BORDER_RADIUS_BASE);
             }
         }
     }
@@ -154,6 +154,7 @@ $PAGINATION_DISABLED_BORDER : $GREYISH;
             color            : $PAGINATION_HOVER_COLOR;
             background-color : $PAGINATION_HOVER_BG;
             border-color     : $PAGINATION_HOVER_BORDER;
+            cursor           : pointer;
         }
     }
 
@@ -166,7 +167,7 @@ $PAGINATION_DISABLED_BORDER : $GREYISH;
             color            : $PAGINATION_ACTIVE_COLOR;
             background-color : $PAGINATION_ACTIVE_BG;
             border-color     : $PAGINATION_ACTIVE_BORDER;
-            cursor           : default;
+            cursor           : pointer;
         }
     }
 
@@ -180,7 +181,7 @@ $PAGINATION_DISABLED_BORDER : $GREYISH;
             color            : $PAGINATION_DISABLED_COLOR;
             background-color : $PAGINATION_DISABLED_BG;
             border-color     : $PAGINATION_DISABLED_BORDER;
-            cursor           : not-allowed;
+            cursor           : default;
         }
     }
 }

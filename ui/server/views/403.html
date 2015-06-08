@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>Page Not Found</title>
+    <title>Invalid Credentials</title>
     <style>
         html {
             padding: 30px 10px;
@@ -50,14 +50,14 @@
 
 <body>
     <div class="container">
-      <h1>Page Not Found</h1>
-      <p>Oops.  The page you were trying to view does not exist.</p>
-      <p>It looks like this was the result of either:</p>
-      <ul>
-        <li>a mistyped or unsupported address</li>
-        <li>an out-of-date link</li>
-      </ul>
-      <p>Please check your page link or click <a href="https://www.quickbase.com/db/main?a=SignIn">here</a> to return to QuickBase.</p>
+        <h1>Invalid Credentials</h1>
+        <p>Your authorization credentials are invalid or expired.</p>
+        <!-- TODO:  tracking link ??  -->
+        <p>Please return to QuickBase and <a href="https://www.quickbase.com/db/main?a=SignIn">login</a> to reset your
+            credentials.</p>
+
+        <p style="text-align:right;margin-bottom:-30px;font-size:12px;"><a target=_blank href="/api/v1/ticket?uid=1000000&realmID=117000">getTicket</a></p>
+
     </div>
 </body>
 

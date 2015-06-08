@@ -10,66 +10,93 @@
      *    'remove'
      *    'delete'
      *
-     *    TODO?:: replace $resource with Restangular
-     *    https://github.com/mgonto/restangular#decoupled-restangular-service
-     *    i.e.
-     *
-     *    angular.module('qbse.api').factory('realmApiService', function(Restangular){
-     *        return Restangular.service('realms');
-
-     *        });
      */
-    angular
-        .module('qbse.api')
 
-        .factory('ApiService', ['$resource', function($resource) {
+    angular.module('qbse.api').service('ApiService', ApiService);
 
-            var basePath = '/api';
-            var realmsPath = basePath + '/realms';
-            var healthPath = basePath + '/health';
-            var ticketPath = basePath + '/ticket'; // this might not be exposed in node
-            var appsPath = basePath + '/apps';
-            var appPath = appsPath + '/:appId';
-            var tablesPath = appPath + '/tables';
-            var tablePath = tablesPath + '/:tableId';
-            var fieldPath = tablePath + '/fields/:fieldId';
-            var recordsPath = tablePath + '/records';
-            var reportsPath = tablePath + '/reports';
+    ApiService.$inject = ['Restangular', 'qbUtility', 'apiConstants', '$cookieStore'];
 
-            return {
-                realms : $resource(realmsPath, {}, {
-                    query: {
-                        method : 'GET',
-                        isArray: true
-                    }
-                }),
-                health : $resource(healthPath, {}, {}),
-                ticket : $resource(ticketPath, {}, {}),
-                apps   : $resource(appsPath, {}, {
-                    query: {
-                        method : 'GET',
-                        isArray: true
-                    }
-                }),
-                app    : $resource(appPath, {}, {}),
-                tables : $resource(tablesPath, {}, {
-                    query: {method: 'GET', isArray: true}
-                }),
-                table  : $resource(tablePath, {}, {
-                    update: {method: 'PUT'}
-                }),
-                field  : $resource(fieldPath, {}, {}),
-                reports: $resource(reportsPath, {}, {}),
-                records: $resource(recordsPath, {}, {
-                    query: {
-                        method           : 'GET',
-                        isArray          : true,
-                        transformResponse: function(data) {
-                            return angular.fromJson(data);
-                        }
-                    }
-                })
-            };
-        }]
-    );
+    function ApiService(Restangular, qbUtility, apiConstants, $cookies) {
+
+        // get the auth session ticket from the cookie.  If it's invalid or not found, the
+        // requested endPoint will respond with a 403 status, which is handled in api.modules.js
+        // by the RestangularProvider.setErrorInterceptor.
+        //
+        function getTicket() {
+            return $cookies.get(apiConstants.TICKET_COOKIE);
+        }
+
+        function setQueryParams(format, offset, rows) {
+            var queryParams = {};
+            if (format) {
+                queryParams.format = format;
+            }
+            if (qbUtility.isInt(offset) && qbUtility.isInt(rows)) {
+                queryParams.offset = offset;
+                queryParams.numRows = rows;
+            }
+            return queryParams;
+        }
+
+        function runTheReport(appId, tableId, reportId, queryParams) {
+            var httpHeaders = {ticket: getTicket()};
+            return Restangular.one(apiConstants.APPS, appId).one(apiConstants.TABLES,tableId).one(apiConstants.REPORTS,reportId).one('results').withHttpConfig(httpHeaders).get(queryParams);
+        }
+
+        function getTheRecords(appId, tableId, queryParams) {
+            var httpHeaders = {ticket: getTicket()};
+            return Restangular.one(apiConstants.APPS, appId).one(apiConstants.TABLES,tableId).one(apiConstants.RECORDS).withHttpConfig(httpHeaders).get(queryParams);
+        }
+
+        var service = {
+            getApp: function(appId) {
+                var httpHeaders = {ticket: getTicket()};
+                return Restangular.one(apiConstants.APPS, appId).withHttpConfig(httpHeaders).get();
+            },
+
+            getFields: function(appId, tableId) {
+                var httpHeaders = {ticket: getTicket()};
+                return Restangular.one(apiConstants.APPS,appId).one(apiConstants.TABLES,tableId).one(apiConstants.FIELDS).withHttpConfig(httpHeaders).get();
+            },
+
+            getField: function(appId, tableId, fieldId) {
+                var httpHeaders = {ticket: getTicket()};
+                return Restangular.one(apiConstants.APPS,appId).one(apiConstants.TABLES,tableId).one(apiConstants.FIELDS,fieldId).withHttpConfig(httpHeaders).get();
+            },
+
+            getRecords: function(appId, tableId, offset, rows) {
+                var queryParams = setQueryParams(null, offset, rows);
+                return getTheRecords(appId, tableId, queryParams);
+            },
+            getFormattedRecords: function(appId, tableId, offset, rows) {
+                var queryParams = setQueryParams('display', offset, rows);
+                return getTheRecords(appId, tableId, queryParams);
+            },
+
+            getReport: function(appId, tableId, reportId) {
+                var httpHeaders = {ticket: getTicket()};
+                return Restangular.one(apiConstants.APPS, appId).one(apiConstants.TABLES,tableId).one(apiConstants.REPORTS,reportId).withHttpConfig(httpHeaders).get();
+            },
+
+            getReports: function(appId, tableId) {
+                var httpHeaders = {ticket: getTicket()};
+                return Restangular.one(apiConstants.APPS, appId).one(apiConstants.TABLES,tableId).one(apiConstants.REPORTS).withHttpConfig(httpHeaders).get();
+            },
+
+            runReport: function(appId, tableId, reportId, offset, rows) {
+                var queryParams = setQueryParams(null, offset, rows);
+                return runTheReport(appId, tableId, reportId, queryParams);
+            },
+            runFormattedReport: function(appId, tableId, reportId, offset, rows) {
+                var queryParams = setQueryParams('display', offset, rows);
+                return runTheReport(appId, tableId, reportId, queryParams);
+            }
+        };
+
+        return service;
+
+    }
+
+
+
 })();

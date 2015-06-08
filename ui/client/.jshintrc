@@ -37,6 +37,7 @@
         "_": true,
         "moment": true,
         "describe": true,
+        "afterEach": true,
         "beforeEach": true,
         "module": true,
         "inject": true,

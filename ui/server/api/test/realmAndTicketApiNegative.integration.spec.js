@@ -28,7 +28,7 @@ describe('API - Negative /realms & /ticket test cases', function () {
             method: 'GET'
         }
         request(opts, function (error, response, body) {
-            assert.equal(response.statusCode, 404, 'Unexpected status code.');
+            assert.equal(response.statusCode, 500, 'Unexpected status code.');
             done();
         });
     });

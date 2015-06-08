@@ -2,81 +2,168 @@
     'use strict';
 
     angular.module('qbse.qbapp.reports.manager')
-        .service('ReportService',['$q', ReportManagerService]);
+        .service('ReportService',['$q', 'ApiService', ReportManagerService]);
 
-    function ReportManagerService($q) {
+    function ReportManagerService($q, ApiService) {
 
-        var d = new Date();
-        d.setDate(d.getDate() - 1);
+        /**
+         * Return the meta report information for the given appId, tableId and reportId
+         *
+         * @param appId
+         * @param tableId
+         * @param reportId
+         * @returns {deferred.promise|{then, always}}
+         */
+        this.getMetaData = function(appId, tableId, reportId) {
+            var deferred = $q.defer();
 
-        var service = {
-            getDataPromise : function(reportId) {
-                return $q.when(this.get(reportId).data);
-            },
-            get: function(reportId) {
-                var report = {
-                    id: reportId,
-                    name: 'Report name ' + reportId,
-                    company: 'ABC Enterprises',
-                    snapshot: d.toLocaleString(),
-                    data: [
-                            {id: '1', name: 'ABC Camping', phoneNumber: '555-333-1111', email:'bill@abccampgrounds.com', balance:'$209.87'},
-                            {id: '2', name: 'Rochester Electric', phoneNumber: '532-665-1111', email:'JRE@RochesterElectric.com', balance:'$459.87'},
-                            {id: '3', name: 'Cool Car Repair', phoneNumber: '617-988-8897', email:'John@coolcars.com', balance:'$79.00'},
-                            {id: '4', name: 'Cambridge Hobby Shopt', phoneNumber: '617-533-1111', email:'Jan@cambridgehobbyshop.com', balance:'$1,599.10'},
-                            {id: '5', name: 'REI Hiking', phoneNumber: '508-990-1111', email:'Mary@rei.com', balance:'$111.83'},
-                            {id: '6', name: 'ABC Camping', phoneNumber: '555-333-1111', email:'bill@abccampgrounds.com', balance:'$209.87'},
-                            {id: '7', name: 'Rochester Electric', phoneNumber: '532-665-1111', email:'JRE@RochesterElectric.com', balance:'$459.87'},
-                            {id: '8', name: 'Cool Car Repair', phoneNumber: '617-988-8897', email:'John@coolcars.com', balance:'$79.00'},
-                            {id: '9', name: 'Cambridge Hobby Shopt', phoneNumber: '617-533-1111', email:'Jan@cambridgehobbyshop.com', balance:'$1,599.10'},
-                            {id: '10', name: 'REI Hiking', phoneNumber: '508-990-1111', email:'Mary@rei.com', balance:'$111.83'},
-                            {id: '11', name: 'ABC Camping', phoneNumber: '555-333-1111', email:'bill@abccampgrounds.com', balance:'$209.87'},
-                            {id: '12', name: 'Rochester Electric', phoneNumber: '532-665-1111', email:'JRE@RochesterElectric.com', balance:'$459.87'},
-                            {id: '13', name: 'Cool Car Repair', phoneNumber: '617-988-8897', email:'John@coolcars.com', balance:'$79.00'},
-                            {id: '14', name: 'Cambridge Hobby Shopt', phoneNumber: '617-533-1111', email:'Jan@cambridgehobbyshop.com', balance:'$1,599.10'},
-                            {id: '15', name: 'REI Hiking', phoneNumber: '508-990-1111', email:'Mary@rei.com', balance:'$111.83'},
-                            {id: '16', name: 'ABC Camping', phoneNumber: '555-333-1111', email:'bill@abccampgrounds.com', balance:'$209.87'},
-                            {id: '17', name: 'Rochester Electric', phoneNumber: '532-665-1111', email:'JRE@RochesterElectric.com', balance:'$459.87'},
-                            {id: '18', name: 'Cool Car Repair', phoneNumber: '617-988-8897', email:'John@coolcars.com', balance:'$79.00'},
-                            {id: '19', name: 'Cambridge Hobby Shopt', phoneNumber: '617-533-1111', email:'Jan@cambridgehobbyshop.com', balance:'$1,599.10'},
-                            {id: '20', name: 'REI Hiking', phoneNumber: '508-990-1111', email:'Mary@rei.com', balance:'$111.83'},
-                            {id: '21', name: 'ABC Camping', phoneNumber: '555-333-1111', email:'bill@abccampgrounds.com', balance:'$209.87'},
-                            {id: '22', name: 'Rochester Electric', phoneNumber: '532-665-1111', email:'JRE@RochesterElectric.com', balance:'$459.87'},
-                            {id: '23', name: 'Cool Car Repair', phoneNumber: '617-988-8897', email:'John@coolcars.com', balance:'$79.00'},
-                            {id: '24', name: 'Cambridge Hobby Shopt', phoneNumber: '617-533-1111', email:'Jan@cambridgehobbyshop.com', balance:'$1,599.10'},
-                            {id: '25', name: 'REI Hiking', phoneNumber: '508-990-1111', email:'Mary@rei.com', balance:'$111.83'},
-                            {id: '26', name: 'ABC Camping', phoneNumber: '555-333-1111', email:'bill@abccampgrounds.com', balance:'$209.87'},
-                            {id: '27', name: 'Rochester Electric', phoneNumber: '532-665-1111', email:'JRE@RochesterElectric.com', balance:'$459.87'},
-                            {id: '28', name: 'Cool Car Repair', phoneNumber: '617-988-8897', email:'John@coolcars.com', balance:'$79.00'},
-                            {id: '29', name: 'Cambridge Hobby Shopt', phoneNumber: '617-533-1111', email:'Jan@cambridgehobbyshop.com', balance:'$1,599.10'},
-                            {id: '30', name: 'REI Hiking', phoneNumber: '508-990-1111', email:'Mary@rei.com', balance:'$111.83'},
-                            {id: '31', name: 'ABC Camping', phoneNumber: '555-333-1111', email:'bill@abccampgrounds.com', balance:'$209.87'},
-                            {id: '32', name: 'Rochester Electric', phoneNumber: '532-665-1111', email:'JRE@RochesterElectric.com', balance:'$459.87'},
-                            {id: '33', name: 'Cool Car Repair', phoneNumber: '617-988-8897', email:'John@coolcars.com', balance:'$79.00'},
-                            {id: '34', name: 'Cambridge Hobby Shopt', phoneNumber: '617-533-1111', email:'Jan@cambridgehobbyshop.com', balance:'$1,599.10'},
-                            {id: '35', name: 'REI Hiking', phoneNumber: '508-990-1111', email:'Mary@rei.com', balance:'$111.83'},
-                            {id: '36', name: 'ABC Camping', phoneNumber: '555-333-1111', email:'bill@abccampgrounds.com', balance:'$209.87'},
-                            {id: '37', name: 'Rochester Electric', phoneNumber: '532-665-1111', email:'JRE@RochesterElectric.com', balance:'$459.87'},
-                            {id: '38', name: 'Cool Car Repair', phoneNumber: '617-988-8897', email:'John@coolcars.com', balance:'$79.00'},
-                            {id: '39', name: 'Cambridge Hobby Shopt', phoneNumber: '617-533-1111', email:'Jan@cambridgehobbyshop.com', balance:'$1,599.10'},
-                            {id: '40', name: 'REI Hiking', phoneNumber: '508-990-1111', email:'Mary@rei.com', balance:'$111.83'}
-                ]};
-                return report;
-            },
-            getColumns: function(reportId) {
-                // jshint unused:false
+            ApiService.getReport(appId, tableId, reportId ).then(
+                function(report) {
+                    console.log('GetReport: Success callback');
+                    deferred.resolve(report);
+                },
+                function(resp) {
+                    console.log('GetReport: failure callback');
+                    deferred.reject(resp);
+                }
+            );
 
-                return [
-                        {name: 'id', displayName: 'ID', fieldType:'NUMERIC'},
-                        {name: 'name', displayName: 'Name', fieldType:'TEXT'},
-                        {name: 'phoneNumber', displayName: 'Phone', fieldType:'PHONE_NUMBER'},
-                        {name: 'email', displayName: 'Email', fieldType:'EMAIL_ADDRESS'},
-                        {name: 'balance', displayName: 'Balance',  fieldType:'CURRENCY'}
-                    ];
-            }
+            return deferred.promise;
         };
 
-        return service;
+        /**
+         * Return all records for the given appId and tableId
+         *
+         * @param appId
+         * @param tableId
+         * @param offset
+         * @param rows
+         * @returns {deferred.promise|{then, always}}
+         */
+        this.getFormattedRecords = function(appId, tableId, offset, rows) {
+            var deferred = $q.defer();
+
+            ApiService.getFormattedRecords(appId, tableId, offset, rows).then(
+                function(records) {
+                    console.log('GetFormattedRecords: Success callback');
+                    deferred.resolve(records);
+                },
+                function(resp) {
+                    console.log('GetRecords: failure callback');
+                    deferred.reject(resp);
+                }
+            );
+
+            return deferred.promise;
+        };
+
+        /**
+         * Return all fields for the given appid and tableId
+         *
+         * @param appId
+         * @param tableId
+         * @returns {deferred.promise|{then, always}}
+         */
+        this.getFields = function(appId, tableId) {
+            var deferred = $q.defer();
+
+            ApiService.getFields(appId, tableId).then(
+                function(fields) {
+                    console.log('GetFields: Success callback');
+                    deferred.resolve(fields);
+                },
+                function(resp) {
+                    console.log('GetFields: failure callback');
+                    deferred.reject(resp);
+                }
+            );
+
+            return deferred.promise;
+        };
+
+        /**
+         * Return the fields for a given report
+         *
+         * @param appId
+         * @param tableId
+         * @param reportId
+         * @returns {*}
+         */
+        this.getReportFields = function(appId, tableId, reportId) {
+            var deferred = $q.defer();
+
+            var offset=0;
+            var rows=1;
+            ApiService.runFormattedReport(appId, tableId, reportId, offset, rows).then(
+                function(report) {
+                    console.log('runFormattedReport: Success callback');
+                    deferred.resolve(report.fields);
+                },
+                function(resp) {
+                    console.log('runFormattedReport: failure callback');
+                    deferred.reject(resp);
+                }
+            );
+
+            return deferred.promise;
+        };
+
+        /**
+         * Return the data records for a given report, offset and rows.
+         * If no offset and/or rows, then all data is returned.
+         *
+         * @param appId
+         * @param tableId
+         * @param reportId
+         * @param offset
+         * @param rows
+         * @returns {*}
+         */
+        this.getReportRecords = function(appId, tableId, reportId, offset, rows) {
+            var deferred = $q.defer();
+
+            ApiService.runFormattedReport(appId, tableId, reportId, offset, rows).then(
+                function(report) {
+                    console.log('runFormattedReport: Success callback');
+                    deferred.resolve(report.records);
+                },
+                function(resp) {
+                    console.log('runFormattedReport: failure callback');
+                    deferred.reject(resp);
+                }
+            );
+
+            return deferred.promise;
+        };
+
+        /**
+         * Return formatted report data(fields, data) for a given report, offset and rows.
+         * If no offset and/or rows, then all data is returned.
+         *
+         * @param appId
+         * @param tableId
+         * @param reportId
+         * @param offset
+         * @param rows
+         * @returns {*}
+         */
+        this.getReport = function(appId, tableId, reportId, offset, rows) {
+            var deferred = $q.defer();
+
+            ApiService.runFormattedReport(appId, tableId, reportId, offset, rows).then(
+                function(report) {
+                    console.log('runFormattedReport: Success callback');
+                    deferred.resolve(report);
+                },
+                function(resp) {
+                    console.log('runFormattedReport: failure callback');
+                    deferred.reject(resp);
+                }
+            );
+
+            return deferred.promise;
+        };
+
     }
 
 }());

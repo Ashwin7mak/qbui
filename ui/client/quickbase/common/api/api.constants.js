@@ -7,6 +7,16 @@
         //
         .module('qbse.api')
         .constant('apiConstants', {
+            // ticket cookie
+            TICKET_COOKIE      : 'ticket',
+
+            //  API REST references
+            APPS               : 'apps',
+            FIELDS             : 'fields',
+            TABLES             : 'tables',
+            RECORDS            : 'records',
+            REPORTS            : 'reports',
+
             //Field types
             CHECKBOX           : 'CHECKBOX',
             CURRENCY           : 'CURRENCY',

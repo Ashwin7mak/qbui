@@ -1,19 +1,14 @@
 (function() {
     'use strict';
 
-    // Instantiate chancejs so it can be used here
-    //see http://chancejs.com lightweight generator
-    var chance = new Chance(12345); //seed value makes random tests repeatable
-
     /**
      * This service provides test grid data
      **/
-    angular.module('test.dataGeneratorService', ['ngLodash', 'qbse.api'])
-        .factory('TestDataService', ['$q', 'lodash', 'apiConstants', TestDataService]);
+    angular.module('test.dataGeneratorService', ['ngLodash', 'qbse.api', 'qbse.grid'])
+        .factory('TestDataService', ['$q', 'lodash', 'apiConstants', 'gridConstants', TestDataService]);
 
-    //todo expend this service to generate data for grid
     //service to supply data and column given fixed values
-    function TestDataService($q, _, apiConstants) {
+    function TestDataService($q, _, apiConstants, gridConstants) {
 
         /** INTERNAL vars and helper methods **/
         // set up some example data for the grid
@@ -23,9 +18,9 @@
                          {'name': 'Agave', 'count': 8}];
 
         /**
-         *  Creates create some columns appends to resultArray
+         *  Creates some random column data and add to the resultArray(argument) array
          */
-        function createColumns(numColumns, colsTypes, resultArray) {
+        function createColumns(chance, numColumns, colsTypes, resultArray) {
             for (var i = 0; i <numColumns; i++) {
                 // get a field type from possible specified field types
                 var findex = chance.integer({min: 0, max: colsTypes.length - 1});
@@ -43,9 +38,9 @@
         }
 
         /**
-         * Creates some rows appends to resultData
+         * Creates some random rows data and add to the resultData(argument) array
          */
-        function createRows(numRows, colDesc, resultData) {
+        function createRows(chance, numRows, colDesc, resultData) {
             var numCols = colDesc.length;
             for (var i = 0; i < numRows; i++) {
                 var row ={};
@@ -88,34 +83,33 @@
 
         var factory = {};
 
-        // given some fix data and its column definitions
-        // wrap in a service usable by qbse grid
-        // allows for generic static data and dynamic data support in grid
-        factory.makeService = function(data, cols) {
-            return {
-                getDataPromise: function() {
-                    return $q.when(data);
-                },
-                getColumns    : function() {
-                    return cols;
-                },
-                forDebug : {
-                    _Data : data,
-                    _Cols : cols
-                }
-            };
+        factory.dataGridReportService = function(requestType) {
+            if (requestType === gridConstants.SERVICE_REQ.DATA) {
+                return $q.when(dataArray);
+            }
+            else
+            if (requestType === gridConstants.SERVICE_REQ.COLS) {
+                return $q.when(columnDefs);
+            }
+            else {
+                return $q.when(dataArray);
+            }
+
         };
-        //return some known data in service
-        factory.defaultData = function() {
-            return this.makeService(dataArray, columnDefs);
+
+        factory.setDataArray = function(data) {
+            dataArray = data;
         };
-        //return the known default rows
-        factory.defaultRows = function() {
+
+        factory.setColumnsDefs = function(columns) {
+            columnDefs = columns;
+        };
+
+        factory.getDataArray = function() {
             return dataArray;
         };
 
-        //return the known default column defs
-        factory.defaultColumns = function() {
+        factory.getColumnsDefs = function() {
             return columnDefs;
         };
 
@@ -129,7 +123,7 @@
          *      columnsTypesToInclude - default text/numeric - array of field types you want
          *      columnTypesToExclude - default text/numeric - array of field types you want to exclude*
          */
-        factory.configuredGridData = function(config) {
+        factory.setConfiguredGridData = function(config) {
             //config #records, #columns, columnsTypesToInclude[] columnTypesToExclude[]
             if (config.numRows === undefined) {
                 config.numRows = 1000;
@@ -163,8 +157,9 @@
             var confData = [];
             createRows(config.numRows, _.union(confCols, unRendCols), confData);
 
-            return this.makeService(confData, confCols);
-
+            //  replace the default data array with the new column and data configuration
+            this.setDataArray(confData);
+            this.setColumnsDefs(confCols);
 
         };
 
@@ -172,10 +167,10 @@
         /**
          * Returns a random integer between min (inclusive) and max (inclusive)
          */
-        factory.getRandomInt = function(min, max) {
+        factory.getRandomInt = function(chance, min, max) {
             return chance.integer({min: min, max: max});
         };
-        factory.chance = chance;
+
         return factory;
     }
 })();

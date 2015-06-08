@@ -9,9 +9,8 @@
     function ReportsDashboardModel(ReportsDashboardService) {
 
         var model = [];
-        model.get = function() {
-            model = ReportsDashboardService.get();
-            return model;
+        model.get = function(appId, tableId) {
+            return ReportsDashboardService.get(appId, tableId);
         };
 
         return model;

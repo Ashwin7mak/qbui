@@ -4,19 +4,28 @@
     angular.module('qbse.qbapp.reports.dashboard')
         .service('ReportsDashboardService', ReportsDashboardService);
 
-    function ReportsDashboardService() {
+    ReportsDashboardService.$inject = ['$q', 'ApiService'];
+
+    function ReportsDashboardService($q, ApiService) {
 
         var service = {
-            get: function() {
-                var model = {
-                    company: 'ABC Enterprises',
-                    menu: [
-                        {id: 1, name: 'Report 1'},
-                        {id: 2, name: 'Report 2'},
-                        {id: 3, name: 'Report 3'}
-                    ]
-                };
-                return model;
+            get: function(appId, tableId) {
+
+                var deferred = $q.defer();
+
+                ApiService.getReports(appId, tableId).then(
+                    function(reports) {
+                        console.log('GetReports: Success callback');
+                        deferred.resolve(reports);
+                    },
+                    function(resp) {
+                        console.log('GetReports: failure callback');
+                        deferred.reject(resp);
+                    }
+                );
+
+                return deferred.promise;
+
             }
         };
 

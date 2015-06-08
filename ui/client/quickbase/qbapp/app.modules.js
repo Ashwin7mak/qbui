@@ -10,6 +10,7 @@
     angular.module('quickbase.qbapp',
         [
             'ui.router',
+            'qbse.api',
             'qbse.qbapp.dashboard',
             'qbse.qbapp.reports.dashboard',
             'qbse.qbapp.reports.manager'

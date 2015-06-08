@@ -5,7 +5,6 @@
     <title>Application Home</title>
 
     <!-- build:css quickbase/assets/qbapp.css -->
-
     <link rel="styleSheet" href="bower_components/angular-ui-grid/ui-grid.css"/>
     <link rel="stylesheet" href="quickbase/common/grid/grid.directive.css"/>
     <link rel="stylesheet" href="quickbase/assets/css/app.css"/>
@@ -17,9 +16,15 @@
     <script src="bower_components/angular/angular.js"></script>
     <script src="bower_components/angular-resource/angular-resource.js"></script>
     <script src="bower_components/angular-sanitize/angular-sanitize.js"></script>
-    <script src="bower_components/angular-ui-router/release/angular-ui-router.js"></script>  <!-- ui-router -->
-    <script src="bower_components/angular-ui-grid/ui-grid.js"></script>  <!-- ui-grid -->
-    <script src="bower_components/ng-lodash/build/ng-lodash.min.js"></script>
+    <script src="bower_components/angular-cookies/angular-cookies.js"></script>
+    <!-- ui-router -->
+    <script src="bower_components/angular-ui-router/release/angular-ui-router.js"></script>
+    <!-- ui-grid -->
+    <script src="bower_components/angular-ui-grid/ui-grid.js"></script>
+    <script src="bower_components/ng-lodash/build/ng-lodash.js"></script>
+    <!-- Restangular -->
+    <script src="bower_components/restangular/dist/restangular.js"></script>
+    <script src="bower_components/lodash/lodash.js"></script>
     <!-- endbuild -->
 
 
@@ -28,8 +33,25 @@
     <div  class="quickbase-app" ui-view="qbappHomeView"></div>
 
     <!-- build:js quickbase/qbapp.js -->
+    <script src="quickbase/common/api/api.modules.js"></script>
+    <script src="quickbase/common/api/api.services.js"></script>
+    <script src="quickbase/common/api/api.constants.js"></script>
+
+    <script src="quickbase/common/grid/grid.modules.js"></script>
+    <script src="quickbase/common/grid/grid.directive.js"></script>
+    <script src="quickbase/common/grid/grid.dataFactory.js"></script>
+    <script src="quickbase/common/grid/grid.pageHandler.js"></script>
+
+    <script src="quickbase/common/helper/helper.modules.js"></script>
+    <script src="quickbase/common/helper/helper.utility.js"></script>
+
+    <script src="quickbase/common/layoutManager/layoutManager.modules.js"></script>
+    <script src="quickbase/common/layoutManager/header/header.directive.js"></script>
+    <script src="quickbase/common/layoutManager/footer/footer.directive.js"></script>
+
     <script src="quickbase/qbapp/app.modules.js"></script>
     <script src="quickbase/qbapp/app.routes.js"></script>
+
     <script src="quickbase/qbapp/dashboard/appDashboard.controller.js"></script>
     <script src="quickbase/qbapp/reports/dashboard/reportsDashboard.controller.js"></script>
     <script src="quickbase/qbapp/reports/dashboard/reportsDashboard.model.js"></script>
@@ -37,19 +59,6 @@
     <script src="quickbase/qbapp/reports/reportManager/reportManager.controller.js"></script>
     <script src="quickbase/qbapp/reports/reportManager/reportManager.model.js"></script>
     <script src="quickbase/qbapp/reports/reportManager/reportManager.service.js"></script>
-
-    <script src="quickbase/common/layoutManager/layoutManager.modules.js"></script>
-    <script src="quickbase/common/layoutManager/header/header.directive.js"></script>
-    <script src="quickbase/common/layoutManager/footer/footer.directive.js"></script>
-
-    <script src="quickbase/common/grid/grid.modules.js"></script>
-    <script src="quickbase/common/grid/grid.directive.js"></script>
-    <script src="quickbase/common/grid/grid.dataFactory.js"></script>
-    <script src="quickbase/common/grid/grid.pageHandler.js"></script>
-
-    <script src="quickbase/common/api/api.modules.js"></script>
-    <script src="quickbase/common/api/api.services.js"></script>
-    <script src="quickbase/common/api/api.constants.js"></script>
 
     <!-- endbuild -->
 

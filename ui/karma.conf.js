@@ -41,16 +41,16 @@ module.exports = function (config) {
             'client/bower_components/angular-ui-grid/ui-grid.js',
             'client/bower_components/angular-ui-router/release/angular-ui-router.js',
             'client/bower_components/chance/chance.js',
+            'client/bower_components/lodash/lodash.js',
+            'client/bower_components/restangular/dist/restangular.js',
             'client/bower_components/angular-mocks/angular-mocks.js',
             'client/bower_components/bluebird/js/browser/bluebird.js',
             //endbower:
 
 
-            // load the application dependencies - loading order is important; broadest
-            // to narrowest.
+            // load the application dependencies - loading order is important; broadest to narrowest.
             'client/*.index.html',
             'client/quickbase/**/**/*.html',
-            'client/gallery/**/*Example.modules.js',
             'client/quickbase/common/**/*.modules.js',
             'client/quickbase/**/*.modules.js',
             'client/quickbase/common/**/*.js',
@@ -58,29 +58,30 @@ module.exports = function (config) {
 
             // fixtures
             {
-                pattern: "**/mockdata/*.json",
+                pattern: '**/mockdata/*.json',
                 watched: 'true',
                 served:  'true',
                 included: 'false'
             }
 
-
         ],
 
         // list of files / patterns to exclude
-        exclude: [],
+        exclude: ['client/gallery/**/*', 'client/gallery.index.html'],
 
         preprocessors: {
             //'**/*.jade': 'ng-jade2js',
-            '**/*.html': 'html2js',
+            'client/quickbase/**/**/*.html': ['html2js'],
             //'**/mockdata/*.json': 'html2js',
             //'**/*.coffee': 'coffee',
             //if any 3rd party vendor plugin within code coverage target folder, need to exclude (ie: jasmine, angular, etc)
             'client/{quickbase/**/*.js,*.js}' : ['coverage']
         },
 
+        //  load the templates for pre-processing...needed for unit testing
         ngHtml2JsPreprocessor: {
-            stripPrefix: 'client/'
+            stripPrefix: 'client/',
+            moduleName: 'qbse.templates'
         },
 
         ngJade2JsPreprocessor: {
