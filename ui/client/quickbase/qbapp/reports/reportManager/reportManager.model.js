@@ -4,9 +4,9 @@
     angular.module('qbse.qbapp.reports.manager')
         .factory('ReportModel', ReportManagerModel);
 
-    ReportManagerModel.$inject = ['$q', 'ReportService'];
+    ReportManagerModel.$inject = ['$q', 'ReportService', 'qbUtility'];
 
-    function ReportManagerModel($q, ReportService) {
+    function ReportManagerModel($q, ReportService, qbUtility) {
 
         return {
             /**
@@ -69,9 +69,10 @@
                     function (fields) {
                         //  process the fields
                         var cols = [];
-                        var fieldMap = new Map();
+                        var fieldMap = new qbUtility.map();
+
                         fields.forEach(function (field) {
-                            fieldMap.set(field.id, field);
+                            fieldMap.put(field.id, field);
                         });
 
                         fieldMap.forEach(function (field, id) {
@@ -82,6 +83,7 @@
                             column.fieldType = field.type;
                             cols.push(column);
                         });
+
                         deferred.resolve(cols);
                     },
                     function (resp) {
@@ -106,10 +108,6 @@
 
                 var deferred = $q.defer();
 
-                //  If need to support IE8 (or older browser that doesn't support Map), create a polyfill..
-                //  https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/map#Polyfill
-                var fieldMap = new Map();
-
                 ReportService.getReport(appId, tableId, reportId, offset, rows).then(
                     function (data) {
                         console.log('formatted report callback successful');
@@ -117,10 +115,11 @@
                         var fields = data.fields;
                         var records = data.records;
                         var reportData = [];
+                        var fieldMap = new qbUtility.map();
 
                         if (fields && records) {
                             fields.forEach(function (field) {
-                                fieldMap.set(field.id, field);
+                                fieldMap.put(field.id, field);
                             });
 
                             records.forEach(function (record) {

@@ -1,10 +1,11 @@
 (function () {
     'use strict';
-    var request = require("request");
+    var request = require('request');
 
     module.exports = function (app, config) {
 
         //  request helper class
+        var env = app.get('env');
         var requestHelper = require('../api/quickbase/requestHelper')(config);
         var recordsApi = require('../api/quickbase/recordsApi')(config);
 
@@ -17,7 +18,7 @@
                         res.send(response);
                     })
                     .catch(function(error) {
-                        console.log("ERROR " + JSON.stringify(error));
+                        console.log('ERROR ' + JSON.stringify(error));
                         requestHelper.copyHeadersToResponse(res, error.headers);
                         res.status(error.statusCode)
                             .send(error.body);
@@ -57,13 +58,15 @@
             }
         );
 
-        //Disable proxying of realm and ticket requests via the node webserver
-        app.route(['/api/:version/realms*']).all(
-            function(req, res) {
-                requestHelper.logRoute(req);
-                res.status(404).send();
-            }
-        );
+        //Disable proxying of realm and ticket requests via the node webserver for non-local environment
+        if ('local' !== env) {
+            app.route(['/api/:version/realms*', '/api/:version/ticket*']).all(
+                function (req, res) {
+                    requestHelper.logRoute(req);
+                    res.status(404).send();
+                }
+            );
+        }
 
         //  TODO: need to figure out the routing..swagger doc vs 'real' api data call vs other.
         //  TODO: .right now we are routing through this one definition...
@@ -74,10 +77,9 @@
             var opts = requestHelper.setOptions(req);
 
             //  send the request
-            //  TODO: NEED TO HANDLE ERRORS..expected(server 401,404) and unexpected(server 500).
             request(opts)
                 .on('response', function (response) {
-                    console.log("status code: " + response.statusCode);
+                    console.log('status code: ' + response.statusCode);
                 })
                 .pipe(res);
         });
