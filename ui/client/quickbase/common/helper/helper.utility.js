@@ -23,6 +23,51 @@
             return (typeof val==='number' && (val%1)===0);
         };
 
+        /**
+         * An object that maps keys to values. Similar implementation to a HashMap.
+         */
+        utilityFunctions.map = function() {
+
+            var dict = {};
+
+            this.size = function () {
+                return Object.keys(dict).length;
+            };
+
+            this.get = function (key) {
+                return dict[key];
+            };
+
+            this.put = function (key, value) {
+                dict[key] = value;
+            };
+
+            this.containsKey = function (key) {
+                return this.get(key) !== undefined;
+            };
+
+            this.remove = function (key) {
+                delete dict[key];
+            };
+
+            this.isEmpty = function () {
+                return Object.keys(dict).length === 0;
+            };
+
+            this.clear = function () {
+                dict = {};
+            };
+
+            this.forEach = function (callback) {
+                var len = this.size();
+                for (var i = 0; i < len; i++) {
+                    var item = this.get(Object.keys(dict)[i]);
+                    callback(item, i);
+                }
+            };
+
+        }
+
         return utilityFunctions;
 
     }

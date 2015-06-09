@@ -69,7 +69,7 @@ describe('Factory: ReportModel', function() {
         );
 
         //  apply the promise and propagate to the then function..
-        var reportName='reportName', reportDesc='reportDesc'
+        var reportName='reportName', reportDesc='reportDesc';
         var data = {appId:appId, tableId:tableId, reportId:reportId, name:reportName, description:reportDesc};
         deferred.resolve(data);
         scope.$apply();
