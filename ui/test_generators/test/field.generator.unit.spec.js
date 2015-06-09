@@ -13,7 +13,7 @@ var assert = require('assert');
 /**
  * Unit tests for field generator
  */
-ddescribe('Field generator unit test', function () {
+describe('Field generator unit test', function () {
     /**
      * DataProvider containing Records, FieldProperties and record display expectations PhoneNumber fields
      */

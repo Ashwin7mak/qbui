@@ -52,7 +52,17 @@
             var recordJson = this.generateRecord(fields);
 
             return recordJson;
+        },
+
+        /**
+         @params: Record JS object you want to stringify
+         You need to run this method on your record object before passing it down through the node layer.
+         This will ensure proper JSON formatting for the API call.
+         */
+        recordToJsonString : function(record){
+            return JSON.stringify(record);
         }
+
     };
 
     //For a given field type, apply any default values that are not currently present in the map
