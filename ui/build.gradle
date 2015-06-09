@@ -263,12 +263,13 @@ sonarRunner {
 
         property "client.sonar.projectName", "${user}:QuickBase:${branchName}:ui:client"
         property "client.sonar.sources", "$projectDir/client"
-        property "client.sonar.exclusions", "**/codemirror/**,**/bower_components/**"
+        property "client.sonar.exclusions", "**/gallery/**,**/bower_components/**,**/quickbase/common/test/**"
         //  import the ui LCOV coverage report
         property "client.sonar.javascript.lcov.reportPath","${projectDir}/build/reports/client/coverage/lcov.info"
 
         property "server.sonar.projectName", "${user}:QuickBase:${branchName}:ui:server"
         property "server.sonar.sources", "$projectDir/server"
+        property "server.sonar.exclusions", "**/api/test/**"
         //  import the ui LCOV coverage report
         property "server.sonar.javascript.lcov.reportPath","${projectDir}/build/reports/server/coverage/lcov.info"
 
