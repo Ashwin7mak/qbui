@@ -157,7 +157,7 @@ describe('App generator unit test', function () {
                             _.forEach(fields, function (field) {
                                 _.forEach(tableMap[tableName], function (fieldType, fieldName) {
                                     //If we have found the field that we expect to have been generated from the map, then put it in the fieldFoundMap
-                                    if (field[fieldConsts.fieldKeys.TYPE] === fieldType && field[fieldConsts.NAME] === fieldName) {
+                                    if (field[fieldConsts.TYPE] === fieldType && field[fieldConsts.NAME] === fieldName) {
 
                                         if (!tableFoundMap[table[tableConsts.NAME]]) {
                                             tableFoundMap[table[tableConsts.NAME]].fields[field[fieldConsts.NAME]] = 1;

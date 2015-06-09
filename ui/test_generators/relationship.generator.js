@@ -8,7 +8,8 @@
     var tableConsts = require('./table.constants')
     var fieldConsts = require('./field.constants')
     var appConsts = require('./app.constants')
-    var chance = new require('chance');
+    var Chance = require('chance');
+    var chance = new Chance();
     var _ = require('lodash');
 
 

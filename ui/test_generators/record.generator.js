@@ -28,14 +28,12 @@
                 var field = fields[i];
 
                 // Check that there is a mapping for the field type (otherwise don't generate a value for it)
-                if (typeof recordTypeMapping[field[fieldConsts.fieldKeys.TYPE]] === 'undefined') {
-                    console.error('Record data generator is undefined for field type ' + field[fieldConsts.fieldKeys.TYPE]);
-                }
-                else {
-                    console.log('Generating field value for type ' + field[fieldConsts.fieldKeys.TYPE]);
+                if (typeof recordTypeMapping[field[fieldConsts.TYPE]] !== 'undefined') {
+
+                    console.log('Generating field value for type ' + field[fieldConsts.TYPE]);
                     recordJson.push({
-                        id: field[fieldConsts.fieldKeys.ID],
-                        value: generateRecordValueForFieldType(field[fieldConsts.fieldKeys.TYPE])
+                        id: field[fieldConsts.ID],
+                        value: generateRecordValueForFieldType(field[fieldConsts.TYPE])
                     });
                 }
             }

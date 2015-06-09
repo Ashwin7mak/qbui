@@ -4,9 +4,7 @@
  */
 (function () {
     'use strict';
-    //var chance = new require('chance');
-
-    var Chance = require('chance');
+    var Chance =  require('chance');
     var chance = new Chance();
     var appConsts = require('./app.constants');
 
