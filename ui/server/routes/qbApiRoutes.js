@@ -58,8 +58,8 @@
             }
         );
 
-        //Disable proxying of realm and ticket requests via the node webserver for non-local environment
-        if ('local' !== env) {
+        //Disable proxying of realm and ticket requests via the node webserver for non-local and test environment
+        if ('local' !== env && 'test' !== env) {
             app.route(['/api/:version/realms*', '/api/:version/ticket*']).all(
                 function (req, res) {
                     requestHelper.logRoute(req);
