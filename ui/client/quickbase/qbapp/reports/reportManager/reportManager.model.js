@@ -81,11 +81,11 @@
                             column.name = field.name;
                             column.displayName = field.name;
                             column.fieldType = field.type;
-
-                            column.bold = field.clientSideAttributes.bold;
-                            column.width = field.clientSideAttributes.width;
-                            if (column.width < 100) { column.width = 100; } // minimum 100px col width for reporting
-
+                            if (field.clientSideAttributes) {
+                                column.bold = field.clientSideAttributes.bold;
+                                column.width = field.clientSideAttributes.width;
+                                if (column.width < 100) { column.width = 100; }
+                            }
                             cols.push(column);
                         });
 
