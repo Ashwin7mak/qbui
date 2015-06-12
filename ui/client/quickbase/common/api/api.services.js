@@ -14,16 +14,17 @@
 
     angular.module('qbse.api').service('ApiService', ApiService);
 
-    ApiService.$inject = ['Restangular', 'qbUtility', 'apiConstants', '$cookieStore'];
+    ApiService.$inject = ['Restangular', 'qbUtility', 'apiConstants', '$cookies'];
 
-    function ApiService(Restangular, qbUtility, apiConstants, $cookies) {
+    function ApiService(Restangular, qbUtility, apiConstants, $cookie) {
 
         // get the auth session ticket from the cookie.  If it's invalid or not found, the
         // requested endPoint will respond with a 403 status, which is handled in api.modules.js
         // by the RestangularProvider.setErrorInterceptor.
         //
         function getTicket() {
-            return $cookies.get(apiConstants.TICKET_COOKIE);
+            var cookie = $cookie.get(apiConstants.TICKET_COOKIE);
+            return cookie;
         }
 
         function setQueryParams(format, offset, rows) {
