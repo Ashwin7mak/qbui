@@ -30,7 +30,7 @@ describe('Factory: ReportModel', function() {
         })
     );
 
-    it('validate the getColumnData service call', function() {
+    it('validate the getColumnData service', function() {
 
         var columns;
         ReportModel.getColumnData(appId, tableId, reportId).then (
@@ -41,21 +41,36 @@ describe('Factory: ReportModel', function() {
 
         //  apply the promise and propagate to the then function..
         var fields = [
-            {id:'1', name:'colName1', type:'NUMERIC'},
-            {id:'2', name:'colName2', type:'TEXT'}];
+            {id:'0', name:'colName2', type:'TEXT'},
+            {id:'1', name:'colName1', type:'NUMERIC', clientSideAttributes: {bold:true, width: 75} },
+            {id:'2', name:'colName2', type:'TEXT', clientSideAttributes: {bold:false, width: 200}}];
         deferred.resolve(fields);
         scope.$apply();
 
         //  NOTE: the expectations will get tested until after the above promise is fulfilled
         expect(ReportService.getReportFields).toHaveBeenCalledWith(appId, tableId, reportId);
 
-        //  expect 2 columns array with the below data
-        expect(columns.length).toEqual(2);
+        //  expect 3 columns array with the below data
+        expect(columns.length).toEqual(3);
         columns.forEach( function(column, idx) {
             expect(column.id).toEqual(fields[idx].id);
             expect(column.name).toEqual(fields[idx].name);
             expect(column.displayName).toEqual(fields[idx].name);
             expect(column.fieldType).toEqual(fields[idx].type);
+            switch (idx) {
+                case 0:
+                    expect(column.bold).toBeUndefined();
+                    expect(column.width).toBeUndefined();
+                    break;
+                case 1:
+                    expect(column.bold).toBeTruthy();
+                    expect(column.width).toEqual(100);
+                    break;
+                case 2:
+                    expect(column.bold).toBeFalsy();
+                    expect(column.width).toEqual(200);
+                    break;
+            }
         });
     });
 
