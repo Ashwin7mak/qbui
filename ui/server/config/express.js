@@ -28,12 +28,13 @@
         app.use(methodOverride());
         app.use(cookieParser());
 
-        if ('production' === env || 'test' === env || 'development' === env) {
+        //TODO: We need to figure out how we want to handle the environment config in aws
+        if ('aws' === env || 'production' === env || 'test' === env || 'development' === env) {
             if ('development' === env) {
                 app.use(require('connect-livereload')());
             }
 
-            if ('production' === env) {
+            if ('aws' === env || 'production' === env) {
                 app.use(favicon(path.join(config.root, 'public', 'favicon.ico')));
             }
 
