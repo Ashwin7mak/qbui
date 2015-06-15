@@ -10,7 +10,8 @@
 
     var express = require('express'),
         http = require('http'),
-        config = require('./config/environment');
+        config = require('./config/environment'),
+        _ = require('lodash');
 
     // Setup server
     var app = module.exports = express();
@@ -35,7 +36,8 @@
 
     console.log('Starting express server');
     console.log('ENVIRONMENT: %s', app.get('env'));
-    console.log('CONFIG: %o', config);
+    // don't log secrets info
+    console.log('CONFIG:', _.omit(config, 'secrets'));
 
     /**************
      * Start HTTP Server
