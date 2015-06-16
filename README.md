@@ -7,7 +7,7 @@ or
 * `git clone -b master https://github.intuit.com/QuickBase/qbui.git`
 
 
-For instructions to setup and run see <https://github.intuit.com/QuickBase/qbui/blob/development/ui/README.md#instructions-to-run-for-development> for details
+For instructions to setup and run see <https://github.intuit.com/QuickBase/qbui/blob/master/ui/README.md#instructions-to-run-for-development> for details
 
 For running locally make sure you copy
  `qbui/ui/server/config/environment/localsample.js`
