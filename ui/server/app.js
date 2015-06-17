@@ -35,6 +35,9 @@
     require('./config/express')(app);
     require('./routes')(app, config);
 
+    //  log some server info...but don't include the secrets configuration
+    log.info('Express Server configuration:', _.omit(config, 'secrets'));
+
     /**************
      * Start HTTP Server
      **************/
@@ -63,8 +66,5 @@
             log.info('Https Server started. Listening on PORT: %d', serverHttps.address().port);
         });
     }
-
-    //  log some server info...but don't include the secrets configuration
-    log.info('Server configuration:', _.omit(config, 'secrets'));
 
 }());

@@ -30,8 +30,7 @@
 
             //  do we want to suppress console logging
             if (getConfig('suppressConsole') === true) {
-                console.log = function () {
-                };
+                console.log = function () { };
             }
 
             var logger = bunyan.createLogger({
@@ -47,7 +46,7 @@
                 callFunc: getCallFunc(callFunc)
             });
 
-             //  add some custom functions
+             //  add some custom functions for logging request and response info
             appLogger.logRequest = function (req) {
                 if (req) {
                     appLogger.info({req: req});
@@ -57,7 +56,8 @@
                 }
             };
             appLogger.logResponse = function (res) {
-                //  Use cautiously, as the amount of data returned could be significant..
+                //  Use cautiously...the data in the response may be sensitive...the volume of data
+                //  returned could be significant.
                 if (res) {
                     appLogger.debug({res: res});                         //  debug mode only
                 }
@@ -72,8 +72,8 @@
     };
 
     /**
-     * Return the configuration setting for the given key.
-     * If the key is not defined, the default value is returned.
+     * Return the bunyan configuration setting for the given key. If the key
+     * is not defined, a default value(if any) is returned.
      *
      * @param logkey
      * @param defaultValue
@@ -94,6 +94,7 @@
     function getStream() {
         var stream = getConfig('stream');
         if (stream) {
+            //  if of type file, setup to stream the output to a file
             if (stream.type === 'file' && stream.file) {
                 var s = {};
                 s.path = stream.file.dir ? stream.file.dir + '/' + stream.file.name : stream.file.name;
@@ -117,11 +118,20 @@
             }
         }
 
+        //  no stream configuration...will default to console
         return {type: 'stream', stream: process.stdout};
     }
 
+    /**
+     * Returns the name of the function that is outputting a log message.
+     * Try to trim off the front portion of the file spec for readability.
+     *
+     * @param callFunc
+     * @returns {*}
+     */
     function getCallFunc(callFunc) {
         if (callFunc) {
+            //  look for public(dist), client(dist/local) and server(local) folders
             var offset = callFunc.indexOf('/server/');
             if (offset === -1) {
                 offset = callFunc.indexOf('/public/');
@@ -129,6 +139,7 @@
                     offset = callFunc.indexOf('/client/');
                 }
             }
+            //  do we have something to trim
             if (offset !== -1) {
                 return callFunc.substr(offset);
             }
