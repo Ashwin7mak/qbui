@@ -6,6 +6,8 @@
     'use strict';
     var moment = require('moment-timezone');
     var consts = require('../../constants');
+    var log = require('../../../logger').getLogger(module.filename);
+
     //FORMATTING COMPONENTS
     var DASH = '-';
     var TWO_DIGIT_MONTH = 'MM';
@@ -97,7 +99,7 @@
                 //Date constructor expects ISO 8601 date
                 d = new Date(rawInput);
             } catch (err) {
-                console.log('failed to parse a valid date attempting to display format a date. ' + fieldValue.value);
+                log.error('Failed to parse a valid date attempting to display format a date. ' + fieldValue.value);
                 return '';
             }
             var m = moment.tz(d, timeZone);

@@ -7,6 +7,7 @@ var recordBase = require('./recordApi.base')(config);
 var Promise = require('bluebird');
 var _ = require('lodash');
 var consts = require('../constants');
+var log = require('../../logger').getLogger(module.filename);
 
 
 describe('API - Validate report execution', function () {
@@ -72,7 +73,7 @@ describe('API - Validate report execution', function () {
                             }
                             done();
                         });
-                }).catch(function(errpr){ console.log(JSON.stringify(error)); });
+                }).catch(function(error){ log.error(JSON.stringify(error)); });
         });
     });
 

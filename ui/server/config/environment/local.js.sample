@@ -12,6 +12,22 @@
 
     module.exports = {
 
+        //  Logging configuration
+        LOG: {
+            name: 'qbse-local',
+            level: 'debug',
+            stream : {
+                type: 'file',         //  file or console
+                path: './logs/qbse-local.log',
+                rotating: {
+                    period: '1d',
+                    count: 7
+                }
+            },
+            src: true,              // this is slow...do not use in prod
+            suppressConsole: false  // suppress console logging
+        },
+
         // to run using ssl, copy the private key and cert for
         // your host(ie:localhost.intuit.com) to ../server/config/keys
         // folder.. comment this out if don't want to offer ssl support.

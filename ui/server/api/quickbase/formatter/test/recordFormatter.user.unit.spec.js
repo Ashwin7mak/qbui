@@ -118,8 +118,6 @@ describe('User record formatter unit test', function () {
         userDataProvider().forEach(function(entry){
             it('Test case: ' + entry.message, function (done) {
                 var formattedRecords = recordFormatter.formatRecords(entry.records, entry.fieldInfo);
-                //console.log('expected : ' + JSON.stringify(entry.expectedRecords));
-                //console.log('formatted: ' + JSON.stringify(formattedRecords));
                 assert.deepEqual(formattedRecords, entry.expectedRecords, entry.message);
                 done();
             });

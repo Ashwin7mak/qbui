@@ -17,8 +17,9 @@
 # exclude the compass compiled css and sprite images they are generated
 client/quickbase/assets/css/
 
-# exclude express server local configuration
+# exclude express server local configuration and logs directory
 server/config/environment/local.js
+server/logs/
 
 
 # miscellaneous files to not track

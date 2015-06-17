@@ -88,7 +88,6 @@ describe('Text record formatter unit test', function () {
         dataProvider().forEach(function(entry){
             it('Test case: ' + entry.message, function (done) {
                 var formattedRecords = recordFormatter.formatRecords(entry.records, fieldInfo);
-                //console.log('entry: ' + JSON.stringify(entry));
                 assert.deepEqual(formattedRecords, entry.expectedRecords, entry.message);
                 done();
             });

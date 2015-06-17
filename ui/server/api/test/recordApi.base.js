@@ -3,6 +3,8 @@
     var promise = require('bluebird');
     var assert = require('assert');
     var consts = require('../constants');
+    var log = require('../../logger').getLogger(module.filename);
+
     /*
      * We can't use JSON.parse() with records because it is possible to lose decimal precision as a
      * result of the JavaScript implementation of its single numeric data type. In JS, all numbers are
@@ -56,8 +58,8 @@
                                 }).catch(function (error) {
                                     fetchRecordDeferred.reject(error);
                                 });
-                        }).catch(function(currError){console.log(JSON.stringify(currError));});
-                }).catch(function(err){console.log(JSON.stringify(err));});
+                        }).catch(function(currError){log.error(JSON.stringify(currError));});
+                }).catch(function(err){log.error(JSON.stringify(err));});
                 return fetchRecordDeferred.promise;
             }
         };
