@@ -94,7 +94,6 @@ describe('Directive: qbseGrid', function() {
     });
 
     it('should have a total rows', function() {
-       // $scope.$digest();
         var isolateScope = element.isolateScope();
         expect(isolateScope.gridOptions.data.length).toBe(testDataService.getDataArray().length);
 

@@ -975,7 +975,6 @@ describe('Numeric record formatter unit test', function () {
         provider().forEach(function(entry){
             it('Test case: ' + entry.message, function (done) {
                 var formattedRecords = recordFormatter.formatRecords(entry.records, entry.fieldInfo);
-                //console.log('entry: ' + JSON.stringify(entry));
                 assert.deepEqual(formattedRecords, entry.expectedRecords, entry.message);
                 done();
             });

@@ -134,9 +134,6 @@ describe('API - Duration record test cases', function () {
                         }
                         currentRecord.forEach(function (fieldValue) {
                             if (fieldValue.id === jsonBigNum.parse(records[i].expectedFieldValue).id) {
-                                //console.log('field info  : ' + jsonBigNum.stringify(appWithNoFlags));
-                                //console.log('expected    : ' + jsonBigNum.stringify(records[i].expectedFieldValue));
-                                //console.log('actual value: ' + jsonBigNum.stringify(fieldValue));
                                 assert.deepEqual(fieldValue, jsonBigNum.parse(records[i].expectedFieldValue), 'Unexpected field value returned: '
                                 + jsonBigNum.stringify(fieldValue) + ', ' + records[i].expectedFieldValue);
                             }
@@ -223,9 +220,6 @@ describe('API - Duration record test cases', function () {
                         }
                         currentRecord.forEach(function (fieldValue) {
                             if (fieldValue.id === records[i].expectedFieldValue.id) {
-                                //console.log('field info  : ' + jsonBigNum.stringify(appWithAllFlags));
-                                //console.log('expected    : ' + jsonBigNum.stringify(records[i].expectedFieldValue));
-                                //console.log('actual value: ' + jsonBigNum.stringify(fieldValue));
                                 assert.deepEqual(fieldValue, jsonBigNum.parse(records[i].expectedFieldValue), 'Unexpected field value returned: '
                                 + JSON.stringify(fieldValue) + ', ' + records[i].expectedFieldValue);
                             }

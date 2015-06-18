@@ -4,6 +4,7 @@
 
 'use strict';
 var consts = require('../../api/constants');
+var log = require('../../logger').getLogger(module.filename);
 
 module.exports[403] = function unauthorized(req, res) {
     var viewFilePath = '403';
@@ -24,6 +25,7 @@ module.exports[403] = function unauthorized(req, res) {
             res.render(viewFilePath);
         });
     }
+    log.logRequest(req);
 };
 
 module.exports[404] = function pageNotFound(req, res) {
@@ -46,6 +48,7 @@ module.exports[404] = function pageNotFound(req, res) {
             res.render(viewFilePath);
         });
     }
+    log.logRequest(req);
 
 };
 
@@ -68,5 +71,6 @@ module.exports[500] = function internalServerError(req, res) {
             res.render(viewFilePath);
         });
     }
+    log.logRequest(req);
 };
 

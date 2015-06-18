@@ -419,7 +419,6 @@ describe('DateTime record formatter unit test', function () {
         mmddyyyyDataProvider().forEach(function(entry){
             it('Test case: ' + entry.message, function (done) {
                 var formattedRecords = recordFormatter.formatRecords(entry.records, entry.fieldInfo);
-                //console.log('entry: ' + JSON.stringify(entry));
                 assert.deepEqual(formattedRecords, entry.expectedRecords, entry.message);
                 done();
             });
@@ -838,7 +837,6 @@ describe('DateTime record formatter unit test', function () {
         mmddyyDataProvider().forEach(function(entry){
             it('Test case: ' + entry.message, function (done) {
                 var formattedRecords = recordFormatter.formatRecords(entry.records, entry.fieldInfo);
-                //console.log('entry: ' + JSON.stringify(entry));
                 assert.deepEqual(formattedRecords, entry.expectedRecords, entry.message);
                 done();
             });
@@ -1257,7 +1255,6 @@ describe('DateTime record formatter unit test', function () {
         ddmmyyDataProvider().forEach(function(entry){
             it('Test case: ' + entry.message, function (done) {
                 var formattedRecords = recordFormatter.formatRecords(entry.records, entry.fieldInfo);
-                //console.log('entry: ' + JSON.stringify(entry));
                 assert.deepEqual(formattedRecords, entry.expectedRecords, entry.message);
                 done();
             });
@@ -1674,7 +1671,6 @@ describe('DateTime record formatter unit test', function () {
         ddmmyyyyDataProvider().forEach(function(entry){
             it('Test case: ' + entry.message, function (done) {
                 var formattedRecords = recordFormatter.formatRecords(entry.records, entry.fieldInfo);
-                //console.log('entry: ' + JSON.stringify(entry));
                 assert.deepEqual(formattedRecords, entry.expectedRecords, entry.message);
                 done();
             });
@@ -2093,7 +2089,6 @@ describe('DateTime record formatter unit test', function () {
         yyyymmddDataProvider().forEach(function(entry){
             it('Test case: ' + entry.message, function (done) {
                 var formattedRecords = recordFormatter.formatRecords(entry.records, entry.fieldInfo);
-                //console.log('entry: ' + JSON.stringify(entry));
                 assert.deepEqual(formattedRecords, entry.expectedRecords, entry.message);
                 done();
             });
@@ -2512,7 +2507,6 @@ describe('DateTime record formatter unit test', function () {
         invalidFormatDataProvider().forEach(function(entry){
             it('Test case: ' + entry.message, function (done) {
                 var formattedRecords = recordFormatter.formatRecords(entry.records, entry.fieldInfo);
-                //console.log('entry: ' + JSON.stringify(entry));
                 assert.deepEqual(formattedRecords, entry.expectedRecords, entry.message);
                 done();
             });
