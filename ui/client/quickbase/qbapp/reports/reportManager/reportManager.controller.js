@@ -50,11 +50,11 @@
                 $scope.report = {};
                 $scope.report.id = metaData.reportId;
                 $scope.report.appId = metaData.appId;
+                $scope.report.appName = metaData.appName;
                 $scope.report.tableId = metaData.tableId;
                 $scope.report.dataService = dataGridReportService;
                 $scope.report.name = metaData.name;
                 $scope.report.company = metaData.company;
-                $scope.report.snapshot = metaData.snapshot;
 
                 //  ui grid options
                 $scope.report.qbseGridOptions = {
@@ -64,6 +64,7 @@
                 };
 
                 //  set appropriate header object data
+                $scope.showHeader = false;
                 $scope.header = {
                     leftContent: 'Beta > Reports > ' + $scope.report.name,
                     rightContent: ''
@@ -77,7 +78,8 @@
                 //  set the stage object based on the model data
                 $scope.stage = {
                     companyName: metaData.company,
-                    lastSnapshot: $scope.report.snapshot
+                    reportName: metaData.name,
+                    appName: metaData.appName
                 };
 
                 //  get the stage content template

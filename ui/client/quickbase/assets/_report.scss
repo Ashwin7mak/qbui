@@ -3,34 +3,55 @@
   min-width: 640px;
 
   .report-stage {
-    .left {
-      float: left;
-      width: 50%;
-      div {
-        font-size: 12px;
-        padding: 0px 30px 15px;
-        &.header {
+    .report-content {
+      .left {
+        float: left;
+        width: 70%;
+        div {
           font-size: 14px;
-          font-weight: bold;
+          margin-left: 40px;
+          &.header {
+            font-size: 16px;
+            font-weight: bold;
+          }
+          &.subheader {
+            margin-top: 3px;
+            font-size: 12px;
+            color: $slate;
+            text-transform: inherit;
+          }
+          &.content {
+            margin: 20px 60px 20px 40px;
+          }
         }
       }
-    }
 
-    .right {
-      font-size: 12px;
-      float: left;
-      width: 50%;
-      .time {
+      .right {
+        font-size: 12px;
         float: left;
-        width: 50%;
-        .title {
-          font-weight:bold;
-          padding: 0px 5px 3px 0px;
+        width: 30%;
+        .icon {
+          min-height: 40px;
         }
-      }
-      .reminder {
-        float: left;
-        width: 50%;
+        .reminder {
+          white-space: nowrap;
+          border-left: 2px solid $lighter-gray;
+          padding: 15px 40px;
+          .header {
+            font-size: 18px;
+          }
+          .subheader {
+
+            font-size: 10px;
+            margin-top: 3px;
+            color: $slate;
+            text-transform: uppercase;
+          }
+          button {
+            cursor: pointer;
+            margin-top: 15px;
+          }
+        }
       }
     }
   }
