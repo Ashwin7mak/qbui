@@ -9,7 +9,13 @@
             restrict: 'E',
             replace: true,
             scope: true,
-            template: '<button ng-click="sendFeedback()" type="button" style="cursor:pointer;">Send your thoughts</button>',
+            template:
+                '<div class="reminder">' +
+                '  <div class="icon"></div>' +
+                '  <div class="header">Remember</div>' +
+                '  <div class="subheader">Your Feedback Matters</div>' +
+                '  <button ng-click="sendFeedback()" type="button">Send your thoughts</button>' +
+                '</div>',
             link: function(scope /*,elem*/) {
                 scope.sendFeedback = function() {
                     //elem.attr('target', '_blank');

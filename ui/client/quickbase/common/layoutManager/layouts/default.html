@@ -1,5 +1,4 @@
 <div class="layout-container">
-
     <qb-global-header info="header"></qb-global-header>
 
     <div class="layout-stage" ng-class="{'stage-open':!isClosed, 'stage-close': isClosed}">
@@ -13,6 +12,6 @@
         <div ng-include="getContent()"></div>
     </div>
 
-    <qb-global-footer info="footer"></qb-global-footer>
+    <qb-global-footer info="footer" ng-hide="hideFooter"></qb-global-footer>
 
 </div>

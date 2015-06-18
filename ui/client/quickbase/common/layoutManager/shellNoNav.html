@@ -2,8 +2,6 @@
 
     <div class="layout-container">
 
-        <qb-global-header class="layout-header" info="header"></qb-global-header>
-
         <div class="layout-stage" ng-class="{'stage-open':!isClosed, 'stage-close': isClosed}">
             <div class="layout-stage-content">
                 <div ng-include="getStageContent()"></div>
