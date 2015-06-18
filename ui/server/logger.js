@@ -26,6 +26,7 @@
             var name = getConfig('name', 'qbse');
             var level = getConfig('level', 'info');
             var src = getConfig('src', false);
+            var maxResponseSize = getConfig('maxResponseSize', 1024);
             var stream = getStream();
 
             //  do we want to suppress console logging
@@ -49,17 +50,23 @@
              //  add some custom functions for logging request and response info
             appLogger.logRequest = function (req) {
                 if (req) {
-                    appLogger.info({req: req});
+                    appLogger.info({Request: req}, 'API Request');
                 }
                 else {
                     appLogger.info('No request object supplied when trying to log request information.');
                 }
             };
             appLogger.logResponse = function (res) {
-                //  Use cautiously...the data in the response may be sensitive...the volume of data
-                //  returned could be significant.
+                //  Restricting to debug level only as the data in the response may be sensitive and should not be logged
                 if (res) {
-                    appLogger.debug({res: res});                         //  debug mode only
+                    //  restrict the size of the response output to the configuration setting
+                    var response = JSON.stringify(res);
+                    if (response.length > maxResponseSize) {
+                        appLogger.debug({TruncatedResponse:response.substring(0, maxResponseSize - 3) + '...'});
+                    }
+                    else {
+                        appLogger.debug({Response: res}, 'API Response');
+                    }
                 }
                 else {
                     appLogger.debug('No response object supplied when trying to log response information.');
@@ -82,7 +89,9 @@
     function getConfig(logkey, defaultValue) {
         var value = defaultValue;
         if (config && config.LOG) {
-            value = config.LOG[logkey] || defaultValue;
+            if (typeof config.LOG[logkey] !== 'undefined') {
+                value = config.LOG[logkey];
+            }
         }
         return value;
     }
