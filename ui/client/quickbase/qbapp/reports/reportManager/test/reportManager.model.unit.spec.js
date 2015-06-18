@@ -2,7 +2,7 @@ describe('Factory: ReportModel', function() {
     'use strict';
 
     var scope, ReportModel, ReportService, deferred;
-    var appId='1', tableId='2', reportId='3';
+    var appId='1', appName='A', tableId='2', reportId='3';
 
     // load the module
     beforeEach(function() {
@@ -85,7 +85,18 @@ describe('Factory: ReportModel', function() {
 
         //  apply the promise and propagate to the then function..
         var reportName='reportName', reportDesc='reportDesc';
-        var data = {appId:appId, tableId:tableId, reportId:reportId, name:reportName, description:reportDesc};
+        var data = {
+            rpt: {
+                appId: appId,
+                tableId: tableId,
+                reportId: reportId,
+                name: reportName,
+                description: reportDesc
+            },
+            app: {
+                name: appName
+            }
+        };
         deferred.resolve(data);
         scope.$apply();
 
@@ -98,7 +109,8 @@ describe('Factory: ReportModel', function() {
         expect(metaData.reportId).toEqual(reportId);
         expect(metaData.name).toEqual(reportName);
         expect(metaData.description).toEqual(reportDesc);
-        expect(metaData.snapshot).toBeDefined();
+        expect(metaData.appName).toEqual(appName);
+
     });
 
     it('validate the getData service call', function() {
