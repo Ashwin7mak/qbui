@@ -19,7 +19,7 @@
             link: function(scope /*,elem*/) {
                 scope.sendFeedback = function() {
                     //elem.attr('target', '_blank');
-                    window.location.href = 'mailto:clay_nicolau@intuit.com?subject=QuickBaseReportFeedback';
+                    window.location.href = 'mailto:clay_nicolau@intuit.com?subject=ReArch LH Feedback';
                 };
             }
         };

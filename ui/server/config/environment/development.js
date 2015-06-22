@@ -6,7 +6,7 @@
     'use strict';
 
     //var path = require('path');
-    //var dateUtils = require('../../components/utility/dateUtils');
+    var dateUtils = require('../../components/utility/dateUtils');
 
     module.exports = {
 
@@ -15,19 +15,19 @@
             name: 'qbse-dev',
             level: 'debug',
             stream: {
-                type: 'console'         //  file or console
-                //file: {
-                //    dir: './logs',
-                //    name: 'qbse-dev-' + dateUtils.formatDate( new Date(), '%Y-%M-%D-%h.%m.%s') + '.log'
-                //},
-                //rotating: {
-                //    period: '1d',
-                //    count: 7
-                //}
+                type: 'console',         //  file or console
+                file: {
+                    dir: './logs',
+                    name: 'qbse-dev-' + dateUtils.formatDate( new Date(), '%Y-%M-%D-%h.%m.%s') + '.log'
+                },
+                rotating: {
+                    period: '1d',
+                    count: 7
+                }
             },
             src: true,               // this is slow...do not use in prod
             suppressConsole: false,  // suppress console logging
-            maxResponseSize: 1024*5  // max number of characters logged per response
+            maxResponseSize: 1024*2  // max number of characters logged per response
         },
 
         // to run using ssl, copy the private key and cert for

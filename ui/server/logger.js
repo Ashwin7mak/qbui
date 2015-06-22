@@ -26,7 +26,6 @@
             var name = getConfig('name', 'qbse');
             var level = getConfig('level', 'info');
             var src = getConfig('src', false);
-            var maxResponseSize = getConfig('maxResponseSize', 1024);
             var stream = getStream();
 
             //  do we want to suppress console logging
@@ -44,28 +43,30 @@
 
             // add custom qbse specific properties
             var appLogger = logger.child({
-                callFunc: getCallFunc(callFunc)
+                callingFunc: getCallFunc(callFunc)
             });
 
              //  add some custom functions for logging request and response info
-            appLogger.logRequest = function (req) {
+            appLogger.logRequest = function (req, full) {
                 if (req) {
-                    appLogger.info({Request: req}, 'API Request');
-                }
-                else {
-                    appLogger.info('No request object supplied when trying to log request information.');
-                }
-            };
-            appLogger.logResponse = function (res) {
-                //  Restricting to debug level only as the data in the response may be sensitive and should not be logged
-                if (res) {
-                    //  restrict the size of the response output to the configuration setting
-                    var response = JSON.stringify(res);
-                    if (response.length > maxResponseSize) {
-                        appLogger.debug({TruncatedResponse:response.substring(0, maxResponseSize - 3) + '...'});
+                    if (full === true) {
+                        appLogger.debug({Request: getLogData(req)}, 'API Request');
                     }
                     else {
-                        appLogger.debug({Response: res}, 'API Response');
+                        appLogger.debug('API Request');
+                    }
+                }
+                else {
+                    appLogger.debug('No request object supplied when trying to log request information.');
+                }
+            };
+            appLogger.logResponse = function (res, full) {
+                if (res) {
+                    if (full === true) {
+                        appLogger.debug({Request: getLogData(res)}, 'API Response');
+                    }
+                    else {
+                        appLogger.debug('API Response');
                     }
                 }
                 else {
@@ -77,6 +78,23 @@
 
         }
     };
+
+    /**
+     *   Return the request/response data.  The output may be restricted based on the maxResponseSize
+     *   configuration parameter.
+     */
+    function getLogData(data) {
+        //  restrict the size of the response output to the configuration setting
+        var maxResponseSize = getConfig('maxResponseSize', 1024);
+
+        var response = JSON.stringify(data);
+        if (response.length > maxResponseSize) {
+            return {TruncatedResponse: response.substring(0, maxResponseSize - 3) + '...'};
+        }
+
+        return {Response: data};
+    }
+
 
     /**
      * Return the bunyan configuration setting for the given key. If the key

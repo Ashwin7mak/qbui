@@ -477,6 +477,48 @@ Open a browser to verify.
 
 To stop or not accept SSL requests, comment out/remove the SSL_KEY object in your run-time environment configuration file...(ie: local.env.js).
 
+##Logging
+
+Node logging is done via Bunyan.  The logger configuration is determined by the settings in the configuration file per run-time environment. 
+Here's an example local.js configuration:
+
+        //  Logging configuration
+        LOG: {
+            name: 'qbse-local',
+            level: 'debug',
+            stream: {
+                type: 'console',
+                file: {
+                    dir: './logs',
+                    name: 'qbse-local-' + dateUtils.formatDate( new Date(), '%Y-%M-%D-%h.%m.%s') + '.log'
+                },
+                rotating: {
+                    period: '1d',
+                    count: 7
+                }
+            },
+            src: true,               // this is slow...do not use in prod
+            suppressConsole: false,  // suppress console logging
+            maxResponseSize: 1024*2  // max number of characters logged per response
+        },
+
+Configuration info:
+
+        name: name of the logger
+        level: log level
+        stream.type: output to 'console' or 'file'.  If stream type is file:
+                file.dir: directory where log file is located
+                file.name: name of the output file.
+                if outputting to a file, can also setup to rotate the files per schedule.
+                    rotating.period: how often to rotate the file
+                    rotating.count: max number of rotated files to keep
+        src:  true or false  --> 
+        suppressConsole: true or false  --> suppress console logging
+        maxResponseSize: max number of characters to output when logging request or response data
+
+For more information on Bunyan configuration settings, click [here](https://github.com/trentm/node-bunyan):
+        
+
 ##Access REST endpoints over SSL
 Update the javahost run-time configuration parameter to use the https protocol and appropriate port.  For example, include the following
 setting in the local.env.js file:
