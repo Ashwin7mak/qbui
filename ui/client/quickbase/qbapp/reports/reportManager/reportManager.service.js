@@ -22,11 +22,9 @@
                 app: ApiService.getApp(appId)
             }).then(
                 function(report) {
-                    console.log('GetReport: Success callback');
                     deferred.resolve(report);
                 },
                 function(resp) {
-                    console.log('GetReport: failure callback');
                     deferred.reject(resp);
                 }
             );
@@ -48,11 +46,9 @@
 
             ApiService.getFormattedRecords(appId, tableId, offset, rows).then(
                 function(records) {
-                    console.log('GetFormattedRecords: Success callback');
                     deferred.resolve(records);
                 },
                 function(resp) {
-                    console.log('GetRecords: failure callback');
                     deferred.reject(resp);
                 }
             );
@@ -72,11 +68,9 @@
 
             ApiService.getFields(appId, tableId).then(
                 function(fields) {
-                    console.log('GetFields: Success callback');
                     deferred.resolve(fields);
                 },
                 function(resp) {
-                    console.log('GetFields: failure callback');
                     deferred.reject(resp);
                 }
             );
@@ -85,7 +79,9 @@
         };
 
         /**
-         * Return the fields for a given report
+         * Return the fields for a given report.  The rest endpoint requires the rows query
+         * parameter to be gt zero, so even though we are only interested in the report fields
+         * and not the actual report data, we must call the api endpoint with 1 row requested.
          *
          * @param appId
          * @param tableId
@@ -99,11 +95,9 @@
             var rows=1;
             ApiService.runFormattedReport(appId, tableId, reportId, offset, rows).then(
                 function(report) {
-                    console.log('runFormattedReport: Success callback');
                     deferred.resolve(report.fields);
                 },
                 function(resp) {
-                    console.log('runFormattedReport: failure callback');
                     deferred.reject(resp);
                 }
             );
@@ -112,7 +106,7 @@
         };
 
         /**
-         * Return the data records for a given report, offset and rows.
+         * Return formatted data records only for a given report, offset and rows.
          * If no offset and/or rows, then all data is returned.
          *
          * @param appId
@@ -120,6 +114,7 @@
          * @param reportId
          * @param offset
          * @param rows
+         *
          * @returns {*}
          */
         this.getReportRecords = function(appId, tableId, reportId, offset, rows) {
@@ -127,11 +122,9 @@
 
             ApiService.runFormattedReport(appId, tableId, reportId, offset, rows).then(
                 function(report) {
-                    console.log('runFormattedReport: Success callback');
                     deferred.resolve(report.records);
                 },
                 function(resp) {
-                    console.log('runFormattedReport: failure callback');
                     deferred.reject(resp);
                 }
             );
@@ -148,6 +141,7 @@
          * @param reportId
          * @param offset
          * @param rows
+         *
          * @returns {*}
          */
         this.getReport = function(appId, tableId, reportId, offset, rows) {
@@ -155,11 +149,9 @@
 
             ApiService.runFormattedReport(appId, tableId, reportId, offset, rows).then(
                 function(report) {
-                    console.log('runFormattedReport: Success callback');
                     deferred.resolve(report);
                 },
                 function(resp) {
-                    console.log('runFormattedReport: failure callback');
                     deferred.reject(resp);
                 }
             );

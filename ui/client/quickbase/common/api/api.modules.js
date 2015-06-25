@@ -1,14 +1,16 @@
 (function() {
     'use strict';
 
-        //  define the quickBase angular apps module
+    //  define the quickBase angular apps module
+    //
     angular.module('qbse.api',
         [
             'qbse.helper',
             'restangular',
-            'ngCookies'
+            'ngCookies',
+            'angular-uuid-generator'
         ]).
-        config( function(RestangularProvider) {
+        config(function(RestangularProvider) {
             RestangularProvider.setBaseUrl('/api/v1');
 
             RestangularProvider.setErrorInterceptor(function(response) {
@@ -33,5 +35,20 @@
 
                 return true;
             });
-        });
+        }).
+        //  run blocks are executed after the config and injector...
+        run(['uuid','Restangular','apiConstants', '$cookies', function(uuid, Restangular, apiConstants, $cookie) {
+            //  include the ticket and a sessionid on every Restangular request
+            var headers = {}
+            //  generate a uuid for this session id.
+            headers.cid = uuid.v1();
+
+            //  get the ticket from the cookies...and add to the header if found
+            var ticket = $cookie.get(apiConstants.TICKET_COOKIE);
+            if (ticket) {
+                headers.ticket = ticket;
+            }
+
+            Restangular.setDefaultHeaders(headers);
+        }]);
 })();

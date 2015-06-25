@@ -29,15 +29,15 @@
                     reportId: reportId,
                     name: 'Report name ' + reportId,
                     description: 'Report description ' + reportId,
-                    company: 'ABC Test Company'
+                    company: ''
                 };
 
                 ReportService.getMetaData(appId, tableId, reportId).then(
                     function (data) {
                         //  get the report meta info
+                        metaData.appName = data.app.name;
                         metaData.name = data.rpt.name;
                         metaData.description = data.rpt.description;
-                        metaData.appName = data.app.name;
 
                         deferred.resolve(metaData);
                     },
@@ -52,7 +52,7 @@
             },
 
             /**
-             * Return report column data for a given appId, tableId and reportId
+             * Return report column/field data for a given appId, tableId and reportId
              *
              * @param appId
              * @param tableId
@@ -82,6 +82,7 @@
                             if (field.clientSideAttributes) {
                                 column.bold = field.clientSideAttributes.bold;
                                 column.width = field.clientSideAttributes.width;
+                                // for now, enforcing a 100 column width min for display purposes
                                 if (column.width < 100) { column.width = 100; }
                             }
                             cols.push(column);
@@ -100,7 +101,7 @@
             },
 
             /**
-             * Return report data for a given appId, tableId and reportId
+             * Return formatted report data for a given appId, tableId and reportId.
              *
              * @param appId
              * @param tableId
@@ -113,8 +114,6 @@
 
                 ReportService.getReport(appId, tableId, reportId, offset, rows).then(
                     function (data) {
-                        console.log('formatted report callback successful');
-
                         var fields = data.fields;
                         var records = data.records;
                         var reportData = [];

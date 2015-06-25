@@ -499,7 +499,6 @@ Here's an example local.js configuration:
             },
             src: true,               // this is slow...do not use in prod
             suppressConsole: false,  // suppress console logging
-            maxResponseSize: 1024*2  // max number of characters logged per response
         },
 
 Configuration info:
@@ -516,7 +515,9 @@ Configuration info:
         suppressConsole: true or false  --> suppress console logging
         maxResponseSize: max number of characters to output when logging request or response data
 
-For more information on Bunyan configuration settings, click [here](https://github.com/trentm/node-bunyan):
+For information on Bunyan configuration settings, click [here](https://github.com/trentm/node-bunyan)
+For information around issue with rotating file logging in multi-clustered node environments: click [here](https://github.com/trentm/node-bunyan#stream-type-rotating-file) 
+For an overview of the logging design regarding transactionId(TID) and clientId(CID), click [here](https://wiki.intuit.com/display/qbasepd/Client+Logging) 
         
 
 ##Access REST endpoints over SSL

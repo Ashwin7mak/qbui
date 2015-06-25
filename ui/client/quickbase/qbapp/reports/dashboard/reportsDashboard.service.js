@@ -15,11 +15,9 @@
 
                 ApiService.getReports(appId, tableId).then(
                     function(reports) {
-                        console.log('GetReports: Success callback');
                         deferred.resolve(reports);
                     },
                     function(resp) {
-                        console.log('GetReports: failure callback');
                         deferred.reject(resp);
                     }
                 );

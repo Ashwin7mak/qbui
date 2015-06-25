@@ -5,6 +5,7 @@
     'use strict';
 
     var express = require('express'),
+        useragent = require('express-useragent'),
         favicon = require('serve-favicon'),
         compression = require('compression'),
         bodyParser = require('body-parser'),
@@ -26,6 +27,7 @@
         app.use(bodyParser.json());
         app.use(methodOverride());
         app.use(cookieParser());
+        app.use(useragent.express());
 
         //TODO: We need to figure out how we want to handle the environment config in aws
         if ('aws' === env || 'production' === env || 'test' === env || 'development' === env) {

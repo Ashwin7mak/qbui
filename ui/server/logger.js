@@ -22,8 +22,13 @@
 
         getLogger: function(callFunc) {
 
-            //  setup the logger configuration
-            var name = getConfig('name', 'qbse');
+            //  setup the logger configuration.  Default configurations:
+            //      name: qbse
+            //      level: info
+            //      src: false
+            //      stream: console
+            //
+            var name = getConfig('name', 'qbse-node');
             var level = getConfig('level', 'info');
             var src = getConfig('src', false);
             var stream = getStream();
@@ -46,32 +51,19 @@
                 callingFunc: getCallFunc(callFunc)
             });
 
-             //  add some custom functions for logging request and response info
-            appLogger.logRequest = function (req, full) {
-                if (req) {
-                    if (full === true) {
-                        appLogger.debug({Request: getLogData(req)}, 'API Request');
-                    }
-                    else {
-                        appLogger.debug('API Request');
-                    }
+             //  custom functions for logging request and response info
+            appLogger.logRequest = function (req) {
+                try {
+                    appLogger.info({Request: getReqInfo(req)}, 'Log Request');
                 }
-                else {
-                    appLogger.debug('No request object supplied when trying to log request information.');
-                }
+                catch (e) {} // don't want logging to stop the app
             };
-            appLogger.logResponse = function (res, full) {
-                if (res) {
-                    if (full === true) {
-                        appLogger.debug({Request: getLogData(res)}, 'API Response');
-                    }
-                    else {
-                        appLogger.debug('API Response');
-                    }
+
+            appLogger.logResponse = function (req, res) {
+                try {
+                    appLogger.info({Request: getReqInfo(req), Response: getResInfo(res)}, 'Log Response');
                 }
-                else {
-                    appLogger.debug('No response object supplied when trying to log response information.');
-                }
+                catch (e) {} // don't want logging to stop the app
             };
 
             return appLogger;
@@ -80,21 +72,51 @@
     };
 
     /**
-     *   Return the request/response data.  The output may be restricted based on the maxResponseSize
-     *   configuration parameter.
+     * Extract from the request a standard set of information to display in a log message.
+     * Currently, the request path, request method, cid(client id) and tid(transaction id) is extracted.
+     *
+     * @param req
      */
-    function getLogData(data) {
-        //  restrict the size of the response output to the configuration setting
-        var maxResponseSize = getConfig('maxResponseSize', 1024);
+    function getReqInfo(req) {
+        var r = {};
+        if (req) {
+            r.path = req.path;
 
-        var response = JSON.stringify(data);
-        if (response.length > maxResponseSize) {
-            return {TruncatedResponse: response.substring(0, maxResponseSize - 3) + '...'};
+            var url = req.url;
+            var indx = url.indexOf('?');
+            r.params = indx > 0 ? url.substr(indx+1) : '';
+
+            r.method = req.method;
+
+            //  extract tid and sid from request header
+            if (req.headers) {
+                //  individual transaction id
+                if (req.headers.tid) { r.tid = req.headers.tid; }
+                //  client session id
+                if (req.headers.cid) { r.cid = req.headers.cid; }
+            }
+
+            //  extract browser info
+            if (req.useragent) {
+                r.useragent = req.useragent.browser + ' ' + req.useragent.version + ' - ' + req.useragent.os;
+            }
         }
-
-        return {Response: data};
+        return r;
     }
 
+    /**
+     * Extract from the response a standard set of information to display in a log message.
+     * Currently, the response http status is extracted.
+     *
+     * @param req
+     */
+    function getResInfo(res) {
+        var r = {};
+        if (res) {
+            r.status = res.statusCode;
+        }
+        return r;
+    }
 
     /**
      * Return the bunyan configuration setting for the given key. If the key
@@ -150,8 +172,8 @@
     }
 
     /**
-     * Returns the name of the function that is outputting a log message.
-     * Try to trim off the front portion of the file spec for readability.
+     * Returns the name of the function that is calling the loger to output a log
+     * message.  Try to trim off the front portion of the file spec for readability.
      *
      * @param callFunc
      * @returns {*}

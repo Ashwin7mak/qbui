@@ -36,7 +36,7 @@
     require('./routes')(app, config);
 
     //  log some server info...but don't include the secrets configuration
-    log.info('Express Server configuration:', _.omit(config, 'secrets'));
+    log.info('Express Server configuration:', JSON.stringify(_.omit(config, 'secrets')));
 
     /**************
      * Start HTTP Server

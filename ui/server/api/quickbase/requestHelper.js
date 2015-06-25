@@ -2,6 +2,7 @@
     'use strict';
 
     var fs = require('fs');
+    var uuid = require('uuid');
 
     module.exports = function (config) {
 
@@ -31,7 +32,6 @@
 
                 if (this.isSecure(req)) {
                     //  we're on https..include the certs
-                    // TODO: verify a signed certificate works as expected
                     agentOptions = {
                         strictSSL: true,
                         key: fs.readFileSync(config.SSL_KEY.private),
@@ -49,17 +49,6 @@
                         res.set(key, headers[key]);
                     }
                 }
-            },
-
-            //TODO: remove this
-            getHeaders: function (req) {
-                // unit tests currently fail if passing in headers on get..
-                // TODO: this shouldn't be a restriction..understand why and fix??
-                var headers = {};
-                if (!this.isGet(req) && !this.isDelete(req)) {
-                    headers = req.headers;
-                }
-                return headers;
             },
 
             setBodyOption: function (req, opts) {
@@ -81,6 +70,16 @@
                 this.setBodyOption(req, opts);
 
                 return opts;
+            },
+
+            setTidHeader: function (req) {
+                var headers = {};
+                if (req && req.headers) {
+                    headers = req.headers;
+                }
+                headers.tid = uuid.v1();
+                req.headers = headers;
+                return req;
             }
 
         };
