@@ -22,7 +22,7 @@
     module.exports = function (config) {
         //Module constants
         var HTTP = 'http://';
-        var BASE_ENDPOINT = '/api/v1';
+        var BASE_ENDPOINT = '/api/api/v1';
         var APPS_ENDPOINT = '/apps/';
         var TABLES_ENDPOINT = '/tables/';
         var REPORTS_ENDPOINT = '/reports/';
