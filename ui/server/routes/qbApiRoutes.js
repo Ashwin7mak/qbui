@@ -89,7 +89,8 @@
 
                 var opts = requestHelper.setOptions(req);
                 var url = config.javaHost + req.url;
-                opts.url = url.replace('/api/api', '/api');
+                opts.url = url;
+
                 request(opts)
                     .on('error', function(error) {
                         log.error('Swagger API ERROR ' + JSON.stringify(error));
@@ -105,6 +106,7 @@
                 log.logRequest(req);
 
                 var opts = requestHelper.setOptions(req);
+
                 request(opts)
                     .on('response', function (response) {
                         log.info('API response: ' + response.statusCode + ' - ' + req.method + ' ' + req.path);
