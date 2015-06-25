@@ -71,7 +71,7 @@
 
         //Generates and returns a psuedo-random char string of specified length
         generateString : function(length) {
-            return chance.string({length: length});
+            return chance.string({length: length, pool: 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789'});
         },
 
         //Generates and returns a psuedo-random email string

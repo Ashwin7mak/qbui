@@ -30,7 +30,7 @@
                 // Check that there is a mapping for the field type (otherwise don't generate a value for it)
                 if (typeof recordTypeMapping[field[fieldConsts.TYPE]] !== 'undefined') {
 
-                    console.log('Generating field value for type ' + field[fieldConsts.TYPE]);
+                    //console.log('Generating field value for type ' + field[fieldConsts.TYPE]);
                     recordJson.push({
                         id: field[fieldConsts.ID],
                         value: generateRecordValueForFieldType(field[fieldConsts.TYPE])
