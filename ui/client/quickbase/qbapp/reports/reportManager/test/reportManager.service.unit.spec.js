@@ -24,6 +24,9 @@ describe('Service: ReportService', function() {
             spyOn(ApiService, 'getReport').and.callFake(function() {
                 return deferredReport.promise;
             });
+            spyOn(ApiService, 'getApp').and.callFake(function() {
+                return deferredReport.promise;
+            });
             spyOn(ApiService, 'getFormattedRecords').and.callFake(function() {
                 return deferredRecord.promise;
             });
@@ -54,6 +57,7 @@ describe('Service: ReportService', function() {
 
         //  NOTE: the expectations will get tested until after the above promise is fulfilled
         expect(ApiService.getReport).toHaveBeenCalledWith(appId, tableId, reportId);
+        expect(ApiService.getApp).toHaveBeenCalledWith(appId);
         expect(ApiService.getFormattedRecords).toHaveBeenCalledWith(appId, tableId, offset, rows);
         expect(ApiService.getFields).toHaveBeenCalledWith(appId, tableId);
         expect(ApiService.runFormattedReport).toHaveBeenCalledWith(appId, tableId, reportId, offset, rows);

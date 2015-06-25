@@ -28,6 +28,7 @@
   },
   "devDependencies": {
     "bower": "^1.3.9",
+    "bunyan": "^1.4.0",
     "chance": "^0.7.5",
     "connect-livereload": "~0.4.0",
     "grunt": "~0.4.4",

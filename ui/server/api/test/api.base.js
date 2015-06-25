@@ -4,6 +4,7 @@
     var promise = require('bluebird');
     var assert = require('assert');
     var consts = require('../constants');
+    var log = require('../../logger').getLogger(module.filename);
     /*
      * We can't use JSON.parse() with records because it is possible to lose decimal precision as a
      * result of the JavaScript implementation of its single numeric data type. In JS, all numbers are
@@ -27,7 +28,7 @@
         var REPORTS_ENDPOINT = '/reports/';
         var RECORDS_ENDPOINT = '/records/';
         var REALMS_ENDPOINT = '/realms/';
-        var USERS_ENDPOINT = "/users/";
+        var USERS_ENDPOINT = '/users/';
         var LOCALHOST_REALM = 117000;
         var TICKETS_ENDPOINT = '/ticket?uid=1000000&realmID=';
         var HEALTH_ENDPOINT  = '/health';
@@ -158,8 +159,8 @@
                 if (this.authTicket) {
                     opts.headers[TICKET_HEADER_KEY] = this.authTicket;
                 }
-                // TODO: Add back in for debugging purposes
-                //console.log('About to execute the request: ' + jsonBigNum.stringify(opts));
+
+                log.debug('About to execute the request: ' + jsonBigNum.stringify(opts));
                 //Make request and return promise
                 var deferred = promise.pending();
                 request(opts, function (error, response) {

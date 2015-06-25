@@ -3,6 +3,10 @@
 @import "colors";
 @import "svgs";
 
+body {
+  margin: 0px;
+}
+
 .quickbase-app {
 
   @import "dashboard";

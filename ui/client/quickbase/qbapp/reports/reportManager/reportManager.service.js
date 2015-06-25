@@ -17,7 +17,10 @@
         this.getMetaData = function(appId, tableId, reportId) {
             var deferred = $q.defer();
 
-            ApiService.getReport(appId, tableId, reportId ).then(
+            $q.all({
+                rpt: ApiService.getReport(appId, tableId, reportId),
+                app: ApiService.getApp(appId)
+            }).then(
                 function(report) {
                     console.log('GetReport: Success callback');
                     deferred.resolve(report);

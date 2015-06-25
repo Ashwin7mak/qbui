@@ -6,8 +6,29 @@
     'use strict';
 
     //var path = require('path');
+    var dateUtils = require('../../components/utility/dateUtils');
 
     module.exports = {
+
+        //  Logging configuration
+        LOG: {
+            name: 'qbse-aws',
+            level: 'warn',
+            stream: {
+                type: 'file',         //  file or console
+                file: {
+                    dir: './logs',
+                    name: 'qbse-aws-' + dateUtils.formatDate( new Date(), '%Y-%M-%D-%h.%m.%s') + '.log'
+                },
+                rotating: {
+                    period: '1d',
+                    count: 7
+                }
+            },
+            src: false,              // this is slow...do not use in prod
+            suppressConsole: true,   // suppress console logging
+            maxResponseSize: 1024*2  // max number of characters logged per response
+        },
 
         // to run using ssl, copy the private key and cert for
         // your production host to ../server/config/environment/keys

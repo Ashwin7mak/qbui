@@ -19,27 +19,25 @@
              */
             getMetaData: function (appId, tableId, reportId) {
 
-                var d = new Date();
-                d.setDate(d.getDate() - 1);
-
                 var deferred = $q.defer();
 
                 //  TODO: get metaData(company,snapshot date) of logged in customer -- jira: qbse-12508
                 var metaData = {
                     appId: appId,
+                    appName: 'App name ' + appId,
                     tableId: tableId,
                     reportId: reportId,
                     name: 'Report name ' + reportId,
                     description: 'Report description ' + reportId,
-                    company: 'ABC Test Company',
-                    snapshot: d.toLocaleString()
+                    company: 'ABC Test Company'
                 };
 
                 ReportService.getMetaData(appId, tableId, reportId).then(
                     function (data) {
                         //  get the report meta info
-                        metaData.name = data.name;
-                        metaData.description = data.description;
+                        metaData.name = data.rpt.name;
+                        metaData.description = data.rpt.description;
+                        metaData.appName = data.app.name;
 
                         deferred.resolve(metaData);
                     },
@@ -81,6 +79,11 @@
                             column.name = field.name;
                             column.displayName = field.name;
                             column.fieldType = field.type;
+                            if (field.clientSideAttributes) {
+                                column.bold = field.clientSideAttributes.bold;
+                                column.width = field.clientSideAttributes.width;
+                                if (column.width < 100) { column.width = 100; }
+                            }
                             cols.push(column);
                         });
 

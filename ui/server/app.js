@@ -10,9 +10,11 @@
 
     var express = require('express'),
         http = require('http'),
-        config = require('./config/environment');
+        config = require('./config/environment'),
+        log = require('./logger').getLogger(module.filename),
+        _ = require('lodash');
 
-    // Setup server
+    // Setup the express server and configure the logger
     var app = module.exports = express();
 
     /*
@@ -33,16 +35,15 @@
     require('./config/express')(app);
     require('./routes')(app, config);
 
-    console.log('Starting express server');
-    console.log('ENVIRONMENT: %s', app.get('env'));
-    console.log('CONFIG: %o', config);
+    //  log some server info...but don't include the secrets configuration
+    log.info('Express Server configuration:', _.omit(config, 'secrets'));
 
     /**************
      * Start HTTP Server
      **************/
     var server = http.createServer(app);
     server.listen(config.port, config.ip, function () {
-        console.log('Server started. Listening on PORT: %d', server.address().port);
+        log.info('Http Server started. Listening on PORT: %d', server.address().port);
     });
 
     //TODO - determine if we need to redirect all server traffic over https on production
@@ -62,7 +63,8 @@
 
         var serverHttps = https.createServer(options, app);
         serverHttps.listen(config.sslPort, config.ip, function () {
-            console.log('Server started. Listening on PORT: %d', serverHttps.address().port);
+            log.info('Https Server started. Listening on PORT: %d', serverHttps.address().port);
         });
     }
+
 }());

@@ -8,6 +8,7 @@
             'ui.grid.selection',
             'ui.grid.pagination',
             'ui.grid.autoResize',
+            'ui.grid.resizeColumns',
             'ngResource',
             'qbse.api',
             'ngLodash'
