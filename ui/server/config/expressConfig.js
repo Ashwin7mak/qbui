@@ -16,7 +16,7 @@
     var config = require('./environment');
 
     function requireHTTPS(req, res, next) {
-        // if the request is not secure redirect as a secure 
+        // if the request is not secure redirect as a secure
         if (!req.secure) {
             var domain = "https://" + req.get("host");
             var sslPort = config.sslPort;
