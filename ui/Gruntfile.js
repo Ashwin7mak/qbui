@@ -716,6 +716,10 @@ module.exports = function (grunt) {
         }
     });
 
+    grunt.registerTask('setEnv', function (envName, envVal) {
+        process.env[envName] = envVal;
+    });
+
     grunt.registerTask('testClientOnly', function () {
         grunt.task.run(['jshint:client', 'jscs:client', 'karma']);
     });
@@ -729,6 +733,7 @@ module.exports = function (grunt) {
             //server unit tests
             return grunt.task.run([
                 'clean:server',
+                'setEnv:NODE_TLS_REJECT_UNAUTHORIZED:0',
                 'mocha_istanbul:coverage'
             ]);
         }

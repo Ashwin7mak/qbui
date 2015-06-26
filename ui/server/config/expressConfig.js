@@ -4,17 +4,40 @@
 (function () {
     'use strict';
 
-    var express = require('express'),
-        favicon = require('serve-favicon'),
-        compression = require('compression'),
-        bodyParser = require('body-parser'),
-        methodOverride = require('method-override'),
-        cookieParser = require('cookie-parser'),
-        errorHandler = require('errorhandler'),
-        path = require('path'),
-        config = require('./environment');
+    var express = require('express');
+    var favicon = require('serve-favicon');
+    var compression = require('compression');
+    var bodyParser = require('body-parser');
+    var methodOverride = require('method-override');
+    var cookieParser = require('cookie-parser');
+    var errorHandler = require('errorhandler');
+    var path = require('path');
+    var log = require('../logger').getLogger(module.filename);
+    var config = require('./environment');
+
+    function requireHTTPS(req, res, next) {
+        // if the request is not secure redirect as a secure 
+        if (!req.secure) {
+            var domain = "https://" + req.get("host");
+            var sslPort = config.sslPort;
+            if (sslPort) {
+                domain = domain.replace(/:\d+$/, "");
+                domain += ":" + sslPort;
+            }
+            return res.redirect(domain + req.url);
+        }
+        next();
+    }
 
     module.exports = function (app) {
+
+        // use ssl when there's a cert
+        if (config.SSL_KEY && config.SSL_KEY.private && config.SSL_KEY.private.length)  {
+            log.info("always auto https");
+            app.use(requireHTTPS);
+        } else {
+            log.info("not auto https");
+        }
 
         var env = app.get('env');
 
@@ -53,6 +76,6 @@
             //  Error handler - has to be last.
             app.use(errorHandler());
         }
-
+        return config;
     };
 }());

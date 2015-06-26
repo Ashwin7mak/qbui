@@ -32,7 +32,7 @@
         next();
     });
 
-    require('./config/express')(app);
+    require('./config/expressConfig')(app);
     require('./routes')(app, config);
 
     //  log some server info...but don't include the secrets configuration
