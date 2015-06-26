@@ -16,6 +16,9 @@
             isPut: function (req) {
                 return req.method.toLowerCase() === 'put';
             },
+            isPatch: function (req) {
+                return req.method.toLowerCase() === 'patch';
+            },
             isDelete: function (req) {
                 return req.method.toLowerCase() === 'delete';
             },
@@ -46,14 +49,14 @@
             copyHeadersToResponse: function (res, headers) {
                 for(var key in headers) {
                     if(headers.hasOwnProperty(key)) {
-                        res.set(key, headers[key]);
+                        res[key] = headers[key];
                     }
                 }
             },
 
             setBodyOption: function (req, opts) {
                 //  body header option only valid for put and post
-                if (this.isPut(req) || this.isPost(req)) {
+                if (this.isPut(req) || this.isPatch(req) || this.isPost(req)) {
                     opts.body = req.rawBody;
                 }
                 return opts;

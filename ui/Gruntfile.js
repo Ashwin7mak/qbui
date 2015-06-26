@@ -4,6 +4,7 @@
 module.exports = function (grunt) {
 
     var buildDir = __dirname + '/build';
+    var localJsFile = __dirname + '/server/config/environment/local.js';
     var serverReportDir = buildDir + '/reports/server';
     var clientReportDir = buildDir + '/reports/client';
     var mochaUnitTest = grunt.option('test') || '*.unit.spec.js';
@@ -725,7 +726,23 @@ module.exports = function (grunt) {
         grunt.file.mkdir(serverReportDir + '/unit/');
         grunt.file.mkdir(serverReportDir + '/integration/');
 
+        //  If the run-time environment variable is not set, will set to local
+        //  but only if the file is defined (which should be only on a developer's machine).
+        if (!process.env.NODE_ENV) {
+            if (grunt.file.exists(localJsFile)) {
+                grunt.task.run(['env:local']);
+            }
+        }
+
         if (target === 'server') {
+            //server unit tests
+            return grunt.task.run([
+
+                'clean:server',
+                'mochaTest:test',
+            ]);
+        }
+        if (target === 'coverage') {
             //server unit tests
             return grunt.task.run([
                 'clean:server',

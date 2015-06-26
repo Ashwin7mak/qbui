@@ -9,7 +9,6 @@
     *      stream: output to std.out or a file. If sending to a file, define the path.
     *      In addition, if outputting to a file, can also setup to rotate the files per schedule.
     *          See: https://github.com/trentm/node-bunyan#stream-type-rotating-file
-    *      suppressConsole: suppress console logging.
     */
 
     'use strict';
@@ -33,11 +32,6 @@
             var src = getConfig('src', false);
             var stream = getStream();
 
-            //  do we want to suppress console logging
-            if (getConfig('suppressConsole') === true) {
-                console.log = function () { };
-            }
-
             var logger = bunyan.createLogger({
                 name: name,
                 streams: [stream],
@@ -51,7 +45,7 @@
                 callingFunc: getCallFunc(callFunc)
             });
 
-             //  custom functions for logging request and response info
+            //  custom functions for logging request and response info
             appLogger.logRequest = function (req) {
                 try {
                     appLogger.info({Request: getReqInfo(req)}, 'Log Request');
