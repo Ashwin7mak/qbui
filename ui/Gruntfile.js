@@ -73,42 +73,42 @@ module.exports = function (grunt) {
             }
         },
         watch: {
-            //mochaTest: {
-            //    files: ['<%= express.root %>/**/*.spec.js'],
-            //    tasks: ['env:test', 'mochaTest']
-            //},
-            //jsTest: {
-            //    files: [
-            //        '<%= quickbase.client.components %>/**/*.spec.js',
-            //        '<%= quickbase.client.components %>/**/*.mock.js'
-            //    ],
-            //    tasks: ['newer:jshint:all', 'karma']
-            //},
-            //livereload: {
-            //    files: [
-            //        '{.tmp,<%= quickbase.client.components %>}/**/*.css',
-            //        '{.tmp,<%= quickbase.client.assets %>}/**/*.css',
-            //        '{.tmp,<%= quickbase.client.components %>}/**/*.html',
-            //        '{.tmp,<%= quickbase.client.components %>}/**/*.js',
-            //        '!{.tmp,<%= quickbase.client.components %>}**/*.spec.js',
-            //        '!{.tmp,<%= quickbase.client.components %>}/**/*.mock.js',
-            //        '<%= quickbase.client.components %>/{,*//*}*.{png,jpg,jpeg,gif,webp,svg}',
-            //        '<%= quickbase.client.assets %>/{,*//*}*.{png,jpg,jpeg,gif,webp,svg}'
-            //    ],
-            //    options: {
-            //        livereload: true
-            //    }
-            //},
-            //express: {
-            //    files: [
-            //        '<%= express.root %>/**/*.{js,json}'
-            ///    ],
-            //    tasks: ['express', 'wait'],
-            //    options: {
-            //        livereload: true,
-            //        nospawn: true //Without this option specified express won't be reloaded
-            //    }
-            //},
+            mochaTest: {
+                files: ['<%= express.root %>/**/*.spec.js'],
+                tasks: ['env:test', 'mochaTest']
+            },
+            jsTest: {
+                files: [
+                    '<%= quickbase.client.components %>/**/*.spec.js',
+                    '<%= quickbase.client.components %>/**/*.mock.js'
+                ],
+                tasks: ['newer:jshint:all', 'karma']
+            },
+            livereload: {
+                files: [
+                    '{.tmp,<%= quickbase.client.components %>}/**/*.css',
+                    '{.tmp,<%= quickbase.client.assets %>}/**/*.css',
+                    '{.tmp,<%= quickbase.client.components %>}/**/*.html',
+                    '{.tmp,<%= quickbase.client.components %>}/**/*.js',
+                    '!{.tmp,<%= quickbase.client.components %>}**/*.spec.js',
+                    '!{.tmp,<%= quickbase.client.components %>}/**/*.mock.js',
+                    '<%= quickbase.client.components %>/{,*//*}*.{png,jpg,jpeg,gif,webp,svg}',
+                    '<%= quickbase.client.assets %>/{,*//*}*.{png,jpg,jpeg,gif,webp,svg}'
+                ],
+                options: {
+                    livereload: true
+                }
+            },
+            express: {
+                files: [
+                    '<%= express.root %>/**/*.{js,json}'
+               ],
+                tasks: ['express:local', 'wait'],
+                options: {
+                    livereload: true,
+                    nospawn: true //Without this option specified express won't be reloaded
+                }
+            },
             sass: {  //watch for changes to scss files to trigger compass compilation
                 files: '<%= quickbase.client.root %>/**/*.scss',
                 tasks: ['compass-compile']

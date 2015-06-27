@@ -1,7 +1,7 @@
 /**
  * Main application file
  */
-(function () {
+(function() {
     'use strict';
 
     // Set default node environment to local
@@ -32,37 +32,71 @@
         next();
     });
 
+
+    /**
+     * Express middleware function to force to use secure requests
+     * If the request passed in is not secure redirects its as a secure (https)
+     * removes port and adds the secure port from config
+     *
+     * If the secure port is the default 443 it does not append it https is sufficient
+     *
+     * NOTE:  That the process has to be running as root to listen on network ports less than 1024
+     * so to use ssl 443 developer's would need to start this with sudo
+     *
+     * @param req the request
+     * @param res the response to provide
+     * @param next the next middleware function to process
+     */
+    app.requireHTTPS = function(req, res, next) {
+        if (!req.secure) {
+            var domain = "https://" + req.get("host");
+            var sslPort = config.sslPort;
+
+            // remove non secure port from domain
+            domain = domain.replace(/:\d+$/, "");
+            if (sslPort && sslPort != 443) {
+                // add back on an sslport if it's not default of 443
+                domain += ":" + sslPort;
+            }
+            //log.info("host:" + req.get("host") );
+            //log.info("req.url:" + req.url );
+            //log.info("config.sslPort:" + config.sslPort );
+            //log.info("redirecting to: " + domain + req.url);
+            return res.redirect(domain + req.url);
+        }
+        next();
+    };
+
     require('./config/expressConfig')(app);
     require('./routes')(app, config);
 
-    //  log some server info...but don't include the secrets configuration
+    //  log some server config info...but don't include the secrets configuration
     log.info('Express Server configuration:', _.omit(config, 'secrets'));
 
     /**************
      * Start HTTP Server
      **************/
     var server = http.createServer(app);
-    server.listen(config.port, config.ip, function () {
+    server.listen(config.port, config.ip, function() {
         log.info('Http Server started. Listening on PORT: %d', server.address().port);
     });
 
-    //TODO - determine if we need to redirect all server traffic over https on production
 
     /**************
      * Start HTTPS Server
      **************/
-    if (config.SSL_KEY.private && config.SSL_KEY.cert) {
+    if (config.hasSslOptions()) {
         var fs = require('fs'),
             https = require('https');
 
         var options = {
-            key: fs.readFileSync(config.SSL_KEY.private),
-            cert: fs.readFileSync(config.SSL_KEY.cert),
+            key               : fs.readFileSync(config.SSL_KEY.private),
+            cert              : fs.readFileSync(config.SSL_KEY.cert),
             rejectUnauthorized: false
         };
 
         var serverHttps = https.createServer(options, app);
-        serverHttps.listen(config.sslPort, config.ip, function () {
+        serverHttps.listen(config.sslPort, config.ip, function() {
             log.info('Https Server started. Listening on PORT: %d', serverHttps.address().port);
         });
     }

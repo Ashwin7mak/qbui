@@ -1,7 +1,7 @@
 /**
  * Express configuration
  */
-(function () {
+(function() {
     'use strict';
 
     var express = require('express');
@@ -15,28 +15,13 @@
     var log = require('../logger').getLogger(module.filename);
     var config = require('./environment');
 
-    function requireHTTPS(req, res, next) {
-        // if the request is not secure redirect as a secure
-        if (!req.secure) {
-            var domain = "https://" + req.get("host");
-            var sslPort = config.sslPort;
-            if (sslPort) {
-                domain = domain.replace(/:\d+$/, "");
-                domain += ":" + sslPort;
-            }
-            return res.redirect(domain + req.url);
-        }
-        next();
-    }
+    module.exports = function(app) {
 
-    module.exports = function (app) {
-
-        // use ssl when there's a cert
-        if (config.SSL_KEY && config.SSL_KEY.private && config.SSL_KEY.private.length)  {
-            log.info("always auto https");
-            app.use(requireHTTPS);
+        // use ssl when there's a cert and we have the method to implement it
+        if (config.hasSslOptions() && app.requireHTTPS) {
+            app.use(app.requireHTTPS);
         } else {
-            log.info("not auto https");
+            log.info("not forcing https");
         }
 
         var env = app.get('env');

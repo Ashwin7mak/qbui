@@ -4,6 +4,7 @@
     // Environment specific configurations extend these defaults
     var _ = require('lodash'),
         path = require('path'),
+        fs = require('fs'),
         all = {
             env: process.env.NODE_ENV,
 
@@ -35,15 +36,44 @@
 
     //  Need to have a run-time environment configured
     if (!all.env) {
-        throw new Error('Missing environment configuration.  You must set a run-time environment variable.');
+        throw new Error('Missing environment configuration.  You must set a run-time environment variable(i.e. NODE_ENV=local).');
     }
 
+    /**
+     * Method to determine if ssl properties are configured
+     * returns true if there is an SSL_KEY in the configuration
+     * and that has non-zero lenght vales for SSL_KEY.private
+     * and SSL_KEY.cert
+     *
+     * if they are not configured SSL won't be forced
+     * useful for development mode, the SSL info will be
+     * configured for production/aws
+     *
+    **/
+    all.hasSslOptions = function() {
+        var answer = false;
+        var sslCfg = this.SSL_KEY;
+        if (sslCfg &&
+            sslCfg.private && sslCfg.private.length &&
+            sslCfg.cert && sslCfg.cert.length) {
+            answer = true;
+        }
+        return answer;
+    };
 
     // Export the config object based on the NODE_ENV
     // ==============================================
-    module.exports = _.merge(
-        all,
-        require('./' + process.env.NODE_ENV + '.js') || {}
-    );
+    var config = all;
+
+    // if there is a config file for the NODE_ENV
+    // merge in its properties to the defaults in all
+    if (fs.existsSync('./' + process.env.NODE_ENV + '.js') ) {
+       config =  _.merge(
+            all,
+            require('./' + process.env.NODE_ENV + '.js') || {}
+        );
+    }
+
+    module.exports = config;
 
 }());
