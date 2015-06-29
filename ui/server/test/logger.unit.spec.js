@@ -94,36 +94,18 @@ describe('Validate Logger', function () {
         });
     });
 
-    describe('validate an explicit file configuration of the logger',function() {
-        //  clear out any logger configuration with explicit setting
-        config.LOG = {
-            name: 'qbse-local',
-            level: 'debug',
-            stream: {
-                type: 'file',
-                file: {
-                    dir: '',
-                    name: 'qbse-local-test.log'
-                }
-            },
-            src: true               // this is slow...do not use in prod
-        };
-        var logger = require('./../logger').getLogger();
-
-        it('validate a default logger with file streaming is configured', function (done) {
-            should.exist(logger);
-            should(logger.fields.name).be.exactly('qbse-local');
-            should(logger.src).be.exactly(true);
-            should(logger._level).be.exactly(20);
-            should(logger.streams[0].type).be.exactly('file');
-            should(logger.streams[0].path).be.exactly('qbse-local-test.log');
-            done();
-        });
-    });
-
     describe('validate an explicit rotating file configuration of the logger',function() {
 
-        it('validate a default logger with file streaming is configured', function (done) {
+        it('validate a default logger with file streaming is configured and not log directory specified', function (done) {
+
+            var bunyan = require('bunyan');
+            var fs = require('fs');
+
+            var stub = sinon.stub(fs, 'existsSync');
+            //  stub the logger so that we do not create a file when creating the logger
+            var stub1 = sinon.stub(bunyan, 'createLogger', function() {
+                return { child: function() { return {} } };
+            });
 
             //  clear out any logger configuration with explicit setting
             config.LOG = {
@@ -146,11 +128,52 @@ describe('Validate Logger', function () {
             var logger = require('./../logger').getLogger();
 
             should.exist(logger);
-            should(logger.fields.name).be.exactly('qbse-local');
-            should(logger.src).be.exactly(true);
-            should(logger._level).be.exactly(20);
-            should(logger.streams[0].type).be.exactly('rotating-file');
-            should(logger.streams[0].path).be.exactly('qbse-some-unit-test.log');
+            assert(!stub.called);
+            assert(stub1.called);
+
+            stub.restore();
+            stub1.restore();
+
+            done();
+        });
+
+        it('validate a default logger with file streaming and a file directory is configured', function (done) {
+
+            var fs = require('fs');
+            var bunyan = require('bunyan');
+
+            var stub = sinon.stub(fs, 'existsSync');
+            var stub1 = sinon.stub(fs, 'mkdirSync');
+
+            //  stub the logger so that we do not create a file when creating the logger
+            var stub2 = sinon.stub(bunyan, 'createLogger', function() {
+                return { child: function() { return {} } };
+            });
+
+            //  clear out any logger configuration with explicit setting
+            config.LOG = {
+                name: 'qbse-local',
+                level: 'debug',
+                stream: {
+                    type: 'file',
+                    file: {
+                        dir: './logs',
+                        name: 'qbse-some-unit-test.log'
+                    }
+                },
+                src: true               // this is slow...do not use in prod
+            };
+
+            var logger = require('./../logger').getLogger();
+
+            should.exist(logger);
+
+            assert(stub.called);
+            assert(stub1.called);
+
+            stub.restore();
+            stub1.restore();
+            stub2.restore();
 
             done();
         });
