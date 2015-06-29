@@ -1,5 +1,6 @@
 'use strict';
 
+var sinon = require('sinon');
 var should = require('should');
 var assert = require('assert');
 var config = require('./../config/environment');
@@ -156,14 +157,15 @@ describe('Validate Logger', function () {
         config.LOG = {};
         var logger = require('./../logger').getLogger();
 
-        it('validate a log request message', function (done) {
+        it('validate a log request message at info level', function (done) {
             should.exist(logger);
+            var stub = sinon.stub(logger, 'info');
 
             var req = generateRequest();
-
             logger.logRequest(req);
 
-            //  todo: need a spy on logger.info
+            assert(stub.called);
+            stub.restore();
 
             done();
         });
@@ -174,8 +176,9 @@ describe('Validate Logger', function () {
         config.LOG = {};
         var logger = require('./../logger').getLogger();
 
-        it('validate a log response message', function (done) {
+        it('validate a log response message at info level', function (done) {
             should.exist(logger);
+            var stub = sinon.stub(logger, 'info');
 
             var req = {
                path: 'some/path',
@@ -188,7 +191,8 @@ describe('Validate Logger', function () {
             };
             logger.logResponse(req, res);
 
-            //  todo: need a spy on logger.info
+            assert(stub.called);
+            stub.restore();
 
             done();
         });
