@@ -113,7 +113,7 @@
                 return tableEndpoint;
             },
             resolveReportsEndpoint: function (appId, tableId, reportId) {
-                var reportEndpoint = this.resolveTablesEndpoint(appId, tableId) + REPORTS_ENDPOINT;
+                var reportEndpoint = NODE_BASE_ENDPOINT + APPS_ENDPOINT + appId + TABLES_ENDPOINT + tableId + REPORTS_ENDPOINT;
                 if(reportId) {
                     reportEndpoint = reportEndpoint + reportId;
                 }

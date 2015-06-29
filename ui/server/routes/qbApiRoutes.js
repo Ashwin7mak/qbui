@@ -19,7 +19,9 @@
         function getOptionsForRequest(req){
             var opts = requestHelper.setOptions(req);
             var url = config.javaHost + req.url;
-            opts.url = url.replace('/api', '/api/api');
+            if(url.search('/api/api') === -1) {
+                opts.url = url.replace('/api', '/api/api');
+            }
 
             return opts;
         };
@@ -32,7 +34,9 @@
          */
         function modifyRequestPathForApi(req){
             var originalUrl = req.url;
-            req.url = originalUrl.replace('/api', '/api/api');
+            if(originalUrl.search('/api/api') === -1) {
+                req.url = originalUrl.replace('/api', '/api/api');
+            }
         }
 
         //Route for returning a single record
@@ -104,9 +108,9 @@
                 //  log some route info and set the request options
                 log.logRequest(req);
 
-                var opts = getOptionsForRequest(req);
+                modifyRequestPathForApi(req);
 
-                recordsApi.fetchRecordsAndFields(opts)
+                recordsApi.fetchRecordsAndFields(req)
                     .then(function(response) {
                         log.logResponse(response);
                         res.send(response);
@@ -117,6 +121,25 @@
                         res.status(error.statusCode)
                             .send(error.body);
                     });
+            }
+        );
+
+        //Route for returning a report
+        app.route('/api/:version/apps/:appId/tables/:tableId/reports').post(
+            function(req, res) {
+                //  log some route info and set the request options
+                log.logRequest(req);
+
+                var opts = getOptionsForRequest(req);
+
+                request(opts)
+                    .on('response', function (response) {
+                        log.info('API response: ' + response.statusCode + ' - ' + req.method + ' ' + req.path);
+                    })
+                    .on('error', function (error) {
+                        log.error('API ERROR ' + JSON.stringify(error));
+                    })
+                    .pipe(res);
             }
         );
 
@@ -138,8 +161,6 @@
                 log.logRequest(req);
 
                 var opts = requestHelper.setOptions(req);
-                var url = config.javaHost + req.url;
-                opts.url = url;
 
                 request(opts)
                     .on('error', function(error) {
@@ -155,7 +176,7 @@
                 //  log some route info and set the request options
                 log.logRequest(req);
 
-                var opts = requestHelper.setOptions(req);
+                var opts = getOptionsForRequest(req);
 
                 request(opts)
                     .on('response', function (response) {
