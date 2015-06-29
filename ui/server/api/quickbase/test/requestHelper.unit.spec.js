@@ -12,6 +12,7 @@ var config = {
 var requestHelper = require('./../requestHelper')(config);
 var should = require('should');
 var assert = require('assert');
+var sinon = require('sinon');
 
 /**
  * Unit tests for User field formatting
@@ -65,13 +66,31 @@ describe('Validate RequestHelper unit tests', function () {
 
     describe('validate agent options',function() {
         var req = {};
-        req.protocol = 'http';
 
         it('validate getting agent options on non-secure protocol', function(done) {
+            req.protocol = 'http';
             var agentOptions = requestHelper.getAgentOptions(req);
             agentOptions.rejectUnauthorized.should.equal(false);
             done();
         });
+
+        it('validate getting agent options on secure protocol', function(done) {
+            req.protocol = 'https';
+
+            var fs = require('fs');
+            var stub = sinon.stub(fs, 'readFileSync', function() { return 'file'; });
+
+            var agentOptions = requestHelper.getAgentOptions(req);
+
+            agentOptions.strictSSL.should.equal(true);
+            agentOptions.rejectUnauthorized.should.equal(true);
+            assert(stub.calledTwice);
+
+            stub.restore();
+            done();
+        });
+
+
     });
 
     describe('validate copy headers to response method',function() {

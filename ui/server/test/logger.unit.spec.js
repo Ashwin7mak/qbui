@@ -122,34 +122,39 @@ describe('Validate Logger', function () {
     });
 
     describe('validate an explicit rotating file configuration of the logger',function() {
-        //  clear out any logger configuration with explicit setting
-        config.LOG = {
-            name: 'qbse-local',
-            level: 'debug',
-            stream: {
-                type: 'file',
-                file: {
-                    dir: '',
-                    name: 'qbse-local-test.log',
-                    rotating: {
-                        period: '1d',
-                        count: 7
-                    }
-                }
-            },
-            src: true               // this is slow...do not use in prod
-        };
-        var logger = require('./../logger').getLogger();
 
         it('validate a default logger with file streaming is configured', function (done) {
+
+            //  clear out any logger configuration with explicit setting
+            config.LOG = {
+                name: 'qbse-local',
+                level: 'debug',
+                stream: {
+                    type: 'file',
+                    file: {
+                        dir: '',
+                        name: 'qbse-some-unit-test.log',
+                        rotating: {
+                            period: '1d',
+                            count: 7
+                        }
+                    }
+                },
+                src: true               // this is slow...do not use in prod
+            };
+
+            var logger = require('./../logger').getLogger();
+
             should.exist(logger);
             should(logger.fields.name).be.exactly('qbse-local');
             should(logger.src).be.exactly(true);
             should(logger._level).be.exactly(20);
             should(logger.streams[0].type).be.exactly('rotating-file');
-            should(logger.streams[0].path).be.exactly('qbse-local-test.log');
+            should(logger.streams[0].path).be.exactly('qbse-some-unit-test.log');
+
             done();
         });
+
     });
 
     describe('validate the logRequest add-on function',function() {
