@@ -83,25 +83,6 @@
             }
         );
 
-        //Route for posting an array of records
-        app.route('/api/:version/apps/:appId/tables/:tableId/records').post(
-            function(req, res) {
-                //  log some route info and set the request options
-                log.logRequest(req);
-
-                var opts = getOptionsForRequest(req);
-
-                request(opts)
-                    .on('response', function (response) {
-                        log.info('API response: ' + response.statusCode + ' - ' + req.method + ' ' + req.path);
-                    })
-                    .on('error', function (error) {
-                        log.error('API ERROR ' + JSON.stringify(error));
-                    })
-                    .pipe(res);
-            }
-        );
-
         //Route for returning a report
         app.route('/api/:version/apps/:appId/tables/:tableId/reports/:reportId/results').get(
             function(req, res) {
@@ -121,25 +102,6 @@
                         res.status(error.statusCode)
                             .send(error.body);
                     });
-            }
-        );
-
-        //Route for returning a report
-        app.route('/api/:version/apps/:appId/tables/:tableId/reports').post(
-            function(req, res) {
-                //  log some route info and set the request options
-                log.logRequest(req);
-
-                var opts = getOptionsForRequest(req);
-
-                request(opts)
-                    .on('response', function (response) {
-                        log.info('API response: ' + response.statusCode + ' - ' + req.method + ' ' + req.path);
-                    })
-                    .on('error', function (error) {
-                        log.error('API ERROR ' + JSON.stringify(error));
-                    })
-                    .pipe(res);
             }
         );
 
