@@ -5,7 +5,7 @@
 'use strict';
 
 var errors = require('./components/errors');
-var log = require('./logger').getLogger(module.filename);
+var log = require('./logger').getLogger();
 
 module.exports = function (app, config) {
 
@@ -18,7 +18,7 @@ module.exports = function (app, config) {
     //
     app.all('*', function(req, res, next) {
         requestHelper.setTidHeader(req);
-        log.logRequest(req);
+        log.logRequest(req, __filename);
         next();
     });
 

@@ -1,7 +1,7 @@
 (function () {
     'use strict';
 
-    var log = require('../logger').getLogger(module.filename);
+    var log = require('../logger').getLogger();
 
     module.exports = function (app) {
 

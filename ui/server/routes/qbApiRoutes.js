@@ -1,7 +1,7 @@
 (function () {
     'use strict';
     var request = require('request');
-    var log = require('../logger').getLogger(module.filename);
+    var log = require('../logger').getLogger();
 
     module.exports = function (app, config) {
 
@@ -15,7 +15,7 @@
             function(req, res) {
                 recordsApi.fetchSingleRecordAndFields(req)
                     .then(function(response) {
-                        log.logResponse(req, response);
+                        log.logResponse(req, response, __filename);
                         res.send(response);
                     })
                     .catch(function(error) {
@@ -32,7 +32,7 @@
             function(req, res) {
                 recordsApi.fetchRecordsAndFields(req)
                     .then(function(response) {
-                        log.logResponse(req, response);
+                        log.logResponse(req, response, __filename);
                         res.send(response);
                     })
                     .catch(function(error) {
@@ -49,7 +49,7 @@
             function(req, res) {
                 recordsApi.fetchRecordsAndFields(req)
                     .then(function(response) {
-                        log.logResponse(req, response);
+                        log.logResponse(req, response, __filename);
                         res.send(response);
                     })
                     .catch(function(error) {
@@ -91,7 +91,7 @@
                 var opts = requestHelper.setOptions(req);
                 request(opts)
                     .on('response', function (response) {
-                        log.logResponse(req, response);
+                        log.logResponse(req, response, __filename);
                     })
                     .on('error', function (error) {
                         log.error('API ERROR ' + JSON.stringify(error));

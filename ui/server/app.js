@@ -11,10 +11,12 @@
     var express = require('express'),
         http = require('http'),
         config = require('./config/environment'),
-        log = require('./logger').getLogger(module.filename),
         _ = require('lodash');
 
-    // Setup the express server and configure the logger
+    //  Configure the Bunyan logger
+    var log = require('./logger').getLogger()
+
+    // Setup the express server
     var app = module.exports = express();
 
     /*

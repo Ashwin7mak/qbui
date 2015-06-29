@@ -17,48 +17,78 @@
     var config = require('./config/environment');
     var fs = require('fs');
 
+    //  one logger per node instance
+    var appLogger;
+
     module.exports = {
 
-        getLogger: function(callFunc) {
+        /**
+         *  Initialize the Bunyan logger.
+         */
+        initLogger: function() {
+            appLogger = undefined;
+        },
 
-            //  setup the logger configuration.  Default configurations:
-            //      name: qbse
-            //      level: info
-            //      src: false
-            //      stream: console
-            //
-            var name = getConfig('name', 'qbse-node');
-            var level = getConfig('level', 'info');
-            var src = getConfig('src', false);
-            var stream = getStream();
+        /**
+         * Return a Bunyan logger based on the environment configuration.
+         *
+         * @returns {*}
+         */
+        getLogger: function() {
 
-            var logger = bunyan.createLogger({
-                name: name,
-                streams: [stream],
-                level: level,
-                src: src,
-                serializers: bunyan.stdSerializers
-            });
+            //  Return the configured Bunyan logger.  A new logger will be configured if one is not
+            //  found, otherwise the existing configured logger is returned.
+            if (!appLogger) {
+                var name = getConfig('name', 'qbse-node');
+                var level = getConfig('level', 'info');
+                var src = getConfig('src', false);
+                var stream = getStream();
 
-            // add custom qbse specific properties
-            var appLogger = logger.child({
-                callingFunc: getCallFunc(callFunc)
-            });
+                var logger = bunyan.createLogger({
+                    name: name,
+                    streams: [stream],
+                    level: level,
+                    src: src,
+                    serializers: bunyan.stdSerializers
+                });
 
-            //  custom functions for logging request and response info
-            appLogger.logRequest = function (req) {
-                try {
-                    appLogger.info({Request: getReqInfo(req)}, 'Log Request');
-                }
-                catch (e) {} // don't want logging to stop the app
-            };
+                // add custom qbse specific properties
+                appLogger = logger.child({
+                    //  put properties here..
+                });
 
-            appLogger.logResponse = function (req, res) {
-                try {
-                    appLogger.info({Request: getReqInfo(req), Response: getResInfo(res)}, 'Log Response');
-                }
-                catch (e) {} // don't want logging to stop the app
-            };
+                /**
+                 * Custom functions for logging request info
+                 *
+                 * @param req - http request object
+                 * @param callingFunc -- optional parameter to identify the calling function/src file
+                 */
+                appLogger.logRequest = function (req, callingFunc) {
+                    if (callingFunc) {
+                        appLogger.info({Request: getReqInfo(req), CallFunc: getCallFunc(callingFunc)});
+                    }
+                    else {
+                        appLogger.info({Request: getReqInfo(req)});
+                    }
+
+                };
+
+                /**
+                 * Custom functions for logging request and response info
+                 *
+                 * @param req - http request object
+                 * @param res - http response object
+                 * @param callingFunc -- optional parameter to identify the calling function/src file
+                 */
+                appLogger.logResponse = function (req, res, callingFunc) {
+                    if (callingFunc) {
+                        appLogger.info({Request: getReqInfo(req), Response: getResInfo(res), CallFunc:getCallFunc(callingFunc)});
+                    }
+                    else {
+                        appLogger.info({Request: getReqInfo(req), Response: getResInfo(res)});
+                    }
+                };
+            }
 
             return appLogger;
 
@@ -73,28 +103,35 @@
      */
     function getReqInfo(req) {
         var r = {};
-        if (req) {
-            r.path = req.path;
+        try {
+            if (req) {
+                r.path = req.path;
 
-            var url = req.url;
-            var indx = url.indexOf('?');
-            r.params = indx > 0 ? url.substr(indx+1) : '';
+                var url = req.url;
+                var indx = url.indexOf('?');
+                r.params = indx > 0 ? url.substr(indx + 1) : '';
 
-            r.method = req.method;
+                r.method = req.method;
 
-            //  extract tid and sid from request header
-            if (req.headers) {
-                //  individual transaction id
-                if (req.headers.tid) { r.tid = req.headers.tid; }
-                //  client session id
-                if (req.headers.cid) { r.cid = req.headers.cid; }
-            }
+                //  extract tid and sid from request header
+                if (req.headers) {
+                    //  individual transaction id
+                    if (req.headers.tid) {
+                        r.tid = req.headers.tid;
+                    }
+                    //  client session id
+                    if (req.headers.cid) {
+                        r.cid = req.headers.cid;
+                    }
+                }
 
-            //  extract browser info
-            if (req.useragent) {
-                r.useragent = req.useragent.browser + ' ' + req.useragent.version + ' - ' + req.useragent.os;
+                //  extract browser info
+                if (req.useragent) {
+                    r.useragent = req.useragent.browser + ' ' + req.useragent.version + ' - ' + req.useragent.os;
+                }
             }
         }
+        catch (e) {}   //  catch exception and move on..
         return r;
     }
 
@@ -106,9 +143,12 @@
      */
     function getResInfo(res) {
         var r = {};
-        if (res) {
-            r.status = res.statusCode;
+        try {
+            if (res) {
+                r.status = res.statusCode;
+            }
         }
+        catch (e) {}    // catch exception and move on..
         return r;
     }
 
@@ -187,6 +227,8 @@
                 return callFunc.substr(offset);
             }
         }
+
+        //  it's not in one of the expected folders..
         return '';
     }
 

@@ -4,7 +4,7 @@
     var promise = require('bluebird');
     var assert = require('assert');
     var consts = require('../constants');
-    var log = require('../../logger').getLogger(module.filename);
+    var log = require('../../logger').getLogger();
     /*
      * We can't use JSON.parse() with records because it is possible to lose decimal precision as a
      * result of the JavaScript implementation of its single numeric data type. In JS, all numbers are
