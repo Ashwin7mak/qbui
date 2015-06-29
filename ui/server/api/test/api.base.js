@@ -22,7 +22,8 @@
     module.exports = function (config) {
         //Module constants
         var HTTP = 'http://';
-        var BASE_ENDPOINT = '/api/api/v1';
+        var NODE_BASE_ENDPOINT = '/api/v1';
+        var JAVA_BASE_ENDPOINT = '/api/api/v1';
         var APPS_ENDPOINT = '/apps/';
         var TABLES_ENDPOINT = '/tables/';
         var REPORTS_ENDPOINT = '/reports/';
@@ -91,14 +92,14 @@
 
         var apiBase = {
             resolveAppsEndpoint: function (appId) {
-                var appsEndpoint = BASE_ENDPOINT + APPS_ENDPOINT;
+                var appsEndpoint = JAVA_BASE_ENDPOINT + APPS_ENDPOINT;
                 if (appId) {
                     appsEndpoint = appsEndpoint + appId;
                 }
                 return appsEndpoint;
             },
             resolveRecordsEndpoint: function (appId, tableId, recordId) {
-                var endpoint = this.resolveTablesEndpoint(appId, tableId) + RECORDS_ENDPOINT;
+                var endpoint = NODE_BASE_ENDPOINT + APPS_ENDPOINT + appId + TABLES_ENDPOINT + tableId + RECORDS_ENDPOINT;
                 if (recordId) {
                     endpoint = endpoint + recordId;
                 }
@@ -119,20 +120,20 @@
                 return reportEndpoint;
             },
             resolveRealmsEndpoint: function (realmId) {
-                var endpoint = BASE_ENDPOINT + REALMS_ENDPOINT;
+                var endpoint = JAVA_BASE_ENDPOINT + REALMS_ENDPOINT;
                 if (realmId) {
                     endpoint = endpoint + realmId;
                 }
                 return endpoint;
             },
             resolveTicketEndpoint: function () {
-                return BASE_ENDPOINT + TICKETS_ENDPOINT;
+                return JAVA_BASE_ENDPOINT + TICKETS_ENDPOINT;
             },
             resolveHealthEndpoint: function () {
-                return BASE_ENDPOINT + HEALTH_ENDPOINT;
+                return JAVA_BASE_ENDPOINT + HEALTH_ENDPOINT;
             },
             resolveUsersEndpoint: function (userId) {
-                var endpoint = BASE_ENDPOINT + USERS_ENDPOINT;
+                var endpoint = JAVA_BASE_ENDPOINT + USERS_ENDPOINT;
                 if (userId) {
                     endpoint = endpoint + userId;
                 }

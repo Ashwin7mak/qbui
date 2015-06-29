@@ -1,3 +1,4 @@
+
 (function () {
     'use strict';
     var request = require('request');
@@ -10,11 +11,37 @@
         var requestHelper = require('../api/quickbase/requestHelper')(config);
         var recordsApi = require('../api/quickbase/recordsApi')(config);
 
+        /**
+         * This helper method takes the request url produced and replaces the single /api with /api/api.
+         *
+         * @param req
+         */
+        function getOptionsForRequest(req){
+            var opts = requestHelper.setOptions(req);
+            var url = config.javaHost + req.url;
+            opts.url = url.replace('/api', '/api/api');
+
+            return opts;
+        };
+
+        /**
+         * This helper method takes the request url produced and replaces the single /api with /api/api on the original
+         * request
+         *
+         * @param req
+         */
+        function modifyRequestPathForApi(req){
+            var originalUrl = req.url;
+            req.url = originalUrl.replace('/api', '/api/api');
+        }
+
         //Route for returning a single record
         app.route('/api/:version/apps/:appId/tables/:tableId/records/:recordId').get(
             function(req, res) {
                 //  log some route info and set the request options
                 log.logRequest(req);
+
+                modifyRequestPathForApi(req);
 
                 recordsApi.fetchSingleRecordAndFields(req)
                     .then(function(response) {
@@ -36,6 +63,8 @@
                 //  log some route info and set the request options
                 log.logRequest(req);
 
+                modifyRequestPathForApi(req);
+
                 recordsApi.fetchRecordsAndFields(req)
                     .then(function(response) {
                         log.logResponse(response);
@@ -50,13 +79,34 @@
             }
         );
 
+        //Route for posting an array of records
+        app.route('/api/:version/apps/:appId/tables/:tableId/records').post(
+            function(req, res) {
+                //  log some route info and set the request options
+                log.logRequest(req);
+
+                var opts = getOptionsForRequest(req);
+
+                request(opts)
+                    .on('response', function (response) {
+                        log.info('API response: ' + response.statusCode + ' - ' + req.method + ' ' + req.path);
+                    })
+                    .on('error', function (error) {
+                        log.error('API ERROR ' + JSON.stringify(error));
+                    })
+                    .pipe(res);
+            }
+        );
+
         //Route for returning a report
         app.route('/api/:version/apps/:appId/tables/:tableId/reports/:reportId/results').get(
             function(req, res) {
                 //  log some route info and set the request options
                 log.logRequest(req);
 
-                recordsApi.fetchRecordsAndFields(req)
+                var opts = getOptionsForRequest(req);
+
+                recordsApi.fetchRecordsAndFields(opts)
                     .then(function(response) {
                         log.logResponse(response);
                         res.send(response);
