@@ -39,7 +39,7 @@
         //REST endpoint (protocol,server,port)
         //javaHost: 'https://localhost.intuit.com:8443',
         //javaHost: 'http://localhost.intuit.com:8080'
-        javaHost: 'http://localhost:8080/api',
+        javaHost: 'http://localhost:8080',
 
         //Express Server
         //DOMAIN: 'https://localhost.intuit.com:9443'

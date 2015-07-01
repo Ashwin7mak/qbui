@@ -198,6 +198,8 @@
                 } else if(inputUrl.indexOf(REPORTS) != -1) {
                     opts.url = inputUrl.substring(0, inputUrl.indexOf(REPORTS)) + FIELDS;
                 }
+
+                //TODO: why do we immediately resolve if the format is raw?
                 return executeRequest(opts, (req.param(FORMAT) === RAW));
             }
         };

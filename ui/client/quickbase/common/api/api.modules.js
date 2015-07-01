@@ -10,8 +10,8 @@
             'ngCookies',
             'angular-uuid-generator'
         ]).
-        config(function(RestangularProvider) {
-            RestangularProvider.setBaseUrl('/api/v1');
+        config( function(RestangularProvider) {
+            RestangularProvider.setBaseUrl('api/api/v1');
 
             RestangularProvider.setErrorInterceptor(function(response) {
                 //  most likely cause is someone manually editing the url
@@ -27,7 +27,7 @@
                     return false;
                 }
 
-                //  TODO: not sure if we should be intercepting all 500 exceptions
+                //  NOTE: not sure if we should be intercepting all 500 exceptions..for now will do so
                 if (response.status === 500) {
                     window.location.href = '/internalServerError';
                     return false;

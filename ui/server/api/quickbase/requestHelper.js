@@ -23,7 +23,7 @@
                 return req.method.toLowerCase() === 'delete';
             },
             isSecure: function (req) {
-                return req.protocol.toLowerCase() === 'https';
+                return req.protocol ? req.protocol.toLowerCase() === 'https' : false;
             },
             getRequestUrl: function (req) {
                 return config.javaHost + req.url;
