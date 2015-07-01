@@ -5,7 +5,7 @@
     var _ = require('lodash'),
         path = require('path'),
         all = {
-            env: process.env.NODE_ENV,
+            env: '',
 
             // Root path of server
             root: path.normalize(__dirname + '/../../..'),

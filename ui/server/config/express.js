@@ -12,9 +12,11 @@
         cookieParser = require('cookie-parser'),
         errorHandler = require('errorhandler'),
         path = require('path'),
-        config = require('./environment');
+        config = require('./environment'),
+        envConsts = require('./valid_environments');
 
-    module.exports = function (app) {
+
+        module.exports = function (app) {
 
         var env = app.get('env');
 
@@ -27,13 +29,13 @@
         app.use(methodOverride());
         app.use(cookieParser());
 
-        //TODO: We need to figure out how we want to handle the environment config in aws
-        if ('aws' === env || 'production' === env || 'test' === env || 'development' === env) {
-            if ('development' === env) {
+        if (envConsts.PRODUCTION === env || envConsts.PRE_PROD === env || envConsts.INTEGRATION === env || envConsts.DEVELOPMENT === env || envConsts.TEST === env) {
+
+            if (envConsts.DEVELOPMENT === env) {
                 app.use(require('connect-livereload')());
             }
 
-            if ('aws' === env || 'production' === env) {
+            if (envConsts.PRODUCTION === env || envConsts.PRE_PROD) {
                 app.use(favicon(path.join(config.root, 'public', 'favicon.ico')));
             }
 
@@ -41,12 +43,12 @@
             app.set('appPath', config.root + '/public');
 
             //  Error handler - has to be last.  NON-PROD environment only
-            if ('test' === env || 'development' === env) {
+            if (envConsts.TEST === env || envConsts.DEVELOPMENT === env) {
                 app.use(errorHandler());
             }
         }
 
-        if ('local' === env) {
+        if (envConsts.LOCAL === env) {
             app.use(express.static(path.join(config.root, '.tmp')));
             app.use(express.static(path.join(config.root, 'client')));
             app.set('appPath', config.root + '/client');

@@ -4,15 +4,16 @@
 (function () {
     'use strict';
 
-    // Set default node environment to local
-    // TODO: should remove default to force environment and avoid potential mis-configuration
-    process.env.NODE_ENV = process.env.NODE_ENV || 'local';
-
     var express = require('express'),
         http = require('http'),
         config = require('./config/environment'),
         log = require('./logger').getLogger(module.filename),
+        envConsts = require('./config/environment/valid_environments'),
         _ = require('lodash');
+
+    // Set default node environment to local
+    // TODO: should remove default to force environment and avoid potential mis-configuration
+    process.env.NODE_ENV = process.env.NODE_ENV || 'local';
 
     // Setup the express server and configure the logger
     var app = module.exports = express();

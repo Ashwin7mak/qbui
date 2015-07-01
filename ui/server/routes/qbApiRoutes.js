@@ -1,8 +1,9 @@
 
 (function () {
     'use strict';
-    var request = require('request');
-    var log = require('../logger').getLogger(module.filename);
+    var request = require('request'),
+        log = require('../logger').getLogger(module.filename),
+        envConsts = require('../config/environment/valid_environments');
 
     module.exports = function (app, config) {
 
@@ -108,7 +109,7 @@
         //Disable proxying of realm and ticket requests via the node webserver for non-local and test environment
         if ('local' !== env && 'test' !== env) {
             log.info('Disabling realm and ticket endpoint access for this run-time environment!');
-            app.route(['/api/:version/realms*', '/api/:version/ticket*']).all(
+            app.route(['/api/:version/realms*', '/api/:version/ticket*', '/api/*']).all(
                 function (req, res) {
                     log.logRequest(req);
                     res.status(404).send();
