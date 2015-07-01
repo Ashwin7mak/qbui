@@ -40,7 +40,7 @@
         }
 
         //Route for returning a single record
-        app.route('/api/:version/apps/:appId/tables/:tableId/records/:recordId').get(
+        app.route('/api/api/:version/apps/:appId/tables/:tableId/records/:recordId').get(
             function(req, res) {
                 //  log some route info and set the request options
                 log.logRequest(req);
@@ -62,7 +62,7 @@
         );
 
         //Route for returning an array of records
-        app.route('/api/:version/apps/:appId/tables/:tableId/records').get(
+        app.route('/api/api/:version/apps/:appId/tables/:tableId/records').get(
             function(req, res) {
                 //  log some route info and set the request options
                 log.logRequest(req);
@@ -84,7 +84,7 @@
         );
 
         //Route for returning a report
-        app.route('/api/:version/apps/:appId/tables/:tableId/reports/:reportId/results').get(
+        app.route('/api/api/:version/apps/:appId/tables/:tableId/reports/:reportId/results').get(
             function(req, res) {
                 //  log some route info and set the request options
                 log.logRequest(req);
