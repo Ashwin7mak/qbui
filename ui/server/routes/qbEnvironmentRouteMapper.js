@@ -100,7 +100,7 @@
     environmentToEnabledRoutes[envConsts.DEVELOPMENT] = routeConsts.ALL;
     environmentToEnabledRoutes[envConsts.INTEGRATION] = routeConsts.ALL;
     environmentToEnabledRoutes[envConsts.PRE_PROD] = routeConsts.ALL;
-    environmentToEnabledRoutes[envConsts.PRODUCTION] = [routeConsts.RECORD, routeConsts.REPORT_RESULTS, routeConsts.RECORDS, routeConsts.REP]
+    environmentToEnabledRoutes[envConsts.PRODUCTION] = [routeConsts.RECORD, routeConsts.REPORT_RESULTS, routeConsts.RECORDS]
 
     /*
      * routeToGetFunction maps each route to the proper function associated with that route for a GET request
@@ -110,7 +110,10 @@
     routeToGetFunction[routeConsts.RECORD] = this.fetchSingleRecord;
     routeToGetFunction[routeConsts.RECORDS] = this.fetchAllRecords;
     routeToGetFunction[routeConsts.REPORT_RESULTS] = this.fetchAllRecords;
-    routeToGetFunction[routeConsts.SWAGGER_DOC_ENDPOINTS] = this.fetchSwagger;
+    routeToGetFunction[routeConsts.SWAGGER_API] = this.fetchSwagger;
+    routeToGetFunction[routeConsts.SWAGGER_RESOURCES] = this.fetchSwagger;
+    routeToGetFunction[routeConsts.SWAGGER_IMAGES] = this.fetchSwagger;
+    routeToGetFunction[routeConsts.SWAGGER_DOCUMENTATION] = this.fetchSwagger;
 
     /*
      * routeToGetFunction maps each route to the proper function associated with that route for a POST request
