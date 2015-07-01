@@ -61,7 +61,7 @@ describe('Report Service E2E Tests', function (){
                 // Via the API create the records, a new report, then run the report.
                 // This is a promise chain since we need these actions to happen sequentially
                 addRecords(createdApp, generatedRecords).then(createReport).then(runReport).then(function (reportRecords) {
-                    console.log("Here are the records returned from your report:");
+                    console.log("Here are the records returned from your API report:");
                     console.log(reportRecords);
                     recordList = reportRecords;
 
@@ -183,7 +183,6 @@ describe('Report Service E2E Tests', function (){
         recordBase.apiBase.executeRequest(reportsEndpoint, 'POST', reportJSON).then(function(result){
             //console.log("Report create result");
             var parsed = JSON.parse(result.body);
-
             var id = parsed.id;
             deferred.resolve(id);
         }).catch(function (error) {
@@ -224,12 +223,13 @@ describe('Report Service E2E Tests', function (){
         // Load the page objects
         var requestReportPage = require('./requestReport.po.js');
         var directReportLinksPage = require('./directReportLinks.po.js');
+        var reportServicePage = require('./reportService.po.js');
 
         // Gather the necessary values to make the requests via the browser
         var ticketEndpoint = recordBase.apiBase.resolveTicketEndpoint();
         var realmName = recordBase.apiBase.realm.subdomain;
         var realmId = recordBase.apiBase.realm.id;
-        console.log('realmId: ' + realmId);
+        //console.log('realmId: ' + realmId);
         var appId = app.id;
         var tableId = app.tables[0].id;
 
@@ -254,13 +254,11 @@ describe('Report Service E2E Tests', function (){
         browser.driver.sleep(2000);
         directReportLinksPage.firstReportLinkEl.click();
 
-        // Now on the Reports page
-        browser.driver.sleep(10000);
-
-        // Now on the Reports page
+        // Now on the Reports Service page
         // Assert report name
+        browser.driver.sleep(10000);
         var reportName = 'Test Report';
-        element.all(by.className('header')).first().getText(function (text){
+        reportServicePage.reportTitleEl.getText(function (text){
             expect(text).toEqual(reportName + ' Report');
         });
 
@@ -276,7 +274,7 @@ describe('Report Service E2E Tests', function (){
         function getColumnHeaders(){
             var deferred = Promise.pending();
             var fieldColHeaders = [];
-            element.all(by.repeater('col in colContainer.renderedColumns track by col.colDef.name')).then(function(result){
+            reportServicePage.columnHeaderElList.then(function(result){
                 for(var i = 0; i < result.length; i++){
                     result[i].getText().then(function(value){
                         // The getText call above is returning the text value with a new line char on the end, need to remove it
@@ -300,7 +298,7 @@ describe('Report Service E2E Tests', function (){
         };
 
         // Check all record values
-        element.all(by.repeater('(rowRenderIndex, row) in rowContainer.renderedRows track by $index')).getText().then(function(uiRecords) {
+        reportServicePage.recordElList.getText().then(function(uiRecords) {
 
             // Check that we have the same number of records to compare
             expect(uiRecords.length).toEqual(recordList.length);
@@ -334,9 +332,10 @@ describe('Report Service E2E Tests', function (){
 
                 // If the record Ids match, compare the other fields in the records
                 if (expectedRecIdValue === Number(actualRecIdValue)) {
-                    console.log("Match! Comparing record values for records with ID: " + expectedRecIdValue);
+                    console.log("Comparing record values for records with ID: " + expectedRecIdValue);
                     for (var j = 1; j < expectedRecord.length; j++) {
-                        console.log("Comparing field");
+                        console.log("Comparing expected field value:" + expectedRecord[j].value
+                            + " with actual field value: " + actualRecord[j]);
                         expect(expectedRecord[j].value).toEqual(actualRecord[j]);
                     }
                 }
