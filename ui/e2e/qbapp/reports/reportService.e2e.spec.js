@@ -4,31 +4,33 @@
  */
 'use strict';
 
+// Uses the base / constants modules in the Node Server layer
+// Launches a new instance of the Express Server
 var consts = require('../../../server/api/constants.js');
 var config = require('../../../server/config/environment/local.js');
 var app = require('../../../server/app');
 var recordBase = require('../../../server/api/test/recordApi.base.js')(config);
 
+// Require the generator modules in the Server layer
 var appGenerator = require('../../../test_generators/app.generator.js');
 var recordGenerator = require('../../../test_generators/record.generator.js');
 
+// Bluebird Promise library
 var Promise = require('bluebird');
+// Node.js assert library
 var assert = require('assert');
-
-var jsonBigNum = require('json-bignum');
-var BigDecimal = require('bigdecimal');
 
 describe('Report Service E2E Tests', function (){
 
     var setupDone = false;
     var cleanupDone = false;
     var app;
-    var records;
+    var recordList;
 
     /**
-     * Setup method. Generates JSON for an app, table, a set of records and a report. Then creates them via the REST API.
+     * Setup method. Generates JSON for an app, a table, a set of records and a report. Then creates them via the REST API.
      *
-     * We this to act like a beforeSuite hence the use of setupDone (this is fixed in newer versions of Jasmine).
+     * We want this method to act like a beforeSuite hence the use of setupDone (beforeSuite has been added in newer versions of Jasmine).
      * Have to specify the done() callback at the end of the promise chain, otherwise Protractor will not wait
      * for the promises to be resolved (should be fixed in newest version)
      */
@@ -48,8 +50,6 @@ describe('Report Service E2E Tests', function (){
             // Create the app via the API
             createApp(generatedApp).then(function (createdApp) {
 
-                //TODO: Verify app here (or in the helper method)
-
                 // Set your global app object to use in the actual test method
                 app = createdApp;
 
@@ -60,11 +60,10 @@ describe('Report Service E2E Tests', function (){
 
                 // Via the API create the records, a new report, then run the report.
                 // This is a promise chain since we need these actions to happen sequentially
-                addRecords(createdApp, generatedRecords).then(createReport).then(runReport).then(function (records) {
+                addRecords(createdApp, generatedRecords).then(createReport).then(runReport).then(function (reportRecords) {
                     console.log("Here are the records returned from your report:");
-                    console.log(records);
-
-                    //TODO: Verify the records here then set the global object
+                    console.log(reportRecords);
+                    recordList = reportRecords;
 
                     // Setup complete so set the global var so we don't run setup again
                     setupDone = true;
@@ -80,6 +79,9 @@ describe('Report Service E2E Tests', function (){
         else { done(); }
     });
 
+    /**
+     * Takes a generated JSON object and creates it via the REST API. Returns the create app JSON response body.
+     */
     function createApp(generatedApp){
         var deferred = Promise.pending();
         recordBase.createApp(generatedApp).then(function (appResponse) {
@@ -95,8 +97,31 @@ describe('Report Service E2E Tests', function (){
         return deferred.promise;
     };
 
+    /**
+     * Takes a generated JSON object and creates it via the REST API. Returns the create app JSON response body.
+     */
+    function createApp(generatedApp){
+        var deferred = Promise.pending();
+        recordBase.createApp(generatedApp).then(function (appResponse) {
+            var createdApp = JSON.parse(appResponse.body);
+            assert(createdApp, 'failed to create app via the API');
+            //console.log("Create App Response: " + app);
+            deferred.resolve(createdApp);
+        }).catch(function(error){
+            console.log(JSON.stringify(error));
+            deferred.reject(error);
+        });
+
+        return deferred.promise;
+    };
+
+    /**
+     * Takes the create app JSON object and returns an array all of the non built in fields in the specified table.
+     * Use the array to pass into the recordGenerator method.
+     */
     function getNonBuiltInFields(createdApp){
         var nonBuiltInFields = [];
+        //TODO: Have the user specify which table to get the fields for
         createdApp.tables[0].fields.forEach(function (field) {
             if(field.builtIn !== true){
                 nonBuiltInFields.push(field);
@@ -106,6 +131,9 @@ describe('Report Service E2E Tests', function (){
         return nonBuiltInFields;
     };
 
+    /**
+     * Takes an array of field objects and returns an array containing the specified number of generated record JSON objects.
+     */
     function generateRecords(fields, numRecords){
         var generatedRecords = [];
         for (var i = 0; i < numRecords; i++) {
@@ -132,7 +160,6 @@ describe('Report Service E2E Tests', function (){
                 for (var i = 0; i < results.length; i++) {
                     //console.log("Here is fetched record response " + i);
                     //console.log(results[i]);
-                    //TODO: Assert values are the same between genRecords and createdRecords
                 }
                 deferred.resolve(app);
             }).catch(function (error) {
@@ -192,9 +219,9 @@ describe('Report Service E2E Tests', function (){
         // Check that your setup completed properly
         // Newer versions of Jasmine allow you to fail fast if your setup fails
         expect(app).not.toBe(null);
-        //TODO: Check that your records aren't null
+        expect(recordList).not.toBe(null);
 
-        // Load the page object model
+        // Load the page objects
         var requestReportPage = require('./requestReport.po.js');
         var directReportLinksPage = require('./directReportLinks.po.js');
 
@@ -202,6 +229,7 @@ describe('Report Service E2E Tests', function (){
         var ticketEndpoint = recordBase.apiBase.resolveTicketEndpoint();
         var realmName = recordBase.apiBase.realm.subdomain;
         var realmId = recordBase.apiBase.realm.id;
+        console.log('realmId: ' + realmId);
         var appId = app.id;
         var tableId = app.tables[0].id;
 
@@ -227,9 +255,93 @@ describe('Report Service E2E Tests', function (){
         directReportLinksPage.firstReportLinkEl.click();
 
         // Now on the Reports page
-        //TODO: Assert the report is being shown
-        //TODO: Check the values shown on the page match your expected records
         browser.driver.sleep(10000);
+
+        // Now on the Reports page
+        // Assert report name
+        var reportName = 'Test Report';
+        element.all(by.className('header')).first().getText(function (text){
+            expect(text).toEqual(reportName + ' Report');
+        });
+
+        // Assert column headers
+        var fieldNames = ['Record ID#', 'Text Field', 'Multi Text Field', 'Phone Number Field'];
+        getColumnHeaders().then(function(resultArray){
+            // UI is currently using upper case to display the field names in columns
+            fieldNames.myUcase();
+            expect(resultArray).toEqual(fieldNames);
+        });
+
+        // Helper function that will get all of the field column headers from the report. Returns an array of strings.
+        function getColumnHeaders(){
+            var deferred = Promise.pending();
+            var fieldColHeaders = [];
+            element.all(by.repeater('col in colContainer.renderedColumns track by col.colDef.name')).then(function(result){
+                for(var i = 0; i < result.length; i++){
+                    result[i].getText().then(function(value){
+                        // The getText call above is returning the text value with a new line char on the end, need to remove it
+                        var subValue = value.replace(/(\r\n|\n|\r)/gm,"");
+                        fieldColHeaders.push(subValue.trim());
+                    });
+                }
+            }).then(function(){
+                deferred.resolve(fieldColHeaders);
+            });
+            return deferred.promise;
+        };
+
+        // Helper function that will convert an array of strings to uppercase
+        Array.prototype.myUcase=function()
+        {
+            for (var i = 0; i < this.length; i++)
+            {
+                this[i]=this[i].toUpperCase();
+            }
+        };
+
+        // Check all record values
+        element.all(by.repeater('(rowRenderIndex, row) in rowContainer.renderedRows track by $index')).getText().then(function(uiRecords) {
+
+            // Check that we have the same number of records to compare
+            expect(uiRecords.length).toEqual(recordList.length);
+
+            // Gather the record values
+            var actualRecordList = [];
+
+            // Each row of the repeater (one record) is returned as a string of values.
+            // Split on the new line char and create a new array.
+            uiRecords.forEach(function (recordString){
+                var record = recordString.split("\n");
+                actualRecordList.push(record);
+            });
+
+            // Sort expected records by recordID
+            recordList.sort(function (a, b) {
+                return parseInt(a[0].value) - parseInt(b[0].value);
+            });
+
+            // Loop through the expected recordList
+            for (var k = 0; k < recordList.length; k++) {
+                // Grab the expected record
+                var expectedRecord = recordList[k];
+                // Get the record Id to look for
+                var expectedRecIdValue = expectedRecord[0].value;
+
+                // Grab actual record to compare recordIds
+                var actualRecord = actualRecordList[k];
+                // Get the record Id
+                var actualRecIdValue = actualRecord[0];
+
+                // If the record Ids match, compare the other fields in the records
+                if (expectedRecIdValue === Number(actualRecIdValue)) {
+                    console.log("Match! Comparing record values for records with ID: " + expectedRecIdValue);
+                    for (var j = 1; j < expectedRecord.length; j++) {
+                        console.log("Comparing field");
+                        expect(expectedRecord[j].value).toEqual(actualRecord[j]);
+                    }
+                }
+            }
+        });
     });
 
     /**
@@ -237,8 +349,6 @@ describe('Report Service E2E Tests', function (){
     */
     afterEach(function (done) {
         if (!cleanupDone) {
-            //Realm deletion takes time, bump the timeout
-            //this.timeout(20000);
             recordBase.apiBase.cleanup().then(function () {
                 cleanupDone = false;
                 done();
@@ -246,5 +356,4 @@ describe('Report Service E2E Tests', function (){
         }
         else { done(); }
     });
-
 });
