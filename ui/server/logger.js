@@ -97,7 +97,7 @@
 
     /**
      * Extract from the request a standard set of information to display in a log message.
-     * Currently, the request path, request method, cid(client id) and tid(transaction id) is extracted.
+     * Currently, the request path, request method, sid(session id) and tid(transaction id) is extracted.
      *
      * @param req
      */
@@ -113,15 +113,15 @@
 
                 r.method = req.method;
 
-                //  extract tid and sid from request header
+                //  extract tid and bsid from request header
                 if (req.headers) {
                     //  individual transaction id
                     if (req.headers.tid) {
                         r.tid = req.headers.tid;
                     }
-                    //  client session id
-                    if (req.headers.cid) {
-                        r.cid = req.headers.cid;
+                    //  session id
+                    if (req.headers.sid) {
+                        r.sid = req.headers.sid;
                     }
                 }
 

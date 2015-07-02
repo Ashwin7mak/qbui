@@ -41,12 +41,12 @@
             //  include the ticket and a sessionid on every Restangular request
             var headers = {}
             //  generate a uuid for this session id.
-            headers.cid = uuid.v1();
+            headers[apiConstants.SESSION_HDR] = uuid.v1();
 
             //  get the ticket from the cookies...and add to the header if found
             var ticket = $cookie.get(apiConstants.TICKET_COOKIE);
             if (ticket) {
-                headers.ticket = ticket;
+                headers[apiConstants.TICKET_HDR] = ticket;
             }
 
             Restangular.setDefaultHeaders(headers);

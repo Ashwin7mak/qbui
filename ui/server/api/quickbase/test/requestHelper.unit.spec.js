@@ -155,12 +155,12 @@ describe('Validate RequestHelper unit tests', function () {
         var req = {};
         req.protocol = 'https';
         req.method = 'POST';
-        req.headers = {cid:'cid-header'};
+        req.headers = {someOtherid:'some-other-header'};
 
         it('Test adding the TID header field', function(done) {
             var newReq = requestHelper.setTidHeader(req);
             req.headers.should.have.property('tid');
-            req.headers.should.have.property('cid');
+            req.headers.should.have.property('someOtherid');
             assert.deepEqual(newReq, req, 'request object != input request after adding TID');
             done();
         });
