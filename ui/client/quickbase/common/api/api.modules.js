@@ -9,7 +9,7 @@
             'ngCookies'
         ]).
         config( function(RestangularProvider) {
-            RestangularProvider.setBaseUrl('/api/v1');
+            RestangularProvider.setBaseUrl('api/api/v1');
 
             RestangularProvider.setErrorInterceptor(function(response) {
                 //  most likely cause is someone manually editing the url
