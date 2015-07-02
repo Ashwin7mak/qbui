@@ -79,6 +79,8 @@ describe('Report Service E2E Tests', function (){
         else { done(); }
     });
 
+
+    // TODO: Move these helper functions out into a service module or base class
     /**
      * Takes a generated JSON object and creates it via the REST API. Returns the create app JSON response body.
      */
@@ -169,6 +171,7 @@ describe('Report Service E2E Tests', function (){
         return deferred.promise;
     };
 
+    // TODO: Need to write a report generator
     function createReport(){
         var deferred = Promise.pending();
         var reportJSON = {
@@ -245,18 +248,18 @@ describe('Report Service E2E Tests', function (){
         browser.get(requestReportPageEndPoint);
 
         // Enter in the appId, tableId and click the 'Go' button
-        browser.driver.sleep(2000);
+        //browser.driver.sleep(2000);
         requestReportPage.appIdInputEl.sendKeys(appId);
         requestReportPage.tableIdInputEl.sendKeys(tableId);
         requestReportPage.goButtonEl.click();
 
         // Now on Direct Links page. Choose the first link to run the Report
-        browser.driver.sleep(2000);
+        //browser.driver.sleep(2000);
         directReportLinksPage.firstReportLinkEl.click();
 
         // Now on the Reports Service page
         // Assert report name
-        browser.driver.sleep(10000);
+        //browser.driver.sleep(10000);
         var reportName = 'Test Report';
         reportServicePage.reportTitleEl.getText(function (text){
             expect(text).toEqual(reportName + ' Report');
