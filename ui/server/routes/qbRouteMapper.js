@@ -1,29 +1,20 @@
 /**
- * qbEnvironmentRouteMapping provides a mapping from a validEnvironment to the routes that are available in that environment.
- * qbApiRoutes will then use this to actually call 'route'
- * Created by cschneider1 on 6/30/15.
+ * The route mapper provides a static mapping from each route to the function we expect to call for that route
+ * Created by cschneider1 on 7/2/15.
  */
 (function () {
-    'use strict';
-    var request = require('request'),
-        log = require('../logger').getLogger(module.filename),
-        envConsts = require('../config/environment/valid_environments'),
+    var log = require('../logger').getLogger(module.filename),
         routeConsts = require('./routeConstants'),
         requestHelper,
         recordsApi,
-        allRoutes = [routeConsts.RECORD,
-            routeConsts.RECORDS,
-            routeConsts.REPORT_RESULTS,
-            routeConsts.TOMCAT_ALL,
-            routeConsts.SWAGGER_DOCUMENTATION,
-            routeConsts.SWAGGER_IMAGES,
-            routeConsts.SWAGGER_RESOURCES,
-            routeConsts.SWAGGER_API];
+        environmentMapper,
+        env;
 
-
-    module.exports = function (config){
+    module.exports = function (config, envMapper){
         requestHelper = require('../api/quickbase/requestHelper')(config);
         recordsApi = require('../api/quickbase/recordsApi')(config);
+        environmentMapper = envMapper;
+        env = config.env;
 
         return {
 
@@ -31,24 +22,15 @@
              * Return all registered routes
              * @returns {*[]}
              */
-             fetchAllRoutes : function(){
-                return allRoutes;
-             },
-
-            /**
-             * For the app environment return all valid routes for this env
-             * @param env
-             * @returns {*}
-             */
-            fetchAllRoutesForEnv: function(env) {
-                return environmentToEnabledRoutes[env];
+            fetchAllRoutes : function(){
+                return routeConsts;
             },
 
             /**
              * For a given route, return the GET function associated with this route or group of routes
              * @param route
              */
-            fetchGetFunctionForRoute : function(route) {
+            fetchGetFunctionForRoute: function (route) {
                 return routeToGetFunction[route];
             },
 
@@ -56,7 +38,7 @@
              * For a given route, return the POST function associated with this route or group of routes
              * @param route
              */
-            fetchPostFunctionForRoute : function(route) {
+            fetchPostFunctionForRoute: function (route) {
                 return routeToPostFunction[route];
             },
 
@@ -64,7 +46,7 @@
              * For a given route, return the POST function associated with this route or group of routes
              * @param route
              */
-            fetchPutFunctionForRoute : function(route) {
+            fetchPutFunctionForRoute: function (route) {
                 return routeToPutFunction[route];
             },
 
@@ -72,7 +54,7 @@
              * For a given route, return the PATCH function associated with this route or group of routes
              * @param route
              */
-            fetchPatchFunctionForRoute : function(route) {
+            fetchPatchFunctionForRoute: function (route) {
                 return routeToPatchFunction[route];
             },
 
@@ -80,7 +62,7 @@
              * For a given route, return the DELETE function associated with this route or group of routes
              * @param route
              */
-            fetchDeleteFunctionForRoute : function(route) {
+            fetchDeleteFunctionForRoute: function (route) {
                 return routeToDeleteFunction[route];
             },
 
@@ -88,32 +70,12 @@
              * For a given route, return the function associated with this route or group of routes for all http verbs
              * @param route
              */
-            fetchAllFunctionForRoute : function(route) {
+            fetchAllFunctionForRoute: function (route) {
                 return routeToAllFunction[route];
-            },
-
-            /**
-             * Return a pointer to the 404 method
-             * @returns {fetch404}
-             */
-            fetch404Function : function(){
-                return fetch404;
             }
         }
     };
 
-
-    /*
-     * environmentToEnabledRoutes maps each enumerated environment to the routes that are enabled for that environment
-     */
-    var environmentToEnabledRoutes = {};
-
-    environmentToEnabledRoutes[envConsts.LOCAL] = allRoutes;
-    environmentToEnabledRoutes[envConsts.TEST] = allRoutes;
-    environmentToEnabledRoutes[envConsts.DEVELOPMENT] = allRoutes;
-    environmentToEnabledRoutes[envConsts.INTEGRATION] = allRoutes;
-    environmentToEnabledRoutes[envConsts.PRE_PROD] = allRoutes;
-    environmentToEnabledRoutes[envConsts.PRODUCTION] = [routeConsts.RECORD, routeConsts.REPORT_RESULTS, routeConsts.RECORDS];
 
     /*
      * routeToGetFunction maps each route to the proper function associated with that route for a GET request
@@ -192,6 +154,11 @@
         //  log some route info and set the request options
         log.logRequest(req);
 
+        if(!isRouteEnabled(req)){
+            routeTo404(req, res);
+            return;
+        }
+
         modifyRequestPathForApi(req);
 
         recordsApi.fetchSingleRecordAndFields(req)
@@ -217,6 +184,11 @@
         //  log some route info and set the request options
         log.logRequest(req);
 
+        if(!isRouteEnabled(req)){
+            routeTo404(req, res);
+            return;
+        }
+
         modifyRequestPathForApi(req);
 
         recordsApi.fetchRecordsAndFields(req)
@@ -241,6 +213,11 @@
         //  log some route info and set the request options
         log.logRequest(req);
 
+        if(!isRouteEnabled(req)){
+            routeTo404(req, res);
+            return;
+        }
+
         var opts = requestHelper.setOptions(req);
 
         request(opts)
@@ -259,6 +236,11 @@
         //  log some route info and set the request options
         log.logRequest(req);
 
+        if(!isRouteEnabled(req)){
+            routeTo404(req, res);
+            return;
+        }
+
         var opts = getOptionsForRequest(req);
 
         request(opts)
@@ -272,13 +254,28 @@
     }
 
     /**
-     * Return a 404 for a response
+     * Method explicitly returns a 404 after logging relevant information
      * @param req
      * @param res
      */
-    function fetch404(req, res) {
+    function routeTo404(req, res) {
         log.logRequest(req);
+        log.error("Route "+req.route.path+" is not enabled for env "+env);
         res.status(404).send();
+    }
+
+    /**
+     * Check that the route has been enabled for this environment, if it has, then
+     * @param req
+     * @param res
+     * @param next
+     */
+    function isRouteEnabled(req){
+        if(environmentMapper.routeIsEnabled(env, req.route.path)){
+            return true;
+        }else{
+            return false;
+        }
     }
 
 }());

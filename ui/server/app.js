@@ -4,16 +4,17 @@
 (function () {
     'use strict';
 
+    // if we have not set the NODE_ENV, then error out here
+    if(process.env.NODE_ENV === undefined){
+        throw new Error("No NODE_ENV was specified. You must set a run-time environment variable. Exiting");
+    }
+
     var express = require('express'),
         http = require('http'),
         config = require('./config/environment'),
         log = require('./logger').getLogger(module.filename),
         envConsts = require('./config/environment/valid_environments'),
         _ = require('lodash');
-
-    // Set default node environment to local
-    // TODO: should remove default to force environment and avoid potential mis-configuration
-    process.env.NODE_ENV = config.env;
 
     // Setup the express server and configure the logger
     var app = module.exports = express();

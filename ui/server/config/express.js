@@ -18,7 +18,18 @@
 
         module.exports = function (app) {
 
-        var env = app.get('env');
+        // This config.env refers to the node env - it is the way in which we know what routes to enable versus disable,
+        // and configure anything environment specific.
+        // This differs from runtime env which corresponds to process.env.NODE_ENV. This is the way node knows which
+        // file to load when creating the express server. We don't want to use this variable as it makes us dependent
+        // on generated config in aws. For this reason, the node code maintains it's own notion of environment independent
+        // of the config file name loaded on startup
+        var env = config.env;
+
+        //  Need to have a run-time environment configured
+        if (config.env === undefined) {
+            throw new Error('Missing environment configuration.  You must set a configuration environment variable. Under ' + process.env.NODE_ENV + '.js, make sure you have env: envConsts.ENVIRONMENT. Look at local.js.sample for an example.');
+        }
 
         app.set('views', config.root + '/server/views');
         app.engine('html', require('ejs').renderFile);
@@ -35,7 +46,7 @@
                 app.use(require('connect-livereload')());
             }
 
-            if (envConsts.PRODUCTION === env || envConsts.PRE_PROD) {
+            if (envConsts.PRODUCTION === env || envConsts.PRE_PROD === env) {
                 app.use(favicon(path.join(config.root, 'public', 'favicon.ico')));
             }
 
