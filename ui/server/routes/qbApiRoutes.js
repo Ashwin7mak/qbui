@@ -7,17 +7,16 @@
         log = require('../logger').getLogger(module.filename),
         _ = require('lodash');
 
-    module.exports = function (app, config) {
+    module.exports = function (app, config, envMapper) {
 
         //  request helper class
         var env = app.get('env');
-        var envMapper = require('./qbEnvironmentRouteMapper')(config);
 
-        var routes = envMapper.fetchAllRoutesForEnv(env);
+        var routesInEnv = envMapper.fetchAllRoutesForEnv(env);
+        var allRoutes = envMapper.fetchAllRoutes();
 
-        if (undefined === routes) {
+        if (undefined === routesInEnv) {
             log.warn("No routes have been configured for env " + env);
-            return;
         }
 
         var getFunctionForRoute;
@@ -27,7 +26,14 @@
         var patchFunctionForRoute;
         var allFunctionForRoute;
 
-        _.forEach(routes, function (route) {
+        _.forEach(allRoutes, function (route) {
+
+            //if this route has not been enabled for the env, then map all to a 404
+            if(!_.contains(routesInEnv, route, 0)){
+                log.info("Routing ALL method for route " + route + " to 404 for environment " + env);
+                app.route(route).all(envMapper.fetch404Function());
+                return;
+            }
 
             getFunctionForRoute = envMapper.fetchGetFunctionForRoute(route);
             postFunctionForRoute = envMapper.fetchPostFunctionForRoute(route);
@@ -35,6 +41,14 @@
             putFunctionForRoute = envMapper.fetchDeleteFunctionForRoute(route);
             allFunctionForRoute = envMapper.fetchAllFunctionForRoute(route);
 
+            //if this route has an all mapping, then ignore individual mappings
+            if (undefined !== allFunctionForRoute) {
+                log.info("Routing ALL method for route " + route + " for environment " + env);
+                app.route(route).all(allFunctionForRoute);
+                return;
+            }
+
+            //map each individual mapping understanding that we may want to map the get function but not the post
             if (undefined !== getFunctionForRoute) {
                 log.info("Routing GET method for route " + route + " for environment " + env);
                 app.route(route).get(getFunctionForRoute);
@@ -73,14 +87,6 @@
             }else{
                 log.info("Routing PATCH method for route " + route + " to 404 for environment " + env);
                 app.route(route).patch(envMapper.fetch404Function());
-            }
-
-            if (undefined !== allFunctionForRoute) {
-                log.info("Routing ALL method for route " + route + " for environment " + env);
-                app.route(route).all(allFunctionForRoute);
-            }else{
-                log.info("Routing ALL method for route " + route + " to 404 for environment " + env);
-                app.route(route).all(envMapper.fetch404Function());
             }
         });
     }

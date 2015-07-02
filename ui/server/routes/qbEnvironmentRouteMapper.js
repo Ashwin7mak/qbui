@@ -40,15 +40,6 @@
              * @param env
              * @returns {*}
              */
-            routeIsEnabledForEnv: function(env, route) {
-                return _.contains(environmentToEnabledRoutes[env], route, 0);
-            },
-
-            /**
-             * For the app environment return all valid routes for this env
-             * @param env
-             * @returns {*}
-             */
             fetchAllRoutesForEnv: function(env) {
                 return environmentToEnabledRoutes[env];
             },

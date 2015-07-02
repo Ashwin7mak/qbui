@@ -8,8 +8,9 @@ var errors = require('./components/errors');
 
 module.exports = function (app, config) {
 
+    var envMapper = require('./qbEnvironmentRouteMapper')(config);
     require('./routes/qbAngularRoutes')(app, config);
-    require('./routes/qbApiRoutes')(app, config);
+    require('./routes/qbApiRoutes')(app, config, envMapper);
 
     // unauthorized
     app.route('/unauthorized*')
