@@ -8,112 +8,134 @@
     var request = require('request'),
         log = require('../logger').getLogger(module.filename),
         envConsts = require('../config/environment/valid_environments'),
-        routeConsts = require('./routeConstants');
+        routeConsts = require('./routeConstants'),
+        requestHelper,
+        recordsApi,
+        allRoutes = [routeConsts.RECORD,
+            routeConsts.RECORDS,
+            routeConsts.REPORT_RESULTS,
+            routeConsts.TOMCAT_ALL,
+            routeConsts.SWAGGER_DOCUMENTATION,
+            routeConsts.SWAGGER_IMAGES,
+            routeConsts.SWAGGER_RESOURCES,
+            routeConsts.SWAGGER_API];
 
-    module.exports = function (config) {
-        var requestHelper = require('../api/quickbase/requestHelper')(config);
-        var recordsApi = require('../api/quickbase/recordsApi')(config);
 
-        function getRequestHelper(){
-            return requestHelper;
-        }
+    module.exports = function (config){
+        requestHelper = require('../api/quickbase/requestHelper')(config);
+        recordsApi = require('../api/quickbase/recordsApi')(config);
 
-        function getRecordsApi(){
-            return recordsApi;
-        }
+        return {
 
-        /**
-         * For the app environment return all valid routes for this env
-         * @param env
-         * @returns {*}
-         */
-        function fetchAllRoutesForEnv(env){
-            return environmentToEnabledRoutes[env];
-        }
+            /**
+             * Return all registered routes
+             * @returns {*[]}
+             */
+             fetchAllRoutes : function(){
+                return allRoutes;
+             },
 
-        /**
-         * For a given route, return the GET function associated with this route or group of routes
-         * @param route
-         */
-        function fetchGetFunctionForRoute(route){
-            return routeToGetFunction[route];
-        }
+            /**
+             * For the app environment return all valid routes for this env
+             * @param env
+             * @returns {*}
+             */
+            routeIsEnabledForEnv: function(env, route) {
+                return _.contains(environmentToEnabledRoutes[env], route, 0);
+            },
 
-        /**
-         * For a given route, return the POST function associated with this route or group of routes
-         * @param route
-         */
-        function fetchPostFunctionForRoute(route){
-            return routeToPostFunction[route];
-        }
+            /**
+             * For the app environment return all valid routes for this env
+             * @param env
+             * @returns {*}
+             */
+            fetchAllRoutesForEnv: function(env) {
+                return environmentToEnabledRoutes[env];
+            },
 
-        /**
-         * For a given route, return the POST function associated with this route or group of routes
-         * @param route
-         */
-        function fetchPutFunctionForRoute(route){
-            return routeToPutFunction[route];
-        }
+            /**
+             * For a given route, return the GET function associated with this route or group of routes
+             * @param route
+             */
+            fetchGetFunctionForRoute : function(route) {
+                return routeToGetFunction[route];
+            },
 
-        /**
-         * For a given route, return the PATCH function associated with this route or group of routes
-         * @param route
-         */
-        function fetchPatchFunctionForRoute(route){
-            return routeToPatchFunction[route];
-        }
+            /**
+             * For a given route, return the POST function associated with this route or group of routes
+             * @param route
+             */
+            fetchPostFunctionForRoute : function(route) {
+                return routeToPostFunction[route];
+            },
 
-        /**
-         * For a given route, return the DELETE function associated with this route or group of routes
-         * @param route
-         */
-        function fetchDeleteFunctionForRoute(route){
-            return routeToDeleteFunction[route];
-        }
+            /**
+             * For a given route, return the POST function associated with this route or group of routes
+             * @param route
+             */
+            fetchPutFunctionForRoute : function(route) {
+                return routeToPutFunction[route];
+            },
 
-        /**
-         * For a given route, return the function associated with this route or group of routes for all http verbs
-         * @param route
-         */
-        function fetchAllFunctionForRoute(route){
-            return routeToAllFunction[route];
+            /**
+             * For a given route, return the PATCH function associated with this route or group of routes
+             * @param route
+             */
+            fetchPatchFunctionForRoute : function(route) {
+                return routeToPatchFunction[route];
+            },
+
+            /**
+             * For a given route, return the DELETE function associated with this route or group of routes
+             * @param route
+             */
+            fetchDeleteFunctionForRoute : function(route) {
+                return routeToDeleteFunction[route];
+            },
+
+            /**
+             * For a given route, return the function associated with this route or group of routes for all http verbs
+             * @param route
+             */
+            fetchAllFunctionForRoute : function(route) {
+                return routeToAllFunction[route];
+            },
+
+            /**
+             * Return a pointer to the 404 method
+             * @returns {fetch404}
+             */
+            fetch404Function : function(){
+                return fetch404;
+            }
         }
     };
 
-    /*
-     * get the requestHelper and the recordsApi
-     * These will both be initialized in the export block. We are initializing these, but
-     * they are required in many of the functions used in routing. To hide the functions being used for routing as those
-     * should not be called outside of a route, we get the requestHelper and recordsApi here,
-     * and use them in functions that are not exported as part of the environment route mapper.
-     */
-    var requestHelper = this.getRequestHelper();
-    var recordsApi = this.getRecordsApi();
 
     /*
      * environmentToEnabledRoutes maps each enumerated environment to the routes that are enabled for that environment
      */
     var environmentToEnabledRoutes = {};
 
-    environmentToEnabledRoutes[envConsts.LOCAL] = routeConsts.ALL;
-    environmentToEnabledRoutes[envConsts.TEST] = routeConsts.ALL;
-    environmentToEnabledRoutes[envConsts.DEVELOPMENT] = routeConsts.ALL;
-    environmentToEnabledRoutes[envConsts.INTEGRATION] = routeConsts.ALL;
-    environmentToEnabledRoutes[envConsts.PRE_PROD] = routeConsts.ALL;
-    environmentToEnabledRoutes[envConsts.PRODUCTION] = [routeConsts.RECORD, routeConsts.REPORT_RESULTS, routeConsts.RECORDS]
+    environmentToEnabledRoutes[envConsts.LOCAL] = allRoutes;
+    environmentToEnabledRoutes[envConsts.TEST] = allRoutes;
+    environmentToEnabledRoutes[envConsts.DEVELOPMENT] = allRoutes;
+    environmentToEnabledRoutes[envConsts.INTEGRATION] = allRoutes;
+    environmentToEnabledRoutes[envConsts.PRE_PROD] = allRoutes;
+    environmentToEnabledRoutes[envConsts.PRODUCTION] = [routeConsts.RECORD, routeConsts.REPORT_RESULTS, routeConsts.RECORDS];
 
     /*
      * routeToGetFunction maps each route to the proper function associated with that route for a GET request
      */
     var routeToGetFunction = {};
 
-    routeToGetFunction[routeConsts.RECORD] = this.fetchSingleRecord;
-    routeToGetFunction[routeConsts.RECORDS] = this.fetchAllRecords;
-    routeToGetFunction[routeConsts.REPORT_RESULTS] = this.fetchAllRecords;
-    routeToGetFunction[routeConsts.SWAGGER_API] = this.fetchSwagger;
-    routeToGetFunction[routeConsts.SWAGGER_RESOURCES] = this.fetchSwagger;
-    routeToGetFunction[routeConsts.SWAGGER_IMAGES] = this.fetchSwagger;
-    routeToGetFunction[routeConsts.SWAGGER_DOCUMENTATION] = this.fetchSwagger;
+    routeToGetFunction[routeConsts.RECORD] = fetchSingleRecord;
+    routeToGetFunction[routeConsts.RECORDS] = fetchAllRecords;
+    routeToGetFunction[routeConsts.REPORT_RESULTS] = fetchAllRecords;
+    routeToGetFunction[routeConsts.SWAGGER_API] = fetchSwagger;
+    routeToGetFunction[routeConsts.SWAGGER_RESOURCES] = fetchSwagger;
+    routeToGetFunction[routeConsts.SWAGGER_IMAGES] = fetchSwagger;
+    routeToGetFunction[routeConsts.SWAGGER_DOCUMENTATION] = fetchSwagger;
 
     /*
      * routeToGetFunction maps each route to the proper function associated with that route for a POST request
@@ -140,7 +162,7 @@
      */
     var routeToAllFunction = {};
 
-    routeToAllFunction[routeConsts.TOMCAT_ALL] = this.forwardAllApiRequests;
+    routeToAllFunction[routeConsts.TOMCAT_ALL] = forwardAllApiRequests;
 
     /**
      * This helper method takes the request url produced and replaces the single /api with /api/api.
@@ -258,5 +280,14 @@
             .pipe(res);
     }
 
+    /**
+     * Return a 404 for a response
+     * @param req
+     * @param res
+     */
+    function fetch404(req, res) {
+        log.logRequest(req);
+        res.status(404).send();
+    }
 
 }());

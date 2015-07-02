@@ -13,7 +13,7 @@
 
     // Set default node environment to local
     // TODO: should remove default to force environment and avoid potential mis-configuration
-    process.env.NODE_ENV = process.env.NODE_ENV || 'local';
+    process.env.NODE_ENV = config.env;
 
     // Setup the express server and configure the logger
     var app = module.exports = express();

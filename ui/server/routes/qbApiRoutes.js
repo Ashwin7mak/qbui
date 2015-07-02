@@ -1,157 +1,87 @@
-
+/**
+ *
+ */
 (function () {
     'use strict';
     var request = require('request'),
         log = require('../logger').getLogger(module.filename),
-        envConsts = require('../config/environment/valid_environments');
+        _ = require('lodash');
 
     module.exports = function (app, config) {
 
         //  request helper class
         var env = app.get('env');
-        var requestHelper = require('../api/quickbase/requestHelper')(config);
-        var recordsApi = require('../api/quickbase/recordsApi')(config);
+        var envMapper = require('./qbEnvironmentRouteMapper')(config);
 
-        /**
-         * This helper method takes the request url produced and replaces the single /api with /api/api.
-         *
-         * @param req
-         */
-        function getOptionsForRequest(req){
-            var opts = requestHelper.setOptions(req);
-            var url = config.javaHost + req.url;
-            if(url.search('/api/api') === -1) {
-                opts.url = url.replace('/api', '/api/api');
-            }
+        var routes = envMapper.fetchAllRoutesForEnv(env);
 
-            return opts;
-        };
-
-        /**
-         * This helper method takes the request url produced and replaces the single /api with /api/api on the original
-         * request
-         *
-         * @param req
-         */
-        function modifyRequestPathForApi(req){
-            var originalUrl = req.url;
-            if(originalUrl.search('/api/api') === -1) {
-                req.url = originalUrl.replace('/api', '/api/api');
-            }
+        if (undefined === routes) {
+            log.warn("No routes have been configured for env " + env);
+            return;
         }
 
-        //Route for returning a single record
-        app.route('/api/api/:version/apps/:appId/tables/:tableId/records/:recordId').get(
-            function(req, res) {
-                //  log some route info and set the request options
-                log.logRequest(req);
+        var getFunctionForRoute;
+        var postFunctionForRoute;
+        var deleteFunctionForRoute;
+        var putFunctionForRoute;
+        var patchFunctionForRoute;
+        var allFunctionForRoute;
 
-                modifyRequestPathForApi(req);
+        _.forEach(routes, function (route) {
 
-                recordsApi.fetchSingleRecordAndFields(req)
-                    .then(function(response) {
-                        log.logResponse(response);
-                        res.send(response);
-                    })
-                    .catch(function(error) {
-                        log.error('ERROR: ' + JSON.stringify(error));
-                        requestHelper.copyHeadersToResponse(res, error.headers);
-                        res.status(error.statusCode)
-                            .send(error.body);
-                    });
+            getFunctionForRoute = envMapper.fetchGetFunctionForRoute(route);
+            postFunctionForRoute = envMapper.fetchPostFunctionForRoute(route);
+            deleteFunctionForRoute = envMapper.fetchDeleteFunctionForRoute(route);
+            putFunctionForRoute = envMapper.fetchDeleteFunctionForRoute(route);
+            allFunctionForRoute = envMapper.fetchAllFunctionForRoute(route);
+
+            if (undefined !== getFunctionForRoute) {
+                log.info("Routing GET method for route " + route + " for environment " + env);
+                app.route(route).get(getFunctionForRoute);
+            }else{
+                log.info("Routing GET method for route " + route + " to 404 for environment " + env);
+                app.route(route).get(envMapper.fetch404Function());
             }
-        );
 
-        //Route for returning an array of records
-        app.route('/api/api/:version/apps/:appId/tables/:tableId/records').get(
-            function(req, res) {
-                //  log some route info and set the request options
-                log.logRequest(req);
-
-                modifyRequestPathForApi(req);
-
-                recordsApi.fetchRecordsAndFields(req)
-                    .then(function(response) {
-                        log.logResponse(response);
-                        res.send(response);
-                    })
-                    .catch(function(error) {
-                        log.error('ERROR: ' + JSON.stringify(error));
-                        requestHelper.copyHeadersToResponse(res, error.headers);
-                        res.status(error.statusCode)
-                            .send(error.body);
-                    });
+            if (undefined !== postFunctionForRoute) {
+                log.info("Routing POST method for route " + route + " for environment " + env);
+                app.route(route).post(postFunctionForRoute);
+            }else{
+                log.info("Routing POST method for route " + route + " to 404 for environment " + env);
+                app.route(route).post(envMapper.fetch404Function());
             }
-        );
 
-        //Route for returning a report
-        app.route('/api/api/:version/apps/:appId/tables/:tableId/reports/:reportId/results').get(
-            function(req, res) {
-                //  log some route info and set the request options
-                log.logRequest(req);
-
-                modifyRequestPathForApi(req);
-
-                recordsApi.fetchRecordsAndFields(req)
-                    .then(function(response) {
-                        log.logResponse(response);
-                        res.send(response);
-                    })
-                    .catch(function(error) {
-                        log.error('ERROR: ' + JSON.stringify(error));
-                        requestHelper.copyHeadersToResponse(res, error.headers);
-                        res.status(error.statusCode)
-                            .send(error.body);
-                    });
+            if (undefined !== deleteFunctionForRoute) {
+                log.info("Routing DELETE method for route " + route + " for environment " + env);
+                app.route(route).delete(deleteFunctionForRoute);
+            }else{
+                log.info("Routing DELETE method for route " + route + " to 404 for environment " + env);
+                app.route(route).delete(envMapper.fetch404Function());
             }
-        );
 
-        //Disable proxying of realm and ticket requests via the node webserver for non-local and test environment
-        if ('local' !== env && 'test' !== env) {
-            log.info('Disabling realm and ticket endpoint access for this run-time environment!');
-            app.route(['/api/:version/realms*', '/api/:version/ticket*', '/api/*']).all(
-                function (req, res) {
-                    log.logRequest(req);
-                    res.status(404).send();
-                }
-            );
-        }
-
-        //Route for returning swagger api documentation
-        app.route(['/api', '/api/resources/*', '/api/images/*', '/api/documentation/*']).get(
-            function(req, res) {
-                //  log some route info and set the request options
-                log.logRequest(req);
-
-                var opts = requestHelper.setOptions(req);
-
-                request(opts)
-                    .on('error', function(error) {
-                        log.error('Swagger API ERROR ' + JSON.stringify(error));
-                    })
-                    .pipe(res);
+            if (undefined !== putFunctionForRoute) {
+                log.info("Routing PUT method for route " + route + " for environment " + env);
+                app.route(route).put(putFunctionForRoute);
+            }else{
+                log.info("Routing PUT method for route " + route + " to 404 for environment " + env);
+                app.route(route).put(envMapper.fetch404Function());
             }
-         );
 
-        //  Route to return API calls
-        app.route('/api/*').all(
-            function (req, res) {
-                //  log some route info and set the request options
-                log.logRequest(req);
-
-                var opts = getOptionsForRequest(req);
-
-                request(opts)
-                    .on('response', function (response) {
-                        log.info('API response: ' + response.statusCode + ' - ' + req.method + ' ' + req.path);
-                    })
-                    .on('error', function (error) {
-                        log.error('API ERROR ' + JSON.stringify(error));
-                    })
-                    .pipe(res);
+            if (undefined !== patchFunctionForRoute) {
+                log.info("Routing PATCH method for route " + route + " for environment " + env);
+                app.route(route).patch(patchFunctionForRoute);
+            }else{
+                log.info("Routing PATCH method for route " + route + " to 404 for environment " + env);
+                app.route(route).patch(envMapper.fetch404Function());
             }
-        );
 
-    };
-
+            if (undefined !== allFunctionForRoute) {
+                log.info("Routing ALL method for route " + route + " for environment " + env);
+                app.route(route).all(allFunctionForRoute);
+            }else{
+                log.info("Routing ALL method for route " + route + " to 404 for environment " + env);
+                app.route(route).all(envMapper.fetch404Function());
+            }
+        });
+    }
 }());

@@ -13,7 +13,7 @@
         errorHandler = require('errorhandler'),
         path = require('path'),
         config = require('./environment'),
-        envConsts = require('./valid_environments');
+        envConsts = require('./environment/valid_environments');
 
 
         module.exports = function (app) {

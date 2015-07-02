@@ -4,8 +4,9 @@
     // Environment specific configurations extend these defaults
     var _ = require('lodash'),
         path = require('path'),
+        envConsts = require('./valid_environments'),
         all = {
-            env: '',
+            env: envConsts.PRODUCTION,
 
             // Root path of server
             root: path.normalize(__dirname + '/../../..'),

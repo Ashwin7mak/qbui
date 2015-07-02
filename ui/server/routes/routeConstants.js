@@ -4,6 +4,7 @@
  */
 (function () {
     'use strict';
+    //save the substrings for lack of repetition
     module.exports = Object.freeze({
         RECORD: '/api/api/:version/apps/:appId/tables/:tableId/records/:recordId',
         RECORDS: '/api/api/:version/apps/:appId/tables/:tableId/records',
@@ -12,7 +13,6 @@
         SWAGGER_RESOURCES: '/api/resources/*',
         SWAGGER_IMAGES: '/api/images/*',
         SWAGGER_DOCUMENTATION: '/api/documentation/*',
-        TOMCAT_ALL: '/api/*',
-        ALL: [this.RECORD, this.RECORDS, this.REPORT_RESULTS, this.TOMCAT_ALL, this.SWAGGER_DOCUMENTATION, this.SWAGGER_IMAGES, this.SWAGGER_RESOURCES, this.SWAGGER_API]
+        TOMCAT_ALL: '/api/*'
     });
 }());
