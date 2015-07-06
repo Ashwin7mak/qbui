@@ -33,9 +33,55 @@
                         deferred.resolve(appResponse);
                     }).catch(function (error) {
                         deferred.reject(error);
-                        //TODO: figure out how we want to handle
                         assert(false, 'failed to create app: ' + JSON.stringify(error));
                     });
+                });
+                return deferred.promise;
+            },
+            //Helper method to create a relationship between two tables in an app
+            createRelationship: function(relationshipToCreate) {
+                var deferred = promise.pending();
+                init.then(function (createdRealm) {
+                    apiBase.executeRequest(apiBase.resolveRelationshipsEndpoint(relationshipToCreate.appId), consts.POST, relationshipToCreate).
+                        then(function (relResponse) {
+                        deferred.resolve(relResponse);
+                    }).catch(function (error) {
+                        deferred.reject(error);
+                        assert(false, 'failed to create app: ' + JSON.stringify(error));
+                    });
+                });
+                return deferred.promise;
+            },
+
+            createField: function(appId, tableId, fieldToCreate) {
+                var deferred = promise.pending();
+                init.then(function (createdRealm) {
+                    apiBase.executeRequest(apiBase.resolveFieldsEndpoint(appId, tableId), consts.POST, fieldToCreate).
+                        then(function (relResponse) {
+                            deferred.resolve(relResponse);
+                        }).catch(function (error) {
+                            deferred.reject(error);
+                            assert(false, 'failed to create field: ' + JSON.stringify(error));
+                        });
+                });
+                return deferred.promise;
+            },
+
+            fetchRecord: function(appId, tableId, recordId, params) {
+                var deferred = promise.pending();
+                var endpoint = apiBase.resolveRecordsEndpoint(appId, tableId, recordId);
+                if(params) {
+                    endpoint += params;
+                }
+                init.then(function(createdRealm){
+                    apiBase.executeRequest(endpoint, consts.GET).
+                        then(function(recResp){
+                            deferred.resolve(recResp);
+                        }).
+                        catch(function(err){
+                            deferred.reject(error);
+                            assert(false, 'failed to resolve record');
+                        });
                 });
                 return deferred.promise;
             },
