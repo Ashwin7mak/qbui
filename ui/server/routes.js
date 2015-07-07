@@ -8,7 +8,7 @@ var errors = require('./components/errors');
 
 module.exports = function (app, config) {
 
-    var envMapper = require('./routes/qbEnvironmentMapper');
+    var envMapper = require('./routes/qbRouteGroupMapper');
     var routeMapper = require('./routes/qbRouteMapper')(config, envMapper);
     require('./routes/qbAngularRoutes')(app, config);
     require('./routes/qbApiRoutes')(app, config, envMapper, routeMapper);

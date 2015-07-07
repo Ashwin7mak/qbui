@@ -8,6 +8,7 @@
         requestHelper,
         recordsApi,
         environmentMapper,
+        processRequestFunction,
         env;
 
     module.exports = function (config, envMapper){
@@ -15,6 +16,9 @@
         recordsApi = require('../api/quickbase/recordsApi')(config);
         environmentMapper = envMapper;
         env = config.env;
+
+        //provide a way to override the request function which processRequestFunction otherwise set it to the default
+        processRequestFunction = processRequest;
 
         return {
 
@@ -72,8 +76,22 @@
              */
             fetchAllFunctionForRoute: function (route) {
                 return routeToAllFunction[route];
+            },
+
+            /**
+             * This helper method takes the request url produced and replaces the single /api with /api/api on the original
+             * request
+             *
+             * @param req
+             */
+            modifyRequestPathForApi : function(req){
+                var originalUrl = req.url;
+                if(originalUrl.search('/api/api') === -1) {
+                    req.url = originalUrl.replace('/api', '/api/api');
+                }
             }
-        }
+
+    }
     };
 
 
@@ -118,31 +136,24 @@
     routeToAllFunction[routeConsts.TOMCAT_ALL] = forwardAllApiRequests;
 
     /**
-     * This helper method takes the request url produced and replaces the single /api with /api/api.
-     *
+     * processRequest is the default implementation for processing a request coming through the router. We first log the
+     * request and then we check whether the route has been enabled. We will then modify the request path and send it
+     * along to the return function.
      * @param req
+     * @param res
+     * @param returnFunction
      */
-    function getOptionsForRequest(req){
-        var opts = requestHelper.setOptions(req);
-        var url = config.javaHost + req.url;
-        if(url.search('/api/api') === -1) {
-            opts.url = url.replace('/api', '/api/api');
+    function processRequest(req, res, returnFunction){
+        //  log some route info and set the request options
+        log.logRequest(req);
+
+        if(!isRouteEnabled(req)){
+            routeTo404(req, res);
         }
 
-        return opts;
-    };
+        modifyRequestPathForApi(req);
 
-    /**
-     * This helper method takes the request url produced and replaces the single /api with /api/api on the original
-     * request
-     *
-     * @param req
-     */
-    function modifyRequestPathForApi(req){
-        var originalUrl = req.url;
-        if(originalUrl.search('/api/api') === -1) {
-            req.url = originalUrl.replace('/api', '/api/api');
-        }
+        returnFunction(req, res);
     }
 
     /**
@@ -151,27 +162,20 @@
      * @param res
      */
     function fetchSingleRecord(req, res) {
-        //  log some route info and set the request options
-        log.logRequest(req);
+        processRequestFunction(req, res, function (req, res){
+            recordsApi.fetchSingleRecordAndFields(req)
+                .then(function (response) {
+                    log.logResponse(response);
+                    res.send(response);
+                })
+                .catch(function (error) {
+                    log.error('ERROR: ' + JSON.stringify(error));
+                    requestHelper.copyHeadersToResponse(res, error.headers);
+                    res.status(error.statusCode)
+                        .send(error.body);
+                });
+        });
 
-        if(!isRouteEnabled(req)){
-            routeTo404(req, res);
-            return;
-        }
-
-        modifyRequestPathForApi(req);
-
-        recordsApi.fetchSingleRecordAndFields(req)
-            .then(function(response) {
-                log.logResponse(response);
-                res.send(response);
-            })
-            .catch(function(error) {
-                log.error('ERROR: ' + JSON.stringify(error));
-                requestHelper.copyHeadersToResponse(res, error.headers);
-                res.status(error.statusCode)
-                    .send(error.body);
-            });
     }
 
     /**
@@ -181,27 +185,19 @@
      * @param res
      */
     function fetchAllRecords(req, res) {
-        //  log some route info and set the request options
-        log.logRequest(req);
-
-        if(!isRouteEnabled(req)){
-            routeTo404(req, res);
-            return;
-        }
-
-        modifyRequestPathForApi(req);
-
-        recordsApi.fetchRecordsAndFields(req)
-            .then(function(response) {
-                log.logResponse(response);
-                res.send(response);
-            })
-            .catch(function(error) {
-                log.error('ERROR: ' + JSON.stringify(error));
-                requestHelper.copyHeadersToResponse(res, error.headers);
-                res.status(error.statusCode)
-                    .send(error.body);
-            });
+        processRequestFunction(req, res, function (req, res) {
+            recordsApi.fetchRecordsAndFields(req)
+                .then(function (response) {
+                    log.logResponse(response);
+                    res.send(response);
+                })
+                .catch(function (error) {
+                    log.error('ERROR: ' + JSON.stringify(error));
+                    requestHelper.copyHeadersToResponse(res, error.headers);
+                    res.status(error.statusCode)
+                        .send(error.body);
+                });
+        });
     }
 
     /**
@@ -210,21 +206,21 @@
      * @param res
      */
     function fetchSwagger(req, res) {
-        //  log some route info and set the request options
-        log.logRequest(req);
 
-        if(!isRouteEnabled(req)){
-            routeTo404(req, res);
-            return;
-        }
+        processRequestFunction(req, res, function (req, res) {
+            var opts = requestHelper.setOptions(req);
 
-        var opts = requestHelper.setOptions(req);
+            // when we preprocess a request we replace a single /api instance with /api/api
+            // for the /api swagger endpoint we don't want to do that. I know it is circular to add it and take it away,
+            // but I would rather have a unified code path branch to support this one endpoint
+            opts.url = url.replace('/api/api', '/api');
 
-        request(opts)
-            .on('error', function(error) {
-                log.error('Swagger API ERROR ' + JSON.stringify(error));
-            })
-            .pipe(res);
+            request(opts)
+                .on('error', function (error) {
+                    log.error('Swagger API ERROR ' + JSON.stringify(error));
+                })
+                .pipe(res);
+        });
     }
 
     /**
@@ -233,24 +229,18 @@
      * @param res
      */
     function forwardAllApiRequests(req, res) {
-        //  log some route info and set the request options
-        log.logRequest(req);
+        processRequestFunction(req, res, function (req, res) {
+            var opts = requestHelper.setOptions(req);
 
-        if(!isRouteEnabled(req)){
-            routeTo404(req, res);
-            return;
-        }
-
-        var opts = getOptionsForRequest(req);
-
-        request(opts)
-            .on('response', function (response) {
-                log.info('API response: ' + response.statusCode + ' - ' + req.method + ' ' + req.path);
-            })
-            .on('error', function (error) {
-                log.error('API ERROR ' + JSON.stringify(error));
-            })
-            .pipe(res);
+            request(opts)
+                .on('response', function (response) {
+                    log.info('API response: ' + response.statusCode + ' - ' + req.method + ' ' + req.path);
+                })
+                .on('error', function (error) {
+                    log.error('API ERROR ' + JSON.stringify(error));
+                })
+                .pipe(res);
+        });
     }
 
     /**

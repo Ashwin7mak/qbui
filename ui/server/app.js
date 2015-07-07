@@ -13,7 +13,7 @@
         http = require('http'),
         config = require('./config/environment'),
         log = require('./logger').getLogger(module.filename),
-        envConsts = require('./config/environment/valid_environments'),
+        envConsts = require('./config/environment/environmentConstants'),
         _ = require('lodash');
 
     // Setup the express server and configure the logger
