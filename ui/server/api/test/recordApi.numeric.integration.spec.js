@@ -87,7 +87,7 @@ describe('API - Numeric record test cases', function () {
 
         // Null number
         var nullInput = '[{"id": ' + fid + ', "value": null}]';
-        var expectedNullRecord = '{"id": ' + fid + ', "value": 0, "display": ""}';
+        var expectedNullRecord = '{"id": ' + fid + ', "value": null, "display": ""}';
 
         // Max number
         var maxInput = '[{"id": ' + fid + ', "value": ' + numberMax + '}]';
