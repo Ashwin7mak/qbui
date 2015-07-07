@@ -39,7 +39,7 @@
 (function () {
     'use strict';
     var Promise = require('bluebird');
-    var request = require('request');
+    var defaultRequest = require('request');
     /*
      * We can't use JSON.parse() with records because it is possible to lose decimal precision as a
      * result of the JavaScript implementation of its single numeric data type. In JS, all numbers are
@@ -69,6 +69,7 @@
         var FORMAT = 'format';
         var DISPLAY = 'display';
         var RAW = 'raw';
+        var request = defaultRequest;
 
         //Given an array of records and array of fields, remove any fields
         //not referenced in the records
@@ -117,6 +118,15 @@
 
         //TODO: only application/json is supported for content type.  Need a plan to support XML
         var recordsApi = {
+
+            /**
+             * Allows you to override the
+             * @param requestOverride
+             */
+            setRequestObject:function(requestOverride){
+                request = requestOverride;
+            },
+
             fetchSingleRecordAndFields: function (req) {
                 var deferred = Promise.pending();
                 Promise.all([

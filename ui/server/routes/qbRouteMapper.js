@@ -7,18 +7,14 @@
         routeConsts = require('./routeConstants'),
         requestHelper,
         recordsApi,
-        environmentMapper,
-        processRequestFunction,
-        env;
+        routeGroupMapper,
+        routeGroup;
 
-    module.exports = function (config, envMapper){
+    module.exports = function (config, groupMapper){
         requestHelper = require('../api/quickbase/requestHelper')(config);
         recordsApi = require('../api/quickbase/recordsApi')(config);
-        environmentMapper = envMapper;
-        env = config.env;
-
-        //provide a way to override the request function which processRequestFunction otherwise set it to the default
-        processRequestFunction = processRequest;
+        routeGroupMapper = groupMapper;
+        routeGroup = config.routeGroup;
 
         return {
 
@@ -79,19 +75,20 @@
             },
 
             /**
-             * This helper method takes the request url produced and replaces the single /api with /api/api on the original
-             * request
-             *
-             * @param req
+             * Get the function being used for preprocessing a request and passing it along
+             * @return the process request function
              */
-            modifyRequestPathForApi : function(req){
-                var originalUrl = req.url;
-                if(originalUrl.search('/api/api') === -1) {
-                    req.url = originalUrl.replace('/api', '/api/api');
-                }
-            }
+             fetchProcessRequestFunction: function (){
+                return processRequest;
+             },
 
-    }
+            /**
+             * Override the default functionality of the recordsApi
+             */
+             setRecordsApi : function(recordsApiOverride){
+                recordsApi = recordsApiOverride;
+             }
+        }
     };
 
 
@@ -136,6 +133,19 @@
     routeToAllFunction[routeConsts.TOMCAT_ALL] = forwardAllApiRequests;
 
     /**
+     * This helper method takes the request url produced and replaces the single /api with /api/api on the original
+     * request
+     *
+     * @param req
+     */
+    function modifyRequestPathForApi(req){
+        var originalUrl = req.url;
+        if(originalUrl.search('/api/api') === -1) {
+            req.url = originalUrl.replace('/api', '/api/api');
+        }
+    }
+
+    /**
      * processRequest is the default implementation for processing a request coming through the router. We first log the
      * request and then we check whether the route has been enabled. We will then modify the request path and send it
      * along to the return function.
@@ -149,11 +159,12 @@
 
         if(!isRouteEnabled(req)){
             routeTo404(req, res);
+        }else {
+
+            modifyRequestPathForApi(req);
+
+            returnFunction(req, res);
         }
-
-        modifyRequestPathForApi(req);
-
-        returnFunction(req, res);
     }
 
     /**
@@ -162,7 +173,7 @@
      * @param res
      */
     function fetchSingleRecord(req, res) {
-        processRequestFunction(req, res, function (req, res){
+        processRequest(req, res, function (req, res){
             recordsApi.fetchSingleRecordAndFields(req)
                 .then(function (response) {
                     log.logResponse(response);
@@ -185,7 +196,7 @@
      * @param res
      */
     function fetchAllRecords(req, res) {
-        processRequestFunction(req, res, function (req, res) {
+        processRequest(req, res, function (req, res) {
             recordsApi.fetchRecordsAndFields(req)
                 .then(function (response) {
                     log.logResponse(response);
@@ -207,7 +218,7 @@
      */
     function fetchSwagger(req, res) {
 
-        processRequestFunction(req, res, function (req, res) {
+        processRequest(req, res, function (req, res) {
             var opts = requestHelper.setOptions(req);
 
             // when we preprocess a request we replace a single /api instance with /api/api
@@ -229,7 +240,7 @@
      * @param res
      */
     function forwardAllApiRequests(req, res) {
-        processRequestFunction(req, res, function (req, res) {
+        processRequest(req, res, function (req, res) {
             var opts = requestHelper.setOptions(req);
 
             request(opts)
@@ -250,7 +261,7 @@
      */
     function routeTo404(req, res) {
         log.logRequest(req);
-        log.error("Route "+req.route.path+" is not enabled for env "+env);
+        log.error("Route "+req.route.path+" is not enabled for routeGroup "+routeGroup);
         res.status(404).send();
     }
 
@@ -261,7 +272,8 @@
      * @param next
      */
     function isRouteEnabled(req){
-        if(environmentMapper.routeIsEnabled(env, req.route.path)){
+
+        if(req !== undefined && req.route !== undefined && routeGroupMapper.routeIsEnabled(routeGroup, req.route.path)){
             return true;
         }else{
             return false;

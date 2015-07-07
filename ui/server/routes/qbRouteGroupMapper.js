@@ -24,8 +24,8 @@
          * @param env
          * @returns {*}
          */
-        routeIsEnabled: function(env, route) {
-            var disabledRoutes = environmentRouteDisabled[env];
+        routeIsEnabled: function(routeGroup, route) {
+            var disabledRoutes = environmentRouteDisabled[routeGroup];
 
             return !_.contains(disabledRoutes, route, 0);
         }
