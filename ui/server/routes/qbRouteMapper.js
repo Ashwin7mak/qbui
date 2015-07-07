@@ -5,6 +5,7 @@
 (function () {
     var log = require('../logger').getLogger(module.filename),
         routeConsts = require('./routeConstants'),
+        request = require('request'),
         requestHelper,
         recordsApi,
         routeGroupMapper,
@@ -210,20 +211,16 @@
      */
     function fetchSwagger(req, res) {
 
-        processRequest(req, res, function (req, res) {
-            var opts = requestHelper.setOptions(req);
+        //  log some route info and set the request options
+        log.logRequest(req);
 
-            // when we preprocess a request we replace a single /api instance with /api/api
-            // for the /api swagger endpoint we don't want to do that. I know it is circular to add it and take it away,
-            // but I would rather have a unified code path branch to support this one endpoint
-            opts.url = url.replace('/api/api', '/api');
+        var opts = requestHelper.setOptions(req);
 
-            request(opts)
-                .on('error', function (error) {
-                    log.error('Swagger API ERROR ' + JSON.stringify(error));
-                })
-                .pipe(res);
-        });
+        request(opts)
+            .on('error', function(error) {
+                log.error('Swagger API ERROR ' + JSON.stringify(error));
+            })
+            .pipe(res);
     }
 
     /**

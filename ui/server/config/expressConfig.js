@@ -35,7 +35,7 @@
         // on generated config in aws. For this reason, the node code maintains it's own notion of environment independent
         // of the config file name loaded on startup
         var env = config.env;
-        
+
         //  Need to have a run-time environment configured
         if (config.env === undefined) {
             throw new Error('Missing environment configuration.  You must set a configuration environment variable. Under ' + process.env.NODE_ENV + '.js, make sure you have env: envConsts.ENVIRONMENT. Look at local.js.sample for an example.');
