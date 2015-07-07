@@ -7,6 +7,8 @@
 
     //var path = require('path');
     var dateUtils = require('../../components/utility/dateUtils');
+    var envConsts = require('./environmentConstants');
+    var routeGroups = require('../../routes/routeGroups');
 
     module.exports = {
 
@@ -46,7 +48,11 @@
         javaHost: '',
 
         //DEV Express Server
-        DOMAIN: ''
+        DOMAIN: '',
+
+        env: envConsts.TEST,
+        routeGroup: envConsts.DEBUG
+
 
     };
 }());

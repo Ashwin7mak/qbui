@@ -7,7 +7,8 @@
 
     //var path = require('path');
     var dateUtils = require('../../components/utility/dateUtils');
-
+    var envConsts = require('./environmentConstants');
+    var routeGroups = require('../../routes/routeGroups');
     module.exports = {
 
         //  Logging configuration
@@ -49,7 +50,10 @@
 
         //Express Server
         //DOMAIN: 'https://localhost.intuit.com:9443'
-        DOMAIN  : 'http://localhost:9000'
+        DOMAIN  : 'http://localhost:9000',
+
+        env: envConsts.TEST,
+        routeGroup: envConsts.DEBUG
 
     };
 
