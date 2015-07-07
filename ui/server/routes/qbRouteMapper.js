@@ -75,14 +75,6 @@
             },
 
             /**
-             * Get the function being used for preprocessing a request and passing it along
-             * @return the process request function
-             */
-             fetchProcessRequestFunction: function (){
-                return processRequest;
-             },
-
-            /**
              * Override the default functionality of the recordsApi
              */
              setRecordsApi : function(recordsApiOverride){
