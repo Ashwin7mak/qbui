@@ -68,7 +68,8 @@
     require('./routes')(app, config);
 
     //  log some server config info...but don't include the secrets configuration
-    log.info('Express Server configuration:', _.omit(config, 'secrets'));
+    log.info('Express Server configuration:',
+        _.omit(config, ['secrets', 'SESSION_SECRET']));
 
     /**************
      * Start HTTP Server

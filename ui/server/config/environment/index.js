@@ -65,14 +65,11 @@
     // ==============================================
     var config = all;
 
-    // if there is a config file for the NODE_ENV
-    // merge in its properties to the defaults in all
-    if (fs.existsSync('./' + process.env.NODE_ENV + '.js') ) {
+    // merge in config file for the NODE_ENV properties to the defaults in all
        config =  _.merge(
             all,
             require('./' + process.env.NODE_ENV + '.js') || {}
         );
-    }
 
     module.exports = config;
 
