@@ -1,22 +1,31 @@
 /**
  * Express configuration
  */
-(function () {
+(function() {
     'use strict';
 
-    var express = require('express'),
-        favicon = require('serve-favicon'),
-        compression = require('compression'),
-        bodyParser = require('body-parser'),
-        methodOverride = require('method-override'),
-        cookieParser = require('cookie-parser'),
-        errorHandler = require('errorhandler'),
-        path = require('path'),
-        config = require('./environment'),
+    var express = require('express');
+    var favicon = require('serve-favicon');
+    var compression = require('compression');
+    var bodyParser = require('body-parser');
+    var methodOverride = require('method-override');
+    var cookieParser = require('cookie-parser');
+    var errorHandler = require('errorhandler');
+    var path = require('path');
+    var log = require('../logger').getLogger(module.filename);
+    var config = require('./environment');
         envConsts = require('./environment/environmentConstants');
 
 
-        module.exports = function (app) {
+
+    module.exports = function(app) {
+
+        // use ssl when there's a cert and we have the method to implement it
+        if (config.hasSslOptions() && app.requireHTTPS) {
+            app.use(app.requireHTTPS);
+        } else {
+            log.info("not forcing https");
+        }
 
         // This config.env refers to the node env - it is the way in which we know what routes to enable versus disable,
         // and configure anything environment specific.
@@ -30,6 +39,7 @@
         if (config.env === undefined) {
             throw new Error('Missing environment configuration.  You must set a configuration environment variable. Under ' + process.env.NODE_ENV + '.js, make sure you have env: envConsts.ENVIRONMENT. Look at local.js.sample for an example.');
         }
+
 
         app.set('views', config.root + '/server/views');
         app.engine('html', require('ejs').renderFile);
@@ -66,6 +76,6 @@
             //  Error handler - has to be last.
             app.use(errorHandler());
         }
-
+        return config;
     };
 }());

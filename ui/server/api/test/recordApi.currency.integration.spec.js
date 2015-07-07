@@ -135,7 +135,7 @@ describe('API - Currency record test cases', function () {
 
         // Null number
         var nullInput = '[{"id": ' + fid + ', "value": null}]';
-        var expectedNullRecord = '{"id": ' + fid + ', "value": 0, "display": ""}';
+        var expectedNullRecord = '{"id": ' + fid + ', "value": null, "display": ""}';
 
         return [
             { message: "display decimal number with no format flags", record: decimalInput, format: "display", expectedFieldValue: expectedDecimalRecord },
@@ -218,7 +218,7 @@ describe('API - Currency record test cases', function () {
 
         // Null number
         var nullInput = '[{"id": ' + fid + ', "value": null}]';
-        var expectedNullRecord = '{"id": ' + fid + ', "value": 0, "display": ""}';
+        var expectedNullRecord = '{"id": ' + fid + ', "value": null, "display": ""}';
 
         return [
             { message: "display decimal number with all 'right of sign' format flags", record: decimalInput, format: "display", expectedFieldValue: expectedDecimalRecord },
@@ -301,7 +301,7 @@ describe('API - Currency record test cases', function () {
 
         // Null number
         var nullInput = '[{"id": ' + fid + ', "value": null}]';
-        var expectedNullRecord = '{"id": ' + fid + ', "value": 0, "display": ""}';
+        var expectedNullRecord = '{"id": ' + fid + ', "value": null, "display": ""}';
 
         return [
             { message: "display decimal number with all 'right' format flags", record: decimalInput, format: "display", expectedFieldValue: expectedDecimalRecord },
@@ -384,7 +384,7 @@ describe('API - Currency record test cases', function () {
 
         // Null number
         var nullInput = '[{"id": ' + fid + ', "value": null}]';
-        var expectedNullRecord = '{"id": ' + fid + ', "value": 0, "display": ""}';
+        var expectedNullRecord = '{"id": ' + fid + ', "value": null, "display": ""}';
 
         return [
             { message: "display decimal number with all 'left' format flags", record: decimalInput, format: "display", expectedFieldValue: expectedDecimalRecord },
