@@ -13,6 +13,8 @@
         SWAGGER_RESOURCES: '/api/resources/*',
         SWAGGER_IMAGES: '/api/images/*',
         SWAGGER_DOCUMENTATION: '/api/documentation/*',
+        TICKET: '/api/api/v1/ticket',
+        REALM: '/api/api/v1/realms',
         TOMCAT_ALL: '/api/*'
     });
 }());
