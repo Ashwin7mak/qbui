@@ -25,7 +25,7 @@ var BigDecimal = require('bigdecimal');
 /**
  * Integration test for Currency field formatting
  */
-xdescribe('API - Currency record test cases', function () {
+describe('API - Currency record test cases', function () {
     var numberDecimalOnly = '0.74765432';
     var numberDouble = '9.876543210074765E10';
     var numberInt = '99';
@@ -450,7 +450,8 @@ xdescribe('API - Currency record test cases', function () {
         //Realm deletion takes time, bump the timeout
         this.timeout(20000);
         recordBase.apiBase.cleanup().then(function () {
-            done();
+            // Do a JavaScript version of a sleep so we don't collide with the next test class
+            setTimeout(function() { done(); }, testConsts.AFTER_TEST_SLEEP);
         });
     });
 });

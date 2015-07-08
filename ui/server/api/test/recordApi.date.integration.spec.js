@@ -12,7 +12,7 @@ var testConsts = require('./api.test.constants');
 /**
  * Integration test for Date field formatting
  */
-xdescribe('API - Date record test cases - ', function () {
+describe('API - Date record test cases - ', function () {
     var dateCurrentYear = "2015-04-12";
     var dateDiffYear = "2000-04-12";
 
@@ -495,7 +495,8 @@ xdescribe('API - Date record test cases - ', function () {
         //Realm deletion takes time, bump the timeout
         this.timeout(20000);
         recordBase.apiBase.cleanup().then(function () {
-            done();
+            // Do a JavaScript version of a sleep so we don't collide with the next test class
+            setTimeout(function() { done(); }, testConsts.AFTER_TEST_SLEEP);
         });
     });
 });

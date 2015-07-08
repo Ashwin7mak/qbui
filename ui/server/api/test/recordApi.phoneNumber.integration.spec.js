@@ -12,7 +12,7 @@ var testConsts = require('./api.test.constants');
 /**
  * Integration test for PhoneNumber field formatting
  */
-xdescribe('API - PhoneNumber record test cases', function () {
+describe('API - PhoneNumber record test cases', function () {
     //Cache the init promise so that test methods can use it as init.then(function(){...})
     var exampleApp = {
         "name": "PhoneNumber App",
@@ -106,7 +106,8 @@ xdescribe('API - PhoneNumber record test cases', function () {
         //Realm deletion takes time, bump the timeout
         this.timeout(20000);
         recordBase.apiBase.cleanup().then(function () {
-            done();
+            // Do a JavaScript version of a sleep so we don't collide with the next test class
+            setTimeout(function() { done(); }, testConsts.AFTER_TEST_SLEEP);
         });
     });
 });

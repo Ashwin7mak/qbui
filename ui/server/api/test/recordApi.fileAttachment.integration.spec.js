@@ -12,7 +12,7 @@ var testConsts = require('./api.test.constants');
 /**
  * Integration test for FileAttachment field formatting
  */
-xdescribe('API - FileAttachment record test cases - ', function () {
+describe('API - FileAttachment record test cases - ', function () {
 
     var localFile = "c:/local/package/file/batFile.bat";
     var urlFile = "www.intuit.com/some/file/zipFile.zip";
@@ -202,7 +202,8 @@ xdescribe('API - FileAttachment record test cases - ', function () {
         //Realm deletion takes time, bump the timeout
         this.timeout(20000);
         recordBase.apiBase.cleanup().then(function () {
-            done();
+            // Do a JavaScript version of a sleep so we don't collide with the next test class
+            setTimeout(function() { done(); }, testConsts.AFTER_TEST_SLEEP);
         });
     });
 });
