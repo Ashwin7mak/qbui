@@ -3,18 +3,17 @@
  * Created by cschneider1 on 7/2/15.
  */
 (function () {
-    var log = require('../logger').getLogger(module.filename),
+    var log = require('../logger').getLogger(),
         routeConsts = require('./routeConstants'),
         request = require('request'),
         requestHelper,
         recordsApi,
-        routeGroupMapper,
+        routeGroupMapper = require('./routes/qbRouteGroupMapper'),
         routeGroup;
 
-    module.exports = function (config, groupMapper){
+    module.exports = function (config){
         requestHelper = require('../api/quickbase/requestHelper')(config);
         recordsApi = require('../api/quickbase/recordsApi')(config);
-        routeGroupMapper = groupMapper;
         routeGroup = config.routeGroup;
 
         return {
@@ -169,7 +168,7 @@
         processRequest(req, res, function (req, res){
             recordsApi.fetchSingleRecordAndFields(req)
                 .then(function (response) {
-                    log.logResponse(response);
+                    log.logResponse(req, response, __filename)
                     res.send(response);
                 })
                 .catch(function (error) {
@@ -192,7 +191,7 @@
         processRequest(req, res, function (req, res) {
             recordsApi.fetchRecordsAndFields(req)
                 .then(function (response) {
-                    log.logResponse(response);
+                    log.logResponse(req, response, __filename)
                     res.send(response);
                 })
                 .catch(function (error) {

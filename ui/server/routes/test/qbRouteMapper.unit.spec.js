@@ -7,8 +7,7 @@
 
 
 var config = require('../../config/environment'),
-groupMapper = require('../qbRouteGroupMapper'),
-routeMapper = require('../qbRouteMapper')(config, groupMapper),
+routeMapper = require('../qbRouteMapper')(config),
 should = require('should'),
 routeConsts = require('../routeConstants'),
 assert = require('assert'),

@@ -22,8 +22,8 @@ module.exports = function (app, config) {
         next();
     });
 	
-	var envMapper = require('./routes/qbRouteGroupMapper');
-    var routeMapper = require('./routes/qbRouteMapper')(config, envMapper);
+
+    var routeMapper = require('./routes/qbRouteMapper')(config);
     require('./routes/qbAngularRoutes')(app, config);
     require('./routes/qbApiRoutes')(app, config, envMapper, routeMapper);
 

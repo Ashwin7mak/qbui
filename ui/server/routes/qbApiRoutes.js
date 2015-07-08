@@ -4,7 +4,7 @@
 (function () {
     'use strict';
     var request = require('request'),
-        log = require('../logger').getLogger(module.filename),
+        log = require('../logger').getLogger(),
         _ = require('lodash'),
         express = require('express');
 
@@ -22,7 +22,8 @@
         var allRoutes = routeMapper.fetchAllRoutes();
 
         if (undefined === allRoutes) {
-            log.warn("No routes have been configured for env " + env);
+            log.error("No routes have been configured for env " + env);
+            return;
         }
 
         initializeRoutes(allRoutes, app, routeMapper);
