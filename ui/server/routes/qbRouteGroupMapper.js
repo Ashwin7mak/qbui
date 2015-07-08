@@ -12,11 +12,11 @@
         routeConsts = require('./routeConstants');
 
     /*
-     * environmentToEnabledRoutes maps each enumerated environment to the routes that are enabled for that environment
+     * routeGroupDisabled maps each enumerated route group to the routes that are disabled for a route/method combination
      */
-    var environmentRouteDisabled = {};
-    environmentRouteDisabled[routeGroups.DEBUG] = [];
-    environmentRouteDisabled[routeGroups.LH_V1] = [
+    var routeGroupDisabled = {};
+    routeGroupDisabled[routeGroups.DEBUG] = [];
+    routeGroupDisabled[routeGroups.LH_V1] = [
         { route: routeConsts.RECORD, methods: [constants.POST,constants.DELETE, constants.PATCH, constants.PUT]},
         { route: routeConsts.RECORDS, methods: [constants.POST,constants.DELETE, constants.PATCH, constants.PUT]},
         { route: routeConsts.REPORT_RESULTS, methods: [constants.POST,constants.DELETE, constants.PATCH, constants.PUT]},
@@ -34,7 +34,7 @@
          * @returns {*}
          */
         routeIsEnabled: function(routeGroup, route, method) {
-            var disabledRoutes = environmentRouteDisabled[routeGroup];
+            var disabledRoutes = routeGroupDisabled[routeGroup];
 
             var routeEnabled = true;
 
