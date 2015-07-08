@@ -12,11 +12,12 @@
     var express = require('express'),
         http = require('http'),
         config = require('./config/environment'),
-        log = require('./logger').getLogger(module.filename),
-        envConsts = require('./config/environment/environmentConstants'),
         _ = require('lodash');
 
-    // Setup the express server and configure the logger
+    //  Configure the Bunyan logger
+    var log = require('./logger').getLogger()
+
+    // Setup the express server
     var app = module.exports = express();
 
     /*
@@ -70,8 +71,7 @@
     require('./routes')(app, config);
 
     //  log some server config info...but don't include the secrets configuration
-    log.info('Express Server configuration:',
-        _.omit(config, ['secrets', 'SESSION_SECRET']));
+    log.info('Express Server configuration:', JSON.stringify(_.omit(config, ['secrets', 'SESSION_SECRET'])));
 
     /**************
      * Start HTTP Server

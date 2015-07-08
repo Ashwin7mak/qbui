@@ -5,6 +5,7 @@
     'use strict';
 
     var express = require('express');
+    var useragent = require('express-useragent');
     var favicon = require('serve-favicon');
     var compression = require('compression');
     var bodyParser = require('body-parser');
@@ -12,7 +13,7 @@
     var cookieParser = require('cookie-parser');
     var errorHandler = require('errorhandler');
     var path = require('path');
-    var log = require('../logger').getLogger(module.filename);
+    var log = require('../logger').getLogger();
     var config = require('./environment');
     var envConsts = require('./environment/environmentConstants');
     var routeGroups = require('../routes/routeGroups');
@@ -23,9 +24,10 @@
 
         // use ssl when there's a cert and we have the method to implement it
         if (config.hasSslOptions() && app.requireHTTPS) {
+            log.info('..redirecting all http requests over https');
             app.use(app.requireHTTPS);
         } else {
-            log.info("not forcing https");
+            log.info('..not redirecting requests over https');
         }
 
         // This config.env refers to the node env - it is the way in which we know what routes to enable versus disable,
@@ -56,6 +58,7 @@
         app.use(bodyParser.json());
         app.use(methodOverride());
         app.use(cookieParser());
+        app.use(useragent.express());
 
         if (envConsts.PRODUCTION === env || envConsts.PRE_PROD === env || envConsts.INTEGRATION === env || envConsts.DEVELOPMENT === env || envConsts.TEST === env) {
 

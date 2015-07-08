@@ -490,16 +490,14 @@ Here's an example local.js configuration:
                 type: 'console',
                 file: {
                     dir: './logs',
-                    name: 'qbse-local-' + dateUtils.formatDate( new Date(), '%Y-%M-%D-%h.%m.%s') + '.log'
-                },
-                rotating: {
-                    period: '1d',
-                    count: 7
+                    name: 'qbse-local-' + dateUtils.formatDate( new Date(), '%Y-%M-%D-%h.%m.%s') + '.log',
+                    rotating: {
+                        period: '1d',
+                        count: 7
+                    }
                 }
             },
             src: true,               // this is slow...do not use in prod
-            suppressConsole: false,  // suppress console logging
-            maxResponseSize: 1024*2  // max number of characters logged per response
         },
 
 Configuration info:
@@ -513,11 +511,14 @@ Configuration info:
                     rotating.period: how often to rotate the file
                     rotating.count: max number of rotated files to keep
         src:  true or false  --> 
-        suppressConsole: true or false  --> suppress console logging
-        maxResponseSize: max number of characters to output when logging request or response data
 
-For more information on Bunyan configuration settings, click [here](https://github.com/trentm/node-bunyan):
-        
+Reference Links
+
+1. For information on Bunyan configuration settings, click [here](https://github.com/trentm/node-bunyan)
+2. For information around issue with rotating file logging in multi-clustered node environments: click [here](https://github.com/trentm/node-bunyan#stream-type-rotating-file)
+3. For an overview of the logging design regarding transactionId(TID) and clientId(CID), click [here](https://wiki.intuit.com/display/qbasepd/Client+Logging) 
+ 
+       
 
 ##Access REST endpoints over SSL
 Update the javahost run-time configuration parameter to use the https protocol and appropriate port.  For example, include the following

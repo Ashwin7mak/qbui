@@ -1,12 +1,14 @@
 (function() {
     'use strict';
 
-        //  define the quickBase angular apps module
+    //  define the quickBase angular apps module
+    //
     angular.module('qbse.api',
         [
             'qbse.helper',
             'restangular',
-            'ngCookies'
+            'ngCookies',
+            'angular-uuid-generator'
         ]).
         config( function(RestangularProvider) {
             RestangularProvider.setBaseUrl('api/api/v1');
@@ -25,7 +27,7 @@
                     return false;
                 }
 
-                //  TODO: not sure if we should be intercepting all 500 exceptions
+                //  NOTE: not sure if we should be intercepting all 500 exceptions..for now will do so
                 if (response.status === 500) {
                     window.location.href = '/internalServerError';
                     return false;
@@ -33,5 +35,20 @@
 
                 return true;
             });
-        });
+        }).
+        //  run blocks are executed after the config and injector...
+        run(['uuid','Restangular','apiConstants', '$cookies', function(uuid, Restangular, apiConstants, $cookie) {
+            //  include the ticket and a sessionid on every Restangular request
+            var headers = {}
+            //  generate a uuid for this session id.
+            headers[apiConstants.SESSION_HDR] = uuid.v1();
+
+            //  get the ticket from the cookies...and add to the header if found
+            var ticket = $cookie.get(apiConstants.TICKET_COOKIE);
+            if (ticket) {
+                headers[apiConstants.TICKET_HDR] = ticket;
+            }
+
+            Restangular.setDefaultHeaders(headers);
+        }]);
 })();

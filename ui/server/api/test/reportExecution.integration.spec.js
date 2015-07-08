@@ -7,7 +7,7 @@ var recordBase = require('./recordApi.base')(config);
 var Promise = require('bluebird');
 var _ = require('lodash');
 var consts = require('../constants');
-var log = require('../../logger').getLogger(module.filename);
+var log = require('../../logger').getLogger();
 
 
 describe('API - Validate report execution', function () {
