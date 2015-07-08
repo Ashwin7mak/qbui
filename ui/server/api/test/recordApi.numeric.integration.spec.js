@@ -26,7 +26,7 @@ var BigDecimal = require('bigdecimal');
 /**
  * Integration test for Numeric field formatting
  */
-describe('API - Numeric record test cases', function () {
+xdescribe('API - Numeric record test cases', function () {
     var numberDecimalOnly = '0.74765432';
     var numberDouble = '9.876543210074765E10';
     var numberNoSeparator = '99';

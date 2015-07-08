@@ -11,7 +11,7 @@ var testConsts = require('./api.test.constants');
 /**
  * Integration test for Text field formatting
  */
-describe('API - Text record test cases', function () {
+xdescribe('API - Text record test cases', function () {
 
     // Application containing a Text field
     var exampleApp = {

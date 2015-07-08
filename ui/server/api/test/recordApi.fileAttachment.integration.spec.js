@@ -12,7 +12,7 @@ var testConsts = require('./api.test.constants');
 /**
  * Integration test for FileAttachment field formatting
  */
-describe('API - FileAttachment record test cases - ', function () {
+xdescribe('API - FileAttachment record test cases - ', function () {
 
     var localFile = "c:/local/package/file/batFile.bat";
     var urlFile = "www.intuit.com/some/file/zipFile.zip";

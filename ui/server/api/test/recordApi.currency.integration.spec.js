@@ -25,7 +25,7 @@ var BigDecimal = require('bigdecimal');
 /**
  * Integration test for Currency field formatting
  */
-describe('API - Currency record test cases', function () {
+xdescribe('API - Currency record test cases', function () {
     var numberDecimalOnly = '0.74765432';
     var numberDouble = '9.876543210074765E10';
     var numberInt = '99';

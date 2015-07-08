@@ -12,7 +12,7 @@ var testConsts = require('./api.test.constants');
 /**
  * Integration test for Date field formatting
  */
-describe('API - Date record test cases - ', function () {
+xdescribe('API - Date record test cases - ', function () {
     var dateCurrentYear = "2015-04-12";
     var dateDiffYear = "2000-04-12";
 
