@@ -5,9 +5,8 @@
     var _ = require('lodash'),
         path = require('path'),
         fs = require('fs'),
+        envConsts = require('./environmentConstants'),
         all = {
-            env: process.env.NODE_ENV,
-
             // Root path of server
             root: path.normalize(__dirname + '/../../..'),
 
@@ -33,11 +32,6 @@
             // when starting up express server, fork as many listener forks as there are cpu cores.
             forkWorkers: false
         };
-
-    //  Need to have a run-time environment configured
-    if (!all.env) {
-        throw new Error('Missing environment configuration.  You must set a run-time environment variable(i.e. NODE_ENV=local).');
-    }
 
     /**
      * Method to determine if ssl properties are configured

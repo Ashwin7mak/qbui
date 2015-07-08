@@ -15,6 +15,10 @@
     var path = require('path');
     var log = require('../logger').getLogger();
     var config = require('./environment');
+    var envConsts = require('./environment/environmentConstants');
+    var routeGroups = require('../routes/routeGroups');
+
+
 
     module.exports = function(app) {
 
@@ -26,7 +30,26 @@
             log.info('..not redirecting requests over https');
         }
 
-        var env = app.get('env');
+        // This config.env refers to the node env - it is the way in which we know what routes to enable versus disable,
+        // and configure anything environment specific.
+        // This differs from runtime env which corresponds to process.env.NODE_ENV. This is the way node knows which
+        // file to load when creating the express server. We don't want to use this variable as it makes us dependent
+        // on generated config in aws. For this reason, the node code maintains it's own notion of environment independent
+        // of the config file name loaded on startup
+        var env = config.env;
+
+        //  Need to have a run-time environment configured
+        if (config.env === undefined) {
+            throw new Error('Missing environment configuration.  You must set a configuration environment variable. Under ' + process.env.NODE_ENV + '.js, make sure you have env: envConsts.ENVIRONMENT. Look at local.js.sample for an example.');
+        }
+
+        //  Need to have a routeGroup enabled here - if none was provided, we will use the DEFAULT which will be the most
+        // restrictive version of routing we have out there.
+        if (config.routeGroup === undefined) {
+            log.warn('Did not find a route group specified in env.js file. Defaulting to ' + routeGroups.DEFAULT);
+            config.routeGroup = routeGroups.DEFAULT;
+        }
+
 
         app.set('views', config.root + '/server/views');
         app.engine('html', require('ejs').renderFile);
@@ -38,13 +61,13 @@
         app.use(cookieParser());
         app.use(useragent.express());
 
-        //TODO: We need to figure out how we want to handle the environment config in aws
-        if ('aws' === env || 'production' === env || 'test' === env || 'development' === env) {
-            if ('development' === env) {
+        if (envConsts.PRODUCTION === env || envConsts.PRE_PROD === env || envConsts.INTEGRATION === env || envConsts.DEVELOPMENT === env || envConsts.TEST === env) {
+
+            if (envConsts.DEVELOPMENT === env) {
                 app.use(require('connect-livereload')());
             }
 
-            if ('aws' === env || 'production' === env) {
+            if (envConsts.PRODUCTION === env || envConsts.PRE_PROD === env) {
                 app.use(favicon(path.join(config.root, 'public', 'favicon.ico')));
             }
 
@@ -52,12 +75,12 @@
             app.set('appPath', config.root + '/public');
 
             //  Error handler - has to be last.  NON-PROD environment only
-            if ('test' === env || 'development' === env) {
+            if (envConsts.TEST === env || envConsts.DEVELOPMENT === env) {
                 app.use(errorHandler());
             }
         }
 
-        if ('local' === env) {
+        if (envConsts.LOCAL === env) {
             app.use(express.static(path.join(config.root, '.tmp')));
             app.use(express.static(path.join(config.root, 'client')));
             app.set('appPath', config.root + '/client');

@@ -6,6 +6,8 @@
         POST: 'POST',
         GET: 'GET',
         DELETE: 'DELETE',
+        PUT: 'PUT',
+        PATCH: 'PATCH',
         CONTENT_TYPE: 'Content-Type',
         APPLICATION_JSON: 'application/json',
         APPLICATION_XML: 'application/xml',

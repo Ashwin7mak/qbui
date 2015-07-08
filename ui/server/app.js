@@ -4,9 +4,10 @@
 (function() {
     'use strict';
 
-    // Set default node environment to local
-    // TODO: should remove default to force environment and avoid potential mis-configuration
-    process.env.NODE_ENV = process.env.NODE_ENV || 'local';
+    // if we have not set the NODE_ENV, then error out here
+    if(process.env.NODE_ENV === undefined){
+        throw new Error("No NODE_ENV was specified. You must set a run-time environment variable. Exiting");
+    }
 
     var express = require('express'),
         http = require('http'),
