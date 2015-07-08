@@ -9,7 +9,7 @@
         express = require('express');
 
 
-    module.exports = function (app, config, envMapper, routeMapper) {
+    module.exports = function (app, config, routeMapper) {
 
         // This config.env refers to the node env - it is the way in which we know what routes to enable versus disable,
         // and configure anything environment specific.

@@ -43,7 +43,8 @@
             throw new Error('Missing environment configuration.  You must set a configuration environment variable. Under ' + process.env.NODE_ENV + '.js, make sure you have env: envConsts.ENVIRONMENT. Look at local.js.sample for an example.');
         }
 
-        //  Need to have a run-time environment configured
+        //  Need to have a routeGroup enabled here - if none was provided, we will use the DEFAULT which will be the most
+        // restrictive version of routing we have out there.
         if (config.routeGroup === undefined) {
             log.warn('Did not find a route group specified in env.js file. Defaulting to ' + routeGroups.DEFAULT);
             config.routeGroup = routeGroups.DEFAULT;

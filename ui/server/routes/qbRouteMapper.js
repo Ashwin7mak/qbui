@@ -8,7 +8,7 @@
         request = require('request'),
         requestHelper,
         recordsApi,
-        routeGroupMapper = require('./routes/qbRouteGroupMapper'),
+        routeGroupMapper = require('./qbRouteGroupMapper'),
         routeGroup;
 
     module.exports = function (config){

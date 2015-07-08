@@ -25,7 +25,7 @@ module.exports = function (app, config) {
 
     var routeMapper = require('./routes/qbRouteMapper')(config);
     require('./routes/qbAngularRoutes')(app, config);
-    require('./routes/qbApiRoutes')(app, config, envMapper, routeMapper);
+    require('./routes/qbApiRoutes')(app, config, routeMapper);
 
     // unauthorized
     app.route('/unauthorized*')
