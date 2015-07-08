@@ -123,6 +123,8 @@
     var routeToAllFunction = {};
 
     routeToAllFunction[routeConsts.TOMCAT_ALL] = forwardAllApiRequests;
+    routeToAllFunction[routeConsts.TICKET] = forwardAllApiRequests;
+    routeToAllFunction[routeConsts.REALM] = forwardAllApiRequests;
 
     /**
      * This helper method takes the request url produced and replaces the single /api with /api/api on the original
