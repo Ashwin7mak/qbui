@@ -47,6 +47,22 @@ describe('Group Route Mapper Unit Test', function () {
             {message: 'LH_V1, '+ routeConsts.SWAGGER_IMAGES + ' DELETE', routeGroup: routeGroups.LH_V1, route: routeConsts.SWAGGER_IMAGES, method: 'delete', expectedOutput: false},
             {message: 'LH_V1, '+ routeConsts.SWAGGER_DOCUMENTATION + ' DELETE', routeGroup: routeGroups.LH_V1, route: routeConsts.SWAGGER_DOCUMENTATION, method: 'delete', expectedOutput: false},
             {message: 'LH_V1, '+ routeConsts.TOMCAT_ALL + ' DELETE', routeGroup: routeGroups.LH_V1, route: routeConsts.TOMCAT_ALL, method: 'delete', expectedOutput: false},
+            {message: 'LH_V1, '+ routeConsts.RECORD + ' PATCH', routeGroup: routeGroups.LH_V1,  route: routeConsts.RECORD, method: 'patch', expectedOutput: false},
+            {message: 'LH_V1, '+ routeConsts.RECORDS + ' PATCH', routeGroup: routeGroups.LH_V1, route: routeConsts.RECORDS, method: 'patch', expectedOutput: false},
+            {message: 'LH_V1, '+ routeConsts.REPORT_RESULTS + ' PATCH', routeGroup: routeGroups.LH_V1, route: routeConsts.REPORT_RESULTS, method: 'patch', expectedOutput: false},
+            {message: 'LH_V1, '+ routeConsts.SWAGGER_API + ' PATCH', routeGroup: routeGroups.LH_V1, route: routeConsts.SWAGGER_API, method: 'patch', expectedOutput: false},
+            {message: 'LH_V1, '+ routeConsts.SWAGGER_RESOURCES + ' PATCH', routeGroup: routeGroups.LH_V1, route: routeConsts.SWAGGER_RESOURCES, method: 'patch', expectedOutput: false},
+            {message: 'LH_V1, '+ routeConsts.SWAGGER_IMAGES + ' PATCH', routeGroup: routeGroups.LH_V1, route: routeConsts.SWAGGER_IMAGES, method: 'patch', expectedOutput: false},
+            {message: 'LH_V1, '+ routeConsts.SWAGGER_DOCUMENTATION + ' PATCH', routeGroup: routeGroups.LH_V1, route: routeConsts.SWAGGER_DOCUMENTATION, method: 'patch', expectedOutput: false},
+            {message: 'LH_V1, '+ routeConsts.TOMCAT_ALL + ' PATCH', routeGroup: routeGroups.LH_V1, route: routeConsts.TOMCAT_ALL, method: 'put', expectedOutput: false},
+            {message: 'LH_V1, '+ routeConsts.RECORD + ' PUT', routeGroup: routeGroups.LH_V1,  route: routeConsts.RECORD, method: 'put', expectedOutput: false},
+            {message: 'LH_V1, '+ routeConsts.RECORDS + ' PUT', routeGroup: routeGroups.LH_V1, route: routeConsts.RECORDS, method: 'put', expectedOutput: false},
+            {message: 'LH_V1, '+ routeConsts.REPORT_RESULTS + ' PUT', routeGroup: routeGroups.LH_V1, route: routeConsts.REPORT_RESULTS, method: 'put', expectedOutput: false},
+            {message: 'LH_V1, '+ routeConsts.SWAGGER_API + ' PUT', routeGroup: routeGroups.LH_V1, route: routeConsts.SWAGGER_API, method: 'put', expectedOutput: false},
+            {message: 'LH_V1, '+ routeConsts.SWAGGER_RESOURCES + ' PUT', routeGroup: routeGroups.LH_V1, route: routeConsts.SWAGGER_RESOURCES, method: 'put', expectedOutput: false},
+            {message: 'LH_V1, '+ routeConsts.SWAGGER_IMAGES + ' PUT', routeGroup: routeGroups.LH_V1, route: routeConsts.SWAGGER_IMAGES, method: 'put', expectedOutput: false},
+            {message: 'LH_V1, '+ routeConsts.SWAGGER_DOCUMENTATION + ' PUT', routeGroup: routeGroups.LH_V1, route: routeConsts.SWAGGER_DOCUMENTATION, method: 'put', expectedOutput: false},
+            {message: 'LH_V1, '+ routeConsts.TOMCAT_ALL + ' PUT', routeGroup: routeGroups.LH_V1, route: routeConsts.TOMCAT_ALL, method: 'put', expectedOutput: false},
 
             //DEBUG
             {message: 'DEBUG, '+ routeConsts.RECORD + ' GET', routeGroup: routeGroups.DEBUG, route: routeConsts.RECORD, method: 'get', expectedOutput: true},
@@ -72,7 +88,23 @@ describe('Group Route Mapper Unit Test', function () {
             {message: 'DEBUG, '+ routeConsts.SWAGGER_RESOURCES + ' DELETE', routeGroup: routeGroups.DEBUG, route: routeConsts.SWAGGER_RESOURCES, method: 'delete', expectedOutput: true},
             {message: 'DEBUG, '+ routeConsts.SWAGGER_IMAGES + ' DELETE', routeGroup: routeGroups.DEBUG, route: routeConsts.SWAGGER_IMAGES, method: 'delete', expectedOutput: true},
             {message: 'DEBUG, '+ routeConsts.SWAGGER_DOCUMENTATION + ' DELETE', routeGroup: routeGroups.DEBUG, route: routeConsts.SWAGGER_DOCUMENTATION, method: 'delete', expectedOutput: true},
-            {message: 'DEBUG, '+ routeConsts.TOMCAT_ALL + ' DELETE', routeGroup: routeGroups.DEBUG, route: routeConsts.TOMCAT_ALL, method: 'delete', expectedOutput: true}
+            {message: 'DEBUG, '+ routeConsts.TOMCAT_ALL + ' DELETE', routeGroup: routeGroups.DEBUG, route: routeConsts.TOMCAT_ALL, method: 'delete', expectedOutput: true},
+            {message: 'DEBUG, '+ routeConsts.RECORD + ' PATCH', routeGroup: routeGroups.DEBUG, route: routeConsts.RECORD, method: 'patch', expectedOutput: true},
+            {message: 'DEBUG, '+ routeConsts.RECORDS + ' PATCH', routeGroup: routeGroups.DEBUG, route: routeConsts.RECORDS, method: 'patch', expectedOutput: true},
+            {message: 'DEBUG, '+ routeConsts.REPORT_RESULTS + ' PATCH', routeGroup: routeGroups.DEBUG, route: routeConsts.REPORT_RESULTS, method: 'patch', expectedOutput: true},
+            {message: 'DEBUG, '+ routeConsts.SWAGGER_API + ' PATCH', routeGroup: routeGroups.DEBUG, route: routeConsts.SWAGGER_API, method: 'patch', expectedOutput: true},
+            {message: 'DEBUG, '+ routeConsts.SWAGGER_RESOURCES + ' PATCH', routeGroup: routeGroups.DEBUG, route: routeConsts.SWAGGER_RESOURCES, method: 'patch', expectedOutput: true},
+            {message: 'DEBUG, '+ routeConsts.SWAGGER_IMAGES + ' PATCH', routeGroup: routeGroups.DEBUG, route: routeConsts.SWAGGER_IMAGES, method: 'patch', expectedOutput: true},
+            {message: 'DEBUG, '+ routeConsts.SWAGGER_DOCUMENTATION + ' PATCH', routeGroup: routeGroups.DEBUG, route: routeConsts.SWAGGER_DOCUMENTATION, method: 'patch', expectedOutput: true},
+            {message: 'DEBUG, '+ routeConsts.TOMCAT_ALL + ' PATCH', routeGroup: routeGroups.DEBUG, route: routeConsts.TOMCAT_ALL, method: 'patch', expectedOutput: true},
+            {message: 'DEBUG, '+ routeConsts.RECORD + ' PUT', routeGroup: routeGroups.DEBUG, route: routeConsts.RECORD, method: 'put', expectedOutput: true},
+            {message: 'DEBUG, '+ routeConsts.RECORDS + ' PUT', routeGroup: routeGroups.DEBUG, route: routeConsts.RECORDS, method: 'put', expectedOutput: true},
+            {message: 'DEBUG, '+ routeConsts.REPORT_RESULTS + ' PUT', routeGroup: routeGroups.DEBUG, route: routeConsts.REPORT_RESULTS, method: 'put', expectedOutput: true},
+            {message: 'DEBUG, '+ routeConsts.SWAGGER_API + ' PUT', routeGroup: routeGroups.DEBUG, route: routeConsts.SWAGGER_API, method: 'put', expectedOutput: true},
+            {message: 'DEBUG, '+ routeConsts.SWAGGER_RESOURCES + ' PUT', routeGroup: routeGroups.DEBUG, route: routeConsts.SWAGGER_RESOURCES, method: 'put', expectedOutput: true},
+            {message: 'DEBUG, '+ routeConsts.SWAGGER_IMAGES + ' PUT', routeGroup: routeGroups.DEBUG, route: routeConsts.SWAGGER_IMAGES, method: 'put', expectedOutput: true},
+            {message: 'DEBUG, '+ routeConsts.SWAGGER_DOCUMENTATION + ' PUT', routeGroup: routeGroups.DEBUG, route: routeConsts.SWAGGER_DOCUMENTATION, method: 'put', expectedOutput: true},
+            {message: 'DEBUG, '+ routeConsts.TOMCAT_ALL + ' PUT', routeGroup: routeGroups.DEBUG, route: routeConsts.TOMCAT_ALL, method: 'put', expectedOutput: true}
         ];
     }
 
