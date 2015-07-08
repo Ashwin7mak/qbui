@@ -3,13 +3,13 @@
  * Created by cschneider1 on 7/2/15.
  */
 (function () {
-    var log = require('../logger').getLogger(),
-        routeConsts = require('./routeConstants'),
-        request = require('request'),
-        requestHelper,
-        recordsApi,
-        routeGroupMapper = require('./qbRouteGroupMapper'),
-        routeGroup;
+    var log = require('../logger').getLogger();
+    var routeConsts = require('./routeConstants');
+    var request = require('request');
+    var requestHelper;
+    var recordsApi;
+    var routeGroupMapper = require('./qbRouteGroupMapper');
+    var routeGroup;
 
     module.exports = function (config){
         requestHelper = require('../api/quickbase/requestHelper')(config);
@@ -77,9 +77,9 @@
             /**
              * Override the default functionality of the recordsApi
              */
-             setRecordsApi : function(recordsApiOverride){
+            setRecordsApi : function(recordsApiOverride){
                 recordsApi = recordsApiOverride;
-             }
+            }
         }
     };
 

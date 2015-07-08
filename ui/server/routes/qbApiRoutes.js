@@ -3,10 +3,10 @@
  */
 (function () {
     'use strict';
-    var request = require('request'),
-        log = require('../logger').getLogger(),
-        _ = require('lodash'),
-        express = require('express');
+    var request = require('request');
+    var log = require('../logger').getLogger();
+    var _ = require('lodash');
+    var express = require('express');
 
 
     module.exports = function (app, config, routeMapper) {
