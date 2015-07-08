@@ -1,21 +1,30 @@
 /**
  * Express configuration
  */
-(function () {
+(function() {
     'use strict';
 
-    var express = require('express'),
-        useragent = require('express-useragent'),
-        favicon = require('serve-favicon'),
-        compression = require('compression'),
-        bodyParser = require('body-parser'),
-        methodOverride = require('method-override'),
-        cookieParser = require('cookie-parser'),
-        errorHandler = require('errorhandler'),
-        path = require('path'),
-        config = require('./environment');
+    var express = require('express');
+    var useragent = require('express-useragent');
+    var favicon = require('serve-favicon');
+    var compression = require('compression');
+    var bodyParser = require('body-parser');
+    var methodOverride = require('method-override');
+    var cookieParser = require('cookie-parser');
+    var errorHandler = require('errorhandler');
+    var path = require('path');
+    var log = require('../logger').getLogger();
+    var config = require('./environment');
 
-    module.exports = function (app) {
+    module.exports = function(app) {
+
+        // use ssl when there's a cert and we have the method to implement it
+        if (config.hasSslOptions() && app.requireHTTPS) {
+            log.info('..redirecting all http requests over https');
+            app.use(app.requireHTTPS);
+        } else {
+            log.info('..not redirecting requests over https');
+        }
 
         var env = app.get('env');
 
@@ -55,6 +64,6 @@
             //  Error handler - has to be last.
             app.use(errorHandler());
         }
-
+        return config;
     };
 }());
