@@ -210,6 +210,10 @@
      * @param res
      */
     function fetchSwagger(req, res) {
+        if(!isRouteEnabled(req)){
+            routeTo404(req, res);
+            return;
+        }
 
         //  log some route info and set the request options
         log.logRequest(req);
@@ -262,7 +266,11 @@
      */
     function isRouteEnabled(req){
 
-        if(req !== undefined && req.route !== undefined && routeGroupMapper.routeIsEnabled(routeGroup, req.route.path)){
+        if(req !== undefined &&
+            req.route !== undefined &&
+            req.method !== undefined &&
+            routeGroupMapper.routeIsEnabled(routeGroup, req.route.path, req.method)){
+
             return true;
         }else{
             return false;

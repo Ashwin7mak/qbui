@@ -38,21 +38,14 @@
      */
     function initializeRoutes(routes, app, routeMapper){
 
-        var getFunctionForRoute;
-        var postFunctionForRoute;
-        var deleteFunctionForRoute;
-        var putFunctionForRoute;
-        var patchFunctionForRoute;
-        var allFunctionForRoute;
-
         _.forEach(routes, function (route) {
 
-            getFunctionForRoute = routeMapper.fetchGetFunctionForRoute(route);
-            postFunctionForRoute = routeMapper.fetchPostFunctionForRoute(route);
-            deleteFunctionForRoute = routeMapper.fetchDeleteFunctionForRoute(route);
-            putFunctionForRoute = routeMapper.fetchPutFunctionForRoute(route);
-            patchFunctionForRoute = routeMapper.fetchPatchFunctionForRoute(route);
-            allFunctionForRoute = routeMapper.fetchAllFunctionForRoute(route);
+            var getFunctionForRoute = routeMapper.fetchGetFunctionForRoute(route);
+            var postFunctionForRoute = routeMapper.fetchPostFunctionForRoute(route);
+            var deleteFunctionForRoute = routeMapper.fetchDeleteFunctionForRoute(route);
+            var putFunctionForRoute = routeMapper.fetchPutFunctionForRoute(route);
+            var patchFunctionForRoute = routeMapper.fetchPatchFunctionForRoute(route);
+            var allFunctionForRoute = routeMapper.fetchAllFunctionForRoute(route);
 
             //if this route has an all mapping, then ignore individual mappings
             if (undefined !== allFunctionForRoute) {

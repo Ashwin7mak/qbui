@@ -8,6 +8,7 @@
     var request = require('request'),
         routeGroups = require('./routeGroups'),
         _ = require('lodash'),
+        constants = require('../api/constants'),
         routeConsts = require('./routeConstants');
 
     /*
@@ -15,7 +16,15 @@
      */
     var environmentRouteDisabled = {};
     environmentRouteDisabled[routeGroups.DEBUG] = [];
-    environmentRouteDisabled[routeGroups.LH_V1] = [routeConsts.SWAGGER_API, routeConsts.SWAGGER_RESOURCES, routeConsts.SWAGGER_IMAGES, routeConsts.SWAGGER_DOCUMENTATION, routeConsts.TOMCAT_ALL];
+    environmentRouteDisabled[routeGroups.LH_V1] = [
+        { route: routeConsts.RECORD, methods: [constants.POST,constants.DELETE]},
+        { route: routeConsts.RECORDS, methods: [constants.POST,constants.DELETE]},
+        { route: routeConsts.REPORT_RESULTS, methods: [constants.POST,constants.DELETE]},
+        { route: routeConsts.SWAGGER_API, methods: [constants.GET,constants.POST,constants.DELETE]},
+        { route: routeConsts.SWAGGER_RESOURCES, methods: [constants.GET,constants.POST,constants.DELETE]},
+        { route: routeConsts.SWAGGER_IMAGES, methods: [constants.GET,constants.POST,constants.DELETE]},
+        { route: routeConsts.SWAGGER_DOCUMENTATION, methods: [constants.GET,constants.POST,constants.DELETE]},
+        { route: routeConsts.TOMCAT_ALL, methods: [constants.POST,constants.DELETE]}];
 
     module.exports = {
 
@@ -24,10 +33,18 @@
          * @param env
          * @returns {*}
          */
-        routeIsEnabled: function(routeGroup, route) {
+        routeIsEnabled: function(routeGroup, route, method) {
             var disabledRoutes = environmentRouteDisabled[routeGroup];
 
-            return !_.contains(disabledRoutes, route, 0);
+            var routeEnabled = true;
+
+            _.forEach(disabledRoutes, function(disabledRoute){
+                if(route === disabledRoute.route && _.contains(disabledRoute.methods, method.toUpperCase(), 0)){
+                    routeEnabled = false;
+                }
+            });
+
+            return routeEnabled;
         }
     };
 }());
