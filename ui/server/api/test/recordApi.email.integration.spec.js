@@ -142,7 +142,7 @@ describe('API - Email record test cases - ', function () {
     * Integration test that validates Email records formatting with no field property flags set
     */
     it('Should create and retrieve email display records when no format flags set', function (done) {
-        this.timeout(testConsts.INTEGRATION_TIMEOUT);
+        this.timeout(testConsts.INTEGRATION_TIMEOUT * noFlagsEmailDataProvider().length);
         recordBase.createApp(appWithNoFlags).then(function (appResponse) {
             var app = JSON.parse(appResponse.body);
             var emailField;
@@ -214,7 +214,7 @@ describe('API - Email record test cases - ', function () {
     * Integration test that validates Email records formatting with 'Entire Email' field property flags set
     */
     it('Should create and retrieve email display records when "entire email" format flag set', function (done) {
-        this.timeout(testConsts.INTEGRATION_TIMEOUT);
+        this.timeout(testConsts.INTEGRATION_TIMEOUT * entireEmailFlagEmailDataProvider().length);
         recordBase.createApp(appWithEntireEmailFlag).then(function (appResponse) {
             var app = JSON.parse(appResponse.body);
             var emailField;
@@ -286,7 +286,7 @@ describe('API - Email record test cases - ', function () {
      * Integration test that validates Email records formatting with 'before @' field property flags set
      */
     it('Should create and retrieve email display records when "before @" format flag set', function (done) {
-        this.timeout(testConsts.INTEGRATION_TIMEOUT);
+        this.timeout(testConsts.INTEGRATION_TIMEOUT * beforeAtSignFlagEmailDataProvider().length);
         recordBase.createApp(appWithBeforeAtSignFlag).then(function (appResponse) {
             var app = JSON.parse(appResponse.body);
             var emailField;
@@ -358,7 +358,7 @@ describe('API - Email record test cases - ', function () {
      * Integration test that validates Email records formatting with 'before _' field property flags set
      */
     it('Should create and retrieve email display records when "before _" format flag set', function (done) {
-        this.timeout(testConsts.INTEGRATION_TIMEOUT);
+        this.timeout(testConsts.INTEGRATION_TIMEOUT * beforeUnderscoreFlagEmailDataProvider().length);
         recordBase.createApp(appWithBeforeUnderscoreFlag).then(function (appResponse) {
             var app = JSON.parse(appResponse.body);
             var emailField;
@@ -430,7 +430,7 @@ describe('API - Email record test cases - ', function () {
      * Integration test that validates Email records formatting with 'link text' field property flags set
      */
     it('Should create and retrieve email display records when "link text" format flag set', function (done) {
-        this.timeout(testConsts.INTEGRATION_TIMEOUT);
+        this.timeout(testConsts.INTEGRATION_TIMEOUT * linkTextFlagEmailDataProvider().length);
         recordBase.createApp(appWithLinkTextFlag).then(function (appResponse) {
             var app = JSON.parse(appResponse.body);
             var emailField;
@@ -502,7 +502,7 @@ describe('API - Email record test cases - ', function () {
      * Integration test that validates Email records formatting with all field property flags set
      */
     it('Should create and retrieve email display records when all format flags set', function (done) {
-        this.timeout(testConsts.INTEGRATION_TIMEOUT);
+        this.timeout(testConsts.INTEGRATION_TIMEOUT * allFlagsEmailDataProvider().length);
         recordBase.createApp(appWithAllFlags).then(function (appResponse) {
             var app = JSON.parse(appResponse.body);
             var emailField;
@@ -548,8 +548,7 @@ describe('API - Email record test cases - ', function () {
         //Realm deletion takes time, bump the timeout
         this.timeout(20000);
         recordBase.apiBase.cleanup().then(function () {
-            // Do a JavaScript version of a sleep so we don't collide with the next test class
-            setTimeout(function() { done(); }, testConsts.AFTER_TEST_SLEEP);
+            done();
         });
     });
 });

@@ -155,7 +155,7 @@ describe('API - Currency record test cases', function () {
      * Integration test that validates Currency records formatting with no field property flags set
      */
     it('Should create and retrieve currency display records when no format flags set', function (done) {
-        this.timeout(testConsts.INTEGRATION_TIMEOUT);
+        this.timeout(testConsts.INTEGRATION_TIMEOUT * noFlagsCurrencyDataProvider().length);
         recordBase.createApp(appWithNoFlags).then(function (appResponse) {
             var app = JSON.parse(appResponse.body);
             var currencyField;
@@ -238,7 +238,7 @@ describe('API - Currency record test cases', function () {
      * Integration test that validates Currency records formatting with all 'right of sign' field property flags set
      */
     it('Should create and retrieve currency display records when all "right of sign" format flags set', function (done) {
-        this.timeout(testConsts.INTEGRATION_TIMEOUT);
+        this.timeout(testConsts.INTEGRATION_TIMEOUT * allRightOfSignFlagsCurrencyDataProvider().length);
         recordBase.createApp(appWithAllRightOfSignFlags).then(function (appResponse) {
             var app = JSON.parse(appResponse.body);
             var currencyField;
@@ -321,7 +321,7 @@ describe('API - Currency record test cases', function () {
     * Integration test that validates Currency records formatting with all 'right' field property flags set
     */
     it('Should create and retrieve currency display records when all "right" format flags set', function (done) {
-        this.timeout(testConsts.INTEGRATION_TIMEOUT);
+        this.timeout(testConsts.INTEGRATION_TIMEOUT * allRightFlagsCurrencyDataProvider().length);
         recordBase.createApp(appWithAllRightFlags).then(function (appResponse) {
             var app = JSON.parse(appResponse.body);
             var currencyField;
@@ -404,7 +404,7 @@ describe('API - Currency record test cases', function () {
      * Integration test that validates Currency records formatting with all 'left' field property flags set
      */
     it('Should create and retrieve currency display records when all "left" format flags set', function (done) {
-        this.timeout(testConsts.INTEGRATION_TIMEOUT);
+        this.timeout(testConsts.INTEGRATION_TIMEOUT * allLeftFlagsCurrencyDataProvider().length);
         recordBase.createApp(appWithAllLeftFlags).then(function (appResponse) {
             var app = JSON.parse(appResponse.body);
             var currencyField;
@@ -450,8 +450,7 @@ describe('API - Currency record test cases', function () {
         //Realm deletion takes time, bump the timeout
         this.timeout(20000);
         recordBase.apiBase.cleanup().then(function () {
-            // Do a JavaScript version of a sleep so we don't collide with the next test class
-            setTimeout(function() { done(); }, testConsts.AFTER_TEST_SLEEP);
+            done();
         });
     });
 });

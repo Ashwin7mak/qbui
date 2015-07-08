@@ -83,7 +83,7 @@ describe('API - Date record test cases - ', function () {
     * Integration test that validates Date records formatting with no field property flags set
     */
     it('Should create and retrieve date display records when no format flags set', function (done) {
-        this.timeout(testConsts.INTEGRATION_TIMEOUT);
+        this.timeout(testConsts.INTEGRATION_TIMEOUT * noFlagsDateDataProvider().length);
         recordBase.createApp(appWithNoFlags).then(function (appResponse) {
             var app = JSON.parse(appResponse.body);
             var dateField;
@@ -156,7 +156,7 @@ describe('API - Date record test cases - ', function () {
     * Integration test that validates DD_MM_YYYY Date records formatting with all field property flags set
     */
     it('Should create and retrieve DD_MM_YYYY date display records when all format flags set', function (done) {
-        this.timeout(testConsts.INTEGRATION_TIMEOUT);
+        this.timeout(testConsts.INTEGRATION_TIMEOUT * allFlagsDateDataProvider_DD_MM_YYYY().length);
         recordBase.createApp(appWithAllFlags_DD_MM_YYYY).then(function (appResponse) {
             var app = JSON.parse(appResponse.body);
             var dateField;
@@ -229,7 +229,7 @@ describe('API - Date record test cases - ', function () {
     * Integration test that validates MM_DD_YYYY Date records formatting with all field property flags set
     */
     it('Should create and retrieve MM_DD_YYYY date display records when all format flags set', function (done) {
-        this.timeout(testConsts.INTEGRATION_TIMEOUT);
+        this.timeout(testConsts.INTEGRATION_TIMEOUT * allFlagsDateDataProvider_MM_DD_YYYY().length);
         recordBase.createApp(appWithAllFlags_MM_DD_YYYY).then(function (appResponse) {
             var app = JSON.parse(appResponse.body);
             var dateField;
@@ -302,7 +302,7 @@ describe('API - Date record test cases - ', function () {
     * Integration test that validates MM_DD_YY Date records formatting with all field property flags set
     */
     it('Should create and retrieve MM_DD_YY date display records when all format flags set', function (done) {
-        this.timeout(testConsts.INTEGRATION_TIMEOUT);
+        this.timeout(testConsts.INTEGRATION_TIMEOUT * allFlagsDateDataProvider_MM_DD_YY().length);
         recordBase.createApp(appWithAllFlags_MM_DD_YY).then(function (appResponse) {
             var app = JSON.parse(appResponse.body);
             var dateField;
@@ -375,7 +375,7 @@ describe('API - Date record test cases - ', function () {
     * Integration test that validates DD_MM_YY Date records formatting with all field property flags set
     */
     it('Should create and retrieve DD_MM_YY date display records when all format flags set', function (done) {
-        this.timeout(testConsts.INTEGRATION_TIMEOUT);
+        this.timeout(testConsts.INTEGRATION_TIMEOUT * allFlagsDateDataProvider_DD_MM_YY().length);
         recordBase.createApp(appWithAllFlags_DD_MM_YY).then(function (appResponse) {
             var app = JSON.parse(appResponse.body);
             var dateField;
@@ -448,7 +448,7 @@ describe('API - Date record test cases - ', function () {
      * Integration test that validates YYYY_MM_DD Date records formatting with all field property flags set
      */
     it('Should create and retrieve YYYY_MM_DD date display records when all format flags set', function (done) {
-        this.timeout(testConsts.INTEGRATION_TIMEOUT);
+        this.timeout(testConsts.INTEGRATION_TIMEOUT * allFlagsDateDataProvider_YYYY_MM_DD().length);
         recordBase.createApp(appWithAllFlags_YYYY_MM_DD).then(function (appResponse) {
             var app = JSON.parse(appResponse.body);
             var dateField;
@@ -495,8 +495,7 @@ describe('API - Date record test cases - ', function () {
         //Realm deletion takes time, bump the timeout
         this.timeout(20000);
         recordBase.apiBase.cleanup().then(function () {
-            // Do a JavaScript version of a sleep so we don't collide with the next test class
-            setTimeout(function() { done(); }, testConsts.AFTER_TEST_SLEEP);
+            done();
         });
     });
 });

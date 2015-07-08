@@ -89,7 +89,7 @@ describe('API - URL record test cases - ', function () {
     * Integration test that validates URL records formatting with no field property flags set
     */
     it('Should create and retrieve url display records when no format flags set', function (done) {
-        this.timeout(testConsts.INTEGRATION_TIMEOUT);
+        this.timeout(testConsts.INTEGRATION_TIMEOUT * noFlagsURLDataProvider().length);
         recordBase.createApp(appWithNoFlags).then(function (appResponse) {
             var app = JSON.parse(appResponse.body);
             var urlField;
@@ -168,7 +168,7 @@ describe('API - URL record test cases - ', function () {
     * Integration test that validates URL records formatting with 'Don't Show HTTP' field property flags set
     */
     it('Should create and retrieve url display records when "dont show http" format flags set', function (done) {
-        this.timeout(testConsts.INTEGRATION_TIMEOUT);
+        this.timeout(testConsts.INTEGRATION_TIMEOUT * dontShowHttpFlagURLDataProvider().length);
         recordBase.createApp(appWithDontShowHttpFlag).then(function (appResponse) {
             var app = JSON.parse(appResponse.body);
             var urlField;
@@ -247,7 +247,7 @@ describe('API - URL record test cases - ', function () {
      * Integration test that validates URL records formatting with all field property flags set
      */
     it('Should create and retrieve url display records when all format flags set', function (done) {
-        this.timeout(testConsts.INTEGRATION_TIMEOUT);
+        this.timeout(testConsts.INTEGRATION_TIMEOUT * allFlagsURLDataProvider().length);
         recordBase.createApp(appWithAllFlags).then(function (appResponse) {
             var app = JSON.parse(appResponse.body);
             var urlField;
@@ -294,8 +294,7 @@ describe('API - URL record test cases - ', function () {
         //Realm deletion takes time, bump the timeout
         this.timeout(20000);
         recordBase.apiBase.cleanup().then(function () {
-            // Do a JavaScript version of a sleep so we don't collide with the next test class
-            setTimeout(function() { done(); }, testConsts.AFTER_TEST_SLEEP);
+            done();
         });
     });
 });

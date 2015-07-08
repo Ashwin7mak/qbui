@@ -4,7 +4,6 @@
 (function (){
     module.exports = Object.freeze({
         //test constants
-        INTEGRATION_TIMEOUT : 60000,
-        AFTER_TEST_SLEEP : 2000
+        INTEGRATION_TIMEOUT : 20000
     });
 }());

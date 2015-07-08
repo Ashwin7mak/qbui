@@ -75,7 +75,7 @@ describe('API - Text record test cases', function () {
      * Integration test that validates Text records formatting
      */
     it('Should create and retrieve display formatted text records', function (done) {
-        this.timeout(testConsts.INTEGRATION_TIMEOUT);
+        this.timeout(testConsts.INTEGRATION_TIMEOUT * textRecordsDataProvider().length);
         recordBase.createApp(exampleApp).then(function (appResponse) {
             var app = JSON.parse(appResponse.body);
             var textField;
@@ -121,8 +121,7 @@ describe('API - Text record test cases', function () {
         //Realm deletion takes time, bump the timeout
         this.timeout(20000);
         recordBase.apiBase.cleanup().then(function () {
-            // Do a JavaScript version of a sleep so we don't collide with the next test class
-            setTimeout(function() { done(); }, testConsts.AFTER_TEST_SLEEP);
+            done();
         });
     });
 });

@@ -84,7 +84,7 @@ describe('API - TimeOfDay record test cases - ', function () {
     * Integration test that validates TimeOfDay records formatting with no field property flags set
     */
     it('Should create and retrieve timeOfDay display records when no format flags set', function (done) {
-        this.timeout(testConsts.INTEGRATION_TIMEOUT);
+        this.timeout(testConsts.INTEGRATION_TIMEOUT * noFlagsTimeOfDayDataProvider().length);
         recordBase.createApp(appWithNoFlags).then(function (appResponse) {
             var app = JSON.parse(appResponse.body);
             var timeOfDayField;
@@ -157,7 +157,7 @@ describe('API - TimeOfDay record test cases - ', function () {
     * Integration test that validates HH_MM TimeOfDay records formatting with all field property flags set
     */
     it('Should create and retrieve HH_MM timeOfDay display records when all format flags set', function (done) {
-        this.timeout(testConsts.INTEGRATION_TIMEOUT);
+        this.timeout(testConsts.INTEGRATION_TIMEOUT * allFlagsTimeOfDayDataProvider_HH_MM().length);
         recordBase.createApp(appWithAllFlags_HH_MM).then(function (appResponse) {
             var app = JSON.parse(appResponse.body);
             var timeOfDayField;
@@ -230,7 +230,7 @@ describe('API - TimeOfDay record test cases - ', function () {
      * Integration test that validates HH_MM_SS TimeOfDay records formatting with all field property flags set
      */
     it('Should create and retrieve HH_MM_SS timeOfDay display records when all format flags set', function (done) {
-        this.timeout(testConsts.INTEGRATION_TIMEOUT);
+        this.timeout(testConsts.INTEGRATION_TIMEOUT * allFlagsTimeOfDayDataProvider_HH_MM_SS().length);
         recordBase.createApp(appWithAllFlags_HH_MM_SS).then(function (appResponse) {
             var app = JSON.parse(appResponse.body);
             var timeOfDayField;
@@ -277,8 +277,7 @@ describe('API - TimeOfDay record test cases - ', function () {
         //Realm deletion takes time, bump the timeout
         this.timeout(20000);
         recordBase.apiBase.cleanup().then(function () {
-            // Do a JavaScript version of a sleep so we don't collide with the next test class
-            setTimeout(function() { done(); }, testConsts.AFTER_TEST_SLEEP);
+            done();
         });
     });
 });

@@ -8,6 +8,7 @@ var Promise = require('bluebird');
 var _ = require('lodash');
 var consts = require('../constants');
 var log = require('../../logger').getLogger();
+var testConsts = require('./api.test.constants');
 
 
 describe('API - Validate report execution', function () {
@@ -34,7 +35,7 @@ describe('API - Validate report execution', function () {
 
     it('Should create an app, add a record, create a report, execute the report, and validate the resulting ' +
         'record matches the created record', function (done) {
-        this.timeout(30000);
+        this.timeout(testConsts.INTEGRATION_TIMEOUT);
         recordBase.createApp(appWithNoFlags).then(function (appResponse) {
             var app = JSON.parse(appResponse.body);
             var percentField;
