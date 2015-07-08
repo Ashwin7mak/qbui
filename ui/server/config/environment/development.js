@@ -45,7 +45,7 @@
         DOMAIN: '',
 
         env: envConsts.TEST,
-        routeGroup: envConsts.DEBUG
+        routeGroup: routeGroups.DEBUG
 
 
     };

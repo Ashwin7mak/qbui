@@ -47,7 +47,7 @@
         DOMAIN  : 'http://localhost:9000',
 
         env: envConsts.TEST,
-        routeGroup: envConsts.DEBUG
+        routeGroup: routeGroups.DEBUG
 
     };
 
