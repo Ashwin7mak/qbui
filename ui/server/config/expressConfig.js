@@ -5,6 +5,7 @@
     'use strict';
 
     var express = require('express');
+    var useragent = require('express-useragent');
     var favicon = require('serve-favicon');
     var compression = require('compression');
     var bodyParser = require('body-parser');
@@ -12,16 +13,17 @@
     var cookieParser = require('cookie-parser');
     var errorHandler = require('errorhandler');
     var path = require('path');
-    var log = require('../logger').getLogger(module.filename);
+    var log = require('../logger').getLogger();
     var config = require('./environment');
 
     module.exports = function(app) {
 
         // use ssl when there's a cert and we have the method to implement it
         if (config.hasSslOptions() && app.requireHTTPS) {
+            log.info('..redirecting all http requests over https');
             app.use(app.requireHTTPS);
         } else {
-            log.info("not forcing https");
+            log.info('..not redirecting requests over https');
         }
 
         var env = app.get('env');
@@ -34,6 +36,7 @@
         app.use(bodyParser.json());
         app.use(methodOverride());
         app.use(cookieParser());
+        app.use(useragent.express());
 
         //TODO: We need to figure out how we want to handle the environment config in aws
         if ('aws' === env || 'production' === env || 'test' === env || 'development' === env) {

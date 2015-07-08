@@ -18,6 +18,9 @@
                     reports.forEach(function (report) {
                         $scope.reports.push({id: report.id, name: report.name});
                     });
+                },
+                function (resp) {
+                    console.log('Error getting report list.  Status: ' + resp.status);
                 }
             );
         }

@@ -14,18 +14,9 @@
 
     angular.module('qbse.api').service('ApiService', ApiService);
 
-    ApiService.$inject = ['Restangular', 'qbUtility', 'apiConstants', '$cookies'];
+    ApiService.$inject = ['Restangular', 'qbUtility', 'apiConstants'];
 
-    function ApiService(Restangular, qbUtility, apiConstants, $cookie) {
-
-        // get the auth session ticket from the cookie.  If it's invalid or not found, the
-        // requested endPoint will respond with a 403 status, which is handled in api.modules.js
-        // by the RestangularProvider.setErrorInterceptor.
-        //
-        function getTicket() {
-            var cookie = $cookie.get(apiConstants.TICKET_COOKIE);
-            return cookie;
-        }
+    function ApiService(Restangular, qbUtility, apiConstants) {
 
         function setQueryParams(format, offset, rows) {
             var queryParams = {};
@@ -40,29 +31,24 @@
         }
 
         function runTheReport(appId, tableId, reportId, queryParams) {
-            var httpHeaders = {ticket: getTicket()};
-            return Restangular.one(apiConstants.APPS, appId).one(apiConstants.TABLES,tableId).one(apiConstants.REPORTS,reportId).one('results').withHttpConfig(httpHeaders).get(queryParams);
+            return Restangular.one(apiConstants.APPS, appId).one(apiConstants.TABLES,tableId).one(apiConstants.REPORTS,reportId).one('results').get(queryParams);
         }
 
         function getTheRecords(appId, tableId, queryParams) {
-            var httpHeaders = {ticket: getTicket()};
-            return Restangular.one(apiConstants.APPS, appId).one(apiConstants.TABLES,tableId).one(apiConstants.RECORDS).withHttpConfig(httpHeaders).get(queryParams);
+            return Restangular.one(apiConstants.APPS, appId).one(apiConstants.TABLES,tableId).one(apiConstants.RECORDS).get(queryParams);
         }
 
         var service = {
             getApp: function(appId) {
-                var httpHeaders = {ticket: getTicket()};
-                return Restangular.one(apiConstants.APPS, appId).withHttpConfig(httpHeaders).get();
+                return Restangular.one(apiConstants.APPS, appId).get();
             },
 
             getFields: function(appId, tableId) {
-                var httpHeaders = {ticket: getTicket()};
-                return Restangular.one(apiConstants.APPS,appId).one(apiConstants.TABLES,tableId).one(apiConstants.FIELDS).withHttpConfig(httpHeaders).get();
+                return Restangular.one(apiConstants.APPS,appId).one(apiConstants.TABLES,tableId).one(apiConstants.FIELDS).get();
             },
 
             getField: function(appId, tableId, fieldId) {
-                var httpHeaders = {ticket: getTicket()};
-                return Restangular.one(apiConstants.APPS,appId).one(apiConstants.TABLES,tableId).one(apiConstants.FIELDS,fieldId).withHttpConfig(httpHeaders).get();
+                return Restangular.one(apiConstants.APPS,appId).one(apiConstants.TABLES,tableId).one(apiConstants.FIELDS,fieldId).get();
             },
 
             getRecords: function(appId, tableId, offset, rows) {
@@ -75,13 +61,11 @@
             },
 
             getReport: function(appId, tableId, reportId) {
-                var httpHeaders = {ticket: getTicket()};
-                return Restangular.one(apiConstants.APPS, appId).one(apiConstants.TABLES,tableId).one(apiConstants.REPORTS,reportId).withHttpConfig(httpHeaders).get();
+                return Restangular.one(apiConstants.APPS, appId).one(apiConstants.TABLES,tableId).one(apiConstants.REPORTS,reportId).get();
             },
 
             getReports: function(appId, tableId) {
-                var httpHeaders = {ticket: getTicket()};
-                return Restangular.one(apiConstants.APPS, appId).one(apiConstants.TABLES,tableId).one(apiConstants.REPORTS).withHttpConfig(httpHeaders).get();
+                return Restangular.one(apiConstants.APPS, appId).one(apiConstants.TABLES,tableId).one(apiConstants.REPORTS).get();
             },
 
             runReport: function(appId, tableId, reportId, offset, rows) {

@@ -2,7 +2,7 @@
 (function () {
     'use strict';
     var request = require('request');
-    var log = require('../logger').getLogger(module.filename);
+    var log = require('../logger').getLogger();
 
     module.exports = function (app, config) {
 
@@ -24,7 +24,7 @@
             }
 
             return opts;
-        };
+        }
 
         /**
          * This helper method takes the request url produced and replaces the single /api with /api/api on the original
@@ -42,14 +42,10 @@
         //Route for returning a single record
         app.route('/api/api/:version/apps/:appId/tables/:tableId/records/:recordId').get(
             function(req, res) {
-                //  log some route info and set the request options
-                log.logRequest(req);
-
                 modifyRequestPathForApi(req);
-
                 recordsApi.fetchSingleRecordAndFields(req)
                     .then(function(response) {
-                        log.logResponse(response);
+                        log.logResponse(req, response, __filename);
                         res.send(response);
                     })
                     .catch(function(error) {
@@ -64,14 +60,10 @@
         //Route for returning an array of records
         app.route('/api/api/:version/apps/:appId/tables/:tableId/records').get(
             function(req, res) {
-                //  log some route info and set the request options
-                log.logRequest(req);
-
                 modifyRequestPathForApi(req);
-
                 recordsApi.fetchRecordsAndFields(req)
                     .then(function(response) {
-                        log.logResponse(response);
+                        log.logResponse(req, response, __filename);
                         res.send(response);
                     })
                     .catch(function(error) {
@@ -86,14 +78,10 @@
         //Route for returning a report
         app.route('/api/api/:version/apps/:appId/tables/:tableId/reports/:reportId/results').get(
             function(req, res) {
-                //  log some route info and set the request options
-                log.logRequest(req);
-
                 modifyRequestPathForApi(req);
-
                 recordsApi.fetchRecordsAndFields(req)
                     .then(function(response) {
-                        log.logResponse(response);
+                        log.logResponse(req, response, __filename);
                         res.send(response);
                     })
                     .catch(function(error) {
@@ -110,7 +98,6 @@
             log.info('Disabling realm and ticket endpoint access for this run-time environment!');
             app.route(['/api/:version/realms*', '/api/:version/ticket*']).all(
                 function (req, res) {
-                    log.logRequest(req);
                     res.status(404).send();
                 }
             );
@@ -119,11 +106,7 @@
         //Route for returning swagger api documentation
         app.route(['/api', '/api/resources/*', '/api/images/*', '/api/documentation/*']).get(
             function(req, res) {
-                //  log some route info and set the request options
-                log.logRequest(req);
-
                 var opts = requestHelper.setOptions(req);
-
                 request(opts)
                     .on('error', function(error) {
                         log.error('Swagger API ERROR ' + JSON.stringify(error));
@@ -135,14 +118,10 @@
         //  Route to return API calls
         app.route('/api/*').all(
             function (req, res) {
-                //  log some route info and set the request options
-                log.logRequest(req);
-
                 var opts = getOptionsForRequest(req);
-
                 request(opts)
                     .on('response', function (response) {
-                        log.info('API response: ' + response.statusCode + ' - ' + req.method + ' ' + req.path);
+                        log.logResponse(req, response, __filename);
                     })
                     .on('error', function (error) {
                         log.error('API ERROR ' + JSON.stringify(error));
