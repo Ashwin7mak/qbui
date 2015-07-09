@@ -88,7 +88,7 @@ describe('API - Validate report execution', function () {
     //Cleanup the test realm after all tests in the block
     after(function (done) {
         //Realm deletion takes time, bump the timeout
-        this.timeout(20000);
+        this.timeout(testConsts.INTEGRATION_TIMEOUT);
         recordBase.apiBase.cleanup().then(function () {
             done();
         });

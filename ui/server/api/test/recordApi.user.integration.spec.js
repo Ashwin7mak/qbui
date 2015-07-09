@@ -260,7 +260,7 @@ describe('API - User record test cases - ', function () {
     //Cleanup the test realm after all tests in the block
     after(function (done) {
         //Realm deletion takes time, bump the timeout
-        this.timeout(20000);
+        this.timeout(testConsts.INTEGRATION_TIMEOUT);
         recordBase.apiBase.cleanup().then(function () {
             // Do a JavaScript version of a sleep so we don't collide with the next test class
             setTimeout(function() { done(); }, testConsts.AFTER_TEST_SLEEP);
