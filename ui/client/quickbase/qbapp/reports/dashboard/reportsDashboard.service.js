@@ -24,6 +24,36 @@
 
                 return deferred.promise;
 
+            },
+
+            getApps: function() {
+                var deferred = $q.defer();
+
+                ApiService.getApps().then(
+                    function(apps) {
+                        deferred.resolve(apps);
+                    },
+                    function(resp) {
+                        deferred.reject(resp);
+                    }
+                );
+
+                return deferred.promise;
+            },
+
+            getApp: function(appId) {
+                var deferred = $q.defer();
+
+                ApiService.getApp(appId).then(
+                    function(app) {
+                        deferred.resolve(app);
+                    },
+                    function(resp) {
+                        deferred.reject(resp);
+                    }
+                );
+
+                return deferred.promise;
             }
         };
 
