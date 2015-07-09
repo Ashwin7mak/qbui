@@ -61,7 +61,7 @@
                                     }).catch(function (error) {
                                         fetchRecordDeferred.reject(error);
                                     });
-                            }, 500);
+                            }, 2000);
                         }).catch(function(currError){log.error(JSON.stringify(currError));});
                 }).catch(function(err){log.error(JSON.stringify(err));});
                 return fetchRecordDeferred.promise;
