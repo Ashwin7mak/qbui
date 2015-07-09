@@ -101,19 +101,13 @@ describe('API - PhoneNumber record test cases', function () {
         });
     });
 
-    //Pause between test suites
-    afterEach(function (done) {
-        this.timeout(testConsts.INTEGRATION_TIMEOUT)
-        //Do a JavaScript version of a sleep because our requests per second are being capped
-        setTimeout(function() { done(); }, testConsts.AFTER_TEST_SLEEP);
-    });
-
     //Cleanup the test realm after all tests in the block
     after(function (done) {
         //Realm deletion takes time, bump the timeout
         this.timeout(20000);
         recordBase.apiBase.cleanup().then(function () {
-            done();
+            // Do a JavaScript version of a sleep so we don't collide with the next test class
+            setTimeout(function() { done(); }, testConsts.AFTER_TEST_SLEEP);
         });
     });
 });
