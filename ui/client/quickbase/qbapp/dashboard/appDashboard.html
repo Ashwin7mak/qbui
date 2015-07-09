@@ -1,6 +1,10 @@
 
-<div>
 
+<div style="margin:25px;" ng_show="showLayout">
+
+    <div class="intuit-logo"></div>
+
+    <!--
     <div ng-if="appId">
         <p>
             <div>Quickbase HomePages for Application X.</div>
@@ -15,6 +19,7 @@
             </div>
         </p>
     </div>
+
     <div ng-if="!appId">
         <p>Enter an appId and tableId<br>
         </p>
@@ -25,5 +30,19 @@
                onclick="window.location.href = '/qbapp#/' + document.getElementById('appId').value + '/' + document.getElementById('tableId').value;"/>
 
     </div>
+     -->
+    <p>Your QuickBase Applications</p>
+    <div ng-repeat='app in apps'>
+        <li style="font-size:14px;list-style-type: decimal;">{{app.name}} ({{app.id}})</li>
+        <div ng-repeat='table in app.tables'>
+            <ul style="list-style-type: decimal;">
+                <li style="font-size:14px;cursor:pointer;text-decoration: underline;color: -webkit-link;list-style-type: lower-alpha;">
+                    <a ng-click='goToTable(table)'>{{table.name}} ({{table.id}})</a>
+                </li>
+            </ul>
+        </div>
+        </ul>
+    </div>
+
 
 </div>

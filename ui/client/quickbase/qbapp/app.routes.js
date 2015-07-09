@@ -6,7 +6,7 @@
 
         $stateProvider
             .state('qbapp', {
-                url: '/:appId/:tableId',
+                //url: '/:appId/:tableId',
                 views: {
                     qbappHomeView: {
                         templateUrl: 'quickbase/qbapp/dashboard/appDashboard.html',
