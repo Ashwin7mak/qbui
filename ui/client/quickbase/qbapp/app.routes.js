@@ -2,11 +2,11 @@
     'use strict';
 
     var reportsApp = angular.module('quickbase.qbapp', ['ui.router', 'qbse.qbapp.dashboard', 'qbse.qbapp.reports.dashboard', 'qbse.qbapp.reports.manager', 'qbse.layout']);
-    var reportsAppConfig = reportsApp.config(['$stateProvider', '$urlRouterProvider', function($stateProvider) {
-
+    var reportsAppConfig = reportsApp.config(['$stateProvider', '$locationProvider', function($stateProvider, $locationProvider) {
+        $locationProvider.html5Mode(true);
         $stateProvider
             .state('qbapp', {
-                url: '/:appId/:tableId',
+                url: '/qbapp/:appId/:tableId',
                 views: {
                     qbappHomeView: {
                         templateUrl: 'quickbase/qbapp/dashboard/appDashboard.html',
@@ -15,7 +15,7 @@
                 }
             })
             .state('reports', {
-                url: '/reports/:appId/:tableId',
+                url: '/qbapp/reports/:appId/:tableId',
                 views: {
                     qbappHomeView: {
                         templateUrl: 'quickbase/qbapp/reports/dashboard/reportsDashboard.html',
@@ -24,7 +24,7 @@
                 }
             })
             .state('reports/report', {
-                url: '^/reports/apps/:appId/tables/:tableId/report/:id',
+                url: '/qbapp/reports/apps/:appId/tables/:tableId/report/:id',
                 parent: 'reports',
                 views: {
                     navigationTarget: {
@@ -37,7 +37,7 @@
                 }
             })
             .state('report', {
-                url: '^/apps/:appId/tables/:tableId/report/:id',
+                url: '/qbapp/apps/:appId/tables/:tableId/report/:id',
                 views: {
                     qbappHomeView: {
                         templateUrl: 'quickbase/qbapp/reports/reportManager/reportLayout.html',

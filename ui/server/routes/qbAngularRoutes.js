@@ -16,7 +16,7 @@
         });
 
         //  quickbase application dashboard
-        app.route('/qbapp').get(function (req, res) {
+        app.route('/qbapp*').get(function (req, res) {
             res.sendfile(app.get('appPath') + '/qbapp.index.html');
         });
 
