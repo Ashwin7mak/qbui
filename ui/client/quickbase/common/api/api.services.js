@@ -43,6 +43,10 @@
                 return Restangular.one(apiConstants.APPS, appId).get();
             },
 
+            getApps: function() {
+                return Restangular.one(apiConstants.APPS).get();
+            },
+
             getFields: function(appId, tableId) {
                 return Restangular.one(apiConstants.APPS,appId).one(apiConstants.TABLES,tableId).one(apiConstants.FIELDS).get();
             },

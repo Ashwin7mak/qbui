@@ -13,6 +13,14 @@
             return ReportsDashboardService.get(appId, tableId);
         };
 
+        model.getApps = function() {
+            return ReportsDashboardService.getApps();
+        };
+
+        model.getApp = function(appId) {
+            return ReportsDashboardService.getApp(appId);
+        };
+
         return model;
 
     }
