@@ -52,16 +52,13 @@
                             if (params) {
                                 getEndpoint += params;
                             }
-                            // Wait before getting the added record (needed for groups of record adds due to throttling)
-                            setTimeout(function(){
-                                apiBase.executeRequest(getEndpoint, consts.GET)
-                                    .then(function (fetchedRecordResponse) {
-                                        var fetchedRecord = jsonBigNum.parse(fetchedRecordResponse.body);
-                                        fetchRecordDeferred.resolve(fetchedRecord);
-                                    }).catch(function (error) {
-                                        fetchRecordDeferred.reject(error);
-                                    });
-                            }, 10000);
+                            apiBase.executeRequest(getEndpoint, consts.GET)
+                                .then(function (fetchedRecordResponse) {
+                                    var fetchedRecord = jsonBigNum.parse(fetchedRecordResponse.body);
+                                    fetchRecordDeferred.resolve(fetchedRecord);
+                                }).catch(function (error) {
+                                    fetchRecordDeferred.reject(error);
+                                });
                         }).catch(function(currError){log.error(JSON.stringify(currError));});
                 }).catch(function(err){log.error(JSON.stringify(err));});
                 return fetchRecordDeferred.promise;

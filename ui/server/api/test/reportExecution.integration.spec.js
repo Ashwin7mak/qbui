@@ -78,6 +78,13 @@ describe('API - Validate report execution', function () {
         });
     });
 
+    //Pause between test suites
+    afterEach(function (done) {
+        this.timeout(testConsts.INTEGRATION_TIMEOUT)
+        //Do a JavaScript version of a sleep because our requests per second are being capped
+        setTimeout(function() { done(); }, testConsts.AFTER_TEST_SLEEP);
+    });
+
     //Cleanup the test realm after all tests in the block
     after(function (done) {
         //Realm deletion takes time, bump the timeout
