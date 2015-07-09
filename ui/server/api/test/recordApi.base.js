@@ -4,6 +4,7 @@
     var assert = require('assert');
     var consts = require('../constants');
     var log = require('../../logger').getLogger();
+    var testConsts = require('./api.test.constants');
 
     /*
      * We can't use JSON.parse() with records because it is possible to lose decimal precision as a
@@ -51,13 +52,16 @@
                             if (params) {
                                 getEndpoint += params;
                             }
-                            apiBase.executeRequest(getEndpoint, consts.GET)
-                                .then(function (fetchedRecordResponse) {
-                                    var fetchedRecord = jsonBigNum.parse(fetchedRecordResponse.body);
-                                    fetchRecordDeferred.resolve(fetchedRecord);
-                                }).catch(function (error) {
-                                    fetchRecordDeferred.reject(error);
-                                });
+                            // Wait before getting the added record (needed for groups of record adds due to throttling)
+                            setTimeout(function(){
+                                apiBase.executeRequest(getEndpoint, consts.GET)
+                                    .then(function (fetchedRecordResponse) {
+                                        var fetchedRecord = jsonBigNum.parse(fetchedRecordResponse.body);
+                                        fetchRecordDeferred.resolve(fetchedRecord);
+                                    }).catch(function (error) {
+                                        fetchRecordDeferred.reject(error);
+                                    });
+                            }, 500);
                         }).catch(function(currError){log.error(JSON.stringify(currError));});
                 }).catch(function(err){log.error(JSON.stringify(err));});
                 return fetchRecordDeferred.promise;
