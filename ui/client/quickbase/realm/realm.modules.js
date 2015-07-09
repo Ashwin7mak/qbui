@@ -1,6 +1,7 @@
 (function() {
     'use strict';
 
+    angular.module('qbse.realm.dashboard', []);
     var reportsApp = angular.module('quickbase.realm', ['ui.router', 'qbse.realm.dashboard']);
     var reportsAppConfig = reportsApp.config(['$stateProvider', '$locationProvider', function($stateProvider, $locationProvider) {
         $locationProvider.html5Mode(true);

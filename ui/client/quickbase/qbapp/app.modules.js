@@ -1,12 +1,15 @@
 (function() {
     'use strict';
 
+    angular.module('qbse.qbapp.dashboard', []);
+    angular.module('qbse.qbapp.reports.dashboard', ['qbse.layout']);
+    angular.module('qbse.qbapp.reports.manager', ['ngSanitize', 'qbse.layout', 'qbse.grid']);
     var reportsApp = angular.module('quickbase.qbapp', ['ui.router', 'qbse.qbapp.dashboard', 'qbse.qbapp.reports.dashboard', 'qbse.qbapp.reports.manager', 'qbse.layout']);
     var reportsAppConfig = reportsApp.config(['$stateProvider', '$locationProvider', function($stateProvider, $locationProvider) {
         $locationProvider.html5Mode(true);
         $stateProvider
             .state('qbapp', {
-                url: '/qbapp/:appId/:tableId',
+                url: '/qbapp',
                 views: {
                     qbappHomeView: {
                         templateUrl: 'quickbase/qbapp/dashboard/appDashboard.html',
