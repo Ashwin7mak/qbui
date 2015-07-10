@@ -33,15 +33,22 @@
      -->
     <p>Your QuickBase Applications</p>
     <div ng-repeat='app in apps'>
-        <li style="font-size:14px;list-style-type: decimal;">{{app.name}} ({{app.id}})</li>
+        <li style="font-size:14px;font-weight:bold; list-style-type: none;">{{$index+1}}. {{app.name}} ({{app.id}})</li>
         <div ng-repeat='table in app.tables'>
-            <ul style="list-style-type: decimal;">
-                <li style="font-size:14px;cursor:pointer;text-decoration: underline;color: -webkit-link;list-style-type: lower-alpha;">
+            <ul style="list-style-type: none;">
+                <li style="font-size:14px;cursor:pointer;text-decoration: underline;color: -webkit-link;list-style-type: square;">
                     <a ng-click='goToTable(table)'>{{table.name}} ({{table.id}})</a>
                 </li>
             </ul>
         </div>
-        </ul>
+        <div ng-show="!app.tables.length">
+            <ul style="list-style-type: none;">
+                <li style="font-size:14px;list-style-type: square;">
+                    No report tables found.
+                </li>
+            </ul>
+        </div>
+
     </div>
 
 

@@ -29,20 +29,36 @@
             ReportsDashboardModel.getApps().then(
                 function (apps) {
                     $scope.showLayout = true;  // display the html as we know the user is authenticated
-                    apps.forEach(function (app) {
-                        ReportsDashboardModel.getApp(app.id).then(
-                            function(app) {
-                                var tables = app.tables;
-                                $scope.apps.push({id: app.id, name: app.name, tables: app.tables});
-                                tables.forEach(function (table) {
-                                    $scope.tables.push({appId: app.id, appName: app.name, tableId: table.id, tableName: table.name});
-                                });
-                            },
-                            function(resp) {
-                                console.log('Error getting app detail.  Status: ' + resp.status);
-                            }
-                        );
-                    });
+                    if (apps) {
+                        apps.forEach(function (app) {
+                            ReportsDashboardModel.getApp(app.id).then(
+                                function (app) {
+                                    $scope.apps.push({id: app.id, name: app.name, tables: app.tables});
+                                    if (app.tables) {
+                                        var tables = app.tables;
+                                        tables.forEach(function (table) {
+                                            $scope.tables.push({
+                                                appId: app.id,
+                                                appName: app.name,
+                                                tableId: table.id,
+                                                tableName: table.name
+                                            });
+                                        });
+                                    }
+                                    else {
+                                        console.log('No tables found for app: ' + app.id);
+                                    }
+                                },
+                                function (resp) {
+                                    console.log('Error getting app detail.  Status: ' + resp.status);
+                                }
+                            );
+                        });
+                    }
+                    else {
+                        $scope.apps.push({id:'', name: 'No apps found.', tables:[ ] })
+                        console.log('No apps found for logged in user.   Nothing to display.');
+                    }
                 },
                 function (resp) {
                     console.log('Error getting app list.  Status: ' + resp.status);
