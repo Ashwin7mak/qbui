@@ -267,8 +267,8 @@
   }
 
   .layout-header {
-    background-color: $light-slate;
-    color: $medium-dark-slate;
+    background-color: $lighter-slate;
+    color: $slate;
     height: 40px;
     min-height: 40px;
     line-height: 40px;
@@ -276,6 +276,12 @@
 
     .leftContent {
       float: left;
+      font-family: "HelveticaNeueBold", Helvetica, Arial, sans-serif;
+      font-size: 0.9rem;
+      font-weight: 500;
+      text-transform: uppercase;
+      -webkit-font-smoothing: antialiased;
+      visibility: hidden;
     }
     .rightContent {
       float: right;
