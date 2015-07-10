@@ -215,6 +215,7 @@
                 if (col.fieldType && !col.cellClass) {
                     //  default is left align
                     col.cellClass = leftAlign;
+                    //  per xd, only currency is right aligned
                     if (col.fieldType.indexOf(apiConstants.CURRENCY) !== -1) {
                         col.cellClass = rightAlign;
                         col.headerCellClass = rightAlign;
