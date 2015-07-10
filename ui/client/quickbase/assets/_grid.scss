@@ -10,10 +10,8 @@
 // override ui-grids styling
 .ui-grid {
   font-family: "Helvetica Neue LT Roman", HelveticaNeue, "Helvetica Neue", Helvetica, Arial, sans-serif;
-  border: 1px;
+  border: 0px;
   color: $darker-gray;
-  border-bottom: 0px solid $light-gray;
-  border-right: 0px solid $light-gray;
   font-size: 12px;
   -webkit-font-smoothing: antialiased;
 }
