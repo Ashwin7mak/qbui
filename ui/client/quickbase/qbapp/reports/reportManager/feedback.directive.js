@@ -14,7 +14,7 @@
                 '  <div class="icon"></div>' +
                 '  <div class="header">Remember</div>' +
                 '  <div class="subheader">Your Feedback Matters</div>' +
-                '  <button ng-click="sendFeedback()" type="button">Send your thoughts</button>' +
+                '  <button ng-click="sendFeedback()" type="button">Log your thoughts</button>' +
                 '</div>',
             link: function(scope /*,elem*/) {
                 scope.sendFeedback = function() {

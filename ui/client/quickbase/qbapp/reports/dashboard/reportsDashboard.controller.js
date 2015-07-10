@@ -36,15 +36,7 @@
         };
 
         $scope.goToPage = function(report) {
-            if (report.id === 1) {
-                $state.transitionTo('reports/report', {appId:$scope.appId, tableId:$scope.tableId,id: report.id});
-            }
-            if (report.id === 2) {
-                $state.transitionTo('reports/report', {appId:$scope.appId, tableId:$scope.tableId,id: report.id});
-            }
-            if (report.id === 3) {
-                $state.transitionTo('reports/report', {appId:$scope.appId, tableId:$scope.tableId,id: report.id});
-            }
+            $state.transitionTo('reports/report', {appId:$scope.appId, tableId:$scope.tableId,id: report.id});
         };
     }
 

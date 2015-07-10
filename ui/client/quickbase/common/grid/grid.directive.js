@@ -207,13 +207,18 @@
             var deferred = $q.defer();
 
             //add column alignment classes based on data type : right aligns numbers
-            var numberClass = 'ui-grid-number-align';
+            var rightAlign = 'ui-grid-align-right';
+            var leftAlign = 'ui-grid-align-left';
 
-            function addAlignment(col) {
-                if (col.fieldType && !col.cellClass && (col.fieldType.indexOf(apiConstants.NUMERIC) !== -1 ||
-                    col.fieldType.indexOf(apiConstants.CURRENCY) !== -1 ||
-                    col.fieldType.indexOf(apiConstants.PHONE_NUMBER) !== -1)) {
-                    col.cellClass = numberClass;
+            function setCellAttributes(col) {
+                col.enableSorting=false;
+                if (col.fieldType && !col.cellClass) {
+                    //  default is left align
+                    col.cellClass = leftAlign;
+                    if (col.fieldType.indexOf(apiConstants.CURRENCY) !== -1) {
+                        col.cellClass = rightAlign;
+                        col.headerCellClass = rightAlign;
+                    }
                 }
             }
 
@@ -221,7 +226,7 @@
                 $q.when(dataServiceFunc(gridConstants.SERVICE_REQ.COLS)).then(
                     function (columns) {
                         // update the alignments for unspecified numeric types
-                        _.map(columns, addAlignment);
+                        _.map(columns, setCellAttributes);
                         deferred.resolve(columns);
                     },
                     function (resp) {
