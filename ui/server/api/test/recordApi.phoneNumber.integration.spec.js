@@ -74,6 +74,7 @@ describe('API - PhoneNumber record test cases', function () {
             //For each of the cases, create the record and execute the request
             var fetchRecordPromises = [];
             records.forEach(function (currentRecord) {
+                recordBase.sleep(testConsts.TEST_CASE_SLEEP, function(){});
                 var recordsEndpoint = recordBase.apiBase.resolveRecordsEndpoint(app.id, app.tables[0].id);
                 fetchRecordPromises.push(recordBase.createAndFetchRecord(recordsEndpoint, currentRecord.record, '?format='+currentRecord.format));
             });

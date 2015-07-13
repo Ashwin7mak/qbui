@@ -52,6 +52,7 @@
                             if (params) {
                                 getEndpoint += params;
                             }
+                            recordBase.sleep(1000, function(){});
                             apiBase.executeRequest(getEndpoint, consts.GET)
                                 .then(function (fetchedRecordResponse) {
                                     var fetchedRecord = jsonBigNum.parse(fetchedRecordResponse.body);
@@ -62,9 +63,17 @@
                         }).catch(function(currError){log.error(JSON.stringify(currError));});
                 }).catch(function(err){log.error(JSON.stringify(err));});
                 return fetchRecordDeferred.promise;
+            },
+
+            //Sleeps the specified ms of time (Will block the execution thread!)
+            sleep: function(time, callback) {
+                var stop = new Date().getTime();
+                while(new Date().getTime() < stop + time) {
+                    ;
+                }
+                callback();
             }
         };
-
         return recordBase;
     }
 }());
