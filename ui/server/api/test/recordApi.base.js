@@ -52,7 +52,7 @@
                             if (params) {
                                 getEndpoint += params;
                             }
-                            recordBase.sleep(1000, function(){});
+                            recordBase.sleep(testConsts.TEST_CASE_SLEEP, function(){});
                             apiBase.executeRequest(getEndpoint, consts.GET)
                                 .then(function (fetchedRecordResponse) {
                                     var fetchedRecord = jsonBigNum.parse(fetchedRecordResponse.body);
