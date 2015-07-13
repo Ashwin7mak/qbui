@@ -21,6 +21,7 @@ describe('quickbase api service', function () {
         $httpBackend.verifyNoOutstandingRequest();
     });
 
+    // todo: as we build out, consider implementing a weaver: jira-12366 / subtask: qbse-12506
     it('Test getApp API call', function () {
         $httpBackend.expectGET(baseApi +'/apps/' + appId).respond(200);
         ApiService.getApp(appId);

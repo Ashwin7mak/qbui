@@ -107,11 +107,8 @@ describe('Controller: AppDashboardCtrl', function() {
          expect(ReportsDashboardModel.getApps).toHaveBeenCalled();
          expect(ReportsDashboardModel.getApp).not.toHaveBeenCalledWith();
 
-         expect(scope.apps[0].id).toEqual('');
-         expect(scope.apps[0].tables.length).toEqual(0);
-
+         expect(scope.apps.length).toEqual(0);
          expect(scope.showLayout).toBeTruthy();
-
      });
 
     it('validate transitionTo Table', function() {

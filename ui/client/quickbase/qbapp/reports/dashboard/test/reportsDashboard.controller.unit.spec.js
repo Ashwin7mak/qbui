@@ -70,10 +70,11 @@ describe('Controller: ReportsDashboardCtrl', function() {
 
         expect(scope.appId).not.toBeDefined();
         expect(scope.tableId).not.toBeDefined();
-        expect(scope.reports).not.toBeDefined();
+        expect(scope.reportId).not.toBeDefined();
+        expect(scope.reports.length).toEqual(0);
     });
 
-    it('validate the workflow when the appId and tableId are supplied', function() {
+    it('validate the default report when the appId and tableId are supplied', function() {
         var appId= '1', tableId = '2';
 
         var getReportData = [{id:'10', name:'name1'}, {id:'11', name:'name2'}];
@@ -87,7 +88,7 @@ describe('Controller: ReportsDashboardCtrl', function() {
 
         expect(scope.appId).toBeDefined();
         expect(scope.tableId).toBeDefined();
-
+        expect(scope.reportId).toEqual('10');   // first report in the list is the default
         expect(scope.reports.length).toEqual(2);
         expect($state.transitionTo).toHaveBeenCalledWith('reports/report', {appId:scope.appId, tableId:scope.tableId, id: '10'});
 

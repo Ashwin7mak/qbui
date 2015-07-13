@@ -11,9 +11,9 @@
         $scope.appId = $stateParams.appId;
         $scope.tableId = $stateParams.tableId;
 
+        //  for a given appId and tableId return list of reports
         if ($scope.appId && $scope.tableId) {
             $scope.reports = [];
-            // TODO: should really be an AppsDashboardModel..
             ReportsDashboardModel.get($scope.appId, $scope.tableId).then(
                 function (reports) {
                     $scope.showLayout = true;  // display the html as we know the user is authenticated
@@ -24,6 +24,7 @@
             );
         }
         else {
+            //  no specific appId/tableId combination requested...will return all apps
             $scope.apps = [];
             ReportsDashboardModel.getApps().then(
                 function (apps) {
@@ -41,7 +42,6 @@
                         });
                     }
                     else {
-                        $scope.apps.push({id:'', name: 'No apps found.', tables:[ ] })
                         console.log('No apps found for logged in user.   Nothing to display.');
                     }
                 },
