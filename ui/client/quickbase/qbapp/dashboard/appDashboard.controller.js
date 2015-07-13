@@ -24,30 +24,15 @@
             );
         }
         else {
-            $scope.tables = [];
             $scope.apps = [];
             ReportsDashboardModel.getApps().then(
                 function (apps) {
                     $scope.showLayout = true;  // display the html as we know the user is authenticated
-                    if (apps) {
-                        apps.forEach(function (app) {
-                            ReportsDashboardModel.getApp(app.id).then(
+                    if (apps && apps.length > 0) {
+                        apps.forEach(function (a) {
+                            ReportsDashboardModel.getApp(a.id).then(
                                 function (app) {
                                     $scope.apps.push({id: app.id, name: app.name, tables: app.tables});
-                                    if (app.tables) {
-                                        var tables = app.tables;
-                                        tables.forEach(function (table) {
-                                            $scope.tables.push({
-                                                appId: app.id,
-                                                appName: app.name,
-                                                tableId: table.id,
-                                                tableName: table.name
-                                            });
-                                        });
-                                    }
-                                    else {
-                                        console.log('No tables found for app: ' + app.id);
-                                    }
                                 },
                                 function (resp) {
                                     console.log('Error getting app detail.  Status: ' + resp.status);
