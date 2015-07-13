@@ -51,6 +51,7 @@ describe('Controller: AppDashboardCtrl', function() {
         expect(ReportsDashboardModel.getApps).not.toHaveBeenCalled();
         expect(ReportsDashboardModel.getApp).not.toHaveBeenCalled();
         expect(scope.showLayout).toBeTruthy();
+        expect(scope.noApps).toBeFalsy();
         expect(scope.reports.length).toEqual(2);
 
     });
@@ -87,12 +88,12 @@ describe('Controller: AppDashboardCtrl', function() {
 
         expect(scope.apps.length).toEqual(2);
         expect(scope.apps[0].tables.length).toEqual(3);
-
+        expect(scope.noApps).toBeFalsy();
         expect(scope.showLayout).toBeTruthy();
 
     });
 
-    it('validate the proper workflow when their are no applications', function() {
+    it('validate the proper workflow with no applications', function() {
 
          deferredGetApps.resolve(null);
          deferredGetApp.resolve(null);
@@ -108,6 +109,23 @@ describe('Controller: AppDashboardCtrl', function() {
          expect(ReportsDashboardModel.getApp).not.toHaveBeenCalledWith();
 
          expect(scope.apps.length).toEqual(0);
+         expect(scope.noApps).toBeTruthy();
+         expect(scope.showLayout).toBeTruthy();
+     });
+
+    it('validate the proper workflow when an error fetching applications', function() {
+
+         deferredGetApps.reject({status:'error'});
+
+         controller('AppDashboardCtrl',
+             {$scope:scope, $state:$state, ReportsDashboardModel:ReportsDashboardModel });
+         scope.$digest();
+
+         expect(ReportsDashboardModel.getApps).toHaveBeenCalled();
+         expect(ReportsDashboardModel.getApp).not.toHaveBeenCalledWith();
+
+         expect(scope.apps.length).toEqual(0);
+         expect(scope.noApps).toBeTruthy();
          expect(scope.showLayout).toBeTruthy();
      });
 

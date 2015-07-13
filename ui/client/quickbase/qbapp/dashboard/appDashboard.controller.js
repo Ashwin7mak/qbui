@@ -26,9 +26,10 @@
         else {
             //  no specific appId/tableId combination requested...will return all apps
             $scope.apps = [];
+            $scope.noApps = false;
             ReportsDashboardModel.getApps().then(
                 function (apps) {
-                    $scope.showLayout = true;  // display the html as we know the user is authenticated
+                    $scope.showLayout = true;
                     if (apps && apps.length > 0) {
                         apps.forEach(function (a) {
                             ReportsDashboardModel.getApp(a.id).then(
@@ -42,10 +43,13 @@
                         });
                     }
                     else {
+                        $scope.noApps = true;
                         console.log('No apps found for logged in user.   Nothing to display.');
                     }
                 },
                 function (resp) {
+                    $scope.showLayout = true;
+                    $scope.noApps = true;
                     console.log('Error getting app list.  Status: ' + resp.status);
                 }
             );

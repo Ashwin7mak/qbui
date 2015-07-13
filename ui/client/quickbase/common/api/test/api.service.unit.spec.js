@@ -1,6 +1,6 @@
 'use strict';
 
-describe('quickbase api service', function () {
+describe('quickbase common api service', function () {
     var scope, ApiService, $httpBackend;
     var appId = '1', tableId = '2', fieldId = '3', reportId = '5';
     var offset = 0, rows = 10;
