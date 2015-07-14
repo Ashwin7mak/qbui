@@ -39,7 +39,7 @@
         //  run blocks are executed after the config and injector...
         run(['uuid','Restangular','apiConstants', '$cookies', function(uuid, Restangular, apiConstants, $cookie) {
             //  include the ticket and a sessionid on every Restangular request
-            var headers = {}
+            var headers = {};
             //  generate a uuid for this session id.
             headers[apiConstants.SESSION_HDR] = uuid.v1();
 
