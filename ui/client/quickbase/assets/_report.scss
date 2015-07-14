@@ -66,10 +66,10 @@
             min-width: 170px;
             padding: 0 20px;
             font-size: 0.8rem;
-            background-color: #4173d5;
-            background-image: -webkit-linear-gradient(top, #4173d5 0%, #3156c7 100%);
-            background-image: linear-gradient(to bottom, #4173d5 0%, #3156c7 100%);
-            border-color: #2c4db3;
+            background-color: $light-blue;
+            background-image: -webkit-linear-gradient(top, $light-blue 0%, $blue 100%);
+            background-image: linear-gradient(to bottom, $light-blue 0%, $blue 100%);
+            border-color: $dark-blue;
             font-family: "HelveticaNeue-Roman","HelveticaNeue","Helvetica Neue","Helvetica","Arial",sans-serif;
             letter-spacing: .0em;
           }
