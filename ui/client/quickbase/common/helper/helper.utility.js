@@ -18,7 +18,7 @@
          *
          * @param path
          */
-        utilityFunctions.redirect = function(path) {
+        utilityFunctions.setLocationHref = function(path) {
             window.location.href = path;
         };
 

@@ -113,7 +113,7 @@ describe('Factory: ReportModel', function() {
 
     });
 
-    it('validate the getData service call', function() {
+    it('validate the getREportData service call with no data returned', function() {
 
         var reportData, offset=30, rows=10;
         ReportModel.getReportData(appId, tableId, reportId, offset, rows).then (
@@ -133,6 +133,36 @@ describe('Factory: ReportModel', function() {
         //  NOTE: the expectations will get tested until after the above promise is fulfilled
         expect(ReportService.getReport).toHaveBeenCalledWith(appId, tableId, reportId, offset, rows);
         expect(reportData.length).toEqual(0);
+
+    });
+
+    it('validate the getReportData service call with data', function() {
+
+        var reportData, offset=30, rows=10;
+        ReportModel.getReportData(appId, tableId, reportId, offset, rows).then (
+             function (value) {
+                 reportData = value;
+             }
+        );
+
+        var fields = [
+            {id:'1', name:'colName2', type:'TEXT'},
+            {id:'2', name:'colName1', type:'NUMERIC'}];
+
+        //  apply the promise and propagate to the then function..
+        var data =
+            {fields:fields,
+             records:[
+                 [{id:'1',display:{align:'left', width:100}}],
+                 [{id:'2',display:{align:'left', width:200}}],
+             ]
+            };
+        deferred.resolve(data);
+        scope.$apply();
+
+        //  NOTE: the expectations will get tested until after the above promise is fulfilled
+        expect(ReportService.getReport).toHaveBeenCalledWith(appId, tableId, reportId, offset, rows);
+        expect(reportData.length).toEqual(2);
 
     });
 

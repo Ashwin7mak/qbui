@@ -21,7 +21,7 @@ describe('quickbase common api module', function () {
         apiService = _ApiService_;
         qbUtility = _qbUtility_;
 
-        spyOn(qbUtility, 'redirect').and.callFake(function(path) {
+        spyOn(qbUtility, 'setLocationHref').and.callFake(function(path) {
              return path;
         });
     }));
@@ -39,35 +39,42 @@ describe('quickbase common api module', function () {
         httpBackend.whenGET(baseApi +'/apps/1').respond(400, {status: 400});
         apiService.getApp(1);
         httpBackend.flush();
-        expect(qbUtility.redirect).toHaveBeenCalledWith('/pageNotFound');
+        expect(qbUtility.setLocationHref).toHaveBeenCalledWith('/pageNotFound');
     });
 
     it('Test Restangular Provider 404 error interceptor', function () {
         httpBackend.whenGET(baseApi +'/apps/1').respond(404, {status: 404});
         apiService.getApp(1);
         httpBackend.flush();
-        expect(qbUtility.redirect).toHaveBeenCalledWith('/pageNotFound');
+        expect(qbUtility.setLocationHref).toHaveBeenCalledWith('/pageNotFound');
     });
 
     it('Test Restangular Provider 401 error interceptor', function () {
         httpBackend.whenGET(baseApi +'/apps/1').respond(401, {status: 401});
         apiService.getApp(1);
         httpBackend.flush();
-        expect(qbUtility.redirect).toHaveBeenCalledWith('/unauthorized');
+        expect(qbUtility.setLocationHref).toHaveBeenCalledWith('/unauthorized');
     });
 
     it('Test Restangular Provider 403 error interceptor', function () {
         httpBackend.whenGET(baseApi +'/apps/1').respond(403, {status: 403});
         apiService.getApp(1);
         httpBackend.flush();
-        expect(qbUtility.redirect).toHaveBeenCalledWith('/unauthorized');
+        expect(qbUtility.setLocationHref).toHaveBeenCalledWith('/unauthorized');
     });
 
     it('Test Restangular Provider 500 error interceptor', function () {
         httpBackend.whenGET(baseApi +'/apps/1').respond(500, {status: 500});
         apiService.getApp(1);
         httpBackend.flush();
-        expect(qbUtility.redirect).toHaveBeenCalledWith('/internalServerError');
+        expect(qbUtility.setLocationHref).toHaveBeenCalledWith('/internalServerError');
+    });
+
+    it('Test Restangular Provider 200 error interceptor', function () {
+        httpBackend.whenGET(baseApi +'/apps/1').respond(200, {status: 200});
+        apiService.getApp(1);
+        httpBackend.flush();
+        expect(qbUtility.setLocationHref).not.toHaveBeenCalled();
     });
 
 });
