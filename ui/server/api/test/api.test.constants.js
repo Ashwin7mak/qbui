@@ -7,6 +7,6 @@
         INTEGRATION_TIMEOUT : 60000,
         TEST_CLASS_SLEEP : 10000,
         TEST_GROUP_SLEEP : 5000,
-        DEFAULT_SLEEP : 1000
+        DEFAULT_SLEEP : 2000
     });
 }());
