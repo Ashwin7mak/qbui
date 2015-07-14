@@ -6,6 +6,6 @@
         //test constants
         INTEGRATION_TIMEOUT : 60000,
         AFTER_TEST_SLEEP : 20000,
-        TEST_CASE_SLEEP : 2000
+        TEST_CASE_SLEEP : 1000
     });
 }());

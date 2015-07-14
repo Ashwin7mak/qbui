@@ -65,6 +65,52 @@
                 return fetchRecordDeferred.promise;
             },
 
+            // Creates a list of records using the bulk record endpoint, returning a promise that is resolved or rejected on successful
+            createRecords: function (recordsEndpoint, records) {
+                var fetchRecordDeferred = promise.pending();
+                init.then(function () {
+                    var recordBulkEndpoint = recordsEndpoint + 'bulk';
+
+                    //Get the actual record JSON out of the records
+                    var recordObjects = [];
+                    records.forEach(function(object){
+                        recordObjects.push(object.record);
+                    });
+
+                    apiBase.executeRequest(recordBulkEndpoint, consts.POST, recordObjects)
+                        .then(function (recordBulkResponse) {
+                            var parsedRecordIdList = JSON.parse(recordBulkResponse.body);
+
+                            var recordIdList = [];
+                            parsedRecordIdList.forEach(function (jsonObj){
+                                recordIdList.push(jsonObj.id);
+                            });
+
+                            fetchRecordDeferred.resolve(recordIdList);
+                        }).catch(function(currError){log.error(JSON.stringify(currError));});
+                }).catch(function(err){log.error(JSON.stringify(err));});
+                return fetchRecordDeferred.promise;
+            },
+
+            // Gets a record given their record ID, returning a promise that is resolved or rejected on successful
+            getRecord: function (recordsEndpoint, recordId, params) {
+                var fetchRecordDeferred = promise.pending();
+                init.then(function () {
+                    var getEndpoint = recordsEndpoint + recordId;
+                    if (params) {
+                        getEndpoint += params;
+                    }
+                    apiBase.executeRequest(getEndpoint, consts.GET)
+                        .then(function (fetchedRecordResponse) {
+                            var fetchedRecord = jsonBigNum.parse(fetchedRecordResponse.body);
+                            fetchRecordDeferred.resolve(fetchedRecord);
+                        }).catch(function (error) {
+                            fetchRecordDeferred.reject(error);
+                        });
+                }).catch(function(currError){log.error(JSON.stringify(currError));});
+                return fetchRecordDeferred.promise;
+            },
+
             //Sleeps the specified ms of time (Will block the execution thread!)
             sleep: function(time, callback) {
                 var stop = new Date().getTime();
