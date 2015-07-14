@@ -14,6 +14,15 @@
         var utilityFunctions = {};
 
         /**
+         * For the given path, redirect
+         *
+         * @param path
+         */
+        utilityFunctions.redirect = function(path) {
+            window.location.href = path;
+        };
+
+        /**
          * Is the supplied value an integer
          *
          * @param val
@@ -66,7 +75,7 @@
                 }
             };
 
-        }
+        };
 
         return utilityFunctions;
 
