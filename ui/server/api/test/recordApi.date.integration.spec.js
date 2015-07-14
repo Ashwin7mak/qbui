@@ -517,7 +517,7 @@ describe('API - Date record test cases - ', function () {
     //Pause between test suites
     afterEach(function (done) {
         this.timeout(testConsts.INTEGRATION_TIMEOUT)
-        recordBase.sleep(testConsts.TEST_CASE_SLEEP, function(){ done();});
+        recordBase.sleep(testConsts.TEST_GROUP_SLEEP, function(){ done();});
     });
 
     //Cleanup the test realm after all tests in the block
@@ -526,7 +526,7 @@ describe('API - Date record test cases - ', function () {
         this.timeout(testConsts.INTEGRATION_TIMEOUT);
         recordBase.apiBase.cleanup().then(function () {
             // Do a JavaScript version of a sleep so we don't collide with the next test class
-            setTimeout(function() { done(); }, testConsts.AFTER_TEST_SLEEP);
+            setTimeout(function() { done(); }, testConsts.TEST_CLASS_SLEEP);
         });
     });
 });
