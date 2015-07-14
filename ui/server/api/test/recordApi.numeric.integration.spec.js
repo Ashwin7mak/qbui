@@ -137,6 +137,7 @@ describe('API - Numeric record test cases', function () {
                 assert(recordIdList.length, records.length, 'Num of records created does not match num of expected records');
                 for(var i=0; i < records.length; i++){
                     //Get newly created records
+                    recordBase.sleep(testConsts.DEFAULT_SLEEP, function(){});
                     fetchRecordPromises.push(recordBase.getRecord(recordsEndpoint, recordIdList[i], '?format='+records[i].format));
                 }
 
@@ -237,6 +238,7 @@ describe('API - Numeric record test cases', function () {
                 assert(recordIdList.length, records.length, 'Num of records created does not match num of expected records');
                 for(var i=0; i < records.length; i++){
                     //Get newly created records
+                    recordBase.sleep(testConsts.DEFAULT_SLEEP, function(){});
                     fetchRecordPromises.push(recordBase.getRecord(recordsEndpoint, recordIdList[i], '?format='+records[i].format));
                 }
 
