@@ -3,7 +3,7 @@ describe('Controller: ReportCtrl', function() {
     // load the controller's module
     beforeEach(module('qbse.qbapp.reports.manager'));
 
-    var scope, ReportModel, $httpBackend, gridConstants, controller;
+    var scope, ReportModel, gridConstants, controller;
     var appId='1', tableId='2', reportId='3';
     var reportName='reportName', companyName='companyName';
 
@@ -13,11 +13,14 @@ describe('Controller: ReportCtrl', function() {
             scope = $rootScope.$new();
             ReportModel = _ReportModel_;
             gridConstants = _gridConstants_;
-            //$httpBackend = _$httpBackend_;
-            //$httpBackend.whenGET('/api/v1/apps/1/tables/2/reports/3').respond(200, {'id':'1'});
 
             var metaData = {appId:appId, tableId:tableId, reportId:reportId, name:reportName, company:companyName};
+            var colData = {colData: true};
+            var rptData = {rptData: true};
+
             spyOn(ReportModel, 'getMetaData').and.returnValue($q.when(metaData));
+            spyOn(ReportModel, 'getColumnData').and.returnValue($q.when(colData));
+            spyOn(ReportModel, 'getReportData').and.returnValue($q.when(rptData));
 
             controller = $controller('ReportCtrl',
                 {$scope:scope, $stateParams:{appId:appId, tableId:tableId, id: reportId}, ReportModel:ReportModel, gridConstants:gridConstants });
@@ -48,6 +51,19 @@ describe('Controller: ReportCtrl', function() {
         //  all reports expected to have staging and content template defined
         expect(scope.getStageContent().length).toBeGreaterThan(0);
         expect(scope.getContent().length).toBeGreaterThan(0);
+    });
+
+    it('validate the data grid report service callback for column data', function() {
+        expect(scope.report.dataService).toBeDefined();
+        scope.report.dataService(gridConstants.SERVICE_REQ.COLS, 0, 10);
+        expect(ReportModel.getColumnData).toHaveBeenCalledWith(appId, tableId, reportId);
+    });
+
+    it('validate the data grid report service callback for column data', function() {
+        var offset= 0, rows=10;
+        expect(scope.report.dataService).toBeDefined();
+        scope.report.dataService(gridConstants.SERVICE_REQ.DATA, offset, rows);
+        expect(ReportModel.getReportData).toHaveBeenCalledWith(appId, tableId, reportId, offset, rows);
     });
 
 });
