@@ -100,33 +100,36 @@ describe('API - DateTime record test cases - ', function () {
             var records = noFlagsDateTimeDataProvider(dateTimeField.id);
             //For each of the cases, create the record and execute the request
             var fetchRecordPromises = [];
-            records.forEach(function (currentRecord) {
-                recordBase.sleep(testConsts.TEST_CASE_SLEEP, function(){});
-                var recordsEndpoint = recordBase.apiBase.resolveRecordsEndpoint(app.id, app.tables[0].id);
-                fetchRecordPromises.push(recordBase.createAndFetchRecord(recordsEndpoint, currentRecord.record, '?format='+currentRecord.format));
-            });
+            var recordsEndpoint = recordBase.apiBase.resolveRecordsEndpoint(app.id, app.tables[0].id);
+            recordBase.createRecords(recordsEndpoint, records).then(function(recordIdList){
+                assert(recordIdList.length, records.length, 'Num of records created does not match num of expected records');
+                for(var i=0; i < records.length; i++){
+                    //Get newly created records
+                    fetchRecordPromises.push(recordBase.getRecord(recordsEndpoint, recordIdList[i], '?format='+records[i].format));
+                }
 
-            //When all the records have been created and fetched, assert the values match expectations
-            Promise.all(fetchRecordPromises)
-                .then(function (results) {
-                    for (var i = 0; i < results.length; i++) {
-                        var currentRecord = results[i];
-                        if(results[i].record) {
-                            currentRecord = results[i].record;
-                        }
-
-                        currentRecord.forEach(function (fieldValue) {
-                            if (fieldValue.id === records[i].expectedFieldValue.id) {
-                                assert.deepEqual(fieldValue, records[i].expectedFieldValue, 'Unexpected field value returned: '
-                                + JSON.stringify(fieldValue) + ', ' + JSON.stringify(records[i].expectedFieldValue));
+                //When all the records have been fetched, assert the values match expectations
+                Promise.all(fetchRecordPromises)
+                    .then(function (results) {
+                        for (var i = 0; i < results.length; i++) {
+                            var currentRecord = results[i];
+                            if(results[i].record) {
+                                currentRecord = results[i].record;
                             }
-                        });
-                    }
-                    done();
-                }).catch(function (errorMsg) {
-                    assert(false, 'unable to resolve all records: ' + JSON.stringify(errorMsg));
-                    done();
-                });
+
+                            currentRecord.forEach(function (fieldValue) {
+                                if (fieldValue.id === records[i].expectedFieldValue.id) {
+                                    assert.deepEqual(fieldValue, records[i].expectedFieldValue, 'Unexpected field value returned: '
+                                    + JSON.stringify(fieldValue) + ', ' + JSON.stringify(records[i].expectedFieldValue));
+                                }
+                            });
+                        }
+                        done();
+                    }).catch(function (errorMsg) {
+                        assert(false, 'unable to resolve all records: ' + JSON.stringify(errorMsg));
+                        done();
+                    });
+            });
         });
     });
 
@@ -174,33 +177,36 @@ describe('API - DateTime record test cases - ', function () {
             var records = allFlagsDateTimeDataProvider_DD_MM_YYYY(dateTimeField.id);
             //For each of the cases, create the record and execute the request
             var fetchRecordPromises = [];
-            records.forEach(function (currentRecord) {
-                recordBase.sleep(testConsts.TEST_CASE_SLEEP, function(){});
-                var recordsEndpoint = recordBase.apiBase.resolveRecordsEndpoint(app.id, app.tables[0].id);
-                fetchRecordPromises.push(recordBase.createAndFetchRecord(recordsEndpoint, currentRecord.record, '?format='+currentRecord.format));
-            });
+            var recordsEndpoint = recordBase.apiBase.resolveRecordsEndpoint(app.id, app.tables[0].id);
+            recordBase.createRecords(recordsEndpoint, records).then(function(recordIdList){
+                assert(recordIdList.length, records.length, 'Num of records created does not match num of expected records');
+                for(var i=0; i < records.length; i++){
+                    //Get newly created records
+                    fetchRecordPromises.push(recordBase.getRecord(recordsEndpoint, recordIdList[i], '?format='+records[i].format));
+                }
 
-            //When all the records have been created and fetched, assert the values match expectations
-            Promise.all(fetchRecordPromises)
-                .then(function (results) {
-                    for (var i = 0; i < results.length; i++) {
-                        var currentRecord = results[i];
-                        if(results[i].record) {
-                            currentRecord = results[i].record;
-                        }
-
-                        currentRecord.forEach(function (fieldValue) {
-                            if (fieldValue.id === records[i].expectedFieldValue.id) {
-                                assert.deepEqual(fieldValue, records[i].expectedFieldValue, 'Unexpected field value returned: '
-                                + JSON.stringify(fieldValue) + ', ' + JSON.stringify(records[i].expectedFieldValue));
+                //When all the records have been fetched, assert the values match expectations
+                Promise.all(fetchRecordPromises)
+                    .then(function (results) {
+                        for (var i = 0; i < results.length; i++) {
+                            var currentRecord = results[i];
+                            if(results[i].record) {
+                                currentRecord = results[i].record;
                             }
-                        });
-                    }
-                    done();
-                }).catch(function (errorMsg) {
-                    assert(false, 'unable to resolve all records: ' + JSON.stringify(errorMsg));
-                    done();
-                });
+
+                            currentRecord.forEach(function (fieldValue) {
+                                if (fieldValue.id === records[i].expectedFieldValue.id) {
+                                    assert.deepEqual(fieldValue, records[i].expectedFieldValue, 'Unexpected field value returned: '
+                                    + JSON.stringify(fieldValue) + ', ' + JSON.stringify(records[i].expectedFieldValue));
+                                }
+                            });
+                        }
+                        done();
+                    }).catch(function (errorMsg) {
+                        assert(false, 'unable to resolve all records: ' + JSON.stringify(errorMsg));
+                        done();
+                    });
+            });
         });
     });
 
@@ -248,33 +254,36 @@ describe('API - DateTime record test cases - ', function () {
             var records = allFlagsDateTimeDataProvider_MM_DD_YYYY(dateTimeField.id);
             //For each of the cases, create the record and execute the request
             var fetchRecordPromises = [];
-            records.forEach(function (currentRecord) {
-                recordBase.sleep(testConsts.TEST_CASE_SLEEP, function(){});
-                var recordsEndpoint = recordBase.apiBase.resolveRecordsEndpoint(app.id, app.tables[0].id);
-                fetchRecordPromises.push(recordBase.createAndFetchRecord(recordsEndpoint, currentRecord.record, '?format='+currentRecord.format));
-            });
+            var recordsEndpoint = recordBase.apiBase.resolveRecordsEndpoint(app.id, app.tables[0].id);
+            recordBase.createRecords(recordsEndpoint, records).then(function(recordIdList){
+                assert(recordIdList.length, records.length, 'Num of records created does not match num of expected records');
+                for(var i=0; i < records.length; i++){
+                    //Get newly created records
+                    fetchRecordPromises.push(recordBase.getRecord(recordsEndpoint, recordIdList[i], '?format='+records[i].format));
+                }
 
-            //When all the records have been created and fetched, assert the values match expectations
-            Promise.all(fetchRecordPromises)
-                .then(function (results) {
-                    for (var i = 0; i < results.length; i++) {
-                        var currentRecord = results[i];
-                        if(results[i].record) {
-                            currentRecord = results[i].record;
-                        }
-
-                        currentRecord.forEach(function (fieldValue) {
-                            if (fieldValue.id === records[i].expectedFieldValue.id) {
-                                assert.deepEqual(fieldValue, records[i].expectedFieldValue, 'Unexpected field value returned: '
-                                + JSON.stringify(fieldValue) + ', ' + JSON.stringify(records[i].expectedFieldValue));
+                //When all the records have been fetched, assert the values match expectations
+                Promise.all(fetchRecordPromises)
+                    .then(function (results) {
+                        for (var i = 0; i < results.length; i++) {
+                            var currentRecord = results[i];
+                            if(results[i].record) {
+                                currentRecord = results[i].record;
                             }
-                        });
-                    }
-                    done();
-                }).catch(function (errorMsg) {
-                    assert(false, 'unable to resolve all records: ' + JSON.stringify(errorMsg));
-                    done();
-                });
+
+                            currentRecord.forEach(function (fieldValue) {
+                                if (fieldValue.id === records[i].expectedFieldValue.id) {
+                                    assert.deepEqual(fieldValue, records[i].expectedFieldValue, 'Unexpected field value returned: '
+                                    + JSON.stringify(fieldValue) + ', ' + JSON.stringify(records[i].expectedFieldValue));
+                                }
+                            });
+                        }
+                        done();
+                    }).catch(function (errorMsg) {
+                        assert(false, 'unable to resolve all records: ' + JSON.stringify(errorMsg));
+                        done();
+                    });
+            });
         });
     });
 
@@ -322,33 +331,36 @@ describe('API - DateTime record test cases - ', function () {
             var records = allFlagsDateTimeDataProvider_MM_DD_YY(dateTimeField.id);
             //For each of the cases, create the record and execute the request
             var fetchRecordPromises = [];
-            records.forEach(function (currentRecord) {
-                recordBase.sleep(testConsts.TEST_CASE_SLEEP, function(){});
-                var recordsEndpoint = recordBase.apiBase.resolveRecordsEndpoint(app.id, app.tables[0].id);
-                fetchRecordPromises.push(recordBase.createAndFetchRecord(recordsEndpoint, currentRecord.record, '?format='+currentRecord.format));
-            });
+            var recordsEndpoint = recordBase.apiBase.resolveRecordsEndpoint(app.id, app.tables[0].id);
+            recordBase.createRecords(recordsEndpoint, records).then(function(recordIdList){
+                assert(recordIdList.length, records.length, 'Num of records created does not match num of expected records');
+                for(var i=0; i < records.length; i++){
+                    //Get newly created records
+                    fetchRecordPromises.push(recordBase.getRecord(recordsEndpoint, recordIdList[i], '?format='+records[i].format));
+                }
 
-            //When all the records have been created and fetched, assert the values match expectations
-            Promise.all(fetchRecordPromises)
-                .then(function (results) {
-                    for (var i = 0; i < results.length; i++) {
-                        var currentRecord = results[i];
-                        if(results[i].record) {
-                            currentRecord = results[i].record;
-                        }
-
-                        currentRecord.forEach(function (fieldValue) {
-                            if (fieldValue.id === records[i].expectedFieldValue.id) {
-                                assert.deepEqual(fieldValue, records[i].expectedFieldValue, 'Unexpected field value returned: '
-                                + JSON.stringify(fieldValue) + ', ' + JSON.stringify(records[i].expectedFieldValue));
+                //When all the records have been fetched, assert the values match expectations
+                Promise.all(fetchRecordPromises)
+                    .then(function (results) {
+                        for (var i = 0; i < results.length; i++) {
+                            var currentRecord = results[i];
+                            if(results[i].record) {
+                                currentRecord = results[i].record;
                             }
-                        });
-                    }
-                    done();
-                }).catch(function (errorMsg) {
-                    assert(false, 'unable to resolve all records: ' + JSON.stringify(errorMsg));
-                    done();
-                });
+
+                            currentRecord.forEach(function (fieldValue) {
+                                if (fieldValue.id === records[i].expectedFieldValue.id) {
+                                    assert.deepEqual(fieldValue, records[i].expectedFieldValue, 'Unexpected field value returned: '
+                                    + JSON.stringify(fieldValue) + ', ' + JSON.stringify(records[i].expectedFieldValue));
+                                }
+                            });
+                        }
+                        done();
+                    }).catch(function (errorMsg) {
+                        assert(false, 'unable to resolve all records: ' + JSON.stringify(errorMsg));
+                        done();
+                    });
+            });
         });
     });
 
@@ -396,33 +408,36 @@ describe('API - DateTime record test cases - ', function () {
             var records = allFlagsDateTimeDataProvider_DD_MM_YY(dateTimeField.id);
             //For each of the cases, create the record and execute the request
             var fetchRecordPromises = [];
-            records.forEach(function (currentRecord) {
-                recordBase.sleep(testConsts.TEST_CASE_SLEEP, function(){});
-                var recordsEndpoint = recordBase.apiBase.resolveRecordsEndpoint(app.id, app.tables[0].id);
-                fetchRecordPromises.push(recordBase.createAndFetchRecord(recordsEndpoint, currentRecord.record, '?format='+currentRecord.format));
-            });
+            var recordsEndpoint = recordBase.apiBase.resolveRecordsEndpoint(app.id, app.tables[0].id);
+            recordBase.createRecords(recordsEndpoint, records).then(function(recordIdList){
+                assert(recordIdList.length, records.length, 'Num of records created does not match num of expected records');
+                for(var i=0; i < records.length; i++){
+                    //Get newly created records
+                    fetchRecordPromises.push(recordBase.getRecord(recordsEndpoint, recordIdList[i], '?format='+records[i].format));
+                }
 
-            //When all the records have been created and fetched, assert the values match expectations
-            Promise.all(fetchRecordPromises)
-                .then(function (results) {
-                    for (var i = 0; i < results.length; i++) {
-                        var currentRecord = results[i];
-                        if(results[i].record) {
-                            currentRecord = results[i].record;
-                        }
-
-                        currentRecord.forEach(function (fieldValue) {
-                            if (fieldValue.id === records[i].expectedFieldValue.id) {
-                                assert.deepEqual(fieldValue, records[i].expectedFieldValue, 'Unexpected field value returned: '
-                                + JSON.stringify(fieldValue) + ', ' + JSON.stringify(records[i].expectedFieldValue));
+                //When all the records have been fetched, assert the values match expectations
+                Promise.all(fetchRecordPromises)
+                    .then(function (results) {
+                        for (var i = 0; i < results.length; i++) {
+                            var currentRecord = results[i];
+                            if(results[i].record) {
+                                currentRecord = results[i].record;
                             }
-                        });
-                    }
-                    done();
-                }).catch(function (errorMsg) {
-                    assert(false, 'unable to resolve all records: ' + JSON.stringify(errorMsg));
-                    done();
-                });
+
+                            currentRecord.forEach(function (fieldValue) {
+                                if (fieldValue.id === records[i].expectedFieldValue.id) {
+                                    assert.deepEqual(fieldValue, records[i].expectedFieldValue, 'Unexpected field value returned: '
+                                    + JSON.stringify(fieldValue) + ', ' + JSON.stringify(records[i].expectedFieldValue));
+                                }
+                            });
+                        }
+                        done();
+                    }).catch(function (errorMsg) {
+                        assert(false, 'unable to resolve all records: ' + JSON.stringify(errorMsg));
+                        done();
+                    });
+            });
         });
     });
 
@@ -470,33 +485,36 @@ describe('API - DateTime record test cases - ', function () {
             var records = allFlagsDateTimeDataProvider_YYYY_MM_DD(dateTimeField.id);
             //For each of the cases, create the record and execute the request
             var fetchRecordPromises = [];
-            records.forEach(function (currentRecord) {
-                recordBase.sleep(1000, function(){});
-                var recordsEndpoint = recordBase.apiBase.resolveRecordsEndpoint(app.id, app.tables[0].id);
-                fetchRecordPromises.push(recordBase.createAndFetchRecord(recordsEndpoint, currentRecord.record, '?format='+currentRecord.format));
-            });
+            var recordsEndpoint = recordBase.apiBase.resolveRecordsEndpoint(app.id, app.tables[0].id);
+            recordBase.createRecords(recordsEndpoint, records).then(function(recordIdList){
+                assert(recordIdList.length, records.length, 'Num of records created does not match num of expected records');
+                for(var i=0; i < records.length; i++){
+                    //Get newly created records
+                    fetchRecordPromises.push(recordBase.getRecord(recordsEndpoint, recordIdList[i], '?format='+records[i].format));
+                }
 
-            //When all the records have been created and fetched, assert the values match expectations
-            Promise.all(fetchRecordPromises)
-                .then(function (results) {
-                    for (var i = 0; i < results.length; i++) {
-                        var currentRecord = results[i];
-                        if(results[i].record) {
-                            currentRecord = results[i].record;
-                        }
-
-                        currentRecord.forEach(function (fieldValue) {
-                            if (fieldValue.id === records[i].expectedFieldValue.id) {
-                                 assert.deepEqual(fieldValue, records[i].expectedFieldValue, 'Unexpected field value returned: '
-                                + JSON.stringify(fieldValue) + ', ' + JSON.stringify(records[i].expectedFieldValue));
+                //When all the records have been fetched, assert the values match expectations
+                Promise.all(fetchRecordPromises)
+                    .then(function (results) {
+                        for (var i = 0; i < results.length; i++) {
+                            var currentRecord = results[i];
+                            if(results[i].record) {
+                                currentRecord = results[i].record;
                             }
-                        });
-                    }
-                    done();
-                }).catch(function (errorMsg) {
-                    assert(false, 'unable to resolve all records: ' + JSON.stringify(errorMsg));
-                    done();
-                });
+
+                            currentRecord.forEach(function (fieldValue) {
+                                if (fieldValue.id === records[i].expectedFieldValue.id) {
+                                    assert.deepEqual(fieldValue, records[i].expectedFieldValue, 'Unexpected field value returned: '
+                                    + JSON.stringify(fieldValue) + ', ' + JSON.stringify(records[i].expectedFieldValue));
+                                }
+                            });
+                        }
+                        done();
+                    }).catch(function (errorMsg) {
+                        assert(false, 'unable to resolve all records: ' + JSON.stringify(errorMsg));
+                        done();
+                    });
+            });
         });
     });
 
