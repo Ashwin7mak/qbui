@@ -741,8 +741,8 @@ module.exports = function (grunt) {
         if (target === 'server') {
             //server unit tests
             return grunt.task.run([
-
                 'clean:server',
+                'setEnv:NODE_TLS_REJECT_UNAUTHORIZED:0',
                 'mochaTest:test',
             ]);
         }

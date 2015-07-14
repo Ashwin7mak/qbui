@@ -102,7 +102,6 @@ describe('Validate Logger', function () {
             should(logger.src).be.exactly(true);
             should(logger._level).be.exactly(20);
             should(logger.streams[0].type).be.exactly('stream');
-            assert.notDeepEqual(console.log.prototype,emptyFunc.prototype,'suppress console logging configuration error');
 
             done();
         });

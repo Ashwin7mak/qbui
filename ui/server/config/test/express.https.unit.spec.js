@@ -1,4 +1,6 @@
 // test that node server will redirect to http
+'use strict';
+
 var request = require('supertest');
 var should = require('should');
 describe('Request test always use ssh', function() {

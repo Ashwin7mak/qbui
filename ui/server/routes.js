@@ -21,9 +21,11 @@ module.exports = function (app, config) {
         log.logRequest(req, __filename);
         next();
     });
+	
 
+    var routeMapper = require('./routes/qbRouteMapper')(config);
     require('./routes/qbAngularRoutes')(app, config);
-    require('./routes/qbApiRoutes')(app, config);
+    require('./routes/qbApiRoutes')(app, config, routeMapper);
 
     // unauthorized
     app.route('/unauthorized*')
