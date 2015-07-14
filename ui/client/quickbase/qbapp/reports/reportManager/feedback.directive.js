@@ -9,13 +9,7 @@
             restrict: 'E',
             replace: true,
             scope: true,
-            template:
-                '<div class="reminder">' +
-                '  <div class="icon"></div>' +
-                '  <div class="header">Remember</div>' +
-                '  <div class="subheader">Your Feedback Matters</div>' +
-                '  <button ng-click="sendFeedback()" type="button">Log your thoughts</button>' +
-                '</div>',
+            templateUrl: 'quickbase/qbapp/reports/reportManager/feedback.html',
             link: function(scope /*,elem*/) {
                 scope.sendFeedback = function() {
                     //elem.attr('target', '_blank');
