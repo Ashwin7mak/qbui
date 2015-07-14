@@ -242,6 +242,12 @@ describe('API - Duration record test cases', function () {
         });
     });
 
+    //Pause between test suites
+    afterEach(function (done) {
+        this.timeout(testConsts.INTEGRATION_TIMEOUT)
+        recordBase.sleep(testConsts.TEST_CASE_SLEEP, function(){ done();});
+    });
+
     //Cleanup the test realm after all tests in the block
     after(function (done) {
         //Realm deletion takes time, bump the timeout
