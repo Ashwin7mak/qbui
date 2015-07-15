@@ -31,12 +31,12 @@
                 var deferred = promise.pending();
                 init.then(function (createdRealm) {
                     apiBase.executeRequest(apiBase.resolveAppsEndpoint(), consts.POST, appToCreate).then(function (appResponse) {
+                        console.log('App creation response: ' + appResponse);
                         deferred.resolve(appResponse);
-                        console.log('App creation response: ' + appReponse);
                     }).catch(function (error) {
                         deferred.reject(error);
                         //TODO: figure out how we want to handle
-                        assert(false, 'failed to create app: ' + JSON.stringify(error) + ', appToCreate: ' + appToCreate);
+                        assert(false, 'failed to create app: ' + JSON.stringify(error) + ', appToCreate: ' + JSON.stringify(appToCreate));
                     });
                 });
                 return deferred.promise;
