@@ -125,7 +125,7 @@ describe('API - User record test cases - ', function () {
                 //For each of the cases, create the record and execute the request
                 var fetchRecordPromises = [];
                 records.forEach(function (currentRecord) {
-                    recordBase.sleep(testConsts.TEST_GROUP_SLEEP, function(){});
+                    //recordBase.sleep(testConsts.TEST_GROUP_SLEEP, function(){});
                     var recordsEndpoint = recordBase.apiBase.resolveRecordsEndpoint(app.id, app.tables[0].id);
                     fetchRecordPromises.push(recordBase.createAndFetchRecord(recordsEndpoint, currentRecord.record, '?format='+currentRecord.format));
                 });
@@ -264,8 +264,9 @@ describe('API - User record test cases - ', function () {
 
     //Pause between test suites
     afterEach(function (done) {
-        this.timeout(testConsts.INTEGRATION_TIMEOUT)
-        recordBase.sleep(testConsts.TEST_GROUP_SLEEP, function(){ done();});
+        done();
+        //this.timeout(testConsts.INTEGRATION_TIMEOUT)
+        //recordBase.sleep(testConsts.TEST_GROUP_SLEEP, function(){ done();});
     });
 
     //Cleanup the test realm after all tests in the block
@@ -273,8 +274,9 @@ describe('API - User record test cases - ', function () {
         //Realm deletion takes time, bump the timeout
         this.timeout(testConsts.INTEGRATION_TIMEOUT);
         recordBase.apiBase.cleanup().then(function () {
+            done();
             // Do a JavaScript version of a sleep so we don't collide with the next test class
-            setTimeout(function() { done(); }, testConsts.TEST_CLASS_SLEEP);
+            //setTimeout(function() { done(); }, testConsts.TEST_CLASS_SLEEP);
         });
     });
 });

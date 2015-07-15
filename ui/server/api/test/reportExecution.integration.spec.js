@@ -80,8 +80,9 @@ describe('API - Validate report execution', function () {
 
     //Pause between test suites
     afterEach(function (done) {
-        this.timeout(testConsts.INTEGRATION_TIMEOUT)
-        recordBase.sleep(testConsts.TEST_GROUP_SLEEP, function(){ done();});
+        done();
+        //this.timeout(testConsts.INTEGRATION_TIMEOUT)
+        //recordBase.sleep(testConsts.TEST_GROUP_SLEEP, function(){ done();});
     });
 
     //Cleanup the test realm after all tests in the block
