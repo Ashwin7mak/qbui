@@ -3,9 +3,10 @@ describe('Controller: ReportCtrl', function() {
     // load the controller's module
     beforeEach(module('qbse.qbapp.reports.manager'));
 
-    var scope, ReportModel, $httpBackend, gridConstants, controller;
+    var scope, ReportModel, gridConstants, controller;
     var appId='1', tableId='2', reportId='3';
     var reportName='reportName', companyName='companyName';
+    var deferredColumn, deferredData;
 
     // Initialize the controller and a mock scope
     beforeEach(
@@ -13,11 +14,19 @@ describe('Controller: ReportCtrl', function() {
             scope = $rootScope.$new();
             ReportModel = _ReportModel_;
             gridConstants = _gridConstants_;
-            //$httpBackend = _$httpBackend_;
-            //$httpBackend.whenGET('/api/v1/apps/1/tables/2/reports/3').respond(200, {'id':'1'});
 
             var metaData = {appId:appId, tableId:tableId, reportId:reportId, name:reportName, company:companyName};
+
             spyOn(ReportModel, 'getMetaData').and.returnValue($q.when(metaData));
+
+            deferredColumn = $q.defer();
+            deferredData = $q.defer();
+            spyOn(ReportModel, 'getColumnData').and.callFake(function() {
+                return deferredColumn.promise;
+            });
+            spyOn(ReportModel, 'getReportData').and.callFake(function() {
+                return deferredData.promise;
+            });
 
             controller = $controller('ReportCtrl',
                 {$scope:scope, $stateParams:{appId:appId, tableId:tableId, id: reportId}, ReportModel:ReportModel, gridConstants:gridConstants });
@@ -48,6 +57,27 @@ describe('Controller: ReportCtrl', function() {
         //  all reports expected to have staging and content template defined
         expect(scope.getStageContent().length).toBeGreaterThan(0);
         expect(scope.getContent().length).toBeGreaterThan(0);
+    });
+
+    it('validate the data grid report service callback for column data', function() {
+        //  resolve the promise with the colData object
+        var colData = {colData: true};
+        deferredColumn.resolve(colData);
+
+        expect(scope.report.dataService).toBeDefined();
+        scope.report.dataService(gridConstants.SERVICE_REQ.COLS, 0, 10);
+        expect(ReportModel.getColumnData).toHaveBeenCalledWith(appId, tableId, reportId);
+    });
+
+    it('validate the data grid report service callback for column data', function() {
+        //  resolve the promise with the reportData object
+        var rptData = {rptData: true};
+        deferredData.resolve(rptData);
+
+        var offset= 0, rows=10;
+        expect(scope.report.dataService).toBeDefined();
+        scope.report.dataService(gridConstants.SERVICE_REQ.DATA, offset, rows);
+        expect(ReportModel.getReportData).toHaveBeenCalledWith(appId, tableId, reportId, offset, rows);
     });
 
 });

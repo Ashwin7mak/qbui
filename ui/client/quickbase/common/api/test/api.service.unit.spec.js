@@ -1,6 +1,6 @@
 'use strict';
 
-describe('quickbase api service', function () {
+describe('quickbase common api service', function () {
     var scope, ApiService, $httpBackend;
     var appId = '1', tableId = '2', fieldId = '3', reportId = '5';
     var offset = 0, rows = 10;
@@ -25,6 +25,12 @@ describe('quickbase api service', function () {
     it('Test getApp API call', function () {
         $httpBackend.expectGET(baseApi +'/apps/' + appId).respond(200);
         ApiService.getApp(appId);
+        $httpBackend.flush();
+    });
+
+    it('Test getApps API call', function () {
+        $httpBackend.expectGET(baseApi +'/apps').respond(200);
+        ApiService.getApps();
         $httpBackend.flush();
     });
 
