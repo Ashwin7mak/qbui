@@ -165,18 +165,36 @@
                 //Make request and return promise
                 var deferred = promise.pending();
                 request(opts, function (error, response) {
-                    if (error) {
+                    if (error || response.statusCode != 200) {
                         console.log("ERROR RESPONSE: " + JSON.stringify(response) + " ERROR: " + JSON.stringify(error));
-                        deferred.reject(new Error(error));
-                    } else if (response.statusCode != 200) {
-                        console.log("ERROR RESPONSE: " + JSON.stringify(response) + " ERROR: " + JSON.stringify(error));
-                        deferred.reject(response);
+                        apiBase.sleep(1000, function () {
+                        });
+                        request(opts, function (error2, response2) {
+                            console.log("------- Made a second call on error. Whoa.");
+                            if (error2) {
+                                deferred.reject(response2);
+                            } else if (response2.statusCode != 200) {
+                                deferred.reject(response2);
+                            } else {
+                                deferred.resolve(response2);
+                            }
+                        });
+                        //deferred.reject(new Error(error));
                     } else {
                         deferred.resolve(response);
                     }
                 });
                 return deferred.promise;
             },
+            //Sleeps the specified ms of time (Will block the execution thread!)
+            sleep: function(time, callback) {
+                var stop = new Date().getTime();
+                while(new Date().getTime() < stop + time) {
+                    ;
+                }
+                callback();
+            },
+
             //Create a realm for API tests to run against and generates a ticket
             initialize: function () {
                 var context = this;
