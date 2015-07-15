@@ -101,7 +101,6 @@ describe('API - Date record test cases - ', function () {
                 assert(recordIdList.length, records.length, 'Num of records created does not match num of expected records');
                 for(var i=0; i < records.length; i++){
                     //Get newly created records
-                    //recordBase.sleep(testConsts.DEFAULT_SLEEP, function(){});
                     fetchRecordPromises.push(recordBase.getRecord(recordsEndpoint, recordIdList[i], '?format='+records[i].format));
                 }
 
@@ -179,7 +178,6 @@ describe('API - Date record test cases - ', function () {
                 assert(recordIdList.length, records.length, 'Num of records created does not match num of expected records');
                 for(var i=0; i < records.length; i++){
                     //Get newly created records
-                    //recordBase.sleep(testConsts.DEFAULT_SLEEP, function(){});
                     fetchRecordPromises.push(recordBase.getRecord(recordsEndpoint, recordIdList[i], '?format='+records[i].format));
                 }
 
@@ -257,7 +255,6 @@ describe('API - Date record test cases - ', function () {
                 assert(recordIdList.length, records.length, 'Num of records created does not match num of expected records');
                 for(var i=0; i < records.length; i++){
                     //Get newly created records
-                    //recordBase.sleep(testConsts.DEFAULT_SLEEP, function(){});
                     fetchRecordPromises.push(recordBase.getRecord(recordsEndpoint, recordIdList[i], '?format='+records[i].format));
                 }
 
@@ -335,7 +332,6 @@ describe('API - Date record test cases - ', function () {
                 assert(recordIdList.length, records.length, 'Num of records created does not match num of expected records');
                 for(var i=0; i < records.length; i++){
                     //Get newly created records
-                    //recordBase.sleep(testConsts.DEFAULT_SLEEP, function(){});
                     fetchRecordPromises.push(recordBase.getRecord(recordsEndpoint, recordIdList[i], '?format='+records[i].format));
                 }
 
@@ -413,7 +409,6 @@ describe('API - Date record test cases - ', function () {
                 assert(recordIdList.length, records.length, 'Num of records created does not match num of expected records');
                 for(var i=0; i < records.length; i++){
                     //Get newly created records
-                    //recordBase.sleep(testConsts.DEFAULT_SLEEP, function(){});
                     fetchRecordPromises.push(recordBase.getRecord(recordsEndpoint, recordIdList[i], '?format='+records[i].format));
                 }
 
@@ -491,7 +486,6 @@ describe('API - Date record test cases - ', function () {
                 assert(recordIdList.length, records.length, 'Num of records created does not match num of expected records');
                 for(var i=0; i < records.length; i++){
                     //Get newly created records
-                    //recordBase.sleep(testConsts.DEFAULT_SLEEP, function(){});
                     fetchRecordPromises.push(recordBase.getRecord(recordsEndpoint, recordIdList[i], '?format='+records[i].format));
                 }
 
@@ -520,21 +514,12 @@ describe('API - Date record test cases - ', function () {
         });
     });
 
-    //Pause between test suites
-    afterEach(function (done) {
-        done();
-        //this.timeout(testConsts.INTEGRATION_TIMEOUT)
-        //recordBase.sleep(testConsts.TEST_GROUP_SLEEP, function(){ done();});
-    });
-
     //Cleanup the test realm after all tests in the block
     after(function (done) {
         //Realm deletion takes time, bump the timeout
         this.timeout(testConsts.INTEGRATION_TIMEOUT);
         recordBase.apiBase.cleanup().then(function () {
             done();
-            // Do a JavaScript version of a sleep so we don't collide with the next test class
-            //setTimeout(function() { done(); }, testConsts.TEST_CLASS_SLEEP);
         });
     });
 });

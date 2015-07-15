@@ -31,7 +31,7 @@
                 var deferred = promise.pending();
                 init.then(function (createdRealm) {
                     apiBase.executeRequest(apiBase.resolveAppsEndpoint(), consts.POST, appToCreate).then(function (appResponse) {
-                        console.log('App creation response: ' + appResponse);
+                        log.debug('App create response: ' + appResponse);
                         deferred.resolve(appResponse);
                     }).catch(function (error) {
                         deferred.reject(error);
@@ -53,7 +53,6 @@
                             if (params) {
                                 getEndpoint += params;
                             }
-                            //recordBase.sleep(testConsts.DEFAULT_SLEEP, function(){});
                             apiBase.executeRequest(getEndpoint, consts.GET)
                                 .then(function (fetchedRecordResponse) {
                                     var fetchedRecord = jsonBigNum.parse(fetchedRecordResponse.body);
@@ -68,7 +67,7 @@
 
             // Creates a list of records using the bulk record endpoint, returning a promise that is resolved or rejected on successful
             createRecords: function (recordsEndpoint, records) {
-                console.log('+++++ RECORDS TO CREATE: ' + JSON.stringify(records));
+                log.debug('Records to create: ' + JSON.stringify(records));
                 var fetchRecordDeferred = promise.pending();
                 init.then(function () {
                     var recordBulkEndpoint = recordsEndpoint + 'bulk';
@@ -97,19 +96,18 @@
             // Gets a record given their record ID, returning a promise that is resolved or rejected on successful
             getRecord: function (recordsEndpoint, recordId, params) {
                 var fetchRecordDeferred = promise.pending();
-                console.log("~~~~~~ Attempting record GET: " + recordsEndpoint + " recordId: " + recordId);
+                log.debug("Attempting record GET: " + recordsEndpoint + " recordId: " + recordId);
                 init.then(function () {
                     var getEndpoint = recordsEndpoint + recordId;
                     if (params) {
                         getEndpoint += params;
                     }
-                    //recordBase.sleep(testConsts.DEFAULT_SLEEP, function(){});
                     apiBase.executeRequest(getEndpoint, consts.GET)
                         .then(function (fetchedRecordResponse) {
                             var fetchedRecord = jsonBigNum.parse(fetchedRecordResponse.body);
                             fetchRecordDeferred.resolve(fetchedRecord);
                         }).catch(function (error) {
-                            console.log("!!!!!!! Error getting record: " + JSON.stringify(error) + " endpoint that failed: " + recordsEndpoint + recordId);
+                            log.debug("Error getting record: " + JSON.stringify(error) + " Endpoint that failed: " + recordsEndpoint + recordId);
                             fetchRecordDeferred.reject(error);
                         });
                 }).catch(function(currError){log.error(JSON.stringify(currError));});
