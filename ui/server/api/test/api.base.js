@@ -164,28 +164,60 @@
                 console.log('About to execute the request: ' + jsonBigNum.stringify(opts));
                 //Make request and return promise
                 var deferred = promise.pending();
+                apiBase.executeRequestRetryable(opts, 3).then(function(resp){
+                    deferred.resolve(resp);
+                }).catch(function(error){
+                    deferred.reject(error);
+                });
+                return deferred.promise;
+                //request(opts, function (error, response) {
+                //    if (error || response.statusCode != 200) {
+                //        console.log("ERROR RESPONSE: " + JSON.stringify(response) + " ERROR: " + JSON.stringify(error));
+                //        apiBase.sleep(1000, function () {
+                //        });
+                //        request(opts, function (error2, response2) {
+                //            console.log("------- Made a second call on error. Whoa.");
+                //            if (error2) {
+                //                deferred.reject(response2);
+                //            } else if (response2.statusCode != 200) {
+                //                deferred.reject(response2);
+                //            } else {
+                //                deferred.resolve(response2);
+                //            }
+                //        });
+                //        //deferred.reject(new Error(error));
+                //    } else {
+                //        deferred.resolve(response);
+                //    }
+                //});
+                //return deferred.promise;
+            },
+            executeRequestRetryable: function(opts, numRetries) {
+                var deferred = promise.pending();
+                var tries = numRetries;
                 request(opts, function (error, response) {
                     if (error || response.statusCode != 200) {
-                        console.log("ERROR RESPONSE: " + JSON.stringify(response) + " ERROR: " + JSON.stringify(error));
-                        apiBase.sleep(1000, function () {
-                        });
-                        request(opts, function (error2, response2) {
-                            console.log("------- Made a second call on error. Whoa.");
-                            if (error2) {
-                                deferred.reject(response2);
-                            } else if (response2.statusCode != 200) {
-                                deferred.reject(response2);
-                            } else {
-                                deferred.resolve(response2);
-                            }
-                        });
-                        //deferred.reject(new Error(error));
+                        if(tries > 1  && (error.code === "HPE_INVALID_CONSTANT" || error.code === "ENOTFOUND")) {
+                            tries --;
+                            console.log("@@@@@ Attempting a retry: " + JSON.stringify(opts) + " tries remaining: " + tries);
+                            apiBase.executeRequestRetryable(opts, tries).then(function(res2){
+                                console.log("@@@@@ Success following retry/retries");
+                                deferred.resolve(res2);
+                            }).catch(function(err2){
+                                console.log("@@@@@ failure after retries");
+                                deferred.reject(err2);
+                            });
+                        } else {
+                            console.log("@@@@@ Network request failed, no retries left or an unsupported error for retry found");
+                            deferred.reject(error);
+                        }
                     } else {
                         deferred.resolve(response);
                     }
                 });
                 return deferred.promise;
             },
+
             //Sleeps the specified ms of time (Will block the execution thread!)
             sleep: function(time, callback) {
                 var stop = new Date().getTime();
