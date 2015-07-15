@@ -532,8 +532,9 @@ describe('API - Date record test cases - ', function () {
         //Realm deletion takes time, bump the timeout
         this.timeout(testConsts.INTEGRATION_TIMEOUT);
         recordBase.apiBase.cleanup().then(function () {
+            done();
             // Do a JavaScript version of a sleep so we don't collide with the next test class
-            setTimeout(function() { done(); }, testConsts.TEST_CLASS_SLEEP);
+            //setTimeout(function() { done(); }, testConsts.TEST_CLASS_SLEEP);
         });
     });
 });
