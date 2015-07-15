@@ -166,10 +166,10 @@
                 var deferred = promise.pending();
                 request(opts, function (error, response) {
                     if (error) {
-                        console.log("ERROR RESPONSE: " + JSON.stringify(response) + " ERROR: " + error);
+                        console.log("ERROR RESPONSE: " + JSON.stringify(response) + " ERROR: " + JSON.stringify(error));
                         deferred.reject(new Error(error));
                     } else if (response.statusCode != 200) {
-                        console.log("ERROR RESPONSE: " + JSON.stringify(response) + " ERROR: " + error);
+                        console.log("ERROR RESPONSE: " + JSON.stringify(response) + " ERROR: " + JSON.stringify(error));
                         deferred.reject(response);
                     } else {
                         deferred.resolve(response);
