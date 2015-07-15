@@ -97,6 +97,7 @@
             // Gets a record given their record ID, returning a promise that is resolved or rejected on successful
             getRecord: function (recordsEndpoint, recordId, params) {
                 var fetchRecordDeferred = promise.pending();
+                console.log("~~~~~~ Attempting record GET: " + recordsEndpoint + " recordId: " + recordId);
                 init.then(function () {
                     var getEndpoint = recordsEndpoint + recordId;
                     if (params) {
@@ -108,6 +109,7 @@
                             var fetchedRecord = jsonBigNum.parse(fetchedRecordResponse.body);
                             fetchRecordDeferred.resolve(fetchedRecord);
                         }).catch(function (error) {
+                            console.log("!!!!!!! Error getting record: " + JSON.stringify(error));
                             fetchRecordDeferred.reject(error);
                         });
                 }).catch(function(currError){log.error(JSON.stringify(currError));});
