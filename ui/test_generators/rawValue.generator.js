@@ -4,7 +4,7 @@
  */
 (function() {
     'use strict';
-    var chance = new (require('chance'));
+    var chance = require('chance').Chance();
     var appConsts = require('./app.constants');
 
     var SUBDOMAIN_CHARS = 'abcdefghijklmnopqrstuvwxyz0123456789';
@@ -40,12 +40,7 @@
             var month = date.getMonth();
             var day = date.getDay();
 
-            return year + '-' + this.pad(month + 1, 2) + '-' + this.pad(day + 1, 2);
-        },
-        pad: function(num, size) {
-            var s = num + "";
-            while (s.length < size) s = "0" + s;
-            return s;
+            return year + '-' + chance.pad(month + 1, 2) + '-' + chance.pad(day + 1, 2);
         },
         'apiFormattedDateTime': function(options) {
             var date = chance.date(options);
@@ -57,9 +52,9 @@
             var minute = date.getMinutes();
             var seconds = date.getSeconds();
             var milliseconds = date.getMilliseconds();
-            var formattedMilliseconds =  "." +  this.pad(chance.integer({min: 0, max: 900}),3);
+            var formattedMilliseconds =  "." +  chance.pad(chance.integer({min: 0, max: 900}),3);
 
-            return year + '-' + this.pad(month + 1, 2) + '-' + this.pad(day + 1, 2) + 'T' + this.pad(hour, 2) + ':' + this.pad(minute, 2) + this.pad(seconds, 2)  + "+00:00Z";
+            return year + '-' + chance.pad(month + 1, 2) + '-' + chance.pad(day + 1, 2) + 'T' + chance.pad(hour, 2) + ':' + chance.pad(minute, 2) + chance.pad(seconds, 2)  + "+00:00Z";
         },
 
         'userId': function(options) {
