@@ -39,7 +39,9 @@
 (function () {
     'use strict';
     var Promise = require('bluebird');
-    var request = require('request');
+    var defaultRequest = require('request');
+    var log = require('../../logger').getLogger();
+
     /*
      * We can't use JSON.parse() with records because it is possible to lose decimal precision as a
      * result of the JavaScript implementation of its single numeric data type. In JS, all numbers are
@@ -69,6 +71,7 @@
         var FORMAT = 'format';
         var DISPLAY = 'display';
         var RAW = 'raw';
+        var request = defaultRequest;
 
         //Given an array of records and array of fields, remove any fields
         //not referenced in the records
@@ -97,7 +100,11 @@
         }
 
         //the immediately resolve flag is set, resolve the deferred without making a call
-        function executeRequest(opts, immediatelyResolve) {
+        function executeRequest(req, opts, immediatelyResolve) {
+            //  Generate tid for all requests..and log it
+            requestHelper.setTidHeader(req);
+            log.logRequest(req, __filename);
+
             var deferred = Promise.pending();
             if (immediatelyResolve) {
                 deferred.resolve(null);
@@ -117,6 +124,15 @@
 
         //TODO: only application/json is supported for content type.  Need a plan to support XML
         var recordsApi = {
+
+            /**
+             * Allows you to override the
+             * @param requestOverride
+             */
+            setRequestObject:function(requestOverride){
+                request = requestOverride;
+            },
+
             fetchSingleRecordAndFields: function (req) {
                 var deferred = Promise.pending();
                 Promise.all([
@@ -183,7 +199,8 @@
             fetchRecords: function (req) {
                 var opts = requestHelper.setOptions(req);
                 opts.headers[CONTENT_TYPE] = APPLICATION_JSON;
-                return executeRequest(opts);
+
+                return executeRequest(req, opts);
             },
 
             //Returns a promise that is resolved with the table fields or rejected with an error code
@@ -200,7 +217,7 @@
                 }
 
                 //TODO: why do we immediately resolve if the format is raw?
-                return executeRequest(opts, (req.param(FORMAT) === RAW));
+                return executeRequest(req, opts, (req.param(FORMAT) === RAW));
             }
         };
         return recordsApi;

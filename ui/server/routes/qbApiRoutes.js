@@ -1,156 +1,85 @@
-
+/**
+ *
+ */
 (function () {
     'use strict';
     var request = require('request');
-    var log = require('../logger').getLogger(module.filename);
+    var log = require('../logger').getLogger();
+    var _ = require('lodash');
+    var express = require('express');
 
-    module.exports = function (app, config) {
 
-        //  request helper class
-        var env = app.get('env');
-        var requestHelper = require('../api/quickbase/requestHelper')(config);
-        var recordsApi = require('../api/quickbase/recordsApi')(config);
+    module.exports = function (app, config, routeMapper) {
 
-        /**
-         * This helper method takes the request url produced and replaces the single /api with /api/api.
-         *
-         * @param req
-         */
-        function getOptionsForRequest(req){
-            var opts = requestHelper.setOptions(req);
-            var url = config.javaHost + req.url;
-            if(url.search('/api/api') === -1) {
-                opts.url = url.replace('/api', '/api/api');
-            }
+        // This config.env refers to the node env - it is the way in which we know what routes to enable versus disable,
+        // and configure anything environment specific.
+        // This differs from runtime env which corresponds to process.env.NODE_ENV. This is the way node knows which
+        // file to load when creating the express server. We don't want to use this variable as it makes us dependent
+        // on generated config in aws. For this reason, the node code maintains it's own notion of environment independent
+        // of the config file name loaded on startup
+        var env = config.env;
 
-            return opts;
-        };
+        var allRoutes = routeMapper.fetchAllRoutes();
 
-        /**
-         * This helper method takes the request url produced and replaces the single /api with /api/api on the original
-         * request
-         *
-         * @param req
-         */
-        function modifyRequestPathForApi(req){
-            var originalUrl = req.url;
-            if(originalUrl.search('/api/api') === -1) {
-                req.url = originalUrl.replace('/api', '/api/api');
-            }
+        if (undefined === allRoutes) {
+            log.error("No routes have been configured for env " + env);
+            return;
         }
 
-        //Route for returning a single record
-        app.route('/api/api/:version/apps/:appId/tables/:tableId/records/:recordId').get(
-            function(req, res) {
-                //  log some route info and set the request options
-                log.logRequest(req);
-
-                modifyRequestPathForApi(req);
-
-                recordsApi.fetchSingleRecordAndFields(req)
-                    .then(function(response) {
-                        log.logResponse(response);
-                        res.send(response);
-                    })
-                    .catch(function(error) {
-                        log.error('ERROR: ' + JSON.stringify(error));
-                        requestHelper.copyHeadersToResponse(res, error.headers);
-                        res.status(error.statusCode)
-                            .send(error.body);
-                    });
-            }
-        );
-
-        //Route for returning an array of records
-        app.route('/api/api/:version/apps/:appId/tables/:tableId/records').get(
-            function(req, res) {
-                //  log some route info and set the request options
-                log.logRequest(req);
-
-                modifyRequestPathForApi(req);
-
-                recordsApi.fetchRecordsAndFields(req)
-                    .then(function(response) {
-                        log.logResponse(response);
-                        res.send(response);
-                    })
-                    .catch(function(error) {
-                        log.error('ERROR: ' + JSON.stringify(error));
-                        requestHelper.copyHeadersToResponse(res, error.headers);
-                        res.status(error.statusCode)
-                            .send(error.body);
-                    });
-            }
-        );
-
-        //Route for returning a report
-        app.route('/api/api/:version/apps/:appId/tables/:tableId/reports/:reportId/results').get(
-            function(req, res) {
-                //  log some route info and set the request options
-                log.logRequest(req);
-
-                modifyRequestPathForApi(req);
-
-                recordsApi.fetchRecordsAndFields(req)
-                    .then(function(response) {
-                        log.logResponse(response);
-                        res.send(response);
-                    })
-                    .catch(function(error) {
-                        log.error('ERROR: ' + JSON.stringify(error));
-                        requestHelper.copyHeadersToResponse(res, error.headers);
-                        res.status(error.statusCode)
-                            .send(error.body);
-                    });
-            }
-        );
-
-        //Disable proxying of realm and ticket requests via the node webserver for non-local and test environment
-        if ('local' !== env && 'test' !== env) {
-            log.info('Disabling realm and ticket endpoint access for this run-time environment!');
-            app.route(['/api/:version/realms*', '/api/:version/ticket*']).all(
-                function (req, res) {
-                    log.logRequest(req);
-                    res.status(404).send();
-                }
-            );
-        }
-
-        //Route for returning swagger api documentation
-        app.route(['/api', '/api/resources/*', '/api/images/*', '/api/documentation/*']).get(
-            function(req, res) {
-                //  log some route info and set the request options
-                log.logRequest(req);
-
-                var opts = requestHelper.setOptions(req);
-
-                request(opts)
-                    .on('error', function(error) {
-                        log.error('Swagger API ERROR ' + JSON.stringify(error));
-                    })
-                    .pipe(res);
-            }
-         );
-
-        //  Route to return API calls
-        app.route('/api/*').all(
-            function (req, res) {
-                //  log some route info and set the request options
-                log.logRequest(req);
-
-                var opts = getOptionsForRequest(req);
-
-                request(opts)
-                    .on('response', function (response) {
-                        log.info('API response: ' + response.statusCode + ' - ' + req.method + ' ' + req.path);
-                    })
-                    .on('error', function (error) {
-                        log.error('API ERROR ' + JSON.stringify(error));
-                    })
-                    .pipe(res);
-            }
-        );
+        initializeRoutes(allRoutes, app, routeMapper);
 
     };
 
+    /**
+     * Initialize all routes provided in the routes param. Use the envMapper to get the appropriate function to call for
+     * each route
+     * @param routes
+     * @param app
+     * @param envMapper
+     */
+    function initializeRoutes(routes, app, routeMapper){
+
+        _.forEach(routes, function (route) {
+
+            var getFunctionForRoute = routeMapper.fetchGetFunctionForRoute(route);
+            var postFunctionForRoute = routeMapper.fetchPostFunctionForRoute(route);
+            var deleteFunctionForRoute = routeMapper.fetchDeleteFunctionForRoute(route);
+            var putFunctionForRoute = routeMapper.fetchPutFunctionForRoute(route);
+            var patchFunctionForRoute = routeMapper.fetchPatchFunctionForRoute(route);
+            var allFunctionForRoute = routeMapper.fetchAllFunctionForRoute(route);
+
+            //if this route has an all mapping, then ignore individual mappings
+            if (undefined !== allFunctionForRoute) {
+                log.info("Routing ALL method for route " + route);
+                app.route(route).all(allFunctionForRoute);
+                return;
+            }
+
+            //map each individual mapping understanding that we may want to map the get function but not the post
+            if (undefined !== getFunctionForRoute) {
+                log.info("Routing GET method for route " + route);
+                app.route(route).get(getFunctionForRoute);
+            }
+
+            if (undefined !== postFunctionForRoute) {
+                log.info("Routing POST method for route " + route);
+                app.route(route).post(postFunctionForRoute);
+            }
+
+            if (undefined !== deleteFunctionForRoute) {
+                log.info("Routing DELETE method for route " + route);
+                app.route(route).delete(deleteFunctionForRoute);
+            }
+
+            if (undefined !== putFunctionForRoute) {
+                log.info("Routing PUT method for route " + route);
+                app.route(route).put(putFunctionForRoute);
+            }
+
+            if (undefined !== patchFunctionForRoute) {
+                log.info("Routing PATCH method for route " + route);
+                app.route(route).patch(patchFunctionForRoute);
+            }
+        });
+    }
 }());

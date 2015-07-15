@@ -15,17 +15,45 @@
 
                 ApiService.getReports(appId, tableId).then(
                     function(reports) {
-                        console.log('GetReports: Success callback');
                         deferred.resolve(reports);
                     },
                     function(resp) {
-                        console.log('GetReports: failure callback');
                         deferred.reject(resp);
                     }
                 );
 
                 return deferred.promise;
 
+            },
+
+            getApps: function() {
+                var deferred = $q.defer();
+
+                ApiService.getApps().then(
+                    function(apps) {
+                        deferred.resolve(apps);
+                    },
+                    function(resp) {
+                        deferred.reject(resp);
+                    }
+                );
+
+                return deferred.promise;
+            },
+
+            getApp: function(appId) {
+                var deferred = $q.defer();
+
+                ApiService.getApp(appId).then(
+                    function(app) {
+                        deferred.resolve(app);
+                    },
+                    function(resp) {
+                        deferred.reject(resp);
+                    }
+                );
+
+                return deferred.promise;
             }
         };
 

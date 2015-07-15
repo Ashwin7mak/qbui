@@ -10,6 +10,11 @@
             // ticket cookie
             TICKET_COOKIE      : 'ticket',
 
+            //  http headers
+            SESSION_HDR        : 'sid',
+            TICKET_HDR         : 'ticket',
+
+
             //  API REST references
             APPS               : 'apps',
             FIELDS             : 'fields',

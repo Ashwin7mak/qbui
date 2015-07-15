@@ -4,6 +4,7 @@
 module.exports = function (grunt) {
 
     var buildDir = __dirname + '/build';
+    var localJsFile = __dirname + '/server/config/environment/local.js';
     var serverReportDir = buildDir + '/reports/server';
     var clientReportDir = buildDir + '/reports/client';
     var mochaUnitTest = grunt.option('test') || '*.unit.spec.js';
@@ -73,42 +74,42 @@ module.exports = function (grunt) {
             }
         },
         watch: {
-            //mochaTest: {
-            //    files: ['<%= express.root %>/**/*.spec.js'],
-            //    tasks: ['env:test', 'mochaTest']
-            //},
-            //jsTest: {
-            //    files: [
-            //        '<%= quickbase.client.components %>/**/*.spec.js',
-            //        '<%= quickbase.client.components %>/**/*.mock.js'
-            //    ],
-            //    tasks: ['newer:jshint:all', 'karma']
-            //},
-            //livereload: {
-            //    files: [
-            //        '{.tmp,<%= quickbase.client.components %>}/**/*.css',
-            //        '{.tmp,<%= quickbase.client.assets %>}/**/*.css',
-            //        '{.tmp,<%= quickbase.client.components %>}/**/*.html',
-            //        '{.tmp,<%= quickbase.client.components %>}/**/*.js',
-            //        '!{.tmp,<%= quickbase.client.components %>}**/*.spec.js',
-            //        '!{.tmp,<%= quickbase.client.components %>}/**/*.mock.js',
-            //        '<%= quickbase.client.components %>/{,*//*}*.{png,jpg,jpeg,gif,webp,svg}',
-            //        '<%= quickbase.client.assets %>/{,*//*}*.{png,jpg,jpeg,gif,webp,svg}'
-            //    ],
-            //    options: {
-            //        livereload: true
-            //    }
-            //},
-            //express: {
-            //    files: [
-            //        '<%= express.root %>/**/*.{js,json}'
-            ///    ],
-            //    tasks: ['express', 'wait'],
-            //    options: {
-            //        livereload: true,
-            //        nospawn: true //Without this option specified express won't be reloaded
-            //    }
-            //},
+            mochaTest: {
+                files: ['<%= express.root %>/**/*.spec.js'],
+                tasks: ['env:test', 'mochaTest']
+            },
+            jsTest: {
+                files: [
+                    '<%= quickbase.client.components %>/**/*.spec.js',
+                    '<%= quickbase.client.components %>/**/*.mock.js'
+                ],
+                tasks: ['newer:jshint:all', 'karma']
+            },
+            livereload: {
+                files: [
+                    '{.tmp,<%= quickbase.client.components %>}/**/*.css',
+                    '{.tmp,<%= quickbase.client.assets %>}/**/*.css',
+                    '{.tmp,<%= quickbase.client.components %>}/**/*.html',
+                    '{.tmp,<%= quickbase.client.components %>}/**/*.js',
+                    '!{.tmp,<%= quickbase.client.components %>}**/*.spec.js',
+                    '!{.tmp,<%= quickbase.client.components %>}/**/*.mock.js',
+                    '<%= quickbase.client.components %>/{,*//*}*.{png,jpg,jpeg,gif,webp,svg}',
+                    '<%= quickbase.client.assets %>/{,*//*}*.{png,jpg,jpeg,gif,webp,svg}'
+                ],
+                options: {
+                    livereload: true
+                }
+            },
+            express: {
+                files: [
+                    '<%= express.root %>/**/*.{js,json}'
+               ],
+                tasks: ['express:local', 'wait'],
+                options: {
+                    livereload: true,
+                    nospawn: true //Without this option specified express won't be reloaded
+                }
+            },
             sass: {  //watch for changes to scss files to trigger compass compilation
                 files: '<%= quickbase.client.root %>/**/*.scss',
                 tasks: ['compass-compile']
@@ -716,6 +717,10 @@ module.exports = function (grunt) {
         }
     });
 
+    grunt.registerTask('setEnv', function (envName, envVal) {
+        process.env[envName] = envVal;
+    });
+
     grunt.registerTask('testClientOnly', function () {
         grunt.task.run(['jshint:client', 'jscs:client', 'karma']);
     });
@@ -725,10 +730,27 @@ module.exports = function (grunt) {
         grunt.file.mkdir(serverReportDir + '/unit/');
         grunt.file.mkdir(serverReportDir + '/integration/');
 
+        //  If the run-time environment variable is not set, will set to local
+        //  but only if the file is defined (which should be only on a developer's machine).
+        if (!process.env.NODE_ENV) {
+            if (grunt.file.exists(localJsFile)) {
+                grunt.task.run(['env:local']);
+            }
+        }
+
         if (target === 'server') {
             //server unit tests
             return grunt.task.run([
                 'clean:server',
+                'setEnv:NODE_TLS_REJECT_UNAUTHORIZED:0',
+                'mochaTest:test',
+            ]);
+        }
+        if (target === 'coverage') {
+            //server unit tests
+            return grunt.task.run([
+                'clean:server',
+                'setEnv:NODE_TLS_REJECT_UNAUTHORIZED:0',
                 'mocha_istanbul:coverage'
             ]);
         }

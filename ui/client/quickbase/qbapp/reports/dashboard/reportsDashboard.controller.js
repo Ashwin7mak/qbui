@@ -11,13 +11,26 @@
         $scope.appId = $stateParams.appId;
         $scope.tableId = $stateParams.tableId;
 
+        $scope.reportId;        // holds the currently selected report
+        $scope.reports = [];    // list of reports for given appId and tableId
+
         if ($scope.appId && $scope.tableId) {
-            $scope.reports = [];
             ReportsDashboardModel.get($scope.appId, $scope.tableId).then(
                 function (reports) {
+                    var defaultReport;
                     reports.forEach(function (report) {
+                        // first report returned in the list is the default display report
+                        if (!defaultReport) { defaultReport = report; }
                         $scope.reports.push({id: report.id, name: report.name});
                     });
+
+                    //  rather than display an empty content pane, will transition to the default report (if any)
+                    if (defaultReport) {
+                        $scope.goToPage(defaultReport);
+                    }
+                },
+                function (resp) {
+                    console.log('Error getting report list.  Status: ' + resp.status);
                 }
             );
         }
@@ -33,15 +46,12 @@
         };
 
         $scope.goToPage = function(report) {
-            if (report.id === 1) {
-                $state.transitionTo('reports/report', {appId:$scope.appId, tableId:$scope.tableId,id: report.id});
-            }
-            if (report.id === 2) {
-                $state.transitionTo('reports/report', {appId:$scope.appId, tableId:$scope.tableId,id: report.id});
-            }
-            if (report.id === 3) {
-                $state.transitionTo('reports/report', {appId:$scope.appId, tableId:$scope.tableId,id: report.id});
-            }
+            $state.transitionTo('reports/report', {appId:$scope.appId, tableId:$scope.tableId,id: report.id});
+            $scope.reportId = report.id;
+        };
+
+        $scope.isSelected = function(report) {
+            return report.id === $scope.reportId;
         };
     }
 

@@ -10,23 +10,42 @@
 // override ui-grids styling
 .ui-grid {
   font-family: "Helvetica Neue LT Roman", HelveticaNeue, "Helvetica Neue", Helvetica, Arial, sans-serif;
-  border: 1;
+  border: 0px;
   color: $darker-gray;
-  border: 2px solid $light-gray;
   font-size: 12px;
+  -webkit-font-smoothing: antialiased;
 }
 
 .ui-grid-header-canvas {
   background-color: $grid-header-background-color;
   color: $grid-header-color;
   text-transform: uppercase;
-  font-weight: normal;
-  border-bottom: 2px solid $grid-header-bottom-border-color;
+  font-weight: 400;
+  border-bottom: 1px solid $grid-header-bottom-border-color;
   height: $grid-header-height;
+  -webkit-font-smoothing: antialiased;
 }
 
 .ui-grid-header-cell {
   padding: 8px 0 2px 0;
+  color: $slate;
+  font-size: 13px;
+}
+
+.ui-grid-cell-contents {
+
+  font-weight: normal;
+}
+
+.ui-grid-header-cell {
+  border-color: $grid-header-bottom-border-color;
+  outline: none !important;
+}
+
+// with sorting not enabled, want the arrow to not display
+// to properly align right justified headers
+.ui-grid-invisible {
+  display:none;
 }
 
 .ui-grid-header-cell:hover {
@@ -39,20 +58,38 @@
 }
 
 .ui-grid-cell {
-  border-right: 1px dotted $dark-gray;
+  border-right: 1px dotted $light-gray;
   height: 43px;
   line-height: 1.2em;
   vertical-align: middle;
 }
 
+//  remove zebra striping
+.ui-grid-row:nth-child(even) .ui-grid-cell {
+  background-color: inherit;
+}
+.ui-grid-row:nth-child(odd) .ui-grid-cell {
+  background-color: inherit;
+}
+
 .ui-grid-row {
-  border-bottom: 1px solid $dark-gray;
+  border-bottom: 1px solid $gray;
+}
+
+.ui-grid-row:hover {
+  background-color: $lightest-slate;
 }
 
 .ui-grid-footer-info {
   margin-top: 7px;
 }
 
-.ui-grid-number-align {
+.ui-grid-align-left {
+  text-align: left;
+}
+.ui-grid-align-right {
   text-align: right;
+}
+.ui-grid-align-center {
+  text-align: center;
 }

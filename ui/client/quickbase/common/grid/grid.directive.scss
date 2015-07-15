@@ -8,7 +8,7 @@ $GREY_BLUE_BORDER_COLOR  : #D2DCE7;
 $GREYISH                 : #DCDCDC;
 $GREY                    : #999;
 $GREYSOFT                : #969696;
-$DARKER_GREY             : #777;
+$DARKER_GREY             : #AAA;
 $GREY_BLUE_TEXT          : #486C8F;
 $STRONG_BLUE             : #365EBF;
 $DEEP_BLUE               : #243f7f;
@@ -112,11 +112,14 @@ $PAGINATION_DISABLED_BORDER : $GREYISH;
 }
 
 .pagination {
+    font-size     : 0.9rem;
+    font-weight   : normal;
     display       : inline-block;
     padding-left  : 0;
     margin        : $LINE_HEIGHT_COMPUTED 0;
     border-radius : $BORDER_RADIUS_BASE;
     box-sizing    : border-box;
+    cursor        : pointer;
 
     > li {
         display : inline; // Remove list-style and block-level defaults
@@ -129,7 +132,6 @@ $PAGINATION_DISABLED_BORDER : $GREYISH;
             text-decoration  : none;
             color            : $PAGINATION_COLOR;
             background-color : $PAGINATION_BG;
-            border           : 1px solid $PAGINATION_BORDER;
             margin-left      : -1px;
         }
         &:first-child {
