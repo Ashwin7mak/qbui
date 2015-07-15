@@ -109,7 +109,7 @@
                             var fetchedRecord = jsonBigNum.parse(fetchedRecordResponse.body);
                             fetchRecordDeferred.resolve(fetchedRecord);
                         }).catch(function (error) {
-                            console.log("!!!!!!! Error getting record: " + JSON.stringify(error));
+                            console.log("!!!!!!! Error getting record: " + JSON.stringify(error) + " endpoint that failed: " + recordsEndpoint + recordId);
                             fetchRecordDeferred.reject(error);
                         });
                 }).catch(function(currError){log.error(JSON.stringify(currError));});

@@ -161,13 +161,15 @@
                     opts.headers[TICKET_HEADER_KEY] = this.authTicket;
                 }
 
-                log.debug('About to execute the request: ' + jsonBigNum.stringify(opts));
+                console.log('About to execute the request: ' + jsonBigNum.stringify(opts));
                 //Make request and return promise
                 var deferred = promise.pending();
                 request(opts, function (error, response) {
                     if (error) {
+                        console.log("ERROR RESPONSE: " + JSON.stringify(response) + " ERROR: " + error);
                         deferred.reject(new Error(error));
                     } else if (response.statusCode != 200) {
+                        console.log("ERROR RESPONSE: " + JSON.stringify(response) + " ERROR: " + error);
                         deferred.reject(response);
                     } else {
                         deferred.resolve(response);
