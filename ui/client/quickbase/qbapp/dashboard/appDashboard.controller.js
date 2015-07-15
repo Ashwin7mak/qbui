@@ -11,9 +11,9 @@
         $scope.appId = $stateParams.appId;
         $scope.tableId = $stateParams.tableId;
 
+        //  for a given appId and tableId return list of reports
         if ($scope.appId && $scope.tableId) {
             $scope.reports = [];
-            // TODO: should really be an AppsDashboardModel..
             ReportsDashboardModel.get($scope.appId, $scope.tableId).then(
                 function (reports) {
                     $scope.showLayout = true;  // display the html as we know the user is authenticated
@@ -24,27 +24,32 @@
             );
         }
         else {
-            $scope.tables = [];
+            //  no specific appId/tableId combination requested...will return all apps
             $scope.apps = [];
+            $scope.noApps = false;
             ReportsDashboardModel.getApps().then(
                 function (apps) {
-                    $scope.showLayout = true;  // display the html as we know the user is authenticated
-                    apps.forEach(function (app) {
-                        ReportsDashboardModel.getApp(app.id).then(
-                            function(app) {
-                                var tables = app.tables;
-                                $scope.apps.push({id: app.id, name: app.name, tables: app.tables});
-                                tables.forEach(function (table) {
-                                    $scope.tables.push({appId: app.id, appName: app.name, tableId: table.id, tableName: table.name});
-                                });
-                            },
-                            function(resp) {
-                                console.log('Error getting app detail.  Status: ' + resp.status);
-                            }
-                        );
-                    });
+                    $scope.showLayout = true;
+                    if (apps && apps.length > 0) {
+                        apps.forEach(function (a) {
+                            ReportsDashboardModel.getApp(a.id).then(
+                                function (app) {
+                                    $scope.apps.push({id: app.id, name: app.name, tables: app.tables});
+                                },
+                                function (resp) {
+                                    console.log('Error getting app detail.  Status: ' + resp.status);
+                                }
+                            );
+                        });
+                    }
+                    else {
+                        $scope.noApps = true;
+                        console.log('No apps found for logged in user.   Nothing to display.');
+                    }
                 },
                 function (resp) {
+                    $scope.showLayout = true;
+                    $scope.noApps = true;
                     console.log('Error getting app list.  Status: ' + resp.status);
                 }
             );
