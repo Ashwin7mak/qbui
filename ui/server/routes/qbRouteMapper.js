@@ -171,7 +171,7 @@
             recordsApi.fetchSingleRecordAndFields(req)
                 .then(function (response) {
                     log.logResponse(req, response, __filename);
-                    log.info('API response: ' + response.statusCode + ' body: ' + response.body + ' - ' + req.method + ' ' + req.path);
+                    log.info('API response: ' + JSON.stringify(response) + ' Request - method:' + req.method + ' - ' + req.path);
                     res.send(response);
                 })
                 .catch(function (error) {
