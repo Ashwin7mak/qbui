@@ -32,6 +32,7 @@
                 init.then(function (createdRealm) {
                     apiBase.executeRequest(apiBase.resolveAppsEndpoint(), consts.POST, appToCreate).then(function (appResponse) {
                         deferred.resolve(appResponse);
+                        console.log('App creation response: ' + appReponse.body);
                     }).catch(function (error) {
                         deferred.reject(error);
                         //TODO: figure out how we want to handle
@@ -67,6 +68,7 @@
 
             // Creates a list of records using the bulk record endpoint, returning a promise that is resolved or rejected on successful
             createRecords: function (recordsEndpoint, records) {
+                console.log('+++++ RECORDS TO CREATE: ' + JSON.stringify(records));
                 var fetchRecordDeferred = promise.pending();
                 init.then(function () {
                     var recordBulkEndpoint = recordsEndpoint + 'bulk';
