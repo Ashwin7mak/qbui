@@ -15,11 +15,17 @@ describe('Controller: ReportsDashboardCtrl', function() {
             $state = _$state_;
             deferredGet = $q.defer();
 
+            //  setup a spy on the ReportsDashboardModel.get function.  Return a deferred promise and
+            //  can resolve or reject based on how you choose to configure your test.  See references to
+            //  deferredGet elsewhere to configuration options.
             spyOn(ReportsDashboardModel, 'get').and.callFake(function() {
                 return deferredGet.promise;
             });
 
-            transitionTo = spyOn($state, 'transitionTo').and.callThrough();
+            //  setup a spy on the Angular transitionTo function.
+            transitionTo = spyOn($state, 'transitionTo').and.callFake(function() {
+                return null;
+            });
 
             controller = $controller;
         })
@@ -28,6 +34,8 @@ describe('Controller: ReportsDashboardCtrl', function() {
     it('validate default scope variables', function() {
         var appId= '1', tableId = '2';
         var getReportData = [{id:'10', name:'name1'}, {id:'11', name:'name2'}];
+
+        //  resolve the promise with the getReportData object
         deferredGet.resolve(getReportData);
 
         controller('ReportsDashboardCtrl',
@@ -75,9 +83,9 @@ describe('Controller: ReportsDashboardCtrl', function() {
     });
 
     it('validate the default report when the appId and tableId are supplied', function() {
-        var appId= '1', tableId = '2';
+        var appId= '1', tableId = '2', reportId1='10', reportId2='11';
 
-        var getReportData = [{id:'10', name:'name1'}, {id:'11', name:'name2'}];
+        var getReportData = [{id:reportId1, name:'name1'}, {id:reportId2, name:'name2'}];
         deferredGet.resolve(getReportData);
 
         controller('ReportsDashboardCtrl',
@@ -86,11 +94,31 @@ describe('Controller: ReportsDashboardCtrl', function() {
 
         expect(ReportsDashboardModel.get).toHaveBeenCalledWith(appId, tableId);
 
-        expect(scope.appId).toBeDefined();
-        expect(scope.tableId).toBeDefined();
-        expect(scope.reportId).toEqual('10');   // first report in the list is the default
+        expect(scope.appId).toEqual(appId);
+        expect(scope.tableId).toEqual(tableId);
+        expect(scope.reportId).toEqual(reportId1);   // first report in the list is the default
         expect(scope.reports.length).toEqual(2);
-        expect($state.transitionTo).toHaveBeenCalledWith('reports/report', {appId:scope.appId, tableId:scope.tableId, id: '10'});
+        expect($state.transitionTo).toHaveBeenCalledWith('reports/report', {appId:scope.appId, tableId:scope.tableId, id: reportId1});
+
+    });
+
+    it('validate the default report when the appId and tableId are supplied but invalid', function() {
+        var appId= '1', tableId = '2';
+
+        var getErrorResp = {msg:'Invalid reportId', status:500};
+        deferredGet.reject(getErrorResp);
+
+        controller('ReportsDashboardCtrl',
+            {$scope:scope, $stateParams:{appId:appId, tableId:tableId}, $state:$state, ReportsDashboardModel:ReportsDashboardModel });
+        scope.$digest();
+
+        expect(ReportsDashboardModel.get).toHaveBeenCalledWith(appId, tableId);
+
+        expect(scope.appId).toEqual(appId);
+        expect(scope.tableId).toEqual(tableId);
+        expect(scope.reportId).not.toBeDefined();
+        expect(scope.reports.length).toEqual(0);
+        expect($state.transitionTo).not.toHaveBeenCalled();
 
     });
 
