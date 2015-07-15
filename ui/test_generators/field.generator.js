@@ -12,7 +12,7 @@
     var fieldBuilder = require('./field.builder');
     var _ = require('lodash');
     var FIELD_KEYS = 'fieldKeys';
-    
+
     module.exports = {
         getFieldBuilder : function(){
             return fieldBuilder.builder();
@@ -41,7 +41,7 @@
             var foundKey = false;
             var valueValid = true;
             var typesKeyWord = 'types';
-            var fieldType = field[fieldConsts.TYPE];
+            var fieldType = field[fieldConsts.fieldKeys.TYPE];
             var fieldKeys = Object.keys(field);
 
             //loop over all of the keys on the passed field
@@ -84,7 +84,7 @@
 
         //For a given field type, apply any default values that are not currently present in the map
         applyDefaults : function(fieldToModify) {
-            var type = fieldToModify[fieldConsts.TYPE];
+            var type = fieldToModify[fieldConsts.fieldKeys.TYPE];
 
             if(!fieldTypeToFunctionCalls[type]){
                 throw new Error('Field type not found in fieldTypeToFunctionCalls');
@@ -194,22 +194,22 @@
     function applyFieldDefaults(fieldToModify){
         //apply all high level field properties that are missing
         //we can't apply an id as that will be assigned by the api
-        if(!fieldToModify[fieldConsts.BUILT_IN]) {
-            fieldToModify[fieldConsts.BUILT_IN] = defaultConsts.fieldDefaults.BUILTIN_DEFAULT;
+        if(!fieldToModify[fieldConsts.fieldKeys.BUILT_IN]) {
+            fieldToModify[fieldConsts.fieldKeys.BUILT_IN] = defaultConsts.fieldDefaults.BUILTIN_DEFAULT;
         }
 
-        if(!fieldToModify[fieldConsts.DATA_IS_COPYABLE]) {
-            fieldToModify[fieldConsts.DATA_IS_COPYABLE] = defaultConsts.fieldDefaults.DATA_COPYABLE_DEFAULT;
+        if(!fieldToModify[fieldConsts.fieldKeys.DATA_IS_COPYABLE]) {
+            fieldToModify[fieldConsts.fieldKeys.DATA_IS_COPYABLE] = defaultConsts.fieldDefaults.DATA_COPYABLE_DEFAULT;
         }
 
-        if(!fieldToModify[fieldConsts.INCLUDE_IN_QUICKSEARCH]) {
-            fieldToModify[fieldConsts.INCLUDE_IN_QUICKSEARCH] = defaultConsts.fieldDefaults.USE_IN_QUICKSEARCH_DEFAULT;
+        if(!fieldToModify[fieldConsts.fieldKeys.INCLUDE_IN_QUICKSEARCH]) {
+            fieldToModify[fieldConsts.fieldKeys.INCLUDE_IN_QUICKSEARCH] = defaultConsts.fieldDefaults.USE_IN_QUICKSEARCH_DEFAULT;
         }
     }
 
     function applyConcreteDefaults(fieldToModify){
-        var fieldType = fieldToModify[fieldConsts.TYPE];
-        
+        var fieldType = fieldToModify[fieldConsts.fieldKeys.TYPE];
+
         if(!fieldToModify[fieldConsts[fieldType][FIELD_KEYS].REQUIRED]){
             fieldToModify[fieldConsts[fieldType][FIELD_KEYS].REQUIRED] = defaultConsts.concreteDefaults.REQUIRED_DEFAULT;
         }
@@ -220,7 +220,7 @@
     }
 
     function applyFormulaDefaults(fieldToModify){
-        var fieldType = fieldToModify[fieldConsts.TYPE];
+        var fieldType = fieldToModify[fieldConsts.fieldKeys.TYPE];
 
         if(!fieldToModify[fieldConsts[fieldType][FIELD_KEYS].FORMULA]){
             fieldToModify[fieldConsts[fieldType][FIELD_KEYS].FORMULA] = defaultConsts.formulaDefaults.FORMULA_STRING_DEFAULT;
@@ -228,7 +228,7 @@
     }
 
     function applyNumericDefaults(fieldToModify){
-        var fieldType = fieldToModify[fieldConsts.TYPE];
+        var fieldType = fieldToModify[fieldConsts.fieldKeys.TYPE];
 
         if(!fieldToModify[fieldConsts[fieldType][FIELD_KEYS].DECIMAL_PLACES]){
             fieldToModify[fieldConsts[fieldType][FIELD_KEYS].DECIMAL_PLACES] = defaultConsts.numericDefaults.DECIMAL_PLACES_DEFAULT;
@@ -240,7 +240,7 @@
     }
 
     function applyScalarDefaults(fieldToModify) {
-        var fieldType = fieldToModify[fieldConsts.TYPE];
+        var fieldType = fieldToModify[fieldConsts.fieldKeys.TYPE];
 
         if (!fieldToModify[fieldConsts[fieldType][FIELD_KEYS].UNIQUE]) {
             fieldToModify[fieldConsts[fieldType][FIELD_KEYS].UNIQUE] = defaultConsts.scalarDefaults.UNIQUE_DEFAULT;
@@ -256,7 +256,7 @@
     }
 
     function applyDateDefaults(fieldToModify){
-        var fieldType = fieldToModify[fieldConsts.TYPE];
+        var fieldType = fieldToModify[fieldConsts.fieldKeys.TYPE];
 
         if (!fieldToModify[fieldConsts[fieldType][FIELD_KEYS].SHOW_MONTH_AS_NAME]) {
             fieldToModify[fieldConsts[fieldType][FIELD_KEYS].SHOW_MONTH_AS_NAME] = defaultConsts.dateDefaults.SHOW_MONTH_AS_NAME_DEFAULT;
@@ -272,7 +272,7 @@
     }
 
     function applyDateTimeDefaults(fieldToModify){
-        var fieldType = fieldToModify[fieldConsts.TYPE];
+        var fieldType = fieldToModify[fieldConsts.fieldKeys.TYPE];
 
         if (!fieldToModify[fieldConsts[fieldType][FIELD_KEYS].SHOW_TIME]) {
             fieldToModify[fieldConsts[fieldType][FIELD_KEYS].SHOW_TIME] = defaultConsts.dateTimeDefaults.SHOW_TIME_DEFAULT;
@@ -285,7 +285,7 @@
     }
 
     function applyTimeOfDayDefaults(fieldToModify){
-        var fieldType = fieldToModify[fieldConsts.TYPE];
+        var fieldType = fieldToModify[fieldConsts.fieldKeys.TYPE];
 
         if (!fieldToModify[fieldConsts[fieldType][FIELD_KEYS].SHOW_TIME]) {
             fieldToModify[fieldConsts[fieldType][FIELD_KEYS].SHOW_TIME] = defaultConsts.dateTimeDefaults.SHOW_TIME_DEFAULT;
@@ -298,7 +298,7 @@
     }
 
     function applyDurationDefaults(fieldToModify){
-        var fieldType = fieldToModify[fieldConsts.TYPE];
+        var fieldType = fieldToModify[fieldConsts.fieldKeys.TYPE];
 
         if (!fieldToModify[fieldConsts[fieldType][FIELD_KEYS].SCALE]) {
             fieldToModify[fieldConsts[fieldType][FIELD_KEYS].SCALE] = defaultConsts.durationDefaults.SCALE_DEFAULT;
@@ -306,7 +306,7 @@
     }
 
     function applyEmailDefaults(fieldToModify) {
-        var fieldType = fieldToModify[fieldConsts.TYPE];
+        var fieldType = fieldToModify[fieldConsts.fieldKeys.TYPE];
 
         if (!fieldToModify[fieldConsts[fieldType][FIELD_KEYS].DEFAULT_DOMAIN]) {
             fieldToModify[fieldConsts[fieldType][FIELD_KEYS].DEFAULT_DOMAIN] = defaultConsts.emailDefaults.DOMAIN_DEFAULT_VALUE_DEFAULT;
@@ -323,7 +323,7 @@
     }
 
     function applyFileAttachmentDefaults(fieldToModify) {
-        var fieldType = fieldToModify[fieldConsts.TYPE];
+        var fieldType = fieldToModify[fieldConsts.fieldKeys.TYPE];
 
         if (!fieldToModify[fieldConsts[fieldType][FIELD_KEYS].LINK_TEXT]) {
             fieldToModify[fieldConsts[fieldType][FIELD_KEYS].LINK_TEXT] = defaultConsts.fileAttachmentDefaults.LINK_TEXT_DEFAULT;
@@ -344,7 +344,7 @@
     }
 
     function applyPhoneNumberDefaults(fieldToModify){
-        var fieldType = fieldToModify[fieldConsts.TYPE];
+        var fieldType = fieldToModify[fieldConsts.fieldKeys.TYPE];
 
         if (!fieldToModify[fieldConsts[fieldType][FIELD_KEYS].INCLUDE_EXTENSION]) {
             fieldToModify[fieldConsts[fieldType][FIELD_KEYS].INCLUDE_EXTENSION] = defaultConsts.phoneNumberDefaults.INCLUDE_EXTENSION_DEFAULT;
@@ -352,7 +352,7 @@
     }
 
     function applyReportLinkDefaults(fieldToModify){
-        var fieldType = fieldToModify[fieldConsts.TYPE];
+        var fieldType = fieldToModify[fieldConsts.fieldKeys.TYPE];
 
         if (!fieldToModify[fieldConsts[fieldType][FIELD_KEYS].DISPLAY_PROTOCOL]) {
             fieldToModify[fieldConsts[fieldType][FIELD_KEYS].DISPLAY_PROTOCOL] = defaultConsts.reportDefaults.DISPLAY_PROTOCOL_DEFAULT;
@@ -372,7 +372,7 @@
     }
 
     function applySummaryFieldDefaults(fieldToModify){
-        var fieldType = fieldToModify[fieldConsts.TYPE];
+        var fieldType = fieldToModify[fieldConsts.fieldKeys.TYPE];
 
         if (!fieldToModify[fieldConsts[fieldType][FIELD_KEYS].AGGREGATE_FUNCTION]) {
             fieldToModify[fieldConsts[fieldType][FIELD_KEYS].AGGREGATE_FUNCTION] = defaultConsts.summaryDefaults.AGGREGATE_FUNCTION_DEFAULT;
@@ -388,7 +388,7 @@
     }
 
     function applyTextDefaults(fieldToModify){
-        var fieldType = fieldToModify[fieldConsts.TYPE];
+        var fieldType = fieldToModify[fieldConsts.fieldKeys.TYPE];
 
         if (!fieldToModify[fieldConsts[fieldType][FIELD_KEYS].HTML_ALLOWED]) {
             fieldToModify[fieldConsts[fieldType][FIELD_KEYS].HTML_ALLOWED] = defaultConsts.textDefaults.HTML_ALLOWED_DEFAULT;
@@ -396,7 +396,7 @@
     }
 
     function applyUrlDefaults(fieldToModify){
-        var fieldType = fieldToModify[fieldConsts.TYPE];
+        var fieldType = fieldToModify[fieldConsts.fieldKeys.TYPE];
 
         if (!fieldToModify[fieldConsts[fieldType][FIELD_KEYS].DISPLAY_PROTOCOL]) {
             fieldToModify[fieldConsts[fieldType][FIELD_KEYS].DISPLAY_PROTOCOL] = defaultConsts.urlDefaults.URL_DISPLAY_PROTOCOL_DEFAULT;
@@ -408,7 +408,7 @@
     }
 
     function applyUserDefaults(fieldToModify){
-        var fieldType = fieldToModify[fieldConsts.TYPE];
+        var fieldType = fieldToModify[fieldConsts.fieldKeys.TYPE];
 
         if (!fieldToModify[fieldConsts[fieldType][FIELD_KEYS].SEND_INVITES_TO_USERS]) {
             fieldToModify[fieldConsts[fieldType][FIELD_KEYS].SEND_INVITES_TO_USERS] = defaultConsts.userDefaults.SEND_INVITES_TO_USERS_DEFAULT;

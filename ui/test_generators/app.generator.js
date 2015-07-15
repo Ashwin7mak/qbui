@@ -79,6 +79,23 @@
         },
 
         /**
+         * Generate an app object with a specified number of tables and a specified number of fields . Fields on those
+         * tables will be generated at random from the supplied list of types
+         * @param numTables
+         * @returns {*|{singleRun, autoWatch}} the app object
+         */
+        generateAppWithTablesOfSizeofTypes : function(numTables, numFieldsPerTable, typesAllowed){
+            var builderInstance = this.getAppBuilderWithName();
+            var tableToAdd;
+            for(var index = 0; index < numTables; index++){
+                tableToAdd = tableGenerator.generateTableWithFieldsOfAllowedTypes(numFieldsPerTable, typesAllowed);
+                builderInstance.withTable(tableToAdd);
+            }
+            return builderInstance.build();
+        },
+
+
+        /**
          * Generate a table following the structure defined by a map from
          * table name to map of field name to field type.
          * </p>

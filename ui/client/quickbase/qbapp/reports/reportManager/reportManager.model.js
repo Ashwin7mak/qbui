@@ -81,9 +81,6 @@
                             column.fieldType = field.type;
                             if (field.clientSideAttributes) {
                                 column.bold = field.clientSideAttributes.bold;
-                                column.width = field.clientSideAttributes.width;
-                                // for now, enforcing a 100 column width min for display purposes
-                                if (column.width < 100) { column.width = 100; }
                             }
                             cols.push(column);
                         });

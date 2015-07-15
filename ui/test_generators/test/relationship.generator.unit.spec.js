@@ -64,8 +64,8 @@ describe('User generator unit test', function () {
             currentFields = table[tableConsts.FIELDS];
 
             _.forEach(currentFields, function(field){
-                currentFieldType = field[fieldConsts.TYPE];
-                field[fieldConsts.ID] = fieldIndex;
+                currentFieldType = field[fieldConsts.fieldKeys.TYPE];
+                field[fieldConsts.fieldKeys.ID] = fieldIndex;
                 field[fieldConsts[currentFieldType].UNIQUE] = true;
                 fieldIndex++;
             });

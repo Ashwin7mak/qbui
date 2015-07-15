@@ -2,7 +2,8 @@
 
 .report {
 
-  min-width: 640px;
+ // xd has not specified a minimum width so allow table to reduce all the way
+ // min-width: 640px;
 
   .report-stage {
     .report-content {

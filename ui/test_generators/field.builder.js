@@ -22,42 +22,42 @@
                 /************************************************************/
 
                 withId :  function(id) {
-                    fieldUnderConstruction[fieldConstants.ID] = id;
+                    fieldUnderConstruction[fieldConstants.fieldKeys.ID] = id;
                     return this;
                 },
 
                 withName :  function(name) {
-                    fieldUnderConstruction[fieldConstants.NAME] = name;
+                    fieldUnderConstruction[fieldConstants.fieldKeys.NAME] = name;
                     return this;
                 },
 
                 withType :  function(type) {
-                    fieldUnderConstruction[fieldConstants.TYPE] = type;
+                    fieldUnderConstruction[fieldConstants.fieldKeys.TYPE] = type;
                     return this;
                 },
 
                 withTableId :  function(tableId) {
-                    fieldUnderConstruction[fieldConstants.TABLE_ID] = tableId;
+                    fieldUnderConstruction[fieldConstants.fieldKeys.TABLE_ID] = tableId;
                     return this;
                 },
 
                 withBuiltIn :  function(isBuiltIn) {
-                    fieldUnderConstruction[fieldConstants.BUILT_IN] = isBuiltIn;
+                    fieldUnderConstruction[fieldConstants.fieldKeys.BUILT_IN] = isBuiltIn;
                     return this;
                 },
 
                 withDataIsCopyable :  function(isDataCopyable) {
-                    fieldUnderConstruction[fieldConstants.DATA_IS_COPYABLE] = isDataCopyable;
+                    fieldUnderConstruction[fieldConstants.fieldKeys.DATA_IS_COPYABLE] = isDataCopyable;
                     return this;
                 },
 
                 withIncludeInQuickSearch :  function(includeInQuickSearch) {
-                    fieldUnderConstruction[fieldConstants.INCLUDE_IN_QUICKSEARCH] = includeInQuickSearch;
+                    fieldUnderConstruction[fieldConstants.fieldKeys.INCLUDE_IN_QUICKSEARCH] = includeInQuickSearch;
                     return this;
                 },
 
                 withClientSideAttributes :  function(clientSideAttributes) {
-                    fieldUnderConstruction[fieldConstants.CLIENT_SIDE_ATTRIBUTES] = clientSideAttributes;
+                    fieldUnderConstruction[fieldConstants.fieldKeys.CLIENT_SIDE_ATTRIBUTES] = clientSideAttributes;
                     return this;
                 },
 

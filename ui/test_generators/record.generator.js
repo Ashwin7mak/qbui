@@ -32,7 +32,7 @@
                     console.error('Record data generator is undefined for field type ' + field[fieldConsts.fieldKeys.TYPE]);
                 }
                 else {
-                    console.log('Generating field value for type ' + field[fieldConsts.fieldKeys.TYPE]);
+                    console.info('Generating field value for type ' + field[fieldConsts.fieldKeys.TYPE]);
                     recordJson.push({
                         id: field[fieldConsts.fieldKeys.ID],
                         value: generateRecordValueForFieldType(field[fieldConsts.fieldKeys.TYPE])
@@ -77,8 +77,8 @@
     recordTypeMapping[consts.EMAIL_ADDRESS] = function (){ return rawValueGenerator.generateEmailInDomain('gmail.com'); };
     recordTypeMapping[consts.PHONE_NUMBER] = function (){ return rawValueGenerator.generatePhoneNumber(); };
     recordTypeMapping[consts.CHECKBOX] = function (){ return rawValueGenerator.generateBool()};
-    recordTypeMapping[consts.DATE_TIME] = function (){ return rawValueGenerator.generateDate() };
-    recordTypeMapping[consts.DATE] = function (){ return rawValueGenerator.generateDateTime() };
+    recordTypeMapping[consts.DATE_TIME] = function (){ return rawValueGenerator.generateDateTime()  };
+    recordTypeMapping[consts.DATE] = function (){ return rawValueGenerator.generateDate() };
     recordTypeMapping[consts.TIME_OF_DAY] = function (){ return rawValueGenerator.generateTime()};
     recordTypeMapping[consts.FILE_ATTACHMENT] = function (){ return rawValueGenerator.generateUrl();};
     recordTypeMapping[consts.USER] = function (userIdsToPickFrom){ return rawValueGenerator.pickUserIdFromList(userIdsToPickFrom)};
