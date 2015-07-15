@@ -527,7 +527,7 @@ module.exports = function (grunt) {
             integration: {
                 options: {
                     //log in test results in red any node integration tests over slow amount below which in milliseconds
-                    noTimeouts: true,
+                    slow : 400,
                     reporter: (function () {
                         process.env.MOCHA_COLORS = false;
                         process.env.JUNIT_REPORT_PATH = serverReportDir + '/integration/server_report.xml';
