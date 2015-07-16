@@ -171,13 +171,13 @@ describe('Service: ReportService', function() {
         });
 
         //  NOTE: the expectations will get tested until after the above promise is fulfilled
-        expect(ApiService.runFormattedReport).toHaveBeenCalledWith(appId, tableId, reportId, 0, 1)
+        expect(ApiService.runFormattedReport).toHaveBeenCalledWith(appId, tableId, reportId, 0, 1);
         expect(promise.$$state.status).toEqual(2);
     });
 
     it('validate resolved API getReportRecords service call', function() {
 
-        var reportData, offset=15, rows=10;;
+        var reportData, offset=15, rows=10;
         var promise = ReportService.getReportRecords(appId, tableId, reportId, offset, rows).then (
              function (value) {
                  reportData = value;
