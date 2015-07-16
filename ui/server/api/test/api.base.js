@@ -201,15 +201,6 @@
                 return deferred.promise;
             },
 
-            //Sleeps the specified ms of time (Will block the execution thread!)
-            sleep: function(time, callback) {
-                var stop = new Date().getTime();
-                while(new Date().getTime() < stop + time) {
-                    ;
-                }
-                callback();
-            },
-
             //Create a realm for API tests to run against and generates a ticket
             initialize: function () {
                 var context = this;
