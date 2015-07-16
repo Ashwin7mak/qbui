@@ -39,6 +39,9 @@
         var TICKET_HEADER_KEY = 'ticket';
         var DEFAULT_HEADERS = {};
         DEFAULT_HEADERS[CONTENT_TYPE] = APPLICATION_JSON;
+        var ERROR_HPE_INVALID_CONSTANT = "HPE_INVALID_CONSTANT";
+        var ERROR_ENOTFOUND = "ENOTFOUND";
+
 
         //Resolves a full URL using the instance subdomain and the configured javaHost
         function resolveFullUrl(path, realmSubdomain) {
@@ -164,17 +167,40 @@
                 log.debug('About to execute the request: ' + jsonBigNum.stringify(opts));
                 //Make request and return promise
                 var deferred = promise.pending();
+                apiBase.executeRequestRetryable(opts, 3).then(function(resp){
+                    deferred.resolve(resp);
+                }).catch(function(error){
+                    deferred.reject(error);
+                });
+                return deferred.promise;
+            },
+
+            executeRequestRetryable: function(opts, numRetries) {
+                var deferred = promise.pending();
+                var tries = numRetries;
                 request(opts, function (error, response) {
-                    if (error) {
-                        deferred.reject(new Error(error));
-                    } else if (response.statusCode != 200) {
-                        deferred.reject(response);
+                    if (error || response.statusCode != 200) {
+                        if(tries > 1  && (error.code === ERROR_HPE_INVALID_CONSTANT || error.code === ERROR_ENOTFOUND)) {
+                            tries --;
+                            log.debug("Attempting a retry: " + JSON.stringify(opts) + " Tries remaining: " + tries);
+                            apiBase.executeRequestRetryable(opts, tries).then(function(res2){
+                                log.debug("Success following retry/retries");
+                                deferred.resolve(res2);
+                            }).catch(function(err2){
+                                log.debug("Failure after retries");
+                                deferred.reject(err2);
+                            });
+                        } else {
+                            log.debug("Network request failed, no retries left or an unsupported error for retry found");
+                            deferred.reject(error);
+                        }
                     } else {
                         deferred.resolve(response);
                     }
                 });
                 return deferred.promise;
             },
+
             //Create a realm for API tests to run against and generates a ticket
             initialize: function () {
                 var context = this;
