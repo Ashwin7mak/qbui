@@ -15,6 +15,7 @@
             font-size: 22px;
             height: 27px;
             font-family: "HelveticaNeueBold", Helvetica, Arial, sans-serif;
+            color: $darker-gray;
           }
           &.subheader {
             margin-top: 3px;
@@ -24,9 +25,11 @@
             font-family: "HelveticaNeueRoman", Helvetica, Arial, sans-serif;
           }
           &.content {
-            font-size: 13px;
             margin: 35px 60px 20px 0px;
             font-family: "HelveticaNeueRoman", Helvetica, Arial, sans-serif;
+            color: $darker-gray;
+            font-size: 14px;
+            -webkit-font-smoothing: antialiased;
           }
         }
       }
@@ -48,15 +51,16 @@
           }
           .header {
             margin-top: 10px;
-            margin-left: 15px;
+            margin-left: 17px;
             font-size: 1.2rem;
             font-family: "HelveticaNeueBold", Helvetica, Arial, sans-serif;
+            color: $darker-gray;
           }
           .subheader {
             font-size: 12px;
             height: 18px;
             margin-top: 2px;
-            margin-left: 15px;
+            margin-left: 17px;
             color: $slate;
             text-transform: uppercase;
             font-family: "HelveticaNeueRoman", Helvetica, Arial, sans-serif;
@@ -64,7 +68,7 @@
           button {
             cursor: pointer;
             margin-top: 15px;
-            margin-left: 15px;
+            margin-left: 17px;
             color: $white !important;
             border: 1px solid #ccc;
             border-radius: 2px;
