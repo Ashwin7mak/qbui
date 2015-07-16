@@ -12,18 +12,21 @@
         div {
           margin-left: 40px;
           &.header {
-            font-size: 1.2rem;
+            font-size: 22px;
+            height: 27px;
             font-family: "HelveticaNeueBold", Helvetica, Arial, sans-serif;
           }
           &.subheader {
             margin-top: 3px;
-            font-size: 0.8rem;
+            font-size: 14px;
             color: $slate;
             text-transform: inherit;
+            font-family: "HelveticaNeueRoman", Helvetica, Arial, sans-serif;
           }
           &.content {
-            font-size: 0.8rem;
-            margin: 20px 60px 20px 0px;
+            font-size: 13px;
+            margin: 35px 60px 20px 0px;
+            font-family: "HelveticaNeueRoman", Helvetica, Arial, sans-serif;
           }
         }
       }
@@ -50,11 +53,13 @@
             font-family: "HelveticaNeueBold", Helvetica, Arial, sans-serif;
           }
           .subheader {
-            font-size: 0.7rem;
+            font-size: 12px;
+            height: 18px;
             margin-top: 2px;
             margin-left: 15px;
             color: $slate;
             text-transform: uppercase;
+            font-family: "HelveticaNeueRoman", Helvetica, Arial, sans-serif;
           }
           button {
             cursor: pointer;
