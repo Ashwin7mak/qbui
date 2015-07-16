@@ -1,6 +1,8 @@
-<div class="reminder">
-    <div class="icon"></div>
-    <div class="header">Remember</div>
-    <div class="subheader">Your Feedback Matters</div>
+<div class="reminder" ng-class="{'stage-closed': isClosed}">
+    <div class="stage-showHide-content">
+        <div class="icon"></div>
+        <div class="header">Remember</div>
+        <div class="subheader">Your Feedback Matters</div>
+    </div>
     <button ng-click="sendFeedback()" type="button">Log your thoughts</button>
 </div>

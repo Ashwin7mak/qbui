@@ -2,14 +2,19 @@
     <div class="report-stage">
         <div class="report-content">
             <div class="left">
-
                 <div class="header">{{stage.reportName}} Report</div>
                 <div class="subheader">Snapshot of original report, {{stage.appName}} app</div>
-                <div class="content">Congratulations and welcome! You're part of a small group in the early-phase QuickBase Data-Snapshot
-                    program. A pioneer program that lets you browse your data faster as a snapshot.</div>
+                <div class="content"  ng-class="{'stage-closed': isClosed}">
+                    <div class="stage-showHide-content">
+                        Congratulations and welcome! You're part of a small group in the early-phase QuickBase Data-Snapshot
+                        program. A pioneer program that lets you browse your data faster as a snapshot.
+                    </div>
+                </div>
             </div>
             <div class="right">
-                <report-feedback-button></report-feedback-button>
+                <div class="content"  ng-class="{'stage-closed': isClosed}">
+                    <report-feedback-button></report-feedback-button>
+                </div>
             </div>
         </div>
     </div>

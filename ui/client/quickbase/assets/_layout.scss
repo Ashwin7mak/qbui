@@ -299,28 +299,8 @@
       transition: opacity .10s linear .20s, max-height .05s linear .20s;
     }
 
-    &.stage-open {
-      min-height: 200px !important;
-    }
-
-    &.stage-close {
-      height: 40px !important;
-      min-height: 40px !important;
-      transition: height .20s linear .10s;
-
-      .layout-stage-content {
-          opacity: 0;
-          max-height: 0;
-          visibility: hidden;
-          transition: visibility 0s .20s, opacity .20s linear;
-      }
-
-      .tab {
-          background-position: -121px -20px;
-      }
-    }
-
     .tab {
+      display: block;  //  show/hide stage open/close arrow
       cursor: pointer;
       position: absolute;
       bottom: -24px;
@@ -336,6 +316,30 @@
       outline: medium none;
       &.arrow {
         @include arrow-sprite-png;
+      }
+    }
+
+    &.stage-open {
+      height: 200px;
+      min-height: 200px !important;
+    }
+
+    &.stage-close {
+      height: 80px !important;
+      min-height: 80px !important;
+      .tab {
+          background-position: -121px -20px;
+      }
+    }
+
+    .stage-closed {
+      transition: height .50s linear .10s;
+
+      .stage-showHide-content {
+          opacity: 0;
+          max-height: 0;
+          visibility: hidden;
+          transition: visibility 0s .20s, opacity .20s linear;
       }
     }
 

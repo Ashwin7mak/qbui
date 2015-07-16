@@ -35,6 +35,9 @@
           white-space: nowrap;
           border-left: 1px solid $light-gray;
           padding: 1px 20px 15px 40px;
+          &.stage-closed {
+            border-left: 0px;
+          }
           .icon {
             width: 50px;
             height: 60px;
