@@ -269,7 +269,7 @@
     height: 40px;
     min-height: 40px;
     line-height: 40px;
-    padding: 0px 15px;
+    //padding: 0px 15px;
 
     .leftContent {
       float: left;
@@ -278,7 +278,6 @@
       font-weight: 500;
       text-transform: uppercase;
       -webkit-font-smoothing: antialiased;
-      visibility: hidden;
     }
     .rightContent {
       float: right;

@@ -66,7 +66,7 @@
                 //  set appropriate header object data
                 $scope.showHeader = false;
                 $scope.header = {
-                    leftContent: 'Beta > Reports > ' + $scope.report.name,
+                    leftContent: '',
                     rightContent: ''
                 };
 
