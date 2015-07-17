@@ -9,7 +9,8 @@
     var tableBuilder = require('./table.builder');
     var tableConsts = require('./table.constants');
     var fieldGenerator = require('./field.generator');
-    var chance = new require('chance');
+    var Chance = require('chance');
+    var chance = new Chance();
 
     //The max number of fields we will generate at random
     var maxRandomFields = 10;
@@ -183,14 +184,11 @@
      */
     function generateRandomTable(size){
         var builderInstance = getTableBuilderWithName();
-
         var numFields = undefined === size ? chance.integer({min:1, max:maxRandomFields}) : size;
 
         for(var i= 0; i< numFields; i++){
-            var fieldTypeIndex = chance.integer({min:1, max:availableFieldTypes.length-1});
-
-            var field = fieldGenerator.generateBaseField(availableFieldTypes[fieldTypeIndex]);
-
+            var fieldTypeIndex = chance.integer({min:1, max:fieldGenerator.getAvailableFieldTypes().length-1});
+            var field = fieldGenerator.generateBaseField(fieldGenerator.getAvailableFieldTypes()[fieldTypeIndex]);
             builderInstance.withField(field);
         }
 
