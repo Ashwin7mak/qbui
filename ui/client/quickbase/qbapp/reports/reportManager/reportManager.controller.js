@@ -72,7 +72,7 @@
 
                 //  set appropriate footer object data
                 $scope.footer = {
-                    content: '&#169;2015 Intuit Inc. All rights reserved'
+                    content: '&#169;' + new Date().getFullYear() + ' Intuit Inc. All rights reserved'
                 };
 
                 //  set the stage object based on the model data
