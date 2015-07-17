@@ -66,10 +66,11 @@
   line-height: 1.2em;
   vertical-align: middle;
   border-left: 1px dotted $light-gray;
-  border-right: 0px dotted $light-gray;
+  border-right: 0px dotted $light-gray;  // ui-grid defaults to always show the right border
 }
 
-.ui-grid-row .ui-grid-cell:nth-child(1) {
+//  always hide the left border for column 1
+.ui-grid-cell:nth-child(1) {
   border-left: 0px dotted $light-gray;
 }
 
