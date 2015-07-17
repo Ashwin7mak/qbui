@@ -13,11 +13,11 @@
 
         // Page Elements using Locators
         this.reportServiceDivEl = element(by.className('quickbase-app'));
-        this.sessionTicketLinkEl = this.reportServiceDivEl.element(by.linkText('session ticket'));
 
-        this.appIdInputEl = element(by.id('appId'));
-        this.tableIdInputEl = element(by.id('tableId'));
-        this.goButtonEl = element(by.id('theButton'));
+        this.appElList = element.all(by.repeater('app in apps'));
+        this.firstAppEl = this.appElList.first();
+        this.firstTableEl = element.all(by.repeater('table in app.tables')).first();
+        this.firstReportLinkEl = this.firstTableEl.all(by.tagName('a')).first();
     };
 
     module.exports = new requestReportPage();

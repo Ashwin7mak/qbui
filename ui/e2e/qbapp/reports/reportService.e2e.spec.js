@@ -42,7 +42,6 @@ describe('Report Service E2E Tests', function (){
             tableToFieldToFieldTypeMap['table 1']['Text Field'] = consts.TEXT;
             tableToFieldToFieldTypeMap['table 1']['Multi Text Field'] = consts.MULTI_LINE_TEXT;
             tableToFieldToFieldTypeMap['table 1']['Phone Number Field'] = consts.PHONE_NUMBER;
-            //tableToFieldToFieldTypeMap['table 1']['Date Field'] = consts.DATE;
 
             // Generate the app JSON object
             var generatedApp = appGenerator.generateAppWithTablesFromMap(tableToFieldToFieldTypeMap);
@@ -54,13 +53,13 @@ describe('Report Service E2E Tests', function (){
                 app = createdApp;
 
                 // Get the appropriate fields out of the Create App response (specifically the created field Ids)
-                var nonBuiltInFields = getNonBuiltInFields(createdApp);
+                var nonBuiltInFields = getNonBuiltInFields(createdApp.tables[0]);
                 // Generate the record JSON objects
                 var generatedRecords = generateRecords(nonBuiltInFields, 10);
 
                 // Via the API create the records, a new report, then run the report.
                 // This is a promise chain since we need these actions to happen sequentially
-                addRecords(createdApp, generatedRecords).then(createReport).then(runReport).then(function (reportRecords) {
+                addRecords(createdApp, createdApp.tables[0], generatedRecords).then(createReport).then(runReport).then(function (reportRecords) {
                     console.log("Here are the records returned from your API report:");
                     console.log(reportRecords);
                     recordList = reportRecords;
@@ -80,7 +79,7 @@ describe('Report Service E2E Tests', function (){
     });
 
 
-    // TODO: Move these helper functions out into a service module or base class
+    // TODO: QBSE-13517 Move these helper functions out into a service module or base class
     /**
      * Takes a generated JSON object and creates it via the REST API. Returns the create app JSON response body.
      */
@@ -101,6 +100,7 @@ describe('Report Service E2E Tests', function (){
 
     /**
      * Takes a generated JSON object and creates it via the REST API. Returns the create app JSON response body.
+     * Returns a promise.
      */
     function createApp(generatedApp){
         var deferred = Promise.pending();
@@ -121,10 +121,9 @@ describe('Report Service E2E Tests', function (){
      * Takes the create app JSON object and returns an array all of the non built in fields in the specified table.
      * Use the array to pass into the recordGenerator method.
      */
-    function getNonBuiltInFields(createdApp){
+    function getNonBuiltInFields(createdTable){
         var nonBuiltInFields = [];
-        //TODO: Have the user specify which table to get the fields for
-        createdApp.tables[0].fields.forEach(function (field) {
+        createdTable.fields.forEach(function (field) {
             if(field.builtIn !== true){
                 nonBuiltInFields.push(field);
             }
@@ -147,10 +146,14 @@ describe('Report Service E2E Tests', function (){
         return generatedRecords;
     };
 
-    function addRecords(app, genRecords){
+    /**
+     * Takes a set of generated record objects and adds them to the specified app and table
+     * Returns a promise.
+     */
+    function addRecords(app, table, genRecords){
         var deferred = Promise.pending();
         // Resolve the proper record endpoint specific to the generated app and table
-        var recordsEndpoint = recordBase.apiBase.resolveRecordsEndpoint(app.id, app.tables[0].id);
+        var recordsEndpoint = recordBase.apiBase.resolveRecordsEndpoint(app.id, table.id);
 
         var fetchRecordPromises = [];
         genRecords.forEach(function (currentRecord) {
@@ -171,7 +174,7 @@ describe('Report Service E2E Tests', function (){
         return deferred.promise;
     };
 
-    // TODO: Need to write a report generator
+    // TODO: QBSE-13518 Write a report generator
     function createReport(){
         var deferred = Promise.pending();
         var reportJSON = {
@@ -212,6 +215,24 @@ describe('Report Service E2E Tests', function (){
         return deferred.promise;
     };
 
+    // Helper function that will get all of the field column headers from the report. Returns an array of strings.
+    function getReportColumnHeaders(reportServicePage){
+        var deferred = Promise.pending();
+        var fieldColHeaders = [];
+        reportServicePage.columnHeaderElList.then(function(result){
+            for(var i = 0; i < result.length; i++){
+                result[i].getText().then(function(value){
+                    // The getText call above is returning the text value with a new line char on the end, need to remove it
+                    var subValue = value.replace(/(\r\n|\n|\r)/gm,"");
+                    fieldColHeaders.push(subValue.trim());
+                });
+            }
+        }).then(function(){
+            deferred.resolve(fieldColHeaders);
+        });
+        return deferred.promise;
+    };
+
     /**
      * Test method. After setup completes, loads the browser, requests a session ticket, requests the list
      * of reports for that app and table, then runs / displays the report in the browser
@@ -225,14 +246,12 @@ describe('Report Service E2E Tests', function (){
 
         // Load the page objects
         var requestReportPage = require('./requestReport.po.js');
-        var directReportLinksPage = require('./directReportLinks.po.js');
         var reportServicePage = require('./reportService.po.js');
 
         // Gather the necessary values to make the requests via the browser
         var ticketEndpoint = recordBase.apiBase.resolveTicketEndpoint();
         var realmName = recordBase.apiBase.realm.subdomain;
         var realmId = recordBase.apiBase.realm.id;
-        //console.log('realmId: ' + realmId);
         var appId = app.id;
         var tableId = app.tables[0].id;
 
@@ -247,19 +266,13 @@ describe('Report Service E2E Tests', function (){
         var requestReportPageEndPoint = 'http://' + realmName + '.localhost:9000/qbapp#//';
         browser.get(requestReportPageEndPoint);
 
-        // Enter in the appId, tableId and click the 'Go' button
-        //browser.driver.sleep(2000);
-        requestReportPage.appIdInputEl.sendKeys(appId);
-        requestReportPage.tableIdInputEl.sendKeys(tableId);
-        requestReportPage.goButtonEl.click();
-
-        // Now on Direct Links page. Choose the first link to run the Report
-        //browser.driver.sleep(2000);
-        directReportLinksPage.firstReportLinkEl.click();
+        // Check that we have a report for our created table
+        expect(requestReportPage.firstReportLinkEl.getText()).toContain(tableId);
+        requestReportPage.firstReportLinkEl.click();
 
         // Now on the Reports Service page
+        browser.driver.sleep(10000);
         // Assert report name
-        //browser.driver.sleep(10000);
         var reportName = 'Test Report';
         reportServicePage.reportTitleEl.getText(function (text){
             expect(text).toEqual(reportName + ' Report');
@@ -267,29 +280,11 @@ describe('Report Service E2E Tests', function (){
 
         // Assert column headers
         var fieldNames = ['Record ID#', 'Text Field', 'Multi Text Field', 'Phone Number Field'];
-        getColumnHeaders().then(function(resultArray){
+        getReportColumnHeaders(reportServicePage).then(function(resultArray){
             // UI is currently using upper case to display the field names in columns
             fieldNames.myUcase();
             expect(resultArray).toEqual(fieldNames);
         });
-
-        // Helper function that will get all of the field column headers from the report. Returns an array of strings.
-        function getColumnHeaders(){
-            var deferred = Promise.pending();
-            var fieldColHeaders = [];
-            reportServicePage.columnHeaderElList.then(function(result){
-                for(var i = 0; i < result.length; i++){
-                    result[i].getText().then(function(value){
-                        // The getText call above is returning the text value with a new line char on the end, need to remove it
-                        var subValue = value.replace(/(\r\n|\n|\r)/gm,"");
-                        fieldColHeaders.push(subValue.trim());
-                    });
-                }
-            }).then(function(){
-                deferred.resolve(fieldColHeaders);
-            });
-            return deferred.promise;
-        };
 
         // Helper function that will convert an array of strings to uppercase
         Array.prototype.myUcase=function()
