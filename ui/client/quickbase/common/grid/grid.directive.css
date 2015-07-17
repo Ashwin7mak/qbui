@@ -63,6 +63,7 @@
       line-height: 1.42857;
       text-decoration: none;
       color: #365EBF;
+      border: 1px #DCDCDC solid;
       background-color: #FFF;
       margin-left: -1px; }
     .pagination > li:first-child > a,

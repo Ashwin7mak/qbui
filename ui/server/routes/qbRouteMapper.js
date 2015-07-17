@@ -170,7 +170,8 @@
         processRequest(req, res, function (req, res){
             recordsApi.fetchSingleRecordAndFields(req)
                 .then(function (response) {
-                    log.logResponse(req, response, __filename)
+                    log.logResponse(req, response, __filename);
+                    log.debug('API response: ' + JSON.stringify(response) + ' Request - method:' + req.method + ' - ' + req.path);
                     res.send(response);
                 })
                 .catch(function (error) {
@@ -239,7 +240,7 @@
 
             request(opts)
                 .on('response', function (response) {
-                    log.info('API response: ' + response.statusCode + ' - ' + req.method + ' ' + req.path);
+                    log.debug('API response: ' + response.statusCode + ' - ' + req.method + ' ' + req.path);
                 })
                 .on('error', function (error) {
                     log.error('API ERROR ' + JSON.stringify(error));

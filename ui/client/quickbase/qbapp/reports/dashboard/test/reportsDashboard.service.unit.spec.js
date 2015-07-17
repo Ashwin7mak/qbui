@@ -20,49 +20,79 @@ describe('Service: ReportService', function() {
         })
     );
 
-    it('validate the API getReports service call', function() {
-
+    it('validate resolved API getReports service call', function() {
         spyOn(ApiService, 'getReports').and.callFake(function() {
             return deferred.promise;
         });
 
         deferred.resolve();
-        ReportsDashboardService.get(appId, tableId);
-
+        var promise = ReportsDashboardService.get(appId, tableId);
         scope.$apply();
 
         expect(ApiService.getReports).toHaveBeenCalledWith(appId, tableId);
+        expect(promise.$$state.status).toEqual(1);
+    });
+    it('validate rejected API getReports service call', function() {
+        spyOn(ApiService, 'getReports').and.callFake(function() {
+            return deferred.promise;
+        });
 
-     });
+        deferred.reject();
+        var promise = ReportsDashboardService.get(appId, tableId);
+        scope.$apply();
 
-    it('validate the API getApps service call', function() {
+        expect(ApiService.getReports).toHaveBeenCalledWith(appId, tableId);
+        expect(promise.$$state.status).toEqual(2);
+    });
 
+    it('validate resolved API getApps service call', function() {
         spyOn(ApiService, 'getApps').and.callFake(function() {
             return deferred.promise;
         });
 
         deferred.resolve();
-        ReportsDashboardService.getApps();
-
+        var promise = ReportsDashboardService.getApps();
         scope.$apply();
 
         expect(ApiService.getApps).toHaveBeenCalledWith();
+        expect(promise.$$state.status).toEqual(1);
+    });
+    it('validate rejected API getApps service call', function() {
+        spyOn(ApiService, 'getApps').and.callFake(function() {
+            return deferred.promise;
+        });
 
-     });
+        deferred.reject();
+        var promise = ReportsDashboardService.getApps();
+        scope.$apply();
 
-    it('validate the API getApp service call', function() {
+        expect(ApiService.getApps).toHaveBeenCalledWith();
+        expect(promise.$$state.status).toEqual(2);
+    });
 
+    it('validate resolved API getApp service call', function() {
         spyOn(ApiService, 'getApp').and.callFake(function() {
             return deferred.promise;
         });
 
         deferred.resolve();
-        ReportsDashboardService.getApp(appId);
-
+        var promise = ReportsDashboardService.getApp(appId);
         scope.$apply();
 
         expect(ApiService.getApp).toHaveBeenCalledWith(appId);
+        expect(promise.$$state.status).toEqual(1);
+    });
+    it('validate rejected API getApp service call', function() {
+        spyOn(ApiService, 'getApp').and.callFake(function() {
+            return deferred.promise;
+        });
 
+        deferred.reject();
+        var promise = ReportsDashboardService.getApp(appId);
+        scope.$apply();
+
+        expect(ApiService.getApp).toHaveBeenCalledWith(appId);
+        expect(promise.$$state.status).toEqual(2);
      });
 
 });

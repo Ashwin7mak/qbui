@@ -135,7 +135,27 @@ module.exports = function (grunt) {
                     config: './.jscsrc',
                     excludeFiles: ['<%= express.root %>/**/*.spec.js']
                 }
+            },
+            testGen: {
+                files: {
+                    src: ['test_generators/**/*.js']
+                },
+                options: {
+                    config: './.jscsrc',
+                    excludeFiles: ['test_generators/**/*.spec.js']
+                }
+            },
+            source: {
+                files: {
+                    src: ['<%= quickbase.client.root %>/**/*.js',
+                         '<%= express.root %>/**/*.js','test_generators/**/*.js']
+                },
+                options: {
+                    config: './.jscsrc',
+                    excludeFiles: ['<%= quickbase.client.root %>/bower_components/**/*.js']
+                }
             }
+
         },
 
         // Make sure code styles are up to par and there are no obvious mistakes
@@ -169,7 +189,10 @@ module.exports = function (grunt) {
                     '<%= quickbase.client.components %>/**/*.spec.js',
                     '<%= quickbase.client.components %>/**/*.mock.js'
                 ]
-            }
+            },
+            testGen: [
+                'test_generator/**/*.js'
+            ],
         },
 
         // Empties folders to start fresh

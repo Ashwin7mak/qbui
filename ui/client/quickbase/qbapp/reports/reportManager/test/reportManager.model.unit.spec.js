@@ -30,10 +30,10 @@ describe('Factory: ReportModel', function() {
         })
     );
 
-    it('validate the getColumnData service', function() {
+    it('validate the resolved getColumnData service', function() {
 
         var columns;
-        ReportModel.getColumnData(appId, tableId, reportId).then (
+        var promise = ReportModel.getColumnData(appId, tableId, reportId).then (
              function (value) {
                  columns = value;
              }
@@ -46,6 +46,8 @@ describe('Factory: ReportModel', function() {
             {id:'2', name:'colName2', type:'TEXT', clientSideAttributes: {bold:false, width: 200}}];
         deferred.resolve(fields);
         scope.$apply();
+
+        expect(promise.$$state.status).toEqual(1);
 
         //  NOTE: the expectations will get tested until after the above promise is fulfilled
         expect(ReportService.getReportFields).toHaveBeenCalledWith(appId, tableId, reportId);
@@ -74,10 +76,10 @@ describe('Factory: ReportModel', function() {
         });
     });
 
-    it('validate the getMetaData service call', function() {
+    it('validate the resolved getMetaData service call', function() {
 
         var metaData;
-        ReportModel.getMetaData(appId, tableId, reportId).then (
+        var promise = ReportModel.getMetaData(appId, tableId, reportId).then (
              function (value) {
                  metaData = value;
              }
@@ -100,6 +102,8 @@ describe('Factory: ReportModel', function() {
         deferred.resolve(data);
         scope.$apply();
 
+        expect(promise.$$state.status).toEqual(1);
+
         //  NOTE: the expectations will get tested until after the above promise is fulfilled
         expect(ReportService.getMetaData).toHaveBeenCalledWith(appId, tableId, reportId);
 
@@ -113,10 +117,10 @@ describe('Factory: ReportModel', function() {
 
     });
 
-    it('validate the getREportData service call with no data returned', function() {
+    it('validate the resolved getREportData service call with no data returned', function() {
 
         var reportData, offset=30, rows=10;
-        ReportModel.getReportData(appId, tableId, reportId, offset, rows).then (
+        var promise = ReportModel.getReportData(appId, tableId, reportId, offset, rows).then (
              function (value) {
                  reportData = value;
              }
@@ -130,16 +134,18 @@ describe('Factory: ReportModel', function() {
         deferred.resolve(data);
         scope.$apply();
 
+        expect(promise.$$state.status).toEqual(1);
+
         //  NOTE: the expectations will get tested until after the above promise is fulfilled
         expect(ReportService.getReport).toHaveBeenCalledWith(appId, tableId, reportId, offset, rows);
         expect(reportData.length).toEqual(0);
 
     });
 
-    it('validate the getReportData service call with data', function() {
+    it('validate the resolved getReportData service call with data', function() {
 
         var reportData, offset=30, rows=10;
-        ReportModel.getReportData(appId, tableId, reportId, offset, rows).then (
+        var promise = ReportModel.getReportData(appId, tableId, reportId, offset, rows).then (
              function (value) {
                  reportData = value;
              }
@@ -160,10 +166,67 @@ describe('Factory: ReportModel', function() {
         deferred.resolve(data);
         scope.$apply();
 
+        expect(promise.$$state.status).toEqual(1);
+
         //  NOTE: the expectations will get tested until after the above promise is fulfilled
         expect(ReportService.getReport).toHaveBeenCalledWith(appId, tableId, reportId, offset, rows);
         expect(reportData.length).toEqual(2);
 
     });
+
+    it('validate the rejected getColumnData service', function() {
+
+        var columns;
+        var promise = ReportModel.getColumnData(appId, tableId, reportId).then (
+             function (value) {
+                 columns = value;
+             }
+        );
+
+        //  apply the promise and propagate to the then function..
+        var errResp = {msg:'error',status:500};
+        deferred.reject(errResp);
+        scope.$apply();
+
+        expect(promise.$$state.status).toEqual(2);
+        expect(ReportService.getReportFields).toHaveBeenCalledWith(appId, tableId, reportId);
+    });
+
+    it('validate the rejected getMetaData service call', function() {
+
+        var metaData;
+        var promise = ReportModel.getMetaData(appId, tableId, reportId).then (
+             function (value) {
+                 metaData = value;
+             }
+        );
+
+        var errResp = {msg:'error',status:500};
+        deferred.reject(errResp);
+        scope.$apply();
+
+        expect(promise.$$state.status).toEqual(2);
+        expect(ReportService.getMetaData).toHaveBeenCalledWith(appId, tableId, reportId);
+    });
+
+
+    it('validate the rejected getReportData service call', function() {
+
+        var reportData, offset=30, rows=10;
+        var promise = ReportModel.getReportData(appId, tableId, reportId, offset, rows).then (
+             function (value) {
+                 reportData = value;
+             }
+        );
+
+        var errResp = {msg:'error',status:500};
+        deferred.reject(errResp);
+        scope.$apply();
+
+        expect(promise.$$state.status).toEqual(2);
+        expect(ReportService.getReport).toHaveBeenCalledWith(appId, tableId, reportId, offset, rows);
+
+    });
+
 
 });

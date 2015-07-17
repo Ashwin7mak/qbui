@@ -6,6 +6,7 @@ describe('Controller: ReportCtrl', function() {
     var scope, ReportModel, gridConstants, controller;
     var appId='1', tableId='2', reportId='3';
     var reportName='reportName', companyName='companyName';
+    var deferredColumn, deferredData;
 
     // Initialize the controller and a mock scope
     beforeEach(
@@ -15,12 +16,17 @@ describe('Controller: ReportCtrl', function() {
             gridConstants = _gridConstants_;
 
             var metaData = {appId:appId, tableId:tableId, reportId:reportId, name:reportName, company:companyName};
-            var colData = {colData: true};
-            var rptData = {rptData: true};
 
             spyOn(ReportModel, 'getMetaData').and.returnValue($q.when(metaData));
-            spyOn(ReportModel, 'getColumnData').and.returnValue($q.when(colData));
-            spyOn(ReportModel, 'getReportData').and.returnValue($q.when(rptData));
+
+            deferredColumn = $q.defer();
+            deferredData = $q.defer();
+            spyOn(ReportModel, 'getColumnData').and.callFake(function() {
+                return deferredColumn.promise;
+            });
+            spyOn(ReportModel, 'getReportData').and.callFake(function() {
+                return deferredData.promise;
+            });
 
             controller = $controller('ReportCtrl',
                 {$scope:scope, $stateParams:{appId:appId, tableId:tableId, id: reportId}, ReportModel:ReportModel, gridConstants:gridConstants });
@@ -54,12 +60,20 @@ describe('Controller: ReportCtrl', function() {
     });
 
     it('validate the data grid report service callback for column data', function() {
+        //  resolve the promise with the colData object
+        var colData = {colData: true};
+        deferredColumn.resolve(colData);
+
         expect(scope.report.dataService).toBeDefined();
         scope.report.dataService(gridConstants.SERVICE_REQ.COLS, 0, 10);
         expect(ReportModel.getColumnData).toHaveBeenCalledWith(appId, tableId, reportId);
     });
 
     it('validate the data grid report service callback for column data', function() {
+        //  resolve the promise with the reportData object
+        var rptData = {rptData: true};
+        deferredData.resolve(rptData);
+
         var offset= 0, rows=10;
         expect(scope.report.dataService).toBeDefined();
         scope.report.dataService(gridConstants.SERVICE_REQ.DATA, offset, rows);
