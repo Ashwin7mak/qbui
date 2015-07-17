@@ -82,24 +82,6 @@ describe('Report Service E2E Tests', function (){
     // TODO: QBSE-13517 Move these helper functions out into a service module or base class
     /**
      * Takes a generated JSON object and creates it via the REST API. Returns the create app JSON response body.
-     */
-    function createApp(generatedApp){
-        var deferred = Promise.pending();
-        recordBase.createApp(generatedApp).then(function (appResponse) {
-            var createdApp = JSON.parse(appResponse.body);
-            assert(createdApp, 'failed to create app via the API');
-            //console.log('Create App Response: ' + app);
-            deferred.resolve(createdApp);
-        }).catch(function(error){
-            console.log(JSON.stringify(error));
-            deferred.reject(error);
-        });
-
-        return deferred.promise;
-    };
-
-    /**
-     * Takes a generated JSON object and creates it via the REST API. Returns the create app JSON response body.
      * Returns a promise.
      */
     function createApp(generatedApp){
@@ -329,6 +311,7 @@ describe('Report Service E2E Tests', function (){
         // Load the requestReportPage
         var requestReportPageEndPoint = 'http://' + realmName + '.localhost:9000/qbapp#//';
         browser.get(requestReportPageEndPoint);
+        browser.driver.sleep(2000);
 
         // Check that we have a report for our created table
         expect(requestReportPage.firstReportLinkEl.getText()).toContain(tableId);
