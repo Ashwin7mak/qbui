@@ -174,6 +174,9 @@ describe('Report Service E2E Tests', function (){
         return deferred.promise;
     };
 
+    /**
+     * Generates a report and creates it in a table via the API. Returns a promise.
+     */
     // TODO: QBSE-13518 Write a report generator
     function createReport(){
         var deferred = Promise.pending();
@@ -198,6 +201,9 @@ describe('Report Service E2E Tests', function (){
         return deferred.promise;
     };
 
+    /**
+     * Helper function that will run an existing report in a table. Returns a promise.
+     */
     function runReport(reportId){
         var deferred = Promise.pending();
 
@@ -215,7 +221,9 @@ describe('Report Service E2E Tests', function (){
         return deferred.promise;
     };
 
-    // Helper function that will get all of the field column headers from the report. Returns an array of strings.
+    /**
+     * Helper function that will get all of the field column headers from the report. Returns an array of strings.
+     */
     function getReportColumnHeaders(reportServicePage){
         var deferred = Promise.pending();
         var fieldColHeaders = [];
@@ -231,6 +239,65 @@ describe('Report Service E2E Tests', function (){
             deferred.resolve(fieldColHeaders);
         });
         return deferred.promise;
+    };
+
+    /**
+     * Helper function that will convert an array of strings to uppercase
+     */
+    function stringArrayToUpperCase(array){
+        var upperArray = [];
+        array.forEach(function (lowerString){
+            var res = lowerString.toUpperCase();
+            upperArray.push(res);
+        });
+        return upperArray;
+    };
+
+    /**
+     * Function that will compare actual and expected record values
+     */
+    function assertRecordValues(actualRecords, expectedRecords) {
+
+        // Check that we have the same number of records to compare
+        expect(actualRecords.length).toEqual(expectedRecords.length);
+
+        // Gather the record values
+        var actualRecordList = [];
+
+        // Each row of the repeater (one record) is returned as a string of values.
+        // Split on the new line char and create a new array.
+        actualRecords.forEach(function (recordString) {
+            var record = recordString.split("\n");
+            actualRecordList.push(record);
+        });
+
+        // Sort expected records by recordID
+        expectedRecords.sort(function (a, b) {
+            return parseInt(a[0].value) - parseInt(b[0].value);
+        });
+
+        // Loop through the expected recordList
+        for (var k = 0; k < expectedRecords.length; k++) {
+            // Grab the expected record
+            var expectedRecord = expectedRecords[k];
+            // Get the record Id to look for
+            var expectedRecIdValue = expectedRecord[0].value;
+
+            // Grab actual record to compare recordIds
+            var actualRecord = actualRecordList[k];
+            // Get the record Id
+            var actualRecIdValue = actualRecord[0];
+
+            // If the record Ids match, compare the other fields in the records
+            if (expectedRecIdValue === Number(actualRecIdValue)) {
+                //console.log("Comparing record values for records with ID: " + expectedRecIdValue);
+                for (var j = 1; j < expectedRecord.length; j++) {
+                    //console.log("Comparing expected field value:" + expectedRecord[j].value
+                    //+ " with actual field value: " + actualRecord[j]);
+                    expect(expectedRecord[j].value).toEqual(actualRecord[j]);
+                }
+            }
+        }
     };
 
     /**
@@ -282,62 +349,13 @@ describe('Report Service E2E Tests', function (){
         var fieldNames = ['Record ID#', 'Text Field', 'Multi Text Field', 'Phone Number Field'];
         getReportColumnHeaders(reportServicePage).then(function(resultArray){
             // UI is currently using upper case to display the field names in columns
-            fieldNames.myUcase();
-            expect(resultArray).toEqual(fieldNames);
+            var upperFieldNames = stringArrayToUpperCase(fieldNames);
+            expect(resultArray).toEqual(upperFieldNames);
         });
-
-        // Helper function that will convert an array of strings to uppercase
-        Array.prototype.myUcase=function()
-        {
-            for (var i = 0; i < this.length; i++)
-            {
-                this[i]=this[i].toUpperCase();
-            }
-        };
 
         // Check all record values
         reportServicePage.recordElList.getText().then(function(uiRecords) {
-
-            // Check that we have the same number of records to compare
-            expect(uiRecords.length).toEqual(recordList.length);
-
-            // Gather the record values
-            var actualRecordList = [];
-
-            // Each row of the repeater (one record) is returned as a string of values.
-            // Split on the new line char and create a new array.
-            uiRecords.forEach(function (recordString){
-                var record = recordString.split("\n");
-                actualRecordList.push(record);
-            });
-
-            // Sort expected records by recordID
-            recordList.sort(function (a, b) {
-                return parseInt(a[0].value) - parseInt(b[0].value);
-            });
-
-            // Loop through the expected recordList
-            for (var k = 0; k < recordList.length; k++) {
-                // Grab the expected record
-                var expectedRecord = recordList[k];
-                // Get the record Id to look for
-                var expectedRecIdValue = expectedRecord[0].value;
-
-                // Grab actual record to compare recordIds
-                var actualRecord = actualRecordList[k];
-                // Get the record Id
-                var actualRecIdValue = actualRecord[0];
-
-                // If the record Ids match, compare the other fields in the records
-                if (expectedRecIdValue === Number(actualRecIdValue)) {
-                    console.log("Comparing record values for records with ID: " + expectedRecIdValue);
-                    for (var j = 1; j < expectedRecord.length; j++) {
-                        console.log("Comparing expected field value:" + expectedRecord[j].value
-                            + " with actual field value: " + actualRecord[j]);
-                        expect(expectedRecord[j].value).toEqual(actualRecord[j]);
-                    }
-                }
-            }
+            assertRecordValues(uiRecords, recordList);
         });
     });
 
