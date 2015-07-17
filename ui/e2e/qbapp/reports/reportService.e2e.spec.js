@@ -60,8 +60,8 @@ describe('Report Service E2E Tests', function (){
                 // Via the API create the records, a new report, then run the report.
                 // This is a promise chain since we need these actions to happen sequentially
                 addRecords(createdApp, createdApp.tables[0], generatedRecords).then(createReport).then(runReport).then(function (reportRecords) {
-                    console.log("Here are the records returned from your API report:");
-                    console.log(reportRecords);
+                    //console.log('Here are the records returned from your API report:');
+                    //console.log(reportRecords);
                     recordList = reportRecords;
 
                     // Setup complete so set the global var so we don't run setup again
@@ -70,7 +70,7 @@ describe('Report Service E2E Tests', function (){
                     done();
                 }).catch(function (error){
                     console.log(JSON.stringify(error));
-                    throw new Error("Error during test setup:" + error);
+                    throw new Error('Error during test setup:' + error);
                     done();
                 });
             });
@@ -88,7 +88,7 @@ describe('Report Service E2E Tests', function (){
         recordBase.createApp(generatedApp).then(function (appResponse) {
             var createdApp = JSON.parse(appResponse.body);
             assert(createdApp, 'failed to create app via the API');
-            //console.log("Create App Response: " + app);
+            //console.log('Create App Response: ' + app);
             deferred.resolve(createdApp);
         }).catch(function(error){
             console.log(JSON.stringify(error));
@@ -107,7 +107,7 @@ describe('Report Service E2E Tests', function (){
         recordBase.createApp(generatedApp).then(function (appResponse) {
             var createdApp = JSON.parse(appResponse.body);
             assert(createdApp, 'failed to create app via the API');
-            //console.log("Create App Response: " + app);
+            //console.log('Create App Response: ' + app);
             deferred.resolve(createdApp);
         }).catch(function(error){
             console.log(JSON.stringify(error));
@@ -162,11 +162,7 @@ describe('Report Service E2E Tests', function (){
 
         Promise.all(fetchRecordPromises)
             .then(function (results) {
-                for (var i = 0; i < results.length; i++) {
-                    //console.log("Here is fetched record response " + i);
-                    //console.log(results[i]);
-                }
-                deferred.resolve(app);
+                deferred.resolve(results);
             }).catch(function (error) {
                 console.log(JSON.stringify(error));
                 deferred.reject(error);
@@ -189,8 +185,9 @@ describe('Report Service E2E Tests', function (){
         };
         var reportsEndpoint = recordBase.apiBase.resolveReportsEndpoint(app.id, app.tables[0].id);
 
+        // TODO: QBSE-13843 Create helper GET And POST functions that extend this executeRequest function
         recordBase.apiBase.executeRequest(reportsEndpoint, 'POST', reportJSON).then(function(result){
-            //console.log("Report create result");
+            //console.log('Report create result');
             var parsed = JSON.parse(result.body);
             var id = parsed.id;
             deferred.resolve(id);
@@ -210,7 +207,7 @@ describe('Report Service E2E Tests', function (){
         var reportsEndpoint = recordBase.apiBase.resolveReportsEndpoint(app.id, app.tables[0].id, reportId);
         var runReportEndpoint = reportsEndpoint + '/results';
         recordBase.apiBase.executeRequest(runReportEndpoint, 'GET').then(function(result){
-            //console.log("Report create result");
+            //console.log('Report create result');
             var responseBody = JSON.parse(result.body);
             //console.log(parsed);
             deferred.resolve(responseBody.records);
@@ -231,7 +228,7 @@ describe('Report Service E2E Tests', function (){
             for(var i = 0; i < result.length; i++){
                 result[i].getText().then(function(value){
                     // The getText call above is returning the text value with a new line char on the end, need to remove it
-                    var subValue = value.replace(/(\r\n|\n|\r)/gm,"");
+                    var subValue = value.replace(/(\r\n|\n|\r)/gm,'');
                     fieldColHeaders.push(subValue.trim());
                 });
             }
@@ -267,7 +264,7 @@ describe('Report Service E2E Tests', function (){
         // Each row of the repeater (one record) is returned as a string of values.
         // Split on the new line char and create a new array.
         actualRecords.forEach(function (recordString) {
-            var record = recordString.split("\n");
+            var record = recordString.split('\n');
             actualRecordList.push(record);
         });
 
@@ -290,10 +287,10 @@ describe('Report Service E2E Tests', function (){
 
             // If the record Ids match, compare the other fields in the records
             if (expectedRecIdValue === Number(actualRecIdValue)) {
-                //console.log("Comparing record values for records with ID: " + expectedRecIdValue);
+                //console.log('Comparing record values for records with ID: ' + expectedRecIdValue);
                 for (var j = 1; j < expectedRecord.length; j++) {
-                    //console.log("Comparing expected field value:" + expectedRecord[j].value
-                    //+ " with actual field value: " + actualRecord[j]);
+                    //console.log('Comparing expected field value:' + expectedRecord[j].value
+                    //+ ' with actual field value: ' + actualRecord[j]);
                     expect(expectedRecord[j].value).toEqual(actualRecord[j]);
                 }
             }

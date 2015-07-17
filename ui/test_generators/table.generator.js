@@ -184,14 +184,11 @@
      */
     function generateRandomTable(size){
         var builderInstance = getTableBuilderWithName();
-
         var numFields = undefined === size ? chance.integer({min:1, max:maxRandomFields}) : size;
 
         for(var i= 0; i< numFields; i++){
             var fieldTypeIndex = chance.integer({min:1, max:fieldGenerator.getAvailableFieldTypes().length-1});
-
             var field = fieldGenerator.generateBaseField(fieldGenerator.getAvailableFieldTypes()[fieldTypeIndex]);
-
             builderInstance.withField(field);
         }
 
