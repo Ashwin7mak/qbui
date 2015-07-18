@@ -83,7 +83,7 @@ describe('Record generator', function () {
         fields.push(lookupField);
 
         var recordJson = recordGenerator.generateRecord(fields);
-        recordJson.should.have.length(0);
+        assert.equal(recordJson.length, 0);
     });
 });
 

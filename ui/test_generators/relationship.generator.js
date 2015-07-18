@@ -5,9 +5,9 @@
 (function () {
     var relationshipConstants = require('./relationship.constants');
     var relationshipBuilder = require('./relationship.builder');
-    var tableConsts = require('./table.constants')
-    var fieldConsts = require('./field.constants')
-    var appConsts = require('./app.constants')
+    var tableConsts = require('./table.constants');
+    var fieldConsts = require('./field.constants');
+    var appConsts = require('./app.constants');
     var chance = require('chance').Chance();
     var _ = require('lodash');
 

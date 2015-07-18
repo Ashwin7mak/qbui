@@ -28,11 +28,8 @@
                 var field = fields[i];
 
                 // Check that there is a mapping for the field type (otherwise don't generate a value for it)
-                if (typeof recordTypeMapping[field[fieldConsts.fieldKeys.TYPE]] === 'undefined') {
-                    console.error('Record data generator is undefined for field type ' + field[fieldConsts.fieldKeys.TYPE]);
-                }
-                else {
-                    console.info('Generating field value for type ' + field[fieldConsts.fieldKeys.TYPE]);
+                if (typeof recordTypeMapping[field[fieldConsts.fieldKeys.TYPE]] !== 'undefined') {
+                    //console.info('Generating field value for type ' + field[fieldConsts.fieldKeys.TYPE]);
                     recordJson.push({
                         id: field[fieldConsts.fieldKeys.ID],
                         value: generateRecordValueForFieldType(field[fieldConsts.fieldKeys.TYPE])
@@ -52,7 +49,17 @@
             var recordJson = this.generateRecord(fields);
 
             return recordJson;
+        },
+
+        /**
+         @params: Record JS object you want to stringify
+         You need to run this method on your record object before passing it down through the node layer.
+         This will ensure proper JSON formatting for the API call.
+         */
+        recordToJsonString : function(record){
+            return JSON.stringify(record);
         }
+
     };
 
     //For a given field type, apply any default values that are not currently present in the map
