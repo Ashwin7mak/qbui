@@ -192,7 +192,7 @@ module.exports = function (grunt) {
             },
             testGen: [
                 'test_generator/**/*.js'
-            ],
+            ]
         },
 
         // Empties folders to start fresh
@@ -633,7 +633,36 @@ module.exports = function (grunt) {
                     environment: 'development'
                 }
             }
-        }
+        },
+        // layout testing
+    //    galen: {
+    //        local: {
+    //            // Check all layout.spec.js files in the e2e/layout directory
+    //            src: ['e2e/layout/**/*.layout.spec.js'],
+    //            options: {
+    //
+    //                // Run test on the localhost
+    //                url: 'http://localhost:' + (process.env.PORT || '9000'),
+    //                devices: {
+    //
+    //                    // Run tests in chrome browser, scaled to basic desktop resolution
+    //                    desktop: {
+    //                        deviceName: 'desktop',
+    //                        browser: 'chrome',
+    //                        size: '1280x800'
+    //                    },
+    //
+    //                    // Also run them in chrome, but scaled to iPad screen size
+    //                    tablet: {
+    //                        deviceName: 'tablet',
+    //                        browser: 'chrome',
+    //                        size: '768x576'
+    //                    }
+    //                }
+    //            }
+    //        }
+    //    }
+
     });
 
     grunt.registerTask('fixCoveragePaths', function () {
@@ -820,7 +849,6 @@ module.exports = function (grunt) {
                 'concurrent:test',
                 'wiredep:app',
                 'autoprefixer',
-                'express:test',
                 'protractor'
             ]);
         }
@@ -832,6 +860,7 @@ module.exports = function (grunt) {
         ]);
 
     });
+
 
     grunt.registerTask('ciTest', [
         'env:test',
@@ -870,10 +899,11 @@ module.exports = function (grunt) {
 
     grunt.registerTask('codeStandards', [
         'jshint',
-        'jscs',
+        'jscs'
     ]);
 
     grunt.loadNpmTasks('grunt-jscs');
     grunt.loadNpmTasks('grunt-contrib-jshint');
+    //grunt.loadNpmTasks('grunt-galen');
 
 };

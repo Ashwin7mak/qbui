@@ -21,7 +21,8 @@
 
     module.exports = function (config) {
         //Module constants
-        var HTTP = 'http://';
+        var HTTP_REGEX =  /https*:\/\//;
+        var HTTP =  "http://";
         var NODE_BASE_ENDPOINT = '/api/api/v1';
         var JAVA_BASE_ENDPOINT = '/api/api/v1';
         var APPS_ENDPOINT = '/apps/';
@@ -46,18 +47,22 @@
         //Resolves a full URL using the instance subdomain and the configured javaHost
         function resolveFullUrl(path, realmSubdomain) {
             var fullPath;
+            log.info('##### Resolving full url for path:'+ path + ' realm:'+realmSubdomain);
             //If there is no subdomain, hit the javaHost directly and don't proxy through the node server
             //This is required for actions like ticket creation and realm creation
             if (realmSubdomain === '') {
                 fullPath = config.javaHost + path;
             } else {
-                var methodLess = config.DOMAIN.replace(HTTP, '');
+                var methodLess = config.DOMAIN.replace(HTTP_REGEX, '');
                 //If we're dealing with a delete realm, use the javaHost and not the node server, which doesn't
                 //proxy realm requests to the javahost for security reasons
                 if(path.indexOf(REALMS_ENDPOINT) !== -1) {
-                    methodLess = config.javaHost.replace(HTTP, '');
+                    methodLess = config.javaHost.replace(HTTP_REGEX, '');
                 }
+                log.info('##### config.DOMAIN:'+ config.DOMAIN + ' methodLess:'+methodLess);
+
                 fullPath = HTTP + realmSubdomain + '.' + methodLess + path;
+                log.info('##### resulting fullpath:'+ fullPath);
             }
             return fullPath;
         }
@@ -163,13 +168,15 @@
                 if (this.authTicket) {
                     opts.headers[TICKET_HEADER_KEY] = this.authTicket;
                 }
-
+                var reqInfo = opts.url;
                 log.debug('About to execute the request: ' + jsonBigNum.stringify(opts));
                 //Make request and return promise
                 var deferred = promise.pending();
                 apiBase.executeRequestRetryable(opts, 3).then(function(resp){
+                    log.debug('-------- RESPONSE FOR reqInfo ' + reqInfo + 'got success response' + resp);
                     deferred.resolve(resp);
                 }).catch(function(error){
+                    log.debug('-------- RESPONSE ERROR! FOR  reqInfo ' + reqInfo + 'got error response' + error);
                     deferred.reject(error);
                 });
                 return deferred.promise;

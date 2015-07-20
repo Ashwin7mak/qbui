@@ -14,7 +14,7 @@
         //  Logging configuration
         LOG: {
             name: 'qbse-test',
-            level: 'info',
+            level: 'debug',
             stream: {
                 type: 'console',         //  file or console
                 file: {
@@ -28,10 +28,10 @@
         // to run using ssl, copy the private key and cert for
         // your test host to ../server/config/environment/keys
         // folder...no keys defined equates to no SSL support.
-        SSL_KEY: {
-            private: '',
-            cert: ''
-        },
+        //SSL_KEY: {
+        //    private: '',
+        //    cert: ''
+        //},
 
         // allow for override of default ports
         port: 9000,
