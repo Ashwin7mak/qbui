@@ -458,11 +458,21 @@ module.exports = function (grunt) {
                         '!**/gallery/*'
                     ]
                 }, {
+                    //  copy icon files that are not in the sprites folder
                     flatten: true,
                     expand: true,
                     cwd: '<%= quickbase.client.assets %>',
                     dest: '<%= quickbase.distPublic %>/quickbase/assets',
                     src: ['**/images-*.*']
+                }, {
+                    //  copy the sprites folder
+                    flatten: false,
+                    expand: true,
+                    cwd: '<%= quickbase.client.assets %>',
+                    dest: '<%= quickbase.distPublic %>/quickbase',
+                    src: [
+                        '**/sprites/**.*'
+                    ]
                 }, {
                     expand: true,
                     dest: '<%= quickbase.distDir %>',

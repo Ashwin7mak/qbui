@@ -16,6 +16,10 @@
   -webkit-font-smoothing: antialiased;
 }
 
+.ui-grid-top-panel {
+  overflow: initial;
+}
+
 .ui-grid-header-canvas {
   background-color: $grid-header-background-color;
   color: $grid-header-color;
@@ -58,10 +62,16 @@
 }
 
 .ui-grid-cell {
-  border-right: 1px dotted $light-gray;
   height: 43px;
   line-height: 1.2em;
   vertical-align: middle;
+  border-left: 1px dotted $light-gray;
+  border-right: 0px dotted $light-gray;  // ui-grid defaults to always show the right border
+}
+
+//  always hide the left border for column 1
+.ui-grid-cell:nth-child(1) {
+  border-left: 0px dotted $light-gray;
 }
 
 //  remove zebra striping
@@ -93,3 +103,4 @@
 .ui-grid-align-center {
   text-align: center;
 }
+

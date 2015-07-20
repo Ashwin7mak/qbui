@@ -37,7 +37,7 @@
 
         //  set appropriate header object data
         $scope.header = {
-            leftContent: 'Beta > Reports',
+            leftContent: '',
             rightContent: ''
         };
 

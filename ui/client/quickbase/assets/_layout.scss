@@ -12,18 +12,16 @@
   flex-direction: row;
 }
 
-.nav-target {
-  width: 100%;
-}
-
 .nav-container {
   flex: 0 0 auto;
   display: flex;
   height: 100%;
+  float:left;
 
   .nav-shell {
     width: 165px;
     min-width: 165px;
+    height: 100%;
     background-color: $dark-slate;
     box-shadow: -3px 0px rgba(0, 0, 0, 0.15) inset;
     overflow: auto;
@@ -261,7 +259,6 @@
   display: flex;
   flex-direction: column;
   height: 100%;
-  width: 100%;
 
   .hide {
     display:none;
@@ -273,7 +270,7 @@
     height: 40px;
     min-height: 40px;
     line-height: 40px;
-    padding: 0px 15px;
+    //padding: 0px 15px;
 
     .leftContent {
       float: left;
@@ -282,7 +279,6 @@
       font-weight: 500;
       text-transform: uppercase;
       -webkit-font-smoothing: antialiased;
-      visibility: hidden;
     }
     .rightContent {
       float: right;
@@ -296,35 +292,15 @@
     position: relative;
     background-color: $lighter-gray;
     padding: 15px 15px 15px;
-    margin-bottom: 20px;
+    margin-bottom: 5px;
     transition: padding 0.5s ease 0s;
 
     .layout-stage-content {
       transition: opacity .10s linear .20s, max-height .05s linear .20s;
     }
 
-    &.stage-open {
-      min-height: 180px !important;
-    }
-
-    &.stage-close {
-      height: 40px !important;
-      min-height: 40px !important;
-      transition: height .20s linear .10s;
-
-      .layout-stage-content {
-          opacity: 0;
-          max-height: 0;
-          visibility: hidden;
-          transition: visibility 0s .20s, opacity .20s linear;
-      }
-
-      .tab {
-          background-position: -121px -20px;
-      }
-    }
-
     .tab {
+      display: block;  //  show/hide stage open/close arrow
       cursor: pointer;
       position: absolute;
       bottom: -24px;
@@ -343,6 +319,29 @@
       }
     }
 
+    &.stage-open {
+      min-height: 205px !important;
+    }
+
+    &.stage-close {
+      height: 80px !important;
+      min-height: 80px !important;
+      .tab {
+          background-position: -121px -20px;
+      }
+    }
+
+    .stage-closed {
+      transition: height .50s linear .10s;
+
+      .stage-showHide-content {
+          opacity: 0;
+          max-height: 0;
+          visibility: hidden;
+          transition: visibility 0s .20s, opacity .20s linear;
+      }
+    }
+
   }
 
   .layout-content {
@@ -355,7 +354,7 @@
     line-height: 40px;
     width: 100%;
     font-size: 0.8rem;
-    position: absolute;
+    float:left;
     .layout-footer-content {
       color: $darker-gray;
       padding: 10px;
