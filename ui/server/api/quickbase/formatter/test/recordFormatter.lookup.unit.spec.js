@@ -37,9 +37,13 @@ describe('Lookup record formatter unit test', function () {
             "id": 7,
             "name": "currency lookup",
             "type": "LOOKUP",
-            "scalarFieldType":"CURRENCY",
             "decimalPlaces": 2,
+            "datatypeAttributes": {
+                "type": "CURRENCY",
+                "decimalPlaces": 2
+            },
             "clientSideAttributes": {
+                "symbol":"$"
             }
         }];
 
@@ -55,7 +59,7 @@ describe('Lookup record formatter unit test', function () {
                 "id": 7,
                 "name": "text lookup",
                 "type": "LOOKUP",
-                "scalarFieldType":"TEXT"
+                "datatypeAttributes": { "type":"TEXT" }
             }
         ];
         var smallText = generateRandomString(5);
@@ -73,7 +77,7 @@ describe('Lookup record formatter unit test', function () {
             "id": 7,
             "name": "datetime lookup",
             "type": "LOOKUP",
-            "scalarFieldType":"DATE_TIME"
+            "datatypeAttributes": { "type":"DATE_TIME" }
         }];
         var inputDateTime =  [[{
             "id": 7,

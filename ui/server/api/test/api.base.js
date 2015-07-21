@@ -25,7 +25,9 @@
         var NODE_BASE_ENDPOINT = '/api/api/v1';
         var JAVA_BASE_ENDPOINT = '/api/api/v1';
         var APPS_ENDPOINT = '/apps/';
+        var RELATIONSHIPS_ENDPOINT = '/relationships/';
         var TABLES_ENDPOINT = '/tables/';
+        var FIELDS_ENDPOINT = '/fields/';
         var REPORTS_ENDPOINT = '/reports/';
         var RECORDS_ENDPOINT = '/records/';
         var REALMS_ENDPOINT = '/realms/';
@@ -105,6 +107,20 @@
                 var endpoint = NODE_BASE_ENDPOINT + APPS_ENDPOINT + appId + TABLES_ENDPOINT + tableId + RECORDS_ENDPOINT;
                 if (recordId) {
                     endpoint = endpoint + recordId;
+                }
+                return endpoint;
+            },
+            resolveRelationshipsEndpoint: function(appId, realmId) {
+                var endpoint = this.resolveAppsEndpoint(appId) + RELATIONSHIPS_ENDPOINT;
+                if(realmId) {
+                    endpoint = endpoint + realmId;
+                }
+                return endpoint;
+            },
+            resolveFieldsEndpoint: function(appId, tableId, fieldId) {
+                var endpoint = this.resolveTablesEndpoint(appId, tableId) + FIELDS_ENDPOINT;
+                if(fieldId) {
+                    endpoint = endpoint + fieldId;
                 }
                 return endpoint;
             },
