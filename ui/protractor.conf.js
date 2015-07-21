@@ -18,9 +18,7 @@ exports.config = {
 
   // list of files / patterns to load in the browser
   specs: [
-    'e2e/qbapp/**/*.spec.js',
-    'e2e/realm/**/*.spec.js',
-    'test_generators/**/*.spec.js'
+    'e2e/qbapp/**/*.spec.js'
   ],
 
   // Patterns to exclude.

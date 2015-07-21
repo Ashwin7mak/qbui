@@ -9,7 +9,6 @@
     *      stream: output to std.out or a file. If sending to a file, define the path.
     *      In addition, if outputting to a file, can also setup to rotate the files per schedule.
     *          See: https://github.com/trentm/node-bunyan#stream-type-rotating-file
-    *      suppressConsole: suppress console logging.
     */
 
     'use strict';
@@ -18,61 +17,78 @@
     var config = require('./config/environment');
     var fs = require('fs');
 
+    //  one logger per node instance
+    var appLogger;
+
     module.exports = {
 
-        getLogger: function(callFunc) {
+        /**
+         *  Initialize the Bunyan logger.
+         */
+        initLogger: function() {
+            appLogger = undefined;
+        },
 
-            //  setup the logger configuration
-            var name = getConfig('name', 'qbse');
-            var level = getConfig('level', 'info');
-            var src = getConfig('src', false);
-            var stream = getStream();
+        /**
+         * Return a Bunyan logger based on the environment configuration.
+         *
+         * @returns {*}
+         */
+        getLogger: function() {
 
-            //  do we want to suppress console logging
-            if (getConfig('suppressConsole') === true) {
-                console.log = function () { };
+            //  Return the configured Bunyan logger.  A new logger will be configured if one is not
+            //  found, otherwise the existing configured logger is returned.
+            if (!appLogger) {
+                var name = getConfig('name', 'qbse-node');
+                var level = getConfig('level', 'info');
+                var src = getConfig('src', false);
+                var stream = getStream();
+
+                var logger = bunyan.createLogger({
+                    name: name,
+                    streams: [stream],
+                    level: level,
+                    src: src,
+                    serializers: bunyan.stdSerializers
+                });
+
+                // add custom qbse specific properties
+                appLogger = logger.child({
+                    //  put properties here..
+                });
+
+                /**
+                 * Custom functions for logging request info
+                 *
+                 * @param req - http request object
+                 * @param callingFunc -- optional parameter to identify the calling function/src file
+                 */
+                appLogger.logRequest = function (req, callingFunc) {
+                    if (callingFunc) {
+                        appLogger.info({Request: getReqInfo(req), CallFunc: getCallFunc(callingFunc)});
+                    }
+                    else {
+                        appLogger.info({Request: getReqInfo(req)});
+                    }
+
+                };
+
+                /**
+                 * Custom functions for logging request and response info
+                 *
+                 * @param req - http request object
+                 * @param res - http response object
+                 * @param callingFunc -- optional parameter to identify the calling function/src file
+                 */
+                appLogger.logResponse = function (req, res, callingFunc) {
+                    if (callingFunc) {
+                        appLogger.info({Request: getReqInfo(req), Response: getResInfo(res), CallFunc:getCallFunc(callingFunc)});
+                    }
+                    else {
+                        appLogger.info({Request: getReqInfo(req), Response: getResInfo(res)});
+                    }
+                };
             }
-
-            var logger = bunyan.createLogger({
-                name: name,
-                streams: [stream],
-                level: level,
-                src: src,
-                serializers: bunyan.stdSerializers
-            });
-
-            // add custom qbse specific properties
-            var appLogger = logger.child({
-                callingFunc: getCallFunc(callFunc)
-            });
-
-             //  add some custom functions for logging request and response info
-            appLogger.logRequest = function (req, full) {
-                if (req) {
-                    if (full === true) {
-                        appLogger.debug({Request: getLogData(req)}, 'API Request');
-                    }
-                    else {
-                        appLogger.debug('API Request');
-                    }
-                }
-                else {
-                    appLogger.debug('No request object supplied when trying to log request information.');
-                }
-            };
-            appLogger.logResponse = function (res, full) {
-                if (res) {
-                    if (full === true) {
-                        appLogger.debug({Request: getLogData(res)}, 'API Response');
-                    }
-                    else {
-                        appLogger.debug('API Response');
-                    }
-                }
-                else {
-                    appLogger.debug('No response object supplied when trying to log response information.');
-                }
-            };
 
             return appLogger;
 
@@ -80,21 +96,61 @@
     };
 
     /**
-     *   Return the request/response data.  The output may be restricted based on the maxResponseSize
-     *   configuration parameter.
+     * Extract from the request a standard set of information to display in a log message.
+     * Currently, the request path, request method, sid(session id) and tid(transaction id) is extracted.
+     *
+     * @param req
      */
-    function getLogData(data) {
-        //  restrict the size of the response output to the configuration setting
-        var maxResponseSize = getConfig('maxResponseSize', 1024);
+    function getReqInfo(req) {
+        var r = {};
+        try {
+            if (req) {
+                r.path = req.path;
 
-        var response = JSON.stringify(data);
-        if (response.length > maxResponseSize) {
-            return {TruncatedResponse: response.substring(0, maxResponseSize - 3) + '...'};
+                var url = req.url;
+                var indx = url.indexOf('?');
+                r.params = indx > 0 ? url.substr(indx + 1) : '';
+
+                r.method = req.method;
+
+                //  extract tid and bsid from request header
+                if (req.headers) {
+                    //  individual transaction id
+                    if (req.headers.tid) {
+                        r.tid = req.headers.tid;
+                    }
+                    //  session id
+                    if (req.headers.sid) {
+                        r.sid = req.headers.sid;
+                    }
+                }
+
+                //  extract browser info
+                if (req.useragent) {
+                    r.useragent = req.useragent.browser + ' ' + req.useragent.version + ' - ' + req.useragent.os;
+                }
+            }
         }
-
-        return {Response: data};
+        catch (e) {}   //  catch exception and move on..
+        return r;
     }
 
+    /**
+     * Extract from the response a standard set of information to display in a log message.
+     * Currently, the response http status is extracted.
+     *
+     * @param req
+     */
+    function getResInfo(res) {
+        var r = {};
+        try {
+            if (res) {
+                r.status = res.statusCode;
+            }
+        }
+        catch (e) {}    // catch exception and move on..
+        return r;
+    }
 
     /**
      * Return the bunyan configuration setting for the given key. If the key
@@ -150,8 +206,8 @@
     }
 
     /**
-     * Returns the name of the function that is outputting a log message.
-     * Try to trim off the front portion of the file spec for readability.
+     * Returns the name of the function that is calling the loger to output a log
+     * message.  Try to trim off the front portion of the file spec for readability.
      *
      * @param callFunc
      * @returns {*}
@@ -171,6 +227,8 @@
                 return callFunc.substr(offset);
             }
         }
+
+        //  it's not in one of the expected folders..
         return '';
     }
 

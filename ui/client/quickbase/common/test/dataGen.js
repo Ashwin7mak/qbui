@@ -12,10 +12,12 @@
 
         /** INTERNAL vars and helper methods **/
         // set up some example data for the grid
-        var columnDefs = [{'name': 'name', 'displayName': 'Team'},
-                          {'name': 'count', 'displayName': 'Size'}];
-        var dataArray = [{'name': 'Indigo', 'count': 7}, {'name': 'Cyan', 'count': 5},
-                         {'name': 'Agave', 'count': 8}];
+        var columnDefs = [{'name': 'name', 'displayName': 'Team', 'fieldType':apiConstants.CURRENCY},
+                          {'name': 'count', 'displayName': 'Size', 'fieldType':apiConstants.TEXT},
+                          {'name': 'focus', 'displayName': 'Focus'}];
+        var dataArray = [{'name': 'Indigo', 'count': 7, 'focus': 'UI'},
+                         {'name': 'Cyan', 'count': 5, 'focus':'Migration'},
+                         {'name': 'Agave', 'count': 8, 'focus':'AWS'}];
 
         /**
          *  Creates some random column data and add to the resultArray(argument) array

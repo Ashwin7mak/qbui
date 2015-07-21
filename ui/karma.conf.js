@@ -43,6 +43,9 @@ module.exports = function (config) {
             'client/bower_components/chance/chance.js',
             'client/bower_components/lodash/lodash.js',
             'client/bower_components/restangular/dist/restangular.js',
+            'client/bower_components/angular-uuid/uuid.min.js',
+            'client/bower_components/node-uuid/uuid.js',
+            'client/bower_components/angular-uuid-generator/angular-uuid-generator.js',
             'client/bower_components/angular-mocks/angular-mocks.js',
             'client/bower_components/bluebird/js/browser/bluebird.js',
             //endbower:
@@ -65,6 +68,10 @@ module.exports = function (config) {
             }
 
         ],
+
+        client: {
+            captureConsole: true
+        },
 
         // list of files / patterns to exclude
         exclude: ['client/gallery/**/*', 'client/gallery.index.html'],

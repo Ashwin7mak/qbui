@@ -7,6 +7,8 @@
 
     //var path = require('path');
     var dateUtils = require('../../components/utility/dateUtils');
+    var envConsts = require('./environmentConstants');
+    var routeGroups = require('../../routes/routeGroups');
 
     module.exports = {
 
@@ -18,16 +20,10 @@
                 type: 'console',         //  file or console
                 file: {
                     dir: './logs',
-                    name: 'qbse-dev-' + dateUtils.formatDate( new Date(), '%Y-%M-%D-%h.%m.%s') + '.log'
-                },
-                rotating: {
-                    period: '1d',
-                    count: 7
+                    name: 'qbse-dev-' + dateUtils.formatDate(new Date(), '%Y-%M-%D-%h.%m.%s') + '.log'
                 }
             },
-            src: true,               // this is slow...do not use in prod
-            suppressConsole: false,  // suppress console logging
-            maxResponseSize: 1024*2  // max number of characters logged per response
+            src: true               // this is slow...do not use in prod
         },
 
         // to run using ssl, copy the private key and cert for
@@ -46,7 +42,11 @@
         javaHost: '',
 
         //DEV Express Server
-        DOMAIN: ''
+        DOMAIN: '',
+
+        env: envConsts.TEST,
+        routeGroup: routeGroups.DEBUG
+
 
     };
 }());

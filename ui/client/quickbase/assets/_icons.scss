@@ -1,4 +1,7 @@
+@import "svgs";
+
 $icons: sprite-map("images/*.png");
+$arrow-sprite: image-url('sprites/arrow-sprite.png');
 
 .attach-clip {
   background: sprite($icons, attach);
@@ -6,4 +9,9 @@ $icons: sprite-map("images/*.png");
 
 .intuit-logo {
   background: sprite($icons, intuitLogo);
+}
+
+@mixin arrow-sprite-png {
+    background-repeat: no-repeat;
+    background-image: $arrow-sprite;
 }

@@ -6,6 +6,7 @@
 
 var should = require('should');
 var tableGenerator = require('../table.generator');
+var fieldGenerator = require('../field.generator');
 var tableConsts = require('../table.constants');
 var fieldConsts = require('../field.constants');
 var consts = require('../../server/api/constants');
@@ -28,11 +29,11 @@ describe('Table generator unit test', function () {
         }
 
         var fields = table[tableConsts.FIELDS];
-        var availableFieldTypes = tableGenerator.getAvailableFieldTypes();
+        var availableFieldTypes = fieldGenerator.getAvailableFieldTypes();
 
         if(fields.length !== availableFieldTypes.length){
             assert.fail('Did not find the right number of fields. Expected ' +
-            tableGenerator.getAvailableFieldTypes().length + '. Table: ' +
+            fieldGenerator.getAvailableFieldTypes().length + '. Table: ' +
             tableGenerator.tableToJsonString(table));
         }
 
@@ -40,10 +41,10 @@ describe('Table generator unit test', function () {
         var field;
 
         _.forEach( fields, function(field){
-            if(!fieldsCreated[field[fieldConsts.fieldKeys.TYPE]]) {
-                fieldsCreated[field[fieldConsts.fieldKeys.TYPE]] = 1;
+            if(!fieldsCreated[field[fieldConsts.TYPE]]) {
+                fieldsCreated[field[fieldConsts.TYPE]] = 1;
             }else{
-                fieldsCreated[field[fieldConsts.fieldKeys.TYPE]] += 1;
+                fieldsCreated[field[fieldConsts.TYPE]] += 1;
             }
         });
 
@@ -131,7 +132,7 @@ describe('Table generator unit test', function () {
                 }
 
                 _.forEach(fields, function(field) {
-                    if (field[fieldConsts.fieldKeys.TYPE] !== fieldType) {
+                    if (field[fieldConsts.TYPE] !== fieldType) {
                         assert.fail('Did not find the right fieldType. Expected ' +
                         fieldType + '. Table: ' +
                         tableGenerator.tableToJsonString(table));
@@ -207,12 +208,12 @@ describe('Table generator unit test', function () {
                 _.forEach(fields, function(field) {
                     _.forEach(fieldMap, function (fieldType, fieldName){
                         //If we have found the field that we expect to have been generated from the map, then put it in the fieldFoundMap
-                        if (field[fieldConsts.fieldKeys.TYPE] === fieldMap[fieldName] && field[fieldConsts.fieldKeys.NAME] === fieldName) {
+                        if (field[fieldConsts.TYPE] === fieldMap[fieldName] && field[fieldConsts.NAME] === fieldName) {
 
-                            if(!fieldFoundMap[field[fieldConsts.fieldKeys.NAME]]) {
-                                fieldFoundMap[field[fieldConsts.fieldKeys.NAME]] = 1;
+                            if(!fieldFoundMap[field[fieldConsts.NAME]]) {
+                                fieldFoundMap[field[fieldConsts.NAME]] = 1;
                             }else{
-                                fieldFoundMap[field[fieldConsts.fieldKeys.NAME]] += 1;
+                                fieldFoundMap[field[fieldConsts.NAME]] += 1;
                             }
                         }
                     });

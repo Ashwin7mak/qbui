@@ -4,10 +4,10 @@
         <ul class="pagination">
             <li ng-class="{disabled: pagesHandler.noPrev()}">
                 <a ng-click="gridApi.pagination.previousPage()">
-                    Previous</a>
+                   Previous</a>
             </li>
             <li>
-                <span ng-class="pageNumber">
+                <span style="cursor:default; color:inherit;">
                     {{pagesHandler.current.pageTopRow + 1}} - {{pagesHandler.current.pageBottomRow}}
                     {{ pagesHandler.current.foundEnd ? ("of " + pagesHandler.getTotalRowsMsg()) : "" }}</span>
             </li>

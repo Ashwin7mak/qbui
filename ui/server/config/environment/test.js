@@ -7,7 +7,8 @@
 
     //var path = require('path');
     var dateUtils = require('../../components/utility/dateUtils');
-
+    var envConsts = require('./environmentConstants');
+    var routeGroups = require('../../routes/routeGroups');
     module.exports = {
 
         //  Logging configuration
@@ -19,15 +20,9 @@
                 file: {
                     dir: './logs',
                     name: 'qbse-test-' + dateUtils.formatDate( new Date(), '%Y-%M-%D-%h.%m.%s') + '.log'
-                },
-                rotating: {
-                    period: '1d',
-                    count: 7
                 }
             },
-            src: true,               // this is slow...do not use in prod
-            suppressConsole: false,  // suppress console logging
-            maxResponseSize: 1024*2  // max number of characters logged per response
+            src: true               // this is slow...do not use in prod
         },
 
         // to run using ssl, copy the private key and cert for
@@ -49,7 +44,10 @@
 
         //Express Server
         //DOMAIN: 'https://localhost.intuit.com:9443'
-        DOMAIN  : 'http://localhost:9000'
+        DOMAIN  : 'http://localhost:9000',
+
+        env: envConsts.TEST,
+        routeGroup: routeGroups.DEBUG
 
     };
 

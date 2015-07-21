@@ -42,7 +42,7 @@
         ReportModel.getMetaData(appId, tableId, reportId).then (
             function(metaData) {
 
-                //  showLayout scope variable inherits from the parent scope, which is defined in app.routes.js.  We're not
+                //  showLayout scope variable inherits from the parent scope, which is defined in app.modules.js.  We're not
                 //  rendering the layout immediately until we know the user's ticket is valid..otherwise it will flash.
                 //  TODO: put in some feedback to the user..for example a spinner instead of just a blank page...
                 $scope.showLayout = true;
@@ -66,13 +66,13 @@
                 //  set appropriate header object data
                 $scope.showHeader = false;
                 $scope.header = {
-                    leftContent: 'Beta > Reports > ' + $scope.report.name,
+                    leftContent: '',
                     rightContent: ''
                 };
 
                 //  set appropriate footer object data
                 $scope.footer = {
-                    content: '&#169;2015 Intuit Inc. All rights reserved'
+                    content: '&#169;' + new Date().getFullYear() + ' Intuit Inc. All rights reserved'
                 };
 
                 //  set the stage object based on the model data

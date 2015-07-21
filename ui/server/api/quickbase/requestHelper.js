@@ -2,6 +2,7 @@
     'use strict';
 
     var fs = require('fs');
+    var uuid = require('uuid');
 
     module.exports = function (config) {
 
@@ -14,6 +15,9 @@
             },
             isPut: function (req) {
                 return req.method.toLowerCase() === 'put';
+            },
+            isPatch: function (req) {
+                return req.method.toLowerCase() === 'patch';
             },
             isDelete: function (req) {
                 return req.method.toLowerCase() === 'delete';
@@ -31,7 +35,6 @@
 
                 if (this.isSecure(req)) {
                     //  we're on https..include the certs
-                    // TODO: verify a signed certificate works as expected
                     agentOptions = {
                         strictSSL: true,
                         key: fs.readFileSync(config.SSL_KEY.private),
@@ -46,25 +49,14 @@
             copyHeadersToResponse: function (res, headers) {
                 for(var key in headers) {
                     if(headers.hasOwnProperty(key)) {
-                        res.set(key, headers[key]);
+                        res[key] = headers[key];
                     }
                 }
             },
 
-            //TODO: remove this
-            getHeaders: function (req) {
-                // unit tests currently fail if passing in headers on get..
-                // TODO: this shouldn't be a restriction..understand why and fix??
-                var headers = {};
-                if (!this.isGet(req) && !this.isDelete(req)) {
-                    headers = req.headers;
-                }
-                return headers;
-            },
-
             setBodyOption: function (req, opts) {
                 //  body header option only valid for put and post
-                if (this.isPut(req) || this.isPost(req)) {
+                if (this.isPut(req) || this.isPatch(req) || this.isPost(req)) {
                     opts.body = req.rawBody;
                 }
                 return opts;
@@ -81,6 +73,16 @@
                 this.setBodyOption(req, opts);
 
                 return opts;
+            },
+
+            setTidHeader: function (req) {
+                var headers = {};
+                if (req && req.headers) {
+                    headers = req.headers;
+                }
+                headers.tid = uuid.v1();
+                req.headers = headers;
+                return req;
             }
 
         };

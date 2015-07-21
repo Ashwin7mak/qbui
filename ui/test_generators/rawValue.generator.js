@@ -4,7 +4,8 @@
  */
 (function () {
     'use strict';
-    var chance = new require('chance');
+    var Chance =  require('chance');
+    var chance = new Chance();
     var appConsts = require('./app.constants');
 
     var SUBDOMAIN_CHARS = 'abcdefghijklmnopqrstuvwxyz0123456789';
@@ -70,7 +71,7 @@
 
         //Generates and returns a psuedo-random char string of specified length
         generateString : function(length) {
-            return chance.string({length: length});
+            return chance.string({length: length, pool: 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789'});
         },
 
         //Generates and returns a psuedo-random email string
