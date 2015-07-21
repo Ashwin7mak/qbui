@@ -8,8 +8,7 @@
     var tableConsts = require('./table.constants');
     var fieldConsts = require('./field.constants');
     var appConsts = require('./app.constants');
-    var Chance = require('chance');
-    var chance = new Chance();
+    var chance = require('chance').Chance();
     var _ = require('lodash');
 
 
@@ -93,7 +92,7 @@
             //loop over all of the fields in the master table and pick a matching master and detail field
             //start at the end of the list so that we can pick fields that are not recordId
             _.eachRight(masterTable[tableConsts.FIELDS], function(masterField){
-                fieldType = masterField[fieldConsts.TYPE];
+                fieldType = masterField[fieldConsts.fieldKeys.TYPE];
 
                 if(masterField[fieldConsts[fieldType].UNIQUE]) {
                     detailField = pickDetailField(masterField, detailTable);
@@ -136,10 +135,10 @@
             builderInstance.withDescription(description);
             builderInstance.withMasterAppId(masterAppId);
             builderInstance.withMasterTableId(masterTableId);
-            builderInstance.withMasterFieldId(masterField[fieldConsts.ID]);
+            builderInstance.withMasterFieldId(masterField[fieldConsts.fieldKeys.ID]);
             builderInstance.withDetailAppId(detailAppId);
             builderInstance.withDetailTableId(detailTableId);
-            builderInstance.withDetailFieldId(detailField[fieldConsts.ID]);
+            builderInstance.withDetailFieldId(detailField[fieldConsts.fieldKeys.ID]);
             builderInstance.withReferentialIntegrity(referentialIntegrity);
             builderInstance.withCascadeDelete(cascadeDelete);
 
@@ -209,11 +208,11 @@
      * @returns {*}
      */
     function pickDetailField(masterField, detailTable) {
-        var fieldType = masterField[fieldConsts.TYPE];
+        var fieldType = masterField[fieldConsts.fieldKeys.TYPE];
 
         return _.find(detailTable[tableConsts.FIELDS], function(candidateField){
 
-            return candidateField[fieldConsts.TYPE] === fieldType;
+            return candidateField[fieldConsts.fieldKeys.TYPE] === fieldType;
         });
     }
 }());

@@ -66,11 +66,11 @@ describe('Factory: ReportModel', function() {
                     break;
                 case 1:
                     expect(column.bold).toBeTruthy();
-                    expect(column.width).toEqual(100);
+                    expect(column.width).toBeUndefined();
                     break;
                 case 2:
                     expect(column.bold).toBeFalsy();
-                    expect(column.width).toEqual(200);
+                    expect(column.width).toBeUndefined();
                     break;
             }
         });

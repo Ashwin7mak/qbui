@@ -28,12 +28,11 @@
                 var field = fields[i];
 
                 // Check that there is a mapping for the field type (otherwise don't generate a value for it)
-                if (typeof recordTypeMapping[field[fieldConsts.TYPE]] !== 'undefined') {
-
-                    //console.log('Generating field value for type ' + field[fieldConsts.TYPE]);
+                if (typeof recordTypeMapping[field[fieldConsts.fieldKeys.TYPE]] !== 'undefined') {
+                    //console.info('Generating field value for type ' + field[fieldConsts.fieldKeys.TYPE]);
                     recordJson.push({
-                        id: field[fieldConsts.ID],
-                        value: generateRecordValueForFieldType(field[fieldConsts.TYPE])
+                        id: field[fieldConsts.fieldKeys.ID],
+                        value: generateRecordValueForFieldType(field[fieldConsts.fieldKeys.TYPE])
                     });
                 }
             }
@@ -85,8 +84,8 @@
     recordTypeMapping[consts.EMAIL_ADDRESS] = function (){ return rawValueGenerator.generateEmailInDomain('gmail.com'); };
     recordTypeMapping[consts.PHONE_NUMBER] = function (){ return rawValueGenerator.generatePhoneNumber(); };
     recordTypeMapping[consts.CHECKBOX] = function (){ return rawValueGenerator.generateBool()};
-    recordTypeMapping[consts.DATE_TIME] = function (){ return rawValueGenerator.generateDate() };
-    recordTypeMapping[consts.DATE] = function (){ return rawValueGenerator.generateDateTime() };
+    recordTypeMapping[consts.DATE_TIME] = function (){ return rawValueGenerator.generateDateTime()  };
+    recordTypeMapping[consts.DATE] = function (){ return rawValueGenerator.generateDate() };
     recordTypeMapping[consts.TIME_OF_DAY] = function (){ return rawValueGenerator.generateTime()};
     recordTypeMapping[consts.FILE_ATTACHMENT] = function (){ return rawValueGenerator.generateUrl();};
     recordTypeMapping[consts.USER] = function (userIdsToPickFrom){ return rawValueGenerator.pickUserIdFromList(userIdsToPickFrom)};

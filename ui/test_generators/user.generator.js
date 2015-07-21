@@ -4,8 +4,7 @@
  */
 (function () {
 
-    var Chance = require('chance');
-    var chance = new Chance();
+    var chance = require('chance').Chance();
 
     chance.mixin({
         'user' : function (options){

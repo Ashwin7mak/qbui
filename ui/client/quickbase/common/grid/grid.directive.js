@@ -97,7 +97,7 @@
             enableFiltering: false,
             enableGridMenu: false,
             enableHorizontalScrollbar: uiGridConstants.scrollbars.ALWAYS,
-            enableVerticalScrollbar: uiGridConstants.scrollbars.ALWAYS,
+            enableVerticalScrollbar: uiGridConstants.scrollbars.NEVER,
             enableRowHeaderSelection: false,
             enableRowSelection: true,
             modifierKeysToMultiSelect: false,
@@ -150,14 +150,6 @@
         function initGrid() {
 
             return $q(function (resolve) {
-
-                //state and handling of grid pages
-                var getTotalPagesMethod = function () {
-                    if (!$scope.gridOptions.enablePagination) {
-                        return null;
-                    }
-                    return $scope.pagesHandler.getTotalPages();
-                };
 
                 // the page handler manages getting  data from the service as needed
                 $scope.pagesHandler = new PagesHandler($scope.dataServiceFunc, gridConstants, $scope.gridOptions);

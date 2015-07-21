@@ -11,7 +11,7 @@
         $scope.appId = $stateParams.appId;
         $scope.tableId = $stateParams.tableId;
 
-        $scope.reportId;        // holds the currently selected report
+        $scope.reportId = undefined;        // holds the currently selected report
         $scope.reports = [];    // list of reports for given appId and tableId
 
         if ($scope.appId && $scope.tableId) {
