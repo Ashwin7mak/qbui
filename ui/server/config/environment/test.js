@@ -14,7 +14,7 @@
         //  Logging configuration
         LOG: {
             name: 'qbse-test',
-            level: 'debug',
+            level: 'info',
             stream: {
                 type: 'console',         //  file or console
                 file: {

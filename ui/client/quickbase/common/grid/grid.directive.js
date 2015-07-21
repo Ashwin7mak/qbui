@@ -97,7 +97,7 @@
             enableFiltering: false,
             enableGridMenu: false,
             enableHorizontalScrollbar: uiGridConstants.scrollbars.ALWAYS,
-            enableVerticalScrollbar: uiGridConstants.scrollbars.ALWAYS,
+            enableVerticalScrollbar: uiGridConstants.scrollbars.NEVER,
             enableRowHeaderSelection: false,
             enableRowSelection: true,
             modifierKeysToMultiSelect: false,

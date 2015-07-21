@@ -1,6 +1,7 @@
 /**
- * E2E tests for the Report Service
- * Created by klabak on 6/1/15.
+ * E2E tests for the Report layout
+ * based on reportService created by klabak on 6/1/15,
+ * cmartinez2 6/21/15
  */
 'use strict';
 
@@ -20,12 +21,15 @@ var Promise = require('bluebird');
 // Node.js assert library
 var assert = require('assert');
 
-describe('Report Service E2E Tests', function (){
+describe('Report Layout Tests', function (){
 
     var setupDone = false;
     var cleanupDone = false;
     var app;
     var recordList;
+    var widthTests = [1280, 640, 3000];
+    var heightTests = 2024;
+
 
     /**
      * Setup method. Generates JSON for an app, a table, a set of records and a report. Then creates them via the REST API.
@@ -42,6 +46,13 @@ describe('Report Service E2E Tests', function (){
             tableToFieldToFieldTypeMap['table 1']['Text Field'] = consts.TEXT;
             tableToFieldToFieldTypeMap['table 1']['Multi Text Field'] = consts.MULTI_LINE_TEXT;
             tableToFieldToFieldTypeMap['table 1']['Phone Number Field'] = consts.PHONE_NUMBER;
+            tableToFieldToFieldTypeMap['table 1']['Numeric'] = consts.NUMERIC;
+            tableToFieldToFieldTypeMap['table 1']['Currency'] = consts.CURRENCY;
+            tableToFieldToFieldTypeMap['table 1']['Percent'] = consts.PERCENT;
+            tableToFieldToFieldTypeMap['table 1']['Url'] = consts.URL;
+            tableToFieldToFieldTypeMap['table 1']['Duration'] = consts.DURATION;
+            tableToFieldToFieldTypeMap['table 1']['Email'] = consts.EMAIL_ADDRESS;
+            tableToFieldToFieldTypeMap['table 1']['Rating'] = consts.RATING;
 
             // Generate the app JSON object
             var generatedApp = appGenerator.generateAppWithTablesFromMap(tableToFieldToFieldTypeMap);
@@ -200,90 +211,32 @@ describe('Report Service E2E Tests', function (){
         return deferred.promise;
     }
 
-    /**
-     * Helper function that will get all of the field column headers from the report. Returns an array of strings.
-     */
-    function getReportColumnHeaders(reportServicePage){
-        var deferred = Promise.pending();
-        var fieldColHeaders = [];
-        reportServicePage.columnHeaderElList.then(function(result){
-            for(var i = 0; i < result.length; i++){
-                result[i].getText().then(function(value){
-                    // The getText call above is returning the text value with a new line char on the end, need to remove it
-                    var subValue = value.replace(/(\r\n|\n|\r)/gm,'');
-                    fieldColHeaders.push(subValue.trim());
-                });
-            }
-        }).then(function(){
-            deferred.resolve(fieldColHeaders);
-        });
-        return deferred.promise;
-    }
-
-    /**
-     * Helper function that will convert an array of strings to uppercase
-     */
-    function stringArrayToUpperCase(array){
-        var upperArray = [];
-        array.forEach(function (lowerString){
-            var res = lowerString.toUpperCase();
-            upperArray.push(res);
-        });
-        return upperArray;
-    }
-
-    /**
-     * Function that will compare actual and expected record values
-     */
-    function assertRecordValues(actualRecords, expectedRecords) {
-
-        // Check that we have the same number of records to compare
-        expect(actualRecords.length).toEqual(expectedRecords.length);
-
-        // Gather the record values
-        var actualRecordList = [];
-
-        // Each row of the repeater (one record) is returned as a string of values.
-        // Split on the new line char and create a new array.
-        actualRecords.forEach(function (recordString) {
-            var record = recordString.split('\n');
-            actualRecordList.push(record);
-        });
-
-        // Sort expected records by recordID
-        expectedRecords.sort(function (a, b) {
-            return parseInt(a[0].value) - parseInt(b[0].value);
-        });
-
-        // Loop through the expected recordList
-        for (var k = 0; k < expectedRecords.length; k++) {
-            // Grab the expected record
-            var expectedRecord = expectedRecords[k];
-            // Get the record Id to look for
-            var expectedRecIdValue = expectedRecord[0].value;
-
-            // Grab actual record to compare recordIds
-            var actualRecord = actualRecordList[k];
-            // Get the record Id
-            var actualRecIdValue = actualRecord[0];
-
-            // If the record Ids match, compare the other fields in the records
-            if (expectedRecIdValue === Number(actualRecIdValue)) {
-                //console.log('Comparing record values for records with ID: ' + expectedRecIdValue);
-                for (var j = 1; j < expectedRecord.length; j++) {
-                    //console.log('Comparing expected field value:' + expectedRecord[j].value
-                    //+ ' with actual field value: ' + actualRecord[j]);
-                    expect(expectedRecord[j].value).toEqual(actualRecord[j]);
-                }
-            }
+     function getDimensions(reportServicePage) {
+       return {
+            windowSize: browser.manage().window().getSize(),
+            mainSize: reportServicePage.mainContent.getSize(),
+            mainLoc: reportServicePage.mainContent.getLocation(),
+            tableContainerSize: reportServicePage.tableContainer.getSize(),
+            tableContainerLoc: reportServicePage.tableContainer.getLocation(),
+            lastColumnSize: reportServicePage.lastColumn.getSize(),
+            lastColumnLoc: reportServicePage.lastColumn.getLocation()
         }
+    }
+
+    function validateGridDimensions(result) {
+        var leftPadding = 10;
+        var allowedVariance = 20;
+        var pointOfLastColumn = result.lastColumnLoc.x + leftPadding  + result.lastColumnSize.width;
+        var pointOfMainContent = result.mainLoc.x + result.mainSize.width;
+        var endsDiff = Math.abs(pointOfMainContent - pointOfLastColumn);
+        expect(endsDiff).toBeLessThan(allowedVariance)
     }
 
     /**
      * Test method. After setup completes, loads the browser, requests a session ticket, requests the list
      * of reports for that app and table, then runs / displays the report in the browser
      */
-    it('Should request a session ticket and load the Report page', function () {
+    it('Should have liquid size behavior on the grid Report page', function () {
 
         // Check that your setup completed properly
         // Newer versions of Jasmine allow you to fail fast if your setup fails
@@ -294,12 +247,15 @@ describe('Report Service E2E Tests', function (){
         var requestReportPage = require('./requestReport.po.js');
         var reportServicePage = require('./reportService.po.js');
 
+
         // Gather the necessary values to make the requests via the browser
         var ticketEndpoint = recordBase.apiBase.resolveTicketEndpoint();
         var realmName = recordBase.apiBase.realm.subdomain;
         var realmId = recordBase.apiBase.realm.id;
-        var appId = app.id;
         var tableId = app.tables[0].id;
+
+        //define the window size
+        browser.manage().window().setSize(widthTests[0],heightTests);
 
         // Get a session ticket for that subdomain and realmId (stores it in the browser)
         var sessionTicketRequest = 'http://' + realmName + '.localhost:9000' + ticketEndpoint + realmId;
@@ -317,27 +273,20 @@ describe('Report Service E2E Tests', function (){
         expect(requestReportPage.firstReportLinkEl.getText()).toContain(tableId);
         requestReportPage.firstReportLinkEl.click();
 
-        // Now on the Reports Service page
-        browser.driver.sleep(10000);
-        // Assert report name
-        var reportName = 'Test Report';
-        reportServicePage.reportTitleEl.getText(function (text){
-            expect(text).toEqual(reportName + ' Report');
-        });
-
-        // Assert column headers
-        var fieldNames = ['Record ID#', 'Text Field', 'Multi Text Field', 'Phone Number Field'];
-        getReportColumnHeaders(reportServicePage).then(function(resultArray){
-            // UI is currently using upper case to display the field names in columns
-            var upperFieldNames = stringArrayToUpperCase(fieldNames);
-            expect(resultArray).toEqual(upperFieldNames);
-        });
-
-        // Check all record values
-        reportServicePage.recordElList.getText().then(function(uiRecords) {
-            assertRecordValues(uiRecords, recordList);
+        // Assert columns fill width
+        Promise.props(getDimensions(reportServicePage)).then(validateGridDimensions).then(function () {
+            //resize window smaller and recheck
+            browser.manage().window().setSize(widthTests[1], heightTests).then(function(){
+                Promise.props(getDimensions(reportServicePage)).then(validateGridDimensions).then(function() {
+                    //resize window larger and recheck
+                    browser.manage().window().setSize(widthTests[2], heightTests).then(function() {
+                        Promise.props(getDimensions(reportServicePage)).then(validateGridDimensions);
+                    });
+                });
             });
-        });
+        })
+    });
+
 
     /**
     * Cleanup the test realm after all tests in the block. Same hack as in the setup method so it only runs once

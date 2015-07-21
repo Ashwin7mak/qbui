@@ -47,7 +47,7 @@
         //Resolves a full URL using the instance subdomain and the configured javaHost
         function resolveFullUrl(path, realmSubdomain) {
             var fullPath;
-            log.info('##### Resolving full url for path:'+ path + ' realm:'+realmSubdomain);
+            log.info('Resolving full url for path:'+ path + ' realm:'+realmSubdomain);
             //If there is no subdomain, hit the javaHost directly and don't proxy through the node server
             //This is required for actions like ticket creation and realm creation
             if (realmSubdomain === '') {
@@ -59,10 +59,10 @@
                 if(path.indexOf(REALMS_ENDPOINT) !== -1) {
                     methodLess = config.javaHost.replace(HTTP_REGEX, '');
                 }
-                log.info('##### config.DOMAIN:'+ config.DOMAIN + ' methodLess:'+methodLess);
+                log.info('config.DOMAIN:'+ config.DOMAIN + ' methodLess:'+methodLess);
 
                 fullPath = HTTP + realmSubdomain + '.' + methodLess + path;
-                log.info('##### resulting fullpath:'+ fullPath);
+                log.info('resulting fullpath:'+ fullPath);
             }
             return fullPath;
         }
@@ -173,10 +173,10 @@
                 //Make request and return promise
                 var deferred = promise.pending();
                 apiBase.executeRequestRetryable(opts, 3).then(function(resp){
-                    log.debug('-------- RESPONSE FOR reqInfo ' + reqInfo + 'got success response' + resp);
+                    log.debug('Response for reqInfo ' + reqInfo + ' got success response' + resp);
                     deferred.resolve(resp);
                 }).catch(function(error){
-                    log.debug('-------- RESPONSE ERROR! FOR  reqInfo ' + reqInfo + 'got error response' + error);
+                    log.debug('Response ERROR! for reqInfo ' + reqInfo + ' got error response' + error);
                     deferred.reject(error);
                 });
                 return deferred.promise;
