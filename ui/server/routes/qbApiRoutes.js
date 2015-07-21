@@ -3,11 +3,8 @@
  */
 (function () {
     'use strict';
-    var request = require('request');
     var log = require('../logger').getLogger();
     var _ = require('lodash');
-    var express = require('express');
-
 
     module.exports = function (app, config, routeMapper) {
 
@@ -22,7 +19,7 @@
         var allRoutes = routeMapper.fetchAllRoutes();
 
         if (undefined === allRoutes) {
-            log.error("No routes have been configured for env " + env);
+            log.error('No routes have been configured for env ' + env);
             return;
         }
 
@@ -35,7 +32,7 @@
      * each route
      * @param routes
      * @param app
-     * @param envMapper
+     * @param routeMapper
      */
     function initializeRoutes(routes, app, routeMapper){
 
@@ -50,34 +47,34 @@
 
             //if this route has an all mapping, then ignore individual mappings
             if (undefined !== allFunctionForRoute) {
-                log.info("Routing ALL method for route " + route);
+                log.info('Routing ALL method for route ' + route);
                 app.route(route).all(allFunctionForRoute);
                 return;
             }
 
             //map each individual mapping understanding that we may want to map the get function but not the post
             if (undefined !== getFunctionForRoute) {
-                log.info("Routing GET method for route " + route);
+                log.info('Routing GET method for route ' + route);
                 app.route(route).get(getFunctionForRoute);
             }
 
             if (undefined !== postFunctionForRoute) {
-                log.info("Routing POST method for route " + route);
+                log.info('Routing POST method for route ' + route);
                 app.route(route).post(postFunctionForRoute);
             }
 
             if (undefined !== deleteFunctionForRoute) {
-                log.info("Routing DELETE method for route " + route);
+                log.info('Routing DELETE method for route ' + route);
                 app.route(route).delete(deleteFunctionForRoute);
             }
 
             if (undefined !== putFunctionForRoute) {
-                log.info("Routing PUT method for route " + route);
+                log.info('Routing PUT method for route ' + route);
                 app.route(route).put(putFunctionForRoute);
             }
 
             if (undefined !== patchFunctionForRoute) {
-                log.info("Routing PATCH method for route " + route);
+                log.info('Routing PATCH method for route ' + route);
                 app.route(route).patch(patchFunctionForRoute);
             }
         });
