@@ -26,7 +26,9 @@
                     promise = gridData.getDataPromise();
                 }
                 else {
-                    promise = $q.when(gridData.getColumns())
+                    var allCols = gridData.getColumns();
+                    var someCols = allCols.slice(0,3)
+                    promise = $q.when(someCols)
                 }
 
                 promise.then (

@@ -83,7 +83,7 @@ module.exports = function (grunt) {
                     '<%= quickbase.client.components %>/**/*.spec.js',
                     '<%= quickbase.client.components %>/**/*.mock.js'
                 ],
-                tasks: ['newer:jshint:all', 'karma']
+                tasks: ['newer:jshint:all', 'karma:unit']
             },
             livereload: {
                 files: [
@@ -135,7 +135,27 @@ module.exports = function (grunt) {
                     config: './.jscsrc',
                     excludeFiles: ['<%= express.root %>/**/*.spec.js']
                 }
+            },
+            testGen: {
+                files: {
+                    src: ['test_generators/**/*.js']
+                },
+                options: {
+                    config: './.jscsrc',
+                    excludeFiles: ['test_generators/**/*.spec.js']
+                }
+            },
+            source: {
+                files: {
+                    src: ['<%= quickbase.client.root %>/**/*.js',
+                         '<%= express.root %>/**/*.js','test_generators/**/*.js']
+                },
+                options: {
+                    config: './.jscsrc',
+                    excludeFiles: ['<%= quickbase.client.root %>/bower_components/**/*.js']
+                }
             }
+
         },
 
         // Make sure code styles are up to par and there are no obvious mistakes
@@ -169,7 +189,10 @@ module.exports = function (grunt) {
                     '<%= quickbase.client.components %>/**/*.spec.js',
                     '<%= quickbase.client.components %>/**/*.mock.js'
                 ]
-            }
+            },
+            testGen: [
+                'test_generator/**/*.js'
+            ]
         },
 
         // Empties folders to start fresh
@@ -534,6 +557,17 @@ module.exports = function (grunt) {
                 src: ['server/**/test/' + mochaUnitTest ]
             },
 
+            testGen: {
+                options: {
+                    reporter: (function () {
+                        process.env.MOCHA_COLORS = false;
+                        process.env.JUNIT_REPORT_PATH = serverReportDir + '/unit/server_report.xml';
+                        return 'mocha-jenkins-reporter';
+                    }())
+                },
+                src: ['test_generators/**/test/' + mochaUnitTest ]
+            },
+
             integration: {
                 options: {
                     //log in test results in red any node integration tests over slow amount below which in milliseconds
@@ -732,7 +766,7 @@ module.exports = function (grunt) {
     });
 
     grunt.registerTask('testClientOnly', function () {
-        grunt.task.run(['jshint:client', 'jscs:client', 'karma']);
+        grunt.task.run(['jshint:client', 'jscs:client', 'karma:unit']);
     });
 
     grunt.registerTask('test', function (target) {
@@ -756,6 +790,13 @@ module.exports = function (grunt) {
                 'mochaTest:test',
             ]);
         }
+        if (target === 'testGen') {
+            //testGen unit tests
+            return grunt.task.run([
+                'mochaTest:testGen'
+            ]);
+        }
+
         if (target === 'coverage') {
             //server unit tests
             return grunt.task.run([
@@ -778,7 +819,7 @@ module.exports = function (grunt) {
                 'concurrent:test',
                 'autoprefixer',
                 'wiredep:test',
-                'karma',
+                'karma:unit',
                 'fixCoveragePaths'
             ]);
         }
@@ -789,7 +830,6 @@ module.exports = function (grunt) {
                 'concurrent:test',
                 'wiredep:app',
                 'autoprefixer',
-                'express:test',
                 'protractor'
             ]);
         }
@@ -801,6 +841,7 @@ module.exports = function (grunt) {
         ]);
 
     });
+
 
     grunt.registerTask('ciTest', [
         'env:test',
@@ -839,7 +880,7 @@ module.exports = function (grunt) {
 
     grunt.registerTask('codeStandards', [
         'jshint',
-        'jscs',
+        'jscs'
     ]);
 
     grunt.loadNpmTasks('grunt-jscs');

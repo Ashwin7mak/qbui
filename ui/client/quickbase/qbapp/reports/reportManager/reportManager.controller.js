@@ -60,7 +60,7 @@
 
                 //  ui grid options
                 $scope.report.qbseGridOptions = {
-                    paginationPageSize: 25,
+                    paginationPageSize: 15,
                     enableColumnResizing: true,
                     showGridFooter: false
                 };

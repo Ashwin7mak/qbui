@@ -15,6 +15,10 @@
         this.reportTitleEl = element.all(by.className('header')).first();
         this.columnHeaderElList = element.all(by.repeater('col in colContainer.renderedColumns track by col.colDef.name'));
         this.recordElList = element.all(by.repeater('(rowRenderIndex, row) in rowContainer.renderedRows track by $index'));
+        this.mainContent = element.all(by.className('nav-target')).first();
+        this.tableContainer = element.all(by.className('ui-grid')).first();;
+        this.lastColumn = element.all(by.className('ui-grid-header-cell')).last();
+
     };
 
     module.exports = new reportServicePage();

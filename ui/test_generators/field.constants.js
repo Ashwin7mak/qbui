@@ -9,15 +9,17 @@
 
     //These are constants common to all fields
     module.exports = Object.freeze({
-        //Field property names common to all fields  
-        ID: 'id',
-        NAME: 'name',
-        TYPE: 'type',
-        TABLE_ID: 'tableId',
-        BUILT_IN: 'builtIn',
-        DATA_IS_COPYABLE: 'dataIsCopyable',
-        INCLUDE_IN_QUICKSEARCH: 'includeInQuickSearch',
-        CLIENT_SIDE_ATTRIBUTES: 'clientSideAttributes',
+        //Field property names common to all fields
+        fieldKeys: {
+            ID                    : 'id',
+            NAME                  : 'name',
+            TYPE                  : 'type',
+            TABLE_ID              : 'tableId',
+            BUILT_IN              : 'builtIn',
+            DATA_IS_COPYABLE      : 'dataIsCopyable',
+            INCLUDE_IN_QUICKSEARCH: 'includeInQuickSearch',
+            CLIENT_SIDE_ATTRIBUTES: 'clientSideAttributes',
+        },
         /******************************************************************/
         /*            FIELD TYPES AVAILABLE FOR USE IN TABLES             */
         /******************************************************************/

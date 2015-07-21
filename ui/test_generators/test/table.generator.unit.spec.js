@@ -65,9 +65,9 @@ describe('Table generator unit test', function () {
 
         var fields = table[tableConsts.FIELDS];
 
-        if(fields.length >= tableGenerator.getMaxNumberRandomFields()){
+        if(fields.length > tableGenerator.getMaxNumberRandomFields()){
             assert.fail('Did not find the right number of fields. Expected a number less than ' +
-            tableGenerator.getMaxNumberRandomFields() + '. Table: ' +
+            tableGenerator.getMaxNumberRandomFields() +  ' but got number '+ fields.length +' . Table: ' +
             tableGenerator.tableToJsonString(table));
         }
     });
@@ -231,6 +231,96 @@ describe('Table generator unit test', function () {
             });
         });
     });
+
+    function tableOfCertainSizeAndSetOfTypesProvider(){
+        return [
+            {message: "all Types, 50 fields", numFields: 50,
+                choicesArray: [
+                consts.BIGTEXT,
+                consts.CHECKBOX,
+                consts.CURRENCY,
+                consts.DATE,
+                consts.DATE_TIME,
+                consts.DURATION,
+                consts.EMAIL_ADDRESS,
+                consts.FILE_ATTACHMENT,
+                consts.FORMULA_CHECKBOX,
+                consts.FORMULA_CURRENCY,
+                consts.FORMULA_DATE,
+                consts.FORMULA_DATE_TIME,
+                consts.FORMULA_DURATION,
+                consts.FORMULA_EMAIL_ADDRESS,
+                consts.FORMULA_NUMERIC,
+                consts.FORMULA_PERCENT,
+                consts.FORMULA_PHONE_NUMBER,
+                consts.FORMULA_TEXT,
+                consts.FORMULA_TIME_OF_DAY,
+                consts.FORMULA_URL,
+                consts.FORMULA_USER,
+                consts.LOOKUP,
+                consts.MULTI_LINE_TEXT,
+                consts.NUMERIC,
+                consts.PERCENT,
+                consts.PHONE_NUMBER,
+                consts.RATING,
+                consts.REPORT_LINK,
+                consts.SUMMARY,
+                consts.TEXT,
+                consts.TIME_OF_DAY,
+                consts.URL,
+                consts.USER
+            ]},
+            {message: "text Types 5 fields", numFields : 5,
+                choicesArray: [consts.TEXT,
+                consts.MULTI_LINE_TEXT,
+                consts.FORMULA_TEXT
+            ]},
+            {message: "null Types 1 fields", numFields : 1,
+                choicesArray: null},
+            {message: "1 Types 0 fields", numFields : 0,
+                choicesArray: [consts.URL]},
+            {message: "0 Types 0 fields", numFields : 0,
+                choicesArray: []}
+        ];
+    }
+
+    /**
+     * Unit test that validates generating a table with a fixed number of fields of allowed types
+     */
+    describe('test generating a table with number of fields of allowed set of types',function(){
+        tableOfCertainSizeAndSetOfTypesProvider().forEach(function(entry) {
+            it('Test case: ' + entry.message, function (done) {
+                var numFields = entry.numFields;
+                var table = tableGenerator.generateTableWithFieldsOfAllowedTypes(numFields, entry.choicesArray);
+
+                if (!table[tableConsts.NAME]) {
+                    assert.fail('Table should be generated with a name');
+                }
+
+                var fields = table[tableConsts.FIELDS];
+
+                if (numFields == 0 || !entry.choicesArray) {
+                    assert.strictEqual(fields, undefined, "expected table with no fields");
+                }
+                else if (fields && fields.length !== numFields) {
+                    assert.fail('Did not find the right number of fields. Expected ' + numFields
+                    + '. Table: ' +
+                    tableGenerator.tableToJsonString(table));
+                }
+
+                _.forEach(fields, function(field) {
+                    if (!_.contains(entry.choicesArray, field[fieldConsts.fieldKeys.TYPE]) ) {
+                        assert.fail('Did not find a valid fieldType. one of allowed but got ' +
+                         field[fieldConsts.fieldKeys.TYPE] + '. Table: ' +
+                        tableGenerator.tableToJsonString(table));
+                    }
+                });
+
+                done();
+            });
+        });
+    });
+
 });
 
 
