@@ -62,6 +62,7 @@
             //Lookup and summary fields need to be formatted according to their root reference field's type
             if(fieldInfo.type === consts.SUMMARY || fieldInfo.type === consts.LOOKUP) {
                 tempFieldInfo = _.cloneDeep(fieldInfo.datatypeAttributes);
+                tempFieldInfo.clientSideAttributes = fieldInfo.clientSideAttributes;
             }
             switch (tempFieldInfo.type) {
                 case consts.PHONE_NUMBER:
