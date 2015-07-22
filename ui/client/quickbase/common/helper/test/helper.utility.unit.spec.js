@@ -25,6 +25,11 @@ describe('quickbase api service', function () {
 
         expect(qbUtility.getRouteArguments(route)).toEqual({});
         expect(qbUtility.getRouteArguments()).toEqual({});
+
+        expect(qbUtility.getRouteArguments('route', 'pattern')).toEqual({});
+        expect(qbUtility.getRouteArguments('route', 'route')).toEqual({});
+
+        expect(qbUtility.getRouteArguments('route', ':route')).toEqual({route:'route'});
     });
 
     it('Validate isInt function', function () {
