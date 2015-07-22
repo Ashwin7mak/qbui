@@ -8,8 +8,6 @@
 
     function ReportManagerController($q, $scope, $stateParams, ReportModel, gridConstants ) {
 
-        console.log('ReportManagerController called..');
-
         $scope.showLayout = false;
 
         //  get the report data model

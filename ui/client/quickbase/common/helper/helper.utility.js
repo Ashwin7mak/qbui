@@ -23,6 +23,35 @@
         };
 
         /**
+         * For the given route and pattern, extract variable parameter arguments
+         * from the route.
+         *
+         * @param route       /qbapp/report/apps/12345/tables/67890/report/1
+         * @param pattern     /qbapp/report/apps/:appId/tables/:tableId/report/:id
+         * @returns {{}}      {appId:12345, tableId:67890, id:1}
+         */
+        utilityFunctions.getRouteArguments = function(route, pattern) {
+            var args = {};
+
+            if (route && pattern) {
+                var routeSplit = route.split('/');
+                var patternSplit = pattern.split('/');
+
+
+                if (routeSplit.length === patternSplit.length) {
+                    for (var i = 0; i < routeSplit.length; i++) {
+                        if (routeSplit[i] !== patternSplit[i]) {
+                            if (patternSplit[i].charAt(0) === ':') {
+                                args[patternSplit[i].substring(1)] = routeSplit[i];
+                            }
+                        }
+                    }
+                }
+            }
+            return args;
+        }
+
+        /**
          * Is the supplied value an integer
          *
          * @param val

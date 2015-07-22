@@ -4,6 +4,14 @@ describe('Module quickbase.app module run function', function() {
     var appId = '12345';
     var tableId = '67890';
     var reportId = '12';
+    var qbUtility;
+
+    beforeEach(function() {
+        module('qbse.helper');
+    });
+    beforeEach(inject(function (_qbUtility_) {
+        qbUtility = _qbUtility_;
+    }));
 
     var stateMock = {
         transitionTo: function() {}
@@ -41,7 +49,7 @@ describe('Module quickbase.app module run function', function() {
             return '/qbapp/report/apps/' + appId + '/tables/' + tableId + '/report/' + reportId;
         });
 
-        runBlock(stateMock, locationMock);
+        runBlock(stateMock, locationMock, qbUtility);
 
         expect(locationMock.path).toHaveBeenCalled();
         expect(stateMock.transitionTo).toHaveBeenCalledWith('report',{appId:appId,tableId:tableId,id:reportId});
@@ -57,7 +65,7 @@ describe('Module quickbase.app module run function', function() {
             return '/some/invalid/route';
         });
 
-        runBlock(stateMock, locationMock);
+        runBlock(stateMock, locationMock, qbUtility);
 
         expect(locationMock.path).toHaveBeenCalled();
         expect(stateMock.transitionTo).toHaveBeenCalledWith('qbapp');
