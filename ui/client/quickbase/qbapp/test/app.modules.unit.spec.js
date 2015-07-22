@@ -21,8 +21,7 @@ describe('Module quickbase.app module run function', function() {
     };
 
     it('test app.module run block with default route', function() {
-        var module = angular.module('quickbase.qbapp');
-        var runBlock = module._runBlocks[0][module._runBlocks[0].length-1];
+        var runBlock = getRunBlock();
 
         spyOn(stateMock, 'transitionTo').and.callFake(function() {
             return null;
@@ -35,12 +34,10 @@ describe('Module quickbase.app module run function', function() {
 
         expect(locationMock.path).toHaveBeenCalled();
         expect(stateMock.transitionTo).toHaveBeenCalledWith('qbapp');
-
     });
 
     it('test app.module run block with report route', function() {
-        var module = angular.module('quickbase.qbapp');
-        var runBlock = module._runBlocks[0][module._runBlocks[0].length-1];
+        var runBlock = getRunBlock();
 
         spyOn(stateMock, 'transitionTo').and.callFake(function() {
             return null;
@@ -53,12 +50,10 @@ describe('Module quickbase.app module run function', function() {
 
         expect(locationMock.path).toHaveBeenCalled();
         expect(stateMock.transitionTo).toHaveBeenCalledWith('report',{appId:appId,tableId:tableId,id:reportId});
-
     });
 
     it('test app.module run block with an invalid route', function() {
-        var module = angular.module('quickbase.qbapp');
-        var runBlock = module._runBlocks[0][module._runBlocks[0].length-1];
+        var runBlock = getRunBlock();
 
         spyOn(stateMock, 'transitionTo');
         spyOn(locationMock, 'path').and.callFake(function() {
@@ -69,7 +64,26 @@ describe('Module quickbase.app module run function', function() {
 
         expect(locationMock.path).toHaveBeenCalled();
         expect(stateMock.transitionTo).toHaveBeenCalledWith('qbapp');
-
     });
+
+    it('test app.module run block with no route', function() {
+        var runBlock = getRunBlock();
+
+        spyOn(stateMock, 'transitionTo');
+        spyOn(locationMock, 'path').and.callFake(function() {
+            return null;
+        });
+
+        runBlock(stateMock, locationMock, qbUtility);
+
+        expect(locationMock.path).toHaveBeenCalled();
+        expect(stateMock.transitionTo).toHaveBeenCalledWith('qbapp');
+    });
+
+
+    function getRunBlock() {
+        var module = angular.module('quickbase.qbapp');
+        return module._runBlocks[0][module._runBlocks[0].length-1];
+    }
 
 });

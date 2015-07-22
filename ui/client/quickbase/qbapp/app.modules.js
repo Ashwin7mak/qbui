@@ -80,9 +80,6 @@
          * @returns boolean
          */
         function isReportRoute(reqPath) {
-
-            console.log('Requesting route: ' + reqPath);
-
             //  Regex tests this format:  /qbapp/report/apps/:appId/tables/:tableId/report/:id
             var re = new RegExp('\/qbapp\/report\/apps\/[A-Za-z0-9]*\/tables\/[A-Za-z0-9]*\/report\/[0-9]*');
             return re.test(reqPath);
