@@ -62,9 +62,6 @@
         $scope.goToReports = function() {
             $state.transitionTo('reports', {appId:$scope.appId, tableId:$scope.tableId});
         };
-        $scope.goToReport = function(report) {
-            $state.transitionTo('report', {appId:$scope.appId, tableId:$scope.tableId, id:report.id});
-        };
 
     }
 
