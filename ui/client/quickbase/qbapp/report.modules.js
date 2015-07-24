@@ -9,7 +9,7 @@
     };
 
     var reportModule = angular.module('quickbase.report', ['ui.router', 'qbse.qbapp.reports.manager', 'qbse.layout']);
-    var reportConfig = reportModule.config(['$stateProvider', '$locationProvider', function($stateProvider, $locationProvider) {
+    reportModule.config(['$stateProvider', '$locationProvider', function($stateProvider, $locationProvider) {
         console.log('setting up app.report.modules.js');
         $locationProvider.html5Mode(true);
         $stateProvider
@@ -25,10 +25,6 @@
                     }
                 }
             });
-    }]);
-
-    reportConfig.run(['$state', '$location','qbUtility', function($state, $location, qbUtility) {
-        $state.transitionTo('report', qbUtility.getRouteArguments($location.path(), ROUTE.report));
     }]);
 
 }());

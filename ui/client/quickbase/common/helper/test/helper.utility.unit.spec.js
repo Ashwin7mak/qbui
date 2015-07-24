@@ -11,27 +11,6 @@ describe('quickbase api service', function () {
         qbUtility = _qbUtility_;
     }));
 
-    it('validate route arguments function', function () {
-        var route = '/qbapp/report/apps/12345/tables/67890/report/14';
-        var pattern = '/qbapp/report/apps/:appId/tables/:tableId/report/:id';
-        expect(qbUtility.getRouteArguments(route, pattern)).toEqual({appId:'12345',tableId:'67890',id:'14'});
-
-        route = '/a/mismatched/route';
-        expect(qbUtility.getRouteArguments(route, pattern)).toEqual({});
-
-        route = '/qbapp/report/apps/12345/tables/67890/report/14';
-        pattern = '/qbapp/report/apps/12345/tables/tableId/report/1';
-        expect(qbUtility.getRouteArguments(route, pattern)).toEqual({});
-
-        expect(qbUtility.getRouteArguments(route)).toEqual({});
-        expect(qbUtility.getRouteArguments()).toEqual({});
-
-        expect(qbUtility.getRouteArguments('route', 'pattern')).toEqual({});
-        expect(qbUtility.getRouteArguments('route', 'route')).toEqual({});
-
-        expect(qbUtility.getRouteArguments('route', ':route')).toEqual({route:'route'});
-    });
-
     it('Validate isInt function', function () {
         expect(qbUtility.isInt(0)).toBeTruthy();
         expect(qbUtility.isInt(3)).toBeTruthy();
