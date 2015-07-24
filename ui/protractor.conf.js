@@ -8,13 +8,15 @@ exports.config = {
   // than the maximum time your application needs to stabilize between tasks.
   allScriptsTimeout: 110000,
 
+  //seleniumAddress: 'http://127.0.0.1:2222/wd/hub',
+
   // A base URL for your application under test. Calls to protractor.get()
   // with relative paths will be prepended with this.
   baseUrl: 'http://localhost:' + (process.env.PORT || '9000'),
 
   // If true, only chromedriver will be started, not a standalone selenium.
   // Tests for browsers other than chrome will not run.
-  chromeOnly: true,
+  //chromeOnly: false,
 
   // list of files / patterns to load in the browser
   specs: [
