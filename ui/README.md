@@ -1,189 +1,75 @@
 
-#Introduction
+#QuickBase UI
 
-This project has the files needed to startup the node.js express server in support of the Angular QuickBase application.
+The QuickBase ui project is the ui layer of the QuickBase application. It is an Node.js pass thru API server to the java backend as well as an angular frontend. This project has the files needed to startup the node.js express server for the ui layer in support of the Angular QuickBase application.
 
-## UI Project Structure
+Other repos for QuickBase [java backend](https://github.intuit.com/QuickBase/QuickBase) and [aws](https://github.intuit.com/QuickBase/aws) are also part of the Quickbase application. 
+see also:
+[File structure](FILESSTRUCTURE.md)
 
-Overview of the UI directory
+##Installing
+Get the qbui project repo 
 
-    ui
-     │
-     └─ .tmp                                    - temporary output folder used by build  (not tracked by git)
-         │
-        client                                  - angular UI client code folder
-         │  │
-         │  ├── bower_components                - components downloaded by bower
-         │  ├── quickbase                       - 1..n quickbase angular modules
-         │  │    │
-         │  │    ├── assets
-         │  │    │    ├──images
-         │  │    │    ├──css                    - compass generated css and sprite images
-         │  │    │    │
-         │  │    │    ├── _partial1.scss        - scss partial
-         │  │    │    ├── _partial2.scss        - scss partial
-         │  │    │    ├── _partialN.scss        - scss partial
-         │  │    │    │
-         │  │    │    ├── app.scss              - scss file for the quickbase app module
-         │  │    │    ├── realm.scss            - scss file for the quickbase realm module
-         │  │    │    └── <...>.scss
-         │  │    │
-         │  │    ├── common                     - common shared angular modules
-         │  │    │    └──<1..n common modules>  - ie: logger, spinner, etc.
-         │  │    │      └──\test\<1..n common test>  - ie: logger\test, spinner\test, etc.
-         │  │    │          └── <...>.spec.js   - test spec
-         │  │    │
-         │  │    ├── qbapp                      - a quickbase angular module named 'app'
-         │  │    │    ├──assets
-         │  │    │    │   ├──images
-         │  │    │    │   └──styles
-         │  │    │    └──<1..n qbapp modules>   - ie: tables, reports, etc.
-         │  │    │        └──<1..n qbapp test>   - ie: tables\test, reports\test, etc.
-         │  │    │          └── <...>.spec.js   - test spec
-         │  │    │
-         │  │    ├── realm                      - a quickbase angular module named 'realm'
-         │  │    │    ├──assets
-         │  │    │    │   ├──images
-         │  │    │    │   └──styles
-         │  │    │    └──<1..n realm modules>
-         │  │    │      └──<1..n realm test>
-         │  │    │          └── <...>.spec.js   - test specs
-         │  │    │
-         │  │    └── <...>
-         │  │
-         │  ├── app.index.html                  - entry point html file associated with the angular module named 'app'
-         │  ├── realm.index.html                - entry point html file associated with the angular module named 'realm'
-         │  └── <...>.index.html
-         │
-        build                                   - gradle build output folder   (not tracked by git)
-         │  │
-         │  ├── distributions                   - folder to hold zip/jar/etc file
-         │  └── reports
-         │       ├──server                      - folder to hold test and coverage output
-         │       └──client                      - folder to hold test and coverage output
-         │
-        dist                                    - grunt build output folder   (not tracked by git)
-         │
-        e2e                                     - protractor end to end tests
-         │
-        node_modules                            - the application&#39;s npm library
-         │
-        server                                  - express Node server
-         │  │
-         │  ├── api                             - app server folder
-         │  ├── components                      - app-wide component's
-         │  ├── config
-         │  │    │
-         │  │    └── environment                - configuration per environment (local, test, aws)
-         │  │         └── keys                  - ssl keys for the server (content is not tracked by git)
-         │  ├── routes                          - quickbase server routes (rest endpoints, angular)
-         │  ├── views                           - server rendered views
-         │  │
-         │  ├── app.js                          - express server start script
-         │  └── routes.js                       - express server routes script
-         │  └── test                            - express server test scripts
-         │       ├── app.spec.js                - express server start script
-         │       └── routes.spec.js
-         │
-        gruntfile.js                            - grunt build file for express and angular application
-        build.gradle                            - gradle build file.
-        karma.conf.js                           - karma test configuration file
-        bower.json                              - application bower dependency definitions
-        package.json                            - list of npm dependencies
-        config.rb                               - compass configuration file
-        protractor.conf.js                      - protractor configuration file
-        .gitignore                              - application (client and server) git ignore configuration file
-        .yo-rc.json                             - yeoman configuration file
-        .jscsrc                                 - js code style linter configuration
+```
+git clone -b master ssh://git@github.intuit.com/quickbase/qbui.git
+```
+or
+
+```
+git clone -b master https://github.intuit.com/QuickBase/qbui.git
+```
+
+##Prerequisites 
+1. Know Javascript, Node.js Angularjs
+2. Read coding conventions (TODO:link to coding conventions doc)
 
 
-Example folder structure of a QuickBase Angular module.
+##Pre-installation
 
-* name:   `app`;
-* folder: `client/quickbase/qbapp`
-
-        qbapp                                                 - name of the angular module
-         ├── qbapp.routes.js                                  - angular routes for this module
-         ├── qbapp.modules.js                                 - angular modules for this module
-         │
-         ├── dashboard                                 - dashboard component
-         │    ├── realmDashboard.controller.js
-         │    ├── realmDashboard.directive.js
-         │    ├── realmDashboard.model.js
-         │    ├── realmDashboard.service.js
-         │    ├── realmDashboard.html
-         │    │
-         │    └── test                                - test folder for the dashboard component
-         │         ├── realmDashboard.controller.spec.js
-         │         ├── realmDashboard.directive.spec.js
-         │         ├── realmDashboard.model.spec.js
-         │         └── realmDashboard.service.spec.js
-         │
-         ├── reports                                   - reports component
-         ├── tables                                    - tables component
-         └── <...>
-
-#Instructions to Run for Development
 * Have node.js installed from the [Node.js site](http://nodejs.org/)
+* (*Optional*) Make a place for any global node modules 
+ 	1. Create a .node folder from command line.
+ 	   
+	  	```
+	  	$ mkdir .node
+	  	```
+   
+	2. Adjust your node settings so that the global modules get installed locally for your login.
+	
+	   ``` bash
+	      $ npm config set prefix=~/.node
+	   ```
+ 	  This is required because when you try to install modules globally (npm install -g), npm will install it in /usr/local/    and this will cause permission issues. In order to prevent this, adjust your node settings to install global modules     local for your login.
 
-* Make sure you have Ruby installed (Macs should have it already `which ruby` otherwise get Ruby here)
+	3. Add this directory to your PATH.
+	
+	   ``` bash
+	     $ export PATH=$PATH:$HOME/.node/bin
+	   ```
 
-* Run `gem install compass -v 1.0.1`   (may need sudo)
 
-* Make sure you have grunt and bower installed
-    * Run  `npm install bower grunt-cli`
+* Make sure you have Ruby installed (Macs should have it already, try `which ruby` otherwise get Ruby here)
 
-* After you get the branch you can go to the terminal command line
+* Install compass. Run `gem install compass -v 1.0.1`   (may need sudo)
 
-* `cd` to the <QuickbaseRoot>/ui directory.
+* **qbui** project uses npm and Bower as its *package managers* and Grunt as its *task runner*. 
 
-* To launch the node web server (express) and update as you edit run
+	The top level of the project holds the CI Jenkins Gradle related files and the source for the ui is under the ui directory
 
-    * `grunt serve`
+	There is a bower_components folder which is managed by bower.json. 
 
-* Current urls supported
-    * http://localhost:9000/
+	There is a node_modules folder which is managed by package.json. 
 
-#Configuring
-The application requires a run-time environment to be defined and configured.  By default, the server runs in local development mode,
-meaning a local configuration file must be defined. As this file is not tracked by git, to run locally, you will need to do the following:
+	Grunt tasks are defined in the Gruntfile.js 
+
+	* Make sure you have grunt and bower installed
+	    * Run  `npm install bower grunt-cli`
+
+##Configuring
+Environment specific configurations reside in the server/config/environment directory. The application requires a run-time environment to be defined and configured.  
+By default, the server runs in local development mode, meaning a local configuration file must be defined. As this file is not tracked by git, to run locally, you will need to do the following:
 
 - copy <project root>/server/config/environment/local.js.sample into the local.js and save:
-
-        (function () {
-            'use strict';
-
-            // Use local.js for environment variables that grunt will set when the server starts locally.
-            // This file should not be tracked by git.
-
-            var path = require('path');
-
-            module.exports = {
-
-                // to run using ssl, copy the private key and cert for
-                // your host(ie:localhost.intuit.com) to ../server/config/keys
-                // folder.. comment this out if don't want to offer ssl support.
-
-                //SSL_KEY: {
-                //    private: path.normalize(__dirname + '/keys/private.pem'),
-                //    cert: path.normalize(__dirname + '/keys/cert.pem')
-                //    requireCert: false  // set to false for self signed certs
-                //},
-
-                // allow for override of default ports
-                port: 9000,
-                sslPort: 9443,
-
-                //REST endpoint (protocol,server,port)
-                //javaHost: 'https://localhost.intuit.com:8443',
-                javaHost: 'http://localhost.intuit.com:8080'
-
-                //Express Server
-                //DOMAIN: 'https://localhost.intuit.com:9443'
-                DOMAIN: 'https://localhost.intuit.com:9000'
-
-            };
-        }());
 
 Notes about the above configuration:
 
@@ -201,15 +87,28 @@ The following run-time environment variables are supported:
 
         NODE_ENV=test;HOST=localhost-test.intuit.com
 
-# Testing
-**Unit tests**
+
+##Instructions to run server and watch for changes 
+
+* `cd` to the <QuickbaseRoot>/ui directory.
+
+* To launch the node web server (express) and it will update server as you make edits run
+
+    * `grunt serve`
+
+* Current urls supported
+    * http://localhost:9000/
+
+
+## Testing
+###Unit tests
 Running `grunt test` will run the client and server unit tests with karma and mocha.
 
 Use `grunt test:server` to only run server tests.
 
 Use `grunt test:client` to only run client tests.
 
-**Mocha Integration tests**
+###Mocha Integration tests
 
 In order to run the integration tests you will need to have your Node.js express server and your Java API service (aka Monolith) running
 
@@ -267,7 +166,7 @@ With the Java API service running, from the qbui/ui directory run:
 
 Note that this command will launch your Node express server if it's not running.
 
-**Protractor E2E tests**
+###Protractor E2E tests
 
 To setup protractor e2e tests, you must first run
 
@@ -275,76 +174,8 @@ To setup protractor e2e tests, you must first run
 
 Use `grunt test:e2e` to have protractor go through tests located in the `e2e` folder.
 
+See [Debugging UI](./DEBUGGING.md)
 
-#To debug Node UI server code
-
-* Launch the grunt task with debug
-    * `grunt serve:debug`
-
-* Setup a debug config in Intellij
-    * Install some IntelliJ plugins if you don't have these already
-        * AngularJS - front end framework plugin
-        * NodeJS - ui web server plugin
-        * SASS support - enhances css with variables and methods plugin
-     * Know working versions of Intellij are 13.0.3 and 13.0.4
-
-    * Add a new config of type Node.js *Remote* debug in Intellij run/debug options menu
-    * use the CI javaapi server in your <qbroot>/ui/server/config/local.env.js file for javaHost
-    * Give the IntelliJ config a name like Node.js server
-    * Set the port to the port printed out by the serve:debug grunt task and save the config
-
-* Set your breakpoints in our server or node_modules directories (just use Chrome inspector for clientside js file debugging)
-
-* Launch the config in debug mode
-
-
-## To debug using your localhost java server
-
-#To debug Protractor tests
-
-Taken from [http://www.youtube.com/watch?v=VLMyI7QKcwg](http://www.youtube.com/watch?v=VLMyI7QKcwg)
-
-1. Make sure you have the Node.js plugin installed for IntelliJ
-2. Install the Selenium WebDriver standalone server
-    * `npm install -g webdriver-manager`
-3. Create a new Node.js run configuration and set the following parameters:
-    * Node interpreter : `/usr/local/bin/node` (should be pre-filled)
-    * Working directory : `QB_PROJECT_HOME/ui`
-    * JavaScript file : `QB_PROJECT_HOME/ui/node_modules/grunt-protractor-runner/node_modules/protractor/lib/cli.js`
-    * Application parameters : `QB_PROJECT_HOME/ui/protractor.conf.js`
-4. Start your local Node.js server
-    * `grunt serve`
-5. Start your standalone Selenium WebDriver server
-    * `webdriver-manager start`
-6. Set a breakpoint in a JavaScript file from IntelliJ
-7. Select the Node.js run configuration you just created and run in debug mode
-
-#Adding new source elements with Yeoman
-Yeoman is a tool that eases the scaffolding setup of new apps/widgets/services etc
-
-The angular-fullstack generator was used as a blueprint for the client and server directory app structure.
-
-If you wish to use yeoman to add new elements like an angular service, directive, etc., it
-will create the files in the correct locations to keep to the project structure.
-
-
-Example to add a directive to the quickbase realm application:
-
-            cd to the project root
-            yo angular-fullstack:directive myDirective
-            [?] Where would you like to create this directive? ui/client/quickbase/<insert app>/component
-            [?] Does this directive need an external html file? Yes
-
-            NOTE: when prompted on where to create the directive, replace <insert app> with application name...for this example: realm
-
-Produces:
-
-            ui/client/quickbase/realm/component/myDirective.directive.js
-            ui/client/quickbase/realm/component/myDirective.directive.spec.js  (You'll need to manually create a test folder and move this file)
-            ui/client/quickbase/realm/component/myDirective.html
-
-
-More yeoman angular fullstack details [here](https://www.npmjs.org/package/generator-angular-fullstack#endpoint)
 
 ##Compass
 Compass is an open-source CSS authoring framework which uses the Sass stylesheet language.
@@ -365,7 +196,7 @@ Grunt watch:
 
 NOTE:  the CSS files used by the application are always generated by the compass compiler.  Directly manipulating a css file will result in your changes getting overwritten when a new build is invoked.
 
-#Using Gradle to build distribution node server
+##Using Gradle to build distribution node server
 Gradle is used to build a production version of the node server and client application. 
 
 Output from the Gradle Build and Test task is saved under the /build folder. 
@@ -477,47 +308,6 @@ Open a browser to verify.
 
 To stop or not accept SSL requests, comment out/remove the SSL_KEY object in your run-time environment configuration file...(ie: local.env.js).
 
-##Logging
-
-Node logging is done via Bunyan.  The logger configuration is determined by the settings in the configuration file per run-time environment. 
-Here's an example local.js configuration:
-
-        //  Logging configuration
-        LOG: {
-            name: 'qbse-local',
-            level: 'debug',
-            stream: {
-                type: 'console',
-                file: {
-                    dir: './logs',
-                    name: 'qbse-local-' + dateUtils.formatDate( new Date(), '%Y-%M-%D-%h.%m.%s') + '.log',
-                    rotating: {
-                        period: '1d',
-                        count: 7
-                    }
-                }
-            },
-            src: true,               // this is slow...do not use in prod
-        },
-
-Configuration info:
-
-        name: name of the logger
-        level: log level
-        stream.type: output to 'console' or 'file'.  If stream type is file:
-                file.dir: directory where log file is located
-                file.name: name of the output file.
-                if outputting to a file, can also setup to rotate the files per schedule.
-                    rotating.period: how often to rotate the file
-                    rotating.count: max number of rotated files to keep
-        src:  true or false  --> 
-
-Reference Links
-
-1. For information on Bunyan configuration settings, click [here](https://github.com/trentm/node-bunyan)
-2. For information around issue with rotating file logging in multi-clustered node environments: click [here](https://github.com/trentm/node-bunyan#stream-type-rotating-file)
-3. For an overview of the logging design regarding transactionId(TID) and clientId(CID), click [here](https://wiki.intuit.com/display/qbasepd/Client+Logging) 
- 
        
 
 ##Access REST endpoints over SSL
@@ -528,17 +318,35 @@ setting in the local.env.js file:
     javaHost: 'https://localhost.intuit.com:8443'
 
 
-##POSSIBLE ISSUES -- and how to resolve
+##Troubleshooting
+POSSIBLE ISSUES -- and how to resolve
 
-1) When running unit tests, if the following error is outputted, it means PhantomJS is not installed on your machine:
+1. First, since the ui has dependencies on the java backend make sure:
+	
+	1.1. your Tomcat server is running 
+	* see [Quickbase repo](https://github.intuit.com/QuickBase/QuickBase/raw/master/README.md)
+	
+	1.2. your Oracle DB is up 
+	
+	* see [oracle vm setup info](https://wiki.intuit.com/display/qbasepd/Local+Oracle+Linux+VM+Setup)
+	
+	1.3. your Node express server is running
+	
+	* under this repo ui dir run 'grunt serve'
+
+2. When running unit tests, if the following error is outputted, it means PhantomJS is not installed on your machine:
 
       INFO [launcher]: Starting browser PhantomJS
       ERROR [launcher]: No binary for PhantomJS browser on your platform.
         Please, set "PHANTOMJS_BIN" env variable.
 
-   Thought the package definition is included in the package.json, to correct, open a command window, cd to the project folder and
+   Though the package definition is included in the package.json, to correct, open a command window, cd to the project folder and
    manually install by running:
 
       npm install karma-phantomjs-launcher
+      
 
+      
+      
+      
 
