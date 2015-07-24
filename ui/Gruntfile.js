@@ -607,13 +607,7 @@ module.exports = function (grunt) {
             options: {
                 configFile: 'protractor.conf.js'
             },
-            chrome: {
-                options: {
-                    args: {
-                        browser: 'chrome'
-                    }
-                }
-            }
+            run: {}
         },
 
         env: {
@@ -625,6 +619,9 @@ module.exports = function (grunt) {
             },
             local: {
                 NODE_ENV: 'local'
+            },
+            display: {
+                DISPLAY: ':99'
             }
         },
 
@@ -641,6 +638,26 @@ module.exports = function (grunt) {
             dev: {
                 options: {
                     environment: 'development'
+                }
+            }
+        },
+        shell: {
+            xvfb: {
+                command: 'xvfb :99 -ac -screen 0 1600x1200x24 &',
+                options: {
+                    async: true
+                }
+            },
+            webdriverUpdate: {
+                command: 'node node_modules/grunt-protractor-runner/node_modules/protractor/bin/webdriver-manager update --standalone',
+                options: {
+                    async: true
+                }
+            },
+            selenium: {
+                command: 'node node_modules/grunt-protractor-runner/node_modules/protractor/bin/webdriver-manager start --seleniumPort 2222',
+                options: {
+                    async: true
                 }
             }
         }
@@ -830,7 +847,10 @@ module.exports = function (grunt) {
                 'concurrent:test',
                 'wiredep:app',
                 'autoprefixer',
-                'protractor'
+                'shell:xvfb',
+                'env:display',
+                //'shell:selenium',
+                'protractor:run'
             ]);
         }
 
@@ -885,5 +905,7 @@ module.exports = function (grunt) {
 
     grunt.loadNpmTasks('grunt-jscs');
     grunt.loadNpmTasks('grunt-contrib-jshint');
+    grunt.loadNpmTasks('grunt-shell-spawn');
+    grunt.loadNpmTasks('grunt-env');
 
 };
