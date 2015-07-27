@@ -9,6 +9,8 @@ exports.config = {
   allScriptsTimeout: 110000,
 
   //seleniumAddress: 'http://127.0.0.1:2222/wd/hub',
+  sauceUser: "sbg_qbse",
+  sauceKey: "ae1f362a-024f-44b1-a428-992defbf0062",
 
   // A base URL for your application under test. Calls to protractor.get()
   // with relative paths will be prepended with this.
@@ -32,9 +34,9 @@ exports.config = {
   // https://code.google.com/p/selenium/wiki/DesiredCapabilities
   // and
   // https://code.google.com/p/selenium/source/browse/javascript/webdriver/capabilities.js
-  capabilities: {
-    'browserName': 'chrome'
-  },
+  //capabilities: {
+  //  'browserName': 'phantomjs'
+  //},
 
   // ----- The test framework -----
   //

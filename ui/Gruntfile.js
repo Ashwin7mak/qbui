@@ -607,7 +607,8 @@ module.exports = function (grunt) {
             options: {
                 configFile: 'protractor.conf.js'
             },
-            run: {}
+            chrome:{},
+            firefox:{}
         },
 
         env: {
@@ -650,6 +651,12 @@ module.exports = function (grunt) {
             },
             webdriverUpdate: {
                 command: 'node node_modules/grunt-protractor-runner/node_modules/protractor/bin/webdriver-manager update --standalone',
+                options: {
+                    async: true
+                }
+            },
+            echoDisplay: {
+                command: 'echo $DISPLAY',
                 options: {
                     async: true
                 }
@@ -847,10 +854,7 @@ module.exports = function (grunt) {
                 'concurrent:test',
                 'wiredep:app',
                 'autoprefixer',
-                'shell:xvfb',
-                'env:display',
-                //'shell:selenium',
-                'protractor:run'
+                'protractor:firefox'
             ]);
         }
 
