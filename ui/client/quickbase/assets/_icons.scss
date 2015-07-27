@@ -11,6 +11,14 @@ $arrow-sprite: image-url('sprites/arrow-sprite.png');
   background: sprite($icons, intuitLogo);
 }
 
+.caret-up {
+  background: sprite($icons, caretUp);
+}
+
+.caret-down {
+  background: sprite($icons, caretDown);
+}
+
 @mixin arrow-sprite-png {
     background-repeat: no-repeat;
     background-image: $arrow-sprite;

@@ -3,6 +3,7 @@
  * Created by cschneider1 on 7/2/15.
  */
 (function () {
+    'use strict';
     var log = require('../logger').getLogger();
     var routeConsts = require('./routeConstants');
     var request = require('request');
@@ -80,7 +81,7 @@
             setRecordsApi : function(recordsApiOverride){
                 recordsApi = recordsApiOverride;
             }
-        }
+        };
     };
 
 
@@ -134,7 +135,7 @@
      */
     function modifyRequestPathForApi(req){
         var originalUrl = req.url;
-        if(originalUrl.search('/api/api') === -1) {
+        if (originalUrl.search('/api/api') === -1) {
             req.url = originalUrl.replace('/api', '/api/api');
         }
     }
@@ -151,12 +152,10 @@
         //  log some route info and set the request options
         log.logRequest(req);
 
-        if(!isRouteEnabled(req)){
+        if (!isRouteEnabled(req)) {
             routeTo404(req, res);
-        }else {
-
+        } else {
             modifyRequestPathForApi(req);
-
             returnFunction(req, res);
         }
     }
@@ -194,7 +193,7 @@
         processRequest(req, res, function (req, res) {
             recordsApi.fetchRecordsAndFields(req)
                 .then(function (response) {
-                    log.logResponse(req, response, __filename)
+                    log.logResponse(req, response, __filename);
                     res.send(response);
                 })
                 .catch(function (error) {
@@ -212,7 +211,7 @@
      * @param res
      */
     function fetchSwagger(req, res) {
-        if(!isRouteEnabled(req)){
+        if (!isRouteEnabled(req)) {
             routeTo404(req, res);
             return;
         }
@@ -256,27 +255,24 @@
      */
     function routeTo404(req, res) {
         log.logRequest(req);
-        log.error("Route "+req.route.path+" is not enabled for routeGroup "+routeGroup);
+        log.error('Route '+ req.route.path + ' is not enabled for routeGroup ' + routeGroup);
         res.status(404).send();
     }
 
     /**
      * Check that the route has been enabled for this environment, if it has, then
      * @param req
-     * @param res
-     * @param next
      */
-    function isRouteEnabled(req){
+    function isRouteEnabled(req) {
 
-        if(req !== undefined &&
-            req.route !== undefined &&
-            req.method !== undefined &&
-            routeGroupMapper.routeIsEnabled(routeGroup, req.route.path, req.method)){
-
-            return true;
-        }else{
-            return false;
+        var enabled = false;
+        if (req !== undefined) {
+            if (req.route !== undefined && req.method !== undefined) {
+                enabled = routeGroupMapper.routeIsEnabled(routeGroup, req.route.path, req.method);
+            }
         }
+
+        return enabled;
     }
 
 }());

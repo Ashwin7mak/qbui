@@ -15,6 +15,9 @@
         }).
         //  run blocks are executed after the config and injector...
         run(['uuid','Restangular','apiConstants', '$cookies', 'qbUtility', function(uuid, Restangular, apiConstants, $cookie, qbUtility) {
+
+            console.log('..qbse.api configuration loaded.  Setting up Restangular options..');
+
             //  include the ticket and a sessionid on every Restangular request
             var headers = {};
             //  generate a uuid for this session id.

@@ -5,8 +5,7 @@
  */
 (function () {
     'use strict';
-    var request = require('request'),
-        routeGroups = require('./routeGroups'),
+    var routeGroups = require('./routeGroups'),
         _ = require('lodash'),
         constants = require('../api/constants'),
         routeConsts = require('./routeConstants');
@@ -32,7 +31,9 @@
 
         /**
          * For the app environment return all valid routes for this env
-         * @param env
+         * @param routeGroup
+         * @param route
+         * @param method
          * @returns {*}
          */
         routeIsEnabled: function(routeGroup, route, method) {

@@ -2,9 +2,9 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>Quickbase Application Dashboard</title>
+    <title>Quickbase Report</title>
     <base href="/">
-    <!-- build:css quickbase/assets/qbapp.css -->
+    <!-- build:css quickbase/assets/report.css -->
     <link rel="styleSheet" href="bower_components/angular-ui-grid/ui-grid.css"/>
     <link rel="stylesheet" href="quickbase/common/grid/grid.directive.css"/>
     <link rel="stylesheet" href="quickbase/assets/css/app.css"/>
@@ -12,7 +12,7 @@
     <!-- endinjector -->
     <!-- endbuild -->
 
-    <!-- build:js quickbase/bower/qbapp.bower.js -->
+    <!-- build:js quickbase/bower/report.bower.js -->
     <script src="bower_components/angular/angular.js"></script>
     <script src="bower_components/angular-resource/angular-resource.js"></script>
     <script src="bower_components/angular-sanitize/angular-sanitize.js"></script>
@@ -30,10 +30,10 @@
 
 
 </head>
-<body  class="quickbase" ng-app="quickbase.qbapp">
-    <div  class="quickbase-app" ui-view="qbappHomeView"></div>
+<body  class="quickbase" ng-app="quickbase.report">
+    <div  class="quickbase-app" ui-view="reportView"></div>
 
-    <!-- build:js quickbase/qbapp.js -->
+    <!-- build:js quickbase/report.js -->
     <script src="quickbase/common/api/api.modules.js"></script>
     <script src="quickbase/common/api/api.services.js"></script>
     <script src="quickbase/common/api/api.constants.js"></script>
@@ -50,12 +50,8 @@
     <script src="quickbase/common/layoutManager/header/header.directive.js"></script>
     <script src="quickbase/common/layoutManager/footer/footer.directive.js"></script>
 
-    <script src="quickbase/qbapp/app.modules.js"></script>
+    <script src="quickbase/qbapp/report.modules.js"></script>
 
-    <script src="quickbase/qbapp/dashboard/appDashboard.controller.js"></script>
-    <script src="quickbase/qbapp/reports/dashboard/reportsDashboard.controller.js"></script>
-    <script src="quickbase/qbapp/reports/dashboard/reportsDashboard.model.js"></script>
-    <script src="quickbase/qbapp/reports/dashboard/reportsDashboard.service.js"></script>
     <script src="quickbase/qbapp/reports/reportManager/reportManager.controller.js"></script>
     <script src="quickbase/qbapp/reports/reportManager/reportManager.model.js"></script>
     <script src="quickbase/qbapp/reports/reportManager/reportManager.service.js"></script>

@@ -4,7 +4,7 @@ describe('quickbase api service', function () {
     var qbUtility;
 
     beforeEach(function() {
-        module('qbse.api');
+        module('qbse.helper');
     });
 
     beforeEach(inject(function (_qbUtility_) {
