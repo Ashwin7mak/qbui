@@ -416,6 +416,15 @@ module.exports = function (grunt) {
                     usemin: 'quickbase/qbapp.js'        // maps to reference in app.index.html
                 }
             },
+            'quickbase.report': {
+                cwd: '<%= quickbase.client.root %>',
+                src: ['quickbase/common/**/*.html',
+                      'quickbase/qbapp/reports/reportManager/**/*.html'],     // look for all html files required for this angular application
+                dest: '.tmp/reportTemplates.js',
+                options: {
+                    usemin: 'quickbase/report.js'        // maps to reference in report.index.html
+                }
+            },
             options: {
                 htmlmin: {
                     collapseBooleanAttributes: true,

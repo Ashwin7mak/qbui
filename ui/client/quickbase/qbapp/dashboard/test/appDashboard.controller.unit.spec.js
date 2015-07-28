@@ -146,7 +146,7 @@ describe('Controller: AppDashboardCtrl', function() {
 
     });
 
-    it('validate transitionTo states', function() {
+    it('validate transitionTo reports', function() {
         var appId='1', tableId='2';
 
         var getData = [{id:'1', name:'name1'}, {id:'2', name:'name2'}];
@@ -159,23 +159,6 @@ describe('Controller: AppDashboardCtrl', function() {
         scope.goToReports();
 
         expect($state.transitionTo).toHaveBeenCalledWith('reports', {appId:scope.appId, tableId:scope.tableId});
-
-    });
-
-    it('validate transitionTo states', function() {
-        var appId='1', tableId='2';
-        var report = {id: '1'};
-
-        var getData = [{id:'1', name:'name1'}, {id:'2', name:'name2'}];
-        deferredGet.resolve(getData);
-
-        controller('AppDashboardCtrl',
-            {$scope:scope, $stateParams:{appId:appId, tableId:tableId}, $state:$state, ReportsDashboardModel:ReportsDashboardModel });
-        scope.$digest();
-
-        scope.goToReport(report);
-
-        expect($state.transitionTo).toHaveBeenCalledWith('report', {appId:scope.appId, tableId:scope.tableId, id: report.id});
 
     });
 
