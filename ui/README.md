@@ -3,54 +3,66 @@
 
 The QuickBase ui project is the ui layer of the QuickBase application. It is an Node.js pass thru API server to the java backend as well as an angular frontend. This project has the files needed to startup the node.js express server for the ui layer in support of the Angular QuickBase application.
 
-Other repos for QuickBase [java backend](https://github.intuit.com/QuickBase/QuickBase) and [aws](https://github.intuit.com/QuickBase/aws) are also part of the Quickbase application. 
+Other repos for QuickBase:
+
+* [java backend](https://github.intuit.com/QuickBase/QuickBase)
+*  and [aws](https://github.intuit.com/QuickBase/aws) 
+are also part of the Quickbase application. 
+
 see also:
-[File structure](FILESSTRUCTURE.md)
+[QBUI project File structure](FILESSTRUCTURE.md)
 
-##Installing
-Get the qbui project repo 
 
-```
-git clone -b master ssh://git@github.intuit.com/quickbase/qbui.git
-```
-or
-
-```
-git clone -b master https://github.intuit.com/QuickBase/qbui.git
-```
-
-##Prerequisites 
-1. Know Javascript, Node.js Angularjs
+##Pre-requisites 
+1. Javascript, Node.js, Angularjs
 2. Read coding conventions (TODO:link to coding conventions doc)
 
 
 ##Pre-installation
 
-* Have node.js installed from the [Node.js site](http://nodejs.org/)
-* (*Optional*) Make a place for any global node modules 
+FIRST - Do all the Quickbase java backend development [setup instructions](https://github.intuit.com/QuickBase/QuickBase/blob/master/README.md) so that you have installed
+
+* Git & SourceTree Source code control
+* Intellij IDE
+* Java and Tomcat to run the backend	
+	
+##Installing 
+* Install node.js (v0.12.4 or higher) from the [Node.js site](http://nodejs.org/)
+
+* (*Optional*) Make a place for any global node modules and no permission issues
+
  	1. Create a .node folder from command line.
  	   
-	  	```
-	  	$ mkdir .node
+	  	``` bash
+	  	mkdir ~/.node
 	  	```
    
 	2. Adjust your node settings so that the global modules get installed locally for your login.
 	
 	   ``` bash
-	      $ npm config set prefix=~/.node
+	   npm config set prefix=~/.node
 	   ```
  	  This is required because when you try to install modules globally (npm install -g), npm will install it in /usr/local/    and this will cause permission issues. In order to prevent this, adjust your node settings to install global modules     local for your login.
 
 	3. Add this directory to your PATH.
 	
 	   ``` bash
-	     $ export PATH=$PATH:$HOME/.node/bin
+	   export PATH=$PATH:$HOME/.node/bin
 	   ```
 
+* Make sure you have Ruby installed for compass next (Macs should have it already, try `which ruby` otherwise get Ruby [here](https://www.ruby-lang.org/en/documentation/installation/)
 
-* Make sure you have Ruby installed (Macs should have it already, try `which ruby` otherwise get Ruby here)
+* Install compass for css preprocessing. Run (may need sudo and it takes a couple minutes)
 
-* Install compass. Run `gem install compass -v 1.0.1`   (may need sudo)
+	 ``` bash
+	 gem install compass -v 1.0.1
+	 ```   
+
+* Install homebrew if it's not already installed. Test if it's install by running `brew --version` if says not found, install homebrew with:
+	
+	```
+	ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"
+	```
 
 * **qbui** project uses npm and Bower as its *package managers* and Grunt as its *task runner*. 
 
@@ -62,35 +74,54 @@ git clone -b master https://github.intuit.com/QuickBase/qbui.git
 
 	Grunt tasks are defined in the Gruntfile.js 
 
-	* Make sure you have grunt and bower installed
-	    * Run  `npm install bower grunt-cli`
+	Make sure you have grunt and bower installed, run:
+	
+	```
+	npm install -g bower grunt-cli
+   ```
+
+* Then get the qbui project repo 
+
+	```
+	git clone -b master ssh://git@github.intuit.com/quickbase/qbui.git
+	```
+	or
+
+	```
+	git clone -b master https://github.intuit.com/QuickBase/qbui.git
+	```
+
+	*Note:* If you get an error about no developer tools found when executing git, make sure you have xCode from Apple installed. Go to the AppStore application and [install xcode](http://itunes.apple.com/us/app/xcode/id497799835?ls=1&mt=12). 
 
 ##Configuring
-Environment specific configurations reside in the server/config/environment directory. The application requires a run-time environment to be defined and configured.  
+Environment specific configurations reside in the qbui/ui/server/config/environment directory. The application requires a run-time environment to be defined and configured.  
+
 By default, the server runs in local development mode, meaning a local configuration file must be defined. As this file is not tracked by git, to run locally, you will need to do the following:
 
-- copy <project root>/server/config/environment/local.js.sample into the local.js and save:
+- copy \<project root\>qbui/ui/server/config/environment/local.js.sample into the local.js
 
 Notes about the above configuration:
 
-        SSL support is commented out.  See the section at the bottom of this README for setup instruction.
-        Environment variable 'javaHost' points to a local instance rest endpoint.  Change to point to another server instance.  ie: pppdc9prd2jx.corp.intuit.net
+SSL support is commented out.  See the section at the bottom of this README for setup instruction.
+
+Environment variable 'javaHost' points to a local instance rest endpoint.  Change to point to another server instance if not running Quickbase java backend locally. 
 
 RUN-TIME configuration.
 
-The following run-time environment variables are supported:
+The following run-time environment variable is supported:
 
-        NODE_ENV=<environment>
-        HOST=<express server host>
+        NODE_ENV: <name of config file>
 
         For example:
 
-        NODE_ENV=test;HOST=localhost-test.intuit.com
+        NODE_ENV=test
+        
+        will load the test.js file for configuration, default is local.js
 
 
 ##Instructions to run server and watch for changes 
 
-* `cd` to the <QuickbaseRoot>/ui directory.
+* `cd` to the \<project root\>qbui/ui directory.
 
 * To launch the node web server (express) and it will update server as you make edits run
 
@@ -108,19 +139,25 @@ Use `grunt test:server` to only run server tests.
 
 Use `grunt test:client` to only run client tests.
 
+Note: If you see a `Cannot find module './build/Release/DTraceProviderBindings'] code: 'MODULE_NOT_FOUND'` in the log from unit test run ` npm install bunyan ` to fix
+
+
 ###Mocha Integration tests
 
-In order to run the integration tests you will need to have your Node.js express server and your Java API service (aka Monolith) running
+In order to run the integration tests you will need to have your Node.js express server and your Java API service running
 
 Make sure you have configured your local.js file properly (as described above):
 
         //REST endpoint (protocol,server,port)
-        javaHost: 'http://localhost:8080/api/'
+        javaHost: 'http://localhost:8080'
         //Express Server
         DOMAIN: 'http://localhost:9000'
 
+
+
 Because the integration tests create a realm and the Mac OS by default does not handle loopback calls to localhost, we need to setup / configure
 a local DNS server (Dnsmasq):
+
 
         # Update your homebrew installation
         brew up
@@ -128,7 +165,7 @@ a local DNS server (Dnsmasq):
         brew install dnsmasq
 
         # Copy the default configuration file:
-        cp $(brew list dnsmasq | grep /dnsmasq.conf.example$) /usr/local/etc/dnsmasq.conf
+        mkdir -p /usr/local/etc && cp $(brew list dnsmasq | grep /dnsmasq.conf.example$) /usr/local/etc/dnsmasq.conf
 
         # Copy the daemon configuration file into place:
         sudo cp $(brew list dnsmasq | grep /homebrew.mxcl.dnsmasq.plist$) /Library/LaunchDaemons/
@@ -136,8 +173,8 @@ a local DNS server (Dnsmasq):
         # Start Dnsmasq automatically when the OS starts:
         sudo launchctl load /Library/LaunchDaemons/homebrew.mxcl.dnsmasq.plist
 
-        # Configure Dnsmasq: The configuration file lives at `/usr/local/etc/dnsmasq.conf` by default, so open this file in your favourite editor.
-        # Add / uncomment to config file:
+Configure Dnsmasq: The configuration file lives at `/usr/local/etc/dnsmasq.c****onf` by default, so open this file in your favourite editor.mAdd or uncomment this line in config file:
+
         address=/localhost/127.0.0.1
 
         # Restart Dnsmasq:
@@ -153,7 +190,7 @@ At this point Dnsmasq is being used for all DNS requests. We want to configure t
 
 For more documentation on Dnsmasq see: `http://passingcuriosity.com/2013/dnsmasq-dev-osx/`
 
-To make sure it's working properly run Monolith and in your web browser hit:
+To make sure it's working properly run java backend and in your web browser hit:
 `http://blah.localhost:8080/api/`
 If swagger comes up then Dnsmasq is configured properly.
 
@@ -162,6 +199,7 @@ Now try to hit an external website like `http://www.google.com` to make sure the
 Now you should be able to run your Mocha integration tests!
 With the Java API service running, from the qbui/ui directory run:
 
+        export NODE_ENV=local
         grunt mochaTest:integration
 
 Note that this command will launch your Node express server if it's not running.
@@ -344,6 +382,9 @@ POSSIBLE ISSUES -- and how to resolve
    manually install by running:
 
       npm install karma-phantomjs-launcher
+      
+3. If when running your node server you see ECONNREFUSED in the logs make sure you have followed the instructions for the DNS workaround on mac above
+
       
 
       
