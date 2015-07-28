@@ -386,8 +386,17 @@ POSSIBLE ISSUES -- and how to resolve
 3. If when running your node server you see ECONNREFUSED in the logs make sure you have followed the instructions for the DNS workaround on mac above
 
       
+Contributors
+---------------------
++ Chris Deery
++ Claire Martinez
++ Cleo Schneider
++ Don Hatch
++ Ken LaBak
++ Lisa Davidson
++ Mark Roper
++ Micah Zimring
 
-      
       
       
 
