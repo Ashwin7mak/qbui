@@ -622,15 +622,27 @@ module.exports = function (grunt) {
             chrome: {}
         },
 
+        sauce_connect: {
+            sauceLab: {
+                options: {
+                    username: 'sbg_qbse',
+                    accessKey: 'ae1f362a-024f-44b1-a428-992defbf0062',
+                    proxy: 'ondemand.saucelabs.com:80'
+                }
+            }
+        },
+
         env: {
             test: {
-                NODE_ENV: 'test'
+                NODE_ENV: 'test',
+                NODE_TLS_REJECT_UNAUTHORIZED: 0
             },
             prod: {
                 NODE_ENV: 'production'
             },
             local: {
-                NODE_ENV: 'local'
+                NODE_ENV: 'local',
+                NODE_TLS_REJECT_UNAUTHORIZED: 0
             }
         },
 
@@ -836,7 +848,9 @@ module.exports = function (grunt) {
                 'concurrent:test',
                 'wiredep:app',
                 'autoprefixer',
-                'protractor'
+                'sauce_connect:sauceLab',
+                'protractor',
+                'sauce-connect-close'
             ]);
         }
 
@@ -891,5 +905,6 @@ module.exports = function (grunt) {
 
     grunt.loadNpmTasks('grunt-jscs');
     grunt.loadNpmTasks('grunt-contrib-jshint');
+    grunt.loadNpmTasks('grunt-sauce-connect-launcher');
 
 };
