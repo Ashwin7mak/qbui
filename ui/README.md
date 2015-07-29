@@ -24,6 +24,11 @@ FIRST - Do all the Quickbase java backend development [setup instructions](https
 
 * Git & SourceTree Source code control
 * Intellij IDE
+        * Install some IntelliJ plugins if you don't have these already
+            * AngularJS - front end framework plugin
+            * NodeJS - ui web server plugin
+            * SASS support - enhances css with variables and methods plugin
+         * Know working versions of Intellij are 14.1.2 and 14.1.4 
 * Java and Tomcat to run the backend	
 	
 ##Installing 

@@ -9,7 +9,8 @@ Overview of the UI directory
          │
         client                                  - angular UI client code folder
          │  │
-         │  ├── bower_components                - components downloaded by bower
+         │  ├── bower_components                - components downloaded by bower compressed/concatinated/installed in brower
+         │  ├── gallery                         - for samples of ui component modules
          │  ├── quickbase                       - 1..n quickbase angular modules
          │  │    │
          │  │    ├── assets
@@ -30,25 +31,21 @@ Overview of the UI directory
          │  │    │          └── <...>.spec.js   - test spec
          │  │    │
          │  │    ├── qbapp                      - a quickbase angular module named 'app'
-         │  │    │    ├──assets
-         │  │    │    │   ├──images
-         │  │    │    │   └──styles
          │  │    │    └──<1..n qbapp modules>   - ie: tables, reports, etc.
          │  │    │        └──<1..n qbapp test>   - ie: tables\test, reports\test, etc.
          │  │    │          └── <...>.spec.js   - test spec
          │  │    │
          │  │    ├── realm                      - a quickbase angular module named 'realm'
-         │  │    │    ├──assets
-         │  │    │    │   ├──images
-         │  │    │    │   └──styles
          │  │    │    └──<1..n realm modules>
          │  │    │      └──<1..n realm test>
          │  │    │          └── <...>.spec.js   - test specs
          │  │    │
          │  │    └── <...>
          │  │
-         │  ├── app.index.html                  - entry point html file associated with the angular module named 'app'
+         │  ├── gallery.index.html              - entry point html file associated with the angular module named 'gallery' for debug only
+         │  ├── qbapp.index.html                - entry point html file associated with the angular module named 'qbapp'
          │  ├── realm.index.html                - entry point html file associated with the angular module named 'realm'
+         │  ├── report.index.html               - entry point html file associated with the angular module named 'report'
          │  └── <...>.index.html
          │
         build                                   - gradle build output folder   (not tracked by git)
@@ -67,21 +64,27 @@ Overview of the UI directory
         server                                  - express Node server
          │  │
          │  ├── api                             - app server folder
+         │  │    └── quickbase                  - quickbase server api
+         |  │      └── test                     - test scripts         
+         │  │    
          │  ├── components                      - app-wide component's
+         │  │    └── test                       - test scripts        
+         │  │    
          │  ├── config
          │  │    │
          │  │    └── environment                - configuration per environment (local, test, aws)
-         │  │         └── keys                  - ssl keys for the server (content is not tracked by git)
+         │  │    │    └── keys                  - ssl keys for the server (content is not tracked by git)
+         │  │    └── test                       - test scripts
+         │  │    
          │  ├── routes                          - quickbase server routes (rest endpoints, angular)
+         │  │  └── test                         - test scripts
+         │  │    
          │  ├── views                           - server rendered views
          │  │
          │  ├── app.js                          - express server start script
          │  └── routes.js                       - express server routes script
-         │  └── test                            - express server test scripts
-         │       ├── app.spec.js                - express server start script
-         │       └── routes.spec.js
          │
-        gruntfile.js                            - grunt build file for express and angular application
+        Gruntfile.js                            - grunt build file for express and angular application
         build.gradle                            - gradle build file.
         karma.conf.js                           - karma test configuration file
         bower.json                              - application bower dependency definitions
@@ -99,21 +102,20 @@ Example folder structure of a QuickBase Angular module.
 * folder: `client/quickbase/qbapp`
 
         qbapp                                                 - name of the angular module
-         ├── qbapp.routes.js                                  - angular routes for this module
-         ├── qbapp.modules.js                                 - angular modules for this module
+         ├── xyz.modules.js                                   - angular dependent modules for this module
          │
-         ├── dashboard                                 - dashboard component
-         │    ├── realmDashboard.controller.js
-         │    ├── realmDashboard.directive.js
-         │    ├── realmDashboard.model.js
-         │    ├── realmDashboard.service.js
-         │    ├── realmDashboard.html
+         ├── xyz                                              - xyz component
+         │    ├── xyz.controller.js
+         │    ├── xyz.directive.js
+         │    ├── xyz.model.js
+         │    ├── xyz.service.js
+         │    ├── xyz.html
          │    │
-         │    └── test                                - test folder for the dashboard component
-         │         ├── realmDashboard.controller.spec.js
-         │         ├── realmDashboard.directive.spec.js
-         │         ├── realmDashboard.model.spec.js
-         │         └── realmDashboard.service.spec.js
+         │    └── test                                        - test folder for the xyz component
+         │         ├── xyz.controller.spec.js
+         │         ├── xyz.directive.spec.js
+         │         ├── xyz.model.spec.js
+         │         └── xyz.service.spec.js
          │
          ├── reports                                   - reports component
          ├── tables                                    - tables component

@@ -1,24 +1,15 @@
 #To debug Node UI server code
 
-* Launch the grunt task with debug
-    * `grunt serve:debug`
+* To debug node layer in Intellij Create a node.js run time configuration and setting the following parameters:
+ * Node interpreter : /usr/local/bin/node (should be pre-filled)
+ * Working directory : QBUI_SERVER_HOME (folder where your app.js is located)
+ * JavaScript file : app.js
+ * environment variables : NODE_ENV=local;HOST=localhost.intuit.com
+ * Set your breakpoints in our server or node_modules directories 
+ * Launch the config in debug mode  
 
-* Setup a debug config in Intellij
-    * Install some IntelliJ plugins if you don't have these already
-        * AngularJS - front end framework plugin
-        * NodeJS - ui web server plugin
-        * SASS support - enhances css with variables and methods plugin
-     * Know working versions of Intellij are 13.0.3 and 13.0.4
-
-    * Add a new config of type Node.js *Remote* debug in Intellij run/debug options menu
-    * use the CI javaapi server in your <qbroot>/ui/server/config/local.env.js file for javaHost
-    * Give the IntelliJ config a name like Node.js server
-    * Set the port to the port printed out by the serve:debug grunt task and save the config
-
-* Set your breakpoints in our server or node_modules directories (just use Chrome inspector for clientside js file debugging)
-
-* Launch the config in debug mode
-
+#To debug client side angular js code
+* just use Chrome Browsers inspector for debugging
 
 
 #To debug Protractor tests
