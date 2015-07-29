@@ -5,10 +5,12 @@ module.exports = function (grunt) {
 
     var buildDir = __dirname + '/build';
     var localJsFile = __dirname + '/server/config/environment/local.js';
+    var config = require('./server/config/environment/local.js');
     var serverReportDir = buildDir + '/reports/server';
     var clientReportDir = buildDir + '/reports/client';
     var mochaUnitTest = grunt.option('test') || '*.unit.spec.js';
     var mochaIntTest = grunt.option('test') || '*.integration.spec.js';
+    var baseUrl = grunt.option('baseUrl') || config.DOMAIN;
 
     // Load grunt tasks automatically, when needed
     require('jit-grunt')(grunt, {
@@ -614,10 +616,10 @@ module.exports = function (grunt) {
         protractor: {
             //  stubbing out...probably need more work here..
             options: {
-                configFile: 'protractor.conf.js'
+                configFile: 'protractor.conf.js',
+                baseUrl: baseUrl
             },
-            chrome:{},
-            firefox:{}
+            chrome: {}
         },
 
         env: {
@@ -629,9 +631,6 @@ module.exports = function (grunt) {
             },
             local: {
                 NODE_ENV: 'local'
-            },
-            display: {
-                DISPLAY: ':99'
             }
         },
 
@@ -648,32 +647,6 @@ module.exports = function (grunt) {
             dev: {
                 options: {
                     environment: 'development'
-                }
-            }
-        },
-        shell: {
-            xvfb: {
-                command: 'xvfb :99 -ac -screen 0 1600x1200x24 &',
-                options: {
-                    async: true
-                }
-            },
-            webdriverUpdate: {
-                command: 'node node_modules/grunt-protractor-runner/node_modules/protractor/bin/webdriver-manager update --standalone',
-                options: {
-                    async: true
-                }
-            },
-            echoDisplay: {
-                command: 'echo $DISPLAY',
-                options: {
-                    async: true
-                }
-            },
-            selenium: {
-                command: 'node node_modules/grunt-protractor-runner/node_modules/protractor/bin/webdriver-manager start --seleniumPort 2222',
-                options: {
-                    async: true
                 }
             }
         }
@@ -863,7 +836,7 @@ module.exports = function (grunt) {
                 'concurrent:test',
                 'wiredep:app',
                 'autoprefixer',
-                'protractor:firefox'
+                'protractor'
             ]);
         }
 
@@ -918,7 +891,5 @@ module.exports = function (grunt) {
 
     grunt.loadNpmTasks('grunt-jscs');
     grunt.loadNpmTasks('grunt-contrib-jshint');
-    grunt.loadNpmTasks('grunt-shell-spawn');
-    grunt.loadNpmTasks('grunt-env');
 
 };

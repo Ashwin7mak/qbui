@@ -14,7 +14,8 @@ exports.config = {
 
   // A base URL for your application under test. Calls to protractor.get()
   // with relative paths will be prepended with this.
-  baseUrl: 'http://localhost:' + (process.env.PORT || '9000'),
+  //baseUrl: 'https://cs1.newstack.quickbaserocks.com',
+  //baseUrl: 'https://localhost.intuit.com:9000',
 
   // If true, only chromedriver will be started, not a standalone selenium.
   // Tests for browsers other than chrome will not run.
@@ -34,9 +35,13 @@ exports.config = {
   // https://code.google.com/p/selenium/wiki/DesiredCapabilities
   // and
   // https://code.google.com/p/selenium/source/browse/javascript/webdriver/capabilities.js
-  //capabilities: {
-  //  'browserName': 'phantomjs'
-  //},
+  capabilities: {
+
+    'browserName': 'chrome',
+
+    'tunnel-identifier': process.env.TRAVIS_JOB_NUMBER
+
+  },
 
   // ----- The test framework -----
   //

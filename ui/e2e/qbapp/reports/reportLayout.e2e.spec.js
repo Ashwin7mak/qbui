@@ -8,8 +8,7 @@
 // Uses the base / constants modules in the Node Server layer
 // Launches a new instance of the Express Server
 var consts = require('../../../server/api/constants.js');
-var config = require('../../../server/config/environment/local.js');
-var recordBase = require('../../../server/api/test/recordApi.base.js')(config);
+var recordBase = require('../../../server/api/test/recordApi.base.js')();
 
 // Require the generator modules in the Server layer
 var appGenerator = require('../../../test_generators/app.generator.js');
@@ -28,8 +27,8 @@ describe('Report Layout Tests', function (){
     var recordList;
     var widthTests = [1280, 640, 3000];
     var heightTests = 2024;
-
-
+    recordBase.setBaseUrl(browser.baseUrl);
+    recordBase.initialize();
     /**
      * Setup method. Generates JSON for an app, a table, a set of records and a report. Then creates them via the REST API.
      *
@@ -257,14 +256,14 @@ describe('Report Layout Tests', function (){
         browser.manage().window().setSize(widthTests[0],heightTests);
 
         // Get a session ticket for that subdomain and realmId (stores it in the browser)
-        var sessionTicketRequest = 'http://' + realmName + '.localhost:9000' + ticketEndpoint + realmId;
+        var sessionTicketRequest = recordBase.apiBase.generateFullRequest(ticketEndpoint + realmId, realmName);
         // This is a Non-Angular page, need to set this otherwise Protractor will wait forever for Angular to load
         browser.ignoreSynchronization = true;
         browser.get(sessionTicketRequest);
         browser.ignoreSynchronization = false;
 
         // Load the requestReportPage
-        var requestReportPageEndPoint = 'http://' + realmName + '.localhost:9000/qbapp#//';
+        var requestReportPageEndPoint = recordBase.apiBase.generateFullRequest('/qbapp#//', realmName);
         browser.get(requestReportPageEndPoint);
         browser.driver.sleep(2000);
 

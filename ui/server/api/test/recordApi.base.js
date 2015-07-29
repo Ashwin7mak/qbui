@@ -22,10 +22,22 @@
 
     module.exports = function (config) {
         var apiBase = require('./api.base.js')(config);
-        var init = apiBase.initialize();
+        var init;
+
+        if(config !== undefined){
+            init = apiBase.initialize();
+        }
 
         var recordBase = {
             apiBase: apiBase,
+            //delegate to apiBase to initialize
+            initialize : function(){
+                init = apiBase.initialize();
+            },
+            //set the baseUrl we want to use to reach out for testing
+            setBaseUrl: function(baseUrlConfig){
+                apiBase.setBaseUrl(baseUrlConfig);
+            },
             //Helper method to create an app, can be used by multiple test cases
             createApp: function (appToCreate) {
                 var deferred = promise.pending();

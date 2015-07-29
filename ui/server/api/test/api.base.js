@@ -5,6 +5,9 @@
     var assert = require('assert');
     var consts = require('../constants');
     var log = require('../../logger').getLogger();
+    //This is the url that will be used for making requests to the node server or the java server
+    var baseUrl;
+
     /*
      * We can't use JSON.parse() with records because it is possible to lose decimal precision as a
      * result of the JavaScript implementation of its single numeric data type. In JS, all numbers are
@@ -21,8 +24,11 @@
 
     module.exports = function (config) {
         //Module constants
+        var HTTPS_REGEX =  /https:\/\/.*/;
         var HTTP_REGEX =  /https*:\/\//;
+
         var HTTP =  "http://";
+        var HTTPS =  "https://";
         var NODE_BASE_ENDPOINT = '/api/api/v1';
         var JAVA_BASE_ENDPOINT = '/api/api/v1';
         var APPS_ENDPOINT = '/apps/';
@@ -34,6 +40,7 @@
         var REALMS_ENDPOINT = '/realms/';
         var USERS_ENDPOINT = '/users/';
         var LOCALHOST_REALM = 117000;
+        var LOCALHOST_SUBDOMAIN = 'localhost';
         var TICKETS_ENDPOINT = '/ticket?uid=1000000&realmID=';
         var HEALTH_ENDPOINT  = '/health';
         var SUBDOMAIN_CHARS = 'abcdefghijklmnopqrstuvwxyz0123456789';
@@ -44,28 +51,34 @@
         DEFAULT_HEADERS[CONTENT_TYPE] = APPLICATION_JSON;
         var ERROR_HPE_INVALID_CONSTANT = "HPE_INVALID_CONSTANT";
         var ERROR_ENOTFOUND = "ENOTFOUND";
-
+        baseUrl = config === undefined ? '' : config.DOMAIN;
 
         //Resolves a full URL using the instance subdomain and the configured javaHost
         function resolveFullUrl(path, realmSubdomain) {
             var fullPath;
-            log.info('Resolving full url for path:'+ path + ' realm:'+realmSubdomain);
+            var protocol = HTTP;
+            log.info('Resolving full url for path: '+ path + ' realm: '+realmSubdomain);
             //If there is no subdomain, hit the javaHost directly and don't proxy through the node server
             //This is required for actions like ticket creation and realm creation
             if (realmSubdomain === '') {
-                fullPath = config.javaHost + path;
-            } else {
-                var methodLess = config.DOMAIN.replace(HTTP_REGEX, '');
-                //If we're dealing with a delete realm, use the javaHost and not the node server, which doesn't
-                //proxy realm requests to the javahost for security reasons
-                if(path.indexOf(REALMS_ENDPOINT) !== -1) {
-                    methodLess = config.javaHost.replace(HTTP_REGEX, '');
-                }
-                log.info('config.DOMAIN:'+ config.DOMAIN + ' methodLess:'+methodLess);
-
-                fullPath = HTTP + realmSubdomain + '.' + methodLess + path;
-                log.info('resulting fullpath:'+ fullPath);
+                realmSubdomain = LOCALHOST_SUBDOMAIN;
             }
+
+            if(baseUrl.match(HTTPS_REGEX)){
+                protocol = HTTPS;
+            }
+
+            var methodLess = baseUrl.replace(HTTP_REGEX, '');
+            //If we're dealing with a delete realm, use the javaHost and not the node server, which doesn't
+            //proxy realm requests to the javahost for security reasons
+            if(path.indexOf(REALMS_ENDPOINT) !== -1) {
+                methodLess = baseUrl.replace(HTTP_REGEX, '');
+            }
+            log.info('baseUrl: '+ baseUrl + ' methodLess: '+methodLess);
+
+            fullPath = protocol + realmSubdomain + '.' + methodLess + path;
+            log.info('resulting fullpath: '+ fullPath);
+
             return fullPath;
         }
 
@@ -101,6 +114,12 @@
         }
 
         var apiBase = {
+            setBaseUrl : function(baseUrlConfig){
+                baseUrl = baseUrlConfig;
+            },
+            generateFullRequest: function(relativePath, subdomain){
+                return resolveFullUrl(relativePath, subdomain);
+            },
             resolveAppsEndpoint: function (appId) {
                 var appsEndpoint = JAVA_BASE_ENDPOINT + APPS_ENDPOINT;
                 if (appId) {
