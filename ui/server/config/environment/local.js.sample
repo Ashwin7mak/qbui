@@ -20,7 +20,7 @@
             name: 'qbse-local',
             level: 'debug',
             stream: {
-                type: 'console'         //  file or console
+                type: 'console',         //  file or console
                 file: {
                     dir: './logs',
                     name: 'qbse-local-' + dateUtils.formatDate( new Date(), '%Y-%M-%D-%h.%m.%s') + '.log'
@@ -43,14 +43,14 @@
         port: 9000,
         sslPort: 9443,
 
-        //REST endpoint (protocol,server,port)
+        //Java REST endpoint (protocol,server,port)
         //javaHost: 'https://localhost.intuit.com:8443',
         //javaHost: 'http://localhost.intuit.com:8080'
-        javaHost: 'http://pppdc9prd2jx.corp.intuit.net:80',
+        javaHost: 'http://localhost:8080',
 
         //Express Server
         //DOMAIN: 'https://localhost.intuit.com:9443'
-        DOMAIN  : 'https://localhost.intuit.com:9000',
+        DOMAIN  : 'https://localhost:9000',
 
         //Node understanding of RuntimeEnvironment
         env: envConsts.LOCAL,
