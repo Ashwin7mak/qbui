@@ -82,7 +82,10 @@ describe('Text record formatter unit test', function () {
             {
                 "id": 7,
                 "name": "text",
-                "type": "TEXT"
+                "datatypeAttributes" : {
+                    "type": "TEXT"
+                },
+                "type": "SCALAR"
             }
         ];
         dataProvider().forEach(function(entry){

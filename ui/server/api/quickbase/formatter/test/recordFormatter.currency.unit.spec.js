@@ -28,9 +28,12 @@ describe('Currency record formatter unit test', function () {
         var noFlagsFieldInfo = [{
             "id": 7,
             "name": "currency",
-            "type": "CURRENCY",
-            "decimalPlaces": 2,
-            "clientSideAttributes": {
+            "type": "SCALAR",
+            "datatypeAttributes":{
+                "type": "CURRENCY",
+                "decimalPlaces": 2,
+                "clientSideAttributes": {
+                }
             }
         }];
 
@@ -41,7 +44,7 @@ describe('Currency record formatter unit test', function () {
 
         //Test for right of sign
         var rightOfSignFieldInfo = jBigNum.parse(jBigNum.stringify(noFlagsFieldInfo));
-        rightOfSignFieldInfo[0].clientSideAttributes.position = 'RIGHT_OF_SIGN';
+        rightOfSignFieldInfo[0].datatypeAttributes.clientSideAttributes.position = 'RIGHT_OF_SIGN';
         var rightOfSignInput = jBigNum.parse(jBigNum.stringify(defaultRecordInput));
         rightOfSignInput[0][0].value = -2.883;
         var rightOfSignExpected = jBigNum.parse(jBigNum.stringify(rightOfSignInput));
@@ -49,7 +52,7 @@ describe('Currency record formatter unit test', function () {
 
         //Right of the number
         var rightFieldInfo = jBigNum.parse(jBigNum.stringify(noFlagsFieldInfo));
-        rightFieldInfo[0].clientSideAttributes.position = 'RIGHT';
+        rightFieldInfo[0].datatypeAttributes.clientSideAttributes.position = 'RIGHT';
         var rightInput = jBigNum.parse(jBigNum.stringify(defaultRecordInput));
         rightInput[0][0].value = -2.883;
         var rightExpected = jBigNum.parse(jBigNum.stringify(rightOfSignInput));
@@ -57,8 +60,8 @@ describe('Currency record formatter unit test', function () {
 
         //Test for right of sign
         var rightOfSignEuroFieldInfo = jBigNum.parse(jBigNum.stringify(noFlagsFieldInfo));
-        rightOfSignEuroFieldInfo[0].clientSideAttributes.position = 'RIGHT_OF_SIGN';
-        rightOfSignEuroFieldInfo[0].clientSideAttributes.symbol = '€';
+        rightOfSignEuroFieldInfo[0].datatypeAttributes.clientSideAttributes.position = 'RIGHT_OF_SIGN';
+        rightOfSignEuroFieldInfo[0].datatypeAttributes.clientSideAttributes.symbol = '€';
         var rightOfSignEuroInput = jBigNum.parse(jBigNum.stringify(defaultRecordInput));
         rightOfSignEuroInput[0][0].value = -2.883;
         var rightOfSignEuroExpected = jBigNum.parse(jBigNum.stringify(rightOfSignInput));
@@ -66,8 +69,8 @@ describe('Currency record formatter unit test', function () {
 
         //Right of the number
         var rightEuroFieldInfo = jBigNum.parse(jBigNum.stringify(noFlagsFieldInfo));
-        rightEuroFieldInfo[0].clientSideAttributes.position = 'RIGHT';
-        rightEuroFieldInfo[0].clientSideAttributes.symbol = '€';
+        rightEuroFieldInfo[0].datatypeAttributes.clientSideAttributes.position = 'RIGHT';
+        rightEuroFieldInfo[0].datatypeAttributes.clientSideAttributes.symbol = '€';
         var rightEuroInput = jBigNum.parse(jBigNum.stringify(defaultRecordInput));
         rightEuroInput[0][0].value = -2.883;
         var rightEuroExpected = jBigNum.parse(jBigNum.stringify(rightOfSignInput));
@@ -75,8 +78,8 @@ describe('Currency record formatter unit test', function () {
 
         //Test for right of sign positive value
         var rightOfSignPositiveEuroFieldInfo = jBigNum.parse(jBigNum.stringify(noFlagsFieldInfo));
-        rightOfSignPositiveEuroFieldInfo[0].clientSideAttributes.position = 'RIGHT_OF_SIGN';
-        rightOfSignPositiveEuroFieldInfo[0].clientSideAttributes.symbol = '€';
+        rightOfSignPositiveEuroFieldInfo[0].datatypeAttributes.clientSideAttributes.position = 'RIGHT_OF_SIGN';
+        rightOfSignPositiveEuroFieldInfo[0].datatypeAttributes.clientSideAttributes.symbol = '€';
         var rightOfSignPositiveEuroInput = jBigNum.parse(jBigNum.stringify(defaultRecordInput));
         rightOfSignPositiveEuroInput[0][0].value = 2.883;
         var rightOfSignPositiveEuroExpected = jBigNum.parse(jBigNum.stringify(rightOfSignPositiveEuroInput));
@@ -84,12 +87,12 @@ describe('Currency record formatter unit test', function () {
 
         //Greater than 16 digits of precision
         var rightOfSignPositiveEuroFieldInfo = jBigNum.parse(jBigNum.stringify(noFlagsFieldInfo));
-        rightOfSignPositiveEuroFieldInfo[0].clientSideAttributes.position = 'RIGHT_OF_SIGN';
-        rightOfSignPositiveEuroFieldInfo[0].clientSideAttributes.symbol = '€';
+        rightOfSignPositiveEuroFieldInfo[0].datatypeAttributes.clientSideAttributes.position = 'RIGHT_OF_SIGN';
+        rightOfSignPositiveEuroFieldInfo[0].datatypeAttributes.clientSideAttributes.symbol = '€';
         rightOfSignPositiveEuroFieldInfo[0].decimalPlaces= 6;
         var rightOfSignPositiveEuroInput = jBigNum.parse('[[{"id":7,"value":2232323232323.88356267}]]');
         var rightOfSignPositiveEuroExpected = jBigNum.parse(jBigNum.stringify(rightOfSignPositiveEuroInput));
-        rightOfSignPositiveEuroExpected[0][0].display = '€2232323232323.883563';
+        rightOfSignPositiveEuroExpected[0][0].display = '€2232323232323.88';
 
         var cases =[
             { message: "Currency - decimal with no format -> symbol left", records: recordInputDecimalOnly, fieldInfo: noFlagsFieldInfo, expectedRecords: expectedDecimal_NoFlags },

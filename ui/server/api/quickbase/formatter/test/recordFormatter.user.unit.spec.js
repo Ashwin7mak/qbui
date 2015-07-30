@@ -29,7 +29,10 @@ describe('User record formatter unit test', function () {
         var fieldInfo_NoFlags = [{
             "id": 7,
             "name": "user",
-            "type": "USER"
+            "type":"SCALAR",
+            "datatypeAttributes": {
+                "type": "USER"
+            }
           }];
 
         var recordInputUser =  [[{
@@ -41,34 +44,34 @@ describe('User record formatter unit test', function () {
             "display": lastThenFirst}]];
 
         /**
-         * FieldInfo and expectations for enabled flag: userDisplayFormat = FULL_NAME
+         * FieldInfo and expectations for enabled flag: .datatypeAttributes.userDisplayFormat = FULL_NAME
          */
         var fieldInfo_FullNameFormat = JSON.parse(JSON.stringify(fieldInfo_NoFlags));
-        fieldInfo_FullNameFormat[0].userDisplayFormat = "FIRST_THEN_LAST";
+        fieldInfo_FullNameFormat[0].datatypeAttributes.userDisplayFormat = "FIRST_THEN_LAST";
         var expectedUser_FullNameFormat = JSON.parse(JSON.stringify(expectedUser_NoFlags));
         expectedUser_FullNameFormat[0][0].display = fullName;
 
         /**
-         * FieldInfo and expectations for disabled flag: userDisplayFormat = LAST_THEN_FIRST
+         * FieldInfo and expectations for disabled flag: .datatypeAttributes.userDisplayFormat = LAST_THEN_FIRST
          */
         var fieldInfo_LastThenFirstFormat = JSON.parse(JSON.stringify(fieldInfo_NoFlags));
-        fieldInfo_LastThenFirstFormat[0].userDisplayFormat = "LAST_THEN_FIRST";
+        fieldInfo_LastThenFirstFormat[0].datatypeAttributes.userDisplayFormat = "LAST_THEN_FIRST";
         var expectedUser_LastThenFirstFormat = JSON.parse(JSON.stringify(expectedUser_NoFlags));
         expectedUser_LastThenFirstFormat[0][0].display = lastThenFirst;
 
         /**
-         * FieldInfo and expectations for flag: userDisplayFormat = USER_NAME
+         * FieldInfo and expectations for flag: .datatypeAttributes.userDisplayFormat = USER_NAME
          */
         var fieldInfo_UserNameFormat = JSON.parse(JSON.stringify(fieldInfo_NoFlags));
-        fieldInfo_UserNameFormat[0].userDisplayFormat = "SCREEN_NAME";
+        fieldInfo_UserNameFormat[0].datatypeAttributes.userDisplayFormat = "SCREEN_NAME";
         var expectedUser_UserNameFormat = JSON.parse(JSON.stringify(expectedUser_NoFlags));
         expectedUser_UserNameFormat[0][0].display = userName;
 
         /**
-         * FieldInfo and expectations for flag: userDisplayFormat = USER_NAME
+         * FieldInfo and expectations for flag: .datatypeAttributes.userDisplayFormat = USER_NAME
          */
         var fieldInfo_UserIdFormat = JSON.parse(JSON.stringify(fieldInfo_NoFlags));
-        fieldInfo_UserIdFormat[0].userDisplayFormat = "USER_ID";
+        fieldInfo_UserIdFormat[0].datatypeAttributes.userDisplayFormat = "USER_ID";
         var expectedUser_UserIdFormat = JSON.parse(JSON.stringify(expectedUser_NoFlags));
         expectedUser_UserIdFormat[0][0].display = userId;
 

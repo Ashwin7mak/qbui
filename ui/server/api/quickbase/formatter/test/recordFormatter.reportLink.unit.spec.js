@@ -27,8 +27,9 @@ describe('ReportLink record formatter unit test', function () {
         var fieldInfo_NoFlags = [{
             "id": 7,
             "name": "reportLink",
-            "type": "REPORT_LINK",
-            "clientSideAttributes": {
+            "datatypeAttributes": {
+                "type": "REPORT_LINK",
+                "clientSideAttributes": {}
             }
         }];
         var recordInputHttpURL =  [[{
@@ -57,7 +58,7 @@ describe('ReportLink record formatter unit test', function () {
          * FieldInfo and expectations for enabled flag: displayProtocol = true
          */
         var fieldInfo_DontShowHTTPEnabled = JSON.parse(JSON.stringify(fieldInfo_NoFlags));
-        fieldInfo_DontShowHTTPEnabled[0].displayProtocol = false;
+        fieldInfo_DontShowHTTPEnabled[0].datatypeAttributes.displayProtocol = false;
         var expectedHttpURL_DontShowHTTPEnabled = JSON.parse(JSON.stringify(expectedHttpURL_NoFlags));
         expectedHttpURL_DontShowHTTPEnabled[0][0].display = httpWOProto;
         var expectedHttpsURL_DontShowHTTPEnabled = JSON.parse(JSON.stringify(expectedHttpsURL_NoFlags));
@@ -68,7 +69,7 @@ describe('ReportLink record formatter unit test', function () {
          * FieldInfo and expectations for disabled flag: displayProtocol = false
          */
         var fieldInfo_DontShowHTTPDisabled = JSON.parse(JSON.stringify(fieldInfo_NoFlags));
-        fieldInfo_DontShowHTTPDisabled[0].displayProtocol = true;
+        fieldInfo_DontShowHTTPDisabled[0].datatypeAttributes.displayProtocol = true;
         var expectedHttpURL_DontShowHTTPDisabled = JSON.parse(JSON.stringify(expectedHttpURL_NoFlags));
         var expectedHttpsURL_DontShowHTTPDisabled = JSON.parse(JSON.stringify(expectedHttpsURL_NoFlags));
         var expectedNoProtoURL_DontShowHTTPDisabled = JSON.parse(JSON.stringify(expectedNoProtoURL_NoFlags));
@@ -77,7 +78,7 @@ describe('ReportLink record formatter unit test', function () {
          * FieldInfo and expectations for flag: linkText
          */
         var fieldInfo_LinkTextFlag = JSON.parse(JSON.stringify(fieldInfo_NoFlags));
-        fieldInfo_LinkTextFlag[0].linkText = linkText;
+        fieldInfo_LinkTextFlag[0].datatypeAttributes.linkText = linkText;
         var expectedHttpURL_LinkTextFlag = JSON.parse(JSON.stringify(expectedHttpURL_NoFlags));
         expectedHttpURL_LinkTextFlag[0][0].display = linkText;
         var expectedHttpsURL_LinkTextFlag = JSON.parse(JSON.stringify(expectedHttpsURL_NoFlags));
@@ -89,8 +90,8 @@ describe('ReportLink record formatter unit test', function () {
          * FieldInfo and expectations for all flags
          */
         var fieldInfo_AllFlags = JSON.parse(JSON.stringify(fieldInfo_NoFlags));
-        fieldInfo_AllFlags[0].displayProtocol = true;
-        fieldInfo_AllFlags[0].linkText = linkText;
+        fieldInfo_AllFlags[0].datatypeAttributes.displayProtocol = true;
+        fieldInfo_AllFlags[0].datatypeAttributes.linkText = linkText;
         var expectedHttpURL_AllFlags = JSON.parse(JSON.stringify(expectedHttpURL_NoFlags));
         expectedHttpURL_AllFlags[0][0].display = linkText;
         var expectedHttpsURL_AllFlags = JSON.parse(JSON.stringify(expectedHttpsURL_NoFlags));
