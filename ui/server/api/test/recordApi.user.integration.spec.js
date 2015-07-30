@@ -21,7 +21,10 @@ describe('API - User record test cases - ', function () {
         "tables": [{
             "name": "table1", "fields": [{
                 "name": "user",
-                "type": "USER",
+                "type": "SCALAR",
+                "datatypeAttributes": {
+                    "type": "USER",
+                },
                 "indexed": true
             }
             ]}
@@ -32,8 +35,11 @@ describe('API - User record test cases - ', function () {
         "tables": [{
             "name": "table1", "fields": [{
                 "name": "user",
-                "type": "USER",
-                "userDisplayFormat": "LAST_THEN_FIRST",
+                "type": "SCALAR",
+                "datatypeAttributes": {
+                    "type": "USER",
+                    "userDisplayFormat": "LAST_THEN_FIRST"
+                },
                 "indexed": true
             }
             ]}

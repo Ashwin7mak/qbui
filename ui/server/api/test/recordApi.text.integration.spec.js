@@ -19,7 +19,7 @@ describe('API - Text record test cases', function () {
         "tables": [
             {
                 "name": "table1", "fields": [
-                {"name": "text", "type": "TEXT"}
+                {"name": "text", "datatypeAttributes": { "type": "TEXT" }, "type": "SCALAR"}
             ]
             }
         ]

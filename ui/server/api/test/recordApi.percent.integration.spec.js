@@ -36,9 +36,12 @@ describe('API - Percent record test cases', function () {
         "name": "Percent App - no flags",
         "tables": [{
                 "name": "table1", "fields": [{
-                    "name": "percent",
+                "name": "percent",
+                "type": "SCALAR",
+                "datatypeAttributes": {
                     "type": "PERCENT"
                 }
+            }
          ]}
     ]};
 
@@ -47,17 +50,20 @@ describe('API - Percent record test cases', function () {
         "tables": [{
             "name": "table1", "fields": [{
                 "name": "percent",
-                "type": "PERCENT",
-                "decimalPlaces": 2,
-                "clientSideAttributes": {
-                    "width": 10,
-                    "bold": false,
-                    "word_wrap": false,
-                    "help_text": "help",
-                    "separator_start": 3,
-                    "separator_mark": ".",
-                    "separator_pattern": "THREE_THEN_TWO",
-                    "decimal_mark": ","
+                "type": "SCALAR",
+                "datatypeAttributes": {
+                    "type": "PERCENT",
+                    "decimalPlaces": 2,
+                    "clientSideAttributes": {
+                        "width": 10,
+                        "bold": false,
+                        "word_wrap": false,
+                        "help_text": "help",
+                        "separator_start": 3,
+                        "separator_mark": ".",
+                        "separator_pattern": "THREE_THEN_TWO",
+                        "decimal_mark": ","
+                    }
                 }
             }
             ]}

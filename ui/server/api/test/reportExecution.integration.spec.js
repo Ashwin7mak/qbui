@@ -18,7 +18,8 @@ describe('API - Validate report execution', function () {
         "tables": [{
             "name": "table1", "fields": [{
                 "name": "percent",
-                "type": "PERCENT"
+                "datatypeAttributes": { "type":"PERCENT" },
+                "type": "SCALAR"
             }
             ]}
         ]};

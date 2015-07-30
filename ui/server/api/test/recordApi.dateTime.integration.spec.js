@@ -22,7 +22,10 @@ describe('API - DateTime record test cases - ', function () {
         "tables": [{
                 "name": "table1", "fields": [{
                     "name": "dateTime",
-                    "type": "DATE_TIME"
+                    "type":"SCALAR",
+                    "datatypeAttributes": {
+                        "type": "DATE_TIME"
+                    }
                 }
          ]}
     ]};
@@ -34,12 +37,15 @@ describe('API - DateTime record test cases - ', function () {
         "tables": [{
             "name": "table1", "fields": [{
                 "name": "dateTime",
-                "type": "DATE_TIME",
-                "showTime": true,
-                "showTimeZone": true,
-                "showMonthAsName": true,
-                "showDayOfWeek": true,
-                "hideYearIfCurrent": true
+                "type":"SCALAR",
+                "datatypeAttributes": {
+                    "type": "DATE_TIME",
+                    "showTime": true,
+                    "showTimeZone": true,
+                    "showMonthAsName": true,
+                    "showDayOfWeek": true,
+                    "hideYearIfCurrent": true
+                }
             }
             ]}
         ]};

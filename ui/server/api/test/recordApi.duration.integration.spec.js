@@ -42,7 +42,10 @@ describe('API - Duration record test cases', function () {
         "tables": [{
                 "name": "table1", "fields": [{
                     "name": "duration",
-                    "type": "DURATION"
+                    "type":"SCALAR",
+                    "datatypeAttributes": {
+                        "type": "DURATION"
+                    }
                 }
          ]}
     ]};
@@ -52,9 +55,12 @@ describe('API - Duration record test cases', function () {
         "tables": [{
             "name": "table1", "fields": [{
                 "name": "duration",
-                "type": "DURATION",
-                "scale": "Days",
-                "decimalPlaces": 4
+                "type":"SCALAR",
+                "datatypeAttributes": {
+                    "type": "DURATION",
+                    "scale": "Days",
+                    "decimalPlaces": 4
+                }
             }
             ]}
         ]};
