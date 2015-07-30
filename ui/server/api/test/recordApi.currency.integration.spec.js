@@ -36,7 +36,10 @@ describe('API - Currency record test cases', function () {
         "tables": [{
                 "name": "table1", "fields": [{
                     "name": "currency",
-                    "type": "CURRENCY"
+                    "datatypeAttributes": {
+                        "type": "CURRENCY"
+                    },
+                    "type": "SCALAR"
                 }
          ]}
     ]};
@@ -46,20 +49,23 @@ describe('API - Currency record test cases', function () {
         "tables": [{
             "name": "table1", "fields": [{
                 "name": "currency",
-                "type": "CURRENCY",
-                "decimalPlaces": 2,
-                "clientSideAttributes": {
-                    "width": 10,
-                    "bold": false,
-                    "word_wrap": false,
-                    "help_text": "help",
-                    "separator_start": 3,
-                    "separator_mark": ".",
-                    "separator_pattern": "THREE_THEN_TWO",
-                    "decimal_mark": ",",
-                    "position": "RIGHT_OF_SIGN",
-                    "symbol": "X"
+                "type": "SCALAR",
+                "datatypeAttributes": {
+                    "type": "CURRENCY",
+                    "decimalPlaces": 2,
+                    "clientSideAttributes": {
+                        "width": 10,
+                        "bold": false,
+                        "word_wrap": false,
+                        "help_text": "help",
+                        "separator_start": 3,
+                        "separator_mark": ".",
+                        "separator_pattern": "THREE_THEN_TWO",
+                        "decimal_mark": ",",
+                        "position": "RIGHT_OF_SIGN",
+                        "symbol": "X"
 
+                    }
                 }
             }
             ]}
@@ -70,20 +76,22 @@ describe('API - Currency record test cases', function () {
         "tables": [{
             "name": "table1", "fields": [{
                 "name": "currency",
-                "type": "CURRENCY",
-                "decimalPlaces": 2,
-                "clientSideAttributes": {
-                    "width": 10,
-                    "bold": false,
-                    "word_wrap": false,
-                    "help_text": "help",
-                    "separator_start": 3,
-                    "separator_mark": ".",
-                    "separator_pattern": "THREE_THEN_TWO",
-                    "decimal_mark": ",",
-                    "position": "LEFT",
-                    "symbol": "\u20BD"
-
+                "type": "SCALAR",
+                "datatypeAttributes": {
+                    "decimalPlaces": 2,
+                    "type": "CURRENCY",
+                    "clientSideAttributes": {
+                        "width": 10,
+                        "bold": false,
+                        "word_wrap": false,
+                        "help_text": "help",
+                        "separator_start": 3,
+                        "separator_mark": ".",
+                        "separator_pattern": "THREE_THEN_TWO",
+                        "decimal_mark": ",",
+                        "position": "LEFT",
+                        "symbol": "\u20BD"
+                    }
                 }
             }
             ]}
@@ -92,25 +100,28 @@ describe('API - Currency record test cases', function () {
     var appWithAllRightFlags = {
         "name": "Currency App - all 'right' flags",
         "tables": [{
-            "name": "table1", "fields": [{
+            "name": "table1",
+            "fields": [{
                 "name": "currency",
-                "type": "CURRENCY",
-                "decimalPlaces": 2,
-                "clientSideAttributes": {
-                    "width": 10,
-                    "bold": false,
-                    "word_wrap": false,
-                    "help_text": "help",
-                    "separator_start": 3,
-                    "separator_mark": ".",
-                    "separator_pattern": "THREE_THEN_TWO",
-                    "decimal_mark": ",",
-                    "position": "RIGHT",
-                    "symbol": "!"
-
+                "type": "SCALAR",
+                "datatypeAttributes": {
+                    "type": "CURRENCY",
+                    "decimalPlaces": 2,
+                    "clientSideAttributes": {
+                        "width": 10,
+                        "bold": false,
+                        "word_wrap": false,
+                        "help_text": "help",
+                        "separator_start": 3,
+                        "separator_mark": ".",
+                        "separator_pattern": "THREE_THEN_TWO",
+                        "decimal_mark": ",",
+                        "position": "RIGHT",
+                        "symbol": "!"
+                    }
                 }
             }
-            ]}
+        ]}
         ]};
 
     /**

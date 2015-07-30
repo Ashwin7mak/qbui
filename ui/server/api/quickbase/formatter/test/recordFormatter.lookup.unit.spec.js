@@ -40,10 +40,10 @@ describe('Lookup record formatter unit test', function () {
             "decimalPlaces": 2,
             "datatypeAttributes": {
                 "type": "CURRENCY",
-                "decimalPlaces": 2
-            },
-            "clientSideAttributes": {
-                "symbol":"$"
+                "decimalPlaces": 2,
+                "clientSideAttributes": {
+                    "symbol":"$"
+                }
             }
         }];
 

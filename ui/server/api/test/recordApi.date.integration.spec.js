@@ -21,7 +21,10 @@ describe('API - Date record test cases - ', function () {
         "tables": [{
                 "name": "table1", "fields": [{
                     "name": "date",
-                    "type": "DATE"
+                    "type": "SCALAR",
+                    "datatypeAttributes": {
+                        "type": "DATE"
+                    }
                 }
          ]}
     ]};
@@ -33,10 +36,13 @@ describe('API - Date record test cases - ', function () {
         "tables": [{
             "name": "table1", "fields": [{
                 "name": "date",
-                "type": "DATE",
-                "showMonthAsName": true,
-                "showDayOfWeek": true,
-                "hideYearIfCurrent": true
+                "type": "SCALAR",
+                "datatypeAttributes": {
+                    "type": "DATE",
+                    "showMonthAsName": true,
+                    "showDayOfWeek": true,
+                    "hideYearIfCurrent": true
+                }
             }
             ]}
         ]};

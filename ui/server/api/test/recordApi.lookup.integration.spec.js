@@ -29,13 +29,16 @@ describe('API - Lookup numeric record test cases - ', function () {
             "fields": [
                 {
                     "name": NUMERIC_FIELD_NAME,
-                    "type": "NUMERIC",
-                    "decimalPlaces": 13
+                    "type": "SCALAR",
+                    "datatypeAttributes": {
+                        "type": "NUMERIC",
+                        "decimalPlaces": 13
+                    }
                 },
-                { "name": FK_FIELD_NAME, "type":"NUMERIC"}
+                { "name": FK_FIELD_NAME, "datatypeAttributes": { "type":"NUMERIC" }, "type":"SCALAR"}
             ]
         },
-            { "name": "table2", "fields":[{"name": MASTER_TABLE_NUMERIC, "type": "NUMERIC"}] }
+            { "name": "table2", "fields":[{"name": MASTER_TABLE_NUMERIC, "datatypeAttributes": { "type":"NUMERIC" }, "type":"SCALAR" }] }
         ]
     };
 

@@ -26,10 +26,12 @@ describe('Percent record formatter unit test', function () {
         var noFlagsFieldInfo = [{
             "id": 7,
             "name": "percent",
-            "type": "PERCENT",
-            "decimalPlaces": 2,
-            "clientSideAttributes": {
-            }
+            "datatypeAttributes": {
+                "type": "PERCENT",
+                "decimalPlaces": 2,
+                "clientSideAttributes": {}
+            },
+            "type":"SCALAR"
         }];
 
         var expectedDecimal_NoFlags = JSON.parse(JSON.stringify(defaultRecordExp));

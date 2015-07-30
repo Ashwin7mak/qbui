@@ -17,7 +17,9 @@ describe('Phone number record formatter unit test', function () {
             {
                 "id": 7,
                 "name": "phone",
-                "type": "PHONE_NUMBER"
+                "datatypeAttributes": {
+                    "type": "PHONE_NUMBER"
+                }
             }
         ];
 
@@ -25,8 +27,10 @@ describe('Phone number record formatter unit test', function () {
             {
                 "id": 7,
                 "name": "phone",
-                "type": "PHONE_NUMBER",
-                "includeExtension": false
+                "datatypeAttributes": {
+                    "type": "PHONE_NUMBER",
+                    "includeExtension": false
+                }
             }
         ];
         //Incomplete number

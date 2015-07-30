@@ -21,7 +21,10 @@ describe('API - Email record test cases - ', function () {
         "tables": [{
                 "name": "table1", "fields": [{
                     "name": "email",
-                    "type": "EMAIL_ADDRESS"
+                    "type":"SCALAR",
+                    "datatypeAttributes": {
+                        "type": "EMAIL_ADDRESS"
+                    }
                 }
          ]}
     ]};
@@ -31,13 +34,16 @@ describe('API - Email record test cases - ', function () {
         "tables": [{
             "name": "table1", "fields": [{
                 "name": "email",
-                "type": "EMAIL_ADDRESS",
-                "clientSideAttributes": {
-                    "width": 10,
-                    "bold": false,
-                    "word_wrap": false,
-                    "help_text": "help",
-                    "format": "WHOLE"
+                "type":"SCALAR",
+                "datatypeAttributes": {
+                    "type": "EMAIL_ADDRESS",
+                    "clientSideAttributes": {
+                        "width": 10,
+                        "bold": false,
+                        "word_wrap": false,
+                        "help_text": "help",
+                        "format": "WHOLE"
+                    }
                 }
             }
             ]}
@@ -48,13 +54,16 @@ describe('API - Email record test cases - ', function () {
         "tables": [{
             "name": "table1", "fields": [{
                 "name": "email",
-                "type": "EMAIL_ADDRESS",
-                "clientSideAttributes": {
-                    "width": 10,
-                    "bold": false,
-                    "word_wrap": false,
-                    "help_text": "help",
-                    "format": "UP_TO_AT_SIGN"
+                "type": "SCALAR",
+                "datatypeAttributes": {
+                    "type": "EMAIL_ADDRESS",
+                    "clientSideAttributes": {
+                        "width": 10,
+                        "bold": false,
+                        "word_wrap": false,
+                        "help_text": "help",
+                        "format": "UP_TO_AT_SIGN"
+                    }
                 }
             }
             ]}
@@ -65,13 +74,16 @@ describe('API - Email record test cases - ', function () {
         "tables": [{
             "name": "table1", "fields": [{
                 "name": "email",
-                "type": "EMAIL_ADDRESS",
-                "clientSideAttributes": {
-                    "width": 10,
-                    "bold": false,
-                    "word_wrap": false,
-                    "help_text": "help",
-                    "format": "UP_TO_UNDERSCORE"
+                "type": "SCALAR",
+                "datatypeAttributes": {
+                    "type": "EMAIL_ADDRESS",
+                    "clientSideAttributes": {
+                        "width": 10,
+                        "bold": false,
+                        "word_wrap": false,
+                        "help_text": "help",
+                        "format": "UP_TO_UNDERSCORE"
+                    }
                 }
             }
             ]}
@@ -82,13 +94,16 @@ describe('API - Email record test cases - ', function () {
         "tables": [{
             "name": "table1", "fields": [{
                 "name": "email",
-                "type": "EMAIL_ADDRESS",
-                "clientSideAttributes": {
-                    "width": 10,
-                    "bold": false,
-                    "word_wrap": false,
-                    "help_text": "help",
-                    "linkText": linkText
+                "type": "SCALAR",
+                "datatypeAttributes": {
+                    "type": "EMAIL_ADDRESS",
+                    "clientSideAttributes": {
+                        "width": 10,
+                        "bold": false,
+                        "word_wrap": false,
+                        "help_text": "help",
+                        "linkText": linkText
+                    }
                 }
             }
             ]}
@@ -99,14 +114,17 @@ describe('API - Email record test cases - ', function () {
         "tables": [{
             "name": "table1", "fields": [{
                 "name": "email",
-                "type": "EMAIL_ADDRESS",
-                "clientSideAttributes": {
-                    "width": 10,
-                    "bold": false,
-                    "word_wrap": false,
-                    "help_text": "help",
-                    "format": "WHOLE",
-                    "linkText": linkText
+                "type": "SCALAR",
+                "datatypeAttributes": {
+                    "type": "EMAIL_ADDRESS",
+                    "clientSideAttributes": {
+                        "width": 10,
+                        "bold": false,
+                        "word_wrap": false,
+                        "help_text": "help",
+                        "format": "WHOLE",
+                        "linkText": linkText
+                    }
                 }
             }
             ]}

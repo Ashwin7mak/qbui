@@ -19,7 +19,7 @@ describe('API - PhoneNumber record test cases', function () {
         "tables": [
             {
                 "name": "table1", "fields": [
-                {"name": "phone", "type": "PHONE_NUMBER"}
+                {"name": "phone", "datatypeAttributes": { "type": "PHONE_NUMBER" }, "type": "SCALAR" }
             ]
             }
         ]
@@ -65,7 +65,7 @@ describe('API - PhoneNumber record test cases', function () {
             var app = JSON.parse(appResponse.body);
             var phoneField;
             app.tables[0].fields.forEach(function (field) {
-                if (field.type === 'PHONE_NUMBER') {
+                if (field.datatypeAttributes.type === 'PHONE_NUMBER') {
                     phoneField = field;
                 }
             });

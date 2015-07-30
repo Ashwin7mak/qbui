@@ -21,7 +21,10 @@ describe('API - TimeOfDay record test cases - ', function () {
         "tables": [{
                 "name": "table1", "fields": [{
                     "name": "timeOfDay",
-                    "type": "TIME_OF_DAY"
+                    "type": "SCALAR",
+                    "datatypeAttributes": {
+                        "type": "TIME_OF_DAY"
+                    }
                 }
          ]}
     ]};
@@ -33,9 +36,12 @@ describe('API - TimeOfDay record test cases - ', function () {
         "tables": [{
             "name": "table1", "fields": [{
                 "name": "timeOfDay",
-                "type": "TIME_OF_DAY",
-                "scale": "HH:MM",
-                "use24HourClock": true
+                "type": "SCALAR",
+                "datatypeAttributes": {
+                    "type": "TIME_OF_DAY",
+                    "scale": "HH:MM",
+                    "use24HourClock": true
+                }
             }
             ]}
         ]};
@@ -47,9 +53,12 @@ describe('API - TimeOfDay record test cases - ', function () {
         "tables": [{
             "name": "table1", "fields": [{
                 "name": "timeOfDay",
-                "type": "TIME_OF_DAY",
-                "scale": "HH:MM:SS",
-                "use24HourClock": true
+                "type": "SCALAR",
+                "datatypeAttributes": {
+                    "type": "TIME_OF_DAY",
+                    "scale": "HH:MM:SS",
+                    "use24HourClock": true
+                }
             }
             ]}
         ]};

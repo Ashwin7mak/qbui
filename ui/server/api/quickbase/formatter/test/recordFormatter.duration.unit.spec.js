@@ -61,7 +61,10 @@ describe('Duration record formatter unit test', function () {
         var fieldInfo = [{
             "id": 7,
             "name": "duration",
-            "type": "DURATION"
+            "datatypeAttributes": {
+                "type": "DURATION"
+            },
+            "type": "SCALAR"
         }];
 
         /**
@@ -141,8 +144,11 @@ describe('Duration record formatter unit test', function () {
         var fieldInfo = [{
             "id": 7,
             "name": "duration",
-            "type": "DURATION",
-            "scale": WEEKS
+            "type": "SCALAR",
+            "datatypeAttributes": {
+                "type": "DURATION",
+                "scale": WEEKS
+            }
         }];
 
         /**
@@ -225,8 +231,11 @@ describe('Duration record formatter unit test', function () {
         var fieldInfo = [{
             "id": 7,
             "name": "duration",
-            "type": "DURATION",
-            "scale": DAYS
+            "datatypeAttributes":{
+                "type": "DURATION",
+                "scale": DAYS
+            },
+            "type": "SCALAR"
         }];
 
         /**
@@ -304,8 +313,11 @@ describe('Duration record formatter unit test', function () {
         var fieldInfo = [{
             "id": 7,
             "name": "duration",
-            "type": "DURATION",
-            "scale": HOURS
+            "datatypeAttributes": {
+                "type": "DURATION",
+                "scale": HOURS
+            },
+            "type": "SCALAR"
         }];
 
         var recordInputHours =  [[{
@@ -384,8 +396,11 @@ describe('Duration record formatter unit test', function () {
         var fieldInfo = [{
             "id": 7,
             "name": "duration",
-            "type": "DURATION",
-            "scale": MINUTES
+            "datatypeAttributes":{
+                "type": "DURATION",
+                "scale": MINUTES
+            },
+            "type": "SCALAR"
         }];
 
         /**
@@ -467,8 +482,11 @@ describe('Duration record formatter unit test', function () {
         var fieldInfo = [{
             "id": 7,
             "name": "duration",
-            "type": "DURATION",
-            "scale": SECONDS
+            "datatypeAttributes": {
+                "type": "DURATION",
+                "scale": SECONDS
+            },
+            "type": "SCALAR"
         }];
 
         var recordInputHours =  [[{
@@ -547,8 +565,11 @@ describe('Duration record formatter unit test', function () {
         var fieldInfo = [{
             "id": 7,
             "name": "duration",
-            "type": "DURATION",
+            "datatypeAttributes":{
+                "type": "DURATION",
                 "scale": HHMM
+            },
+            "type": "SCALAR"
         }];
 
         /**
@@ -631,8 +652,11 @@ describe('Duration record formatter unit test', function () {
         var fieldInfo = [{
             "id": 7,
             "name": "duration",
-            "type": "DURATION",
-            "scale": HHMMSS
+            "datatypeAttributes": {
+                "type": "DURATION",
+                "scale": HHMMSS
+            },
+            "type": "SCALAR"
         }];
 
         /**
@@ -715,8 +739,11 @@ describe('Duration record formatter unit test', function () {
         var fieldInfo = [{
             "id": 7,
             "name": "duration",
-            "type": "DURATION",
-            "scale": MM
+            "datatypeAttributes":{
+                "type": "DURATION",
+                "scale": MM
+            },
+            "type": "SCALAR"
         }];
 
         /**
@@ -799,8 +826,11 @@ describe('Duration record formatter unit test', function () {
         var fieldInfo = [{
             "id": 7,
             "name": "duration",
-            "type": "DURATION",
-            "scale": MMSS
+            "datatypeAttributes": {
+                "type": "DURATION",
+                "scale": MMSS
+            },
+            "type": "SCALAR"
         }];
 
         /**

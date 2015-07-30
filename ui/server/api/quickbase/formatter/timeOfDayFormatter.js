@@ -19,6 +19,23 @@
     };
 
     module.exports = {
+        generateFormatterString: function(fieldInfo) {
+            //Resolve formatting options
+            var formatString;
+            if(fieldInfo) {
+                formatString = JAVA_FORMAT_TO_JS_FORMAT[fieldInfo.scale];
+            }
+            if (!formatString) {
+                formatString = MM;
+            }
+            //resolve 12 vs. 24 hour clock
+            if (fieldInfo.use24HourClock) {
+                formatString = TWENTY_FOUR_HOUR_CLOCK + formatString;
+            } else {
+                formatString = TWELVE_HOUR_CLOCK + formatString + AM_PM;
+            }
+            return formatString;
+        },
         generateFormat: function(fieldInfo) {
             //Resolve formatting options
             var formatString;
