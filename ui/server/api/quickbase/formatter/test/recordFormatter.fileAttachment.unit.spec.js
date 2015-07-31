@@ -25,7 +25,10 @@ describe('FileAttachment record formatter unit test', function () {
         var fieldInfo_NoFlags = [{
             "id": 7,
             "name": "file",
-            "type": "FILE_ATTACHMENT"
+            "datatypeAttributes": {
+                "type": "FILE_ATTACHMENT"
+            },
+            "type":"CONCRETE"
          }];
 
         var recordInputLocalFile =  [[{
@@ -52,7 +55,7 @@ describe('FileAttachment record formatter unit test', function () {
          * FieldInfo and expectations for all flags
          */
         var fieldInfo_AllFlags = JSON.parse(JSON.stringify(fieldInfo_NoFlags));
-        fieldInfo_AllFlags[0].linkText = linkText;
+        fieldInfo_AllFlags[0].datatypeAttributes.linkText = linkText;
         var expectedLocalFile_AllFlags = JSON.parse(JSON.stringify(expectedLocalFile_NoFlags));
         expectedLocalFile_AllFlags[0][0].value = localFile;
         expectedLocalFile_AllFlags[0][0].display = linkText;

@@ -38,9 +38,12 @@ describe('API - Numeric record test cases', function () {
         "name": "Numeric App - no flags",
         "tables": [{
                 "name": "table1", "fields": [{
-                    "name": "numeric",
+                "name": "numeric",
+                "type": "SCALAR",
+                "datatypeAttributes": {
                     "type": "NUMERIC"
                 }
+            }
          ]}
     ]};
 
@@ -49,17 +52,20 @@ describe('API - Numeric record test cases', function () {
         "tables": [{
             "name": "table1", "fields": [{
                 "name": "numeric",
-                "type": "NUMERIC",
-                "decimalPlaces": 2,
-                "clientSideAttributes": {
-                    "width": 10,
-                    "bold": false,
-                    "word_wrap": false,
-                    "help_text": "help",
-                    "separator_start": 3,
-                    "separator_mark": ".",
-                    "separator_pattern": "THREE_THEN_TWO",
-                    "decimal_mark": ","
+                "type": "SCALAR",
+                "datatypeAttributes": {
+                    "type": "NUMERIC",
+                    "decimalPlaces": 2,
+                    "clientSideAttributes": {
+                        "width": 10,
+                        "bold": false,
+                        "word_wrap": false,
+                        "help_text": "help",
+                        "separator_start": 3,
+                        "separator_mark": ".",
+                        "separator_pattern": "THREE_THEN_TWO",
+                        "decimal_mark": ","
+                    }
                 }
             }
             ]}

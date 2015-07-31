@@ -25,8 +25,11 @@ describe('API - URL record test cases - ', function () {
         "tables": [{
                 "name": "table1", "fields": [{
                     "name": "url",
-                    "type": "URL"
-                }
+                    "type": "SCALAR",
+                        "datatypeAttributes": {
+                            "type": "URL"
+                        }
+                    }
          ]}
     ]};
 
@@ -35,8 +38,11 @@ describe('API - URL record test cases - ', function () {
         "tables": [{
             "name": "table1", "fields": [{
                 "name": "url",
-                "type": "URL",
-                "displayProtocol": false
+                "type": "SCALAR",
+                "datatypeAttributes": {
+                    "type": "URL",
+                    "displayProtocol": false
+                }
             }
             ]}
         ]};
@@ -46,9 +52,12 @@ describe('API - URL record test cases - ', function () {
         "tables": [{
             "name": "table1", "fields": [{
                 "name": "url",
-                "type": "URL",
-                "linkText": linkText,
-                "displayProtocol": false
+                "type": "SCALAR",
+                "datatypeAttributes": {
+                    "type": "URL",
+                    "linkText": linkText,
+                    "displayProtocol": false
+                }
             }
             ]}
         ]};
