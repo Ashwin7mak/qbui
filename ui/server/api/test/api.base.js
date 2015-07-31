@@ -24,8 +24,8 @@
 
     module.exports = function (config) {
         //Module constants
-        var HTTPS_REGEX =  /https:\/\/.*/;
-        var HTTP_REGEX =  /https*:\/\//;
+        var HTTPS_REGEX =  /https*:\/\/.*/;
+        var HTTP_REGEX =  /http*:\/\//;
 
         var HTTP =  "http://";
         var HTTPS =  "https://";
@@ -64,16 +64,14 @@
                 realmSubdomain = LOCALHOST_SUBDOMAIN;
             }
 
+            var methodLess;
             if(baseUrl.match(HTTPS_REGEX)){
                 protocol = HTTPS;
+                methodLess = baseUrl.replace(HTTPS, '');
+            } else {
+                methodLess = baseUrl.replace(HTTP, '');
             }
 
-            var methodLess = baseUrl.replace(HTTP_REGEX, '');
-            //If we're dealing with a delete realm, use the javaHost and not the node server, which doesn't
-            //proxy realm requests to the javahost for security reasons
-            if(path.indexOf(REALMS_ENDPOINT) !== -1) {
-                methodLess = baseUrl.replace(HTTP_REGEX, '');
-            }
             log.info('baseUrl: '+ baseUrl + ' methodLess: '+methodLess);
 
             fullPath = protocol + realmSubdomain + '.' + methodLess + path;

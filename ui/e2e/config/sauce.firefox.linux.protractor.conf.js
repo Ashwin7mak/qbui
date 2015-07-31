@@ -8,22 +8,15 @@ exports.config = {
   // than the maximum time your application needs to stabilize between tasks.
   allScriptsTimeout: 110000,
 
-  //seleniumAddress: 'http://127.0.0.1:2222/wd/hub',
+  //The sauce user and access key allow us to run our browser tests remotely on a SauceLabs VM
   sauceUser: "sbg_qbse",
   sauceKey: "ae1f362a-024f-44b1-a428-992defbf0062",
 
-  // A base URL for your application under test. Calls to protractor.get()
-  // with relative paths will be prepended with this.
-  //baseUrl: 'https://cs1.newstack.quickbaserocks.com',
-  //baseUrl: 'https://localhost.intuit.com:9000',
-
-  // If true, only chromedriver will be started, not a standalone selenium.
-  // Tests for browsers other than chrome will not run.
-  //chromeOnly: false,
+  // A base URL for your application under test will be passed in via grunt config so that we can use whatever url we please
 
   // list of files / patterns to load in the browser
   specs: [
-    'e2e/qbapp/**/*.spec.js'
+    '../qbapp/**/*.spec.js'
   ],
 
   // Patterns to exclude.
@@ -36,7 +29,7 @@ exports.config = {
   // and
   // https://code.google.com/p/selenium/source/browse/javascript/webdriver/capabilities.js
   capabilities: {
-    'browserName': 'chrome',
+    'browserName': 'firefox',
     tunnelIdentifier: process.env.ENV_TUNNEL_NAME,
     name: process.env.SAUCE_JOB_NAME
   },

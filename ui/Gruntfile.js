@@ -617,12 +617,24 @@ module.exports = function (grunt) {
         },
 
         protractor: {
-            //  stubbing out...probably need more work here..
-            options: {
-                configFile: 'protractor.conf.js',
-                baseUrl: baseUrl
+            sauce_linux_chrome: {
+                options: {
+                    configFile: './e2e/config/sauce.chrome.linux.protractor.conf.js',
+                    baseUrl: baseUrl
+                }
             },
-            chrome: {}
+            sauce_linux_firefox: {
+                options: {
+                    configFile: './e2e/config/sauce.firefox.linux.protractor.conf.js',
+                    baseUrl: baseUrl
+                }
+            },
+            local: {
+                options: {
+                    configFile: './e2e/config/local.protractor.conf.js',
+                    baseUrl: baseUrl
+                }
+            }
         },
 
         env: {
@@ -850,8 +862,18 @@ module.exports = function (grunt) {
                 'wiredep:app',
                 'autoprefixer',
                 'sauce_connect',
-                'protractor',
+                'protractor:sauce_linux_chrome',
                 'sauce-connect-close'
+            ]);
+        }
+
+        if (target === 'e2eLocal') {
+            return grunt.task.run([
+                'clean:server',
+                'concurrent:test',
+                'wiredep:app',
+                'autoprefixer',
+                'protractor:local',
             ]);
         }
 

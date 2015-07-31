@@ -90,7 +90,7 @@ Overview of the UI directory
         bower.json                              - application bower dependency definitions
         package.json                            - list of npm dependencies
         config.rb                               - compass configuration file
-        protractor.conf.js                      - protractor configuration file
+        sauce.chrome.protractor.conf.js                      - protractor configuration file
         .gitignore                              - application (client and server) git ignore configuration file
         .yo-rc.json                             - yeoman configuration file
         .jscsrc                                 - js code style linter configuration
