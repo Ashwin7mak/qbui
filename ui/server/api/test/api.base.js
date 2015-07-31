@@ -24,8 +24,7 @@
 
     module.exports = function (config) {
         //Module constants
-        var HTTPS_REGEX =  /https*:\/\/.*/;
-        var HTTP_REGEX =  /http*:\/\//;
+        var HTTPS_REGEX =  /https:\/\/.*/;
 
         var HTTP =  "http://";
         var HTTPS =  "https://";
@@ -51,6 +50,7 @@
         DEFAULT_HEADERS[CONTENT_TYPE] = APPLICATION_JSON;
         var ERROR_HPE_INVALID_CONSTANT = "HPE_INVALID_CONSTANT";
         var ERROR_ENOTFOUND = "ENOTFOUND";
+        //add comment about this usage
         baseUrl = config === undefined ? '' : config.DOMAIN;
 
         //Resolves a full URL using the instance subdomain and the configured javaHost
@@ -65,7 +65,7 @@
             }
 
             var methodLess;
-            if(baseUrl.match(HTTPS_REGEX)){
+            if(HTTPS_REGEX.test(baseUrl)){
                 protocol = HTTPS;
                 methodLess = baseUrl.replace(HTTPS, '');
             } else {

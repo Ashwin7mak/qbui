@@ -8,8 +8,12 @@
  *
  * @see https://github.com/seckardt/grunt-sauce-connect-launcher
  * @see https://github.com/bermi/sauce-connect-launcher
+ *
+ * This code was not using the latest version of the sauce-connect-launcher and was therefore failing. There was a 2 year old pull request
+ * out there asking for the version to be upgraded, but it hadn't been looked at. I cloned this script and modified it so that we could
+ * leverage the code without waiting for an unlikely response to the pull request
  */
-(function (grunt) {
+(function () {
     'use strict';
     var launcher = require('sauce-connect-launcher');
     var tunnel = {};

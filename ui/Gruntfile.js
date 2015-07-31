@@ -15,6 +15,7 @@ module.exports = function (grunt) {
     var currentDateTime = new Date().getTime();
     var tunnelIdentifier = grunt.option('tunnelIdentifier') || 'tunnel_' + currentDateTime;
     var sauceJobName = grunt.option('sauceJobName') || 'e2e_' + currentDateTime;
+    var sauceKey = grunt.option('sauceKey');
 
     // Load grunt tasks automatically, when needed
     require('jit-grunt')(grunt, {
@@ -642,18 +643,21 @@ module.exports = function (grunt) {
                 NODE_ENV: 'test',
                 NODE_TLS_REJECT_UNAUTHORIZED: 0,
                 ENV_TUNNEL_NAME: tunnelIdentifier,
-                SAUCE_JOB_NAME: sauceJobName
+                SAUCE_JOB_NAME: sauceJobName,
+                SAUCE_KEY: sauceKey
             },
             prod: {
                 NODE_ENV: 'production',
                 ENV_TUNNEL_NAME: tunnelIdentifier,
-                SAUCE_JOB_NAME: sauceJobName
+                SAUCE_JOB_NAME: sauceJobName,
+                SAUCE_KEY: sauceKey
             },
             local: {
                 NODE_ENV: 'local',
                 NODE_TLS_REJECT_UNAUTHORIZED: 0,
                 ENV_TUNNEL_NAME: tunnelIdentifier,
-                SAUCE_JOB_NAME: sauceJobName
+                SAUCE_JOB_NAME: sauceJobName,
+                SAUCE_KEY: sauceKey
             }
         },
 

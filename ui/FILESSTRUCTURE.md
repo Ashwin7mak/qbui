@@ -32,7 +32,7 @@ Overview of the UI directory
          │  │    │
          │  │    ├── qbapp                      - a quickbase angular module named 'app'
          │  │    │    └──<1..n qbapp modules>   - ie: tables, reports, etc.
-         │  │    │        └──<1..n qbapp test>   - ie: tables\test, reports\test, etc.
+         │  │    │        └──<1..n qbapp test>  - ie: tables\test, reports\test, etc.
          │  │    │          └── <...>.spec.js   - test spec
          │  │    │
          │  │    ├── realm                      - a quickbase angular module named 'realm'
@@ -58,7 +58,9 @@ Overview of the UI directory
         dist                                    - grunt build output folder   (not tracked by git)
          │
         e2e                                     - protractor end to end tests
-         │
+         |  |
+         |  |__ config                          - protractor configuration files
+         │        
         node_modules                            - the application&#39;s npm library
          │
         server                                  - express Node server
@@ -90,7 +92,6 @@ Overview of the UI directory
         bower.json                              - application bower dependency definitions
         package.json                            - list of npm dependencies
         config.rb                               - compass configuration file
-        sauce.chrome.protractor.conf.js                      - protractor configuration file
         .gitignore                              - application (client and server) git ignore configuration file
         .yo-rc.json                             - yeoman configuration file
         .jscsrc                                 - js code style linter configuration
