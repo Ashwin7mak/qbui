@@ -36,11 +36,9 @@ exports.config = {
   // and
   // https://code.google.com/p/selenium/source/browse/javascript/webdriver/capabilities.js
   capabilities: {
-
     'browserName': 'chrome',
-
-    'tunnel-identifier': process.env.TRAVIS_JOB_NUMBER
-
+    tunnelIdentifier: process.env.ENV_TUNNEL_NAME,
+    name: process.env.SAUCE_JOB_NAME
   },
 
   // ----- The test framework -----
