@@ -9,6 +9,7 @@ exports.config = {
   allScriptsTimeout: 110000,
 
   // A base URL for your application under test will be passed in via grunt config so that we can use whatever url we please
+  baseUrl: process.env.DOMAIN,
 
   // list of files / patterns to load in the browser
   specs: [

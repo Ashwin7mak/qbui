@@ -113,6 +113,7 @@
 
         var apiBase = {
             setBaseUrl : function(baseUrlConfig){
+                log.info('Setting baseUrl on api.base: ' + baseUrlConfig);
                 baseUrl = baseUrlConfig;
             },
             generateFullRequest: function(relativePath, subdomain){
@@ -185,7 +186,7 @@
             executeRequest: function (stringPath, method, body, headers) {
                 //if there is a realm & we're not making a ticket request, use the realm subdomain request URL
                 var subdomain = '';
-                if (this.realm && stringPath.indexOf(TICKETS_ENDPOINT) === -1) {
+                if (this.realm) {
                     subdomain = this.realm.subdomain;
                 }
                 var opts = generateRequestOpts(stringPath, method, subdomain);
