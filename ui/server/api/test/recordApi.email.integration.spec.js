@@ -13,36 +13,36 @@ var testConsts = require('./api.test.constants');
  * Integration test for Email field formatting
  */
 describe('API - Email record test cases - ', function () {
-    var email = "first_name_last_name@quickbase.com";
-    var linkText = "some link text";
+    var email = 'first_name_last_name@quickbase.com';
+    var linkText = 'some link text';
 
     var appWithNoFlags = {
-        "name": "Email App - no flags",
-        "tables": [{
-                "name": "table1", "fields": [{
-                    "name": "email",
-                    "type":"SCALAR",
-                    "datatypeAttributes": {
-                        "type": "EMAIL_ADDRESS"
+        name: 'Email App - no flags',
+        tables: [{
+                name: 'table1', fields: [{
+                    name: 'email',
+                    type:'SCALAR',
+                    datatypeAttributes: {
+                        type: 'EMAIL_ADDRESS'
                     }
                 }
          ]}
     ]};
 
     var appWithEntireEmailFlag = {
-        "name": "Email App - 'entire email' flag",
-        "tables": [{
-            "name": "table1", "fields": [{
-                "name": "email",
-                "type":"SCALAR",
-                "datatypeAttributes": {
-                    "type": "EMAIL_ADDRESS",
-                    "clientSideAttributes": {
-                        "width": 10,
-                        "bold": false,
-                        "word_wrap": false,
-                        "help_text": "help",
-                        "format": "WHOLE"
+        name: 'Email App - "entire email" flag',
+        tables: [{
+            name: 'table1', fields: [{
+                name: 'email',
+                type:'SCALAR',
+                datatypeAttributes: {
+                    type: 'EMAIL_ADDRESS',
+                    clientSideAttributes: {
+                        width: 10,
+                        bold: false,
+                        word_wrap: false,
+                        help_text: 'help',
+                        format: 'WHOLE'
                     }
                 }
             }
@@ -50,19 +50,19 @@ describe('API - Email record test cases - ', function () {
         ]};
 
     var appWithBeforeAtSignFlag = {
-        "name": "Email App - 'before @' flag",
-        "tables": [{
-            "name": "table1", "fields": [{
-                "name": "email",
-                "type": "SCALAR",
-                "datatypeAttributes": {
-                    "type": "EMAIL_ADDRESS",
-                    "clientSideAttributes": {
-                        "width": 10,
-                        "bold": false,
-                        "word_wrap": false,
-                        "help_text": "help",
-                        "format": "UP_TO_AT_SIGN"
+        name: 'Email App - "before @" flag',
+        tables: [{
+            name: 'table1', fields: [{
+                name: 'email',
+                type: 'SCALAR',
+                datatypeAttributes: {
+                    type: 'EMAIL_ADDRESS',
+                    clientSideAttributes: {
+                        width: 10,
+                        bold: false,
+                        word_wrap: false,
+                        help_text: 'help',
+                        format: 'UP_TO_AT_SIGN'
                     }
                 }
             }
@@ -70,19 +70,19 @@ describe('API - Email record test cases - ', function () {
         ]};
 
     var appWithBeforeUnderscoreFlag = {
-        "name": "Email App - 'before _' flag",
-        "tables": [{
-            "name": "table1", "fields": [{
-                "name": "email",
-                "type": "SCALAR",
-                "datatypeAttributes": {
-                    "type": "EMAIL_ADDRESS",
-                    "clientSideAttributes": {
-                        "width": 10,
-                        "bold": false,
-                        "word_wrap": false,
-                        "help_text": "help",
-                        "format": "UP_TO_UNDERSCORE"
+        name: 'Email App - "before _" flag',
+        tables: [{
+            name: 'table1', fields: [{
+                name: 'email',
+                type: 'SCALAR',
+                datatypeAttributes: {
+                    type: 'EMAIL_ADDRESS',
+                    clientSideAttributes: {
+                        width: 10,
+                        bold: false,
+                        word_wrap: false,
+                        help_text: 'help',
+                        format: 'UP_TO_UNDERSCORE'
                     }
                 }
             }
@@ -90,19 +90,19 @@ describe('API - Email record test cases - ', function () {
         ]};
 
     var appWithLinkTextFlag = {
-        "name": "Email App - 'link text' flag",
-        "tables": [{
-            "name": "table1", "fields": [{
-                "name": "email",
-                "type": "SCALAR",
-                "datatypeAttributes": {
-                    "type": "EMAIL_ADDRESS",
-                    "clientSideAttributes": {
-                        "width": 10,
-                        "bold": false,
-                        "word_wrap": false,
-                        "help_text": "help",
-                        "linkText": linkText
+        name: 'Email App - "link text" flag',
+        tables: [{
+            name: 'table1', fields: [{
+                name: 'email',
+                type: 'SCALAR',
+                datatypeAttributes: {
+                    type: 'EMAIL_ADDRESS',
+                    clientSideAttributes: {
+                        width: 10,
+                        bold: false,
+                        word_wrap: false,
+                        help_text: 'help',
+                        linkText: linkText
                     }
                 }
             }
@@ -110,20 +110,20 @@ describe('API - Email record test cases - ', function () {
         ]};
 
     var appWithAllFlags = {
-        "name": "Email App - all flags",
-        "tables": [{
-            "name": "table1", "fields": [{
-                "name": "email",
-                "type": "SCALAR",
-                "datatypeAttributes": {
-                    "type": "EMAIL_ADDRESS",
-                    "clientSideAttributes": {
-                        "width": 10,
-                        "bold": false,
-                        "word_wrap": false,
-                        "help_text": "help",
-                        "format": "WHOLE",
-                        "linkText": linkText
+        name: 'Email App - all flags',
+        tables: [{
+            name: 'table1', fields: [{
+                name: 'email',
+                type: 'SCALAR',
+                datatypeAttributes: {
+                    type: 'EMAIL_ADDRESS',
+                    clientSideAttributes: {
+                        width: 10,
+                        bold: false,
+                        word_wrap: false,
+                        help_text: 'help',
+                        format: 'WHOLE',
+                        linkText: linkText
                     }
                 }
             }
@@ -135,25 +135,25 @@ describe('API - Email record test cases - ', function () {
     */
     function  noFlagsEmailDataProvider(fid) {
         // Email
-        var emailInput = [{"id": fid, "value": email}];
-        var expectedEmailRecord = {"id": fid, "value": email, "display": email};
+        var emailInput = [{id: fid, value: email}];
+        var expectedEmailRecord = {id: fid, value: email, display: email};
 
         // Empty email
-        var emptyInput = [{"id": fid, "value": ""}];
-        var expectedEmptyRecord = {"id": fid, "value": null, "display": ""};
+        var emptyInput = [{id: fid, value: ''}];
+        var expectedEmptyRecord = {id: fid, value: null, display: ''};
 
         // Null email
-        var nullInput = [{"id": fid, "value": null}];
-        var expectedNullRecord = {"id": fid, "value": null, "display": ""};
+        var nullInput = [{id: fid, value: null}];
+        var expectedNullRecord = {id: fid, value: null, display: ''};
 
         return [
-            { message: "display email with no format flags", record: emailInput, format: "display", expectedFieldValue: expectedEmailRecord },
-            { message: "raw email with no format flags", record: emailInput, format: "raw", expectedFieldValue: emailInput },
-            { message: "display empty email with no format flags", record: emptyInput, format: "display", expectedFieldValue: expectedEmptyRecord },
-            { message: "raw empty email with no format flags", record: emptyInput, format: "raw", expectedFieldValue: emptyInput },
-            { message: "display null email with no format flags", record: nullInput, format: "display", expectedFieldValue: expectedNullRecord },
-            { message: "raw null email with no format flags", record: nullInput, format: "raw", expectedFieldValue: nullInput }
-        ]
+            { message: 'display email with no format flags', record: emailInput, format: 'display', expectedFieldValue: expectedEmailRecord },
+            { message: 'raw email with no format flags', record: emailInput, format: 'raw', expectedFieldValue: emailInput },
+            { message: 'display empty email with no format flags', record: emptyInput, format: 'display', expectedFieldValue: expectedEmptyRecord },
+            { message: 'raw empty email with no format flags', record: emptyInput, format: 'raw', expectedFieldValue: emptyInput },
+            { message: 'display null email with no format flags', record: nullInput, format: 'display', expectedFieldValue: expectedNullRecord },
+            { message: 'raw null email with no format flags', record: nullInput, format: 'raw', expectedFieldValue: nullInput }
+        ];
     }
 
     /**
@@ -192,8 +192,8 @@ describe('API - Email record test cases - ', function () {
 
                             currentRecord.forEach(function (fieldValue) {
                                 if (fieldValue.id === records[i].expectedFieldValue.id) {
-                                    assert.deepEqual(fieldValue, records[i].expectedFieldValue, 'Unexpected field value returned: '
-                                    + JSON.stringify(fieldValue) + ', ' + JSON.stringify(records[i].expectedFieldValue));
+                                    assert.deepEqual(fieldValue, records[i].expectedFieldValue, 'Unexpected field value returned: ' +
+                                     JSON.stringify(fieldValue) + ', ' + JSON.stringify(records[i].expectedFieldValue));
                                 }
                             });
                         }
@@ -212,25 +212,25 @@ describe('API - Email record test cases - ', function () {
     function  entireEmailFlagEmailDataProvider(fid) {
 
         // Email
-        var emailInput = [{"id": fid, "value": email}];
-        var expectedEmailRecord = {"id": fid, "value": email, "display": email};
+        var emailInput = [{id: fid, value: email}];
+        var expectedEmailRecord = {id: fid, value: email, display: email};
 
         // Empty email
-        var emptyInput = [{"id": fid, "value": ""}];
-        var expectedEmptyRecord = {"id": fid, "value": null, "display": ""};
+        var emptyInput = [{id: fid, value: ''}];
+        var expectedEmptyRecord = {id: fid, value: null, display: ''};
 
         // Null email
-        var nullInput = [{"id": fid, "value": null}];
-        var expectedNullRecord = {"id": fid, "value": null, "display": ""};
+        var nullInput = [{id: fid, value: null}];
+        var expectedNullRecord = {id: fid, value: null, display: ''};
 
         return [
-            { message: "display email with 'entire email' format flags", record: emailInput, format: "display", expectedFieldValue: expectedEmailRecord },
-            { message: "raw email with 'entire email' format flags", record: emailInput, format: "raw", expectedFieldValue: emailInput },
-            { message: "display empty email with 'entire email' format flags", record: emptyInput, format: "display", expectedFieldValue: expectedEmptyRecord },
-            { message: "raw empty email with 'entire email' format flags", record: emptyInput, format: "raw", expectedFieldValue: emptyInput },
-            { message: "display null email with 'entire email' format flags", record: nullInput, format: "display", expectedFieldValue: expectedNullRecord },
-            { message: "raw null email with 'entire email' format flags", record: nullInput, format: "raw", expectedFieldValue: nullInput }
-        ]
+            { message: 'display email with "entire email" format flags', record: emailInput, format: 'display', expectedFieldValue: expectedEmailRecord },
+            { message: 'raw email with "entire email" format flags', record: emailInput, format: 'raw', expectedFieldValue: emailInput },
+            { message: 'display empty email with "entire email" format flags', record: emptyInput, format: 'display', expectedFieldValue: expectedEmptyRecord },
+            { message: 'raw empty email with "entire email" format flags', record: emptyInput, format: 'raw', expectedFieldValue: emptyInput },
+            { message: 'display null email with "entire email" format flags', record: nullInput, format: 'display', expectedFieldValue: expectedNullRecord },
+            { message: 'raw null email with "entire email" format flags', record: nullInput, format: 'raw', expectedFieldValue: nullInput }
+        ];
     }
 
     /**
@@ -269,8 +269,8 @@ describe('API - Email record test cases - ', function () {
 
                             currentRecord.forEach(function (fieldValue) {
                                 if (fieldValue.id === records[i].expectedFieldValue.id) {
-                                    assert.deepEqual(fieldValue, records[i].expectedFieldValue, 'Unexpected field value returned: '
-                                    + JSON.stringify(fieldValue) + ', ' + JSON.stringify(records[i].expectedFieldValue));
+                                    assert.deepEqual(fieldValue, records[i].expectedFieldValue, 'Unexpected field value returned: ' +
+                                     JSON.stringify(fieldValue) + ', ' + JSON.stringify(records[i].expectedFieldValue));
                                 }
                             });
                         }
@@ -289,25 +289,25 @@ describe('API - Email record test cases - ', function () {
     function  beforeAtSignFlagEmailDataProvider(fid) {
 
         // Email
-        var emailInput = [{"id": fid, "value": email}];
-        var expectedEmailRecord = {"id": fid, "value": email, "display": "first_name_last_name"};
+        var emailInput = [{id: fid, value: email}];
+        var expectedEmailRecord = {id: fid, value: email, display: 'first_name_last_name'};
 
         // Empty email
-        var emptyInput = [{"id": fid, "value": ""}];
-        var expectedEmptyRecord = {"id": fid, "value": null, "display": ""};
+        var emptyInput = [{id: fid, value: ''}];
+        var expectedEmptyRecord = {id: fid, value: null, display: ''};
 
         // Null email
-        var nullInput = [{"id": fid, "value": null}];
-        var expectedNullRecord = {"id": fid, "value": null, "display": ""};
+        var nullInput = [{id: fid, value: null}];
+        var expectedNullRecord = {id: fid, value: null, display: ''};
 
         return [
-            { message: "display email with 'before @' format flags", record: emailInput, format: "display", expectedFieldValue: expectedEmailRecord },
-            { message: "raw email with 'before @' format flags", record: emailInput, format: "raw", expectedFieldValue: emailInput },
-            { message: "display empty email with 'before @' format flags", record: emptyInput, format: "display", expectedFieldValue: expectedEmptyRecord },
-            { message: "raw empty email with 'before @' format flags", record: emptyInput, format: "raw", expectedFieldValue: emptyInput },
-            { message: "display null email with 'before @' format flags", record: nullInput, format: "display", expectedFieldValue: expectedNullRecord },
-            { message: "raw null email with 'before @' format flags", record: nullInput, format: "raw", expectedFieldValue: nullInput }
-        ]
+            { message: 'display email with "before @" format flags', record: emailInput, format: 'display', expectedFieldValue: expectedEmailRecord },
+            { message: 'raw email with "before @" format flags', record: emailInput, format: 'raw', expectedFieldValue: emailInput },
+            { message: 'display empty email with "before @" format flags', record: emptyInput, format: 'display', expectedFieldValue: expectedEmptyRecord },
+            { message: 'raw empty email with "before @" format flags', record: emptyInput, format: 'raw', expectedFieldValue: emptyInput },
+            { message: 'display null email with "before @" format flags', record: nullInput, format: 'display', expectedFieldValue: expectedNullRecord },
+            { message: 'raw null email with "before @" format flags', record: nullInput, format: 'raw', expectedFieldValue: nullInput }
+        ];
     }
 
     /**
@@ -346,8 +346,8 @@ describe('API - Email record test cases - ', function () {
 
                             currentRecord.forEach(function (fieldValue) {
                                 if (fieldValue.id === records[i].expectedFieldValue.id) {
-                                    assert.deepEqual(fieldValue, records[i].expectedFieldValue, 'Unexpected field value returned: '
-                                    + JSON.stringify(fieldValue) + ', ' + JSON.stringify(records[i].expectedFieldValue));
+                                    assert.deepEqual(fieldValue, records[i].expectedFieldValue, 'Unexpected field value returned: ' +
+                                      JSON.stringify(fieldValue) + ', ' + JSON.stringify(records[i].expectedFieldValue));
                                 }
                             });
                         }
@@ -366,25 +366,25 @@ describe('API - Email record test cases - ', function () {
     function  beforeUnderscoreFlagEmailDataProvider(fid) {
 
         // Email
-        var emailInput = [{"id": fid, "value": email}];
-        var expectedEmailRecord = {"id": fid, "value": email, "display": "first"};
+        var emailInput = [{id: fid, value: email}];
+        var expectedEmailRecord = {id: fid, value: email, display: 'first'};
 
         // Empty email
-        var emptyInput = [{"id": fid, "value": ""}];
-        var expectedEmptyRecord = {"id": fid, "value": null, "display": ""};
+        var emptyInput = [{id: fid, value: ''}];
+        var expectedEmptyRecord = {id: fid, value: null, display: ''};
 
         // Null email
-        var nullInput = [{"id": fid, "value": null}];
-        var expectedNullRecord = {"id": fid, "value": null, "display": ""};
+        var nullInput = [{id: fid, value: null}];
+        var expectedNullRecord = {id: fid, value: null, display: ''};
 
         return [
-            { message: "display email with 'before _' format flags", record: emailInput, format: "display", expectedFieldValue: expectedEmailRecord },
-            { message: "raw email with 'before _' format flags", record: emailInput, format: "raw", expectedFieldValue: emailInput },
-            { message: "display empty email with 'before _' format flags", record: emptyInput, format: "display", expectedFieldValue: expectedEmptyRecord },
-            { message: "raw empty email with 'before _' format flags", record: emptyInput, format: "raw", expectedFieldValue: emptyInput },
-            { message: "display null email with 'before _' format flags", record: nullInput, format: "display", expectedFieldValue: expectedNullRecord },
-            { message: "raw null email with 'before _' format flags", record: nullInput, format: "raw", expectedFieldValue: nullInput }
-        ]
+            { message: 'display email with "before _" format flags', record: emailInput, format: 'display', expectedFieldValue: expectedEmailRecord },
+            { message: 'raw email with "before _" format flags', record: emailInput, format: 'raw', expectedFieldValue: emailInput },
+            { message: 'display empty email with "before _" format flags', record: emptyInput, format: 'display', expectedFieldValue: expectedEmptyRecord },
+            { message: 'raw empty email with "before _" format flags', record: emptyInput, format: 'raw', expectedFieldValue: emptyInput },
+            { message: 'display null email with "before _" format flags', record: nullInput, format: 'display', expectedFieldValue: expectedNullRecord },
+            { message: 'raw null email with "before _" format flags', record: nullInput, format: 'raw', expectedFieldValue: nullInput }
+        ];
     }
 
     /**
@@ -423,8 +423,8 @@ describe('API - Email record test cases - ', function () {
 
                             currentRecord.forEach(function (fieldValue) {
                                 if (fieldValue.id === records[i].expectedFieldValue.id) {
-                                    assert.deepEqual(fieldValue, records[i].expectedFieldValue, 'Unexpected field value returned: '
-                                    + JSON.stringify(fieldValue) + ', ' + JSON.stringify(records[i].expectedFieldValue));
+                                    assert.deepEqual(fieldValue, records[i].expectedFieldValue, 'Unexpected field value returned: ' +
+                                     JSON.stringify(fieldValue) + ', ' + JSON.stringify(records[i].expectedFieldValue));
                                 }
                             });
                         }
@@ -443,25 +443,25 @@ describe('API - Email record test cases - ', function () {
     function  linkTextFlagEmailDataProvider(fid) {
 
         // Email
-        var emailInput = [{"id": fid, "value": email}];
-        var expectedEmailRecord = {"id": fid, "value": email, "display": linkText};
+        var emailInput = [{id: fid, value: email}];
+        var expectedEmailRecord = {id: fid, value: email, display: linkText};
 
         // Empty email
-        var emptyInput = [{"id": fid, "value": ""}];
-        var expectedEmptyRecord = {"id": fid, "value": null, "display": ""};
+        var emptyInput = [{id: fid, value: ''}];
+        var expectedEmptyRecord = {id: fid, value: null, display: ''};
 
         // Null email
-        var nullInput = [{"id": fid, "value": null}];
-        var expectedNullRecord = {"id": fid, "value": null, "display": ""};
+        var nullInput = [{id: fid, value: null}];
+        var expectedNullRecord = {id: fid, value: null, display: ''};
 
         return [
-            { message: "display email with 'link text' format flags", record: emailInput, format: "display", expectedFieldValue: expectedEmailRecord },
-            { message: "raw email with 'link text' format flags", record: emailInput, format: "raw", expectedFieldValue: emailInput },
-            { message: "display empty email with 'link text' format flags", record: emptyInput, format: "display", expectedFieldValue: expectedEmptyRecord },
-            { message: "raw empty email with 'link text' format flags", record: emptyInput, format: "raw", expectedFieldValue: emptyInput },
-            { message: "display null email with 'link text' format flags", record: nullInput, format: "display", expectedFieldValue: expectedNullRecord },
-            { message: "raw null email with 'link text' format flags", record: nullInput, format: "raw", expectedFieldValue: nullInput }
-        ]
+            { message: 'display email with "link text" format flags', record: emailInput, format: 'display', expectedFieldValue: expectedEmailRecord },
+            { message: 'raw email with "link text" format flags', record: emailInput, format: 'raw', expectedFieldValue: emailInput },
+            { message: 'display empty email with "link text" format flags', record: emptyInput, format: 'display', expectedFieldValue: expectedEmptyRecord },
+            { message: 'raw empty email with "link text" format flags', record: emptyInput, format: 'raw', expectedFieldValue: emptyInput },
+            { message: 'display null email with "link text" format flags', record: nullInput, format: 'display', expectedFieldValue: expectedNullRecord },
+            { message: 'raw null email with "link text" format flags', record: nullInput, format: 'raw', expectedFieldValue: nullInput }
+        ];
     }
 
     /**
@@ -500,8 +500,8 @@ describe('API - Email record test cases - ', function () {
 
                             currentRecord.forEach(function (fieldValue) {
                                 if (fieldValue.id === records[i].expectedFieldValue.id) {
-                                    assert.deepEqual(fieldValue, records[i].expectedFieldValue, 'Unexpected field value returned: '
-                                    + JSON.stringify(fieldValue) + ', ' + JSON.stringify(records[i].expectedFieldValue));
+                                    assert.deepEqual(fieldValue, records[i].expectedFieldValue, 'Unexpected field value returned: ' +
+                                     JSON.stringify(fieldValue) + ', ' + JSON.stringify(records[i].expectedFieldValue));
                                 }
                             });
                         }
@@ -520,25 +520,25 @@ describe('API - Email record test cases - ', function () {
     function  allFlagsEmailDataProvider(fid) {
 
         // Email
-        var emailInput = [{"id": fid, "value": email}];
-        var expectedEmailRecord = {"id": fid, "value": email, "display": linkText};
+        var emailInput = [{id: fid, value: email}];
+        var expectedEmailRecord = {id: fid, value: email, display: linkText};
 
         // Empty email
-        var emptyInput = [{"id": fid, "value": ""}];
-        var expectedEmptyRecord = {"id": fid, "value": null, "display": ""};
+        var emptyInput = [{id: fid, value: ''}];
+        var expectedEmptyRecord = {id: fid, value: null, display: ''};
 
         // Null email
-        var nullInput = [{"id": fid, "value": null}];
-        var expectedNullRecord = {"id": fid, "value": null, "display": ""};
+        var nullInput = [{id: fid, value: null}];
+        var expectedNullRecord = {id: fid, value: null, display: ''};
 
         return [
-            { message: "display email with all format flags", record: emailInput, format: "display", expectedFieldValue: expectedEmailRecord },
-            { message: "raw email with all format flags", record: emailInput, format: "raw", expectedFieldValue: emailInput },
-            { message: "display empty email with all format flags", record: emptyInput, format: "display", expectedFieldValue: expectedEmptyRecord },
-            { message: "raw empty email with all format flags", record: emptyInput, format: "raw", expectedFieldValue: emptyInput },
-            { message: "display null email with all format flags", record: nullInput, format: "display", expectedFieldValue: expectedNullRecord },
-            { message: "raw null email with all format flags", record: nullInput, format: "raw", expectedFieldValue: nullInput }
-        ]
+            { message: 'display email with all format flags', record: emailInput, format: 'display', expectedFieldValue: expectedEmailRecord },
+            { message: 'raw email with all format flags', record: emailInput, format: 'raw', expectedFieldValue: emailInput },
+            { message: 'display empty email with all format flags', record: emptyInput, format: 'display', expectedFieldValue: expectedEmptyRecord },
+            { message: 'raw empty email with all format flags', record: emptyInput, format: 'raw', expectedFieldValue: emptyInput },
+            { message: 'display null email with all format flags', record: nullInput, format: 'display', expectedFieldValue: expectedNullRecord },
+            { message: 'raw null email with all format flags', record: nullInput, format: 'raw', expectedFieldValue: nullInput }
+        ];
     }
 
     /**
@@ -577,8 +577,8 @@ describe('API - Email record test cases - ', function () {
 
                             currentRecord.forEach(function (fieldValue) {
                                 if (fieldValue.id === records[i].expectedFieldValue.id) {
-                                    assert.deepEqual(fieldValue, records[i].expectedFieldValue, 'Unexpected field value returned: '
-                                    + JSON.stringify(fieldValue) + ', ' + JSON.stringify(records[i].expectedFieldValue));
+                                    assert.deepEqual(fieldValue, records[i].expectedFieldValue, 'Unexpected field value returned: ' +
+                                     JSON.stringify(fieldValue) + ', ' + JSON.stringify(records[i].expectedFieldValue));
                                 }
                             });
                         }

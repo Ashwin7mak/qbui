@@ -22,7 +22,7 @@
     module.exports = function (config) {
         //Module constants
         var HTTP_REGEX =  /https*:\/\//;
-        var HTTP =  "http://";
+        var HTTP =  'http://';
         var NODE_BASE_ENDPOINT = '/api/api/v1';
         var JAVA_BASE_ENDPOINT = '/api/api/v1';
         var APPS_ENDPOINT = '/apps/';
@@ -42,8 +42,8 @@
         var TICKET_HEADER_KEY = 'ticket';
         var DEFAULT_HEADERS = {};
         DEFAULT_HEADERS[CONTENT_TYPE] = APPLICATION_JSON;
-        var ERROR_HPE_INVALID_CONSTANT = "HPE_INVALID_CONSTANT";
-        var ERROR_ENOTFOUND = "ENOTFOUND";
+        var ERROR_HPE_INVALID_CONSTANT = 'HPE_INVALID_CONSTANT';
+        var ERROR_ENOTFOUND = 'ENOTFOUND';
 
 
         //Resolves a full URL using the instance subdomain and the configured javaHost
@@ -97,7 +97,7 @@
 
         //Generates and returns a psuedo-random email string
         function generateEmail() {
-            return generateString(10) + "_" + generateString(10) + "@intuit.com";
+            return generateString(10) + '_' + generateString(10) + '@intuit.com';
         }
 
         var apiBase = {
@@ -202,19 +202,19 @@
                 var deferred = promise.pending();
                 var tries = numRetries;
                 request(opts, function (error, response) {
-                    if (error || response.statusCode != 200) {
+                    if (error || response.statusCode !== 200) {
                         if(tries > 1  && (error.code === ERROR_HPE_INVALID_CONSTANT || error.code === ERROR_ENOTFOUND)) {
                             tries --;
-                            log.debug("Attempting a retry: " + JSON.stringify(opts) + " Tries remaining: " + tries);
+                            log.debug('Attempting a retry: ' + JSON.stringify(opts) + ' Tries remaining: ' + tries);
                             apiBase.executeRequestRetryable(opts, tries).then(function(res2){
-                                log.debug("Success following retry/retries");
+                                log.debug('Success following retry/retries');
                                 deferred.resolve(res2);
                             }).catch(function(err2){
-                                log.debug("Failure after retries");
+                                log.debug('Failure after retries');
                                 deferred.reject(err2);
                             });
                         } else {
-                            log.debug("Network request failed, no retries left or an unsupported error for retry found");
+                            log.debug('Network request failed, no retries left or an unsupported error for retry found');
                             deferred.reject(error);
                         }
                     } else {
@@ -273,9 +273,9 @@
             //Create realm helper method generates an arbitrary realm, calls execute request and returns a promise
             createRealm: function () {
                 var realmToMake = {
-                    "id": Math.floor(Math.random() * 100000000 - 0),
-                    "subdomain": generateValidSubdomainString(),
-                    "name": generateValidSubdomainString()
+                    'id': Math.floor(Math.random() * 100000000 - 0),
+                    'subdomain': generateValidSubdomainString(),
+                    'name': generateValidSubdomainString()
                 };
                 return this.executeRequest(this.resolveRealmsEndpoint(), consts.POST, realmToMake, DEFAULT_HEADERS);
             },
@@ -286,13 +286,13 @@
             //Create user helper method generates an arbitrary user, calls execute request and returns a promise
             createUser: function () {
                 var userToMake = {
-                    "firstName":  generateString(10),
-                    "lastName": generateString(10),
-                    "screenName": generateString(10),
-                    "email": generateEmail(),
-                    "password": "quickbase",
-                    "challengeQuestion": "who is your favorite scrum team?",
-                    "challengeAnswer": "blue"
+                    'firstName':  generateString(10),
+                    'lastName': generateString(10),
+                    'screenName': generateString(10),
+                    'email': generateEmail(),
+                    'password': 'quickbase',
+                    'challengeQuestion': 'who is your favorite scrum team?',
+                    'challengeAnswer': 'blue'
                 };
                 return this.createSpecificUser(userToMake);
             },
@@ -314,9 +314,9 @@
                         }).catch(function (error) {
                             var r = context.realm;
                             context.realm = null;
-                            assert(false, 'Unable to delete realm '
-                            + JSON.stringify(r) + ' due to: '
-                            + JSON.stringify(error));
+                            assert(false, 'Unable to delete realm ' +
+                              JSON.stringify(r) + ' due to: ' +
+                              JSON.stringify(error));
                             deferred.reject(error);
                         });
                 } else {
@@ -327,5 +327,5 @@
         };
 
         return apiBase;
-    }
+    };
 }());

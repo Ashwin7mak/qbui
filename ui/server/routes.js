@@ -21,7 +21,7 @@ module.exports = function (app, config) {
         log.logRequest(req, __filename);
         next();
     });
-	
+
 
     var routeMapper = require('./routes/qbRouteMapper')(config);
     require('./routes/qbAngularRoutes')(app, config);

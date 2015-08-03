@@ -4,9 +4,9 @@
     angular.module('qbse.qbapp.reports.dashboard')
         .controller('ReportsDashboardCtrl', ReportDashboardController);
 
-    ReportDashboardController.$inject = ['$scope', '$state', '$stateParams', 'ReportsDashboardModel'];
+    ReportDashboardController.$inject = ['$scope', '$state', '$stateParams', '$log', 'ReportsDashboardModel'];
 
-    function ReportDashboardController($scope, $state, $stateParams, ReportsDashboardModel) {
+    function ReportDashboardController($scope, $state, $stateParams, $log, ReportsDashboardModel) {
 
         $scope.appId = $stateParams.appId;
         $scope.tableId = $stateParams.tableId;
@@ -30,7 +30,7 @@
                     }
                 },
                 function (resp) {
-                    console.log('Error getting report list.  Status: ' + resp.status);
+                    $log.error('Error getting report list.  Status: ' + resp.status);
                 }
             );
         }

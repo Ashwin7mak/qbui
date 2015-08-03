@@ -34,6 +34,7 @@ module.exports = function (grunt) {
             client: {
                 root: 'client',
                 components: '<%= quickbase.client.root %>/quickbase',
+                gallery: '<%= quickbase.client.root %>/gallery',
                 assets: '<%= quickbase.client.root %>/quickbase/assets'
             },
             //  dist contains the target folders of the build
@@ -173,26 +174,41 @@ module.exports = function (grunt) {
                     '!<%= express.root %>/**/*.spec.js'
                 ]
             },
-            serverTest: {
+            //TODO : complete code delint of server tests
+            //serverTest: {
+            //    options: {
+            //        jshintrc: '<%= express.root %>/.jshintrc'
+            //    },
+            //    src: ['<%= express.root %>/**/*.spec.js']
+            //},
+            client: {
                 options: {
-                    jshintrc: '<%= express.root %>/.jshintrc-spec'
+                    jshintrc: '<%= quickbase.client.root %>/.jshintrc'
                 },
-                src: ['<%= express.root %>/**/*.spec.js']
-            },
-            client: [
+                src: [
                 '<%= quickbase.client.components %>/**/*.js',
-                '!<%= quickbase.client.components %>/**/*.spec.js',
-                '!<%= quickbase.client.components %>/**/*.mock.js'
-            ],
+                '<%= quickbase.client.gallery %>/**/*.js',
+                    '!<%= quickbase.client.components %>/**/*.spec.js',
+                    '!<%= quickbase.client.components %>/**/*.mock.js'
+                ]
+            },
             clientTest: {
+                options: {
+                    jshintrc: '<%= quickbase.client.root %>/.jshintrc'
+                },
                 src: [
                     '<%= quickbase.client.components %>/**/*.spec.js',
                     '<%= quickbase.client.components %>/**/*.mock.js'
                 ]
             },
-            testGen: [
+            testGen: {
+                options: {
+                    jshintrc: '<%= express.root %>/.jshintrc'
+                },
+                src:[
                 'test_generator/**/*.js'
-            ]
+                ]
+            }
         },
 
         // Empties folders to start fresh
@@ -265,7 +281,7 @@ module.exports = function (grunt) {
                     },
                     callback: function (nodemon) {
                         nodemon.on('log', function (event) {
-                            console.log(event.colour);
+                            grunt.log.ok(event.colour);
                         });
 
                         // opens browser on initial server start

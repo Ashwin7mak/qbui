@@ -4,7 +4,6 @@
     var assert = require('assert');
     var consts = require('../constants');
     var log = require('../../logger').getLogger();
-    var testConsts = require('./api.test.constants');
 
     /*
      * We can't use JSON.parse() with records because it is possible to lose decimal precision as a
@@ -29,7 +28,7 @@
             //Helper method to create an app, can be used by multiple test cases
             createApp: function (appToCreate) {
                 var deferred = promise.pending();
-                init.then(function (createdRealm) {
+                init.then(function () {
                     apiBase.executeRequest(apiBase.resolveAppsEndpoint(), consts.POST, appToCreate).then(function (appResponse) {
                         log.debug('App create response: ' + appResponse);
                         deferred.resolve(appResponse);
@@ -44,7 +43,7 @@
             //Helper method to create a relationship between two tables in an app
             createRelationship: function(relationshipToCreate) {
                 var deferred = promise.pending();
-                init.then(function (createdRealm) {
+                init.then(function () {
                     apiBase.executeRequest(apiBase.resolveRelationshipsEndpoint(relationshipToCreate.appId), consts.POST, relationshipToCreate).
                         then(function (relResponse) {
                         deferred.resolve(relResponse);
@@ -58,7 +57,7 @@
 
             createField: function(appId, tableId, fieldToCreate) {
                 var deferred = promise.pending();
-                init.then(function (createdRealm) {
+                init.then(function () {
                     apiBase.executeRequest(apiBase.resolveFieldsEndpoint(appId, tableId), consts.POST, fieldToCreate).
                         then(function (relResponse) {
                             deferred.resolve(relResponse);
@@ -76,12 +75,12 @@
                 if(params) {
                     endpoint += params;
                 }
-                init.then(function(createdRealm){
+                init.then(function(){
                     apiBase.executeRequest(endpoint, consts.GET).
                         then(function(recResp){
                             deferred.resolve(recResp);
                         }).
-                        catch(function(err){
+                        catch(function(error){
                             deferred.reject(error);
                             assert(false, 'failed to resolve record');
                         });
@@ -143,7 +142,7 @@
             // Gets a record given their record ID, returning a promise that is resolved or rejected on successful
             getRecord: function (recordsEndpoint, recordId, params) {
                 var fetchRecordDeferred = promise.pending();
-                log.debug("Attempting record GET: " + recordsEndpoint + " recordId: " + recordId);
+                log.debug('Attempting record GET: ' + recordsEndpoint + ' recordId: ' + recordId);
                 init.then(function () {
                     var getEndpoint = recordsEndpoint + recordId;
                     if (params) {
@@ -154,7 +153,7 @@
                             var fetchedRecord = jsonBigNum.parse(fetchedRecordResponse.body);
                             fetchRecordDeferred.resolve(fetchedRecord);
                         }).catch(function (error) {
-                            log.debug("Error getting record: " + JSON.stringify(error) + " Endpoint that failed: " + recordsEndpoint + recordId);
+                            log.debug('Error getting record: ' + JSON.stringify(error) + ' Endpoint that failed: ' + recordsEndpoint + recordId);
                             fetchRecordDeferred.reject(error);
                         });
                 }).catch(function(currError){log.error(JSON.stringify(currError));});
@@ -162,5 +161,5 @@
             }
         };
         return recordBase;
-    }
+    };
 }());

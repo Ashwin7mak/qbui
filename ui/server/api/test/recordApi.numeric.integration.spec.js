@@ -35,36 +35,36 @@ describe('API - Numeric record test cases', function () {
     var numberMin = '-1111111111111111111';
 
     var appWithNoFlags = {
-        "name": "Numeric App - no flags",
-        "tables": [{
-                "name": "table1", "fields": [{
-                "name": "numeric",
-                "type": "SCALAR",
-                "datatypeAttributes": {
-                    "type": "NUMERIC"
+        name: 'Numeric App - no flags',
+        tables: [{
+                name: 'table1', fields: [{
+                name: 'numeric',
+                type: 'SCALAR',
+                datatypeAttributes: {
+                    type: 'NUMERIC'
                 }
             }
          ]}
     ]};
 
     var appWithAllFlags = {
-        "name": "Numeric App - all flags",
-        "tables": [{
-            "name": "table1", "fields": [{
-                "name": "numeric",
-                "type": "SCALAR",
-                "datatypeAttributes": {
-                    "type": "NUMERIC",
-                    "decimalPlaces": 2,
-                    "clientSideAttributes": {
-                        "width": 10,
-                        "bold": false,
-                        "word_wrap": false,
-                        "help_text": "help",
-                        "separator_start": 3,
-                        "separator_mark": ".",
-                        "separator_pattern": "THREE_THEN_TWO",
-                        "decimal_mark": ","
+        name: 'Numeric App - all flags',
+        tables: [{
+            name: 'table1', fields: [{
+                name: 'numeric',
+                type: 'SCALAR',
+                datatypeAttributes: {
+                    type: 'NUMERIC',
+                    decimalPlaces: 2,
+                    clientSideAttributes: {
+                        width: 10,
+                        bold: false,
+                        word_wrap: false,
+                        help_text: 'help',
+                        separator_start: 3,
+                        separator_mark: '.',
+                        separator_pattern: 'THREE_THEN_TWO',
+                        decimal_mark: ','
                     }
                 }
             }
@@ -76,48 +76,48 @@ describe('API - Numeric record test cases', function () {
      */
     function  noFlagsNumericDataProvider(fid) {
         // Decimal number
-        var decimalInput = '[{"id": ' + fid + ', "value": ' + numberDecimalOnly + '}]';
-        var expectedDecimalRecord = '{"id": ' + fid + ', "value": '+ numberDecimalOnly + ', "display": "0.74765432000000"}';
+        var decimalInput = '[{id: ' + fid + ', value: ' + numberDecimalOnly + '}]';
+        var expectedDecimalRecord = '{id: ' + fid + ', value: '+ numberDecimalOnly + ', display: "0.74765432000000"}';
 
         // Double number
-        var doubleInput = '[{"id": ' + fid + ', "value": '+ numberDouble + '}]';
-        var expectedDoubleRecord = '{"id": ' + fid + ', "value": ' + numberDouble +', "display": "98765432100.74765000000000"}';
+        var doubleInput = '[{id: ' + fid + ', value: '+ numberDouble + '}]';
+        var expectedDoubleRecord = '{id: ' + fid + ', value: ' + numberDouble +', display: "98765432100.74765000000000"}';
 
         // No separator number
-        var noSeparatorInput = '[{"id": ' + fid + ', "value": '+ numberNoSeparator +'}]';
-        var expectedNoSeparatorRecord = '{"id": ' + fid + ', "value": ' + numberNoSeparator + ', "display": "99.00000000000000"}';
+        var noSeparatorInput = '[{id: ' + fid + ', value: '+ numberNoSeparator +'}]';
+        var expectedNoSeparatorRecord = '{id: ' + fid + ', value: ' + numberNoSeparator + ', display: "99.00000000000000"}';
 
         // Multiple separator number
-        var multiSeparatorInput = '[{"id": ' + fid + ', "value": '+ numberMultipleSeparators + '}]';
-        var expectedMultiSeparatorRecord = '{"id": ' + fid + ', "value": ' + numberMultipleSeparators + ', "display": "98765432100.00000000000000"}';
+        var multiSeparatorInput = '[{id: ' + fid + ', value: '+ numberMultipleSeparators + '}]';
+        var expectedMultiSeparatorRecord = '{id: ' + fid + ', value: ' + numberMultipleSeparators + ', display: "98765432100.00000000000000"}';
 
         // Null number
-        var nullInput = '[{"id": ' + fid + ', "value": null}]';
-        var expectedNullRecord = '{"id": ' + fid + ', "value": null, "display": ""}';
+        var nullInput = '[{id: ' + fid + ', value: null}]';
+        var expectedNullRecord = '{id: ' + fid + ', value: null, display: ""}';
 
         // Max number
-        var maxInput = '[{"id": ' + fid + ', "value": ' + numberMax + '}]';
-        var expectedMaxRecord = '{"id": ' + fid + ', "value": ' + numberMax + ', "display": "7777777777777777777.00000000000000"}';
+        var maxInput = '[{id: ' + fid + ', value: ' + numberMax + '}]';
+        var expectedMaxRecord = '{id: ' + fid + ', value: ' + numberMax + ', display: "7777777777777777777.00000000000000"}';
 
         // Min number
-        var minInput = '[{"id": ' + fid + ', "value":' + numberMin + '}]';
-        var expectedMinRecord = '{"id": ' + fid + ', "value": ' + numberMin + ', "display": "-1111111111111111111.00000000000000"}';
+        var minInput = '[{id: ' + fid + ', value:' + numberMin + '}]';
+        var expectedMinRecord = '{id: ' + fid + ', value: ' + numberMin + ', display: "-1111111111111111111.00000000000000"}';
 
         return [
-            { message: "display decimal number with no format flags", record: decimalInput, format: "display", expectedFieldValue: expectedDecimalRecord },
-            { message: "raw decimal number with no format flags", record: decimalInput, format: "raw", expectedFieldValue: decimalInput },
-            { message: "display double number with no format flags", record: doubleInput, format: "display", expectedFieldValue: expectedDoubleRecord },
-            { message: "raw double number with no format flags", record: doubleInput, format: "raw", expectedFieldValue: doubleInput },
-            { message: "display no separator number with no format flags", record: noSeparatorInput, format: "display", expectedFieldValue: expectedNoSeparatorRecord },
-            { message: "raw no separator number with no format flags", record: noSeparatorInput, format: "raw", expectedFieldValue: noSeparatorInput },
-            { message: "display multiple separator number with no format flags", record: multiSeparatorInput, format: "display", expectedFieldValue: expectedMultiSeparatorRecord },
-            { message: "raw multiple separator number with no format flags", record: multiSeparatorInput, format: "raw", expectedFieldValue: multiSeparatorInput },
-            { message: "display max number with no format flags", record: maxInput, format: "display", expectedFieldValue: expectedMaxRecord },
-            { message: "raw max number with no format flags", record: maxInput, format: "raw", expectedFieldValue: maxInput },
-            { message: "display min number with no format flags", record: minInput, format: "display", expectedFieldValue: expectedMinRecord },
-            { message: "raw min number with no format flags", record: minInput, format: "raw", expectedFieldValue: minInput },
-            { message: "display null number with no format flags", record: nullInput, format: "display", expectedFieldValue: expectedNullRecord },
-            { message: "raw null number with no format flags", record: nullInput, format: "raw", expectedFieldValue: nullInput },
+            { message: 'display decimal number with no format flags', record: decimalInput, format: 'display', expectedFieldValue: expectedDecimalRecord },
+            { message: 'raw decimal number with no format flags', record: decimalInput, format: 'raw', expectedFieldValue: decimalInput },
+            { message: 'display double number with no format flags', record: doubleInput, format: 'display', expectedFieldValue: expectedDoubleRecord },
+            { message: 'raw double number with no format flags', record: doubleInput, format: 'raw', expectedFieldValue: doubleInput },
+            { message: 'display no separator number with no format flags', record: noSeparatorInput, format: 'display', expectedFieldValue: expectedNoSeparatorRecord },
+            { message: 'raw no separator number with no format flags', record: noSeparatorInput, format: 'raw', expectedFieldValue: noSeparatorInput },
+            { message: 'display multiple separator number with no format flags', record: multiSeparatorInput, format: 'display', expectedFieldValue: expectedMultiSeparatorRecord },
+            { message: 'raw multiple separator number with no format flags', record: multiSeparatorInput, format: 'raw', expectedFieldValue: multiSeparatorInput },
+            { message: 'display max number with no format flags', record: maxInput, format: 'display', expectedFieldValue: expectedMaxRecord },
+            { message: 'raw max number with no format flags', record: maxInput, format: 'raw', expectedFieldValue: maxInput },
+            { message: 'display min number with no format flags', record: minInput, format: 'display', expectedFieldValue: expectedMinRecord },
+            { message: 'raw min number with no format flags', record: minInput, format: 'raw', expectedFieldValue: minInput },
+            { message: 'display null number with no format flags', record: nullInput, format: 'display', expectedFieldValue: expectedNullRecord },
+            { message: 'raw null number with no format flags', record: nullInput, format: 'raw', expectedFieldValue: nullInput },
         ]
     }
 
@@ -176,48 +176,48 @@ describe('API - Numeric record test cases', function () {
      */
     function  allFlagsNumericDataProvider(fid) {
         // Decimal number
-        var decimalInput = '[{"id": ' + fid + ', "value": ' + numberDecimalOnly + '}]';
-        var expectedDecimalRecord = '{"id": ' + fid + ', "value": ' + numberDecimalOnly + ', "display": "0,75"}';
+        var decimalInput = '[{id: ' + fid + ', value: ' + numberDecimalOnly + '}]';
+        var expectedDecimalRecord = '{id: ' + fid + ', value: ' + numberDecimalOnly + ', display: "0,75"}';
 
         // Double number
-        var doubleInput = '[{"id": ' + fid + ', "value": ' + numberDouble + '}]';
-        var expectedDoubleRecord = '{"id": ' + fid + ', "value": ' + numberDouble + ', "display": "98.76.54.32.100,75"}';
+        var doubleInput = '[{id: ' + fid + ', value: ' + numberDouble + '}]';
+        var expectedDoubleRecord = '{id: ' + fid + ', value: ' + numberDouble + ', display: "98.76.54.32.100,75"}';
 
         // No separator number
-        var noSeparatorInput = '[{"id": ' + fid + ', "value": ' + numberNoSeparator + '}]';
-        var expectedNoSeparatorRecord = '{"id": ' + fid + ', "value": ' + numberNoSeparator + ', "display": "99,00"}';
+        var noSeparatorInput = '[{id: ' + fid + ', value: ' + numberNoSeparator + '}]';
+        var expectedNoSeparatorRecord = '{id: ' + fid + ', value: ' + numberNoSeparator + ', display: "99,00"}';
 
         // Multiple separator number
-        var multiSeparatorInput = '[{"id": ' + fid + ', "value": ' + numberMultipleSeparators + '}]';
-        var expectedMultiSeparatorRecord = '{"id": ' + fid + ', "value": ' + numberMultipleSeparators + ', "display": "98.76.54.32.100,00"}';
+        var multiSeparatorInput = '[{id: ' + fid + ', value: ' + numberMultipleSeparators + '}]';
+        var expectedMultiSeparatorRecord = '{id: ' + fid + ', value: ' + numberMultipleSeparators + ', display: "98.76.54.32.100,00"}';
 
         // Max number
-        var maxInput = '[{"id": ' + fid + ', "value": ' + numberMax + '}]';
-        var expectedMaxRecord = '{"id": ' + fid + ', "value": ' + numberMax + ', "display": "7.77.77.77.77.77.77.77.77.77,00"}';
+        var maxInput = '[{id: ' + fid + ', value: ' + numberMax + '}]';
+        var expectedMaxRecord = '{id: ' + fid + ', value: ' + numberMax + ', display: "7.77.77.77.77.77.77.77.77.77,00"}';
 
         // Min number
-        var minInput = '[{"id": ' + fid + ', "value": ' + numberMin + '}]';
-        var expectedMinRecord = '{"id": ' + fid + ', "value": ' + numberMin + ', "display": "-1.11.11.11.11.11.11.11.11.11,00"}';
+        var minInput = '[{id: ' + fid + ', value: ' + numberMin + '}]';
+        var expectedMinRecord = '{id: ' + fid + ', value: ' + numberMin + ', display: "-1.11.11.11.11.11.11.11.11.11,00"}';
 
         // Null number
-        var nullInput = '[{"id": ' + fid + ', "value": null}]';
-        var expectedNullRecord = '{"id": ' + fid + ', "value": 0, "display": ""}';
+        var nullInput = '[{id: ' + fid + ', value: null}]';
+        var expectedNullRecord = '{id: ' + fid + ', value: 0, display: ""}';
 
         return [
-            { message: "display decimal number with all format flags", record: decimalInput, format: "display", expectedFieldValue: expectedDecimalRecord },
-            { message: "raw decimal number with all format flags", record: decimalInput, format: "raw", expectedFieldValue: decimalInput },
-            { message: "display double number with all format flags", record: doubleInput, format: "display", expectedFieldValue: expectedDoubleRecord },
-            { message: "raw double number with all format flags", record: doubleInput, format: "raw", expectedFieldValue: doubleInput },
-            { message: "display no separator number with all format flags", record: noSeparatorInput, format: "display", expectedFieldValue: expectedNoSeparatorRecord },
-            { message: "raw no separator number with all format flags", record: noSeparatorInput, format: "raw", expectedFieldValue: noSeparatorInput },
-            { message: "display multiple separator number with all format flags", record: multiSeparatorInput, format: "display", expectedFieldValue: expectedMultiSeparatorRecord },
-            { message: "raw multiple separator number with all format flags", record: multiSeparatorInput, format: "raw", expectedFieldValue: multiSeparatorInput },
-            { message: "display max number with all format flags", record: maxInput, format: "display", expectedFieldValue: expectedMaxRecord },
-            { message: "raw max number with all format flags", record: maxInput, format: "raw", expectedFieldValue: maxInput },
-            { message: "display min number with all format flags", record: minInput, format: "display", expectedFieldValue: expectedMinRecord },
-            { message: "raw min number with all format flags", record: minInput, format: "raw", expectedFieldValue: minInput },
-            { message: "display null number with all format flags", record: nullInput, format: "display", expectedFieldValue: expectedNullRecord },
-            { message: "raw null number with all format flags", record: nullInput, format: "raw", expectedFieldValue: nullInput }
+            { message: 'display decimal number with all format flags', record: decimalInput, format: 'display', expectedFieldValue: expectedDecimalRecord },
+            { message: 'raw decimal number with all format flags', record: decimalInput, format: 'raw', expectedFieldValue: decimalInput },
+            { message: 'display double number with all format flags', record: doubleInput, format: 'display', expectedFieldValue: expectedDoubleRecord },
+            { message: 'raw double number with all format flags', record: doubleInput, format: 'raw', expectedFieldValue: doubleInput },
+            { message: 'display no separator number with all format flags', record: noSeparatorInput, format: 'display', expectedFieldValue: expectedNoSeparatorRecord },
+            { message: 'raw no separator number with all format flags', record: noSeparatorInput, format: 'raw', expectedFieldValue: noSeparatorInput },
+            { message: 'display multiple separator number with all format flags', record: multiSeparatorInput, format: 'display', expectedFieldValue: expectedMultiSeparatorRecord },
+            { message: 'raw multiple separator number with all format flags', record: multiSeparatorInput, format: 'raw', expectedFieldValue: multiSeparatorInput },
+            { message: 'display max number with all format flags', record: maxInput, format: 'display', expectedFieldValue: expectedMaxRecord },
+            { message: 'raw max number with all format flags', record: maxInput, format: 'raw', expectedFieldValue: maxInput },
+            { message: 'display min number with all format flags', record: minInput, format: 'display', expectedFieldValue: expectedMinRecord },
+            { message: 'raw min number with all format flags', record: minInput, format: 'raw', expectedFieldValue: minInput },
+            { message: 'display null number with all format flags', record: nullInput, format: 'display', expectedFieldValue: expectedNullRecord },
+            { message: 'raw null number with all format flags', record: nullInput, format: 'raw', expectedFieldValue: nullInput }
         ]
     }
 

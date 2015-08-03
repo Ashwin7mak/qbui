@@ -1,52 +1,44 @@
 {
-    //defines globals exposed by modern browsers
-    "browser": true,
     //prohibits the use of bitwise operators usually its a mistyped &&
     "bitwise": true,
     //requires you to always put curly braces around blocks
-    "curly": true,
+    //"curly": true,
     //require === or !=== (don't do any coercion)
     "eqeqeq": true,
-    //enables new javascript syntax
+    // enables warnings about the `debugger` statements in your code.
+    "debug": false,
+    //enables new javascript syntax ECMAScript 6
     "esnext": true,
     //prohibits overwriting prototypes of native objects such as Array, Date etc.
     "freeze":true,
     //warnings about the use of identifiers which are defined in future versions of JavaScript.
     "futurehostile":true,
-    //prohibits the use of a variable before it was defined
-    "latedef": "nofunc",
-    //capitalize names of constructor functions
-    "newcap": true,
     //prohibits the use of soon deprecated for performance arguments.caller and arguments.callee
     "noarg": true,
+    //prohibits the use of of the comma operator.
+    "nocomma": true,
+    //control how nested do you want your blocks
+    "maxdepth":4,
+    // max number of formal parameters allowed per function
+    "maxparams":7,
+    // max number of statements allowed per function
+    "maxstatements":50,
+    //prohibits the use of a variable before it was defined, nofunc will allow function declarations to be ignored.
+    "latedef": "nofunc",
     //enforces the consistency of quotation marks used
     "quotmark": "single",
-    // warn about not running in strict mode
+    // warn about not running in strict mode, which eliminates some JavaScript pitfalls
     "strict": true,
     //prohibits the use of explicitly undeclared variable, catches typos
     "undef": true,
     //warns when you define and never use your variables
     "unused": true,
     //third party usage
+    //a white list of global variables that are not formally defined in the source code
     "globals": {
-        "jQuery": true,
-        "angular": true,
-        "console": true,
         "Chance" : true,
-        "$": true,
-        "_": true,
-        "moment": true,
-        "describe": true,
-        "afterEach": true,
-        "beforeEach": true,
-        "module": true,
-        "inject": true,
-        "it": true,
-        "expect": true,
-        "browser": true,
-        "element": true,
-        "by": true,
-        "xit" : true,
-        "xdescribe": true
+        "process" : true,
+        "require" : true,
+        "_": true
     }
 }

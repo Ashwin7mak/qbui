@@ -1,17 +1,18 @@
 describe('Controller: AppDashboardCtrl', function() {
     'use strict';
     // load the controller's module
-    var controller, ReportsDashboardModel, scope, $httpBackend, $state, deferredGetApp, deferredGetApps, deferredGet, transitionTo;
+    var controller, ReportsDashboardModel, scope, $httpBackend, $state, deferredGetApp, deferredGetApps, deferredGet, transitionTo, $log;
 
     beforeEach(function() {
         module('qbse.qbapp.dashboard','qbse.qbapp.reports.dashboard','qbse.qbapp.reports.manager', 'quickbase.qbapp', 'qbse.templates');
     });
 
     beforeEach(
-        inject(function($controller, $rootScope, _ReportsDashboardModel_, _$state_, $q, _$httpBackend_ ) {
+        inject(function($controller, $rootScope, _ReportsDashboardModel_, _$state_, $q, _$httpBackend_, _$log_) {
             scope = $rootScope.$new();
             ReportsDashboardModel = _ReportsDashboardModel_;
             $httpBackend = _$httpBackend_;
+            $log = _$log_;
             $state = _$state_;
             deferredGet = $q.defer();
             deferredGetApp = $q.defer();
@@ -42,7 +43,7 @@ describe('Controller: AppDashboardCtrl', function() {
         deferredGet.resolve(getData);
 
         controller('AppDashboardCtrl',
-            {$scope:scope, $stateParams:{appId:appId, tableId:tableId}, $state:$state, ReportsDashboardModel:ReportsDashboardModel });
+            {$scope:scope, $stateParams:{appId:appId, tableId:tableId}, $state:$state, ReportsDashboardModel:ReportsDashboardModel, $log:$log });
         scope.$digest();
 
         expect(scope.appId).toBeDefined();
@@ -76,7 +77,7 @@ describe('Controller: AppDashboardCtrl', function() {
         deferredGetApp.resolve(getApp);
 
         controller('AppDashboardCtrl',
-            {$scope:scope, $state:$state, ReportsDashboardModel:ReportsDashboardModel });
+            {$scope:scope, $state:$state, ReportsDashboardModel:ReportsDashboardModel, $log:$log  });
         scope.$digest();
 
         expect(scope.appId).not.toBeDefined();
@@ -99,7 +100,7 @@ describe('Controller: AppDashboardCtrl', function() {
          deferredGetApp.resolve(null);
 
          controller('AppDashboardCtrl',
-             {$scope:scope, $state:$state, ReportsDashboardModel:ReportsDashboardModel });
+             {$scope:scope, $state:$state, ReportsDashboardModel:ReportsDashboardModel, $log:$log  });
          scope.$digest();
 
          expect(scope.appId).not.toBeDefined();
@@ -137,7 +138,7 @@ describe('Controller: AppDashboardCtrl', function() {
         deferredGet.resolve(getData);
 
         controller('AppDashboardCtrl',
-            {$scope:scope, $stateParams:{appId:appId, tableId:tableId}, $state:$state, ReportsDashboardModel:ReportsDashboardModel });
+            {$scope:scope, $stateParams:{appId:appId, tableId:tableId}, $state:$state, ReportsDashboardModel:ReportsDashboardModel, $log:$log  });
         scope.$digest();
 
         scope.goToTable(table);
@@ -153,7 +154,7 @@ describe('Controller: AppDashboardCtrl', function() {
         deferredGet.resolve(getData);
 
         controller('AppDashboardCtrl',
-            {$scope:scope, $stateParams:{appId:appId, tableId:tableId}, $state:$state, ReportsDashboardModel:ReportsDashboardModel });
+            {$scope:scope, $stateParams:{appId:appId, tableId:tableId}, $state:$state, ReportsDashboardModel:ReportsDashboardModel, $log:$log  });
         scope.$digest();
 
         scope.goToReports();

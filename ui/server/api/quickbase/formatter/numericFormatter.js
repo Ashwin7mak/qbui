@@ -26,11 +26,11 @@
     var EXPONENT_CHAR = 'E';
     var PATTERN_EVERY_THREE = 'EVERY_THREE';
     var PATTERN_THREE_THEN_TWO = 'THREE_THEN_TWO';
-    var CURRENCY_LEFT = "LEFT";
-    var CURRENCY_RIGHT = "RIGHT";
-    var CURRENCY_RIGHT_OF_SIGN = "RIGHT_OF_SIGN";
-    var CURRENCY_SYMBOL = "$";
-    var PERCENT_SYMBOL = "%";
+    var CURRENCY_LEFT = 'LEFT';
+    var CURRENCY_RIGHT = 'RIGHT';
+    var CURRENCY_RIGHT_OF_SIGN = 'RIGHT_OF_SIGN';
+    var CURRENCY_SYMBOL = '$';
+    var PERCENT_SYMBOL = '%';
     //Defaults & supported values
     var DEFAULT_SEPARATOR_START = 3;
     var DEFAULT_CURRENCY_SYMBOL = CURRENCY_SYMBOL;
@@ -139,9 +139,9 @@
         var numString = numeric.toString();
         var mantissaString, characteristicString;
         //Parse either scientific notation string or a raw numeric string
-        if(numString.indexOf(EXPONENT_CHAR) != -1) {
+        if(numString.indexOf(EXPONENT_CHAR) !== -1) {
             var parts = numString.split(EXPONENT_CHAR);
-            var exponent = new Number(parts[1]);
+            var exponent = Number(parts[1]);
             var decimalSplits = parts[0].split(PERIOD);
             if(decimalSplits[1].length >= exponent) {
                 mantissaString = decimalSplits[0] + decimalSplits[1].substring(0, exponent);

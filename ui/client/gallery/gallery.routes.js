@@ -7,7 +7,7 @@
      */
     angular
         .module('quickbase.gallery')
-        .config(['$stateProvider', '$urlRouterProvider','ExampleDataProvider', CommonRoutes]);
+        .config(['$stateProvider', '$urlRouterProvider', 'ExampleDataProvider', CommonRoutes]);
 
     CommonRoutes.$inject = ['$stateProvider', '$urlRouterProvider'];
     function CommonRoutes($stateProvider, $urlRouterProvider) {
@@ -19,11 +19,11 @@
                 url: '/home'
             })
             .state('grid', {
-                url: '/grid',
-                templateUrl: 'gallery/grid/gridExample.html',
-                controller:'GridExampleController',
-                controllerAs:'example',
-                resolve: {
+                url         : '/grid',
+                templateUrl : 'gallery/grid/gridExample.html',
+                controller  : 'GridExampleController',
+                controllerAs: 'example',
+                resolve     : {
                     gridData: function($q, ExampleData) {
                         var gridInfo = $q.defer();
 
@@ -35,18 +35,18 @@
                             exampleSize = requestSize;
                         }
                         // load up example data &schema
-                        var schemaPromise = ExampleData.get({file:'mockRecordsSchema', size:exampleSize});
-                        var dataPromise = ExampleData.get({file:'mockRecords',size:exampleSize});
+                        var schemaPromise = ExampleData.get({file: 'mockRecordsSchema', size: exampleSize});
+                        var dataPromise = ExampleData.get({file: 'mockRecords', size: exampleSize});
 
                         // after the example data is resolved, resolve the grid Info colunms and data
                         $q.all([schemaPromise.$promise, dataPromise.$promise]).then(function(resolvedGridData) {
                             gridInfo.resolve({
-                                exampleSize : exampleSize,
-                                getColumns: function() {
+                                exampleSize   : exampleSize,
+                                getColumns    : function() {
                                     //ui-grid expects array of column header names
                                     return resolvedGridData[0];
                                 },
-                                getDataPromise   : function() {
+                                getDataPromise: function() {
                                     // ui-grid expects promise of data
                                     return dataPromise.$promise;
                                 }

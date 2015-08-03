@@ -4,9 +4,9 @@
     angular.module('qbse.qbapp.reports.manager')
         .controller('ReportCtrl', ReportManagerController);
 
-    ReportManagerController.$inject = ['$q', '$scope', '$stateParams', 'ReportModel', 'gridConstants'];
+    ReportManagerController.$inject = ['$q', '$scope', '$log', '$stateParams', 'ReportModel', 'gridConstants'];
 
-    function ReportManagerController($q, $scope, $stateParams, ReportModel, gridConstants ) {
+    function ReportManagerController($q, $scope, $log, $stateParams, ReportModel, gridConstants ) {
 
         $scope.showLayout = false;
 
@@ -94,7 +94,7 @@
                 };
             },
             function(resp) {
-                console.log('Error fetching model data in controller.  Status:' + resp.status);
+                $log.error('Error fetching model data in controller.  Status:' + resp.status);
             }
         );
 

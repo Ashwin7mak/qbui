@@ -33,36 +33,36 @@ describe('API - Percent record test cases', function () {
     var numberInt = '99';
 
     var appWithNoFlags = {
-        "name": "Percent App - no flags",
-        "tables": [{
-                "name": "table1", "fields": [{
-                "name": "percent",
-                "type": "SCALAR",
-                "datatypeAttributes": {
-                    "type": "PERCENT"
+        name: 'Percent App - no flags',
+        tables: [{
+                name: 'table1', fields: [{
+                name: 'percent',
+                type: 'SCALAR',
+                datatypeAttributes: {
+                    type: 'PERCENT'
                 }
             }
          ]}
     ]};
 
     var appWithAllFlags = {
-        "name": "Percent App - all flags",
-        "tables": [{
-            "name": "table1", "fields": [{
-                "name": "percent",
-                "type": "SCALAR",
-                "datatypeAttributes": {
-                    "type": "PERCENT",
-                    "decimalPlaces": 2,
-                    "clientSideAttributes": {
-                        "width": 10,
-                        "bold": false,
-                        "word_wrap": false,
-                        "help_text": "help",
-                        "separator_start": 3,
-                        "separator_mark": ".",
-                        "separator_pattern": "THREE_THEN_TWO",
-                        "decimal_mark": ","
+        name: 'Percent App - all flags',
+        tables: [{
+            name: 'table1', fields: [{
+                name: 'percent',
+                type: 'SCALAR',
+                datatypeAttributes: {
+                    type: 'PERCENT',
+                    decimalPlaces: 2,
+                    clientSideAttributes: {
+                        width: 10,
+                        bold: false,
+                        word_wrap: false,
+                        help_text: 'help',
+                        separator_start: 3,
+                        separator_mark: '.',
+                        separator_pattern: 'THREE_THEN_TWO',
+                        decimal_mark: ','
                     }
                 }
             }
@@ -74,31 +74,31 @@ describe('API - Percent record test cases', function () {
      */
     function  noFlagsPercentDataProvider(fid) {
         // Decimal number
-        var decimalInput = '[{"id": ' + fid + ', "value": ' + numberDecimalOnly + '}]';
-        var expectedDecimalRecord = '{"id": ' + fid + ', "value": ' + numberDecimalOnly + ', "display": "0.74765432000000%"}';
+        var decimalInput = '[{id: ' + fid + ', value: ' + numberDecimalOnly + '}]';
+        var expectedDecimalRecord = '{id: ' + fid + ', value: ' + numberDecimalOnly + ', display: "0.74765432000000%"}';
 
         // Double number
-        var doubleInput = '[{"id": ' + fid + ', "value": ' + numberDouble + '}]';
-        var expectedDoubleRecord = '{"id": ' + fid + ', "value": ' + numberDouble + ', "display": "98765432100.74765000000000%"}';
+        var doubleInput = '[{id: ' + fid + ', value: ' + numberDouble + '}]';
+        var expectedDoubleRecord = '{id: ' + fid + ', value: ' + numberDouble + ', display: "98765432100.74765000000000%"}';
 
         // Int number
-        var intInput = '[{"id": ' + fid + ', "value": ' + numberInt+ '}]';
-        var expectedIntRecord = '{"id": ' + fid + ', "value": ' + numberInt + ', "display": "99.00000000000000%"}';
+        var intInput = '[{id: ' + fid + ', value: ' + numberInt+ '}]';
+        var expectedIntRecord = '{id: ' + fid + ', value: ' + numberInt + ', display: "99.00000000000000%"}';
 
         // Null number
-        var nullInput = '[{"id": ' + fid + ', "value": null}]';
-        var expectedNullRecord = '{"id": ' + fid + ', "value": null, "display": ""}';
+        var nullInput = '[{id: ' + fid + ', value: null}]';
+        var expectedNullRecord = '{id: ' + fid + ', value: null, display: ""}';
 
         return [
-            { message: "display decimal number with no format flags", record: decimalInput, format: "display", expectedFieldValue: expectedDecimalRecord },
-            { message: "raw decimal number with no format flags", record: decimalInput, format: "raw", expectedFieldValue: decimalInput },
-            { message: "display double number with no format flags", record: doubleInput, format: "display", expectedFieldValue: expectedDoubleRecord },
-            { message: "raw double number with no format flags", record: doubleInput, format: "raw", expectedFieldValue: doubleInput },
-            { message: "display int number with no format flags", record: intInput, format: "display", expectedFieldValue: expectedIntRecord },
-            { message: "raw int number with no format flags", record: intInput, format: "raw", expectedFieldValue: intInput },
-            { message: "display null number with no format flags", record: nullInput, format: "display", expectedFieldValue: expectedNullRecord },
-            { message: "raw null number with no format flags", record: nullInput, format: "raw", expectedFieldValue: nullInput }
-        ]
+            { message: 'display decimal number with no format flags', record: decimalInput, format: 'display', expectedFieldValue: expectedDecimalRecord },
+            { message: 'raw decimal number with no format flags', record: decimalInput, format: 'raw', expectedFieldValue: decimalInput },
+            { message: 'display double number with no format flags', record: doubleInput, format: 'display', expectedFieldValue: expectedDoubleRecord },
+            { message: 'raw double number with no format flags', record: doubleInput, format: 'raw', expectedFieldValue: doubleInput },
+            { message: 'display int number with no format flags', record: intInput, format: 'display', expectedFieldValue: expectedIntRecord },
+            { message: 'raw int number with no format flags', record: intInput, format: 'raw', expectedFieldValue: intInput },
+            { message: 'display null number with no format flags', record: nullInput, format: 'display', expectedFieldValue: expectedNullRecord },
+            { message: 'raw null number with no format flags', record: nullInput, format: 'raw', expectedFieldValue: nullInput }
+        ];
     }
 
     /**
@@ -137,8 +137,8 @@ describe('API - Percent record test cases', function () {
 
                             currentRecord.forEach(function (fieldValue) {
                                 if (fieldValue.id === records[i].expectedFieldValue.id) {
-                                    assert.deepEqual(fieldValue, records[i].expectedFieldValue, 'Unexpected field value returned: '
-                                    + JSON.stringify(fieldValue) + ', ' + JSON.stringify(records[i].expectedFieldValue));
+                                    assert.deepEqual(fieldValue, records[i].expectedFieldValue, 'Unexpected field value returned: ' +
+                                     JSON.stringify(fieldValue) + ', ' + JSON.stringify(records[i].expectedFieldValue));
                                 }
                             });
                         }
@@ -156,30 +156,30 @@ describe('API - Percent record test cases', function () {
      */
     function  allFlagsPercentDataProvider(fid) {
         // Decimal number
-        var decimalInput = '[{"id": ' + fid + ', "value": ' + numberDecimalOnly + '}]';
-        var expectedDecimalRecord = '{"id": ' + fid + ', "value": ' + numberDecimalOnly + ', "display": "0,75%"}';
+        var decimalInput = '[{id: ' + fid + ', value: ' + numberDecimalOnly + '}]';
+        var expectedDecimalRecord = '{id: ' + fid + ', value: ' + numberDecimalOnly + ', display: "0,75%"}';
 
         // Double number
-        var doubleInput = '[{"id": ' + fid + ', "value": ' + numberDouble + '}]';
-        var expectedDoubleRecord = '{"id": ' + fid + ', "value": ' + numberDouble + ', "display": "98.76.54.32.100,75%"}';
+        var doubleInput = '[{id: ' + fid + ', value: ' + numberDouble + '}]';
+        var expectedDoubleRecord = '{id: ' + fid + ', value: ' + numberDouble + ', display: "98.76.54.32.100,75%"}';
 
         // Int number
-        var intInput = '[{"id": ' + fid + ', "value": ' + numberInt + '}]';
-        var expectedIntRecord = '{"id": ' + fid + ', "value": ' + numberInt + ', "display": "99,00%"}';
+        var intInput = '[{id: ' + fid + ', value: ' + numberInt + '}]';
+        var expectedIntRecord = '{id: ' + fid + ', value: ' + numberInt + ', display: "99,00%"}';
 
         // Null number
-        var nullInput = '[{"id": ' + fid + ', "value": null}]';
-        var expectedNullRecord = '{"id": ' + fid + ', "value": null, "display": ""}';
+        var nullInput = '[{id: ' + fid + ', value: null}]';
+        var expectedNullRecord = '{id: ' + fid + ', value: null, display: ""}';
 
         return [
-            { message: "display decimal number with all format flags", record: decimalInput, format: "display", expectedFieldValue: expectedDecimalRecord },
-            { message: "raw decimal number with all format flags", record: decimalInput, format: "raw", expectedFieldValue: decimalInput },
-            { message: "display double number with all format flags", record: doubleInput, format: "display", expectedFieldValue: expectedDoubleRecord },
-            { message: "raw double number with all format flags", record: doubleInput, format: "raw", expectedFieldValue: doubleInput },
-            { message: "display int number with all format flags", record: intInput, format: "display", expectedFieldValue: expectedIntRecord },
-            { message: "raw int number with all format flags", record: intInput, format: "raw", expectedFieldValue: intInput },
-            { message: "display null number with all format flags", record: nullInput, format: "display", expectedFieldValue: expectedNullRecord },
-            { message: "raw null number with all format flags", record: nullInput, format: "raw", expectedFieldValue: nullInput }
+            { message: 'display decimal number with all format flags', record: decimalInput, format: 'display', expectedFieldValue: expectedDecimalRecord },
+            { message: 'raw decimal number with all format flags', record: decimalInput, format: 'raw', expectedFieldValue: decimalInput },
+            { message: 'display double number with all format flags', record: doubleInput, format: 'display', expectedFieldValue: expectedDoubleRecord },
+            { message: 'raw double number with all format flags', record: doubleInput, format: 'raw', expectedFieldValue: doubleInput },
+            { message: 'display int number with all format flags', record: intInput, format: 'display', expectedFieldValue: expectedIntRecord },
+            { message: 'raw int number with all format flags', record: intInput, format: 'raw', expectedFieldValue: intInput },
+            { message: 'display null number with all format flags', record: nullInput, format: 'display', expectedFieldValue: expectedNullRecord },
+            { message: 'raw null number with all format flags', record: nullInput, format: 'raw', expectedFieldValue: nullInput }
         ]
     }
 

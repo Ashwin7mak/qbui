@@ -2,6 +2,7 @@
  * This module contains global shared constant values for the server tests
  */
 (function (){
+    'use strict';
     module.exports = Object.freeze({
         //test constants
         INTEGRATION_TIMEOUT : 10000,

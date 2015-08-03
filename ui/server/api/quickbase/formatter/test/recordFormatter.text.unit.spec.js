@@ -11,7 +11,7 @@ describe('Text record formatter unit test', function () {
 
     //Generates and returns a random string of specified length
     function generateRandomString(size) {
-        var possible = "abcdefghijklmnopqrstuvwxyz0123456789";
+        var possible = 'abcdefghijklmnopqrstuvwxyz0123456789';
         var text = '';
         for (var i = 0; i < size; i++) {
             text += possible.charAt(Math.floor(Math.random() * possible.length));
@@ -28,49 +28,49 @@ describe('Text record formatter unit test', function () {
         var maxText = generateRandomString(4000);
 
         var inputSmallRecord =  [[{
-                "id": 7,
-                "value": smallText}]];
+                id: 7,
+                value: smallText}]];
         var expectedSmallRecord =
             [[{
-                "id": 7,
-                "value": smallText,
-                "display": smallText}]];
+                id: 7,
+                value: smallText,
+                display: smallText}]];
 
         // Text string of 4000 characters
         var inputMaxRecord =  [[{
-            "id": 7,
-            "value": maxText}]];
+            id: 7,
+            value: maxText}]];
         var expectedMaxRecord =
             [[{
-                "id": 7,
-                "value": maxText,
-                "display": maxText}]];
+                id: 7,
+                value: maxText,
+                display: maxText}]];
 
         //Empty records
         var emptyRecord =  [[{
-            "id": 7,
-            "value": ""}]];
+            id: 7,
+            value: ''}]];
         var expectedEmptyRecord =
             [[{
-                "id": 7,
-                "value": "",
-                "display": ""}]];
+                id: 7,
+                value: '',
+                display: ''}]];
 
         //null record value
         var nullRecord =  [[{
-            "id": 7,
-            "value": null}]];
+            id: 7,
+            value: null}]];
         var nullExpectedRecord =
             [[{
-                "id": 7,
-                "value": null,
-                "display": ""}]];
+                id: 7,
+                value: null,
+                display: ''}]];
 
         return [
-            { message: "Text - small text", records: inputSmallRecord, expectedRecords: expectedSmallRecord },
-            { message: "Text - maximum text", records: inputMaxRecord, expectedRecords: expectedMaxRecord },
-            { message: "Text - empty text", records: emptyRecord, expectedRecords: expectedEmptyRecord },
-            { message: "Text - null text", records: nullRecord, expectedRecords: nullExpectedRecord }
+            { message: 'Text - small text', records: inputSmallRecord, expectedRecords: expectedSmallRecord },
+            { message: 'Text - maximum text', records: inputMaxRecord, expectedRecords: expectedMaxRecord },
+            { message: 'Text - empty text', records: emptyRecord, expectedRecords: expectedEmptyRecord },
+            { message: 'Text - null text', records: nullRecord, expectedRecords: nullExpectedRecord }
         ];
     }
 
@@ -80,12 +80,12 @@ describe('Text record formatter unit test', function () {
     describe('should format a text for display',function(){
         var fieldInfo = [
             {
-                "id": 7,
-                "name": "text",
-                "datatypeAttributes" : {
-                    "type": "TEXT"
+                id: 7,
+                name: 'text',
+                'datatypeAttributes' : {
+                    type: 'TEXT'
                 },
-                "type": "SCALAR"
+                type: 'SCALAR'
             }
         ];
         dataProvider().forEach(function(entry){

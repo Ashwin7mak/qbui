@@ -1,6 +1,6 @@
+describe('quickbase api service', function () {
 'use strict';
 
-describe('quickbase api service', function () {
     var qbUtility;
 
     beforeEach(function() {

@@ -17,7 +17,6 @@
      * of precision. For more info, google it!
      */
     var bigDecimal = require('bigdecimal');
-    var consts = require('../../constants');
 
     //Module constants:
     var DECIMAL_DEFAULTS = 14;
@@ -76,7 +75,7 @@
     function formatDurationValue(millis, opts) {
         millis = new bigDecimal.BigDecimal(millis.toString());
         var seconds, minutes, hours, days, weeks;
-        if (millis.compareTo(ZERO) != 0) {
+        if (millis.compareTo(ZERO) !== 0) {
             seconds = divideBigDecimals(millis, MILLIS_PER_SECOND, opts);
             minutes = divideBigDecimals(millis, MILLIS_PER_MIN, opts);
             hours = divideBigDecimals(millis, MILLIS_PER_HOUR, opts);
@@ -139,17 +138,17 @@
             timeUnits += '-';
         }
         var h = Math.round(hours.abs().longValue());
-        if (h != 0) {
+        if (h !== 0) {
             //If its less than 10 and greater than negative ten, prepend a '0'
             if (hours.compareTo(TEN) === -1 && hours.compareTo(NEGATIVE_TEN) === 1) {
                 timeUnits += '0';
             }
             timeUnits += h + ':';
-        } else if (opts.scale == HHMM || opts.scale == HHMMSS) {
+        } else if (opts.scale === HHMM || opts.scale === HHMMSS) {
             timeUnits += '00:';
         }
         var extraMinutes = minutes.subtract(hours.multiply(MINUTES_PER_HOUR));
-        if (extraMinutes.signum() != 0) {
+        if (extraMinutes.signum() !== 0) {
             if (extraMinutes.compareTo(TEN) === -1 && extraMinutes.compareTo(NEGATIVE_TEN) === 1) {
                 timeUnits += '0';
             }
@@ -158,8 +157,8 @@
             timeUnits += '00';
         }
         var extraSeconds = seconds.subtract(minutes.multiply(SECONDS_PER_MINUTE));
-        if (opts.scale === MMSS || opts.scale == HHMMSS) {
-            if (extraSeconds.compareTo(ZERO) != 0) {
+        if (opts.scale === MMSS || opts.scale === HHMMSS) {
+            if (extraSeconds.compareTo(ZERO) !== 0) {
                 timeUnits += ':';
                 if (extraSeconds.compareTo(TEN) === -1 && extraSeconds.compareTo(NEGATIVE_TEN) === 1) {
                     timeUnits += '0';

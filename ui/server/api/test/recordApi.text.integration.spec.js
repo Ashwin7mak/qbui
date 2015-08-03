@@ -15,11 +15,11 @@ describe('API - Text record test cases', function () {
 
     // Application containing a Text field
     var exampleApp = {
-        "name": "Text App",
-        "tables": [
+        name: 'Text App',
+        tables: [
             {
-                "name": "table1", "fields": [
-                {"name": "text", "datatypeAttributes": { "type": "TEXT" }, "type": "SCALAR"}
+                name: 'table1', fields: [
+                {name: 'text', datatypeAttributes: { type: 'TEXT' }, type: 'SCALAR'}
             ]
             }
         ]
@@ -29,7 +29,7 @@ describe('API - Text record test cases', function () {
      * Generates and returns a random string of specified length
      */
     function generateRandomString(size) {
-        var possible = "abcdefghijklmnopqrstuvwxyz0123456789";
+        var possible = 'abcdefghijklmnopqrstuvwxyz0123456789';
         var text = '';
         for (var i = 0; i < size; i++) {
             text += possible.charAt(Math.floor(Math.random() * possible.length));
@@ -45,30 +45,30 @@ describe('API - Text record test cases', function () {
         var maxText = generateRandomString(3990);
 
         // Small text value
-        var smallInput = [{"id": fid, "value": smallText}];
-        var expectedSmallRecord = {"id": fid, "value": smallText, "display": smallText};
+        var smallInput = [{id: fid, value: smallText}];
+        var expectedSmallRecord = {id: fid, value: smallText, display: smallText};
 
         // Text value of 4000 characters
-        var largeInput = [{"id": fid, "value": maxText}];
-        var expectedLargeRecord = {"id": fid, "value": maxText, "display": maxText};
+        var largeInput = [{id: fid, value: maxText}];
+        var expectedLargeRecord = {id: fid, value: maxText, display: maxText};
 
         //Empty records
-        var emptyInput = [{"id": fid, "value": ""}];
-        var expectedEmptyRecord = {"id": fid, "value": null, "display": ""};
+        var emptyInput = [{id: fid, value: ''}];
+        var expectedEmptyRecord = {id: fid, value: null, display: ''};
 
         //null record value
-        var nullInput = [{"id": fid, "value": null}];
-        var expectedNullRecord = {"id": fid, "value": null, "display": ""};
+        var nullInput = [{id: fid, value: null}];
+        var expectedNullRecord = {id: fid, value: null, display: ''};
 
         return [
-            { message: "display small text", record: smallInput, format: "display", expectedFieldValue: expectedSmallRecord },
-            { message: "raw small text", record: smallInput, format: "raw", expectedFieldValue: smallInput },
-            { message: "display maximum supported text", record: largeInput, format: "display", expectedFieldValue: expectedLargeRecord },
-            { message: "raw maximum supported text", record: largeInput, format: "raw", expectedFieldValue: largeInput },
-            { message: "display empty text", record: emptyInput, format: "display", expectedFieldValue: expectedEmptyRecord},
-            { message: "raw empty text", record: emptyInput, format: "raw", expectedFieldValue: emptyInput},
-            { message: "display null text", record: nullInput, format: "display", expectedFieldValue: expectedNullRecord },
-            { message: "raw null text", record: nullInput, format: "raw", expectedFieldValue: nullInput }]
+            { message: 'display small text', record: smallInput, format: 'display', expectedFieldValue: expectedSmallRecord },
+            { message: 'raw small text', record: smallInput, format: 'raw', expectedFieldValue: smallInput },
+            { message: 'display maximum supported text', record: largeInput, format: 'display', expectedFieldValue: expectedLargeRecord },
+            { message: 'raw maximum supported text', record: largeInput, format: 'raw', expectedFieldValue: largeInput },
+            { message: 'display empty text', record: emptyInput, format: 'display', expectedFieldValue: expectedEmptyRecord},
+            { message: 'raw empty text', record: emptyInput, format: 'raw', expectedFieldValue: emptyInput},
+            { message: 'display null text', record: nullInput, format: 'display', expectedFieldValue: expectedNullRecord },
+            { message: 'raw null text', record: nullInput, format: 'raw', expectedFieldValue: nullInput }]
     }
 
     /**

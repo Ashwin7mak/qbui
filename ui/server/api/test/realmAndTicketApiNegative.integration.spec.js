@@ -1,7 +1,8 @@
+'use strict';
 var should = require('should');
 var assert = require('assert');
-var request = require('request');
 var app = require('../../app');
+var request = require('request');
 var config = require('../../config/environment');
 var apiBase = require('./api.base.js')(config);
 
@@ -15,8 +16,10 @@ describe('API - Negative /realms & /ticket test cases', function () {
         var opts = {
             url: config.DOMAIN + apiBase.resolveRealmsEndpoint(117000),
             method: 'GET'
-        }
+        };
         request(opts, function (error, response, body) {
+            assert.notEqual(response, undefined, 'Unexpected  response. undefined');
+            assert.notEqual(response.statusCode, undefined , 'Unexpected  response.statusCode undefined');
             assert.equal(response.statusCode, 403, 'Unexpected status code.');
             done();
         });
@@ -26,7 +29,7 @@ describe('API - Negative /realms & /ticket test cases', function () {
         var opts = {
             url: config.DOMAIN + apiBase.resolveTicketEndpoint(),
             method: 'GET'
-        }
+        };
         request(opts, function (error, response, body) {
             assert.equal(response.statusCode, 500, 'Unexpected status code.');
             done();

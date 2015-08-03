@@ -24,19 +24,19 @@ describe('API - Summary numeric record test cases - ', function () {
     var expectedDisplaySum = '5.67';
 
     var appWithNoFlags = {
-        "name": "Date App - no flags",
-        "tables": [{
-            "name": "table1",
-            "fields": [
+        name: 'Date App - no flags',
+        tables: [{
+            name: 'table1',
+            fields: [
                 {
-                    "name": NUMERIC_FIELD_NAME,
-                    "datatypeAttributes": { "type":"NUMERIC", "decimalPlaces": 13 },
-                    "type":"SCALAR"
+                    name: NUMERIC_FIELD_NAME,
+                    datatypeAttributes: { type:'NUMERIC', decimalPlaces: 13 },
+                    type:'SCALAR'
                 },
-                { "name": FK_FIELD_NAME, "datatypeAttributes": { "type":"NUMERIC" }, "type":"SCALAR"}
+                { name: FK_FIELD_NAME, datatypeAttributes: { type:'NUMERIC' }, type:'SCALAR'}
             ]
         },
-        { "name": "table2", "fields":[{"name":MASTER_TABLE_TEXT, "datatypeAttributes": { "type":"TEXT" }, "type": "SCALAR"}] }
+        { name: 'table2', fields:[{name:MASTER_TABLE_TEXT, datatypeAttributes: { type:'TEXT' }, type: 'SCALAR'}] }
         ]
     };
 
@@ -69,38 +69,38 @@ describe('API - Summary numeric record test cases - ', function () {
             });
 
             var relationshipToCreate = {
-                "appId": app.id,
-                "masterTableId": masterTableId,
-                "masterFieldId": masterTablePkField.id,
-                "detailTableId": detailTableId,
-                "detailFieldId": detailTableFkField.id,
-                "description": "Two star crossed tables in a relationship of referential integrity"
+                appId: app.id,
+                masterTableId: masterTableId,
+                masterFieldId: masterTablePkField.id,
+                detailTableId: detailTableId,
+                detailFieldId: detailTableFkField.id,
+                description: 'Two star crossed tables in a relationship of referential integrity'
             };
             recordBase.createRelationship(relationshipToCreate).then(function(relResponse) {
                 var relationship = JSON.parse(relResponse.body);
                 var numericSummaryField = {
-                    "name": "numericSummary",
-                    "type": "SUMMARY",
-                    "aggregateFunction": "SUM",
-                    "datatypeAttributes": {
-                        "type":"NUMERIC",
-                        "treatNullAsZero": true,
-                        "decimalPlaces": 2
+                    name: 'numericSummary',
+                    type: 'SUMMARY',
+                    aggregateFunction: 'SUM',
+                    datatypeAttributes: {
+                        type:'NUMERIC',
+                        treatNullAsZero: true,
+                        decimalPlaces: 2
                     },
-                    "relationshipId": relationship.id,
-                    "referenceFieldId": refField.id
+                    relationshipId: relationship.id,
+                    referenceFieldId: refField.id
                 };
                 recordBase.createField(app.id, masterTableId, numericSummaryField).then(function(fieldsResponse){
                     var summaryField = JSON.parse(fieldsResponse.body);
                     //insert one record into the master table and cache the ID.
-                    var masterRecord = [{"id": masterTableText.id, "value": "record 1"}];
+                    var masterRecord = [{id: masterTableText.id, value: 'record 1'}];
                     var masterRecordEndpoint = recordBase.apiBase.resolveRecordsEndpoint(app.id, masterTableId);
                     recordBase.createAndFetchRecord(masterRecordEndpoint, masterRecord).then(function(masterRecResp){
                         var masterRec = masterRecResp;
                         //Insert multiple records into the details table
                         var detailsRecords = [
-                            [{ "id": detailTableFkField.id, "value": 1},{ "id": refField.id, "value": numericValue1 }],
-                            [{ "id": detailTableFkField.id, "value": 1},{"id": refField.id, "value": numericValue2 }],
+                            [{ id: detailTableFkField.id, value: 1},{ id: refField.id, value: numericValue1 }],
+                            [{ id: detailTableFkField.id, value: 1},{id: refField.id, value: numericValue2 }],
                         ];
                         var fetchRecordPromises = [];
                         detailsRecords.forEach(function(rec) {
@@ -122,7 +122,7 @@ describe('API - Summary numeric record test cases - ', function () {
                             }).catch(function (errorMsg) {
                                 assert(false, 'unable to resolve all records: ' + JSON.stringify(errorMsg));
                                 done();
-                            });;
+                            });
                         });
                     });
                 });

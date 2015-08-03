@@ -1,6 +1,6 @@
+describe('quickbase common api module', function () {
 'use strict';
 
-describe('quickbase common api module', function () {
     var restangularProvider, httpBackend, Restangular, apiService, qbUtility;
     var baseApi = 'api/api/v1';
 

@@ -4,9 +4,9 @@
     angular.module('qbse.qbapp.reports.manager')
         .factory('ReportModel', ReportManagerModel);
 
-    ReportManagerModel.$inject = ['$q', 'ReportService', 'qbUtility'];
+    ReportManagerModel.$inject = ['$q', '$log', 'ReportService', 'qbUtility'];
 
-    function ReportManagerModel($q, ReportService, qbUtility) {
+    function ReportManagerModel($q, $log, ReportService, qbUtility) {
 
         return {
             /**
@@ -42,7 +42,7 @@
                         deferred.resolve(metaData);
                     },
                     function (resp) {
-                        console.log('Error getting report information.  Status: ' + resp.status);
+                        $log.error('Error getting report information.  Status: ' + resp.status);
                         deferred.reject(resp);
                     }
                 );
@@ -88,7 +88,7 @@
                         deferred.resolve(cols);
                     },
                     function (resp) {
-                        console.log('Error getting report information.  Status: ' + resp.status);
+                        $log.error('Error getting report information.  Status: ' + resp.status);
                         deferred.reject(resp);
                     }
                 );
@@ -134,7 +134,7 @@
                         deferred.resolve(reportData);
                     },
                     function (resp) {
-                        console.log('formatted report callback failure' + resp.status);
+                        $log.error('formatted report callback failure' + resp.status);
                         deferred.reject(resp);
                     }
                 );

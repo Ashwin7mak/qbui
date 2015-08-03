@@ -38,28 +38,28 @@ describe('API - Duration record test cases', function () {
     var MILLIS_PER_WEEK = new bigDecimal.BigDecimal(604800000);
 
     var appWithNoFlags = {
-        "name": "Duration App - no flags",
-        "tables": [{
-                "name": "table1", "fields": [{
-                    "name": "duration",
-                    "type":"SCALAR",
-                    "datatypeAttributes": {
-                        "type": "DURATION"
+        name: 'Duration App - no flags',
+        tables: [{
+                name: 'table1', fields: [{
+                    name: 'duration',
+                    type:'SCALAR',
+                    datatypeAttributes: {
+                        type: 'DURATION'
                     }
                 }
          ]}
     ]};
 
     var appWithAllFlags = {
-        "name": "Duration App - all flags",
-        "tables": [{
-            "name": "table1", "fields": [{
-                "name": "duration",
-                "type":"SCALAR",
-                "datatypeAttributes": {
-                    "type": "DURATION",
-                    "scale": "Days",
-                    "decimalPlaces": 4
+        name: 'Duration App - all flags',
+        tables: [{
+            name: 'table1', fields: [{
+                name: 'duration',
+                type:'SCALAR',
+                datatypeAttributes: {
+                    type: 'DURATION',
+                    scale: 'Days',
+                    decimalPlaces: 4
                 }
             }
             ]}
@@ -71,39 +71,39 @@ describe('API - Duration record test cases', function () {
     function  noFlagsDurationDataProvider(fid) {
 
         // Default duration
-        var durationInput = '[{"id": ' + fid + ', "value": '+ duration + '}]';
+        var durationInput = '[{id: ' + fid + ', value: '+ duration + '}]';
         var durationExpectedDisplay = new bigDecimal.BigDecimal(duration).divide(MILLIS_PER_WEEK,
                 DEFAULT_DECIMAL_PLACES,
-                bigDecimal.RoundingMode.HALF_UP()).stripTrailingZeros().toString() + " weeks";
-        var expectedDurationRecord = '{"id": ' + fid + ', "value": ' + duration + ', "display": "' + durationExpectedDisplay + '"}';
+                bigDecimal.RoundingMode.HALF_UP()).stripTrailingZeros().toString() + ' weeks';
+        var expectedDurationRecord = '{id: ' + fid + ', value: ' + duration + ', display: "' + durationExpectedDisplay + '"}';
 
         // Null number
-        var nullInput = '[{"id": ' + fid + ', "value": null}]';
-        var expectedNullRecord = '{"id": ' + fid + ', "value": null, "display": ""}';
+        var nullInput = '[{id: ' + fid + ', value: null}]';
+        var expectedNullRecord = '{id: ' + fid + ', value: null, display: ''}';;
 
         // Max number
-        var maxInput = '[{"id": ' + fid + ', "value": ' + durationMax + '}]';
+        var maxInput = '[{id: ' + fid + ', value: ' + durationMax + '}]';
         var maxExpectedDisplay = new bigDecimal.BigDecimal(durationMax).divide(MILLIS_PER_WEEK,
             DEFAULT_DECIMAL_PLACES,
-            bigDecimal.RoundingMode.HALF_UP()).stripTrailingZeros().toString() + " weeks";
-        var expectedMaxRecord = '{"id": ' + fid + ', "value": ' + durationMax + ', "display": "'+ maxExpectedDisplay +'"}';
+            bigDecimal.RoundingMode.HALF_UP()).stripTrailingZeros().toString() + ' weeks';
+        var expectedMaxRecord = '{id: ' + fid + ', value: ' + durationMax + ', display: "'+ maxExpectedDisplay +'"}';
 
         // Min number
-        var minInput = '[{"id": ' + fid + ', "value":' + durationMin + '}]';
+        var minInput = '[{id: ' + fid + ', value:' + durationMin + '}]';
         var minExpectedDisplay = new bigDecimal.BigDecimal(durationMin).divide(MILLIS_PER_WEEK,
                 DEFAULT_DECIMAL_PLACES,
-                bigDecimal.RoundingMode.HALF_UP()).stripTrailingZeros().toString() + " weeks";
-        var expectedMinRecord = '{"id": ' + fid + ', "value": ' + durationMin + ', "display": "' + minExpectedDisplay + '"}';
+                bigDecimal.RoundingMode.HALF_UP()).stripTrailingZeros().toString() + ' weeks';
+        var expectedMinRecord = '{id: ' + fid + ', value: ' + durationMin + ', display: "' + minExpectedDisplay + '"}';
 
         return [
-            { message: "display duration with no format flags", record: durationInput, format: "display", expectedFieldValue: expectedDurationRecord },
-            { message: "raw duration with no format flags", record: durationInput, format: "raw", expectedFieldValue: durationInput },
-            { message: "display max duration with no format flags", record: maxInput, format: "display", expectedFieldValue: expectedMaxRecord },
-            { message: "raw max duration with no format flags", record: maxInput, format: "raw", expectedFieldValue: maxInput },
-            { message: "display min duration with no format flags", record: minInput, format: "display", expectedFieldValue: expectedMinRecord },
-            { message: "raw min duration with no format flags", record: minInput, format: "raw", expectedFieldValue: minInput },
-            { message: "display null duration with no format flags", record: nullInput, format: "display", expectedFieldValue: expectedNullRecord },
-            { message: "raw null duration with no format flags", record: nullInput, format: "raw", expectedFieldValue: nullInput }
+            { message: 'display duration with no format flags', record: durationInput, format: 'display', expectedFieldValue: expectedDurationRecord },
+            { message: 'raw duration with no format flags', record: durationInput, format: 'raw', expectedFieldValue: durationInput },
+            { message: 'display max duration with no format flags', record: maxInput, format: 'display', expectedFieldValue: expectedMaxRecord },
+            { message: 'raw max duration with no format flags', record: maxInput, format: 'raw', expectedFieldValue: maxInput },
+            { message: 'display min duration with no format flags', record: minInput, format: 'display', expectedFieldValue: expectedMinRecord },
+            { message: 'raw min duration with no format flags', record: minInput, format: 'raw', expectedFieldValue: minInput },
+            { message: 'display null duration with no format flags', record: nullInput, format: 'display', expectedFieldValue: expectedNullRecord },
+            { message: 'raw null duration with no format flags', record: nullInput, format: 'raw', expectedFieldValue: nullInput }
         ]
     }
 
@@ -162,39 +162,39 @@ describe('API - Duration record test cases', function () {
      */
     function  allFlagsDurationDataProvider(fid) {
         // Default duration
-        var durationInput = '[{"id": ' + fid + ', "value": '+ duration + '}]';
+        var durationInput = '[{id: ' + fid + ', value: '+ duration + '}]';
         var durationExpectedDisplay = new bigDecimal.BigDecimal(duration).divide(MILLIS_PER_DAY,
                 DEFAULT_DECIMAL_PLACES,
-                bigDecimal.RoundingMode.HALF_UP()).stripTrailingZeros().toString() + " weeks";
-        var expectedDurationRecord = '{"id": ' + fid + ', "value": ' + duration + ', "display": "' + durationExpectedDisplay + '"}';
+                bigDecimal.RoundingMode.HALF_UP()).stripTrailingZeros().toString() + ' weeks';
+        var expectedDurationRecord = '{id: ' + fid + ', value: ' + duration + ', display: "' + durationExpectedDisplay + '"}';
 
         // Null number
-        var nullInput = '[{"id": ' + fid + ', "value": null}]';
-        var expectedNullRecord = '{"id": ' + fid + ', "value": null, "display": ""}';
+        var nullInput = '[{id: ' + fid + ', value: null}]';
+        var expectedNullRecord = '{id: ' + fid + ', value: null, display: ''}';;
 
         // Max number
-        var maxInput = '[{"id": ' + fid + ', "value": ' + durationMax + '}]';
+        var maxInput = '[{id: ' + fid + ', value: ' + durationMax + '}]';
         var maxExpectedDisplay = new bigDecimal.BigDecimal(durationMax).divide(MILLIS_PER_DAY,
                 ALL_FLAGS_DECIMAL_PLACES,
-                bigDecimal.RoundingMode.HALF_UP()).stripTrailingZeros().toString() + " days";
-        var expectedMaxRecord = '{"id": ' + fid + ', "value": ' + durationMax + ', "display": "'+ maxExpectedDisplay +'"}';
+                bigDecimal.RoundingMode.HALF_UP()).stripTrailingZeros().toString() + ' days';
+        var expectedMaxRecord = '{id: ' + fid + ', value: ' + durationMax + ', display: "'+ maxExpectedDisplay +'"}';
 
         // Min number
-        var minInput = '[{"id": ' + fid + ', "value":' + durationMin + '}]';
+        var minInput = '[{id: ' + fid + ', value:' + durationMin + '}]';
         var minExpectedDisplay = new bigDecimal.BigDecimal(durationMin).divide(MILLIS_PER_DAY,
                 ALL_FLAGS_DECIMAL_PLACES,
-                bigDecimal.RoundingMode.HALF_UP()).stripTrailingZeros().toString() + " days";
-        var expectedMinRecord = '{"id": ' + fid + ', "value": ' + durationMin + ', "display": "' + minExpectedDisplay + '"}';
+                bigDecimal.RoundingMode.HALF_UP()).stripTrailingZeros().toString() + ' days';
+        var expectedMinRecord = '{id: ' + fid + ', value: ' + durationMin + ', display: "' + minExpectedDisplay + '"}';
 
         return [
-            { message: "display duration with all format flags", record:durationInput, format: "display", expectedFieldValue: expectedDurationRecord },
-            { message: "raw duration with all format flags", record: durationInput, format: "raw", expectedFieldValue: durationInput },
-            { message: "display max duration with all format flags", record: maxInput, format: "display", expectedFieldValue: expectedMaxRecord },
-            { message: "raw max duration with all format flags", record: maxInput, format: "raw", expectedFieldValue: maxInput },
-            { message: "display min duration with all format flags", record: minInput, format: "display", expectedFieldValue: expectedMinRecord },
-            { message: "raw min duration with all format flags", record: minInput, format: "raw", expectedFieldValue: minInput },
-            { message: "display null duration with all format flags", record: nullInput, format: "display", expectedFieldValue: expectedNullRecord },
-            { message: "raw null duration with all format flags", record: nullInput, format: "raw", expectedFieldValue: nullInput }
+            { message: 'display duration with all format flags', record:durationInput, format: 'display', expectedFieldValue: expectedDurationRecord },
+            { message: 'raw duration with all format flags', record: durationInput, format: 'raw', expectedFieldValue: durationInput },
+            { message: 'display max duration with all format flags', record: maxInput, format: 'display', expectedFieldValue: expectedMaxRecord },
+            { message: 'raw max duration with all format flags', record: maxInput, format: 'raw', expectedFieldValue: maxInput },
+            { message: 'display min duration with all format flags', record: minInput, format: 'display', expectedFieldValue: expectedMinRecord },
+            { message: 'raw min duration with all format flags', record: minInput, format: 'raw', expectedFieldValue: minInput },
+            { message: 'display null duration with all format flags', record: nullInput, format: 'display', expectedFieldValue: expectedNullRecord },
+            { message: 'raw null duration with all format flags', record: nullInput, format: 'raw', expectedFieldValue: nullInput }
         ]
     }
 

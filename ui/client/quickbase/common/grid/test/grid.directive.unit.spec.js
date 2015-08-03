@@ -15,7 +15,7 @@ describe('Directive: qbseGrid', function() {
     var $compile, $rootScope, $element, $scope, $http, $httpBackend, testDataService;
 
     // load the directive's module & load the template
-    beforeEach(module('qbse.grid','test.dataGeneratorService',
+    beforeEach(module('qbse.grid', 'test.dataGeneratorService',
         'qbse.templates',
         'ngMockE2E'));
 
@@ -37,7 +37,7 @@ describe('Directive: qbseGrid', function() {
         $scope.settings.type = 'report';
         $scope.settings.title = 'Grid Test';
         $scope.settings.selectedItems = [];
-        $scope.settings.customOptions = {showColumnFooter:true};
+        $scope.settings.customOptions = {showColumnFooter: true};
         $scope.settings.service = TestDataService.dataGridReportService;
 
         elementHtml =

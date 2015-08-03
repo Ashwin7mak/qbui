@@ -1,52 +1,37 @@
 {
+    //Use another configuration file as a "base"
+    "extends": "../.jshintrc",
     //defines globals exposed by modern browsers
     "browser": true,
-    //prohibits the use of bitwise operators usually its a mistyped &&
-    "bitwise": true,
-    //requires you to always put curly braces around blocks
-    "curly": true,
-    //require === or !=== (don't do any coercion)
-    "eqeqeq": true,
-    //enables new javascript syntax
-    "esnext": true,
-    //prohibits overwriting prototypes of native objects such as Array, Date etc.
-    "freeze":true,
-    //warnings about the use of identifiers which are defined in future versions of JavaScript.
-    "futurehostile":true,
-    //prohibits the use of a variable before it was defined
-    "latedef": "nofunc",
-    //capitalize names of constructor functions
-    "newcap": true,
-    //prohibits the use of soon deprecated for performance arguments.caller and arguments.callee
-    "noarg": true,
-    //enforces the consistency of quotation marks used
-    "quotmark": "single",
-    // warn about not running in strict mode
-    "strict": true,
-    //prohibits the use of explicitly undeclared variable, catches typos
-    "undef": true,
-    //warns when you define and never use your variables
-    "unused": true,
+
     //third party usage
+    //a white list of global variables that are not formally defined in the source code
     "globals": {
-        "jQuery": true,
-        "angular": true,
-        "console": true,
-        "Chance": true,
         "$": true,
-        "_": true,
-        "moment": true,
-        "describe": true,
+        "after": true,
         "afterEach": true,
+        "angular": true,
+        "before": true,
         "beforeEach": true,
-        "module": true,
+        "browser": true,
+        "by": true,
+        "console": true,
+        "ddescribe": true,
+        "describe": true,
+        "element": true,
+        "expect" : true,
+        "expect": true,
+        "iit" : true,
         "inject": true,
         "it": true,
-        "expect": true,
-        "browser": true,
-        "element": true,
-        "by": true,
+        "jQuery": true,
+        "module": true,
+        "spyOn": true,
+        "sessionStorage": true,
+        "top": true,
+        "window": true,
+        "xdescribe": true,
         "xit" : true,
-        "xdescribe": true
+        "XMLHttpRequest": true
     }
 }

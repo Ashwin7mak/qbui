@@ -23,22 +23,22 @@ describe('API - Lookup numeric record test cases - ', function () {
     var expectedDisplayOfNumericValue = '2.67';
 
     var appWithNoFlags = {
-        "name": "Date App - no flags",
-        "tables": [{
-            "name": "table1",
-            "fields": [
+        name: 'Date App - no flags',
+        tables: [{
+            name: 'table1',
+            fields: [
                 {
-                    "name": NUMERIC_FIELD_NAME,
-                    "type": "SCALAR",
-                    "datatypeAttributes": {
-                        "type": "NUMERIC",
-                        "decimalPlaces": 13
+                    name: NUMERIC_FIELD_NAME,
+                    type: 'SCALAR',
+                    datatypeAttributes: {
+                        type: 'NUMERIC',
+                        decimalPlaces: 13
                     }
                 },
-                { "name": FK_FIELD_NAME, "datatypeAttributes": { "type":"NUMERIC" }, "type":"SCALAR"}
+                { name: FK_FIELD_NAME, datatypeAttributes: { type:'NUMERIC' }, type:'SCALAR'}
             ]
         },
-            { "name": "table2", "fields":[{"name": MASTER_TABLE_NUMERIC, "datatypeAttributes": { "type":"NUMERIC" }, "type":"SCALAR" }] }
+            { name: 'table2', fields:[{name: MASTER_TABLE_NUMERIC, datatypeAttributes: { type:'NUMERIC' }, type:'SCALAR' }] }
         ]
     };
 
@@ -71,36 +71,36 @@ describe('API - Lookup numeric record test cases - ', function () {
             });
 
             var relationshipToCreate = {
-                "appId": app.id,
-                "masterTableId": masterTableId,
-                "masterFieldId": masterTablePkField.id,
-                "detailTableId": detailTableId,
-                "detailFieldId": detailTableFkField.id,
-                "description": "Two star crossed tables in a relationship of referential integrity"
+                appId: app.id,
+                masterTableId: masterTableId,
+                masterFieldId: masterTablePkField.id,
+                detailTableId: detailTableId,
+                detailFieldId: detailTableFkField.id,
+                description: 'Two star crossed tables in a relationship of referential integrity'
             };
             recordBase.createRelationship(relationshipToCreate).then(function(relResponse) {
                 var relationship = JSON.parse(relResponse.body);
                 var numericLookupField = {
-                    "name": "numericLookup",
-                    "type": "LOOKUP",
-                    "datatypeAttributes": {
-                        "type":"NUMERIC",
-                        "treatNullAsZero": true,
-                        "decimalPlaces": 2
+                    name: 'numericLookup',
+                    type: 'LOOKUP',
+                    datatypeAttributes: {
+                        type:'NUMERIC',
+                        treatNullAsZero: true,
+                        decimalPlaces: 2
                     },
-                    "relationshipId": relationship.id,
-                    "referenceFieldId": refField.id
+                    relationshipId: relationship.id,
+                    referenceFieldId: refField.id
                 };
                 recordBase.createField(app.id, detailTableId, numericLookupField).then(function(fieldsResponse){
                     var lookupField = JSON.parse(fieldsResponse.body);
                     //insert one record into the master table and cache the ID.
-                    var masterRecord = [{"id": masterTableNumeric.id, "value": numericValue }];
+                    var masterRecord = [{id: masterTableNumeric.id, value: numericValue }];
                     var masterRecordEndpoint = recordBase.apiBase.resolveRecordsEndpoint(app.id, masterTableId);
                     recordBase.createAndFetchRecord(masterRecordEndpoint, masterRecord).then(function(masterRecResp){
                         var masterRec = masterRecResp;
                         //Insert multiple records into the details table
                         var detailsRecord =
-                            [{ "id": detailTableFkField.id, "value": 1},{ "id": refField.id, "value": numericValue }];
+                            [{ id: detailTableFkField.id, value: 1},{ id: refField.id, value: numericValue }];
 
                             var recordsEndpoint = recordBase.apiBase.resolveRecordsEndpoint(app.id, detailTableId);
                             recordBase.createAndFetchRecord(recordsEndpoint, detailsRecord, '?format=display').then(function(results){

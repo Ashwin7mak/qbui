@@ -13,75 +13,75 @@ var testConsts = require('./api.test.constants');
  * Integration test for Date field formatting
  */
 describe('API - Date record test cases - ', function () {
-    var dateCurrentYear = "2015-04-12";
-    var dateDiffYear = "2000-04-12";
+    var dateCurrentYear = '2015-04-12';
+    var dateDiffYear = '2000-04-12';
 
     var appWithNoFlags = {
-        "name": "Date App - no flags",
-        "tables": [{
-                "name": "table1", "fields": [{
-                    "name": "date",
-                    "type": "SCALAR",
-                    "datatypeAttributes": {
-                        "type": "DATE"
+        name: 'Date App - no flags',
+        tables: [{
+                name: 'table1', fields: [{
+                    name: 'date',
+                    type: 'SCALAR',
+                    datatypeAttributes: {
+                        type: 'DATE'
                     }
                 }
          ]}
     ]};
 
     var appWithAllFlags_DD_MM_YYYY = {
-        "name": "Date App - all flags",
-        "dateFormat": "dd-MM-uuuu",
-        "timeZone": "America/New_York",
-        "tables": [{
-            "name": "table1", "fields": [{
-                "name": "date",
-                "type": "SCALAR",
-                "datatypeAttributes": {
-                    "type": "DATE",
-                    "showMonthAsName": true,
-                    "showDayOfWeek": true,
-                    "hideYearIfCurrent": true
+        name: 'Date App - all flags',
+        dateFormat: 'dd-MM-uuuu',
+        timeZone: 'America/New_York',
+        tables: [{
+            name: 'table1', fields: [{
+                name: 'date',
+                type: 'SCALAR',
+                datatypeAttributes: {
+                    type: 'DATE',
+                    showMonthAsName: true,
+                    showDayOfWeek: true,
+                    hideYearIfCurrent: true
                 }
             }
             ]}
         ]};
 
     var appWithAllFlags_MM_DD_YYYY = JSON.parse(JSON.stringify(appWithAllFlags_DD_MM_YYYY));
-    appWithAllFlags_MM_DD_YYYY.dateFormat = "MM-dd-uuuu";
+    appWithAllFlags_MM_DD_YYYY.dateFormat = 'MM-dd-uuuu';
 
     var appWithAllFlags_MM_DD_YY = JSON.parse(JSON.stringify(appWithAllFlags_DD_MM_YYYY));
-    appWithAllFlags_MM_DD_YY.dateFormat = "MM-dd-uu";
+    appWithAllFlags_MM_DD_YY.dateFormat = 'MM-dd-uu';
 
     var appWithAllFlags_DD_MM_YY = JSON.parse(JSON.stringify(appWithAllFlags_DD_MM_YYYY));
-    appWithAllFlags_DD_MM_YY.dateFormat = "dd-MM-uu";
+    appWithAllFlags_DD_MM_YY.dateFormat = 'dd-MM-uu';
 
     var appWithAllFlags_YYYY_MM_DD = JSON.parse(JSON.stringify(appWithAllFlags_DD_MM_YYYY));
-    appWithAllFlags_YYYY_MM_DD.dateFormat = "uuuu-MM-dd";
+    appWithAllFlags_YYYY_MM_DD.dateFormat = 'uuuu-MM-dd';
 
     /**
     * DataProvider containing Records and record display expectations for Date field with no display props set
     */
     function  noFlagsDateDataProvider(fid) {
         // Date in current year
-        var currentYearInput = [{"id": fid, "value": dateCurrentYear}];
-        var expectedCurrentYearRecord = {"id": fid, "value": dateCurrentYear, "display": "04-12-2015"};
+        var currentYearInput = [{id: fid, value: dateCurrentYear}];
+        var expectedCurrentYearRecord = {id: fid, value: dateCurrentYear, display: '04-12-2015'};
 
         // Date in different year
-        var diffYearInput = [{"id": fid, "value": dateDiffYear}];
-        var expectedDiffYearRecord = {"id": fid, "value": dateDiffYear, "display": "04-12-2000"};
+        var diffYearInput = [{id: fid, value: dateDiffYear}];
+        var expectedDiffYearRecord = {id: fid, value: dateDiffYear, display: '04-12-2000'};
 
         // Null date
-        var nullInput = [{"id": fid, "value": null}];
-        var expectedNullRecord = {"id": fid, "value": null, "display": ""};
+        var nullInput = [{id: fid, value: null}];
+        var expectedNullRecord = {id: fid, value: null, display: ''};
 
         return [
-            { message: "display current year date with no format flags", record: currentYearInput, format: "display", expectedFieldValue: expectedCurrentYearRecord },
-            { message: "raw current year date with no format flags", record: currentYearInput, format: "raw", expectedFieldValue: currentYearInput },
-            { message: "display different year date with no format flags", record: diffYearInput, format: "display", expectedFieldValue: expectedDiffYearRecord },
-            { message: "raw different year date with no format flags", record: diffYearInput, format: "raw", expectedFieldValue: diffYearInput },
-            { message: "display null date with no format flags", record: nullInput, format: "display", expectedFieldValue: expectedNullRecord },
-            { message: "raw null date with no format flags", record: nullInput, format: "raw", expectedFieldValue: nullInput }
+            { message: 'display current year date with no format flags', record: currentYearInput, format: 'display', expectedFieldValue: expectedCurrentYearRecord },
+            { message: 'raw current year date with no format flags', record: currentYearInput, format: 'raw', expectedFieldValue: currentYearInput },
+            { message: 'display different year date with no format flags', record: diffYearInput, format: 'display', expectedFieldValue: expectedDiffYearRecord },
+            { message: 'raw different year date with no format flags', record: diffYearInput, format: 'raw', expectedFieldValue: diffYearInput },
+            { message: 'display null date with no format flags', record: nullInput, format: 'display', expectedFieldValue: expectedNullRecord },
+            { message: 'raw null date with no format flags', record: nullInput, format: 'raw', expectedFieldValue: nullInput }
         ]
     }
 
@@ -141,24 +141,24 @@ describe('API - Date record test cases - ', function () {
     function  allFlagsDateDataProvider_DD_MM_YYYY(fid) {
 
         // Date in current year
-        var currentYearInput = [{"id": fid, "value": dateCurrentYear}];
-        var expectedCurrentYearRecord = {"id": fid, "value": dateCurrentYear, "display": "Sunday, 12-Apr"};
+        var currentYearInput = [{id: fid, value: dateCurrentYear}];
+        var expectedCurrentYearRecord = {id: fid, value: dateCurrentYear, display: 'Sunday, 12-Apr'};
 
         // Date in different year
-        var diffYearInput = [{"id": fid, "value": dateDiffYear}];
-        var expectedDiffYearRecord = {"id": fid, "value": dateDiffYear, "display": "Wednesday, 12-Apr-2000"};
+        var diffYearInput = [{id: fid, value: dateDiffYear}];
+        var expectedDiffYearRecord = {id: fid, value: dateDiffYear, display: 'Wednesday, 12-Apr-2000'};
 
         // Null date
-        var nullInput = [{"id": fid, "value": null}];
-        var expectedNullRecord = {"id": fid, "value": null, "display": ""};
+        var nullInput = [{id: fid, value: null}];
+        var expectedNullRecord = {id: fid, value: null, display: ''};
 
         return [
-            { message: "display current year date with all DD_MM_YYYY format flags", record: currentYearInput, format: "display", expectedFieldValue: expectedCurrentYearRecord },
-            { message: "raw current year date with all DD_MM_YYYY format flags", record: currentYearInput, format: "raw", expectedFieldValue: currentYearInput },
-            { message: "display different year date with all DD_MM_YYYY format flags", record: diffYearInput, format: "display", expectedFieldValue: expectedDiffYearRecord },
-            { message: "raw different year date with all DD_MM_YYYY format flags", record: diffYearInput, format: "raw", expectedFieldValue: diffYearInput },
-            { message: "display null date with all DD_MM_YYYY format flags", record: nullInput, format: "display", expectedFieldValue: expectedNullRecord },
-            { message: "raw null date with all DD_MM_YYYY format flags", record: nullInput, format: "raw", expectedFieldValue: nullInput }
+            { message: 'display current year date with all DD_MM_YYYY format flags', record: currentYearInput, format: 'display', expectedFieldValue: expectedCurrentYearRecord },
+            { message: 'raw current year date with all DD_MM_YYYY format flags', record: currentYearInput, format: 'raw', expectedFieldValue: currentYearInput },
+            { message: 'display different year date with all DD_MM_YYYY format flags', record: diffYearInput, format: 'display', expectedFieldValue: expectedDiffYearRecord },
+            { message: 'raw different year date with all DD_MM_YYYY format flags', record: diffYearInput, format: 'raw', expectedFieldValue: diffYearInput },
+            { message: 'display null date with all DD_MM_YYYY format flags', record: nullInput, format: 'display', expectedFieldValue: expectedNullRecord },
+            { message: 'raw null date with all DD_MM_YYYY format flags', record: nullInput, format: 'raw', expectedFieldValue: nullInput }
         ]
     }
 
@@ -218,24 +218,24 @@ describe('API - Date record test cases - ', function () {
     function  allFlagsDateDataProvider_MM_DD_YYYY(fid) {
 
         // Date in current year
-        var currentYearInput = [{"id": fid, "value": dateCurrentYear}];
-        var expectedCurrentYearRecord = {"id": fid, "value": dateCurrentYear, "display": "Sunday, Apr-12"};
+        var currentYearInput = [{id: fid, value: dateCurrentYear}];
+        var expectedCurrentYearRecord = {id: fid, value: dateCurrentYear, display: 'Sunday, Apr-12'};
 
         // Date in different year
-        var diffYearInput = [{"id": fid, "value": dateDiffYear}];
-        var expectedDiffYearRecord = {"id": fid, "value": dateDiffYear, "display": "Wednesday, Apr-12-2000"};
+        var diffYearInput = [{id: fid, value: dateDiffYear}];
+        var expectedDiffYearRecord = {id: fid, value: dateDiffYear, display: 'Wednesday, Apr-12-2000'};
 
         // Null date
-        var nullInput = [{"id": fid, "value": null}];
-        var expectedNullRecord = {"id": fid, "value": null, "display": ""};
+        var nullInput = [{id: fid, value: null}];
+        var expectedNullRecord = {id: fid, value: null, display: ''};
 
         return [
-            { message: "display current year date with all MM_DD_YYYY format flags", record: currentYearInput, format: "display", expectedFieldValue: expectedCurrentYearRecord },
-            { message: "raw current year date with all MM_DD_YYYY format flags", record: currentYearInput, format: "raw", expectedFieldValue: currentYearInput },
-            { message: "display different year date with all MM_DD_YYYY format flags", record: diffYearInput, format: "display", expectedFieldValue: expectedDiffYearRecord },
-            { message: "raw different year date with all MM_DD_YYYY format flags", record: diffYearInput, format: "raw", expectedFieldValue: diffYearInput },
-            { message: "display null date with all MM_DD_YYYY format flags", record: nullInput, format: "display", expectedFieldValue: expectedNullRecord },
-            { message: "raw null date with all MM_DD_YYYY format flags", record: nullInput, format: "raw", expectedFieldValue: nullInput }
+            { message: 'display current year date with all MM_DD_YYYY format flags', record: currentYearInput, format: 'display', expectedFieldValue: expectedCurrentYearRecord },
+            { message: 'raw current year date with all MM_DD_YYYY format flags', record: currentYearInput, format: 'raw', expectedFieldValue: currentYearInput },
+            { message: 'display different year date with all MM_DD_YYYY format flags', record: diffYearInput, format: 'display', expectedFieldValue: expectedDiffYearRecord },
+            { message: 'raw different year date with all MM_DD_YYYY format flags', record: diffYearInput, format: 'raw', expectedFieldValue: diffYearInput },
+            { message: 'display null date with all MM_DD_YYYY format flags', record: nullInput, format: 'display', expectedFieldValue: expectedNullRecord },
+            { message: 'raw null date with all MM_DD_YYYY format flags', record: nullInput, format: 'raw', expectedFieldValue: nullInput }
         ]
     }
 
@@ -295,24 +295,24 @@ describe('API - Date record test cases - ', function () {
     function  allFlagsDateDataProvider_MM_DD_YY(fid) {
 
         // Date in current year
-        var currentYearInput = [{"id": fid, "value": dateCurrentYear}];
-        var expectedCurrentYearRecord = {"id": fid, "value": dateCurrentYear, "display": "Sunday, Apr-12"};
+        var currentYearInput = [{id: fid, value: dateCurrentYear}];
+        var expectedCurrentYearRecord = {id: fid, value: dateCurrentYear, display: 'Sunday, Apr-12'};
 
         // Date in different year
-        var diffYearInput = [{"id": fid, "value": dateDiffYear}];
-        var expectedDiffYearRecord = {"id": fid, "value": dateDiffYear, "display": "Wednesday, Apr-12-00"};
+        var diffYearInput = [{id: fid, value: dateDiffYear}];
+        var expectedDiffYearRecord = {id: fid, value: dateDiffYear, display: 'Wednesday, Apr-12-00'};
 
         // Null date
-        var nullInput = [{"id": fid, "value": null}];
-        var expectedNullRecord = {"id": fid, "value": null, "display": ""};
+        var nullInput = [{id: fid, value: null}];
+        var expectedNullRecord = {id: fid, value: null, display: ''};
 
         return [
-            { message: "display current year date with all MM_DD_YY format flags", record: currentYearInput, format: "display", expectedFieldValue: expectedCurrentYearRecord },
-            { message: "raw current year date with all MM_DD_YY format flags", record: currentYearInput, format: "raw", expectedFieldValue: currentYearInput },
-            { message: "display different year date with all MM_DD_YY format flags", record: diffYearInput, format: "display", expectedFieldValue: expectedDiffYearRecord },
-            { message: "raw different year date with all MM_DD_YY format flags", record: diffYearInput, format: "raw", expectedFieldValue: diffYearInput },
-            { message: "display null date with all MM_DD_YY format flags", record: nullInput, format: "display", expectedFieldValue: expectedNullRecord },
-            { message: "raw null date with all MM_DD_YY format flags", record: nullInput, format: "raw", expectedFieldValue: nullInput }
+            { message: 'display current year date with all MM_DD_YY format flags', record: currentYearInput, format: 'display', expectedFieldValue: expectedCurrentYearRecord },
+            { message: 'raw current year date with all MM_DD_YY format flags', record: currentYearInput, format: 'raw', expectedFieldValue: currentYearInput },
+            { message: 'display different year date with all MM_DD_YY format flags', record: diffYearInput, format: 'display', expectedFieldValue: expectedDiffYearRecord },
+            { message: 'raw different year date with all MM_DD_YY format flags', record: diffYearInput, format: 'raw', expectedFieldValue: diffYearInput },
+            { message: 'display null date with all MM_DD_YY format flags', record: nullInput, format: 'display', expectedFieldValue: expectedNullRecord },
+            { message: 'raw null date with all MM_DD_YY format flags', record: nullInput, format: 'raw', expectedFieldValue: nullInput }
         ]
     }
 
@@ -372,24 +372,24 @@ describe('API - Date record test cases - ', function () {
     function  allFlagsDateDataProvider_DD_MM_YY(fid) {
 
         // Date in current year
-        var currentYearInput = [{"id": fid, "value": dateCurrentYear}];
-        var expectedCurrentYearRecord = {"id": fid, "value": dateCurrentYear, "display": "Sunday, 12-Apr"};
+        var currentYearInput = [{id: fid, value: dateCurrentYear}];
+        var expectedCurrentYearRecord = {id: fid, value: dateCurrentYear, display: 'Sunday, 12-Apr'};
 
         // Date in different year
-        var diffYearInput = [{"id": fid, "value": dateDiffYear}];
-        var expectedDiffYearRecord = {"id": fid, "value": dateDiffYear, "display": "Wednesday, 12-Apr-00"};
+        var diffYearInput = [{id: fid, value: dateDiffYear}];
+        var expectedDiffYearRecord = {id: fid, value: dateDiffYear, display: 'Wednesday, 12-Apr-00'};
 
         // Null date
-        var nullInput = [{"id": fid, "value": null}];
-        var expectedNullRecord = {"id": fid, "value": null, "display": ""};
+        var nullInput = [{id: fid, value: null}];
+        var expectedNullRecord = {id: fid, value: null, display: ''};
 
         return [
-            { message: "display current year date with all DD_MM_YY format flags", record: currentYearInput, format: "display", expectedFieldValue: expectedCurrentYearRecord },
-            { message: "raw current year date with all DD_MM_YY format flags", record: currentYearInput, format: "raw", expectedFieldValue: currentYearInput },
-            { message: "display different year date with all DD_MM_YY format flags", record: diffYearInput, format: "display", expectedFieldValue: expectedDiffYearRecord },
-            { message: "raw different year date with all DD_MM_YY format flags", record: diffYearInput, format: "raw", expectedFieldValue: diffYearInput },
-            { message: "display null date with all DD_MM_YY format flags", record: nullInput, format: "display", expectedFieldValue: expectedNullRecord },
-            { message: "raw null date with all DD_MM_YY format flags", record: nullInput, format: "raw", expectedFieldValue: nullInput }
+            { message: 'display current year date with all DD_MM_YY format flags', record: currentYearInput, format: 'display', expectedFieldValue: expectedCurrentYearRecord },
+            { message: 'raw current year date with all DD_MM_YY format flags', record: currentYearInput, format: 'raw', expectedFieldValue: currentYearInput },
+            { message: 'display different year date with all DD_MM_YY format flags', record: diffYearInput, format: 'display', expectedFieldValue: expectedDiffYearRecord },
+            { message: 'raw different year date with all DD_MM_YY format flags', record: diffYearInput, format: 'raw', expectedFieldValue: diffYearInput },
+            { message: 'display null date with all DD_MM_YY format flags', record: nullInput, format: 'display', expectedFieldValue: expectedNullRecord },
+            { message: 'raw null date with all DD_MM_YY format flags', record: nullInput, format: 'raw', expectedFieldValue: nullInput }
         ]
     }
 
@@ -449,24 +449,24 @@ describe('API - Date record test cases - ', function () {
     function  allFlagsDateDataProvider_YYYY_MM_DD(fid) {
 
         // Date in current year
-        var currentYearInput = [{"id": fid, "value": dateCurrentYear}];
-        var expectedCurrentYearRecord = {"id": fid, "value": dateCurrentYear, "display": "Sunday, Apr-12"};
+        var currentYearInput = [{id: fid, value: dateCurrentYear}];
+        var expectedCurrentYearRecord = {id: fid, value: dateCurrentYear, display: 'Sunday, Apr-12'};
 
         // Date in different year
-        var diffYearInput = [{"id": fid, "value": dateDiffYear}];
-        var expectedDiffYearRecord = {"id": fid, "value": dateDiffYear, "display": "Wednesday, 2000-Apr-12"};
+        var diffYearInput = [{id: fid, value: dateDiffYear}];
+        var expectedDiffYearRecord = {id: fid, value: dateDiffYear, display: 'Wednesday, 2000-Apr-12'};
 
         // Null date
-        var nullInput = [{"id": fid, "value": null}];
-        var expectedNullRecord = {"id": fid, "value": null, "display": ""};
+        var nullInput = [{id: fid, value: null}];
+        var expectedNullRecord = {id: fid, value: null, display: ''};
 
         return [
-            { message: "display current year date with all YYYY_MM_DD_MM_YY format flags", record: currentYearInput, format: "display", expectedFieldValue: expectedCurrentYearRecord },
-            { message: "raw current year date with all YYYY_MM_DD_MM_YY format flags", record: currentYearInput, format: "raw", expectedFieldValue: currentYearInput },
-            { message: "display different year date with all YYYY_MM_DD_MM_YY format flags", record: diffYearInput, format: "display", expectedFieldValue: expectedDiffYearRecord },
-            { message: "raw different year date with all YYYY_MM_DD_MM_YY format flags", record: diffYearInput, format: "raw", expectedFieldValue: diffYearInput },
-            { message: "display null date with all YYYY_MM_DD_MM_YY format flags", record: nullInput, format: "display", expectedFieldValue: expectedNullRecord },
-            { message: "raw null date with all YYYY_MM_DD_MM_YY format flags", record: nullInput, format: "raw", expectedFieldValue: nullInput }
+            { message: 'display current year date with all YYYY_MM_DD_MM_YY format flags', record: currentYearInput, format: 'display', expectedFieldValue: expectedCurrentYearRecord },
+            { message: 'raw current year date with all YYYY_MM_DD_MM_YY format flags', record: currentYearInput, format: 'raw', expectedFieldValue: currentYearInput },
+            { message: 'display different year date with all YYYY_MM_DD_MM_YY format flags', record: diffYearInput, format: 'display', expectedFieldValue: expectedDiffYearRecord },
+            { message: 'raw different year date with all YYYY_MM_DD_MM_YY format flags', record: diffYearInput, format: 'raw', expectedFieldValue: diffYearInput },
+            { message: 'display null date with all YYYY_MM_DD_MM_YY format flags', record: nullInput, format: 'display', expectedFieldValue: expectedNullRecord },
+            { message: 'raw null date with all YYYY_MM_DD_MM_YY format flags', record: nullInput, format: 'raw', expectedFieldValue: nullInput }
         ]
     }
 

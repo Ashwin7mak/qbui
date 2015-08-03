@@ -1,11 +1,8 @@
 'use strict';
-var should = require('should');
 var assert = require('assert');
-var app = require('../../app');
+require('../../app');
 var config = require('../../config/environment');
 var recordBase = require('./recordApi.base')(config);
-var Promise = require('bluebird');
-var _ = require('lodash');
 var consts = require('../constants');
 var log = require('../../logger').getLogger();
 var testConsts = require('./api.test.constants');
@@ -14,23 +11,23 @@ var testConsts = require('./api.test.constants');
 describe('API - Validate report execution', function () {
     var numberDecimalOnly = '0.74765432';
     var appWithNoFlags = {
-        "name": "Percent App - no flags",
-        "tables": [{
-            "name": "table1", "fields": [{
-                "name": "percent",
-                "datatypeAttributes": { "type":"PERCENT" },
-                "type": "SCALAR"
+        name: 'Percent App - no flags',
+        tables: [{
+            name: 'table1', fields: [{
+                name: 'percent',
+                datatypeAttributes: { type:'PERCENT' },
+                type: 'SCALAR'
             }
             ]}
         ]};
 
     function  recordProvider(fid) {
         // Decimal number
-        var decimalInput = '[{"id": ' + fid + ', "value": ' + numberDecimalOnly + '}]';
-        var expectedDecimalRecord = '{"id": ' + fid + ', "value": ' + numberDecimalOnly + ', "display": "0.74765432000000%"}';
-        return { message: "display decimal number with no format flags",
+        var decimalInput = '[{id: ' + fid + ', value: ' + numberDecimalOnly + '}]';
+        var expectedDecimalRecord = '{id: ' + fid + ', value: ' + numberDecimalOnly + ', display: "0.74765432000000%"}';
+        return { message: 'display decimal number with no format flags',
                 record: decimalInput,
-                format: "display",
+                format: 'display',
                 expectedFieldValue: expectedDecimalRecord };
     }
 
@@ -53,9 +50,9 @@ describe('API - Validate report execution', function () {
 
             var reportEndpoint = recordBase.apiBase.resolveReportsEndpoint(app.id, app.tables[0].id);
             var reportToCreate = {
-                "name": "test report",
-                "type": "TABLE",
-                "tableId": app.tables[0].id
+                name: 'test report',
+                type: 'TABLE',
+                tableId: app.tables[0].id
             };
             recordBase.apiBase.executeRequest(reportEndpoint, consts.POST, reportToCreate)
                 .then(function(report) {
@@ -68,8 +65,8 @@ describe('API - Validate report execution', function () {
                                 currentRecord.forEach(function (fieldValue) {
                                     if (fieldValue.id === JSON.parse(testCase.expectedFieldValue).id) {
                                         assert.deepEqual(fieldValue, JSON.parse(testCase.expectedFieldValue),
-                                            'Unexpected field value returned: '
-                                            + JSON.stringify(fieldValue) + ', ' + testCase.expectedFieldValue);
+                                            'Unexpected field value returned: ' +
+                                             JSON.stringify(fieldValue) + ', ' + testCase.expectedFieldValue);
                                     }
                                 });
                             }

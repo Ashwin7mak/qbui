@@ -1,4 +1,4 @@
-(function () {
+(function() {
     'use strict';
     /***
      * This module is used to expand on the angular ui.grid directive
@@ -53,8 +53,8 @@
         // Setup some module constants used by the grid
         .constant('gridConstants', {
             'MAX_ROWS_PER_PAGE': 10000,
-            'ROWS_PER_PAGE': 100,
-            'SERVICE_REQ': {
+            'ROWS_PER_PAGE'    : 100,
+            'SERVICE_REQ'      : {
                 'DATA': 1,
                 'COLS': 2
             }
@@ -66,18 +66,18 @@
     // its implementation
     function GridDirective() {
         return {
-            restrict: 'E',
+            restrict   : 'E',
             templateUrl: 'quickbase/common/grid/grid.template.html',
-            scope: {
-                title: '@?',                //one way bind, optional
-                selectedItems: '=?',        // optional option
-                customOptions: '=?',        // optional option
-                gridApi: '=?',              // optional returns reference to the grid api interface
+            scope      : {
+                title          : '@?',                //one way bind, optional
+                selectedItems  : '=?',        // optional option
+                customOptions  : '=?',        // optional option
+                gridApi        : '=?',              // optional returns reference to the grid api interface
                 dataServiceFunc: '=service' // data service function that supplies content and column definition
             },
-            replace: true,
-            transclude: false,
-            controller: GridController
+            replace    : true,
+            transclude : false,
+            controller : GridController
         };
     }
 
@@ -86,34 +86,34 @@
      * keeps track of selected items
      * and defines default options for initializing the directive
      */
-    GridController.$inject = ['$scope', '$q', 'uiGridConstants', 'gridConstants', 'apiConstants', 'PagesHandler', 'lodash'];
-    function GridController($scope, $q, uiGridConstants, gridConstants, apiConstants, PagesHandler, _) {
+    GridController.$inject = ['$scope', '$q', '$log', 'uiGridConstants', 'gridConstants', 'apiConstants', 'PagesHandler', 'lodash'];
+    /* jshint maxparams: 8 */
+    function GridController($scope, $q, $log, uiGridConstants, gridConstants, apiConstants, PagesHandler, _) {
         $scope.selectedItems = [];
         angular.extend(gridConstants, uiGridConstants);
-
         // the defaults we'll use for grids
         $scope.defaultOptions = {
-            enableColumnResizing: true,
-            enableFiltering: false,
-            enableGridMenu: false,
+            enableColumnResizing     : true,
+            enableFiltering          : false,
+            enableGridMenu           : false,
             enableHorizontalScrollbar: uiGridConstants.scrollbars.ALWAYS,
-            enableVerticalScrollbar: uiGridConstants.scrollbars.NEVER,
-            enableRowHeaderSelection: false,
-            enableRowSelection: true,
+            enableVerticalScrollbar  : uiGridConstants.scrollbars.NEVER,
+            enableRowHeaderSelection : false,
+            enableRowSelection       : true,
             modifierKeysToMultiSelect: false,
-            multiSelect: false,
-            noUnselect: false,
-            selectedItems: $scope.selectedItems,
-            showColumnFooter: false,
-            showFooter: true,
-            showGridFooter: false,
-            showSelectionCheckbox: false,
-            paginationPageSizes: [25, 50, 75],
-            paginationPageSize: gridConstants.ROWS_PER_PAGE,
-            useExternalPagination: true,
-            enableSorting: false,
-            useExternalSorting: false,
-            enablePaginationControls: false
+            multiSelect              : false,
+            noUnselect               : false,
+            selectedItems            : $scope.selectedItems,
+            showColumnFooter         : false,
+            showFooter               : true,
+            showGridFooter           : false,
+            showSelectionCheckbox    : false,
+            paginationPageSizes      : [25, 50, 75],
+            paginationPageSize       : gridConstants.ROWS_PER_PAGE,
+            useExternalPagination    : true,
+            enableSorting            : false,
+            useExternalSorting       : false,
+            enablePaginationControls : false
         };
 
         //combine the defaults then the custom overrides
@@ -126,7 +126,7 @@
             grid: initGrid(),
             cols: initGridColumns($scope.dataServiceFunc)
         }).then(
-            function (init) {
+            function(init) {
                 //  List of columns to add to the ui grid.  Only these data columns will render
                 //  in the grid.   If columns is empty, then all columns are rendered (grid default).
                 if (init.cols) {
@@ -141,7 +141,7 @@
                 $scope.pagesHandler.loadCurrentPage();
             },
             function(resp) {
-                console.log('Error loading init grid data.  Resp:' + resp);
+                $log.error('Error loading init grid data.  Resp:' + resp);
             }
         );
 
@@ -149,13 +149,13 @@
         //
         function initGrid() {
 
-            return $q(function (resolve) {
+            return $q(function(resolve) {
 
                 // the page handler manages getting  data from the service as needed
                 $scope.pagesHandler = new PagesHandler($scope.dataServiceFunc, gridConstants, $scope.gridOptions);
 
                 // gridApi is how we can hook into the grid events, keep api handle on scope
-                $scope.gridOptions.onRegisterApi = function (gridApi) {
+                $scope.gridOptions.onRegisterApi = function(gridApi) {
                     $scope.gridApi = gridApi;
 
                     //add our api extensions ( TBD -keep our api separate to allow switching grid implementations?)
@@ -166,7 +166,7 @@
                     gridApi.pagination.on.paginationChanged($scope, $scope.pagesHandler.updatePages.bind($scope.pagesHandler));
 
                     //override default getTotalPage to support unknown data size until end is reached
-                    gridApi.pagination.getTotalPages = function () {
+                    gridApi.pagination.getTotalPages = function() {
                         if (!$scope.gridOptions.enablePagination) {
                             return null;
                         }
@@ -203,7 +203,7 @@
             var leftAlign = 'ui-grid-align-left';
 
             function setCellAttributes(col) {
-                col.enableSorting=false;
+                col.enableSorting = false;
                 if (col.fieldType && !col.cellClass) {
                     //  default is left align
                     col.cellClass = leftAlign;
@@ -217,14 +217,14 @@
 
             if (dataServiceFunc) {
                 $q.when(dataServiceFunc(gridConstants.SERVICE_REQ.COLS)).then(
-                    function (columns) {
+                    function(columns) {
                         // update the alignments for unspecified numeric types
                         _.map(columns, setCellAttributes);
                         deferred.resolve(columns);
                     },
-                    function (resp) {
+                    function(resp) {
                         deferred.resolve({cols: null});
-                        console.log('error retrieving columns for grid' + resp);
+                        $log.error('error retrieving columns for grid' + resp);
                     }
                 );
             }

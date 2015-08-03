@@ -10,13 +10,13 @@
             'ngCookies',
             'angular-uuid-generator'
         ]).
-        config( function(RestangularProvider) {
+        config(function(RestangularProvider) {
             RestangularProvider.setBaseUrl('api/api/v1');
         }).
         //  run blocks are executed after the config and injector...
-        run(['uuid','Restangular','apiConstants', '$cookies', 'qbUtility', function(uuid, Restangular, apiConstants, $cookie, qbUtility) {
+        run(['uuid', 'Restangular', 'apiConstants', '$cookies', 'qbUtility', '$log', function(uuid, Restangular, apiConstants, $cookie, qbUtility, $log) {
 
-            console.log('..qbse.api configuration loaded.  Setting up Restangular options..');
+            $log.log('..qbse.api configuration loaded.  Setting up Restangular options..');
 
             //  include the ticket and a sessionid on every Restangular request
             var headers = {};

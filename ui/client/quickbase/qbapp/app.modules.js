@@ -15,7 +15,7 @@
     };
 
     var qbApp = angular.module('quickbase.qbapp', ['ui.router', 'qbse.qbapp.dashboard', 'qbse.qbapp.reports.dashboard', 'qbse.qbapp.reports.manager', 'qbse.layout']);
-    var qbAppConfig = qbApp.config(['$stateProvider', '$locationProvider', function($stateProvider, $locationProvider) {
+    var qbAppConfig = qbApp.config(['$stateProvider', '$locationProvider',  function($stateProvider, $locationProvider) {
         console.log('setting up app.modules.js');
         $locationProvider.html5Mode(true);
         $stateProvider

@@ -9,7 +9,7 @@ describe('Lookup record formatter unit test', function () {
 
     //Generates and returns a random string of specified length
     function generateRandomString(size) {
-        var possible = "abcdefghijklmnopqrstuvwxyz0123456789";
+        var possible = 'abcdefghijklmnopqrstuvwxyz0123456789';
         var text = '';
         for (var i = 0; i < size; i++) {
             text += possible.charAt(Math.floor(Math.random() * possible.length));
@@ -23,26 +23,26 @@ describe('Lookup record formatter unit test', function () {
 
         //Incomplete number
         var defaultRecordInput =  [[{
-            "id": 7,
-            "value": numberDecimalOnly}]];
+            id: 7,
+            value: numberDecimalOnly}]];
         var defaultRecordExp = [[{
-            "id": 7,
-            "value": numberDecimalOnly,
-            "display": ""}]];
+            id: 7,
+            value: numberDecimalOnly,
+            display: ''}]];
 
         // Setup the record inputs
         var recordInputDecimalOnly = jBigNum.parse(jBigNum.stringify(defaultRecordInput));
 
         var noFlagsFieldInfo = [{
-            "id": 7,
-            "name": "currency lookup",
-            "type": "LOOKUP",
-            "decimalPlaces": 2,
-            "datatypeAttributes": {
-                "type": "CURRENCY",
-                "decimalPlaces": 2,
-                "clientSideAttributes": {
-                    "symbol":"$"
+            id: 7,
+            name: 'currency lookup',
+            type: 'LOOKUP',
+            decimalPlaces: 2,
+            datatypeAttributes: {
+                type: 'CURRENCY',
+                decimalPlaces: 2,
+                clientSideAttributes: {
+                    symbol:'$'
                 }
             }
         }];
@@ -50,48 +50,48 @@ describe('Lookup record formatter unit test', function () {
         //Default behavior
         var expectedDecimal_NoFlags = jBigNum.parse(jBigNum.stringify(defaultRecordExp));
         expectedDecimal_NoFlags[0][0].value = numberDecimalOnly;
-        expectedDecimal_NoFlags[0][0].display = "$0.75";
+        expectedDecimal_NoFlags[0][0].display = '$0.75';
 
 
         //Text field info
         var textFieldInfo = [
             {
-                "id": 7,
-                "name": "text lookup",
-                "type": "LOOKUP",
-                "datatypeAttributes": { "type":"TEXT" }
+                id: 7,
+                name: 'text lookup',
+                type: 'LOOKUP',
+                datatypeAttributes: { type:'TEXT' }
             }
         ];
         var smallText = generateRandomString(5);
         var inputTextRecord =  [[{
-            "id": 7,
-            "value": smallText}]];
+            id: 7,
+            value: smallText}]];
         var expectedTextRecord =
             [[{
-                "id": 7,
-                "value": smallText,
-                "display": smallText}]];
+                id: 7,
+                value: smallText,
+                display: smallText}]];
 
         // DATE
         var dateTimeFieldInfo = [{
-            "id": 7,
-            "name": "datetime lookup",
-            "type": "LOOKUP",
-            "datatypeAttributes": { "type":"DATE_TIME" }
+            id: 7,
+            name: 'datetime lookup',
+            type: 'LOOKUP',
+            datatypeAttributes: { type:'DATE_TIME' }
         }];
         var inputDateTime =  [[{
-            "id": 7,
-            "value": "2015-04-12T18:51:19z"}]];
+            id: 7,
+            value: '2015-04-12T18:51:19z'}]];
         var expectedDateTime =
             [[{
-                "id": 7,
-                "value": "2015-04-12T18:51:19z",
-                "display": "04-12-2015"}]];
+                id: 7,
+                value: '2015-04-12T18:51:19z',
+                display: '04-12-2015'}]];
 
         var cases =[
-            { message: "Lookup -> CURRENCY", records: recordInputDecimalOnly, fieldInfo: noFlagsFieldInfo, expectedRecords: expectedDecimal_NoFlags },
-            { message: "Lookup -> TEXT", records: inputTextRecord, fieldInfo: textFieldInfo, expectedRecords: expectedTextRecord },
-            { message: "Lookup -> DATE_TIME", records: inputDateTime, fieldInfo: dateTimeFieldInfo, expectedRecords: expectedDateTime }
+            { message: 'Lookup -> CURRENCY', records: recordInputDecimalOnly, fieldInfo: noFlagsFieldInfo, expectedRecords: expectedDecimal_NoFlags },
+            { message: 'Lookup -> TEXT', records: inputTextRecord, fieldInfo: textFieldInfo, expectedRecords: expectedTextRecord },
+            { message: 'Lookup -> DATE_TIME', records: inputDateTime, fieldInfo: dateTimeFieldInfo, expectedRecords: expectedDateTime }
         ];
         return cases;
     }

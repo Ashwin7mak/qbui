@@ -1,17 +1,18 @@
 describe('Controller: ReportsDashboardCtrl', function() {
     'use strict';
     // load the controller's module
-    var controller, ReportsDashboardModel, scope, $httpBackend, $state, deferredGet, transitionTo;
+    var controller, ReportsDashboardModel, scope, $httpBackend, $state, deferredGet, $log, transitionTo;
 
     beforeEach(function() {
         module('qbse.qbapp.reports.dashboard','qbse.qbapp.reports.manager', 'quickbase.qbapp', 'qbse.templates');
     });
 
     beforeEach(
-        inject(function($controller, $rootScope, _ReportsDashboardModel_, _$state_, $q, _$httpBackend_ ) {
+        inject(function($controller, $rootScope, _ReportsDashboardModel_, _$state_, $q, _$httpBackend_ , _$log_) {
             scope = $rootScope.$new();
             ReportsDashboardModel = _ReportsDashboardModel_;
             $httpBackend = _$httpBackend_;
+            $log = _$log_;
             $state = _$state_;
             deferredGet = $q.defer();
 
@@ -39,7 +40,7 @@ describe('Controller: ReportsDashboardCtrl', function() {
         deferredGet.resolve(getReportData);
 
         controller('ReportsDashboardCtrl',
-            {$scope:scope, $state:$state, ReportsDashboardModel:ReportsDashboardModel });
+            {$scope:scope, $state:$state, ReportsDashboardModel:ReportsDashboardModel, $log:$log });
         scope.$digest();
 
         expect(ReportsDashboardModel.get).not.toHaveBeenCalledWith(appId, tableId);
@@ -55,7 +56,7 @@ describe('Controller: ReportsDashboardCtrl', function() {
         var notSelectedReport = {id:'2'};
 
         controller('ReportsDashboardCtrl',
-            {$scope:scope, $state:$state, ReportsDashboardModel:ReportsDashboardModel });
+            {$scope:scope, $state:$state, ReportsDashboardModel:ReportsDashboardModel, $log:$log  });
         scope.$digest();
 
         expect(ReportsDashboardModel.get).not.toHaveBeenCalledWith(appId, tableId);
@@ -71,7 +72,7 @@ describe('Controller: ReportsDashboardCtrl', function() {
         var appId= '1', tableId = '2';
 
         controller('ReportsDashboardCtrl',
-            {$scope:scope, $state:$state, ReportsDashboardModel:ReportsDashboardModel });
+            {$scope:scope, $state:$state, ReportsDashboardModel:ReportsDashboardModel, $log:$log  });
         scope.$digest();
 
         expect(ReportsDashboardModel.get).not.toHaveBeenCalledWith(appId, tableId);
@@ -89,7 +90,7 @@ describe('Controller: ReportsDashboardCtrl', function() {
         deferredGet.resolve(getReportData);
 
         controller('ReportsDashboardCtrl',
-            {$scope:scope, $stateParams:{appId:appId, tableId:tableId}, $state:$state, ReportsDashboardModel:ReportsDashboardModel });
+            {$scope:scope, $stateParams:{appId:appId, tableId:tableId}, $state:$state, ReportsDashboardModel:ReportsDashboardModel, $log:$log  });
         scope.$digest();
 
         expect(ReportsDashboardModel.get).toHaveBeenCalledWith(appId, tableId);
@@ -109,7 +110,7 @@ describe('Controller: ReportsDashboardCtrl', function() {
         deferredGet.reject(getErrorResp);
 
         controller('ReportsDashboardCtrl',
-            {$scope:scope, $stateParams:{appId:appId, tableId:tableId}, $state:$state, ReportsDashboardModel:ReportsDashboardModel });
+            {$scope:scope, $stateParams:{appId:appId, tableId:tableId}, $state:$state, ReportsDashboardModel:ReportsDashboardModel, $log:$log  });
         scope.$digest();
 
         expect(ReportsDashboardModel.get).toHaveBeenCalledWith(appId, tableId);

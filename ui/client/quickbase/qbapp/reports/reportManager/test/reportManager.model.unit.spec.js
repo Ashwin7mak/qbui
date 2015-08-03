@@ -1,7 +1,7 @@
 describe('Factory: ReportModel', function() {
     'use strict';
 
-    var scope, ReportModel, ReportService, deferred;
+    var scope, ReportModel, ReportService, deferred, $log;
     var appId='1', appName='A', tableId='2', reportId='3';
 
     // load the module
@@ -10,10 +10,11 @@ describe('Factory: ReportModel', function() {
     });
 
     beforeEach(
-        inject(function($rootScope, _ReportModel_, _ReportService_, $q) {
+        inject(function($rootScope, _ReportModel_, _ReportService_, $q, _$log_) {
             scope = $rootScope.$new();
             ReportModel = _ReportModel_;
             ReportService = _ReportService_;
+            $log = _$log_;
 
             deferred = $q.defer();
 

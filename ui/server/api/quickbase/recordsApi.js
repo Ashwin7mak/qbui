@@ -60,8 +60,6 @@
         var recordFormatter = require('./formatter/recordFormatter')();
 
         //Module constants:
-        var PHONE_NUMBER = 'PHONE_NUMBER';
-        var SLASH = '/';
         var FIELDS = 'fields';
         var RECORDS = 'records';
         var REPORTS = 'reports';
@@ -112,7 +110,7 @@
                 request(opts, function (error, response) {
                     if (error) {
                         deferred.reject(new Error(error));
-                    } else if (response.statusCode != 200) {
+                    } else if (response.statusCode !== 200) {
                         deferred.reject(response);
                     } else {
                         deferred.resolve(response);
@@ -210,9 +208,9 @@
                 var inputUrl = opts.url.toLowerCase();
                 //If the endpoint provided is the records or report execution endpoint,
                 // replace records or reports with the /fields path
-                if (inputUrl.indexOf(RECORDS) != -1) {
+                if (inputUrl.indexOf(RECORDS) !== -1) {
                     opts.url = inputUrl.substring(0, inputUrl.indexOf(RECORDS)) + FIELDS;
-                } else if(inputUrl.indexOf(REPORTS) != -1) {
+                } else if(inputUrl.indexOf(REPORTS) !== -1) {
                     opts.url = inputUrl.substring(0, inputUrl.indexOf(REPORTS)) + FIELDS;
                 }
 
@@ -221,5 +219,5 @@
             }
         };
         return recordsApi;
-    }
+    };
 }());

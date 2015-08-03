@@ -17,30 +17,30 @@ describe('API - User record test cases - ', function () {
      * Apps needed for testing
      */
     var appWithNoFlags = {
-        "name": "User App - no flags",
-        "tables": [{
-            "name": "table1", "fields": [{
-                "name": "user",
-                "type": "SCALAR",
-                "datatypeAttributes": {
-                    "type": "USER",
+        name: 'User App - no flags',
+        tables: [{
+            name: 'table1', fields: [{
+                name: 'user',
+                type: 'SCALAR',
+                datatypeAttributes: {
+                    type: 'USER',
                 },
-                "indexed": true
+                indexed: true
             }
             ]}
         ]};
 
     var appWithAllFlags = {
-        "name": "User App - all flags",
-        "tables": [{
-            "name": "table1", "fields": [{
-                "name": "user",
-                "type": "SCALAR",
-                "datatypeAttributes": {
-                    "type": "USER",
-                    "userDisplayFormat": "LAST_THEN_FIRST"
+        name: 'User App - all flags',
+        tables: [{
+            name: 'table1', fields: [{
+                name: 'user',
+                type: 'SCALAR',
+                datatypeAttributes: {
+                    type: 'USER',
+                    userDisplayFormat: 'LAST_THEN_FIRST'
                 },
-                "indexed": true
+                indexed: true
             }
             ]}
         ]};
@@ -49,7 +49,7 @@ describe('API - User record test cases - ', function () {
      * Generates and returns a random string of specified length
      */
     function generateRandomString(size) {
-        var possible = "abcdefghijklmnopqrstuvwxyz";
+        var possible = 'abcdefghijklmnopqrstuvwxyz';
         var text = '';
         for (var i = 0; i < size; i++) {
             text += possible.charAt(Math.floor(Math.random() * possible.length));
@@ -65,25 +65,25 @@ describe('API - User record test cases - ', function () {
         // Generate user information needed for test
         var firstName = generateRandomString(10);
         var lastName = generateRandomString(10);
-        var email = firstName + "_" + lastName + "@intuit.com";
-        var firstThenLast = firstName + " " + lastName;
+        var email = firstName + '_' + lastName + '@intuit.com';
+        var firstThenLast = firstName + ' ' + lastName;
         var user = {
-                "id": null,
-                "firstName": firstName,
-                "lastName": lastName,
-                "screenName": email,
-                "email": email,
-                "challengeQuestion": 'who is your favorite scrum team?',
-                "challengeAnswer": 'blue',
-                "password": 'quickbase'
+                id: null,
+                firstName: firstName,
+                lastName: lastName,
+                screenName: email,
+                email: email,
+                challengeQuestion: 'who is your favorite scrum team?',
+                challengeAnswer: 'blue',
+                password: 'quickbase'
         };
 
         var retUser = {
-            "id": null,
-            "firstName": firstName,
-            "lastName": lastName,
-            "screenName": email,
-            "email": email
+            id: null,
+            firstName: firstName,
+            lastName: lastName,
+            screenName: email,
+            email: email
         };
         var userId;
 
@@ -93,18 +93,18 @@ describe('API - User record test cases - ', function () {
                 userId = JSON.parse(userResponse.body).id;
                 retUser.id = userId;
                 // User
-                var userInput = [{"id": fid, "value": userId}];
-                var expectedUserRecord = {"id": fid, "value": retUser, "display": firstThenLast};
+                var userInput = [{id: fid, value: userId}];
+                var expectedUserRecord = {id: fid, value: retUser, display: firstThenLast};
 
                 // Null User
-                var nullInput = [{"id": fid, "value": null}];
-                var expectedNullRecord = {"id": fid, "value": null, "display": ""};
+                var nullInput = [{id: fid, value: null}];
+                var expectedNullRecord = {id: fid, value: null, display: ''};
 
                 deferred.resolve([
-                    { message: "display user with no format flags", record: userInput, format: "display", expectedFieldValue: expectedUserRecord },
-                    { message: "raw user with no format flags", record: userInput, format: "raw", expectedFieldValue: userInput },
-                    { message: "display null user with no format flags", record: nullInput, format: "display", expectedFieldValue: expectedNullRecord },
-                    { message: "raw null user with no format flags", record: nullInput, format: "raw", expectedFieldValue: nullInput }
+                    { message: 'display user with no format flags', record: userInput, format: 'display', expectedFieldValue: expectedUserRecord },
+                    { message: 'raw user with no format flags', record: userInput, format: 'raw', expectedFieldValue: userInput },
+                    { message: 'display null user with no format flags', record: nullInput, format: 'display', expectedFieldValue: expectedNullRecord },
+                    { message: 'raw null user with no format flags', record: nullInput, format: 'raw', expectedFieldValue: nullInput }
                 ]);
             }).catch(function (userError) {
                 deferred.reject(userError);
@@ -168,25 +168,25 @@ describe('API - User record test cases - ', function () {
         // Generate user information needed for test
         var firstName = generateRandomString(10);
         var lastName = generateRandomString(10);
-        var email = firstName + "_" + lastName + "@intuit.com";
-        var lastThenFirst = lastName + ", " + firstName;
+        var email = firstName + '_' + lastName + '@intuit.com';
+        var lastThenFirst = lastName + ', ' + firstName;
         var user = {
-            "id": null,
-            "firstName": firstName,
-            "lastName": lastName,
-            "screenName": email,
-            "email": email,
-            "challengeQuestion": 'who is your favorite scrum team?',
-            "challengeAnswer": 'blue',
-            "password": 'quickbase'
+            id: null,
+            firstName: firstName,
+            lastName: lastName,
+            screenName: email,
+            email: email,
+            challengeQuestion: 'who is your favorite scrum team?',
+            challengeAnswer: 'blue',
+            password: 'quickbase'
         };
 
         var retUser = {
-            "id": null,
-            "firstName": firstName,
-            "lastName": lastName,
-            "screenName": email,
-            "email": email
+            id: null,
+            firstName: firstName,
+            lastName: lastName,
+            screenName: email,
+            email: email
         };
         var userId;
 
@@ -196,18 +196,18 @@ describe('API - User record test cases - ', function () {
                 userId = JSON.parse(userResponse.body).id;
                 retUser.id = userId;
                 // User
-                var userInput = [{"id": fid, "value": userId}];
-                var expectedUserRecord = {"id": fid, "value": retUser, "display": lastThenFirst};
+                var userInput = [{id: fid, value: userId}];
+                var expectedUserRecord = {id: fid, value: retUser, display: lastThenFirst};
 
                 // Null User
-                var nullInput = [{"id": fid, "value": null}];
-                var expectedNullRecord = {"id": fid, "value": null, "display": ""};
+                var nullInput = [{id: fid, value: null}];
+                var expectedNullRecord = {id: fid, value: null, display: ''};
 
                 deferred.resolve([
-                    { message: "display user with all format flags", record: userInput, format: "display", expectedFieldValue: expectedUserRecord },
-                    { message: "raw user with all format flags", record: userInput, format: "raw", expectedFieldValue: userInput },
-                    { message: "display null user with all format flags", record: nullInput, format: "display", expectedFieldValue: expectedNullRecord },
-                    { message: "raw null user with all format flags", record: nullInput, format: "raw", expectedFieldValue: nullInput }
+                    { message: 'display user with all format flags', record: userInput, format: 'display', expectedFieldValue: expectedUserRecord },
+                    { message: 'raw user with all format flags', record: userInput, format: 'raw', expectedFieldValue: userInput },
+                    { message: 'display null user with all format flags', record: nullInput, format: 'display', expectedFieldValue: expectedNullRecord },
+                    { message: 'raw null user with all format flags', record: nullInput, format: 'raw', expectedFieldValue: nullInput }
                 ]);
             }).catch(function (userError) {
                 deferred.reject(userError);

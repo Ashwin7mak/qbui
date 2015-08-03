@@ -9,8 +9,8 @@
     };
 
     var reportModule = angular.module('quickbase.report', ['ui.router', 'qbse.qbapp.reports.manager', 'qbse.layout']);
-    reportModule.config(['$stateProvider', '$locationProvider', function($stateProvider, $locationProvider) {
-        console.log('setting up app.report.modules.js');
+    reportModule.config(['$stateProvider', '$locationProvider, $log', function($stateProvider, $locationProvider, $log) {
+        $log.log('setting up app.report.modules.js');
         $locationProvider.html5Mode(true);
         $stateProvider
             .state('report', {

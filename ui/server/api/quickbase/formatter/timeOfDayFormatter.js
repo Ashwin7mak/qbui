@@ -12,6 +12,7 @@
     var MM = 'mm';
     var SS = ':ss';
     var AM_PM = ' A';
+    var DEFAULT_TIMEZONE = 'America/Los_Angeles';
 
     var JAVA_FORMAT_TO_JS_FORMAT = {
         'HH:MM': MM,

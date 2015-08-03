@@ -1,7 +1,7 @@
 /**
  * Error responses
  */
-
+(function(){
 'use strict';
 var consts = require('../../api/constants');
 var log = require('../../logger').getLogger();
@@ -74,3 +74,4 @@ module.exports[500] = function internalServerError(req, res) {
     log.logRequest(req, __filename);
 };
 
+}());

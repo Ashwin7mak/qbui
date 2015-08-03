@@ -12,52 +12,52 @@ var testConsts = require('./api.test.constants');
  * Integration test for TimeOfDay field formatting
  */
 describe('API - TimeOfDay record test cases - ', function () {
-    var earlyTOD = "1970-01-01T09:00:00Z[UTC]";
-    var lateTOD = "1970-01-01T15:00:00Z[UTC]";
+    var earlyTOD = '1970-01-01T09:00:00Z[UTC]';
+    var lateTOD = '1970-01-01T15:00:00Z[UTC]';
 
 
     var appWithNoFlags = {
-        "name": "TimeOfDay App - no flags",
-        "tables": [{
-                "name": "table1", "fields": [{
-                    "name": "timeOfDay",
-                    "type": "SCALAR",
-                    "datatypeAttributes": {
-                        "type": "TIME_OF_DAY"
+        name: 'TimeOfDay App - no flags',
+        tables: [{
+                name: 'table1', fields: [{
+                    name: 'timeOfDay',
+                    type: 'SCALAR',
+                    datatypeAttributes: {
+                        type: 'TIME_OF_DAY'
                     }
                 }
          ]}
     ]};
 
     var appWithAllFlags_HH_MM = {
-        "name": "TimeOfDay App - HH_MM format",
-        "dateFormat": "MM-dd-uuuu",
-        "timeZone": "America/New_York",
-        "tables": [{
-            "name": "table1", "fields": [{
-                "name": "timeOfDay",
-                "type": "SCALAR",
-                "datatypeAttributes": {
-                    "type": "TIME_OF_DAY",
-                    "scale": "HH:MM",
-                    "use24HourClock": true
+        name: 'TimeOfDay App - HH_MM format',
+        dateFormat: 'MM-dd-uuuu',
+        timeZone: 'America/New_York',
+        tables: [{
+            name: 'table1', fields: [{
+                name: 'timeOfDay',
+                type: 'SCALAR',
+                datatypeAttributes: {
+                    type: 'TIME_OF_DAY',
+                    scale: 'HH:MM',
+                    use24HourClock: true
                 }
             }
             ]}
         ]};
 
     var appWithAllFlags_HH_MM_SS = {
-        "name": "TimeOfDay App - HH_MM_SS format",
-        "dateFormat": "dd-MM-uuuu",
-        "timeZone": "America/New_York",
-        "tables": [{
-            "name": "table1", "fields": [{
-                "name": "timeOfDay",
-                "type": "SCALAR",
-                "datatypeAttributes": {
-                    "type": "TIME_OF_DAY",
-                    "scale": "HH:MM:SS",
-                    "use24HourClock": true
+        name: 'TimeOfDay App - HH_MM_SS format',
+        dateFormat: 'dd-MM-uuuu',
+        timeZone: 'America/New_York',
+        tables: [{
+            name: 'table1', fields: [{
+                name: 'timeOfDay',
+                type: 'SCALAR',
+                datatypeAttributes: {
+                    type: 'TIME_OF_DAY',
+                    scale: 'HH:MM:SS',
+                    use24HourClock: true
                 }
             }
             ]}
@@ -68,24 +68,24 @@ describe('API - TimeOfDay record test cases - ', function () {
     */
     function  noFlagsTimeOfDayDataProvider(fid) {
         // TimeOfDay in morning
-        var earlyTODInput = [{"id": fid, "value": earlyTOD}];
-        var expectedEarlyTODRecord = {"id": fid, "value": earlyTOD, "display": "9:00 AM"};
+        var earlyTODInput = [{id: fid, value: earlyTOD}];
+        var expectedEarlyTODRecord = {id: fid, value: earlyTOD, display: '9:00 AM'};
 
         // TimeOfDay in afternoon
-        var lateTODInput = [{"id": fid, "value": lateTOD}];
-        var expectedLateTODRecord = {"id": fid, "value": lateTOD, "display": "3:00 PM"};
+        var lateTODInput = [{id: fid, value: lateTOD}];
+        var expectedLateTODRecord = {id: fid, value: lateTOD, display: '3:00 PM'};
 
         // Null date
-        var nullInput = [{"id": fid, "value": null}];
-        var expectedNullRecord = {"id": fid, "value": null, "display": ""};
+        var nullInput = [{id: fid, value: null}];
+        var expectedNullRecord = {id: fid, value: null, display: ''};
 
         return [
-            { message: "display early timeOfDay with no format flags", record: earlyTODInput, format: "display", expectedFieldValue: expectedEarlyTODRecord },
-            { message: "raw early timeOfDay with no format flags", record: earlyTODInput, format: "raw", expectedFieldValue: earlyTODInput },
-            { message: "display different year timeOfDay with no format flags", record: lateTODInput, format: "display", expectedFieldValue: expectedLateTODRecord },
-            { message: "raw different year timeOfDay with no format flags", record: lateTODInput, format: "raw", expectedFieldValue: lateTODInput },
-            { message: "display null timeOfDay with no format flags", record: nullInput, format: "display", expectedFieldValue: expectedNullRecord },
-            { message: "raw null timeOfDay with no format flags", record: nullInput, format: "raw", expectedFieldValue: nullInput }
+            { message: 'display early timeOfDay with no format flags', record: earlyTODInput, format: 'display', expectedFieldValue: expectedEarlyTODRecord },
+            { message: 'raw early timeOfDay with no format flags', record: earlyTODInput, format: 'raw', expectedFieldValue: earlyTODInput },
+            { message: 'display different year timeOfDay with no format flags', record: lateTODInput, format: 'display', expectedFieldValue: expectedLateTODRecord },
+            { message: 'raw different year timeOfDay with no format flags', record: lateTODInput, format: 'raw', expectedFieldValue: lateTODInput },
+            { message: 'display null timeOfDay with no format flags', record: nullInput, format: 'display', expectedFieldValue: expectedNullRecord },
+            { message: 'raw null timeOfDay with no format flags', record: nullInput, format: 'raw', expectedFieldValue: nullInput }
         ]
     }
 
@@ -145,24 +145,24 @@ describe('API - TimeOfDay record test cases - ', function () {
     function  allFlagsTimeOfDayDataProvider_HH_MM(fid) {
 
         // TimeOfDay in early
-        var earlyTODInput = [{"id": fid, "value": earlyTOD}];
-        var expectedEarlyTODRecord = {"id": fid, "value": earlyTOD, "display": "09:00"};
+        var earlyTODInput = [{id: fid, value: earlyTOD}];
+        var expectedEarlyTODRecord = {id: fid, value: earlyTOD, display: '09:00'};
 
         // TimeOfDay in different year
-        var lateTODInput = [{"id": fid, "value": lateTOD}];
-        var expectedLateTODRecord = {"id": fid, "value": lateTOD, "display": "15:00"};
+        var lateTODInput = [{id: fid, value: lateTOD}];
+        var expectedLateTODRecord = {id: fid, value: lateTOD, display: '15:00'};
 
         // Null date
-        var nullInput = [{"id": fid, "value": null}];
-        var expectedNullRecord = {"id": fid, "value": null, "display": ""};
+        var nullInput = [{id: fid, value: null}];
+        var expectedNullRecord = {id: fid, value: null, display: ''};
 
         return [
-            { message: "display early timeOfDay with all HH_MM format flags", record: earlyTODInput, format: "display", expectedFieldValue: expectedEarlyTODRecord },
-            { message: "raw early timeOfDay with all HH_MM format flags", record: earlyTODInput, format: "raw", expectedFieldValue: earlyTODInput },
-            { message: "display different year timeOfDay with all HH_MM format flags", record: lateTODInput, format: "display", expectedFieldValue: expectedLateTODRecord },
-            { message: "raw different year timeOfDay with all HH_MM format flags", record: lateTODInput, format: "raw", expectedFieldValue: lateTODInput },
-            { message: "display null timeOfDay with all HH_MM format flags", record: nullInput, format: "display", expectedFieldValue: expectedNullRecord },
-            { message: "raw null timeOfDay with all HH_MM format flags", record: nullInput, format: "raw", expectedFieldValue: nullInput }
+            { message: 'display early timeOfDay with all HH_MM format flags', record: earlyTODInput, format: 'display', expectedFieldValue: expectedEarlyTODRecord },
+            { message: 'raw early timeOfDay with all HH_MM format flags', record: earlyTODInput, format: 'raw', expectedFieldValue: earlyTODInput },
+            { message: 'display different year timeOfDay with all HH_MM format flags', record: lateTODInput, format: 'display', expectedFieldValue: expectedLateTODRecord },
+            { message: 'raw different year timeOfDay with all HH_MM format flags', record: lateTODInput, format: 'raw', expectedFieldValue: lateTODInput },
+            { message: 'display null timeOfDay with all HH_MM format flags', record: nullInput, format: 'display', expectedFieldValue: expectedNullRecord },
+            { message: 'raw null timeOfDay with all HH_MM format flags', record: nullInput, format: 'raw', expectedFieldValue: nullInput }
         ]
     }
 
@@ -222,24 +222,24 @@ describe('API - TimeOfDay record test cases - ', function () {
     function  allFlagsTimeOfDayDataProvider_HH_MM_SS(fid) {
 
         // TimeOfDay in early
-        var earlyTODInput = [{"id": fid, "value": earlyTOD}];
-        var expectedEarlyTODRecord = {"id": fid, "value": earlyTOD, "display": "09:00:00"};
+        var earlyTODInput = [{id: fid, value: earlyTOD}];
+        var expectedEarlyTODRecord = {id: fid, value: earlyTOD, display: '09:00:00'};
 
         // TimeOfDay in different year
-        var lateTODInput = [{"id": fid, "value": lateTOD}];
-        var expectedLateTODRecord = {"id": fid, "value": lateTOD, "display": "15:00:00"};
+        var lateTODInput = [{id: fid, value: lateTOD}];
+        var expectedLateTODRecord = {id: fid, value: lateTOD, display: '15:00:00'};
 
         // Null date
-        var nullInput = [{"id": fid, "value": null}];
-        var expectedNullRecord = {"id": fid, "value": null, "display": ""};
+        var nullInput = [{id: fid, value: null}];
+        var expectedNullRecord = {id: fid, value: null, display: ''};
 
         return [
-            { message: "display early timeOfDay with all HH_MM_SS format flags", record: earlyTODInput, format: "display", expectedFieldValue: expectedEarlyTODRecord },
-            { message: "raw early timeOfDay with all HH_MM_SS format flags", record: earlyTODInput, format: "raw", expectedFieldValue: earlyTODInput },
-            { message: "display different year timeOfDay with all HH_MM_SS format flags", record: lateTODInput, format: "display", expectedFieldValue: expectedLateTODRecord },
-            { message: "raw different year timeOfDay with all HH_MM_SS format flags", record: lateTODInput, format: "raw", expectedFieldValue: lateTODInput },
-            { message: "display null timeOfDay with all HH_MM_SS format flags", record: nullInput, format: "display", expectedFieldValue: expectedNullRecord },
-            { message: "raw null timeOfDay with all format HH_MM_SS flags", record: nullInput, format: "raw", expectedFieldValue: nullInput }
+            { message: 'display early timeOfDay with all HH_MM_SS format flags', record: earlyTODInput, format: 'display', expectedFieldValue: expectedEarlyTODRecord },
+            { message: 'raw early timeOfDay with all HH_MM_SS format flags', record: earlyTODInput, format: 'raw', expectedFieldValue: earlyTODInput },
+            { message: 'display different year timeOfDay with all HH_MM_SS format flags', record: lateTODInput, format: 'display', expectedFieldValue: expectedLateTODRecord },
+            { message: 'raw different year timeOfDay with all HH_MM_SS format flags', record: lateTODInput, format: 'raw', expectedFieldValue: lateTODInput },
+            { message: 'display null timeOfDay with all HH_MM_SS format flags', record: nullInput, format: 'display', expectedFieldValue: expectedNullRecord },
+            { message: 'raw null timeOfDay with all format HH_MM_SS flags', record: nullInput, format: 'raw', expectedFieldValue: nullInput }
         ]
     }
 

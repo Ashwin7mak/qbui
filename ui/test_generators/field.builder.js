@@ -32,7 +32,9 @@
                 },
 
                 withType :  function(type) {
-                    fieldUnderConstruction[fieldConstants.fieldKeys.TYPE] = type;
+                    fieldUnderConstruction["datatypeAttributes"] = {};
+                    fieldUnderConstruction["datatypeAttributes"][fieldConstants.fieldKeys.TYPE] = type;
+                    fieldUnderConstruction[fieldConstants.fieldKeys.TYPE] = "SCALAR";
                     return this;
                 },
 

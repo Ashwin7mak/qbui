@@ -3,17 +3,18 @@ describe('Controller: ReportCtrl', function() {
     // load the controller's module
     beforeEach(module('qbse.qbapp.reports.manager'));
 
-    var scope, ReportModel, gridConstants, controller;
+    var scope, ReportModel, gridConstants, controller, $log;
     var appId='1', tableId='2', reportId='3';
     var reportName='reportName', companyName='companyName';
     var deferredColumn, deferredData;
 
     // Initialize the controller and a mock scope
     beforeEach(
-        inject(function($controller, $rootScope, _$httpBackend_, _ReportModel_, _gridConstants_, $q ) {
+        inject(function($controller, $rootScope, _$httpBackend_, _ReportModel_, _gridConstants_, $q, _$log_ ) {
             scope = $rootScope.$new();
             ReportModel = _ReportModel_;
             gridConstants = _gridConstants_;
+            $log = _$log_;
 
             var metaData = {appId:appId, tableId:tableId, reportId:reportId, name:reportName, company:companyName};
 

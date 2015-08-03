@@ -94,10 +94,10 @@
     "phantomjs": "^1.9.16",
     "requirejs": "~2.1.11",
     "should": "~3.3.1",
-    "sinon": "^1.15.3",
+    "sinon": "~1.15.4",
+    "strip-json-comments": "^1.0.2",
     "supertest": "~0.11.0",
-    "time-grunt": "~0.3.1",
-    "sinon": "~1.15.4"
+    "time-grunt": "~0.3.1"
   },
   "engines": {
     "node": ">=0.10.0"

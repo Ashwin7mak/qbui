@@ -34,7 +34,7 @@ describe('Request test always use ssh', function() {
     describe('hasSslOptions method', function() {
         it('should correctly check for ssl config settings', function(done) {
             var origEnvVal = process.env.NODE_ENV;
-            process.env.NODE_ENV = "dummy";
+            process.env.NODE_ENV = 'dummy';
 
             // init the app server with dummy env and test the configs ssl function
             var testapp = require('express')();
@@ -90,7 +90,7 @@ describe('Request test always use ssh', function() {
                 .get('/')
                 .expect(302)
                 .expect(function(res) {
-                    return !(res.headers.location.indexOf(config.sslPort + "/") > -1);
+                    return !(res.headers.location.indexOf(config.sslPort + '/') > -1);
                 })
                 .end(function(err) {
                     done(err);

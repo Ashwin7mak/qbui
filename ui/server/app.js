@@ -6,7 +6,7 @@
 
     // if we have not set the NODE_ENV, then error out here
     if(process.env.NODE_ENV === undefined){
-        throw new Error("No NODE_ENV was specified. You must set a run-time environment variable. Exiting");
+        throw new Error('No NODE_ENV was specified. You must set a run-time environment variable. Exiting');
     }
 
     var express = require('express'),
@@ -15,7 +15,7 @@
         _ = require('lodash');
 
     //  Configure the Bunyan logger
-    var log = require('./logger').getLogger()
+    var log = require('./logger').getLogger();
 
     // Setup the express server
     var app = module.exports = express();
@@ -52,16 +52,16 @@
      */
     app.requireHTTPS = function(req, res, next) {
         if (!req.secure) {
-            var domain = "https://" + req.get("host");
+            var domain = 'https://' + req.get('host');
             var sslPort = config.sslPort;
 
             // remove non secure port from domain
-            domain = domain.replace(/:\d+$/, "");
-            if (sslPort && sslPort != 443) {
+            domain = domain.replace(/:\d+$/, '');
+            if (sslPort && sslPort !== 443) {
                 // add back on an sslport if it's not default of 443
-                domain += ":" + sslPort;
+                domain += ':' + sslPort;
             }
-            log.info("redirecting to: " + domain + req.url);
+            log.info('redirecting to: ' + domain + req.url);
             return res.redirect(domain + req.url);
         }
         next();

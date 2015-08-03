@@ -13,34 +13,34 @@ describe('Percent record formatter unit test', function () {
 
         //Incomplete number
         var defaultRecordInput =  [[{
-            "id": 7,
-            "value": numberDecimalOnly}]];
+            id: 7,
+            value: numberDecimalOnly}]];
         var defaultRecordExp = [[{
-            "id": 7,
-            "value": numberDecimalOnly,
-            "display": ""}]];
+            id: 7,
+            value: numberDecimalOnly,
+            display: ''}]];
 
         // Setup the record inputs
         var recordInputDecimalOnly = JSON.parse(JSON.stringify(defaultRecordInput));
 
         var noFlagsFieldInfo = [{
-            "id": 7,
-            "name": "percent",
-            "datatypeAttributes": {
-                "type": "PERCENT",
-                "decimalPlaces": 2,
-                "clientSideAttributes": {}
+            id: 7,
+            name: 'percent',
+            datatypeAttributes: {
+                type: 'PERCENT',
+                decimalPlaces: 2,
+                clientSideAttributes: {}
             },
-            "type":"SCALAR"
+            type:'SCALAR'
         }];
 
         var expectedDecimal_NoFlags = JSON.parse(JSON.stringify(defaultRecordExp));
         expectedDecimal_NoFlags[0][0].value = numberDecimalOnly;
-        expectedDecimal_NoFlags[0][0].display = "0.75%";
+        expectedDecimal_NoFlags[0][0].display = '0.75%';
 
 
         var cases =[
-            { message: "Numeric - decimal with no format", records: recordInputDecimalOnly, fieldInfo: noFlagsFieldInfo, expectedRecords: expectedDecimal_NoFlags }
+            { message: 'Numeric - decimal with no format', records: recordInputDecimalOnly, fieldInfo: noFlagsFieldInfo, expectedRecords: expectedDecimal_NoFlags }
         ];
 
         return cases;

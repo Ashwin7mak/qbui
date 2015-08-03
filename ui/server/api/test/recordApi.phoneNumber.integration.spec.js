@@ -15,11 +15,11 @@ var testConsts = require('./api.test.constants');
 describe('API - PhoneNumber record test cases', function () {
     //Cache the init promise so that test methods can use it as init.then(function(){...})
     var exampleApp = {
-        "name": "PhoneNumber App",
-        "tables": [
+        name: 'PhoneNumber App',
+        tables: [
             {
-                "name": "table1", "fields": [
-                {"name": "phone", "datatypeAttributes": { "type": "PHONE_NUMBER" }, "type": "SCALAR" }
+                name: 'table1', fields: [
+                {name: 'phone', datatypeAttributes: { type: 'PHONE_NUMBER' }, type: 'SCALAR' }
             ]
             }
         ]
@@ -30,34 +30,34 @@ describe('API - PhoneNumber record test cases', function () {
      */
     function phoneRecordsDataProvider(fid) {
         //Standard phone number
-        var recordsInput = [{"id": fid, "value": "12345678"}];
-        var expectedRecords = {"id": fid, "value": "(1) 234-5678", "display": "(1) 234-5678"};
+        var recordsInput = [{id: fid, value: '12345678'}];
+        var expectedRecords = {id: fid, value: '(1) 234-5678', display: '(1) 234-5678'};
 
         //More than 10 digit number
-        var largeInput = [{"id": fid, "value": "1234567890123"}];
-        var largeExpected = {"id": fid, "value": "123 (456) 789-0123", "display": "123 (456) 789-0123"};
+        var largeInput = [{id: fid, value: '1234567890123'}];
+        var largeExpected = {id: fid, value: '123 (456) 789-0123', display: '123 (456) 789-0123'};
 
         //Empty records
-        var emptyPhoneRecords = [{"id": fid, "value": ""}];
-        var expectedEmptyPhoneRecords = {"id": fid, "value": null, "display": ""};
+        var emptyPhoneRecords = [{id: fid, value: ''}];
+        var expectedEmptyPhoneRecords = {id: fid, value: null, display: ''};
 
         //null record value
-        var nullPhoneRecords = [{"id": fid, "value": null}];
-        var nullExpectedPhoneRecords = {"id": fid, "value": null, "display": ""};
+        var nullPhoneRecords = [{id: fid, value: null}];
+        var nullExpectedPhoneRecords = {id: fid, value: null, display: ''};
 
         return [
-            { message: "display phone number", record: recordsInput, format: "display", expectedFieldValue: expectedRecords },
-            { message: "raw phone number", record: recordsInput, format: "raw", expectedFieldValue: recordsInput },
-            { message: "display empty phone number", record: emptyPhoneRecords, format: "display", expectedFieldValue: expectedEmptyPhoneRecords},
-            { message: "raw empty phone number", record: emptyPhoneRecords, format: "raw", expectedFieldValue: emptyPhoneRecords},
-            { message: "display too-long phone number", record: largeInput, format: "display", expectedFieldValue: largeExpected },
-            { message: "raw too-long phone number", record: largeInput, format: "raw", expectedFieldValue: largeInput },
-            { message: "display null phone number", record: nullPhoneRecords, format: "display", expectedFieldValue: nullExpectedPhoneRecords },
-            { message: "raw null phone number", record: nullPhoneRecords, format: "raw", expectedFieldValue: nullPhoneRecords }]
+            { message: 'display phone number', record: recordsInput, format: 'display', expectedFieldValue: expectedRecords },
+            { message: 'raw phone number', record: recordsInput, format: 'raw', expectedFieldValue: recordsInput },
+            { message: 'display empty phone number', record: emptyPhoneRecords, format: 'display', expectedFieldValue: expectedEmptyPhoneRecords},
+            { message: 'raw empty phone number', record: emptyPhoneRecords, format: 'raw', expectedFieldValue: emptyPhoneRecords},
+            { message: 'display too-long phone number', record: largeInput, format: 'display', expectedFieldValue: largeExpected },
+            { message: 'raw too-long phone number', record: largeInput, format: 'raw', expectedFieldValue: largeInput },
+            { message: 'display null phone number', record: nullPhoneRecords, format: 'display', expectedFieldValue: nullExpectedPhoneRecords },
+            { message: 'raw null phone number', record: nullPhoneRecords, format: 'raw', expectedFieldValue: nullPhoneRecords }]
     }
 
     /**
-     * Integration test that validates PhoneNumber records formatting 
+     * Integration test that validates PhoneNumber records formatting
      */
     it('Should create and retrieve display formatted phone records', function (done) {
         this.timeout(testConsts.INTEGRATION_TIMEOUT * phoneRecordsDataProvider().length);

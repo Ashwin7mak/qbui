@@ -108,7 +108,7 @@
                 jsDateFormat = this.generateFormat(fieldInfo);
             }
             //If the date is the current year and hideYearIfCurrent is true, remove the date from the formatter string
-            if (fieldInfo.hideYearIfCurrent && m.format(FOUR_DIGIT_YEAR) == new Date().getFullYear()) {
+            if (fieldInfo.hideYearIfCurrent && parseInt(m.format(FOUR_DIGIT_YEAR)) === new Date().getFullYear()) {
                 jsDateFormat = hideYear(jsDateFormat);
             }
             return m.format(jsDateFormat);

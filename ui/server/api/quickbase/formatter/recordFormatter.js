@@ -137,5 +137,5 @@
             }
         };
         return recordsFormatter;
-    }
+    };
 }());

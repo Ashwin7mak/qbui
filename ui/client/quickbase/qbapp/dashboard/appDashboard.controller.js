@@ -4,9 +4,9 @@
     angular.module('qbse.qbapp.dashboard')
         .controller('AppDashboardCtrl', AppDashboardController);
 
-    AppDashboardController.$inject = ['$scope', '$state', '$stateParams', 'ReportsDashboardModel'];
+    AppDashboardController.$inject = ['$scope', '$state', '$stateParams', '$log', 'ReportsDashboardModel'];
 
-    function AppDashboardController($scope, $state, $stateParams, ReportsDashboardModel) {
+    function AppDashboardController($scope, $state, $stateParams, $log, ReportsDashboardModel) {
 
         $scope.appId = $stateParams.appId;
         $scope.tableId = $stateParams.tableId;
@@ -37,20 +37,20 @@
                                     $scope.apps.push({id: app.id, name: app.name, tables: app.tables});
                                 },
                                 function (resp) {
-                                    console.log('Error getting app detail.  Status: ' + resp.status);
+                                    $log.error('Error getting app detail.  Status: ' + resp.status);
                                 }
                             );
                         });
                     }
                     else {
                         $scope.noApps = true;
-                        console.log('No apps found for logged in user.   Nothing to display.');
+                        $log.log('No apps found for logged in user.   Nothing to display.');
                     }
                 },
                 function (resp) {
                     $scope.showLayout = true;
                     $scope.noApps = true;
-                    console.log('Error getting app list.  Status: ' + resp.status);
+                    $log.error('Error getting app list.  Status: ' + resp.status);
                 }
             );
         }
