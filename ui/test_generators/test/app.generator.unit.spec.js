@@ -101,19 +101,19 @@ describe('App generator unit test', function () {
     function appFromTableMapProvider(){
         var tableToFieldToFieldTypeMap = {};
         tableToFieldToFieldTypeMap['table 1'] = {};
-        tableToFieldToFieldTypeMap['table 1']['field 1'] = consts.TEXT;
-        tableToFieldToFieldTypeMap['table 1']['field 2'] = consts.MULTI_LINE_TEXT;
-        tableToFieldToFieldTypeMap['table 1']['field 3'] = consts.PHONE_NUMBER;
-        tableToFieldToFieldTypeMap['table 1']['field 4'] = consts.DATE;
-        tableToFieldToFieldTypeMap['table 1']['field 5'] = consts.FORMULA_DURATION;
-        tableToFieldToFieldTypeMap['table 1']['field 6'] = consts.FORMULA_DATE;
-        tableToFieldToFieldTypeMap['table 1']['field 7'] = consts.DURATION;
+        tableToFieldToFieldTypeMap['table 1']['field 1'] = { fieldType: consts.SCALAR, dataType: consts.TEXT};
+        tableToFieldToFieldTypeMap['table 1']['field 2'] = { fieldType: consts.SCALAR, dataType: consts.MULTI_LINE_TEXT};
+        tableToFieldToFieldTypeMap['table 1']['field 3'] = { fieldType: consts.SCALAR, dataType: consts.PHONE_NUMBER};
+        tableToFieldToFieldTypeMap['table 1']['field 4'] = { fieldType: consts.SCALAR, dataType: consts.DATE};
+        tableToFieldToFieldTypeMap['table 1']['field 5'] = { fieldType: consts.FORMULA, dataType: consts.DURATION};
+        tableToFieldToFieldTypeMap['table 1']['field 6'] = { fieldType: consts.FORMULA, dataType: consts.DATE};
+        tableToFieldToFieldTypeMap['table 1']['field 7'] = { fieldType: consts.SCALAR, dataType: consts.DURATION};
 
         tableToFieldToFieldTypeMap['table 2'] = {};
-        tableToFieldToFieldTypeMap['table 2']['field 1'] = consts.NUMERIC;
-        tableToFieldToFieldTypeMap['table 2']['field 2'] = consts.NUMERIC;
-        tableToFieldToFieldTypeMap['table 2']['field 3'] = consts.NUMERIC;
-        tableToFieldToFieldTypeMap['table 2']['field 4'] = consts.NUMERIC;
+        tableToFieldToFieldTypeMap['table 2']['field 1']={ fieldType: consts.SCALAR, dataType: consts.NUMERIC};
+        tableToFieldToFieldTypeMap['table 2']['field 2'] = { fieldType: consts.SCALAR, dataType: consts.NUMERIC};
+        tableToFieldToFieldTypeMap['table 2']['field 3'] = { fieldType: consts.SCALAR, dataType: consts.NUMERIC};
+        tableToFieldToFieldTypeMap['table 2']['field 4']= { fieldType: consts.SCALAR, dataType: consts.NUMERIC};
 
 
         return [

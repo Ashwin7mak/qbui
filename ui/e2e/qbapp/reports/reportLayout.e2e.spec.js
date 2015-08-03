@@ -41,16 +41,16 @@ describe('Report Layout Tests', function (){
             // Create the table schema (map object) to pass into the app generator
             var tableToFieldToFieldTypeMap = {};
             tableToFieldToFieldTypeMap['table 1'] = {};
-            tableToFieldToFieldTypeMap['table 1']['Text Field'] = consts.TEXT;
-            tableToFieldToFieldTypeMap['table 1']['Multi Text Field'] = consts.MULTI_LINE_TEXT;
-            tableToFieldToFieldTypeMap['table 1']['Phone Number Field'] = consts.PHONE_NUMBER;
-            tableToFieldToFieldTypeMap['table 1']['Numeric'] = consts.NUMERIC;
-            tableToFieldToFieldTypeMap['table 1']['Currency'] = consts.CURRENCY;
-            tableToFieldToFieldTypeMap['table 1']['Percent'] = consts.PERCENT;
-            tableToFieldToFieldTypeMap['table 1']['Url'] = consts.URL;
-            tableToFieldToFieldTypeMap['table 1']['Duration'] = consts.DURATION;
-            tableToFieldToFieldTypeMap['table 1']['Email'] = consts.EMAIL_ADDRESS;
-            tableToFieldToFieldTypeMap['table 1']['Rating'] = consts.RATING;
+            tableToFieldToFieldTypeMap['table 1']['Text Field'] = { fieldType: consts.SCALAR, dataType: consts.TEXT};
+            tableToFieldToFieldTypeMap['table 1']['Rating Field'] = { fieldType: consts.SCALAR, dataType: consts.RATING};
+            tableToFieldToFieldTypeMap['table 1']['Phone Number Field'] = { fieldType: consts.SCALAR, dataType: consts.PHONE_NUMBER};
+            tableToFieldToFieldTypeMap['table 1']['Numeric'] = { fieldType: consts.SCALAR, dataType: consts.NUMERIC};
+            tableToFieldToFieldTypeMap['table 1']['Currency'] = { fieldType: consts.SCALAR, dataType: consts.CURRENCY};
+            tableToFieldToFieldTypeMap['table 1']['Percent'] = { fieldType: consts.SCALAR, dataType: consts.PERCENT};
+            tableToFieldToFieldTypeMap['table 1']['Url'] = { fieldType: consts.SCALAR, dataType: consts.URL};
+            tableToFieldToFieldTypeMap['table 1']['Duration'] = { fieldType: consts.SCALAR, dataType: consts.DURATION};
+            tableToFieldToFieldTypeMap['table 1']['Email'] = { fieldType: consts.SCALAR, dataType: consts.EMAIL_ADDRESS};
+            tableToFieldToFieldTypeMap['table 1']['Rating'] = { fieldType: consts.SCALAR, dataType: consts.RATING};
 
             // Generate the app JSON object
             var generatedApp = appGenerator.generateAppWithTablesFromMap(tableToFieldToFieldTypeMap);

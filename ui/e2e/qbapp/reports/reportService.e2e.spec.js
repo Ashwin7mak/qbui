@@ -40,9 +40,9 @@ describe('Report Service E2E Tests', function (){
             // Create the table schema (map object) to pass into the app generator
             var tableToFieldToFieldTypeMap = {};
             tableToFieldToFieldTypeMap['table 1'] = {};
-            tableToFieldToFieldTypeMap['table 1']['Text Field'] = consts.TEXT;
-            tableToFieldToFieldTypeMap['table 1']['Multi Text Field'] = consts.MULTI_LINE_TEXT;
-            tableToFieldToFieldTypeMap['table 1']['Phone Number Field'] = consts.PHONE_NUMBER;
+            tableToFieldToFieldTypeMap['table 1']['Text Field'] = { fieldType: consts.SCALAR, dataType: consts.TEXT};
+            tableToFieldToFieldTypeMap['table 1']['Numeric Field'] = { fieldType: consts.SCALAR, dataType: consts.NUMERIC};
+            tableToFieldToFieldTypeMap['table 1']['Phone Number Field'] = { fieldType: consts.SCALAR, dataType: consts.PHONE_NUMBER};
 
             // Generate the app JSON object
             var generatedApp = appGenerator.generateAppWithTablesFromMap(tableToFieldToFieldTypeMap);
@@ -327,7 +327,7 @@ describe('Report Service E2E Tests', function (){
         });
 
         // Assert column headers
-        var fieldNames = ['Record ID#', 'Text Field', 'Multi Text Field', 'Phone Number Field'];
+        var fieldNames = ['Record ID#', 'Text Field', 'Numeric Field', 'Phone Number Field'];
         getReportColumnHeaders(reportServicePage).then(function(resultArray){
             // UI is currently using upper case to display the field names in columns
             var upperFieldNames = stringArrayToUpperCase(fieldNames);

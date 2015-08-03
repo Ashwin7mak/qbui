@@ -31,8 +31,13 @@
                     return this;
                 },
 
-                withType :  function(type) {
+                withFieldType :  function(type) {
                     fieldUnderConstruction[fieldConstants.fieldKeys.TYPE] = type;
+                    return this;
+                },
+
+                withDataTypeAttributes : function(datatypeAttributes) {
+                    fieldUnderConstruction[fieldConstants.fieldKeys.DATA_TYPE_ATTRIBUTES] = datatypeAttributes;
                     return this;
                 },
 
@@ -145,108 +150,6 @@
                 /*               Specific Field Properties                  */
                 /************************************************************/
 
-                //DATE STUFF
-                withShowMonthAsName :  function(showMonthAsName, fieldType) {
-                    fieldUnderConstruction[fieldConstants[fieldType].SHOW_MONTH_AS_NAME] = showMonthAsName;
-                    return this;
-                },
-
-                withShowDayOfWeek :  function(showDayOfWeek, fieldType) {
-                    fieldUnderConstruction[fieldConstants[fieldType].SHOW_DAY_OF_WEEK] = showDayOfWeek;
-                    return this;
-                },
-
-                withHideYearIfCurrent :  function(hideYearIfCurrent, fieldType) {
-                    fieldUnderConstruction[fieldConstants[fieldType].HIDE_YEAR_IF_CURRENT] = hideYearIfCurrent;
-                    return this;
-                },
-
-                withDateFormat :  function(dateFormat, fieldType) {
-                    fieldUnderConstruction[fieldConstants[fieldType].DATE_FORMAT] = dateFormat;
-                    return this;
-                },
-
-                //DATE TIME STUFF
-                withShowTime :  function(showTime, fieldType) {
-                    fieldUnderConstruction[fieldConstants[fieldType].SHOW_TIME] = showTime;
-                    return this;
-                },
-
-                withShowTimeZone :  function(showTimeZone, fieldType) {
-                    fieldUnderConstruction[fieldConstants[fieldType].SHOW_TIME_ZONE] = showTimeZone;
-                    return this;
-                },
-
-                withTimeZone :  function(timeZone, fieldType) {
-                    fieldUnderConstruction[fieldConstants[fieldType].TIME_ZONE] = timeZone;
-                    return this;
-                },
-
-                withSortOrderAscending :  function(sortOrderAscending, fieldType) {
-                    fieldUnderConstruction[fieldConstants[fieldType].SORT_ORDER_ASCENDING] = sortOrderAscending;
-                    return this;
-                },
-
-                //DURATION STUFF
-                withDurationScale :  function(durationScale, fieldType) {
-                    fieldUnderConstruction[fieldConstants[fieldType].SCALE] = durationScale;
-                    return this;
-                },
-
-                //EMAIL STUFF
-                withDefaultDomain :  function(defaultDomain, fieldType) {
-                    fieldUnderConstruction[fieldConstants[fieldType].DEFAULT_DOMAIN] = defaultDomain;
-                    return this;
-                },
-
-                withSortByDomain :  function(sortByDomain, fieldType) {
-                    fieldUnderConstruction[fieldConstants[fieldType].SORT_BY_DOMAIN] = sortByDomain;
-                    return this;
-                },
-
-                withShowEmailEveryone :  function(showEmailEveryone, fieldType) {
-                    fieldUnderConstruction[fieldConstants[fieldType].SHOW_EMAIL_EVERYONE] = showEmailEveryone;
-                    return this;
-                },
-
-                //FILE ATTACHMENT STUFF
-                withFileLinkText :  function(linkText, fieldType) {
-                    fieldUnderConstruction[fieldConstants[fieldType].LINK_TEXT] = linkText;
-                    return this;
-                },
-
-                withFileKeepAllRevisions :  function(keepAllRevisions, fieldType) {
-                    fieldUnderConstruction[fieldConstants[fieldType].KEEP_ALL_REVISIONS] = keepAllRevisions;
-                    return this;
-                },
-
-                withRevisionsToKeep :  function(numRevisionsToKeep, fieldType) {
-                    fieldUnderConstruction[fieldConstants[fieldType].REVISIONS_TO_KEEP] = numRevisionsToKeep;
-                    return this;
-                },
-
-                withAllowUsersToMakeOlderVersionCurrentVersion :  function(allowUsersToMakeOlderVersionCurrentVersion, fieldType) {
-                    fieldUnderConstruction[fieldConstants[fieldType].ALLOW_USERS_TO_MAKE_OLDER_VERSIONS_THE_CURRENT_VERSION] = allowUsersToMakeOlderVersionCurrentVersion;
-                    return this;
-                },
-
-                //NUMERIC STUFF
-                withDecimalPlaces :  function(decimalPlaces, fieldType) {
-                    fieldUnderConstruction[fieldConstants[fieldType].DECIMAL_PLACES] = decimalPlaces;
-                    return this;
-                },
-
-                withTreatNullAsZero :  function(treatNullAsZero, fieldType) {
-                    fieldUnderConstruction[fieldConstants[fieldType].TREAT_NULL_AS_ZERO] = treatNullAsZero;
-                    return this;
-                },
-
-                //PHONE NUMBER STUFF
-                withIncludeExtension :  function(includeExtension, fieldType) {
-                    fieldUnderConstruction[fieldConstants[fieldType].INCLUDE_EXTENSION] = includeExtension;
-                    return this;
-                },
-
                 //REPORT LINK STUFF
                 withReportLinkText :  function(linkText, fieldType) {
                     fieldUnderConstruction[fieldConstants[fieldType].LINK_TEXT] = linkText;
@@ -291,50 +194,6 @@
 
                 withExpression :  function(expression, fieldType) {
                     fieldUnderConstruction[fieldConstants[fieldType].EXPRESSION] = expression;
-                    return this;
-                },
-
-                //TEXT STUFF
-                withHtmlAllowed :  function(htmlAllowed, fieldType) {
-                    fieldUnderConstruction[fieldConstants[fieldType].HTML_ALLOWED] = htmlAllowed;
-                    return this;
-                },
-
-                //TIME OF DAY STUFF
-                withTimeScale :  function(scale, fieldType) {
-                    fieldUnderConstruction[fieldConstants[fieldType].SCALE] = scale;
-                    return this;
-                },
-
-                withUse24HourClock :  function(use24HourClock, fieldType) {
-                    fieldUnderConstruction[fieldConstants[fieldType].USE_24_HOUR_CLOCK] = use24HourClock;
-                    return this;
-                },
-
-                withUseTimezone :  function(useTimezone, fieldType) {
-                    fieldUnderConstruction[fieldConstants[fieldType].USE_TIMEZONE] = useTimezone;
-                    return this;
-                },
-
-                //URL STUFF
-                withUrlDisplayProtocol :  function(displayProtocol, fieldType) {
-                    fieldUnderConstruction[fieldConstants[fieldType].DISPLAY_PROTOCOL] = displayProtocol;
-                    return this;
-                },
-
-                withUrlLinkText :  function(linkText, fieldType) {
-                    fieldUnderConstruction[fieldConstants[fieldType].LINK_TEXT] = linkText;
-                    return this;
-                },
-
-                //USER STUFF
-                withSendInvitesToUsers :  function(sendInvitesToUsers, fieldType) {
-                    fieldUnderConstruction[fieldConstants[fieldType].SEND_INVITES_TO_USERS] = sendInvitesToUsers;
-                    return this;
-                },
-
-                withUserDisplayFormat : function(userDisplayFormat, fieldType) {
-                    fieldUnderConstruction[fieldConstants[fieldType].USER_DISPLAY_FORMAT] = userDisplayFormat;
                     return this;
                 }
             };

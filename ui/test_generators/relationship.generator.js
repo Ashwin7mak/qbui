@@ -7,6 +7,7 @@
     var relationshipBuilder = require('./relationship.builder');
     var tableConsts = require('./table.constants');
     var fieldConsts = require('./field.constants');
+    var datatypeConsts = require('./datatype.attributes.constants');
     var appConsts = require('./app.constants');
     var chance = require('chance').Chance();
     var _ = require('lodash');
@@ -208,11 +209,11 @@
      * @returns {*}
      */
     function pickDetailField(masterField, detailTable) {
-        var fieldType = masterField[fieldConsts.fieldKeys.TYPE];
+        var dataType = masterField[fieldConsts.fieldKeys.DATA_TYPE_ATTRIBUTES][datatypeConsts.dataTypeKeys.TYPE];
 
         return _.find(detailTable[tableConsts.FIELDS], function(candidateField){
 
-            return candidateField[fieldConsts.fieldKeys.TYPE] === fieldType;
+            return candidateField[fieldConsts.fieldKeys.DATA_TYPE_ATTRIBUTES][datatypeConsts.dataTypeKeys.TYPE] === dataType;
         });
     }
 }());

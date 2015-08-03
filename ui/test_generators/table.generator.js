@@ -10,6 +10,8 @@
     var tableConsts = require('./table.constants');
     var fieldGenerator = require('./field.generator');
     var chance = require('chance').Chance();
+    var FIELD_TYPE_CONST = 'fieldType';
+    var DATA_TYPE_CONST = 'dataType';
 
     //The max number of fields we will generate at random
     var maxRandomFields = 10;
@@ -28,28 +30,21 @@
         /**
          * Generate a list of field objects using the field generator
          * {
-        *  field1 : CHECKBOX,
-        *  field2 : NUMERIC,
-        *  iLoveEmail : EMAIL_ADDRESS,
-        *  youCanToo : EMAIL_ADDRESS
-        * }
+         *  field1 : { fieldType: SCALAR, dataType: CHECKBOX},
+         *  field2 : { fieldType: SCALAR, dataType: NUMERIC},
+         *  iLoveEmail : { fieldType: SCALAR, dataType: EMAIL_ADDRESS},
+         *  youCanToo : { fieldType: SCALAR, dataType: EMAIL_ADDRESS}
+         * }
+         * </p>
          */
         generateFieldListFromMap: function(fieldMap){
-            var fields = [];
-            var fieldNameKeys = Object.keys(fieldMap);
+            var table = generateTableWithFieldMap(fieldMap)
 
-            fieldNameKeys.forEach(function (fieldName){
-                var fieldType = fieldMap[fieldName];
-                var fieldBuilder = fieldGenerator.getFieldBuilder();
-                var field = fieldBuilder.withName(fieldName).withType(fieldType).build();
-                fields.push(field);
-            });
-
-            return fields;
+            return table[tableConsts.FIELDS];
         },
 
-        addFieldsOfType : function(tableBuilder, numFieldsToAdd, fieldType){
-            var fields = generateFieldList(numFieldsToAdd, fieldType);
+        addFieldsOfType : function(tableBuilder, numFieldsToAdd, fieldType, dataType){
+            var fields = generateFieldList(numFieldsToAdd, fieldType, dataType);
             tableBuilder.withAdditionalFields(fields);
             return tableBuilder;
         },
@@ -88,8 +83,8 @@
          * @param fieldType the field type for all fields
          * @returns {*} the table object with numFields of type fieldType
          */
-        generateTableWithFieldsOfType : function(numFields, fieldType){
-            var builderInstance = generateTableWithFieldsOfType(numFields, fieldType);
+        generateTableWithFieldsOfType : function(numFields, fieldType, dataType){
+            var builderInstance = generateTableWithFieldsOfFieldTypeAndDataType(numFields, fieldType, dataType);
             var tableInstance = builderInstance.build();
             return tableInstance;
         },
@@ -124,9 +119,7 @@
          * @returns {*}
          */
         generateTableWithFieldMap : function(fieldNameToTypeMap){
-            var builderInstance = generateTableWithFieldMap(fieldNameToTypeMap);
-            var tableInstance = builderInstance.build();
-            return tableInstance;
+            return generateTableWithFieldMap(fieldNameToTypeMap);
         },
 
         tableToJsonString : function(table){
@@ -184,9 +177,13 @@
     function generateTableWithAllFieldTypes(){
         var builderInstance = getTableBuilderWithName();
         var availableFieldTypes = fieldGenerator.getAvailableFieldTypes();
+        var availableDataTypes = fieldGenerator.getAvailableDataTypes();
         for(var i= 0; i< availableFieldTypes.length; i++){
-            var field = fieldGenerator.generateBaseField(availableFieldTypes[i]);
-            builderInstance.withField(field);
+            for(var j= 0; j< availableDataTypes.length; j++) {
+
+                var field = fieldGenerator.generateBaseField(availableFieldTypes[i], availableDataTypes[j]);
+                builderInstance.withField(field);
+            }
         }
 
         return builderInstance;
@@ -200,11 +197,15 @@
         var builderInstance = getTableBuilderWithName();
         var numFields = undefined === size ? chance.integer({min:1, max:maxRandomFields}) : size;
         var types = fieldGenerator.getAvailableFieldTypes();
-        var maxFields = types.length-1;
-        for(var i= 0; i< numFields; i++){
-            var fieldTypeIndex = chance.integer({min:1, max: maxFields});
+        var dataTypes = fieldGenerator.getAvailableDataTypes();
 
-            var field = fieldGenerator.generateBaseField(types[fieldTypeIndex]);
+        var maxFieldTypeIndex = types.length-1;
+        var maxDataTypeIndex = dataTypes.length-1;
+        for(var i= 0; i< numFields; i++){
+            var fieldTypeIndex = chance.integer({min:1, max: maxFieldTypeIndex});
+            var dataTypeIndex = chance.integer({min:1, max: maxDataTypeIndex});
+
+            var field = fieldGenerator.generateBaseField(types[fieldTypeIndex], dataTypes[dataTypeIndex]);
             builderInstance.withField(field);
         }
 
@@ -218,11 +219,12 @@
      * @param fieldType the field type for all fields
      * @returns {*} the table object with numFields of type fieldType
      */
-    function generateTableWithFieldsOfType(numFields, fieldType){
+    function generateTableWithFieldsOfFieldTypeAndDataType(numFields, fieldType, dataType){
         var builderInstance = getTableBuilderWithName();
 
-        for(var i= 0; i< numFields; i++){
-            var field = fieldGenerator.generateBaseField(fieldType);
+        for (var i = 0; i < numFields; i++) {
+            // get the next field type if more fields are request than there are types index wraps around to the start
+            var field = fieldGenerator.generateBaseField(fieldType, dataType);
             builderInstance.withField(field);
         }
 
@@ -235,18 +237,22 @@
      * @param appId the app id of the parent app
      * @param numFields the number of fields to generate
      * @param allowedFieldTypes the array of allowd field types
+     * @param allowedDataTypes the array of allowed data types
      * @returns {*} the table object with numFields of type fieldType
      */
-    function generateTableWithAnyFieldsOfType(numFields, allowedFieldTypes) {
+    function generateTableWithAnyFieldsOfType(numFields, allowedFieldTypes, allowedDataTypes) {
         var builderInstance = getTableBuilderWithName();
-        if (allowedFieldTypes && allowedFieldTypes.length) {
+        if (allowedFieldTypes && allowedFieldTypes.length && allowedDataTypes && allowedDataTypes.length) {
             // get the list of fields in random order
             // with numfield entries in randomTypes if that's less than the full allowedFieldTypes list
             var randomTypes = chance.pick(allowedFieldTypes, numFields < allowedFieldTypes ? numFields : allowedFieldTypes.length);
+            var randomDataTypes = chance.pick(allowedDataTypes, numFields < allowedDataTypes ? numFields : allowedFieldTypes.length);
+
             for (var i = 0; i < numFields; i++) {
                 // get the next field type if more fields are request than there are types index wraps around to the start
                 var fieldType = randomTypes[i % (randomTypes.length - 1)];
-                var field = fieldGenerator.generateBaseField(fieldType);
+                var dataType = randomDataTypes[i % (randomDataTypes.length - 1)];
+                var field = fieldGenerator.generateBaseField(fieldType, dataType);
                 builderInstance.withField(field);
             }
         }
@@ -258,10 +264,10 @@
      * </p>
      * The map should appear as:
      * {
-         *  field1 : CHECKBOX,
-         *  field2 : NUMERIC,
-         *  iLoveEmail : EMAIL_ADDRESS,
-         *  youCanToo : EMAIL_ADDRESS
+         *  field1 : { fieldType: SCALAR, dataType: CHECKBOX},
+         *  field2 : { fieldType: SCALAR, dataType: NUMERIC},
+         *  iLoveEmail : { fieldType: SCALAR, dataType: EMAIL_ADDRESS},
+         *  youCanToo : { fieldType: SCALAR, dataType: EMAIL_ADDRESS}
          * }
      * </p>
      * We will then return a table with fields of those names and types
@@ -274,24 +280,29 @@
         var fieldNameKeys = Object.keys(fieldNameToTypeMap);
 
         fieldNameKeys.forEach(function (fieldName){
-            var fieldType = fieldNameToTypeMap[fieldName];
+            var fieldType = fieldNameToTypeMap[fieldName][FIELD_TYPE_CONST];
+            var dataType = fieldNameToTypeMap[fieldName][DATA_TYPE_CONST];
+
             var fieldBuilder = fieldGenerator.getFieldBuilder();
-            var field = fieldBuilder.withName(fieldName).withType(fieldType).build();
+            var dataTypeAttributeBuilder = fieldGenerator.getDataTypeBuilder();
+            var dataTypeAttributes = dataTypeAttributeBuilder.withType(dataType).build();
+            var field = fieldBuilder.withName(fieldName).withFieldType(fieldType).withDataTypeAttributes(dataTypeAttributes).build();
             builderInstance.withField(field);
         });
 
-        return builderInstance;
+        return builderInstance.build();
     }
 
     /**
      * Generate a list of field objects using the field generator
      * @param numFields
      * @param fieldType
+     * @param dataType
      */
-    function generateFieldList(numFields, fieldType){
+    function generateFieldList(numFields, fieldType, dataType){
         var fields = [];
         for(var i= 0; i< numFields; i++){
-            fields.push(fieldGenerator.generateBaseField(fieldType));
+            fields.push(fieldGenerator.generateBaseField(fieldType, dataType));
         }
         return fields;
     }
