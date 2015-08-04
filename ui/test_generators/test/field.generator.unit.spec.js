@@ -20,36 +20,35 @@ describe('Field generator unit test', function () {
     function provider() {
 
         return [
-            {message: "checkbox field", fieldType: consts.CHECKBOX},
-            {message: "text field", fieldType: consts.TEXT},
-            {message: "multi line text field", fieldType: consts.MULTI_LINE_TEXT},
-            {message: "phone number field", fieldType: consts.PHONE_NUMBER},
-            {message: "date field", fieldType: consts.DATE},
-            {message: "formula duration field", fieldType: consts.FORMULA_DURATION},
-            {message: "formula date field", fieldType: consts.FORMULA_DATE},
-            {message: "duration field", fieldType: consts.DURATION},
-            {message: "formula time of day field", fieldType: consts.FORMULA_TIME_OF_DAY},
-            {message: "time of day field", fieldType: consts.TIME_OF_DAY},
-            {message: "numeric field", fieldType: consts.NUMERIC},
-            {message: "formula numeric field", fieldType: consts.FORMULA_NUMERIC},
-            {message: "currency field", fieldType: consts.CURRENCY},
-            {message: "rating field", fieldType: consts.RATING},
-            {message: "formula currency field", fieldType: consts.FORMULA_CURRENCY},
-            {message: "percent field", fieldType: consts.PERCENT},
-            {message: "formula percent field", fieldType: consts.FORMULA_PERCENT},
-            {message: "url field", fieldType: consts.URL},
-            {message: "email address field", fieldType: consts.EMAIL_ADDRESS},
-            {message: "user field", fieldType: consts.USER},
-            {message: "formula user field", fieldType: consts.FORMULA_USER},
-            {message: "file attachment field", fieldType: consts.FILE_ATTACHMENT},
-            {message: "report link field", fieldType: consts.REPORT_LINK},
-            {message: "summary field", fieldType: consts.SUMMARY},
-            {message: "lookup field", fieldType: consts.LOOKUP},
-            {message: "formula phone number field", fieldType: consts.FORMULA_PHONE_NUMBER},
-            {message: "formula url field", fieldType: consts.FORMULA_URL},
-            {message: "formula checkbox field", fieldType: consts.FORMULA_CHECKBOX},
-            {message: "formula text field", fieldType: consts.FORMULA_TEXT},
-            {message: "formula email address field", fieldType: consts.FORMULA_EMAIL_ADDRESS}
+            {message: "checkbox field", fieldType: consts.SCALAR, dataType: consts.CHECKBOX},
+            {message: "text field", fieldType: consts.SCALAR, dataType: consts.TEXT},
+            {message: "phone number field", fieldType: consts.SCALAR, dataType: consts.PHONE_NUMBER},
+            {message: "date field", fieldType: consts.SCALAR, dataType: consts.DATE},
+            {message: "formula duration field", fieldType: consts.FORMULA, dataType: consts.DURATION},
+            {message: "formula date field", fieldType: consts.FORMULA, dataType: consts.DATE},
+            {message: "duration field", fieldType: consts.SCALAR, dataType: consts.DURATION},
+            {message: "formula time of day field", fieldType: consts.FORMULA, dataType: consts.TIME_OF_DAY},
+            {message: "time of day field", fieldType: consts.SCALAR, dataType: consts.TIME_OF_DAY},
+            {message: "numeric field", fieldType: consts.SCALAR, dataType: consts.NUMERIC},
+            {message: "formula numeric field", fieldType: consts.FORMULA, dataType: consts.NUMERIC},
+            {message: "currency field", fieldType: consts.SCALAR, dataType: consts.CURRENCY},
+            {message: "rating field", fieldType: consts.SCALAR, dataType: consts.RATING},
+            {message: "formula currency field", fieldType: consts.FORMULA, dataType: consts.CURRENCY},
+            {message: "percent field", fieldType: consts.SCALAR, dataType: consts.PERCENT},
+            {message: "formula percent field", fieldType: consts.FORMULA, dataType: consts.PERCENT},
+            {message: "url field", fieldType: consts.SCALAR, dataType: consts.URL},
+            {message: "email address field", fieldType: consts.SCALAR, dataType: consts.EMAIL_ADDRESS},
+            {message: "user field", fieldType: consts.SCALAR, dataType: consts.USER},
+            {message: "formula user field", fieldType: consts.FORMULA, dataType: consts.USER},
+            {message: "file attachment field", fieldType: consts.CONCRETE, dataType: consts.FILE_ATTACHMENT},
+            {message: "report link field", fieldType: consts.REPORT_LINK, dataType: consts.URL},
+            {message: "summary field", fieldType: consts.SUMMARY, dataType: consts.NUMERIC},
+            {message: "lookup field", fieldType: consts.LOOKUP, dataType: consts.NUMERIC},
+            {message: "formula phone number field", fieldType: consts.FORMULA, dataType: consts.PHONE_NUMBER},
+            {message: "formula url field", fieldType: consts.FORMULA, dataType: consts.URL},
+            {message: "formula checkbox field", fieldType: consts.FORMULA, dataType: consts.CHECKBOX},
+            {message: "formula text field", fieldType: consts.FORMULA, dataType: consts.TEXT},
+            {message: "formula email address field", fieldType: consts.FORMULA, dataType: consts.EMAIL_ADDRESS}
         ];
     }
 
@@ -59,7 +58,7 @@ describe('Field generator unit test', function () {
     describe('should create a base field of a particular type',function(){
         provider().forEach(function(entry){
             it('Test case: ' + entry.message, function (done) {
-                var field = fieldGenerator.generateBaseField(entry.fieldType);
+                var field = fieldGenerator.generateBaseField(entry.fieldType, entry.dataType);
 
                 if(!field[fieldConsts.fieldKeys.NAME]){
                     assert.fail('Fields should be generated with a name');
@@ -81,7 +80,7 @@ describe('Field generator unit test', function () {
     describe('should create a base field and apply defaults for a particular type',function(){
         provider().forEach(function(entry){
             it('Test case: ' + entry.message, function (done) {
-                var field = fieldGenerator.generateBaseField(entry.fieldType);
+                var field = fieldGenerator.generateBaseField(entry.fieldType, entry.dataType);
                 fieldGenerator.applyDefaults(field);
 
                 if(!field[fieldConsts.fieldKeys.NAME]){

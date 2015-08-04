@@ -18,7 +18,7 @@ var assert = require('assert');
 /**
  * Unit tests for relationship generator
  */
-describe('User generator unit test', function () {
+describe('Relationship generator unit test', function () {
 
     function relationshipProvider(){
         var tableMap = {};
@@ -27,15 +27,15 @@ describe('User generator unit test', function () {
         tableMap['App1Table2'] = {};
         tableMap['App1Table3'] = {};
 
-        tableMap['App1Table0']['textField0'] = consts.TEXT;
-        tableMap['App1Table0']['numericField0'] = consts.NUMERIC;
-        tableMap['App1Table0']['dateField0'] = consts.DATE;
+        tableMap['App1Table0']['textField0'] = { fieldType: consts.SCALAR, dataType: consts.TEXT};
+        tableMap['App1Table0']['numericField0'] = { fieldType: consts.SCALAR, dataType: consts.NUMERIC};
+        tableMap['App1Table0']['dateField0'] = { fieldType: consts.SCALAR, dataType: consts.DATE};
 
-        tableMap['App1Table1']['dateField1'] = consts.DATE;
+        tableMap['App1Table1']['dateField1'] = { fieldType: consts.SCALAR, dataType: consts.DATE};
 
-        tableMap['App1Table2']['numericField2'] = consts.NUMERIC;
+        tableMap['App1Table2']['numericField2'] = { fieldType: consts.SCALAR, dataType: consts.NUMERIC};
 
-        tableMap['App1Table3']['textField3'] = consts.TEXT;
+        tableMap['App1Table3']['textField3'] = { fieldType: consts.SCALAR, dataType: consts.TEXT};
 
         var generatedApp = appGenerator.generateAppWithTablesFromMap(tableMap);
 

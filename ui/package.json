@@ -67,6 +67,8 @@
     "grunt-open": "~0.2.3",
     "grunt-protractor-runner": "^1.1.0",
     "grunt-rev": "~0.1.0",
+    "grunt-sauce-connect-launcher": "^0.3.0",
+    "grunt-shell-spawn": "^0.3.8",
     "grunt-svgmin": "^2.0.1",
     "grunt-usemin": "~2.1.1",
     "grunt-wiredep": "~1.8.0",
@@ -92,12 +94,13 @@
     "mocha-jenkins-reporter": "^0.1.6",
     "open": "~0.0.4",
     "phantomjs": "^1.9.16",
+    "q": "^1.4.1",
     "requirejs": "~2.1.11",
+    "sauce-connect-launcher": "^0.12.0",
     "should": "~3.3.1",
-    "sinon": "^1.15.3",
+    "sinon": "~1.15.4",
     "supertest": "~0.11.0",
-    "time-grunt": "~0.3.1",
-    "sinon": "~1.15.4"
+    "time-grunt": "~0.3.1"
   },
   "engines": {
     "node": ">=0.10.0"

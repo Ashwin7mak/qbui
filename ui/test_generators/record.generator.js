@@ -8,6 +8,7 @@
     'use strict';
     var consts = require('../server/api/constants');
     var fieldConsts = require('./field.constants');
+    var dataTypeConsts = require('./datatype.attributes.constants');
     var tableConsts = require('./table.constants');
     var rawValueGenerator = require('./rawValue.generator');
 
@@ -28,11 +29,11 @@
                 var field = fields[i];
 
                 // Check that there is a mapping for the field type (otherwise don't generate a value for it)
-                if (typeof recordTypeMapping[field[fieldConsts.fieldKeys.TYPE]] !== 'undefined') {
+                if (field[fieldConsts.fieldKeys.TYPE] === fieldConsts.SCALAR || field[fieldConsts.fieldKeys.TYPE] === fieldConsts.REPORT_LINK) {
                     //console.info('Generating field value for type ' + field[fieldConsts.fieldKeys.TYPE]);
                     recordJson.push({
                         id: field[fieldConsts.fieldKeys.ID],
-                        value: generateRecordValueForFieldType(field[fieldConsts.fieldKeys.TYPE])
+                        value: generateRecordValueForFieldType(field[fieldConsts.fieldKeys.DATA_TYPE_ATTRIBUTES][dataTypeConsts.dataTypeKeys.TYPE])
                     });
                 }
             }
@@ -78,7 +79,6 @@
     recordTypeMapping[consts.RATING] = function (){ return rawValueGenerator.generateDouble(0, 10); };
     recordTypeMapping[consts.DURATION] = function (){ return rawValueGenerator.generateDouble(0, 5); };
     recordTypeMapping[consts.TEXT] = function (){ return rawValueGenerator.generateString(10); };
-    recordTypeMapping[consts.MULTI_LINE_TEXT] = function (){ return rawValueGenerator.generateString(100); };
     recordTypeMapping[consts.BIGTEXT] = function (){ return rawValueGenerator.generateString(1000); };
     recordTypeMapping[consts.URL] = function (){ return rawValueGenerator.generateUrl(); };
     recordTypeMapping[consts.EMAIL_ADDRESS] = function (){ return rawValueGenerator.generateEmailInDomain('gmail.com'); };
