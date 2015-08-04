@@ -221,7 +221,7 @@
                 var tries = numRetries;
                 request(opts, function (error, response) {
                     if (error || response.statusCode != 200) {
-                        if(tries > 1  && (error.code === ERROR_HPE_INVALID_CONSTANT || error.code === ERROR_ENOTFOUND)) {
+                        if(tries > 1  && error && (error.code === ERROR_HPE_INVALID_CONSTANT || error.code === ERROR_ENOTFOUND)) {
                             tries --;
                             log.debug("Attempting a retry: " + JSON.stringify(opts) + " Tries remaining: " + tries);
                             apiBase.executeRequestRetryable(opts, tries).then(function(res2){
@@ -232,7 +232,8 @@
                                 deferred.reject(err2);
                             });
                         } else {
-                            log.debug("Network request failed, no retries left or an unsupported error for retry found");
+                            log.error("Network request failed, no retries left or an unsupported error for retry found");
+                            log.info("Uknown failure mode. Error: " + JSON.stringify(error) + " response: " + JSON.stringify(response));
                             deferred.reject(error);
                         }
                     } else {
