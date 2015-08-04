@@ -4,6 +4,7 @@ var request = require('request');
 var app = require('../../app');
 var config = require('../../config/environment');
 var apiBase = require('./api.base.js')(config);
+var testConsts = require('./api.test.constants');
 
 /**
  * Negative integration test for  realm and ticket creation, which are not proxied to the javahost
@@ -12,6 +13,7 @@ var apiBase = require('./api.base.js')(config);
 describe('API - Negative /realms & /ticket test cases', function () {
 
     it('Should fail to create a realm with a 404', function (done) {
+        this.timeout(testConsts.INTEGRATION_TIMEOUT);
         var opts = {
             url: config.DOMAIN + apiBase.resolveRealmsEndpoint(117000),
             method: 'GET'
@@ -23,6 +25,7 @@ describe('API - Negative /realms & /ticket test cases', function () {
     });
 
     it('Should fail to create a ticket with a 404', function (done) {
+        this.timeout(testConsts.INTEGRATION_TIMEOUT);
         var opts = {
             url: config.DOMAIN + apiBase.resolveTicketEndpoint(),
             method: 'GET'
