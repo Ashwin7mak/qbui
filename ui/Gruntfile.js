@@ -5,7 +5,10 @@ module.exports = function (grunt) {
 
     var buildDir = __dirname + '/build';
     var localJsFile = __dirname + '/server/config/environment/local.js';
-    var config = require('./server/config/environment');
+    var config;
+    if(localJsFile) {
+        config = require(localJsFile);
+    }
     var serverReportDir = buildDir + '/reports/server';
     var clientReportDir = buildDir + '/reports/client';
     var mochaUnitTest = grunt.option('test') || '*.unit.spec.js';
