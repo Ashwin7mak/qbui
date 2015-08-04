@@ -642,7 +642,9 @@ module.exports = function (grunt) {
                 NODE_TLS_REJECT_UNAUTHORIZED: 0,
                 ENV_TUNNEL_NAME: tunnelIdentifier,
                 SAUCE_JOB_NAME: sauceJobName,
-                SAUCE_KEY: sauceKey
+                SAUCE_KEY: sauceKey,
+                //for the test env, we need to thwart the proxy
+                no_proxy: 'localhost,*.localhost'
             },
             prod: {
                 NODE_ENV: 'production',
