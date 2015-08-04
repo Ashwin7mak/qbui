@@ -5,15 +5,11 @@ module.exports = function (grunt) {
 
     var buildDir = __dirname + '/build';
     var localJsFile = __dirname + '/server/config/environment/local.js';
-    var config;
-    if(localJsFile) {
-        config = require(localJsFile);
-    }
     var serverReportDir = buildDir + '/reports/server';
     var clientReportDir = buildDir + '/reports/client';
     var mochaUnitTest = grunt.option('test') || '*.unit.spec.js';
     var mochaIntTest = grunt.option('test') || '*.integration.spec.js';
-    var baseUrl = grunt.option('baseUrl') || config.DOMAIN;
+    var baseUrl = grunt.option('baseUrl') || 'http://localhost:9000';
     var sauceConnect = require('./e2e/sauce_connect');
     var currentDateTime = new Date().getTime();
     var tunnelIdentifier = grunt.option('tunnelIdentifier') || 'tunnel_' + currentDateTime;
