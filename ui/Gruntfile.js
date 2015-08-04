@@ -644,7 +644,9 @@ module.exports = function (grunt) {
                 SAUCE_JOB_NAME: sauceJobName,
                 SAUCE_KEY: sauceKey,
                 //for the test env, we need to thwart the proxy
-                no_proxy: 'localhost,*.localhost'
+                http_proxy: '',
+                //for the test env, we need to thwart the proxy
+                https_proxy: ''
             },
             prod: {
                 NODE_ENV: 'production',
