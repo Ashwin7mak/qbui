@@ -54,7 +54,7 @@
         baseUrl = config === undefined ? '' : config.DOMAIN;
 
         //Resolves a full URL using the instance subdomain and the configured javaHost
-        function resolveFullUrl(path, realmSubdomain) {
+        function resolveFullUrl(realmSubdomain, path) {
             var fullPath;
             var protocol = HTTP;
             log.info('Resolving full url for path: '+ path + ' realm: '+realmSubdomain);
@@ -83,7 +83,7 @@
         //Private helper method to generate a request options object
         function generateRequestOpts(stringPath, method, realmSubdomain) {
             return {
-                url: resolveFullUrl(stringPath, realmSubdomain),
+                url: resolveFullUrl(realmSubdomain, stringPath),
                 method: method
             };
         }
@@ -116,8 +116,8 @@
                 log.info('Setting baseUrl on api.base: ' + baseUrlConfig);
                 baseUrl = baseUrlConfig;
             },
-            generateFullRequest: function(relativePath, subdomain){
-                return resolveFullUrl(relativePath, subdomain);
+            generateFullRequest: function(subdomain, relativePath){
+                return resolveFullUrl(subdomain, relativePath);
             },
             resolveAppsEndpoint: function (appId) {
                 var appsEndpoint = JAVA_BASE_ENDPOINT + APPS_ENDPOINT;

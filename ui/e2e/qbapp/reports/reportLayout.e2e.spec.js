@@ -256,14 +256,14 @@ describe('Report Layout Tests', function (){
         browser.manage().window().setSize(widthTests[0],heightTests);
 
         // Get a session ticket for that subdomain and realmId (stores it in the browser)
-        var sessionTicketRequest = recordBase.apiBase.generateFullRequest(ticketEndpoint + realmId, realmName);
+        var sessionTicketRequest = recordBase.apiBase.generateFullRequest(realmName, ticketEndpoint + realmId);
         // This is a Non-Angular page, need to set this otherwise Protractor will wait forever for Angular to load
         browser.ignoreSynchronization = true;
         browser.get(sessionTicketRequest);
         browser.ignoreSynchronization = false;
 
         // Load the requestReportPage
-        var requestReportPageEndPoint = recordBase.apiBase.generateFullRequest('/qbapp#//', realmName);
+        var requestReportPageEndPoint = recordBase.apiBase.generateFullRequest(realmName, '/qbapp#//');
         browser.get(requestReportPageEndPoint);
         browser.driver.sleep(2000);
 
