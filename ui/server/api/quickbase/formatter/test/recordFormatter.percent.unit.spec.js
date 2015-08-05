@@ -1,6 +1,5 @@
 'use strict';
 
-var should = require('should');
 var recordFormatter = require('./../recordFormatter')();
 var assert = require('assert');
 
@@ -9,7 +8,7 @@ describe('Percent record formatter unit test', function () {
      * DataProvider containing Records, FieldProperties and record display expectations for percent field
      */
     function provider() {
-        var numberDecimalOnly = .74765432;
+        var numberDecimalOnly = 0.74765432;
 
         //Incomplete number
         var defaultRecordInput =  [[{

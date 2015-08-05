@@ -1,12 +1,11 @@
 'use strict';
-var should = require('should');
 var assert = require('assert');
-var app = require('../../app');
+require('../../app');
 var config = require('../../config/environment');
 var recordBase = require('./recordApi.base')(config);
-var Promise = require('bluebird');
-var _ = require('lodash');
 var testConsts = require('./api.test.constants');
+
+//jshint loopfunc: true
 
 /**
  * Integration test for URL field formatting
@@ -91,7 +90,7 @@ describe('API - URL record test cases - ', function () {
             { message: 'raw no proto url with no format flags', record: noProtoInput, format: 'raw', expectedFieldValue: noProtoInput },
             { message: 'display null url with no format flags', record: nullInput, format: 'display', expectedFieldValue: expectedNullRecord },
             { message: 'raw null url with no format flags', record: nullInput, format: 'raw', expectedFieldValue: nullInput }
-        ]
+        ];
     }
 
     /**
@@ -130,8 +129,8 @@ describe('API - URL record test cases - ', function () {
 
                             currentRecord.forEach(function (fieldValue) {
                                 if (fieldValue.id === records[i].expectedFieldValue.id) {
-                                    assert.deepEqual(fieldValue, records[i].expectedFieldValue, 'Unexpected field value returned: '
-                                    + JSON.stringify(fieldValue) + ', ' + JSON.stringify(records[i].expectedFieldValue));
+                                    assert.deepEqual(fieldValue, records[i].expectedFieldValue, 'Unexpected field value returned: ' +
+                                      JSON.stringify(fieldValue) + ', ' + JSON.stringify(records[i].expectedFieldValue));
                                 }
                             });
                         }
@@ -166,21 +165,21 @@ describe('API - URL record test cases - ', function () {
         var expectedNullRecord = {id: fid, value: null, display: ''};
 
         return [
-            { message: "display http url with 'dont show http' format flags', record: httpURLInput, format: 'display", expectedFieldValue: expectedHttpURLRecord },
-            { message: "raw http url with 'dont show http' format flags', record: httpURLInput, format: 'raw", expectedFieldValue: httpURLInput },
-            { message: "display https url with 'dont show http' format flags', record: httpsURLInput, format: 'display", expectedFieldValue: expectedHttpsURLRecord },
-            { message: "raw https url with 'dont show http' format flags', record: httpsURLInput, format: 'raw", expectedFieldValue: httpsURLInput },
-            { message: "display no proto url with 'dont show http' format flags', record: noProtoInput, format: 'display", expectedFieldValue: expectedNoProtoRecord },
-            { message: "raw no proto url with 'dont show http' format flags', record: noProtoInput, format: 'raw", expectedFieldValue: noProtoInput },
-            { message: "display null url with 'dont show http' format flags', record: nullInput, format: 'display", expectedFieldValue: expectedNullRecord },
-            { message: "raw null url with 'dont show http' format flags', record: nullInput, format: 'raw", expectedFieldValue: nullInput }
-        ]
+            { message: 'display http url with "dont show http" format flags', record: httpURLInput, format: 'display', expectedFieldValue: expectedHttpURLRecord },
+            { message: 'raw http url with "dont show http" format flags', record: httpURLInput, format: 'raw', expectedFieldValue: httpURLInput },
+            { message: 'display https url with "dont show http" format flags', record: httpsURLInput, format: 'display', expectedFieldValue: expectedHttpsURLRecord },
+            { message: 'raw https url with "dont show http" format flags', record: httpsURLInput, format: 'raw', expectedFieldValue: httpsURLInput },
+            { message: 'display no proto url with "dont show http" format flags', record: noProtoInput, format: 'display', expectedFieldValue: expectedNoProtoRecord },
+            { message: 'raw no proto url with "dont show http" format flags', record: noProtoInput, format: 'raw', expectedFieldValue: noProtoInput },
+            { message: 'display null url with "dont show http" format flags', record: nullInput, format: 'display', expectedFieldValue: expectedNullRecord },
+            { message: 'raw null url with "dont show http" format flags', record: nullInput, format: 'raw', expectedFieldValue: nullInput }
+        ];
     }
 
     /**
     * Integration test that validates URL records formatting with 'Don't Show HTTP' field property flags set
     */
-    it('Should create and retrieve url display records when 'dont;; show; http' format flags set', function (done) {
+    it('Should create and retrieve url display records when "dont show  http" format flags set', function (done) {
         this.timeout(testConsts.INTEGRATION_TIMEOUT * dontShowHttpFlagURLDataProvider().length);
         recordBase.createApp(appWithDontShowHttpFlag).then(function (appResponse) {
             var app = JSON.parse(appResponse.body);
@@ -213,8 +212,8 @@ describe('API - URL record test cases - ', function () {
 
                             currentRecord.forEach(function (fieldValue) {
                                 if (fieldValue.id === records[i].expectedFieldValue.id) {
-                                    assert.deepEqual(fieldValue, records[i].expectedFieldValue, 'Unexpected field value returned: '
-                                    + JSON.stringify(fieldValue) + ', ' + JSON.stringify(records[i].expectedFieldValue));
+                                    assert.deepEqual(fieldValue, records[i].expectedFieldValue, 'Unexpected field value returned: ' +
+                                    JSON.stringify(fieldValue) + ', ' + JSON.stringify(records[i].expectedFieldValue));
                                 }
                             });
                         }
@@ -225,8 +224,8 @@ describe('API - URL record test cases - ', function () {
                     });
             });
         });
-    };
-    )
+    }
+    );
     /**
      * DataProvider containing Records and record display expectations for URL field with all display props set
      */
@@ -257,7 +256,7 @@ describe('API - URL record test cases - ', function () {
             { message: 'raw no proto url with all format flags', record: noProtoInput, format: 'raw', expectedFieldValue: noProtoInput },
             { message: 'display null url with all format flags', record: nullInput, format: 'display', expectedFieldValue: expectedNullRecord },
             { message: 'raw null url with all format flags', record: nullInput, format: 'raw', expectedFieldValue: nullInput }
-        ]
+        ];
     }
 
     /**
@@ -296,8 +295,8 @@ describe('API - URL record test cases - ', function () {
 
                             currentRecord.forEach(function (fieldValue) {
                                 if (fieldValue.id === records[i].expectedFieldValue.id) {
-                                    assert.deepEqual(fieldValue, records[i].expectedFieldValue, 'Unexpected field value returned: '
-                                    + JSON.stringify(fieldValue) + ', ' + JSON.stringify(records[i].expectedFieldValue));
+                                    assert.deepEqual(fieldValue, records[i].expectedFieldValue, 'Unexpected field value returned: ' +
+                                      JSON.stringify(fieldValue) + ', ' + JSON.stringify(records[i].expectedFieldValue));
                                 }
                             });
                         }
@@ -318,4 +317,4 @@ describe('API - URL record test cases - ', function () {
             done();
         });
     });
-});;
+});

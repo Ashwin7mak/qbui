@@ -1,6 +1,5 @@
 'use strict';
 
-var should = require('should');
 var recordFormatter = require('./../recordFormatter')();
 var assert = require('assert');
 var jBigNum = require('json-bignum');
@@ -18,7 +17,7 @@ describe('Lookup record formatter unit test', function () {
     }
 
     function provider() {
-        var numberDecimalOnly = .74765432;
+        var numberDecimalOnly = 0.74765432;
 
 
         //Incomplete number

@@ -1,11 +1,8 @@
 'use strict';
-var should = require('should');
 var assert = require('assert');
-var app = require('../../app');
+require('../../app');
 var config = require('../../config/environment');
 var recordBase = require('./recordApi.base')(config);
-var Promise = require('bluebird');
-var _ = require('lodash');
 var testConsts = require('./api.test.constants');
 
 
@@ -95,8 +92,7 @@ describe('API - Summary numeric record test cases - ', function () {
                     //insert one record into the master table and cache the ID.
                     var masterRecord = [{id: masterTableText.id, value: 'record 1'}];
                     var masterRecordEndpoint = recordBase.apiBase.resolveRecordsEndpoint(app.id, masterTableId);
-                    recordBase.createAndFetchRecord(masterRecordEndpoint, masterRecord).then(function(masterRecResp){
-                        var masterRec = masterRecResp;
+                    recordBase.createAndFetchRecord(masterRecordEndpoint, masterRecord).then(function(){
                         //Insert multiple records into the details table
                         var detailsRecords = [
                             [{ id: detailTableFkField.id, value: 1},{ id: refField.id, value: numericValue1 }],
@@ -108,7 +104,7 @@ describe('API - Summary numeric record test cases - ', function () {
                             fetchRecordPromises.push(recordBase.createAndFetchRecord(recordsEndpoint, rec, '?format=display'));
                         });
                         //retrieve & validate the master record's summary value
-                        Promise.all(fetchRecordPromises).then(function(results){
+                        Promise.all(fetchRecordPromises).then(function(){
                             recordBase.fetchRecord(app.id, masterTableId, 1, '?format=display').then(function(summaryRecResp){
                                 var summaryRec = JSON.parse(summaryRecResp.body).record;
                                 summaryRec.forEach(function(fieldValue){

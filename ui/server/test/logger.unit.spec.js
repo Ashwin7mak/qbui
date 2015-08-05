@@ -95,8 +95,6 @@ describe('Validate Logger', function () {
             };
             var logger = initLoggerWithConfig(logConfig);
 
-            var emptyFunc = function () { };
-
             should.exist(logger);
             should(logger.fields.name).be.exactly('qbse-local');
             should(logger.src).be.exactly(true);
@@ -114,7 +112,7 @@ describe('Validate Logger', function () {
             var stub = sinon.stub(fs, 'existsSync');
             //  stub the logger so that we do not create a file when creating the logger
             var stub1 = sinon.stub(bunyan, 'createLogger', function() {
-                return { child: function() { return {} } };
+                return { child: function() { return {}; } };
             });
 
             //  clear out any logger configuration with explicit setting
@@ -153,7 +151,7 @@ describe('Validate Logger', function () {
 
             //  stub the logger so that we do not create a file when creating the logger
             var stub2 = sinon.stub(bunyan, 'createLogger', function() {
-                return { child: function() { return {} } };
+                return { child: function() { return {}; } };
             });
 
             //  clear out any logger configuration with explicit setting
@@ -218,10 +216,10 @@ describe('Validate Logger', function () {
             logger.logRequest(req, '/client/callFunction');
             assert(stub.calledWith( {Request:sinon.match.any, CallFunc:'/client/callFunction'} ));
 
-            logger.logRequest(req, '/public/callFunction')
+            logger.logRequest(req, '/public/callFunction');
             assert(stub.calledWith( {Request:sinon.match.any, CallFunc:'/public/callFunction'} ));
 
-            logger.logRequest(req, 'callFunction')
+            logger.logRequest(req, 'callFunction');
             assert(stub.calledWith( {Request:sinon.match.any, CallFunc:''} ));
 
             stub.restore();

@@ -1,13 +1,11 @@
 'use strict';
-var should = require('should');
 var assert = require('assert');
-var app = require('../../app');
 var config = require('../../config/environment');
 var recordBase = require('./recordApi.base')(config);
-var Promise = require('bluebird');
-var _ = require('lodash');
+require('../../app');
 var testConsts = require('./api.test.constants');
 
+//jshint loopfunc: true
 
 /**
  * Integration test for Date field formatting
@@ -82,7 +80,7 @@ describe('API - Date record test cases - ', function () {
             { message: 'raw different year date with no format flags', record: diffYearInput, format: 'raw', expectedFieldValue: diffYearInput },
             { message: 'display null date with no format flags', record: nullInput, format: 'display', expectedFieldValue: expectedNullRecord },
             { message: 'raw null date with no format flags', record: nullInput, format: 'raw', expectedFieldValue: nullInput }
-        ]
+        ];
     }
 
     /**
@@ -121,8 +119,8 @@ describe('API - Date record test cases - ', function () {
 
                             currentRecord.forEach(function (fieldValue) {
                                 if (fieldValue.id === records[i].expectedFieldValue.id) {
-                                    assert.deepEqual(fieldValue, records[i].expectedFieldValue, 'Unexpected field value returned: '
-                                    + JSON.stringify(fieldValue) + ', ' + JSON.stringify(records[i].expectedFieldValue));
+                                    assert.deepEqual(fieldValue, records[i].expectedFieldValue, 'Unexpected field value returned: ' +
+                                     JSON.stringify(fieldValue) + ', ' + JSON.stringify(records[i].expectedFieldValue));
                                 }
                             });
                         }
@@ -159,7 +157,7 @@ describe('API - Date record test cases - ', function () {
             { message: 'raw different year date with all DD_MM_YYYY format flags', record: diffYearInput, format: 'raw', expectedFieldValue: diffYearInput },
             { message: 'display null date with all DD_MM_YYYY format flags', record: nullInput, format: 'display', expectedFieldValue: expectedNullRecord },
             { message: 'raw null date with all DD_MM_YYYY format flags', record: nullInput, format: 'raw', expectedFieldValue: nullInput }
-        ]
+        ];
     }
 
     /**
@@ -198,8 +196,8 @@ describe('API - Date record test cases - ', function () {
 
                             currentRecord.forEach(function (fieldValue) {
                                 if (fieldValue.id === records[i].expectedFieldValue.id) {
-                                    assert.deepEqual(fieldValue, records[i].expectedFieldValue, 'Unexpected field value returned: '
-                                    + JSON.stringify(fieldValue) + ', ' + JSON.stringify(records[i].expectedFieldValue));
+                                    assert.deepEqual(fieldValue, records[i].expectedFieldValue, 'Unexpected field value returned: ' +
+                                    JSON.stringify(fieldValue) + ', ' + JSON.stringify(records[i].expectedFieldValue));
                                 }
                             });
                         }
@@ -236,7 +234,7 @@ describe('API - Date record test cases - ', function () {
             { message: 'raw different year date with all MM_DD_YYYY format flags', record: diffYearInput, format: 'raw', expectedFieldValue: diffYearInput },
             { message: 'display null date with all MM_DD_YYYY format flags', record: nullInput, format: 'display', expectedFieldValue: expectedNullRecord },
             { message: 'raw null date with all MM_DD_YYYY format flags', record: nullInput, format: 'raw', expectedFieldValue: nullInput }
-        ]
+        ];
     }
 
     /**
@@ -275,8 +273,8 @@ describe('API - Date record test cases - ', function () {
 
                             currentRecord.forEach(function (fieldValue) {
                                 if (fieldValue.id === records[i].expectedFieldValue.id) {
-                                    assert.deepEqual(fieldValue, records[i].expectedFieldValue, 'Unexpected field value returned: '
-                                    + JSON.stringify(fieldValue) + ', ' + JSON.stringify(records[i].expectedFieldValue));
+                                    assert.deepEqual(fieldValue, records[i].expectedFieldValue, 'Unexpected field value returned: ' +
+                                    JSON.stringify(fieldValue) + ', ' + JSON.stringify(records[i].expectedFieldValue));
                                 }
                             });
                         }
@@ -313,7 +311,7 @@ describe('API - Date record test cases - ', function () {
             { message: 'raw different year date with all MM_DD_YY format flags', record: diffYearInput, format: 'raw', expectedFieldValue: diffYearInput },
             { message: 'display null date with all MM_DD_YY format flags', record: nullInput, format: 'display', expectedFieldValue: expectedNullRecord },
             { message: 'raw null date with all MM_DD_YY format flags', record: nullInput, format: 'raw', expectedFieldValue: nullInput }
-        ]
+        ];
     }
 
     /**
@@ -352,8 +350,8 @@ describe('API - Date record test cases - ', function () {
 
                             currentRecord.forEach(function (fieldValue) {
                                 if (fieldValue.id === records[i].expectedFieldValue.id) {
-                                    assert.deepEqual(fieldValue, records[i].expectedFieldValue, 'Unexpected field value returned: '
-                                    + JSON.stringify(fieldValue) + ', ' + JSON.stringify(records[i].expectedFieldValue));
+                                    assert.deepEqual(fieldValue, records[i].expectedFieldValue, 'Unexpected field value returned: ' +
+                                    JSON.stringify(fieldValue) + ', ' + JSON.stringify(records[i].expectedFieldValue));
                                 }
                             });
                         }
@@ -390,7 +388,7 @@ describe('API - Date record test cases - ', function () {
             { message: 'raw different year date with all DD_MM_YY format flags', record: diffYearInput, format: 'raw', expectedFieldValue: diffYearInput },
             { message: 'display null date with all DD_MM_YY format flags', record: nullInput, format: 'display', expectedFieldValue: expectedNullRecord },
             { message: 'raw null date with all DD_MM_YY format flags', record: nullInput, format: 'raw', expectedFieldValue: nullInput }
-        ]
+        ];
     }
 
     /**
@@ -429,8 +427,8 @@ describe('API - Date record test cases - ', function () {
 
                             currentRecord.forEach(function (fieldValue) {
                                 if (fieldValue.id === records[i].expectedFieldValue.id) {
-                                    assert.deepEqual(fieldValue, records[i].expectedFieldValue, 'Unexpected field value returned: '
-                                    + JSON.stringify(fieldValue) + ', ' + JSON.stringify(records[i].expectedFieldValue));
+                                    assert.deepEqual(fieldValue, records[i].expectedFieldValue, 'Unexpected field value returned: ' +
+                                    JSON.stringify(fieldValue) + ', ' + JSON.stringify(records[i].expectedFieldValue));
                                 }
                             });
                         }
@@ -467,7 +465,7 @@ describe('API - Date record test cases - ', function () {
             { message: 'raw different year date with all YYYY_MM_DD_MM_YY format flags', record: diffYearInput, format: 'raw', expectedFieldValue: diffYearInput },
             { message: 'display null date with all YYYY_MM_DD_MM_YY format flags', record: nullInput, format: 'display', expectedFieldValue: expectedNullRecord },
             { message: 'raw null date with all YYYY_MM_DD_MM_YY format flags', record: nullInput, format: 'raw', expectedFieldValue: nullInput }
-        ]
+        ];
     }
 
     /**
@@ -506,8 +504,8 @@ describe('API - Date record test cases - ', function () {
 
                             currentRecord.forEach(function (fieldValue) {
                                 if (fieldValue.id === records[i].expectedFieldValue.id) {
-                                    assert.deepEqual(fieldValue, records[i].expectedFieldValue, 'Unexpected field value returned: '
-                                    + JSON.stringify(fieldValue) + ', ' + JSON.stringify(records[i].expectedFieldValue));
+                                    assert.deepEqual(fieldValue, records[i].expectedFieldValue, 'Unexpected field value returned: ' +
+                                        JSON.stringify(fieldValue) + ', ' + JSON.stringify(records[i].expectedFieldValue));
                                 }
                             });
                         }

@@ -1,12 +1,11 @@
 'use strict';
-var should = require('should');
 var assert = require('assert');
-var app = require('../../app');
+require('../../app');
 var config = require('../../config/environment');
 var recordBase = require('./recordApi.base')(config);
-var Promise = require('bluebird');
-var _ = require('lodash');
 var testConsts = require('./api.test.constants');
+
+//jshint loopfunc: true
 
 /**
  * Integration test for User field formatting
@@ -146,8 +145,8 @@ describe('API - User record test cases - ', function () {
 
                             currentRecord.forEach(function (fieldValue) {
                                 if (fieldValue.id === records[i].expectedFieldValue.id) {
-                                    assert.deepEqual(fieldValue, records[i].expectedFieldValue, 'Unexpected field value returned: '
-                                    + JSON.stringify(fieldValue) + ', ' + JSON.stringify(records[i].expectedFieldValue));
+                                    assert.deepEqual(fieldValue, records[i].expectedFieldValue, 'Unexpected field value returned: ' +
+                                      JSON.stringify(fieldValue) + ', ' + JSON.stringify(records[i].expectedFieldValue));
                                 }
                             });
                         }
@@ -252,8 +251,8 @@ describe('API - User record test cases - ', function () {
 
                                 currentRecord.forEach(function (fieldValue) {
                                     if (fieldValue.id === records[i].expectedFieldValue.id) {
-                                        assert.deepEqual(fieldValue, records[i].expectedFieldValue, 'Unexpected field value returned: '
-                                        + JSON.stringify(fieldValue) + ', ' + JSON.stringify(records[i].expectedFieldValue));
+                                        assert.deepEqual(fieldValue, records[i].expectedFieldValue, 'Unexpected field value returned: ' +
+                                          JSON.stringify(fieldValue) + ', ' + JSON.stringify(records[i].expectedFieldValue));
                                     }
                                 });
                             }

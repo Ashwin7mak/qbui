@@ -19,21 +19,20 @@ describe('Record generator', function () {
      */
     function fieldProvider() {
         return [
-            {message: "checkbox field", fieldType: consts.CHECKBOX},
-            {message: "text field", fieldType: consts.TEXT},
-            {message: "multi line text field", fieldType: consts.MULTI_LINE_TEXT},
-            {message: "phone number field", fieldType: consts.PHONE_NUMBER},
-            {message: "date field", fieldType: consts.DATE},
-            {message: "duration field", fieldType: consts.DURATION},
-            {message: "time of day field", fieldType: consts.TIME_OF_DAY},
-            {message: "numeric field", fieldType: consts.NUMERIC},
-            {message: "currency field", fieldType: consts.CURRENCY},
-            {message: "rating field", fieldType: consts.RATING},
-            {message: "percent field", fieldType: consts.PERCENT},
-            {message: "url field", fieldType: consts.URL},
-            {message: "email address field", fieldType: consts.EMAIL_ADDRESS},
-            {message: "user field", fieldType: consts.USER},
-            {message: "file attachment field", fieldType: consts.FILE_ATTACHMENT},
+            {message: "checkbox field", fieldType: consts.SCALAR, dataType: consts.CHECKBOX},
+            {message: "text field", fieldType: consts.SCALAR, dataType: consts.TEXT},
+            {message: "phone number field", fieldType: consts.SCALAR, dataType: consts.PHONE_NUMBER},
+            {message: "date field", fieldType: consts.SCALAR, dataType: consts.DATE},
+            {message: "duration field", fieldType: consts.SCALAR, dataType: consts.DURATION},
+            {message: "time of day field", fieldType: consts.SCALAR, dataType: consts.TIME_OF_DAY},
+            {message: "numeric field", fieldType: consts.SCALAR, dataType: consts.NUMERIC},
+            {message: "currency field", fieldType: consts.SCALAR, dataType: consts.CURRENCY},
+            {message: "rating field", fieldType: consts.SCALAR, dataType: consts.RATING},
+            {message: "percent field", fieldType: consts.SCALAR, dataType: consts.PERCENT},
+            {message: "url field", fieldType: consts.SCALAR, dataType: consts.URL},
+            {message: "email address field", fieldType: consts.SCALAR, dataType: consts.EMAIL_ADDRESS},
+            {message: "user field", fieldType: consts.SCALAR, dataType: consts.USER},
+            {message: "file attachment field", fieldType: consts.CONCRETE, dataType: consts.FILE_ATTACHMENT},
         ];
     }
 
@@ -45,7 +44,7 @@ describe('Record generator', function () {
         var fields = [];
         fieldProvider().forEach(function(entry) {
             // Generate the field and add it to the list
-            var field = fieldGenerator.generateBaseField(entry.fieldType);
+            var field = fieldGenerator.generateBaseField(entry.fieldType, entry.dataType);
             fields.push(field);
         });
 

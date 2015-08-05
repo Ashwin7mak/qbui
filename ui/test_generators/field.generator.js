@@ -10,6 +10,7 @@
     var defaultConsts = require('./field.schema.defaults');
     var rawValueGenerator = require('./rawValue.generator');
     var fieldBuilder = require('./field.builder');
+    var datatypeAttributesGenerator = require('./datatype.attributes.generator');
     var _ = require('lodash');
     var FIELD_KEYS = 'fieldKeys';
 
@@ -18,15 +19,24 @@
             return fieldBuilder.builder();
         },
 
+        getDataTypeBuilder : function(){
+            return datatypeAttributesGenerator.getDataTypeBuilder();
+        },
+
         getAvailableFieldTypes : function(){
             return fieldConsts.availableFieldTypes;
         },
 
+        getAvailableDataTypes : function(){
+            return datatypeAttributesGenerator.getAvailableDataTypes();
+        },
+
         //Generate a json field blob based on field type
-        generateBaseField : function(type){
+        generateBaseField : function(type, datatype){
             var builder = fieldBuilder.builder();
             var fieldName = rawValueGenerator.generateString(15);
-            var field = builder.withName(fieldName).withType(type).build();
+            var datatypeAttributes = datatypeAttributesGenerator.generateBaseDataType(datatype);
+            var field = builder.withName(fieldName).withFieldType(type).withDataTypeAttributes(datatypeAttributes).build();
             return field;
         },
 
@@ -40,15 +50,22 @@
             //let's start out assuming the best and let the loop tell us if we're in trouble
             var foundKey = false;
             var valueValid = true;
+            var dataTypeAttributesValid = true;
             var typesKeyWord = 'types';
             var fieldType = field[fieldConsts.fieldKeys.TYPE];
             var fieldKeys = Object.keys(field);
+            var dataTypeAttributes = field[fieldConsts.fieldKeys.DATA_TYPE_ATTRIBUTES];
+
 
             //loop over all of the keys on the passed field
             fieldKeys.forEach(function (fieldKey) {
                 foundKey = false;
                 //loop over every key in for this field type
                 _.forEach(fieldConsts[fieldType][FIELD_KEYS], function (constValue, constKey) {
+
+                    if(fieldKey === 'datatypeAttributes' && constValue !== fieldKey){
+                        console.log('blech');
+                    }
 
                     //if we find the fieldKey matches current JSON constant then make sure we have found the right type
                     if (constValue === fieldKey) {
@@ -79,7 +96,12 @@
 
             });
 
-            return foundKey && valueValid;
+            if(!datatypeAttributesGenerator.validateDataTypeProperties(dataTypeAttributes)){
+                dataTypeAttributesValid = false;
+                console.error('Could not validate dataTypeAttributes: ' + datatypeAttributesGenerator.fieldToJsonString(dataTypeAttributes) + '.\n This field will not be added to the table');
+            }
+
+            return foundKey && valueValid && dataTypeAttributesValid;
         },
 
         //For a given field type, apply any default values that are not currently present in the map
@@ -100,38 +122,10 @@
 
     //map fields by type so that we can know what to do fairly easily by grabbing keys
     //formula fields
-    fieldTypeToFunctionCalls[consts.FORMULA_DATE_TIME] = applyDateTimeFormulaHierarchy;
-    fieldTypeToFunctionCalls[consts.FORMULA_DATE] = applyDateFormulaHierarchy;
-    fieldTypeToFunctionCalls[consts.FORMULA_TIME_OF_DAY] = function(fieldToModify){ applyDateTimeFormulaHierarchy(fieldToModify); applyTimeOfDayDefaults(fieldToModify);};
-    fieldTypeToFunctionCalls[consts.FORMULA_NUMERIC] = applyNumericFormulaHierarchy;
-    fieldTypeToFunctionCalls[consts.FORMULA_CURRENCY] = applyNumericFormulaHierarchy;
-    fieldTypeToFunctionCalls[consts.FORMULA_PERCENT] = applyNumericFormulaHierarchy;
-    fieldTypeToFunctionCalls[consts.FORMULA_DURATION] = function(fieldToModify){applyNumericFormulaHierarchy(fieldToModify); applyDurationDefaults(fieldToModify);};
-    fieldTypeToFunctionCalls[consts.FORMULA_USER] = applyFormulaHierarchy;
-    fieldTypeToFunctionCalls[consts.FORMULA_TEXT] = applyFormulaHierarchy;
-    fieldTypeToFunctionCalls[consts.FORMULA_PHONE_NUMBER] = function(fieldToModify){ applyFormulaHierarchy(fieldToModify); applyPhoneNumberDefaults(fieldToModify);};
-    fieldTypeToFunctionCalls[consts.FORMULA_EMAIL_ADDRESS] = function(fieldToModify){ applyFormulaHierarchy(fieldToModify); applyEmailDefaults(fieldToModify);};
-    fieldTypeToFunctionCalls[consts.FORMULA_URL] = applyFormulaHierarchy;
-    fieldTypeToFunctionCalls[consts.FORMULA_CHECKBOX] = applyFormulaHierarchy;
-    fieldTypeToFunctionCalls[consts.FORMULA_USER] = function(fieldToModify){applyFormulaHierarchy(fieldToModify); applyUserDefaults(fieldToModify);};
+    fieldTypeToFunctionCalls[consts.FORMULA] = applyFormulaHierarchy;
 
     //concrete/scalar fields
-    fieldTypeToFunctionCalls[consts.PERCENT] = applyNumericHierarchy;
-    fieldTypeToFunctionCalls[consts.NUMERIC] = applyNumericHierarchy;
-    fieldTypeToFunctionCalls[consts.CURRENCY] = applyNumericHierarchy;
-    fieldTypeToFunctionCalls[consts.RATING] = applyNumericHierarchy;
-    fieldTypeToFunctionCalls[consts.DURATION] = function(fieldToModify){applyNumericHierarchy(fieldToModify); applyDurationDefaults(fieldToModify);};
-    fieldTypeToFunctionCalls[consts.TEXT] = applyTextHierarchy;
-    fieldTypeToFunctionCalls[consts.MULTI_LINE_TEXT] = applyTextHierarchy;
-    fieldTypeToFunctionCalls[consts.BIGTEXT] = applyTextHierarchy;
-    fieldTypeToFunctionCalls[consts.URL] = function(fieldToModify){ applyScalarHierarchy(fieldToModify); applyUrlDefaults(fieldToModify);};
-    fieldTypeToFunctionCalls[consts.EMAIL_ADDRESS] = function(fieldToModify){ applyScalarHierarchy(fieldToModify); applyEmailDefaults(fieldToModify);};
-    fieldTypeToFunctionCalls[consts.PHONE_NUMBER] = function(fieldToModify){ applyScalarHierarchy(fieldToModify); applyPhoneNumberDefaults(fieldToModify);};
-    fieldTypeToFunctionCalls[consts.DATE_TIME] = applyDateTimeHierarchy;
-    fieldTypeToFunctionCalls[consts.DATE] = applyDateHierarchy;
-    fieldTypeToFunctionCalls[consts.TIME_OF_DAY] = function(fieldToModify){ applyDateTimeHierarchy(fieldToModify); applyTimeOfDayDefaults(fieldToModify);};
-    fieldTypeToFunctionCalls[consts.CHECKBOX] = applyScalarHierarchy;
-    fieldTypeToFunctionCalls[consts.USER] = function(fieldToModify){applyScalarHierarchy(fieldToModify); applyUserDefaults(fieldToModify);};
+    fieldTypeToFunctionCalls[consts.SCALAR] = applyScalarHierarchy;
 
     //virtuals
     fieldTypeToFunctionCalls[consts.LOOKUP] = applyFieldDefaults;
@@ -139,57 +133,23 @@
 
     //weirdos
     fieldTypeToFunctionCalls[consts.REPORT_LINK] = function(fieldToModify){applyFieldDefaults(fieldToModify); applyReportLinkDefaults(fieldToModify);};
-    fieldTypeToFunctionCalls[consts.FILE_ATTACHMENT] = function(fieldToModify){applyConcreteHierarchy(fieldToModify); applyFileAttachmentDefaults(fieldToModify);};
+
+    fieldTypeToFunctionCalls[consts.CONCRETE] = applyConcreteHierarchy;
 
     function applyFormulaHierarchy(fieldToModify){
         applyFieldDefaults(fieldToModify);
         applyFormulaDefaults(fieldToModify);
-    };
+    }
 
     function applyConcreteHierarchy(fieldToModify){
         applyFieldDefaults(fieldToModify);
         applyConcreteDefaults(fieldToModify);
-    };
+    }
 
     function applyScalarHierarchy(fieldToModify){
         applyConcreteHierarchy(fieldToModify)
         applyScalarDefaults(fieldToModify);
-    };
-
-    function applyNumericHierarchy(fieldToModify){
-        applyScalarHierarchy(fieldToModify)
-        applyNumericDefaults(fieldToModify);
-    };
-
-    function applyNumericFormulaHierarchy(fieldToModify){
-        applyFormulaHierarchy(fieldToModify)
-        applyNumericDefaults(fieldToModify);
-    };
-
-    function applyDateHierarchy(fieldToModify){
-        applyConcreteHierarchy(fieldToModify)
-        applyDateDefaults(fieldToModify);
-    };
-
-    function applyDateFormulaHierarchy(fieldToModify){
-        applyFormulaHierarchy(fieldToModify)
-        applyDateDefaults(fieldToModify);
-    };
-
-    function applyDateTimeHierarchy(fieldToModify){
-        applyDateHierarchy(fieldToModify)
-        applyDateTimeDefaults(fieldToModify);
-    };
-
-    function applyDateTimeFormulaHierarchy(fieldToModify){
-        applyFormulaHierarchy(fieldToModify)
-        applyDateTimeDefaults(fieldToModify);
-    };
-
-    function applyTextHierarchy(fieldToModify){
-        applyScalarHierarchy(fieldToModify)
-        applyTextDefaults(fieldToModify);
-    };
+    }
 
     function applyFieldDefaults(fieldToModify){
         //apply all high level field properties that are missing
@@ -227,18 +187,6 @@
         }
     }
 
-    function applyNumericDefaults(fieldToModify){
-        var fieldType = fieldToModify[fieldConsts.fieldKeys.TYPE];
-
-        if(!fieldToModify[fieldConsts[fieldType][FIELD_KEYS].DECIMAL_PLACES]){
-            fieldToModify[fieldConsts[fieldType][FIELD_KEYS].DECIMAL_PLACES] = defaultConsts.numericDefaults.DECIMAL_PLACES_DEFAULT;
-        }
-
-        if(!fieldToModify[fieldConsts[fieldType][FIELD_KEYS].TREAT_NULL_AS_ZERO]){
-            fieldToModify[fieldConsts[fieldType][FIELD_KEYS].TREAT_NULL_AS_ZERO] = defaultConsts.numericDefaults.TREAT_NULL_AS_ZERO_DEFAULT;
-        }
-    }
-
     function applyScalarDefaults(fieldToModify) {
         var fieldType = fieldToModify[fieldConsts.fieldKeys.TYPE];
 
@@ -252,102 +200,6 @@
 
         if (!fieldToModify[fieldConsts[fieldType][FIELD_KEYS].MULTIPLE_CHOICE_SOURCE_ALLOWED]) {
             fieldToModify[fieldConsts[fieldType][FIELD_KEYS].MULTIPLE_CHOICE_SOURCE_ALLOWED] = defaultConsts.scalarDefaults.MULTI_CHOICE_SOURCE_ALLOWED_DEFAULT;
-        }
-    }
-
-    function applyDateDefaults(fieldToModify){
-        var fieldType = fieldToModify[fieldConsts.fieldKeys.TYPE];
-
-        if (!fieldToModify[fieldConsts[fieldType][FIELD_KEYS].SHOW_MONTH_AS_NAME]) {
-            fieldToModify[fieldConsts[fieldType][FIELD_KEYS].SHOW_MONTH_AS_NAME] = defaultConsts.dateDefaults.SHOW_MONTH_AS_NAME_DEFAULT;
-        }
-
-        if (!fieldToModify[fieldConsts[fieldType][FIELD_KEYS].SHOW_DAY_OF_WEEK]) {
-            fieldToModify[fieldConsts[fieldType][FIELD_KEYS].SHOW_DAY_OF_WEEK] = defaultConsts.dateDefaults.SHOW_DAY_OF_WEEK_DEFAULT;
-        }
-
-        if (!fieldToModify[fieldConsts[fieldType][FIELD_KEYS].HIDE_YEAR_IF_CURRENT]) {
-            fieldToModify[fieldConsts[fieldType][FIELD_KEYS].HIDE_YEAR_IF_CURRENT] = defaultConsts.dateDefaults.HIDE_YEAR_IF_CURRENT_DEFAULT;
-        }
-    }
-
-    function applyDateTimeDefaults(fieldToModify){
-        var fieldType = fieldToModify[fieldConsts.fieldKeys.TYPE];
-
-        if (!fieldToModify[fieldConsts[fieldType][FIELD_KEYS].SHOW_TIME]) {
-            fieldToModify[fieldConsts[fieldType][FIELD_KEYS].SHOW_TIME] = defaultConsts.dateTimeDefaults.SHOW_TIME_DEFAULT;
-        }
-
-        if (!fieldToModify[fieldConsts[fieldType][FIELD_KEYS].SHOW_TIME_ZONE]) {
-            fieldToModify[fieldConsts[fieldType][FIELD_KEYS].SHOW_TIME_ZONE] = defaultConsts.dateTimeDefaults.SHOW_TIME_ZONE_DEFAULT;
-        }
-
-    }
-
-    function applyTimeOfDayDefaults(fieldToModify){
-        var fieldType = fieldToModify[fieldConsts.fieldKeys.TYPE];
-
-        if (!fieldToModify[fieldConsts[fieldType][FIELD_KEYS].SHOW_TIME]) {
-            fieldToModify[fieldConsts[fieldType][FIELD_KEYS].SHOW_TIME] = defaultConsts.dateTimeDefaults.SHOW_TIME_DEFAULT;
-        }
-
-        if (!fieldToModify[fieldConsts[fieldType][FIELD_KEYS].SHOW_TIME_ZONE]) {
-            fieldToModify[fieldConsts[fieldType][FIELD_KEYS].SHOW_TIME_ZONE] = defaultConsts.dateTimeDefaults.SHOW_TIME_ZONE_DEFAULT;
-        }
-
-    }
-
-    function applyDurationDefaults(fieldToModify){
-        var fieldType = fieldToModify[fieldConsts.fieldKeys.TYPE];
-
-        if (!fieldToModify[fieldConsts[fieldType][FIELD_KEYS].SCALE]) {
-            fieldToModify[fieldConsts[fieldType][FIELD_KEYS].SCALE] = defaultConsts.durationDefaults.SCALE_DEFAULT;
-        }
-    }
-
-    function applyEmailDefaults(fieldToModify) {
-        var fieldType = fieldToModify[fieldConsts.fieldKeys.TYPE];
-
-        if (!fieldToModify[fieldConsts[fieldType][FIELD_KEYS].DEFAULT_DOMAIN]) {
-            fieldToModify[fieldConsts[fieldType][FIELD_KEYS].DEFAULT_DOMAIN] = defaultConsts.emailDefaults.DOMAIN_DEFAULT_VALUE_DEFAULT;
-        }
-
-        if (!fieldToModify[fieldConsts[fieldType][FIELD_KEYS].SORT_BY_DOMAIN]) {
-            fieldToModify[fieldConsts[fieldType][FIELD_KEYS].SORT_BY_DOMAIN] = defaultConsts.emailDefaults.SORT_BY_DOMAIN_DEFAULT;
-        }
-
-        if (!fieldToModify[fieldConsts[fieldType][FIELD_KEYS].SHOW_EMAIL_EVERYONE]) {
-            fieldToModify[fieldConsts[fieldType][FIELD_KEYS].SHOW_EMAIL_EVERYONE] = defaultConsts.emailDefaults.SHOW_EMAIL_EVERYONE_DEFAULT;
-        }
-
-    }
-
-    function applyFileAttachmentDefaults(fieldToModify) {
-        var fieldType = fieldToModify[fieldConsts.fieldKeys.TYPE];
-
-        if (!fieldToModify[fieldConsts[fieldType][FIELD_KEYS].LINK_TEXT]) {
-            fieldToModify[fieldConsts[fieldType][FIELD_KEYS].LINK_TEXT] = defaultConsts.fileAttachmentDefaults.LINK_TEXT_DEFAULT;
-        }
-
-        if (!fieldToModify[fieldConsts[fieldType][FIELD_KEYS].KEEP_ALL_REVISIONS]) {
-            fieldToModify[fieldConsts[fieldType][FIELD_KEYS].KEEP_ALL_REVISIONS] = defaultConsts.fileAttachmentDefaults.KEEP_ALL_REVISIONS_DEFAULT;
-        }
-
-        if (!fieldToModify[fieldConsts[fieldType][FIELD_KEYS].REVISIONS_TO_KEEP]) {
-            fieldToModify[fieldConsts[fieldType][FIELD_KEYS].REVISIONS_TO_KEEP] = defaultConsts.fileAttachmentDefaults.REVISIONS_TO_KEEP_DEFAULT;
-        }
-
-        if (!fieldToModify[fieldConsts[fieldType][FIELD_KEYS].ALLOW_USERS_TO_MAKE_OLDER_VERSIONS_THE_CURRENT_VERSION]) {
-            fieldToModify[fieldConsts[fieldType][FIELD_KEYS].ALLOW_USERS_TO_MAKE_OLDER_VERSIONS_THE_CURRENT_VERSION] = defaultConsts.fileAttachmentDefaults.ALLOW_USERS_TO_SET_CURRENT_VERSION_DEFAULT;
-        }
-
-    }
-
-    function applyPhoneNumberDefaults(fieldToModify){
-        var fieldType = fieldToModify[fieldConsts.fieldKeys.TYPE];
-
-        if (!fieldToModify[fieldConsts[fieldType][FIELD_KEYS].INCLUDE_EXTENSION]) {
-            fieldToModify[fieldConsts[fieldType][FIELD_KEYS].INCLUDE_EXTENSION] = defaultConsts.phoneNumberDefaults.INCLUDE_EXTENSION_DEFAULT;
         }
     }
 
@@ -384,38 +236,6 @@
 
         if (!fieldToModify[fieldConsts[fieldType][FIELD_KEYS].TREAT_NULL_AS_ZERO]) {
             fieldToModify[fieldConsts[fieldType][FIELD_KEYS].TREAT_NULL_AS_ZERO] = defaultConsts.summaryDefaults.TREAT_NULL_AS_ZERO_DEFAULT;
-        }
-    }
-
-    function applyTextDefaults(fieldToModify){
-        var fieldType = fieldToModify[fieldConsts.fieldKeys.TYPE];
-
-        if (!fieldToModify[fieldConsts[fieldType][FIELD_KEYS].HTML_ALLOWED]) {
-            fieldToModify[fieldConsts[fieldType][FIELD_KEYS].HTML_ALLOWED] = defaultConsts.textDefaults.HTML_ALLOWED_DEFAULT;
-        }
-    }
-
-    function applyUrlDefaults(fieldToModify){
-        var fieldType = fieldToModify[fieldConsts.fieldKeys.TYPE];
-
-        if (!fieldToModify[fieldConsts[fieldType][FIELD_KEYS].DISPLAY_PROTOCOL]) {
-            fieldToModify[fieldConsts[fieldType][FIELD_KEYS].DISPLAY_PROTOCOL] = defaultConsts.urlDefaults.URL_DISPLAY_PROTOCOL_DEFAULT;
-        }
-
-        if (!fieldToModify[fieldConsts[fieldType][FIELD_KEYS].LINK_TEXT]) {
-            fieldToModify[fieldConsts[fieldType][FIELD_KEYS].LINK_TEXT] = defaultConsts.urlDefaults.URL_DEFAULT_LINK_TEXT;
-        }
-    }
-
-    function applyUserDefaults(fieldToModify){
-        var fieldType = fieldToModify[fieldConsts.fieldKeys.TYPE];
-
-        if (!fieldToModify[fieldConsts[fieldType][FIELD_KEYS].SEND_INVITES_TO_USERS]) {
-            fieldToModify[fieldConsts[fieldType][FIELD_KEYS].SEND_INVITES_TO_USERS] = defaultConsts.userDefaults.SEND_INVITES_TO_USERS_DEFAULT;
-        }
-
-        if (!fieldToModify[fieldConsts[fieldType][FIELD_KEYS].USER_DISPLAY_FORMAT]) {
-            fieldToModify[fieldConsts[fieldType][FIELD_KEYS].USER_DISPLAY_FORMAT] = defaultConsts.userDefaults.USER_DISPLAY_FORMAT_DEFAULT;
         }
     }
 

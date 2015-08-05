@@ -1,22 +1,26 @@
 describe('Factory: ReportsDashboardModel', function() {
     'use strict';
 
-    var scope, ReportsDashboardModel, ReportsDashboardService, deferred;
-    var appId='1', tableId='2';
+    var scope;
+    var ReportsDashboardModel;
+    var ReportsDashboardService;
+    var deferred;
+    var appId = '1';
+    var tableId = '2';
 
     // load the module
     beforeEach(function() {
-        module('qbse.qbapp.reports.dashboard','quickbase.qbapp', 'qbse.templates');
+        module('qbse.qbapp.reports.dashboard', 'quickbase.qbapp', 'qbse.templates');
     });
 
     beforeEach(
-        inject(function($rootScope, _ReportsDashboardModel_, _ReportsDashboardService_, $q) {
-            scope = $rootScope.$new();
-            ReportsDashboardModel = _ReportsDashboardModel_;
-            ReportsDashboardService = _ReportsDashboardService_;
+            inject(function($rootScope, _ReportsDashboardModel_, _ReportsDashboardService_, $q) {
+                scope = $rootScope.$new();
+                ReportsDashboardModel = _ReportsDashboardModel_;
+                ReportsDashboardService = _ReportsDashboardService_;
 
-            deferred = $q.defer();
-        })
+                deferred = $q.defer();
+            })
     );
 
     it('validate the get service', function() {
@@ -27,16 +31,16 @@ describe('Factory: ReportsDashboardModel', function() {
 
         //  apply the promise and propagate to the then function..
         var reportData = [
-            {id:'0', name:'name0'},
-            {id:'1', name:'name1'},
-            {id:'2', name:'name2'}];
+            {id: '0', name: 'name0'},
+            {id: '1', name: 'name1'},
+            {id: '2', name: 'name2'}];
         deferred.resolve(reportData);
 
         var reports;
-        ReportsDashboardService.get(appId, tableId).then (
-             function (value) {
-                 reports = value;
-             }
+        ReportsDashboardService.get(appId, tableId).then(
+                function(value) {
+                    reports = value;
+                }
         );
 
         scope.$apply();
@@ -55,16 +59,16 @@ describe('Factory: ReportsDashboardModel', function() {
 
         //  apply the promise and propagate to the then function..
         var appsData = [
-            {id:'0', name:'name0'},
-            {id:'1', name:'name1'},
-            {id:'2', name:'name2'}];
+            {id: '0', name: 'name0'},
+            {id: '1', name: 'name1'},
+            {id: '2', name: 'name2'}];
         deferred.resolve(appsData);
 
         var apps;
-        ReportsDashboardService.getApps().then (
-             function (value) {
-                 apps = value;
-             }
+        ReportsDashboardService.getApps().then(
+                function(value) {
+                    apps = value;
+                }
         );
 
         scope.$apply();
@@ -82,14 +86,14 @@ describe('Factory: ReportsDashboardModel', function() {
         });
 
         //  apply the promise and propagate to the then function..
-        var appData = {id:'0', name:'name0'};
+        var appData = {id: '0', name: 'name0'};
         deferred.resolve(appData);
 
         var app;
-        ReportsDashboardService.getApp(appId).then (
-             function (value) {
-                 app = value;
-             }
+        ReportsDashboardService.getApp(appId).then(
+                function(value) {
+                    app = value;
+                }
         );
 
         scope.$apply();

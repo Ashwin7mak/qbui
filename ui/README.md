@@ -101,6 +101,9 @@ FIRST - Do all the Quickbase java backend development [setup instructions](https
 ##Configuring
 Environment specific configurations reside in the qbui/ui/server/config/environment directory. The application requires a run-time environment to be defined and configured.  
 
+For developing set this environment variable in your bash profile
+`export NODE_ENV=local`
+
 By default, the server runs in local development mode, meaning a local configuration file must be defined. As this file is not tracked by git, to run locally, you will need to do the following:
 
 - copy \<project root\>qbui/ui/server/config/environment/local.js.sample into the local.js
@@ -391,6 +394,14 @@ POSSIBLE ISSUES -- and how to resolve
 3. If when running your node server you see ECONNREFUSED in the logs make sure you have followed the instructions for the DNS workaround on mac above
 
       
+##Other Resources
+
+* Links for learning Node, angular etc - [https://github.intuit.com/QuickBase/QuickBaseUIProto/blob/development/ui/LEARNING.md]([https://github.intuit.com/QuickBase/QuickBaseUIProto/blob/development/ui/LEARNING.md)
+
+* Information on the ui ops tools we use to build and deploy the you - [https://github.intuit.com/QuickBase/QuickBaseUIProto/blob/development/ui/TOOLS_AND_LIBS.md](https://github.intuit.com/QuickBase/QuickBaseUIProto/blob/development/ui/TOOLS_AND_LIBS.md)
+
+* Globalization oin the UI - [https://github.intuit.com/QuickBase/QuickBaseUIProto/blob/development/ui/UI%20i18n.md](https://github.intuit.com/QuickBase/QuickBaseUIProto/blob/development/ui/UI%20i18n.md)
+
 Contributors
 ---------------------
 + Chris Deery

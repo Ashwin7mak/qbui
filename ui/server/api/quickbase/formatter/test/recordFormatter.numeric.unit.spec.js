@@ -1,6 +1,5 @@
 'use strict';
 
-var should = require('should');
 var recordFormatter = require('./../recordFormatter')();
 var assert = require('assert');
 
@@ -12,8 +11,9 @@ describe('Numeric record formatter unit test', function () {
     /**
      * DataProvider containing Records, FieldProperties and record display expectations for numeric field
      */
+    //jshint maxstatements:false
     function provider() {
-        var numberDecimalOnly = .74765432;
+        var numberDecimalOnly = 0.74765432;
         var numberDouble = 98765432100.74765;
         var numberNoSeparator = 99;
         var numberMultipleSeparators = 98765432100;

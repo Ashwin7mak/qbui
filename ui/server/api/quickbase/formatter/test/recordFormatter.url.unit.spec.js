@@ -1,6 +1,5 @@
 'use strict';
 
-var should = require('should');
 var recordFormatter = require('./../recordFormatter')();
 var assert = require('assert');
 
@@ -12,6 +11,7 @@ describe('URL record formatter unit test', function () {
     /**
      * DataProvider containing Records, FieldProperties and record display expectations URL fields
      */
+    //jshint maxstatements:false
     function urlDataProvider() {
 
         var httpURL = 'http://www.intuit.com';
@@ -123,19 +123,19 @@ describe('URL record formatter unit test', function () {
             { message: 'URL - no protocol url with no flags', records: recordInputNoProtoURL, fieldInfo: fieldInfo_NoFlags, expectedRecords: expectedNoProtoURL_NoFlags },
 
             // Don't Show Http flag enabled
-            { message: "URL - http url with 'don't show Http' flag", records: recordInputHttpURL, fieldInfo: fieldInfo_DontShowHTTPEnabled, expectedRecords: expectedHttpURL_DontShowHTTPEnabled },
-            { message: "URL - https url with 'don't show Http' flag", records: recordInputHttpsURL, fieldInfo: fieldInfo_DontShowHTTPEnabled, expectedRecords: expectedHttpsURL_DontShowHTTPEnabled },
-            { message: "URL - no protocol url with 'don't show Http' flag", records: recordInputNoProtoURL, fieldInfo: fieldInfo_DontShowHTTPEnabled, expectedRecords: expectedNoProtoURL_DontShowHTTPEnabled },
+            { message: 'URL - http url with "don\'t show Http" flag', records: recordInputHttpURL, fieldInfo: fieldInfo_DontShowHTTPEnabled, expectedRecords: expectedHttpURL_DontShowHTTPEnabled },
+            { message: 'URL - https url with "don\'t show Http" flag', records: recordInputHttpsURL, fieldInfo: fieldInfo_DontShowHTTPEnabled, expectedRecords: expectedHttpsURL_DontShowHTTPEnabled },
+            { message: 'URL - no protocol url with "don\'t show Http" flag', records: recordInputNoProtoURL, fieldInfo: fieldInfo_DontShowHTTPEnabled, expectedRecords: expectedNoProtoURL_DontShowHTTPEnabled },
 
             // Don't Show Http flag disabled
-            { message: "URL - http url with 'don't show Http' flag disabled", records: recordInputHttpURL, fieldInfo: fieldInfo_DontShowHTTPDisabled, expectedRecords: expectedHttpURL_DontShowHTTPDisabled },
-            { message: "URL - https url with 'don't show Http' flag disabled", records: recordInputHttpsURL, fieldInfo: fieldInfo_DontShowHTTPDisabled, expectedRecords: expectedHttpsURL_DontShowHTTPDisabled },
-            { message: "URL - no protocol url with 'don't show Http' flag disabled", records: recordInputNoProtoURL, fieldInfo: fieldInfo_DontShowHTTPDisabled, expectedRecords: expectedNoProtoURL_DontShowHTTPDisabled },
+            { message: 'URL - http url with "don\'t show Http" flag disabled', records: recordInputHttpURL, fieldInfo: fieldInfo_DontShowHTTPDisabled, expectedRecords: expectedHttpURL_DontShowHTTPDisabled },
+            { message: 'URL - https url with "don\'t show Http" flag disabled', records: recordInputHttpsURL, fieldInfo: fieldInfo_DontShowHTTPDisabled, expectedRecords: expectedHttpsURL_DontShowHTTPDisabled },
+            { message: 'URL - no protocol url with "don\'t show Http" flag disabled', records: recordInputNoProtoURL, fieldInfo: fieldInfo_DontShowHTTPDisabled, expectedRecords: expectedNoProtoURL_DontShowHTTPDisabled },
 
             // LinkText flag
-            { message: "URL - http url with 'link text' flag", records: recordInputHttpURL, fieldInfo: fieldInfo_LinkTextFlag, expectedRecords: expectedHttpURL_LinkTextFlag },
-            { message: "URL - https url with 'link text' flag", records: recordInputHttpsURL, fieldInfo: fieldInfo_LinkTextFlag, expectedRecords: expectedHttpsURL_LinkTextFlag },
-            { message: "URL - no protocol url with 'link text' flag", records: recordInputNoProtoURL, fieldInfo: fieldInfo_LinkTextFlag, expectedRecords: expectedNoProtoURL_LinkTextFlag },
+            { message: 'URL - http url with "link text" flag', records: recordInputHttpURL, fieldInfo: fieldInfo_LinkTextFlag, expectedRecords: expectedHttpURL_LinkTextFlag },
+            { message: 'URL - https url with "link text" flag', records: recordInputHttpsURL, fieldInfo: fieldInfo_LinkTextFlag, expectedRecords: expectedHttpsURL_LinkTextFlag },
+            { message: 'URL - no protocol url with "link text" flag', records: recordInputNoProtoURL, fieldInfo: fieldInfo_LinkTextFlag, expectedRecords: expectedNoProtoURL_LinkTextFlag },
 
             // All flags
             { message: 'URL - http url with all flags', records: recordInputHttpURL, fieldInfo: fieldInfo_AllFlags, expectedRecords: expectedHttpURL_AllFlags },

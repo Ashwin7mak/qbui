@@ -62,6 +62,7 @@ describe('API - Validate report execution', function () {
                             var results = JSON.parse(reportResults.body);
                             for (var i = 0; i < results.records.length; i++) {
                                 var currentRecord = results.records[i];
+                                /*jslint loopfunc: true */
                                 currentRecord.forEach(function (fieldValue) {
                                     if (fieldValue.id === JSON.parse(testCase.expectedFieldValue).id) {
                                         assert.deepEqual(fieldValue, JSON.parse(testCase.expectedFieldValue),

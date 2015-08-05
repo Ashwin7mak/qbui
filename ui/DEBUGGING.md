@@ -23,7 +23,7 @@ Taken from [http://www.youtube.com/watch?v=VLMyI7QKcwg](http://www.youtube.com/w
     * Node interpreter : `/usr/local/bin/node` (should be pre-filled)
     * Working directory : `QB_PROJECT_HOME/ui`
     * JavaScript file : `QB_PROJECT_HOME/ui/node_modules/grunt-protractor-runner/node_modules/protractor/lib/cli.js`
-    * Application parameters : `QB_PROJECT_HOME/ui/protractor.conf.js`
+    * Application parameters : `QB_PROJECT_HOME/ui/sauce.chrome.protractor.conf.js`
 4. Start your local Node.js server
     * `grunt serve`
 5. Start your standalone Selenium WebDriver server

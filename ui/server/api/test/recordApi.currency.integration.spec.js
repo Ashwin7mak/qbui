@@ -1,11 +1,8 @@
 'use strict';
-var should = require('should');
 var assert = require('assert');
-var app = require('../../app');
+require('../../app');
 var config = require('../../config/environment');
 var recordBase = require('./recordApi.base')(config);
-var Promise = require('bluebird');
-var _ = require('lodash');
 var testConsts = require('./api.test.constants');
 /*
  * We can't use JSON.parse() with records because it is possible to lose decimal precision as a
@@ -19,9 +16,8 @@ var testConsts = require('./api.test.constants');
  * APIs.  This is slower than using JSON.parse/stringify, but is necessary to avoid the loss
  * of precision. For more info, google it!
  */
-var jsonBigNum = require('json-bignum');
-var BigDecimal = require('bigdecimal');
 
+//jshint loopfunc: true
 /**
  * Integration test for Currency field formatting
  */

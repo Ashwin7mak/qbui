@@ -1,11 +1,8 @@
 'use strict';
-var should = require('should');
 var assert = require('assert');
-var app = require('../../app');
+ require('../../app');
 var config = require('../../config/environment');
 var recordBase = require('./recordApi.base')(config);
-var Promise = require('bluebird');
-var _ = require('lodash');
 var testConsts = require('./api.test.constants');
 
 
@@ -96,8 +93,7 @@ describe('API - Lookup numeric record test cases - ', function () {
                     //insert one record into the master table and cache the ID.
                     var masterRecord = [{id: masterTableNumeric.id, value: numericValue }];
                     var masterRecordEndpoint = recordBase.apiBase.resolveRecordsEndpoint(app.id, masterTableId);
-                    recordBase.createAndFetchRecord(masterRecordEndpoint, masterRecord).then(function(masterRecResp){
-                        var masterRec = masterRecResp;
+                    recordBase.createAndFetchRecord(masterRecordEndpoint, masterRecord).then(function(){
                         //Insert multiple records into the details table
                         var detailsRecord =
                             [{ id: detailTableFkField.id, value: 1},{ id: refField.id, value: numericValue }];

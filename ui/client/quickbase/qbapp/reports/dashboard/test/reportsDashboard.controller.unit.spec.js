@@ -1,7 +1,14 @@
 describe('Controller: ReportsDashboardCtrl', function() {
     'use strict';
     // load the controller's module
-    var controller, ReportsDashboardModel, scope, $httpBackend, $state, deferredGet, $log, transitionTo;
+    var controller;
+    var ReportsDashboardModel;
+    var scope;
+    var $httpBackend;
+    var $state;
+    var deferredGet;
+    var $log;
+    var transitionTo;
 
     beforeEach(function() {
         module('qbse.qbapp.reports.dashboard','qbse.qbapp.reports.manager', 'quickbase.qbapp', 'qbse.templates');

@@ -1,12 +1,11 @@
 'use strict';
-var should = require('should');
 var assert = require('assert');
-var app = require('../../app');
+require('../../app');
 var config = require('../../config/environment');
 var recordBase = require('./recordApi.base')(config);
-var Promise = require('bluebird');
-var _ = require('lodash');
 var testConsts = require('./api.test.constants');
+
+//jshint loopfunc: true
 
 /**
  * Integration test for TimeOfDay field formatting
@@ -86,7 +85,7 @@ describe('API - TimeOfDay record test cases - ', function () {
             { message: 'raw different year timeOfDay with no format flags', record: lateTODInput, format: 'raw', expectedFieldValue: lateTODInput },
             { message: 'display null timeOfDay with no format flags', record: nullInput, format: 'display', expectedFieldValue: expectedNullRecord },
             { message: 'raw null timeOfDay with no format flags', record: nullInput, format: 'raw', expectedFieldValue: nullInput }
-        ]
+        ];
     }
 
     /**
@@ -125,8 +124,8 @@ describe('API - TimeOfDay record test cases - ', function () {
 
                             currentRecord.forEach(function (fieldValue) {
                                 if (fieldValue.id === records[i].expectedFieldValue.id) {
-                                    assert.deepEqual(fieldValue, records[i].expectedFieldValue, 'Unexpected field value returned: '
-                                    + JSON.stringify(fieldValue) + ', ' + JSON.stringify(records[i].expectedFieldValue));
+                                    assert.deepEqual(fieldValue, records[i].expectedFieldValue, 'Unexpected field value returned: ' +
+                                      JSON.stringify(fieldValue) + ', ' + JSON.stringify(records[i].expectedFieldValue));
                                 }
                             });
                         }
@@ -163,7 +162,7 @@ describe('API - TimeOfDay record test cases - ', function () {
             { message: 'raw different year timeOfDay with all HH_MM format flags', record: lateTODInput, format: 'raw', expectedFieldValue: lateTODInput },
             { message: 'display null timeOfDay with all HH_MM format flags', record: nullInput, format: 'display', expectedFieldValue: expectedNullRecord },
             { message: 'raw null timeOfDay with all HH_MM format flags', record: nullInput, format: 'raw', expectedFieldValue: nullInput }
-        ]
+        ];
     }
 
     /**
@@ -202,8 +201,8 @@ describe('API - TimeOfDay record test cases - ', function () {
 
                             currentRecord.forEach(function (fieldValue) {
                                 if (fieldValue.id === records[i].expectedFieldValue.id) {
-                                    assert.deepEqual(fieldValue, records[i].expectedFieldValue, 'Unexpected field value returned: '
-                                    + JSON.stringify(fieldValue) + ', ' + JSON.stringify(records[i].expectedFieldValue));
+                                    assert.deepEqual(fieldValue, records[i].expectedFieldValue, 'Unexpected field value returned: ' +
+                                      JSON.stringify(fieldValue) + ', ' + JSON.stringify(records[i].expectedFieldValue));
                                 }
                             });
                         }
@@ -240,7 +239,7 @@ describe('API - TimeOfDay record test cases - ', function () {
             { message: 'raw different year timeOfDay with all HH_MM_SS format flags', record: lateTODInput, format: 'raw', expectedFieldValue: lateTODInput },
             { message: 'display null timeOfDay with all HH_MM_SS format flags', record: nullInput, format: 'display', expectedFieldValue: expectedNullRecord },
             { message: 'raw null timeOfDay with all format HH_MM_SS flags', record: nullInput, format: 'raw', expectedFieldValue: nullInput }
-        ]
+        ];
     }
 
     /**
@@ -279,8 +278,8 @@ describe('API - TimeOfDay record test cases - ', function () {
 
                             currentRecord.forEach(function (fieldValue) {
                                 if (fieldValue.id === records[i].expectedFieldValue.id) {
-                                    assert.deepEqual(fieldValue, records[i].expectedFieldValue, 'Unexpected field value returned: '
-                                    + JSON.stringify(fieldValue) + ', ' + JSON.stringify(records[i].expectedFieldValue));
+                                    assert.deepEqual(fieldValue, records[i].expectedFieldValue, 'Unexpected field value returned: ' +
+                                      JSON.stringify(fieldValue) + ', ' + JSON.stringify(records[i].expectedFieldValue));
                                 }
                             });
                         }

@@ -6,15 +6,13 @@
 'use strict';
 
 
-var config = require('../../config/environment'),
-routeMapper = require('../qbRouteMapper')(config),
-should = require('should'),
-routeConsts = require('../routeConstants'),
-assert = require('assert'),
-_ = require('lodash'),
-sinon = require('sinon'),
-recordsApi = require('../../api/quickbase/recordsApi')(config),
-requestStub;
+var config = require('../../config/environment');
+var routeMapper = require('../qbRouteMapper')(config);
+var routeConsts = require('../routeConstants');
+var assert = require('assert');
+var sinon = require('sinon');
+var recordsApi = require('../../api/quickbase/recordsApi')(config);
+var requestStub;
 
 /**
  * Unit tests for app generator
@@ -71,18 +69,18 @@ describe('Qb Route Mapper Unit Test', function () {
 
                 //mock out the request and response objects with some utility methods they need in this flow
                 var originalReq = {
-                    param : function(fake){}
+                    param : function(){}
                 };
 
-                originalReq['method'] =
-                originalReq['url'] = entry.request;
-                originalReq['route'] = {path: entry.route};
-                originalReq['headers'] = {};
+                originalReq.method =
+                originalReq.url = entry.request;
+                originalReq.route = {path: entry.route};
+                originalReq.headers = {};
                 var res = {
-                    status : function(fake){
+                    status : function(){
                         return {
-                            send : function(fake){}
-                        }
+                            send : function(){}
+                        };
                     }
                 };
 

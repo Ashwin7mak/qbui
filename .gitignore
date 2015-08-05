@@ -23,3 +23,7 @@ ehthumbs.db
 Thumbs.db
 
 ui/client/config.codekit
+ui/client/quickbase/assets/app.css
+ui/client/quickbase/assets/app.css.map
+ui/client/quickbase/assets/realm.css
+ui/client/quickbase/assets/realm.css.map

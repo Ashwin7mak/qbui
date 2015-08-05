@@ -1,13 +1,12 @@
 'use strict';
-var should = require('should');
 var assert = require('assert');
-var app = require('../../app');
+require('../../app');
 var config = require('../../config/environment');
 var recordBase = require('./recordApi.base')(config);
-var Promise = require('bluebird');
-var _ = require('lodash');
 var testConsts = require('./api.test.constants');
 
+
+//jshint loopfunc: true
 
 /**
  * Integration test for FileAttachment field formatting
@@ -75,7 +74,7 @@ describe('API - FileAttachment record test cases - ', function () {
             { message: 'raw https file attachment with no format flags', record: httpsFileAttachmentInput, format: 'raw', expectedFieldValue: httpsFileAttachmentInput },
             { message: 'display null file attachment with no format flags', record: nullInput, format: 'display', expectedFieldValue: expectedNullRecord },
             { message: 'raw null file attachment with no format flags', record: nullInput, format: 'raw', expectedFieldValue: nullInput }
-        ]
+        ];
     }
 
     /**
@@ -114,8 +113,8 @@ describe('API - FileAttachment record test cases - ', function () {
 
                             currentRecord.forEach(function (fieldValue) {
                                 if (fieldValue.id === records[i].expectedFieldValue.id) {
-                                    assert.deepEqual(fieldValue, records[i].expectedFieldValue, 'Unexpected field value returned: '
-                                    + JSON.stringify(fieldValue) + ', ' + JSON.stringify(records[i].expectedFieldValue));
+                                    assert.deepEqual(fieldValue, records[i].expectedFieldValue, 'Unexpected field value returned: ' +
+                                      JSON.stringify(fieldValue) + ', ' + JSON.stringify(records[i].expectedFieldValue));
                                 }
                             });
                         }
@@ -158,7 +157,7 @@ describe('API - FileAttachment record test cases - ', function () {
             { message: 'raw https file attachment with all format flags', record: httpsFileAttachmentInput, format: 'raw', expectedFieldValue: httpsFileAttachmentInput },
             { message: 'display null file attachment with all format flags', record: nullInput, format: 'display', expectedFieldValue: expectedNullRecord },
             { message: 'raw null file attachment with all format flags', record: nullInput, format: 'raw', expectedFieldValue: nullInput }
-        ]
+        ];
     }
 
     /**
@@ -197,8 +196,8 @@ describe('API - FileAttachment record test cases - ', function () {
 
                             currentRecord.forEach(function (fieldValue) {
                                 if (fieldValue.id === records[i].expectedFieldValue.id) {
-                                    assert.deepEqual(fieldValue, records[i].expectedFieldValue, 'Unexpected field value returned: '
-                                    + JSON.stringify(fieldValue) + ', ' + JSON.stringify(records[i].expectedFieldValue));
+                                    assert.deepEqual(fieldValue, records[i].expectedFieldValue, 'Unexpected field value returned: ' +
+                                      JSON.stringify(fieldValue) + ', ' + JSON.stringify(records[i].expectedFieldValue));
                                 }
                             });
                         }

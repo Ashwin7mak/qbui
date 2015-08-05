@@ -1,13 +1,12 @@
 'use strict';
-var should = require('should');
 var assert = require('assert');
-var app = require('../../app');
+require('../../app');
 var config = require('../../config/environment');
 var recordBase = require('./recordApi.base')(config);
-var Promise = require('bluebird');
-var _ = require('lodash');
 var testConsts = require('./api.test.constants');
 
+
+//jshint loopfunc: true
 
 /**
  * Integration test for PhoneNumber field formatting
@@ -53,7 +52,7 @@ describe('API - PhoneNumber record test cases', function () {
             { message: 'display too-long phone number', record: largeInput, format: 'display', expectedFieldValue: largeExpected },
             { message: 'raw too-long phone number', record: largeInput, format: 'raw', expectedFieldValue: largeInput },
             { message: 'display null phone number', record: nullPhoneRecords, format: 'display', expectedFieldValue: nullExpectedPhoneRecords },
-            { message: 'raw null phone number', record: nullPhoneRecords, format: 'raw', expectedFieldValue: nullPhoneRecords }]
+            { message: 'raw null phone number', record: nullPhoneRecords, format: 'raw', expectedFieldValue: nullPhoneRecords }];
     }
 
     /**
@@ -92,8 +91,8 @@ describe('API - PhoneNumber record test cases', function () {
 
                             currentRecord.forEach(function (fieldValue) {
                                 if (fieldValue.id === records[i].expectedFieldValue.id) {
-                                    assert.deepEqual(fieldValue, records[i].expectedFieldValue, 'Unexpected field value returned: '
-                                    + JSON.stringify(fieldValue) + ', ' + JSON.stringify(records[i].expectedFieldValue));
+                                    assert.deepEqual(fieldValue, records[i].expectedFieldValue, 'Unexpected field value returned: ' +
+                                      JSON.stringify(fieldValue) + ', ' + JSON.stringify(records[i].expectedFieldValue));
                                 }
                             });
                         }

@@ -52,7 +52,7 @@ describe('Validate Date Utility Functions', function () {
         it('validate utc date..invalid format: return exception', function (done) {
             var formattedDate;
             try {
-                var formattedDate = dateUtils.formatDate(testDate, '%H:%m');
+                formattedDate = dateUtils.formatDate(testDate, '%H:%m');
             }
             catch (e) {
                 assert(true);

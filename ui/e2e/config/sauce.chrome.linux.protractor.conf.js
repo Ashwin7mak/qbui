@@ -8,17 +8,15 @@ exports.config = {
   // than the maximum time your application needs to stabilize between tasks.
   allScriptsTimeout: 110000,
 
-  // A base URL for your application under test. Calls to protractor.get()
-  // with relative paths will be prepended with this.
-  baseUrl: 'http://localhost:' + (process.env.PORT || '9000'),
+  //The sauce user and access key allow us to run our browser tests remotely on a SauceLabs VM
+  sauceUser: "sbg_qbse",
+  sauceKey: process.env.SAUCE_KEY,
 
-  // If true, only chromedriver will be started, not a standalone selenium.
-  // Tests for browsers other than chrome will not run.
-  chromeOnly: true,
+  // A base URL for your application under test will be passed in via grunt config so that we can use whatever url we please
 
   // list of files / patterns to load in the browser
   specs: [
-    'e2e/qbapp/**/*.spec.js'
+    '../qbapp/**/*.spec.js'
   ],
 
   // Patterns to exclude.
@@ -30,8 +28,13 @@ exports.config = {
   // https://code.google.com/p/selenium/wiki/DesiredCapabilities
   // and
   // https://code.google.com/p/selenium/source/browse/javascript/webdriver/capabilities.js
+  //
+  // When we go to do multiple os's then we should have a look at this
+  // http://www.ignoredbydinosaurs.com/2015/04/angular-protractor-tests-and-sauce-connect-config
   capabilities: {
-    'browserName': 'chrome'
+    'browserName': 'chrome',
+    'tunnelIdentifier': process.env.ENV_TUNNEL_NAME,
+    'name': process.env.SAUCE_JOB_NAME
   },
 
   // ----- The test framework -----
@@ -45,6 +48,6 @@ exports.config = {
   //
   // See the full list at https://github.com/juliemr/minijasminenode
   jasmineNodeOpts: {
-    defaultTimeoutInterval: 30000
+    defaultTimeoutInterval: 60000
   }
 };

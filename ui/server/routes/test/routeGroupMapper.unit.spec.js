@@ -6,13 +6,11 @@
 'use strict';
 
 
-var config = require('../../config/environment'),
-    groupMapper = require('../qbRouteGroupMapper'),
-    routeGroups = require('../routeGroups'),
-    should = require('should'),
-    routeConsts = require('../routeConstants'),
-    assert = require('assert'),
-    _ = require('lodash');
+//var config = require('../../config/environment');
+var groupMapper = require('../qbRouteGroupMapper');
+var routeGroups = require('../routeGroups');
+var routeConsts = require('../routeConstants');
+var assert = require('assert');
 
 /**
  * Unit tests for app generator

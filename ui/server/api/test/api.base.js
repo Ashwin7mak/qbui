@@ -5,6 +5,9 @@
     var assert = require('assert');
     var consts = require('../constants');
     var log = require('../../logger').getLogger();
+    //This is the url that will be used for making requests to the node server or the java server
+    var baseUrl;
+
     /*
      * We can't use JSON.parse() with records because it is possible to lose decimal precision as a
      * result of the JavaScript implementation of its single numeric data type. In JS, all numbers are
@@ -21,8 +24,10 @@
 
     module.exports = function (config) {
         //Module constants
-        var HTTP_REGEX =  /https*:\/\//;
+        var HTTPS_REGEX =  /https:\/\/.*/;
+
         var HTTP =  'http://';
+        var HTTPS =  'https://';
         var NODE_BASE_ENDPOINT = '/api/api/v1';
         var JAVA_BASE_ENDPOINT = '/api/api/v1';
         var APPS_ENDPOINT = '/apps/';
@@ -34,6 +39,7 @@
         var REALMS_ENDPOINT = '/realms/';
         var USERS_ENDPOINT = '/users/';
         var LOCALHOST_REALM = 117000;
+        var LOCALHOST_SUBDOMAIN = 'localhost';
         var TICKETS_ENDPOINT = '/ticket?uid=1000000&realmID=';
         var HEALTH_ENDPOINT  = '/health';
         var SUBDOMAIN_CHARS = 'abcdefghijklmnopqrstuvwxyz0123456789';
@@ -44,35 +50,40 @@
         DEFAULT_HEADERS[CONTENT_TYPE] = APPLICATION_JSON;
         var ERROR_HPE_INVALID_CONSTANT = 'HPE_INVALID_CONSTANT';
         var ERROR_ENOTFOUND = 'ENOTFOUND';
-
+        //add comment about this usage
+        baseUrl = config === undefined ? '' : config.DOMAIN;
 
         //Resolves a full URL using the instance subdomain and the configured javaHost
-        function resolveFullUrl(path, realmSubdomain) {
+        function resolveFullUrl(realmSubdomain, path) {
             var fullPath;
-            log.info('Resolving full url for path:'+ path + ' realm:'+realmSubdomain);
+            var protocol = HTTP;
+            log.info('Resolving full url for path: '+ path + ' realm: '+realmSubdomain);
             //If there is no subdomain, hit the javaHost directly and don't proxy through the node server
             //This is required for actions like ticket creation and realm creation
             if (realmSubdomain === '') {
-                fullPath = config.javaHost + path;
-            } else {
-                var methodLess = config.DOMAIN.replace(HTTP_REGEX, '');
-                //If we're dealing with a delete realm, use the javaHost and not the node server, which doesn't
-                //proxy realm requests to the javahost for security reasons
-                if(path.indexOf(REALMS_ENDPOINT) !== -1) {
-                    methodLess = config.javaHost.replace(HTTP_REGEX, '');
-                }
-                log.info('config.DOMAIN:'+ config.DOMAIN + ' methodLess:'+methodLess);
-
-                fullPath = HTTP + realmSubdomain + '.' + methodLess + path;
-                log.info('resulting fullpath:'+ fullPath);
+                realmSubdomain = LOCALHOST_SUBDOMAIN;
             }
+
+            var methodLess;
+            if(HTTPS_REGEX.test(baseUrl)){
+                protocol = HTTPS;
+                methodLess = baseUrl.replace(HTTPS, '');
+            } else {
+                methodLess = baseUrl.replace(HTTP, '');
+            }
+
+            log.info('baseUrl: '+ baseUrl + ' methodLess: '+methodLess);
+
+            fullPath = protocol + realmSubdomain + '.' + methodLess + path;
+            log.info('resulting fullpath: '+ fullPath);
+
             return fullPath;
         }
 
         //Private helper method to generate a request options object
         function generateRequestOpts(stringPath, method, realmSubdomain) {
             return {
-                url: resolveFullUrl(stringPath, realmSubdomain),
+                url: resolveFullUrl(realmSubdomain, stringPath),
                 method: method
             };
         }
@@ -101,6 +112,13 @@
         }
 
         var apiBase = {
+            setBaseUrl : function(baseUrlConfig){
+                log.info('Setting baseUrl on api.base: ' + baseUrlConfig);
+                baseUrl = baseUrlConfig;
+            },
+            generateFullRequest: function(subdomain, relativePath){
+                return resolveFullUrl(subdomain, relativePath);
+            },
             resolveAppsEndpoint: function (appId) {
                 var appsEndpoint = JAVA_BASE_ENDPOINT + APPS_ENDPOINT;
                 if (appId) {
@@ -168,7 +186,7 @@
             executeRequest: function (stringPath, method, body, headers) {
                 //if there is a realm & we're not making a ticket request, use the realm subdomain request URL
                 var subdomain = '';
-                if (this.realm && stringPath.indexOf(TICKETS_ENDPOINT) === -1) {
+                if (this.realm) {
                     subdomain = this.realm.subdomain;
                 }
                 var opts = generateRequestOpts(stringPath, method, subdomain);
@@ -203,7 +221,7 @@
                 var tries = numRetries;
                 request(opts, function (error, response) {
                     if (error || response.statusCode !== 200) {
-                        if(tries > 1  && (error.code === ERROR_HPE_INVALID_CONSTANT || error.code === ERROR_ENOTFOUND)) {
+                        if(tries > 1  && error && (error.code === ERROR_HPE_INVALID_CONSTANT || error.code === ERROR_ENOTFOUND)) {
                             tries --;
                             log.debug('Attempting a retry: ' + JSON.stringify(opts) + ' Tries remaining: ' + tries);
                             apiBase.executeRequestRetryable(opts, tries).then(function(res2){
@@ -214,7 +232,8 @@
                                 deferred.reject(err2);
                             });
                         } else {
-                            log.debug('Network request failed, no retries left or an unsupported error for retry found');
+                            log.error('Network request failed, no retries left or an unsupported error for retry found');
+                            log.info('Uknown failure mode. Error: ' + JSON.stringify(error) + ' response: ' + JSON.stringify(response));
                             deferred.reject(error);
                         }
                     } else {
