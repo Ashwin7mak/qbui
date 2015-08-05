@@ -568,7 +568,7 @@ module.exports = function(grunt) {
         mochaTest: {
             test: {
                 options: {
-                    quiet: false,
+                    quiet   : false,
                     reporter: (function() {
                         process.env.MOCHA_COLORS = false;
                         process.env.JUNIT_REPORT_PATH = serverReportDir + '/unit/server_report.xml';
@@ -649,7 +649,11 @@ module.exports = function(grunt) {
                 NODE_TLS_REJECT_UNAUTHORIZED: 0,
                 ENV_TUNNEL_NAME             : tunnelIdentifier,
                 SAUCE_JOB_NAME              : sauceJobName,
-                SAUCE_KEY                   : sauceKey
+                SAUCE_KEY                   : sauceKey,
+                //for the test env, we need to thwart the proxy
+                http_proxy                  : '',
+                //for the test env, we need to thwart the proxy
+                https_proxy                 : ''
             },
             prod : {
                 NODE_ENV       : 'production',
@@ -823,8 +827,8 @@ module.exports = function(grunt) {
         }
         // run lint and coding standards tests
         grunt.task.run('jshint');
-       // WIP
-       // grunt.task.run('jscs');
+        // WIP
+        // grunt.task.run('jscs');
 
         if (target === 'server') {
             //server unit tests
