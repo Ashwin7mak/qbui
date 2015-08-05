@@ -4,6 +4,7 @@ var app = require('../../app');
 var request = require('supertest');
 var config = require('../../config/environment');
 var apiBase = require('./api.base.js')(config);
+require('should');
 
 describe('GET /api/health', function () {
     it('should respond with JSON object with sqlDate', function (done) {
