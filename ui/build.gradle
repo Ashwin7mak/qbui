@@ -269,7 +269,7 @@ sonarRunner {
 
         property "server.sonar.projectName", "${user}:QuickBase:${branchName}:ui:server"
         property "server.sonar.sources", "$projectDir/server"
-        property "server.sonar.exclusions", "**/api/test/**"
+        property "server.sonar.exclusions", "**/test/**,**/config/**"
         //  import the ui LCOV coverage report
         property "server.sonar.javascript.lcov.reportPath","${projectDir}/build/reports/server/coverage/lcov.info"
 
