@@ -5,6 +5,7 @@
     var config = require('../../config/environment');
     var recordBase = require('./recordApi.base')(config);
     var testConsts = require('./api.test.constants');
+    var promise = require('bluebird');
 
 
 //jshint loopfunc: true
@@ -218,7 +219,7 @@
                     }
 
                     //When all the records have been fetched, assert the values match expectations
-                    Promise.all(fetchRecordPromises)
+                    promise.all(fetchRecordPromises)
                             .then(function(results) {
                                 for (var i = 0; i < results.length; i++) {
                                     var currentRecord = results[i];
@@ -231,7 +232,7 @@
                                             assert.deepEqual(fieldValue, records[i].expectedFieldValue, 'Unexpected field value returned: ' +
                                             JSON.stringify(fieldValue) + ', ' + JSON.stringify(records[i].expectedFieldValue));
                                         }
-                                    }); // jslint loopfunc: true
+                                    });
                                 }
                                 done();
                             }).catch(function(errorMsg) {
@@ -319,7 +320,7 @@
                     }
 
                     //When all the records have been fetched, assert the values match expectations
-                    Promise.all(fetchRecordPromises)
+                    promise.all(fetchRecordPromises)
                             .then(function(results) {
                                 for (var i = 0; i < results.length; i++) {
                                     var currentRecord = results[i];
@@ -327,7 +328,6 @@
                                         currentRecord = results[i].record;
                                     }
 
-                                    // jslint loopfunc: true
                                     currentRecord.forEach(function(fieldValue) {
                                         if (fieldValue.id === records[i].expectedFieldValue.id) {
                                             assert.deepEqual(fieldValue, records[i].expectedFieldValue, 'Unexpected field value returned: ' +
@@ -421,7 +421,7 @@
                     }
 
                     //When all the records have been fetched, assert the values match expectations
-                    Promise.all(fetchRecordPromises)
+                    promise.all(fetchRecordPromises)
                             .then(function(results) {
                                 for (var i = 0; i < results.length; i++) {
                                     var currentRecord = results[i];
@@ -429,7 +429,6 @@
                                         currentRecord = results[i].record;
                                     }
 
-                                    // jslint loopfunc: true
                                     currentRecord.forEach(function(fieldValue) {
                                         if (fieldValue.id === records[i].expectedFieldValue.id) {
                                             assert.deepEqual(fieldValue, records[i].expectedFieldValue, 'Unexpected field value returned: ' +
@@ -523,7 +522,7 @@
                     }
 
                     //When all the records have been fetched, assert the values match expectations
-                    Promise.all(fetchRecordPromises)
+                    promise.all(fetchRecordPromises)
                             .then(function(results) {
                                 for (var i = 0; i < results.length; i++) {
                                     var currentRecord = results[i];
@@ -531,7 +530,6 @@
                                         currentRecord = results[i].record;
                                     }
 
-                                    // jslint loopfunc: true
                                     currentRecord.forEach(function(fieldValue) {
                                         if (fieldValue.id === records[i].expectedFieldValue.id) {
                                             assert.deepEqual(fieldValue, records[i].expectedFieldValue, 'Unexpected field value returned: ' +
@@ -625,7 +623,7 @@
                     }
 
                     //When all the records have been fetched, assert the values match expectations
-                    Promise.all(fetchRecordPromises)
+                    promise.all(fetchRecordPromises)
                             .then(function(results) {
                                 for (var i = 0; i < results.length; i++) {
                                     var currentRecord = results[i];
@@ -633,7 +631,6 @@
                                         currentRecord = results[i].record;
                                     }
 
-                                    // jslint loopfunc: true
                                     currentRecord.forEach(function(fieldValue) {
                                         if (fieldValue.id === records[i].expectedFieldValue.id) {
                                             assert.deepEqual(fieldValue, records[i].expectedFieldValue, 'Unexpected field value returned: ' +
@@ -727,7 +724,7 @@
                     }
 
                     //When all the records have been fetched, assert the values match expectations
-                    Promise.all(fetchRecordPromises)
+                    promise.all(fetchRecordPromises)
                             .then(function(results) {
                                 for (var i = 0; i < results.length; i++) {
                                     var currentRecord = results[i];
@@ -735,7 +732,6 @@
                                         currentRecord = results[i].record;
                                     }
 
-                                    // jslint loopfunc: true
                                     currentRecord.forEach(function(fieldValue) {
                                         if (fieldValue.id === records[i].expectedFieldValue.id) {
                                             assert.deepEqual(fieldValue, records[i].expectedFieldValue, 'Unexpected field value returned: ' +

@@ -14,6 +14,7 @@ module.exports = function(grunt) {
     var tunnelIdentifier = grunt.option('tunnelIdentifier') || 'tunnel_' + currentDateTime;
     var sauceJobName = grunt.option('sauceJobName') || 'e2e_' + currentDateTime;
     var sauceKey = grunt.option('sauceKey');
+    var useColors = grunt.option('colors') || false;
 
     // Load grunt tasks automatically, when needed
     require('jit-grunt')(grunt, {
@@ -81,15 +82,20 @@ module.exports = function(grunt) {
         },
         watch    : {
             mochaTest : {
-                files: ['<%= express.root %>/**/*.spec.js'],
-                tasks: ['env:test', 'mochaTest']
+                files: ['<%= express.root %>/**/*.spec.js',
+                        '<%= express.root %>/**/test/**/*.js',
+                        '<%= express.root %>/**/*.js'
+                ],
+                tasks: ['env:local', 'mochaTest:test']
             },
             jsTest    : {
                 files: [
                     '<%= quickbase.client.components %>/**/*.spec.js',
-                    '<%= quickbase.client.components %>/**/*.mock.js'
+                    '<%= quickbase.client.components %>/**/*.mock.js',
+                    '<%= quickbase.client.components %>/**/test/**/*.js',
+                    '<%= quickbase.client.components %>/**/*.js'
                 ],
-                tasks: ['newer:jshint:all', 'karma:unit']
+                tasks: ['newer:jshint', 'karma:unit']
             },
             livereload: {
                 files  : [
@@ -158,7 +164,8 @@ module.exports = function(grunt) {
         jshint: {
             options   : {
                 jshintrc: '<%= quickbase.client.root %>/.jshintrc',
-                reporter: require('jshint-stylish')
+                //reporter: require('jshint-stylish'),
+                reporter: './node_modules/jshint-practical/'
             },
             server    : {
                 options: {
@@ -173,7 +180,8 @@ module.exports = function(grunt) {
                 options: {
                     jshintrc: '<%= express.root %>/.jshintrc'
                 },
-                src    : ['<%= express.root %>/**/*.spec.js']
+                src    : ['<%= express.root %>/**/*.spec.js',
+                    '<%= express.root %>/**/test/**/*.js']
             },
             client    : {
                 options: {
@@ -193,6 +201,8 @@ module.exports = function(grunt) {
                 src    : [
                     '<%= quickbase.client.components %>/**/*.spec.js',
                     '<%= quickbase.client.components %>/**/*.mock.js',
+                    '<%= quickbase.client.components %>/**/test/**/*.js',
+                    '<%= quickbase.client.gallery %>/**/test/**/*.js',
                     '<%= quickbase.client.e2e %>/**/*.js'
                 ]
             },
@@ -559,6 +569,7 @@ module.exports = function(grunt) {
         // Karma tests..use configuration file to determine what is run
         karma: {
             unit: {
+                colors: useColors,
                 configFile: 'karma.conf.js',
                 singleRun : true
             }
@@ -568,9 +579,9 @@ module.exports = function(grunt) {
         mochaTest: {
             test: {
                 options: {
-                    quiet   : false,
+                    quiet   : true,
                     reporter: (function() {
-                        process.env.MOCHA_COLORS = false;
+                        process.env.MOCHA_COLORS = useColors;
                         process.env.JUNIT_REPORT_PATH = serverReportDir + '/unit/server_report.xml';
                         return 'mocha-jenkins-reporter';
                     }())
@@ -581,8 +592,8 @@ module.exports = function(grunt) {
             testGen: {
                 options: {
                     reporter: (function() {
-                        process.env.MOCHA_COLORS = false;
-                        process.env.JUNIT_REPORT_PATH = serverReportDir + '/unit/server_report.xml';
+                        process.env.MOCHA_COLORS = useColors;
+                        process.env.JUNIT_REPORT_PATH = serverReportDir + '/unit/testGen_report.xml';
                         return 'mocha-jenkins-reporter';
                     }())
                 },
@@ -594,7 +605,7 @@ module.exports = function(grunt) {
                     //log in test results in red any node integration tests over slow amount below which in milliseconds
                     slow    : 400,
                     reporter: (function() {
-                        process.env.MOCHA_COLORS = false;
+                        process.env.MOCHA_COLORS = useColors;
                         process.env.JUNIT_REPORT_PATH = serverReportDir + '/integration/server_report.xml';
                         return 'mocha-jenkins-reporter';
                     }())
@@ -610,13 +621,8 @@ module.exports = function(grunt) {
                 src    : ['server/**/test/*.unit.spec.js'],
                 options: {
                     mask          : '**/*.spec.js',
-                    check         : {
-                        //will fail if not meeting coverage %
-                        //lines:90,
-                        //statements:90
-                    },
                     root          : 'server',
-                    noColors      : true,
+                    noColors      : !useColors,
                     reportFormats : ['lcov'],
                     coverageFolder: 'build/reports/server/coverage'
                 }
@@ -809,6 +815,12 @@ module.exports = function(grunt) {
         process.env[envName] = envVal;
     });
 
+    grunt.registerTask('codeStandards', [
+        'jshint',
+        //WIP
+        //'jscs'
+    ]);
+
     grunt.registerTask('testClientOnly', function() {
         grunt.task.run(['jshint:client', 'jscs:client', 'karma:unit']);
     });
@@ -825,10 +837,6 @@ module.exports = function(grunt) {
                 grunt.task.run(['env:local']);
             }
         }
-        // run lint and coding standards tests
-        grunt.task.run('jshint');
-        // WIP
-        // grunt.task.run('jscs');
 
         if (target === 'server') {
             //server unit tests
@@ -855,6 +863,7 @@ module.exports = function(grunt) {
         if (target === 'integration') {
             //server integration tests
             return grunt.task.run([
+                'codeStandards',
                 'clean:server',
                 'mochaTest:integration',
             ]);
@@ -894,9 +903,12 @@ module.exports = function(grunt) {
         }
 
         //  default task if no target specified
-        grunt.task.run([
+        return grunt.task.run([
+            // run lint and coding standards tests
+            'codeStandards',
+            // run unit tests
             'test:client',
-            'test:server'
+            'test:coverage',
         ]);
 
     });
@@ -937,10 +949,6 @@ module.exports = function(grunt) {
     ]);
 
 
-    grunt.registerTask('codeStandards', [
-        'jshint',
-        'jscs'
-    ]);
 
     grunt.registerTask('sauce_connect', 'Grunt plug-in to download and launch Sauce Labs Sauce Connect', function() {
         var options = this.options({

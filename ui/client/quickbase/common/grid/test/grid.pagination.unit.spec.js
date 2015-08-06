@@ -31,7 +31,6 @@ describe('Directive: qbseGrid pagination - ', function() {
     // generate some records and field definitions to use
     function generateTestData(minRecords, maxRecords, maxCols) {
         expectedTotalRows = testDataService.getRandomInt(chance, minRecords, maxRecords);
-        console.info(' random expectedTotalRows : ' + expectedTotalRows);
 
         var config = {
             numRows   : expectedTotalRows,

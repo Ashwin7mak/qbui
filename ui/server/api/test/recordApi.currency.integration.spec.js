@@ -5,6 +5,7 @@
     var config = require('../../config/environment');
     var recordBase = require('./recordApi.base')(config);
     var testConsts = require('./api.test.constants');
+    var promise = require('bluebird');
     /*
      * We can't use JSON.parse() with records because it is possible to lose decimal precision as a
      * result of the JavaScript implementation of its single numeric data type. In JS, all numbers are
@@ -233,7 +234,7 @@
                     }
 
                     //When all the records have been fetched, assert the values match expectations
-                    Promise.all(fetchRecordPromises)
+                    promise.all(fetchRecordPromises)
                             .then(function(results) {
                                 for (var i = 0; i < results.length; i++) {
                                     var currentRecord = results[i];
@@ -361,7 +362,7 @@
                     }
 
                     //When all the records have been fetched, assert the values match expectations
-                    Promise.all(fetchRecordPromises)
+                    promise.all(fetchRecordPromises)
                             .then(function(results) {
                                 for (var i = 0; i < results.length; i++) {
                                     var currentRecord = results[i];
@@ -490,7 +491,7 @@
                     }
 
                     //When all the records have been fetched, assert the values match expectations
-                    Promise.all(fetchRecordPromises)
+                    promise.all(fetchRecordPromises)
                             .then(function(results) {
                                 for (var i = 0; i < results.length; i++) {
                                     var currentRecord = results[i];
@@ -618,7 +619,7 @@
                     }
 
                     //When all the records have been fetched, assert the values match expectations
-                    Promise.all(fetchRecordPromises)
+                    promise.all(fetchRecordPromises)
                             .then(function(results) {
                                 for (var i = 0; i < results.length; i++) {
                                     var currentRecord = results[i];

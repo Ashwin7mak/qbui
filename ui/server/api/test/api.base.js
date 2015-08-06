@@ -72,10 +72,10 @@
                 methodLess = baseUrl.replace(HTTP, '');
             }
 
-            log.info('baseUrl: '+ baseUrl + ' methodLess: '+methodLess);
+            log.debug('baseUrl: '+ baseUrl + ' methodLess: '+methodLess);
 
             fullPath = protocol + realmSubdomain + '.' + methodLess + path;
-            log.info('resulting fullpath: '+ fullPath);
+            log.debug('resulting fullpath: '+ fullPath);
 
             return fullPath;
         }

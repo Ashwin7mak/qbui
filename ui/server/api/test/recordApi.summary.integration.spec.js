@@ -5,6 +5,7 @@
     var config = require('../../config/environment');
     var recordBase = require('./recordApi.base')(config);
     var testConsts = require('./api.test.constants');
+    var promise = require('bluebird');
 
 
     /**
@@ -107,7 +108,7 @@
                                 fetchRecordPromises.push(recordBase.createAndFetchRecord(recordsEndpoint, rec, '?format=display'));
                             });
                             //retrieve & validate the master record's summary value
-                            Promise.all(fetchRecordPromises).then(function() {
+                            promise.all(fetchRecordPromises).then(function() {
                                 recordBase.fetchRecord(app.id, masterTableId, 1, '?format=display').then(function(summaryRecResp) {
                                     var summaryRec = JSON.parse(summaryRecResp.body).record;
                                     summaryRec.forEach(function(fieldValue) {

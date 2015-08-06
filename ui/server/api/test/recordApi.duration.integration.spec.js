@@ -5,6 +5,7 @@
     var config = require('../../config/environment');
     var recordBase = require('./recordApi.base')(config);
     var testConsts = require('./api.test.constants');
+    var promise = require('bluebird');
 
 //jshint loopfunc: true
 
@@ -168,7 +169,7 @@
                     }
 
                     //When all the records have been fetched, assert the values match expectations
-                    Promise.all(fetchRecordPromises)
+                    promise.all(fetchRecordPromises)
                             .then(function(results) {
                                 for (var i = 0; i < results.length; i++) {
                                     var currentRecord = results[i];
@@ -291,7 +292,7 @@
                     }
 
                     //When all the records have been fetched, assert the values match expectations
-                    Promise.all(fetchRecordPromises)
+                    promise.all(fetchRecordPromises)
                             .then(function(results) {
                                 for (var i = 0; i < results.length; i++) {
                                     var currentRecord = results[i];
