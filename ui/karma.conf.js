@@ -82,7 +82,7 @@ module.exports = function (config) {
             //'**/mockdata/*.json': 'html2js',
             //'**/*.coffee': 'coffee',
             //if any 3rd party vendor plugin within code coverage target folder, need to exclude (ie: jasmine, angular, etc)
-            'client/{quickbase/**/!(*test)/*.js,*.js}' : ['coverage']
+            'client/{quickbase/**/*.js,*.js}' : ['coverage']
         },
 
         //  load the templates for pre-processing...needed for unit testing
