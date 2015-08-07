@@ -15,6 +15,10 @@ module.exports = function (grunt) {
     var tunnelIdentifier = grunt.option('tunnelIdentifier') || 'tunnel_' + currentDateTime;
     var sauceJobName = grunt.option('sauceJobName') || 'e2e_' + currentDateTime;
     var sauceKey = grunt.option('sauceKey');
+    //We need to pass along --proxy-tunnel so that the tunnel will also use the proxy to communicate with the sauce apis
+    //sauce-connect-launcher won't take an explicit no arg argument, so we are "leveraging" their mechanism for passing
+    //arguments along to sauce-connect-launcher
+    var httpProxy = grunt.option('httpProxyHost') !== undefined ? grunt.option('httpProxyHost') + ':80 --proxy-tunnel' : null;
 
     // Load grunt tasks automatically, when needed
     require('jit-grunt')(grunt, {
@@ -108,7 +112,7 @@ module.exports = function (grunt) {
             express: {
                 files: [
                     '<%= express.root %>/**/*.{js,json}'
-               ],
+                ],
                 tasks: ['express:local', 'wait'],
                 options: {
                     livereload: true,
@@ -153,7 +157,7 @@ module.exports = function (grunt) {
             source: {
                 files: {
                     src: ['<%= quickbase.client.root %>/**/*.js',
-                         '<%= express.root %>/**/*.js','test_generators/**/*.js']
+                        '<%= express.root %>/**/*.js','test_generators/**/*.js']
                 },
                 options: {
                     config: './.jscsrc',
@@ -406,7 +410,7 @@ module.exports = function (grunt) {
             'quickbase.realm': {
                 cwd: '<%= quickbase.client.root %>',
                 src: ['quickbase/common/**/*.html',
-                      'quickbase/realm/**/*.html'],     // look for all html files required for this angular application
+                    'quickbase/realm/**/*.html'],     // look for all html files required for this angular application
                 dest: '.tmp/realmTemplates.js',
                 options: {
                     usemin: 'quickbase/realm.js'        // maps to reference in realm.index.html
@@ -415,7 +419,7 @@ module.exports = function (grunt) {
             'quickbase.qbapp': {
                 cwd: '<%= quickbase.client.root %>',
                 src: ['quickbase/common/**/*.html',
-                      'quickbase/qbapp/**/*.html'],     // look for all html files required for this angular application
+                    'quickbase/qbapp/**/*.html'],     // look for all html files required for this angular application
                 dest: '.tmp/appTemplates.js',
                 options: {
                     usemin: 'quickbase/qbapp.js'        // maps to reference in app.index.html
@@ -424,7 +428,7 @@ module.exports = function (grunt) {
             'quickbase.report': {
                 cwd: '<%= quickbase.client.root %>',
                 src: ['quickbase/common/**/*.html',
-                      'quickbase/qbapp/reports/reportManager/**/*.html'],     // look for all html files required for this angular application
+                    'quickbase/qbapp/reports/reportManager/**/*.html'],     // look for all html files required for this angular application
                 dest: '.tmp/reportTemplates.js',
                 options: {
                     usemin: 'quickbase/report.js'        // maps to reference in report.index.html
@@ -593,7 +597,7 @@ module.exports = function (grunt) {
                     }())
                 },
                 src: ['server/**/test/' + mochaIntTest ]
-             }
+            }
 
         },
 
@@ -604,9 +608,9 @@ module.exports = function (grunt) {
                 options: {
                     mask: '**/*.spec.js',
                     check: {
-                       //will fail if not meeting coverage %
-                       //lines:90,
-                       //statements:90
+                        //will fail if not meeting coverage %
+                        //lines:90,
+                        //statements:90
                     },
                     root: 'server',
                     noColors: true,
@@ -647,6 +651,13 @@ module.exports = function (grunt) {
                 http_proxy: '',
                 //for the test env, we need to thwart the proxy
                 https_proxy: ''
+            },
+            e2e: {
+                NODE_ENV: 'test',
+                NODE_TLS_REJECT_UNAUTHORIZED: 0,
+                ENV_TUNNEL_NAME: tunnelIdentifier,
+                SAUCE_JOB_NAME: sauceJobName,
+                SAUCE_KEY: sauceKey,
             },
             prod: {
                 NODE_ENV: 'production',
@@ -864,10 +875,7 @@ module.exports = function (grunt) {
 
         if (target === 'e2e') {
             return grunt.task.run([
-                'clean:server',
-                'concurrent:test',
-                'wiredep:app',
-                'autoprefixer',
+                'env:e2e',
                 'sauce_connect',
                 'protractor:sauce_linux_chrome',
                 'sauce-connect-close'
@@ -935,13 +943,13 @@ module.exports = function (grunt) {
 
     grunt.registerTask('sauce_connect', 'Grunt plug-in to download and launch Sauce Labs Sauce Connect', function () {
         var options = this.options({
-                username: 'sbg_qbse',
-                accessKey: 'ae1f362a-024f-44b1-a428-992defbf0062',
-                proxy: 'ondemand.saucelabs.com:80',
-                tunnelIdentifier:  tunnelIdentifier,
-                verbose: grunt.option('verbose') === true,
-                logger: grunt.verbose.writeln
-            })
+            username: 'sbg_qbse',
+            accessKey: sauceKey,
+            proxy: httpProxy,
+            tunnelIdentifier:  tunnelIdentifier,
+            verbose: true,
+            logger: console.log
+        })
 
         var done = this.async();
 

@@ -24,7 +24,7 @@ describe('API - FileAttachment record test cases - ', function () {
         "tables": [{
                 "name": "table1", "fields": [{
                     "name": "file",
-                    "type":"SCALAR",
+                    "type":"CONCRETE",
                     "datatypeAttributes": {
                         "type": "FILE_ATTACHMENT"
                     }
@@ -37,7 +37,7 @@ describe('API - FileAttachment record test cases - ', function () {
         "tables": [{
             "name": "table1", "fields": [{
                 "name": "file",
-                "type":"SCALAR",
+                "type":"CONCRETE",
                 "datatypeAttributes": {
                     "type": "FILE_ATTACHMENT",
                     "linkText": linkText
