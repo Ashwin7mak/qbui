@@ -215,10 +215,26 @@ To setup protractor e2e tests, you must first run
 
 `npm run update-webdriver`
 
-Use `grunt test:e2e` to have protractor go through tests located in the `e2e` folder.
+Use `grunt test:e2eLocal` to have protractor go through tests located in the `e2e` folder. You will need to have both your local node server 
+and your java server running.
 
 See [Debugging UI](./DEBUGGING.md)
 
+To connect to an aws swimlane to run your tests from your local, run
+
+`grunt test:e2e --baseUrl=<the url you want to hit> --sauceKey=<the credentials for our sauceLabs account>`
+
+The credentials for the sauceLabs account can be found in the Jenkins job 'AWS_Pipeline-Run_UI_E2E_Tests'
+
+For more information on sauce visit: https://docs.saucelabs.com/
+
+To configure protractor to use different browsers, modify or add a file to the protractor configuration under qbui/ui/e2e/config.
+
+For all of the browser capabilities check out: 
+
+http://www.ignoredbydinosaurs.com/2015/04/angular-protractor-tests-and-sauce-connect-config
+and 
+https://www.browserstack.com/automate/capabilities
 
 ##Compass
 Compass is an open-source CSS authoring framework which uses the Sass stylesheet language.
