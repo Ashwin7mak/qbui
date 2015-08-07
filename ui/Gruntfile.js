@@ -15,6 +15,9 @@ module.exports = function (grunt) {
     var tunnelIdentifier = grunt.option('tunnelIdentifier') || 'tunnel_' + currentDateTime;
     var sauceJobName = grunt.option('sauceJobName') || 'e2e_' + currentDateTime;
     var sauceKey = grunt.option('sauceKey');
+    //We need to pass along --proxy-tunnel so that the tunnel will also use the proxy to communicate with the sauce apis
+    //sauce-connect-launcher won't take an explicit no arg argument, so we are "leveraging" their mechanism for passing
+    //arguments along to sauce-connect-launcher
     var httpProxy = grunt.option('httpProxyHost') !== undefined ? grunt.option('httpProxyHost') + ':80 --proxy-tunnel' : null;
 
     // Load grunt tasks automatically, when needed
@@ -942,8 +945,6 @@ module.exports = function (grunt) {
         var options = this.options({
             username: 'sbg_qbse',
             accessKey: sauceKey,
-            //We need to pass along --proxy-tunnel so that the tunnel will also use the proxy to communicate with the sauce apis
-            //sauce-connect-launcher won't take an explicit no arg argument, so this is a bit of a hack to pass it along sneakily
             proxy: httpProxy,
             tunnelIdentifier:  tunnelIdentifier,
             verbose: true,
