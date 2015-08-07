@@ -941,7 +941,7 @@ module.exports = function (grunt) {
     grunt.registerTask('sauce_connect', 'Grunt plug-in to download and launch Sauce Labs Sauce Connect', function () {
         var options = this.options({
             username: 'sbg_qbse',
-            accessKey: 'ae1f362a-024f-44b1-a428-992defbf0062',
+            accessKey: sauceKey,
             //We need to pass along --proxy-tunnel so that the tunnel will also use the proxy to communicate with the sauce apis
             //sauce-connect-launcher won't take an explicit no arg argument, so this is a bit of a hack to pass it along sneakily
             proxy: httpProxy,
