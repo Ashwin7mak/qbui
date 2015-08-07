@@ -11,6 +11,7 @@ exports.config = {
   //The sauce user and access key allow us to run our browser tests remotely on a SauceLabs VM
   sauceUser: "sbg_qbse",
   sauceKey: "ae1f362a-024f-44b1-a428-992defbf0062",
+  sauceSeleniumAddress: 'localhost:4445/wd/hub',
 
   // A base URL for your application under test will be passed in via grunt config so that we can use whatever url we please
 
