@@ -100,7 +100,7 @@ describe('Service: ReportService', function() {
 
         var reportData, offset=15, rows=10;
         var promise = ReportService.getReport(appId, tableId, reportId, offset, rows).then (
-             function (value) {
+             function(value) {
                  reportData = value;
              }
         );
@@ -140,7 +140,7 @@ describe('Service: ReportService', function() {
 
         var reportData;
         var promise = ReportService.getReportFields(appId, tableId, reportId).then (
-             function (value) {
+             function(value) {
                  reportData = value;
              }
         );
@@ -179,7 +179,7 @@ describe('Service: ReportService', function() {
 
         var reportData, offset=15, rows=10;
         var promise = ReportService.getReportRecords(appId, tableId, reportId, offset, rows).then (
-             function (value) {
+             function(value) {
                  reportData = value;
              }
         );

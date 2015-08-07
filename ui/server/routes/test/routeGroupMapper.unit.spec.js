@@ -15,10 +15,9 @@ var assert = require('assert');
 /**
  * Unit tests for app generator
  */
-describe('Group Route Mapper Unit Test', function () {
+describe('Group Route Mapper Unit Test', function() {
 
-    function routeIsEnabledForGroupProvider(){
-
+    function routeIsEnabledForGroupProvider() {
         return [
             //LIGHTHOUSE V1 ROUTE GROUP
             {message: 'LH_V1, '+ routeConsts.RECORD + ' GET', routeGroup: routeGroups.LH_V1,  route: routeConsts.RECORD, method: 'get', expectedOutput: true},
@@ -129,9 +128,9 @@ describe('Group Route Mapper Unit Test', function () {
     /**
      * Unit test that validates generating an app with a specified number of tables
      */
-    describe('test that we are properly enabling routes for a given route group',function(){
+    describe('test that we are properly enabling routes for a given route group',function() {
         routeIsEnabledForGroupProvider().forEach(function(entry) {
-            it('Test case: ' + entry.message, function (done) {
+            it('Test case: ' + entry.message, function(done) {
                 var route = entry.route;
                 var routeGroup = entry.routeGroup;
                 var expectedOutput = entry.expectedOutput;

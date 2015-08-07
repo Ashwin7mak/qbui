@@ -5,7 +5,7 @@
  * Created by klabak on 4/10/15
  */
 
-(function(){
+(function() {
     'use strict';
 
     var requestReportPage = function() {

@@ -23,8 +23,7 @@
 
             if (requestType === 1) {
                 promise = gridData.getDataPromise();
-            }
-            else {
+            } else {
                 var allCols = gridData.getColumns();
                 var someCols = allCols.slice(0, 3);
                 promise = $q.when(someCols);

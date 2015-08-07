@@ -227,8 +227,7 @@
                         $log.error('error retrieving columns for grid' + resp);
                     }
                 );
-            }
-            else {
+            } else {
                 deferred.resolve({cols: null});  // resolve to an empty column array
             }
 

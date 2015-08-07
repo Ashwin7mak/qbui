@@ -2,7 +2,7 @@
  * Given a raw duration field value and field meta data from the Java capabilities API, this module is capable of
  * display formatting the duration field.
  */
-(function () {
+(function() {
     'use strict';
     /*
      * We can't use the JS native number data type when handling records because it is possible to lose
@@ -216,7 +216,7 @@
          * @param fieldInfo a field meta data object
          * @returns a display options object
          */
-        generateFormat: function (fieldInfo) {
+        generateFormat: function(fieldInfo) {
             var opts = {};
             if (fieldInfo) {
                 opts.scale = fieldInfo.scale;
@@ -237,7 +237,7 @@
          * @param fieldInfo the meta data about the field
          * @returns A formatted display string
          */
-        format: function (fieldValue, fieldInfo) {
+        format: function(fieldValue, fieldInfo) {
             if (!fieldValue || !fieldValue.value) {
                 return '';
             }

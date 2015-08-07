@@ -9,7 +9,7 @@
     //These are constants common to all fields
     module.exports = {
 
-        builder : function(){
+        builder : function() {
             var fieldUnderConstruction = {};
 
             return {

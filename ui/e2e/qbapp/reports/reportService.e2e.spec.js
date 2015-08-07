@@ -82,8 +82,7 @@
                         done();
                     });
                 });
-            }
-            else {
+            } else {
                 done();
             }
         });
@@ -358,8 +357,7 @@
                     cleanupDone = false;
                     done();
                 });
-            }
-            else {
+            } else {
                 done();
             }
         });

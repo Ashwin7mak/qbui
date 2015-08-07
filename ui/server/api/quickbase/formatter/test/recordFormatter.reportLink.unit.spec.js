@@ -6,7 +6,7 @@ var assert = require('assert');
 /**
  * Unit tests for ReportLink field formatting
  */
-describe('ReportLink record formatter unit test', function () {
+describe('ReportLink record formatter unit test', function() {
 
     /**
      * DataProvider containing Records, FieldProperties and record display expectations ReportLink fields
@@ -151,9 +151,9 @@ describe('ReportLink record formatter unit test', function () {
     /**
      * Unit test that validates ReportLink records formatting with various field property flags set
      */
-    describe('should format an ReportLink record with various properties for display',function(){
-        reportLinkDataProvider().forEach(function(entry){
-            it('Test case: ' + entry.message, function (done) {
+    describe('should format an ReportLink record with various properties for display',function() {
+        reportLinkDataProvider().forEach(function(entry) {
+            it('Test case: ' + entry.message, function(done) {
                 var formattedRecords = recordFormatter.formatRecords(entry.records, entry.fieldInfo);
                 assert.deepEqual(formattedRecords, entry.expectedRecords, entry.message);
                 done();

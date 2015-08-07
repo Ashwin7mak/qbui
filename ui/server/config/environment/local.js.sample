@@ -2,7 +2,7 @@
 // Local configuration
 // ===========================
 
-(function () {
+(function() {
     'use strict';
 
     // Use local.js for environment variables that grunt will set when the server starts locally.

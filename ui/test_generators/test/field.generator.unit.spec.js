@@ -13,7 +13,7 @@ var assert = require('assert');
 /**
  * Unit tests for field generator
  */
-describe('Field generator unit test', function () {
+describe('Field generator unit test', function() {
     /**
      * DataProvider containing Records, FieldProperties and record display expectations PhoneNumber fields
      */
@@ -55,16 +55,16 @@ describe('Field generator unit test', function () {
     /**
      * Unit test that validates generating fields by type
      */
-    describe('should create a base field of a particular type',function(){
-        provider().forEach(function(entry){
-            it('Test case: ' + entry.message, function (done) {
+    describe('should create a base field of a particular type',function() {
+        provider().forEach(function(entry) {
+            it('Test case: ' + entry.message, function(done) {
                 var field = fieldGenerator.generateBaseField(entry.fieldType, entry.dataType);
 
-                if(!field[fieldConsts.fieldKeys.NAME]){
+                if (!field[fieldConsts.fieldKeys.NAME]) {
                     assert.fail('Fields should be generated with a name');
                 }
 
-                if(!field[fieldConsts.fieldKeys.TYPE]){
+                if (!field[fieldConsts.fieldKeys.TYPE]) {
                     assert.fail('Fields should be generated with a type');
                 }
 
@@ -77,29 +77,29 @@ describe('Field generator unit test', function () {
     /**
      * Unit test that validates generating fields by type
      */
-    describe('should create a base field and apply defaults for a particular type',function(){
-        provider().forEach(function(entry){
-            it('Test case: ' + entry.message, function (done) {
+    describe('should create a base field and apply defaults for a particular type',function() {
+        provider().forEach(function(entry) {
+            it('Test case: ' + entry.message, function(done) {
                 var field = fieldGenerator.generateBaseField(entry.fieldType, entry.dataType);
                 fieldGenerator.applyDefaults(field);
 
-                if(!field[fieldConsts.fieldKeys.NAME]){
+                if (!field[fieldConsts.fieldKeys.NAME]) {
                     assert.fail('Fields should be generated with a name');
                 }
 
-                if(!field[fieldConsts.fieldKeys.TYPE]){
+                if (!field[fieldConsts.fieldKeys.TYPE]) {
                     assert.fail('Fields should be generated with a type');
                 }
 
-                if(field[fieldConsts.fieldKeys.BUILT_IN] == true){
+                if (field[fieldConsts.fieldKeys.BUILT_IN] == true) {
                     assert.fail('Fields should be have builtin set after applying defaults');
                 }
 
-                if(!field[fieldConsts.fieldKeys.DATA_IS_COPYABLE] == true){
+                if (!field[fieldConsts.fieldKeys.DATA_IS_COPYABLE] == true) {
                     assert.fail('Fields should have dataIsCopyable set after applying defaults');
                 }
 
-                if(!field[fieldConsts.fieldKeys.INCLUDE_IN_QUICKSEARCH] == true){
+                if (!field[fieldConsts.fieldKeys.INCLUDE_IN_QUICKSEARCH] == true) {
                     assert.fail('Fields should have includeInQuicksearch set after applying defaults');
                 }
 

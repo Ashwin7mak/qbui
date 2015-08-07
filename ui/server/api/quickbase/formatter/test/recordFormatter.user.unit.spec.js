@@ -6,7 +6,7 @@ var assert = require('assert');
 /**
  * Unit tests for User field formatting
  */
-describe('User record formatter unit test', function () {
+describe('User record formatter unit test', function() {
 
     /**
      * DataProvider containing Records, FieldProperties and record display expectations User fields
@@ -116,9 +116,9 @@ describe('User record formatter unit test', function () {
     /**
      * Unit test that validates User records formatting with various field property flags set
      */
-    describe('should format an User record with various properties for display',function(){
-        userDataProvider().forEach(function(entry){
-            it('Test case: ' + entry.message, function (done) {
+    describe('should format an User record with various properties for display',function() {
+        userDataProvider().forEach(function(entry) {
+            it('Test case: ' + entry.message, function(done) {
                 var formattedRecords = recordFormatter.formatRecords(entry.records, entry.fieldInfo);
                 assert.deepEqual(formattedRecords, entry.expectedRecords, entry.message);
                 done();

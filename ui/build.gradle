@@ -320,8 +320,7 @@ def getArchiveLayoutStr(useBuildTime) {
     def base = "[organisation]/[module]/[revision]/[artifact]-${getReleasePrefix()}_${getRpmVersion()}"
     if (useBuildTime) {
         base += getBuildTime()
-    }
-    else {
+    } else {
         base += "-${getRelease()}"
     }
     return "${base}(.[ext])"

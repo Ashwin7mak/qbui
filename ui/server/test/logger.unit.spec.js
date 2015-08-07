@@ -11,12 +11,12 @@ var log = require('./../logger');
 /**
  * Unit tests for User field formatting
  */
-describe('Validate Logger', function () {
+describe('Validate Logger', function() {
 
     describe('validate a new logger is created',function() {
 
         var logger;
-        it('validate a new logger is created if one does not exist', function (done) {
+        it('validate a new logger is created if one does not exist', function(done) {
             var spy = sinon.spy(bunyan, 'createLogger');
 
             var logConfig = {};
@@ -29,7 +29,7 @@ describe('Validate Logger', function () {
             done();
         });
 
-        it('validate a new logger is not created if one already exists', function (done) {
+        it('validate a new logger is not created if one already exists', function(done) {
             var spy = sinon.spy(bunyan, 'createLogger');
 
             var sameInstanceLogger = log.getLogger();
@@ -41,7 +41,7 @@ describe('Validate Logger', function () {
             done();
         });
 
-        it('validate a new logger is created if one already exists and initialize is called', function (done) {
+        it('validate a new logger is created if one already exists and initialize is called', function(done) {
             var spy = sinon.spy(bunyan, 'createLogger');
 
             var logConfig = {};
@@ -59,7 +59,7 @@ describe('Validate Logger', function () {
 
     describe('validate the default configuration of the logger',function() {
 
-        it('validate a default logger is configured', function (done) {
+        it('validate a default logger is configured', function(done) {
             //  clear out any logger configuration
             var logConfig = {};
             var logger = initLoggerWithConfig(logConfig);
@@ -75,7 +75,7 @@ describe('Validate Logger', function () {
 
     describe('validate an explicit console configuration of the logger',function() {
 
-        it('validate a default logger is configured', function (done) {
+        it('validate a default logger is configured', function(done) {
 
             var logConfig = {
                 name: 'qbse-local',
@@ -107,7 +107,7 @@ describe('Validate Logger', function () {
 
     describe('validate an explicit rotating file configuration of the logger',function() {
 
-        it('validate a default logger with file streaming is configured and not log directory specified', function (done) {
+        it('validate a default logger with file streaming is configured and not log directory specified', function(done) {
 
             var stub = sinon.stub(fs, 'existsSync');
             //  stub the logger so that we do not create a file when creating the logger
@@ -144,7 +144,7 @@ describe('Validate Logger', function () {
             done();
         });
 
-        it('validate a default logger with file streaming and a file directory is configured', function (done) {
+        it('validate a default logger with file streaming and a file directory is configured', function(done) {
 
             var stub = sinon.stub(fs, 'existsSync');
             var stub1 = sinon.stub(fs, 'mkdirSync');
@@ -185,7 +185,7 @@ describe('Validate Logger', function () {
 
     describe('validate the logRequest add-on function',function() {
 
-        it('validate a log request message at info level without calling function', function (done) {
+        it('validate a log request message at info level without calling function', function(done) {
             //  clear out any logger configuration
             var logConfig = {};
             var logger = initLoggerWithConfig(logConfig);
@@ -202,7 +202,7 @@ describe('Validate Logger', function () {
             done();
         });
 
-        it('validate a log request message at info level', function (done) {
+        it('validate a log request message at info level', function(done) {
             var logConfig = {};
             var logger = initLoggerWithConfig(logConfig);
 
@@ -230,7 +230,7 @@ describe('Validate Logger', function () {
 
     describe('validate the logResponse add-on function',function() {
 
-        it('validate a log response message at info level', function (done) {
+        it('validate a log response message at info level', function(done) {
             var logConfig = {};
             var logger = initLoggerWithConfig(logConfig);
 

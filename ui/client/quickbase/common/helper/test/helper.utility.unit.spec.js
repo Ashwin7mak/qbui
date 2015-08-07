@@ -1,5 +1,5 @@
-describe('quickbase api service', function () {
-'use strict';
+describe('quickbase api service', function() {
+    'use strict';
 
     var qbUtility;
 
@@ -7,11 +7,11 @@ describe('quickbase api service', function () {
         module('qbse.helper');
     });
 
-    beforeEach(inject(function (_qbUtility_) {
+    beforeEach(inject(function(_qbUtility_) {
         qbUtility = _qbUtility_;
     }));
 
-    it('Validate isInt function', function () {
+    it('Validate isInt function', function() {
         expect(qbUtility.isInt(0)).toBeTruthy();
         expect(qbUtility.isInt(3)).toBeTruthy();
         expect(qbUtility.isInt(33.7)).toBeFalsy();
@@ -27,7 +27,7 @@ describe('quickbase api service', function () {
     });
 
 
-    it('Validate map function', function () {
+    it('Validate map function', function() {
         var map = new qbUtility.map();
 
         //  initialize empty map

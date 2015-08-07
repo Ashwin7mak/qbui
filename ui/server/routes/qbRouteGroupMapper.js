@@ -3,7 +3,7 @@
  * qbApiRoutes will then use this to actually call 'route'
  * Created by cschneider1 on 6/30/15.
  */
-(function () {
+(function() {
     'use strict';
     var routeGroups = require('./routeGroups'),
         _ = require('lodash'),
@@ -41,8 +41,8 @@
 
             var routeEnabled = true;
 
-            _.forEach(disabledRoutes, function(disabledRoute){
-                if(route === disabledRoute.route && _.contains(disabledRoute.methods, method.toUpperCase(), 0)){
+            _.forEach(disabledRoutes, function(disabledRoute) {
+                if (route === disabledRoute.route && _.contains(disabledRoute.methods, method.toUpperCase(), 0)) {
                     routeEnabled = false;
                 }
             });

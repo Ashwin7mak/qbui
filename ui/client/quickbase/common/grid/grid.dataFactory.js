@@ -43,8 +43,7 @@
                     // is there additional data to show beyond the current page
                     if (data.length > rows) {
                         newState.morePages = true;
-                    }
-                    else {
+                    } else {
                         newState.morePages = false;
                         newState.foundEnd = newState.pageNumber;
                         newState.totalRows = ((newState.pageNumber - 1) * newState.pageSize) + data.length;

@@ -6,7 +6,7 @@ var assert = require('assert');
 /**
  * Unit tests for URL field formatting
  */
-describe('URL record formatter unit test', function () {
+describe('URL record formatter unit test', function() {
 
     /**
      * DataProvider containing Records, FieldProperties and record display expectations URL fields
@@ -153,9 +153,9 @@ describe('URL record formatter unit test', function () {
     /**
      * Unit test that validates URL records formatting with various field property flags set
      */
-    describe('should format an URL record with various properties for display',function(){
-        urlDataProvider().forEach(function(entry){
-            it('Test case: ' + entry.message, function (done) {
+    describe('should format an URL record with various properties for display',function() {
+        urlDataProvider().forEach(function(entry) {
+            it('Test case: ' + entry.message, function(done) {
                 var formattedRecords = recordFormatter.formatRecords(entry.records, entry.fieldInfo);
                 assert.deepEqual(formattedRecords, entry.expectedRecords, entry.message);
                 done();

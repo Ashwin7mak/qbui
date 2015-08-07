@@ -13,37 +13,36 @@ var assert = require('assert');
 /**
  * Unit tests for user generator
  */
-describe('User generator unit test', function () {
+describe('User generator unit test', function() {
 
     /**
      * Unit test that validates generating a user with no options present
      */
-    describe('test generating an app with a specified number of tables',function(){
-
+    describe('test generating an app with a specified number of tables',function() {
         var user = userGenerator.generateUser();
 
-        if(!user[userConsts.FIRST]){
+        if (!user[userConsts.FIRST]) {
             assert.fail('User should be generated with a first name');
         }
 
-        if(!user[userConsts.LAST]){
+        if (!user[userConsts.LAST]) {
             assert.fail('User should be generated with a last name');
         }
 
-        if(!user[userConsts.SCREEN_NAME]){
+        if (!user[userConsts.SCREEN_NAME]) {
             assert.fail('User should be generated with a screen name');
         }
 
-        if(!user[userConsts.EMAIL]){
+        if (!user[userConsts.EMAIL]) {
             assert.fail('User should be generated with a email');
         }
 
-        if(typeof user[userConsts.DEACTIVATED] === 'undefined'){
+        if (typeof user[userConsts.DEACTIVATED] === 'undefined') {
             assert.fail('User should be generated with a deactivated value');
         }
     });
 
-    function userWithOverridesGenerator(){
+    function userWithOverridesGenerator() {
         return [
             {message: "Generate user override first name", userOptions : {firstName: 'Cleo'}, expectedKeyValue: { firstName: 'Cleo'}},
             {message: "Generate user override last name", userOptions : {lastName: 'Schneider'}, expectedKeyValue: { lastName: 'Schneider'}},
@@ -57,51 +56,51 @@ describe('User generator unit test', function () {
     /**
      * Unit test that validates generating a user with a specified number of tables and a specified number of fields
      */
-    describe('test generating a user with some defined values',function(){
+    describe('test generating a user with some defined values',function() {
         userWithOverridesGenerator().forEach(function(entry) {
-            it('Test case: ' + entry.message, function (done) {
+            it('Test case: ' + entry.message, function(done) {
                 var options = entry.userOptions;
                 var expectedKeyValuePairs = entry.expectedKeyValue;
 
                 var user = userGenerator.generatePopulatedUser(options);
 
-                if(!user[userConsts.FIRST]){
+                if (!user[userConsts.FIRST]) {
                     assert.fail('User should be generated with a first name');
                 }
 
-                if(!user[userConsts.LAST]){
+                if (!user[userConsts.LAST]) {
                     assert.fail('User should be generated with a last name');
                 }
 
-                if(!user[userConsts.SCREEN_NAME]){
+                if (!user[userConsts.SCREEN_NAME]) {
                     assert.fail('User should be generated with a screen name');
                 }
 
-                if(!user[userConsts.EMAIL]){
+                if (!user[userConsts.EMAIL]) {
                     assert.fail('User should be generated with a email');
                 }
 
-                if(typeof user[userConsts.DEACTIVATED] === 'undefined'){
+                if (typeof user[userConsts.DEACTIVATED] === 'undefined') {
                     assert.fail('User should be generated with a deactivated value');
                 }
 
-                if(expectedKeyValuePairs[userConsts.FIRST] && expectedKeyValuePairs[userConsts.FIRST] !== user[userConsts.FIRST]){
+                if (expectedKeyValuePairs[userConsts.FIRST] && expectedKeyValuePairs[userConsts.FIRST] !== user[userConsts.FIRST]) {
                     assert.fail('Expected first name ' + expectedKeyValuePairs[userConsts.FIRST] + ' to match actual first name ' + user[userConsts.FIRST]);
                 }
 
-                if(expectedKeyValuePairs[userConsts.LAST] && expectedKeyValuePairs[userConsts.LAST] !== user[userConsts.LAST]){
+                if (expectedKeyValuePairs[userConsts.LAST] && expectedKeyValuePairs[userConsts.LAST] !== user[userConsts.LAST]) {
                     assert.fail('Expected last name ' + expectedKeyValuePairs[userConsts.LAST] + ' to match actual last name ' + user[userConsts.LAST]);
                 }
 
-                if(expectedKeyValuePairs[userConsts.SCREEN_NAME] && expectedKeyValuePairs[userConsts.SCREEN_NAME] !== user[userConsts.SCREEN_NAME]){
+                if (expectedKeyValuePairs[userConsts.SCREEN_NAME] && expectedKeyValuePairs[userConsts.SCREEN_NAME] !== user[userConsts.SCREEN_NAME]) {
                     assert.fail('Expected screen name ' + expectedKeyValuePairs[userConsts.SCREEN_NAME] + ' to match actual screen name ' + user[userConsts.SCREEN_NAME]);
                 }
 
-                if(expectedKeyValuePairs[userConsts.EMAIL] && expectedKeyValuePairs[userConsts.EMAIL] !== user[userConsts.EMAIL]){
+                if (expectedKeyValuePairs[userConsts.EMAIL] && expectedKeyValuePairs[userConsts.EMAIL] !== user[userConsts.EMAIL]) {
                     assert.fail('Expected first email ' + expectedKeyValuePairs[userConsts.EMAIL] + ' to match actual email ' + user[userConsts.EMAIL]);
                 }
 
-                if(typeof expectedKeyValuePairs[userConsts.DEACTIVATED] !== 'undefined' && expectedKeyValuePairs[userConsts.DEACTIVATED] !== user[userConsts.DEACTIVATED] ){
+                if (typeof expectedKeyValuePairs[userConsts.DEACTIVATED] !== 'undefined' && expectedKeyValuePairs[userConsts.DEACTIVATED] !== user[userConsts.DEACTIVATED] ) {
                     assert.fail('Expected deactivated = ' + expectedKeyValuePairs[userConsts.DEACTIVATED] + ' to match actual deactivated = ' + user[userConsts.DEACTIVATED]);
                 }
 

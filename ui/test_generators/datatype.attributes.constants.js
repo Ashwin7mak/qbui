@@ -112,7 +112,7 @@
         mapToModify.TYPE = 'type';
         mapToModify.CLIENT_SIDE_ATTRIBUTES = 'clientSideAttributes';
     }
-    
+
     /**
      * Add all of the concrete field keys to a map
      */
@@ -252,7 +252,7 @@
     /**
      * Add all date time formula keys to the map
      */
-    function addDateTimeHierarchy(mapToModify){
+    function addDateTimeHierarchy(mapToModify) {
         addDateHierarchy(mapToModify);
         addDateTimeKeys(mapToModify)
         mapToModify.SORT_ORDER_ASCENDING = 'sortOrderAscending';
@@ -263,7 +263,7 @@
      * Add the date time formula hierarchy and the time of day keys to the map
      * @param mapToModify
      */
-    function addTimeOfDayHierarchy(mapToModify){
+    function addTimeOfDayHierarchy(mapToModify) {
         addDateTimeHierarchy(mapToModify);
         addTimeOfDayKeys(mapToModify);
         return mapToModify;
@@ -273,7 +273,7 @@
      * Add the formula hierarchy and the email keys to the map
      * @param mapToModify
      */
-    function addEmailHierarchy(mapToModify){
+    function addEmailHierarchy(mapToModify) {
         addDataTypeAttributeKeys(mapToModify);
         addEmailKeys(mapToModify);
         return mapToModify;
@@ -283,7 +283,7 @@
      * Add formula hierarchy and phone number keys to the map
      * @param mapToModify
      */
-    function addPhoneNumberHierarchy(mapToModify){
+    function addPhoneNumberHierarchy(mapToModify) {
         addDataTypeAttributeKeys(mapToModify);
         addPhoneNumberKeys(mapToModify);
         return mapToModify;
@@ -293,7 +293,7 @@
      * Add formula hierarchy and text keys to the map
      * @param mapToModify
      */
-    function addTextHierarchy(mapToModify){
+    function addTextHierarchy(mapToModify) {
         addDataTypeAttributeKeys(mapToModify);
         addTextKeys(mapToModify);
         return mapToModify;
@@ -303,7 +303,7 @@
      * Add Url hierarchy to the map
      * @param mapToModify
      */
-    function addUrlHierarchy(mapToModify){
+    function addUrlHierarchy(mapToModify) {
         addDataTypeAttributeKeys(mapToModify);
         addUrlKeys(mapToModify);
         return mapToModify;
@@ -312,7 +312,7 @@
     /**
      * Add the user formula hierarchy to the map
      */
-    function addUserHierarchy(mapToModify){
+    function addUserHierarchy(mapToModify) {
         addDataTypeAttributeKeys(mapToModify);
         addUserKeys(mapToModify);
         return mapToModify;
@@ -322,7 +322,7 @@
      * Add the concrete hierarchy and the file attachment keys to the map
      * @param mapToModify
      */
-    function addFileAttachmentHierarchy(mapToModify){
+    function addFileAttachmentHierarchy(mapToModify) {
         addDataTypeAttributeKeys(mapToModify)
         addFileAttachmentKeys(mapToModify);
         return mapToModify;
@@ -479,7 +479,7 @@
     /**
      * Add all date time formula JsonTypes to the map
      */
-    function addJsonTypeDateTimeHierarchy(mapToModify){
+    function addJsonTypeDateTimeHierarchy(mapToModify) {
         addJsonTypeDateHierarchy(mapToModify);
         addDateTimeJsonTypes(mapToModify)
         mapToModify.SORT_ORDER_ASCENDING = 'sortOrderAscending';
@@ -490,7 +490,7 @@
      * Add the date time formula hierarchy and the time of day JsonTypes to the map
      * @param mapToModify
      */
-    function addJsonTypeTimeOfDayHierarchy(mapToModify){
+    function addJsonTypeTimeOfDayHierarchy(mapToModify) {
         addJsonTypeDateTimeHierarchy(mapToModify);
         addTimeOfDayJsonTypes(mapToModify);
         return mapToModify;
@@ -500,7 +500,7 @@
      * Add the formula hierarchy and the email JsonTypes to the map
      * @param mapToModify
      */
-    function addJsonTypeEmailHierarchy(mapToModify){
+    function addJsonTypeEmailHierarchy(mapToModify) {
         addFieldJsonTypes(mapToModify);
         addEmailJsonTypes(mapToModify);
         return mapToModify;
@@ -510,7 +510,7 @@
      * Add formula hierarchy and phone number JsonTypes to the map
      * @param mapToModify
      */
-    function addJsonTypePhoneNumberHierarchy(mapToModify){
+    function addJsonTypePhoneNumberHierarchy(mapToModify) {
         addFieldJsonTypes(mapToModify);
         addPhoneNumberJsonTypes(mapToModify);
         return mapToModify;
@@ -520,7 +520,7 @@
      * Add formula hierarchy and text JsonTypes to the map
      * @param mapToModify
      */
-    function addJsonTypeTextHierarchy(mapToModify){
+    function addJsonTypeTextHierarchy(mapToModify) {
         addFieldJsonTypes(mapToModify);
         addTextJsonTypes(mapToModify);
         return mapToModify;
@@ -530,7 +530,7 @@
      * Add Url hierarchy to the map
      * @param mapToModify
      */
-    function addJsonTypeUrlHierarchy(mapToModify){
+    function addJsonTypeUrlHierarchy(mapToModify) {
         addFieldJsonTypes(mapToModify);
         addUrlJsonTypes(mapToModify);
         return mapToModify;
@@ -539,7 +539,7 @@
     /**
      * Add the user formula hierarchy to the map
      */
-    function addJsonTypeUserHierarchy(mapToModify){
+    function addJsonTypeUserHierarchy(mapToModify) {
         addFieldJsonTypes(mapToModify);
         addUserJsonTypes(mapToModify);
         return mapToModify;
@@ -549,7 +549,7 @@
      * Add the concrete hierarchy and the file attachment JsonTypes to the map
      * @param mapToModify
      */
-    function addJsonTypeFileAttachmentHierarchy(mapToModify){
+    function addJsonTypeFileAttachmentHierarchy(mapToModify) {
         addFieldJsonTypes(mapToModify)
         addFileAttachmentJsonTypes(mapToModify);
         return mapToModify;

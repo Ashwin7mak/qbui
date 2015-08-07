@@ -1,8 +1,15 @@
 describe('Factory: ReportModel', function() {
     'use strict';
 
-    var scope, ReportModel, ReportService, deferred, $log;
-    var appId='1', appName='A', tableId='2', reportId='3';
+    var scope;
+    var ReportModel;
+    var ReportService;
+    var deferred;
+    var $log;
+    var appId ='1';
+    var appName = 'A';
+    var tableId = '2';
+    var reportId = '3';
 
     // load the module
     beforeEach(function() {
@@ -35,7 +42,7 @@ describe('Factory: ReportModel', function() {
 
         var columns;
         var promise = ReportModel.getColumnData(appId, tableId, reportId).then (
-             function (value) {
+             function(value) {
                  columns = value;
              }
         );
@@ -81,7 +88,7 @@ describe('Factory: ReportModel', function() {
 
         var metaData;
         var promise = ReportModel.getMetaData(appId, tableId, reportId).then (
-             function (value) {
+             function(value) {
                  metaData = value;
              }
         );
@@ -122,7 +129,7 @@ describe('Factory: ReportModel', function() {
 
         var reportData, offset=30, rows=10;
         var promise = ReportModel.getReportData(appId, tableId, reportId, offset, rows).then (
-             function (value) {
+             function(value) {
                  reportData = value;
              }
         );
@@ -147,7 +154,7 @@ describe('Factory: ReportModel', function() {
 
         var reportData, offset=30, rows=10;
         var promise = ReportModel.getReportData(appId, tableId, reportId, offset, rows).then (
-             function (value) {
+             function(value) {
                  reportData = value;
              }
         );
@@ -179,7 +186,7 @@ describe('Factory: ReportModel', function() {
 
         var columns;
         var promise = ReportModel.getColumnData(appId, tableId, reportId).then (
-             function (value) {
+             function(value) {
                  columns = value;
              }
         );
@@ -197,7 +204,7 @@ describe('Factory: ReportModel', function() {
 
         var metaData;
         var promise = ReportModel.getMetaData(appId, tableId, reportId).then (
-             function (value) {
+             function(value) {
                  metaData = value;
              }
         );
@@ -215,7 +222,7 @@ describe('Factory: ReportModel', function() {
 
         var reportData, offset=30, rows=10;
         var promise = ReportModel.getReportData(appId, tableId, reportId, offset, rows).then (
-             function (value) {
+             function(value) {
                  reportData = value;
              }
         );

@@ -4,7 +4,7 @@ describe('Controller: AppDashboardCtrl', function() {
     var controller, ReportsDashboardModel, scope, $httpBackend, $state, deferredGetApp, deferredGetApps, deferredGet, transitionTo, $log;
 
     beforeEach(function() {
-        module('qbse.qbapp.dashboard','qbse.qbapp.reports.dashboard','qbse.qbapp.reports.manager', 'quickbase.qbapp', 'qbse.templates');
+        module('qbse.qbapp.dashboard', 'qbse.qbapp.reports.dashboard', 'qbse.qbapp.reports.manager', 'quickbase.qbapp', 'qbse.templates');
     });
 
     beforeEach(

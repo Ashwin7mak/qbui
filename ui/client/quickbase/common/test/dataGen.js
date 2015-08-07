@@ -92,8 +92,7 @@
             else
             if (requestType === gridConstants.SERVICE_REQ.COLS) {
                 return $q.when(columnDefs);
-            }
-            else {
+            } else {
                 return $q.when(dataArray);
             }
 

@@ -19,7 +19,7 @@ var bigDecimal = require('bigdecimal');
 /**
  * Unit tests for Duration field formatting
  */
-describe('Duration record formatter unit test', function () {
+describe('Duration record formatter unit test', function() {
     var MILLIS_PER_SECOND = new bigDecimal.BigDecimal(1000);
     var MILLIS_PER_MIN = new bigDecimal.BigDecimal(60000);
     var MILLIS_PER_HOUR = new bigDecimal.BigDecimal(3600000);
@@ -122,9 +122,9 @@ describe('Duration record formatter unit test', function () {
     /**
      * Unit test that validates Duration records formatting with no field property flags set
      */
-    describe('should format duration record with no properties for display',function(){
-        durationNoFlagsDataProvider().forEach(function(entry){
-            it('Test case: ' + entry.message, function (done) {
+    describe('should format duration record with no properties for display',function() {
+        durationNoFlagsDataProvider().forEach(function(entry) {
+            it('Test case: ' + entry.message, function(done) {
                 var formattedRecords = recordFormatter.formatRecords(entry.records, entry.fieldInfo);
                 assert.equal(JSON.stringify(formattedRecords), JSON.stringify(entry.expectedRecords), entry.message);
                 done();
@@ -209,9 +209,9 @@ describe('Duration record formatter unit test', function () {
     /**
      * Unit test that validates Duration records formatting with Weeks field property flags set
      */
-    describe('should format Weeks duration record with various properties for display',function(){
-        durationWeeksDataProvider().forEach(function(entry){
-            it('Test case: ' + entry.message, function (done) {
+    describe('should format Weeks duration record with various properties for display',function() {
+        durationWeeksDataProvider().forEach(function(entry) {
+            it('Test case: ' + entry.message, function(done) {
                 var formattedRecords = recordFormatter.formatRecords(entry.records, entry.fieldInfo);
                 assert.equal(JSON.stringify(formattedRecords), JSON.stringify(entry.expectedRecords), entry.message);
                 done();
@@ -295,9 +295,9 @@ describe('Duration record formatter unit test', function () {
     /**
      * Unit test that validates Duration records formatting with Days field property flags set
      */
-    describe('should format Days duration record with various properties for display',function(){
-        durationDaysDataProvider().forEach(function(entry){
-            it('Test case: ' + entry.message, function (done) {
+    describe('should format Days duration record with various properties for display',function() {
+        durationDaysDataProvider().forEach(function(entry) {
+            it('Test case: ' + entry.message, function(done) {
                 var formattedRecords = recordFormatter.formatRecords(entry.records, entry.fieldInfo);
                 assert.equal(JSON.stringify(formattedRecords), JSON.stringify(entry.expectedRecords), entry.message);
                 done();
@@ -374,9 +374,9 @@ describe('Duration record formatter unit test', function () {
     /**
      * Unit test that validates Duration records formatting with Hours field property flags set
      */
-    describe('should format Hours duration record with various properties for display',function(){
-        durationHoursDataProvider().forEach(function(entry){
-            it('Test case: ' + entry.message, function (done) {
+    describe('should format Hours duration record with various properties for display',function() {
+        durationHoursDataProvider().forEach(function(entry) {
+            it('Test case: ' + entry.message, function(done) {
                 var formattedRecords = recordFormatter.formatRecords(entry.records, entry.fieldInfo);
                 assert.equal(JSON.stringify(formattedRecords), JSON.stringify(entry.expectedRecords), entry.message);
                 done();
@@ -460,9 +460,9 @@ describe('Duration record formatter unit test', function () {
     /**
      * Unit test that validates Duration records formatting with Minutes field property flags set
      */
-    describe('should format Minutes duration record with various properties for display',function(){
-        durationMinutesDataProvider().forEach(function(entry){
-            it('Test case: ' + entry.message, function (done) {
+    describe('should format Minutes duration record with various properties for display',function() {
+        durationMinutesDataProvider().forEach(function(entry) {
+            it('Test case: ' + entry.message, function(done) {
                 var formattedRecords = recordFormatter.formatRecords(entry.records, entry.fieldInfo);
                 assert.equal(JSON.stringify(formattedRecords), JSON.stringify(entry.expectedRecords), entry.message);
                 done();
@@ -543,9 +543,9 @@ describe('Duration record formatter unit test', function () {
     /**
      * Unit test that validates Duration records formatting with Seconds field property flags set
      */
-    describe('should format Seconds duration record with various properties for display',function(){
-        durationSecondsDataProvider().forEach(function(entry){
-            it('Test case: ' + entry.message, function (done) {
+    describe('should format Seconds duration record with various properties for display',function() {
+        durationSecondsDataProvider().forEach(function(entry) {
+            it('Test case: ' + entry.message, function(done) {
                 var formattedRecords = recordFormatter.formatRecords(entry.records, entry.fieldInfo);
                 assert.equal(JSON.stringify(formattedRecords), JSON.stringify(entry.expectedRecords), entry.message);
                 done();
@@ -630,9 +630,9 @@ describe('Duration record formatter unit test', function () {
     /**
      * Unit test that validates Duration records formatting with HHMM field property flags set
      */
-    describe('should format HHMM duration record with various properties for display',function(){
-        durationHHMMDataProvider().forEach(function(entry){
-            it('Test case: ' + entry.message, function (done) {
+    describe('should format HHMM duration record with various properties for display',function() {
+        durationHHMMDataProvider().forEach(function(entry) {
+            it('Test case: ' + entry.message, function(done) {
                 var formattedRecords = recordFormatter.formatRecords(entry.records, entry.fieldInfo);
                 assert.equal(JSON.stringify(formattedRecords), JSON.stringify(entry.expectedRecords), entry.message);
                 done();
@@ -717,9 +717,9 @@ describe('Duration record formatter unit test', function () {
     /**
      * Unit test that validates Duration records formatting with HHMMSS field property flags set
      */
-    describe('should format HHMMSS duration record with various properties for display',function(){
-        durationHHMMSSDataProvider().forEach(function(entry){
-            it('Test case: ' + entry.message, function (done) {
+    describe('should format HHMMSS duration record with various properties for display',function() {
+        durationHHMMSSDataProvider().forEach(function(entry) {
+            it('Test case: ' + entry.message, function(done) {
                 var formattedRecords = recordFormatter.formatRecords(entry.records, entry.fieldInfo);
                 assert.equal(JSON.stringify(formattedRecords), JSON.stringify(entry.expectedRecords), entry.message);
                 done();
@@ -804,9 +804,9 @@ describe('Duration record formatter unit test', function () {
     /**
      * Unit test that validates Duration records formatting with MM field property flags set
      */
-    describe('should format MM duration record with various properties for display',function(){
-        durationMMDataProvider().forEach(function(entry){
-            it('Test case: ' + entry.message, function (done) {
+    describe('should format MM duration record with various properties for display',function() {
+        durationMMDataProvider().forEach(function(entry) {
+            it('Test case: ' + entry.message, function(done) {
                 var formattedRecords = recordFormatter.formatRecords(entry.records, entry.fieldInfo);
                 assert.equal(JSON.stringify(formattedRecords), JSON.stringify(entry.expectedRecords), entry.message);
                 done();
@@ -891,9 +891,9 @@ describe('Duration record formatter unit test', function () {
     /**
      * Unit test that validates Duration records formatting with MMSS field property flags set
      */
-    describe('should format MMSS duration record with various properties for display',function(){
-        durationMMSSDataProvider().forEach(function(entry){
-            it('Test case: ' + entry.message, function (done) {
+    describe('should format MMSS duration record with various properties for display',function() {
+        durationMMSSDataProvider().forEach(function(entry) {
+            it('Test case: ' + entry.message, function(done) {
                 var formattedRecords = recordFormatter.formatRecords(entry.records, entry.fieldInfo);
                 assert.equal(JSON.stringify(formattedRecords), JSON.stringify(entry.expectedRecords), entry.message);
                 done();

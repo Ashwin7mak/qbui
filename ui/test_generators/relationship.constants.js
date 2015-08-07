@@ -2,7 +2,7 @@
  * relationship.constants.js holds all constants associated with the relationship object
  * Created by cschneider1 on 5/29/15.
  */
-(function(){
+(function() {
     module.exports = {
 
         //JSON CONSTANTS
@@ -18,5 +18,5 @@
         REFERENTIAL_INTEGRITY : 'referentialIntegrity',
         CASCADE_DELETE : 'cascadeDelete'
     }
-    
+
 }());

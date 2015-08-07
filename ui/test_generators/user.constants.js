@@ -2,7 +2,7 @@
  * Constants for the User object. Primarily comprised of the expected keys
  * Created by cschneider1 on 5/29/15.
  */
-(function () {
+(function() {
     module.exports = Object.freeze({
         ID : 'id',
         FIRST : 'firstName',

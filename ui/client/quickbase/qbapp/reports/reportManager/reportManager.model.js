@@ -17,7 +17,7 @@
              * @param reportId
              * @returns {deferred.promise|{then, always}}
              */
-            getMetaData: function (appId, tableId, reportId) {
+            getMetaData: function(appId, tableId, reportId) {
 
                 var deferred = $q.defer();
 
@@ -33,7 +33,7 @@
                 };
 
                 ReportService.getMetaData(appId, tableId, reportId).then(
-                    function (data) {
+                    function(data) {
                         //  get the report meta info
                         metaData.appName = data.app.name;
                         metaData.name = data.rpt.name;
@@ -41,7 +41,7 @@
 
                         deferred.resolve(metaData);
                     },
-                    function (resp) {
+                    function(resp) {
                         $log.error('Error getting report information.  Status: ' + resp.status);
                         deferred.reject(resp);
                     }
@@ -59,21 +59,21 @@
              * @param reportId
              * @returns {deferred.promise|{then, always}}
              */
-            getColumnData: function (appId, tableId, reportId) {
+            getColumnData: function(appId, tableId, reportId) {
 
                 var deferred = $q.defer();
 
                 ReportService.getReportFields(appId, tableId, reportId).then(
-                    function (fields) {
+                    function(fields) {
                         //  process the fields
                         var cols = [];
                         var fieldMap = new qbUtility.map();
 
-                        fields.forEach(function (field) {
+                        fields.forEach(function(field) {
                             fieldMap.put(field.id, field);
                         });
 
-                        fieldMap.forEach(function (field, id) {
+                        fieldMap.forEach(function(field, id) {
                             var column = {};
                             column.id = field.id || id;
                             column.name = field.name;
@@ -87,7 +87,7 @@
 
                         deferred.resolve(cols);
                     },
-                    function (resp) {
+                    function(resp) {
                         $log.error('Error getting report information.  Status: ' + resp.status);
                         deferred.reject(resp);
                     }
@@ -105,25 +105,25 @@
              * @param reportId
              * @returns {deferred.promise|{then, always}}
              */
-            getReportData: function (appId, tableId, reportId, offset, rows) {
+            getReportData: function(appId, tableId, reportId, offset, rows) {
 
                 var deferred = $q.defer();
 
                 ReportService.getReport(appId, tableId, reportId, offset, rows).then(
-                    function (data) {
+                    function(data) {
                         var fields = data.fields;
                         var records = data.records;
                         var reportData = [];
                         var fieldMap = new qbUtility.map();
 
                         if (fields && records) {
-                            fields.forEach(function (field) {
+                            fields.forEach(function(field) {
                                 fieldMap.put(field.id, field);
                             });
 
-                            records.forEach(function (record) {
+                            records.forEach(function(record) {
                                 var columns = {};
-                                record.forEach(function (column) {
+                                record.forEach(function(column) {
                                     var fld = fieldMap.get(column.id);
                                     columns[fld.name] = column.display;
                                 });
@@ -133,7 +133,7 @@
                         }
                         deferred.resolve(reportData);
                     },
-                    function (resp) {
+                    function(resp) {
                         $log.error('formatted report callback failure' + resp.status);
                         deferred.reject(resp);
                     }

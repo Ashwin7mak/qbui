@@ -2,7 +2,7 @@
  * app.constants.js holds all constants associated with the app object
  * Created by cschneider1 on 5/29/15.
  */
-(function(){
+(function() {
     module.exports = {
         APP_ID_LENGTH : 10,
         APP_NAME_LENGTH : 14,
@@ -16,5 +16,5 @@
         TABLES : 'tables',
         RELATIONSHIPS : 'relationships'
     }
-    
+
 }());

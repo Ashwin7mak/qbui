@@ -17,7 +17,7 @@ var sinon = require('sinon');
 /**
  * Unit tests for User field formatting
  */
-describe('Validate RequestHelper unit tests', function () {
+describe('Validate RequestHelper unit tests', function() {
 
     /**
      * Unit test the helper methods

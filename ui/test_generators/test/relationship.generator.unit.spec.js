@@ -18,9 +18,9 @@ var assert = require('assert');
 /**
  * Unit tests for relationship generator
  */
-describe('Relationship generator unit test', function () {
+describe('Relationship generator unit test', function() {
 
-    function relationshipProvider(){
+    function relationshipProvider() {
         var tableMap = {};
         tableMap['App1Table0'] = {};
         tableMap['App1Table1'] = {};
@@ -52,8 +52,7 @@ describe('Relationship generator unit test', function () {
 
         var generatedTableMap = {};
 
-        _.forEach(generatedTables, function(table){
-
+        _.forEach(generatedTables, function(table) {
             table[tableConsts.ID] = tableIdPrefix + tableIndex;
             table[tableConsts.APP_ID] = appId;
             generatedTableMap[tableIdPrefix + tableIndex] = table;
@@ -63,7 +62,7 @@ describe('Relationship generator unit test', function () {
 
             currentFields = table[tableConsts.FIELDS];
 
-            _.forEach(currentFields, function(field){
+            _.forEach(currentFields, function(field) {
                 currentFieldType = field[fieldConsts.fieldKeys.TYPE];
                 field[fieldConsts.fieldKeys.ID] = fieldIndex;
                 field[fieldConsts[currentFieldType].UNIQUE] = true;
@@ -89,9 +88,9 @@ describe('Relationship generator unit test', function () {
     /**
      * Unit test that validates generating a relationship with a specified master and detail table
      */
-    describe('test generating a relationship given 2 tables',function(){
+    describe('test generating a relationship given 2 tables',function() {
         relationshipProvider().forEach(function(entry) {
-            it('Test case: ' + entry.message, function (done) {
+            it('Test case: ' + entry.message, function(done) {
                 var expectedRelationship = entry.expectedRelationship;
                 var masterTable = entry.masterTable;
                 var detailTable = entry.detailTable;
@@ -100,43 +99,43 @@ describe('Relationship generator unit test', function () {
 
                 var validRelationshipObject = relationshipGenerator.validateRelationshipProperties(relationship);
 
-                if(!validRelationshipObject){
+                if (!validRelationshipObject) {
                     assert.fail('Relationship was found invalid ' + relationship);
                 }
 
-                if(expectedRelationship[relationshipConsts.APP_ID] !== relationship[relationshipConsts.APP_ID]){
+                if (expectedRelationship[relationshipConsts.APP_ID] !== relationship[relationshipConsts.APP_ID]) {
                     assert.fail('Expected appId ' + expectedRelationship[relationshipConsts.APP_ID] + ' to match actual appId ' + relationship[relationshipConsts.APP_ID]);
                 }
 
-                if(expectedRelationship[relationshipConsts.MASTER_APP_ID] !== relationship[relationshipConsts.MASTER_APP_ID]){
+                if (expectedRelationship[relationshipConsts.MASTER_APP_ID] !== relationship[relationshipConsts.MASTER_APP_ID]) {
                     assert.fail('Expected masterAppId ' + expectedRelationship[relationshipConsts.MASTER_APP_ID] + ' to match actual masterAppId ' + relationship[relationshipConsts.APP_ID]);
                 }
 
-                if(expectedRelationship[relationshipConsts.MASTER_TABLE_ID] !== relationship[relationshipConsts.MASTER_TABLE_ID]){
+                if (expectedRelationship[relationshipConsts.MASTER_TABLE_ID] !== relationship[relationshipConsts.MASTER_TABLE_ID]) {
                     assert.fail('Expected masterTableId ' + expectedRelationship[relationshipConsts.MASTER_TABLE_ID] + ' to match actual masterTableId ' + relationship[relationshipConsts.MASTER_TABLE_ID]);
                 }
 
-                if(expectedRelationship[relationshipConsts.MASTER_FIELD_ID] !== relationship[relationshipConsts.MASTER_FIELD_ID]){
+                if (expectedRelationship[relationshipConsts.MASTER_FIELD_ID] !== relationship[relationshipConsts.MASTER_FIELD_ID]) {
                     assert.fail('Expected masterFieldId ' + expectedRelationship[relationshipConsts.MASTER_FIELD_ID] + ' to match actual masterFieldId ' + relationship[relationshipConsts.MASTER_FIELD_ID]);
                 }
 
-                if(expectedRelationship[relationshipConsts.DETAIL_APP_ID] !== relationship[relationshipConsts.DETAIL_APP_ID]){
+                if (expectedRelationship[relationshipConsts.DETAIL_APP_ID] !== relationship[relationshipConsts.DETAIL_APP_ID]) {
                     assert.fail('Expected detailAppid ' + expectedRelationship[relationshipConsts.DETAIL_APP_ID] + ' to match actual detailAppid ' + relationship[relationshipConsts.DETAIL_APP_ID]);
                 }
 
-                if(expectedRelationship[relationshipConsts.DETAIL_TABLE_ID] !== relationship[relationshipConsts.DETAIL_TABLE_ID]){
+                if (expectedRelationship[relationshipConsts.DETAIL_TABLE_ID] !== relationship[relationshipConsts.DETAIL_TABLE_ID]) {
                     assert.fail('Expected detailTableId ' + expectedRelationship[relationshipConsts.DETAIL_TABLE_ID] + ' to match actual detailTableId ' + relationship[relationshipConsts.DETAIL_TABLE_ID]);
                 }
 
-                if(expectedRelationship[relationshipConsts.DETAIL_FIELD_ID] !== relationship[relationshipConsts.DETAIL_FIELD_ID]){
+                if (expectedRelationship[relationshipConsts.DETAIL_FIELD_ID] !== relationship[relationshipConsts.DETAIL_FIELD_ID]) {
                     assert.fail('Expected detailFieldId ' + expectedRelationship[relationshipConsts.DETAIL_FIELD_ID] + ' to match actual detailFieldId ' + relationship[relationshipConsts.DETAIL_FIELD_ID]);
                 }
 
-                if(typeof expectedRelationship[relationshipConsts.REFERENTIAL_INTEGRITY] === 'boolean' && expectedRelationship[relationshipConsts.REFERENTIAL_INTEGRITY] !== relationship[relationshipConsts.REFERENTIAL_INTEGRITY]){
+                if (typeof expectedRelationship[relationshipConsts.REFERENTIAL_INTEGRITY] === 'boolean' && expectedRelationship[relationshipConsts.REFERENTIAL_INTEGRITY] !== relationship[relationshipConsts.REFERENTIAL_INTEGRITY]) {
                     assert.fail('Expected referentialIntegrity ' + expectedRelationship[relationshipConsts.REFERENTIAL_INTEGRITY] + ' to match actual referentialIntegrity ' + relationship[relationshipConsts.REFERENTIAL_INTEGRITY]);
                 }
 
-                if(typeof expectedRelationship[relationshipConsts.CASCADE_DELETE] === 'boolean' && expectedRelationship[relationshipConsts.CASCADE_DELETE] !== relationship[relationshipConsts.CASCADE_DELETE]){
+                if (typeof expectedRelationship[relationshipConsts.CASCADE_DELETE] === 'boolean' && expectedRelationship[relationshipConsts.CASCADE_DELETE] !== relationship[relationshipConsts.CASCADE_DELETE]) {
                     assert.fail('Expected cascadeDelete ' + expectedRelationship[relationshipConsts.CASCADE_DELETE] + ' to match actual cascadeDelete ' + relationship[relationshipConsts.CASCADE_DELETE]);
                 }
 
@@ -148,9 +147,9 @@ describe('Relationship generator unit test', function () {
     /**
      * Unit test that validates generating a relationship with a specified app and master and detail tableIds
      */
-    describe('test generating a relationship given an app and two table ids',function(){
+    describe('test generating a relationship given an app and two table ids',function() {
         relationshipProvider().forEach(function(entry) {
-            it('Test case: ' + entry.message, function (done) {
+            it('Test case: ' + entry.message, function(done) {
                 var expectedRelationship = entry.expectedRelationship;
                 var masterTable = entry.masterTable;
                 var detailTable = entry.detailTable;
@@ -161,43 +160,43 @@ describe('Relationship generator unit test', function () {
 
                 var validRelationshipObject = relationshipGenerator.validateRelationshipProperties(relationship);
 
-                if(!validRelationshipObject){
+                if (!validRelationshipObject) {
                     assert.fail('Relationship was found invalid ' + relationship);
                 }
 
-                if(expectedRelationship[relationshipConsts.APP_ID] !== relationship[relationshipConsts.APP_ID]){
+                if (expectedRelationship[relationshipConsts.APP_ID] !== relationship[relationshipConsts.APP_ID]) {
                     assert.fail('Expected appId ' + expectedRelationship[relationshipConsts.APP_ID] + ' to match actual appId ' + relationship[relationshipConsts.APP_ID]);
                 }
 
-                if(expectedRelationship[relationshipConsts.MASTER_APP_ID] !== relationship[relationshipConsts.MASTER_APP_ID]){
+                if (expectedRelationship[relationshipConsts.MASTER_APP_ID] !== relationship[relationshipConsts.MASTER_APP_ID]) {
                     assert.fail('Expected masterAppId ' + expectedRelationship[relationshipConsts.MASTER_APP_ID] + ' to match actual masterAppId ' + relationship[relationshipConsts.APP_ID]);
                 }
 
-                if(expectedRelationship[relationshipConsts.MASTER_TABLE_ID] !== relationship[relationshipConsts.MASTER_TABLE_ID]){
+                if (expectedRelationship[relationshipConsts.MASTER_TABLE_ID] !== relationship[relationshipConsts.MASTER_TABLE_ID]) {
                     assert.fail('Expected masterTableId ' + expectedRelationship[relationshipConsts.MASTER_TABLE_ID] + ' to match actual masterTableId ' + relationship[relationshipConsts.MASTER_TABLE_ID]);
                 }
 
-                if(expectedRelationship[relationshipConsts.MASTER_FIELD_ID] !== relationship[relationshipConsts.MASTER_FIELD_ID]){
+                if (expectedRelationship[relationshipConsts.MASTER_FIELD_ID] !== relationship[relationshipConsts.MASTER_FIELD_ID]) {
                     assert.fail('Expected masterFieldId ' + expectedRelationship[relationshipConsts.MASTER_FIELD_ID] + ' to match actual masterFieldId ' + relationship[relationshipConsts.MASTER_FIELD_ID]);
                 }
 
-                if(expectedRelationship[relationshipConsts.DETAIL_APP_ID] !== relationship[relationshipConsts.DETAIL_APP_ID]){
+                if (expectedRelationship[relationshipConsts.DETAIL_APP_ID] !== relationship[relationshipConsts.DETAIL_APP_ID]) {
                     assert.fail('Expected detailAppid ' + expectedRelationship[relationshipConsts.DETAIL_APP_ID] + ' to match actual detailAppid ' + relationship[relationshipConsts.DETAIL_APP_ID]);
                 }
 
-                if(expectedRelationship[relationshipConsts.DETAIL_TABLE_ID] !== relationship[relationshipConsts.DETAIL_TABLE_ID]){
+                if (expectedRelationship[relationshipConsts.DETAIL_TABLE_ID] !== relationship[relationshipConsts.DETAIL_TABLE_ID]) {
                     assert.fail('Expected detailTableId ' + expectedRelationship[relationshipConsts.DETAIL_TABLE_ID] + ' to match actual detailTableId ' + relationship[relationshipConsts.DETAIL_TABLE_ID]);
                 }
 
-                if(expectedRelationship[relationshipConsts.DETAIL_FIELD_ID] !== relationship[relationshipConsts.DETAIL_FIELD_ID]){
+                if (expectedRelationship[relationshipConsts.DETAIL_FIELD_ID] !== relationship[relationshipConsts.DETAIL_FIELD_ID]) {
                     assert.fail('Expected detailFieldId ' + expectedRelationship[relationshipConsts.DETAIL_FIELD_ID] + ' to match actual detailFieldId ' + relationship[relationshipConsts.DETAIL_FIELD_ID]);
                 }
 
-                if(typeof expectedRelationship[relationshipConsts.REFERENTIAL_INTEGRITY] === 'boolean' && expectedRelationship[relationshipConsts.REFERENTIAL_INTEGRITY] !== relationship[relationshipConsts.REFERENTIAL_INTEGRITY]){
+                if (typeof expectedRelationship[relationshipConsts.REFERENTIAL_INTEGRITY] === 'boolean' && expectedRelationship[relationshipConsts.REFERENTIAL_INTEGRITY] !== relationship[relationshipConsts.REFERENTIAL_INTEGRITY]) {
                     assert.fail('Expected referentialIntegrity ' + expectedRelationship[relationshipConsts.REFERENTIAL_INTEGRITY] + ' to match actual referentialIntegrity ' + relationship[relationshipConsts.REFERENTIAL_INTEGRITY]);
                 }
 
-                if(typeof expectedRelationship[relationshipConsts.CASCADE_DELETE] === 'boolean' && expectedRelationship[relationshipConsts.CASCADE_DELETE] !== relationship[relationshipConsts.CASCADE_DELETE]){
+                if (typeof expectedRelationship[relationshipConsts.CASCADE_DELETE] === 'boolean' && expectedRelationship[relationshipConsts.CASCADE_DELETE] !== relationship[relationshipConsts.CASCADE_DELETE]) {
                     assert.fail('Expected cascadeDelete ' + expectedRelationship[relationshipConsts.CASCADE_DELETE] + ' to match actual cascadeDelete ' + relationship[relationshipConsts.CASCADE_DELETE]);
                 }
 

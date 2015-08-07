@@ -1,7 +1,7 @@
 /**
  * Error responses
  */
-(function(){
+(function() {
 'use strict';
 var consts = require('../../api/constants');
 var log = require('../../logger').getLogger();

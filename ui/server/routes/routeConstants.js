@@ -2,7 +2,7 @@
  * route constants encapsulate the valid routes for a quickbase app
  * Created by cschneider1 on 6/30/15.
  */
-(function () {
+(function() {
     'use strict';
     //save the substrings for lack of repetition
     module.exports = Object.freeze({

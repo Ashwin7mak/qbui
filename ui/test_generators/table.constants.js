@@ -3,7 +3,7 @@
  * divided by hierarchy
  * Created by cschneider1 on 5/29/15.
  */
-(function(){
+(function() {
     var consts = require('../server/api/constants');
 
     //These are constants common to all fields
@@ -18,5 +18,5 @@
         TABLE_ALIAS : 'tableAlias',
         FIELDS : 'fields'
     });
-    
+
 }());

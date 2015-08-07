@@ -3,7 +3,7 @@ describe('Service: ReportService', function() {
 
     // load the module
     beforeEach(function() {
-        module('qbse.qbapp.reports.dashboard','quickbase.qbapp', 'qbse.templates');
+        module('qbse.qbapp.reports.dashboard', 'quickbase.qbapp', 'qbse.templates');
     });
 
     var scope, ApiService, ReportsDashboardService;

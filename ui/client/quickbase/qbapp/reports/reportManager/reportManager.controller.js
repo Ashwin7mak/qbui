@@ -22,8 +22,7 @@
 
             if (requestType === gridConstants.SERVICE_REQ.COLS) {
                 promise = ReportModel.getColumnData(appId, tableId, reportId);
-            }
-            else {
+            } else {
                 promise = ReportModel.getReportData(appId, tableId, reportId, offset, rows);
             }
 
@@ -84,12 +83,12 @@
 
                 //  get the stage content template
                 // TODO: the close/open of the stage area is choppy..
-                $scope.getStageContent = function () {
+                $scope.getStageContent = function() {
                     return 'quickbase/qbapp/reports/reportManager/reportStage.html';
                 };
 
                 //  get the primary content template
-                $scope.getContent = function () {
+                $scope.getContent = function() {
                     return 'quickbase/qbapp/reports/reportManager/reportGridContent.html';
                 };
             },

@@ -4,7 +4,9 @@ describe('Controller: RealmDashboardCtrl', function() {
     // load the controller's module
     beforeEach(module('qbse.realm.dashboard'));
 
-    var RealmDashboardCtrl, scope, $log;
+    var RealmDashboardCtrl;
+    var scope;
+    var $log;
 
     // Initialize the controller and a mock scope
     beforeEach(inject(function($controller, $rootScope, _$log_) {

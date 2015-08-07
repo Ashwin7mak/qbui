@@ -2,7 +2,7 @@
  Given a raw URL field value and field meta data from the Java capabilities API, this module is capable of
  display formatting the URL instance.
  */
-(function () {
+(function() {
     'use strict';
     //Module constants:
     var PROTOCOL_SPLIT_STRING = '://';
@@ -10,12 +10,12 @@
 
     module.exports = {
         //Given a URL string as input, formats as a URL with display preferences applied.
-        format: function (fieldValue, fieldInfo) {
+        format: function(fieldValue, fieldInfo) {
             if (!fieldValue || !fieldValue.value) {
                 return '';
             }
             var baseValue = fieldValue.value;
-            if(fieldInfo && fieldInfo.linkText) {
+            if (fieldInfo && fieldInfo.linkText) {
                 baseValue = fieldInfo.linkText;
             } else {
                 //Resolve the displayProtocol display property

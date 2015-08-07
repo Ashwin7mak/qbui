@@ -6,7 +6,7 @@ var assert = require('assert');
 /**
  * Unit tests for EmailAddress field formatting
  */
-describe('Email address record formatter unit test', function () {
+describe('Email address record formatter unit test', function() {
 
     /**
      * Helper method to generate random strings
@@ -157,9 +157,9 @@ describe('Email address record formatter unit test', function () {
     /**
      * Unit test that validates EmailAddress records formatting with various field property flags set
      */
-    describe('should format an email address record with various properties for display', function(){
-        emailDataProvider().forEach(function(entry){
-            it('Test case: ' + entry.message, function (done) {
+    describe('should format an email address record with various properties for display', function() {
+        emailDataProvider().forEach(function(entry) {
+            it('Test case: ' + entry.message, function(done) {
                 var formattedRecords = recordFormatter.formatRecords(entry.records, entry.fieldInfo);
                 assert.equal(JSON.stringify(formattedRecords), JSON.stringify(entry.expectedRecords), entry.message);
                 done();

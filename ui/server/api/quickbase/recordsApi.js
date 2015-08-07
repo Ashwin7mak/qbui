@@ -36,7 +36,7 @@
  ...
  ]
  */
-(function () {
+(function() {
     'use strict';
     var Promise = require('bluebird');
     var defaultRequest = require('request');
@@ -55,7 +55,7 @@
      * of precision. For more info, google it!
      */
     var jsonBigNum = require('json-bignum');
-    module.exports = function (config) {
+    module.exports = function(config) {
         var requestHelper = require('./requestHelper')(config);
         var recordFormatter = require('./formatter/recordFormatter')();
 
@@ -107,7 +107,7 @@
             if (immediatelyResolve) {
                 deferred.resolve(null);
             } else {
-                request(opts, function (error, response) {
+                request(opts, function(error, response) {
                     if (error) {
                         deferred.reject(new Error(error));
                     } else if (response.statusCode !== 200) {
@@ -127,16 +127,16 @@
              * Allows you to override the
              * @param requestOverride
              */
-            setRequestObject:function(requestOverride){
+            setRequestObject:function(requestOverride) {
                 request = requestOverride;
             },
 
-            fetchSingleRecordAndFields: function (req) {
+            fetchSingleRecordAndFields: function(req) {
                 var deferred = Promise.pending();
                 Promise.all([
                     this.fetchRecords(req),
                     this.fetchFields(req)
-                ]).then(function (response) {
+                ]).then(function(response) {
                     var record = jsonBigNum.parse(response[0].body);
                     var responseObject;
                     if (req.param(FORMAT) === RAW) {
@@ -155,7 +155,7 @@
                         responseObject[RECORD] = record;
                     }
                     deferred.resolve(responseObject);
-                }).catch(function (error) {
+                }).catch(function(error) {
                     deferred.reject(error);
                 });
                 return deferred.promise;
@@ -163,12 +163,12 @@
 
             //Returns a promise that is resolved with the records and fields meta data
             //or is rejected with a descriptive error code
-            fetchRecordsAndFields: function (req) {
+            fetchRecordsAndFields: function(req) {
                 var deferred = Promise.pending();
                 Promise.all([
                     this.fetchRecords(req),
                     this.fetchFields(req)
-                ]).then(function (response) {
+                ]).then(function(response) {
                     var records = jsonBigNum.parse(response[0].body);
                     var responseObject;
                     if (req.param(FORMAT) === RAW) {
@@ -187,14 +187,14 @@
                         responseObject[RECORDS] = records;
                     }
                     deferred.resolve(responseObject);
-                }).catch(function (error) {
+                }).catch(function(error) {
                     deferred.reject(error);
                 });
                 return deferred.promise;
             },
 
             //Returns a promise that is resolved with the records array or rejected with an error code
-            fetchRecords: function (req) {
+            fetchRecords: function(req) {
                 var opts = requestHelper.setOptions(req);
                 opts.headers[CONTENT_TYPE] = APPLICATION_JSON;
 
@@ -202,7 +202,7 @@
             },
 
             //Returns a promise that is resolved with the table fields or rejected with an error code
-            fetchFields: function (req) {
+            fetchFields: function(req) {
                 var opts = requestHelper.setOptions(req);
                 opts.headers[CONTENT_TYPE] = APPLICATION_JSON;
                 var inputUrl = opts.url.toLowerCase();
@@ -210,7 +210,7 @@
                 // replace records or reports with the /fields path
                 if (inputUrl.indexOf(RECORDS) !== -1) {
                     opts.url = inputUrl.substring(0, inputUrl.indexOf(RECORDS)) + FIELDS;
-                } else if(inputUrl.indexOf(REPORTS) !== -1) {
+                } else if (inputUrl.indexOf(REPORTS) !== -1) {
                     opts.url = inputUrl.substring(0, inputUrl.indexOf(REPORTS)) + FIELDS;
                 }
 

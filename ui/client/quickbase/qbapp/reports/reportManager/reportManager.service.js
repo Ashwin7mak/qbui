@@ -2,7 +2,7 @@
     'use strict';
 
     angular.module('qbse.qbapp.reports.manager')
-        .service('ReportService',['$q', 'ApiService', ReportManagerService]);
+        .service('ReportService', ['$q', 'ApiService', ReportManagerService]);
 
     function ReportManagerService($q, ApiService) {
 

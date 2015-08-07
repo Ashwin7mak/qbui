@@ -3,10 +3,18 @@ describe('Controller: ReportCtrl', function() {
     // load the controller's module
     beforeEach(module('qbse.qbapp.reports.manager'));
 
-    var scope, ReportModel, gridConstants, controller, $log;
-    var appId='1', tableId='2', reportId='3';
-    var reportName='reportName', companyName='companyName';
-    var deferredColumn, deferredData;
+    var scope;
+    var ReportModel;
+    var gridConstants;
+    var controller;
+    var $log;
+    var appId = '1';
+    var tableId = '2';
+    var reportId = '3';
+    var reportName = 'reportName';
+    var companyName = 'companyName';
+    var deferredColumn;
+    var deferredData;
 
     // Initialize the controller and a mock scope
     beforeEach(

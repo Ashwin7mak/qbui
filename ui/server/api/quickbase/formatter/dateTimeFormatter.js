@@ -2,7 +2,7 @@
  Given a raw date field value and field meta data from the Java capabilities API, this module is capable of
  display formatting the date instance.
  */
-(function () {
+(function() {
     'use strict';
     var moment = require('moment-timezone');
     var consts = require('../../constants');
@@ -62,7 +62,7 @@
     module.exports = {
         generateFormat: function(fieldInfo) {
             var jsDateFormat;
-            if(fieldInfo) {
+            if (fieldInfo) {
                 jsDateFormat = JAVA_TO_JS_DATE_FORMATS[fieldInfo.dateFormat];
             }
             if (!jsDateFormat) {
@@ -82,7 +82,7 @@
             }
             return jsDateFormat;
         },
-        format: function (fieldValue, fieldInfo) {
+        format: function(fieldValue, fieldInfo) {
             if (!fieldValue || !fieldValue.value) {
                 return '';
             }
@@ -104,7 +104,7 @@
             }
             var m = moment.tz(d, timeZone);
             var jsDateFormat = fieldInfo.jsFormat;
-            if(!jsDateFormat) {
+            if (!jsDateFormat) {
                 jsDateFormat = this.generateFormat(fieldInfo);
             }
             //If the date is the current year and hideYearIfCurrent is true, remove the date from the formatter string

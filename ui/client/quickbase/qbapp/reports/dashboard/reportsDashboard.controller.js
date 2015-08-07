@@ -16,9 +16,9 @@
 
         if ($scope.appId && $scope.tableId) {
             ReportsDashboardModel.get($scope.appId, $scope.tableId).then(
-                function (reports) {
+                function(reports) {
                     var defaultReport;
-                    reports.forEach(function (report) {
+                    reports.forEach(function(report) {
                         // first report returned in the list is the default display report
                         if (!defaultReport) { defaultReport = report; }
                         $scope.reports.push({id: report.id, name: report.name});
@@ -29,7 +29,7 @@
                         $scope.goToPage(defaultReport);
                     }
                 },
-                function (resp) {
+                function(resp) {
                     $log.error('Error getting report list.  Status: ' + resp.status);
                 }
             );

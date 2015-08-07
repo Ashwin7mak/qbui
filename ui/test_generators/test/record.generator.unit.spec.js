@@ -12,7 +12,7 @@ var tableGenerator = require('./../table.generator.js');
 var assert = require('assert');
 var should = require('should');
 
-describe('Record generator', function () {
+describe('Record generator', function() {
 
     /**
      * DataProvider containing the field types to include in the generated record
@@ -39,7 +39,7 @@ describe('Record generator', function () {
     /**
      * Positive test cases
      */
-    it('should generate a record with values based on the list of fields provided', function (){
+    it('should generate a record with values based on the list of fields provided', function() {
         // Setup the list of fields
         var fields = [];
         fieldProvider().forEach(function(entry) {
@@ -60,7 +60,7 @@ describe('Record generator', function () {
         };
     });
 
-    it('should generate a record if given a table', function (){
+    it('should generate a record if given a table', function() {
         // Generate a table
         var table = tableGenerator.generateTable(5);
 
@@ -71,7 +71,7 @@ describe('Record generator', function () {
     /**
      * Negative test cases
      */
-    it('should not generate a value for a formula or virtual field type', function (){
+    it('should not generate a value for a formula or virtual field type', function() {
         // Generate fields
         var dateTimeFormulaField = fieldGenerator.generateBaseField(consts.FORMULA_DATE);
 

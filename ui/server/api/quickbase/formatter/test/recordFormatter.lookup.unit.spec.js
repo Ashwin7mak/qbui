@@ -4,7 +4,7 @@ var recordFormatter = require('./../recordFormatter')();
 var assert = require('assert');
 var jBigNum = require('json-bignum');
 
-describe('Lookup record formatter unit test', function () {
+describe('Lookup record formatter unit test', function() {
 
     //Generates and returns a random string of specified length
     function generateRandomString(size) {
@@ -95,9 +95,9 @@ describe('Lookup record formatter unit test', function () {
         return cases;
     }
 
-    describe('should format a lookup by its scalarFieldType for display',function(){
-        provider().forEach(function(entry){
-            it('Test case: ' + entry.message, function (done) {
+    describe('should format a lookup by its scalarFieldType for display',function() {
+        provider().forEach(function(entry) {
+            it('Test case: ' + entry.message, function(done) {
                 var formattedRecords = recordFormatter.formatRecords(entry.records, entry.fieldInfo);
                 assert.deepEqual(formattedRecords, entry.expectedRecords, entry.message);
                 done();

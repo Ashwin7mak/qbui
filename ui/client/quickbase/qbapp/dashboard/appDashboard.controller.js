@@ -15,39 +15,37 @@
         if ($scope.appId && $scope.tableId) {
             $scope.reports = [];
             ReportsDashboardModel.get($scope.appId, $scope.tableId).then(
-                function (reports) {
+                function(reports) {
                     $scope.showLayout = true;  // display the html as we know the user is authenticated
-                    reports.forEach(function (report) {
+                    reports.forEach(function(report) {
                         $scope.reports.push({id: report.id, name: report.name});
                     });
                 }
             );
-        }
-        else {
+        } else {
             //  no specific appId/tableId combination requested...will return all apps
             $scope.apps = [];
             $scope.noApps = false;
             ReportsDashboardModel.getApps().then(
-                function (apps) {
+                function(apps) {
                     $scope.showLayout = true;
                     if (apps && apps.length > 0) {
-                        apps.forEach(function (a) {
+                        apps.forEach(function(a) {
                             ReportsDashboardModel.getApp(a.id).then(
-                                function (app) {
+                                function(app) {
                                     $scope.apps.push({id: app.id, name: app.name, tables: app.tables});
                                 },
-                                function (resp) {
+                                function(resp) {
                                     $log.error('Error getting app detail.  Status: ' + resp.status);
                                 }
                             );
                         });
-                    }
-                    else {
+                    } else {
                         $scope.noApps = true;
                         $log.log('No apps found for logged in user.   Nothing to display.');
                     }
                 },
-                function (resp) {
+                function(resp) {
                     $scope.showLayout = true;
                     $scope.noApps = true;
                     $log.error('Error getting app list.  Status: ' + resp.status);

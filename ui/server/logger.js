@@ -1,4 +1,4 @@
-(function () {
+(function() {
     /*
     * Setup Bunyan logging configuration.
     *
@@ -63,11 +63,10 @@
                  * @param req - http request object
                  * @param callingFunc -- optional parameter to identify the calling function/src file
                  */
-                appLogger.logRequest = function (req, callingFunc) {
+                appLogger.logRequest = function(req, callingFunc) {
                     if (callingFunc) {
                         appLogger.info({Request: getReqInfo(req), CallFunc: getCallFunc(callingFunc)});
-                    }
-                    else {
+                    } else {
                         appLogger.info({Request: getReqInfo(req)});
                     }
 
@@ -80,11 +79,10 @@
                  * @param res - http response object
                  * @param callingFunc -- optional parameter to identify the calling function/src file
                  */
-                appLogger.logResponse = function (req, res, callingFunc) {
+                appLogger.logResponse = function(req, res, callingFunc) {
                     if (callingFunc) {
                         appLogger.info({Request: getReqInfo(req), Response: getResInfo(res), CallFunc:getCallFunc(callingFunc)});
-                    }
-                    else {
+                    } else {
                         appLogger.info({Request: getReqInfo(req), Response: getResInfo(res)});
                     }
                 };
@@ -185,8 +183,7 @@
                     s.type = 'rotating-file';
                     s.period = stream.file.rotating.period;
                     s.count = stream.file.rotating.count;
-                }
-                else {
+                } else {
                     s.type = 'file';
                 }
 

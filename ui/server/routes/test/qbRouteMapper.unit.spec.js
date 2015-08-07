@@ -17,7 +17,7 @@ var requestStub;
 /**
  * Unit tests for app generator
  */
-describe('Qb Route Mapper Unit Test', function () {
+describe('Qb Route Mapper Unit Test', function() {
 
     before(function() {
 
@@ -26,8 +26,7 @@ describe('Qb Route Mapper Unit Test', function () {
         routeMapper.setRecordsApi(recordsApi);
     });
 
-    function pathModificationProvider(){
-
+    function pathModificationProvider() {
         return [
             {message: 'GET request to record endpoint', request : '/api/v1/apps/fakeApp/tables/fakeTable/records/1', expectedPath : '/api/api/v1/apps/fakeApp/tables/fakeTable/records/1', route: routeConsts.RECORD, method: routeMapper.fetchGetFunctionForRoute(routeConsts.RECORD), expectedDefined: true, httpVerb: 'GET'},
             {message: 'GET request to records endpoint', request : '/api/v1/apps/fakeApp/tables/fakeTable/records', expectedPath : '/api/api/v1/apps/fakeApp/tables/fakeTable/records', route: routeConsts.RECORDS,method: routeMapper.fetchGetFunctionForRoute(routeConsts.RECORDS), expectedDefined: true, httpVerb: 'GET'},
@@ -62,9 +61,9 @@ describe('Qb Route Mapper Unit Test', function () {
     /**
      * Unit test that validates generating an app with a specified number of tables
      */
-    describe('test modify path for request',function(){
+    describe('test modify path for request',function() {
         pathModificationProvider().forEach(function(entry) {
-            it('Test case: ' + entry.message, function (done) {
+            it('Test case: ' + entry.message, function(done) {
                 var expectedPath = entry.expectedPath;
 
                 //mock out the request and response objects with some utility methods they need in this flow
@@ -77,7 +76,7 @@ describe('Qb Route Mapper Unit Test', function () {
                 originalReq.route = {path: entry.route};
                 originalReq.headers = {};
                 var res = {
-                    status : function(){
+                    status : function() {
                         return {
                             send : function(){}
                         };
@@ -90,12 +89,12 @@ describe('Qb Route Mapper Unit Test', function () {
                 requestStub.yields(null, {statusCode: 200}, {login: 'cleo'});
 
                 if (expectedDefined) {
-                    if(method === undefined) {
+                    if (method === undefined) {
                         assert.fail();
                     }else {
                         try {
                             method(originalReq, res);
-                        }catch(error){
+                        }catch(error) {
                             //ignore errors, we shouldn't have fully formed objects
                         }
                         //verify that we have properly mutated the request string

@@ -3,7 +3,7 @@
 var recordFormatter = require('./../recordFormatter')();
 var assert = require('assert');
 
-describe('Percent record formatter unit test', function () {
+describe('Percent record formatter unit test', function() {
     /**
      * DataProvider containing Records, FieldProperties and record display expectations for percent field
      */
@@ -45,9 +45,9 @@ describe('Percent record formatter unit test', function () {
         return cases;
     }
 
-    describe('should format a percent record with various properties for display',function(){
-        provider().forEach(function(entry){
-            it('Test case: ' + entry.message, function (done) {
+    describe('should format a percent record with various properties for display',function() {
+        provider().forEach(function(entry) {
+            it('Test case: ' + entry.message, function(done) {
                 var formattedRecords = recordFormatter.formatRecords(entry.records, entry.fieldInfo);
                 assert.deepEqual(formattedRecords, entry.expectedRecords, entry.message);
                 done();

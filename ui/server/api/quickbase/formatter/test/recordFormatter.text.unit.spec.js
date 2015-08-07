@@ -6,7 +6,7 @@ var assert = require('assert');
 /**
  * Unit tests for Text field formatting
  */
-describe('Text record formatter unit test', function () {
+describe('Text record formatter unit test', function() {
 
     //Generates and returns a random string of specified length
     function generateRandomString(size) {
@@ -76,7 +76,7 @@ describe('Text record formatter unit test', function () {
     /**
      * Unit test that validates Text records formatting
      */
-    describe('should format a text for display',function(){
+    describe('should format a text for display',function() {
         var fieldInfo = [
             {
                 id: 7,
@@ -87,8 +87,8 @@ describe('Text record formatter unit test', function () {
                 type: 'SCALAR'
             }
         ];
-        dataProvider().forEach(function(entry){
-            it('Test case: ' + entry.message, function (done) {
+        dataProvider().forEach(function(entry) {
+            it('Test case: ' + entry.message, function(done) {
                 var formattedRecords = recordFormatter.formatRecords(entry.records, fieldInfo);
                 assert.deepEqual(formattedRecords, entry.expectedRecords, entry.message);
                 done();

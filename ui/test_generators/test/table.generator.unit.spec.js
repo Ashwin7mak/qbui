@@ -17,15 +17,15 @@ var assert = require('assert');
 /**
  * Unit tests for field generator
  */
-describe('Table generator unit test', function () {
+describe('Table generator unit test', function() {
 
     /**
      * Unit test that validates generating a table with all field types
      */
-    describe('test generating a table with all field types',function(){
+    describe('test generating a table with all field types',function() {
         var table = tableGenerator.generateTableWithAllFieldTypes();
 
-        if(!table[tableConsts.NAME]){
+        if (!table[tableConsts.NAME]) {
             assert.fail('Table should be generated with a name');
         }
 
@@ -33,7 +33,7 @@ describe('Table generator unit test', function () {
         var availableFieldTypes = fieldGenerator.getAvailableFieldTypes();
         var availableDataTypes = fieldGenerator.getAvailableDataTypes();
 
-        if(fields.length !== (availableFieldTypes.length * availableDataTypes.length)){
+        if (fields.length !== (availableFieldTypes.length * availableDataTypes.length)) {
             assert.fail('Did not find the right number of fields. Expected ' +
             fieldGenerator.getAvailableFieldTypes().length + '. Table: ' +
             tableGenerator.tableToJsonString(table));
@@ -42,19 +42,19 @@ describe('Table generator unit test', function () {
         var fieldsCreated = {};
         var field;
 
-        _.forEach( fields, function(field){
-            if(!fieldsCreated[field[fieldConsts.fieldKeys.TYPE]]){
+        _.forEach( fields, function(field) {
+            if (!fieldsCreated[field[fieldConsts.fieldKeys.TYPE]]) {
                 fieldsCreated[field[fieldConsts.fieldKeys.TYPE]] = {};
             }
 
-            if(!fieldsCreated[field[fieldConsts.fieldKeys.TYPE][datatypeConsts.dataTypeKeys.TYPE]]) {
+            if (!fieldsCreated[field[fieldConsts.fieldKeys.TYPE][datatypeConsts.dataTypeKeys.TYPE]]) {
                 fieldsCreated[field[fieldConsts.fieldKeys.TYPE]][field[fieldConsts.fieldKeys.DATA_TYPE_ATTRIBUTES][datatypeConsts.dataTypeKeys.TYPE]] = 1;
             }else{
                 fieldsCreated[field[fieldConsts.fieldKeys.TYPE]][field[fieldConsts.fieldKeys.DATA_TYPE_ATTRIBUTES][datatypeConsts.dataTypeKeys.TYPE]] += 1;
             }
         });
 
-        _.forEach(availableFieldTypes, function(fieldType){
+        _.forEach(availableFieldTypes, function(fieldType) {
             _.forEach(availableDataTypes, function(dataType) {
                 assert.equal(fieldsCreated[fieldType][dataType], 1, 'We should have a single field per field type / data type combination');
             });
@@ -64,23 +64,23 @@ describe('Table generator unit test', function () {
     /**
      * Unit test that validates generating a table with a random number of fields
      */
-    describe('test generating a table with all field types',function(){
+    describe('test generating a table with all field types',function() {
         var table = tableGenerator.generateTable();
 
-        if(!table[tableConsts.NAME]){
+        if (!table[tableConsts.NAME]) {
             assert.fail('Table should be generated with a name');
         }
 
         var fields = table[tableConsts.FIELDS];
 
-        if(fields.length > tableGenerator.getMaxNumberRandomFields()){
+        if (fields.length > tableGenerator.getMaxNumberRandomFields()) {
             assert.fail('Did not find the right number of fields. Expected a number less than ' +
             tableGenerator.getMaxNumberRandomFields() +  ' but got number '+ fields.length +' . Table: ' +
             tableGenerator.tableToJsonString(table));
         }
     });
 
-    function tableOfCertainSizeAndTypeProvider(){
+    function tableOfCertainSizeAndTypeProvider() {
         return [
             {message: "checkbox field table", numFields: 10, fieldType: consts.SCALAR, dataType: consts.CHECKBOX},
             {message: "text field table", numFields: 10, fieldType: consts.SCALAR, dataType: consts.TEXT},
@@ -119,9 +119,9 @@ describe('Table generator unit test', function () {
     /**
      * Unit test that validates generating a table with a fixed number of fields of a particular type
      */
-    describe('test generating a table with fixed name and type',function(){
+    describe('test generating a table with fixed name and type',function() {
         tableOfCertainSizeAndTypeProvider().forEach(function(entry) {
-            it('Test case: ' + entry.message, function (done) {
+            it('Test case: ' + entry.message, function(done) {
                 var numFields = 14;
                 var table = tableGenerator.generateTableWithFieldsOfType(numFields, entry.fieldType, entry.dataType);
 
@@ -156,7 +156,7 @@ describe('Table generator unit test', function () {
         });
     });
 
-    function tableFromFieldMapProvider(){
+    function tableFromFieldMapProvider() {
         var fieldNameToTypeMap = {};
         fieldNameToTypeMap['checkbox field'] = {fieldType: consts.SCALAR, dataType: consts.CHECKBOX};
         fieldNameToTypeMap['text field'] = {fieldType: consts.SCALAR, dataType: consts.TEXT};
@@ -197,9 +197,9 @@ describe('Table generator unit test', function () {
     /**
      * Unit test that validates generating a table based on a map of fieldName: fieldType
      */
-    describe('test generating a table with a map of custom name to field type ',function(){
+    describe('test generating a table with a map of custom name to field type ',function() {
         tableFromFieldMapProvider().forEach(function(entry) {
-            it('Test case: ' + entry.message, function (done) {
+            it('Test case: ' + entry.message, function(done) {
                 var fieldMap = entry.fieldMap;
                 var table = tableGenerator.generateTableWithFieldMap(fieldMap);
 
@@ -217,13 +217,13 @@ describe('Table generator unit test', function () {
 
                 var fieldFoundMap = {};
                 _.forEach(fields, function(field) {
-                    _.forEach(fieldMap, function (fieldType, fieldName){
+                    _.forEach(fieldMap, function(fieldType, fieldName) {
                         //If we have found the field that we expect to have been generated from the map, then put it in the fieldFoundMap
                         if (field[fieldConsts.fieldKeys.TYPE] === fieldMap[fieldName].fieldType &&
                         field[fieldConsts.fieldKeys.DATA_TYPE_ATTRIBUTES][datatypeConsts.dataTypeKeys.TYPE] === fieldMap[fieldName].dataType &&
                         field[fieldConsts.fieldKeys.NAME] === fieldName) {
 
-                            if(!fieldFoundMap[field[fieldConsts.fieldKeys.NAME]]) {
+                            if (!fieldFoundMap[field[fieldConsts.fieldKeys.NAME]]) {
                                 fieldFoundMap[field[fieldConsts.fieldKeys.NAME]] = 1;
                             }else{
                                 fieldFoundMap[field[fieldConsts.fieldKeys.NAME]] += 1;
@@ -232,8 +232,8 @@ describe('Table generator unit test', function () {
                     });
                 });
 
-                fieldNames.forEach(function(fieldName){
-                    if(!fieldFoundMap[fieldName] || fieldFoundMap[fieldName] > 1){
+                fieldNames.forEach(function(fieldName) {
+                    if (!fieldFoundMap[fieldName] || fieldFoundMap[fieldName] > 1) {
                         assert.fail('Could not find expected field with name' + fieldName
                         + ' and type '+ fieldMap[fieldName] +'. Table created: ' +
                         tableGenerator.tableToJsonString(table));
@@ -245,7 +245,7 @@ describe('Table generator unit test', function () {
         });
     });
 
-    function tableOfCertainSizeAndSetOfTypesProvider(){
+    function tableOfCertainSizeAndSetOfTypesProvider() {
         return [
             {message: "all Types, 50 fields", numFields: 50,
                 choicesArray: [
@@ -283,9 +283,9 @@ describe('Table generator unit test', function () {
     /**
      * Unit test that validates generating a table with a fixed number of fields of allowed types
      */
-    describe('test generating a table with number of fields of allowed set of types',function(){
+    describe('test generating a table with number of fields of allowed set of types',function() {
         tableOfCertainSizeAndSetOfTypesProvider().forEach(function(entry) {
-            it('Test case: ' + entry.message, function (done) {
+            it('Test case: ' + entry.message, function(done) {
                 var numFields = entry.numFields;
                 var table = tableGenerator.generateTableWithFieldsOfAllowedTypes(numFields, entry.choicesArray);
 

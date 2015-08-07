@@ -6,7 +6,7 @@ var assert = require('assert');
 /**
  * Unit tests for FileAttachment field formatting
  */
-describe('FileAttachment record formatter unit test', function () {
+describe('FileAttachment record formatter unit test', function() {
 
     /**
      * DataProvider containing Records, FieldProperties and record display expectations FileAttachment fields
@@ -102,9 +102,9 @@ describe('FileAttachment record formatter unit test', function () {
     /**
      * Unit test that validates FileAttachment records formatting with various field property flags set
      */
-    describe('should format an FileAttachment record with various properties for display',function(){
-        fileAttachmentDataProvider().forEach(function(entry){
-            it('Test case: ' + entry.message, function (done) {
+    describe('should format an FileAttachment record with various properties for display',function() {
+        fileAttachmentDataProvider().forEach(function(entry) {
+            it('Test case: ' + entry.message, function(done) {
                 var formattedRecords = recordFormatter.formatRecords(entry.records, entry.fieldInfo);
                 assert.deepEqual(formattedRecords, entry.expectedRecords, entry.message);
                 done();

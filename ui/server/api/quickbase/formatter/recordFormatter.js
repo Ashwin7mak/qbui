@@ -2,7 +2,7 @@
  Given raw records input and field meta data from the Java capabilities API, this module is capable of
  display formatting the raw record field values by adding a display properties attribute.
  */
-(function () {
+(function() {
     'use strict';
     var _ = require('lodash');
     var consts = require('../../constants');
@@ -55,7 +55,7 @@
         }
     }
 
-    module.exports = function () {
+    module.exports = function() {
         //Display formats record field values according to the field's display settings
         function formatRecordValue(fieldValue, fieldInfo) {
             var tempFieldInfo = _.cloneDeep(fieldInfo.datatypeAttributes);
@@ -110,21 +110,21 @@
 
         var recordsFormatter = {
             //Given an array of records, array of fields format the record values for display
-            formatRecords: function (records, fields) {
+            formatRecords: function(records, fields) {
                 if (records && fields) {
                     var fieldsMap = {};
                     var formattedRecords = [];
 
                     //Precalculate any formatter strings & Generate a map for O(1) lookup on each field get
                     precalculateFormatterStringsForFields(fields);
-                    fields.forEach(function (entry) {
+                    fields.forEach(function(entry) {
                         fieldsMap[entry.id] = entry;
                     });
 
                     //For each record, for each value, display format it!
-                    records.forEach(function (record) {
+                    records.forEach(function(record) {
                         var formattedRecord = [];
-                        record.forEach(function (fieldValue) {
+                        record.forEach(function(fieldValue) {
                             formattedRecord.push(
                                 formatRecordValue(fieldValue, fieldsMap[fieldValue.id.toString()])
                             );

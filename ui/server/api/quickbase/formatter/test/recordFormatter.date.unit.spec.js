@@ -6,7 +6,7 @@ var assert = require('assert');
 /**
  * Unit tests for Date field formatting
  */
-describe('Date record formatter unit test', function () {
+describe('Date record formatter unit test', function() {
 
     /**
      * DataProvider containing Records, FieldProperties and record display expectations for MM_DD_YYYY format
@@ -168,9 +168,9 @@ describe('Date record formatter unit test', function () {
     /**
      * Unit test that validates Date records with MM_DD_YYYY format and various field property flags set
      */
-    describe('should format various MM_DD_YYYY Date records for display',function(){
-        mmddyyyyDataProvider().forEach(function(entry){
-            it('Test case: ' + entry.message, function (done) {
+    describe('should format various MM_DD_YYYY Date records for display',function() {
+        mmddyyyyDataProvider().forEach(function(entry) {
+            it('Test case: ' + entry.message, function(done) {
                 var formattedRecords = recordFormatter.formatRecords(entry.records, entry.fieldInfo);
                 assert.deepEqual(formattedRecords, entry.expectedRecords, entry.message);
                 done();
@@ -340,9 +340,9 @@ describe('Date record formatter unit test', function () {
     /**
      * Unit test that validates Date records with MM_DD_YY format and various field property flags set
      */
-    describe('should format various MM_DD_YY Date records for display',function(){
-        mmddyyDataProvider().forEach(function(entry){
-            it('Test case: ' + entry.message, function (done) {
+    describe('should format various MM_DD_YY Date records for display',function() {
+        mmddyyDataProvider().forEach(function(entry) {
+            it('Test case: ' + entry.message, function(done) {
                 var formattedRecords = recordFormatter.formatRecords(entry.records, entry.fieldInfo);
                 assert.deepEqual(formattedRecords, entry.expectedRecords, entry.message);
                 done();
@@ -512,9 +512,9 @@ describe('Date record formatter unit test', function () {
     /**
      * Unit test that validates Date records with DD_MM_YY format and various field property flags set
      */
-    describe('should format various DD_MM_YY Date records for display',function(){
-        ddmmyyDataProvider().forEach(function(entry){
-            it('Test case: ' + entry.message, function (done) {
+    describe('should format various DD_MM_YY Date records for display',function() {
+        ddmmyyDataProvider().forEach(function(entry) {
+            it('Test case: ' + entry.message, function(done) {
                 var formattedRecords = recordFormatter.formatRecords(entry.records, entry.fieldInfo);
                 assert.deepEqual(formattedRecords, entry.expectedRecords, entry.message);
                 done();
@@ -683,9 +683,9 @@ describe('Date record formatter unit test', function () {
     /**
      * Unit test that validates Date records with DD_MM_YYYY format and various field property flags set
      */
-    describe('should format various DD_MM_YYYY Date records for display',function(){
-        ddmmyyyyDataProvider().forEach(function(entry){
-            it('Test case: ' + entry.message, function (done) {
+    describe('should format various DD_MM_YYYY Date records for display',function() {
+        ddmmyyyyDataProvider().forEach(function(entry) {
+            it('Test case: ' + entry.message, function(done) {
                 var formattedRecords = recordFormatter.formatRecords(entry.records, entry.fieldInfo);
                 assert.deepEqual(formattedRecords, entry.expectedRecords, entry.message);
                 done();
@@ -853,9 +853,9 @@ describe('Date record formatter unit test', function () {
     /**
      * Unit test that validates Date records with YYYY_MM_DD format and various field property flags set
      */
-    describe('should format various YYYY_MM_DD Date records for display',function(){
-        yyyymmddDataProvider().forEach(function(entry){
-            it('Test case: ' + entry.message, function (done) {
+    describe('should format various YYYY_MM_DD Date records for display',function() {
+        yyyymmddDataProvider().forEach(function(entry) {
+            it('Test case: ' + entry.message, function(done) {
                 var formattedRecords = recordFormatter.formatRecords(entry.records, entry.fieldInfo);
                 assert.deepEqual(formattedRecords, entry.expectedRecords, entry.message);
                 done();
@@ -1026,9 +1026,9 @@ describe('Date record formatter unit test', function () {
      * Unit test that validates Date records with an invalid format and various field property flags set.
      * That should ignore the invalid format and default to MM_DD_YYYY
      */
-    describe('should format various Date records with invalid format for display',function(){
-        invalidFormatDataProvider().forEach(function(entry){
-            it('Test case: ' + entry.message, function (done) {
+    describe('should format various Date records with invalid format for display',function() {
+        invalidFormatDataProvider().forEach(function(entry) {
+            it('Test case: ' + entry.message, function(done) {
                 var formattedRecords = recordFormatter.formatRecords(entry.records, entry.fieldInfo);
                 assert.deepEqual(formattedRecords, entry.expectedRecords, entry.message);
                 done();

@@ -1,34 +1,34 @@
-(function () {
+(function() {
     'use strict';
 
     var fs = require('fs');
     var uuid = require('uuid');
 
-    module.exports = function (config) {
+    module.exports = function(config) {
 
         var helper = {
-            isGet: function (req) {
+            isGet: function(req) {
                 return req.method.toLowerCase() === 'get';
             },
-            isPost: function (req) {
+            isPost: function(req) {
                 return req.method.toLowerCase() === 'post';
             },
-            isPut: function (req) {
+            isPut: function(req) {
                 return req.method.toLowerCase() === 'put';
             },
-            isPatch: function (req) {
+            isPatch: function(req) {
                 return req.method.toLowerCase() === 'patch';
             },
-            isDelete: function (req) {
+            isDelete: function(req) {
                 return req.method.toLowerCase() === 'delete';
             },
-            isSecure: function (req) {
+            isSecure: function(req) {
                 return req.protocol ? req.protocol.toLowerCase() === 'https' : false;
             },
-            getRequestUrl: function (req) {
+            getRequestUrl: function(req) {
                 return config.javaHost + req.url;
             },
-            getAgentOptions: function (req) {
+            getAgentOptions: function(req) {
                 var agentOptions = {
                     rejectUnauthorized: false
                 };
@@ -46,15 +46,15 @@
             },
 
             //Given an express response object and POJO, copy POJO attributes to the response headers object
-            copyHeadersToResponse: function (res, headers) {
+            copyHeadersToResponse: function(res, headers) {
                 for(var key in headers) {
-                    if(headers.hasOwnProperty(key)) {
+                    if (headers.hasOwnProperty(key)) {
                         res[key] = headers[key];
                     }
                 }
             },
 
-            setBodyOption: function (req, opts) {
+            setBodyOption: function(req, opts) {
                 //  body header option only valid for put and post
                 if (this.isPut(req) || this.isPatch(req) || this.isPost(req)) {
                     opts.body = req.rawBody;
@@ -62,7 +62,7 @@
                 return opts;
             },
 
-            setOptions: function (req) {
+            setOptions: function(req) {
                 var opts = {
                     url: this.getRequestUrl(req),
                     method: req.method,
@@ -75,7 +75,7 @@
                 return opts;
             },
 
-            setTidHeader: function (req) {
+            setTidHeader: function(req) {
                 var headers = {};
                 if (req && req.headers) {
                     headers = req.headers;
