@@ -597,7 +597,7 @@ module.exports = function(grunt) {
                         return 'mocha-jenkins-reporter';
                     }())
                 },
-                src    : ['test_generators/**/test/' + mochaUnitTest]
+                src    : ['server/**/test/' + mochaUnitTest]
             },
 
             integration: {

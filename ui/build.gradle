@@ -43,6 +43,7 @@ if (isCIBuild()) {
     rootProject.ext.buildTime = "." + getBuildTime();
 }
 println( "Assembling: " + getProjectArchive() )
+println( "Branch : " + getProjectArchive() )
 
 
 node {
@@ -244,6 +245,9 @@ sonarRunner {
     def proc = "git rev-parse --abbrev-ref HEAD".execute()
     proc.waitFor()
     def branchName = proc.in.text.replace("\n", "").replace("\r", "").trim()
+    def paramBranch = System.getProperty("GIT_BRANCH");
+    println 'paramBranch:' + paramBranch;
+    println 'branchName:' + branchName;
 
     sonarProperties{
         // the user name becomes part of the project key, this way Jenkins builds are separated from the commoners, meaning you...
