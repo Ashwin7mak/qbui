@@ -908,7 +908,7 @@ module.exports = function(grunt) {
             'codeStandards',
             // run unit tests
             'test:client',
-            'test:coverage',
+            'test:server',
         ]);
 
     });

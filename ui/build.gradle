@@ -17,7 +17,6 @@ apply plugin: 'sonar-runner'
 
 //grab the current working directory to use later on
 def cwd = project.getProjectDir().absolutePath
-
 //******************************************************
 //  Build dependencies...local
 //******************************************************
@@ -192,6 +191,7 @@ artifacts {
 
 def ivyPasswd = System.getProperty("ivyPasswd", "");         // The IVY password for the Nexus repository
 def ivyUser = System.getProperty("ivyUser", "qbbuilds");     // By default use the qbbuilds user, password needs to be provided
+def paramBranch =  System.getProperty("GIT_BRANCH", "master");
 
 /*
  Push the zip file with the build to the Nexus Repository.
@@ -234,6 +234,7 @@ uploadArchives {
     }
 }
 
+
 //******************************************************
 // Sonar task that performs coverage and analysis of the ui project
 //******************************************************
@@ -245,17 +246,20 @@ sonarRunner {
     def proc = "git rev-parse --abbrev-ref HEAD".execute()
     proc.waitFor()
     def branchName = proc.in.text.replace("\n", "").replace("\r", "").trim()
-    def paramBranch = System.getProperty("GIT_BRANCH");
-    println 'paramBranch:' + paramBranch;
     println 'branchName:' + branchName;
+
+    if (paramBranch) {
+        println 'paramBranch:' + paramBranch;
+        branchName = paramBranch;
+    }
 
     sonarProperties{
         // the user name becomes part of the project key, this way Jenkins builds are separated from the commoners, meaning you...
         // for UI we analyse the angulr client and the nodejs server as 2 modules
         // see: http://docs.codehaus.org/display/SONAR/Analyzing+with+SonarQube+Runner#AnalyzingwithSonarQubeRunner-Multi-moduleProject
-        property "sonar.projectKey", "QuickBase:${branchName}:${user}"
+        property "sonar.projectKey", "ui:${branchName}:${user}"
         property "sonar.projectVersion", "0.1"
-        property "sonar.projectName", "${user}:QuickBase:${branchName}:ui"
+        property "sonar.projectName", "${user}:ui:${branchName}"
         property "sonar.host.url", "http://pppdc9prd01j:9000/"
         property "sonar.jdbc.url", "jdbc:mysql://pppdc9prd01j:3306/sonar?autoReconnect=true&useUnicode=true&characterEncoding=utf8"
         property "sonar.language", "js"
@@ -265,13 +269,13 @@ sonarRunner {
         property "sonar.modules", "client,server"
         property "sonar.coverage.exclusions", "**/*.spec.js"
 
-        property "client.sonar.projectName", "${user}:QuickBase:${branchName}:ui:client"
+        property "client.sonar.projectName", "${user}:ui:${branchName}:client"
         property "client.sonar.sources", "$projectDir/client"
         property "client.sonar.exclusions", "**/gallery/**,**/bower_components/**,**/quickbase/common/test/**"
         //  import the ui LCOV coverage report
         property "client.sonar.javascript.lcov.reportPath","${projectDir}/build/reports/client/coverage/lcov.info"
 
-        property "server.sonar.projectName", "${user}:QuickBase:${branchName}:ui:server"
+        property "server.sonar.projectName", "${user}:ui:${branchName}:server"
         property "server.sonar.sources", "$projectDir/server"
         property "server.sonar.exclusions", "**/test/**,**/config/**"
         //  import the ui LCOV coverage report
