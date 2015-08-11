@@ -101,16 +101,16 @@
          * </p>
          * For example:
          * {
-         *  "Table1" : {
-         *      "field 1" : CHECKBOX,
-         *      "field 2" : TEXT,
-         *      "numericField" : NUMERIC
+         *  Table1 : {
+         *      field 1 : CHECKBOX,
+         *      field 2 : TEXT,
+         *      numericField : NUMERIC
          *  },
-         *  "Table2" : {
-         *      "field1" : CHECKBOX,
-         *      "field2" : TEXT,
-         *      "duration" : DURATION,
-         *      "formula user" : FORMULA_USER
+         *  Table2 : {
+         *      field1 : CHECKBOX,
+         *      field2 : TEXT,
+         *      duration : DURATION,
+         *      formula user : FORMULA_USER
          *  }
          *
          */

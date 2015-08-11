@@ -185,7 +185,7 @@ module.exports = function(grunt) {
                     jshintrc: '<%= express.root %>/.jshintrc'
                 },
                 src    : ['<%= express.root %>/**/*.spec.js',
-                    '<%= express.root %>/**/test/**/*.js']
+                          '<%= express.root %>/**/test/**/*.js']
             },
             client    : {
                 options: {
@@ -426,7 +426,7 @@ module.exports = function(grunt) {
             'quickbase.realm' : {
                 cwd    : '<%= quickbase.client.root %>',
                 src    : ['quickbase/common/**/*.html',
-                    'quickbase/realm/**/*.html'],     // look for all html files required for this angular application
+                          'quickbase/realm/**/*.html'],     // look for all html files required for this angular application
                 dest   : '.tmp/realmTemplates.js',
                 options: {
                     usemin: 'quickbase/realm.js'        // maps to reference in realm.index.html
@@ -435,7 +435,7 @@ module.exports = function(grunt) {
             'quickbase.qbapp' : {
                 cwd    : '<%= quickbase.client.root %>',
                 src    : ['quickbase/common/**/*.html',
-                    'quickbase/qbapp/**/*.html'],     // look for all html files required for this angular application
+                          'quickbase/qbapp/**/*.html'],     // look for all html files required for this angular application
                 dest   : '.tmp/appTemplates.js',
                 options: {
                     usemin: 'quickbase/qbapp.js'        // maps to reference in app.index.html
@@ -444,7 +444,7 @@ module.exports = function(grunt) {
             'quickbase.report': {
                 cwd    : '<%= quickbase.client.root %>',
                 src    : ['quickbase/common/**/*.html',
-                    'quickbase/qbapp/reports/reportManager/**/*.html'],     // look for all html files required for this angular application
+                          'quickbase/qbapp/reports/reportManager/**/*.html'],     // look for all html files required for this angular application
                 dest   : '.tmp/reportTemplates.js',
                 options: {
                     usemin: 'quickbase/report.js'        // maps to reference in report.index.html
@@ -573,7 +573,7 @@ module.exports = function(grunt) {
         // Karma tests..use configuration file to determine what is run
         karma: {
             unit: {
-                colors: useColors,
+                colors    : useColors,
                 configFile: 'karma.conf.js',
                 singleRun : true
             }
@@ -665,12 +665,12 @@ module.exports = function(grunt) {
                 //for the test env, we need to thwart the proxy
                 https_proxy                 : ''
             },
-            e2e: {
-                NODE_ENV: 'test',
+            e2e  : {
+                NODE_ENV                    : 'test',
                 NODE_TLS_REJECT_UNAUTHORIZED: 0,
-                ENV_TUNNEL_NAME: tunnelIdentifier,
-                SAUCE_JOB_NAME: sauceJobName,
-                SAUCE_KEY: sauceKey,
+                ENV_TUNNEL_NAME             : tunnelIdentifier,
+                SAUCE_JOB_NAME              : sauceJobName,
+                SAUCE_KEY                   : sauceKey,
             },
             prod : {
                 NODE_ENV       : 'production',
@@ -836,6 +836,7 @@ module.exports = function(grunt) {
         grunt.task.run(['jshint:client', 'jscs:client', 'karma:unit']);
     });
 
+
     grunt.registerTask('test', function(target) {
         //  need this folder to exist or mocha tests will fail
         grunt.file.mkdir(serverReportDir + '/unit/');
@@ -922,6 +923,19 @@ module.exports = function(grunt) {
     });
 
 
+    grunt.registerTask('testIntegration', function() {
+        grunt.task.run(['test:integration']);
+    });
+
+
+    grunt.registerTask('testE2ELocal', function() {
+        grunt.task.run(['test:e2eLocal']);
+    });
+
+    grunt.registerTask('testE2E', function() {
+        grunt.task.run(['test:e2e']);
+    });
+
     grunt.registerTask('ciTest', [
         'env:test',
         'test'
@@ -957,10 +971,9 @@ module.exports = function(grunt) {
     ]);
 
 
-
     grunt.registerTask('sauce_connect', 'Grunt plug-in to download and launch Sauce Labs Sauce Connect', function() {
         var options = this.options({
-                username: 'sbg_qbse',
+            username        : 'sbg_qbse',
             accessKey       : sauceKey,
             proxy           : httpProxy,
             tunnelIdentifier: tunnelIdentifier,

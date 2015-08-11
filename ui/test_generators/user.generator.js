@@ -15,12 +15,12 @@
             var deactivated = options && (typeof options.deactivated !== 'undefined') ? options.deactivated : chance.bool();
 
             return {
-                "firstName"  : first,
-                "lastName"   : last,
-                "screenName" : screenName,
-                "email"      : email,
-                "deactivated": deactivated
-            }
+                firstName  : first,
+                lastName   : last,
+                screenName : screenName,
+                email      : email,
+                deactivated: deactivated
+            };
         }
     });
 

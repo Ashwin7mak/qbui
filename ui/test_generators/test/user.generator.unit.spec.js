@@ -44,12 +44,12 @@ describe('User generator unit test', function() {
 
     function userWithOverridesGenerator() {
         return [
-            {message: "Generate user override first name", userOptions: {firstName: 'Cleo'}, expectedKeyValue: {firstName: 'Cleo'}},
-            {message: "Generate user override last name", userOptions: {lastName: 'Schneider'}, expectedKeyValue: {lastName: 'Schneider'}},
-            {message: "Generate user override screen name", userOptions: {screenName: 'cschneider'}, expectedKeyValue: {screenName: 'cschneider'}},
-            {message: "Generate user override email", userOptions: {email: 'cleo_schneider@intuit.com'}, expectedKeyValue: {email: 'cleo_schneider@intuit.com'}},
-            {message: "Generate user override deactivated", userOptions: {deactivated: true}, expectedKeyValue: {deactivated: true}},
-            {message: "Generate user override everything", userOptions: {firstName: 'Cleo', lastName: 'Schneider', screenName: 'cschneider', email: 'cleo_schneider@intuit.com', deactivated: true}, expectedKeyValue: {firstName: 'Cleo', lastName: 'Schneider', screenName: 'cschneider', email: 'cleo_schneider@intuit.com', deactivated: true}}
+            {message: 'Generate user override first name', userOptions: {firstName: 'Cleo'}, expectedKeyValue: {firstName: 'Cleo'}},
+            {message: 'Generate user override last name', userOptions: {lastName: 'Schneider'}, expectedKeyValue: {lastName: 'Schneider'}},
+            {message: 'Generate user override screen name', userOptions: {screenName: 'cschneider'}, expectedKeyValue: {screenName: 'cschneider'}},
+            {message: 'Generate user override email', userOptions: {email: 'cleo_schneider@intuit.com'}, expectedKeyValue: {email: 'cleo_schneider@intuit.com'}},
+            {message: 'Generate user override deactivated', userOptions: {deactivated: true}, expectedKeyValue: {deactivated: true}},
+            {message: 'Generate user override everything', userOptions: {firstName: 'Cleo', lastName: 'Schneider', screenName: 'cschneider', email: 'cleo_schneider@intuit.com', deactivated: true}, expectedKeyValue: {firstName: 'Cleo', lastName: 'Schneider', screenName: 'cschneider', email: 'cleo_schneider@intuit.com', deactivated: true}}
         ];
     }
 

@@ -82,37 +82,37 @@ describe('Table generator unit test', function() {
 
     function tableOfCertainSizeAndTypeProvider() {
         return [
-            {message: "checkbox field table", numFields: 10, fieldType: consts.SCALAR, dataType: consts.CHECKBOX},
-            {message: "text field table", numFields: 10, fieldType: consts.SCALAR, dataType: consts.TEXT},
-            {message: "phone number field table", numFields: 10, fieldType: consts.SCALAR, dataType: consts.PHONE_NUMBER},
-            {message: "date field table", numFields: 10, fieldType: consts.SCALAR, dataType: consts.DATE},
-            {message: "formula duration field table", numFields: 10, fieldType: consts.FORMULA, dataType: consts.DURATION},
-            {message: "formula date field table", numFields: 10, fieldType: consts.FORMULA, dataType: consts.DATE},
-            {message: "duration field table", numFields: 10, fieldType: consts.SCALAR, dataType: consts.DURATION},
-            {message: "formula time of day field table", numFields: 10, fieldType: consts.FORMULA, dataType: consts.TIME_OF_DAY},
-            {message: "time of day field table", numFields: 10, fieldType: consts.SCALAR, dataType: consts.TIME_OF_DAY},
-            {message: "numeric field table", numFields: 10, fieldType: consts.SCALAR, dataType: consts.NUMERIC},
-            {message: "formula numeric field table", numFields: 10, fieldType: consts.FORMULA, dataType: consts.NUMERIC},
-            {message: "currency field table", numFields: 10, fieldType: consts.SCALAR, dataType: consts.CURRENCY},
-            {message: "rating field table", numFields: 10, fieldType: consts.SCALAR, dataType: consts.RATING},
-            {message: "formula currency field table", numFields: 10, fieldType: consts.FORMULA, dataType: consts.CURRENCY},
-            {message: "percent field table", numFields: 10, fieldType: consts.SCALAR, dataType: consts.PERCENT},
-            {message: "formula percent field table", numFields: 10, fieldType: consts.FORMULA, dataType: consts.PERCENT},
-            {message: "url field table", numFields: 10, fieldType: consts.SCALAR, dataType: consts.URL},
-            {message: "email address field table", numFields: 10, fieldType: consts.SCALAR, dataType: consts.EMAIL_ADDRESS},
-            {message: "user field table", numFields: 10, fieldType: consts.SCALAR, dataType: consts.USER},
-            {message: "formula user field table", numFields: 10, fieldType: consts.FORMULA, dataType: consts.USER},
-            {message: "file attachment field table", numFields: 10, fieldType: consts.SCALAR, dataType: consts.FILE_ATTACHMENT},
-            {message: "report link field table", numFields: 10, fieldType: consts.SCALAR, dataType: consts.REPORT_LINK},
-            {message: "summary field table", numFields: 10, fieldType: consts.SCALAR, dataType: consts.SUMMARY},
-            {message: "lookup field table", numFields: 10, fieldType: consts.SCALAR, dataType: consts.LOOKUP},
-            {message: "formula phone number field table", numFields: 10, fieldType: consts.FORMULA, dataType: consts.PHONE_NUMBER},
-            {message: "formula url field table", numFields: 10, fieldType: consts.FORMULA, dataType: consts.URL},
-            {message: "formula checkbox field table", numFields: 10, fieldType: consts.FORMULA, dataType: consts.CHECKBOX},
-            {message: "formula text field table", numFields: 10, fieldType: consts.FORMULA, dataType: consts.TEXT},
-            {message: "formula email address field table", numFields: 10, fieldType: consts.FORMULA, dataType: consts.EMAIL_ADDRESS},
-            {message: "text field table with no fields", numFields: 0, fieldType: consts.SCALAR, dataType: consts.TEXT},
-            {message: "text field table with 1 field", numFields: 1, fieldType: consts.SCALAR, dataType: consts.TEXT},
+            {message: 'checkbox field table', numFields: 10, fieldType: consts.SCALAR, dataType: consts.CHECKBOX},
+            {message: 'text field table', numFields: 10, fieldType: consts.SCALAR, dataType: consts.TEXT},
+            {message: 'phone number field table', numFields: 10, fieldType: consts.SCALAR, dataType: consts.PHONE_NUMBER},
+            {message: 'date field table', numFields: 10, fieldType: consts.SCALAR, dataType: consts.DATE},
+            {message: 'formula duration field table', numFields: 10, fieldType: consts.FORMULA, dataType: consts.DURATION},
+            {message: 'formula date field table', numFields: 10, fieldType: consts.FORMULA, dataType: consts.DATE},
+            {message: 'duration field table', numFields: 10, fieldType: consts.SCALAR, dataType: consts.DURATION},
+            {message: 'formula time of day field table', numFields: 10, fieldType: consts.FORMULA, dataType: consts.TIME_OF_DAY},
+            {message: 'time of day field table', numFields: 10, fieldType: consts.SCALAR, dataType: consts.TIME_OF_DAY},
+            {message: 'numeric field table', numFields: 10, fieldType: consts.SCALAR, dataType: consts.NUMERIC},
+            {message: 'formula numeric field table', numFields: 10, fieldType: consts.FORMULA, dataType: consts.NUMERIC},
+            {message: 'currency field table', numFields: 10, fieldType: consts.SCALAR, dataType: consts.CURRENCY},
+            {message: 'rating field table', numFields: 10, fieldType: consts.SCALAR, dataType: consts.RATING},
+            {message: 'formula currency field table', numFields: 10, fieldType: consts.FORMULA, dataType: consts.CURRENCY},
+            {message: 'percent field table', numFields: 10, fieldType: consts.SCALAR, dataType: consts.PERCENT},
+            {message: 'formula percent field table', numFields: 10, fieldType: consts.FORMULA, dataType: consts.PERCENT},
+            {message: 'url field table', numFields: 10, fieldType: consts.SCALAR, dataType: consts.URL},
+            {message: 'email address field table', numFields: 10, fieldType: consts.SCALAR, dataType: consts.EMAIL_ADDRESS},
+            {message: 'user field table', numFields: 10, fieldType: consts.SCALAR, dataType: consts.USER},
+            {message: 'formula user field table', numFields: 10, fieldType: consts.FORMULA, dataType: consts.USER},
+            {message: 'file attachment field table', numFields: 10, fieldType: consts.SCALAR, dataType: consts.FILE_ATTACHMENT},
+            {message: 'report link field table', numFields: 10, fieldType: consts.SCALAR, dataType: consts.REPORT_LINK},
+            {message: 'summary field table', numFields: 10, fieldType: consts.SCALAR, dataType: consts.SUMMARY},
+            {message: 'lookup field table', numFields: 10, fieldType: consts.SCALAR, dataType: consts.LOOKUP},
+            {message: 'formula phone number field table', numFields: 10, fieldType: consts.FORMULA, dataType: consts.PHONE_NUMBER},
+            {message: 'formula url field table', numFields: 10, fieldType: consts.FORMULA, dataType: consts.URL},
+            {message: 'formula checkbox field table', numFields: 10, fieldType: consts.FORMULA, dataType: consts.CHECKBOX},
+            {message: 'formula text field table', numFields: 10, fieldType: consts.FORMULA, dataType: consts.TEXT},
+            {message: 'formula email address field table', numFields: 10, fieldType: consts.FORMULA, dataType: consts.EMAIL_ADDRESS},
+            {message: 'text field table with no fields', numFields: 0, fieldType: consts.SCALAR, dataType: consts.TEXT},
+            {message: 'text field table with 1 field', numFields: 1, fieldType: consts.SCALAR, dataType: consts.TEXT},
         ];
     }
 
@@ -190,7 +190,7 @@ describe('Table generator unit test', function() {
 
 
         return [
-            {message: "generate a table based on a map holding custom names and all field types", fieldMap: fieldNameToTypeMap}
+            {message: 'generate a table based on a map holding custom names and all field types', fieldMap: fieldNameToTypeMap}
         ];
     }
 
@@ -248,7 +248,7 @@ describe('Table generator unit test', function() {
     function tableOfCertainSizeAndSetOfTypesProvider() {
         return [
             {
-                message     : "all Types, 50 fields", numFields: 50,
+                message     : 'all Types, 50 fields', numFields: 50,
                 choicesArray: [
                     consts.BIGTEXT,
                     consts.CHECKBOX,
@@ -272,19 +272,19 @@ describe('Table generator unit test', function() {
                 ]
             },
             {
-                message     : "text Types 5 fields", numFields: 5,
+                message     : 'text Types 5 fields', numFields: 5,
                 choicesArray: [consts.TEXT, consts.NUMERIC, consts.DATE]
             },
             {
-                message     : "null Types 1 fields", numFields: 1,
+                message     : 'null Types 1 fields', numFields: 1,
                 choicesArray: null
             },
             {
-                message     : "1 Types 0 fields", numFields: 0,
+                message     : '1 Types 0 fields', numFields: 0,
                 choicesArray: [consts.URL]
             },
             {
-                message     : "0 Types 0 fields", numFields: 0,
+                message     : '0 Types 0 fields', numFields: 0,
                 choicesArray: []
             }
         ];
@@ -306,11 +306,10 @@ describe('Table generator unit test', function() {
                 var fields = table[tableConsts.FIELDS];
 
                 if (numFields == 0 || !entry.choicesArray) {
-                    assert.strictEqual(fields, undefined, "expected table with no fields");
-                }
-                else if (fields && fields.length !== numFields) {
-                    assert.fail('Did not find the right number of fields. Expected ' + numFields
-                                + '. Table: ' +
+                    assert.strictEqual(fields, undefined, 'expected table with no fields');
+                } else if (fields && fields.length !== numFields) {
+                    assert.fail('Did not find the right number of fields. Expected ' + numFields +
+                                '. Table: ' +
                                 tableGenerator.tableToJsonString(table));
                 }
 
