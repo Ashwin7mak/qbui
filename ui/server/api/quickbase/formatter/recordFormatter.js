@@ -126,7 +126,7 @@
                         var formattedRecord = [];
                         record.forEach(function(fieldValue) {
                             formattedRecord.push(
-                                formatRecordValue(fieldValue, fieldsMap[fieldValue.id.toString()])
+                                    formatRecordValue(fieldValue, fieldsMap[fieldValue.id.toString()])
                             );
                         });
                         formattedRecords.push(formattedRecord);

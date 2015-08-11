@@ -35,9 +35,10 @@
                     {name: FK_FIELD_NAME, datatypeAttributes: {type: 'NUMERIC'}, type: 'SCALAR'}
                 ]
             },
-                {name     : 'table2',
-                    fields: [{name: MASTER_TABLE_TEXT, datatypeAttributes: {type: 'TEXT'}, type: 'SCALAR'}]
-                }
+                     {
+                         name  : 'table2',
+                         fields: [{name: MASTER_TABLE_TEXT, datatypeAttributes: {type: 'TEXT'}, type: 'SCALAR'}]
+                     }
             ]
         };
 
@@ -114,7 +115,7 @@
                                     summaryRec.forEach(function(fieldValue) {
                                         if (fieldValue.id === summaryField.id) {
                                             assert.equal(fieldValue.display, expectedDisplaySum,
-                                                    'Unexpected value returned in summary field column');
+                                                         'Unexpected value returned in summary field column');
                                             done();
                                         }
                                     });

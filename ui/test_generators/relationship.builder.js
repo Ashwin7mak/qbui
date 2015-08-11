@@ -105,32 +105,32 @@
                     return this;
                 },
 
-                withMasterFieldId : function(masterFieldId) {
+                withMasterFieldId: function(masterFieldId) {
                     relationshipUnderConstruction[relationshipConstants.MASTER_FIELD_ID] = masterFieldId;
                     return this;
                 },
 
-                withDetailAppId : function(detailAppId) {
+                withDetailAppId: function(detailAppId) {
                     relationshipUnderConstruction[relationshipConstants.DETAIL_APP_ID] = detailAppId;
                     return this;
                 },
 
-                withDetailTableId : function(detailTableId) {
+                withDetailTableId: function(detailTableId) {
                     relationshipUnderConstruction[relationshipConstants.DETAIL_TABLE_ID] = detailTableId;
                     return this;
                 },
 
-                withDetailFieldId : function(detailFieldId) {
+                withDetailFieldId: function(detailFieldId) {
                     relationshipUnderConstruction[relationshipConstants.DETAIL_FIELD_ID] = detailFieldId;
                     return this;
                 },
 
-                withReferentialIntegrity : function(referentialIntegrity) {
+                withReferentialIntegrity: function(referentialIntegrity) {
                     relationshipUnderConstruction[relationshipConstants.REFERENTIAL_INTEGRITY] = referentialIntegrity;
                     return this;
                 },
 
-                withCascadeDelete : function(cascadeDelete) {
+                withCascadeDelete: function(cascadeDelete) {
                     relationshipUnderConstruction[relationshipConstants.CASCADE_DELETE] = cascadeDelete;
                     return this;
                 }

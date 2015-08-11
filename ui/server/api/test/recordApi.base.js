@@ -28,17 +28,17 @@
         }
 
         var recordBase = {
-            apiBase: apiBase,
+            apiBase           : apiBase,
             //delegate to apiBase to initialize
-            initialize : function() {
+            initialize        : function() {
                 init = apiBase.initialize();
             },
             //set the baseUrl we want to use to reach out for testing
-            setBaseUrl: function(baseUrlConfig) {
+            setBaseUrl        : function(baseUrlConfig) {
                 apiBase.setBaseUrl(baseUrlConfig);
             },
             //Helper method to create an app, can be used by multiple test cases
-            createApp: function(appToCreate) {
+            createApp         : function(appToCreate) {
                 var deferred = promise.pending();
                 init.then(function() {
                     apiBase.executeRequest(apiBase.resolveAppsEndpoint(), consts.POST, appToCreate).then(function(appResponse) {
@@ -57,12 +57,12 @@
                 var deferred = promise.pending();
                 init.then(function() {
                     apiBase.executeRequest(apiBase.resolveRelationshipsEndpoint(relationshipToCreate.appId), consts.POST, relationshipToCreate).
-                        then(function(relResponse) {
-                        deferred.resolve(relResponse);
-                    }).catch(function(error) {
-                        deferred.reject(error);
-                        assert(false, 'failed to create app: ' + JSON.stringify(error));
-                    });
+                            then(function(relResponse) {
+                                     deferred.resolve(relResponse);
+                                 }).catch(function(error) {
+                                              deferred.reject(error);
+                                              assert(false, 'failed to create app: ' + JSON.stringify(error));
+                                          });
                 });
                 return deferred.promise;
             },
@@ -71,12 +71,12 @@
                 var deferred = promise.pending();
                 init.then(function() {
                     apiBase.executeRequest(apiBase.resolveFieldsEndpoint(appId, tableId), consts.POST, fieldToCreate).
-                        then(function(relResponse) {
-                            deferred.resolve(relResponse);
-                        }).catch(function(error) {
-                            deferred.reject(error);
-                            assert(false, 'failed to create field: ' + JSON.stringify(error));
-                        });
+                            then(function(relResponse) {
+                                     deferred.resolve(relResponse);
+                                 }).catch(function(error) {
+                                              deferred.reject(error);
+                                              assert(false, 'failed to create field: ' + JSON.stringify(error));
+                                          });
                 });
                 return deferred.promise;
             },
@@ -89,13 +89,13 @@
                 }
                 init.then(function() {
                     apiBase.executeRequest(endpoint, consts.GET).
-                        then(function(recResp) {
-                            deferred.resolve(recResp);
-                        }).
-                        catch(function(error) {
-                            deferred.reject(error);
-                            assert(false, 'failed to resolve record');
-                        });
+                            then(function(recResp) {
+                                     deferred.resolve(recResp);
+                                 }).
+                            catch(function(error) {
+                                      deferred.reject(error);
+                                      assert(false, 'failed to resolve record');
+                                  });
                 });
                 return deferred.promise;
             },
@@ -106,20 +106,20 @@
                 var fetchRecordDeferred = promise.pending();
                 init.then(function() {
                     apiBase.executeRequest(recordsEndpoint, consts.POST, record)
-                        .then(function(recordIdResponse) {
-                            var getEndpoint = recordsEndpoint + JSON.parse(recordIdResponse.body).id;
-                            if (params) {
-                                getEndpoint += params;
-                            }
-                            apiBase.executeRequest(getEndpoint, consts.GET)
-                                .then(function(fetchedRecordResponse) {
-                                    var fetchedRecord = jsonBigNum.parse(fetchedRecordResponse.body);
-                                    fetchRecordDeferred.resolve(fetchedRecord);
-                                }).catch(function(error) {
-                                    fetchRecordDeferred.reject(error);
-                                });
-                        }).catch(function(currError){log.error(JSON.stringify(currError));});
-                }).catch(function(err){log.error(JSON.stringify(err));});
+                            .then(function(recordIdResponse) {
+                                      var getEndpoint = recordsEndpoint + JSON.parse(recordIdResponse.body).id;
+                                      if (params) {
+                                          getEndpoint += params;
+                                      }
+                                      apiBase.executeRequest(getEndpoint, consts.GET)
+                                              .then(function(fetchedRecordResponse) {
+                                                        var fetchedRecord = jsonBigNum.parse(fetchedRecordResponse.body);
+                                                        fetchRecordDeferred.resolve(fetchedRecord);
+                                                    }).catch(function(error) {
+                                                                 fetchRecordDeferred.reject(error);
+                                                             });
+                                  }).catch(function(currError) {log.error(JSON.stringify(currError));});
+                }).catch(function(err) {log.error(JSON.stringify(err));});
                 return fetchRecordDeferred.promise;
             },
 
@@ -137,17 +137,17 @@
                     });
 
                     apiBase.executeRequest(recordBulkEndpoint, consts.POST, recordObjects)
-                        .then(function(recordBulkResponse) {
-                            var parsedRecordIdList = JSON.parse(recordBulkResponse.body);
+                            .then(function(recordBulkResponse) {
+                                      var parsedRecordIdList = JSON.parse(recordBulkResponse.body);
 
-                            var recordIdList = [];
-                            parsedRecordIdList.forEach(function(jsonObj) {
-                                recordIdList.push(jsonObj.id);
-                            });
+                                      var recordIdList = [];
+                                      parsedRecordIdList.forEach(function(jsonObj) {
+                                          recordIdList.push(jsonObj.id);
+                                      });
 
-                            fetchRecordDeferred.resolve(recordIdList);
-                        }).catch(function(currError){log.error(JSON.stringify(currError));});
-                }).catch(function(err){log.error(JSON.stringify(err));});
+                                      fetchRecordDeferred.resolve(recordIdList);
+                                  }).catch(function(currError) {log.error(JSON.stringify(currError));});
+                }).catch(function(err) {log.error(JSON.stringify(err));});
                 return fetchRecordDeferred.promise;
             },
 
@@ -161,14 +161,14 @@
                         getEndpoint += params;
                     }
                     apiBase.executeRequest(getEndpoint, consts.GET)
-                        .then(function(fetchedRecordResponse) {
-                            var fetchedRecord = jsonBigNum.parse(fetchedRecordResponse.body);
-                            fetchRecordDeferred.resolve(fetchedRecord);
-                        }).catch(function(error) {
-                            log.debug('Error getting record: ' + JSON.stringify(error) + ' Endpoint that failed: ' + recordsEndpoint + recordId);
-                            fetchRecordDeferred.reject(error);
-                        });
-                }).catch(function(currError){log.error(JSON.stringify(currError));});
+                            .then(function(fetchedRecordResponse) {
+                                      var fetchedRecord = jsonBigNum.parse(fetchedRecordResponse.body);
+                                      fetchRecordDeferred.resolve(fetchedRecord);
+                                  }).catch(function(error) {
+                                               log.debug('Error getting record: ' + JSON.stringify(error) + ' Endpoint that failed: ' + recordsEndpoint + recordId);
+                                               fetchRecordDeferred.reject(error);
+                                           });
+                }).catch(function(currError) {log.error(JSON.stringify(currError));});
                 return fetchRecordDeferred.promise;
             }
         };

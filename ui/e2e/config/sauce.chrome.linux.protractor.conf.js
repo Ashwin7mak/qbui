@@ -9,17 +9,17 @@ exports.config = {
     allScriptsTimeout: 110000,
 
     //The sauce user and access key allow us to run our browser tests remotely on a SauceLabs VM
-  sauceUser: "sbg_qbse",
-  sauceKey: process.env.SAUCE_KEY,
-  //we have to specify the selenium address to point locally so that we use the tunnel properly
-  sauceSeleniumAddress: 'localhost:4445/wd/hub',
+    sauceUser           : "sbg_qbse",
+    sauceKey            : process.env.SAUCE_KEY,
+    //we have to specify the selenium address to point locally so that we use the tunnel properly
+    sauceSeleniumAddress: 'localhost:4445/wd/hub',
 
     // A base URL for your application under test will be passed in via grunt config so that we can use whatever url we please
 
     // list of files / patterns to load in the browser
-  specs: [
-    '../qbapp/**/*.spec.js'
-  ],
+    specs: [
+        '../qbapp/**/*.spec.js'
+    ],
 
     // Patterns to exclude.
     exclude: [],
@@ -34,9 +34,9 @@ exports.config = {
     // When we go to do multiple os's then we should have a look at this
     // http://www.ignoredbydinosaurs.com/2015/04/angular-protractor-tests-and-sauce-connect-config
     capabilities: {
-    'browserName': 'chrome',
-    'tunnelIdentifier': process.env.ENV_TUNNEL_NAME,
-    'name': process.env.SAUCE_JOB_NAME
+        'browserName'     : 'chrome',
+        'tunnelIdentifier': process.env.ENV_TUNNEL_NAME,
+        'name'            : process.env.SAUCE_JOB_NAME
     },
 
     // ----- The test framework -----

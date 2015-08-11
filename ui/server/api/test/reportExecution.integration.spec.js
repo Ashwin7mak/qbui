@@ -37,7 +37,7 @@
         }
 
         it('Should create an app, add a record, create a report, execute the report, and validate the resulting ' +
-        'record matches the created record', function(done) {
+           'record matches the created record', function(done) {
             this.timeout(testConsts.INTEGRATION_TIMEOUT);
             recordBase.createApp(appWithNoFlags).then(function(appResponse) {
                 var app = JSON.parse(appResponse.body);
@@ -61,26 +61,26 @@
                 };
                 recordBase.apiBase.executeRequest(reportEndpoint, consts.POST, reportToCreate)
                         .then(function(report) {
-                            var r = JSON.parse(report.body);
-                            recordBase.apiBase.executeRequest(reportEndpoint + r.id + '/results?format=' + testCase.format, consts.GET)
-                                    .then(function(reportResults) {
-                                        var results = JSON.parse(reportResults.body);
-                                        for (var i = 0; i < results.records.length; i++) {
-                                            var currentRecord = results.records[i];
-                                            /*jslint loopfunc: true */
-                                            currentRecord.forEach(function(fieldValue) {
-                                                if (fieldValue.id === JSON.parse(testCase.expectedFieldValue).id) {
-                                                    assert.deepEqual(fieldValue, JSON.parse(testCase.expectedFieldValue),
-                                                            'Unexpected field value returned: ' +
-                                                            JSON.stringify(fieldValue) + ', ' + testCase.expectedFieldValue);
-                                                }
-                                            });
-                                        }
-                                        done();
-                                    });
-                        }).catch(function(error) {
-                            log.error(JSON.stringify(error));
-                        });
+                                  var r = JSON.parse(report.body);
+                                  recordBase.apiBase.executeRequest(reportEndpoint + r.id + '/results?format=' + testCase.format, consts.GET)
+                                          .then(function(reportResults) {
+                                                    var results = JSON.parse(reportResults.body);
+                                                    for (var i = 0; i < results.records.length; i++) {
+                                                        var currentRecord = results.records[i];
+                                                        /*jslint loopfunc: true */
+                                                        currentRecord.forEach(function(fieldValue) {
+                                                            if (fieldValue.id === JSON.parse(testCase.expectedFieldValue).id) {
+                                                                assert.deepEqual(fieldValue, JSON.parse(testCase.expectedFieldValue),
+                                                                                 'Unexpected field value returned: ' +
+                                                                                 JSON.stringify(fieldValue) + ', ' + testCase.expectedFieldValue);
+                                                            }
+                                                        });
+                                                    }
+                                                    done();
+                                                });
+                              }).catch(function(error) {
+                                           log.error(JSON.stringify(error));
+                                       });
             });
         });
 

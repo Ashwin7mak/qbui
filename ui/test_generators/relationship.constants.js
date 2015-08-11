@@ -6,17 +6,17 @@
     module.exports = {
 
         //JSON CONSTANTS
-        ID : 'id',
-        APP_ID : 'appId',
-        DESCRIPTION : 'description',
-        MASTER_APP_ID : 'masterAppId',
-        MASTER_TABLE_ID : 'masterTableId',
-        MASTER_FIELD_ID : 'masterFieldId',
-        DETAIL_APP_ID : 'detailAppId',
-        DETAIL_TABLE_ID : 'detailTableId',
-        DETAIL_FIELD_ID : 'detailFieldId',
-        REFERENTIAL_INTEGRITY : 'referentialIntegrity',
-        CASCADE_DELETE : 'cascadeDelete'
+        ID                   : 'id',
+        APP_ID               : 'appId',
+        DESCRIPTION          : 'description',
+        MASTER_APP_ID        : 'masterAppId',
+        MASTER_TABLE_ID      : 'masterTableId',
+        MASTER_FIELD_ID      : 'masterFieldId',
+        DETAIL_APP_ID        : 'detailAppId',
+        DETAIL_TABLE_ID      : 'detailTableId',
+        DETAIL_FIELD_ID      : 'detailFieldId',
+        REFERENTIAL_INTEGRITY: 'referentialIntegrity',
+        CASCADE_DELETE       : 'cascadeDelete'
     }
 
 }());

@@ -22,7 +22,7 @@ describe('Table generator unit test', function() {
     /**
      * Unit test that validates generating a table with all field types
      */
-    describe('test generating a table with all field types',function() {
+    describe('test generating a table with all field types', function() {
         var table = tableGenerator.generateTableWithAllFieldTypes();
 
         if (!table[tableConsts.NAME]) {
@@ -35,21 +35,21 @@ describe('Table generator unit test', function() {
 
         if (fields.length !== (availableFieldTypes.length * availableDataTypes.length)) {
             assert.fail('Did not find the right number of fields. Expected ' +
-            fieldGenerator.getAvailableFieldTypes().length + '. Table: ' +
-            tableGenerator.tableToJsonString(table));
+                        fieldGenerator.getAvailableFieldTypes().length + '. Table: ' +
+                        tableGenerator.tableToJsonString(table));
         }
 
         var fieldsCreated = {};
         var field;
 
-        _.forEach( fields, function(field) {
+        _.forEach(fields, function(field) {
             if (!fieldsCreated[field[fieldConsts.fieldKeys.TYPE]]) {
                 fieldsCreated[field[fieldConsts.fieldKeys.TYPE]] = {};
             }
 
             if (!fieldsCreated[field[fieldConsts.fieldKeys.TYPE][datatypeConsts.dataTypeKeys.TYPE]]) {
                 fieldsCreated[field[fieldConsts.fieldKeys.TYPE]][field[fieldConsts.fieldKeys.DATA_TYPE_ATTRIBUTES][datatypeConsts.dataTypeKeys.TYPE]] = 1;
-            }else{
+            } else {
                 fieldsCreated[field[fieldConsts.fieldKeys.TYPE]][field[fieldConsts.fieldKeys.DATA_TYPE_ATTRIBUTES][datatypeConsts.dataTypeKeys.TYPE]] += 1;
             }
         });
@@ -64,7 +64,7 @@ describe('Table generator unit test', function() {
     /**
      * Unit test that validates generating a table with a random number of fields
      */
-    describe('test generating a table with all field types',function() {
+    describe('test generating a table with all field types', function() {
         var table = tableGenerator.generateTable();
 
         if (!table[tableConsts.NAME]) {
@@ -75,8 +75,8 @@ describe('Table generator unit test', function() {
 
         if (fields.length > tableGenerator.getMaxNumberRandomFields()) {
             assert.fail('Did not find the right number of fields. Expected a number less than ' +
-            tableGenerator.getMaxNumberRandomFields() +  ' but got number '+ fields.length +' . Table: ' +
-            tableGenerator.tableToJsonString(table));
+                        tableGenerator.getMaxNumberRandomFields() + ' but got number ' + fields.length + ' . Table: ' +
+                        tableGenerator.tableToJsonString(table));
         }
     });
 
@@ -119,7 +119,7 @@ describe('Table generator unit test', function() {
     /**
      * Unit test that validates generating a table with a fixed number of fields of a particular type
      */
-    describe('test generating a table with fixed name and type',function() {
+    describe('test generating a table with fixed name and type', function() {
         tableOfCertainSizeAndTypeProvider().forEach(function(entry) {
             it('Test case: ' + entry.message, function(done) {
                 var numFields = 14;
@@ -133,21 +133,21 @@ describe('Table generator unit test', function() {
 
                 if (fields.length !== numFields) {
                     assert.fail('Did not find the right number of fields. Expected ' + numFields
-                    + '. Table: ' +
-                    tableGenerator.tableToJsonString(table));
+                                + '. Table: ' +
+                                tableGenerator.tableToJsonString(table));
                 }
 
                 _.forEach(fields, function(field) {
                     if (field[fieldConsts.fieldKeys.TYPE] !== entry.fieldType) {
                         assert.fail('Did not find the right fieldType. Expected ' +
-                            entry.fieldType + '. Table: ' +
-                        tableGenerator.tableToJsonString(table));
+                                    entry.fieldType + '. Table: ' +
+                                    tableGenerator.tableToJsonString(table));
                     }
 
                     if (field[fieldConsts.fieldKeys.DATA_TYPE_ATTRIBUTES][datatypeConsts.dataTypeKeys.TYPE] !== entry.dataType) {
                         assert.fail('Did not find the right dataType. Expected ' +
-                            entry.dataType + '. Table: ' +
-                            tableGenerator.tableToJsonString(table));
+                                    entry.dataType + '. Table: ' +
+                                    tableGenerator.tableToJsonString(table));
                     }
                 });
 
@@ -197,7 +197,7 @@ describe('Table generator unit test', function() {
     /**
      * Unit test that validates generating a table based on a map of fieldName: fieldType
      */
-    describe('test generating a table with a map of custom name to field type ',function() {
+    describe('test generating a table with a map of custom name to field type ', function() {
         tableFromFieldMapProvider().forEach(function(entry) {
             it('Test case: ' + entry.message, function(done) {
                 var fieldMap = entry.fieldMap;
@@ -211,8 +211,8 @@ describe('Table generator unit test', function() {
                 var fieldNames = Object.keys(fieldMap);
                 if (fields.length !== fieldNames.length) {
                     assert.fail('Did not find the right number of fields. Expected ' + fieldNames.length
-                    + '. Table: ' +
-                    tableGenerator.tableToJsonString(table));
+                                + '. Table: ' +
+                                tableGenerator.tableToJsonString(table));
                 }
 
                 var fieldFoundMap = {};
@@ -220,12 +220,12 @@ describe('Table generator unit test', function() {
                     _.forEach(fieldMap, function(fieldType, fieldName) {
                         //If we have found the field that we expect to have been generated from the map, then put it in the fieldFoundMap
                         if (field[fieldConsts.fieldKeys.TYPE] === fieldMap[fieldName].fieldType &&
-                        field[fieldConsts.fieldKeys.DATA_TYPE_ATTRIBUTES][datatypeConsts.dataTypeKeys.TYPE] === fieldMap[fieldName].dataType &&
-                        field[fieldConsts.fieldKeys.NAME] === fieldName) {
+                            field[fieldConsts.fieldKeys.DATA_TYPE_ATTRIBUTES][datatypeConsts.dataTypeKeys.TYPE] === fieldMap[fieldName].dataType &&
+                            field[fieldConsts.fieldKeys.NAME] === fieldName) {
 
                             if (!fieldFoundMap[field[fieldConsts.fieldKeys.NAME]]) {
                                 fieldFoundMap[field[fieldConsts.fieldKeys.NAME]] = 1;
-                            }else{
+                            } else {
                                 fieldFoundMap[field[fieldConsts.fieldKeys.NAME]] += 1;
                             }
                         }
@@ -235,8 +235,8 @@ describe('Table generator unit test', function() {
                 fieldNames.forEach(function(fieldName) {
                     if (!fieldFoundMap[fieldName] || fieldFoundMap[fieldName] > 1) {
                         assert.fail('Could not find expected field with name' + fieldName
-                        + ' and type '+ fieldMap[fieldName] +'. Table created: ' +
-                        tableGenerator.tableToJsonString(table));
+                                    + ' and type ' + fieldMap[fieldName] + '. Table created: ' +
+                                    tableGenerator.tableToJsonString(table));
                     }
                 });
 
@@ -247,43 +247,53 @@ describe('Table generator unit test', function() {
 
     function tableOfCertainSizeAndSetOfTypesProvider() {
         return [
-            {message: "all Types, 50 fields", numFields: 50,
+            {
+                message     : "all Types, 50 fields", numFields: 50,
                 choicesArray: [
-                consts.BIGTEXT,
-                consts.CHECKBOX,
-                consts.CURRENCY,
-                consts.DATE,
-                consts.DATE_TIME,
-                consts.DURATION,
-                consts.EMAIL_ADDRESS,
-                consts.FILE_ATTACHMENT,
-                consts.LOOKUP,
-                consts.NUMERIC,
-                consts.PERCENT,
-                consts.PHONE_NUMBER,
-                consts.RATING,
-                consts.REPORT_LINK,
-                consts.SUMMARY,
-                consts.TEXT,
-                consts.TIME_OF_DAY,
-                consts.URL,
-                consts.USER
-            ]},
-            {message: "text Types 5 fields", numFields : 5,
-                choicesArray: [consts.TEXT, consts.NUMERIC, consts.DATE]},
-            {message: "null Types 1 fields", numFields : 1,
-                choicesArray: null},
-            {message: "1 Types 0 fields", numFields : 0,
-                choicesArray: [consts.URL]},
-            {message: "0 Types 0 fields", numFields : 0,
-                choicesArray: []}
+                    consts.BIGTEXT,
+                    consts.CHECKBOX,
+                    consts.CURRENCY,
+                    consts.DATE,
+                    consts.DATE_TIME,
+                    consts.DURATION,
+                    consts.EMAIL_ADDRESS,
+                    consts.FILE_ATTACHMENT,
+                    consts.LOOKUP,
+                    consts.NUMERIC,
+                    consts.PERCENT,
+                    consts.PHONE_NUMBER,
+                    consts.RATING,
+                    consts.REPORT_LINK,
+                    consts.SUMMARY,
+                    consts.TEXT,
+                    consts.TIME_OF_DAY,
+                    consts.URL,
+                    consts.USER
+                ]
+            },
+            {
+                message     : "text Types 5 fields", numFields: 5,
+                choicesArray: [consts.TEXT, consts.NUMERIC, consts.DATE]
+            },
+            {
+                message     : "null Types 1 fields", numFields: 1,
+                choicesArray: null
+            },
+            {
+                message     : "1 Types 0 fields", numFields: 0,
+                choicesArray: [consts.URL]
+            },
+            {
+                message     : "0 Types 0 fields", numFields: 0,
+                choicesArray: []
+            }
         ];
     }
 
     /**
      * Unit test that validates generating a table with a fixed number of fields of allowed types
      */
-    describe('test generating a table with number of fields of allowed set of types',function() {
+    describe('test generating a table with number of fields of allowed set of types', function() {
         tableOfCertainSizeAndSetOfTypesProvider().forEach(function(entry) {
             it('Test case: ' + entry.message, function(done) {
                 var numFields = entry.numFields;
@@ -300,15 +310,15 @@ describe('Table generator unit test', function() {
                 }
                 else if (fields && fields.length !== numFields) {
                     assert.fail('Did not find the right number of fields. Expected ' + numFields
-                    + '. Table: ' +
-                    tableGenerator.tableToJsonString(table));
+                                + '. Table: ' +
+                                tableGenerator.tableToJsonString(table));
                 }
 
                 _.forEach(fields, function(field) {
-                    if (!_.contains(entry.choicesArray, field[fieldConsts.fieldKeys.TYPE]) ) {
+                    if (!_.contains(entry.choicesArray, field[fieldConsts.fieldKeys.TYPE])) {
                         assert.fail('Did not find a valid fieldType. one of allowed but got ' +
-                         field[fieldConsts.fieldKeys.TYPE] + '. Table: ' +
-                        tableGenerator.tableToJsonString(table));
+                                    field[fieldConsts.fieldKeys.TYPE] + '. Table: ' +
+                                    tableGenerator.tableToJsonString(table));
                     }
                 });
 

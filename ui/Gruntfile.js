@@ -829,7 +829,7 @@ module.exports = function(grunt) {
     grunt.registerTask('codeStandards', [
         'jshint',
         //WIP
-        //'jscs'
+        'jscs'
     ]);
 
     grunt.registerTask('testClientOnly', function() {

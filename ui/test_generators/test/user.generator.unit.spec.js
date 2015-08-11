@@ -18,7 +18,7 @@ describe('User generator unit test', function() {
     /**
      * Unit test that validates generating a user with no options present
      */
-    describe('test generating an app with a specified number of tables',function() {
+    describe('test generating an app with a specified number of tables', function() {
         var user = userGenerator.generateUser();
 
         if (!user[userConsts.FIRST]) {
@@ -44,19 +44,19 @@ describe('User generator unit test', function() {
 
     function userWithOverridesGenerator() {
         return [
-            {message: "Generate user override first name", userOptions : {firstName: 'Cleo'}, expectedKeyValue: { firstName: 'Cleo'}},
-            {message: "Generate user override last name", userOptions : {lastName: 'Schneider'}, expectedKeyValue: { lastName: 'Schneider'}},
-            {message: "Generate user override screen name", userOptions : {screenName: 'cschneider'}, expectedKeyValue: { screenName: 'cschneider'}},
-            {message: "Generate user override email", userOptions : {email: 'cleo_schneider@intuit.com'}, expectedKeyValue: { email: 'cleo_schneider@intuit.com'}},
-            {message: "Generate user override deactivated", userOptions : {deactivated: true}, expectedKeyValue: { deactivated: true}},
-            {message: "Generate user override everything", userOptions : {firstName: 'Cleo', lastName: 'Schneider', screenName: 'cschneider', email: 'cleo_schneider@intuit.com', deactivated: true}, expectedKeyValue: { firstName: 'Cleo', lastName: 'Schneider', screenName: 'cschneider', email: 'cleo_schneider@intuit.com', deactivated: true} }
+            {message: "Generate user override first name", userOptions: {firstName: 'Cleo'}, expectedKeyValue: {firstName: 'Cleo'}},
+            {message: "Generate user override last name", userOptions: {lastName: 'Schneider'}, expectedKeyValue: {lastName: 'Schneider'}},
+            {message: "Generate user override screen name", userOptions: {screenName: 'cschneider'}, expectedKeyValue: {screenName: 'cschneider'}},
+            {message: "Generate user override email", userOptions: {email: 'cleo_schneider@intuit.com'}, expectedKeyValue: {email: 'cleo_schneider@intuit.com'}},
+            {message: "Generate user override deactivated", userOptions: {deactivated: true}, expectedKeyValue: {deactivated: true}},
+            {message: "Generate user override everything", userOptions: {firstName: 'Cleo', lastName: 'Schneider', screenName: 'cschneider', email: 'cleo_schneider@intuit.com', deactivated: true}, expectedKeyValue: {firstName: 'Cleo', lastName: 'Schneider', screenName: 'cschneider', email: 'cleo_schneider@intuit.com', deactivated: true}}
         ];
     }
 
     /**
      * Unit test that validates generating a user with a specified number of tables and a specified number of fields
      */
-    describe('test generating a user with some defined values',function() {
+    describe('test generating a user with some defined values', function() {
         userWithOverridesGenerator().forEach(function(entry) {
             it('Test case: ' + entry.message, function(done) {
                 var options = entry.userOptions;
@@ -100,7 +100,7 @@ describe('User generator unit test', function() {
                     assert.fail('Expected first email ' + expectedKeyValuePairs[userConsts.EMAIL] + ' to match actual email ' + user[userConsts.EMAIL]);
                 }
 
-                if (typeof expectedKeyValuePairs[userConsts.DEACTIVATED] !== 'undefined' && expectedKeyValuePairs[userConsts.DEACTIVATED] !== user[userConsts.DEACTIVATED] ) {
+                if (typeof expectedKeyValuePairs[userConsts.DEACTIVATED] !== 'undefined' && expectedKeyValuePairs[userConsts.DEACTIVATED] !== user[userConsts.DEACTIVATED]) {
                     assert.fail('Expected deactivated = ' + expectedKeyValuePairs[userConsts.DEACTIVATED] + ' to match actual deactivated = ' + user[userConsts.DEACTIVATED]);
                 }
 

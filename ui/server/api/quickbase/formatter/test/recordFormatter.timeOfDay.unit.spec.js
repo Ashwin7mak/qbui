@@ -14,21 +14,23 @@ describe('Time of day record formatter unit test', function() {
     function provider() {
         var inputTod = '1970-01-01T18:51:21Z';
         //Incomplete number
-        var recordsInput =  [[{
-            id: 7,
-            value: inputTod}]];
+        var recordsInput = [[{
+            id   : 7,
+            value: inputTod
+        }]];
         var expectedHHMM12HourClock = [[{
-                id: 7,
-                value: inputTod,
-                display: '6:51 PM'}]];
+            id     : 7,
+            value  : inputTod,
+            display: '6:51 PM'
+        }]];
         var todHHMM12HourClock = [
             {
-                id: 7,
-                type: 'SCALAR',
-                name: 'datetime',
+                id                : 7,
+                type              : 'SCALAR',
+                name              : 'datetime',
                 datatypeAttributes: {
-                    type: 'TIME_OF_DAY',
-                    scale: 'HH:MM',
+                    type          : 'TIME_OF_DAY',
+                    scale         : 'HH:MM',
                     use24HourClock: false
                 }
             }
@@ -63,13 +65,13 @@ describe('Time of day record formatter unit test', function() {
         var recordsEmpty = JSON.parse(JSON.stringify(recordsInput));
         recordsEmpty[0][0].value = '';
 
-        var cases =[
-            { message: 'TOD - HH:MM 12 hour clock', records: recordsInput, fieldInfo: todHHMM12HourClock, expectedRecords: expectedHHMM12HourClock },
-            { message: 'TOD - HH:MM 24 hour clock', records: recordsInput, fieldInfo: todHHMM24HourClock, expectedRecords: expectedHHMM24HourClock },
-            { message: 'TOD - HH:MM:SS 24 hour clock', records: recordsInput, fieldInfo: todHHMMSS24HourClock, expectedRecords: expectedHHMMSS24HourClock },
-            { message: 'TOD - HH:MM:SS 12 hour clock', records: recordsInput, fieldInfo: todHHMMSS12HourClock, expectedRecords: expectedHHMMSS12HourClock },
-            { message: 'TOD - null -> empty string', records: recordsNull, fieldInfo: todHHMM12HourClock, expectedRecords: expectedNull },
-            { message: 'TOD - empty string -> empty string', records: recordsEmpty, fieldInfo: todHHMM12HourClock, expectedRecords: expectedEmpty },
+        var cases = [
+            {message: 'TOD - HH:MM 12 hour clock', records: recordsInput, fieldInfo: todHHMM12HourClock, expectedRecords: expectedHHMM12HourClock},
+            {message: 'TOD - HH:MM 24 hour clock', records: recordsInput, fieldInfo: todHHMM24HourClock, expectedRecords: expectedHHMM24HourClock},
+            {message: 'TOD - HH:MM:SS 24 hour clock', records: recordsInput, fieldInfo: todHHMMSS24HourClock, expectedRecords: expectedHHMMSS24HourClock},
+            {message: 'TOD - HH:MM:SS 12 hour clock', records: recordsInput, fieldInfo: todHHMMSS12HourClock, expectedRecords: expectedHHMMSS12HourClock},
+            {message: 'TOD - null -> empty string', records: recordsNull, fieldInfo: todHHMM12HourClock, expectedRecords: expectedNull},
+            {message: 'TOD - empty string -> empty string', records: recordsEmpty, fieldInfo: todHHMM12HourClock, expectedRecords: expectedEmpty},
         ];
 
         return cases;
@@ -78,7 +80,7 @@ describe('Time of day record formatter unit test', function() {
     /**
      * Unit test that validates TimeOfDay records formatting with various field property flags set
      */
-    describe('should format a time of day record with various properties for display',function() {
+    describe('should format a time of day record with various properties for display', function() {
         provider().forEach(function(entry) {
             it('Test case: ' + entry.message, function(done) {
                 var formattedRecords = recordFormatter.formatRecords(entry.records, entry.fieldInfo);

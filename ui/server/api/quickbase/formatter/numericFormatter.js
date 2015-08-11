@@ -96,7 +96,7 @@
         }
         //Pad if needed to fill out the precision
         if (characteristicString.length < precision) {
-            while(characteristicString.length < precision) {
+            while (characteristicString.length < precision) {
                 characteristicString = characteristicString + ZERO_CHAR;
             }
         }
@@ -127,6 +127,7 @@
         }
         return formattedMantissa;
     }
+
     /**
      * Given a numeric value and an options object with display config properties set on it, this method
      * formats the numeric value as a string and returns the formatted string.
@@ -239,7 +240,7 @@
          * @param fieldInfo the meta data about the field
          * @returns A formatted display string
          */
-        format: function(fieldValue, fieldInfo) {
+        format        : function(fieldValue, fieldInfo) {
             if (!fieldValue || !fieldValue.value) {
                 return '';
             }

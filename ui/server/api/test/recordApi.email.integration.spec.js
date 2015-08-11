@@ -8,7 +8,7 @@
     var promise = require('bluebird');
 
 
-//jshint loopfunc: true
+    //jshint loopfunc: true
 
     /**
      * Integration test for Email field formatting
@@ -160,32 +160,38 @@
             var expectedNullRecord = {id: fid, value: null, display: ''};
 
             return [
-                {message              : 'display email with no format flags',
+                {
+                    message           : 'display email with no format flags',
                     record            : emailInput,
                     format            : 'display',
                     expectedFieldValue: expectedEmailRecord
                 },
-                {message              : 'raw email with no format flags',
+                {
+                    message           : 'raw email with no format flags',
                     record            : emailInput,
                     format            : 'raw',
                     expectedFieldValue: emailInput
                 },
-                {message              : 'display empty email with no format flags',
+                {
+                    message           : 'display empty email with no format flags',
                     record            : emptyInput,
                     format            : 'display',
                     expectedFieldValue: expectedEmptyRecord
                 },
-                {message              : 'raw empty email with no format flags',
+                {
+                    message           : 'raw empty email with no format flags',
                     record            : emptyInput,
                     format            : 'raw',
                     expectedFieldValue: emptyInput
                 },
-                {message              : 'display null email with no format flags',
+                {
+                    message           : 'display null email with no format flags',
                     record            : nullInput,
                     format            : 'display',
                     expectedFieldValue: expectedNullRecord
                 },
-                {message              : 'raw null email with no format flags',
+                {
+                    message           : 'raw null email with no format flags',
                     record            : nullInput,
                     format            : 'raw',
                     expectedFieldValue: nullInput
@@ -221,24 +227,24 @@
                     //When all the records have been fetched, assert the values match expectations
                     promise.all(fetchRecordPromises)
                             .then(function(results) {
-                                for (var i = 0; i < results.length; i++) {
-                                    var currentRecord = results[i];
-                                    if (results[i].record) {
-                                        currentRecord = results[i].record;
-                                    }
+                                      for (var i = 0; i < results.length; i++) {
+                                          var currentRecord = results[i];
+                                          if (results[i].record) {
+                                              currentRecord = results[i].record;
+                                          }
 
-                                    currentRecord.forEach(function(fieldValue) {
-                                        if (fieldValue.id === records[i].expectedFieldValue.id) {
-                                            assert.deepEqual(fieldValue, records[i].expectedFieldValue, 'Unexpected field value returned: ' +
-                                            JSON.stringify(fieldValue) + ', ' + JSON.stringify(records[i].expectedFieldValue));
-                                        }
-                                    });
-                                }
-                                done();
-                            }).catch(function(errorMsg) {
-                                assert(false, 'unable to resolve all records: ' + JSON.stringify(errorMsg));
-                                done();
-                            });
+                                          currentRecord.forEach(function(fieldValue) {
+                                              if (fieldValue.id === records[i].expectedFieldValue.id) {
+                                                  assert.deepEqual(fieldValue, records[i].expectedFieldValue, 'Unexpected field value returned: ' +
+                                                                                                              JSON.stringify(fieldValue) + ', ' + JSON.stringify(records[i].expectedFieldValue));
+                                              }
+                                          });
+                                      }
+                                      done();
+                                  }).catch(function(errorMsg) {
+                                               assert(false, 'unable to resolve all records: ' + JSON.stringify(errorMsg));
+                                               done();
+                                           });
                 });
             });
         });
@@ -261,32 +267,38 @@
             var expectedNullRecord = {id: fid, value: null, display: ''};
 
             return [
-                {message              : 'display email with "entire email" format flags',
+                {
+                    message           : 'display email with "entire email" format flags',
                     record            : emailInput,
                     format            : 'display',
                     expectedFieldValue: expectedEmailRecord
                 },
-                {message              : 'raw email with "entire email" format flags',
+                {
+                    message           : 'raw email with "entire email" format flags',
                     record            : emailInput,
                     format            : 'raw',
                     expectedFieldValue: emailInput
                 },
-                {message              : 'display empty email with "entire email" format flags',
+                {
+                    message           : 'display empty email with "entire email" format flags',
                     record            : emptyInput,
                     format            : 'display',
                     expectedFieldValue: expectedEmptyRecord
                 },
-                {message              : 'raw empty email with "entire email" format flags',
+                {
+                    message           : 'raw empty email with "entire email" format flags',
                     record            : emptyInput,
                     format            : 'raw',
                     expectedFieldValue: emptyInput
                 },
-                {message              : 'display null email with "entire email" format flags',
+                {
+                    message           : 'display null email with "entire email" format flags',
                     record            : nullInput,
                     format            : 'display',
                     expectedFieldValue: expectedNullRecord
                 },
-                {message              : 'raw null email with "entire email" format flags',
+                {
+                    message           : 'raw null email with "entire email" format flags',
                     record            : nullInput,
                     format            : 'raw',
                     expectedFieldValue: nullInput
@@ -322,24 +334,24 @@
                     //When all the records have been fetched, assert the values match expectations
                     promise.all(fetchRecordPromises)
                             .then(function(results) {
-                                for (var i = 0; i < results.length; i++) {
-                                    var currentRecord = results[i];
-                                    if (results[i].record) {
-                                        currentRecord = results[i].record;
-                                    }
+                                      for (var i = 0; i < results.length; i++) {
+                                          var currentRecord = results[i];
+                                          if (results[i].record) {
+                                              currentRecord = results[i].record;
+                                          }
 
-                                    currentRecord.forEach(function(fieldValue) {
-                                        if (fieldValue.id === records[i].expectedFieldValue.id) {
-                                            assert.deepEqual(fieldValue, records[i].expectedFieldValue, 'Unexpected field value returned: ' +
-                                            JSON.stringify(fieldValue) + ', ' + JSON.stringify(records[i].expectedFieldValue));
-                                        }
-                                    });
-                                }
-                                done();
-                            }).catch(function(errorMsg) {
-                                assert(false, 'unable to resolve all records: ' + JSON.stringify(errorMsg));
-                                done();
-                            });
+                                          currentRecord.forEach(function(fieldValue) {
+                                              if (fieldValue.id === records[i].expectedFieldValue.id) {
+                                                  assert.deepEqual(fieldValue, records[i].expectedFieldValue, 'Unexpected field value returned: ' +
+                                                                                                              JSON.stringify(fieldValue) + ', ' + JSON.stringify(records[i].expectedFieldValue));
+                                              }
+                                          });
+                                      }
+                                      done();
+                                  }).catch(function(errorMsg) {
+                                               assert(false, 'unable to resolve all records: ' + JSON.stringify(errorMsg));
+                                               done();
+                                           });
                 });
             });
         });
@@ -362,32 +374,38 @@
             var expectedNullRecord = {id: fid, value: null, display: ''};
 
             return [
-                {message              : 'display email with "before @" format flags',
+                {
+                    message           : 'display email with "before @" format flags',
                     record            : emailInput,
                     format            : 'display',
                     expectedFieldValue: expectedEmailRecord
                 },
-                {message              : 'raw email with "before @" format flags',
+                {
+                    message           : 'raw email with "before @" format flags',
                     record            : emailInput,
                     format            : 'raw',
                     expectedFieldValue: emailInput
                 },
-                {message              : 'display empty email with "before @" format flags',
+                {
+                    message           : 'display empty email with "before @" format flags',
                     record            : emptyInput,
                     format            : 'display',
                     expectedFieldValue: expectedEmptyRecord
                 },
-                {message              : 'raw empty email with "before @" format flags',
+                {
+                    message           : 'raw empty email with "before @" format flags',
                     record            : emptyInput,
                     format            : 'raw',
                     expectedFieldValue: emptyInput
                 },
-                {message              : 'display null email with "before @" format flags',
+                {
+                    message           : 'display null email with "before @" format flags',
                     record            : nullInput,
                     format            : 'display',
                     expectedFieldValue: expectedNullRecord
                 },
-                {message              : 'raw null email with "before @" format flags',
+                {
+                    message           : 'raw null email with "before @" format flags',
                     record            : nullInput,
                     format            : 'raw',
                     expectedFieldValue: nullInput
@@ -423,24 +441,24 @@
                     //When all the records have been fetched, assert the values match expectations
                     promise.all(fetchRecordPromises)
                             .then(function(results) {
-                                for (var i = 0; i < results.length; i++) {
-                                    var currentRecord = results[i];
-                                    if (results[i].record) {
-                                        currentRecord = results[i].record;
-                                    }
+                                      for (var i = 0; i < results.length; i++) {
+                                          var currentRecord = results[i];
+                                          if (results[i].record) {
+                                              currentRecord = results[i].record;
+                                          }
 
-                                    currentRecord.forEach(function(fieldValue) {
-                                        if (fieldValue.id === records[i].expectedFieldValue.id) {
-                                            assert.deepEqual(fieldValue, records[i].expectedFieldValue, 'Unexpected field value returned: ' +
-                                            JSON.stringify(fieldValue) + ', ' + JSON.stringify(records[i].expectedFieldValue));
-                                        }
-                                    });
-                                }
-                                done();
-                            }).catch(function(errorMsg) {
-                                assert(false, 'unable to resolve all records: ' + JSON.stringify(errorMsg));
-                                done();
-                            });
+                                          currentRecord.forEach(function(fieldValue) {
+                                              if (fieldValue.id === records[i].expectedFieldValue.id) {
+                                                  assert.deepEqual(fieldValue, records[i].expectedFieldValue, 'Unexpected field value returned: ' +
+                                                                                                              JSON.stringify(fieldValue) + ', ' + JSON.stringify(records[i].expectedFieldValue));
+                                              }
+                                          });
+                                      }
+                                      done();
+                                  }).catch(function(errorMsg) {
+                                               assert(false, 'unable to resolve all records: ' + JSON.stringify(errorMsg));
+                                               done();
+                                           });
                 });
             });
         });
@@ -463,32 +481,38 @@
             var expectedNullRecord = {id: fid, value: null, display: ''};
 
             return [
-                {message              : 'display email with "before _" format flags',
+                {
+                    message           : 'display email with "before _" format flags',
                     record            : emailInput,
                     format            : 'display',
                     expectedFieldValue: expectedEmailRecord
                 },
-                {message              : 'raw email with "before _" format flags',
+                {
+                    message           : 'raw email with "before _" format flags',
                     record            : emailInput,
                     format            : 'raw',
                     expectedFieldValue: emailInput
                 },
-                {message              : 'display empty email with "before _" format flags',
+                {
+                    message           : 'display empty email with "before _" format flags',
                     record            : emptyInput,
                     format            : 'display',
                     expectedFieldValue: expectedEmptyRecord
                 },
-                {message              : 'raw empty email with "before _" format flags',
+                {
+                    message           : 'raw empty email with "before _" format flags',
                     record            : emptyInput,
                     format            : 'raw',
                     expectedFieldValue: emptyInput
                 },
-                {message              : 'display null email with "before _" format flags',
+                {
+                    message           : 'display null email with "before _" format flags',
                     record            : nullInput,
                     format            : 'display',
                     expectedFieldValue: expectedNullRecord
                 },
-                {message              : 'raw null email with "before _" format flags',
+                {
+                    message           : 'raw null email with "before _" format flags',
                     record            : nullInput,
                     format            : 'raw',
                     expectedFieldValue: nullInput
@@ -524,24 +548,24 @@
                     //When all the records have been fetched, assert the values match expectations
                     promise.all(fetchRecordPromises)
                             .then(function(results) {
-                                for (var i = 0; i < results.length; i++) {
-                                    var currentRecord = results[i];
-                                    if (results[i].record) {
-                                        currentRecord = results[i].record;
-                                    }
+                                      for (var i = 0; i < results.length; i++) {
+                                          var currentRecord = results[i];
+                                          if (results[i].record) {
+                                              currentRecord = results[i].record;
+                                          }
 
-                                    currentRecord.forEach(function(fieldValue) {
-                                        if (fieldValue.id === records[i].expectedFieldValue.id) {
-                                            assert.deepEqual(fieldValue, records[i].expectedFieldValue, 'Unexpected field value returned: ' +
-                                            JSON.stringify(fieldValue) + ', ' + JSON.stringify(records[i].expectedFieldValue));
-                                        }
-                                    });
-                                }
-                                done();
-                            }).catch(function(errorMsg) {
-                                assert(false, 'unable to resolve all records: ' + JSON.stringify(errorMsg));
-                                done();
-                            });
+                                          currentRecord.forEach(function(fieldValue) {
+                                              if (fieldValue.id === records[i].expectedFieldValue.id) {
+                                                  assert.deepEqual(fieldValue, records[i].expectedFieldValue, 'Unexpected field value returned: ' +
+                                                                                                              JSON.stringify(fieldValue) + ', ' + JSON.stringify(records[i].expectedFieldValue));
+                                              }
+                                          });
+                                      }
+                                      done();
+                                  }).catch(function(errorMsg) {
+                                               assert(false, 'unable to resolve all records: ' + JSON.stringify(errorMsg));
+                                               done();
+                                           });
                 });
             });
         });
@@ -564,32 +588,38 @@
             var expectedNullRecord = {id: fid, value: null, display: ''};
 
             return [
-                {message              : 'display email with "link text" format flags',
+                {
+                    message           : 'display email with "link text" format flags',
                     record            : emailInput,
                     format            : 'display',
                     expectedFieldValue: expectedEmailRecord
                 },
-                {message              : 'raw email with "link text" format flags',
+                {
+                    message           : 'raw email with "link text" format flags',
                     record            : emailInput,
                     format            : 'raw',
                     expectedFieldValue: emailInput
                 },
-                {message              : 'display empty email with "link text" format flags',
+                {
+                    message           : 'display empty email with "link text" format flags',
                     record            : emptyInput,
                     format            : 'display',
                     expectedFieldValue: expectedEmptyRecord
                 },
-                {message              : 'raw empty email with "link text" format flags',
+                {
+                    message           : 'raw empty email with "link text" format flags',
                     record            : emptyInput,
                     format            : 'raw',
                     expectedFieldValue: emptyInput
                 },
-                {message              : 'display null email with "link text" format flags',
+                {
+                    message           : 'display null email with "link text" format flags',
                     record            : nullInput,
                     format            : 'display',
                     expectedFieldValue: expectedNullRecord
                 },
-                {message              : 'raw null email with "link text" format flags',
+                {
+                    message           : 'raw null email with "link text" format flags',
                     record            : nullInput,
                     format            : 'raw',
                     expectedFieldValue: nullInput
@@ -625,24 +655,24 @@
                     //When all the records have been fetched, assert the values match expectations
                     promise.all(fetchRecordPromises)
                             .then(function(results) {
-                                for (var i = 0; i < results.length; i++) {
-                                    var currentRecord = results[i];
-                                    if (results[i].record) {
-                                        currentRecord = results[i].record;
-                                    }
+                                      for (var i = 0; i < results.length; i++) {
+                                          var currentRecord = results[i];
+                                          if (results[i].record) {
+                                              currentRecord = results[i].record;
+                                          }
 
-                                    currentRecord.forEach(function(fieldValue) {
-                                        if (fieldValue.id === records[i].expectedFieldValue.id) {
-                                            assert.deepEqual(fieldValue, records[i].expectedFieldValue, 'Unexpected field value returned: ' +
-                                            JSON.stringify(fieldValue) + ', ' + JSON.stringify(records[i].expectedFieldValue));
-                                        }
-                                    });
-                                }
-                                done();
-                            }).catch(function(errorMsg) {
-                                assert(false, 'unable to resolve all records: ' + JSON.stringify(errorMsg));
-                                done();
-                            });
+                                          currentRecord.forEach(function(fieldValue) {
+                                              if (fieldValue.id === records[i].expectedFieldValue.id) {
+                                                  assert.deepEqual(fieldValue, records[i].expectedFieldValue, 'Unexpected field value returned: ' +
+                                                                                                              JSON.stringify(fieldValue) + ', ' + JSON.stringify(records[i].expectedFieldValue));
+                                              }
+                                          });
+                                      }
+                                      done();
+                                  }).catch(function(errorMsg) {
+                                               assert(false, 'unable to resolve all records: ' + JSON.stringify(errorMsg));
+                                               done();
+                                           });
                 });
             });
         });
@@ -665,32 +695,38 @@
             var expectedNullRecord = {id: fid, value: null, display: ''};
 
             return [
-                {message              : 'display email with all format flags',
+                {
+                    message           : 'display email with all format flags',
                     record            : emailInput,
                     format            : 'display',
                     expectedFieldValue: expectedEmailRecord
                 },
-                {message              : 'raw email with all format flags',
+                {
+                    message           : 'raw email with all format flags',
                     record            : emailInput,
                     format            : 'raw',
                     expectedFieldValue: emailInput
                 },
-                {message              : 'display empty email with all format flags',
+                {
+                    message           : 'display empty email with all format flags',
                     record            : emptyInput,
                     format            : 'display',
                     expectedFieldValue: expectedEmptyRecord
                 },
-                {message              : 'raw empty email with all format flags',
+                {
+                    message           : 'raw empty email with all format flags',
                     record            : emptyInput,
                     format            : 'raw',
                     expectedFieldValue: emptyInput
                 },
-                {message              : 'display null email with all format flags',
+                {
+                    message           : 'display null email with all format flags',
                     record            : nullInput,
                     format            : 'display',
                     expectedFieldValue: expectedNullRecord
                 },
-                {message              : 'raw null email with all format flags',
+                {
+                    message           : 'raw null email with all format flags',
                     record            : nullInput,
                     format            : 'raw',
                     expectedFieldValue: nullInput
@@ -726,24 +762,24 @@
                     //When all the records have been fetched, assert the values match expectations
                     promise.all(fetchRecordPromises)
                             .then(function(results) {
-                                for (var i = 0; i < results.length; i++) {
-                                    var currentRecord = results[i];
-                                    if (results[i].record) {
-                                        currentRecord = results[i].record;
-                                    }
+                                      for (var i = 0; i < results.length; i++) {
+                                          var currentRecord = results[i];
+                                          if (results[i].record) {
+                                              currentRecord = results[i].record;
+                                          }
 
-                                    currentRecord.forEach(function(fieldValue) {
-                                        if (fieldValue.id === records[i].expectedFieldValue.id) {
-                                            assert.deepEqual(fieldValue, records[i].expectedFieldValue, 'Unexpected field value returned: ' +
-                                            JSON.stringify(fieldValue) + ', ' + JSON.stringify(records[i].expectedFieldValue));
-                                        }
-                                    });
-                                }
-                                done();
-                            }).catch(function(errorMsg) {
-                                assert(false, 'unable to resolve all records: ' + JSON.stringify(errorMsg));
-                                done();
-                            });
+                                          currentRecord.forEach(function(fieldValue) {
+                                              if (fieldValue.id === records[i].expectedFieldValue.id) {
+                                                  assert.deepEqual(fieldValue, records[i].expectedFieldValue, 'Unexpected field value returned: ' +
+                                                                                                              JSON.stringify(fieldValue) + ', ' + JSON.stringify(records[i].expectedFieldValue));
+                                              }
+                                          });
+                                      }
+                                      done();
+                                  }).catch(function(errorMsg) {
+                                               assert(false, 'unable to resolve all records: ' + JSON.stringify(errorMsg));
+                                               done();
+                                           });
                 });
             });
         });

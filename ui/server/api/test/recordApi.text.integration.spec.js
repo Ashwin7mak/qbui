@@ -7,7 +7,7 @@
     var testConsts = require('./api.test.constants');
     var promise = require('bluebird');
 
-//jshint loopfunc: true
+    //jshint loopfunc: true
 
     /**
      * Integration test for Text field formatting
@@ -62,29 +62,34 @@
             var expectedNullRecord = {id: fid, value: null, display: ''};
 
             return [
-                {message              : 'display small text',
+                {
+                    message           : 'display small text',
                     record            : smallInput,
                     format            : 'display',
                     expectedFieldValue: expectedSmallRecord
                 },
                 {message: 'raw small text', record: smallInput, format: 'raw', expectedFieldValue: smallInput},
-                {message              : 'display maximum supported text',
+                {
+                    message           : 'display maximum supported text',
                     record            : largeInput,
                     format            : 'display',
                     expectedFieldValue: expectedLargeRecord
                 },
-                {message              : 'raw maximum supported text',
+                {
+                    message           : 'raw maximum supported text',
                     record            : largeInput,
                     format            : 'raw',
                     expectedFieldValue: largeInput
                 },
-                {message              : 'display empty text',
+                {
+                    message           : 'display empty text',
                     record            : emptyInput,
                     format            : 'display',
                     expectedFieldValue: expectedEmptyRecord
                 },
                 {message: 'raw empty text', record: emptyInput, format: 'raw', expectedFieldValue: emptyInput},
-                {message              : 'display null text',
+                {
+                    message           : 'display null text',
                     record            : nullInput,
                     format            : 'display',
                     expectedFieldValue: expectedNullRecord
@@ -120,24 +125,24 @@
                     //When all the records have been fetched, assert the values match expectations
                     promise.all(fetchRecordPromises)
                             .then(function(results) {
-                                for (var i = 0; i < results.length; i++) {
-                                    var currentRecord = results[i];
-                                    if (results[i].record) {
-                                        currentRecord = results[i].record;
-                                    }
+                                      for (var i = 0; i < results.length; i++) {
+                                          var currentRecord = results[i];
+                                          if (results[i].record) {
+                                              currentRecord = results[i].record;
+                                          }
 
-                                    currentRecord.forEach(function(fieldValue) {
-                                        if (fieldValue.id === records[i].expectedFieldValue.id) {
-                                            assert.deepEqual(fieldValue, records[i].expectedFieldValue, 'Unexpected field value returned: ' +
-                                            JSON.stringify(fieldValue) + ', ' + JSON.stringify(records[i].expectedFieldValue));
-                                        }
-                                    });
-                                }
-                                done();
-                            }).catch(function(errorMsg) {
-                                assert(false, 'unable to resolve all records: ' + JSON.stringify(errorMsg));
-                                done();
-                            });
+                                          currentRecord.forEach(function(fieldValue) {
+                                              if (fieldValue.id === records[i].expectedFieldValue.id) {
+                                                  assert.deepEqual(fieldValue, records[i].expectedFieldValue, 'Unexpected field value returned: ' +
+                                                                                                              JSON.stringify(fieldValue) + ', ' + JSON.stringify(records[i].expectedFieldValue));
+                                              }
+                                          });
+                                      }
+                                      done();
+                                  }).catch(function(errorMsg) {
+                                               assert(false, 'unable to resolve all records: ' + JSON.stringify(errorMsg));
+                                               done();
+                                           });
                 });
             });
         });

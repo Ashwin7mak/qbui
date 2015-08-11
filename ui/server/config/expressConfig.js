@@ -19,7 +19,6 @@
     var routeGroups = require('../routes/routeGroups');
 
 
-
     module.exports = function(app) {
 
         // use ssl when there's a cert and we have the method to implement it

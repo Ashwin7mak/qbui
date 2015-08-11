@@ -56,16 +56,16 @@ describe('quickbase api service', function() {
         expect(map.size()).toEqual(0);
 
         //  add 5 entries
-        for (var i=0; i<5; i++) {
+        for (var i = 0; i < 5; i++) {
             map.put('key' + i, 'value' + i);
         }
 
         expect(map.size()).toEqual(5);
 
-        var ctr=0;
-        map.forEach( function(item, idx) {
+        var ctr = 0;
+        map.forEach(function(item, idx) {
             expect(idx).toEqual(ctr++);
-            expect(item).toEqual('value'+idx);
+            expect(item).toEqual('value' + idx);
         });
         expect(map.size()).toEqual(ctr);
 

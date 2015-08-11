@@ -2,13 +2,13 @@
     'use strict';
 
     angular.module('qbse.layout')
-        .directive('qbGlobalFooter', GlobalFooter);
+            .directive('qbGlobalFooter', GlobalFooter);
 
     function GlobalFooter() {
         return {
-            restrict: 'E',
+            restrict   : 'E',
             templateUrl: 'quickbase/common/layoutManager/footer/footer.html',
-            scope: {
+            scope      : {
                 footerInfo: '=info'
             }
         };

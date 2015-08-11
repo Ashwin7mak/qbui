@@ -13,18 +13,18 @@
         $log.log('setting up app.report.modules.js');
         $locationProvider.html5Mode(true);
         $stateProvider
-            .state('report', {
-                url: ROUTE.report,
-                views: {
-                    reportView: {
-                        templateUrl: 'quickbase/qbapp/reports/reportManager/reportLayout.html',
-                        controller: function($scope) {
-                            $scope.showLayout = false;   // hide until we know user is authenticated
-                            $scope.layout = 'quickbase/common/layoutManager/shellNoNav.html';
+                .state('report', {
+                    url  : ROUTE.report,
+                    views: {
+                        reportView: {
+                            templateUrl: 'quickbase/qbapp/reports/reportManager/reportLayout.html',
+                            controller : function($scope) {
+                                $scope.showLayout = false;   // hide until we know user is authenticated
+                                $scope.layout = 'quickbase/common/layoutManager/shellNoNav.html';
+                            }
                         }
                     }
-                }
-            });
+                });
     }]);
 
 }());

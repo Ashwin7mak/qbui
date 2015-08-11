@@ -43,8 +43,8 @@ describe('Directive: qbseGrid pagination - ', function() {
 
     // load the directive's module & load the template
     beforeEach(module('qbse.grid', 'test.dataGeneratorService',
-        'qbse.templates',
-        'ngMockE2E'));
+                      'qbse.templates',
+                      'ngMockE2E'));
 
 
     // mock the containing controller
@@ -74,13 +74,13 @@ describe('Directive: qbseGrid pagination - ', function() {
 
 
         elementHtml =
-            '<qbse-grid ' +
-            'title={{settings.title}} ' +
-            'selected-items="settings.selectedItems" ' +
-            'custom-options="settings.customOptions" ' +
-            'service="settings.service"> ' +
-            'This gets replaced with data - loading...' +
-            '</qbse-grid>';
+                '<qbse-grid ' +
+                'title={{settings.title}} ' +
+                'selected-items="settings.selectedItems" ' +
+                'custom-options="settings.customOptions" ' +
+                'service="settings.service"> ' +
+                'This gets replaced with data - loading...' +
+                '</qbse-grid>';
 
         // create the html dom fragment and process the angular
         $element = angular.element(elementHtml);

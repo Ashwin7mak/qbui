@@ -24,10 +24,10 @@
 
     module.exports = function(config) {
         //Module constants
-        var HTTPS_REGEX =  /https:\/\/.*/;
+        var HTTPS_REGEX = /https:\/\/.*/;
 
-        var HTTP =  'http://';
-        var HTTPS =  'https://';
+        var HTTP = 'http://';
+        var HTTPS = 'https://';
         var NODE_BASE_ENDPOINT = '/api/api/v1';
         var JAVA_BASE_ENDPOINT = '/api/api/v1';
         var APPS_ENDPOINT = '/apps/';
@@ -41,7 +41,7 @@
         var LOCALHOST_REALM = 117000;
         var LOCALHOST_SUBDOMAIN = 'localhost';
         var TICKETS_ENDPOINT = '/ticket?uid=1000000&realmID=';
-        var HEALTH_ENDPOINT  = '/health';
+        var HEALTH_ENDPOINT = '/health';
         var SUBDOMAIN_CHARS = 'abcdefghijklmnopqrstuvwxyz0123456789';
         var CONTENT_TYPE = 'Content-Type';
         var APPLICATION_JSON = 'application/json';
@@ -57,7 +57,7 @@
         function resolveFullUrl(realmSubdomain, path) {
             var fullPath;
             var protocol = HTTP;
-            log.info('Resolving full url for path: '+ path + ' realm: '+realmSubdomain);
+            log.info('Resolving full url for path: ' + path + ' realm: ' + realmSubdomain);
             //If there is no subdomain, hit the javaHost directly and don't proxy through the node server
             //This is required for actions like ticket creation and realm creation
             if (realmSubdomain === '') {
@@ -72,10 +72,10 @@
                 methodLess = baseUrl.replace(HTTP, '');
             }
 
-            log.debug('baseUrl: '+ baseUrl + ' methodLess: '+methodLess);
+            log.debug('baseUrl: ' + baseUrl + ' methodLess: ' + methodLess);
 
             fullPath = protocol + realmSubdomain + '.' + methodLess + path;
-            log.debug('resulting fullpath: '+ fullPath);
+            log.debug('resulting fullpath: ' + fullPath);
 
             return fullPath;
         }
@@ -83,7 +83,7 @@
         //Private helper method to generate a request options object
         function generateRequestOpts(stringPath, method, realmSubdomain) {
             return {
-                url: resolveFullUrl(realmSubdomain, stringPath),
+                url   : resolveFullUrl(realmSubdomain, stringPath),
                 method: method
             };
         }
@@ -112,21 +112,21 @@
         }
 
         var apiBase = {
-            setBaseUrl : function(baseUrlConfig) {
+            setBaseUrl                  : function(baseUrlConfig) {
                 log.info('Setting baseUrl on api.base: ' + baseUrlConfig);
                 baseUrl = baseUrlConfig;
             },
-            generateFullRequest: function(subdomain, relativePath) {
+            generateFullRequest         : function(subdomain, relativePath) {
                 return resolveFullUrl(subdomain, relativePath);
             },
-            resolveAppsEndpoint: function(appId) {
+            resolveAppsEndpoint         : function(appId) {
                 var appsEndpoint = JAVA_BASE_ENDPOINT + APPS_ENDPOINT;
                 if (appId) {
                     appsEndpoint = appsEndpoint + appId;
                 }
                 return appsEndpoint;
             },
-            resolveRecordsEndpoint: function(appId, tableId, recordId) {
+            resolveRecordsEndpoint      : function(appId, tableId, recordId) {
                 var endpoint = NODE_BASE_ENDPOINT + APPS_ENDPOINT + appId + TABLES_ENDPOINT + tableId + RECORDS_ENDPOINT;
                 if (recordId) {
                     endpoint = endpoint + recordId;
@@ -140,50 +140,50 @@
                 }
                 return endpoint;
             },
-            resolveFieldsEndpoint: function(appId, tableId, fieldId) {
+            resolveFieldsEndpoint       : function(appId, tableId, fieldId) {
                 var endpoint = this.resolveTablesEndpoint(appId, tableId) + FIELDS_ENDPOINT;
                 if (fieldId) {
                     endpoint = endpoint + fieldId;
                 }
                 return endpoint;
             },
-            resolveTablesEndpoint: function(appId, tableId) {
+            resolveTablesEndpoint       : function(appId, tableId) {
                 var tableEndpoint = this.resolveAppsEndpoint(appId) + TABLES_ENDPOINT;
                 if (tableId) {
                     tableEndpoint = tableEndpoint + tableId;
                 }
                 return tableEndpoint;
             },
-            resolveReportsEndpoint: function(appId, tableId, reportId) {
+            resolveReportsEndpoint      : function(appId, tableId, reportId) {
                 var reportEndpoint = NODE_BASE_ENDPOINT + APPS_ENDPOINT + appId + TABLES_ENDPOINT + tableId + REPORTS_ENDPOINT;
                 if (reportId) {
                     reportEndpoint = reportEndpoint + reportId;
                 }
                 return reportEndpoint;
             },
-            resolveRealmsEndpoint: function(realmId) {
+            resolveRealmsEndpoint       : function(realmId) {
                 var endpoint = JAVA_BASE_ENDPOINT + REALMS_ENDPOINT;
                 if (realmId) {
                     endpoint = endpoint + realmId;
                 }
                 return endpoint;
             },
-            resolveTicketEndpoint: function() {
+            resolveTicketEndpoint       : function() {
                 return JAVA_BASE_ENDPOINT + TICKETS_ENDPOINT;
             },
-            resolveHealthEndpoint: function() {
+            resolveHealthEndpoint       : function() {
                 return JAVA_BASE_ENDPOINT + HEALTH_ENDPOINT;
             },
-            resolveUsersEndpoint: function(userId) {
+            resolveUsersEndpoint        : function(userId) {
                 var endpoint = JAVA_BASE_ENDPOINT + USERS_ENDPOINT;
                 if (userId) {
                     endpoint = endpoint + userId;
                 }
                 return endpoint;
             },
-            defaultHeaders: DEFAULT_HEADERS,
+            defaultHeaders              : DEFAULT_HEADERS,
             //Executes a REST request against the instance's realm using the configured javaHost
-            executeRequest: function(stringPath, method, body, headers) {
+            executeRequest              : function(stringPath, method, body, headers) {
                 //if there is a realm & we're not making a ticket request, use the realm subdomain request URL
                 var subdomain = '';
                 if (this.realm) {
@@ -221,8 +221,8 @@
                 var tries = numRetries;
                 request(opts, function(error, response) {
                     if (error || response.statusCode !== 200) {
-                        if (tries > 1  && error && (error.code === ERROR_HPE_INVALID_CONSTANT || error.code === ERROR_ENOTFOUND)) {
-                            tries --;
+                        if (tries > 1 && error && (error.code === ERROR_HPE_INVALID_CONSTANT || error.code === ERROR_ENOTFOUND)) {
+                            tries--;
                             log.debug('Attempting a retry: ' + JSON.stringify(opts) + ' Tries remaining: ' + tries);
                             apiBase.executeRequestRetryable(opts, tries).then(function(res2) {
                                 log.debug('Success following retry/retries');
@@ -244,7 +244,7 @@
             },
 
             //Create a realm for API tests to run against and generates a ticket
-            initialize: function() {
+            initialize        : function() {
                 var context = this;
                 var deferred = promise.pending();
                 if (!context.realm) {
@@ -256,32 +256,32 @@
                      *  2) use the admin ticket to create a realm
                      *  3) create a ticket valid on the realm in question
                      *  4) If any step above fails, assert!
-                    */
+                     */
                     context.createTicket(LOCALHOST_REALM)
-                        .then(function(authResponse) {
-                            //TODO: tickets come back quoted, invalid JSON, we regex the quotes away.  hack.
-                            context.authTicket = authResponse.body.replace(/"/g, '');
-                            context.createRealm()
-                                .then(function(realmResponse) {
-                                    context.realm = JSON.parse(realmResponse.body);
-                                    context.createTicket(context.realm.id)
-                                        .then(function(realmTicketResponse) {
-                                            context.authTicket = realmTicketResponse.body.replace(/"/g, '');
-                                            deferred.resolve(context.realm);
-                                        }).catch(function(realmTicketError) {
-                                            deferred.reject(realmTicketError);
-                                            assert(false, 'failed to create ticket for realm: ' + context.realm.id);
-                                        });
-                                }).catch(function(realmError) {
-                                    deferred.reject(realmError);
-                                    assert(false, 'failed to create realm: ' + JSON.stringify(realmError));
-                                });
-                        }).catch(function(authError) {
-                            //If auth request fails, delete the realm & fail the tests
-                            context.cleanup();
-                            deferred.reject(authError);
-                            assert(false, 'failed to resolve ticket: ' + JSON.stringify(authError));
-                        });
+                            .then(function(authResponse) {
+                                      //TODO: tickets come back quoted, invalid JSON, we regex the quotes away.  hack.
+                                      context.authTicket = authResponse.body.replace(/"/g, '');
+                                      context.createRealm()
+                                              .then(function(realmResponse) {
+                                                        context.realm = JSON.parse(realmResponse.body);
+                                                        context.createTicket(context.realm.id)
+                                                                .then(function(realmTicketResponse) {
+                                                                          context.authTicket = realmTicketResponse.body.replace(/"/g, '');
+                                                                          deferred.resolve(context.realm);
+                                                                      }).catch(function(realmTicketError) {
+                                                                                   deferred.reject(realmTicketError);
+                                                                                   assert(false, 'failed to create ticket for realm: ' + context.realm.id);
+                                                                               });
+                                                    }).catch(function(realmError) {
+                                                                 deferred.reject(realmError);
+                                                                 assert(false, 'failed to create realm: ' + JSON.stringify(realmError));
+                                                             });
+                                  }).catch(function(authError) {
+                                               //If auth request fails, delete the realm & fail the tests
+                                               context.cleanup();
+                                               deferred.reject(authError);
+                                               assert(false, 'failed to resolve ticket: ' + JSON.stringify(authError));
+                                           });
                 } else {
                     //The realm already exists, no-op
                     deferred.resolve(context.realm);
@@ -290,11 +290,11 @@
 
             },
             //Create realm helper method generates an arbitrary realm, calls execute request and returns a promise
-            createRealm: function() {
+            createRealm       : function() {
                 var realmToMake = {
-                    'id': Math.floor(Math.random() * 100000000 - 0),
-                    'subdomain': generateValidSubdomainString(),
-                    'name': generateValidSubdomainString()
+                    id       : Math.floor(Math.random() * 100000000 - 0),
+                    subdomain: generateValidSubdomainString(),
+                    name     : generateValidSubdomainString()
                 };
                 return this.executeRequest(this.resolveRealmsEndpoint(), consts.POST, realmToMake, DEFAULT_HEADERS);
             },
@@ -303,41 +303,41 @@
                 return this.executeRequest(this.resolveUsersEndpoint(), consts.POST, userToMake, DEFAULT_HEADERS);
             },
             //Create user helper method generates an arbitrary user, calls execute request and returns a promise
-            createUser: function() {
+            createUser        : function() {
                 var userToMake = {
-                    'firstName':  generateString(10),
-                    'lastName': generateString(10),
-                    'screenName': generateString(10),
-                    'email': generateEmail(),
-                    'password': 'quickbase',
-                    'challengeQuestion': 'who is your favorite scrum team?',
-                    'challengeAnswer': 'blue'
+                    firstName        : generateString(10),
+                    lastName         : generateString(10),
+                    screenName       : generateString(10),
+                    email            : generateEmail(),
+                    password         : 'quickbase',
+                    challengeQuestion: 'who is your favorite scrum team?',
+                    challengeAnswer  : 'blue'
                 };
                 return this.createSpecificUser(userToMake);
             },
             //Helper method creates a ticket given a realm ID.  Returns a promise
-            createTicket: function(realmId) {
+            createTicket      : function(realmId) {
                 return this.executeRequest(this.resolveTicketEndpoint() + realmId, consts.GET, '', DEFAULT_HEADERS);
             },
             //Deletes a realm, if one is set on the instance, returns a promise
-            cleanup: function() {
+            cleanup           : function() {
                 //delete the realm  if not null
                 var context = this;
                 var deferred = promise.pending();
                 if (context.realm) {
                     context.executeRequest(context.resolveRealmsEndpoint(context.realm.id),
-                        consts.DELETE, '', DEFAULT_HEADERS)
-                        .then(function(response) {
-                            deferred.resolve(response);
-                            context.realm = null;
-                        }).catch(function(error) {
-                            var r = context.realm;
-                            context.realm = null;
-                            assert(false, 'Unable to delete realm ' +
-                              JSON.stringify(r) + ' due to: ' +
-                              JSON.stringify(error));
-                            deferred.reject(error);
-                        });
+                                           consts.DELETE, '', DEFAULT_HEADERS)
+                            .then(function(response) {
+                                      deferred.resolve(response);
+                                      context.realm = null;
+                                  }).catch(function(error) {
+                                               var r = context.realm;
+                                               context.realm = null;
+                                               assert(false, 'Unable to delete realm ' +
+                                                             JSON.stringify(r) + ' due to: ' +
+                                                             JSON.stringify(error));
+                                               deferred.reject(error);
+                                           });
                 } else {
                     deferred.resolve();
                 }

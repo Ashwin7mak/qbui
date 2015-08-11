@@ -7,7 +7,7 @@
     var testConsts = require('./api.test.constants');
     var promise = require('bluebird');
 
-//jshint loopfunc: true
+    //jshint loopfunc: true
 
     /**
      * Integration test for Date field formatting
@@ -82,32 +82,38 @@
             var expectedNullRecord = {id: fid, value: null, display: ''};
 
             return [
-                {message              : 'display current year date with no format flags',
+                {
+                    message           : 'display current year date with no format flags',
                     record            : currentYearInput,
                     format            : 'display',
                     expectedFieldValue: expectedCurrentYearRecord
                 },
-                {message              : 'raw current year date with no format flags',
+                {
+                    message           : 'raw current year date with no format flags',
                     record            : currentYearInput,
                     format            : 'raw',
                     expectedFieldValue: currentYearInput
                 },
-                {message              : 'display different year date with no format flags',
+                {
+                    message           : 'display different year date with no format flags',
                     record            : diffYearInput,
                     format            : 'display',
                     expectedFieldValue: expectedDiffYearRecord
                 },
-                {message              : 'raw different year date with no format flags',
+                {
+                    message           : 'raw different year date with no format flags',
                     record            : diffYearInput,
                     format            : 'raw',
                     expectedFieldValue: diffYearInput
                 },
-                {message              : 'display null date with no format flags',
+                {
+                    message           : 'display null date with no format flags',
                     record            : nullInput,
                     format            : 'display',
                     expectedFieldValue: expectedNullRecord
                 },
-                {message              : 'raw null date with no format flags',
+                {
+                    message           : 'raw null date with no format flags',
                     record            : nullInput,
                     format            : 'raw',
                     expectedFieldValue: nullInput
@@ -143,24 +149,24 @@
                     //When all the records have been fetched, assert the values match expectations
                     promise.all(fetchRecordPromises)
                             .then(function(results) {
-                                for (var i = 0; i < results.length; i++) {
-                                    var currentRecord = results[i];
-                                    if (results[i].record) {
-                                        currentRecord = results[i].record;
-                                    }
+                                      for (var i = 0; i < results.length; i++) {
+                                          var currentRecord = results[i];
+                                          if (results[i].record) {
+                                              currentRecord = results[i].record;
+                                          }
 
-                                    currentRecord.forEach(function(fieldValue) {
-                                        if (fieldValue.id === records[i].expectedFieldValue.id) {
-                                            assert.deepEqual(fieldValue, records[i].expectedFieldValue, 'Unexpected field value returned: ' +
-                                            JSON.stringify(fieldValue) + ', ' + JSON.stringify(records[i].expectedFieldValue));
-                                        }
-                                    });
-                                }
-                                done();
-                            }).catch(function(errorMsg) {
-                                assert(false, 'unable to resolve all records: ' + JSON.stringify(errorMsg));
-                                done();
-                            });
+                                          currentRecord.forEach(function(fieldValue) {
+                                              if (fieldValue.id === records[i].expectedFieldValue.id) {
+                                                  assert.deepEqual(fieldValue, records[i].expectedFieldValue, 'Unexpected field value returned: ' +
+                                                                                                              JSON.stringify(fieldValue) + ', ' + JSON.stringify(records[i].expectedFieldValue));
+                                              }
+                                          });
+                                      }
+                                      done();
+                                  }).catch(function(errorMsg) {
+                                               assert(false, 'unable to resolve all records: ' + JSON.stringify(errorMsg));
+                                               done();
+                                           });
                 });
             });
         });
@@ -183,32 +189,38 @@
             var expectedNullRecord = {id: fid, value: null, display: ''};
 
             return [
-                {message              : 'display current year date with all DD_MM_YYYY format flags',
+                {
+                    message           : 'display current year date with all DD_MM_YYYY format flags',
                     record            : currentYearInput,
                     format            : 'display',
                     expectedFieldValue: expectedCurrentYearRecord
                 },
-                {message              : 'raw current year date with all DD_MM_YYYY format flags',
+                {
+                    message           : 'raw current year date with all DD_MM_YYYY format flags',
                     record            : currentYearInput,
                     format            : 'raw',
                     expectedFieldValue: currentYearInput
                 },
-                {message              : 'display different year date with all DD_MM_YYYY format flags',
+                {
+                    message           : 'display different year date with all DD_MM_YYYY format flags',
                     record            : diffYearInput,
                     format            : 'display',
                     expectedFieldValue: expectedDiffYearRecord
                 },
-                {message              : 'raw different year date with all DD_MM_YYYY format flags',
+                {
+                    message           : 'raw different year date with all DD_MM_YYYY format flags',
                     record            : diffYearInput,
                     format            : 'raw',
                     expectedFieldValue: diffYearInput
                 },
-                {message              : 'display null date with all DD_MM_YYYY format flags',
+                {
+                    message           : 'display null date with all DD_MM_YYYY format flags',
                     record            : nullInput,
                     format            : 'display',
                     expectedFieldValue: expectedNullRecord
                 },
-                {message              : 'raw null date with all DD_MM_YYYY format flags',
+                {
+                    message           : 'raw null date with all DD_MM_YYYY format flags',
                     record            : nullInput,
                     format            : 'raw',
                     expectedFieldValue: nullInput
@@ -244,24 +256,24 @@
                     //When all the records have been fetched, assert the values match expectations
                     promise.all(fetchRecordPromises)
                             .then(function(results) {
-                                for (var i = 0; i < results.length; i++) {
-                                    var currentRecord = results[i];
-                                    if (results[i].record) {
-                                        currentRecord = results[i].record;
-                                    }
+                                      for (var i = 0; i < results.length; i++) {
+                                          var currentRecord = results[i];
+                                          if (results[i].record) {
+                                              currentRecord = results[i].record;
+                                          }
 
-                                    currentRecord.forEach(function(fieldValue) {
-                                        if (fieldValue.id === records[i].expectedFieldValue.id) {
-                                            assert.deepEqual(fieldValue, records[i].expectedFieldValue, 'Unexpected field value returned: ' +
-                                            JSON.stringify(fieldValue) + ', ' + JSON.stringify(records[i].expectedFieldValue));
-                                        }
-                                    });
-                                }
-                                done();
-                            }).catch(function(errorMsg) {
-                                assert(false, 'unable to resolve all records: ' + JSON.stringify(errorMsg));
-                                done();
-                            });
+                                          currentRecord.forEach(function(fieldValue) {
+                                              if (fieldValue.id === records[i].expectedFieldValue.id) {
+                                                  assert.deepEqual(fieldValue, records[i].expectedFieldValue, 'Unexpected field value returned: ' +
+                                                                                                              JSON.stringify(fieldValue) + ', ' + JSON.stringify(records[i].expectedFieldValue));
+                                              }
+                                          });
+                                      }
+                                      done();
+                                  }).catch(function(errorMsg) {
+                                               assert(false, 'unable to resolve all records: ' + JSON.stringify(errorMsg));
+                                               done();
+                                           });
                 });
             });
         });
@@ -284,32 +296,38 @@
             var expectedNullRecord = {id: fid, value: null, display: ''};
 
             return [
-                {message              : 'display current year date with all MM_DD_YYYY format flags',
+                {
+                    message           : 'display current year date with all MM_DD_YYYY format flags',
                     record            : currentYearInput,
                     format            : 'display',
                     expectedFieldValue: expectedCurrentYearRecord
                 },
-                {message              : 'raw current year date with all MM_DD_YYYY format flags',
+                {
+                    message           : 'raw current year date with all MM_DD_YYYY format flags',
                     record            : currentYearInput,
                     format            : 'raw',
                     expectedFieldValue: currentYearInput
                 },
-                {message              : 'display different year date with all MM_DD_YYYY format flags',
+                {
+                    message           : 'display different year date with all MM_DD_YYYY format flags',
                     record            : diffYearInput,
                     format            : 'display',
                     expectedFieldValue: expectedDiffYearRecord
                 },
-                {message              : 'raw different year date with all MM_DD_YYYY format flags',
+                {
+                    message           : 'raw different year date with all MM_DD_YYYY format flags',
                     record            : diffYearInput,
                     format            : 'raw',
                     expectedFieldValue: diffYearInput
                 },
-                {message              : 'display null date with all MM_DD_YYYY format flags',
+                {
+                    message           : 'display null date with all MM_DD_YYYY format flags',
                     record            : nullInput,
                     format            : 'display',
                     expectedFieldValue: expectedNullRecord
                 },
-                {message              : 'raw null date with all MM_DD_YYYY format flags',
+                {
+                    message           : 'raw null date with all MM_DD_YYYY format flags',
                     record            : nullInput,
                     format            : 'raw',
                     expectedFieldValue: nullInput
@@ -345,24 +363,24 @@
                     //When all the records have been fetched, assert the values match expectations
                     promise.all(fetchRecordPromises)
                             .then(function(results) {
-                                for (var i = 0; i < results.length; i++) {
-                                    var currentRecord = results[i];
-                                    if (results[i].record) {
-                                        currentRecord = results[i].record;
-                                    }
+                                      for (var i = 0; i < results.length; i++) {
+                                          var currentRecord = results[i];
+                                          if (results[i].record) {
+                                              currentRecord = results[i].record;
+                                          }
 
-                                    currentRecord.forEach(function(fieldValue) {
-                                        if (fieldValue.id === records[i].expectedFieldValue.id) {
-                                            assert.deepEqual(fieldValue, records[i].expectedFieldValue, 'Unexpected field value returned: ' +
-                                            JSON.stringify(fieldValue) + ', ' + JSON.stringify(records[i].expectedFieldValue));
-                                        }
-                                    });
-                                }
-                                done();
-                            }).catch(function(errorMsg) {
-                                assert(false, 'unable to resolve all records: ' + JSON.stringify(errorMsg));
-                                done();
-                            });
+                                          currentRecord.forEach(function(fieldValue) {
+                                              if (fieldValue.id === records[i].expectedFieldValue.id) {
+                                                  assert.deepEqual(fieldValue, records[i].expectedFieldValue, 'Unexpected field value returned: ' +
+                                                                                                              JSON.stringify(fieldValue) + ', ' + JSON.stringify(records[i].expectedFieldValue));
+                                              }
+                                          });
+                                      }
+                                      done();
+                                  }).catch(function(errorMsg) {
+                                               assert(false, 'unable to resolve all records: ' + JSON.stringify(errorMsg));
+                                               done();
+                                           });
                 });
             });
         });
@@ -385,32 +403,38 @@
             var expectedNullRecord = {id: fid, value: null, display: ''};
 
             return [
-                {message              : 'display current year date with all MM_DD_YY format flags',
+                {
+                    message           : 'display current year date with all MM_DD_YY format flags',
                     record            : currentYearInput,
                     format            : 'display',
                     expectedFieldValue: expectedCurrentYearRecord
                 },
-                {message              : 'raw current year date with all MM_DD_YY format flags',
+                {
+                    message           : 'raw current year date with all MM_DD_YY format flags',
                     record            : currentYearInput,
                     format            : 'raw',
                     expectedFieldValue: currentYearInput
                 },
-                {message              : 'display different year date with all MM_DD_YY format flags',
+                {
+                    message           : 'display different year date with all MM_DD_YY format flags',
                     record            : diffYearInput,
                     format            : 'display',
                     expectedFieldValue: expectedDiffYearRecord
                 },
-                {message              : 'raw different year date with all MM_DD_YY format flags',
+                {
+                    message           : 'raw different year date with all MM_DD_YY format flags',
                     record            : diffYearInput,
                     format            : 'raw',
                     expectedFieldValue: diffYearInput
                 },
-                {message              : 'display null date with all MM_DD_YY format flags',
+                {
+                    message           : 'display null date with all MM_DD_YY format flags',
                     record            : nullInput,
                     format            : 'display',
                     expectedFieldValue: expectedNullRecord
                 },
-                {message              : 'raw null date with all MM_DD_YY format flags',
+                {
+                    message           : 'raw null date with all MM_DD_YY format flags',
                     record            : nullInput,
                     format            : 'raw',
                     expectedFieldValue: nullInput
@@ -446,24 +470,24 @@
                     //When all the records have been fetched, assert the values match expectations
                     promise.all(fetchRecordPromises)
                             .then(function(results) {
-                                for (var i = 0; i < results.length; i++) {
-                                    var currentRecord = results[i];
-                                    if (results[i].record) {
-                                        currentRecord = results[i].record;
-                                    }
+                                      for (var i = 0; i < results.length; i++) {
+                                          var currentRecord = results[i];
+                                          if (results[i].record) {
+                                              currentRecord = results[i].record;
+                                          }
 
-                                    currentRecord.forEach(function(fieldValue) {
-                                        if (fieldValue.id === records[i].expectedFieldValue.id) {
-                                            assert.deepEqual(fieldValue, records[i].expectedFieldValue, 'Unexpected field value returned: ' +
-                                            JSON.stringify(fieldValue) + ', ' + JSON.stringify(records[i].expectedFieldValue));
-                                        }
-                                    });
-                                }
-                                done();
-                            }).catch(function(errorMsg) {
-                                assert(false, 'unable to resolve all records: ' + JSON.stringify(errorMsg));
-                                done();
-                            });
+                                          currentRecord.forEach(function(fieldValue) {
+                                              if (fieldValue.id === records[i].expectedFieldValue.id) {
+                                                  assert.deepEqual(fieldValue, records[i].expectedFieldValue, 'Unexpected field value returned: ' +
+                                                                                                              JSON.stringify(fieldValue) + ', ' + JSON.stringify(records[i].expectedFieldValue));
+                                              }
+                                          });
+                                      }
+                                      done();
+                                  }).catch(function(errorMsg) {
+                                               assert(false, 'unable to resolve all records: ' + JSON.stringify(errorMsg));
+                                               done();
+                                           });
                 });
             });
         });
@@ -486,32 +510,38 @@
             var expectedNullRecord = {id: fid, value: null, display: ''};
 
             return [
-                {message              : 'display current year date with all DD_MM_YY format flags',
+                {
+                    message           : 'display current year date with all DD_MM_YY format flags',
                     record            : currentYearInput,
                     format            : 'display',
                     expectedFieldValue: expectedCurrentYearRecord
                 },
-                {message              : 'raw current year date with all DD_MM_YY format flags',
+                {
+                    message           : 'raw current year date with all DD_MM_YY format flags',
                     record            : currentYearInput,
                     format            : 'raw',
                     expectedFieldValue: currentYearInput
                 },
-                {message              : 'display different year date with all DD_MM_YY format flags',
+                {
+                    message           : 'display different year date with all DD_MM_YY format flags',
                     record            : diffYearInput,
                     format            : 'display',
                     expectedFieldValue: expectedDiffYearRecord
                 },
-                {message              : 'raw different year date with all DD_MM_YY format flags',
+                {
+                    message           : 'raw different year date with all DD_MM_YY format flags',
                     record            : diffYearInput,
                     format            : 'raw',
                     expectedFieldValue: diffYearInput
                 },
-                {message              : 'display null date with all DD_MM_YY format flags',
+                {
+                    message           : 'display null date with all DD_MM_YY format flags',
                     record            : nullInput,
                     format            : 'display',
                     expectedFieldValue: expectedNullRecord
                 },
-                {message              : 'raw null date with all DD_MM_YY format flags',
+                {
+                    message           : 'raw null date with all DD_MM_YY format flags',
                     record            : nullInput,
                     format            : 'raw',
                     expectedFieldValue: nullInput
@@ -547,24 +577,24 @@
                     //When all the records have been fetched, assert the values match expectations
                     promise.all(fetchRecordPromises)
                             .then(function(results) {
-                                for (var i = 0; i < results.length; i++) {
-                                    var currentRecord = results[i];
-                                    if (results[i].record) {
-                                        currentRecord = results[i].record;
-                                    }
+                                      for (var i = 0; i < results.length; i++) {
+                                          var currentRecord = results[i];
+                                          if (results[i].record) {
+                                              currentRecord = results[i].record;
+                                          }
 
-                                    currentRecord.forEach(function(fieldValue) {
-                                        if (fieldValue.id === records[i].expectedFieldValue.id) {
-                                            assert.deepEqual(fieldValue, records[i].expectedFieldValue, 'Unexpected field value returned: ' +
-                                            JSON.stringify(fieldValue) + ', ' + JSON.stringify(records[i].expectedFieldValue));
-                                        }
-                                    });
-                                }
-                                done();
-                            }).catch(function(errorMsg) {
-                                assert(false, 'unable to resolve all records: ' + JSON.stringify(errorMsg));
-                                done();
-                            });
+                                          currentRecord.forEach(function(fieldValue) {
+                                              if (fieldValue.id === records[i].expectedFieldValue.id) {
+                                                  assert.deepEqual(fieldValue, records[i].expectedFieldValue, 'Unexpected field value returned: ' +
+                                                                                                              JSON.stringify(fieldValue) + ', ' + JSON.stringify(records[i].expectedFieldValue));
+                                              }
+                                          });
+                                      }
+                                      done();
+                                  }).catch(function(errorMsg) {
+                                               assert(false, 'unable to resolve all records: ' + JSON.stringify(errorMsg));
+                                               done();
+                                           });
                 });
             });
         });
@@ -587,32 +617,38 @@
             var expectedNullRecord = {id: fid, value: null, display: ''};
 
             return [
-                {message              : 'display current year date with all YYYY_MM_DD_MM_YY format flags',
+                {
+                    message           : 'display current year date with all YYYY_MM_DD_MM_YY format flags',
                     record            : currentYearInput,
                     format            : 'display',
                     expectedFieldValue: expectedCurrentYearRecord
                 },
-                {message              : 'raw current year date with all YYYY_MM_DD_MM_YY format flags',
+                {
+                    message           : 'raw current year date with all YYYY_MM_DD_MM_YY format flags',
                     record            : currentYearInput,
                     format            : 'raw',
                     expectedFieldValue: currentYearInput
                 },
-                {message              : 'display different year date with all YYYY_MM_DD_MM_YY format flags',
+                {
+                    message           : 'display different year date with all YYYY_MM_DD_MM_YY format flags',
                     record            : diffYearInput,
                     format            : 'display',
                     expectedFieldValue: expectedDiffYearRecord
                 },
-                {message              : 'raw different year date with all YYYY_MM_DD_MM_YY format flags',
+                {
+                    message           : 'raw different year date with all YYYY_MM_DD_MM_YY format flags',
                     record            : diffYearInput,
                     format            : 'raw',
                     expectedFieldValue: diffYearInput
                 },
-                {message              : 'display null date with all YYYY_MM_DD_MM_YY format flags',
+                {
+                    message           : 'display null date with all YYYY_MM_DD_MM_YY format flags',
                     record            : nullInput,
                     format            : 'display',
                     expectedFieldValue: expectedNullRecord
                 },
-                {message              : 'raw null date with all YYYY_MM_DD_MM_YY format flags',
+                {
+                    message           : 'raw null date with all YYYY_MM_DD_MM_YY format flags',
                     record            : nullInput,
                     format            : 'raw',
                     expectedFieldValue: nullInput
@@ -648,24 +684,24 @@
                     //When all the records have been fetched, assert the values match expectations
                     promise.all(fetchRecordPromises)
                             .then(function(results) {
-                                for (var i = 0; i < results.length; i++) {
-                                    var currentRecord = results[i];
-                                    if (results[i].record) {
-                                        currentRecord = results[i].record;
-                                    }
+                                      for (var i = 0; i < results.length; i++) {
+                                          var currentRecord = results[i];
+                                          if (results[i].record) {
+                                              currentRecord = results[i].record;
+                                          }
 
-                                    currentRecord.forEach(function(fieldValue) {
-                                        if (fieldValue.id === records[i].expectedFieldValue.id) {
-                                            assert.deepEqual(fieldValue, records[i].expectedFieldValue, 'Unexpected field value returned: ' +
-                                            JSON.stringify(fieldValue) + ', ' + JSON.stringify(records[i].expectedFieldValue));
-                                        }
-                                    });
-                                }
-                                done();
-                            }).catch(function(errorMsg) {
-                                assert(false, 'unable to resolve all records: ' + JSON.stringify(errorMsg));
-                                done();
-                            });
+                                          currentRecord.forEach(function(fieldValue) {
+                                              if (fieldValue.id === records[i].expectedFieldValue.id) {
+                                                  assert.deepEqual(fieldValue, records[i].expectedFieldValue, 'Unexpected field value returned: ' +
+                                                                                                              JSON.stringify(fieldValue) + ', ' + JSON.stringify(records[i].expectedFieldValue));
+                                              }
+                                          });
+                                      }
+                                      done();
+                                  }).catch(function(errorMsg) {
+                                               assert(false, 'unable to resolve all records: ' + JSON.stringify(errorMsg));
+                                               done();
+                                           });
                 });
             });
         });

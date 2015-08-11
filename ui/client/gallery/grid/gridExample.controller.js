@@ -3,10 +3,10 @@
 
     //get the module
     angular
-        .module('gallery.gridExample')
+            .module('gallery.gridExample')
 
         // instantiate the controller
-        .controller('GridExampleController', GridExampleController);
+            .controller('GridExampleController', GridExampleController);
 
     // inject what it needs
     GridExampleController.$inject = ['$scope', 'gridData', '$q'];
@@ -30,12 +30,12 @@
             }
 
             promise.then(
-                function(data) {
-                    return deferred.resolve(data);
-                },
-                function(resp) {
-                    return deferred.reject(resp);
-                }
+                    function(data) {
+                        return deferred.resolve(data);
+                    },
+                    function(resp) {
+                        return deferred.reject(resp);
+                    }
             );
 
             return deferred.promise;

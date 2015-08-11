@@ -35,38 +35,41 @@ describe('Email address record formatter unit test', function() {
         var firstName = generateRandomString(100);
         var lastName = generateRandomString(100);
         var fullName = firstName + '_' + lastName;
-        var maxEmail =  fullName + domain;
+        var maxEmail = fullName + domain;
 
         /**
          * FieldInfo and expectations for flag: no flags
          */
         var fieldInfo_NoFlags = [{
-            id: 7,
-            name: 'email',
-            datatypeAttributes:{
-                type: 'EMAIL_ADDRESS',
-                clientSideAttributes: {
-                }
+            id                : 7,
+            name              : 'email',
+            datatypeAttributes: {
+                type                : 'EMAIL_ADDRESS',
+                clientSideAttributes: {}
             },
-            type: 'SCALAR'
+            type              : 'SCALAR'
         }];
 
         // Various email address inputs
-        var inputEmailRecord =  [[{
-            id: 7,
-            value: fullEmail}]];
+        var inputEmailRecord = [[{
+            id   : 7,
+            value: fullEmail
+        }]];
         var expectedEmail_NoFlags = [[{
-            id: 7,
-            value: fullEmail,
-            display: fullEmail}]];
+            id     : 7,
+            value  : fullEmail,
+            display: fullEmail
+        }]];
 
-        var maxEmailRecord =  [[{
-            id: 7,
-            value: maxEmail}]];
+        var maxEmailRecord = [[{
+            id   : 7,
+            value: maxEmail
+        }]];
         var expectedMaxEmail_NoFlags = [[{
-            id: 7,
-            value: maxEmail,
-            display: maxEmail}]];
+            id     : 7,
+            value  : maxEmail,
+            display: maxEmail
+        }]];
 
         /**
          * FieldInfo and expectations for flag: entire email flag
@@ -131,24 +134,24 @@ describe('Email address record formatter unit test', function() {
 
         var cases = [
             // Standard email
-            { message: 'Email - standard email with no flags', records: inputEmailRecord, fieldInfo: fieldInfo_NoFlags, expectedRecords: expectedEmail_NoFlags },
-            { message: 'Email - standard email with "entire email" flag', records: inputEmailRecord, fieldInfo: fieldInfo_EntireEmail, expectedRecords: expectedEmail_EntireEmailFlag },
-            { message: 'Email - standard email with "before @" flag', records: inputEmailRecord, fieldInfo: fieldInfo_BeforeAtSign, expectedRecords: expectedEmail_BeforeAtSignFlag },
-            { message: 'Email - standard email with "before _" flag', records: inputEmailRecord, fieldInfo: fieldInfo_BeforeUnderscore, expectedRecords: expectedEmail_BeforeUnderscoreFlag },
-            { message: 'Email - standard email with link text flag', records: inputEmailRecord, fieldInfo: fieldInfo_LinkText, expectedRecords: expectedEmail_LinkTextFlag },
-            { message: 'Email - standard email with all flags', records: inputEmailRecord, fieldInfo: fieldInfo_AllFlags, expectedRecords: expectedEmail_AllFlags },
+            {message: 'Email - standard email with no flags', records: inputEmailRecord, fieldInfo: fieldInfo_NoFlags, expectedRecords: expectedEmail_NoFlags},
+            {message: 'Email - standard email with "entire email" flag', records: inputEmailRecord, fieldInfo: fieldInfo_EntireEmail, expectedRecords: expectedEmail_EntireEmailFlag},
+            {message: 'Email - standard email with "before @" flag', records: inputEmailRecord, fieldInfo: fieldInfo_BeforeAtSign, expectedRecords: expectedEmail_BeforeAtSignFlag},
+            {message: 'Email - standard email with "before _" flag', records: inputEmailRecord, fieldInfo: fieldInfo_BeforeUnderscore, expectedRecords: expectedEmail_BeforeUnderscoreFlag},
+            {message: 'Email - standard email with link text flag', records: inputEmailRecord, fieldInfo: fieldInfo_LinkText, expectedRecords: expectedEmail_LinkTextFlag},
+            {message: 'Email - standard email with all flags', records: inputEmailRecord, fieldInfo: fieldInfo_AllFlags, expectedRecords: expectedEmail_AllFlags},
 
             // Maximum valid email
-            { message: 'Email - maximum email with no flags', records: maxEmailRecord, fieldInfo: fieldInfo_NoFlags, expectedRecords: expectedMaxEmail_NoFlags },
-            { message: 'Email - maximum email with "entire email" flag', records: maxEmailRecord, fieldInfo: fieldInfo_EntireEmail, expectedRecords: expectedMaxEmail_EntireEmailFlag },
-            { message: 'Email - maximum email with "before @" flag', records: maxEmailRecord, fieldInfo: fieldInfo_BeforeAtSign, expectedRecords: expectedMaxEmail_BeforeAtSignFlag },
-            { message: 'Email - maximum email with "before _" flag', records: maxEmailRecord, fieldInfo: fieldInfo_BeforeUnderscore, expectedRecords: expectedMaxEmail_BeforeUnderscoreFlag },
-            { message: 'Email - maximum email with link text flag', records: maxEmailRecord, fieldInfo: fieldInfo_LinkText, expectedRecords: expectedMaxEmail_LinkTextFlag },
-            { message: 'Email - maximum email with all flags', records: maxEmailRecord, fieldInfo: fieldInfo_AllFlags, expectedRecords: expectedMaxEmail_AllFlags },
+            {message: 'Email - maximum email with no flags', records: maxEmailRecord, fieldInfo: fieldInfo_NoFlags, expectedRecords: expectedMaxEmail_NoFlags},
+            {message: 'Email - maximum email with "entire email" flag', records: maxEmailRecord, fieldInfo: fieldInfo_EntireEmail, expectedRecords: expectedMaxEmail_EntireEmailFlag},
+            {message: 'Email - maximum email with "before @" flag', records: maxEmailRecord, fieldInfo: fieldInfo_BeforeAtSign, expectedRecords: expectedMaxEmail_BeforeAtSignFlag},
+            {message: 'Email - maximum email with "before _" flag', records: maxEmailRecord, fieldInfo: fieldInfo_BeforeUnderscore, expectedRecords: expectedMaxEmail_BeforeUnderscoreFlag},
+            {message: 'Email - maximum email with link text flag', records: maxEmailRecord, fieldInfo: fieldInfo_LinkText, expectedRecords: expectedMaxEmail_LinkTextFlag},
+            {message: 'Email - maximum email with all flags', records: maxEmailRecord, fieldInfo: fieldInfo_AllFlags, expectedRecords: expectedMaxEmail_AllFlags},
 
 
-            { message: 'Email - null -> empty string', records: recordsNull, fieldInfo: fieldInfo_NoFlags, expectedRecords: expectedNull },
-            { message: 'Email - empty string -> empty string', records: recordsEmpty, fieldInfo: fieldInfo_NoFlags, expectedRecords: expectedEmpty }
+            {message: 'Email - null -> empty string', records: recordsNull, fieldInfo: fieldInfo_NoFlags, expectedRecords: expectedNull},
+            {message: 'Email - empty string -> empty string', records: recordsEmpty, fieldInfo: fieldInfo_NoFlags, expectedRecords: expectedEmpty}
         ];
 
         return cases;

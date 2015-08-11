@@ -7,7 +7,7 @@
     var testConsts = require('./api.test.constants');
     var promise = require('bluebird');
 
-//jshint loopfunc: true
+    //jshint loopfunc: true
 
     /*
      * We can't use JSON.parse() with records because it is possible to lose decimal precision as a
@@ -77,8 +77,8 @@
             // Default duration
             var durationInput = '[{id: ' + fid + ', value: ' + duration + '}]';
             var durationExpectedDisplay = new bigDecimal.BigDecimal(duration).divide(MILLIS_PER_WEEK,
-                            DEFAULT_DECIMAL_PLACES,
-                            bigDecimal.RoundingMode.HALF_UP()).stripTrailingZeros().toString() + ' weeks';
+                                                                                     DEFAULT_DECIMAL_PLACES,
+                                                                                     bigDecimal.RoundingMode.HALF_UP()).stripTrailingZeros().toString() + ' weeks';
             var expectedDurationRecord = '{id: ' + fid + ', value: ' + duration + ', display: "' + durationExpectedDisplay + '"}';
 
             // Null number
@@ -88,54 +88,62 @@
             // Max number
             var maxInput = '[{id: ' + fid + ', value: ' + durationMax + '}]';
             var maxExpectedDisplay = new bigDecimal.BigDecimal(durationMax).divide(MILLIS_PER_WEEK,
-                            DEFAULT_DECIMAL_PLACES,
-                            bigDecimal.RoundingMode.HALF_UP()).stripTrailingZeros().toString() + ' weeks';
+                                                                                   DEFAULT_DECIMAL_PLACES,
+                                                                                   bigDecimal.RoundingMode.HALF_UP()).stripTrailingZeros().toString() + ' weeks';
             var expectedMaxRecord = '{id: ' + fid + ', value: ' + durationMax + ', display: "' + maxExpectedDisplay + '"}';
 
             // Min number
             var minInput = '[{id: ' + fid + ', value:' + durationMin + '}]';
             var minExpectedDisplay = new bigDecimal.BigDecimal(durationMin).divide(MILLIS_PER_WEEK,
-                            DEFAULT_DECIMAL_PLACES,
-                            bigDecimal.RoundingMode.HALF_UP()).stripTrailingZeros().toString() + ' weeks';
+                                                                                   DEFAULT_DECIMAL_PLACES,
+                                                                                   bigDecimal.RoundingMode.HALF_UP()).stripTrailingZeros().toString() + ' weeks';
             var expectedMinRecord = '{id: ' + fid + ', value: ' + durationMin + ', display: "' + minExpectedDisplay + '"}';
 
             return [
-                {message              : 'display duration with no format flags',
+                {
+                    message           : 'display duration with no format flags',
                     record            : durationInput,
                     format            : 'display',
                     expectedFieldValue: expectedDurationRecord
                 },
-                {message              : 'raw duration with no format flags',
+                {
+                    message           : 'raw duration with no format flags',
                     record            : durationInput,
                     format            : 'raw',
                     expectedFieldValue: durationInput
                 },
-                {message              : 'display max duration with no format flags',
+                {
+                    message           : 'display max duration with no format flags',
                     record            : maxInput,
                     format            : 'display',
                     expectedFieldValue: expectedMaxRecord
                 },
-                {message              : 'raw max duration with no format flags',
+                {
+                    message           : 'raw max duration with no format flags',
                     record            : maxInput,
                     format            : 'raw',
                     expectedFieldValue: maxInput
                 },
-                {message              : 'display min duration with no format flags',
+                {
+                    message           : 'display min duration with no format flags',
                     record            : minInput,
                     format            : 'display',
                     expectedFieldValue: expectedMinRecord
                 },
-                {message              : 'raw min duration with no format flags',
+                {
+                    message           : 'raw min duration with no format flags',
                     record            : minInput,
                     format            : 'raw',
                     expectedFieldValue: minInput
                 },
-                {message              : 'display null duration with no format flags',
+                {
+                    message           : 'display null duration with no format flags',
                     record            : nullInput,
                     format            : 'display',
                     expectedFieldValue: expectedNullRecord
                 },
-                {message              : 'raw null duration with no format flags',
+                {
+                    message           : 'raw null duration with no format flags',
                     record            : nullInput,
                     format            : 'raw',
                     expectedFieldValue: nullInput
@@ -171,24 +179,24 @@
                     //When all the records have been fetched, assert the values match expectations
                     promise.all(fetchRecordPromises)
                             .then(function(results) {
-                                for (var i = 0; i < results.length; i++) {
-                                    var currentRecord = results[i];
-                                    if (results[i].record) {
-                                        currentRecord = results[i].record;
-                                    }
+                                      for (var i = 0; i < results.length; i++) {
+                                          var currentRecord = results[i];
+                                          if (results[i].record) {
+                                              currentRecord = results[i].record;
+                                          }
 
-                                    currentRecord.forEach(function(fieldValue) {
-                                        if (fieldValue.id === records[i].expectedFieldValue.id) {
-                                            assert.deepEqual(fieldValue, records[i].expectedFieldValue, 'Unexpected field value returned: ' +
-                                            JSON.stringify(fieldValue) + ', ' + JSON.stringify(records[i].expectedFieldValue));
-                                        }
-                                    });
-                                }
-                                done();
-                            }).catch(function(errorMsg) {
-                                assert(false, 'unable to resolve all records: ' + JSON.stringify(errorMsg));
-                                done();
-                            });
+                                          currentRecord.forEach(function(fieldValue) {
+                                              if (fieldValue.id === records[i].expectedFieldValue.id) {
+                                                  assert.deepEqual(fieldValue, records[i].expectedFieldValue, 'Unexpected field value returned: ' +
+                                                                                                              JSON.stringify(fieldValue) + ', ' + JSON.stringify(records[i].expectedFieldValue));
+                                              }
+                                          });
+                                      }
+                                      done();
+                                  }).catch(function(errorMsg) {
+                                               assert(false, 'unable to resolve all records: ' + JSON.stringify(errorMsg));
+                                               done();
+                                           });
                 });
             });
         });
@@ -200,8 +208,8 @@
             // Default duration
             var durationInput = '[{id: ' + fid + ', value: ' + duration + '}]';
             var durationExpectedDisplay = new bigDecimal.BigDecimal(duration).divide(MILLIS_PER_DAY,
-                            DEFAULT_DECIMAL_PLACES,
-                            bigDecimal.RoundingMode.HALF_UP()).stripTrailingZeros().toString() + ' weeks';
+                                                                                     DEFAULT_DECIMAL_PLACES,
+                                                                                     bigDecimal.RoundingMode.HALF_UP()).stripTrailingZeros().toString() + ' weeks';
             var expectedDurationRecord = '{id: ' + fid + ', value: ' + duration + ', display: "' + durationExpectedDisplay + '"}';
 
             // Null number
@@ -211,54 +219,62 @@
             // Max number
             var maxInput = '[{id: ' + fid + ', value: ' + durationMax + '}]';
             var maxExpectedDisplay = new bigDecimal.BigDecimal(durationMax).divide(MILLIS_PER_DAY,
-                            ALL_FLAGS_DECIMAL_PLACES,
-                            bigDecimal.RoundingMode.HALF_UP()).stripTrailingZeros().toString() + ' days';
+                                                                                   ALL_FLAGS_DECIMAL_PLACES,
+                                                                                   bigDecimal.RoundingMode.HALF_UP()).stripTrailingZeros().toString() + ' days';
             var expectedMaxRecord = '{id: ' + fid + ', value: ' + durationMax + ', display: "' + maxExpectedDisplay + '"}';
 
             // Min number
             var minInput = '[{id: ' + fid + ', value:' + durationMin + '}]';
             var minExpectedDisplay = new bigDecimal.BigDecimal(durationMin).divide(MILLIS_PER_DAY,
-                            ALL_FLAGS_DECIMAL_PLACES,
-                            bigDecimal.RoundingMode.HALF_UP()).stripTrailingZeros().toString() + ' days';
+                                                                                   ALL_FLAGS_DECIMAL_PLACES,
+                                                                                   bigDecimal.RoundingMode.HALF_UP()).stripTrailingZeros().toString() + ' days';
             var expectedMinRecord = '{id: ' + fid + ', value: ' + durationMin + ', display: "' + minExpectedDisplay + '"}';
 
             return [
-                {message              : 'display duration with all format flags',
+                {
+                    message           : 'display duration with all format flags',
                     record            : durationInput,
                     format            : 'display',
                     expectedFieldValue: expectedDurationRecord
                 },
-                {message              : 'raw duration with all format flags',
+                {
+                    message           : 'raw duration with all format flags',
                     record            : durationInput,
                     format            : 'raw',
                     expectedFieldValue: durationInput
                 },
-                {message              : 'display max duration with all format flags',
+                {
+                    message           : 'display max duration with all format flags',
                     record            : maxInput,
                     format            : 'display',
                     expectedFieldValue: expectedMaxRecord
                 },
-                {message              : 'raw max duration with all format flags',
+                {
+                    message           : 'raw max duration with all format flags',
                     record            : maxInput,
                     format            : 'raw',
                     expectedFieldValue: maxInput
                 },
-                {message              : 'display min duration with all format flags',
+                {
+                    message           : 'display min duration with all format flags',
                     record            : minInput,
                     format            : 'display',
                     expectedFieldValue: expectedMinRecord
                 },
-                {message              : 'raw min duration with all format flags',
+                {
+                    message           : 'raw min duration with all format flags',
                     record            : minInput,
                     format            : 'raw',
                     expectedFieldValue: minInput
                 },
-                {message              : 'display null duration with all format flags',
+                {
+                    message           : 'display null duration with all format flags',
                     record            : nullInput,
                     format            : 'display',
                     expectedFieldValue: expectedNullRecord
                 },
-                {message              : 'raw null duration with all format flags',
+                {
+                    message           : 'raw null duration with all format flags',
                     record            : nullInput,
                     format            : 'raw',
                     expectedFieldValue: nullInput
@@ -294,24 +310,24 @@
                     //When all the records have been fetched, assert the values match expectations
                     promise.all(fetchRecordPromises)
                             .then(function(results) {
-                                for (var i = 0; i < results.length; i++) {
-                                    var currentRecord = results[i];
-                                    if (results[i].record) {
-                                        currentRecord = results[i].record;
-                                    }
+                                      for (var i = 0; i < results.length; i++) {
+                                          var currentRecord = results[i];
+                                          if (results[i].record) {
+                                              currentRecord = results[i].record;
+                                          }
 
-                                    currentRecord.forEach(function(fieldValue) {
-                                        if (fieldValue.id === records[i].expectedFieldValue.id) {
-                                            assert.deepEqual(fieldValue, records[i].expectedFieldValue, 'Unexpected field value returned: ' +
-                                            JSON.stringify(fieldValue) + ', ' + JSON.stringify(records[i].expectedFieldValue));
-                                        }
-                                    });
-                                }
-                                done();
-                            }).catch(function(errorMsg) {
-                                assert(false, 'unable to resolve all records: ' + JSON.stringify(errorMsg));
-                                done();
-                            });
+                                          currentRecord.forEach(function(fieldValue) {
+                                              if (fieldValue.id === records[i].expectedFieldValue.id) {
+                                                  assert.deepEqual(fieldValue, records[i].expectedFieldValue, 'Unexpected field value returned: ' +
+                                                                                                              JSON.stringify(fieldValue) + ', ' + JSON.stringify(records[i].expectedFieldValue));
+                                              }
+                                          });
+                                      }
+                                      done();
+                                  }).catch(function(errorMsg) {
+                                               assert(false, 'unable to resolve all records: ' + JSON.stringify(errorMsg));
+                                               done();
+                                           });
                 });
             });
         });

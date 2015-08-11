@@ -46,8 +46,8 @@
         var answer = false;
         var sslCfg = this.SSL_KEY;
         if (sslCfg &&
-                sslCfg.private && sslCfg.private.length &&
-                sslCfg.cert && sslCfg.cert.length) {
+            sslCfg.private && sslCfg.private.length &&
+            sslCfg.cert && sslCfg.cert.length) {
             answer = true;
         }
         return answer;

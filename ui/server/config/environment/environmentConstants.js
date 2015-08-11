@@ -4,12 +4,12 @@
 (function() {
     'use strict';
     module.exports = Object.freeze({
-        PRODUCTION: 'PRODUCTION',
-        PRE_PROD: 'PRE_PROD',
+        PRODUCTION : 'PRODUCTION',
+        PRE_PROD   : 'PRE_PROD',
         INTEGRATION: 'INTEGRATION',
         DEVELOPMENT: 'DEVELOPMENT',
-        TEST: 'TEST',
-        LOCAL: 'LOCAL'
+        TEST       : 'TEST',
+        LOCAL      : 'LOCAL'
     });
 
 }());

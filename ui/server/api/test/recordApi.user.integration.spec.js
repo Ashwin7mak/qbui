@@ -8,7 +8,7 @@
     require('should');
     var promise = require('bluebird');
 
-//jshint loopfunc: true
+    //jshint loopfunc: true
 
     /**
      * Integration test for User field formatting
@@ -96,42 +96,46 @@
             var deferred = promise.pending();
             recordBase.apiBase.createSpecificUser(user)
                     .then(function(userResponse) {
-                        userId = JSON.parse(userResponse.body).id;
-                        retUser.id = userId;
-                        // User
-                        var userInput = [{id: fid, value: userId}];
-                        var expectedUserRecord = {id: fid, value: retUser, display: firstThenLast};
+                              userId = JSON.parse(userResponse.body).id;
+                              retUser.id = userId;
+                              // User
+                              var userInput = [{id: fid, value: userId}];
+                              var expectedUserRecord = {id: fid, value: retUser, display: firstThenLast};
 
-                        // Null User
-                        var nullInput = [{id: fid, value: null}];
-                        var expectedNullRecord = {id: fid, value: null, display: ''};
+                              // Null User
+                              var nullInput = [{id: fid, value: null}];
+                              var expectedNullRecord = {id: fid, value: null, display: ''};
 
-                        deferred.resolve([
-                            {message              : 'display user with no format flags',
-                                record            : userInput,
-                                format            : 'display',
-                                expectedFieldValue: expectedUserRecord
-                            },
-                            {message              : 'raw user with no format flags',
-                                record            : userInput,
-                                format            : 'raw',
-                                expectedFieldValue: userInput
-                            },
-                            {message              : 'display null user with no format flags',
-                                record            : nullInput,
-                                format            : 'display',
-                                expectedFieldValue: expectedNullRecord
-                            },
-                            {message              : 'raw null user with no format flags',
-                                record            : nullInput,
-                                format            : 'raw',
-                                expectedFieldValue: nullInput
-                            }
-                        ]);
-                    }).catch(function(userError) {
-                        deferred.reject(userError);
-                        assert(false, 'failed to create user: ' + JSON.stringify(userError));
-                    });
+                              deferred.resolve([
+                                  {
+                                      message           : 'display user with no format flags',
+                                      record            : userInput,
+                                      format            : 'display',
+                                      expectedFieldValue: expectedUserRecord
+                                  },
+                                  {
+                                      message           : 'raw user with no format flags',
+                                      record            : userInput,
+                                      format            : 'raw',
+                                      expectedFieldValue: userInput
+                                  },
+                                  {
+                                      message           : 'display null user with no format flags',
+                                      record            : nullInput,
+                                      format            : 'display',
+                                      expectedFieldValue: expectedNullRecord
+                                  },
+                                  {
+                                      message           : 'raw null user with no format flags',
+                                      record            : nullInput,
+                                      format            : 'raw',
+                                      expectedFieldValue: nullInput
+                                  }
+                              ]);
+                          }).catch(function(userError) {
+                                       deferred.reject(userError);
+                                       assert(false, 'failed to create user: ' + JSON.stringify(userError));
+                                   });
             return deferred.promise;
         }
 
@@ -160,24 +164,24 @@
                     //When all the records have been created and fetched, assert the values match expectations
                     promise.all(fetchRecordpromises)
                             .then(function(results) {
-                                for (var i = 0; i < results.length; i++) {
-                                    var currentRecord = results[i];
-                                    if (results[i].record) {
-                                        currentRecord = results[i].record;
-                                    }
+                                      for (var i = 0; i < results.length; i++) {
+                                          var currentRecord = results[i];
+                                          if (results[i].record) {
+                                              currentRecord = results[i].record;
+                                          }
 
-                                    currentRecord.forEach(function(fieldValue) {
-                                        if (fieldValue.id === records[i].expectedFieldValue.id) {
-                                            assert.deepEqual(fieldValue, records[i].expectedFieldValue, 'Unexpected field value returned: ' +
-                                            JSON.stringify(fieldValue) + ', ' + JSON.stringify(records[i].expectedFieldValue));
-                                        }
-                                    });
-                                }
-                                done();
-                            }).catch(function(errorMsg) {
-                                assert(false, 'unable to resolve all records: ' + JSON.stringify(errorMsg));
-                                done();
-                            });
+                                          currentRecord.forEach(function(fieldValue) {
+                                              if (fieldValue.id === records[i].expectedFieldValue.id) {
+                                                  assert.deepEqual(fieldValue, records[i].expectedFieldValue, 'Unexpected field value returned: ' +
+                                                                                                              JSON.stringify(fieldValue) + ', ' + JSON.stringify(records[i].expectedFieldValue));
+                                              }
+                                          });
+                                      }
+                                      done();
+                                  }).catch(function(errorMsg) {
+                                               assert(false, 'unable to resolve all records: ' + JSON.stringify(errorMsg));
+                                               done();
+                                           });
                 });
             });
         });
@@ -215,42 +219,46 @@
             var deferred = promise.pending();
             recordBase.apiBase.createSpecificUser(user)
                     .then(function(userResponse) {
-                        userId = JSON.parse(userResponse.body).id;
-                        retUser.id = userId;
-                        // User
-                        var userInput = [{id: fid, value: userId}];
-                        var expectedUserRecord = {id: fid, value: retUser, display: lastThenFirst};
+                              userId = JSON.parse(userResponse.body).id;
+                              retUser.id = userId;
+                              // User
+                              var userInput = [{id: fid, value: userId}];
+                              var expectedUserRecord = {id: fid, value: retUser, display: lastThenFirst};
 
-                        // Null User
-                        var nullInput = [{id: fid, value: null}];
-                        var expectedNullRecord = {id: fid, value: null, display: ''};
+                              // Null User
+                              var nullInput = [{id: fid, value: null}];
+                              var expectedNullRecord = {id: fid, value: null, display: ''};
 
-                        deferred.resolve([
-                            {message              : 'display user with all format flags',
-                                record            : userInput,
-                                format            : 'display',
-                                expectedFieldValue: expectedUserRecord
-                            },
-                            {message              : 'raw user with all format flags',
-                                record            : userInput,
-                                format            : 'raw',
-                                expectedFieldValue: userInput
-                            },
-                            {message              : 'display null user with all format flags',
-                                record            : nullInput,
-                                format            : 'display',
-                                expectedFieldValue: expectedNullRecord
-                            },
-                            {message              : 'raw null user with all format flags',
-                                record            : nullInput,
-                                format            : 'raw',
-                                expectedFieldValue: nullInput
-                            }
-                        ]);
-                    }).catch(function(userError) {
-                        deferred.reject(userError);
-                        assert(false, 'failed to create user: ' + JSON.stringify(userError));
-                    });
+                              deferred.resolve([
+                                  {
+                                      message           : 'display user with all format flags',
+                                      record            : userInput,
+                                      format            : 'display',
+                                      expectedFieldValue: expectedUserRecord
+                                  },
+                                  {
+                                      message           : 'raw user with all format flags',
+                                      record            : userInput,
+                                      format            : 'raw',
+                                      expectedFieldValue: userInput
+                                  },
+                                  {
+                                      message           : 'display null user with all format flags',
+                                      record            : nullInput,
+                                      format            : 'display',
+                                      expectedFieldValue: expectedNullRecord
+                                  },
+                                  {
+                                      message           : 'raw null user with all format flags',
+                                      record            : nullInput,
+                                      format            : 'raw',
+                                      expectedFieldValue: nullInput
+                                  }
+                              ]);
+                          }).catch(function(userError) {
+                                       deferred.reject(userError);
+                                       assert(false, 'failed to create user: ' + JSON.stringify(userError));
+                                   });
             return deferred.promise;
         }
 
@@ -282,24 +290,24 @@
                         //When all the records have been fetched, assert the values match expectations
                         promise.all(fetchRecordpromises)
                                 .then(function(results) {
-                                    for (var i = 0; i < results.length; i++) {
-                                        var currentRecord = results[i];
-                                        if (results[i].record) {
-                                            currentRecord = results[i].record;
-                                        }
+                                          for (var i = 0; i < results.length; i++) {
+                                              var currentRecord = results[i];
+                                              if (results[i].record) {
+                                                  currentRecord = results[i].record;
+                                              }
 
-                                        currentRecord.forEach(function(fieldValue) {
-                                            if (fieldValue.id === records[i].expectedFieldValue.id) {
-                                                assert.deepEqual(fieldValue, records[i].expectedFieldValue, 'Unexpected field value returned: ' +
-                                                JSON.stringify(fieldValue) + ', ' + JSON.stringify(records[i].expectedFieldValue));
-                                            }
-                                        });
-                                    }
-                                    done();
-                                }).catch(function(errorMsg) {
-                                    assert(false, 'unable to resolve all records: ' + JSON.stringify(errorMsg));
-                                    done();
-                                });
+                                              currentRecord.forEach(function(fieldValue) {
+                                                  if (fieldValue.id === records[i].expectedFieldValue.id) {
+                                                      assert.deepEqual(fieldValue, records[i].expectedFieldValue, 'Unexpected field value returned: ' +
+                                                                                                                  JSON.stringify(fieldValue) + ', ' + JSON.stringify(records[i].expectedFieldValue));
+                                                  }
+                                              });
+                                          }
+                                          done();
+                                      }).catch(function(errorMsg) {
+                                                   assert(false, 'unable to resolve all records: ' + JSON.stringify(errorMsg));
+                                                   done();
+                                               });
                     });
                 });
             });

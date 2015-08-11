@@ -23,7 +23,7 @@
              * Return all registered routes
              * @returns {*[]}
              */
-            fetchAllRoutes : function() {
+            fetchAllRoutes: function() {
                 return routeConsts;
             },
 
@@ -78,7 +78,7 @@
             /**
              * Override the default functionality of the recordsApi
              */
-            setRecordsApi : function(recordsApiOverride) {
+            setRecordsApi: function(recordsApiOverride) {
                 recordsApi = recordsApiOverride;
             }
         };
@@ -168,17 +168,17 @@
     function fetchSingleRecord(req, res) {
         processRequest(req, res, function(req, res) {
             recordsApi.fetchSingleRecordAndFields(req)
-                .then(function(response) {
-                    log.logResponse(req, response, __filename);
-                    log.debug('API response: ' + JSON.stringify(response) + ' Request - method:' + req.method + ' - ' + req.path);
-                    res.send(response);
-                })
-                .catch(function(error) {
-                    log.error('ERROR: ' + JSON.stringify(error));
-                    requestHelper.copyHeadersToResponse(res, error.headers);
-                    res.status(error.statusCode)
-                        .send(error.body);
-                });
+                    .then(function(response) {
+                              log.logResponse(req, response, __filename);
+                              log.debug('API response: ' + JSON.stringify(response) + ' Request - method:' + req.method + ' - ' + req.path);
+                              res.send(response);
+                          })
+                    .catch(function(error) {
+                               log.error('ERROR: ' + JSON.stringify(error));
+                               requestHelper.copyHeadersToResponse(res, error.headers);
+                               res.status(error.statusCode)
+                                       .send(error.body);
+                           });
         });
 
     }
@@ -192,16 +192,16 @@
     function fetchAllRecords(req, res) {
         processRequest(req, res, function(req, res) {
             recordsApi.fetchRecordsAndFields(req)
-                .then(function(response) {
-                    log.logResponse(req, response, __filename);
-                    res.send(response);
-                })
-                .catch(function(error) {
-                    log.error('ERROR: ' + JSON.stringify(error));
-                    requestHelper.copyHeadersToResponse(res, error.headers);
-                    res.status(error.statusCode)
-                        .send(error.body);
-                });
+                    .then(function(response) {
+                              log.logResponse(req, response, __filename);
+                              res.send(response);
+                          })
+                    .catch(function(error) {
+                               log.error('ERROR: ' + JSON.stringify(error));
+                               requestHelper.copyHeadersToResponse(res, error.headers);
+                               res.status(error.statusCode)
+                                       .send(error.body);
+                           });
         });
     }
 
@@ -222,10 +222,10 @@
         var opts = requestHelper.setOptions(req);
 
         request(opts)
-            .on('error', function(error) {
-                log.error('Swagger API ERROR ' + JSON.stringify(error));
-            })
-            .pipe(res);
+                .on('error', function(error) {
+                        log.error('Swagger API ERROR ' + JSON.stringify(error));
+                    })
+                .pipe(res);
     }
 
     /**
@@ -238,13 +238,13 @@
             var opts = requestHelper.setOptions(req);
 
             request(opts)
-                .on('response', function(response) {
-                    log.debug('API response: ' + response.statusCode + ' - ' + req.method + ' ' + req.path);
-                })
-                .on('error', function(error) {
-                    log.error('API ERROR ' + JSON.stringify(error));
-                })
-                .pipe(res);
+                    .on('response', function(response) {
+                            log.debug('API response: ' + response.statusCode + ' - ' + req.method + ' ' + req.path);
+                        })
+                    .on('error', function(error) {
+                            log.error('API ERROR ' + JSON.stringify(error));
+                        })
+                    .pipe(res);
         });
     }
 
@@ -255,7 +255,7 @@
      */
     function routeTo404(req, res) {
         log.logRequest(req);
-        log.error('Route '+ req.route.path + ' is not enabled for routeGroup ' + routeGroup);
+        log.error('Route ' + req.route.path + ' is not enabled for routeGroup ' + routeGroup);
         res.status(404).send();
     }
 

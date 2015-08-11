@@ -15,24 +15,24 @@
     var FIELD_KEYS = 'fieldKeys';
 
     module.exports = {
-        getFieldBuilder : function() {
+        getFieldBuilder: function() {
             return fieldBuilder.builder();
         },
 
-        getDataTypeBuilder : function() {
+        getDataTypeBuilder: function() {
             return datatypeAttributesGenerator.getDataTypeBuilder();
         },
 
-        getAvailableFieldTypes : function() {
+        getAvailableFieldTypes: function() {
             return fieldConsts.availableFieldTypes;
         },
 
-        getAvailableDataTypes : function() {
+        getAvailableDataTypes: function() {
             return datatypeAttributesGenerator.getAvailableDataTypes();
         },
 
         //Generate a json field blob based on field type
-        generateBaseField : function(type, datatype) {
+        generateBaseField: function(type, datatype) {
             var builder = fieldBuilder.builder();
             var fieldName = rawValueGenerator.generateString(15);
             var datatypeAttributes = datatypeAttributesGenerator.generateBaseDataType(datatype);
@@ -40,11 +40,11 @@
             return field;
         },
 
-        fieldToJsonString : function(field) {
+        fieldToJsonString: function(field) {
             return JSON.stringify(field);
         },
 
-        validateFieldProperties : function(field) {
+        validateFieldProperties: function(field) {
             //these will be initialized in the loop to be false
             //let's start out assuming the best and let the loop tell us if we're in trouble
             var foundKey = false;
@@ -86,11 +86,11 @@
                 });
 
                 if (foundKey == false) {
-                    console.error('We could not find this key in our key constants for a field. Key in question: ' +fieldKey+ ' Field ' + JSON.stringify(field));
+                    console.error('We could not find this key in our key constants for a field. Key in question: ' + fieldKey + ' Field ' + JSON.stringify(field));
                 }
 
                 if (valueValid == false) {
-                    console.error('There was a value type mismatch. Key in question: ' +fieldKey+ ' Field ' + JSON.stringify(field));
+                    console.error('There was a value type mismatch. Key in question: ' + fieldKey + ' Field ' + JSON.stringify(field));
                 }
 
             });
@@ -104,7 +104,7 @@
         },
 
         //For a given field type, apply any default values that are not currently present in the map
-        applyDefaults : function(fieldToModify) {
+        applyDefaults: function(fieldToModify) {
             var type = fieldToModify[fieldConsts.fieldKeys.TYPE];
 
             if (!fieldTypeToFunctionCalls[type]) {
@@ -114,7 +114,6 @@
             fieldTypeToFunctionCalls[type](fieldToModify);
         }
     };
-
 
 
     var fieldTypeToFunctionCalls = {};
@@ -128,10 +127,16 @@
 
     //virtuals
     fieldTypeToFunctionCalls[consts.LOOKUP] = applyFieldDefaults;
-    fieldTypeToFunctionCalls[consts.SUMMARY] = function(fieldToModify){applyFieldDefaults(fieldToModify); applySummaryFieldDefaults(fieldToModify);};
+    fieldTypeToFunctionCalls[consts.SUMMARY] = function(fieldToModify) {
+        applyFieldDefaults(fieldToModify);
+        applySummaryFieldDefaults(fieldToModify);
+    };
 
     //weirdos
-    fieldTypeToFunctionCalls[consts.REPORT_LINK] = function(fieldToModify){applyFieldDefaults(fieldToModify); applyReportLinkDefaults(fieldToModify);};
+    fieldTypeToFunctionCalls[consts.REPORT_LINK] = function(fieldToModify) {
+        applyFieldDefaults(fieldToModify);
+        applyReportLinkDefaults(fieldToModify);
+    };
 
     fieldTypeToFunctionCalls[consts.CONCRETE] = applyConcreteHierarchy;
 

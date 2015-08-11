@@ -14,25 +14,25 @@
     var DATATYPE_KEYS = 'dataTypeKeys';
 
     module.exports = {
-        getDataTypeBuilder : function() {
+        getDataTypeBuilder: function() {
             return dataTypeBuilder.builder();
         },
 
-        getAvailableDataTypes : function() {
+        getAvailableDataTypes: function() {
             return dataTypeConsts.availableDataTypes;
         },
 
         //Generate a json field blob based on field type
-        generateBaseDataType : function(type) {
+        generateBaseDataType: function(type) {
             var builder = dataTypeBuilder.builder();
             return builder.withType(type).build();
         },
 
-        dataTypeToJsonString : function(dataTypeAttributes) {
+        dataTypeToJsonString: function(dataTypeAttributes) {
             return JSON.stringify(dataTypeAttributes);
         },
 
-        validateDataTypeProperties : function(dataTypeAttributes) {
+        validateDataTypeProperties: function(dataTypeAttributes) {
             //these will be initialized in the loop to be false
             //let's start out assuming the best and let the loop tell us if we're in trouble
             var foundKey = false;
@@ -71,7 +71,7 @@
                 }
 
                 if (valueValid == false) {
-                    console.error('There was a value type mismatch. Key in question: ' +dataTypeKey+ ' Field ' + JSON.stringify(dataTypeAttributes));
+                    console.error('There was a value type mismatch. Key in question: ' + dataTypeKey + ' Field ' + JSON.stringify(dataTypeAttributes));
                 }
 
             });
@@ -80,7 +80,7 @@
         },
 
         //For a given field type, apply any default values that are not currently present in the map
-        applyDefaults : function(fieldToModify) {
+        applyDefaults: function(fieldToModify) {
             var type = fieldToModify[dataTypeConsts.availableDataTypes.TYPE];
 
             if (!dataTypeToFunctionCalls[type]) {
@@ -92,7 +92,6 @@
     };
 
 
-
     var dataTypeToFunctionCalls = {};
 
     //map fields by type so that we can know what to do fairly easily by grabbing keys
@@ -102,21 +101,27 @@
     dataTypeToFunctionCalls[consts.NUMERIC] = applyNumericHierarchy;
     dataTypeToFunctionCalls[consts.CURRENCY] = applyNumericHierarchy;
     dataTypeToFunctionCalls[consts.RATING] = applyNumericHierarchy;
-    dataTypeToFunctionCalls[consts.DURATION] = function(fieldToModify){applyNumericHierarchy(fieldToModify); applyDurationDefaults(fieldToModify);};
+    dataTypeToFunctionCalls[consts.DURATION] = function(fieldToModify) {
+        applyNumericHierarchy(fieldToModify);
+        applyDurationDefaults(fieldToModify);
+    };
     dataTypeToFunctionCalls[consts.TEXT] = applyTextHierarchy;
     dataTypeToFunctionCalls[consts.MULTI_LINE_TEXT] = applyTextHierarchy;
     dataTypeToFunctionCalls[consts.BIGTEXT] = applyTextHierarchy;
-    dataTypeToFunctionCalls[consts.URL] = function(fieldToModify){ applyUrlDefaults(fieldToModify);};
-    dataTypeToFunctionCalls[consts.EMAIL_ADDRESS] = function(fieldToModify){ applyEmailDefaults(fieldToModify);};
-    dataTypeToFunctionCalls[consts.PHONE_NUMBER] = function(fieldToModify){ applyPhoneNumberDefaults(fieldToModify);};
+    dataTypeToFunctionCalls[consts.URL] = function(fieldToModify) { applyUrlDefaults(fieldToModify);};
+    dataTypeToFunctionCalls[consts.EMAIL_ADDRESS] = function(fieldToModify) { applyEmailDefaults(fieldToModify);};
+    dataTypeToFunctionCalls[consts.PHONE_NUMBER] = function(fieldToModify) { applyPhoneNumberDefaults(fieldToModify);};
     dataTypeToFunctionCalls[consts.DATE_TIME] = applyDateTimeHierarchy;
     dataTypeToFunctionCalls[consts.DATE] = applyDateHierarchy;
-    dataTypeToFunctionCalls[consts.TIME_OF_DAY] = function(fieldToModify){ applyDateTimeHierarchy(fieldToModify); applyTimeOfDayDefaults(fieldToModify);};
-    dataTypeToFunctionCalls[consts.CHECKBOX] = function(fieldToModify){};
-    dataTypeToFunctionCalls[consts.USER] = function(fieldToModify){applyUserDefaults(fieldToModify);};
+    dataTypeToFunctionCalls[consts.TIME_OF_DAY] = function(fieldToModify) {
+        applyDateTimeHierarchy(fieldToModify);
+        applyTimeOfDayDefaults(fieldToModify);
+    };
+    dataTypeToFunctionCalls[consts.CHECKBOX] = function(fieldToModify) {};
+    dataTypeToFunctionCalls[consts.USER] = function(fieldToModify) {applyUserDefaults(fieldToModify);};
 
     //weirdos
-    dataTypeToFunctionCalls[consts.FILE_ATTACHMENT] = function(fieldToModify){ applyFileAttachmentDefaults(fieldToModify);};
+    dataTypeToFunctionCalls[consts.FILE_ATTACHMENT] = function(fieldToModify) { applyFileAttachmentDefaults(fieldToModify);};
 
     function applyNumericHierarchy(fieldToModify) {
         applyNumericDefaults(fieldToModify);

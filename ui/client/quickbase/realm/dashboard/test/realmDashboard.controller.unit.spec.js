@@ -1,4 +1,3 @@
-
 describe('Controller: RealmDashboardCtrl', function() {
     'use strict';
     // load the controller's module
@@ -14,7 +13,7 @@ describe('Controller: RealmDashboardCtrl', function() {
         $log = _$log_;
         RealmDashboardCtrl = $controller('RealmDashboardCtrl', {
             $scope: scope,
-            $log :$log
+            $log  : $log
         });
     }));
 

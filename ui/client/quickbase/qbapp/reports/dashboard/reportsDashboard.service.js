@@ -2,7 +2,7 @@
     'use strict';
 
     angular.module('qbse.qbapp.reports.dashboard')
-        .service('ReportsDashboardService', ReportsDashboardService);
+            .service('ReportsDashboardService', ReportsDashboardService);
 
     ReportsDashboardService.$inject = ['$q', 'ApiService'];
 
@@ -14,12 +14,12 @@
                 var deferred = $q.defer();
 
                 ApiService.getReports(appId, tableId).then(
-                    function(reports) {
-                        deferred.resolve(reports);
-                    },
-                    function(resp) {
-                        deferred.reject(resp);
-                    }
+                        function(reports) {
+                            deferred.resolve(reports);
+                        },
+                        function(resp) {
+                            deferred.reject(resp);
+                        }
                 );
 
                 return deferred.promise;
@@ -30,12 +30,12 @@
                 var deferred = $q.defer();
 
                 ApiService.getApps().then(
-                    function(apps) {
-                        deferred.resolve(apps);
-                    },
-                    function(resp) {
-                        deferred.reject(resp);
-                    }
+                        function(apps) {
+                            deferred.resolve(apps);
+                        },
+                        function(resp) {
+                            deferred.reject(resp);
+                        }
                 );
 
                 return deferred.promise;
@@ -45,12 +45,12 @@
                 var deferred = $q.defer();
 
                 ApiService.getApp(appId).then(
-                    function(app) {
-                        deferred.resolve(app);
-                    },
-                    function(resp) {
-                        deferred.reject(resp);
-                    }
+                        function(app) {
+                            deferred.resolve(app);
+                        },
+                        function(resp) {
+                            deferred.reject(resp);
+                        }
                 );
 
                 return deferred.promise;

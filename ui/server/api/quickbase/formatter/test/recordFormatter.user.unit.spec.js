@@ -13,9 +13,9 @@ describe('User record formatter unit test', function() {
      */
     function userDataProvider() {
         var userString = '{"userId":"RYVP73_UB", "firstName":"dave", "lastName":"isaman", "screenName":"disaman", "email":"disaman@intuit.com", ' +
-            '"deactivated":false, "anonymous":false, "administrator":false, "intuitID":"rc0isu4jlxqmjvqfhnp9", "userProps":null, ' +
-            '"sysRights":null, "challengeQuestion":"who is your favorite scrum team?", "challengeAnswer":"blue", ' +
-            '"password":"rxrr4z2ci1pvwhax2lr1", "placeHolderId":null, "ticketVersion":0}';
+                         '"deactivated":false, "anonymous":false, "administrator":false, "intuitID":"rc0isu4jlxqmjvqfhnp9", "userProps":null, ' +
+                         '"sysRights":null, "challengeQuestion":"who is your favorite scrum team?", "challengeAnswer":"blue", ' +
+                         '"password":"rxrr4z2ci1pvwhax2lr1", "placeHolderId":null, "ticketVersion":0}';
         var user = JSON.parse(userString);
         var fullName = 'dave isaman';
         var lastThenFirst = 'isaman, dave';
@@ -26,21 +26,23 @@ describe('User record formatter unit test', function() {
          * FieldInfo and expectations for no flags
          */
         var fieldInfo_NoFlags = [{
-            id: 7,
-            name: 'user',
-            type:'SCALAR',
+            id                : 7,
+            name              : 'user',
+            type              : 'SCALAR',
             datatypeAttributes: {
                 type: 'USER'
             }
-          }];
+        }];
 
-        var recordInputUser =  [[{
-            id: 7,
-            value: user}]];
+        var recordInputUser = [[{
+            id   : 7,
+            value: user
+        }]];
         var expectedUser_NoFlags = [[{
-            id: 7,
-            value: user,
-            display: lastThenFirst}]];
+            id     : 7,
+            value  : user,
+            display: lastThenFirst
+        }]];
 
         /**
          * FieldInfo and expectations for enabled flag: .datatypeAttributes.userDisplayFormat = FULL_NAME
@@ -89,25 +91,25 @@ describe('User record formatter unit test', function() {
         expectedEmpty[0][0].value = '';
         expectedEmpty[0][0].display = '';
 
-        var cases =[
+        var cases = [
             // No flags
-            { message: 'User - user with no flags', records: recordInputUser, fieldInfo: fieldInfo_NoFlags, expectedRecords: expectedUser_NoFlags },
+            {message: 'User - user with no flags', records: recordInputUser, fieldInfo: fieldInfo_NoFlags, expectedRecords: expectedUser_NoFlags},
 
             // FullName DisplayFormat flag
-            { message: 'User - user with "fullName" flag', records: recordInputUser, fieldInfo: fieldInfo_FullNameFormat, expectedRecords: expectedUser_FullNameFormat },
+            {message: 'User - user with "fullName" flag', records: recordInputUser, fieldInfo: fieldInfo_FullNameFormat, expectedRecords: expectedUser_FullNameFormat},
 
             // LastThenFirst DisplayFormat flag
-            { message: 'User - user with "lastThenFirst" flag', records: recordInputUser, fieldInfo: fieldInfo_LastThenFirstFormat, expectedRecords: expectedUser_LastThenFirstFormat },
+            {message: 'User - user with "lastThenFirst" flag', records: recordInputUser, fieldInfo: fieldInfo_LastThenFirstFormat, expectedRecords: expectedUser_LastThenFirstFormat},
 
             // UserName DisplayFormat flag
-            { message: 'User - user with "userName" flag', records: recordInputUser, fieldInfo: fieldInfo_UserNameFormat, expectedRecords: expectedUser_UserNameFormat },
+            {message: 'User - user with "userName" flag', records: recordInputUser, fieldInfo: fieldInfo_UserNameFormat, expectedRecords: expectedUser_UserNameFormat},
 
             // UserName DisplayFormat flag
-            { message: 'User - user with "userId" flag', records: recordInputUser, fieldInfo: fieldInfo_UserIdFormat, expectedRecords: expectedUser_UserIdFormat },
+            {message: 'User - user with "userId" flag', records: recordInputUser, fieldInfo: fieldInfo_UserIdFormat, expectedRecords: expectedUser_UserIdFormat},
 
             // Null and Empty User strings
-            { message: 'User - null -> empty string', records: recordsNull, fieldInfo: fieldInfo_NoFlags, expectedRecords: expectedNull },
-            { message: 'User - empty string -> empty string', records: recordsEmpty, fieldInfo: fieldInfo_NoFlags, expectedRecords: expectedEmpty }
+            {message: 'User - null -> empty string', records: recordsNull, fieldInfo: fieldInfo_NoFlags, expectedRecords: expectedNull},
+            {message: 'User - empty string -> empty string', records: recordsEmpty, fieldInfo: fieldInfo_NoFlags, expectedRecords: expectedEmpty}
         ];
 
         return cases;
@@ -116,7 +118,7 @@ describe('User record formatter unit test', function() {
     /**
      * Unit test that validates User records formatting with various field property flags set
      */
-    describe('should format an User record with various properties for display',function() {
+    describe('should format an User record with various properties for display', function() {
         userDataProvider().forEach(function(entry) {
             it('Test case: ' + entry.message, function(done) {
                 var formattedRecords = recordFormatter.formatRecords(entry.records, entry.fieldInfo);

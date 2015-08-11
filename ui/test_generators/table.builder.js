@@ -10,11 +10,11 @@
     //These are constants common to all fields
     module.exports = {
 
-        builder : function() {
+        builder: function() {
             var tableUnderConstruction = {};
             var tableFields = [];
             return {
-                build : function() {
+                build: function() {
                     if (tableFields.length > 0) {
                         tableUnderConstruction[tableConsts.FIELDS] = tableFields;
                     }
@@ -43,32 +43,32 @@
                     return this;
                 },
 
-                withId : function(id) {
+                withId: function(id) {
                     tableUnderConstruction[tableConsts.ID] = id;
                 },
 
-                withAppId : function(appId) {
+                withAppId: function(appId) {
                     tableUnderConstruction[tableConsts.APP_ID] = appId;
                 },
 
-                withName : function(name) {
+                withName: function(name) {
                     tableUnderConstruction[tableConsts.NAME] = name;
                 },
 
-                withTableAlias : function(alias) {
+                withTableAlias: function(alias) {
                     tableUnderConstruction[tableConsts.TABLE_ALIAS] = alias;
                 },
 
-                withField : function(field) {
+                withField: function(field) {
                     tableFields.push(field);
                     return this;
                 },
 
-                withAdditionalFields : function(fields) {
+                withAdditionalFields: function(fields) {
                     tableFields.concat(fields)
                 },
 
-                withFields : function(fields) {
+                withFields: function(fields) {
                     tableFields = fields;
                 }
 

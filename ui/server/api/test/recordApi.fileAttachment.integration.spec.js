@@ -8,7 +8,7 @@
     var promise = require('bluebird');
 
 
-//jshint loopfunc: true
+    //jshint loopfunc: true
 
     /**
      * Integration test for FileAttachment field formatting
@@ -25,7 +25,7 @@
             tables: [{
                 name: 'table1', fields: [{
                     name              : 'file',
-                    type              :'CONCRETE',
+                    type              : 'CONCRETE',
                     datatypeAttributes: {
                         type: 'FILE_ATTACHMENT'
                     }
@@ -72,42 +72,50 @@
             var expectedNullRecord = {id: fid, value: null, display: ''};
 
             return [
-                {message              : 'display local file attachment with no format flags',
+                {
+                    message           : 'display local file attachment with no format flags',
                     record            : localFileAttachmentInput,
                     format            : 'display',
                     expectedFieldValue: expectedLocalFileAttachmentRecord
                 },
-                {message              : 'raw local file attachment with no format flags',
+                {
+                    message           : 'raw local file attachment with no format flags',
                     record            : localFileAttachmentInput,
                     format            : 'raw',
                     expectedFieldValue: localFileAttachmentInput
                 },
-                {message              : 'display http file attachment with no format flags',
+                {
+                    message           : 'display http file attachment with no format flags',
                     record            : httpFileAttachmentInput,
                     format            : 'display',
                     expectedFieldValue: expectedHttpFileAttachmentRecord
                 },
-                {message              : 'raw http file attachment with no format flags',
+                {
+                    message           : 'raw http file attachment with no format flags',
                     record            : httpFileAttachmentInput,
                     format            : 'raw',
                     expectedFieldValue: httpFileAttachmentInput
                 },
-                {message              : 'display https file attachment with no format flags',
+                {
+                    message           : 'display https file attachment with no format flags',
                     record            : httpsFileAttachmentInput,
                     format            : 'display',
                     expectedFieldValue: expectedHttpsFileAttachmentRecord
                 },
-                {message              : 'raw https file attachment with no format flags',
+                {
+                    message           : 'raw https file attachment with no format flags',
                     record            : httpsFileAttachmentInput,
                     format            : 'raw',
                     expectedFieldValue: httpsFileAttachmentInput
                 },
-                {message              : 'display null file attachment with no format flags',
+                {
+                    message           : 'display null file attachment with no format flags',
                     record            : nullInput,
                     format            : 'display',
                     expectedFieldValue: expectedNullRecord
                 },
-                {message              : 'raw null file attachment with no format flags',
+                {
+                    message           : 'raw null file attachment with no format flags',
                     record            : nullInput,
                     format            : 'raw',
                     expectedFieldValue: nullInput
@@ -143,24 +151,24 @@
                     //When all the records have been fetched, assert the values match expectations
                     promise.all(fetchRecordPromises)
                             .then(function(results) {
-                                for (var i = 0; i < results.length; i++) {
-                                    var currentRecord = results[i];
-                                    if (results[i].record) {
-                                        currentRecord = results[i].record;
-                                    }
+                                      for (var i = 0; i < results.length; i++) {
+                                          var currentRecord = results[i];
+                                          if (results[i].record) {
+                                              currentRecord = results[i].record;
+                                          }
 
-                                    currentRecord.forEach(function(fieldValue) {
-                                        if (fieldValue.id === records[i].expectedFieldValue.id) {
-                                            assert.deepEqual(fieldValue, records[i].expectedFieldValue, 'Unexpected field value returned: ' +
-                                            JSON.stringify(fieldValue) + ', ' + JSON.stringify(records[i].expectedFieldValue));
-                                        }
-                                    });
-                                }
-                                done();
-                            }).catch(function(errorMsg) {
-                                assert(false, 'unable to resolve all records: ' + JSON.stringify(errorMsg));
-                                done();
-                            });
+                                          currentRecord.forEach(function(fieldValue) {
+                                              if (fieldValue.id === records[i].expectedFieldValue.id) {
+                                                  assert.deepEqual(fieldValue, records[i].expectedFieldValue, 'Unexpected field value returned: ' +
+                                                                                                              JSON.stringify(fieldValue) + ', ' + JSON.stringify(records[i].expectedFieldValue));
+                                              }
+                                          });
+                                      }
+                                      done();
+                                  }).catch(function(errorMsg) {
+                                               assert(false, 'unable to resolve all records: ' + JSON.stringify(errorMsg));
+                                               done();
+                                           });
                 });
             });
         });
@@ -187,42 +195,50 @@
             var expectedNullRecord = {id: fid, value: null, display: ''};
 
             return [
-                {message              : 'display local file attachment with all format flags',
+                {
+                    message           : 'display local file attachment with all format flags',
                     record            : localFileAttachmentInput,
                     format            : 'display',
                     expectedFieldValue: expectedLocalFileAttachmentRecord
                 },
-                {message              : 'raw local file attachment with all format flags',
+                {
+                    message           : 'raw local file attachment with all format flags',
                     record            : localFileAttachmentInput,
                     format            : 'raw',
                     expectedFieldValue: localFileAttachmentInput
                 },
-                {message              : 'display http file attachment with all format flags',
+                {
+                    message           : 'display http file attachment with all format flags',
                     record            : httpFileAttachmentInput,
                     format            : 'display',
                     expectedFieldValue: expectedHttpFileAttachmentRecord
                 },
-                {message              : 'raw http file attachment with all format flags',
+                {
+                    message           : 'raw http file attachment with all format flags',
                     record            : httpFileAttachmentInput,
                     format            : 'raw',
                     expectedFieldValue: httpFileAttachmentInput
                 },
-                {message              : 'display https file attachment with all format flags',
+                {
+                    message           : 'display https file attachment with all format flags',
                     record            : httpsFileAttachmentInput,
                     format            : 'display',
                     expectedFieldValue: expectedHttpsFileAttachmentRecord
                 },
-                {message              : 'raw https file attachment with all format flags',
+                {
+                    message           : 'raw https file attachment with all format flags',
                     record            : httpsFileAttachmentInput,
                     format            : 'raw',
                     expectedFieldValue: httpsFileAttachmentInput
                 },
-                {message              : 'display null file attachment with all format flags',
+                {
+                    message           : 'display null file attachment with all format flags',
                     record            : nullInput,
                     format            : 'display',
                     expectedFieldValue: expectedNullRecord
                 },
-                {message              : 'raw null file attachment with all format flags',
+                {
+                    message           : 'raw null file attachment with all format flags',
                     record            : nullInput,
                     format            : 'raw',
                     expectedFieldValue: nullInput
@@ -258,24 +274,24 @@
                     //When all the records have been fetched, assert the values match expectations
                     promise.all(fetchRecordPromises)
                             .then(function(results) {
-                                for (var i = 0; i < results.length; i++) {
-                                    var currentRecord = results[i];
-                                    if (results[i].record) {
-                                        currentRecord = results[i].record;
-                                    }
+                                      for (var i = 0; i < results.length; i++) {
+                                          var currentRecord = results[i];
+                                          if (results[i].record) {
+                                              currentRecord = results[i].record;
+                                          }
 
-                                    currentRecord.forEach(function(fieldValue) {
-                                        if (fieldValue.id === records[i].expectedFieldValue.id) {
-                                            assert.deepEqual(fieldValue, records[i].expectedFieldValue, 'Unexpected field value returned: ' +
-                                            JSON.stringify(fieldValue) + ', ' + JSON.stringify(records[i].expectedFieldValue));
-                                        }
-                                    });
-                                }
-                                done();
-                            }).catch(function(errorMsg) {
-                                assert(false, 'unable to resolve all records: ' + JSON.stringify(errorMsg));
-                                done();
-                            });
+                                          currentRecord.forEach(function(fieldValue) {
+                                              if (fieldValue.id === records[i].expectedFieldValue.id) {
+                                                  assert.deepEqual(fieldValue, records[i].expectedFieldValue, 'Unexpected field value returned: ' +
+                                                                                                              JSON.stringify(fieldValue) + ', ' + JSON.stringify(records[i].expectedFieldValue));
+                                              }
+                                          });
+                                      }
+                                      done();
+                                  }).catch(function(errorMsg) {
+                                               assert(false, 'unable to resolve all records: ' + JSON.stringify(errorMsg));
+                                               done();
+                                           });
                 });
             });
         });

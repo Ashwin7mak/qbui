@@ -49,19 +49,19 @@
 
     angular
         //depends on the ui-grid and ui-selection see: http://ui-grid.info/
-        .module('qbse.grid')
+            .module('qbse.grid')
         // Setup some module constants used by the grid
-        .constant('gridConstants', {
-            'MAX_ROWS_PER_PAGE': 10000,
-            'ROWS_PER_PAGE'    : 100,
-            'SERVICE_REQ'      : {
-                'DATA': 1,
-                'COLS': 2
-            }
-        })
+            .constant('gridConstants', {
+                MAX_ROWS_PER_PAGE: 10000,
+                ROWS_PER_PAGE    : 100,
+                SERVICE_REQ      : {
+                    DATA: 1,
+                    COLS: 2
+                }
+            })
 
         // the quickbase grid element directive
-        .directive('qbseGrid', GridDirective);
+            .directive('qbseGrid', GridDirective);
 
     // its implementation
     function GridDirective() {
@@ -126,23 +126,23 @@
             grid: initGrid(),
             cols: initGridColumns($scope.dataServiceFunc)
         }).then(
-            function(init) {
-                //  List of columns to add to the ui grid.  Only these data columns will render
-                //  in the grid.   If columns is empty, then all columns are rendered (grid default).
-                if (init.cols) {
-                    angular.extend($scope.gridOptions, {columnDefs: init.cols});
+                function(init) {
+                    //  List of columns to add to the ui grid.  Only these data columns will render
+                    //  in the grid.   If columns is empty, then all columns are rendered (grid default).
+                    if (init.cols) {
+                        angular.extend($scope.gridOptions, {columnDefs: init.cols});
+                    }
+                    //TODO : Sorting??
+
+                    // update the pages handler with the updated grid options
+                    $scope.pagesHandler.setGridOptions($scope.gridOptions);
+
+                    // load up the initial page
+                    $scope.pagesHandler.loadCurrentPage();
+                },
+                function(resp) {
+                    $log.error('Error loading init grid data.  Resp:' + resp);
                 }
-                //TODO : Sorting??
-
-                // update the pages handler with the updated grid options
-                $scope.pagesHandler.setGridOptions($scope.gridOptions);
-
-                // load up the initial page
-                $scope.pagesHandler.loadCurrentPage();
-            },
-            function(resp) {
-                $log.error('Error loading init grid data.  Resp:' + resp);
-            }
         );
 
         //   Function to initialize the grid component
@@ -217,15 +217,15 @@
 
             if (dataServiceFunc) {
                 $q.when(dataServiceFunc(gridConstants.SERVICE_REQ.COLS)).then(
-                    function(columns) {
-                        // update the alignments for unspecified numeric types
-                        _.map(columns, setCellAttributes);
-                        deferred.resolve(columns);
-                    },
-                    function(resp) {
-                        deferred.resolve({cols: null});
-                        $log.error('error retrieving columns for grid' + resp);
-                    }
+                        function(columns) {
+                            // update the alignments for unspecified numeric types
+                            _.map(columns, setCellAttributes);
+                            deferred.resolve(columns);
+                        },
+                        function(resp) {
+                            deferred.resolve({cols: null});
+                            $log.error('error retrieving columns for grid' + resp);
+                        }
                 );
             } else {
                 deferred.resolve({cols: null});  // resolve to an empty column array

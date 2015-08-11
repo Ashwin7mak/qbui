@@ -19,13 +19,15 @@ describe('Numeric record formatter unit test', function() {
         var numberMultipleSeparators = 98765432100;
 
         //Incomplete number
-        var defaultRecordInput =  [[{
-            id: 7,
-            value: numberDouble}]];
+        var defaultRecordInput = [[{
+            id   : 7,
+            value: numberDouble
+        }]];
         var defaultRecordExp = [[{
-                id: 7,
-                value: numberDouble,
-                display: ''}]];
+            id     : 7,
+            value  : numberDouble,
+            display: ''
+        }]];
 
         // Setup the record inputs
         var recordInputDecimalOnly = JSON.parse(JSON.stringify(defaultRecordInput));
@@ -41,13 +43,13 @@ describe('Numeric record formatter unit test', function() {
          * FieldInfo and expectations for no flags
          */
         var noFlagsFieldInfo = [{
-            id: 7,
-            name: 'numeric',
+            id                : 7,
+            name              : 'numeric',
             datatypeAttributes: {
-                type: 'NUMERIC',
+                type                : 'NUMERIC',
                 clientSideAttributes: {}
             },
-            type:'SCALAR'
+            type              : 'SCALAR'
         }];
 
         var expectedDecimal_NoFlags = JSON.parse(JSON.stringify(defaultRecordExp));
@@ -549,9 +551,9 @@ describe('Numeric record formatter unit test', function() {
         // Separator start, separator mark, separator pattern - multiple separators
         var expectedMultiSeparators_SS_SM_SP = JSON.parse(JSON.stringify(expectedMultiSeparators_NoFlags));
 
-       /**
-        * FieldInfo and expectations for flags: separator start, separator mark, decimal mark
-        */
+        /**
+         * FieldInfo and expectations for flags: separator start, separator mark, decimal mark
+         */
         var fieldInfo_SS_SM_DM = JSON.parse(JSON.stringify(noFlagsFieldInfo));
         fieldInfo_SS_SM_DM[0].datatypeAttributes.clientSideAttributes.separator_start = 1;
         fieldInfo_SS_SM_DM[0].datatypeAttributes.clientSideAttributes.separator_mark = '.';
@@ -795,176 +797,176 @@ describe('Numeric record formatter unit test', function() {
         var expectedMultiSeparators_InvalidFlags = JSON.parse(JSON.stringify(expectedMultiSeparators_NoFlags));
         expectedMultiSeparators_InvalidFlags[0][0].display = numberMultipleSeparators;
 
-        var cases =[
-            { message: 'Numeric - decimal with no format', records: recordInputDecimalOnly, fieldInfo: noFlagsFieldInfo, expectedRecords: expectedDecimal_NoFlags },
-            { message: 'Numeric - double with no format', records: recordInputDouble, fieldInfo: noFlagsFieldInfo, expectedRecords: expectedDouble_NoFlags },
-            { message: 'Numeric - no separator with no format', records: recordInputNoSeparator, fieldInfo: noFlagsFieldInfo, expectedRecords: expectedNoSeparator_NoFlags },
-            { message: 'Numeric - multiple separators with no format', records: recordInputMultipleSeparators, fieldInfo: noFlagsFieldInfo, expectedRecords: expectedMultiSeparators_NoFlags },
+        var cases = [
+            {message: 'Numeric - decimal with no format', records: recordInputDecimalOnly, fieldInfo: noFlagsFieldInfo, expectedRecords: expectedDecimal_NoFlags},
+            {message: 'Numeric - double with no format', records: recordInputDouble, fieldInfo: noFlagsFieldInfo, expectedRecords: expectedDouble_NoFlags},
+            {message: 'Numeric - no separator with no format', records: recordInputNoSeparator, fieldInfo: noFlagsFieldInfo, expectedRecords: expectedNoSeparator_NoFlags},
+            {message: 'Numeric - multiple separators with no format', records: recordInputMultipleSeparators, fieldInfo: noFlagsFieldInfo, expectedRecords: expectedMultiSeparators_NoFlags},
 
             // 1 flag
-            { message: 'Numeric - decimal with decimalPlaces format', records: recordInputDecimalOnly, fieldInfo: dpFlagFieldInfo, expectedRecords: expectedDecimal_DPFlags },
-            { message: 'Numeric - double with decimalPlaces format', records: recordInputDouble, fieldInfo: dpFlagFieldInfo, expectedRecords: expectedDouble_DPFlags },
-            { message: 'Numeric - no separator with decimalPlaces format', records: recordInputNoSeparator, fieldInfo: dpFlagFieldInfo, expectedRecords: expectedNoSeparator_DPFlags },
-            { message: 'Numeric - multiple separators with decimalPlaces format', records: recordInputMultipleSeparators, fieldInfo: dpFlagFieldInfo, expectedRecords: expectedMultiSeparators_DPFlags },
+            {message: 'Numeric - decimal with decimalPlaces format', records: recordInputDecimalOnly, fieldInfo: dpFlagFieldInfo, expectedRecords: expectedDecimal_DPFlags},
+            {message: 'Numeric - double with decimalPlaces format', records: recordInputDouble, fieldInfo: dpFlagFieldInfo, expectedRecords: expectedDouble_DPFlags},
+            {message: 'Numeric - no separator with decimalPlaces format', records: recordInputNoSeparator, fieldInfo: dpFlagFieldInfo, expectedRecords: expectedNoSeparator_DPFlags},
+            {message: 'Numeric - multiple separators with decimalPlaces format', records: recordInputMultipleSeparators, fieldInfo: dpFlagFieldInfo, expectedRecords: expectedMultiSeparators_DPFlags},
 
-            { message: 'Numeric - decimal with separatorStart format', records: recordInputDecimalOnly, fieldInfo: separatorStartFlagFieldInfo, expectedRecords: expectedDecimal_SeparatorStartFlags },
-            { message: 'Numeric - double with separatorStart format', records: recordInputDouble, fieldInfo: separatorStartFlagFieldInfo, expectedRecords: expectedDouble_SeparatorStartFlags },
-            { message: 'Numeric - no separator with separatorStart format', records: recordInputNoSeparator, fieldInfo: separatorStartFlagFieldInfo, expectedRecords: expectedNoSeparator_SeparatorStartFlags },
-            { message: 'Numeric - multiple separators with separatorStart format', records: recordInputMultipleSeparators, fieldInfo: separatorStartFlagFieldInfo, expectedRecords: expectedMultiSeparators_SeparatorStartFlags },
+            {message: 'Numeric - decimal with separatorStart format', records: recordInputDecimalOnly, fieldInfo: separatorStartFlagFieldInfo, expectedRecords: expectedDecimal_SeparatorStartFlags},
+            {message: 'Numeric - double with separatorStart format', records: recordInputDouble, fieldInfo: separatorStartFlagFieldInfo, expectedRecords: expectedDouble_SeparatorStartFlags},
+            {message: 'Numeric - no separator with separatorStart format', records: recordInputNoSeparator, fieldInfo: separatorStartFlagFieldInfo, expectedRecords: expectedNoSeparator_SeparatorStartFlags},
+            {message: 'Numeric - multiple separators with separatorStart format', records: recordInputMultipleSeparators, fieldInfo: separatorStartFlagFieldInfo, expectedRecords: expectedMultiSeparators_SeparatorStartFlags},
 
-            { message: 'Numeric - decimal with separatorMark format', records: recordInputDecimalOnly, fieldInfo: separatorMarkFlagFieldInfo, expectedRecords: expectedDecimal_SeparatorMarkFlags },
-            { message: 'Numeric - double with separatorMark format', records: recordInputDouble, fieldInfo: separatorMarkFlagFieldInfo, expectedRecords: expectedDouble_SeparatorMarkFlags },
-            { message: 'Numeric - no separator with separatorMark format', records: recordInputNoSeparator, fieldInfo: separatorMarkFlagFieldInfo, expectedRecords: expectedNoSeparator_SeparatorMarkFlags },
-            { message: 'Numeric - multiple separators with separatorMark format', records: recordInputMultipleSeparators, fieldInfo: separatorMarkFlagFieldInfo, expectedRecords: expectedMultiSeparators_SeparatorMarkFlags },
+            {message: 'Numeric - decimal with separatorMark format', records: recordInputDecimalOnly, fieldInfo: separatorMarkFlagFieldInfo, expectedRecords: expectedDecimal_SeparatorMarkFlags},
+            {message: 'Numeric - double with separatorMark format', records: recordInputDouble, fieldInfo: separatorMarkFlagFieldInfo, expectedRecords: expectedDouble_SeparatorMarkFlags},
+            {message: 'Numeric - no separator with separatorMark format', records: recordInputNoSeparator, fieldInfo: separatorMarkFlagFieldInfo, expectedRecords: expectedNoSeparator_SeparatorMarkFlags},
+            {message: 'Numeric - multiple separators with separatorMark format', records: recordInputMultipleSeparators, fieldInfo: separatorMarkFlagFieldInfo, expectedRecords: expectedMultiSeparators_SeparatorMarkFlags},
 
-            { message: 'Numeric - decimal with separatorPattern format', records: recordInputDecimalOnly, fieldInfo: separatorPatternFlagFieldInfo, expectedRecords: expectedDecimal_SeparatorPatternFlags },
-            { message: 'Numeric - double with separatorPattern format', records: recordInputDouble, fieldInfo: separatorPatternFlagFieldInfo, expectedRecords: expectedDouble_SeparatorPatternFlags },
-            { message: 'Numeric - no separator with separatorPattern format', records: recordInputNoSeparator, fieldInfo: separatorPatternFlagFieldInfo, expectedRecords: expectedNoSeparator_SeparatorPatternFlags },
-            { message: 'Numeric - multiple separators with separatorPattern format', records: recordInputMultipleSeparators, fieldInfo: separatorPatternFlagFieldInfo, expectedRecords: expectedMultiSeparators_SeparatorPatternFlags },
+            {message: 'Numeric - decimal with separatorPattern format', records: recordInputDecimalOnly, fieldInfo: separatorPatternFlagFieldInfo, expectedRecords: expectedDecimal_SeparatorPatternFlags},
+            {message: 'Numeric - double with separatorPattern format', records: recordInputDouble, fieldInfo: separatorPatternFlagFieldInfo, expectedRecords: expectedDouble_SeparatorPatternFlags},
+            {message: 'Numeric - no separator with separatorPattern format', records: recordInputNoSeparator, fieldInfo: separatorPatternFlagFieldInfo, expectedRecords: expectedNoSeparator_SeparatorPatternFlags},
+            {message: 'Numeric - multiple separators with separatorPattern format', records: recordInputMultipleSeparators, fieldInfo: separatorPatternFlagFieldInfo, expectedRecords: expectedMultiSeparators_SeparatorPatternFlags},
 
-            { message: 'Numeric - decimal with decimalMark format', records: recordInputDecimalOnly, fieldInfo: decimalMarkFlagFieldInfo, expectedRecords: expectedDecimal_DecimalMarkFlags },
-            { message: 'Numeric - double with decimalMark format', records: recordInputDouble, fieldInfo: decimalMarkFlagFieldInfo, expectedRecords: expectedDouble_DecimalMarkFlags },
-            { message: 'Numeric - no separator with decimalMark format', records: recordInputNoSeparator, fieldInfo: decimalMarkFlagFieldInfo, expectedRecords: expectedNoSeparator_DecimalMarkFlags },
-            { message: 'Numeric - multiple separators with decimalMark format', records: recordInputMultipleSeparators, fieldInfo: decimalMarkFlagFieldInfo, expectedRecords: expectedMultiSeparators_DecimalMarkFlags },
+            {message: 'Numeric - decimal with decimalMark format', records: recordInputDecimalOnly, fieldInfo: decimalMarkFlagFieldInfo, expectedRecords: expectedDecimal_DecimalMarkFlags},
+            {message: 'Numeric - double with decimalMark format', records: recordInputDouble, fieldInfo: decimalMarkFlagFieldInfo, expectedRecords: expectedDouble_DecimalMarkFlags},
+            {message: 'Numeric - no separator with decimalMark format', records: recordInputNoSeparator, fieldInfo: decimalMarkFlagFieldInfo, expectedRecords: expectedNoSeparator_DecimalMarkFlags},
+            {message: 'Numeric - multiple separators with decimalMark format', records: recordInputMultipleSeparators, fieldInfo: decimalMarkFlagFieldInfo, expectedRecords: expectedMultiSeparators_DecimalMarkFlags},
 
             // 2 flags
-            { message: 'Numeric - decimal with decimalPlaces, decimalMark formats', records: recordInputDecimalOnly, fieldInfo: fieldInfo_DP_DM, expectedRecords: expectedDecimal_DP_DM },
-            { message: 'Numeric - double with decimalPlaces, decimalMark formats', records: recordInputDouble, fieldInfo: fieldInfo_DP_DM, expectedRecords: expectedDouble_DP_DM },
-            { message: 'Numeric - no separator with decimalPlaces, decimalMark formats', records: recordInputNoSeparator, fieldInfo: fieldInfo_DP_DM, expectedRecords: expectedNoSeparator_DP_DM },
-            { message: 'Numeric - multiple separators with decimalPlaces, decimalMark formats', records: recordInputMultipleSeparators, fieldInfo: fieldInfo_DP_DM, expectedRecords: expectedMultiSeparators_DP_DM },
+            {message: 'Numeric - decimal with decimalPlaces, decimalMark formats', records: recordInputDecimalOnly, fieldInfo: fieldInfo_DP_DM, expectedRecords: expectedDecimal_DP_DM},
+            {message: 'Numeric - double with decimalPlaces, decimalMark formats', records: recordInputDouble, fieldInfo: fieldInfo_DP_DM, expectedRecords: expectedDouble_DP_DM},
+            {message: 'Numeric - no separator with decimalPlaces, decimalMark formats', records: recordInputNoSeparator, fieldInfo: fieldInfo_DP_DM, expectedRecords: expectedNoSeparator_DP_DM},
+            {message: 'Numeric - multiple separators with decimalPlaces, decimalMark formats', records: recordInputMultipleSeparators, fieldInfo: fieldInfo_DP_DM, expectedRecords: expectedMultiSeparators_DP_DM},
 
-            { message: 'Numeric - decimal with decimalPlaces, separatorStart formats', records: recordInputDecimalOnly, fieldInfo: fieldInfo_DP_SS, expectedRecords: expectedDecimal_DP_SS },
-            { message: 'Numeric - double with decimalPlaces, separatorStart formats', records: recordInputDouble, fieldInfo: fieldInfo_DP_SS, expectedRecords: expectedDouble_DP_SS },
-            { message: 'Numeric - no separator with decimalPlaces, separatorStart formats', records: recordInputNoSeparator, fieldInfo: fieldInfo_DP_SS, expectedRecords: expectedNoSeparator_DP_SS },
-            { message: 'Numeric - multiple separators with decimalPlaces, separatorStart formats', records: recordInputMultipleSeparators, fieldInfo: fieldInfo_DP_SS, expectedRecords: expectedMultiSeparators_DP_SS },
+            {message: 'Numeric - decimal with decimalPlaces, separatorStart formats', records: recordInputDecimalOnly, fieldInfo: fieldInfo_DP_SS, expectedRecords: expectedDecimal_DP_SS},
+            {message: 'Numeric - double with decimalPlaces, separatorStart formats', records: recordInputDouble, fieldInfo: fieldInfo_DP_SS, expectedRecords: expectedDouble_DP_SS},
+            {message: 'Numeric - no separator with decimalPlaces, separatorStart formats', records: recordInputNoSeparator, fieldInfo: fieldInfo_DP_SS, expectedRecords: expectedNoSeparator_DP_SS},
+            {message: 'Numeric - multiple separators with decimalPlaces, separatorStart formats', records: recordInputMultipleSeparators, fieldInfo: fieldInfo_DP_SS, expectedRecords: expectedMultiSeparators_DP_SS},
 
-            { message: 'Numeric - decimal with decimalPlaces, separatorMark formats', records: recordInputDecimalOnly, fieldInfo: fieldInfo_DP_SM, expectedRecords: expectedDecimal_DP_SM },
-            { message: 'Numeric - double with decimalPlaces, separatorMark formats', records: recordInputDouble, fieldInfo: fieldInfo_DP_SM, expectedRecords: expectedDouble_DP_SM },
-            { message: 'Numeric - no separator with decimalPlaces, separatorMark formats', records: recordInputNoSeparator, fieldInfo: fieldInfo_DP_SM, expectedRecords: expectedNoSeparator_DP_SM },
-            { message: 'Numeric - multiple separators with decimalPlaces, separatorMark formats', records: recordInputMultipleSeparators, fieldInfo: fieldInfo_DP_SM, expectedRecords: expectedMultiSeparators_DP_SM },
+            {message: 'Numeric - decimal with decimalPlaces, separatorMark formats', records: recordInputDecimalOnly, fieldInfo: fieldInfo_DP_SM, expectedRecords: expectedDecimal_DP_SM},
+            {message: 'Numeric - double with decimalPlaces, separatorMark formats', records: recordInputDouble, fieldInfo: fieldInfo_DP_SM, expectedRecords: expectedDouble_DP_SM},
+            {message: 'Numeric - no separator with decimalPlaces, separatorMark formats', records: recordInputNoSeparator, fieldInfo: fieldInfo_DP_SM, expectedRecords: expectedNoSeparator_DP_SM},
+            {message: 'Numeric - multiple separators with decimalPlaces, separatorMark formats', records: recordInputMultipleSeparators, fieldInfo: fieldInfo_DP_SM, expectedRecords: expectedMultiSeparators_DP_SM},
 
-            { message: 'Numeric - decimal with decimalPlaces, separatorPattern formats', records: recordInputDecimalOnly, fieldInfo: fieldInfo_DP_SP, expectedRecords: expectedDecimal_DP_SP },
-            { message: 'Numeric - double with decimalPlaces, separatorPattern formats', records: recordInputDouble, fieldInfo: fieldInfo_DP_SP, expectedRecords: expectedDouble_DP_SP },
-            { message: 'Numeric - no separator with decimalPlaces, separatorPattern formats', records: recordInputNoSeparator, fieldInfo: fieldInfo_DP_SP, expectedRecords: expectedNoSeparator_DP_SP },
-            { message: 'Numeric - multiple separators with decimalPlaces, separatorPattern formats', records: recordInputMultipleSeparators, fieldInfo: fieldInfo_DP_SP, expectedRecords: expectedMultiSeparators_DP_SP },
+            {message: 'Numeric - decimal with decimalPlaces, separatorPattern formats', records: recordInputDecimalOnly, fieldInfo: fieldInfo_DP_SP, expectedRecords: expectedDecimal_DP_SP},
+            {message: 'Numeric - double with decimalPlaces, separatorPattern formats', records: recordInputDouble, fieldInfo: fieldInfo_DP_SP, expectedRecords: expectedDouble_DP_SP},
+            {message: 'Numeric - no separator with decimalPlaces, separatorPattern formats', records: recordInputNoSeparator, fieldInfo: fieldInfo_DP_SP, expectedRecords: expectedNoSeparator_DP_SP},
+            {message: 'Numeric - multiple separators with decimalPlaces, separatorPattern formats', records: recordInputMultipleSeparators, fieldInfo: fieldInfo_DP_SP, expectedRecords: expectedMultiSeparators_DP_SP},
 
-            { message: 'Numeric - decimal with separatorStart, separatorPattern formats', records: recordInputDecimalOnly, fieldInfo: fieldInfo_SS_SP, expectedRecords: expectedDecimal_SS_SP },
-            { message: 'Numeric - double with separatorStart, separatorPattern formats', records: recordInputDouble, fieldInfo: fieldInfo_SS_SP, expectedRecords: expectedDouble_SS_SP },
-            { message: 'Numeric - no separator with separatorStart, separatorPattern formats', records: recordInputNoSeparator, fieldInfo: fieldInfo_SS_SP, expectedRecords: expectedNoSeparator_SS_SP },
-            { message: 'Numeric - multiple separators with separatorStart, separatorPattern formats', records: recordInputMultipleSeparators, fieldInfo: fieldInfo_SS_SP, expectedRecords: expectedMultiSeparators_SS_SP },
+            {message: 'Numeric - decimal with separatorStart, separatorPattern formats', records: recordInputDecimalOnly, fieldInfo: fieldInfo_SS_SP, expectedRecords: expectedDecimal_SS_SP},
+            {message: 'Numeric - double with separatorStart, separatorPattern formats', records: recordInputDouble, fieldInfo: fieldInfo_SS_SP, expectedRecords: expectedDouble_SS_SP},
+            {message: 'Numeric - no separator with separatorStart, separatorPattern formats', records: recordInputNoSeparator, fieldInfo: fieldInfo_SS_SP, expectedRecords: expectedNoSeparator_SS_SP},
+            {message: 'Numeric - multiple separators with separatorStart, separatorPattern formats', records: recordInputMultipleSeparators, fieldInfo: fieldInfo_SS_SP, expectedRecords: expectedMultiSeparators_SS_SP},
 
-            { message: 'Numeric - decimal with separatorStart, decimalMark formats', records: recordInputDecimalOnly, fieldInfo: fieldInfo_SS_DM, expectedRecords: expectedDecimal_SS_DM },
-            { message: 'Numeric - double with separatorStart, decimalMark formats', records: recordInputDouble, fieldInfo: fieldInfo_SS_DM, expectedRecords: expectedDouble_SS_DM },
-            { message: 'Numeric - no separator with separatorStart, decimalMark formats', records: recordInputNoSeparator, fieldInfo: fieldInfo_SS_DM, expectedRecords: expectedNoSeparator_SS_DM },
-            { message: 'Numeric - multiple separators with separatorStart, decimalMark formats', records: recordInputMultipleSeparators, fieldInfo: fieldInfo_SS_DM, expectedRecords: expectedMultiSeparators_SS_DM },
+            {message: 'Numeric - decimal with separatorStart, decimalMark formats', records: recordInputDecimalOnly, fieldInfo: fieldInfo_SS_DM, expectedRecords: expectedDecimal_SS_DM},
+            {message: 'Numeric - double with separatorStart, decimalMark formats', records: recordInputDouble, fieldInfo: fieldInfo_SS_DM, expectedRecords: expectedDouble_SS_DM},
+            {message: 'Numeric - no separator with separatorStart, decimalMark formats', records: recordInputNoSeparator, fieldInfo: fieldInfo_SS_DM, expectedRecords: expectedNoSeparator_SS_DM},
+            {message: 'Numeric - multiple separators with separatorStart, decimalMark formats', records: recordInputMultipleSeparators, fieldInfo: fieldInfo_SS_DM, expectedRecords: expectedMultiSeparators_SS_DM},
 
-            { message: 'Numeric - decimal with decimalMark, separatorMark formats', records: recordInputDecimalOnly, fieldInfo: fieldInfo_DM_SM, expectedRecords: expectedDecimal_DM_SM },
-            { message: 'Numeric - double with decimalMark, separatorMark formats', records: recordInputDouble, fieldInfo: fieldInfo_DM_SM, expectedRecords: expectedDouble_DM_SM },
-            { message: 'Numeric - no separator with decimalMark, separatorMark formats', records: recordInputNoSeparator, fieldInfo: fieldInfo_DM_SM, expectedRecords: expectedNoSeparator_DM_SM },
-            { message: 'Numeric - multiple separators with decimalMark, separatorMark formats', records: recordInputMultipleSeparators, fieldInfo: fieldInfo_DM_SM, expectedRecords: expectedMultiSeparators_DM_SM },
+            {message: 'Numeric - decimal with decimalMark, separatorMark formats', records: recordInputDecimalOnly, fieldInfo: fieldInfo_DM_SM, expectedRecords: expectedDecimal_DM_SM},
+            {message: 'Numeric - double with decimalMark, separatorMark formats', records: recordInputDouble, fieldInfo: fieldInfo_DM_SM, expectedRecords: expectedDouble_DM_SM},
+            {message: 'Numeric - no separator with decimalMark, separatorMark formats', records: recordInputNoSeparator, fieldInfo: fieldInfo_DM_SM, expectedRecords: expectedNoSeparator_DM_SM},
+            {message: 'Numeric - multiple separators with decimalMark, separatorMark formats', records: recordInputMultipleSeparators, fieldInfo: fieldInfo_DM_SM, expectedRecords: expectedMultiSeparators_DM_SM},
 
-            { message: 'Numeric - decimal with separatorStart, separatorMark formats', records: recordInputDecimalOnly, fieldInfo: fieldInfo_SS_SM, expectedRecords: expectedDecimal_SS_SM },
-            { message: 'Numeric - double with separatorStart, separatorMark formats', records: recordInputDouble, fieldInfo: fieldInfo_SS_SM, expectedRecords: expectedDouble_SS_SM },
-            { message: 'Numeric - no separator with separatorStart, separatorMark formats', records: recordInputNoSeparator, fieldInfo: fieldInfo_SS_SM, expectedRecords: expectedNoSeparator_SS_SM },
-            { message: 'Numeric - multiple separators with separatorStart, separatorMark formats', records: recordInputMultipleSeparators, fieldInfo: fieldInfo_SS_SM, expectedRecords: expectedMultiSeparators_SS_SM },
+            {message: 'Numeric - decimal with separatorStart, separatorMark formats', records: recordInputDecimalOnly, fieldInfo: fieldInfo_SS_SM, expectedRecords: expectedDecimal_SS_SM},
+            {message: 'Numeric - double with separatorStart, separatorMark formats', records: recordInputDouble, fieldInfo: fieldInfo_SS_SM, expectedRecords: expectedDouble_SS_SM},
+            {message: 'Numeric - no separator with separatorStart, separatorMark formats', records: recordInputNoSeparator, fieldInfo: fieldInfo_SS_SM, expectedRecords: expectedNoSeparator_SS_SM},
+            {message: 'Numeric - multiple separators with separatorStart, separatorMark formats', records: recordInputMultipleSeparators, fieldInfo: fieldInfo_SS_SM, expectedRecords: expectedMultiSeparators_SS_SM},
 
-            { message: 'Numeric - decimal with separatorMark, separatorPattern formats', records: recordInputDecimalOnly, fieldInfo: fieldInfo_SM_SP, expectedRecords: expectedDecimal_SM_SP },
-            { message: 'Numeric - double with separatorMark, separatorPattern formats', records: recordInputDouble, fieldInfo: fieldInfo_SM_SP, expectedRecords: expectedDouble_SM_SP },
-            { message: 'Numeric - no separator with separatorMark, separatorPattern formats', records: recordInputNoSeparator, fieldInfo: fieldInfo_SM_SP, expectedRecords: expectedNoSeparator_SM_SP },
-            { message: 'Numeric - multiple separators with separatorMark, separatorPattern formats', records: recordInputMultipleSeparators, fieldInfo: fieldInfo_SM_SP, expectedRecords: expectedMultiSeparators_SM_SP },
+            {message: 'Numeric - decimal with separatorMark, separatorPattern formats', records: recordInputDecimalOnly, fieldInfo: fieldInfo_SM_SP, expectedRecords: expectedDecimal_SM_SP},
+            {message: 'Numeric - double with separatorMark, separatorPattern formats', records: recordInputDouble, fieldInfo: fieldInfo_SM_SP, expectedRecords: expectedDouble_SM_SP},
+            {message: 'Numeric - no separator with separatorMark, separatorPattern formats', records: recordInputNoSeparator, fieldInfo: fieldInfo_SM_SP, expectedRecords: expectedNoSeparator_SM_SP},
+            {message: 'Numeric - multiple separators with separatorMark, separatorPattern formats', records: recordInputMultipleSeparators, fieldInfo: fieldInfo_SM_SP, expectedRecords: expectedMultiSeparators_SM_SP},
 
-            { message: 'Numeric - decimal with separatorPattern, decimalMark formats', records: recordInputDecimalOnly, fieldInfo: fieldInfo_SP_DM, expectedRecords: expectedDecimal_SP_DM },
-            { message: 'Numeric - double with separatorPattern, decimalMark formats', records: recordInputDouble, fieldInfo: fieldInfo_SP_DM, expectedRecords: expectedDouble_SP_DM },
-            { message: 'Numeric - no separator with separatorPattern, decimalMark formats', records: recordInputNoSeparator, fieldInfo: fieldInfo_SP_DM, expectedRecords: expectedNoSeparator_SP_DM },
-            { message: 'Numeric - multiple separators with separatorPattern, decimalMark formats', records: recordInputMultipleSeparators, fieldInfo: fieldInfo_SP_DM, expectedRecords: expectedMultiSeparators_SP_DM },
+            {message: 'Numeric - decimal with separatorPattern, decimalMark formats', records: recordInputDecimalOnly, fieldInfo: fieldInfo_SP_DM, expectedRecords: expectedDecimal_SP_DM},
+            {message: 'Numeric - double with separatorPattern, decimalMark formats', records: recordInputDouble, fieldInfo: fieldInfo_SP_DM, expectedRecords: expectedDouble_SP_DM},
+            {message: 'Numeric - no separator with separatorPattern, decimalMark formats', records: recordInputNoSeparator, fieldInfo: fieldInfo_SP_DM, expectedRecords: expectedNoSeparator_SP_DM},
+            {message: 'Numeric - multiple separators with separatorPattern, decimalMark formats', records: recordInputMultipleSeparators, fieldInfo: fieldInfo_SP_DM, expectedRecords: expectedMultiSeparators_SP_DM},
 
             // 3 flags
-            { message: 'Numeric - decimal with decimalPlaces, separatorStart, separatorMark formats', records: recordInputDecimalOnly, fieldInfo: fieldInfo_DP_SS_SM, expectedRecords: expectedDecimal_DP_SS_SM },
-            { message: 'Numeric - double with decimalPlaces, separatorStart, separatorMark formats', records: recordInputDouble, fieldInfo: fieldInfo_DP_SS_SM, expectedRecords: expectedDouble_DP_SS_SM },
-            { message: 'Numeric - no separator with decimalPlaces, separatorStart, separatorMark formats', records: recordInputNoSeparator, fieldInfo: fieldInfo_DP_SS_SM, expectedRecords: expectedNoSeparator_DP_SS_SM },
-            { message: 'Numeric - multiple separators with decimalPlaces, separatorStart, separatorMark formats', records: recordInputMultipleSeparators, fieldInfo: fieldInfo_DP_SS_SM, expectedRecords: expectedMultiSeparators_DP_SS_SM },
+            {message: 'Numeric - decimal with decimalPlaces, separatorStart, separatorMark formats', records: recordInputDecimalOnly, fieldInfo: fieldInfo_DP_SS_SM, expectedRecords: expectedDecimal_DP_SS_SM},
+            {message: 'Numeric - double with decimalPlaces, separatorStart, separatorMark formats', records: recordInputDouble, fieldInfo: fieldInfo_DP_SS_SM, expectedRecords: expectedDouble_DP_SS_SM},
+            {message: 'Numeric - no separator with decimalPlaces, separatorStart, separatorMark formats', records: recordInputNoSeparator, fieldInfo: fieldInfo_DP_SS_SM, expectedRecords: expectedNoSeparator_DP_SS_SM},
+            {message: 'Numeric - multiple separators with decimalPlaces, separatorStart, separatorMark formats', records: recordInputMultipleSeparators, fieldInfo: fieldInfo_DP_SS_SM, expectedRecords: expectedMultiSeparators_DP_SS_SM},
 
-            { message: 'Numeric - decimal with decimalPlaces, separatorStart, separatorPattern formats', records: recordInputDecimalOnly, fieldInfo: fieldInfo_DP_SS_SP, expectedRecords: expectedDecimal_DP_SS_SP },
-            { message: 'Numeric - double with decimalPlaces, separatorStart, separatorPattern formats', records: recordInputDouble, fieldInfo: fieldInfo_DP_SS_SP, expectedRecords: expectedDouble_DP_SS_SP },
-            { message: 'Numeric - no separator with decimalPlaces, separatorStart, separatorPattern formats', records: recordInputNoSeparator, fieldInfo: fieldInfo_DP_SS_SP, expectedRecords: expectedNoSeparator_DP_SS_SP },
-            { message: 'Numeric - multiple separators with decimalPlaces, separatorStart, separatorPattern formats', records: recordInputMultipleSeparators, fieldInfo: fieldInfo_DP_SS_SP, expectedRecords: expectedMultiSeparators_DP_SS_SP },
+            {message: 'Numeric - decimal with decimalPlaces, separatorStart, separatorPattern formats', records: recordInputDecimalOnly, fieldInfo: fieldInfo_DP_SS_SP, expectedRecords: expectedDecimal_DP_SS_SP},
+            {message: 'Numeric - double with decimalPlaces, separatorStart, separatorPattern formats', records: recordInputDouble, fieldInfo: fieldInfo_DP_SS_SP, expectedRecords: expectedDouble_DP_SS_SP},
+            {message: 'Numeric - no separator with decimalPlaces, separatorStart, separatorPattern formats', records: recordInputNoSeparator, fieldInfo: fieldInfo_DP_SS_SP, expectedRecords: expectedNoSeparator_DP_SS_SP},
+            {message: 'Numeric - multiple separators with decimalPlaces, separatorStart, separatorPattern formats', records: recordInputMultipleSeparators, fieldInfo: fieldInfo_DP_SS_SP, expectedRecords: expectedMultiSeparators_DP_SS_SP},
 
-            { message: 'Numeric - decimal with decimalPlaces, separatorStart, decimalMark formats', records: recordInputDecimalOnly, fieldInfo: fieldInfo_DP_SS_DM, expectedRecords: expectedDecimal_DP_SS_DM },
-            { message: 'Numeric - double with decimalPlaces, separatorStart, decimalMark formats', records: recordInputDouble, fieldInfo: fieldInfo_DP_SS_DM, expectedRecords: expectedDouble_DP_SS_DM },
-            { message: 'Numeric - no separator with decimalPlaces, separatorStart, decimalMark formats', records: recordInputNoSeparator, fieldInfo: fieldInfo_DP_SS_DM, expectedRecords: expectedNoSeparator_DP_SS_DM },
-            { message: 'Numeric - multiple separators with decimalPlaces, separatorStart, decimalMark formats', records: recordInputMultipleSeparators, fieldInfo: fieldInfo_DP_SS_DM, expectedRecords: expectedMultiSeparators_DP_SS_DM },
+            {message: 'Numeric - decimal with decimalPlaces, separatorStart, decimalMark formats', records: recordInputDecimalOnly, fieldInfo: fieldInfo_DP_SS_DM, expectedRecords: expectedDecimal_DP_SS_DM},
+            {message: 'Numeric - double with decimalPlaces, separatorStart, decimalMark formats', records: recordInputDouble, fieldInfo: fieldInfo_DP_SS_DM, expectedRecords: expectedDouble_DP_SS_DM},
+            {message: 'Numeric - no separator with decimalPlaces, separatorStart, decimalMark formats', records: recordInputNoSeparator, fieldInfo: fieldInfo_DP_SS_DM, expectedRecords: expectedNoSeparator_DP_SS_DM},
+            {message: 'Numeric - multiple separators with decimalPlaces, separatorStart, decimalMark formats', records: recordInputMultipleSeparators, fieldInfo: fieldInfo_DP_SS_DM, expectedRecords: expectedMultiSeparators_DP_SS_DM},
 
-            { message: 'Numeric - decimal with decimalPlaces, separatorMark, separatorPattern formats', records: recordInputDecimalOnly, fieldInfo: fieldInfo_DP_SM_SP, expectedRecords: expectedDecimal_DP_SM_SP },
-            { message: 'Numeric - double with decimalPlaces, separatorMark, separatorPattern formats', records: recordInputDouble, fieldInfo: fieldInfo_DP_SM_SP, expectedRecords: expectedDouble_DP_SM_SP },
-            { message: 'Numeric - no separator with decimalPlaces, separatorMark, separatorPattern formats', records: recordInputNoSeparator, fieldInfo: fieldInfo_DP_SM_SP, expectedRecords: expectedNoSeparator_DP_SM_SP },
-            { message: 'Numeric - multiple separators with decimalPlaces, separatorMark, separatorPattern formats', records: recordInputMultipleSeparators, fieldInfo: fieldInfo_DP_SM_SP, expectedRecords: expectedMultiSeparators_DP_SM_SP },
+            {message: 'Numeric - decimal with decimalPlaces, separatorMark, separatorPattern formats', records: recordInputDecimalOnly, fieldInfo: fieldInfo_DP_SM_SP, expectedRecords: expectedDecimal_DP_SM_SP},
+            {message: 'Numeric - double with decimalPlaces, separatorMark, separatorPattern formats', records: recordInputDouble, fieldInfo: fieldInfo_DP_SM_SP, expectedRecords: expectedDouble_DP_SM_SP},
+            {message: 'Numeric - no separator with decimalPlaces, separatorMark, separatorPattern formats', records: recordInputNoSeparator, fieldInfo: fieldInfo_DP_SM_SP, expectedRecords: expectedNoSeparator_DP_SM_SP},
+            {message: 'Numeric - multiple separators with decimalPlaces, separatorMark, separatorPattern formats', records: recordInputMultipleSeparators, fieldInfo: fieldInfo_DP_SM_SP, expectedRecords: expectedMultiSeparators_DP_SM_SP},
 
-            { message: 'Numeric - decimal with decimalPlaces, separatorMark, decimalMark formats', records: recordInputDecimalOnly, fieldInfo: fieldInfo_DP_SM_DM, expectedRecords: expectedDecimal_DP_SM_DM },
-            { message: 'Numeric - double with decimalPlaces, separatorMark, decimalMark formats', records: recordInputDouble, fieldInfo: fieldInfo_DP_SM_DM, expectedRecords: expectedDouble_DP_SM_DM },
-            { message: 'Numeric - no separator with decimalPlaces, separatorMark, decimalMark formats', records: recordInputNoSeparator, fieldInfo: fieldInfo_DP_SM_DM, expectedRecords: expectedNoSeparator_DP_SM_DM },
-            { message: 'Numeric - multiple separators with decimalPlaces, separatorMark, decimalMark formats', records: recordInputMultipleSeparators, fieldInfo: fieldInfo_DP_SM_DM, expectedRecords: expectedMultiSeparators_DP_SM_DM },
+            {message: 'Numeric - decimal with decimalPlaces, separatorMark, decimalMark formats', records: recordInputDecimalOnly, fieldInfo: fieldInfo_DP_SM_DM, expectedRecords: expectedDecimal_DP_SM_DM},
+            {message: 'Numeric - double with decimalPlaces, separatorMark, decimalMark formats', records: recordInputDouble, fieldInfo: fieldInfo_DP_SM_DM, expectedRecords: expectedDouble_DP_SM_DM},
+            {message: 'Numeric - no separator with decimalPlaces, separatorMark, decimalMark formats', records: recordInputNoSeparator, fieldInfo: fieldInfo_DP_SM_DM, expectedRecords: expectedNoSeparator_DP_SM_DM},
+            {message: 'Numeric - multiple separators with decimalPlaces, separatorMark, decimalMark formats', records: recordInputMultipleSeparators, fieldInfo: fieldInfo_DP_SM_DM, expectedRecords: expectedMultiSeparators_DP_SM_DM},
 
-            { message: 'Numeric - decimal with decimalPlaces, separatorPattern, decimalMark formats', records: recordInputDecimalOnly, fieldInfo: fieldInfo_DP_SP_DM, expectedRecords: expectedDecimal_DP_SP_DM },
-            { message: 'Numeric - double with decimalPlaces, separatorPattern, decimalMark formats', records: recordInputDouble, fieldInfo: fieldInfo_DP_SP_DM, expectedRecords: expectedDouble_DP_SP_DM },
-            { message: 'Numeric - no separator with decimalPlaces, separatorPattern, decimalMark formats', records: recordInputNoSeparator, fieldInfo: fieldInfo_DP_SP_DM, expectedRecords: expectedNoSeparator_DP_SP_DM },
-            { message: 'Numeric - multiple separators with decimalPlaces, separatorPattern, decimalMark formats', records: recordInputMultipleSeparators, fieldInfo: fieldInfo_DP_SP_DM, expectedRecords: expectedMultiSeparators_DP_SP_DM },
+            {message: 'Numeric - decimal with decimalPlaces, separatorPattern, decimalMark formats', records: recordInputDecimalOnly, fieldInfo: fieldInfo_DP_SP_DM, expectedRecords: expectedDecimal_DP_SP_DM},
+            {message: 'Numeric - double with decimalPlaces, separatorPattern, decimalMark formats', records: recordInputDouble, fieldInfo: fieldInfo_DP_SP_DM, expectedRecords: expectedDouble_DP_SP_DM},
+            {message: 'Numeric - no separator with decimalPlaces, separatorPattern, decimalMark formats', records: recordInputNoSeparator, fieldInfo: fieldInfo_DP_SP_DM, expectedRecords: expectedNoSeparator_DP_SP_DM},
+            {message: 'Numeric - multiple separators with decimalPlaces, separatorPattern, decimalMark formats', records: recordInputMultipleSeparators, fieldInfo: fieldInfo_DP_SP_DM, expectedRecords: expectedMultiSeparators_DP_SP_DM},
 
-            { message: 'Numeric - decimal with separatorStart, separatorMark, separatorPattern formats', records: recordInputDecimalOnly, fieldInfo: fieldInfo_SS_SM_SP, expectedRecords: expectedDecimal_SS_SM_SP },
-            { message: 'Numeric - double with separatorStart, separatorMark, separatorPattern formats', records: recordInputDouble, fieldInfo: fieldInfo_SS_SM_SP, expectedRecords: expectedDouble_SS_SM_SP },
-            { message: 'Numeric - no separator with separatorStart, separatorMark, separatorPattern formats', records: recordInputNoSeparator, fieldInfo: fieldInfo_SS_SM_SP, expectedRecords: expectedNoSeparator_SS_SM_SP },
-            { message: 'Numeric - multiple separators with separatorStart, separatorMark, separatorPattern formats', records: recordInputMultipleSeparators, fieldInfo: fieldInfo_SS_SM_SP, expectedRecords: expectedMultiSeparators_SS_SM_SP },
+            {message: 'Numeric - decimal with separatorStart, separatorMark, separatorPattern formats', records: recordInputDecimalOnly, fieldInfo: fieldInfo_SS_SM_SP, expectedRecords: expectedDecimal_SS_SM_SP},
+            {message: 'Numeric - double with separatorStart, separatorMark, separatorPattern formats', records: recordInputDouble, fieldInfo: fieldInfo_SS_SM_SP, expectedRecords: expectedDouble_SS_SM_SP},
+            {message: 'Numeric - no separator with separatorStart, separatorMark, separatorPattern formats', records: recordInputNoSeparator, fieldInfo: fieldInfo_SS_SM_SP, expectedRecords: expectedNoSeparator_SS_SM_SP},
+            {message: 'Numeric - multiple separators with separatorStart, separatorMark, separatorPattern formats', records: recordInputMultipleSeparators, fieldInfo: fieldInfo_SS_SM_SP, expectedRecords: expectedMultiSeparators_SS_SM_SP},
 
-            { message: 'Numeric - decimal with separatorStart, separatorMark, decimalMark formats', records: recordInputDecimalOnly, fieldInfo: fieldInfo_SS_SM_DM, expectedRecords: expectedDecimal_SS_SM_DM },
-            { message: 'Numeric - double with separatorStart, separatorMark, decimalMark formats', records: recordInputDouble, fieldInfo: fieldInfo_SS_SM_DM, expectedRecords: expectedDouble_SS_SM_DM },
-            { message: 'Numeric - no separator with separatorStart, separatorMark, decimalMark formats', records: recordInputNoSeparator, fieldInfo: fieldInfo_SS_SM_DM, expectedRecords: expectedNoSeparator_SS_SM_DM },
-            { message: 'Numeric - multiple separators with separatorStart, separatorMark, decimalMark formats', records: recordInputMultipleSeparators, fieldInfo: fieldInfo_SS_SM_DM, expectedRecords: expectedMultiSeparators_SS_SM_DM },
+            {message: 'Numeric - decimal with separatorStart, separatorMark, decimalMark formats', records: recordInputDecimalOnly, fieldInfo: fieldInfo_SS_SM_DM, expectedRecords: expectedDecimal_SS_SM_DM},
+            {message: 'Numeric - double with separatorStart, separatorMark, decimalMark formats', records: recordInputDouble, fieldInfo: fieldInfo_SS_SM_DM, expectedRecords: expectedDouble_SS_SM_DM},
+            {message: 'Numeric - no separator with separatorStart, separatorMark, decimalMark formats', records: recordInputNoSeparator, fieldInfo: fieldInfo_SS_SM_DM, expectedRecords: expectedNoSeparator_SS_SM_DM},
+            {message: 'Numeric - multiple separators with separatorStart, separatorMark, decimalMark formats', records: recordInputMultipleSeparators, fieldInfo: fieldInfo_SS_SM_DM, expectedRecords: expectedMultiSeparators_SS_SM_DM},
 
-            { message: 'Numeric - decimal with separatorStart, separatorPattern, decimalMark formats', records: recordInputDecimalOnly, fieldInfo: fieldInfo_SS_SP_DM, expectedRecords: expectedDecimal_SS_SP_DM },
-            { message: 'Numeric - double with separatorStart, separatorPattern, decimalMark formats', records: recordInputDouble, fieldInfo: fieldInfo_SS_SP_DM, expectedRecords: expectedDouble_SS_SP_DM },
-            { message: 'Numeric - no separator with separatorStart, separatorPattern, decimalMark formats', records: recordInputNoSeparator, fieldInfo: fieldInfo_SS_SP_DM, expectedRecords: expectedNoSeparator_SS_SP_DM },
-            { message: 'Numeric - multiple separators with separatorStart, separatorPattern, decimalMark formats', records: recordInputMultipleSeparators, fieldInfo: fieldInfo_SS_SP_DM, expectedRecords: expectedMultiSeparators_SS_SP_DM },
+            {message: 'Numeric - decimal with separatorStart, separatorPattern, decimalMark formats', records: recordInputDecimalOnly, fieldInfo: fieldInfo_SS_SP_DM, expectedRecords: expectedDecimal_SS_SP_DM},
+            {message: 'Numeric - double with separatorStart, separatorPattern, decimalMark formats', records: recordInputDouble, fieldInfo: fieldInfo_SS_SP_DM, expectedRecords: expectedDouble_SS_SP_DM},
+            {message: 'Numeric - no separator with separatorStart, separatorPattern, decimalMark formats', records: recordInputNoSeparator, fieldInfo: fieldInfo_SS_SP_DM, expectedRecords: expectedNoSeparator_SS_SP_DM},
+            {message: 'Numeric - multiple separators with separatorStart, separatorPattern, decimalMark formats', records: recordInputMultipleSeparators, fieldInfo: fieldInfo_SS_SP_DM, expectedRecords: expectedMultiSeparators_SS_SP_DM},
 
-            { message: 'Numeric - decimal with separatorMark, separatorPattern, decimalMark formats', records: recordInputDecimalOnly, fieldInfo: fieldInfo_SM_SP_DM, expectedRecords: expectedDecimal_SM_SP_DM },
-            { message: 'Numeric - double with separatorMark, separatorPattern, decimalMark formats', records: recordInputDouble, fieldInfo: fieldInfo_SM_SP_DM, expectedRecords: expectedDouble_SM_SP_DM },
-            { message: 'Numeric - no separator with separatorMark, separatorPattern, decimalMark formats', records: recordInputNoSeparator, fieldInfo: fieldInfo_SM_SP_DM, expectedRecords: expectedNoSeparator_SM_SP_DM },
-            { message: 'Numeric - multiple separators with separatorMark, separatorPattern, decimalMark formats', records: recordInputMultipleSeparators, fieldInfo: fieldInfo_SM_SP_DM, expectedRecords: expectedMultiSeparators_SM_SP_DM },
+            {message: 'Numeric - decimal with separatorMark, separatorPattern, decimalMark formats', records: recordInputDecimalOnly, fieldInfo: fieldInfo_SM_SP_DM, expectedRecords: expectedDecimal_SM_SP_DM},
+            {message: 'Numeric - double with separatorMark, separatorPattern, decimalMark formats', records: recordInputDouble, fieldInfo: fieldInfo_SM_SP_DM, expectedRecords: expectedDouble_SM_SP_DM},
+            {message: 'Numeric - no separator with separatorMark, separatorPattern, decimalMark formats', records: recordInputNoSeparator, fieldInfo: fieldInfo_SM_SP_DM, expectedRecords: expectedNoSeparator_SM_SP_DM},
+            {message: 'Numeric - multiple separators with separatorMark, separatorPattern, decimalMark formats', records: recordInputMultipleSeparators, fieldInfo: fieldInfo_SM_SP_DM, expectedRecords: expectedMultiSeparators_SM_SP_DM},
 
             // 4 flags
-            { message: 'Numeric - decimal with decimalPlaces, separatorStart, separatorMark, separatorPattern format flags', records: recordInputDecimalOnly, fieldInfo: fieldInfo_DP_SS_SM_SP, expectedRecords: expectedDecimal_DP_SS_SM_SP },
-            { message: 'Numeric - double with decimalPlaces, separatorStart, separatorMark, separatorPattern format flags', records: recordInputDouble, fieldInfo: fieldInfo_DP_SS_SM_SP, expectedRecords: expectedDouble_DP_SS_SM_SP },
-            { message: 'Numeric - no separator with decimalPlaces, separatorStart, separatorMark, separatorPattern format flags', records: recordInputNoSeparator, fieldInfo: fieldInfo_DP_SS_SM_SP, expectedRecords: expectedNoSeparator_DP_SS_SM_SP },
-            { message: 'Numeric - multiple separators with decimalPlaces, separatorStart, separatorMark, separatorPattern format flags', records: recordInputMultipleSeparators, fieldInfo: fieldInfo_DP_SS_SM_SP, expectedRecords: expectedMultiSeparators_DP_SS_SM_SP },
+            {message: 'Numeric - decimal with decimalPlaces, separatorStart, separatorMark, separatorPattern format flags', records: recordInputDecimalOnly, fieldInfo: fieldInfo_DP_SS_SM_SP, expectedRecords: expectedDecimal_DP_SS_SM_SP},
+            {message: 'Numeric - double with decimalPlaces, separatorStart, separatorMark, separatorPattern format flags', records: recordInputDouble, fieldInfo: fieldInfo_DP_SS_SM_SP, expectedRecords: expectedDouble_DP_SS_SM_SP},
+            {message: 'Numeric - no separator with decimalPlaces, separatorStart, separatorMark, separatorPattern format flags', records: recordInputNoSeparator, fieldInfo: fieldInfo_DP_SS_SM_SP, expectedRecords: expectedNoSeparator_DP_SS_SM_SP},
+            {message: 'Numeric - multiple separators with decimalPlaces, separatorStart, separatorMark, separatorPattern format flags', records: recordInputMultipleSeparators, fieldInfo: fieldInfo_DP_SS_SM_SP, expectedRecords: expectedMultiSeparators_DP_SS_SM_SP},
 
-            { message: 'Numeric - decimal with decimalPlaces, separatorStart, separatorMark, decimalMark format flags', records: recordInputDecimalOnly, fieldInfo: fieldInfo_DP_SS_SM_DM, expectedRecords: expectedDecimal_DP_SS_SM_DM },
-            { message: 'Numeric - double with decimalPlaces, separatorStart, separatorMark, decimalMark format flags', records: recordInputDouble, fieldInfo: fieldInfo_DP_SS_SM_DM, expectedRecords: expectedDouble_DP_SS_SM_DM },
-            { message: 'Numeric - no separator with decimalPlaces, separatorStart, separatorMark, decimalMark format flags', records: recordInputNoSeparator, fieldInfo: fieldInfo_DP_SS_SM_DM, expectedRecords: expectedNoSeparator_DP_SS_SM_DM },
-            { message: 'Numeric - multiple separators with decimalPlaces, separatorStart, separatorMark, decimalMark format flags', records: recordInputMultipleSeparators, fieldInfo: fieldInfo_DP_SS_SM_DM, expectedRecords: expectedMultiSeparators_DP_SS_SM_DM },
+            {message: 'Numeric - decimal with decimalPlaces, separatorStart, separatorMark, decimalMark format flags', records: recordInputDecimalOnly, fieldInfo: fieldInfo_DP_SS_SM_DM, expectedRecords: expectedDecimal_DP_SS_SM_DM},
+            {message: 'Numeric - double with decimalPlaces, separatorStart, separatorMark, decimalMark format flags', records: recordInputDouble, fieldInfo: fieldInfo_DP_SS_SM_DM, expectedRecords: expectedDouble_DP_SS_SM_DM},
+            {message: 'Numeric - no separator with decimalPlaces, separatorStart, separatorMark, decimalMark format flags', records: recordInputNoSeparator, fieldInfo: fieldInfo_DP_SS_SM_DM, expectedRecords: expectedNoSeparator_DP_SS_SM_DM},
+            {message: 'Numeric - multiple separators with decimalPlaces, separatorStart, separatorMark, decimalMark format flags', records: recordInputMultipleSeparators, fieldInfo: fieldInfo_DP_SS_SM_DM, expectedRecords: expectedMultiSeparators_DP_SS_SM_DM},
 
-            { message: 'Numeric - decimal with decimalPlaces, separatorStart, separatorPattern, decimalMark format flags', records: recordInputDecimalOnly, fieldInfo: fieldInfo_DP_SS_SP_DM, expectedRecords: expectedDecimal_DP_SS_SP_DM },
-            { message: 'Numeric - double with decimalPlaces, separatorStart, separatorPattern, decimalMark format flags', records: recordInputDouble, fieldInfo: fieldInfo_DP_SS_SP_DM, expectedRecords: expectedDouble_DP_SS_SP_DM },
-            { message: 'Numeric - no separator with decimalPlaces, separatorStart, separatorPattern, decimalMark format flags', records: recordInputNoSeparator, fieldInfo: fieldInfo_DP_SS_SP_DM, expectedRecords: expectedNoSeparator_DP_SS_SP_DM },
-            { message: 'Numeric - multiple separators with decimalPlaces, separatorStart, separatorPattern, decimalMark format flags', records: recordInputMultipleSeparators, fieldInfo: fieldInfo_DP_SS_SP_DM, expectedRecords: expectedMultiSeparators_DP_SS_SP_DM },
+            {message: 'Numeric - decimal with decimalPlaces, separatorStart, separatorPattern, decimalMark format flags', records: recordInputDecimalOnly, fieldInfo: fieldInfo_DP_SS_SP_DM, expectedRecords: expectedDecimal_DP_SS_SP_DM},
+            {message: 'Numeric - double with decimalPlaces, separatorStart, separatorPattern, decimalMark format flags', records: recordInputDouble, fieldInfo: fieldInfo_DP_SS_SP_DM, expectedRecords: expectedDouble_DP_SS_SP_DM},
+            {message: 'Numeric - no separator with decimalPlaces, separatorStart, separatorPattern, decimalMark format flags', records: recordInputNoSeparator, fieldInfo: fieldInfo_DP_SS_SP_DM, expectedRecords: expectedNoSeparator_DP_SS_SP_DM},
+            {message: 'Numeric - multiple separators with decimalPlaces, separatorStart, separatorPattern, decimalMark format flags', records: recordInputMultipleSeparators, fieldInfo: fieldInfo_DP_SS_SP_DM, expectedRecords: expectedMultiSeparators_DP_SS_SP_DM},
 
-            { message: 'Numeric - decimal with decimalPlaces, separatorMark, separatorPattern, decimalMark format flags', records: recordInputDecimalOnly, fieldInfo: fieldInfo_DP_SM_SP_DM, expectedRecords: expectedDecimal_DP_SM_SP_DM },
-            { message: 'Numeric - double with decimalPlaces, separatorMark, separatorPattern, decimalMark format flags', records: recordInputDouble, fieldInfo: fieldInfo_DP_SM_SP_DM, expectedRecords: expectedDouble_DP_SM_SP_DM },
-            { message: 'Numeric - no separator with decimalPlaces, separatorMark, separatorPattern, decimalMark format flags', records: recordInputNoSeparator, fieldInfo: fieldInfo_DP_SM_SP_DM, expectedRecords: expectedNoSeparator_DP_SM_SP_DM },
-            { message: 'Numeric - multiple separators with decimalPlaces, separatorMark, separatorPattern, decimalMark format flags', records: recordInputMultipleSeparators, fieldInfo: fieldInfo_DP_SM_SP_DM, expectedRecords: expectedMultiSeparators_DP_SM_SP_DM },
+            {message: 'Numeric - decimal with decimalPlaces, separatorMark, separatorPattern, decimalMark format flags', records: recordInputDecimalOnly, fieldInfo: fieldInfo_DP_SM_SP_DM, expectedRecords: expectedDecimal_DP_SM_SP_DM},
+            {message: 'Numeric - double with decimalPlaces, separatorMark, separatorPattern, decimalMark format flags', records: recordInputDouble, fieldInfo: fieldInfo_DP_SM_SP_DM, expectedRecords: expectedDouble_DP_SM_SP_DM},
+            {message: 'Numeric - no separator with decimalPlaces, separatorMark, separatorPattern, decimalMark format flags', records: recordInputNoSeparator, fieldInfo: fieldInfo_DP_SM_SP_DM, expectedRecords: expectedNoSeparator_DP_SM_SP_DM},
+            {message: 'Numeric - multiple separators with decimalPlaces, separatorMark, separatorPattern, decimalMark format flags', records: recordInputMultipleSeparators, fieldInfo: fieldInfo_DP_SM_SP_DM, expectedRecords: expectedMultiSeparators_DP_SM_SP_DM},
 
-            { message: 'Numeric - decimal with separatorStart, separatorMark, separatorPattern, decimalMark format flags', records: recordInputDecimalOnly, fieldInfo: fieldInfo_SS_SM_SP_DM, expectedRecords: expectedDecimal_SS_SM_SP_DM },
-            { message: 'Numeric - double with separatorStart, separatorMark, separatorPattern, decimalMark format flags', records: recordInputDouble, fieldInfo: fieldInfo_SS_SM_SP_DM, expectedRecords: expectedDouble_SS_SM_SP_DM },
-            { message: 'Numeric - no separator with separatorStart, separatorMark, separatorPattern, decimalMark format flags', records: recordInputNoSeparator, fieldInfo: fieldInfo_SS_SM_SP_DM, expectedRecords: expectedNoSeparator_SS_SM_SP_DM },
-            { message: 'Numeric - multiple separators with separatorStart, separatorMark, separatorPattern, decimalMark format flags', records: recordInputMultipleSeparators, fieldInfo: fieldInfo_SS_SM_SP_DM, expectedRecords: expectedMultiSeparators_SS_SM_SP_DM },
+            {message: 'Numeric - decimal with separatorStart, separatorMark, separatorPattern, decimalMark format flags', records: recordInputDecimalOnly, fieldInfo: fieldInfo_SS_SM_SP_DM, expectedRecords: expectedDecimal_SS_SM_SP_DM},
+            {message: 'Numeric - double with separatorStart, separatorMark, separatorPattern, decimalMark format flags', records: recordInputDouble, fieldInfo: fieldInfo_SS_SM_SP_DM, expectedRecords: expectedDouble_SS_SM_SP_DM},
+            {message: 'Numeric - no separator with separatorStart, separatorMark, separatorPattern, decimalMark format flags', records: recordInputNoSeparator, fieldInfo: fieldInfo_SS_SM_SP_DM, expectedRecords: expectedNoSeparator_SS_SM_SP_DM},
+            {message: 'Numeric - multiple separators with separatorStart, separatorMark, separatorPattern, decimalMark format flags', records: recordInputMultipleSeparators, fieldInfo: fieldInfo_SS_SM_SP_DM, expectedRecords: expectedMultiSeparators_SS_SM_SP_DM},
 
             // All flags
-            { message: 'Numeric - decimal with all format flags', records: recordInputDecimalOnly, fieldInfo: allFlagsFieldInfo, expectedRecords: expectedDecimal_AllFlags },
-            { message: 'Numeric - double with all format flags', records: recordInputDouble, fieldInfo: allFlagsFieldInfo, expectedRecords: expectedDouble_AllFlags },
-            { message: 'Numeric - no separator with all format flags', records: recordInputNoSeparator, fieldInfo: allFlagsFieldInfo, expectedRecords: expectedNoSeparator_AllFlags },
-            { message: 'Numeric - multiple separators with all format flags', records: recordInputMultipleSeparators, fieldInfo: allFlagsFieldInfo, expectedRecords: expectedMultiSeparators_AllFlags },
+            {message: 'Numeric - decimal with all format flags', records: recordInputDecimalOnly, fieldInfo: allFlagsFieldInfo, expectedRecords: expectedDecimal_AllFlags},
+            {message: 'Numeric - double with all format flags', records: recordInputDouble, fieldInfo: allFlagsFieldInfo, expectedRecords: expectedDouble_AllFlags},
+            {message: 'Numeric - no separator with all format flags', records: recordInputNoSeparator, fieldInfo: allFlagsFieldInfo, expectedRecords: expectedNoSeparator_AllFlags},
+            {message: 'Numeric - multiple separators with all format flags', records: recordInputMultipleSeparators, fieldInfo: allFlagsFieldInfo, expectedRecords: expectedMultiSeparators_AllFlags},
 
-            { message: 'Numeric - decimal with invalid format flags', records: recordInputDecimalOnly, fieldInfo: invalidFlagsFieldInfo, expectedRecords: expectedDecimal_InvalidFlags },
-            { message: 'Numeric - double with invalid format flags', records: recordInputDouble, fieldInfo: invalidFlagsFieldInfo, expectedRecords: expectedDouble_InvalidFlags },
-            { message: 'Numeric - no separator with invalid format flags', records: recordInputNoSeparator, fieldInfo: invalidFlagsFieldInfo, expectedRecords: expectedNoSeparator_InvalidFlags },
-            { message: 'Numeric - multiple separators with invalid format flags', records: recordInputMultipleSeparators, fieldInfo: invalidFlagsFieldInfo, expectedRecords: expectedMultiSeparators_InvalidFlags },
+            {message: 'Numeric - decimal with invalid format flags', records: recordInputDecimalOnly, fieldInfo: invalidFlagsFieldInfo, expectedRecords: expectedDecimal_InvalidFlags},
+            {message: 'Numeric - double with invalid format flags', records: recordInputDouble, fieldInfo: invalidFlagsFieldInfo, expectedRecords: expectedDouble_InvalidFlags},
+            {message: 'Numeric - no separator with invalid format flags', records: recordInputNoSeparator, fieldInfo: invalidFlagsFieldInfo, expectedRecords: expectedNoSeparator_InvalidFlags},
+            {message: 'Numeric - multiple separators with invalid format flags', records: recordInputMultipleSeparators, fieldInfo: invalidFlagsFieldInfo, expectedRecords: expectedMultiSeparators_InvalidFlags},
         ];
 
         return cases;
@@ -973,7 +975,7 @@ describe('Numeric record formatter unit test', function() {
     /**
      * Unit test that validates Numeric records formatting with various field property flags set
      */
-    describe('should format a numeric record with various properties for display',function() {
+    describe('should format a numeric record with various properties for display', function() {
         provider().forEach(function(entry) {
             it('Test case: ' + entry.message, function(done) {
                 var formattedRecords = recordFormatter.formatRecords(entry.records, entry.fieldInfo);

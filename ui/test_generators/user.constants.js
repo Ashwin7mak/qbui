@@ -4,11 +4,11 @@
  */
 (function() {
     module.exports = Object.freeze({
-        ID : 'id',
-        FIRST : 'firstName',
-        LAST : 'lastName',
-        SCREEN_NAME : 'screenName',
-        EMAIL : 'email',
-        DEACTIVATED : 'deactivated'
+        ID         : 'id',
+        FIRST      : 'firstName',
+        LAST       : 'lastName',
+        SCREEN_NAME: 'screenName',
+        EMAIL      : 'email',
+        DEACTIVATED: 'deactivated'
     });
 }());

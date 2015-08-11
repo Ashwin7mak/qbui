@@ -1,4 +1,3 @@
-
 // Development specific configuration
 // ===========================
 
@@ -14,16 +13,16 @@
 
         //  Logging configuration
         LOG: {
-            name: 'qbse-dev',
-            level: 'debug',
+            name  : 'qbse-dev',
+            level : 'debug',
             stream: {
                 type: 'console',         //  file or console
                 file: {
-                    dir: './logs',
+                    dir : './logs',
                     name: 'qbse-dev-' + dateUtils.formatDate(new Date(), '%Y-%M-%D-%h.%m.%s') + '.log'
                 }
             },
-            src: true               // this is slow...do not use in prod
+            src   : true               // this is slow...do not use in prod
         },
 
         // to run using ssl, copy the private key and cert for
@@ -31,11 +30,11 @@
         // folder...no keys defined equates to no SSL support.
         SSL_KEY: {
             private: '',
-            cert: ''
+            cert   : ''
         },
 
         // allow for override of default ports
-        port: 9000,
+        port   : 9000,
         sslPort: 9443,
 
         //DEV REST endpoint (protocol,server,port)
@@ -44,7 +43,7 @@
         //DEV Express Server
         DOMAIN: '',
 
-        env: envConsts.TEST,
+        env       : envConsts.TEST,
         routeGroup: routeGroups.DEBUG
 
 

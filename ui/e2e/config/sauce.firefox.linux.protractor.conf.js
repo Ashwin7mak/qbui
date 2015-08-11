@@ -9,8 +9,8 @@ exports.config = {
     allScriptsTimeout: 110000,
 
     //The sauce user and access key allow us to run our browser tests remotely on a SauceLabs VM
-    sauceUser: "sbg_qbse",
-    sauceKey: process.env.SAUCE_KEY,
+    sauceUser           : "sbg_qbse",
+    sauceKey            : process.env.SAUCE_KEY,
     //we have to specify the selenium address to point locally so that we use the tunnel properly
     sauceSeleniumAddress: 'localhost:4445/wd/hub',
 
@@ -31,9 +31,9 @@ exports.config = {
     // and
     // https://code.google.com/p/selenium/source/browse/javascript/webdriver/capabilities.js
     capabilities: {
-        'browserName': 'firefox',
+        'browserName'   : 'firefox',
         tunnelIdentifier: process.env.ENV_TUNNEL_NAME,
-        name: process.env.SAUCE_JOB_NAME
+        name            : process.env.SAUCE_JOB_NAME
     },
 
     // ----- The test framework -----

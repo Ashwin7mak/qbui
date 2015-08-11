@@ -66,7 +66,7 @@
 
             if (typeof masterTable === 'undefined' || typeof detailTable === 'undefined') {
                 console.error('Could not find any matching tables for the ids provided!');
-                throw new Error('Could not find any matching tables for the ids provided! masterTableId: '+ masterTableId +', detailTableId: ' + detailTableId +', app: ' + app );
+                throw new Error('Could not find any matching tables for the ids provided! masterTableId: ' + masterTableId + ', detailTableId: ' + detailTableId + ', app: ' + app);
             }
 
             return this.generateRelationship(masterTable, detailTable);
@@ -152,8 +152,8 @@
          * @param relationship
          * @returns {boolean}
          */
-        validateRelationshipProperties : function(relationship) {
-           var relationshipPropsValid = true;
+        validateRelationshipProperties: function(relationship) {
+            var relationshipPropsValid = true;
 
             if (typeof relationship[relationshipConstants.MASTER_APP_ID] !== 'string') {
                 relationshipPropsValid = false;

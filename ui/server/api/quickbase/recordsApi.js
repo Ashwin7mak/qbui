@@ -77,7 +77,7 @@
             var returnFields = fields;
             if (record && fields && record.length !== fields.length) {
                 returnFields = [];
-                for (var idx=0; idx<record.length; idx++) {
+                for (var idx = 0; idx < record.length; idx++) {
                     var f = findFieldById(record[idx].id, fields);
                     if (f !== null) {
                         returnFields.push(f);
@@ -89,7 +89,7 @@
 
         //Given a field id and collection of fields, find and return the field ID
         function findFieldById(fieldId, fields) {
-            for (var idx=0; idx<fields.length; idx++) {
+            for (var idx = 0; idx < fields.length; idx++) {
                 if (fields[idx].id === fieldId) {
                     return fields[idx];
                 }
@@ -127,7 +127,7 @@
              * Allows you to override the
              * @param requestOverride
              */
-            setRequestObject:function(requestOverride) {
+            setRequestObject: function(requestOverride) {
                 request = requestOverride;
             },
 

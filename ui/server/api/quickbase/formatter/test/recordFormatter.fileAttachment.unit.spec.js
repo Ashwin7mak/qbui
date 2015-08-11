@@ -22,26 +22,28 @@ describe('FileAttachment record formatter unit test', function() {
          * FieldInfo and expectations for no flags
          */
         var fieldInfo_NoFlags = [{
-            id: 7,
-            name: 'file',
+            id                : 7,
+            name              : 'file',
             datatypeAttributes: {
                 type: 'FILE_ATTACHMENT'
             },
-            type:'CONCRETE'
-         }];
+            type              : 'CONCRETE'
+        }];
 
-        var recordInputLocalFile =  [[{
-            id: 7,
-            value: localFile}]];
+        var recordInputLocalFile = [[{
+            id   : 7,
+            value: localFile
+        }]];
         var recordInputURLFile = JSON.parse(JSON.stringify(recordInputLocalFile));
         recordInputURLFile[0][0].value = urlFile;
         var recordInputHttpsURLFile = JSON.parse(JSON.stringify(recordInputLocalFile));
         recordInputHttpsURLFile[0][0].value = httpsURLFile;
 
         var expectedLocalFile_NoFlags = [[{
-            id: 7,
-            value: localFile,
-            display: localFile}]];
+            id     : 7,
+            value  : localFile,
+            display: localFile
+        }]];
         var expectedURLFile_NoFlags = JSON.parse(JSON.stringify(expectedLocalFile_NoFlags));
         expectedURLFile_NoFlags[0][0].value = urlFile;
         expectedURLFile_NoFlags[0][0].display = urlFile;
@@ -80,20 +82,20 @@ describe('FileAttachment record formatter unit test', function() {
         expectedEmpty[0][0].display = '';
         expectedEmpty[0][0].value = '';
 
-        var cases =[
+        var cases = [
             // No flags
-            { message: 'FileAttachment - local file with no flags', records: recordInputLocalFile, fieldInfo: fieldInfo_NoFlags, expectedRecords: expectedLocalFile_NoFlags },
-            { message: 'FileAttachment - http url file with no flags', records: recordInputURLFile, fieldInfo: fieldInfo_NoFlags, expectedRecords: expectedURLFile_NoFlags },
-            { message: 'FileAttachment - https url file with no flags', records: recordInputHttpsURLFile, fieldInfo: fieldInfo_NoFlags, expectedRecords: expectedHttpsURLFile_NoFlags },
+            {message: 'FileAttachment - local file with no flags', records: recordInputLocalFile, fieldInfo: fieldInfo_NoFlags, expectedRecords: expectedLocalFile_NoFlags},
+            {message: 'FileAttachment - http url file with no flags', records: recordInputURLFile, fieldInfo: fieldInfo_NoFlags, expectedRecords: expectedURLFile_NoFlags},
+            {message: 'FileAttachment - https url file with no flags', records: recordInputHttpsURLFile, fieldInfo: fieldInfo_NoFlags, expectedRecords: expectedHttpsURLFile_NoFlags},
 
             // All flags
-            { message: 'FileAttachment - local file with all flags', records: recordInputLocalFile, fieldInfo: fieldInfo_AllFlags, expectedRecords: expectedLocalFile_AllFlags },
-            { message: 'FileAttachment - http url file with all flags', records: recordInputURLFile, fieldInfo: fieldInfo_AllFlags, expectedRecords: expectedURLFile_AllFlags },
-            { message: 'FileAttachment - https url file with all flags', records: recordInputHttpsURLFile, fieldInfo: fieldInfo_AllFlags, expectedRecords: expectedHttpsURLFile_AllFlags },
+            {message: 'FileAttachment - local file with all flags', records: recordInputLocalFile, fieldInfo: fieldInfo_AllFlags, expectedRecords: expectedLocalFile_AllFlags},
+            {message: 'FileAttachment - http url file with all flags', records: recordInputURLFile, fieldInfo: fieldInfo_AllFlags, expectedRecords: expectedURLFile_AllFlags},
+            {message: 'FileAttachment - https url file with all flags', records: recordInputHttpsURLFile, fieldInfo: fieldInfo_AllFlags, expectedRecords: expectedHttpsURLFile_AllFlags},
 
             // Null and Empty File strings
-            { message: 'FileAttachment - null -> empty string', records: recordsNull, fieldInfo: fieldInfo_NoFlags, expectedRecords: expectedNull },
-            { message: 'FileAttachment - empty string -> empty string', records: recordsEmpty, fieldInfo: fieldInfo_NoFlags, expectedRecords: expectedEmpty }
+            {message: 'FileAttachment - null -> empty string', records: recordsNull, fieldInfo: fieldInfo_NoFlags, expectedRecords: expectedNull},
+            {message: 'FileAttachment - empty string -> empty string', records: recordsEmpty, fieldInfo: fieldInfo_NoFlags, expectedRecords: expectedEmpty}
         ];
 
         return cases;
@@ -102,7 +104,7 @@ describe('FileAttachment record formatter unit test', function() {
     /**
      * Unit test that validates FileAttachment records formatting with various field property flags set
      */
-    describe('should format an FileAttachment record with various properties for display',function() {
+    describe('should format an FileAttachment record with various properties for display', function() {
         fileAttachmentDataProvider().forEach(function(entry) {
             it('Test case: ' + entry.message, function(done) {
                 var formattedRecords = recordFormatter.formatRecords(entry.records, entry.fieldInfo);

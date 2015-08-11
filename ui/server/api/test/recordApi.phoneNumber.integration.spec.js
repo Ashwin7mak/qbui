@@ -8,7 +8,7 @@
     var promise = require('bluebird');
 
 
-//jshint loopfunc: true
+    //jshint loopfunc: true
 
     /**
      * Integration test for PhoneNumber field formatting
@@ -47,38 +47,45 @@
             var nullExpectedPhoneRecords = {id: fid, value: null, display: ''};
 
             return [
-                {message              : 'display phone number',
+                {
+                    message           : 'display phone number',
                     record            : recordsInput,
                     format            : 'display',
                     expectedFieldValue: expectedRecords
                 },
                 {message: 'raw phone number', record: recordsInput, format: 'raw', expectedFieldValue: recordsInput},
-                {message              : 'display empty phone number',
+                {
+                    message           : 'display empty phone number',
                     record            : emptyPhoneRecords,
                     format            : 'display',
                     expectedFieldValue: expectedEmptyPhoneRecords
                 },
-                {message              : 'raw empty phone number',
+                {
+                    message           : 'raw empty phone number',
                     record            : emptyPhoneRecords,
                     format            : 'raw',
                     expectedFieldValue: emptyPhoneRecords
                 },
-                {message              : 'display too-long phone number',
+                {
+                    message           : 'display too-long phone number',
                     record            : largeInput,
                     format            : 'display',
                     expectedFieldValue: largeExpected
                 },
-                {message              : 'raw too-long phone number',
+                {
+                    message           : 'raw too-long phone number',
                     record            : largeInput,
                     format            : 'raw',
                     expectedFieldValue: largeInput
                 },
-                {message              : 'display null phone number',
+                {
+                    message           : 'display null phone number',
                     record            : nullPhoneRecords,
                     format            : 'display',
                     expectedFieldValue: nullExpectedPhoneRecords
                 },
-                {message              : 'raw null phone number',
+                {
+                    message           : 'raw null phone number',
                     record            : nullPhoneRecords,
                     format            : 'raw',
                     expectedFieldValue: nullPhoneRecords
@@ -113,24 +120,24 @@
                     //When all the records have been fetched, assert the values match expectations
                     promise.all(fetchRecordPromises)
                             .then(function(results) {
-                                for (var i = 0; i < results.length; i++) {
-                                    var currentRecord = results[i];
-                                    if (results[i].record) {
-                                        currentRecord = results[i].record;
-                                    }
+                                      for (var i = 0; i < results.length; i++) {
+                                          var currentRecord = results[i];
+                                          if (results[i].record) {
+                                              currentRecord = results[i].record;
+                                          }
 
-                                    currentRecord.forEach(function(fieldValue) {
-                                        if (fieldValue.id === records[i].expectedFieldValue.id) {
-                                            assert.deepEqual(fieldValue, records[i].expectedFieldValue, 'Unexpected field value returned: ' +
-                                            JSON.stringify(fieldValue) + ', ' + JSON.stringify(records[i].expectedFieldValue));
-                                        }
-                                    });
-                                }
-                                done();
-                            }).catch(function(errorMsg) {
-                                assert(false, 'unable to resolve all records: ' + JSON.stringify(errorMsg));
-                                done();
-                            });
+                                          currentRecord.forEach(function(fieldValue) {
+                                              if (fieldValue.id === records[i].expectedFieldValue.id) {
+                                                  assert.deepEqual(fieldValue, records[i].expectedFieldValue, 'Unexpected field value returned: ' +
+                                                                                                              JSON.stringify(fieldValue) + ', ' + JSON.stringify(records[i].expectedFieldValue));
+                                              }
+                                          });
+                                      }
+                                      done();
+                                  }).catch(function(errorMsg) {
+                                               assert(false, 'unable to resolve all records: ' + JSON.stringify(errorMsg));
+                                               done();
+                                           });
                 });
             });
         });

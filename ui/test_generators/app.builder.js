@@ -100,27 +100,27 @@
                     return this;
                 },
 
-                withTable : function(table) {
+                withTable: function(table) {
                     appTables.push(table);
                     return this;
                 },
 
-                withTables : function(tables) {
+                withTables: function(tables) {
                     appTables = tables;
                     return this;
                 },
 
-                withRelationship : function(relationship) {
+                withRelationship: function(relationship) {
                     appRelationships.push(relationship);
                     return this;
                 },
 
-                withAdditionalRelationships : function(relationships) {
+                withAdditionalRelationships: function(relationships) {
                     appTables.concat(relationships);
                     return this;
                 },
 
-                withRelationships : function(relationships) {
+                withRelationships: function(relationships) {
                     appTables = relationships;
                     return this;
                 }

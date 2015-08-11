@@ -10,7 +10,7 @@
     //These are constants common to all fields
     module.exports = Object.freeze({
         //Field property names common to all fields
-        fieldKeys: {
+        fieldKeys          : {
             ID                    : 'id',
             NAME                  : 'name',
             TYPE                  : 'type',
@@ -19,7 +19,7 @@
             DATA_IS_COPYABLE      : 'dataIsCopyable',
             INCLUDE_IN_QUICKSEARCH: 'includeInQuickSearch',
             CLIENT_SIDE_ATTRIBUTES: 'clientSideAttributes',
-            DATA_TYPE_ATTRIBUTES: 'datatypeAttributes'
+            DATA_TYPE_ATTRIBUTES  : 'datatypeAttributes'
         },
         /******************************************************************/
         /*            FIELD TYPES AVAILABLE FOR USE IN TABLES             */
@@ -35,29 +35,29 @@
         /******************************************************************/
         /*                  FIELD JSON KEYS                               */
         /******************************************************************/
-        SCALAR: {
+        SCALAR     : {
             fieldKeys: addScalarHierarchy({}),
-            types: addJsonTypeScalarHierarchy({})
+            types    : addJsonTypeScalarHierarchy({})
         },
-        FORMULA: {
+        FORMULA    : {
             fieldKeys: addFormulaHierarchy({}),
-            types: addJsonTypeFormulaHierarchy({})
+            types    : addJsonTypeFormulaHierarchy({})
         },
         REPORT_LINK: {
             fieldKeys: addReportLinkHierarchy({}),
-            types: addJsonTypeReportLinkHierarchy({})
+            types    : addJsonTypeReportLinkHierarchy({})
         },
-        SUMMARY: {
+        SUMMARY    : {
             fieldKeys: addSummaryHierarchy({}),
-            types: addJsonTypeSummaryHierarchy({})
+            types    : addJsonTypeSummaryHierarchy({})
         },
-        LOOKUP: {
+        LOOKUP     : {
             fieldKeys: addVirtualHierarchy({}),
-            types: addJsonTypeVirtualHierarchy({})
+            types    : addJsonTypeVirtualHierarchy({})
         },
-        CONCRETE: {
+        CONCRETE   : {
             fieldKeys: addConcreteHierarchy({}),
-            types: addJsonTypeConcreteHierarchy({})
+            types    : addJsonTypeConcreteHierarchy({})
         }
     });
 
@@ -108,6 +108,7 @@
         mapToModify.MULTIPLE_CHOICE = 'multipleChoice';
         mapToModify.MULTIPLE_CHOICE_SOURCE_ALLOWED = 'multipleChoiceSourceAllowed';
     }
+
     /**
      * Add all report link specific keys to the map
      * @param mapToModify

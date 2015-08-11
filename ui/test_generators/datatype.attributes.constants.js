@@ -36,69 +36,69 @@
         /******************************************************************/
         /*                  FIELD JSON KEYS                               */
         /******************************************************************/
-        CHECKBOX: {
+        CHECKBOX       : {
             dataTypeKeys: addCheckboxHierarchy({}),
-            types: addJsonTypeCheckboxHierarchy({})
+            types       : addJsonTypeCheckboxHierarchy({})
         },
-        TEXT: {
+        TEXT           : {
             dataTypeKeys: addTextHierarchy({}),
-            types: addJsonTypeTextHierarchy({})
+            types       : addJsonTypeTextHierarchy({})
         },
-        BIGTEXT: {
+        BIGTEXT        : {
             dataTypeKeys: addTextHierarchy({}),
-            types: addJsonTypeTextHierarchy({})
+            types       : addJsonTypeTextHierarchy({})
         },
-        PHONE_NUMBER: {
+        PHONE_NUMBER   : {
             dataTypeKeys: addPhoneNumberHierarchy({}),
-            types: addJsonTypePhoneNumberHierarchy({})
+            types       : addJsonTypePhoneNumberHierarchy({})
         },
-        DATE_TIME: {
+        DATE_TIME      : {
             dataTypeKeys: addDateTimeHierarchy({}),
-            types: addJsonTypeDateTimeHierarchy({})
+            types       : addJsonTypeDateTimeHierarchy({})
         },
-        DATE: {
+        DATE           : {
             dataTypeKeys: addDateHierarchy({}),
-            types: addJsonTypeDateHierarchy({})
+            types       : addJsonTypeDateHierarchy({})
         },
-        DURATION: {
+        DURATION       : {
             dataTypeKeys: addDurationHierarchy({}),
-            types: addJsonTypeDurationHierarchy({})
+            types       : addJsonTypeDurationHierarchy({})
         },
-        TIME_OF_DAY: {
+        TIME_OF_DAY    : {
             dataTypeKeys: addTimeOfDayHierarchy({}),
-            types: addJsonTypeTimeOfDayHierarchy({})
+            types       : addJsonTypeTimeOfDayHierarchy({})
         },
-        NUMERIC: {
+        NUMERIC        : {
             dataTypeKeys: addNumericHierarchy({}),
-            types: addJsonTypeNumericHierarchy({})
+            types       : addJsonTypeNumericHierarchy({})
         },
-        CURRENCY: {
+        CURRENCY       : {
             dataTypeKeys: addNumericHierarchy({}),
-            types: addJsonTypeNumericHierarchy({})
+            types       : addJsonTypeNumericHierarchy({})
         },
-        RATING: {
+        RATING         : {
             dataTypeKeys: addNumericHierarchy({}),
-            types: addJsonTypeNumericHierarchy({})
+            types       : addJsonTypeNumericHierarchy({})
         },
-        PERCENT: {
+        PERCENT        : {
             dataTypeKeys: addNumericHierarchy({}),
-            types: addJsonTypeNumericHierarchy({})
+            types       : addJsonTypeNumericHierarchy({})
         },
-        URL: {
+        URL            : {
             dataTypeKeys: addUrlHierarchy({}),
-            types: addJsonTypeUrlHierarchy({})
+            types       : addJsonTypeUrlHierarchy({})
         },
-        EMAIL_ADDRESS: {
+        EMAIL_ADDRESS  : {
             dataTypeKeys: addEmailHierarchy({}),
-            types: addJsonTypeEmailHierarchy({})
+            types       : addJsonTypeEmailHierarchy({})
         },
-        USER: {
+        USER           : {
             dataTypeKeys: addUserHierarchy({}),
-            types: addJsonTypeUserHierarchy({})
+            types       : addJsonTypeUserHierarchy({})
         },
         FILE_ATTACHMENT: {
             dataTypeKeys: addFileAttachmentHierarchy({}),
-            types: addJsonTypeFileAttachmentHierarchy({})
+            types       : addJsonTypeFileAttachmentHierarchy({})
         }
     });
 

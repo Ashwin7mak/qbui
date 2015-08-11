@@ -12,7 +12,7 @@ describe('Module quickbase.app module run function', function() {
 
     function getRunBlock() {
         var module = angular.module('quickbase.report');
-        return module._runBlocks[0] ? module._runBlocks[0][module._runBlocks[0].length-1] : undefined;
+        return module._runBlocks[0] ? module._runBlocks[0][module._runBlocks[0].length - 1] : undefined;
     }
 
 });

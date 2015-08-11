@@ -25,36 +25,39 @@ describe('URL record formatter unit test', function() {
          * FieldInfo and expectations for no flags
          */
         var fieldInfo_NoFlags = [{
-            id: 7,
-            name: 'url',
-            type:'SCALAR',
+            id                : 7,
+            name              : 'url',
+            type              : 'SCALAR',
             datatypeAttributes: {
-                type: 'URL',
-                clientSideAttributes: {
-                }
+                type                : 'URL',
+                clientSideAttributes: {}
             }
         }];
-        var recordInputHttpURL =  [[{
-            id: 7,
-            value: httpURL}]];
+        var recordInputHttpURL = [[{
+            id   : 7,
+            value: httpURL
+        }]];
         var expectedHttpURL_NoFlags = [[{
-            id: 7,
-            value: httpURL,
-            display: httpURL}]];
+            id     : 7,
+            value  : httpURL,
+            display: httpURL
+        }]];
 
         var recordInputHttpsURL = JSON.parse(JSON.stringify(recordInputHttpURL));
         recordInputHttpsURL[0][0].value = httpsURL;
         var expectedHttpsURL_NoFlags = [[{
-            id: 7,
-            value: httpsURL,
-            display: httpsURL}]];
+            id     : 7,
+            value  : httpsURL,
+            display: httpsURL
+        }]];
 
         var recordInputNoProtoURL = JSON.parse(JSON.stringify(recordInputHttpURL));
         recordInputNoProtoURL[0][0].value = noProtoURL;
         var expectedNoProtoURL_NoFlags = [[{
-            id: 7,
-            value: noProtoURL,
-            display: noProtoURL}]];
+            id     : 7,
+            value  : noProtoURL,
+            display: noProtoURL
+        }]];
 
         /**
          * FieldInfo and expectations for enabled flag: displayProtocol = true
@@ -116,35 +119,35 @@ describe('URL record formatter unit test', function() {
         expectedEmpty[0][0].display = '';
         expectedEmpty[0][0].value = '';
 
-        var cases =[
+        var cases = [
             // No flags
-            { message: 'URL - http url with no flags', records: recordInputHttpURL, fieldInfo: fieldInfo_NoFlags, expectedRecords: expectedHttpURL_NoFlags },
-            { message: 'URL - https url with no flags', records: recordInputHttpsURL, fieldInfo: fieldInfo_NoFlags, expectedRecords: expectedHttpsURL_NoFlags },
-            { message: 'URL - no protocol url with no flags', records: recordInputNoProtoURL, fieldInfo: fieldInfo_NoFlags, expectedRecords: expectedNoProtoURL_NoFlags },
+            {message: 'URL - http url with no flags', records: recordInputHttpURL, fieldInfo: fieldInfo_NoFlags, expectedRecords: expectedHttpURL_NoFlags},
+            {message: 'URL - https url with no flags', records: recordInputHttpsURL, fieldInfo: fieldInfo_NoFlags, expectedRecords: expectedHttpsURL_NoFlags},
+            {message: 'URL - no protocol url with no flags', records: recordInputNoProtoURL, fieldInfo: fieldInfo_NoFlags, expectedRecords: expectedNoProtoURL_NoFlags},
 
             // Don't Show Http flag enabled
-            { message: 'URL - http url with "don\'t show Http" flag', records: recordInputHttpURL, fieldInfo: fieldInfo_DontShowHTTPEnabled, expectedRecords: expectedHttpURL_DontShowHTTPEnabled },
-            { message: 'URL - https url with "don\'t show Http" flag', records: recordInputHttpsURL, fieldInfo: fieldInfo_DontShowHTTPEnabled, expectedRecords: expectedHttpsURL_DontShowHTTPEnabled },
-            { message: 'URL - no protocol url with "don\'t show Http" flag', records: recordInputNoProtoURL, fieldInfo: fieldInfo_DontShowHTTPEnabled, expectedRecords: expectedNoProtoURL_DontShowHTTPEnabled },
+            {message: 'URL - http url with "don\'t show Http" flag', records: recordInputHttpURL, fieldInfo: fieldInfo_DontShowHTTPEnabled, expectedRecords: expectedHttpURL_DontShowHTTPEnabled},
+            {message: 'URL - https url with "don\'t show Http" flag', records: recordInputHttpsURL, fieldInfo: fieldInfo_DontShowHTTPEnabled, expectedRecords: expectedHttpsURL_DontShowHTTPEnabled},
+            {message: 'URL - no protocol url with "don\'t show Http" flag', records: recordInputNoProtoURL, fieldInfo: fieldInfo_DontShowHTTPEnabled, expectedRecords: expectedNoProtoURL_DontShowHTTPEnabled},
 
             // Don't Show Http flag disabled
-            { message: 'URL - http url with "don\'t show Http" flag disabled', records: recordInputHttpURL, fieldInfo: fieldInfo_DontShowHTTPDisabled, expectedRecords: expectedHttpURL_DontShowHTTPDisabled },
-            { message: 'URL - https url with "don\'t show Http" flag disabled', records: recordInputHttpsURL, fieldInfo: fieldInfo_DontShowHTTPDisabled, expectedRecords: expectedHttpsURL_DontShowHTTPDisabled },
-            { message: 'URL - no protocol url with "don\'t show Http" flag disabled', records: recordInputNoProtoURL, fieldInfo: fieldInfo_DontShowHTTPDisabled, expectedRecords: expectedNoProtoURL_DontShowHTTPDisabled },
+            {message: 'URL - http url with "don\'t show Http" flag disabled', records: recordInputHttpURL, fieldInfo: fieldInfo_DontShowHTTPDisabled, expectedRecords: expectedHttpURL_DontShowHTTPDisabled},
+            {message: 'URL - https url with "don\'t show Http" flag disabled', records: recordInputHttpsURL, fieldInfo: fieldInfo_DontShowHTTPDisabled, expectedRecords: expectedHttpsURL_DontShowHTTPDisabled},
+            {message: 'URL - no protocol url with "don\'t show Http" flag disabled', records: recordInputNoProtoURL, fieldInfo: fieldInfo_DontShowHTTPDisabled, expectedRecords: expectedNoProtoURL_DontShowHTTPDisabled},
 
             // LinkText flag
-            { message: 'URL - http url with "link text" flag', records: recordInputHttpURL, fieldInfo: fieldInfo_LinkTextFlag, expectedRecords: expectedHttpURL_LinkTextFlag },
-            { message: 'URL - https url with "link text" flag', records: recordInputHttpsURL, fieldInfo: fieldInfo_LinkTextFlag, expectedRecords: expectedHttpsURL_LinkTextFlag },
-            { message: 'URL - no protocol url with "link text" flag', records: recordInputNoProtoURL, fieldInfo: fieldInfo_LinkTextFlag, expectedRecords: expectedNoProtoURL_LinkTextFlag },
+            {message: 'URL - http url with "link text" flag', records: recordInputHttpURL, fieldInfo: fieldInfo_LinkTextFlag, expectedRecords: expectedHttpURL_LinkTextFlag},
+            {message: 'URL - https url with "link text" flag', records: recordInputHttpsURL, fieldInfo: fieldInfo_LinkTextFlag, expectedRecords: expectedHttpsURL_LinkTextFlag},
+            {message: 'URL - no protocol url with "link text" flag', records: recordInputNoProtoURL, fieldInfo: fieldInfo_LinkTextFlag, expectedRecords: expectedNoProtoURL_LinkTextFlag},
 
             // All flags
-            { message: 'URL - http url with all flags', records: recordInputHttpURL, fieldInfo: fieldInfo_AllFlags, expectedRecords: expectedHttpURL_AllFlags },
-            { message: 'URL - https url with all flags', records: recordInputHttpsURL, fieldInfo: fieldInfo_AllFlags, expectedRecords: expectedHttpsURL_AllFlags },
-            { message: 'URL - no protocol url with all flags', records: recordInputNoProtoURL, fieldInfo: fieldInfo_AllFlags, expectedRecords: expectedNoProtoURL_AllFlags },
+            {message: 'URL - http url with all flags', records: recordInputHttpURL, fieldInfo: fieldInfo_AllFlags, expectedRecords: expectedHttpURL_AllFlags},
+            {message: 'URL - https url with all flags', records: recordInputHttpsURL, fieldInfo: fieldInfo_AllFlags, expectedRecords: expectedHttpsURL_AllFlags},
+            {message: 'URL - no protocol url with all flags', records: recordInputNoProtoURL, fieldInfo: fieldInfo_AllFlags, expectedRecords: expectedNoProtoURL_AllFlags},
 
             // Null and Empty URL strings
-            { message: 'URL - null -> empty string', records: recordsNull, fieldInfo: fieldInfo_NoFlags, expectedRecords: expectedNull },
-            { message: 'URL - empty string -> empty string', records: recordsEmpty, fieldInfo: fieldInfo_NoFlags, expectedRecords: expectedEmpty },
+            {message: 'URL - null -> empty string', records: recordsNull, fieldInfo: fieldInfo_NoFlags, expectedRecords: expectedNull},
+            {message: 'URL - empty string -> empty string', records: recordsEmpty, fieldInfo: fieldInfo_NoFlags, expectedRecords: expectedEmpty},
         ];
 
         return cases;
@@ -153,7 +156,7 @@ describe('URL record formatter unit test', function() {
     /**
      * Unit test that validates URL records formatting with various field property flags set
      */
-    describe('should format an URL record with various properties for display',function() {
+    describe('should format an URL record with various properties for display', function() {
         urlDataProvider().forEach(function(entry) {
             it('Test case: ' + entry.message, function(done) {
                 var formattedRecords = recordFormatter.formatRecords(entry.records, entry.fieldInfo);

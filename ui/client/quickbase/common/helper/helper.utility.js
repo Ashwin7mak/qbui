@@ -7,7 +7,7 @@
      *
      **/
     angular.module('qbse.helper')
-        .factory('qbUtility', UtilityFactory);
+            .factory('qbUtility', UtilityFactory);
 
     function UtilityFactory() {
 
@@ -29,7 +29,7 @@
          * @returns {boolean}
          */
         utilityFunctions.isInt = function(val) {
-            return (typeof val==='number' && (val%1)===0);
+            return (typeof val === 'number' && (val % 1) === 0);
         };
 
         /**

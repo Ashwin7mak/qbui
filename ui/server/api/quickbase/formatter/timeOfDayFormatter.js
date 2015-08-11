@@ -15,7 +15,7 @@
     var DEFAULT_TIMEZONE = 'America/Los_Angeles';
 
     var JAVA_FORMAT_TO_JS_FORMAT = {
-        'HH:MM': MM,
+        'HH:MM'   : MM,
         'HH:MM:SS': MM + SS
     };
 
@@ -37,7 +37,7 @@
             }
             return formatString;
         },
-        generateFormat: function(fieldInfo) {
+        generateFormat         : function(fieldInfo) {
             //Resolve formatting options
             var formatString;
             if (fieldInfo) {
@@ -55,7 +55,7 @@
             return formatString;
         },
         //Given a raw number as input, formats as a legacy QuickBase phone number. Note, not internationalized
-        format: function(fieldValue, fieldInfo) {
+        format                 : function(fieldValue, fieldInfo) {
             if (!fieldValue || !fieldValue.value) {
                 return '';
             }

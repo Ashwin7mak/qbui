@@ -12,11 +12,11 @@
         /******************************************************************/
         /*                  TABLE JSON KEYS                               */
         /******************************************************************/
-        ID : 'id',
-        APP_ID : 'appId',
-        NAME : 'name',
-        TABLE_ALIAS : 'tableAlias',
-        FIELDS : 'fields'
+        ID         : 'id',
+        APP_ID     : 'appId',
+        NAME       : 'name',
+        TABLE_ALIAS: 'tableAlias',
+        FIELDS     : 'fields'
     });
 
 }());

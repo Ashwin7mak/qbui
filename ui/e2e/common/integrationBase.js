@@ -26,23 +26,23 @@
                 }
 
                 promise.all(getTextPromises)
-                    .then(function(responses) {
-                        var valueFound = false;
+                        .then(function(responses) {
+                                  var valueFound = false;
 
-                        for (var i = 0; i < responses.length; i++) {
-                            if (responses[i] === linkText) {
-                                // console.log('found link');
-                                valueFound = true;
-                                linkDeferred.resolve(responses[i]);
-                            }
-                        }
-                        if (!valueFound) {
-                            linkDeferred.reject('Could not find link');
-                        }
+                                  for (var i = 0; i < responses.length; i++) {
+                                      if (responses[i] === linkText) {
+                                          // console.log('found link');
+                                          valueFound = true;
+                                          linkDeferred.resolve(responses[i]);
+                                      }
+                                  }
+                                  if (!valueFound) {
+                                      linkDeferred.reject('Could not find link');
+                                  }
 
-                    }).catch(function(error) {
-                        linkDeferred.reject(error);
-                    })
+                              }).catch(function(error) {
+                                           linkDeferred.reject(error);
+                                       })
 
                 return linkDeferred.promise;
             },

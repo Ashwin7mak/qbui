@@ -27,15 +27,15 @@ describe('Relationship generator unit test', function() {
         tableMap['App1Table2'] = {};
         tableMap['App1Table3'] = {};
 
-        tableMap['App1Table0']['textField0'] = { fieldType: consts.SCALAR, dataType: consts.TEXT};
-        tableMap['App1Table0']['numericField0'] = { fieldType: consts.SCALAR, dataType: consts.NUMERIC};
-        tableMap['App1Table0']['dateField0'] = { fieldType: consts.SCALAR, dataType: consts.DATE};
+        tableMap['App1Table0']['textField0'] = {fieldType: consts.SCALAR, dataType: consts.TEXT};
+        tableMap['App1Table0']['numericField0'] = {fieldType: consts.SCALAR, dataType: consts.NUMERIC};
+        tableMap['App1Table0']['dateField0'] = {fieldType: consts.SCALAR, dataType: consts.DATE};
 
-        tableMap['App1Table1']['dateField1'] = { fieldType: consts.SCALAR, dataType: consts.DATE};
+        tableMap['App1Table1']['dateField1'] = {fieldType: consts.SCALAR, dataType: consts.DATE};
 
-        tableMap['App1Table2']['numericField2'] = { fieldType: consts.SCALAR, dataType: consts.NUMERIC};
+        tableMap['App1Table2']['numericField2'] = {fieldType: consts.SCALAR, dataType: consts.NUMERIC};
 
-        tableMap['App1Table3']['textField3'] = { fieldType: consts.SCALAR, dataType: consts.TEXT};
+        tableMap['App1Table3']['textField3'] = {fieldType: consts.SCALAR, dataType: consts.TEXT};
 
         var generatedApp = appGenerator.generateAppWithTablesFromMap(tableMap);
 
@@ -71,24 +71,36 @@ describe('Relationship generator unit test', function() {
         });
 
         return [
-            {message: "Generate a relationship on App1->Table1->dateField1: App1->Table2->dateField2", app: generatedApp, masterTable : generatedTableMap['T_0'],
-            detailTable: generatedTableMap['T_1'], expectedRelationship: { appId:appId,  masterAppId: appId, masterTableId: 'T_0',
-            masterFieldId: 2, detailAppId: appId, detailTableId: 'T_1', detailFieldId: 0}},
+            {
+                message    : "Generate a relationship on App1->Table1->dateField1: App1->Table2->dateField2", app: generatedApp, masterTable: generatedTableMap['T_0'],
+                detailTable: generatedTableMap['T_1'], expectedRelationship: {
+                appId        : appId, masterAppId: appId, masterTableId: 'T_0',
+                masterFieldId: 2, detailAppId: appId, detailTableId: 'T_1', detailFieldId: 0
+            }
+            },
 
-            {message: "Generate a relationship on App1->Table1->numericField1 : App1->Table3->numericField3", app: generatedApp, masterTable : generatedTableMap['T_0'],
-                detailTable: generatedTableMap['T_2'], expectedRelationship: { appId:appId,  masterAppId: appId, masterTableId: 'T_0',
-                masterFieldId: 1, detailAppId: appId, detailTableId: 'T_2', detailFieldId: 0}},
+            {
+                message    : "Generate a relationship on App1->Table1->numericField1 : App1->Table3->numericField3", app: generatedApp, masterTable: generatedTableMap['T_0'],
+                detailTable: generatedTableMap['T_2'], expectedRelationship: {
+                appId        : appId, masterAppId: appId, masterTableId: 'T_0',
+                masterFieldId: 1, detailAppId: appId, detailTableId: 'T_2', detailFieldId: 0
+            }
+            },
 
-            {message: "Generate a relationship on App1->Table1->textField1 : App1->Table4->textField4", app: generatedApp, masterTable : generatedTableMap['T_0'],
-                detailTable: generatedTableMap['T_3'], expectedRelationship: { appId:appId,  masterAppId: appId, masterTableId: 'T_0',
-                masterFieldId: 0, detailAppId: appId, detailTableId: 'T_3', detailFieldId: 0}}
+            {
+                message    : "Generate a relationship on App1->Table1->textField1 : App1->Table4->textField4", app: generatedApp, masterTable: generatedTableMap['T_0'],
+                detailTable: generatedTableMap['T_3'], expectedRelationship: {
+                appId        : appId, masterAppId: appId, masterTableId: 'T_0',
+                masterFieldId: 0, detailAppId: appId, detailTableId: 'T_3', detailFieldId: 0
+            }
+            }
         ];
     }
 
     /**
      * Unit test that validates generating a relationship with a specified master and detail table
      */
-    describe('test generating a relationship given 2 tables',function() {
+    describe('test generating a relationship given 2 tables', function() {
         relationshipProvider().forEach(function(entry) {
             it('Test case: ' + entry.message, function(done) {
                 var expectedRelationship = entry.expectedRelationship;
@@ -147,7 +159,7 @@ describe('Relationship generator unit test', function() {
     /**
      * Unit test that validates generating a relationship with a specified app and master and detail tableIds
      */
-    describe('test generating a relationship given an app and two table ids',function() {
+    describe('test generating a relationship given an app and two table ids', function() {
         relationshipProvider().forEach(function(entry) {
             it('Test case: ' + entry.message, function(done) {
                 var expectedRelationship = entry.expectedRelationship;

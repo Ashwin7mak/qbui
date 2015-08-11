@@ -7,7 +7,7 @@
     var testConsts = require('./api.test.constants');
     var promise = require('bluebird');
 
-//jshint loopfunc: true
+    //jshint loopfunc: true
 
     /**
      * Integration test for TimeOfDay field formatting
@@ -87,32 +87,38 @@
             var expectedNullRecord = {id: fid, value: null, display: ''};
 
             return [
-                {message              : 'display early timeOfDay with no format flags',
+                {
+                    message           : 'display early timeOfDay with no format flags',
                     record            : earlyTODInput,
                     format            : 'display',
                     expectedFieldValue: expectedEarlyTODRecord
                 },
-                {message              : 'raw early timeOfDay with no format flags',
+                {
+                    message           : 'raw early timeOfDay with no format flags',
                     record            : earlyTODInput,
                     format            : 'raw',
                     expectedFieldValue: earlyTODInput
                 },
-                {message              : 'display different year timeOfDay with no format flags',
+                {
+                    message           : 'display different year timeOfDay with no format flags',
                     record            : lateTODInput,
                     format            : 'display',
                     expectedFieldValue: expectedLateTODRecord
                 },
-                {message              : 'raw different year timeOfDay with no format flags',
+                {
+                    message           : 'raw different year timeOfDay with no format flags',
                     record            : lateTODInput,
                     format            : 'raw',
                     expectedFieldValue: lateTODInput
                 },
-                {message              : 'display null timeOfDay with no format flags',
+                {
+                    message           : 'display null timeOfDay with no format flags',
                     record            : nullInput,
                     format            : 'display',
                     expectedFieldValue: expectedNullRecord
                 },
-                {message              : 'raw null timeOfDay with no format flags',
+                {
+                    message           : 'raw null timeOfDay with no format flags',
                     record            : nullInput,
                     format            : 'raw',
                     expectedFieldValue: nullInput
@@ -148,24 +154,24 @@
                     //When all the records have been fetched, assert the values match expectations
                     promise.all(fetchRecordPromises)
                             .then(function(results) {
-                                for (var i = 0; i < results.length; i++) {
-                                    var currentRecord = results[i];
-                                    if (results[i].record) {
-                                        currentRecord = results[i].record;
-                                    }
+                                      for (var i = 0; i < results.length; i++) {
+                                          var currentRecord = results[i];
+                                          if (results[i].record) {
+                                              currentRecord = results[i].record;
+                                          }
 
-                                    currentRecord.forEach(function(fieldValue) {
-                                        if (fieldValue.id === records[i].expectedFieldValue.id) {
-                                            assert.deepEqual(fieldValue, records[i].expectedFieldValue, 'Unexpected field value returned: ' +
-                                            JSON.stringify(fieldValue) + ', ' + JSON.stringify(records[i].expectedFieldValue));
-                                        }
-                                    });
-                                }
-                                done();
-                            }).catch(function(errorMsg) {
-                                assert(false, 'unable to resolve all records: ' + JSON.stringify(errorMsg));
-                                done();
-                            });
+                                          currentRecord.forEach(function(fieldValue) {
+                                              if (fieldValue.id === records[i].expectedFieldValue.id) {
+                                                  assert.deepEqual(fieldValue, records[i].expectedFieldValue, 'Unexpected field value returned: ' +
+                                                                                                              JSON.stringify(fieldValue) + ', ' + JSON.stringify(records[i].expectedFieldValue));
+                                              }
+                                          });
+                                      }
+                                      done();
+                                  }).catch(function(errorMsg) {
+                                               assert(false, 'unable to resolve all records: ' + JSON.stringify(errorMsg));
+                                               done();
+                                           });
                 });
             });
         });
@@ -188,32 +194,38 @@
             var expectedNullRecord = {id: fid, value: null, display: ''};
 
             return [
-                {message              : 'display early timeOfDay with all HH_MM format flags',
+                {
+                    message           : 'display early timeOfDay with all HH_MM format flags',
                     record            : earlyTODInput,
                     format            : 'display',
                     expectedFieldValue: expectedEarlyTODRecord
                 },
-                {message              : 'raw early timeOfDay with all HH_MM format flags',
+                {
+                    message           : 'raw early timeOfDay with all HH_MM format flags',
                     record            : earlyTODInput,
                     format            : 'raw',
                     expectedFieldValue: earlyTODInput
                 },
-                {message              : 'display different year timeOfDay with all HH_MM format flags',
+                {
+                    message           : 'display different year timeOfDay with all HH_MM format flags',
                     record            : lateTODInput,
                     format            : 'display',
                     expectedFieldValue: expectedLateTODRecord
                 },
-                {message              : 'raw different year timeOfDay with all HH_MM format flags',
+                {
+                    message           : 'raw different year timeOfDay with all HH_MM format flags',
                     record            : lateTODInput,
                     format            : 'raw',
                     expectedFieldValue: lateTODInput
                 },
-                {message              : 'display null timeOfDay with all HH_MM format flags',
+                {
+                    message           : 'display null timeOfDay with all HH_MM format flags',
                     record            : nullInput,
                     format            : 'display',
                     expectedFieldValue: expectedNullRecord
                 },
-                {message              : 'raw null timeOfDay with all HH_MM format flags',
+                {
+                    message           : 'raw null timeOfDay with all HH_MM format flags',
                     record            : nullInput,
                     format            : 'raw',
                     expectedFieldValue: nullInput
@@ -249,24 +261,24 @@
                     //When all the records have been fetched, assert the values match expectations
                     promise.all(fetchRecordPromises)
                             .then(function(results) {
-                                for (var i = 0; i < results.length; i++) {
-                                    var currentRecord = results[i];
-                                    if (results[i].record) {
-                                        currentRecord = results[i].record;
-                                    }
+                                      for (var i = 0; i < results.length; i++) {
+                                          var currentRecord = results[i];
+                                          if (results[i].record) {
+                                              currentRecord = results[i].record;
+                                          }
 
-                                    currentRecord.forEach(function(fieldValue) {
-                                        if (fieldValue.id === records[i].expectedFieldValue.id) {
-                                            assert.deepEqual(fieldValue, records[i].expectedFieldValue, 'Unexpected field value returned: ' +
-                                            JSON.stringify(fieldValue) + ', ' + JSON.stringify(records[i].expectedFieldValue));
-                                        }
-                                    });
-                                }
-                                done();
-                            }).catch(function(errorMsg) {
-                                assert(false, 'unable to resolve all records: ' + JSON.stringify(errorMsg));
-                                done();
-                            });
+                                          currentRecord.forEach(function(fieldValue) {
+                                              if (fieldValue.id === records[i].expectedFieldValue.id) {
+                                                  assert.deepEqual(fieldValue, records[i].expectedFieldValue, 'Unexpected field value returned: ' +
+                                                                                                              JSON.stringify(fieldValue) + ', ' + JSON.stringify(records[i].expectedFieldValue));
+                                              }
+                                          });
+                                      }
+                                      done();
+                                  }).catch(function(errorMsg) {
+                                               assert(false, 'unable to resolve all records: ' + JSON.stringify(errorMsg));
+                                               done();
+                                           });
                 });
             });
         });
@@ -289,32 +301,38 @@
             var expectedNullRecord = {id: fid, value: null, display: ''};
 
             return [
-                {message              : 'display early timeOfDay with all HH_MM_SS format flags',
+                {
+                    message           : 'display early timeOfDay with all HH_MM_SS format flags',
                     record            : earlyTODInput,
                     format            : 'display',
                     expectedFieldValue: expectedEarlyTODRecord
                 },
-                {message              : 'raw early timeOfDay with all HH_MM_SS format flags',
+                {
+                    message           : 'raw early timeOfDay with all HH_MM_SS format flags',
                     record            : earlyTODInput,
                     format            : 'raw',
                     expectedFieldValue: earlyTODInput
                 },
-                {message              : 'display different year timeOfDay with all HH_MM_SS format flags',
+                {
+                    message           : 'display different year timeOfDay with all HH_MM_SS format flags',
                     record            : lateTODInput,
                     format            : 'display',
                     expectedFieldValue: expectedLateTODRecord
                 },
-                {message              : 'raw different year timeOfDay with all HH_MM_SS format flags',
+                {
+                    message           : 'raw different year timeOfDay with all HH_MM_SS format flags',
                     record            : lateTODInput,
                     format            : 'raw',
                     expectedFieldValue: lateTODInput
                 },
-                {message              : 'display null timeOfDay with all HH_MM_SS format flags',
+                {
+                    message           : 'display null timeOfDay with all HH_MM_SS format flags',
                     record            : nullInput,
                     format            : 'display',
                     expectedFieldValue: expectedNullRecord
                 },
-                {message              : 'raw null timeOfDay with all format HH_MM_SS flags',
+                {
+                    message           : 'raw null timeOfDay with all format HH_MM_SS flags',
                     record            : nullInput,
                     format            : 'raw',
                     expectedFieldValue: nullInput
@@ -350,24 +368,24 @@
                     //When all the records have been fetched, assert the values match expectations
                     promise.all(fetchRecordPromises)
                             .then(function(results) {
-                                for (var i = 0; i < results.length; i++) {
-                                    var currentRecord = results[i];
-                                    if (results[i].record) {
-                                        currentRecord = results[i].record;
-                                    }
+                                      for (var i = 0; i < results.length; i++) {
+                                          var currentRecord = results[i];
+                                          if (results[i].record) {
+                                              currentRecord = results[i].record;
+                                          }
 
-                                    currentRecord.forEach(function(fieldValue) {
-                                        if (fieldValue.id === records[i].expectedFieldValue.id) {
-                                            assert.deepEqual(fieldValue, records[i].expectedFieldValue, 'Unexpected field value returned: ' +
-                                            JSON.stringify(fieldValue) + ', ' + JSON.stringify(records[i].expectedFieldValue));
-                                        }
-                                    });
-                                }
-                                done();
-                            }).catch(function(errorMsg) {
-                                assert(false, 'unable to resolve all records: ' + JSON.stringify(errorMsg));
-                                done();
-                            });
+                                          currentRecord.forEach(function(fieldValue) {
+                                              if (fieldValue.id === records[i].expectedFieldValue.id) {
+                                                  assert.deepEqual(fieldValue, records[i].expectedFieldValue, 'Unexpected field value returned: ' +
+                                                                                                              JSON.stringify(fieldValue) + ', ' + JSON.stringify(records[i].expectedFieldValue));
+                                              }
+                                          });
+                                      }
+                                      done();
+                                  }).catch(function(errorMsg) {
+                                               assert(false, 'unable to resolve all records: ' + JSON.stringify(errorMsg));
+                                               done();
+                                           });
                 });
             });
         });

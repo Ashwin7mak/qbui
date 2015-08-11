@@ -53,11 +53,12 @@ describe('Record generator', function() {
         console.log(recordJson);
 
         // Loop through the generated JSON checking type of each value generated matches field type
-        for(var i = 0; i < recordJson.length; i++) {
+        for (var i = 0; i < recordJson.length; i++) {
             var obj = recordJson[i];
             console.log(obj.value);
             //console.log(Object.prototype.toString.call(obj.value));
-        };
+        }
+        ;
     });
 
     it('should generate a record if given a table', function() {

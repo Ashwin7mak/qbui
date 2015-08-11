@@ -7,25 +7,25 @@
     module.exports = function(config) {
 
         var helper = {
-            isGet: function(req) {
+            isGet          : function(req) {
                 return req.method.toLowerCase() === 'get';
             },
-            isPost: function(req) {
+            isPost         : function(req) {
                 return req.method.toLowerCase() === 'post';
             },
-            isPut: function(req) {
+            isPut          : function(req) {
                 return req.method.toLowerCase() === 'put';
             },
-            isPatch: function(req) {
+            isPatch        : function(req) {
                 return req.method.toLowerCase() === 'patch';
             },
-            isDelete: function(req) {
+            isDelete       : function(req) {
                 return req.method.toLowerCase() === 'delete';
             },
-            isSecure: function(req) {
+            isSecure       : function(req) {
                 return req.protocol ? req.protocol.toLowerCase() === 'https' : false;
             },
-            getRequestUrl: function(req) {
+            getRequestUrl  : function(req) {
                 return config.javaHost + req.url;
             },
             getAgentOptions: function(req) {
@@ -36,9 +36,9 @@
                 if (this.isSecure(req)) {
                     //  we're on https..include the certs
                     agentOptions = {
-                        strictSSL: true,
-                        key: fs.readFileSync(config.SSL_KEY.private),
-                        cert: fs.readFileSync(config.SSL_KEY.cert),
+                        strictSSL         : true,
+                        key               : fs.readFileSync(config.SSL_KEY.private),
+                        cert              : fs.readFileSync(config.SSL_KEY.cert),
                         rejectUnauthorized: config.SSL_KEY.requireCert
                     };
                 }
@@ -47,7 +47,7 @@
 
             //Given an express response object and POJO, copy POJO attributes to the response headers object
             copyHeadersToResponse: function(res, headers) {
-                for(var key in headers) {
+                for (var key in headers) {
                     if (headers.hasOwnProperty(key)) {
                         res[key] = headers[key];
                     }
@@ -64,10 +64,10 @@
 
             setOptions: function(req) {
                 var opts = {
-                    url: this.getRequestUrl(req),
-                    method: req.method,
+                    url         : this.getRequestUrl(req),
+                    method      : req.method,
                     agentOptions: this.getAgentOptions(req),
-                    headers: req.headers
+                    headers     : req.headers
                 };
 
                 this.setBodyOption(req, opts);

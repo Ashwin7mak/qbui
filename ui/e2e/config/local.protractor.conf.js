@@ -12,9 +12,9 @@ exports.config = {
     baseUrl: process.env.DOMAIN,
 
     // list of files / patterns to load in the browser
-  specs: [
-    '../qbapp/**/*.spec.js'
-  ],
+    specs: [
+        '../qbapp/**/*.spec.js'
+    ],
 
     // Patterns to exclude.
     exclude: [],

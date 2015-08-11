@@ -1,15 +1,15 @@
 (function() {
     /*
-    * Setup Bunyan logging configuration.
-    *
-    * The following environment configurations are available:
-    *      name:   logger name
-    *      level:  log level
-    *      src:    include reference to source file in log message..FOR DEBUGGING PURPOSES...DO NOT SET TO TRUE IN PROD
-    *      stream: output to std.out or a file. If sending to a file, define the path.
-    *      In addition, if outputting to a file, can also setup to rotate the files per schedule.
-    *          See: https://github.com/trentm/node-bunyan#stream-type-rotating-file
-    */
+     * Setup Bunyan logging configuration.
+     *
+     * The following environment configurations are available:
+     *      name:   logger name
+     *      level:  log level
+     *      src:    include reference to source file in log message..FOR DEBUGGING PURPOSES...DO NOT SET TO TRUE IN PROD
+     *      stream: output to std.out or a file. If sending to a file, define the path.
+     *      In addition, if outputting to a file, can also setup to rotate the files per schedule.
+     *          See: https://github.com/trentm/node-bunyan#stream-type-rotating-file
+     */
 
     'use strict';
 
@@ -45,10 +45,10 @@
                 var stream = getStream();
 
                 var logger = bunyan.createLogger({
-                    name: name,
-                    streams: [stream],
-                    level: level,
-                    src: src,
+                    name       : name,
+                    streams    : [stream],
+                    level      : level,
+                    src        : src,
                     serializers: bunyan.stdSerializers
                 });
 
@@ -81,7 +81,7 @@
                  */
                 appLogger.logResponse = function(req, res, callingFunc) {
                     if (callingFunc) {
-                        appLogger.info({Request: getReqInfo(req), Response: getResInfo(res), CallFunc:getCallFunc(callingFunc)});
+                        appLogger.info({Request: getReqInfo(req), Response: getResInfo(res), CallFunc: getCallFunc(callingFunc)});
                     } else {
                         appLogger.info({Request: getReqInfo(req), Response: getResInfo(res)});
                     }
@@ -128,8 +128,7 @@
                     r.useragent = req.useragent.browser + ' ' + req.useragent.version + ' - ' + req.useragent.os;
                 }
             }
-        }
-        catch (e) {}   //  catch exception and move on..
+        } catch (e) {}   //  catch exception and move on..
         return r;
     }
 
@@ -145,8 +144,7 @@
             if (res) {
                 r.status = res.statusCode;
             }
-        }
-        catch (e) {}    // catch exception and move on..
+        } catch (e) {}    // catch exception and move on..
         return r;
     }
 

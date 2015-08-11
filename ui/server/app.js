@@ -10,9 +10,9 @@
     }
 
     var express = require('express'),
-        http = require('http'),
-        config = require('./config/environment'),
-        _ = require('lodash');
+            http = require('http'),
+            config = require('./config/environment'),
+            _ = require('lodash');
 
     //  Configure the Bunyan logger
     var log = require('./logger').getLogger();
@@ -87,7 +87,7 @@
      **************/
     if (config.hasSslOptions()) {
         var fs = require('fs'),
-            https = require('https');
+                https = require('https');
 
         var options = {
             key               : fs.readFileSync(config.SSL_KEY.private),

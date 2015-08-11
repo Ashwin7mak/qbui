@@ -4,8 +4,8 @@
      * This service is used to manage the state of the pages of the data for a grid
      **/
     angular
-        .module('qbse.grid')
-        .factory('PagesHandler', ['$http', '$log', 'GridDataFactory', PagesHandlerFactory]);
+            .module('qbse.grid')
+            .factory('PagesHandler', ['$http', '$log', 'GridDataFactory', PagesHandlerFactory]);
 
     function PagesHandlerFactory($http, $log, GridDataFactory) {
 
@@ -32,10 +32,10 @@
         };
 
         PagesHandler.prototype.loadCurrentPage = function() {
-            var self = this;
+            var context = this;
             this.dataFact.getData(this.current).then(function(resolved) {
-                self.current = resolved.newState;
-                self.gridOptions.data = resolved.data;
+                context.current = resolved.newState;
+                context.gridOptions.data = resolved.data;
             }, function(error) {
                 // getData rejected, log the error with: console.log('error', error);
                 //TODO error message to screen & change to use tbd logging interface and emit notification
