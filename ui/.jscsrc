@@ -3,12 +3,13 @@
   "disallowKeywords": [
     "with"
   ],
-  "disallowKeywordsOnNewLine" : [
-    "else"
+  "disallowKeywordsOnNewLine": [
+    "else",
+    "catch"
   ],
   "disallowMixedSpacesAndTabs": true,
-  "disallowMultipleVarDecl": true,
-  "disallowQuotedKeysInObjects": true,
+  "disallowMultipleVarDecl": { allExcept: ['undefined'] },
+  "disallowQuotedKeysInObjects": 'allButReserved',
   "disallowSpaceAfterPrefixUnaryOperators": true,
   "disallowSpaceBeforeBinaryOperators": [
     ","
@@ -28,11 +29,11 @@
   },
   "disallowSpacesInsideArrayBrackets": true,
   "disallowSpacesInsideParentheses": true,
- // "disallowTrailingComma": true,
+  // "disallowTrailingComma": true,
   "disallowTrailingWhitespace": true,
   "disallowYodaConditions": true,
   "requireBlocksOnNewline": 1,
-//  "requireCamelCaseOrUpperCaseIdentifiers": false,
+  //  "requireCamelCaseOrUpperCaseIdentifiers": false,
   "requireCapitalizedConstructors": true,
   "requireCommaBeforeLineBreak": true,
   "requireCurlyBraces": [

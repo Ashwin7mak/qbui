@@ -9,15 +9,17 @@ exports.config = {
     allScriptsTimeout: 110000,
 
     //The sauce user and access key allow us to run our browser tests remotely on a SauceLabs VM
-  sauceUser: "sbg_qbse",
-  sauceKey: "ae1f362a-024f-44b1-a428-992defbf0062",
+    sauceUser: "sbg_qbse",
+    sauceKey: process.env.SAUCE_KEY,
+    //we have to specify the selenium address to point locally so that we use the tunnel properly
+    sauceSeleniumAddress: 'localhost:4445/wd/hub',
 
     // A base URL for your application under test will be passed in via grunt config so that we can use whatever url we please
 
     // list of files / patterns to load in the browser
-  specs: [
-    '../qbapp/**/*.spec.js'
-  ],
+    specs: [
+        '../qbapp/**/*.spec.js'
+    ],
 
     // Patterns to exclude.
     exclude: [],
@@ -29,9 +31,9 @@ exports.config = {
     // and
     // https://code.google.com/p/selenium/source/browse/javascript/webdriver/capabilities.js
     capabilities: {
-    'browserName': 'firefox',
-    tunnelIdentifier: process.env.ENV_TUNNEL_NAME,
-    name: process.env.SAUCE_JOB_NAME
+        'browserName': 'firefox',
+        tunnelIdentifier: process.env.ENV_TUNNEL_NAME,
+        name: process.env.SAUCE_JOB_NAME
     },
 
     // ----- The test framework -----

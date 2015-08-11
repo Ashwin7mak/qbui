@@ -25,7 +25,7 @@
             tables: [{
                 name: 'table1', fields: [{
                     name              : 'file',
-                    type              : 'SCALAR',
+                    type              :'CONCRETE',
                     datatypeAttributes: {
                         type: 'FILE_ATTACHMENT'
                     }
@@ -40,7 +40,7 @@
             tables: [{
                 name: 'table1', fields: [{
                     name              : 'file',
-                    type              : 'SCALAR',
+                    type              : 'CONCRETE',
                     datatypeAttributes: {
                         type    : 'FILE_ATTACHMENT',
                         linkText: linkText

@@ -8,7 +8,6 @@
     // Uses the base / constants modules in the Node Server layer
     // Launches a new instance of the Express Server
     var consts = require('../../../server/api/constants.js');
-    var config = require('../../../server/config/environment/local.js');
     var recordBase = require('../../../server/api/test/recordApi.base.js')();
 
     // Require the generator modules in the Server layer

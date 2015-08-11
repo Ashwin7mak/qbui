@@ -14,6 +14,10 @@ module.exports = function(grunt) {
     var tunnelIdentifier = grunt.option('tunnelIdentifier') || 'tunnel_' + currentDateTime;
     var sauceJobName = grunt.option('sauceJobName') || 'e2e_' + currentDateTime;
     var sauceKey = grunt.option('sauceKey');
+    //We need to pass along --proxy-tunnel so that the tunnel will also use the proxy to communicate with the sauce apis
+    //sauce-connect-launcher won't take an explicit no arg argument, so we are "leveraging" their mechanism for passing
+    //arguments along to sauce-connect-launcher
+    var httpProxy = grunt.option('httpProxyHost') !== undefined ? grunt.option('httpProxyHost') + ':80 --proxy-tunnel' : null;
     var useColors = grunt.option('colors') || false;
 
     // Load grunt tasks automatically, when needed
@@ -661,6 +665,13 @@ module.exports = function(grunt) {
                 //for the test env, we need to thwart the proxy
                 https_proxy                 : ''
             },
+            e2e: {
+                NODE_ENV: 'test',
+                NODE_TLS_REJECT_UNAUTHORIZED: 0,
+                ENV_TUNNEL_NAME: tunnelIdentifier,
+                SAUCE_JOB_NAME: sauceJobName,
+                SAUCE_KEY: sauceKey,
+            },
             prod : {
                 NODE_ENV       : 'production',
                 ENV_TUNNEL_NAME: tunnelIdentifier,
@@ -882,10 +893,7 @@ module.exports = function(grunt) {
 
         if (target === 'e2e') {
             return grunt.task.run([
-                'clean:server',
-                'concurrent:test',
-                'wiredep:app',
-                'autoprefixer',
+                'env:e2e',
                 'sauce_connect',
                 'protractor:sauce_linux_chrome',
                 'sauce-connect-close'
@@ -952,12 +960,12 @@ module.exports = function(grunt) {
 
     grunt.registerTask('sauce_connect', 'Grunt plug-in to download and launch Sauce Labs Sauce Connect', function() {
         var options = this.options({
-            username        : 'sbg_qbse',
-            accessKey       : 'ae1f362a-024f-44b1-a428-992defbf0062',
-            proxy           : 'ondemand.saucelabs.com:80',
+                username: 'sbg_qbse',
+            accessKey       : sauceKey,
+            proxy           : httpProxy,
             tunnelIdentifier: tunnelIdentifier,
             verbose         : grunt.option('verbose') === true,
-            logger          : grunt.verbose.writeln
+            logger          : console.log
         });
 
         var done = this.async();
