@@ -635,7 +635,7 @@ module.exports = function (grunt) {
             },
             local: {
                 options: {
-                    configFile: './e2e/config/local.protractor.conf.js',
+                    configFile: './e2e/config/local.protractor.conf.js'
                 }
             }
         },
@@ -657,7 +657,7 @@ module.exports = function (grunt) {
                 NODE_TLS_REJECT_UNAUTHORIZED: 0,
                 ENV_TUNNEL_NAME: tunnelIdentifier,
                 SAUCE_JOB_NAME: sauceJobName,
-                SAUCE_KEY: sauceKey,
+                SAUCE_KEY: sauceKey
             },
             prod: {
                 NODE_ENV: 'production',

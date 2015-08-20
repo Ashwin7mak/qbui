@@ -282,7 +282,7 @@ describe('Report Layout Tests', function (){
                     });
                 });
             });
-        })
+        });
     });
 
 
@@ -291,6 +291,7 @@ describe('Report Layout Tests', function (){
     */
     afterEach(function (done) {
         if (!cleanupDone) {
+            browser.driver.manage().window().maximize();
             recordBase.apiBase.cleanup().then(function () {
                 cleanupDone = false;
                 done();
