@@ -13,7 +13,7 @@ exports.config = {
 
   // list of files / patterns to load in the browser
   specs: [
-    '../qbapp/**/*.spec.js'
+    '../qbapp/**/*.e2e.spec.js'
   ],
 
   // Patterns to exclude.

@@ -17,6 +17,8 @@ var recordGenerator = require('../../../test_generators/record.generator.js');
 var Promise = require('bluebird');
 // Node.js assert library
 var assert = require('assert');
+// Logger.js
+var log = require('../../../server/logger').getLogger();
 
 describe('Report Service E2E Tests', function (){
 
@@ -40,7 +42,6 @@ describe('Report Service E2E Tests', function (){
             var tableToFieldToFieldTypeMap = {};
             tableToFieldToFieldTypeMap['table 1'] = {};
             tableToFieldToFieldTypeMap['table 1']['Text Field'] = { fieldType: consts.SCALAR, dataType: consts.TEXT};
-            tableToFieldToFieldTypeMap['table 1']['Numeric Field'] = { fieldType: consts.SCALAR, dataType: consts.NUMERIC};
             tableToFieldToFieldTypeMap['table 1']['Phone Number Field'] = { fieldType: consts.SCALAR, dataType: consts.PHONE_NUMBER};
 
             // Generate the app JSON object
@@ -60,8 +61,8 @@ describe('Report Service E2E Tests', function (){
                 // Via the API create the records, a new report, then run the report.
                 // This is a promise chain since we need these actions to happen sequentially
                 addRecords(createdApp, createdApp.tables[0], generatedRecords).then(createReport).then(runReport).then(function (reportRecords) {
-                    //console.log('Here are the records returned from your API report:');
-                    //console.log(reportRecords);
+                    log.info('Here are the records returned from your API report:');
+                    log.info(reportRecords);
                     recordList = reportRecords;
 
                     // Setup complete so set the global var so we don't run setup again
@@ -121,7 +122,7 @@ describe('Report Service E2E Tests', function (){
         var generatedRecords = [];
         for (var i = 0; i < numRecords; i++) {
             var generatedRecord = recordGenerator.generateRecord(fields);
-            //console.log(generatedRecord);
+            log.info(generatedRecord);
             generatedRecords.push(generatedRecord);
         }
 
@@ -159,7 +160,7 @@ describe('Report Service E2E Tests', function (){
     function createReport(){
         var deferred = Promise.pending();
         var reportJSON = {
-            "name": "Test Report",
+            "name": "Protractor Table",
             "type": "TABLE",
             "ownerId": "1000000",
             "hideReport": false
@@ -205,17 +206,20 @@ describe('Report Service E2E Tests', function (){
      */
     function getReportColumnHeaders(reportServicePage){
         var deferred = Promise.pending();
-        var fieldColHeaders = [];
-        reportServicePage.columnHeaderElList.then(function(result){
-            for(var i = 0; i < result.length; i++){
-                result[i].getText().then(function(value){
+        reportServicePage.columnHeaderElList.then(function(elements){
+            var fetchTextPromises = [];
+            for(var i = 0; i < elements.length; i++) {
+                fetchTextPromises.push(elements[i].getAttribute("innerText"));
+            };
+            Promise.all(fetchTextPromises).then(function (colHeaders){
+                var fieldColHeaders =[];
+                colHeaders.forEach(function(headerText){
                     // The getText call above is returning the text value with a new line char on the end, need to remove it
-                    var subValue = value.replace(/(\r\n|\n|\r)/gm,'');
-                    fieldColHeaders.push(subValue.trim());
+                    var subText = headerText.replace(/(\r\n|\n|\r)/gm,'');
+                    fieldColHeaders.push(subText.trim());
                 });
-            }
-        }).then(function(){
-            deferred.resolve(fieldColHeaders);
+                deferred.resolve(fieldColHeaders);
+            });
         });
         return deferred.promise;
     }
@@ -326,7 +330,7 @@ describe('Report Service E2E Tests', function (){
         });
 
         // Assert column headers
-        var fieldNames = ['Record ID#', 'Text Field', 'Numeric Field', 'Phone Number Field'];
+        var fieldNames = ['Record ID#', 'Text Field', 'Phone Number Field'];
         getReportColumnHeaders(reportServicePage).then(function(resultArray){
             // UI is currently using upper case to display the field names in columns
             var upperFieldNames = stringArrayToUpperCase(fieldNames);

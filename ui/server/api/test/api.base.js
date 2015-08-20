@@ -58,11 +58,6 @@
             var fullPath;
             var protocol = HTTP;
             log.info('Resolving full url for path: '+ path + ' realm: '+realmSubdomain);
-            //If there is no subdomain, hit the javaHost directly and don't proxy through the node server
-            //This is required for actions like ticket creation and realm creation
-            if (realmSubdomain === '') {
-                realmSubdomain = LOCALHOST_SUBDOMAIN;
-            }
 
             var methodLess;
             if(HTTPS_REGEX.test(baseUrl)){
@@ -73,9 +68,15 @@
             }
 
             log.info('baseUrl: '+ baseUrl + ' methodLess: '+methodLess);
-
-            fullPath = protocol + realmSubdomain + '.' + methodLess + path;
-            log.info('resulting fullpath: '+ fullPath);
+            //If there is no subdomain, hit the javaHost directly and don't proxy through the node server
+            //This is required for actions like ticket creation and realm creation
+            if (realmSubdomain === '') {
+                fullPath = baseUrl + path;
+                log.info('resulting fullpath: '+ fullPath);
+            } else {
+                fullPath = protocol + realmSubdomain + '.' + methodLess + path;
+                log.info('resulting fullpath: '+ fullPath);
+            }
 
             return fullPath;
         }
