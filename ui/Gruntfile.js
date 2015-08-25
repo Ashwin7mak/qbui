@@ -238,6 +238,8 @@ module.exports = function(grunt) {
                 files: [{
                     dot: true,
                     src: [
+                        '<%= quickbase.client.assets %>/css/*.*',
+                        '<%= quickbase %>/css/*.*',
                         clientReportDir + '/coverage/*',
                         clientReportDir + '/unit/*'
                     ]

@@ -21,6 +21,7 @@
     "moment": false,
     "require": false,
     "xdescribe": false,
-    "xit": false
+    "xit": false,
+    "bigdecimal": false
   }
 }

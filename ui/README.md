@@ -24,11 +24,15 @@ FIRST - Do all the Quickbase java backend development [setup instructions](https
 
 * Git & SourceTree Source code control
 * Intellij IDE
-        * Install some IntelliJ plugins if you don't have these already
-            * AngularJS - front end framework plugin
-            * NodeJS - ui web server plugin
-            * SASS support - enhances css with variables and methods plugin
-         * Know working versions of Intellij are 14.1.2 and 14.1.4 
+  * Install some IntelliJ plugins if you don't have these already
+   		* AngularJS - front end framework plugin
+    	* NodeJS - ui web server plugin
+    	* SASS support - enhances css with variables and methods plugin
+  * Know working versions of Intellij are 14.1.2 and 14.1.4 
+  * Use the QuickBase/intelliJSettings.jar from the Quickbase project and set the following settings for coding style errors to appear in the IDE inspection.(This is manual due to path is user code location dependent)
+ 	 * 	In the qbui Intellij project, go to Main Menu `Intellij IDEA/Preferences...` and select the options for `Languages & Frameworks` then`Javascript` disable all but the following 2 JSHint and JSCS with the settings 
+ 	 *  for jsHint![jsHintScreenShot.png](jsHintScreenShot.png) 
+ 	 *  and for jscs(javascript codestyle)![jscsScreenShot.png](jscsScreenShot.png)
 * Java and Tomcat to run the backend	
 	
 ##Installing 
@@ -84,6 +88,7 @@ FIRST - Do all the Quickbase java backend development [setup instructions](https
 	```
 	npm install -g bower grunt-cli
    ```
+   
 
 * Then get the qbui project repo 
 
@@ -140,8 +145,12 @@ The following run-time environment variable is supported:
 
 
 ## Testing
+###Lint and Code Style tests
+Running `grunt codeStandards` will run the jshint and jscs tasks to validate the javascript (lint) and assure the code is formatted to qbui coding styles.
+
+
 ###Unit tests
-Running `grunt test` will run the client and server unit tests with karma and mocha.
+Running `grunt test` will run the client and server unit tests with karma and mocha as well as the codeStandards.
 
 Use `grunt test:server` to only run server tests.
 
