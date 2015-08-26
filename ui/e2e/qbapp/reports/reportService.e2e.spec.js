@@ -2,6 +2,9 @@
  * E2E tests for the Report Service
  * Created by klabak on 6/1/15.
  */
+// jshint sub: true
+// jscs:disable requireDotNotation
+
 (function() {
     'use strict';
 
@@ -18,6 +21,8 @@
     var promise = require('bluebird');
     // Node.js assert library
     var assert = require('assert');
+    // Logger.js
+    var log = require('../../../server/logger').getLogger();
 
     describe('Report Service E2E Tests', function() {
 
@@ -40,7 +45,10 @@
                 // Create the table schema (map object) to pass into the app generator
                 var tableToFieldToFieldTypeMap = {};
                 tableToFieldToFieldTypeMap['table 1'] = {};
-                tableToFieldToFieldTypeMap['table 1']['Text Field'] = {fieldType: consts.SCALAR, dataType: consts.TEXT};
+                tableToFieldToFieldTypeMap['table 1']['Text Field'] = {
+                    fieldType: consts.SCALAR,
+                    dataType : consts.TEXT
+                };
                 tableToFieldToFieldTypeMap['table 1']['Numeric Field'] = {
                     fieldType: consts.SCALAR,
                     dataType : consts.NUMERIC
@@ -67,8 +75,8 @@
                     // Via the API create the records, a new report, then run the report.
                     // This is a promise chain since we need these actions to happen sequentially
                     addRecords(createdApp, createdApp.tables[0], generatedRecords).then(createReport).then(runReport).then(function(reportRecords) {
-                        //console.log('Here are the records returned from your API report:');
-                        //console.log(reportRecords);
+                        log.info('Here are the records returned from your API report:');
+                        log.info(reportRecords);
                         recordList = reportRecords;
 
                         // Setup complete so set the global var so we don't run setup again
@@ -77,8 +85,8 @@
                         done();
                     }).catch(function(error) {
                         console.log(JSON.stringify(error));
-                        throw new Error('Error during test setup:' + error);
                         done();
+                        throw new Error('Error during test setup:' + error);
                     });
                 });
             } else {
@@ -129,7 +137,7 @@
             var generatedRecords = [];
             for (var i = 0; i < numRecords; i++) {
                 var generatedRecord = recordGenerator.generateRecord(fields);
-                //console.log(generatedRecord);
+                log.info(generatedRecord);
                 generatedRecords.push(generatedRecord);
             }
 
@@ -167,10 +175,10 @@
         function createReport() {
             var deferred = promise.pending();
             var reportJSON = {
-                "name"      : "Test Report",
-                "type"      : "TABLE",
-                "ownerId"   : "1000000",
-                "hideReport": false
+                name      : 'Protractor Table',
+                type      : 'TABLE',
+                ownerId   : '1000000',
+                hideReport: false
                 //"query": "{'3'.EX.'1'}"
             };
             var reportsEndpoint = recordBase.apiBase.resolveReportsEndpoint(app.id, app.tables[0].id);
@@ -213,17 +221,20 @@
          */
         function getReportColumnHeaders(reportServicePage) {
             var deferred = promise.pending();
-            var fieldColHeaders = [];
-            reportServicePage.columnHeaderElList.then(function(result) {
-                for (var i = 0; i < result.length; i++) {
-                    result[i].getText().then(function(value) {
-                        // The getText call above is returning the text value with a new line char on the end, need to remove it
-                        var subValue = value.replace(/(\r\n|\n|\r)/gm, '');
-                        fieldColHeaders.push(subValue.trim());
-                    });
+            reportServicePage.columnHeaderElList.then(function(elements) {
+                var fetchTextPromises = [];
+                for (var i = 0; i < elements.length; i++) {
+                    fetchTextPromises.push(elements[i].getAttribute('innerText'));
                 }
-            }).then(function() {
-                deferred.resolve(fieldColHeaders);
+                Promise.all(fetchTextPromises).then(function(colHeaders) {
+                    var fieldColHeaders = [];
+                    colHeaders.forEach(function(headerText) {
+                        // The getText call above is returning the text value with a new line char on the end, need to remove it
+                        var subText = headerText.replace(/(\r\n|\n|\r)/gm, '');
+                        fieldColHeaders.push(subText.trim());
+                    });
+                    deferred.resolve(fieldColHeaders);
+                });
             });
             return deferred.promise;
         }
@@ -306,7 +317,7 @@
             var ticketEndpoint = recordBase.apiBase.resolveTicketEndpoint();
             var realmName = recordBase.apiBase.realm.subdomain;
             var realmId = recordBase.apiBase.realm.id;
-            var appId = app.id;
+            //var appId = app.id;
             var tableId = app.tables[0].id;
 
             // Get a session ticket for that subdomain and realmId (stores it in the browser)
@@ -334,7 +345,7 @@
             });
 
             // Assert column headers
-            var fieldNames = ['Record ID#', 'Text Field', 'Numeric Field', 'Phone Number Field'];
+            var fieldNames = ['Record ID#', 'Text Field', 'Phone Number Field'];
             getReportColumnHeaders(reportServicePage).then(function(resultArray) {
                 // UI is currently using upper case to display the field names in columns
                 var upperFieldNames = stringArrayToUpperCase(fieldNames);

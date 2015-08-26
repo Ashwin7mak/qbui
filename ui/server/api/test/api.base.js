@@ -39,7 +39,6 @@
         var REALMS_ENDPOINT = '/realms/';
         var USERS_ENDPOINT = '/users/';
         var LOCALHOST_REALM = 117000;
-        var LOCALHOST_SUBDOMAIN = 'localhost';
         var TICKETS_ENDPOINT = '/ticket?uid=1000000&realmID=';
         var HEALTH_ENDPOINT = '/health';
         var SUBDOMAIN_CHARS = 'abcdefghijklmnopqrstuvwxyz0123456789';
@@ -58,11 +57,6 @@
             var fullPath;
             var protocol = HTTP;
             log.info('Resolving full url for path: ' + path + ' realm: ' + realmSubdomain);
-            //If there is no subdomain, hit the javaHost directly and don't proxy through the node server
-            //This is required for actions like ticket creation and realm creation
-            if (realmSubdomain === '') {
-                realmSubdomain = LOCALHOST_SUBDOMAIN;
-            }
 
             var methodLess;
             if (HTTPS_REGEX.test(baseUrl)) {
@@ -73,9 +67,15 @@
             }
 
             log.debug('baseUrl: ' + baseUrl + ' methodLess: ' + methodLess);
-
-            fullPath = protocol + realmSubdomain + '.' + methodLess + path;
-            log.debug('resulting fullpath: ' + fullPath);
+            //If there is no subdomain, hit the javaHost directly and don't proxy through the node server
+            //This is required for actions like ticket creation and realm creation
+            if (realmSubdomain === '') {
+                fullPath = baseUrl + path;
+                log.debug('resulting fullpath: ' + fullPath);
+            } else {
+                fullPath = protocol + realmSubdomain + '.' + methodLess + path;
+                log.debug('resulting fullpath: ' + fullPath);
+            }
 
             return fullPath;
         }

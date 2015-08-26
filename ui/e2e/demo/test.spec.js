@@ -5,10 +5,10 @@
 
     // spec.js
 describe('Protractor Demo App', function() {
+    'use strict';
     var firstNumber = element(by.model('first'));
     var secondNumber = element(by.model('second'));
     var goButton = element(by.id('gobutton'));
-    var latestResult = element(by.binding('latest'));
     var history = element.all(by.repeater('result in memory'));
 
     function add(a, b) {

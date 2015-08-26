@@ -1,3 +1,5 @@
+// jscs:disable requireDotNotation
+// jshint sub: true
 (function() {
     /**
      * E2E tests for the Report layout
@@ -95,8 +97,10 @@
                         done();
                     }).catch(function(error) {
                         console.log(JSON.stringify(error));
+                        promise.delayed(30).then(function() {
+                            done();
+                        });
                         throw new Error('Error during test setup:' + error);
-                        done();
                     });
                 });
             } else {
@@ -185,10 +189,10 @@
         function createReport() {
             var deferred = promise.pending();
             var reportJSON = {
-                "name"      : "Test Report",
-                "type"      : "TABLE",
-                "ownerId"   : "1000000",
-                "hideReport": false
+                name      : 'Test Report',
+                type      : 'TABLE',
+                ownerId   : '1000000',
+                hideReport: false
                 //"query": "{'3'.EX.'1'}"
             };
             var reportsEndpoint = recordBase.apiBase.resolveReportsEndpoint(app.id, app.tables[0].id);
@@ -235,7 +239,7 @@
                 tableContainerLoc : reportServicePage.tableContainer.getLocation(),
                 lastColumnSize    : reportServicePage.lastColumn.getSize(),
                 lastColumnLoc     : reportServicePage.lastColumn.getLocation()
-            }
+            };
         }
 
         function validateGridDimensions(result) {
@@ -244,7 +248,7 @@
             var pointOfLastColumn = result.lastColumnLoc.x + leftPadding + result.lastColumnSize.width;
             var pointOfMainContent = result.mainLoc.x + result.mainSize.width;
             var endsDiff = Math.abs(pointOfMainContent - pointOfLastColumn);
-            expect(endsDiff).toBeLessThan(allowedVariance)
+            expect(endsDiff).toBeLessThan(allowedVariance);
         }
 
         /**
@@ -299,7 +303,7 @@
                         });
                     });
                 });
-            })
+            });
         });
 
 
@@ -308,6 +312,7 @@
          */
         afterEach(function(done) {
             if (!cleanupDone) {
+                browser.driver.manage().window().maximize();
                 recordBase.apiBase.cleanup().then(function() {
                     cleanupDone = false;
                     done();

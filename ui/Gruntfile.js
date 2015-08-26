@@ -44,9 +44,9 @@ module.exports = function(grunt) {
                 root      : 'client',
                 components: '<%= quickbase.client.root %>/quickbase',
                 gallery   : '<%= quickbase.client.root %>/gallery',
-                e2e       : '<%= quickbase.client.root %>/e2e',
                 assets    : '<%= quickbase.client.root %>/quickbase/assets'
             },
+            e2e       : 'e2e',
             //  dist contains the target folders of the build
             distDir   : 'dist',
             distPublic: 'dist/public'
@@ -90,7 +90,7 @@ module.exports = function(grunt) {
                         '<%= express.root %>/**/test/**/*.js',
                         '<%= express.root %>/**/*.js'
                 ],
-                tasks: ['env:local', 'mochaTest:test']
+                tasks: ['env:local', 'newer:jshint', 'newer:jscs', 'mochaTest:test']
             },
             jsTest    : {
                 files: [
@@ -99,7 +99,7 @@ module.exports = function(grunt) {
                     '<%= quickbase.client.components %>/**/test/**/*.js',
                     '<%= quickbase.client.components %>/**/*.js'
                 ],
-                tasks: ['newer:jshint', 'karma:unit']
+                tasks: ['newer:jshint', 'newer:jscs','karma:unit']
             },
             livereload: {
                 files  : [
@@ -135,7 +135,7 @@ module.exports = function(grunt) {
         jscs: {
             client : {
                 files  : {
-                    src: ['<%= quickbase.client.root %>/**/*.js']
+                    src: ['<%= quickbase.client.root %>/**/*.js', '<%= quickbase.e2e %>/**/*.js']
                 },
                 options: {
                     config      : './.jscsrc',
@@ -167,7 +167,7 @@ module.exports = function(grunt) {
         // Make sure code styles are up to par and there are no obvious mistakes
         jshint: {
             options   : {
-                jshintrc: '<%= quickbase.client.root %>/.jshintrc',
+                jshintrc: './.jshintrc',
                 //reporter: require('jshint-stylish'),
                 reporter: './node_modules/jshint-practical/'
             },
@@ -193,6 +193,7 @@ module.exports = function(grunt) {
                 },
                 src    : [
                     '<%= quickbase.client.components %>/**/*.js',
+                    '<%= quickbase.client.components %>/**/*.js',
                     '<%= quickbase.client.gallery %>/**/*.js',
                     '!<%= quickbase.client.components %>/**/*.spec.js',
                     '!<%= quickbase.client.components %>/**/*.mock.js'
@@ -205,9 +206,8 @@ module.exports = function(grunt) {
                 src    : [
                     '<%= quickbase.client.components %>/**/*.spec.js',
                     '<%= quickbase.client.components %>/**/*.mock.js',
-                    '<%= quickbase.client.components %>/**/test/**/*.js',
                     '<%= quickbase.client.gallery %>/**/test/**/*.js',
-                    '<%= quickbase.client.e2e %>/**/*.js'
+                    '<%= quickbase.e2e %>/**/*.js'
                 ]
             },
             testGen   : {
@@ -650,7 +650,7 @@ module.exports = function(grunt) {
             },
             local              : {
                 options: {
-                    configFile: './e2e/config/local.protractor.conf.js',
+                    configFile: './e2e/config/local.protractor.conf.js'
                 }
             }
         },
@@ -672,7 +672,7 @@ module.exports = function(grunt) {
                 NODE_TLS_REJECT_UNAUTHORIZED: 0,
                 ENV_TUNNEL_NAME             : tunnelIdentifier,
                 SAUCE_JOB_NAME              : sauceJobName,
-                SAUCE_KEY                   : sauceKey,
+                SAUCE_KEY: sauceKey
             },
             prod : {
                 NODE_ENV       : 'production',
@@ -830,7 +830,6 @@ module.exports = function(grunt) {
 
     grunt.registerTask('codeStandards', [
         'jshint',
-        //WIP
         'jscs'
     ]);
 
@@ -968,11 +967,12 @@ module.exports = function(grunt) {
 
     grunt.registerTask('default', [
         'newer:jshint',
+        'newer:jscs',
         'test',
         'build'
     ]);
 
-
+    /* global console:true */
     grunt.registerTask('sauce_connect', 'Grunt plug-in to download and launch Sauce Labs Sauce Connect', function() {
         var options = this.options({
             username        : 'sbg_qbse',

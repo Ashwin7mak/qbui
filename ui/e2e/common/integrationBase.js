@@ -4,7 +4,7 @@
  */
 
 (function() {
-    'useStrict';
+    'use strict';
     var promise = require('bluebird');
     module.exports = function() {
         var integrationBase = {
@@ -42,7 +42,7 @@
 
                               }).catch(function(error) {
                                            linkDeferred.reject(error);
-                                       })
+                                       });
 
                 return linkDeferred.promise;
             },
@@ -64,10 +64,10 @@
             }
 
 
-        }
+        };
 
         return integrationBase;
 
         // Can have locators for headers and footers here as well
-    }
+    };
 }());

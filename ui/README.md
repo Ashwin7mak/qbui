@@ -32,7 +32,7 @@ FIRST - Do all the Quickbase java backend development [setup instructions](https
   * Use the QuickBase/intelliJSettings.jar from the Quickbase project and set the following settings for coding style errors to appear in the IDE inspection.(This is manual due to path is user code location dependent)
  	 * 	In the qbui Intellij project, go to Main Menu `Intellij IDEA/Preferences...` and select the options for `Languages & Frameworks` then`Javascript` disable all but the following 2 JSHint and JSCS with the settings 
  	 *  for jsHint![jsHintScreenShot.png](jsHintScreenShot.png) 
- 	 *  and for jscs(javascript codestyle)![jscsScreenShot.png](jscsScreenShot.png)
+ 	 *  and for jscs(javascript coding style)![jscsScreenShot.png](jscsScreenShot.png)
 * Java and Tomcat to run the backend	
 	
 ##Installing 

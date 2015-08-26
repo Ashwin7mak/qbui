@@ -8,7 +8,7 @@
 (function() {
     'use strict';
 
-    var reportServicePage = function() {
+    var ReportServicePage = function() {
         // Constants
 
         // Page Elements using Locators
@@ -17,10 +17,9 @@
         this.recordElList = element.all(by.repeater('(rowRenderIndex, row) in rowContainer.renderedRows track by $index'));
         this.mainContent = element.all(by.className('nav-target')).first();
         this.tableContainer = element.all(by.className('ui-grid')).first();
-        ;
         this.lastColumn = element.all(by.className('ui-grid-header-cell')).last();
 
     };
 
-    module.exports = new reportServicePage();
+    module.exports = new ReportServicePage();
 }());

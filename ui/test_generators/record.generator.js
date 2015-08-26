@@ -11,6 +11,7 @@
     var dataTypeConsts = require('./datatype.attributes.constants');
     var tableConsts = require('./table.constants');
     var rawValueGenerator = require('./rawValue.generator');
+    var log = require('../server/logger').getLogger();
 
     module.exports = {
         /**
@@ -29,8 +30,9 @@
                 var field = fields[i];
 
                 // Check that there is a mapping for the field type (otherwise don't generate a value for it)
-                if (field[fieldConsts.fieldKeys.TYPE] === fieldConsts.SCALAR || field[fieldConsts.fieldKeys.TYPE] === fieldConsts.REPORT_LINK) {
-                    //console.info('Generating field value for type ' + field[fieldConsts.fieldKeys.TYPE]);
+                // Check that there is a mapping for the field type (otherwise don't generate a value for it)
+                if (field[fieldConsts.fieldKeys.TYPE] === consts.SCALAR || field[fieldConsts.fieldKeys.TYPE] === consts.REPORT_LINK) {
+                    log.info('Generating field value for type ' + field[fieldConsts.fieldKeys.TYPE]);
                     recordJson.push({
                         id   : field[fieldConsts.fieldKeys.ID],
                         value: generateRecordValueForFieldType(field[fieldConsts.fieldKeys.DATA_TYPE_ATTRIBUTES][dataTypeConsts.dataTypeKeys.TYPE])

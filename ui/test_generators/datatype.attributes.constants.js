@@ -12,7 +12,7 @@
         //Field property names common to all fields
         dataTypeKeys: {
             TYPE                  : 'type',
-            CLIENT_SIDE_ATTRIBUTES: 'clientSideAttributes',
+            CLIENT_SIDE_ATTRIBUTES: 'clientSideAttributes'
         },
 
         availableDataTypes: [

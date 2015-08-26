@@ -37,6 +37,7 @@
         "Chance" : false,
         "process" : false,
         "require" : false,
+        "exports" : false,
         "module": false,
         "setTimeout": false,
         "__dirname" : false,

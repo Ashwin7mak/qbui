@@ -1,10 +1,9 @@
 // Karma configuration
 // http://karma-runner.github.io/0.10/config/configuration-file.html
 
-'use strict';
 
 module.exports = function(config) {
-
+    'use strict';
     config.set({
         // base path, that will be used to resolve files and exclude
         basePath: '',

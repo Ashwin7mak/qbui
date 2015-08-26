@@ -1,0 +1,6 @@
+{
+  //Use another configuration file as a "base"
+  "extends": "../.jshintrc",
+  // warn about not running in strict mode, which eliminates some JavaScript pitfalls
+  "strict": false
+}

@@ -124,7 +124,7 @@
                     appTables = relationships;
                     return this;
                 }
-            }
+            };
         }
-    }
+    };
 }());

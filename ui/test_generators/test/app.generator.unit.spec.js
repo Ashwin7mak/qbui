@@ -4,7 +4,6 @@
  */
 'use strict';
 
-var should = require('should');
 var appGenerator = require('../app.generator');
 var appConsts = require('../app.constants');
 var tableConsts = require('../table.constants');
@@ -173,15 +172,15 @@ describe('App generator unit test', function() {
 
                 tableNames.forEach(function(tableName) {
                     if (!tableFoundMap[tableName] || tableFoundMap[tableName] > 1) {
-                        assert.fail('Could not find expected table with name' + tableName
-                                    + '. App created: ' +
+                        assert.fail('Could not find expected table with name' + tableName +
+                                    '. App created: ' +
                                     appGenerator.appToJsonString(app));
                     }
 
                     _.forEach(tableFoundMap[tableName], function(fieldType, fieldName) {
                         if (!tableFoundMap[tableName][fieldName] || tableFoundMap[tableName][fieldName] > 1) {
-                            assert.fail('Could not find expected table with field of name' + fieldName
-                                        + '. App created: ' +
+                            assert.fail('Could not find expected table with field of name' + fieldName +
+                                        '. App created: ' +
                                         appGenerator.appToJsonString(app));
                         }
                     });
