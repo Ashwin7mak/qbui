@@ -233,7 +233,7 @@
                             });
                         } else {
                             log.error('Network request failed, no retries left or an unsupported error for retry found');
-                            log.info('Uknown failure mode. Error: ' + JSON.stringify(error) + ' response: ' + JSON.stringify(response));
+                            log.info('Unknown failure mode. Error: ' + JSON.stringify(error) + ' response: ' + JSON.stringify(response));
                             deferred.reject(error);
                         }
                     } else {
