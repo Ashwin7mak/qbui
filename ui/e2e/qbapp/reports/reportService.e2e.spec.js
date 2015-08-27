@@ -24,6 +24,10 @@
     // Logger.js
     var log = require('../../../server/logger').getLogger();
 
+    function isNumeric(n) {
+        return !isNaN(parseFloat(n)) && isFinite(n);
+    }
+
     describe('Report Service E2E Tests', function() {
 
         var setupDone = false;
@@ -287,12 +291,16 @@
                 var actualRecIdValue = actualRecord[0];
 
                 // If the record Ids match, compare the other fields in the records
-                if (expectedRecIdValue === Number(actualRecIdValue)) {
+                if (Number(expectedRecIdValue) === Number(actualRecIdValue)) {
                     //console.log('Comparing record values for records with ID: ' + expectedRecIdValue);
                     for (var j = 1; j < expectedRecord.length; j++) {
-                        //console.log('Comparing expected field value:' + expectedRecord[j].value
-                        //+ ' with actual field value: ' + actualRecord[j]);
-                        expect(expectedRecord[j].value).toEqual(actualRecord[j]);
+                        //console.log('Comparing expected field value:' + expectedRecord[j].value +
+                        // ' with actual field value: ' + actualRecord[j]);
+                        if (isNumeric(expectedRecord[j].value)) {
+                            expect(Number(expectedRecord[j].value)).toEqual(Number(actualRecord[j]));
+                        } else {
+                            expect(expectedRecord[j].value).toEqual(actualRecord[j]);
+                        }
                     }
                 }
             }
@@ -345,7 +353,7 @@
             });
 
             // Assert column headers
-            var fieldNames = ['Record ID#', 'Text Field', 'Phone Number Field'];
+            var fieldNames = ['Record ID#', 'Text Field', 'Numeric Field', 'Phone Number Field'];
             getReportColumnHeaders(reportServicePage).then(function(resultArray) {
                 // UI is currently using upper case to display the field names in columns
                 var upperFieldNames = stringArrayToUpperCase(fieldNames);
