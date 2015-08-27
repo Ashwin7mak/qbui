@@ -3,6 +3,8 @@
  * Created by cschneider1 on 6/2/15.
  */
 (function() {
+    'use strict';
+
     var appConstants = require('./app.constants');
     var _ = require('lodash');
 
@@ -16,7 +18,7 @@
 
             return {
                 /**
-                 * Return the app with tables and realtionships populated if they exist
+                 * Return the app with tables and relationships populated if they exist
                  * @returns {{}}
                  */
                 build: function() {

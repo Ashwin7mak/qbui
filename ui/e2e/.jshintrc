@@ -4,7 +4,8 @@
 
   //defines globals exposed by modern browsers
   "browser": true,
-
+  //defines globals from jasmine
+  "jasmine": true,
   //a white list of global variables that are not formally defined in the source code
   "globals": {
     "__dirname": false,

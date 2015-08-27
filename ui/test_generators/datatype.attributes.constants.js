@@ -4,8 +4,9 @@
  * Created by cschneider1 on 5/29/15.
  */
 (function() {
-    var consts = require('../server/api/constants');
+    'use strict';
 
+    var consts = require('../server/api/constants');
 
     //These are constants common to all fields
     module.exports = Object.freeze({
@@ -211,7 +212,7 @@
     }
 
     /**
-     * Add the formula hierarch and the numeric keys to the map
+     * Add the formula hierarchy and the numeric keys to the map
      * @param mapToModify
      */
     function addCheckboxHierarchy(mapToModify) {
@@ -220,7 +221,7 @@
     }
 
     /**
-     * Add the formula hierarch and the numeric keys to the map
+     * Add the formula hierarchy and the numeric keys to the map
      * @param mapToModify
      */
     function addNumericHierarchy(mapToModify) {
@@ -254,7 +255,7 @@
      */
     function addDateTimeHierarchy(mapToModify) {
         addDateHierarchy(mapToModify);
-        addDateTimeKeys(mapToModify)
+        addDateTimeKeys(mapToModify);
         mapToModify.SORT_ORDER_ASCENDING = 'sortOrderAscending';
 
     }
@@ -323,7 +324,7 @@
      * @param mapToModify
      */
     function addFileAttachmentHierarchy(mapToModify) {
-        addDataTypeAttributeKeys(mapToModify)
+        addDataTypeAttributeKeys(mapToModify);
         addFileAttachmentKeys(mapToModify);
         return mapToModify;
     }
@@ -337,7 +338,7 @@
     function addFieldJsonTypes(mapToModify) {
         //Field property names
         mapToModify.TYPE = 'string';
-        mapToModify.CLIENT_SIDE_ATTRIBUTES = 'object'
+        mapToModify.CLIENT_SIDE_ATTRIBUTES = 'object';
     }
 
     /**
@@ -438,7 +439,7 @@
     }
 
     /**
-     * Add the formula hierarch and the numeric JsonTypes to the map
+     * Add the formula hierarchy and the numeric JsonTypes to the map
      * @param mapToModify
      */
     function addJsonTypeCheckboxHierarchy(mapToModify) {
@@ -447,7 +448,7 @@
     }
 
     /**
-     * Add the formula hierarch and the numeric JsonTypes to the map
+     * Add the formula hierarchy and the numeric JsonTypes to the map
      * @param mapToModify
      */
     function addJsonTypeNumericHierarchy(mapToModify) {
@@ -481,7 +482,7 @@
      */
     function addJsonTypeDateTimeHierarchy(mapToModify) {
         addJsonTypeDateHierarchy(mapToModify);
-        addDateTimeJsonTypes(mapToModify)
+        addDateTimeJsonTypes(mapToModify);
         mapToModify.SORT_ORDER_ASCENDING = 'sortOrderAscending';
 
     }
@@ -550,7 +551,7 @@
      * @param mapToModify
      */
     function addJsonTypeFileAttachmentHierarchy(mapToModify) {
-        addFieldJsonTypes(mapToModify)
+        addFieldJsonTypes(mapToModify);
         addFileAttachmentJsonTypes(mapToModify);
         return mapToModify;
     }

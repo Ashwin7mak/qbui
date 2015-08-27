@@ -79,7 +79,7 @@
 
         //Generates and returns a psuedo-random char string of specified length
         generateEntityName: function(options) {
-            options = options || {capitalize: true}
+            options = options || {capitalize: true};
             var answer = chance.word();
             if (options.capitalize) {
                 answer = chance.capitalize(answer);

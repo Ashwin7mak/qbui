@@ -4,6 +4,8 @@
  * Created by cschneider1 on 5/31/15.
  */
 (function() {
+    'use strict';
+
     var dataTypeConstants = require('./datatype.attributes.constants');
 
     //These are constants common to all fields
@@ -172,11 +174,6 @@
 
                 withSummaryDecimalPlaces: function(decimalPlaces, dataType) {
                     fieldUnderConstruction[dataTypeConstants[dataType].DECIMAL_PLACES] = decimalPlaces;
-                    return this;
-                },
-
-                withTreatNullAsZero: function(treatNullAsZero, dataType) {
-                    fieldUnderConstruction[dataTypeConstants[dataType].TREAT_NULL_AS_ZERO] = treatNullAsZero;
                     return this;
                 },
 

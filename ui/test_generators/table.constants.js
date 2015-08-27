@@ -4,7 +4,8 @@
  * Created by cschneider1 on 5/29/15.
  */
 (function() {
-    var consts = require('../server/api/constants');
+    'use strict';
+    //var consts = require('../server/api/constants');
 
     //These are constants common to all fields
     module.exports = Object.freeze({

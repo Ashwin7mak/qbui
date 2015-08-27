@@ -4,7 +4,7 @@
  */
 (function() {
     'use strict';
-    var consts = require('../server/api/constants');
+    //var consts = require('../server/api/constants');
     var rawValueGenerator = require('./rawValue.generator');
     var tableBuilder = require('./table.builder');
     var tableConsts = require('./table.constants');
@@ -38,7 +38,7 @@
          * </p>
          */
         generateFieldListFromMap: function(fieldMap) {
-            var table = generateTableWithFieldMap(fieldMap)
+            var table = generateTableWithFieldMap(fieldMap);
 
             return table[tableConsts.FIELDS];
         },
@@ -149,7 +149,7 @@
             for (var index in fields) {
                 if (!fieldGenerator.validateFieldProperties(fields[index])) {
                     fieldsValid = false;
-                    console.error('Could not validate field: ' + fieldGenerator.fieldToJsonString(field) + '.\n This field will not be added to the table');
+                    console.error('Could not validate field: ' + fieldGenerator.fieldToJsonString(fields[index]) + '.\n This field will not be added to the table');
                 }
             }
 
@@ -157,8 +157,7 @@
         },
 
         //For a given field type, apply any default values that are not currently present in the map
-        applyDefaults: function(tableToModify) {
-
+        applyDefaults: function() {
         }
     };
 
@@ -194,7 +193,7 @@
      */
     function generateRandomTable(size) {
         var builderInstance = getTableBuilderWithName();
-        var numFields = undefined === size ? chance.integer({min: 1, max: maxRandomFields}) : size;
+        var numFields = size || chance.integer({min: 1, max: maxRandomFields});
         var types = fieldGenerator.getAvailableFieldTypes();
         var dataTypes = fieldGenerator.getAvailableDataTypes();
 
@@ -235,7 +234,7 @@
      * Generate a table with numFields number of fields from any of the allowed fieldTypes
      * @param appId the app id of the parent app
      * @param numFields the number of fields to generate
-     * @param allowedFieldTypes the array of allowd field types
+     * @param allowedFieldTypes the array of allowed field types
      * @param allowedDataTypes the array of allowed data types
      * @returns {*} the table object with numFields of type fieldType
      */

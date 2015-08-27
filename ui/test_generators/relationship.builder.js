@@ -3,8 +3,9 @@
  * Created by cschneider1 on 6/2/15.
  */
 (function() {
+    'use strict';
     var relationshipConstants = require('./relationship.constants');
-    var _ = require('lodash');
+    //var _ = require('lodash');
 
     //These are constants common to all relationships
     module.exports = {
@@ -135,7 +136,7 @@
                     return this;
                 }
 
-            }
+            };
         }
-    }
+    };
 }());

@@ -9,7 +9,7 @@ Overview of the UI directory
          │
         client                                  - angular UI client code folder
          │  │
-         │  ├── bower_components                - components downloaded by bower compressed/concatinated/installed in brower
+         │  ├── bower_components                - components downloaded by bower compressed/concatinated/installed in browser
          │  ├── gallery                         - for samples of ui component modules
          │  ├── quickbase                       - 1..n quickbase angular modules
          │  │    │

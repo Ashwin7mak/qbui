@@ -3,6 +3,7 @@
  * Created by cschneider1 on 5/29/15.
  */
 (function() {
+    'use strict';
 
     var chance = require('chance').Chance();
 

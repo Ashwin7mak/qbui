@@ -8,7 +8,7 @@
     var consts = require('../server/api/constants');
     var dataTypeConsts = require('./datatype.attributes.constants');
     var defaultConsts = require('./field.schema.defaults');
-    var rawValueGenerator = require('./rawValue.generator');
+    //var rawValueGenerator = require('./rawValue.generator');
     var dataTypeBuilder = require('./datatype.attributes.builder');
     var _ = require('lodash');
     var DATATYPE_KEYS = 'dataTypeKeys';
@@ -66,11 +66,11 @@
                     }
                 });
 
-                if (foundKey == false) {
+                if (foundKey === false) {
                     console.error('We could not find this key in our key constants for a field. Key in question: ' + dataTypeKey + ' Field ' + JSON.stringify(dataTypeAttributes));
                 }
 
-                if (valueValid == false) {
+                if (valueValid === false) {
                     console.error('There was a value type mismatch. Key in question: ' + dataTypeKey + ' Field ' + JSON.stringify(dataTypeAttributes));
                 }
 
@@ -117,7 +117,7 @@
         applyDateTimeHierarchy(fieldToModify);
         applyTimeOfDayDefaults(fieldToModify);
     };
-    dataTypeToFunctionCalls[consts.CHECKBOX] = function(fieldToModify) {};
+    dataTypeToFunctionCalls[consts.CHECKBOX] = function() {};
     dataTypeToFunctionCalls[consts.USER] = function(fieldToModify) {applyUserDefaults(fieldToModify);};
 
     //weirdos
@@ -132,7 +132,7 @@
     }
 
     function applyDateTimeHierarchy(fieldToModify) {
-        applyDateHierarchy(fieldToModify)
+        applyDateHierarchy(fieldToModify);
         applyDateTimeDefaults(fieldToModify);
     }
 
@@ -245,42 +245,6 @@
 
         if (!fieldToModify[dataTypeConsts[fieldType][DATATYPE_KEYS].INCLUDE_EXTENSION]) {
             fieldToModify[dataTypeConsts[fieldType][DATATYPE_KEYS].INCLUDE_EXTENSION] = defaultConsts.phoneNumberDefaults.INCLUDE_EXTENSION_DEFAULT;
-        }
-    }
-
-    function applyReportLinkDefaults(fieldToModify) {
-        var fieldType = fieldToModify[dataTypeConsts.fieldKeys.TYPE];
-
-        if (!fieldToModify[dataTypeConsts[fieldType][DATATYPE_KEYS].DISPLAY_PROTOCOL]) {
-            fieldToModify[dataTypeConsts[fieldType][DATATYPE_KEYS].DISPLAY_PROTOCOL] = defaultConsts.reportDefaults.DISPLAY_PROTOCOL_DEFAULT;
-        }
-
-        if (!fieldToModify[dataTypeConsts[fieldType][DATATYPE_KEYS].LINK_TEXT]) {
-            fieldToModify[dataTypeConsts[fieldType][DATATYPE_KEYS].LINK_TEXT] = defaultConsts.reportDefaults.LINK_TEXT_DEFAULT;
-        }
-
-        if (!fieldToModify[dataTypeConsts[fieldType][DATATYPE_KEYS].EXACT_MATCH]) {
-            fieldToModify[dataTypeConsts[fieldType][DATATYPE_KEYS].EXACT_MATCH] = defaultConsts.reportDefaults.EXACT_MATCH_DEFAULT;
-        }
-
-        if (!fieldToModify[dataTypeConsts[fieldType][DATATYPE_KEYS].MULTI_CHOICE_SOURCE_ALLOWED]) {
-            fieldToModify[dataTypeConsts[fieldType][DATATYPE_KEYS].MULTI_CHOICE_SOURCE_ALLOWED] = defaultConsts.reportDefaults.MULTI_CHOICE_SOURCE_ALLOWED_DEFAULT;
-        }
-    }
-
-    function applySummaryFieldDefaults(fieldToModify) {
-        var fieldType = fieldToModify[dataTypeConsts.fieldKeys.TYPE];
-
-        if (!fieldToModify[dataTypeConsts[fieldType][DATATYPE_KEYS].AGGREGATE_FUNCTION]) {
-            fieldToModify[dataTypeConsts[fieldType][DATATYPE_KEYS].AGGREGATE_FUNCTION] = defaultConsts.summaryDefaults.AGGREGATE_FUNCTION_DEFAULT;
-        }
-
-        if (!fieldToModify[dataTypeConsts[fieldType][DATATYPE_KEYS].DECIMAL_PLACES]) {
-            fieldToModify[dataTypeConsts[fieldType][DATATYPE_KEYS].DECIMAL_PLACES] = defaultConsts.summaryDefaults.DECIMAL_PLACES_DEFAULT;
-        }
-
-        if (!fieldToModify[dataTypeConsts[fieldType][DATATYPE_KEYS].TREAT_NULL_AS_ZERO]) {
-            fieldToModify[dataTypeConsts[fieldType][DATATYPE_KEYS].TREAT_NULL_AS_ZERO] = defaultConsts.summaryDefaults.TREAT_NULL_AS_ZERO_DEFAULT;
         }
     }
 

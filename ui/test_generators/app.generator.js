@@ -8,12 +8,13 @@
  * Created by cschneider1 on 5/28/15.
  */
 (function() {
-    var consts = require('../server/api/constants');
+    'use strict';
+
+    //var consts = require('../server/api/constants');
     var tableGenerator = require('./table.generator');
     var appConsts = require('./app.constants');
     var appBuilder = require('./app.builder');
     var rawValueGenerator = require('./rawValue.generator');
-    var _ = require('lodash');
 
 
     module.exports = {
@@ -159,7 +160,7 @@
             for (var index in tables) {
                 if (!tableGenerator.validateTableProperties(tables[index])) {
                     tablesValid = false;
-                    console.error('Could not validate table: ' + tableGenerator.fieldToJsonString(table) + '.');
+                    console.error('Could not validate table: ' + tableGenerator.fieldToJsonString(tables[index]) + '.');
                 }
             }
 

@@ -3,6 +3,7 @@
  * Created by cschneider1 on 5/28/15.
  */
 (function() {
+    'use strict';
     var relationshipConstants = require('./relationship.constants');
     var relationshipBuilder = require('./relationship.builder');
     var tableConsts = require('./table.constants');
@@ -16,7 +17,7 @@
     module.exports = {
 
         /**
-         * Retrieve the relationship builder to build a field peicemeal
+         * Retrieve the relationship builder to build a field piecemeal
          * @returns {*|{build, cloneIntoBuilder, withId, withAppId, withDescription, withMasterAppId,
          *     withMasterTableId, withMasterFieldId, withDetailAppId, withDetailTableId, withDetailFieldId,
          *     withReferentialIntegrity, withCascadeDelete}}

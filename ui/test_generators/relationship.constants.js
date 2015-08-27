@@ -3,6 +3,7 @@
  * Created by cschneider1 on 5/29/15.
  */
 (function() {
+    'use strict';
     module.exports = {
 
         //JSON CONSTANTS
@@ -17,6 +18,6 @@
         DETAIL_FIELD_ID      : 'detailFieldId',
         REFERENTIAL_INTEGRITY: 'referentialIntegrity',
         CASCADE_DELETE       : 'cascadeDelete'
-    }
+    };
 
 }());

@@ -85,11 +85,11 @@
                     }
                 });
 
-                if (foundKey == false) {
+                if (foundKey === false) {
                     console.error('We could not find this key in our key constants for a field. Key in question: ' + fieldKey + ' Field ' + JSON.stringify(field));
                 }
 
-                if (valueValid == false) {
+                if (valueValid === false) {
                     console.error('There was a value type mismatch. Key in question: ' + fieldKey + ' Field ' + JSON.stringify(field));
                 }
 
@@ -151,7 +151,7 @@
     }
 
     function applyScalarHierarchy(fieldToModify) {
-        applyConcreteHierarchy(fieldToModify)
+        applyConcreteHierarchy(fieldToModify);
         applyScalarDefaults(fieldToModify);
     }
 

@@ -99,7 +99,7 @@ module.exports = function(grunt) {
                     '<%= quickbase.client.components %>/**/test/**/*.js',
                     '<%= quickbase.client.components %>/**/*.js'
                 ],
-                tasks: ['newer:jshint', 'newer:jscs','karma:unit']
+                tasks: ['newer:jshint', 'newer:jscs', 'karma:unit']
             },
             livereload: {
                 files  : [
@@ -215,7 +215,7 @@ module.exports = function(grunt) {
                     jshintrc: '<%= express.root %>/.jshintrc'
                 },
                 src    : [
-                    'test_generator/**/*.js'
+                    'test_generators/**/*.js'
                 ]
             }
         },

@@ -4,6 +4,7 @@
  * Created by cschneider1 on 5/29/15.
  */
 (function() {
+    'use strict';
     var consts = require('../server/api/constants');
 
 
@@ -206,7 +207,7 @@
         mapToModify.BUILT_IN = 'boolean';
         mapToModify.DATA_IS_COPYABLE = 'boolean';
         mapToModify.INCLUDE_IN_QUICKSEARCH = 'boolean';
-        mapToModify.CLIENT_SIDE_ATTRIBUTES = 'object'
+        mapToModify.CLIENT_SIDE_ATTRIBUTES = 'object';
     }
 
     function addFormulaJsonTypes(mapToModify) {

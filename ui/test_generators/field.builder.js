@@ -4,6 +4,7 @@
  * Created by cschneider1 on 5/31/15.
  */
 (function() {
+    'use strict';
     var fieldConstants = require('./field.constants');
 
     //These are constants common to all fields

@@ -38,7 +38,7 @@
                             var schemaPromise = ExampleData.get({file: 'mockRecordsSchema', size: exampleSize});
                             var dataPromise = ExampleData.get({file: 'mockRecords', size: exampleSize});
 
-                            // after the example data is resolved, resolve the grid Info colunms and data
+                            // after the example data is resolved, resolve the grid Info columns and data
                             $q.all([schemaPromise.$promise, dataPromise.$promise]).then(function(resolvedGridData) {
                                 gridInfo.resolve({
                                     exampleSize   : exampleSize,

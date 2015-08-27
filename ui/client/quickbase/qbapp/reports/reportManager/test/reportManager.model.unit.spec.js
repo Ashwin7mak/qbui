@@ -125,7 +125,7 @@ describe('Factory: ReportModel', function() {
 
     });
 
-    it('validate the resolved getREportData service call with no data returned', function() {
+    it('validate the resolved getReportData service call with no data returned', function() {
 
         var reportData, offset = 30, rows = 10;
         var promise = ReportModel.getReportData(appId, tableId, reportId, offset, rows).then(

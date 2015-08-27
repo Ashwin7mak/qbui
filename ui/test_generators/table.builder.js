@@ -4,7 +4,8 @@
  * Created by cschneider1 on 5/31/15.
  */
 (function() {
-    var consts = require('../server/api/constants');
+    'use strict';
+    //var consts = require('../server/api/constants');
     var tableConsts = require('./table.constants');
 
     //These are constants common to all fields
@@ -65,7 +66,7 @@
                 },
 
                 withAdditionalFields: function(fields) {
-                    tableFields.concat(fields)
+                    tableFields.concat(fields);
                 },
 
                 withFields: function(fields) {

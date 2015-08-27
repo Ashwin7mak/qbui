@@ -3,6 +3,7 @@
  * Created by cschneider1 on 5/29/15.
  */
 (function() {
+    'use strict';
 
     //These are constants common to all fields
     module.exports = Object.freeze({

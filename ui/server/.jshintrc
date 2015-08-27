@@ -4,6 +4,7 @@
   // defines globals available when your code is running inside of the Node
   // skips some warnings that make sense in the browser environments but not in in Node
   "node": true,
+  "mocha":true,
   //a white list of global variables that are not formally defined in the source code
   "globals": {
     "__dirname": false,

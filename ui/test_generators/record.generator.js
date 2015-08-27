@@ -85,11 +85,11 @@
     recordTypeMapping[consts.URL] = function() { return rawValueGenerator.generateUrl(); };
     recordTypeMapping[consts.EMAIL_ADDRESS] = function() { return rawValueGenerator.generateEmailInDomain('gmail.com'); };
     recordTypeMapping[consts.PHONE_NUMBER] = function() { return rawValueGenerator.generatePhoneNumber(); };
-    recordTypeMapping[consts.CHECKBOX] = function() { return rawValueGenerator.generateBool()};
-    recordTypeMapping[consts.DATE_TIME] = function() { return rawValueGenerator.generateDateTime() };
-    recordTypeMapping[consts.DATE] = function() { return rawValueGenerator.generateDate() };
-    recordTypeMapping[consts.TIME_OF_DAY] = function() { return rawValueGenerator.generateTime()};
+    recordTypeMapping[consts.CHECKBOX] = function() { return rawValueGenerator.generateBool();};
+    recordTypeMapping[consts.DATE_TIME] = function() { return rawValueGenerator.generateDateTime(); };
+    recordTypeMapping[consts.DATE] = function() { return rawValueGenerator.generateDate(); };
+    recordTypeMapping[consts.TIME_OF_DAY] = function() { return rawValueGenerator.generateTime();};
     recordTypeMapping[consts.FILE_ATTACHMENT] = function() { return rawValueGenerator.generateUrl();};
-    recordTypeMapping[consts.USER] = function(userIdsToPickFrom) { return rawValueGenerator.pickUserIdFromList(userIdsToPickFrom)};
+    recordTypeMapping[consts.USER] = function(userIdsToPickFrom) { return rawValueGenerator.pickUserIdFromList(userIdsToPickFrom);};
 
 }());
