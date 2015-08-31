@@ -40,7 +40,7 @@
         var USERS_ENDPOINT = '/users/';
         var LOCALHOST_REALM = 117000;
         var LOCALHOST_SUBDOMAIN = 'localhost';
-        var TICKETS_ENDPOINT = '/ticket?uid=1000000&realmID=';
+        var TICKETS_ENDPOINT = '/ticket?uid=10000&realmID=';
         var HEALTH_ENDPOINT  = '/health';
         var SUBDOMAIN_CHARS = 'abcdefghijklmnopqrstuvwxyz0123456789';
         var CONTENT_TYPE = 'Content-Type';
