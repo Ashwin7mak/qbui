@@ -297,7 +297,9 @@
                         //console.log('Comparing expected field value:' + expectedRecord[j].value +
                         // ' with actual field value: ' + actualRecord[j]);
                         if (isNumeric(expectedRecord[j].value)) {
-                            expect(Number(expectedRecord[j].value)).toEqual(Number(actualRecord[j]));
+                            expect(Number(expectedRecord[j].value)).toEqual(Number(actualRecord[j]), 'Ensure number values are equivalent not including precision');
+                            //TODO: QBSE-15108: Fix test expected value for precision adhering to defaiult display DECIMAL_PLACES option
+                            //expect(expectedRecord[j].value).toEqual(actualRecord[j], '1. Ensure number values are equivalent including precision');
                         } else {
                             expect(expectedRecord[j].value).toEqual(actualRecord[j]);
                         }

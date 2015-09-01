@@ -150,7 +150,9 @@ The following run-time environment variable is supported:
 
 ## Testing
 ###Lint and Code Style tests
-Running `grunt codeStandards` will run the jshint and jscs tasks to validate the javascript (lint) and assure the code is formatted to qbui coding styles.
+Running `grunt codeStandards` will run the jshint and jscs tasks. These tasks validate the javascript follows best practices and ensures the code is formatted to our qbui coding styles.
+
+Look at the .jshintrc and .jscscrc files for the lint rules and coding standards
 
 
 ###Unit tests
@@ -399,6 +401,7 @@ POSSIBLE ISSUES -- and how to resolve
 1. First, since the ui has dependencies on the java backend make sure:
     
     1.1. your Tomcat server is running 
+    
     * see [Quickbase repo](https://github.intuit.com/QuickBase/QuickBase/raw/master/README.md)
     
     1.2. your Oracle DB is up 
