@@ -1,17 +1,17 @@
-'use strict';
+describe('quickbase api service', function() {
+    'use strict';
 
-describe('quickbase api service', function () {
     var qbUtility;
 
     beforeEach(function() {
         module('qbse.helper');
     });
 
-    beforeEach(inject(function (_qbUtility_) {
+    beforeEach(inject(function(_qbUtility_) {
         qbUtility = _qbUtility_;
     }));
 
-    it('Validate isInt function', function () {
+    it('Validate isInt function', function() {
         expect(qbUtility.isInt(0)).toBeTruthy();
         expect(qbUtility.isInt(3)).toBeTruthy();
         expect(qbUtility.isInt(33.7)).toBeFalsy();
@@ -27,7 +27,7 @@ describe('quickbase api service', function () {
     });
 
 
-    it('Validate map function', function () {
+    it('Validate map function', function() {
         var map = new qbUtility.map();
 
         //  initialize empty map
@@ -56,16 +56,16 @@ describe('quickbase api service', function () {
         expect(map.size()).toEqual(0);
 
         //  add 5 entries
-        for (var i=0; i<5; i++) {
+        for (var i = 0; i < 5; i++) {
             map.put('key' + i, 'value' + i);
         }
 
         expect(map.size()).toEqual(5);
 
-        var ctr=0;
-        map.forEach( function(item, idx) {
+        var ctr = 0;
+        map.forEach(function(item, idx) {
             expect(idx).toEqual(ctr++);
-            expect(item).toEqual('value'+idx);
+            expect(item).toEqual('value' + idx);
         });
         expect(map.size()).toEqual(ctr);
 

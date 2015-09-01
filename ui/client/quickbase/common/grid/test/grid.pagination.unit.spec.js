@@ -22,20 +22,19 @@ describe('Directive: qbseGrid pagination - ', function() {
     var megaTestColumnsToGenerate = 500;
     var chance = new Chance(12345);
 
-    console.info ('qbseGrid pagination values: ');
-    console.info ('minTestRecords ' + minTestRecordsToGenerate);
-    console.info ('maxTestRecords ' + maxTestRecordsToGenerate);
-    console.info ('expectedPageSize ' + expectedPageSize);
-    console.info ('maxTestColumns ' + normalTestColumnsToGenerate);
+    console.info('qbseGrid pagination values: ');
+    console.info('minTestRecords ' + minTestRecordsToGenerate);
+    console.info('maxTestRecords ' + maxTestRecordsToGenerate);
+    console.info('expectedPageSize ' + expectedPageSize);
+    console.info('maxTestColumns ' + normalTestColumnsToGenerate);
 
     // generate some records and field definitions to use
-    function generateTestData(minRecords, maxRecords, maxCols ) {
+    function generateTestData(minRecords, maxRecords, maxCols) {
         expectedTotalRows = testDataService.getRandomInt(chance, minRecords, maxRecords);
-        console.info (' random expectedTotalRows : ' + expectedTotalRows);
 
         var config = {
-            numRows : expectedTotalRows,
-            numColumns : maxCols
+            numRows   : expectedTotalRows,
+            numColumns: maxCols
         };
         testDataService.setConfiguredGridData(config);
 
@@ -43,9 +42,9 @@ describe('Directive: qbseGrid pagination - ', function() {
     }
 
     // load the directive's module & load the template
-    beforeEach(module('qbse.grid','test.dataGeneratorService',
-        'qbse.templates',
-        'ngMockE2E'));
+    beforeEach(module('qbse.grid', 'test.dataGeneratorService',
+                      'qbse.templates',
+                      'ngMockE2E'));
 
 
     // mock the containing controller
@@ -66,8 +65,8 @@ describe('Directive: qbseGrid pagination - ', function() {
         $scope.settings.title = 'Grid Test';
         $scope.settings.selectedItems = [];
         $scope.settings.customOptions = {
-            showColumnFooter:true,
-            paginationPageSize : expectedPageSize
+            showColumnFooter  : true,
+            paginationPageSize: expectedPageSize
         };
 
 
@@ -75,13 +74,13 @@ describe('Directive: qbseGrid pagination - ', function() {
 
 
         elementHtml =
-            '<qbse-grid ' +
-            'title={{settings.title}} ' +
-            'selected-items="settings.selectedItems" ' +
-            'custom-options="settings.customOptions" ' +
-            'service="settings.service"> ' +
-            'This gets replaced with data - loading...' +
-            '</qbse-grid>';
+                '<qbse-grid ' +
+                'title={{settings.title}} ' +
+                'selected-items="settings.selectedItems" ' +
+                'custom-options="settings.customOptions" ' +
+                'service="settings.service"> ' +
+                'This gets replaced with data - loading...' +
+                '</qbse-grid>';
 
         // create the html dom fragment and process the angular
         $element = angular.element(elementHtml);
@@ -119,6 +118,7 @@ describe('Directive: qbseGrid pagination - ', function() {
     it('should support empty record set', function() {
         // create the html dom fragment and process the angular directive
         var rowsMade = generateTestData(0, 0, normalTestColumnsToGenerate);
+        expect(rowsMade).not.toBeNull();
         $element = angular.element(elementHtml);
         element = $compile($element)($scope);
         $scope.$digest();
@@ -137,6 +137,7 @@ describe('Directive: qbseGrid pagination - ', function() {
     it('should support empty fields set', function() {
         // create the html dom fragment and process the angular directive
         var rowsMade = generateTestData(1, 200, 0);
+        expect(rowsMade).not.toBeNull();
         $element = angular.element(elementHtml);
         element = $compile($element)($scope);
         $scope.$digest();
@@ -156,6 +157,7 @@ describe('Directive: qbseGrid pagination - ', function() {
     it('should support large fields set', function() {
         // create the html dom fragment and process the angular directive
         var rowsMade = generateTestData(1, 200, megaTestColumnsToGenerate);
+        expect(rowsMade).not.toBeNull();
         $element = angular.element(elementHtml);
         element = $compile($element)($scope);
         $scope.$digest();
@@ -172,7 +174,8 @@ describe('Directive: qbseGrid pagination - ', function() {
 
     it('should support unfull page', function() {
         // create the html dom fragment and process the angular directive
-        var rowsMade = generateTestData(1, expectedPageSize-1, normalTestColumnsToGenerate);
+        var rowsMade = generateTestData(1, expectedPageSize - 1, normalTestColumnsToGenerate);
+        expect(rowsMade).not.toBeNull();
         $element = angular.element(elementHtml);
         element = $compile($element)($scope);
         $scope.$digest();
@@ -202,7 +205,7 @@ describe('Directive: qbseGrid pagination - ', function() {
             //var morePages = (expectedTotalRows > expectedPageSize);
             //if (morePages) {
             //    expect(isolateScope.pagesHandler.noNext()).toBeFalsy();
-           // } else {
+            // } else {
             //    expect(isolateScope.pagesHandler.noNext()).toBeTruthy();
             //}
 

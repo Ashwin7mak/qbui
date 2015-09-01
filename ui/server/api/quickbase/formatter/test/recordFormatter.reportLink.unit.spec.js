@@ -1,58 +1,62 @@
 'use strict';
 
-var should = require('should');
 var recordFormatter = require('./../recordFormatter')();
 var assert = require('assert');
 
 /**
  * Unit tests for ReportLink field formatting
  */
-describe('ReportLink record formatter unit test', function () {
+describe('ReportLink record formatter unit test', function() {
 
     /**
      * DataProvider containing Records, FieldProperties and record display expectations ReportLink fields
      */
+    //jshint maxstatements:false
     function reportLinkDataProvider() {
 
-        var httpURL = "http://www.intuit.com";
-        var httpWOProto = httpURL.split("//")[1];
-        var httpsURL = "https://www.google.com";
-        var httpsWOProto = httpsURL.split("//")[1];
-        var noProtoURL = "www.quickbase.com/some/url/location.html";
-        var linkText = "some link text";
+        var httpURL = 'http://www.intuit.com';
+        var httpWOProto = httpURL.split('//')[1];
+        var httpsURL = 'https://www.google.com';
+        var httpsWOProto = httpsURL.split('//')[1];
+        var noProtoURL = 'www.quickbase.com/some/url/location.html';
+        var linkText = 'some link text';
 
         /**
          * FieldInfo and expectations for no flags
          */
         var fieldInfo_NoFlags = [{
-            "id": 7,
-            "name": "reportLink",
-            "datatypeAttributes": {
-                "type": "REPORT_LINK",
-                "clientSideAttributes": {}
+            id                : 7,
+            name              : 'reportLink',
+            datatypeAttributes: {
+                type                : 'REPORT_LINK',
+                clientSideAttributes: {}
             }
         }];
-        var recordInputHttpURL =  [[{
-            "id": 7,
-            "value": httpURL}]];
+        var recordInputHttpURL = [[{
+            id   : 7,
+            value: httpURL
+        }]];
         var expectedHttpURL_NoFlags = [[{
-            "id": 7,
-            "value": httpURL,
-            "display": httpURL}]];
+            id     : 7,
+            value  : httpURL,
+            display: httpURL
+        }]];
 
         var recordInputHttpsURL = JSON.parse(JSON.stringify(recordInputHttpURL));
         recordInputHttpsURL[0][0].value = httpsURL;
         var expectedHttpsURL_NoFlags = [[{
-            "id": 7,
-            "value": httpsURL,
-            "display": httpsURL}]];
+            id     : 7,
+            value  : httpsURL,
+            display: httpsURL
+        }]];
 
         var recordInputNoProtoURL = JSON.parse(JSON.stringify(recordInputHttpURL));
         recordInputNoProtoURL[0][0].value = noProtoURL;
         var expectedNoProtoURL_NoFlags = [[{
-            "id": 7,
-            "value": noProtoURL,
-            "display": noProtoURL}]];
+            id     : 7,
+            value  : noProtoURL,
+            display: noProtoURL
+        }]];
 
         /**
          * FieldInfo and expectations for enabled flag: displayProtocol = true
@@ -105,44 +109,44 @@ describe('ReportLink record formatter unit test', function () {
         var recordsNull = JSON.parse(JSON.stringify(recordInputHttpURL));
         recordsNull[0][0].value = null;
         var expectedNull = JSON.parse(JSON.stringify(expectedHttpURL_NoFlags));
-        expectedNull[0][0].display = "";
+        expectedNull[0][0].display = '';
         expectedNull[0][0].value = null;
 
         var recordsEmpty = JSON.parse(JSON.stringify(recordInputHttpURL));
-        recordsEmpty[0][0].value = "";
+        recordsEmpty[0][0].value = '';
         var expectedEmpty = JSON.parse(JSON.stringify(expectedHttpURL_NoFlags));
-        expectedEmpty[0][0].display = "";
-        expectedEmpty[0][0].value = "";
+        expectedEmpty[0][0].display = '';
+        expectedEmpty[0][0].value = '';
 
-        var cases =[
+        var cases = [
             // No flags
-            { message: "ReportLink - http url with no flags", records: recordInputHttpURL, fieldInfo: fieldInfo_NoFlags, expectedRecords: expectedHttpURL_NoFlags },
-            { message: "ReportLink - https url with no flags", records: recordInputHttpsURL, fieldInfo: fieldInfo_NoFlags, expectedRecords: expectedHttpsURL_NoFlags },
-            { message: "ReportLink - no protocol url with no flags", records: recordInputNoProtoURL, fieldInfo: fieldInfo_NoFlags, expectedRecords: expectedNoProtoURL_NoFlags },
+            {message: 'ReportLink - http url with no flags', records: recordInputHttpURL, fieldInfo: fieldInfo_NoFlags, expectedRecords: expectedHttpURL_NoFlags},
+            {message: 'ReportLink - https url with no flags', records: recordInputHttpsURL, fieldInfo: fieldInfo_NoFlags, expectedRecords: expectedHttpsURL_NoFlags},
+            {message: 'ReportLink - no protocol url with no flags', records: recordInputNoProtoURL, fieldInfo: fieldInfo_NoFlags, expectedRecords: expectedNoProtoURL_NoFlags},
 
             // Don't Show Http flag enabled
-            { message: "ReportLink - http url with 'don't show Http' flag", records: recordInputHttpURL, fieldInfo: fieldInfo_DontShowHTTPEnabled, expectedRecords: expectedHttpURL_DontShowHTTPEnabled },
-            { message: "ReportLink - https url with 'don't show Http' flag", records: recordInputHttpsURL, fieldInfo: fieldInfo_DontShowHTTPEnabled, expectedRecords: expectedHttpsURL_DontShowHTTPEnabled },
-            { message: "ReportLink - no protocol url with 'don't show Http' flag", records: recordInputNoProtoURL, fieldInfo: fieldInfo_DontShowHTTPEnabled, expectedRecords: expectedNoProtoURL_DontShowHTTPEnabled },
+            {message: 'ReportLink - http url with "don\'t show Http" flag', records: recordInputHttpURL, fieldInfo: fieldInfo_DontShowHTTPEnabled, expectedRecords: expectedHttpURL_DontShowHTTPEnabled},
+            {message: 'ReportLink - https url with "don\'t show Http" flag', records: recordInputHttpsURL, fieldInfo: fieldInfo_DontShowHTTPEnabled, expectedRecords: expectedHttpsURL_DontShowHTTPEnabled},
+            {message: 'ReportLink - no protocol url with "don\'t show Http" flag', records: recordInputNoProtoURL, fieldInfo: fieldInfo_DontShowHTTPEnabled, expectedRecords: expectedNoProtoURL_DontShowHTTPEnabled},
 
             // Don't Show Http flag disabled
-            { message: "ReportLink - http url with 'don't show Http' flag disabled", records: recordInputHttpURL, fieldInfo: fieldInfo_DontShowHTTPDisabled, expectedRecords: expectedHttpURL_DontShowHTTPDisabled },
-            { message: "ReportLink - https url with 'don't show Http' flag disabled", records: recordInputHttpsURL, fieldInfo: fieldInfo_DontShowHTTPDisabled, expectedRecords: expectedHttpsURL_DontShowHTTPDisabled },
-            { message: "ReportLink - no protocol url with 'don't show Http' flag disabled", records: recordInputNoProtoURL, fieldInfo: fieldInfo_DontShowHTTPDisabled, expectedRecords: expectedNoProtoURL_DontShowHTTPDisabled },
+            {message: 'ReportLink - http url with "don\'t show Http" flag disabled', records: recordInputHttpURL, fieldInfo: fieldInfo_DontShowHTTPDisabled, expectedRecords: expectedHttpURL_DontShowHTTPDisabled},
+            {message: 'ReportLink - https url with "don\'t show Http" flag disabled', records: recordInputHttpsURL, fieldInfo: fieldInfo_DontShowHTTPDisabled, expectedRecords: expectedHttpsURL_DontShowHTTPDisabled},
+            {message: 'ReportLink - no protocol url with "don\'t show Http" flag disabled', records: recordInputNoProtoURL, fieldInfo: fieldInfo_DontShowHTTPDisabled, expectedRecords: expectedNoProtoURL_DontShowHTTPDisabled},
 
             // LinkText flag
-            { message: "ReportLink - http url with 'link text' flag", records: recordInputHttpURL, fieldInfo: fieldInfo_LinkTextFlag, expectedRecords: expectedHttpURL_LinkTextFlag },
-            { message: "ReportLink - https url with 'link text' flag", records: recordInputHttpsURL, fieldInfo: fieldInfo_LinkTextFlag, expectedRecords: expectedHttpsURL_LinkTextFlag },
-            { message: "ReportLink - no protocol url with 'link text' flag", records: recordInputNoProtoURL, fieldInfo: fieldInfo_LinkTextFlag, expectedRecords: expectedNoProtoURL_LinkTextFlag },
+            {message: 'ReportLink - http url with "link text" flag', records: recordInputHttpURL, fieldInfo: fieldInfo_LinkTextFlag, expectedRecords: expectedHttpURL_LinkTextFlag},
+            {message: 'ReportLink - https url with "link text" flag', records: recordInputHttpsURL, fieldInfo: fieldInfo_LinkTextFlag, expectedRecords: expectedHttpsURL_LinkTextFlag},
+            {message: 'ReportLink - no protocol url with "link text" flag', records: recordInputNoProtoURL, fieldInfo: fieldInfo_LinkTextFlag, expectedRecords: expectedNoProtoURL_LinkTextFlag},
 
             // All flags
-            { message: "ReportLink - http url with all flags", records: recordInputHttpURL, fieldInfo: fieldInfo_AllFlags, expectedRecords: expectedHttpURL_AllFlags },
-            { message: "ReportLink - https url with all flags", records: recordInputHttpsURL, fieldInfo: fieldInfo_AllFlags, expectedRecords: expectedHttpsURL_AllFlags },
-            { message: "ReportLink - no protocol url with all flags", records: recordInputNoProtoURL, fieldInfo: fieldInfo_AllFlags, expectedRecords: expectedNoProtoURL_AllFlags },
+            {message: 'ReportLink - http url with all flags', records: recordInputHttpURL, fieldInfo: fieldInfo_AllFlags, expectedRecords: expectedHttpURL_AllFlags},
+            {message: 'ReportLink - https url with all flags', records: recordInputHttpsURL, fieldInfo: fieldInfo_AllFlags, expectedRecords: expectedHttpsURL_AllFlags},
+            {message: 'ReportLink - no protocol url with all flags', records: recordInputNoProtoURL, fieldInfo: fieldInfo_AllFlags, expectedRecords: expectedNoProtoURL_AllFlags},
 
             // Null and Empty URL strings
-            { message: "ReportLink - null -> empty string", records: recordsNull, fieldInfo: fieldInfo_NoFlags, expectedRecords: expectedNull },
-            { message: "ReportLink - empty string -> empty string", records: recordsEmpty, fieldInfo: fieldInfo_NoFlags, expectedRecords: expectedEmpty },
+            {message: 'ReportLink - null -> empty string', records: recordsNull, fieldInfo: fieldInfo_NoFlags, expectedRecords: expectedNull},
+            {message: 'ReportLink - empty string -> empty string', records: recordsEmpty, fieldInfo: fieldInfo_NoFlags, expectedRecords: expectedEmpty},
         ];
 
         return cases;
@@ -151,9 +155,9 @@ describe('ReportLink record formatter unit test', function () {
     /**
      * Unit test that validates ReportLink records formatting with various field property flags set
      */
-    describe('should format an ReportLink record with various properties for display',function(){
-        reportLinkDataProvider().forEach(function(entry){
-            it('Test case: ' + entry.message, function (done) {
+    describe('should format an ReportLink record with various properties for display', function() {
+        reportLinkDataProvider().forEach(function(entry) {
+            it('Test case: ' + entry.message, function(done) {
                 var formattedRecords = recordFormatter.formatRecords(entry.records, entry.fieldInfo);
                 assert.deepEqual(formattedRecords, entry.expectedRecords, entry.message);
                 done();

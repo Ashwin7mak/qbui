@@ -2,7 +2,7 @@
  Given a raw date field value and field meta data from the Java capabilities API, this module is capable of
  display formatting the date instance.
  */
-(function () {
+(function() {
     'use strict';
     var moment = require('moment-timezone');
     var consts = require('../../constants');
@@ -21,18 +21,18 @@
     var TIMEZONE_FORMATTER = ' z';
     //Base formats
     var DATE_FORMATS = Object.freeze({
-        MM_DD_YY: TWO_DIGIT_MONTH + DASH + TWO_DIGIT_DAY + DASH + TWO_DIGIT_YEAR,
+        MM_DD_YY  : TWO_DIGIT_MONTH + DASH + TWO_DIGIT_DAY + DASH + TWO_DIGIT_YEAR,
         MM_DD_YYYY: TWO_DIGIT_MONTH + DASH + TWO_DIGIT_DAY + DASH + FOUR_DIGIT_YEAR,
         DD_MM_YYYY: TWO_DIGIT_DAY + DASH + TWO_DIGIT_MONTH + DASH + FOUR_DIGIT_YEAR,
-        DD_MM_YY: TWO_DIGIT_DAY + DASH + TWO_DIGIT_MONTH + DASH + TWO_DIGIT_YEAR,
+        DD_MM_YY  : TWO_DIGIT_DAY + DASH + TWO_DIGIT_MONTH + DASH + TWO_DIGIT_YEAR,
         YYYY_MM_DD: FOUR_DIGIT_YEAR + DASH + TWO_DIGIT_MONTH + DASH + TWO_DIGIT_DAY
     });
     //resolves the moment.js format string from the JAVA 8 date format string
     var JAVA_TO_JS_DATE_FORMATS = Object.freeze({
-        'MM-dd-uu': DATE_FORMATS.MM_DD_YY,
+        'MM-dd-uu'  : DATE_FORMATS.MM_DD_YY,
         'MM-dd-uuuu': DATE_FORMATS.MM_DD_YYYY,
         'dd-MM-uuuu': DATE_FORMATS.DD_MM_YYYY,
-        'dd-MM-uu': DATE_FORMATS.DD_MM_YY,
+        'dd-MM-uu'  : DATE_FORMATS.DD_MM_YY,
         'uuuu-MM-dd': DATE_FORMATS.YYYY_MM_DD
     });
 
@@ -62,7 +62,7 @@
     module.exports = {
         generateFormat: function(fieldInfo) {
             var jsDateFormat;
-            if(fieldInfo) {
+            if (fieldInfo) {
                 jsDateFormat = JAVA_TO_JS_DATE_FORMATS[fieldInfo.dateFormat];
             }
             if (!jsDateFormat) {
@@ -82,7 +82,7 @@
             }
             return jsDateFormat;
         },
-        format: function (fieldValue, fieldInfo) {
+        format        : function(fieldValue, fieldInfo) {
             if (!fieldValue || !fieldValue.value) {
                 return '';
             }
@@ -104,11 +104,11 @@
             }
             var m = moment.tz(d, timeZone);
             var jsDateFormat = fieldInfo.jsFormat;
-            if(!jsDateFormat) {
+            if (!jsDateFormat) {
                 jsDateFormat = this.generateFormat(fieldInfo);
             }
             //If the date is the current year and hideYearIfCurrent is true, remove the date from the formatter string
-            if (fieldInfo.hideYearIfCurrent && m.format(FOUR_DIGIT_YEAR) == new Date().getFullYear()) {
+            if (fieldInfo.hideYearIfCurrent && parseInt(m.format(FOUR_DIGIT_YEAR)) === new Date().getFullYear()) {
                 jsDateFormat = hideYear(jsDateFormat);
             }
             return m.format(jsDateFormat);

@@ -2,7 +2,7 @@
  * Given a raw numeric field value and field meta data from the Java capabilities API, this module is capable of
  * display formatting the numeric field.
  */
-(function () {
+(function() {
     'use strict';
     /*
      * We can't use the JS native number data type when handling records because it is possible to lose
@@ -26,11 +26,11 @@
     var EXPONENT_CHAR = 'E';
     var PATTERN_EVERY_THREE = 'EVERY_THREE';
     var PATTERN_THREE_THEN_TWO = 'THREE_THEN_TWO';
-    var CURRENCY_LEFT = "LEFT";
-    var CURRENCY_RIGHT = "RIGHT";
-    var CURRENCY_RIGHT_OF_SIGN = "RIGHT_OF_SIGN";
-    var CURRENCY_SYMBOL = "$";
-    var PERCENT_SYMBOL = "%";
+    var CURRENCY_LEFT = 'LEFT';
+    var CURRENCY_RIGHT = 'RIGHT';
+    var CURRENCY_RIGHT_OF_SIGN = 'RIGHT_OF_SIGN';
+    var CURRENCY_SYMBOL = '$';
+    var PERCENT_SYMBOL = '%';
     //Defaults & supported values
     var DEFAULT_SEPARATOR_START = 3;
     var DEFAULT_CURRENCY_SYMBOL = CURRENCY_SYMBOL;
@@ -79,14 +79,14 @@
      * @returns the rounded numeric as a string with number of decimal places equal to precision
      */
     function toRoundedDisplayDecimal(characteristicString, precision) {
-        if(precision === 0) {
+        if (precision === 0) {
             return null;
-        } else if(!precision) {
+        } else if (!precision) {
             return characteristicString;
-        } else if(characteristicString === null){
+        } else if (characteristicString === null) {
             characteristicString = '';
         }
-        if(characteristicString.length > precision) {
+        if (characteristicString.length > precision) {
             //round
             var c = new bigDecimal.BigDecimal(characteristicString);
             c = c.divide(new bigDecimal.BigDecimal(Math.pow(10, characteristicString.length - precision)));
@@ -95,8 +95,8 @@
             characteristicString = cStr;
         }
         //Pad if needed to fill out the precision
-        if(characteristicString.length < precision) {
-            while(characteristicString.length < precision) {
+        if (characteristicString.length < precision) {
+            while (characteristicString.length < precision) {
                 characteristicString = characteristicString + ZERO_CHAR;
             }
         }
@@ -127,6 +127,7 @@
         }
         return formattedMantissa;
     }
+
     /**
      * Given a numeric value and an options object with display config properties set on it, this method
      * formats the numeric value as a string and returns the formatted string.
@@ -139,13 +140,13 @@
         var numString = numeric.toString();
         var mantissaString, characteristicString;
         //Parse either scientific notation string or a raw numeric string
-        if(numString.indexOf(EXPONENT_CHAR) != -1) {
+        if (numString.indexOf(EXPONENT_CHAR) !== -1) {
             var parts = numString.split(EXPONENT_CHAR);
-            var exponent = new Number(parts[1]);
+            var exponent = Number(parts[1]);
             var decimalSplits = parts[0].split(PERIOD);
-            if(decimalSplits[1].length >= exponent) {
+            if (decimalSplits[1].length >= exponent) {
                 mantissaString = decimalSplits[0] + decimalSplits[1].substring(0, exponent);
-                if(decimalSplits[1].length > exponent) {
+                if (decimalSplits[1].length > exponent) {
                     characteristicString = decimalSplits[1].substring(exponent);
                 }
             }
@@ -154,7 +155,7 @@
             var numParts = numString.toString().split(PERIOD);
             mantissaString = numParts[0];
             characteristicString = null;
-            if(numParts.length > 1) {
+            if (numParts.length > 1) {
                 characteristicString = numParts[1];
             }
         }
@@ -166,16 +167,16 @@
             returnValue = returnValue + opts.decimalMark + characteristicString;
         }
         //Handle percent and currency subtypes
-        if(opts.type === consts.FORMULA_CURRENCY || opts.type === consts.CURRENCY) {
-            if(opts.position === CURRENCY_RIGHT) {
+        if (opts.type === consts.FORMULA_CURRENCY || opts.type === consts.CURRENCY) {
+            if (opts.position === CURRENCY_RIGHT) {
                 returnValue = returnValue + ' ' + opts.symbol;
-            } else if(opts.position === CURRENCY_RIGHT_OF_SIGN && returnValue.charAt(0) === DASH) {
+            } else if (opts.position === CURRENCY_RIGHT_OF_SIGN && returnValue.charAt(0) === DASH) {
                 //Place the currency symbol between the - and the number itself
                 returnValue = returnValue.replace(/^(-)/, DASH + opts.symbol);
             } else {
                 returnValue = opts.symbol + returnValue;
             }
-        } else if(opts.type === consts.PERCENT || opts.type === consts.FORMULA_PERCENT) {
+        } else if (opts.type === consts.PERCENT || opts.type === consts.FORMULA_PERCENT) {
             returnValue = returnValue + PERCENT_SYMBOL;
         }
         return returnValue;
@@ -189,7 +190,7 @@
          * @param fieldInfo a field meta data object
          * @returns a display options object
          */
-        generateFormat: function (fieldInfo) {
+        generateFormat: function(fieldInfo) {
             var opts = {};
             if (fieldInfo && fieldInfo.clientSideAttributes) {
                 opts.separatorStart = fieldInfo.clientSideAttributes.separator_start;
@@ -197,7 +198,7 @@
                 opts.separatorPattern = fieldInfo.clientSideAttributes.separator_pattern;
                 opts.decimalMark = fieldInfo.clientSideAttributes.decimal_mark;
                 opts.type = fieldInfo.type;
-                if(opts.type === consts.CURRENCY || opts.type === consts.FORMULA_CURRENCY) {
+                if (opts.type === consts.CURRENCY || opts.type === consts.FORMULA_CURRENCY) {
                     opts.symbol = fieldInfo.clientSideAttributes.symbol;
                     opts.position = fieldInfo.clientSideAttributes.position;
                 }
@@ -219,15 +220,15 @@
             if (!opts.decimalMark || opts.decimalMark.length !== 1) {
                 opts.decimalMark = DEFAULT_DECIMAL_MARK;
             }
-            if(!opts.type) {
+            if (!opts.type) {
                 opts.type = consts.NUMERIC;
             }
             //Add any additional currency options, if this is a currency field
-            if(opts.type === consts.CURRENCY || opts.type === consts.FORMULA_CURRENCY) {
-                if(!opts.symbol) {
+            if (opts.type === consts.CURRENCY || opts.type === consts.FORMULA_CURRENCY) {
+                if (!opts.symbol) {
                     opts.symbol = DEFAULT_CURRENCY_SYMBOL;
                 }
-                if(!opts.position) {
+                if (!opts.position) {
                     opts.position = DEFAULT_CURRENCY_SYMBOL_POSITION;
                 }
             }
@@ -239,7 +240,7 @@
          * @param fieldInfo the meta data about the field
          * @returns A formatted display string
          */
-        format: function (fieldValue, fieldInfo) {
+        format        : function(fieldValue, fieldInfo) {
             if (!fieldValue || !fieldValue.value) {
                 return '';
             }

@@ -2,11 +2,11 @@
     'use strict';
 
     angular.module('qbse.qbapp.reports.dashboard')
-        .controller('ReportsDashboardCtrl', ReportDashboardController);
+            .controller('ReportsDashboardCtrl', ReportDashboardController);
 
-    ReportDashboardController.$inject = ['$scope', '$state', '$stateParams', 'ReportsDashboardModel'];
+    ReportDashboardController.$inject = ['$scope', '$state', '$stateParams', '$log', 'ReportsDashboardModel'];
 
-    function ReportDashboardController($scope, $state, $stateParams, ReportsDashboardModel) {
+    function ReportDashboardController($scope, $state, $stateParams, $log, ReportsDashboardModel) {
 
         $scope.appId = $stateParams.appId;
         $scope.tableId = $stateParams.tableId;
@@ -16,28 +16,28 @@
 
         if ($scope.appId && $scope.tableId) {
             ReportsDashboardModel.get($scope.appId, $scope.tableId).then(
-                function (reports) {
-                    var defaultReport;
-                    reports.forEach(function (report) {
-                        // first report returned in the list is the default display report
-                        if (!defaultReport) { defaultReport = report; }
-                        $scope.reports.push({id: report.id, name: report.name});
-                    });
+                    function(reports) {
+                        var defaultReport;
+                        reports.forEach(function(report) {
+                            // first report returned in the list is the default display report
+                            if (!defaultReport) { defaultReport = report; }
+                            $scope.reports.push({id: report.id, name: report.name});
+                        });
 
-                    //  rather than display an empty content pane, will transition to the default report (if any)
-                    if (defaultReport) {
-                        $scope.goToPage(defaultReport);
+                        //  rather than display an empty content pane, will transition to the default report (if any)
+                        if (defaultReport) {
+                            $scope.goToPage(defaultReport);
+                        }
+                    },
+                    function(resp) {
+                        $log.error('Error getting report list.  Status: ' + resp.status);
                     }
-                },
-                function (resp) {
-                    console.log('Error getting report list.  Status: ' + resp.status);
-                }
             );
         }
 
         //  set appropriate header object data
         $scope.header = {
-            leftContent: '',
+            leftContent : '',
             rightContent: ''
         };
 
@@ -46,7 +46,7 @@
         };
 
         $scope.goToPage = function(report) {
-            $state.transitionTo('reports/report', {appId:$scope.appId, tableId:$scope.tableId,id: report.id});
+            $state.transitionTo('reports/report', {appId: $scope.appId, tableId: $scope.tableId, id: report.id});
             $scope.reportId = report.id;
         };
 

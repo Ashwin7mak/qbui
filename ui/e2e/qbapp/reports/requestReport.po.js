@@ -5,10 +5,10 @@
  * Created by klabak on 4/10/15
  */
 
-(function(){
+(function() {
     'use strict';
 
-    var requestReportPage = function() {
+    var RequestReportPage = function() {
         // Constants
 
         // Page Elements using Locators
@@ -20,5 +20,5 @@
         this.firstReportLinkEl = this.firstTableEl.all(by.tagName('a')).first();
     };
 
-    module.exports = new requestReportPage();
+    module.exports = new RequestReportPage();
 }());

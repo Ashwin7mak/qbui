@@ -2,25 +2,26 @@
  * Generate a user with a random First, Last, ScreenName, and Email address
  * Created by cschneider1 on 5/29/15.
  */
-(function () {
+(function() {
+    'use strict';
 
     var chance = require('chance').Chance();
 
     chance.mixin({
-        'user' : function (options){
+        user: function(options) {
             var first = options && options.firstName ? options.firstName : chance.first(options);
             var last = options && options.lastName ? options.lastName : chance.last(options);
-            var screenName = options && options.screenName ? options.screenName : first.substring(0,1) + last;
+            var screenName = options && options.screenName ? options.screenName : first.substring(0, 1) + last;
             var email = options && options.email ? options.email : chance.email(options);
             var deactivated = options && (typeof options.deactivated !== 'undefined') ? options.deactivated : chance.bool();
 
             return {
-                "firstName": first,
-                "lastName": last,
-                "screenName": screenName,
-                "email": email,
-                "deactivated" : deactivated
-            }
+                firstName  : first,
+                lastName   : last,
+                screenName : screenName,
+                email      : email,
+                deactivated: deactivated
+            };
         }
     });
 
@@ -31,7 +32,7 @@
          * @param options
          * @returns {*}
          */
-        userToJson: function(user){
+        userToJson: function(user) {
             return JSON.stringify(user);
         },
 
@@ -40,7 +41,7 @@
          * @param options
          * @returns {*}
          */
-        generateUser: function(){
+        generateUser: function() {
             return chance.user();
         },
 
@@ -60,7 +61,7 @@
          * @param options
          * @returns {*}
          */
-        generatePopulatedUser : function(options){
+        generatePopulatedUser: function(options) {
             return chance.user(options);
         }
     };

@@ -6,15 +6,15 @@
     var reportsAppConfig = reportsApp.config(['$stateProvider', '$locationProvider', function($stateProvider, $locationProvider) {
         $locationProvider.html5Mode(true);
         $stateProvider
-            .state('home', {
-                url: '',
-                views: {
-                    realmHomeView: {
-                        templateUrl: 'quickbase/realm/dashboard/realmDashboard.html',
-                        controller: 'RealmDashboardCtrl'
+                .state('home', {
+                    url  : '',
+                    views: {
+                        realmHomeView: {
+                            templateUrl: 'quickbase/realm/dashboard/realmDashboard.html',
+                            controller : 'RealmDashboardCtrl'
+                        }
                     }
-                }
-            });
+                });
 
     }]);
 

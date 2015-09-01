@@ -11,7 +11,7 @@ relative_assets = true
 line_comments = (environment == :production) ? false : true
 
 # compile all files relative to this path
-project_path = "client/quickbase/assets"
+project_path = 'client/quickbase/assets'
 
 # put the compiled styles and sprite images into the 'css' folder
 generated_images_dir = "css"

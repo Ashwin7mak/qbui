@@ -1,8 +1,7 @@
-
 // Test specific configuration
 // ===========================
 
-(function () {
+(function() {
     'use strict';
 
     //var path = require('path');
@@ -13,16 +12,16 @@
 
         //  Logging configuration
         LOG: {
-            name: 'qbse-test',
-            level: 'info',
+            name  : 'qbse-test',
+            level : 'info',
             stream: {
                 type: 'console',         //  file or console
                 file: {
-                    dir: './logs',
-                    name: 'qbse-test-' + dateUtils.formatDate( new Date(), '%Y-%M-%D-%h.%m.%s') + '.log'
+                    dir : './logs',
+                    name: 'qbse-test-' + dateUtils.formatDate(new Date(), '%Y-%M-%D-%h.%m.%s') + '.log'
                 }
             },
-            src: true               // this is slow...do not use in prod
+            src   : true               // this is slow...do not use in prod
         },
 
         // to run using ssl, copy the private key and cert for
@@ -34,7 +33,7 @@
         //},
 
         // allow for override of default ports
-        port: 9000,
+        port   : 9000,
         sslPort: 9443,
 
         //REST endpoint (protocol,server,port)
@@ -44,9 +43,9 @@
 
         //Express Server
         //DOMAIN: 'https://localhost.intuit.com:9443'
-        DOMAIN  : 'http://localhost:9000',
+        DOMAIN: 'http://localhost:9000',
 
-        env: envConsts.TEST,
+        env       : envConsts.TEST,
         routeGroup: routeGroups.DEBUG
 
     };

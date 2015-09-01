@@ -22,4 +22,7 @@ npm-debug.log
 ehthumbs.db
 Thumbs.db
 
-ui/client/config.codekit
+# compiled files #
+######################
+ui/client/quickbase/assets/css
+ui/client/quickbase/assets/*.map

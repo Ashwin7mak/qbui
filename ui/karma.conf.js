@@ -1,10 +1,9 @@
 // Karma configuration
 // http://karma-runner.github.io/0.10/config/configuration-file.html
 
-'use strict';
 
-module.exports = function (config) {
-
+module.exports = function(config) {
+    'use strict';
     config.set({
         // base path, that will be used to resolve files and exclude
         basePath: '',
@@ -82,7 +81,7 @@ module.exports = function (config) {
             //'**/mockdata/*.json': 'html2js',
             //'**/*.coffee': 'coffee',
             //if any 3rd party vendor plugin within code coverage target folder, need to exclude (ie: jasmine, angular, etc)
-            'client/{quickbase/**/*.js,*.js}' : ['coverage']
+            'client/{quickbase/**/!(*test)/*.js,*.js}' : ['coverage']
         },
 
         //  load the templates for pre-processing...needed for unit testing
@@ -91,17 +90,19 @@ module.exports = function (config) {
             moduleName: 'qbse.templates'
         },
 
+
         ngJade2JsPreprocessor: {
             stripPrefix: 'client/'
         },
 
-        reporters: ['progress', 'coverage'],
+        reporters: ['progress', 'mocha', 'coverage'],
 
         coverageReporter: {
             // specify a common output directory
             dir: 'build/reports/client/coverage',
             reporters: [
-                { type: 'lcov', subdir: '.' }
+                {type: 'lcov', subdir: '.' },
+                {type: 'text-summary'}
             ]
         },
         junitReporter : {

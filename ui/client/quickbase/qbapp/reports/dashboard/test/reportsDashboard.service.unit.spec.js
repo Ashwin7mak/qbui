@@ -3,21 +3,21 @@ describe('Service: ReportService', function() {
 
     // load the module
     beforeEach(function() {
-        module('qbse.qbapp.reports.dashboard','quickbase.qbapp', 'qbse.templates');
+        module('qbse.qbapp.reports.dashboard', 'quickbase.qbapp', 'qbse.templates');
     });
 
     var scope, ApiService, ReportsDashboardService;
     var deferred;
-    var appId='1', tableId='2';
+    var appId = '1', tableId = '2';
 
     beforeEach(
-        inject(function($rootScope, _ReportsDashboardService_, _ApiService_, $q ) {
-            ReportsDashboardService = _ReportsDashboardService_;
-            scope = $rootScope.$new();
-            ApiService = _ApiService_;
+            inject(function($rootScope, _ReportsDashboardService_, _ApiService_, $q) {
+                ReportsDashboardService = _ReportsDashboardService_;
+                scope = $rootScope.$new();
+                ApiService = _ApiService_;
 
-            deferred = $q.defer();
-        })
+                deferred = $q.defer();
+            })
     );
 
     it('validate resolved API getReports service call', function() {
@@ -93,6 +93,6 @@ describe('Service: ReportService', function() {
 
         expect(ApiService.getApp).toHaveBeenCalledWith(appId);
         expect(promise.$$state.status).toEqual(2);
-     });
+    });
 
 });

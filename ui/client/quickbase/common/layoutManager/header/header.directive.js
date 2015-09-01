@@ -2,13 +2,13 @@
     'use strict';
 
     angular.module('qbse.layout')
-        .directive('qbGlobalHeader', GlobalHeader);
+            .directive('qbGlobalHeader', GlobalHeader);
 
     function GlobalHeader() {
         return {
-            restrict: 'E',
+            restrict   : 'E',
             templateUrl: 'quickbase/common/layoutManager/header/header.html',
-            scope: {
+            scope      : {
                 headerInfo: '=info'
             }
         };

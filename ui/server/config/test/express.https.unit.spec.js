@@ -32,14 +32,14 @@ describe('Request test always use ssh', function() {
 
 
     describe('hasSslOptions method', function() {
+        //jshint expr:true
         it('should correctly check for ssl config settings', function(done) {
             var origEnvVal = process.env.NODE_ENV;
-            process.env.NODE_ENV = "dummy";
+            process.env.NODE_ENV = 'dummy';
 
             // init the app server with dummy env and test the configs ssl function
             var testapp = require('express')();
             var testconfig = require('../expressConfig')(testapp);
-            var key = testconfig.SSL_KEY;
 
             should.exist(testconfig.hasSslOptions);
 
@@ -87,14 +87,16 @@ describe('Request test always use ssh', function() {
     it('server http request should return redirect to https with sslPort', function(done) {
         if (config.hasSslOptions()) {
             request('http://localhost:' + config.port)
-                .get('/')
-                .expect(302)
-                .expect(function(res) {
-                    return !(res.headers.location.indexOf(config.sslPort + "/") > -1);
-                })
-                .end(function(err) {
-                    done(err);
-                });
+                    .get('/')
+                    .expect(302)
+                    .expect(function(res) {
+                                var foundSslPort = (res.headers.location.indexOf(config.sslPort + '/') > -1);
+                                //expect returns true on fail (foundSslPort is expected)
+                                return !foundSslPort;
+                            })
+                    .end(function(err) {
+                             done(err);
+                         });
         } else {
             done();
         }
@@ -106,14 +108,15 @@ describe('Request test always use ssh', function() {
         if (config.hasSslOptions()) {
             should.exist(process.env.NODE_TLS_REJECT_UNAUTHORIZED);
             request('https://localhost:' + config.sslPort)
-                .get('/')
-                .expect(200)
-                .expect(function(res) {
-                    return !(res.redirect === false);
-                })
-                .end(function(err) {
-                    done(err);
-                });
+                    .get('/')
+                    .expect(200)
+                    .expect(function(res) {
+                                //expect returns true on fail (no redirect is expected)
+                                return true === res.redirect;
+                            })
+                    .end(function(err) {
+                             done(err);
+                         });
         } else {
             done();
         }

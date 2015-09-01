@@ -3,36 +3,45 @@ describe('Controller: ReportCtrl', function() {
     // load the controller's module
     beforeEach(module('qbse.qbapp.reports.manager'));
 
-    var scope, ReportModel, gridConstants, controller;
-    var appId='1', tableId='2', reportId='3';
-    var reportName='reportName', companyName='companyName';
-    var deferredColumn, deferredData;
+    var scope;
+    var ReportModel;
+    var gridConstants;
+    var controller;
+    var $log;
+    var appId = '1';
+    var tableId = '2';
+    var reportId = '3';
+    var reportName = 'reportName';
+    var companyName = 'companyName';
+    var deferredColumn;
+    var deferredData;
 
     // Initialize the controller and a mock scope
     beforeEach(
-        inject(function($controller, $rootScope, _$httpBackend_, _ReportModel_, _gridConstants_, $q ) {
-            scope = $rootScope.$new();
-            ReportModel = _ReportModel_;
-            gridConstants = _gridConstants_;
+            inject(function($controller, $rootScope, _$httpBackend_, _ReportModel_, _gridConstants_, $q, _$log_) {
+                scope = $rootScope.$new();
+                ReportModel = _ReportModel_;
+                gridConstants = _gridConstants_;
+                $log = _$log_;
 
-            var metaData = {appId:appId, tableId:tableId, reportId:reportId, name:reportName, company:companyName};
+                var metaData = {appId: appId, tableId: tableId, reportId: reportId, name: reportName, company: companyName};
 
-            spyOn(ReportModel, 'getMetaData').and.returnValue($q.when(metaData));
+                spyOn(ReportModel, 'getMetaData').and.returnValue($q.when(metaData));
 
-            deferredColumn = $q.defer();
-            deferredData = $q.defer();
-            spyOn(ReportModel, 'getColumnData').and.callFake(function() {
-                return deferredColumn.promise;
-            });
-            spyOn(ReportModel, 'getReportData').and.callFake(function() {
-                return deferredData.promise;
-            });
+                deferredColumn = $q.defer();
+                deferredData = $q.defer();
+                spyOn(ReportModel, 'getColumnData').and.callFake(function() {
+                    return deferredColumn.promise;
+                });
+                spyOn(ReportModel, 'getReportData').and.callFake(function() {
+                    return deferredData.promise;
+                });
 
-            controller = $controller('ReportCtrl',
-                {$scope:scope, $stateParams:{appId:appId, tableId:tableId, id: reportId}, ReportModel:ReportModel, gridConstants:gridConstants });
+                controller = $controller('ReportCtrl',
+                                         {$scope: scope, $stateParams: {appId: appId, tableId: tableId, id: reportId}, ReportModel: ReportModel, gridConstants: gridConstants});
 
-            scope.$digest();
-        })
+                scope.$digest();
+            })
     );
 
     it('validate the request parameters are properly set on the scope', function() {
@@ -74,7 +83,7 @@ describe('Controller: ReportCtrl', function() {
         var rptData = {rptData: true};
         deferredData.resolve(rptData);
 
-        var offset= 0, rows=10;
+        var offset = 0, rows = 10;
         expect(scope.report.dataService).toBeDefined();
         scope.report.dataService(gridConstants.SERVICE_REQ.DATA, offset, rows);
         expect(ReportModel.getReportData).toHaveBeenCalledWith(appId, tableId, reportId, offset, rows);
