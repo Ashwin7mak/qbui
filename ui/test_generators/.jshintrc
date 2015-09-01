@@ -1,0 +1,27 @@
+{
+  //Use another configuration file as a "base"
+  "extends": "../.jshintrc",
+  // warn about not running in strict mode, which eliminates some JavaScript pitfalls
+  //"strict": false,
+  // allow debugging info like console
+  "devel": true,
+  "globals": {
+    "__dirname": false,
+    "__filename": false,
+    "after": false,
+    "afterEach": false,
+    "before": false,
+    "beforeEach": false,
+    "ddescribe": false,
+    "describe": false,
+    "expect": false,
+    "iit": false,
+    "it": false,
+    "module": false,
+    "moment": false,
+    "require": false,
+    "xdescribe": false,
+    "xit": false,
+    "bigdecimal": false
+  }
+}

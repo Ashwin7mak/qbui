@@ -1,45 +1,28 @@
 {
-  //prohibits the use of bitwise operators usually its a mistyped && - JSHint boolean option which is shared with JSLint
-  "bitwise": true,
-  //suppresses warnings about the `debugger` statements in your code.
-  "debug": true,
-  //require === or !=== (don't do any coercion)
-  "eqeqeq": true,
-  //enables new javascript syntax
-  "esnext": true,
-  //defines globals exposed by frameworks listed
-  "globals": ["describe", "it", "angular"],
-  //defines globals exposed by [the Jasmine unit testing
-  "jasmine": true,
-  //prohibits the use of a variable before it was defined, nofunc will allow function declarations to be ignored.
-  "latedef": "nofunc",
-  //JSHint boolean option which is shared with JSLint
-  "newcap": true,
-  // prohibits the use of `arguments.caller` and `arguments.callee`
-  "noarg": true,
-  //defines globals available in node, skips some warnings that make sense in the browser environments but don't make sense in node
+  //Use another configuration file as a "base"
+  "extends": "../.jshintrc",
+  // defines globals available when your code is running inside of the Node
+  // skips some warnings that make sense in the browser environments but not in in Node
   "node": true,
-  //JSHint boolean option which are shared with JSLint
-  "regexp": true,
-  //JSHint boolean option which are shared with JSLint
-  "undef": true,
-  "predef": [
-      "alert",
-      "angular",
-      "clearTimeout",
-      "console",
-      "Chance",
-      "define",
-      "document",
-      "HTMLElement",
-      "localStorage",
-      "module",
-      "navigator",
-      "require",
-      "sessionStorage",
-      "setTimeout",
-      "top",
-      "window",
-      "XMLHttpRequest"
-  ]
+  "mocha":true,
+  //a white list of global variables that are not formally defined in the source code
+  "globals": {
+    "__dirname": false,
+    "__filename": false,
+    "after": false,
+    "afterEach": false,
+    "before": false,
+    "beforeEach": false,
+    "ddescribe": false,
+    "describe": false,
+    "expect": false,
+    "iit": false,
+    "it": false,
+    "module": false,
+    "moment": false,
+    "require": false,
+    "xdescribe": false,
+    "xit": false,
+    "bigdecimal": false
+  }
 }

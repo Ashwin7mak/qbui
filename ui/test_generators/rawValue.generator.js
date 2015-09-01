@@ -10,7 +10,7 @@
     var SUBDOMAIN_CHARS = 'abcdefghijklmnopqrstuvwxyz0123456789';
 
     chance.mixin({
-        'timezone': function() {
+        timezone: function() {
             var isPositive = chance.bool();
             var timeZone = isPositive ? '+' + chance.integer({min: 0, max: 14}) : '-' + chance.integer({
                 min: 0,
@@ -20,8 +20,8 @@
             return timeZone;
         },
 
-        'appDateFormat': function(options) {
-            var dateFormat = options['dateFormat'];
+        appDateFormat: function(options) {
+            var dateFormat = options.dateFormat;
 
             if (undefined === dateFormat || !_(appConsts.DATE_FORMATS).contains(appConsts.DATE_FORMATS, dateFormat)) {
                 dateFormat = chance.pick(appConsts.DATE_FORMATS);
@@ -29,11 +29,11 @@
             return dateFormat;
         },
 
-        'phoneNumberWithExtension': function() {
-            return chance.phone() + "x" + chance.integer({min: 1000, max: 9999});
+        phoneNumberWithExtension: function() {
+            return chance.phone() + 'x' + chance.integer({min: 1000, max: 9999});
         },
 
-        'apiFormattedDate': function(options) {
+        apiFormattedDate    : function(options) {
             var date = chance.date(options);
 
             var year = date.getFullYear();
@@ -42,7 +42,7 @@
 
             return year + '-' + chance.pad(month + 1, 2) + '-' + chance.pad(day + 1, 2);
         },
-        'apiFormattedDateTime': function(options) {
+        apiFormattedDateTime: function(options) {
             var date = chance.date(options);
 
             var year = date.getFullYear();
@@ -51,14 +51,14 @@
             var hour = date.getHours();
             var minute = date.getMinutes();
             var seconds = date.getSeconds();
-            var milliseconds = date.getMilliseconds();
-            var formattedMilliseconds =  "." +  chance.pad(chance.integer({min: 0, max: 900}),3);
+            //var milliseconds = date.getMilliseconds();
+            //var formattedMilliseconds = '.' + chance.pad(chance.integer({min: 0, max: 900}), 3);
 
-            return year + '-' + chance.pad(month + 1, 2) + '-' + chance.pad(day + 1, 2) + 'T' + chance.pad(hour, 2) + ':' + chance.pad(minute, 2) + chance.pad(seconds, 2)  + "+00:00Z";
+            return year + '-' + chance.pad(month + 1, 2) + '-' + chance.pad(day + 1, 2) + 'T' + chance.pad(hour, 2) + ':' + chance.pad(minute, 2) + chance.pad(seconds, 2) + '+00:00Z';
         },
 
-        'userId': function(options) {
-            return options['userIds'] ? chance.pick(options['userIds']) : 1000000;
+        userId: function(options) {
+            return options.userIds ? chance.pick(options.userIds) : 1000000;
         }
     });
 
@@ -71,7 +71,7 @@
         },
 
         //Generates and returns a psuedo-random char string of specified length
-        generateString: function(length) {
+        generateString: function() {
             //return chance.string({length: length, pool: 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789'});
             return this.generateEntityName();
         },
@@ -79,7 +79,7 @@
 
         //Generates and returns a psuedo-random char string of specified length
         generateEntityName: function(options) {
-            var options = options || {capitalize: true}
+            options = options || {capitalize: true};
             var answer = chance.word();
             if (options.capitalize) {
                 answer = chance.capitalize(answer);
@@ -115,10 +115,11 @@
 
         //Generates and returns a psuedo-random us phone number
         generatePhoneNumber: function(includeExt) {
+            var phoneNumber;
             if (includeExt) {
-                chance.phoneNumberWithExtension();
+                phoneNumber = chance.phoneNumberWithExtension();
             } else {
-                var phoneNumber = chance.phone();
+                phoneNumber = chance.phone();
             }
             return phoneNumber;
         },
@@ -160,7 +161,7 @@
         },
 
         pickUserIdFromList: function(userIds) {
-            return chance.userId({userIds: userIds})
+            return chance.userId({userIds: userIds});
         }
     };
 

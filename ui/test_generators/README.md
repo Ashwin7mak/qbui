@@ -49,7 +49,7 @@ Use relative path to get ahold of the proper generator. From ui/server/api/quick
     var consts = require('../constants');
 
 #### Generate
-Simply ask and you shall recieve:
+Simply ask and you shall receive:
 
     var field = fieldGenerator.generateBaseField(consts.CHECKBOX);
 

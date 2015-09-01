@@ -3,37 +3,36 @@
  * to allow the caller to set various properties on the field
  * Created by cschneider1 on 5/28/15.
  */
-(function () {
+(function() {
     'use strict';
     var consts = require('../server/api/constants');
     var dataTypeConsts = require('./datatype.attributes.constants');
     var defaultConsts = require('./field.schema.defaults');
-    var rawValueGenerator = require('./rawValue.generator');
+    //var rawValueGenerator = require('./rawValue.generator');
     var dataTypeBuilder = require('./datatype.attributes.builder');
     var _ = require('lodash');
     var DATATYPE_KEYS = 'dataTypeKeys';
 
     module.exports = {
-        getDataTypeBuilder : function(){
+        getDataTypeBuilder: function() {
             return dataTypeBuilder.builder();
         },
 
-        getAvailableDataTypes : function(){
+        getAvailableDataTypes: function() {
             return dataTypeConsts.availableDataTypes;
         },
 
         //Generate a json field blob based on field type
-        generateBaseDataType : function(type){
+        generateBaseDataType: function(type) {
             var builder = dataTypeBuilder.builder();
             return builder.withType(type).build();
         },
 
-        dataTypeToJsonString : function(dataTypeAttributes){
+        dataTypeToJsonString: function(dataTypeAttributes) {
             return JSON.stringify(dataTypeAttributes);
         },
 
-        validateDataTypeProperties : function(dataTypeAttributes){
-
+        validateDataTypeProperties: function(dataTypeAttributes) {
             //these will be initialized in the loop to be false
             //let's start out assuming the best and let the loop tell us if we're in trouble
             var foundKey = false;
@@ -43,10 +42,10 @@
             var dataTypeKeys = Object.keys(dataTypeAttributes);
 
             //loop over all of the keys on the passed field
-            dataTypeKeys.forEach(function (dataTypeKey) {
+            dataTypeKeys.forEach(function(dataTypeKey) {
                 foundKey = false;
                 //loop over every key in for this field type
-                _.forEach(dataTypeConsts[dataType][DATATYPE_KEYS], function (constValue, constKey) {
+                _.forEach(dataTypeConsts[dataType][DATATYPE_KEYS], function(constValue, constKey) {
 
                     //if we find the fieldKey matches current JSON constant then make sure we have found the right type
                     if (constValue === dataTypeKey) {
@@ -67,12 +66,12 @@
                     }
                 });
 
-                if(foundKey == false){
+                if (foundKey === false) {
                     console.error('We could not find this key in our key constants for a field. Key in question: ' + dataTypeKey + ' Field ' + JSON.stringify(dataTypeAttributes));
                 }
 
-                if(valueValid == false){
-                    console.error('There was a value type mismatch. Key in question: ' +dataTypeKey+ ' Field ' + JSON.stringify(dataTypeAttributes));
+                if (valueValid === false) {
+                    console.error('There was a value type mismatch. Key in question: ' + dataTypeKey + ' Field ' + JSON.stringify(dataTypeAttributes));
                 }
 
             });
@@ -81,17 +80,16 @@
         },
 
         //For a given field type, apply any default values that are not currently present in the map
-        applyDefaults : function(fieldToModify) {
+        applyDefaults: function(fieldToModify) {
             var type = fieldToModify[dataTypeConsts.availableDataTypes.TYPE];
 
-            if(!dataTypeToFunctionCalls[type]){
+            if (!dataTypeToFunctionCalls[type]) {
                 throw new Error('Field type not found in fieldTypeToFunctionCalls');
             }
 
             dataTypeToFunctionCalls[type](fieldToModify);
         }
     };
-
 
 
     var dataTypeToFunctionCalls = {};
@@ -103,52 +101,58 @@
     dataTypeToFunctionCalls[consts.NUMERIC] = applyNumericHierarchy;
     dataTypeToFunctionCalls[consts.CURRENCY] = applyNumericHierarchy;
     dataTypeToFunctionCalls[consts.RATING] = applyNumericHierarchy;
-    dataTypeToFunctionCalls[consts.DURATION] = function(fieldToModify){applyNumericHierarchy(fieldToModify); applyDurationDefaults(fieldToModify);};
+    dataTypeToFunctionCalls[consts.DURATION] = function(fieldToModify) {
+        applyNumericHierarchy(fieldToModify);
+        applyDurationDefaults(fieldToModify);
+    };
     dataTypeToFunctionCalls[consts.TEXT] = applyTextHierarchy;
     dataTypeToFunctionCalls[consts.MULTI_LINE_TEXT] = applyTextHierarchy;
     dataTypeToFunctionCalls[consts.BIGTEXT] = applyTextHierarchy;
-    dataTypeToFunctionCalls[consts.URL] = function(fieldToModify){ applyUrlDefaults(fieldToModify);};
-    dataTypeToFunctionCalls[consts.EMAIL_ADDRESS] = function(fieldToModify){ applyEmailDefaults(fieldToModify);};
-    dataTypeToFunctionCalls[consts.PHONE_NUMBER] = function(fieldToModify){ applyPhoneNumberDefaults(fieldToModify);};
+    dataTypeToFunctionCalls[consts.URL] = function(fieldToModify) { applyUrlDefaults(fieldToModify);};
+    dataTypeToFunctionCalls[consts.EMAIL_ADDRESS] = function(fieldToModify) { applyEmailDefaults(fieldToModify);};
+    dataTypeToFunctionCalls[consts.PHONE_NUMBER] = function(fieldToModify) { applyPhoneNumberDefaults(fieldToModify);};
     dataTypeToFunctionCalls[consts.DATE_TIME] = applyDateTimeHierarchy;
     dataTypeToFunctionCalls[consts.DATE] = applyDateHierarchy;
-    dataTypeToFunctionCalls[consts.TIME_OF_DAY] = function(fieldToModify){ applyDateTimeHierarchy(fieldToModify); applyTimeOfDayDefaults(fieldToModify);};
-    dataTypeToFunctionCalls[consts.CHECKBOX] = function(fieldToModify){};
-    dataTypeToFunctionCalls[consts.USER] = function(fieldToModify){applyUserDefaults(fieldToModify);};
-    
-    //weirdos
-    dataTypeToFunctionCalls[consts.FILE_ATTACHMENT] = function(fieldToModify){ applyFileAttachmentDefaults(fieldToModify);};
+    dataTypeToFunctionCalls[consts.TIME_OF_DAY] = function(fieldToModify) {
+        applyDateTimeHierarchy(fieldToModify);
+        applyTimeOfDayDefaults(fieldToModify);
+    };
+    dataTypeToFunctionCalls[consts.CHECKBOX] = function() {};
+    dataTypeToFunctionCalls[consts.USER] = function(fieldToModify) {applyUserDefaults(fieldToModify);};
 
-    function applyNumericHierarchy(fieldToModify){
+    //weirdos
+    dataTypeToFunctionCalls[consts.FILE_ATTACHMENT] = function(fieldToModify) { applyFileAttachmentDefaults(fieldToModify);};
+
+    function applyNumericHierarchy(fieldToModify) {
         applyNumericDefaults(fieldToModify);
     }
 
-    function applyDateHierarchy(fieldToModify){
+    function applyDateHierarchy(fieldToModify) {
         applyDateDefaults(fieldToModify);
     }
 
-    function applyDateTimeHierarchy(fieldToModify){
-        applyDateHierarchy(fieldToModify)
+    function applyDateTimeHierarchy(fieldToModify) {
+        applyDateHierarchy(fieldToModify);
         applyDateTimeDefaults(fieldToModify);
     }
 
-    function applyTextHierarchy(fieldToModify){
+    function applyTextHierarchy(fieldToModify) {
         applyTextDefaults(fieldToModify);
     }
 
-    function applyNumericDefaults(fieldToModify){
+    function applyNumericDefaults(fieldToModify) {
         var fieldType = fieldToModify[dataTypeConsts.fieldKeys.TYPE];
 
-        if(!fieldToModify[dataTypeConsts[fieldType][DATATYPE_KEYS].DECIMAL_PLACES]){
+        if (!fieldToModify[dataTypeConsts[fieldType][DATATYPE_KEYS].DECIMAL_PLACES]) {
             fieldToModify[dataTypeConsts[fieldType][DATATYPE_KEYS].DECIMAL_PLACES] = defaultConsts.numericDefaults.DECIMAL_PLACES_DEFAULT;
         }
 
-        if(!fieldToModify[dataTypeConsts[fieldType][DATATYPE_KEYS].TREAT_NULL_AS_ZERO]){
+        if (!fieldToModify[dataTypeConsts[fieldType][DATATYPE_KEYS].TREAT_NULL_AS_ZERO]) {
             fieldToModify[dataTypeConsts[fieldType][DATATYPE_KEYS].TREAT_NULL_AS_ZERO] = defaultConsts.numericDefaults.TREAT_NULL_AS_ZERO_DEFAULT;
         }
     }
 
-    function applyDateDefaults(fieldToModify){
+    function applyDateDefaults(fieldToModify) {
         var fieldType = fieldToModify[dataTypeConsts.fieldKeys.TYPE];
 
         if (!fieldToModify[dataTypeConsts[fieldType][DATATYPE_KEYS].SHOW_MONTH_AS_NAME]) {
@@ -164,7 +168,7 @@
         }
     }
 
-    function applyDateTimeDefaults(fieldToModify){
+    function applyDateTimeDefaults(fieldToModify) {
         var fieldType = fieldToModify[dataTypeConsts.fieldKeys.TYPE];
 
         if (!fieldToModify[dataTypeConsts[fieldType][DATATYPE_KEYS].SHOW_TIME]) {
@@ -177,7 +181,7 @@
 
     }
 
-    function applyTimeOfDayDefaults(fieldToModify){
+    function applyTimeOfDayDefaults(fieldToModify) {
         var fieldType = fieldToModify[dataTypeConsts.fieldKeys.TYPE];
 
         if (!fieldToModify[dataTypeConsts[fieldType][DATATYPE_KEYS].SHOW_TIME]) {
@@ -190,7 +194,7 @@
 
     }
 
-    function applyDurationDefaults(fieldToModify){
+    function applyDurationDefaults(fieldToModify) {
         var fieldType = fieldToModify[dataTypeConsts.fieldKeys.TYPE];
 
         if (!fieldToModify[dataTypeConsts[fieldType][DATATYPE_KEYS].SCALE]) {
@@ -236,7 +240,7 @@
 
     }
 
-    function applyPhoneNumberDefaults(fieldToModify){
+    function applyPhoneNumberDefaults(fieldToModify) {
         var fieldType = fieldToModify[dataTypeConsts.fieldKeys.TYPE];
 
         if (!fieldToModify[dataTypeConsts[fieldType][DATATYPE_KEYS].INCLUDE_EXTENSION]) {
@@ -244,43 +248,7 @@
         }
     }
 
-    function applyReportLinkDefaults(fieldToModify){
-        var fieldType = fieldToModify[dataTypeConsts.fieldKeys.TYPE];
-
-        if (!fieldToModify[dataTypeConsts[fieldType][DATATYPE_KEYS].DISPLAY_PROTOCOL]) {
-            fieldToModify[dataTypeConsts[fieldType][DATATYPE_KEYS].DISPLAY_PROTOCOL] = defaultConsts.reportDefaults.DISPLAY_PROTOCOL_DEFAULT;
-        }
-
-        if (!fieldToModify[dataTypeConsts[fieldType][DATATYPE_KEYS].LINK_TEXT]) {
-            fieldToModify[dataTypeConsts[fieldType][DATATYPE_KEYS].LINK_TEXT] = defaultConsts.reportDefaults.LINK_TEXT_DEFAULT;
-        }
-
-        if (!fieldToModify[dataTypeConsts[fieldType][DATATYPE_KEYS].EXACT_MATCH]) {
-            fieldToModify[dataTypeConsts[fieldType][DATATYPE_KEYS].EXACT_MATCH] = defaultConsts.reportDefaults.EXACT_MATCH_DEFAULT;
-        }
-
-        if (!fieldToModify[dataTypeConsts[fieldType][DATATYPE_KEYS].MULTI_CHOICE_SOURCE_ALLOWED]) {
-            fieldToModify[dataTypeConsts[fieldType][DATATYPE_KEYS].MULTI_CHOICE_SOURCE_ALLOWED] = defaultConsts.reportDefaults.MULTI_CHOICE_SOURCE_ALLOWED_DEFAULT;
-        }
-    }
-
-    function applySummaryFieldDefaults(fieldToModify){
-        var fieldType = fieldToModify[dataTypeConsts.fieldKeys.TYPE];
-
-        if (!fieldToModify[dataTypeConsts[fieldType][DATATYPE_KEYS].AGGREGATE_FUNCTION]) {
-            fieldToModify[dataTypeConsts[fieldType][DATATYPE_KEYS].AGGREGATE_FUNCTION] = defaultConsts.summaryDefaults.AGGREGATE_FUNCTION_DEFAULT;
-        }
-
-        if (!fieldToModify[dataTypeConsts[fieldType][DATATYPE_KEYS].DECIMAL_PLACES]) {
-            fieldToModify[dataTypeConsts[fieldType][DATATYPE_KEYS].DECIMAL_PLACES] = defaultConsts.summaryDefaults.DECIMAL_PLACES_DEFAULT;
-        }
-
-        if (!fieldToModify[dataTypeConsts[fieldType][DATATYPE_KEYS].TREAT_NULL_AS_ZERO]) {
-            fieldToModify[dataTypeConsts[fieldType][DATATYPE_KEYS].TREAT_NULL_AS_ZERO] = defaultConsts.summaryDefaults.TREAT_NULL_AS_ZERO_DEFAULT;
-        }
-    }
-
-    function applyTextDefaults(fieldToModify){
+    function applyTextDefaults(fieldToModify) {
         var fieldType = fieldToModify[dataTypeConsts.fieldKeys.TYPE];
 
         if (!fieldToModify[dataTypeConsts[fieldType][DATATYPE_KEYS].HTML_ALLOWED]) {
@@ -288,7 +256,7 @@
         }
     }
 
-    function applyUrlDefaults(fieldToModify){
+    function applyUrlDefaults(fieldToModify) {
         var fieldType = fieldToModify[dataTypeConsts.fieldKeys.TYPE];
 
         if (!fieldToModify[dataTypeConsts[fieldType][DATATYPE_KEYS].DISPLAY_PROTOCOL]) {
@@ -300,7 +268,7 @@
         }
     }
 
-    function applyUserDefaults(fieldToModify){
+    function applyUserDefaults(fieldToModify) {
         var fieldType = fieldToModify[dataTypeConsts.fieldKeys.TYPE];
 
         if (!fieldToModify[dataTypeConsts[fieldType][DATATYPE_KEYS].SEND_INVITES_TO_USERS]) {

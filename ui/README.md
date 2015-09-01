@@ -24,82 +24,94 @@ FIRST - Do all the Quickbase java backend development [setup instructions](https
 
 * Git & SourceTree Source code control
 * Intellij IDE
-        * Install some IntelliJ plugins if you don't have these already
-            * AngularJS - front end framework plugin
-            * NodeJS - ui web server plugin
-            * SASS support - enhances css with variables and methods plugin
-         * Know working versions of Intellij are 14.1.2 and 14.1.4 
+  * Install some IntelliJ plugins if you don't have these already
+    * AngularJS - front end framework plugin
+    * NodeJS - ui web server plugin
+    * SASS support - enhances css with variables and methods plugin
+  * Know working versions of Intellij are 14.1.2 and 14.1.4 
+  * Use the QuickBase/intelliJSettings.jar from the Quickbase project and set the following settings for coding style errors to appear in the IDE inspection.(This is manual due to user code path dependent)
+    * 	In the qbui Intellij project, go to Main Menu `Intellij IDEA/Preferences...` and select the options for `Languages & Frameworks` then`Javascript` disable all but the following 2 JSHint and JSCS with the settings 
+    *  for jsHint 
+        * ![jsHintScreenShot.png](jsHintScreenShot.png) 
+    *  and for jscs(javascript coding style)
+        * ![jscsScreenShot.png](jscsScreenShot.png)
+    * Note: The lint and coding standards settings are a composite of several standards see [https://github.com/jscs-dev/node-jscs/tree/master/presets](https://github.com/jscs-dev/node-jscs/tree/master/presets) (I wrote a script to merge the preset values to determine most common for the js industry as well as data from statistics on github open source code [http://sideeffect.kr/popularconvention#javascript](http://sideeffect.kr/popularconvention#javascript)
+
 * Java and Tomcat to run the backend	
-	
+    
 ##Installing 
 * Install node.js (v0.12.4 or higher) from the [Node.js site](http://nodejs.org/)
 
 * (*Optional*) Make a place for any global node modules and no permission issues
 
- 	1. Create a .node folder from command line.
- 	   
-	  	``` bash
-	  	mkdir ~/.node
-	  	```
+1. Create a .node folder from command line.
+       
+	``` bash
+	mkdir ~/.node
+	```
    
-	2. Adjust your node settings so that the global modules get installed locally for your login.
-	
-	   ``` bash
-	   npm config set prefix=~/.node
-	   ```
- 	  This is required because when you try to install modules globally (npm install -g), npm will install it in /usr/local/    and this will cause permission issues. In order to prevent this, adjust your node settings to install global modules     local for your login.
+2. Adjust your node settings so that the global modules get installed locally for your login.
+	    
+	``` bash
+	npm config set prefix=~/.node
+	```
+      This is required because when you try to install modules globally (npm install -g), npm will install it in /usr/local/    and this will cause permission issues. In order to prevent this, adjust your node settings to install global modules     local for your login.
 
-	3. Add this directory to your PATH.
-	
-	   ``` bash
-	   export PATH=$PATH:$HOME/.node/bin
-	   ```
+3. Add this directory to your PATH.
+    
+   ``` bash
+   export PATH=$PATH:$HOME/.node/bin
+   ```
 
 * Make sure you have Ruby installed for compass next (Macs should have it already, try `which ruby` otherwise get Ruby [here](https://www.ruby-lang.org/en/documentation/installation/)
 
 * Install compass for css preprocessing. Run (may need sudo and it takes a couple minutes)
 
-	 ``` bash
-	 gem install compass -v 1.0.1
-	 ```   
+	``` bash
+	     gem install compass -v 1.0.1
+	```   
 
 * Install homebrew if it's not already installed. Test if it's install by running `brew --version` if says not found, install homebrew with:
-	
+	    
 	```
-	ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"
+	    ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"
 	```
 
 * **qbui** project uses npm and Bower as its *package managers* and Grunt as its *task runner*. 
 
-	The top level of the project holds the CI Jenkins Gradle related files and the source for the ui is under the ui directory
+    The top level of the project holds the CI Jenkins Gradle related files and the source for the ui is under the ui directory
 
-	There is a bower_components folder which is managed by bower.json. 
+    There is a bower_components folder which is managed by bower.json. 
 
-	There is a node_modules folder which is managed by package.json. 
+    There is a node_modules folder which is managed by package.json. 
 
-	Grunt tasks are defined in the Gruntfile.js 
+    Grunt tasks are defined in the Gruntfile.js 
 
-	Make sure you have grunt and bower installed, run:
-	
-	```
-	npm install -g bower grunt-cli
+    Make sure you have grunt and bower installed, run:
+    
+    ```
+    npm install -g bower grunt-cli
    ```
+   
 
 * Then get the qbui project repo 
 
-	```
-	git clone -b master ssh://git@github.intuit.com/quickbase/qbui.git
-	```
-	or
+    ```
+    git clone -b master ssh://git@github.intuit.com/quickbase/qbui.git
+    ```
+    or
 
-	```
-	git clone -b master https://github.intuit.com/QuickBase/qbui.git
-	```
+    ```
+    git clone -b master https://github.intuit.com/QuickBase/qbui.git
+    ```
 
-	*Note:* If you get an error about no developer tools found when executing git, make sure you have xCode from Apple installed. Go to the AppStore application and [install xcode](http://itunes.apple.com/us/app/xcode/id497799835?ls=1&mt=12). 
+    *Note:* If you get an error about no developer tools found when executing git, make sure you have xCode from Apple installed. Go to the AppStore application and [install xcode](http://itunes.apple.com/us/app/xcode/id497799835?ls=1&mt=12). 
 
 ##Configuring
 Environment specific configurations reside in the qbui/ui/server/config/environment directory. The application requires a run-time environment to be defined and configured.  
+
+For developing set this environment variable in your bash profile
+`export NODE_ENV=local`
 
 By default, the server runs in local development mode, meaning a local configuration file must be defined. As this file is not tracked by git, to run locally, you will need to do the following:
 
@@ -137,8 +149,14 @@ The following run-time environment variable is supported:
 
 
 ## Testing
+###Lint and Code Style tests
+Running `grunt codeStandards` will run the jshint and jscs tasks. These tasks validate the javascript follows best practices and ensures the code is formatted to our qbui coding styles.
+
+Look at the .jshintrc and .jscscrc files for the lint rules and coding standards
+
+
 ###Unit tests
-Running `grunt test` will run the client and server unit tests with karma and mocha.
+Running `grunt test` will run the client and server unit tests with karma and mocha as well as the codeStandards.
 
 Use `grunt test:server` to only run server tests.
 
@@ -381,17 +399,18 @@ setting in the local.env.js file:
 POSSIBLE ISSUES -- and how to resolve
 
 1. First, since the ui has dependencies on the java backend make sure:
-	
-	1.1. your Tomcat server is running 
-	* see [Quickbase repo](https://github.intuit.com/QuickBase/QuickBase/raw/master/README.md)
-	
-	1.2. your Oracle DB is up 
-	
-	* see [oracle vm setup info](https://wiki.intuit.com/display/qbasepd/Local+Oracle+Linux+VM+Setup)
-	
-	1.3. your Node express server is running
-	
-	* under this repo ui dir run 'grunt serve'
+    
+    1.1. your Tomcat server is running 
+    
+    * see [Quickbase repo](https://github.intuit.com/QuickBase/QuickBase/raw/master/README.md)
+    
+    1.2. your Oracle DB is up 
+    
+    * see [oracle vm setup info](https://wiki.intuit.com/display/qbasepd/Local+Oracle+Linux+VM+Setup)
+    
+    1.3. your Node express server is running
+    
+    * under this repo ui dir run 'grunt serve'
 
 2. When running unit tests, if the following error is outputted, it means PhantomJS is not installed on your machine:
 
@@ -407,6 +426,14 @@ POSSIBLE ISSUES -- and how to resolve
 3. If when running your node server you see ECONNREFUSED in the logs make sure you have followed the instructions for the DNS workaround on mac above
 
       
+##Other Resources
+
+* Links for learning Node, angular etc - [https://github.intuit.com/QuickBase/QuickBaseUIProto/blob/development/ui/LEARNING.md]([https://github.intuit.com/QuickBase/QuickBaseUIProto/blob/development/ui/LEARNING.md)
+
+* Information on the ui ops tools we use to build and deploy the you - [https://github.intuit.com/QuickBase/QuickBaseUIProto/blob/development/ui/TOOLS_AND_LIBS.md](https://github.intuit.com/QuickBase/QuickBaseUIProto/blob/development/ui/TOOLS_AND_LIBS.md)
+
+* Globalization in the UI - [https://github.intuit.com/QuickBase/QuickBaseUIProto/blob/development/ui/UI%20i18n.md](https://github.intuit.com/QuickBase/QuickBaseUIProto/blob/development/ui/UI%20i18n.md)
+
 Contributors
 ---------------------
 + Chris Deery

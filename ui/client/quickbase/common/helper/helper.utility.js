@@ -7,7 +7,7 @@
      *
      **/
     angular.module('qbse.helper')
-        .factory('qbUtility', UtilityFactory);
+            .factory('qbUtility', UtilityFactory);
 
     function UtilityFactory() {
 
@@ -29,7 +29,7 @@
          * @returns {boolean}
          */
         utilityFunctions.isInt = function(val) {
-            return (typeof val==='number' && (val%1)===0);
+            return (typeof val === 'number' && (val % 1) === 0);
         };
 
         /**
@@ -39,35 +39,35 @@
 
             var dict = {};
 
-            this.size = function () {
+            this.size = function() {
                 return Object.keys(dict).length;
             };
 
-            this.get = function (key) {
+            this.get = function(key) {
                 return dict[key];
             };
 
-            this.put = function (key, value) {
+            this.put = function(key, value) {
                 dict[key] = value;
             };
 
-            this.containsKey = function (key) {
+            this.containsKey = function(key) {
                 return this.get(key) !== undefined;
             };
 
-            this.remove = function (key) {
+            this.remove = function(key) {
                 delete dict[key];
             };
 
-            this.isEmpty = function () {
+            this.isEmpty = function() {
                 return Object.keys(dict).length === 0;
             };
 
-            this.clear = function () {
+            this.clear = function() {
                 dict = {};
             };
 
-            this.forEach = function (callback) {
+            this.forEach = function(callback) {
                 var len = this.size();
                 for (var i = 0; i < len; i++) {
                     var item = this.get(Object.keys(dict)[i]);

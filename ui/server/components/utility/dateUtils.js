@@ -1,4 +1,4 @@
-(function () {
+(function() {
     'use strict';
 
     module.exports = {
@@ -9,12 +9,12 @@
          * @param fmt
          * @returns {*}
          */
-        formatDate: function (date, fmt) {
+        formatDate: function(date, fmt) {
             function pad(value) {
                 return (value.toString().length < 2) ? '0' + value : value;
             }
 
-            return fmt.replace(/%([a-zA-Z])/g, function (_, fmtCode) {
+            return fmt.replace(/%([a-zA-Z])/g, function(_, fmtCode) {
                 switch (fmtCode) {
                     case 'Y':
                         return date.getUTCFullYear();

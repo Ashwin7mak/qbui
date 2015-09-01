@@ -2,9 +2,9 @@
 
 var config = {
     javaHost: 'http://javaHost',
-    SSL_KEY: {
-        private: 'privateKey',
-        cert: 'cert',
+    SSL_KEY : {
+        private    : 'privateKey',
+        cert       : 'cert',
         requireCert: true
     }
 };
@@ -17,30 +17,30 @@ var sinon = require('sinon');
 /**
  * Unit tests for User field formatting
  */
-describe('Validate RequestHelper unit tests', function () {
+describe('Validate RequestHelper unit tests', function() {
 
     /**
      * Unit test the helper methods
      */
-    describe('validate the http request methods',function() {
+    describe('validate the http request methods', function() {
 
-        var reqMethods = ['GET','POST','PUT','PATCH','DELETE'];
+        var reqMethods = ['GET', 'POST', 'PUT', 'PATCH', 'DELETE'];
         reqMethods.forEach(function(reqMethod, idx) {
             var req = {};
             req.method = reqMethod;
             it('Test request method: ' + reqMethod, function(done) {
                 //  make sure the order of the tests match the array order
-                should( requestHelper.isGet(req)).be.exactly( idx===0 );
-                should( requestHelper.isPost(req)).be.exactly( idx===1 );
-                should( requestHelper.isPut(req)).be.exactly( idx===2 );
-                should( requestHelper.isPatch(req)).be.exactly( idx===3 );
-                should( requestHelper.isDelete(req)).be.exactly( idx===4 );
+                should(requestHelper.isGet(req)).be.exactly(idx === 0);
+                should(requestHelper.isPost(req)).be.exactly(idx === 1);
+                should(requestHelper.isPut(req)).be.exactly(idx === 2);
+                should(requestHelper.isPatch(req)).be.exactly(idx === 3);
+                should(requestHelper.isDelete(req)).be.exactly(idx === 4);
                 done();
             });
         });
     });
 
-    describe('validate the http protocol',function() {
+    describe('validate the http protocol', function() {
         var req = {};
         it('Test secure protocol method', function(done) {
             req.protocol = 'https';
@@ -54,7 +54,7 @@ describe('Validate RequestHelper unit tests', function () {
         });
     });
 
-    describe('validate the request url',function() {
+    describe('validate the request url', function() {
         var req = {};
         req.url = '/someurl.com';
         it('Test request url method', function(done) {
@@ -64,7 +64,7 @@ describe('Validate RequestHelper unit tests', function () {
         });
     });
 
-    describe('validate agent options',function() {
+    describe('validate agent options', function() {
         var req = {};
 
         it('validate getting agent options on non-secure protocol', function(done) {
@@ -93,9 +93,9 @@ describe('Validate RequestHelper unit tests', function () {
 
     });
 
-    describe('validate copy headers to response method',function() {
-        var res = {header0:'header0'};
-        var headers = {header1:'header1',header2:'header2'};
+    describe('validate copy headers to response method', function() {
+        var res = {header0: 'header0'};
+        var headers = {header1: 'header1', header2: 'header2'};
 
         it('validate copy', function(done) {
             requestHelper.copyHeadersToResponse(res, headers);
@@ -106,10 +106,10 @@ describe('Validate RequestHelper unit tests', function () {
         });
     });
 
-    describe('validate setting options',function() {
+    describe('validate setting options', function() {
         var req = {};
         req.url = '/someurl.com';
-        req.headers = {tid:'tid'};
+        req.headers = {tid: 'tid'};
         req.protocol = 'http';
         req.rawBody = 'test';
 
@@ -151,11 +151,11 @@ describe('Validate RequestHelper unit tests', function () {
 
     });
 
-    describe('validate setting the TID on the header with other headers',function() {
+    describe('validate setting the TID on the header with other headers', function() {
         var req = {};
         req.protocol = 'https';
         req.method = 'POST';
-        req.headers = {someOtherid:'some-other-header'};
+        req.headers = {someOtherid: 'some-other-header'};
 
         it('Test adding the TID header field', function(done) {
             var newReq = requestHelper.setTidHeader(req);
@@ -167,7 +167,7 @@ describe('Validate RequestHelper unit tests', function () {
 
     });
 
-    describe('validate setting the TID on the header',function() {
+    describe('validate setting the TID on the header', function() {
         var req = {};
         req.protocol = 'https';
         req.method = 'POST';

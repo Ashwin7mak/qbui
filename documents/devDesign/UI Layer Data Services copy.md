@@ -102,7 +102,7 @@ pass in $resource object which transforms API response
  $http(x,y,z) = mapp to generator or file
  
  
-	Items (){
+	Items () {
 	}
 	get schmea {
 	}

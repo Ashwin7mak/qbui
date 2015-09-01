@@ -5,25 +5,25 @@
      * This service provides test grid data
      **/
     angular.module('test.dataGeneratorService', ['ngLodash', 'qbse.api', 'qbse.grid'])
-        .factory('TestDataService', ['$q', 'lodash', 'apiConstants', 'gridConstants', TestDataService]);
+            .factory('TestDataService', ['$q', 'lodash', 'apiConstants', 'gridConstants', TestDataService]);
 
     //service to supply data and column given fixed values
     function TestDataService($q, _, apiConstants, gridConstants) {
 
         /** INTERNAL vars and helper methods **/
         // set up some example data for the grid
-        var columnDefs = [{'name': 'name', 'displayName': 'Team', 'fieldType':apiConstants.CURRENCY},
-                          {'name': 'count', 'displayName': 'Size', 'fieldType':apiConstants.TEXT},
-                          {'name': 'focus', 'displayName': 'Focus'}];
-        var dataArray = [{'name': 'Indigo', 'count': 7, 'focus': 'UI'},
-                         {'name': 'Cyan', 'count': 5, 'focus':'Migration'},
-                         {'name': 'Agave', 'count': 8, 'focus':'AWS'}];
+        var columnDefs = [{name: 'name', displayName: 'Team', fieldType: apiConstants.CURRENCY},
+                          {name: 'count', displayName: 'Size', fieldType: apiConstants.TEXT},
+                          {name: 'focus', displayName: 'Focus'}];
+        var dataArray = [{name: 'Indigo', count: 7, focus: 'UI'},
+                         {name: 'Cyan', count: 5, focus: 'Migration'},
+                         {name: 'Agave', count: 8, focus: 'AWS'}];
 
         /**
          *  Creates some random column data and add to the resultArray(argument) array
          */
         function createColumns(chance, numColumns, colsTypes, resultArray) {
-            for (var i = 0; i <numColumns; i++) {
+            for (var i = 0; i < numColumns; i++) {
                 // get a field type from possible specified field types
                 var findex = chance.integer({min: 0, max: colsTypes.length - 1});
                 var type = colsTypes[findex];
@@ -45,32 +45,32 @@
         function createRows(chance, numRows, colDesc, resultData) {
             var numCols = colDesc.length;
             for (var i = 0; i < numRows; i++) {
-                var row ={};
+                var row = {};
                 for (var j = 0; j < numCols; j++) {
                     var value;
                     switch (colDesc[j].fieldType) {
-                        case(apiConstants.TEXT) :
+                        case (apiConstants.TEXT) :
                             value = chance.string();
                             break;
-                        case(apiConstants.NUMERIC) :
+                        case (apiConstants.NUMERIC) :
                             value = chance.integer({min: -200, max: 20000});
                             break;
-                        case(apiConstants.PHONE_NUMBER) :
+                        case (apiConstants.PHONE_NUMBER) :
                             value = chance.phone();
                             break;
-                        case(apiConstants.DATE) :
+                        case (apiConstants.DATE) :
                             value = chance.date();
                             break;
-                        case(apiConstants.DATE_TIME) :
+                        case (apiConstants.DATE_TIME) :
                             value = chance.hammertime();
                             break;
-                        case(apiConstants.EMAIL_ADDRESS) :
+                        case (apiConstants.EMAIL_ADDRESS) :
                             value = chance.email();
                             break;
-                        case(apiConstants.CHECKBOX) :
+                        case (apiConstants.CHECKBOX) :
                             value = chance.bool();
                             break;
-                        case(apiConstants.CURRENCY) :
+                        case (apiConstants.CURRENCY) :
                             value = chance.dollar();
                             break;
                     }
@@ -88,12 +88,9 @@
         factory.dataGridReportService = function(requestType) {
             if (requestType === gridConstants.SERVICE_REQ.DATA) {
                 return $q.when(dataArray);
-            }
-            else
-            if (requestType === gridConstants.SERVICE_REQ.COLS) {
+            } else if (requestType === gridConstants.SERVICE_REQ.COLS) {
                 return $q.when(columnDefs);
-            }
-            else {
+            } else {
                 return $q.when(dataArray);
             }
 
@@ -137,8 +134,8 @@
                 config.numUnRenderedColumns = 0;
             }
             if (config.columnsTypesToInclude === undefined || !config.columnsTypesToInclude.length) {
-                config.columnsTypesToInclude = [apiConstants.TEXT, apiConstants.NUMERIC, apiConstants.PHONE_NUMBER,apiConstants.DATE,
-                    apiConstants.DATE_TIME, apiConstants.EMAIL_ADDRESS, apiConstants.CHECKBOX, apiConstants.CURRENCY];
+                config.columnsTypesToInclude = [apiConstants.TEXT, apiConstants.NUMERIC, apiConstants.PHONE_NUMBER, apiConstants.DATE,
+                                                apiConstants.DATE_TIME, apiConstants.EMAIL_ADDRESS, apiConstants.CHECKBOX, apiConstants.CURRENCY];
             }
 
             // make up some column defs

@@ -4,10 +4,10 @@
      * This service is used to manage the state of the pages of the data for a grid
      **/
     angular
-        .module('qbse.grid')
-        .factory('PagesHandler', ['$http','GridDataFactory', PagesHandlerFactory]);
+            .module('qbse.grid')
+            .factory('PagesHandler', ['$http', '$log', 'GridDataFactory', PagesHandlerFactory]);
 
-    function PagesHandlerFactory($http, GridDataFactory) {
+    function PagesHandlerFactory($http, $log, GridDataFactory) {
 
         var PagesHandler = function(dataServiceFunc, gridConstants, gridOptions) {
             this.http = $http;
@@ -15,13 +15,13 @@
             this.gridOptions = gridOptions;
             this.dataServiceFunc = dataServiceFunc;
             this.current = {
-                pageSize  : this.gridOptions.paginationPageSize,
-                pageNumber: 1,
-                pageTopRow: 0,
+                pageSize     : this.gridOptions.paginationPageSize,
+                pageNumber   : 1,
+                pageTopRow   : 0,
                 pageBottomRow: null, //gets set once data is fetched
-                totalRows: null, //gets set once end of data is reached
-                foundEnd : null, // get set once end of data is encountered
-                sort      : null
+                totalRows    : null, //gets set once end of data is reached
+                foundEnd     : null, // get set once end of data is encountered
+                sort         : null
             };
             //data fetcher
             this.dataFact = new GridDataFactory(this.dataServiceFunc);
@@ -32,20 +32,20 @@
         };
 
         PagesHandler.prototype.loadCurrentPage = function() {
-            var self = this;
-            this.dataFact.getData(this.current).then(function(resolved){
-                self.current = resolved.newState;
-                self.gridOptions.data = resolved.data;
+            var context = this;
+            this.dataFact.getData(this.current).then(function(resolved) {
+                context.current = resolved.newState;
+                context.gridOptions.data = resolved.data;
             }, function(error) {
                 // getData rejected, log the error with: console.log('error', error);
                 //TODO error message to screen & change to use tbd logging interface and emit notification
-                console.log('ERROR ' + JSON.stringify(error));
+                $log.error('ERROR ' + JSON.stringify(error));
             });
         };
 
         // go to a 1st with given page sizing
         PagesHandler.prototype.updatePageSize = function(pageSize) {
-            if (pageSize > 0 && pageSize <= this.gridConstants.MAX_ROWS_PER_PAGE){
+            if (pageSize > 0 && pageSize <= this.gridConstants.MAX_ROWS_PER_PAGE) {
                 this.gridOptions.paginationPageSize = pageSize;
                 this.gridOptions.paginationCurrentPage = 1;
             }

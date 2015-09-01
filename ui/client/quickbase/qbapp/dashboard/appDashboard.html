@@ -3,6 +3,7 @@
     <div class="intuit-logo"></div>
 
     <p>Your QuickBase Applications</p>
+
     <div ng-repeat='app in apps'>
         <li style="font-size:14px;font-weight:bold; list-style-type: none;">{{$index+1}}. {{app.name}} ({{app.id}})</li>
         <div ng-repeat='table in app.tables'>

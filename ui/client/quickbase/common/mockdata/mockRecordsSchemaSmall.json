@@ -1,11 +1,30 @@
 [
-
-    {"field": "first_name" , "displayName" : "First Name"},
-    {"field": "last_name"  , "displayName" : "Last_name" },
-    {"field": "email"      , "displayName" : "Email"     },
-    {"field": "country"    , "displayName" : "Country"   },
-    {"field": "ip_address" , "displayName" : "Ip_address"},
-    {"field": "company"    , "displayName" : "Company"   },
-    {"field": "date"       , "displayName" : "Date"      }
-
+  {
+    "field": "first_name",
+    "displayName": "First Name"
+  },
+  {
+    "field": "last_name",
+    "displayName": "Last_name"
+  },
+  {
+    "field": "email",
+    "displayName": "Email"
+  },
+  {
+    "field": "country",
+    "displayName": "Country"
+  },
+  {
+    "field": "ip_address",
+    "displayName": "Ip_address"
+  },
+  {
+    "field": "company",
+    "displayName": "Company"
+  },
+  {
+    "field": "date",
+    "displayName": "Date"
+  }
 ]

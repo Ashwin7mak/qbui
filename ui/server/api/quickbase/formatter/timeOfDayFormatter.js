@@ -2,7 +2,7 @@
  Given a raw time of day field value and field meta data from the Java capabilities API, this module is capable of
  display formatting the time of day instance.
  */
-(function () {
+(function() {
     'use strict';
     var moment = require('moment-timezone');
     var consts = require('../../constants');
@@ -12,9 +12,10 @@
     var MM = 'mm';
     var SS = ':ss';
     var AM_PM = ' A';
+    var DEFAULT_TIMEZONE = 'America/Los_Angeles';
 
     var JAVA_FORMAT_TO_JS_FORMAT = {
-        'HH:MM': MM,
+        'HH:MM'   : MM,
         'HH:MM:SS': MM + SS
     };
 
@@ -22,7 +23,7 @@
         generateFormatterString: function(fieldInfo) {
             //Resolve formatting options
             var formatString;
-            if(fieldInfo) {
+            if (fieldInfo) {
                 formatString = JAVA_FORMAT_TO_JS_FORMAT[fieldInfo.scale];
             }
             if (!formatString) {
@@ -36,10 +37,10 @@
             }
             return formatString;
         },
-        generateFormat: function(fieldInfo) {
+        generateFormat         : function(fieldInfo) {
             //Resolve formatting options
             var formatString;
-            if(fieldInfo) {
+            if (fieldInfo) {
                 formatString = JAVA_FORMAT_TO_JS_FORMAT[fieldInfo.scale];
             }
             if (!formatString) {
@@ -54,7 +55,7 @@
             return formatString;
         },
         //Given a raw number as input, formats as a legacy QuickBase phone number. Note, not internationalized
-        format: function (fieldValue, fieldInfo) {
+        format                 : function(fieldValue, fieldInfo) {
             if (!fieldValue || !fieldValue.value) {
                 return '';
             }
@@ -73,7 +74,7 @@
 
             //Resolve formatting options
             var formatString = fieldInfo.jsFormat;
-            if(!formatString) {
+            if (!formatString) {
                 formatString = this.generateFormatterString(fieldInfo);
             }
             return m.format(formatString);

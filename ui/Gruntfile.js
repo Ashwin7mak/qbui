@@ -1,7 +1,6 @@
 // Generated on 2015-02-24 using generator-angular-fullstack 2.0.13
-'use strict';
-
-module.exports = function (grunt) {
+module.exports = function(grunt) {
+    'use strict';
 
     var buildDir = __dirname + '/build';
     var localJsFile = __dirname + '/server/config/environment/local.js';
@@ -19,16 +18,17 @@ module.exports = function (grunt) {
     //sauce-connect-launcher won't take an explicit no arg argument, so we are "leveraging" their mechanism for passing
     //arguments along to sauce-connect-launcher
     var httpProxy = grunt.option('httpProxyHost') !== undefined ? grunt.option('httpProxyHost') + ':80 --proxy-tunnel' : null;
+    var useColors = grunt.option('colors') || false;
 
     // Load grunt tasks automatically, when needed
     require('jit-grunt')(grunt, {
-        express: 'grunt-express-server',
+        express      : 'grunt-express-server',
         useminPrepare: 'grunt-usemin',
-        ngtemplates: 'grunt-angular-templates',
+        ngtemplates  : 'grunt-angular-templates',
         //cdnify: 'grunt-google-cdn',
-        protractor: 'grunt-protractor-runner',
-        injector: 'grunt-asset-injector',
-        buildcontrol: 'grunt-build-control'
+        protractor   : 'grunt-protractor-runner',
+        injector     : 'grunt-asset-injector',
+        buildcontrol : 'grunt-build-control'
     });
 
     // Time how long tasks take. Can help when optimizing build times
@@ -37,65 +37,72 @@ module.exports = function (grunt) {
     // Define the configuration for all the tasks
     grunt.initConfig({
         // Project settings
-        pkg: grunt.file.readJSON('package.json'),
+        pkg      : grunt.file.readJSON('package.json'),
         quickbase: {
             // configurable paths
-            client: {
-                root: 'client',
+            client    : {
+                root      : 'client',
                 components: '<%= quickbase.client.root %>/quickbase',
-                assets: '<%= quickbase.client.root %>/quickbase/assets'
+                gallery   : '<%= quickbase.client.root %>/gallery',
+                assets    : '<%= quickbase.client.root %>/quickbase/assets'
             },
+            e2e       : 'e2e',
             //  dist contains the target folders of the build
-            distDir: 'dist',
+            distDir   : 'dist',
             distPublic: 'dist/public'
         },
-        express: {
-            root: 'server',
+        express  : {
+            root   : 'server',
             options: {
-                debug: true,
-                port: 9000,
+                debug  : true,
+                port   : 9000,
                 sslPort: 9443,
-                host: process.env.HOST || 'localhost',
-                script: '<%= express.root %>/app.js'
+                host   : process.env.HOST || 'localhost',
+                script : '<%= express.root %>/app.js'
             },
-            local: {
+            local  : {
                 options: {
                     node_env: 'local'
                 }
             },
-            prod: {
+            prod   : {
                 options: {
-                    debug: false,
-                    script: '<%= quickbase.distDir %>/<%= express.root %>/app.js',
+                    debug   : false,
+                    script  : '<%= quickbase.distDir %>/<%= express.root %>/app.js',
                     node_env: 'production'
                 }
             },
-            test: {
+            test   : {
                 options: {
-                    script: '<%= quickbase.distDir %>/<%= express.root %>/app.js',
+                    script  : '<%= quickbase.distDir %>/<%= express.root %>/app.js',
                     node_env: 'test'
                 }
             }
         },
-        open: {
+        open     : {
             server: {
                 url: 'http://<%= express.options.host %>:<%= express.options.port %>'
             }
         },
-        watch: {
-            mochaTest: {
-                files: ['<%= express.root %>/**/*.spec.js'],
-                tasks: ['env:test', 'mochaTest']
+        watch    : {
+            mochaTest : {
+                files: ['<%= express.root %>/**/*.spec.js',
+                        '<%= express.root %>/**/test/**/*.js',
+                        '<%= express.root %>/**/*.js'
+                ],
+                tasks: ['env:local', 'newer:jshint', 'newer:jscs', 'mochaTest:test']
             },
-            jsTest: {
+            jsTest    : {
                 files: [
                     '<%= quickbase.client.components %>/**/*.spec.js',
-                    '<%= quickbase.client.components %>/**/*.mock.js'
+                    '<%= quickbase.client.components %>/**/*.mock.js',
+                    '<%= quickbase.client.components %>/**/test/**/*.js',
+                    '<%= quickbase.client.components %>/**/*.js'
                 ],
-                tasks: ['newer:jshint:all', 'karma:unit']
+                tasks: ['newer:jshint', 'newer:jscs', 'karma:unit']
             },
             livereload: {
-                files: [
+                files  : [
                     '{.tmp,<%= quickbase.client.components %>}/**/*.css',
                     '{.tmp,<%= quickbase.client.assets %>}/**/*.css',
                     '{.tmp,<%= quickbase.client.components %>}/**/*.html',
@@ -109,104 +116,113 @@ module.exports = function (grunt) {
                     livereload: true
                 }
             },
-            express: {
-                files: [
+            express   : {
+                files  : [
                     '<%= express.root %>/**/*.{js,json}'
                 ],
-                tasks: ['express:local', 'wait'],
+                tasks  : ['express:local', 'wait'],
                 options: {
                     livereload: true,
-                    nospawn: true //Without this option specified express won't be reloaded
+                    nospawn   : true //Without this option specified express won't be reloaded
                 }
             },
-            sass: {  //watch for changes to scss files to trigger compass compilation
+            sass      : {  //watch for changes to scss files to trigger compass compilation
                 files: '<%= quickbase.client.root %>/**/*.scss',
                 tasks: ['compass-compile']
             }
         },
 
         jscs: {
-            client: {
-                files: {
-                    src: ['<%= quickbase.client.root %>/**/*.js']
+            client : {
+                files  : {
+                    src: ['<%= quickbase.client.root %>/**/*.js', '<%= quickbase.e2e %>/**/*.js']
                 },
                 options: {
-                    config: './.jscsrc',
+                    config      : './.jscsrc',
                     excludeFiles: ['<%= quickbase.client.root %>/bower_components/**/*.js',
-                        '<%= quickbase.client.root %>/**/*.spec.js']
+                        //              '<%= quickbase.client.root %>/**/*.spec.js'
+                    ]
                 }
             },
-            server: {
-                files: {
+            server : {
+                files  : {
                     src: ['<%= express.root %>/**/*.js']
                 },
                 options: {
                     config: './.jscsrc',
-                    excludeFiles: ['<%= express.root %>/**/*.spec.js']
+                    // excludeFiles: ['<%= express.root %>/**/*.spec.js']
                 }
             },
             testGen: {
-                files: {
+                files  : {
                     src: ['test_generators/**/*.js']
                 },
                 options: {
                     config: './.jscsrc',
-                    excludeFiles: ['test_generators/**/*.spec.js']
-                }
-            },
-            source: {
-                files: {
-                    src: ['<%= quickbase.client.root %>/**/*.js',
-                        '<%= express.root %>/**/*.js','test_generators/**/*.js']
-                },
-                options: {
-                    config: './.jscsrc',
-                    excludeFiles: ['<%= quickbase.client.root %>/bower_components/**/*.js']
+                    //             excludeFiles: ['test_generators/**/*.spec.js']
                 }
             }
-
         },
 
         // Make sure code styles are up to par and there are no obvious mistakes
         jshint: {
-            options: {
-                jshintrc: '<%= quickbase.client.root %>/.jshintrc',
-                reporter: require('jshint-stylish')
+            options   : {
+                jshintrc: './.jshintrc',
+                //reporter: require('jshint-stylish'),
+                reporter: './node_modules/jshint-practical/'
             },
-            server: {
+            server    : {
                 options: {
                     jshintrc: '<%= express.root %>/.jshintrc'
                 },
-                src: [
+                src    : [
                     '<%= express.root %>/**/*.js',
                     '!<%= express.root %>/**/*.spec.js'
                 ]
             },
             serverTest: {
                 options: {
-                    jshintrc: '<%= express.root %>/.jshintrc-spec'
+                    jshintrc: '<%= express.root %>/.jshintrc'
                 },
-                src: ['<%= express.root %>/**/*.spec.js']
+                src    : ['<%= express.root %>/**/*.spec.js',
+                          '<%= express.root %>/**/test/**/*.js']
             },
-            client: [
-                '<%= quickbase.client.components %>/**/*.js',
-                '!<%= quickbase.client.components %>/**/*.spec.js',
-                '!<%= quickbase.client.components %>/**/*.mock.js'
-            ],
-            clientTest: {
-                src: [
-                    '<%= quickbase.client.components %>/**/*.spec.js',
-                    '<%= quickbase.client.components %>/**/*.mock.js'
+            client    : {
+                options: {
+                    jshintrc: '<%= quickbase.client.root %>/.jshintrc'
+                },
+                src    : [
+                    '<%= quickbase.client.components %>/**/*.js',
+                    '<%= quickbase.client.components %>/**/*.js',
+                    '<%= quickbase.client.gallery %>/**/*.js',
+                    '!<%= quickbase.client.components %>/**/*.spec.js',
+                    '!<%= quickbase.client.components %>/**/*.mock.js'
                 ]
             },
-            testGen: [
-                'test_generator/**/*.js'
-            ]
+            clientTest: {
+                options: {
+                    jshintrc: '<%= quickbase.client.root %>/.jshintrc'
+                },
+                src    : [
+                    '<%= quickbase.client.components %>/**/*.spec.js',
+                    '<%= quickbase.client.components %>/**/*.mock.js',
+                    '<%= quickbase.client.gallery %>/**/test/**/*.js',
+                    '<%= quickbase.e2e %>/**/*.js'
+                ]
+            },
+            testGen   : {
+                options: {
+                    jshintrc: '<%= express.root %>/.jshintrc'
+                },
+                src    : [
+                    'test_generators/**/*.js'
+                ]
+            }
         },
 
         // Empties folders to start fresh
         clean: {
-            dist: {
+            dist  : {
                 files: [{
                     dot: true,
                     src: [
@@ -222,6 +238,8 @@ module.exports = function (grunt) {
                 files: [{
                     dot: true,
                     src: [
+                        '<%= quickbase.client.assets %>/css/*.*',
+                        '<%= quickbase %>/css/*.*',
                         clientReportDir + '/coverage/*',
                         clientReportDir + '/unit/*'
                     ]
@@ -244,12 +262,12 @@ module.exports = function (grunt) {
             options: {
                 browsers: ['last 1 version']
             },
-            dist: {
+            dist   : {
                 files: [{
                     expand: true,
-                    cwd: '.tmp/',
-                    src: '{,*/}*.css',
-                    dest: '.tmp/'
+                    cwd   : '.tmp/',
+                    src   : '{,*/}*.css',
+                    dest  : '.tmp/'
                 }]
             }
         },
@@ -266,20 +284,20 @@ module.exports = function (grunt) {
         // Use nodemon to run server in debug mode with an initial breakpoint
         nodemon: {
             debug: {
-                script: '<%= express.root %>/app.js',
+                script : '<%= express.root %>/app.js',
                 options: {
                     nodeArgs: ['--debug-brk'],
-                    env: {
+                    env     : {
                         PORT: 9000
                     },
-                    callback: function (nodemon) {
-                        nodemon.on('log', function (event) {
-                            console.log(event.colour);
+                    callback: function(nodemon) {
+                        nodemon.on('log', function(event) {
+                            grunt.log.ok(event.colour);
                         });
 
                         // opens browser on initial server start
-                        nodemon.on('config:update', function () {
-                            setTimeout(function () {
+                        nodemon.on('config:update', function() {
+                            setTimeout(function() {
                                 require('open')('http://localhost:8080/debug?port=5858');
                             }, 500);
                         });
@@ -290,19 +308,19 @@ module.exports = function (grunt) {
 
         // Automatically inject Bower components into the app
         wiredep: {
-            app: {
-                src: '<%= quickbase.client.root %>/*.index.html',
+            app : {
+                src       : '<%= quickbase.client.root %>/*.index.html',
                 ignorePath: '<%= quickbase.client.root %>/',
-                exclude: [/bootstrap-sass-official/, /bootstrap.js/, '/json3/', '/es5-shim/', /bootstrap.css/, /font-awesome.css/ ]
+                exclude   : [/bootstrap-sass-official/, /bootstrap.js/, '/json3/', '/es5-shim/', /bootstrap.css/, /font-awesome.css/]
             },
             test: {
-                src: 'karma.conf.js',
-                ignorePath:  /\.\.\//,
+                src            : 'karma.conf.js',
+                ignorePath     : /\.\.\//,
                 devDependencies: true,
-                fileTypes: {
+                fileTypes      : {
                     js: {
-                        block: /(([\s\t]*)\/\/\s*startbower:*(\S*))(\n|\r|.)*?(\/\/\s*endbower:)/gi,
-                        detect: {
+                        block  : /(([\s\t]*)\/\/\s*startbower:*(\S*))(\n|\r|.)*?(\/\/\s*endbower:)/gi,
+                        detect : {
                             js: /'(.*\.js)'/gi
                         },
                         replace: {
@@ -340,7 +358,7 @@ module.exports = function (grunt) {
         //      <script src="common_components/logger/log.js"></script>
         //   <!-- endbuild -->
         useminPrepare: {
-            html: [
+            html   : [
                 '<%= quickbase.client.root %>/*.index.html', '!<%= quickbase.client.root %>/gallery/*.index.html'],         // look for entry point html files
             options: {
                 dest: '<%= quickbase.distPublic %>'
@@ -350,16 +368,16 @@ module.exports = function (grunt) {
         // Performs rewrites based on rev and the useminPrepare configuration
         //
         usemin: {
-            html: ['<%= quickbase.distPublic %>/{,*/}*.html'],
-            css: ['<%= quickbase.distPublic %>/{,*/}*.css'],
-            js: ['<%= quickbase.distPublic %>/{,*/}*.js'],
+            html   : ['<%= quickbase.distPublic %>/{,*/}*.html'],
+            css    : ['<%= quickbase.distPublic %>/{,*/}*.css'],
+            js     : ['<%= quickbase.distPublic %>/{,*/}*.js'],
             options: {
                 assetsDirs: [
                     '<%= quickbase.distPublic %>',
                     '<%= quickbase.distPublic %>/assets/images'
                 ],
                 // This is so we update image references in our ng-templates
-                patterns: {
+                patterns  : {
                     js: [
                         [/(assets\/images\/.*?\.(?:gif|jpeg|jpg|png|webp|svg))/gm, 'Update the JS to reference our revved images']
                     ]
@@ -372,9 +390,9 @@ module.exports = function (grunt) {
             dist: {
                 files: [{
                     expand: true,
-                    cwd: '<%= quickbase.client.root %>/',
-                    src: '{,*/}*.{png,jpg,jpeg,gif}',
-                    dest: '<%= quickbase.distPublic %>/assets/images'
+                    cwd   : '<%= quickbase.client.root %>/',
+                    src   : '{,*/}*.{png,jpg,jpeg,gif}',
+                    dest  : '<%= quickbase.distPublic %>/assets/images'
                 }]
             }
         },
@@ -383,9 +401,9 @@ module.exports = function (grunt) {
             dist: {
                 files: [{
                     expand: true,
-                    cwd: '<%= quickbase.client.root %>/',
-                    src: '{,*/}*.svg',
-                    dest: '<%= quickbase.distPublic %>/assets/images'
+                    cwd   : '<%= quickbase.client.root %>/',
+                    src   : '{,*/}*.svg',
+                    dest  : '<%= quickbase.distPublic %>/assets/images'
                 }]
             }
         },
@@ -396,9 +414,9 @@ module.exports = function (grunt) {
             dist: {
                 files: [{
                     expand: true,
-                    cwd: '.tmp/concat',
-                    src: '*/**.js',
-                    dest: '.tmp/concat'
+                    cwd   : '.tmp/concat',
+                    src   : '*/**.js',
+                    dest  : '.tmp/concat'
                 }]
             }
         },
@@ -407,47 +425,47 @@ module.exports = function (grunt) {
         //
         // Each quickBase angular app (quickbase.realm, quickbase.qbapp, etc.) to have their own definition block
         ngtemplates: {
-            'quickbase.realm': {
-                cwd: '<%= quickbase.client.root %>',
-                src: ['quickbase/common/**/*.html',
-                    'quickbase/realm/**/*.html'],     // look for all html files required for this angular application
-                dest: '.tmp/realmTemplates.js',
+            'quickbase.realm' : {
+                cwd    : '<%= quickbase.client.root %>',
+                src    : ['quickbase/common/**/*.html',
+                          'quickbase/realm/**/*.html'],     // look for all html files required for this angular application
+                dest   : '.tmp/realmTemplates.js',
                 options: {
                     usemin: 'quickbase/realm.js'        // maps to reference in realm.index.html
                 }
             },
-            'quickbase.qbapp': {
-                cwd: '<%= quickbase.client.root %>',
-                src: ['quickbase/common/**/*.html',
-                    'quickbase/qbapp/**/*.html'],     // look for all html files required for this angular application
-                dest: '.tmp/appTemplates.js',
+            'quickbase.qbapp' : {
+                cwd    : '<%= quickbase.client.root %>',
+                src    : ['quickbase/common/**/*.html',
+                          'quickbase/qbapp/**/*.html'],     // look for all html files required for this angular application
+                dest   : '.tmp/appTemplates.js',
                 options: {
                     usemin: 'quickbase/qbapp.js'        // maps to reference in app.index.html
                 }
             },
             'quickbase.report': {
-                cwd: '<%= quickbase.client.root %>',
-                src: ['quickbase/common/**/*.html',
-                    'quickbase/qbapp/reports/reportManager/**/*.html'],     // look for all html files required for this angular application
-                dest: '.tmp/reportTemplates.js',
+                cwd    : '<%= quickbase.client.root %>',
+                src    : ['quickbase/common/**/*.html',
+                          'quickbase/qbapp/reports/reportManager/**/*.html'],     // look for all html files required for this angular application
+                dest   : '.tmp/reportTemplates.js',
                 options: {
                     usemin: 'quickbase/report.js'        // maps to reference in report.index.html
                 }
             },
-            options: {
+            options           : {
                 htmlmin: {
-                    collapseBooleanAttributes: true,
-                    collapseWhitespace: true,
-                    removeAttributeQuotes: true,
-                    removeEmptyAttributes: true,
-                    removeRedundantAttributes: true,
-                    removeScriptTypeAttributes: true,
+                    collapseBooleanAttributes    : true,
+                    collapseWhitespace           : true,
+                    removeAttributeQuotes        : true,
+                    removeEmptyAttributes        : true,
+                    removeRedundantAttributes    : true,
+                    removeScriptTypeAttributes   : true,
                     removeStyleLinkTypeAttributes: true
                 }
             },
-            tmp: {
-                cwd: '.tmp',
-                src: ['**/*.html'],
+            tmp               : {
+                cwd : '.tmp',
+                src : ['**/*.html'],
                 dest: '.tmp/tmp-templates.js'
             }
         },
@@ -461,13 +479,13 @@ module.exports = function (grunt) {
 
         // Copies remaining files to places other tasks can use
         copy: {
-            dist: {
+            dist  : {
                 files: [{
                     expand: true,
-                    dot: true,
-                    cwd: '<%= quickbase.client.root %>',
-                    dest: '<%= quickbase.distPublic %>',
-                    src: [
+                    dot   : true,
+                    cwd   : '<%= quickbase.client.root %>',
+                    dest  : '<%= quickbase.distPublic %>',
+                    src   : [
                         '*.{ico,png,txt}',
                         '.htaccess',
                         'bower_components/**/*',
@@ -478,23 +496,23 @@ module.exports = function (grunt) {
                 }, {
                     //  copy icon files that are not in the sprites folder
                     flatten: true,
-                    expand: true,
-                    cwd: '<%= quickbase.client.assets %>',
-                    dest: '<%= quickbase.distPublic %>/quickbase/assets',
-                    src: ['**/images-*.*']
+                    expand : true,
+                    cwd    : '<%= quickbase.client.assets %>',
+                    dest   : '<%= quickbase.distPublic %>/quickbase/assets',
+                    src    : ['**/images-*.*']
                 }, {
                     //  copy the sprites folder
                     flatten: false,
-                    expand: true,
-                    cwd: '<%= quickbase.client.assets %>',
-                    dest: '<%= quickbase.distPublic %>/quickbase',
-                    src: [
+                    expand : true,
+                    cwd    : '<%= quickbase.client.assets %>',
+                    dest   : '<%= quickbase.distPublic %>/quickbase',
+                    src    : [
                         '**/sprites/**.*'
                     ]
                 }, {
                     expand: true,
-                    dest: '<%= quickbase.distDir %>',
-                    src: [
+                    dest  : '<%= quickbase.distDir %>',
+                    src   : [
                         'package.json',
                         '<%= express.root %>/**/*'
                     ]
@@ -502,21 +520,21 @@ module.exports = function (grunt) {
             },
             styles: {
                 expand: true,
-                cwd: ['<%= quickbase.client.assets %>/'],
-                dest: '.tmp/',
-                src: ['**/*.css']
+                cwd   : ['<%= quickbase.client.assets %>/'],
+                dest  : '.tmp/',
+                src   : ['**/*.css']
             }
         },
 
         buildcontrol: {
-            options: {
-                dir: 'dist',
-                commit: true,
-                push: true,
+            options  : {
+                dir           : 'dist',
+                commit        : true,
+                push          : true,
                 connectCommits: false,
-                message: 'Built %sourceName% from commit %sourceCommit% on branch %sourceBranch%'
+                message       : 'Built %sourceName% from commit %sourceCommit% on branch %sourceBranch%'
             },
-            heroku: {
+            heroku   : {
                 options: {
                     remote: 'heroku',
                     branch: 'master'
@@ -535,11 +553,11 @@ module.exports = function (grunt) {
             server: [
                 'compass:dev'
             ],
-            test: [
+            test  : [
                 'compass:dev'
             ],
-            debug: {
-                tasks: [
+            debug : {
+                tasks  : [
                     'nodemon',
                     'node-inspector'
                 ],
@@ -547,7 +565,7 @@ module.exports = function (grunt) {
                     logConcurrentOutput: true
                 }
             },
-            dist: [
+            dist  : [
                 'compass:dist',
                 'imagemin',
                 'svgmin'
@@ -557,8 +575,9 @@ module.exports = function (grunt) {
         // Karma tests..use configuration file to determine what is run
         karma: {
             unit: {
+                colors    : useColors,
                 configFile: 'karma.conf.js',
-                singleRun: true
+                singleRun : true
             }
         },
 
@@ -566,37 +585,38 @@ module.exports = function (grunt) {
         mochaTest: {
             test: {
                 options: {
-                    reporter: (function () {
-                        process.env.MOCHA_COLORS = false;
+                    quiet   : true,
+                    reporter: (function() {
+                        process.env.MOCHA_COLORS = useColors;
                         process.env.JUNIT_REPORT_PATH = serverReportDir + '/unit/server_report.xml';
                         return 'mocha-jenkins-reporter';
                     }())
                 },
-                src: ['server/**/test/' + mochaUnitTest ]
+                src    : ['server/**/test/' + mochaUnitTest]
             },
 
             testGen: {
                 options: {
-                    reporter: (function () {
-                        process.env.MOCHA_COLORS = false;
-                        process.env.JUNIT_REPORT_PATH = serverReportDir + '/unit/server_report.xml';
+                    reporter: (function() {
+                        process.env.MOCHA_COLORS = useColors;
+                        process.env.JUNIT_REPORT_PATH = serverReportDir + '/unit/testGen_report.xml';
                         return 'mocha-jenkins-reporter';
                     }())
                 },
-                src: ['test_generators/**/test/' + mochaUnitTest ]
+                src    : ['server/**/test/' + mochaUnitTest]
             },
 
             integration: {
                 options: {
                     //log in test results in red any node integration tests over slow amount below which in milliseconds
-                    slow : 400,
-                    reporter: (function () {
-                        process.env.MOCHA_COLORS = false;
+                    slow    : 400,
+                    reporter: (function() {
+                        process.env.MOCHA_COLORS = useColors;
                         process.env.JUNIT_REPORT_PATH = serverReportDir + '/integration/server_report.xml';
                         return 'mocha-jenkins-reporter';
                     }())
                 },
-                src: ['server/**/test/' + mochaIntTest ]
+                src    : ['server/**/test/' + mochaIntTest]
             }
 
         },
@@ -604,36 +624,31 @@ module.exports = function (grunt) {
         //  Code coverage against the express code
         mocha_istanbul: {
             coverage: {
-                src: ['server/**/test/*.unit.spec.js'],
+                src    : ['server/**/test/*.unit.spec.js'],
                 options: {
-                    mask: '**/*.spec.js',
-                    check: {
-                        //will fail if not meeting coverage %
-                        //lines:90,
-                        //statements:90
-                    },
-                    root: 'server',
-                    noColors: true,
-                    reportFormats: ['lcov'],
+                    mask          : '**/*.spec.js',
+                    root          : 'server',
+                    noColors      : !useColors,
+                    reportFormats : ['lcov'],
                     coverageFolder: 'build/reports/server/coverage'
                 }
             }
         },
 
         protractor: {
-            sauce_linux_chrome: {
+            sauce_linux_chrome : {
                 options: {
                     configFile: './e2e/config/sauce.chrome.linux.protractor.conf.js',
-                    baseUrl: baseUrl
+                    baseUrl   : baseUrl
                 }
             },
             sauce_linux_firefox: {
                 options: {
                     configFile: './e2e/config/sauce.firefox.linux.protractor.conf.js',
-                    baseUrl: baseUrl
+                    baseUrl   : baseUrl
                 }
             },
-            local: {
+            local              : {
                 options: {
                     configFile: './e2e/config/local.protractor.conf.js'
                 }
@@ -641,37 +656,37 @@ module.exports = function (grunt) {
         },
 
         env: {
-            test: {
-                NODE_ENV: 'test',
+            test : {
+                NODE_ENV                    : 'test',
                 NODE_TLS_REJECT_UNAUTHORIZED: 0,
-                ENV_TUNNEL_NAME: tunnelIdentifier,
-                SAUCE_JOB_NAME: sauceJobName,
-                SAUCE_KEY: sauceKey,
+                ENV_TUNNEL_NAME             : tunnelIdentifier,
+                SAUCE_JOB_NAME              : sauceJobName,
+                SAUCE_KEY                   : sauceKey,
                 //for the test env, we need to thwart the proxy
-                http_proxy: '',
+                http_proxy                  : '',
                 //for the test env, we need to thwart the proxy
-                https_proxy: ''
+                https_proxy                 : ''
             },
-            e2e: {
-                NODE_ENV: 'test',
+            e2e  : {
+                NODE_ENV                    : 'test',
                 NODE_TLS_REJECT_UNAUTHORIZED: 0,
-                ENV_TUNNEL_NAME: tunnelIdentifier,
-                SAUCE_JOB_NAME: sauceJobName,
+                ENV_TUNNEL_NAME             : tunnelIdentifier,
+                SAUCE_JOB_NAME              : sauceJobName,
                 SAUCE_KEY: sauceKey
             },
-            prod: {
-                NODE_ENV: 'production',
+            prod : {
+                NODE_ENV       : 'production',
                 ENV_TUNNEL_NAME: tunnelIdentifier,
-                SAUCE_JOB_NAME: sauceJobName,
-                SAUCE_KEY: sauceKey
+                SAUCE_JOB_NAME : sauceJobName,
+                SAUCE_KEY      : sauceKey
             },
             local: {
-                NODE_ENV: 'local',
+                NODE_ENV                    : 'local',
                 NODE_TLS_REJECT_UNAUTHORIZED: 0,
-                ENV_TUNNEL_NAME: tunnelIdentifier,
-                SAUCE_JOB_NAME: sauceJobName,
-                SAUCE_KEY: sauceKey,
-                DOMAIN: baseUrl
+                ENV_TUNNEL_NAME             : tunnelIdentifier,
+                SAUCE_JOB_NAME              : sauceJobName,
+                SAUCE_KEY                   : sauceKey,
+                DOMAIN                      : baseUrl
             }
         },
 
@@ -680,12 +695,12 @@ module.exports = function (grunt) {
                 config: 'config.rb'
             },
             //  set the run-time environment for config.rb
-            dist: {
+            dist   : {
                 options: {
                     environment: 'production'
                 }
             },
-            dev: {
+            dev    : {
                 options: {
                     environment: 'development'
                 }
@@ -694,8 +709,7 @@ module.exports = function (grunt) {
     });
 
 
-
-    grunt.registerTask('fixCoveragePaths', function () {
+    grunt.registerTask('fixCoveragePaths', function() {
         // Workaround: The lcov report generated by karma-coverage for clientside js code
         // does not contain the absolute path and thus sonar cannot use the report file
         // for coverage, an issue is open on this https://github.com/karma-runner/karma/issues/528
@@ -711,18 +725,18 @@ module.exports = function (grunt) {
     });
 
     // Used for delaying livereload until after server has restarted
-    grunt.registerTask('wait', function () {
+    grunt.registerTask('wait', function() {
         grunt.log.ok('Waiting for server reload...');
 
         var done = this.async();
 
-        setTimeout(function () {
+        setTimeout(function() {
             grunt.log.writeln('Done waiting!');
             done();
         }, 1500);
     });
 
-    grunt.registerTask('clean-up', 'Clean build and distribution folders', function (target) {
+    grunt.registerTask('clean-up', 'Clean build and distribution folders', function(target) {
         if (target === 'dist') {
             return grunt.task.run([
                 'clean:dist']);
@@ -742,22 +756,22 @@ module.exports = function (grunt) {
         ]);
     });
 
-    grunt.registerTask('compass-compile', 'Compass compile', function () {
+    grunt.registerTask('compass-compile', 'Compass compile', function() {
         grunt.task.run([
             'compass:dev'
         ]);
     });
-    grunt.registerTask('compass-watch', 'Compass watch', function () {
+    grunt.registerTask('compass-watch', 'Compass watch', function() {
         grunt.task.run([
             'watch:sass'
         ]);
     });
 
-    grunt.registerTask('express-keepalive', 'Keep grunt running', function () {
+    grunt.registerTask('express-keepalive', 'Keep grunt running', function() {
         this.async();
     });
 
-    grunt.registerTask('serve', function (target) {
+    grunt.registerTask('serve', function(target) {
         if (target === 'dist') {
             return grunt.task.run([
                 'build',
@@ -791,12 +805,12 @@ module.exports = function (grunt) {
         ]);
     });
 
-    grunt.registerTask('server', function () {
+    grunt.registerTask('server', function() {
         grunt.log.warn('The `server` task has been deprecated. Use `grunt serve` to start a server.');
         grunt.task.run(['serve']);
     });
 
-    grunt.registerTask('fixCoveragePaths', function () {
+    grunt.registerTask('fixCoveragePaths', function() {
         // Workaround: The lcov report generated by karma-coverage for clientside js code
         // does not contain the absolute path and thus sonar cannot use the report file
         // for coverage, an issue is open on this https://github.com/karma-runner/karma/issues/528
@@ -810,15 +824,21 @@ module.exports = function (grunt) {
         }
     });
 
-    grunt.registerTask('setEnv', function (envName, envVal) {
+    grunt.registerTask('setEnv', function(envName, envVal) {
         process.env[envName] = envVal;
     });
 
-    grunt.registerTask('testClientOnly', function () {
+    grunt.registerTask('codeStandards', [
+        'jshint',
+        'jscs'
+    ]);
+
+    grunt.registerTask('testClientOnly', function() {
         grunt.task.run(['jshint:client', 'jscs:client', 'karma:unit']);
     });
 
-    grunt.registerTask('test', function (target) {
+
+    grunt.registerTask('test', function(target) {
         //  need this folder to exist or mocha tests will fail
         grunt.file.mkdir(serverReportDir + '/unit/');
         grunt.file.mkdir(serverReportDir + '/integration/');
@@ -845,7 +865,6 @@ module.exports = function (grunt) {
                 'mochaTest:testGen'
             ]);
         }
-
         if (target === 'coverage') {
             //server unit tests
             return grunt.task.run([
@@ -857,6 +876,7 @@ module.exports = function (grunt) {
         if (target === 'integration') {
             //server integration tests
             return grunt.task.run([
+                'codeStandards',
                 'clean:server',
                 'mochaTest:integration',
             ]);
@@ -893,13 +913,29 @@ module.exports = function (grunt) {
         }
 
         //  default task if no target specified
-        grunt.task.run([
+        return grunt.task.run([
+            // run lint and coding standards tests
+            'codeStandards',
+            // run unit tests
             'test:client',
-            'test:server'
+            'test:server',
         ]);
 
     });
 
+
+    grunt.registerTask('testIntegration', function() {
+        grunt.task.run(['test:integration']);
+    });
+
+
+    grunt.registerTask('testE2ELocal', function() {
+        grunt.task.run(['test:e2eLocal']);
+    });
+
+    grunt.registerTask('testE2E', function() {
+        grunt.task.run(['test:e2e']);
+    });
 
     grunt.registerTask('ciTest', [
         'env:test',
@@ -931,25 +967,21 @@ module.exports = function (grunt) {
 
     grunt.registerTask('default', [
         'newer:jshint',
+        'newer:jscs',
         'test',
         'build'
     ]);
 
-
-    grunt.registerTask('codeStandards', [
-        'jshint',
-        'jscs'
-    ]);
-
-    grunt.registerTask('sauce_connect', 'Grunt plug-in to download and launch Sauce Labs Sauce Connect', function () {
+    /* global console:true */
+    grunt.registerTask('sauce_connect', 'Grunt plug-in to download and launch Sauce Labs Sauce Connect', function() {
         var options = this.options({
-            username: 'sbg_qbse',
-            accessKey: sauceKey,
-            proxy: httpProxy,
-            tunnelIdentifier:  tunnelIdentifier,
-            verbose: true,
-            logger: console.log
-        })
+            username        : 'sbg_qbse',
+            accessKey       : sauceKey,
+            proxy           : httpProxy,
+            tunnelIdentifier: tunnelIdentifier,
+            verbose         : grunt.option('verbose') === true,
+            logger          : console.log
+        });
 
         var done = this.async();
 
@@ -966,7 +998,7 @@ module.exports = function (grunt) {
         }
     });
 
-    grunt.registerTask('sauce-connect-close', 'Closes the current Sauce Connect tunnel', function () {
+    grunt.registerTask('sauce-connect-close', 'Closes the current Sauce Connect tunnel', function() {
         sauceConnect.close(this.async());
     });
 

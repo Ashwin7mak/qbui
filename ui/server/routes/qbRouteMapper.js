@@ -2,7 +2,7 @@
  * The route mapper provides a static mapping from each route to the function we expect to call for that route
  * Created by cschneider1 on 7/2/15.
  */
-(function () {
+(function() {
     'use strict';
     var log = require('../logger').getLogger();
     var routeConsts = require('./routeConstants');
@@ -12,7 +12,7 @@
     var routeGroupMapper = require('./qbRouteGroupMapper');
     var routeGroup;
 
-    module.exports = function (config){
+    module.exports = function(config) {
         requestHelper = require('../api/quickbase/requestHelper')(config);
         recordsApi = require('../api/quickbase/recordsApi')(config);
         routeGroup = config.routeGroup;
@@ -23,7 +23,7 @@
              * Return all registered routes
              * @returns {*[]}
              */
-            fetchAllRoutes : function(){
+            fetchAllRoutes: function() {
                 return routeConsts;
             },
 
@@ -31,7 +31,7 @@
              * For a given route, return the GET function associated with this route or group of routes
              * @param route
              */
-            fetchGetFunctionForRoute: function (route) {
+            fetchGetFunctionForRoute: function(route) {
                 return routeToGetFunction[route];
             },
 
@@ -39,7 +39,7 @@
              * For a given route, return the POST function associated with this route or group of routes
              * @param route
              */
-            fetchPostFunctionForRoute: function (route) {
+            fetchPostFunctionForRoute: function(route) {
                 return routeToPostFunction[route];
             },
 
@@ -47,7 +47,7 @@
              * For a given route, return the POST function associated with this route or group of routes
              * @param route
              */
-            fetchPutFunctionForRoute: function (route) {
+            fetchPutFunctionForRoute: function(route) {
                 return routeToPutFunction[route];
             },
 
@@ -55,7 +55,7 @@
              * For a given route, return the PATCH function associated with this route or group of routes
              * @param route
              */
-            fetchPatchFunctionForRoute: function (route) {
+            fetchPatchFunctionForRoute: function(route) {
                 return routeToPatchFunction[route];
             },
 
@@ -63,7 +63,7 @@
              * For a given route, return the DELETE function associated with this route or group of routes
              * @param route
              */
-            fetchDeleteFunctionForRoute: function (route) {
+            fetchDeleteFunctionForRoute: function(route) {
                 return routeToDeleteFunction[route];
             },
 
@@ -71,14 +71,14 @@
              * For a given route, return the function associated with this route or group of routes for all http verbs
              * @param route
              */
-            fetchAllFunctionForRoute: function (route) {
+            fetchAllFunctionForRoute: function(route) {
                 return routeToAllFunction[route];
             },
 
             /**
              * Override the default functionality of the recordsApi
              */
-            setRecordsApi : function(recordsApiOverride){
+            setRecordsApi: function(recordsApiOverride) {
                 recordsApi = recordsApiOverride;
             }
         };
@@ -133,7 +133,7 @@
      *
      * @param req
      */
-    function modifyRequestPathForApi(req){
+    function modifyRequestPathForApi(req) {
         var originalUrl = req.url;
         if (originalUrl.search('/api/api') === -1) {
             req.url = originalUrl.replace('/api', '/api/api');
@@ -148,7 +148,7 @@
      * @param res
      * @param returnFunction
      */
-    function processRequest(req, res, returnFunction){
+    function processRequest(req, res, returnFunction) {
         //  log some route info and set the request options
         log.logRequest(req);
 
@@ -166,19 +166,19 @@
      * @param res
      */
     function fetchSingleRecord(req, res) {
-        processRequest(req, res, function (req, res){
+        processRequest(req, res, function(req, res) {
             recordsApi.fetchSingleRecordAndFields(req)
-                .then(function (response) {
-                    log.logResponse(req, response, __filename);
-                    log.debug('API response: ' + JSON.stringify(response) + ' Request - method:' + req.method + ' - ' + req.path);
-                    res.send(response);
-                })
-                .catch(function (error) {
-                    log.error('ERROR: ' + JSON.stringify(error));
-                    requestHelper.copyHeadersToResponse(res, error.headers);
-                    res.status(error.statusCode)
-                        .send(error.body);
-                });
+                    .then(function(response) {
+                              log.logResponse(req, response, __filename);
+                              log.debug('API response: ' + JSON.stringify(response) + ' Request - method:' + req.method + ' - ' + req.path);
+                              res.send(response);
+                          })
+                    .catch(function(error) {
+                               log.error('ERROR: ' + JSON.stringify(error));
+                               requestHelper.copyHeadersToResponse(res, error.headers);
+                               res.status(error.statusCode)
+                                       .send(error.body);
+                           });
         });
 
     }
@@ -190,18 +190,18 @@
      * @param res
      */
     function fetchAllRecords(req, res) {
-        processRequest(req, res, function (req, res) {
+        processRequest(req, res, function(req, res) {
             recordsApi.fetchRecordsAndFields(req)
-                .then(function (response) {
-                    log.logResponse(req, response, __filename);
-                    res.send(response);
-                })
-                .catch(function (error) {
-                    log.error('ERROR: ' + JSON.stringify(error));
-                    requestHelper.copyHeadersToResponse(res, error.headers);
-                    res.status(error.statusCode)
-                        .send(error.body);
-                });
+                    .then(function(response) {
+                              log.logResponse(req, response, __filename);
+                              res.send(response);
+                          })
+                    .catch(function(error) {
+                               log.error('ERROR: ' + JSON.stringify(error));
+                               requestHelper.copyHeadersToResponse(res, error.headers);
+                               res.status(error.statusCode)
+                                       .send(error.body);
+                           });
         });
     }
 
@@ -222,10 +222,10 @@
         var opts = requestHelper.setOptions(req);
 
         request(opts)
-            .on('error', function(error) {
-                log.error('Swagger API ERROR ' + JSON.stringify(error));
-            })
-            .pipe(res);
+                .on('error', function(error) {
+                        log.error('Swagger API ERROR ' + JSON.stringify(error));
+                    })
+                .pipe(res);
     }
 
     /**
@@ -234,17 +234,17 @@
      * @param res
      */
     function forwardAllApiRequests(req, res) {
-        processRequest(req, res, function (req, res) {
+        processRequest(req, res, function(req, res) {
             var opts = requestHelper.setOptions(req);
 
             request(opts)
-                .on('response', function (response) {
-                    log.debug('API response: ' + response.statusCode + ' - ' + req.method + ' ' + req.path);
-                })
-                .on('error', function (error) {
-                    log.error('API ERROR ' + JSON.stringify(error));
-                })
-                .pipe(res);
+                    .on('response', function(response) {
+                            log.debug('API response: ' + response.statusCode + ' - ' + req.method + ' ' + req.path);
+                        })
+                    .on('error', function(error) {
+                            log.error('API ERROR ' + JSON.stringify(error));
+                        })
+                    .pipe(res);
         });
     }
 
@@ -255,7 +255,7 @@
      */
     function routeTo404(req, res) {
         log.logRequest(req);
-        log.error('Route '+ req.route.path + ' is not enabled for routeGroup ' + routeGroup);
+        log.error('Route ' + req.route.path + ' is not enabled for routeGroup ' + routeGroup);
         res.status(404).send();
     }
 

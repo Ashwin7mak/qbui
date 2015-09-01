@@ -19,7 +19,7 @@ describe('Module quickbase.app module run function', function() {
 
     function getRunBlock() {
         var module = angular.module('quickbase.qbapp');
-        return module._runBlocks[0][module._runBlocks[0].length-1];
+        return module._runBlocks[0][module._runBlocks[0].length - 1];
     }
 
 });

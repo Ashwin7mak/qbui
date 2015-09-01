@@ -2,6 +2,6 @@
     'use strict';
     angular
         // define the QuickBase (qbse) LayoutManager module
-        .module('qbse.helper', []);
+            .module('qbse.helper', []);
 
 })();

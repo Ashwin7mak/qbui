@@ -2,7 +2,8 @@
  * relationship.generator.js will generate valid json for a relationship object given a master and detail table
  * Created by cschneider1 on 5/28/15.
  */
-(function () {
+(function() {
+    'use strict';
     var relationshipConstants = require('./relationship.constants');
     var relationshipBuilder = require('./relationship.builder');
     var tableConsts = require('./table.constants');
@@ -16,12 +17,12 @@
     module.exports = {
 
         /**
-         * Retrieve the relationship builder to build a field peicemeal
+         * Retrieve the relationship builder to build a field piecemeal
          * @returns {*|{build, cloneIntoBuilder, withId, withAppId, withDescription, withMasterAppId,
          *     withMasterTableId, withMasterFieldId, withDetailAppId, withDetailTableId, withDetailFieldId,
          *     withReferentialIntegrity, withCascadeDelete}}
          */
-        getRelationshipBuilder: function () {
+        getRelationshipBuilder: function() {
             var builderInstance = relationshipBuilder.builder();
             return builderInstance;
         },
@@ -30,7 +31,7 @@
          * Return the string representation of the relationship object
          * @param relationship
          */
-        relationshipToJsonString: function (relationship) {
+        relationshipToJsonString: function(relationship) {
             return JSON.stringify(relationship);
         },
 
@@ -45,7 +46,7 @@
          * @param detailTableId
          * @returns {*|{singleRun, autoWatch}}
          */
-        generateRelationshipFromApp: function (app, masterTableId, detailTableId) {
+        generateRelationshipFromApp: function(app, masterTableId, detailTableId) {
 
             var tables = app[appConsts.TABLES];
 
@@ -54,19 +55,19 @@
 
             //loop over all of the fields in the master table and pick a matching master and detail field
             //start at the end of the list so that we can pick fields that are not recordId
-            _.forEach(tables, function(table){
-                if(table[tableConsts.ID] === masterTableId){
+            _.forEach(tables, function(table) {
+                if (table[tableConsts.ID] === masterTableId) {
                     masterTable = table;
                 }
 
-                if(table[tableConsts.ID] === detailTableId){
+                if (table[tableConsts.ID] === detailTableId) {
                     detailTable = table;
                 }
             });
 
-            if(typeof masterTable === 'undefined' || typeof detailTable === 'undefined'){
+            if (typeof masterTable === 'undefined' || typeof detailTable === 'undefined') {
                 console.error('Could not find any matching tables for the ids provided!');
-                throw new Error('Could not find any matching tables for the ids provided! masterTableId: '+ masterTableId +', detailTableId: ' + detailTableId +', app: ' + app );
+                throw new Error('Could not find any matching tables for the ids provided! masterTableId: ' + masterTableId + ', detailTableId: ' + detailTableId + ', app: ' + app);
             }
 
             return this.generateRelationship(masterTable, detailTable);
@@ -83,7 +84,7 @@
          * @param detailTable
          * @returns {*|{singleRun, autoWatch}}
          */
-        generateRelationship: function (masterTable, detailTable) {
+        generateRelationship: function(masterTable, detailTable) {
 
             var finalMasterField;
             var finalDetailField;
@@ -92,10 +93,10 @@
 
             //loop over all of the fields in the master table and pick a matching master and detail field
             //start at the end of the list so that we can pick fields that are not recordId
-            _.eachRight(masterTable[tableConsts.FIELDS], function(masterField){
+            _.eachRight(masterTable[tableConsts.FIELDS], function(masterField) {
                 fieldType = masterField[fieldConsts.fieldKeys.TYPE];
 
-                if(masterField[fieldConsts[fieldType].UNIQUE]) {
+                if (masterField[fieldConsts[fieldType].UNIQUE]) {
                     detailField = pickDetailField(masterField, detailTable);
 
                     if (!finalDetailField && detailField) {
@@ -105,7 +106,7 @@
                 }
             });
 
-            if(typeof finalDetailField === 'undefined' || typeof finalMasterField === 'undefined'){
+            if (typeof finalDetailField === 'undefined' || typeof finalMasterField === 'undefined') {
                 console.error('Could not find any matching field types in these two tables!');
                 throw new Error('Could not find any matching field types in these two tables!' + masterTable, detailTable);
             }
@@ -125,7 +126,7 @@
          * @param cascadeDelete
          * @returns {*|{singleRun, autoWatch}}
          */
-        generateRelationshipWithValues: function (description, masterTable, masterField, detailTable, detailField, referentialIntegrity, cascadeDelete) {
+        generateRelationshipWithValues: function(description, masterTable, masterField, detailTable, detailField, referentialIntegrity, cascadeDelete) {
             var builderInstance = this.getRelationshipBuilder();
             var masterAppId = masterTable[tableConsts.APP_ID];
             var detailAppId = detailTable[tableConsts.APP_ID];
@@ -152,46 +153,45 @@
          * @param relationship
          * @returns {boolean}
          */
-        validateRelationshipProperties : function(relationship){
+        validateRelationshipProperties: function(relationship) {
+            var relationshipPropsValid = true;
 
-           var relationshipPropsValid = true;
-
-            if(typeof relationship[relationshipConstants.MASTER_APP_ID] !== 'string'){
+            if (typeof relationship[relationshipConstants.MASTER_APP_ID] !== 'string') {
                 relationshipPropsValid = false;
                 console.error('The master appId of the relationship was not a string. Relationship: ' + JSON.stringify(relationship));
             }
 
-            if(typeof relationship[relationshipConstants.MASTER_TABLE_ID] !== 'string'){
+            if (typeof relationship[relationshipConstants.MASTER_TABLE_ID] !== 'string') {
                 relationshipPropsValid = false;
                 console.error('The master tableId of the relationship was not a string. Relationship: ' + JSON.stringify(relationship));
             }
 
-            if(typeof relationship[relationshipConstants.MASTER_FIELD_ID] !== 'number'){
+            if (typeof relationship[relationshipConstants.MASTER_FIELD_ID] !== 'number') {
                 relationshipPropsValid = false;
                 console.error('The master fieldId of the relationship was not a string. Relationship: ' + JSON.stringify(relationship));
             }
 
-            if(typeof relationship[relationshipConstants.DETAIL_APP_ID] !== 'string'){
+            if (typeof relationship[relationshipConstants.DETAIL_APP_ID] !== 'string') {
                 relationshipPropsValid = false;
                 console.error('The detail appId of the relationship was not a string. Relationship: ' + JSON.stringify(relationship));
             }
 
-            if(typeof relationship[relationshipConstants.DETAIL_TABLE_ID] !== 'string'){
+            if (typeof relationship[relationshipConstants.DETAIL_TABLE_ID] !== 'string') {
                 relationshipPropsValid = false;
                 console.error('The detail tableId of the relationship was not a string. Relationship: ' + JSON.stringify(relationship));
             }
 
-            if(typeof relationship[relationshipConstants.DETAIL_FIELD_ID] !== 'number'){
+            if (typeof relationship[relationshipConstants.DETAIL_FIELD_ID] !== 'number') {
                 relationshipPropsValid = false;
                 console.error('The detail fieldId of the relationship was not a number. Relationship: ' + JSON.stringify(relationship));
             }
 
-            if(typeof relationship[relationshipConstants.REFERENTIAL_INTEGRITY] !== 'boolean'){
+            if (typeof relationship[relationshipConstants.REFERENTIAL_INTEGRITY] !== 'boolean') {
                 relationshipPropsValid = false;
                 console.error('The referential integrity on the relationship was not a boolean. Relationship: ' + JSON.stringify(relationship));
             }
 
-            if(typeof relationship[relationshipConstants.CASCADE_DELETE] !== 'boolean'){
+            if (typeof relationship[relationshipConstants.CASCADE_DELETE] !== 'boolean') {
                 relationshipPropsValid = false;
                 console.error('The referential integrity on the relationship was not a boolean. Relationship: ' + JSON.stringify(relationship));
             }
@@ -211,8 +211,7 @@
     function pickDetailField(masterField, detailTable) {
         var dataType = masterField[fieldConsts.fieldKeys.DATA_TYPE_ATTRIBUTES][datatypeConsts.dataTypeKeys.TYPE];
 
-        return _.find(detailTable[tableConsts.FIELDS], function(candidateField){
-
+        return _.find(detailTable[tableConsts.FIELDS], function(candidateField) {
             return candidateField[fieldConsts.fieldKeys.DATA_TYPE_ATTRIBUTES][datatypeConsts.dataTypeKeys.TYPE] === dataType;
         });
     }

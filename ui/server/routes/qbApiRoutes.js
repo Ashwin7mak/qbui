@@ -1,12 +1,12 @@
 /**
  *
  */
-(function () {
+(function() {
     'use strict';
     var log = require('../logger').getLogger();
     var _ = require('lodash');
 
-    module.exports = function (app, config, routeMapper) {
+    module.exports = function(app, config, routeMapper) {
 
         // This config.env refers to the node env - it is the way in which we know what routes to enable versus disable,
         // and configure anything environment specific.
@@ -34,9 +34,8 @@
      * @param app
      * @param routeMapper
      */
-    function initializeRoutes(routes, app, routeMapper){
-
-        _.forEach(routes, function (route) {
+    function initializeRoutes(routes, app, routeMapper) {
+        _.forEach(routes, function(route) {
 
             var getFunctionForRoute = routeMapper.fetchGetFunctionForRoute(route);
             var postFunctionForRoute = routeMapper.fetchPostFunctionForRoute(route);

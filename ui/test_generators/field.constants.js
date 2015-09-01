@@ -4,13 +4,14 @@
  * Created by cschneider1 on 5/29/15.
  */
 (function() {
+    'use strict';
     var consts = require('../server/api/constants');
 
 
     //These are constants common to all fields
     module.exports = Object.freeze({
         //Field property names common to all fields
-        fieldKeys: {
+        fieldKeys          : {
             ID                    : 'id',
             NAME                  : 'name',
             TYPE                  : 'type',
@@ -19,7 +20,7 @@
             DATA_IS_COPYABLE      : 'dataIsCopyable',
             INCLUDE_IN_QUICKSEARCH: 'includeInQuickSearch',
             CLIENT_SIDE_ATTRIBUTES: 'clientSideAttributes',
-            DATA_TYPE_ATTRIBUTES: 'datatypeAttributes'
+            DATA_TYPE_ATTRIBUTES  : 'datatypeAttributes'
         },
         /******************************************************************/
         /*            FIELD TYPES AVAILABLE FOR USE IN TABLES             */
@@ -35,29 +36,29 @@
         /******************************************************************/
         /*                  FIELD JSON KEYS                               */
         /******************************************************************/
-        SCALAR: {
+        SCALAR     : {
             fieldKeys: addScalarHierarchy({}),
-            types: addJsonTypeScalarHierarchy({})
+            types    : addJsonTypeScalarHierarchy({})
         },
-        FORMULA: {
+        FORMULA    : {
             fieldKeys: addFormulaHierarchy({}),
-            types: addJsonTypeFormulaHierarchy({})
+            types    : addJsonTypeFormulaHierarchy({})
         },
         REPORT_LINK: {
             fieldKeys: addReportLinkHierarchy({}),
-            types: addJsonTypeReportLinkHierarchy({})
+            types    : addJsonTypeReportLinkHierarchy({})
         },
-        SUMMARY: {
+        SUMMARY    : {
             fieldKeys: addSummaryHierarchy({}),
-            types: addJsonTypeSummaryHierarchy({})
+            types    : addJsonTypeSummaryHierarchy({})
         },
-        LOOKUP: {
+        LOOKUP     : {
             fieldKeys: addVirtualHierarchy({}),
-            types: addJsonTypeVirtualHierarchy({})
+            types    : addJsonTypeVirtualHierarchy({})
         },
-        CONCRETE: {
+        CONCRETE   : {
             fieldKeys: addConcreteHierarchy({}),
-            types: addJsonTypeConcreteHierarchy({})
+            types    : addJsonTypeConcreteHierarchy({})
         }
     });
 
@@ -108,6 +109,7 @@
         mapToModify.MULTIPLE_CHOICE = 'multipleChoice';
         mapToModify.MULTIPLE_CHOICE_SOURCE_ALLOWED = 'multipleChoiceSourceAllowed';
     }
+
     /**
      * Add all report link specific keys to the map
      * @param mapToModify
@@ -145,7 +147,7 @@
      * Add field keys and concrete keys to the map
      * @param mapToModify
      */
-    function addConcreteHierarchy(mapToModify){
+    function addConcreteHierarchy(mapToModify) {
         addFieldKeys(mapToModify);
         addConcreteKeys(mapToModify);
         return mapToModify;
@@ -155,7 +157,7 @@
      * add the concrete hierarchy and the scalar keys to the map
      * @param mapToModify
      */
-    function addScalarHierarchy(mapToModify){
+    function addScalarHierarchy(mapToModify) {
         addConcreteHierarchy(mapToModify);
         addScalarKeys(mapToModify);
         return mapToModify;
@@ -164,7 +166,7 @@
     /**
      * Add field keys and virtual field keys to the map
      */
-    function addVirtualHierarchy(mapToModify){
+    function addVirtualHierarchy(mapToModify) {
         addFieldKeys(mapToModify);
         addVirtualKeys(mapToModify);
         return mapToModify;
@@ -174,7 +176,7 @@
      * Add virtual hierarchy and the summary keys to the map
      * @param mapToModify
      */
-    function addSummaryHierarchy(mapToModify){
+    function addSummaryHierarchy(mapToModify) {
         addVirtualHierarchy(mapToModify);
         addSummaryKeys(mapToModify);
         return mapToModify;
@@ -184,7 +186,7 @@
      * Add field keys and report link keys to the map
      * @param mapToModify
      */
-    function addReportLinkHierarchy(mapToModify){
+    function addReportLinkHierarchy(mapToModify) {
         addFieldKeys(mapToModify);
         addReportLinkKeys(mapToModify);
         return mapToModify;
@@ -205,7 +207,7 @@
         mapToModify.BUILT_IN = 'boolean';
         mapToModify.DATA_IS_COPYABLE = 'boolean';
         mapToModify.INCLUDE_IN_QUICKSEARCH = 'boolean';
-        mapToModify.CLIENT_SIDE_ATTRIBUTES = 'object'
+        mapToModify.CLIENT_SIDE_ATTRIBUTES = 'object';
     }
 
     function addFormulaJsonTypes(mapToModify) {
@@ -277,7 +279,7 @@
      * Add field JsonTypes and concrete JsonTypes to the map
      * @param mapToModify
      */
-    function addJsonTypeConcreteHierarchy(mapToModify){
+    function addJsonTypeConcreteHierarchy(mapToModify) {
         addFieldJsonTypes(mapToModify);
         addConcreteJsonTypes(mapToModify);
         return mapToModify;
@@ -287,7 +289,7 @@
      * add the concrete hierarchy and the scalar JsonTypes to the map
      * @param mapToModify
      */
-    function addJsonTypeScalarHierarchy(mapToModify){
+    function addJsonTypeScalarHierarchy(mapToModify) {
         addJsonTypeConcreteHierarchy(mapToModify);
         addScalarJsonTypes(mapToModify);
         return mapToModify;
@@ -296,7 +298,7 @@
     /**
      * Add field JsonTypes and virtual field JsonTypes to the map
      */
-    function addJsonTypeVirtualHierarchy(mapToModify){
+    function addJsonTypeVirtualHierarchy(mapToModify) {
         addFieldJsonTypes(mapToModify);
         addVirtualJsonTypes(mapToModify);
         return mapToModify;
@@ -306,7 +308,7 @@
      * Add virtual hierarchy and the summary JsonTypes to the map
      * @param mapToModify
      */
-    function addJsonTypeSummaryHierarchy(mapToModify){
+    function addJsonTypeSummaryHierarchy(mapToModify) {
         addJsonTypeVirtualHierarchy(mapToModify);
         addSummaryJsonTypes(mapToModify);
         return mapToModify;
@@ -316,7 +318,7 @@
      * Add field JsonTypes and report link JsonTypes to the map
      * @param mapToModify
      */
-    function addJsonTypeReportLinkHierarchy(mapToModify){
+    function addJsonTypeReportLinkHierarchy(mapToModify) {
         addFieldJsonTypes(mapToModify);
         addReportLinkJsonTypes(mapToModify);
         return mapToModify;
