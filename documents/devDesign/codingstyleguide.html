@@ -1,0 +1,370 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Re-Arch UI Coding Style Guide</title>
+    <style>
+.styleguide {
+    font-family: BentonSans, "Helvetica Neue", Arial, sans-serif;
+    font-size: 0.9em;
+}
+.styleguide h1.title {
+    width: 100%;
+    background-color: #0066aa;
+    color: white;
+    padding-left: 30px;
+    box-sizing: border-box;
+}
+
+.styleguide .right, .wrong, .example {
+    background-color: white;
+    line-height: 1.5em;
+    padding: 0;
+    border-radius: 6px;
+    border: 1px solid #aaaaaa;
+    width: 75%;
+    margin-top: 10px;
+}
+
+.styleguide .heading span {
+    padding-left: 10px;
+    font-size: 0.7em;
+}
+
+.styleguide .styleitem {
+    margin-top: 10px;
+}
+
+.styleguide pre {
+    margin: 5px 0 5px 10px;
+}
+.styleguide ol {
+    width: 50%;
+}
+.styleguide ul {
+    margin-bottom: 10px;
+    background-color: #ffffcc;
+    border-left: 4px solid #444444;
+}
+.styleguide ul li {
+    list-style-type: none;
+    display: inline-block;
+    /* background-color: #cceeff; */
+    padding: 2px;
+    margin-right: 3px;
+    border-radius: 3px;
+}
+.styleguide .heading {
+    display: inline-block;
+    width: 100%;
+    border-top-left-radius: 6px;
+    border-top-right-radius: 6px;
+}
+
+.styleguide .right .heading {
+    background-color: #aaffaa;
+}
+
+.styleguide .wrong .heading {
+    background-color: #ffaaaa;
+}
+
+.styleguide .example .heading {
+    background-color: #aaaaaa;
+}
+
+.styleguide .jscs  {
+    background-color: #ddd;
+    color: #444;
+}
+
+.styleguide .jscsid {
+    font-weight: bold;
+}
+
+.styleguide .jscsrule {
+    font-style: italic;
+}
+
+    </style>
+</head>
+<body class="default">
+    <div class="styleguide">
+        <h1 class="title">Re-Arch UI Coding Style Guide</h1>
+        <ol>
+                <li class="styleitem">
+                <p class="description">
+                    Empty blocks are not allowed, except for <code>catch</code> blocks.
+                </p>
+                    <div class="right">
+                        <span class="heading"><span>DO THIS</span></span>
+                        <pre><code class="lang-js">if (a === b) {c = true }try {a = b} catch(e) {};</code></pre>
+                    </div>
+                    <div class="wrong">
+                        <span class="heading"><span>NOT THIS</span></span>
+                        <pre><code>if (a ===b_ {} else {d == false}</code></pre>
+                    </div>
+                
+                </li>
+                <li class="styleitem">
+                <p class="description">
+                    Do not use the following keywords:
+                </p>
+                <ul class="jscslist">
+                        <li>"with"</li>
+                </ul>
+                
+                </li>
+                <li class="styleitem">
+                <p class="description">
+                    Do not place the following keywords on a new line:
+                </p>
+                <ul class="jscslist">
+                        <li>"else"</li>
+                        <li>"catch"</li>
+                </ul>
+                    <div class="right">
+                        <span class="heading"><span>DO THIS</span></span>
+                        <pre><code class="lang-js">} else {</code></pre>
+                    </div>
+                    <div class="wrong">
+                        <span class="heading"><span>NOT THIS</span></span>
+                        <pre><code>}else {</code></pre>
+                    </div>
+                
+                </li>
+                <li class="styleitem">
+                <p class="description">
+                    Lines may not contain a mixture of spaces and tab (\t) characacters. 
+                </p>
+                    <div class="right">
+                        <span class="heading"><span>DO THIS</span></span>
+                        <pre><code class="lang-js">   x = 1; // \t   y = 2; // \s\s\s\s</code></pre>
+                    </div>
+                    <div class="wrong">
+                        <span class="heading"><span>NOT THIS</span></span>
+                        <pre><code>     z = 3; // \t\s</code></pre>
+                    </div>
+                
+                </li>
+                <li class="styleitem">
+                <p class="description">
+                    Do not put any spaces after a unary prefix operator.
+                </p>
+                    <div class="right">
+                        <span class="heading"><span>DO THIS</span></span>
+                        <pre><code class="lang-js">var x = ++y;</code></pre>
+                    </div>
+                    <div class="wrong">
+                        <span class="heading"><span>NOT THIS</span></span>
+                        <pre><code>var x = ++ y;</code></pre>
+                    </div>
+                
+                </li>
+                <li class="styleitem">
+                <p class="description">
+                    There must not be a space before the opening paren in a <code>function</code> expression.
+                </p>
+                    <div class="right">
+                        <span class="heading"><span>DO THIS</span></span>
+                        <pre><code class="lang-js">var x = function() {};</code></pre>
+                    </div>
+                    <div class="wrong">
+                        <span class="heading"><span>NOT THIS</span></span>
+                        <pre><code>var x = function () {};</code></pre>
+                    </div>
+                
+                </li>
+                <li class="styleitem">
+                <p class="description">
+                    In an Array, do not put a space after the opening square bracket, or before the closing square bracket.
+                </p>
+                    <div class="right">
+                        <span class="heading"><span>DO THIS</span></span>
+                        <pre><code class="lang-js">var x = [1, 2];var x = [1, [2, 3]];</code></pre>
+                    </div>
+                    <div class="wrong">
+                        <span class="heading"><span>NOT THIS</span></span>
+                        <pre><code>var x = [ 1, 2];var x = [1, 2 ];var x = [1, [ 2, 3 ] ];</code></pre>
+                    </div>
+                
+                </li>
+                <li class="styleitem">
+                <p class="description">
+                    In an expression, do not put a space after the opening paren, or before the closing paren.
+                </p>
+                    <div class="right">
+                        <span class="heading"><span>DO THIS</span></span>
+                        <pre><code class="lang-js">var x = (3 + 4) * 5;var x = (3 * (4 + 5)) * 6;</code></pre>
+                    </div>
+                    <div class="wrong">
+                        <span class="heading"><span>NOT THIS</span></span>
+                        <pre><code>var x = ( 3 + 4);var x = (3 + 4 );var x = (3 + ( 4 * 5) ) / 6;</code></pre>
+                    </div>
+                
+                </li>
+                <li class="styleitem">
+                <p class="description">
+                     All constructors except for <code>this</code> must be capitalized.
+                </p>
+                    <div class="right">
+                        <span class="heading"><span>DO THIS</span></span>
+                        <pre><code class="lang-js">var x = new A();var y = new this();</code></pre>
+                    </div>
+                    <div class="wrong">
+                        <span class="heading"><span>NOT THIS</span></span>
+                        <pre><code>var x = new a();</code></pre>
+                    </div>
+                
+                </li>
+                <li class="styleitem">
+                <p class="description">
+                    When a list is split over multiple lines, the comma separator must come at the end of a line.
+                </p>
+                    <div class="right">
+                        <span class="heading"><span>DO THIS</span></span>
+                        <pre><code class="lang-js">var x = {    one: 1,    two: 2,    three: 3};</code></pre>
+                    </div>
+                    <div class="wrong">
+                        <span class="heading"><span>NOT THIS</span></span>
+                        <pre><code>var x = {    one: 1    ,two: 2    ,three: 3};</code></pre>
+                    </div>
+                
+                </li>
+                <li class="styleitem">
+                <p class="description">
+                    Curly braces are required after the following statements:
+                </p>
+                <ul class="jscslist">
+                        <li>"if"</li>
+                        <li>"else"</li>
+                        <li>"for"</li>
+                        <li>"while"</li>
+                        <li>"do"</li>
+                        <li>"try"</li>
+                        <li>"catch"</li>
+                </ul>
+                    <div class="right">
+                        <span class="heading"><span>DO THIS</span></span>
+                        <pre><code class="lang-js">if (condition) {    someThing();}</code></pre>
+                    </div>
+                    <div class="wrong">
+                        <span class="heading"><span>NOT THIS</span></span>
+                        <pre><code>if (condition) someThing();</code></pre>
+                    </div>
+                
+                </li>
+                <li class="styleitem">
+                <p class="description">
+                    A space is required after all binary operators.
+                </p>
+                    <div class="right">
+                        <span class="heading"><span>DO THIS</span></span>
+                        <pre><code class="lang-js">x + y;</code></pre>
+                    </div>
+                    <div class="wrong">
+                        <span class="heading"><span>NOT THIS</span></span>
+                        <pre><code>x +y;</code></pre>
+                    </div>
+                
+                </li>
+                <li class="styleitem">
+                <p class="description">
+                    The following keywords must be followed by a space:
+                </p>
+                <ul class="jscslist">
+                        <li>"if"</li>
+                        <li>"else"</li>
+                        <li>"for"</li>
+                        <li>"while"</li>
+                        <li>"do"</li>
+                        <li>"switch"</li>
+                        <li>"case"</li>
+                        <li>"return"</li>
+                        <li>"try"</li>
+                        <li>"catch"</li>
+                        <li>"typeof"</li>
+                </ul>
+                    <div class="right">
+                        <span class="heading"><span>DO THIS</span></span>
+                        <pre><code class="lang-js">if (x) {    x++;}</code></pre>
+                    </div>
+                    <div class="wrong">
+                        <span class="heading"><span>NOT THIS</span></span>
+                        <pre><code>if(x) {    x++;}</code></pre>
+                    </div>
+                
+                </li>
+                <li class="styleitem">
+                <p class="description">
+                    Do not allow 'sticky' binary operators. The following operators must be preceeded by a space:
+                </p>
+                    <div class="right">
+                        <span class="heading"><span>DO THIS</span></span>
+                        <pre><code class="lang-js">x != y;</code></pre>
+                    </div>
+                    <div class="wrong">
+                        <span class="heading"><span>NOT THIS</span></span>
+                        <pre><code>x!= y;</code></pre>
+                    </div>
+                
+                </li>
+                <li class="styleitem">
+                <p class="description">
+                    A space is required before the opening brace of a block statement.
+                </p>
+                    <div class="right">
+                        <span class="heading"><span>DO THIS</span></span>
+                        <pre><code class="lang-js">if (condition) {    foo();}</code></pre>
+                    </div>
+                    <div class="wrong">
+                        <span class="heading"><span>NOT THIS</span></span>
+                        <pre><code>if (condition){    foo();}</code></pre>
+                    </div>
+                
+                </li>
+                <li class="styleitem">
+                <p class="description">
+                    In the conditional (ternary) operator, spaces are to be included as shown.
+                </p>
+                    <div class="right">
+                        <span class="heading"><span>DO THIS</span></span>
+                        <pre><code class="lang-js">var x = a ? b : c;</code></pre>
+                    </div>
+                    <div class="wrong">
+                        <span class="heading"><span>NOT THIS</span></span>
+                        <pre><code>var x = a?b:c;</code></pre>
+                    </div>
+                
+                </li>
+                <li class="styleitem">
+                <p class="description">
+                    Block statements must be indented with 4 space characters.
+                </p>
+                    <div class="right">
+                        <span class="heading"><span>DO THIS</span></span>
+                        <pre><code class="lang-js">if (a) {    b = c; \\ line is indented with 4 spaces}</code></pre>
+                    </div>
+                    <div class="wrong">
+                        <span class="heading"><span>NOT THIS</span></span>
+                        <pre><code>if (a) {      b = c; \\ line is indented with 6 spaces}</code></pre>
+                    </div>
+                
+                </li>
+                <li class="styleitem">
+                <p class="description">
+                    Strings must be quoted with single-quote (apostrophe).
+                </p>
+                    <div class="right">
+                        <span class="heading"><span>DO THIS</span></span>
+                        <pre><code class="lang-js">var s = &#x27;A String Value&#x27;;</code></pre>
+                    </div>
+                    <div class="wrong">
+                        <span class="heading"><span>NOT THIS</span></span>
+                        <pre><code>var s = &quot;A String Value&quot;;</code></pre>
+                    </div>
+                
+                </li>
+        </ol>
+    </div>
+</body>
+</html>        
