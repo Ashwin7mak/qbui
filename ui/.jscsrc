@@ -37,7 +37,13 @@
   "requireCapitalizedConstructors": true,
   "requireCommaBeforeLineBreak": true,
   "requireCurlyBraces": [
-    "do"
+    "if",
+    "else",
+    "for",
+    "while",
+    "do",
+    "try",
+    "catch"
   ],
   "requireDotNotation": true,
   //"requireLineFeedAtFileEnd": true,
@@ -59,7 +65,7 @@
   "requireSpaceBeforeBinaryOperators": true,
   "requireSpaceBeforeBlockStatements": true,
   "requireSpacesInConditionalExpression": true,
-  "safeContextKeyword": "context",
+  //"safeContextKeyword": "context",
   "validateIndentation": 4,
   "validateLineBreaks": "LF",
   "validateQuoteMarks": "'"
