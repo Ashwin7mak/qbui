@@ -191,7 +191,7 @@
             var reportJSON = {
                 name      : 'Test Report',
                 type      : 'TABLE',
-                ownerId   : '1000000',
+                ownerId   : '10000',
                 hideReport: false
                 //"query": "{'3'.EX.'1'}"
             };

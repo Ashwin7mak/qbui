@@ -9,7 +9,6 @@
     'use strict';
 
     // Uses the base / constants modules in the Node Server layer
-    // Launches a new instance of the Express Server
     var consts = require('../../../server/api/constants.js');
     var recordBase = require('../../../server/api/test/recordApi.base.js')();
 
@@ -20,7 +19,7 @@
     // Bluebird Promise library
     var promise = require('bluebird');
     // Node.js assert library
-    var assert = require('assert');
+    //var assert = require('assert');
     // Logger.js
     var log = require('../../../server/logger').getLogger();
 
@@ -66,7 +65,7 @@
                 var generatedApp = appGenerator.generateAppWithTablesFromMap(tableToFieldToFieldTypeMap);
 
                 // Create the app via the API
-                createApp(generatedApp).then(function(createdApp) {
+                recordBase.createAndGetApp(generatedApp).then(function(createdApp) {
 
                     // Set your global app object to use in the actual test method
                     app = createdApp;
@@ -100,24 +99,6 @@
 
 
         // TODO: QBSE-13517 Move these helper functions out into a service module or base class
-        /**
-         * Takes a generated JSON object and creates it via the REST API. Returns the create app JSON response body.
-         * Returns a promise.
-         */
-        function createApp(generatedApp) {
-            var deferred = promise.pending();
-            recordBase.createApp(generatedApp).then(function(appResponse) {
-                var createdApp = JSON.parse(appResponse.body);
-                assert(createdApp, 'failed to create app via the API');
-                //console.log('Create App Response: ' + app);
-                deferred.resolve(createdApp);
-            }).catch(function(error) {
-                console.log(JSON.stringify(error));
-                deferred.reject(error);
-            });
-
-            return deferred.promise;
-        }
 
         /**
          * Takes the create app JSON object and returns an array all of the non built in fields in the specified table.
@@ -181,7 +162,7 @@
             var reportJSON = {
                 name      : 'Protractor Table',
                 type      : 'TABLE',
-                ownerId   : '1000000',
+                ownerId   : '10000',
                 hideReport: false
                 //"query": "{'3'.EX.'1'}"
             };

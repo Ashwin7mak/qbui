@@ -52,6 +52,24 @@
                 });
                 return deferred.promise;
             },
+            /**
+             * Takes a generated JSON object and creates it via the REST API. Returns the create app JSON response body.
+             * Returns a promise.
+             */
+            createAndGetApp: function(generatedApp) {
+                var deferred = promise.pending();
+                recordBase.createApp(generatedApp).then(function(appResponse) {
+                    var createdApp = JSON.parse(appResponse.body);
+                    assert(createdApp, 'failed to create app via the API');
+                    //console.log('Create App Response: ' + app);
+                    deferred.resolve(createdApp);
+                }).catch(function(error) {
+                    console.log(JSON.stringify(error));
+                    deferred.reject(error);
+                });
+
+                return deferred.promise;
+            },
             //Helper method to create a relationship between two tables in an app
             createRelationship: function(relationshipToCreate) {
                 var deferred = promise.pending();

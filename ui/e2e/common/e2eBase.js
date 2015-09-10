@@ -7,7 +7,7 @@
     'use strict';
     var promise = require('bluebird');
     module.exports = function() {
-        var integrationBase = {
+        var e2eBase = {
 
             // Find a particular link (based on link text) in a list of links
             getLink: function(listOfLinks, linkText) {
@@ -66,7 +66,7 @@
 
         };
 
-        return integrationBase;
+        return e2eBase;
 
         // Can have locators for headers and footers here as well
     };
