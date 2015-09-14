@@ -28,7 +28,7 @@
         var cleanupDone = false;
         var app;
         var recordList;
-        var widthTests = [1280, 640, 3000];
+        var widthTests = [1024, 640, 1280];
         var heightTests = 2024;
         recordBase.setBaseUrl(browser.baseUrl);
         recordBase.initialize();
@@ -244,7 +244,7 @@
 
         function validateGridDimensions(result) {
             var leftPadding = 10;
-            var allowedVariance = 20;
+            var allowedVariance = 25;
             var pointOfLastColumn = result.lastColumnLoc.x + leftPadding + result.lastColumnSize.width;
             var pointOfMainContent = result.mainLoc.x + result.mainSize.width;
             var endsDiff = Math.abs(pointOfMainContent - pointOfLastColumn);
@@ -274,7 +274,7 @@
             var tableId = app.tables[0].id;
 
             //define the window size
-            browser.manage().window().setSize(widthTests[0], heightTests);
+            browser.driver.manage().window().setSize(widthTests[0], heightTests);
 
             // Get a session ticket for that subdomain and realmId (stores it in the browser)
             var sessionTicketRequest = recordBase.apiBase.generateFullRequest(realmName, ticketEndpoint + realmId);
@@ -286,7 +286,7 @@
             // Load the requestReportPage
             var requestReportPageEndPoint = recordBase.apiBase.generateFullRequest(realmName, '/qbapp#//');
             browser.get(requestReportPageEndPoint);
-            browser.driver.sleep(2000);
+            //browser.driver.sleep(2000);
 
             // Check that we have a report for our created table
             expect(requestReportPage.firstReportLinkEl.getText()).toContain(tableId);
@@ -295,18 +295,18 @@
             // Assert columns fill width
             promise.props(getDimensions(reportServicePage)).then(validateGridDimensions).then(function() {
                 //resize window smaller and recheck
-                browser.manage().window().setSize(widthTests[1], heightTests).then(function() {
+                browser.driver.manage().window().setSize(widthTests[1], heightTests).then(function() {
+                    browser.driver.sleep(40000);
                     promise.props(getDimensions(reportServicePage)).then(validateGridDimensions).then(function() {
                         //resize window larger and recheck
-                        browser.manage().window().setSize(widthTests[2], heightTests).then(function() {
+                        browser.driver.manage().window().setSize(widthTests[2], heightTests).then(function() {
+                            browser.driver.sleep(5000);
                             promise.props(getDimensions(reportServicePage)).then(validateGridDimensions);
                         });
                     });
                 });
             });
         });
-
-
         /**
          * Cleanup the test realm after all tests in the block. Same hack as in the setup method so it only runs once
          */
