@@ -311,6 +311,11 @@
          * Cleanup the test realm after all tests in the block. Same hack as in the setup method so it only runs once
          */
         afterEach(function(done) {
+            // Checks for any JS errors in the browser console
+            browser.manage().logs().get('browser').then(function(browserLog) {
+                expect(browserLog.length).toEqual(0);
+                if (browserLog.length) console.error('browser log: ' + JSON.stringify(browserLog));
+            });
             if (!cleanupDone) {
                 browser.driver.manage().window().maximize();
                 recordBase.apiBase.cleanup().then(function() {
