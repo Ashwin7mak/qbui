@@ -5,69 +5,80 @@
 
 (function() {
     'use strict';
+    // Bluebird Promise library
     var promise = require('bluebird');
-    module.exports = function() {
+    // Node.js assert library
+    //var assert = require('assert');
+    module.exports = function(config) {
+        var recordBase = require('../../server/api/test/recordApi.base.js')(config);
+        var appService = require('./appService.js');
+        var recordService = require('./recordService.js');
+        var tableService = require('./tableService.js');
+        var init;
+        if (config !== undefined) {
+            init = recordBase.initialize();
+        }
         var e2eBase = {
-
-            // Find a particular link (based on link text) in a list of links
-            getLink: function(listOfLinks, linkText) {
-                var linkDeferred = promise.pending();
-                // Check the size of the list first
-                expect(listOfLinks.length).not.toBe(null);
-                var arrayLength = listOfLinks.length;
-
-                var getTextPromises = [];
-
-                for (var i = 0; i < arrayLength; i++) {
-                    // Use === as it checks for type as well
-                    // console.log('searching');
-
-                    getTextPromises.push(listOfLinks[i].getText());
-                }
-
-                promise.all(getTextPromises)
-                        .then(function(responses) {
-                                  var valueFound = false;
-
-                                  for (var i = 0; i < responses.length; i++) {
-                                      if (responses[i] === linkText) {
-                                          // console.log('found link');
-                                          valueFound = true;
-                                          linkDeferred.resolve(responses[i]);
-                                      }
-                                  }
-                                  if (!valueFound) {
-                                      linkDeferred.reject('Could not find link');
-                                  }
-
-                              }).catch(function(error) {
-                                           linkDeferred.reject(error);
-                                       });
-
-                return linkDeferred.promise;
+            recordBase : recordBase,
+            //delegate to recordBase to initialize
+            initialize: function() {
+                init = recordBase.initialize();
             },
-
-            // Gets all links within a div element
-            // Returns a promise (calls Protractor's element.all() function)
-            getLinks: function(div) {
-                // Check that the div is not empty
-                expect(div).not.toEqual({});
-                return div.all(by.tagName('a'));
+            //set the baseUrl we want to use to reach out for testing
+            setBaseUrl: function(baseUrlConfig) {
+                recordBase.setBaseUrl(baseUrlConfig);
             },
+            // Initialize the service modules to use the same base class
+            appService : appService(recordBase),
+            recordService : recordService(recordBase),
+            tableService : tableService(recordBase),
+            /**
+             * Generates a report and creates it in a table via the API. Returns a promise.
+             */
+            // TODO: QBSE-13518 Write a report generator
+            createReport: function(app) {
+                var deferred = promise.pending();
+                var reportJSON = {
+                    name      : 'Test Report',
+                    type      : 'TABLE',
+                    ownerId   : '10000',
+                    hideReport: false
+                    //"query": "{'3'.EX.'1'}"
+                };
+                var reportsEndpoint = e2eBase.recordBase.apiBase.resolveReportsEndpoint(app.id, app.tables[0].id);
 
-            // Helper method that checks the classes of an element for only exact matches
-            // Use this method instead of toMatch() as that will return true for partial matches
-            hasClass: function(element, cls) {
-                return element.getAttribute('class').then(function(classes) {
-                    return classes.split(' ').indexOf(cls) !== -1;
+                // TODO: QBSE-13843 Create helper GET And POST functions that extend this executeRequest function
+                e2eBase.recordBase.apiBase.executeRequest(reportsEndpoint, 'POST', reportJSON).then(function(result) {
+                    //console.log('Report create result');
+                    var parsed = JSON.parse(result.body);
+                    var id = parsed.id;
+                    deferred.resolve(id);
+                }).catch(function(error) {
+                    console.log(JSON.stringify(error));
+                    deferred.reject(error);
                 });
+                return deferred.promise;
+            },
+
+            /**
+             * Helper function that will run an existing report in a table. Returns a promise.
+             */
+            runReport: function(app, reportId) {
+                var deferred = promise.pending();
+                var reportsEndpoint = e2eBase.recordBase.apiBase.resolveReportsEndpoint(app.id, app.tables[0].id, reportId);
+                var runReportEndpoint = reportsEndpoint + '/results';
+                e2eBase.recordBase.apiBase.executeRequest(runReportEndpoint, 'GET').then(function(result) {
+                    //console.log('Report create result');
+                    var responseBody = JSON.parse(result.body);
+                    //console.log(parsed);
+                    deferred.resolve(responseBody.records);
+                }).catch(function(error) {
+                    console.log(JSON.stringify(error));
+                    deferred.reject(error);
+                });
+                return deferred.promise;
             }
-
-
         };
-
         return e2eBase;
-
-        // Can have locators for headers and footers here as well
     };
 }());
