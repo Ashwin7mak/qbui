@@ -1,16 +1,18 @@
 /**
- * Integration base module that defines common locators / actions / functions to be used by all Protractor tests
- * Created by klabak on 4/15/15.
+ * Record service module which contains methods for generating record JSON objects and interacting with the Node server layer
+ * Created by klabak on 9/17/15.
  */
-
 (function() {
     'use strict';
     // Bluebird Promise library
     var promise = require('bluebird');
     var recordGenerator = require('../../test_generators/record.generator.js');
-
     module.exports = function(recordBase) {
         var recordService = {
+            /**
+             * Given an already created app and table, create a list of generated record JSON objects via the API.
+             * Returns a promise.
+             */
             addRecords: function(app, table, genRecords) {
                 var deferred = promise.pending();
                 // Resolve the proper record endpoint specific to the generated app and table
@@ -28,6 +30,10 @@
                     });
                 return deferred.promise;
             },
+            /**
+             * Uses the generators in the test_generators package to generate a list of record objects based on the
+             * given list of fields and number of records. This list can then be passed into the addRecords function.
+             */
             generateRecords: function(fields, numRecords) {
                 var generatedRecords = [];
                 for (var i = 0; i < numRecords; i++) {
@@ -40,16 +46,4 @@
         };
         return recordService;
     };
-    ///**
-    // * Takes an array of field objects and returns an array containing the specified number of generated record JSON objects.
-    // */
-    //exports.generateRecords = function(fields, numRecords) {
-    //    var generatedRecords = [];
-    //    for (var i = 0; i < numRecords; i++) {
-    //        var generatedRecord = recordGenerator.generateRecord(fields);
-    //        //console.log(generatedRecord);
-    //        generatedRecords.push(generatedRecord);
-    //    }
-    //    return generatedRecords;
-    //};
 }());
