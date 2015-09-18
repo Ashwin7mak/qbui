@@ -4,9 +4,9 @@
  */
 (function() {
     'use strict';
-    // Bluebird Promise library
+    //Bluebird Promise library
     var promise = require('bluebird');
-    // Node.js assert library
+    //Node.js assert library
     var assert = require('assert');
     module.exports = function(recordBase) {
         var appService = {

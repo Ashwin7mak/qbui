@@ -4,7 +4,7 @@
  */
 (function() {
     'use strict';
-    // Bluebird Promise library
+    //Bluebird Promise library
     var promise = require('bluebird');
     module.exports = function(recordBase) {
         var reportService = {

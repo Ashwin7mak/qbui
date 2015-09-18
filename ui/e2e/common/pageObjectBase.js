@@ -14,14 +14,13 @@
              */
             getLink: function(listOfLinks, linkText) {
                 var linkDeferred = promise.pending();
-                // Check the size of the list first
+                //Check the size of the list first
                 expect(listOfLinks.length).not.toBe(null);
                 var arrayLength = listOfLinks.length;
                 var getTextPromises = [];
                 for (var i = 0; i < arrayLength; i++) {
-                    // Use === as it checks for type as well
-                    // console.log('searching');
-
+                    //Use === as it checks for type as well
+                    //console.log('searching');
                     getTextPromises.push(listOfLinks[i].getText());
                 }
                 promise.all(getTextPromises)
@@ -47,7 +46,7 @@
              * Returns a promise (calls Protractor's element.all() function)
              */
             getLinks: function(div) {
-                // Check that the div is not empty
+                //Check that the div is not empty
                 expect(div).not.toEqual({});
                 return div.all(by.tagName('a'));
             },
@@ -64,6 +63,6 @@
 
         return pageObjectBase;
 
-        // Can have locators for headers and footers here as well
+        //Can have locators for headers and footers here as well
     };
 }());
