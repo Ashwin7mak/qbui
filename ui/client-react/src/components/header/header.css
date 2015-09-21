@@ -1,0 +1,22 @@
+.layout-header {
+    background-color: #f3f5f8;
+    color: #6e8ba8;
+    height: 40px;
+    min-height: 40px;
+    line-height: 40px;
+}
+
+.layout-header .leftContent {
+    margin-left: 10px;
+    float: left;
+    font-family: "HelveticaNeueBold", Helvetica, Arial, sans-serif;
+    font-size: 0.9rem;
+    font-weight: 500;
+    text-transform: uppercase;
+    -webkit-font-smoothing: antialiased;
+}
+
+.layout-header .rightContent {
+    margin-right: 10px;
+    float: right;
+}
