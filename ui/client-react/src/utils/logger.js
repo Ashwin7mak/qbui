@@ -1,44 +1,53 @@
 
 var LOG_LEVEL = {
-    DEBUG: 10,
-    INFO: 20,
-    WARN: 30,
-    ERROR: 40,
-    OFF: -99
+    DEBUG: 40,
+    INFO: 30,
+    WARN: 20,
+    ERROR: 10,
+    OFF: 99
 };
 
 class Logger {
 
     //  simple logging class..
-    // todo: xhr to node server to log message...
 
-    constructor(logLevel) {
-        if (logLevel) {
-            this.logLevel = logLevel;
+    constructor(config) {
+        if (config) {
+            this.logLevel = config.logLevel || LOG_LEVEL.OFF;
+            this.logToConsole = config.logToConsole || false;
+            this.logToServer = config.logToServer || false;
         }
     }
 
     debug(msg) {
-        if (LOG_LEVEL.DEBUG >= this.logLevel) {
-            console.log(msg);
+        if (this.logLevel <= LOG_LEVEL.DEBUG) {
+            this.logTheMessage(LOG_LEVEL.DEBUG, msg);
         }
     }
 
     info(msg) {
-        if (LOG_LEVEL.INFO >= this.logLevel) {
-            console.log(msg);
+        if (this.logLevel <= LOG_LEVEL.INFO) {
+            this.logTheMessage(LOG_LEVEL.DEBUG, msg);
         }
     }
 
     warn(msg) {
-        if (LOG_LEVEL.WARN >= this.logLevel) {
-            console.log(msg);
+        if (this.logLevel <= LOG_LEVEL.WARN) {
+            this.logTheMessage(LOG_LEVEL.DEBUG, msg);
         }
     }
 
     error(msg) {
-        if (LOG_LEVEL.ERROR >= this.logLevel) {
-            console.log(msg);
+        if (this.logLevel <= LOG_LEVEL.ERROR) {
+            this.logTheMessage(LOG_LEVEL.DEBUG, msg);
+        }
+    }
+
+    //  todo: might want to move this to a private class..
+    //  todo: xhr to node server to log server message...
+    logTheMessage(level, msg) {
+        if (this.logToConsole === true) {
+            console.log(level + ': ' + msg);
         }
     }
 }

@@ -6,8 +6,13 @@ import EN_US from '../locales/en_us';
 import FR_FR from '../locales/fr_fr';
 import {Logger,LOG_LEVEL} from '../utils/logger';
 
-// todo: log level should be retrieved/set as a configuration value per build..
-var logger = new Logger(LOG_LEVEL.DEBUG);
+// todo: should be retrieved/set as a configuration value per build..
+var logConfig = {
+    logLevel: LOG_LEVEL.DEBUG,
+    logToConsole: true,
+    logToServer: false
+};
+var logger = new Logger(logConfig);
 
 // todo: implement as a ES6 class
 var getLocale = function(locale) {
