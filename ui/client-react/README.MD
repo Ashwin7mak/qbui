@@ -19,14 +19,17 @@ Updated to include React modules.  When Angular is removed, will need to do the 
  
 * Start db server
 * Start lighhouse back-end server
+* cd to the ui folder
 * run grunt serve
     - browser should open to an unauthorized page
+    - generate a ticket for realm to view data
 
 #Build and launch React implementation of Lighhouse:
  
 * From command window:
+    * cd to the ui folder
     * npm run webpack
-    * NODE_ENV=REACT npm run webpack
+    * NODE_ENV=REACT npm start
     * Open browser and access localhost:9000 to view prototype lighthouse page
     
 #WebPack
