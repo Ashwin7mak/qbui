@@ -34,7 +34,7 @@ var Stage = React.createClass({
                                     <div className="header"><FormattedMessage message={this.getIntlMessage('lighthouse.stage.feedback.header')}/></div>
                                     <div className="subheader"><FormattedMessage message={this.getIntlMessage('lighthouse.stage.feedback.sub_header')}/></div>
                                 </div>
-                                <Button onClick={this.handleClick}> {<FormattedMessage message={this.getIntlMessage('lighthouse.stage.feedback.button')}/>}</Button>
+                                <Button bsStyle="primary" onClick={this.handleClick}> {<FormattedMessage message={this.getIntlMessage('lighthouse.stage.feedback.button')}/>}</Button>
                             </div>
                         </div>
                     </div>
