@@ -1,6 +1,7 @@
 
 import React from 'react';
 import './stage.css';
+import { Button } from 'react-bootstrap';
 
 //dangerouslySetInnerHTML={{__html: this.props.stageContent}}
 
@@ -19,7 +20,8 @@ var Stage = React.createClass({
         return <div className={stageClass}>
             <div id="layout-stage-content" className="layout-stage-content">
             </div>
-            <button onClick={this.toggleStage} className="tab arrow"></button>
+            /*<button onClick={this.toggleStage} className="tab arrow"></button>*/
+            <Button onClick={this.toggleStage} bsStyle="primary"></Button>
         </div>
     }
 });

@@ -1,6 +1,6 @@
 import React from 'react';
 import ReactIntl from 'react-intl';
-import Button from '../../../components/button/button.js';
+import { Button } from 'react-bootstrap';
 
 import '../../../assets/css/report.css';
 
@@ -34,7 +34,7 @@ var Stage = React.createClass({
                                     <div className="header"><FormattedMessage message={this.getIntlMessage('lighthouse.stage.feedback.header')}/></div>
                                     <div className="subheader"><FormattedMessage message={this.getIntlMessage('lighthouse.stage.feedback.sub_header')}/></div>
                                 </div>
-                                <Button onClick={this.handleClick} label={<FormattedMessage message={this.getIntlMessage('lighthouse.stage.feedback.button')}/>}/>
+                                <Button onClick={this.handleClick}> {<FormattedMessage message={this.getIntlMessage('lighthouse.stage.feedback.button')}/>}</Button>
                             </div>
                         </div>
                     </div>
