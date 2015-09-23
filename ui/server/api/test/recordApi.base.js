@@ -52,24 +52,6 @@
                 });
                 return deferred.promise;
             },
-            /**
-             * Takes a generated JSON object and creates it via the REST API. Returns the create app JSON response body.
-             * Returns a promise.
-             */
-            createAndGetApp: function(generatedApp) {
-                var deferred = promise.pending();
-                recordBase.createApp(generatedApp).then(function(appResponse) {
-                    var createdApp = JSON.parse(appResponse.body);
-                    assert(createdApp, 'failed to create app via the API');
-                    //console.log('Create App Response: ' + app);
-                    deferred.resolve(createdApp);
-                }).catch(function(error) {
-                    console.log(JSON.stringify(error));
-                    deferred.reject(error);
-                });
-
-                return deferred.promise;
-            },
             //Helper method to create a relationship between two tables in an app
             createRelationship: function(relationshipToCreate) {
                 var deferred = promise.pending();
@@ -84,7 +66,6 @@
                 });
                 return deferred.promise;
             },
-
             createField: function(appId, tableId, fieldToCreate) {
                 var deferred = promise.pending();
                 init.then(function() {
@@ -98,7 +79,6 @@
                 });
                 return deferred.promise;
             },
-
             fetchRecord: function(appId, tableId, recordId, params) {
                 var deferred = promise.pending();
                 var endpoint = apiBase.resolveRecordsEndpoint(appId, tableId, recordId);
@@ -117,7 +97,6 @@
                 });
                 return deferred.promise;
             },
-
             // Creates and fetches a record, returning a promise that is resolved or rejected on successful
             // record GET following the create
             createAndFetchRecord: function(recordsEndpoint, record, params) {
@@ -140,7 +119,6 @@
                 }).catch(function(err) {log.error(JSON.stringify(err));});
                 return fetchRecordDeferred.promise;
             },
-
             // Creates a list of records using the bulk record endpoint, returning a promise that is resolved or rejected on successful
             createRecords: function(recordsEndpoint, records) {
                 log.debug('Records to create: ' + JSON.stringify(records));
@@ -168,7 +146,6 @@
                 }).catch(function(err) {log.error(JSON.stringify(err));});
                 return fetchRecordDeferred.promise;
             },
-
             // Gets a record given their record ID, returning a promise that is resolved or rejected on successful
             getRecord: function(recordsEndpoint, recordId, params) {
                 var fetchRecordDeferred = promise.pending();
