@@ -8,7 +8,7 @@ var PROD = JSON.parse(process.env.NODE_ENV === 'PRODUCTION' || "0");
 var config = {
     devtool: "source-map",
     entry: [
-        path.resolve(__dirname, 'client-react/src/scripts/reportEntry.js'),   // TODO:entry point...probably should rename to something like quickbase.js
+        path.resolve(__dirname, 'client-react/src/scripts/router.js'),   // TODO:entry point...probably should rename to something like quickbase.js
         "bootstrap-sass!./client-react/bootstrap-sass.config.js"
     ],
     output: {

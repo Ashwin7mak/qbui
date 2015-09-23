@@ -6,51 +6,50 @@
  ERROR	Runtime errors or unexpected conditions.
  OFF	Turn off logging.
  */
-var LOG_LEVEL = {
-    DEBUG: {id:40,name:'DEBUG'},
-    INFO: {id:30,name:'INFO'},
-    WARN: {id:20,name:'WARN'},
-    ERROR: {id:10,name:'ERROR'},
-    OFF: {id:0,name:'OFF'},
-};
+import Configuration from '../config/app.config';
+import LogLevel from './logLevels';
 
 class Logger {
 
-    //  simple logging class..
-
     constructor(config) {
         // Set to what we'd expect we'd want for production, in case there's an issue with the config
-        this.logLevel = LOG_LEVEL.ERROR;
+        this.logLevel = LogLevel.ERROR;
         this.logToConsole = false;
         this.logToServer = true;
 
+        //  allow for override of application level settings
         if (config) {
-            this.logLevel = config.logLevel || LOG_LEVEL.ERROR;
-            this.logToConsole = config.logToConsole || false;
-            this.logToServer = config.logToServer || true;
+            this.logLevel = config.logger.logLevel || LogLevel.ERROR;
+            this.logToConsole = config.logger.logToConsole || false;
+            this.logToServer = config.logger.logToServer || true;
+        }
+        else if (Configuration.logger) {
+            this.logLevel = Configuration.logger.logLevel || LogLevel.ERROR;
+            this.logToConsole = Configuration.logger.logToConsole || false;
+            this.logToServer = Configuration.logger.logToServer || true;
         }
     }
 
     debug(msg) {
-        if (LOG_LEVEL.DEBUG.id <= this.logLevel.id) {
+        if (LogLevel.DEBUG.id <= this.logLevel.id) {
             this.logTheMessage(this.logLevel, msg);
         }
     }
 
     info(msg) {
-        if (LOG_LEVEL.INFO.id <= this.logLevel.id) {
+        if (LogLevel.INFO.id <= this.logLevel.id) {
             this.logTheMessage(this.logLevel, msg);
         }
     }
 
     warn(msg) {
-        if (LOG_LEVEL.WARN.id <= this.logLevel.id) {
+        if (LogLevel.WARN.id <= this.logLevel.id) {
             this.logTheMessage(this.logLevel, msg);
         }
     }
 
     error(msg) {
-        if (LOG_LEVEL.ERROR.id <= this.logLevel.id) {
+        if (LogLevel.ERROR.id <= this.logLevel.id) {
             this.logTheMessage(this.logLevel, msg);
         }
     }
@@ -62,7 +61,8 @@ class Logger {
                 window.console.log(level.name + ': ' + msg);
             }
             if (this.logToServer === true) {
-                // make xhr call to server to log on node
+                // TODO: make xhr call to server to log on node
+                // TODO: include uuid on the request
             }
         }
         catch (e) {
@@ -73,4 +73,4 @@ class Logger {
     }
 }
 
-export {Logger, LOG_LEVEL};
+export default Logger;

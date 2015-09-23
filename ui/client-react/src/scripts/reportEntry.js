@@ -28,7 +28,7 @@ var CurrentDate = React.createClass({
 React.render(
     <div>
         <Header leftContent="Intuit QuickBase" rightContent={<CurrentDate/>}/>
-        <Stage />
+        <Stage stageContent="this is the stage content text"/>
         <div id="layout-content"></div>
         <Footer {...i18n} />
     </div>, document.getElementById('content')
