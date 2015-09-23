@@ -18,6 +18,7 @@ var logger = new Logger(logConfig);
 var getLocale = function(locale) {
     'use strict';
     logger.debug('Fetching locale: ' + locale);
+
     try {
         switch (locale.toLowerCase()) {
             case 'en-us':
@@ -29,6 +30,7 @@ var getLocale = function(locale) {
                 return EN_US;
         }
     }
+
     catch (e) {
         //  any error automatically returns default locale
         logger.error('Error fetching locale; error=' + e);
