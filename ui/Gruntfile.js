@@ -149,7 +149,7 @@ module.exports = function(grunt) {
                     src: ['<%= express.root %>/**/*.js']
                 },
                 options: {
-                    config: './.jscsrc',
+                    config: './.jscsrc'
                     // excludeFiles: ['<%= express.root %>/**/*.spec.js']
                 }
             },
@@ -158,7 +158,7 @@ module.exports = function(grunt) {
                     src: ['test_generators/**/*.js']
                 },
                 options: {
-                    config: './.jscsrc',
+                    config: './.jscsrc'
                     //             excludeFiles: ['test_generators/**/*.spec.js']
                 }
             }
@@ -642,9 +642,15 @@ module.exports = function(grunt) {
                     baseUrl   : baseUrl
                 }
             },
-            sauce_linux_firefox: {
+            sauce_linux_firefox : {
                 options: {
                     configFile: './e2e/config/sauce.firefox.linux.protractor.conf.js',
+                    baseUrl   : baseUrl
+                }
+            },
+            sauce_multi_browser : {
+                options: {
+                    configFile: './e2e/config/sauce.multi.browser.protractor.conf.js',
                     baseUrl   : baseUrl
                 }
             },
@@ -898,6 +904,15 @@ module.exports = function(grunt) {
                 'env:e2e',
                 'sauce_connect',
                 'protractor:sauce_linux_chrome',
+                'sauce-connect-close'
+            ]);
+        }
+
+        if (target === 'e2eMulti') {
+            return grunt.task.run([
+                'env:e2e',
+                'sauce_connect',
+                'protractor:sauce_multi_browser',
                 'sauce-connect-close'
             ]);
         }

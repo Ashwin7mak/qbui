@@ -66,7 +66,6 @@
                 });
                 return deferred.promise;
             },
-
             createField: function(appId, tableId, fieldToCreate) {
                 var deferred = promise.pending();
                 init.then(function() {
@@ -80,7 +79,6 @@
                 });
                 return deferred.promise;
             },
-
             fetchRecord: function(appId, tableId, recordId, params) {
                 var deferred = promise.pending();
                 var endpoint = apiBase.resolveRecordsEndpoint(appId, tableId, recordId);
@@ -99,7 +97,6 @@
                 });
                 return deferred.promise;
             },
-
             // Creates and fetches a record, returning a promise that is resolved or rejected on successful
             // record GET following the create
             createAndFetchRecord: function(recordsEndpoint, record, params) {
@@ -122,7 +119,6 @@
                 }).catch(function(err) {log.error(JSON.stringify(err));});
                 return fetchRecordDeferred.promise;
             },
-
             // Creates a list of records using the bulk record endpoint, returning a promise that is resolved or rejected on successful
             createRecords: function(recordsEndpoint, records) {
                 log.debug('Records to create: ' + JSON.stringify(records));
@@ -150,7 +146,6 @@
                 }).catch(function(err) {log.error(JSON.stringify(err));});
                 return fetchRecordDeferred.promise;
             },
-
             // Gets a record given their record ID, returning a promise that is resolved or rejected on successful
             getRecord: function(recordsEndpoint, recordId, params) {
                 var fetchRecordDeferred = promise.pending();

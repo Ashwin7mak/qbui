@@ -7,7 +7,7 @@
     exports.config = {
         // The timeout for each script run on the browser. This should be longer
         // than the maximum time your application needs to stabilize between tasks.
-        allScriptsTimeout: 110000,
+        allScriptsTimeout: 120000,
 
         //The sauce user and access key allow us to run our browser tests remotely on a SauceLabs VM
         sauceUser           : 'sbg_qbse',
@@ -19,7 +19,7 @@
 
         // list of files / patterns to load in the browser
         specs: [
-            '../qbapp/**/*.spec.js'
+            '../qbapp/**/*.e2e.spec.js'
         ],
 
         // Patterns to exclude.
@@ -37,7 +37,7 @@
         capabilities: {
             browserName     : 'chrome',
             tunnelIdentifier: process.env.ENV_TUNNEL_NAME,
-            name            : process.env.SAUCE_JOB_NAME
+            name            : process.env.SAUCE_JOB_NAME + '_Linux_Chrome'
         },
 
         // ----- The test framework -----
@@ -51,7 +51,7 @@
         //
         // See the full list at https://github.com/juliemr/minijasminenode
         jasmineNodeOpts: {
-            defaultTimeoutInterval: 60000
+            defaultTimeoutInterval: 90000
         }
     };
 }());
