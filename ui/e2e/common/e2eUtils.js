@@ -10,12 +10,12 @@
              * Helper function that will convert an array of strings to uppercase
              */
             stringArrayToUpperCase: function(array) {
-                var upperArray = [];
-                array.forEach(function(lowerString) {
-                    var res = lowerString.toUpperCase();
-                    upperArray.push(res);
-                });
-                return upperArray;
+                // Modify the array inline instead of creating a new one
+                var index;
+                for (index = 0; index < array.length; ++index) {
+                    array[index] = array[index].toUpperCase();
+                }
+                return array;
             }
         };
         return e2eUtils;

@@ -19,8 +19,6 @@
                 var arrayLength = listOfLinks.length;
                 var getTextPromises = [];
                 for (var i = 0; i < arrayLength; i++) {
-                    //Use === as it checks for type as well
-                    //console.log('searching');
                     getTextPromises.push(listOfLinks[i].getText());
                 }
                 promise.all(getTextPromises)
@@ -28,7 +26,6 @@
                                   var valueFound = false;
                                   for (var i = 0; i < responses.length; i++) {
                                       if (responses[i] === linkText) {
-                                          // console.log('found link');
                                           valueFound = true;
                                           linkDeferred.resolve(responses[i]);
                                       }
