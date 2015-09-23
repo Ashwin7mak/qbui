@@ -173,7 +173,9 @@
             // Checks for any JS errors in the browser console
             browser.manage().logs().get('browser').then(function(browserLog) {
                 expect(browserLog.length).toEqual(0);
-                if (browserLog.length) console.error('browser log: ' + JSON.stringify(browserLog));
+                if (browserLog.length) {
+                    console.error('browser log: ' + JSON.stringify(browserLog));
+                }
             });
             // Cleanup the realm when finished
             if (!cleanupDone) {
