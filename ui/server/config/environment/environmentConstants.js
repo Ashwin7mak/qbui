@@ -9,10 +9,7 @@
         INTEGRATION: 'INTEGRATION',
         DEVELOPMENT: 'DEVELOPMENT',
         TEST       : 'TEST',
-        LOCAL      : 'LOCAL',
-        //  START TEMPORARY -- while we support Angular lighthouse..
-        REACT      : 'REACT'
-        //  END TEMPORARY
+        LOCAL      : 'LOCAL'
     });
 
 }());

@@ -41,6 +41,6 @@ var Stage = React.createClass({
                  </div>
                </div>
     }
-})
+});
 
 export default Stage;

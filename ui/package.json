@@ -33,8 +33,7 @@
     "react-router": "^0.13.3",
     "request": "^2.53.0",
     "serve-favicon": "~2.0.1",
-    "uuid": "^2.0.1",
-    "webpack": "^1.12.2"
+    "uuid": "^2.0.1"
   },
   "devDependencies": {
     "babel-loader": "^5.3.2",
@@ -68,7 +67,7 @@
     "grunt-env": "~0.4.1",
     "grunt-express-server": "~0.4.19",
     "grunt-google-cdn": "~0.4.0",
-    "grunt-jscs": "^1.5.0",
+    "grunt-jscs": "^2.1.0",
     "grunt-karma": "~0.8.2",
     "grunt-mocha-istanbul": "^2.3.1",
     "grunt-mocha-test": "~0.10.2",
@@ -83,6 +82,7 @@
     "grunt-shell-spawn": "^0.3.8",
     "grunt-svgmin": "^2.0.1",
     "grunt-usemin": "~2.1.1",
+    "grunt-webpack": "^1.0.11",
     "grunt-wiredep": "~1.8.0",
     "istanbul": "~0.3.11",
     "jit-grunt": "^0.5.0",
@@ -119,14 +119,17 @@
     "style-loader": "^0.12.4",
     "supertest": "~0.11.0",
     "time-grunt": "~0.3.1",
-    "url-loader": "^0.5.6"
+    "url-loader": "^0.5.6",
+    "webpack": "^1.12.2",
+    "webpack-dev-server": "^1.11.0"
   },
   "engines": {
     "node": ">=0.10.0"
   },
   "scripts": {
-    "webpack": "webpack --config webpack.js",
-    "watch": "webpack --config webpack.js --watch",
+    "webpack": "webpack -d --config webpack.config.js",
+    "watch": "webpack --config webpack.config.js --watch",
+    "devserv" :  "webpack-dev-server -d --config webpack.config.js --colors ",
     "start": "node server/app.js",
     "test": "grunt test",
     "update-webdriver": "node node_modules/grunt-protractor-runner/node_modules/protractor/bin/webdriver-manager update"

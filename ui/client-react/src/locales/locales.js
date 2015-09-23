@@ -28,12 +28,11 @@ var getLocale = function(locale) {
                 logger.error('Locale not found.  Returning default: en_US');
                 return EN_US;
         }
-    }
-    catch (e) {
+    } catch (e) {
         //  any error automatically returns default locale
         logger.error('Error fetching locale; error=' + e);
         return EN_US;
     }
-}
+};
 
 export { getLocale, ReactIntl };

@@ -1,4 +1,6 @@
 {
+ // "esprima": "esprima-fb",
+  "esnext" : true,
   "disallowEmptyBlocks": true,
   "disallowKeywords": [
     "with"
@@ -67,6 +69,6 @@
   "requireSpacesInConditionalExpression": true,
   //"safeContextKeyword": "context",
   "validateIndentation": 4,
-  "validateLineBreaks": "LF",
-  "validateQuoteMarks": "'"
+  "validateLineBreaks": "LF"
+  //"validateQuoteMarks": "'"
 }

@@ -19,6 +19,39 @@ module.exports = function(grunt) {
     //arguments along to sauce-connect-launcher
     var httpProxy = grunt.option('httpProxyHost') !== undefined ? grunt.option('httpProxyHost') + ':80 --proxy-tunnel' : null;
     var useColors = grunt.option('colors') || false;
+    var client = (process.env.CLIENT && process.env.CLIENT === 'REACT') ? 'REACT' : 'ANGULAR';
+    var webpack = require('webpack');
+    var webpackConfig = require('./webpack.config.js');
+
+    function updateClientRoot() {
+        var clientRoot = 'client';
+        var answer = {};
+        if (client === 'REACT') {
+            //react tree
+            clientRoot = 'client-react';
+            answer = {
+                root : clientRoot,
+                components: clientRoot + '/src',
+                gallery   : clientRoot + '/gallery',
+                assets    : clientRoot + '/assets',
+                gen    : clientRoot + '/dist'
+            };
+        } else {
+            //angular tree
+            clientRoot = 'client';
+            answer = {
+                root : clientRoot,
+                components: clientRoot + '/quickbase',
+                gallery   : clientRoot + '/gallery',
+                assets    : clientRoot + '/quickbase/assets',
+                gen    : clientRoot + '/quickbase'
+            };
+        }
+        var msg = 'clientRoot' + JSON.stringify(answer);
+        grunt.log.debug(msg);
+        return answer;
+    }
+
 
     // Load grunt tasks automatically, when needed
     require('jit-grunt')(grunt, {
@@ -40,12 +73,7 @@ module.exports = function(grunt) {
         pkg      : grunt.file.readJSON('package.json'),
         quickbase: {
             // configurable paths
-            client    : {
-                root      : 'client',
-                components: '<%= quickbase.client.root %>/quickbase',
-                gallery   : '<%= quickbase.client.root %>/gallery',
-                assets    : '<%= quickbase.client.root %>/quickbase/assets'
-            },
+            client    : updateClientRoot(), // 'client',
             e2e       : 'e2e',
             //  dist contains the target folders of the build
             distDir   : 'dist',
@@ -107,11 +135,14 @@ module.exports = function(grunt) {
                     '{.tmp,<%= quickbase.client.assets %>}/**/*.css',
                     '{.tmp,<%= quickbase.client.components %>}/**/*.html',
                     '{.tmp,<%= quickbase.client.components %>}/**/*.js',
+                    '<%= quickbase.client.gen %>/**/*.js',
                     '!{.tmp,<%= quickbase.client.components %>}**/*.spec.js',
                     '!{.tmp,<%= quickbase.client.components %>}/**/*.mock.js',
                     '<%= quickbase.client.components %>/{,*//*}*.{png,jpg,jpeg,gif,webp,svg}',
-                    '<%= quickbase.client.assets %>/{,*//*}*.{png,jpg,jpeg,gif,webp,svg}'
+                    '<%= quickbase.client.assets %>/{,*//*}*.{png,jpg,jpeg,gif,webp,svg}',
+                    'Gruntfile.js'
                 ],
+                //tasks  : (client === 'REACT' ? ['shell:webpack'] : []),
                 options: {
                     livereload: true
                 }
@@ -129,6 +160,13 @@ module.exports = function(grunt) {
             sass      : {  //watch for changes to scss files to trigger compass compilation
                 files: '<%= quickbase.client.root %>/**/*.scss',
                 tasks: ['compass-compile']
+            },
+            reactapp: {
+                files: ["<%= quickbase.client.components %>/**/*"],
+                tasks: ["webpack:build-dev"],
+                options: {
+                    spawn: false
+                }
             }
         },
 
@@ -140,7 +178,9 @@ module.exports = function(grunt) {
                 options: {
                     config      : './.jscsrc',
                     excludeFiles: ['<%= quickbase.client.root %>/bower_components/**/*.js',
-                        //              '<%= quickbase.client.root %>/**/*.spec.js'
+                                   '<%= quickbase.client.root %>/**/*.spec.js',
+                                   (client === 'REACT' && ('<%= quickbase.client.gen %>/**/*.js')),
+                                   (client === 'REACT' && ('<%= quickbase.client.root %>/bootstrap-sass.config.js'))
                     ]
                 }
             },
@@ -149,7 +189,7 @@ module.exports = function(grunt) {
                     src: ['<%= express.root %>/**/*.js']
                 },
                 options: {
-                    config: './.jscsrc',
+                    config: './.jscsrc'
                     // excludeFiles: ['<%= express.root %>/**/*.spec.js']
                 }
             },
@@ -158,7 +198,7 @@ module.exports = function(grunt) {
                     src: ['test_generators/**/*.js']
                 },
                 options: {
-                    config: './.jscsrc',
+                    config: './.jscsrc'
                     //             excludeFiles: ['test_generators/**/*.spec.js']
                 }
             }
@@ -192,8 +232,7 @@ module.exports = function(grunt) {
                     jshintrc: '<%= quickbase.client.root %>/.jshintrc'
                 },
                 src    : [
-                    '<%= quickbase.client.components %>/**/*.js',
-                    '<%= quickbase.client.components %>/**/*.js',
+                    client === 'REACT' ? '!<%= quickbase.client %>/**/*.js' : '<%= quickbase.client.components %>/**/*.js',
                     '<%= quickbase.client.gallery %>/**/*.js',
                     '!<%= quickbase.client.components %>/**/*.spec.js',
                     '!<%= quickbase.client.components %>/**/*.mock.js'
@@ -705,8 +744,72 @@ module.exports = function(grunt) {
                     environment: 'development'
                 }
             }
+        },
+        shell: {
+            webpack: {
+                command: 'npm run webpack',
+                options: {
+                    execOptions: {
+                    }
+                }
+            },
+            options: {
+                stdout: true,
+                stderr: true,
+                failOnError: true
+            }
+        },
+        webpack : {
+            options    : webpackConfig,
+            build      : {
+                plugins: webpackConfig.plugins.concat(
+                        new webpack.DefinePlugin({
+                            'process.env': {
+                                // This has beneficial effect on the react lib size for deploy
+                                NODE_ENV: JSON.stringify('production')
+                            }
+                        }),
+                        new webpack.optimize.DedupePlugin(),
+                        new webpack.optimize.UglifyJsPlugin()
+                )
+            },
+            'build-dev': {
+                devtool: 'sourcemap',
+                debug  : true
+            }
+        },
+        'webpack-dev-server': {
+            options: {
+                webpack   : webpackConfig,
+                //publicPath: '/' + webpackConfig.output.publicPath
+                publicPath: '<%= quickbase.client.root %>'
+            },
+            start  : {
+                keepAlive: true,
+                webpack  : {
+                    devtool: 'eval',
+                    debug  : true
+                }
+            }
         }
+
     });
+    //------------END OF initConfig
+
+
+
+    // The development server (the recommended option for development)
+    grunt.registerTask('webpacksrv', ['webpack-dev-server:start']);
+
+    // Production build
+    grunt.registerTask('webpackbuild', ['webpack:build']);
+
+    // Build and watch cycle (another option for development)
+    // Advantage: No server required, can run app from filesystem
+    // Disadvantage: Requests are not blocked until bundle is available,
+    //               can serve an old app on too fast refresh
+    grunt.registerTask("webpackdev", ["webpack:build-dev", "watch:reactapp"]);
+
 
 
     grunt.registerTask('fixCoveragePaths', function() {
@@ -772,6 +875,7 @@ module.exports = function(grunt) {
     });
 
     grunt.registerTask('serve', function(target) {
+        updateClientRoot();
         if (target === 'dist') {
             return grunt.task.run([
                 'build',
@@ -826,6 +930,7 @@ module.exports = function(grunt) {
 
     grunt.registerTask('setEnv', function(envName, envVal) {
         process.env[envName] = envVal;
+        updateClientRoot();
     });
 
     grunt.registerTask('codeStandards', [
@@ -856,7 +961,7 @@ module.exports = function(grunt) {
             return grunt.task.run([
                 'clean:server',
                 'setEnv:NODE_TLS_REJECT_UNAUTHORIZED:0',
-                'mochaTest:test',
+                'mochaTest:test'
             ]);
         }
         if (target === 'testGen') {
@@ -878,7 +983,7 @@ module.exports = function(grunt) {
             return grunt.task.run([
                 'codeStandards',
                 'clean:server',
-                'mochaTest:integration',
+                'mochaTest:integration'
             ]);
         }
         if (target === 'client') {
@@ -908,7 +1013,7 @@ module.exports = function(grunt) {
                 'concurrent:test',
                 'wiredep:app',
                 'autoprefixer',
-                'protractor:local',
+                'protractor:local'
             ]);
         }
 
@@ -918,7 +1023,7 @@ module.exports = function(grunt) {
             'codeStandards',
             // run unit tests
             'test:client',
-            'test:server',
+            'test:server'
         ]);
 
     });
@@ -1004,5 +1109,6 @@ module.exports = function(grunt) {
 
     grunt.loadNpmTasks('grunt-jscs');
     grunt.loadNpmTasks('grunt-contrib-jshint');
-
+    grunt.loadNpmTasks('grunt-shell-spawn');
+    grunt.loadNpmTasks('grunt-webpack');
 };

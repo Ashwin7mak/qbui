@@ -15,22 +15,23 @@ Updated to include React modules.  When Angular is removed, will need to do the 
 * Remove all Angular references from dev and devDependencies section
 * Update webpack script to reference where the webpack configuration file is located (client-react will probably be refactored to just client..)
 
-#Build and launch Angular implementation of Lighhouse:   
+#Build and launch Angular implementation of Lighthouse:   
  
-* Start db server
-* Start lighhouse back-end server
+* Start Oracle db server
+* Start lighthouse java back-end server from Quickbase repo
 * cd to the ui folder
-* run grunt serve
+* run `grunt serve`
+    - note CLIENT=ANGULAR is optional, by default it will use ANGULAR if CLIENT is unspecified
     - browser should open to an unauthorized page
     - generate a ticket for realm to view data
 
-#Build and launch React implementation of Lighhouse:
+#Build and launch React implementation of Lighthouse:
  
 * From command window:
     * cd to the ui folder
     * npm run webpack
-    * NODE_ENV=REACT npm start
-    * Open browser and access localhost:9000 to view prototype lighthouse page
+    * run  `grunt setEnv:CLIENT:REACT serve` or `CLIENT=REACT grunt serve`
+    * browser should open to view react lighthouse page
     
 #WebPack
       

@@ -27,8 +27,8 @@
         var routeMapper = require('./routes/qbRouteMapper')(config);
 
         //  START TEMPORARY -- while we support Angular lighthouse..
-        var envConsts = require('./config/environment/environmentConstants');
-        if (envConsts.REACT === config.env) {
+        var clientConsts = require('./config/environment/clientConsts');
+        if (clientConsts.REACT === config.client) {
             require('./routes/qbClientRoutes')(app, config);
         } else {
             require('./routes/qbAngularRoutes')(app, config);
