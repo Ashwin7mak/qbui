@@ -67,7 +67,7 @@ class Logger {
         }
         catch (e) {
             if (typeof window.console !== 'undefined' && typeof window.console.log !== 'undefined') {
-                console.log('An error occurred in the processing of a logging message. ERROR::' + e);
+                window.console.log('An error occurred in the processing of a logging message. ERROR::' + e);
             }
         }
     }
