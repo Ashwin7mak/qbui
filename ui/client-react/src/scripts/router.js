@@ -24,11 +24,8 @@ flux.actions.loadReports('mydbid')
 
 
 //  load the locale
-var defaultLocale = document.documentElement.getAttribute('lang');
-import { getLocale } from '../locales/locales.js';
-
-var i18n = getLocale(defaultLocale);
-
+import { getI18nBundle } from '../locales/locales';
+var i18n = getI18nBundle();
 
 React.render(
     <Nav flux={flux} {...i18n}/>, document.getElementById('content')

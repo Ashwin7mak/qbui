@@ -1,4 +1,5 @@
 import React from 'react';
+import ReactIntl from 'react-intl';
 import ReactBootstrap from 'react-bootstrap';
 
 import './nav.css';
@@ -11,19 +12,18 @@ import Navbar from '../../../../node_modules/react-bootstrap/lib/Navbar'
 import MenuItem from '../../../../node_modules/react-bootstrap/lib/MenuItem'
 import NavDropdown from '../../../../node_modules/react-bootstrap/lib/NavDropdown'
 
+import { Locale, getI18nBundle } from '../../locales/locales';
+var i18n = getI18nBundle();
 
-var defaultLocale = document.documentElement.getAttribute('lang');
-import { getLocale, ReactIntl } from '../../locales/locales.js';
-var FormattedDate = ReactIntl.FormattedDate;
-var i18n = getLocale(defaultLocale);
 var IntlMixin = ReactIntl.IntlMixin;
+var FormattedDate = ReactIntl.FormattedDate;
 
 var CurrentDate = React.createClass({
 
     mixins: [IntlMixin],
 
     render: function() {
-        return <FormattedDate locales={[defaultLocale]} value={new Date()} day="numeric" month="long" year="numeric"/>
+        return <FormattedDate locales={[Locale]} value={new Date()} day="numeric" month="long" year="numeric"/>
     }
 });
 

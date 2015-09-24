@@ -1,4 +1,5 @@
 import React from 'react';
+import ReactIntl from 'react-intl';
 
 import Button from 'react-bootstrap/lib/Button';
 
@@ -18,10 +19,9 @@ let FluxMixin = Fluxxor.FluxMixin(React);
 let StoreWatchMixin = Fluxxor.StoreWatchMixin;
 
 //  load the locale
-var defaultLocale = document.documentElement.getAttribute('lang');
-import { getLocale, ReactIntl } from '../../locales/locales';
+import { Locale, getI18nBundle } from '../../locales/locales';
+var i18n = getI18nBundle();
 
-var i18n = getLocale(defaultLocale);
 var IntlMixin = ReactIntl.IntlMixin;
 var FormattedDate = ReactIntl.FormattedDate;
 
@@ -30,7 +30,7 @@ var CurrentDate = React.createClass({
     mixins: [IntlMixin],
 
     render: function() {
-        return <FormattedDate locales={[defaultLocale]} value={new Date()} day="numeric" month="long" year="numeric"/>
+        return <FormattedDate locales={[Locale]} value={new Date()} day="numeric" month="long" year="numeric"/>
     }
 });
 
@@ -102,19 +102,5 @@ var Nav = React.createClass( {
         </div>);
     }
 });
-
-
-
-/*
-//  TODO: this doesn't feel right...maybe explicit components to support the different stage content layouts???
-React.render(
-    <ReportStage {...i18n}/>, document.getElementById('layout-stage-content')
-);
-
-React.render(
-    <ReportContent {...i18n}/>, document.getElementById('layout-content')
-);
-*/
-
 
 export default Nav;
