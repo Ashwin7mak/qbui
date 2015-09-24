@@ -35,7 +35,7 @@
         // Jasmine and Cucumber are fully supported as a test and assertion framework.
         // Mocha has limited beta support. You will need to include your own
         // assertion framework if working with mocha.
-        framework: 'jasmine',
+        framework: 'jasmine2',
 
         // ----- Options to be passed to minijasminenode -----
         //
