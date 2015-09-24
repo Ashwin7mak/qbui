@@ -1,5 +1,6 @@
 
 import React from 'react';
+import ReactIntl from 'react-intl';
 
 import Header from '../../../components/header/header';
 import Stage from '../../../components/stage/stage';
@@ -8,18 +9,17 @@ import Footer from '../../../components/footer/footer';
 import ReportStage from '../../../components/report/dataTable/stage';
 import ReportContent from '../../../components/report/dataTable/content';
 
-var defaultLocale = document.documentElement.getAttribute('lang');
-import { getLocale, ReactIntl } from '../../../locales/locales.js';
-var FormattedDate = ReactIntl.FormattedDate;
-var i18n = getLocale(defaultLocale);
+import { Locale, getI18nBundle } from '../../../locales/locales';
+var i18n = getI18nBundle();
 var IntlMixin = ReactIntl.IntlMixin;
+var FormattedDate = ReactIntl.FormattedDate;
 
 var CurrentDate = React.createClass({
 
     mixins: [IntlMixin],
 
     render: function() {
-        return <FormattedDate locales={[defaultLocale]} value={new Date()} day="numeric" month="long" year="numeric"/>
+        return <FormattedDate locales={[Locale]} value={new Date()} day="numeric" month="long" year="numeric"/>
     }
 });
 
@@ -29,7 +29,7 @@ var ReportStageContent = React.createClass({
     }
 });
 
-class DataTable extends React.Component {
+class DataTableReport extends React.Component {
     render() {
         return <div>
             <Header leftContent="Intuit QuickBase" rightContent={<CurrentDate/>}/>
@@ -40,4 +40,4 @@ class DataTable extends React.Component {
     }
 };
 
-export default DataTable;
+export default DataTableReport;
