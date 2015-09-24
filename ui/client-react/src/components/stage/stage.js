@@ -21,7 +21,7 @@ var Stage = React.createClass({
     render: function() {
         var stageClass = this.state.stage === 'open' ? 'layout-stage stage-open' : 'layout-stage stage-close';
         return <div className={stageClass}>
-            <div id="layout-stage-content" className="layout-stage-content">{this.props.stageContent}</div>
+            <div id="layout-stage-content" className="layout-stage-content">{this.props.children}</div>
             <button onClick={this.toggleStage} className="tab arrow"></button>
         </div>
     }

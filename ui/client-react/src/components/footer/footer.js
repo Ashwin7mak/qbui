@@ -2,6 +2,11 @@ import React from 'react';
 import ReactIntl from 'react-intl';
 import './footer.css';
 
+import Nav from '../../../../node_modules/react-bootstrap/lib/Nav';
+
+import NavItem from '../../../../node_modules/react-bootstrap/lib/NavItem'
+import Navbar from '../../../../node_modules/react-bootstrap/lib/Navbar'
+
 var IntlMixin = ReactIntl.IntlMixin;
 var FormattedMessage = ReactIntl.FormattedMessage;
 
@@ -10,11 +15,11 @@ var Footer = React.createClass({
 
     render: function() {
         var currentYear = new Date().getFullYear();
-        return <footer className="layout-footer">
-            <span className="layout-footer-content">
-              &#169;<FormattedMessage message={this.getIntlMessage('footer.copyright')} year={currentYear} />
-            </span>
-        </footer>
+        return <Navbar fixedBottom>
+            <Nav right>
+              <NavItem>&#169;<FormattedMessage message={this.getIntlMessage('footer.copyright')} year={currentYear} /></NavItem>
+            </Nav>
+        </Navbar>
     }
 });
 
