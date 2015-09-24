@@ -1,32 +1,35 @@
 
 import React from 'react';
-import { Router, Route } from 'react-router';
-import DataTableReport from '../components/report/dataTable/layout';
-//import Routes from './routes';
+//import { Router, Route, Link } from 'react-router'
+
+import DataTable from '../components/report/dataTable/layout';
+
+import Nav from '../components/nav/nav';
+import Fluxxor from 'fluxxor';
+
+import ReportsStore from '../stores/ReportsStore';
+import reportActions from'../actions/reportActions';
+
+import ReportDataStore from '../stores/ReportDataStore';
+import reportDataActions from'../actions/reportDataActions';
+
+let stores = { ReportsStore: new ReportsStore(),
+    ReportDataStore: new ReportDataStore()
+};
+let flux = new Fluxxor.Flux(stores);
+flux.addActions(reportActions);
+flux.addActions(reportDataActions);
+
+flux.actions.loadReports('mydbid')
+
 
 //  load the locale
+var defaultLocale = document.documentElement.getAttribute('lang');
+import { getLocale } from '../locales/locales.js';
 
-
-const Report = React.createClass({
-    render() {
-        return <div><h1>Some report</h1></div>
-    }
-});
-
-const routes = {
-    path: '/',
-    component: DataTableReport,
-    childRoutes: [
-        { path: 'report', component: Report }
-    ]
-};
-
+var i18n = getLocale(defaultLocale);
 
 
 React.render(
-    <Router routes={routes} />, document.getElementById('content')
+    <Nav flux={flux} {...i18n}/>, document.getElementById('content')
 );
-
-//React.render(
-//    <DataTableReport {...i18n}/>, document.getElementById('content')
-//);
