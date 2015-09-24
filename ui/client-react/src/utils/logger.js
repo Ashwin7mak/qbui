@@ -1,55 +1,76 @@
 
-var LOG_LEVEL = {
-    DEBUG: 40,
-    INFO: 30,
-    WARN: 20,
-    ERROR: 10,
-    OFF: 99
-};
+/*
+ DEBUG	Detailed information on the flow through the system. Expect these to be written to logs only.
+ INFO	Interesting runtime events (startup/shutdown).
+ WARN	Use of deprecated APIs, poor use of API, 'almost' errors, other runtime situations that are undesirable or unexpected, but not necessarily "wrong".
+ ERROR	Runtime errors or unexpected conditions.
+ OFF	Turn off logging.
+ */
+import Configuration from '../config/app.config';
+import LogLevel from './logLevels';
 
 class Logger {
 
-    //  simple logging class..
-
     constructor(config) {
+        // Set to what we'd expect we'd want for production, in case there's an issue with the config
+        this.logLevel = LogLevel.ERROR;
+        this.logToConsole = false;
+        this.logToServer = true;
+
+        //  allow for override of application level settings
         if (config) {
-            this.logLevel = config.logLevel || LOG_LEVEL.OFF;
-            this.logToConsole = config.logToConsole || false;
-            this.logToServer = config.logToServer || false;
+            this.logLevel = config.logger.logLevel || LogLevel.ERROR;
+            this.logToConsole = config.logger.logToConsole || false;
+            this.logToServer = config.logger.logToServer || true;
+        }
+        else if (Configuration.logger) {
+            this.logLevel = Configuration.logger.logLevel || LogLevel.ERROR;
+            this.logToConsole = Configuration.logger.logToConsole || false;
+            this.logToServer = Configuration.logger.logToServer || true;
         }
     }
 
     debug(msg) {
-        if (this.logLevel <= LOG_LEVEL.DEBUG) {
-            this.logTheMessage(LOG_LEVEL.DEBUG, msg);
+        if (LogLevel.DEBUG.id <= this.logLevel.id) {
+            this.logTheMessage(this.logLevel, msg);
         }
     }
 
     info(msg) {
-        if (this.logLevel <= LOG_LEVEL.INFO) {
-            this.logTheMessage(LOG_LEVEL.DEBUG, msg);
+        if (LogLevel.INFO.id <= this.logLevel.id) {
+            this.logTheMessage(this.logLevel, msg);
         }
     }
 
     warn(msg) {
-        if (this.logLevel <= LOG_LEVEL.WARN) {
-            this.logTheMessage(LOG_LEVEL.DEBUG, msg);
+        if (LogLevel.WARN.id <= this.logLevel.id) {
+            this.logTheMessage(this.logLevel, msg);
         }
     }
 
     error(msg) {
-        if (this.logLevel <= LOG_LEVEL.ERROR) {
-            this.logTheMessage(LOG_LEVEL.DEBUG, msg);
+        if (LogLevel.ERROR.id <= this.logLevel.id) {
+            this.logTheMessage(this.logLevel, msg);
         }
     }
 
-    //  todo: might want to move this to a private class..
     //  todo: xhr to node server to log server message...
     logTheMessage(level, msg) {
-        if (this.logToConsole === true) {
-            console.log(level + ': ' + msg);
+        try {
+            if (this.logToConsole === true) {
+                window.console.log(level.name + ': ' + msg);
+            }
+            if (this.logToServer === true) {
+                // TODO: make xhr call to server to log on node
+                // TODO: include uuid on the request
+            }
+        }
+        catch (e) {
+            if (typeof window.console !== 'undefined' && typeof window.console.log !== 'undefined') {
+                window.console.log('An error occurred in the processing of a logging message. ERROR::' + e);
+            }
         }
     }
 }
 
-export {Logger, LOG_LEVEL};
+export default Logger;

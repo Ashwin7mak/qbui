@@ -1,25 +1,22 @@
 
-import ReactIntl from 'react-intl';
 // import supported languages...
-// TODO: would be nice to dynamically load based on selection
+// TODO: dynamically load based on selection
 import EN_US from '../locales/en_us';
 import FR_FR from '../locales/fr_fr';
-import {Logger,LOG_LEVEL} from '../utils/logger';
+import Logger from '../utils/logger';
 
-// todo: should be retrieved/set as a configuration value per build..
-var logConfig = {
-    logLevel: LOG_LEVEL.DEBUG,
-    logToConsole: true,
-    logToServer: false
-};
-var logger = new Logger(logConfig);
+// todo: implement as an ES6 class
+// todo: this seems questionable as a proper way to read in the user's locale
+var Locale = document.documentElement.getAttribute('lang') || 'en-us';
+var logger = new Logger();
 
-// todo: implement as a ES6 class
-var getLocale = function(locale) {
+var getI18nBundle = function() {
+
     'use strict';
-    logger.debug('Fetching locale: ' + locale);
+    logger.debug('Fetching locale: ' + Locale);
+
     try {
-        switch (locale.toLowerCase()) {
+        switch (Locale.toLowerCase()) {
             case 'en-us':
                 return EN_US;
             case 'fr-fr':
@@ -30,9 +27,9 @@ var getLocale = function(locale) {
         }
     } catch (e) {
         //  any error automatically returns default locale
-        logger.error('Error fetching locale; error=' + e);
+        logger.error('Error fetching locale: ' + e);
         return EN_US;
     }
 };
 
-export { getLocale, ReactIntl };
+export { Locale, getI18nBundle };

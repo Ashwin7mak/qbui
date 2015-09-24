@@ -7,6 +7,8 @@
     padding: 15px 15px 15px;
     margin-bottom: 5px;
     transition: padding 0.5s ease 0s;
+
+    margin-top:75px;
 }
 /* line 298, ../_layout.scss */
 .layout-stage .layout-stage-content {

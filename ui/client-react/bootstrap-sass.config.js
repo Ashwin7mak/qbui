@@ -31,18 +31,7 @@ module.exports = {
   // 'css-loader!sass?outputStyle=expanded'),
 
   scripts: {
-    'transition': true,
-    'alert': true,
-    'button': true,
-    'carousel': true,
-    'collapse': true,
-    'dropdown': true,
-    'modal': true,
-    'tooltip': true,
-    'popover': true,
-    'scrollspy': true,
-    'tab': true,
-    'affix': true
+
   },
   styles: {
     'mixins': true,

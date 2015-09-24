@@ -10,7 +10,7 @@ var Content = React.createClass({
     mixins: [IntlMixin],
 
     render: function() {
-        return <div className="report-content"></div>
+        return <div className="report-content">Todo: use mock table from flux store</div>
     }
 })
 

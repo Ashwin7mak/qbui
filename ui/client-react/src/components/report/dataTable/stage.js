@@ -1,6 +1,8 @@
 import React from 'react';
 import ReactIntl from 'react-intl';
 import { Button } from 'react-bootstrap';
+import Logger from '../../../utils/logger';
+var logger = new Logger();
 
 import '../../../assets/css/report.css';
 
@@ -11,12 +13,11 @@ var Stage = React.createClass({
     mixins: [IntlMixin],
 
     handleClick: function() {
-        console.log('button click event fired.');
+        logger.debug('report feedback button click event fired.');
         window.location.href = 'mailto:clay_nicolau@intuit.com?subject=ReArch LH Feedback';
     },
 
     render: function() {
-//<!-- class: stage-closed -->
         return <div className="report-stage">
                  <div className="report-content">
                     <div className="left">

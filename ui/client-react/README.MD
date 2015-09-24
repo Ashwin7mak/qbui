@@ -37,4 +37,4 @@ Updated to include React modules.  When Angular is removed, will need to do the 
       
 * build output to /client-react/dist folder
 * non-production build outputs bundle.js and bundle.js.map
-* production build outputs bundle.min.js and bundle.min.js.map
+* production build outputs bundle.min.js and bundle.min.js.map/Users/dstevens/Desktop/qbui
