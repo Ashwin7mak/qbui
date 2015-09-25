@@ -37,7 +37,7 @@ var CurrentDate = React.createClass({
 
 
 var Nav = React.createClass( {
-    mixins: [FluxMixin, StoreWatchMixin("ReportsStore")],
+    mixins: [FluxMixin, StoreWatchMixin("ReportsStore","ReportDataStore")],
     getInitialState: function() {
         return {
             leftNavOpen: false,
@@ -47,16 +47,11 @@ var Nav = React.createClass( {
     getStateFromFlux: function (){
 
         var flux = this.getFlux();
-        // Our entire state is made up of the ReportsStore data. In a larger
-        // application, you will likely return data from multiple stores, e.g.:
-        //
-        //   return {
-        //     reportsData: flux.store("ReportsStore").getState(),
-        //     userData: flux.store("UserStore").getData(),
-        //     fooBarData: flux.store("FooBarStore").someMoreData()
-        //   };
 
-        return flux.store("ReportsStore").getState();
+        return {
+            reports: flux.store("ReportsStore").getState(),
+            reportData: flux.store("ReportDataStore").getState()
+        };
     },
     showNav: function() {
         this.setState({leftNavOpen: true});
@@ -65,6 +60,7 @@ var Nav = React.createClass( {
         this.setState({leftNavOpen: false});
     },
     leftNavSelection: function(id) {
+
         this.hideNav();
 
         var flux = this.getFlux();
@@ -72,11 +68,11 @@ var Nav = React.createClass( {
         flux.actions.loadReport(id);
     },
     showTrouser: function() {
-        console.log('show it')
+
         this.setState({trouserOpen: true});
     },
     hideTrouser: function() {
-        console.log('hide it')
+
         this.setState({trouserOpen: false});
     },
 
@@ -88,7 +84,7 @@ var Nav = React.createClass( {
             </Trouser>
 
             <LeftNav visible={this.state.leftNavOpen}
-                     items={this.state.reports}
+                     items={this.state.reports.list}
                      itemSelection={this.leftNavSelection}/>
 
             <TopNav onNavClick={this.showNav} onAddClicked={this.showTrouser}/>
@@ -96,7 +92,7 @@ var Nav = React.createClass( {
             <Stage stageContent="this is the stage content text">
                 <ReportStage {...i18n} />
             </Stage>
-            <ReportContent {...i18n}/>
+            <ReportContent {...i18n} data={this.state.reportData.data}/>
             <Footer {...i18n} />
 
         </div>);

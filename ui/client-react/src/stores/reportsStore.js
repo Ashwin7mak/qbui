@@ -13,7 +13,7 @@ let ReportsStore = Fluxxor.createStore({
         );
     },
     onAddReport: function (report) {
-        this.tables.push(report);
+        this.reports.push(report);
         this.emit("change");
     },
     onRemoveReport: function (id) {
@@ -34,7 +34,7 @@ let ReportsStore = Fluxxor.createStore({
 
     getState: function () {
         return {
-            reports: this.reports
+            list: this.reports
         }
     }
 });

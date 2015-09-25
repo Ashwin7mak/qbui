@@ -3,6 +3,7 @@
 let reportDataActions = {
 
     loadReport: function(id) {
+
         this.dispatch('LOAD_REPORT', id);
     }
 };

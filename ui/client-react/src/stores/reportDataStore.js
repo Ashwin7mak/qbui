@@ -12,17 +12,18 @@ let ReportDataStore = Fluxxor.createStore({
     },
 
     onLoadReport: function (reportID) {
+
         switch (reportID) {
             case 1:
                 this.data = [
-                    {name: 'Drew', color: 'red'},
-                    {name: 'Don', color: 'blue'}
+                    {name: 'Drew', place: 'Ottawa'},
+                    {name: 'Don', place: 'Nashua'}
                 ];
                 break;
             case 2:
                 this.data = [
-                    {name: 'Aditi', number: 123},
-                    {name: 'Claire', number: 456}
+                    {name: 'Aditi', place: 'New York'},
+                    {name: 'Claire', place: 'Berlin'}
                 ];
                 break;
             case 3:
@@ -31,8 +32,9 @@ let ReportDataStore = Fluxxor.createStore({
                     {name: 'Mark', place: 'Boston'}
                 ];
                 break;
+            default:
+                this.data = [];
         }
-
 
         this.emit("change");
     },

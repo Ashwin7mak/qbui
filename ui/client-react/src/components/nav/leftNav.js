@@ -1,8 +1,7 @@
 import React from 'react';
-import ReactBootstrap from 'react-bootstrap';
 
-import Nav from 'react-bootstrap/lib/Nav';
-import NavItem from 'react-bootstrap/lib/NavItem';
+import {Nav,NavItem} from 'react-bootstrap';
+
 import './nav.css';
 
 let LeftNav = React.createClass( {
@@ -10,7 +9,6 @@ let LeftNav = React.createClass( {
     selectItem: function (id) {
         if (id)
             this.props.itemSelection(id);
-
     },
 
     render: function() {
@@ -20,7 +18,7 @@ let LeftNav = React.createClass( {
                 <Nav stacked activeKey={1} >
                     {this.props.items.map((item) => {
                         return (
-                            <NavItem eventKey={item.id} key={item.id}
+                            <NavItem key={item.id}
                                      onClick={this.selectItem.bind(this,item.id)}>
                                 {item.name}
                             </NavItem>)
