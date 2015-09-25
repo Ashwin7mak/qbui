@@ -17,8 +17,9 @@
     var routeGroups = require('../../routes/routeGroups');
     var clientConsts = require('./clientConsts');
 
-    //Temporary angular default for ci until we deploy react
-    var client = clientConsts.ANGULAR;
+    //Temporary support CLIENT=ANGULAR
+    // default is CLIENT=REACT for ci which we'll deploy
+    var client = clientConsts.REACT;
     if (process.env.CLIENT) {
         client = process.env.CLIENT;
     }

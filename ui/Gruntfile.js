@@ -19,10 +19,11 @@ module.exports = function(grunt) {
     //arguments along to sauce-connect-launcher
     var httpProxy = grunt.option('httpProxyHost') !== undefined ? grunt.option('httpProxyHost') + ':80 --proxy-tunnel' : null;
     var useColors = grunt.option('colors') || false;
-    var client = (process.env.CLIENT && process.env.CLIENT === 'REACT') ? 'REACT' : 'ANGULAR';
     var webpack = require('webpack');
     var webpackConfig = require('./webpack.config.js');
 
+    // specify client env var of default will use REACT
+    var client = (process.env.CLIENT && process.env.CLIENT === 'ANGULAR') ? 'ANGULAR' : 'REACT';
     function updateClientRoot() {
         var clientRoot = 'client';
         var answer = {};
@@ -34,6 +35,7 @@ module.exports = function(grunt) {
                 components: clientRoot + '/src',
                 gallery   : clientRoot + '/gallery',
                 assets    : clientRoot + '/assets',
+                src    : clientRoot + '/src',
                 gen    : clientRoot + '/dist'
             };
         } else {
@@ -44,11 +46,12 @@ module.exports = function(grunt) {
                 components: clientRoot + '/quickbase',
                 gallery   : clientRoot + '/gallery',
                 assets    : clientRoot + '/quickbase/assets',
+                src    : clientRoot + '/quickbase',
                 gen    : clientRoot + '/quickbase'
             };
         }
         var msg = 'clientRoot' + JSON.stringify(answer);
-        grunt.log.debug(msg);
+        grunt.log.writeln(msg);
         return answer;
     }
 
@@ -142,7 +145,6 @@ module.exports = function(grunt) {
                     '<%= quickbase.client.assets %>/{,*//*}*.{png,jpg,jpeg,gif,webp,svg}',
                     'Gruntfile.js'
                 ],
-                //tasks  : (client === 'REACT' ? ['shell:webpack'] : []),
                 options: {
                     livereload: true
                 }
@@ -162,14 +164,13 @@ module.exports = function(grunt) {
                 tasks: ['compass-compile']
             },
             reactapp: {
-                files: ["<%= quickbase.client.components %>/**/*"],
-                tasks: ["webpack:build-dev"],
+                files: ['Gruntfile.js', '<%= quickbase.client.src %>/**/*'],
+                tasks: ['webpack:build-dev'],
                 options: {
                     spawn: false
                 }
             }
         },
-
         jscs: {
             client : {
                 files  : {
@@ -232,10 +233,13 @@ module.exports = function(grunt) {
                     jshintrc: '<%= quickbase.client.root %>/.jshintrc'
                 },
                 src    : [
-                    client === 'REACT' ? '!<%= quickbase.client %>/**/*.js' : '<%= quickbase.client.components %>/**/*.js',
-                    '<%= quickbase.client.gallery %>/**/*.js',
-                    '!<%= quickbase.client.components %>/**/*.spec.js',
-                    '!<%= quickbase.client.components %>/**/*.mock.js'
+                        // only use jshint on angular code
+                        // React will use ESLint for lint checking which supports JSX/ES6
+                        // So when running jshint with REACT as client we will not include the react client code
+                        (client === 'ANGULAR' && ('<%= quickbase.client.components %>/**/*.js')),
+                        (client === 'ANGULAR' && ('<%= quickbase.client.gallery %>/**/*.js')),
+                        '!<%= quickbase.client.components %>/**/*.spec.js',
+                        '!<%= quickbase.client.components %>/**/*.mock.js'
                 ]
             },
             clientTest: {
@@ -518,7 +522,7 @@ module.exports = function(grunt) {
 
         // Copies remaining files to places other tasks can use
         copy: {
-            dist  : {
+            angularDist  : {
                 files: [{
                     expand: true,
                     dot   : true,
@@ -562,6 +566,28 @@ module.exports = function(grunt) {
                 cwd   : ['<%= quickbase.client.assets %>/'],
                 dest  : '.tmp/',
                 src   : ['**/*.css']
+            },
+            reactDist : {
+                files: [{
+                    expand : true,
+                    dot   : true,
+                    cwd   : '<%= quickbase.client.root %>',
+                    dest  : '<%= quickbase.distPublic %>',
+                    src   : [
+                        '*.{ico,png,txt}',
+                        'dist/**/*',
+                        'index.html'
+                    ]
+                },
+                    {
+                        expand: true,
+                        dest  : '<%= quickbase.distDir %>',
+                        src   : [
+                            'package.json',
+                            '<%= express.root %>/**/*'
+                        ]
+                    }
+                ]
             }
         },
 
@@ -781,8 +807,12 @@ module.exports = function(grunt) {
         'webpack-dev-server': {
             options: {
                 webpack   : webpackConfig,
-                //publicPath: '/' + webpackConfig.output.publicPath
-                publicPath: '<%= quickbase.client.root %>'
+                contentBase : './<%= quickbase.client.root %>',
+                publicPath : '/dist/',
+                inline: true,
+                hot: true,
+                progress: true,
+                port: 3000
             },
             start  : {
                 keepAlive: true,
@@ -792,23 +822,19 @@ module.exports = function(grunt) {
                 }
             }
         }
-
     });
     //------------END OF initConfig
 
 
 
-    // The development server (the recommended option for development)
-    grunt.registerTask('webpacksrv', ['webpack-dev-server:start']);
-
     // Production build
     grunt.registerTask('webpackbuild', ['webpack:build']);
 
-    // Build and watch cycle (another option for development)
+    // Build and watch cycle (option for development)
     // Advantage: No server required, can run app from filesystem
     // Disadvantage: Requests are not blocked until bundle is available,
     //               can serve an old app on too fast refresh
-    grunt.registerTask("webpackdev", ["webpack:build-dev", "watch:reactapp"]);
+    grunt.registerTask('webpackdev', ['webpack:build-dev', 'watch:reactapp']);
 
 
 
@@ -895,18 +921,30 @@ module.exports = function(grunt) {
                 'concurrent:debug'
             ]);
         }
-
-        grunt.task.run([
-            'clean:server',
-            'env:local',
-            'concurrent:server',
-            'wiredep:app',
-            'autoprefixer',
-            'express:local',
-            'wait',
-            'open',
-            'watch'
-        ]);
+        if (client === 'ANGULAR') {
+            grunt.task.run([
+                'clean:server',
+                'env:local',
+                'concurrent:server',
+                'wiredep:app',
+                'autoprefixer',
+                'express:local',
+                'wait',
+                'open',
+                'watch'
+            ]);
+        } else {
+            grunt.task.run([
+                'clean:server',
+                'shell:webpack',
+                'env:local',
+                'concurrent:server',
+                'express:local',
+                'wait',
+                'open',
+                'watch'
+            ]);
+        }
     });
 
     grunt.registerTask('server', function() {
@@ -1053,22 +1091,30 @@ module.exports = function(grunt) {
         'test:integration'
     ]);
 
-    grunt.registerTask('build', [
-        'clean:dist',
-        'concurrent:dist',
-        'wiredep:app',
-        'useminPrepare',
-        'autoprefixer',
-        'ngtemplates',
-        'concat',
-        'ngAnnotate',
-        'copy:dist',
-        //'cdnify',
-        'cssmin',
-        'uglify',
-        'rev',
-        'usemin'
+    if (client === 'ANGULAR') {
+        grunt.registerTask('build', [
+            'clean:dist',
+            'concurrent:dist',
+            'wiredep:app',
+            'useminPrepare',
+            'autoprefixer',
+            'ngtemplates',
+            'concat',
+            'ngAnnotate',
+            'copy:angularDist',
+            //'cdnify',
+            'cssmin',
+            'uglify',
+            'rev',
+            'usemin'
     ]);
+    } else {
+        grunt.registerTask('build', [
+            'clean:dist',
+            'webpackbuild',
+            'copy:reactDist'
+        ]);
+    }
 
     grunt.registerTask('default', [
         'newer:jshint',

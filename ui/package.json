@@ -41,7 +41,7 @@
     "bootstrap-sass": "^3.3.5",
     "bootstrap-sass-loader": "^1.0.9",
     "bower": "^1.3.9",
-    "bunyan": "^1.4.0",
+    "bunyan": "^1.5.1",
     "chance": "^0.7.5",
     "connect-livereload": "~0.4.0",
     "css-loader": "^0.18.0",
@@ -128,9 +128,9 @@
     "node": ">=0.10.0"
   },
   "scripts": {
-    "webpack": "webpack -d --config webpack.config.js",
+    "webpack": "webpack --config webpack.config.js",
     "watch": "webpack --config webpack.config.js --watch",
-    "devserv" :  "webpack-dev-server -d --config webpack.config.js --colors ",
+    "webpack-dev-server" :  "./node_modules/webpack-dev-server/bin/webpack-dev-server.js --inline --hot --port 3000 --content-base ./client-react --config  webpack.config.js",
     "start": "node server/app.js",
     "test": "grunt test",
     "update-webdriver": "node node_modules/grunt-protractor-runner/node_modules/protractor/bin/webdriver-manager update"

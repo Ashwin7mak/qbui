@@ -24,7 +24,7 @@
     //prohibits the use of a variable before it was defined, nofunc will allow function declarations to be ignored.
     "latedef": "nofunc",
     //enforces the consistency of quotation marks used
-    //"quotmark": "single",
+    "quotmark": true,
     // warn about not running in strict mode, which eliminates some JavaScript pitfalls
     "strict": true,
     //prohibits the use of explicitly undeclared variable, catches typos

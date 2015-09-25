@@ -81,7 +81,7 @@
             }
         }
 
-        //  LOCAL runs react client
+        //   runs angular client
         var client = config.client;
         if (clientConsts.ANGULAR === client) {
             app.use(express.static(path.join(config.root, '.tmp')));
