@@ -13,7 +13,7 @@ let ReportsStore = Fluxxor.createStore({
         );
     },
     onAddReport: function (report) {
-        this.tables.push(report);
+        this.reports.push(report);
         this.emit("change");
     },
     onRemoveReport: function (id) {
@@ -23,18 +23,17 @@ let ReportsStore = Fluxxor.createStore({
     onLoadReports: function (dbid) {
         //mock data
         this.reports = [
-            {name: 'All Tasks',id:1},
-            {name: 'My Open Tasks',id:2},
-            {name: 'My Overdue Tasks',id:3},
-            {name: 'Task Summary',id:4},
-            {name: 'Updated Tasks',id:5}
+            {name: 'Jade Developers',id:1},
+            {name: 'Indigo Developers',id:2},
+            {name: 'UXv3 UX',id:3},
+            {name: 'All UXV3',id:4}
         ];
         this.emit("change");
     },
 
     getState: function () {
         return {
-            reports: this.reports
+            list: this.reports
         }
     }
 });
