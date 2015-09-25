@@ -22,7 +22,7 @@ var getI18nBundle = function() {
             case 'fr-fr':
                 return FR_FR;
             default:
-                logger.error('Locale not found.  Returning default: en_US');
+                logger.info('Locale (' + Locale + ') is invalid or not supported.  Returning default: EN_US');
                 return EN_US;
         }
     }

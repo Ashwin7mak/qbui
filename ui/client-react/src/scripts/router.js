@@ -1,10 +1,8 @@
-
 import React from 'react';
-//import { Router, Route, Link } from 'react-router'
+import { Router, Route } from 'react-router';
+import createBrowserHistory from 'history/lib/createBrowserHistory';
 
-import DataTable from '../components/report/dataTable/layout';
-
-import Nav from '../components/nav/nav';
+import NavComponent from '../components/nav/nav';
 import Fluxxor from 'fluxxor';
 
 import ReportsStore from '../stores/ReportsStore';
@@ -20,13 +18,22 @@ let flux = new Fluxxor.Flux(stores);
 flux.addActions(reportActions);
 flux.addActions(reportDataActions);
 
-flux.actions.loadReports('mydbid')
+flux.actions.loadReports('mydbid');
+
+class Nav extends React.Component {
+    render() {
+        return <NavComponent flux={flux}/>
+    }
+};
+
+React.render((
+    <Router history={createBrowserHistory()}>
+        <Route path="/" name="default" component={Nav} >
+            <Route path="apps" name="apps" component={Nav} />
+            <Route path="app/:appId/table/:tblId/reports" name="reports" component={Nav} />
+            <Route path="app/:appId/table/:tblId/report/:rptId" name="report" component={Nav} />
+        </Route>
+    </Router>
+), document.getElementById('content') );
 
 
-//  load the locale
-import { getI18nBundle } from '../locales/locales';
-var i18n = getI18nBundle();
-
-React.render(
-    <Nav flux={flux} {...i18n}/>, document.getElementById('content')
-);
