@@ -1,0 +1,15 @@
+.layout-footer {
+    height: 40px;
+    line-height: 40px;
+    width: 100%;
+    font-size: 0.8rem;
+    float: left;
+}
+.layout-footer .layout-footer-content {
+    color: #404040;
+    padding: 10px;
+}
+
+nav .container {
+    width:100%;
+}

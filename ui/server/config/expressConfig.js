@@ -79,6 +79,7 @@
             }
         }
 
+        //  LOCAL runs react client
         if (envConsts.LOCAL === env) {
             app.use(express.static(path.join(config.root, '.tmp')));
             app.use(express.static(path.join(config.root, 'client')));
@@ -86,6 +87,17 @@
             //  Error handler - has to be last.
             app.use(errorHandler());
         }
+
+        //  START TEMPORARY -- while we support Angular lighthouse..
+        if (envConsts.REACT === env) {
+            app.use(express.static(path.join(config.root, '.tmp')));
+            app.use(express.static(path.join(config.root, 'client-react')));
+            app.set('appPath', config.root + '/client-react');
+            //  Error handler - has to be last.
+            app.use(errorHandler());
+        }
+        //  END TEMPORARY
+
         return config;
     };
 }());
