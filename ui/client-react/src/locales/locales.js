@@ -25,12 +25,11 @@ var getI18nBundle = function() {
                 logger.info('Locale (' + Locale + ') is invalid or not supported.  Returning default: EN_US');
                 return EN_US;
         }
-    }
-    catch (e) {
+    } catch (e) {
         //  any error automatically returns default locale
         logger.error('Error fetching locale: ' + e);
         return EN_US;
     }
-}
+};
 
 export { Locale, getI18nBundle };

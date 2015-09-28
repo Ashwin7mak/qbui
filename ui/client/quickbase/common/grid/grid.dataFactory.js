@@ -5,7 +5,7 @@
      * This service wraps the data source and adds pagination chunking
      **/
 
-        //  get pages service
+    //  get pages service
     angular.module('qbse.grid')
             .factory('GridDataFactory', ['$q', '$log', 'gridConstants', GridDataFactory]);
 

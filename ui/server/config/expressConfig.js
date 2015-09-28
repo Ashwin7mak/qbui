@@ -17,6 +17,7 @@
     var config = require('./environment');
     var envConsts = require('./environment/environmentConstants');
     var routeGroups = require('../routes/routeGroups');
+    var clientConsts = require('./environment/clientConsts');
 
 
     module.exports = function(app) {
@@ -49,6 +50,7 @@
             config.routeGroup = routeGroups.DEFAULT;
         }
 
+        log.info('env : %s, client: %s, routegroup: %s', config.env, config.client, config.routeGroup);
 
         app.set('views', config.root + '/server/views');
         app.engine('html', require('ejs').renderFile);
@@ -79,8 +81,9 @@
             }
         }
 
-        //  LOCAL runs react client
-        if (envConsts.LOCAL === env) {
+        //   runs angular client
+        var client = config.client;
+        if (clientConsts.ANGULAR === client) {
             app.use(express.static(path.join(config.root, '.tmp')));
             app.use(express.static(path.join(config.root, 'client')));
             app.set('appPath', config.root + '/client');
@@ -89,7 +92,7 @@
         }
 
         //  START TEMPORARY -- while we support Angular lighthouse..
-        if (envConsts.REACT === env) {
+        else if (clientConsts.REACT === client) {
             app.use(express.static(path.join(config.root, '.tmp')));
             app.use(express.static(path.join(config.root, 'client-react')));
             app.set('appPath', config.root + '/client-react');

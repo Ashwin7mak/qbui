@@ -7,6 +7,13 @@
 
     //var path = require('path');
     var dateUtils = require('../../components/utility/dateUtils');
+    var clientConsts = require('./clientConsts');
+
+    //Temporary angular default for ci until we deploy react
+    var client = clientConsts.ANGULAR;
+    if (process.env.CLIENT) {
+        client = process.env.CLIENT;
+    }
 
     module.exports = {
 
@@ -40,7 +47,9 @@
         javaHost: '',
 
         //PROD Express Server
-        DOMAIN: ''
+        DOMAIN: '',
 
+        // the client to use
+        client
     };
 }());

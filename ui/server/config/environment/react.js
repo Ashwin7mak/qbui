@@ -15,6 +15,14 @@
     var dateUtils = require('../../components/utility/dateUtils');
     var envConsts = require('./environmentConstants');
     var routeGroups = require('../../routes/routeGroups');
+    var clientConsts = require('./clientConsts');
+
+    //Temporary support CLIENT=ANGULAR
+    // default is CLIENT=REACT for ci which we'll deploy
+    var client = clientConsts.REACT;
+    if (process.env.CLIENT) {
+        client = process.env.CLIENT;
+    }
 
     module.exports = {
 
@@ -52,15 +60,18 @@
         //javaHost: 'http://localhost:8080',
 
         //Express Server
-        DOMAIN: 'https://localhost.intuit.com:9443',
-        //DOMAIN: 'http://localhost.intuit.com:9000',
+        // DOMAIN: 'https://localhost.intuit.com:9443',
+        DOMAIN: 'http://localhost.intuit.com:9000',
         //DOMAIN  : 'http://localhost:9000',
 
         //Node understanding of RuntimeEnvironment
-        env: envConsts.REACT,
+        env: envConsts.LOCAL,
 
         //Node's understanding of a grouping of routes to be enabled/disabled
-        routeGroup: routeGroups.DEBUG
+        routeGroup: routeGroups.DEBUG,
+
+        // the client to use
+        client: client
 
     };
 }());
