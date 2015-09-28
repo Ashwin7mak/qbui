@@ -41,7 +41,18 @@
         //
         // See the full list at https://github.com/juliemr/minijasminenode
         jasmineNodeOpts: {
+            // If true, print colors to the terminal.
+            showColors: true,
+            // Default time to wait in ms before a test fails.
             defaultTimeoutInterval: 60000
+        },
+        // Globally accessible variables (params is a property of the Protractor instance)
+        // Used for running tests slower / faster if running in Sauce Labs
+        params: {
+            tinySleep : 100,
+            smallSleep : 1000,
+            mediumSleep : 5000,
+            largeSleep :10000
         }
     };
 }());

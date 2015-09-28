@@ -34,10 +34,35 @@
             reportService : reportService(recordBase),
             //Initialize the utils class
             e2eUtils : e2eUtils(),
-            // Helper method to get the proper URL for loading the dashboard page containing a list of reports for an app
+            //Helper method to get the proper URL for loading the dashboard page containing a list of reports for an app
             getRequestReportPageEndpoint : function(realmName) {
                 var requestReportPageEndPoint = e2eBase.recordBase.apiBase.generateFullRequest(realmName, '/qbapp#//');
                 return requestReportPageEndPoint;
+            },
+            //Get the proper URL for loading the session ticket page in the browser
+            getSessionTicketRequestEndpoint : function(realmName, realmId, ticketEndpoint) {
+                var sessionTicketRequestEndPoint = e2eBase.recordBase.apiBase.generateFullRequest(realmName, ticketEndpoint + realmId);
+                return sessionTicketRequestEndPoint;
+            },
+            //Checks for any JS errors in the browser, resets the browser window size and cleans up the test realm and app
+            cleanup : function(done) {
+                //Checks for any JS errors in the browser console
+                browser.manage().logs().get('browser').then(function(browserLog) {
+                    expect(browserLog.length).toEqual(0);
+                    if (browserLog.length) {
+                        console.error('browser log: ' + JSON.stringify(browserLog));
+                    }
+                });
+                //Reset the browser size
+                browser.driver.manage().window().maximize();
+                //Cleanup the realm and app
+                e2eBase.recordBase.apiBase.cleanup().then(function() {
+                    done();
+                });
+            },
+            //Helper method to sleep a specified number of seconds
+            sleep: function(ms) {
+                browser.driver.sleep(ms);
             }
         };
         return e2eBase;
