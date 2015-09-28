@@ -1,4 +1,4 @@
-
+Logger
 /*
  DEBUG	Detailed information on the flow through the system. Expect these to be written to logs only.
  INFO	Interesting runtime events (startup/shutdown).
@@ -32,25 +32,25 @@ class Logger {
 
     debug(msg) {
         if (LogLevel.DEBUG.id <= this.logLevel.id) {
-            this.logTheMessage(this.logLevel, msg);
+            this.logTheMessage(LogLevel.DEBUG, msg);
         }
     }
 
     info(msg) {
         if (LogLevel.INFO.id <= this.logLevel.id) {
-            this.logTheMessage(this.logLevel, msg);
+            this.logTheMessage(LogLevel.INFO, msg);
         }
     }
 
     warn(msg) {
         if (LogLevel.WARN.id <= this.logLevel.id) {
-            this.logTheMessage(this.logLevel, msg);
+            this.logTheMessage(LogLevel.WARN, msg);
         }
     }
 
     error(msg) {
         if (LogLevel.ERROR.id <= this.logLevel.id) {
-            this.logTheMessage(this.logLevel, msg);
+            this.logTheMessage(LogLevel.ERROR, msg);
         }
     }
 

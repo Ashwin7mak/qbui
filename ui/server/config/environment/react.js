@@ -71,7 +71,7 @@
         routeGroup: routeGroups.DEBUG,
 
         // the client to use
-        client
+        client: client
 
     };
 }());
