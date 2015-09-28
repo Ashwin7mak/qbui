@@ -96,26 +96,6 @@
                 done();
             }
         });
-        // TODO: Move these two functions into the PO
-        function getDimensions(reportServicePage) {
-            return {
-                windowSize        : browser.manage().window().getSize(),
-                mainSize          : reportServicePage.mainContent.getSize(),
-                mainLoc           : reportServicePage.mainContent.getLocation(),
-                tableContainerSize: reportServicePage.tableContainer.getSize(),
-                tableContainerLoc : reportServicePage.tableContainer.getLocation(),
-                lastColumnSize    : reportServicePage.lastColumn.getSize(),
-                lastColumnLoc     : reportServicePage.lastColumn.getLocation()
-            };
-        }
-        function validateGridDimensions(result) {
-            var leftPadding = 10;
-            var allowedVariance = 25;
-            var pointOfLastColumn = result.lastColumnLoc.x + leftPadding + result.lastColumnSize.width;
-            var pointOfMainContent = result.mainLoc.x + result.mainSize.width;
-            var endsDiff = Math.abs(pointOfMainContent - pointOfLastColumn);
-            expect(endsDiff).toBeLessThan(allowedVariance);
-        }
         /**
          * Test method. After setup completes, loads the browser, requests a session ticket, requests the list
          * of reports for that app and table, then runs / displays the report in the browser
@@ -126,6 +106,7 @@
             expect(app).not.toBe(null);
             expect(recordList).not.toBe(null);
             //Load the page objects
+            var requestSessionTicketPage = require('./requestSessionTicket.po.js');
             var requestReportPage = require('./requestReport.po.js');
             var reportServicePage = require('./reportService.po.js');
             //Gather the necessary values to make the requests via the browser
@@ -137,26 +118,28 @@
             browser.driver.manage().window().setSize(widthTests[0], heightTests);
             //Get a session ticket for that subdomain and realmId (stores it in the browser)
             var sessionTicketRequest = e2eBase.recordBase.apiBase.generateFullRequest(realmName, ticketEndpoint + realmId);
-            //This is a Non-Angular page, need to set this otherwise Protractor will wait forever for Angular to load
-            browser.ignoreSynchronization = true;
-            browser.get(sessionTicketRequest);
-            browser.ignoreSynchronization = false;
+            requestSessionTicketPage.get(sessionTicketRequest);
             //Load the requestReportPage
-            var requestReportPageEndPoint = e2eBase.recordBase.apiBase.generateFullRequest(realmName, '/qbapp#//');
-            browser.get(requestReportPageEndPoint);
+            requestReportPage.get(e2eBase.getRequestReportPageEndpoint(realmName));
             //Check that we have a report for our created table
             expect(requestReportPage.firstReportLinkEl.getText()).toContain(tableId);
             requestReportPage.firstReportLinkEl.click();
             //Assert columns fill width
-            promise.props(getDimensions(reportServicePage)).then(validateGridDimensions).then(function() {
+            promise.props(reportServicePage.getDimensions()).then(function(result) {
+                reportServicePage.validateGridDimensions(result);
+            }).then(function() {
                 //Resize window smaller and recheck
                 browser.driver.manage().window().setSize(widthTests[1], heightTests).then(function() {
                     browser.driver.sleep(40000);
-                    promise.props(getDimensions(reportServicePage)).then(validateGridDimensions).then(function() {
+                    promise.props(reportServicePage.getDimensions()).then(function(result) {
+                        reportServicePage.validateGridDimensions(result);
+                    }).then(function() {
                         //Resize window larger and recheck
                         browser.driver.manage().window().setSize(widthTests[2], heightTests).then(function() {
                             browser.driver.sleep(5000);
-                            promise.props(getDimensions(reportServicePage)).then(validateGridDimensions);
+                            promise.props(reportServicePage.getDimensions(reportServicePage)).then(function(result) {
+                                reportServicePage.validateGridDimensions(result);
+                            });
                         });
                     });
                 });

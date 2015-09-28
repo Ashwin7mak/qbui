@@ -20,11 +20,11 @@
         var e2eBase = {
             //Delegate to recordBase to initialize
             recordBase : recordBase,
-            initialize: function() {
+            initialize : function() {
                 init = recordBase.initialize();
             },
             //Set the baseUrl we want to use to reach out for testing
-            setBaseUrl: function(baseUrlConfig) {
+            setBaseUrl : function(baseUrlConfig) {
                 recordBase.setBaseUrl(baseUrlConfig);
             },
             //Initialize the service modules to use the same base class
@@ -33,7 +33,12 @@
             tableService : tableService(),
             reportService : reportService(recordBase),
             //Initialize the utils class
-            e2eUtils : e2eUtils()
+            e2eUtils : e2eUtils(),
+            // Helper method to get the proper URL for loading the dashboard page containing a list of reports for an app
+            getRequestReportPageEndpoint : function(realmName) {
+                var requestReportPageEndPoint = e2eBase.recordBase.apiBase.generateFullRequest(realmName, '/qbapp#//');
+                return requestReportPageEndPoint;
+            }
         };
         return e2eBase;
     };

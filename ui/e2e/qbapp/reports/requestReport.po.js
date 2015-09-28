@@ -18,6 +18,9 @@
         this.firstAppEl = this.appElList.first();
         this.firstTableEl = element.all(by.repeater('table in app.tables')).first();
         this.firstReportLinkEl = this.firstTableEl.all(by.tagName('a')).first();
+        this.get = function(requestReportPageEndPoint) {
+            browser.get(requestReportPageEndPoint);
+        };
     };
 
     module.exports = new RequestReportPage();

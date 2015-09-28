@@ -81,41 +81,6 @@
                 done();
             }
         });
-        //TODO: Move this function into the PO
-        /**
-         * Helper function that will get all of the field column headers from the report. Returns an array of strings.
-         */
-        function getReportColumnHeaders(reportServicePage) {
-            var deferred = promise.pending();
-            reportServicePage.columnHeaderElList.then(function(elements) {
-                var fetchTextPromises = [];
-                for (var i = 0; i < elements.length; i++) {
-                    fetchTextPromises.push(elements[i].getAttribute('innerText'));
-                }
-                Promise.all(fetchTextPromises).then(function(colHeaders) {
-                    var fieldColHeaders = [];
-                    colHeaders.forEach(function(headerText) {
-                        // The getText call above is returning the text value with a new line char on the end, need to remove it
-                        var subText = headerText.replace(/(\r\n|\n|\r)/gm, '');
-                        fieldColHeaders.push(subText.trim());
-                    });
-                    deferred.resolve(fieldColHeaders);
-                });
-            });
-            return deferred.promise;
-        }
-        //// TODO: Move into e2eUtils class
-        ///**
-        // * Helper function that will convert an array of strings to uppercase
-        // */
-        //function stringArrayToUpperCase(array) {
-        //    var upperArray = [];
-        //    array.forEach(function(lowerString) {
-        //        var res = lowerString.toUpperCase();
-        //        upperArray.push(res);
-        //    });
-        //    return upperArray;
-        //}
         /**
          * Test method. After setup completes, loads the browser, requests a session ticket, requests the list
          * of reports for that app and table, then runs / displays the report page in the browser
@@ -156,7 +121,7 @@
             });
             // Assert column headers
             var fieldNames = ['Record ID#', 'Text Field', 'Numeric Field', 'Phone Number Field'];
-            getReportColumnHeaders(reportServicePage).then(function(resultArray) {
+            reportServicePage.getReportColumnHeaders(reportServicePage).then(function(resultArray) {
                 // UI is currently using upper case to display the field names in columns
                 var upperFieldNames = e2eBase.e2eUtils.stringArrayToUpperCase(fieldNames);
                 expect(resultArray).toEqual(upperFieldNames);

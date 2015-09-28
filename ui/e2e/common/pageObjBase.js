@@ -8,7 +8,7 @@
     'use strict';
     var promise = require('bluebird');
     module.exports = function() {
-        var pageObjectBase = {
+        var pageObjBase = {
             /**
              * Find a particular link (based on link text) in a list of links
              */
@@ -58,7 +58,7 @@
             }
         };
 
-        return pageObjectBase;
+        return pageObjBase;
 
         //Can have locators for headers and footers here as well
     };
