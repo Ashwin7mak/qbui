@@ -7,13 +7,18 @@ module.exports = function(config) {
     "use strict";
 
     config.set({
-        basePath: "",
+        //  base path that is used to resolve files, excludes, etc.
+        basePath: "./",
+
         frameworks: ["jasmine"],
 
-        // test files
+        // list of files/patterns to load and test
         files: [
             { pattern: "tests.webpack.js"}
         ],
+
+        // list of files to exclude
+        exclude: [],
 
         // add webpack as the preprocessor
         preprocessors: {
@@ -65,6 +70,7 @@ module.exports = function(config) {
         singleRun: true,
 
         // level of output logging
+        // LOG_DISABLE || LOG_ERROR || LOG_WARN || LOG_INFO || LOG_DEBUG
         logLevel: config.LOG_INFO,
 
         // enable / disable watching file and executing tests whenever any file changes
@@ -84,6 +90,9 @@ module.exports = function(config) {
         //        {type: "text-summary"}
         //    ]
         //},
+
+        // report which specs are slower than 500ms
+        reportSlowerThan: 500,
 
         // allow for client console logging
         client: {

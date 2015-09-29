@@ -4,4 +4,4 @@
 var context = require.context('./client-react/test', true, /.unit.spec.js$/);
 context.keys().forEach(context);
 
-console.log(context.keys());
+//console.log(context.keys());
