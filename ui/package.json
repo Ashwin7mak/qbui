@@ -4,7 +4,7 @@
   "main": "server/app.js",
   "dependencies": {
     "angular-uuid": "0.0.2",
-    "axios": "^0.5.4",
+    "axios": "^0.7.0",
     "bigdecimal": "0.6.1",
     "bluebird": "2.9.24",
     "body-parser": "~1.5.0",
