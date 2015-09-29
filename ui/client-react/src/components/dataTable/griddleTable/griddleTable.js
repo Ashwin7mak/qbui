@@ -4,6 +4,7 @@ import Griddle from 'griddle-react';
 import PaginationComponent from './pagination.js';
 
 import './griddleTable.css';
+import './qbGriddleTable.css';
 
 
 class GriddleTable extends React.Component {
