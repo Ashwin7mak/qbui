@@ -31,32 +31,13 @@
             tableToFieldToFieldTypeMap['table 1']['Text Field'] = {fieldType: consts.SCALAR, dataType : consts.TEXT};
             tableToFieldToFieldTypeMap['table 1']['Numeric Field'] = {fieldType: consts.SCALAR, dataType : consts.NUMERIC};
             tableToFieldToFieldTypeMap['table 1']['Phone Number Field'] = {fieldType: consts.SCALAR, dataType : consts.PHONE_NUMBER};
-            //Generate the app JSON object
-            var generatedApp = e2eBase.appService.generateAppFromMap(tableToFieldToFieldTypeMap);
-            //Create the app via the API
-            e2eBase.appService.createApp(generatedApp).then(function(createdApp) {
-                //Set your global app object to use in the actual test method
-                app = createdApp;
-                //Get the appropriate fields out of the Create App response (specifically the created field Ids)
-                var nonBuiltInFields = e2eBase.tableService.getNonBuiltInFields(createdApp.tables[0]);
-                //Generate the record JSON objects
-                var generatedRecords = e2eBase.recordService.generateRecords(nonBuiltInFields, 10);
-                //Via the API create the records, a new report, then run the report.
-                //This is a promise chain since we need these actions to happen sequentially
-                e2eBase.recordService.addRecords(createdApp, createdApp.tables[0], generatedRecords).then(function() {
-                    e2eBase.reportService.createReport(app).then(function(reportId) {
-                        e2eBase.reportService.runReport(app, reportId).then(function(reportRecords) {
-                            //console.log('Here are the records returned from your API report:');
-                            //console.log(reportRecords);
-                            recordList = reportRecords;
-                            //End of the promise chain so call done here so Protractor can stop waiting;
-                            done();
-                        }).catch(function(error) {
-                            console.log(JSON.stringify(error));
-                            throw new Error('Error during test setup:' + error);
-                        });
-                    });
-                });
+            //Call the basic app setup function
+            e2eBase.basicSetup(tableToFieldToFieldTypeMap, 10).then(function(results) {
+                //Set your global objects to use in the test functions
+                app = results[0];
+                recordList = results[1];
+                //Finished with the promise chain so call done here
+                done();
             });
         });
         /**

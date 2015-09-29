@@ -18,7 +18,6 @@
     var reportServicePage = require('./reportService.po.js');
     describe('Report Layout Tests', function() {
         var app;
-        var recordList;
         var widthTests = [1024, 640, 1280];
         var heightTests = 2024;
         e2eBase.setBaseUrl(browser.baseUrl);
@@ -26,7 +25,7 @@
         /**
          * Setup method. Generates JSON for an app, a table, a set of records and a report. Then creates them via the REST API.
          * Have to specify the done() callback at the end of the promise chain, otherwise Protractor will not wait
-         * for the promises to be resolved (should be fixed in newest version)
+         * for the promises to be resolved
          */
         beforeAll(function(done) {
             //Create the table schema (map object) to pass into the app generator
@@ -42,32 +41,12 @@
             tableToFieldToFieldTypeMap['table 1']['Duration'] = {fieldType: consts.SCALAR, dataType : consts.DURATION};
             tableToFieldToFieldTypeMap['table 1']['Email'] = {fieldType: consts.SCALAR, dataType : consts.EMAIL_ADDRESS};
             tableToFieldToFieldTypeMap['table 1']['Rating'] = {fieldType: consts.SCALAR, dataType: consts.RATING};
-            //Generate the app JSON object
-            var generatedApp = e2eBase.appService.generateAppFromMap(tableToFieldToFieldTypeMap);
-            //Create the app via the API
-            e2eBase.appService.createApp(generatedApp).then(function(createdApp) {
-                //Set your global app object to use in the actual test method
-                app = createdApp;
-                //Get the appropriate fields out of the Create App response (specifically the created field Ids)
-                var nonBuiltInFields = e2eBase.tableService.getNonBuiltInFields(createdApp.tables[0]);
-                //Generate the record JSON objects
-                var generatedRecords = e2eBase.recordService.generateRecords(nonBuiltInFields, 10);
-                //Via the API create the records, a new report, then run the report.
-                //This is a promise chain since we need these actions to happen sequentially
-                e2eBase.recordService.addRecords(createdApp, createdApp.tables[0], generatedRecords).then(function() {
-                    e2eBase.reportService.createReport(app).then(function(reportId) {
-                        e2eBase.reportService.runReport(app, reportId).then(function(reportRecords) {
-                            //console.log('Here are the records returned from your API report:');
-                            //console.log(reportRecords);
-                            recordList = reportRecords;
-                            //End of the promise chain so call done here so Protractor can stop waiting;
-                            done();
-                        }).catch(function(error) {
-                            console.error(JSON.stringify(error));
-                            throw new Error('Error during test setup:' + error);
-                        });
-                    });
-                });
+            //Call the basic app setup function
+            e2eBase.basicSetup(tableToFieldToFieldTypeMap, 10).then(function(results) {
+                //Set your global objects to use in the test functions
+                app = results[0];
+                //Finished with the promise chain so call done here
+                done();
             });
         });
         /**
@@ -75,9 +54,10 @@
          * of reports for that app and table, then runs / displays the report in the browser
          */
         it('Should have liquid size behavior on the grid Report page', function(done) {
-            //Check that your setup completed properly (no fail fast option in beforeAll yet in Jasmine)
-            //This will fast fail the test if setup did not complete properly
-            if (!app || !recordList) {
+            //Check that your setup completed properly
+            //There's no fail fast option using beforeAll yet in Jasmine to prevent other tests from running
+            //This will fail the test if setup did not complete properly so at least it doesn't run
+            if (!app) {
                 done.fail('test app / recordList was not created properly during setup');
             }
             //Gather the necessary values to make the requests via the browser
