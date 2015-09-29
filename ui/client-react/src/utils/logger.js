@@ -1,4 +1,3 @@
-Logger
 /*
  DEBUG	Detailed information on the flow through the system. Expect these to be written to logs only.
  INFO	Interesting runtime events (startup/shutdown).
@@ -19,14 +18,13 @@ class Logger {
 
         //  allow for override of application level settings
         if (config) {
-            this.logLevel = config.logger.logLevel || LogLevel.ERROR;
-            this.logToConsole = config.logger.logToConsole || false;
-            this.logToServer = config.logger.logToServer || true;
-        }
-        else if (Configuration.logger) {
-            this.logLevel = Configuration.logger.logLevel || LogLevel.ERROR;
-            this.logToConsole = Configuration.logger.logToConsole || false;
-            this.logToServer = Configuration.logger.logToServer || true;
+            this.logLevel = config.logLevel;
+            this.logToConsole = config.logToConsole;
+            this.logToServer = config.logToServer;
+        } else if (Configuration && Configuration.logger) {
+            this.logLevel = Configuration.logger.logLevel;
+            this.logToConsole = Configuration.logger.logToConsole;
+            this.logToServer = Configuration.logger.logToServer;
         }
     }
 
@@ -58,18 +56,24 @@ class Logger {
     logTheMessage(level, msg) {
         try {
             if (this.logToConsole === true) {
-                window.console.log(level.name + ': ' + msg);
+                console.log(level.name + ': ' + msg);
             }
             if (this.logToServer === true) {
+                this.sendMessageToServer(level, msg);
                 // TODO: make xhr call to server to log on node
                 // TODO: include uuid on the request
             }
-        }
-        catch (e) {
-            if (typeof window.console !== 'undefined' && typeof window.console.log !== 'undefined') {
-                window.console.log('An error occurred in the processing of a logging message. ERROR::' + e);
+        } catch (e) {
+            if (typeof console !== 'undefined' && typeof console.log !== 'undefined') {
+                console.log('An error occurred in the processing of a logging message. ERROR::' + e);
             }
         }
+    }
+
+    // Log the message to the server
+    sendMessageToServer(level, msg) {
+        //TODO: placeholder...
+        return null;
     }
 }
 

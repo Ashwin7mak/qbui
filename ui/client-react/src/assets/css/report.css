@@ -52,6 +52,9 @@
     white-space: nowrap;
     padding: 1px 20px 15px 40px;
 }
+.report-stage .report-content .right .reminder .button-container {
+    margin-top:20px;
+}
 /* line 48, ../_report.scss */
 .report-stage .report-content .right .reminder .icon {
     width: 50px;

@@ -1,178 +1,195 @@
-import Logger from '../../src/utils/logger';
-import LogLevel from '../../src/utils/logLevels';
+import Logger from '../../src/utils/logger.js';
+import LogLevel from '../../src/utils/logLevels.js';
 
-describe('Logger', function() {
+describe('Logger', () => {
     'use strict';
 
-    it ('test default instantiation of Logger', function() {
-        let config = {};
-        let logger = new Logger(config);
-        expect (logger.logLevel).toBe(LogLevel.ERROR);
-        expect (logger.logToConsole).toBeFalsy();
-        expect (logger.logToServer).toBeFalsy();
+    let logMsg = 'debug message';
+
+    // TODO: this is a PLACEHOLDER...need to explicitly call with TEST configuration..
+    it('test instantiation of Logger with default test environment settings', () => {
+        let logger = new Logger();
+
+        //  defined in config/app.config.js
+        expect(logger.logLevel).toBe(LogLevel.DEBUG);
+        expect(logger.logToConsole).toBeTruthy();
+        expect(logger.logToServer).toBeFalsy();
     });
-    /*
-     it ('test non-default instantiation of Logger', () => {
-     let config = {
-     logToConsole: true,
-     logToServer: true,
-     logLevel: LogLevel.DEBUG
-     };
-     let logger = new Logger(config);
 
-     expect (logger.logLevel).toBe(LogLevel.ERROR);
-     expect (logger.logToConsole).toBeFalsy();
-     expect (logger.logToServer).toBeTruthy();
-     });
+    it('test instantiation of Logger with application level settings', () => {
+        let config = {
+            logToConsole: false,
+            logToServer: true,
+            logLevel: LogLevel.DEBUG
+        };
+        let logger = new Logger(config);
 
-     it ('test Logger set to DEBUG', () => {
-     let config = {
-     logToConsole: true,
-     logToServer: true,
-     logLevel: LogLevel.DEBUG
-     };
+        expect(logger.logLevel).toBe(LogLevel.DEBUG);
+        expect(logger.logToConsole).toBeFalsy();
+        expect(logger.logToServer).toBeTruthy();
+    });
 
-     let logger = new Logger(config);
+    it('test Logger with console and server logging', () => {
+        let config = {
+            logToConsole: true,
+            logToServer: true,
+            logLevel: LogLevel.DEBUG
+        };
 
-     expect (logger.logLevel).toBe(LogLevel.DEBUG);
+        let logger = new Logger(config);
+        spyOn(logger, 'logTheMessage').and.callThrough();
+        spyOn(console, 'log').and.returnValue('message logged to console');
+        spyOn(logger, 'sendMessageToServer');
 
-     spyOn(logger, 'logTheMessage').andReturn();
-     let logMsg = 'debug message';
-     logger.debug(logMsg);
-     expect(logger.logTheMessage).toHaveBeenCalledWIth(LogLevel.DEBUG, logMsg);
+        logger.debug(logMsg);
 
-     logger.info(logMsg);
-     expect(logger.logTheMessage).toHaveBeenCalledWIth(LogLevel.INFO, logMsg);
+        expect(logger.logTheMessage).toHaveBeenCalled();
+        expect(console.log).toHaveBeenCalled();
+        expect(logger.sendMessageToServer).toHaveBeenCalled();
+    });
 
-     logger.warn(logMsg);
-     expect(logger.logTheMessage).toHavaeBeenCalledWIth(LogLevel.WARN, logMsg);
+    it('test Logger with no console and server logging', () => {
+        let config = {
+            logToConsole: false,
+            logToServer: false,
+            logLevel: LogLevel.DEBUG
+        };
 
-     logger.error(logMsg);
-     expect(logger.logTheMessage).toHaveBeenCalledWIth(LogLevel.ERROR, logMsg);
-     });
+        let logger = new Logger(config);
+        spyOn(logger, 'logTheMessage').and.callThrough();
+        spyOn(console, 'log').and.returnValue('message logged to console');
+        spyOn(logger, 'sendMessageToServer');
 
-     it ('test Logger set to INFO', () => {
-     let config = {
-     logToConsole: true,
-     logToServer: true,
-     logLevel: LogLevel.INFO
-     };
+        logger.debug(logMsg);
 
-     let logger = new Logger(config);
+        expect(logger.logTheMessage).toHaveBeenCalled();
+        expect(console.log).not.toHaveBeenCalled();
+        expect(logger.sendMessageToServer).not.toHaveBeenCalled();
+    });
 
-     expect (logger.logLevel).toBe(LogLevel.INFO);
+    it('test debug level logging', () => {
+        let config = {
+            logToConsole: false,
+            logToServer: false,
+            logLevel: LogLevel.DEBUG
+        };
 
-     spyOn(logger, 'logTheMessage').andReturn();
-     let logMsg = 'info message';
-     logger.debug(logMsg);
-     expect(logger.logTheMessage).not.toHaveBeenCalledWIth(LogLevel.DEBUG, logMsg);
+        let logger = new Logger(config);
+        spyOn(logger, 'logTheMessage').and.returnValue('logTheMessage');
 
-     logger.info(logMsg);
-     expect(logger.logTheMessage).toHaveBeenCalledWIth(LogLevel.INFO, logMsg);
+        expect(logger.logLevel).toBe(LogLevel.DEBUG);
 
-     logger.warn(logMsg);
-     expect(logger.logTheMessage).toHaveBeenCalledWIth(LogLevel.WARN, logMsg);
+        logger.debug(logMsg);
+        expect(logger.logTheMessage).toHaveBeenCalled();
 
-     logger.error(logMsg);
-     expect(logger.logTheMessage).toHaveBeenCalledWIth(LogLevel.ERROR, logMsg);
-     });
+        logger.info(logMsg);
+        expect(logger.logTheMessage).toHaveBeenCalled();
 
-     it ('test Logger set to WARN', () => {
-     let config = {
-     logToConsole: true,
-     logToServer: true,
-     logLevel: LogLevel.WARN
-     };
+        logger.warn(logMsg);
+        expect(logger.logTheMessage).toHaveBeenCalled();
 
-     let logger = new Logger(config);
+        logger.error(logMsg);
+        expect(logger.logTheMessage).toHaveBeenCalled();
+    });
 
-     expect (logger.logLevel).toBe(LogLevel.WARN);
+    it('test info level logging', () => {
+        let config = {
+            logToConsole: false,
+            logToServer: false,
+            logLevel: LogLevel.INFO
+        };
 
-     spyOn(logger, 'logTheMessage').andReturn();
-     let logMsg = 'warn message';
-     logger.debug(logMsg);
-     expect(logger.logTheMessage).not.toHaveBeenCalledWIth(LogLevel.DEBUG, logMsg);
+        let logger = new Logger(config);
+        spyOn(logger, 'logTheMessage').and.returnValue('logTheMessage');
 
-     logger.info(logMsg);
-     expect(logger.logTheMessage).not.toHaveBeenCalledWIth(LogLevel.INFO, logMsg);
+        expect(logger.logLevel).toBe(LogLevel.INFO);
 
-     logger.warn(logMsg);
-     expect(logger.logTheMessage).toHaveBeenCalledWIth(LogLevel.WARN, logMsg);
+        logger.debug(logMsg);
+        expect(logger.logTheMessage).not.toHaveBeenCalled();
 
-     logger.error(logMsg);
-     expect(logger.logTheMessage).toHaveBeenCalledWIth(LogLevel.ERROR, logMsg);
-     });
+        logger.info(logMsg);
+        expect(logger.logTheMessage).toHaveBeenCalled();
 
-     it ('test Logger set to ERROR', () => {
-     let config = {
-     logToConsole: true,
-     logToServer: true,
-     logLevel: LogLevel.ERROR
-     };
+        logger.warn(logMsg);
+        expect(logger.logTheMessage).toHaveBeenCalled();
 
-     let logger = new Logger(config);
+        logger.error(logMsg);
+        expect(logger.logTheMessage).toHaveBeenCalled();
+    });
 
-     expect (logger.logLevel).toBe(LogLevel.ERROR);
+    it('test info level logging', () => {
+        let config = {
+            logToConsole: false,
+            logToServer: false,
+            logLevel: LogLevel.WARN
+        };
 
-     spyOn(logger, 'logTheMessage').andReturn();
-     let logMsg = 'error message';
-     logger.debug(logMsg);
-     expect(logger.logTheMessage).not.toHaveBeenCalledWIth(LogLevel.DEBUG, logMsg);
+        let logger = new Logger(config);
+        spyOn(logger, 'logTheMessage').and.returnValue('logTheMessage');
 
-     logger.info(logMsg);
-     expect(logger.logTheMessage).not.toHaveBeenCalledWIth(LogLevel.INFO, logMsg);
+        expect(logger.logLevel).toBe(LogLevel.WARN);
 
-     logger.warn(logMsg);
-     expect(logger.logTheMessage).not.toHaveBeenCalledWIth(LogLevel.WARN, logMsg);
+        logger.debug(logMsg);
+        expect(logger.logTheMessage).not.toHaveBeenCalled();
 
-     logger.error(logMsg);
-     expect(logger.logTheMessage).toHaveBeenCalledWIth(LogLevel.ERROR, logMsg);
-     });
+        logger.info(logMsg);
+        expect(logger.logTheMessage).not.toHaveBeenCalled();
 
-     it ('test Logger set to OFF', () => {
-     let config = {
-     logToConsole: true,
-     logToServer: true,
-     logLevel: LogLevel.OFF
-     };
+        logger.warn(logMsg);
+        expect(logger.logTheMessage).toHaveBeenCalled();
 
-     let logger = new Logger(config);
+        logger.error(logMsg);
+        expect(logger.logTheMessage).toHaveBeenCalled();
+    });
 
-     expect (logger.logLevel).toBe(LogLevel.OFF);
+    it('test info level logging', () => {
+        let config = {
+            logToConsole: false,
+            logToServer: false,
+            logLevel: LogLevel.ERROR
+        };
 
-     spyOn(logger, 'logTheMessage').andReturn();
-     let logMsg = 'no error message logging';
-     logger.debug(logMsg);
-     expect(logger.logTheMessage).not.toHaveBeenCalledWIth(LogLevel.DEBUG, logMsg);
+        let logger = new Logger(config);
+        spyOn(logger, 'logTheMessage').and.returnValue('logTheMessage');
 
-     logger.info(logMsg);
-     expect(logger.logTheMessage).not.toHaveBeenCalledWIth(LogLevel.INFO, logMsg);
+        expect(logger.logLevel).toBe(LogLevel.ERROR);
 
-     logger.warn(logMsg);
-     expect(logger.logTheMessage).not.toHaveBeenCalledWIth(LogLevel.WARN, logMsg);
+        logger.debug(logMsg);
+        expect(logger.logTheMessage).not.toHaveBeenCalled();
 
-     logger.error(logMsg);
-     expect(logger.logTheMessage).not.toHaveBeenCalledWIth(LogLevel.ERROR, logMsg);
-     });
+        logger.info(logMsg);
+        expect(logger.logTheMessage).not.toHaveBeenCalled();
 
-     it ('test logging of message to console only', () => {
-     let config = {
-     logToConsole: true,
-     logToServer: false,
-     logLevel: LogLevel.DEBUG
-     };
+        logger.warn(logMsg);
+        expect(logger.logTheMessage).not.toHaveBeenCalled();
 
-     let logger = new Logger(config);
+        logger.error(logMsg);
+        expect(logger.logTheMessage).toHaveBeenCalled();
+    });
 
-     spyOn(window.console, 'log').andReturn();
-     let logMsg = 'no error message logging';
-     logger.debug(logMsg);
+    it('test info level logging', () => {
+        let config = {
+            logToConsole: false,
+            logToServer: false,
+            logLevel: LogLevel.OFF
+        };
 
-     expect(logger.logTheMessage).toHaveBeenCalledWIth(LogLevel.DEBUG, logMsg);
-     expect(window.console.log).toHaveBeenCalled();
+        let logger = new Logger(config);
+        spyOn(logger, 'logTheMessage').and.returnValue('logTheMessage');
 
-     // TODO add test to ensure server xhr is not called
+        expect(logger.logLevel).toBe(LogLevel.OFF);
 
-     });
-     */
+        logger.debug(logMsg);
+        expect(logger.logTheMessage).not.toHaveBeenCalled();
+
+        logger.info(logMsg);
+        expect(logger.logTheMessage).not.toHaveBeenCalled();
+
+        logger.warn(logMsg);
+        expect(logger.logTheMessage).not.toHaveBeenCalled();
+
+        logger.error(logMsg);
+        expect(logger.logTheMessage).not.toHaveBeenCalled();
+    });
+
 });

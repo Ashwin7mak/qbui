@@ -1,5 +1,5 @@
 export default {
-    locales: "fr-FR",
+    locales: "fr-fr",
 
     messages: {
         footer: {

@@ -51,7 +51,14 @@ Updated to include React modules.  When Angular is removed, will need to do the 
     * which will contain the and server dir and under public the react index.html and client bundle files 
     * host webserver from ui\dist\public for react interface 
      
-
+## Run Unit tests with Karma:
+* From command window:
+     * cd to the ui folder
+     * run `npm run tests` 
+     * output is sent to:
+        * the console 
+        * ui/build/reports/client/unit/client_report.xml 
+         
 #WebPack 
 
 ## What gets generated 
