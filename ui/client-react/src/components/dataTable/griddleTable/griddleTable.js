@@ -2,42 +2,77 @@ import React from 'react';
 import Griddle from 'griddle-react';
 
 import PaginationComponent from './pagination.js';
+import { fakeGriddleData } from '../../../components/dataTable/griddleTable/fakeData.js';
 
 import './griddleTable.css';
 import './qbGriddleTable.css';
 
+/*
+* Sample component for passing in data  -
+* <GriddleTable results={fakeGriddleData} columnMetadata={fakeGriddleColumnMetaData} useExternal={false}/>
+*
+* Sample component for fetching data from server on demand  - TODO
+* <GriddleTable getResultsCallback={callback} columnMetadata={fakeGriddleColumnMetaData} useExternal={false}/>
+* */
+
+var serverData = fakeGriddleData;
 
 class GriddleTable extends React.Component {
     initState(props){
         let initialState = {
-            "data": props.data,
-            externalResultsPerPage: props.externalResultsPerPage,
+            "results": props.results,
+            "maxPages": props.maxPages || 0,
+            "currentPage": props.currentPage,
+            "externalResultsPerPage": props.externalResultsPerPage,
             "externalSortColumn": props.externalSortColumn,
-            "externalSortAscending": props.externalSortAscending
+            "externalSortAscending": props.externalSortAscending,
+            "externalData": serverData
         };
+
         return initialState;
     }
 
     constructor(...args) {
         super(...args);
         this.state = this.initState(...args);
+        this.setPage = this.setPage.bind(this);
     }
 
     //general lifecycle methods
     componentWillMount(){
+        if (this.props.useExternal) {
+            if (!typeof(this.props.getResultsCallback) === 'function') {
+                console.log("No data source defined for lazy loading");
+            }
+            else {
+                this.setState({
+                    //TODO: "externalData": this.props.getResultsCallback(),
+                    "maxPages": Math.round(this.state.externalData.length / this.state.externalResultsPerPage),
+                    "results": this.state.externalData.slice(0, this.state.externalResultsPerPage)
+                });
+            }
+        }
+        else{
+            this.setState({
+                "maxPages": Math.round(this.state.results.length / this.state.externalResultsPerPage)
+            });
+        }
     }
 
     componentDidMount(){
-        this.getExternalData();
+
     }
 
-    getExternalData(page){
-        //TODO: fake data for now. this should go out to node layer and get the real data
-        this.setState({results: this.props.data});
-    }
 
     //what page is currently viewed
     setPage(index){
+        //This should interact with the data source to get the page at the given index
+        var number = index === 0 ? 0 : index * this.state.externalResultsPerPage;
+        this.setState(
+            {
+                "results": this.state.externalData.slice(number, number+this.state.externalResultsPerPage>this.state.externalData.length ? this.state.externalData.length : number+this.state.externalResultsPerPage),
+                "currentPage": index
+            });
     }
 
     //this will handle how the data is sorted
@@ -59,7 +94,7 @@ class GriddleTable extends React.Component {
     render(){
         return (
             <Griddle {...this.props}
-                     results={this.state.data}
+                     results={this.state.results}
                      //events
                      externalSetPage={this.setPage}
                      externalChangeSort={this.changeSort}
@@ -80,9 +115,8 @@ GriddleTable.defaultProps = {
     //useFixedLayout: false,  // this isnt working right now
     showFilter: false,
     showSettings: false,
-    maxPages: 0,
     currentPage: 0,
-    externalResultsPerPage: 20,
+    externalResultsPerPage: 5,
     externalSortColumn: null,
     externalSortAscending: true,
 
@@ -91,7 +125,9 @@ GriddleTable.defaultProps = {
 
     useExternal: false, /* TODO: this should always be true for us but needs data from server */
     columnMetadata: [],
-    results: []
+    results: [],
+
+    getResultsCallback: null
 };
 
 export default GriddleTable;

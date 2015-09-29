@@ -13,9 +13,12 @@ var FormattedMessage = ReactIntl.FormattedMessage;
 var Content = React.createClass({
     mixins: [IntlMixin],
 
+    getData: function(){
+      return fakeGriddleData;
+    },
     render: function() {
         return (
-            <GriddleTable data={fakeGriddleData} columnMetadata={fakeGriddleColumnMetaData} />
+            <GriddleTable getResultsCallback={this.getData} columnMetadata={fakeGriddleColumnMetaData} useExternal={true}/>
         )
     }
 })
