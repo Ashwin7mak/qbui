@@ -226,7 +226,8 @@ export const fakeGriddleColumnMetaData = [
     {
         "columnName": "rid",
         "order": 1,
-        "displayName": "Record Id#"
+        "displayName": "Record Id#",
+        "cssClassName" : "AlignRight"
     },
     {
         "columnName": "name",

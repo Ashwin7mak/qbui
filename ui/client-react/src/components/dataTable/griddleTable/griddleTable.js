@@ -13,7 +13,7 @@ class GriddleTable extends React.Component {
             "data": props.data || [],
             "currentPage": props.currentPage || 0,
             "maxPages": props.maxPages || 1,
-            "externalResultsPerPage": props.externalResultsPerPage || 5,
+            "externalResultsPerPage": props.externalResultsPerPage || 20,
             "externalSortColumn": props.externalSortColumn || null,
             "externalSortAscending":props.externalSortAscending || true
         };
@@ -89,7 +89,7 @@ GriddleTable.propTypes = {  };
 GriddleTable.defaultProps = {
     showFilter: false,
     useExternal: false, /* TODO: this should always be true for us but needs data from server */
-    showSettings: true,
+    showSettings: false,
     useFixedHeader: true,
     columnMetadata: [],
     results: [],

@@ -1,3 +1,25 @@
+.griddle table{
+    table-layout: auto!important; /* by default griddle sets this to "fixed" layout but we dont want same width columns*/
+}
+
+.griddle-container { /* Temporary margin so the footer doesnt overlap the grid. Should be resolved by the layout in time. */
+    margin-bottom: 70px;
+    margin-left: 20px;
+    margin-right: 20px;
+}
+
 .griddle td{
     word-wrap: break-word;
+}
+
+/*Temporary pagination styles */
+.griddle-footer > .pagination {
+    margin: 0;
+    padding: 5px;
+    float: right;
+}
+
+/* Placeholder for column-related css classes */
+.AlignRight {
+    text-align: right;
 }
