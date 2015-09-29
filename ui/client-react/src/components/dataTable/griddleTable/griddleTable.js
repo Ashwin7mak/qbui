@@ -10,12 +10,10 @@ import './qbGriddleTable.css';
 class GriddleTable extends React.Component {
     initState(props){
         let initialState = {
-            "data": props.data || [],
-            "currentPage": props.currentPage || 0,
-            "maxPages": props.maxPages || 1,
-            "externalResultsPerPage": props.externalResultsPerPage || 20,
-            "externalSortColumn": props.externalSortColumn || null,
-            "externalSortAscending":props.externalSortAscending || true
+            "data": props.data,
+            externalResultsPerPage: props.externalResultsPerPage,
+            "externalSortColumn": props.externalSortColumn,
+            "externalSortAscending": props.externalSortAscending
         };
         return initialState;
     }
@@ -36,12 +34,10 @@ class GriddleTable extends React.Component {
     getExternalData(page){
         //TODO: fake data for now. this should go out to node layer and get the real data
         this.setState({results: this.props.data});
-        console.log("in get external data");
     }
 
     //what page is currently viewed
     setPage(index){
-        console.log("setPage to: " +  index);
     }
 
     //this will handle how the data is sorted
@@ -62,14 +58,8 @@ class GriddleTable extends React.Component {
 
     render(){
         return (
-            <Griddle useExternal={this.props.useExternal}
+            <Griddle {...this.props}
                      results={this.state.data}
-                     // other configurable props
-                     showFilter={this.props.showFilter}
-                     showSettings={this.props.showSettings}
-                     columnMetadata={this.props.columnMetadata}
-                     useCustomPagerComponent={this.props.useCustomPagerComponent}
-                     customPagerComponent={this.props.customPagerComponent}
                      //events
                      externalSetPage={this.setPage}
                      externalChangeSort={this.changeSort}
@@ -87,14 +77,21 @@ class GriddleTable extends React.Component {
 }
 GriddleTable.propTypes = {  };
 GriddleTable.defaultProps = {
+    //useFixedLayout: false,  // this isnt working right now
     showFilter: false,
-    useExternal: false, /* TODO: this should always be true for us but needs data from server */
     showSettings: false,
-    useFixedHeader: true,
-    columnMetadata: [],
-    results: [],
+    maxPages: 0,
+    currentPage: 0,
+    externalResultsPerPage: 20,
+    externalSortColumn: null,
+    externalSortAscending: true,
+
     useCustomPagerComponent: true,
-    customPagerComponent: PaginationComponent
+    customPagerComponent: PaginationComponent,
+
+    useExternal: false, /* TODO: this should always be true for us but needs data from server */
+    columnMetadata: [],
+    results: []
 };
 
 export default GriddleTable;

@@ -15,7 +15,6 @@ class PaginationComponent  extends React.Component {
         this.props.setPage(selectedEvent.eventKey -1);
     }
     render(){
-        console.log("rendering");
         return (
             <Pagination
                 prev
