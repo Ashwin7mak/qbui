@@ -8,7 +8,7 @@
     module.exports = function() {
         var tableService = {
             /**
-             * Given a table JSON object check for and return an array containing the non built in fields
+             * Given a table JSON object check for and return an array containing the non built-in fields
              */
             getNonBuiltInFields: function(createdTable) {
                 var nonBuiltInFields = [];

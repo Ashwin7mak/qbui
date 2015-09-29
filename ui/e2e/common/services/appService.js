@@ -8,6 +8,8 @@
     var promise = require('bluebird');
     //Node.js assert library
     var assert = require('assert');
+    //App generator module
+    var appGenerator = require('../../../test_generators/app.generator.js');
     module.exports = function(recordBase) {
         var appService = {
             /**
@@ -26,6 +28,14 @@
                     deferred.reject(error);
                 });
                 return deferred.promise;
+            },
+            /**
+             * Wrapper function that calls the generator function in the test_generators folder
+             */
+            generateAppFromMap: function(tableToFieldToFieldTypeMap) {
+                //Generate the app JSON object
+                var generatedApp = appGenerator.generateAppWithTablesFromMap(tableToFieldToFieldTypeMap);
+                return generatedApp;
             }
         };
         return appService;

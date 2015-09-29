@@ -6,6 +6,8 @@
  */
 (function() {
     'use strict';
+    //Bluebird Promise library
+    var promise = require('bluebird');
     module.exports = function(config) {
         var recordBase = require('../../server/api/test/recordApi.base.js')(config);
         var e2eUtils = require('./e2eUtils.js');
@@ -34,6 +36,24 @@
             reportService : reportService(recordBase),
             //Initialize the utils class
             e2eUtils : e2eUtils(),
+            //Common variables
+            ticketEndpoint : recordBase.apiBase.resolveTicketEndpoint(),
+            //Checks for any JS errors in the browser, resets the browser window size and cleans up the test realm and app
+            cleanup : function(done) {
+                //Checks for any JS errors in the browser console
+                browser.manage().logs().get('browser').then(function(browserLog) {
+                    expect(browserLog.length).toEqual(0);
+                    if (browserLog.length) {
+                        console.error('browser log: ' + JSON.stringify(browserLog));
+                    }
+                });
+                //Reset the browser size (note this doesn't work for Chrome on Mac OSX, a known bug - it will only max height)
+                browser.driver.manage().window().maximize();
+                //Cleanup the realm and app
+                e2eBase.recordBase.apiBase.cleanup().then(function() {
+                    done();
+                });
+            },
             //Helper method to get the proper URL for loading the dashboard page containing a list of reports for an app
             getRequestReportPageEndpoint : function(realmName) {
                 var requestReportPageEndPoint = e2eBase.recordBase.apiBase.generateFullRequest(realmName, '/qbapp#//');
@@ -44,24 +64,16 @@
                 var sessionTicketRequestEndPoint = e2eBase.recordBase.apiBase.generateFullRequest(realmName, ticketEndpoint + realmId);
                 return sessionTicketRequestEndPoint;
             },
-            //Checks for any JS errors in the browser, resets the browser window size and cleans up the test realm and app
-            cleanup : function(done) {
-                //Checks for any JS errors in the browser console
-                browser.manage().logs().get('browser').then(function(browserLog) {
-                    expect(browserLog.length).toEqual(0);
-                    if (browserLog.length) {
-                        console.error('browser log: ' + JSON.stringify(browserLog));
-                    }
+            //Resize the browser window to the given pixel width and height. Returns a promise
+            resizeBrowser : function(width, height) {
+                var deferred = promise.pending();
+                browser.driver.manage().window().setSize(width, height).then(function() {
+                    deferred.resolve();
                 });
-                //Reset the browser size
-                browser.driver.manage().window().maximize();
-                //Cleanup the realm and app
-                e2eBase.recordBase.apiBase.cleanup().then(function() {
-                    done();
-                });
+                return deferred.promise;
             },
             //Helper method to sleep a specified number of seconds
-            sleep: function(ms) {
+            sleep : function(ms) {
                 browser.driver.sleep(ms);
             }
         };

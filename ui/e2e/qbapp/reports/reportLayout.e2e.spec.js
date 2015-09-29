@@ -10,10 +10,12 @@
     //Require the e2e base class and constants modules
     var e2eBase = require('../../common/e2eBase.js')();
     var consts = require('../../../server/api/constants.js');
-    //Require the generator modules in the Server layer
-    var appGenerator = require('../../../test_generators/app.generator.js');
     //Bluebird Promise library
     var promise = require('bluebird');
+    //Load the page objects
+    var requestSessionTicketPage = require('./requestSessionTicket.po.js');
+    var requestReportPage = require('./requestReport.po.js');
+    var reportServicePage = require('./reportService.po.js');
     describe('Report Layout Tests', function() {
         var app;
         var recordList;
@@ -23,7 +25,6 @@
         e2eBase.initialize();
         /**
          * Setup method. Generates JSON for an app, a table, a set of records and a report. Then creates them via the REST API.
-         *
          * Have to specify the done() callback at the end of the promise chain, otherwise Protractor will not wait
          * for the promises to be resolved (should be fixed in newest version)
          */
@@ -32,32 +33,17 @@
             var tableToFieldToFieldTypeMap = {};
             tableToFieldToFieldTypeMap['table 1'] = {};
             tableToFieldToFieldTypeMap['table 1']['Text Field'] = {fieldType: consts.SCALAR, dataType: consts.TEXT};
-            tableToFieldToFieldTypeMap['table 1']['Rating Field'] = {
-                fieldType: consts.SCALAR,
-                dataType : consts.RATING
-            };
-            tableToFieldToFieldTypeMap['table 1']['Phone Number Field'] = {
-                fieldType: consts.SCALAR,
-                dataType : consts.PHONE_NUMBER
-            };
+            tableToFieldToFieldTypeMap['table 1']['Rating Field'] = {fieldType: consts.SCALAR, dataType : consts.RATING};
+            tableToFieldToFieldTypeMap['table 1']['Phone Number Field'] = {fieldType: consts.SCALAR, dataType : consts.PHONE_NUMBER};
             tableToFieldToFieldTypeMap['table 1']['Numeric'] = {fieldType: consts.SCALAR, dataType: consts.NUMERIC};
-            tableToFieldToFieldTypeMap['table 1']['Currency'] = {
-                fieldType: consts.SCALAR,
-                dataType : consts.CURRENCY
-            };
+            tableToFieldToFieldTypeMap['table 1']['Currency'] = {fieldType: consts.SCALAR, dataType : consts.CURRENCY};
             tableToFieldToFieldTypeMap['table 1']['Percent'] = {fieldType: consts.SCALAR, dataType: consts.PERCENT};
             tableToFieldToFieldTypeMap['table 1']['Url'] = {fieldType: consts.SCALAR, dataType: consts.URL};
-            tableToFieldToFieldTypeMap['table 1']['Duration'] = {
-                fieldType: consts.SCALAR,
-                dataType : consts.DURATION
-            };
-            tableToFieldToFieldTypeMap['table 1']['Email'] = {
-                fieldType: consts.SCALAR,
-                dataType : consts.EMAIL_ADDRESS
-            };
+            tableToFieldToFieldTypeMap['table 1']['Duration'] = {fieldType: consts.SCALAR, dataType : consts.DURATION};
+            tableToFieldToFieldTypeMap['table 1']['Email'] = {fieldType: consts.SCALAR, dataType : consts.EMAIL_ADDRESS};
             tableToFieldToFieldTypeMap['table 1']['Rating'] = {fieldType: consts.SCALAR, dataType: consts.RATING};
             //Generate the app JSON object
-            var generatedApp = appGenerator.generateAppWithTablesFromMap(tableToFieldToFieldTypeMap);
+            var generatedApp = e2eBase.appService.generateAppFromMap(tableToFieldToFieldTypeMap);
             //Create the app via the API
             e2eBase.appService.createApp(generatedApp).then(function(createdApp) {
                 //Set your global app object to use in the actual test method
@@ -94,37 +80,32 @@
             if (!app || !recordList) {
                 done.fail('test app / recordList was not created properly during setup');
             }
-            //Load the page objects
-            var requestSessionTicketPage = require('./requestSessionTicket.po.js');
-            var requestReportPage = require('./requestReport.po.js');
-            var reportServicePage = require('./reportService.po.js');
             //Gather the necessary values to make the requests via the browser
-            var ticketEndpoint = e2eBase.recordBase.apiBase.resolveTicketEndpoint();
             var realmName = e2eBase.recordBase.apiBase.realm.subdomain;
             var realmId = e2eBase.recordBase.apiBase.realm.id;
             var tableId = app.tables[0].id;
-            //Define the window size
-            browser.driver.manage().window().setSize(widthTests[0], heightTests);
             //Get a session ticket for that subdomain and realmId (stores it in the browser)
-            requestSessionTicketPage.get(e2eBase.getSessionTicketRequestEndpoint(realmName, realmId, ticketEndpoint));
-            //Load the requestReportPage
+            requestSessionTicketPage.get(e2eBase.getSessionTicketRequestEndpoint(realmName, realmId, e2eBase.ticketEndpoint));
+            //Load the requestReportPage (shows a list of all the reports for an app)
             requestReportPage.get(e2eBase.getRequestReportPageEndpoint(realmName));
-            //Test that we have a report for our created table
+            //Assert that we have a report for our created table
             expect(requestReportPage.firstReportLinkEl.getText()).toContain(tableId);
             //Select the report to load it in the browser
             requestReportPage.firstReportLinkEl.click();
+            //Define the window size
+            e2eBase.resizeBrowser(widthTests[0], heightTests);
             //Assert columns fill width
             promise.props(reportServicePage.getDimensions()).then(function(result) {
                 reportServicePage.validateGridDimensions(result);
             }).then(function() {
                 //Resize window smaller and recheck
-                browser.driver.manage().window().setSize(widthTests[1], heightTests).then(function() {
+                e2eBase.resizeBrowser(widthTests[1], heightTests).then(function() {
                     e2eBase.sleep(browser.params.largeSleep);
                     promise.props(reportServicePage.getDimensions()).then(function(result) {
                         reportServicePage.validateGridDimensions(result);
                     }).then(function() {
                         //Resize window larger and recheck
-                        browser.driver.manage().window().setSize(widthTests[2], heightTests).then(function() {
+                        e2eBase.resizeBrowser(widthTests[2], heightTests).then(function() {
                             e2eBase.sleep(browser.params.mediumSleep);
                             promise.props(reportServicePage.getDimensions(reportServicePage)).then(function(result) {
                                 reportServicePage.validateGridDimensions(result);

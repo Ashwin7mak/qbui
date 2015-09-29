@@ -4,7 +4,6 @@
  *
  * Created by klabak on 4/10/15
  */
-
 (function() {
     'use strict';
     //Bluebird Promise library

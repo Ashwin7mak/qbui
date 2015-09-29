@@ -57,9 +57,6 @@
                 });
             }
         };
-
         return pageObjBase;
-
-        //Can have locators for headers and footers here as well
     };
 }());

@@ -10,8 +10,10 @@
     //Require the e2e base class and constants modules
     var e2eBase = require('../../common/e2eBase.js')();
     var consts = require('../../../server/api/constants.js');
-    //Require the generator modules in the Server layer
-    var appGenerator = require('../../../test_generators/app.generator.js');
+    //Load the page objects
+    var requestSessionTicketPage = require('./requestSessionTicket.po.js');
+    var requestReportPage = require('./requestReport.po.js');
+    var reportServicePage = require('./reportService.po.js');
     describe('Report Service E2E Tests', function() {
         var app;
         var recordList;
@@ -19,28 +21,18 @@
         e2eBase.initialize();
         /**
          * Setup method. Generates JSON for an app, a table, a set of records and a report. Then creates them via the REST API.
-         *
          * Have to specify the done() callback at the end of the promise chain, otherwise Protractor will not wait
-         * for the promises to be resolved (should be fixed in newest version)
+         * for the promises to be resolved
          */
         beforeAll(function(done) {
             // Create the table schema (map object) to pass into the app generator
             var tableToFieldToFieldTypeMap = {};
             tableToFieldToFieldTypeMap['table 1'] = {};
-            tableToFieldToFieldTypeMap['table 1']['Text Field'] = {
-                fieldType: consts.SCALAR,
-                dataType : consts.TEXT
-            };
-            tableToFieldToFieldTypeMap['table 1']['Numeric Field'] = {
-                fieldType: consts.SCALAR,
-                dataType : consts.NUMERIC
-            };
-            tableToFieldToFieldTypeMap['table 1']['Phone Number Field'] = {
-                fieldType: consts.SCALAR,
-                dataType : consts.PHONE_NUMBER
-            };
+            tableToFieldToFieldTypeMap['table 1']['Text Field'] = {fieldType: consts.SCALAR, dataType : consts.TEXT};
+            tableToFieldToFieldTypeMap['table 1']['Numeric Field'] = {fieldType: consts.SCALAR, dataType : consts.NUMERIC};
+            tableToFieldToFieldTypeMap['table 1']['Phone Number Field'] = {fieldType: consts.SCALAR, dataType : consts.PHONE_NUMBER};
             //Generate the app JSON object
-            var generatedApp = appGenerator.generateAppWithTablesFromMap(tableToFieldToFieldTypeMap);
+            var generatedApp = e2eBase.appService.generateAppFromMap(tableToFieldToFieldTypeMap);
             //Create the app via the API
             e2eBase.appService.createApp(generatedApp).then(function(createdApp) {
                 //Set your global app object to use in the actual test method
@@ -69,7 +61,7 @@
         });
         /**
          * Test method. After setup completes, loads the browser, requests a session ticket, requests the list
-         * of reports for that app and table, then runs / displays the report page in the browser
+         * of reports for that app and table, then displays the report page in the browser
          */
         it('Should load the reports page with the appropriate table report', function(done) {
             //Check that your setup completed properly (no fail fast option in beforeAll yet in Jasmine)
@@ -77,24 +69,17 @@
             if (!app || !recordList) {
                 done.fail('test app / recordList was not created properly during setup');
             }
-            //Load the page objects
-            var requestSessionTicketPage = require('./requestSessionTicket.po.js');
-            var requestReportPage = require('./requestReport.po.js');
-            var reportServicePage = require('./reportService.po.js');
             //Gather the necessary values to make the requests via the browser
-            var ticketEndpoint = e2eBase.recordBase.apiBase.resolveTicketEndpoint();
             var realmName = e2eBase.recordBase.apiBase.realm.subdomain;
             var realmId = e2eBase.recordBase.apiBase.realm.id;
             var tableId = app.tables[0].id;
             //Get a session ticket for that subdomain and realmId (stores it in the browser)
-            var sessionTicketRequest = e2eBase.recordBase.apiBase.generateFullRequest(realmName, ticketEndpoint + realmId);
-            requestSessionTicketPage.get(sessionTicketRequest);
-            //Load the requestReportPage
+            requestSessionTicketPage.get(e2eBase.getSessionTicketRequestEndpoint(realmName, realmId, e2eBase.ticketEndpoint));
+            //Load the requestReportPage (shows a list of all the reports for an app)
             requestReportPage.get(e2eBase.getRequestReportPageEndpoint(realmName));
-            //Test that we have a report for our created table
-            e2eBase.sleep(browser.params.smallSleep);
             // Check that we have a report for our created table
             expect(requestReportPage.firstReportLinkEl.getText()).toContain(tableId);
+            e2eBase.sleep(browser.params.smallSleep);
             requestReportPage.firstReportLinkEl.click();
             // Now on the Reports Service page
             e2eBase.sleep(browser.params.mediumSleep);
