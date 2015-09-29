@@ -6,6 +6,7 @@
 
 # build support folders
 /build/
+/coverage/
 /dist/
 /logs/
 .tmp/
