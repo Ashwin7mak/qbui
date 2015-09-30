@@ -24,7 +24,7 @@ var App = React.createClass( {
     render: function() {
         return (
             <div>
-                <p>Your QuickBase Applications</p>
+                <p><h4>Your QuickBase Applications</h4></p>
                 <AppsList {...i18n} data={this.state.apps}/>
             </div>
         );

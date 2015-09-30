@@ -2,6 +2,7 @@
 import Fluxxor from 'fluxxor';
 import AppService from '../services/appService';
 import Logger from '../utils/logger';
+import Promise from 'bluebird';
 
 let AppsStore = Fluxxor.createStore({
 
@@ -17,66 +18,59 @@ let AppsStore = Fluxxor.createStore({
         this.appService = new AppService();
     },
 
-    onLoadApps: function () {
+    onLoadApps: function() {
         this.apps = [];
         this.appService.getApps().
             then(
             function(response) {
-                this.logger.debug('success:'+response);
+                this.logger.debug('success:' + response);
                 this.apps = response.data;
-                this.emit("change");
+                this.emit('change');
             }.bind(this),
             function(error) {
-                this.logger.debug('error:'+error);
-                this.emit("change");
+                this.logger.debug('error:' + error);
+                this.emit('change');
             }.bind(this))
             .catch(
             function(ex) {
-                this.logger.debug('exception:'+ex);
-                this.emit("change");
+                this.logger.debug('exception:' + ex);
+                this.emit('change');
             }.bind(this)
         );
     },
 
-    onLoadAppsWithHydratedTables: function () {
+    onLoadAppsWithHydratedTables: function() {
         this.apps = [];
-        this.appService.getApps().
-            then(
+        this.appService.getApps().then(
             function(response) {
-                this.logger.debug('success:'+response);
-                let apps = response.data;
-                if (apps && apps.length > 0) {
-                    let emitChange=false;
-                    apps.forEach(function(a) {
-                        this.appService.getApp(a.id).then(
-                            function(app) {
-                                this.apps.push(app.data);
-                                this.emit("change");  //TODO: change this
-                            }.bind(this),
-                            function(err) {
-                                this.logger.error('Error retrieving app with tables.  ERROR=' + err);
-                            }.bind(this)
-                        )
-                    }.bind(this));
-                }
+                this.logger.debug('success:' + response);
+                response.data.forEach(function(app) {
+                    this.appService.getApp(app.id).then(
+                        function(a) {
+                            this.apps.push(a.data);
+                            this.emit('change');
+                        }.bind(this)
+                    );
+                }.bind(this));
             }.bind(this),
             function(error) {
-                this.logger.debug('error:'+error);
+                this.logger.debug('error:' + error);
                 //this.emit("change");
             }.bind(this))
             .catch(
             function(ex) {
-                this.logger.debug('exception:'+ex);
+                this.logger.debug('exception:' + ex);
                 //this.emit("change");
             }.bind(this)
         );
     },
 
-    getState: function () {
+    getState: function() {
         return {
             apps: this.apps
-        }
-    }
+        };
+    },
+
 });
 
 export default AppsStore;
