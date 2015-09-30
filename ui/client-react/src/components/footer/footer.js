@@ -15,7 +15,7 @@ var Footer = React.createClass({
 
     render: function() {
         var currentYear = new Date().getFullYear();
-        return <Navbar fixedBottom>
+        return <Navbar className='footer'>
             <Nav right>
               <NavItem>&#169;<FormattedMessage message={this.getIntlMessage('footer.copyright')} year={currentYear} /></NavItem>
             </Nav>

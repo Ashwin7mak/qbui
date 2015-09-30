@@ -31,7 +31,7 @@ module.exports = {
   // 'css-loader!sass?outputStyle=expanded'),
 
   scripts: {
-
+    //none, using react-bootstrap
   },
   styles: {
     'mixins': true,

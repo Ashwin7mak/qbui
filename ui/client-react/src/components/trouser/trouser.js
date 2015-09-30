@@ -1,6 +1,6 @@
 import React from 'react';
 
-import './trouser.css'
+import './trouser.scss'
 
 class Trouser extends React.Component {
 

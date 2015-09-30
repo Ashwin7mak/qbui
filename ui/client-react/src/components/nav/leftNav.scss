@@ -1,0 +1,16 @@
+.leftMenu {
+  border-right: 1px solid #ccc;
+  background:#002b48;
+  max-width:250px;
+
+  .nav > li > a {
+    color:#bbd;
+    .glyphicon {
+      margin-right:8px;
+    }
+  }
+  .nav > li > a:hover, .nav > li > a:focus {
+    text-decoration: none;
+    background-color: #476b8f;
+  }
+}
