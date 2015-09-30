@@ -1,6 +1,6 @@
 import React from 'react';
 import ReactIntl from 'react-intl';
-import {ListGroup, ListGroupItem} from 'react-bootstrap';
+import './apps.css';
 
 var IntlMixin = ReactIntl.IntlMixin;
 var FormattedMessage = ReactIntl.FormattedMessage;
@@ -10,21 +10,24 @@ var Content = React.createClass({
 
     render: function() {
         return ( this.props.data.apps.length ?
-            <div>
+            <div className="apps">
                 {this.props.data.apps.map((app) => {
-                    let hdr = app.name + ' (' + app.id + ')'
+                    let appName = app.name + ' (' + app.id + ')';
                     return (
-                        <ListGroup>
-                            <ListGroupItem header={hdr}>
+                        <div>
+                            <li>{appName}</li>
+                            <div className="tables">
                                 {app.tables.map((table) => {
-                                    let tbl = table.name + ' (' + table.id + ')';
-                                    return (<a href="/">{tbl}</a>);
+                                    let tblName = table.name + ' (' + table.id + ')';
+                                    return (
+                                        <ul><li><a href="/">{tblName}</a></li></ul>
+                                    );
                                 })}
-                            </ListGroupItem>
-                        </ListGroup>
+                            </div>
+                        </div>
                     );
                 })}
-            </div> : <div>No apps found</div>
+            </div> : <div></div>
         )
     }
 });
