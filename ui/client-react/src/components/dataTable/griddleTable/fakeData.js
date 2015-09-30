@@ -1,3 +1,84 @@
+export const fakeGriddleDataByReportId = {
+    1: [
+        {
+            rid: 1,
+            name: "Stephen Suarez",
+            company: "Ante Incorporated",
+            phone: "(230) 274-3518",
+            fax: "(420) 503-9285",
+            email: "sem.semper@lobortistellusjusto.com"
+        },
+        {
+            rid: 2,
+            name: "Judah Reid",
+            company: "Nulla Integer Vulputate Ltd",
+            phone: "(763) 195-2651",
+            fax: "(746) 319-9276",
+            email: "libero@orcilobortisaugue.co.uk"
+        },
+
+        {
+            rid: 3,
+            name: "Stephen Suarez",
+            company: "Ante Incorporated",
+            phone: "(230) 274-3518",
+            fax: "(420) 503-9285",
+            email: "sem.semper@lobortistellusjusto.com"
+        }],
+    2: [
+        {
+            rid: 4,
+            name: "Judah Reid",
+            company: "Nulla Integer Vulputate Ltd",
+            phone: "(763) 195-2651",
+            fax: "(746) 319-9276",
+            email: "libero@orcilobortisaugue.co.uk"
+        },
+        {
+            rid: 5,
+            name: "Stephen Suarez",
+            company: "Ante Incorporated",
+            phone: "(230) 274-3518",
+            fax: "(420) 503-9285",
+            email: "sem.semper@lobortistellusjusto.com"
+        },
+        {
+            rid: 6,
+            name: "Judah Reid",
+            company: "Nulla Integer Vulputate Ltd",
+            phone: "(763) 195-2651",
+            fax: "(746) 319-9276",
+            email: "libero@orcilobortisaugue.co.uk"
+        }
+    ],
+    3: [
+        {
+            rid: 7,
+            name: "Stephen Suarez",
+            company: "Ante Incorporated",
+            phone: "(230) 274-3518",
+            fax: "(420) 503-9285",
+            email: "sem.semper@lobortistellusjusto.com"
+        },
+        {
+            rid: 8,
+            name: "Judah Reid",
+            company: "Nulla Integer Vulputate Ltd",
+            phone: "(763) 195-2651",
+            fax: "(746) 319-9276",
+            email: "libero@orcilobortisaugue.co.uk"
+        },
+        {
+            rid: 9,
+            name: "Stephen Suarez",
+            company: "Ante Incorporated",
+            phone: "(230) 274-3518",
+            fax: "(420) 503-9285",
+            email: "sem.semper@lobortistellusjusto.com"
+        }
+    ]
+}
+
 export const fakeGriddleData =   [
     {
         rid: 1,

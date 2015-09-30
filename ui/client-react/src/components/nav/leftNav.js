@@ -1,6 +1,7 @@
 import React from 'react';
 
 import {Nav,NavItem,Tooltip,OverlayTrigger,Glyphicon} from 'react-bootstrap';
+import {Link} from 'react-router';
 
 import './leftNav.scss';
 
@@ -13,33 +14,32 @@ let LeftNav = React.createClass( {
 
     _getGlyphName(item) {
 
-        if (item.id==1)
-            return 'home';
+        if (item.icon)
+            return item.icon;
         else
             return 'th-list';
 
     },
     render: function() {
 
-        var styles={width: (this.props.visible ? 450 : 40) }
+        var styles={width: (this.props.visible ? 350 : 40) }
         return (
             <div style={styles} className={(this.props.visible ? "visible " : "") + "leftMenu"}>
                 <Nav stacked activeKey={1} >
                     {this.props.items.map((item) => {
                         const tooltip = (
-                            <Tooltip>{item.name}</Tooltip>
+                            <Tooltip id={item.id}>{item.name}</Tooltip>
                         );
+
                         return (this.props.visible ?
-                            (<NavItem key={item.id}
-                                     onClick={this.selectItem.bind(this,item.id)}>
+                            (<li key={item.id}><Link className='leftNavLink' to={item.link}>
                                 <Glyphicon glyph={this._getGlyphName(item)}/> {item.name}
-                            </NavItem>)
+                            </Link></li>)
                             :
-                            (<OverlayTrigger placement="right" overlay={tooltip}>
-                                <NavItem key={item.id}
-                                         onClick={this.selectItem.bind(this,item.id)}>
+                            (<OverlayTrigger key={item.id} placement="right" overlay={tooltip}>
+                                <li><Link className='leftNavLink' to={item.link}>
                                     <Glyphicon glyph={this._getGlyphName(item)}/>
-                                </NavItem>
+                                </Link></li>
                             </OverlayTrigger>));
                     })}
                 </Nav>

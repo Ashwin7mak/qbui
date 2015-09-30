@@ -1,6 +1,7 @@
 import React from 'react';
 import ReactIntl from 'react-intl';
-
+import Logger from '../../utils/logger';
+var logger = new Logger();
 
 import './nav.scss';
 
@@ -28,6 +29,7 @@ var i18n = getI18nBundle();
 var IntlMixin = ReactIntl.IntlMixin;
 var FormattedDate = ReactIntl.FormattedDate;
 
+
 var CurrentDate = React.createClass({
 
     mixins: [IntlMixin],
@@ -52,6 +54,7 @@ var Nav = React.createClass( {
         var flux = this.getFlux();
 
         return {
+            apps: flux.store("AppsStore").getState(),
             reports: flux.store("ReportsStore").getState(),
             reportData: flux.store("ReportDataStore").getState()
         };
@@ -60,12 +63,7 @@ var Nav = React.createClass( {
         this.setState({leftNavOpen: !this.state.leftNavOpen});
     },
 
-    leftNavSelection: function(id) {
 
-        var flux = this.getFlux();
-
-        flux.actions.loadReport(id);
-    },
     showTrouser: function() {
 
         this.setState({trouserOpen: true});
@@ -75,6 +73,37 @@ var Nav = React.createClass( {
         this.setState({trouserOpen: false});
     },
 
+    _handleParams: function() {
+        if (this.props.params) {
+            var flux = this.getFlux();
+            logger.info('update:')
+            logger.info(this.props.params)
+
+            let appId = this.props.params.appId;
+            let tblId = this.props.params.tblId;
+            let rptId = this.props.params.rptId;
+
+            //if (appId)
+            //    flux.actions.loadApp(appId);
+
+            if (tblId)
+                flux.actions.loadReports(tblId)
+
+            if (rptId)
+                flux.actions.loadReport(rptId);
+
+        }
+    },
+    componentWillMount: function() {
+        this._handleParams();
+    },
+
+    componentWillReceiveProps: function(props) {
+        this._handleParams();
+
+    },
+    
+
     render() {
         return (<div className='navShell'>
             <Trouser visible={this.state.trouserOpen} onHide={this.hideTrouser}>
@@ -83,8 +112,7 @@ var Nav = React.createClass( {
             </Trouser>
 
             <LeftNav visible={this.state.leftNavOpen}
-                     items={this.state.reports.list}
-                     itemSelection={this.leftNavSelection}/>
+                     items={this.state.reports.list}/>
 
             <div className='main'>
                 <TopNav onNavClick={this.toggleNav} onAddClicked={this.showTrouser}/>

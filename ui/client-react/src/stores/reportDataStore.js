@@ -1,6 +1,7 @@
 
 import Fluxxor from 'fluxxor';
 import Logger from '../utils/logger';
+import { fakeGriddleDataByReportId } from '../components/dataTable/griddleTable/fakeData.js';
 
 let ReportDataStore = Fluxxor.createStore({
 
@@ -16,50 +17,18 @@ let ReportDataStore = Fluxxor.createStore({
 
     onLoadReport: function (reportID) {
 
-        switch (reportID) {
-            case 1:
-                this.data = [
-                    {name: 'Drew', place: 'Ottawa'},
-                    {name: 'Don', place: 'Nashua'},
-                    {name: 'Claude', place: 'Sonoma'},
-                ];
-                break;
-            case 2:
-                this.data = [
-                    {name: 'Aditi', place: 'New York'},
-                    {name: 'Claire', place: 'Berlin'},
-                    {name: 'Rick', place: 'Los Angeles'}
-                ];
-                break;
-            case 3:
-                this.data = [
-                    {name: 'Micah', place: 'Dallas'},
-                    {name: 'Kana', place: 'Boston'},
-                    {name: 'Matt', place: 'Portsmouth'}
-                ];
-                break;
-            case 4:
-                this.data = [
-                    {name: 'Drew', place: 'Ottawa'},
-                    {name: 'Don', place: 'Nashua'},
-                    {name: 'Claude', place: 'Sonoma'},
-                    {name: 'Aditi', place: 'New York'},
-                    {name: 'Claire', place: 'Berlin'},
-                    {name: 'Rick', place: 'Los Angeles'},
-                    {name: 'Micah', place: 'Dallas'},
-                    {name: 'Kana', place: 'Boston'},
-                    {name: 'Matt', place: 'Portsmouth'},
-                    {name: 'Chris', place: 'Cambridge'}
-                ];
-                break;
-            default:
-                this.data = [];
-        }
+        if (fakeGriddleDataByReportId[reportID])
+            this.data = fakeGriddleDataByReportId[reportID];
+        else
+            this.data = fakeGriddleDataByReportId["1"];
+
+        console.log('loaded!',reportID,this.data)
 
         this.emit("change");
     },
 
     getState: function () {
+
         return {
             data: this.data
         }

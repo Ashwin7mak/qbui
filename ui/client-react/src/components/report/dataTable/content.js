@@ -14,11 +14,13 @@ var Content = React.createClass({
     mixins: [IntlMixin],
 
     getData: function(){
-      return fakeGriddleData;
+      return this.props.data;
     },
     render: function() {
         return (
-            <GriddleTable getResultsCallback={this.getData} columnMetadata={fakeGriddleColumnMetaData} useExternal={true}/>
+
+            <GriddleTable getResultsCallback={this.getData} columnMetadata={fakeGriddleColumnMetaData} useExternal={true} data={this.props.data}/>
+
         )
     }
 })

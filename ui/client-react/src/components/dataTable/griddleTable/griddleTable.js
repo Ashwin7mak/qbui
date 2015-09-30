@@ -19,6 +19,7 @@ var serverData = fakeGriddleData;
 
 class GriddleTable extends React.Component {
     initState(props){
+
         let initialState = {
             "results": props.results,
             "maxPages": props.maxPages || 0,
@@ -93,6 +94,7 @@ class GriddleTable extends React.Component {
 
     render(){
         return (
+            <div>Data from props (from report store):<p/> {JSON.stringify(this.props.data,null,'  ')}
             <Griddle {...this.props}
                      results={this.state.results}
                      //events
@@ -107,6 +109,7 @@ class GriddleTable extends React.Component {
                      externalSortColumn={this.state.externalSortColumn} 
                      externalSortAscending={this.state.externalSortAscending}
                 />
+                </div>
         );
     }
 }

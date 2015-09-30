@@ -7,8 +7,8 @@ let reportActions = {
     removeReport: function(index){
         this.dispatch('REMOVE_REPORT', index);
     },
-    loadReports: function(app) {
-        this.dispatch('LOAD_REPORTS', app);
+    loadReports: function(dbid) {
+        this.dispatch('LOAD_REPORTS', dbid);
     }
 };
 

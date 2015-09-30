@@ -51,7 +51,7 @@ class TopNav extends React.Component {
                 <div className='navGroup center'>
                     <ButtonGroup className='navItem' ButtonGroup>
 
-                        <OverlayTrigger trigger="click" rootClose placement="bottom" overlay={<Popover style={{whiteSpace:'nowrap'}} title="Search Records"><strong>Search:</strong> <input /> <Button bsStyle='success'>Go</Button></Popover>}>
+                        <OverlayTrigger trigger="click" rootClose placement="bottom" overlay={<Popover id={0} style={{whiteSpace:'nowrap'}} title="Search Records"><strong>Search:</strong> <input /> <Button bsStyle='success'>Go</Button></Popover>}>
                             <Button><Glyphicon glyph="search" /></Button>
                         </OverlayTrigger>
 

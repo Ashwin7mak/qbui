@@ -23,10 +23,10 @@ let ReportsStore = Fluxxor.createStore({
     onLoadReports: function (dbid) {
         //mock data
         this.reports = [
-            {name: 'Jade Developers',id:1},
-            {name: 'Indigo Developers',id:2},
-            {name: 'UXv3 UX',id:3},
-            {name: 'All UXV3',id:4}
+            {id:0, name: 'Home', link:'/apps', icon:'home'},
+            {id:1, name: 'Report #1', link:'/app/1/table/1/report/1'},
+            {id:2, name: 'Report #2',link:'/app/1/table/1/report/2'},
+            {id:3, name: 'Report #3',link:'/app/1/table/1/report/3'}
         ];
         this.emit("change");
     },

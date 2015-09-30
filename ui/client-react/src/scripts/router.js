@@ -31,7 +31,7 @@ flux.actions.loadAppsWithTables();
 
 class Nav extends React.Component {
     render() {
-        return <NavComponent flux={flux}/>
+        return <NavComponent flux={flux} {...this.props}/>
     }
 };
 
