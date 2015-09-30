@@ -1,0 +1,60 @@
+.layout-stage {
+    border-bottom: 1px solid #e3eaf3;
+    background-image: linear-gradient(to top, #f6f8fb 0%, #f9fafb 100%);
+    box-sizing: border-box;
+    position: relative;
+    background-color: #f3f5f8;
+    padding: 15px 15px 15px;
+    margin-bottom: 5px;
+    transition: padding 0.5s ease 0s;
+
+    margin-top:15px;
+    margin-bottom:35px;
+
+    .xlayout-stage-content {
+        transition: opacity .10s linear .20s, max-height .05s linear .20s;
+    }
+
+    .tab {
+        display: block;
+        cursor: pointer;
+        position: absolute;
+        bottom: -24px;
+        right: 0px;
+        margin-right: 25px;
+        height: 24px;
+        width: 27px;
+        border: 1px solid #e3eaf3;
+        border-radius: 0px 0px 2px 2px;
+        background-position: -80px -20px;
+        background-size: 144px auto;
+        background-color: #f3f5f8;
+        outline: medium none;
+    }
+
+    .tab.arrow {
+        background-repeat: no-repeat;
+        background-image: url('../../assets/images/arrow-sprite.png');
+    }
+}
+
+.layout-stage.stage-open {
+    min-height: 245px !important;
+}
+
+.layout-stage.stage-close {
+    height: 80px !important;
+    min-height: 80px !important;
+}
+
+.layout-stage.stage-close .tab {
+    background-position: -121px -20px;
+}
+
+
+
+
+
+
+
+

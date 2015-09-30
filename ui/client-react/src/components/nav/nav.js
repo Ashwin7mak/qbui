@@ -1,6 +1,9 @@
 import React from 'react';
 import ReactIntl from 'react-intl';
 
+
+import './nav.scss';
+
 import Button from 'react-bootstrap/lib/Button';
 
 import TopNav from './topNav';
@@ -40,7 +43,7 @@ var Nav = React.createClass( {
     mixins: [FluxMixin, StoreWatchMixin("ReportsStore","ReportDataStore")],
     getInitialState: function() {
         return {
-            leftNavOpen: false,
+            leftNavOpen: true,
             trouserOpen: false
         }
     },
@@ -53,15 +56,11 @@ var Nav = React.createClass( {
             reportData: flux.store("ReportDataStore").getState()
         };
     },
-    showNav: function() {
-        this.setState({leftNavOpen: true});
+    toggleNav: function() {
+        this.setState({leftNavOpen: !this.state.leftNavOpen});
     },
-    hideNav: function() {
-        this.setState({leftNavOpen: false});
-    },
-    leftNavSelection: function(id) {
 
-        this.hideNav();
+    leftNavSelection: function(id) {
 
         var flux = this.getFlux();
 
@@ -77,7 +76,7 @@ var Nav = React.createClass( {
     },
 
     render() {
-        return (<div>
+        return (<div className='navShell'>
             <Trouser visible={this.state.trouserOpen} onHide={this.hideTrouser}>
 
                 <Button bsStyle='success' onClick={this.hideTrouser} style={{position:'absolute',bottom:'10px',right:'10px'}}>Done</Button>
@@ -87,13 +86,16 @@ var Nav = React.createClass( {
                      items={this.state.reports.list}
                      itemSelection={this.leftNavSelection}/>
 
-            <TopNav onNavClick={this.showNav} onAddClicked={this.showTrouser}/>
-
-            <Stage stageContent="this is the stage content text">
-                <ReportStage {...i18n} />
-            </Stage>
-            <ReportContent {...i18n} data={this.state.reportData.data}/>
-            <Footer {...i18n} />
+            <div className='main'>
+                <TopNav onNavClick={this.toggleNav} onAddClicked={this.showTrouser}/>
+                <div className='mainContent'>
+                    <Stage stageContent="this is the stage content text">
+                        <ReportStage {...i18n} />
+                    </Stage>
+                    <ReportContent {...i18n} data={this.state.reportData.data}/>
+                </div>
+                <Footer {...i18n} />
+            </div>
 
         </div>);
     }

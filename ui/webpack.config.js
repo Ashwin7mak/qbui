@@ -75,7 +75,7 @@ var config = {
             // SASS - transformed to css,
             {
                 test: /\.scss$/,
-                loader: 'css-loader!sass-loader'
+                loader: 'style!css!sass'
             },
             // also handles fonts and svg files
             // can return a Data Url if the file is smaller than a limit.
