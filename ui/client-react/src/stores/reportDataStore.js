@@ -1,6 +1,5 @@
 
 import Fluxxor from 'fluxxor';
-import AppService from '../services/appService';
 import Logger from '../utils/logger';
 
 let ReportDataStore = Fluxxor.createStore({
@@ -13,28 +12,12 @@ let ReportDataStore = Fluxxor.createStore({
         );
 
         this.logger = new Logger();
-        this.appService = new AppService();
     },
 
     onLoadReport: function (reportID) {
 
         switch (reportID) {
             case 1:
-
-                this.appService.getApps().
-                    then(
-                        function(response) {
-                            this.logger.debug('success:'+response);
-                        }.bind(this),
-                        function(error) {
-                            this.logger.debug('error:'+error);
-                        }.bind(this))
-                    .catch(
-                        function(ex) {
-                            this.logger.debug('exception:'+ex);
-                        }.bind(this)
-                    );
-
                 this.data = [
                     {name: 'Drew', place: 'Ottawa'},
                     {name: 'Don', place: 'Nashua'},
