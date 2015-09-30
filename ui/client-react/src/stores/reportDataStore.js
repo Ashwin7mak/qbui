@@ -1,20 +1,40 @@
 
-import Fluxxor from 'fluxxor'
-
+import Fluxxor from 'fluxxor';
+import AppService from '../services/appService';
+import Logger from '../utils/logger';
 
 let ReportDataStore = Fluxxor.createStore({
+
     initialize: function() {
         this.data = [ ];
 
         this.bindActions(
             'LOAD_REPORT', this.onLoadReport
         );
+
+        this.logger = new Logger();
+        this.appService = new AppService();
     },
 
     onLoadReport: function (reportID) {
 
         switch (reportID) {
             case 1:
+
+                this.appService.getApps().
+                    then(
+                        function(response) {
+                            this.logger.debug('success:'+response);
+                        }.bind(this),
+                        function(error) {
+                            this.logger.debug('error:'+error);
+                        }.bind(this))
+                    .catch(
+                        function(ex) {
+                            this.logger.debug('exception:'+ex);
+                        }.bind(this)
+                    );
+
                 this.data = [
                     {name: 'Drew', place: 'Ottawa'},
                     {name: 'Don', place: 'Nashua'},
@@ -48,8 +68,6 @@ let ReportDataStore = Fluxxor.createStore({
                     {name: 'Matt', place: 'Portsmouth'},
                     {name: 'Chris', place: 'Cambridge'}
                 ];
-                break;
-
                 break;
             default:
                 this.data = [];

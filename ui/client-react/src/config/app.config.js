@@ -14,7 +14,11 @@ var Configuration = {
         logLevel: LogLevel.DEBUG,
         logToConsole: true,
         logToServer: false
+    },
+    api: {
+        version: 'v1'
     }
+
 }
 
 export default Configuration;

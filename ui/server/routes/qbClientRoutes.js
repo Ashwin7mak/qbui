@@ -17,7 +17,7 @@
 
         app.route('/apps').get(function(req, res) {
             log.info('..opening apps home page.');
-            res.sendfile(app.get('appPath') + '/index.html');
+            res.sendfile(app.get('appPath') + '/apps.index.html');
         });
 
         //  default page -- quickbase application dashboard
