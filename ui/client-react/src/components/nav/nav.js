@@ -74,13 +74,14 @@ var Nav = React.createClass( {
     },
 
     // TODO: should the nav component know the details of what is rendering??
-    _handleParams: function() {
-        if (this.props.params) {
+    _handleParams: function(params) {
+
+        if (params) {
             var flux = this.getFlux();
 
-            let appId = this.props.params.appId;
-            let tblId = this.props.params.tblId;
-            let rptId = this.props.params.rptId;
+            let appId = params.appId;
+            let tblId = params.tblId;
+            let rptId = params.rptId;
 
             //  TODO: probably don't want to re-render when report link is clicked
             //  TODO: report url has route defined on node layer...need to re-think this..
@@ -97,12 +98,14 @@ var Nav = React.createClass( {
 
     //  Triggered when component is first rendered
     componentWillMount: function() {
-        this._handleParams();
+
+        this._handleParams(this.props.params);
     },
 
     // Triggered when properties change
     componentWillReceiveProps: function(props) {
-        this._handleParams();
+
+        this._handleParams(props.params);
 
     },
 

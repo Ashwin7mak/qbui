@@ -3,6 +3,8 @@ import Fluxxor from 'fluxxor';
 import Logger from '../utils/logger';
 import { fakeGriddleDataByReportId } from '../components/dataTable/griddleTable/fakeData.js';
 
+var logger = new Logger();
+
 let ReportDataStore = Fluxxor.createStore({
 
     initialize: function() {
@@ -21,9 +23,7 @@ let ReportDataStore = Fluxxor.createStore({
             this.data = fakeGriddleDataByReportId[reportID];
         else
             this.data = fakeGriddleDataByReportId["1"];
-
-        console.log('loaded!',reportID,this.data)
-
+        
         this.emit("change");
     },
 
