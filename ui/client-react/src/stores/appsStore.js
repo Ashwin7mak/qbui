@@ -2,7 +2,6 @@
 import Fluxxor from 'fluxxor';
 import AppService from '../services/appService';
 import Logger from '../utils/logger';
-import Promise from 'bluebird';
 
 let AppsStore = Fluxxor.createStore({
 

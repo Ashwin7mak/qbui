@@ -1,14 +1,17 @@
 // action creators
 
 let reportActions = {
-    addReport: function(report){
-        this.dispatch('ADD_REPORT', report);
-    },
-    removeReport: function(index){
-        this.dispatch('REMOVE_REPORT', index);
-    },
-    loadReports: function(dbid) {
-        this.dispatch('LOAD_REPORTS', dbid);
+    //
+    // uncomment when action is implemented..
+    //
+    //addReport: function(report){
+    //    this.dispatch('ADD_REPORT', report);
+    //},
+    //removeReport: function(index){
+    //    this.dispatch('REMOVE_REPORT', index);
+    //},
+    loadReports: function(report) {
+        this.dispatch('LOAD_REPORTS', report);
     }
 };
 

@@ -1,40 +1,68 @@
 
-import Fluxxor from 'fluxxor'
-
+import Fluxxor from 'fluxxor';
+import ReportService from '../services/reportService';
+import Logger from '../utils/logger';
 
 let ReportsStore = Fluxxor.createStore({
     initialize: function() {
-        this.reports = [ ];
+        this.reports = [];
 
         this.bindActions(
-            'ADD_TABLE', this.onAddReport,
-            'REMOVE_TABLE', this.onRemoveReport,
+            // activate actions once implemented..
+            //
+            //'ADD_TABLE', this.onAddReport,
+            //'REMOVE_TABLE', this.onRemoveReport,
             'LOAD_REPORTS', this.onLoadReports
         );
+
+        this.logger = new Logger();
+        this.reportService = new ReportService();
     },
-    onAddReport: function (report) {
-        this.reports.push(report);
-        this.emit("change");
-    },
-    onRemoveReport: function (id) {
-        this.reports.splice(index, 1);
-        this.emit("change");
-    },
-    onLoadReports: function (dbid) {
-        //mock data
-        this.reports = [
-            {id:0, name: 'Home', link:'/apps', icon:'home'},
-            {id:1, name: 'Report #1', link:'/app/1/table/1/report/1'},
-            {id:2, name: 'Report #2',link:'/app/1/table/1/report/2'},
-            {id:3, name: 'Report #3',link:'/app/1/table/1/report/3'}
-        ];
-        this.emit("change");
+    //onAddReport: function(report) {
+    //    this.reports.push(report);
+    //    this.emit('change');
+    //},
+    //onRemoveReport: function(id) {
+    //    this.reports.splice(index, 1);
+    //    this.emit('change');
+    //},
+
+    onLoadReports: function(report) {
+
+        this.reports = [{id:0, name: 'Home', link:'/apps', icon:'home'}];
+        if (report.appId && report.tblId) {
+            this.reportService.getReports(report.appId, report.tblId).
+                then(
+                function(response) {
+                    this.logger.debug('success:' + response);
+                    response.data.forEach(function (report) {
+                        this.reports.push({id: report.id, name: report.name, link: this.buildLink(report.appId, report.tblId, report.id)});
+                    }.bind(this));
+                    this.emit('change');
+                }.bind(this),
+                function(error) {
+                    this.logger.debug('error:' + error);
+                    this.emit('change');
+                }.bind(this))
+                .catch(
+                function(ex) {
+                    this.logger.debug('exception:' + ex);
+                    this.emit('change');
+                }.bind(this)
+            );
+        } else {
+            this.emit('change');
+        }
     },
 
-    getState: function () {
+    buildLink: function(appId, tblId, rptId) {
+        return '/app/' + appId + '/table/' + tblId + '/report/' + rptId;
+    },
+
+    getState: function() {
         return {
             list: this.reports
-        }
+        };
     }
 });
 

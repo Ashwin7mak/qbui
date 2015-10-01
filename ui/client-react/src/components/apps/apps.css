@@ -1,15 +1,23 @@
-.apps li {
-    font-size:14px;
+.apps-container {
+    margin: 15px;
+}
+
+.apps-container .apps {
+    margin-left: 15px;
+}
+
+.apps-container .apps li {
+    font-size:13px;
     font-weight:bold;
+    list-style-type: decimal;
+}
+
+.apps-container .apps .tables ul {
     list-style-type: none;
 }
 
-.apps .tables ul {
-    list-style-type: none;
-}
-
-.apps .tables ul li {
-    font-size:14px;
+.apps-container .apps .tables ul li {
+    font-size:12px;
     cursor:pointer;
     text-decoration: underline;
     color: -webkit-link;
