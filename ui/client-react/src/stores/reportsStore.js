@@ -35,8 +35,8 @@ let ReportsStore = Fluxxor.createStore({
                 then(
                 function(response) {
                     this.logger.debug('success:' + response);
-                    response.data.forEach(function (report) {
-                        this.reports.push({id: report.id, name: report.name, link: this.buildLink(report.appId, report.tblId, report.id)});
+                    response.data.forEach(function(rpt) {
+                        this.reports.push({id: rpt.id, name: rpt.name, link: this.buildLink(report.appId, report.tblId, rpt.id)});
                     }.bind(this));
                     this.emit('change');
                 }.bind(this),
