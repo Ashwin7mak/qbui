@@ -26,9 +26,6 @@ flux.addActions(reportActions);
 flux.addActions(reportDataActions);
 flux.addActions(appsActions);
 
-flux.actions.loadReports('mydbid');
-flux.actions.loadAppsWithTables();
-
 class Nav extends React.Component {
     render() {
         return <NavComponent flux={flux} {...this.props}/>
@@ -41,13 +38,12 @@ class Apps extends React.Component {
     }
 }
 
-
 React.render((
     <Router history={createBrowserHistory()}>
-        <Route path="/" name="default" component={Nav} />
-        <Route path="apps" name="apps" component={Apps} />
-        <Route path="app/:appId/table/:tblId/reports" name="reports" component={Nav} />
-        <Route path="app/:appId/table/:tblId/report/:rptId" name="report" component={Nav} />
+        <Route path='/' name='default' component={Nav} />
+        <Route path='apps' name='apps' component={Apps} />
+        <Route path='app/:appId/table/:tblId/reports' name='reports' component={Nav} />
+        <Route path='app/:appId/table/:tblId/report/:rptId' name='report' component={Nav} />
     </Router>
 ), document.getElementById('content') );
 

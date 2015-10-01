@@ -2,6 +2,9 @@ export default {
     locales: "fr-fr",
 
     messages: {
+        apps: {
+            header: "Vos Applications QuickBase"
+        },
         footer: {
             copyright: "{year} Intuit Inc. Tous droits réservés."
         },
@@ -16,6 +19,9 @@ export default {
                     button: "Envoyer vos commentaires"
                 }
             }
+        },
+        nav: {
+            home: "Accueil"
         }
     }
 };
