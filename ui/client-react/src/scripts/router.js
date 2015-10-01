@@ -26,35 +26,17 @@ flux.addActions(reportActions);
 flux.addActions(reportDataActions);
 flux.addActions(appsActions);
 
-//flux.actions.loadReports('mydbid');
-//flux.actions.loadAppsWithTables();
-//
-//class Nav extends React.Component {
-//    render() {
-//        return <NavComponent flux={flux} {...this.props}/>
-//    }
-//};
-//
-//class Apps extends React.Component {
-//    render() {
-//        return <AppsHome flux={flux}/>
-//    }
-//}
-
-
-let Nav = React.createClass({
-    render: function() {
-        flux.actions.loadReports({appId:this.props.params.appId, tblId:this.props.params.tblId});
-        return <NavComponent flux={flux} {...this.props}/>;
+class Nav extends React.Component {
+    render() {
+        return <NavComponent flux={flux} {...this.props}/>
     }
-});
+};
 
-let Apps = React.createClass({
-    render: function() {
-        flux.actions.loadAppsWithTables();
-        return <AppsHome flux={flux}/>;
+class Apps extends React.Component {
+    render() {
+        return <AppsHome flux={flux}/>
     }
-});
+}
 
 React.render((
     <Router history={createBrowserHistory()}>

@@ -73,36 +73,38 @@ var Nav = React.createClass( {
         this.setState({trouserOpen: false});
     },
 
+    // TODO: should the nav component know the details of what is rendering??
     _handleParams: function() {
         if (this.props.params) {
             var flux = this.getFlux();
-            logger.info('update:')
-            logger.info(this.props.params)
 
             let appId = this.props.params.appId;
             let tblId = this.props.params.tblId;
             let rptId = this.props.params.rptId;
 
-            //if (appId)
-            //    flux.actions.loadApp(appId);
-
-            if (tblId)
-                flux.actions.loadReports(tblId)
-
-            if (rptId)
+            //  TODO: probably don't want to re-render when report link is clicked
+            //  TODO: report url has route defined on node layer...need to re-think this..
+            if (appId && tblId) {
+                logger.debug('loading navigation reports.  AppId: ' + appId + ';TblId: ' + tblId);
+                flux.actions.loadReports({appId: appId, tblId: tblId});
+            }
+            if (rptId /*&& appId && tblId*/) {
+                logger.debug('loading specfic report. RptId: ' + rptId);
                 flux.actions.loadReport(rptId);
-
+            }
         }
     },
+
+    //  Triggered when component is first rendered
     componentWillMount: function() {
         this._handleParams();
     },
 
+    // Triggered when properties change
     componentWillReceiveProps: function(props) {
         this._handleParams();
 
     },
-    
 
     render() {
         return (<div className='navShell'>
