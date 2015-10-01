@@ -31,7 +31,7 @@
                     var id = parsed.id;
                     deferred.resolve(id);
                 }).catch(function(error) {
-                    console.log(JSON.stringify(error));
+                    console.error(JSON.stringify(error));
                     deferred.reject(error);
                 });
                 return deferred.promise;
