@@ -7,6 +7,11 @@ import './leftNav.scss';
 
 let LeftNav = React.createClass( {
 
+    getInitialState: function() {
+        return {
+            rendered:false,
+        }
+    },
     selectItem: function (id) {
         if (id)
             this.props.itemSelection(id);
@@ -19,6 +24,12 @@ let LeftNav = React.createClass( {
         else
             return 'th-list';
 
+    },
+    shouldComponentUpdate: function(nextProps,nextState) {
+        if (this.state.rendered)
+            return true;
+        this.setState({rendered:true});
+            return true;
     },
     render: function() {
 

@@ -87,19 +87,13 @@ var Nav = React.createClass( {
             //  TODO: report url has route defined on node layer...need to re-think this..
             if (appId && tblId) {
                 logger.debug('loading navigation reports.  AppId: ' + appId + ';TblId: ' + tblId);
-                flux.actions.loadReports({appId: appId, tblId: tblId});
+                //flux.actions.loadReports({appId: appId, tblId: tblId});
             }
             if (rptId /*&& appId && tblId*/) {
                 logger.debug('loading specfic report. RptId: ' + rptId);
                 flux.actions.loadReport(rptId);
             }
         }
-    },
-
-    //  Triggered when component is first rendered
-    componentWillMount: function() {
-
-        this._handleParams(this.props.params);
     },
 
     // Triggered when properties change

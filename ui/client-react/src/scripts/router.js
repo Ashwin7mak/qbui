@@ -26,17 +26,24 @@ flux.addActions(reportActions);
 flux.addActions(reportDataActions);
 flux.addActions(appsActions);
 
-class Nav extends React.Component {
-    render() {
+let Nav = React.createClass({
+    render: function () {
+
+        flux.actions.loadReports({appId: this.props.params.appId, tblId: this.props.params.tblId});
+
         return <NavComponent flux={flux} {...this.props}/>
     }
-};
+});
 
-class Apps extends React.Component {
-    render() {
+let Apps = React.createClass({
+    render: function () {
+
+        flux.actions.loadAppsWithTables();
+
         return <AppsHome flux={flux}/>
     }
-}
+});
+
 
 React.render((
     <Router history={createBrowserHistory()}>

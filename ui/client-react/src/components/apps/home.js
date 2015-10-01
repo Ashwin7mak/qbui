@@ -34,11 +34,6 @@ var App = React.createClass({
         };
     },
 
-    //  Triggered when component is first rendered
-    componentWillMount: function() {
-        let flux = this.getFlux();
-        flux.actions.loadAppsWithTables();
-    },
 
     render: function() {
         return (
