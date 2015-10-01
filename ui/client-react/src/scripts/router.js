@@ -26,21 +26,22 @@ flux.addActions(reportActions);
 flux.addActions(reportDataActions);
 flux.addActions(appsActions);
 
+
 let Nav = React.createClass({
     render: function () {
-
-        flux.actions.loadReports({appId: this.props.params.appId, tblId: this.props.params.tblId});
-
         return <NavComponent flux={flux} {...this.props}/>
+    },
+    componentDidMount: function () {
+        flux.actions.loadReports({appId: this.props.params.appId, tblId: this.props.params.tblId});
     }
 });
 
 let Apps = React.createClass({
     render: function () {
-
-        flux.actions.loadAppsWithTables();
-
         return <AppsHome flux={flux}/>
+    },
+    componentDidMount: function () {
+        flux.actions.loadAppsWithTables();
     }
 });
 
