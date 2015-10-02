@@ -38,80 +38,80 @@ class GriddleTable extends React.Component {
         this.state = this.initState(...args);
         this.setPage = this.setPage.bind(this);
         this.getExternalData = this.getExternalData.bind(this);
-}
+    }
 
-//general lifecycle methods
-componentWillMount(){
-}
+    //general lifecycle methods
+    componentWillMount(){
+    }
 
-getExternalData(page){
-    var that = this;
-    page = page||1
+    getExternalData(page){
+        var that = this;
+        page = page||1
 
-    this.setState({
-        isLoading: true
-    });
+        this.setState({
+            isLoading: true
+        });
 
-    this.props.getResultsCallback(page, function (data) {
-        var newState = {
-            currentPage: page-1,
-            isLoading:false,
-            results: data.results,
-            maxPages: (data.count /that.state.externalResultsPerPage) //+ 1 //need +1 for 1st data set that came in with props
-        };
+        this.props.getResultsCallback(page, function (data) {
+            var newState = {
+                currentPage: page-1,
+                isLoading:false,
+                results: data.results,
+                maxPages: (data.count /that.state.externalResultsPerPage) //+ 1 //need +1 for 1st data set that came in with props
+            };
 
-        that.setState(newState);
-    });
-}
+            that.setState(newState);
+        });
+    }
 
-componentDidMount(){
-    this.getExternalData();
-}
+    componentDidMount(){
+        this.getExternalData();
+    }
 
-//what page is currently viewed
-setPage(index){
-    //This should interact with the data source to get the page at the given index
-    index = index > this.state.maxPages ? this.state.maxPages : index < 1 ? 1 : index + 1;
-    this.getExternalData(index);
+    //what page is currently viewed
+    setPage(index){
+        //This should interact with the data source to get the page at the given index
+        index = index > this.state.maxPages ? this.state.maxPages : index < 1 ? 1 : index + 1;
+        this.getExternalData(index);
 
-}
+    }
 
-//this will handle how the data is sorted
-sortData(sort, sortAscending, data){
-}
+    //this will handle how the data is sorted
+    sortData(sort, sortAscending, data){
+    }
 
-//this changes whether data is sorted in ascending or descending order
-changeSort(sort, sortAscending){
-}
+    //this changes whether data is sorted in ascending or descending order
+    changeSort(sort, sortAscending){
+    }
 
-//this method handles the filtering of the data
-setFilter(filter){
-}
+    //this method handles the filtering of the data
+    setFilter(filter){
+    }
 
-//this method handles determining the page size
-setPageSize(size){
-}
+    //this method handles determining the page size
+    setPageSize(size){
+    }
 
-render(){
-    return (
-        <div>Data from props (from report store):<p/> {JSON.stringify(this.props.data,null,'  ')}
-<Griddle {...this.props}
-results={this.state.results}
-//events
-externalSetPage={this.setPage}
-externalChangeSort={this.changeSort}
-externalSetFilter={this.setFilter}
-externalSetPageSize={this.setPageSize}
-//state variables
-externalMaxPage={this.state.maxPages}
-externalCurrentPage={this.state.currentPage}
-resultsPerPage={this.state.externalResultsPerPage}
-externalSortColumn={this.state.externalSortColumn}
-externalSortAscending={this.state.externalSortAscending}
-/>
-</div>
-);
-}
+    render(){
+        return (
+            <div>Data from props (from report store):<p/> {JSON.stringify(this.props.results,null,'  ')}
+            <Griddle {...this.props}
+                results={this.state.results}
+                //events
+                externalSetPage={this.setPage}
+                externalChangeSort={this.changeSort}
+                externalSetFilter={this.setFilter}
+                externalSetPageSize={this.setPageSize}
+                //state variables
+                externalMaxPage={this.state.maxPages}
+                externalCurrentPage={this.state.currentPage}
+                resultsPerPage={this.state.externalResultsPerPage}
+                externalSortColumn={this.state.externalSortColumn}
+                externalSortAscending={this.state.externalSortAscending}
+            />
+        </div>
+        );
+    }
 }
 GriddleTable.propTypes = {  };
 GriddleTable.defaultProps = {
