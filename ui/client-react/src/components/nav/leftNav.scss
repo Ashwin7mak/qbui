@@ -2,7 +2,10 @@
   width:350px;
   nav li {
     a.heading {
-      background-color: #375b7f;
+      border-top:1px solid #6f8eac;
+      border-bottom:1px solid #6f8eac;
+      color: #6f8eac;
+      background-color: #1e3757;
     }
   }
 }

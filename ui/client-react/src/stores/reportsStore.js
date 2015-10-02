@@ -51,8 +51,6 @@ let ReportsStore = Fluxxor.createStore({
                     this.emit('change');
                 }.bind(this)
             );
-        } else {
-            this.emit('change');
         }
     },
 

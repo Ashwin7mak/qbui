@@ -32,7 +32,7 @@ flux.addActions(appsActions);
 flux.addActions(navActions);
 
 let Nav = React.createClass({
-    render: function () {
+    render: function() {
         return <NavComponent flux={flux} {...this.props}/>
     },
     componentDidMount: function () {
@@ -41,14 +41,13 @@ let Nav = React.createClass({
 });
 
 let Apps = React.createClass({
-    render: function () {
+    render: function() {
         return <AppsHome flux={flux}/>
     },
-    componentDidMount: function () {
+    componentDidMount: function() {
         flux.actions.loadAppsWithTables();
     }
 });
-
 
 React.render((
     <Router history={createBrowserHistory()}>
