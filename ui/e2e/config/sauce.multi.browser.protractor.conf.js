@@ -22,17 +22,23 @@
             platform : 'Windows 10',
             browserName     : 'chrome',
             tunnelIdentifier: process.env.ENV_TUNNEL_NAME,
-            name            : process.env.SAUCE_JOB_NAME + '_Win10_Chrome'
+            name            : process.env.SAUCE_JOB_NAME + '_Win10_Chrome',
+            //Timeout in seconds for Sauce Labs to wait for another command (bumped this for sleeps in tests)
+            idleTimeout: '120'
         }, {
             browserName     : 'firefox',
             tunnelIdentifier: process.env.ENV_TUNNEL_NAME,
-            name            : process.env.SAUCE_JOB_NAME + '_Linux_FF'
+            name            : process.env.SAUCE_JOB_NAME + '_Linux_FF',
+            //Timeout in seconds for Sauce Labs to wait for another command (bumped this for sleeps in tests)
+            idleTimeout: '120'
         }, {
             platform: 'OS X 10.11',
             browserName: 'safari',
             version: '8.1',
             tunnelIdentifier: process.env.ENV_TUNNEL_NAME,
-            name: process.env.SAUCE_JOB_NAME + '_OSX10.11_Safari'
+            name: process.env.SAUCE_JOB_NAME + '_OSX10.11_Safari',
+            //Timeout in seconds for Sauce Labs to wait for another command (bumped this for sleeps in tests)
+            idleTimeout: '120'
     }];
     exports.config = globalSauceConfig;
 }());
