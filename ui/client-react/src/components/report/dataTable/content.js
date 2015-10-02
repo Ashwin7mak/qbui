@@ -16,12 +16,26 @@ var Content = React.createClass({
     getNextDataSet: function(page, callback){
         callback({results:fakeGriddleData.slice((page-1)*5,(page)*5), count: fakeGriddleData.length});
     },
+
+    //Render with callback
+    //
+    //render: function() {
+    //    var firstDataSet = fakeGriddleData.slice(0,5);
+    //    return (
+    //        <GriddleTable getResultsCallback={this.getNextDataSet} results={firstDataSet} columnMetadata={fakeGriddleColumnMetaData} useExternal={true}/>
+    //    )
+    //}
+
     render: function() {
-        var firstDataSet = fakeGriddleData.slice(0,5);
+        let reportColumns = this.props.data ? this.props.data.columns : [];
+        let reportRecords = this.props.data ? this.props.data.records : [];
+
+        //  todo paging..
         return (
-            <GriddleTable getResultsCallback={this.getNextDataSet} results={firstDataSet} columnMetadata={fakeGriddleColumnMetaData} useExternal={true}/>
+            <GriddleTable columnMetadata={reportColumns} useExternal={true} data={reportRecords}/>
         )
     }
-})
+
+});
 
 export default Content;
