@@ -13,14 +13,13 @@ var FormattedMessage = ReactIntl.FormattedMessage;
 var Content = React.createClass({
     mixins: [IntlMixin],
 
-    getData: function(){
-      return this.props.data;
+    getNextDataSet: function(page, callback){
+        callback({results:fakeGriddleData.slice((page-1)*5,(page)*5), count: fakeGriddleData.length});
     },
     render: function() {
+        var firstDataSet = fakeGriddleData.slice(0,5);
         return (
-
-            <GriddleTable getResultsCallback={this.getData} columnMetadata={fakeGriddleColumnMetaData} useExternal={true} data={this.props.data}/>
-
+            <GriddleTable getResultsCallback={this.getNextDataSet} results={firstDataSet} columnMetadata={fakeGriddleColumnMetaData} useExternal={true}/>
         )
     }
 })
