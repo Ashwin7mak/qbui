@@ -1,3 +1,4 @@
+import * as actions from '../constants/actions';
 
 import Fluxxor from 'fluxxor';
 import ReportService from '../services/reportService';
@@ -12,7 +13,7 @@ let ReportsStore = Fluxxor.createStore({
             //
             //'ADD_TABLE', this.onAddReport,
             //'REMOVE_TABLE', this.onRemoveReport,
-            'LOAD_REPORTS', this.onLoadReports
+            actions.LOAD_REPORTS, this.onLoadReports
         );
 
         this.logger = new Logger();

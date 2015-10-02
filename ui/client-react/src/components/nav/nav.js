@@ -1,7 +1,7 @@
 import React from 'react';
 import ReactIntl from 'react-intl';
 import Logger from '../../utils/logger';
-var logger = new Logger();
+let logger = new Logger();
 
 import './nav.scss';
 
@@ -24,13 +24,13 @@ let StoreWatchMixin = Fluxxor.StoreWatchMixin;
 
 //  load the locale
 import { Locale, getI18nBundle } from '../../locales/locales';
-var i18n = getI18nBundle();
+let i18n = getI18nBundle();
 
-var IntlMixin = ReactIntl.IntlMixin;
-var FormattedDate = ReactIntl.FormattedDate;
+let IntlMixin = ReactIntl.IntlMixin;
+let FormattedDate = ReactIntl.FormattedDate;
 
 
-var CurrentDate = React.createClass({
+let CurrentDate = React.createClass({
 
     mixins: [IntlMixin],
 
@@ -42,36 +42,20 @@ var CurrentDate = React.createClass({
 
 
 var Nav = React.createClass( {
-    mixins: [FluxMixin, StoreWatchMixin("ReportsStore","ReportDataStore")],
-    getInitialState: function() {
-        return {
-            leftNavOpen: true,
-            trouserOpen: false
-        }
-    },
+    mixins: [FluxMixin, StoreWatchMixin("NavStore","AppsStore","ReportsStore","ReportDataStore")],
+
     getStateFromFlux: function (){
 
         var flux = this.getFlux();
 
         return {
+            nav: flux.store("NavStore").getState(),
             apps: flux.store("AppsStore").getState(),
             reports: flux.store("ReportsStore").getState(),
             reportData: flux.store("ReportDataStore").getState()
         };
     },
-    toggleNav: function() {
-        this.setState({leftNavOpen: !this.state.leftNavOpen});
-    },
 
-
-    showTrouser: function() {
-
-        this.setState({trouserOpen: true});
-    },
-    hideTrouser: function() {
-
-        this.setState({trouserOpen: false});
-    },
 
     // TODO: should the nav component know the details of what is rendering??
     _handleParams: function(params) {
@@ -103,14 +87,22 @@ var Nav = React.createClass( {
 
     },
 
-    render() {
-        return (<div className='navShell'>
-            <Trouser visible={this.state.trouserOpen} onHide={this.hideTrouser}>
+    hideTrouserExample: function () {
+        console.log('hide')
+        let flux = this.getFlux();
+        flux.actions.hideTrouser();
+    },
 
-                <Button bsStyle='success' onClick={this.hideTrouser} style={{position:'absolute',bottom:'10px',right:'10px'}}>Done</Button>
+
+    render: function() {
+
+        return (<div className='navShell'>
+            <Trouser visible={this.state.nav.trouserOpen} onHide={this.hideTrouserExample}>
+
+                <Button bsStyle='success' onClick={this.hideTrouserExample} style={{position:'absolute',bottom:'10px',right:'10px'}}>Done</Button>
             </Trouser>
 
-            <LeftNav visible={this.state.leftNavOpen}
+            <LeftNav visible={this.state.nav.leftNavOpen}
                      items={this.state.reports.list}/>
 
             <div className='main'>

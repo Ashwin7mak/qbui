@@ -1,13 +1,14 @@
 // action creators
+import * as actions from '../constants/actions';
 
 let appsActions = {
 
     loadApps: function() {
-        this.dispatch('LOAD_APPS');
+        this.dispatch(actions.LOAD_APPS);
     },
 
     loadAppsWithTables: function() {
-        this.dispatch('LOAD_APPS_WITH_TABLES');
+        this.dispatch(actions.LOAD_APPS_WITH_TABLES);
     }
 };
 

@@ -17,7 +17,7 @@ let LeftNav = React.createClass( {
             this.props.itemSelection(id);
     },
 
-    _getGlyphName(item) {
+    getGlyphName(item) {
 
         if (item.icon)
             return item.icon;
@@ -25,33 +25,37 @@ let LeftNav = React.createClass( {
             return 'th-list';
 
     },
-    shouldComponentUpdate: function(nextProps,nextState) {
-        if (this.state.rendered)
-            return true;
-        this.setState({rendered:true});
-            return true;
+
+    buildNavItem: function(item) {
+        const tooltip = (
+            <Tooltip id={item.id}>{item.name}</Tooltip>
+        );
+
+        if (this.props.visible)
+            return (
+                <li>
+                    <Link className='leftNavLink' to={item.link}>
+                        <Glyphicon glyph={this._getGlyphName(item)}/> {item.name}
+                    </Link>
+                </li>);
+        else
+            return (
+                <OverlayTrigger key={item.id} placement="right" overlay={tooltip}>
+                    <li>
+                        <Link className='leftNavLink' to={item.link}>
+                            <Glyphicon glyph={this._getGlyphName(item)}/>
+                        </Link>
+                    </li>
+                </OverlayTrigger>
+            )
     },
     render: function() {
-
         var styles={width: (this.props.visible ? 350 : 40) }
         return (
             <div style={styles} className={(this.props.visible ? "visible " : "") + "leftMenu"}>
                 <Nav stacked activeKey={1} >
                     {this.props.items.map((item) => {
-                        const tooltip = (
-                            <Tooltip id={item.id}>{item.name}</Tooltip>
-                        );
-
-                        return (this.props.visible ?
-                            (<li key={item.id}><Link className='leftNavLink' to={item.link}>
-                                <Glyphicon glyph={this._getGlyphName(item)}/> {item.name}
-                            </Link></li>)
-                            :
-                            (<OverlayTrigger key={item.id} placement="right" overlay={tooltip}>
-                                <li><Link className='leftNavLink' to={item.link}>
-                                    <Glyphicon glyph={this._getGlyphName(item)}/>
-                                </Link></li>
-                            </OverlayTrigger>));
+                        return this.buildNavItem(item);
                     })}
                 </Nav>
             </div>

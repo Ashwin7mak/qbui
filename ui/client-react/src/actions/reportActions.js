@@ -1,4 +1,5 @@
 // action creators
+import * as actions from '../constants/actions';
 
 let reportActions = {
     //
@@ -11,7 +12,7 @@ let reportActions = {
     //    this.dispatch('REMOVE_REPORT', index);
     //},
     loadReports: function(report) {
-        this.dispatch('LOAD_REPORTS', report);
+        this.dispatch(actions.LOAD_REPORTS, report);
     }
 };
 

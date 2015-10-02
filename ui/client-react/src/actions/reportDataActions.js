@@ -1,10 +1,11 @@
 // action creators
+import * as actions from '../constants/actions';
 
 let reportDataActions = {
 
     loadReport: function(id) {
 
-        this.dispatch('LOAD_REPORT', id);
+        this.dispatch(actions.LOAD_REPORT, id);
     }
 };
 

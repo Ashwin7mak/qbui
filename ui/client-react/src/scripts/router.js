@@ -14,18 +14,22 @@ import reportDataActions from'../actions/reportDataActions';
 import AppsStore from '../stores/AppsStore';
 import appsActions from '../actions/appsActions';
 
+import NavStore from '../stores/navStore';
+import navActions from '../actions/navActions';
+
 import AppsHome from '../components/apps/home';
 
 let stores = {
     ReportsStore: new ReportsStore(),
     ReportDataStore: new ReportDataStore(),
-    AppsStore: new AppsStore()
+    AppsStore: new AppsStore(),
+    NavStore: new NavStore()
 };
 let flux = new Fluxxor.Flux(stores);
 flux.addActions(reportActions);
 flux.addActions(reportDataActions);
 flux.addActions(appsActions);
-
+flux.addActions(navActions);
 
 let Nav = React.createClass({
     render: function () {

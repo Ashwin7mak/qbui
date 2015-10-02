@@ -2,6 +2,9 @@ import React from 'react';
 import ReactIntl from 'react-intl';
 import ReactBootstrap from 'react-bootstrap';
 
+import Fluxxor from 'fluxxor';
+
+let FluxMixin = Fluxxor.FluxMixin(React);
 import {Nav,NavItem,Navbar,MenuItem,NavDropdown,ButtonGroup,Button,OverlayTrigger,Popover,Glyphicon} from '../../../../node_modules/react-bootstrap/lib'
 
 import { Locale, getI18nBundle } from '../../locales/locales';
@@ -20,25 +23,21 @@ var CurrentDate = React.createClass({
 });
 
 
-class TopNav extends React.Component {
 
-    constructor(props) {
-        super(props);
+var TopNav = React.createClass( {
+    mixins: [FluxMixin],
 
-        // no autobinding for es6
-        this.showNav = this.showNav.bind(this);
-        this.addNew = this.addNew.bind(this);
-    }
+    showNav: function () {
+        let flux = this.getFlux();
+        flux.actions.toggleLeftNav();
+    },
 
-    showNav(e) {
-        this.props.onNavClick();
-    }
+    addNew: function () {
+        let flux = this.getFlux();
+        flux.actions.showTrouser();
+    },
 
-    addNew() {
-        this.props.onAddClicked();
-    }
-
-    render() {
+    render: function () {
 
         return (
             <div className='topNav'>
@@ -54,8 +53,6 @@ class TopNav extends React.Component {
                         <OverlayTrigger trigger="click" rootClose placement="bottom" overlay={<Popover id={0} style={{whiteSpace:'nowrap'}} title="Search Records"><strong>Search:</strong> <input /> <Button bsStyle='success'>Go</Button></Popover>}>
                             <Button><Glyphicon glyph="search" /></Button>
                         </OverlayTrigger>
-
-
 
                         <Button onClick={this.addNew} ><Glyphicon glyph="plus" /></Button>
                         <Button><Glyphicon glyph="time" /></Button>
@@ -75,34 +72,6 @@ class TopNav extends React.Component {
             </div>
         );
     }
-    render2() {
-
-        return (
-            <Navbar inverse brand={<a href="#" onClick={this.showNav}><i className="fa fa-bars"></i> </a> }>
-                <Nav left>
-                    <NavItem eventKey={1} href='#'>Intuit QuickBase</NavItem>
-                </Nav>
-
-                <Nav>
-                    <ButtonGroup>
-                        <Button><Glyphicon glyph="search" /></Button>
-                        <Button onClick={this.addNew} ><Glyphicon glyph="plus" /></Button>
-                        <Button><Glyphicon glyph="time" /></Button>
-                    </ButtonGroup>
-                </Nav>
-
-                <Nav right>
-                    <NavDropdown NavDropdown={true} navItem={true} eventKey={3} title={<CurrentDate/>} id='nav-right-dropdown'>
-                        <MenuItem href="/user" eventKey={4}>Prefs...</MenuItem>
-
-                        <MenuItem divider />
-                        <MenuItem href="/signout" eventKey={5}>Sign Out</MenuItem>
-                    </NavDropdown>
-                </Nav>
-
-            </Navbar>
-        );
-    }
-}
+});
 
 export default TopNav;

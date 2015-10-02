@@ -1,3 +1,4 @@
+import * as actions from '../constants/actions';
 
 import Fluxxor from 'fluxxor';
 import AppService from '../services/appService';
@@ -9,8 +10,8 @@ let AppsStore = Fluxxor.createStore({
         this.apps = [];
 
         this.bindActions(
-            'LOAD_APPS', this.onLoadApps,
-            'LOAD_APPS_WITH_TABLES', this.onLoadAppsWithHydratedTables
+            actions.LOAD_APPS, this.onLoadApps,
+            actions.LOAD_APPS_WITH_TABLES, this.onLoadAppsWithHydratedTables
         );
 
         this.logger = new Logger();
