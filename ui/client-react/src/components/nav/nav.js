@@ -88,11 +88,9 @@ var Nav = React.createClass( {
     },
 
     hideTrouserExample: function () {
-        console.log('hide')
         let flux = this.getFlux();
         flux.actions.hideTrouser();
     },
-
 
     render: function() {
 
@@ -102,8 +100,8 @@ var Nav = React.createClass( {
                 <Button bsStyle='success' onClick={this.hideTrouserExample} style={{position:'absolute',bottom:'10px',right:'10px'}}>Done</Button>
             </Trouser>
 
-            <LeftNav visible={this.state.nav.leftNavOpen}
-                     items={this.state.reports.list}/>
+            <LeftNav open={this.state.nav.leftNavOpen}
+                     items={this.state.nav.leftNavItems} reports={this.state.reports.list}/>
 
             <div className='main'>
                 <TopNav onNavClick={this.toggleNav} onAddClicked={this.showTrouser}/>

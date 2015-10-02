@@ -30,7 +30,7 @@ let ReportsStore = Fluxxor.createStore({
 
     onLoadReports: function(report) {
 
-        this.reports = [{id:0, name: 'Home', link:'/apps', icon:'home'}];
+        this.reports = [];
         if (report.appId && report.tblId) {
             this.reportService.getReports(report.appId, report.tblId).
                 then(

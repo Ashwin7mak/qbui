@@ -7,11 +7,7 @@ import './leftNav.scss';
 
 let LeftNav = React.createClass( {
 
-    getInitialState: function() {
-        return {
-            rendered:false,
-        }
-    },
+
     selectItem: function (id) {
         if (id)
             this.props.itemSelection(id);
@@ -23,15 +19,24 @@ let LeftNav = React.createClass( {
             return item.icon;
         else
             return 'th-list';
+    },
+
+    buildHeadingItem: function (item) {
+
+        if (this.props.open)
+            return (<li><a className='heading'>{item.name}</a></li>);
+        else
+            return (<li><a className='heading'></a></li>);
 
     },
 
     buildNavItem: function(item) {
+
         const tooltip = (
             <Tooltip id={item.id}>{item.name}</Tooltip>
         );
 
-        if (this.props.visible)
+        if (this.props.open)
             return (
                 <li>
                     <Link className='leftNavLink' to={item.link}>
@@ -49,12 +54,20 @@ let LeftNav = React.createClass( {
                 </OverlayTrigger>
             )
     },
+
     render: function() {
-        var styles={width: (this.props.visible ? 350 : 40) }
+
+
         return (
-            <div style={styles} className={(this.props.visible ? "visible " : "") + "leftMenu"}>
+            <div className={(this.props.open ? "open " : "closed ") +"leftMenu"}>
                 <Nav stacked activeKey={1} >
                     {this.props.items.map((item) => {
+                        return this.buildNavItem(item);
+                    })}
+
+                    {this.props.reports ? this.buildHeadingItem({name:'Reports'}): ''}
+
+                    {this.props.reports.map((item) => {
                         return this.buildNavItem(item);
                     })}
                 </Nav>

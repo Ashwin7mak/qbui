@@ -10,7 +10,8 @@ let NavStore = Fluxxor.createStore({
     initialize: function() {
         this.state = {
             leftNavOpen: true,
-            trouserOpen: false
+            trouserOpen: false,
+            leftNavItems: []
         };
 
         this.bindActions(
@@ -18,6 +19,8 @@ let NavStore = Fluxxor.createStore({
             actions.HIDE_TROUSER, this.onHideTrouser,
             actions.TOGGLE_LEFT_NAV, this.onToggleLeftNav
         );
+
+        this.state.leftNavItems.push({id:0, name: 'Home', link:'/apps', icon:'home'});
 
         this.logger = new Logger();
     },
@@ -36,8 +39,8 @@ let NavStore = Fluxxor.createStore({
         this.state.leftNavOpen = !this.state.leftNavOpen;
         this.emit("change");
     },
-    getState: function () {
 
+    getState: function () {
         return this.state;
     }
 });
