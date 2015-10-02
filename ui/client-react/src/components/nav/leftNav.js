@@ -35,7 +35,7 @@ let LeftNav = React.createClass( {
             return (
                 <li>
                     <Link className='leftNavLink' to={item.link}>
-                        <Glyphicon glyph={this._getGlyphName(item)}/> {item.name}
+                        <Glyphicon glyph={this.getGlyphName(item)}/> {item.name}
                     </Link>
                 </li>);
         else
@@ -43,7 +43,7 @@ let LeftNav = React.createClass( {
                 <OverlayTrigger key={item.id} placement="right" overlay={tooltip}>
                     <li>
                         <Link className='leftNavLink' to={item.link}>
-                            <Glyphicon glyph={this._getGlyphName(item)}/>
+                            <Glyphicon glyph={this.getGlyphName(item)}/>
                         </Link>
                     </li>
                 </OverlayTrigger>
