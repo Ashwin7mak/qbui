@@ -4,6 +4,7 @@ import ReactIntl from 'react-intl';
 import { Table } from 'react-bootstrap';
 import GriddleTable  from '../../../components/dataTable/griddleTable/griddleTable.js';
 import { fakeGriddleData,fakeGriddleColumnMetaData } from '../../../components/dataTable/griddleTable/fakeData.js';
+import Loader  from 'react-loader';
 
 import '../../../assets/css/report.css';
 
@@ -18,21 +19,30 @@ var Content = React.createClass({
     },
 
     //Render with callback
-   /* render: function() {
+    /*
+   render: function() {
         console.log(this.props.data);
         var firstDataSet = this.props.data.records.slice(0,5);
         return (
-            <GriddleTable getResultsCallback={this.getNextDataSet} results={firstDataSet} columnMetadata={this.props.data.columns} useExternal={true}/>
+            <Loader loaded={!this.props.reportData.loading}>
+                {this.props.reportData.error ?
+                    <div>Error loading report!</div> :
+                    <GriddleTable getResultsCallback={this.getNextDataSet} results={firstDataSet} columnMetadata={this.props.data.columns} useExternal={true}/>}
+            </Loader>
         )
-    }*/
+    */
 
     render: function() {
-        let reportColumns = this.props.data ? this.props.data.columns : [];
-        let reportRecords = this.props.data ? this.props.data.records : [];
+        let reportColumns = this.props.reportData.data ? this.props.reportData.data.columns : [];
+        let reportRecords = this.props.reportData.data ? this.props.reportData.data.records : [];
 
         //  todo paging..
         return (
-            <GriddleTable columnMetadata={reportColumns} useExternal={true} data={reportRecords}/>
+            <Loader loaded={!this.props.reportData.loading}>
+                {this.props.reportData.error ?
+                    <div>Error loading report!</div> :
+                    <GriddleTable columnMetadata={reportColumns} useExternal={true} data={reportRecords}/>}
+            </Loader>
         )
     }
 

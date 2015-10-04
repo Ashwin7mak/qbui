@@ -11,9 +11,8 @@ let reportDataActions = {
 
     loadReport: function(report) {
 
-        this.dispatch(actions.LOAD_REPORT, report.rptId);
-
         if (report.appId && report.tblId && report.rptId) {
+            this.dispatch(actions.LOAD_REPORT, report.rptId);
             reportService.getReportResults(report.appId, report.tblId, report.rptId, true).
                 then(
                 function(response) {

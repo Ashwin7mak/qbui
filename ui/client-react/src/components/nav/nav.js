@@ -78,7 +78,7 @@ var Nav = React.createClass({
                     <Stage stageContent='this is the stage content text'>
                         <ReportStage {...i18n} />
                     </Stage>
-                    <ReportContent {...i18n} data={this.state.reportData.data}/>
+                    <ReportContent {...i18n} reportData={this.state.reportData}/>
                 </div>
                 <Footer {...i18n} />
             </div>
