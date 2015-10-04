@@ -68,12 +68,12 @@ var Nav = React.createClass({
                 <Button bsStyle='success' onClick={this.hideTrouserExample} style={{position:'absolute',bottom:'10px',right:'10px'}}>Done</Button>
             </Trouser>
 
-            <LeftNav open={this.state.nav.leftNavOpen}
+            <LeftNav {...i18n} open={this.state.nav.leftNavOpen}
                      items={this.state.nav.leftNavItems}
                      reports={this.state.reports.list}/>
 
             <div className='main'>
-                <TopNav onNavClick={this.toggleNav} onAddClicked={this.showTrouser}/>
+                <TopNav {...i18n} onNavClick={this.toggleNav} onAddClicked={this.showTrouser}/>
                 <div className='mainContent'>
                     <Stage stageContent='this is the stage content text'>
                         <ReportStage {...i18n} />

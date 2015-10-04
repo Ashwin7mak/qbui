@@ -1,12 +1,14 @@
 import React from 'react';
-
+import ReactIntl from 'react-intl';
 import {Nav,NavItem,Tooltip,OverlayTrigger,Glyphicon} from 'react-bootstrap';
 import {Link} from 'react-router';
 
 import './leftNav.scss';
+var IntlMixin = ReactIntl.IntlMixin;
+var FormattedMessage = ReactIntl.FormattedMessage;
 
 let LeftNav = React.createClass( {
-
+    mixins: [IntlMixin],
 
     selectItem: function (id) {
         if (id)
@@ -24,7 +26,8 @@ let LeftNav = React.createClass( {
     buildHeadingItem: function (item) {
 
         if (this.props.open)
-            return (<li><a className='heading'>{item.name}</a></li>);
+            return (<li><a className='heading'><FormattedMessage message={this.getIntlMessage('nav.reportsHeading')}/></a></li>);
+
         else
             return (<li><a className='heading'></a></li>);
 
@@ -32,15 +35,17 @@ let LeftNav = React.createClass( {
 
     buildNavItem: function(item) {
 
+        let label = item.key ? this.getIntlMessage(item.key) : item.name;
+
         const tooltip = (
-            <Tooltip id={item.id}>{item.name}</Tooltip>
+            <Tooltip id={item.id}>{label}</Tooltip>
         );
 
         if (this.props.open)
             return (
                 <li>
                     <Link className='leftNavLink' to={item.link}>
-                        <Glyphicon glyph={this.getGlyphName(item)}/> {item.name}
+                        <Glyphicon glyph={this.getGlyphName(item)}/> {label}
                     </Link>
                 </li>);
         else
@@ -62,10 +67,12 @@ let LeftNav = React.createClass( {
             <div className={(this.props.open ? "open " : "closed ") +"leftMenu"}>
                 <Nav stacked activeKey={1} >
                     {this.props.items.map((item) => {
-                        return this.buildNavItem(item);
+                        return item.heading ?
+                            this.buildHeadingItem(item)  :
+                            this.buildNavItem(item);
                     })}
 
-                    {this.props.reports ? this.buildHeadingItem({name:'Reports'}): ''}
+                    {this.props.reports ? this.buildHeadingItem({key:'nav.reportsHeading'}): ''}
 
                     {this.props.reports.map((item) => {
                         return this.buildNavItem(item);
