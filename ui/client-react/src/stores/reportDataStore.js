@@ -1,6 +1,6 @@
 import Fluxxor from 'fluxxor';
 import Logger from '../utils/logger';
-import ReportService from '../services/reportService';
+
 //import { fakeGriddleDataByReportId } from '../components/dataTable/griddleTable/fakeData.js';
 
 let logger = new Logger();
@@ -9,41 +9,37 @@ let ReportDataStore = Fluxxor.createStore({
 
     initialize: function() {
         this.data = [];
-        this.bindActions(
-            'LOAD_REPORT', this.onLoadReport
-        );
+        this.loading = false;
+        this.error = false;
 
-        this.reportService = new ReportService();
+        this.bindActions(
+            'LOAD_REPORT', this.onLoadReport,
+            'LOAD_REPORT_SUCCESS', this.onLoadReportSuccess,
+            'LOAD_REPORT_FAILED', this.onLoadReportFailed
+        );
     },
 
-    onLoadReport: function(report) {
-        this.data = {};
-        if (report.appId && report.tblId && report.rptId) {
-            this.reportService.getReportResults(report.appId, report.tblId, report.rptId, true).
-                then(
-                function(response) {
-                    this.data = {columns: this.getReportColumns(response.data.fields), records: this.getReportData(response.data)};
-                    logger.debug('success:' + response);
-                    this.emit('change');
-                }.bind(this),
-                function(error) {
-                    logger.debug('error:' + error);
-                    this.emit('change');
-                }.bind(this))
-                .catch(
-                function(ex) {
-                    logger.debug('exception:' + ex);
-                    this.emit('change');
-                }.bind(this)
-            );
-        }
+    onLoadReport: function() {
+        this.loading = true;
+        this.emit("change");
+    },
+    onLoadReportFailed: function() {
+        this.loading = false;
+        this.error = true;
+        this.emit("change");
+    },
 
-        //if (fakeGriddleDataByReportId[reportID])
-        //    this.data = fakeGriddleDataByReportId[reportID];
-        //else
-        //    this.data = fakeGriddleDataByReportId["1"];
-        //
-        //this.emit("change");
+    onLoadReportSuccess: function(reportData) {
+        this.loading = false;
+        this.error = false;
+
+        let data = {
+            columns: this.getReportColumns(reportData.fields),
+            records: this.getReportData(reportData)
+        };
+
+        this.data = data;
+        this.emit("change");
     },
 
     getReportColumns: function(fields) {
@@ -91,6 +87,8 @@ let ReportDataStore = Fluxxor.createStore({
 
     getState: function() {
         return {
+            loading: this.loading,
+            error: this.error,
             data: this.data
         };
     }
