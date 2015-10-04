@@ -80,7 +80,8 @@ class GriddleTable extends React.Component {
     }
 
     componentDidMount() {
-        this.getExternalData();
+        if (this.props.useExternal && typeof (this.props.getResultsCallback) === 'function')
+            this.getExternalData();
     }
 
     //what page is currently viewed

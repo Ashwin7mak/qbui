@@ -14,17 +14,17 @@ var Content = React.createClass({
     mixins: [IntlMixin],
 
     getNextDataSet: function(page, callback){
-        callback({results:fakeGriddleData.slice((page-1)*5,(page)*5+1)});
+        callback({results:this.props.data.records.slice((page-1)*5,(page)*5+1)});
     },
 
     //Render with callback
-    //
-    //render: function() {
-    //    var firstDataSet = fakeGriddleData.slice(0,5);
-    //    return (
-    //        <GriddleTable getResultsCallback={this.getNextDataSet} results={firstDataSet} columnMetadata={fakeGriddleColumnMetaData} useExternal={true}/>
-    //    )
-    //}
+   /* render: function() {
+        console.log(this.props.data);
+        var firstDataSet = this.props.data.records.slice(0,5);
+        return (
+            <GriddleTable getResultsCallback={this.getNextDataSet} results={firstDataSet} columnMetadata={this.props.data.columns} useExternal={true}/>
+        )
+    }*/
 
     render: function() {
         let reportColumns = this.props.data ? this.props.data.columns : [];
