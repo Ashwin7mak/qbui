@@ -18,20 +18,17 @@ import './qbGriddleTable.css';
  * <GriddleTable getResultsCallback={callback} columnMetadata={fakeGriddleColumnMetaData} useExternal={false}/>
  * */
 
-var setDefault = function(original, value) {
-    return typeof original === 'undefined' ? value : original;
-};
-
 class GriddleTable extends React.Component {
     initState(props) {
 
         let initialState = {
             "results": props.results,
-            "maxPages": props.maxPages || 0,
+            "maxPages": props.maxPages || 0, // this feeds into the pagination component and tells it whether there should be a "Next" available or not.
             "currentPage": props.currentPage,
             "externalResultsPerPage": props.externalResultsPerPage,
             "externalSortColumn": props.externalSortColumn,
-            "externalSortAscending": props.externalSortAscending
+            "externalSortAscending": props.externalSortAscending,
+            "fullDataSet": []
         };
 
         return initialState;
@@ -56,21 +53,29 @@ class GriddleTable extends React.Component {
             isLoading: true
         });
 
-        if (this.props.getResultsCallback) {
-            if (!typeof (this.props.getResultsCallback) === 'function') {
-                logger.debug('No data source defined for lazy loading');
-            } else {
-                this.props.getResultsCallback(page, function (data) {
-                    var newState = {
-                        currentPage: page - 1,
-                        isLoading: false,
-                        results: data.results,
-                        maxPages: (data.count / that.state.externalResultsPerPage) //+ 1 //need +1 for 1st data set that came in with props
-                    };
+        // dont go to the server if we already have the data - the user might be paginating back and forth on already rendered results.
+        if (page <= this.state.maxPages)
+        {
+            var newState = {
+                currentPage: page - 1,
+                isLoading: false,
+                results: this.state.fullDataSet.slice((page-1)*this.state.externalResultsPerPage, page*this.state.externalResultsPerPage) // we always pull 1 extra record than neccesary to know if "Next" is available or not. So leave out that one extra record
+            };
 
-                    that.setState(newState);
-                });
-            }
+            that.setState(newState);
+        }
+        else {
+            this.props.getResultsCallback(page, function (data) {
+                var newState = {
+                    currentPage: page - 1,
+                    isLoading: false,
+                    maxPages: data.results.length > that.state.externalResultsPerPage ? that.state.maxPages + 1 : that.state.maxPages,
+                    results: data.results.length > that.state.externalResultsPerPage ? data.results.slice(0, data.results.length - 1) : data.results // we always pull 1 extra record than neccesary to know if "Next" is available or not. So leave out that one extra record
+                };
+                newState.fullDataSet = that.state.fullDataSet.concat(newState.results)
+
+                that.setState(newState);
+            });
         }
     }
 
@@ -81,7 +86,7 @@ class GriddleTable extends React.Component {
     //what page is currently viewed
     setPage(index) {
         //This should interact with the data source to get the page at the given index
-        index = index > this.state.maxPages ? this.state.maxPages : index < 1 ? 1 : index + 1;
+        index = index+1;
         this.getExternalData(index);
 
     }
@@ -103,15 +108,12 @@ class GriddleTable extends React.Component {
     }
 
     render() {
-        let reportData = this.props.data;
-        let columnData = this.props.columnMetadata;  // TODO: THIS IS NOT WORKING
-
-        if (reportData) {
+        /* Griddle has a bug where you have to supply the first set of data to render otherwise it will not re-render even when data is set later.
+        For our purpose that first set of data should always be provided by the store. If not data has been provided then there is nothing to display.  */
+        if (this.props.results.length == 0) {
             return (
-                <div>
+                <div>Data from props (from report store):<p/> {JSON.stringify(this.props.results, null, '  ')}
                     <Griddle {...this.props}
-                        results={reportData}
-                        //columnMetaData={columnData}  //TODO NOT WORKING
                         //events
                         externalSetPage={this.setPage}
                         externalChangeSort={this.changeSort}
@@ -122,11 +124,32 @@ class GriddleTable extends React.Component {
                         externalCurrentPage={this.state.currentPage}
                         resultsPerPage={this.state.externalResultsPerPage}
                         externalSortColumn={this.state.externalSortColumn}
-                        externalSortAscending={this.state.externalSortAscending}/>
-                </div> )
-        } else {
-            return (<div>No Report Data found.</div>)
-        };
+                        externalSortAscending={this.state.externalSortAscending}
+                        />
+                </div>
+            );
+        }
+        else {
+            return (
+                <div>Data from props (from report store):<p/> {JSON.stringify(this.props.results, null, '  ')}
+
+                    <Griddle {...this.props}
+                        results={this.state.results}
+                        //events
+                        externalSetPage={this.setPage}
+                        externalChangeSort={this.changeSort}
+                        externalSetFilter={this.setFilter}
+                        externalSetPageSize={this.setPageSize}
+                        //state variables
+                        externalMaxPage={this.state.maxPages}
+                        externalCurrentPage={this.state.currentPage}
+                        resultsPerPage={this.state.externalResultsPerPage}
+                        externalSortColumn={this.state.externalSortColumn}
+                        externalSortAscending={this.state.externalSortAscending}
+                        />
+                </div>
+            );
+        }
     }
 }
 GriddleTable.propTypes = {  };
@@ -142,7 +165,7 @@ GriddleTable.defaultProps = {
     useCustomPagerComponent: true,
     customPagerComponent: PaginationComponent,
 
-    useExternal: true, /* TODO: this should always be true for us but needs data from server */
+    useExternal: false, /* TODO: this should always be true for us but needs data from server */
     columnMetadata: [],
     results: [],
 
