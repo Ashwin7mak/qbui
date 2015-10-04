@@ -14,7 +14,7 @@ var Content = React.createClass({
     mixins: [IntlMixin],
 
     getNextDataSet: function(page, callback){
-        callback({results:fakeGriddleData.slice((page-1)*5,(page)*5), count: fakeGriddleData.length});
+        callback({results:fakeGriddleData.slice((page-1)*5,(page)*5+1)});
     },
     render: function() {
         var firstDataSet = fakeGriddleData.slice(0,5);
