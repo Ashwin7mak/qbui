@@ -21,7 +21,8 @@ export default {
             }
         },
         nav: {
-            home: "Accueil"
+            home: "Accueil",
+            reportsHeading: "Rapports"
         }
     }
 };
