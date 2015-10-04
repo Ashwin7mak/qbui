@@ -108,9 +108,13 @@ class GriddleTable extends React.Component {
     }
 
     render() {
+        let reportData = this.props.results;
+        let columnData = this.props.columnMetadata;  // TODO: THIS IS NOT WORKING
+
         /* Griddle has a bug where you have to supply the first set of data to render otherwise it will not re-render even when data is set later.
         For our purpose that first set of data should always be provided by the store. If not data has been provided then there is nothing to display.  */
         if (this.props.results.length == 0) {
+            //TODO: do we need a custom message instead of rendering the Griddle.
             return (
                 <div>Data from props (from report store):<p/> {JSON.stringify(this.props.results, null, '  ')}
                     <Griddle {...this.props}
