@@ -19,18 +19,18 @@ var Content = React.createClass({
 
     getInitialState: function() {
         return {
-            reportRecords: this.props.reportData.data.length > 0 ? this.props.reportData.data.records : [],
-            reportColumns: this.props.reportData.data.length > 0 ? this.props.reportData.data.columns : [],
-            firstDataSet: this.props.reportData.data.length > 0 ? this.props.reportData.data.records.slice(0, resultsPerPage) : []
+            reportRecords: this.props.reportData.data.records ? this.props.reportData.data.records : [],
+            reportColumns: this.props.reportData.data.columns ? this.props.reportData.data.columns : [],
+            firstDataSet: this.props.reportData.data.records ? this.props.reportData.data.records.slice(0, resultsPerPage) : []
         };
     },
 
     componentWillReceiveProps: function(nextProps){
-        if (nextProps.reportData.data.length != this.props.reportData.data.length) {
+        if (nextProps.reportData.data) {
             this.setState({
-                reportRecords: nextProps.reportData.data ? nextProps.reportData.data.records : [],
-                reportColumns: nextProps.reportData.data ? nextProps.reportData.data.columns : [],
-                firstDataSet: nextProps.reportData.data ? nextProps.reportData.data.records.slice(0, resultsPerPage) : []
+                reportRecords: nextProps.reportData.data.records ? nextProps.reportData.data.records : [],
+                reportColumns: nextProps.reportData.data.columns ? nextProps.reportData.data.columns : [],
+                firstDataSet: nextProps.reportData.data.records ? nextProps.reportData.data.records.slice(0, resultsPerPage) : []
             });
         }
     },
