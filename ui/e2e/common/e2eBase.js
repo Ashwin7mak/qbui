@@ -48,7 +48,7 @@
                     }
                 });
                 //Reset the browser size (note this doesn't work for Chrome on Mac OSX, a known bug - it will only max height)
-                browser.driver.manage().window().maximize();
+                //browser.driver.manage().window().maximize();
                 //Cleanup the realm and app
                 e2eBase.recordBase.apiBase.cleanup().then(function() {
                     done();
