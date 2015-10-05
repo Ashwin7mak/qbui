@@ -109,16 +109,18 @@ class GriddleTable extends React.Component {
     }
 
     render() {
-        let reportData = this.props.results;
+        let reportData = this.props.data;
         let columnData = this.props.columnMetadata;  // TODO: THIS IS NOT WORKING
 
         /* Griddle has a bug where you have to supply the first set of data to render otherwise it will not re-render even when data is set later.
         For our purpose that first set of data should always be provided by the store. If not data has been provided then there is nothing to display.  */
-        if (this.props.results.length == 0) {
-            //TODO: do we need a custom message instead of rendering the Griddle.
+        if (reportData) {
             return (
-                <div>Data from props (from report store):<p/> {JSON.stringify(this.props.results, null, '  ')}
+                //<div>Data from props (from report store):<p/> {JSON.stringify(this.props.results, null, '  ')}
+                <div>
                     <Griddle {...this.props}
+                        results={reportData}
+                        //columnMetaData={columnData}  //TODO: custom column tags NOT WORKING
                         //events
                         externalSetPage={this.setPage}
                         externalChangeSort={this.changeSort}
@@ -135,24 +137,11 @@ class GriddleTable extends React.Component {
             );
         }
         else {
+            // Griddle will not render the grid if the first render is undefined.  Subsequent calls, even with data, will not display.  Not sure
+            // if this is by design or a bug...
+            // For now, will render a div
             return (
-                <div>Data from props (from report store):<p/> {JSON.stringify(this.props.results, null, '  ')}
-
-                    <Griddle {...this.props}
-                        results={this.state.results}
-                        //events
-                        externalSetPage={this.setPage}
-                        externalChangeSort={this.changeSort}
-                        externalSetFilter={this.setFilter}
-                        externalSetPageSize={this.setPageSize}
-                        //state variables
-                        externalMaxPage={this.state.maxPages}
-                        externalCurrentPage={this.state.currentPage}
-                        resultsPerPage={this.state.externalResultsPerPage}
-                        externalSortColumn={this.state.externalSortColumn}
-                        externalSortAscending={this.state.externalSortAscending}
-                        />
-                </div>
+                <div>There is no data to display</div>
             );
         }
     }
