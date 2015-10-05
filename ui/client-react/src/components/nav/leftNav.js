@@ -2,7 +2,7 @@ import React from 'react';
 import ReactIntl from 'react-intl';
 import {Nav,NavItem,Tooltip,OverlayTrigger,Glyphicon} from 'react-bootstrap';
 import {Link} from 'react-router';
-
+import Loader  from 'react-loader';
 import './leftNav.scss';
 var IntlMixin = ReactIntl.IntlMixin;
 var FormattedMessage = ReactIntl.FormattedMessage;
@@ -23,10 +23,14 @@ let LeftNav = React.createClass( {
             return 'th-list';
     },
 
-    buildHeadingItem: function (item) {
+    buildHeadingItem: function (item, loadingCheck) {
 
         if (this.props.open)
-            return (<li><a className='heading'><FormattedMessage message={this.getIntlMessage('nav.reportsHeading')}/></a></li>);
+            return (
+                <li>
+                    <Loader scale={.5} right={'90%'} loaded={!loadingCheck} />
+                    <a className='heading'><FormattedMessage message={this.getIntlMessage('nav.reportsHeading')}/></a>
+                </li>);
 
         else
             return (<li><a className='heading'></a></li>);
@@ -62,9 +66,10 @@ let LeftNav = React.createClass( {
 
     render: function() {
 
-
         return (
+
             <div className={(this.props.open ? "open " : "closed ") +"leftMenu"}>
+
                 <Nav stacked activeKey={1} >
                     {this.props.items.map((item) => {
                         return item.heading ?
@@ -72,13 +77,17 @@ let LeftNav = React.createClass( {
                             this.buildNavItem(item);
                     })}
 
-                    {this.props.reports ? this.buildHeadingItem({key:'nav.reportsHeading'}): ''}
 
-                    {this.props.reports.map((item) => {
+                    {this.buildHeadingItem({key:'nav.reportsHeading'},this.props.reportsData.loading)}
+
+                    {this.props.reportsData.list ? this.props.reportsData.list.map((item) => {
                         return this.buildNavItem(item);
-                    })}
+                    }) : ''}
+
                 </Nav>
+
             </div>
+
         );
     }
 });

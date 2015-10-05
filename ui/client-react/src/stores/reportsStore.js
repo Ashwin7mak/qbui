@@ -1,57 +1,46 @@
 import * as actions from '../constants/actions';
 
 import Fluxxor from 'fluxxor';
-import ReportService from '../services/reportService';
+
 import Logger from '../utils/logger';
 
 let ReportsStore = Fluxxor.createStore({
     initialize: function() {
         this.reports = [];
+        this.loading = false;
+        this.error = false;
 
         this.bindActions(
             // activate actions once implemented..
             //
-            //'ADD_TABLE', this.onAddReport,
-            //'REMOVE_TABLE', this.onRemoveReport,
-            actions.LOAD_REPORTS, this.onLoadReports
+            actions.LOAD_REPORTS, this.onLoadReports,
+            actions.LOAD_REPORTS_SUCCESS, this.onLoadReportsSuccess,
+            actions.LOAD_REPORTS_FAILED, this.onLoadReportsFailed
         );
 
         this.logger = new Logger();
-        this.reportService = new ReportService();
-    },
-    //onAddReport: function(report) {
-    //    this.reports.push(report);
-    //    this.emit('change');
-    //},
-    //onRemoveReport: function(id) {
-    //    this.reports.splice(index, 1);
-    //    this.emit('change');
-    //},
 
-    onLoadReports: function(report) {
+    },
+    onLoadReports: function() {
+        this.loading = true;
+        this.emit("change");
+    },
+    onLoadReportsFailed: function() {
+        this.loading = false;
+        this.error = true;
+        this.emit("change");
+    },
+
+    onLoadReportsSuccess: function(reports) {
+        this.loading = false;
+        this.error = false;
 
         this.reports = [];
-        if (report.appId && report.tblId) {
-            this.reportService.getReports(report.appId, report.tblId).
-                then(
-                function(response) {
-                    this.logger.debug('success:' + response);
-                    response.data.forEach(function(rpt) {
-                        this.reports.push({id: rpt.id, name: rpt.name, link: this.buildLink(report.appId, report.tblId, rpt.id)});
-                    }.bind(this));
-                    this.emit('change');
-                }.bind(this),
-                function(error) {
-                    this.logger.debug('error:' + error);
-                    this.emit('change');
-                }.bind(this))
-                .catch(
-                function(ex) {
-                    this.logger.debug('exception:' + ex);
-                    this.emit('change');
-                }.bind(this)
-            );
-        }
+        reports.data.forEach((rpt) => {
+            this.reports.push({id: rpt.id, name: rpt.name, link: this.buildLink(reports.appId, reports.tblId, rpt.id)});
+        });
+
+        this.emit('change');
     },
 
     buildLink: function(appId, tblId, rptId) {
@@ -60,7 +49,9 @@ let ReportsStore = Fluxxor.createStore({
 
     getState: function() {
         return {
-            list: this.reports
+            list: this.reports,
+            loading: this.loading,
+            error: this.error
         };
     }
 });
