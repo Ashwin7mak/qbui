@@ -34,7 +34,7 @@ var Nav = React.createClass({
         return {
             nav: flux.store('NavStore').getState(),
             apps: flux.store('AppsStore').getState(),
-            reports: flux.store('ReportsStore').getState(),
+            reportsData: flux.store('ReportsStore').getState(),
             reportData: flux.store('ReportDataStore').getState()
         };
     },
@@ -70,7 +70,7 @@ var Nav = React.createClass({
 
             <LeftNav {...i18n} open={this.state.nav.leftNavOpen}
                      items={this.state.nav.leftNavItems}
-                     reports={this.state.reports.list}/>
+                     reportsData={this.state.reportsData}/>
 
             <div className='main'>
                 <TopNav {...i18n} onNavClick={this.toggleNav} onAddClicked={this.showTrouser}/>
