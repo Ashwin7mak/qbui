@@ -12,37 +12,47 @@ import { Locale, getI18nBundle } from '../../../locales/locales';
 var i18n = getI18nBundle();
 var IntlMixin = ReactIntl.IntlMixin;
 
+const resultsPerPage = 10; //assume that this is the constant number of records per page. This can be passed in as a prop for diff reports
+
 var Content = React.createClass({
     mixins: [IntlMixin],
 
-    getNextDataSet: function(page, callback){
-        callback({results:this.props.data.records.slice((page-1)*5,(page)*5+1)});
+    getInitialState: function() {
+        return {
+            reportRecords: this.props.reportData.data.length > 0 ? this.props.reportData.data.records : [],
+            reportColumns: this.props.reportData.data.length > 0 ? this.props.reportData.data.columns : [],
+            firstDataSet: this.props.reportData.data.length > 0 ? this.props.reportData.data.records.slice(0, resultsPerPage) : []
+        };
     },
 
-    //Render with callback
-    /*
-     render: function() {
-     console.log(this.props.data);
-     var firstDataSet = this.props.data.records.slice(0,5);
-     return (
-     <Loader loaded={!this.props.reportData.loading}>
-     {this.props.reportData.error ?
-     <div>Error loading report!</div> :
-     <GriddleTable getResultsCallback={this.getNextDataSet} results={firstDataSet} columnMetadata={this.props.data.columns} useExternal={true}/>}
-     </Loader>
-     )
-     */
+    componentWillReceiveProps: function(nextProps){
+        if (nextProps.reportData.data.length != this.props.reportData.data.length) {
+            this.setState({
+                reportRecords: nextProps.reportData.data ? nextProps.reportData.data.records : [],
+                reportColumns: nextProps.reportData.data ? nextProps.reportData.data.columns : [],
+                firstDataSet: nextProps.reportData.data ? nextProps.reportData.data.records.slice(0, resultsPerPage) : []
+            });
+        }
+    },
+
+    getNextDataSet: function(page, callback){
+        var that = this;
+        if (that.state.reportRecords.length > 0) {
+            callback({
+                results: that.state.reportRecords.slice((page - 1) * resultsPerPage, (page) * resultsPerPage + 1)
+            })
+        }
+        else{
+            callback({results: []});
+        }
+    },
 
     render: function() {
-        let reportColumns = this.props.reportData.data ? this.props.reportData.data.columns : [];
-        let reportRecords = this.props.reportData.data ? this.props.reportData.data.records : [];
-
-        //  todo paging..
         return (
             <Loader loaded={!this.props.reportData.loading}>
                 {this.props.reportData.error ?
                     <div>Error loading report!</div> :
-                    <GriddleTable {...i18n} columnMetadata={reportColumns} useExternal={true} data={reportRecords}/>}
+                    <GriddleTable {...i18n} getResultsCallback={this.getNextDataSet} results={this.state.firstDataSet} columnMetadata={this.state.reportColumns} useExternal={true} externalResultsPerPage={resultsPerPage}/>}
             </Loader>
         )
     }

@@ -123,18 +123,14 @@ class GriddleTable extends React.Component {
     }
 
     render() {
-        let reportData = this.props.data;
-        let columnData = this.props.columnMetadata;  // TODO: THIS IS NOT WORKING
-
         /* Griddle has a bug where you have to supply the first set of data to render otherwise it will not re-render even when data is set later.
-         For our purpose that first set of data should always be provided by the store. If not data has been provided then there is nothing to display.  */
-        if (reportData) {
+         For our purpose that first set of data should always be provided by the store. If not data has been provided then there is nothing to display.
+         So in case of no data sent in just render a plain and empty div */
+        if (this.props.results) {
             return (
-                //<div>Data from props (from report store):<p/> {JSON.stringify(this.props.results, null, '  ')}
                 <div>
                     <Griddle {...this.props}
-                        results={reportData}
-                        //columnMetaData={columnData}  //TODO: custom column tags NOT WORKING
+                        results={this.state.results}
                         //events
                         externalSetPage={this.setPage}
                         externalChangeSort={this.changeSort}
@@ -151,9 +147,6 @@ class GriddleTable extends React.Component {
             );
         }
         else {
-            // Griddle will not render the grid if the first render is undefined.  Subsequent calls, even with data, will not display.  Not sure
-            // if this is by design or a bug...
-            // For now, will render a div
             return (
                 <div><I18nMessage message={'grid.no_data'}/></div>
             );
