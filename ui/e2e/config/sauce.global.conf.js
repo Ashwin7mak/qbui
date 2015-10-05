@@ -7,20 +7,17 @@
         // The timeout for each script run on the browser. This should be longer
         // than the maximum time your application needs to stabilize between tasks.
         allScriptsTimeout: 300000,
-
-        //The sauce user and access key allow us to run our browser tests remotely on a SauceLabs VM
+        // The sauce user and access key allow us to run our browser tests remotely on a SauceLabs VM
         sauceUser           : 'sbg_qbse',
         sauceKey            : process.env.SAUCE_KEY,
-        //we have to specify the selenium address to point locally so that we use the tunnel properly
+        // We have to specify the selenium address to point locally so that we use the tunnel properly
         sauceSeleniumAddress: 'localhost:4445/wd/hub',
-
         // A base URL for your application under test will be passed in via grunt config so that we can use whatever url we please
         //baseUrl: process.env.DOMAIN,
         // list of files / patterns to load in the browser
         specs: [
             '../qbapp/**/*.e2e.spec.js'
         ],
-
         // Patterns to exclude.
         exclude: [],
         // ----- The test framework -----
@@ -29,7 +26,6 @@
         // Mocha has limited beta support. You will need to include your own
         // assertion framework if working with mocha.
         framework: 'jasmine2',
-
         // ----- Options to be passed to minijasminenode -----
         //
         // See the full list at https://github.com/juliemr/minijasminenode
@@ -39,10 +35,10 @@
         // Globally accessible variables (params is a property of the Protractor instance)
         // Used for running tests slower / faster if running in Sauce Labs
         params : {
-            tinySleep : 5000,
-            smallSleep : 10000,
-            mediumSleep : 30000,
-            largeSleep :60000
+            tinySleep : 1000,
+            smallSleep : 5000,
+            mediumSleep : 10000,
+            largeSleep :30000
         }
     };
 }());
