@@ -8,8 +8,9 @@ import Loader  from 'react-loader';
 
 import '../../../assets/css/report.css';
 
+import { Locale, getI18nBundle } from '../../../locales/locales';
+var i18n = getI18nBundle();
 var IntlMixin = ReactIntl.IntlMixin;
-var FormattedMessage = ReactIntl.FormattedMessage;
 
 var Content = React.createClass({
     mixins: [IntlMixin],
@@ -20,17 +21,17 @@ var Content = React.createClass({
 
     //Render with callback
     /*
-   render: function() {
-        console.log(this.props.data);
-        var firstDataSet = this.props.data.records.slice(0,5);
-        return (
-            <Loader loaded={!this.props.reportData.loading}>
-                {this.props.reportData.error ?
-                    <div>Error loading report!</div> :
-                    <GriddleTable getResultsCallback={this.getNextDataSet} results={firstDataSet} columnMetadata={this.props.data.columns} useExternal={true}/>}
-            </Loader>
-        )
-    */
+     render: function() {
+     console.log(this.props.data);
+     var firstDataSet = this.props.data.records.slice(0,5);
+     return (
+     <Loader loaded={!this.props.reportData.loading}>
+     {this.props.reportData.error ?
+     <div>Error loading report!</div> :
+     <GriddleTable getResultsCallback={this.getNextDataSet} results={firstDataSet} columnMetadata={this.props.data.columns} useExternal={true}/>}
+     </Loader>
+     )
+     */
 
     render: function() {
         let reportColumns = this.props.reportData.data ? this.props.reportData.data.columns : [];
@@ -41,7 +42,7 @@ var Content = React.createClass({
             <Loader loaded={!this.props.reportData.loading}>
                 {this.props.reportData.error ?
                     <div>Error loading report!</div> :
-                    <GriddleTable columnMetadata={reportColumns} useExternal={true} data={reportRecords}/>}
+                    <GriddleTable {...i18n} columnMetadata={reportColumns} useExternal={true} data={reportRecords}/>}
             </Loader>
         )
     }

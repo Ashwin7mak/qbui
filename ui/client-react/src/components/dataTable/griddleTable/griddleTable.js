@@ -1,8 +1,12 @@
 import React from 'react';
+import ReactIntl from 'react-intl';
 import Griddle from 'griddle-react';
 
 import Logger from '../../../utils/logger';
 var logger = new Logger();
+
+var IntlMixin = ReactIntl.IntlMixin;
+var FormattedMessage = ReactIntl.FormattedMessage;
 
 import PaginationComponent from './pagination.js';
 import { fakeGriddleData } from '../../../components/dataTable/griddleTable/fakeData.js';
@@ -18,7 +22,17 @@ import './qbGriddleTable.css';
  * <GriddleTable getResultsCallback={callback} columnMetadata={fakeGriddleColumnMetaData} useExternal={false}/>
  * */
 
+var I18nMessage = React.createClass({
+    mixins: [IntlMixin],
+
+    render: function() {
+        return <FormattedMessage message={this.getIntlMessage(this.props.message)}/>
+    }
+});
+
 class GriddleTable extends React.Component {
+
+
     initState(props) {
 
         let initialState = {
@@ -35,7 +49,7 @@ class GriddleTable extends React.Component {
     }
 
     constructor(...args) {
-    super(...args);
+        super(...args);
         this.state = this.initState(...args);
         this.setPage = this.setPage.bind(this);
         this.getExternalData = this.getExternalData.bind(this);
@@ -113,7 +127,7 @@ class GriddleTable extends React.Component {
         let columnData = this.props.columnMetadata;  // TODO: THIS IS NOT WORKING
 
         /* Griddle has a bug where you have to supply the first set of data to render otherwise it will not re-render even when data is set later.
-        For our purpose that first set of data should always be provided by the store. If not data has been provided then there is nothing to display.  */
+         For our purpose that first set of data should always be provided by the store. If not data has been provided then there is nothing to display.  */
         if (reportData) {
             return (
                 //<div>Data from props (from report store):<p/> {JSON.stringify(this.props.results, null, '  ')}
@@ -141,11 +155,12 @@ class GriddleTable extends React.Component {
             // if this is by design or a bug...
             // For now, will render a div
             return (
-                <div>There is no data to display</div>
+                <div><I18nMessage message={'grid.no_data'}/></div>
             );
         }
     }
 }
+
 GriddleTable.propTypes = {  };
 GriddleTable.defaultProps = {
     //useFixedLayout: false,  // this isnt working right now

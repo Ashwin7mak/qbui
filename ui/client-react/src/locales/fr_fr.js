@@ -23,6 +23,9 @@ export default {
         nav: {
             home: "Accueil",
             reportsHeading: "Rapports"
+        },
+        grid: {
+            no_data: "Il n'y a pas de données à afficher."
         }
     }
 };

@@ -23,6 +23,9 @@ export default {
         nav: {
             home: "zu Hause",
             reportsHeading: "Berichte"
+        },
+        grid: {
+            no_data: "Es liegen keine Daten zum Anzeigen."
         }
     }
 };
