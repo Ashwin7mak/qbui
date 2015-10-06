@@ -76,7 +76,7 @@ var Nav = React.createClass({
                 <TopNav {...i18n} onNavClick={this.toggleNav} onAddClicked={this.showTrouser}/>
                 <div className='mainContent'>
                     <Stage stageContent='this is the stage content text'>
-                        <ReportStage {...i18n} />
+                        <ReportStage {...i18n} reportName={this.state.reportData.data.name}/>
                     </Stage>
                     <ReportContent {...i18n} reportData={this.state.reportData}/>
                 </div>
