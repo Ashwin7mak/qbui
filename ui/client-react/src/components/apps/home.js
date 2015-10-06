@@ -7,8 +7,8 @@ import AppsList from './appsList';
 import './apps.css';
 
 //  load the locale
-import { Locale, getI18nBundle } from '../../locales/locales';
-let i18n = getI18nBundle();
+import Locale from '../../locales/locales';
+let i18n = Locale.getI18nBundle();
 
 var IntlMixin = ReactIntl.IntlMixin;
 var FormattedMessage = ReactIntl.FormattedMessage;

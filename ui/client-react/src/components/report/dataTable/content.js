@@ -8,8 +8,8 @@ import Loader  from 'react-loader';
 
 import '../../../assets/css/report.css';
 
-import { Locale, getI18nBundle } from '../../../locales/locales';
-var i18n = getI18nBundle();
+import Locale from '../../../locales/locales';
+var i18n = Locale.getI18nBundle();
 var IntlMixin = ReactIntl.IntlMixin;
 
 const resultsPerPage = 50; //assume that this is the constant number of records per page. This can be passed in as a prop for diff reports

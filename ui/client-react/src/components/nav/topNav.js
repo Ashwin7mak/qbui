@@ -7,8 +7,8 @@ import Fluxxor from 'fluxxor';
 let FluxMixin = Fluxxor.FluxMixin(React);
 import {Nav,NavItem,Navbar,MenuItem,NavDropdown,ButtonGroup,Button,OverlayTrigger,Popover,Glyphicon} from '../../../../node_modules/react-bootstrap/lib'
 
-import { Locale, getI18nBundle } from '../../locales/locales';
-var i18n = getI18nBundle();
+import Locale from '../../locales/locales';
+var i18n = Locale.getI18nBundle();
 
 var IntlMixin = ReactIntl.IntlMixin;
 var FormattedDate = ReactIntl.FormattedDate;
@@ -18,11 +18,9 @@ var CurrentDate = React.createClass({
     mixins: [IntlMixin],
 
     render: function() {
-        return <FormattedDate locales={[Locale]} value={new Date()} day="numeric" month="long" year="numeric"/>
+        return <FormattedDate locales={[Locale.getLocale()]} value={new Date()} day="numeric" month="long" year="numeric"/>
     }
 });
-
-
 
 var TopNav = React.createClass( {
     mixins: [FluxMixin],
