@@ -23,8 +23,8 @@ let FluxMixin = Fluxxor.FluxMixin(React);
 let StoreWatchMixin = Fluxxor.StoreWatchMixin;
 
 //  load the locale
-import { Locale, getI18nBundle } from '../../locales/locales';
-let i18n = getI18nBundle();
+import Locale from '../../locales/locales';
+let i18n = Locale.getI18nBundle();
 
 var Nav = React.createClass({
     mixins: [FluxMixin, StoreWatchMixin('NavStore','AppsStore','ReportsStore','ReportDataStore')],
@@ -76,7 +76,7 @@ var Nav = React.createClass({
                 <TopNav {...i18n} onNavClick={this.toggleNav} onAddClicked={this.showTrouser}/>
                 <div className='mainContent'>
                     <Stage stageContent='this is the stage content text'>
-                        <ReportStage {...i18n} />
+                        <ReportStage {...i18n} reportName={this.state.reportData.data.name}/>
                     </Stage>
                     <ReportContent {...i18n} reportData={this.state.reportData}/>
                 </div>

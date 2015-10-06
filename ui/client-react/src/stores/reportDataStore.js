@@ -34,8 +34,9 @@ let ReportDataStore = Fluxxor.createStore({
         this.error = false;
 
         let data = {
-            columns: this.getReportColumns(reportData.fields),
-            records: this.getReportData(reportData)
+            name: reportData.name,
+            columns: this.getReportColumns(reportData.data.fields),
+            records: this.getReportData(reportData.data)
         };
 
         this.data = data;
@@ -54,7 +55,7 @@ let ReportDataStore = Fluxxor.createStore({
             column.builtIn = field.builtIn;
 
             //  client side attributes..
-            column.datatypeAttribures = field.datatypeAttributes;
+            column.datatypeAttributes = field.datatypeAttributes;
 
             columns.push(column);
         });

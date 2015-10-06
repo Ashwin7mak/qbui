@@ -17,11 +17,25 @@ var Stage = React.createClass({
         window.location.href = 'mailto:clay_nicolau@intuit.com?subject=ReArch LH Feedback';
     },
 
+    getInitialState: function() {
+        return {
+            reportName: '...'
+        };
+    },
+
+    componentWillReceiveProps: function(nextProps) {
+        if (nextProps.reportName) {
+            this.setState({
+                reportName: nextProps.reportName
+            });
+        }
+    },
+
     render: function() {
         return <div className="report-stage">
                  <div className="report-content">
                     <div className="left">
-                        <div className="header"><FormattedMessage message={this.getIntlMessage('lighthouse.stage.header')}/></div>
+                        <div className="header">{this.state.reportName}</div>
                         <div className="subheader"><FormattedMessage message={this.getIntlMessage('lighthouse.stage.sub_header')}/></div>
                         <div className="content">
                             <div className="stage-showHide-content"><FormattedMessage message={this.getIntlMessage('lighthouse.stage.content')}/></div>

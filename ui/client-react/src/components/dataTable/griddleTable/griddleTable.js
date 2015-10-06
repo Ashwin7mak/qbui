@@ -12,7 +12,7 @@ import PaginationComponent from './pagination.js';
 import { fakeGriddleData } from '../../../components/dataTable/griddleTable/fakeData.js';
 
 import './griddleTable.css';
-import './qbGriddleTable.css';
+import './qbGriddleTable.scss';
 
 /*
  * Sample component for passing in data  -
@@ -32,9 +32,7 @@ var I18nMessage = React.createClass({
 
 class GriddleTable extends React.Component {
 
-
     initState(props) {
-
         let initialState = {
             "results": props.results,
             "maxPages": props.maxPages || 0, // this feeds into the pagination component and tells it whether there should be a "Next" available or not.
@@ -42,6 +40,7 @@ class GriddleTable extends React.Component {
             "externalResultsPerPage": props.externalResultsPerPage,
             "externalSortColumn": props.externalSortColumn,
             "externalSortAscending": props.externalSortAscending,
+            "columnMetadata": props.columnMetadata || [],
             "fullDataSet": []
         };
 
@@ -127,10 +126,12 @@ class GriddleTable extends React.Component {
          For our purpose that first set of data should always be provided by the store. If not data has been provided then there is nothing to display.
          So in case of no data sent in just render a plain and empty div */
         if (this.props.results) {
+            //let columnMetadata = this.getColumnProps(); //TODO: is there a way to make sure this doesnt happen on every render.
             return (
                 <div>
                     <Griddle {...this.props}
                         results={this.state.results}
+                        //columnMetadata={columnMetadata}
                         //events
                         externalSetPage={this.setPage}
                         externalChangeSort={this.changeSort}
@@ -171,7 +172,10 @@ GriddleTable.defaultProps = {
     columnMetadata: [],
     results: [],
 
-    getResultsCallback: null
+    getResultsCallback: null,
+    gridClassName: 'QBGriddle',
+    useGriddleStyles: false
+    //,rowHeight: 30 //TODO not working right now
 };
 
 export default GriddleTable;
