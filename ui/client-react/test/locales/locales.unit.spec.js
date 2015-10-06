@@ -8,9 +8,10 @@ describe('Locales', () => {
         expect(i18n.locales).toBe('en-us');
     });
 
-    it('test change locale', () => {
+    it('test valid change locale', () => {
         let i18n = Locale.getI18nBundle();
         expect(i18n.locales).toBe('en-us');
+        expect(Locale.getLocale()).toBe('en-us');
 
         Locale.changeLocale('fr-fr');
         i18n = Locale.getI18nBundle();
@@ -21,14 +22,17 @@ describe('Locales', () => {
         i18n = Locale.getI18nBundle();
         expect(i18n.locales).toBe('de-de');
         expect(Locale.getLocale()).toBe('de-de');
+    });
 
+    it('test invalid change locale', () => {
         Locale.changeLocale('invalid');
-        i18n = Locale.getI18nBundle();
+        let i18n = Locale.getI18nBundle();
         expect(i18n.locales).toBe('en-us');
-        expect(Locale.getLocale()).toBe('invalid');
+        expect(Locale.getLocale()).toBe('en-us');
 
         Locale.changeLocale({'throws exception':2});
         i18n = Locale.getI18nBundle();
         expect(i18n.locales).toBe('en-us');
+        expect(Locale.getLocale()).toBe('en-us');
     });
 });
