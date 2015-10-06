@@ -78,7 +78,7 @@
      **************/
     var server = http.createServer(app);
     server.listen(config.port, config.ip, function() {
-        log.info('Http Server started. Listening on PORT: %d', server.address().port);
+        log.info('Http Server started. Listening %s on PORT: %d', config.ip, server.address().port);
     });
 
 
@@ -97,8 +97,12 @@
 
         var serverHttps = https.createServer(options, app);
         serverHttps.listen(config.sslPort, config.ip, function() {
-            log.info('Https Server started. Listening on PORT: %d', serverHttps.address().port);
+            log.info('Https Server started. Listening %s on PORT: %d', config.ip, serverHttps.address().port);
         });
     }
+
+
+    // if not running production it get the hot loader running for debugging
+    require('./hotDevServer')(config);
 
 }());

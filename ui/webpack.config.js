@@ -23,7 +23,12 @@ var config = {
     // and line number
     // eval is faster than 'source-map' for dev but eval is not supported for prod
     devtool: PROD ? 'source-map' : 'eval',
-    entry: [
+    entry: PROD ? [
+        mainPath,
+        'bootstrap-sass!./client-react/bootstrap-sass.config.js'
+    ]: [
+        'webpack-dev-server/client?http://0.0.0.0:3000', // WebpackDevServer host and port
+        'webpack/hot/only-dev-server', // "only" prevents reload on syntax errors
         mainPath,
         'bootstrap-sass!./client-react/bootstrap-sass.config.js'
     ],
@@ -51,7 +56,7 @@ var config = {
                     path.resolve(__dirname, 'client-react/test')
                 ],
                 exclude: [nodeModulesPath],
-                loader: 'babel'
+                loaders: [ 'react-hot-loader', 'babel-loader' ]
             },
             {
                 // all css files can be required into js files with this
@@ -96,7 +101,8 @@ var config = {
     ] : [
         // We will have to manually add the Hot Replacement plugin when running
         // from Node
-       //new webpack.HotModuleReplacementPlugin()
+        new webpack.HotModuleReplacementPlugin(), // don't add this if running webpackdev from cli
+        new webpack.NoErrorsPlugin()
     ]
 };
 

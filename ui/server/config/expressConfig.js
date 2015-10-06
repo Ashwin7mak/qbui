@@ -20,6 +20,8 @@
     var clientConsts = require('./environment/clientConsts');
 
 
+
+
     module.exports = function(app) {
 
         // use ssl when there's a cert and we have the method to implement it
@@ -62,6 +64,7 @@
         app.use(cookieParser());
         app.use(useragent.express());
 
+        config.isProduction = false;
         if (envConsts.PRODUCTION === env || envConsts.PRE_PROD === env || envConsts.INTEGRATION === env || envConsts.DEVELOPMENT === env || envConsts.TEST === env) {
 
             if (envConsts.DEVELOPMENT === env) {
@@ -69,7 +72,8 @@
             }
 
             if (envConsts.PRODUCTION === env || envConsts.PRE_PROD === env) {
-                app.use(favicon(path.join(config.root, 'public', 'favicon.ico')));
+                config.isProduction = true;
+                app.use(favicon(path.join(config.root, 'dist','public', 'favicon.ico')));
             }
 
             app.use(express.static(path.join(config.root, 'public')));
@@ -81,6 +85,14 @@
             }
         }
 
+        if (!config.ip) {
+            if (config.DOMAIN) {
+                var url = require('url');
+                config.ip = url.parse(config.DOMAIN).hostname;
+            } else {
+                config.ip = "localhost";
+            }
+        }
         //   runs angular client
         var client = config.client;
         if (clientConsts.ANGULAR === client) {

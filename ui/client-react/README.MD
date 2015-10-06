@@ -82,7 +82,6 @@ _note: hot loading means edits will update the browser without needing to refres
     * any edits you make to the files in the bundle (css, js) will be hot loaded
 
 
-TODO: serve static react hot reload files from node server with proxy - see
 
 
 
