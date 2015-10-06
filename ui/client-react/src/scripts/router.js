@@ -51,7 +51,7 @@ let Apps = React.createClass({
 
 React.render((
     <Router history={createBrowserHistory()}>
-        <Route path='/' name='default' component={Nav} />
+        <Route path='/' name='default' component={Apps} />
         <Route path='apps' name='apps' component={Apps} />
         <Route path='app/:appId/table/:tblId/reports' name='reports' component={Nav} />
         <Route path='app/:appId/table/:tblId/report/:rptId' name='report' component={Nav} />
