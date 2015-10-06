@@ -6,37 +6,45 @@ import FR_FR from '../locales/fr_fr';
 import DE_DE from '../locales/de_de';
 import Logger from '../utils/logger';
 
-// todo: implement as an ES6 class
-// todo: this seems questionable as a proper way to read in the user's locale
-var Locale = document.documentElement.getAttribute('lang') || 'en-us';
-var logger = new Logger();
+let logger = new Logger();
 
-var getI18nBundle = function() {
+//  todo: this will need to change and get set based on authenticated user preferences...do not
+//  todo: believe this should get set from the browser as supported QuickBase languages will be a subset
+//  todo: of the language list in the browser
+let locale = document.documentElement.getAttribute('lang') || 'en-us';
 
-    'use strict';
-    logger.debug('Fetching locale: ' + Locale);
+class Locale {
 
-    try {
-        switch (Locale.toLowerCase()) {
-            case 'en-us':
-                return EN_US;
-            case 'fr-fr':
-                return FR_FR;
-            case 'de-de':
-                return DE_DE;
-            default:
-                logger.info('Locale (' + Locale + ') is invalid or not supported.  Returning default: EN_US');
-                return EN_US;
-        }
-    } catch (e) {
-        //  any error automatically returns default locale
-        logger.error('Error fetching locale: ' + e);
-        return EN_US;
+    static getLocale() {
+        return locale;
     }
-};
 
-var changeLocale = function(locale) {
-    Locale = locale;
+    static getI18nBundle() {
+        logger.debug('Fetching locale: ' + locale);
+
+        try {
+            switch (locale.toLowerCase()) {
+                case 'en-us':
+                    return EN_US;
+                case 'fr-fr':
+                    return FR_FR;
+                case 'de-de':
+                    return DE_DE;
+                default:
+                    logger.info('Locale (' + locale + ') is invalid or not supported.  Returning default: EN_US');
+                    return EN_US;
+            }
+        } catch (e) {
+            //  any error automatically returns default locale
+            logger.error('Error fetching locale: ' + e);
+            return EN_US;
+        }
+    }
+
+    static changeLocale(newLocale) {
+        locale = newLocale;
+    }
+
 }
 
-export { Locale, getI18nBundle, changeLocale };
+export default Locale;
