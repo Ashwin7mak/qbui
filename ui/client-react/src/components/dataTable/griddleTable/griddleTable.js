@@ -12,7 +12,7 @@ import PaginationComponent from './pagination.js';
 import { fakeGriddleData } from '../../../components/dataTable/griddleTable/fakeData.js';
 
 import './griddleTable.css';
-import './qbGriddleTable.css';
+import './qbGriddleTable.scss';
 
 /*
  * Sample component for passing in data  -
@@ -41,7 +41,6 @@ class GriddleTable extends React.Component {
             "externalSortColumn": props.externalSortColumn,
             "externalSortAscending": props.externalSortAscending,
             "columnMetadata": props.columnMetadata || [],
-            "columnMetadataInitialized": false,
             "fullDataSet": []
         };
 
@@ -173,7 +172,10 @@ GriddleTable.defaultProps = {
     columnMetadata: [],
     results: [],
 
-    getResultsCallback: null
+    getResultsCallback: null,
+    gridClassName: 'QBGriddle',
+    useGriddleStyles: false
+    //,rowHeight: 30 //TODO not working right now
 };
 
 export default GriddleTable;

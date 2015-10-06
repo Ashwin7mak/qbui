@@ -1,0 +1,94 @@
+.QBGriddle {
+  font-family: 'Helvetica Neue LT Roman', HelveticaNeue, 'Helvetica Neue', Helvetica, Arial, sans-serif;
+  color: #404040;
+  font-size: 12px;
+  -webkit-font-smoothing: antialiased;
+
+  table{
+    table-layout: auto; /* by default griddle sets this to "fixed" layout but we dont want same width columns*/
+  }
+
+  .griddle-container { /* Temporary margin so the footer doesnt overlap the grid. Should be resolved by the layout in time. */
+    margin-bottom: 70px;
+    margin-left: 20px;
+    margin-right: 20px;
+    border: 0px;
+  }
+
+  th{
+    padding: 8px 5px 2px 5px;
+    color: #6e8ba8;
+    font-size: 13px;
+    -webkit-font-smoothing: antialiased;
+    text-transform: uppercase;
+    font-weight: 400;
+    border-color: #c0d0e4;
+    border-right: 1px solid #c0d0e4;
+    border-bottom: 2px solid #D2DCE7;
+    background-color: #E3E9F3;
+    &:hover{
+      background-color: #6e8ba8;
+      color: #e3eaf3;
+    }
+  }
+
+  tr:hover td {
+    &:not(.footer-container) {
+      background-color: #f3f8fe;
+    }
+  }
+  tr {
+    td {
+      word-wrap: break-word;
+      padding: 5px;
+      border-left: 1px dotted #dcdcdc;
+      border-right: 1px dotted #dcdcdc;
+      border-bottom: 1px solid #dcdcdc;
+      border-color: #d4d4d4;
+      height: 30px; /* this doesnt seem right - pass through props if possible*/
+      &:nth-child(1){
+        border-left: 0px;
+      }
+      &:last-of-type{
+        border-right: 0px;
+      }
+    }
+  }
+  td.Bold{
+    font-weight: bold;
+  }
+  .NoWrap{
+    white-space: nowrap;
+  }
+  td.AlignRight, th.AlignRight {
+    text-align: right;
+  }
+
+  .footer-container {
+    background-color: #fff;
+    .griddle-footer{
+      .pager{
+        margin-right: 2px;
+      }
+      .next {
+        a{
+          padding: 5px 15px;
+          line-height: 1.42857;
+          text-decoration: none;
+          color: #365EBF;
+          border: 1px #DCDCDC solid;
+          background-color: #FFFFFF;
+          font-size: 14px;
+          margin: 0;
+          border-radius: 2px;
+          &:hover{
+            color: #243F7F;
+          }
+        }
+      }
+    }
+  }
+
+  /* Pagination related styles */
+}
+

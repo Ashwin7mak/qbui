@@ -22,8 +22,8 @@ class PaginationComponent  extends React.Component {
     render(){
         return (
             <Pager>
-                <PageItem onClick={this.handlePrev}>Previous</PageItem>
-                <PageItem onClick={this.handleNext}>Next</PageItem>
+                <PageItem next onClick={this.handleNext}>Next</PageItem>
+                <PageItem next onClick={this.handlePrev}>Previous</PageItem>
             </Pager>
 
         );
