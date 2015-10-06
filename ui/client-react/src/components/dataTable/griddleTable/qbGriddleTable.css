@@ -6,10 +6,20 @@
     margin-bottom: 70px;
     margin-left: 20px;
     margin-right: 20px;
+    font-family: "HelveticaNeueRoman", Helvetica, Arial, sans-serif;
+    color: #404040;
+    font-size: 14px;
 }
 
 .griddle td{
     word-wrap: break-word;
+}
+
+.griddle td.Bold{
+    font-weight: bold;
+}
+.griddle td.NoWrap{
+    white-space: no-wrap!important;
 }
 
 /*Temporary pagination styles */

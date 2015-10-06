@@ -12,7 +12,7 @@ import { Locale, getI18nBundle } from '../../../locales/locales';
 var i18n = getI18nBundle();
 var IntlMixin = ReactIntl.IntlMixin;
 
-const resultsPerPage = 10; //assume that this is the constant number of records per page. This can be passed in as a prop for diff reports
+const resultsPerPage = 50; //assume that this is the constant number of records per page. This can be passed in as a prop for diff reports
 
 var Content = React.createClass({
     mixins: [IntlMixin],
@@ -26,13 +26,56 @@ var Content = React.createClass({
     },
 
     componentWillReceiveProps: function(nextProps){
+        var that = this;
         if (nextProps.reportData.data) {
-            this.setState({
+            that.setState({
                 reportRecords: nextProps.reportData.data.records ? nextProps.reportData.data.records : [],
-                reportColumns: nextProps.reportData.data.columns ? nextProps.reportData.data.columns : [],
+                reportColumns: nextProps.reportData.data.columns ? that.getColumnProps(nextProps.reportData.data.columns) : [],
                 firstDataSet: nextProps.reportData.data.records ? nextProps.reportData.data.records.slice(0, resultsPerPage) : []
             });
         }
+    },
+    setCSSClass_helper: function(obj, classname){
+        if (typeof (obj.cssClassName) == 'undefined')
+            obj.cssClassName = classname;
+        else
+            obj.cssClassName += " " + classname;
+    },
+    /* for each field attribute that has some presentation effect convert that to a css class before passing to griddle.*/
+    getColumnProps: function(columns) {
+        var that = this;
+
+        if (columns){
+            var columnsData = columns.map(function(obj){
+                if (obj.datatypeAttributes) {
+                    var datatypeAttributes = obj.datatypeAttributes;
+                    for (var attr in datatypeAttributes) {
+                        switch (attr) {
+                            case 'type':
+                                datatypeAttributes[attr] == "NUMERIC" ? that.setCSSClass_helper(obj, "AlignRight") : null;
+                                break;
+                        }
+                    }
+
+                    if (datatypeAttributes.clientSideAttributes) {
+                        var clientSideAttributes = datatypeAttributes.clientSideAttributes;
+                        for (var attr in clientSideAttributes) {
+                            switch (attr) {
+                                case 'bold':
+                                    clientSideAttributes[attr] == true ? that.setCSSClass_helper(obj, "Bold") : null;
+                                    break;
+                                case 'word-wrap':
+                                    clientSideAttributes[attr] == true ? that.setCSSClass_helper(obj, "NoWrap") : null;
+                                    break;
+                            }
+                        }
+                    }
+                }
+                return obj;
+            });
+            return columnsData;
+        }
+        return [];
     },
 
     getNextDataSet: function(page, callback){

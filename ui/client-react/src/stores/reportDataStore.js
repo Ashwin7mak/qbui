@@ -54,7 +54,7 @@ let ReportDataStore = Fluxxor.createStore({
             column.builtIn = field.builtIn;
 
             //  client side attributes..
-            column.datatypeAttribures = field.datatypeAttributes;
+            column.datatypeAttributes = field.datatypeAttributes;
 
             columns.push(column);
         });
