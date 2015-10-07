@@ -21,7 +21,7 @@ var Content = React.createClass({
         return {
             reportRecords: this.props.reportData.data.records ? this.props.reportData.data.records : [],
             reportColumns: this.props.reportData.data.columns ? this.props.reportData.data.columns : [],
-            firstDataSet: this.props.reportData.data.records ? this.props.reportData.data.records.slice(0, resultsPerPage) : []
+            firstDataSet: this.props.reportData.data.records ? this.props.reportData.data.records.slice(0, resultsPerPage+1) : []
         };
     },
 
@@ -31,7 +31,7 @@ var Content = React.createClass({
             that.setState({
                 reportRecords: nextProps.reportData.data.records ? nextProps.reportData.data.records : [],
                 reportColumns: nextProps.reportData.data.columns ? that.getColumnProps(nextProps.reportData.data.columns) : [],
-                firstDataSet: nextProps.reportData.data.records ? nextProps.reportData.data.records.slice(0, resultsPerPage) : []
+                firstDataSet: nextProps.reportData.data.records ? nextProps.reportData.data.records.slice(0, resultsPerPage+1) : []
             });
         }
     },
