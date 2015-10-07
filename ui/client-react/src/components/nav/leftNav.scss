@@ -1,3 +1,5 @@
+
+
 .leftMenu.open {
   width:350px;
   nav li {
@@ -9,6 +11,24 @@
     }
   }
 }
+
+@media (min-width:500px) and (max-width: 768px) {
+  /* For mobile phones: */
+  .leftMenu.open {
+    width:200px;
+  }
+}
+
+@media (max-width: 500px) {
+  /* For mobile phones: */
+  .leftMenu.open {
+    width:40px;
+  }
+  nav li a.heading {
+    visibility:hidden;
+  }
+}
+
 .leftMenu.closed {
   width:40px;
   .nav li a.heading {
@@ -20,7 +40,7 @@
 .leftMenu {
   border-right: 1px solid #ccc;
   background-color: #002b48;
-  max-width: 250px;
+  //max-width: 250px;
 
   .nav li {
     a.leftNavLink:hover, a.leftNavLink:focus {
@@ -35,8 +55,15 @@
     a.leftNavLink {
       color: #bbd;
       cursor: pointer;
+      white-space:nowrap;
+      overflow:hidden;
+      text-overflow:ellipsis;
       .glyphicon {
         margin-right: 8px;
+      }
+      span {
+
+        text-overflow:ellipsis;
       }
     }
     .loader {
