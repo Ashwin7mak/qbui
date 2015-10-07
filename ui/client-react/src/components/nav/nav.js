@@ -39,22 +39,6 @@ var Nav = React.createClass({
         };
     },
 
-    // Triggered when properties change
-    componentWillReceiveProps: function(props) {
-        if (props) {
-            if (props.params) {
-                let appId = props.params.appId;
-                let tblId = props.params.tblId;
-                let rptId = props.params.rptId;
-                if (appId && tblId && rptId) {
-                    logger.debug('Loading report. AppId:' + appId + ' ;tblId:' + tblId + ' ;rptId:' + rptId);
-                    let flux = this.getFlux();
-                    flux.actions.loadReport({appId: appId, tblId: tblId, rptId: rptId});
-                }
-            }
-        }
-    },
-
     hideTrouserExample: function() {
         logger.debug('hiding trowser from Nav shell');
         let flux = this.getFlux();
@@ -62,6 +46,7 @@ var Nav = React.createClass({
     },
 
     render: function() {
+        let flux = this.getFlux();
 
         return (<div className='navShell'>
             <Trouser visible={this.state.nav.trouserOpen} onHide={this.hideTrouserExample}>
@@ -75,10 +60,7 @@ var Nav = React.createClass({
             <div className='main'>
                 <TopNav {...i18n} onNavClick={this.toggleNav} onAddClicked={this.showTrouser}/>
                 <div className='mainContent'>
-                    <Stage stageContent='this is the stage content text'>
-                        <ReportStage {...i18n} reportName={this.state.reportData.data.name}/>
-                    </Stage>
-                    <ReportContent {...i18n} reportData={this.state.reportData}/>
+                    {React.cloneElement(this.props.children, {reportData: this.state.reportData, flux: flux} )}
                 </div>
                 <Footer {...i18n} />
             </div>

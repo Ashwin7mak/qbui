@@ -1,5 +1,5 @@
 import React from 'react';
-import { Router, Route } from 'react-router';
+import { Router, Route, IndexRoute } from 'react-router';
 import createBrowserHistory from 'history/lib/createBrowserHistory';
 
 import NavComponent from '../components/nav/nav';
@@ -18,6 +18,9 @@ import NavStore from '../stores/navStore';
 import navActions from '../actions/navActions';
 
 import AppsHome from '../components/apps/home';
+
+import ReportRoute from '../components/report/reportRoute';
+import TableHomePageRoute from '../components/table/tableHomePageRoute';
 
 let stores = {
     ReportsStore: new ReportsStore(),
@@ -54,7 +57,11 @@ React.render((
         <Route path='/' name='default' component={Apps} />
         <Route path='apps' name='apps' component={Apps} />
         <Route path='app/:appId/table/:tblId/reports' name='reports' component={Nav} />
-        <Route path='app/:appId/table/:tblId/report/:rptId' name='report' component={Nav} />
+
+        <Route path='app/:appId/table/:tblId' component={Nav} >
+            <IndexRoute component={TableHomePageRoute} />
+            <Route path='report/:rptId' component={ReportRoute} />
+        </Route>
     </Router>
 ), document.getElementById('content') );
 

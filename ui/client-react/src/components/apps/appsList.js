@@ -19,7 +19,7 @@ var Content = React.createClass({
                                 <div className="tables">
                                     {app.tables.map((table) => {
                                         let tblName = table.name + ' (' + table.id + ')';
-                                        let href = '/app/' + app.id + '/table/' + table.id + '/reports';
+                                        let href = '/app/' + app.id + '/table/' + table.id;
                                         return (
                                             <ul><li><a href={href}>{tblName}</a></li></ul>
                                         );
