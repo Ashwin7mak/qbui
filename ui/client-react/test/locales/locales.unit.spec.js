@@ -25,14 +25,18 @@ describe('Locales', () => {
     });
 
     it('test invalid change locale', () => {
+        //  set to a valid locale..
+        Locale.changeLocale('fr-fr');
+
+        //  .. now set to an invalid locale..should use existing
         Locale.changeLocale('invalid');
         let i18n = Locale.getI18nBundle();
-        expect(i18n.locales).toBe('en-us');
-        expect(Locale.getLocale()).toBe('en-us');
+        expect(i18n.locales).toBe('fr-fr');
+        expect(Locale.getLocale()).toBe('fr-fr');
 
         Locale.changeLocale({'throws exception':2});
         i18n = Locale.getI18nBundle();
-        expect(i18n.locales).toBe('en-us');
-        expect(Locale.getLocale()).toBe('en-us');
+        expect(i18n.locales).toBe('fr-fr');
+        expect(Locale.getLocale()).toBe('fr-fr');
     });
 });
