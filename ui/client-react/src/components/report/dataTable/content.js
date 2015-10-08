@@ -5,7 +5,6 @@ import { Table } from 'react-bootstrap';
 import GriddleTable  from '../../../components/dataTable/griddleTable/griddleTable.js';
 import {DateFormatter,NumericFormatter}  from '../../../components/dataTable/griddleTable/formatters.js';
 import { fakeGriddleData,fakeGriddleColumnMetaData } from '../../../components/dataTable/griddleTable/fakeData.js';
-
 import Loader  from 'react-loader';
 
 import '../../../assets/css/report.css';
@@ -43,8 +42,6 @@ var Content = React.createClass({
         else
             obj.cssClassName += " " + classname;
     },
-
-
     /* for each field attribute that has some presentation effect convert that to a css class before passing to griddle.*/
     getColumnProps: function(columns) {
         var that = this;
@@ -57,7 +54,7 @@ var Content = React.createClass({
                         switch (attr) {
                             case 'type':
                             {
-                                switch (datatypeAttributes[attr]) {
+                                switch(datatypeAttributes[attr]){
                                     case "NUMERIC" : that.setCSSClass_helper(obj, "AlignRight"); obj["customComponent"] = NumericFormatter;
                                         break;
                                     case "DATE" : obj["customComponent"] = DateFormatter;
@@ -105,10 +102,7 @@ var Content = React.createClass({
             <Loader loaded={!this.props.reportData.loading}>
                 {this.props.reportData.error ?
                     <div>Error loading report!</div> :
-                    <GriddleTable {...i18n} getResultsCallback={this.getNextDataSet} results={this.state.firstDataSet}
-                                            columnMetadata={this.state.reportColumns} useExternal={true}
-                                            externalResultsPerPage={resultsPerPage}/>
-                }
+                    <GriddleTable {...i18n} mobile={this.props.mobile} getResultsCallback={this.getNextDataSet} results={this.state.firstDataSet} columnMetadata={this.state.reportColumns} useExternal={true} externalResultsPerPage={resultsPerPage}/>}
             </Loader>
         )
     }

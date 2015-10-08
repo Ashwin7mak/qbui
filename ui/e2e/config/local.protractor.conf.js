@@ -11,7 +11,7 @@
         baseUrl: process.env.DOMAIN,
         // list of files / patterns to load in the browser
         specs: [
-            '../qbapp/**/*.e2e.spec.js'
+            '../qbapp/**/reportService.e2e.spec.js'
         ],
         // Patterns to exclude.
         exclude: [],
@@ -40,12 +40,19 @@
             defaultTimeoutInterval: 60000
         },
         // Globally accessible variables (params is a property of the Protractor instance)
-        // Used for running tests slower / faster if running in Sauce Labs
         params: {
-            tinySleep : 100,
-            smallSleep : 1000,
-            mediumSleep : 5000,
-            largeSleep :10000
+            // Used for running tests slower / faster if running in Sauce Labs
+            tinySleep: 100,
+            smallSleep: 1000,
+            mediumSleep: 5000,
+            largeSleep: 10000
+        },
+        // This function is run once before any of the test files. Acts as a global test preparation step
+        onPrepare: function(){
+            // Lets Protractor know there is no Angular code to wait for
+            browser.ignoreSynchronization = true;
+            // Maximizes the browser window (known bug with Chrome)
+            browser.driver.manage().window().maximize();
         }
-    };
+    }
 }());

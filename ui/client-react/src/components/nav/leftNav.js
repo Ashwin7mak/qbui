@@ -10,11 +10,6 @@ var FormattedMessage = ReactIntl.FormattedMessage;
 let LeftNav = React.createClass( {
     mixins: [IntlMixin],
 
-    selectItem: function (id) {
-        if (id)
-            this.props.itemSelection(id);
-    },
-
     getGlyphName(item) {
 
         if (item.icon)
@@ -36,32 +31,21 @@ let LeftNav = React.createClass( {
             return (<li><a className='heading'></a></li>);
 
     },
-
     buildNavItem: function(item) {
 
         let label = item.key ? this.getIntlMessage(item.key) : item.name;
 
-        const tooltip = (
-            <Tooltip id={item.id}>{label}</Tooltip>
-        );
+        const tooltip = (<Tooltip className={ this.props.open ? 'leftNavTooltip' : 'leftNavTooltip show' } id={item.id}>{label}</Tooltip>);
 
-        if (this.props.open)
-            return (
+        return (
+            <OverlayTrigger key={item.id} placement="right" overlay={tooltip}>
                 <li>
                     <Link className='leftNavLink' to={item.link}>
                         <Glyphicon glyph={this.getGlyphName(item)}/> {label}
                     </Link>
-                </li>);
-        else
-            return (
-                <OverlayTrigger key={item.id} placement="right" overlay={tooltip}>
-                    <li>
-                        <Link className='leftNavLink' to={item.link}>
-                            <Glyphicon glyph={this.getGlyphName(item)}/>
-                        </Link>
-                    </li>
-                </OverlayTrigger>
-            )
+                </li>
+            </OverlayTrigger>
+        )
     },
 
     render: function() {
@@ -76,7 +60,6 @@ let LeftNav = React.createClass( {
                             this.buildHeadingItem(item)  :
                             this.buildNavItem(item);
                     })}
-
 
                     {this.buildHeadingItem({key:'nav.reportsHeading'},this.props.reportsData.loading)}
 

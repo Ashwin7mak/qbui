@@ -46,6 +46,7 @@ var Nav = React.createClass({
     },
 
     render: function() {
+
         let flux = this.getFlux();
 
         return (<div className='navShell'>
@@ -60,7 +61,7 @@ var Nav = React.createClass({
             <div className='main'>
                 <TopNav {...i18n} onNavClick={this.toggleNav} onAddClicked={this.showTrouser}/>
                 <div className='mainContent'>
-                    {React.cloneElement(this.props.children, {reportData: this.state.reportData, flux: flux} )}
+                    {React.cloneElement(this.props.children, {reportData: this.state.reportData, mobile: this.props.mobile, flux: flux} )}
                 </div>
                 <Footer {...i18n} />
             </div>
