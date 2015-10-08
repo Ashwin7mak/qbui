@@ -52,7 +52,7 @@
 .leftMenu {
   border-right: 1px solid #ccc;
   background-color: #002b48;
-  //max-width: 250px;
+  overflow-y:auto;
 
   .nav li {
     a.leftNavLink:hover, a.leftNavLink:focus {
