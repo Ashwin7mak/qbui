@@ -29,8 +29,8 @@ var config = {
     ]: [
         'webpack-dev-server/client?http://0.0.0.0:3000', // WebpackDevServer host and port
         'webpack/hot/only-dev-server', // "only" prevents reload on syntax errors
-        mainPath,
-        'bootstrap-sass!./client-react/bootstrap-sass.config.js'
+        'bootstrap-sass!./client-react/bootstrap-sass.config.js',
+        mainPath
     ],
     output: {
         // generated files

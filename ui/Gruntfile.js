@@ -178,11 +178,15 @@ module.exports = function(grunt) {
                 },
                 options: {
                     config      : './.jscsrc',
-                    excludeFiles: ['<%= quickbase.client.root %>/bower_components/**/*.js',
-                                   '<%= quickbase.client.root %>/**/*.spec.js',
-                                   (client === 'REACT' && ('<%= quickbase.client.gen %>/**/*.js')),
-                                   (client === 'REACT' && ('<%= quickbase.client.root %>/bootstrap-sass.config.js'))
-                    ]
+                    excludeFiles: (client === 'REACT') ?
+                                ['<%= quickbase.client.root %>/bower_components/**/*.js',
+                                 '<%= quickbase.client.root %>/**/*.spec.js',
+                                 '<%= quickbase.client.gen %>/**/*.js',
+                                 '<%= quickbase.client.root %>/**/*.js', //TODO replace with eslint
+                                 '<%= quickbase.client.root %>/bootstrap-sass.config.js'
+                                ] : ['<%= quickbase.client.root %>/bower_components/**/*.js',
+                                   '<%= quickbase.client.root %>/**/*.spec.js'
+                                ]
                 }
             },
             server : {
@@ -232,14 +236,21 @@ module.exports = function(grunt) {
                 options: {
                     jshintrc: '<%= quickbase.client.root %>/.jshintrc'
                 },
-                src    : [
+                src    : (client === 'ANGULAR') ? [
                         // only use jshint on angular code
                         // React will use ESLint for lint checking which supports JSX/ES6
                         // So when running jshint with REACT as client we will not include the react client code
-                        (client === 'ANGULAR' && ('<%= quickbase.client.components %>/**/*.js')),
-                        (client === 'ANGULAR' && ('<%= quickbase.client.gallery %>/**/*.js')),
-                        '!<%= quickbase.client.components %>/**/*.spec.js',
-                        '!<%= quickbase.client.components %>/**/*.mock.js'
+                        '<%= quickbase.client.components %>/**/*.js',
+                        '<%= quickbase.client.gallery %>/**/*.js',
+                       '!<%= quickbase.client.root %>/dist/**/*.js',
+                       '!<%= quickbase.client.components %>/**/*.spec.js',
+                       '!<%= quickbase.client.components %>/**/*.mock.js',
+                       '!<%= quickbase.e2e %>/**/*.js'
+
+                ]  : [
+                    '!<%= quickbase.client.root %>/**/*.js',
+                    '!<%= quickbase.e2e %>/**/*.js',
+                    '!<%= express.root %>/**/*.js'
                 ]
             },
             clientTest: {
