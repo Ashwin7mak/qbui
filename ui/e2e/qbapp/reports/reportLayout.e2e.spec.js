@@ -14,7 +14,7 @@
     var promise = require('bluebird');
     //Load the page objects
     var requestSessionTicketPage = require('./requestSessionTicket.po.js');
-    var requestReportPage = require('./requestReport.po.js');
+    var requestAppsPage = require('./requestApps.po.js');
     var reportServicePage = require('./reportService.po.js');
     describe('Report Layout Tests', function() {
         var app;
@@ -66,12 +66,12 @@
             var tableId = app.tables[0].id;
             //Get a session ticket for that subdomain and realmId (stores it in the browser)
             requestSessionTicketPage.get(e2eBase.getSessionTicketRequestEndpoint(realmName, realmId, e2eBase.ticketEndpoint));
-            //Load the requestReportPage (shows a list of all the reports for an app)
-            requestReportPage.get(e2eBase.getRequestReportPageEndpoint(realmName));
+            //Load the requestAppsPage (shows a list of all the apps and tables in a realm)
+            requestAppsPage.get(e2eBase.getRequestAppsPageEndpoint(realmName));
             //Assert that we have a report for our created table
-            expect(requestReportPage.firstReportLinkEl.getText()).toContain(tableId);
+            expect(requestAppsPage.firstReportLinkEl.getText()).toContain(tableId);
             //Select the report to load it in the browser
-            requestReportPage.firstReportLinkEl.click();
+            requestAppsPage.firstReportLinkEl.click();
             //Define the window size
             e2eBase.resizeBrowser(widthTests[0], heightTests);
             //Assert columns fill width
