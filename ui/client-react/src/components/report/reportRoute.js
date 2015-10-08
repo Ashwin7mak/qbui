@@ -43,7 +43,7 @@ var ReportRoute = React.createClass( {
                 <Stage stageContent='this is the stage content text'>
                     <ReportStage {...i18n} />
                 </Stage>
-                <ReportContent {...i18n} reportData={this.props.reportData}/>
+                <ReportContent {...i18n} reportData={this.props.reportData} mobile={this.props.mobile}/>
                 </div>);
     }
 });

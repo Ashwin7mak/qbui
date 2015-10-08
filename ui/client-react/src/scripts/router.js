@@ -34,9 +34,13 @@ flux.addActions(reportDataActions);
 flux.addActions(appsActions);
 flux.addActions(navActions);
 
+function isMobileRoute(route) {
+    return route.path.indexOf('m/')==0;
+}
+
 let Nav = React.createClass({
     render: function() {
-        return <NavComponent flux={flux} {...this.props}/>
+        return <NavComponent flux={flux} {...this.props} mobile={isMobileRoute(this.props.route)} />
     },
     componentDidMount: function () {
         flux.actions.loadReports({appId: this.props.params.appId, tblId: this.props.params.tblId});
@@ -45,7 +49,7 @@ let Nav = React.createClass({
 
 let Apps = React.createClass({
     render: function() {
-        return <AppsHome flux={flux}/>
+        return <AppsHome flux={flux} mobile={isMobileRoute(this.props.route)}/>
     },
     componentDidMount: function() {
         flux.actions.loadAppsWithTables();
@@ -62,6 +66,12 @@ React.render((
             <IndexRoute component={TableHomePageRoute} />
             <Route path='report/:rptId' component={ReportRoute} />
         </Route>
+
+        <Route path='m/app/:appId/table/:tblId' component={Nav} >
+            <IndexRoute component={TableHomePageRoute} />
+            <Route path='report/:rptId' component={ReportRoute} />
+        </Route>
+
     </Router>
 ), document.getElementById('content') );
 
