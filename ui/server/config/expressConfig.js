@@ -90,7 +90,7 @@
                 var url = require('url');
                 config.ip = url.parse(config.DOMAIN).hostname;
             } else {
-                config.ip = "localhost";
+                config.ip = 'localhost';
             }
         }
         //   runs angular client

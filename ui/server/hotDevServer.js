@@ -12,7 +12,6 @@
             var WebpackDevServer = require('webpack-dev-server');
             var webpackConfig = require('../webpack.config.js');
 
-            var nodeServerPort = config.port;
             var hotPort = config.devServerPort || 3000;
             var compiler = webpack(webpackConfig);
 
@@ -32,7 +31,7 @@
                 inline             : true,
 
                 // historyApiFallback -  to access dev server from arbitrary url.
-                historyApiFallback: true,
+                historyApiFallback: true
 
                 // proxy: for webpack-dev-server to delegate a single path to an arbitrary server.
                 //proxy             : {
