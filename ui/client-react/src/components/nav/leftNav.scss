@@ -30,8 +30,13 @@
 }
 
 @media (min-width: 500px) {
+  /* hide tooltip if the left nav is showing labels (see above) */
   div.leftNavTooltip {
     display:none;
+  }
+  /* if nav is collapsed always show the tooltip regardless of width */
+  div.leftNavTooltip.show {
+    display:block;
   }
 }
 

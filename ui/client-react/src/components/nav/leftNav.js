@@ -35,7 +35,7 @@ let LeftNav = React.createClass( {
 
         let label = item.key ? this.getIntlMessage(item.key) : item.name;
 
-        const tooltip = (<Tooltip className='leftNavTooltip' id={item.id}>{label}</Tooltip>);
+        const tooltip = (<Tooltip className={ this.props.open ? 'leftNavTooltip' : 'leftNavTooltip show' } id={item.id}>{label}</Tooltip>);
 
         return (
             <OverlayTrigger key={item.id} placement="right" overlay={tooltip}>
