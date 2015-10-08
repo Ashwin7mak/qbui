@@ -29,6 +29,13 @@
   }
 }
 
+@media (min-width: 500px) {
+  div.leftNavTooltip {
+    display:none;
+  }
+}
+
+
 .leftMenu.closed {
   width:40px;
   .nav li a.heading {
