@@ -2,7 +2,10 @@ import React from 'react';
 import { Router, Route, IndexRoute } from 'react-router';
 import createBrowserHistory from 'history/lib/createBrowserHistory';
 
-import NavComponent from '../components/nav/nav';
+import Nav from '../components/nav/nav';
+import LeftNav from '../components/nav/leftNav';
+import MobileLeftNav from '../components/nav/mobileLeftNav';
+
 import Fluxxor from 'fluxxor';
 
 import ReportsStore from '../stores/ReportsStore';
@@ -21,6 +24,7 @@ import AppsHome from '../components/apps/home';
 
 import ReportRoute from '../components/report/reportRoute';
 import TableHomePageRoute from '../components/table/tableHomePageRoute';
+import DashboardRoute from '../components/dashboard/dashboardRoute';
 
 let stores = {
     ReportsStore: new ReportsStore(),
@@ -38,9 +42,9 @@ function isMobileRoute(route) {
     return route.path.indexOf('m/')==0;
 }
 
-let Nav = React.createClass({
+let NavWrapper = React.createClass({
     render: function() {
-        return <NavComponent flux={flux} {...this.props} mobile={isMobileRoute(this.props.route)} />
+        return <Nav flux={flux} {...this.props} mobile={isMobileRoute(this.props.route)} />
     },
     componentDidMount: function () {
         flux.actions.loadReports({appId: this.props.params.appId, tblId: this.props.params.tblId});
@@ -58,18 +62,18 @@ let Apps = React.createClass({
 
 React.render((
     <Router history={createBrowserHistory()}>
-        <Route path='/' name='default' component={Apps} />
-        <Route path='apps' name='apps' component={Apps} />
-        <Route path='app/:appId/table/:tblId/reports' name='reports' component={Nav} />
+        <Route path='/' component={Apps} />
+        <Route path='apps' component={Apps} />
 
-        <Route path='app/:appId/table/:tblId' component={Nav} >
-            <IndexRoute component={TableHomePageRoute} />
-            <Route path='report/:rptId' component={ReportRoute} />
+        <Route path='app/:appId/table/:tblId' component={NavWrapper} >
+            <IndexRoute components={{main: TableHomePageRoute, leftNav: LeftNav}} />
+            <Route path='report/:rptId' components={{main: ReportRoute, leftNav: LeftNav}} />
+            <Route path='dashboardDemo/:rptId' components={{main: DashboardRoute, leftNav: LeftNav}} />
         </Route>
 
-        <Route path='m/app/:appId/table/:tblId' component={Nav} >
-            <IndexRoute component={TableHomePageRoute} />
-            <Route path='report/:rptId' component={ReportRoute} />
+        <Route path='m/app/:appId/table/:tblId' component={NavWrapper} >
+            <IndexRoute components={{main: TableHomePageRoute, leftNav: MobileLeftNav}} />
+            <Route path='report/:rptId' components={{main: ReportRoute, leftNav: MobileLeftNav}} />
         </Route>
 
     </Router>

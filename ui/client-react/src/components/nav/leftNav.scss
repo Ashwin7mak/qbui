@@ -23,6 +23,7 @@
   /* For mobile phones: */
   .leftMenu.open {
     width:40px;
+    overflow-y:hidden;
   }
   nav li a.heading {
     visibility:hidden;
@@ -43,6 +44,7 @@
 
 .leftMenu.closed {
   width:40px;
+  overflow-y:hidden;
   .nav li a.heading {
     background-color:#002b48;
 

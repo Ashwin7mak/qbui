@@ -1,21 +1,15 @@
 import React from 'react';
 
-import Logger from '../../utils/logger';
-let logger = new Logger();
-
 import './nav.scss';
 
 import Button from 'react-bootstrap/lib/Button';
 
 import TopNav from './topNav';
-import LeftNav from './leftNav';
 import Trouser from '../trouser/trouser';
-import Header from '../header/header';
-import Stage from '../stage/stage';
 import Footer from '../footer/footer';
 
-import ReportStage from '../report/dataTable/stage';
-import ReportContent from '../report/dataTable/content';
+import Logger from '../../utils/logger';
+let logger = new Logger();
 
 import Fluxxor from 'fluxxor';
 
@@ -49,19 +43,19 @@ var Nav = React.createClass({
 
         let flux = this.getFlux();
 
+        const { main, leftNav } = this.props.children;
+
         return (<div className='navShell'>
             <Trouser visible={this.state.nav.trouserOpen} onHide={this.hideTrouserExample}>
                 <Button bsStyle='success' onClick={this.hideTrouserExample} style={{position:'absolute',bottom:'10px',right:'10px'}}>Done</Button>
             </Trouser>
 
-            <LeftNav {...i18n} open={this.state.nav.leftNavOpen}
-                     items={this.state.nav.leftNavItems}
-                     reportsData={this.state.reportsData}/>
+            {React.cloneElement(leftNav,{...i18n, items:this.state.nav.leftNavItems, open: this.state.nav.leftNavOpen, reportsData: this.state.reportsData, flux: flux} )}
 
             <div className='main'>
                 <TopNav {...i18n} onNavClick={this.toggleNav} onAddClicked={this.showTrouser}/>
                 <div className='mainContent'>
-                    {React.cloneElement(this.props.children, {reportData: this.state.reportData, mobile: this.props.mobile, flux: flux} )}
+                    {React.cloneElement(main, {reportData: this.state.reportData, mobile: this.props.mobile,  flux: flux} )}
                 </div>
                 <Footer {...i18n} />
             </div>

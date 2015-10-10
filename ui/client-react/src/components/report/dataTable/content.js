@@ -99,7 +99,7 @@ var Content = React.createClass({
 
     render: function() {
         return (
-            <Loader loaded={!this.props.reportData.loading}>
+            <Loader  loaded={!this.props.reportData.loading}>
                 {this.props.reportData.error ?
                     <div>Error loading report!</div> :
                     <GriddleTable {...i18n} mobile={this.props.mobile} getResultsCallback={this.getNextDataSet} results={this.state.firstDataSet} columnMetadata={this.state.reportColumns} useExternal={true} externalResultsPerPage={resultsPerPage}/>}

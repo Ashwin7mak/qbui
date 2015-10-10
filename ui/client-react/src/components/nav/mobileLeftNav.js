@@ -1,14 +1,23 @@
 import React from 'react';
 import ReactIntl from 'react-intl';
-import {Nav,NavItem,Tooltip,OverlayTrigger,Glyphicon} from 'react-bootstrap';
+import {Nav,Collapse,Glyphicon} from 'react-bootstrap';
 import {Link} from 'react-router';
 import Loader  from 'react-loader';
-import './leftNav.scss';
+import './mobileLeftNav.scss';
+
 var IntlMixin = ReactIntl.IntlMixin;
 var FormattedMessage = ReactIntl.FormattedMessage;
+import Fluxxor from 'fluxxor';
 
-let LeftNav = React.createClass( {
-    mixins: [IntlMixin],
+let FluxMixin = Fluxxor.FluxMixin(React);
+
+let MobileLeftNav = React.createClass( {
+    mixins: [FluxMixin,IntlMixin],
+
+    toggleNav: function () {
+        let flux = this.getFlux();
+        flux.actions.toggleLeftNav();
+    },
 
     getGlyphName(item) {
 
@@ -20,57 +29,48 @@ let LeftNav = React.createClass( {
 
     buildHeadingItem: function (item, loadingCheck) {
 
-        if (this.props.open)
-            return (
-                <li>
-                    <Loader scale={.5} right={'90%'} loaded={!loadingCheck} />
-                    <a className='heading'><FormattedMessage message={this.getIntlMessage('nav.reportsHeading')}/></a>
-                </li>);
-
-        else
-            return (<li><a className='heading'></a></li>);
-
+        return (
+            <li>
+                <Loader scale={.5} right={'90%'} loaded={!loadingCheck} />
+                <a className='heading'><FormattedMessage message={this.getIntlMessage('nav.reportsHeading')}/></a>
+            </li>);
     },
     buildNavItem: function(item) {
 
         let label = item.key ? this.getIntlMessage(item.key) : item.name;
 
-        const tooltip = (<Tooltip className={ this.props.open ? 'leftNavTooltip' : 'leftNavTooltip show' } id={item.id}>{label}</Tooltip>);
-
         return (
-            <OverlayTrigger key={item.id} placement="right" overlay={tooltip}>
-                <li>
-                    <Link className='leftNavLink' to={item.link}>
-                        <Glyphicon glyph={this.getGlyphName(item)}/> {label}
-                    </Link>
-                </li>
-            </OverlayTrigger>
+            <li>
+                <Link className='leftNavLink' to={'/m'+item.link}>
+                    <Glyphicon glyph={this.getGlyphName(item)}/> {label}
+                </Link>
+            </li>
         )
     },
 
     render: function() {
 
         return (
+            <div className={"mobileLeftMenu " + (this.props.open ? "open" : "closed")}>
+                <Nav stacked activeKey={1}>
 
-            <div className={"leftMenu " + (this.props.open ? "open" : "closed")}>
-
-                <Nav stacked activeKey={1} >
                     {this.props.items.map((item) => {
                         return item.heading ?
                             this.buildHeadingItem(item)  :
                             this.buildNavItem(item);
                     })}
+
                     {this.buildHeadingItem({key:'nav.reportsHeading'},this.props.reportsData.loading)}
+
                     {this.props.reportsData.list ? this.props.reportsData.list.map((item) => {
                         return this.buildNavItem(item);
                     }) : ''}
 
                 </Nav>
-
+                <a href="#" onClick={this.toggleNav} className={'close'}><Glyphicon  glyph={'chevron-left'}/></a>
             </div>
-
         );
     }
 });
 
-export default LeftNav;
+export default MobileLeftNav;
