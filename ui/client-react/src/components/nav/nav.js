@@ -1,4 +1,5 @@
 import React from 'react';
+import TransitionGroup from 'react/lib/ReactCSSTransitionGroup';
 
 import './nav.scss';
 
@@ -56,8 +57,10 @@ var Nav = React.createClass({
             <div className='main'>
                 <TopNav {...i18n} title='QuickBase' mobile={this.props.mobile} showActionIcons={!this.props.mobile} onNavClick={this.toggleNav} onAddClicked={this.showTrouser}/>
                 <div className='mainContent'>
+                    <TransitionGroup transitionName="example" transitionEnterTimeout={1500} transitionLeaveTimeout={1300}>
                     {/* insert the main component passed in by the router */}
-                    {React.cloneElement(main, {reportData: this.state.reportData, mobile: this.props.mobile,  flux: flux} )}
+                        {React.cloneElement(main, {key: this.state.reportData.name, reportData: this.state.reportData, mobile: this.props.mobile,  flux: flux} )}
+                    </TransitionGroup>
                 </div>
                 <Footer {...i18n} />
             </div>

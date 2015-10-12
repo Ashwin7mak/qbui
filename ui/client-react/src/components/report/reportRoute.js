@@ -41,8 +41,8 @@ var ReportRoute = React.createClass( {
     render: function() {
 
         return (<div className='reportContainer'>
-                <Stage stageContent='this is the stage content text'>
-                    <ReportStage {...i18n} />
+                <Stage stageContent='this is the stage content text' >
+                    <ReportStage {...i18n} reportName={this.props.reportData.data.name}/>
                 </Stage>
                 <ReportContent {...i18n} reportData={this.props.reportData} mobile={this.props.mobile}/>
                 </div>);
