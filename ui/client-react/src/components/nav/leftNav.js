@@ -22,20 +22,20 @@ let LeftNav = React.createClass( {
 
         if (this.props.open)
             return (
-                <li>
+                <li key={item.key}>
                     <Loader scale={.5} right={'90%'} loaded={!loadingCheck} />
-                    <a className='heading'><FormattedMessage message={this.getIntlMessage('nav.reportsHeading')}/></a>
+                    <a className='heading'><FormattedMessage message={this.getIntlMessage(item.key)}/></a>
                 </li>);
 
         else
-            return (<li><a className='heading'></a></li>);
+            return (<li key={item.key}><a className='heading'></a></li>);
 
     },
     buildNavItem: function(item) {
 
         let label = item.key ? this.getIntlMessage(item.key) : item.name;
 
-        const tooltip = (<Tooltip className={ this.props.open ? 'leftNavTooltip' : 'leftNavTooltip show' } id={item.id}>{label}</Tooltip>);
+        const tooltip = (<Tooltip className={ this.props.open ? 'leftNavTooltip' : 'leftNavTooltip show' } id={label}>{label}</Tooltip>);
 
         return (
             <OverlayTrigger key={item.id} placement="right" overlay={tooltip}>
