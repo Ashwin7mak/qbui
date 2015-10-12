@@ -1,6 +1,6 @@
 import React from 'react';
-import ReactTransitionGroup from 'react/lib/ReactCSSTransitionGroup';
-
+import ReactCSSTransitionGroup from 'react/lib/ReactCSSTransitionGroup';
+import { render } from 'react-dom'
 import './nav.scss';
 
 import Button from 'react-bootstrap/lib/Button';
@@ -44,6 +44,9 @@ var Nav = React.createClass({
 
         let flux = this.getFlux();
 
+        const { pathname } = this.props.location
+        const key = pathname.split('/')[1] || 'root'
+
         const { main, leftNav } = this.props.children;
 
         return (<div className='navShell'>
@@ -57,10 +60,10 @@ var Nav = React.createClass({
             <div className='main'>
                 <TopNav {...i18n} title='QuickBase' mobile={this.props.mobile} showActionIcons={!this.props.mobile} onNavClick={this.toggleNav} onAddClicked={this.showTrouser}/>
                 <div className='mainContent'>
-                    <ReactTransitionGroup transitionAppear={true} transitionAppearTimeout={1500} transitionName="example" transitionEnterTimeout={1500} transitionLeaveTimeout={1300}>
+                    <ReactCSSTransitionGroup component="div" transitionName="swap" transitionEnterTimeout={500} transitionLeaveTimeout={500}>
                     {/* insert the main component passed in by the router */}
-                        {React.cloneElement(main, {key: this.state.reportData.name, reportData: this.state.reportData, mobile: this.props.mobile,  flux: flux} )}
-                    </ReactTransitionGroup>
+                        {React.cloneElement(main, {key: key, reportData: this.state.reportData, mobile: this.props.mobile,  flux: flux} )}
+                    </ReactCSSTransitionGroup>
                 </div>
                 <Footer {...i18n} />
             </div>

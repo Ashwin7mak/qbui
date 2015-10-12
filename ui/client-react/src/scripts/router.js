@@ -1,4 +1,5 @@
 import React from 'react';
+import { render } from 'react-dom'
 import { Router, Route, IndexRoute } from 'react-router';
 import createBrowserHistory from 'history/lib/createBrowserHistory';
 
@@ -60,7 +61,7 @@ let Apps = React.createClass({
     }
 });
 
-React.render((
+render((
     <Router history={createBrowserHistory()}>
         <Route path='/' component={Apps} />
         <Route path='apps' component={Apps} />
