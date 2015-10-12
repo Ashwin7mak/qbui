@@ -42,13 +42,20 @@ describe('Loader', function () {
 
   testCases.forEach(function (testCase) {
     describe(testCase.description, function () {
+      var container;
       beforeEach(function () {
         var loader = React.createElement(Loader, testCase.props, 'Welcome');
-        React.render(loader, document.body);
+        container = document.createElement('div');
+        document.body.appendChild(container);
+        React.render(loader, container);
+      });
+
+      afterEach(function () {
+        document.body.removeChild(container);
       });
 
       it('renders the correct output', function () {
-        expect(document.body.innerHTML).to.match(testCase.expectedOutput);
+        expect(container.innerHTML).to.match(testCase.expectedOutput);
       })
     });
   });
