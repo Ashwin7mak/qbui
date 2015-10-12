@@ -8,6 +8,14 @@ html, body {
     height:100%;
 }
 
+/* yuck */
+.navShell .topNav  .open > .dropdown-menu {
+    left: -33px;
+}
+.navShell .topNav.mobile  .open > .dropdown-menu {
+    left: -128px;
+}
+
 .navShell {
     height:100%;
     display:flex;
@@ -71,6 +79,11 @@ html, body {
             .iconLink:hover {
                 color:#000;
             }
+
+            a {
+                text-decoration: none;
+            }
+
         }
 
         .mainContent {

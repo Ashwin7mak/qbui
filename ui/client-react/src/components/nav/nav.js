@@ -34,7 +34,7 @@ var Nav = React.createClass({
     },
 
     hideTrouserExample: function() {
-        logger.debug('hiding trowser from Nav shell');
+        logger.debug('hiding trouser from Nav shell');
         let flux = this.getFlux();
         flux.actions.hideTrouser();
     },
@@ -50,11 +50,13 @@ var Nav = React.createClass({
                 <Button bsStyle='success' onClick={this.hideTrouserExample} style={{position:'absolute',bottom:'10px',right:'10px'}}>Done</Button>
             </Trouser>
 
+            {/* insert the leftNav component passed in by the router */}
             {React.cloneElement(leftNav,{...i18n, items:this.state.nav.leftNavItems, open: this.state.nav.leftNavOpen, reportsData: this.state.reportsData, flux: flux} )}
 
             <div className='main'>
-                <TopNav {...i18n} onNavClick={this.toggleNav} onAddClicked={this.showTrouser}/>
+                <TopNav {...i18n} title='QuickBase' mobile={this.props.mobile} showActionIcons={!this.props.mobile} onNavClick={this.toggleNav} onAddClicked={this.showTrouser}/>
                 <div className='mainContent'>
+                    {/* insert the main component passed in by the router */}
                     {React.cloneElement(main, {reportData: this.state.reportData, mobile: this.props.mobile,  flux: flux} )}
                 </div>
                 <Footer {...i18n} />

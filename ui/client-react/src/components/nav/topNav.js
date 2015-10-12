@@ -25,7 +25,7 @@ var CurrentDate = React.createClass({
 var TopNav = React.createClass( {
     mixins: [FluxMixin],
 
-    showNav: function () {
+    toggleNav: function () {
         let flux = this.getFlux();
         flux.actions.toggleLeftNav();
     },
@@ -38,14 +38,16 @@ var TopNav = React.createClass( {
     render: function () {
 
         return (
-            <div className='topNav'>
+            <div className={'topNav ' + (this.props.mobile ? 'mobile' : '')}>
                 <div className='navGroup left'>
-                    <div className='navItem '><a className='iconLink' href="#" onClick={this.showNav}><Glyphicon glyph="menu-hamburger" /> </a></div>
+                    <div className='navItem '><a className='iconLink' href="#" onClick={this.toggleNav}><Glyphicon glyph="menu-hamburger" /> </a></div>
 
-                    <div className='navItem'>Intuit QuickBase</div>
+                    <div className='navItem'>{this.props.title}</div>
                 </div>
 
+
                 <div className='navGroup center'>
+                {this.props.showActionIcons ?
                     <ButtonGroup className='navItem' ButtonGroup>
 
                         <OverlayTrigger trigger="click" rootClose placement="bottom" overlay={<Popover id={0} style={{whiteSpace:'nowrap'}} title="Search Records"><strong>Search:</strong> <input /> <Button bsStyle='success'>Go</Button></Popover>}>
@@ -55,16 +57,20 @@ var TopNav = React.createClass( {
                         <Button onClick={this.addNew} ><Glyphicon glyph="plus" /></Button>
                         <Button><Glyphicon glyph="time" /></Button>
                     </ButtonGroup>
+                    :
+                    ''
+                }
                 </div>
 
+
                 <div className='navGroup right'>
-                    <NavDropdown className='navItem' NavDropdown={true} navItem={true} eventKey={3} title={<CurrentDate/>} id='nav-right-dropdown'>
+                    <NavDropdown className='navItem' NavDropdown={true} navItem={true} eventKey={3} title={this.props.mobile ? <Glyphicon glyph="cog" /> : <CurrentDate/>} id='nav-right-dropdown'>
                         <MenuItem href="/user" eventKey={4}>Prefs...</MenuItem>
 
                         <MenuItem divider />
-                        <MenuItem href="/signout" eventKey={5}>Sign Out</MenuItem>
+                        <MenuItem href="/signout" eventKey={5}>Sign out</MenuItem>
                     </NavDropdown>
-                    <a className='iconLink' href="#" ><Glyphicon glyph="cog" /></a>
+                    &nbsp;
                 </div>
 
             </div>

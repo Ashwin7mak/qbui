@@ -47,14 +47,14 @@ var DashboardRoute = React.createClass( {
                         <ReportContent className='narrow' {...i18n} reportData={this.props.reportData} mobile={this.props.mobile}/>
                     </div>
                     <div className='wide'>
-                        <ReportContent className='wide' {...i18n} reportData={this.props.reportData} mobile={this.props.mobile}/>
+                        <ReportContent className='narrow' {...i18n} reportData={this.props.reportData} mobile={this.props.mobile}/>
                     </div>
                 </div>
                 <div className='dashboardRow'>
-                    <div className='wide'>
+                    <div className='narrow'>
                         <ReportContent {...i18n}  reportData={this.props.reportData} mobile={this.props.mobile}/>
                     </div>
-                    <div className='narrow'>
+                    <div className='wide'>
                         <ReportContent {...i18n}  reportData={this.props.reportData} mobile={this.props.mobile}/>
                     </div>
                 </div>
