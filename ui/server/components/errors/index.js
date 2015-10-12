@@ -7,7 +7,7 @@
     var log = require('../../logger').getLogger();
 
     module.exports[403] = function unauthorized(req, res) {
-        var viewFilePath = '403';
+        var viewFilePath = '403.html';
         var statusCode = 403;
         var result = {
             status: statusCode
@@ -29,7 +29,7 @@
     };
 
     module.exports[404] = function pageNotFound(req, res) {
-        var viewFilePath = '404';
+        var viewFilePath = '404.html';
         var statusCode = 404;
         var result = {
             status: statusCode
@@ -53,7 +53,7 @@
     };
 
     module.exports[500] = function internalServerError(req, res) {
-        var viewFilePath = '500';
+        var viewFilePath = '500.html';
         var statusCode = 500;
         var result = {
             status: statusCode

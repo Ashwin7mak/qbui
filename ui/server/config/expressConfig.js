@@ -57,6 +57,7 @@
         app.set('views', config.root + '/server/views');
         app.engine('html', require('ejs').renderFile);
         app.set('view engine', 'html');
+
         app.use(compression());
         app.use(bodyParser.urlencoded({extended: false}));
         app.use(bodyParser.json());
@@ -72,8 +73,11 @@
             }
 
             if (envConsts.PRODUCTION === env || envConsts.PRE_PROD === env) {
+                var fs = require('fs');
                 config.isProduction = true;
-                app.use(favicon(path.join(config.root, 'dist','public', 'favicon.ico')));
+                var faviconFile = path.join(config.root, 'dist','public', 'favicon.ico');
+                if (fs.existsSync(faviconFile))
+                    app.use(favicon(faviconFile));
             }
 
             app.use(express.static(path.join(config.root, 'public')));
@@ -95,6 +99,7 @@
         }
         //   runs angular client
         var client = config.client;
+        //  START TEMPORARY -- while we support Angular lighthouse..
         if (clientConsts.ANGULAR === client) {
             app.use(express.static(path.join(config.root, '.tmp')));
             app.use(express.static(path.join(config.root, 'client')));
@@ -102,16 +107,14 @@
             //  Error handler - has to be last.
             app.use(errorHandler());
         }
+        //  END TEMPORARY
 
-        //  START TEMPORARY -- while we support Angular lighthouse..
         else if (clientConsts.REACT === client) {
-            app.use(express.static(path.join(config.root, '.tmp')));
             app.use(express.static(path.join(config.root, 'client-react')));
             app.set('appPath', config.root + '/client-react');
             //  Error handler - has to be last.
             app.use(errorHandler());
         }
-        //  END TEMPORARY
 
         return config;
     };

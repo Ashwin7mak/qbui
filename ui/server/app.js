@@ -102,7 +102,7 @@
     }
 
 
-    // if not running production it get the hot loader running for debugging
-    require('./hotDevServer')(config);
+    //get the hot loader running for debugging, if not running production
+    require('./hotDevServer')(config, app);
 
 }());
