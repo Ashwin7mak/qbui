@@ -4,6 +4,7 @@ import uuid from 'uuid';
 import constants from './constants';
 import axios from 'axios';
 import Configuration from '../config/app.config';
+import Promise from 'bluebird';
 
 class BaseService {
 

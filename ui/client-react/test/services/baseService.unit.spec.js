@@ -14,7 +14,7 @@ describe('BaseService rewire tests', () => {
         get: function(url, config) {
             return {getMethodCalled:true};
         }
-    }
+    };
 
     beforeEach(() => {
         spyOn(BaseService.prototype, 'setRequestInterceptor');
@@ -48,17 +48,3 @@ describe('BaseService rewire tests', () => {
         expect(axios.getMethodCalled).toBeTruthy();
     });
 });
-
-describe('BaseService axios interceptor tests', () => {
-    'use strict';
-
-    let baseService;
-
-    it('test authorization header on request', function(done) {
-    //    baseService = new BaseService();
-    //    baseService.get('/test/url');
-    //    expect(jasmine.Ajax.requests.mostRecent().url).toBe('/test/url');
-    //});
-
-});
-
