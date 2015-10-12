@@ -37,7 +37,7 @@ module.exports = function(config) {
                             path.resolve(__dirname, "client-react/test")
                         ],
                         exclude: [nodeModulesPath],
-                        loader: "babel"
+                        loader: "babel-loader?plugins=babel-plugin-rewire"
                     }]
             },
             watch: true
