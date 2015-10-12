@@ -8,6 +8,7 @@ import Logger from '../../utils/logger';
 let logger = new Logger();
 import ReportContent from './dataTable/content';
 import Fluxxor from 'fluxxor';
+import './report.scss';
 
 let FluxMixin = Fluxxor.FluxMixin(React);
 var i18n = getI18nBundle();
@@ -39,7 +40,7 @@ var ReportRoute = React.createClass( {
 
     render: function() {
 
-        return (<div>
+        return (<div className='reportContainer'>
                 <Stage stageContent='this is the stage content text'>
                     <ReportStage {...i18n} />
                 </Stage>

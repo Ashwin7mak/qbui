@@ -87,11 +87,11 @@ html, body {
         }
 
         .mainContent {
+            display:flex;
             order: 2;
-            overflow-y:scroll;
+            overflow-y:auto;
             flex:1;
-            margin-left:10px;
-            margin-right:10px;
+
         }
 
         .footer {

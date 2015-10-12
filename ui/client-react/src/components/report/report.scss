@@ -1,0 +1,15 @@
+.reportContainer {
+  display: flex;
+  flex-direction: column;
+
+  .layout-stage {
+    flex-shrink:0;
+  }
+
+  .loadedContent {
+    flex:1;
+    overflow-y:auto;
+    margin-left:10px;
+    margin-right:10px;
+  }
+}
