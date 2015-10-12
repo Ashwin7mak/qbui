@@ -38,7 +38,7 @@ let LeftNav = React.createClass( {
         const tooltip = (<Tooltip className={ this.props.open ? 'leftNavTooltip' : 'leftNavTooltip show' } id={label}>{label}</Tooltip>);
 
         return (
-            <OverlayTrigger key={item.id} placement="right" overlay={tooltip}>
+            <OverlayTrigger key={label} placement="right" overlay={tooltip}>
                 <li>
                     <Link className='leftNavLink' to={item.link}>
                         <Glyphicon glyph={this.getGlyphName(item)}/> {label}
