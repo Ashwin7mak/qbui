@@ -60,10 +60,9 @@ var Nav = React.createClass({
             <div className='main'>
                 <TopNav {...i18n} title='QuickBase' mobile={this.props.mobile} showActionIcons={!this.props.mobile} onNavClick={this.toggleNav} onAddClicked={this.showTrouser}/>
                 <div className='mainContent'>
-                    <ReactCSSTransitionGroup component="div" transitionName="swap" transitionEnterTimeout={500} transitionLeaveTimeout={500}>
                     {/* insert the main component passed in by the router */}
                         {React.cloneElement(main, {key: key, reportData: this.state.reportData, mobile: this.props.mobile,  flux: flux} )}
-                    </ReactCSSTransitionGroup>
+    
                 </div>
                 <Footer {...i18n} />
             </div>
