@@ -1,6 +1,6 @@
 .dashboard {
   margin-top:10px;
-
+  overflow-x:auto;
   .dashboardRow {
     display:flex;
     flex-direction:row;
@@ -14,10 +14,10 @@
     }
 
     .narrow {
-      flex:.4;
+      flex:4;
     }
     .wide {
-      flex:.6;
+      flex:6;
     }
   }
 }
