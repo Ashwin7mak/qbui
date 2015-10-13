@@ -16,26 +16,48 @@ var i18n = getI18nBundle();
 var ReportRoute = React.createClass( {
     mixins: [FluxMixin],
 
-    // Triggered when properties change
-    componentWillReceiveProps: function(props) {
+    loadReportFromParams: function(params, checkParams) {
 
-        if (props.params) {
-            let appId = props.params.appId;
-            let tblId = props.params.tblId;
-            let rptId = props.params.rptId;
+        if (params) {
+            let appId = params.appId;
+            let tblId = params.tblId;
+            let rptId = params.rptId;
 
             // VERY IMPORTANT: check URL params against props to prevent cycles
+
+            if (this.props.reportData.loading)
+                return;
+
             if (appId == this.props.reportData.appId &&
                 tblId == this.props.reportData.tblId &&
-                rptId == this.props.reportData.rptId)
+                rptId == this.props.reportData.rptId) {
                 return;
+            }
+
+            if (checkParams) {
+                if (appId == this.props.params.appId &&
+                    tblId == this.props.params.tblId &&
+                    rptId == this.props.params.rptId) {
+                    return;
+                }
+            }
 
             if (appId && tblId && rptId) {
                 logger.debug('Loading report. AppId:' + appId + ' ;tblId:' + tblId + ' ;rptId:' + rptId);
                 let flux = this.getFlux();
+
                 flux.actions.loadReport(appId, tblId, rptId);
             }
         }
+    },
+    componentDidMount: function() {
+        this.loadReportFromParams(this.props.params);
+    },
+
+    // Triggered when properties change
+    componentWillReceiveProps: function(props) {
+
+        this.loadReportFromParams(props.params,true);
     },
 
     render: function() {
