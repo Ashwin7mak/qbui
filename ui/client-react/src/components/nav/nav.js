@@ -49,7 +49,7 @@ var Nav = React.createClass({
             </Trouser>
 
             {/* insert the leftNav component passed in by the router */}
-            {React.cloneElement(leftNav,{...this.state.nav.i18n, items:this.state.nav.leftNavItems, open: this.state.nav.leftNavOpen, reportsData: this.state.reportsData, flux: flux} )}
+            {React.cloneElement(leftNav,{...this.state.nav.i18n, items:this.state.nav.leftNavItems, open: this.state.nav.leftNavOpen, reportsData: this.state.reportsData, reportID: this.state.reportData.rptId, flux: flux} )}
 
             <div className='main'>
                 <TopNav {...this.state.nav.i18n} title='QuickBase' mobile={this.props.mobile} showActionIcons={!this.props.mobile} onNavClick={this.toggleNav} onAddClicked={this.showTrouser}/>

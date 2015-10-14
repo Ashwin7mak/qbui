@@ -35,12 +35,20 @@ let MobileLeftNav = React.createClass( {
                 <a className='heading'><FormattedMessage message={this.getIntlMessage('nav.reportsHeading')}/></a>
             </li>);
     },
+
+    // set focus to nested anchor tag to select current report if there is one...
+    navItemMounted: function (id, element) {
+
+        if (element && id == this.props.reportID)
+            element.firstChild.focus();
+    },
+
     buildNavItem: function(item) {
 
         let label = item.key ? this.getIntlMessage(item.key) : item.name;
 
         return (
-            <li>
+            <li ref={this.navItemMounted.bind(this, item.id)}>
                 <Link className='leftNavLink' to={'/m'+item.link} onClick={this.toggleNav}>
                     <Glyphicon glyph={this.getGlyphName(item)}/> {label}
                 </Link>
