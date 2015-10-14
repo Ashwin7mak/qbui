@@ -29,9 +29,9 @@ html, body {
 
     .mainContent {
         opacity: 1;
-        transition: opacity 500 ease-in-out;
-        -moz-transition: opacity 500 ease-in-out;
-        -webkit-transition: opacity 500 ease-in-out;
+        transition: opacity 500ms ease-in-out;
+        -moz-transition: opacity 500ms ease-in-out;
+        -webkit-transition: opacity 500ms ease-in-out;
     }
 
     .main {
