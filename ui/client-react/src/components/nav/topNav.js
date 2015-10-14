@@ -8,10 +8,10 @@ let FluxMixin = Fluxxor.FluxMixin(React);
 import {Nav,NavItem,Navbar,MenuItem,NavDropdown,ButtonGroup,Button,OverlayTrigger,Popover,Glyphicon} from '../../../../node_modules/react-bootstrap/lib'
 
 import Locale from '../../locales/locales';
-var i18n = Locale.getI18nBundle();
 
 var IntlMixin = ReactIntl.IntlMixin;
 var FormattedDate = ReactIntl.FormattedDate;
+var FormattedMessage = ReactIntl.FormattedMessage;
 
 var CurrentDate = React.createClass({
 
@@ -23,7 +23,7 @@ var CurrentDate = React.createClass({
 });
 
 var TopNav = React.createClass( {
-    mixins: [FluxMixin],
+    mixins: [IntlMixin, FluxMixin],
 
     toggleNav: function () {
         let flux = this.getFlux();
@@ -33,6 +33,11 @@ var TopNav = React.createClass( {
     addNew: function () {
         let flux = this.getFlux();
         flux.actions.showTrouser();
+    },
+
+    onSelect: function(e) {
+        let flux = this.getFlux();
+        flux.actions.changeLocale(e.currentTarget.title);
     },
 
     render: function () {
@@ -65,10 +70,13 @@ var TopNav = React.createClass( {
 
                 <div className='navGroup right'>
                     <NavDropdown className='navItem' NavDropdown={true} navItem={true} eventKey={3} title={this.props.mobile ? <Glyphicon glyph="cog" /> : <CurrentDate/>} id='nav-right-dropdown'>
-                        <MenuItem href="/user" eventKey={4}>Prefs...</MenuItem>
-
+                        <MenuItem href="/user" eventKey={4}><FormattedMessage message={this.getIntlMessage('header.menu.preferences')}/></MenuItem>
                         <MenuItem divider />
-                        <MenuItem href="/signout" eventKey={5}>Sign out</MenuItem>
+                        <MenuItem href="#" onSelect={this.onSelect} title='en-us' eventKey={5}><FormattedMessage message={this.getIntlMessage('header.menu.locale.english')}/></MenuItem>
+                        <MenuItem href="#" onSelect={this.onSelect} title='fr-fr' eventKey={6}><FormattedMessage message={this.getIntlMessage('header.menu.locale.french')}/></MenuItem>
+                        <MenuItem href="#" onSelect={this.onSelect} title='de-de' eventKey={7}><FormattedMessage message={this.getIntlMessage('header.menu.locale.german')}/></MenuItem>
+                        <MenuItem divider />
+                        <MenuItem href="/signout" eventKey={8}><FormattedMessage message={this.getIntlMessage('header.menu.sign_out')}/></MenuItem>
                     </NavDropdown>
                     &nbsp;
                 </div>

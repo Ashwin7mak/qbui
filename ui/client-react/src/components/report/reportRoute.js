@@ -1,20 +1,22 @@
 import React from 'react';
 import ReactIntl from 'react-intl';
 import ReactBootstrap from 'react-bootstrap';
-import { Locale, getI18nBundle } from '../../locales/locales';
+
 import Stage from '../stage/stage';
 import ReportStage from './dataTable/stage';
+
 import Logger from '../../utils/logger';
 let logger = new Logger();
+
 import ReportContent from './dataTable/content';
 import Fluxxor from 'fluxxor';
 import './report.scss';
 
 let FluxMixin = Fluxxor.FluxMixin(React);
-var i18n = getI18nBundle();
+var IntlMixin = ReactIntl.IntlMixin;
 
 var ReportRoute = React.createClass({
-    mixins: [FluxMixin],
+    mixins: [IntlMixin, FluxMixin],
 
     loadReportFromParams: function(params, checkParams) {
 
@@ -65,9 +67,9 @@ var ReportRoute = React.createClass({
 
         return (<div className='reportContainer'>
                 <Stage stageContent='this is the stage content text' >
-                    <ReportStage {...i18n} reportName={this.props.reportData.data.name}/>
+                    <ReportStage {...this.props.i18n} reportName={this.props.reportData.data.name}/>
                 </Stage>
-                <ReportContent {...i18n} reportData={this.props.reportData} mobile={this.props.mobile}/>
+                <ReportContent {...this.props.i18n} reportData={this.props.reportData} mobile={this.props.mobile}/>
                 </div>);
     }
 });

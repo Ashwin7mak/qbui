@@ -1,5 +1,6 @@
 // action creators
 import * as actions from '../constants/actions';
+import Locale from '../locales/locales';
 
 let navActions = {
 
@@ -14,6 +15,11 @@ let navActions = {
     toggleLeftNav: function() {
         this.dispatch(actions.TOGGLE_LEFT_NAV);
     },
+
+    changeLocale: function(locale) {
+        Locale.changeLocale(locale);
+        this.dispatch(actions.CHANGE_LOCALE);
+    }
 };
 
 export default navActions
