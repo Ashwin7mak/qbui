@@ -14,14 +14,14 @@ var Content = React.createClass({
                     {this.props.data.apps.map((app) => {
                         let appName = app.name + ' (' + app.id + ')';
                         return (
-                            <div>
+                            <div key={appName}>
                                 <li>{appName}</li>
                                 <div className="tables">
                                     {app.tables.map((table) => {
                                         let tblName = table.name + ' (' + table.id + ')';
-                                        let href = '/app/' + app.id + '/table/' + table.id + '/reports';
+                                        let href = '/app/' + app.id + '/table/' + table.id;
                                         return (
-                                            <ul><li><a href={href}>{tblName}</a></li></ul>
+                                            <ul key={table.id}><li><a href={href}>{tblName}</a></li></ul>
                                         );
                                     })}
                                 </div>

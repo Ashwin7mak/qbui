@@ -1,3 +1,5 @@
+
+
 .leftMenu.open {
   width:350px;
   nav li {
@@ -9,8 +11,40 @@
     }
   }
 }
+
+@media (min-width:500px) and (max-width: 1024px) {
+  /* For mobile phones: */
+  .leftMenu.open {
+    width:200px;
+  }
+}
+
+@media (max-width: 500px) {
+  /* For mobile phones: */
+  .leftMenu.open {
+    width:40px;
+    overflow-y:hidden;
+  }
+  nav li a.heading {
+    visibility:hidden;
+  }
+}
+
+@media (min-width: 500px) {
+  /* hide tooltip if the left nav is showing labels (see above) */
+  div.leftNavTooltip {
+    display:none;
+  }
+  /* if nav is collapsed always show the tooltip regardless of width */
+  div.leftNavTooltip.show {
+    display:block;
+  }
+}
+
+
 .leftMenu.closed {
   width:40px;
+  overflow-y:hidden;
   .nav li a.heading {
     background-color:#002b48;
 
@@ -20,7 +54,7 @@
 .leftMenu {
   border-right: 1px solid #ccc;
   background-color: #002b48;
-  max-width: 250px;
+  overflow-y:auto;
 
   .nav li {
     a.leftNavLink:hover, a.leftNavLink:focus {
@@ -35,8 +69,15 @@
     a.leftNavLink {
       color: #bbd;
       cursor: pointer;
+      white-space:nowrap;
+      overflow:hidden;
+      text-overflow:ellipsis;
       .glyphicon {
         margin-right: 8px;
+      }
+      span {
+
+        text-overflow:ellipsis;
       }
     }
     .loader {

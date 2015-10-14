@@ -5,6 +5,9 @@ component a simple mechanism for rendering a loading spinner (via
 [spin.js](http://fgnass.github.io/spin.js/)) while data is loading, such as an
 asynchronous request to load data for a view.
 
+> Important Note: The 2.x branch is compatible with React 1.4 and higher. If
+> you're working with an older version of React, please use the 1.x branch.
+
 ## Installation
 
 react-loader is available through both [Bower](http://bower.io/) and

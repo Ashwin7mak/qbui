@@ -1,0 +1,23 @@
+.dashboard {
+  margin-top:10px;
+  overflow-x:auto;
+  .dashboardRow {
+    display:flex;
+    flex-direction:row;
+
+    .normal,.wide,.narrow {
+      border:1px dashed red;
+      margin:3px;
+      display:flex;
+      overflow:scroll;
+      max-height:400px;
+    }
+
+    .narrow {
+      flex:4;
+    }
+    .wide {
+      flex:6;
+    }
+  }
+}

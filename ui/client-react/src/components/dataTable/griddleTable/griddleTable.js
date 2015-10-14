@@ -12,7 +12,7 @@ import PaginationComponent from './pagination.js';
 import { fakeGriddleData } from '../../../components/dataTable/griddleTable/fakeData.js';
 
 import './griddleTable.css';
-import './qbGriddleTable.css';
+import './qbGriddleTable.scss';
 
 /*
  * Sample component for passing in data  -
@@ -32,9 +32,7 @@ var I18nMessage = React.createClass({
 
 class GriddleTable extends React.Component {
 
-
     initState(props) {
-
         let initialState = {
             "results": props.results,
             "maxPages": props.maxPages || 0, // this feeds into the pagination component and tells it whether there should be a "Next" available or not.
@@ -42,7 +40,10 @@ class GriddleTable extends React.Component {
             "externalResultsPerPage": props.externalResultsPerPage,
             "externalSortColumn": props.externalSortColumn,
             "externalSortAscending": props.externalSortAscending,
-            "fullDataSet": []
+            "columnMetadata": props.columnMetadata || [],
+            "fullDataSet": [],
+            "useExternal": props.useExternal,
+            "customPagerComponent": props.customPagerComponent
         };
 
         return initialState;
@@ -93,9 +94,22 @@ class GriddleTable extends React.Component {
         }
     }
 
+
+    /* On first time render make the following decisions:
+    * Are we getting external data?
+    *   If so, Is the 1st data set supplied all the data thats on the table?
+    *       If so we dont need to get external data really even though that calling component thinks we do - shut of pagination
+    *
+    *     else set up the getExternalData callback
+    * */
     componentDidMount() {
-        if (this.props.useExternal && typeof (this.props.getResultsCallback) === 'function')
-            this.getExternalData();
+        if (this.state.useExternal && typeof (this.props.getResultsCallback) === 'function') {
+            if (this.state.results)
+                if (this.state.results.length > this.state.externalResultsPerPage)
+                    this.getExternalData();
+                else
+                    this.setState({useExternal: false, customPagerComponent: null});
+        }
     }
 
     //what page is currently viewed
@@ -130,7 +144,9 @@ class GriddleTable extends React.Component {
             return (
                 <div>
                     <Griddle {...this.props}
+                        useExternal={this.state.useExternal}
                         results={this.state.results}
+                        customPagerComponent={this.state.customPagerComponent}
                         //events
                         externalSetPage={this.setPage}
                         externalChangeSort={this.changeSort}
@@ -171,7 +187,12 @@ GriddleTable.defaultProps = {
     columnMetadata: [],
     results: [],
 
-    getResultsCallback: null
+    getResultsCallback: null,
+    gridClassName: 'QBGriddle',
+    useGriddleStyles: false,
+    sortAscendingClassName: "Sorted",
+    sortDescendingClassName: "Sorted",
+    //,rowHeight: 30 //TODO not working right now
 };
 
 export default GriddleTable;

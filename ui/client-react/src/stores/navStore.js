@@ -20,7 +20,7 @@ let NavStore = Fluxxor.createStore({
             actions.TOGGLE_LEFT_NAV, this.onToggleLeftNav
         );
 
-        this.state.leftNavItems.push({key: 'nav.home', link:'/apps', icon:'home'});
+        this.state.leftNavItems.push({ key: 'nav.home', link:'/apps', icon:'home'});
 
         this.logger = new Logger();
     },

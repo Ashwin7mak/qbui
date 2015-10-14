@@ -7,12 +7,14 @@
 
 (function() {
     'use strict';
+    // In order to manage the async nature of Protractor with a non-Angular page use the ExpectedConditions feature
+    var EC = protractor.ExpectedConditions;
     //Require the e2e base class and constants modules
     var e2eBase = require('../../common/e2eBase.js')();
     var consts = require('../../../server/api/constants.js');
     //Load the page objects
     var requestSessionTicketPage = require('./requestSessionTicket.po.js');
-    var requestReportPage = require('./requestReport.po.js');
+    var requestAppsPage = require('./requestApps.po.js');
     var reportServicePage = require('./reportService.po.js');
     describe('Report Service E2E Tests', function() {
         var app;
@@ -45,30 +47,46 @@
          * of reports for that app and table, then displays the report page in the browser
          */
         it('Should load the reports page with the appropriate table report', function(done) {
-            //Check that your setup completed properly (no fail fast option in beforeAll yet in Jasmine)
-            //This will fast fail the test if setup did not complete properly
+            // Check that your setup completed properly (no fail fast option in beforeAll yet in Jasmine)
+            // This will fast fail the test if setup did not complete properly
             if (!app || !recordList) {
                 done.fail('test app / recordList was not created properly during setup');
             }
-            //Gather the necessary values to make the requests via the browser
+            // Gather the necessary values to make the requests via the browser
             var realmName = e2eBase.recordBase.apiBase.realm.subdomain;
             var realmId = e2eBase.recordBase.apiBase.realm.id;
             var tableId = app.tables[0].id;
-            //Get a session ticket for that subdomain and realmId (stores it in the browser)
+            // Get a session ticket for that subdomain and realmId (stores it in the browser)
             requestSessionTicketPage.get(e2eBase.getSessionTicketRequestEndpoint(realmName, realmId, e2eBase.ticketEndpoint));
-            //Load the requestReportPage (shows a list of all the reports for an app)
-            requestReportPage.get(e2eBase.getRequestReportPageEndpoint(realmName));
+            browser.wait(EC.visibilityOf(requestSessionTicketPage.ticketResponseBodyEl), 5000);
+            //e2eBase.sleep(browser.params.mediumSleep);
+            // Load the requestAppsPage (shows a list of all apps and tables in a realm)
+            requestAppsPage.get(e2eBase.getRequestAppsPageEndpoint(realmName));
+            // Wait until the page has loaded (blocking wait)
+            browser.wait(EC.visibilityOf(requestAppsPage.tableElList), 5000);
             // Check that we have a report for our created table
-            expect(requestReportPage.firstReportLinkEl.getText()).toContain(tableId);
-            e2eBase.sleep(browser.params.smallSleep);
-            requestReportPage.firstReportLinkEl.click();
-            // Now on the Reports Service page
-            e2eBase.sleep(browser.params.mediumSleep);
+            expect(requestAppsPage.firstTableLinkEl.getText()).toContain(tableId);
+            //e2eBase.sleep(browser.params.mediumSleep);
+            requestAppsPage.firstTableLinkEl.click();
+            // Now on the reportServicePage (shows the nav with a list of reports you can load)
+            // Wait until the nav has loaded
+            browser.wait(EC.visibilityOf(reportServicePage.navStackedEl), 5000);
             // Assert report name
             var reportName = 'Test Report';
-            reportServicePage.reportTitleEl.getText(function(text) {
-                expect(text).toEqual(reportName + ' Report');
+            reportServicePage.navLinksElList.then(function(links) {
+                links[1].getText(function(text) {
+                    expect(text).toEqual(reportName + ' Report');
+                });
             });
+            // Select the report
+            reportServicePage.navLinksElList.then(function(links) {
+                links[1].click();
+                // Bug need to fix
+                links[1].click();
+            });
+            // Wait until the table has loaded
+            browser.wait(EC.visibilityOf(reportServicePage.griddleContainerEl), 5000);
+            //e2eBase.sleep(browser.params.mediumSleep);
             // Assert column headers
             var fieldNames = ['Record ID#', 'Text Field', 'Numeric Field', 'Phone Number Field'];
             reportServicePage.getReportColumnHeaders(reportServicePage).then(function(resultArray) {
@@ -77,7 +95,7 @@
                 expect(resultArray).toEqual(upperFieldNames);
             });
             // Check all record values equal the ones we added via the API
-            reportServicePage.recordElList.getText().then(function(uiRecords) {
+            reportServicePage.griddleRecordElList.getText().then(function(uiRecords) {
                 e2eBase.recordService.assertRecordValues(uiRecords, recordList);
                 done();
             });

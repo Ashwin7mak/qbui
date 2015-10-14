@@ -1,0 +1,30 @@
+.reportContainer {
+  display: flex;
+  flex-direction: column;
+  flex:1;
+  .layout-stage {
+    flex-shrink:0;
+  }
+
+  .loadedContent {
+    flex:1;
+    overflow-y:auto;
+    margin-top:10px;
+    margin-left:10px;
+    margin-right:10px;
+  }
+}
+
+@media (max-width: 1150px) {
+  .layout-stage {
+    //display: none;//for now
+    .right {
+      display: none;
+
+    }
+    .report-content .left {
+      width:100%;
+    }
+  }
+
+}

@@ -7,8 +7,8 @@ import AppsList from './appsList';
 import './apps.css';
 
 //  load the locale
-import { Locale, getI18nBundle } from '../../locales/locales';
-let i18n = getI18nBundle();
+import Locale from '../../locales/locales';
+let i18n = Locale.getI18nBundle();
 
 var IntlMixin = ReactIntl.IntlMixin;
 var FormattedMessage = ReactIntl.FormattedMessage;
@@ -38,7 +38,7 @@ var App = React.createClass({
     render: function() {
         return (
             <div className='apps-container'>
-                <p><h4><AppsHeader {...i18n}/></h4></p>
+                <h4><AppsHeader {...i18n}/></h4>
                 <AppsList {...i18n} data={this.state.apps}/>
             </div>
         );

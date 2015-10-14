@@ -1,21 +1,16 @@
 import React from 'react';
-
-import Logger from '../../utils/logger';
-let logger = new Logger();
-
+import ReactCSSTransitionGroup from 'react/lib/ReactCSSTransitionGroup';
+import { render } from 'react-dom'
 import './nav.scss';
 
 import Button from 'react-bootstrap/lib/Button';
 
 import TopNav from './topNav';
-import LeftNav from './leftNav';
 import Trouser from '../trouser/trouser';
-import Header from '../header/header';
-import Stage from '../stage/stage';
 import Footer from '../footer/footer';
 
-import ReportStage from '../report/dataTable/stage';
-import ReportContent from '../report/dataTable/content';
+import Logger from '../../utils/logger';
+let logger = new Logger();
 
 import Fluxxor from 'fluxxor';
 
@@ -23,8 +18,8 @@ let FluxMixin = Fluxxor.FluxMixin(React);
 let StoreWatchMixin = Fluxxor.StoreWatchMixin;
 
 //  load the locale
-import { Locale, getI18nBundle } from '../../locales/locales';
-let i18n = getI18nBundle();
+import Locale from '../../locales/locales';
+let i18n = Locale.getI18nBundle();
 
 var Nav = React.createClass({
     mixins: [FluxMixin, StoreWatchMixin('NavStore','AppsStore','ReportsStore','ReportDataStore')],
@@ -39,46 +34,35 @@ var Nav = React.createClass({
         };
     },
 
-    // Triggered when properties change
-    componentWillReceiveProps: function(props) {
-        if (props) {
-            if (props.params) {
-                let appId = props.params.appId;
-                let tblId = props.params.tblId;
-                let rptId = props.params.rptId;
-                if (appId && tblId && rptId) {
-                    logger.debug('Loading report. AppId:' + appId + ' ;tblId:' + tblId + ' ;rptId:' + rptId);
-                    let flux = this.getFlux();
-                    flux.actions.loadReport({appId: appId, tblId: tblId, rptId: rptId});
-                }
-            }
-        }
-    },
-
     hideTrouserExample: function() {
-        logger.debug('hiding trowser from Nav shell');
+        logger.debug('hiding trouser from Nav shell');
         let flux = this.getFlux();
         flux.actions.hideTrouser();
     },
 
     render: function() {
 
+        let flux = this.getFlux();
+
+        const { pathname } = this.props.location
+        const key = pathname.split('/')[1] || 'root'
+
+        const { main, leftNav } = this.props.children;
+
         return (<div className='navShell'>
             <Trouser visible={this.state.nav.trouserOpen} onHide={this.hideTrouserExample}>
                 <Button bsStyle='success' onClick={this.hideTrouserExample} style={{position:'absolute',bottom:'10px',right:'10px'}}>Done</Button>
             </Trouser>
 
-            <LeftNav {...i18n} open={this.state.nav.leftNavOpen}
-                     items={this.state.nav.leftNavItems}
-                     reportsData={this.state.reportsData}/>
+            {/* insert the leftNav component passed in by the router */}
+            {React.cloneElement(leftNav,{...i18n, items:this.state.nav.leftNavItems, open: this.state.nav.leftNavOpen, reportsData: this.state.reportsData, flux: flux} )}
 
             <div className='main'>
-                <TopNav {...i18n} onNavClick={this.toggleNav} onAddClicked={this.showTrouser}/>
+                <TopNav {...i18n} title='QuickBase' mobile={this.props.mobile} showActionIcons={!this.props.mobile} onNavClick={this.toggleNav} onAddClicked={this.showTrouser}/>
                 <div className='mainContent'>
-                    <Stage stageContent='this is the stage content text'>
-                        <ReportStage {...i18n} reportName={this.state.reportData.data.name}/>
-                    </Stage>
-                    <ReportContent {...i18n} reportData={this.state.reportData}/>
+                    {/* insert the main component passed in by the router */}
+                        {React.cloneElement(main, {key: key, reportData: this.state.reportData, mobile: this.props.mobile,  flux: flux} )}
+    
                 </div>
                 <Footer {...i18n} />
             </div>

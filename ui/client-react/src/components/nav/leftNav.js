@@ -10,11 +10,6 @@ var FormattedMessage = ReactIntl.FormattedMessage;
 let LeftNav = React.createClass( {
     mixins: [IntlMixin],
 
-    selectItem: function (id) {
-        if (id)
-            this.props.itemSelection(id);
-    },
-
     getGlyphName(item) {
 
         if (item.icon)
@@ -27,48 +22,37 @@ let LeftNav = React.createClass( {
 
         if (this.props.open)
             return (
-                <li>
+                <li key={item.key}>
                     <Loader scale={.5} right={'90%'} loaded={!loadingCheck} />
-                    <a className='heading'><FormattedMessage message={this.getIntlMessage('nav.reportsHeading')}/></a>
+                    <a className='heading'><FormattedMessage message={this.getIntlMessage(item.key)}/></a>
                 </li>);
 
         else
-            return (<li><a className='heading'></a></li>);
+            return (<li key={item.key}><a className='heading'></a></li>);
 
     },
-
     buildNavItem: function(item) {
 
         let label = item.key ? this.getIntlMessage(item.key) : item.name;
 
-        const tooltip = (
-            <Tooltip id={item.id}>{label}</Tooltip>
-        );
+        const tooltip = (<Tooltip className={ this.props.open ? 'leftNavTooltip' : 'leftNavTooltip show' } id={label}>{label}</Tooltip>);
 
-        if (this.props.open)
-            return (
+        return (
+            <OverlayTrigger key={label} placement="right" overlay={tooltip}>
                 <li>
                     <Link className='leftNavLink' to={item.link}>
                         <Glyphicon glyph={this.getGlyphName(item)}/> {label}
                     </Link>
-                </li>);
-        else
-            return (
-                <OverlayTrigger key={item.id} placement="right" overlay={tooltip}>
-                    <li>
-                        <Link className='leftNavLink' to={item.link}>
-                            <Glyphicon glyph={this.getGlyphName(item)}/>
-                        </Link>
-                    </li>
-                </OverlayTrigger>
-            )
+                </li>
+            </OverlayTrigger>
+        )
     },
 
     render: function() {
 
         return (
 
-            <div className={(this.props.open ? "open " : "closed ") +"leftMenu"}>
+            <div className={"leftMenu " + (this.props.open ? "open" : "closed")}>
 
                 <Nav stacked activeKey={1} >
                     {this.props.items.map((item) => {
@@ -76,10 +60,7 @@ let LeftNav = React.createClass( {
                             this.buildHeadingItem(item)  :
                             this.buildNavItem(item);
                     })}
-
-
                     {this.buildHeadingItem({key:'nav.reportsHeading'},this.props.reportsData.loading)}
-
                     {this.props.reportsData.list ? this.props.reportsData.list.map((item) => {
                         return this.buildNavItem(item);
                     }) : ''}

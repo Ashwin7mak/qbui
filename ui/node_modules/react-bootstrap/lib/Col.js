@@ -20,9 +20,9 @@ var _styleMaps = require('./styleMaps');
 
 var _styleMaps2 = _interopRequireDefault(_styleMaps);
 
-var _utilsCustomPropTypes = require('./utils/CustomPropTypes');
+var _reactPropTypesLibElementType = require('react-prop-types/lib/elementType');
 
-var _utilsCustomPropTypes2 = _interopRequireDefault(_utilsCustomPropTypes);
+var _reactPropTypesLibElementType2 = _interopRequireDefault(_reactPropTypesLibElementType);
 
 var Col = _react2['default'].createClass({
   displayName: 'Col',
@@ -159,7 +159,7 @@ var Col = _react2['default'].createClass({
     /**
      * You can use a custom element for this component
      */
-    componentClass: _utilsCustomPropTypes2['default'].elementType
+    componentClass: _reactPropTypesLibElementType2['default']
   },
 
   getDefaultProps: function getDefaultProps() {
@@ -169,6 +169,8 @@ var Col = _react2['default'].createClass({
   },
 
   render: function render() {
+    var _this = this;
+
     var ComponentClass = this.props.componentClass;
     var classes = {};
 
@@ -177,26 +179,26 @@ var Col = _react2['default'].createClass({
       var prop = size;
       var classPart = size + '-';
 
-      if (this.props[prop]) {
-        classes['col-' + classPart + this.props[prop]] = true;
+      if (_this.props[prop]) {
+        classes['col-' + classPart + _this.props[prop]] = true;
       }
 
       prop = size + 'Offset';
       classPart = size + '-offset-';
-      if (this.props[prop] >= 0) {
-        classes['col-' + classPart + this.props[prop]] = true;
+      if (_this.props[prop] >= 0) {
+        classes['col-' + classPart + _this.props[prop]] = true;
       }
 
       prop = size + 'Push';
       classPart = size + '-push-';
-      if (this.props[prop] >= 0) {
-        classes['col-' + classPart + this.props[prop]] = true;
+      if (_this.props[prop] >= 0) {
+        classes['col-' + classPart + _this.props[prop]] = true;
       }
 
       prop = size + 'Pull';
       classPart = size + '-pull-';
-      if (this.props[prop] >= 0) {
-        classes['col-' + classPart + this.props[prop]] = true;
+      if (_this.props[prop] >= 0) {
+        classes['col-' + classPart + _this.props[prop]] = true;
       }
     }, this);
 
