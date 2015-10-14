@@ -14,6 +14,9 @@ import { fakeGriddleData } from '../../../components/dataTable/griddleTable/fake
 import './griddleTable.css';
 import './qbGriddleTable.scss';
 
+import CardView from './cardView.js';
+import './cardView.css';
+
 /*
  * Sample component for passing in data  -
  * <GriddleTable results={fakeGriddleData} columnMetadata={fakeGriddleColumnMetaData} useExternal={false}/>
@@ -43,7 +46,8 @@ class GriddleTable extends React.Component {
             "columnMetadata": props.columnMetadata || [],
             "fullDataSet": [],
             "useExternal": props.useExternal,
-            "customPagerComponent": props.customPagerComponent
+            "customPagerComponent": props.customPagerComponent,
+            "useCustomRowComponent": props.mobile
         };
 
         return initialState;
@@ -147,6 +151,7 @@ class GriddleTable extends React.Component {
                         useExternal={this.state.useExternal}
                         results={this.state.results}
                         customPagerComponent={this.state.customPagerComponent}
+                        useCustomRowComponent={this.state.useCustomRowComponent}
                         //events
                         externalSetPage={this.setPage}
                         externalChangeSort={this.changeSort}
@@ -182,6 +187,10 @@ GriddleTable.defaultProps = {
 
     useCustomPagerComponent: true,
     customPagerComponent: PaginationComponent,
+
+    useCustomRowComponent: false,
+    customRowComponent: CardView,
+    customRowComponentClassName: "custom-row",
 
     useExternal: false, /* TODO: this should always be true for us but needs data from server */
     columnMetadata: [],
