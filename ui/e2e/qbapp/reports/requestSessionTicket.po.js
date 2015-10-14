@@ -6,6 +6,8 @@
  */
 (function() {
     'use strict';
+    // In order to manage the async nature of Protractor with a non-Angular page use the ExpectedConditions feature
+    var EC = protractor.ExpectedConditions;
     var RequestSessionTicketPage = function() {
         // Element locators
         this.ticketResponseBodyEl = element(by.tagName('body'));
@@ -15,6 +17,8 @@
          */
         this.get = function(sessionTicketRequest) {
             browser.get(sessionTicketRequest);
+            // Make sure the page is loaded before giving control back to the test class
+            browser.wait(EC.visibilityOf(this.ticketResponseBodyEl), 5000);
         };
     };
     module.exports = new RequestSessionTicketPage();
