@@ -1,10 +1,4 @@
 
-
-.mobileLeftMenu.open {
-  transform: translate3d(300px, 0, 0);
-  -webkit-transform: translate3d(300px, 0, 0);
-}
-
 .mobileLeftMenu {
   margin:0;
   width:300px;
@@ -15,16 +9,8 @@
   border-right: 1px solid #ccc;
   background-color: #002b48;
   overflow-y:auto;
-  transition: -webkit-transform ease 150ms;
-  -webkit-transition: transform ease 150ms;
-  transition: transform ease 150ms;
 
-  .close {
-    color: #fff;
-    position:absolute;
-    right:10px;
-    top:5px;
-  }
+
   a.leftNavLink:hover, a.leftNavLink:focus {
     text-decoration: none;
     background-color: #476b8f;
