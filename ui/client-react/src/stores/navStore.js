@@ -10,6 +10,7 @@ let NavStore = Fluxxor.createStore({
     initialize: function() {
         this.state = {
             leftNavOpen: true,
+            mobileLeftNavOpen: false,
             trouserOpen: false,
             leftNavItems: [],
             i18n: Locale.getI18nBundle()
@@ -43,6 +44,7 @@ let NavStore = Fluxxor.createStore({
 
     onToggleLeftNav: function() {
         this.state.leftNavOpen = !this.state.leftNavOpen;
+        this.state.mobileLeftNavOpen = !this.state.mobileLeftNavOpen;
         this.emit('change');
     },
 
