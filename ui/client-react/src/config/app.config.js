@@ -10,6 +10,10 @@ import LogLevel from '../utils/logLevels';
 
 var Configuration = {
     env: 'LOCAL',
+    locale: {
+        supported:['en-us', 'de-de', 'fr-fr'],
+        default: 'en-us',
+    },
     logger: {
         logLevel: LogLevel.DEBUG,
         logToConsole: true,

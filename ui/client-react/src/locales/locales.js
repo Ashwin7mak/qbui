@@ -6,15 +6,14 @@ import FR_FR from '../locales/fr_fr';
 import DE_DE from '../locales/de_de';
 import Logger from '../utils/logger';
 
+import config from '../config/app.config';
+
 let logger = new Logger();
 
-const defaultLocale = 'en-us';
-const supportedLocales = ['en-us', 'de-de', 'fr-fr'];
-
 //  todo: this will need to change and get set based on the authenticated user language preference (which may
-//  todo: then affect how this object is implemented)...but, we do not want to use the browser as the source of
+//  todo: then affect how this object is implemented)...we do not want to use the browser as the source of
 //  todo: truth as the supported QuickBase languages will be a subset of the languages offered in the browser.
-let locale = document.documentElement.getAttribute('lang') || defaultLocale;
+let locale = config.locale.default;
 
 class Locale {
 
@@ -24,7 +23,6 @@ class Locale {
 
     static getI18nBundle() {
         logger.debug('Fetching locale: ' + locale);
-
         try {
             switch (locale.toLowerCase()) {
                 case 'en-us':
@@ -34,25 +32,24 @@ class Locale {
                 case 'de-de':
                     return DE_DE;
                 default:
-                    logger.info('Locale (' + locale + ') is invalid or not supported.  Using default: ' + defaultLocale);
+                    logger.info('Locale (' + locale + ') is invalid or not supported.  Using default: en-us');
                     return EN_US;
             }
         } catch (e) {
             //  any error automatically returns default locale
-            logger.error('Error fetching locale: ' + e + '.  Using default: ' + defaultLocale);
+            logger.error('Error fetching locale: ' + e + '.  Using default: en-us');
             return EN_US;
         }
     }
 
     static changeLocale(newLocale) {
         try {
-            if (supportedLocales.indexOf(newLocale.toLowerCase()) === -1) {
+            if (config.locale.supported.indexOf(newLocale.toLowerCase()) === -1) {
                 logger.error('Invalid/unsupported change locale: ' + newLocale + '.  Locale not changed.');
             } else {
                 locale = newLocale;
             }
-        }
-        catch (e) {
+        } catch (e) {
             logger.error('Exception changing locale: ' + e + '.  Locale not changed.');
         }
     }

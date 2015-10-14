@@ -16,10 +16,6 @@ import Fluxxor from 'fluxxor';
 let FluxMixin = Fluxxor.FluxMixin(React);
 let StoreWatchMixin = Fluxxor.StoreWatchMixin;
 
-//  load the locale
-import Locale from '../../locales/locales';
-let i18n = Locale.getI18nBundle();
-
 var Nav = React.createClass({
     mixins: [FluxMixin, StoreWatchMixin('NavStore','AppsStore','ReportsStore','ReportDataStore')],
 
@@ -53,18 +49,16 @@ var Nav = React.createClass({
             </Trouser>
 
             {/* insert the leftNav component passed in by the router */}
-            {React.cloneElement(leftNav,{...i18n, items:this.state.nav.leftNavItems, open: this.state.nav.leftNavOpen, reportsData: this.state.reportsData, flux: flux} )}
+            {React.cloneElement(leftNav,{...this.state.nav.i18n, items:this.state.nav.leftNavItems, open: this.state.nav.leftNavOpen, reportsData: this.state.reportsData, flux: flux} )}
 
             <div className='main'>
-                <TopNav {...i18n} title='QuickBase' mobile={this.props.mobile} showActionIcons={!this.props.mobile} onNavClick={this.toggleNav} onAddClicked={this.showTrouser}/>
+                <TopNav {...this.state.nav.i18n} title='QuickBase' mobile={this.props.mobile} showActionIcons={!this.props.mobile} onNavClick={this.toggleNav} onAddClicked={this.showTrouser}/>
                 <div className='mainContent'>
-
                     {/* insert the main component passed in by the router */}
-                        {React.cloneElement(main, {key: key, reportData: this.state.reportData, mobile: this.props.mobile,  flux: flux} )}
-
+                    {React.cloneElement(main, {...this.state.nav.i18n, key: key, reportData: this.state.reportData, mobile: this.props.mobile,  flux: flux} )}
                 </div>
                 {/* insert the footer if route wants it */}
-                {footer ? React.cloneElement(footer, {...i18n, flux: flux} ) : ''}
+                {footer ? React.cloneElement(footer, {...this.state.nav.i18n, flux: flux} ) : ''}
             </div>
         </div>);
     }

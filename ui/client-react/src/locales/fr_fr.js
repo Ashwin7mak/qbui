@@ -26,6 +26,17 @@ export default {
         },
         grid: {
             no_data: "Il n'y a pas de données à afficher."
+        },
+        header: {
+            menu: {
+                locale: {
+                    english: "Anglais",
+                    french: "Français",
+                    german: "Allemand"
+                },
+                preferences: "Préférences",
+                sign_out: "Se déconnecter"
+            }
         }
     }
 };

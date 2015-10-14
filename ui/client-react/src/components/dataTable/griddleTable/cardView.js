@@ -78,14 +78,21 @@ class CardView  extends React.Component {
         }
         return (
             <div className="custom-row-card">
-                <div className="card">
-                    {fields}
+                <div className="flexRow">
+                    <div className="card">
+                        {fields}
+                    </div>
+                    <div className="card-expand" onClick={this.handleMoreCard}>
+                        <Glyphicon glyph="plus" />
+                    </div>
                 </div>
-                <div className="card-expand" onClick={this.handleMoreCard}>
-                    <Glyphicon glyph="plus" />
-                </div>
-                <div className={this.state.showMoreCard ? "show-more-card" : "hide-more-card"}>
-                    {additionalCards}
+                <div className="flexRow grayBackground">
+                    <div className={this.state.showMoreCard ? "show-more-card" : "hide-more-card"}>
+                        {additionalCards}
+                    </div>
+                    <div className={this.state.showMoreCard? "card-expand-hidden": "displayNone"}>
+                        <Glyphicon glyph="plus" />
+                    </div>
                 </div>
             </div>
         );
