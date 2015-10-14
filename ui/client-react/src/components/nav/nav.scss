@@ -2,12 +2,12 @@ html, body {
     margin:0;
     height:100%;
     min-height:100%;
+    overflow:hidden;
 }
 
 #content {
     height:100%;
 }
-
 
 /* yuck */
 .navShell .topNav  .open > .dropdown-menu {
@@ -23,9 +23,9 @@ html, body {
     display:flex;
     flex-direction: row;
 
-    transition: -webkit-transform ease 500ms;
-    -webkit-transition: transform ease 500ms;
+
     transition: transform ease 500ms;
+    -webkit-transition: transform ease 500ms;
 
     .mainContent {
         opacity: 1;

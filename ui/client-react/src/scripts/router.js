@@ -7,6 +7,7 @@ import Nav from '../components/nav/nav';
 import LeftNav from '../components/nav/leftNav';
 import MobileLeftNav from '../components/nav/mobileLeftNav';
 import Footer from '../components/footer/footer';
+import MobileAddFooter from '../components/footer/mobileAddFooter';
 import Fluxxor from 'fluxxor';
 
 import ReportsStore from '../stores/ReportsStore';
@@ -73,8 +74,8 @@ render((
         </Route>
 
         <Route path='m/app/:appId/table/:tblId' component={NavWrapper} >
-            <IndexRoute components={{main: TableHomePageRoute, leftNav: MobileLeftNav}} />
-            <Route path='report/:rptId' components={{main: ReportRoute, leftNav: MobileLeftNav}} />
+            <IndexRoute components={{main: TableHomePageRoute, leftNav: MobileLeftNav, footer: MobileAddFooter}} />
+            <Route path='report/:rptId' components={{main: ReportRoute, leftNav: MobileLeftNav, footer: MobileAddFooter}} />
         </Route>
 
     </Router>
