@@ -14,16 +14,19 @@
         this.navMenuEl = element(by.className('leftMenu'));
         this.navStackedEl = element(by.className('nav-stacked'));
         this.navLinksElList = element.all(by.className('leftNavLink'));
+        this.appsHomeLinkEl = this.navLinksElList.first();
+        // Report Container
+        this.reportContainerEl = element(by.className('reportContainer'));
+        // Loaded Content Div
+        this.loadedContentEl = this.reportContainerEl.element(by.className('loadedContent'));
         // Griddle table
         this.griddleContainerEl = element(by.className('griddle-container'));
         this.griddleBodyEl = element(by.className('griddle-body'));
-        this.griddleColHeaderElList = this.griddleBodyEl.all(by.tagName('span'));
+        this.griddleTableHeaderEl = this.griddleBodyEl.all(by.tagName('thead'));
+        this.griddleColHeaderElList = this.griddleTableHeaderEl.all(by.tagName('span'));
+        this.griddleLastColumnHeaderEl = this.griddleColHeaderElList.last();
         this.griddleDataBodyDivEl = this.griddleBodyEl.all(by.tagName('tbody')).first();
         this.griddleRecordElList = this.griddleDataBodyDivEl.all(by.tagName('tr'));
-        // The old ui-grid locators
-        this.mainContent = element.all(by.className('nav-target')).first();
-        this.tableContainer = element.all(by.className('ui-grid')).first();
-        this.lastColumn = element.all(by.className('ui-grid-header-cell')).last();
         /**
         * Helper function that will get all of the field column headers from the report. Returns an array of strings.
         */
@@ -46,31 +49,6 @@
             });
             return deferred.promise;
         };
-        /**
-        * Function that will return the dimensions of the browser window and report grid
-        */
-        this.getDimensions = function() {
-            return {
-                windowSize        : browser.manage().window().getSize(),
-                mainSize          : this.mainContent.getSize(),
-                mainLoc           : this.mainContent.getLocation(),
-                tableContainerSize: this.tableContainer.getSize(),
-                tableContainerLoc : this.tableContainer.getLocation(),
-                lastColumnSize    : this.lastColumn.getSize(),
-                lastColumnLoc     : this.lastColumn.getLocation()
-            };
-        };
-        /**
-        * Validates that the grid dimensions are within proper proportions after resizing the browser window
-        */
-        this.validateGridDimensions = function(result) {
-            var leftPadding = 10;
-            var allowedVariance = 25;
-            var pointOfLastColumn = result.lastColumnLoc.x + leftPadding + result.lastColumnSize.width;
-            var pointOfMainContent = result.mainLoc.x + result.mainSize.width;
-            var endsDiff = Math.abs(pointOfMainContent - pointOfLastColumn);
-            expect(endsDiff).toBeLessThan(allowedVariance);
-        };
     };
-    module.exports = new ReportServicePage();
+    module.exports = ReportServicePage;
 }());

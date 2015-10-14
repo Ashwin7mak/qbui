@@ -13,16 +13,16 @@
              * will generate a 'list all' report. Returns a promise.
              */
             // TODO: QBSE-13518 Write a report generator in the test_generators package
-            createReport: function(app) {
+            createReport: function(appId, tableId, query) {
                 var deferred = promise.pending();
                 var reportJSON = {
                     name      : 'Test Report',
                     type      : 'TABLE',
                     ownerId   : '10000',
-                    hideReport: false
-                    //"query": "{'3'.EX.'1'}"
+                    hideReport: false,
+                    query: query
                 };
-                var reportsEndpoint = recordBase.apiBase.resolveReportsEndpoint(app.id, app.tables[0].id);
+                var reportsEndpoint = recordBase.apiBase.resolveReportsEndpoint(appId, tableId);
 
                 // TODO: QBSE-13843 Create helper GET And POST functions that extend this executeRequest function
                 recordBase.apiBase.executeRequest(reportsEndpoint, 'POST', reportJSON).then(function(result) {
@@ -39,9 +39,9 @@
             /**
              * Helper function that will run an existing report in a table via the API. Returns a promise.
              */
-            runReport: function(app, reportId) {
+            runReport: function(appId, tableId, reportId) {
                 var deferred = promise.pending();
-                var reportsEndpoint = recordBase.apiBase.resolveReportsEndpoint(app.id, app.tables[0].id, reportId);
+                var reportsEndpoint = recordBase.apiBase.resolveReportsEndpoint(appId, tableId, reportId);
                 var runReportEndpoint = reportsEndpoint + '/results';
                 recordBase.apiBase.executeRequest(runReportEndpoint, 'GET').then(function(result) {
                     //console.log('Report create result');

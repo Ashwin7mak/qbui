@@ -6,18 +6,22 @@
  */
 (function() {
     'use strict';
+    // In order to manage the async nature of Protractor with a non-Angular page use the ExpectedConditions feature
+    var EC = protractor.ExpectedConditions;
     var RequestAppsPage = function() {
         // Page Elements using Locators
         this.appContainerEl = element(by.className('apps-container'));
-        this.appElList = this.appContainerEl.all(by.className('apps'));
-        this.tableElList = element(by.className('tables'));
-        this.firstTableLinkEl = this.tableElList.all(by.tagName('a')).first();
+        this.appsDivEl = this.appContainerEl.all(by.className('apps'));
+        this.tablesDivEl = element(by.className('tables'));
+        this.tableLinksElList = this.tablesDivEl.all(by.tagName('a'));
         /*
          * Loads the page in the browser containing a list apps and tables in a realm
          * Use the service method in e2eBase to get this URL for the realm/app
          */
         this.get = function(requestAppsPageEndPoint) {
             browser.get(requestAppsPageEndPoint);
+            // Make sure the page is loaded before giving control back to the test class
+            browser.wait(EC.visibilityOf(this.tablesDivEl), 5000);
         };
     };
     module.exports = new RequestAppsPage();

@@ -42,6 +42,7 @@
             cleanup : function(done) {
                 //Checks for any JS errors in the browser console
                 browser.manage().logs().get('browser').then(function(browserLog) {
+                    // TODO: Errors in the console need to fix
                     //expect(browserLog.length).toEqual(0);
                     if (browserLog.length) {
                         console.error('Browser console had errors: ' + JSON.stringify(browserLog));
@@ -78,8 +79,6 @@
                 var generatedApp = e2eBase.appService.generateAppFromMap(tableToFieldToFieldTypeMap);
                 //Create the app via the API
                 e2eBase.appService.createApp(generatedApp).then(function(createdApp) {
-                    //Set your global app object to use in the actual test method
-                    //createdApp;
                     //Get the appropriate fields out of the Create App response (specifically the created field Ids)
                     var nonBuiltInFields = e2eBase.tableService.getNonBuiltInFields(createdApp.tables[0]);
                     //Generate the record JSON objects
@@ -87,8 +86,8 @@
                     //Via the API create the records, a new report, then run the report.
                     //This is a promise chain since we need these actions to happen sequentially
                     e2eBase.recordService.addRecords(createdApp, createdApp.tables[0], generatedRecords).then(function() {
-                        e2eBase.reportService.createReport(createdApp).then(function(reportId) {
-                            e2eBase.reportService.runReport(createdApp, reportId).then(function(reportRecords) {
+                        e2eBase.reportService.createReport(createdApp.id, createdApp.tables[0].id).then(function(reportId) {
+                            e2eBase.reportService.runReport(createdApp.id, createdApp.tables[0].id, reportId).then(function(reportRecords) {
                                 //Return back the created app and records
                                 //Pass it back in an array as promise.resolve can only send back one object
                                 var appAndRecords = [createdApp, reportRecords];

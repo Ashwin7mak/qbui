@@ -7,6 +7,8 @@
 // jshint sub: true
 (function() {
     'use strict';
+    // In order to manage the async nature of Protractor with a non-Angular page use the ExpectedConditions feature
+    var EC = protractor.ExpectedConditions;
     //Require the e2e base class and constants modules
     var e2eBase = require('../../common/e2eBase.js')();
     var consts = require('../../../server/api/constants.js');
@@ -15,13 +17,15 @@
     //Load the page objects
     var requestSessionTicketPage = require('./requestSessionTicket.po.js');
     var requestAppsPage = require('./requestApps.po.js');
-    var reportServicePage = require('./reportService.po.js');
-    describe('Report Layout Tests', function() {
-        var app;
-        var widthTests = [1024, 640, 1280];
-        var heightTests = 2024;
+    var ReportServicePage = require('./reportService.po.js');
+    describe('Report Griddle Layout Tests', function() {
+
+        var widthTest = 1024;
+        var heightTest = 2024;
         e2eBase.setBaseUrl(browser.baseUrl);
         e2eBase.initialize();
+        var app;
+
         /**
          * Setup method. Generates JSON for an app, a table, a set of records and a report. Then creates them via the REST API.
          * Have to specify the done() callback at the end of the promise chain, otherwise Protractor will not wait
@@ -41,60 +45,109 @@
             tableToFieldToFieldTypeMap['table 1']['Duration'] = {fieldType: consts.SCALAR, dataType : consts.DURATION};
             tableToFieldToFieldTypeMap['table 1']['Email'] = {fieldType: consts.SCALAR, dataType : consts.EMAIL_ADDRESS};
             tableToFieldToFieldTypeMap['table 1']['Rating'] = {fieldType: consts.SCALAR, dataType: consts.RATING};
+            tableToFieldToFieldTypeMap['table 2'] = {};
+            tableToFieldToFieldTypeMap['table 2']['Text Field'] = {fieldType: consts.SCALAR, dataType: consts.TEXT};
+            tableToFieldToFieldTypeMap['table 2']['Rating Field'] = {fieldType: consts.SCALAR, dataType : consts.RATING};
+            tableToFieldToFieldTypeMap['table 2']['Phone Number Field'] = {fieldType: consts.SCALAR, dataType : consts.PHONE_NUMBER};
             //Call the basic app setup function
             e2eBase.basicSetup(tableToFieldToFieldTypeMap, 10).then(function(results) {
                 //Set your global objects to use in the test functions
                 app = results[0];
-                //Finished with the promise chain so call done here
-                done();
+                //Check that your setup completed properly
+                //There's no fail fast option using beforeAll yet in Jasmine to prevent other tests from running
+                //This will fail the test if setup did not complete properly so at least it doesn't run
+                if (!app) {
+                    done.fail('test app / recordList was not created properly during setup');
+                }
+
+                //Get the appropriate fields out of the second table
+                var nonBuiltInFields = e2eBase.tableService.getNonBuiltInFields(app.tables[1]);
+                //Generate the record JSON objects
+                var generatedRecords = e2eBase.recordService.generateRecords(nonBuiltInFields, 10);
+                //Via the API create the records, a new report
+                //This is a promise chain since we need these actions to happen sequentially
+                e2eBase.recordService.addRecords(app, app.tables[1], generatedRecords).then(function() {
+                    e2eBase.reportService.createReport(app.id, app.tables[1].id).then(function() {
+                        // Get a session ticket for that subdomain and realmId (stores it in the browser)
+                        // Gather the necessary values to make the requests via the browser
+                        var realmName = e2eBase.recordBase.apiBase.realm.subdomain;
+                        var realmId = e2eBase.recordBase.apiBase.realm.id;
+                        requestSessionTicketPage.get(e2eBase.getSessionTicketRequestEndpoint(realmName, realmId, e2eBase.ticketEndpoint));
+                        // Load the requestAppsPage (shows a list of all the apps and tables in a realm)
+                        requestAppsPage.get(e2eBase.getRequestAppsPageEndpoint(realmName));
+                        // Define the window size
+                        e2eBase.resizeBrowser(widthTest, heightTest);
+                        done();
+                    });
+                });
             });
         });
         /**
-         * Test method. After setup completes, loads the browser, requests a session ticket, requests the list
-         * of reports for that app and table, then runs / displays the report in the browser
+         * Test method. Loads the first table containing 10 fields (10 columns). The table report (griddle) width should expand past the browser size
+         * to give all columns enough space to show their data.
          */
-        it('Should have liquid size behavior on the grid Report page', function(done) {
-            //Check that your setup completed properly
-            //There's no fail fast option using beforeAll yet in Jasmine to prevent other tests from running
-            //This will fail the test if setup did not complete properly so at least it doesn't run
-            if (!app) {
-                done.fail('test app / recordList was not created properly during setup');
-            }
-            //Gather the necessary values to make the requests via the browser
-            var realmName = e2eBase.recordBase.apiBase.realm.subdomain;
-            var realmId = e2eBase.recordBase.apiBase.realm.id;
-            var tableId = app.tables[0].id;
-            //Get a session ticket for that subdomain and realmId (stores it in the browser)
-            requestSessionTicketPage.get(e2eBase.getSessionTicketRequestEndpoint(realmName, realmId, e2eBase.ticketEndpoint));
-            //Load the requestAppsPage (shows a list of all the apps and tables in a realm)
-            requestAppsPage.get(e2eBase.getRequestAppsPageEndpoint(realmName));
-            //Assert that we have a report for our created table
-            expect(requestAppsPage.firstReportLinkEl.getText()).toContain(tableId);
-            //Select the report to load it in the browser
-            requestAppsPage.firstReportLinkEl.click();
-            //Define the window size
-            e2eBase.resizeBrowser(widthTests[0], heightTests);
-            //Assert columns fill width
-            promise.props(reportServicePage.getDimensions()).then(function(result) {
-                reportServicePage.validateGridDimensions(result);
-            }).then(function() {
-                //Resize window smaller and recheck
-                e2eBase.resizeBrowser(widthTests[1], heightTests).then(function() {
-                    e2eBase.sleep(browser.params.largeSleep);
-                    promise.props(reportServicePage.getDimensions()).then(function(result) {
-                        reportServicePage.validateGridDimensions(result);
-                    }).then(function() {
-                        //Resize window larger and recheck
-                        e2eBase.resizeBrowser(widthTests[2], heightTests).then(function() {
-                            e2eBase.sleep(browser.params.mediumSleep);
-                            promise.props(reportServicePage.getDimensions(reportServicePage)).then(function(result) {
-                                reportServicePage.validateGridDimensions(result);
-                                done();
-                            });
+        it('Should expand width past the browser size to show all available data and columns (large data sets)', function(done) {
+            browser.wait(EC.visibilityOf(requestAppsPage.tablesDivEl), 5000).then(function() {
+                // Select the table to load
+                requestAppsPage.tableLinksElList.get(0).click();
+                // Now on the reportServicePage (shows the nav with a list of reports you can load)
+                var reportServicePage = new ReportServicePage();
+                // Wait until the nav has loaded
+                browser.wait(EC.visibilityOf(reportServicePage.navStackedEl), 5000).then(function() {
+                    // Select the report
+                    reportServicePage.navLinksElList.get(1).click();
+                    // Make sure the table report has loaded
+                    browser.wait(EC.visibilityOf(reportServicePage.griddleContainerEl), 5000).then(function () {
+                        // Check there is a scrollbar in the griddle table
+                        var fetchRecordPromises = [];
+                        fetchRecordPromises.push(reportServicePage.loadedContentEl.getAttribute('scrollWidth'));
+                        fetchRecordPromises.push(reportServicePage.loadedContentEl.getAttribute('clientWidth'));
+                        //When all the dimensions have been fetched, assert the values match expectations
+                        promise.all(fetchRecordPromises).then(function (dimensions) {
+                            expect(Number(dimensions[0])).toBeGreaterThan(Number(dimensions[1]));
+                            done();
                         });
                     });
                 });
             });
+        });
+        /**
+         * Test method. Loads the second table containing 3 fields (3 columns). The table report (griddle) width should expand
+         * it's columns to fill the available space (and not show a scrollbar).
+         */
+        it('Should expand the width to take up available space in the browser for a small number of columns', function(done) {
+            browser.wait(EC.visibilityOf(requestAppsPage.tablesDivEl), 5000).then(function() {
+                // Select the table to load
+                requestAppsPage.tableLinksElList.get(1).click();
+                // Now on the reportServicePage (shows the nav with a list of reports you can load)
+                // Wait until the nav has loaded
+                var reportServicePage = new ReportServicePage();
+                browser.wait(EC.visibilityOf(reportServicePage.navStackedEl), 5000).then(function() {
+                    // Select the report
+                    reportServicePage.navLinksElList.get(1).click();
+                    // Make sure the table report has loaded
+                    browser.wait(EC.visibilityOf(reportServicePage.griddleContainerEl), 5000).then(function() {
+                        // Check there is no scrollbar in the griddle table
+                        var fetchRecordPromises = [];
+                        fetchRecordPromises.push(reportServicePage.loadedContentEl.getAttribute('scrollWidth'));
+                        fetchRecordPromises.push(reportServicePage.loadedContentEl.getAttribute('clientWidth'));
+                        //When all the dimensions have been fetched, assert the values match expectations
+                        promise.all(fetchRecordPromises).then(function (dimensions) {
+                            expect(Number(dimensions[0])).not.toBeGreaterThan(Number(dimensions[1]));
+                            done();
+                        });
+                    });
+                });
+            });
+        });
+        ///**
+        // * Return to the table selection page by clicking on the Home link in the left nav
+        // */
+        afterEach(function (done) {
+            var reportServicePage = new ReportServicePage();
+            browser.wait(EC.visibilityOf(reportServicePage.navStackedEl), 5000);
+            reportServicePage.appsHomeLinkEl.click();
+            done();
         });
         /**
          * After all tests are done, run the cleanup function in the base class
