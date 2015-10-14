@@ -13,7 +13,7 @@ import './report.scss';
 let FluxMixin = Fluxxor.FluxMixin(React);
 var i18n = getI18nBundle();
 
-var ReportRoute = React.createClass( {
+var ReportRoute = React.createClass({
     mixins: [FluxMixin],
 
     loadReportFromParams: function(params, checkParams) {
@@ -25,19 +25,20 @@ var ReportRoute = React.createClass( {
 
             // VERY IMPORTANT: check URL params against props to prevent cycles
 
-            if (this.props.reportData.loading)
+            if (this.props.reportData.loading) {
                 return;
+            }
 
-            if (appId == this.props.reportData.appId &&
-                tblId == this.props.reportData.tblId &&
-                rptId == this.props.reportData.rptId) {
+            if (appId === this.props.reportData.appId &&
+                tblId === this.props.reportData.tblId &&
+                rptId === this.props.reportData.rptId) {
                 return;
             }
 
             if (checkParams) {
-                if (appId == this.props.params.appId &&
-                    tblId == this.props.params.tblId &&
-                    rptId == this.props.params.rptId) {
+                if (appId === this.props.params.appId &&
+                    tblId === this.props.params.tblId &&
+                    rptId === this.props.params.rptId) {
                     return;
                 }
             }
@@ -46,7 +47,7 @@ var ReportRoute = React.createClass( {
                 logger.debug('Loading report. AppId:' + appId + ' ;tblId:' + tblId + ' ;rptId:' + rptId);
                 let flux = this.getFlux();
 
-                flux.actions.loadReport(appId, tblId, rptId);
+                flux.actions.loadReport(appId, tblId, rptId, true);
             }
         }
     },

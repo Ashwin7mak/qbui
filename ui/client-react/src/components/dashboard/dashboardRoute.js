@@ -32,7 +32,7 @@ var DashboardRoute = React.createClass( {
             if (appId && tblId && rptId) {
                 logger.debug('Loading report. AppId:' + appId + ' ;tblId:' + tblId + ' ;rptId:' + rptId);
                 let flux = this.getFlux();
-                flux.actions.loadReport(appId, tblId, rptId);
+                flux.actions.loadReport(appId, tblId, rptId, true);
             }
         }
     },

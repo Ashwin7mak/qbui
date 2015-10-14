@@ -15,7 +15,7 @@ let reportDataActions = {
         if (appId && tblId && rptId) {
             let reportService = new ReportService();
 
-            this.dispatch(actions.LOAD_REPORT);
+            this.dispatch(actions.LOAD_REPORT, {appId, tblId, rptId});
 
             var promises = [];
             promises.push(reportService.getReport(appId, tblId, rptId));

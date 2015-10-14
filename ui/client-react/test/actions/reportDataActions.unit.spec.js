@@ -53,7 +53,7 @@ describe('Report Data Actions functions -- success', () => {
         promise = flux.actions.loadReport(appId, tblId, rptId, true);
 
         //  expect a load report event to get fired before the promise returns
-        expect(flux.dispatchBinder.dispatch).toHaveBeenCalledWith(actions.LOAD_REPORT);
+        expect(flux.dispatchBinder.dispatch).toHaveBeenCalledWith(actions.LOAD_REPORT, {appId, tblId, rptId});
         flux.dispatchBinder.dispatch.calls.reset();
 
         promise.then(
