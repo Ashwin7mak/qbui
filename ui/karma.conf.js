@@ -54,7 +54,7 @@ module.exports = function(config) {
         // - Safari (only Mac)
         // - PhantomJS
         // - IE (only Windows)
-        browsers: ["PhantomJS"],
+        browsers: ["Chrome","PhantomJS"],
 
         reporters: ["progress", "mocha", "coverage", "junit"],
 
@@ -67,7 +67,7 @@ module.exports = function(config) {
         browserDisconnectTolerance : 1,     // default 0
 
         colors: true,
-        singleRun: true,
+        //singleRun: true,
 
         // level of output logging
         // LOG_DISABLE || LOG_ERROR || LOG_WARN || LOG_INFO || LOG_DEBUG
