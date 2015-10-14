@@ -19,8 +19,13 @@ let ReportDataStore = Fluxxor.createStore({
         );
     },
 
-    onLoadReport: function() {
+    onLoadReport: function(report) {
         this.loading = true;
+
+        this.appId = report.appId;
+        this.tblId = report.tblId;
+        this.rptId = report.rptId;
+
         this.emit("change");
     },
     onLoadReportFailed: function() {
@@ -90,7 +95,10 @@ let ReportDataStore = Fluxxor.createStore({
         return {
             loading: this.loading,
             error: this.error,
-            data: this.data
+            data: this.data,
+            appId: this.appId,
+            tblId: this.tblId,
+            rptId: this.rptId
         };
     }
 });

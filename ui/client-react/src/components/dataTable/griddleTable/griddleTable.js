@@ -41,7 +41,9 @@ class GriddleTable extends React.Component {
             "externalSortColumn": props.externalSortColumn,
             "externalSortAscending": props.externalSortAscending,
             "columnMetadata": props.columnMetadata || [],
-            "fullDataSet": []
+            "fullDataSet": [],
+            "useExternal": props.useExternal,
+            "customPagerComponent": props.customPagerComponent
         };
 
         return initialState;
@@ -92,9 +94,22 @@ class GriddleTable extends React.Component {
         }
     }
 
+
+    /* On first time render make the following decisions:
+    * Are we getting external data?
+    *   If so, Is the 1st data set supplied all the data thats on the table?
+    *       If so we dont need to get external data really even though that calling component thinks we do - shut of pagination
+    *
+    *     else set up the getExternalData callback
+    * */
     componentDidMount() {
-        if (this.props.useExternal && typeof (this.props.getResultsCallback) === 'function')
-            this.getExternalData();
+        if (this.state.useExternal && typeof (this.props.getResultsCallback) === 'function') {
+            if (this.state.results)
+                if (this.state.results.length > this.state.externalResultsPerPage)
+                    this.getExternalData();
+                else
+                    this.setState({useExternal: false, customPagerComponent: null});
+        }
     }
 
     //what page is currently viewed
@@ -126,12 +141,12 @@ class GriddleTable extends React.Component {
          For our purpose that first set of data should always be provided by the store. If not data has been provided then there is nothing to display.
          So in case of no data sent in just render a plain and empty div */
         if (this.props.results) {
-            //let columnMetadata = this.getColumnProps(); //TODO: is there a way to make sure this doesnt happen on every render.
             return (
                 <div>
                     <Griddle {...this.props}
+                        useExternal={this.state.useExternal}
                         results={this.state.results}
-                        //columnMetadata={columnMetadata}
+                        customPagerComponent={this.state.customPagerComponent}
                         //events
                         externalSetPage={this.setPage}
                         externalChangeSort={this.changeSort}
@@ -174,7 +189,9 @@ GriddleTable.defaultProps = {
 
     getResultsCallback: null,
     gridClassName: 'QBGriddle',
-    useGriddleStyles: false
+    useGriddleStyles: false,
+    sortAscendingClassName: "Sorted",
+    sortDescendingClassName: "Sorted",
     //,rowHeight: 30 //TODO not working right now
 };
 

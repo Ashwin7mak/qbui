@@ -3,6 +3,7 @@ import ReactIntl from 'react-intl';
 
 import { Table } from 'react-bootstrap';
 import GriddleTable  from '../../../components/dataTable/griddleTable/griddleTable.js';
+import {DateFormatter,NumericFormatter}  from '../../../components/dataTable/griddleTable/formatters.js';
 import { fakeGriddleData,fakeGriddleColumnMetaData } from '../../../components/dataTable/griddleTable/fakeData.js';
 import Loader  from 'react-loader';
 
@@ -21,7 +22,7 @@ var Content = React.createClass({
         return {
             reportRecords: this.props.reportData.data.records ? this.props.reportData.data.records : [],
             reportColumns: this.props.reportData.data.columns ? this.props.reportData.data.columns : [],
-            firstDataSet: this.props.reportData.data.records ? this.props.reportData.data.records.slice(0, resultsPerPage) : []
+            firstDataSet: this.props.reportData.data.records ? this.props.reportData.data.records.slice(0, resultsPerPage+1) : []
         };
     },
 
@@ -31,7 +32,7 @@ var Content = React.createClass({
             that.setState({
                 reportRecords: nextProps.reportData.data.records ? nextProps.reportData.data.records : [],
                 reportColumns: nextProps.reportData.data.columns ? that.getColumnProps(nextProps.reportData.data.columns) : [],
-                firstDataSet: nextProps.reportData.data.records ? nextProps.reportData.data.records.slice(0, resultsPerPage) : []
+                firstDataSet: nextProps.reportData.data.records ? nextProps.reportData.data.records.slice(0, resultsPerPage+1) : []
             });
         }
     },
@@ -52,8 +53,14 @@ var Content = React.createClass({
                     for (var attr in datatypeAttributes) {
                         switch (attr) {
                             case 'type':
-                                datatypeAttributes[attr] == "NUMERIC" ? that.setCSSClass_helper(obj, "AlignRight") : null;
-                                break;
+                            {
+                                switch(datatypeAttributes[attr]){
+                                    case "NUMERIC" : that.setCSSClass_helper(obj, "AlignRight"); obj["customComponent"] = NumericFormatter;
+                                        break;
+                                    case "DATE" : obj["customComponent"] = DateFormatter;
+                                        break;
+                                }
+                            }
                         }
                     }
 
@@ -92,10 +99,10 @@ var Content = React.createClass({
 
     render: function() {
         return (
-            <Loader loaded={!this.props.reportData.loading}>
+            <Loader  loaded={!this.props.reportData.loading}>
                 {this.props.reportData.error ?
                     <div>Error loading report!</div> :
-                    <GriddleTable {...i18n} getResultsCallback={this.getNextDataSet} results={this.state.firstDataSet} columnMetadata={this.state.reportColumns} useExternal={true} externalResultsPerPage={resultsPerPage}/>}
+                    <GriddleTable {...i18n} mobile={this.props.mobile} getResultsCallback={this.getNextDataSet} results={this.state.firstDataSet} columnMetadata={this.state.reportColumns} useExternal={true} externalResultsPerPage={resultsPerPage}/>}
             </Loader>
         )
     }

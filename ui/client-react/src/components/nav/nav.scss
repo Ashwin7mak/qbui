@@ -7,6 +7,15 @@ html, body {
 #content {
     height:100%;
 }
+
+/* yuck */
+.navShell .topNav  .open > .dropdown-menu {
+    left: -33px;
+}
+.navShell .topNav.mobile  .open > .dropdown-menu {
+    left: -128px;
+}
+
 .navShell {
     height:100%;
     display:flex;
@@ -15,7 +24,7 @@ html, body {
     .main {
         display:flex;
         flex-direction: column;
-        width:100%;
+        flex:1;
 
         .topNav {
             display:flex;
@@ -70,14 +79,19 @@ html, body {
             .iconLink:hover {
                 color:#000;
             }
+
+            a {
+                text-decoration: none;
+            }
+
         }
 
         .mainContent {
+            display:flex;
             order: 2;
-            overflow-y:scroll;
+            overflow-y:auto;
             flex:1;
-            margin-left:10px;
-            margin-right:10px;
+
         }
 
         .footer {
@@ -89,6 +103,45 @@ html, body {
             border-top: 1px;
         }
     }
+}
+.swap-enter {
+    opacity: 0.01;
+    transform: translateX(5em);
+    transition: all .5s ease-in;
+}
+
+.swap-enter.swap-enter-active {
+    opacity: 1;
+    transform: translateX(0);
+}
+
+.swap-leave {
+    opacity: 1;
+    transform: translateX(0);
+    transition: all .5s ease-in;
+}
+
+.swap-leave.swap-leave-active {
+    opacity: 0;
+    transform: translateX(-5em);
+}
+
+.example-enter {
+    opacity: 0.01;
+    transition: opacity .5s ease-in;
+}
+
+.example-enter.example-enter-active {
+    opacity: 1;
+}
+
+.example-leave {
+    opacity: 1;
+    transition: opacity .5s ease-in;
+}
+
+.example-leave.example-leave-active {
+    opacity: 0;
 }
 
 

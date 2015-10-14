@@ -12,8 +12,7 @@ var Index = React.createClass({
             <Html {...this.props}>
                 <div id="content">
                 </div>
-
-                <script src={this.props.hostBase + this.props.jsPath + 'bundle.js'}></script>
+                <script src={this.props.hostBase + this.props.jsPath + this.props.bundleFileName}></script>
             </Html>
         );
     }

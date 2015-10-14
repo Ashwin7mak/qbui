@@ -18,13 +18,13 @@
             webpackConfig.plugins.push(new webpack.HotModuleReplacementPlugin());
             webpackConfig.entry = [
                     // WebpackDevServer host and port
-                    //'webpack-dev-server/client?http://0.0.0.0:' + hotPort,
-                    'webpack-dev-server/client?http://localhost:' + hotPort,
+                    'webpack-dev-server/client?http://0.0.0.0:' + hotPort,
+                    //'webpack-dev-server/client?http://localhost:' + hotPort,
                     // "only-dev-server" prevents reload on syntax errors
                     'webpack/hot/only-dev-server'
             ].concat(webpackConfig.entry);
 
-            //webpackConfig.output.publicPath = "http://localhost:" + hotPort + webpackConfig.output.publicPath;
+            webpackConfig.output.publicPath = "http://localhost:" + hotPort + webpackConfig.output.publicPath;
 
             var compiler = webpack(webpackConfig);
             // we start a webpack-dev-server with our config
@@ -38,6 +38,7 @@
                // publicPath : '/dist/',
                 publicPath        : "http://localhost:" + hotPort + webpackConfig.output.publicPath,
 
+                contentBase        : webpackConfig.contentBase,
                 // hot -  Enable special support for Hot Module Replacement (HMR)
                 // Page is not updated, but a "webpackHotUpdate" message is send to the content
                 // Use "webpack/hot/dev-server" as additional module in your entry point
@@ -46,12 +47,15 @@
                 hot: true,
 
                 // inline - doesn't use iframe for HMR
-                //inline             : true,
+                inline             : true,
 
                 progress: true,
 
                 // historyApiFallback -  to access dev server from arbitrary url.
                 historyApiFallback: true,
+
+                //webpack-dev-server will serve the files in the current directory, unless you configure a specific content base.
+                //contentBase: "./client-react",
 
                 // Config for minimal console.log mess.
                 stats: {

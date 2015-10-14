@@ -7,7 +7,7 @@
 .report-stage .report-content .left {
     float: left;
     width: 68%;
-    border-right: 1px solid #dcdcdc;
+
 }
 /* line 12, ../_report.scss */
 .report-stage .report-content .left.stage-closed {
@@ -44,6 +44,7 @@
 }
 /* line 42, ../_report.scss */
 .report-stage .report-content .right {
+    border-left: 1px solid #dcdcdc;
     float: left;
     width: 30%;
 }

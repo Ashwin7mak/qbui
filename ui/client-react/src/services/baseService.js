@@ -4,6 +4,7 @@ import uuid from 'uuid';
 import constants from './constants';
 import axios from 'axios';
 import Configuration from '../config/app.config';
+import Promise from 'bluebird';
 
 class BaseService {
 
@@ -33,7 +34,7 @@ class BaseService {
      * Axiom interceptor for all http requests -- add a session tracking id and session ticket
      */
     setRequestInterceptor() {
-        axios.interceptors.request.use(function (config) {
+        axios.interceptors.request.use(function(config) {
             config.headers[constants.HEADER.SESSION] = uuid.v1();
             let ticket = this.getCookie(constants.COOKIE.TICKET);
             if (ticket) {
@@ -48,27 +49,27 @@ class BaseService {
      */
     setResponseInterceptor() {
         axios.interceptors.response.use(
-            function (response) {
+            function(response) {
                 //  success
                 return response;
             },
-            function (error) {
+            function(error) {
                 switch (error.status) {
                     //TODO: not sure if this is okay to do or not...
                     case 400:
-                        window.location.href = "/pageNotFound";
+                        window.location.href = '/pageNotFound';
                         break;
                     case 401:
-                        window.location.href = "/unauthorized";
+                        window.location.href = '/unauthorized';
                         break;
                     case 403:
-                        window.location.href = "/unauthorized";
+                        window.location.href = '/unauthorized';
                         break;
                     case 404:
-                        window.location.href = "/pageNotFound";
+                        window.location.href = '/pageNotFound';
                         break;
                     case 500:
-                        window.location.href = "/internalServerError";
+                        window.location.href = '/internalServerError';
                         break;
                 }
                 return Promise.reject(error);

@@ -48,7 +48,7 @@ class ReportService extends BaseService {
         }
         if (NumberUtils.isInt(offset) && NumberUtils.isInt(rows)) {
             params.offset = offset;
-            params.numRows =rows;
+            params.numRows = rows;
         }
         return super.get(constants.APPS + '/' + appId + '/' + constants.TABLES + '/' + tableId + '/' + constants.REPORTS + '/' + reportId + '/' + constants.RESULTS, {params:params});
     }

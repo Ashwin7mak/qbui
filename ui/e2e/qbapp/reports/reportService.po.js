@@ -10,18 +10,26 @@
     var promise = require('bluebird');
     var ReportServicePage = function() {
         // Page Elements using Locators
-        this.reportTitleEl = element.all(by.className('header')).first();
-        this.columnHeaderElList = element.all(by.repeater('col in colContainer.renderedColumns track by col.colDef.name'));
-        this.recordElList = element.all(by.repeater('(rowRenderIndex, row) in rowContainer.renderedRows track by $index'));
+        // Left Nav
+        this.navMenuEl = element(by.className('leftMenu'));
+        this.navStackedEl = element(by.className('nav-stacked'));
+        this.navLinksElList = element.all(by.className('leftNavLink'));
+        // Griddle table
+        this.griddleContainerEl = element(by.className('griddle-container'));
+        this.griddleBodyEl = element(by.className('griddle-body'));
+        this.griddleColHeaderElList = this.griddleBodyEl.all(by.tagName('span'));
+        this.griddleDataBodyDivEl = this.griddleBodyEl.all(by.tagName('tbody')).first();
+        this.griddleRecordElList = this.griddleDataBodyDivEl.all(by.tagName('tr'));
+        // The old ui-grid locators
         this.mainContent = element.all(by.className('nav-target')).first();
         this.tableContainer = element.all(by.className('ui-grid')).first();
         this.lastColumn = element.all(by.className('ui-grid-header-cell')).last();
         /**
-         * Helper function that will get all of the field column headers from the report. Returns an array of strings.
-         */
+        * Helper function that will get all of the field column headers from the report. Returns an array of strings.
+        */
         this.getReportColumnHeaders = function() {
             var deferred = promise.pending();
-            this.columnHeaderElList.then(function(elements) {
+            this.griddleColHeaderElList.then(function(elements) {
                 var fetchTextPromises = [];
                 for (var i = 0; i < elements.length; i++) {
                     fetchTextPromises.push(elements[i].getAttribute('innerText'));
@@ -39,8 +47,8 @@
             return deferred.promise;
         };
         /**
-         * Function that will return the dimensions of the browser window and report grid
-         */
+        * Function that will return the dimensions of the browser window and report grid
+        */
         this.getDimensions = function() {
             return {
                 windowSize        : browser.manage().window().getSize(),
@@ -53,8 +61,8 @@
             };
         };
         /**
-         * Validates that the grid dimensions are within proper proportions after resizing the browser window
-         */
+        * Validates that the grid dimensions are within proper proportions after resizing the browser window
+        */
         this.validateGridDimensions = function(result) {
             var leftPadding = 10;
             var allowedVariance = 25;

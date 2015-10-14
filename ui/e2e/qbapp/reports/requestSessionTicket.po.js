@@ -7,15 +7,14 @@
 (function() {
     'use strict';
     var RequestSessionTicketPage = function() {
+        // Element locators
+        this.ticketResponseBodyEl = element(by.tagName('body'));
         /*
          * Loads the page in the browser to generate a session ticket
          * Use the service method in e2eBase to get the proper endpoint
          */
         this.get = function(sessionTicketRequest) {
-            //This is a Non-Angular page, need to set this otherwise Protractor will wait forever for Angular to load
-            browser.ignoreSynchronization = true;
             browser.get(sessionTicketRequest);
-            browser.ignoreSynchronization = false;
         };
     };
     module.exports = new RequestSessionTicketPage();

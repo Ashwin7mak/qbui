@@ -38,7 +38,7 @@ var App = React.createClass({
     render: function() {
         return (
             <div className='apps-container'>
-                <p><h4><AppsHeader {...i18n}/></h4></p>
+                <h4><AppsHeader {...i18n}/></h4>
                 <AppsList {...i18n} data={this.state.apps}/>
             </div>
         );

@@ -14,7 +14,8 @@ var clientPath = path.join(__dirname, 'client-react');
 // main entry point to the app
 // TODO:entry point...when more pages are flushed out
 // we probably should rename to something like quickbase.js and add a builder entry
-var mainPath =  path.resolve(__dirname, 'client-react/src/scripts/router.js');
+//var mainPath =  path.resolve(__dirname, 'client-react/src/scripts/router.js');
+var mainPath =  path.resolve(clientPath, 'src/scripts/router.js');
 
 var envConfig = require('./server/config/environment');
 
@@ -22,11 +23,12 @@ var envConfig = require('./server/config/environment');
 var PROD = (envConfig.env === 'PRODUCTION' || false);
 
 var config = {
-    //contentBase : './client-react/',
     // devtool Makes sure errors in console map to the correct file
     // and line number
     // eval is faster than 'source-map' for dev but eval is not supported for prod
     devtool: PROD ? 'source-map' : 'eval',
+
+    contentBase: clientPath,
 
     entry: [
         mainPath,
@@ -35,10 +37,10 @@ var config = {
     output: {
         // pathinfo - false disable outputting file info comments in prod bundle
         pathinfo: !PROD,
-        // generated files directory
+        // generated files directory for output
         path: buildPath,
         // generated js file
-        filename: 'bundle.js',
+        filename: PROD ? 'bundle.min.js' : 'bundle.js',
         //publicPath is path from the view of the Javascript / HTML page.
         // where all js/css http://.. references will use for relative base
         publicPath: '/dist/' // Required for webpack-dev-server

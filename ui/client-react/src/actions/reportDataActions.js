@@ -10,14 +10,14 @@ let reportService = new ReportService();
 
 let reportDataActions = {
 
-    loadReport: function(report) {
+    loadReport: function(appId,tblId,rptId) {
 
-        if (report.appId && report.tblId && report.rptId) {
-            this.dispatch(actions.LOAD_REPORT, report.rptId);
+        if (appId && tblId && rptId) {
+            this.dispatch(actions.LOAD_REPORT, {appId, tblId, rptId});
 
             var promises = [];
-            promises.push(reportService.getReport(report.appId, report.tblId, report.rptId));
-            promises.push(reportService.getReportResults(report.appId, report.tblId, report.rptId, true));
+            promises.push(reportService.getReport(appId, tblId, rptId));
+            promises.push(reportService.getReportResults(appId, tblId, rptId, true));
 
             Promise.all(promises).then(
                 function(response) {

@@ -1,8 +1,12 @@
 import React from 'react';
-import { Router, Route } from 'react-router';
+import { render } from 'react-dom'
+import { Router, Route, IndexRoute } from 'react-router';
 import createBrowserHistory from 'history/lib/createBrowserHistory';
 
-import NavComponent from '../components/nav/nav';
+import Nav from '../components/nav/nav';
+import LeftNav from '../components/nav/leftNav';
+import MobileLeftNav from '../components/nav/mobileLeftNav';
+
 import Fluxxor from 'fluxxor';
 
 import ReportsStore from '../stores/reportsStore';
@@ -19,6 +23,10 @@ import navActions from '../actions/navActions';
 
 import AppsHome from '../components/apps/home';
 
+import ReportRoute from '../components/report/reportRoute';
+import TableHomePageRoute from '../components/table/tableHomePageRoute';
+import DashboardRoute from '../components/dashboard/dashboardRoute';
+
 let stores = {
     ReportsStore: new ReportsStore(),
     ReportDataStore: new ReportDataStore(),
@@ -31,9 +39,13 @@ flux.addActions(reportDataActions);
 flux.addActions(appsActions);
 flux.addActions(navActions);
 
-let Nav = React.createClass({
+function isMobileRoute(route) {
+    return route.path.indexOf('m/')==0;
+}
+
+let NavWrapper = React.createClass({
     render: function() {
-        return <NavComponent flux={flux} {...this.props}/>
+        return <Nav flux={flux} {...this.props} mobile={isMobileRoute(this.props.route)} />
     },
     componentDidMount: function () {
         flux.actions.loadReports({appId: this.props.params.appId, tblId: this.props.params.tblId});
@@ -42,19 +54,29 @@ let Nav = React.createClass({
 
 let Apps = React.createClass({
     render: function() {
-        return <AppsHome flux={flux}/>
+        return <AppsHome flux={flux} mobile={isMobileRoute(this.props.route)}/>
     },
     componentDidMount: function() {
         flux.actions.loadAppsWithTables();
     }
 });
 
-React.render((
+render((
     <Router history={createBrowserHistory()}>
-        <Route path='/' name='default' component={Apps} />
-        <Route path='apps' name='apps' component={Apps} />
-        <Route path='app/:appId/table/:tblId/reports' name='reports' component={Nav} />
-        <Route path='app/:appId/table/:tblId/report/:rptId' name='report' component={Nav} />
+        <Route path='/' component={Apps} />
+        <Route path='apps' component={Apps} />
+
+        <Route path='app/:appId/table/:tblId' component={NavWrapper} >
+            <IndexRoute components={{main: TableHomePageRoute, leftNav: LeftNav}} />
+            <Route path='report/:rptId' components={{main: ReportRoute, leftNav: LeftNav}} />
+            <Route path='dashboardDemo/:rptId' components={{main: DashboardRoute, leftNav: LeftNav}} />
+        </Route>
+
+        <Route path='m/app/:appId/table/:tblId' component={NavWrapper} >
+            <IndexRoute components={{main: TableHomePageRoute, leftNav: MobileLeftNav}} />
+            <Route path='report/:rptId' components={{main: ReportRoute, leftNav: MobileLeftNav}} />
+        </Route>
+
     </Router>
 ), document.getElementById('content') );
 
