@@ -46,7 +46,7 @@ var Nav = React.createClass({
         let mobileNavOpen = this.props.mobile && this.state.nav.mobileLeftNavOpen;
         let navOpen = mobileNavOpen || this.state.nav.leftNavOpen;
 
-        return (<div className={mobileNavOpen ? 'navShell mobileNavOpen' : 'navShell '}>
+        return (<div className={mobileNavOpen ? 'navShell mobileNavOpen' : 'navShell'}>
             <Trouser visible={this.state.nav.trouserOpen} onHide={this.hideTrouserExample}>
                 <Button bsStyle='success' onClick={this.hideTrouserExample} style={{position:'absolute',bottom:'10px',right:'10px'}}>Done</Button>
             </Trouser>
