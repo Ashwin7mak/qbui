@@ -30,7 +30,6 @@ var Nav = React.createClass({
     },
 
     hideTrouserExample: function() {
-        logger.debug('hiding trouser from Nav shell');
         let flux = this.getFlux();
         flux.actions.hideTrouser();
     },

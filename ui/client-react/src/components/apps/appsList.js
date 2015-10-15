@@ -9,7 +9,6 @@ var Content = React.createClass({
     mixins: [IntlMixin],
 
     render: function() {
-        console.log('getting apps');
         return ( this.props.data.apps.length ?
                 <div className="apps">
                     {this.props.data.apps.map((app) => {
