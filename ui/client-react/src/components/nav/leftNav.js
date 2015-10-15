@@ -22,9 +22,7 @@ let LeftNav = React.createClass( {
     navItemMounted: function (id, element) {
 
         if (element && id && id == this.props.reportID)
-
             element.firstChild.focus();
-
     },
 
     buildHeadingItem: function (item, loadingCheck) {
@@ -38,8 +36,8 @@ let LeftNav = React.createClass( {
 
         else
             return (<li key={item.key}><a className='heading'></a></li>);
-
     },
+
     buildNavItem: function(item) {
 
         let label = item.key ? this.getIntlMessage(item.key) : item.name;
