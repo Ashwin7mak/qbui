@@ -23,17 +23,5 @@ var Footer = React.createClass({
     }
 });
 
-/*
-class Footer extends React.Component {
 
-    render() {
-
-        var currentYear = new Date().getFullYear();
-
-        return <footer className="layout-footer">
-                 <span className="layout-footer-content">&#169;{currentYear} Intuit Inc. All rights reserved.</span>
-               </footer>
-    }
-}
-*/
 export default Footer;

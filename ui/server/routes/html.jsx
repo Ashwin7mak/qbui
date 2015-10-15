@@ -1,16 +1,14 @@
-var React = require('react');
+import React, { PropTypes } from 'react';
 
 var Html = React.createClass({
     propTypes: {
-        title: React.PropTypes.string,
-        lang: React.PropTypes.string,
-        favicon: React.PropTypes.string,
-        jsPath: React.PropTypes.string,
-        hostBase: React.PropTypes.string
+        title   : PropTypes.string,
+        lang    : PropTypes.string,
+        favicon : PropTypes.string,
+        jsPath  : PropTypes.string,
+        hostBase: PropTypes.string
       },
-    render: function() {
-        console.log(" HTML props = "+ JSON.stringify(this.props));
-
+    render() {
         return (
             <html lang={this.props.lang}>
                 <head>

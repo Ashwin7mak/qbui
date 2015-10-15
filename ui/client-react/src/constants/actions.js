@@ -2,6 +2,7 @@
 export const TOGGLE_LEFT_NAV = 'TOGGLE_LEFT_NAV';
 export const SHOW_TROUSER = 'SHOW_TROUSER';
 export const HIDE_TROUSER = 'HIDE_TROUSER';
+export const CHANGE_LOCALE = 'CHANGE_LOCALE'
 
 export const LOAD_APPS = 'LOAD_APPS';
 export const LOAD_APPS_WITH_TABLES = 'LOAD_APPS_WITH_TABLES';

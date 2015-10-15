@@ -11,12 +11,6 @@ var buildPath = path.join(__dirname, 'client-react/dist');
 
 var clientPath = path.join(__dirname, 'client-react');
 
-// main entry point to the app
-// TODO:entry point...when more pages are flushed out
-// we probably should rename to something like quickbase.js and add a builder entry
-//var mainPath =  path.resolve(__dirname, 'client-react/src/scripts/router.js');
-var mainPath =  path.resolve(clientPath, 'src/scripts/router.js');
-
 var envConfig = require('./server/config/environment');
 
 // Environment setting for prod enabled?
@@ -28,10 +22,11 @@ var config = {
     // eval is faster than 'source-map' for dev but eval is not supported for prod
     devtool: PROD ? 'source-map' : 'eval',
 
-    contentBase: clientPath,
-
     entry: [
-        mainPath,
+        // main entry point to the app
+        // TODO:entry point...when more pages are flushed out
+        // we probably should rename to something like quickbase.js and add a builder entry
+        path.resolve(clientPath, 'src/scripts/router.js'),
         'bootstrap-sass!./client-react/bootstrap-sass.config.js'
     ],
     output: {
@@ -66,6 +61,7 @@ var config = {
                 include: [
                     path.resolve(__dirname, 'client-react/src')
                 ],
+                exclude: [nodeModulesPath],
                 loader: 'style!css'
             },
             {

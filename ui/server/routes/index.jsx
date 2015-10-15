@@ -1,18 +1,20 @@
-var React = require('react');
-var Html = require('./html');
+import React, { PropTypes } from 'react';
+import Html from './html'
 
 var Index = React.createClass({
     propTypes: {
-        title: React.PropTypes.string,
-        jsPath: React.PropTypes.string
+        title         : PropTypes.string,
+        hostBase      : PropTypes.string,
+        bundleFileName: PropTypes.string,
+        jsPath        : PropTypes.string
     },
-    render: function() {
-        console.log(" Index props = "+ JSON.stringify(this.props));
+    render() {
         return (
             <Html {...this.props}>
                 <div id="content">
                 </div>
-                <script src={this.props.hostBase + this.props.jsPath + this.props.bundleFileName}></script>
+                <script src={this.props.hostBase +
+                             this.props.jsPath + this.props.bundleFileName}></script>
             </Html>
         );
     }

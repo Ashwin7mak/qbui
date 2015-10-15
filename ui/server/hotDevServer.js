@@ -25,6 +25,7 @@
             ].concat(webpackConfig.entry);
 
             webpackConfig.output.publicPath = "http://localhost:" + hotPort + webpackConfig.output.publicPath;
+           // webpackConfig.output.publicPath = "/dist/";
 
             var compiler = webpack(webpackConfig);
             // we start a webpack-dev-server with our config
@@ -35,10 +36,10 @@
                 // Note that we are not actually outputting any files when running the
                 // webpack-dev workflow, but we want the 'in-memory' files to be fetched from
                 // this path  e.g http://localhost:3000/dist/
-               // publicPath : '/dist/',
-                publicPath        : "http://localhost:" + hotPort + webpackConfig.output.publicPath,
+                publicPath : '/dist/',
+                //publicPath        : "http://localhost:" + hotPort + webpackConfig.output.publicPath,
 
-                contentBase        : webpackConfig.contentBase,
+                //contentBase        : webpackConfig.contentBase,
                 // hot -  Enable special support for Hot Module Replacement (HMR)
                 // Page is not updated, but a "webpackHotUpdate" message is send to the content
                 // Use "webpack/hot/dev-server" as additional module in your entry point
@@ -51,14 +52,13 @@
 
                 progress: true,
 
+                //debug: true,
+
                 // historyApiFallback -  to access dev server from arbitrary url.
                 historyApiFallback: true,
 
-                //webpack-dev-server will serve the files in the current directory, unless you configure a specific content base.
-                //contentBase: "./client-react",
-
-                // Config for minimal console.log mess.
-                stats: {
+                // Config for minimal console.log output.
+                no_stats: {
                     assets      : true,
                     cached      : true,
                     chunkModules: false,
@@ -68,36 +68,12 @@
                     hash        : false,
                     modules     : false,
                     reasons     : true,
-                    timings     : false,
+                    timings     : true, //false
                     version     : true
                 }
-                //,
-                //proxy: [
-                //    {
-                //        // proxy all requests not containing "dist/*"
-                //        path : /favico.ico/,
-                //        target:  'http:' + config.ip +':' + config.port
-                //    },
-                //    {
-                //        // proxy all requests not containing "dist/*"
-                //        path : /^((?!(dist\/)).)*$/,
-                //        target:  'http:' + config.ip +':' + config.port
-                //    },
-                //    {
-                //        path:   /\/api(.*)/,
-                //        target:  'http://' + config.ip +':' + config.port
-                //    },
-                //    {
-                //        path:   /\/app*(.*)/,
-                //        target:  'http://' + config.ip +':' + config.port
-                //    }]
-                //proxy: for webpack-dev-server to delegate a path to node server.
-                //proxy: {
-                //    '*':  'http://' + config.ip +':' + config.port
-                //}
             };
-            console.log('webpackConfig Settings :' + JSON.stringify(webpackConfig, null, 2));
-            console.log('devServerConfig Settings :' + JSON.stringify(devServerConfig, null, 2));
+            log.info('webpackConfig Settings :' + JSON.stringify(webpackConfig));
+            log.info('devServerConfig Settings :' + JSON.stringify(devServerConfig));
 
             var hotServer = new WebpackDevServer(compiler, devServerConfig);
             log.info('Hot webpack-dev-server Settings :' + JSON.stringify(hotServer));

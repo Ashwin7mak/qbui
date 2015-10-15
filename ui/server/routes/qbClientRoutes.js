@@ -4,7 +4,6 @@
 
     var reactViews = require('express-react-views');
     var lodash = require('lodash');
-    console.log("clientRoutes-dir=" + __dirname);
     var viewPath = __dirname;
     var engineOptions = {
         beautify: true,
@@ -29,16 +28,15 @@
 
 
     function renderJsx(res, filename, opts) {
-        log.info('renderJSX entry file:' + filename + ' opts:' + JSON.stringify(opts))
         var templatePath = require.resolve(filename);
         jsxEngine(templatePath, opts, function transformedJsxCallback(err, str) {
             if (!err) {
-                console.log("results html for:" + filename + " opts: " + JSON.stringify(opts) + " html:" + str);
+                log.debug("results html for jsx:" + filename + " opts: " + JSON.stringify(opts) + " html:" + str);
                 res.write(str);
                 res.end();
             } else {
-                log.error("got error in jsx file:" + filename + e.message);
-                res.write("error:" + error.message);
+                log.error("got error server rendering jsx file:" + filename + err.message);
+                res.write("error:" + err.message);
                 res.end();
             }
         });

@@ -15,7 +15,7 @@
     //Load the page objects
     var requestSessionTicketPage = require('./requestSessionTicket.po.js');
     var requestAppsPage = require('./requestApps.po.js');
-    var reportServicePage = require('./reportService.po.js');
+    var ReportServicePage = require('./reportService.po.js');
     describe('Report Service E2E Tests', function() {
         var app;
         var recordList;
@@ -63,13 +63,14 @@
             // Load the requestAppsPage (shows a list of all apps and tables in a realm)
             requestAppsPage.get(e2eBase.getRequestAppsPageEndpoint(realmName));
             // Wait until the page has loaded (blocking wait)
-            browser.wait(EC.visibilityOf(requestAppsPage.tableElList), 5000);
+            browser.wait(EC.visibilityOf(requestAppsPage.tablesDivEl), 5000);
             // Check that we have a report for our created table
-            expect(requestAppsPage.firstTableLinkEl.getText()).toContain(tableId);
+            expect(requestAppsPage.tableLinksElList.get(0).getText()).toContain(tableId);
             //e2eBase.sleep(browser.params.mediumSleep);
-            requestAppsPage.firstTableLinkEl.click();
+            requestAppsPage.tableLinksElList.get(0).click();
             // Now on the reportServicePage (shows the nav with a list of reports you can load)
             // Wait until the nav has loaded
+            var reportServicePage = new ReportServicePage();
             browser.wait(EC.visibilityOf(reportServicePage.navStackedEl), 5000);
             // Assert report name
             var reportName = 'Test Report';
@@ -81,12 +82,9 @@
             // Select the report
             reportServicePage.navLinksElList.then(function(links) {
                 links[1].click();
-                // Bug need to fix
-                links[1].click();
             });
             // Wait until the table has loaded
             browser.wait(EC.visibilityOf(reportServicePage.griddleContainerEl), 5000);
-            //e2eBase.sleep(browser.params.mediumSleep);
             // Assert column headers
             var fieldNames = ['Record ID#', 'Text Field', 'Numeric Field', 'Phone Number Field'];
             reportServicePage.getReportColumnHeaders(reportServicePage).then(function(resultArray) {

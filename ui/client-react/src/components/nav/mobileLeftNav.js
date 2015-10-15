@@ -67,7 +67,7 @@ let MobileLeftNav = React.createClass( {
                     }) : ''}
 
                 </Nav>
-                <a href="#" onClick={this.toggleNav} className={'close'}><Glyphicon  glyph={'chevron-left'}/></a>
+
             </div>
         );
     }

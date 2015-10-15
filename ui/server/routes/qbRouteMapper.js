@@ -11,6 +11,7 @@
     var recordsApi;
     var routeGroupMapper = require('./qbRouteGroupMapper');
     var routeGroup;
+    var simpleStringify = require('./../components/utility/simpleStringify.js');
 
     module.exports = function(config) {
         requestHelper = require('../api/quickbase/requestHelper')(config);
@@ -236,7 +237,7 @@
     function forwardAllApiRequests(req, res) {
         processRequest(req, res, function(req, res) {
             var opts = requestHelper.setOptions(req);
-
+            log.debug('Java api request:' +  simpleStringify(req) + ' opts:' + simpleStringify(opts));
             request(opts)
                     .on('response', function(response) {
                             log.debug('API response: ' + response.statusCode + ' - ' + req.method + ' ' + req.path);
