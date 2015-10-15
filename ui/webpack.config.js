@@ -9,35 +9,35 @@ var nodeModulesPath = path.resolve(__dirname, 'node_modules');
 // where generated files go
 var buildPath = path.join(__dirname, 'client-react/dist');
 
-// main entry point to the app
-// TODO:entry point...when more pages are flushed out
-// we probably should rename to something like quickbase.js and add a builder entry
-var mainPath =  path.resolve(__dirname, 'client-react/src/scripts/router.js');
+var clientPath = path.join(__dirname, 'client-react');
+
+var envConfig = require('./server/config/environment');
 
 // Environment setting for prod enabled?
-var PROD = JSON.parse(process.env.NODE_ENV === 'PRODUCTION' || '0');
+var PROD = (envConfig.env === 'PRODUCTION' || false);
 
 var config = {
-
     // devtool Makes sure errors in console map to the correct file
     // and line number
     // eval is faster than 'source-map' for dev but eval is not supported for prod
     devtool: PROD ? 'source-map' : 'eval',
+
     entry: [
-        mainPath,
+        // main entry point to the app
+        // TODO:entry point...when more pages are flushed out
+        // we probably should rename to something like quickbase.js and add a builder entry
+        path.resolve(clientPath, 'src/scripts/router.js'),
         'bootstrap-sass!./client-react/bootstrap-sass.config.js'
     ],
     output: {
-        // generated files
+        // pathinfo - false disable outputting file info comments in prod bundle
+        pathinfo: !PROD,
+        // generated files directory for output
         path: buildPath,
+        // generated js file
         filename: PROD ? 'bundle.min.js' : 'bundle.js',
         //publicPath is path from the view of the Javascript / HTML page.
         // where all js/css http://.. references will use for relative base
-        // webpack-dev-server will capture http refs to this and turn into it's in mem bundle's location
-        // Note that we are not actually outputting any files when running the
-        // webpack-dev workflow, but we want the 'in-memory' files to be fetched from the
-        // same path as in production,e.g localhost:3000/dist/bundle.js.
-        // That way we only need one index.html file.
         publicPath: '/dist/' // Required for webpack-dev-server
     },
     module: {
@@ -45,13 +45,15 @@ var config = {
             {
                 // all js src and test files get treated by babel
                 // we get ES6/7 syntax and JSX transpiling out of the box with babel
+                // the react-hot-loader loader when processing the .js
+                // (it will add some js to magically do the hot reloading)
                 test: /\.js?$/,
                 include: [
                     path.resolve(__dirname, 'client-react/src'),
                     path.resolve(__dirname, 'client-react/test')
                 ],
                 exclude: [nodeModulesPath],
-                loader: 'babel'
+                loaders: [ 'react-hot-loader', 'babel-loader' ]
             },
             {
                 // all css files can be required into js files with this
@@ -59,6 +61,7 @@ var config = {
                 include: [
                     path.resolve(__dirname, 'client-react/src')
                 ],
+                exclude: [nodeModulesPath],
                 loader: 'style!css'
             },
             {
@@ -91,12 +94,15 @@ var config = {
         extensions: ['', '.js', '.json', '.scss']
     },
     plugins: PROD ? [
-        // for prod we obfuscate and minimize
+        // This has beneficial effect on the react lib size for deploy
+        new webpack.DefinePlugin({'process.env': { NODE_ENV: JSON.stringify('production')}}),
+        // for prod we also dedupe, obfuscate and minimize
+        new webpack.optimize.DedupePlugin(),
         new webpack.optimize.UglifyJsPlugin({minimize: true})
-    ] : [
-        // We will have to manually add the Hot Replacement plugin when running
-        // from Node
-       //new webpack.HotModuleReplacementPlugin()
+    ] :  [
+        //When there are errors while compiling this plugin skips the emitting phase
+        // (and recording phase), so there are no assets emitted that include errors.
+        new webpack.NoErrorsPlugin()
     ]
 };
 

@@ -47,7 +47,7 @@ module.exports = function(grunt) {
                 gallery   : clientRoot + '/gallery',
                 assets    : clientRoot + '/quickbase/assets',
                 src    : clientRoot + '/quickbase',
-                gen    : clientRoot + '/quickbase'
+                gen    : clientRoot + '/dist'
             };
         }
         var msg = 'clientRoot' + JSON.stringify(answer);
@@ -178,11 +178,15 @@ module.exports = function(grunt) {
                 },
                 options: {
                     config      : './.jscsrc',
-                    excludeFiles: ['<%= quickbase.client.root %>/bower_components/**/*.js',
-                                   '<%= quickbase.client.root %>/**/*.spec.js',
-                                   (client === 'REACT' && ('<%= quickbase.client.gen %>/**/*.js')),
-                                   (client === 'REACT' && ('<%= quickbase.client.root %>/bootstrap-sass.config.js'))
-                    ]
+                    excludeFiles: (client === 'REACT') ?
+                                ['<%= quickbase.client.root %>/bower_components/**/*.js',
+                                 '<%= quickbase.client.root %>/**/*.spec.js',
+                                 '<%= quickbase.client.gen %>/**/*.js',
+                                 '<%= quickbase.client.root %>/**/*.js', //TODO replace with eslint
+                                 '<%= quickbase.client.root %>/bootstrap-sass.config.js'
+                                ] : ['<%= quickbase.client.root %>/bower_components/**/*.js',
+                                   '<%= quickbase.client.root %>/**/*.spec.js'
+                                ]
                 }
             },
             server : {
@@ -232,14 +236,21 @@ module.exports = function(grunt) {
                 options: {
                     jshintrc: '<%= quickbase.client.root %>/.jshintrc'
                 },
-                src    : [
+                src    : (client === 'ANGULAR') ? [
                         // only use jshint on angular code
                         // React will use ESLint for lint checking which supports JSX/ES6
                         // So when running jshint with REACT as client we will not include the react client code
-                        (client === 'ANGULAR' && ('<%= quickbase.client.components %>/**/*.js')),
-                        (client === 'ANGULAR' && ('<%= quickbase.client.gallery %>/**/*.js')),
-                        '!<%= quickbase.client.components %>/**/*.spec.js',
-                        '!<%= quickbase.client.components %>/**/*.mock.js'
+                        '<%= quickbase.client.components %>/**/*.js',
+                        '<%= quickbase.client.gallery %>/**/*.js',
+                       '!<%= quickbase.client.root %>/dist/**/*.js',
+                       '!<%= quickbase.client.components %>/**/*.spec.js',
+                       '!<%= quickbase.client.components %>/**/*.mock.js',
+                       '!<%= quickbase.e2e %>/**/*.js'
+
+                ]  : [
+                    '!<%= quickbase.client.root %>/**/*.js',
+                    '!<%= quickbase.e2e %>/**/*.js',
+                    '!<%= express.root %>/**/*.js'
                 ]
             },
             clientTest: {
@@ -270,6 +281,7 @@ module.exports = function(grunt) {
                     dot: true,
                     src: [
                         '.tmp',
+                        '<%= quickbase.client.gen %>/*',
                         '<%= quickbase.distDir %>/*',
                         '!<%= quickbase.distDir %>/.git*',
                         '!<%= quickbase.distDir %>/.openshift',
@@ -800,14 +812,8 @@ module.exports = function(grunt) {
                                 // This has beneficial effect on the react lib size for deploy
                                 NODE_ENV: JSON.stringify('production')
                             }
-                        }),
-                        new webpack.optimize.DedupePlugin(),
-                        new webpack.optimize.UglifyJsPlugin()
+                        })
                 )
-            },
-            'build-dev': {
-                devtool: 'sourcemap',
-                debug  : true
             }
         },
         'webpack-dev-server': {
@@ -835,13 +841,6 @@ module.exports = function(grunt) {
 
     // Production build
     grunt.registerTask('webpackbuild', ['webpack:build']);
-
-    // Build and watch cycle (option for development)
-    // Advantage: No server required, can run app from filesystem
-    // Disadvantage: Requests are not blocked until bundle is available,
-    //               can serve an old app on too fast refresh
-    grunt.registerTask('webpackdev', ['webpack:build-dev', 'watch:reactapp']);
-
 
 
     grunt.registerTask('fixCoveragePaths', function() {

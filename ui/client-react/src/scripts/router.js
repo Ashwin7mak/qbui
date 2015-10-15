@@ -10,13 +10,13 @@ import Footer from '../components/footer/footer';
 import MobileAddFooter from '../components/footer/mobileAddFooter';
 import Fluxxor from 'fluxxor';
 
-import ReportsStore from '../stores/ReportsStore';
+import ReportsStore from '../stores/reportsStore';
 import reportActions from'../actions/reportActions';
 
-import ReportDataStore from '../stores/ReportDataStore';
+import ReportDataStore from '../stores/reportDataStore';
 import reportDataActions from'../actions/reportDataActions';
 
-import AppsStore from '../stores/AppsStore';
+import AppsStore from '../stores/appsStore';
 import appsActions from '../actions/appsActions';
 
 import NavStore from '../stores/navStore';

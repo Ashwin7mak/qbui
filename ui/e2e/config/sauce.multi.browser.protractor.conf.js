@@ -39,6 +39,7 @@
             name: process.env.SAUCE_JOB_NAME + '_OSX10.11_Safari',
             //Timeout in seconds for Sauce Labs to wait for another command (bumped this for sleeps in tests)
             idleTimeout: '120'
-    }];
+        }
+    ];
     exports.config = globalSauceConfig;
 }());

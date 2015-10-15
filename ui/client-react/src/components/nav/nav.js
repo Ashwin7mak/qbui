@@ -30,6 +30,7 @@ var Nav = React.createClass({
     },
 
     hideTrouserExample: function() {
+        logger.debug('hiding trouser from Nav shell');
         let flux = this.getFlux();
         flux.actions.hideTrouser();
     },
@@ -38,8 +39,8 @@ var Nav = React.createClass({
 
         let flux = this.getFlux();
 
-        const { pathname } = this.props.location
-        const key = pathname.split('/')[1] || 'root'
+        const { pathname } = this.props.location;
+        const key = pathname.split('/')[1] || 'root';
 
         const { main, leftNav, footer } = this.props.children;
 
