@@ -8,8 +8,8 @@
 
     var log = require('./logger').getLogger();
 
-    module.exports = function(config, app) {
-        if (!config.isProduction) {
+    module.exports = function(config) {
+        if (!config.isProduction && !config.noHotLoad) {
             var webpack = require('webpack');
             var WebpackDevServer = require('webpack-dev-server');
             var hotPort = config.webpackDevServerPort || 3000;
@@ -24,7 +24,7 @@
                     'webpack/hot/only-dev-server'
             ].concat(webpackConfig.entry);
 
-            webpackConfig.output.publicPath = "http://localhost:" + hotPort + webpackConfig.output.publicPath;
+            webpackConfig.output.publicPath = 'http://localhost:' + hotPort + webpackConfig.output.publicPath;
            // webpackConfig.output.publicPath = "/dist/";
 
             var compiler = webpack(webpackConfig);

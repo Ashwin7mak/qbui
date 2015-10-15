@@ -41,15 +41,17 @@ Updated to include React modules.  When Angular is removed, will need to do the 
      * cd to the ui folder
      * run  `npm run webpack` 
      * then `NODE_ENV=local npm start`
+     * if your local has noHotLoad:true it will not hotload, it will hotload client files by default
      * grunt will generate the client webpack output
      * manually go to browser at localhost:9000
 
 ## Generate distribution(dist) folder for production deploy
 * From command window:    
-    * run  `grunt build` or `CLIENT=REACT grunt build`
-    * to generate the ui\dist folder for deploy 
-    * which will contain the and server dir and under public the react index.html and client bundle files 
-    * host webserver from ui\dist\public for react interface 
+    * run  `NODE_ENV=prod grunt build`
+    * to generate the ui/dist folder for deploy 
+        * which will contain the server dir and
+        * public/dist dir with the react and client bundle files 
+    * run server/app from ui/dist  for prod react interface 
      
 ## Run Unit tests with Karma:
 * From command window:
@@ -69,17 +71,14 @@ Updated to include React modules.  When Angular is removed, will need to do the 
 
 ## Developers to run react app with _hot load_ of ui changes
 _note: hot loading means edits will update the browser without needing to refresh the page
-### Using _npm_ to launch hot reload
+### Using _npm_ to launch hot reload node server
 * From command window:    
-    * run  `npm run webpack-dev-server` 
-    * manually go to browser at localhost:3000
+    * run  `NODE_ENV=local npm start` 
+    * if your local config does not have noHotLoad:true it will hotload client files by default    
+    * manually go to browser at localhost:9000
     * any edits you make to the files in the bundle (css, js) will be hot loaded 
     
-### Or using _grunt_ to launch hot reload
-* From command window:    
-    * run  `grunt webpack-dev-server` 
-    * manually go to browser at localhost:3000
-    * any edits you make to the files in the bundle (css, js) will be hot loaded
+you can also create a node.js config in intellij to debug the server 
 
 
 

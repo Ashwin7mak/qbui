@@ -21,7 +21,7 @@
             favicon : '/dist/favicon.ico',
             jsPath  : '/dist/',
             settings: {views: viewPath},
-            hostBase: config.isProduction ? '' : HOT_BASE,
+            hostBase: (config.isProduction || config.noHotLoad) ? '' : HOT_BASE,
             bundleFileName: config.isProduction ? 'bundle.min.js' : 'bundle.js'
         };
     }
@@ -31,12 +31,12 @@
         var templatePath = require.resolve(filename);
         jsxEngine(templatePath, opts, function transformedJsxCallback(err, str) {
             if (!err) {
-                log.debug("results html for jsx:" + filename + " opts: " + JSON.stringify(opts) + " html:" + str);
+                log.debug('results html for jsx:' + filename + ' opts: ' + JSON.stringify(opts) + ' html:' + str);
                 res.write(str);
                 res.end();
             } else {
-                log.error("got error server rendering jsx file:" + filename + err.message);
-                res.write("error:" + err.message);
+                log.error('got error server rendering jsx file:' + filename + err.message);
+                res.write('error:' + err.message);
                 res.end();
             }
         });
@@ -81,7 +81,7 @@
         app.route('/app/:appId/table/:tblId/report/:rptId').get(function(req, res) {
             log.info('..specific app report request');
             if (isCallerMobile(req)) {
-                res.redirect('/m/app/' + req.params.appId + "/table/" + req.params.tblId + "/report/" + req.params.rptId);
+                res.redirect('/m/app/' + req.params.appId + '/table/' + req.params.tblId + '/report/' + req.params.rptId);
             } else {
                 renderIndex(res);
             }
@@ -104,7 +104,7 @@
         app.route('/app/:appId/table/:tblId').get(function(req, res) {
             log.info('..table homepage request (placeholder)');
             if (isCallerMobile(req)) {
-                res.redirect('/m/app/' + req.params.appId + "/table/" + req.params.tblId);
+                res.redirect('/m/app/' + req.params.appId + '/table/' + req.params.tblId);
             } else {
                 renderIndex(res);
             }
