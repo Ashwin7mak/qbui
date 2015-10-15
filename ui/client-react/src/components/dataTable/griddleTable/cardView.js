@@ -83,7 +83,7 @@ class CardView  extends React.Component {
                         {fields}
                     </div>
                     <div className="card-expand" onClick={this.handleMoreCard}>
-                        <Glyphicon glyph="plus" />
+                        <Glyphicon glyph={this.state.showMoreCard ? "chevron-up" : "chevron-down"} />
                     </div>
                 </div>
                 <div className="flexRow grayBackground">
@@ -91,7 +91,7 @@ class CardView  extends React.Component {
                         {additionalCards}
                     </div>
                     <div className={this.state.showMoreCard? "card-expand-hidden": "displayNone"}>
-                        <Glyphicon glyph="plus" />
+                        <Glyphicon glyph={this.state.showMoreCard ? "chevron-up" : "chevron-down"} />
                     </div>
                 </div>
             </div>
