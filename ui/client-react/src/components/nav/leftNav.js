@@ -21,8 +21,10 @@ let LeftNav = React.createClass( {
     // set focus to nested anchor tag to select current report if there is one...
     navItemMounted: function (id, element) {
 
-        if (element && id == this.props.reportID)
+        if (element && id && id == this.props.reportID)
+
             element.firstChild.focus();
+
     },
 
     buildHeadingItem: function (item, loadingCheck) {
