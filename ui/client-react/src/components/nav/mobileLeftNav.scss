@@ -14,7 +14,7 @@
   a.leftNavLink:hover, a.leftNavLink:focus {
     outline: none;
     text-decoration: none;
-    background-color: #476b8f;
+    background-color: #2E71B5;
   }
   a.leftNavLink {
     color: #bbd;
@@ -29,11 +29,12 @@
       text-overflow: ellipsis;
     }
   }
-  a.heading {
-    border-top: 1px solid #6f8eac;
-    border-bottom: 1px solid #6f8eac;
-    color: #6f8eac;
-    background-color: #1e3757;
+  a.mobileHeading,a.mobileHeading:hover {
+    color: #bbd;
+    background-color: #3F5B7D;
+    padding: 3px 15px;
+    cursor: default;
+    font-size:12px;
   }
   .loader {
     position: absolute;
