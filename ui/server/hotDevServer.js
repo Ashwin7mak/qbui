@@ -58,7 +58,7 @@
                 historyApiFallback: true,
 
                 // Config for minimal console.log output.
-                no_stats: {
+                stats: {
                     assets      : true,
                     cached      : true,
                     chunkModules: false,
@@ -68,7 +68,7 @@
                     hash        : false,
                     modules     : false,
                     reasons     : true,
-                    timings     : true, //false
+                    timings     : true,
                     version     : true
                 }
             };
