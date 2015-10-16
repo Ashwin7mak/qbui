@@ -10,7 +10,7 @@ module.exports = function(config) {
         //  base path that is used to resolve files, excludes, etc.
         basePath: "./",
 
-        frameworks: ["jasmine"],
+        frameworks: ["phantomjs-shim", "jasmine"],
 
         // list of files/patterns to load and test
         files: [
@@ -54,7 +54,7 @@ module.exports = function(config) {
         // - Safari (only Mac)
         // - PhantomJS
         // - IE (only Windows)
-        browsers: ["Chrome","PhantomJS"],
+        browsers: ["PhantomJS"],
 
         reporters: ["progress", "mocha", "coverage", "junit"],
 
@@ -67,7 +67,7 @@ module.exports = function(config) {
         browserDisconnectTolerance : 1,     // default 0
 
         colors: true,
-        //singleRun: true,
+        singleRun: false,
 
         // level of output logging
         // LOG_DISABLE || LOG_ERROR || LOG_WARN || LOG_INFO || LOG_DEBUG
