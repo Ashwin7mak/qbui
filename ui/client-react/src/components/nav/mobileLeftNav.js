@@ -32,7 +32,7 @@ let MobileLeftNav = React.createClass( {
         return (
             <li>
                 <Loader scale={.5} right={'90%'} loaded={!loadingCheck} />
-                <a className='heading'><FormattedMessage message={this.getIntlMessage('nav.reportsHeading')}/></a>
+                <a className='mobileHeading'><FormattedMessage message={this.getIntlMessage('nav.reportsHeading')}/></a>
             </li>);
     },
 

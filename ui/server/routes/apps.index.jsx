@@ -1,4 +1,4 @@
-import React, { Proptypes } from 'react';
+import React, { PropTypes } from 'react';
 import Html from './html'
 
 var Index = React.createClass({

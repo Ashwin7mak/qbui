@@ -4,10 +4,10 @@
   width:350px;
   nav li {
     a.heading {
-      border-top:1px solid #6f8eac;
-      border-bottom:1px solid #6f8eac;
-      color: #6f8eac;
-      background-color: #1e3757;
+      //border-top:1px solid #6f8eac;
+      //border-bottom:1px solid #6f8eac;
+      color: #bbd;
+      background-color: #3F5B7D
     }
   }
 }
@@ -57,15 +57,19 @@
   overflow-y:auto;
 
   .nav li {
-    a.leftNavLink:hover, a.leftNavLink:focus {
+    a.leftNavLink:focus {
       outline: none;
       text-decoration: none;
-      background-color: #476b8f;
+      background-color: #2E71B5;
+    }
+    a.leftNavLink:hover {
+      background-color: #2E71B5;
     }
     a.heading {
-      //background-color:#375b7f;
+      padding: 3px 15px;
       color:#ddd;
       cursor: default;
+      font-size:12px;
     }
     a.leftNavLink {
       color: #bbd;
