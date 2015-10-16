@@ -15,7 +15,6 @@ import './griddleTable.css';
 import './qbGriddleTable.scss';
 
 import CardView from './cardView.js';
-import './cardView.css';
 
 /*
  * Sample component for passing in data  -
