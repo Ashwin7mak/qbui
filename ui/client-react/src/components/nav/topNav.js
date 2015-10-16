@@ -5,7 +5,7 @@ import ReactBootstrap from 'react-bootstrap';
 import Fluxxor from 'fluxxor';
 
 let FluxMixin = Fluxxor.FluxMixin(React);
-import {Nav,NavItem,Navbar,MenuItem,NavDropdown,ButtonGroup,Button,OverlayTrigger,Popover,Glyphicon} from '../../../../node_modules/react-bootstrap/lib'
+import {Nav,NavItem,Navbar,MenuItem,NavDropdown,ButtonGroup,Button,OverlayTrigger,Popover,Glyphicon} from 'react-bootstrap'
 
 import Locale from '../../locales/locales';
 

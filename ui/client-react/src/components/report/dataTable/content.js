@@ -7,8 +7,6 @@ import {DateFormatter,NumericFormatter}  from '../../../components/dataTable/gri
 import { fakeGriddleData,fakeGriddleColumnMetaData } from '../../../components/dataTable/griddleTable/fakeData.js';
 import Loader  from 'react-loader';
 
-import '../../../assets/css/report.css';
-
 import Locale from '../../../locales/locales';
 var i18n = Locale.getI18nBundle();
 var IntlMixin = ReactIntl.IntlMixin;

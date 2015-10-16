@@ -24,20 +24,21 @@ html, body {
     flex-direction: row;
 
 
-    transition: transform ease 500ms;
-    -webkit-transition: transform ease 500ms;
+    transition: transform ease 250ms;
+    -webkit-transition: transform ease 250ms;
 
     .mainContent {
         opacity: 1;
-        transition: opacity 500ms ease-in-out;
-        -moz-transition: opacity 500ms ease-in-out;
-        -webkit-transition: opacity 500ms ease-in-out;
+        transition: opacity 250ms ease-in-out;
+        -moz-transition: opacity 250ms ease-in-out;
+        -webkit-transition: opacity 250ms ease-in-out;
     }
 
     .main {
         display:flex;
         flex-direction: column;
         flex:1;
+        position:relative;
 
         .topNav {
             display:flex;
@@ -122,54 +123,42 @@ html, body {
     position: absolute;
 
     .mainContent {
-        opacity: .5;
-        transition: opacity 500ms ease-in-out;
-        -moz-transition: opacity 500ms ease-in-out;
-        -webkit-transition: opacity 500ms ease-in-out;
+        opacity: .4;
+        transition: opacity 250ms ease-in-out;
+        -moz-transition: opacity 250ms ease-in-out;
+        -webkit-transition: opacity 250ms ease-in-out;
     }
 
     transform: translate3d(300px, 0, 0);
     -webkit-transform: translate3d(300px, 0, 0);
 }
 
-.swap-enter {
+// transitions
+
+.main-transition-enter {
     opacity: 0.01;
-    transform: translateX(5em);
-    transition: all .5s ease-in;
+    transform: scale(.4);
+
 }
 
-.swap-enter.swap-enter-active {
-    opacity: 1;
-    transform: translateX(0);
+.main-transition-enter.main-transition-enter-active {
+    opacity: .9;
+    transform: scale(1);
+    transition: all 300ms ease-in-out;
+
 }
 
-.swap-leave {
-    opacity: 1;
-    transform: translateX(0);
-    transition: all .5s ease-in;
+.main-transition-leave {
+    //opacity: .9;
+    position:absolute;
+    top:50px;
+
 }
 
-.swap-leave.swap-leave-active {
-    opacity: 0;
-    transform: translateX(-5em);
-}
+.main-transition-leave.main-transition-leave-active {
+    //opacity: 0.01;
+    transition: all 300ms linear;
+    top:850px;
 
-.example-enter {
-    opacity: 0.01;
-    transition: opacity .5s ease-in;
 }
-
-.example-enter.example-enter-active {
-    opacity: 1;
-}
-
-.example-leave {
-    opacity: 1;
-    transition: opacity .5s ease-in;
-}
-
-.example-leave.example-leave-active {
-    opacity: 0;
-}
-
 

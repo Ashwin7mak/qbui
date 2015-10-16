@@ -1,22 +1,10 @@
 .layout-stage {
     border-bottom: 1px solid #e3eaf3;
-    background-image: linear-gradient(to top, #f6f8fb 0%, #f9fafb 100%);
-    box-sizing: border-box;
     position: relative;
-    background-color: #f3f5f8;
-    padding: 15px 15px 15px;
-    margin-bottom: 5px;
-    transition: padding 0.5s ease 0s;
-
-    margin-top:15px;
     margin-bottom:35px;
 
-    .xlayout-stage-content {
-        transition: opacity .10s linear .20s, max-height .05s linear .20s;
-    }
+    .toggleStage {
 
-    .tab {
-        display: block;
         cursor: pointer;
         position: absolute;
         bottom: -24px;
@@ -32,29 +20,12 @@
         outline: medium none;
     }
 
-    .tab.arrow {
-        background-repeat: no-repeat;
-        background-image: url('../../assets/images/arrow-sprite.png');
+    .well {
+        background-image: linear-gradient(to top, #f6f8fb 0%, #f9fafb 100%);
+        border:0;
+        margin:0;
     }
 }
-
-.layout-stage.stage-open {
-    min-height: 245px !important;
-}
-
-.layout-stage.stage-close {
-    height: 80px !important;
-    min-height: 80px !important;
-}
-
-.layout-stage.stage-close .tab {
-    background-position: -121px -20px;
-}
-
-
-
-
-
 
 
 
