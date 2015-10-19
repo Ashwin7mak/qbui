@@ -48,7 +48,7 @@ let MobileLeftNav = React.createClass( {
         let label = item.key ? this.getIntlMessage(item.key) : item.name;
 
         return (
-            <li ref={this.navItemMounted.bind(this, item.id)}>
+            <li key={label} ref={this.navItemMounted.bind(this, item.id)}>
                 <Link className='leftNavLink' to={'/m'+item.link} onClick={this.toggleNav}>
                     <Glyphicon glyph={this.getGlyphName(item)}/> {label}
                 </Link>

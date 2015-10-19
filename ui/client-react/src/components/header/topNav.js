@@ -44,16 +44,15 @@ var TopNav = React.createClass( {
 
         return (
             <div className={'topNav ' + (this.props.mobile ? 'mobile' : '')}>
+                <div className='top'>
                 <div className='navGroup left'>
                     <div className='navItem '><a className='iconLink' href="#" onClick={this.toggleNav}><Glyphicon glyph="menu-hamburger" /> </a></div>
 
                     <div className='navItem'>{this.props.title}</div>
                 </div>
 
-
                 <div className='navGroup center'>
-                {this.props.showActionIcons ?
-                    <ButtonGroup className='navItem' ButtonGroup>
+                    <ButtonGroup className='navItem harmonyButtons' ButtonGroup>
 
                         <OverlayTrigger trigger="click" rootClose placement="bottom" overlay={<Popover id={0} style={{whiteSpace:'nowrap'}} title="Search Records"><strong>Search:</strong> <input /> <Button bsStyle='success'>Go</Button></Popover>}>
                             <Button><Glyphicon glyph="search" /></Button>
@@ -62,11 +61,7 @@ var TopNav = React.createClass( {
                         <Button onClick={this.addNew} ><Glyphicon glyph="plus" /></Button>
                         <Button><Glyphicon glyph="time" /></Button>
                     </ButtonGroup>
-                    :
-                    ''
-                }
                 </div>
-
 
                 <div className='navGroup right'>
                     <NavDropdown className='navItem' NavDropdown={true} navItem={true} eventKey={3} title={this.props.mobile ? <Glyphicon glyph="cog" /> : <CurrentDate/>} id='nav-right-dropdown'>
@@ -80,7 +75,7 @@ var TopNav = React.createClass( {
                     </NavDropdown>
                     &nbsp;
                 </div>
-
+                </div>
             </div>
         );
     }

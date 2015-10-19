@@ -1,10 +1,10 @@
-.mobileAddFooter {
+.mobileAddButton {
+
   position:absolute;
   bottom:10px;
   width:100%;
   text-align:center;
 
-  //transform: bottom 1s;
   transition: bottom .5s ease-in;
 
   .glyphicon {
@@ -15,12 +15,24 @@
   }
 }
 
+.mobileNavOpen .mobileAddButton {
+   bottom: -50px;
+   .glyphicon {
+     transition: all .5s linear;
+     transform: rotate(45deg);
+   }
+ }
+
+.mobileAddFooter {
+  position:absolute;
+  bottom:0;
+  width:100%;
+  height:200px;
+
+  background-image: linear-gradient(to top, #FFFFFF 0%, #B8BBBD 100%);
+}
+
 .mobileNavOpen .mobileAddFooter {
-  bottom: -50px;
-
-  .glyphicon {
-    transition: all .5s linear;
-    transform: rotate(45deg);
-  }
-
+  height:0;
+  transition: all .5s ease-in;
 }

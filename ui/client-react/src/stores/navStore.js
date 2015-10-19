@@ -10,8 +10,10 @@ let NavStore = Fluxxor.createStore({
     initialize: function() {
         this.state = {
             leftNavOpen: true,
+            searchBarOpen: false,
             mobileLeftNavOpen: false,
             trouserOpen: false,
+            newItemsOpen: false,
             leftNavItems: []
         };
 
@@ -20,7 +22,9 @@ let NavStore = Fluxxor.createStore({
         this.bindActions(
             actions.SHOW_TROUSER, this.onShowTrouser,
             actions.HIDE_TROUSER, this.onHideTrouser,
+            actions.SHOW_NEW_ITEMS, this.onShowNewItems,
             actions.TOGGLE_LEFT_NAV, this.onToggleLeftNav,
+            actions.TOGGLE_SEARCH, this.onToggleSearch,
             actions.CHANGE_LOCALE, this.onChangeLocale
         );
 
@@ -42,13 +46,19 @@ let NavStore = Fluxxor.createStore({
         this.state.trouserOpen = false;
         this.emit('change');
     },
-
+    onToggleSearch: function() {
+        this.state.searchBarOpen = !this.state.searchBarOpen;
+        this.emit('change');
+    },
     onToggleLeftNav: function() {
         this.state.leftNavOpen = !this.state.leftNavOpen;
         this.state.mobileLeftNavOpen = !this.state.mobileLeftNavOpen;
         this.emit('change');
     },
-
+    onShowNewItems: function() {
+        this.state.newItemsOpen = true;
+        this.emit('change');
+    },
     getState: function() {
         return this.state;
     },
