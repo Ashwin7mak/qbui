@@ -12,9 +12,10 @@ let NavStore = Fluxxor.createStore({
             leftNavOpen: true,
             mobileLeftNavOpen: false,
             trouserOpen: false,
-            leftNavItems: [],
-            i18n: Locale.getI18nBundle()
+            leftNavItems: []
         };
+
+        this.setLocaleBundle();
 
         this.bindActions(
             actions.SHOW_TROUSER, this.onShowTrouser,
@@ -28,7 +29,7 @@ let NavStore = Fluxxor.createStore({
 
     onChangeLocale: function() {
         logger.debug('changing locale: ' + Locale.getLocale());
-        this.state.i18n = Locale.getI18nBundle();
+        this.setLocaleBundle();
         this.emit('change');
     },
 
@@ -50,6 +51,10 @@ let NavStore = Fluxxor.createStore({
 
     getState: function() {
         return this.state;
+    },
+
+    setLocaleBundle: function() {
+        this.state.i18n = Locale.getI18nBundle();
     }
 });
 
