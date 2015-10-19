@@ -1,7 +1,7 @@
+import * as actions from '../../src/constants/actions';
+
 import Fluxxor from 'fluxxor';
 import Logger from '../utils/logger';
-
-//import { fakeGriddleDataByReportId } from '../components/dataTable/griddleTable/fakeData.js';
 
 let logger = new Logger();
 
@@ -13,9 +13,9 @@ let ReportDataStore = Fluxxor.createStore({
         this.error = false;
 
         this.bindActions(
-            'LOAD_REPORT', this.onLoadReport,
-            'LOAD_REPORT_SUCCESS', this.onLoadReportSuccess,
-            'LOAD_REPORT_FAILED', this.onLoadReportFailed
+            actions.LOAD_REPORT, this.onLoadReport,
+            actions.LOAD_REPORT_SUCCESS, this.onLoadReportSuccess,
+            actions.LOAD_REPORT_FAILED, this.onLoadReportFailed
         );
     },
 
