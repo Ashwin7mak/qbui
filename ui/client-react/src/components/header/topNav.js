@@ -5,9 +5,10 @@ import ReactBootstrap from 'react-bootstrap';
 import Fluxxor from 'fluxxor';
 
 let FluxMixin = Fluxxor.FluxMixin(React);
-import {Nav,NavItem,Navbar,MenuItem,NavDropdown,ButtonGroup,Button,OverlayTrigger,Popover,Glyphicon} from 'react-bootstrap'
+import {Nav,NavItem,Navbar,MenuItem,NavDropdown,ButtonGroup,Button,OverlayTrigger,Popover,Glyphicon,Input} from 'react-bootstrap'
 
 import Locale from '../../locales/locales';
+import './topNav.scss'
 
 var IntlMixin = ReactIntl.IntlMixin;
 var FormattedDate = ReactIntl.FormattedDate;
@@ -21,6 +22,8 @@ var CurrentDate = React.createClass({
         return <FormattedDate locales={[Locale.getLocale()]} value={new Date()} day="numeric" month="long" year="numeric"/>
     }
 });
+
+const debounceSearchMillis = 500;
 
 var TopNav = React.createClass( {
     mixins: [IntlMixin, FluxMixin],
@@ -40,33 +43,42 @@ var TopNav = React.createClass( {
         flux.actions.changeLocale(e.currentTarget.title);
     },
 
+    searchChanged: function (ev) {
+        ev.preventDefault();
+        const text = ev.target.value;
+
+        let flux = this.getFlux();
+        flux.actions.searchFor(text);
+    },
     render: function () {
+        const searchIcon = <Glyphicon glyph="search" />;
 
         return (
             <div className={'topNav ' + (this.props.mobile ? 'mobile' : '')}>
+                <div className='top'>
                 <div className='navGroup left'>
                     <div className='navItem '><a className='iconLink' href="#" onClick={this.toggleNav}><Glyphicon glyph="menu-hamburger" /> </a></div>
 
                     <div className='navItem'>{this.props.title}</div>
                 </div>
 
-
                 <div className='navGroup center'>
-                {this.props.showActionIcons ?
-                    <ButtonGroup className='navItem' ButtonGroup>
+                    <ButtonGroup className='navItem harmonyButtons' ButtonGroup>
 
-                        <OverlayTrigger trigger="click" rootClose placement="bottom" overlay={<Popover id={0} style={{whiteSpace:'nowrap'}} title="Search Records"><strong>Search:</strong> <input /> <Button bsStyle='success'>Go</Button></Popover>}>
+                        <OverlayTrigger trigger="click" rootClose placement="bottom" overlay={
+                            <Popover id={0} className={'searchPopover'}  title="Search">
+                                <Input addonBefore={searchIcon} type="text" placeholder="Search Records"  onChange={_.debounce(this.searchChanged, debounceSearchMillis)} />
+                                <div className='buttonContainer'><Button bsStyle='success'>Go</Button></div>
+                            </Popover>}
+                            >
+
                             <Button><Glyphicon glyph="search" /></Button>
                         </OverlayTrigger>
 
                         <Button onClick={this.addNew} ><Glyphicon glyph="plus" /></Button>
                         <Button><Glyphicon glyph="time" /></Button>
                     </ButtonGroup>
-                    :
-                    ''
-                }
                 </div>
-
 
                 <div className='navGroup right'>
                     <NavDropdown className='navItem' NavDropdown={true} navItem={true} eventKey={3} title={this.props.mobile ? <Glyphicon glyph="cog" /> : <CurrentDate/>} id='nav-right-dropdown'>
@@ -80,7 +92,7 @@ var TopNav = React.createClass( {
                     </NavDropdown>
                     &nbsp;
                 </div>
-
+                </div>
             </div>
         );
     }

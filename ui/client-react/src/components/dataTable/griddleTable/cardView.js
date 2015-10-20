@@ -21,7 +21,6 @@ class CardView  extends React.Component {
 
     handleMoreCard(){
         this.setState({ showMoreCards: !this.state.showMoreCards });
-        console.log(this.state.showMoreCards);
     }
 
 

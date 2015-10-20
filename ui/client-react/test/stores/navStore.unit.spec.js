@@ -94,6 +94,28 @@ describe('Test Nav Store', () => {
         expect(flux.store(STORE_NAME).emit.calls.count()).toBe(1);
     });
 
+    it('test toggle mobile nav searchbar action', () => {
+
+        let toggleSearchAction = {
+            type: actions.TOGGLE_SEARCH
+        }
+
+        //  should be closed by default
+        expect(flux.store('NavStore').state.searchBarOpen).toBeFalsy();
+
+        flux.dispatcher.dispatch(toggleSearchAction);
+        expect(flux.store('NavStore').state.searchBarOpen).toBeTruthy();
+        expect(flux.store('NavStore').emit).toHaveBeenCalledWith('change');
+        expect(flux.store('NavStore').emit.calls.count()).toBe(1);
+        flux.store('NavStore').emit.calls.reset();
+
+        flux.dispatcher.dispatch(toggleSearchAction);
+        expect(flux.store('NavStore').state.trouserOpen).toBeFalsy();
+
+        expect(flux.store('NavStore').emit).toHaveBeenCalledWith('change');
+        expect(flux.store('NavStore').emit.calls.count()).toBe(1);
+    });
+
     it('test toggle left nav action', () => {
 
         let toggleLeftNavAction = {

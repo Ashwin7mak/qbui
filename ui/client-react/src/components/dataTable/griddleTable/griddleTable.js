@@ -72,7 +72,7 @@ class GriddleTable extends React.Component {
         });
 
         // dont go to the server if we already have the data - the user might be paginating back and forth on already rendered results.
-        if (page <= this.state.maxPages)
+        /*if (page <= this.state.maxPages)
         {
             var newState = {
                 currentPage: page - 1,
@@ -82,7 +82,7 @@ class GriddleTable extends React.Component {
 
             that.setState(newState);
         }
-        else {
+        else {*/
             this.props.getResultsCallback(page, function (data) {
                 var newState = {
                     currentPage: page - 1,
@@ -94,7 +94,7 @@ class GriddleTable extends React.Component {
 
                 that.setState(newState);
             });
-        }
+        //}
     }
 
 
@@ -148,7 +148,7 @@ class GriddleTable extends React.Component {
                 <div>
                     <Griddle {...this.props}
                         useExternal={this.state.useExternal}
-                        results={this.state.results}
+                        results={this.props.results}
                         customPagerComponent={this.state.customPagerComponent}
                         useCustomRowComponent={this.state.useCustomRowComponent}
                         //events

@@ -36,6 +36,11 @@ describe('Nav Actions functions', () => {
         expect(flux.dispatchBinder.dispatch).toHaveBeenCalledWith(actions.TOGGLE_LEFT_NAV);
     });
 
+    it('test toggle mobile searchbar action', () => {
+        flux.actions.toggleSearch();
+        expect(flux.dispatchBinder.dispatch).toHaveBeenCalledWith(actions.TOGGLE_SEARCH);
+    });
+
     it('test change locale action', () => {
         navActions.__Rewire__('Locale', mockLocale);
         spyOn(mockLocale, 'changeLocale');
@@ -47,5 +52,6 @@ describe('Nav Actions functions', () => {
 
         navActions.__ResetDependency__('Locale');
     });
+
 
 });
