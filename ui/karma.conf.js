@@ -38,7 +38,17 @@ module.exports = function(config) {
                         ],
                         exclude: [nodeModulesPath],
                         loader: "babel-loader?plugins=babel-plugin-rewire"
-                    }]
+                    },
+                    {
+                        // all css files can be required into js files with this
+                        test: /\.css?$/,
+                        include: [
+                            path.resolve(__dirname, "client-react/src")
+                        ],
+                        exclude: [nodeModulesPath],
+                        loader: "style!css"
+                    }
+                ]
             },
             watch: true
         },
@@ -54,7 +64,7 @@ module.exports = function(config) {
         // - Safari (only Mac)
         // - PhantomJS
         // - IE (only Windows)
-        browsers: ["PhantomJS"],
+        browsers: ["Chrome", "PhantomJS"],
 
         reporters: ["progress", "mocha", "coverage", "junit"],
 
