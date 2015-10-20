@@ -1,8 +1,7 @@
+import * as actions from '../../src/constants/actions';
+
 import Fluxxor from 'fluxxor';
 import Logger from '../utils/logger';
-import _ from 'lodash';
-
-//import { fakeGriddleDataByReportId } from '../components/dataTable/griddleTable/fakeData.js';
 
 let logger = new Logger();
 
@@ -14,10 +13,9 @@ let ReportDataStore = Fluxxor.createStore({
         this.error = false;
 
         this.bindActions(
-            'LOAD_REPORT', this.onLoadReport,
-            'LOAD_REPORT_SUCCESS', this.onLoadReportSuccess,
-            'LOAD_REPORT_FAILED', this.onLoadReportFailed,
-            'SEARCH_FOR', this.onSearchFor
+            actions.LOAD_REPORT, this.onLoadReport,
+            actions.LOAD_REPORT_SUCCESS, this.onLoadReportSuccess,
+            actions.LOAD_REPORT_FAILED, this.onLoadReportFailed
         );
     },
 
@@ -40,33 +38,13 @@ let ReportDataStore = Fluxxor.createStore({
         this.loading = false;
         this.error = false;
 
-        let records = this.getReportData(reportData.data);
         let data = {
             name: reportData.name,
             columns: this.getReportColumns(reportData.data.fields),
-            records: records,
-            filteredRecords: records
+            records: this.getReportData(reportData.data)
         };
 
         this.data = data;
-        this.emit("change");
-    },
-
-    onSearchFor: function(text) {
-
-        this.data.filteredRecords = [];
-
-        this.data.records.forEach ((record) => {
-
-            let match = false;
-            _.values(record).forEach((val) => {
-               if (val.toString().toLowerCase().indexOf(text.toLowerCase()) != -1)
-                match = true;
-            });
-            if (match)
-                this.data.filteredRecords.push(record)
-
-        })
         this.emit("change");
     },
 
@@ -90,7 +68,6 @@ let ReportDataStore = Fluxxor.createStore({
     },
 
     getReportData: function(data) {
-
         let fields = data.fields;
         let records = data.records;
         let reportData = [];
