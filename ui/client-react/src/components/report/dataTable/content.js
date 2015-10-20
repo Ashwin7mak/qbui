@@ -18,19 +18,21 @@ var Content = React.createClass({
 
     getInitialState: function() {
         return {
-            reportRecords: this.props.reportData.data.records ? this.props.reportData.data.records : [],
+            reportRecords: this.props.reportData.data.filteredRecords ? this.props.reportData.data.filteredRecords : [],
             reportColumns: this.props.reportData.data.columns ? this.props.reportData.data.columns : [],
-            firstDataSet: this.props.reportData.data.records ? this.props.reportData.data.records.slice(0, resultsPerPage+1) : []
+            firstDataSet: this.props.reportData.data.filteredRecords ? this.props.reportData.data.filteredRecords.slice(0, resultsPerPage+1) : []
         };
     },
 
     componentWillReceiveProps: function(nextProps){
+
         var that = this;
         if (nextProps.reportData.data) {
+
             that.setState({
-                reportRecords: nextProps.reportData.data.records ? nextProps.reportData.data.records : [],
+                reportRecords: nextProps.reportData.data.filteredRecords ? nextProps.reportData.data.filteredRecords : [],
                 reportColumns: nextProps.reportData.data.columns ? that.getColumnProps(nextProps.reportData.data.columns) : [],
-                firstDataSet: nextProps.reportData.data.records ? nextProps.reportData.data.records.slice(0, resultsPerPage+1) : []
+                firstDataSet: nextProps.reportData.data.filteredRecords ? nextProps.reportData.data.filteredRecords.slice(0, resultsPerPage+1) : []
             });
         }
     },
@@ -84,6 +86,7 @@ var Content = React.createClass({
     },
 
     getNextDataSet: function(page, callback){
+
         var that = this;
         if (that.state.reportRecords.length > 0) {
             callback({
@@ -96,6 +99,7 @@ var Content = React.createClass({
     },
 
     render: function() {
+
         return (
             <Loader  loaded={!this.props.reportData.loading}>
                 {this.props.reportData.error ?
