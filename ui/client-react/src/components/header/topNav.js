@@ -44,7 +44,7 @@ var TopNav = React.createClass( {
     },
 
     searchChanged: function (ev) {
-        ev.preventDefault();
+
         const text = ev.target.value;
 
         let flux = this.getFlux();
@@ -67,10 +67,8 @@ var TopNav = React.createClass( {
 
                         <OverlayTrigger trigger="click" rootClose placement="bottom" overlay={
                             <Popover id={0} className={'searchPopover'}  title="Search">
-                                <Input addonBefore={searchIcon} type="text" placeholder="Search Records"  onChange={_.debounce(this.searchChanged, debounceSearchMillis)} />
-                                <div className='buttonContainer'><Button bsStyle='success'>Go</Button></div>
-                            </Popover>}
-                            >
+                                <Input key={'searchInput'} standalone addonBefore={searchIcon} type="text" placeholder="Search Records"  onChange={_.debounce(this.searchChanged, debounceSearchMillis)} />
+                            </Popover>}>
 
                             <Button><Glyphicon glyph="search" /></Button>
                         </OverlayTrigger>
