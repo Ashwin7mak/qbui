@@ -1,0 +1,24 @@
+.searchBar {
+  flex-basis:0;
+  transition: flex-basis 500ms ease-in-out;
+  align-items:center;
+  font-size:14px;
+  display:flex;
+  flex-direction: column;
+}
+
+.searchBar.open {
+  flex-basis:75px;
+  transition: flex-basis 500ms ease-in-out;
+}
+
+.searchLine {
+
+}
+
+.filterLine {
+
+}
+.searchLine .form-group {
+  margin: 0 15px;
+}

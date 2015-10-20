@@ -1,9 +1,11 @@
 import React from 'react';
 import ReactIntl from 'react-intl';
-import ReactCSSTransitionGroup from 'react/lib/ReactCSSTransitionGroup';
+
 import './mobileTopNav.scss';
 import Fluxxor from 'fluxxor';
 import {Glyphicon,Input,DropdownButton,MenuItem} from 'react-bootstrap'
+
+import MobileSearchBar from '../search/mobileSearchBar';
 
 let FluxMixin = Fluxxor.FluxMixin(React);
 
@@ -45,20 +47,8 @@ var MobileTopNav = React.createClass( {
                 </div>
 
                 {this.props.searchBarOpen ?
-                    <div className={'searchBar open'}>
-                        <div className={'searchLine'}>
-                            <Input type="text" placeholder="Search Records" addonBefore={searchIcon} />
-                        </div>
-                        <div className={'filterLine'}>
-                            <DropdownButton bsStyle={'link'} title={'Filter by'} >
-
-                            </DropdownButton>
-                        </div>
-                    </div>
-                    :
-                    <div className={'searchBar'}/>
+                    <MobileSearchBar /> : <div/>
                 }
-
 
             </div>
         );
