@@ -1,6 +1,6 @@
 import React from 'react';
 import ReactIntl from 'react-intl';
-//import './footer.css';
+import './footer.css';
 
 import Nav from '../../../../node_modules/react-bootstrap/lib/Nav';
 

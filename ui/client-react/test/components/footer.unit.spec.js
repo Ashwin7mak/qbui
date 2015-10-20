@@ -21,7 +21,6 @@ describe('Footer functions', () => {
 
     var component;
     var currentYear = new Date().getFullYear();
-    console.log("footer.css");
 
     beforeEach(() => {
         Footer.__Rewire__('I18nMessage', I18nMessageMock);

@@ -47,6 +47,22 @@ module.exports = function(config) {
                         ],
                         exclude: [nodeModulesPath],
                         loader: "style!css"
+                    },
+                    {
+                        // all png files can be required into js files with this
+                        // url loader transform works like a file loader,
+                        // but can return a Data Url if the file is smaller than a limit.
+                        test: /\.png?$/,
+                        include: [
+                            path.resolve(__dirname, 'client-react/src')
+                        ],
+                        loader: 'url-loader'
+                    },
+
+                    // SASS - transformed to css,
+                    {
+                        test: /\.scss$/,
+                        loader: 'style!css!sass'
                     }
                 ]
             },
