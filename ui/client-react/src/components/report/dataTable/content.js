@@ -18,21 +18,20 @@ var Content = React.createClass({
 
     getInitialState: function() {
         return {
-            reportRecords: this.props.reportData.data.records ? this.props.reportData.data.records : [],
+            reportRecords: this.props.reportData.data.filteredRecords ? this.props.reportData.data.filteredRecords : [],
             reportColumns: this.props.reportData.data.columns ? this.props.reportData.data.columns : [],
-            firstDataSet: this.props.reportData.data.records ? this.props.reportData.data.records.slice(0, resultsPerPage+1) : []
+            firstDataSet: this.props.reportData.data.filteredRecords ? this.props.reportData.data.filteredRecords.slice(0, resultsPerPage+1) : []
         };
     },
 
     componentWillReceiveProps: function(nextProps){
-
         var that = this;
         if (nextProps.reportData.data) {
 
             that.setState({
-                reportRecords: nextProps.reportData.data.records ? nextProps.reportData.data.records : [],
+                reportRecords: nextProps.reportData.data.filteredRecords ? nextProps.reportData.data.filteredRecords : [],
                 reportColumns: nextProps.reportData.data.columns ? that.getColumnProps(nextProps.reportData.data.columns) : [],
-                firstDataSet: nextProps.reportData.data.records ? nextProps.reportData.data.records.slice(0, resultsPerPage+1) : []
+                firstDataSet: nextProps.reportData.data.filteredRecords ? nextProps.reportData.data.filteredRecords.slice(0, resultsPerPage+1) : []
             });
         }
     },
@@ -101,7 +100,7 @@ var Content = React.createClass({
     render: function() {
 
         return (
-            <Loader  loaded={!this.props.reportData.loading}>
+            <Loader loaded={!this.props.reportData.loading}>
                 {this.props.reportData.error ?
                     <div>Error loading report!</div> :
                     <GriddleTable {...i18n} mobile={this.props.mobile} getResultsCallback={this.getNextDataSet} results={this.state.firstDataSet} columnMetadata={this.state.reportColumns} useExternal={true} externalResultsPerPage={resultsPerPage}/>}

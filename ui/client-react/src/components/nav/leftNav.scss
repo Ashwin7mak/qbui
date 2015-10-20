@@ -56,12 +56,13 @@
   background-color: #002b48;
   overflow-y:auto;
 
-  .nav li {
-    a.leftNavLink:focus {
-      outline: none;
-      text-decoration: none;
+  .nav li.selected {
+    a.leftNavLink {
       background-color: #2E71B5;
     }
+  }
+  .nav li {
+
     a.leftNavLink:hover {
       background-color: #2E71B5;
       -webkit-animation: swing 1s ease;

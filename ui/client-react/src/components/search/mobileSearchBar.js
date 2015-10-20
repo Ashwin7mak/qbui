@@ -1,4 +1,5 @@
 import React from 'react';
+import ReactDOM from 'react-dom';
 import ReactIntl from 'react-intl';
 
 import _ from 'lodash';
@@ -33,7 +34,7 @@ var MobileSearchBar = React.createClass( {
         return (
             <div className={'searchBar open'}>
                 <div className={'searchLine'}>
-                    <Input type="text" placeholder="Search Records" addonBefore={searchIcon} onChange={_.debounce(this.searchChanged, debounceSearchMillis)}/>
+                    <Input key={'searchInput'} standalone type="text" placeholder="Search Records" addonBefore={searchIcon} onChange={_.debounce(this.searchChanged, debounceSearchMillis)}/>
                 </div>
                 <div className={'filterLine'}>
                     <DropdownButton bsStyle={'link'} title={'Filter by'} id={'searchDropDown'} >
