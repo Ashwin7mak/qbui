@@ -1,10 +1,9 @@
 import React from 'react/addons';
 import ReactDOM from 'react-dom';
 import Footer  from '../../src/components/footer/footer';
-
 import Nav from '../../../node_modules/react-bootstrap/lib/Nav';
-import NavItem from '../../../node_modules/react-bootstrap/lib/NavItem'
-import Navbar from '../../../node_modules/react-bootstrap/lib/Navbar'
+import NavItem from '../../../node_modules/react-bootstrap/lib/NavItem';
+import Navbar from '../../../node_modules/react-bootstrap/lib/Navbar';
 
 var I18nMessageMock = React.createClass({
 
@@ -21,7 +20,6 @@ describe('Footer functions', () => {
 
     var component;
     var currentYear = new Date().getFullYear();
-    console.log("footer.css");
 
     beforeEach(() => {
         Footer.__Rewire__('I18nMessage', I18nMessageMock);
