@@ -19,8 +19,11 @@ let navActions = {
     toggleSearch: function() {
         this.dispatch(actions.TOGGLE_SEARCH);
     },
-    searchFor: function(text) {
-        this.dispatch(actions.SEARCH_FOR, text)
+    searchFor: function (text) {
+        this.dispatch(actions.SEARCH_FOR, text);
+    },
+    setSearching: function (searching) {
+        this.dispatch(actions.SEARCHING, searching);
     },
     changeLocale: function(locale) {
         Locale.changeLocale(locale);

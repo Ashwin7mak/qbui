@@ -1,24 +1,41 @@
+.topNav.mobile.searching {
+
+  >.top {
+    flex-basis:0;
+    transition: flex-basis 300ms ease-in-out;
+  }
+}
+
 .searchBar {
   flex-basis:0;
-  transition: flex-basis 500ms ease-in-out;
+  transition: flex-basis 300ms ease-in-out;
   align-items:center;
   font-size:14px;
   display:flex;
   flex-direction: column;
+  overflow:hidden;
 }
 
-.searchBar.open {
-  flex-basis:75px;
-  transition: flex-basis 500ms ease-in-out;
+.searchOpen .searchBar {
+  flex-basis:100px;
+  transition: flex-basis 300ms ease-in-out;
+  overflow:visible;
 }
 
 .searchLine {
-
+  button.cancel {
+    padding-left:0;
+    padding-right:15px;
+  }
+  flex-basis:50px;
+  display:flex;
+  align-items:center;
+  margin: 10px 0;
 }
 
 .filterLine {
-
+  flex-basis:50px;
 }
 .searchLine .input-group {
-  margin: 0 15px;
+  margin: 0 5px 0 15px;
 }

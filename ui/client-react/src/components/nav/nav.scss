@@ -46,11 +46,13 @@ html, body {
             flex-direction:column;
             background-color: #e1eaf2;
 
-            .top {
+            >.top {
                 display:flex;
                 flex-basis:50px;
                 align-items:center;
                 font-size:14px;
+                transition: flex-basis 300ms ease-in-out;
+                overflow:hidden;
             }
 
             .navGroup {

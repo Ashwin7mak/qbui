@@ -47,6 +47,7 @@ var Nav = React.createClass({
         const mobileNavOpen = this.props.mobile && this.state.nav.mobileLeftNavOpen;
         const navOpen = mobileNavOpen || this.state.nav.leftNavOpen;
         const searchBarOpen = this.state.nav.searchBarOpen;
+        const searching = this.state.nav.searching;
 
         const i18n = this.state.nav.i18n;
 
@@ -60,7 +61,7 @@ var Nav = React.createClass({
             {React.cloneElement(leftNav,{...i18n, items:this.state.nav.leftNavItems, open: navOpen, reportsData: this.state.reportsData, reportID: this.state.reportData.rptId, flux: flux} )}
 
             <div className='main'>
-                {React.cloneElement(topNav, {...i18n, title:'QuickBase', searchBarOpen: searchBarOpen, mobile: this.props.mobile, onNavClick:this.toggleNav, onAddClicked:this.showTrouser, flux: flux} )}
+                {React.cloneElement(topNav, {...i18n, title:'QuickBase', searching: searching, searchBarOpen: searchBarOpen, mobile: this.props.mobile, onNavClick:this.toggleNav, onAddClicked:this.showTrouser, flux: flux} )}
 
                 <ReactCSSTransitionGroup className='mainContent'
                                          transitionName="main-transition"

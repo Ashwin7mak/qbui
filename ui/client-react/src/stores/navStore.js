@@ -11,6 +11,7 @@ let NavStore = Fluxxor.createStore({
         this.state = {
             leftNavOpen: true,
             searchBarOpen: false,
+            searching:false,
             mobileLeftNavOpen: false,
             trouserOpen: false,
             newItemsOpen: false,
@@ -25,6 +26,7 @@ let NavStore = Fluxxor.createStore({
             actions.SHOW_NEW_ITEMS, this.onShowNewItems,
             actions.TOGGLE_LEFT_NAV, this.onToggleLeftNav,
             actions.TOGGLE_SEARCH, this.onToggleSearch,
+            actions.SEARCHING, this.onSearching,
             actions.CHANGE_LOCALE, this.onChangeLocale
         );
 
@@ -48,6 +50,10 @@ let NavStore = Fluxxor.createStore({
     },
     onToggleSearch: function() {
         this.state.searchBarOpen = !this.state.searchBarOpen;
+        this.emit('change');
+    },
+    onSearching: function (searching) {
+        this.state.searching = searching;
         this.emit('change');
     },
     onToggleLeftNav: function() {
