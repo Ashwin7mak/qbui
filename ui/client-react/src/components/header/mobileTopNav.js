@@ -30,8 +30,15 @@ var MobileTopNav = React.createClass( {
     render: function () {
         const searchIcon = <Glyphicon glyph="search" />;
 
+        let topClasses = 'topNav mobile';
+        if (this.props.searching)
+            topClasses += ' searching';
+        if (this.props.searchBarOpen)
+            topClasses += ' searchOpen';
+
         return (
-            <div className={'topNav mobile'}>
+            <div className={topClasses}>
+
                 <div className='top'>
                     <div className='navGroup left'>
                         <div className='navItem '><a className='iconLink' href="#" onClick={this.toggleNav}><Glyphicon glyph="menu-hamburger" /> </a></div>
@@ -46,9 +53,8 @@ var MobileTopNav = React.createClass( {
                     </div>
                 </div>
 
-                {this.props.searchBarOpen ?
-                    <MobileSearchBar /> : <div/>
-                }
+                <MobileSearchBar searchOpen= {this.props.searchBarOpen} searching={this.props.searching} />
+
 
             </div>
         );

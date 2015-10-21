@@ -23,7 +23,7 @@ var CurrentDate = React.createClass({
     }
 });
 
-const debounceSearchMillis = 500;
+const debounceSearchMillis = 100;
 
 var TopNav = React.createClass( {
     mixins: [IntlMixin, FluxMixin],
