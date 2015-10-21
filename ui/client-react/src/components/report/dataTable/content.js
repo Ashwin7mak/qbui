@@ -11,27 +11,22 @@ import Locale from '../../../locales/locales';
 var i18n = Locale.getI18nBundle();
 var IntlMixin = ReactIntl.IntlMixin;
 
-const resultsPerPage = 50; //assume that this is the constant number of records per page. This can be passed in as a prop for diff reports
+const resultsPerPage = 1000; //assume that this is the constant number of records per page. This can be passed in as a prop for diff reports
 
 var Content = React.createClass({
     mixins: [IntlMixin],
 
     getInitialState: function() {
         return {
-            reportRecords: this.props.reportData.data.filteredRecords ? this.props.reportData.data.filteredRecords : [],
-            reportColumns: this.props.reportData.data.columns ? this.props.reportData.data.columns : [],
-            firstDataSet: this.props.reportData.data.filteredRecords ? this.props.reportData.data.filteredRecords.slice(0, resultsPerPage+1) : []
+            reportColumns: this.props.reportData.data.columns ? this.props.reportData.data.columns : []
         };
     },
 
     componentWillReceiveProps: function(nextProps){
         var that = this;
         if (nextProps.reportData.data) {
-
             that.setState({
-                reportRecords: nextProps.reportData.data.filteredRecords ? nextProps.reportData.data.filteredRecords : [],
-                reportColumns: nextProps.reportData.data.columns ? that.getColumnProps(nextProps.reportData.data.columns) : [],
-                firstDataSet: nextProps.reportData.data.filteredRecords ? nextProps.reportData.data.filteredRecords.slice(0, resultsPerPage+1) : []
+                reportColumns: nextProps.reportData.data.columns ? that.getColumnProps(nextProps.reportData.data.columns) : []
             });
         }
     },
@@ -84,26 +79,18 @@ var Content = React.createClass({
         return [];
     },
 
-    getNextDataSet: function(page, callback){
 
-        var that = this;
-        if (that.state.reportRecords.length > 0) {
-            callback({
-                results: that.state.reportRecords.slice((page - 1) * resultsPerPage, (page) * resultsPerPage + 1)
-            })
-        }
-        else{
-            callback({results: []});
-        }
-    },
-
+    /* TODO: paging component that has "next and previous tied to callbacks from the store to get new data set*/
     render: function() {
 
         return (
             <Loader loaded={!this.props.reportData.loading}>
                 {this.props.reportData.error ?
                     <div>Error loading report!</div> :
-                    <GriddleTable {...i18n} mobile={this.props.mobile} getResultsCallback={this.getNextDataSet} results={this.state.firstDataSet} columnMetadata={this.state.reportColumns} useExternal={true} externalResultsPerPage={resultsPerPage}/>}
+                        <div>
+                            <GriddleTable {...i18n} mobile={this.props.mobile} results={this.props.reportData.data.filteredRecords} columnMetadata={this.state.reportColumns} showPager={false} useExternal={false} resultsPerPage={resultsPerPage} externalResultsPerPage={resultsPerPage} />
+                        </div>
+                }
             </Loader>
         )
     }
