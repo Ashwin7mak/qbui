@@ -14,7 +14,7 @@
 
     function getBaseOpts(config) {
         // for hot loading we need to prefix the requests in the html wih the hot loader url
-        HOT_BASE = 'http://localhost:' + (config.webpackDevServerPort || 3000 );
+        HOT_BASE = 'http://' + config.ip +':' + (config.webpackDevServerPort || 3000 );
         BASE_PROPS = {
             title   : '',
             lang    : 'en-us',

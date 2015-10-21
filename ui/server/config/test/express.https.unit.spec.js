@@ -86,7 +86,7 @@ describe('Request test always use ssh', function() {
     // ensure request use secure http
     it('server http request should return redirect to https with sslPort', function(done) {
         if (config.hasSslOptions()) {
-            request('http://localhost:' + config.port)
+            request('http://' + config.ip + ':' + config.port)
                     .get('/')
                     .expect(302)
                     .expect(function(res) {
@@ -107,7 +107,7 @@ describe('Request test always use ssh', function() {
         //test ssl cert if available
         if (config.hasSslOptions()) {
             should.exist(process.env.NODE_TLS_REJECT_UNAUTHORIZED);
-            request('https://localhost:' + config.sslPort)
+            request('https://' + config.ip + ':' + config.sslPort)
                     .get('/')
                     .expect(200)
                     .expect(function(res) {

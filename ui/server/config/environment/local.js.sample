@@ -51,6 +51,8 @@
         port: 9000,
         sslPort: 9443,
 
+        ip : 'localhost', // replace with your host or machine name user use (that is in your hosts file i.e.'CMBL13XXXXXX' for mobile testing)
+
         //Java REST endpoint (protocol,server,port)
         //javaHost: 'https://localhost.intuit.com:8443',
         javaHost: 'http://localhost.intuit.com:8080',
