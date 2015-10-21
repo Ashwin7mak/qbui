@@ -36,19 +36,14 @@ let MobileLeftNav = React.createClass( {
             </li>);
     },
 
-    // set focus to nested anchor tag to select current report if there is one...
-    navItemMounted: function (id, element) {
-
-        if (element && id && id == this.props.reportID)
-            element.firstChild.focus();
-    },
 
     buildNavItem: function(item) {
 
         let label = item.key ? this.getIntlMessage(item.key) : item.name;
+        let selectedClass = item.id && (item.id == this.props.reportID) ? 'selected' : '';
 
         return (
-            <li ref={this.navItemMounted.bind(this, item.id)}>
+            <li key={label} className={selectedClass}>
                 <Link className='leftNavLink' to={'/m'+item.link} onClick={this.toggleNav}>
                     <Glyphicon glyph={this.getGlyphName(item)}/> {label}
                 </Link>

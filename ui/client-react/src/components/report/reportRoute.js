@@ -18,6 +18,10 @@ var IntlMixin = ReactIntl.IntlMixin;
 var ReportRoute = React.createClass({
     mixins: [IntlMixin, FluxMixin],
 
+    loadReport: function(appId, tblId, rptId){
+        let flux = this.getFlux();
+        flux.actions.loadReport(appId, tblId, rptId, true);
+    },
     loadReportFromParams: function(params, checkParams) {
 
         if (params) {
@@ -47,9 +51,7 @@ var ReportRoute = React.createClass({
 
             if (appId && tblId && rptId) {
                 logger.debug('Loading report. AppId:' + appId + ' ;tblId:' + tblId + ' ;rptId:' + rptId);
-                let flux = this.getFlux();
-
-                flux.actions.loadReport(appId, tblId, rptId, true);
+                this.loadReport(appId, tblId, rptId);
             }
         }
     },
@@ -67,7 +69,7 @@ var ReportRoute = React.createClass({
 
         return (<div className='reportContainer'>
                 <Stage stageContent='this is the stage content text' >
-                    <ReportStage {...this.props.i18n} reportName={this.props.reportData.data.name}/>
+                    <ReportStage {...this.props.i18n} reportName={this.props.reportData && this.props.reportData.data ? this.props.reportData.data.name: ""}/>
                 </Stage>
                 <ReportContent {...this.props.i18n} reportData={this.props.reportData} mobile={this.props.mobile}/>
                 </div>);

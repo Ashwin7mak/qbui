@@ -1,25 +1,33 @@
 import React from 'react';
 import ReactIntl from 'react-intl';
-
+import Fluxxor from 'fluxxor';
 import './mobileAddFooter.scss';
 
 import {Glyphicon} from 'react-bootstrap';
 
-var IntlMixin = ReactIntl.IntlMixin;
-var FormattedMessage = ReactIntl.FormattedMessage;
+let IntlMixin = ReactIntl.IntlMixin;
+let FormattedMessage = ReactIntl.FormattedMessage;
+let FluxMixin = Fluxxor.FluxMixin(React);
 
-var MobileAddFooter = React.createClass({
-    mixins: [IntlMixin],
+ let MobileAddFooter = React.createClass({
+    mixins: [IntlMixin,FluxMixin],
 
     addNew: function() {
-
+        let flux = this.getFlux();
+        // todo: flux.actions.showNewItems();
     },
 
     render: function() {
-
         return (
-            <div className='mobileAddFooter'>
-                <Glyphicon onClick={this.addNew} glyph={'plus-sign'} />
+            <div>
+                {this.props.newItemsOpen ?
+                    <div className='mobileAddFooter'>
+                    record selection component goes here (like qbo native app)
+                    </div>
+                :
+                <div className='mobileAddButton'>
+                    <Glyphicon onClick={this.addNew} glyph={'plus-sign'}/>
+                </div>}
             </div>);
     }
 });

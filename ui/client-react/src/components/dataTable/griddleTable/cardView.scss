@@ -1,0 +1,81 @@
+.custom-row-card {
+  border-color: grey;
+  border-style: solid;
+  border-width: 1px 0 1px 0;
+  font-size: large;
+  .card {
+    flex: 1;
+    width: 100%;
+  }
+  .top-card-row{
+    margin-top: 10px;
+  }
+  .card-expander{
+    border-left: 1px solid lightgray;
+    padding: 0 20px 0 25px;
+    /*margin: 20px 0;*/
+    color: gray;
+  }
+  .glyphicon{
+   top: 50px;
+  }
+  .flexRow{
+    display: flex;
+    flex-direction: row;
+  }
+  .fieldRow{
+    display: flex;
+    flex-direction: row;
+    align-items: stretch;
+    flex-wrap: wrap;
+    overflow-y: hidden;
+  }
+  .fieldRow.collapsed{
+    max-height: 70px;
+  }
+  .fieldRow.expanded{
+    max-height: 100%;
+  }
+  .field {
+    padding: 10px;
+    flex: 1 1 50%;
+    .fieldLabel{
+      display: block;
+      color:#6e8ba8;
+    }
+    .fieldValue {
+      display:block;
+      min-width: 0;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+    &:nth-child(n+3) {
+      background-color: #F5FAFF;
+      border-top: 1px solid lightgrey;
+      .fieldValue {
+        white-space: normal;
+      }
+    }
+  }
+
+
+  @media (min-device-width: 300px) and (orientation: landscape) {
+    .field {
+      flex-basis: 33%;
+      display: block;
+      &:nth-child(n+3) {
+        background-color: inherit;
+        border-top: inherit;
+        .fieldValue {
+          white-space: nowrap;
+        }
+      }
+      &:nth-child(n+4) {
+        background-color: #F5FAFF;
+        border-top: 1px solid lightgrey;
+        white-space: normal;
+      }
+    }
+  }
+}

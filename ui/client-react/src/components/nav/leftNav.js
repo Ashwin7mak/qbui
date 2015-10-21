@@ -18,13 +18,6 @@ let LeftNav = React.createClass( {
             return 'th-list';
     },
 
-    // set focus to nested anchor tag to select current report if there is one...
-    navItemMounted: function (id, element) {
-
-        if (element && id && id == this.props.reportID)
-            element.firstChild.focus();
-    },
-
     buildHeadingItem: function (item, loadingCheck) {
 
         if (this.props.open)
@@ -44,9 +37,11 @@ let LeftNav = React.createClass( {
 
         const tooltip = (<Tooltip className={ this.props.open ? 'leftNavTooltip' : 'leftNavTooltip show' } id={label}>{label}</Tooltip>);
 
+        let selectedClass = item.id && (item.id == this.props.reportID) ? 'selected' : '';
+
         return (
             <OverlayTrigger key={label} placement="right" overlay={tooltip}>
-                <li ref={this.navItemMounted.bind(this, item.id)}>
+                <li className={selectedClass}>
                     <Link className='leftNavLink' to={item.link} >
                         <Glyphicon glyph={this.getGlyphName(item)}/> {label}
                     </Link>

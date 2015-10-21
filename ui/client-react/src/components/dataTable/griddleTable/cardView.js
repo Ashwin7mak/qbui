@@ -3,6 +3,8 @@ import React from 'react';
 import ReactBootstrap from 'react-bootstrap';
 import {Button,Glyphicon} from '../../../../../node_modules/react-bootstrap/lib'
 
+import './cardView.scss';
+
 class CardView  extends React.Component {
     constructor(...args) {
         super(...args);
@@ -18,80 +20,36 @@ class CardView  extends React.Component {
     }
 
     handleMoreCard(){
-        this.setState({ showMoreCard: !this.state.showMoreCard });
+        this.setState({ showMoreCards: !this.state.showMoreCards });
     }
 
-    createColumn(key, column){
-        //create a new column for a row
-        var spanClass = column + "-value";
-        return(
-        <div className={column}>
-            <span className="text-info">{key}</span>
-            <span className={spanClass}>{this.props.data[key]}</span>
+
+
+    createField(c, curKey){
+        return(<div key={c} className="field">
+            <span className="fieldLabel">{curKey}</span>
+            <span className="fieldValue">{this.props.data[curKey]}</span>
         </div>);
     }
 
-    createRow(c, curKey, curKeyPlus1){
-        var classRow = c == 3 ? "top-card-row card-row" : "bottom-card-row card-row";
-        return(<div className={classRow}>
-            {this.createColumn(curKey, "left-col")}
-            {this.createColumn(curKeyPlus1, "right-col")}
-        </div>);
-    }
 
     render(){
+        var row;
         var fields = [];
-        var additionalCards = [];
-        for (var i = 0; i < Object.keys(this.props.data).length; i++) {
-            var values = [];
-            var addCardValues = [];
-            var keys = Object.keys(this.props.data);
-            for (var c = 0; ((c < keys.length) && (c < 7)); c++) {
-                if(c == 0) {
-                    values.push(<div className="top-card-row"><strong>{this.props.data[keys[c]]}</strong></div>)
-                }
-                else if (c == 1){
-                    //check to see if I can drop in the next two
-                    if (c + 1 < keys.length) {
-                        //we can!
-                        values.push(this.createRow(c,keys[c],keys[c+1]));
-                        c++;
-                    }
-                    else {
-                        //we cannot!
-                    }
-                }
-                else {
-                    //this.createHiddenCard(c, keys);
-                    if (c + 1 < keys.length) {
-                        //we can!
-                        addCardValues.push(this.createRow(c,keys[c],keys[c+1]));
-                        c++;
-                    }
-                    else {
-                        addCardValues.push(this.createColumn(keys[c],"left-col"))
-                    }
-                }
-            }
-            fields.push(values[i]);
-            additionalCards.push(addCardValues[i]);
+        var keys = Object.keys(this.props.data);
+        var topField = <div className="top-card-row field"><strong>{this.props.data[keys[0]]}</strong></div>;
+        for (var i = 1; i < keys.length; i++) {
+            fields.push(this.createField(i,keys[i]));
         }
+        row = <div className="card">{topField}<div className={this.state.showMoreCards? "fieldRow expanded": "fieldRow collapsed"}>{fields}</div></div>;
         return (
             <div className="custom-row-card">
                 <div className="flexRow">
-                    <div className="card">
-                        {fields}
+                    <div className={this.state.showMoreCards ? "card expanded": "card collapsed"}>
+                        {row}
                     </div>
-                    <div className="card-expand" onClick={this.handleMoreCard}>
-                        <Glyphicon glyph={this.state.showMoreCard ? "chevron-up" : "chevron-down"} />
-                    </div>
-                </div>
-                <div className="flexRow grayBackground">
-                    <div className={this.state.showMoreCard ? "show-more-card" : "hide-more-card"}>
-                        {additionalCards}
-                    </div>
-                    <div className={this.state.showMoreCard? "card-expand-hidden": "displayNone"}>
-                        <Glyphicon glyph={this.state.showMoreCard ? "chevron-up" : "chevron-down"} />
+                    <div className="card-expander" onClick={this.handleMoreCard}>
+                        <Glyphicon glyph="plus" />
                     </div>
                 </div>
             </div>

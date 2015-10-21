@@ -4,7 +4,8 @@ import { Button } from 'react-bootstrap';
 import Logger from '../../../utils/logger';
 var logger = new Logger();
 
-import '../../../assets/css/report.css';
+
+import './stage.scss';
 
 var IntlMixin = ReactIntl.IntlMixin;
 var FormattedMessage = ReactIntl.FormattedMessage;
@@ -19,8 +20,7 @@ var Stage = React.createClass({
 
 
     render: function() {
-        return <div className="report-stage">
-                 <div className="report-content">
+        return <div className="report-content">
                     <div className="left">
                         <div className="header">{this.props.reportName}</div>
                         <div className="subheader"><FormattedMessage message={this.getIntlMessage('lighthouse.stage.sub_header')}/></div>
@@ -43,7 +43,7 @@ var Stage = React.createClass({
                         </div>
                     </div>
                  </div>
-               </div>
+
     }
 });
 

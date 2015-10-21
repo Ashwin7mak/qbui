@@ -10,16 +10,21 @@ let NavStore = Fluxxor.createStore({
     initialize: function() {
         this.state = {
             leftNavOpen: true,
+            searchBarOpen: false,
             mobileLeftNavOpen: false,
             trouserOpen: false,
-            leftNavItems: [],
-            i18n: Locale.getI18nBundle()
+            newItemsOpen: false,
+            leftNavItems: []
         };
+
+        this.setLocaleBundle();
 
         this.bindActions(
             actions.SHOW_TROUSER, this.onShowTrouser,
             actions.HIDE_TROUSER, this.onHideTrouser,
+            actions.SHOW_NEW_ITEMS, this.onShowNewItems,
             actions.TOGGLE_LEFT_NAV, this.onToggleLeftNav,
+            actions.TOGGLE_SEARCH, this.onToggleSearch,
             actions.CHANGE_LOCALE, this.onChangeLocale
         );
 
@@ -28,7 +33,7 @@ let NavStore = Fluxxor.createStore({
 
     onChangeLocale: function() {
         logger.debug('changing locale: ' + Locale.getLocale());
-        this.state.i18n = Locale.getI18nBundle();
+        this.setLocaleBundle();
         this.emit('change');
     },
 
@@ -41,15 +46,25 @@ let NavStore = Fluxxor.createStore({
         this.state.trouserOpen = false;
         this.emit('change');
     },
-
+    onToggleSearch: function() {
+        this.state.searchBarOpen = !this.state.searchBarOpen;
+        this.emit('change');
+    },
     onToggleLeftNav: function() {
         this.state.leftNavOpen = !this.state.leftNavOpen;
         this.state.mobileLeftNavOpen = !this.state.mobileLeftNavOpen;
         this.emit('change');
     },
-
+    onShowNewItems: function() {
+        this.state.newItemsOpen = true;
+        this.emit('change');
+    },
     getState: function() {
         return this.state;
+    },
+
+    setLocaleBundle: function() {
+        this.state.i18n = Locale.getI18nBundle();
     }
 });
 
