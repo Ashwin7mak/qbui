@@ -54,7 +54,7 @@ class GriddleTable extends React.Component {
 
 GriddleTable.propTypes = {  };
 GriddleTable.defaultProps = {
-    showFilter: true,
+    showFilter: false,
     showSettings: false,
     currentPage: 0,
     resultsPerPage: 1000,
