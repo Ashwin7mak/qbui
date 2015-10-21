@@ -10,7 +10,7 @@ module.exports = function(config) {
         //  base path that is used to resolve files, excludes, etc.
         basePath: "",
 
-        frameworks: ["phantomjs-shim", "jasmine"],
+        frameworks: ["phantomjs-shim", "es6-shim", "jasmine"],
 
         // list of files/patterns to load and test
         files: [
