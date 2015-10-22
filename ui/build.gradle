@@ -125,14 +125,6 @@ task gruntBuildDebugVerbose(type: GruntTask) {
     args = ["build",  "--no-color", "--debug", "--verbose", "--stacktrace"]
 }
 
-task gruntEnvTest(type: GruntTask) {
-    args = ["env:test",  "--no-color", "--debug", "--verbose", "--stacktrace"]
-}
-
-task gruntEnvProd(type: GruntTask) {
-    args = ["env:prod",  "--no-color", "--debug", "--verbose", "--stacktrace"]
-}
-
 task gruntTestDebugVerbose(type: GruntTask) {
     args = ["ciTest", "--no-color", "--debug", "--verbose", "--stacktrace"]
 }
@@ -184,7 +176,7 @@ task invokeCheckForApiUp(type:Exec) {
 
 zip.dependsOn clean, gruntMakeProdNodeModules
 build.dependsOn clean, grunt_build
-clean.dependsOn grunt_clean, cleanBuildDir
+clean.dependsOn grunt_npmRebuild, grunt_clean, cleanBuildDir
 test.dependsOn clean, gruntUnitTestsNoColor
 gruntMakeProdNodeModules.dependsOn clean, grunt_build
 

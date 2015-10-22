@@ -820,6 +820,13 @@ module.exports = function(grunt) {
                     }
                 }
             },
+            rebuild: {
+                command: 'npm rebuild node-sass',
+                options: {
+                    execOptions: {
+                    }
+                }
+            },
             options: {
                 stdout: true,
                 stderr: true,
@@ -1001,6 +1008,7 @@ module.exports = function(grunt) {
         //  If the run-time environment variable is not set, will set to local
         //  but only if the file is defined (which should be only on a developer's machine).
         if (!process.env.NODE_ENV) {
+            grunt.log.writeln('NODE_ENV not set defaulting to local');
             if (grunt.file.exists(localJsFile)) {
                 grunt.task.run(['env:local']);
             }
@@ -1176,7 +1184,6 @@ module.exports = function(grunt) {
 
     grunt.registerTask('makeProdNodeModules', 'Creates a production copy of node_modules folder for zip to nexus', function () {
         // delete any old modules in dist dir
-        grunt.log.writeln('deleting old node_modules_prod');
         grunt.task.run(['clean:modulesProd']);
 
         //copy current modules to prod modules dir
@@ -1185,7 +1192,14 @@ module.exports = function(grunt) {
         //prune the dev modules
         grunt.task.run(['shell:modulesPrune']);
 
-    })
+    });
+
+    grunt.registerTask('npmRebuild', 'rebuilds the npm bins for the ci machine env ', function () {
+        //rebuild npm
+        grunt.task.run(['shell:rebuild']);
+
+    });
+
 
     grunt.loadNpmTasks('grunt-jscs');
     grunt.loadNpmTasks('grunt-contrib-jshint');
