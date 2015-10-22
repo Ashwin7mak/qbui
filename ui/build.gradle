@@ -88,14 +88,10 @@ task zip(type: Zip) {
     from ('dist') {
         into('dist')
     }
-    from ('node_modules') {
-        into ('node_modules')
-    }
-
 }
 
 task clean_node_modules(type: Delete) {
-    delete 'node_modules'
+    delete 'dist/node_modules'
 }
 
 npm_install {
@@ -158,6 +154,10 @@ task cleanBuildDir (type: Delete) {
     delete 'build'
 }
 
+task gruntMakeProdNodeModules(type: GruntTask) {
+    args = ["makeProdNodeModules"]
+}
+
 //in cloud9 check if the server is up
 task checkForApiUp {
     doFirst {
@@ -174,11 +174,11 @@ task invokeCheckForApiUp(type:Exec) {
 //  Define task dependencies
 //******************************************************
 
-zip.dependsOn clean, grunt_build
+zip.dependsOn clean, gruntMakeProdNodeModules
 build.dependsOn clean, grunt_build
 clean.dependsOn grunt_clean, cleanBuildDir
 test.dependsOn clean, gruntUnitTestsNoColor
-
+gruntMakeProdNodeModules.dependsOn clean, grunt_build
 
 // the directory for nightly builds used to release from
 project.group = "build_rpms"

@@ -34,13 +34,14 @@
     //third party usage
     //a white list of global variables that are not formally defined in the source code
     "globals": {
+        "_": false,
+        "__dirname" : false,
         "Chance" : false,
-        "process" : false,
-        "require" : false,
         "exports" : false,
         "module": false,
-        "setTimeout": false,
-        "__dirname" : false,
-        "_": false
+        "process" : false,
+        "protractor" : false,
+        "require" : false,
+        "setTimeout": false
     }
 }

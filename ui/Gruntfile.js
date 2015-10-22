@@ -309,7 +309,16 @@ module.exports = function(grunt) {
                         serverReportDir + '/integration/*'
                     ]
                 }]
+            },
+            modulesProd: {
+                files: [{
+                    dot: true,
+                    src: [
+                        '<%= quickbase.distDir %>/node_modules/*'
+                    ]
+                }]
             }
+
         },
 
         // Add vendor prefixed styles
@@ -579,6 +588,12 @@ module.exports = function(grunt) {
                 dest  : '.tmp/',
                 src   : ['**/*.css']
             },
+            modulesProd : {
+                expand: true,
+                cwd   : 'node_modules',
+                src   : ['**/*'],
+                dest   :'<%= quickbase.distDir %>/node_modules'
+            },
             reactDist : {
                 files: [{
                     expand : true,
@@ -794,6 +809,14 @@ module.exports = function(grunt) {
                 command: 'npm run webpack',
                 options: {
                     execOptions: {
+                    }
+                }
+            },
+            modulesPrune: {
+                command: 'npm prune --production',
+                options: {
+                    execOptions: {
+                        cwd : '<%= quickbase.distDir %>'
                     }
                 }
             },
@@ -1150,6 +1173,19 @@ module.exports = function(grunt) {
     grunt.registerTask('sauce-connect-close', 'Closes the current Sauce Connect tunnel', function() {
         sauceConnect.close(this.async());
     });
+
+    grunt.registerTask('makeProdNodeModules', 'Creates a production copy of node_modules folder for zip to nexus', function () {
+        // delete any old modules in dist dir
+        grunt.log.writeln('deleting old node_modules_prod');
+        grunt.task.run(['clean:modulesProd']);
+
+        //copy current modules to prod modules dir
+        grunt.task.run(['copy:modulesProd']);
+
+        //prune the dev modules
+        grunt.task.run(['shell:modulesPrune']);
+
+    })
 
     grunt.loadNpmTasks('grunt-jscs');
     grunt.loadNpmTasks('grunt-contrib-jshint');

@@ -24,8 +24,8 @@
                     'webpack/hot/only-dev-server'
             ].concat(webpackConfig.entry);
 
-           webpackConfig.output.publicPath = 'http://'+ config.ip +':' + hotPort + webpackConfig.output.publicPath;
-           //webpackConfig.output.publicPath = '/dist/';
+            webpackConfig.output.publicPath = 'http://' + config.ip + ':' + hotPort + webpackConfig.output.publicPath;
+            //webpackConfig.output.publicPath = '/dist/';
 
             var compiler = webpack(webpackConfig);
             // we start a webpack-dev-server with our config
