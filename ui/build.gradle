@@ -126,11 +126,11 @@ task gruntBuildDebugVerbose(type: GruntTask) {
 }
 
 task gruntEnvTest(type: GruntTask) {
-    args = ["env:test", "--no-color"]
+    args = ["env:test",  "--no-color", "--debug", "--verbose", "--stacktrace"]
 }
 
 task gruntEnvProd(type: GruntTask) {
-    args = ["env:prod", "--no-color"]
+    args = ["env:prod",  "--no-color", "--debug", "--verbose", "--stacktrace"]
 }
 
 task gruntTestDebugVerbose(type: GruntTask) {
