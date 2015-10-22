@@ -821,7 +821,10 @@ module.exports = function(grunt) {
                 }
             },
             rebuild: {
-                command: 'npm rebuild node-sass',
+                command: [
+                    'npm rebuild node-sass',
+                    'npm install node-sass'
+                    ],
                 options: {
                     execOptions: {
                     }
