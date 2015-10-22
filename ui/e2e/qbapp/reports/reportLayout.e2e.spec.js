@@ -97,13 +97,13 @@
                     // Select the report
                     reportServicePage.navLinksElList.get(1).click();
                     // Make sure the table report has loaded
-                    browser.wait(EC.visibilityOf(reportServicePage.griddleContainerEl), 5000).then(function () {
+                    browser.wait(EC.visibilityOf(reportServicePage.griddleContainerEl), 5000).then(function() {
                         // Check there is a scrollbar in the griddle table
                         var fetchRecordPromises = [];
                         fetchRecordPromises.push(reportServicePage.loadedContentEl.getAttribute('scrollWidth'));
                         fetchRecordPromises.push(reportServicePage.loadedContentEl.getAttribute('clientWidth'));
                         //When all the dimensions have been fetched, assert the values match expectations
-                        promise.all(fetchRecordPromises).then(function (dimensions) {
+                        promise.all(fetchRecordPromises).then(function(dimensions) {
                             expect(Number(dimensions[0])).toBeGreaterThan(Number(dimensions[1]));
                             done();
                         });
@@ -132,7 +132,7 @@
                         fetchRecordPromises.push(reportServicePage.loadedContentEl.getAttribute('scrollWidth'));
                         fetchRecordPromises.push(reportServicePage.loadedContentEl.getAttribute('clientWidth'));
                         //When all the dimensions have been fetched, assert the values match expectations
-                        promise.all(fetchRecordPromises).then(function (dimensions) {
+                        promise.all(fetchRecordPromises).then(function(dimensions) {
                             expect(Number(dimensions[0])).not.toBeGreaterThan(Number(dimensions[1]));
                             done();
                         });
@@ -143,7 +143,7 @@
         ///**
         // * Return to the table selection page by clicking on the Home link in the left nav
         // */
-        afterEach(function (done) {
+        afterEach(function(done) {
             var reportServicePage = new ReportServicePage();
             browser.wait(EC.visibilityOf(reportServicePage.navStackedEl), 5000);
             reportServicePage.appsHomeLinkEl.click();

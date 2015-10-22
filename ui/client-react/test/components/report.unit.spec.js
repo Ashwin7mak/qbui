@@ -70,7 +70,7 @@ describe('Report functions', () => {
 
     let flux = {
         actions:{
-            loadReport= function(){return;}
+            loadReport: function(){return;}
         }
     };
 
