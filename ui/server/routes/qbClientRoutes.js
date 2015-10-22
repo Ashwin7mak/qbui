@@ -18,7 +18,7 @@
         BASE_PROPS = {
             title   : '',
             lang    : 'en-us',
-            favicon : '/dist/favicon.ico',
+            favicon : '/favicon.ico',
             jsPath  : '/dist/',
             settings: {views: viewPath},
             hostBase: (config.isProduction || config.noHotLoad) ? '' : HOT_BASE,
