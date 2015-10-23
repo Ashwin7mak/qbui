@@ -76,7 +76,6 @@ node {
     // Set the work directory for unpacking node...can't be under build directory as the clean task will wipe out the directory
     workDir = file("$projectDir/nodejs")
 
-    nodeModulesDir = file("${project.projectDir}/ui")
 }
 
 //******************************************************
@@ -114,6 +113,10 @@ task npmPruneProduction (type: NpmTask) {
 
 task npmRebuildJpegtran (type: NpmTask) {
     args =['rebuild', 'jpegtran-bin']
+}
+
+task npmRebuildNodeSass (type: NpmTask) {
+    args =['rebuild', 'node-sass']
 }
 
 task npmRmJpegtran (type: NpmTask) {
@@ -179,7 +182,7 @@ task invokeCheckForApiUp(type:Exec) {
 
 zip.dependsOn clean, gruntMakeProdNodeModules
 build.dependsOn clean, grunt_build
-clean.dependsOn grunt_npmRebuild, grunt_clean, cleanBuildDir
+clean.dependsOn grunt_clean, cleanBuildDir
 test.dependsOn clean, gruntUnitTestsNoColor
 gruntMakeProdNodeModules.dependsOn clean, grunt_build
 
