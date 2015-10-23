@@ -47,8 +47,10 @@ println( "Branch : " + getProjectArchive() )
 
 node {
     // Version of node to use.
-    version = '0.10.31'
+    //version = '0.10.31'
+    version = '4.2.1'
 
+    npmVersion = '2.14.4'
     // Base URL for fetching node distributions (change if you have a mirror).
     //distBaseUrl = 'http://nodejs.org/dist'
     // full URL is http://nodejs.org/dist/v0.10.31/node-v0.10.31-darwin-x64.tar.gz
@@ -64,8 +66,8 @@ node {
     // classifier: darwin-x64  // use whatever is in that section of the original file name for the OS
     // extension: gz
 
-    distBaseUrl = 'http://pppdc9prd0t4:8081/nexus/service/local/repositories/phoenix/content/nodejs/node'
-    //distBaseUrl = 'http://nodejs.org/dist'
+    //distBaseUrl = 'http://pppdc9prd0t4:8081/nexus/service/local/repositories/phoenix/content/nodejs/node'
+    distBaseUrl = 'http://nodejs.org/dist'
 
 
     // Download node if running a CI build; otherwise use globally installed node.
@@ -74,6 +76,7 @@ node {
     // Set the work directory for unpacking node...can't be under build directory as the clean task will wipe out the directory
     workDir = file("$projectDir/nodejs")
 
+    nodeModulesDir = file("${project.projectDir}/ui")
 }
 
 //******************************************************
