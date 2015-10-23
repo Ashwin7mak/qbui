@@ -115,8 +115,12 @@ task npmRebuildJpegtran (type: NpmTask) {
     args =['rebuild', 'jpegtran-bin']
 }
 
-task npmRebuild (type: NpmTask) {
-    args =['rebuild']
+task npmRebuildNodeSass (type: NpmTask) {
+    args =['rebuild', 'node-sass']
+}
+
+task npmInstallReactRouter (type: NpmTask) {
+    args = [ 'install', 'react-router@1.0.0-rc3']
 }
 
 task npmRmJpegtran (type: NpmTask) {
