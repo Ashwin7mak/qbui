@@ -115,8 +115,8 @@ task npmRebuildJpegtran (type: NpmTask) {
     args =['rebuild', 'jpegtran-bin']
 }
 
-task npmRebuildNodeSass (type: NpmTask) {
-    args =['rebuild', 'node-sass']
+task npmRebuild (type: NpmTask) {
+    args =['rebuild']
 }
 
 task npmRmJpegtran (type: NpmTask) {
