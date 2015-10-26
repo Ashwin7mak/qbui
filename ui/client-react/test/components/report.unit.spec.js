@@ -1,22 +1,15 @@
-import Fluxxor from 'fluxxor';
-
 import React from 'react/addons';
-import Report from '../../src/components/report/reportRoute'
+import Report from '../../src/components/report/reportRoute';
 
 var TestUtils = React.addons.TestUtils;
 
 var StageMock = React.createClass({
-    render: function () {
+    render: function() {
         return <div className="stage-mock-component" />;
     }
 });
-var ReportStageMock = React.createClass({
-    render: function () {
-        return <div className="report-stage-mock-component" />;
-    }
-});
 var ContentMock = React.createClass({
-    render: function () {
+    render: function() {
         return <div className="datatable-mock-component" />;
     }
 });
@@ -27,7 +20,7 @@ const fakeReportData_Empty = {
         records: [],
         columns: []
     }
-}
+};
 
 const fakeReportData = {
     data: {
@@ -35,7 +28,7 @@ const fakeReportData = {
         records: [],
         columns: []
     }
-}
+};
 
 const params = {
     "noapp": {
@@ -60,7 +53,7 @@ const params = {
         tblId: "xyz2",
         rptId: 2
     }
-}
+};
 
 
 describe('Report functions', () => {
@@ -123,17 +116,17 @@ describe('Report functions', () => {
 
         var TestParent = React.createFactory(React.createClass({
             getInitialState() {
-                return { params: params.before };
+                return {params: params.before};
             },
             render() {
-                return <Report flux={flux} ref="refReport" reportData={fakeReportData} params={this.state.params}/>
+                return <Report flux={flux} ref="refReport" reportData={fakeReportData} params={this.state.params}/>;
             }
         }));
         var parent = TestUtils.renderIntoDocument(TestParent());
         parent.setState({
             params: params.after
         });
-        expect (parent.refs.refReport.props.params).toEqual(params.after);
+        expect(parent.refs.refReport.props.params).toEqual(params.after);
         expect(Report.prototype.loadReport).toHaveBeenCalledWith(params.after.appId, params.after.tblId, params.after.rptId);
 
     });

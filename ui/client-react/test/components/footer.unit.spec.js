@@ -19,8 +19,6 @@ describe('Footer functions', () => {
     'use strict';
 
     var component;
-    var currentYear = new Date().getFullYear();
-
     beforeEach(() => {
         Footer.__Rewire__('I18nMessage', I18nMessageMock);
         component = TestUtils.renderIntoDocument(<Footer />);

@@ -58,11 +58,11 @@
                 init.then(function() {
                     apiBase.executeRequest(apiBase.resolveRelationshipsEndpoint(relationshipToCreate.appId), consts.POST, relationshipToCreate).
                             then(function(relResponse) {
-                                     deferred.resolve(relResponse);
-                                 }).catch(function(error) {
-                                              deferred.reject(error);
-                                              assert(false, 'failed to create app: ' + JSON.stringify(error));
-                                          });
+                                deferred.resolve(relResponse);
+                            }).catch(function(error) {
+                                deferred.reject(error);
+                                assert(false, 'failed to create app: ' + JSON.stringify(error));
+                            });
                 });
                 return deferred.promise;
             },
@@ -71,11 +71,11 @@
                 init.then(function() {
                     apiBase.executeRequest(apiBase.resolveFieldsEndpoint(appId, tableId), consts.POST, fieldToCreate).
                             then(function(relResponse) {
-                                     deferred.resolve(relResponse);
-                                 }).catch(function(error) {
-                                              deferred.reject(error);
-                                              assert(false, 'failed to create field: ' + JSON.stringify(error));
-                                          });
+                                deferred.resolve(relResponse);
+                            }).catch(function(error) {
+                                deferred.reject(error);
+                                assert(false, 'failed to create field: ' + JSON.stringify(error));
+                            });
                 });
                 return deferred.promise;
             },
@@ -88,12 +88,12 @@
                 init.then(function() {
                     apiBase.executeRequest(endpoint, consts.GET).
                             then(function(recResp) {
-                                     deferred.resolve(recResp);
-                                 }).
+                                deferred.resolve(recResp);
+                            }).
                             catch(function(error) {
-                                      deferred.reject(error);
-                                      assert(false, 'failed to resolve record');
-                                  });
+                                deferred.reject(error);
+                                assert(false, 'failed to resolve record');
+                            });
                 });
                 return deferred.promise;
             },
@@ -104,18 +104,18 @@
                 init.then(function() {
                     apiBase.executeRequest(recordsEndpoint, consts.POST, record)
                             .then(function(recordIdResponse) {
-                                      var getEndpoint = recordsEndpoint + JSON.parse(recordIdResponse.body).id;
-                                      if (params) {
-                                          getEndpoint += params;
-                                      }
-                                      apiBase.executeRequest(getEndpoint, consts.GET)
+                                var getEndpoint = recordsEndpoint + JSON.parse(recordIdResponse.body).id;
+                                if (params) {
+                                    getEndpoint += params;
+                                }
+                                apiBase.executeRequest(getEndpoint, consts.GET)
                                               .then(function(fetchedRecordResponse) {
-                                                        var fetchedRecord = jsonBigNum.parse(fetchedRecordResponse.body);
-                                                        fetchRecordDeferred.resolve(fetchedRecord);
-                                                    }).catch(function(error) {
-                                                                 fetchRecordDeferred.reject(error);
-                                                             });
-                                  }).catch(function(currError) {log.error(JSON.stringify(currError));});
+                                                  var fetchedRecord = jsonBigNum.parse(fetchedRecordResponse.body);
+                                                  fetchRecordDeferred.resolve(fetchedRecord);
+                                              }).catch(function(error) {
+                                                  fetchRecordDeferred.reject(error);
+                                              });
+                            }).catch(function(currError) {log.error(JSON.stringify(currError));});
                 }).catch(function(err) {log.error(JSON.stringify(err));});
                 return fetchRecordDeferred.promise;
             },
@@ -134,15 +134,15 @@
 
                     apiBase.executeRequest(recordBulkEndpoint, consts.POST, recordObjects)
                             .then(function(recordBulkResponse) {
-                                      var parsedRecordIdList = JSON.parse(recordBulkResponse.body);
+                                var parsedRecordIdList = JSON.parse(recordBulkResponse.body);
 
-                                      var recordIdList = [];
-                                      parsedRecordIdList.forEach(function(jsonObj) {
-                                          recordIdList.push(jsonObj.id);
-                                      });
+                                var recordIdList = [];
+                                parsedRecordIdList.forEach(function(jsonObj) {
+                                    recordIdList.push(jsonObj.id);
+                                });
 
-                                      fetchRecordDeferred.resolve(recordIdList);
-                                  }).catch(function(currError) {log.error(JSON.stringify(currError));});
+                                fetchRecordDeferred.resolve(recordIdList);
+                            }).catch(function(currError) {log.error(JSON.stringify(currError));});
                 }).catch(function(err) {log.error(JSON.stringify(err));});
                 return fetchRecordDeferred.promise;
             },
@@ -157,12 +157,12 @@
                     }
                     apiBase.executeRequest(getEndpoint, consts.GET)
                             .then(function(fetchedRecordResponse) {
-                                      var fetchedRecord = jsonBigNum.parse(fetchedRecordResponse.body);
-                                      fetchRecordDeferred.resolve(fetchedRecord);
-                                  }).catch(function(error) {
-                                               log.debug('Error getting record: ' + JSON.stringify(error) + ' Endpoint that failed: ' + recordsEndpoint + recordId);
-                                               fetchRecordDeferred.reject(error);
-                                           });
+                                var fetchedRecord = jsonBigNum.parse(fetchedRecordResponse.body);
+                                fetchRecordDeferred.resolve(fetchedRecord);
+                            }).catch(function(error) {
+                                log.debug('Error getting record: ' + JSON.stringify(error) + ' Endpoint that failed: ' + recordsEndpoint + recordId);
+                                fetchRecordDeferred.reject(error);
+                            });
                 }).catch(function(currError) {log.error(JSON.stringify(currError));});
                 return fetchRecordDeferred.promise;
             }

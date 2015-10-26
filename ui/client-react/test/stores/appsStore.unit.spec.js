@@ -10,10 +10,9 @@ describe('Apps Store functions', () => {
     });
 
     it('test load apps action', () => {
-
-
-
-
+        /*eslint no-unused-expressions:0 */
+        expect(appStore).toBeDefined;
+        expect(appActions).toBeDefined;
     });
 
 

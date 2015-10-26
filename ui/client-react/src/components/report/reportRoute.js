@@ -1,6 +1,6 @@
 import React from 'react';
 import ReactIntl from 'react-intl';
-import ReactBootstrap from 'react-bootstrap';
+//import ReactBootstrap from 'react-bootstrap';
 
 import Stage from '../stage/stage';
 import ReportStage from './dataTable/stage';
@@ -18,11 +18,11 @@ var IntlMixin = ReactIntl.IntlMixin;
 var ReportRoute = React.createClass({
     mixins: [IntlMixin, FluxMixin],
 
-    loadReport: function(appId, tblId, rptId){
+    loadReport(appId, tblId, rptId){
         let flux = this.getFlux();
         flux.actions.loadReport(appId, tblId, rptId, true);
     },
-    loadReportFromParams: function(params, checkParams) {
+    loadReportFromParams(params, checkParams) {
 
         if (params) {
             let appId = params.appId;
@@ -55,21 +55,21 @@ var ReportRoute = React.createClass({
             }
         }
     },
-    componentDidMount: function() {
+    componentDidMount() {
         this.loadReportFromParams(this.props.params);
     },
 
     // Triggered when properties change
-    componentWillReceiveProps: function(props) {
+    componentWillReceiveProps(props) {
 
-        this.loadReportFromParams(props.params,true);
+        this.loadReportFromParams(props.params, true);
     },
 
-    render: function() {
+    render() {
 
-        return (<div className='reportContainer'>
-                <Stage stageContent='this is the stage content text' >
-                    <ReportStage {...this.props.i18n} reportName={this.props.reportData && this.props.reportData.data ? this.props.reportData.data.name: ""}/>
+        return (<div className="reportContainer">
+                <Stage stageContent="this is the stage content text" >
+                    <ReportStage {...this.props.i18n} reportName={this.props.reportData && this.props.reportData.data ? this.props.reportData.data.name : ""}/>
                 </Stage>
                 <ReportContent {...this.props.i18n} reportData={this.props.reportData} mobile={this.props.mobile}/>
                 </div>);

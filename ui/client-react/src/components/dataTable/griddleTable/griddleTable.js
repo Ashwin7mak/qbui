@@ -2,8 +2,8 @@ import React from 'react';
 import ReactIntl from 'react-intl';
 import Griddle from 'griddle-react';
 
-import Logger from '../../../utils/logger';
-var logger = new Logger();
+//import Logger from '../../../utils/logger';
+//var logger = new Logger();
 
 var IntlMixin = ReactIntl.IntlMixin;
 var FormattedMessage = ReactIntl.FormattedMessage;
@@ -23,7 +23,7 @@ var I18nMessage = React.createClass({
     mixins: [IntlMixin],
 
     render: function() {
-        return <FormattedMessage message={this.getIntlMessage(this.props.message)}/>
+        return <FormattedMessage message={this.getIntlMessage(this.props.message)}/>;
     }
 });
 
@@ -43,8 +43,7 @@ class GriddleTable extends React.Component {
                         />
                 </div>
             );
-        }
-        else {
+        } else {
             return (
                 <div><I18nMessage message={'grid.no_data'}/></div>
             );

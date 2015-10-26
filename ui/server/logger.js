@@ -128,7 +128,9 @@
                     r.useragent = req.useragent.browser + ' ' + req.useragent.version + ' - ' + req.useragent.os;
                 }
             }
-        } catch (e) {}   //  catch exception and move on..
+        } catch (e) {
+            //  catch exception and move on..
+        }
         return r;
     }
 
@@ -144,7 +146,9 @@
             if (res) {
                 r.status = res.statusCode;
             }
-        } catch (e) {}    // catch exception and move on..
+        } catch (e) {
+            // catch exception and move on..
+        }
         return r;
     }
 

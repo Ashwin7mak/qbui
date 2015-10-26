@@ -61,26 +61,25 @@
                 };
                 recordBase.apiBase.executeRequest(reportEndpoint, consts.POST, reportToCreate)
                         .then(function(report) {
-                                  var r = JSON.parse(report.body);
-                                  recordBase.apiBase.executeRequest(reportEndpoint + r.id + '/results?format=' + testCase.format, consts.GET)
+                            var r = JSON.parse(report.body);
+                            recordBase.apiBase.executeRequest(reportEndpoint + r.id + '/results?format=' + testCase.format, consts.GET)
                                           .then(function(reportResults) {
-                                                    var results = JSON.parse(reportResults.body);
-                                                    for (var i = 0; i < results.records.length; i++) {
-                                                        var currentRecord = results.records[i];
-                                                        /*jslint loopfunc: true */
-                                                        currentRecord.forEach(function(fieldValue) {
-                                                            if (fieldValue.id === JSON.parse(testCase.expectedFieldValue).id) {
-                                                                assert.deepEqual(fieldValue, JSON.parse(testCase.expectedFieldValue),
+                                              var results = JSON.parse(reportResults.body);
+                                              for (var i = 0; i < results.records.length; i++) {
+                                                  var currentRecord = results.records[i];
+                                                  currentRecord.forEach(function(fieldValue) {
+                                                      if (fieldValue.id === JSON.parse(testCase.expectedFieldValue).id) {
+                                                          assert.deepEqual(fieldValue, JSON.parse(testCase.expectedFieldValue),
                                                                                  'Unexpected field value returned: ' +
                                                                                  JSON.stringify(fieldValue) + ', ' + testCase.expectedFieldValue);
-                                                            }
-                                                        });
-                                                    }
-                                                    done();
-                                                });
-                              }).catch(function(error) {
-                                           log.error(JSON.stringify(error));
-                                       });
+                                                      }
+                                                  });
+                                              }
+                                              done();
+                                          });
+                        }).catch(function(error) {
+                            log.error(JSON.stringify(error));
+                        });
             });
         });
 

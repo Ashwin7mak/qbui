@@ -23,6 +23,6 @@ var Configuration = {
         version: 'v1'
     }
 
-}
+};
 
 export default Configuration;

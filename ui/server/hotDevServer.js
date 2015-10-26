@@ -18,10 +18,10 @@
             webpackConfig.plugins.push(new webpack.HotModuleReplacementPlugin());
             webpackConfig.entry = [
                     // WebpackDevServer host and port
-                    'webpack-dev-server/client?http://0.0.0.0:' + hotPort,
+                'webpack-dev-server/client?http://0.0.0.0:' + hotPort,
                     //'webpack-dev-server/client?http://localhost:' + hotPort,
                     // 'only-dev-server' prevents reload on syntax errors
-                    'webpack/hot/only-dev-server'
+                'webpack/hot/only-dev-server'
             ].concat(webpackConfig.entry);
 
             webpackConfig.output.publicPath = 'http://' + config.ip + ':' + hotPort + webpackConfig.output.publicPath;
@@ -78,11 +78,11 @@
             var hotServer = new WebpackDevServer(compiler, devServerConfig);
             log.info('Hot webpack-dev-server Settings :' + JSON.stringify(hotServer));
             hotServer.listen(hotPort, config.ip, function(err) {
-                  if (err) {
-                      log.fatal(err);
-                  }
-                  log.info('Hot webpack-dev-server Listening at ' + config.ip + ' port:' + hotPort);
-              });
+                if (err) {
+                    log.fatal(err);
+                }
+                log.info('Hot webpack-dev-server Listening at ' + config.ip + ' port:' + hotPort);
+            });
             //console.log('\nwebpackConfig Settings :' + JSON.stringify(webpackConfig, null, 2));
 
         }

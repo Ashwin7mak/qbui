@@ -25,15 +25,15 @@ class Locale {
         logger.debug('Fetching locale: ' + locale);
         try {
             switch (locale.toLowerCase()) {
-                case 'en-us':
-                    return EN_US;
-                case 'fr-fr':
-                    return FR_FR;
-                case 'de-de':
-                    return DE_DE;
-                default:
-                    logger.info('Locale (' + locale + ') is invalid or not supported.  Using default: en-us');
-                    return EN_US;
+            case 'en-us':
+                return EN_US;
+            case 'fr-fr':
+                return FR_FR;
+            case 'de-de':
+                return DE_DE;
+            default:
+                logger.info('Locale (' + locale + ') is invalid or not supported.  Using default: en-us');
+                return EN_US;
             }
         } catch (e) {
             //  any error automatically returns default locale

@@ -19,9 +19,6 @@
     var routeGroups = require('../routes/routeGroups');
     var clientConsts = require('./environment/clientConsts');
 
-
-
-
     module.exports = function(app) {
 
         // use ssl when there's a cert and we have the method to implement it
@@ -75,7 +72,7 @@
             if (envConsts.PRODUCTION === env || envConsts.PRE_PROD === env) {
                 var fs = require('fs');
                 config.isProduction = true;
-                var faviconFile = path.join(config.root, 'dist','public', 'favicon.ico');
+                var faviconFile = path.join(config.root, 'dist', 'public', 'favicon.ico');
                 if (fs.existsSync(faviconFile)) {
                     app.use(favicon(faviconFile));
                 }
@@ -107,10 +104,8 @@
             app.set('appPath', config.root + '/client');
             //  Error handler - has to be last.
             app.use(errorHandler());
-        }
-        //  END TEMPORARY
-
-        else if (clientConsts.REACT === client) {
+            //  END TEMPORARY
+        } else if (clientConsts.REACT === client) {
             app.use(express.static(path.join(config.root, 'client-react')));
             app.set('appPath', config.root + '/client-react');
             //  Error handler - has to be last.

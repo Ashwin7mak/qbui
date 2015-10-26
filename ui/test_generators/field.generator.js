@@ -13,6 +13,7 @@
     var datatypeAttributesGenerator = require('./datatype.attributes.generator');
     var _ = require('lodash');
     var FIELD_KEYS = 'fieldKeys';
+    var fieldTypeToFunctionCalls = {};
 
     module.exports = {
         getFieldBuilder: function() {
@@ -116,7 +117,6 @@
     };
 
 
-    var fieldTypeToFunctionCalls = {};
 
     //map fields by type so that we can know what to do fairly easily by grabbing keys
     //formula fields

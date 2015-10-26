@@ -26,31 +26,31 @@
     function precalculateFormatterStringsForFields(fieldInfos) {
         for (var i = 0; i < fieldInfos.length; i++) {
             switch (fieldInfos[i].type) {
-                case consts.DATE_TIME:
-                case consts.DATE:
-                case consts.FORMULA_DATE_TIME:
-                case consts.FORMULA_DATE:
-                    fieldInfos[i].jsFormat = dateFormatter.generateFormat(fieldInfos[i]);
-                    break;
-                case consts.TIME_OF_DAY:
-                case consts.FORMULA_TIME_OF_DAY:
-                    fieldInfos[i].jsFormat = todFormatter.generateFormat(fieldInfos[i]);
-                    break;
-                case consts.SUMMARY:
-                case consts.NUMERIC:
-                case consts.FORMULA_NUMERIC:
-                case consts.CURRENCY:
-                case consts.FORMULA_CURRENCY:
-                case consts.PERCENT:
-                case consts.FORMULA_PERCENT:
-                    fieldInfos[i].jsFormat = numericFormatter.generateFormat(fieldInfos[i]);
-                    break;
-                case consts.DURATION:
-                case consts.FORMULA_DURATION:
-                    fieldInfos[i].jsFormat = durationFormatter.generateFormat(fieldInfos[i]);
-                    break;
-                default:
-                    break;
+            case consts.DATE_TIME:
+            case consts.DATE:
+            case consts.FORMULA_DATE_TIME:
+            case consts.FORMULA_DATE:
+                fieldInfos[i].jsFormat = dateFormatter.generateFormat(fieldInfos[i]);
+                break;
+            case consts.TIME_OF_DAY:
+            case consts.FORMULA_TIME_OF_DAY:
+                fieldInfos[i].jsFormat = todFormatter.generateFormat(fieldInfos[i]);
+                break;
+            case consts.SUMMARY:
+            case consts.NUMERIC:
+            case consts.FORMULA_NUMERIC:
+            case consts.CURRENCY:
+            case consts.FORMULA_CURRENCY:
+            case consts.PERCENT:
+            case consts.FORMULA_PERCENT:
+                fieldInfos[i].jsFormat = numericFormatter.generateFormat(fieldInfos[i]);
+                break;
+            case consts.DURATION:
+            case consts.FORMULA_DURATION:
+                fieldInfos[i].jsFormat = durationFormatter.generateFormat(fieldInfos[i]);
+                break;
+            default:
+                break;
             }
         }
     }
@@ -60,50 +60,50 @@
         function formatRecordValue(fieldValue, fieldInfo) {
             var tempFieldInfo = _.cloneDeep(fieldInfo.datatypeAttributes);
             switch (tempFieldInfo.type) {
-                case consts.PHONE_NUMBER:
-                    fieldValue.display = phoneFormatter.format(fieldValue, tempFieldInfo);
-                    break;
-                case consts.DATE_TIME:
-                case consts.DATE:
-                case consts.FORMULA_DATE_TIME:
-                case consts.FORMULA_DATE:
-                    fieldValue.display = dateFormatter.format(fieldValue, tempFieldInfo);
-                    break;
-                case consts.TIME_OF_DAY:
-                case consts.FORMULA_TIME_OF_DAY:
-                    fieldValue.display = todFormatter.format(fieldValue, tempFieldInfo);
-                    break;
-                case consts.NUMERIC:
-                case consts.FORMULA_NUMERIC:
-                case consts.CURRENCY:
-                case consts.FORMULA_CURRENCY:
-                case consts.PERCENT:
-                case consts.FORMULA_PERCENT:
-                    fieldValue.display = numericFormatter.format(fieldValue, tempFieldInfo);
-                    break;
-                case consts.URL:
-                case consts.FILE_ATTACHMENT:
-                case consts.REPORT_LINK:
-                    fieldValue.display = urlAndFileReportLinkFormatter.format(fieldValue, tempFieldInfo);
-                    break;
-                case consts.EMAIL_ADDRESS:
-                    fieldValue.display = emailFormatter.format(fieldValue, tempFieldInfo);
-                    break;
-                case consts.DURATION:
-                case consts.FORMULA_DURATION:
-                    fieldValue.display = durationFormatter.format(fieldValue, tempFieldInfo);
-                    break;
-                case consts.USER:
-                case consts.FORMULA_USER:
-                    fieldValue.display = userFormatter.format(fieldValue, tempFieldInfo);
-                    break;
-                default:
+            case consts.PHONE_NUMBER:
+                fieldValue.display = phoneFormatter.format(fieldValue, tempFieldInfo);
+                break;
+            case consts.DATE_TIME:
+            case consts.DATE:
+            case consts.FORMULA_DATE_TIME:
+            case consts.FORMULA_DATE:
+                fieldValue.display = dateFormatter.format(fieldValue, tempFieldInfo);
+                break;
+            case consts.TIME_OF_DAY:
+            case consts.FORMULA_TIME_OF_DAY:
+                fieldValue.display = todFormatter.format(fieldValue, tempFieldInfo);
+                break;
+            case consts.NUMERIC:
+            case consts.FORMULA_NUMERIC:
+            case consts.CURRENCY:
+            case consts.FORMULA_CURRENCY:
+            case consts.PERCENT:
+            case consts.FORMULA_PERCENT:
+                fieldValue.display = numericFormatter.format(fieldValue, tempFieldInfo);
+                break;
+            case consts.URL:
+            case consts.FILE_ATTACHMENT:
+            case consts.REPORT_LINK:
+                fieldValue.display = urlAndFileReportLinkFormatter.format(fieldValue, tempFieldInfo);
+                break;
+            case consts.EMAIL_ADDRESS:
+                fieldValue.display = emailFormatter.format(fieldValue, tempFieldInfo);
+                break;
+            case consts.DURATION:
+            case consts.FORMULA_DURATION:
+                fieldValue.display = durationFormatter.format(fieldValue, tempFieldInfo);
+                break;
+            case consts.USER:
+            case consts.FORMULA_USER:
+                fieldValue.display = userFormatter.format(fieldValue, tempFieldInfo);
+                break;
+            default:
                     //TODO: handle LOOKUP fields, need to return rootFieldType in the fieldInfo in order to display format properly
-                    fieldValue.display = fieldValue.value;
-                    if (!fieldValue.display) {
-                        fieldValue.display = '';
-                    }
-                    break;
+                fieldValue.display = fieldValue.value;
+                if (!fieldValue.display) {
+                    fieldValue.display = '';
+                }
+                break;
             }
             return fieldValue;
         }
@@ -126,7 +126,7 @@
                         var formattedRecord = [];
                         record.forEach(function(fieldValue) {
                             formattedRecord.push(
-                                    formatRecordValue(fieldValue, fieldsMap[fieldValue.id.toString()])
+                                formatRecordValue(fieldValue, fieldsMap[fieldValue.id.toString()])
                             );
                         });
                         formattedRecords.push(formattedRecord);

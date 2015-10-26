@@ -90,32 +90,32 @@
         }
         var returnValue = '';
         switch (opts.scale) {
-            case HHMM:
-            case HHMMSS:
-            case MM:
-            case MMSS:
-                returnValue = generateTimeUnits(millis, hours, minutes, seconds, opts);
-                break;
-            case SMART_UNITS:
-                returnValue = generateSmartUnit(millis, weeks, days, hours, minutes, seconds, opts);
-                break;
-            case WEEKS:
-                returnValue = divideToString(millis, MILLIS_PER_WEEK, opts);
-                break;
-            case DAYS:
-                returnValue = divideToString(millis, MILLIS_PER_DAY, opts);
-                break;
-            case HOURS:
-                returnValue = divideToString(millis, MILLIS_PER_HOUR, opts);
-                break;
-            case MINUTES:
-                returnValue = divideToString(millis, MILLIS_PER_MIN, opts);
-                break;
-            case SECONDS:
-                returnValue = divideToString(millis, MILLIS_PER_SECOND, opts);
-                break;
-            default:
-                break;
+        case HHMM:
+        case HHMMSS:
+        case MM:
+        case MMSS:
+            returnValue = generateTimeUnits(millis, hours, minutes, seconds, opts);
+            break;
+        case SMART_UNITS:
+            returnValue = generateSmartUnit(millis, weeks, days, hours, minutes, seconds, opts);
+            break;
+        case WEEKS:
+            returnValue = divideToString(millis, MILLIS_PER_WEEK, opts);
+            break;
+        case DAYS:
+            returnValue = divideToString(millis, MILLIS_PER_DAY, opts);
+            break;
+        case HOURS:
+            returnValue = divideToString(millis, MILLIS_PER_HOUR, opts);
+            break;
+        case MINUTES:
+            returnValue = divideToString(millis, MILLIS_PER_MIN, opts);
+            break;
+        case SECONDS:
+            returnValue = divideToString(millis, MILLIS_PER_SECOND, opts);
+            break;
+        default:
+            break;
         }
 
         return returnValue;

@@ -17,7 +17,7 @@ describe('StringUtils', () => {
         var a;
         var date = new Date();
 
-        a = ['1',' 2 '];
+        a = ['1', ' 2 '];
         expect(StringUtils.trim(a)).toBe(a);
         expect(StringUtils.trim(date)).toBe(date);
 

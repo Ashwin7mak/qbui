@@ -2,8 +2,8 @@
 module.exports = function(grunt) {
     'use strict';
 
-    var buildDir = __dirname + '/build';
-    var localJsFile = __dirname + '/server/config/environment/local.js';
+    var buildDir =  path.join(__dirname, '/build');
+    var localJsFile =  path.join(__dirname, '/server/config/environment/local.js');
     var serverReportDir = buildDir + '/reports/server';
     var clientReportDir = buildDir + '/reports/client';
     var mochaUnitTest = grunt.option('test') || '*.unit.spec.js';
@@ -121,7 +121,7 @@ module.exports = function(grunt) {
                         '<%= express.root %>/**/test/**/*.js',
                         '<%= express.root %>/**/*.js'
                 ],
-                tasks: ['env:local', 'newer:jshint', 'newer:jscs', 'mochaTest:test']
+                tasks: ['env:local', 'newer:lint', 'mochaTest:test']
             },
             jsTest    : {
                 files: [
@@ -130,7 +130,7 @@ module.exports = function(grunt) {
                     '<%= quickbase.client.components %>/**/test/**/*.js',
                     '<%= quickbase.client.components %>/**/*.js'
                 ],
-                tasks: ['newer:jshint', 'newer:jscs', 'karma:unit']
+                tasks: ['newer:hint', 'karma:unit']
             },
             livereload: {
                 files  : [
@@ -210,7 +210,7 @@ module.exports = function(grunt) {
         },
 
         // Make sure code styles are up to par and there are no obvious mistakes
-        jshint: {
+        lint: {
             options   : {
                 jshintrc: './.jshintrc',
                 //reporter: require('jshint-stylish'),
@@ -240,12 +240,12 @@ module.exports = function(grunt) {
                         // only use jshint on angular code
                         // React will use ESLint for lint checking which supports JSX/ES6
                         // So when running jshint with REACT as client we will not include the react client code
-                        '<%= quickbase.client.components %>/**/*.js',
-                        '<%= quickbase.client.gallery %>/**/*.js',
-                       '!<%= quickbase.client.root %>/dist/**/*.js',
-                       '!<%= quickbase.client.components %>/**/*.spec.js',
-                       '!<%= quickbase.client.components %>/**/*.mock.js',
-                       '!<%= quickbase.e2e %>/**/*.js'
+                    '<%= quickbase.client.components %>/**/*.js',
+                    '<%= quickbase.client.gallery %>/**/*.js',
+                    '!<%= quickbase.client.root %>/dist/**/*.js',
+                    '!<%= quickbase.client.components %>/**/*.spec.js',
+                    '!<%= quickbase.client.components %>/**/*.mock.js',
+                    '!<%= quickbase.e2e %>/**/*.js'
 
                 ]  : [
                     '!<%= quickbase.client.root %>/**/*.js',
@@ -606,14 +606,14 @@ module.exports = function(grunt) {
                         'index.html'
                     ]
                 },
-                    {
-                        expand: true,
-                        dest  : '<%= quickbase.distDir %>',
-                        src   : [
-                            'package.json',
-                            '<%= express.root %>/**/*'
-                        ]
-                    }
+                {
+                    expand: true,
+                    dest  : '<%= quickbase.distDir %>',
+                    src   : [
+                        'package.json',
+                        '<%= express.root %>/**/*'
+                    ]
+                }
                 ]
             }
         },
@@ -805,6 +805,13 @@ module.exports = function(grunt) {
             }
         },
         shell: {
+            lint: {
+                command: 'npm run lint',
+                options: {
+                    execOptions: {
+                    }
+                }
+            },
             webpack: {
                 command: 'npm run webpack',
                 options: {
@@ -824,7 +831,7 @@ module.exports = function(grunt) {
                 command: [
                     'npm rebuild node-sass',
                     'npm install node-sass'
-                    ],
+                ],
                 options: {
                     execOptions: {
                     }
@@ -879,7 +886,7 @@ module.exports = function(grunt) {
     grunt.registerTask('wait', function() {
         grunt.log.ok('Waiting for server reload...');
 
-        var done = this.async();
+        var done = async();
 
         setTimeout(function() {
             grunt.log.writeln('Done waiting!');
@@ -919,7 +926,7 @@ module.exports = function(grunt) {
     });
 
     grunt.registerTask('express-keepalive', 'Keep grunt running', function() {
-        this.async();
+        async();
     });
 
     grunt.registerTask('serve', function(target) {
@@ -980,7 +987,7 @@ module.exports = function(grunt) {
         // for coverage, an issue is open on this https://github.com/karma-runner/karma/issues/528
         // meanwhile we can workaround it by fixing the paths in the client coverage file
         var clientCoverageReport = clientReportDir + '/coverage/lcov.info';
-        var absoluteFilePrefix = 'SF:' + __dirname + '/';
+        var absoluteFilePrefix =  path.join('SF:', __dirname, '/');
         if (grunt.file.exists(clientCoverageReport)) {
             var lcovString = grunt.file.read(clientCoverageReport);
             var newLcovString = lcovString.replace(/SF\:\.\//g, absoluteFilePrefix);
@@ -994,8 +1001,7 @@ module.exports = function(grunt) {
     });
 
     grunt.registerTask('codeStandards', [
-        'jshint',
-        'jscs'
+        'lint',
     ]);
 
     grunt.registerTask('testClientOnly', function() {
@@ -1139,7 +1145,7 @@ module.exports = function(grunt) {
             'uglify',
             'rev',
             'usemin'
-    ]);
+        ]);
     } else {
         grunt.registerTask('build', [
             'clean:dist',
@@ -1157,7 +1163,7 @@ module.exports = function(grunt) {
 
     /* global console:true */
     grunt.registerTask('sauce_connect', 'Grunt plug-in to download and launch Sauce Labs Sauce Connect', function() {
-        var options = this.options({
+        var options = options({
             username        : 'sbg_qbse',
             accessKey       : sauceKey,
             proxy           : httpProxy,
@@ -1166,7 +1172,7 @@ module.exports = function(grunt) {
             logger          : console.log
         });
 
-        var done = this.async();
+        var done = async();
 
         var tunnel = {};
         sauceConnect.setOptions(options);
@@ -1182,10 +1188,16 @@ module.exports = function(grunt) {
     });
 
     grunt.registerTask('sauce-connect-close', 'Closes the current Sauce Connect tunnel', function() {
-        sauceConnect.close(this.async());
+        sauceConnect.close(async());
     });
 
-    grunt.registerTask('makeProdNodeModules', 'Creates a production copy of node_modules folder for zip to nexus', function () {
+    grunt.registerTask('lint', 'Runt lint on code', function(){
+        return grunt.task.run([
+            'shell:lint',
+        ]);
+    });
+
+    grunt.registerTask('makeProdNodeModules', 'Creates a production copy of node_modules folder for zip to nexus', function() {
         // delete any old modules in dist dir
         grunt.task.run(['clean:modulesProd']);
 
@@ -1197,15 +1209,6 @@ module.exports = function(grunt) {
 
     });
 
-    grunt.registerTask('npmRebuild', 'rebuilds the npm bins for the ci machine env ', function () {
-        //rebuild npm
-        grunt.task.run(['shell:rebuild']);
-
-    });
-
-
-    grunt.loadNpmTasks('grunt-jscs');
-    grunt.loadNpmTasks('grunt-contrib-jshint');
     grunt.loadNpmTasks('grunt-shell-spawn');
     grunt.loadNpmTasks('grunt-webpack');
 };

@@ -11,8 +11,9 @@ var FormattedNumber = ReactIntl.FormattedNumber;
 
 export var DateFormatter = React.createClass({
     render: function(){
-        if (this.props.data != "")
-            return <FormattedDate value={this.props.data} />
+        if (this.props.data !== "") {
+            return <FormattedDate value={this.props.data}/>;
+        }
         return null;
     }
 });
@@ -20,8 +21,9 @@ export var DateFormatter = React.createClass({
 
 export var NumericFormatter = React.createClass({
     render: function(){
-        if (this.props.data != "")
-            return <FormattedNumber value={this.props.data} />
+        if (this.props.data !== "") {
+            return <FormattedNumber value={this.props.data}/>;
+        }
         return null;
     }
 });

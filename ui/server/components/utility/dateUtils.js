@@ -16,20 +16,20 @@
 
             return fmt.replace(/%([a-zA-Z])/g, function(_, fmtCode) {
                 switch (fmtCode) {
-                    case 'Y':
-                        return date.getUTCFullYear();
-                    case 'M':
-                        return pad(date.getUTCMonth() + 1);
-                    case 'D':
-                        return pad(date.getUTCDate());
-                    case 'h':
-                        return pad(date.getUTCHours());
-                    case 'm':
-                        return pad(date.getUTCMinutes());
-                    case 's':
-                        return pad(date.getUTCSeconds());
-                    default:
-                        throw new Error('Unsupported format code: ' + fmtCode);
+                case 'Y':
+                    return date.getUTCFullYear();
+                case 'M':
+                    return pad(date.getUTCMonth() + 1);
+                case 'D':
+                    return pad(date.getUTCDate());
+                case 'h':
+                    return pad(date.getUTCHours());
+                case 'm':
+                    return pad(date.getUTCMinutes());
+                case 's':
+                    return pad(date.getUTCSeconds());
+                default:
+                    throw new Error('Unsupported format code: ' + fmtCode);
                 }
             });
         }

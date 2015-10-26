@@ -8,12 +8,14 @@ import Promise from 'bluebird';
 describe('Report Actions functions -- success', () => {
     'use strict';
 
-    let testData = {appId:'1', tblId:'2'};
+    let testData = {appId: '1', tblId: '2'};
     let responseData = {appId: testData.appId, tblId: testData.tblId, data: 'testData'};
 
     let promise;
     class mockReportService {
-        constructor() { }
+        constructor() {
+        }
+
         getReports() {
             var p = Promise.defer();
             p.resolve(responseData);
@@ -53,7 +55,7 @@ describe('Report Actions functions -- success', () => {
 
     it('test load report action with report parameters', () => {
         expect(promise.isFulfilled()).toBeTruthy();
-        expect(flux.dispatchBinder.dispatch).toHaveBeenCalledWith(actions.LOAD_REPORTS_SUCCESS,responseData);
+        expect(flux.dispatchBinder.dispatch).toHaveBeenCalledWith(actions.LOAD_REPORTS_SUCCESS, responseData);
     });
 
 });

@@ -28,7 +28,7 @@ let reportDataActions = {
                         name:response[0].data.name,
                         data:response[1].data
                     };
-                    this.dispatch(actions.LOAD_REPORT_SUCCESS,report);
+                    this.dispatch(actions.LOAD_REPORT_SUCCESS, report);
                     deferred.resolve(report);
                 }.bind(this),
                 function(error) {
@@ -53,4 +53,4 @@ let reportDataActions = {
     }
 };
 
-export default reportDataActions
+export default reportDataActions;

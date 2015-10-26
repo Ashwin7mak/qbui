@@ -28,19 +28,18 @@
                 if (fieldInfo.clientSideAttributes.linkText) {
                     //If there is a linkText set, use that
                     baseValue = fieldInfo.clientSideAttributes.linkText;
-                } else {
                     //Otherwise, see if there is a display format setting and use that
-                    if (fieldInfo && fieldInfo.clientSideAttributes &&
-                        SUPPORTED_FORMATS[fieldInfo.clientSideAttributes.format]) {
-                        //Resolve the format
-                        var format = fieldInfo.clientSideAttributes.format;
-                        if (format === UP_TO_AT_SIGN) {
-                            baseValue = baseValue.split(AT_SIGN)[0];
-                        } else if (format === UP_TO_UNDERSCORE) {
-                            baseValue = baseValue.split(UNDERSCORE)[0];
-                        }
+                } else if (fieldInfo && fieldInfo.clientSideAttributes &&
+                    SUPPORTED_FORMATS[fieldInfo.clientSideAttributes.format]) {
+                    //Resolve the format
+                    var format = fieldInfo.clientSideAttributes.format;
+                    if (format === UP_TO_AT_SIGN) {
+                        baseValue = baseValue.split(AT_SIGN)[0];
+                    } else if (format === UP_TO_UNDERSCORE) {
+                        baseValue = baseValue.split(UNDERSCORE)[0];
                     }
                 }
+
             }
             return baseValue;
         }

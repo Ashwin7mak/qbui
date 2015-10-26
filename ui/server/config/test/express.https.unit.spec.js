@@ -32,7 +32,7 @@ describe('Request test always use ssh', function() {
 
 
     describe('hasSslOptions method', function() {
-        //jshint expr:true
+        /* eslint no-unused-expressions:0 */
         it('should correctly check for ssl config settings', function(done) {
             var origEnvVal = process.env.NODE_ENV;
             process.env.NODE_ENV = 'dummy';
@@ -90,13 +90,13 @@ describe('Request test always use ssh', function() {
                     .get('/')
                     .expect(302)
                     .expect(function(res) {
-                                var foundSslPort = (res.headers.location.indexOf(config.sslPort + '/') > -1);
+                        var foundSslPort = (res.headers.location.indexOf(config.sslPort + '/') > -1);
                                 //expect returns true on fail (foundSslPort is expected)
-                                return !foundSslPort;
-                            })
+                        return !foundSslPort;
+                    })
                     .end(function(err) {
-                             done(err);
-                         });
+                        done(err);
+                    });
         } else {
             done();
         }
@@ -112,11 +112,11 @@ describe('Request test always use ssh', function() {
                     .expect(200)
                     .expect(function(res) {
                                 //expect returns true on fail (no redirect is expected)
-                                return true === res.redirect;
-                            })
+                        return true === res.redirect;
+                    })
                     .end(function(err) {
-                             done(err);
-                         });
+                        done(err);
+                    });
         } else {
             done();
         }

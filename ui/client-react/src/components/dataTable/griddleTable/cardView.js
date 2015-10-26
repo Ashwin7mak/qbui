@@ -1,11 +1,11 @@
 import React from 'react';
 
-import ReactBootstrap from 'react-bootstrap';
-import {Button,Glyphicon} from '../../../../../node_modules/react-bootstrap/lib'
+//import ReactBootstrap from 'react-bootstrap';
+import {Glyphicon} from '../../../../../node_modules/react-bootstrap/lib';
 
 import './cardView.scss';
 
-class CardView  extends React.Component {
+class CardView extends React.Component {
     constructor(...args) {
         super(...args);
         this.state = this.initState(...args);
@@ -13,43 +13,44 @@ class CardView  extends React.Component {
     }
 
     initState() {
-        let initialState ={
+        let initialState = {
             showMoreCards: false
-        }
+        };
         return initialState;
     }
 
-    handleMoreCard(){
-        this.setState({ showMoreCards: !this.state.showMoreCards });
+    handleMoreCard() {
+        this.setState({showMoreCards: !this.state.showMoreCards});
     }
 
 
-
-    createField(c, curKey){
-        return(<div key={c} className="field">
+    createField(c, curKey) {
+        return (<div key={c} className="field">
             <span className="fieldLabel">{curKey}</span>
             <span className="fieldValue">{this.props.data[curKey]}</span>
         </div>);
     }
 
 
-    render(){
+    render() {
         var row;
         var fields = [];
         var keys = Object.keys(this.props.data);
         var topField = <div className="top-card-row field"><strong>{this.props.data[keys[0]]}</strong></div>;
         for (var i = 1; i < keys.length; i++) {
-            fields.push(this.createField(i,keys[i]));
+            fields.push(this.createField(i, keys[i]));
         }
-        row = <div className="card">{topField}<div className={this.state.showMoreCards? "fieldRow expanded": "fieldRow collapsed"}>{fields}</div></div>;
+        row = <div className="card">{topField}
+            <div className={this.state.showMoreCards ? "fieldRow expanded" : "fieldRow collapsed"}>{fields}</div>
+        </div>;
         return (
             <div className="custom-row-card">
                 <div className="flexRow">
-                    <div className={this.state.showMoreCards ? "card expanded": "card collapsed"}>
+                    <div className={this.state.showMoreCards ? "card expanded" : "card collapsed"}>
                         {row}
                     </div>
                     <div className="card-expander" onClick={this.handleMoreCard}>
-                        <Glyphicon glyph="plus" />
+                        <Glyphicon glyph="plus"/>
                     </div>
                 </div>
             </div>

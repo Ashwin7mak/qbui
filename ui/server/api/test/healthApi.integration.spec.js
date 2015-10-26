@@ -14,12 +14,12 @@ describe('GET /api/health', function() {
                 .expect(200)
                 .expect('Content-Type', /json/)
                 .end(function(err, res) {
-                         if (err) {
-                             return done(err);
-                         }
-                         res.body.should.be.instanceof(Object);
-                         res.body.should.have.keys('sqlDate');
-                         done();
-                     });
+                    if (err) {
+                        return done(err);
+                    }
+                    res.body.should.be.instanceof(Object);
+                    res.body.should.have.keys('sqlDate');
+                    done();
+                });
     });
 });

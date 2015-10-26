@@ -4,8 +4,8 @@ import './footer.css';
 
 import Nav from '../../../../node_modules/react-bootstrap/lib/Nav';
 
-import NavItem from '../../../../node_modules/react-bootstrap/lib/NavItem'
-import Navbar from '../../../../node_modules/react-bootstrap/lib/Navbar'
+import NavItem from '../../../../node_modules/react-bootstrap/lib/NavItem';
+import Navbar from '../../../../node_modules/react-bootstrap/lib/Navbar';
 
 var IntlMixin = ReactIntl.IntlMixin;
 var FormattedMessage = ReactIntl.FormattedMessage;
@@ -26,11 +26,11 @@ var Footer = React.createClass({
 
     render: function() {
         var currentYear = new Date().getFullYear();
-        return <Navbar className='footer'>
+        return <Navbar className="footer">
             <Nav right>
               <NavItem><I18nMessage message={'footer.copyright'} year={currentYear} /></NavItem>
             </Nav>
-        </Navbar>
+        </Navbar>;
     }
 });
 

@@ -1,6 +1,6 @@
 import React from 'react';
 import ReactIntl from 'react-intl';
-import { Button } from 'react-bootstrap';
+import {Button} from 'react-bootstrap';
 import Logger from '../../../utils/logger';
 var logger = new Logger();
 
@@ -42,7 +42,7 @@ var Stage = React.createClass({
                             </div>
                         </div>
                     </div>
-                 </div>
+                 </div>;
 
     }
 });

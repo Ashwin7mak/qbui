@@ -34,18 +34,18 @@
 
             //Format the results
             switch (format) {
-                case FIRST_THEN_LAST:
-                    baseValue = baseValue.firstName + ' ' + baseValue.lastName;
-                    break;
-                case LAST_THEN_FIRST:
-                    baseValue = baseValue.lastName + ', ' + baseValue.firstName;
-                    break;
-                case SCREEN_NAME:
-                    baseValue = baseValue.screenName;
-                    break;
-                case USER_ID:
-                    baseValue = baseValue.userId;
-                    break;
+            case FIRST_THEN_LAST:
+                baseValue = baseValue.firstName + ' ' + baseValue.lastName;
+                break;
+            case LAST_THEN_FIRST:
+                baseValue = baseValue.lastName + ', ' + baseValue.firstName;
+                break;
+            case SCREEN_NAME:
+                baseValue = baseValue.screenName;
+                break;
+            case USER_ID:
+                baseValue = baseValue.userId;
+                break;
             }
             return baseValue;
         }

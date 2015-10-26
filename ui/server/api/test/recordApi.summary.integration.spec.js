@@ -35,10 +35,10 @@
                     {name: FK_FIELD_NAME, datatypeAttributes: {type: 'NUMERIC'}, type: 'SCALAR'}
                 ]
             },
-                     {
-                         name  : 'table2',
-                         fields: [{name: MASTER_TABLE_TEXT, datatypeAttributes: {type: 'TEXT'}, type: 'SCALAR'}]
-                     }
+                {
+                    name  : 'table2',
+                    fields: [{name: MASTER_TABLE_TEXT, datatypeAttributes: {type: 'TEXT'}, type: 'SCALAR'}]
+                }
             ]
         };
 

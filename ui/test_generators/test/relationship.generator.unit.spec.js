@@ -74,25 +74,25 @@
                 {
                     message    : 'Generate a relationship on App1->Table1->dateField1: App1->Table2->dateField2', app: generatedApp, masterTable: generatedTableMap.T_0,
                     detailTable: generatedTableMap.T_1, expectedRelationship: {
-                    appId        : appId, masterAppId: appId, masterTableId: 'T_0',
-                    masterFieldId: 2, detailAppId: appId, detailTableId: 'T_1', detailFieldId: 0
-                }
+                        appId        : appId, masterAppId: appId, masterTableId: 'T_0',
+                        masterFieldId: 2, detailAppId: appId, detailTableId: 'T_1', detailFieldId: 0
+                    }
                 },
 
                 {
                     message    : 'Generate a relationship on App1->Table1->numericField1 : App1->Table3->numericField3', app: generatedApp, masterTable: generatedTableMap.T_0,
                     detailTable: generatedTableMap.T_2, expectedRelationship: {
-                    appId        : appId, masterAppId: appId, masterTableId: 'T_0',
-                    masterFieldId: 1, detailAppId: appId, detailTableId: 'T_2', detailFieldId: 0
-                }
+                        appId        : appId, masterAppId: appId, masterTableId: 'T_0',
+                        masterFieldId: 1, detailAppId: appId, detailTableId: 'T_2', detailFieldId: 0
+                    }
                 },
 
                 {
                     message    : 'Generate a relationship on App1->Table1->textField1 : App1->Table4->textField4', app: generatedApp, masterTable: generatedTableMap.T_0,
                     detailTable: generatedTableMap.T_3, expectedRelationship: {
-                    appId        : appId, masterAppId: appId, masterTableId: 'T_0',
-                    masterFieldId: 0, detailAppId: appId, detailTableId: 'T_3', detailFieldId: 0
-                }
+                        appId        : appId, masterAppId: appId, masterTableId: 'T_0',
+                        masterFieldId: 0, detailAppId: appId, detailTableId: 'T_3', detailFieldId: 0
+                    }
                 }
             ];
         }

@@ -1,6 +1,6 @@
 import React from 'react';
 import ReactIntl from 'react-intl';
-import {Nav,Collapse,Glyphicon} from 'react-bootstrap';
+import {Nav, Glyphicon} from 'react-bootstrap';
 import {Link} from 'react-router';
 import Loader  from 'react-loader';
 import './mobileLeftNav.scss';
@@ -11,28 +11,29 @@ import Fluxxor from 'fluxxor';
 
 let FluxMixin = Fluxxor.FluxMixin(React);
 
-let MobileLeftNav = React.createClass( {
-    mixins: [FluxMixin,IntlMixin],
+let MobileLeftNav = React.createClass({
+    mixins: [FluxMixin, IntlMixin],
 
-    toggleNav: function () {
+    toggleNav: function() {
         let flux = this.getFlux();
         flux.actions.toggleLeftNav();
     },
 
     getGlyphName(item) {
 
-        if (item.icon)
+        if (item.icon) {
             return item.icon;
-        else
+        } else {
             return 'th-list';
+        }
     },
 
-    buildHeadingItem: function (item, loadingCheck) {
+    buildHeadingItem: function(item, loadingCheck) {
 
         return (
             <li>
                 <Loader scale={.5} right={'90%'} loaded={!loadingCheck} />
-                <a className='mobileHeading'><FormattedMessage message={this.getIntlMessage('nav.reportsHeading')}/></a>
+                <a className="mobileHeading"><FormattedMessage message={this.getIntlMessage('nav.reportsHeading')}/></a>
             </li>);
     },
 
@@ -40,15 +41,15 @@ let MobileLeftNav = React.createClass( {
     buildNavItem: function(item) {
 
         let label = item.key ? this.getIntlMessage(item.key) : item.name;
-        let selectedClass = item.id && (item.id == this.props.reportID) ? 'selected' : '';
+        let selectedClass = item.id && (item.id === this.props.reportID) ? 'selected' : '';
 
         return (
             <li key={label} className={selectedClass}>
-                <Link className='leftNavLink' to={'/m'+item.link} onClick={this.toggleNav}>
+                <Link className="leftNavLink" to={'/m' + item.link} onClick={this.toggleNav}>
                     <Glyphicon glyph={this.getGlyphName(item)}/> {label}
                 </Link>
             </li>
-        )
+        );
     },
 
     render: function() {
@@ -63,7 +64,7 @@ let MobileLeftNav = React.createClass( {
                             this.buildNavItem(item);
                     })}
 
-                    {this.buildHeadingItem({key:'nav.reportsHeading'},this.props.reportsData.loading)}
+                    {this.buildHeadingItem({key: 'nav.reportsHeading'}, this.props.reportsData.loading)}
 
                     {this.props.reportsData.list ? this.props.reportsData.list.map((item) => {
                         return this.buildNavItem(item);

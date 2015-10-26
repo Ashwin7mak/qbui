@@ -6,12 +6,12 @@ describe('BaseService rewire tests', () => {
 
     let baseService;
     var mockCookie = {
-        load: function(name) {
+        load: function() {
             return {loadMethodCalled:true};
         }
     };
     var mockAxios = {
-        get: function(url, config) {
+        get: function() {
             return {getMethodCalled:true};
         }
     };
@@ -44,7 +44,7 @@ describe('BaseService rewire tests', () => {
 
     it('test axios get method', () => {
         baseService = new BaseService();
-        var axios = baseService.get('url','config');
+        var axios = baseService.get('url', 'config');
         expect(axios.getMethodCalled).toBeTruthy();
     });
 });
