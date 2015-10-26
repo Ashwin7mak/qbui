@@ -13,7 +13,7 @@ var Content = React.createClass({
                     {this.props.data.apps.map((app) => {
                         let appName = app.name + ' (' + app.id + ')';
                         return (
-                            <div key={appName}>
+                            <div className="app" key={appName}>
                                 <li>{appName}</li>
                                 <div className="tables">
                                     {app.tables.map((table) => {
