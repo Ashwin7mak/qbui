@@ -59,14 +59,12 @@
             // Get a session ticket for that subdomain and realmId (stores it in the browser)
             requestSessionTicketPage.get(e2eBase.getSessionTicketRequestEndpoint(realmName, realmId, e2eBase.ticketEndpoint));
             browser.wait(EC.visibilityOf(requestSessionTicketPage.ticketResponseBodyEl), 5000);
-            //e2eBase.sleep(browser.params.mediumSleep);
             // Load the requestAppsPage (shows a list of all apps and tables in a realm)
             requestAppsPage.get(e2eBase.getRequestAppsPageEndpoint(realmName));
             // Wait until the page has loaded (blocking wait)
             browser.wait(EC.visibilityOf(requestAppsPage.tablesDivEl), 5000);
             // Check that we have a report for our created table
             expect(requestAppsPage.tableLinksElList.get(0).getText()).toContain(tableId);
-            //e2eBase.sleep(browser.params.mediumSleep);
             requestAppsPage.tableLinksElList.get(0).click();
             // Now on the reportServicePage (shows the nav with a list of reports you can load)
             // Wait until the nav has loaded
