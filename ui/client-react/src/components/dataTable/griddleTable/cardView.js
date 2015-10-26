@@ -32,6 +32,8 @@ class CardView  extends React.Component {
     createRow(){
         var fields = [];
         var keys = Object.keys(this.props.data);
+        if (!keys.length)
+            return null;
         var topField = <div className="top-card-row field"><strong>{this.props.data[keys[0]]}</strong></div>;
         for (var i = 1; i < keys.length; i++) {
             fields.push(this.createField(i,keys[i]));
@@ -41,19 +43,25 @@ class CardView  extends React.Component {
 
 
     render(){
-        var row = this.createRow();
-        return (
-            <div className="custom-row-card">
-                <div className="flexRow">
-                    <div className={this.state.showMoreCards ? "card expanded": "card collapsed"}>
-                        {row}
-                    </div>
-                    <div className="card-expander" onClick={this.handleMoreCard}>
-                        <Glyphicon glyph="plus" />
+        if (this.props.data) {
+            var row = this.createRow();
+            return (
+                <div className="custom-row-card">
+                    <div className="flexRow">
+                        <div className="card">
+                            {row}
+                        </div>
+                        <div className="card-expander" onClick={this.handleMoreCard}>
+                            <Glyphicon glyph="plus"/>
+                        </div>
                     </div>
                 </div>
-            </div>
-        );
+            );
+        }
+        else
+        {
+            return null;
+        }
     }
 
 }
