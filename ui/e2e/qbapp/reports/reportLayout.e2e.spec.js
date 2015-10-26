@@ -98,6 +98,8 @@
                     reportServicePage.navLinksElList.get(1).click();
                     // Make sure the table report has loaded
                     browser.wait(EC.visibilityOf(reportServicePage.griddleContainerEl), 5000).then(function() {
+                        // Sleep for animation
+                        e2eBase.sleep(2000);
                         // Check there is a scrollbar in the griddle table
                         var fetchRecordPromises = [];
                         fetchRecordPromises.push(reportServicePage.loadedContentEl.getAttribute('scrollWidth'));
@@ -127,6 +129,8 @@
                     reportServicePage.navLinksElList.get(1).click();
                     // Make sure the table report has loaded
                     browser.wait(EC.visibilityOf(reportServicePage.griddleContainerEl), 5000).then(function() {
+                        // Sleep for animation
+                        e2eBase.sleep(2000);
                         // Check there is no scrollbar in the griddle table
                         var fetchRecordPromises = [];
                         fetchRecordPromises.push(reportServicePage.loadedContentEl.getAttribute('scrollWidth'));
