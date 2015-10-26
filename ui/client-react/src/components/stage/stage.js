@@ -2,7 +2,7 @@
 import React from 'react';
 import './stage.scss';
 
-import {Collapse,Well,Glyphicon} from 'react-bootstrap';
+import {Collapse, Well, Glyphicon} from 'react-bootstrap';
 
 import Logger from '../../utils/logger';
 var logger = new Logger();
@@ -16,7 +16,7 @@ var Stage = React.createClass({
     },
 
     toggleStage: function() {
-        this.setState({open: !this.state.open})
+        this.setState({open: !this.state.open});
         logger.debug('Click event: ' + this.state.stage + ' staging area');
     },
 
@@ -24,7 +24,7 @@ var Stage = React.createClass({
 
         let classes = 'layout-stage ';// + (this.state.open ? 'stage-open' : 'state-closed');
 
-        return(
+        return (
             <div className={classes}>
                 <Collapse in={this.state.open}>
                     <Well>{this.props.children}</Well>

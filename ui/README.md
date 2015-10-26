@@ -29,14 +29,7 @@ FIRST - Do all the Quickbase java backend development [setup instructions](https
     * NodeJS - ui web server plugin
     * SASS support - enhances css with variables and methods plugin
   * Know working versions of Intellij are 14.1.2 and 14.1.4 
-  * Use the QuickBase/intelliJSettings.jar from the Quickbase project and set the following settings for coding style errors to appear in the IDE inspection.(This is manual due to user code path dependent)
-    * 	In the qbui Intellij project, go to Main Menu `Intellij IDEA/Preferences...` and select the options for `Languages & Frameworks` then`Javascript` disable all but the following 2 JSHint and JSCS with the settings 
-    *  for jsHint 
-        * ![jsHintScreenShot.png](jsHintScreenShot.png) 
-    *  and for jscs(javascript coding style)
-        * ![jscsScreenShot.png](jscsScreenShot.png)
-    * Note: The lint and coding standards settings are a composite of several standards see [https://github.com/jscs-dev/node-jscs/tree/master/presets](https://github.com/jscs-dev/node-jscs/tree/master/presets) (I wrote a script to merge the preset values to determine most common for the js industry as well as data from statistics on github open source code [http://sideeffect.kr/popularconvention#javascript](http://sideeffect.kr/popularconvention#javascript)
-
+  * Use the QuickBase/intelliJSettings.jar from the Quickbase project. 
 * Java and Tomcat to run the backend	
     
 ##Installing 
@@ -150,9 +143,46 @@ The following run-time environment variable is supported:
 
 ## Testing
 ###Lint and Code Style tests
-Running `grunt codeStandards` will run the jshint and jscs tasks. These tasks validate the javascript follows best practices and ensures the code is formatted to our qbui coding styles.
+Running `grunt codeStandards` will run the lint tasks. This task validates the javascript follows best practices and ensures the code is formatted to our qbui coding styles.
 
-Look at the .jshintrc and .jscscrc files for the lint rules and coding standards
+* Linting check (ESLint)
+	Look at the .eslintrc filesfor the lint rules and coding standards
+	and set the following settings for coding style errors to appear in the IDE inspection.(This is manual due to user code path dependent)
+
+	
+	*  In the qbui Intellij project, go to Main Menu `Intellij IDEA/Preferences...` or `File/Other Settings... /Default Settings...` and then select the options for `Languages & Frameworks` then `Code Quality Tools` then `Javascript` and disable all the others but enble ESLint and set the following ESLint settings 
+	
+	*  ESLint dialog 
+    	* ![eslintDialogScreenShot.png](eslintDialogScreenShot.png) 
+	* Note: The lint and coding standards settings are found in `.eslintrc` file(s). Each directory can overide the general settings with its own .eslintrc file or in line a file can specify `/* eslint rule:value */` overrive comment statements. 
+	* The rules are based on several standards see [https://github.com/jscs-dev/node-jscs/tree/master/presets](https://github.com/jscs-dev/node-jscs/tree/master/presets)  as well as data from statistics on github open source code [http://sideeffect.kr/popularconvention#javascript](http://sideeffect.kr/popularconvention#javascript
+	
+	* The ESLint setup in the above dialog will now run eslint with the Intellij `Analyze\Inspect Code...` feature and while you edit it will show errors in the left margin in red. 
+	
+	* ESLint is part of the build and build will fail if there are errors. 
+
+	* The script to run eslint from the command line is `NODE_ENV=local npm run lint` or to fix the stylistic [fixable errors][http://eslint.org/docs/rules/) run `NODE_ENV=local npm run lintFix` our build does lintFix. The lint npm script runs ` node_modules/eslint/bin/eslint.js --ext .js --ext .jsx --format 'node_modules/eslint-friendly-formatter' .`
+
+	
+	* Also to run the eslint on the source from Intellij custom tooll with clickable links to error location, do the following 
+		1. Create a external tool (IntelliJ\Preferences...\Tools\Exterenal Tools` to run eslint using this
+		   - program: `npm`
+		   - parameters: `run lintFix`
+		   - working directory: `$ProjectFileDir$/ui`
+		       
+		2. Use an output filter like: 
+		
+		   ```bash
+		     $FILE_PATH$.*:$LINE$.*:$COLUMN$
+		    
+		   ```
+		   * For Example ![eslintExternalTool](eslintExternalTool.png)
+		   
+		3. When launching the tool now any eslint errors listed which have file location will be also clickable. Clicking will take you to the error location in the Intellij editor:
+		   ![](eslintErrorExample.png)
+       
+   
+
 
 
 ###Unit tests

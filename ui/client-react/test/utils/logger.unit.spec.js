@@ -2,6 +2,8 @@ import Logger from '../../src/utils/logger.js';
 import LogLevel from '../../src/utils/logLevels.js';
 
 describe('Logger', () => {
+    /*eslint no-console:0 */
+
     'use strict';
 
     let logMsg = 'debug message';

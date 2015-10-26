@@ -43,10 +43,10 @@
             return table[tableConsts.FIELDS];
         },
 
-        addFieldsOfType: function(tableBuilder, numFieldsToAdd, fieldType, dataType) {
+        addFieldsOfType: function(inTableBuilder, numFieldsToAdd, fieldType, dataType) {
             var fields = generateFieldList(numFieldsToAdd, fieldType, dataType);
-            tableBuilder.withAdditionalFields(fields);
-            return tableBuilder;
+            inTableBuilder.withAdditionalFields(fields);
+            return inTableBuilder;
         },
 
         /**

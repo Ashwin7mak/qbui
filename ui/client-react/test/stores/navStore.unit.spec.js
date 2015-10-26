@@ -21,7 +21,7 @@ describe('Test Nav Store', () => {
         getI18nBundle: function() {
             return i18nBundle;
         }
-    }
+    };
 
     beforeEach(() => {
         Store.__Rewire__('Locale', mockLocale);
@@ -58,7 +58,7 @@ describe('Test Nav Store', () => {
 
         let changeLocaleAction = {
             type: actions.CHANGE_LOCALE
-        }
+        };
         spyOn(mockLocale, 'getI18nBundle');
         spyOn(flux.store(STORE_NAME), 'setLocaleBundle');
 
@@ -73,10 +73,10 @@ describe('Test Nav Store', () => {
 
         let showTrouserAction = {
             type: actions.SHOW_TROUSER
-        }
+        };
         let hideTrouserAction = {
             type: actions.HIDE_TROUSER
-        }
+        };
 
         //  should be closed by default
         expect(flux.store(STORE_NAME).state.trouserOpen).toBeFalsy();
@@ -98,7 +98,7 @@ describe('Test Nav Store', () => {
 
         let toggleSearchAction = {
             type: actions.TOGGLE_SEARCH
-        }
+        };
 
         //  should be closed by default
         expect(flux.store('NavStore').state.searchBarOpen).toBeFalsy();
@@ -120,7 +120,7 @@ describe('Test Nav Store', () => {
 
         let toggleLeftNavAction = {
             type: actions.TOGGLE_LEFT_NAV
-        }
+        };
 
         expect(flux.store(STORE_NAME).state.leftNavOpen).toBeTruthy();
         expect(flux.store(STORE_NAME).state.mobileLeftNavOpen).toBeFalsy();

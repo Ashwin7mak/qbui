@@ -26,7 +26,7 @@
         open      : function(callback) {
             tunnel.tid = options.tunnelIdentifier;
             var tunnelId = tunnel.tid,
-                    userName = options.username;
+                userName = options.username;
             console.log('Open'.cyan + ' Sauce Connect tunnel: ' + tunnelId.cyan);
 
             // Create base URL for Sauce Labs REST API calls
@@ -48,9 +48,10 @@
 
 
         close: function(callback) {
-            var request = require('request').defaults({jar: false, json: true}),
-                    _ = require('lodash'),
-                    q = require('q');
+            var  _ = require('lodash'),
+                q = require('q');
+
+            var request = require('request').defaults({jar: false, json: true});
 
             function obtainMachine() {
                 var deferred = q.defer();
@@ -74,7 +75,7 @@
 
             function killMachine(tunnelData) {
                 var deferred = q.defer(),
-                        tunnelId = tunnelData.id || tunnel.tid;
+                    tunnelId = tunnelData.id || tunnel.tid;
 
                 console.log('Stop'.cyan + ' Sauce Connect machine: ' + tunnelId.cyan);
 
@@ -112,8 +113,8 @@
                         .then(killMachine)
                         .then(closeTunnel(proc))
                         .fin(function() {
-                                 callback();
-                             });
+                            callback();
+                        });
             } else {
                 console.log('Close'.cyan + ' current Sauce Connect tunnel');
                 launcher.kill(function() {

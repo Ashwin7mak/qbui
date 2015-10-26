@@ -55,4 +55,4 @@ let reportActions = {
     }
 };
 
-export default reportActions
+export default reportActions;

@@ -6,9 +6,9 @@
 (function() {
     'use strict';
     var routeGroups = require('./routeGroups'),
-            _ = require('lodash'),
-            constants = require('../api/constants'),
-            routeConsts = require('./routeConstants');
+        _ = require('lodash'),
+        constants = require('../api/constants'),
+        routeConsts = require('./routeConstants');
 
     /*
      * routeGroupDisabled maps each enumerated route group to the routes that are disabled for a route/method combination

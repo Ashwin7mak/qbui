@@ -1,4 +1,4 @@
-import Fluxxor from 'fluxxor';
+//import Fluxxor from 'fluxxor';
 
 import React from 'react';
 import ReactDOM from 'react-dom';
@@ -18,17 +18,17 @@ describe('Report functions', () => {
 
     let flux = {
         actions:{
-            loadReport: function() { return; }
+            loadReport: function() {return;}
         }
     };
 
     let ReportStageMock = React.createClass({
-        render: function () {
+        render: function() {
             return <div className="stage-mock" />;
         }
     });
     let ReportContentMock = React.createClass({
-        render: function () {
+        render: function() {
             return <div className="report-content" />;
         }
     });

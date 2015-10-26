@@ -3,13 +3,13 @@ import * as actions from '../constants/actions';
 
 let appsActions = {
 
-    loadApps: function() {
+    loadApps() {
         this.dispatch(actions.LOAD_APPS);
     },
 
-    loadAppsWithTables: function() {
+    loadAppsWithTables() {
         this.dispatch(actions.LOAD_APPS_WITH_TABLES);
     }
 };
 
-export default appsActions
+export default appsActions;

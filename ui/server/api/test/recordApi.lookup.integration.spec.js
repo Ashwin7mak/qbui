@@ -36,10 +36,10 @@
                     {name: FK_FIELD_NAME, datatypeAttributes: {type: 'NUMERIC'}, type: 'SCALAR'}
                 ]
             },
-                     {
-                         name  : 'table2',
-                         fields: [{name: MASTER_TABLE_NUMERIC, datatypeAttributes: {type: 'NUMERIC'}, type: 'SCALAR'}]
-                     }
+                {
+                    name  : 'table2',
+                    fields: [{name: MASTER_TABLE_NUMERIC, datatypeAttributes: {type: 'NUMERIC'}, type: 'SCALAR'}]
+                }
             ]
         };
 

@@ -1,6 +1,6 @@
 import React from 'react/addons';
 import ReportStage  from '../../src/components/report/dataTable/stage';
-import I18nMessage from '../../src/utils/i18nMessage';
+//import I18nMessage from '../../src/utils/i18nMessage';
 
 var TestUtils = React.addons.TestUtils;
 

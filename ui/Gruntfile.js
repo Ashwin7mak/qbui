@@ -1,9 +1,11 @@
 // Generated on 2015-02-24 using generator-angular-fullstack 2.0.13
+var path = require('path');
+
 module.exports = function(grunt) {
     'use strict';
 
-    var buildDir = __dirname + '/build';
-    var localJsFile = __dirname + '/server/config/environment/local.js';
+    var buildDir =  path.join(__dirname, '/build');
+    var localJsFile =  path.join(__dirname, '/server/config/environment/local.js');
     var serverReportDir = buildDir + '/reports/server';
     var clientReportDir = buildDir + '/reports/client';
     var mochaUnitTest = grunt.option('test') || '*.unit.spec.js';
@@ -118,10 +120,10 @@ module.exports = function(grunt) {
         watch    : {
             mochaTest : {
                 files: ['<%= express.root %>/**/*.spec.js',
-                    '<%= express.root %>/**/test/**/*.js',
-                    '<%= express.root %>/**/*.js'
+                        '<%= express.root %>/**/test/**/*.js',
+                        '<%= express.root %>/**/*.js'
                 ],
-                tasks: ['env:local', 'newer:jshint', 'newer:jscs', 'mochaTest:test']
+                tasks: ['env:local', 'newer:lint', 'mochaTest:test']
             },
             jsTest    : {
                 files: [
@@ -130,7 +132,7 @@ module.exports = function(grunt) {
                     '<%= quickbase.client.components %>/**/test/**/*.js',
                     '<%= quickbase.client.components %>/**/*.js'
                 ],
-                tasks: ['newer:jshint', 'newer:jscs', 'karma:unit']
+                tasks: ['newer:hint', 'karma:unit']
             },
             livereload: {
                 files  : [
@@ -171,108 +173,7 @@ module.exports = function(grunt) {
                 }
             }
         },
-        jscs: {
-            client : {
-                files  : {
-                    src: ['<%= quickbase.client.root %>/**/*.js', '<%= quickbase.e2e %>/**/*.js']
-                },
-                options: {
-                    config      : './.jscsrc',
-                    excludeFiles: (client === 'REACT') ?
-                        ['<%= quickbase.client.root %>/bower_components/**/*.js',
-                            '<%= quickbase.client.root %>/**/*.spec.js',
-                            '<%= quickbase.client.gen %>/**/*.js',
-                            '<%= quickbase.client.root %>/**/*.js', //TODO replace with eslint
-                            '<%= quickbase.client.root %>/bootstrap-sass.config.js'
-                        ] : ['<%= quickbase.client.root %>/bower_components/**/*.js',
-                        '<%= quickbase.client.root %>/**/*.spec.js'
-                    ]
-                }
-            },
-            server : {
-                files  : {
-                    src: ['<%= express.root %>/**/*.js']
-                },
-                options: {
-                    config: './.jscsrc'
-                    // excludeFiles: ['<%= express.root %>/**/*.spec.js']
-                }
-            },
-            testGen: {
-                files  : {
-                    src: ['test_generators/**/*.js']
-                },
-                options: {
-                    config: './.jscsrc'
-                    //             excludeFiles: ['test_generators/**/*.spec.js']
-                }
-            }
-        },
 
-        // Make sure code styles are up to par and there are no obvious mistakes
-        jshint: {
-            options   : {
-                jshintrc: './.jshintrc',
-                //reporter: require('jshint-stylish'),
-                reporter: './node_modules/jshint-practical/'
-            },
-            server    : {
-                options: {
-                    jshintrc: '<%= express.root %>/.jshintrc'
-                },
-                src    : [
-                    '<%= express.root %>/**/*.js',
-                    '!<%= express.root %>/**/*.spec.js'
-                ]
-            },
-            serverTest: {
-                options: {
-                    jshintrc: '<%= express.root %>/.jshintrc'
-                },
-                src    : ['<%= express.root %>/**/*.spec.js',
-                    '<%= express.root %>/**/test/**/*.js']
-            },
-            client    : {
-                options: {
-                    jshintrc: '<%= quickbase.client.root %>/.jshintrc'
-                },
-                src    : (client === 'ANGULAR') ? [
-                    // only use jshint on angular code
-                    // React will use ESLint for lint checking which supports JSX/ES6
-                    // So when running jshint with REACT as client we will not include the react client code
-                    '<%= quickbase.client.components %>/**/*.js',
-                    '<%= quickbase.client.gallery %>/**/*.js',
-                    '!<%= quickbase.client.root %>/dist/**/*.js',
-                    '!<%= quickbase.client.components %>/**/*.spec.js',
-                    '!<%= quickbase.client.components %>/**/*.mock.js',
-                    '!<%= quickbase.e2e %>/**/*.js'
-
-                ]  : [
-                    '!<%= quickbase.client.root %>/**/*.js',
-                    '!<%= quickbase.e2e %>/**/*.js',
-                    '!<%= express.root %>/**/*.js'
-                ]
-            },
-            clientTest: {
-                options: {
-                    jshintrc: '<%= quickbase.client.root %>/.jshintrc'
-                },
-                src    : [
-                    '<%= quickbase.client.components %>/**/*.spec.js',
-                    '<%= quickbase.client.components %>/**/*.mock.js',
-                    '<%= quickbase.client.gallery %>/**/test/**/*.js',
-                    '<%= quickbase.e2e %>/**/*.js'
-                ]
-            },
-            testGen   : {
-                options: {
-                    jshintrc: '<%= express.root %>/.jshintrc'
-                },
-                src    : [
-                    'test_generators/**/*.js'
-                ]
-            }
-        },
 
         // Empties folders to start fresh
         clean: {
@@ -606,14 +507,14 @@ module.exports = function(grunt) {
                         'index.html'
                     ]
                 },
-                    {
-                        expand: true,
-                        dest  : '<%= quickbase.distDir %>',
-                        src   : [
-                            'package.json',
-                            '<%= express.root %>/**/*'
-                        ]
-                    }
+                {
+                    expand: true,
+                    dest  : '<%= quickbase.distDir %>',
+                    src   : [
+                        'package.json',
+                        '<%= express.root %>/**/*'
+                    ]
+                }
                 ]
             }
         },
@@ -809,6 +710,16 @@ module.exports = function(grunt) {
             }
         },
         shell: {
+            lint: {
+                // Make sure code styles are up to par and there are no obvious mistakes
+                //fixes any fixables i.e. spacing, missing semicolon etc
+                // see (fixables) in the list http://eslint.org/docs/rules/
+                command: 'npm run lintFix',
+                options: {
+                    execOptions: {
+                    }
+                }
+            },
             webpack: {
                 command: 'npm run webpack',
                 options: {
@@ -883,7 +794,7 @@ module.exports = function(grunt) {
     grunt.registerTask('wait', function() {
         grunt.log.ok('Waiting for server reload...');
 
-        var done = this.async();
+        var done = async();
 
         setTimeout(function() {
             grunt.log.writeln('Done waiting!');
@@ -923,7 +834,7 @@ module.exports = function(grunt) {
     });
 
     grunt.registerTask('express-keepalive', 'Keep grunt running', function() {
-        this.async();
+        async();
     });
 
     grunt.registerTask('serve', function(target) {
@@ -984,7 +895,7 @@ module.exports = function(grunt) {
         // for coverage, an issue is open on this https://github.com/karma-runner/karma/issues/528
         // meanwhile we can workaround it by fixing the paths in the client coverage file
         var clientCoverageReport = clientReportDir + '/coverage/lcov.info';
-        var absoluteFilePrefix = 'SF:' + __dirname + '/';
+        var absoluteFilePrefix =  path.join('SF:', __dirname, '/');
         if (grunt.file.exists(clientCoverageReport)) {
             var lcovString = grunt.file.read(clientCoverageReport);
             var newLcovString = lcovString.replace(/SF\:\.\//g, absoluteFilePrefix);
@@ -998,12 +909,11 @@ module.exports = function(grunt) {
     });
 
     grunt.registerTask('codeStandards', [
-        'jshint',
-        'jscs'
+        'lint',
     ]);
 
     grunt.registerTask('testClientOnly', function() {
-        grunt.task.run(['jshint:client', 'jscs:client', 'karma:unit']);
+        grunt.task.run(['lint', 'karma:unit']);
     });
 
 
@@ -1163,15 +1073,14 @@ module.exports = function(grunt) {
     }
 
     grunt.registerTask('default', [
-        'newer:jshint',
-        'newer:jscs',
+        'newer:lint',
         'test',
         'build'
     ]);
 
     /* global console:true */
     grunt.registerTask('sauce_connect', 'Grunt plug-in to download and launch Sauce Labs Sauce Connect', function() {
-        var options = this.options({
+        var options = options({
             username        : 'sbg_qbse',
             accessKey       : sauceKey,
             proxy           : httpProxy,
@@ -1180,7 +1089,7 @@ module.exports = function(grunt) {
             logger          : console.log
         });
 
-        var done = this.async();
+        var done = async();
 
         var tunnel = {};
         sauceConnect.setOptions(options);
@@ -1196,10 +1105,16 @@ module.exports = function(grunt) {
     });
 
     grunt.registerTask('sauce-connect-close', 'Closes the current Sauce Connect tunnel', function() {
-        sauceConnect.close(this.async());
+        sauceConnect.close(async());
     });
 
-    grunt.registerTask('makeProdNodeModules', 'Creates a production copy of node_modules folder for zip to nexus', function () {
+    grunt.registerTask('lint', 'Run eslint on code', function(){
+        return grunt.task.run([
+            'shell:lint',
+        ]);
+    });
+
+    grunt.registerTask('makeProdNodeModules', 'Creates a production copy of node_modules folder for zip to nexus', function() {
         // delete any old modules in dist dir
         grunt.task.run(['clean:modulesProd']);
 
@@ -1211,15 +1126,6 @@ module.exports = function(grunt) {
 
     });
 
-    grunt.registerTask('npmRebuild', 'rebuilds the npm bins for the ci machine env ', function () {
-        //rebuild npm
-        grunt.task.run(['shell:rebuild']);
-
-    });
-
-
-    grunt.loadNpmTasks('grunt-jscs');
-    grunt.loadNpmTasks('grunt-contrib-jshint');
     grunt.loadNpmTasks('grunt-shell-spawn');
     grunt.loadNpmTasks('grunt-webpack');
 };

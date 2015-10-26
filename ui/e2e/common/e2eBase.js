@@ -23,7 +23,9 @@
             //Delegate to recordBase to initialize
             recordBase : recordBase,
             initialize : function() {
-                init = recordBase.initialize();
+                if (!init) {
+                    init = recordBase.initialize();
+                }
             },
             //Set the baseUrl we want to use to reach out for testing
             setBaseUrl : function(baseUrlConfig) {

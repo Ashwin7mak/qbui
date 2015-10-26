@@ -54,6 +54,7 @@ class Logger {
 
     //  todo: xhr to node server to log server message...
     logTheMessage(level, msg) {
+        /*eslint no-console:0 */
         try {
             if (this.logToConsole === true) {
                 console.log(level.name + ': ' + msg);
@@ -71,7 +72,7 @@ class Logger {
     }
 
     // Log the message to the server
-    sendMessageToServer(level, msg) {
+    sendMessageToServer() {
         //TODO: placeholder...
         return null;
     }

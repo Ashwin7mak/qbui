@@ -1,6 +1,3 @@
-import Logger from './logger';
-var logger = new Logger();
-
 class StringUtils {
 
     /**

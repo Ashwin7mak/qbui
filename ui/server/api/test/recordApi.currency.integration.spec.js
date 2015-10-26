@@ -19,7 +19,6 @@
      * of precision. For more info, google it!
      */
 
-    //jshint loopfunc: true
     /**
      * Integration test for Currency field formatting
      */
@@ -30,14 +29,14 @@
         var numberNegative = '-88.22';
 
         var appWithNoFlags = {
-            name  : 'Currency App - no flags',
+            name: 'Currency App - no flags',
             tables: [{
                 name: 'table1', fields: [{
-                    name              : 'currency',
+                    name: 'currency',
                     datatypeAttributes: {
                         type: 'CURRENCY'
                     },
-                    type              : 'SCALAR'
+                    type: 'SCALAR'
                 }
                 ]
             }
@@ -45,25 +44,25 @@
         };
 
         var appWithAllRightOfSignFlags = {
-            name  : 'Currency App - all \'right of sign\' flags',
+            name: 'Currency App - all \'right of sign\' flags',
             tables: [{
                 name: 'table1', fields: [{
-                    name              : 'currency',
-                    type              : 'SCALAR',
+                    name: 'currency',
+                    type: 'SCALAR',
                     datatypeAttributes: {
-                        type                : 'CURRENCY',
-                        decimalPlaces       : 2,
+                        type: 'CURRENCY',
+                        decimalPlaces: 2,
                         clientSideAttributes: {
-                            width            : 10,
-                            bold             : false,
-                            word_wrap        : false,
-                            help_text        : 'help',
-                            separator_start  : 3,
-                            separator_mark   : '.',
+                            width: 10,
+                            bold: false,
+                            word_wrap: false,
+                            help_text: 'help',
+                            separator_start: 3,
+                            separator_mark: '.',
                             separator_pattern: 'THREE_THEN_TWO',
-                            decimal_mark     : ',',
-                            position         : 'RIGHT_OF_SIGN',
-                            symbol           : 'X'
+                            decimal_mark: ',',
+                            position: 'RIGHT_OF_SIGN',
+                            symbol: 'X'
 
                         }
                     }
@@ -74,25 +73,25 @@
         };
 
         var appWithAllLeftFlags = {
-            name  : 'Currency App - all \'left\' flags',
+            name: 'Currency App - all \'left\' flags',
             tables: [{
                 name: 'table1', fields: [{
-                    name              : 'currency',
-                    type              : 'SCALAR',
+                    name: 'currency',
+                    type: 'SCALAR',
                     datatypeAttributes: {
-                        decimalPlaces       : 2,
-                        type                : 'CURRENCY',
+                        decimalPlaces: 2,
+                        type: 'CURRENCY',
                         clientSideAttributes: {
-                            width            : 10,
-                            bold             : false,
-                            word_wrap        : false,
-                            help_text        : 'help',
-                            separator_start  : 3,
-                            separator_mark   : '.',
+                            width: 10,
+                            bold: false,
+                            word_wrap: false,
+                            help_text: 'help',
+                            separator_start: 3,
+                            separator_mark: '.',
                             separator_pattern: 'THREE_THEN_TWO',
-                            decimal_mark     : ',',
-                            position         : 'LEFT',
-                            symbol           : '\u20BD'
+                            decimal_mark: ',',
+                            position: 'LEFT',
+                            symbol: '\u20BD'
                         }
                     }
                 }
@@ -102,26 +101,26 @@
         };
 
         var appWithAllRightFlags = {
-            name  : 'Currency App - all "right" flags',
+            name: 'Currency App - all "right" flags',
             tables: [{
-                name  : 'table1',
+                name: 'table1',
                 fields: [{
-                    name              : 'currency',
-                    type              : 'SCALAR',
+                    name: 'currency',
+                    type: 'SCALAR',
                     datatypeAttributes: {
-                        type                : 'CURRENCY',
-                        decimalPlaces       : 2,
+                        type: 'CURRENCY',
+                        decimalPlaces: 2,
                         clientSideAttributes: {
-                            width            : 10,
-                            bold             : false,
-                            word_wrap        : false,
-                            help_text        : 'help',
-                            separator_start  : 3,
-                            separator_mark   : '.',
+                            width: 10,
+                            bold: false,
+                            word_wrap: false,
+                            help_text: 'help',
+                            separator_start: 3,
+                            separator_mark: '.',
                             separator_pattern: 'THREE_THEN_TWO',
-                            decimal_mark     : ',',
-                            position         : 'RIGHT',
-                            symbol           : '!'
+                            decimal_mark: ',',
+                            position: 'RIGHT',
+                            symbol: '!'
                         }
                     }
                 }
@@ -156,63 +155,63 @@
 
             return [
                 {
-                    message           : 'display decimal number with no format flags',
-                    record            : decimalInput,
-                    format            : 'display',
+                    message: 'display decimal number with no format flags',
+                    record: decimalInput,
+                    format: 'display',
                     expectedFieldValue: expectedDecimalRecord
                 },
                 {
-                    message           : 'raw decimal number with no format flags',
-                    record            : decimalInput,
-                    format            : 'raw',
+                    message: 'raw decimal number with no format flags',
+                    record: decimalInput,
+                    format: 'raw',
                     expectedFieldValue: decimalInput
                 },
                 {
-                    message           : 'display double number with no format flags',
-                    record            : doubleInput,
-                    format            : 'display',
+                    message: 'display double number with no format flags',
+                    record: doubleInput,
+                    format: 'display',
                     expectedFieldValue: expectedDoubleRecord
                 },
                 {
-                    message           : 'raw double number with no format flags',
-                    record            : doubleInput,
-                    format            : 'raw',
+                    message: 'raw double number with no format flags',
+                    record: doubleInput,
+                    format: 'raw',
                     expectedFieldValue: doubleInput
                 },
                 {
-                    message           : 'display negative number with no format flags',
-                    record            : negativeInput,
-                    format            : 'display',
+                    message: 'display negative number with no format flags',
+                    record: negativeInput,
+                    format: 'display',
                     expectedFieldValue: expectedNegativeRecord
                 },
                 {
-                    message           : 'raw negative number with no format flags',
-                    record            : negativeInput,
-                    format            : 'raw',
+                    message: 'raw negative number with no format flags',
+                    record: negativeInput,
+                    format: 'raw',
                     expectedFieldValue: negativeInput
                 },
                 {
-                    message           : 'display int number with no format flags',
-                    record            : intInput,
-                    format            : 'display',
+                    message: 'display int number with no format flags',
+                    record: intInput,
+                    format: 'display',
                     expectedFieldValue: expectedIntRecord
                 },
                 {
-                    message           : 'raw int number with no format flags',
-                    record            : intInput,
-                    format            : 'raw',
+                    message: 'raw int number with no format flags',
+                    record: intInput,
+                    format: 'raw',
                     expectedFieldValue: intInput
                 },
                 {
-                    message           : 'display null number with no format flags',
-                    record            : nullInput,
-                    format            : 'display',
+                    message: 'display null number with no format flags',
+                    record: nullInput,
+                    format: 'display',
                     expectedFieldValue: expectedNullRecord
                 },
                 {
-                    message           : 'raw null number with no format flags',
-                    record            : nullInput,
-                    format            : 'raw',
+                    message: 'raw null number with no format flags',
+                    record: nullInput,
+                    format: 'raw',
                     expectedFieldValue: nullInput
                 }
             ];
@@ -245,25 +244,25 @@
 
                     //When all the records have been fetched, assert the values match expectations
                     promise.all(fetchRecordPromises)
-                            .then(function(results) {
-                                      for (var i = 0; i < results.length; i++) {
-                                          var currentRecord = results[i];
-                                          if (results[i].record) {
-                                              currentRecord = results[i].record;
-                                          }
+                        .then(function(results) {
+                            for (var j = 0; j < results.length; j++) {
+                                var currentRecord = results[j];
+                                if (results[j].record) {
+                                    currentRecord = results[j].record;
+                                }
 
-                                          currentRecord.forEach(function(fieldValue) {
-                                              if (fieldValue.id === records[i].expectedFieldValue.id) {
-                                                  assert.deepEqual(fieldValue, records[i].expectedFieldValue, 'Unexpected field value returned: ' +
-                                                                                                              JSON.stringify(fieldValue) + ', ' + JSON.stringify(records[i].expectedFieldValue));
-                                              }
-                                          });
-                                      }
-                                      done();
-                                  }).catch(function(errorMsg) {
-                                               assert(false, 'unable to resolve all records: ' + JSON.stringify(errorMsg));
-                                               done();
-                                           });
+                                currentRecord.forEach(function(fieldValue) {
+                                    if (fieldValue.id === records[j].expectedFieldValue.id) {
+                                        assert.deepEqual(fieldValue, records[j].expectedFieldValue, 'Unexpected field value returned: ' +
+                                            JSON.stringify(fieldValue) + ', ' + JSON.stringify(records[j].expectedFieldValue));
+                                    }
+                                });
+                            }
+                            done();
+                        }).catch(function(errorMsg) {
+                            assert(false, 'unable to resolve all records: ' + JSON.stringify(errorMsg));
+                            done();
+                        });
                 });
             });
         });
@@ -294,63 +293,63 @@
 
             return [
                 {
-                    message           : 'display decimal number with all "right of sign" format flags',
-                    record            : decimalInput,
-                    format            : 'display',
+                    message: 'display decimal number with all "right of sign" format flags',
+                    record: decimalInput,
+                    format: 'display',
                     expectedFieldValue: expectedDecimalRecord
                 },
                 {
-                    message           : 'raw decimal number with all "right of sign" format flags',
-                    record            : decimalInput,
-                    format            : 'raw',
+                    message: 'raw decimal number with all "right of sign" format flags',
+                    record: decimalInput,
+                    format: 'raw',
                     expectedFieldValue: decimalInput
                 },
                 {
-                    message           : 'display double number with all "right of sign" format flags',
-                    record            : doubleInput,
-                    format            : 'display',
+                    message: 'display double number with all "right of sign" format flags',
+                    record: doubleInput,
+                    format: 'display',
                     expectedFieldValue: expectedDoubleRecord
                 },
                 {
-                    message           : 'raw double number with all "right of sign: format flags',
-                    record            : doubleInput,
-                    format            : 'raw',
+                    message: 'raw double number with all "right of sign: format flags',
+                    record: doubleInput,
+                    format: 'raw',
                     expectedFieldValue: doubleInput
                 },
                 {
-                    message           : 'display negative number with all "right of sign" format flags',
-                    record            : negativeInput,
-                    format            : 'display',
+                    message: 'display negative number with all "right of sign" format flags',
+                    record: negativeInput,
+                    format: 'display',
                     expectedFieldValue: expectedNegativeRecord
                 },
                 {
-                    message           : 'raw negative number with all "right of sign" format flags',
-                    record            : negativeInput,
-                    format            : 'raw',
+                    message: 'raw negative number with all "right of sign" format flags',
+                    record: negativeInput,
+                    format: 'raw',
                     expectedFieldValue: negativeInput
                 },
                 {
-                    message           : 'display int number with all "right of sign" format flags',
-                    record            : intInput,
-                    format            : 'display',
+                    message: 'display int number with all "right of sign" format flags',
+                    record: intInput,
+                    format: 'display',
                     expectedFieldValue: expectedIntRecord
                 },
                 {
-                    message           : 'raw int number with all format "right of sign" flags',
-                    record            : intInput,
-                    format            : 'raw',
+                    message: 'raw int number with all format "right of sign" flags',
+                    record: intInput,
+                    format: 'raw',
                     expectedFieldValue: intInput
                 },
                 {
-                    message           : 'display null number with all "right of sign" format flags',
-                    record            : nullInput,
-                    format            : 'display',
+                    message: 'display null number with all "right of sign" format flags',
+                    record: nullInput,
+                    format: 'display',
                     expectedFieldValue: expectedNullRecord
                 },
                 {
-                    message           : 'raw null number with all format "right of sign" flags',
-                    record            : nullInput,
-                    format            : 'raw',
+                    message: 'raw null number with all format "right of sign" flags',
+                    record: nullInput,
+                    format: 'raw',
                     expectedFieldValue: nullInput
                 }
             ];
@@ -383,25 +382,25 @@
 
                     //When all the records have been fetched, assert the values match expectations
                     promise.all(fetchRecordPromises)
-                            .then(function(results) {
-                                      for (var i = 0; i < results.length; i++) {
-                                          var currentRecord = results[i];
-                                          if (results[i].record) {
-                                              currentRecord = results[i].record;
-                                          }
+                        .then(function(results) {
+                            for (var j = 0; j < results.length; j++) {
+                                var currentRecord = results[j];
+                                if (results[j].record) {
+                                    currentRecord = results[j].record;
+                                }
 
-                                          currentRecord.forEach(function(fieldValue) {
-                                              if (fieldValue.id === records[i].expectedFieldValue.id) {
-                                                  assert.deepEqual(fieldValue, records[i].expectedFieldValue, 'Unexpected field value returned: ' +
-                                                                                                              JSON.stringify(fieldValue) + ', ' + JSON.stringify(records[i].expectedFieldValue));
-                                              }
-                                          });
-                                      }
-                                      done();
-                                  }).catch(function(errorMsg) {
-                                               assert(false, 'unable to resolve all records: ' + JSON.stringify(errorMsg));
-                                               done();
-                                           });
+                                currentRecord.forEach(function(fieldValue) {
+                                    if (fieldValue.id === records[j].expectedFieldValue.id) {
+                                        assert.deepEqual(fieldValue, records[j].expectedFieldValue, 'Unexpected field value returned: ' +
+                                            JSON.stringify(fieldValue) + ', ' + JSON.stringify(records[j].expectedFieldValue));
+                                    }
+                                });
+                            }
+                            done();
+                        }).catch(function(errorMsg) {
+                            assert(false, 'unable to resolve all records: ' + JSON.stringify(errorMsg));
+                            done();
+                        });
                 });
             });
         });
@@ -432,63 +431,63 @@
 
             return [
                 {
-                    message           : 'display decimal number with all "right" format flags',
-                    record            : decimalInput,
-                    format            : 'display',
+                    message: 'display decimal number with all "right" format flags',
+                    record: decimalInput,
+                    format: 'display',
                     expectedFieldValue: expectedDecimalRecord
                 },
                 {
-                    message           : 'raw decimal number with all "right" format flags',
-                    record            : decimalInput,
-                    format            : 'raw',
+                    message: 'raw decimal number with all "right" format flags',
+                    record: decimalInput,
+                    format: 'raw',
                     expectedFieldValue: decimalInput
                 },
                 {
-                    message           : 'display double number with all "right" format flags',
-                    record            : doubleInput,
-                    format            : 'display',
+                    message: 'display double number with all "right" format flags',
+                    record: doubleInput,
+                    format: 'display',
                     expectedFieldValue: expectedDoubleRecord
                 },
                 {
-                    message           : 'raw double number with all "right" format flags',
-                    record            : doubleInput,
-                    format            : 'raw',
+                    message: 'raw double number with all "right" format flags',
+                    record: doubleInput,
+                    format: 'raw',
                     expectedFieldValue: doubleInput
                 },
                 {
-                    message           : 'display negative number with all "right" format flags',
-                    record            : negativeInput,
-                    format            : 'display',
+                    message: 'display negative number with all "right" format flags',
+                    record: negativeInput,
+                    format: 'display',
                     expectedFieldValue: expectedNegativeRecord
                 },
                 {
-                    message           : 'raw negative number with all "right" format flags',
-                    record            : negativeInput,
-                    format            : 'raw',
+                    message: 'raw negative number with all "right" format flags',
+                    record: negativeInput,
+                    format: 'raw',
                     expectedFieldValue: negativeInput
                 },
                 {
-                    message           : 'display int number with all "right" format flags',
-                    record            : intInput,
-                    format            : 'display',
+                    message: 'display int number with all "right" format flags',
+                    record: intInput,
+                    format: 'display',
                     expectedFieldValue: expectedIntRecord
                 },
                 {
-                    message           : 'raw int number with all format "right" flags',
-                    record            : intInput,
-                    format            : 'raw',
+                    message: 'raw int number with all format "right" flags',
+                    record: intInput,
+                    format: 'raw',
                     expectedFieldValue: intInput
                 },
                 {
-                    message           : 'display null number with all "right" format flags',
-                    record            : nullInput,
-                    format            : 'display',
+                    message: 'display null number with all "right" format flags',
+                    record: nullInput,
+                    format: 'display',
                     expectedFieldValue: expectedNullRecord
                 },
                 {
-                    message           : 'raw null number with all format "right" flags',
-                    record            : nullInput,
-                    format            : 'raw',
+                    message: 'raw null number with all format "right" flags',
+                    record: nullInput,
+                    format: 'raw',
                     expectedFieldValue: nullInput
                 }
             ];
@@ -522,25 +521,25 @@
 
                     //When all the records have been fetched, assert the values match expectations
                     promise.all(fetchRecordPromises)
-                            .then(function(results) {
-                                      for (var i = 0; i < results.length; i++) {
-                                          var currentRecord = results[i];
-                                          if (results[i].record) {
-                                              currentRecord = results[i].record;
-                                          }
+                        .then(function(results) {
+                            for (var j = 0; j < results.length; j++) {
+                                var currentRecord = results[j];
+                                if (results[j].record) {
+                                    currentRecord = results[j].record;
+                                }
 
-                                          currentRecord.forEach(function(fieldValue) {
-                                              if (fieldValue.id === records[i].expectedFieldValue.id) {
-                                                  assert.deepEqual(fieldValue, records[i].expectedFieldValue, 'Unexpected field value returned: ' +
-                                                                                                              JSON.stringify(fieldValue) + ', ' + JSON.stringify(records[i].expectedFieldValue));
-                                              }
-                                          });
-                                      }
-                                      done();
-                                  }).catch(function(errorMsg) {
-                                               assert(false, 'unable to resolve all records: ' + JSON.stringify(errorMsg));
-                                               done();
-                                           });
+                                currentRecord.forEach(function(fieldValue) {
+                                    if (fieldValue.id === records[j].expectedFieldValue.id) {
+                                        assert.deepEqual(fieldValue, records[j].expectedFieldValue, 'Unexpected field value returned: ' +
+                                            JSON.stringify(fieldValue) + ', ' + JSON.stringify(records[j].expectedFieldValue));
+                                    }
+                                });
+                            }
+                            done();
+                        }).catch(function(errorMsg) {
+                            assert(false, 'unable to resolve all records: ' + JSON.stringify(errorMsg));
+                            done();
+                        });
                 });
             });
         });
@@ -571,63 +570,63 @@
 
             return [
                 {
-                    message           : 'display decimal number with all "left" format flags',
-                    record            : decimalInput,
-                    format            : 'display',
+                    message: 'display decimal number with all "left" format flags',
+                    record: decimalInput,
+                    format: 'display',
                     expectedFieldValue: expectedDecimalRecord
                 },
                 {
-                    message           : 'raw decimal number with all "left" format flags',
-                    record            : decimalInput,
-                    format            : 'raw',
+                    message: 'raw decimal number with all "left" format flags',
+                    record: decimalInput,
+                    format: 'raw',
                     expectedFieldValue: decimalInput
                 },
                 {
-                    message           : 'display double number with all "left" format flags',
-                    record            : doubleInput,
-                    format            : 'display',
+                    message: 'display double number with all "left" format flags',
+                    record: doubleInput,
+                    format: 'display',
                     expectedFieldValue: expectedDoubleRecord
                 },
                 {
-                    message           : 'raw double number with all "left" format flags',
-                    record            : doubleInput,
-                    format            : 'raw',
+                    message: 'raw double number with all "left" format flags',
+                    record: doubleInput,
+                    format: 'raw',
                     expectedFieldValue: doubleInput
                 },
                 {
-                    message           : 'display negative number with all "left" format flags',
-                    record            : negativeInput,
-                    format            : 'display',
+                    message: 'display negative number with all "left" format flags',
+                    record: negativeInput,
+                    format: 'display',
                     expectedFieldValue: expectedNegativeRecord
                 },
                 {
-                    message           : 'raw negative number with all "left" format flags',
-                    record            : negativeInput,
-                    format            : 'raw',
+                    message: 'raw negative number with all "left" format flags',
+                    record: negativeInput,
+                    format: 'raw',
                     expectedFieldValue: negativeInput
                 },
                 {
-                    message           : 'display int number with all "left" format flags',
-                    record            : intInput,
-                    format            : 'display',
+                    message: 'display int number with all "left" format flags',
+                    record: intInput,
+                    format: 'display',
                     expectedFieldValue: expectedIntRecord
                 },
                 {
-                    message           : 'raw int number with all format "left" flags',
-                    record            : intInput,
-                    format            : 'raw',
+                    message: 'raw int number with all format "left" flags',
+                    record: intInput,
+                    format: 'raw',
                     expectedFieldValue: intInput
                 },
                 {
-                    message           : 'display null number with all "left" format flags',
-                    record            : nullInput,
-                    format            : 'display',
+                    message: 'display null number with all "left" format flags',
+                    record: nullInput,
+                    format: 'display',
                     expectedFieldValue: expectedNullRecord
                 },
                 {
-                    message           : 'raw null number with all format "left" flags',
-                    record            : nullInput,
-                    format            : 'raw',
+                    message: 'raw null number with all format "left" flags',
+                    record: nullInput,
+                    format: 'raw',
                     expectedFieldValue: nullInput
                 }
             ];
@@ -660,25 +659,25 @@
 
                     //When all the records have been fetched, assert the values match expectations
                     promise.all(fetchRecordPromises)
-                            .then(function(results) {
-                                      for (var i = 0; i < results.length; i++) {
-                                          var currentRecord = results[i];
-                                          if (results[i].record) {
-                                              currentRecord = results[i].record;
-                                          }
+                        .then(function(results) {
+                            for (var j = 0; j < results.length; j++) {
+                                var currentRecord = results[j];
+                                if (results[j].record) {
+                                    currentRecord = results[j].record;
+                                }
 
-                                          currentRecord.forEach(function(fieldValue) {
-                                              if (fieldValue.id === records[i].expectedFieldValue.id) {
-                                                  assert.deepEqual(fieldValue, records[i].expectedFieldValue, 'Unexpected field value returned: ' +
-                                                                                                              JSON.stringify(fieldValue) + ', ' + JSON.stringify(records[i].expectedFieldValue));
-                                              }
-                                          });
-                                      }
-                                      done();
-                                  }).catch(function(errorMsg) {
-                                               assert(false, 'unable to resolve all records: ' + JSON.stringify(errorMsg));
-                                               done();
-                                           });
+                                currentRecord.forEach(function(fieldValue) {
+                                    if (fieldValue.id === records[j].expectedFieldValue.id) {
+                                        assert.deepEqual(fieldValue, records[j].expectedFieldValue, 'Unexpected field value returned: ' +
+                                            JSON.stringify(fieldValue) + ', ' + JSON.stringify(records[j].expectedFieldValue));
+                                    }
+                                });
+                            }
+                            done();
+                        }).catch(function(errorMsg) {
+                            assert(false, 'unable to resolve all records: ' + JSON.stringify(errorMsg));
+                            done();
+                        });
                 });
             });
         });

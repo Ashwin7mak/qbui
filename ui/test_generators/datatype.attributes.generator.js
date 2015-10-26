@@ -12,6 +12,7 @@
     var dataTypeBuilder = require('./datatype.attributes.builder');
     var _ = require('lodash');
     var DATATYPE_KEYS = 'dataTypeKeys';
+    var dataTypeToFunctionCalls = {};
 
     module.exports = {
         getDataTypeBuilder: function() {
@@ -92,7 +93,6 @@
     };
 
 
-    var dataTypeToFunctionCalls = {};
 
     //map fields by type so that we can know what to do fairly easily by grabbing keys
     //formula fields
@@ -108,9 +108,9 @@
     dataTypeToFunctionCalls[consts.TEXT] = applyTextHierarchy;
     dataTypeToFunctionCalls[consts.MULTI_LINE_TEXT] = applyTextHierarchy;
     dataTypeToFunctionCalls[consts.BIGTEXT] = applyTextHierarchy;
-    dataTypeToFunctionCalls[consts.URL] = function(fieldToModify) { applyUrlDefaults(fieldToModify);};
-    dataTypeToFunctionCalls[consts.EMAIL_ADDRESS] = function(fieldToModify) { applyEmailDefaults(fieldToModify);};
-    dataTypeToFunctionCalls[consts.PHONE_NUMBER] = function(fieldToModify) { applyPhoneNumberDefaults(fieldToModify);};
+    dataTypeToFunctionCalls[consts.URL] = function(fieldToModify) {applyUrlDefaults(fieldToModify);};
+    dataTypeToFunctionCalls[consts.EMAIL_ADDRESS] = function(fieldToModify) {applyEmailDefaults(fieldToModify);};
+    dataTypeToFunctionCalls[consts.PHONE_NUMBER] = function(fieldToModify) {applyPhoneNumberDefaults(fieldToModify);};
     dataTypeToFunctionCalls[consts.DATE_TIME] = applyDateTimeHierarchy;
     dataTypeToFunctionCalls[consts.DATE] = applyDateHierarchy;
     dataTypeToFunctionCalls[consts.TIME_OF_DAY] = function(fieldToModify) {
@@ -121,7 +121,7 @@
     dataTypeToFunctionCalls[consts.USER] = function(fieldToModify) {applyUserDefaults(fieldToModify);};
 
     //weirdos
-    dataTypeToFunctionCalls[consts.FILE_ATTACHMENT] = function(fieldToModify) { applyFileAttachmentDefaults(fieldToModify);};
+    dataTypeToFunctionCalls[consts.FILE_ATTACHMENT] = function(fieldToModify) {applyFileAttachmentDefaults(fieldToModify);};
 
     function applyNumericHierarchy(fieldToModify) {
         applyNumericDefaults(fieldToModify);

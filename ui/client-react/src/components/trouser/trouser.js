@@ -1,6 +1,6 @@
 import React from 'react';
 
-import './trouser.scss'
+import './trouser.scss';
 
 class Trouser extends React.Component {
 
@@ -12,7 +12,7 @@ class Trouser extends React.Component {
         window.addEventListener("keydown",  (e) => {
             var keyCode = e.keyCode;
 
-            if(keyCode == 27) {
+            if (keyCode === 27) {
                 this.props.onHide();
             }
         }, false);

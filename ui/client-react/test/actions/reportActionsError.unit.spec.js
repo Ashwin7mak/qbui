@@ -8,7 +8,7 @@ import Promise from 'bluebird';
 describe('Report Actions functions -- error', () => {
     'use strict';
 
-    let testData = {appId:'1', tblId:'2'}
+    let testData = {appId:'1', tblId:'2'};
 
     let promise;
     class mockReportService {
@@ -62,7 +62,7 @@ describe('Report Actions functions -- error', () => {
 describe('Report Actions functions -- no data supplied', () => {
     'use strict';
 
-    let testData = {appId:null, tblId:null}
+    let testData = {appId:null, tblId:null};
 
     let promise;
     class mockSuccessReportService {

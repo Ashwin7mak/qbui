@@ -1,4 +1,4 @@
-import Fluxxor from 'fluxxor';
+//import Fluxxor from 'fluxxor';
 import React from 'react/addons';
 import TableHomePage  from '../../src/components/table/tableHomePageRoute';
 
@@ -9,7 +9,7 @@ describe('TableHomePage functions', () => {
     'use strict';
 
     let component;
-    let flux = {}
+    let flux = {};
 
     it('test render of component', () => {
         component = TestUtils.renderIntoDocument(<TableHomePage flux={flux}/>);

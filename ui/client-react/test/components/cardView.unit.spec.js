@@ -9,7 +9,7 @@ const fakeReportData_empty = {
         results: [],
         columnMetadata: []
     }
-}
+};
 const fakeReportData_valid = {
     data: {
         results: {
@@ -22,7 +22,7 @@ const fakeReportData_valid = {
         },
         columnMetadata: ["col_num", "col_text", "col_date"/*, "col_4", "col_5", "col_6"*/]
     }
-}
+};
 
 describe('Report Mobile View functions', () => {
     'use strict';

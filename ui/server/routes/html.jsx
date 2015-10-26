@@ -1,4 +1,4 @@
-import React, { PropTypes } from 'react';
+import React, {PropTypes} from 'react';
 
 var Html = React.createClass({
     propTypes: {
@@ -7,7 +7,7 @@ var Html = React.createClass({
         favicon : PropTypes.string,
         jsPath  : PropTypes.string,
         hostBase: PropTypes.string
-      },
+    },
     render() {
         return (
             <html lang={this.props.lang}>

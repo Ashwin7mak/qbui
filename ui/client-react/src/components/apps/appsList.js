@@ -3,13 +3,12 @@ import ReactIntl from 'react-intl';
 import './apps.css';
 
 var IntlMixin = ReactIntl.IntlMixin;
-var FormattedMessage = ReactIntl.FormattedMessage;
 
 var Content = React.createClass({
     mixins: [IntlMixin],
 
     render: function() {
-        return ( this.props.data.apps.length ?
+        return (this.props.data.apps.length ?
                 <div className="apps">
                     {this.props.data.apps.map((app) => {
                         let appName = app.name + ' (' + app.id + ')';
@@ -29,7 +28,7 @@ var Content = React.createClass({
                         );
                     })}
                 </div> : <div></div>
-        )
+        );
     }
 });
 

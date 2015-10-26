@@ -1,12 +1,12 @@
-import Fluxxor from 'fluxxor';
+//import Fluxxor from 'fluxxor';
 
 import React from 'react/addons';
-import Dashboard from '../../src/components/dashboard/dashboardRoute'
+import Dashboard from '../../src/components/dashboard/dashboardRoute';
 
 var TestUtils = React.addons.TestUtils;
 
 var ContentMock = React.createClass({
-    render: function () {
+    render: function() {
         return <div className="datatable-mock-component" />;
     }
 });
@@ -17,7 +17,7 @@ const fakeReportData_Empty = {
         records: [],
         columns: []
     }
-}
+};
 
 const fakeReportData = {
     data: {
@@ -25,7 +25,7 @@ const fakeReportData = {
         records: [],
         columns: []
     }
-}
+};
 
 const params = {
     "noapp": {
@@ -45,7 +45,7 @@ const params = {
         tblId: "xyz1",
         rptId: 1
     }
-}
+};
 
 
 describe('Dashboard functions', () => {

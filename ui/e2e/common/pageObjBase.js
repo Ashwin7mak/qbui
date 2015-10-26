@@ -23,19 +23,19 @@
                 }
                 promise.all(getTextPromises)
                         .then(function(responses) {
-                                  var valueFound = false;
-                                  for (var i = 0; i < responses.length; i++) {
-                                      if (responses[i] === linkText) {
-                                          valueFound = true;
-                                          linkDeferred.resolve(responses[i]);
-                                      }
-                                  }
-                                  if (!valueFound) {
-                                      linkDeferred.reject('Could not find link');
-                                  }
-                              }).catch(function(error) {
-                                           linkDeferred.reject(error);
-                                       });
+                            var valueFound = false;
+                            for (var j = 0; j < responses.length; j++) {
+                                if (responses[j] === linkText) {
+                                    valueFound = true;
+                                    linkDeferred.resolve(responses[j]);
+                                }
+                            }
+                            if (!valueFound) {
+                                linkDeferred.reject('Could not find link');
+                            }
+                        }).catch(function(error) {
+                            linkDeferred.reject(error);
+                        });
                 return linkDeferred.promise;
             },
             /**

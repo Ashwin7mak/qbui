@@ -1,11 +1,11 @@
 import React from 'react';
 
-import ReactBootstrap from 'react-bootstrap';
-import {Button,Glyphicon} from '../../../../../node_modules/react-bootstrap/lib'
+//import ReactBootstrap from 'react-bootstrap';
+import {Glyphicon} from '../../../../../node_modules/react-bootstrap/lib';
 
 import './cardView.scss';
 
-class CardView  extends React.Component {
+class CardView extends React.Component {
     constructor(...args) {
         super(...args);
         this.state = this.initState(...args);
@@ -13,18 +13,19 @@ class CardView  extends React.Component {
     }
 
     initState() {
-        let initialState ={
+        let initialState = {
             showMoreCards: false
-        }
+        };
         return initialState;
     }
 
-    handleMoreCard(){
-        this.setState({ showMoreCards: !this.state.showMoreCards });
+    handleMoreCard() {
+        this.setState({showMoreCards: !this.state.showMoreCards});
     }
 
-    createField(c, curKey){
-        return(<div key={c} className="field">
+
+    createField(c, curKey) {
+        return (<div key={c} className="field">
             <span className="fieldLabel">{curKey}</span>
             <span className="fieldValue">{this.props.data[curKey]}</span>
         </div>);
@@ -32,17 +33,18 @@ class CardView  extends React.Component {
     createRow(){
         var fields = [];
         var keys = Object.keys(this.props.data);
-        if (!keys.length)
+        if (!keys.length) {
             return null;
+        }
         var topField = <div className="top-card-row field"><strong>{this.props.data[keys[0]]}</strong></div>;
         for (var i = 1; i < keys.length; i++) {
-            fields.push(this.createField(i,keys[i]));
+            fields.push(this.createField(i, keys[i]));
         }
-        return <div className="card">{topField}<div className={this.state.showMoreCards? "fieldRow expanded": "fieldRow collapsed"}>{fields}</div></div>;
+        return <div className="card">{topField}<div className={this.state.showMoreCards ? "fieldRow expanded" : "fieldRow collapsed"}>{fields}</div></div>;
     }
 
 
-    render(){
+    render() {
         if (this.props.data) {
             var row = this.createRow();
             return (
@@ -57,9 +59,7 @@ class CardView  extends React.Component {
                     </div>
                 </div>
             );
-        }
-        else
-        {
+        } else {
             return null;
         }
     }

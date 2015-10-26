@@ -78,7 +78,7 @@ describe('Validate RequestHelper unit tests', function() {
             req.protocol = 'https';
 
             var fs = require('fs');
-            var stub = sinon.stub(fs, 'readFileSync', function() { return 'file'; });
+            var stub = sinon.stub(fs, 'readFileSync', function() {return 'file';});
 
             var agentOptions = requestHelper.getAgentOptions(req);
 

@@ -12,6 +12,7 @@
     var tableConsts = require('./table.constants');
     var rawValueGenerator = require('./rawValue.generator');
     var log = require('../server/logger').getLogger();
+    var recordTypeMapping = {};
 
     module.exports = {
         /**
@@ -70,25 +71,24 @@
         return functionToCall();
     }
 
-    var recordTypeMapping = {};
 
     //map fields by type so that we know what kind of data to generate and plug into the record
     //concrete/scalar fields
-    recordTypeMapping[consts.PERCENT] = function() { return rawValueGenerator.generateDouble(1.5, 10.5); };
-    recordTypeMapping[consts.NUMERIC] = function() { return rawValueGenerator.generateDouble(0, 10.5); };
-    recordTypeMapping[consts.CURRENCY] = function() { return rawValueGenerator.generateDouble(0, 100); };
-    recordTypeMapping[consts.RATING] = function() { return rawValueGenerator.generateDouble(0, 10); };
-    recordTypeMapping[consts.DURATION] = function() { return rawValueGenerator.generateDouble(0, 5); };
-    recordTypeMapping[consts.TEXT] = function() { return rawValueGenerator.generateString(10); };
-    recordTypeMapping[consts.BIGTEXT] = function() { return rawValueGenerator.generateString(1000); };
-    recordTypeMapping[consts.URL] = function() { return rawValueGenerator.generateUrl(); };
-    recordTypeMapping[consts.EMAIL_ADDRESS] = function() { return rawValueGenerator.generateEmailInDomain('gmail.com'); };
-    recordTypeMapping[consts.PHONE_NUMBER] = function() { return rawValueGenerator.generatePhoneNumber(); };
-    recordTypeMapping[consts.CHECKBOX] = function() { return rawValueGenerator.generateBool();};
-    recordTypeMapping[consts.DATE_TIME] = function() { return rawValueGenerator.generateDateTime(); };
-    recordTypeMapping[consts.DATE] = function() { return rawValueGenerator.generateDate(); };
-    recordTypeMapping[consts.TIME_OF_DAY] = function() { return rawValueGenerator.generateTime();};
-    recordTypeMapping[consts.FILE_ATTACHMENT] = function() { return rawValueGenerator.generateUrl();};
-    recordTypeMapping[consts.USER] = function(userIdsToPickFrom) { return rawValueGenerator.pickUserIdFromList(userIdsToPickFrom);};
+    recordTypeMapping[consts.PERCENT] = function() {return rawValueGenerator.generateDouble(1.5, 10.5);};
+    recordTypeMapping[consts.NUMERIC] = function() {return rawValueGenerator.generateDouble(0, 10.5);};
+    recordTypeMapping[consts.CURRENCY] = function() {return rawValueGenerator.generateDouble(0, 100);};
+    recordTypeMapping[consts.RATING] = function() {return rawValueGenerator.generateDouble(0, 10);};
+    recordTypeMapping[consts.DURATION] = function() {return rawValueGenerator.generateDouble(0, 5);};
+    recordTypeMapping[consts.TEXT] = function() {return rawValueGenerator.generateString(10);};
+    recordTypeMapping[consts.BIGTEXT] = function() {return rawValueGenerator.generateString(1000);};
+    recordTypeMapping[consts.URL] = function() {return rawValueGenerator.generateUrl();};
+    recordTypeMapping[consts.EMAIL_ADDRESS] = function() {return rawValueGenerator.generateEmailInDomain('gmail.com');};
+    recordTypeMapping[consts.PHONE_NUMBER] = function() {return rawValueGenerator.generatePhoneNumber();};
+    recordTypeMapping[consts.CHECKBOX] = function() {return rawValueGenerator.generateBool();};
+    recordTypeMapping[consts.DATE_TIME] = function() {return rawValueGenerator.generateDateTime();};
+    recordTypeMapping[consts.DATE] = function() {return rawValueGenerator.generateDate();};
+    recordTypeMapping[consts.TIME_OF_DAY] = function() {return rawValueGenerator.generateTime();};
+    recordTypeMapping[consts.FILE_ATTACHMENT] = function() {return rawValueGenerator.generateUrl();};
+    recordTypeMapping[consts.USER] = function(userIdsToPickFrom) {return rawValueGenerator.pickUserIdFromList(userIdsToPickFrom);};
 
 }());

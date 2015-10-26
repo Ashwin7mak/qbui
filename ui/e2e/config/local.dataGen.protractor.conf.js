@@ -54,5 +54,5 @@
             // Maximizes the browser window (known bug with Chrome)
             browser.driver.manage().window().maximize();
         }
-    }
+    };
 }());

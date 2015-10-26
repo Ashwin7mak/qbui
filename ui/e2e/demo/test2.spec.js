@@ -9,7 +9,6 @@ describe('Test to print out jasmine version', function() {
         console.log('beforeAll capability is present');
     });
     it('prints jasmine version used by protractor', function() {
-        /* global jasmine:true */
         console.log('jasmine-version:' + jasmine.version);
     });
 });

@@ -27,7 +27,7 @@ const fakeReportData_empty = {
         records: [],
         columns: []
     }
-}
+};
 
 const fakeReportData_before = {
     data: {
@@ -38,7 +38,7 @@ const fakeReportData_before = {
         }],
         columnMetadata: ["col_num", "col_text", "col_date"]
     }
-}
+};
 const fakeReportData_after = {
     data: {
         results: [{
@@ -48,7 +48,7 @@ const fakeReportData_after = {
         }],
         columnMetadata: ["col_num1", "col_text1", "col_date1"]
     }
-}
+};
 
 
 
@@ -88,10 +88,10 @@ describe('GriddleTable functions', () => {
     it('test re-render with new data pushed from parent', () => {
         var TestParent = React.createFactory(React.createClass({
             getInitialState() {
-                return { results: fakeReportData_before.data.results, columns: fakeReportData_before.data.columnMetadata };
+                return {results: fakeReportData_before.data.results, columns: fakeReportData_before.data.columnMetadata};
             },
             render() {
-                return <GriddleTable ref="refGriddle" results={this.state.results} columnMetadata={this.state.columns}/>
+                return <GriddleTable ref="refGriddle" results={this.state.results} columnMetadata={this.state.columns}/>;
             }
         }));
 

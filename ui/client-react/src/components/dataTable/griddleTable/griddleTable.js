@@ -1,8 +1,8 @@
 import React from 'react';
 import Griddle from 'griddle-react';
 
-import Logger from '../../../utils/logger';
-var logger = new Logger();
+//import Logger from '../../../utils/logger';
+//var logger = new Logger();
 import I18nMessage from '../../../utils/i18nMessage';
 
 import './griddleTable.css';
@@ -32,8 +32,7 @@ class GriddleTable extends React.Component {
                         />
                 </div>
             );
-        }
-        else {
+        } else {
             return (
                 <div><I18nMessage message={'grid.no_data'}/></div>
             );

@@ -1,10 +1,10 @@
 import React from 'react';
 import ReactIntl from 'react-intl';
-import ReactBootstrap from 'react-bootstrap';
+//import ReactBootstrap from 'react-bootstrap';
 
 import Record from './record';
-import Logger from '../../utils/logger';
-let logger = new Logger();
+//import Logger from '../../utils/logger';
+//let logger = new Logger();
 
 import Fluxxor from 'fluxxor';
 import './record.scss';
@@ -21,14 +21,14 @@ var RecordRoute = React.createClass({
     },
 
     // Triggered when properties change
-    componentWillReceiveProps: function(props) {
+    componentWillReceiveProps: function(/* props */) {
 
         //this.loadRecordFromParams(props.params,true);
     },
 
     render: function() {
 
-        return (<div className='recordContainer'>
+        return (<div className="recordContainer">
 
             <Record {...this.props.i18n} recordData={this.props.recordData} mobile={this.props.mobile}/>
         </div>);

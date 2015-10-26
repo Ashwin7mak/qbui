@@ -8,7 +8,7 @@ var I18nMessage = React.createClass({
     mixins: [IntlMixin],
 
     render: function() {
-        return <FormattedMessage {...this.props} message={this.getIntlMessage(this.props.message)}/>
+        return <FormattedMessage {...this.props} message={this.getIntlMessage(this.props.message)}/>;
     }
 });
 

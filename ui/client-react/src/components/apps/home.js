@@ -20,7 +20,7 @@ var AppsHeader = React.createClass({
     mixins: [IntlMixin],
 
     render: function() {
-        return <FormattedMessage message={this.getIntlMessage('apps.header')}/>
+        return <FormattedMessage message={this.getIntlMessage('apps.header')}/>;
     }
 });
 
@@ -37,7 +37,7 @@ var App = React.createClass({
 
     render: function() {
         return (
-            <div className='apps-container'>
+            <div className="apps-container">
                 <h4><AppsHeader {...i18n}/></h4>
                 <AppsList {...i18n} data={this.state.apps}/>
             </div>

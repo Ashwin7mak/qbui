@@ -49,28 +49,28 @@ class BaseService {
      */
     setResponseInterceptor() {
         axios.interceptors.response.use(
-            function(response) {
+            function success(response) {
                 //  success
                 return response;
             },
-            function(error) {
+            function fail(error) {
                 switch (error.status) {
                     //TODO: not sure if this is okay to do or not...
-                    case 400:
-                        window.location.href = '/pageNotFound';
-                        break;
-                    case 401:
-                        window.location.href = '/unauthorized';
-                        break;
-                    case 403:
-                        window.location.href = '/unauthorized';
-                        break;
-                    case 404:
-                        window.location.href = '/pageNotFound';
-                        break;
-                    case 500:
-                        window.location.href = '/internalServerError';
-                        break;
+                case 400:
+                    window.location.href = '/pageNotFound';
+                    break;
+                case 401:
+                    window.location.href = '/unauthorized';
+                    break;
+                case 403:
+                    window.location.href = '/unauthorized';
+                    break;
+                case 404:
+                    window.location.href = '/pageNotFound';
+                    break;
+                case 500:
+                    window.location.href = '/internalServerError';
+                    break;
                 }
                 return Promise.reject(error);
             }

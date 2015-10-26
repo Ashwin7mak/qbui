@@ -30,7 +30,7 @@ let NavStore = Fluxxor.createStore({
             actions.CHANGE_LOCALE, this.onChangeLocale
         );
 
-        this.state.leftNavItems.push({ key: 'nav.home', link:'/apps', icon:'home'});
+        this.state.leftNavItems.push({key: 'nav.home', link:'/apps', icon:'home'});
     },
 
     onChangeLocale: function() {
@@ -52,7 +52,7 @@ let NavStore = Fluxxor.createStore({
         this.state.searchBarOpen = !this.state.searchBarOpen;
         this.emit('change');
     },
-    onSearching: function (searching) {
+    onSearching: function(searching) {
         this.state.searching = searching;
         this.emit('change');
     },

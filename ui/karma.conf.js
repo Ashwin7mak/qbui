@@ -14,7 +14,7 @@ module.exports = function(config) {
 
         // list of files/patterns to load and test
         files: [
-            { pattern: "tests.webpack.js"}
+            {pattern: "tests.webpack.js"}
         ],
 
         // list of files to exclude
@@ -105,7 +105,7 @@ module.exports = function(config) {
             // specify a common output directory
             dir: "build/reports/client/coverage",
             reporters: [
-                {type: "lcov", subdir: "." },
+                {type: "lcov", subdir: "."},
                 {type: "text-summary"}    // outputs to the console by default
             ]
         },

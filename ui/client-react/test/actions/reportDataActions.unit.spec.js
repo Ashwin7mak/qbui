@@ -11,7 +11,6 @@ describe('Report Data Actions functions -- success', () => {
     let appId = '1';
     let tblId = '2';
     let rptId = '3';
-    let format = true;
     let responseReportData = {
         data: {
             name: 'name'
@@ -25,7 +24,7 @@ describe('Report Data Actions functions -- success', () => {
     let response = {
         name: responseReportData.data.name,
         data: responseResultData.data
-    }
+    };
 
     let promise;
     class mockReportService {

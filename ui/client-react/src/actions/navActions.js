@@ -4,31 +4,31 @@ import Locale from '../locales/locales';
 
 let navActions = {
 
-    showTrouser: function() {
+    showTrouser() {
         this.dispatch(actions.SHOW_TROUSER);
     },
-    hideTrouser: function() {
+    hideTrouser() {
         this.dispatch(actions.HIDE_TROUSER);
     },
-    showNewItems: function() {
+    showNewItems() {
         this.dispatch(actions.SHOW_NEW_ITEMS);
     },
-    toggleLeftNav: function() {
+    toggleLeftNav() {
         this.dispatch(actions.TOGGLE_LEFT_NAV);
     },
-    toggleSearch: function() {
+    toggleSearch() {
         this.dispatch(actions.TOGGLE_SEARCH);
     },
-    searchFor: function (text) {
+    searchFor(text) {
         this.dispatch(actions.SEARCH_FOR, text);
     },
-    setSearching: function (searching) {
+    setSearching(searching) {
         this.dispatch(actions.SEARCHING, searching);
     },
-    changeLocale: function(locale) {
+    changeLocale(locale) {
         Locale.changeLocale(locale);
         this.dispatch(actions.CHANGE_LOCALE);
     }
 };
 
-export default navActions
+export default navActions;

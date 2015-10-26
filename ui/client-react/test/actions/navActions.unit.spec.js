@@ -15,7 +15,7 @@ describe('Nav Actions functions', () => {
         changeLocale: function(locale) {
             return locale;
         }
-    }
+    };
 
     beforeEach(() => {
         spyOn(flux.dispatchBinder, 'dispatch');

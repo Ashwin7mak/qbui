@@ -245,9 +245,9 @@
 
             //Create a realm for API tests to run against and generates a ticket
             initialize        : function() {
-                var context = this;
+                var self = this;
                 var deferred = promise.pending();
-                if (!context.realm) {
+                if (!self.realm) {
                     /*
                      * What follows are the steps needed to create a realm and a ticket for that realm such that
                      * subsequent requests can be made to that are realm without worrying about ticket creation
@@ -257,34 +257,34 @@
                      *  3) create a ticket valid on the realm in question
                      *  4) If any step above fails, assert!
                      */
-                    context.createTicket(LOCALHOST_REALM)
+                    self.createTicket(LOCALHOST_REALM)
                             .then(function(authResponse) {
                                       //TODO: tickets come back quoted, invalid JSON, we regex the quotes away.  hack.
-                                      context.authTicket = authResponse.body.replace(/"/g, '');
-                                      context.createRealm()
+                                self.authTicket = authResponse.body.replace(/"/g, '');
+                                self.createRealm()
                                               .then(function(realmResponse) {
-                                                        context.realm = JSON.parse(realmResponse.body);
-                                                        context.createTicket(context.realm.id)
+                                                  self.realm = JSON.parse(realmResponse.body);
+                                                  self.createTicket(self.realm.id)
                                                                 .then(function(realmTicketResponse) {
-                                                                          context.authTicket = realmTicketResponse.body.replace(/"/g, '');
-                                                                          deferred.resolve(context.realm);
-                                                                      }).catch(function(realmTicketError) {
-                                                                                   deferred.reject(realmTicketError);
-                                                                                   assert(false, 'failed to create ticket for realm: ' + context.realm.id);
-                                                                               });
-                                                    }).catch(function(realmError) {
-                                                                 deferred.reject(realmError);
-                                                                 assert(false, 'failed to create realm: ' + JSON.stringify(realmError));
-                                                             });
-                                  }).catch(function(authError) {
+                                                                    self.authTicket = realmTicketResponse.body.replace(/"/g, '');
+                                                                    deferred.resolve(self.realm);
+                                                                }).catch(function(realmTicketError) {
+                                                                    deferred.reject(realmTicketError);
+                                                                    assert(false, 'failed to create ticket for realm: ' + self.realm.id);
+                                                                });
+                                              }).catch(function(realmError) {
+                                                  deferred.reject(realmError);
+                                                  assert(false, 'failed to create realm: ' + JSON.stringify(realmError));
+                                              });
+                            }).catch(function(authError) {
                                                //If auth request fails, delete the realm & fail the tests
-                                               context.cleanup();
-                                               deferred.reject(authError);
-                                               assert(false, 'failed to resolve ticket: ' + JSON.stringify(authError));
-                                           });
+                                self.cleanup();
+                                deferred.reject(authError);
+                                assert(false, 'failed to resolve ticket: ' + JSON.stringify(authError));
+                            });
                 } else {
                     //The realm already exists, no-op
-                    deferred.resolve(context.realm);
+                    deferred.resolve(self.realm);
                 }
                 return deferred.promise;
 
@@ -322,22 +322,22 @@
             //Deletes a realm, if one is set on the instance, returns a promise
             cleanup           : function() {
                 //delete the realm  if not null
-                var context = this;
+                var self = this;
                 var deferred = promise.pending();
-                if (context.realm) {
-                    context.executeRequest(context.resolveRealmsEndpoint(context.realm.id),
+                if (self.realm) {
+                    self.executeRequest(self.resolveRealmsEndpoint(self.realm.id),
                                            consts.DELETE, '', DEFAULT_HEADERS)
                             .then(function(response) {
-                                      deferred.resolve(response);
-                                      context.realm = null;
-                                  }).catch(function(error) {
-                                               var r = context.realm;
-                                               context.realm = null;
-                                               assert(false, 'Unable to delete realm ' +
-                                                             JSON.stringify(r) + ' due to: ' +
+                                deferred.resolve(response);
+                                self.realm = null;
+                            }).catch(function(error) {
+                                var realm = self.realm;
+                                self.realm = null;
+                                assert(false, 'Unable to delete realm ' +
+                                                             JSON.stringify(realm) + ' due to: ' +
                                                              JSON.stringify(error));
-                                               deferred.reject(error);
-                                           });
+                                deferred.reject(error);
+                            });
                 } else {
                     deferred.resolve();
                 }

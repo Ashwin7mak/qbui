@@ -20,120 +20,120 @@
                  */
 
                 //Field defaults
-                fieldDefaults: {
-                    BUILTIN_DEFAULT           : false,
-                    DATA_COPYABLE_DEFAULT     : true,
-                    USE_IN_QUICKSEARCH_DEFAULT: true
-                },
+        fieldDefaults: {
+            BUILTIN_DEFAULT           : false,
+            DATA_COPYABLE_DEFAULT     : true,
+            USE_IN_QUICKSEARCH_DEFAULT: true
+        },
 
                 //Formula field defaults
-                formulaDefaults: {
-                    FORMULA_STRING_DEFAULT: ''
-                },
+        formulaDefaults: {
+            FORMULA_STRING_DEFAULT: ''
+        },
 
                 //ConcreteFieldDefaults
-                concreteDefaults: {
-                    REQUIRED_DEFAULT     : false,
-                    USER_EDITABLE_DEFAULT: false
-                },
+        concreteDefaults: {
+            REQUIRED_DEFAULT     : false,
+            USER_EDITABLE_DEFAULT: false
+        },
 
                 //ScalarFieldDefaults
-                scalarDefaults: {
-                    UNIQUE_DEFAULT                     : false,
-                    INDEXED_DEFAULT                    : false,
-                    MULTI_CHOICE_SOURCE_ALLOWED_DEFAULT: false
-                },
+        scalarDefaults: {
+            UNIQUE_DEFAULT                     : false,
+            INDEXED_DEFAULT                    : false,
+            MULTI_CHOICE_SOURCE_ALLOWED_DEFAULT: false
+        },
 
                 //Numeric and Numeric formula defaults
-                numericDefaults: {
-                    DECIMAL_PLACES_DEFAULT    : 14,
-                    TREAT_NULL_AS_ZERO_DEFAULT: true
-                },
+        numericDefaults: {
+            DECIMAL_PLACES_DEFAULT    : 14,
+            TREAT_NULL_AS_ZERO_DEFAULT: true
+        },
 
                 //Date and Date Formula defaults
-                dateDefaults: {
-                    SHOW_MONTH_AS_NAME_DEFAULT  : false,
-                    SHOW_DAY_OF_WEEK_DEFAULT    : false,
-                    HIDE_YEAR_IF_CURRENT_DEFAULT: false
-                },
+        dateDefaults: {
+            SHOW_MONTH_AS_NAME_DEFAULT  : false,
+            SHOW_DAY_OF_WEEK_DEFAULT    : false,
+            HIDE_YEAR_IF_CURRENT_DEFAULT: false
+        },
 
                 //DateTime and DateTimeFormula Defaults
-                dateTimeDefaults: {
-                    SHOW_TIME_DEFAULT     : true,
-                    SHOW_TIME_ZONE_DEFAULT: false
-                },
+        dateTimeDefaults: {
+            SHOW_TIME_DEFAULT     : true,
+            SHOW_TIME_ZONE_DEFAULT: false
+        },
 
                 //Duration and DurationFormula
-                durationDefaults: {
-                    SCALE_DEFAULT: 'Smart Units'
-                },
+        durationDefaults: {
+            SCALE_DEFAULT: 'Smart Units'
+        },
 
                 //Email and EmailFormula
-                emailDefaults: {
-                    DOMAIN_DEFAULT_VALUE_DEFAULT: false,
-                    SORT_BY_DOMAIN_DEFAULT      : false,
-                    SHOW_EMAIL_EVERYONE_DEFAULT : false
-                },
+        emailDefaults: {
+            DOMAIN_DEFAULT_VALUE_DEFAULT: false,
+            SORT_BY_DOMAIN_DEFAULT      : false,
+            SHOW_EMAIL_EVERYONE_DEFAULT : false
+        },
 
                 //FileAttachments
-                fileAttachmentDefaults: {
-                    REVISIONS_TO_KEEP_DEFAULT                 : 3,
-                    ALLOW_USERS_TO_SET_CURRENT_VERSION_DEFAULT: true,
-                    KEEP_ALL_REVISIONS_DEFAULT                : false,
-                    LINK_TEXT_DEFAULT                         : ''
-                },
+        fileAttachmentDefaults: {
+            REVISIONS_TO_KEEP_DEFAULT                 : 3,
+            ALLOW_USERS_TO_SET_CURRENT_VERSION_DEFAULT: true,
+            KEEP_ALL_REVISIONS_DEFAULT                : false,
+            LINK_TEXT_DEFAULT                         : ''
+        },
 
                 //PhoneNumber and PhoneNumberFormulaField
-                phoneNumberDefaults: {
-                    INCLUDE_EXTENSION_DEFAULT: true
-                },
+        phoneNumberDefaults: {
+            INCLUDE_EXTENSION_DEFAULT: true
+        },
 
                 //Rating and RatingFormula
-                ratingDefaults: {
-                    DECIMAL_PLACES_DEFAULT    : 1,
-                    TREAT_NULL_AS_ZERO_DEFAULT: false
-                },
+        ratingDefaults: {
+            DECIMAL_PLACES_DEFAULT    : 1,
+            TREAT_NULL_AS_ZERO_DEFAULT: false
+        },
 
                 //ReportLink
-                reportDefaults: {
-                    EXACT_MATCH_DEFAULT                : true,
-                    DISPLAY_PROTOCOL_DEFAULT           : true,
-                    LINK_TEXT_DEFAULT                  : '',
-                    MULTI_CHOICE_SOURCE_ALLOWED_DEFAULT: false
-                },
+        reportDefaults: {
+            EXACT_MATCH_DEFAULT                : true,
+            DISPLAY_PROTOCOL_DEFAULT           : true,
+            LINK_TEXT_DEFAULT                  : '',
+            MULTI_CHOICE_SOURCE_ALLOWED_DEFAULT: false
+        },
 
                 //Summary
-                summaryDefaults: {
-                    DECIMAL_PLACES_DEFAULT    : 14,
-                    TREAT_NULL_AS_ZERO_DEFAULT: true,
-                    AGGREGATE_FUNCTION_DEFAULT: 'SUM'
-                },
+        summaryDefaults: {
+            DECIMAL_PLACES_DEFAULT    : 14,
+            TREAT_NULL_AS_ZERO_DEFAULT: true,
+            AGGREGATE_FUNCTION_DEFAULT: 'SUM'
+        },
 
                 //Text and TextFormula
-                textDefaults: {
-                    HTML_ALLOWED_DEFAULT: false
-                },
+        textDefaults: {
+            HTML_ALLOWED_DEFAULT: false
+        },
 
                 //TimeOfDay and TimeOfDayFormula
-                timeOfDayDefaults: {
-                    TIME_OF_DAY_SCALE_DEFAULT       : 'HH:MM',
-                    USE_24_HOUR_CLOCK_DEFAULT       : false,
-                    TIME_OF_DAY_USE_TIMEZONE_DEFAULT: false
-                },
+        timeOfDayDefaults: {
+            TIME_OF_DAY_SCALE_DEFAULT       : 'HH:MM',
+            USE_24_HOUR_CLOCK_DEFAULT       : false,
+            TIME_OF_DAY_USE_TIMEZONE_DEFAULT: false
+        },
 
                 //URL and URLFormula
-                urlDefaults: {
-                    URL_DISPLAY_PROTOCOL_DEFAULT: '',
-                    URL_DEFAULT_LINK_TEXT       : ''
-                },
+        urlDefaults: {
+            URL_DISPLAY_PROTOCOL_DEFAULT: '',
+            URL_DEFAULT_LINK_TEXT       : ''
+        },
 
                 //User and UserFormula
-                userDefaults: {
-                    USER_DISPLAY_FORMAT_DEFAULT  : 'FIRST_THEN_LAST',
-                    SEND_INVITES_TO_USERS_DEFAULT: true,
-                    USER_INDEXED_DEFAULT         : true
-                }
-            }
+        userDefaults: {
+            USER_DISPLAY_FORMAT_DEFAULT  : 'FIRST_THEN_LAST',
+            SEND_INVITES_TO_USERS_DEFAULT: true,
+            USER_INDEXED_DEFAULT         : true
+        }
+    }
     );
 
 }());

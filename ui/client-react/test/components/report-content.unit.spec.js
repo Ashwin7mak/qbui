@@ -1,17 +1,17 @@
-import Fluxxor from 'fluxxor';
+//import Fluxxor from 'fluxxor';
 
 import React from 'react/addons';
-import ReportContent from '../../src/components/report/dataTable/content'
+import ReportContent from '../../src/components/report/dataTable/content';
 import Loader  from 'react-loader';
 import GriddleTable  from '../../src/components/dataTable/griddleTable/griddleTable';
-import {DateFormatter,NumericFormatter}  from '../../src/components/dataTable/griddleTable/formatters';
+//import {DateFormatter}  from '../../src/components/dataTable/griddleTable/formatters';
 
 var TestUtils = React.addons.TestUtils;
 
 
 const fakeReportData_loading = {
     loading: true
-}
+};
 const fakeReportData_empty = {
     loading: false,
     data: {
@@ -19,7 +19,7 @@ const fakeReportData_empty = {
         records: [],
         columns: []
     }
-}
+};
 
 const fakeReportData_simple = {
     loading: false,
@@ -32,39 +32,40 @@ const fakeReportData_simple = {
         }],
         columns: ["col_num", "col_text", "col_date"]
     }
-}
+};
 
-const cols_with_numeric_field = [
+//const cols_with_numeric_field = [
+//    {
+//        "columnName": "col_num",
+//        "datatypeAttributes": {
+//            type: "NUMERIC"
+//        }
+//    },
+//    "col_text",
+//    "col_date"
+//];
+//
+//const cols_with_date_field = [
+//    "col_num",
+//    "col_text",
+//    {
+//        "column_name": "col_date",
+//        "datatypeAttributes": {
+//            type: "DATE"
+//        }
+//    }
+//];
+
+const cols_with_bold_attrs = [
     {
-    "columnName": "col_num",
+        "columnName": "col_num",
         "datatypeAttributes": {
-            type: "NUMERIC"
-            }
+            clientSideAttributes: {"bold": true}
+        }
     },
     "col_text",
     "col_date"
 ];
-const cols_with_date_field = [
-    "col_num",
-    "col_text",
-    {
-        "column_name": "col_date",
-        "datatypeAttributes": {
-            type: "DATE"
-        }
-    }
-]
-
-const cols_with_bold_attrs = [
-    {
-    "columnName": "col_num",
-    "datatypeAttributes": {
-        clientSideAttributes: {"bold": true}
-        }
-    },
-    "col_text",
-    "col_date"
-]
 const cols_with_nowrap_attrs = [
     {
         "columnName": "col_num",
@@ -74,7 +75,7 @@ const cols_with_nowrap_attrs = [
     },
     "col_text",
     "col_date"
-]
+];
 
 const fakeReportData_attributes = {
     loading: false,
@@ -86,7 +87,7 @@ const fakeReportData_attributes = {
             col_date: "01-01-2015"
         }]
     }
-}
+};
 
 
 

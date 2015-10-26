@@ -18,6 +18,50 @@
         recordsApi = require('../api/quickbase/recordsApi')(config);
         routeGroup = config.routeGroup;
 
+        /* internal data */
+        /*
+         * routeToGetFunction maps each route to the proper function associated with that route for a GET request
+         */
+        var routeToGetFunction = {};
+
+        routeToGetFunction[routeConsts.RECORD] = fetchSingleRecord;
+        routeToGetFunction[routeConsts.RECORDS] = fetchAllRecords;
+        routeToGetFunction[routeConsts.REPORT_RESULTS] = fetchAllRecords;
+        routeToGetFunction[routeConsts.SWAGGER_API] = fetchSwagger;
+        routeToGetFunction[routeConsts.SWAGGER_RESOURCES] = fetchSwagger;
+        routeToGetFunction[routeConsts.SWAGGER_IMAGES] = fetchSwagger;
+        routeToGetFunction[routeConsts.SWAGGER_DOCUMENTATION] = fetchSwagger;
+
+        /*
+         * routeToGetFunction maps each route to the proper function associated with that route for a POST request
+         */
+        var routeToPostFunction = {};
+
+        /*
+         * routeToGetFunction maps each route to the proper function associated with that route for a PUT request
+         */
+        var routeToPutFunction = {};
+
+        /*
+         * routeToGetFunction maps each route to the proper function associated with that route for a PATCH request
+         */
+        var routeToPatchFunction = {};
+
+        /*
+         * routeToGetFunction maps each route to the proper function associated with that route for a DELETE request
+         */
+        var routeToDeleteFunction = {};
+
+        /*
+         * routeToAllFunction maps each route to the proper function associated with the route for all HTTP verb requests
+         */
+        var routeToAllFunction = {};
+
+        routeToAllFunction[routeConsts.TOMCAT_ALL] = forwardAllApiRequests;
+        routeToAllFunction[routeConsts.TICKET] = forwardAllApiRequests;
+        routeToAllFunction[routeConsts.REALM] = forwardAllApiRequests;
+
+        /*** public data ****/
         return {
 
             /**
@@ -86,47 +130,6 @@
     };
 
 
-    /*
-     * routeToGetFunction maps each route to the proper function associated with that route for a GET request
-     */
-    var routeToGetFunction = {};
-
-    routeToGetFunction[routeConsts.RECORD] = fetchSingleRecord;
-    routeToGetFunction[routeConsts.RECORDS] = fetchAllRecords;
-    routeToGetFunction[routeConsts.REPORT_RESULTS] = fetchAllRecords;
-    routeToGetFunction[routeConsts.SWAGGER_API] = fetchSwagger;
-    routeToGetFunction[routeConsts.SWAGGER_RESOURCES] = fetchSwagger;
-    routeToGetFunction[routeConsts.SWAGGER_IMAGES] = fetchSwagger;
-    routeToGetFunction[routeConsts.SWAGGER_DOCUMENTATION] = fetchSwagger;
-
-    /*
-     * routeToGetFunction maps each route to the proper function associated with that route for a POST request
-     */
-    var routeToPostFunction = {};
-
-    /*
-     * routeToGetFunction maps each route to the proper function associated with that route for a PUT request
-     */
-    var routeToPutFunction = {};
-
-    /*
-     * routeToGetFunction maps each route to the proper function associated with that route for a PATCH request
-     */
-    var routeToPatchFunction = {};
-
-    /*
-     * routeToGetFunction maps each route to the proper function associated with that route for a DELETE request
-     */
-    var routeToDeleteFunction = {};
-
-    /*
-     * routeToAllFunction maps each route to the proper function associated with the route for all HTTP verb requests
-     */
-    var routeToAllFunction = {};
-
-    routeToAllFunction[routeConsts.TOMCAT_ALL] = forwardAllApiRequests;
-    routeToAllFunction[routeConsts.TICKET] = forwardAllApiRequests;
-    routeToAllFunction[routeConsts.REALM] = forwardAllApiRequests;
 
     /**
      * This helper method takes the request url produced and replaces the single /api with /api/api on the original
@@ -166,20 +169,21 @@
      * @param req
      * @param res
      */
+    /*eslint no-shadow:0 */
     function fetchSingleRecord(req, res) {
         processRequest(req, res, function(req, res) {
             recordsApi.fetchSingleRecordAndFields(req)
                     .then(function(response) {
-                              log.logResponse(req, response, __filename);
-                              log.debug('API response: ' + JSON.stringify(response) + ' Request - method:' + req.method + ' - ' + req.path);
-                              res.send(response);
-                          })
+                        log.logResponse(req, response, __filename);
+                        log.debug('API response: ' + JSON.stringify(response) + ' Request - method:' + req.method + ' - ' + req.path);
+                        res.send(response);
+                    })
                     .catch(function(error) {
-                               log.error('ERROR: ' + JSON.stringify(error));
-                               requestHelper.copyHeadersToResponse(res, error.headers);
-                               res.status(error.statusCode)
+                        log.error('ERROR: ' + JSON.stringify(error));
+                        requestHelper.copyHeadersToResponse(res, error.headers);
+                        res.status(error.statusCode)
                                        .send(error.body);
-                           });
+                    });
         });
 
     }
@@ -190,19 +194,20 @@
      * @param req
      * @param res
      */
+    /*eslint no-shadow:0 */
     function fetchAllRecords(req, res) {
         processRequest(req, res, function(req, res) {
             recordsApi.fetchRecordsAndFields(req)
                     .then(function(response) {
-                              log.logResponse(req, response, __filename);
-                              res.send(response);
-                          })
+                        log.logResponse(req, response, __filename);
+                        res.send(response);
+                    })
                     .catch(function(error) {
-                               log.error('ERROR: ' + JSON.stringify(error));
-                               requestHelper.copyHeadersToResponse(res, error.headers);
-                               res.status(error.statusCode)
+                        log.error('ERROR: ' + JSON.stringify(error));
+                        requestHelper.copyHeadersToResponse(res, error.headers);
+                        res.status(error.statusCode)
                                        .send(error.body);
-                           });
+                    });
         });
     }
 
@@ -224,8 +229,8 @@
 
         request(opts)
                 .on('error', function(error) {
-                        log.error('Swagger API ERROR ' + JSON.stringify(error));
-                    })
+                    log.error('Swagger API ERROR ' + JSON.stringify(error));
+                })
                 .pipe(res);
     }
 
@@ -234,17 +239,18 @@
      * @param req
      * @param res
      */
+    /*eslint no-shadow:0 */
     function forwardAllApiRequests(req, res) {
         processRequest(req, res, function(req, res) {
             var opts = requestHelper.setOptions(req);
             log.debug('Java api request:' +  simpleStringify(req) + ' opts:' + simpleStringify(opts));
             request(opts)
                     .on('response', function(response) {
-                            log.debug('API response: ' + response.statusCode + ' - ' + req.method + ' ' + req.path);
-                        })
+                        log.debug('API response: ' + response.statusCode + ' - ' + req.method + ' ' + req.path);
+                    })
                     .on('error', function(error) {
-                            log.error('API ERROR ' + JSON.stringify(error));
-                        })
+                        log.error('API ERROR ' + JSON.stringify(error));
+                    })
                     .pipe(res);
         });
     }

@@ -77,7 +77,7 @@ export const fakeGriddleDataByReportId = {
             email: "sem.semper@lobortistellusjusto.com"
         }
     ]
-}
+};
 
 export const fakeGriddleData =   [
     {
@@ -175,7 +175,8 @@ export const fakeGriddleData =   [
         phone: "(763) 195-2651",
         fax: "(746) 319-9276",
         email: "libero@orcilobortisaugue.co.uk"
-    },{
+    },
+    {
         rid: 13,
         name: "Stephen Suarez",
         company: "Ante Incorporated",
@@ -206,7 +207,8 @@ export const fakeGriddleData =   [
         phone: "(763) 195-2651",
         fax: "(746) 319-9276",
         email: "libero@orcilobortisaugue.co.uk"
-    },{
+    },
+    {
         rid: 17,
         name: "Stephen Suarez",
         company: "Ante Incorporated",

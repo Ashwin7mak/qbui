@@ -1,13 +1,13 @@
 import React from 'react';
 import ReactIntl from 'react-intl';
 
-import Loader  from 'react-loader';
+//import Loader  from 'react-loader';
 
 import './record.scss';
 var IntlMixin = ReactIntl.IntlMixin;
-var FormattedMessage = ReactIntl.FormattedMessage;
+//var FormattedMessage = ReactIntl.FormattedMessage;
 
-let Record = React.createClass( {
+let Record = React.createClass({
     mixins: [IntlMixin],
 
 
