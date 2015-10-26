@@ -18,7 +18,7 @@ var Content = React.createClass({
 
     getInitialState: function() {
         return {
-            reportColumns: this.props.reportData.data.columns ? this.props.reportData.data.columns : []
+            reportColumns: this.props.reportData && this.props.reportData.data && this.props.reportData.data.columns ? this.getColumnProps(this.props.reportData.data.columns) : []
         };
     },
 
@@ -82,13 +82,12 @@ var Content = React.createClass({
 
     /* TODO: paging component that has "next and previous tied to callbacks from the store to get new data set*/
     render: function() {
-
         return (
             <Loader loaded={!this.props.reportData.loading}>
                 {this.props.reportData.error ?
                     <div>Error loading report!</div> :
                         <div>
-                            <GriddleTable {...i18n} mobile={this.props.mobile} results={this.props.reportData.data.filteredRecords} columnMetadata={this.state.reportColumns} showPager={false} useExternal={false} resultsPerPage={resultsPerPage} externalResultsPerPage={resultsPerPage} />
+                            <GriddleTable {...i18n} mobile={this.props.mobile} results={this.props.reportData && this.props.reportData.data ? this.props.reportData.data.filteredRecords: []} columnMetadata={this.state.reportColumns} showPager={false} useExternal={false} resultsPerPage={resultsPerPage} externalResultsPerPage={resultsPerPage} />
                         </div>
                 }
             </Loader>
