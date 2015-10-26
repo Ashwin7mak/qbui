@@ -87,6 +87,19 @@
             }
         });
 
+        app.route('/m/app/:appId/table/:tblId/record/:recordId').get(function(req, res) {
+            log.info('..specific record request');
+            renderIndex(res);
+        });
+
+        app.route('/app/:appId/table/:tblId/record/:recordId').get(function(req, res) {
+            log.info('..specific record request');
+            if (isCallerMobile(req)) {
+                res.redirect('/m/app/' + req.params.appId + '/table/' + req.params.tblId + '/record/' + req.params.recordId);
+            } else {
+                renderIndex(res);
+            }
+        });
         app.route('/app/:appId/table/:tblId/dashboardDemo/:rptId').get(function(req, res) {
             log.info('..specific app report request');
             renderIndex(res);

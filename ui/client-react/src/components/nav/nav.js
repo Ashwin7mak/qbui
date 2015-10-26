@@ -66,9 +66,9 @@ var Nav = React.createClass({
                 <ReactCSSTransitionGroup className='mainContent'
                                          transitionName="main-transition"
                                          transitionAppear={true}
-                                         transitionAppearTimeout={500}
-                                         transitionEnterTimeout={500}
-                                         transitionLeaveTimeout={500} >
+                                         transitionAppearTimeout={600}
+                                         transitionEnterTimeout={600}
+                                         transitionLeaveTimeout={600} >
                 {/* insert the main component passed in by the router */}
                 {React.cloneElement(main, {...i18n, key: pathname, reportData: this.state.reportData, mobile: this.props.mobile,  flux: flux} )}
                 </ReactCSSTransitionGroup>
