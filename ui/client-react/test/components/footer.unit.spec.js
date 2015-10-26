@@ -1,9 +1,12 @@
-import React from 'react/addons';
+import React from 'react';
+
 import ReactDOM from 'react-dom';
 import Footer  from '../../src/components/footer/footer';
 import Nav from '../../../node_modules/react-bootstrap/lib/Nav';
 import NavItem from '../../../node_modules/react-bootstrap/lib/NavItem';
 import Navbar from '../../../node_modules/react-bootstrap/lib/Navbar';
+
+import TestUtils from 'react-addons-test-utils';
 
 var I18nMessageMock = React.createClass({
 
@@ -13,7 +16,7 @@ var I18nMessageMock = React.createClass({
         );
     }
 });
-var TestUtils = React.addons.TestUtils;
+
 
 describe('Footer functions', () => {
     'use strict';
@@ -22,6 +25,7 @@ describe('Footer functions', () => {
     var currentYear = new Date().getFullYear();
 
     beforeEach(() => {
+        //var TestUtils = ReactAddons.TestUtils;
         Footer.__Rewire__('I18nMessage', I18nMessageMock);
         component = TestUtils.renderIntoDocument(<Footer />);
     });
