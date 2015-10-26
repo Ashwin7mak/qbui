@@ -1,7 +1,7 @@
 import Fluxxor from 'fluxxor';
 import React from 'react/addons';
 import Home  from '../../src/components/apps/home';
-import Store from '../../src/stores/appsStore'
+import Store from '../../src/stores/appsStore';
 
 //TODO this is a placeholder file to add tests as table home page gets built out
 var TestUtils = React.addons.TestUtils;
