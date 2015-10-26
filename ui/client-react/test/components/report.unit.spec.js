@@ -1,11 +1,14 @@
 import Fluxxor from 'fluxxor';
 
-import React from 'react';
+import React from 'react/addons';
 import ReactDOM from 'react-dom';
 import Report from '../../src/components/report/reportRoute';
+import Stage from '../../src/components/stage/stage';
 
 import Locale from '../../src/locales/locales';
 var i18n = Locale.getI18nBundle();
+
+var TestUtils = React.addons.TestUtils;
 
 describe('Report functions', () => {
     'use strict';
@@ -29,46 +32,39 @@ describe('Report functions', () => {
     });
     let ReportContentMock = React.createClass({
         render: function () {
-            return <div className="report-content" />;
+            return <div className="report-content-mock" />;
         }
     });
 
     beforeEach(() => {
-        Report.__Rewire__('Stage', ReportStageMock);
+        Report.__Rewire__('ReportStage', ReportStageMock);
         Report.__Rewire__('ReportContent', ReportContentMock);
         spyOn(flux.actions, 'loadReport');
     });
 
     afterEach(() => {
-        Report.__ResetDependency__('Stage', ReportStageMock);
+        Report.__ResetDependency__('ReportStage', ReportStageMock);
         Report.__ResetDependency__('ReportContent', ReportContentMock);
         flux.actions.loadReport.calls.reset();
     });
 
-    it('test render of report with no app data', () => {
+    it('test render of report', () => {
         var div = document.createElement('div');
-        component = ReactDOM.render(<Report  flux={flux}/>, div);
+        component = ReactDOM.render(<Report {...i18n} flux={flux} params={reportParams} reportData={reportDataParams} />, div);
 
-        var node = ReactDOM.findDOMNode(component);
+        //  test that the reportContentMock is rendered
+        expect(TestUtils.scryRenderedComponentsWithType(component, ReportContentMock).length).toEqual(1);
 
-        expect(node.querySelector('.stage-mock')).toBeDefined();
-        expect(node.querySelector('.report-content')).toBeDefined();
+        //  test that the Stage component is rendered, and that the ReportStageMock component is a child
+        var _Stage = TestUtils.scryRenderedComponentsWithType(component, Stage);
+        expect(TestUtils.scryRenderedComponentsWithType(component, Stage).length).toEqual(1);
+        expect(TestUtils.scryRenderedComponentsWithType(_Stage[0], ReportStageMock).length).toEqual(1);
     });
 
     it('test flux action loadReport is not called with no app data', () => {
         var div = document.createElement('div');
         ReactDOM.render(<Report {...i18n} flux={flux} />, div);
         expect(flux.actions.loadReport).not.toHaveBeenCalled();
-    });
-
-    it('test render of report with app data', () => {
-        var div = document.createElement('div');
-        component = ReactDOM.render(<Report {...i18n} flux={flux} params={reportParams} reportData={reportDataParams} />, div);
-
-        var node = ReactDOM.findDOMNode(component);
-
-        expect(node.querySelector('.stage-mock')).toBeDefined();
-        expect(node.querySelector('.report-content')).toBeDefined();
     });
 
     it('test flux action loadReport is called with app data', () => {
