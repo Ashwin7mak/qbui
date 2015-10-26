@@ -118,8 +118,8 @@ module.exports = function(grunt) {
         watch    : {
             mochaTest : {
                 files: ['<%= express.root %>/**/*.spec.js',
-                        '<%= express.root %>/**/test/**/*.js',
-                        '<%= express.root %>/**/*.js'
+                    '<%= express.root %>/**/test/**/*.js',
+                    '<%= express.root %>/**/*.js'
                 ],
                 tasks: ['env:local', 'newer:jshint', 'newer:jscs', 'mochaTest:test']
             },
@@ -179,14 +179,14 @@ module.exports = function(grunt) {
                 options: {
                     config      : './.jscsrc',
                     excludeFiles: (client === 'REACT') ?
-                                ['<%= quickbase.client.root %>/bower_components/**/*.js',
-                                 '<%= quickbase.client.root %>/**/*.spec.js',
-                                 '<%= quickbase.client.gen %>/**/*.js',
-                                 '<%= quickbase.client.root %>/**/*.js', //TODO replace with eslint
-                                 '<%= quickbase.client.root %>/bootstrap-sass.config.js'
-                                ] : ['<%= quickbase.client.root %>/bower_components/**/*.js',
-                                   '<%= quickbase.client.root %>/**/*.spec.js'
-                                ]
+                        ['<%= quickbase.client.root %>/bower_components/**/*.js',
+                            '<%= quickbase.client.root %>/**/*.spec.js',
+                            '<%= quickbase.client.gen %>/**/*.js',
+                            '<%= quickbase.client.root %>/**/*.js', //TODO replace with eslint
+                            '<%= quickbase.client.root %>/bootstrap-sass.config.js'
+                        ] : ['<%= quickbase.client.root %>/bower_components/**/*.js',
+                        '<%= quickbase.client.root %>/**/*.spec.js'
+                    ]
                 }
             },
             server : {
@@ -230,22 +230,22 @@ module.exports = function(grunt) {
                     jshintrc: '<%= express.root %>/.jshintrc'
                 },
                 src    : ['<%= express.root %>/**/*.spec.js',
-                          '<%= express.root %>/**/test/**/*.js']
+                    '<%= express.root %>/**/test/**/*.js']
             },
             client    : {
                 options: {
                     jshintrc: '<%= quickbase.client.root %>/.jshintrc'
                 },
                 src    : (client === 'ANGULAR') ? [
-                        // only use jshint on angular code
-                        // React will use ESLint for lint checking which supports JSX/ES6
-                        // So when running jshint with REACT as client we will not include the react client code
-                        '<%= quickbase.client.components %>/**/*.js',
-                        '<%= quickbase.client.gallery %>/**/*.js',
-                       '!<%= quickbase.client.root %>/dist/**/*.js',
-                       '!<%= quickbase.client.components %>/**/*.spec.js',
-                       '!<%= quickbase.client.components %>/**/*.mock.js',
-                       '!<%= quickbase.e2e %>/**/*.js'
+                    // only use jshint on angular code
+                    // React will use ESLint for lint checking which supports JSX/ES6
+                    // So when running jshint with REACT as client we will not include the react client code
+                    '<%= quickbase.client.components %>/**/*.js',
+                    '<%= quickbase.client.gallery %>/**/*.js',
+                    '!<%= quickbase.client.root %>/dist/**/*.js',
+                    '!<%= quickbase.client.components %>/**/*.spec.js',
+                    '!<%= quickbase.client.components %>/**/*.mock.js',
+                    '!<%= quickbase.e2e %>/**/*.js'
 
                 ]  : [
                     '!<%= quickbase.client.root %>/**/*.js',
@@ -492,7 +492,7 @@ module.exports = function(grunt) {
             'quickbase.realm' : {
                 cwd    : '<%= quickbase.client.root %>',
                 src    : ['quickbase/common/**/*.html',
-                          'quickbase/realm/**/*.html'],     // look for all html files required for this angular application
+                    'quickbase/realm/**/*.html'],     // look for all html files required for this angular application
                 dest   : '.tmp/realmTemplates.js',
                 options: {
                     usemin: 'quickbase/realm.js'        // maps to reference in realm.index.html
@@ -501,7 +501,7 @@ module.exports = function(grunt) {
             'quickbase.qbapp' : {
                 cwd    : '<%= quickbase.client.root %>',
                 src    : ['quickbase/common/**/*.html',
-                          'quickbase/qbapp/**/*.html'],     // look for all html files required for this angular application
+                    'quickbase/qbapp/**/*.html'],     // look for all html files required for this angular application
                 dest   : '.tmp/appTemplates.js',
                 options: {
                     usemin: 'quickbase/qbapp.js'        // maps to reference in app.index.html
@@ -510,7 +510,7 @@ module.exports = function(grunt) {
             'quickbase.report': {
                 cwd    : '<%= quickbase.client.root %>',
                 src    : ['quickbase/common/**/*.html',
-                          'quickbase/qbapp/reports/reportManager/**/*.html'],     // look for all html files required for this angular application
+                    'quickbase/qbapp/reports/reportManager/**/*.html'],     // look for all html files required for this angular application
                 dest   : '.tmp/reportTemplates.js',
                 options: {
                     usemin: 'quickbase/report.js'        // maps to reference in report.index.html
@@ -710,7 +710,6 @@ module.exports = function(grunt) {
                 },
                 src    : ['server/**/test/' + mochaIntTest]
             }
-
         },
 
         //  Code coverage against the express code
@@ -749,6 +748,11 @@ module.exports = function(grunt) {
             local              : {
                 options: {
                     configFile: './e2e/config/local.protractor.conf.js'
+                }
+            },
+            local_data_gen : {
+                options: {
+                    configFile: './e2e/config/local.dataGen.protractor.conf.js'
                 }
             }
         },
@@ -824,7 +828,7 @@ module.exports = function(grunt) {
                 command: [
                     'npm rebuild node-sass',
                     'npm install node-sass'
-                    ],
+                ],
                 options: {
                     execOptions: {
                     }
@@ -840,12 +844,12 @@ module.exports = function(grunt) {
             options    : webpackConfig,
             build      : {
                 plugins: webpackConfig.plugins.concat(
-                        new webpack.DefinePlugin({
-                            'process.env': {
-                                // This has beneficial effect on the react lib size for deploy
-                                NODE_ENV: JSON.stringify('production')
-                            }
-                        })
+                    new webpack.DefinePlugin({
+                        'process.env': {
+                            // This has beneficial effect on the react lib size for deploy
+                            NODE_ENV: JSON.stringify('production')
+                        }
+                    })
                 )
             }
         },
@@ -1087,6 +1091,16 @@ module.exports = function(grunt) {
             ]);
         }
 
+        if (target === 'e2eDataGen') {
+            return grunt.task.run([
+                'clean:server',
+                'concurrent:test',
+                'wiredep:app',
+                'autoprefixer',
+                'protractor:local_data_gen'
+            ]);
+        }
+
         //  default task if no target specified
         return grunt.task.run([
             // run lint and coding standards tests
@@ -1139,7 +1153,7 @@ module.exports = function(grunt) {
             'uglify',
             'rev',
             'usemin'
-    ]);
+        ]);
     } else {
         grunt.registerTask('build', [
             'clean:dist',
