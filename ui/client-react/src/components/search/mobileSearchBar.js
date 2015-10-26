@@ -16,12 +16,13 @@ var IntlMixin = ReactIntl.IntlMixin;
 var FormattedDate = ReactIntl.FormattedDate;
 var FormattedMessage = ReactIntl.FormattedMessage;
 
-const debounceSearchMillis = 100;
+//const debounceSearchMillis = 100;
 
 var MobileSearchBar = React.createClass( {
     mixins: [IntlMixin, FluxMixin],
 
     searchChanged: function (ev) {
+
         let flux = this.getFlux();
         flux.actions.searchFor(ev.target.value);
     },
@@ -48,7 +49,7 @@ var MobileSearchBar = React.createClass( {
         return (
             <div key={'searchBar'} className={'searchBar'}>
                 <div className={'searchLine'}>
-                    <Input key={'searchInput'} ref={(ref)=>this.input = ref} onBlur={this.onBlur} onFocus={this.onFocus} standalone type="text" placeholder="Search Records" addonBefore={searchIcon} onChange={_.debounce(this.searchChanged, debounceSearchMillis)}/>
+                    <Input key={'searchInput'} ref={(ref)=>this.input = ref} onBlur={this.onBlur} onFocus={this.onFocus} standalone type="text" placeholder="Search Records" addonBefore={searchIcon} onChange={this.searchChanged}/>
                     {this.props.searching ? <Button bsStyle='link' className={'cancel'} onClick={this.cancelSearch}>Cancel</Button> : ''}
                 </div>
                 <div className={'filterLine'}>
