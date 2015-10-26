@@ -29,6 +29,7 @@ import navActions from '../actions/navActions';
 import AppsHome from '../components/apps/home';
 
 import ReportRoute from '../components/report/reportRoute';
+import RecordRoute from '../components/record/recordRoute';
 import TableHomePageRoute from '../components/table/tableHomePageRoute';
 import DashboardRoute from '../components/dashboard/dashboardRoute';
 
@@ -70,16 +71,19 @@ render((
     <Router history={createBrowserHistory()}>
         <Route path='/' component={Apps} />
         <Route path='apps' component={Apps} />
+        <Route path='m/apps' component={Apps} />
 
         <Route path='app/:appId/table/:tblId' component={NavWrapper} >
             <IndexRoute components={{main: TableHomePageRoute, topNav: TopNav, leftNav: LeftNav, footer: Footer}} />
             <Route path='report/:rptId' components={{main: ReportRoute, topNav: TopNav,  leftNav: LeftNav, footer: Footer}} />
+            <Route path='record/:recordId' components={{main: RecordRoute, topNav: TopNav,  leftNav: LeftNav, footer: Footer}} />
             <Route path='dashboardDemo/:rptId' components={{main: DashboardRoute, topNav: TopNav,  leftNav: LeftNav, footer: Footer}} />
         </Route>
 
         <Route path='m/app/:appId/table/:tblId' component={NavWrapper} >
             <IndexRoute components={{main: TableHomePageRoute, leftNav: MobileLeftNav, footer: MobileAddFooter}} />
             <Route path='report/:rptId' components={{main: ReportRoute, topNav: MobileTopNav, leftNav: MobileLeftNav, footer: MobileAddFooter}} />
+            <Route path='record/:recordId' components={{main: RecordRoute, topNav: MobileTopNav, leftNav: MobileLeftNav, footer: MobileAddFooter}} />
         </Route>
 
     </Router>

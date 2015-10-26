@@ -8,20 +8,20 @@
         // than the maximum time your application needs to stabilize between tasks.
         allScriptsTimeout: 120000,
         // A base URL for your application under test will be passed in via grunt config so that we can use whatever url we please
-        baseUrl: process.env.DOMAIN,
+        baseUrl          : process.env.DOMAIN,
         // list of files / patterns to load in the browser
-        specs: [
+        specs            : [
             '../qbapp/**/*.e2e.spec.js'
         ],
         // Patterns to exclude.
-        exclude: [],
+        exclude          : [],
         // ----- Capabilities to be passed to the webdriver instance ----
         //
         // For a full list of available capabilities, see
         // https://code.google.com/p/selenium/wiki/DesiredCapabilities
         // and
         // https://code.google.com/p/selenium/source/browse/javascript/webdriver/capabilities.js
-        capabilities: {
+        capabilities     : {
             browserName: 'chrome'
         },
         // ----- The test framework -----
@@ -29,30 +29,30 @@
         // Jasmine and Cucumber are fully supported as a test and assertion framework.
         // Mocha has limited beta support. You will need to include your own
         // assertion framework if working with mocha.
-        framework: 'jasmine2',
+        framework        : 'jasmine2',
         // ----- Options to be passed to minijasminenode -----
         //
         // See the full list at https://github.com/juliemr/minijasminenode
-        jasmineNodeOpts: {
+        jasmineNodeOpts  : {
             // If true, print colors to the terminal.
-            showColors: true,
+            showColors            : true,
             // Default time to wait in ms before a test fails.
             defaultTimeoutInterval: 60000
         },
         // Globally accessible variables (params is a property of the Protractor instance)
-        params: {
+        params           : {
             // Used for running tests slower / faster if running in Sauce Labs
-            tinySleep: 100,
-            smallSleep: 1000,
+            tinySleep  : 100,
+            smallSleep : 1000,
             mediumSleep: 5000,
-            largeSleep: 10000
+            largeSleep : 10000
         },
         // This function is run once before any of the test files. Acts as a global test preparation step
-        onPrepare: function(){
+        onPrepare        : function() {
             // Lets Protractor know there is no Angular code to wait for
             browser.ignoreSynchronization = true;
             // Maximizes the browser window (known bug with Chrome)
             browser.driver.manage().window().maximize();
         }
-    }
+    };
 }());

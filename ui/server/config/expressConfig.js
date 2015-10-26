@@ -76,8 +76,9 @@
                 var fs = require('fs');
                 config.isProduction = true;
                 var faviconFile = path.join(config.root, 'dist','public', 'favicon.ico');
-                if (fs.existsSync(faviconFile))
+                if (fs.existsSync(faviconFile)) {
                     app.use(favicon(faviconFile));
+                }
             }
 
             app.use(express.static(path.join(config.root, 'public')));

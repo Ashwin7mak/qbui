@@ -14,10 +14,10 @@
             if (!object.hasOwnProperty(prop)) {
                 continue;
             }
-            if (typeof(object[prop]) === 'object') {
+            if (typeof (object[prop]) === 'object') {
                 continue;
             }
-            if (typeof(object[prop]) === 'function') {
+            if (typeof (object[prop]) === 'function') {
                 continue;
             }
             simpleObject[prop] = object[prop];

@@ -309,7 +309,16 @@ module.exports = function(grunt) {
                         serverReportDir + '/integration/*'
                     ]
                 }]
+            },
+            modulesProd: {
+                files: [{
+                    dot: true,
+                    src: [
+                        '<%= quickbase.distDir %>/node_modules/*'
+                    ]
+                }]
             }
+
         },
 
         // Add vendor prefixed styles
@@ -579,6 +588,12 @@ module.exports = function(grunt) {
                 dest  : '.tmp/',
                 src   : ['**/*.css']
             },
+            modulesProd : {
+                expand: true,
+                cwd   : 'node_modules',
+                src   : ['**/*'],
+                dest   :'<%= quickbase.distDir %>/node_modules'
+            },
             reactDist : {
                 files: [{
                     expand : true,
@@ -797,6 +812,24 @@ module.exports = function(grunt) {
                     }
                 }
             },
+            modulesPrune: {
+                command: 'npm prune --production',
+                options: {
+                    execOptions: {
+                        cwd : '<%= quickbase.distDir %>'
+                    }
+                }
+            },
+            rebuild: {
+                command: [
+                    'npm rebuild node-sass',
+                    'npm install node-sass'
+                    ],
+                options: {
+                    execOptions: {
+                    }
+                }
+            },
             options: {
                 stdout: true,
                 stderr: true,
@@ -978,6 +1011,7 @@ module.exports = function(grunt) {
         //  If the run-time environment variable is not set, will set to local
         //  but only if the file is defined (which should be only on a developer's machine).
         if (!process.env.NODE_ENV) {
+            grunt.log.writeln('NODE_ENV not set defaulting to local');
             if (grunt.file.exists(localJsFile)) {
                 grunt.task.run(['env:local']);
             }
@@ -1150,6 +1184,25 @@ module.exports = function(grunt) {
     grunt.registerTask('sauce-connect-close', 'Closes the current Sauce Connect tunnel', function() {
         sauceConnect.close(this.async());
     });
+
+    grunt.registerTask('makeProdNodeModules', 'Creates a production copy of node_modules folder for zip to nexus', function () {
+        // delete any old modules in dist dir
+        grunt.task.run(['clean:modulesProd']);
+
+        //copy current modules to prod modules dir
+        grunt.task.run(['copy:modulesProd']);
+
+        //prune the dev modules
+        grunt.task.run(['shell:modulesPrune']);
+
+    });
+
+    grunt.registerTask('npmRebuild', 'rebuilds the npm bins for the ci machine env ', function () {
+        //rebuild npm
+        grunt.task.run(['shell:rebuild']);
+
+    });
+
 
     grunt.loadNpmTasks('grunt-jscs');
     grunt.loadNpmTasks('grunt-contrib-jshint');

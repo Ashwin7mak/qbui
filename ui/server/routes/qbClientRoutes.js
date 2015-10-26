@@ -14,11 +14,11 @@
 
     function getBaseOpts(config) {
         // for hot loading we need to prefix the requests in the html wih the hot loader url
-        HOT_BASE = 'http://' + config.ip +':' + (config.webpackDevServerPort || 3000 );
+        HOT_BASE = 'http://' + config.ip + ':' + (config.webpackDevServerPort || 3000);
         BASE_PROPS = {
             title   : '',
             lang    : 'en-us',
-            favicon : '/dist/favicon.ico',
+            favicon : '/favicon.ico',
             jsPath  : '/dist/',
             settings: {views: viewPath},
             hostBase: (config.isProduction || config.noHotLoad) ? '' : HOT_BASE,
@@ -87,6 +87,19 @@
             }
         });
 
+        app.route('/m/app/:appId/table/:tblId/record/:recordId').get(function(req, res) {
+            log.info('..specific record request');
+            renderIndex(res);
+        });
+
+        app.route('/app/:appId/table/:tblId/record/:recordId').get(function(req, res) {
+            log.info('..specific record request');
+            if (isCallerMobile(req)) {
+                res.redirect('/m/app/' + req.params.appId + '/table/' + req.params.tblId + '/record/' + req.params.recordId);
+            } else {
+                renderIndex(res);
+            }
+        });
         app.route('/app/:appId/table/:tblId/dashboardDemo/:rptId').get(function(req, res) {
             log.info('..specific app report request');
             renderIndex(res);
