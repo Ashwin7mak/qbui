@@ -145,17 +145,17 @@ The following run-time environment variable is supported:
 ###Lint and Code Style tests
 Running `grunt codeStandards` will run the lint tasks. This task validates the javascript follows best practices and ensures the code is formatted to our qbui coding styles.
 
-* Linting check (ESLint)
-	Look at the .eslintrc filesfor the lint rules and coding standards
-	and set the following settings for coding style errors to appear in the IDE inspection.(This is manual due to user code path dependent)
+* Linting check [ESLint](http://eslint.org/docs/rules/) -
+	Look at the .eslintrc files for the lint rules and coding standards
+	and set the following settings for coding style errors to appear in the IDE inspection. (This step is manual due to difference user code paths)
 
 	
-	*  In the qbui Intellij project, go to Main Menu `Intellij IDEA/Preferences...` or `File/Other Settings... /Default Settings...` and then select the options for `Languages & Frameworks` then `Code Quality Tools` then `Javascript` and disable all the others but enble ESLint and set the following ESLint settings 
+	*  In the qbui Intellij project, go to Main Menu `Intellij IDEA/Preferences...` or `File/Other Settings... /Default Settings...` and then select the options for `Languages & Frameworks` then `Code Quality Tools` then `Javascript` and disable all the others but enable ESLint and set the following ESLint settings 
 	
 	*  ESLint dialog 
     	* ![eslintDialogScreenShot.png](eslintDialogScreenShot.png) 
-	* Note: The lint and coding standards settings are found in `.eslintrc` file(s). Each directory can overide the general settings with its own .eslintrc file or in line a file can specify `/* eslint rule:value */` overrive comment statements. 
-	* The rules are based on several standards see [https://github.com/jscs-dev/node-jscs/tree/master/presets](https://github.com/jscs-dev/node-jscs/tree/master/presets)  as well as data from statistics on github open source code [http://sideeffect.kr/popularconvention#javascript](http://sideeffect.kr/popularconvention#javascript
+	* Note: The lint and coding standards settings are found in `.eslintrc` file(s). Each directory can overide the general settings with its own .eslintrc file or in line a file can specify `/* eslint rule:value */` to override with comment statements. 
+	* The rules are based on several standards see [https://github.com/jscs-dev/node-jscs/tree/master/presets](https://github.com/jscs-dev/node-jscs/tree/master/presets)  as well as data from statistics on github open source code [http://sideeffect.kr/popularconvention#javascript](http://sideeffectkr/popularconvention#javascript
 	
 	* The ESLint setup in the above dialog will now run eslint with the Intellij `Analyze\Inspect Code...` feature and while you edit it will show errors in the left margin in red. 
 	
