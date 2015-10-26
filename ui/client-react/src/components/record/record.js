@@ -7,7 +7,7 @@ import './record.scss';
 var IntlMixin = ReactIntl.IntlMixin;
 //var FormattedMessage = ReactIntl.FormattedMessage;
 
-let LeftNav = React.createClass({
+let Record = React.createClass({
     mixins: [IntlMixin],
 
 
@@ -16,11 +16,11 @@ let LeftNav = React.createClass({
         return (
 
             <div>
-                display record goes here
+                display record here
             </div>
 
         );
     }
 });
 
-export default LeftNav;
+export default Record;

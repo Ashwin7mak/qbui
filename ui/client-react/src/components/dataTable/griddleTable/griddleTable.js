@@ -1,13 +1,9 @@
 import React from 'react';
-import ReactIntl from 'react-intl';
 import Griddle from 'griddle-react';
 
 //import Logger from '../../../utils/logger';
 //var logger = new Logger();
-
-var IntlMixin = ReactIntl.IntlMixin;
-var FormattedMessage = ReactIntl.FormattedMessage;
-
+import I18nMessage from '../../../utils/i18nMessage';
 
 import './griddleTable.css';
 import './qbGriddleTable.scss';
@@ -19,13 +15,6 @@ import CardView from './cardView.js';
  * <GriddleTable results={fakeGriddleData} columnMetadata={fakeGriddleColumnMetaData} useExternal={false}/>
  * */
 
-var I18nMessage = React.createClass({
-    mixins: [IntlMixin],
-
-    render: function() {
-        return <FormattedMessage message={this.getIntlMessage(this.props.message)}/>;
-    }
-});
 
 class GriddleTable extends React.Component {
 
@@ -53,6 +42,7 @@ class GriddleTable extends React.Component {
 
 GriddleTable.propTypes = {  };
 GriddleTable.defaultProps = {
+    mobile: false,
     showFilter: false,
     showSettings: false,
     currentPage: 0,
@@ -68,7 +58,7 @@ GriddleTable.defaultProps = {
     gridClassName: 'QBGriddle',
     useGriddleStyles: false,
     sortAscendingClassName: "Sorted",
-    sortDescendingClassName: "Sorted",
+    sortDescendingClassName: "Sorted"
 };
 
 export default GriddleTable;

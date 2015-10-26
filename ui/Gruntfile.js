@@ -1,4 +1,6 @@
 // Generated on 2015-02-24 using generator-angular-fullstack 2.0.13
+var path = require('path');
+
 module.exports = function(grunt) {
     'use strict';
 
@@ -391,7 +393,7 @@ module.exports = function(grunt) {
             'quickbase.realm' : {
                 cwd    : '<%= quickbase.client.root %>',
                 src    : ['quickbase/common/**/*.html',
-                          'quickbase/realm/**/*.html'],     // look for all html files required for this angular application
+                    'quickbase/realm/**/*.html'],     // look for all html files required for this angular application
                 dest   : '.tmp/realmTemplates.js',
                 options: {
                     usemin: 'quickbase/realm.js'        // maps to reference in realm.index.html
@@ -400,7 +402,7 @@ module.exports = function(grunt) {
             'quickbase.qbapp' : {
                 cwd    : '<%= quickbase.client.root %>',
                 src    : ['quickbase/common/**/*.html',
-                          'quickbase/qbapp/**/*.html'],     // look for all html files required for this angular application
+                    'quickbase/qbapp/**/*.html'],     // look for all html files required for this angular application
                 dest   : '.tmp/appTemplates.js',
                 options: {
                     usemin: 'quickbase/qbapp.js'        // maps to reference in app.index.html
@@ -409,7 +411,7 @@ module.exports = function(grunt) {
             'quickbase.report': {
                 cwd    : '<%= quickbase.client.root %>',
                 src    : ['quickbase/common/**/*.html',
-                          'quickbase/qbapp/reports/reportManager/**/*.html'],     // look for all html files required for this angular application
+                    'quickbase/qbapp/reports/reportManager/**/*.html'],     // look for all html files required for this angular application
                 dest   : '.tmp/reportTemplates.js',
                 options: {
                     usemin: 'quickbase/report.js'        // maps to reference in report.index.html
@@ -609,7 +611,6 @@ module.exports = function(grunt) {
                 },
                 src    : ['server/**/test/' + mochaIntTest]
             }
-
         },
 
         //  Code coverage against the express code
@@ -648,6 +649,11 @@ module.exports = function(grunt) {
             local              : {
                 options: {
                     configFile: './e2e/config/local.protractor.conf.js'
+                }
+            },
+            local_data_gen : {
+                options: {
+                    configFile: './e2e/config/local.dataGen.protractor.conf.js'
                 }
             }
         },
@@ -749,12 +755,12 @@ module.exports = function(grunt) {
             options    : webpackConfig,
             build      : {
                 plugins: webpackConfig.plugins.concat(
-                        new webpack.DefinePlugin({
-                            'process.env': {
-                                // This has beneficial effect on the react lib size for deploy
-                                NODE_ENV: JSON.stringify('production')
-                            }
-                        })
+                    new webpack.DefinePlugin({
+                        'process.env': {
+                            // This has beneficial effect on the react lib size for deploy
+                            NODE_ENV: JSON.stringify('production')
+                        }
+                    })
                 )
             }
         },
@@ -992,6 +998,16 @@ module.exports = function(grunt) {
                 'wiredep:app',
                 'autoprefixer',
                 'protractor:local'
+            ]);
+        }
+
+        if (target === 'e2eDataGen') {
+            return grunt.task.run([
+                'clean:server',
+                'concurrent:test',
+                'wiredep:app',
+                'autoprefixer',
+                'protractor:local_data_gen'
             ]);
         }
 

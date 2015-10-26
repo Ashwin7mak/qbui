@@ -39,6 +39,13 @@
             smallSleep : 5000,
             mediumSleep : 10000,
             largeSleep :30000
+        },
+        // This function is run once before any of the test files. Acts as a global test preparation step
+        onPrepare: function(){
+            // Lets Protractor know there is no Angular code to wait for
+            browser.ignoreSynchronization = true;
+            // Maximizes the browser window (known bug with Chrome)
+            browser.driver.manage().window().maximize();
         }
     };
 }());

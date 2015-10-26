@@ -18,7 +18,7 @@ var IntlMixin = ReactIntl.IntlMixin;
 var ReportRoute = React.createClass({
     mixins: [IntlMixin, FluxMixin],
 
-    loadReport(appId, tblId, rptId){
+    loadReport(appId, tblId, rptId) {
         let flux = this.getFlux();
         flux.actions.loadReport(appId, tblId, rptId, true);
     },
