@@ -171,108 +171,7 @@ module.exports = function(grunt) {
                 }
             }
         },
-        jscs: {
-            client : {
-                files  : {
-                    src: ['<%= quickbase.client.root %>/**/*.js', '<%= quickbase.e2e %>/**/*.js']
-                },
-                options: {
-                    config      : './.jscsrc',
-                    excludeFiles: (client === 'REACT') ?
-                                ['<%= quickbase.client.root %>/bower_components/**/*.js',
-                                 '<%= quickbase.client.root %>/**/*.spec.js',
-                                 '<%= quickbase.client.gen %>/**/*.js',
-                                 '<%= quickbase.client.root %>/**/*.js', //TODO replace with eslint
-                                 '<%= quickbase.client.root %>/bootstrap-sass.config.js'
-                                ] : ['<%= quickbase.client.root %>/bower_components/**/*.js',
-                                   '<%= quickbase.client.root %>/**/*.spec.js'
-                                ]
-                }
-            },
-            server : {
-                files  : {
-                    src: ['<%= express.root %>/**/*.js']
-                },
-                options: {
-                    config: './.jscsrc'
-                    // excludeFiles: ['<%= express.root %>/**/*.spec.js']
-                }
-            },
-            testGen: {
-                files  : {
-                    src: ['test_generators/**/*.js']
-                },
-                options: {
-                    config: './.jscsrc'
-                    //             excludeFiles: ['test_generators/**/*.spec.js']
-                }
-            }
-        },
 
-        // Make sure code styles are up to par and there are no obvious mistakes
-        lint: {
-            options   : {
-                jshintrc: './.jshintrc',
-                //reporter: require('jshint-stylish'),
-                reporter: './node_modules/jshint-practical/'
-            },
-            server    : {
-                options: {
-                    jshintrc: '<%= express.root %>/.jshintrc'
-                },
-                src    : [
-                    '<%= express.root %>/**/*.js',
-                    '!<%= express.root %>/**/*.spec.js'
-                ]
-            },
-            serverTest: {
-                options: {
-                    jshintrc: '<%= express.root %>/.jshintrc'
-                },
-                src    : ['<%= express.root %>/**/*.spec.js',
-                          '<%= express.root %>/**/test/**/*.js']
-            },
-            client    : {
-                options: {
-                    jshintrc: '<%= quickbase.client.root %>/.jshintrc'
-                },
-                src    : (client === 'ANGULAR') ? [
-                        // only use jshint on angular code
-                        // React will use ESLint for lint checking which supports JSX/ES6
-                        // So when running jshint with REACT as client we will not include the react client code
-                    '<%= quickbase.client.components %>/**/*.js',
-                    '<%= quickbase.client.gallery %>/**/*.js',
-                    '!<%= quickbase.client.root %>/dist/**/*.js',
-                    '!<%= quickbase.client.components %>/**/*.spec.js',
-                    '!<%= quickbase.client.components %>/**/*.mock.js',
-                    '!<%= quickbase.e2e %>/**/*.js'
-
-                ]  : [
-                    '!<%= quickbase.client.root %>/**/*.js',
-                    '!<%= quickbase.e2e %>/**/*.js',
-                    '!<%= express.root %>/**/*.js'
-                ]
-            },
-            clientTest: {
-                options: {
-                    jshintrc: '<%= quickbase.client.root %>/.jshintrc'
-                },
-                src    : [
-                    '<%= quickbase.client.components %>/**/*.spec.js',
-                    '<%= quickbase.client.components %>/**/*.mock.js',
-                    '<%= quickbase.client.gallery %>/**/test/**/*.js',
-                    '<%= quickbase.e2e %>/**/*.js'
-                ]
-            },
-            testGen   : {
-                options: {
-                    jshintrc: '<%= express.root %>/.jshintrc'
-                },
-                src    : [
-                    'test_generators/**/*.js'
-                ]
-            }
-        },
 
         // Empties folders to start fresh
         clean: {
@@ -806,7 +705,10 @@ module.exports = function(grunt) {
         },
         shell: {
             lint: {
-                command: 'npm run lint',
+                // Make sure code styles are up to par and there are no obvious mistakes
+                //fixes any fixables i.e. spacing, missing semicolon etc
+                // see (fixables) in the list http://eslint.org/docs/rules/
+                command: 'npm run lintFix',
                 options: {
                     execOptions: {
                     }
@@ -1005,7 +907,7 @@ module.exports = function(grunt) {
     ]);
 
     grunt.registerTask('testClientOnly', function() {
-        grunt.task.run(['jshint:client', 'jscs:client', 'karma:unit']);
+        grunt.task.run(['lint', 'karma:unit']);
     });
 
 
@@ -1155,8 +1057,7 @@ module.exports = function(grunt) {
     }
 
     grunt.registerTask('default', [
-        'newer:jshint',
-        'newer:jscs',
+        'newer:lint',
         'test',
         'build'
     ]);
@@ -1191,7 +1092,7 @@ module.exports = function(grunt) {
         sauceConnect.close(async());
     });
 
-    grunt.registerTask('lint', 'Runt lint on code', function(){
+    grunt.registerTask('lint', 'Run eslint on code', function(){
         return grunt.task.run([
             'shell:lint',
         ]);
