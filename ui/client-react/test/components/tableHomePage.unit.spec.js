@@ -1,9 +1,8 @@
-//import Fluxxor from 'fluxxor';
-import React from 'react/addons';
+import 'react';
+import TestUtils from 'react-addons-test-utils';
 import TableHomePage  from '../../src/components/table/tableHomePageRoute';
 
 //TODO this is a placeholder file to add tests as table home page gets built out
-var TestUtils = React.addons.TestUtils;
 
 describe('TableHomePage functions', () => {
     'use strict';

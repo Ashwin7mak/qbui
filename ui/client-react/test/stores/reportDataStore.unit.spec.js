@@ -134,5 +134,13 @@ describe('Test ReportData Store', () => {
         expect(state.rptId).toBeDefined(rptId);
     });
 
+    it('test search', () => {
+        let searchForAction = {
+            type: actions.SEARCH_FOR,
+            payload: ''
+        };
+        flux.dispatcher.dispatch(searchForAction);
+        expect(flux.store(STORE_NAME).emit).toHaveBeenCalledWith('change');
+    });
 
 });

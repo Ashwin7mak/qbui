@@ -1,9 +1,8 @@
-import React from 'react/addons';
+import React from 'react';
+import TestUtils from 'react-addons-test-utils';
 import ReactDOM from 'react-dom';
 import GriddleTable  from '../../src/components/dataTable/griddleTable/griddleTable';
 import Griddle from 'griddle-react';
-
-var TestUtils = React.addons.TestUtils;
 
 var GriddleMock = React.createClass({
     render: function() {
