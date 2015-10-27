@@ -5,7 +5,7 @@ import ReactIntl from 'react-intl';
 
 import './mobileSearchBar.scss';
 import Fluxxor from 'fluxxor';
-import {Glyphicon} from 'react-bootstrap';
+import {Glyphicon,DropdownButton,MenuItem,Input,Button} from 'react-bootstrap';
 
 let FluxMixin = Fluxxor.FluxMixin(React);
 
