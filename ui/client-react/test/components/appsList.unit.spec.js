@@ -1,9 +1,8 @@
-//import Fluxxor from 'fluxxor';
-import React from 'react/addons';
+import 'react';
+import TestUtils from 'react-addons-test-utils';
 import AppsList  from '../../src/components/apps/appsList';
 
 //TODO this is a placeholder file to add tests as table home page gets built out
-var TestUtils = React.addons.TestUtils;
 
 let appsdata_empty = {
     apps:[]

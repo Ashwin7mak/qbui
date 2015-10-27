@@ -1,8 +1,7 @@
-import React from 'react/addons';
+import 'react';
+import TestUtils from 'react-addons-test-utils';
 import ReactDOM from 'react-dom';
 import CardView from '../../src/components/dataTable/griddleTable/cardView';
-
-var TestUtils = React.addons.TestUtils;
 
 const fakeReportData_empty = {
     data: {

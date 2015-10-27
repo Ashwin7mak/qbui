@@ -1,10 +1,10 @@
 import Fluxxor from 'fluxxor';
-import React from 'react/addons';
+import React from 'react';
+import TestUtils from 'react-addons-test-utils';
 import Home  from '../../src/components/apps/home';
 import Store from '../../src/stores/appsStore';
 
 //TODO this is a placeholder file to add tests as table home page gets built out
-var TestUtils = React.addons.TestUtils;
 
 var AppsHeaderMock = React.createClass({
     render: function() {

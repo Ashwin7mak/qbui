@@ -139,5 +139,19 @@ describe('Test Nav Store', () => {
         expect(flux.store(STORE_NAME).emit).toHaveBeenCalledWith('change');
         expect(flux.store(STORE_NAME).emit.calls.count()).toBe(1);
     });
+    it('test searching action', () => {
 
+        let toggleSearchingAction = {
+            type: actions.SEARCHING,
+            payload: true
+        };
+
+        expect(flux.store(STORE_NAME).state.searching).toBeFalsy();
+
+        flux.dispatcher.dispatch(toggleSearchingAction);
+        expect(flux.store(STORE_NAME).state.searching).toBeTruthy();
+        expect(flux.store(STORE_NAME).emit).toHaveBeenCalledWith('change');
+        expect(flux.store(STORE_NAME).emit.calls.count()).toBe(1);
+        flux.store(STORE_NAME).emit.calls.reset();
+    });
 });

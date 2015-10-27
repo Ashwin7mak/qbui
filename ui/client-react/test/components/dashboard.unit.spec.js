@@ -1,9 +1,7 @@
-//import Fluxxor from 'fluxxor';
-
-import React from 'react/addons';
+import React from 'react';
+import TestUtils from 'react-addons-test-utils';
 import Dashboard from '../../src/components/dashboard/dashboardRoute';
 
-var TestUtils = React.addons.TestUtils;
 
 var ContentMock = React.createClass({
     render: function() {

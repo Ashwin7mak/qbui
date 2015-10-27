@@ -1,14 +1,11 @@
-//import Fluxxor from 'fluxxor';
-
-import React from 'react/addons';
+import React from 'react';
+import TestUtils from 'react-addons-test-utils';
 import ReactDOM from 'react-dom';
 import Report from '../../src/components/report/reportRoute';
 import Stage from '../../src/components/stage/stage';
 
 import Locale from '../../src/locales/locales';
 var i18n = Locale.getI18nBundle();
-
-var TestUtils = React.addons.TestUtils;
 
 describe('Report functions', () => {
     'use strict';

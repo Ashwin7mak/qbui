@@ -37,14 +37,12 @@ let ReportDataStore = Fluxxor.createStore({
         this.error = false;
 
         let records = this.getReportData(reportData.data);
-        let data = {
+        this.data = {
             name: reportData.name,
             columns: this.getReportColumns(reportData.data.fields),
             records: records,
             filteredRecords: records
         };
-
-        this.data = data;
         this.emit("change");
     },
 
@@ -52,19 +50,21 @@ let ReportDataStore = Fluxxor.createStore({
 
         this.data.filteredRecords = [];
 
-        this.data.records.forEach((record) => {
+        if (this.data.records) {
+            this.data.records.forEach((record) => {
 
-            let match = false;
-            _.values(record).forEach((val) => {
-                if (val.toString().toLowerCase().indexOf(text.toLowerCase()) !== -1) {
-                    match = true;
+                let match = false;
+                _.values(record).forEach((val) => {
+                    if (val.toString().toLowerCase().indexOf(text.toLowerCase()) !== -1) {
+                        match = true;
+                    }
+                });
+                if (match) {
+                    this.data.filteredRecords.push(record);
                 }
-            });
-            if (match) {
-                this.data.filteredRecords.push(record);
-            }
 
-        });
+            });
+        }
         this.emit("change");
     },
 

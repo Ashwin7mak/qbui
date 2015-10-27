@@ -1,13 +1,9 @@
-//import Fluxxor from 'fluxxor';
-
-import React from 'react/addons';
+import 'react';
+import TestUtils from 'react-addons-test-utils';
 import ReportContent from '../../src/components/report/dataTable/content';
 import Loader  from 'react-loader';
 import GriddleTable  from '../../src/components/dataTable/griddleTable/griddleTable';
 //import {DateFormatter}  from '../../src/components/dataTable/griddleTable/formatters';
-
-var TestUtils = React.addons.TestUtils;
-
 
 const fakeReportData_loading = {
     loading: true

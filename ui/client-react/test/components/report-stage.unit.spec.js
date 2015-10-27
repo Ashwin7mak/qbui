@@ -1,8 +1,7 @@
-import React from 'react/addons';
+import React from 'react';
+import TestUtils from 'react-addons-test-utils';
 import ReportStage  from '../../src/components/report/dataTable/stage';
 //import I18nMessage from '../../src/utils/i18nMessage';
-
-var TestUtils = React.addons.TestUtils;
 
 var I18nMessageMock = React.createClass({
     render: function() {
