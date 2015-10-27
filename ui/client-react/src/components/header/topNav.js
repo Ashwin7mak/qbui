@@ -1,7 +1,6 @@
 import React from 'react';
 import ReactIntl from 'react-intl';
-//import ReactBootstrap from 'react-bootstrap';
-
+import _ from 'lodash';
 import Fluxxor from 'fluxxor';
 
 let FluxMixin = Fluxxor.FluxMixin(React);
