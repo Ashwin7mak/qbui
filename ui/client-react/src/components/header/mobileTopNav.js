@@ -55,7 +55,7 @@ var MobileTopNav = React.createClass({
                     </div>
                 </div>
 
-                <MobileSearchBar searchOpen= {this.props.searchBarOpen} searching={this.props.searching} />
+                <MobileSearchBar searching={this.props.searching} />
 
 
             </div>
