@@ -39,7 +39,7 @@ let LeftNav = React.createClass({
         const tooltip = (<Tooltip className={ this.props.open ? 'leftNavTooltip' : 'leftNavTooltip show' }
                                   id={label}>{label}</Tooltip>);
 
-        let selectedClass = item.id && (item.id === this.props.reportID) ? 'selected' : '';
+        let selectedClass = item.id && (item.id.toString() === this.props.reportID) ? 'selected' : '';
 
         return (
             <OverlayTrigger key={label} placement="right" overlay={tooltip}>
