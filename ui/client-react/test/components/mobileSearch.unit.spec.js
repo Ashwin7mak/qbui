@@ -1,5 +1,3 @@
-import React from 'react';
-
 import ReactDOM from 'react-dom';
 import MobileSearchBar  from '../../src/components/search/mobileSearchBar';
 
@@ -7,8 +5,8 @@ import TestUtils from 'react-addons-test-utils';
 
 let flux = {
     actions:{
-        setSearching: function(searching) { },
-        searchFor: function(text) { }
+        setSearching: function() { },
+        searchFor: function() { }
     }
 };
 
@@ -34,7 +32,7 @@ describe('Mobile search functions', () => {
         var div = document.createElement('div');
         component = ReactDOM.render(<MobileSearchBar  searching={searching} flux={flux} />, div);
 
-        var input = TestUtils.findRenderedDOMComponentWithTag(component,'input');
+        var input = TestUtils.findRenderedDOMComponentWithTag(component, 'input');
         expect(input).toBeDefined();
 
         TestUtils.Simulate.focus(input);
@@ -48,13 +46,13 @@ describe('Mobile search functions', () => {
         var div = document.createElement('div');
         component = ReactDOM.render(<MobileSearchBar searching={searching} flux={flux} />, div);
 
-        var input = TestUtils.findRenderedDOMComponentWithTag(component,'input');
+        var input = TestUtils.findRenderedDOMComponentWithTag(component, 'input');
         expect(input).toBeDefined();
 
-        TestUtils.Simulate.change(input, { target: { value:'abc'}});
+        TestUtils.Simulate.change(input, {target: {value:'abc'}});
         expect(flux.actions.searchFor).toHaveBeenCalledWith('abc');
 
-        var cancel = TestUtils.findRenderedDOMComponentWithClass(component,'cancel');
+        var cancel = TestUtils.findRenderedDOMComponentWithClass(component, 'cancel');
         expect(cancel).toBeDefined();
         TestUtils.Simulate.click(cancel);
         expect(flux.actions.setSearching).toHaveBeenCalledWith(false);
