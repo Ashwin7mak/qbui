@@ -1,4 +1,4 @@
-import 'react';
+import React from 'react';
 import TestUtils from 'react-addons-test-utils';
 import AppsList  from '../../src/components/apps/appsList';
 

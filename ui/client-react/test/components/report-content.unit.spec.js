@@ -1,4 +1,4 @@
-import 'react';
+import React from 'react';
 import TestUtils from 'react-addons-test-utils';
 import ReportContent from '../../src/components/report/dataTable/content';
 import Loader  from 'react-loader';

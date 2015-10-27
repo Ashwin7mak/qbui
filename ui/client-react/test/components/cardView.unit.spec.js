@@ -1,4 +1,4 @@
-import 'react';
+import React from 'react';
 import TestUtils from 'react-addons-test-utils';
 import ReactDOM from 'react-dom';
 import CardView from '../../src/components/dataTable/griddleTable/cardView';
