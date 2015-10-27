@@ -1,4 +1,4 @@
-import Fluxxor from 'fluxxor';
+//import Fluxxor from 'fluxxor';
 import React from 'react/addons';
 import AppsList  from '../../src/components/apps/appsList';
 
@@ -23,19 +23,19 @@ let appsdata_valid = {
         tables: [],
         timeZone: "US/Pacific"
     },
-    {
-        aliases: {
-            _DBID_ACTIVITIES: "abc"
-        },
-        dateFormat: "MM-dd-uuuu",
-        firstDayOfWeek: 1,
-        id: "bkac9mqfh",
-        lastAccessed: null,
-        name: "app_YvujdPIsBs1",
-        relationships: [],
-        tables: [],
-        timeZone: "US/Pacific"
-    }]
+        {
+            aliases: {
+                _DBID_ACTIVITIES: "abc"
+            },
+            dateFormat: "MM-dd-uuuu",
+            firstDayOfWeek: 1,
+            id: "bkac9mqfh",
+            lastAccessed: null,
+            name: "app_YvujdPIsBs1",
+            relationships: [],
+            tables: [],
+            timeZone: "US/Pacific"
+        }]
 };
 
 
