@@ -46,7 +46,7 @@ var TopNav = React.createClass({
         const searchIcon = <Glyphicon glyph="search" />;
 
         return (
-            <div className={'topNav ' + (this.props.mobile ? 'mobile' : '')}>
+            <div className={'topNav'}>
                 <div className="top">
                     <div className="navGroup left">
                         <div className="navItem "><a className="iconLink toggleNavButton" href="#" onClick={this.toggleNav}><Glyphicon glyph="menu-hamburger" /> </a></div>
@@ -71,7 +71,7 @@ var TopNav = React.createClass({
                     </div>
 
                     <div className="navGroup right">
-                        <NavDropdown className="navItem" NavDropdown={true} navItem={true} eventKey={3} title={this.props.mobile ? <Glyphicon glyph="cog" /> : <CurrentDate/>} id="nav-right-dropdown">
+                        <NavDropdown className="navItem" NavDropdown={true} navItem={true} eventKey={3} title={<CurrentDate/>} id="nav-right-dropdown">
                             <MenuItem href="/user" eventKey={4}><I18nMessage message={'header.menu.preferences'}/></MenuItem>
                             <MenuItem divider />
                             <MenuItem href="#" className="localeLink" onSelect={this.onSelect} title="en-us" eventKey={5}><I18nMessage message={'header.menu.locale.english'}/></MenuItem>

@@ -22,7 +22,7 @@ class Locale {
     }
 
     static getI18nBundle() {
-        logger.debug('Fetching locale: ' + locale);
+        //logger.debug('Fetching locale: ' + locale);
         try {
             switch (locale.toLowerCase()) {
             case 'en-us':
