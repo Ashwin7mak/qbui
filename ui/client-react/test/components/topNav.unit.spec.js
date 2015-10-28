@@ -76,13 +76,10 @@ describe('TopNav functions', () => {
     it('test changes locale on selecting menu item', () => {
         var localeMenuOptions = TestUtils.scryRenderedDOMComponentsWithClass(component, "localeLink");
 
-        /*var newlocaleMenuOptions = localeMenuOptions.filter((option) => {
-            return ReactDOM.findDOMNode(option).className == "localeLink";
-        });*/
-
-        //let localoption = ReactDOM.findDOMNode(newlocaleMenuOptions[1]);
-        TestUtils.Simulate.click(localeMenuOptions[1]);
-        expect(flux.actions.changeLocale).toHaveBeenCalledWith("");
+        let localeoption = ReactDOM.findDOMNode(localeMenuOptions[1]);
+        localeoption = localeoption.querySelector("a"); //get to the element that registers click event for change of locale.
+        TestUtils.Simulate.click(localeoption);
+        expect(flux.actions.changeLocale).toHaveBeenCalledWith(localeoption.title);
     });
 
     it('test search on change of searchtext', () => {
