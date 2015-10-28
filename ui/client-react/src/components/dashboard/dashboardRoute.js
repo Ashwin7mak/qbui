@@ -1,15 +1,12 @@
 import React from 'react';
-//import ReactBootstrap from 'react-bootstrap';
-import {getI18nBundle} from '../../locales/locales';
 import './dashboard.scss';
-
-import Logger from '../../utils/logger';
-let logger = new Logger();
 import ReportContent from '../report/dataTable/content';
 import Fluxxor from 'fluxxor';
 
+import Logger from '../../utils/logger';
+let logger = new Logger();
+
 let FluxMixin = Fluxxor.FluxMixin(React);
-var i18n = getI18nBundle();
 
 var DashboardRoute = React.createClass({
     mixins: [FluxMixin],
@@ -44,18 +41,18 @@ var DashboardRoute = React.createClass({
 
                 <div className="dashboardRow">
                     <div className="narrow">
-                        <ReportContent className="narrow" {...i18n} reportData={this.props.reportData} mobile={this.props.mobile}/>
+                        <ReportContent className="narrow" reportData={this.props.reportData} mobile={this.props.mobile}/>
                     </div>
                     <div className="wide">
-                        <ReportContent className="narrow" {...i18n} reportData={this.props.reportData} mobile={this.props.mobile}/>
+                        <ReportContent className="narrow" reportData={this.props.reportData} mobile={this.props.mobile}/>
                     </div>
                 </div>
                 <div className="dashboardRow">
                     <div className="narrow">
-                        <ReportContent {...i18n}  reportData={this.props.reportData} mobile={this.props.mobile}/>
+                        <ReportContent reportData={this.props.reportData} mobile={this.props.mobile}/>
                     </div>
                     <div className="wide">
-                        <ReportContent {...i18n}  reportData={this.props.reportData} mobile={this.props.mobile}/>
+                        <ReportContent reportData={this.props.reportData} mobile={this.props.mobile}/>
                     </div>
                 </div>
 

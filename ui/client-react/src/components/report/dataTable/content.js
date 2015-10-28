@@ -1,19 +1,13 @@
 import React from 'react';
-import ReactIntl from 'react-intl';
 
 //import { Table } from 'react-bootstrap';
 import GriddleTable  from '../../../components/dataTable/griddleTable/griddleTable.js';
 import {DateFormatter, NumericFormatter}  from '../../../components/dataTable/griddleTable/formatters.js';
 import Loader  from 'react-loader';
 
-import Locale from '../../../locales/locales';
-var i18n = Locale.getI18nBundle();
-var IntlMixin = ReactIntl.IntlMixin;
-
 const resultsPerPage = 1000; //assume that this is the constant number of records per page. This can be passed in as a prop for diff reports
 
 var Content = React.createClass({
-    mixins: [IntlMixin],
 
     getInitialState: function() {
         return {
@@ -94,7 +88,7 @@ var Content = React.createClass({
                 {this.props.reportData.error ?
                     <div>Error loading report!</div> :
                         <div>
-                            <GriddleTable {...i18n} mobile={this.props.mobile} results={this.props.reportData && this.props.reportData.data ? this.props.reportData.data.filteredRecords : []} columnMetadata={this.state.reportColumns} showPager={false} useExternal={false} resultsPerPage={resultsPerPage} externalResultsPerPage={resultsPerPage} />
+                            <GriddleTable mobile={this.props.mobile} results={this.props.reportData && this.props.reportData.data ? this.props.reportData.data.filteredRecords : []} columnMetadata={this.state.reportColumns} showPager={false} useExternal={false} resultsPerPage={resultsPerPage} externalResultsPerPage={resultsPerPage} />
                         </div>
                 }
             </Loader>

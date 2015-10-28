@@ -1,16 +1,13 @@
 import React from 'react';
-import ReactIntl from 'react-intl';
 import Fluxxor from 'fluxxor';
 import './mobileAddFooter.scss';
 
 import {Glyphicon} from 'react-bootstrap';
 
-let IntlMixin = ReactIntl.IntlMixin;
-//let FormattedMessage = ReactIntl.FormattedMessage;
 let FluxMixin = Fluxxor.FluxMixin(React);
 
 let MobileAddFooter = React.createClass({
-    mixins: [IntlMixin, FluxMixin],
+    mixins: [FluxMixin],
 
     addNew: function() {
         //let flux = this.getFlux();
@@ -30,6 +27,5 @@ let MobileAddFooter = React.createClass({
             </div>);
     }
 });
-
 
 export default MobileAddFooter;

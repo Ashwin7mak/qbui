@@ -1,6 +1,6 @@
 import React from 'react';
 import ReactIntl from 'react-intl';
-import I18nMessage from '../../utils/i18nMessage';
+import {I18nMessage, I18nDate} from '../../utils/i18nMessage';
 
 import Fluxxor from 'fluxxor';
 import _ from 'lodash';
@@ -8,25 +8,19 @@ import _ from 'lodash';
 let FluxMixin = Fluxxor.FluxMixin(React);
 import {MenuItem, NavDropdown, ButtonGroup, Button, OverlayTrigger, Popover, Glyphicon, Input} from 'react-bootstrap';
 
-import Locale from '../../locales/locales';
 import './topNav.scss';
-
-var IntlMixin = ReactIntl.IntlMixin;
-var FormattedDate = ReactIntl.FormattedDate;
 
 var CurrentDate = React.createClass({
 
-    mixins: [IntlMixin],
-
     render: function() {
-        return <FormattedDate locales={[Locale.getLocale()]} value={new Date()} day="numeric" month="long" year="numeric"/>;
+        return <I18nDate value={new Date()} day="numeric" month="long" year="numeric"/>;
     }
 });
 
 const debounceSearchMillis = 100;
 
 var TopNav = React.createClass({
-    mixins: [IntlMixin, FluxMixin],
+    mixins: [FluxMixin],
 
     toggleNav: function() {
         let flux = this.getFlux();

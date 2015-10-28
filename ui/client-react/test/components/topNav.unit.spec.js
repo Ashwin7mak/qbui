@@ -6,7 +6,6 @@ import TopNav from '../../src/components/header/topNav';
 import {MenuItem, OverlayTrigger} from 'react-bootstrap';
 import _ from 'lodash';
 
-
 var I18nMessageMock = React.createClass({
     render: function() {
         return (

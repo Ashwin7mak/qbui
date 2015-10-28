@@ -3,7 +3,7 @@ import Griddle from 'griddle-react';
 
 //import Logger from '../../../utils/logger';
 //var logger = new Logger();
-import I18nMessage from '../../../utils/i18nMessage';
+import {I18nMessage} from '../../../utils/i18nMessage';
 
 import './griddleTable.css';
 import './qbGriddleTable.scss';

@@ -1,7 +1,4 @@
 import React from 'react';
-import ReactIntl from 'react-intl';
-
-//import _ from 'lodash';
 
 import './mobileSearchBar.scss';
 import Fluxxor from 'fluxxor';
@@ -9,12 +6,10 @@ import {Glyphicon, DropdownButton, MenuItem, Input, Button} from 'react-bootstra
 
 let FluxMixin = Fluxxor.FluxMixin(React);
 
-var IntlMixin = ReactIntl.IntlMixin;
-
 //const debounceSearchMillis = 100;
 
 var MobileSearchBar = React.createClass({
-    mixins: [IntlMixin, FluxMixin],
+    mixins: [FluxMixin],
 
     searchChanged: function(ev) {
         let flux = this.getFlux();

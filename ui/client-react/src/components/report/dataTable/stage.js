@@ -1,5 +1,5 @@
 import React from 'react';
-import I18nMessage from '../../../utils/i18nMessage';
+import {I18nMessage} from '../../../utils/i18nMessage';
 import {Button} from 'react-bootstrap';
 import Logger from '../../../utils/logger';
 var logger = new Logger();
@@ -12,7 +12,6 @@ var Stage = React.createClass({
         logger.debug('report feedback button click event fired.');
         window.location.href = 'mailto:clay_nicolau@intuit.com?subject=ReArch LH Feedback';
     },
-
 
     render: function() {
         return <div className="report-content">

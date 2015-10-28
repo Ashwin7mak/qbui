@@ -4,25 +4,21 @@
 *
 * */
 import React from 'react';
-import ReactIntl from 'react-intl';
-
-var FormattedDate = ReactIntl.FormattedDate;
-var FormattedNumber = ReactIntl.FormattedNumber;
+import {I18nDate, I18nNumber} from '../../../utils/i18nMessage';
 
 export var DateFormatter = React.createClass({
     render: function(){
         if (this.props.data !== "") {
-            return <FormattedDate value={this.props.data}/>;
+            return <I18nDate value={this.props.data}/>;
         }
         return null;
     }
 });
 
-
 export var NumericFormatter = React.createClass({
     render: function(){
         if (this.props.data !== "") {
-            return <FormattedNumber value={this.props.data}/>;
+            return <I18nNumber value={this.props.data}/>;
         }
         return null;
     }

@@ -1,18 +1,17 @@
 import React from 'react';
-import ReactIntl from 'react-intl';
+
 import {Nav, Glyphicon} from 'react-bootstrap';
 import {Link} from 'react-router';
 import Loader  from 'react-loader';
 import './mobileLeftNav.scss';
+import {I18nMessage} from '../../utils/i18nMessage';
 
-var IntlMixin = ReactIntl.IntlMixin;
-var FormattedMessage = ReactIntl.FormattedMessage;
 import Fluxxor from 'fluxxor';
 
 let FluxMixin = Fluxxor.FluxMixin(React);
 
 let MobileLeftNav = React.createClass({
-    mixins: [FluxMixin, IntlMixin],
+    mixins: [FluxMixin],
 
     toggleNav: function() {
         let flux = this.getFlux();
@@ -33,14 +32,14 @@ let MobileLeftNav = React.createClass({
         return (
             <li>
                 <Loader scale={.5} right={'90%'} loaded={!loadingCheck} />
-                <a className="mobileHeading"><FormattedMessage message={this.getIntlMessage('nav.reportsHeading')}/></a>
+                <a className="mobileHeading"><I18nMessage message={'nav.reportsHeading'}/></a>
             </li>);
     },
 
 
     buildNavItem: function(item) {
 
-        let label = item.key ? this.getIntlMessage(item.key) : item.name;
+        let label = item.key ? item.key : item.name;
         let selectedClass = item.id && (item.id === this.props.reportID) ? 'selected' : '';
 
         return (

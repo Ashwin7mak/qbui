@@ -1,20 +1,14 @@
 import React from 'react';
 import ReactCSSTransitionGroup from 'react/lib/ReactCSSTransitionGroup';
 
-//import { render } from 'react-dom'
 import './nav.scss';
-//import Loader  from 'react-loader';
 import Button from 'react-bootstrap/lib/Button';
 import Trouser from '../trouser/trouser';
-
-//import Logger from '../../utils/logger';
-//let logger = new Logger();
 
 import Fluxxor from 'fluxxor';
 
 let FluxMixin = Fluxxor.FluxMixin(React);
 let StoreWatchMixin = Fluxxor.StoreWatchMixin;
-
 
 var Nav = React.createClass({
     mixins: [FluxMixin, StoreWatchMixin('NavStore', 'AppsStore', 'ReportsStore', 'ReportDataStore')],
@@ -49,8 +43,6 @@ var Nav = React.createClass({
         const searchBarOpen = this.state.nav.searchBarOpen;
         const searching = this.state.nav.searching;
 
-        const i18n = this.state.nav.i18n;
-
         // todo: might be cleaner to just pass {...this.state} down and let the child components use what they need...
         return (<div className={mobileNavOpen ? 'navShell mobileNavOpen' : 'navShell'}>
             <Trouser visible={this.state.nav.trouserOpen} onHide={this.hideTrouserExample}>
@@ -59,10 +51,10 @@ var Nav = React.createClass({
             </Trouser>
 
             {/* insert the leftNav component passed in by the router */}
-            {React.cloneElement(leftNav, {...i18n, items:this.state.nav.leftNavItems, open: navOpen, reportsData: this.state.reportsData, reportID: this.state.reportData.rptId, flux: flux})}
+            {React.cloneElement(leftNav, {items:this.state.nav.leftNavItems, open: navOpen, reportsData: this.state.reportsData, reportID: this.state.reportData.rptId, flux: flux})}
 
             <div className="main">
-                {React.cloneElement(topNav, {...i18n, title:"QuickBase", searching: searching, searchBarOpen: searchBarOpen, mobile: this.props.mobile, onNavClick:this.toggleNav, onAddClicked:this.showTrouser, flux: flux})}
+                {React.cloneElement(topNav, {title:"QuickBase", searching: searching, searchBarOpen: searchBarOpen, mobile: this.props.mobile, onNavClick:this.toggleNav, onAddClicked:this.showTrouser, flux: flux})}
 
                 <ReactCSSTransitionGroup className="mainContent"
                                          transitionName="main-transition"
@@ -71,11 +63,11 @@ var Nav = React.createClass({
                                          transitionEnterTimeout={600}
                                          transitionLeaveTimeout={600} >
                 {/* insert the main component passed in by the router */}
-                {React.cloneElement(main, {...i18n, key: pathname, reportData: this.state.reportData, mobile: this.props.mobile,  flux: flux})}
+                {React.cloneElement(main, {key: pathname, reportData: this.state.reportData, mobile: this.props.mobile,  flux: flux})}
                 </ReactCSSTransitionGroup>
 
                 {/* insert the footer if route wants it */}
-                {footer ? React.cloneElement(footer, {...i18n, newItemsOpen: this.state.nav.newItemsOpen, flux: flux}) : ''}
+                {footer ? React.cloneElement(footer, {newItemsOpen: this.state.nav.newItemsOpen, flux: flux}) : ''}
             </div>
         </div>);
     }
