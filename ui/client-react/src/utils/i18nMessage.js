@@ -29,18 +29,18 @@ var Display = React.createClass({
     render: function() {
         // message returned is as a string if the property type argument is invalid or undefined..
         switch (this.props.type) {
-            case I18N_MESSAGE:
-                return (<FormattedMessage {...this.props} message={this.getIntlMessage(this.props.message)}/>);
-            case I18N_NUMBER:
-                return (<FormattedNumber {...this.props}/>);
-            case I18N_DATE:
-                return (<FormattedDate {...this.props} />);
-            case I18N_TIME:
-                return (<FormattedTime {...this.props}/>);
-            case I18N_RELATIVE:
-                return (<FormattedRelative {...this.props}/>);
-            default:
-                logger.warn('Invalid/undefined i18n property type.  Returning as a FormattedMessage.  Input properties: ' + JSON.stringify(this.props.i18nProps));
+        case I18N_MESSAGE:
+            return (<FormattedMessage {...this.props} message={this.getIntlMessage(this.props.message)}/>);
+        case I18N_NUMBER:
+            return (<FormattedNumber {...this.props}/>);
+        case I18N_DATE:
+            return (<FormattedDate {...this.props} />);
+        case I18N_TIME:
+            return (<FormattedTime {...this.props}/>);
+        case I18N_RELATIVE:
+            return (<FormattedRelative {...this.props}/>);
+        default:
+            logger.warn('Invalid/undefined i18n property type.  Returning as a FormattedMessage.  Input properties: ' + JSON.stringify(this.props.i18nProps));
         }
 
         return (<FormattedMessage {...this.props} message={this.getIntlMessage(this.props.message)}/>);

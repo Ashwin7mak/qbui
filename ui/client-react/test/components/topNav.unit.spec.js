@@ -1,10 +1,10 @@
-import React from 'react/addons';
+import React from 'react';
+import TestUtils from 'react-addons-test-utils';
 import ReactDOM from 'react-dom';
 import Fluxxor from 'fluxxor';
 import TopNav from '../../src/components/header/topNav';
 import {MenuItem, OverlayTrigger} from 'react-bootstrap';
 import _ from 'lodash';
-var TestUtils = React.addons.TestUtils;
 
 var I18nMessageMock = React.createClass({
     render: function() {
