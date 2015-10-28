@@ -3,7 +3,7 @@ import TestUtils from 'react-addons-test-utils';
 import ReactDOM from 'react-dom';
 import Fluxxor from 'fluxxor';
 import TopNav from '../../src/components/header/mobileTopNav';
-import MobileSearchBar from '../../src/components/search/MobileSearchBar';
+import MobileSearchBar from '../../src/components/search/mobileSearchBar';
 import _ from 'lodash';
 
 
