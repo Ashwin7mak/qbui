@@ -1,10 +1,11 @@
-import React from 'react/addons';
+import React from 'react';
+import TestUtils from 'react-addons-test-utils';
 import ReactDOM from 'react-dom';
 import Fluxxor from 'fluxxor';
 import TopNav from '../../src/components/header/topNav';
 import {MenuItem, OverlayTrigger} from 'react-bootstrap';
 import _ from 'lodash';
-var TestUtils = React.addons.TestUtils;
+
 
 var I18nMessageMock = React.createClass({
     render: function() {
@@ -47,7 +48,7 @@ describe('TopNav functions', () => {
 
     afterEach(() => {
         TopNav.__ResetDependency__('I18nMessage');
-        TopNav.__ResetDependency__('CurrentDate', CurrentDateMock);
+        TopNav.__ResetDependency__('CurrentDate');
     });
 
     it('test render of component', () => {
@@ -74,6 +75,15 @@ describe('TopNav functions', () => {
     });
 
     it('test changes locale on selecting menu item', () => {
+        var localeMenuOptions = TestUtils.scryRenderedDOMComponentsWithClass(component, "localeLink");
+
+        /*var newlocaleMenuOptions = localeMenuOptions.filter((option) => {
+            return ReactDOM.findDOMNode(option).className == "localeLink";
+        });*/
+
+        //let localoption = ReactDOM.findDOMNode(newlocaleMenuOptions[1]);
+        TestUtils.Simulate.click(localeMenuOptions[1]);
+        expect(flux.actions.changeLocale).toHaveBeenCalledWith("");
     });
 
     it('test search on change of searchtext', () => {
