@@ -1,11 +1,7 @@
 import React from 'react';
-import ReactIntl from 'react-intl';
 import './apps.css';
 
-var IntlMixin = ReactIntl.IntlMixin;
-
 var Content = React.createClass({
-    mixins: [IntlMixin],
 
     render: function() {
         return (this.props.data.apps.length ?

@@ -1,14 +1,11 @@
 import React from 'react';
-import ReactIntl from 'react-intl';
 import {Nav, Tooltip, OverlayTrigger, Glyphicon} from 'react-bootstrap';
 import {Link} from 'react-router';
 import Loader  from 'react-loader';
 import './leftNav.scss';
-var IntlMixin = ReactIntl.IntlMixin;
-var FormattedMessage = ReactIntl.FormattedMessage;
+import {I18nMessage} from '../../utils/i18nMessage';
 
 let LeftNav = React.createClass({
-    mixins: [IntlMixin],
 
     getGlyphName(item) {
 
@@ -25,7 +22,7 @@ let LeftNav = React.createClass({
             return (
                 <li key={item.key}>
                     <Loader scale={.5} right={'90%'} loaded={!loadingCheck}/>
-                    <a className="heading"><FormattedMessage message={this.getIntlMessage(item.key)}/></a>
+                    <a className="heading"><I18nMessage message={item.key}/></a>
                 </li>);
         } else {
             return (<li key={item.key}><a className="heading"></a></li>);
@@ -34,7 +31,7 @@ let LeftNav = React.createClass({
 
     buildNavItem: function(item) {
 
-        let label = item.key ? this.getIntlMessage(item.key) : item.name;
+        let label = item.key ? item.key : item.name;
 
         const tooltip = (<Tooltip className={ this.props.open ? 'leftNavTooltip' : 'leftNavTooltip show' }
                                   id={label}>{label}</Tooltip>);

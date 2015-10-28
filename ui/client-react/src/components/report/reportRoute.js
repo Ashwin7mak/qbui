@@ -1,6 +1,4 @@
 import React from 'react';
-import ReactIntl from 'react-intl';
-//import ReactBootstrap from 'react-bootstrap';
 
 import Stage from '../stage/stage';
 import ReportStage from './dataTable/stage';
@@ -13,10 +11,9 @@ import Fluxxor from 'fluxxor';
 import './report.scss';
 
 let FluxMixin = Fluxxor.FluxMixin(React);
-var IntlMixin = ReactIntl.IntlMixin;
 
 var ReportRoute = React.createClass({
-    mixins: [IntlMixin, FluxMixin],
+    mixins: [FluxMixin],
 
     loadReport(appId, tblId, rptId) {
         let flux = this.getFlux();
@@ -61,7 +58,6 @@ var ReportRoute = React.createClass({
 
     // Triggered when properties change
     componentWillReceiveProps(props) {
-
         this.loadReportFromParams(props.params, true);
     },
 
@@ -69,9 +65,9 @@ var ReportRoute = React.createClass({
 
         return (<div className="reportContainer">
                 <Stage stageContent="this is the stage content text" >
-                    <ReportStage {...this.props.i18n} reportName={this.props.reportData && this.props.reportData.data ? this.props.reportData.data.name : ""}/>
+                    <ReportStage reportName={this.props.reportData && this.props.reportData.data ? this.props.reportData.data.name : ""}/>
                 </Stage>
-                <ReportContent {...this.props.i18n} reportData={this.props.reportData} mobile={this.props.mobile}/>
+                <ReportContent reportData={this.props.reportData} mobile={this.props.mobile}/>
                 </div>);
     }
 });

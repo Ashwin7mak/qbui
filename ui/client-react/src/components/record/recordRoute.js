@@ -1,19 +1,14 @@
 import React from 'react';
-import ReactIntl from 'react-intl';
-//import ReactBootstrap from 'react-bootstrap';
 
 import Record from './record';
-//import Logger from '../../utils/logger';
-//let logger = new Logger();
 
 import Fluxxor from 'fluxxor';
 import './record.scss';
 
 let FluxMixin = Fluxxor.FluxMixin(React);
-var IntlMixin = ReactIntl.IntlMixin;
 
 var RecordRoute = React.createClass({
-    mixins: [IntlMixin, FluxMixin],
+    mixins: [FluxMixin],
 
 
     componentDidMount: function() {
@@ -27,10 +22,8 @@ var RecordRoute = React.createClass({
     },
 
     render: function() {
-
         return (<div className="recordContainer">
-
-            <Record {...this.props.i18n} recordData={this.props.recordData} mobile={this.props.mobile}/>
+            <Record recordData={this.props.recordData} mobile={this.props.mobile}/>
         </div>);
     }
 });

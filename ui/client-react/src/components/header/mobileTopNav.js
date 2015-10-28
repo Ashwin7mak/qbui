@@ -1,5 +1,4 @@
 import React from 'react';
-import ReactIntl from 'react-intl';
 
 import './mobileTopNav.scss';
 import Fluxxor from 'fluxxor';
@@ -9,15 +8,8 @@ import MobileSearchBar from '../search/mobileSearchBar';
 
 let FluxMixin = Fluxxor.FluxMixin(React);
 
-//import Locale from '../../locales/locales';
-
-var IntlMixin = ReactIntl.IntlMixin;
-//var FormattedDate = ReactIntl.FormattedDate;
-//var FormattedMessage = ReactIntl.FormattedMessage;
-
-
 var MobileTopNav = React.createClass({
-    mixins: [IntlMixin, FluxMixin],
+    mixins: [FluxMixin],
 
     toggleNav: function() {
         let flux = this.getFlux();
@@ -56,7 +48,6 @@ var MobileTopNav = React.createClass({
                 </div>
 
                 <MobileSearchBar searching={this.props.searching} />
-
 
             </div>
         );

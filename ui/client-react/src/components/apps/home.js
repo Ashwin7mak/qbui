@@ -1,26 +1,17 @@
 import React from 'react';
-import ReactIntl from 'react-intl';
 
 import Fluxxor from 'fluxxor';
 import AppsList from './appsList';
-
 import './apps.css';
-
-//  load the locale
-import Locale from '../../locales/locales';
-let i18n = Locale.getI18nBundle();
-
-var IntlMixin = ReactIntl.IntlMixin;
-var FormattedMessage = ReactIntl.FormattedMessage;
+import {I18nMessage} from '../../utils/i18nMessage';
 
 let FluxMixin = Fluxxor.FluxMixin(React);
 let StoreWatchMixin = Fluxxor.StoreWatchMixin;
 
 var AppsHeader = React.createClass({
-    mixins: [IntlMixin],
 
     render: function() {
-        return <FormattedMessage message={this.getIntlMessage('apps.header')}/>;
+        return <I18nMessage message={'apps.header'}/>;
     }
 });
 
@@ -38,8 +29,8 @@ var App = React.createClass({
     render: function() {
         return (
             <div className="apps-container">
-                <h4><AppsHeader {...i18n}/></h4>
-                <AppsList {...i18n} data={this.state.apps}/>
+                <h4><AppsHeader /></h4>
+                <AppsList data={this.state.apps}/>
             </div>
         );
     }
