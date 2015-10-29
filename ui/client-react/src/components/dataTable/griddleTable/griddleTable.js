@@ -4,7 +4,7 @@ import Griddle from 'griddle-react';
 //import Logger from '../../../utils/logger';
 //var logger = new Logger();
 import {I18nMessage} from '../../../utils/i18nMessage';
-
+import * as breakpoints from '../../../constants/breakpoints';
 import './griddleTable.css';
 import './qbGriddleTable.scss';
 
@@ -28,7 +28,7 @@ class GriddleTable extends React.Component {
                 <div>
                     <Griddle {...this.props}
                         results={this.props.results}
-                        useCustomRowComponent={this.props.mobile}
+                        useCustomRowComponent={this.props.breakpoint === breakpoints.SMALL_BREAKPOINT}
                         />
                 </div>
             );

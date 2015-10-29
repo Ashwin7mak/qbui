@@ -44,7 +44,7 @@ html, body {
                 align-items:center;
                 font-size:14px;
                 transition: flex-basis 300ms ease-in-out;
-                overflow:hidden;
+                //overflow:hidden; mobile needs this
             }
 
             .navGroup {

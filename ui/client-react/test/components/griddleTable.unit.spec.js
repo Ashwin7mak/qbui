@@ -78,7 +78,7 @@ describe('GriddleTable functions', () => {
     });
 
     it('test render with mobile prop', () => {
-        component = TestUtils.renderIntoDocument(<GriddleTable columnMetadata={fakeReportData_empty.data.columns} mobile={true} />);
+        component = TestUtils.renderIntoDocument(<GriddleTable columnMetadata={fakeReportData_empty.data.columns} breakpoint={'small-breakpoint'} />);
         var griddle = TestUtils.scryRenderedComponentsWithType(component, GriddleMock);
         expect(griddle.length).toEqual(1);
         expect(griddle[0].props.useCustomRowComponent).toBeTruthy();

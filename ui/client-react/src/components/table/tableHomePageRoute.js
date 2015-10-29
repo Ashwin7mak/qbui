@@ -9,7 +9,7 @@ let TableHomePageRoute = React.createClass({
     render: function() {
 
         return (<div>
-            <div>Table Homepage goes here... {this.props.mobile ? '(mobile version)' : '(desktop version)'}</div>
+            <div>Table Homepage goes here... {this.props.breakpoint}</div>
         </div>);
     }
 });

@@ -39,7 +39,11 @@ let MobileLeftNav = React.createClass({
 
     buildNavItem: function(item) {
 
-        let label = item.key ? item.key : item.name;
+        let label = item.name;
+        if (item.key) {
+            label = (<I18nMessage message={item.key}/>);
+        }
+
         let selectedClass = item.id && (item.id === this.props.reportID) ? 'selected' : '';
 
         return (

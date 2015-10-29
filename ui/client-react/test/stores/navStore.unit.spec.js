@@ -42,7 +42,6 @@ describe('Test Nav Store', () => {
     it('test default nav store state', () => {
         // verify default states
         expect(flux.store(STORE_NAME).state.leftNavOpen).toBeTruthy();
-        expect(flux.store(STORE_NAME).state.mobileLeftNavOpen).toBeFalsy();
         expect(flux.store(STORE_NAME).state.trouserOpen).toBeFalsy();
         expect(flux.store(STORE_NAME).state.i18n).toBe(i18nBundle);
 
@@ -123,18 +122,15 @@ describe('Test Nav Store', () => {
         };
 
         expect(flux.store(STORE_NAME).state.leftNavOpen).toBeTruthy();
-        expect(flux.store(STORE_NAME).state.mobileLeftNavOpen).toBeFalsy();
 
         flux.dispatcher.dispatch(toggleLeftNavAction);
         expect(flux.store(STORE_NAME).state.leftNavOpen).toBeFalsy();
-        expect(flux.store(STORE_NAME).state.mobileLeftNavOpen).toBeTruthy();
         expect(flux.store(STORE_NAME).emit).toHaveBeenCalledWith('change');
         expect(flux.store(STORE_NAME).emit.calls.count()).toBe(1);
         flux.store(STORE_NAME).emit.calls.reset();
 
         flux.dispatcher.dispatch(toggleLeftNavAction);
         expect(flux.store(STORE_NAME).state.leftNavOpen).toBeTruthy();
-        expect(flux.store(STORE_NAME).state.mobileLeftNavOpen).toBeFalsy();
 
         expect(flux.store(STORE_NAME).emit).toHaveBeenCalledWith('change');
         expect(flux.store(STORE_NAME).emit.calls.count()).toBe(1);
