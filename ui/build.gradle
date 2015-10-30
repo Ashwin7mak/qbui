@@ -276,12 +276,12 @@ sonarRunner {
         property "sonar.jdbc.username", "sonar"
         property "sonar.jdbc.password", "sonar"
         property "sonar.sources", "."
-        property "sonar.modules", "client,server"
+        property "sonar.modules", "client-react,server"
         property "sonar.coverage.exclusions", "**/*.spec.js"
 
         property "client.sonar.projectName", "${user}:ui:${branchName}:client"
-        property "client.sonar.sources", "$projectDir/client"
-        property "client.sonar.exclusions", "**/gallery/**,**/bower_components/**,**/quickbase/common/test/**"
+        property "client.sonar.sources", "$projectDir/client-react/src"
+        property "client.sonar.exclusions", "**/css/**"
         //  import the ui LCOV coverage report
         property "client.sonar.javascript.lcov.reportPath","${projectDir}/build/reports/client/coverage/lcov.info"
 
