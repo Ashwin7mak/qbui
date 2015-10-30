@@ -574,7 +574,7 @@ module.exports = function(grunt) {
                 configFile: 'karma.conf.js'
             },
             unit: {
-                browsers: ["Phantom"],
+                browsers: ["PhantomJS"],
                 singleRun : true
             },
             devunit: {
@@ -1038,7 +1038,7 @@ module.exports = function(grunt) {
             // run lint and coding standards tests
             'codeStandards',
             // run unit tests
-            'test:client',
+            'test:client_wip',
             'test:server'
         ]);
 
