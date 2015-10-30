@@ -279,11 +279,11 @@ sonarRunner {
         property "sonar.modules", "client-react,server"
         property "sonar.coverage.exclusions", "**/*.spec.js"
 
-        property "client.sonar.projectName", "${user}:ui:${branchName}:client"
-        property "client.sonar.sources", "$projectDir/client-react/src"
-        property "client.sonar.exclusions", "**/css/**"
+        property "client-react.sonar.projectName", "${user}:ui:${branchName}:client"
+        property "client-react.sonar.sources", "$projectDir/client-react/src"
+        property "client-react.sonar.exclusions", "**/css/**"
         //  import the ui LCOV coverage report
-        property "client.sonar.javascript.lcov.reportPath","${projectDir}/build/reports/client/coverage/lcov.info"
+        property "client-react.sonar.javascript.lcov.reportPath","${projectDir}/build/reports/client/coverage/lcov.info"
 
         property "server.sonar.projectName", "${user}:ui:${branchName}:server"
         property "server.sonar.sources", "$projectDir/server"

@@ -972,17 +972,6 @@ module.exports = function(grunt) {
                 'mochaTest:integration'
             ]);
         }
-        if (target === 'client_wip') {
-            //client unit tests
-            return grunt.task.run([
-                'clean:client',
-                'concurrent:test',
-                'autoprefixer',
-                'wiredep:test',
-                'karma:unit',
-                'fixCoveragePaths'
-            ]);
-        }
         if (target === 'client') {
             //client dummy placeholder
             return grunt.task.run([
@@ -990,7 +979,7 @@ module.exports = function(grunt) {
                 'concurrent:test',
                 'autoprefixer',
                 'wiredep:test',
-                //'karma:unit',
+                'karma:unit',
                 'fixCoveragePaths'
             ]);
         }
@@ -1038,8 +1027,9 @@ module.exports = function(grunt) {
             // run lint and coding standards tests
             'codeStandards',
             // run unit tests
-            'test:client_wip',
-            'test:server'
+            'test:client',
+            //'test:server' // no coverage
+            'test:coverage' // server with coverage
         ]);
 
     });
