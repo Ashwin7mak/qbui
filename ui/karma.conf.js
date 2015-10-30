@@ -23,7 +23,7 @@ module.exports = function(config) {
         // add webpack as the preprocessor
         preprocessors: {
             "tests.webpack.js": ["webpack", "sourcemap"],
-            //"client-react/src/**/*.js" : ["coverage"]
+            "client-react/src/**/*.js" : ["coverage"]
         },
 
         webpack: {
