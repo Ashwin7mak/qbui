@@ -47,7 +47,7 @@ let testdata_items = {
     items: [test_headingitem, test_navitem1, test_navitem2]
 };
 
-describe('Mobile Left Nav functions', () => {
+xdescribe('Mobile Left Nav functions', () => {
     'use strict';
 
     var component;
