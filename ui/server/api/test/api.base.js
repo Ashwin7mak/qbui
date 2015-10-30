@@ -168,6 +168,13 @@
                 }
                 return endpoint;
             },
+            resolveRealmsGetEndpoint       : function(realmName) {
+                var endpoint = JAVA_BASE_ENDPOINT + REALMS_ENDPOINT;
+                if (realmName) {
+                    endpoint = endpoint + "?subdomain=" + realmName;
+                }
+                return endpoint;
+            },
             resolveTicketEndpoint       : function() {
                 return JAVA_BASE_ENDPOINT + TICKETS_ENDPOINT;
             },
@@ -261,21 +268,26 @@
                             .then(function(authResponse) {
                                       //TODO: tickets come back quoted, invalid JSON, we regex the quotes away.  hack.
                                 self.authTicket = authResponse.body.replace(/"/g, '');
-                                self.createRealm()
-                                              .then(function(realmResponse) {
-                                                  self.realm = JSON.parse(realmResponse.body);
-                                                  self.createTicket(self.realm.id)
-                                                                .then(function(realmTicketResponse) {
-                                                                    self.authTicket = realmTicketResponse.body.replace(/"/g, '');
-                                                                    deferred.resolve(self.realm);
-                                                                }).catch(function(realmTicketError) {
-                                                                    deferred.reject(realmTicketError);
-                                                                    assert(false, 'failed to create ticket for realm: ' + self.realm.id);
-                                                                });
-                                              }).catch(function(realmError) {
-                                                  deferred.reject(realmError);
-                                                  assert(false, 'failed to create realm: ' + JSON.stringify(realmError));
-                                              });
+                                var realmPromise;
+                                if (config.realmToUse) {
+                                    realmPromise = self.getRealm(config.realmToUse);
+                                } else {
+                                    realmPromise = self.createRealm();
+                                }
+                                realmPromise.then(function(realmResponse) {
+                                    self.realm = JSON.parse(realmResponse.body);
+                                    self.createTicket(self.realm.id)
+                                                    .then(function(realmTicketResponse) {
+                                                        self.authTicket = realmTicketResponse.body.replace(/"/g, '');
+                                                        deferred.resolve(self.realm);
+                                                    }).catch(function(realmTicketError) {
+                                                        deferred.reject(realmTicketError);
+                                                        assert(false, 'failed to create ticket for realm: ' + self.realm.id);
+                                                    });
+                                }).catch(function(realmError) {
+                                    deferred.reject(realmError);
+                                    assert(false, 'failed to create realm: ' + JSON.stringify(realmError));
+                                });
                             }).catch(function(authError) {
                                                //If auth request fails, delete the realm & fail the tests
                                 self.cleanup();
@@ -297,6 +309,10 @@
                     name     : generateValidSubdomainString()
                 };
                 return this.executeRequest(this.resolveRealmsEndpoint(), consts.POST, realmToMake, DEFAULT_HEADERS);
+            },
+            //get realm calls execute request and returns a promise
+            getRealm       : function(realmToUse) {
+                return this.executeRequest(this.resolveRealmsGetEndpoint(realmToUse), consts.GET, null, DEFAULT_HEADERS);
             },
             //Create user helper method generates an specific user, calls execute request and returns a promise
             createSpecificUser: function(userToMake) {

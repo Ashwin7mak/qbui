@@ -9,14 +9,9 @@
 .apps-container .apps li {
     font-size:13px;
     font-weight:bold;
-    list-style-type: decimal;
 }
 
-.apps-container .apps .tables ul {
-    list-style-type: none;
-}
-
-.apps-container .apps .tables ul li {
+.apps-container .apps .tables li {
     font-size:12px;
     cursor:pointer;
     text-decoration: underline;
