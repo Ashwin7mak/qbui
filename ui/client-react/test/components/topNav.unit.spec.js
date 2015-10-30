@@ -47,7 +47,7 @@ describe('TopNav functions', () => {
 
     afterEach(() => {
         TopNav.__ResetDependency__('I18nMessage');
-        TopNav.__ResetDependency__('CurrentDate', CurrentDateMock);
+        TopNav.__ResetDependency__('CurrentDate');
     });
 
     it('test render of component', () => {
@@ -74,6 +74,12 @@ describe('TopNav functions', () => {
     });
 
     it('test changes locale on selecting menu item', () => {
+        var localeMenuOptions = TestUtils.scryRenderedDOMComponentsWithClass(component, "localeLink");
+
+        let localeoption = ReactDOM.findDOMNode(localeMenuOptions[1]);
+        localeoption = localeoption.querySelector("a"); //get to the element that registers click event for change of locale.
+        TestUtils.Simulate.click(localeoption);
+        expect(flux.actions.changeLocale).toHaveBeenCalledWith(localeoption.title);
     });
 
     it('test search on change of searchtext', () => {

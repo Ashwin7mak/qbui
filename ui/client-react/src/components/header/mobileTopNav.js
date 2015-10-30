@@ -35,15 +35,15 @@ var MobileTopNav = React.createClass({
 
                 <div className="top">
                     <div className="navGroup left">
-                        <div className="navItem "><a className="iconLink" href="#" onClick={this.toggleNav}><Glyphicon glyph="menu-hamburger" /> </a></div>
+                        <div className="navItem "><a className="iconLink navToggleButton" href="#" onClick={this.toggleNav}><Glyphicon glyph="menu-hamburger" /> </a></div>
                     </div>
 
                     <div className="navGroup center">
-                        <div className="navItem">{this.props.title}</div>
+                        <div className="navItem navTitle">{this.props.title}</div>
                     </div>
 
                     <div className="navGroup right">
-                        <div className="navItem"><a className="iconLink" href="#" onClick={this.toggleSearch}>{searchIcon} </a></div>
+                        <div className="navItem"><a className="iconLink toggleSearchButton" href="#" onClick={this.toggleSearch}>{searchIcon} </a></div>
                     </div>
                 </div>
 

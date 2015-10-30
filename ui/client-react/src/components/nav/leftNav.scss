@@ -12,14 +12,14 @@
   }
 }
 
-@media (min-width:500px) and (max-width: 1024px) {
+@media (min-width:700px) and (max-width: 1024px) {
   /* For mobile phones: */
   .leftMenu.open {
     width:200px;
   }
 }
 
-@media (max-width: 500px) {
+@media (max-width: 700px) {
   /* For mobile phones: */
   .leftMenu.open {
     width:40px;
@@ -30,7 +30,7 @@
   }
 }
 
-@media (min-width: 500px) {
+@media (min-width: 700px) {
   /* hide tooltip if the left nav is showing labels (see above) */
   div.leftNavTooltip {
     display:none;

@@ -39,7 +39,11 @@ let MobileLeftNav = React.createClass({
 
     buildNavItem: function(item) {
 
-        let label = item.key ? item.key : item.name;
+        let label = item.name;
+        if (item.key) {
+            label = (<I18nMessage message={item.key}/>);
+        }
+
         let selectedClass = item.id && (item.id === this.props.reportID) ? 'selected' : '';
 
         return (
@@ -57,15 +61,15 @@ let MobileLeftNav = React.createClass({
             <div className={"mobileLeftMenu " + (this.props.open ? "open" : "closed")}>
                 <Nav stacked activeKey={1}>
 
-                    {this.props.items.map((item) => {
+                    {this.props.items ? this.props.items.map((item) => {
                         return item.heading ?
                             this.buildHeadingItem(item)  :
                             this.buildNavItem(item);
-                    })}
+                    }) : null}
 
-                    {this.buildHeadingItem({key: 'nav.reportsHeading'}, this.props.reportsData.loading)}
+                    {this.props.reportsData ? this.buildHeadingItem({key: 'nav.reportsHeading'}, this.props.reportsData.loading) : null}
 
-                    {this.props.reportsData.list ? this.props.reportsData.list.map((item) => {
+                    {this.props.reportsData && this.props.reportsData.list ? this.props.reportsData.list.map((item) => {
                         return this.buildNavItem(item);
                     }) : ''}
 
