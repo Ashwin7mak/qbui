@@ -24,98 +24,94 @@ const I18N_DATE = 30;
 const I18N_TIME = 31;
 const I18N_RELATIVE = 32;
 
-var Display = React.createClass({
+var DisplayI18n = React.createClass({
     mixins: [IntlMixin],
     render: function() {
         // message returned is as a string if the property type argument is invalid or undefined..
         switch (this.props.type) {
-        case I18N_MESSAGE:
-            return (<FormattedMessage {...this.props} message={this.getIntlMessage(this.props.message)}/>);
-        case I18N_NUMBER:
-            return (<FormattedNumber {...this.props}/>);
-        case I18N_DATE:
-            return (<FormattedDate {...this.props} />);
-        case I18N_TIME:
-            return (<FormattedTime {...this.props}/>);
-        case I18N_RELATIVE:
-            return (<FormattedRelative {...this.props}/>);
-        default:
-            logger.warn('Invalid/undefined i18n property type.  Returning as a FormattedMessage.  Input properties: ' + JSON.stringify(this.props.i18nProps));
+            case I18N_MESSAGE:
+                return (<FormattedMessage {...this.props} message={this.getIntlMessage(this.props.message)}/>);
+            case I18N_NUMBER:
+                return (<FormattedNumber {...this.props}/>);
+            case I18N_DATE:
+                return (<FormattedDate {...this.props} />);
+            case I18N_TIME:
+                return (<FormattedTime {...this.props}/>);
+            case I18N_RELATIVE:
+                return (<FormattedRelative {...this.props}/>);
+            default:
+                logger.warn('Invalid/undefined i18n property type.  Returning as a FormattedMessage.  Input properties: ' + JSON.stringify(this.props.i18nProps));
         }
 
         return (<FormattedMessage {...this.props} message={this.getIntlMessage(this.props.message)}/>);
     }
 });
 
-export var I18nDate = React.createClass({
-    mixins: [FluxMixin, StoreWatchMixin('NavStore')],
-
-    getStateFromFlux() {
-        let flux = this.getFlux();
-        return {
-            nav: flux.store('NavStore').getState()
-        };
-    },
-
-    render: function() {
-        const i18n = Locale.getI18nBundle();
-        return (<Display {...i18n} {...this.props} type={I18N_DATE}/>);
+//  Instead of creating a mixin to handle the flux lifecycle events needed in each i18n component(Date, Number, etc),
+//  created a wrapper class to handle the events and render the component that is passed as a parameter.
+class I18nFlux {
+    static renderMessage(Component) {
+        const fluxState = React.createClass({
+            mixins: [FluxMixin, StoreWatchMixin('NavStore')],
+            getStateFromFlux() {
+                let flux = this.getFlux();
+                return {
+                    nav: flux.store('NavStore').getState()
+                };
+            },
+            render() {
+                const i18n = Locale.getI18nBundle();
+                return (<Component {...i18n} {...this.props}/>);
+            }
+        });
+        return fluxState;
     }
-});
+}
 
-export var I18nMessage = React.createClass({
-    mixins: [FluxMixin, StoreWatchMixin('NavStore')],
-    getStateFromFlux() {
-        let flux = this.getFlux();
-        return {
-            nav: flux.store('NavStore').getState()
-        };
-    },
-    render: function() {
-        const i18n = Locale.getI18nBundle();
-        return (<Display {...i18n} {...this.props} type={I18N_MESSAGE}/>);
-    }
-});
+//  Render a date using current locale setting
+var I18nDate = I18nFlux.renderMessage(
+    React.createClass({
+        render: function() {
+            return (<DisplayI18n {...this.props} type={I18N_DATE}/>);
+        }
+    })
+);
 
-export var I18nNumber = React.createClass({
-    mixins: [FluxMixin, StoreWatchMixin('NavStore')],
-    getStateFromFlux() {
-        let flux = this.getFlux();
-        return {
-            nav: flux.store('NavStore').getState()
-        };
-    },
-    render: function() {
-        const i18n = Locale.getI18nBundle();
-        return (<Display {...i18n} {...this.props} type={I18N_NUMBER}/>);
-    }
-});
+//  Render a string message using current locale setting
+var I18nMessage = I18nFlux.renderMessage(
+    React.createClass({
+        render: function() {
+            return (<DisplayI18n {...this.props} type={I18N_MESSAGE}/>);
+        }
+    })
+);
 
-export var I18nTime = React.createClass({
-    mixins: [FluxMixin, StoreWatchMixin('NavStore')],
-    getStateFromFlux() {
-        let flux = this.getFlux();
-        return {
-            nav: flux.store('NavStore').getState()
-        };
-    },
-    render: function() {
-        const i18n = Locale.getI18nBundle();
-        return (<Display {...i18n} {...this.props} type={I18N_TIME}/>);
-    }
-});
+//  Render a number using current locale setting
+var I18nNumber = I18nFlux.renderMessage(
+    React.createClass({
+        render: function() {
+            return (<DisplayI18n {...this.props} type={I18N_NUMBER}/>);
+        }
+    })
+);
 
-export var I18nRelative = React.createClass({
-    mixins: [FluxMixin, StoreWatchMixin('NavStore')],
-    getStateFromFlux() {
-        let flux = this.getFlux();
-        return {
-            nav: flux.store('NavStore').getState()
-        };
-    },
-    render: function() {
-        const i18n = Locale.getI18nBundle();
-        return (<Display {...i18n} {...this.props} type={I18N_RELATIVE}/>);
-    }
-});
+//  Render time using current locale setting
+var I18nTime = I18nFlux.renderMessage(
+    React.createClass({
+        render: function() {
+            return (<DisplayI18n {...this.props} type={I18N_TIME}/>);
+        }
+    })
+);
+
+var I18nRelative = I18nFlux.renderMessage(
+    React.createClass({
+        render: function() {
+            return (<DisplayI18n {...this.props} type={I18N_RELATIVE}/>);
+        }
+    })
+);
+
+//  export the 5 support i18n data types
+export {I18nMessage, I18nDate, I18nTime, I18nNumber, I18nRelative};
 
