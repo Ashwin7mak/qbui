@@ -26,16 +26,7 @@
 
         var routeMapper = require('./routes/qbRouteMapper')(config);
 
-        //  START TEMPORARY -- while we support Angular lighthouse..
-        var clientConsts = require('./config/environment/clientConsts');
-        if (clientConsts.REACT === config.client) {
-            require('./routes/qbClientRoutes')(app, config);
-        } else {
-            require('./routes/qbAngularRoutes')(app, config);
-        }
-        //  NOTE: Remove above conditional block and load just the client routes(qbClientRoutes) when Angular code is removed.
-        //  END TEMPORARY.
-
+        require('./routes/qbClientRoutes')(app, config);
         require('./routes/qbApiRoutes')(app, config, routeMapper);
 
         // unauthorized
