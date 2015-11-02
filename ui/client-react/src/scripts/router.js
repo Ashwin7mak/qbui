@@ -1,3 +1,6 @@
+import Intl from 'intl';
+import en from 'intl/locale-data/jsonp/en.js';
+
 import React from 'react';
 import {render} from 'react-dom';
 import {Router, Route, IndexRoute} from 'react-router';

@@ -64,7 +64,7 @@ let LeftNav = React.createClass({
                             this.buildHeadingItem(item) :
                             this.buildNavItem(item);
                     }) : null}
-                    {this.props.reportsData ? this.buildHeadingItem({key: 'nav.reportsHeading'}, this.props.reportsData.loading): null}
+                    {this.props.reportsData ? this.buildHeadingItem({key: 'nav.reportsHeading'}, this.props.reportsData.loading) : null}
                     {this.props.reportsData && this.props.reportsData.list ? this.props.reportsData.list.map((item) => {
                         return this.buildNavItem(item);
                     }) : ''}

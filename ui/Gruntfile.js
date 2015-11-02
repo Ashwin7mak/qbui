@@ -1,6 +1,8 @@
 // Generated on 2015-02-24 using generator-angular-fullstack 2.0.13
 var path = require('path');
 
+/*eslint-disable no-invalid-this */
+
 module.exports = function(grunt) {
     'use strict';
 
@@ -567,10 +569,17 @@ module.exports = function(grunt) {
 
         // Karma tests..use configuration file to determine what is run
         karma: {
-            unit: {
+            options: {
                 colors    : useColors,
-                configFile: 'karma.conf.js',
+                configFile: 'karma.conf.js'
+            },
+            unit: {
+                browsers: ["PhantomJS"],
                 singleRun : true
+            },
+            devunit: {
+                browsers: ["Chrome"],
+                singleRun : false
             }
         },
 
@@ -648,12 +657,14 @@ module.exports = function(grunt) {
             },
             local              : {
                 options: {
-                    configFile: './e2e/config/local.protractor.conf.js'
+                    configFile: './e2e/config/local.protractor.conf.js',
+                    baseUrl   : baseUrl
                 }
             },
             local_data_gen : {
                 options: {
-                    configFile: './e2e/config/local.dataGen.protractor.conf.js'
+                    configFile: './e2e/config/local.dataGen.protractor.conf.js',
+                    baseUrl   : baseUrl
                 }
             }
         },
@@ -794,7 +805,7 @@ module.exports = function(grunt) {
     grunt.registerTask('wait', function() {
         grunt.log.ok('Waiting for server reload...');
 
-        var done = async();
+        var done = this.async();
 
         setTimeout(function() {
             grunt.log.writeln('Done waiting!');
@@ -834,7 +845,7 @@ module.exports = function(grunt) {
     });
 
     grunt.registerTask('express-keepalive', 'Keep grunt running', function() {
-        async();
+        this.async();
     });
 
     grunt.registerTask('serve', function(target) {
@@ -961,17 +972,6 @@ module.exports = function(grunt) {
                 'mochaTest:integration'
             ]);
         }
-        if (target === 'client-wip') {
-            //client unit tests
-            return grunt.task.run([
-                'clean:client',
-                'concurrent:test',
-                'autoprefixer',
-                'wiredep:test',
-                'karma:unit',
-                'fixCoveragePaths'
-            ]);
-        }
         if (target === 'client') {
             //client dummy placeholder
             return grunt.task.run([
@@ -979,7 +979,7 @@ module.exports = function(grunt) {
                 'concurrent:test',
                 'autoprefixer',
                 'wiredep:test',
-                //'karma:unit',
+                'karma:unit',
                 'fixCoveragePaths'
             ]);
         }
@@ -1028,7 +1028,8 @@ module.exports = function(grunt) {
             'codeStandards',
             // run unit tests
             'test:client',
-            'test:server'
+            //'test:server' // no coverage
+            'test:coverage' // server with coverage
         ]);
 
     });
@@ -1100,7 +1101,7 @@ module.exports = function(grunt) {
             logger          : console.log
         });
 
-        var done = async();
+        var done = this.async();
 
         var tunnel = {};
         sauceConnect.setOptions(options);
@@ -1116,7 +1117,7 @@ module.exports = function(grunt) {
     });
 
     grunt.registerTask('sauce-connect-close', 'Closes the current Sauce Connect tunnel', function() {
-        sauceConnect.close(async());
+        sauceConnect.close(this.async());
     });
 
     grunt.registerTask('lint', 'Run eslint on code', function(){
