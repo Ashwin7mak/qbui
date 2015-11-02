@@ -844,9 +844,6 @@ module.exports = function(grunt) {
         //copy current modules to prod modules dir
         grunt.task.run(['copy:modulesProd']);
 
-        //prune the dev modules
-        grunt.task.run(['shell:modulesPrune']);
-
     });
 
     grunt.loadNpmTasks('grunt-shell-spawn');

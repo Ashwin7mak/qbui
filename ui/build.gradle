@@ -119,6 +119,13 @@ task npmPruneProduction (type: NpmTask) {
     }
 }
 
+task npmInstallProduction (type: NpmTask) {
+    args = ['install', '--production']
+    execOverrides {
+        it.workingDir = cwd + "/dist"
+    }
+}
+
 task npmRebuildJpegtran (type: NpmTask) {
     args =['rebuild', 'jpegtran-bin']
 }
@@ -176,6 +183,10 @@ task gruntMakeProdNodeModules(type: GruntTask) {
     args = ["makeProdNodeModules"]
 }
 
+task deleteDistModules(type: Delete) {
+    delete "dist/node_modules"
+}
+
 task installExpress(type: NpmTask) {
     // install the express package only
     args = ['install', 'express', '--save-dev']
@@ -197,11 +208,11 @@ task invokeCheckForApiUp(type:Exec) {
 //  Define task dependencies
 //******************************************************
 
-zip.dependsOn clean, gruntMakeProdNodeModules
+zip.dependsOn clean, npmInstallProduction
 build.dependsOn clean, grunt_build
 clean.dependsOn grunt_clean, cleanBuildDir
 test.dependsOn clean, gruntUnitTestsNoColor
-gruntMakeProdNodeModules.dependsOn clean, grunt_build
+npmInstallProduction.dependsOn grunt_build
 
 // the directory for nightly builds used to release from
 project.group = "build_rpms"
