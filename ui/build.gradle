@@ -265,7 +265,7 @@ sonarRunner {
 
     sonarProperties{
         // the user name becomes part of the project key, this way Jenkins builds are separated from the commoners, meaning you...
-        // for UI we analyse the angulr client and the nodejs server as 2 modules
+        // for UI we analyse the react client and the nodejs server as 2 modules
         // see: http://docs.codehaus.org/display/SONAR/Analyzing+with+SonarQube+Runner#AnalyzingwithSonarQubeRunner-Multi-moduleProject
         property "sonar.projectKey", "ui:${branchName}:${user}"
         property "sonar.projectVersion", "0.1"
@@ -278,10 +278,10 @@ sonarRunner {
         property "sonar.sources", "."
         property "sonar.modules", "client-react,server"
         property "sonar.coverage.exclusions", "**/*.spec.js"
-
         property "client-react.sonar.projectName", "${user}:ui:${branchName}:client"
         property "client-react.sonar.sources", "$projectDir/client-react/src"
         property "client-react.sonar.exclusions", "**/css/**"
+
         //  import the ui LCOV coverage report
         property "client-react.sonar.javascript.lcov.reportPath","${projectDir}/build/reports/client/coverage/lcov.info"
 

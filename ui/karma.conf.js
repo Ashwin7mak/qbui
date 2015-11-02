@@ -96,7 +96,7 @@ module.exports = function(config) {
         // - Safari (only Mac)
         // - PhantomJS
         // - IE (only Windows)
-        browsers: ["Chrome", "PhantomJS"],
+        browsers: ["PhantomJS"],
 
         reporters: ["progress", "mocha", "coverage", "junit"],
 

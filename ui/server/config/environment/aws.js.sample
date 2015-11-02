@@ -9,11 +9,7 @@
     var dateUtils = require('../../components/utility/dateUtils');
     var clientConsts = require('./clientConsts');
 
-    //Temporary angular default for ci until we deploy react
-    var client = clientConsts.ANGULAR;
-    if (process.env.CLIENT) {
-        client = process.env.CLIENT;
-    }
+    var client = clientConsts.REACT;
 
     module.exports = {
 

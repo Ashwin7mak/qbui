@@ -95,22 +95,14 @@
                 config.ip = 'localhost';
             }
         }
-        //   runs angular client
+        //   allows for ability to run multiple clients...right now only REACT
         var client = config.client;
-        //  START TEMPORARY -- while we support Angular lighthouse..
-        if (clientConsts.ANGULAR === client) {
-            app.use(express.static(path.join(config.root, '.tmp')));
-            app.use(express.static(path.join(config.root, 'client')));
-            app.set('appPath', config.root + '/client');
-            //  Error handler - has to be last.
-            app.use(errorHandler());
-            //  END TEMPORARY
-        } else if (clientConsts.REACT === client) {
-            app.use(express.static(path.join(config.root, 'client-react')));
-            app.set('appPath', config.root + '/client-react');
-            //  Error handler - has to be last.
-            app.use(errorHandler());
-        }
+
+        //  LOAD THE REACT CLIENT
+        app.use(express.static(path.join(config.root, 'client-react')));
+        app.set('appPath', config.root + '/client-react');
+        //  Error handler - has to be last.
+        app.use(errorHandler());
 
         return config;
     };

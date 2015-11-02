@@ -4,8 +4,7 @@
 (function() {
     'use strict';
     module.exports = Object.freeze({
-        REACT  : 'REACT',
-        ANGULAR: 'ANGULAR'
+        REACT  : 'REACT'
     });
 
 }());

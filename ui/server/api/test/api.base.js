@@ -269,7 +269,7 @@
                                       //TODO: tickets come back quoted, invalid JSON, we regex the quotes away.  hack.
                                 self.authTicket = authResponse.body.replace(/"/g, '');
                                 var realmPromise;
-                                if (config.realmToUse) {
+                                if (config && config.realmToUse) {
                                     realmPromise = self.getRealm(config.realmToUse);
                                 } else {
                                     realmPromise = self.createRealm();

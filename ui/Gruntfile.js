@@ -1,4 +1,5 @@
-// Generated on 2015-02-24 using generator-angular-fullstack 2.0.13
+//
+//
 var path = require('path');
 
 /*eslint-disable no-invalid-this */
@@ -6,66 +7,68 @@ var path = require('path');
 module.exports = function(grunt) {
     'use strict';
 
+    var currentDateTime = new Date().getTime();
+
+    var baseUrl = grunt.option('baseUrl') || 'http://localhost:9000';
     var buildDir =  path.join(__dirname, '/build');
     var localJsFile =  path.join(__dirname, '/server/config/environment/local.js');
+
     var serverReportDir = buildDir + '/reports/server';
     var clientReportDir = buildDir + '/reports/client';
+
     var mochaUnitTest = grunt.option('test') || '*.unit.spec.js';
     var mochaIntTest = grunt.option('test') || '*.integration.spec.js';
-    var baseUrl = grunt.option('baseUrl') || 'http://localhost:9000';
+
+    //  If the run-time environment variable is not set, will set to a local environment
+    //  configuration file, BUT ONLY if one is found....which should mean we are on a
+    //  developer's machine.
+    //
+    //  NOTE: this needs to get checked/set prior to the sauce labs setup.
+    //
+    if (!process.env.NODE_ENV) {
+        if (grunt.file.exists(localJsFile)) {
+            grunt.log.writeln('NODE_ENV not set...defaulting to LOCAL.');
+            process.env.NODE_ENV = 'local';
+        }
+    }
+
+    grunt.log.writeln('NODE_ENV: ' + process.env.NODE_ENV);
+
     var sauceConnect = require('./e2e/sauce_connect');
-    var currentDateTime = new Date().getTime();
-    var tunnelIdentifier = grunt.option('tunnelIdentifier') || 'tunnel_' + currentDateTime;
     var sauceJobName = grunt.option('sauceJobName') || 'e2e_' + currentDateTime;
     var sauceKey = grunt.option('sauceKey');
+
+    var tunnelIdentifier = grunt.option('tunnelIdentifier') || 'tunnel_' + currentDateTime;
     //We need to pass along --proxy-tunnel so that the tunnel will also use the proxy to communicate with the sauce apis
     //sauce-connect-launcher won't take an explicit no arg argument, so we are "leveraging" their mechanism for passing
     //arguments along to sauce-connect-launcher
     var httpProxy = grunt.option('httpProxyHost') !== undefined ? grunt.option('httpProxyHost') + ':80 --proxy-tunnel' : null;
     var useColors = grunt.option('colors') || false;
+
+    //  webpack is our module builder
     var webpack = require('webpack');
     var webpackConfig = require('./webpack.config.js');
 
-    // specify client env var of default will use REACT
-    var client = (process.env.CLIENT && process.env.CLIENT === 'ANGULAR') ? 'ANGULAR' : 'REACT';
+    // define the source client(REACT) folder hierarchy...
     function updateClientRoot() {
-        var clientRoot = 'client';
-        var answer = {};
-        if (client === 'REACT') {
-            //react tree
-            clientRoot = 'client-react';
-            answer = {
-                root : clientRoot,
-                components: clientRoot + '/src',
-                gallery   : clientRoot + '/gallery',
-                assets    : clientRoot + '/assets',
-                src    : clientRoot + '/src',
-                gen    : clientRoot + '/dist'
-            };
-        } else {
-            //angular tree
-            clientRoot = 'client';
-            answer = {
-                root : clientRoot,
-                components: clientRoot + '/quickbase',
-                gallery   : clientRoot + '/gallery',
-                assets    : clientRoot + '/quickbase/assets',
-                src    : clientRoot + '/quickbase',
-                gen    : clientRoot + '/dist'
-            };
-        }
-        var msg = 'clientRoot' + JSON.stringify(answer);
-        grunt.log.writeln(msg);
-        return answer;
-    }
+        var clientRoot = 'client-react';
+        var folderHierarchy = {
+            root : clientRoot,
+            components: clientRoot + '/src',
+            assets    : clientRoot + '/src/assets',
+            src    : clientRoot + '/src',
+            gen    : clientRoot + '/dist'
+        };
 
+        var msg = 'clientRoot' + JSON.stringify(folderHierarchy);
+        grunt.log.writeln(msg);
+
+        return folderHierarchy;
+    }
 
     // Load grunt tasks automatically, when needed
     require('jit-grunt')(grunt, {
         express      : 'grunt-express-server',
-        useminPrepare: 'grunt-usemin',
-        ngtemplates  : 'grunt-angular-templates',
-        //cdnify: 'grunt-google-cdn',
         protractor   : 'grunt-protractor-runner',
         injector     : 'grunt-asset-injector',
         buildcontrol : 'grunt-build-control'
@@ -122,8 +125,8 @@ module.exports = function(grunt) {
         watch    : {
             mochaTest : {
                 files: ['<%= express.root %>/**/*.spec.js',
-                        '<%= express.root %>/**/test/**/*.js',
-                        '<%= express.root %>/**/*.js'
+                    '<%= express.root %>/**/test/**/*.js',
+                    '<%= express.root %>/**/*.js'
                 ],
                 tasks: ['env:local', 'newer:lint', 'mochaTest:test']
             },
@@ -163,10 +166,6 @@ module.exports = function(grunt) {
                     nospawn   : true //Without this option specified express won't be reloaded
                 }
             },
-            sass      : {  //watch for changes to scss files to trigger compass compilation
-                files: '<%= quickbase.client.root %>/**/*.scss',
-                tasks: ['compass-compile']
-            },
             reactapp: {
                 files: ['Gruntfile.js', '<%= quickbase.client.src %>/**/*'],
                 tasks: ['webpack:build-dev'],
@@ -196,8 +195,6 @@ module.exports = function(grunt) {
                 files: [{
                     dot: true,
                     src: [
-                        '<%= quickbase.client.assets %>/css/*.*',
-                        '<%= quickbase %>/css/*.*',
                         clientReportDir + '/coverage/*',
                         clientReportDir + '/unit/*'
                     ]
@@ -273,218 +270,8 @@ module.exports = function(grunt) {
             }
         },
 
-        // Automatically inject Bower components into the app
-        wiredep: {
-            app : {
-                src       : '<%= quickbase.client.root %>/*.index.html',
-                ignorePath: '<%= quickbase.client.root %>/',
-                exclude   : [/bootstrap-sass-official/, /bootstrap.js/, '/json3/', '/es5-shim/', /bootstrap.css/, /font-awesome.css/]
-            },
-            test: {
-                src            : 'karma.conf.js',
-                ignorePath     : /\.\.\//,
-                devDependencies: true,
-                fileTypes      : {
-                    js: {
-                        block  : /(([\s\t]*)\/\/\s*startbower:*(\S*))(\n|\r|.)*?(\/\/\s*endbower:)/gi,
-                        detect : {
-                            js: /'(.*\.js)'/gi
-                        },
-                        replace: {
-                            js: '\'{{filePath}}\','
-                        }
-                    }
-                }
-            }
-        },
-
-        // Renames files for browser caching purposes
-        rev: {
-            dist: {
-                files: {
-                    src: [
-                        '<%= quickbase.distPublic %>/quickbase/{,*/}*.js',
-                        '<%= quickbase.distPublic %>/quickbase/{,*/}*.css'
-                    ]
-                }
-            }
-        },
-
-        // Reads HTML for usemin blocks to enable smart builds that automatically
-        // concat, minify and revision files.
-        //
-        // Creates configurations in memory so additional tasks can operate on them
-        //
-        // NOTE: the task scans the html files to identify what to process.  Format of tags is:
-        //   <!-- build:<type>(alternate search path) <path> -->
-        //       ...
-        //   <!-- endbuild -->
-        //
-        //   For example:
-        //   <!-- build:js quickbase/apps.common.js -->
-        //      <script src="common_components/logger/log.js"></script>
-        //   <!-- endbuild -->
-        useminPrepare: {
-            html   : [
-                '<%= quickbase.client.root %>/*.index.html', '!<%= quickbase.client.root %>/gallery/*.index.html'],         // look for entry point html files
-            options: {
-                dest: '<%= quickbase.distPublic %>'
-            }
-        },
-
-        // Performs rewrites based on rev and the useminPrepare configuration
-        //
-        usemin: {
-            html   : ['<%= quickbase.distPublic %>/{,*/}*.html'],
-            css    : ['<%= quickbase.distPublic %>/{,*/}*.css'],
-            js     : ['<%= quickbase.distPublic %>/{,*/}*.js'],
-            options: {
-                assetsDirs: [
-                    '<%= quickbase.distPublic %>',
-                    '<%= quickbase.distPublic %>/assets/images'
-                ],
-                // This is so we update image references in our ng-templates
-                patterns  : {
-                    js: [
-                        [/(assets\/images\/.*?\.(?:gif|jpeg|jpg|png|webp|svg))/gm, 'Update the JS to reference our revved images']
-                    ]
-                }
-            }
-        },
-
-        // The following *-min tasks produce minified files in the dist folder
-        imagemin: {
-            dist: {
-                files: [{
-                    expand: true,
-                    cwd   : '<%= quickbase.client.root %>/',
-                    src   : '{,*/}*.{png,jpg,jpeg,gif}',
-                    dest  : '<%= quickbase.distPublic %>/assets/images'
-                }]
-            }
-        },
-
-        svgmin: {
-            dist: {
-                files: [{
-                    expand: true,
-                    cwd   : '<%= quickbase.client.root %>/',
-                    src   : '{,*/}*.svg',
-                    dest  : '<%= quickbase.distPublic %>/assets/images'
-                }]
-            }
-        },
-
-        // Allow the use of non-minsafe AngularJS files. Automatically makes it
-        // minsafe compatible so Uglify does not destroy the ng references
-        ngAnnotate: {
-            dist: {
-                files: [{
-                    expand: true,
-                    cwd   : '.tmp/concat',
-                    src   : '*/**.js',
-                    dest  : '.tmp/concat'
-                }]
-            }
-        },
-
-        // Package all the html partials into a single javascript payload
-        //
-        // Each quickBase angular app (quickbase.realm, quickbase.qbapp, etc.) to have their own definition block
-        ngtemplates: {
-            'quickbase.realm' : {
-                cwd    : '<%= quickbase.client.root %>',
-                src    : ['quickbase/common/**/*.html',
-                    'quickbase/realm/**/*.html'],     // look for all html files required for this angular application
-                dest   : '.tmp/realmTemplates.js',
-                options: {
-                    usemin: 'quickbase/realm.js'        // maps to reference in realm.index.html
-                }
-            },
-            'quickbase.qbapp' : {
-                cwd    : '<%= quickbase.client.root %>',
-                src    : ['quickbase/common/**/*.html',
-                    'quickbase/qbapp/**/*.html'],     // look for all html files required for this angular application
-                dest   : '.tmp/appTemplates.js',
-                options: {
-                    usemin: 'quickbase/qbapp.js'        // maps to reference in app.index.html
-                }
-            },
-            'quickbase.report': {
-                cwd    : '<%= quickbase.client.root %>',
-                src    : ['quickbase/common/**/*.html',
-                    'quickbase/qbapp/reports/reportManager/**/*.html'],     // look for all html files required for this angular application
-                dest   : '.tmp/reportTemplates.js',
-                options: {
-                    usemin: 'quickbase/report.js'        // maps to reference in report.index.html
-                }
-            },
-            options           : {
-                htmlmin: {
-                    collapseBooleanAttributes    : true,
-                    collapseWhitespace           : true,
-                    removeAttributeQuotes        : true,
-                    removeEmptyAttributes        : true,
-                    removeRedundantAttributes    : true,
-                    removeScriptTypeAttributes   : true,
-                    removeStyleLinkTypeAttributes: true
-                }
-            },
-            tmp               : {
-                cwd : '.tmp',
-                src : ['**/*.html'],
-                dest: '.tmp/tmp-templates.js'
-            }
-        },
-
-        // Replace Google CDN references
-        //cdnify: {
-        //    dist: {
-        //        html: ['<%= quickbase.distPublic %>/*.html']
-        //    }
-        //},
-
         // Copies remaining files to places other tasks can use
         copy: {
-            angularDist  : {
-                files: [{
-                    expand: true,
-                    dot   : true,
-                    cwd   : '<%= quickbase.client.root %>',
-                    dest  : '<%= quickbase.distPublic %>',
-                    src   : [
-                        '*.{ico,png,txt}',
-                        '.htaccess',
-                        'bower_components/**/*',
-                        '*.index.html',
-                        '!gallery.index.html',
-                        '!**/gallery/*'
-                    ]
-                }, {
-                    //  copy icon files that are not in the sprites folder
-                    flatten: true,
-                    expand : true,
-                    cwd    : '<%= quickbase.client.assets %>',
-                    dest   : '<%= quickbase.distPublic %>/quickbase/assets',
-                    src    : ['**/images-*.*']
-                }, {
-                    //  copy the sprites folder
-                    flatten: false,
-                    expand : true,
-                    cwd    : '<%= quickbase.client.assets %>',
-                    dest   : '<%= quickbase.distPublic %>/quickbase',
-                    src    : [
-                        '**/sprites/**.*'
-                    ]
-                }, {
-                    expand: true,
-                    dest  : '<%= quickbase.distDir %>',
-                    src   : [
-                        'package.json',
-                        '<%= express.root %>/**/*'
-                    ]
-                }]
-            },
             styles: {
                 expand: true,
                 cwd   : ['<%= quickbase.client.assets %>/'],
@@ -498,25 +285,26 @@ module.exports = function(grunt) {
                 dest   :'<%= quickbase.distDir %>/node_modules'
             },
             reactDist : {
-                files: [{
-                    expand : true,
-                    dot   : true,
-                    cwd   : '<%= quickbase.client.root %>',
-                    dest  : '<%= quickbase.distPublic %>',
-                    src   : [
-                        '*.{ico,png,txt}',
-                        'dist/**/*',
-                        'index.html'
-                    ]
-                },
-                {
-                    expand: true,
-                    dest  : '<%= quickbase.distDir %>',
-                    src   : [
-                        'package.json',
-                        '<%= express.root %>/**/*'
-                    ]
-                }
+                files: [
+                    {
+                        expand : true,
+                        dot   : true,
+                        cwd   : '<%= quickbase.client.root %>',
+                        dest  : '<%= quickbase.distPublic %>',
+                        src   : [
+                            '*.{ico,png,txt}',
+                            'dist/**/*',
+                            'index.html'
+                        ]
+                    },
+                    {
+                        expand: true,
+                        dest  : '<%= quickbase.distDir %>',
+                        src   : [
+                            'package.json',
+                            '<%= express.root %>/**/*'
+                        ]
+                    }
                 ]
             }
         },
@@ -545,12 +333,6 @@ module.exports = function(grunt) {
 
         // Run some tasks in parallel to speed up the build process
         concurrent: {
-            server: [
-                'compass:dev'
-            ],
-            test  : [
-                'compass:dev'
-            ],
             debug : {
                 tasks  : [
                     'nodemon',
@@ -559,12 +341,7 @@ module.exports = function(grunt) {
                 options: {
                     logConcurrentOutput: true
                 }
-            },
-            dist  : [
-                'compass:dist',
-                'imagemin',
-                'svgmin'
-            ]
+            }
         },
 
         // Karma tests..use configuration file to determine what is run
@@ -678,7 +455,6 @@ module.exports = function(grunt) {
                 SAUCE_KEY                   : sauceKey,
                 //for the test env, we need to thwart the proxy
                 http_proxy                  : '',
-                //for the test env, we need to thwart the proxy
                 https_proxy                 : ''
             },
             e2e  : {
@@ -704,22 +480,6 @@ module.exports = function(grunt) {
             }
         },
 
-        compass: {
-            options: {
-                config: 'config.rb'
-            },
-            //  set the run-time environment for config.rb
-            dist   : {
-                options: {
-                    environment: 'production'
-                }
-            },
-            dev    : {
-                options: {
-                    environment: 'development'
-                }
-            }
-        },
         shell: {
             lint: {
                 // Make sure code styles are up to par and there are no obvious mistakes
@@ -796,8 +556,6 @@ module.exports = function(grunt) {
     });
     //------------END OF initConfig
 
-
-
     // Production build
     grunt.registerTask('webpackbuild', ['webpack:build']);
 
@@ -833,17 +591,6 @@ module.exports = function(grunt) {
         ]);
     });
 
-    grunt.registerTask('compass-compile', 'Compass compile', function() {
-        grunt.task.run([
-            'compass:dev'
-        ]);
-    });
-    grunt.registerTask('compass-watch', 'Compass watch', function() {
-        grunt.task.run([
-            'watch:sass'
-        ]);
-    });
-
     grunt.registerTask('express-keepalive', 'Keep grunt running', function() {
         this.async();
     });
@@ -863,36 +610,21 @@ module.exports = function(grunt) {
             return grunt.task.run([
                 'clean:server',
                 'env:local',
-                'concurrent:server',
-                'wiredep:app',
                 'autoprefixer',
                 'concurrent:debug'
             ]);
         }
-        if (client === 'ANGULAR') {
-            grunt.task.run([
-                'clean:server',
-                'env:local',
-                'concurrent:server',
-                'wiredep:app',
-                'autoprefixer',
-                'express:local',
-                'wait',
-                'open',
-                'watch'
-            ]);
-        } else {
-            grunt.task.run([
-                'clean:server',
-                'shell:webpack',
-                'env:local',
-                'concurrent:server',
-                'express:local',
-                'wait',
-                'open',
-                'watch'
-            ]);
-        }
+
+        grunt.task.run([
+            'clean:server',
+            'shell:webpack',
+            'env:local',
+            'express:local',
+            'wait',
+            'open',
+            'watch'
+        ]);
+
     });
 
     grunt.registerTask('server', function() {
@@ -933,15 +665,6 @@ module.exports = function(grunt) {
         grunt.file.mkdir(serverReportDir + '/unit/');
         grunt.file.mkdir(serverReportDir + '/integration/');
 
-        //  If the run-time environment variable is not set, will set to local
-        //  but only if the file is defined (which should be only on a developer's machine).
-        if (!process.env.NODE_ENV) {
-            grunt.log.writeln('NODE_ENV not set defaulting to local');
-            if (grunt.file.exists(localJsFile)) {
-                grunt.task.run(['env:local']);
-            }
-        }
-
         if (target === 'server') {
             //server unit tests
             return grunt.task.run([
@@ -950,12 +673,14 @@ module.exports = function(grunt) {
                 'mochaTest:test'
             ]);
         }
+
         if (target === 'testGen') {
             //testGen unit tests
             return grunt.task.run([
                 'mochaTest:testGen'
             ]);
         }
+
         if (target === 'coverage') {
             //server unit tests
             return grunt.task.run([
@@ -964,6 +689,7 @@ module.exports = function(grunt) {
                 'mocha_istanbul:coverage'
             ]);
         }
+
         if (target === 'integration') {
             //server integration tests
             return grunt.task.run([
@@ -972,13 +698,22 @@ module.exports = function(grunt) {
                 'mochaTest:integration'
             ]);
         }
+
+        if (target === 'client-wip') {
+            //client unit tests
+            return grunt.task.run([
+                'clean:client',
+                'autoprefixer',
+                'karma:unit',
+                'fixCoveragePaths'
+            ]);
+        }
+
         if (target === 'client') {
             //client dummy placeholder
             return grunt.task.run([
                 'clean:client',
-                'concurrent:test',
                 'autoprefixer',
-                'wiredep:test',
                 'karma:unit',
                 'fixCoveragePaths'
             ]);
@@ -1005,8 +740,6 @@ module.exports = function(grunt) {
         if (target === 'e2eLocal') {
             return grunt.task.run([
                 'clean:server',
-                'concurrent:test',
-                'wiredep:app',
                 'autoprefixer',
                 'protractor:local'
             ]);
@@ -1015,8 +748,6 @@ module.exports = function(grunt) {
         if (target === 'e2eDataGen') {
             return grunt.task.run([
                 'clean:server',
-                'concurrent:test',
-                'wiredep:app',
                 'autoprefixer',
                 'protractor:local_data_gen'
             ]);
@@ -1053,36 +784,16 @@ module.exports = function(grunt) {
         'test'
     ]);
 
-
     grunt.registerTask('ciIntegration', [
         'env:test',
         'test:integration'
     ]);
 
-    if (client === 'ANGULAR') {
-        grunt.registerTask('build', [
-            'clean:dist',
-            'concurrent:dist',
-            'wiredep:app',
-            'useminPrepare',
-            'autoprefixer',
-            'ngtemplates',
-            'concat',
-            'ngAnnotate',
-            'copy:angularDist',
-            //'cdnify',
-            'cssmin',
-            'uglify',
-            'rev',
-            'usemin'
-        ]);
-    } else {
-        grunt.registerTask('build', [
-            'clean:dist',
-            'webpackbuild',
-            'copy:reactDist'
-        ]);
-    }
+    grunt.registerTask('build', [
+        'clean:dist',
+        'webpackbuild',
+        'copy:reactDist'
+    ]);
 
     grunt.registerTask('default', [
         'newer:lint',
