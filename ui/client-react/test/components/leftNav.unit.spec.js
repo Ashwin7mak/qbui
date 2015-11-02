@@ -8,7 +8,7 @@ import LeftNav from '../../src/components/nav/leftNav';
 var I18nMessageMock = React.createClass({
     render: function() {
         return (
-            <div>mock message</div>
+            <div>{this.props.message}</div>
         );
     }
 });
@@ -130,7 +130,7 @@ describe('Left Nav functions', () => {
         expect(navLink.length).toEqual(2);
         let headings = TestUtils.scryRenderedDOMComponentsWithClass(component,"heading");
         expect(headings.length).toEqual(1);
-        expect(headings[0].textContent).toMatch("mock message");
+        expect(headings[0].textContent).toMatch(testdata_items.items[0].key);
     });
 
     it('test renders closed heading item', () => {
