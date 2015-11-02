@@ -42,6 +42,11 @@ const params = {
         appId: "abcd1",
         tblId: "xyz1",
         rptId: 1
+    },
+    "changed": {
+        appId: "abcd2",
+        tblId: "xyz2",
+        rptId: 2
     }
 };
 
@@ -53,15 +58,18 @@ describe('Dashboard functions', () => {
 
     let flux = {
         actions:{
+            loadReport: function() {return;}
         }
     };
 
     beforeEach(() => {
         Dashboard.__Rewire__('ReportContent', ContentMock);
+        spyOn(flux.actions, 'loadReport');
     });
 
     afterEach(() => {
         Dashboard.__ResetDependency__('ReportContent', ContentMock);
+        flux.actions.loadReport.calls.reset();
     });
 
     it('test render of component', () => {
@@ -75,21 +83,45 @@ describe('Dashboard functions', () => {
         component = TestUtils.renderIntoDocument(<Dashboard flux={flux} reportData={fakeReportData} params={params.noapp}/>);
         expect(TestUtils.isCompositeComponent(component)).toBeTruthy();
         expect(TestUtils.scryRenderedComponentsWithType(component, ContentMock).length).toEqual(4);
+        expect(flux.actions.loadReport).not.toHaveBeenCalled();
     });
     it('test render of report with no tbl', () => {
         component = TestUtils.renderIntoDocument(<Dashboard flux={flux} reportData={fakeReportData} params={params.notbl}/>);
         expect(TestUtils.isCompositeComponent(component)).toBeTruthy();
         expect(TestUtils.scryRenderedComponentsWithType(component, ContentMock).length).toEqual(4);
+        expect(flux.actions.loadReport).not.toHaveBeenCalled();
     });
     it('test render of report with no rpt', () => {
         component = TestUtils.renderIntoDocument(<Dashboard flux={flux} reportData={fakeReportData} params={params.norpt}/>);
         expect(TestUtils.isCompositeComponent(component)).toBeTruthy();
         expect(TestUtils.scryRenderedComponentsWithType(component, ContentMock).length).toEqual(4);
+        expect(flux.actions.loadReport).not.toHaveBeenCalled();
     });
     it('test render of report with valid params', () => {
         component = TestUtils.renderIntoDocument(<Dashboard flux={flux} reportData={fakeReportData} params={params.valid}/>);
         expect(TestUtils.isCompositeComponent(component)).toBeTruthy();
         expect(TestUtils.scryRenderedComponentsWithType(component, ContentMock).length).toEqual(4);
+        expect(flux.actions.loadReport).not.toHaveBeenCalled();
     });
 
+    it('test render of report with updated params', () => {
+        var TestParent = React.createFactory(React.createClass({
+            getInitialState() {
+                return {
+                    params: params.valid
+                };
+            },
+            render() {
+                return <Dashboard flux={flux} reportData={fakeReportData} params={this.state.params}/>;
+            }
+        }));
+
+        var parent = TestUtils.renderIntoDocument(TestParent());
+
+        parent.setState({
+            params: params.changed
+        });
+
+        expect(flux.actions.loadReport).toHaveBeenCalledWith(params.changed.appId, params.changed.tblId, params.changed.rptId, true);
+    });
 });

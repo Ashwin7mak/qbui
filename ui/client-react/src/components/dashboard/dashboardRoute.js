@@ -11,6 +11,10 @@ let FluxMixin = Fluxxor.FluxMixin(React);
 var DashboardRoute = React.createClass({
     mixins: [FluxMixin],
 
+    loadReport(appId, tblId, rptId) {
+        let flux = this.getFlux();
+        flux.actions.loadReport(appId, tblId, rptId, true);
+    },
     // Triggered when properties change
     componentWillReceiveProps: function(props) {
 
@@ -28,8 +32,7 @@ var DashboardRoute = React.createClass({
 
             if (appId && tblId && rptId) {
                 logger.debug('Loading report. AppId:' + appId + ' ;tblId:' + tblId + ' ;rptId:' + rptId);
-                let flux = this.getFlux();
-                flux.actions.loadReport(appId, tblId, rptId, true);
+                this.loadReport(appId, tblId, rptId);
             }
         }
     },
