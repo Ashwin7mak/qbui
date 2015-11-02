@@ -40,7 +40,4 @@ echo copy phantomjs to node_module
 cp $PHANTOMJS_INSTALL_DIR/bin/phantomjs $PHANTOMJS_NODEMODULE
 ls -l "$PHANTOMJS_NODEMODULE"
 
-#echo back the list of installed gems (compass 1.0.1 needs to be installed)
-echo "List of installed gems:"
-gem list
 
