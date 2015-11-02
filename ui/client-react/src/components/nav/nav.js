@@ -60,15 +60,16 @@ var Nav = React.createClass({
 
             <div className="main">
                 <TopNav title="QuickBase"  onNavClick={this.toggleNav} onAddClicked={this.showTrouser} flux={flux} />
-                <ReactCSSTransitionGroup className="mainContent"
+                {this.props.children && this.props.children.main ?
+                    <ReactCSSTransitionGroup className="mainContent"
                                          transitionName="main-transition"
                                          transitionAppear={true}
                                          transitionAppearTimeout={600}
                                          transitionEnterTimeout={600}
                                          transitionLeaveTimeout={600} >
                     {/* insert the main component passed in by the router */}
-                    {React.cloneElement(this.props.children.main, {key: this.props.location.pathname, reportData: this.state.reportData, breakpoint: this.props.breakpoint,  flux: flux})}
-                </ReactCSSTransitionGroup>
+                    {React.cloneElement(this.props.children.main, {key: this.props.location ? this.props.location.pathname : "", reportData: this.state.reportData, breakpoint: this.props.breakpoint,  flux: flux})}
+                </ReactCSSTransitionGroup> : null}
 
                 <Footer flux= {flux} />
             </div>
@@ -95,15 +96,16 @@ var Nav = React.createClass({
             <div className="main">
                 <MobileTopNav title="QuickBase" searching={searching} searchBarOpen={searchBarOpen}  onNavClick={this.toggleNav} flux={flux} />
 
-                <ReactCSSTransitionGroup className="mainContent"
+                {this.props.children && this.props.children.main ?
+                    <ReactCSSTransitionGroup className="mainContent"
                                          transitionName="main-transition"
                                          transitionAppear={true}
                                          transitionAppearTimeout={600}
                                          transitionEnterTimeout={600}
                                          transitionLeaveTimeout={600} >
                     {/* insert the main component passed in by the router */}
-                    {React.cloneElement(this.props.children.main, {key: this.props.location.pathname, reportData: this.state.reportData, breakpoint: this.props.breakpoint,  flux: flux})}
-                </ReactCSSTransitionGroup>
+                    {this.props.children && this.props.children.main ? React.cloneElement(this.props.children.main, {key: this.props.location ? this.props.location.pathname : "", reportData: this.state.reportData, breakpoint: this.props.breakpoint,  flux: flux}) : null}
+                </ReactCSSTransitionGroup> : null}
 
                 {/* insert the footer if route wants it */}
                 <MobileAddFooter newItemsOpen={this.state.nav.newItemsOpen} flux= {flux} />
