@@ -2,37 +2,6 @@
 # this is a script used by Jenkins to prepare the environment for building and testing the ui
 #set -x #echo on
 echo PATH=$PATH
-echo JRUBY_JAR=$JRUBY_JAR
-echo GEM_PATH=$GEM_PATH
-if [ ! -d "$JRUBY_TMP" ]; then
-  echo creating tmp dir  [$JRUBY_TMP for ruby
-  mkdir "$JRUBY_TMP"
-else
-  echo $JRUBY_TMP already exists
-fi
-
-if [ ! -f "$JRUBY_TMP/$JRUBY_TARBALL" ]; then
-  echo fetching ruby
-  wget -q "--directory-prefix=$JRUBY_TMP" "http://pppdc9prd0t4.corp.intuit.net:8081/nexus/service/local/repositories/phoenix/content/jruby/jruby-bin/1.7.16.tar/jruby-bin-1.7.16.tar.gz"
-  ls "$JRUBY_TMP"
-else
-  echo "JRuby archive $JRUBY_TMP/$JRUBY_TARBALL already exists"
-fi
-
-if [ ! -d "$JRUBY_INSTALL_DIR" ]; then
- echo unpacking jruby
-  tar -xf  $JRUBY_TMP/$JRUBY_TARBALL -C $TOOLS_DIR
-  ls "$TOOLS_DIR"
-  $JRUBY_INSTALL_DIR/bin/jruby -S gem install compass
-else
-  echo "Ruby install dir $JRUBY_INSTALL_DIR already exists"
-  $JRUBY_INSTALL_DIR/bin/jruby -S gem install compass
-fi
-
-echo Ruby version:
-echo "Running Ruby version:"
-jruby -v
-
 
 #get phantomjs install
 

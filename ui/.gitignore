@@ -7,6 +7,7 @@
 /dist/
 /logs/
 /lib/
+/.sass-cache/
 
 # in the event a local build is configured to download node, don't want
 # to track the working directory where node is unpacked
