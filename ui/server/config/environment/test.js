@@ -58,6 +58,9 @@
         //Node's understanding of a grouping of routes to be enabled/disabled
         routeGroup: routeGroups.DEBUG,
 
+        //set notHotLoad true to disable hotloading
+        noHotLoad : true,
+
         // the client to use
         client: client
 

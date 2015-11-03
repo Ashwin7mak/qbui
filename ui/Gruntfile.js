@@ -837,15 +837,6 @@ module.exports = function(grunt) {
         ]);
     });
 
-    grunt.registerTask('makeProdNodeModules', 'Creates a production copy of node_modules folder for zip to nexus', function() {
-        // delete any old modules in dist dir
-        grunt.task.run(['clean:modulesProd']);
-
-        //copy current modules to prod modules dir
-        grunt.task.run(['copy:modulesProd']);
-
-    });
-
     grunt.loadNpmTasks('grunt-shell-spawn');
     grunt.loadNpmTasks('grunt-webpack');
 };
