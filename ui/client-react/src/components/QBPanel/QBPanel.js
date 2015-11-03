@@ -6,7 +6,7 @@ import React from 'react';
 import ReactBootstrap from 'react-bootstrap';
 import {Glyphicon, Collapse}  from 'react-bootstrap';
 
-import './QBPanel.scss';
+import './qbpanel.scss';
 
 class QBPanel extends React.Component {
 

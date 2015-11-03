@@ -1,0 +1,29 @@
+.flexRow{
+  display: flex;
+  flex-direction: row;
+}
+.fieldRow{
+  display: flex;
+  flex-direction: row;
+  align-items: stretch;
+  flex-wrap: wrap;
+  overflow-y: hidden;
+}
+.field {
+  padding: 10px;
+  flex: 1 1 50%;
+  .fieldLabel{
+    display: block;
+    color:#6e8ba8;
+  }
+  .fieldValue {
+    display:block;
+    min-width: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+  .fieldCheckBox {
+    margin-left: 1%;
+  }
+}
