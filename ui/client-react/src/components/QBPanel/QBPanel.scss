@@ -1,0 +1,30 @@
+.card {
+  z-index:2;
+  //padding:1.5rem;
+  box-shadow:0 1px 2px #aaa;
+  background:white;
+  margin:0 1rem 1rem;
+  border-radius:3px;
+  user-select:none;
+  transform-origin:top left;
+}
+.cardHeader {
+  padding-left: 3%;
+  padding-top: 0.2rem;
+  padding-bottom: 0.2rem;
+  cursor: pointer;
+}
+.cardHeaderIcon {
+  float: right;
+  margin-right:2rem;
+}
+
+.rotateDown {
+  transition: all .5s linear;
+  transform: rotate(-180deg);
+}
+
+.rotateUp {
+  transition: all .5s linear;
+  transform: rotate(0deg);
+}
