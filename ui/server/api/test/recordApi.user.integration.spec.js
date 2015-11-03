@@ -84,7 +84,7 @@
             };
 
             var retUser = {
-                id: null,
+                userId: null,
                 firstName: firstName,
                 lastName: lastName,
                 screenName: email,
@@ -96,7 +96,7 @@
             recordBase.apiBase.createSpecificUser(user)
                 .then(function(userResponse) {
                     userId = JSON.parse(userResponse.body).id;
-                    retUser.id = userId;
+                    retUser.userId = userId;
                     // User
                     var userInput = [{id: fid, value: userId}];
                     var expectedUserRecord = {id: fid, value: retUser, display: firstThenLast};
@@ -207,7 +207,7 @@
             };
 
             var retUser = {
-                id: null,
+                userId: null,
                 firstName: firstName,
                 lastName: lastName,
                 screenName: email,
@@ -219,7 +219,7 @@
             recordBase.apiBase.createSpecificUser(user)
                 .then(function(userResponse) {
                     userId = JSON.parse(userResponse.body).id;
-                    retUser.id = userId;
+                    retUser.userId = userId;
                     // User
                     var userInput = [{id: fid, value: userId}];
                     var expectedUserRecord = {id: fid, value: retUser, display: lastThenFirst};
