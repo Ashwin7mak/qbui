@@ -179,10 +179,6 @@ task cleanBuildDir (type: Delete) {
     delete 'build'
 }
 
-task gruntMakeProdNodeModules(type: GruntTask) {
-    args = ["makeProdNodeModules"]
-}
-
 task deleteDistModules(type: Delete) {
     delete "dist/node_modules"
 }
