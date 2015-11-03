@@ -1,6 +1,5 @@
 import React from 'react';
 
-//import { Table } from 'react-bootstrap';
 import GriddleTable  from '../../../components/dataTable/griddleTable/griddleTable.js';
 import {DateFormatter, NumericFormatter}  from '../../../components/dataTable/griddleTable/formatters.js';
 import Loader  from 'react-loader';

@@ -32,7 +32,14 @@ let appsdata_valid = {
             lastAccessed: null,
             name: "app_YvujdPIsBs1",
             relationships: [],
-            tables: [],
+            tables: [{
+                name: 'table1',
+                id: 1
+            },
+                {
+                    name: 'table2',
+                    id: 2
+                }],
             timeZone: "US/Pacific"
         }]
 };
@@ -53,6 +60,13 @@ describe('AppsList functions', () => {
     it('test render of component with apps', () => {
         component = TestUtils.renderIntoDocument(<AppsList data={appsdata_valid}/>);
         expect(TestUtils.scryRenderedDOMComponentsWithClass(component, "app").length).toEqual(2);
+    });
+
+    it('test render of component with tables', () => {
+        component = TestUtils.renderIntoDocument(<AppsList data={appsdata_valid}/>);
+        var tablesList = TestUtils.scryRenderedDOMComponentsWithClass(component, "tables");
+        expect(tablesList.length).toEqual(2);
+        expect(tablesList[1].querySelectorAll('li').length).toEqual(2);
     });
 
 });

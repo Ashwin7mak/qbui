@@ -43,6 +43,8 @@ describe('Home page functions', () => {
     it('test render of component', () => {
         component = TestUtils.renderIntoDocument(<Home flux={flux}/>);
         expect(TestUtils.isCompositeComponent(component)).toBeTruthy();
+        expect(TestUtils.scryRenderedComponentsWithType(component, AppsHeaderMock).length).toEqual(1);
+        expect(TestUtils.scryRenderedComponentsWithType(component, AppsListMock).length).toEqual(1);
     });
 
 });
