@@ -41,6 +41,7 @@ if (isCIBuild()) {
     rootProject.ext.releasePrefix = getReleasePrefix();
     rootProject.ext.buildTime = "." + getBuildTime();
 }
+println("cwd " + cwd )
 println( "Assembling: " + getProjectArchive() )
 println( "Branch : " + getProjectArchive() )
 
@@ -107,8 +108,22 @@ task npmInstallVerbose(type: NpmTask) {
     args = ['install', '--verbose', '--debug' ]
 }
 
+task npmListConfig(type: NpmTask) {
+    args = ['config', 'ls', '-l' ]
+}
+
 task npmPruneProduction (type: NpmTask) {
     args = ['prune', '--production']
+    execOverrides {
+        it.workingDir = cwd + "/dist"
+    }
+}
+
+task npmInstallProduction (type: NpmTask) {
+    args = ['install', '--production']
+    execOverrides {
+        it.workingDir = cwd + "/dist"
+    }
 }
 
 task npmRebuildJpegtran (type: NpmTask) {
@@ -168,6 +183,15 @@ task gruntMakeProdNodeModules(type: GruntTask) {
     args = ["makeProdNodeModules"]
 }
 
+task deleteDistModules(type: Delete) {
+    delete "dist/node_modules"
+}
+
+task installExpress(type: NpmTask) {
+    // install the express package only
+    args = ['install', 'express', '--save-dev']
+}
+
 //in cloud9 check if the server is up
 task checkForApiUp {
     doFirst {
@@ -184,11 +208,11 @@ task invokeCheckForApiUp(type:Exec) {
 //  Define task dependencies
 //******************************************************
 
-zip.dependsOn clean, gruntMakeProdNodeModules
+zip.dependsOn clean, npmInstallProduction
 build.dependsOn clean, grunt_build
 clean.dependsOn grunt_clean, cleanBuildDir
 test.dependsOn clean, gruntUnitTestsNoColor
-gruntMakeProdNodeModules.dependsOn clean, grunt_build
+npmInstallProduction.dependsOn grunt_build
 
 // the directory for nightly builds used to release from
 project.group = "build_rpms"
@@ -280,7 +304,7 @@ sonarRunner {
         property "sonar.coverage.exclusions", "**/*.spec.js"
         property "client-react.sonar.projectName", "${user}:ui:${branchName}:client"
         property "client-react.sonar.sources", "$projectDir/client-react/src"
-        property "client-react.sonar.exclusions", "**/css/**"
+        property "client-react.sonar.exclusions", "**/css/**,**/constants/**"
 
         //  import the ui LCOV coverage report
         property "client-react.sonar.javascript.lcov.reportPath","${projectDir}/build/reports/client/coverage/lcov.info"

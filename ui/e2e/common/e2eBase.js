@@ -43,15 +43,15 @@
             //Checks for any JS errors in the browser, resets the browser window size and cleans up the test realm and app
             cleanup : function(done) {
                 //Checks for any JS errors in the browser console
-                browser.manage().logs().get('browser').then(function(browserLog) {
-                    // TODO: Errors in the console need to fix
-                    //expect(browserLog.length).toEqual(0);
-                    if (browserLog.length) {
-                        console.error('Browser console had errors: ' + JSON.stringify(browserLog));
-                    }
-                });
+                //browser.manage().logs().get('browser').then(function(browserLog) {
+                //    // TODO: Errors in the console need to fix
+                //    //expect(browserLog.length).toEqual(0);
+                //    if (browserLog.length) {
+                //        console.error('Browser console had errors: ' + JSON.stringify(browserLog));
+                //    }
+                //});
                 //Reset the browser size (note this doesn't work for Chrome on Mac OSX, a known bug - it will only max height)
-                browser.driver.manage().window().maximize();
+                //browser.driver.manage().window().maximize();
                 //Cleanup the realm and app
                 e2eBase.recordBase.apiBase.cleanup().then(function() {
                     done();
