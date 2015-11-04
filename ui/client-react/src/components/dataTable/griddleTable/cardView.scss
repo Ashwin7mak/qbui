@@ -1,23 +1,28 @@
+$font-family: 'Helvetica Neue LT Roman', HelveticaNeue, 'Helvetica Neue', Helvetica, Arial, sans-serif;
+$font-size: 12px;
+$font-color: #404040;
+
+$margin-spacer: 10px;
+
+.custom-row{
+  display: block!important;
+}
+
 .custom-row-card {
-  border-color: grey;
-  border-style: solid;
-  border-width: 1px 0 1px 0;
-  font-size: large;
+  font-family: $font-family;
+  color: $font-color;
+  font-size: $font-size;
+  border-bottom: 1px solid lightgrey;
+  position: relative;
+  padding: $margin-spacer;
   .card {
     flex: 1;
     width: 100%;
   }
-  .top-card-row{
-    margin-top: 10px;
-  }
-  .card-expander{
-    border-left: 1px solid lightgray;
-    padding: 0 20px 0 25px;
-    /*margin: 20px 0;*/
-    color: gray;
-  }
   .glyphicon{
-   top: 50px;
+    position: absolute;
+    right: $margin-spacer * 2;
+    top: $margin-spacer * 2;
   }
   .flexRow{
     display: flex;
@@ -31,28 +36,30 @@
     overflow-y: hidden;
   }
   .fieldRow.collapsed{
-    max-height: 70px;
+    max-height: 50px;
   }
   .fieldRow.expanded{
     max-height: 100%;
   }
+  .top-card-row{
+    font-size: $font-size+2;
+  }
   .field {
-    padding: 10px;
+    padding: $margin-spacer $margin-spacer $margin-spacer 0;
     flex: 1 1 50%;
-    .fieldLabel{
+    .fieldLabel {
       display: block;
-      color:#6e8ba8;
+      color: #6e8ba8;
     }
     .fieldValue {
-      display:block;
+      display: block;
       min-width: 0;
       overflow: hidden;
       text-overflow: ellipsis;
       white-space: nowrap;
+      font-size: $font-size+2;
     }
     &:nth-child(n+3) {
-      background-color: #F5FAFF;
-      border-top: 1px solid lightgrey;
       .fieldValue {
         white-space: normal;
       }
@@ -65,17 +72,23 @@
       flex-basis: 33%;
       display: block;
       &:nth-child(n+3) {
-        background-color: inherit;
-        border-top: inherit;
         .fieldValue {
           white-space: nowrap;
         }
       }
       &:nth-child(n+4) {
-        background-color: #F5FAFF;
-        border-top: 1px solid lightgrey;
         white-space: normal;
       }
+
     }
   }
+}
+.custom-row-card.expanded {
+  box-shadow: inset 0 0 4px lightgrey;
+  border: 0;
+  background: #fff;
+}
+
+.reportContainer{
+  background: #f5f5f5;/* Temporary background to show off inset white stying */
 }
