@@ -97,7 +97,7 @@ describe('Nav functions', () => {
 
     it('test renders small based on break point', () => {
         component = TestUtils.renderIntoDocument(<Nav flux={flux} breakpoint={breakpoints.SMALL_BREAKPOINT}></Nav>);
-        expect(TestUtils.scryRenderedComponentsWithType(component, MobileLeftNavMock).length).toEqual(1);
+        expect(TestUtils.scryRenderedComponentsWithType(component, LeftNavMock).length).toEqual(1);
         expect(TestUtils.scryRenderedComponentsWithType(component, MobileTopNavMock).length).toEqual(1);
         expect(TestUtils.scryRenderedComponentsWithType(component, MobileFooterMock).length).toEqual(1);
     });

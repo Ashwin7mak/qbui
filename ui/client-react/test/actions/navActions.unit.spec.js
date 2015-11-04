@@ -32,8 +32,8 @@ describe('Nav Actions functions', () => {
     });
 
     it('test toggle left nav action', () => {
-        flux.actions.toggleLeftNav();
-        expect(flux.dispatchBinder.dispatch).toHaveBeenCalledWith(actions.TOGGLE_LEFT_NAV);
+        flux.actions.toggleLeftNav(true);
+        expect(flux.dispatchBinder.dispatch).toHaveBeenCalledWith(actions.TOGGLE_LEFT_NAV, true);
     });
 
     it('test toggle mobile searchbar action', () => {

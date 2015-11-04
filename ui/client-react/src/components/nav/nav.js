@@ -9,7 +9,6 @@ import Trouser from '../trouser/trouser';
 import Fluxxor from 'fluxxor';
 
 import LeftNav from './leftNav';
-import MobileLeftNav from './mobileLeftNav';
 
 import TopNav from '../header/topNav';
 import MobileTopNav from '../header/mobileTopNav';
@@ -78,19 +77,23 @@ var Nav = React.createClass({
     renderSmall() {
         const flux = this.getFlux();
 
+        function onSelectSmall() {
+            flux.actions.toggleLeftNav(false);
+        }
         const searchBarOpen = this.state.nav.searchBarOpen;
         const searching = this.state.nav.searching;
 
         let classes = 'navShell ' + this.props.breakpoint;
         if (this.state.nav.leftNavOpen) {
-            classes += ' mobileNavOpen';
+            classes += ' leftNavOpen';
         }
         return (<div className={classes}>
-            <MobileLeftNav
+            <LeftNav
                 items={this.state.nav.leftNavItems}
                 open={this.state.nav.leftNavOpen}
                 reportsData={this.state.reportsData}
                 reportID={this.state.reportData.rptId}
+                onSelect={onSelectSmall}
                 flux={flux} />
 
             <div className="main">

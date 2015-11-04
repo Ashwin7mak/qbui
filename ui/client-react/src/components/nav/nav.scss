@@ -111,19 +111,7 @@ html, body {
     }
 }
 
-.navShell.mobileNavOpen {
-    position: absolute;
 
-    .mainContent {
-        opacity: .4;
-        transition: opacity 250ms ease-in-out;
-        -moz-transition: opacity 250ms ease-in-out;
-        -webkit-transition: opacity 250ms ease-in-out;
-    }
-
-    transform: translate3d(300px, 0, 0);
-    -webkit-transform: translate3d(300px, 0, 0);
-}
 
 // transitions
 
