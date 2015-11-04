@@ -1,39 +1,14 @@
 
-#Environment Configuration
-
-Temporary changes to support a new 'REACT' run-time environment.  These changes to be deleted once the Angular client code is removed.
-
-* /server/config/environment/react.js : new file created to configure a 'REACT' run time environment.
-* /server/config/environment/environmentConstants.js : added 'REACT' run time environment 
-* /server/config/expressConfig.js : define static appPath for the 'REACT' run time environment.  
-* /server/routes/js : load either Angular or React routes based on run-time environment.
  
-#package.json   
- 
-Updated to include React modules.  When Angular is removed, will need to do the following:
-
-* Remove all Angular references from dev and devDependencies section
-* Update webpack script to reference where the webpack configuration file is located (client-react will probably be refactored to just client..)
-
-#Build and launch Angular implementation of Lighthouse:   
- 
-* Start Oracle db server
-* Start lighthouse java back-end server from Quickbase repo
-* cd to the ui folder
-* run `CLIENT=ANGULAR grunt serve`
-    - CLIENT=ANGULAR is required as the CLIENT=REACT uses by default it will if CLIENT is unspecified
-    - browser should open to an unauthorized page
-    - generate a ticket for realm to view data
-
-#Build and launch React implementation of Lighthouse:
+#Build and launch React client:
 
 ## Start Node Server :
 ### using _grunt_ to build and start node server and  watch for changes
 * From command window:
     * cd to the ui folder
-    * run  `NODE_ENV=local grunt serve` or `NODE_ENV=local CLIENT=REACT grunt serve`
+    * run `grunt serve` (looks for local.js) or `NODE_ENV=local grunt serve` or `NODE_ENV=local CLIENT=REACT grunt serve`.  
     * grunt will generate the client webpack output
-    * browser should open to view react lighthouse page
+    * browser should open to default client home page
     * grunt will wait for changes to client or server and regen webpack and restart server
     
 ### Or using _npm_ to build and start server only
@@ -56,7 +31,7 @@ Updated to include React modules.  When Angular is removed, will need to do the 
 ## Run Unit tests with Karma:
 * From command window:
      * cd to the ui folder
-     * run `npm run tests` 
+     * run `grunt test` or `npm run tests` 
      * output is sent to:
         * the console 
         * ui/build/reports/client/unit/client_report.xml 
