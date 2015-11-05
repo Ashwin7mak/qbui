@@ -13,8 +13,8 @@ let navActions = {
     showNewItems() {
         this.dispatch(actions.SHOW_NEW_ITEMS);
     },
-    toggleLeftNav() {
-        this.dispatch(actions.TOGGLE_LEFT_NAV);
+    toggleLeftNav(open) {
+        this.dispatch(actions.TOGGLE_LEFT_NAV, open);
     },
     toggleSearch() {
         this.dispatch(actions.TOGGLE_SEARCH);
