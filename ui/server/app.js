@@ -73,12 +73,21 @@
     //  log some server config info...but don't include the secrets configuration
     log.info('Express Server configuration:', JSON.stringify(_.omit(config, ['secrets', 'SESSION_SECRET'])));
 
+    /**
+     * only listen via a specific ip/hostname when running with dev hotloader,
+     * as the hotload server needs the ip for main express server
+     ****/
+    var hostnameToListenOn = undefined;
+    if ((!config.isProduction && !config.noHotLoad)) {
+        hostnameToListenOn = config.ip;
+    }
+
     /**************
      * Start HTTP Server
      **************/
     var server = http.createServer(app);
-    server.listen(config.port, config.ip, function() {
-        log.info('Http Server started. Listening %s on PORT: %d', config.ip, server.address().port);
+    server.listen(config.port, hostnameToListenOn, function() {
+        log.info('Http Server started. Listening %s on PORT: %d', hostnameToListenOn, server.address().port);
     });
 
 
@@ -96,8 +105,8 @@
         };
 
         var serverHttps = https.createServer(options, app);
-        serverHttps.listen(config.sslPort, config.ip, function() {
-            log.info('Https Server started. Listening %s on PORT: %d', config.ip, serverHttps.address().port);
+        serverHttps.listen(config.sslPort, hostnameToListenOn, function() {
+            log.info('Https Server started. Listening %s on PORT: %d', hostnameToListenOn, serverHttps.address().port);
         });
     }
 
