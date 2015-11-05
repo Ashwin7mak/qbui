@@ -59,7 +59,6 @@ describe('Nav functions', () => {
 
     beforeEach(() => {
         Nav.__Rewire__('LeftNav', LeftNavMock);
-        Nav.__Rewire__('MobileLeftNav', MobileLeftNavMock);
         Nav.__Rewire__('MobileTopNav', MobileTopNavMock);
         Nav.__Rewire__('TopNav', TopNavMock);
         Nav.__Rewire__('Footer', FooterMock);
@@ -68,7 +67,6 @@ describe('Nav functions', () => {
 
     afterEach(() => {
         Nav.__ResetDependency__('LeftNav');
-        Nav.__ResetDependency__('MobileLeftNav');
         Nav.__ResetDependency__('MobileTopNav');
         Nav.__ResetDependency__('TopNav');
         Nav.__ResetDependency__('Footer');
