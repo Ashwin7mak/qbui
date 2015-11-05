@@ -160,8 +160,8 @@ Running `grunt codeStandards` will run the lint tasks. This task validates the j
 	* The script to run eslint from the command line is `NODE_ENV=local npm run lint` or to fix the stylistic [fixable errors][http://eslint.org/docs/rules/) run `NODE_ENV=local npm run lintFix` our build does lintFix. The lint npm script runs ` node_modules/eslint/bin/eslint.js --ext .js --ext .jsx --format 'node_modules/eslint-friendly-formatter' .`
 
 	
-	* Also to run the eslint on the source from Intellij custom tooll with clickable links to error location, do the following 
-		1. Create a external tool (IntelliJ\Preferences...\Tools\Exterenal Tools` to run eslint using this
+	* Also to run the eslint on the source from Intellij *custom tool* with clickable links to error location, do the following 
+		1. Create a external tool (`IntelliJ\Preferences...\Tools\Exterenal Tools`) to run eslint using this
 		   - program: `npm`
 		   - parameters: `run lintFix`
 		   - working directory: `$ProjectFileDir$/ui`
