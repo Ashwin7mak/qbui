@@ -1,7 +1,7 @@
 
 
 .leftMenu.open {
-  width:350px;
+  width:300px;
   nav li {
     a.heading {
       //border-top:1px solid #6f8eac;
@@ -25,21 +25,19 @@
     width:40px;
     overflow:hidden;
   }
-  nav li a.heading {
+  body:not(.small-breakpoint) nav li a.heading {
     visibility:hidden;
   }
 }
 
-@media (min-width: 700px) {
-  /* hide tooltip if the left nav is showing labels (see above) */
-  div.leftNavTooltip {
-    display:none;
-  }
-  /* if nav is collapsed always show the tooltip regardless of width */
-  div.leftNavTooltip.show {
-    display:block;
-  }
+/* show tooltips only if .show is present unless we're in small (phone) breakpoint */
+div.leftNavTooltip {
+  display:none;
 }
+body:not(.small-breakpoint) div.leftNavTooltip.show {
+  display:block;
+}
+
 
 
 .leftMenu.closed {
@@ -51,6 +49,7 @@
   }
 }
 
+
 .leftMenu {
   border-right: 1px solid #ccc;
   background-color: #002b48;
@@ -61,15 +60,8 @@
       background-color: #2E71B5;
     }
   }
-  .nav li {
 
-    a.leftNavLink:hover {
-      background-color: #2E71B5;
-      -webkit-animation: swing 1s ease;
-      animation: swing 1s ease;
-      -webkit-animation-iteration-count: 1;
-      animation-iteration-count: 1;
-    }
+  .nav li {
     a.heading {
       padding: 3px 15px;
       color:#ddd;
@@ -90,6 +82,9 @@
         text-overflow:ellipsis;
       }
     }
+    a.leftNavLink:hover {
+      background-color: #2E71B5;
+    }
     .loader {
       position:absolute;
       right:20px;
@@ -98,6 +93,40 @@
   }
 }
 
+/* small (mobile) left nav behaves differently */
+
+.small-breakpoint .leftMenu {
+  margin: 0;
+  width: 250px;
+  height: 100%;
+  position: absolute;
+  z-index: 9999;
+  left: -250px;
+  border-right: 1px solid #ccc;
+  background-color: #002b48;
+  overflow-y: auto;
+}
+
+body:not(.small-breakpoint) .leftMenu a.leftNavLink:hover {
+  -webkit-animation: swing 1s ease;
+  animation: swing 1s ease;
+  -webkit-animation-iteration-count: 1;
+  animation-iteration-count: 1;
+}
+
+.small-breakpoint .leftNavOpen {
+  position: absolute;
+
+  .mainContent {
+    opacity: .4;
+    transition: opacity 250ms ease-in-out;
+    -moz-transition: opacity 250ms ease-in-out;
+    -webkit-transition: opacity 250ms ease-in-out;
+  }
+
+  transform: translate3d(250px, 0, 0);
+  -webkit-transform: translate3d(250px, 0, 0);
+}
 // fun stuff
 @-webkit-keyframes swing
 {

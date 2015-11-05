@@ -55,8 +55,12 @@ let NavStore = Fluxxor.createStore({
         this.state.searching = searching;
         this.emit('change');
     },
-    onToggleLeftNav: function() {
-        this.state.leftNavOpen = !this.state.leftNavOpen;
+    onToggleLeftNav: function(open) {
+        if (open === false || open === true) {
+            this.state.leftNavOpen = open;
+        } else {
+            this.state.leftNavOpen = !this.state.leftNavOpen;
+        }
         this.emit('change');
     },
     onShowNewItems: function() {
