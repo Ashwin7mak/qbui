@@ -13,9 +13,9 @@ see also:
 [QBUI project File structure](FILESSTRUCTURE.md)
 
 
-##Pre-requisites 
-1. Javascript, Node.js, React
-2. Read coding conventions (TODO:link to coding conventions doc)
+##Knowledge Prerequisites
+1. Writing Javascript, Node.js, React
+2. Read coding conventions (convention settings in https://github.intuit.com/QuickBase/qbui/tree/master/documents/devDesign)
 
 
 ##Pre-installation
@@ -133,6 +133,9 @@ The following run-time environment variable is supported:
 * Current urls supported
     * http://localhost:9000/
 
+###Note : 
+ The Node Server only listen via a specific ip/hostname when running with dev hotloader,
+ as the hotload server needs the ip of main express server. When running in production mode listen is just scoped to port, not ip.node -
 
 ## Testing
 ###Lint and Code Style tests
@@ -219,7 +222,7 @@ a local DNS server (Dnsmasq):
         # Start Dnsmasq automatically when the OS starts:
         sudo launchctl load /Library/LaunchDaemons/homebrew.mxcl.dnsmasq.plist
 
-Configure Dnsmasq: The configuration file lives at `/usr/local/etc/dnsmasq.c****onf` by default, so open this file in your favourite editor.mAdd or uncomment this line in config file:
+Configure Dnsmasq: The configuration file lives at `/usr/local/etc/dnsmasq.conf` by default, so open this file in your favourite editor. Add or uncomment this line in config file:
 
         address=/localhost/127.0.0.1
 
@@ -276,12 +279,6 @@ For all of the browser capabilities check out:
 http://www.ignoredbydinosaurs.com/2015/04/angular-protractor-tests-and-sauce-connect-config
 and 
 https://www.browserstack.com/automate/capabilities
-
-##Compass
-Compass is an open-source CSS authoring framework which uses the Sass stylesheet language.
-
-If you're not familiar with Compass, go to the [Compass homepage](http://compass-style.org/) for an overview.  
-For developer's, [click here to install compass on your dev machine](http://compass-style.org/install/). 
 
 ##Using Gradle to build distribution node server
 Gradle is used to build a production version of the node server and client application. 

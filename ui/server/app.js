@@ -74,11 +74,11 @@
     log.info('Express Server configuration:', JSON.stringify(_.omit(config, ['secrets', 'SESSION_SECRET'])));
 
     /**
-     * only listen via a specific ip/hostname when running with dev hotloader,
-     * as the hotload server needs the ip for main express server
+     * only listen via a specific ip/hostname when not in production mode or when
+     * running with dev hotloader, as the hotload server needs the ip for main express server
      ****/
     var hostnameToListenOn = undefined;
-    if ((!config.isProduction && !config.noHotLoad)) {
+    if (!config.noHotLoad && !config.isProduction) {
         hostnameToListenOn = config.ip;
     }
 
@@ -87,9 +87,13 @@
      **************/
     var server = http.createServer(app);
     server.listen(config.port, hostnameToListenOn, function() {
-        log.info('Http Server started. Listening %s on PORT: %d', hostnameToListenOn, server.address().port);
-    });
+        if (hostnameToListenOn) {
+            log.info('Http Server started. Listening %s on PORT: %d', hostnameToListenOn, server.address().port);
+        } else {
+            log.info('Http Server started. Listening on PORT: %d', server.address().port);
 
+        }
+    });
 
     /**************
      * Start HTTPS Server
@@ -106,7 +110,12 @@
 
         var serverHttps = https.createServer(options, app);
         serverHttps.listen(config.sslPort, hostnameToListenOn, function() {
-            log.info('Https Server started. Listening %s on PORT: %d', hostnameToListenOn, serverHttps.address().port);
+            if (hostnameToListenOn) {
+                log.info('Https Server started. Listening %s on PORT: %d', hostnameToListenOn, server.address().port);
+            } else {
+                log.info('Https Server started. Listening on PORT: %d', server.address().port);
+
+            }
         });
     }
 
