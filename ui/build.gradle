@@ -14,6 +14,7 @@ description = "Package for Node.js application and UI files"
 apply plugin: 'com.moowork.grunt'
 apply plugin: 'com.moowork.node'
 apply plugin: 'sonar-runner'
+apply plugin: 'com.bmuschko.cargo'
 
 //grab the current working directory to use later on
 def cwd = project.getProjectDir().absolutePath
@@ -26,11 +27,19 @@ buildscript {
         dependencies {
             classpath 'com.moowork.gradle:gradle-grunt-plugin:0.9'
             classpath 'com.moowork.gradle:gradle-node-plugin:0.9'
-            //COMMENT out until proven we need to include
-            //Caused by: java.lang.ClassNotFoundException: org.codehaus.groovy.runtime.typehandling.ShortTypeHandling
-            //classpath 'org.codehaus.groovy:groovy-backports-compat23:2.3.5'
+            classpath 'com.bmuschko:gradle-cargo-plugin:2.2.1'
         }
     }
+}
+
+dependencies {
+    def cargoVersion = '1.4.5'
+    cargo "org.codehaus.cargo:cargo-core-uberjar:$cargoVersion",
+            "org.codehaus.cargo:cargo-ant:$cargoVersion",
+            "commons-discovery:commons-discovery:0.5",
+            "commons-logging:commons-logging:1.1.3",
+            "dom4j:dom4j:1.6.1",
+            "jaxen:jaxen:1.1.6"
 }
 
 //  CI Builds need the following properties to properly package and archive the build artifacts
@@ -44,6 +53,31 @@ if (isCIBuild()) {
 println("cwd " + cwd )
 println( "Assembling: " + getProjectArchive() )
 println( "Branch : " + getProjectArchive() )
+println( "Tomcat war : " + getAllServicesWar() )
+
+cargo {
+    containerId = 'tomcat8x'
+    port = 8080
+
+    deployable {
+        context = 'api'
+        file = file(cwd + "/build/libs/" + getAllServicesWar())
+    }
+
+    local {
+        containerProperties {
+            property 'cargo.tomcat.ajp.port', 9090
+        }
+        logLevel = 'high'
+
+        installer {
+            installUrl = "file://" + cwd + "/../tools/ci/apache-tomcat-8.0.20.zip"
+            downloadDir = file("$buildDir/download")
+            extractDir = file("$buildDir/extract")
+            outputFile = file('build/output.log')
+        }
+    }
+}
 
 
 node {
@@ -167,7 +201,15 @@ task gruntUnitTestsNoColor(type: GruntTask) {
 }
 
 task gruntIntegrationTestsNoColor(type: GruntTask) {
-    args = ["ciIntegration", "--no-color"]
+    doFirst {
+        println("Starting Tomcat instance with Cargo and deploying API war");
+        tasks.cargoStartLocal.execute()
+        args = ["ciIntegration", "--no-color"]
+    }
+    doLast {
+        println("Stopping Tomcat instance with Cargo");
+        tasks.cargoStopLocal.execute()
+    }
 }
 
 //browser tests not yet supported on ci
@@ -188,16 +230,21 @@ task installExpress(type: NpmTask) {
     args = ['install', 'express', '--save-dev']
 }
 
-//in cloud9 check if the server is up
 task checkForApiUp {
     doFirst {
+        println("Starting Tomcat instance with Cargo and deploying API war");
+        tasks.cargoStartLocal.execute()
         tasks.invokeCheckForApiUp.execute()
+    }
+    doLast {
+        println("Stopping Tomcat instance with Cargo");
+        tasks.cargoStopLocal.execute()
     }
 }
 
 task invokeCheckForApiUp(type:Exec) {
     executable cwd + "/../tools/ci/checkForApiUp.sh"
-    args '300'
+    args '60'
 }
 
 //******************************************************
@@ -344,6 +391,10 @@ def getReleasePrefix() {
 
 def getProjectArchive() {
     return "${project.name}-${getReleasePrefix()}_${getRpmVersion()}-${getRelease()}.zip"
+}
+
+def getAllServicesWar() {
+    return "allServices-${getReleasePrefix()}_${getRpmVersion()}-${getRelease()}.war"
 }
 
 def getArchiveLayoutStr(useBuildTime) {
