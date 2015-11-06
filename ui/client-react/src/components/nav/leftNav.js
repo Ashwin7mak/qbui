@@ -32,19 +32,20 @@ let LeftNav = React.createClass({
     buildNavItem: function(item) {
 
         let label = item.name;
+        let tooltipID = item.key ? item.key : item.name;
         if (item.key) {
             label = (<I18nMessage message={item.key}/>);
         }
 
         const tooltip = (<Tooltip className={ this.props.open ? 'leftNavTooltip' : 'leftNavTooltip show' }
-                                  id={label}>{label}</Tooltip>);
+                                  id={tooltipID}>{label}</Tooltip>);
 
         let selectedClass = item.id && (item.id.toString() === this.props.reportID) ? 'selected' : '';
 
         return (
             <OverlayTrigger key={label} placement="right" overlay={tooltip}>
                 <li className={selectedClass}>
-                    <Link className="leftNavLink" to={item.link}>
+                    <Link className="leftNavLink" to={item.link} onClick={this.props.onSelect}>
                         <Glyphicon glyph={this.getGlyphName(item)}/> {label}
                     </Link>
                 </li>

@@ -19,13 +19,11 @@
             webpackConfig.entry = [
                     // WebpackDevServer host and port
                 'webpack-dev-server/client?http://0.0.0.0:' + hotPort,
-                    //'webpack-dev-server/client?http://localhost:' + hotPort,
                     // 'only-dev-server' prevents reload on syntax errors
                 'webpack/hot/only-dev-server'
             ].concat(webpackConfig.entry);
 
             webpackConfig.output.publicPath = 'http://' + config.ip + ':' + hotPort + webpackConfig.output.publicPath;
-            //webpackConfig.output.publicPath = '/dist/';
 
             var compiler = webpack(webpackConfig);
             // we start a webpack-dev-server with our config
@@ -37,9 +35,7 @@
                 // webpack-dev workflow, but we want the 'in-memory' files to be fetched from
                 // this path  e.g http://localhost:3000/dist/
                 publicPath : '/dist/',
-                //publicPath        : 'http://localhost:' + hotPort + webpackConfig.output.publicPath,
 
-                //contentBase        : webpackConfig.contentBase,
                 // hot -  Enable special support for Hot Module Replacement (HMR)
                 // Page is not updated, but a 'webpackHotUpdate' message is send to the content
                 // Use 'webpack/hot/dev-server' as additional module in your entry point
@@ -51,8 +47,6 @@
                 inline             : true,
 
                 progress: true,
-
-                //debug: true,
 
                 // historyApiFallback -  to access dev server from arbitrary url.
                 historyApiFallback: true,
@@ -83,8 +77,6 @@
                 }
                 log.info('Hot webpack-dev-server Listening at ' + config.ip + ' port:' + hotPort);
             });
-            //console.log('\nwebpackConfig Settings :' + JSON.stringify(webpackConfig, null, 2));
-
         }
 
     };

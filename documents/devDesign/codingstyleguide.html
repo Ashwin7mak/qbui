@@ -97,13 +97,14 @@
                 </p>
                     <div class="right">
                         <span class="heading"><span>DO THIS</span></span>
-                        <pre><code class="lang-js">if (a === b) {c = true }try {a = b} catch(e) {};</code></pre>
+                        <pre><code class="lang-js">if (a === b) {c = true }
+try {a = b} catch(e) {};</code></pre>
                     </div>
                     <div class="wrong">
                         <span class="heading"><span>NOT THIS</span></span>
                         <pre><code>if (a ===b_ {} else {d == false}</code></pre>
                     </div>
-                
+
                 </li>
                 <li class="styleitem">
                 <p class="description">
@@ -112,7 +113,7 @@
                 <ul class="jscslist">
                         <li>"with"</li>
                 </ul>
-                
+
                 </li>
                 <li class="styleitem">
                 <p class="description">
@@ -128,23 +129,25 @@
                     </div>
                     <div class="wrong">
                         <span class="heading"><span>NOT THIS</span></span>
-                        <pre><code>}else {</code></pre>
+                        <pre><code>}
+else {</code></pre>
                     </div>
-                
+
                 </li>
                 <li class="styleitem">
                 <p class="description">
-                    Lines may not contain a mixture of spaces and tab (\t) characacters. 
+                    Lines may not contain a mixture of spaces and tab (\t) characacters.
                 </p>
                     <div class="right">
                         <span class="heading"><span>DO THIS</span></span>
-                        <pre><code class="lang-js">   x = 1; // \t   y = 2; // \s\s\s\s</code></pre>
+                        <pre><code class="lang-js">   x = 1; // \t
+   y = 2; // \s\s\s\s</code></pre>
                     </div>
                     <div class="wrong">
                         <span class="heading"><span>NOT THIS</span></span>
                         <pre><code>     z = 3; // \t\s</code></pre>
                     </div>
-                
+
                 </li>
                 <li class="styleitem">
                 <p class="description">
@@ -158,7 +161,7 @@
                         <span class="heading"><span>NOT THIS</span></span>
                         <pre><code>var x = ++ y;</code></pre>
                     </div>
-                
+
                 </li>
                 <li class="styleitem">
                 <p class="description">
@@ -172,7 +175,7 @@
                         <span class="heading"><span>NOT THIS</span></span>
                         <pre><code>var x = function () {};</code></pre>
                     </div>
-                
+
                 </li>
                 <li class="styleitem">
                 <p class="description">
@@ -180,13 +183,16 @@
                 </p>
                     <div class="right">
                         <span class="heading"><span>DO THIS</span></span>
-                        <pre><code class="lang-js">var x = [1, 2];var x = [1, [2, 3]];</code></pre>
+                        <pre><code class="lang-js">var x = [1, 2];
+var x = [1, [2, 3]];</code></pre>
                     </div>
                     <div class="wrong">
                         <span class="heading"><span>NOT THIS</span></span>
-                        <pre><code>var x = [ 1, 2];var x = [1, 2 ];var x = [1, [ 2, 3 ] ];</code></pre>
+                        <pre><code>var x = [ 1, 2];
+var x = [1, 2 ];
+var x = [1, [ 2, 3 ] ];</code></pre>
                     </div>
-                
+
                 </li>
                 <li class="styleitem">
                 <p class="description">
@@ -194,27 +200,16 @@
                 </p>
                     <div class="right">
                         <span class="heading"><span>DO THIS</span></span>
-                        <pre><code class="lang-js">var x = (3 + 4) * 5;var x = (3 * (4 + 5)) * 6;</code></pre>
+                        <pre><code class="lang-js">var x = (3 + 4) * 5;
+var x = (3 * (4 + 5)) * 6;</code></pre>
                     </div>
                     <div class="wrong">
                         <span class="heading"><span>NOT THIS</span></span>
-                        <pre><code>var x = ( 3 + 4);var x = (3 + 4 );var x = (3 + ( 4 * 5) ) / 6;</code></pre>
+                        <pre><code>var x = ( 3 + 4);
+var x = (3 + 4 );
+var x = (3 + ( 4 * 5) ) / 6;</code></pre>
                     </div>
-                
-                </li>
-                <li class="styleitem">
-                <p class="description">
-                     All constructors except for <code>this</code> must be capitalized.
-                </p>
-                    <div class="right">
-                        <span class="heading"><span>DO THIS</span></span>
-                        <pre><code class="lang-js">var x = new A();var y = new this();</code></pre>
-                    </div>
-                    <div class="wrong">
-                        <span class="heading"><span>NOT THIS</span></span>
-                        <pre><code>var x = new a();</code></pre>
-                    </div>
-                
+
                 </li>
                 <li class="styleitem">
                 <p class="description">
@@ -222,13 +217,21 @@
                 </p>
                     <div class="right">
                         <span class="heading"><span>DO THIS</span></span>
-                        <pre><code class="lang-js">var x = {    one: 1,    two: 2,    three: 3};</code></pre>
+                        <pre><code class="lang-js">var x = {
+    one: 1,
+    two: 2,
+    three: 3
+};</code></pre>
                     </div>
                     <div class="wrong">
                         <span class="heading"><span>NOT THIS</span></span>
-                        <pre><code>var x = {    one: 1    ,two: 2    ,three: 3};</code></pre>
+                        <pre><code>var x = {
+    one: 1
+    ,two: 2
+    ,three: 3
+};</code></pre>
                     </div>
-                
+
                 </li>
                 <li class="styleitem">
                 <p class="description">
@@ -245,13 +248,15 @@
                 </ul>
                     <div class="right">
                         <span class="heading"><span>DO THIS</span></span>
-                        <pre><code class="lang-js">if (condition) {    someThing();}</code></pre>
+                        <pre><code class="lang-js">if (condition) {
+    someThing();
+}</code></pre>
                     </div>
                     <div class="wrong">
                         <span class="heading"><span>NOT THIS</span></span>
                         <pre><code>if (condition) someThing();</code></pre>
                     </div>
-                
+
                 </li>
                 <li class="styleitem">
                 <p class="description">
@@ -265,7 +270,7 @@
                         <span class="heading"><span>NOT THIS</span></span>
                         <pre><code>x +y;</code></pre>
                     </div>
-                
+
                 </li>
                 <li class="styleitem">
                 <p class="description">
@@ -286,13 +291,17 @@
                 </ul>
                     <div class="right">
                         <span class="heading"><span>DO THIS</span></span>
-                        <pre><code class="lang-js">if (x) {    x++;}</code></pre>
+                        <pre><code class="lang-js">if (x) {
+    x++;
+}</code></pre>
                     </div>
                     <div class="wrong">
                         <span class="heading"><span>NOT THIS</span></span>
-                        <pre><code>if(x) {    x++;}</code></pre>
+                        <pre><code>if(x) {
+    x++;
+}</code></pre>
                     </div>
-                
+
                 </li>
                 <li class="styleitem">
                 <p class="description">
@@ -306,21 +315,7 @@
                         <span class="heading"><span>NOT THIS</span></span>
                         <pre><code>x!= y;</code></pre>
                     </div>
-                
-                </li>
-                <li class="styleitem">
-                <p class="description">
-                    A space is required before the opening brace of a block statement.
-                </p>
-                    <div class="right">
-                        <span class="heading"><span>DO THIS</span></span>
-                        <pre><code class="lang-js">if (condition) {    foo();}</code></pre>
-                    </div>
-                    <div class="wrong">
-                        <span class="heading"><span>NOT THIS</span></span>
-                        <pre><code>if (condition){    foo();}</code></pre>
-                    </div>
-                
+
                 </li>
                 <li class="styleitem">
                 <p class="description">
@@ -334,7 +329,7 @@
                         <span class="heading"><span>NOT THIS</span></span>
                         <pre><code>var x = a?b:c;</code></pre>
                     </div>
-                
+
                 </li>
                 <li class="styleitem">
                 <p class="description">
@@ -342,13 +337,17 @@
                 </p>
                     <div class="right">
                         <span class="heading"><span>DO THIS</span></span>
-                        <pre><code class="lang-js">if (a) {    b = c; \\ line is indented with 4 spaces}</code></pre>
+                        <pre><code class="lang-js">if (a) {
+    b = c; \\ line is indented with 4 spaces
+}</code></pre>
                     </div>
                     <div class="wrong">
                         <span class="heading"><span>NOT THIS</span></span>
-                        <pre><code>if (a) {      b = c; \\ line is indented with 6 spaces}</code></pre>
+                        <pre><code>if (a) {
+      b = c; \\ line is indented with 6 spaces
+}</code></pre>
                     </div>
-                
+
                 </li>
                 <li class="styleitem">
                 <p class="description">
@@ -362,9 +361,9 @@
                         <span class="heading"><span>NOT THIS</span></span>
                         <pre><code>var s = &quot;A String Value&quot;;</code></pre>
                     </div>
-                
+
                 </li>
         </ol>
     </div>
 </body>
-</html>        
+</html>

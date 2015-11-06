@@ -29,6 +29,8 @@ import RecordRoute from '../components/record/recordRoute';
 import TableHomePageRoute from '../components/table/tableHomePageRoute';
 import DashboardRoute from '../components/dashboard/dashboardRoute';
 
+import FastClick from 'fastclick';
+
 import * as breakpoints from '../constants/breakpoints';
 
 let stores = {
@@ -70,13 +72,23 @@ let NavWrapper = React.createClass({
     handleResize: function() {
 
         let breakpoint = this.getCurrentBreakpointClass();
+        document.body.className = breakpoint;
+
+        // close left nav if resizing down to small
+        if (breakpoint === breakpoints.SMALL_BREAKPOINT && this.state.breakpoint === breakpoints.MEDIUM_BREAKPOINT) {
+            flux.actions.toggleLeftNav(false);
+        }
 
         this.setState({breakpoint});
     },
     componentDidMount: function() {
+
+        FastClick.attach(document.body);
+
         flux.actions.loadReports({appId: this.props.params.appId, tblId: this.props.params.tblId});
 
         window.addEventListener('resize', this.handleResize);
+        this.handleResize();
     },
     componentWillUnmount: function() {
         window.removeEventListener('resize', this.handleResize);
@@ -96,7 +108,6 @@ render((
     <Router history={createBrowserHistory()}>
         <Route path="/" component={Apps} />
         <Route path="apps" component={Apps} />
-        <Route path="m/apps" component={Apps} />
 
         <Route path="app/:appId/table/:tblId" component={NavWrapper} >
             <IndexRoute components={{main: TableHomePageRoute}} />
