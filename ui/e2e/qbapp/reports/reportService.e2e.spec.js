@@ -19,6 +19,9 @@
     describe('Report Service E2E Tests', function() {
         var app;
         var recordList;
+        var fieldNames = ['Record ID#', 'Text Field', 'Numeric Field', 'Numeric Currency Field', 'Numeric Percent Field', 'Numeric Rating Field',
+            'Date Field', 'Date Time Field', 'Time of Day Field', 'Duration Field', 'Checkbox Field', 'Phone Number Field',
+            'Email Address Field', 'URL Field'];
         e2eBase.setBaseUrl(browser.baseUrl);
         e2eBase.initialize();
         /**
@@ -30,9 +33,19 @@
             // Create the table schema (map object) to pass into the app generator
             var tableToFieldToFieldTypeMap = {};
             tableToFieldToFieldTypeMap['table 1'] = {};
-            tableToFieldToFieldTypeMap['table 1']['Text Field'] = {fieldType: consts.SCALAR, dataType : consts.TEXT};
-            tableToFieldToFieldTypeMap['table 1']['Numeric Field'] = {fieldType: consts.SCALAR, dataType : consts.NUMERIC};
-            tableToFieldToFieldTypeMap['table 1']['Phone Number Field'] = {fieldType: consts.SCALAR, dataType : consts.PHONE_NUMBER};
+            tableToFieldToFieldTypeMap['table 1'][fieldNames[1]] = {fieldType: consts.SCALAR, dataType : consts.TEXT};
+            tableToFieldToFieldTypeMap['table 1'][fieldNames[2]] = {fieldType: consts.SCALAR, dataType : consts.NUMERIC};
+            tableToFieldToFieldTypeMap['table 1'][fieldNames[3]] = {fieldType: consts.SCALAR, dataType : consts.CURRENCY};
+            tableToFieldToFieldTypeMap['table 1'][fieldNames[4]] = {fieldType: consts.SCALAR, dataType : consts.PERCENT};
+            tableToFieldToFieldTypeMap['table 1'][fieldNames[5]] = {fieldType: consts.SCALAR, dataType : consts.RATING};
+            tableToFieldToFieldTypeMap['table 1'][fieldNames[6]] = {fieldType: consts.SCALAR, dataType : consts.DATE};
+            tableToFieldToFieldTypeMap['table 1'][fieldNames[7]] = {fieldType: consts.SCALAR, dataType : consts.DATE_TIME};
+            tableToFieldToFieldTypeMap['table 1'][fieldNames[8]] = {fieldType: consts.SCALAR, dataType : consts.TIME_OF_DAY};
+            tableToFieldToFieldTypeMap['table 1'][fieldNames[9]] = {fieldType: consts.SCALAR, dataType : consts.DURATION};
+            tableToFieldToFieldTypeMap['table 1'][fieldNames[10]] = {fieldType: consts.SCALAR, dataType : consts.CHECKBOX};
+            tableToFieldToFieldTypeMap['table 1'][fieldNames[11]] = {fieldType: consts.SCALAR, dataType : consts.PHONE_NUMBER};
+            tableToFieldToFieldTypeMap['table 1'][fieldNames[12]] = {fieldType: consts.SCALAR, dataType : consts.EMAIL_ADDRESS};
+            tableToFieldToFieldTypeMap['table 1'][fieldNames[13]] = {fieldType: consts.SCALAR, dataType : consts.URL};
             //Call the basic app setup function
             e2eBase.basicSetup(tableToFieldToFieldTypeMap, 10).then(function(results) {
                 //Set your global objects to use in the test functions
@@ -84,7 +97,6 @@
             // Wait until the table has loaded
             browser.wait(EC.visibilityOf(reportServicePage.griddleContainerEl), 5000);
             // Assert column headers
-            var fieldNames = ['Record ID#', 'Text Field', 'Numeric Field', 'Phone Number Field'];
             reportServicePage.getReportColumnHeaders(reportServicePage).then(function(resultArray) {
                 // UI is currently using upper case to display the field names in columns
                 var upperFieldNames = e2eBase.e2eUtils.stringArrayToUpperCase(fieldNames);
