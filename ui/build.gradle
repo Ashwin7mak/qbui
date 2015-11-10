@@ -53,8 +53,7 @@ if (isCIBuild()) {
 println("cwd " + cwd )
 println( "Assembling: " + getProjectArchive() )
 println( "Branch : " + getProjectArchive() )
-println( "AllServices dir: " + getAllServicesDir(cwd))
-println( "AllServices war: " + getAllServicesWar())
+println( "AllServices war: " + getAllServicesWar(cwd))
 
 cargo {
     containerId = 'tomcat8x'
@@ -62,7 +61,7 @@ cargo {
 
     deployable {
         context = 'api'
-        file = file(getAllServicesDir(cwd) + getAllServicesWar())
+        file = file(getAllServicesWar(cwd))
     }
 
     local {
@@ -231,13 +230,6 @@ task installExpress(type: NpmTask) {
     args = ['install', 'express', '--save-dev']
 }
 
-task copyServiceWar {
-    doFirst {
-        tasks.invokeServiceWar.execute()
-    }
-}
-
-
 task checkForApiUp {
     doFirst {
         println("Starting Tomcat instance with Cargo and deploying API war");
@@ -253,12 +245,6 @@ task checkForApiUp {
 task invokeCheckForApiUp(type:Exec) {
     executable cwd + "/../tools/ci/checkForApiUp.sh"
     args '60'
-}
-
-
-task invokeServiceWar(type:Exec) {
-    executable cwd + "/../tools/ci/copyAllServicesWar.sh"
-    args cwd + getAllServicesWar(), cwd + "/build/"
 }
 
 
@@ -362,7 +348,7 @@ sonarRunner {
         property "sonar.coverage.exclusions", "**/*.spec.js"
         property "client-react.sonar.projectName", "${user}:ui:${branchName}:client"
         property "client-react.sonar.sources", "$projectDir/client-react/src"
-        property "client-react.sonar.exclusions", "**/css/**,**/constants/**"
+        property "client-react.sonar.exclusions", "**/assets/**,**/constants/**,**/prototype/**"
 
         //  import the ui LCOV coverage report
         property "client-react.sonar.javascript.lcov.reportPath","${projectDir}/build/reports/client/coverage/lcov.info"
@@ -408,14 +394,12 @@ def getProjectArchive() {
     return "${project.name}-${getReleasePrefix()}_${getRpmVersion()}-${getRelease()}.zip"
 }
 
-def getAllServicesDir(cwd) {
-    return "${cwd}/../../quickbase/allServices/build/libs/"
-}
-
-def getAllServicesWar() {
-    return isCIBuild() ?
-            "allServices-${getReleasePrefix()}_${getRpmVersion()}.war" :
-            "allServices-${getReleasePrefix()}_${getRpmVersion()}-${getRelease()}.war"
+//  return the directory where the allServices war is outputted.
+def getAllServicesWar(cwd) {
+    //  TODO: this is temporary as we should be retrieving from a nexus repository and not from the QuickBase folder structure.
+    //  TODO: The nexus repo is work in progress for the AWS team..when ready this code needs to be updated to reference the repo
+    //  TODO: for the latest war.  In addition, the job that builds the war in the ui_node_integration jenkins job should be removed.
+    return "${cwd}/../../quickbase/allServices/build/libs/allServices-${getReleasePrefix()}_${getRpmVersion()}-${getRelease()}.war"
 }
 
 def getArchiveLayoutStr(useBuildTime) {
