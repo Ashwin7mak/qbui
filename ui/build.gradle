@@ -210,7 +210,7 @@ task gruntUnitTestsNoColor(type: GruntTask) {
 
 task integrationTestsNoColor {
     doFirst {
-        println("Starting Tomcat instance with Cargo and deploying API war");
+        println("Starting Tomcat instance with Cargo");
         tasks.cargoStartLocal.execute()
         tasks.gruntIntegrationTestsNoColor.execute()
     }
