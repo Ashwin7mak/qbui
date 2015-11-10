@@ -16,7 +16,7 @@
         //baseUrl: process.env.DOMAIN,
         // list of files / patterns to load in the browser
         specs: [
-            '../qbapp/**/*.e2e.spec.js'
+            '../qbapp/reports/*.e2e.spec.js'
         ],
         // Patterns to exclude.
         exclude: [],
@@ -28,8 +28,12 @@
         framework: 'jasmine2',
         // ----- Options to be passed to minijasminenode -----
         //
-        // See the full list at https://github.com/juliemr/minijasminenode
+        // See https://github.com/jasmine/jasmine-npm/blob/master/lib/jasmine.js
+        // for the exact options available.
         jasmineNodeOpts: {
+            // If true, print colors to the terminal.
+            showColors: true,
+            // Default time to wait in ms before a test fails.
             defaultTimeoutInterval: 150000
         },
         // Globally accessible variables (params is a property of the Protractor instance)
