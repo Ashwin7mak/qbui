@@ -4,7 +4,7 @@
 import React from 'react';
 
 import ReactBootstrap from 'react-bootstrap';
-import {Tabs, Tab, Panel, Accordion, Glyphicon}  from 'react-bootstrap';
+import {Tabs, Tab, Glyphicon}  from 'react-bootstrap';
 import QBPanel from '../QBPanel/qbpanel.js';
 
 import {fakeForm2Tabs} from './fakeData.js';
@@ -13,7 +13,7 @@ var formData = fakeForm2Tabs;
 
 import './qbform.scss';
 
-class QBForm  extends React.Component {
+class QBForm extends React.Component {
 
     constructor(...args) {
         super(...args);
@@ -41,7 +41,7 @@ class QBForm  extends React.Component {
     }
 
     createField(curElement){
-        var isCheckbox = curElement.type == "checkbox";
+        var isCheckbox = curElement.type === "checkbox";
         return (
             <div id={curElement.id} className="field">
                 <span className={isCheckbox ? "" : "fieldLabel"}>{curElement.name}</span>
@@ -53,7 +53,7 @@ class QBForm  extends React.Component {
     createSection(curSection){
 
         var fields = [];
-        for(var j = 0; j < curSection.elements.length; j++){
+        for (var j = 0; j < curSection.elements.length; j++){
             fields.push(this.createField(curSection.elements[j]));
         }
         return (
@@ -65,7 +65,7 @@ class QBForm  extends React.Component {
 
     createTab(curTab){
         var sections = [];
-        for(var c = 0; c < curTab.sections.length; c++){
+        for (var c = 0; c < curTab.sections.length; c++){
             sections.push(this.createSection(curTab.sections[c]));
         }
         return (
@@ -76,9 +76,9 @@ class QBForm  extends React.Component {
         );
     }
 
-    render () {
+    render() {
         var test = [];
-        for(var i = 0; i < this.state.externalData.tabs.length; i++){
+        for (var i = 0; i < this.state.externalData.tabs.length; i++){
             test.push(this.createTab(this.state.externalData.tabs[i]));
         }
         return (

@@ -61,7 +61,7 @@ export const fakeForm1Tab = {
             "labelWrap": true
         }
     ]
-}
+};
 
 export const fakeForm2Tabs = {
     "title": "Marvel Form",
@@ -180,7 +180,7 @@ export const fakeForm2Tabs = {
             "labelWrap": true
         }
     ]
-}
+};
 
 export const fakeFormOnlyTabs = {
     "title": "Steve Rogers' Form",
@@ -233,19 +233,22 @@ export const fakeFormOnlyTabs = {
             "sections": [
 
             ]// end of sections array
-        },{
+        },
+        {
             "id": 7,
             "title": "Falcon",
             "sections": [
 
             ]// end of sections array
-        },{
+        },
+        {
             "id": 8,
             "title": "Ant Man",
             "sections": [
 
             ]// end of sections array
-        },{
+        },
+        {
             "id": 9,
             "title": "Star Lord",
             "sections": [
@@ -266,3 +269,4 @@ export const fakeFormOnlyTabs = {
         }
     ]
 }
+;

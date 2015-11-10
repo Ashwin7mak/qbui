@@ -24,14 +24,14 @@ class QBPanel extends React.Component {
     }
 
     handlePanelClick(){
-        this.setState({ showSection: !this.state.showSection });
+        this.setState({showSection: !this.state.showSection});
     }
 
-    render () {
+    render() {
         return (
             <div className="card">
                 <div className="cardHeader" onClick={this.handlePanelClick}>
-                    <h3>{this.props.title}<small className="cardHeaderIcon">
+                    <h3 id="title">{this.props.title}<small className="cardHeaderIcon">
                         <Glyphicon glyph="chevron-up" className={this.state.showSection ? "rotateDown" : "rotateUp"}/>
                     </small></h3>
                 </div>
