@@ -4,13 +4,13 @@
 TOTAL_WAIT_TIME=$1
 echo "Starting API health check.  Max verification time: $TOTAL_WAIT_TIME" seconds
 #loop and check whether the server is up, if so, return, otherwise up the wait time and loop again
-SERVER_RESPONSE=`curl -s -o /dev/null -w \"%{http_code}\" http://localhost:8080/api/api/v1/health`
+SERVER_RESPONSE=`curl -s -o /dev/null -w \"%{http_code}\" http://test.quickbase-dev.com:8080/api/api/v1/health`
 
 i=1
 while [ $i -lt $TOTAL_WAIT_TIME ] && [ "$SERVER_RESPONSE" != "\"200\"" ]; do
     echo "Sleeping $i seconds"
     sleep $i
-    SERVER_RESPONSE=`curl -s -o /dev/null -w \"%{http_code}\" http://localhost:8080/api/api/v1/health`
+    SERVER_RESPONSE=`curl -s -o /dev/null -w \"%{http_code}\" http://test.quickbase-dev:8080/api/api/v1/health`
     echo "Server response: $SERVER_RESPONSE"
     i=$(($i * 2))
 done
