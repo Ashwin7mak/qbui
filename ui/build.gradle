@@ -200,16 +200,21 @@ task gruntUnitTestsNoColor(type: GruntTask) {
     args = ["ciTest", "--no-color"]
 }
 
-task gruntIntegrationTestsNoColor(type: GruntTask) {
+task integrationTestsNoColor {
     doFirst {
         println("Starting Tomcat instance with Cargo and deploying API war");
         tasks.cargoStartLocal.execute()
-        args = ["ciIntegration", "--no-color"]
+        tasks.gruntIntegrationTestsNoColor.execute()
     }
     doLast {
         println("Stopping Tomcat instance with Cargo");
         tasks.cargoStopLocal.execute()
     }
+}
+
+task gruntIntegrationTestsNoColor(type: GruntTask) {
+    println("Running grunt integration ci tests");
+    args = ["ciIntegration", "--no-color"]
 }
 
 //browser tests not yet supported on ci
