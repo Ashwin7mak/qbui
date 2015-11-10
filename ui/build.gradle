@@ -412,13 +412,13 @@ def getAllServicesWar(cwd) {
     //  TODO: this is temporary as we should be retrieving the configuration from a nexus repository and not from the QuickBase folder structure.
     //  TODO: When the nexus repo becomes available, this code needs to be updated to reference the repo
     //  TODO: for the latest war.  In addition, the job that builds the war in the ui_node_integration jenkins job should be removed.
-    return "${cwd}/../../QuickBase/allServices/build/libs/allServices-${getReleasePrefix()}_${getRpmVersion()}-${getRelease()}.war"
+    return "${cwd}/../../quickbase/allServices/build/libs/allServices-${getReleasePrefix()}_${getRpmVersion()}-${getRelease()}.war"
 }
 def getCommonCoherenceResources(cwd) {
     //  TODO: this is temporary as we should be retrieving the configuration from a nexus repository and not from the QuickBase folder structure.
     //  TODO: When the nexus repo becomes available, this code needs to be updated to reference the repo
     //  TODO: for the latest war.  In addition, the job that builds the war in the ui_node_integration jenkins job should be removed.
-    return "${cwd}/../../QuickBase/coherenceCommon/src/main/resources"
+    return "${cwd}/../../quickbase/coherenceCommon/src/main/resources"
 }
 
 def getArchiveLayoutStr(useBuildTime) {
