@@ -53,7 +53,8 @@ if (isCIBuild()) {
 println("cwd " + cwd )
 println( "Assembling: " + getProjectArchive() )
 println( "Branch : " + getProjectArchive() )
-println( "AllServices war: " + cwd + getAllServicesWar())
+println( "AllServices dir: " + getAllServicesDir(cwd))
+println( "AllServices war: " + getAllServicesWar())
 
 cargo {
     containerId = 'tomcat8x'
@@ -61,7 +62,7 @@ cargo {
 
     deployable {
         context = 'api'
-        file = file(cwd + getAllServicesWar())
+        file = file(getAllServicesDir(cwd) + getAllServicesWar())
     }
 
     local {
@@ -407,12 +408,14 @@ def getProjectArchive() {
     return "${project.name}-${getReleasePrefix()}_${getRpmVersion()}-${getRelease()}.zip"
 }
 
-def getAllServicesWar() {
-    return "/../../QuickBase/allServices/build/libs/" + getAllServicesWarFileName()
+def getAllServicesDir(cwd) {
+    return "${cwd}/../../quickbase/allServices/build/libs/"
 }
 
-def getAllServicesWarFileName() {
-    return "allServices-${getReleasePrefix()}_${getRpmVersion()}-${getRelease()}.war"
+def getAllServicesWar() {
+    return isCIBuild() ?
+            "allServices-${getReleasePrefix()}_${getRpmVersion()}.war" :
+            "allServices-${getReleasePrefix()}_${getRpmVersion()}-${getRelease()}.war"
 }
 
 def getArchiveLayoutStr(useBuildTime) {
