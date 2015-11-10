@@ -50,7 +50,7 @@
 
         //Express Server
         //DOMAIN: 'https://localhost.intuit.com:9443'
-        DOMAIN: 'http://localhost:9000',
+        DOMAIN: 'http://quickbase-dev:9000',
 
         //Node understanding of RuntimeEnvironment
         env       : envConsts.TEST,
