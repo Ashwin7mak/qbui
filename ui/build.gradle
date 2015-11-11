@@ -208,26 +208,37 @@ task gruntUnitTestsNoColor(type: GruntTask) {
     args = ["ciTest", "--no-color"]
 }
 
-task integrationTestsNoColor {
+task startTomcat {
     doFirst {
         println("Starting Tomcat instance with Cargo");
         tasks.cargoStartLocal.execute()
-        tasks.gruntIntegrationTestsNoColor.execute()
     }
-    doLast {
+}
+task stopTomcat {
+    doFirst {
         println("Stopping Tomcat instance with Cargo");
         tasks.cargoStopLocal.execute()
     }
 }
 
-task gruntIntegrationTestsNoColor(type: GruntTask) {
-    println("Running grunt integration ci tests");
+task integrationTestsNoColor(type: GruntTask) {
     args = ["ciIntegration", "--no-color"]
+    dependsOn startTomcat
+    finalizedBy stopTomcat
 }
 
 //browser tests not yet supported on ci
 task gruntCiE2ETestsNoColor(type: GruntTask) {
     args = ["test:e2e", "--no-color"]
+    dependsOn startTomcat
+    finalizedBy stopTomcat
+}
+
+task checkForApiUp(type:Exec) {
+    executable cwd + "/../tools/ci/checkForApiUp.sh"
+    args '60'
+    dependsOn startTomcat
+    finalizedBy stopTomcat
 }
 
 task cleanBuildDir (type: Delete) {
@@ -242,24 +253,6 @@ task installExpress(type: NpmTask) {
     // install the express package only
     args = ['install', 'express', '--save-dev']
 }
-
-task checkForApiUp {
-    doFirst {
-        println("Starting Tomcat instance with Cargo");
-        tasks.cargoStartLocal.execute()
-        tasks.invokeCheckForApiUp.execute()
-    }
-    doLast {
-        println("Stopping Tomcat instance with Cargo");
-        tasks.cargoStopLocal.execute()
-    }
-}
-
-task invokeCheckForApiUp(type:Exec) {
-    executable cwd + "/../tools/ci/checkForApiUp.sh"
-    args '60'
-}
-
 
 //******************************************************
 //  Define task dependencies
