@@ -8,15 +8,14 @@ SERVER_RESPONSE=`curl -s -o /dev/null -w \"%{http_code}\" http://localhost:8080/
 
 i=1
 while [ $i -lt $TOTAL_WAIT_TIME ] && [ "$SERVER_RESPONSE" != "\"200\"" ]; do
-    echo "Sleeping $i seconds"
+    echo "Server response: $SERVER_RESPONSE...Sleeping $i seconds"
     sleep $i
     SERVER_RESPONSE=`curl -s -o /dev/null -w \"%{http_code}\" http://localhost:8080/api/api/v1/health`
-    echo "Server response: $SERVER_RESPONSE"
     i=$(($i * 2))
 done
 
 if [ "$SERVER_RESPONSE" != "\"200\"" ]; then
-    echo "API health check failed...aborting."
+    echo "Server response: $SERVER_RESPONSE...API health check failed...aborting."
 
     PID=$(ps -ef | grep org.apache.catalina.startup.Bootstrap | grep -v grep | awk '{ print $2 }')
 

@@ -54,11 +54,10 @@ if (isCIBuild()) {
 println("cwd " + cwd )
 println( "Assembling: " + getProjectArchive() )
 println( "Branch : " + getProjectArchive() )
-println( "AllServices war: ${getAllServicesWar(cwd)}")
-println( "CommonCoherence Resource: ${getCommonCoherenceResources(cwd)}")
 
 cargo {
     containerId = 'tomcat8x'
+
     port = 8080
 
     deployable {
@@ -67,8 +66,9 @@ cargo {
     }
 
     local {
+        //hostname = isCIBuild() ? 'quickbase-dev.com' : 'localhost'
         timeout=1000000
-        logLevel = 'high'
+        logLevel = 'medium'
         containerProperties {
             property 'cargo.tomcat.ajp.port', 9090
         }
@@ -82,7 +82,7 @@ cargo {
             installUrl = "file://" + cwd + "/../tools/ci/apache-tomcat-8.0.20.zip"
             downloadDir = file("$buildDir/download")
             extractDir = file("$buildDir/extract")
-            outputFile = file('build/output.log')
+            outputFile = file("$buildDir/tomcat.log")
         }
     }
 }
@@ -211,6 +211,8 @@ task gruntUnitTestsNoColor(type: GruntTask) {
 task startTomcat {
     doFirst {
         println("Starting Tomcat instance with Cargo");
+        println( "Deploying war: ${getAllServicesWar(cwd)}")
+        println( "Cargo output log folder: $buildDir")
         tasks.cargoStartLocal.execute()
     }
 }
@@ -221,22 +223,35 @@ task stopTomcat {
     }
 }
 
+
+task invokeCheckForApiUp(type:Exec) {
+    executable cwd + "/../tools/ci/checkForApiUp.sh"
+    args '60'
+}
+
+task checkForApiUp() {
+    doFirst {
+        tasks.invokeCheckForApiUp.execute()
+    }
+    dependsOn startTomcat
+    finalizedBy stopTomcat
+}
+
 task integrationTestsNoColor(type: GruntTask) {
-    args = ["ciIntegration", "--no-color"]
+    doFirst {
+        tasks.invokeCheckForApiUp.execute()
+        args = ["ciIntegration", "--no-color"]
+    }
     dependsOn startTomcat
     finalizedBy stopTomcat
 }
 
 //browser tests not yet supported on ci
 task gruntCiE2ETestsNoColor(type: GruntTask) {
-    args = ["test:e2e", "--no-color"]
-    dependsOn startTomcat
-    finalizedBy stopTomcat
-}
-
-task checkForApiUp(type:Exec) {
-    executable cwd + "/../tools/ci/checkForApiUp.sh"
-    args '60'
+    doFirst {
+        tasks.invokeCheckForApiUp.execute()
+        args = ["test:e2e", "--no-color"]
+    }
     dependsOn startTomcat
     finalizedBy stopTomcat
 }
@@ -354,7 +369,7 @@ sonarRunner {
         property "sonar.coverage.exclusions", "**/*.spec.js"
         property "client-react.sonar.projectName", "${user}:ui:${branchName}:client"
         property "client-react.sonar.sources", "$projectDir/client-react/src"
-        property "client-react.sonar.exclusions", "**/assets/**,**/constants/**,**/prototype/**"
+        property "client-react.sonar.exclusions", "**/assets/**,**/constants/**"
 
         //  import the ui LCOV coverage report
         property "client-react.sonar.javascript.lcov.reportPath","${projectDir}/build/reports/client/coverage/lcov.info"
