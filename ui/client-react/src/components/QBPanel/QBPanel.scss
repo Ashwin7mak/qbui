@@ -4,14 +4,15 @@
   background:white;
   margin:0 1rem 1rem;
   border-radius:3px;
-  user-select:none;
   transform-origin:top left;
+  min-width: 30%;
 }
 .cardHeader {
   padding-left: 3%;
   padding-top: 0.2rem;
   padding-bottom: 0.2rem;
   cursor: pointer;
+  min-width: 30%;
 }
 .cardHeaderIcon {
   float: right;
