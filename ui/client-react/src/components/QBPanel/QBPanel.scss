@@ -17,12 +17,13 @@
   float: right;
   margin-right:2rem;
 }
-
+.panelBody {
+  padding-left: 2%;
+}
 .rotateDown {
   transition: all .5s linear;
   transform: rotate(-180deg);
 }
-
 .rotateUp {
   transition: all .5s linear;
   transform: rotate(0deg);

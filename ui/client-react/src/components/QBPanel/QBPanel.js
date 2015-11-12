@@ -18,7 +18,7 @@ class QBPanel extends React.Component {
 
     initState(){
         let initialState = {
-            showSection: false
+            showSection: this.props.isOpen
         };
         return initialState;
     }
@@ -36,7 +36,7 @@ class QBPanel extends React.Component {
                     </small></h3>
                 </div>
                 <Collapse in={this.state.showSection}>
-                    <div id="cardBody">
+                    <div id="cardBody" className="panelBody">
                         {this.props.children}
                     </div>
                 </Collapse>
@@ -44,5 +44,8 @@ class QBPanel extends React.Component {
         );
     }
 }
+
+QBPanel.propTypes = { isOpen: React.PropTypes.bool };
+QBPanel.defaultProps = { isOpen: false};
 
 export default QBPanel;
