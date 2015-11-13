@@ -4,14 +4,18 @@
 import React from 'react';
 
 import ReactBootstrap from 'react-bootstrap';
-import {Tabs, Tab, Glyphicon}  from 'react-bootstrap';
+import {Glyphicon}  from 'react-bootstrap';
 import QBPanel from '../QBPanel/qbpanel.js';
 
-import {fakeForm2Tabs} from './fakeData.js';
+import {fakeFormLotsOfData} from './fakeData.js';
 
-var formData = fakeForm2Tabs;
+var formData = fakeFormLotsOfData;
 
 import './qbform.scss';
+
+var Tabs = require('rc-tabs');
+var TabPane = Tabs.TabPane;
+import '../record/rc-tabs.scss';
 
 class QBForm extends React.Component {
 
@@ -23,7 +27,8 @@ class QBForm extends React.Component {
     initState(){
         let initialState = {
             "externalData": formData,
-            readonly : true
+            readonly : true,
+            defaultTab : this.props.activeTab
         };
         return initialState;
     }
@@ -57,7 +62,7 @@ class QBForm extends React.Component {
             fields.push(this.createField(curSection.elements[j]));
         }
         return (
-            <QBPanel title={curSection.title} key={curSection.id}>
+            <QBPanel title={curSection.title} key={curSection.id} isOpen={false}>
                 {fields}
             </QBPanel>
         );
@@ -69,10 +74,10 @@ class QBForm extends React.Component {
             sections.push(this.createSection(curTab.sections[c]));
         }
         return (
-            <Tab eventKey={curTab.id} title={curTab.title}>
+            <TabPane key={curTab.id} tab={curTab.title}>
                 <br/>
                 {sections}
-            </Tab>
+            </TabPane>
         );
     }
 
@@ -82,8 +87,8 @@ class QBForm extends React.Component {
             test.push(this.createTab(this.state.externalData.tabs[i]));
         }
         return (
-            <div>
-                <Tabs defaultActiveKey={0}>
+            <div className="formContainer">
+                <Tabs defaultActiveKey={this.state.defaultTab}>
                     {test}
                 </Tabs>
             </div>
@@ -91,10 +96,12 @@ class QBForm extends React.Component {
     }
 }
 
+QBForm.propTypes = { activeTab: React.PropTypes.string };
+QBForm.defaultProps = { activeTab: '0'};
+
 export default QBForm;
 
 /*
- basic mobile form structure
 
  <tab | tab | <selected tab> | tab | tab>
     <QBPanel (collapsed)>

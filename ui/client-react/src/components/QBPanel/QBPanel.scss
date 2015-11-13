@@ -7,25 +7,25 @@
   transform-origin:top left;
   min-width: 30%;
 }
-.cardHeader {
+.qbPanelHeader {
   padding-left: 3%;
   padding-top: 0.2rem;
   padding-bottom: 0.2rem;
   cursor: pointer;
   min-width: 30%;
 }
-.cardHeaderIcon {
+.qbPanelHeaderIcon {
   float: right;
   margin-right:2rem;
 }
-.panelBody {
-  padding-left: 2%;
+.qbPanelBody {
+  padding-left: 1%;
 }
 .rotateDown {
-  transition: all .5s linear;
+  transition: all .25s linear;
   transform: rotate(-180deg);
 }
 .rotateUp {
-  transition: all .5s linear;
+  transition: all .25s linear;
   transform: rotate(0deg);
 }

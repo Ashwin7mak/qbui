@@ -4,7 +4,7 @@
 import React from 'react';
 
 import ReactBootstrap from 'react-bootstrap';
-import {Glyphicon, Collapse}  from 'react-bootstrap';
+import {Glyphicon, Panel}  from 'react-bootstrap';
 
 import './qbpanel.scss';
 
@@ -12,34 +12,24 @@ class QBPanel extends React.Component {
 
     constructor(...args) {
         super(...args);
-        this.state = this.initState(...args);
-        this.handlePanelClick = this.handlePanelClick.bind(this);
-    }
-
-    initState(){
-        let initialState = {
-            showSection: this.props.isOpen
+        this.state = {
+            open: this.props.isOpen
         };
-        return initialState;
-    }
-
-    handlePanelClick(){
-        this.setState({showSection: !this.state.showSection});
     }
 
     render() {
         return (
-            <div className="card">
-                <div className="cardHeader" onClick={this.handlePanelClick}>
-                    <h3 id="title">{this.props.title}<small className="cardHeaderIcon">
-                        <Glyphicon glyph="chevron-up" className={this.state.showSection ? "rotateDown" : "rotateUp"}/>
+            <div>
+                <div className="qbPanelHeader" onClick={ ()=> this.setState({ open: !this.state.open })}>
+                    <h3 id="title">{this.props.title}<small className="qbPanelHeaderIcon">
+                        <Glyphicon glyph="chevron-up" className={this.state.open ? "rotateDown" : "rotateUp"}/>
                     </small></h3>
                 </div>
-                <Collapse in={this.state.showSection}>
-                    <div id="cardBody" className="panelBody">
+                <Panel collapsible expanded={this.state.open}>
+                    <div className="qbPanelBody">
                         {this.props.children}
                     </div>
-                </Collapse>
+                </Panel>
             </div>
         );
     }
