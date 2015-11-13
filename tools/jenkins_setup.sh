@@ -40,4 +40,7 @@ echo copy phantomjs to node_module
 cp $PHANTOMJS_INSTALL_DIR/bin/phantomjs $PHANTOMJS_NODEMODULE
 ls -l "$PHANTOMJS_NODEMODULE"
 
+echo running rebuild of node
+npm rebuild node-sass
+
 
