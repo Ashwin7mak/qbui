@@ -14,6 +14,7 @@ description = "Package for Node.js application and UI files"
 apply plugin: 'com.moowork.grunt'
 apply plugin: 'com.moowork.node'
 apply plugin: 'sonar-runner'
+apply plugin: 'com.bmuschko.cargo'
 
 //grab the current working directory to use later on
 def cwd = project.getProjectDir().absolutePath
@@ -26,11 +27,19 @@ buildscript {
         dependencies {
             classpath 'com.moowork.gradle:gradle-grunt-plugin:0.9'
             classpath 'com.moowork.gradle:gradle-node-plugin:0.9'
-            //COMMENT out until proven we need to include
-            //Caused by: java.lang.ClassNotFoundException: org.codehaus.groovy.runtime.typehandling.ShortTypeHandling
-            //classpath 'org.codehaus.groovy:groovy-backports-compat23:2.3.5'
+            classpath 'com.bmuschko:gradle-cargo-plugin:2.2.1'
         }
     }
+}
+
+dependencies {
+    def cargoVersion = '1.4.5'
+    cargo "org.codehaus.cargo:cargo-core-uberjar:$cargoVersion",
+            "org.codehaus.cargo:cargo-ant:$cargoVersion",
+            "commons-discovery:commons-discovery:0.5",
+            "commons-logging:commons-logging:1.1.3",
+            "dom4j:dom4j:1.6.1",
+            "jaxen:jaxen:1.1.6"
 }
 
 //  CI Builds need the following properties to properly package and archive the build artifacts
@@ -41,9 +50,41 @@ if (isCIBuild()) {
     rootProject.ext.releasePrefix = getReleasePrefix();
     rootProject.ext.buildTime = "." + getBuildTime();
 }
+
 println("cwd " + cwd )
 println( "Assembling: " + getProjectArchive() )
 println( "Branch : " + getProjectArchive() )
+
+cargo {
+    containerId = 'tomcat8x'
+
+    port = 8080
+
+    deployable {
+        context = 'api'
+        file = file(getAllServicesWar(cwd))
+    }
+
+    local {
+        timeout=1000000
+        logLevel = 'medium'
+        containerProperties {
+            property 'cargo.tomcat.ajp.port', 9090
+        }
+
+        jvmArgs ="-Dspring.profiles.active=default" +
+                " -Dtangosol.coherence.override=${getCommonCoherenceResources(cwd)}/tangosol-coherence-override-test.xml" +
+                " -Dtangosol.pof.enabled=true" +
+                " -Dtangosol.pof.config=${getCommonCoherenceResources(cwd)}/quickbase-pof-config.xml"
+
+        installer {
+            installUrl = "file://" + cwd + "/../tools/ci/apache-tomcat-8.0.20.zip"
+            downloadDir = file("$buildDir/download")
+            extractDir = file("$buildDir/extract")
+            outputFile = file("$buildDir/tomcat.log")
+        }
+    }
+}
 
 
 node {
@@ -166,13 +207,52 @@ task gruntUnitTestsNoColor(type: GruntTask) {
     args = ["ciTest", "--no-color"]
 }
 
-task gruntIntegrationTestsNoColor(type: GruntTask) {
-    args = ["ciIntegration", "--no-color"]
+task startTomcat {
+    doFirst {
+        println("Starting Tomcat instance with Cargo");
+        println( "Deploying war: ${getAllServicesWar(cwd)}")
+        println( "Cargo output log folder: $buildDir")
+        tasks.cargoStartLocal.execute()
+    }
+}
+task stopTomcat {
+    doFirst {
+        println("Stopping Tomcat instance with Cargo");
+        tasks.cargoStopLocal.execute()
+    }
+}
+
+
+task invokeCheckForApiUp(type:Exec) {
+    executable cwd + "/../tools/ci/checkForApiUp.sh"
+    args '60'
+}
+
+task checkForApiUp() {
+    doFirst {
+        tasks.invokeCheckForApiUp.execute()
+    }
+    dependsOn startTomcat
+    finalizedBy stopTomcat
+}
+
+task integrationTestsNoColor(type: GruntTask) {
+    doFirst {
+        tasks.invokeCheckForApiUp.execute()
+        args = ["ciIntegration", "--no-color"]
+    }
+    dependsOn startTomcat
+    finalizedBy stopTomcat
 }
 
 //browser tests not yet supported on ci
 task gruntCiE2ETestsNoColor(type: GruntTask) {
-    args = ["test:e2e", "--no-color"]
+    doFirst {
+        tasks.invokeCheckForApiUp.execute()
+        args = ["test:e2e", "--no-color"]
+    }
+    dependsOn startTomcat
+    finalizedBy stopTomcat
 }
 
 task cleanBuildDir (type: Delete) {
@@ -186,18 +266,6 @@ task deleteDistModules(type: Delete) {
 task installExpress(type: NpmTask) {
     // install the express package only
     args = ['install', 'express', '--save-dev']
-}
-
-//in cloud9 check if the server is up
-task checkForApiUp {
-    doFirst {
-        tasks.invokeCheckForApiUp.execute()
-    }
-}
-
-task invokeCheckForApiUp(type:Exec) {
-    executable cwd + "/../tools/ci/checkForApiUp.sh"
-    args '300'
 }
 
 //******************************************************
@@ -300,7 +368,7 @@ sonarRunner {
         property "sonar.coverage.exclusions", "**/*.spec.js"
         property "client-react.sonar.projectName", "${user}:ui:${branchName}:client"
         property "client-react.sonar.sources", "$projectDir/client-react/src"
-        property "client-react.sonar.exclusions", "**/css/**,**/constants/**"
+        property "client-react.sonar.exclusions", "**/assets/**,**/constants/**"
 
         //  import the ui LCOV coverage report
         property "client-react.sonar.javascript.lcov.reportPath","${projectDir}/build/reports/client/coverage/lcov.info"
@@ -372,4 +440,17 @@ def isReleaseSnapshot() {
 
 def isCIBuild() {
     return getReleasePrefix().equals(getServicePrefix())
+}
+
+//  TODO: the following methods are temporary as we ultimately want to retrieve the war from a nexus repository and not have to build
+//  TODO: it from the QuickBase folder structure on every CI run.  When a nexus repo is updated to include the latest war, this
+//  TODO: code should be refactored to pull from nexus and the CI build configuration task that builds the war should be deleted.
+//
+//  return the folder where the allServices war is located
+def getAllServicesWar(cwd) {
+    return "${cwd}/../../quickbase/allServices/build/libs/allServices-${getReleasePrefix()}_${getRpmVersion()}-${getRelease()}.war"
+}
+//  return the folder where the coherenceCommon resources are located
+def getCommonCoherenceResources(cwd) {
+    return "${cwd}/../../quickbase/coherenceCommon/src/main/resources"
 }
