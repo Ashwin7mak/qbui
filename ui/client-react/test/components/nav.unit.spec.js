@@ -94,7 +94,22 @@ describe('Nav functions', () => {
     });
 
     it('test renders small based on break point', () => {
-        component = TestUtils.renderIntoDocument(<Nav flux={flux} breakpoint={breakpoints.SMALL_BREAKPOINT}></Nav>);
+        var TestParent = React.createFactory(React.createClass({
+
+            childContextTypes: {
+                breakpoint: React.PropTypes.string
+            },
+            getChildContext: function() {
+                return {breakpoint: breakpoints.SMALL_BREAKPOINT};
+            },
+            render() {
+                return <Nav ref="nav" flux={flux}></Nav>;
+            }
+        }));
+        var parent = TestUtils.renderIntoDocument(TestParent());
+
+        component = parent.refs.nav;
+
         expect(TestUtils.scryRenderedComponentsWithType(component, LeftNavMock).length).toEqual(1);
         expect(TestUtils.scryRenderedComponentsWithType(component, MobileTopNavMock).length).toEqual(1);
         expect(TestUtils.scryRenderedComponentsWithType(component, MobileFooterMock).length).toEqual(1);

@@ -1,76 +1,64 @@
 import * as actions from '../constants/actions';
 
 import Fluxxor from 'fluxxor';
-import AppService from '../services/appService';
 import Logger from '../utils/logger';
+var logger = new Logger();
+import _ from 'lodash';
 
 let AppsStore = Fluxxor.createStore({
 
     initialize: function() {
         this.apps = [];
+        this.selectedApp = null;
+        this.loading = false;
+        this.error = false;
 
         this.bindActions(
             actions.LOAD_APPS, this.onLoadApps,
-            actions.LOAD_APPS_WITH_TABLES, this.onLoadAppsWithHydratedTables
+            actions.LOAD_APPS_SUCCESS, this.onLoadAppsSuccess,
+            actions.LOAD_APPS_FAILED, this.onLoadAppsFailed,
+            actions.SELECT_APP, this.onSelectApp,
+            actions.SELECT_TABLE, this.onSelectTable
         );
 
         this.logger = new Logger();
-        this.appService = new AppService();
     },
-
     onLoadApps: function() {
-        this.apps = [];
-        this.appService.getApps().
-            then(
-            function(response) {
-                this.logger.debug('success:' + response);
-                this.apps = response.data;
-                this.emit('change');
-            }.bind(this),
-            function(error) {
-                this.logger.debug('error:' + error);
-                this.emit('change');
-            }.bind(this))
-            .catch(
-            function(ex) {
-                this.logger.debug('exception:' + ex);
-                this.emit('change');
-            }.bind(this)
-        );
+        this.loading = true;
+        this.emit("change");
+    },
+    onLoadAppsFailed: function() {
+        this.loading = false;
+        this.error = true;
+        this.emit("change");
+    },
+    onLoadAppsSuccess: function(apps) {
+
+        this.loading = false;
+        this.error = false;
+
+        this.apps = apps;
+
+        this.emit('change');
     },
 
-    onLoadAppsWithHydratedTables: function() {
-        this.apps = [];
-        this.appService.getApps().then(
-            function(response) {
-                this.logger.debug('success:' + response);
-                response.data.forEach(function(app) {
-                    this.appService.getApp(app.id).then(
-                        function(a) {
-                            this.apps.push(a.data);
-                            this.emit('change');
-                        }.bind(this)
-                    );
-                }.bind(this));
-            }.bind(this),
-            function(error) {
-                this.logger.debug('error:' + error);
-                //this.emit("change");
-            }.bind(this))
-            .catch(
-            function(ex) {
-                this.logger.debug('exception:' + ex);
-                //this.emit("change");
-            }.bind(this)
-        );
-    },
+    onSelectApp: function(appId) {
+        this.selectedAppId = appId;
 
+        this.emit('change');
+    },
+    onSelectTable: function(tblId) {
+        this.selectedTableId = tblId;
+
+        this.emit('change');
+    },
     getState: function() {
         return {
-            apps: this.apps
+            apps: this.apps,
+            selectedAppId: this.selectedAppId,
+            selectedTableId: this.selectedTableId
         };
     },
-
 });
 
 export default AppsStore;

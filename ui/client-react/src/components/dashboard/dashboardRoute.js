@@ -44,18 +44,18 @@ var DashboardRoute = React.createClass({
 
                 <div className="dashboardRow">
                     <div className="narrow">
-                        <ReportContent className="narrow" reportData={this.props.reportData} breakpoint={this.props.breakpoint}/>
+                        <ReportContent className="narrow" reportData={this.props.reportData} />
                     </div>
                     <div className="wide">
-                        <ReportContent className="narrow" reportData={this.props.reportData} breakpoint={this.props.breakpoint}/>
+                        <ReportContent className="narrow" reportData={this.props.reportData} />
                     </div>
                 </div>
                 <div className="dashboardRow">
                     <div className="narrow">
-                        <ReportContent reportData={this.props.reportData} breakpoint={this.props.breakpoint}/>
+                        <ReportContent reportData={this.props.reportData} />
                     </div>
                     <div className="wide">
-                        <ReportContent reportData={this.props.reportData} breakpoint={this.props.breakpoint}/>
+                        <ReportContent reportData={this.props.reportData} />
                     </div>
                 </div>
 

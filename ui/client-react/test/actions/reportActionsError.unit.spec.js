@@ -28,7 +28,7 @@ describe('Report Actions functions -- error', () => {
         spyOn(flux.dispatchBinder, 'dispatch');
         reportActions.__Rewire__('ReportService', mockReportService);
 
-        promise = flux.actions.loadReports(testData);
+        promise = flux.actions.loadReports(testData.appId, testData.tblId);
 
         //  expect a load report event to get fired before the promise returns
         expect(flux.dispatchBinder.dispatch).toHaveBeenCalledWith(actions.LOAD_REPORTS);
@@ -82,7 +82,7 @@ describe('Report Actions functions -- no data supplied', () => {
         spyOn(flux.dispatchBinder, 'dispatch');
         reportActions.__Rewire__('ReportService', mockSuccessReportService);
 
-        promise = flux.actions.loadReports(testData);
+        promise = flux.actions.loadReports(testData.appId, testData.tblId);
 
         //  no spinner if missing input parameters
         expect(flux.dispatchBinder.dispatch).not.toHaveBeenCalled();

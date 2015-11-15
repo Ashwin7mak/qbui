@@ -23,7 +23,7 @@ var RecordRoute = React.createClass({
 
     render: function() {
         return (<div className="recordContainer">
-            <Record recordData={this.props.recordData} breakpoint={this.props.breakpoint}/>
+            <Record recordData={this.props.recordData} />
         </div>);
     }
 });

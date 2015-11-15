@@ -3,7 +3,7 @@ export default {
 
     messages: {
         apps: {
-            header: "Ihr QuickBase Anwendungen"
+            header: "Anwendungen"
         },
         footer: {
             copyright: "{year} Intuit Inc. Alle Rechte vorbehalten."
@@ -22,7 +22,9 @@ export default {
         },
         nav: {
             home: "zu Hause",
-            reportsHeading: "Berichte"
+            reportsHeading: "Berichte",
+            tablesHeading: "Tische",
+            appsHeading: "Anwendungen"
         },
         grid: {
             no_data: "Es liegen keine Daten zum Anzeigen."

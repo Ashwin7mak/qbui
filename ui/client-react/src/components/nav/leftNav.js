@@ -29,7 +29,7 @@ let LeftNav = React.createClass({
         }
     },
 
-    buildNavItem: function(item) {
+    buildNavItem: function(item, selectedId) {
 
         let label = item.name;
         let tooltipID = item.key ? item.key : item.name;
@@ -38,9 +38,9 @@ let LeftNav = React.createClass({
         }
 
         const tooltip = (<Tooltip className={ this.props.open ? 'leftNavTooltip' : 'leftNavTooltip show' }
-                                  id={tooltipID}>{label}</Tooltip>);
+                                  id={tooltipID}>{label}:{selectedId}</Tooltip>);
 
-        let selectedClass = item.id && (item.id.toString() === this.props.reportID) ? 'selected' : '';
+        let selectedClass = item.id && (item.id.toString() === selectedId) ? 'selected' : '';
 
         return (
             <OverlayTrigger key={label} placement="right" overlay={tooltip}>
@@ -53,8 +53,13 @@ let LeftNav = React.createClass({
         );
     },
 
-    render: function() {
+    getAppTables(appId) {
+        let app = _.findWhere(this.props.apps, {id: appId});
 
+        return app ? app.tables : [];
+    },
+
+    render() {
         return (
 
             <div className={"leftMenu " + (this.props.open ? "open" : "closed")}>
@@ -65,12 +70,27 @@ let LeftNav = React.createClass({
                             this.buildHeadingItem(item) :
                             this.buildNavItem(item);
                     }) : null}
-                    {this.props.reportsData ? this.buildHeadingItem({key: 'nav.reportsHeading'}, this.props.reportsData.loading) : null}
-                    {this.props.reportsData && this.props.reportsData.list ? this.props.reportsData.list.map((item) => {
-                        return this.buildNavItem(item);
-                    }) : ''}
 
-                </Nav>
+                    {this.props.apps && this.buildHeadingItem({key: 'nav.appsHeading'}, false)}
+                    {this.props.apps && this.props.apps.map((app) => {
+                        app.icon = 'apple';
+                        return this.buildNavItem(app, this.props.selectedAppId);
+                    })}
+
+                    {this.props.selectedAppId && this.buildHeadingItem({key: 'nav.tablesHeading'}, false)}
+                    {this.props.selectedAppId && this.getAppTables(this.props.selectedAppId).map((table) => {
+                        table.link = '/app/' + this.props.selectedAppId + '/table/' + table.id;
+                        table.icon = 'book';
+                        return this.buildNavItem(table, this.props.selectedTableId);
+                    })}
+
+                    {this.props.selectedTableId && this.buildHeadingItem({key: 'nav.reportsHeading'}, this.props.reportsData.loading)}
+                    {this.props.selectedTableId && this.props.reportsData.list && this.props.reportsData.list.map((report) => {
+                        report.icon = 'list-alt';
+                        return this.buildNavItem(report, this.props.selectedReportId);
+                    })}
+
+                  </Nav>
 
             </div>
 

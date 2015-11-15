@@ -20,8 +20,8 @@ describe('Apps Actions functions', () => {
 
 
     it('test load apps with tables action', () => {
-        flux.actions.loadAppsWithTables();
-        expect(flux.dispatchBinder.dispatch).toHaveBeenCalledWith(actions.LOAD_APPS_WITH_TABLES);
+        flux.actions.loadApps(true);
+        expect(flux.dispatchBinder.dispatch).toHaveBeenCalledWith(actions.LOAD_APPS);
     });
 
 });
