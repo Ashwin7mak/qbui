@@ -66,7 +66,7 @@ class BaseService {
                     window.location.href = '/unauthorized';
                     break;
                 case 404:
-                    window.location.href = '/pageNotFound';
+                    //window.location.href = '/pageNotFound';
                     break;
                 case 500:
                     window.location.href = '/internalServerError';
