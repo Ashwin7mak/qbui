@@ -96,8 +96,8 @@ class QBForm extends React.Component {
     }
 }
 
-QBForm.propTypes = { activeTab: React.PropTypes.string };
-QBForm.defaultProps = { activeTab: '0'};
+QBForm.propTypes = {activeTab: React.PropTypes.string};
+QBForm.defaultProps = {activeTab: '0'};
 
 export default QBForm;
 
