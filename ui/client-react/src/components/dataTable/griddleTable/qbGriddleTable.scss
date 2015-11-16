@@ -1,16 +1,16 @@
-$font-family: 'Helvetica Neue LT Roman', HelveticaNeue, 'Helvetica Neue', Helvetica, Arial, sans-serif;
-$font-size: 12px;
+@import '../../../../src/assets/css/customVariables';
+$font-family: $font-family-sans-serif;
+$font-size: $font-size-base;
 $font-color: #404040;
 
 $header-cell-border: #c0d0e4;
 $header-cell-border-bottom: #d2dce7;
-$header-cell-background-color: #e3e9f3;
-$header-cell-color: #6e8ba8;
-$header-cell-color-hover: #e3eaf3;
+$header-cell-background-color: #e3eaf3;
+$header-cell-color: #486c8f;
 
 $row-background-color-hover: #f3f8fe;
-$row-cell-border: #dcdcdc;
-$row-cell-top-border: #d4d4d4;
+$row-cell-vertical-border: #969696;
+$row-cell-horizontal-border: #dcdcdc;
 
 .QBGriddle {
   font-family: $font-family;
@@ -27,22 +27,6 @@ $row-cell-top-border: #d4d4d4;
     border: 0px;
   }
 
-  th{
-    padding: 8px 5px 2px 5px;
-    color: $header-cell-color;
-    font-size: $font-size + 1;
-    -webkit-font-smoothing: antialiased;
-    text-transform: uppercase;
-    font-weight: 400;
-    border-color: $header-cell-border;
-    border-right: 1px solid $header-cell-border;
-    border-bottom: 2px solid $header-cell-border-bottom;
-    background-color: $header-cell-background-color;
-    &:hover{
-      background-color: $header-cell-color;
-      color: $header-cell-color-hover;
-    }
-  }
 
   tr:hover td {
     &:not(.footer-container) {
@@ -50,18 +34,31 @@ $row-cell-top-border: #d4d4d4;
     }
   }
   tr {
+    th{
+      padding: 5px 8px 2px 8px;
+      color: $header-cell-color;
+      font-size: $font-size-h5;
+      -webkit-font-smoothing: antialiased;
+      border-color: $header-cell-border;
+      border-right: 1px solid $header-cell-border;
+      border-bottom: 2px solid $header-cell-border-bottom;
+      background-color: $header-cell-background-color;
+      &:last-of-type{
+        border-right: 0px;
+      }
+    }
     td {
       word-wrap: break-word;
-      padding: 5px;
+      padding: 5px 8px;
       border-width: 1px;
       border-left-style: dotted;
       border-right-style: dotted;
       border-bottom-style: solid;
       border-top-style: solid;
-      border-left-color: $row-cell-border;
-      border-right-color: $row-cell-border;
-      border-bottom-color: $row-cell-border;
-      border-top-color: $row-cell-top-border;
+      border-left-color: $row-cell-vertical-border;
+      border-right-color: $row-cell-vertical-border;
+      border-bottom-color: $row-cell-horizontal-border;
+      border-top-color: $row-cell-horizontal-border;
       height: 30px; /* this doesnt seem right - pass through props if possible*/
       &:nth-child(1){
         border-left: 0px;
@@ -95,7 +92,7 @@ $row-cell-top-border: #d4d4d4;
           color: #365EBF;
           border-style: solid;
           border-width: 1px;
-          border-color: $row-cell-border;
+          border-color: $row-cell-vertical-border;
           background-color: #FFFFFF;
           font-size: 14px;
           margin: 0;
