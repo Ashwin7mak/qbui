@@ -62,6 +62,7 @@ let LeftNav = React.createClass({
     render() {
         return (
 
+
             <div className={"leftMenu " + (this.props.open ? "open" : "closed")}>
 
                 <Nav stacked activeKey={1}>

@@ -9,7 +9,6 @@ let AppsStore = Fluxxor.createStore({
 
     initialize: function() {
         this.apps = [];
-        this.selectedApp = null;
         this.loading = false;
         this.error = false;
 
@@ -56,7 +55,9 @@ let AppsStore = Fluxxor.createStore({
         return {
             apps: this.apps,
             selectedAppId: this.selectedAppId,
-            selectedTableId: this.selectedTableId
+            selectedTableId: this.selectedTableId,
+            loading: this.loading,
+            error: this.error
         };
     },
 });
