@@ -1,23 +1,38 @@
+@import '../../../../src/assets/css/customVariables';
+$font-family: $font-family-sans-serif;
+$font-size: $font-size-base;
+$font-color: #404040;
+
+$report-background-color: #f5f5f5;
+$card-expanded-background-color: #fffff;
+
+$fieldLabel-font-size: $font-size-small;
+$fieldValue-font-size: $font-size-base;
+
+$fieldLabel-color: #6e8ba8;
+$card-border-color: lightgrey;
+
+$margin-spacer: 10px;
+
+.custom-row{
+  display: block!important;
+}
+
 .custom-row-card {
-  border-color: grey;
-  border-style: solid;
-  border-width: 1px 0 1px 0;
-  font-size: large;
+  font-family: $font-family;
+  color: $font-color;
+  font-size: $font-size;
+  border-bottom: 1px solid $card-border-color;
+  position: relative;
+  padding: 5px 10px 15px 10px;
   .card {
     flex: 1;
     width: 100%;
   }
-  .top-card-row{
-    margin-top: 10px;
-  }
-  .card-expander{
-    border-left: 1px solid lightgray;
-    padding: 0 20px 0 25px;
-    /*margin: 20px 0;*/
-    color: gray;
-  }
   .glyphicon{
-   top: 50px;
+    position: absolute;
+    right: $margin-spacer * 2;
+    top: $margin-spacer * 2;
   }
   .flexRow{
     display: flex;
@@ -31,28 +46,31 @@
     overflow-y: hidden;
   }
   .fieldRow.collapsed{
-    max-height: 70px;
+    max-height: 45px;
   }
   .fieldRow.expanded{
     max-height: 100%;
   }
+  .top-card-row{
+    font-size: $fieldLabel-font-size;
+  }
   .field {
-    padding: 10px;
+    padding: $margin-spacer $margin-spacer 0 0;
     flex: 1 1 50%;
-    .fieldLabel{
+    .fieldLabel {
       display: block;
-      color:#6e8ba8;
+      color: $fieldLabel-color;
+      font-size: $fieldLabel-font-size
     }
     .fieldValue {
-      display:block;
+      display: block;
       min-width: 0;
       overflow: hidden;
       text-overflow: ellipsis;
       white-space: nowrap;
+      font-size: $fieldValue-font-size;
     }
     &:nth-child(n+3) {
-      background-color: #F5FAFF;
-      border-top: 1px solid lightgrey;
       .fieldValue {
         white-space: normal;
       }
@@ -65,17 +83,23 @@
       flex-basis: 33%;
       display: block;
       &:nth-child(n+3) {
-        background-color: inherit;
-        border-top: inherit;
         .fieldValue {
           white-space: nowrap;
         }
       }
       &:nth-child(n+4) {
-        background-color: #F5FAFF;
-        border-top: 1px solid lightgrey;
         white-space: normal;
       }
+
     }
   }
+}
+.custom-row-card.expanded {
+  box-shadow: 2px 2px 4px $card-border-color, 2px 2px 10px $card-border-color;
+  border: 0;
+  background: $card-expanded-background-color;
+}
+
+.reportContainer{
+  background: $report-background-color;/* Temporary background to show off inset white stying */
 }

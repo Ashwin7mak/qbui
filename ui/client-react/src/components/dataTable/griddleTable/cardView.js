@@ -48,13 +48,13 @@ class CardView extends React.Component {
         if (this.props.data) {
             var row = this.createRow();
             return (
-                <div className="custom-row-card">
+                <div className={this.state.showMoreCards ? "custom-row-card expanded" : "custom-row-card"}>
                     <div className="flexRow">
                         <div className="card">
                             {row}
                         </div>
                         <div className="card-expander" onClick={this.handleMoreCard}>
-                            <Glyphicon glyph="plus"/>
+                            <Glyphicon glyph={this.state.showMoreCards ? "menu-down" : "menu-up"}/>
                         </div>
                     </div>
                 </div>
