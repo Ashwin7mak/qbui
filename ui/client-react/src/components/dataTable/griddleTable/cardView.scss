@@ -1,6 +1,16 @@
-$font-family: 'Helvetica Neue LT Roman', HelveticaNeue, 'Helvetica Neue', Helvetica, Arial, sans-serif;
-$font-size: 12px;
+@import '../../../../src/assets/css/customVariables';
+$font-family: $font-family-sans-serif;
+$font-size: $font-size-base;
 $font-color: #404040;
+
+$report-background-color: #f5f5f5;
+$card-expanded-background-color: #fffff;
+
+$fieldLabel-font-size: $font-size-small;
+$fieldValue-font-size: $font-size-base;
+
+$fieldLabel-color: #6e8ba8;
+$card-border-color: lightgrey;
 
 $margin-spacer: 10px;
 
@@ -12,7 +22,7 @@ $margin-spacer: 10px;
   font-family: $font-family;
   color: $font-color;
   font-size: $font-size;
-  border-bottom: 1px solid lightgrey;
+  border-bottom: 1px solid $card-border-color;
   position: relative;
   padding: 5px 10px 15px 10px;
   .card {
@@ -42,14 +52,15 @@ $margin-spacer: 10px;
     max-height: 100%;
   }
   .top-card-row{
-    font-size: $font-size+2;
+    font-size: $fieldLabel-font-size;
   }
   .field {
-    padding: $margin-spacer $margin-spacer $margin-spacer 0;
+    padding: $margin-spacer $margin-spacer 0 0;
     flex: 1 1 50%;
     .fieldLabel {
       display: block;
-      color: #6e8ba8;
+      color: $fieldLabel-color;
+      font-size: $fieldLabel-font-size
     }
     .fieldValue {
       display: block;
@@ -57,7 +68,7 @@ $margin-spacer: 10px;
       overflow: hidden;
       text-overflow: ellipsis;
       white-space: nowrap;
-      font-size: $font-size+2;
+      font-size: $fieldValue-font-size;
     }
     &:nth-child(n+3) {
       .fieldValue {
@@ -84,11 +95,11 @@ $margin-spacer: 10px;
   }
 }
 .custom-row-card.expanded {
-  box-shadow: 2px 2px 4px lightgrey, 2px 2px 10px lightgrey;
+  box-shadow: 2px 2px 4px $card-border-color, 2px 2px 10px $card-border-color;
   border: 0;
-  background: #fff;
+  background: $card-expanded-background-color;
 }
 
 .reportContainer{
-  background: #f5f5f5;/* Temporary background to show off inset white stying */
+  background: $report-background-color;/* Temporary background to show off inset white stying */
 }
