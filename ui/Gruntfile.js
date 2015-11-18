@@ -497,7 +497,7 @@ module.exports = function(grunt) {
                 options: {
                     username        : 'sbg_qbse',
                     accessKey       : sauceKey,
-                    proxyTunnel     : 'http://qypprdproxy02.ie.intuit.net:80',
+                    proxy           : httpProxy,
                     tunnelIdentifier: tunnelIdentifier,
                     verbose         : grunt.option('verbose') === true,
                     logger          : console.log
@@ -768,8 +768,7 @@ module.exports = function(grunt) {
             return grunt.task.run([
                 'env:e2e',
                 'sauce_connect:aws',
-                'protractor:sauce_linux_chrome',
-                'sauce-connect-close'
+                'protractor:sauce_linux_chrome'
             ]);
         }
 
