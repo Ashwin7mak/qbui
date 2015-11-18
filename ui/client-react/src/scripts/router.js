@@ -25,6 +25,9 @@ import navActions from '../actions/navActions';
 import AppsHome from '../components/apps/home';
 import AppsRoute from '../components/apps/appsRoute';
 import AppHomePageRoute from '../components/app/appHomePageRoute';
+
+import Prototype from '../components/prototype/prototype';
+
 import ReportRoute from '../components/report/reportRoute';
 import RecordRoute from '../components/record/recordRoute';
 import TableHomePageRoute from '../components/table/tableHomePageRoute';
@@ -115,6 +118,8 @@ let Apps = React.createClass({
 render((
     <Router history={createBrowserHistory()}>
         <Route path="/" component={Apps} />
+
+        <Route path="prototype" component={Prototype} />
 
         <Route path="apps" component={NavWrapper} >
             <IndexRoute component={AppsRoute} />

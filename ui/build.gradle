@@ -54,11 +54,10 @@ if (isCIBuild()) {
 println("cwd " + cwd )
 println( "Assembling: " + getProjectArchive() )
 println( "Branch : " + getProjectArchive() )
-println( "AllServices war: ${getAllServicesWar(cwd)}")
-println( "CommonCoherence Resource: ${getCommonCoherenceResources(cwd)}")
 
 cargo {
     containerId = 'tomcat8x'
+
     port = 8080
 
     deployable {
@@ -68,7 +67,7 @@ cargo {
 
     local {
         timeout=1000000
-        logLevel = 'high'
+        logLevel = 'medium'
         containerProperties {
             property 'cargo.tomcat.ajp.port', 9090
         }
@@ -82,7 +81,7 @@ cargo {
             installUrl = "file://" + cwd + "/../tools/ci/apache-tomcat-8.0.20.zip"
             downloadDir = file("$buildDir/download")
             extractDir = file("$buildDir/extract")
-            outputFile = file('build/output.log')
+            outputFile = file("$buildDir/tomcat.log")
         }
     }
 }
@@ -208,26 +207,52 @@ task gruntUnitTestsNoColor(type: GruntTask) {
     args = ["ciTest", "--no-color"]
 }
 
-task integrationTestsNoColor {
+task startTomcat {
     doFirst {
-        println("Starting Tomcat instance with Cargo and deploying API war");
+        println("Starting Tomcat instance with Cargo");
+        println( "Deploying war: ${getAllServicesWar(cwd)}")
+        println( "Cargo output log folder: $buildDir")
         tasks.cargoStartLocal.execute()
-        tasks.gruntIntegrationTestsNoColor.execute()
     }
-    doLast {
+}
+task stopTomcat {
+    doFirst {
         println("Stopping Tomcat instance with Cargo");
         tasks.cargoStopLocal.execute()
     }
 }
 
-task gruntIntegrationTestsNoColor(type: GruntTask) {
-    println("Running grunt integration ci tests");
-    args = ["ciIntegration", "--no-color"]
+
+task invokeCheckForApiUp(type:Exec) {
+    executable cwd + "/../tools/ci/checkForApiUp.sh"
+    args '60'
+}
+
+task checkForApiUp() {
+    doFirst {
+        tasks.invokeCheckForApiUp.execute()
+    }
+    dependsOn startTomcat
+    finalizedBy stopTomcat
+}
+
+task integrationTestsNoColor(type: GruntTask) {
+    doFirst {
+        tasks.invokeCheckForApiUp.execute()
+        args = ["ciIntegration", "--no-color"]
+    }
+    dependsOn startTomcat
+    finalizedBy stopTomcat
 }
 
 //browser tests not yet supported on ci
 task gruntCiE2ETestsNoColor(type: GruntTask) {
-    args = ["test:e2e", "--no-color"]
+    doFirst {
+        tasks.invokeCheckForApiUp.execute()
+        args = ["test:e2e", "--no-color"]
+    }
+    dependsOn startTomcat
+    finalizedBy stopTomcat
 }
 
 task cleanBuildDir (type: Delete) {
@@ -242,24 +267,6 @@ task installExpress(type: NpmTask) {
     // install the express package only
     args = ['install', 'express', '--save-dev']
 }
-
-task checkForApiUp {
-    doFirst {
-        println("Starting Tomcat instance with Cargo and deploying API war");
-        tasks.cargoStartLocal.execute()
-        tasks.invokeCheckForApiUp.execute()
-    }
-    doLast {
-        println("Stopping Tomcat instance with Cargo");
-        tasks.cargoStopLocal.execute()
-    }
-}
-
-task invokeCheckForApiUp(type:Exec) {
-    executable cwd + "/../tools/ci/checkForApiUp.sh"
-    args '60'
-}
-
 
 //******************************************************
 //  Define task dependencies
@@ -361,7 +368,7 @@ sonarRunner {
         property "sonar.coverage.exclusions", "**/*.spec.js"
         property "client-react.sonar.projectName", "${user}:ui:${branchName}:client"
         property "client-react.sonar.sources", "$projectDir/client-react/src"
-        property "client-react.sonar.exclusions", "**/assets/**,**/constants/**,**/prototype/**"
+        property "client-react.sonar.exclusions", "**/assets/**,**/constants/**"
 
         //  import the ui LCOV coverage report
         property "client-react.sonar.javascript.lcov.reportPath","${projectDir}/build/reports/client/coverage/lcov.info"
@@ -407,20 +414,6 @@ def getProjectArchive() {
     return "${project.name}-${getReleasePrefix()}_${getRpmVersion()}-${getRelease()}.zip"
 }
 
-//  return the directory where the allServices war is outputted.
-def getAllServicesWar(cwd) {
-    //  TODO: this is temporary as we should be retrieving the configuration from a nexus repository and not from the QuickBase folder structure.
-    //  TODO: When the nexus repo becomes available, this code needs to be updated to reference the repo
-    //  TODO: for the latest war.  In addition, the job that builds the war in the ui_node_integration jenkins job should be removed.
-    return "${cwd}/../../quickbase/allServices/build/libs/allServices-${getReleasePrefix()}_${getRpmVersion()}-${getRelease()}.war"
-}
-def getCommonCoherenceResources(cwd) {
-    //  TODO: this is temporary as we should be retrieving the configuration from a nexus repository and not from the QuickBase folder structure.
-    //  TODO: When the nexus repo becomes available, this code needs to be updated to reference the repo
-    //  TODO: for the latest war.  In addition, the job that builds the war in the ui_node_integration jenkins job should be removed.
-    return "${cwd}/../../quickbase/coherenceCommon/src/main/resources"
-}
-
 def getArchiveLayoutStr(useBuildTime) {
     def base = "[organisation]/[module]/[revision]/[artifact]-${getReleasePrefix()}_${getRpmVersion()}"
     if (useBuildTime) {
@@ -447,4 +440,17 @@ def isReleaseSnapshot() {
 
 def isCIBuild() {
     return getReleasePrefix().equals(getServicePrefix())
+}
+
+//  TODO: the following methods are temporary as we ultimately want to retrieve the war from a nexus repository and not have to build
+//  TODO: it from the QuickBase folder structure on every CI run.  When a nexus repo is updated to include the latest war, this
+//  TODO: code should be refactored to pull from nexus and the CI build configuration task that builds the war should be deleted.
+//
+//  return the folder where the allServices war is located
+def getAllServicesWar(cwd) {
+    return "${cwd}/../../quickbase/allServices/build/libs/allServices-${getReleasePrefix()}_${getRpmVersion()}-${getRelease()}.war"
+}
+//  return the folder where the coherenceCommon resources are located
+def getCommonCoherenceResources(cwd) {
+    return "${cwd}/../../quickbase/coherenceCommon/src/main/resources"
 }

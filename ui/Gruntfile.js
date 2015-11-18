@@ -34,7 +34,7 @@ module.exports = function(grunt) {
 
     grunt.log.writeln('NODE_ENV: ' + process.env.NODE_ENV);
 
-    var sauceConnect = require('./e2e/sauce_connect');
+    var sauceDns = grunt.option('sauceDns');
     var sauceJobName = grunt.option('sauceJobName') || 'e2e_' + currentDateTime;
     var sauceKey = grunt.option('sauceKey');
 
@@ -474,9 +474,34 @@ module.exports = function(grunt) {
                 NODE_ENV                    : 'local',
                 NODE_TLS_REJECT_UNAUTHORIZED: 0,
                 ENV_TUNNEL_NAME             : tunnelIdentifier,
+                SAUCE_DNS                   : sauceDns,
                 SAUCE_JOB_NAME              : sauceJobName,
                 SAUCE_KEY                   : sauceKey,
                 DOMAIN                      : baseUrl
+            }
+        },
+
+        sauce_connect: {
+            local: {
+                options: {
+                    username        : 'sbg_qbse',
+                    accessKey       : sauceKey,
+                    proxy           : httpProxy,
+                    tunnelIdentifier: tunnelIdentifier,
+                    verbose         : grunt.option('verbose') === true,
+                    logger          : console.log,
+                    dns             : sauceDns
+                }
+            },
+            aws: {
+                options: {
+                    username        : 'sbg_qbse',
+                    accessKey       : sauceKey,
+                    proxy           : httpProxy,
+                    tunnelIdentifier: tunnelIdentifier,
+                    verbose         : grunt.option('verbose') === true,
+                    logger          : console.log
+                }
             }
         },
 
@@ -652,7 +677,7 @@ module.exports = function(grunt) {
     });
 
     grunt.registerTask('codeStandards', [
-        'lint',
+        'lint'
     ]);
 
     grunt.registerTask('testClientOnly', function() {
@@ -719,24 +744,7 @@ module.exports = function(grunt) {
             ]);
         }
 
-        if (target === 'e2e') {
-            return grunt.task.run([
-                'env:e2e',
-                'sauce_connect',
-                'protractor:sauce_linux_chrome',
-                'sauce-connect-close'
-            ]);
-        }
-
-        if (target === 'e2eMulti') {
-            return grunt.task.run([
-                'env:e2e',
-                'sauce_connect',
-                'protractor:sauce_multi_browser',
-                'sauce-connect-close'
-            ]);
-        }
-
+        // Run your protractor tests locally against your dev env
         if (target === 'e2eLocal') {
             return grunt.task.run([
                 'clean:server',
@@ -745,6 +753,26 @@ module.exports = function(grunt) {
             ]);
         }
 
+        // Run your protractor tests in Sauce Labs against your local dev env
+        if (target === 'e2eLocalSauce') {
+            return grunt.task.run([
+                'env:local',
+                'sauce_connect:local',
+                'protractor:sauce_linux_chrome',
+                'sauce-connect-close'
+            ]);
+        }
+
+        // Run your protractor tests via Sauce Labs against an existing AWS swimlane
+        if (target === 'e2eAWSSauce') {
+            return grunt.task.run([
+                'env:e2e',
+                'sauce_connect:aws',
+                'protractor:sauce_linux_chrome'
+            ]);
+        }
+
+        // Run a protractor spec file that will generate you a ticket, realm and app in your local dev
         if (target === 'e2eDataGen') {
             return grunt.task.run([
                 'clean:server',
@@ -765,11 +793,9 @@ module.exports = function(grunt) {
 
     });
 
-
     grunt.registerTask('testIntegration', function() {
         grunt.task.run(['test:integration']);
     });
-
 
     grunt.registerTask('testE2ELocal', function() {
         grunt.task.run(['test:e2eLocal']);
@@ -801,36 +827,6 @@ module.exports = function(grunt) {
         'build'
     ]);
 
-    /* global console:true */
-    grunt.registerTask('sauce_connect', 'Grunt plug-in to download and launch Sauce Labs Sauce Connect', function() {
-        var options = options({
-            username        : 'sbg_qbse',
-            accessKey       : sauceKey,
-            proxy           : httpProxy,
-            tunnelIdentifier: tunnelIdentifier,
-            verbose         : grunt.option('verbose') === true,
-            logger          : console.log
-        });
-
-        var done = this.async();
-
-        var tunnel = {};
-        sauceConnect.setOptions(options);
-
-        grunt.log.writeln('Found tunnelIdentifier: ' + options.tunnelIdentifier);
-
-        if (tunnel.process) {
-            grunt.log.writeln('Existing'.cyan + ' Sauce Connect tunnel: ' + tunnel.tid);
-            sauceConnect.close(sauceConnect.open(done));
-        } else {
-            tunnel = sauceConnect.open(done);
-        }
-    });
-
-    grunt.registerTask('sauce-connect-close', 'Closes the current Sauce Connect tunnel', function() {
-        sauceConnect.close(this.async());
-    });
-
     grunt.registerTask('lint', 'Run eslint on code', function(){
         return grunt.task.run([
             'shell:lint',
@@ -839,4 +835,5 @@ module.exports = function(grunt) {
 
     grunt.loadNpmTasks('grunt-shell-spawn');
     grunt.loadNpmTasks('grunt-webpack');
+    grunt.loadNpmTasks('grunt-sauce-connect-launcher');
 };

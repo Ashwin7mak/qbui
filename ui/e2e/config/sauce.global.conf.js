@@ -3,7 +3,14 @@
 (function() {
     'use strict';
     // Global properties file with params common to all Sauce lab config files
+
+    // Needed for Protractor's DriverProvider to be able to run it's updateJob function
+    // to let Sauce Labs know when the tests have completed
+    var HttpsProxyAgent = require('https-proxy-agent');
+    var agent = new HttpsProxyAgent('http://qypprdproxy02.ie.intuit.net:80');
+
     module.exports = {
+        sauceAgent: agent,
         // The timeout for each script run on the browser. This should be longer
         // than the maximum time your application needs to stabilize between tasks.
         allScriptsTimeout: 300000,
@@ -16,7 +23,7 @@
         //baseUrl: process.env.DOMAIN,
         // list of files / patterns to load in the browser
         specs: [
-            '../qbapp/**/*.e2e.spec.js'
+            '../qbapp/reports/*.e2e.spec.js'
         ],
         // Patterns to exclude.
         exclude: [],
@@ -28,8 +35,12 @@
         framework: 'jasmine2',
         // ----- Options to be passed to minijasminenode -----
         //
-        // See the full list at https://github.com/juliemr/minijasminenode
+        // See https://github.com/jasmine/jasmine-npm/blob/master/lib/jasmine.js
+        // for the exact options available.
         jasmineNodeOpts: {
+            // If true, print colors to the terminal.
+            showColors: true,
+            // Default time to wait in ms before a test fails.
             defaultTimeoutInterval: 150000
         },
         // Globally accessible variables (params is a property of the Protractor instance)
