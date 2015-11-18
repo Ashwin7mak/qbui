@@ -497,7 +497,7 @@ module.exports = function(grunt) {
                 options: {
                     username        : 'sbg_qbse',
                     accessKey       : sauceKey,
-                    proxy           : httpProxy,
+                    proxy           : 'http://qypprdproxy02.ie.intuit.net:80',
                     tunnelIdentifier: tunnelIdentifier,
                     verbose         : grunt.option('verbose') === true,
                     logger          : console.log
