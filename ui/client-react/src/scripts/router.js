@@ -95,7 +95,7 @@ let NavWrapper = React.createClass({
         if (this.props.params.appId && this.props.params.tblId && this.props.params.appId !== props.params.appId && this.props.params.tblId !== props.params.tblId) {
             flux.actions.selectAppId(this.props.params.appId);
             flux.actions.selectTableId(this.props.params.tblId);
-            flux.actions.loadReports({appId: this.props.params.appId, tblId: this.props.params.tblId});
+            flux.actions.loadReports(this.props.params.appId, this.props.params.tblId);
         }
     },
     componentWillUnmount: function() {
