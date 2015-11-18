@@ -3,7 +3,14 @@
 (function() {
     'use strict';
     // Global properties file with params common to all Sauce lab config files
+
+    // Needed for Protractor's DriverProvider to be able to run it's updateJob function
+    // to let Sauce Labs know when the tests have completed
+    var HttpsProxyAgent = require('https-proxy-agent');
+    var agent = new HttpsProxyAgent('http://qypprdproxy02.ie.intuit.net:80');
+
     module.exports = {
+        sauceAgent: agent,
         // The timeout for each script run on the browser. This should be longer
         // than the maximum time your application needs to stabilize between tasks.
         allScriptsTimeout: 300000,
