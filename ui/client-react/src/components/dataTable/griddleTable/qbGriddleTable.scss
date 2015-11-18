@@ -1,7 +1,21 @@
+@import '../../../../src/assets/css/customVariables';
+$font-family: $font-family-sans-serif;
+$font-size: $font-size-base;
+$font-color: #404040;
+
+$header-cell-border: #c0d0e4;
+$header-cell-border-bottom: #d2dce7;
+$header-cell-background-color: #e3eaf3;
+$header-cell-color: #486c8f;
+
+$row-background-color-hover: #f3f8fe;
+$row-cell-vertical-border: #969696;
+$row-cell-horizontal-border: #dcdcdc;
+
 .QBGriddle {
-  font-family: 'Helvetica Neue LT Roman', HelveticaNeue, 'Helvetica Neue', Helvetica, Arial, sans-serif;
-  color: #404040;
-  font-size: 12px;
+  font-family: $font-family;
+  color: $font-color;
+  font-size: $font-size;
   -webkit-font-smoothing: antialiased;
 
   table{
@@ -10,41 +24,41 @@
 
   .griddle-container { /* Temporary margin so the footer doesnt overlap the grid. Should be resolved by the layout in time. */
     margin-bottom: 70px;
-    //margin-left: 20px;
-    //margin-right: 20px;
     border: 0px;
   }
 
-  th{
-    padding: 8px 5px 2px 5px;
-    color: #6e8ba8;
-    font-size: 13px;
-    -webkit-font-smoothing: antialiased;
-    text-transform: uppercase;
-    font-weight: 400;
-    border-color: #c0d0e4;
-    border-right: 1px solid #c0d0e4;
-    border-bottom: 2px solid #D2DCE7;
-    background-color: #E3E9F3;
-    &:hover{
-      background-color: #6e8ba8;
-      color: #e3eaf3;
-    }
-  }
 
   tr:hover td {
     &:not(.footer-container) {
-      background-color: #f3f8fe;
+      background-color: $row-background-color-hover;
     }
   }
   tr {
+    th{
+      padding: 5px 8px 2px 8px;
+      color: $header-cell-color;
+      font-size: $font-size-h5;
+      -webkit-font-smoothing: antialiased;
+      border-color: $header-cell-border;
+      border-right: 1px solid $header-cell-border;
+      border-bottom: 2px solid $header-cell-border-bottom;
+      background-color: $header-cell-background-color;
+      &:last-of-type{
+        border-right: 0px;
+      }
+    }
     td {
       word-wrap: break-word;
-      padding: 5px;
-      border-left: 1px dotted #dcdcdc;
-      border-right: 1px dotted #dcdcdc;
-      border-bottom: 1px solid #dcdcdc;
-      border-color: #d4d4d4;
+      padding: 5px 8px;
+      border-width: 1px;
+      border-left-style: dotted;
+      border-right-style: dotted;
+      border-bottom-style: solid;
+      border-top-style: solid;
+      border-left-color: $row-cell-vertical-border;
+      border-right-color: $row-cell-vertical-border;
+      border-bottom-color: $row-cell-horizontal-border;
+      border-top-color: $row-cell-horizontal-border;
       height: 30px; /* this doesnt seem right - pass through props if possible*/
       &:nth-child(1){
         border-left: 0px;
@@ -76,7 +90,9 @@
           line-height: 1.42857;
           text-decoration: none;
           color: #365EBF;
-          border: 1px #DCDCDC solid;
+          border-style: solid;
+          border-width: 1px;
+          border-color: $row-cell-vertical-border;
           background-color: #FFFFFF;
           font-size: 14px;
           margin: 0;

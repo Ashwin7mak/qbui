@@ -87,8 +87,8 @@
             var fieldNames = ['Record ID#', 'Text Field', 'Numeric Field', 'Phone Number Field'];
             reportServicePage.getReportColumnHeaders(reportServicePage).then(function(resultArray) {
                 // UI is currently using upper case to display the field names in columns
-                var upperFieldNames = e2eBase.e2eUtils.stringArrayToUpperCase(fieldNames);
-                expect(resultArray).toEqual(upperFieldNames);
+                //var upperFieldNames = e2eBase.e2eUtils.stringArrayToUpperCase(fieldNames);
+                expect(resultArray).toEqual(fieldNames);
             });
             // Check all record values equal the ones we added via the API
             reportServicePage.griddleRecordElList.getText().then(function(uiRecords) {
