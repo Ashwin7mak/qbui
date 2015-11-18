@@ -34,7 +34,7 @@
     server.use(jsonServer.defaults());
 
 // Custom routes
-    server.get('/api/api/v1/ticket', function (req, res) {
+    server.get('/api/api/v1/ticket', function(req, res) {
         res.send('8_bkbn766qp_j2s_duii_a_9s59gbbvatm7dbqvp5incc7pp4sbeaj99sb7eaua5da7djzwmmzsdv');
     });
 //Add any additional custom or generated route responses here
@@ -44,7 +44,6 @@
     var router = jsonServer.router(dbfile);
     server.use(router);
 
-    console.log();
     server.listen(port, argv.host);
     console.log("Mock backend listening on port " + port + " - http://" + argv.host + ":" + port);
 }());
