@@ -11,9 +11,9 @@ describe('Logger', () => {
     it('test instantiation of Logger with default test environment settings', () => {
         let logger = new Logger();
 
-        //  defined in config/app.config.js
-        expect(logger.logLevel).toBe(LogLevel.DEBUG);
-        expect(logger.logToConsole).toBeTruthy();
+        //  defined in config/app.config.js...for tests we are running with PROD
+        expect(logger.logLevel).toBe(LogLevel.WARN);
+        expect(logger.logToConsole).toBeFalsy();
         expect(logger.logToServer).toBeTruthy();
     });
 

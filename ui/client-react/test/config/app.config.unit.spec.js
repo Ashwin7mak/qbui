@@ -11,7 +11,7 @@ describe('Logger', () => {
         expect(config).toBeDefined();
 
         //  following configuration values are expected to exist
-        expect(config.env).toBe('TEST');
+        expect(config.env).toBe('PROD');
         expect(config.api.version).toBeDefined();
         expect(config.logger.logLevel).toBeDefined();
         expect(config.logger.logToConsole).toBeDefined();

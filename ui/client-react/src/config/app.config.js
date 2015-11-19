@@ -1,14 +1,19 @@
-
 import LogLevel from '../utils/logLevels';
-
 //
-// Application configuration settings per run-time environment.
-// Supported run-time environments include PRODUCTION, TEST and LOCAL.
+// Application configuration settings per run-time environment.  The webpack configuration defines and sets
+// these variables at build time.  The supported run-time environments include:  __QB_PROD__, __QB_TEST__
+// and __QB_LOCAL__.  ONE and ONLY ONE variable is to be set to true.
 //
+// CODE COVERAGE: For the given if conditional variable blocks: __QB_PROD__, __QB_TEST__ and __QB_LOCAL__,
+// the babel transpiler only includes the code inside of the condition block when the conditional statement
+// is true.  When the if conditional block is false, the block code is NOT included in the outputted bundle file.
+//
+// For our tests, the webPack configuration in karam.conf is setup to run with __QB_PROD__ set to true (the others
+// are false).  Because of this, our coverage reports need to ignore the 'false' conditional blocks by annotating
+// the if statements of __QB_TEST__ and __QB_LOCAL__ with 'istanbul ignore if'.
 
 let configuration = null;
 
-//  set the run-time environment..these values are set in webpack...one and only one should be true
 if (__QB_PROD__) {
     configuration = {
         env: 'PROD',
@@ -27,6 +32,7 @@ if (__QB_PROD__) {
     };
 }
 
+/* istanbul ignore if */
 if (__QB_TEST__) {
     configuration = {
         env: 'TEST',
@@ -45,6 +51,7 @@ if (__QB_TEST__) {
     };
 }
 
+/* istanbul ignore if */
 if (__QB_LOCAL__) {
     configuration = {
         env: 'LOCAL',
@@ -63,15 +70,16 @@ if (__QB_LOCAL__) {
     };
 }
 
-//  A run-time environment MUST be defined
+/* istanbul ignore if */
 if (!configuration) {
+    //  A run-time environment MUST be defined
     throw ("Run-time environment not defined....aborting!");
 }
 
-//  don't call the logger...you'll get into a race condition...instead, directly check
-//  if the configuration allows for console logging
-if (configuration.logger.logToConsole) {
+/* istanbul ignore if */
+if (!__QB_PROD__) {
     /*eslint no-console:0 */
+    // don't call the logger..you'll get into a race condition
     console.log("Run time configuration: " + configuration.env);
 }
 
