@@ -18,6 +18,8 @@ client-react/dist/
 server/config/environment/local.js
 server/logs/
 
+# local mock
+server/mockserver/db.json
 
 # miscellaneous files to not track
 npm-debug.log
