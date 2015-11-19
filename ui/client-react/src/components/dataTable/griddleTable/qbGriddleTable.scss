@@ -1,16 +1,17 @@
-@import '../../../../src/assets/css/customVariables';
-$font-family: $font-family-sans-serif;
-$font-size: $font-size-base;
-$font-color: #404040;
+@import '../../../../src/assets/css/qbVariables';
 
-$header-cell-border: #c0d0e4;
-$header-cell-border-bottom: #d2dce7;
-$header-cell-background-color: #e3eaf3;
-$header-cell-color: #486c8f;
+$header-cell-border: $color5;
+$header-cell-border-bottom: $color6;
+$header-cell-background-color: $color7;
+$header-cell-color: $color8;
 
-$row-background-color-hover: #f3f8fe;
-$row-cell-vertical-border: #969696;
-$row-cell-horizontal-border: #dcdcdc;
+$row-background-color-hover: $color1;
+$row-cell-vertical-border: $color9;
+$row-cell-horizontal-border: $color4;
+
+$footer-background: $color2;
+$footer-next-button-hover: $color10;
+$footer-next-button: $color2;
 
 .QBGriddle {
   font-family: $font-family;
@@ -79,7 +80,7 @@ $row-cell-horizontal-border: #dcdcdc;
   }
 
   .footer-container {
-    background-color: #fff;
+    background-color: $footer-background;
     .griddle-footer{
       .pager{
         margin-right: 2px;
@@ -93,12 +94,12 @@ $row-cell-horizontal-border: #dcdcdc;
           border-style: solid;
           border-width: 1px;
           border-color: $row-cell-vertical-border;
-          background-color: #FFFFFF;
+          background-color: $footer-next-button;
           font-size: 14px;
           margin: 0;
           border-radius: 2px;
           &:hover{
-            color: #243F7F;
+            color: $footer-next-button-hover;
           }
         }
       }

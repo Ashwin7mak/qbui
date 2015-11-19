@@ -1,0 +1,22 @@
+/* This file should contain all shared variables for QuickBase styling. */
+@import 'customVariables';
+
+/* QuickBase color stack */
+$color1:    #f3f8fe;
+$color2:    #ffffff;
+$color3:    #486c8f;
+$color4:    #dcdcdc;
+$color5:    #c0d0e4;
+$color6:    #d2dce7;
+$color7:    #e3eaf3;
+$color8:    #486c8f;
+$color9:    #969696;
+$color10:   #243F7F;
+$color11:   #404040;
+
+/* QuickBase font stack */
+$font-family: $font-family-sans-serif;  /* default font face */
+$font-size:   $font-size-base;          /* base/default body font size */
+$font-color:  $color11;                 /* default font color */
+
+/* QuickBase icons */

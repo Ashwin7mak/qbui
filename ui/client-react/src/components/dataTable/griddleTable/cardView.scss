@@ -1,21 +1,24 @@
-@import '../../../../src/assets/css/customVariables';
-$font-family: $font-family-sans-serif;
-$font-size: $font-size-base;
-$font-color: #404040;
+@import '../../../../src/assets/css/qbVariables';
 
-$report-background-color: #f5f5f5;
-$card-expanded-background-color: #ffffff;
+$report-background-color: $color1;
+$card-expanded-background-color: $color2;
 
 $fieldLabel-font-size: $font-size-small;
 $fieldValue-font-size: $font-size-base;
 
-$fieldLabel-color: #6e8ba8;
-$card-border-color: lightgrey;
+$fieldLabel-color: $color3;
+$card-border-color: $color4;
+
+/* TODO: move to qbVariables after figuring out relative urls */
+$chevron_opened_icon: url('../../../../src/assets/images/chevron_opened.svg');
+$chevron_closed_icon: url('../../../../src/assets/images/chevron_closed.svg');
 
 $margin-spacer: 10px;
 
 .custom-row{
   display: block!important;
+  width: inherit!important;
+  margin: $margin-spacer;
 }
 
 .custom-row-card {
@@ -76,7 +79,22 @@ $margin-spacer: 10px;
       }
     }
   }
+  .card-expander{
+    margin-top: $margin-spacer;
+    .open {
+      display: block;
+      width: 14px;
+      height: 14px;
+      background: $chevron_opened_icon 0 0 no-repeat;
+    }
 
+    .close {
+      display: block;
+      width: 14px;
+      height: 14px;
+      background: $chevron_closed_icon 0 0 no-repeat;
+    }
+  }
 
   @media (min-device-width: 300px) and (orientation: landscape) {
     .field {
@@ -95,9 +113,11 @@ $margin-spacer: 10px;
   }
 }
 .custom-row-card.expanded {
-  box-shadow: 2px 2px 4px $card-border-color, 2px 2px 10px $card-border-color;
   border: 0;
   background: $card-expanded-background-color;
+  -webkit-box-shadow: 0px 0px 4px 4px $card-border-color;
+  -moz-box-shadow: 0px 0px 4px 4px $card-border-color;
+  box-shadow: 0px 0px 4px 4px $card-border-color;
 }
 
 .reportContainer{
