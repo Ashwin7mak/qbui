@@ -1,6 +1,7 @@
 // Karma configuration
 //
 var path = require("path");
+var webpack = require('webpack');
 var nodeModulesPath = path.resolve(__dirname, "node_modules");
 
 module.exports = function(config) {
@@ -82,6 +83,13 @@ module.exports = function(config) {
                     }
                 ]
             },
+            plugins: [
+                new webpack.DefinePlugin({
+                    __QB_PROD__: JSON.stringify(false),
+                    __QB_TEST__: JSON.stringify(true),
+                    __QB_LOCAL__: JSON.stringify(false)
+                })
+            ],
             watch: true
         },
         webpackServer: {

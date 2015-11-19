@@ -8,14 +8,13 @@ describe('Logger', () => {
 
     let logMsg = 'debug message';
 
-    // TODO: this is a PLACEHOLDER...need to explicitly call with TEST configuration..
     it('test instantiation of Logger with default test environment settings', () => {
         let logger = new Logger();
 
         //  defined in config/app.config.js
         expect(logger.logLevel).toBe(LogLevel.DEBUG);
         expect(logger.logToConsole).toBeTruthy();
-        expect(logger.logToServer).toBeFalsy();
+        expect(logger.logToServer).toBeTruthy();
     });
 
     it('test instantiation of Logger with application level settings', () => {

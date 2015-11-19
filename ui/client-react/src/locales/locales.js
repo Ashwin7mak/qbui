@@ -22,7 +22,6 @@ class Locale {
     }
 
     static getI18nBundle() {
-        //logger.debug('Fetching locale: ' + locale);
         try {
             switch (locale.toLowerCase()) {
             case 'en-us':
@@ -32,12 +31,12 @@ class Locale {
             case 'de-de':
                 return DE_DE;
             default:
-                logger.info('Locale (' + locale + ') is invalid or not supported.  Using default: en-us');
+                logger.warn('Locale (' + locale + ') is invalid or not supported.  Using default: en-us');
                 return EN_US;
             }
         } catch (e) {
-            //  any error automatically returns default locale
-            logger.error('Error fetching locale: ' + e + '.  Using default: en-us');
+            //  any error automatically returns default of en-us
+            logger.error('Error fetching locale..Using default: en-us --> ' + e);
             return EN_US;
         }
     }
@@ -45,13 +44,17 @@ class Locale {
     static changeLocale(newLocale) {
         try {
             if (config.locale.supported.indexOf(newLocale.toLowerCase()) === -1) {
-                logger.error('Invalid/unsupported change locale: ' + newLocale + '.  Locale not changed.');
+                logger.warn('Invalid/unsupported change locale: ' + newLocale + '.  Locale not changed.');
             } else {
                 locale = newLocale;
             }
         } catch (e) {
-            logger.error('Exception changing locale: ' + e + '.  Locale not changed.');
+            logger.error('Error changing locale..Locale not changed --> ' + e);
         }
+    }
+
+    static getSupportedLocales() {
+        return config.locale.supported;
     }
 
 }

@@ -1,6 +1,7 @@
 import React from 'react';
 import ReactIntl from 'react-intl';
 import {I18nMessage, I18nDate} from '../../utils/i18nMessage';
+import Locale from '../../locales/locales';
 
 import Fluxxor from 'fluxxor';
 import _ from 'lodash';
@@ -15,6 +16,7 @@ var CurrentDate = React.createClass({
     render: function() {
         return <I18nDate value={new Date()} day="numeric" month="long" year="numeric"/>;
     }
+
 });
 
 const debounceSearchMillis = 100;
@@ -32,18 +34,21 @@ var TopNav = React.createClass({
         flux.actions.showTrouser();
     },
 
-    onSelect: function(ev) {
-        let flux = this.getFlux();
-        flux.actions.changeLocale(ev.currentTarget.title);
-    },
-
     searchChanged: function(ev) {
         const text = ev.target.value;
         let flux = this.getFlux();
         flux.actions.searchFor(text);
     },
+
+    onSelect: function(ev) {
+        let flux = this.getFlux();
+        flux.actions.changeLocale(ev.currentTarget.title);
+    },
+
     render: function() {
         const searchIcon = <Glyphicon glyph="search" />;
+        let supportedLocales = Locale.getSupportedLocales();
+        let eventKeyIdx = 20;
 
         return (
             <div className={'topNav'}>
@@ -71,14 +76,16 @@ var TopNav = React.createClass({
                     </div>
 
                     <div className="navGroup right">
-                        <NavDropdown className="navItem" NavDropdown={true} navItem={true} eventKey={3} title={<CurrentDate/>} id="nav-right-dropdown">
-                            <MenuItem href="/user" eventKey={4}><I18nMessage message={'header.menu.preferences'}/></MenuItem>
+                        <NavDropdown className="navItem" NavDropdown={true} navItem={true} eventKey={eventKeyIdx++} title={<CurrentDate/>} id="nav-right-dropdown">
+                            <MenuItem href="/user" eventKey={eventKeyIdx++}><I18nMessage message={'header.menu.preferences'}/></MenuItem>
                             <MenuItem divider />
-                            <MenuItem href="#" className="localeLink" onSelect={this.onSelect} title="en-us" eventKey={5}><I18nMessage message={'header.menu.locale.english'}/></MenuItem>
-                            <MenuItem href="#" className="localeLink" onSelect={this.onSelect} title="fr-fr" eventKey={6}><I18nMessage message={'header.menu.locale.french'}/></MenuItem>
-                            <MenuItem href="#" className="localeLink" onSelect={this.onSelect} title="de-de" eventKey={7}><I18nMessage message={'header.menu.locale.german'}/></MenuItem>
-                            <MenuItem divider />
-                            <MenuItem href="/signout" eventKey={8}><I18nMessage message={'header.menu.sign_out'}/></MenuItem>
+
+                            {supportedLocales.length > 1 ? supportedLocales.map((locale) => {
+                                return <MenuItem href="#" className="localeLink" onSelect={this.onSelect} title={locale} eventKey={eventKeyIdx++}><I18nMessage message={'header.menu.locale.' + locale}/></MenuItem>;
+                            }) : null}
+                            {supportedLocales.length > 1 ? <MenuItem divider /> : null}
+
+                            <MenuItem href="/signout" eventKey={eventKeyIdx++}><I18nMessage message={'header.menu.sign_out'}/></MenuItem>
                         </NavDropdown>
                         &nbsp;
                     </div>
