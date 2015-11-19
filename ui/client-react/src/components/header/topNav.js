@@ -81,7 +81,7 @@ var TopNav = React.createClass({
                             <MenuItem divider />
 
                             {supportedLocales.length > 1 ? supportedLocales.map((locale) => {
-                                return <MenuItem href="#" className="localeLink" onSelect={this.onSelect} title={locale} eventKey={eventKeyIdx++}><I18nMessage message={'header.menu.locale.' + locale}/></MenuItem>;
+                                return <MenuItem href="#" className="localeLink" onSelect={this.onSelect} title={locale} key={eventKeyIdx} eventKey={eventKeyIdx++}><I18nMessage message={'header.menu.locale.' + locale}/></MenuItem>;
                             }) : null}
                             {supportedLocales.length > 1 ? <MenuItem divider /> : null}
 

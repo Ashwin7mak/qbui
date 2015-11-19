@@ -12,6 +12,9 @@ let configuration = null;
 if (__QB_PROD__) {
     configuration = {
         env: 'PROD',
+        api: {
+            version: 'v1'
+        },
         locale: {
             supported:['en-us', 'de-de', 'fr-fr'],
             default: 'en-us',
@@ -20,9 +23,6 @@ if (__QB_PROD__) {
             logLevel: LogLevel.WARN,
             logToConsole: false,
             logToServer: true
-        },
-        api: {
-            version: 'v1'
         }
     };
 }
@@ -30,6 +30,9 @@ if (__QB_PROD__) {
 if (__QB_TEST__) {
     configuration = {
         env: 'TEST',
+        api: {
+            version: 'v1'
+        },
         locale: {
             supported: ['en-us', 'de-de', 'fr-fr'],
             default: 'en-us',
@@ -38,9 +41,6 @@ if (__QB_TEST__) {
             logLevel: LogLevel.DEBUG,
             logToConsole: true,
             logToServer: true
-        },
-        api: {
-            version: 'v1'
         }
     };
 }
@@ -48,6 +48,9 @@ if (__QB_TEST__) {
 if (__QB_LOCAL__) {
     configuration = {
         env: 'LOCAL',
+        api: {
+            version: 'v1'
+        },
         locale: {
             supported:['en-us', 'de-de', 'fr-fr'],
             default: 'en-us',
@@ -56,9 +59,6 @@ if (__QB_LOCAL__) {
             logLevel: LogLevel.DEBUG,
             logToConsole: true,
             logToServer: true
-        },
-        api: {
-            version: 'v1'
         }
     };
 }
