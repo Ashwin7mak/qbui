@@ -23,7 +23,6 @@ import NavStore from '../stores/navStore';
 import navActions from '../actions/navActions';
 
 import AppsHome from '../components/apps/home';
-import Prototype from '../components/prototype/prototype';
 
 import ReportRoute from '../components/report/reportRoute';
 import RecordRoute from '../components/record/recordRoute';
@@ -109,7 +108,6 @@ render((
     <Router history={createBrowserHistory()}>
         <Route path="/" component={Apps} />
         <Route path="apps" component={Apps} />
-        <Route path="prototype" component={Prototype} />
 
         <Route path="app/:appId/table/:tblId" component={NavWrapper} >
             <IndexRoute components={{main: TableHomePageRoute}} />
