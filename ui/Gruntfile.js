@@ -34,7 +34,7 @@ module.exports = function(grunt) {
 
     grunt.log.writeln('NODE_ENV: ' + process.env.NODE_ENV);
 
-    var sauceDns = grunt.option('sauceDns');
+    var sauceDns = grunt.option('sauceDns') || '127.0.0.1';
     var sauceJobName = grunt.option('sauceJobName') || 'e2e_' + currentDateTime;
     var sauceKey = grunt.option('sauceKey');
 
@@ -417,31 +417,49 @@ module.exports = function(grunt) {
             sauce_linux_chrome : {
                 options: {
                     configFile: './e2e/config/sauce.chrome.linux.protractor.conf.js',
-                    baseUrl   : baseUrl
+                    args: {
+                        baseUrl   : baseUrl
+                    }
                 }
             },
             sauce_linux_firefox : {
                 options: {
                     configFile: './e2e/config/sauce.firefox.linux.protractor.conf.js',
-                    baseUrl   : baseUrl
+                    args: {
+                        baseUrl   : baseUrl
+                    }
                 }
             },
             sauce_multi_browser : {
                 options: {
                     configFile: './e2e/config/sauce.multi.browser.protractor.conf.js',
-                    baseUrl   : baseUrl
+                    args: {
+                        baseUrl   : baseUrl
+                    }
                 }
             },
             local              : {
                 options: {
                     configFile: './e2e/config/local.protractor.conf.js',
-                    baseUrl   : baseUrl
+                    args: {
+                        baseUrl   : baseUrl
+                    }
+                }
+            },
+            local_sauce              : {
+                options: {
+                    configFile: './e2e/config/local.sauce.protractor.conf.js',
+                    args: {
+                        baseUrl   : baseUrl
+                    }
                 }
             },
             local_data_gen : {
                 options: {
                     configFile: './e2e/config/local.dataGen.protractor.conf.js',
-                    baseUrl   : baseUrl
+                    args: {
+                        baseUrl   : baseUrl
+                    }
                 }
             }
         },
@@ -753,12 +771,21 @@ module.exports = function(grunt) {
             ]);
         }
 
+        // Run a protractor spec file that will generate you a ticket, realm and app in your local dev
+        if (target === 'e2eLocalDataGen') {
+            return grunt.task.run([
+                'clean:server',
+                'autoprefixer',
+                'protractor:local_data_gen'
+            ]);
+        }
+
         // Run your protractor tests in Sauce Labs against your local dev env
         if (target === 'e2eLocalSauce') {
             return grunt.task.run([
                 'env:local',
                 'sauce_connect:local',
-                'protractor:sauce_linux_chrome',
+                'protractor:local_sauce',
                 'sauce-connect-close'
             ]);
         }
@@ -769,15 +796,6 @@ module.exports = function(grunt) {
                 'env:e2e',
                 'sauce_connect:aws',
                 'protractor:sauce_linux_chrome'
-            ]);
-        }
-
-        // Run a protractor spec file that will generate you a ticket, realm and app in your local dev
-        if (target === 'e2eDataGen') {
-            return grunt.task.run([
-                'clean:server',
-                'autoprefixer',
-                'protractor:local_data_gen'
             ]);
         }
 

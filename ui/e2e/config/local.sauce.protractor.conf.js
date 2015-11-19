@@ -2,19 +2,21 @@
 // https://github.com/angular/protractor/blob/master/referenceConf.js
 (function() {
     'use strict';
-    // Needed for Protractor's DriverProvider to be able to run it's updateJob function
-    // to let Sauce Labs know when the tests have completed (for use in AWS pipeline job)
-    var HttpsProxyAgent = require('https-proxy-agent');
-    var agent = new HttpsProxyAgent('http://qypprdproxy02.ie.intuit.net:80');
     // Global properties file with params common to all Sauce lab config files
-    module.exports = {
+    exports.config = {
         // The timeout for each script run on the browser. This should be longer
         // than the maximum time your application needs to stabilize between tasks.
         allScriptsTimeout: 300000,
         // A base URL for your application under test will be passed in via grunt config so that we can use whatever url we please
         baseUrl: process.env.DOMAIN,
-        // Pass the proxy agent down into Protractor's DriverProvider
-        sauceAgent: agent,
+        // Browser and platform configuration to run your tests on
+        capabilities : {
+            browserName     : 'chrome',
+            tunnelIdentifier: process.env.ENV_TUNNEL_NAME,
+            name            : process.env.SAUCE_JOB_NAME + '_Linux_Chrome',
+            //Timeout in seconds for Sauce Labs to wait for another command (bumped this for sleeps in tests)
+            idleTimeout: '120'
+        },
         // The sauce user and access key allow us to run our browser tests remotely on a SauceLabs VM
         sauceUser           : 'sbg_qbse',
         sauceKey            : process.env.SAUCE_KEY,

@@ -32,7 +32,7 @@
 
                 // Check that there is a mapping for the field type (otherwise don't generate a value for it)
                 if (field[fieldConsts.fieldKeys.TYPE] === consts.SCALAR || field[fieldConsts.fieldKeys.TYPE] === consts.REPORT_LINK) {
-                    log.info('Generating field value for type ' + field[fieldConsts.fieldKeys.TYPE]);
+                    log.debug('Generating field value for type ' + field[fieldConsts.fieldKeys.TYPE]);
                     recordJson.push({
                         id   : field[fieldConsts.fieldKeys.ID],
                         value: generateRecordValueForFieldType(field[fieldConsts.fieldKeys.DATA_TYPE_ATTRIBUTES][dataTypeConsts.dataTypeKeys.TYPE])
