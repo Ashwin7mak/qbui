@@ -54,7 +54,7 @@ class CardView extends React.Component {
                             {row}
                         </div>
                         <div className="card-expander" onClick={this.handleMoreCard}>
-                            <span className={this.state.showMoreCards ? "open" : "close"}/>
+                            <span className={this.state.showMoreCards ? "chevron_opened" : "chevron_closed"}/>
                         </div>
                     </div>
                 </div>
