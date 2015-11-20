@@ -1,17 +1,18 @@
 import LogLevel from '../utils/logLevels';
 //
-// Application configuration settings per run-time environment.  The webpack configuration defines and sets
-// these variables at build time.  The supported run-time environments include:  __QB_PROD__, __QB_TEST__
-// and __QB_LOCAL__.  ONE and ONLY ONE variable is to be set to true.
+// Set application configuration settings per run-time environment.  The webpack configuration defines and sets
+// the variables __QB_PROD__, __QB_TEST__ and __QB_LOCAL__ at build time in the webpack.conf and karam.conf files.
+// Please reference these files for more information on the details of how these values are defined and set.
 //
-// CODE COVERAGE: For the given if conditional variable blocks: __QB_PROD__, __QB_TEST__ and __QB_LOCAL__,
-// the babel transpiler only includes the code inside of the condition block when the conditional statement
-// is true.  When the if conditional block is false, the block code is NOT included in the outputted bundle file.
+// A note about the generated transpiled file:  babel will include only the code inside of the condition block
+// when the conditional statement evaluates to true.  This means when the if conditional statement is false,
+// the conditional block code is NOT included in the outputted bundle file.
 //
-// For our tests, the webPack configuration in karam.conf is setup to run with __QB_PROD__ set to true (the others
-// are false).  Because of this, our coverage reports need to ignore the 'false' conditional blocks by annotating
-// the if statements of __QB_TEST__ and __QB_LOCAL__ with 'istanbul ignore if'.
-
+// CODE COVERAGE: For our tests, the webPack configuration in karma.conf is setup to run with __QB_PROD__ set to
+// true (the others are false).  Because of this, our coverage reports need to ignore the 'false' conditional
+// blocks because that code is NOT included in the evaluated bundle.  This is accomplished by annotating the
+// if statements that evaluates to false in our tests with /* istanbul ignore if */
+//
 let configuration = null;
 
 if (__QB_PROD__) {
