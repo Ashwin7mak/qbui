@@ -5,6 +5,7 @@ import Fluxxor from 'fluxxor';
 import TopNav from '../../src/components/header/topNav';
 import {MenuItem, OverlayTrigger} from 'react-bootstrap';
 import _ from 'lodash';
+import Locale from '../../src/locales/locales';
 
 var I18nMessageMock = React.createClass({
     render: function() {
@@ -55,8 +56,21 @@ describe('TopNav functions', () => {
     });
 
     it('test renders all locale menu options', () => {
-        var menuItems = TestUtils.scryRenderedComponentsWithType(component, MenuItem);
-        expect(menuItems.length).toBeGreaterThan(4); //3 locales
+        var menuItems = TestUtils.scryRenderedDOMComponentsWithClass(component, "localeLink");
+        var localeMenuItems = Locale.getSupportedLocales();
+        expect(menuItems.length).toBe(localeMenuItems.length);
+
+        //  test with zero supported locales
+        var LocaleMock = {
+            getSupportedLocales: function() {
+                return [];
+            }
+        };
+        TopNav.__Rewire__('Locale', LocaleMock);
+        var noLocaleComponent = TestUtils.renderIntoDocument(<TopNav flux={flux}/>);
+        menuItems = TestUtils.scryRenderedDOMComponentsWithClass(noLocaleComponent, "localeLink");
+        expect(menuItems.length).toBe(0);
+        TopNav.__ResetDependency__('Locale');
     });
 
     it('test toggles nav on hamburger click', () => {
@@ -92,6 +106,5 @@ describe('TopNav functions', () => {
         TestUtils.Simulate.change(searchInputBox);
         expect(flux.actions.searchFor).toHaveBeenCalledWith(searchInputBox.value);
     });
-
 
 });

@@ -10,8 +10,8 @@ import LogLevel from '../utils/logLevels';
 //
 // CODE COVERAGE: For our tests, the webPack configuration in karma.conf is setup to run with __QB_PROD__ set to
 // true (the others are false).  Because of this, our coverage reports need to ignore the 'false' conditional
-// blocks because that code is NOT included in the evaluated bundle.  This is accomplished by annotating the
-// if statements that evaluates to false in our tests with /* istanbul ignore if */
+// blocks because that code is NOT included in the evaluated bundle, and therefore not testable.  This is
+// accomplished by annotating the if statements that evaluate to false with /* istanbul ignore if */
 //
 let configuration = null;
 
