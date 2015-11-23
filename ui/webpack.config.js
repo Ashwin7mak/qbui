@@ -13,8 +13,17 @@ var clientPath = path.join(__dirname, 'client-react');
 
 var envConfig = require('./server/config/environment');
 
-// Environment setting for prod enabled?
+// 3 supported run-time environments..ONE and ONLY ONE variable is to be set to true.
 var PROD = (envConfig.env === 'PRODUCTION' || false);
+var TEST = (envConfig.env === 'TEST' || false);
+var LOCAL = !PROD && !TEST ? true : false;
+
+// Variables referenced by our application to determine the run-time environment (ie: configuration)
+var envPlugin = new webpack.DefinePlugin({
+    __QB_PROD__: JSON.stringify(PROD),
+    __QB_TEST__: JSON.stringify(TEST),
+    __QB_LOCAL__: JSON.stringify(LOCAL)
+});
 
 var config = {
     // devtool Makes sure errors in console map to the correct file
@@ -96,13 +105,20 @@ var config = {
     plugins: PROD ? [
         // This has beneficial effect on the react lib size for deploy
         new webpack.DefinePlugin({'process.env': {NODE_ENV: JSON.stringify('production')}}),
-        // for prod we also dedupe, obfuscate and minimize
+
+        // for prod we also de-dupe, obfuscate and minimize
         new webpack.optimize.DedupePlugin(),
-        new webpack.optimize.UglifyJsPlugin({minimize: true})
+        new webpack.optimize.UglifyJsPlugin({minimize: true}),
+
+        //  run-time environment for our application
+        envPlugin
     ] :  [
-        //When there are errors while compiling this plugin skips the emitting phase
-        // (and recording phase), so there are no assets emitted that include errors.
-        new webpack.NoErrorsPlugin()
+        // When there are compilation errors, this plugin skips the emitting (and recording) phase.
+        // This means there are no assets emitted that include errors.
+        new webpack.NoErrorsPlugin(),
+
+        //  run-time environment for our application
+        envPlugin
     ]
 };
 
