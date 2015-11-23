@@ -11,6 +11,8 @@
     var ReportServicePage = function() {
         // Page Elements using Locators
         // Left Nav
+        this.navMenuBodyEl = element(by.tagName('body'));
+        this.navMenuShellEl = element(by.className('navShell'));
         this.navMenuEl = element(by.className('leftMenu'));
         this.navStackedEl = element(by.className('nav-stacked'));
         this.navLinksElList = element.all(by.className('leftNavLink'));
@@ -49,6 +51,22 @@
             });
             return deferred.promise;
         };
+
+        /**
+         * Assertion function that will test the properties of the leftNav
+         */
+        this.assertNavProperties = function(breakpointSize, open, clientWidth){
+            // Check properties of nav bar
+            expect(this.navMenuBodyEl.getAttribute('class')).toMatch(breakpointSize + '-breakpoint');
+            expect(this.navMenuShellEl.getAttribute('class')).toMatch(breakpointSize + '-breakpoint');
+            if (open){
+                expect(this.navMenuEl.getAttribute('class')).toMatch('open');
+            }
+            else {
+                expect(this.navMenuEl.getAttribute('class')).toMatch('closed');
+            }
+            expect(this.navMenuEl.getAttribute('clientWidth')).toMatch(clientWidth);
+        }
     };
     module.exports = ReportServicePage;
 }());

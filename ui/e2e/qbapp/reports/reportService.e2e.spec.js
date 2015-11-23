@@ -58,7 +58,6 @@
             var tableId = app.tables[0].id;
             // Get a session ticket for that subdomain and realmId (stores it in the browser)
             requestSessionTicketPage.get(e2eBase.getSessionTicketRequestEndpoint(realmName, realmId, e2eBase.ticketEndpoint));
-            browser.wait(EC.visibilityOf(requestSessionTicketPage.ticketResponseBodyEl), 5000);
             // Load the requestAppsPage (shows a list of all apps and tables in a realm)
             requestAppsPage.get(e2eBase.getRequestAppsPageEndpoint(realmName));
             // Wait until the page has loaded (blocking wait)
