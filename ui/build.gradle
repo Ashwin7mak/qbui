@@ -376,7 +376,7 @@ sonarRunner {
 
         property "server.sonar.projectName", "${user}:ui:${branchName}:server"
         property "server.sonar.sources", "$projectDir/server"
-        property "server.sonar.exclusions", "**/test/**,**/config/**"
+        property "server.sonar.exclusions", "**/test/**,**/config/environment/**,**/mockserver/**"
         //  import the ui LCOV coverage report
         property "server.sonar.javascript.lcov.reportPath","${projectDir}/build/reports/server/coverage/lcov.info"
 
