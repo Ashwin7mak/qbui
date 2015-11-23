@@ -8,6 +8,8 @@
     'use strict';
     //Bluebird Promise library
     var promise = require('bluebird');
+
+    var basePage = require('./../../common/basePage.js');
     var ReportServicePage = function() {
         // Page Elements using Locators
         // Left Nav
@@ -68,5 +70,6 @@
             expect(this.navMenuEl.getAttribute('clientWidth')).toMatch(clientWidth);
         }
     };
+    ReportServicePage.prototype = basePage;
     module.exports = ReportServicePage;
 }());

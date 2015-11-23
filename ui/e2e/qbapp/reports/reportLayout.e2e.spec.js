@@ -7,6 +7,7 @@
 // jshint sub: true
 (function() {
     'use strict';
+
     // In order to manage the async nature of Protractor with a non-Angular page use the ExpectedConditions feature
     var EC = protractor.ExpectedConditions;
     //Require the e2e base class and constants modules
@@ -18,8 +19,9 @@
     var requestSessionTicketPage = require('./requestSessionTicket.po.js');
     var requestAppsPage = require('./requestApps.po.js');
     var ReportServicePage = require('./reportService.po.js');
-    describe('Report Page Layout Tests', function() {
+    var reportServicePage = new ReportServicePage();
 
+    describe('Report Page Layout Tests', function() {
         var widthTest = 1024;
         var heightTest = 2024;
         e2eBase.setBaseUrl(browser.baseUrl);
@@ -82,22 +84,22 @@
                 });
             });
         });
+
         /**
          * Test method. Loads the first table containing 10 fields (10 columns). The table report (griddle) width should expand past the browser size
          * to give all columns enough space to show their data.
          */
-        it('Griddle Table should expand width past the browser size to show all available data and columns (large data sets)', function(done) {
+        it('Table report should expand width past the browser size to show all available data (large num columns)', function(done) {
             browser.wait(EC.visibilityOf(requestAppsPage.tablesDivEl), 5000).then(function() {
                 // Select the table to load
                 requestAppsPage.tableLinksElList.get(0).click();
                 // Now on the reportServicePage (shows the nav with a list of reports you can load)
-                var reportServicePage = new ReportServicePage();
                 // Wait until the nav has loaded
-                browser.wait(EC.visibilityOf(reportServicePage.navStackedEl), 5000).then(function() {
+                reportServicePage.waitForElement(reportServicePage.navStackedEl).then(function() {
                     // Select the report
                     reportServicePage.navLinksElList.get(1).click();
                     // Make sure the table report has loaded
-                    browser.wait(EC.visibilityOf(reportServicePage.griddleContainerEl), 5000).then(function() {
+                    reportServicePage.waitForElement(reportServicePage.griddleContainerEl).then(function() {
                         // Sleep for animation
                         e2eBase.sleep(2000);
                         // Check there is a scrollbar in the griddle table
@@ -113,22 +115,22 @@
                 });
             });
         });
+
         /**
          * Test method. Loads the second table containing 3 fields (3 columns). The table report (griddle) width should expand
          * it's columns to fill the available space (and not show a scrollbar).
          */
-        it('Griddle Table should expand the width to take up available space for a small number of columns', function(done) {
+        it('Table report should expand width to take up available space (small num of columns)', function(done) {
             browser.wait(EC.visibilityOf(requestAppsPage.tablesDivEl), 5000).then(function() {
                 // Select the table to load
                 requestAppsPage.tableLinksElList.get(1).click();
                 // Now on the reportServicePage (shows the nav with a list of reports you can load)
                 // Wait until the nav has loaded
-                var reportServicePage = new ReportServicePage();
-                browser.wait(EC.visibilityOf(reportServicePage.navStackedEl), 5000).then(function() {
+                reportServicePage.waitForElement(reportServicePage.navStackedEl).then(function() {
                     // Select the report
                     reportServicePage.navLinksElList.get(1).click();
                     // Make sure the table report has loaded
-                    browser.wait(EC.visibilityOf(reportServicePage.griddleContainerEl), 5000).then(function() {
+                    reportServicePage.waitForElement(reportServicePage.griddleContainerEl).then(function() {
                         // Sleep for animation
                         e2eBase.sleep(2000);
                         // Check there is no scrollbar in the griddle table
@@ -144,21 +146,21 @@
                 });
             });
         });
+
         /**
          * Test method. The table nav should shrink responsively across the 4 breakpoints as the browser is re-sized
          */
-        it('Left hand nav should be responsive', function(done) {
+        it('Left hand nav should shrink responsively', function(done) {
             browser.wait(EC.visibilityOf(requestAppsPage.tablesDivEl), 5000).then(function() {
                 // Select the table to load
                 requestAppsPage.tableLinksElList.get(0).click();
                 // Now on the reportServicePage (shows the nav with a list of reports you can load)
                 // Wait until the nav has loaded
-                var reportServicePage = new ReportServicePage();
-                browser.wait(EC.visibilityOf(reportServicePage.navStackedEl), 5000).then(function() {
+                reportServicePage.waitForElement(reportServicePage.navStackedEl).then(function() {
                     // Select the report
                     reportServicePage.navLinksElList.get(1).click();
                     // Make sure the table report has loaded
-                    browser.wait(EC.visibilityOf(reportServicePage.griddleContainerEl), 5000).then(function() {
+                    reportServicePage.waitForElement(reportServicePage.griddleContainerEl).then(function() {
                         // Resize browser at different widths to check responsiveness
                         e2eBase.resizeBrowser(1500, 600).then(function() {
                             reportServicePage.assertNavProperties('xlarge', true, '299');
@@ -192,11 +194,11 @@
         * Return to the table selection page by clicking on the Home link in the left nav
         */
         afterEach(function(done) {
-            var reportServicePage = new ReportServicePage();
-            browser.wait(EC.visibilityOf(reportServicePage.navStackedEl), 5000);
+            reportServicePage.waitForElement(reportServicePage.navStackedEl);
             reportServicePage.appsHomeLinkEl.click();
             done();
         });
+
         /**
          * After all tests are done, run the cleanup function in the base class
          */
