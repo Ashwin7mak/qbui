@@ -6,7 +6,7 @@ describe('Logger', () => {
 
     'use strict';
 
-    it('verify configuration with TEST setting', () => {
+    it('verify configuration with PROD setting', () => {
 
         expect(config).toBeDefined();
 

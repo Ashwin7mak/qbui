@@ -1,11 +1,5 @@
 
-// import supported languages...
-// TODO: would be nice to dynamically load based on the selected language
-import EN_US from '../locales/en_us';
-import FR_FR from '../locales/fr_fr';
-import DE_DE from '../locales/de_de';
 import Logger from '../utils/logger';
-
 import config from '../config/app.config';
 
 let logger = new Logger();
@@ -22,23 +16,31 @@ class Locale {
     }
 
     static getI18nBundle() {
+        let bundle = "";
+
         try {
+            // this is where all supported locales are defined
             switch (locale.toLowerCase()) {
             case 'en-us':
-                return EN_US;
+                bundle = require('../locales/en_us');
+                break;
             case 'fr-fr':
-                return FR_FR;
+                bundle = require('../locales/fr_fr');
+                break;
             case 'de-de':
-                return DE_DE;
-            default:
-                logger.warn('Locale (' + locale + ') is invalid or not supported.  Using default: en-us');
-                return EN_US;
+                bundle = require('../locales/de_de');
+                break;
             }
         } catch (e) {
-            //  any error automatically returns default of en-us
-            logger.error('Error fetching locale..Using default: en-us --> ' + e);
-            return EN_US;
+            logger.error('Error fetching locale:' + e);
         }
+
+        if (!bundle) {
+            logger.warn('Locale (' + locale + ') is invalid or not supported.  Using default: en-us');
+            bundle = require('../locales/en_us');
+        }
+
+        return bundle;
     }
 
     static changeLocale(newLocale) {
