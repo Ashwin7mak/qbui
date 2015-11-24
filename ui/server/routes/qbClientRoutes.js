@@ -83,10 +83,13 @@
             log.info('..table homepage request (placeholder)');
             renderIndex(res);
         });
-
+        app.route('/app/:appId').get(function(req, res) {
+            log.info('..app dashboard request (placeholder)');
+            renderIndex(res);
+        });
         app.route('/apps').get(function(req, res) {
-            log.info('..apps home page.');
-            renderAppsIndex(res);
+            log.info('..apps page.');
+            renderIndex(res);
         });
 
         //  default page -- quickbase application dashboard

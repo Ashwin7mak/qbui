@@ -3,6 +3,7 @@ import TestUtils from 'react-addons-test-utils';
 import ReactDOM from 'react-dom';
 import GriddleTable  from '../../src/components/dataTable/griddleTable/griddleTable';
 import Griddle from 'griddle-react';
+import * as breakpoints from '../../src/constants/breakpoints';
 
 var GriddleMock = React.createClass({
     render: function() {
@@ -77,9 +78,30 @@ describe('GriddleTable functions', () => {
         expect(ReactDOM.findDOMNode(component).textContent).toMatch("test");
     });
 
-    it('test render with mobile prop', () => {
-        component = TestUtils.renderIntoDocument(<GriddleTable columnMetadata={fakeReportData_empty.data.columns} breakpoint={'small-breakpoint'} />);
-        var griddle = TestUtils.scryRenderedComponentsWithType(component, GriddleMock);
+    it('test render with small breakpoint', () => {
+        var TestParent = React.createFactory(React.createClass({
+
+            childContextTypes: {
+                breakpoint: React.PropTypes.string
+            },
+            getChildContext: function() {
+                return {breakpoint: breakpoints.SMALL_BREAKPOINT};
+            },
+            getInitialState() {
+                return {results: fakeReportData_before.data.results, columns: fakeReportData_before.data.columnMetadata};
+            },
+            render() {
+                return <GriddleTable ref="refGriddle" results={this.state.results} columnMetadata={this.state.columns}/>;
+            }
+        }));
+        var parent = TestUtils.renderIntoDocument(TestParent());
+
+        parent.setState({
+            results: fakeReportData_after.data.results,
+            columns: fakeReportData_empty.data.columns
+        });
+
+        var griddle = TestUtils.scryRenderedComponentsWithType(parent.refs.refGriddle, GriddleMock);
         expect(griddle.length).toEqual(1);
         expect(griddle[0].props.useCustomRowComponent).toBeTruthy();
     });

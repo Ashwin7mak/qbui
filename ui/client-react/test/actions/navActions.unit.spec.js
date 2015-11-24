@@ -31,14 +31,24 @@ describe('Nav Actions functions', () => {
         expect(flux.dispatchBinder.dispatch).toHaveBeenCalledWith(actions.HIDE_TROUSER);
     });
 
-    it('test toggle left nav action', () => {
+    it('test toggle left nav action with state', () => {
         flux.actions.toggleLeftNav(true);
         expect(flux.dispatchBinder.dispatch).toHaveBeenCalledWith(actions.TOGGLE_LEFT_NAV, true);
     });
 
-    it('test toggle mobile searchbar action', () => {
-        flux.actions.toggleSearch();
-        expect(flux.dispatchBinder.dispatch).toHaveBeenCalledWith(actions.TOGGLE_SEARCH);
+    it('test toggle left nav action', () => {
+        flux.actions.toggleLeftNav();
+        expect(flux.dispatchBinder.dispatch).toHaveBeenCalledWith(actions.TOGGLE_LEFT_NAV, undefined);
+    });
+
+    it('test searching action', () => {
+        flux.actions.setSearching(true);
+        expect(flux.dispatchBinder.dispatch).toHaveBeenCalledWith(actions.SEARCHING, true);
+    });
+
+    it('test searchfor action', () => {
+        flux.actions.searchFor('abc');
+        expect(flux.dispatchBinder.dispatch).toHaveBeenCalledWith(actions.SEARCH_FOR, 'abc');
     });
 
     it('test change locale action', () => {
