@@ -358,6 +358,7 @@ sonarRunner {
         property "sonar.projectKey", "ui:${branchName}:${user}"
         property "sonar.projectVersion", "0.1"
         property "sonar.projectName", "${user}:ui:${branchName}"
+        property "sonar.qualitygate", "Sonar%20way%20with%20Findbugs%20-%20reactjs"
         property "sonar.host.url", "http://pppdc9prd01j:9000/"
         property "sonar.jdbc.url", "jdbc:mysql://pppdc9prd01j:3306/sonar?autoReconnect=true&useUnicode=true&characterEncoding=utf8"
         property "sonar.language", "js"
