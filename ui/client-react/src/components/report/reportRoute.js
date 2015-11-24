@@ -16,8 +16,8 @@ var ReportRoute = React.createClass({
     mixins: [FluxMixin],
 
     loadReport(appId, tblId, rptId) {
-        let flux = this.getFlux();
 
+        let flux = this.getFlux();
         flux.actions.loadReport(appId, tblId, rptId, true);
     },
     loadReportFromParams(params) {
@@ -33,7 +33,10 @@ var ReportRoute = React.createClass({
     },
 
     componentDidMount() {
-        this.loadReportFromParams(this.props.params);
+
+        if (this.props.params) {
+            this.loadReportFromParams(this.props.params);
+        }
     },
 
     render() {

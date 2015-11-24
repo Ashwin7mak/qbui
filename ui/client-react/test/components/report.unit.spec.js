@@ -80,15 +80,6 @@ describe('Report functions', () => {
         expect(flux.actions.loadReport).not.toHaveBeenCalledWith();
     });
 
-    it('test flux action loadReport is called on 2nd called with different app data', () => {
-        var div = document.createElement('div');
-        ReactDOM.render(<Report {...i18n} flux={flux} params={reportParams} reportData={reportDataParams} />, div);
-
-        //  on subsequent call with the different parameter data, the loadReport function is expected to be called
-        ReactDOM.render(<Report {...i18n} flux={flux} params={secondaryParams} reportData={reportDataParams}/>, div);
-        expect(flux.actions.loadReport).toHaveBeenCalledWith(secondaryParams.appId, secondaryParams.tblId, secondaryParams.rptId, true);
-    });
-
     it('test flux action loadReport is not called with missing app data', () => {
         var div = document.createElement('div');
 
