@@ -78,7 +78,9 @@
     recordTypeMapping[consts.NUMERIC] = function() {return rawValueGenerator.generateDouble(0, 10.5);};
     recordTypeMapping[consts.CURRENCY] = function() {return rawValueGenerator.generateDouble(0, 100);};
     recordTypeMapping[consts.RATING] = function() {return rawValueGenerator.generateDouble(0, 10);};
-    recordTypeMapping[consts.DURATION] = function() {return rawValueGenerator.generateDouble(0, 5);};
+    //duration is stored in milliseconds and currently displays in the unit of weeks in browser
+    //use 1 day as min, and 100 days as max
+    recordTypeMapping[consts.DURATION] = function() {return rawValueGenerator.generateDouble(86400000, 8640000000);};
     recordTypeMapping[consts.TEXT] = function() {return rawValueGenerator.generateString(10);};
     recordTypeMapping[consts.BIGTEXT] = function() {return rawValueGenerator.generateString(1000);};
     recordTypeMapping[consts.URL] = function() {return rawValueGenerator.generateUrl();};

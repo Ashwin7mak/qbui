@@ -32,9 +32,9 @@ export default {
         header: {
             menu: {
                 locale: {
-                    english: "Anglais",
-                    french: "Français",
-                    german: "Allemand"
+                    "en-us": "Anglais",
+                    "fr-fr": "Français",
+                    "de-de": "Allemand"
                 },
                 preferences: "Préférences",
                 sign_out: "Se déconnecter"

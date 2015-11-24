@@ -1,6 +1,7 @@
 // Karma configuration
 //
 var path = require("path");
+var webpack = require('webpack');
 var nodeModulesPath = path.resolve(__dirname, "node_modules");
 
 module.exports = function(config) {
@@ -66,7 +67,9 @@ module.exports = function(config) {
                         include: [
                             path.resolve(__dirname, "client-react/src")
                         ],
-                    }
+                    },
+                    {test: /\.eot(\?v=\d+\.\d+\.\d+)?$/,    loader: 'file'},
+                    {test: /\.svg(\?v=\d+\.\d+\.\d+)?$/,    loader: 'url?limit=10000&mimetype=image/svg+xml'}
                 ],
                 postLoaders: [
                     { //delays coverage til after tests are run, fixing transpiled source coverage error
@@ -82,6 +85,16 @@ module.exports = function(config) {
                     }
                 ]
             },
+            plugins: [
+                // Define the build run-time environment.  Configure to run as a PROD build.
+                // This will allow us to write unit tests against the prod configuration.
+                // ONE and ONLY ONE variable is to be set to true.
+                new webpack.DefinePlugin({
+                    __QB_PROD__: JSON.stringify(true),
+                    __QB_TEST__: JSON.stringify(false),
+                    __QB_LOCAL__: JSON.stringify(false)
+                })
+            ],
             watch: true
         },
         webpackServer: {

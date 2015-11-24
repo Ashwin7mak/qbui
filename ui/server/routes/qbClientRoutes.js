@@ -51,7 +51,7 @@
     function renderAppsIndex(res) {
         var opts = lodash.merge({}, BASE_PROPS, {
             title                : 'QuickBase Apps',
-            styleTagStringContent: 'body.container {margin-left:0;padding-left:0;}'
+            styleTagStringContent: 'body>.container {margin-left:0;padding-left:0;}'
         });
         renderJsx(res, './apps.index.jsx', opts);
         // res.sendfile(app.get('appPath') + '/apps.index.html');
@@ -89,11 +89,6 @@
         });
         app.route('/apps').get(function(req, res) {
             log.info('..apps page.');
-            renderIndex(res);
-        });
-
-        app.route('/prototype').get(function(req, res) {
-            log.info('..prototyping page.');
             renderIndex(res);
         });
 

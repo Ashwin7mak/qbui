@@ -10,22 +10,11 @@ import LogLevel from './logLevels';
 
 class Logger {
 
-    constructor(config) {
-        // Set to what we'd expect we'd want for production, in case there's an issue with the config
-        this.logLevel = LogLevel.ERROR;
-        this.logToConsole = false;
-        this.logToServer = true;
-
-        //  allow for override of application level settings
-        if (config) {
-            this.logLevel = config.logLevel;
-            this.logToConsole = config.logToConsole;
-            this.logToServer = config.logToServer;
-        } else if (Configuration && Configuration.logger) {
-            this.logLevel = Configuration.logger.logLevel;
-            this.logToConsole = Configuration.logger.logToConsole;
-            this.logToServer = Configuration.logger.logToServer;
-        }
+    constructor() {
+        // log levels are set based on the app run-time configuration
+        this.logLevel = Configuration.logger.logLevel;
+        this.logToConsole = Configuration.logger.logToConsole;
+        this.logToServer = Configuration.logger.logToServer;
     }
 
     debug(msg) {

@@ -38,23 +38,28 @@
 
             var year = date.getFullYear();
             var month = date.getMonth();
-            var day = date.getDay();
+            // getDate() returns the day of the month (1-31); getDay() the day of the week (0-6)
+            var day = date.getDate();
 
-            return year + '-' + chance.pad(month + 1, 2) + '-' + chance.pad(day + 1, 2);
+            // month is 0-indexed therefore month + 1; day is not 0-indexed
+            return year + '-' + chance.pad(month + 1, 2) + '-' + chance.pad(day, 2);
         },
         apiFormattedDateTime: function(options) {
             var date = chance.date(options);
 
             var year = date.getFullYear();
             var month = date.getMonth();
-            var day = date.getDay();
-            var hour = date.getHours();
+            // see comment for apiFormattedDate
+            var day = date.getDate();
+            // date.getHours() returns 1-12;
+            // Date time and Time of day fields both allow 0-23
+            var hour = chance.hour({twentyfour: true}) - 1;
             var minute = date.getMinutes();
             var seconds = date.getSeconds();
-            //var milliseconds = date.getMilliseconds();
-            //var formattedMilliseconds = '.' + chance.pad(chance.integer({min: 0, max: 900}), 3);
 
-            return year + '-' + chance.pad(month + 1, 2) + '-' + chance.pad(day + 1, 2) + 'T' + chance.pad(hour, 2) + ':' + chance.pad(minute, 2) + chance.pad(seconds, 2) + '+00:00Z';
+            // see comment for apiFormattedDate
+            return year + '-' + chance.pad(month + 1, 2) + '-' + chance.pad(day, 2) +
+                'T' + chance.pad(hour, 2) + ':' + chance.pad(minute, 2) + ':' + chance.pad(seconds, 2) + 'Z[UTC]';
         },
 
         userId: function(options) {
@@ -108,9 +113,10 @@
             return chance.apiFormattedDateTime();
         },
 
-        //Generates and returns a dateTime that can be sent to the api
+        //Generates and returns a time that can be sent to the api
         generateTime: function() {
-            return chance.apiFormattedDateTime({year: 1970, month: 1, day: 1});
+            // month is 0-indexed
+            return chance.apiFormattedDateTime({year: 1970, month: 0, day: 1});
         },
 
         //Generates and returns a psuedo-random us phone number
