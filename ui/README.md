@@ -57,14 +57,6 @@ FIRST - Do all the Quickbase java backend development [setup instructions](https
    export PATH=$PATH:$HOME/.node/bin
    ```
 
-* Make sure you have Ruby installed for compass next (Macs should have it already, try `which ruby` otherwise get Ruby [here](https://www.ruby-lang.org/en/documentation/installation/)
-
-* Install compass for css preprocessing. Run (may need sudo and it takes a couple minutes)
-
-	``` bash
-	     gem install compass -v 1.0.1
-	```   
-
 * Install homebrew if it's not already installed. Test if it's install by running `brew --version` if says not found, install homebrew with:
 	    
 	```
