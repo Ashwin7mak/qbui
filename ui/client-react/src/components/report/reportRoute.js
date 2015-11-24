@@ -17,48 +17,23 @@ var ReportRoute = React.createClass({
 
     loadReport(appId, tblId, rptId) {
         let flux = this.getFlux();
+
         flux.actions.loadReport(appId, tblId, rptId, true);
     },
-    loadReportFromParams(params, checkParams) {
+    loadReportFromParams(params) {
 
-        if (params) {
-            let appId = params.appId;
-            let tblId = params.tblId;
-            let rptId = params.rptId;
+        let appId = params.appId;
+        let tblId = params.tblId;
+        let rptId = params.rptId;
 
-            // VERY IMPORTANT: check URL params against props to prevent cycles
-
-            if (this.props.reportData.loading) {
-                return;
-            }
-
-            if (appId === this.props.reportData.appId &&
-                tblId === this.props.reportData.tblId &&
-                rptId === this.props.reportData.rptId) {
-                return;
-            }
-
-            if (checkParams) {
-                if (appId === this.props.params.appId &&
-                    tblId === this.props.params.tblId &&
-                    rptId === this.props.params.rptId) {
-                    return;
-                }
-            }
-
-            if (appId && tblId && rptId) {
-                logger.debug('Loading report. AppId:' + appId + ' ;tblId:' + tblId + ' ;rptId:' + rptId);
-                this.loadReport(appId, tblId, rptId);
-            }
+        if (appId && tblId && rptId) {
+            //logger.debug('Loading report. AppId:' + appId + ' ;tblId:' + tblId + ' ;rptId:' + rptId);
+            this.loadReport(appId, tblId, rptId);
         }
     },
+
     componentDidMount() {
         this.loadReportFromParams(this.props.params);
-    },
-
-    // Triggered when properties change
-    componentWillReceiveProps(props) {
-        this.loadReportFromParams(props.params, true);
     },
 
     render() {
