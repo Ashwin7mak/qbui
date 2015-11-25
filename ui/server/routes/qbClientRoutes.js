@@ -69,10 +69,6 @@
             log.info('..specific record request');
             renderIndex(res);
         });
-        app.route('/app/:appId/table/:tblId/dashboardDemo/:rptId').get(function(req, res) {
-            log.info('..specific app report request');
-            renderIndex(res);
-        });
 
         app.route('/app/:appId/table/:tblId/reports').get(function(req, res) {
             log.info('..reports for a given table');
