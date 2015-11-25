@@ -9,22 +9,26 @@ var log = require('../logger').getLogger();
 describe('HotDevServer Unit Test', function() {
 
     var stubLog;
+    var hotServerMockStub;
     var webpackDevServerStub;
 
+    //  mock to included in config and pass to hotLoader...as do not want to call the 'real' hot loader during test run
     function HotServerMock(compiler, option) {
         this.compiler = compiler;
         this.option = option;
     }
     HotServerMock.prototype.listen = function() {
-        console.log('listen mock');
+        log.debug('listen mock');
     };
 
     beforeEach(function() {
         stubLog = sinon.stub(log, 'logRequest').returns(true);
+        hotServerMockStub = sinon.stub(HotServerMock.prototype, 'listen').returns(true);
         webpackDevServerStub = sinon.stub(WebpackDevServer.prototype, 'listen').returns(true);
     });
     afterEach(function() {
         stubLog.restore();
+        hotServerMockStub.restore();
         webpackDevServerStub.restore();
     });
 
@@ -32,9 +36,12 @@ describe('HotDevServer Unit Test', function() {
 
         var mockConfig = {
             isProduction: true,
-            noHotLoad: false
+            noHotLoad: false,
+            hotServer: HotServerMock
         };
         require('../hotDevServer')(mockConfig);
+
+        assert(hotServerMockStub.callCount === 0, true);
         assert(webpackDevServerStub.callCount === 0, true);
     });
 
@@ -42,9 +49,12 @@ describe('HotDevServer Unit Test', function() {
 
         var mockConfig = {
             isProduction: true,
-            noHotLoad: true
+            noHotLoad: true,
+            hotServer: HotServerMock
         };
         require('../hotDevServer')(mockConfig);
+
+        assert(hotServerMockStub.callCount === 0, true);
         assert(webpackDevServerStub.callCount === 0, true);
     });
 
@@ -52,9 +62,12 @@ describe('HotDevServer Unit Test', function() {
 
         var mockConfig = {
             isProduction: false,
-            noHotLoad: true
+            noHotLoad: true,
+            hotServer: HotServerMock
         };
         require('../hotDevServer')(mockConfig);
+
+        assert(hotServerMockStub.callCount === 0, true);
         assert(webpackDevServerStub.callCount === 0, true);
     });
 
@@ -65,11 +78,11 @@ describe('HotDevServer Unit Test', function() {
             noHotLoad: false,
             hotServer: HotServerMock
         };
-        var hotServerStub = sinon.stub(HotServerMock.prototype, 'listen').returns(true);
 
         require('../hotDevServer')(mockConfig);
+
+        assert(hotServerMockStub.callCount === 1, true);
         assert(webpackDevServerStub.callCount === 0, true);
-        assert(hotServerStub.callCount === 1, true);
     });
 
 });
