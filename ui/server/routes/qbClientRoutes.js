@@ -1,9 +1,10 @@
+var log = require('../logger').getLogger();
+var reactViews = require('express-react-views');
+var lodash = require('lodash');
+
 (function() {
     'use strict';
-    var log = require('../logger').getLogger();
 
-    var reactViews = require('express-react-views');
-    var lodash = require('lodash');
     var viewPath = __dirname;
     var engineOptions = {
         beautify: true,
