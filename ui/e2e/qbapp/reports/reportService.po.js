@@ -64,12 +64,11 @@
             if (open){
                 expect(this.navMenuEl.getAttribute('class')).toMatch('open');
                 expect(this.navMenuEl.getAttribute('clientWidth')).toMatch(clientWidth);
-            }
-            else {
+            } else {
                 expect(this.navMenuEl.getAttribute('class')).toMatch('closed');
                 expect(this.navMenuEl.getAttribute('clientWidth')).toMatch(clientWidth);
             }
-        }
+        };
     };
     ReportServicePage.prototype = e2ePageBase;
     module.exports = ReportServicePage;

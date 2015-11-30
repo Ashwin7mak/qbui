@@ -130,7 +130,7 @@
                         // Select the report
                         reportServicePage.navLinksElList.get(4).click();
                         // Make sure the table report has loaded
-                        reportServicePage.waitForElement(reportServicePage.loadedContentEl).then(function () {
+                        reportServicePage.waitForElement(reportServicePage.loadedContentEl).then(function() {
                             // Sleep for animation
                             e2eBase.sleep(2000);
                             // Check there is no scrollbar in the griddle table
@@ -138,7 +138,7 @@
                             fetchRecordPromises.push(reportServicePage.loadedContentEl.getAttribute('scrollWidth'));
                             fetchRecordPromises.push(reportServicePage.loadedContentEl.getAttribute('clientWidth'));
                             //When all the dimensions have been fetched, assert the values match expectations
-                            promise.all(fetchRecordPromises).then(function (dimensions) {
+                            promise.all(fetchRecordPromises).then(function(dimensions) {
                                 expect(Number(dimensions[0])).not.toBeGreaterThan(Number(dimensions[1]));
                             });
                         });
@@ -156,27 +156,27 @@
                 // Select the app
                 reportServicePage.navLinksElList.get(1).click().then(function() {
                     // Select the table
-                    reportServicePage.navLinksElList.get(2).click().then(function () {
+                    reportServicePage.navLinksElList.get(2).click().then(function() {
                         // Select the report
                         reportServicePage.navLinksElList.get(4).click();
                         // Make sure the table report has loaded
-                        reportServicePage.waitForElement(reportServicePage.griddleContainerEl).then(function () {
+                        reportServicePage.waitForElement(reportServicePage.griddleContainerEl).then(function() {
                             // Resize browser at different widths to check responsiveness
-                            e2eBase.resizeBrowser(1500, 600).then(function () {
+                            e2eBase.resizeBrowser(1500, 600).then(function() {
                                 reportServicePage.assertNavProperties('xlarge', true, '299');
-                            }).then(function () {
-                                e2eBase.resizeBrowser(1280, 600).then(function () {
+                            }).then(function() {
+                                e2eBase.resizeBrowser(1280, 600).then(function() {
                                     reportServicePage.assertNavProperties('large', true, '299');
-                                }).then(function () {
-                                    e2eBase.resizeBrowser(1024, 600).then(function () {
+                                }).then(function() {
+                                    e2eBase.resizeBrowser(1024, 600).then(function() {
                                         reportServicePage.assertNavProperties('medium', true, '199');
-                                    }).then(function () {
-                                        e2eBase.resizeBrowser(700, 600).then(function () {
+                                    }).then(function() {
+                                        e2eBase.resizeBrowser(700, 600).then(function() {
                                             reportServicePage.assertNavProperties('medium', true, '39');
-                                        }).then(function () {
-                                            e2eBase.resizeBrowser(640, 600).then(function () {
+                                        }).then(function() {
+                                            e2eBase.resizeBrowser(640, 600).then(function() {
                                                 reportServicePage.assertNavProperties('small', false, '249');
-                                            }).then(function () {
+                                            }).then(function() {
                                                 // Reset the browser for other tests
                                                 e2eBase.resizeBrowser(widthTest, heightTest);
                                                 done();

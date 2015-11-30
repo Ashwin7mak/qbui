@@ -59,7 +59,7 @@
         };
         this.waitForElement = function(element){
             return browser.wait(EC.visibilityOf(element), 5000);
-        }
+        };
 
     };
     module.exports = new BasePage();
