@@ -11,11 +11,13 @@
         baseUrl: process.env.DOMAIN,
         // Browser and platform configuration to run your tests on
         capabilities : {
+            platform : 'Windows 7',
             browserName     : 'chrome',
             tunnelIdentifier: process.env.ENV_TUNNEL_NAME,
-            name            : process.env.SAUCE_JOB_NAME + '_Linux_Chrome',
+            name            : 'local_' + process.env.SAUCE_JOB_NAME + '_Win7_Chrome',
             //Timeout in seconds for Sauce Labs to wait for another command (bumped this for sleeps in tests)
-            idleTimeout: '120'
+            idleTimeout: '120',
+            screenResolution : '1680x1050'
         },
         // The sauce user and access key allow us to run our browser tests remotely on a SauceLabs VM
         sauceUser           : 'sbg_qbse',

@@ -21,7 +21,7 @@
         this.get = function(requestAppsPageEndPoint) {
             browser.get(requestAppsPageEndPoint);
             // Make sure the page is loaded before giving control back to the test class
-            browser.wait(EC.visibilityOf(this.tablesDivEl), 5000);
+            // browser.wait(EC.visibilityOf(this.tablesDivEl), 5000);
         };
     };
     module.exports = new RequestAppsPage();
