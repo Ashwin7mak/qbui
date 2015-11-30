@@ -47,6 +47,7 @@ let ReportsStore = Fluxxor.createStore({
         return '/app/' + appId + '/table/' + tblId + '/report/' + rptId;
     },
 
+
     getState: function() {
         return {
             list: this.reports,

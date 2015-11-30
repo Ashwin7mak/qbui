@@ -3,18 +3,30 @@ import Locale from '../../src/locales/locales';
 describe('Locales', () => {
     'use strict';
 
-    it('test getI18nBundle', () => {
+    it('test getI18nBundle default bundle using environment settings(PROD)', () => {
+        expect(Locale.getLocale()).toBe('en-us');
         let i18n = Locale.getI18nBundle();
         expect(i18n.locales).toBe('en-us');
     });
 
-    it('test valid change locale', () => {
-        let i18n = Locale.getI18nBundle();
-        expect(i18n.locales).toBe('en-us');
-        expect(Locale.getLocale()).toBe('en-us');
+    it('test getSupportLocales', () => {
+        let mockConfig = {
+            locale: {
+                supported: ['en-us', 'de-de'],
+                default: 'en-us',
+            }
+        };
+        Locale.__Rewire__('config', mockConfig);
 
+        let locales = Locale.getSupportedLocales();
+        expect(locales.length).toBe(2);
+
+        Locale.__ResetDependency__('config');
+    });
+
+    it('test valid change locale', () => {
         Locale.changeLocale('fr-fr');
-        i18n = Locale.getI18nBundle();
+        let i18n = Locale.getI18nBundle();
         expect(i18n.locales).toBe('fr-fr');
         expect(Locale.getLocale()).toBe('fr-fr');
 
@@ -25,12 +37,22 @@ describe('Locales', () => {
     });
 
     it('test invalid change locale', () => {
+        let mockConfig = {
+            locale: {
+                supported: ['en-us', 'fr-fr'],
+                default: 'en-us',
+            }
+        };
+        Locale.__Rewire__('config', mockConfig);
+
         //  set to a valid locale..
         Locale.changeLocale('fr-fr');
-
-        //  .. now set to an invalid locale..should use existing
-        Locale.changeLocale('invalid');
         let i18n = Locale.getI18nBundle();
+        expect(i18n.locales).toBe('fr-fr');
+
+        //  .. now set to an invalid locale..locale should not change
+        Locale.changeLocale('de-de');
+        i18n = Locale.getI18nBundle();
         expect(i18n.locales).toBe('fr-fr');
         expect(Locale.getLocale()).toBe('fr-fr');
 
@@ -38,5 +60,12 @@ describe('Locales', () => {
         i18n = Locale.getI18nBundle();
         expect(i18n.locales).toBe('fr-fr');
         expect(Locale.getLocale()).toBe('fr-fr');
+
+        //  set to a valid locale..
+        Locale.changeLocale('en-us');
+        i18n = Locale.getI18nBundle();
+        expect(i18n.locales).toBe('en-us');
+
+        Locale.__ResetDependency__('config');
     });
 });

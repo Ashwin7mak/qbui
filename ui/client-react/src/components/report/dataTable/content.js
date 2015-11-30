@@ -87,7 +87,7 @@ var Content = React.createClass({
                 {this.props.reportData.error ?
                     <div>Error loading report!</div> :
                         <div>
-                            <GriddleTable breakpoint={this.props.breakpoint} results={this.props.reportData && this.props.reportData.data ? this.props.reportData.data.filteredRecords : []} columnMetadata={this.state.reportColumns} showPager={false} useExternal={false} resultsPerPage={resultsPerPage} externalResultsPerPage={resultsPerPage} />
+                            <GriddleTable results={this.props.reportData && this.props.reportData.data ? this.props.reportData.data.filteredRecords : []} columnMetadata={this.state.reportColumns} showPager={false} useExternal={false} resultsPerPage={resultsPerPage} externalResultsPerPage={resultsPerPage} />
                         </div>
                 }
             </Loader>

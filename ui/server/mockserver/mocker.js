@@ -27,6 +27,16 @@
 
     var port = process.env.PORT || argv.port;
 
+// use the db.json file copy from sample if it doesn't exist
+    var dbfile = path.join(__dirname, 'db.json');
+    var dbSamplefile = path.join(__dirname, 'db.json.sample');
+    if (!fs.existsSync(dbfile) && fs.existsSync(dbSamplefile)) {
+        //copy sample file
+        console.log("Copying db.json.sample to db.json...");
+        var contents = fs.readFileSync(dbSamplefile, 'utf8');
+        fs.writeFileSync(dbfile, contents);
+    }
+
 // Returns an Express server
     var server = jsonServer.create();
 
@@ -40,7 +50,6 @@
 //Add any additional custom or generated route responses here
 
 // Returns an Express router
-    var dbfile = path.join(__dirname, 'db.json');
     var router = jsonServer.router(dbfile);
     server.use(router);
 

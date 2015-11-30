@@ -1,4 +1,4 @@
-
+@import '../../assets/css/qbVariables';
 
 .leftMenu.open {
   width:300px;
@@ -52,7 +52,7 @@ body:not(.small-breakpoint) div.leftNavTooltip.show {
 
 .leftMenu {
   border-right: 1px solid #ccc;
-  background-color: #002b48;
+  background-color: $left-nav-bg;
   overflow-y:auto;
 
   .nav li.selected {

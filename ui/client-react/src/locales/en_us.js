@@ -3,7 +3,7 @@ export default {
 
     messages: {
         apps: {
-            header: "Your QuickBase Applications"
+            header: "Apps"
         },
         footer: {
             copyright: "{year} Intuit Inc. All rights reserved."
@@ -22,7 +22,9 @@ export default {
         },
         nav: {
             home: "Home",
-            reportsHeading: "Reports"
+            reportsHeading: "Reports",
+            tablesHeading: "Tables",
+            appsHeading: "Apps",
         },
         grid: {
             no_data: "There is no data to display."
@@ -30,9 +32,9 @@ export default {
         header: {
             menu: {
                 locale: {
-                    english: "English",
-                    french: "French",
-                    german: "German"
+                    "en-us": "English",
+                    "fr-fr": "French",
+                    "de-de": "German"
                 },
                 preferences: "Preferences",
                 sign_out: "Sign out"

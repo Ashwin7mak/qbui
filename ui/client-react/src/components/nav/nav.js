@@ -22,6 +22,9 @@ let StoreWatchMixin = Fluxxor.StoreWatchMixin;
 var Nav = React.createClass({
     mixins: [FluxMixin, StoreWatchMixin('NavStore', 'AppsStore', 'ReportsStore', 'ReportDataStore')],
 
+    contextTypes: {
+        breakpoint: React.PropTypes.string
+    },
     // todo: maybe we should move this up another level into the router...
     getStateFromFlux() {
         let flux = this.getFlux();
@@ -41,7 +44,7 @@ var Nav = React.createClass({
     renderLarge() {
         const flux = this.getFlux();
 
-        let classes = 'navShell ' + this.props.breakpoint;
+        let classes = 'navShell ';
 
         return (<div className={classes}>
 
@@ -53,22 +56,24 @@ var Nav = React.createClass({
             <LeftNav
                 items={this.state.nav.leftNavItems}
                 open={this.state.nav.leftNavOpen}
+                apps={this.state.apps.apps}
+                selectedAppId={this.state.apps.selectedAppId}
+                selectedTableId={this.state.apps.selectedTableId}
                 reportsData={this.state.reportsData}
-                reportID={this.state.reportData.rptId}
+                selectedReportId={this.state.reportData.rptId}
                 flux={flux} />
 
             <div className="main">
                 <TopNav title="QuickBase"  onNavClick={this.toggleNav} onAddClicked={this.showTrouser} flux={flux} />
-                {this.props.children && this.props.children.main ?
-                    <ReactCSSTransitionGroup className="mainContent"
+                {this.props.children && <ReactCSSTransitionGroup className="mainContent"
                                          transitionName="main-transition"
                                          transitionAppear={true}
                                          transitionAppearTimeout={600}
                                          transitionEnterTimeout={600}
                                          transitionLeaveTimeout={600} >
-                    {/* insert the main component passed in by the router */}
-                    {React.cloneElement(this.props.children.main, {key: this.props.location ? this.props.location.pathname : "", reportData: this.state.reportData, breakpoint: this.props.breakpoint,  flux: flux})}
-                </ReactCSSTransitionGroup> : null}
+                    {/* insert the component passed in by the router */}
+                    {React.cloneElement(this.props.children, {key: this.props.location ? this.props.location.pathname : "", selectedAppId: this.state.apps.selectedAppId, reportData: this.state.reportData,  flux: flux})}
+                </ReactCSSTransitionGroup>}
 
                 <Footer flux= {flux} />
             </div>
@@ -83,7 +88,7 @@ var Nav = React.createClass({
         const searchBarOpen = this.state.nav.searchBarOpen;
         const searching = this.state.nav.searching;
 
-        let classes = 'navShell ' + this.props.breakpoint;
+        let classes = 'navShell';
         if (this.state.nav.leftNavOpen) {
             classes += ' leftNavOpen';
         }
@@ -91,24 +96,26 @@ var Nav = React.createClass({
             <LeftNav
                 items={this.state.nav.leftNavItems}
                 open={this.state.nav.leftNavOpen}
+                apps={this.state.apps.apps}
+                selectedAppId={this.state.apps.selectedAppId}
+                selectedTableId={this.state.apps.selectedTableId}
                 reportsData={this.state.reportsData}
-                reportID={this.state.reportData.rptId}
+                selectedReportId={this.state.reportData.rptId}
                 onSelect={onSelectSmall}
                 flux={flux} />
 
             <div className="main">
                 <MobileTopNav title="QuickBase" searching={searching} searchBarOpen={searchBarOpen}  onNavClick={this.toggleNav} flux={flux} />
 
-                {this.props.children && this.props.children.main ?
-                    <ReactCSSTransitionGroup className="mainContent"
+                {this.props.children && <ReactCSSTransitionGroup className="mainContent"
                                          transitionName="main-transition"
                                          transitionAppear={true}
                                          transitionAppearTimeout={600}
                                          transitionEnterTimeout={600}
                                          transitionLeaveTimeout={600} >
-                    {/* insert the main component passed in by the router */}
-                    {this.props.children && this.props.children.main ? React.cloneElement(this.props.children.main, {key: this.props.location ? this.props.location.pathname : "", reportData: this.state.reportData, breakpoint: this.props.breakpoint,  flux: flux}) : null}
-                </ReactCSSTransitionGroup> : null}
+                    {/* insert the component passed in by the router */}
+                    {React.cloneElement(this.props.children, {key: this.props.location ? this.props.location.pathname : "", selectedAppId: this.state.apps.selectedAppId, reportData: this.state.reportData, flux: flux})}
+                </ReactCSSTransitionGroup>}
 
                 {/* insert the footer if route wants it */}
                 <MobileAddFooter newItemsOpen={this.state.nav.newItemsOpen} flux= {flux} />
@@ -116,7 +123,7 @@ var Nav = React.createClass({
         </div>);
     },
     render() {
-        if (this.props.breakpoint === breakpoints.SMALL_BREAKPOINT) {
+        if (this.context.breakpoint === breakpoints.SMALL_BREAKPOINT) {
             return this.renderSmall();
         } else {
             return this.renderLarge();

@@ -10,7 +10,10 @@ export const SEARCHING = 'SEARCH';
 
 export const SHOW_NEW_ITEMS = 'SHOW_NEW_ITEMS';
 export const LOAD_APPS = 'LOAD_APPS';
-export const LOAD_APPS_WITH_TABLES = 'LOAD_APPS_WITH_TABLES';
+export const LOAD_APPS_SUCCESS = 'LOAD_APPS_SUCCESS';
+export const LOAD_APPS_FAILED = 'LOAD_APPS_FAILED';
+export const SELECT_APP = 'SELECT_APP';
+export const SELECT_TABLE = 'SELECT_TABLE';
 
 export const LOAD_REPORTS = 'LOAD_REPORTS';
 export const LOAD_REPORTS_SUCCESS = 'LOAD_REPORTS_SUCCESS';
