@@ -51,6 +51,16 @@ describe('Express Client Routes', function() {
             });
     });
 
+    it('Validate get app route', function(done) {
+        request(app).
+            get('/app/1').
+            expect(200).
+            end(function(err, res) {
+                if (err) {return done(err);}
+                done();
+            });
+    });
+
     it('Validate get tables route', function(done) {
         request(app).
             get('/app/1/table/2').

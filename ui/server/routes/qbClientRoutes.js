@@ -48,15 +48,6 @@
         //res.sendfile(app.get('appPath') + '/index.html');
     }
 
-    function renderAppsIndex(res) {
-        var opts = lodash.merge({}, BASE_PROPS, {
-            title                : 'QuickBase Apps',
-            styleTagStringContent: 'body>.container {margin-left:0;padding-left:0;}'
-        });
-        renderJsx(res, './apps.index.jsx', opts);
-        // res.sendfile(app.get('appPath') + '/apps.index.html');
-    }
-
     module.exports = function(app, config) {
         getBaseOpts(config);
 
