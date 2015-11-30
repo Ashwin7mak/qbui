@@ -54,44 +54,47 @@ body:not(.small-breakpoint) div.leftNavTooltip.show {
   border-right: 1px solid #ccc;
   background-color: $left-nav-bg;
   overflow-y:auto;
+  color: #fff;
 
-  .nav li.selected {
-    a.leftNavLink {
-      background-color: #2E71B5;
+  ul {
+    list-style: none;
+    list-style-type: none;
+    list-style-position: initial;
+    list-style-image: initial;
+    padding: 0;
+    margin: 0;
+    color: #fff;
+
+    .heading {
+      font-size: 12px;
+      line-height: 30px;
+      background-color: #264a6d;
+      color: #BFCFE3;
+      margin: 0;
+      padding-left: 10px;
+    }
+
+    li a {
+      text-decoration:none;
+      display: block;
+      line-height: 45px;
+      padding-left: 10px;
+      color: #CAD8E9;
+    }
+
+    li.link:hover {
+      color: white;
+      background-color: #0097CD;
     }
   }
 
-  .nav li {
-    a.heading {
-      padding: 3px 15px;
-      color:#ddd;
-      cursor: default;
-      font-size:12px;
-    }
-    a.leftNavLink {
-      color: #bbd;
-      cursor: pointer;
-      white-space:nowrap;
-      overflow:hidden;
-      text-overflow:ellipsis;
-      .glyphicon {
-        margin-right: 8px;
-      }
-      span {
-
-        text-overflow:ellipsis;
-      }
-    }
-    a.leftNavLink:hover {
-      background-color: #2E71B5;
-    }
-    .loader {
-      position:absolute;
-      right:20px;
-      top:20px;
-    }
+  .loader {
+    position:absolute;
+    right:20px;
+    top:20px;
   }
 }
+
 
 /* small (mobile) left nav behaves differently */
 
@@ -127,72 +130,6 @@ body:not(.small-breakpoint) .leftMenu a.leftNavLink:hover {
   transform: translate3d(250px, 0, 0);
   -webkit-transform: translate3d(250px, 0, 0);
 }
-// fun stuff
-@-webkit-keyframes swing
-{
-  15%
-  {
-    -webkit-transform: translateX(5px);
-    transform: translateX(5px);
-  }
-  30%
-  {
-    -webkit-transform: translateX(-5px);
-    transform: translateX(-5px);
-  }
-  50%
-  {
-    -webkit-transform: translateX(3px);
-    transform: translateX(3px);
-  }
-  65%
-  {
-    -webkit-transform: translateX(-3px);
-    transform: translateX(-3px);
-  }
-  80%
-  {
-    -webkit-transform: translateX(2px);
-    transform: translateX(2px);
-  }
-  100%
-  {
-    -webkit-transform: translateX(0);
-    transform: translateX(0);
-  }
-}
-@keyframes swing
-{
-  15%
-  {
-    -webkit-transform: translateX(5px);
-    transform: translateX(5px);
-  }
-  30%
-  {
-    -webkit-transform: translateX(-5px);
-    transform: translateX(-5px);
-  }
-  50%
-  {
-    -webkit-transform: translateX(3px);
-    transform: translateX(3px);
-  }
-  65%
-  {
-    -webkit-transform: translateX(-3px);
-    transform: translateX(-3px);
-  }
-  80%
-  {
-    -webkit-transform: translateX(2px);
-    transform: translateX(2px);
-  }
-  100%
-  {
-    -webkit-transform: translateX(0);
-    transform: translateX(0);
-  }
-}
+
 
 
