@@ -1,6 +1,6 @@
 "use strict";
 
-var _ = require("underscore");
+var _ = require('underscore');
 
 // Credits: https://github.com/documentcloud/underscore-contrib
 // Sub module: underscore.object.selectors
