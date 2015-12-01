@@ -1,16 +1,17 @@
-"use strict";
+'use strict';
 
-var _prototypeProperties = function (child, staticProps, instanceProps) { if (staticProps) Object.defineProperties(child, staticProps); if (instanceProps) Object.defineProperties(child.prototype, instanceProps); };
+var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ('value' in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
 
-var _classCallCheck = function (instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } };
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError('Cannot call a class as a function'); } }
 
-var _ = require("underscore");
+var _ = require('underscore');
 
 var RowProperties = (function () {
   function RowProperties() {
-    var rowMetadata = arguments[0] === undefined ? {} : arguments[0];
-    var rowComponent = arguments[1] === undefined ? null : arguments[1];
-    var isCustom = arguments[2] === undefined ? false : arguments[2];
+    var rowMetadata = arguments.length <= 0 || arguments[0] === undefined ? {} : arguments[0];
+    var rowComponent = arguments.length <= 1 || arguments[1] === undefined ? null : arguments[1];
+    var isCustom = arguments.length <= 2 || arguments[2] === undefined ? false : arguments[2];
+
     _classCallCheck(this, RowProperties);
 
     this.rowMetadata = rowMetadata;
@@ -18,60 +19,49 @@ var RowProperties = (function () {
     this.isCustom = isCustom;
   }
 
-  _prototypeProperties(RowProperties, null, {
-    getRowKey: {
-      value: function getRowKey(row) {
-        var uniqueId;
+  _createClass(RowProperties, [{
+    key: 'getRowKey',
+    value: function getRowKey(row) {
+      var uniqueId;
 
-        if (this.hasRowMetadataKey()) {
-          uniqueId = row[this.rowMetadata.key];
-        } else {
-          uniqueId = _.uniqueId("grid_row");
-        }
+      if (this.hasRowMetadataKey()) {
+        uniqueId = row[this.rowMetadata.key];
+      } else {
+        uniqueId = _.uniqueId("grid_row");
+      }
 
-        //todo: add error handling
+      //todo: add error handling
 
-        return uniqueId;
-      },
-      writable: true,
-      configurable: true
-    },
-    hasRowMetadataKey: {
-      value: function hasRowMetadataKey() {
-        return this.hasRowMetadata() && this.rowMetadata.key !== null && this.rowMetadata.key !== undefined;
-      },
-      writable: true,
-      configurable: true
-    },
-    getBodyRowMetadataClass: {
-      value: function getBodyRowMetadataClass(rowData) {
-        if (this.hasRowMetadata() && this.rowMetadata.bodyCssClassName !== null && this.rowMetadata.bodyCssClassName !== undefined) {
-          if (typeof this.rowMetadata.bodyCssClassName === "function") {
-            return this.rowMetadata.bodyCssClassName(rowData);
-          } else {
-            return this.rowMetadata.bodyCssClassName;
-          }
-        }
-        return null;
-      },
-      writable: true,
-      configurable: true
-    },
-    getHeaderRowMetadataClass: {
-      value: function getHeaderRowMetadataClass() {
-        return this.hasRowMetadata() && this.rowMetadata.headerCssClassName !== null && this.rowMetadata.headerCssClassName !== undefined ? this.rowMetadata.headerCssClassName : null;
-      },
-      writable: true,
-      configurable: true
-    },
-    hasRowMetadata: {
-      value: function hasRowMetadata() {
-        return this.rowMetadata !== null;
-      },
-      writable: true,
-      configurable: true
+      return uniqueId;
     }
-  });
+  }, {
+    key: 'hasRowMetadataKey',
+    value: function hasRowMetadataKey() {
+      return this.hasRowMetadata() && this.rowMetadata.key !== null && this.rowMetadata.key !== undefined;
+    }
+  }, {
+    key: 'getBodyRowMetadataClass',
+    value: function getBodyRowMetadataClass(rowData) {
+      if (this.hasRowMetadata() && this.rowMetadata.bodyCssClassName !== null && this.rowMetadata.bodyCssClassName !== undefined) {
+        if (typeof this.rowMetadata.bodyCssClassName === 'function') {
+          return this.rowMetadata.bodyCssClassName(rowData);
+        } else {
+          return this.rowMetadata.bodyCssClassName;
+        }
+      }
+      return null;
+    }
+  }, {
+    key: 'getHeaderRowMetadataClass',
+    value: function getHeaderRowMetadataClass() {
+      return this.hasRowMetadata() && this.rowMetadata.headerCssClassName !== null && this.rowMetadata.headerCssClassName !== undefined ? this.rowMetadata.headerCssClassName : null;
+    }
+  }, {
+    key: 'hasRowMetadata',
+    value: function hasRowMetadata() {
+      return this.rowMetadata !== null;
+    }
+  }]);
 
   return RowProperties;
 })();
