@@ -2,7 +2,7 @@ module.exports = function(pluginArguments) {
     var Plugin = pluginArguments.Plugin;
     var t = pluginArguments.types;
 
-    var commentToIgnoreCoverage = "istanbul ignore next ";
+    var commentToIgnoreCoverage = " istanbul ignore next ";
 
     function addIgnoreComment(context) {
         context.addComment("leading", commentToIgnoreCoverage, true);
@@ -13,7 +13,7 @@ module.exports = function(pluginArguments) {
                 exit(path) {
                     // add istanbul ignore on the the rewire injected function statements
                     if (path.id && path.id.name) {
-                        if (path.id.name.match(/__GetDependency__||__Rewire__|__ResetDependency__/)) {
+                        if (path.id.name.match(/__GetDependency__|__Rewire__|__ResetDependency__/)) {
                             addIgnoreComment(this);
                         }
                     //  add istanbul ignore for the functions assignments for $Getter, $Setter, $Resetter injections
@@ -23,9 +23,9 @@ module.exports = function(pluginArguments) {
                       this.container.left !== undefined &&
                       this.container.left.object !== undefined &&
                       this.container.left.object.name.match(/__\$Getters__|__\$Setters__|__\$Resetters__/)) {
-                            addIgnoreComment(this);
+                        addIgnoreComment(this);
                     }
-                  }
+                }
             }
         }
     });
