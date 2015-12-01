@@ -58,7 +58,7 @@
             });
         };
         this.waitForElement = function(element){
-            return browser.wait(EC.visibilityOf(element), 5000);
+            return browser.wait(EC.visibilityOf(element), 5000, 'Timed out waiting for element to appear');
         };
 
     };

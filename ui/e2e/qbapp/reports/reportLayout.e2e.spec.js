@@ -160,7 +160,7 @@
                         // Select the report
                         reportServicePage.navLinksElList.get(4).click();
                         // Make sure the table report has loaded
-                        reportServicePage.waitForElement(reportServicePage.griddleContainerEl).then(function() {
+                        reportServicePage.waitForElement(reportServicePage.reportContainerEl).then(function() {
                             // Resize browser at different widths to check responsiveness
                             e2eBase.resizeBrowser(1500, 600).then(function() {
                                 reportServicePage.assertNavProperties('xlarge', true, '299');

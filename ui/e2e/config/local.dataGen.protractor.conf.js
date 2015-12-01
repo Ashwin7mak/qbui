@@ -1,5 +1,5 @@
 // Protractor configuration
-// https://github.com/angular/protractor/blob/master/referenceConf.js
+// https://github.com/angular/protractor/blob/master/docs/referenceConf.js
 
 (function() {
     'use strict';
