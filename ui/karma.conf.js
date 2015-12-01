@@ -39,7 +39,10 @@ module.exports = function(config) {
                             path.resolve(__dirname, "client-react/test")
                         ],
                         exclude: [nodeModulesPath],
-                        loader: "babel-loader?plugins=babel-plugin-rewire"
+                        loader: "babel-loader",
+                        query: {
+                            plugins: ['babel-plugin-rewire', 'babel-plugin-rewire-ignore-coverage']
+                        }
                     },
                     {
                         // all css files can be required into js files with this
