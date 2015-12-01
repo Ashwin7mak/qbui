@@ -4,7 +4,7 @@ var WebpackDevServer = require('webpack-dev-server');
 var log = require('../logger').getLogger();
 
 /**
- * Unit tests for app generator
+ * Unit tests for Hot Dev Server
  */
 describe('HotDevServer Unit Test', function() {
 
@@ -12,7 +12,7 @@ describe('HotDevServer Unit Test', function() {
     var hotServerMockStub;
     var webpackDevServerStub;
 
-    //  mock to included in config and pass to hotLoader...as do not want to call the 'real' hot loader during test run
+    //  mock is included in config and passed to hotLoader...as we do not want to call the 'real' hot loader during test run
     function HotServerMock(compiler, option) {
         this.compiler = compiler;
         this.option = option;
@@ -32,7 +32,7 @@ describe('HotDevServer Unit Test', function() {
         webpackDevServerStub.restore();
     });
 
-    it('validate hot reload is not available in production', function() {
+    it('validate hot reload is not available if noHotLoad is false and production is true', function() {
 
         var mockConfig = {
             isProduction: true,
@@ -45,7 +45,7 @@ describe('HotDevServer Unit Test', function() {
         assert(webpackDevServerStub.callCount === 0, true);
     });
 
-    it('validate hot reload is not available in production and noHotLoad is true', function() {
+    it('validate hot reload is not available if noHotLoad is true and production is true', function() {
 
         var mockConfig = {
             isProduction: true,
@@ -58,7 +58,7 @@ describe('HotDevServer Unit Test', function() {
         assert(webpackDevServerStub.callCount === 0, true);
     });
 
-    it('validate hot reload is not available if noHotLoad is true', function() {
+    it('validate hot reload is not available if noHotLoad is true and production is false', function() {
 
         var mockConfig = {
             isProduction: false,
@@ -71,7 +71,7 @@ describe('HotDevServer Unit Test', function() {
         assert(webpackDevServerStub.callCount === 0, true);
     });
 
-    it('validate hot reload is available in non-prod environment', function() {
+    it('validate hot reload is available if noHotLoad is false and production is false', function() {
 
         var mockConfig = {
             isProduction: false,
