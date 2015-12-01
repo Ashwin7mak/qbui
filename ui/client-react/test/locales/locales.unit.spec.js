@@ -25,6 +25,7 @@ describe('Locales', () => {
         expect(i18n.locales).toBe('en-us');
 
         Locale.__ResetDependency__('config');
+        Locale.__ResetDependency__('locale');
     });
 
     it('test getSupportLocales', () => {

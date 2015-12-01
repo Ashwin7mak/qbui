@@ -5,7 +5,7 @@
     'use strict';
 
     // if we have not set the NODE_ENV, then error out here
-    if (process.env.NODE_ENV === undefined) {
+    if (!process.env.NODE_ENV) {
         throw new Error('No NODE_ENV was specified. You must set a run-time environment variable. Exiting');
     }
 
