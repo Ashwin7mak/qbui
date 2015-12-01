@@ -22,6 +22,8 @@ export default {
         },
         nav: {
             home: "Accueil",
+            users: "Utilisateurs",
+            favorites: "Favoris",
             reportsHeading: "Rapports",
             tablesHeading: "Les Tables",
             appsHeading: "Vos Apps"

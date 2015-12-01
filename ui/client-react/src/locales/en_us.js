@@ -22,6 +22,8 @@ export default {
         },
         nav: {
             home: "Home",
+            users: "Users",
+            favorites: "Favorites",
             reportsHeading: "Reports",
             tablesHeading: "Tables",
             appsHeading: "Apps",

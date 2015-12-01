@@ -22,6 +22,8 @@ export default {
         },
         nav: {
             home: "zu Hause",
+            users: "Benutzer",
+            favorites: "Favoriten",
             reportsHeading: "Berichte",
             tablesHeading: "Tische",
             appsHeading: "Anwendungen"

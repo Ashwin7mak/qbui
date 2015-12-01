@@ -30,6 +30,8 @@ let NavStore = Fluxxor.createStore({
         );
 
         this.state.leftNavItems.push({key: 'nav.home', link:'/apps', icon:'home'});
+        this.state.leftNavItems.push({key: 'nav.users', link:'/users', icon:'user'});
+        this.state.leftNavItems.push({key: 'nav.favorites', link:'/favorites', icon:'star'});
     },
 
     onChangeLocale: function() {
