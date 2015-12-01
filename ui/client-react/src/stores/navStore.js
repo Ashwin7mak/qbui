@@ -14,6 +14,7 @@ let NavStore = Fluxxor.createStore({
             searching:false,
             trouserOpen: false,
             newItemsOpen: false,
+            showReports: false,
             leftNavItems: []
         };
 
@@ -22,6 +23,8 @@ let NavStore = Fluxxor.createStore({
         this.bindActions(
             actions.SHOW_TROUSER, this.onShowTrouser,
             actions.HIDE_TROUSER, this.onHideTrouser,
+            actions.SHOW_REPORTS, this.onShowReports,
+            actions.HIDE_REPORTS, this.onHideReports,
             actions.SHOW_NEW_ITEMS, this.onShowNewItems,
             actions.TOGGLE_LEFT_NAV, this.onToggleLeftNav,
             actions.TOGGLE_SEARCH, this.onToggleSearch,
@@ -44,9 +47,17 @@ let NavStore = Fluxxor.createStore({
         this.state.trouserOpen = true;
         this.emit('change');
     },
-
     onHideTrouser: function() {
         this.state.trouserOpen = false;
+        this.emit('change');
+    },
+
+    onShowReports: function() {
+        this.state.showReports = true;
+        this.emit('change');
+    },
+    onHideReports: function() {
+        this.state.showReports = false;
         this.emit('change');
     },
     onToggleSearch: function() {

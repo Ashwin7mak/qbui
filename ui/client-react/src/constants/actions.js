@@ -4,6 +4,9 @@ export const SHOW_TROUSER = 'SHOW_TROUSER';
 export const HIDE_TROUSER = 'HIDE_TROUSER';
 export const CHANGE_LOCALE = 'CHANGE_LOCALE';
 
+export const SHOW_REPORTS = 'SHOW_REPORTS';
+export const HIDE_REPORTS = 'HIDE_REPORTS';
+
 export const TOGGLE_SEARCH = 'TOGGLE_SEARCH';
 export const SEARCH_FOR = 'SEARCH_FOR';
 export const SEARCHING = 'SEARCH';

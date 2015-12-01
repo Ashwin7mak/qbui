@@ -40,8 +40,17 @@ var Nav = React.createClass({
         let flux = this.getFlux();
         flux.actions.hideTrouser();
     },
-
+    onSelectTableReports(tableId) {
+        const flux = this.getFlux();
+        flux.actions.loadReports(this.state.apps.selectedAppId, tableId);
+        flux.actions.showReports();
+    },
+    onHideTableReports() {
+        const flux = this.getFlux();
+        flux.actions.hideReports();
+    },
     renderLarge() {
+
         const flux = this.getFlux();
 
         let classes = 'navShell ';
@@ -61,6 +70,9 @@ var Nav = React.createClass({
                 selectedTableId={this.state.apps.selectedTableId}
                 reportsData={this.state.reportsData}
                 selectedReportId={this.state.reportData.rptId}
+                showReports={this.state.nav.showReports}
+                onSelectReports={this.onSelectTableReports}
+                onHideReports={this.onHideTableReports}
                 flux={flux} />
 
             <div className="main">
@@ -101,6 +113,9 @@ var Nav = React.createClass({
                 selectedTableId={this.state.apps.selectedTableId}
                 reportsData={this.state.reportsData}
                 selectedReportId={this.state.reportData.rptId}
+                showReports={this.state.nav.showReports}
+                onSelectReports={this.onSelectTableReports}
+                onHideReports={this.onHideTableReports}
                 onSelect={onSelectSmall}
                 flux={flux} />
 

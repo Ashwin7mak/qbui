@@ -41,9 +41,13 @@ body:not(.small-breakpoint) div.leftNavTooltip.show {
 .leftMenu.closed {
   width:40px;
   overflow-y:hidden;
-  .nav li a.heading {
+  li a.heading {
     background-color:#002b48;
 
+  }
+
+  .reportsView.open {
+    width:40px;
   }
 }
 
