@@ -8,19 +8,24 @@
     'use strict';
     //Bluebird Promise library
     var promise = require('bluebird');
+
+    var e2ePageBase = require('./../../common/e2ePageBase.js');
     var ReportServicePage = function() {
         // Page Elements using Locators
         // Left Nav
+        this.navMenuBodyEl = element(by.tagName('body'));
+        this.navMenuShellEl = element(by.className('navShell'));
         this.navMenuEl = element(by.className('leftMenu'));
         this.navStackedEl = element(by.className('nav-stacked'));
-        this.navLinksElList = element.all(by.className('leftNavLink'));
+        this.navLinksElList = this.navStackedEl.all(by.className('leftNavLink'));
         this.appsHomeLinkEl = this.navLinksElList.first();
+
         // Report Container
-        this.reportContainerEl = element(by.className('reportContainer'));
+        this.reportContainerEl = element.all(by.className('reportContainer')).first();
         // Loaded Content Div
         this.loadedContentEl = this.reportContainerEl.element(by.className('loadedContent'));
         // Griddle table
-        this.griddleContainerEl = element(by.className('griddle-container'));
+        this.griddleContainerEl = element.all(by.className('griddle-container')).first();
         this.griddleBodyEl = element(by.className('griddle-body'));
         this.griddleTableHeaderEl = this.griddleBodyEl.all(by.tagName('thead'));
         this.griddleColHeaderElList = this.griddleTableHeaderEl.all(by.tagName('span'));
@@ -49,6 +54,22 @@
             });
             return deferred.promise;
         };
+
+        /**
+         * Assertion function that will test the properties of the leftNav
+         */
+        this.assertNavProperties = function(breakpointSize, open, clientWidth){
+            // Check properties of nav bar
+            expect(this.navMenuBodyEl.getAttribute('class')).toMatch(breakpointSize + '-breakpoint');
+            if (open){
+                expect(this.navMenuEl.getAttribute('class')).toMatch('open');
+                expect(this.navMenuEl.getAttribute('clientWidth')).toMatch(clientWidth);
+            } else {
+                expect(this.navMenuEl.getAttribute('class')).toMatch('closed');
+                expect(this.navMenuEl.getAttribute('clientWidth')).toMatch(clientWidth);
+            }
+        };
     };
+    ReportServicePage.prototype = e2ePageBase;
     module.exports = ReportServicePage;
 }());

@@ -71,31 +71,32 @@
             var tableId = app.tables[0].id;
             // Get a session ticket for that subdomain and realmId (stores it in the browser)
             requestSessionTicketPage.get(e2eBase.getSessionTicketRequestEndpoint(realmName, realmId, e2eBase.ticketEndpoint));
-            browser.wait(EC.visibilityOf(requestSessionTicketPage.ticketResponseBodyEl), 5000);
             // Load the requestAppsPage (shows a list of all apps and tables in a realm)
             requestAppsPage.get(e2eBase.getRequestAppsPageEndpoint(realmName));
-            // Wait until the page has loaded (blocking wait)
-            browser.wait(EC.visibilityOf(requestAppsPage.tablesDivEl), 5000);
-            // Check that we have a report for our created table
-            expect(requestAppsPage.tableLinksElList.get(0).getText()).toContain(tableId);
-            requestAppsPage.tableLinksElList.get(0).click();
+
             // Now on the reportServicePage (shows the nav with a list of reports you can load)
             // Wait until the nav has loaded
             var reportServicePage = new ReportServicePage();
             browser.wait(EC.visibilityOf(reportServicePage.navStackedEl), 5000);
+
+            // Select the app
+            reportServicePage.navLinksElList.get(1).click();
+            // Select the table
+            reportServicePage.navLinksElList.get(2).click();
+
             // Assert report name
-            var reportName = 'Test Report';
             reportServicePage.navLinksElList.then(function(links) {
-                links[1].getText(function(text) {
-                    expect(text).toEqual(reportName + ' Report');
+                links[3].getText().then(function(text) {
+                    expect(text).toEqual('Test Report');
                 });
             });
+
             // Select the report
             reportServicePage.navLinksElList.then(function(links) {
-                links[1].click();
+                links[3].click();
             });
             // Wait until the table has loaded
-            browser.wait(EC.visibilityOf(reportServicePage.griddleContainerEl), 5000);
+            browser.wait(EC.visibilityOf(reportServicePage.loadedContentEl), 5000);
             // Assert column headers
             reportServicePage.getReportColumnHeaders(reportServicePage).then(function(resultArray) {
                 // UI is currently using upper case to display the field names in columns

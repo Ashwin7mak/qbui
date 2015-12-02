@@ -15,17 +15,11 @@
         var recordService = require('./services/recordService.js');
         var tableService = require('./services/tableService.js');
         var reportService = require('./services/reportService.js');
-        var init;
-        if (config !== undefined) {
-            init = recordBase.initialize();
-        }
         var e2eBase = {
             //Delegate to recordBase to initialize
             recordBase : recordBase,
             initialize : function() {
-                if (!init) {
-                    init = recordBase.initialize();
-                }
+                recordBase.initialize();
             },
             //Set the baseUrl we want to use to reach out for testing
             setBaseUrl : function(baseUrlConfig) {
