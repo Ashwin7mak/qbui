@@ -2,16 +2,23 @@ import React from 'react';
 import {Tooltip, OverlayTrigger, Glyphicon} from 'react-bootstrap';
 import {Link} from 'react-router';
 
-
 let TablesList = React.createClass({
 
+    propTypes: {
+        items: React.PropTypes.array.isRequired,
+        buildHeadingItem: React.PropTypes.func.isRequired,
+        buildItem: React.PropTypes.func.isRequired,
+        selectedAppId: React.PropTypes.string.isRequired,
+        open: React.PropTypes.bool.isRequired,
+        onSelect: React.PropTypes.func,
+        showReports: React.PropTypes.func.isRequired
+    },
     buildTableItem(table) {
 
         let label = table.name;
 
         const tooltip = (<Tooltip className={ this.props.open ? 'leftNavTooltip' : 'leftNavTooltip show' }
                                   id={label}>{label}</Tooltip>);
-
         return (
             <OverlayTrigger key={table.id} placement="right" overlay={tooltip}>
                 <li className={"link"}>

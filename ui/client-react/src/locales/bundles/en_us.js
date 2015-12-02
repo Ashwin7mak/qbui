@@ -2,6 +2,9 @@ export default {
     locales: "en-us",
 
     messages: {
+        test: {
+            testMsg: "test"
+        },
         apps: {
             header: "Apps"
         },

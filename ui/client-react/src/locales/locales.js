@@ -59,7 +59,7 @@ class Locale {
     static getMessage(msgPath) {
         var messages =  Locale.getI18nBundle().messages;
 
-        let message = msgPath.split('.').reduce(function (obj, pathPart) {
+        let message = msgPath.split('.').reduce((obj, pathPart) => {
             return obj[pathPart];
         }, messages);
 

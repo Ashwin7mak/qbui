@@ -7,7 +7,9 @@ let AppsList = React.createClass({
     propTypes: {
         apps: React.PropTypes.array.isRequired,
         toggleApps: React.PropTypes.func.isRequired,
-        buildHeadingItem: React.PropTypes.func.isRequired
+        buildHeadingItem: React.PropTypes.func.isRequired,
+        buildItem: React.PropTypes.func.isRequired,
+        open: React.PropTypes.bool.isRequired
     },
     getInitialState() {
         return {searchText:""};

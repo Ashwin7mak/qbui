@@ -4,6 +4,15 @@ import Locale from '../../locales/locales';
 
 let ReportsList = React.createClass({
 
+    propTypes: {
+        open: React.PropTypes.bool.isRequired,
+        reportsOpen: React.PropTypes.bool.isRequired,
+        onBack: React.PropTypes.func.isRequired,
+        buildItem: React.PropTypes.func.isRequired,
+        reportsData: React.PropTypes.shape({
+            list: React.PropTypes.array.isRequired
+        })
+    },
     getInitialState() {
         return {searchText:""};
     },
