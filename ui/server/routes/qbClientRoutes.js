@@ -1,9 +1,10 @@
+var log = require('../logger').getLogger();
+var reactViews = require('express-react-views');
+var lodash = require('lodash');
+
 (function() {
     'use strict';
-    var log = require('../logger').getLogger();
 
-    var reactViews = require('express-react-views');
-    var lodash = require('lodash');
     var viewPath = __dirname;
     var engineOptions = {
         beautify: true,
@@ -48,15 +49,6 @@
         //res.sendfile(app.get('appPath') + '/index.html');
     }
 
-    function renderAppsIndex(res) {
-        var opts = lodash.merge({}, BASE_PROPS, {
-            title                : 'QuickBase Apps',
-            styleTagStringContent: 'body>.container {margin-left:0;padding-left:0;}'
-        });
-        renderJsx(res, './apps.index.jsx', opts);
-        // res.sendfile(app.get('appPath') + '/apps.index.html');
-    }
-
     module.exports = function(app, config) {
         getBaseOpts(config);
 
@@ -67,10 +59,6 @@
 
         app.route('/app/:appId/table/:tblId/record/:recordId').get(function(req, res) {
             log.info('..specific record request');
-            renderIndex(res);
-        });
-        app.route('/app/:appId/table/:tblId/dashboardDemo/:rptId').get(function(req, res) {
-            log.info('..specific app report request');
             renderIndex(res);
         });
 

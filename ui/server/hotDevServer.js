@@ -10,10 +10,11 @@
 
     module.exports = function(config) {
         if (!config.isProduction && !config.noHotLoad) {
+
             var webpack = require('webpack');
             var WebpackDevServer = require('webpack-dev-server');
-            var hotPort = config.webpackDevServerPort || 3000;
             var webpackConfig = require('../webpack.config.js');
+            var hotPort = config.webpackDevServerPort || 3000;
 
             webpackConfig.plugins.push(new webpack.HotModuleReplacementPlugin());
             webpackConfig.entry = [
@@ -69,7 +70,9 @@
             log.info('webpackConfig Settings :' + JSON.stringify(webpackConfig));
             log.info('devServerConfig Settings :' + JSON.stringify(devServerConfig));
 
-            var hotServer = new WebpackDevServer(compiler, devServerConfig);
+            var hotServer =  config.hotServer ?
+                new config.hotServer(compiler, devServerConfig) :
+                new WebpackDevServer(compiler, devServerConfig);
             log.info('Hot webpack-dev-server Settings :' + JSON.stringify(hotServer));
             hotServer.listen(hotPort, config.ip, function(err) {
                 if (err) {

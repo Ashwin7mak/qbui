@@ -23,7 +23,6 @@
             next();
         });
 
-
         var routeMapper = require('./routes/qbRouteMapper')(config);
 
         require('./routes/qbClientRoutes')(app, config);
