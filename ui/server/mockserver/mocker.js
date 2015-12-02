@@ -1,5 +1,4 @@
 /* istanbul ignore next */
-
 (function() {
     var fs = require('fs');
     var path = require('path');

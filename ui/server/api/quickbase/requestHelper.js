@@ -70,6 +70,13 @@
                     headers     : req.headers
                 };
 
+                if (config.proxyHost) {
+                    opts.host = config.proxyHost;
+                    if (config.proxyPort) {
+                        opts.port  = config.proxyPort;
+                    }
+                }
+
                 this.setBodyOption(req, opts);
 
                 return opts;
