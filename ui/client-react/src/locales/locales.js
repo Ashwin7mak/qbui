@@ -55,6 +55,17 @@ class Locale {
         }
     }
 
+    // return message in bundle.messages object by dot-separated path
+    static getMessage(msgPath) {
+        var messages =  Locale.getI18nBundle().messages;
+
+        let message = msgPath.split('.').reduce(function (obj, pathPart) {
+            return obj[pathPart];
+        }, messages);
+
+        return message;
+    }
+
     static getSupportedLocales() {
         return config.locale.supported;
     }

@@ -27,6 +27,8 @@ export default {
             reportsHeading: "Reports",
             tablesHeading: "Tables",
             appsHeading: "Apps",
+            searchAppsPlaceholder: "Search apps...",
+            searchReportsPlaceholder: "Search reports..."
         },
         grid: {
             no_data: "There is no data to display."

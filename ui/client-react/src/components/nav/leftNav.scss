@@ -11,16 +11,16 @@
     }
   }
 }
-
+/*
 @media (min-width:700px) and (max-width: 1024px) {
-  /* For mobile phones: */
+
   .leftMenu.open {
     width:200px;
   }
 }
 
 @media (max-width: 700px) {
-  /* For mobile phones: */
+
   .leftMenu.open {
     width:40px;
     overflow:hidden;
@@ -29,6 +29,7 @@
     visibility:hidden;
   }
 }
+*/
 
 /* show tooltips only if .show is present unless we're in small (phone) breakpoint */
 div.leftNavTooltip {
@@ -46,7 +47,7 @@ body:not(.small-breakpoint) div.leftNavTooltip.show {
 
   }
 
-  .reportsView.open {
+  .reportsList.open {
     width:40px;
   }
 }
@@ -78,8 +79,12 @@ body:not(.small-breakpoint) div.leftNavTooltip.show {
       padding: 5px 10px;
       width: 100%;
       color: #555;
-      height:21px;
+      height:25px;
     }
+  }
+  .leftNavList {
+    position:absolute;
+    width:100%;
   }
   ul {
     list-style: none;
@@ -104,7 +109,7 @@ body:not(.small-breakpoint) div.leftNavTooltip.show {
 
     li {
       position:relative;
-      //line-height: 45px;
+
       a {
         text-decoration:none;
         line-height: 45px;
@@ -113,7 +118,7 @@ body:not(.small-breakpoint) div.leftNavTooltip.show {
         display:inline-block;
       }
       a.right {
-        visibility:hidden;
+        opacity:0;
         position:absolute;
         right: 5px;
       }
@@ -127,7 +132,10 @@ body:not(.small-breakpoint) div.leftNavTooltip.show {
       background-color: #0097CD;
 
       a.right {
-        visibility:visible;
+        opacity:1;
+        transition: all 0.2s ease-in-out;
+        -webkit-transition: all 0.2s ease-in-out;
+        -moz-transition: all 0.2s ease-in-out;
       }
     }
   }
@@ -177,53 +185,52 @@ body:not(.small-breakpoint) .leftMenu a.leftNavLink:hover {
 
 /** REACTCSSTRANSITION BASE CLASSES **/
 
-.leftNavView-enter {
+.leftNavList-enter {
   opacity: 0.01;
 }
 
 
-.leftNavView-enter.leftNavView-enter-active {
+.leftNavList.leftNavList-enter-active {
   opacity: 1;
   transition: all 300ms ease-in;
   // transition: opacity 500ms ease-in;
 }
 
-.leftNavView-leave {
+.leftNavList-leave {
   opacity: 1;
 }
 
-.leftNavView-leave.leftNavView-leave-active {
+.leftNavList-leave.leftNavList-leave-active {
   opacity: 0.01;
   transition: opacity 300ms ease-in;
 }
 
-$transition-time: 200ms;
+$transition-time: 300ms;
 $travel-distance: 15;
 
-.leftNavView-enter .appsView li {
+.leftNavList-enter.appsList li {
   margin-top: -#{$travel-distance}px;
 }
 
-.leftNavView-enter-active .appsView li {
+.leftNavList-enter-active.appsList li {
   margin-top: 0;
   transition: all $transition-time ease-in;
 }
 
-.leftNavView-enter .tablesView li {
+.leftNavList-enter.tablesList li {
   margin-top: #{$travel-distance}px;
 }
 
-.leftNavView-enter-active .tablesView li {
+.leftNavList-enter-active.tablesList li {
   margin-top: 0;
   transition: all $transition-time ease-in;
 }
 
-
-
-.leftMenu.appsViewOpen .branding .glyphicon-triangle-bottom {
+.leftMenu.appsListOpen .branding .glyphicon-triangle-bottom {
   transform: rotate(-180deg);
 }
-.leftMenu .reportsView {
+
+.leftMenu .reportsList {
   opacity: 0.5;
   transform: translate3d(100%, 0, 0);
   transition: all 300ms cubic-bezier(0.175, 0.885, 0.32, 1.275);
@@ -236,7 +243,7 @@ $travel-distance: 15;
   background-color: #486C8F;
 }
 
-.leftMenu .reportsView.open {
+.leftMenu .reportsList.open {
   width:300px;
   opacity: 1;
   transform: translate3d(0, 0, 0);

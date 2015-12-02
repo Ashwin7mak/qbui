@@ -26,7 +26,9 @@ export default {
             favorites: "Favoriten",
             reportsHeading: "Berichte",
             tablesHeading: "Tische",
-            appsHeading: "Anwendungen"
+            appsHeading: "Anwendungen",
+            searchAppsPlaceholder: "Suche anwendungen...",
+            searchReportsPlaceholder: "Suche berichte..."
         },
         grid: {
             no_data: "Es liegen keine Daten zum Anzeigen."

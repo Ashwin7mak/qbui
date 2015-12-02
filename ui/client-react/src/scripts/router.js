@@ -74,7 +74,9 @@ let NavWrapper = React.createClass({
         if (breakpoint === breakpoints.SMALL_BREAKPOINT && this.state.breakpoint === breakpoints.MEDIUM_BREAKPOINT) {
             flux.actions.toggleLeftNav(false);
         }
-
+        if (breakpoint === breakpoints.MEDIUM_BREAKPOINT && this.state.breakpoint === breakpoints.SMALL_BREAKPOINT) {
+            flux.actions.toggleLeftNav(true);
+        }
         this.setState({breakpoint});
     },
 

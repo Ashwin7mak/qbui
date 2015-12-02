@@ -42,8 +42,9 @@ var Nav = React.createClass({
     },
     onSelectTableReports(tableId) {
         const flux = this.getFlux();
-        flux.actions.loadReports(this.state.apps.selectedAppId, tableId);
         flux.actions.showReports();
+        flux.actions.loadReports(this.state.apps.selectedAppId, tableId);
+
     },
     onHideTableReports() {
         const flux = this.getFlux();
