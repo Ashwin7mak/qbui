@@ -192,15 +192,6 @@
         });
 
         /**
-        * Return to the table selection page by clicking on the Home link in the left nav
-        */
-        afterEach(function(done) {
-            reportServicePage.waitForElement(reportServicePage.navStackedEl);
-            reportServicePage.appsHomeLinkEl.click();
-            done();
-        });
-
-        /**
          * After all tests are done, run the cleanup function in the base class
          */
         afterAll(function(done) {
