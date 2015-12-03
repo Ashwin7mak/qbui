@@ -77,23 +77,26 @@
             // Now on the reportServicePage (shows the nav with a list of reports you can load)
             // Wait until the nav has loaded
             var reportServicePage = new ReportServicePage();
-            browser.wait(EC.visibilityOf(reportServicePage.navStackedEl), 5000);
+            browser.wait(EC.visibilityOf(reportServicePage.appsListDivEl), 5000);
 
             // Select the app
-            reportServicePage.navLinksElList.get(1).click();
+            reportServicePage.appLinksElList.get(0).click();
+            reportServicePage.appLinksElList.get(0).click();
             // Select the table
-            reportServicePage.navLinksElList.get(2).click();
+            reportServicePage.tableLinksElList.get(3).click();
+            // Open the reports list for that table
+            reportServicePage.reportHamburgersElList.get(0).click();
 
             // Assert report name
-            reportServicePage.navLinksElList.then(function(links) {
-                links[3].getText().then(function(text) {
+            reportServicePage.reportLinksElList.then(function(links) {
+                links[0].getText().then(function(text) {
                     expect(text).toEqual('Test Report');
                 });
             });
 
             // Select the report
-            reportServicePage.navLinksElList.then(function(links) {
-                links[3].click();
+            reportServicePage.reportLinksElList.then(function(links) {
+                links[0].click();
             });
             // Wait until the table has loaded
             browser.wait(EC.visibilityOf(reportServicePage.loadedContentEl), 5000);

@@ -20,6 +20,15 @@
         this.navLinksElList = this.navStackedEl.all(by.className('leftNavLink'));
         this.appsHomeLinkEl = this.navLinksElList.first();
 
+        this.appsListDivEl = element(by.className('appsList'));
+        this.appLinksElList = this.appsListDivEl.all(by.className('leftNavLink'));
+        this.tablesListDivEl = element(by.className('tablesList'));
+        this.tableLinksElList = this.tablesListDivEl.all(by.className('leftNavLink'));
+        this.reportHamburgersElList = this.tablesListDivEl.all(by.className('right'));
+        this.reportsListDivEl = element(by.className('reportsList'));
+        this.reportLinksElList = this.reportsListDivEl.all(by.className('leftNavLink'));
+        this.reportsBackLinkEl = this.reportsListDivEl.element(by.className('backLink'));
+
         // Report Container
         this.reportContainerEl = element.all(by.className('reportContainer')).first();
         // Loaded Content Div
@@ -68,6 +77,10 @@
                 expect(this.navMenuEl.getAttribute('class')).toMatch('closed');
                 expect(this.navMenuEl.getAttribute('clientWidth')).toMatch(clientWidth);
             }
+        };
+
+        this.clickReportsMenu = function(tableLinkEl){
+            tableLinkEl.by(className('right')).click();
         };
     };
     ReportServicePage.prototype = e2ePageBase;
