@@ -6,13 +6,18 @@ import Promise from 'bluebird';
 describe('Apps Actions functions', () => {
     'use strict';
 
-    let responseData = [];
+    let responseData = [{id:'appid'}];
     let promise;
     class mockAppService {
         constructor() { }
         getApps() {
             var p = Promise.defer();
             p.resolve({data: responseData});
+            return p.promise;
+        }
+        getApp(id) {
+            var p = Promise.defer();
+            p.resolve({data: {id:'tableId'}});
             return p.promise;
         }
     }
