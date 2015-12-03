@@ -6,7 +6,7 @@ import Promise from 'bluebird';
 describe('Apps Actions functions', () => {
     'use strict';
 
-    let responseData = [{id:'appid'}];
+    let responseData = [{id:'tableId', link:'/app/tableId'}];
     let promise;
     class mockAppService {
         constructor() { }
@@ -30,7 +30,7 @@ describe('Apps Actions functions', () => {
         spyOn(flux.dispatchBinder, 'dispatch');
         appsActions.__Rewire__('AppService', mockAppService);
 
-        promise = flux.actions.loadApps();
+        promise = flux.actions.loadApps(true);
 
         //  expect a load apps event to get fired before the promise returns
         expect(flux.dispatchBinder.dispatch).toHaveBeenCalledWith(actions.LOAD_APPS);

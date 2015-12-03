@@ -17,7 +17,7 @@ let LeftNav = React.createClass({
 
     getInitialState() {
         return {
-            appsIsOpen: false
+            appsIsOpen: !this.props.selectedAppId
         };
     },
 
