@@ -5,7 +5,7 @@ import React from 'react';
 
 import ReactBootstrap from 'react-bootstrap';
 import {Glyphicon}  from 'react-bootstrap';
-import QBPanel from '../QBPanel/qbpanel.js';
+import QBPanel from '../qbPanel/qbpanel.js';
 
 import {fakeFormLotsOfData} from './fakeData.js';
 
@@ -13,8 +13,7 @@ var formData = fakeFormLotsOfData;
 
 import './qbform.scss';
 
-var Tabs = require('rc-tabs');
-var TabPane = Tabs.TabPane;
+import Tabs, {TabPane} from 'rc-tabs';
 import '../record/rc-tabs.scss';
 
 class QBForm extends React.Component {
@@ -82,14 +81,14 @@ class QBForm extends React.Component {
     }
 
     render() {
-        var test = [];
+        var tabs = [];
         for (var i = 0; i < this.state.externalData.tabs.length; i++){
-            test.push(this.createTab(this.state.externalData.tabs[i]));
+            tabs.push(this.createTab(this.state.externalData.tabs[i]));
         }
         return (
             <div className="formContainer">
                 <Tabs defaultActiveKey={this.state.defaultTab}>
-                    {test}
+                    {tabs}
                 </Tabs>
             </div>
         );
