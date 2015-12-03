@@ -85,13 +85,12 @@
     /**************
      * Start HTTP Server
      **************/
-    var server = http.createServer(app);
-    server.listen(config.port, hostnameToListenOn, function() {
+    app.httpServer = http.createServer(app);
+    app.httpServer.listen(config.port, hostnameToListenOn, function() {
         if (hostnameToListenOn) {
-            log.info('Http Server started. Listening %s on PORT: %d', hostnameToListenOn, server.address().port);
+            log.info('Http Server started. Listening %s on PORT: %d', hostnameToListenOn, app.httpServer.address().port);
         } else {
-            log.info('Http Server started. Listening on PORT: %d', server.address().port);
-
+            log.info('Http Server started. Listening on PORT: %d', app.httpServer.address().port);
         }
     });
 
@@ -108,19 +107,17 @@
             rejectUnauthorized: false
         };
 
-        var serverHttps = https.createServer(options, app);
-        serverHttps.listen(config.sslPort, hostnameToListenOn, function() {
+        app.httpsServer = https.createServer(options, app);
+        app.httpsServer.listen(config.sslPort, hostnameToListenOn, function() {
             if (hostnameToListenOn) {
-                log.info('Https Server started. Listening %s on PORT: %d', hostnameToListenOn, server.address().port);
+                log.info('Https Server started. Listening %s on PORT: %d', hostnameToListenOn, app.httpsServer.address().port);
             } else {
-                log.info('Https Server started. Listening on PORT: %d', server.address().port);
-
+                log.info('Https Server started. Listening on PORT: %d', app.httpsServer.address().port);
             }
         });
     }
 
-
     //get the hot loader running for debugging, if not running production
-    require('./hotDevServer')(config, app);
+    require('./hotDevServer')(config);
 
 }());

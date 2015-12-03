@@ -35,7 +35,11 @@ describe('Test node app main entry file', function() {
             get('/').
             expect(200).
             end(function(err, res) {
-                if (err) {return done(err);}
+                if (err) {
+                    closeServer(app);
+                    return done(err);
+                }
+                closeServer(app);
                 done();
             });
 
@@ -69,7 +73,7 @@ describe('Test node app main entry file', function() {
         assert(spy.called);
 
         spy.reset();
-
+        closeServer(app);
         done();
 
     });
@@ -102,10 +106,21 @@ describe('Test node app main entry file', function() {
         assert.equal(redirect, undefined);
 
         spyRedirect.reset();
-
+        closeServer(app);
         done();
 
     });
+
+    function closeServer(app) {
+        if (app) {
+            if (app.httpServer) {
+                app.httpServer.close();
+            }
+            if (app.httpsServer) {
+                app.httpsServer.close();
+            }
+        }
+    }
 
 
 });
