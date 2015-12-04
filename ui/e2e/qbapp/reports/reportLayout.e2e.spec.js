@@ -149,7 +149,7 @@
         /**
         * Test method. The left hand nav should shrink responsively across the 4 breakpoints as the browser is re-sized
         */
-        xit('Left hand nav should shrink responsively', function(done) {
+        it('Left hand nav should shrink responsively', function(done) {
             // Select the table
             reportServicePage.tableLinksElList.get(3).click().then(function(){
                 // Open the reports list
@@ -160,7 +160,7 @@
                 reportServicePage.waitForElement(reportServicePage.loadedContentEl).then(function() {
                     // Resize browser at different widths to check responsiveness
                     e2eBase.resizeBrowser(1500, 600).then(function() {
-                        reportServicePage.assertNavProperties('xlarge', true, '299');
+                        reportServicePage.assertNavProperties('xlarge', true, '399');
                     }).then(function() {
                         e2eBase.resizeBrowser(1280, 600).then(function() {
                             reportServicePage.assertNavProperties('large', true, '299');
@@ -168,16 +168,12 @@
                             e2eBase.resizeBrowser(1024, 600).then(function() {
                                 reportServicePage.assertNavProperties('medium', true, '199');
                             }).then(function() {
-                                e2eBase.resizeBrowser(700, 600).then(function() {
-                                    reportServicePage.assertNavProperties('medium', true, '39');
+                                e2eBase.resizeBrowser(640, 600).then(function() {
+                                    reportServicePage.assertNavProperties('small', false, '0');
                                 }).then(function() {
-                                    e2eBase.resizeBrowser(640, 600).then(function() {
-                                        reportServicePage.assertNavProperties('small', false, '249');
-                                    }).then(function() {
-                                        // Reset the browser for other tests
-                                        e2eBase.resizeBrowser(widthTest, heightTest);
-                                        done();
-                                    });
+                                    // Reset the browser for other tests
+                                    e2eBase.resizeBrowser(widthTest, heightTest);
+                                    done();
                                 });
                             });
                         });
@@ -187,8 +183,8 @@
         });
 
         /**
-         * Run after each it block is run, run the below function to reset state
-         */
+        * Run after each it block is run, run the below function to reset state
+        */
         afterEach(function(){
             // Click the back button
             reportServicePage.reportsBackLinkEl.click();
