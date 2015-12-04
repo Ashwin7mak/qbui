@@ -1,7 +1,7 @@
 /**
  * Main application file
  */
-
+(function() {
     'use strict';
 
     // if we have not set the NODE_ENV, then error out here
@@ -120,3 +120,4 @@
     //get the hot loader running for debugging, if not running production
     require('./hotDevServer')(config);
 
+}());
