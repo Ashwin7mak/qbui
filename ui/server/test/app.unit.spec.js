@@ -1,9 +1,9 @@
 // test that node server will redirect to http
 'use strict';
 
-var request = require('supertest');
 var assert = require('assert');
 var sinon = require('sinon');
+var rewire = require('rewire');
 
 /*eslint-disable no-invalid-this */
 
@@ -25,30 +25,62 @@ describe('Test node app main entry file', function() {
         process.env.NODE_ENV = origVal;
 
     });
+});
 
-    it('test server listening', function(done) {
+describe('Test node app main entry file', function() {
 
-        var app = require('../app');
+    var http;
+    var https;
+    var httpSpy;
+    var httpsSpy;
 
-        this.timeout(5000);
-        request(app).
-            get('/').
-            expect(200).
-            end(function(err, res) {
-                if (err) {
-                    closeServer(app);
-                    return done(err);
+    var saveHttpCreateServer;
+    var saveHttpsCreateServer;
+
+    beforeEach(function() {
+        http = require('http');
+
+        saveHttpCreateServer = http.createServer;
+        http.createServer = function() {
+            return {
+                listen: function(port, host, callback) {
+                    return true;
                 }
-                closeServer(app);
-                done();
-            });
+            };
+        };
 
+        https = require('https');
+        saveHttpsCreateServer = https.createServer;
+
+        https.createServer = function() {
+            return {
+                listen: function(port, host, callback) {
+                    return true;
+                }
+            };
+        };
+
+        httpSpy = sinon.spy(http, 'createServer');
+        httpsSpy = sinon.spy(https, 'createServer');
+    });
+
+    afterEach(function() {
+        http.createServer = saveHttpCreateServer;
+        https.createServer = saveHttpsCreateServer;
+
+        httpSpy.reset();
+        httpsSpy.reset();
+    });
+
+    it('test http listen method', function(done) {
+        var app = require('../app');
+        assert(httpSpy.called);
+        done();
     });
 
     it('test express middleware function for http request is redirected to https when required secure connection', function(done) {
 
         var app = require('../app');
-
         var mockReq = {
             secure: false,
             get: function() {
@@ -65,15 +97,14 @@ describe('Test node app main entry file', function() {
             return true;
         };
 
-        var spy = sinon.spy(mockRes, 'redirect');
+        var spyRedirect = sinon.spy(mockRes, 'redirect');
 
         var redirect = app.requireHTTPS(mockReq, mockRes, next);
 
         assert(redirect === 'https://' + mockReq.get() + ':9443' + mockReq.url);
-        assert(spy.called);
+        assert(spyRedirect.called);
 
-        spy.reset();
-        closeServer(app);
+        spyRedirect.reset();
         done();
 
     });
@@ -81,7 +112,6 @@ describe('Test node app main entry file', function() {
     it('test express middleware function for https request is NOT redirected when required secure connection', function(done) {
 
         var app = require('../app');
-
         var mockReq = {
             secure: true,
             get: function() {
@@ -106,22 +136,9 @@ describe('Test node app main entry file', function() {
         assert.equal(redirect, undefined);
 
         spyRedirect.reset();
-        closeServer(app);
         done();
 
     });
-
-    function closeServer(app) {
-        if (app) {
-            if (app.httpServer) {
-                app.httpServer.close();
-            }
-            if (app.httpsServer) {
-                app.httpsServer.close();
-            }
-        }
-    }
-
 
 });
 
