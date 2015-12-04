@@ -1,35 +1,35 @@
 @import '../../assets/css/qbVariables';
 
+/* nav vars */
+$left-nav-padding: 15px;
+$left-nav-reports-bg: #486C8F;
+$left-nav-bg: #002b48;
+$left-nav-fg: #fff;
+$left-nav-link-fg: #bbd;
+$left-nav-heading-bg: #002b48;
+$left-nav-input-fg: #555;
+$left-nav-hover-bg: #0097CD;
+
 .leftMenu.open {
+  overflow:hidden;
+}
+
+.xlarge-breakpoint .leftMenu.open {
+  width:400px;
+
+}
+.large-breakpoint .leftMenu.open {
   width:300px;
-  nav li {
-    a.heading {
-      //border-top:1px solid #6f8eac;
-      //border-bottom:1px solid #6f8eac;
-      color: #bbd;
-      background-color: #3F5B7D
-    }
-  }
-}
-/*
-@media (min-width:700px) and (max-width: 1024px) {
 
-  .leftMenu.open {
-    width:200px;
-  }
+}
+.medium-breakpoint .leftMenu.open {
+  width:200px;
 }
 
-@media (max-width: 700px) {
+.small-breakpoint .leftMenu.open {
+  width:350px;
 
-  .leftMenu.open {
-    width:40px;
-    overflow:hidden;
-  }
-  body:not(.small-breakpoint) nav li a.heading {
-    visibility:hidden;
-  }
 }
-*/
 
 /* show tooltips only if .show is present unless we're in small (phone) breakpoint */
 div.leftNavTooltip {
@@ -39,12 +39,11 @@ body:not(.small-breakpoint) div.leftNavTooltip.show {
   display:block;
 }
 
-.leftMenu.closed {
+body:not(.small-breakpoint) .leftMenu.closed {
   width:40px;
   overflow-y:hidden;
   li a.heading {
-    background-color:#002b48;
-
+    background-color:$left-nav-heading-bg;
   }
 
   .reportsList.open {
@@ -56,8 +55,8 @@ body:not(.small-breakpoint) div.leftNavTooltip.show {
   border-right: 1px solid #ccc;
   background-color: $left-nav-bg;
   overflow-y:auto;
-  color: #fff;
-  width:300px;
+  color: $left-nav-fg;
+
   position:relative;
   .appsToggle {
     margin-top:10px;
@@ -78,7 +77,7 @@ body:not(.small-breakpoint) div.leftNavTooltip.show {
     input {
       padding: 5px 10px;
       width: 100%;
-      color: #555;
+      color: $left-nav-input-fg;
       height:25px;
     }
   }
@@ -93,7 +92,6 @@ body:not(.small-breakpoint) div.leftNavTooltip.show {
     list-style-image: initial;
     padding: 0;
     margin: 0;
-    color: #fff;
 
     .heading {
       font-size: 12px;
@@ -128,8 +126,8 @@ body:not(.small-breakpoint) div.leftNavTooltip.show {
       }
     }
     li.link:hover {
-      color: white;
-      background-color: #0097CD;
+      color: #fff;
+      background-color: $left-nav-hover-bg;
 
       a.right {
         opacity:1;
@@ -147,40 +145,32 @@ body:not(.small-breakpoint) div.leftNavTooltip.show {
   }
 }
 
-
 /* small (mobile) left nav behaves differently */
 
 .small-breakpoint .leftMenu {
   margin: 0;
-  width: 250px;
   height: 100%;
-  position: absolute;
   z-index: 9999;
-  left: -250px;
   border-right: 1px solid #ccc;
-  background-color: #002b48;
   overflow-y: auto;
 }
 
-body:not(.small-breakpoint) .leftMenu a.leftNavLink:hover {
-  -webkit-animation: swing 1s ease;
-  animation: swing 1s ease;
-  -webkit-animation-iteration-count: 1;
-  animation-iteration-count: 1;
-}
+.small-breakpoint .navShell.leftNavOpen {
+  position: relative;
+  left:-350px;
 
-.small-breakpoint .leftNavOpen {
-  position: absolute;
-
+  .main {
+    position:absolute;
+  }
   .mainContent {
-    opacity: .4;
+    opacity: .1;
     transition: opacity 250ms ease-in-out;
     -moz-transition: opacity 250ms ease-in-out;
     -webkit-transition: opacity 250ms ease-in-out;
   }
 
-  transform: translate3d(250px, 0, 0);
-  -webkit-transform: translate3d(250px, 0, 0);
+  transform: translate3d(350px, 0, 0);
+  -webkit-transform: translate3d(350px, 0, 0);
 }
 
 /** REACTCSSTRANSITION BASE CLASSES **/
@@ -188,7 +178,6 @@ body:not(.small-breakpoint) .leftMenu a.leftNavLink:hover {
 .leftNavList-enter {
   opacity: 0.01;
 }
-
 
 .leftNavList.leftNavList-enter-active {
   opacity: 1;
@@ -229,6 +218,15 @@ $travel-distance: 15;
 .leftMenu.appsListOpen .branding .glyphicon-triangle-bottom {
   transform: rotate(-180deg);
 }
+.leftMenu .reportsContainer {
+  flex-direction: column;
+  display: flex;
+  height:100%;
+
+  .reportItems {
+    overflow-y:auto;
+  }
+}
 
 .leftMenu .reportsList {
   opacity: 0.5;
@@ -240,18 +238,20 @@ $travel-distance: 15;
   left: 0;
   right: 0;
   z-index: 900;
-  background-color: #486C8F;
+  background-color: $left-nav-reports-bg;
 }
 
+
 .leftMenu .reportsList.open {
-  width:300px;
+  overflow-x: hidden;
+  overflow-y: auto;
   opacity: 1;
   transform: translate3d(0, 0, 0);
 
   a {
     width:100%;
+    overflow:hidden;
     text-overflow: ellipsis;
     white-space:nowrap;
   }
-
 }
