@@ -13,6 +13,8 @@
         http = require('http'),
         config = require('./config/environment'),
         _ = require('lodash');
+    var fs = require('fs'),
+        https = require('https');
 
     //  Configure the Bunyan logger
     var log = require('./logger').getLogger();
@@ -98,8 +100,6 @@
      * Start HTTPS Server
      **************/
     if (config.hasSslOptions()) {
-        var fs = require('fs'),
-            https = require('https');
 
         var options = {
             key               : fs.readFileSync(config.SSL_KEY.private),
