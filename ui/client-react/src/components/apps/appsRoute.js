@@ -12,7 +12,7 @@ let AppsRoute = React.createClass({
     render: function() {
 
         return (<div>
-            <div>Apps go here... {this.context.breakpoint} whoo</div>
+            <div>Apps go here... {this.context.breakpoint}</div>
         </div>);
     }
 });

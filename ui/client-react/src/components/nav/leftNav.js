@@ -1,35 +1,56 @@
 import React from 'react';
-import {Nav, Tooltip, OverlayTrigger, Glyphicon} from 'react-bootstrap';
+import {Tooltip, OverlayTrigger, Glyphicon} from 'react-bootstrap';
 import {Link} from 'react-router';
 import Loader  from 'react-loader';
-import './leftNav.scss';
 import {I18nMessage} from '../../utils/i18nMessage';
+import qbLogo from '../../assets/images/intuit_logo_white.png';
+import ReactCSSTransitionGroup from 'react/lib/ReactCSSTransitionGroup';
+
+import AppsList from './appsList';
+import TablesList from './tablesList';
+import ReportsList from './reportsList';
+
+import './leftNav.scss';
+
 
 let LeftNav = React.createClass({
 
-    getGlyphName(item) {
-
-        if (item.icon) {
-            return item.icon;
-        } else {
-            return 'th-list';
-        }
+    getInitialState() {
+        return {
+            appsIsOpen: !this.props.selectedAppId
+        };
     },
 
-    buildHeadingItem: function(item, loadingCheck) {
+    toggleApps: function() {
+        this.setState({appsIsOpen: !this.state.appsIsOpen});
+    },
+
+    createBranding() {
+        let app = _.findWhere(this.props.apps, {id: this.props.selectedAppId});
+        return (this.props.open &&
+            <div className="branding">
+                <img src={qbLogo} />
+                {this.props.selectedAppId &&
+                    <div className="appsToggle" onClick={this.toggleApps}>{app ? app.name : ''}&nbsp;
+                        <Glyphicon glyph="triangle-bottom"/></div>
+                }
+            </div>
+        );
+    },
+
+    buildHeadingItem(item, loadingCheck) {
 
         if (this.props.open) {
             return (
-                <li key={item.key}>
+                <li key={item.key} className="heading"><I18nMessage message={item.key}/>
                     <Loader scale={.5} right={'90%'} loaded={!loadingCheck}/>
-                    <a className="heading"><I18nMessage message={item.key}/></a>
                 </li>);
         } else {
             return (<li key={item.key}><a className="heading"></a></li>);
         }
     },
 
-    buildNavItem: function(item, selectedId) {
+    buildNavItem(item, onSelect) {
 
         let label = item.name;
         let tooltipID = item.key ? item.key : item.name;
@@ -38,15 +59,13 @@ let LeftNav = React.createClass({
         }
 
         const tooltip = (<Tooltip className={ this.props.open ? 'leftNavTooltip' : 'leftNavTooltip show' }
-                                  id={tooltipID}>{label}:{selectedId}</Tooltip>);
-
-        let selectedClass = item.id && (item.id.toString() === selectedId) ? 'selected' : '';
+                                  id={tooltipID}>{label}</Tooltip>);
 
         return (
-            <OverlayTrigger key={label} placement="right" overlay={tooltip}>
-                <li className={selectedClass}>
-                    <Link className="leftNavLink" to={item.link} onClick={this.props.onSelect}>
-                        <Glyphicon glyph={this.getGlyphName(item)}/> {label}
+            <OverlayTrigger key={tooltipID} placement="right" overlay={tooltip}>
+                <li className={"link" }>
+                    <Link className="leftNavLink" to={item.link} onClick={onSelect}>
+                        <Glyphicon glyph={item.icon}/> {this.props.open ? label : ""}
                     </Link>
                 </li>
             </OverlayTrigger>
@@ -62,39 +81,17 @@ let LeftNav = React.createClass({
     render() {
         return (
 
+            <div className={"leftMenu " + (this.props.open ? "open " : "closed ") + (this.state.appsIsOpen ? "appsListOpen" : "")}>
+                {this.createBranding()}
 
-            <div className={"leftMenu " + (this.props.open ? "open" : "closed")}>
+                <ReactCSSTransitionGroup transitionName="leftNavList" component="div" className={"transitionGroup"} transitionEnterTimeout={300} transitionLeaveTimeout={300}>
+                    {!this.props.selectedAppId || this.state.appsIsOpen ?
+                        <AppsList key={"apps"} {...this.props} toggleApps={this.toggleApps} buildItem={this.buildNavItem} buildHeadingItem={this.buildHeadingItem} /> :
+                        <TablesList key={"tables"} {...this.props} showReports={(id)=>{this.props.onSelectReports(id);} } buildItem={this.buildNavItem} buildHeadingItem={this.buildHeadingItem} getAppTables={this.getAppTables}/> }
+                </ReactCSSTransitionGroup>
 
-                <Nav stacked activeKey={1}>
-                    {this.props.items ? this.props.items.map((item) => {
-                        return item.heading ?
-                            this.buildHeadingItem(item) :
-                            this.buildNavItem(item);
-                    }) : null}
-
-                    {this.props.apps && this.buildHeadingItem({key: 'nav.appsHeading'}, false)}
-                    {this.props.apps && this.props.apps.map((app) => {
-                        app.icon = 'apple';
-                        return this.buildNavItem(app, this.props.selectedAppId);
-                    })}
-
-                    {this.props.selectedAppId && this.buildHeadingItem({key: 'nav.tablesHeading'}, false)}
-                    {this.props.selectedAppId && this.getAppTables(this.props.selectedAppId).map((table) => {
-                        table.link = '/app/' + this.props.selectedAppId + '/table/' + table.id;
-                        table.icon = 'book';
-                        return this.buildNavItem(table, this.props.selectedTableId);
-                    })}
-
-                    {this.props.selectedTableId && this.buildHeadingItem({key: 'nav.reportsHeading'}, this.props.reportsData.loading)}
-                    {this.props.selectedTableId && this.props.reportsData.list && this.props.reportsData.list.map((report) => {
-                        report.icon = 'list-alt';
-                        return this.buildNavItem(report, this.props.selectedReportId);
-                    })}
-
-                  </Nav>
-
+                <ReportsList open={this.props.open} onSelect={this.props.onSelect} reportsOpen={this.props.showReports} onBack={this.props.onHideReports} reportsData={this.props.reportsData} buildItem={this.buildNavItem} buildHeading={this.buildHeadingItem} />
             </div>
-
         );
     }
 });

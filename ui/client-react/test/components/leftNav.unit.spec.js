@@ -71,17 +71,16 @@ describe('Left Nav functions', () => {
         LeftNav.__ResetDependency__('I18nMessage');
     });
 
-    it('test render of component', () => {
-        component = TestUtils.renderIntoDocument(<LeftNav open={true}/>);
-        expect(TestUtils.isCompositeComponent(component)).toBeTruthy();
+    it('test render opened with app list', () => {
+        component = TestUtils.renderIntoDocument(<LeftNav open={true} apps={appsTestData} reportsData={reportsTestData} items={navItemsTestData}/>);
     });
 
     it('test render opened with app,table,reports', () => {
-        component = TestUtils.renderIntoDocument(<LeftNav open={true} apps={appsTestData} selectedAppId={'app1'} selectedTableId={'table1'} reportsData={reportsTestData} items={navItemsTestData}/>);
+        component = TestUtils.renderIntoDocument(<LeftNav open={true} apps={appsTestData} selectedAppId={'app1'} reportsData={reportsTestData} items={navItemsTestData}/>);
     });
 
     it('test render closed with app,table,reports', () => {
-        component = TestUtils.renderIntoDocument(<LeftNav open={true} apps={appsTestData} selectedAppId={'app1'} selectedTableId={'table1'} reportsData={reportsTestData} items={navItemsTestData}/>);
+        component = TestUtils.renderIntoDocument(<LeftNav open={false} apps={appsTestData} selectedAppId={'app1'} reportsData={reportsTestData} items={navItemsTestData}/>);
     });
 
 });

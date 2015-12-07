@@ -8,7 +8,7 @@ import Promise from 'bluebird';
 
 let appsActions = {
 
-    loadApps(withTables = false) {
+    loadApps(withTables) {
         this.dispatch(actions.LOAD_APPS);
 
         let deferred = Promise.defer();

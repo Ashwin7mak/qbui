@@ -77,36 +77,40 @@
             // Now on the reportServicePage (shows the nav with a list of reports you can load)
             // Wait until the nav has loaded
             var reportServicePage = new ReportServicePage();
-            browser.wait(EC.visibilityOf(reportServicePage.navStackedEl), 5000);
+            browser.wait(EC.visibilityOf(reportServicePage.appsListDivEl), 5000).then(function() {
+                // Select the app
+                reportServicePage.appLinksElList.get(0).click();
+                // Select the table
+                reportServicePage.tableLinksElList.get(3).click();
+                // Open the reports list for that table
+                reportServicePage.reportHamburgersElList.get(0).click();
 
-            // Select the app
-            reportServicePage.navLinksElList.get(1).click();
-            // Select the table
-            reportServicePage.navLinksElList.get(2).click();
-
-            // Assert report name
-            reportServicePage.navLinksElList.then(function(links) {
-                links[3].getText().then(function(text) {
-                    expect(text).toEqual('Test Report');
+                // Assert report name
+                reportServicePage.reportLinksElList.then(function(links) {
+                    links[0].getText().then(function(text) {
+                        expect(text).toEqual('Test Report');
+                    });
                 });
-            });
 
-            // Select the report
-            reportServicePage.navLinksElList.then(function(links) {
-                links[3].click();
-            });
-            // Wait until the table has loaded
-            browser.wait(EC.visibilityOf(reportServicePage.loadedContentEl), 5000);
-            // Assert column headers
-            reportServicePage.getReportColumnHeaders(reportServicePage).then(function(resultArray) {
-                // UI is currently using upper case to display the field names in columns
-                //var upperFieldNames = e2eBase.e2eUtils.stringArrayToUpperCase(fieldNames);
-                expect(resultArray).toEqual(fieldNames);
-            });
-            // Check all record values equal the ones we added via the API
-            reportServicePage.griddleRecordElList.getText().then(function(uiRecords) {
-                e2eBase.recordService.assertRecordValues(uiRecords, recordList);
-                done();
+                // Select the report
+                reportServicePage.reportLinksElList.then(function(links) {
+                    links[0].click();
+                });
+
+                // Wait until the table has loaded
+                browser.wait(EC.visibilityOf(reportServicePage.loadedContentEl), 5000).then(function() {
+                    // Assert column headers
+                    reportServicePage.getReportColumnHeaders(reportServicePage).then(function(resultArray) {
+                        // UI is currently using upper case to display the field names in columns
+                        //var upperFieldNames = e2eBase.e2eUtils.stringArrayToUpperCase(fieldNames);
+                        expect(resultArray).toEqual(fieldNames);
+                    });
+                    // Check all record values equal the ones we added via the API
+                    reportServicePage.griddleRecordElList.getText().then(function(uiRecords) {
+                        e2eBase.recordService.assertRecordValues(uiRecords, recordList);
+                        done();
+                    });
+                });
             });
         });
         /**

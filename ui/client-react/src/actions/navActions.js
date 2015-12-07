@@ -4,6 +4,12 @@ import Locale from '../locales/locales';
 
 let navActions = {
 
+    showReports() {
+        this.dispatch(actions.SHOW_REPORTS);
+    },
+    hideReports() {
+        this.dispatch(actions.HIDE_REPORTS);
+    },
     showTrouser() {
         this.dispatch(actions.SHOW_TROUSER);
     },

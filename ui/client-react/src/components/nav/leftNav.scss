@@ -1,33 +1,34 @@
 @import '../../assets/css/qbVariables';
 
+/* nav vars */
+$left-nav-padding: 15px;
+$left-nav-reports-bg: #486C8F;
+$left-nav-bg: #002b48;
+$left-nav-fg: #fff;
+$left-nav-link-fg: #bbd;
+$left-nav-heading-bg: #002b48;
+$left-nav-input-fg: #555;
+$left-nav-hover-bg: #0097CD;
+
 .leftMenu.open {
+  overflow:hidden;
+}
+
+.xlarge-breakpoint .leftMenu.open {
+  width:400px;
+
+}
+.large-breakpoint .leftMenu.open {
   width:300px;
-  nav li {
-    a.heading {
-      //border-top:1px solid #6f8eac;
-      //border-bottom:1px solid #6f8eac;
-      color: #bbd;
-      background-color: #3F5B7D
-    }
-  }
+
+}
+.medium-breakpoint .leftMenu.open {
+  width:200px;
 }
 
-@media (min-width:700px) and (max-width: 1024px) {
-  /* For mobile phones: */
-  .leftMenu.open {
-    width:200px;
-  }
-}
+.small-breakpoint .leftMenu.open {
+  width:350px;
 
-@media (max-width: 700px) {
-  /* For mobile phones: */
-  .leftMenu.open {
-    width:40px;
-    overflow:hidden;
-  }
-  body:not(.small-breakpoint) nav li a.heading {
-    visibility:hidden;
-  }
 }
 
 /* show tooltips only if .show is present unless we're in small (phone) breakpoint */
@@ -38,58 +39,109 @@ body:not(.small-breakpoint) div.leftNavTooltip.show {
   display:block;
 }
 
-
-
-.leftMenu.closed {
+body:not(.small-breakpoint) .leftMenu.closed {
   width:40px;
   overflow-y:hidden;
-  .nav li a.heading {
-    background-color:#002b48;
+  li a.heading {
+    background-color:$left-nav-heading-bg;
+  }
 
+  .reportsList.open {
+    width:40px;
   }
 }
-
 
 .leftMenu {
   border-right: 1px solid #ccc;
   background-color: $left-nav-bg;
   overflow-y:auto;
+  color: $left-nav-fg;
 
-  .nav li.selected {
-    a.leftNavLink {
-      background-color: #2E71B5;
+  position:relative;
+  .appsToggle {
+    margin-top:10px;
+    margin-bottom:10px;
+    cursor:pointer;
+  }
+
+  .branding {
+    padding:10px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.3);
+    .glyphicon-triangle-bottom {
+      transition: transform 300ms ease-in;
     }
   }
 
-  .nav li {
-    a.heading {
-      padding: 3px 15px;
-      color:#ddd;
-      cursor: default;
-      font-size:12px;
+  .searchApps,.searchReports {
+    padding:8px;
+    input {
+      padding: 5px 10px;
+      width: 100%;
+      color: $left-nav-input-fg;
+      height:25px;
     }
-    a.leftNavLink {
-      color: #bbd;
-      cursor: pointer;
-      white-space:nowrap;
-      overflow:hidden;
-      text-overflow:ellipsis;
-      .glyphicon {
-        margin-right: 8px;
-      }
-      span {
+  }
+  .leftNavList {
+    position:absolute;
+    width:100%;
+  }
+  ul {
+    list-style: none;
+    list-style-type: none;
+    list-style-position: initial;
+    list-style-image: initial;
+    padding: 0;
+    margin: 0;
 
-        text-overflow:ellipsis;
+    .heading {
+      font-size: 12px;
+      line-height: 30px;
+      background-color: #264a6d;
+      color: #BFCFE3;
+      margin: 0;
+      padding-left: 10px;
+    }
+    .heading:hover {
+      color:#fff;
+    }
+
+    li {
+      position:relative;
+
+      a {
+        text-decoration:none;
+        line-height: 45px;
+        padding-left: 10px;
+        color: #CAD8E9;
+        display:inline-block;
+      }
+      a.right {
+        opacity:0;
+        position:absolute;
+        right: 5px;
+      }
+      a.backLink {
+        cursor:pointer;
+        width:100%
       }
     }
-    a.leftNavLink:hover {
-      background-color: #2E71B5;
+    li.link:hover {
+      color: #fff;
+      background-color: $left-nav-hover-bg;
+
+      a.right {
+        opacity:1;
+        transition: all 0.2s ease-in-out;
+        -webkit-transition: all 0.2s ease-in-out;
+        -moz-transition: all 0.2s ease-in-out;
+      }
     }
-    .loader {
-      position:absolute;
-      right:20px;
-      top:20px;
-    }
+  }
+
+  .loader {
+    position:absolute;
+    right:20px;
+    top:20px;
   }
 }
 
@@ -97,102 +149,109 @@ body:not(.small-breakpoint) div.leftNavTooltip.show {
 
 .small-breakpoint .leftMenu {
   margin: 0;
-  width: 250px;
   height: 100%;
-  position: absolute;
   z-index: 9999;
-  left: -250px;
   border-right: 1px solid #ccc;
-  background-color: #002b48;
   overflow-y: auto;
 }
 
-body:not(.small-breakpoint) .leftMenu a.leftNavLink:hover {
-  -webkit-animation: swing 1s ease;
-  animation: swing 1s ease;
-  -webkit-animation-iteration-count: 1;
-  animation-iteration-count: 1;
-}
+.small-breakpoint .navShell.leftNavOpen {
+  position: relative;
+  left:-350px;
 
-.small-breakpoint .leftNavOpen {
-  position: absolute;
-
+  .main {
+    position:absolute;
+  }
   .mainContent {
-    opacity: .4;
+    opacity: .1;
     transition: opacity 250ms ease-in-out;
     -moz-transition: opacity 250ms ease-in-out;
     -webkit-transition: opacity 250ms ease-in-out;
   }
 
-  transform: translate3d(250px, 0, 0);
-  -webkit-transform: translate3d(250px, 0, 0);
+  transform: translate3d(350px, 0, 0);
+  -webkit-transform: translate3d(350px, 0, 0);
 }
-// fun stuff
-@-webkit-keyframes swing
-{
-  15%
-  {
-    -webkit-transform: translateX(5px);
-    transform: translateX(5px);
-  }
-  30%
-  {
-    -webkit-transform: translateX(-5px);
-    transform: translateX(-5px);
-  }
-  50%
-  {
-    -webkit-transform: translateX(3px);
-    transform: translateX(3px);
-  }
-  65%
-  {
-    -webkit-transform: translateX(-3px);
-    transform: translateX(-3px);
-  }
-  80%
-  {
-    -webkit-transform: translateX(2px);
-    transform: translateX(2px);
-  }
-  100%
-  {
-    -webkit-transform: translateX(0);
-    transform: translateX(0);
-  }
+
+/** REACTCSSTRANSITION BASE CLASSES **/
+
+.leftNavList-enter {
+  opacity: 0.01;
 }
-@keyframes swing
-{
-  15%
-  {
-    -webkit-transform: translateX(5px);
-    transform: translateX(5px);
-  }
-  30%
-  {
-    -webkit-transform: translateX(-5px);
-    transform: translateX(-5px);
-  }
-  50%
-  {
-    -webkit-transform: translateX(3px);
-    transform: translateX(3px);
-  }
-  65%
-  {
-    -webkit-transform: translateX(-3px);
-    transform: translateX(-3px);
-  }
-  80%
-  {
-    -webkit-transform: translateX(2px);
-    transform: translateX(2px);
-  }
-  100%
-  {
-    -webkit-transform: translateX(0);
-    transform: translateX(0);
+
+.leftNavList.leftNavList-enter-active {
+  opacity: 1;
+  transition: all 300ms ease-in;
+  // transition: opacity 500ms ease-in;
+}
+
+.leftNavList-leave {
+  opacity: 1;
+}
+
+.leftNavList-leave.leftNavList-leave-active {
+  opacity: 0.01;
+  transition: opacity 300ms ease-in;
+}
+
+$transition-time: 300ms;
+$travel-distance: 15;
+
+.leftNavList-enter.appsList li {
+  margin-top: -#{$travel-distance}px;
+}
+
+.leftNavList-enter-active.appsList li {
+  margin-top: 0;
+  transition: all $transition-time ease-in;
+}
+
+.leftNavList-enter.tablesList li {
+  margin-top: #{$travel-distance}px;
+}
+
+.leftNavList-enter-active.tablesList li {
+  margin-top: 0;
+  transition: all $transition-time ease-in;
+}
+
+.leftMenu.appsListOpen .branding .glyphicon-triangle-bottom {
+  transform: rotate(-180deg);
+}
+.leftMenu .reportsContainer {
+  flex-direction: column;
+  display: flex;
+  height:100%;
+
+  .reportItems {
+    overflow-y:auto;
   }
 }
 
+.leftMenu .reportsList {
+  opacity: 0.5;
+  transform: translate3d(100%, 0, 0);
+  transition: all 300ms cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  z-index: 900;
+  background-color: $left-nav-reports-bg;
+}
 
+
+.leftMenu .reportsList.open {
+  overflow-x: hidden;
+  overflow-y: auto;
+  opacity: 1;
+  transform: translate3d(0, 0, 0);
+
+  a {
+    width:100%;
+    overflow:hidden;
+    text-overflow: ellipsis;
+    white-space:nowrap;
+  }
+}

@@ -79,7 +79,12 @@
                         requestAppsPage.get(e2eBase.getRequestAppsPageEndpoint(realmName));
                         // Define the window size
                         e2eBase.resizeBrowser(widthTest, heightTest);
-                        done();
+                        // Wait for the left nav to load
+                        reportServicePage.waitForElement(reportServicePage.appsListDivEl).then(function() {
+                            // Select the app
+                            reportServicePage.appLinksElList.get(0).click();
+                            done();
+                        });
                     });
                 });
             });
@@ -89,28 +94,25 @@
         * Test method. Loads the first table containing 10 fields (10 columns). The table report (griddle) width should expand past the browser size
         * to give all columns enough space to show their data.
         */
-        it('Table report should expand width past the browser size to show all available data (large num columns)', function() {
-            // Wait for the left nav to load
-            reportServicePage.waitForElement(reportServicePage.navStackedEl).then(function() {
-                // Select the app
-                reportServicePage.navLinksElList.get(1).click().then(function(){
-                    // Select the table
-                    reportServicePage.navLinksElList.get(2).click().then(function(){
-                        // Select the report
-                        reportServicePage.navLinksElList.get(4).click();
-                        // Make sure the table report has loaded
-                        reportServicePage.waitForElement(reportServicePage.loadedContentEl).then(function() {
-                            // Sleep for animation
-                            e2eBase.sleep(2000);
-                            // Check there is a scrollbar in the griddle table
-                            var fetchRecordPromises = [];
-                            fetchRecordPromises.push(reportServicePage.loadedContentEl.getAttribute('scrollWidth'));
-                            fetchRecordPromises.push(reportServicePage.loadedContentEl.getAttribute('clientWidth'));
-                            //When all the dimensions have been fetched, assert the values match expectations
-                            promise.all(fetchRecordPromises).then(function(dimensions) {
-                                expect(Number(dimensions[0])).toBeGreaterThan(Number(dimensions[1]));
-                            });
-                        });
+        it('Table report should expand width past the browser size to show all available data (large num columns)', function(done) {
+            // Select the table
+            reportServicePage.tableLinksElList.get(3).click().then(function(){
+                // Open the reports list
+                reportServicePage.reportHamburgersElList.get(0).click();
+                // Select the report
+                reportServicePage.reportLinksElList.get(0).click();
+                // Make sure the table report has loaded
+                reportServicePage.waitForElement(reportServicePage.loadedContentEl).then(function() {
+                    // Sleep for animation
+                    e2eBase.sleep(2000);
+                    // Check there is a scrollbar in the griddle table
+                    var fetchRecordPromises = [];
+                    fetchRecordPromises.push(reportServicePage.loadedContentEl.getAttribute('scrollWidth'));
+                    fetchRecordPromises.push(reportServicePage.loadedContentEl.getAttribute('clientWidth'));
+                    //When all the dimensions have been fetched, assert the values match expectations
+                    promise.all(fetchRecordPromises).then(function(dimensions) {
+                        expect(Number(dimensions[0])).toBeGreaterThan(Number(dimensions[1]));
+                        done();
                     });
                 });
             });
@@ -120,28 +122,25 @@
         * Test method. Loads the second table containing 3 fields (3 columns). The table report (griddle) width should expand
         * it's columns to fill the available space (and not show a scrollbar).
         */
-        it('Table report should expand width to take up available space (small num of columns)', function() {
-            // Wait for the left nav to load
-            reportServicePage.waitForElement(reportServicePage.navStackedEl).then(function() {
-                // Select the app
-                reportServicePage.navLinksElList.get(1).click().then(function(){
-                    // Select the table
-                    reportServicePage.navLinksElList.get(3).click().then(function() {
-                        // Select the report
-                        reportServicePage.navLinksElList.get(4).click();
-                        // Make sure the table report has loaded
-                        reportServicePage.waitForElement(reportServicePage.loadedContentEl).then(function() {
-                            // Sleep for animation
-                            e2eBase.sleep(2000);
-                            // Check there is no scrollbar in the griddle table
-                            var fetchRecordPromises = [];
-                            fetchRecordPromises.push(reportServicePage.loadedContentEl.getAttribute('scrollWidth'));
-                            fetchRecordPromises.push(reportServicePage.loadedContentEl.getAttribute('clientWidth'));
-                            //When all the dimensions have been fetched, assert the values match expectations
-                            promise.all(fetchRecordPromises).then(function(dimensions) {
-                                expect(Number(dimensions[0])).not.toBeGreaterThan(Number(dimensions[1]));
-                            });
-                        });
+        it('Table report should expand width to take up available space (small num of columns)', function(done) {
+            // Select the table
+            reportServicePage.tableLinksElList.get(4).click().then(function(){
+                // Open the reports list
+                reportServicePage.reportHamburgersElList.get(1).click();
+                // Select the report
+                reportServicePage.reportLinksElList.get(0).click();
+                // Make sure the table report has loaded
+                reportServicePage.waitForElement(reportServicePage.loadedContentEl).then(function() {
+                    // Sleep for animation
+                    e2eBase.sleep(2000);
+                    // Check there is no scrollbar in the griddle table
+                    var fetchRecordPromises = [];
+                    fetchRecordPromises.push(reportServicePage.loadedContentEl.getAttribute('scrollWidth'));
+                    fetchRecordPromises.push(reportServicePage.loadedContentEl.getAttribute('clientWidth'));
+                    //When all the dimensions have been fetched, assert the values match expectations
+                    promise.all(fetchRecordPromises).then(function(dimensions) {
+                        expect(Number(dimensions[0])).not.toBeGreaterThan(Number(dimensions[1]));
+                        done();
                     });
                 });
             });
@@ -151,44 +150,44 @@
         * Test method. The left hand nav should shrink responsively across the 4 breakpoints as the browser is re-sized
         */
         it('Left hand nav should shrink responsively', function(done) {
-            // Wait for the left nav to load
-            reportServicePage.waitForElement(reportServicePage.navStackedEl).then(function() {
-                // Select the app
-                reportServicePage.navLinksElList.get(1).click().then(function() {
-                    // Select the table
-                    reportServicePage.navLinksElList.get(2).click().then(function() {
-                        // Select the report
-                        reportServicePage.navLinksElList.get(4).click();
-                        // Make sure the table report has loaded
-                        reportServicePage.waitForElement(reportServicePage.reportContainerEl).then(function() {
-                            // Resize browser at different widths to check responsiveness
-                            e2eBase.resizeBrowser(1500, 600).then(function() {
-                                reportServicePage.assertNavProperties('xlarge', true, '299');
+            // Select the table
+            reportServicePage.tableLinksElList.get(3).click().then(function(){
+                // Open the reports list
+                reportServicePage.reportHamburgersElList.get(0).click();
+                // Select the report
+                reportServicePage.reportLinksElList.get(0).click();
+                // Make sure the table report has loaded
+                reportServicePage.waitForElement(reportServicePage.loadedContentEl).then(function() {
+                    // Resize browser at different widths to check responsiveness
+                    e2eBase.resizeBrowser(1500, 600).then(function() {
+                        reportServicePage.assertNavProperties('xlarge', true, '399');
+                    }).then(function() {
+                        e2eBase.resizeBrowser(1280, 600).then(function() {
+                            reportServicePage.assertNavProperties('large', true, '299');
+                        }).then(function() {
+                            e2eBase.resizeBrowser(1024, 600).then(function() {
+                                reportServicePage.assertNavProperties('medium', true, '199');
                             }).then(function() {
-                                e2eBase.resizeBrowser(1280, 600).then(function() {
-                                    reportServicePage.assertNavProperties('large', true, '299');
+                                e2eBase.resizeBrowser(640, 600).then(function() {
+                                    reportServicePage.assertNavProperties('small', false, '0');
                                 }).then(function() {
-                                    e2eBase.resizeBrowser(1024, 600).then(function() {
-                                        reportServicePage.assertNavProperties('medium', true, '199');
-                                    }).then(function() {
-                                        e2eBase.resizeBrowser(700, 600).then(function() {
-                                            reportServicePage.assertNavProperties('medium', true, '39');
-                                        }).then(function() {
-                                            e2eBase.resizeBrowser(640, 600).then(function() {
-                                                reportServicePage.assertNavProperties('small', false, '249');
-                                            }).then(function() {
-                                                // Reset the browser for other tests
-                                                e2eBase.resizeBrowser(widthTest, heightTest);
-                                                done();
-                                            });
-                                        });
-                                    });
+                                    // Reset the browser for other tests
+                                    e2eBase.resizeBrowser(widthTest, heightTest);
+                                    done();
                                 });
                             });
                         });
                     });
                 });
             });
+        });
+
+        /**
+        * Run after each it block is run, run the below function to reset state
+        */
+        afterEach(function(){
+            // Click the back button
+            reportServicePage.reportsBackLinkEl.click();
         });
 
         /**
