@@ -14,7 +14,7 @@ var formData = fakeFormLotsOfData;
 import './qbform.scss';
 
 import Tabs, {TabPane} from 'rc-tabs';
-import '../record/rc-tabs.scss';
+import 'rc-tabs/assets/index.css';
 
 class QBForm extends React.Component {
 
