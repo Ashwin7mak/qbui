@@ -13,10 +13,26 @@
         var requestHelper = require('./api/quickbase/requestHelper')();
         var routeConstants = require('./routes/routeConstants');
 
+        /*
+         *  Route to log a message. Only a post request is supported.
+         */
         app.all(routeConstants.LOG_CLIENT_MSG, function(req, res, next) {
-            // TODO: validate that the request includes a valid authenticated ticket
+
+            // TODO: this endpoint needs to be protected...validate that the requested
+            // TODO: endpoint includes a valid authenticated ticket.
+
             if (requestHelper.isPost(req)) {
+
                 if (req.body.level && req.body.msg) {
+                    //
+                    //  The req.body.level binds to the respective bunyan logging function.
+                    //  Expected values include 'info', 'warn', 'debug', 'error'
+                    //
+                    //  Couple of examples:
+                    //      req.body.level = 'info', will bind to log['info'] function
+                    //      req.body.level = 'warn', will bind to log['warn'] function
+                    //      ...
+                    //
                     var fn;
                     try {
                         fn = log[req.body.level].bind(log);
@@ -55,7 +71,7 @@
             } else {
                 res.status(405).send('Method not supported');
             }
-            // ...processing stops here...logging a client side message only
+            // ...route terminates...logging a client side message only
         });
 
         //  For all api requests:
