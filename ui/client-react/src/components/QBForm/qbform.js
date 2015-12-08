@@ -3,18 +3,14 @@
  */
 import React from 'react';
 
-import ReactBootstrap from 'react-bootstrap';
-import {Glyphicon}  from 'react-bootstrap';
 import QBPanel from '../qbPanel/qbpanel.js';
 
 import {fakeFormLotsOfData} from './fakeData.js';
 
-var formData = fakeFormLotsOfData;
-
 import './qbform.scss';
+import './tabs.scss';
 
 import Tabs, {TabPane} from 'rc-tabs';
-import 'rc-tabs/assets/index.css';
 
 class QBForm extends React.Component {
 
@@ -25,7 +21,7 @@ class QBForm extends React.Component {
 
     initState(){
         let initialState = {
-            "externalData": formData,
+            "externalData": fakeFormLotsOfData,
             readonly : true,
             defaultTab : this.props.activeTab
         };

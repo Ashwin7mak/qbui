@@ -4,8 +4,6 @@ import './record.scss';
 
 import QBForm from './../qbForm/qbform.js';
 
-import './rc-tabs.scss';
-
 let Record = React.createClass({
 
     render: function() {
