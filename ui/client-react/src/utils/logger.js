@@ -7,6 +7,7 @@
  */
 import Configuration from '../config/app.config';
 import LogLevel from './logLevels';
+import LogService from '../services/logService';
 
 class Logger {
 
@@ -15,6 +16,8 @@ class Logger {
         this.logLevel = Configuration.logger.logLevel;
         this.logToConsole = Configuration.logger.logToConsole;
         this.logToServer = Configuration.logger.logToServer;
+
+        this.logService = new LogService();
     }
 
     debug(msg) {
@@ -50,20 +53,21 @@ class Logger {
             }
             if (this.logToServer === true) {
                 this.sendMessageToServer(level, msg);
-                // TODO: make xhr call to server to log on node
-                // TODO: include uuid on the request
             }
         } catch (e) {
             if (typeof console !== 'undefined' && typeof console.log !== 'undefined') {
-                console.log('An error occurred in the processing of a logging message. ERROR::' + e);
+                console.log('An error occurred in the processing of a logging message. MSG::' + msg + '; ERROR::' + e);
             }
         }
     }
 
     // Log the message to the server
-    sendMessageToServer() {
-        //TODO: placeholder...
-        return null;
+    sendMessageToServer(level, msg) {
+        let message = {
+            level: level.bunyanLevel,
+            msg: msg
+        };
+        this.logService.log(message);
     }
 }
 

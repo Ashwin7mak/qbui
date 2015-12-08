@@ -87,7 +87,10 @@
                 if (req && req.headers) {
                     headers = req.headers;
                 }
-                headers.tid = uuid.v1();
+                //  if no tid, generate one
+                if (!headers.tid) {
+                    headers.tid = uuid.v1();
+                }
                 req.headers = headers;
                 return req;
             }

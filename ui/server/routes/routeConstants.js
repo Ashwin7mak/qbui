@@ -6,15 +6,16 @@
     'use strict';
     //save the substrings for lack of repetition
     module.exports = Object.freeze({
+        LOG_CLIENT_MSG       : '/api/api/:version/log',
+        REALM                : '/api/api/v1/realms',
         RECORD               : '/api/api/:version/apps/:appId/tables/:tableId/records/:recordId',
         RECORDS              : '/api/api/:version/apps/:appId/tables/:tableId/records',
         REPORT_RESULTS       : '/api/api/:version/apps/:appId/tables/:tableId/reports/:reportId/results',
         SWAGGER_API          : '/api',
-        SWAGGER_RESOURCES    : '/api/resources/*',
-        SWAGGER_IMAGES       : '/api/images/*',
         SWAGGER_DOCUMENTATION: '/api/documentation/*',
+        SWAGGER_IMAGES       : '/api/images/*',
+        SWAGGER_RESOURCES    : '/api/resources/*',
         TICKET               : '/api/api/v1/ticket',
-        REALM                : '/api/api/v1/realms',
         TOMCAT_ALL           : '/api/*'
     });
 }());

@@ -41,7 +41,7 @@
                 res.render(viewFilePath);
             });
         }
-        log.logRequest(req, __filename);
+        log.error({req: req}, 'process error');
     }
 
 }());

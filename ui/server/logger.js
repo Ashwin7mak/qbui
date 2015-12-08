@@ -16,9 +16,56 @@
     var bunyan = require('bunyan');
     var config = require('./config/environment');
     var fs = require('fs');
+    var uuid = require('uuid');
 
     //  one logger per node instance
     var appLogger;
+
+    //  custom request serializer to include on all messages.  For example, log.info({req:req}, 'some message') will
+    //  trigger the serializer and include the custom output on the message.
+    function reqSerializer(req) {
+        var headers = req.headers || {};
+        var agent = req.useragent || {};
+        var body = req.body || {};
+
+        //  try to get the ip address
+        if (req.headers) {
+            var ip = req.headers['x-forwarded-for'];
+        }
+        if (!ip) {
+            if (req.connection) {
+                ip = req.connection.remoteAddress;
+                if (!ip && req.connection.socket) {
+                    ip = req.connection.socket.remoteAddress;
+                }
+            }
+            if (!ip && req.socket) {
+                ip = req.socket.remoteAddress;
+            }
+        }
+
+        return {
+            method: req.method,
+            url: req.url,
+            host: headers.host,
+            sid: headers.sid,
+            tid: headers.tid,
+            browser: agent.source,
+            platform: agent.platform,
+            referer: headers.referer,
+            ip: ip,
+            body: body
+        };
+    }
+
+    //  custom response serializer to include on all messages.  For example, log.info({res:res}, 'some message') will
+    //  trigger the serializer and include the custom output on the message.
+    function resSerializer(res) {
+        return {
+            statusCode: res.statusCode,
+            statusMessage: res.statusMessage
+        };
+    }
 
     module.exports = {
 
@@ -49,108 +96,21 @@
                     streams    : [stream],
                     level      : level,
                     src        : src,
-                    serializers: bunyan.stdSerializers
+                    serializers: {
+                        req: reqSerializer,
+                        res: resSerializer
+                    }
                 });
 
-                // add custom qbse specific properties
                 appLogger = logger.child({
-                    //  put properties here..
+                    // custom logger attributes go here..
                 });
-
-                /**
-                 * Custom functions for logging request info
-                 *
-                 * @param req - http request object
-                 * @param callingFunc -- optional parameter to identify the calling function/src file
-                 */
-                appLogger.logRequest = function(req, callingFunc) {
-                    if (callingFunc) {
-                        appLogger.info({Request: getReqInfo(req), CallFunc: getCallFunc(callingFunc)});
-                    } else {
-                        appLogger.info({Request: getReqInfo(req)});
-                    }
-
-                };
-
-                /**
-                 * Custom functions for logging request and response info
-                 *
-                 * @param req - http request object
-                 * @param res - http response object
-                 * @param callingFunc -- optional parameter to identify the calling function/src file
-                 */
-                appLogger.logResponse = function(req, res, callingFunc) {
-                    if (callingFunc) {
-                        appLogger.info({Request: getReqInfo(req), Response: getResInfo(res), CallFunc: getCallFunc(callingFunc)});
-                    } else {
-                        appLogger.info({Request: getReqInfo(req), Response: getResInfo(res)});
-                    }
-                };
             }
 
             return appLogger;
 
         }
     };
-
-    /**
-     * Extract from the request a standard set of information to display in a log message.
-     * Currently, the request path, request method, sid(session id) and tid(transaction id) is extracted.
-     *
-     * @param req
-     */
-    function getReqInfo(req) {
-        var r = {};
-        try {
-            if (req) {
-                r.path = req.path;
-
-                var url = req.url;
-                var indx = url.indexOf('?');
-                r.params = indx > 0 ? url.substr(indx + 1) : '';
-
-                r.method = req.method;
-
-                //  extract tid and bsid from request header
-                if (req.headers) {
-                    //  individual transaction id
-                    if (req.headers.tid) {
-                        r.tid = req.headers.tid;
-                    }
-                    //  session id
-                    if (req.headers.sid) {
-                        r.sid = req.headers.sid;
-                    }
-                }
-
-                //  extract browser info
-                if (req.useragent) {
-                    r.useragent = req.useragent.browser + ' ' + req.useragent.version + ' - ' + req.useragent.os;
-                }
-            }
-        } catch (e) {
-            //  catch exception and move on..
-        }
-        return r;
-    }
-
-    /**
-     * Extract from the response a standard set of information to display in a log message.
-     * Currently, the response http status is extracted.
-     *
-     * @param req
-     */
-    function getResInfo(res) {
-        var r = {};
-        try {
-            if (res) {
-                r.status = res.statusCode;
-            }
-        } catch (e) {
-            // catch exception and move on..
-        }
-        return r;
-    }
 
     /**
      * Return the bunyan configuration setting for the given key. If the key
@@ -203,33 +163,5 @@
         //  no stream configuration...will default to console
         return {type: 'stream', stream: process.stdout};
     }
-
-    /**
-     * Returns the name of the function that is calling the loger to output a log
-     * message.  Try to trim off the front portion of the file spec for readability.
-     *
-     * @param callFunc
-     * @returns {*}
-     */
-    function getCallFunc(callFunc) {
-        if (callFunc) {
-            //  look for public(dist), client(dist/local) and server(local) folders
-            var offset = callFunc.indexOf('/server/');
-            if (offset === -1) {
-                offset = callFunc.indexOf('/public/');
-                if (offset === -1) {
-                    offset = callFunc.indexOf('/client/');
-                }
-            }
-            //  do we have something to trim
-            if (offset !== -1) {
-                return callFunc.substr(offset);
-            }
-        }
-
-        //  it's not in one of the expected folders..
-        return '';
-    }
-
 
 }());

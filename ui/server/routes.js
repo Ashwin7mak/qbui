@@ -10,7 +10,38 @@
 
     module.exports = function(app, config) {
 
-        var requestHelper = require('./api/quickbase/requestHelper')(config);
+        var requestHelper = require('./api/quickbase/requestHelper')();
+        var routeConstants = require('./routes/routeConstants');
+
+        app.all(routeConstants.LOG_CLIENT_MSG, function(req, res, next) {
+            // TODO: validate that the request includes a valid authenticated ticket
+            if (requestHelper.isPost(req)) {
+                if (req.body.level && req.body.msg) {
+                    var fn;
+                    try {
+                        fn = log[req.body.level].bind(log);
+                    } catch (e) {
+                        // if invalid level, log it and return a bad request
+                        log.error({req:req}, 'ERROR logging message: ' + e);
+                    }
+
+                    if (typeof fn === 'function') {
+                        var args = [];
+                        args.push({req:req});
+                        args.push(req.body.msg);
+                        fn.apply(null, args);
+                        res.status(200).send('OK');
+                    } else {
+                        res.status(400).send('Bad Request');
+                    }
+                } else {
+                    res.status(400).send('Bad Request');
+                }
+            } else {
+                res.status(405).send('Method not supported');
+            }
+            // ...processing stops here...logging a client side message only
+        });
 
         //  For all api requests:
         //     -- generate a new Transaction Id(TID) and add to the request header.
@@ -19,7 +50,7 @@
         //
         app.all('*', function(req, res, next) {
             requestHelper.setTidHeader(req);
-            log.logRequest(req, __filename);
+            log.info({req: req});
             next();
         });
 

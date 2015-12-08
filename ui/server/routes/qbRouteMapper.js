@@ -154,7 +154,7 @@
      */
     function processRequest(req, res, returnFunction) {
         //  log some route info and set the request options
-        log.logRequest(req);
+        log.info({req: req}, 'qbRouteMapper - process request');
 
         if (!isRouteEnabled(req)) {
             routeTo404(req, res);
@@ -174,12 +174,11 @@
         processRequest(req, res, function(req, res) {
             recordsApi.fetchSingleRecordAndFields(req)
                     .then(function(response) {
-                        log.logResponse(req, response, __filename);
-                        log.debug('API response: ' + JSON.stringify(response) + ' Request - method:' + req.method + ' - ' + req.path);
+                        log.debug({req:req, res:res}, 'API response status: ' + response.statusCode);
                         res.send(response);
                     })
                     .catch(function(error) {
-                        log.error('ERROR: ' + JSON.stringify(error));
+                        log.error({req:req}, 'API ERROR: ' + JSON.stringify(error));
                         requestHelper.copyHeadersToResponse(res, error.headers);
                         res.status(error.statusCode)
                                        .send(error.body);
@@ -199,11 +198,11 @@
         processRequest(req, res, function(req, res) {
             recordsApi.fetchRecordsAndFields(req)
                     .then(function(response) {
-                        log.logResponse(req, response, __filename);
+                        log.debug({req:req}, 'API response status: ' + response.statusCode);
                         res.send(response);
                     })
                     .catch(function(error) {
-                        log.error('ERROR: ' + JSON.stringify(error));
+                        log.error({req:req}, 'API ERROR: ' + JSON.stringify(error));
                         requestHelper.copyHeadersToResponse(res, error.headers);
                         res.status(error.statusCode)
                                        .send(error.body);
@@ -223,13 +222,13 @@
         }
 
         //  log some route info and set the request options
-        log.logRequest(req);
+        log.debug({req: req}, 'Fetch swagger');
 
         var opts = requestHelper.setOptions(req);
 
         request(opts)
                 .on('error', function(error) {
-                    log.error('Swagger API ERROR ' + JSON.stringify(error));
+                    log.error({req:req}, 'API ERROR: ' + JSON.stringify(error));
                 })
                 .pipe(res);
     }
@@ -243,13 +242,13 @@
     function forwardAllApiRequests(req, res) {
         processRequest(req, res, function(req, res) {
             var opts = requestHelper.setOptions(req);
-            log.debug('Java api request:' +  simpleStringify(req) + ' opts:' + simpleStringify(opts));
+            log.debug({req:req}, 'Java api request');
             request(opts)
                     .on('response', function(response) {
-                        log.debug('API response: ' + response.statusCode + ' - ' + req.method + ' ' + req.path);
+                        log.debug({req:req, res:response});
                     })
                     .on('error', function(error) {
-                        log.error('API ERROR ' + JSON.stringify(error));
+                        log.error({req:req, res:res}, 'API ERROR: ' + JSON.stringify(error));
                     })
                     .pipe(res);
         });
@@ -261,8 +260,7 @@
      * @param res
      */
     function routeTo404(req, res) {
-        log.logRequest(req);
-        log.error('Route ' + req.route.path + ' is not enabled for routeGroup ' + routeGroup);
+        log.error({req:req, res:res}, 'Route ' + req.route.path + ' is not enabled for routeGroup ' + routeGroup);
         res.status(404).send();
     }
 
