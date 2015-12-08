@@ -5,7 +5,7 @@ import Loader  from 'react-loader';
 import {I18nMessage} from '../../utils/i18nMessage';
 import qbLogo from '../../assets/images/intuit_logo_white.png';
 import ReactCSSTransitionGroup from 'react/lib/ReactCSSTransitionGroup';
-
+import GlobalActions from '../global/GlobalActions';
 import AppsList from './appsList';
 import TablesList from './tablesList';
 import ReportsList from './reportsList';
@@ -81,16 +81,20 @@ let LeftNav = React.createClass({
     render() {
         return (
 
-            <div className={"leftMenu " + (this.props.open ? "open " : "closed ") + (this.state.appsIsOpen ? "appsListOpen" : "")}>
+            <div className={"leftNav " + (this.props.open ? "open " : "closed ") + (this.state.appsIsOpen ? "appsListOpen" : "")}>
                 {this.createBranding()}
 
                 <ReactCSSTransitionGroup transitionName="leftNavList" component="div" className={"transitionGroup"} transitionEnterTimeout={300} transitionLeaveTimeout={300}>
                     {!this.props.selectedAppId || this.state.appsIsOpen ?
                         <AppsList key={"apps"} {...this.props} toggleApps={this.toggleApps} buildItem={this.buildNavItem} buildHeadingItem={this.buildHeadingItem} /> :
                         <TablesList key={"tables"} {...this.props} showReports={(id)=>{this.props.onSelectReports(id);} } buildItem={this.buildNavItem} buildHeadingItem={this.buildHeadingItem} getAppTables={this.getAppTables}/> }
+
                 </ReactCSSTransitionGroup>
+                {this.props.globalActions && <GlobalActions actions={this.props.globalActions} onSelect={this.props.onSelect}/>}
 
                 <ReportsList open={this.props.open} onSelect={this.props.onSelect} reportsOpen={this.props.showReports} onBack={this.props.onHideReports} reportsData={this.props.reportsData} buildItem={this.buildNavItem} buildHeading={this.buildHeadingItem} />
+
+
             </div>
         );
     }

@@ -2,12 +2,12 @@ import React from 'react';
 import ReactIntl from 'react-intl';
 import {I18nMessage, I18nDate} from '../../utils/i18nMessage';
 import Locale from '../../locales/locales';
-
+import GlobalActions from '../global/GlobalActions';
 import Fluxxor from 'fluxxor';
 import _ from 'lodash';
 
 let FluxMixin = Fluxxor.FluxMixin(React);
-import {MenuItem, NavDropdown, ButtonGroup, Button, OverlayTrigger, Popover, Glyphicon, Input} from 'react-bootstrap';
+import {MenuItem, NavDropdown, Dropdown,Menu, ButtonGroup, Button, OverlayTrigger, Popover, Glyphicon, Input} from 'react-bootstrap';
 
 import './topNav.scss';
 
@@ -75,18 +75,27 @@ var TopNav = React.createClass({
                         </ButtonGroup>
                     </div>
 
+
                     <div className="navGroup right">
-                        <NavDropdown className="navItem" NavDropdown={true} navItem={true} eventKey={eventKeyIdx++} title={<CurrentDate/>} id="nav-right-dropdown">
-                            <MenuItem href="/user" eventKey={eventKeyIdx++}><I18nMessage message={'header.menu.preferences'}/></MenuItem>
-                            <MenuItem divider />
 
-                            {supportedLocales.length > 1 ? supportedLocales.map((locale) => {
-                                return <MenuItem href="#" className="localeLink" onSelect={this.onSelect} title={locale} key={eventKeyIdx} eventKey={eventKeyIdx++}><I18nMessage message={'header.menu.locale.' + locale}/></MenuItem>;
-                            }) : null}
-                            {supportedLocales.length > 1 ? <MenuItem divider /> : null}
+                        {this.props.globalActions && <GlobalActions actions={this.props.globalActions}/>}
 
-                            <MenuItem href="/signout" eventKey={eventKeyIdx++}><I18nMessage message={'header.menu.sign_out'}/></MenuItem>
-                        </NavDropdown>
+                        <Dropdown id="nav-right-dropdown">
+
+                            <a bsRole="toggle" className={"dropdownToggle"}><Glyphicon glyph="option-vertical"/> </a>
+
+                            <Dropdown.Menu>
+                                <MenuItem href="/user" eventKey={eventKeyIdx++}><I18nMessage message={'header.menu.preferences'}/></MenuItem>
+                                <MenuItem divider />
+
+                                {supportedLocales.length > 1 ? supportedLocales.map((locale) => {
+                                    return <MenuItem href="#" className="localeLink" onSelect={this.onSelect} title={locale} key={eventKeyIdx} eventKey={eventKeyIdx++}><I18nMessage message={'header.menu.locale.' + locale}/></MenuItem>;
+                                }) : null}
+                                {supportedLocales.length > 1 ? <MenuItem divider /> : null}
+
+                                <MenuItem href="/signout" eventKey={eventKeyIdx++}><I18nMessage message={'header.menu.sign_out'}/></MenuItem>
+                            </Dropdown.Menu>
+                        </Dropdown>
                         &nbsp;
                     </div>
                 </div>

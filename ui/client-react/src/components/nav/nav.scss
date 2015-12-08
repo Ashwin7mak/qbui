@@ -1,3 +1,4 @@
+@import '../../assets/css/qbVariables';
 
 html, body {
     margin:0;
@@ -40,7 +41,7 @@ html, body {
 
             >.top {
                 display:flex;
-                flex-basis:50px;
+                flex-basis:$top-nav-height;
                 align-items:center;
                 font-size:14px;
                 transition: flex-basis 300ms ease-in-out;
@@ -48,6 +49,7 @@ html, body {
             }
 
             .navGroup {
+                line-height: $top-nav-height;
                 .navItem {
                     display: inline-block;
 

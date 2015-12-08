@@ -36,6 +36,12 @@ export default {
         grid: {
             no_data: "There is no data to display."
         },
+        globalActions: {
+            user: "User",
+            alerts: "Alerts",
+            help: "Help",
+            logout: "Logout"
+        },
         header: {
             menu: {
                 locale: {

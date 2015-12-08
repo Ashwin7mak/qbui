@@ -36,6 +36,15 @@ var Nav = React.createClass({
         };
     },
 
+    getGlobalActions() {
+
+        return [
+            {key:'globalActions.user', link:'/apps', icon:'user'},
+            {key:'globalActions.alerts', link:'/apps', icon:'exclamation-sign'},
+            {key:'globalActions.help', link:'/apps', icon:'question-sign'},
+            {key:'globalActions.logout', link:'/apps', icon:'off'}
+        ];
+    },
     hideTrouserExample() {
         let flux = this.getFlux();
         flux.actions.hideTrouser();
@@ -77,7 +86,7 @@ var Nav = React.createClass({
                 flux={flux} />
 
             <div className="main">
-                <TopNav title="QuickBase"  onNavClick={this.toggleNav} onAddClicked={this.showTrouser} flux={flux} />
+                <TopNav title="QuickBase"  globalActions={this.getGlobalActions()} onNavClick={this.toggleNav} onAddClicked={this.showTrouser} flux={flux} />
                 {this.props.children && <ReactCSSTransitionGroup className="mainContent"
                                          transitionName="main-transition"
                                          transitionAppear={true}
@@ -118,6 +127,7 @@ var Nav = React.createClass({
                 onSelectReports={this.onSelectTableReports}
                 onHideReports={this.onHideTableReports}
                 onSelect={onSelectSmall}
+                globalActions={this.getGlobalActions()}
                 flux={flux} />
 
             <div className="main">
