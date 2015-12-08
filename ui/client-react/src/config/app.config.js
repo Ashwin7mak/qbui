@@ -86,7 +86,7 @@ if (!configuration) {
 if (!__QB_PROD__) {
     /*eslint no-console:0 */
     // don't call the logger..you'll get into a race condition
-    console.log("Run time configuration: " + configuration.env);
+    console.log("Run time configuration: " + configuration.env + '; SID: ' + configuration.sid);
 }
 
 export default configuration;
