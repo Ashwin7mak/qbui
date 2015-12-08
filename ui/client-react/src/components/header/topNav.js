@@ -7,7 +7,7 @@ import Fluxxor from 'fluxxor';
 import _ from 'lodash';
 
 let FluxMixin = Fluxxor.FluxMixin(React);
-import {MenuItem, NavDropdown, Dropdown,Menu, ButtonGroup, Button, OverlayTrigger, Popover, Glyphicon, Input} from 'react-bootstrap';
+import {MenuItem, Dropdown, ButtonGroup, Button, OverlayTrigger, Popover, Glyphicon, Input} from 'react-bootstrap';
 
 import './topNav.scss';
 
