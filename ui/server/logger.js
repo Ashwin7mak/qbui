@@ -16,7 +16,6 @@
     var bunyan = require('bunyan');
     var config = require('./config/environment');
     var fs = require('fs');
-    var uuid = require('uuid');
 
     //  one logger per node instance
     var appLogger;
