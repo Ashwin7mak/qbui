@@ -27,8 +27,23 @@
 
                     if (typeof fn === 'function') {
                         var args = [];
-                        args.push({req:req});
-                        args.push(req.body.msg);
+                        //
+                        //  for readability in the outputted log message, convert all double quotes to single quotes.
+                        //
+                        //  NOTE: it's okay to change the contents of the body message as this request is terminated
+                        //  immediately after the message is logged on the server and not used elsewhere.
+                        //
+                        //  There is one minor downside to converting double quotes to single quotes, and that is if
+                        //  the message is a json formatted string and you want to use it for debugging purposes (via
+                        //  copy/paste from the log file), the json could become corrupt if it includes a double quoted
+                        //  data value.  Weighing pro's and con's of each, the readability of the log supersedes the
+                        //  possibility of corrupting a json message with double quoted data.  The thought is that a
+                        //  double quoted message will happen infrequently, and if it does, the corrupt data can be
+                        //  manually corrected by the developer who is debugging the issue.
+                        //
+                        req.body.msg = req.body.msg.replace(/"/g, "'");
+
+                        args.push({req:req});   // the msg is outputted as part of the req.body
                         fn.apply(null, args);
                         res.status(200).send('OK');
                     } else {
