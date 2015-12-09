@@ -10,6 +10,8 @@ import AppsList from './appsList';
 import TablesList from './tablesList';
 import ReportsList from './reportsList';
 import Fluxxor from 'fluxxor';
+import Hicon from '../harmonyIcon/harmonyIcon';
+
 import './leftNav.scss';
 
 //let FluxMixin = Fluxxor.FluxMixin(React);
@@ -28,7 +30,7 @@ let LeftNav = React.createClass({
                 <img src={qbLogo} />
                 {this.props.selectedAppId &&
                     <div className="appsToggle" onClick={this.toggleAppsList}>{app ? app.name : ''}&nbsp;
-                        <Glyphicon glyph="triangle-bottom"/></div>
+                        <Hicon icon="chevron-down"/></div>
                 }
             </div>
         );
@@ -61,7 +63,7 @@ let LeftNav = React.createClass({
             <OverlayTrigger key={tooltipID} placement="right" overlay={tooltip}>
                 <li className={"link" }>
                     <Link className="leftNavLink" to={item.link} onClick={onSelect}>
-                        <Glyphicon glyph={item.icon}/> {this.props.open ? label : ""}
+                        <Hicon icon={item.icon}/> {this.props.open ? label : ""}
                     </Link>
                 </li>
             </OverlayTrigger>

@@ -75,7 +75,7 @@ body:not(.small-breakpoint) .leftNav.closed {
     flex: 0 0 auto;
     padding:10px;
     border-bottom: $global-actions-border;
-    .glyphicon-triangle-bottom {
+    .hi-chevron-down {
       transition: transform 300ms ease-in;
     }
   }
@@ -237,7 +237,7 @@ $travel-distance: 15;
   transition: all $transition-time ease-in;
 }
 
-.leftNav.appsListOpen .branding .glyphicon-triangle-bottom {
+.leftNav.appsListOpen .branding .hi-chevron-down {
   transform: rotate(-180deg);
 }
 .leftNav .reportsContainer {

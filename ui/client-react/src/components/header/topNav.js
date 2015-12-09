@@ -5,6 +5,7 @@ import Locale from '../../locales/locales';
 import GlobalActions from '../global/GlobalActions';
 import Fluxxor from 'fluxxor';
 import _ from 'lodash';
+import Hicon from '../harmonyIcon/harmonyIcon';
 
 let FluxMixin = Fluxxor.FluxMixin(React);
 import {MenuItem, Dropdown, ButtonGroup, Button, OverlayTrigger, Popover, Glyphicon, Input} from 'react-bootstrap';
@@ -67,11 +68,11 @@ var TopNav = React.createClass({
                                 <Input className="searchInputBox" key={'searchInput'} standalone addonBefore={searchIcon} type="text" placeholder="Search Records"  onChange={this.searchChanged} />
                             </Popover>}>
 
-                                <Button><Glyphicon glyph="search" /></Button>
+                                <Button><Hicon icon="search" /></Button>
                             </OverlayTrigger>
 
-                            <Button className="addNewButton" onClick={this.addNew} ><Glyphicon glyph="plus" /></Button>
-                            <Button><Glyphicon glyph="time" /></Button>
+                            <Button className="addNewButton" onClick={this.addNew} ><Hicon icon="create-lg" /></Button>
+                            <Button><Hicon icon="history" /></Button>
                         </ButtonGroup>
                     </div>
 

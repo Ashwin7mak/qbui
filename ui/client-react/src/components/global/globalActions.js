@@ -3,6 +3,8 @@ import Fluxxor from 'fluxxor';
 import './globalActions.scss';
 import {Link} from 'react-router';
 import {Glyphicon} from 'react-bootstrap';
+import Hicon from '../harmonyIcon/harmonyIcon';
+
 import {I18nMessage} from '../../utils/i18nMessage';
 
 let GlobalAction = React.createClass({
@@ -11,7 +13,7 @@ let GlobalAction = React.createClass({
         return (
             <li className={"link globalAction"}>
                 <Link to={this.props.action.link} onClick={this.props.onSelect}>
-                    <Glyphicon glyph={this.props.action.icon}/> <I18nMessage message={this.props.action.key}/>
+                    <Hicon icon={this.props.action.icon}/> <I18nMessage message={this.props.action.key}/>
                 </Link>
             </li>);
     }

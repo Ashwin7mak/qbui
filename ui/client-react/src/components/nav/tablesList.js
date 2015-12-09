@@ -1,6 +1,7 @@
 import React from 'react';
 import {Tooltip, OverlayTrigger, Glyphicon} from 'react-bootstrap';
 import {Link} from 'react-router';
+import Hicon from '../harmonyIcon/harmonyIcon';
 
 let TablesList = React.createClass({
 
@@ -23,10 +24,10 @@ let TablesList = React.createClass({
             <OverlayTrigger key={table.id} placement="right" overlay={tooltip}>
                 <li className={"link"}>
                     <Link className="leftNavLink" to={table.link} onClick={this.props.onSelect}>
-                        <Glyphicon glyph={table.icon}/> {this.props.open ? label : ""}
+                        <Hicon icon={table.icon}/> {this.props.open ? label : ""}
                     </Link>
                     { this.props.open ?
-                        <a href="#" className="right" onClick={()=>this.props.showReports(table.id)}><Glyphicon glyph="list"/></a> : ""}
+                        <a href="#" className="right" onClick={()=>this.props.showReports(table.id)}><Hicon icon="list"/></a> : ""}
                 </li>
             </OverlayTrigger>
         );
@@ -45,7 +46,7 @@ let TablesList = React.createClass({
                     {this.props.selectedAppId && this.props.buildHeadingItem({key: 'nav.tablesHeading'}, false)}
                     {this.props.selectedAppId && this.props.getAppTables(this.props.selectedAppId).map((table) => {
                         table.link = '/app/' + this.props.selectedAppId + '/table/' + table.id;
-                        table.icon = 'book';
+                        table.icon = 'invoices';
                         return this.buildTableItem(table);
                     })}
                 </ul>
