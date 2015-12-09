@@ -13,7 +13,7 @@ let GlobalAction = React.createClass({
         return (
             <li className={"link globalAction"}>
                 <Link to={this.props.action.link} onClick={this.props.onSelect}>
-                    <Hicon icon={this.props.action.icon}/> <I18nMessage message={this.props.action.key}/>
+                    <Hicon icon={this.props.action.icon}/> <I18nMessage message={this.props.action.msg}/>
                 </Link>
             </li>);
     }
@@ -27,7 +27,7 @@ let GlobalActions = React.createClass({
             <div className={"globalActions"}>
                 <ul className={"globalActionsList"}>
                     {this.props.actions && this.props.actions.map((action) => {
-                        return <GlobalAction key={action.key} linkClass={this.props.linkClass} onSelect={this.props.onSelect} action={action}/>;
+                        return <GlobalAction key={action.msg} linkClass={this.props.linkClass} onSelect={this.props.onSelect} action={action}/>;
                     })}
                 </ul>
             </div>);

@@ -36,40 +36,6 @@ let LeftNav = React.createClass({
         );
     },
 
-    buildHeadingItem(item, loadingCheck) {
-
-        if (this.props.open) {
-            return (
-                <li key={item.key} className="heading"><I18nMessage message={item.key}/>
-                    <Loader scale={.5} right={'90%'} loaded={!loadingCheck}/>
-                </li>);
-        } else {
-            return (<li key={item.key}><a className="heading"></a></li>);
-        }
-    },
-
-    buildNavItem(item, onSelect) {
-
-        let label = item.name;
-        let tooltipID = item.key ? item.key : item.name;
-        if (item.key) {
-            label = (<I18nMessage message={item.key}/>);
-        }
-
-        const tooltip = (<Tooltip className={ this.props.open ? 'leftNavTooltip' : 'leftNavTooltip show' }
-                                  id={tooltipID}>{label}</Tooltip>);
-
-        return (
-            <OverlayTrigger key={tooltipID} placement="right" overlay={tooltip}>
-                <li className={"link" }>
-                    <Link className="leftNavLink" to={item.link} onClick={onSelect}>
-                        <Hicon icon={item.icon}/> {this.props.open ? label : ""}
-                    </Link>
-                </li>
-            </OverlayTrigger>
-        );
-    },
-
     getAppTables(appId) {
         let app = _.findWhere(this.props.apps, {id: appId});
 
@@ -84,13 +50,13 @@ let LeftNav = React.createClass({
 
                 <ReactCSSTransitionGroup transitionName="leftNavList" component="div" className={"transitionGroup"} transitionEnterTimeout={300} transitionLeaveTimeout={300}>
                     {!this.props.selectedAppId || this.props.appsListOpen ?
-                        <AppsList key={"apps"} {...this.props} toggleApps={this.toggleAppsList} buildItem={this.buildNavItem} buildHeadingItem={this.buildHeadingItem} /> :
-                        <TablesList key={"tables"} {...this.props} showReports={(id)=>{this.props.onSelectReports(id);} } buildItem={this.buildNavItem} buildHeadingItem={this.buildHeadingItem} getAppTables={this.getAppTables}/> }
+                        <AppsList key={"apps"} {...this.props} toggleApps={this.toggleAppsList}  /> :
+                        <TablesList key={"tables"} {...this.props} showReports={(id)=>{this.props.onSelectReports(id);} } getAppTables={this.getAppTables}/> }
 
                 </ReactCSSTransitionGroup>
                 {this.props.globalActions && <GlobalActions actions={this.props.globalActions} onSelect={this.props.onSelect}/>}
 
-                <ReportsList open={this.props.open} onSelect={this.props.onSelect} reportsOpen={this.props.showReports} onBack={this.props.onHideReports} reportsData={this.props.reportsData} buildItem={this.buildNavItem} buildHeading={this.buildHeadingItem} />
+                <ReportsList open={this.props.open} onSelect={this.props.onSelect} reportsOpen={this.props.showReports} onBack={this.props.onHideReports} reportsData={this.props.reportsData} />
 
             </div>
         );

@@ -39,10 +39,10 @@ var Nav = React.createClass({
     getGlobalActions() {
 
         return [
-            {key:'globalActions.user', link:'/apps', icon:'user'},
-            {key:'globalActions.alerts', link:'/apps', icon:'circle-alert'},
-            {key:'globalActions.help', link:'/apps', icon:'help'},
-            {key:'globalActions.logout', link:'/apps', icon:'lock'}
+            {msg:'globalActions.user', link:'/user', icon:'user'},
+            {msg:'globalActions.alerts', link:'/alerts', icon:'circle-alert'},
+            {msg:'globalActions.help', link:'/help', icon:'help'},
+            {msg:'globalActions.logout', link:'/signout', icon:'lock'}
         ];
     },
     hideTrouserExample() {
