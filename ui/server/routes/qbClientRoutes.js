@@ -43,7 +43,6 @@ var lodash = require('lodash');
     }
 
     function renderIndex(req, res) {
-        log.info({req:req}, 'Render requested client page');
         var opts = lodash.merge({}, BASE_PROPS, {title: 'QuickBase'});
         renderJsx(req, res, './index.jsx', opts);
     }

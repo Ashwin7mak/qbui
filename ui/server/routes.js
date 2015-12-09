@@ -42,7 +42,6 @@
                     }
 
                     if (typeof fn === 'function') {
-                        var args = [];
                         //
                         //  for readability in the outputted log message, convert all double quotes to single quotes.
                         //
@@ -57,9 +56,31 @@
                         //  double quoted message will happen infrequently, and if it does, the corrupt data can be
                         //  manually corrected by the developer who is debugging the issue.
                         //
+                        //  Below are two examples of the same message
+                        /*  FILTERED MESSAGE  (double quotes replaced with single quotes)
+                         { ...
+                         "body":{"msg":"AppService getApps success:{'data':[{'id':'bj7dzve78','name':'app_qLBpmnXXxg','lastAccessed':null,
+                         'dateFormat':'MM-dd-uuuu','timeZone':'US/Pacific','firstDayOfWeek':null,'tables':[{'id':'bj7dzve9q'},{'id':'bj7dzve9m'}],
+                         'relationships':[{'masterAppId':'bj7dzve78','masterTableId':'bj7dzve9m','masterFieldId':3,'detailAppId':'bj7dzve78',
+                         'detailTableId':'bj7dzve9q','detailFieldId':14,'id':1,'appId':'bj7dzve78',
+                         'description':'Relationship with master table: bj7dzve9m and detail table: bj7dzve9q','referentialIntegrity':false,'cascadeDelete':true}],
+                          ... }
+                        */
+                        /*  UNFILTERED MESSAGE  (No changes)
+                         { ...
+                         "body":{"msg":"AppService getApps success:{\"data\":[{\"id\":\"bj7dzve78\",\"name\":\"app_qLBpmnXXxg\",\"lastAccessed\":null,
+                         \"dateFormat\":\"MM-dd-uuuu\",\"timeZone\":\"US/Pacific\",\"firstDayOfWeek\":null,\"tables\":[{\"id\":\"bj7dzve9q\"},{\"id\":\"bj7dzve9m\"}],
+                         \"relationships\":[{\"masterAppId\":\"bj7dzve78\",\"masterTableId\":\"bj7dzve9m\",\"masterFieldId\":3,\"detailAppId\":\"bj7dzve78\",
+                         \"detailTableId\":\"bj7dzve9q\",\"detailFieldId\":14,\"id\":1,\"appId\":\"bj7dzve78\",\"description\":\"Relationship with master table: bj7dzve9m and detail table: bj7dzve9q\",
+                         \"referentialIntegrity\":false,\"cascadeDelete\":true}],
+                          ... }
+                         */
+
                         req.body.msg = req.body.msg.replace(/"/g, "'");
 
-                        args.push({req:req});   // the msg is outputted as part of the req.body
+                        var args = [];
+                        args.push({req:req});   // the log message is included as part of the req.body, which is included as output in the logger serializer
+
                         fn.apply(null, args);
                         res.status(200).send('OK');
                     } else {

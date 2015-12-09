@@ -1,6 +1,5 @@
 //
 import cookie from 'react-cookie';
-import uuid from 'uuid';
 import constants from './constants';
 import axios from 'axios';
 import Configuration from '../config/app.config';
@@ -14,6 +13,12 @@ class BaseService {
         this.setResponseInterceptor();
     }
 
+    /**
+     * Get the cookie in string format.
+     *
+     * @param cookieName
+     * @returns {*} - cookie
+     */
     getCookie(cookieName) {
         return cookie.load(cookieName);
     }
@@ -49,7 +54,6 @@ class BaseService {
     setRequestInterceptor() {
         axios.interceptors.request.use(function(config) {
             config.headers[constants.HEADER.SESSION_ID] = Configuration.sid;
-            config.headers[constants.HEADER.TRANSACTION_ID] = uuid.v1();
             let ticket = this.getCookie(constants.COOKIE.TICKET);
             if (ticket) {
                 config.headers[constants.HEADER.TICKET] = ticket;
@@ -89,8 +93,6 @@ class BaseService {
             }
         );
     }
-
-
 
 }
 

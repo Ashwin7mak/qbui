@@ -44,7 +44,12 @@ class Logger {
         }
     }
 
-    //  todo: xhr to node server to log server message...
+    /**
+     * Log a message to the console and/or server
+     *
+     * @param logging level
+     * @param message to log
+     */
     logTheMessage(level, msg) {
         /*eslint no-console:0 */
         try {
@@ -61,7 +66,12 @@ class Logger {
         }
     }
 
-    // Log the message to the server
+    /**
+     * Log a message to the server.
+     *
+     * @param level - bunyan log level.  ie: info, warn, debug, error
+     * @param msg - the message to log on the server
+     */
     sendMessageToServer(level, msg) {
         let message = {
             level: level.bunyanLevel,
