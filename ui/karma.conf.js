@@ -71,8 +71,10 @@ module.exports = function(config) {
                             path.resolve(__dirname, "client-react/src")
                         ],
                     },
-                    {test: /\.eot(\?v=\d+\.\d+\.\d+)?$/,    loader: 'file'},
-                    {test: /\.svg(\?v=\d+\.\d+\.\d+)?$/,    loader: 'url?limit=10000&mimetype=image/svg+xml'}
+                    {
+                        test   : /\.woff|\.woff2|\.svg|.eot|\.ttf/,
+                        loader : 'url?prefix=font/&limit=10000'
+                    }
                 ],
                 postLoaders: [
                     { //delays coverage til after tests are run, fixing transpiled source coverage error

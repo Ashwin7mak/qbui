@@ -1,5 +1,7 @@
 @import '../../assets/css/qbVariables';
 
+
+
 html, body {
     margin:0;
     height:100%;
@@ -37,7 +39,7 @@ html, body {
             display:flex;
             order: 1;
             flex-direction:column;
-            background-color: #e1eaf2;
+            background-color: $header-bg;
 
             >.top {
                 display:flex;
@@ -67,16 +69,12 @@ html, body {
             .btn-group.harmonyButtons {
                 height:50px;
                 button {
-                    background-color: #476b8f;
                     border-radius: 0;
                     width: 50px;
                     height: 50px;
-                    span {
-                        color: #fff;
-                    }
                 }
-                button:hover {
-                    background-color:#193048;
+                button:hover .hi {
+                    color: $icon-color-hover;
                 }
             }
 

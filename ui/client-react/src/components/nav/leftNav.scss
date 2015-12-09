@@ -150,6 +150,9 @@ body:not(.small-breakpoint) .leftNav.closed {
       color: #fff;
       background-color: $left-nav-hover-bg;
 
+      .hi {
+        color: #CAD8E9;
+      }
       a.right {
         opacity:1;
         transition: all 0.2s ease-in-out;

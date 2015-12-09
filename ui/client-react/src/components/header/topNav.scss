@@ -10,6 +10,12 @@ $top-nav-hover-bg: #0097CD;
   }
 }
 
+.topNav .navGroup .harmonyButtons .btn {
+  background: $header-bg;
+  border-color: #fff;
+  border-bottom:0;
+}
+
 .topNav .dropdown {
   outline:none;
 }
@@ -23,13 +29,12 @@ $top-nav-hover-bg: #0097CD;
     display:inline-block;
     cursor:pointer;
     padding: 0 8px;
-    color: #333;
+    color: $icon-color;
   }
 }
 .topNav .dropdown:hover {
-  background-color: $top-nav-hover-bg;
   a.dropdownToggle {
-    color:#fff;
+    color:$icon-color-hover;
   }
 }
 
@@ -47,10 +52,9 @@ $top-nav-hover-bg: #0097CD;
   }
 
   .link:hover {
-    background-color: $top-nav-hover-bg;
 
     a {
-      color: #fff;
+
     }
   }
   .globalActionsList {
@@ -64,6 +68,12 @@ $top-nav-hover-bg: #0097CD;
   }
   .globalAction:first-child {
     border-left: 1px solid #fff;
+  }
+  .globalAction:hover {
+    //height:$top-nav-height;
+    .hi {
+      color: $icon-color-hover;
+    }
   }
   li {
     display:inline-block;

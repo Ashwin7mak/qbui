@@ -73,7 +73,6 @@ var Nav = React.createClass({
             </Trouser>
 
             <LeftNav
-                items={this.state.nav.leftNavItems}
                 open={this.state.nav.leftNavOpen}
                 appsListOpen={this.state.nav.appsListOpen}
                 apps={this.state.apps.apps}
@@ -117,7 +116,6 @@ var Nav = React.createClass({
         }
         return (<div className={classes}>
             <LeftNav
-                items={this.state.nav.leftNavItems}
                 open={this.state.nav.leftNavOpen}
                 appsListOpen={this.state.nav.appsListOpen}
                 apps={this.state.apps.apps}

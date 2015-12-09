@@ -6,7 +6,6 @@ import Hicon from '../harmonyIcon/harmonyIcon';
 let TablesList = React.createClass({
 
     propTypes: {
-        items: React.PropTypes.array.isRequired,
         buildHeadingItem: React.PropTypes.func.isRequired,
         buildItem: React.PropTypes.func.isRequired,
         selectedAppId: React.PropTypes.string.isRequired,
@@ -37,6 +36,10 @@ let TablesList = React.createClass({
             <div className="tablesList leftNavList">
 
                 <ul>
+                    {this.props.selectedAppId && this.props.buildItem({key: 'nav.home', link:'/app/' + this.props.selectedAppId, icon:'dashboard'})}
+                    {this.props.selectedAppId && this.props.buildItem({key: 'nav.users', link:'/users', icon:'customers'})}
+                    {this.props.selectedAppId && this.props.buildItem({key: 'nav.favorites', link:'/favorites', icon:'star'})}
+
                     {this.props.items ? this.props.items.map((item) => {
                         return item.heading ?
                             this.props.buildHeadingItem(item) :

@@ -89,13 +89,12 @@ var config = {
                 test: /\.scss$/,
                 loader: 'style!css!sass'
             },
-            // also handles fonts and svg files
-            // can return a Data Url if the file is smaller than a limit.
-            {test: /\.woff(\?v=\d+\.\d+\.\d+)?$/,   loader: 'url?limit=10000&mimetype=application/font-woff'},
-            {test: /\.woff2(\?v=\d+\.\d+\.\d+)?$/,  loader: 'url?limit=10000&mimetype=application/font-woff'},
-            {test: /\.ttf(\?v=\d+\.\d+\.\d+)?$/,    loader: 'url?limit=10000&mimetype=application/octet-stream'},
-            {test: /\.eot(\?v=\d+\.\d+\.\d+)?$/,    loader: 'file'},
-            {test: /\.svg(\?v=\d+\.\d+\.\d+)?$/,    loader: 'url?limit=10000&mimetype=image/svg+xml'}
+
+            {
+                test   : /\.woff|\.woff2|\.svg|.eot|\.ttf/,
+                loader : 'url?prefix=font/&limit=10000'
+            }
+
         ]
     },
     resolve: {
