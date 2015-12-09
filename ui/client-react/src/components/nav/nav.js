@@ -75,6 +75,7 @@ var Nav = React.createClass({
             <LeftNav
                 items={this.state.nav.leftNavItems}
                 open={this.state.nav.leftNavOpen}
+                appsListOpen={this.state.nav.appsListOpen}
                 apps={this.state.apps.apps}
                 selectedAppId={this.state.apps.selectedAppId}
                 selectedTableId={this.state.apps.selectedTableId}
@@ -118,6 +119,7 @@ var Nav = React.createClass({
             <LeftNav
                 items={this.state.nav.leftNavItems}
                 open={this.state.nav.leftNavOpen}
+                appsListOpen={this.state.nav.appsListOpen}
                 apps={this.state.apps.apps}
                 selectedAppId={this.state.apps.selectedAppId}
                 selectedTableId={this.state.apps.selectedTableId}

@@ -22,6 +22,9 @@ let navActions = {
     toggleLeftNav(open) {
         this.dispatch(actions.TOGGLE_LEFT_NAV, open);
     },
+    toggleAppsList(open) {
+        this.dispatch(actions.TOGGLE_APPS_LIST, open);
+    },
     toggleSearch() {
         this.dispatch(actions.TOGGLE_SEARCH);
     },
