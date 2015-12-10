@@ -22,6 +22,12 @@ var _createMemoryHistory3 = _interopRequireDefault(_createMemoryHistory2);
 
 exports.createMemoryHistory = _createMemoryHistory3['default'];
 
+var _createLocation2 = require('./createLocation');
+
+var _createLocation3 = _interopRequireDefault(_createLocation2);
+
+exports.createLocation = _createLocation3['default'];
+
 var _useBasename2 = require('./useBasename');
 
 var _useBasename3 = _interopRequireDefault(_useBasename2);
@@ -47,12 +53,6 @@ var _Actions3 = _interopRequireDefault(_Actions2);
 exports.Actions = _Actions3['default'];
 
 // deprecated
-
-var _createLocation2 = require('./createLocation');
-
-var _createLocation3 = _interopRequireDefault(_createLocation2);
-
-exports.createLocation = _createLocation3['default'];
 
 var _enableBeforeUnload2 = require('./enableBeforeUnload');
 
