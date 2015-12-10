@@ -5,7 +5,7 @@ import Loader  from 'react-loader';
 import {I18nMessage} from '../../utils/i18nMessage';
 import qbLogo from '../../assets/images/intuit_logo_white.png';
 import ReactCSSTransitionGroup from 'react/lib/ReactCSSTransitionGroup';
-import GlobalActions from '../global/GlobalActions';
+import GlobalActions from '../global/globalActions';
 import AppsList from './appsList';
 import TablesList from './tablesList';
 import ReportsList from './reportsList';
