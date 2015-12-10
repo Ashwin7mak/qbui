@@ -1,4 +1,6 @@
 import LogLevel from '../utils/logLevels';
+import uuid from 'uuid';
+
 //
 // Set application configuration settings per run-time environment.  The webpack configuration defines and sets
 // the variables __QB_PROD__, __QB_TEST__ and __QB_LOCAL__ at build time in the webpack.conf and karam.conf files.
@@ -18,6 +20,7 @@ let configuration = null;
 if (__QB_PROD__) {
     configuration = {
         env: 'PROD',
+        sid: uuid.v1(),
         api: {
             version: 'v1'
         },
@@ -37,6 +40,7 @@ if (__QB_PROD__) {
 if (__QB_TEST__) {
     configuration = {
         env: 'TEST',
+        sid: uuid.v1(),
         api: {
             version: 'v1'
         },
@@ -56,6 +60,7 @@ if (__QB_TEST__) {
 if (__QB_LOCAL__) {
     configuration = {
         env: 'LOCAL',
+        sid: uuid.v1(),
         api: {
             version: 'v1'
         },
@@ -81,7 +86,7 @@ if (!configuration) {
 if (!__QB_PROD__) {
     /*eslint no-console:0 */
     // don't call the logger..you'll get into a race condition
-    console.log("Run time configuration: " + configuration.env);
+    console.log("Run time configuration: " + configuration.env + '; SID: ' + configuration.sid);
 }
 
 export default configuration;

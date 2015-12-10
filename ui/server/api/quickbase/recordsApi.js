@@ -101,7 +101,7 @@
         function executeRequest(req, opts, immediatelyResolve) {
             //  Generate tid for all requests..and log it
             requestHelper.setTidHeader(req);
-            log.logRequest(req, __filename);
+            log.info({req: req});
 
             var deferred = Promise.pending();
             if (immediatelyResolve) {

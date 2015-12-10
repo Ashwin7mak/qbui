@@ -7,6 +7,7 @@
  */
 import Configuration from '../config/app.config';
 import LogLevel from './logLevels';
+import LogService from '../services/logService';
 
 class Logger {
 
@@ -15,6 +16,8 @@ class Logger {
         this.logLevel = Configuration.logger.logLevel;
         this.logToConsole = Configuration.logger.logToConsole;
         this.logToServer = Configuration.logger.logToServer;
+
+        this.logService = new LogService();
     }
 
     debug(msg) {
@@ -41,7 +44,12 @@ class Logger {
         }
     }
 
-    //  todo: xhr to node server to log server message...
+    /**
+     * Log a message to the console and/or server
+     *
+     * @param logging level
+     * @param message to log
+     */
     logTheMessage(level, msg) {
         /*eslint no-console:0 */
         try {
@@ -50,20 +58,26 @@ class Logger {
             }
             if (this.logToServer === true) {
                 this.sendMessageToServer(level, msg);
-                // TODO: make xhr call to server to log on node
-                // TODO: include uuid on the request
             }
         } catch (e) {
             if (typeof console !== 'undefined' && typeof console.log !== 'undefined') {
-                console.log('An error occurred in the processing of a logging message. ERROR::' + e);
+                console.log('An error occurred in the processing of a logging message. MSG::' + msg + '; ERROR::' + e);
             }
         }
     }
 
-    // Log the message to the server
-    sendMessageToServer() {
-        //TODO: placeholder...
-        return null;
+    /**
+     * Log a message to the server.
+     *
+     * @param level - bunyan log level.  ie: info, warn, debug, error
+     * @param msg - the message to log on the server
+     */
+    sendMessageToServer(level, msg) {
+        let message = {
+            level: level.bunyanLevel,
+            msg: msg
+        };
+        this.logService.log(message);
     }
 }
 
