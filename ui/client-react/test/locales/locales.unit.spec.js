@@ -55,6 +55,13 @@ describe('Locales', () => {
         expect(Locale.getLocale()).toBe('de-de');
     });
 
+    it('test getMessage', () => {
+        Locale.changeLocale('en-us');
+        Locale.getI18nBundle();
+        const testMsg = Locale.getMessage("test.testMsg");
+        expect(testMsg).toBe('test');
+    });
+
     it('test invalid change locale', () => {
         let mockConfig = {
             locale: {

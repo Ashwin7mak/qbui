@@ -2,6 +2,9 @@ export default {
     locales: "en-us",
 
     messages: {
+        test: {
+            testMsg: "test"
+        },
         apps: {
             header: "Apps"
         },
@@ -22,9 +25,13 @@ export default {
         },
         nav: {
             home: "Home",
+            users: "Users",
+            favorites: "Favorites",
             reportsHeading: "Reports",
             tablesHeading: "Tables",
             appsHeading: "Apps",
+            searchAppsPlaceholder: "Search apps...",
+            searchReportsPlaceholder: "Search reports..."
         },
         grid: {
             no_data: "There is no data to display."

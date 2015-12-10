@@ -12,7 +12,7 @@ var Html = React.createClass({
         return (
             <html lang={this.props.lang}>
                 <head>
-                    <meta charSet="UTF-8" name="viewport" content="width=device-width; initial-scale=1.0; maximum-scale=1.0; user-scalable=no"/>
+                    <meta charSet="UTF-8" name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
                         <title>{this.props.title}</title>
 
                         <link rel="icon" type="image/png" href={this.props.hostBase + this.props.favicon} />

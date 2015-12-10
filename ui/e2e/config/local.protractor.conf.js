@@ -1,5 +1,5 @@
 // Protractor configuration
-// https://github.com/angular/protractor/blob/master/referenceConf.js
+// https://github.com/angular/protractor/blob/master/docs/referenceConf.js
 
 (function() {
     'use strict';
@@ -53,6 +53,9 @@
             browser.ignoreSynchronization = true;
             // Maximizes the browser window (known bug with Chrome)
             browser.driver.manage().window().maximize();
+            // Add jasmine spec reporter
+            var SpecReporter = require('jasmine-spec-reporter');
+            jasmine.getEnv().addReporter(new SpecReporter({displayStacktrace: 'all'}));
         }
     };
 }());

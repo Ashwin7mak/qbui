@@ -11,6 +11,7 @@
     var RequestSessionTicketPage = function() {
         // Element locators
         this.ticketResponseBodyEl = element(by.tagName('body'));
+        this.stringValueEl = element(by.tagName('stringValue'));
         /*
          * Loads the page in the browser to generate a session ticket
          * Use the service method in e2eBase to get the proper endpoint
