@@ -32,7 +32,7 @@ var TopNav = React.createClass({
 
     addNew: function() {
         let flux = this.getFlux();
-        flux.actions.showTrouser();
+        flux.actions.showTrowser();
     },
 
     searchChanged: function(ev) {

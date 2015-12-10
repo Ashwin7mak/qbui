@@ -39,7 +39,7 @@ let LeftNav = React.createClass({
 
             <div className={"leftNav " + (this.props.open ? "open " : "closed ") + (this.props.appsListOpen ? "appsListOpen" : "")}>
                 {this.createBranding()}
-                {/*
+
                 <ReactCSSTransitionGroup transitionName="leftNavList" component="div" className={"transitionGroup"} transitionEnterTimeout={300} transitionLeaveTimeout={300}>
                     {!this.props.selectedAppId || this.props.appsListOpen ?
                         <AppsList key={"apps"} {...this.props} toggleApps={this.props.onToggleAppsList}  /> :
@@ -49,7 +49,7 @@ let LeftNav = React.createClass({
 
 
                 {this.props.globalActions && <GlobalActions actions={this.props.globalActions} onSelect={this.props.onSelect}/>}
-                 */}
+
                 <ReportsList open={this.props.open} onSelect={this.props.onSelect} reportsOpen={this.props.showReports} onBack={this.props.onHideReports} reportsData={this.props.reportsData} />
 
             </div>

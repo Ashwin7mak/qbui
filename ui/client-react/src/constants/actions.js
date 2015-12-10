@@ -1,7 +1,7 @@
 
 export const TOGGLE_LEFT_NAV = 'TOGGLE_LEFT_NAV';
-export const SHOW_TROUSER = 'SHOW_TROUSER';
-export const HIDE_TROUSER = 'HIDE_TROUSER';
+export const SHOW_TROWSER = 'SHOW_TROWSER';
+export const HIDE_TROWSER = 'HIDE_TROWSER';
 export const CHANGE_LOCALE = 'CHANGE_LOCALE';
 export const TOGGLE_APPS_LIST = 'TOGGLE_APPS_LIST';
 export const SHOW_REPORTS = 'SHOW_REPORTS';

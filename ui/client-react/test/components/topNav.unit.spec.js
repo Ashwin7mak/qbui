@@ -30,7 +30,7 @@ describe('TopNav functions', () => {
     let flux = {
         actions:{
             toggleLeftNav: function() {return;},
-            showTrouser: function() {return;},
+            showTrowser: function() {return;},
             changeLocale: function(locale) {return;},
             searchFor: function(text) {return;}
         }
@@ -41,7 +41,7 @@ describe('TopNav functions', () => {
         TopNav.__Rewire__('CurrentDate', CurrentDateMock);
         component = TestUtils.renderIntoDocument(<TopNav flux={flux}/>);
         spyOn(flux.actions, 'toggleLeftNav');
-        spyOn(flux.actions, 'showTrouser');
+        spyOn(flux.actions, 'showTrowser');
         spyOn(flux.actions, 'changeLocale');
         spyOn(flux.actions, 'searchFor');
     });
@@ -80,11 +80,11 @@ describe('TopNav functions', () => {
         expect(flux.actions.toggleLeftNav).toHaveBeenCalled();
     });
 
-    it('test shows trouser on addNew button click', () => {
+    it('test shows trowser on addNew button click', () => {
         let addNewButton = TestUtils.scryRenderedDOMComponentsWithClass(component, "addNewButton");
         expect(addNewButton.length).toEqual(1);
         TestUtils.Simulate.click(addNewButton[0]);
-        expect(flux.actions.showTrouser).toHaveBeenCalled();
+        expect(flux.actions.showTrowser).toHaveBeenCalled();
     });
 
     it('test changes locale on selecting menu item', () => {

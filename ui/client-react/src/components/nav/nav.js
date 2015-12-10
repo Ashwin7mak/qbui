@@ -4,7 +4,7 @@ import ReactCSSTransitionGroup from 'react/lib/ReactCSSTransitionGroup';
 import * as breakpoints from '../../constants/breakpoints';
 import './nav.scss';
 import Button from 'react-bootstrap/lib/Button';
-import Trouser from '../trouser/trouser';
+import Trowser from '../trowser/trowser';
 
 import Fluxxor from 'fluxxor';
 
@@ -45,9 +45,9 @@ var Nav = React.createClass({
             {msg:'globalActions.logout', link:'/signout', icon:'lock'}
         ];
     },
-    hideTrouserExample() {
+    hideTrowserExample() {
         let flux = this.getFlux();
-        flux.actions.hideTrouser();
+        flux.actions.hideTrowser();
     },
     onSelectTableReports(tableId) {
         const flux = this.getFlux();
@@ -71,10 +71,10 @@ var Nav = React.createClass({
 
         return (<div className={classes}>
 
-            <Trouser visible={this.state.nav.trouserOpen} onHide={this.hideTrouserExample}>
-                <Button bsStyle="success" onClick={this.hideTrouserExample}
+            <Trowser visible={this.state.nav.trowserOpen} onHide={this.hideTrowserExample}>
+                <Button bsStyle="success" onClick={this.hideTrowserExample}
                         style={{position:"absolute", bottom:"10px", right:"10px"}}>Done</Button>
-            </Trouser>
+            </Trowser>
 
             <LeftNav
                 open={this.state.nav.leftNavOpen}
@@ -91,7 +91,7 @@ var Nav = React.createClass({
                 flux={flux} />
 
             <div className="main">
-                <TopNav title="QuickBase"  globalActions={this.getGlobalActions()} onNavClick={this.toggleNav} onAddClicked={this.showTrouser} flux={flux} />
+                <TopNav title="QuickBase"  globalActions={this.getGlobalActions()} onNavClick={this.toggleNav} onAddClicked={this.showTrowser} flux={flux} />
                 {this.props.children && <ReactCSSTransitionGroup className="mainContent"
                                          transitionName="main-transition"
                                          transitionAppear={true}
