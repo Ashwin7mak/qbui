@@ -2,7 +2,7 @@ import React from 'react';
 import ReactIntl from 'react-intl';
 import {I18nMessage, I18nDate} from '../../utils/i18nMessage';
 import Locale from '../../locales/locales';
-import GlobalActions from '../global/GlobalActions';
+import GlobalActions from '../global/globalActions';
 import Fluxxor from 'fluxxor';
 import _ from 'lodash';
 import Hicon from '../harmonyIcon/harmonyIcon';
