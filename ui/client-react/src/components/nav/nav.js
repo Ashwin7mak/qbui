@@ -59,6 +59,10 @@ var Nav = React.createClass({
         const flux = this.getFlux();
         flux.actions.hideReports();
     },
+    toggleAppsList: function() {
+        const flux = this.getFlux;
+        flux.actions.toggleAppsList();
+    },
     renderLarge() {
 
         const flux = this.getFlux();
@@ -81,6 +85,7 @@ var Nav = React.createClass({
                 reportsData={this.state.reportsData}
                 selectedReportId={this.state.reportData.rptId}
                 showReports={this.state.nav.showReports}
+                onToggleAppsList={this.toggleAppsList}
                 onSelectReports={this.onSelectTableReports}
                 onHideReports={this.onHideTableReports}
                 flux={flux} />
@@ -124,6 +129,7 @@ var Nav = React.createClass({
                 reportsData={this.state.reportsData}
                 selectedReportId={this.state.reportData.rptId}
                 showReports={this.state.nav.showReports}
+                onToggleAppsList={this.toggleAppsList}
                 onSelectReports={this.onSelectTableReports}
                 onHideReports={this.onHideTableReports}
                 onSelect={onSelectSmall}

@@ -9,19 +9,11 @@ import GlobalActions from '../global/GlobalActions';
 import AppsList from './appsList';
 import TablesList from './tablesList';
 import ReportsList from './reportsList';
-import Fluxxor from 'fluxxor';
 import Hicon from '../harmonyIcon/harmonyIcon';
 
 import './leftNav.scss';
 
-//let FluxMixin = Fluxxor.FluxMixin(React);
-
 let LeftNav = React.createClass({
-
-    toggleAppsList: function() {
-        let flux = this.props.flux;
-        flux.actions.toggleAppsList();
-    },
 
     createBranding() {
         let app = _.findWhere(this.props.apps, {id: this.props.selectedAppId});
@@ -29,7 +21,7 @@ let LeftNav = React.createClass({
             <div className="branding">
                 <img src={qbLogo} />
                 {this.props.selectedAppId &&
-                    <div className="appsToggle" onClick={this.toggleAppsList}>{app ? app.name : ''}&nbsp;
+                    <div className="appsToggle" onClick={this.props.onToggleAppsList}>{app ? app.name : ''}&nbsp;
                         <Hicon icon="chevron-down"/></div>
                 }
             </div>
@@ -47,15 +39,17 @@ let LeftNav = React.createClass({
 
             <div className={"leftNav " + (this.props.open ? "open " : "closed ") + (this.props.appsListOpen ? "appsListOpen" : "")}>
                 {this.createBranding()}
-
+                {/*
                 <ReactCSSTransitionGroup transitionName="leftNavList" component="div" className={"transitionGroup"} transitionEnterTimeout={300} transitionLeaveTimeout={300}>
                     {!this.props.selectedAppId || this.props.appsListOpen ?
-                        <AppsList key={"apps"} {...this.props} toggleApps={this.toggleAppsList}  /> :
+                        <AppsList key={"apps"} {...this.props} toggleApps={this.props.onToggleAppsList}  /> :
                         <TablesList key={"tables"} {...this.props} showReports={(id)=>{this.props.onSelectReports(id);} } getAppTables={this.getAppTables}/> }
 
                 </ReactCSSTransitionGroup>
-                {this.props.globalActions && <GlobalActions actions={this.props.globalActions} onSelect={this.props.onSelect}/>}
 
+
+                {this.props.globalActions && <GlobalActions actions={this.props.globalActions} onSelect={this.props.onSelect}/>}
+                 */}
                 <ReportsList open={this.props.open} onSelect={this.props.onSelect} reportsOpen={this.props.showReports} onBack={this.props.onHideReports} reportsData={this.props.reportsData} />
 
             </div>
