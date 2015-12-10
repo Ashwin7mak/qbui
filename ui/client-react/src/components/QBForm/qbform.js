@@ -30,7 +30,7 @@ class QBForm extends React.Component {
 
     createCheckBox(curElement){
         return (
-            <input type="checkbox" className="fieldCheckBox" disabled={this.state.readonly} checked={curElement.value}></input>
+            <input type="checkbox" className="fieldValue" disabled={this.state.readonly} checked={curElement.value}></input>
         );
     }
 
@@ -43,8 +43,8 @@ class QBForm extends React.Component {
     createField(curElement){
         var isCheckbox = curElement.type === "checkbox";
         return (
-            <div id={curElement.id} className="field">
-                <span className={isCheckbox ? "" : "fieldLabel"}>{curElement.name}</span>
+            <div key={curElement.id} className="field">
+                <span className={"fieldLabel"}>{curElement.name}</span>
                 {isCheckbox ? this.createCheckBox(curElement) : this.createSpan(curElement)}
             </div>
         );
