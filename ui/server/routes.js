@@ -42,6 +42,9 @@
                     }
 
                     if (typeof fn === 'function') {
+                        //  generate a new Transaction Id(TID) and add to the request header.
+                        requestHelper.setTidHeader(req);
+
                         //
                         //  for readability in the outputted log message, convert all double quotes to single quotes.
                         //
@@ -95,7 +98,7 @@
             // ...route terminates...logging a client side message only
         });
 
-        //  For all api requests:
+        //  For all requests:
         //     -- generate a new Transaction Id(TID) and add to the request header.
         //     -- log the request route.
         //     -- continue matching subsequent routes
