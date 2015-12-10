@@ -22,7 +22,7 @@ describe('HotDevServer Unit Test', function() {
     };
 
     beforeEach(function() {
-        stubLog = sinon.stub(log, 'logRequest').returns(true);
+        stubLog = sinon.stub(log, 'info').returns(true);
         hotServerMockStub = sinon.stub(HotServerMock.prototype, 'listen').returns(true);
         webpackDevServerStub = sinon.stub(WebpackDevServer.prototype, 'listen').returns(true);
     });

@@ -1,6 +1,5 @@
 //
 import cookie from 'react-cookie';
-import uuid from 'uuid';
 import constants from './constants';
 import axios from 'axios';
 import Configuration from '../config/app.config';
@@ -14,12 +13,18 @@ class BaseService {
         this.setResponseInterceptor();
     }
 
+    /**
+     * Get the cookie in string format.
+     *
+     * @param cookieName
+     * @returns {*} - cookie
+     */
     getCookie(cookieName) {
         return cookie.load(cookieName);
     }
 
     /**
-     * Http get request for the given url
+     * Http get request
      *
      * @param url - request url.  Can be relative or set to explicit domain
      * @param conf - optional http header configuration
@@ -31,11 +36,24 @@ class BaseService {
     }
 
     /**
+     * Http post request
+     *
+     * @param url - request url.  Can be relative or set to explicit domain
+     * @param data - optional data properties
+     * @param conf - optional http header configuration
+     * @returns {*} - promise
+     */
+    post(url, data, conf) {
+        let config = conf || {};
+        return axios.post(this.baseUrl + url, data, config);
+    }
+
+    /**
      * Axiom interceptor for all http requests -- add a session tracking id and session ticket
      */
     setRequestInterceptor() {
         axios.interceptors.request.use(function(config) {
-            config.headers[constants.HEADER.SESSION] = uuid.v1();
+            config.headers[constants.HEADER.SESSION_ID] = Configuration.sid;
             let ticket = this.getCookie(constants.COOKIE.TICKET);
             if (ticket) {
                 config.headers[constants.HEADER.TICKET] = ticket;
@@ -55,7 +73,6 @@ class BaseService {
             },
             function fail(error) {
                 switch (error.status) {
-                    //TODO: not sure if this is okay to do or not...
                 case 400:
                     window.location.href = '/pageNotFound';
                     break;
@@ -76,8 +93,6 @@ class BaseService {
             }
         );
     }
-
-
 
 }
 
