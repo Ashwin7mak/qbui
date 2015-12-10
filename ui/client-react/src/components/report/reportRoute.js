@@ -6,7 +6,7 @@ import ReportStage from './dataTable/stage';
 import Logger from '../../utils/logger';
 let logger = new Logger();
 
-import ReportContent from './dataTable/content';
+import ReportToolsAndContent from './reportToolsAndContent';
 import Fluxxor from 'fluxxor';
 import './report.scss';
 
@@ -45,7 +45,7 @@ var ReportRoute = React.createClass({
                 <Stage stageContent="this is the stage content text" >
                     <ReportStage reportName={this.props.reportData && this.props.reportData.data ? this.props.reportData.data.name : ""}/>
                 </Stage>
-                <ReportContent reportData={this.props.reportData} />
+                <ReportToolsAndContent reportData={this.props.reportData} />
                 </div>);
     }
 });

@@ -1,3 +1,5 @@
+@import '../../assets/css/qbVariables';
+
 .reportContainer {
   display: flex;
   flex-direction: column;
@@ -5,15 +7,46 @@
   .layout-stage {
     flex-shrink:0;
   }
+  margin-top:10px;
+  margin-left:10px;
+  margin-right:10px;
 
-  .loadedContent {
-    flex:1;
-    overflow-y:auto;
-    margin-top:10px;
-    margin-left:10px;
-    margin-right:10px;
+  .reportToolsAndContentContainer {
+
+    .reportToolbar {
+      display: flex;
+      flex-direction: row;
+      flex:1;
+      border: solid 1px $toolBar-borderColor;
+      background-color: $toolBar-backgroundColor;
+      padding :  .5rem 1rem .5rem 1rem;
+      align-items: center;
+
+      .recordSearchBox {
+        padding: .8rem;
+        width: 25em;
+      }
+
+      .filterResultsButton {
+        //margin-top: .5rem;
+        margin-left: 1.5rem;
+      }
+      .recordsCount {
+       // margin-top: .5rem;
+        margin-left: 1.5rem;
+      }
+    }
+
+    .loadedContent {
+      flex:1;
+      overflow-y:auto;
+    }
+
   }
+
+
 }
+
 
 @media (max-width: 1150px) {
   .layout-stage {
