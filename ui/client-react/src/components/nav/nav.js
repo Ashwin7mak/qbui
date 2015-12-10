@@ -59,8 +59,8 @@ var Nav = React.createClass({
         const flux = this.getFlux();
         flux.actions.hideReports();
     },
-    toggleAppsList: function() {
-        const flux = this.getFlux;
+    toggleAppsList() {
+        const flux = this.getFlux();
         flux.actions.toggleAppsList();
     },
     renderLarge() {
