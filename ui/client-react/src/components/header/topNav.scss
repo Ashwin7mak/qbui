@@ -82,8 +82,8 @@ $top-nav-hover-bg: #0097CD;
 
 /* hide text not icons */
 
-.medium-breakpoint .topNav .globalActions span:not(.glyphicon),
-.small-breakpoint .topNav .globalActions span:not(.glyphicon)
+.medium-breakpoint .topNav .globalActions span:not(.hi),
+.small-breakpoint .topNav .globalActions span:not(.hi)
 {
   display:none;
 }
