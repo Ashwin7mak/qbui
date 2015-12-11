@@ -1,14 +1,19 @@
 import React from 'react';
 import Fluxxor from 'fluxxor';
-import './globalActions.scss';
 import {Link} from 'react-router';
 import {Glyphicon} from 'react-bootstrap';
 import Hicon from '../harmonyIcon/harmonyIcon';
-
 import {I18nMessage} from '../../utils/i18nMessage';
 
-let GlobalAction = React.createClass({
+import './globalActions.scss';
 
+let GlobalAction = React.createClass({
+    propTypes: {
+        action: React.PropTypes.shape({
+            icon: React.PropTypes.string.isRequired,
+            msg: React.PropTypes.string.isRequired
+        })
+    },
     render: function() {
         return (
             <li className={"link globalAction"}>
@@ -20,6 +25,15 @@ let GlobalAction = React.createClass({
 });
 
 let GlobalActions = React.createClass({
+
+    propTypes: {
+        linkClass: React.PropTypes.string,
+        onSelect: React.PropTypes.func,
+        actions: React.PropTypes.arrayOf(React.PropTypes.shape({
+            icon: React.PropTypes.string.isRequired,
+            msg: React.PropTypes.string.isRequired
+        }))
+    },
 
     render: function() {
 
