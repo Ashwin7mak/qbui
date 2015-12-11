@@ -6,6 +6,9 @@ let FluxMixin = Fluxxor.FluxMixin(React);
 import Logger from '../../utils/logger';
 let logger = new Logger();
 
+/**
+ * placeholder for app dashboard route
+ */
 let AppHomePageRoute = React.createClass({
     mixins: [FluxMixin],
 

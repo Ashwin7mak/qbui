@@ -41,20 +41,6 @@ describe('Validate Logger', function() {
             done();
         });
 
-        it('validate a new logger is created if one already exists and initialize is called', function(done) {
-            var spy = sinon.spy(bunyan, 'createLogger');
-
-            var logConfig = {};
-            var newInstanceLogger = initLoggerWithConfig(logConfig);
-
-            should.exist(newInstanceLogger);
-            assert.notDeepEqual(newInstanceLogger, logger);
-            assert(spy.called);
-
-            spy.restore();
-            done();
-        });
-
     });
 
     describe('validate the default configuration of the logger', function() {
@@ -183,99 +169,189 @@ describe('Validate Logger', function() {
 
     });
 
-    describe('validate the logRequest add-on function', function() {
+    describe('validate the log message serializers are called', function() {
 
-        it('validate a log request message at info level without calling function', function(done) {
+        it('validate a log request serializer is defined and will not error out if no request information is supplied', function(done) {
             //  clear out any logger configuration
             var logConfig = {};
             var logger = initLoggerWithConfig(logConfig);
 
-            var stub = sinon.stub(logger, 'info');
+            var req = generateRequestWithForward();
+            var reqSerializer = logger.serializers.req({});
 
-            var req = generateRequest();
-            logger.logRequest(req);
+            assert.equal(undefined, reqSerializer.method);
+            assert.equal(undefined, reqSerializer.url);
+            assert.equal(undefined, reqSerializer.host);
+            assert.equal(undefined, reqSerializer.tid);
+            assert.equal(undefined, reqSerializer.sid);
+            assert.equal(undefined, reqSerializer.browser);
+            assert.equal(undefined, reqSerializer.platform);
+            assert.equal(undefined, reqSerializer.ip);
+            assert.equal(undefined, reqSerializer.referer);
+            assert.deepEqual({}, reqSerializer.body);
 
-            assert(stub.called);
-            assert(stub.calledWith({Request: sinon.match.any}));
-
-            stub.restore();
             done();
         });
 
-        it('validate a log request message at info level', function(done) {
+        it('validate a log request serializer is defined with forwarded-for', function(done) {
+            //  clear out any logger configuration
             var logConfig = {};
             var logger = initLoggerWithConfig(logConfig);
 
-            var stub = sinon.stub(logger, 'info');
+            var req = generateRequestWithForward();
+            var reqSerializer = logger.serializers.req(req);
 
-            var req = generateRequest();
+            assert.equal(req.method, reqSerializer.method);
+            assert.equal(req.url, reqSerializer.url);
+            assert.equal(req.headers.host, reqSerializer.host);
+            assert.equal(req.headers.tid, reqSerializer.tid);
+            assert.equal(req.headers.sid, reqSerializer.sid);
+            assert.equal(req.useragent.source, reqSerializer.browser);
+            assert.equal(req.useragent.platform, reqSerializer.platform);
+            assert.equal(req.headers['x-forwarded-for'], reqSerializer.ip);
+            assert.equal(req.headers.referer, reqSerializer.referer);
+            assert.deepEqual(req.body, reqSerializer.body);
 
-            logger.logRequest(req, '/server/callFunction');
-            assert(stub.calledWith({Request: sinon.match.any, CallFunc: '/server/callFunction'}));
+            done();
+        });
 
-            logger.logRequest(req, '/client/callFunction');
-            assert(stub.calledWith({Request: sinon.match.any, CallFunc: '/client/callFunction'}));
+        it('validate a log request serializer is defined with connection', function(done) {
+            //  clear out any logger configuration
+            var logConfig = {};
+            var logger = initLoggerWithConfig(logConfig);
 
-            logger.logRequest(req, '/public/callFunction');
-            assert(stub.calledWith({Request: sinon.match.any, CallFunc: '/public/callFunction'}));
+            var req = generateRequestWithConnection();
+            var reqSerializer = logger.serializers.req(req);
 
-            logger.logRequest(req, 'callFunction');
-            assert(stub.calledWith({Request: sinon.match.any, CallFunc: ''}));
+            assert.equal(req.method, reqSerializer.method);
+            assert.equal(req.url, reqSerializer.url);
+            assert.equal(req.headers.host, reqSerializer.host);
+            assert.equal(req.headers.tid, reqSerializer.tid);
+            assert.equal(req.headers.sid, reqSerializer.sid);
+            assert.equal(req.useragent.source, reqSerializer.browser);
+            assert.equal(req.useragent.platform, reqSerializer.platform);
+            assert.equal(req.connection.remoteAddress, reqSerializer.ip);
+            assert.equal(req.headers.referer, reqSerializer.referer);
+            assert.deepEqual(req.body, reqSerializer.body);
 
-            stub.restore();
+            done();
+        });
+
+        it('validate a log request serializer is defined with socket', function(done) {
+            //  clear out any logger configuration
+            var logConfig = {};
+            var logger = initLoggerWithConfig(logConfig);
+
+            var req = generateRequestWithSocket();
+            var reqSerializer = logger.serializers.req(req);
+
+            assert.equal(req.method, reqSerializer.method);
+            assert.equal(req.url, reqSerializer.url);
+            assert.equal(req.headers.host, reqSerializer.host);
+            assert.equal(req.headers.tid, reqSerializer.tid);
+            assert.equal(req.headers.sid, reqSerializer.sid);
+            assert.equal(req.useragent.source, reqSerializer.browser);
+            assert.equal(req.useragent.platform, reqSerializer.platform);
+            assert.equal(req.socket.remoteAddress, reqSerializer.ip);
+            assert.equal(req.headers.referer, reqSerializer.referer);
+            assert.deepEqual(req.body, reqSerializer.body);
+
+            done();
+        });
+
+        it('validate a log request serializer is defined with socket connection', function(done) {
+            //  clear out any logger configuration
+            var logConfig = {};
+            var logger = initLoggerWithConfig(logConfig);
+
+            var req = generateRequestWithSocketConnection();
+            var reqSerializer = logger.serializers.req(req);
+
+            assert.equal(req.method, reqSerializer.method);
+            assert.equal(req.url, reqSerializer.url);
+            assert.equal(req.headers.host, reqSerializer.host);
+            assert.equal(req.headers.tid, reqSerializer.tid);
+            assert.equal(req.headers.sid, reqSerializer.sid);
+            assert.equal(req.useragent.source, reqSerializer.browser);
+            assert.equal(req.useragent.platform, reqSerializer.platform);
+            assert.equal(req.connection.socket.remoteAddress, reqSerializer.ip);
+            assert.equal(req.headers.referer, reqSerializer.referer);
+            assert.deepEqual(req.body, reqSerializer.body);
+
+            done();
+        });
+
+        it('validate a log response serializer at info level', function(done) {
+            var logConfig = {};
+            var logger = initLoggerWithConfig(logConfig);
+
+            var res = generateResponse();
+            var resSerializer = logger.serializers.res(res);
+
+            assert.equal(res.statusCode, resSerializer.statusCode);
+            assert.equal(res.statusMessage, resSerializer.statusMessage);
+
             done();
         });
 
     });
 
-    describe('validate the logResponse add-on function', function() {
+    function generateResponse() {
+        var res = {
+            statusCode: 200,
+            statusMessage: 'message'
+        };
+        return res;
+    }
 
-        it('validate a log response message at info level', function(done) {
-            var logConfig = {};
-            var logger = initLoggerWithConfig(logConfig);
-
-            should.exist(logger);
-            var stub = sinon.stub(logger, 'info');
-
-            var req = {
-                path   : 'some/path',
-                url    : 'somedomain.com/some/path',
-                method : 'GET',
-                headers: {}
-            };
-            var res = {
-                status: 200
-            };
-            logger.logResponse(req, res);
-
-            assert(stub.calledWith({Request: sinon.match.any, Response: sinon.match.any}));
-
-            logger.logResponse(req, res, '/server/callFunction');
-            assert(stub.calledWith({Request: sinon.match.any, Response: sinon.match.any, CallFunc: '/server/callFunction'}));
-
-            logger.logResponse(null, null);
-            assert(stub.calledWith({Request: {}, Response: {}}));
-
-            stub.restore();
-            done();
-        });
-
-    });
-
-    function generateRequest() {
+    function baseRequest() {
         var req = {
             path     : 'some/path',
             url      : 'somedomain.com/some/path?param1=value1',
             method   : 'GET',
             headers  : {
+                host: 'testhost.test.com',
                 tid: 'tid',
-                cid: 'cid'
+                sid: 'sid',
+                referer: 'refer'
             },
             useragent: {
-                browser: 'chrome',
-                version: '11.0.2',
-                os     : 'OS/X'
+                source: 'chrome',
+                platform: 'OS/X 11.0.2'
+            },
+            body: {fld1:'fld1', fld2:'fld2'}
+        };
+        return req;
+    }
+
+    function generateRequestWithForward() {
+        var req = baseRequest();
+        req.headers['x-forwarded-for'] = '1.2.3.4';
+        return req;
+    }
+
+    function generateRequestWithConnection() {
+        var req = baseRequest();
+        req.connection = {
+            remoteAddress: '1.2.3.4'
+        };
+        return req;
+    }
+
+    function generateRequestWithSocketConnection() {
+        var req = baseRequest();
+        req.connection = {
+            socket: {
+                remoteAddress: '1.2.3.4'
             }
+        };
+        return req;
+    }
+
+    function generateRequestWithSocket() {
+        var req = baseRequest();
+        req.socket = {
+            remoteAddress: '1.2.3.4'
         };
         return req;
     }

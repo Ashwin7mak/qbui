@@ -29,7 +29,6 @@ import AppHomePageRoute from '../components/app/appHomePageRoute';
 import ReportRoute from '../components/report/reportRoute';
 import RecordRoute from '../components/record/recordRoute';
 import TableHomePageRoute from '../components/table/tableHomePageRoute';
-import DashboardRoute from '../components/dashboard/dashboardRoute';
 
 import FastClick from 'fastclick';
 
@@ -128,7 +127,6 @@ render((
             <Route path="table/:tblId" component={TableHomePageRoute} />
             <Route path="table/:tblId/report/:rptId" component={ReportRoute} />
             <Route path="table/:tblId/record/:recordId" component={RecordRoute} />
-            <Route path="table/:tblId/dashboardDemo/:rptId" component={DashboardRoute} />
         </Route>
 
     </Router>

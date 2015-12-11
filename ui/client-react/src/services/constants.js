@@ -6,15 +6,17 @@ export default {
 
     // REQUEST HEADERS
     HEADER: {
-        SESSION: 'sid',
+        SESSION_ID: 'sid',
+        TRANSACTION_ID: 'tid',
         TICKET: 'ticket'
     },
 
     // API REST ENDPOINTS
     APPS: 'apps',
     FIELD: 'fields',
-    TABLES: 'tables',
+    LOG: 'log',
     RECORDS: 'records',
     REPORTS: 'reports',
-    RESULTS: 'results'
+    RESULTS: 'results',
+    TABLES: 'tables'
 };

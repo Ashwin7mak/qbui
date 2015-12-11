@@ -5,11 +5,15 @@ var request = require('supertest');
 var log = require('../logger').getLogger();
 var errors = require('../components/errors');
 var routeGroups = require('../routes/routeGroups');
+var routeConstants = require('../routes/routeConstants');
 
 var express = require('express');
 var app = express();
 app.set('views', '../views');   // to avoid issue trying to find the error html pages..
 app.engine('html', require('ejs').renderFile);
+
+var bodyParser = require('body-parser');
+app.use(bodyParser.json());
 
 var mockConfig = {
     routeGroup: routeGroups.DEBUG,
@@ -26,11 +30,79 @@ describe('Express Routes', function() {
     var server;
     var spySetTid;
 
-    beforeEach(function() {
-        stubLog = sinon.stub(log, 'logRequest').returns(true);
+    it('Validate post log route', function(done) {
+
+        stubLog = sinon.stub(log, 'info').returns(true);
+
+        request(app).
+            post(routeConstants.LOG_CLIENT_MSG).
+            send({level:'debug', msg:'test'}).
+            expect(200, 'OK').
+            end(function(err, res) {
+                if (err) {
+                    stubLog.restore();
+                    return done(err);
+                }
+                stubLog.restore();
+                done();
+            });
     });
-    afterEach(function() {
-        stubLog.restore();
+
+    it('Validate get log route is not supported', function(done) {
+
+        request(app).
+            get(routeConstants.LOG_CLIENT_MSG).
+            expect(405).
+            end(function(err, res) {
+                if (err) {
+                    return done(err);
+                }
+                done();
+            });
+    });
+
+    it('Validate post log route with invalid body data', function(done) {
+
+        request(app).
+            post(routeConstants.LOG_CLIENT_MSG).
+            send({level:'debug'}).
+            expect(400).
+            end(function(err, res) {
+                if (err) {
+                    return done(err);
+                }
+                done();
+            });
+
+    });
+
+    it('Validate post log route with no body data', function(done) {
+
+        request(app).
+            post(routeConstants.LOG_CLIENT_MSG).
+            expect(400).
+            end(function(err, res) {
+                if (err) {
+                    return done(err);
+                }
+                done();
+            });
+
+    });
+
+    it('Validate post log route with invalid log level', function(done) {
+
+        request(app).
+            post(routeConstants.LOG_CLIENT_MSG).
+            send({level:'invalid', msg:'test'}).
+            expect(400).
+            end(function(err, res) {
+                if (err) {
+                    return done(err);
+                }
+                done();
+            });
+
     });
 
     it('Validate unauthorized route', function(done) {

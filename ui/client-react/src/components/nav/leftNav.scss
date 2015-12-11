@@ -1,32 +1,41 @@
 @import '../../assets/css/qbVariables';
+@import '../../assets/css/qbColorVariables';
 
-/* nav vars */
+/*left nav vars */
 $left-nav-padding: 15px;
 $left-nav-reports-bg: #486C8F;
 $left-nav-bg: #002b48;
 $left-nav-fg: #fff;
-$left-nav-link-fg: #bbd;
+$left-nav-link-fg: #cad8e9;
 $left-nav-heading-bg: #002b48;
 $left-nav-input-fg: #555;
-$left-nav-hover-bg: #0097CD;
 
-.leftMenu.open {
+$left-nav-heading-hover-fg: #bbd;
+$left-nav-heading-bg: #264a6d;
+$left-nav-heading-fg: #bfcfe3;
+
+.leftNav.open {
   overflow:hidden;
 }
 
-.xlarge-breakpoint .leftMenu.open {
+.leftNav a.leftNavLink {
+  width:100%;
+  cursor:pointer;
+}
+
+.xlarge-breakpoint .leftNav.open {
   width:400px;
 
 }
-.large-breakpoint .leftMenu.open {
+.large-breakpoint .leftNav.open {
   width:300px;
 
 }
-.medium-breakpoint .leftMenu.open {
+.medium-breakpoint .leftNav.open {
   width:200px;
 }
 
-.small-breakpoint .leftMenu.open {
+.small-breakpoint .leftNav.open {
   width:350px;
 
 }
@@ -39,7 +48,7 @@ body:not(.small-breakpoint) div.leftNavTooltip.show {
   display:block;
 }
 
-body:not(.small-breakpoint) .leftMenu.closed {
+body:not(.small-breakpoint) .leftNav.closed {
   width:40px;
   overflow-y:hidden;
   li a.heading {
@@ -51,10 +60,12 @@ body:not(.small-breakpoint) .leftMenu.closed {
   }
 }
 
-.leftMenu {
-  border-right: 1px solid #ccc;
+.leftNav {
+  border-right: 1px solid $nav-border;
   background-color: $left-nav-bg;
-  overflow-y:auto;
+  display:flex;
+  flex-direction:column;
+
   color: $left-nav-fg;
 
   position:relative;
@@ -65,13 +76,28 @@ body:not(.small-breakpoint) .leftMenu.closed {
   }
 
   .branding {
+    flex: 0 0 auto;
     padding:10px;
-    border-bottom: 1px solid rgba(255, 255, 255, 0.3);
-    .glyphicon-triangle-bottom {
+    border-bottom: $global-actions-border;
+    .hi-chevron-down {
       transition: transform 300ms ease-in;
     }
   }
+  .globalActions {
+    flex: 0 1 auto;
+    bottom:0;
 
+    .globalAction {
+      border-top: $global-actions-border;
+      a {
+        width:100%;
+      }
+    }
+  }
+  .transitionGroup {
+    flex: 1;
+    overflow-y:auto;
+  }
   .searchApps,.searchReports {
     padding:8px;
     input {
@@ -81,10 +107,7 @@ body:not(.small-breakpoint) .leftMenu.closed {
       height:25px;
     }
   }
-  .leftNavList {
-    position:absolute;
-    width:100%;
-  }
+
   ul {
     list-style: none;
     list-style-type: none;
@@ -96,13 +119,13 @@ body:not(.small-breakpoint) .leftMenu.closed {
     .heading {
       font-size: 12px;
       line-height: 30px;
-      background-color: #264a6d;
-      color: #BFCFE3;
+      background-color: $left-nav-heading-bg;
+      color: $left-nav-heading-fg;
       margin: 0;
       padding-left: 10px;
     }
     .heading:hover {
-      color:#fff;
+      color:$left-nav-heading-hover-fg;
     }
 
     li {
@@ -112,8 +135,9 @@ body:not(.small-breakpoint) .leftMenu.closed {
         text-decoration:none;
         line-height: 45px;
         padding-left: 10px;
-        color: #CAD8E9;
+        color: $left-nav-link-fg;
         display:inline-block;
+        cursor:pointer;
       }
       a.right {
         opacity:0;
@@ -126,9 +150,12 @@ body:not(.small-breakpoint) .leftMenu.closed {
       }
     }
     li.link:hover {
-      color: #fff;
-      background-color: $left-nav-hover-bg;
+      color: $nav-hover-fg;
+      background-color: $nav-hover-bg;
 
+      .hi {
+        color: $left-nav-link-fg;
+      }
       a.right {
         opacity:1;
         transition: all 0.2s ease-in-out;
@@ -147,11 +174,12 @@ body:not(.small-breakpoint) .leftMenu.closed {
 
 /* small (mobile) left nav behaves differently */
 
-.small-breakpoint .leftMenu {
+.small-breakpoint .leftNav {
   margin: 0;
   height: 100%;
+  width:0;
   z-index: 9999;
-  border-right: 1px solid #ccc;
+  border-right: 1px solid $nav-border;
   overflow-y: auto;
 }
 
@@ -159,8 +187,11 @@ body:not(.small-breakpoint) .leftMenu.closed {
   position: relative;
   left:-350px;
 
+  .topNav.mobile {
+    min-width:640px;
+  }
   .main {
-    position:absolute;
+    //position:absolute;
   }
   .mainContent {
     opacity: .1;
@@ -215,10 +246,10 @@ $travel-distance: 15;
   transition: all $transition-time ease-in;
 }
 
-.leftMenu.appsListOpen .branding .glyphicon-triangle-bottom {
+.leftNav.appsListOpen .branding .hi-chevron-down {
   transform: rotate(-180deg);
 }
-.leftMenu .reportsContainer {
+.leftNav .reportsContainer {
   flex-direction: column;
   display: flex;
   height:100%;
@@ -228,7 +259,7 @@ $travel-distance: 15;
   }
 }
 
-.leftMenu .reportsList {
+.leftNav .reportsList {
   opacity: 0.5;
   transform: translate3d(100%, 0, 0);
   transition: all 300ms cubic-bezier(0.175, 0.885, 0.32, 1.275);
@@ -242,7 +273,7 @@ $travel-distance: 15;
 }
 
 
-.leftMenu .reportsList.open {
+.leftNav .reportsList.open {
   overflow-x: hidden;
   overflow-y: auto;
   opacity: 1;

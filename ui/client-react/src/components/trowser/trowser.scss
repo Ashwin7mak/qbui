@@ -1,4 +1,4 @@
-.trouser  {
+.trowser  {
     position:absolute;
     z-index:9999;
     top:0;
@@ -6,7 +6,6 @@
     height:80%;
     background:#fdfdfd;
     color: #000;
-    border-bottom: 1px solid #ccc;
 
     max-height:0;
     overflow:hidden;
@@ -17,7 +16,8 @@
     padding:0 10px 0 10px;
 }
 
-.trouser.visible {
+.trowser.visible {
+    border-bottom: 1px solid #ccc;
 
     max-height:80%;
 }

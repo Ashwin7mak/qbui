@@ -181,4 +181,25 @@ describe('Validate RequestHelper unit tests', function() {
 
     });
 
+    describe('validate setting the TID on the header with an initialized req object', function() {
+        var tid = 'tid';
+        var method = 'post';
+
+        var req = {
+            headers: {
+                tid: tid
+            }
+        };
+        req.method = method;
+
+        it('Test the TID header field does not change', function(done) {
+            var newReq = requestHelper.setTidHeader(req);
+            assert.equal(req.headers.tid, tid);
+            assert.equal(newReq.headers.tid, tid);
+            assert.equal(newReq.method, method);
+            done();
+        });
+
+    });
+
 });

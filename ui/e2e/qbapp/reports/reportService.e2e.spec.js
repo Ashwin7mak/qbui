@@ -77,38 +77,40 @@
             // Now on the reportServicePage (shows the nav with a list of reports you can load)
             // Wait until the nav has loaded
             var reportServicePage = new ReportServicePage();
-            browser.wait(EC.visibilityOf(reportServicePage.appsListDivEl), 5000).then(function() {
+            reportServicePage.waitForElement(reportServicePage.appsListDivEl).then(function() {
                 // Select the app
                 reportServicePage.appLinksElList.get(0).click();
                 // Select the table
-                reportServicePage.tableLinksElList.get(3).click();
-                // Open the reports list for that table
-                reportServicePage.reportHamburgersElList.get(0).click();
+                reportServicePage.waitForElement(reportServicePage.tablesListDivEl).then(function() {
+                    reportServicePage.tableLinksElList.get(3).click();
+                    // Open the reports list for that table
+                    reportServicePage.reportHamburgersElList.get(0).click();
 
-                // Assert report name
-                reportServicePage.reportLinksElList.then(function(links) {
-                    links[0].getText().then(function(text) {
-                        expect(text).toEqual('Test Report');
+                    // Assert report name
+                    reportServicePage.reportLinksElList.then(function(links) {
+                        links[0].getText().then(function(text) {
+                            expect(text).toEqual('Test Report');
+                        });
                     });
-                });
 
-                // Select the report
-                reportServicePage.reportLinksElList.then(function(links) {
-                    links[0].click();
-                });
-
-                // Wait until the table has loaded
-                browser.wait(EC.visibilityOf(reportServicePage.loadedContentEl), 5000).then(function() {
-                    // Assert column headers
-                    reportServicePage.getReportColumnHeaders(reportServicePage).then(function(resultArray) {
-                        // UI is currently using upper case to display the field names in columns
-                        //var upperFieldNames = e2eBase.e2eUtils.stringArrayToUpperCase(fieldNames);
-                        expect(resultArray).toEqual(fieldNames);
+                    // Select the report
+                    reportServicePage.reportLinksElList.then(function(links) {
+                        links[0].click();
                     });
-                    // Check all record values equal the ones we added via the API
-                    reportServicePage.griddleRecordElList.getText().then(function(uiRecords) {
-                        e2eBase.recordService.assertRecordValues(uiRecords, recordList);
-                        done();
+
+                    // Wait until the table has loaded
+                    reportServicePage.waitForElement(reportServicePage.loadedContentEl).then(function() {
+                        // Assert column headers
+                        reportServicePage.getReportColumnHeaders(reportServicePage).then(function(resultArray) {
+                            // UI is currently using upper case to display the field names in columns
+                            //var upperFieldNames = e2eBase.e2eUtils.stringArrayToUpperCase(fieldNames);
+                            expect(resultArray).toEqual(fieldNames);
+                        });
+                        // Check all record values equal the ones we added via the API
+                        reportServicePage.griddleRecordElList.getText().then(function(uiRecords) {
+                            e2eBase.recordService.assertRecordValues(uiRecords, recordList);
+                            done();
+                        });
                     });
                 });
             });

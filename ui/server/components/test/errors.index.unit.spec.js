@@ -20,7 +20,7 @@ var stubLog, stubMockJson, spyRender;
 describe('Validate https response error functions', function() {
 
     beforeEach(function() {
-        stubLog = sinon.stub(log, 'logRequest').returns(true);
+        stubLog = sinon.stub(log, 'error').returns(true);
         stubMockJson = sinon.stub(mockRes, 'json').returns(true);
         spyRender = sinon.spy(mockRes, 'render');
     });

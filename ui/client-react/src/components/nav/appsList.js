@@ -1,14 +1,13 @@
 import React from 'react';
 
 import Locale from '../../locales/locales';
+import NavItem from './navItem';
 
 let AppsList = React.createClass({
 
     propTypes: {
         apps: React.PropTypes.array.isRequired,
         toggleApps: React.PropTypes.func.isRequired,
-        buildHeadingItem: React.PropTypes.func.isRequired,
-        buildItem: React.PropTypes.func.isRequired,
         open: React.PropTypes.bool.isRequired
     },
     getInitialState() {
@@ -24,7 +23,7 @@ let AppsList = React.createClass({
     appList() {
         return this.props.apps && this.props.apps.map((app) => {
             app.icon = 'star';
-            return this.searchMatches(app.name) && this.props.buildItem(app, this.props.toggleApps);
+            return this.searchMatches(app.name) && <NavItem key={app.id} item={app} onSelect={this.props.toggleApps} {...this.props} />;
         });
     },
     render() {
@@ -36,7 +35,7 @@ let AppsList = React.createClass({
                         <input type="text" placeholder={Locale.getMessage('nav.searchAppsPlaceholder')} value={this.state.searchText} onChange={this.onChangeSearch}/>
                     </div> : ""}
                 <ul>
-                    {this.props.apps && this.props.buildHeadingItem({key: 'nav.appsHeading'}, false)}
+                    {this.props.apps &&  <NavItem item={{msg: 'nav.appsHeading'}} isHeading={true} {...this.props} />}
                     {this.appList()}
                 </ul>
 

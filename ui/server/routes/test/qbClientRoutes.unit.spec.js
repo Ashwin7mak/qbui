@@ -27,7 +27,7 @@ describe('Express Client Routes', function() {
     var spySetTid;
 
     beforeEach(function() {
-        stubLog = sinon.stub(log, 'logRequest').returns(true);
+        stubLog = sinon.stub(log, 'info').returns(true);
     });
     afterEach(function() {
         stubLog.restore();
