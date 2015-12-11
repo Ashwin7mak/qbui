@@ -3,7 +3,8 @@ import * as actions from '../constants/actions';
 import Fluxxor from 'fluxxor';
 import Locale from '../locales/locales';
 import Logger from '../utils/logger';
-var logger = new Logger();
+
+let logger = new Logger();
 
 let NavStore = Fluxxor.createStore({
 
@@ -33,8 +34,6 @@ let NavStore = Fluxxor.createStore({
             actions.SEARCHING, this.onSearching,
             actions.CHANGE_LOCALE, this.onChangeLocale
         );
-
-
     },
 
     onChangeLocale: function() {
@@ -68,14 +67,23 @@ let NavStore = Fluxxor.createStore({
         this.state.searching = searching;
         this.emit('change');
     },
-    onToggleLeftNav: function(open) {
-        if (open === false || open === true) {
-            this.state.leftNavOpen = open;
+
+    /*
+     * toggle left nav open/closed
+     * @param show force shown/hidden
+     */
+    onToggleLeftNav: function(show) {
+        if (show === false || show === true) {
+            this.state.leftNavOpen = show;
         } else {
             this.state.leftNavOpen = !this.state.leftNavOpen;
         }
         this.emit('change');
     },
+    /*
+     * toggle apps list
+     * @param show force shown/hidden
+     */
     onToggleAppsList: function(show) {
         if (show === false || show === true) {
             this.state.appsListOpen = open;

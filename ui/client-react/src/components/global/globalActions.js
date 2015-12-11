@@ -7,12 +7,18 @@ import {I18nMessage} from '../../utils/i18nMessage';
 
 import './globalActions.scss';
 
+const actionPropType = React.PropTypes.shape({
+    icon: React.PropTypes.string.isRequired,
+    msg: React.PropTypes.string.isRequired,
+    link: React.PropTypes.string
+});
+
+/*
+ * a global action (ex. 'Help' with an icon and an associated link);
+ */
 let GlobalAction = React.createClass({
     propTypes: {
-        action: React.PropTypes.shape({
-            icon: React.PropTypes.string.isRequired,
-            msg: React.PropTypes.string.isRequired
-        })
+        action: actionPropType
     },
     render: function() {
         return (
@@ -24,19 +30,17 @@ let GlobalAction = React.createClass({
     }
 });
 
+/*
+ * a list of global actions (user, alerts, help, logout etc.)
+ */
 let GlobalActions = React.createClass({
 
     propTypes: {
         linkClass: React.PropTypes.string,
         onSelect: React.PropTypes.func,
-        actions: React.PropTypes.arrayOf(React.PropTypes.shape({
-            icon: React.PropTypes.string.isRequired,
-            msg: React.PropTypes.string.isRequired
-        }))
+        actions: React.PropTypes.arrayOf(actionPropType)
     },
-
     render: function() {
-
         return (
             <div className={"globalActions"}>
                 <ul className={"globalActionsList"}>

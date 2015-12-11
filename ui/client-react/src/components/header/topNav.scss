@@ -1,5 +1,7 @@
 @import '../../assets/css/qbVariables';
 
+$global-action-fg: #333;
+
 .searchPopover {
 
   .buttonContainer {
@@ -15,7 +17,7 @@
 .topNav .navGroup .harmonyButtons .btn:hover {
   background: $nav-hover-bg;
   span {
-    color: #fff;
+    color: $nav-hover-fg;
   }
 }
 .topNav .dropdown {
@@ -36,7 +38,7 @@
   a.dropdownToggle:hover {
     background: $nav-hover-bg;
     span {
-      color: #fff;
+      color: $nav-hover-fg;
     }
   }
 }
@@ -50,7 +52,7 @@
       display:inline-block;
       border-right: $global-actions-border;
       padding: 0 8px;
-      color: #333;
+      color: $global-action-fg;
     }
   }
 
@@ -66,9 +68,9 @@
   .globalAction:hover {
     background: $nav-hover-bg;
     a {
-      color: #fff;
+      color: $nav-hover-fg;
       .hi {
-        color: #fff;
+        color: $nav-hover-fg;
       }
     }
   }

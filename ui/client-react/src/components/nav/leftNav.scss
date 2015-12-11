@@ -1,14 +1,18 @@
 @import '../../assets/css/qbVariables';
 @import '../../assets/css/qbColorVariables';
-/* nav vars */
+
+/*left nav vars */
 $left-nav-padding: 15px;
 $left-nav-reports-bg: #486C8F;
 $left-nav-bg: #002b48;
 $left-nav-fg: #fff;
-$left-nav-link-fg: #bbd;
+$left-nav-link-fg: #cad8e9;
 $left-nav-heading-bg: #002b48;
 $left-nav-input-fg: #555;
 
+$left-nav-heading-hover-fg: #bbd;
+$left-nav-heading-bg: #264a6d;
+$left-nav-heading-fg: #bfcfe3;
 
 .leftNav.open {
   overflow:hidden;
@@ -57,7 +61,7 @@ body:not(.small-breakpoint) .leftNav.closed {
 }
 
 .leftNav {
-  border-right: 1px solid #ccc;
+  border-right: 1px solid $nav-border;
   background-color: $left-nav-bg;
   display:flex;
   flex-direction:column;
@@ -115,13 +119,13 @@ body:not(.small-breakpoint) .leftNav.closed {
     .heading {
       font-size: 12px;
       line-height: 30px;
-      background-color: #264a6d;
-      color: #BFCFE3;
+      background-color: $left-nav-heading-bg;
+      color: $left-nav-heading-fg;
       margin: 0;
       padding-left: 10px;
     }
     .heading:hover {
-      color:#fff;
+      color:$left-nav-heading-hover-fg;
     }
 
     li {
@@ -131,9 +135,8 @@ body:not(.small-breakpoint) .leftNav.closed {
         text-decoration:none;
         line-height: 45px;
         padding-left: 10px;
-        color: #CAD8E9;
+        color: $left-nav-link-fg;
         display:inline-block;
-        //width:100%;
         cursor:pointer;
       }
       a.right {
@@ -147,11 +150,11 @@ body:not(.small-breakpoint) .leftNav.closed {
       }
     }
     li.link:hover {
-      color: #fff;
+      color: $nav-hover-fg;
       background-color: $nav-hover-bg;
 
       .hi {
-        color: #CAD8E9;
+        color: $left-nav-link-fg;
       }
       a.right {
         opacity:1;
@@ -176,7 +179,7 @@ body:not(.small-breakpoint) .leftNav.closed {
   height: 100%;
   width:0;
   z-index: 9999;
-  border-right: 1px solid #ccc;
+  border-right: 1px solid $nav-border;
   overflow-y: auto;
 }
 
