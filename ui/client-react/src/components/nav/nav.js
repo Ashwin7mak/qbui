@@ -87,8 +87,7 @@ var Nav = React.createClass({
                 showReports={this.state.nav.showReports}
                 onToggleAppsList={this.toggleAppsList}
                 onSelectReports={this.onSelectTableReports}
-                onHideReports={this.onHideTableReports}
-                flux={flux} />
+                onHideReports={this.onHideTableReports}/>
 
             <div className="main">
                 <TopNav title="QuickBase"  globalActions={this.getGlobalActions()} onNavClick={this.toggleNav} onAddClicked={this.showTrowser} flux={flux} />
@@ -128,8 +127,7 @@ var Nav = React.createClass({
                 onSelectReports={this.onSelectTableReports}
                 onHideReports={this.onHideTableReports}
                 onSelect={onSelectSmall}
-                globalActions={this.getGlobalActions()}
-                flux={flux} />
+                globalActions={this.getGlobalActions()} />
 
             <div className="main">
                 <MobileTopNav title="QuickBase" searching={searching} searchBarOpen={searchBarOpen}  onNavClick={this.toggleNav} flux={flux} />

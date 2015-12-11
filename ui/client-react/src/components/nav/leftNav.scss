@@ -187,6 +187,9 @@ body:not(.small-breakpoint) .leftNav.closed {
   position: relative;
   left:-350px;
 
+  .topNav.mobile {
+    min-width:640px;
+  }
   .main {
     //position:absolute;
   }

@@ -50,7 +50,6 @@ $global-action-fg: #333;
     cursor:pointer;
     a {
       display:inline-block;
-      border-right: $global-actions-border;
       padding: 0 8px;
       color: $global-action-fg;
     }

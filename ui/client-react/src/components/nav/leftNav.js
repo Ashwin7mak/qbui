@@ -15,6 +15,23 @@ import './leftNav.scss';
 
 let LeftNav = React.createClass({
 
+    propTypes: {
+        open:React.PropTypes.bool.isRequired,
+        appsListOpen:React.PropTypes.bool.isRequired,
+        selectedAppId:React.PropTypes.string,
+        selectedTableId:React.PropTypes.string,
+        reportsData:React.PropTypes.object,
+        selectedReportId:React.PropTypes.string,
+        showReports:React.PropTypes.bool.isRequired,
+        onToggleAppsList:React.PropTypes.func,
+        onSelectReports:React.PropTypes.func,
+        onSelect:React.PropTypes.func,
+        globalActions:React.PropTypes.array
+    },
+
+    /**
+     * create a branding section (logo with an apps toggle if an app is selected)
+     */
     createBranding() {
         let app = _.findWhere(this.props.apps, {id: this.props.selectedAppId});
         return (this.props.open &&
@@ -22,7 +39,8 @@ let LeftNav = React.createClass({
                 <img src={qbLogo} />
                 {this.props.selectedAppId &&
                     <div className="appsToggle" onClick={this.props.onToggleAppsList}>{app ? app.name : ''}&nbsp;
-                        <Hicon icon="chevron-down"/></div>
+                        <Hicon icon="chevron-down"/>
+                    </div>
                 }
             </div>
         );
@@ -46,7 +64,6 @@ let LeftNav = React.createClass({
                         <TablesList key={"tables"} {...this.props} showReports={(id)=>{this.props.onSelectReports(id);} } getAppTables={this.getAppTables}/> }
 
                 </ReactCSSTransitionGroup>
-
 
                 {this.props.globalActions && <GlobalActions actions={this.props.globalActions} onSelect={this.props.onSelect}/>}
 
