@@ -1,6 +1,7 @@
 import React from 'react';
 import {Tooltip, OverlayTrigger, Glyphicon} from 'react-bootstrap';
 import Locale from '../../locales/locales';
+import NavItem from './navItem';
 
 let ReportsList = React.createClass({
 
@@ -8,7 +9,6 @@ let ReportsList = React.createClass({
         open: React.PropTypes.bool.isRequired,
         reportsOpen: React.PropTypes.bool.isRequired,
         onBack: React.PropTypes.func.isRequired,
-        buildItem: React.PropTypes.func.isRequired,
         reportsData: React.PropTypes.shape({
             list: React.PropTypes.array.isRequired
         })
@@ -24,9 +24,9 @@ let ReportsList = React.createClass({
     },
     reportList() {
         return this.props.reportsData.list && this.props.reportsData.list.map((report) => {
-            report.icon = 'list-alt';
+            report.icon = 'list';
 
-            return this.searchMatches(report.name) && this.props.buildItem(report, this.props.onSelect);
+            return this.searchMatches(report.name) && <NavItem key={report.id} item={report} onSelect={this.props.onSelect} {...this.props} />;
         });
     },
     render() {
@@ -41,14 +41,14 @@ let ReportsList = React.createClass({
                                 <input type="text" placeholder={Locale.getMessage('nav.searchReportsPlaceholder')} value={this.state.searchText} onChange={this.onChangeSearch}/>
                             </li>
 
-                            { this.props.buildHeading({key: 'nav.reportsHeading'}, this.props.reportsData.loading) }
+                            <NavItem item={{msg: 'nav.reportsHeading'}} loadingCheck={this.props.reportsData.loading} isHeading={true} {...this.props} />
                         </ul>
                         <ul className={"reportItems"}>
                             {this.reportList()}
                         </ul>
                     </div> :
                     <div className={"reportsContainer"}>
-                        <ul lassName={"reportsTop"}>
+                        <ul className={"reportsTop"}>
                             <li><a className="backLink" onClick={this.props.onBack}><Glyphicon glyph="chevron-left"/></a></li>
                         </ul>
                         <ul className={"reportItems"}>

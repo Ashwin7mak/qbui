@@ -15,7 +15,7 @@
         // Left Nav
         this.navMenuBodyEl = element(by.tagName('body'));
         this.navMenuShellEl = element(by.className('navShell'));
-        this.navMenuEl = element(by.className('leftMenu'));
+        this.navMenuEl = element(by.className('leftNav'));
         this.navStackedEl = element(by.className('nav-stacked'));
         this.navLinksElList = this.navStackedEl.all(by.className('leftNavLink'));
         this.appsHomeLinkEl = this.navLinksElList.first();
@@ -23,7 +23,7 @@
         this.appsListDivEl = element(by.className('appsList'));
         this.appLinksElList = this.appsListDivEl.all(by.className('leftNavLink'));
         this.tablesListDivEl = element(by.className('tablesList'));
-        this.tableLinksElList = this.tablesListDivEl.all(by.className('leftNavLink'));
+        this.tableLinksElList = this.tablesListDivEl.all(by.tagName('li'));
         this.reportHamburgersElList = this.tablesListDivEl.all(by.className('right'));
         this.reportsListDivEl = element(by.className('reportsList'));
         this.reportLinksElList = this.reportsListDivEl.all(by.className('leftNavLink'));

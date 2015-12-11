@@ -1,4 +1,6 @@
+@import '../../assets/css/qbVariables';
 
+$global-action-fg: #333;
 
 .searchPopover {
 
@@ -6,4 +8,81 @@
     display:flex;
     justify-content:center;
   }
+}
+
+.topNav .navGroup .harmonyButtons .btn {
+  background: $header-bg;
+  border:0;
+}
+.topNav .navGroup .harmonyButtons .btn:hover {
+  background: $nav-hover-bg;
+  span {
+    color: $nav-hover-fg;
+  }
+}
+.topNav .dropdown {
+  outline:none;
+}
+.topNav .dropdown-menu {
+  right:0;
+  left:auto;
+}
+.topNav .dropdown {
+
+  a.dropdownToggle {
+    display:inline-block;
+    cursor:pointer;
+    padding: 0 8px;
+    color: $icon-color;
+  }
+  a.dropdownToggle:hover {
+    background: $nav-hover-bg;
+    span {
+      color: $nav-hover-fg;
+    }
+  }
+}
+
+.topNav .globalActions {
+  display:inline-block;
+
+  .link {
+    cursor:pointer;
+    a {
+      display:inline-block;
+      padding: 0 8px;
+      color: $global-action-fg;
+    }
+  }
+
+  .globalActionsList {
+    margin:0;
+    padding:0;
+    vertical-align:middle;
+  }
+  .globalAction {
+    border:0;
+  }
+
+  .globalAction:hover {
+    background: $nav-hover-bg;
+    a {
+      color: $nav-hover-fg;
+      .hi {
+        color: $nav-hover-fg;
+      }
+    }
+  }
+
+  li {
+    display:inline-block;
+  }
+}
+
+/* hide text not icons */
+
+.medium-breakpoint .topNav .globalActions span:not(.hi),
+.small-breakpoint .topNav .globalActions span:not(.hi)
+{
+  display:none;
 }

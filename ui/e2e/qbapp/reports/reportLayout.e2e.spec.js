@@ -91,6 +91,15 @@
         });
 
         /**
+         * Before each test starts just make sure the table list div has loaded
+         */
+        beforeEach(function(done){
+            reportServicePage.waitForElement(reportServicePage.tablesListDivEl).then(function(){
+                done();
+            });
+        });
+
+        /**
         * Test method. Loads the first table containing 10 fields (10 columns). The table report (griddle) width should expand past the browser size
         * to give all columns enough space to show their data.
         */
@@ -112,6 +121,7 @@
                     //When all the dimensions have been fetched, assert the values match expectations
                     promise.all(fetchRecordPromises).then(function(dimensions) {
                         expect(Number(dimensions[0])).toBeGreaterThan(Number(dimensions[1]));
+                        reportServicePage.reportsBackLinkEl.click();
                         done();
                     });
                 });
@@ -140,6 +150,7 @@
                     //When all the dimensions have been fetched, assert the values match expectations
                     promise.all(fetchRecordPromises).then(function(dimensions) {
                         expect(Number(dimensions[0])).not.toBeGreaterThan(Number(dimensions[1]));
+                        reportServicePage.reportsBackLinkEl.click();
                         done();
                     });
                 });
@@ -180,14 +191,6 @@
                     });
                 });
             });
-        });
-
-        /**
-        * Run after each it block is run, run the below function to reset state
-        */
-        afterEach(function(){
-            // Click the back button
-            reportServicePage.reportsBackLinkEl.click();
         });
 
         /**

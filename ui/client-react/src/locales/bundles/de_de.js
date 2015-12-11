@@ -33,6 +33,12 @@ export default {
         grid: {
             no_data: "Es liegen keine Daten zum Anzeigen."
         },
+        globalActions: {
+            user: "Benutzer",
+            alerts: "Benachrichtigung",
+            help: "Hilfe",
+            logout: "Abmelden"
+        },
         header: {
             menu: {
                 locale: {

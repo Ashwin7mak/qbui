@@ -1,52 +1,36 @@
 import React from 'react';
 import {Tooltip, OverlayTrigger, Glyphicon} from 'react-bootstrap';
 import {Link} from 'react-router';
+import Hicon from '../harmonyIcon/harmonyIcon';
+import NavItem from './navItem';
 
 let TablesList = React.createClass({
 
     propTypes: {
-        items: React.PropTypes.array.isRequired,
-        buildHeadingItem: React.PropTypes.func.isRequired,
-        buildItem: React.PropTypes.func.isRequired,
         selectedAppId: React.PropTypes.string.isRequired,
         open: React.PropTypes.bool.isRequired,
         onSelect: React.PropTypes.func,
         showReports: React.PropTypes.func.isRequired
     },
-    buildTableItem(table) {
 
-        let label = table.name;
-
-        const tooltip = (<Tooltip className={ this.props.open ? 'leftNavTooltip' : 'leftNavTooltip show' }
-                                  id={label}>{label}</Tooltip>);
-        return (
-            <OverlayTrigger key={table.id} placement="right" overlay={tooltip}>
-                <li className={"link"}>
-                    <Link className="leftNavLink" to={table.link} onClick={this.props.onSelect}>
-                        <Glyphicon glyph={table.icon}/> {this.props.open ? label : ""}
-                    </Link>
-                    { this.props.open ?
-                        <a href="#" className="right" onClick={()=>this.props.showReports(table.id)}><Glyphicon glyph="list"/></a> : ""}
-                </li>
-            </OverlayTrigger>
-        );
-    },
     render() {
         return (
             <div className="tablesList leftNavList">
 
                 <ul>
-                    {this.props.items ? this.props.items.map((item) => {
-                        return item.heading ?
-                            this.props.buildHeadingItem(item) :
-                            this.props.buildItem(item);
-                    }) : null}
+                    <NavItem item={{msg: 'nav.home', link:'/app/' + this.props.selectedAppId, icon:'dashboard'}} {...this.props} />
+                    <NavItem item={{msg: 'nav.users', link:'/users', icon:'customers'}} {...this.props}/>
+                    <NavItem item={{msg: 'nav.favorites', link:'/favorites', icon:'star'}} {...this.props}/>
 
-                    {this.props.selectedAppId && this.props.buildHeadingItem({key: 'nav.tablesHeading'}, false)}
-                    {this.props.selectedAppId && this.props.getAppTables(this.props.selectedAppId).map((table) => {
+                    <NavItem item={{msg: 'nav.tablesHeading'}} isHeading={true} {...this.props}/>
+                    {this.props.getAppTables(this.props.selectedAppId).map((table) => {
                         table.link = '/app/' + this.props.selectedAppId + '/table/' + table.id;
-                        table.icon = 'book';
-                        return this.buildTableItem(table);
+                        table.icon = 'invoices';
+                        return <NavItem item={table}
+                                        key={table.id}
+                                        secondaryIcon={"list"}
+                                        secondaryOnSelect={this.props.showReports}
+                                        {...this.props}/>;
                     })}
                 </ul>
             </div>
