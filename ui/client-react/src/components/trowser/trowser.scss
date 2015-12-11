@@ -6,7 +6,6 @@
     height:80%;
     background:#fdfdfd;
     color: #000;
-    border-bottom: 1px solid #ccc;
 
     max-height:0;
     overflow:hidden;
@@ -18,6 +17,7 @@
 }
 
 .trowser.visible {
+    border-bottom: 1px solid #ccc;
 
     max-height:80%;
 }

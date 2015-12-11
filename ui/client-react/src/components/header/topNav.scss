@@ -1,7 +1,5 @@
 @import '../../assets/css/qbVariables';
 
-$top-nav-hover-bg: #0097CD;
-
 .searchPopover {
 
   .buttonContainer {
@@ -12,10 +10,14 @@ $top-nav-hover-bg: #0097CD;
 
 .topNav .navGroup .harmonyButtons .btn {
   background: $header-bg;
-  border-color: #fff;
-  border-bottom:0;
+  border:0;
 }
-
+.topNav .navGroup .harmonyButtons .btn:hover {
+  background: $nav-hover-bg;
+  span {
+    color: #fff;
+  }
+}
 .topNav .dropdown {
   outline:none;
 }
@@ -31,10 +33,11 @@ $top-nav-hover-bg: #0097CD;
     padding: 0 8px;
     color: $icon-color;
   }
-}
-.topNav .dropdown:hover {
-  a.dropdownToggle {
-    color:$icon-color-hover;
+  a.dropdownToggle:hover {
+    background: $nav-hover-bg;
+    span {
+      color: #fff;
+    }
   }
 }
 
@@ -51,30 +54,25 @@ $top-nav-hover-bg: #0097CD;
     }
   }
 
-  .link:hover {
-
-    a {
-
-    }
-  }
   .globalActionsList {
     margin:0;
     padding:0;
     vertical-align:middle;
   }
   .globalAction {
-    //height:$top-nav-height;
-    border-right: 1px solid #fff;
+    border:0;
   }
-  .globalAction:first-child {
-    border-left: 1px solid #fff;
-  }
+
   .globalAction:hover {
-    //height:$top-nav-height;
-    .hi {
-      color: $icon-color-hover;
+    background: $nav-hover-bg;
+    a {
+      color: #fff;
+      .hi {
+        color: #fff;
+      }
     }
   }
+
   li {
     display:inline-block;
   }

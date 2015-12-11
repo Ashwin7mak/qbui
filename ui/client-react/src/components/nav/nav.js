@@ -92,15 +92,10 @@ var Nav = React.createClass({
 
             <div className="main">
                 <TopNav title="QuickBase"  globalActions={this.getGlobalActions()} onNavClick={this.toggleNav} onAddClicked={this.showTrowser} flux={flux} />
-                {this.props.children && <ReactCSSTransitionGroup className="mainContent"
-                                         transitionName="main-transition"
-                                         transitionAppear={true}
-                                         transitionAppearTimeout={600}
-                                         transitionEnterTimeout={600}
-                                         transitionLeaveTimeout={600} >
+                {this.props.children && <div className="mainContent" >
                     {/* insert the component passed in by the router */}
                     {React.cloneElement(this.props.children, {key: this.props.location ? this.props.location.pathname : "", selectedAppId: this.state.apps.selectedAppId, reportData: this.state.reportData,  flux: flux})}
-                </ReactCSSTransitionGroup>}
+                </div>}
 
                 <Footer flux= {flux} />
             </div>
@@ -139,15 +134,10 @@ var Nav = React.createClass({
             <div className="main">
                 <MobileTopNav title="QuickBase" searching={searching} searchBarOpen={searchBarOpen}  onNavClick={this.toggleNav} flux={flux} />
 
-                {this.props.children && <ReactCSSTransitionGroup className="mainContent"
-                                         transitionName="main-transition"
-                                         transitionAppear={true}
-                                         transitionAppearTimeout={600}
-                                         transitionEnterTimeout={600}
-                                         transitionLeaveTimeout={600} >
+                {this.props.children && <div className="mainContent" >
                     {/* insert the component passed in by the router */}
                     {React.cloneElement(this.props.children, {key: this.props.location ? this.props.location.pathname : "", selectedAppId: this.state.apps.selectedAppId, reportData: this.state.reportData, flux: flux})}
-                </ReactCSSTransitionGroup>}
+                </div>}
 
                 {/* insert the footer if route wants it */}
                 <MobileAddFooter newItemsOpen={this.state.nav.newItemsOpen} flux= {flux} />

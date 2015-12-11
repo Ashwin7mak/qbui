@@ -1,5 +1,5 @@
 @import '../../assets/css/qbVariables';
-
+@import '../../assets/css/qbColorVariables';
 /* nav vars */
 $left-nav-padding: 15px;
 $left-nav-reports-bg: #486C8F;
@@ -8,7 +8,7 @@ $left-nav-fg: #fff;
 $left-nav-link-fg: #bbd;
 $left-nav-heading-bg: #002b48;
 $left-nav-input-fg: #555;
-$left-nav-hover-bg: #0097CD;
+
 
 .leftNav.open {
   overflow:hidden;
@@ -148,7 +148,7 @@ body:not(.small-breakpoint) .leftNav.closed {
     }
     li.link:hover {
       color: #fff;
-      background-color: $left-nav-hover-bg;
+      background-color: $nav-hover-bg;
 
       .hi {
         color: #CAD8E9;

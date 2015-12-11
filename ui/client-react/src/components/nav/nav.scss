@@ -74,7 +74,7 @@ html, body {
                     height: 50px;
                 }
                 button:hover .hi {
-                    color: $icon-color-hover;
+                    color: #fff;
                 }
             }
 
@@ -109,33 +109,4 @@ html, body {
     }
 }
 
-
-
-// transitions
-
-.main-transition-enter {
-    position:absolute;
-    opacity: 0.01;
-    transform: scale(.4);
-}
-
-.main-transition-enter.main-transition-enter-active {
-    opacity: .9;
-    transform: scale(1);
-    transition: all 600ms ease-in-out;
-}
-
-.main-transition-leave {
-    opacity: .5;
-    position:absolute;
-    top:50px;
-    transition: all 600ms ease-out;
-}
-
-.main-transition-leave.main-transition-leave-active {
-    opacity: 0.01;
-    position:absolute;
-    top:850px;
-
-}
 
