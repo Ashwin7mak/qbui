@@ -1,10 +1,6 @@
 .formContainer{
   padding: 2%;
 }
-.flexRow{
-  display: flex;
-  flex-direction: row;
-}
 .fieldRow{
   display: flex;
   flex-direction: row;
@@ -13,8 +9,8 @@
   overflow-y: hidden;
 }
 .field {
-  padding: 10px;
-  flex: 1 1 25%;
+  padding-right: 25px;
+  max-width: 25%;
   .fieldLabel{
     display: block;
     color:#6e8ba8;
@@ -22,5 +18,25 @@
   .fieldValue {
     display:block;
     min-width: 0;
+  }
+}
+
+@media (max-width: 700px) {
+  /* For mobile phones: */
+  .formContainer{
+    font-size: large;
+  }
+  .field {
+    padding-right: 25px;
+    padding-bottom: 25px;
+    max-width: 100%;
+    .fieldLabel{
+      display: block;
+      color:#6e8ba8;
+    }
+    .fieldValue {
+      display:block;
+      min-width: 0;
+    }
   }
 }

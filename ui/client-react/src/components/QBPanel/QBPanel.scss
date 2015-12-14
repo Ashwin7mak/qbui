@@ -32,3 +32,13 @@
   transition: all .25s linear;
   transform: rotate(0deg);
 }
+
+@media (max-width: 700px) {
+  /* For mobile phones: */
+  .qbPanelBody{
+    padding-left: 1%;
+    display: flex;
+    flex-wrap: wrap;
+    flex-direction: row;
+  }
+}

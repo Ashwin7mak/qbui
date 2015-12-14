@@ -8,7 +8,7 @@
   position: absolute;
   box-sizing: border-box;
   margin-top: -3px;
-  background-color: #3fc7fa;
+  background-color: #365ebf;
   -webkit-transform: scaleX(1);
   -ms-transform: scaleX(1);
   transform: scaleX(1);
@@ -83,7 +83,7 @@
 }
 .rc-tabs-nav div.rc-tabs-tab-active > .rc-tabs-tab-inner,
 .rc-tabs-nav div.rc-tabs-tab-active > .rc-tabs-tab-inner:hover {
-  color: #3fc7fa;
+  color: #404040;
   cursor: default;
 }
 .rc-tabs-nav div.rc-tabs-tab-disabled {
@@ -109,7 +109,7 @@
   cursor: pointer;
 }
 .rc-tabs-nav .rc-tabs-tab > .rc-tabs-tab-inner:hover {
-  color: #23c0fa;
+  color: #404040;
 }
 .rc-tabs-tabpane-hidden {
   display: none;
@@ -492,4 +492,5 @@
   float: left;
   height: 100%;
   margin-right: 30px;
+  color: #969696;
 }
