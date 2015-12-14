@@ -461,13 +461,15 @@
   right: 2px;
 }
 .rc-tabs-top .rc-tabs-tab-next-icon:before {
-  content: ">";
+  font-family: "Glyphicons Halflings";
+  content: "\e080";
 }
 .rc-tabs-top .rc-tabs-tab-prev {
   left: 0;
 }
 .rc-tabs-top .rc-tabs-tab-prev-icon:before {
-  content: "<";
+  font-family: "Glyphicons Halflings";
+  content: "\e079";
 }
 .rc-tabs-top .rc-tabs-tab-prev,
 .rc-tabs-top .rc-tabs-tab-next {
