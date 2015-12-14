@@ -7,7 +7,7 @@ let AppsList = React.createClass({
 
     propTypes: {
         apps: React.PropTypes.array.isRequired,
-        toggleApps: React.PropTypes.func.isRequired,
+        onSelectApp: React.PropTypes.func.isRequired,
         open: React.PropTypes.bool.isRequired
     },
     getInitialState() {
@@ -23,7 +23,7 @@ let AppsList = React.createClass({
     appList() {
         return this.props.apps && this.props.apps.map((app) => {
             app.icon = 'star';
-            return this.searchMatches(app.name) && <NavItem key={app.id} item={app} onSelect={this.props.toggleApps} {...this.props} />;
+            return this.searchMatches(app.name) && <NavItem key={app.id} item={app} onSelect={this.props.onSelectApp} {...this.props} />;
         });
     },
     render() {

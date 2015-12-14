@@ -38,7 +38,7 @@ let LeftNav = React.createClass({
             <div className="branding">
                 <img src={qbLogo} />
                 {this.props.selectedAppId &&
-                    <div className="appsToggle" onClick={this.props.onToggleAppsList}>{app ? app.name : ''}&nbsp;
+                    <div className="appsToggle" onClick={this.props.toggleAppsList}>{app ? app.name : ''}&nbsp;
                         <Hicon icon="chevron-down"/>
                     </div>
                 }
@@ -52,6 +52,9 @@ let LeftNav = React.createClass({
         return app ? app.tables : [];
     },
 
+    onSelectApp() {
+        this.props.toggleAppsList(false);
+    },
     render() {
         return (
 
@@ -60,7 +63,7 @@ let LeftNav = React.createClass({
 
                 <ReactCSSTransitionGroup transitionName="leftNavList" component="div" className={"transitionGroup"} transitionEnterTimeout={300} transitionLeaveTimeout={300}>
                     {!this.props.selectedAppId || this.props.appsListOpen ?
-                        <AppsList key={"apps"} {...this.props} toggleApps={this.props.onToggleAppsList}  /> :
+                        <AppsList key={"apps"} {...this.props} onSelectApp={this.onSelectApp}  /> :
                         <TablesList key={"tables"} {...this.props} showReports={(id)=>{this.props.onSelectReports(id);} } getAppTables={this.getAppTables}/> }
 
                 </ReactCSSTransitionGroup>
