@@ -5,6 +5,7 @@ import React from 'react';
 
 import ReactBootstrap from 'react-bootstrap';
 import {Glyphicon, Panel}  from 'react-bootstrap';
+import Hicon from '../harmonyIcon/harmonyIcon';
 
 import './qbpanel.scss';
 
@@ -19,10 +20,10 @@ class QBPanel extends React.Component {
 
     render() {
         return (
-            <div>
+            <div className={"qbPanel"}>
                 <div className="qbPanelHeader" onClick={ ()=> this.setState({open: !this.state.open})}>
                     <h3 id="title">{this.props.title}<small className="qbPanelHeaderIcon">
-                        <Glyphicon glyph="chevron-up" className={this.state.open ? "rotateDown" : "rotateUp"}/>
+                        <Hicon icon="chevron-up" className={this.state.open ? "rotateDown" : "rotateUp"}/>
                     </small></h3>
                 </div>
                 <Panel collapsible expanded={this.state.open}>

@@ -1,11 +1,24 @@
-.card {
-  z-index:2;
-  box-shadow:0 1px 2px #aaa;
-  background:white;
-  margin:0 1rem 1rem;
-  border-radius:3px;
-  transform-origin:top left;
-  min-width: 30%;
+@import '../../assets/css/qbVariables';
+@import '../../../src/assets/css/qbVariables';
+
+$report-background-color: $color1;
+$card-expanded-background-color: $color2;
+
+$fieldLabel-font-size: $font-size-small;
+$fieldValue-font-size: $font-size-base;
+
+$fieldLabel-color: $color3;
+$card-border-color: $color4;
+
+/* TODO: move to qbVariables after figuring out relative urls */
+$chevron_opened_icon: url('../../../src/assets/images/chevron_opened.svg');
+$chevron_closed_icon: url('../../../src/assets/images/chevron_closed.svg');
+
+$margin-spacer: 10px;
+
+.qbPanel{
+  font-family: $font-family;
+  color: $font-color;
 }
 .qbPanelHeader {
   padding-left: 3%;
@@ -27,18 +40,55 @@
 .rotateDown {
   transition: all .25s linear;
   transform: rotate(-180deg);
+  font-size: 32px;
 }
 .rotateUp {
   transition: all .25s linear;
   transform: rotate(0deg);
+  font-size: 32px;
+}
+.fieldRow{
+  display: flex;
+  flex-direction: row;
+  align-items: stretch;
+  flex-wrap: wrap;
+  overflow-y: hidden;
+}
+.field {
+  padding-right: 25px;
+  padding-bottom: 25px;
+  max-width: 25%;
+  .fieldLabel{
+    display: block;
+    color: $fieldLabel-color;
+  }
+  .fieldValue {
+    display:block;
+    min-width: 0;
+  }
 }
 
 @media (max-width: 700px) {
   /* For mobile phones: */
+  .qbPanel{
+    font-size: $font-size;
+  }
   .qbPanelBody{
     padding-left: 1%;
     display: flex;
     flex-wrap: wrap;
     flex-direction: row;
+  }
+  .field {
+    max-width: 100%;
+    .fieldLabel{
+      display: block;
+      font-size: $fieldLabel-font-size
+    }
+    .fieldValue {
+      display:block;
+      min-width: 0;
+      font-size: $fieldValue-font-size;
+    }
   }
 }
