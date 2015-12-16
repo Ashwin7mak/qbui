@@ -6,7 +6,11 @@
 
     module.exports = function(config) {
 
+        /**
+         * Set of common methods used to parse out information from the http request object
+         */
         var helper = {
+
             isGet          : function(req) {
                 return req.method.toLowerCase() === 'get';
             },
@@ -45,7 +49,12 @@
                 return agentOptions;
             },
 
-            //Given an express response object and POJO, copy POJO attributes to the response headers object
+            /**
+             * Given an express response object and POJO, copy POJO attributes to the response headers object
+             *
+             * @param res
+             * @param headers
+             */
             copyHeadersToResponse: function(res, headers) {
                 for (var key in headers) {
                     if (headers.hasOwnProperty(key)) {
@@ -54,6 +63,13 @@
                 }
             },
 
+            /**
+             * Add rawBody data to the submitted options object for put and post requests
+             *
+             * @param req
+             * @param opts
+             * @returns {*}
+             */
             setBodyOption: function(req, opts) {
                 //  body header option only valid for put and post
                 if (this.isPut(req) || this.isPatch(req) || this.isPost(req)) {
@@ -62,6 +78,12 @@
                 return opts;
             },
 
+            /**
+             * Set common shared request attributes on the server request
+             *
+             * @param req
+             * @returns request object used when submitting a server request
+             */
             setOptions: function(req) {
                 var opts = {
                     url         : this.getRequestUrl(req),
@@ -70,17 +92,34 @@
                     headers     : req.headers
                 };
 
+                if (config.proxyHost) {
+                    opts.host = config.proxyHost;
+                    if (config.proxyPort) {
+                        opts.port  = config.proxyPort;
+                    }
+                }
+
                 this.setBodyOption(req, opts);
 
                 return opts;
             },
 
+            /**
+             * If the request header does not include a transactionId (TID),
+             * generate a transaction ID (uuid.v1) and set on the request header.
+             *
+             * @param req
+             * @returns req
+             */
             setTidHeader: function(req) {
                 var headers = {};
                 if (req && req.headers) {
                     headers = req.headers;
                 }
-                headers.tid = uuid.v1();
+                //  if no tid, generate one
+                if (!headers.tid) {
+                    headers.tid = uuid.v1();
+                }
                 req.headers = headers;
                 return req;
             }

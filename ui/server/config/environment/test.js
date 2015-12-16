@@ -11,9 +11,6 @@
     var clientConsts = require('./clientConsts');
 
     var client = clientConsts.REACT;
-    //if (process.env.CLIENT) {
-    //    client = process.env.CLIENT;
-    //}
 
     module.exports = {
 
@@ -44,19 +41,21 @@
         sslPort: 9443,
 
         //REST endpoint (protocol,server,port)
-        //javaHost: 'https://localhost.intuit.com:8443',
-        //javaHost: 'http://localhost.intuit.com:8080'
-        javaHost: 'http://localhost:8080',
+        //javaHost: 'https://quickbase-dev.com:8443',
+        javaHost: 'http://quickbase-dev.com:8080',
 
         //Express Server
-        //DOMAIN: 'https://localhost.intuit.com:9443'
-        DOMAIN: 'http://localhost:9000',
+        //DOMAIN: 'https://quickbase-dev.com:9443'
+        DOMAIN: 'http://quickbase-dev.com:9000',
 
         //Node understanding of RuntimeEnvironment
         env       : envConsts.TEST,
 
         //Node's understanding of a grouping of routes to be enabled/disabled
         routeGroup: routeGroups.DEBUG,
+
+        //set notHotLoad true to disable hotloading
+        noHotLoad : true,
 
         // the client to use
         client: client

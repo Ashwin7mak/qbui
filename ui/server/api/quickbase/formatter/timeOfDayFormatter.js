@@ -37,23 +37,25 @@
             }
             return formatString;
         },
-        generateFormat         : function(fieldInfo) {
-            //Resolve formatting options
-            var formatString;
-            if (fieldInfo) {
-                formatString = JAVA_FORMAT_TO_JS_FORMAT[fieldInfo.scale];
-            }
-            if (!formatString) {
-                formatString = MM;
-            }
-            //resolve 12 vs. 24 hour clock
-            if (fieldInfo.use24HourClock) {
-                formatString = TWENTY_FOUR_HOUR_CLOCK + formatString;
-            } else {
-                formatString = TWELVE_HOUR_CLOCK + formatString + AM_PM;
-            }
-            return formatString;
-        },
+        // TODO: this function is not used currently and commented out so that code coverage is not skewed...
+        // TODO: could be here for future implementation so leaving..but should be reviewed and removed if not needed.
+        //generateFormat         : function(fieldInfo) {
+        //    //Resolve formatting options
+        //    var formatString;
+        //    if (fieldInfo) {
+        //        formatString = JAVA_FORMAT_TO_JS_FORMAT[fieldInfo.scale];
+        //    }
+        //    if (!formatString) {
+        //        formatString = MM;
+        //    }
+        //    //resolve 12 vs. 24 hour clock
+        //    if (fieldInfo.use24HourClock) {
+        //        formatString = TWENTY_FOUR_HOUR_CLOCK + formatString;
+        //    } else {
+        //        formatString = TWELVE_HOUR_CLOCK + formatString + AM_PM;
+        //    }
+        //    return formatString;
+        //},
         //Given a raw number as input, formats as a legacy QuickBase phone number. Note, not internationalized
         format                 : function(fieldValue, fieldInfo) {
             if (!fieldValue || !fieldValue.value) {

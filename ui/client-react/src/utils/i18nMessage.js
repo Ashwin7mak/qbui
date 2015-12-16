@@ -50,11 +50,14 @@ var DisplayI18n = React.createClass({
 //  Instead of creating a mixin to handle the flux lifecycle events needed in each i18n component(Date, Number, etc),
 //  created a wrapper class to handle the events and render the component that is passed as a parameter.
 class I18nFlux {
+
     static renderMessage(Component) {
+
         const fluxState = React.createClass({
             mixins: [FluxMixin, StoreWatchMixin('NavStore')],
             getStateFromFlux() {
                 let flux = this.getFlux();
+
                 return {
                     nav: flux.store('NavStore').getState()
                 };
@@ -79,6 +82,7 @@ var I18nDate = I18nFlux.renderMessage(
 
 //  Render a string message using current locale setting
 var I18nMessage = I18nFlux.renderMessage(
+
     React.createClass({
         render: function() {
             return (<DisplayI18n {...this.props} type={I18N_MESSAGE}/>);

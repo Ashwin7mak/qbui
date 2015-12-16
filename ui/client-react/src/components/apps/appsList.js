@@ -13,11 +13,13 @@ var Content = React.createClass({
                             <li className="app" key={appName}>
                                 <div>{appName}</div>
                                 <ul className="tables">
-                                    {app.tables.map((table) => {
+                                    {sortByAll(app.tables, ['name']).map((table) => {
                                         let tblName = table.name + ' (' + table.id + ')';
                                         let href = '/app/' + app.id + '/table/' + table.id;
                                         return (
-                                            <li key={table.id}><div><a href={href}>{tblName}</a></div></li>
+                                            <li key={table.id}>
+                                                <div><a href={href}>{tblName}</a></div>
+                                            </li>
                                         );
                                     })}
                                 </ul>

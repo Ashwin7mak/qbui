@@ -39,5 +39,3 @@ phantomjs -v
 echo copy phantomjs to node_module
 cp $PHANTOMJS_INSTALL_DIR/bin/phantomjs $PHANTOMJS_NODEMODULE
 ls -l "$PHANTOMJS_NODEMODULE"
-
-

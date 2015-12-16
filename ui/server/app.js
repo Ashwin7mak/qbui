@@ -5,7 +5,7 @@
     'use strict';
 
     // if we have not set the NODE_ENV, then error out here
-    if (process.env.NODE_ENV === undefined) {
+    if (!process.env.NODE_ENV) {
         throw new Error('No NODE_ENV was specified. You must set a run-time environment variable. Exiting');
     }
 
@@ -13,6 +13,8 @@
         http = require('http'),
         config = require('./config/environment'),
         _ = require('lodash');
+    var fs = require('fs'),
+        https = require('https');
 
     //  Configure the Bunyan logger
     var log = require('./logger').getLogger();
@@ -73,21 +75,31 @@
     //  log some server config info...but don't include the secrets configuration
     log.info('Express Server configuration:', JSON.stringify(_.omit(config, ['secrets', 'SESSION_SECRET'])));
 
+    /**
+     * only listen via a specific ip/hostname when not in production mode or when
+     * running with dev hotloader, as the hotload server needs the ip for main express server
+     ****/
+    var hostnameToListenOn = undefined;
+    if (!config.noHotLoad && !config.isProduction) {
+        hostnameToListenOn = config.ip;
+    }
+
     /**************
      * Start HTTP Server
      **************/
-    var server = http.createServer(app);
-    server.listen(config.port, config.ip, function() {
-        log.info('Http Server started. Listening %s on PORT: %d', config.ip, server.address().port);
+    app.httpServer = http.createServer(app);
+    app.httpServer.listen(config.port, hostnameToListenOn, function() {
+        if (hostnameToListenOn) {
+            log.info('Http Server started. Listening %s on PORT: %d', hostnameToListenOn, app.httpServer.address().port);
+        } else {
+            log.info('Http Server started. Listening on PORT: %d', app.httpServer.address().port);
+        }
     });
-
 
     /**************
      * Start HTTPS Server
      **************/
     if (config.hasSslOptions()) {
-        var fs = require('fs'),
-            https = require('https');
 
         var options = {
             key               : fs.readFileSync(config.SSL_KEY.private),
@@ -95,14 +107,17 @@
             rejectUnauthorized: false
         };
 
-        var serverHttps = https.createServer(options, app);
-        serverHttps.listen(config.sslPort, config.ip, function() {
-            log.info('Https Server started. Listening %s on PORT: %d', config.ip, serverHttps.address().port);
+        app.httpsServer = https.createServer(options, app);
+        app.httpsServer.listen(config.sslPort, hostnameToListenOn, function() {
+            if (hostnameToListenOn) {
+                log.info('Https Server started. Listening %s on PORT: %d', hostnameToListenOn, app.httpsServer.address().port);
+            } else {
+                log.info('Https Server started. Listening on PORT: %d', app.httpsServer.address().port);
+            }
         });
     }
 
-
     //get the hot loader running for debugging, if not running production
-    require('./hotDevServer')(config, app);
+    require('./hotDevServer')(config);
 
 }());

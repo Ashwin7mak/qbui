@@ -7,29 +7,22 @@ import Promise from 'bluebird';
 let logger = new Logger();
 
 let reportActions = {
-    //
-    // uncomment when action is implemented..
-    //
-    //addReport: function(report){
-    //    this.dispatch('ADD_REPORT', report);
-    //},
-    //removeReport: function(index){
-    //    this.dispatch('REMOVE_REPORT', index);
-    //},
-    loadReports: function(report) {
+
+
+    loadReports: function(appId, tblId) {
 
         let deferred = Promise.defer();
 
-        if (report.appId && report.tblId) {
+        if (appId && tblId) {
             let reportService = new ReportService();
 
             this.dispatch(actions.LOAD_REPORTS);
 
-            reportService.getReports(report.appId, report.tblId).
+            reportService.getReports(appId, tblId).
                 then(
                 (response) => {
                     logger.debug('ReportService getReports success:' + JSON.stringify(response));
-                    this.dispatch(actions.LOAD_REPORTS_SUCCESS, {appId: report.appId, tblId:report.tblId, data: response.data});
+                    this.dispatch(actions.LOAD_REPORTS_SUCCESS, {appId, tblId, data: response.data});
                     deferred.resolve(response);
                 },
                 (error) => {

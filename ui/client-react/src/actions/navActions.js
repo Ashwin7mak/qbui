@@ -4,17 +4,26 @@ import Locale from '../locales/locales';
 
 let navActions = {
 
-    showTrouser() {
-        this.dispatch(actions.SHOW_TROUSER);
+    showReports() {
+        this.dispatch(actions.SHOW_REPORTS);
     },
-    hideTrouser() {
-        this.dispatch(actions.HIDE_TROUSER);
+    hideReports() {
+        this.dispatch(actions.HIDE_REPORTS);
+    },
+    showTrowser() {
+        this.dispatch(actions.SHOW_TROWSER);
+    },
+    hideTrowser() {
+        this.dispatch(actions.HIDE_TROWSER);
     },
     showNewItems() {
         this.dispatch(actions.SHOW_NEW_ITEMS);
     },
-    toggleLeftNav() {
-        this.dispatch(actions.TOGGLE_LEFT_NAV);
+    toggleLeftNav(open) {
+        this.dispatch(actions.TOGGLE_LEFT_NAV, open);
+    },
+    toggleAppsList(open) {
+        this.dispatch(actions.TOGGLE_APPS_LIST, open);
     },
     toggleSearch() {
         this.dispatch(actions.TOGGLE_SEARCH);

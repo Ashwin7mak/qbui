@@ -4,25 +4,11 @@ exports.__esModule = true;
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
 
-var _warning = require('warning');
-
-var _warning2 = _interopRequireDefault(_warning);
-
-var _deprecate = require('./deprecate');
-
-var _deprecate2 = _interopRequireDefault(_deprecate);
-
 var _Actions = require('./Actions');
 
-function extractPath(string) {
-  var match = string.match(/https?:\/\/[^\/]*/);
+var _parsePath = require('./parsePath');
 
-  if (match == null) return string;
-
-  _warning2['default'](false, 'Location path must be pathname + query string only, not a fully qualified URL like "%s"', string);
-
-  return string.substring(match[0].length);
-}
+var _parsePath2 = _interopRequireDefault(_parsePath);
 
 function createLocation() {
   var path = arguments.length <= 0 || arguments[0] === undefined ? '/' : arguments[0];
@@ -30,25 +16,11 @@ function createLocation() {
   var action = arguments.length <= 2 || arguments[2] === undefined ? _Actions.POP : arguments[2];
   var key = arguments.length <= 3 || arguments[3] === undefined ? null : arguments[3];
 
-  path = extractPath(path);
+  if (typeof path === 'string') path = _parsePath2['default'](path);
 
-  var pathname = path;
-  var search = '';
-  var hash = '';
-
-  var hashIndex = pathname.indexOf('#');
-  if (hashIndex !== -1) {
-    hash = pathname.substring(hashIndex);
-    pathname = pathname.substring(0, hashIndex);
-  }
-
-  var searchIndex = pathname.indexOf('?');
-  if (searchIndex !== -1) {
-    search = pathname.substring(searchIndex);
-    pathname = pathname.substring(0, searchIndex);
-  }
-
-  if (pathname === '') pathname = '/';
+  var pathname = path.pathname || '/';
+  var search = path.search || '';
+  var hash = path.hash || '';
 
   return {
     pathname: pathname,
@@ -60,5 +32,5 @@ function createLocation() {
   };
 }
 
-exports['default'] = _deprecate2['default'](createLocation, 'Calling createLocation statically is deprecated; instead call the history.createLocation method - see docs/Location.md');
+exports['default'] = createLocation;
 module.exports = exports['default'];

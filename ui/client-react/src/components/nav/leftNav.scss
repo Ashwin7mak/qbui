@@ -1,169 +1,288 @@
+@import '../../assets/css/qbVariables';
+@import '../../assets/css/qbColorVariables';
 
+/*left nav vars */
+$left-nav-padding: 15px;
+$left-nav-reports-bg: #486C8F;
+$left-nav-bg: #002b48;
+$left-nav-fg: #fff;
+$left-nav-link-fg: #cad8e9;
+$left-nav-heading-bg: #002b48;
+$left-nav-input-fg: #555;
 
-.leftMenu.open {
+$left-nav-heading-hover-fg: #bbd;
+$left-nav-heading-bg: #264a6d;
+$left-nav-heading-fg: #bfcfe3;
+
+.leftNav.open {
+  overflow:hidden;
+}
+
+.leftNav a.leftNavLink {
+  width:100%;
+  cursor:pointer;
+}
+
+.xlarge-breakpoint .leftNav.open {
+  width:400px;
+
+}
+.large-breakpoint .leftNav.open {
+  width:300px;
+
+}
+.medium-breakpoint .leftNav.open {
+  width:200px;
+}
+
+.small-breakpoint .leftNav.open {
   width:350px;
-  nav li {
-    a.heading {
-      //border-top:1px solid #6f8eac;
-      //border-bottom:1px solid #6f8eac;
-      color: #bbd;
-      background-color: #3F5B7D
-    }
-  }
+
 }
 
-@media (min-width:700px) and (max-width: 1024px) {
-  /* For mobile phones: */
-  .leftMenu.open {
-    width:200px;
-  }
+/* show tooltips only if .show is present unless we're in small (phone) breakpoint */
+div.leftNavTooltip {
+  display:none;
+}
+body:not(.small-breakpoint) div.leftNavTooltip.show {
+  display:block;
 }
 
-@media (max-width: 700px) {
-  /* For mobile phones: */
-  .leftMenu.open {
-    width:40px;
-    overflow:hidden;
-  }
-  nav li a.heading {
-    visibility:hidden;
-  }
-}
-
-@media (min-width: 700px) {
-  /* hide tooltip if the left nav is showing labels (see above) */
-  div.leftNavTooltip {
-    display:none;
-  }
-  /* if nav is collapsed always show the tooltip regardless of width */
-  div.leftNavTooltip.show {
-    display:block;
-  }
-}
-
-
-.leftMenu.closed {
+body:not(.small-breakpoint) .leftNav.closed {
   width:40px;
   overflow-y:hidden;
-  .nav li a.heading {
-    background-color:#002b48;
+  li a.heading {
+    background-color:$left-nav-heading-bg;
+  }
 
+  .reportsList.open {
+    width:40px;
   }
 }
 
-.leftMenu {
-  border-right: 1px solid #ccc;
-  background-color: #002b48;
-  overflow-y:auto;
+.leftNav {
+  border-right: 1px solid $nav-border;
+  background-color: $left-nav-bg;
+  display:flex;
+  flex-direction:column;
 
-  .nav li.selected {
-    a.leftNavLink {
-      background-color: #2E71B5;
+  color: $left-nav-fg;
+
+  position:relative;
+  .appsToggle {
+    margin-top:10px;
+    margin-bottom:10px;
+    cursor:pointer;
+  }
+
+  .branding {
+    flex: 0 0 auto;
+    padding:10px;
+    border-bottom: $global-actions-border;
+    .hi-chevron-down {
+      transition: transform 300ms ease-in;
     }
   }
-  .nav li {
+  .globalActions {
+    flex: 0 1 auto;
+    bottom:0;
 
-    a.leftNavLink:hover {
-      background-color: #2E71B5;
-      -webkit-animation: swing 1s ease;
-      animation: swing 1s ease;
-      -webkit-animation-iteration-count: 1;
-      animation-iteration-count: 1;
-    }
-    a.heading {
-      padding: 3px 15px;
-      color:#ddd;
-      cursor: default;
-      font-size:12px;
-    }
-    a.leftNavLink {
-      color: #bbd;
-      cursor: pointer;
-      white-space:nowrap;
-      overflow:hidden;
-      text-overflow:ellipsis;
-      .glyphicon {
-        margin-right: 8px;
-      }
-      span {
-
-        text-overflow:ellipsis;
+    .globalAction {
+      border-top: $global-actions-border;
+      a {
+        width:100%;
       }
     }
-    .loader {
-      position:absolute;
-      right:20px;
-      top:20px;
+  }
+  .transitionGroup {
+    flex: 1;
+    overflow-y:auto;
+  }
+  .searchApps,.searchReports {
+    padding:8px;
+    input {
+      padding: 5px 10px;
+      width: 100%;
+      color: $left-nav-input-fg;
+      height:25px;
     }
   }
-}
 
-// fun stuff
-@-webkit-keyframes swing
-{
-  15%
-  {
-    -webkit-transform: translateX(5px);
-    transform: translateX(5px);
+  ul {
+    list-style: none;
+    list-style-type: none;
+    list-style-position: initial;
+    list-style-image: initial;
+    padding: 0;
+    margin: 0;
+
+    .heading {
+      font-size: 12px;
+      line-height: 30px;
+      background-color: $left-nav-heading-bg;
+      color: $left-nav-heading-fg;
+      margin: 0;
+      padding-left: 10px;
+    }
+    .heading:hover {
+      color:$left-nav-heading-hover-fg;
+    }
+
+    li {
+      position:relative;
+
+      a {
+        text-decoration:none;
+        line-height: 45px;
+        padding-left: 10px;
+        color: $left-nav-link-fg;
+        display:inline-block;
+        cursor:pointer;
+      }
+      a.right {
+        opacity:0;
+        position:absolute;
+        right: 5px;
+      }
+      a.backLink {
+        cursor:pointer;
+        width:100%
+      }
+    }
+    li.link:hover {
+      color: $nav-hover-fg;
+      background-color: $nav-hover-bg;
+
+      .hi {
+        color: $left-nav-link-fg;
+      }
+      a.right {
+        opacity:1;
+        transition: all 0.2s ease-in-out;
+        -webkit-transition: all 0.2s ease-in-out;
+        -moz-transition: all 0.2s ease-in-out;
+      }
+    }
   }
-  30%
-  {
-    -webkit-transform: translateX(-5px);
-    transform: translateX(-5px);
-  }
-  50%
-  {
-    -webkit-transform: translateX(3px);
-    transform: translateX(3px);
-  }
-  65%
-  {
-    -webkit-transform: translateX(-3px);
-    transform: translateX(-3px);
-  }
-  80%
-  {
-    -webkit-transform: translateX(2px);
-    transform: translateX(2px);
-  }
-  100%
-  {
-    -webkit-transform: translateX(0);
-    transform: translateX(0);
-  }
-}
-@keyframes swing
-{
-  15%
-  {
-    -webkit-transform: translateX(5px);
-    transform: translateX(5px);
-  }
-  30%
-  {
-    -webkit-transform: translateX(-5px);
-    transform: translateX(-5px);
-  }
-  50%
-  {
-    -webkit-transform: translateX(3px);
-    transform: translateX(3px);
-  }
-  65%
-  {
-    -webkit-transform: translateX(-3px);
-    transform: translateX(-3px);
-  }
-  80%
-  {
-    -webkit-transform: translateX(2px);
-    transform: translateX(2px);
-  }
-  100%
-  {
-    -webkit-transform: translateX(0);
-    transform: translateX(0);
+
+  .loader {
+    position:absolute;
+    right:20px;
+    top:20px;
   }
 }
 
+/* small (mobile) left nav behaves differently */
 
+.small-breakpoint .leftNav {
+  margin: 0;
+  height: 100%;
+  width:0;
+  z-index: 9999;
+  border-right: 1px solid $nav-border;
+  overflow-y: auto;
+}
+
+.small-breakpoint .navShell.leftNavOpen {
+  position: relative;
+  left:-350px;
+
+  .topNav.mobile {
+    min-width:640px;
+  }
+  .main {
+    //position:absolute;
+  }
+  .mainContent {
+    opacity: .1;
+    transition: opacity 250ms ease-in-out;
+    -moz-transition: opacity 250ms ease-in-out;
+    -webkit-transition: opacity 250ms ease-in-out;
+  }
+
+  transform: translate3d(350px, 0, 0);
+  -webkit-transform: translate3d(350px, 0, 0);
+}
+
+/** REACTCSSTRANSITION BASE CLASSES **/
+
+.leftNavList-enter {
+  opacity: 0.01;
+}
+
+.leftNavList.leftNavList-enter-active {
+  opacity: 1;
+  transition: all 300ms ease-in;
+  // transition: opacity 500ms ease-in;
+}
+
+.leftNavList-leave {
+  opacity: 1;
+}
+
+.leftNavList-leave.leftNavList-leave-active {
+  opacity: 0.01;
+  transition: opacity 300ms ease-in;
+}
+
+$transition-time: 300ms;
+$travel-distance: 15;
+
+.leftNavList-enter.appsList li {
+  margin-top: -#{$travel-distance}px;
+}
+
+.leftNavList-enter-active.appsList li {
+  margin-top: 0;
+  transition: all $transition-time ease-in;
+}
+
+.leftNavList-enter.tablesList li {
+  margin-top: #{$travel-distance}px;
+}
+
+.leftNavList-enter-active.tablesList li {
+  margin-top: 0;
+  transition: all $transition-time ease-in;
+}
+
+.leftNav.appsListOpen .branding .hi-chevron-down {
+  transform: rotate(-180deg);
+}
+.leftNav .reportsContainer {
+  flex-direction: column;
+  display: flex;
+  height:100%;
+
+  .reportItems {
+    overflow-y:auto;
+  }
+}
+
+.leftNav .reportsList {
+  opacity: 0.5;
+  transform: translate3d(100%, 0, 0);
+  transition: all 300ms cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  z-index: 900;
+  background-color: $left-nav-reports-bg;
+}
+
+
+.leftNav .reportsList.open {
+  overflow-x: hidden;
+  overflow-y: auto;
+  opacity: 1;
+  transform: translate3d(0, 0, 0);
+
+  a {
+    width:100%;
+    overflow:hidden;
+    text-overflow: ellipsis;
+    white-space:nowrap;
+  }
+}

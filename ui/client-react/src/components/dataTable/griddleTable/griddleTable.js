@@ -28,7 +28,7 @@ class GriddleTable extends React.Component {
                 <div>
                     <Griddle {...this.props}
                         results={this.props.results}
-                        useCustomRowComponent={this.props.breakpoint === breakpoints.SMALL_BREAKPOINT}
+                        useCustomRowComponent={this.context.breakpoint === breakpoints.SMALL_BREAKPOINT}
                         />
                 </div>
             );
@@ -39,6 +39,9 @@ class GriddleTable extends React.Component {
         }
     }
 }
+GriddleTable.contextTypes = {
+    breakpoint: React.PropTypes.string
+};
 
 GriddleTable.propTypes = {  };
 GriddleTable.defaultProps = {

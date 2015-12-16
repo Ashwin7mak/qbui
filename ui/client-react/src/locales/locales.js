@@ -1,11 +1,5 @@
 
-// import supported languages...
-// TODO: would be nice to dynamically load based on the selected language
-import EN_US from '../locales/en_us';
-import FR_FR from '../locales/fr_fr';
-import DE_DE from '../locales/de_de';
 import Logger from '../utils/logger';
-
 import config from '../config/app.config';
 
 let logger = new Logger();
@@ -22,36 +16,58 @@ class Locale {
     }
 
     static getI18nBundle() {
-        //logger.debug('Fetching locale: ' + locale);
+        let bundle = "";
+
         try {
+            // this is where all supported locales are defined
             switch (locale.toLowerCase()) {
             case 'en-us':
-                return EN_US;
+                bundle = require('../locales/bundles/en_us');
+                break;
             case 'fr-fr':
-                return FR_FR;
+                bundle = require('../locales/bundles/fr_fr');
+                break;
             case 'de-de':
-                return DE_DE;
-            default:
-                logger.info('Locale (' + locale + ') is invalid or not supported.  Using default: en-us');
-                return EN_US;
+                bundle = require('../locales/bundles/de_de');
+                break;
             }
         } catch (e) {
-            //  any error automatically returns default locale
-            logger.error('Error fetching locale: ' + e + '.  Using default: en-us');
-            return EN_US;
+            logger.error('Error fetching locale:' + e);
         }
+
+        if (!bundle) {
+            logger.warn('Locale (' + locale + ') is invalid or not supported.  Using default: en-us');
+            bundle = require('../locales/bundles/en_us');
+        }
+
+        return bundle;
     }
 
     static changeLocale(newLocale) {
         try {
             if (config.locale.supported.indexOf(newLocale.toLowerCase()) === -1) {
-                logger.error('Invalid/unsupported change locale: ' + newLocale + '.  Locale not changed.');
+                logger.warn('Invalid/unsupported change locale: ' + newLocale + '.  Locale not changed.');
             } else {
                 locale = newLocale;
             }
         } catch (e) {
-            logger.error('Exception changing locale: ' + e + '.  Locale not changed.');
+            logger.error('Error changing locale..Locale not changed --> ' + e);
         }
+    }
+
+    // return message in bundle.messages object by dot-separated path
+    static getMessage(msgPath) {
+        var messages =  Locale.getI18nBundle().messages;
+
+        let message = msgPath.split('.').reduce((obj, pathPart) => {
+            return obj[pathPart];
+        }, messages);
+
+        return message;
+    }
+
+    static getSupportedLocales() {
+        return config.locale.supported;
     }
 
 }

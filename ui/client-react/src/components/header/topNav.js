@@ -1,12 +1,14 @@
 import React from 'react';
 import ReactIntl from 'react-intl';
 import {I18nMessage, I18nDate} from '../../utils/i18nMessage';
-
+import Locale from '../../locales/locales';
+import GlobalActions from '../global/globalActions';
 import Fluxxor from 'fluxxor';
 import _ from 'lodash';
+import Hicon from '../harmonyIcon/harmonyIcon';
 
 let FluxMixin = Fluxxor.FluxMixin(React);
-import {MenuItem, NavDropdown, ButtonGroup, Button, OverlayTrigger, Popover, Glyphicon, Input} from 'react-bootstrap';
+import {MenuItem, Dropdown, ButtonGroup, Button, OverlayTrigger, Popover, Glyphicon, Input} from 'react-bootstrap';
 
 import './topNav.scss';
 
@@ -15,6 +17,7 @@ var CurrentDate = React.createClass({
     render: function() {
         return <I18nDate value={new Date()} day="numeric" month="long" year="numeric"/>;
     }
+
 });
 
 const debounceSearchMillis = 100;
@@ -29,12 +32,7 @@ var TopNav = React.createClass({
 
     addNew: function() {
         let flux = this.getFlux();
-        flux.actions.showTrouser();
-    },
-
-    onSelect: function(ev) {
-        let flux = this.getFlux();
-        flux.actions.changeLocale(ev.currentTarget.title);
+        flux.actions.showTrowser();
     },
 
     searchChanged: function(ev) {
@@ -42,8 +40,16 @@ var TopNav = React.createClass({
         let flux = this.getFlux();
         flux.actions.searchFor(text);
     },
+
+    onSelect: function(ev) {
+        let flux = this.getFlux();
+        flux.actions.changeLocale(ev.currentTarget.title);
+    },
+
     render: function() {
         const searchIcon = <Glyphicon glyph="search" />;
+        let supportedLocales = Locale.getSupportedLocales();
+        let eventKeyIdx = 20;
 
         return (
             <div className={'topNav'}>
@@ -62,24 +68,35 @@ var TopNav = React.createClass({
                                 <Input className="searchInputBox" key={'searchInput'} standalone addonBefore={searchIcon} type="text" placeholder="Search Records"  onChange={this.searchChanged} />
                             </Popover>}>
 
-                                <Button><Glyphicon glyph="search" /></Button>
+                                <Button><Hicon icon="search" /></Button>
                             </OverlayTrigger>
 
-                            <Button className="addNewButton" onClick={this.addNew} ><Glyphicon glyph="plus" /></Button>
-                            <Button><Glyphicon glyph="time" /></Button>
+                            <Button className="addNewButton" onClick={this.addNew} ><Hicon icon="create-lg" /></Button>
+                            <Button><Hicon icon="history" /></Button>
                         </ButtonGroup>
                     </div>
 
+
                     <div className="navGroup right">
-                        <NavDropdown className="navItem" NavDropdown={true} navItem={true} eventKey={3} title={<CurrentDate/>} id="nav-right-dropdown">
-                            <MenuItem href="/user" eventKey={4}><I18nMessage message={'header.menu.preferences'}/></MenuItem>
-                            <MenuItem divider />
-                            <MenuItem href="#" className="localeLink" onSelect={this.onSelect} title="en-us" eventKey={5}><I18nMessage message={'header.menu.locale.english'}/></MenuItem>
-                            <MenuItem href="#" className="localeLink" onSelect={this.onSelect} title="fr-fr" eventKey={6}><I18nMessage message={'header.menu.locale.french'}/></MenuItem>
-                            <MenuItem href="#" className="localeLink" onSelect={this.onSelect} title="de-de" eventKey={7}><I18nMessage message={'header.menu.locale.german'}/></MenuItem>
-                            <MenuItem divider />
-                            <MenuItem href="/signout" eventKey={8}><I18nMessage message={'header.menu.sign_out'}/></MenuItem>
-                        </NavDropdown>
+
+                        {this.props.globalActions && <GlobalActions actions={this.props.globalActions}/>}
+
+                        <Dropdown id="nav-right-dropdown">
+
+                            <a bsRole="toggle" className={"dropdownToggle"}><Glyphicon glyph="option-vertical"/> </a>
+
+                            <Dropdown.Menu>
+                                <MenuItem href="/user" eventKey={eventKeyIdx++}><I18nMessage message={'header.menu.preferences'}/></MenuItem>
+                                <MenuItem divider />
+
+                                {supportedLocales.length > 1 ? supportedLocales.map((locale) => {
+                                    return <MenuItem href="#" className="localeLink" onSelect={this.onSelect} title={locale} key={eventKeyIdx} eventKey={eventKeyIdx++}><I18nMessage message={'header.menu.locale.' + locale}/></MenuItem>;
+                                }) : null}
+                                {supportedLocales.length > 1 ? <MenuItem divider /> : null}
+
+                                <MenuItem href="/signout" eventKey={eventKeyIdx++}><I18nMessage message={'header.menu.sign_out'}/></MenuItem>
+                            </Dropdown.Menu>
+                        </Dropdown>
                         &nbsp;
                     </div>
                 </div>

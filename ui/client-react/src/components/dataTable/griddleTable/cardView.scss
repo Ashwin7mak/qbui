@@ -1,23 +1,41 @@
+@import '../../../../src/assets/css/qbVariables';
+
+$report-background-color: $color1;
+$card-expanded-background-color: $color2;
+
+$fieldLabel-font-size: $font-size-small;
+$fieldValue-font-size: $font-size-base;
+
+$fieldLabel-color: $color3;
+$card-border-color: $color4;
+
+/* TODO: move to qbVariables after figuring out relative urls */
+$chevron_opened_icon: url('../../../../src/assets/images/chevron_opened.svg');
+$chevron_closed_icon: url('../../../../src/assets/images/chevron_closed.svg');
+
+$margin-spacer: 10px;
+
+.custom-row{
+  display: block!important;
+  width: inherit!important;
+  margin: $margin-spacer;
+}
+
 .custom-row-card {
-  border-color: grey;
-  border-style: solid;
-  border-width: 1px 0 1px 0;
-  font-size: large;
+  font-family: $font-family;
+  color: $font-color;
+  font-size: $font-size;
+  border-bottom: 1px solid $card-border-color;
+  position: relative;
+  padding: 5px 10px 15px 10px;
   .card {
     flex: 1;
     width: 100%;
   }
-  .top-card-row{
-    margin-top: 10px;
-  }
-  .card-expander{
-    border-left: 1px solid lightgray;
-    padding: 0 20px 0 25px;
-    /*margin: 20px 0;*/
-    color: gray;
-  }
   .glyphicon{
-   top: 50px;
+    position: absolute;
+    right: $margin-spacer * 2;
+    top: $margin-spacer * 2;
   }
   .flexRow{
     display: flex;
@@ -31,51 +49,79 @@
     overflow-y: hidden;
   }
   .fieldRow.collapsed{
-    max-height: 70px;
+    max-height: 45px;
   }
   .fieldRow.expanded{
     max-height: 100%;
   }
+  .top-card-row{
+    font-size: $fieldLabel-font-size;
+  }
   .field {
-    padding: 10px;
+    padding: $margin-spacer $margin-spacer 0 0;
     flex: 1 1 50%;
-    .fieldLabel{
+    .fieldLabel {
       display: block;
-      color:#6e8ba8;
+      color: $fieldLabel-color;
+      font-size: $fieldLabel-font-size
     }
     .fieldValue {
-      display:block;
+      display: block;
       min-width: 0;
       overflow: hidden;
       text-overflow: ellipsis;
       white-space: nowrap;
+      font-size: $fieldValue-font-size;
     }
     &:nth-child(n+3) {
-      background-color: #F5FAFF;
-      border-top: 1px solid lightgrey;
       .fieldValue {
         white-space: normal;
       }
     }
   }
+  .card-expander{
+    margin-top: $margin-spacer;
+    .chevron_opened {
+      display: block;
+      width: 14px;
+      height: 14px;
+      background: $chevron_opened_icon 0 0 no-repeat;
+    }
 
+    .chevron_closed {
+      display: block;
+      width: 14px;
+      height: 14px;
+      background: $chevron_closed_icon 0 0 no-repeat;
+      opacity: .7;
+    }
+  }
 
   @media (min-device-width: 300px) and (orientation: landscape) {
     .field {
       flex-basis: 33%;
       display: block;
       &:nth-child(n+3) {
-        background-color: inherit;
-        border-top: inherit;
         .fieldValue {
           white-space: nowrap;
         }
       }
       &:nth-child(n+4) {
-        background-color: #F5FAFF;
-        border-top: 1px solid lightgrey;
         white-space: normal;
       }
+
     }
   }
+}
+.custom-row-card.expanded {
+  border: 0;
+  background: $card-expanded-background-color;
+  -webkit-box-shadow: 0px 0px 2px 2px rgba(72, 108, 143, 0.2);
+  -moz-box-shadow: 0px 0px 2px 2px rgba(72, 108, 143, 0.2);
+  box-shadow: 0px 0px 2px 2px rgba(72, 108, 143, 0.2);
+}
+
+.reportContainer{
+  background-image: linear-gradient(to top, $color13 0%, $color14 100%);
+  background-color: $color12;
 }

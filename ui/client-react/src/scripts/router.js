@@ -23,11 +23,16 @@ import NavStore from '../stores/navStore';
 import navActions from '../actions/navActions';
 
 import AppsHome from '../components/apps/home';
+import AppsRoute from '../components/apps/appsRoute';
+import AppHomePageRoute from '../components/app/appHomePageRoute';
 
 import ReportRoute from '../components/report/reportRoute';
 import RecordRoute from '../components/record/recordRoute';
 import TableHomePageRoute from '../components/table/tableHomePageRoute';
-import DashboardRoute from '../components/dashboard/dashboardRoute';
+
+import FastClick from 'fastclick';
+
+import Breakpoints from '../utils/breakpoints';
 
 import * as breakpoints from '../constants/breakpoints';
 
@@ -46,37 +51,54 @@ flux.addActions(navActions);
 let NavWrapper = React.createClass({
     getInitialState() {
         return {
-            breakpoint: this.getCurrentBreakpointClass()
+            breakpoint: Breakpoints.getCurrentBreakpointClass()
         };
     },
-    getCurrentBreakpointClass: function() {
-        let w = window.innerWidth;
-
-        if (w <= 640) {
-            return breakpoints.SMALL_BREAKPOINT;
-        } else if (w <= 1024) {
-            return breakpoints.MEDIUM_BREAKPOINT;
-        } else if (w <= 1440) {
-            return breakpoints.LARGE_BREAKPOINT;
-        } else {
-            return breakpoints.XLARGE_BREAKPOINT;
-        }
+    childContextTypes: {
+        breakpoint: React.PropTypes.string
+    },
+    getChildContext: function() {
+        return {breakpoint: this.state.breakpoint};
     },
     render: function() {
         return <Nav flux={flux} {...this.props}  breakpoint={this.state.breakpoint} />;
     },
 
-    //need to debounce this...
     handleResize: function() {
 
-        let breakpoint = this.getCurrentBreakpointClass();
+        let breakpoint = Breakpoints.getCurrentBreakpointClass();
+        document.body.className = breakpoint;
 
+        // close left nav if resizing down to small
+        if (breakpoint === breakpoints.SMALL_BREAKPOINT && this.state.breakpoint === breakpoints.MEDIUM_BREAKPOINT) {
+            flux.actions.toggleLeftNav(false);
+        }
+        if (breakpoint === breakpoints.MEDIUM_BREAKPOINT && this.state.breakpoint === breakpoints.SMALL_BREAKPOINT) {
+            flux.actions.toggleLeftNav(true);
+        }
         this.setState({breakpoint});
     },
-    componentDidMount: function() {
-        flux.actions.loadReports({appId: this.props.params.appId, tblId: this.props.params.tblId});
 
+    componentDidMount: function() {
+        FastClick.attach(document.body);
+
+        flux.actions.loadApps(true);
+
+        if (this.props.params.appId && this.props.params.tblId) {
+            flux.actions.selectAppId(this.props.params.appId);
+            flux.actions.selectTableId(this.props.params.tblId);
+            flux.actions.loadReports(this.props.params.appId, this.props.params.tblId);
+        }
         window.addEventListener('resize', this.handleResize);
+        this.handleResize();
+    },
+
+    componentWillReceiveProps(props) {
+        if (this.props.params.appId && this.props.params.tblId && this.props.params.appId !== props.params.appId && this.props.params.tblId !== props.params.tblId) {
+            flux.actions.selectAppId(this.props.params.appId);
+            flux.actions.selectTableId(this.props.params.tblId);
+            flux.actions.loadReports(this.props.params.appId, this.props.params.tblId);
+        }
     },
     componentWillUnmount: function() {
         window.removeEventListener('resize', this.handleResize);
@@ -88,23 +110,24 @@ let Apps = React.createClass({
         return <AppsHome flux={flux} />;
     },
     componentDidMount: function() {
-        flux.actions.loadAppsWithTables();
+        flux.actions.loadApps(true);
     }
 });
 
 render((
     <Router history={createBrowserHistory()}>
         <Route path="/" component={Apps} />
-        <Route path="apps" component={Apps} />
-        <Route path="m/apps" component={Apps} />
 
-        <Route path="app/:appId/table/:tblId" component={NavWrapper} >
-            <IndexRoute components={{main: TableHomePageRoute}} />
-            <Route path="report/:rptId" components={{main: ReportRoute}} />
-            <Route path="record/:recordId" components={{main: RecordRoute}} />
-            <Route path="dashboardDemo/:rptId" components={{main: DashboardRoute}} />
+        <Route path="apps" component={NavWrapper} >
+            <IndexRoute component={AppsRoute} />
         </Route>
 
+        <Route path="app/:appId" component={NavWrapper} >
+            <IndexRoute component={AppHomePageRoute} />
+            <Route path="table/:tblId" component={TableHomePageRoute} />
+            <Route path="table/:tblId/report/:rptId" component={ReportRoute} />
+            <Route path="table/:tblId/record/:recordId" component={RecordRoute} />
+        </Route>
 
     </Router>
 ), document.getElementById('content'));

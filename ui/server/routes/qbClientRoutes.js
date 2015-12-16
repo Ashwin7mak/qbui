@@ -1,9 +1,10 @@
+var log = require('../logger').getLogger();
+var reactViews = require('express-react-views');
+var lodash = require('lodash');
+
 (function() {
     'use strict';
-    var log = require('../logger').getLogger();
 
-    var reactViews = require('express-react-views');
-    var lodash = require('lodash');
     var viewPath = __dirname;
     var engineOptions = {
         beautify: true,
@@ -27,72 +28,53 @@
     }
 
 
-    function renderJsx(res, filename, opts) {
+    function renderJsx(req, res, filename, opts) {
         var templatePath = require.resolve(filename);
         jsxEngine(templatePath, opts, function transformedJsxCallback(err, str) {
             if (!err) {
-                log.debug('results html for jsx:' + filename + ' opts: ' + JSON.stringify(opts) + ' html:' + str);
                 res.write(str);
                 res.end();
             } else {
-                log.error('got error server rendering jsx file:' + filename + err.message);
-                res.write('error:' + err.message);
+                log.error({req:req}, 'ERROR rendering jsx file:' + filename + '; MESSAGE: ' + err.message);
+                res.write('Error rendering page');
                 res.end();
             }
         });
     }
 
-    function renderIndex(res) {
+    function renderIndex(req, res) {
         var opts = lodash.merge({}, BASE_PROPS, {title: 'QuickBase'});
-        renderJsx(res, './index.jsx', opts);
-        //res.sendfile(app.get('appPath') + '/index.html');
-    }
-
-    function renderAppsIndex(res) {
-        var opts = lodash.merge({}, BASE_PROPS, {
-            title                : 'QuickBase Apps',
-            styleTagStringContent: 'body>.container {margin-left:0;padding-left:0;}'
-        });
-        renderJsx(res, './apps.index.jsx', opts);
-        // res.sendfile(app.get('appPath') + '/apps.index.html');
+        renderJsx(req, res, './index.jsx', opts);
     }
 
     module.exports = function(app, config) {
         getBaseOpts(config);
 
         app.route('/app/:appId/table/:tblId/report/:rptId').get(function(req, res) {
-            log.info('..specific app report request');
-            renderIndex(res);
+            renderIndex(req, res);
         });
 
         app.route('/app/:appId/table/:tblId/record/:recordId').get(function(req, res) {
-            log.info('..specific record request');
-            renderIndex(res);
-        });
-        app.route('/app/:appId/table/:tblId/dashboardDemo/:rptId').get(function(req, res) {
-            log.info('..specific app report request');
-            renderIndex(res);
+            renderIndex(req, res);
         });
 
         app.route('/app/:appId/table/:tblId/reports').get(function(req, res) {
-            log.info('..reports for a given table');
-            renderIndex(res);
+            renderIndex(req, res);
         });
 
         app.route('/app/:appId/table/:tblId').get(function(req, res) {
-            log.info('..table homepage request (placeholder)');
-            renderIndex(res);
+            renderIndex(req, res);
         });
-
+        app.route('/app/:appId').get(function(req, res) {
+            renderIndex(req, res);
+        });
         app.route('/apps').get(function(req, res) {
-            log.info('..apps home page.');
-            renderAppsIndex(res);
+            renderIndex(req, res);
         });
 
-        //  default page -- quickbase application dashboard
+        //  default application dashboard
         app.route('/').get(function(req, res) {
-            log.info('..default home page.');
-            renderIndex(res);
+            renderIndex(req, res);
         });
 
     };

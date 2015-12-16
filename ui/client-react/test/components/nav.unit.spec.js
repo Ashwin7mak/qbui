@@ -6,11 +6,9 @@ import Nav from '../../src/components/nav/nav';
 import * as breakpoints from '../../src/constants/breakpoints';
 
 var LeftNavMock = React.createClass({
-    render: function() {return <div>mock left nav</div>;}
+    render: function() {return <div className="leftMenu" ><a className="leftNavLink" onClick={() => this.props.onSelect()} >mock left nav</a></div>;}
 });
-var MobileLeftNavMock = React.createClass({
-    render: function() {return <div>mock mobile left nav</div>;}
-});
+
 var MobileTopNavMock = React.createClass({
     render: function() {return <div>mock mobile top nav</div>;}
 });
@@ -30,7 +28,7 @@ describe('Nav functions', () => {
     var component;
     let navStore = Fluxxor.createStore({
         getState: function(){
-            return {};
+            return {leftNavOpen:true};
         }
     });
     let appStore = Fluxxor.createStore({
@@ -55,11 +53,11 @@ describe('Nav functions', () => {
         ReportDataStore: new reportDataStore()
     };
     let flux = new Fluxxor.Flux(stores);
+    flux.addActions({toggleLeftNav() {return;}});
 
 
     beforeEach(() => {
         Nav.__Rewire__('LeftNav', LeftNavMock);
-        Nav.__Rewire__('MobileLeftNav', MobileLeftNavMock);
         Nav.__Rewire__('MobileTopNav', MobileTopNavMock);
         Nav.__Rewire__('TopNav', TopNavMock);
         Nav.__Rewire__('Footer', FooterMock);
@@ -68,7 +66,6 @@ describe('Nav functions', () => {
 
     afterEach(() => {
         Nav.__ResetDependency__('LeftNav');
-        Nav.__ResetDependency__('MobileLeftNav');
         Nav.__ResetDependency__('MobileTopNav');
         Nav.__ResetDependency__('TopNav');
         Nav.__ResetDependency__('Footer');
@@ -83,7 +80,7 @@ describe('Nav functions', () => {
                 );
             }
         });
-        var children = {main: MainComponent};
+
         component = TestUtils.renderIntoDocument(<Nav flux={flux}></Nav>);
         expect(TestUtils.isCompositeComponent(component)).toBeTruthy();
     });
@@ -96,10 +93,28 @@ describe('Nav functions', () => {
     });
 
     it('test renders small based on break point', () => {
-        component = TestUtils.renderIntoDocument(<Nav flux={flux} breakpoint={breakpoints.SMALL_BREAKPOINT}></Nav>);
-        expect(TestUtils.scryRenderedComponentsWithType(component, MobileLeftNavMock).length).toEqual(1);
+        var TestParent = React.createFactory(React.createClass({
+
+            childContextTypes: {
+                breakpoint: React.PropTypes.string
+            },
+            getChildContext: function() {
+                return {breakpoint: breakpoints.SMALL_BREAKPOINT};
+            },
+            render() {
+                return <Nav ref="nav" flux={flux}></Nav>;
+            }
+        }));
+        var parent = TestUtils.renderIntoDocument(TestParent());
+
+        component = parent.refs.nav;
+
+        expect(TestUtils.scryRenderedComponentsWithType(component, LeftNavMock).length).toEqual(1);
         expect(TestUtils.scryRenderedComponentsWithType(component, MobileTopNavMock).length).toEqual(1);
         expect(TestUtils.scryRenderedComponentsWithType(component, MobileFooterMock).length).toEqual(1);
+
+        let leftLink = TestUtils.findRenderedDOMComponentWithClass(component, "leftNavLink");
+        TestUtils.Simulate.click(leftLink);
     });
 
 });

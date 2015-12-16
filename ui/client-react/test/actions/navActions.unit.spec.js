@@ -21,24 +21,34 @@ describe('Nav Actions functions', () => {
         spyOn(flux.dispatchBinder, 'dispatch');
     });
 
-    it('test show trouser action', () => {
-        flux.actions.showTrouser();
-        expect(flux.dispatchBinder.dispatch).toHaveBeenCalledWith(actions.SHOW_TROUSER);
+    it('test show trowser action', () => {
+        flux.actions.showTrowser();
+        expect(flux.dispatchBinder.dispatch).toHaveBeenCalledWith(actions.SHOW_TROWSER);
     });
 
-    it('test hide trouser action', () => {
-        flux.actions.hideTrouser();
-        expect(flux.dispatchBinder.dispatch).toHaveBeenCalledWith(actions.HIDE_TROUSER);
+    it('test hide trouwser action', () => {
+        flux.actions.hideTrowser();
+        expect(flux.dispatchBinder.dispatch).toHaveBeenCalledWith(actions.HIDE_TROWSER);
+    });
+
+    it('test toggle left nav action with state', () => {
+        flux.actions.toggleLeftNav(true);
+        expect(flux.dispatchBinder.dispatch).toHaveBeenCalledWith(actions.TOGGLE_LEFT_NAV, true);
     });
 
     it('test toggle left nav action', () => {
         flux.actions.toggleLeftNav();
-        expect(flux.dispatchBinder.dispatch).toHaveBeenCalledWith(actions.TOGGLE_LEFT_NAV);
+        expect(flux.dispatchBinder.dispatch).toHaveBeenCalledWith(actions.TOGGLE_LEFT_NAV, undefined);
     });
 
-    it('test toggle mobile searchbar action', () => {
-        flux.actions.toggleSearch();
-        expect(flux.dispatchBinder.dispatch).toHaveBeenCalledWith(actions.TOGGLE_SEARCH);
+    it('test searching action', () => {
+        flux.actions.setSearching(true);
+        expect(flux.dispatchBinder.dispatch).toHaveBeenCalledWith(actions.SEARCHING, true);
+    });
+
+    it('test searchfor action', () => {
+        flux.actions.searchFor('abc');
+        expect(flux.dispatchBinder.dispatch).toHaveBeenCalledWith(actions.SEARCH_FOR, 'abc');
     });
 
     it('test change locale action', () => {

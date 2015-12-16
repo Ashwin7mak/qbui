@@ -5,6 +5,7 @@ import Fluxxor from 'fluxxor';
 import TopNav from '../../src/components/header/topNav';
 import {MenuItem, OverlayTrigger} from 'react-bootstrap';
 import _ from 'lodash';
+import Locale from '../../src/locales/locales';
 
 var I18nMessageMock = React.createClass({
     render: function() {
@@ -29,7 +30,7 @@ describe('TopNav functions', () => {
     let flux = {
         actions:{
             toggleLeftNav: function() {return;},
-            showTrouser: function() {return;},
+            showTrowser: function() {return;},
             changeLocale: function(locale) {return;},
             searchFor: function(text) {return;}
         }
@@ -40,7 +41,7 @@ describe('TopNav functions', () => {
         TopNav.__Rewire__('CurrentDate', CurrentDateMock);
         component = TestUtils.renderIntoDocument(<TopNav flux={flux}/>);
         spyOn(flux.actions, 'toggleLeftNav');
-        spyOn(flux.actions, 'showTrouser');
+        spyOn(flux.actions, 'showTrowser');
         spyOn(flux.actions, 'changeLocale');
         spyOn(flux.actions, 'searchFor');
     });
@@ -55,8 +56,21 @@ describe('TopNav functions', () => {
     });
 
     it('test renders all locale menu options', () => {
-        var menuItems = TestUtils.scryRenderedComponentsWithType(component, MenuItem);
-        expect(menuItems.length).toBeGreaterThan(4); //3 locales
+        var menuItems = TestUtils.scryRenderedDOMComponentsWithClass(component, "localeLink");
+        var localeMenuItems = Locale.getSupportedLocales();
+        expect(menuItems.length).toBe(localeMenuItems.length);
+
+        //  test with zero supported locales
+        var LocaleMock = {
+            getSupportedLocales: function() {
+                return [];
+            }
+        };
+        TopNav.__Rewire__('Locale', LocaleMock);
+        var noLocaleComponent = TestUtils.renderIntoDocument(<TopNav flux={flux}/>);
+        menuItems = TestUtils.scryRenderedDOMComponentsWithClass(noLocaleComponent, "localeLink");
+        expect(menuItems.length).toBe(0);
+        TopNav.__ResetDependency__('Locale');
     });
 
     it('test toggles nav on hamburger click', () => {
@@ -66,11 +80,11 @@ describe('TopNav functions', () => {
         expect(flux.actions.toggleLeftNav).toHaveBeenCalled();
     });
 
-    it('test shows trouser on addNew button click', () => {
+    it('test shows trowser on addNew button click', () => {
         let addNewButton = TestUtils.scryRenderedDOMComponentsWithClass(component, "addNewButton");
         expect(addNewButton.length).toEqual(1);
         TestUtils.Simulate.click(addNewButton[0]);
-        expect(flux.actions.showTrouser).toHaveBeenCalled();
+        expect(flux.actions.showTrowser).toHaveBeenCalled();
     });
 
     it('test changes locale on selecting menu item', () => {
@@ -83,7 +97,7 @@ describe('TopNav functions', () => {
     });
 
     it('test search on change of searchtext', () => {
-        let searchInputContainer = TestUtils.scryRenderedDOMComponentsWithClass(component, "glyphicon-search");
+        let searchInputContainer = TestUtils.scryRenderedDOMComponentsWithClass(component, "hi-search");
         expect(searchInputContainer.length).toEqual(1);
         TestUtils.Simulate.click(searchInputContainer[0]);
 
@@ -92,6 +106,5 @@ describe('TopNav functions', () => {
         TestUtils.Simulate.change(searchInputBox);
         expect(flux.actions.searchFor).toHaveBeenCalledWith(searchInputBox.value);
     });
-
 
 });
