@@ -528,3 +528,257 @@ export const fakeFormLotsOfData = {
         }
     ]
 };
+
+export const fakeFormClassyData = {
+    "title": "Project Manager Data",
+    "tabs": [
+        {
+            "id": 0,
+            "title": "Projects",
+            "sections": [
+                {
+                    "id": 0,
+                    "title": "Basic Details",
+                    "elements": [
+                        {
+                            "id": 1,
+                            "name": "Project name",
+                            "type": "text",
+                            "value": "UXv3"
+                        },
+                        {
+                            "id": 2,
+                            "name": "Company",
+                            "type": "text",
+                            "value": "QuickBase"
+                        },
+                        {
+                            "id": 3,
+                            "name": "Project Lead",
+                            "type": "text",
+                            "value": "Marc Labbe"
+                        },
+                        {
+                            "id": 4,
+                            "name": "Priority",
+                            "type": "text",
+                            "value": "High"
+                        },
+                        {
+                            "id": 5,
+                            "name": "Status",
+                            "type": "text",
+                            "value": "In Progress"
+                        },
+                        {
+                            "id": 6,
+                            "name": "Has Tasks?",
+                            "type": "checkbox",
+                            "value": true
+                        },
+                        {
+                            "id": 7,
+                            "name": "Start Date",
+                            "type": "datetime",
+                            "value": "08/01/15"
+                        },
+                        {
+                            "id": 8,
+                            "name": "Planned Finish Date",
+                            "type": "datetime",
+                            "value": "08/01/20"
+                        },
+                        {
+                            "id": 9,
+                            "name": "Percent Complete",
+                            "type": "number",
+                            "value": 7
+                        }
+
+                    ]
+                },
+                {
+                    "id": 1,
+                    "title": "Contacts",
+                    "elements": [
+                        {
+                            "id": 10,
+                            "name": "Name",
+                            "type": "text",
+                            "value": ""
+                        },
+                        {
+                            "id": 11,
+                            "name": "Company",
+                            "type": "text",
+                            "value": "Captain America"
+                        },
+                        {
+                            "id": 12,
+                            "name": "Title",
+                            "type": "text",
+                            "value": ""
+                        },
+                        {
+                            "id": 13,
+                            "name": "Department",
+                            "type": "text",
+                            "value": ""
+                        },
+                        {
+                            "id": 14,
+                            "name": "Phone Number",
+                            "type": "phoneNumber",
+                            "value": ""
+                        },
+                        {
+                            "id": 15,
+                            "name": "Mobile",
+                            "type": "phoneNumber",
+                            "value": ""
+                        },
+                        {
+                            "id": 16,
+                            "name": "Fax",
+                            "type": "phoneNumber",
+                            "value": ""
+                        },
+                        {
+                            "id": 17,
+                            "name": "Email Address",
+                            "type": "text",
+                            "value": ""
+                        }
+                    ]
+                }
+            ]// end of sections array
+        },
+        {
+            "id": 1,
+            "title": "Tasks",
+            "sections": [
+                {
+                    "id": 0,
+                    "title": "SMASH!",
+                    "elements": [
+                        {
+                            "id": 1,
+                            "name": "First name",
+                            "type": "text",
+                            "value": "Bruce"
+                        },
+                        {
+                            "id": 2,
+                            "name": "Last name",
+                            "type": "text",
+                            "value": "Banner"
+                        },
+                        {
+                            "id": 3,
+                            "name": "Awesome?",
+                            "type": "checkbox",
+                            "value": true
+                        }
+                    ]
+                },
+                {
+                    "id": 1,
+                    "title": "Puny God",
+                    "elements": [
+                        {
+                            "id": 4,
+                            "name": "Strength",
+                            "type": "text",
+                            "value": "Over 9000!"
+                        },
+                        {
+                            "id": 5,
+                            "name": "Description",
+                            "type": "text",
+                            "value": "HULK SMASH!"
+                        },
+                        {
+                            "id": 6,
+                            "name": "Is Duder?",
+                            "type": "checkbox",
+                            "value": true
+                        }
+                    ]
+                }
+            ]// end of sections array
+        },
+        {
+            "id": 3,
+            "title": "Issues",
+            "sections": [
+                {
+                    "id": 0,
+                    "title": "Basic Details",
+                    "elements": [
+                        {
+                            "id": 1,
+                            "name": "First name",
+                            "type": "text",
+                            "value": "Steve"
+                        },
+                        {
+                            "id": 2,
+                            "name": "Last name",
+                            "type": "text",
+                            "value": "Rogers"
+                        },
+                        {
+                            "id": 3,
+                            "name": "Awesome?",
+                            "type": "checkbox",
+                            "value": true
+                        }
+                    ]
+                },
+                {
+                    "id": 1,
+                    "title": "Advanced Details",
+                    "elements": [
+                        {
+                            "id": 4,
+                            "name": "Age",
+                            "type": "number",
+                            "value": 30
+                        },
+                        {
+                            "id": 5,
+                            "name": "Description",
+                            "type": "text",
+                            "value": "Captain America is the coolest guy in the world. When I get older I hope to be as awesome as Captain America."
+                        },
+                        {
+                            "id": 6,
+                            "name": "Can Fly?",
+                            "type": "checkbox",
+                            "value": false
+                        }
+                    ]
+                }
+            ]// end of sections array
+        },
+        {
+            "id": 4,
+            "title": "Thor",
+            "sections": [
+
+            ]// end of sections array
+        },
+        {
+            "id": 5,
+            "title": "Nick Fury",
+            "sections": [
+
+            ]// end of sections array
+        }
+    ],//end of tabs array
+    "properties": [
+        {
+            "labelWrap": true
+        }
+    ]
+};
