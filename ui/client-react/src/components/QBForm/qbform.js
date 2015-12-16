@@ -5,7 +5,7 @@ import React from 'react';
 
 import QBPanel from '../qbPanel/qbpanel.js';
 
-import {fakeFormLotsOfData} from './fakeData.js';
+import {fakeFormClassyData} from './fakeData.js';
 
 import './qbform.scss';
 import './tabs.scss';
@@ -21,7 +21,7 @@ class QBForm extends React.Component {
 
     initState(){
         let initialState = {
-            "externalData": fakeFormLotsOfData,
+            "externalData": fakeFormClassyData,
             readonly : true,
             defaultTab : this.props.activeTab
         };
@@ -44,7 +44,7 @@ class QBForm extends React.Component {
         var isCheckbox = curElement.type === "checkbox";
         return (
             <div key={curElement.id} className="field">
-                <span className={"fieldLabel"}>{curElement.name}</span>
+                <h5 className={"fieldLabel"}>{curElement.name}</h5>
                 {isCheckbox ? this.createCheckBox(curElement) : this.createSpan(curElement)}
             </div>
         );

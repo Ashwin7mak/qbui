@@ -579,7 +579,7 @@ export const fakeFormClassyData = {
                         {
                             "id": 7,
                             "name": "Start Date",
-                            "type": "datetime",
+                            "type": "dateTime",
                             "value": "08/01/15"
                         },
                         {
@@ -605,49 +605,49 @@ export const fakeFormClassyData = {
                             "id": 10,
                             "name": "Name",
                             "type": "text",
-                            "value": ""
+                            "value": "Marc Labbe"
                         },
                         {
                             "id": 11,
                             "name": "Company",
                             "type": "text",
-                            "value": "Captain America"
+                            "value": "QuickBase"
                         },
                         {
                             "id": 12,
                             "name": "Title",
                             "type": "text",
-                            "value": ""
+                            "value": "Project Manager"
                         },
                         {
                             "id": 13,
                             "name": "Department",
                             "type": "text",
-                            "value": ""
+                            "value": "Project Management"
                         },
                         {
                             "id": 14,
                             "name": "Phone Number",
                             "type": "phoneNumber",
-                            "value": ""
+                            "value": "617-250-2334"
                         },
                         {
                             "id": 15,
                             "name": "Mobile",
                             "type": "phoneNumber",
-                            "value": ""
+                            "value": "617-250-2334"
                         },
                         {
                             "id": 16,
                             "name": "Fax",
                             "type": "phoneNumber",
-                            "value": ""
+                            "value": null
                         },
                         {
                             "id": 17,
                             "name": "Email Address",
                             "type": "text",
-                            "value": ""
+                            "value": "marc_labbe@intuit.com"
                         }
                     ]
                 }
@@ -658,50 +658,86 @@ export const fakeFormClassyData = {
             "title": "Tasks",
             "sections": [
                 {
-                    "id": 0,
-                    "title": "SMASH!",
+                    "id": 2,
+                    "title": "Information",
                     "elements": [
                         {
-                            "id": 1,
-                            "name": "First name",
+                            "id": 18,
+                            "name": "Project Name",
                             "type": "text",
-                            "value": "Bruce"
+                            "value": "UXv3"
                         },
                         {
-                            "id": 2,
-                            "name": "Last name",
+                            "id": 19,
+                            "name": "Project Phase",
                             "type": "text",
-                            "value": "Banner"
+                            "value": "Development"
                         },
                         {
-                            "id": 3,
-                            "name": "Awesome?",
+                            "id": 20,
+                            "name": "Task Name",
+                            "type": "text",
+                            "value": "Forms First Pass"
+                        },
+                        {
+                            "id": 21,
+                            "name": "Milestone",
                             "type": "checkbox",
                             "value": true
-                        }
-                    ]
-                },
-                {
-                    "id": 1,
-                    "title": "Puny God",
-                    "elements": [
-                        {
-                            "id": 4,
-                            "name": "Strength",
-                            "type": "text",
-                            "value": "Over 9000!"
                         },
                         {
-                            "id": 5,
-                            "name": "Description",
-                            "type": "text",
-                            "value": "HULK SMASH!"
+                            "id": 22,
+                            "name": "Duration (Days)",
+                            "type": "number",
+                            "value": 14
                         },
                         {
-                            "id": 6,
-                            "name": "Is Duder?",
-                            "type": "checkbox",
-                            "value": true
+                            "id": 23,
+                            "name": "Start",
+                            "type": "dateTime",
+                            "value": "12/04/15"
+                        },
+                        {
+                            "id": 24,
+                            "name": "Calculated Finish Date",
+                            "type": "dateTime",
+                            "value": "12/18/15"
+                        },
+                        {
+                            "id": 25,
+                            "name": "Actual Finish Date",
+                            "type": "dateTime",
+                            "value": ""
+                        },
+                        {
+                            "id": 26,
+                            "name": "Days Overdue",
+                            "type": "number",
+                            "value": null
+                        },
+                        {
+                            "id": 27,
+                            "name": "Status",
+                            "type": "text",
+                            "value": "In Progress"
+                        },
+                        {
+                            "id": 28,
+                            "name": "% Complete",
+                            "type": "number",
+                            "value": 90
+                        },
+                        {
+                            "id": 29,
+                            "name": "Priority",
+                            "type": "text",
+                            "value": "Medium"
+                        },
+                        {
+                            "id": 30,
+                            "name": "Assigned To",
+                            "type": "text",
+                            "value": "Bisquit"
                         }
                     ]
                 }
@@ -712,50 +748,56 @@ export const fakeFormClassyData = {
             "title": "Issues",
             "sections": [
                 {
-                    "id": 0,
+                    "id": 3,
                     "title": "Basic Details",
                     "elements": [
                         {
-                            "id": 1,
-                            "name": "First name",
+                            "id": 31,
+                            "name": "Issue Name",
                             "type": "text",
-                            "value": "Steve"
+                            "value": "Prepare for Re-Arch Demo"
                         },
                         {
-                            "id": 2,
-                            "name": "Last name",
-                            "type": "text",
-                            "value": "Rogers"
-                        },
-                        {
-                            "id": 3,
-                            "name": "Awesome?",
-                            "type": "checkbox",
-                            "value": true
-                        }
-                    ]
-                },
-                {
-                    "id": 1,
-                    "title": "Advanced Details",
-                    "elements": [
-                        {
-                            "id": 4,
-                            "name": "Age",
-                            "type": "number",
-                            "value": 30
-                        },
-                        {
-                            "id": 5,
+                            "id": 32,
                             "name": "Description",
                             "type": "text",
-                            "value": "Captain America is the coolest guy in the world. When I get older I hope to be as awesome as Captain America."
+                            "value": "We need to have the work done on Forms MVP so that we can show it off at an upcoming demo. To do this we have 4 stories that need to be completed."
                         },
                         {
-                            "id": 6,
-                            "name": "Can Fly?",
-                            "type": "checkbox",
-                            "value": false
+                            "id": 33,
+                            "name": "Assigned To",
+                            "type": "text",
+                            "value": "Bisquit"
+                        },
+                        {
+                            "id": 34,
+                            "name": "Due Date",
+                            "type": "dateTime",
+                            "value": "12/17/15"
+                        },
+                        {
+                            "id": 35,
+                            "name": "Status",
+                            "type": "text",
+                            "value": "Completed"
+                        },
+                        {
+                            "id": 36,
+                            "name": "Priority",
+                            "type": "text",
+                            "value": "High"
+                        },
+                        {
+                            "id": 37,
+                            "name": "Project",
+                            "type": "text",
+                            "value": "UXv3"
+                        },
+                        {
+                            "id": 33,
+                            "name": "Date Resolved",
+                            "type": "dateTime",
+                            "value": "12/16/15"
                         }
                     ]
                 }
@@ -763,14 +805,19 @@ export const fakeFormClassyData = {
         },
         {
             "id": 4,
-            "title": "Thor",
+            "title": "Resources",
             "sections": [
-
+                {
+                    "id": 4,
+                    "title": "Untitled Section",
+                    "elements": [
+                    ]
+                }
             ]// end of sections array
         },
         {
             "id": 5,
-            "title": "Nick Fury",
+            "title": "Time Cards",
             "sections": [
 
             ]// end of sections array
