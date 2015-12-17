@@ -35,13 +35,13 @@ describe('Report functions', () => {
 
     beforeEach(() => {
         Report.__Rewire__('ReportStage', ReportStageMock);
-        Report.__Rewire__('ReportContent', ReportContentMock);
+        Report.__Rewire__('ReportToolsAndContent', ReportContentMock);
         spyOn(flux.actions, 'loadReport');
     });
 
     afterEach(() => {
         Report.__ResetDependency__('ReportStage', ReportStageMock);
-        Report.__ResetDependency__('ReportContent', ReportContentMock);
+        Report.__ResetDependency__('ReportToolsAndContent', ReportContentMock);
         flux.actions.loadReport.calls.reset();
     });
 

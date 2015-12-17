@@ -22,12 +22,12 @@
       padding :  .5rem 1rem .5rem 1rem;
       align-items: center;
 
-      .recordSearchBox {
+      .filterSearchBox {
         padding: .8rem;
         width: 25em;
       }
 
-      .filterResultsButton {
+      .filterListButton {
         //margin-top: .5rem;
         margin-left: 1.5rem;
       }
@@ -44,6 +44,10 @@
 
   }
 
+
+}
+
+.facetList {
 
 }
 
