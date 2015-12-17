@@ -30,12 +30,12 @@ $fieldLabel-color: $color3;
 .rotateDown {
   transition: all .25s linear;
   transform: rotate(-180deg);
-  font-size: 32px;
+  font-size: 22px;
 }
 .rotateUp {
   transition: all .25s linear;
   transform: rotate(0deg);
-  font-size: 32px;
+  font-size: 22px;
 }
 .fieldRow{
   display: flex;

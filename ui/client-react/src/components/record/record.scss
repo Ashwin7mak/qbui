@@ -1,3 +1,7 @@
+@import '../../assets/css/qbVariables';
+
 .recordContainer {
   width: 100%;
+  background-image: linear-gradient(to top, $color13 0%, $color14 100%);
+  background-color: $color12;
 }

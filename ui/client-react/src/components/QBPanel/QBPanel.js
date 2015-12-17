@@ -19,10 +19,11 @@ class QBPanel extends React.Component {
     }
 
     render() {
+        var panelId = "panelId" + this.props.key;
         return (
             <div className={"qbPanel"}>
                 <div className="qbPanelHeader" onClick={ ()=> this.setState({open: !this.state.open})}>
-                    <h3 id="title">{this.props.title}<small className="qbPanelHeaderIcon">
+                    <h3 id={panelId}>{this.props.title}<small className="qbPanelHeaderIcon">
                         <Hicon icon="chevron-up" className={this.state.open ? "rotateDown" : "rotateUp"}/>
                     </small></h3>
                 </div>
@@ -36,7 +37,7 @@ class QBPanel extends React.Component {
     }
 }
 
-QBPanel.propTypes = {title: React.PropTypes.string, isOpen: React.PropTypes.bool};
-QBPanel.defaultProps = {title: "", isOpen: false};
+QBPanel.propTypes = {title: React.PropTypes.string, isOpen: React.PropTypes.bool, key: React.PropTypes.number};
+QBPanel.defaultProps = {title: "Untitled", isOpen: false, key: -1};
 
 export default QBPanel;

@@ -809,7 +809,7 @@ export const fakeFormClassyData = {
             "sections": [
                 {
                     "id": 4,
-                    "title": "Untitled Section",
+                    "title": "Untitled",
                     "elements": [
                     ]
                 }
