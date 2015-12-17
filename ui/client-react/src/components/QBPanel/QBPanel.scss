@@ -1,11 +1,10 @@
 @import '../../assets/css/qbVariables';
-@import '../../../src/assets/css/qbVariables';
+@import '../../assets/css/qbColorVariables';
 
 $fieldLabel-font-size: $font-size-small;
 $fieldValue-font-size: $font-size-base;
 
 $fieldLabel-color: $color3;
-$card-border-color: $color4;
 
 .qbPanel{
   font-family: $font-family;
