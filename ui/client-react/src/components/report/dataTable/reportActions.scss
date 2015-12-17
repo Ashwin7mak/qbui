@@ -1,0 +1,15 @@
+.reportActions {
+  padding: 5px 0 10px 0;
+  display:flex;
+  justify-content:space-between;
+  button {
+    margin-right:8px;
+  }
+  .input-group {
+    width: 200px;
+  }
+  .searchInput {
+    display:inline-block;
+    vertical-align:middle;
+  }
+}

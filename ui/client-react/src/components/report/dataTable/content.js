@@ -3,6 +3,7 @@ import React from 'react';
 import GriddleTable  from '../../../components/dataTable/griddleTable/griddleTable.js';
 import {DateFormatter, NumericFormatter}  from '../../../components/dataTable/griddleTable/formatters.js';
 import Loader  from 'react-loader';
+import ReportActions from './reportActions';
 
 const resultsPerPage = 1000; //assume that this is the constant number of records per page. This can be passed in as a prop for diff reports
 
@@ -82,13 +83,22 @@ var Content = React.createClass({
 
     /* TODO: paging component that has "next and previous tied to callbacks from the store to get new data set*/
     render: function() {
+
         return (
             <Loader loaded={!this.props.reportData.loading}>
                 {this.props.reportData.error ?
                     <div>Error loading report!</div> :
-                        <div>
-                            <GriddleTable results={this.props.reportData && this.props.reportData.data ? this.props.reportData.data.filteredRecords : []} columnMetadata={this.state.reportColumns} showPager={false} useExternal={false} resultsPerPage={resultsPerPage} externalResultsPerPage={resultsPerPage} />
-                        </div>
+                    <div>
+                        <GriddleTable results={this.props.reportData && this.props.reportData.data ? this.props.reportData.data.filteredRecords : []}
+                                      columnMetadata={this.state.reportColumns}
+                                      uniqueIdentifier="Record ID#"
+                                      showPager={false}
+                                      useExternal={false}
+                                      resultsPerPage={resultsPerPage}
+                                      externalResultsPerPage={resultsPerPage}
+                                      actions={<ReportActions/>}
+                        />
+                    </div>
                 }
             </Loader>
         );
