@@ -4,7 +4,7 @@ import GriddleTable  from '../../../components/dataTable/griddleTable/griddleTab
 import {DateFormatter, NumericFormatter}  from '../../../components/dataTable/griddleTable/formatters.js';
 import Loader  from 'react-loader';
 import ReportActions from './reportActions';
-
+import TableActions from './tableActions';
 const resultsPerPage = 1000; //assume that this is the constant number of records per page. This can be passed in as a prop for diff reports
 
 var Content = React.createClass({
@@ -96,7 +96,8 @@ var Content = React.createClass({
                                       useExternal={false}
                                       resultsPerPage={resultsPerPage}
                                       externalResultsPerPage={resultsPerPage}
-                                      actions={<ReportActions/>}
+                                      actions={<TableActions/>}
+                                      selectionActions={<ReportActions customActions={["Mark Done","Change Status"]}/>}
                         />
                     </div>
                 }

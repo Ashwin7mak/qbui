@@ -149,6 +149,8 @@ body:not(.small-breakpoint) .leftNav.closed {
         width:100%
       }
     }
+
+
     li.link:hover {
       color: $nav-hover-fg;
       background-color: $nav-hover-bg;
@@ -181,6 +183,10 @@ body:not(.small-breakpoint) .leftNav.closed {
   z-index: 9999;
   border-right: 1px solid $nav-border;
   overflow-y: auto;
+
+  ul li.link a.right {
+    opacity:1;
+  }
 }
 
 .small-breakpoint .navShell.leftNavOpen {

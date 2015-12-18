@@ -38,6 +38,7 @@ $margin-spacer: 10px;
     top: $margin-spacer * 2;
   }
   .flexRow{
+    position:relative;
     display: flex;
     flex-direction: row;
   }

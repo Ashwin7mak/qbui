@@ -1,0 +1,40 @@
+import React from 'react';
+import ReactIntl from 'react-intl';
+import {I18nMessage, I18nDate} from '../../../utils/i18nMessage';
+import Locale from '../../../locales/locales';
+import Fluxxor from 'fluxxor';
+import Hicon from '../../harmonyIcon/harmonyIcon';
+
+import './tableActions.scss';
+
+import {MenuItem, Dropdown, ButtonGroup, Button, OverlayTrigger, Popover, Glyphicon, Input} from 'react-bootstrap';
+
+let FluxMixin = Fluxxor.FluxMixin(React);
+
+var TableActions = React.createClass({
+    mixins: [FluxMixin],
+
+    searchChanged(ev) {
+        const text = ev.target.value;
+        let flux = this.getFlux();
+        flux.actions.searchFor(text);
+    },
+    render() {
+
+        const searchIcon = <Glyphicon glyph="search" />;
+
+        return (
+            <div className={"tableBar"}>
+
+                <div>
+                    <div className="searchInput">
+                        <Input bsClass="search" size="30" className="searchInputBox" standalone addonBefore={searchIcon} type="text" placeholder="Search Records"  onChange={this.searchChanged} />
+                    </div>
+                    <a><Hicon icon="filter"/></a>
+                </div>
+            </div>
+        );
+    }
+});
+
+export default TableActions;

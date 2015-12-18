@@ -3,11 +3,13 @@ import Griddle from 'griddle-react';
 
 import {I18nMessage} from '../../../utils/i18nMessage';
 import * as breakpoints from '../../../constants/breakpoints';
-import './griddleTable.css';
-import './qbGriddleTable.scss';
+import ReactCSSTransitionGroup from 'react/lib/ReactCSSTransitionGroup';
+
 import ReportActions from '../../report/dataTable/reportActions';
 import CardView from './cardView.js';
 
+import './griddleTable.scss';
+import './qbGriddleTable.scss';
 /*
  * Sample component looks like  -
  * <GriddleTable results={fakeGriddleData} columnMetadata={fakeGriddleColumnMetaData} useExternal={false}/>
@@ -23,8 +25,8 @@ class GriddleTable extends React.Component {
         };
 
         this.onTableClick = this.onTableClick.bind(this);
-    }
 
+    }
 
     /**
      * since Griddle is a half-baked piece of junk we need to get selected rows
@@ -36,16 +38,21 @@ class GriddleTable extends React.Component {
         }, 0);
     }
 
+
     render() {
 
         if (this.props.results) {
             return (
                 <div className="reportTable" >
 
-                    {/* add actions component if present, passing in selected row count prop */}
-                    {this.props.actions && React.cloneElement(this.props.actions, {selection: this.state.selectedRows})}
+                    <ReactCSSTransitionGroup transitionName="tableActions" component="div" className={"tableActionsContainer"}  transitionEnterTimeout={300} transitionLeaveTimeout={300}>
 
-                    <div onClick={this.onTableClick}>
+                    {this.props.selectionActions && this.state.selectedRows.length ?
+                        React.cloneElement(this.props.selectionActions, {key:"selectionActions", selection: this.state.selectedRows}) :
+                        React.cloneElement(this.props.actions, {key:"actions"})}
+                    </ReactCSSTransitionGroup>
+
+                    <div onClick={this.onTableClick} onMouseMove={this.mouseMove} onMouseEnter={this.mouseEnter} onMouseLeave={this.mouseLeave}>
                         <Griddle {...this.props}
                             ref="griddleTable"
                             isMultipleSelection={true}
