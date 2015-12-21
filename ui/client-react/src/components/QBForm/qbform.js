@@ -1,17 +1,14 @@
-/**
- * Created by fbeyer on 10/21/15.
- */
 import React from 'react';
-
 import QBPanel from '../qbPanel/qbpanel.js';
-
 import {fakeFormClassyData} from './fakeData.js';
-
+import Tabs, {TabPane} from 'rc-tabs';
 import './qbform.scss';
 import './tabs.scss';
 
-import Tabs, {TabPane} from 'rc-tabs';
-
+/*
+ Custom QuickBase Form component that has 1 property.
+ activeTab: the tab we want to display first when viewing the form, defaults to the first tab
+ */
 class QBForm extends React.Component {
 
     constructor(...args) {
@@ -23,7 +20,7 @@ class QBForm extends React.Component {
         let initialState = {
             "externalData": fakeFormClassyData,
             readonly : true,
-            defaultTab : this.props.activeTab
+            currentTab : this.props.activeTab
         };
         return initialState;
     }
@@ -83,7 +80,7 @@ class QBForm extends React.Component {
         }
         return (
             <div className="formContainer">
-                <Tabs defaultActiveKey={this.state.defaultTab}>
+                <Tabs defaultActiveKey={this.state.currentTab}>
                     {tabs}
                 </Tabs>
             </div>
@@ -95,18 +92,3 @@ QBForm.propTypes = {activeTab: React.PropTypes.string};
 QBForm.defaultProps = {activeTab: '0'};
 
 export default QBForm;
-
-/*
-
- <tab | tab | <selected tab> | tab | tab>
-    <QBPanel (collapsed)>
-        field : value
-        field : value
-        field : value
-    </QBPanel>
-     <QBPanel (collapsed)>
-        field : value
-        field : value
-        field : value
-     </QBPanel>
- */

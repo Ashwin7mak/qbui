@@ -1,9 +1,7 @@
 @import '../../assets/css/qbVariables';
-@import '../../assets/css/qbColorVariables';
 
 $fieldLabel-font-size: $font-size-small;
 $fieldValue-font-size: $font-size-base;
-
 $fieldLabel-color: $color3;
 
 .qbPanel{
@@ -58,12 +56,10 @@ $fieldLabel-color: $color3;
   }
 }
 
-@media (max-width: 700px) {
   /* For mobile phones: */
-  .qbPanel{
-    font-size: $font-size;
-  }
-  .qbPanelBody{
+.small-breakpoint .qbPanel {
+  font-size: $font-size;
+  .qbPanelBody {
     padding-left: 1%;
     display: flex;
     flex-wrap: wrap;
@@ -71,12 +67,35 @@ $fieldLabel-color: $color3;
   }
   .field {
     max-width: 100%;
-    .fieldLabel{
+    .fieldLabel {
       display: block;
       font-size: $fieldLabel-font-size
     }
     .fieldValue {
-      display:block;
+      display: block;
+      min-width: 0;
+      font-size: $fieldValue-font-size;
+    }
+  }
+}
+
+/* For tablet like devices: */
+.medium-breakpoint .qbPanel {
+  font-size: $font-size;
+  .qbPanelBody {
+    padding-left: 1%;
+    display: flex;
+    flex-wrap: wrap;
+    flex-direction: row;
+  }
+  .field {
+    max-width: 60%;
+    .fieldLabel {
+      display: block;
+      font-size: $fieldLabel-font-size
+    }
+    .fieldValue {
+      display: block;
       min-width: 0;
       font-size: $fieldValue-font-size;
     }

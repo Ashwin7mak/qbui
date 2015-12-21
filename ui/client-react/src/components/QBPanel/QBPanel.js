@@ -1,14 +1,16 @@
-/**
- * Created by fbeyer on 10/29/15.
- */
 import React from 'react';
-
 import ReactBootstrap from 'react-bootstrap';
 import {Panel}  from 'react-bootstrap';
 import Hicon from '../harmonyIcon/harmonyIcon';
-
 import './qbpanel.scss';
 
+/*
+    Custom QuickBase Panel component that has 4 properties.
+        title: the title to display in the Panel Header
+        isOPen: boolean if we should start with the panel expanded or not
+        key: creates a unique id for each panel object (helps with accessibility)
+        children: the content displayed within the panel itself
+ */
 class QBPanel extends React.Component {
 
     constructor(...args) {

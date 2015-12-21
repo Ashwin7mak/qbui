@@ -1,3 +1,10 @@
+//need to import colors and update accordingly where I changed css code.
+@import '../../assets/css/qbVariables';
+
+$activeTab-color: $color9;
+$disabledTab-color: $nav-border;
+$chevronFontSize: 22px;
+
 .rc-tabs {
   outline: none;
   box-sizing: border-box;
@@ -8,7 +15,7 @@
   position: absolute;
   box-sizing: border-box;
   margin-top: -3px;
-  background-color: #365ebf;
+  background-color: $tabsUnderLine;
   -webkit-transform: scaleX(1);
   -ms-transform: scaleX(1);
   transform: scaleX(1);
@@ -59,7 +66,7 @@
 }
 .rc-tabs-tab-btn-disabled {
   cursor: default;
-  color: #ccc;
+  color: $disabledTab-color;
 }
 .rc-tabs-nav-wrap {
   overflow: hidden;
@@ -88,13 +95,13 @@
 }
 .rc-tabs-nav div.rc-tabs-tab-disabled {
   cursor: default;
-  color: #ccc;
+  color: $disabledTab-color;
 }
 .rc-tabs-nav div.rc-tabs-tab-disabled > .rc-tabs-tab-inner {
   cursor: default;
 }
 .rc-tabs-nav div.rc-tabs-tab-disabled > .rc-tabs-tab-inner:hover {
-  color: #ccc;
+  color: $disabledTab-color;
 }
 .rc-tabs-nav .rc-tabs-tab {
   box-sizing: border-box;
@@ -237,210 +244,9 @@
   transition: -webkit-transform 0.3s cubic-bezier(0.35, 0, 0.25, 1);
   transition: transform 0.3s cubic-bezier(0.35, 0, 0.25, 1);
 }
-.rc-tabs-left {
-  border-right: 2px solid #f3f3f3;
-}
-.rc-tabs-left .rc-tabs-tabs-bar {
-  float: left;
-  margin-right: 10px;
-  border-right: 1px solid #f3f3f3;
-}
-.rc-tabs-left .rc-tabs-nav-container-scrolling {
-  padding-top: 32px;
-  padding-bottom: 32px;
-}
-.rc-tabs-left .rc-tabs-nav-wrap {
-  height: 100%;
-}
-.rc-tabs-left .rc-tabs-content {
-  height: 100%;
-}
-.rc-tabs-left .rc-tabs-nav-scroll {
-  height: 99999px;
-}
-.rc-tabs-left .rc-tabs-nav {
-  transition: top 0.5s cubic-bezier(0.35, 0, 0.25, 1);
-}
-.rc-tabs-left .rc-tabs-tab-prev,
-.rc-tabs-left .rc-tabs-tab-next {
-  margin-top: -2px;
-  height: 32px;
-  line-height: 32px;
-  width: 100%;
-  display: block;
-  text-align: center;
-}
-.rc-tabs-left .rc-tabs-tab-next {
-  bottom: 0;
-}
-.rc-tabs-left .rc-tabs-tab-next-icon {
-  -webkit-transform: rotate(90deg);
-  -ms-transform: rotate(90deg);
-  transform: rotate(90deg);
-  filter: progid:DXImageTransform.Microsoft.BasicImage(rotation=1);
-}
-.rc-tabs-left .rc-tabs-tab-next-icon:before {
-  font-family: "Glyphicons Halflings";
-  content: "\e080";
-}
-.rc-tabs-left .rc-tabs-tab-prev {
-  top: 2px;
-}
-.rc-tabs-left .rc-tabs-tab-prev-icon {
-  -webkit-transform: rotate(270deg);
-  -ms-transform: rotate(270deg);
-  transform: rotate(270deg);
-  filter: progid:DXImageTransform.Microsoft.BasicImage(rotation=3);
-}
-.rc-tabs-left .rc-tabs-tab-prev-icon:before {
-  font-family: "Glyphicons Halflings";
-  content: "\e079";
-}
-.rc-tabs-left .rc-tabs-ink-bar {
-  width: 2px;
-  right: 0;
-}
-.rc-tabs-left .rc-tabs-ink-bar-transition-forward {
-  transition: bottom 0.3s cubic-bezier(0.35, 0, 0.25, 1), top 0.3s cubic-bezier(0.35, 0, 0.25, 1) 0.09s;
-}
-.rc-tabs-left .rc-tabs-ink-bar-transition-backward {
-  transition: bottom 0.3s cubic-bezier(0.35, 0, 0.25, 1) 0.09s, top 0.3s cubic-bezier(0.35, 0, 0.25, 1);
-}
-.rc-tabs-left .rc-tabs-nav .rc-tabs-tab {
-  padding: 16px 24px;
-}
-.rc-tabs-right {
-  border-left: 2px solid #f3f3f3;
-}
-.rc-tabs-right .rc-tabs-tabs-bar {
-  float: right;
-  margin-left: 10px;
-  border-left: 1px solid #f3f3f3;
-}
-.rc-tabs-right .rc-tabs-nav-container-scrolling {
-  padding-top: 32px;
-  padding-bottom: 32px;
-}
-.rc-tabs-right .rc-tabs-nav-wrap {
-  height: 100%;
-}
-.rc-tabs-right .rc-tabs-nav-scroll {
-  height: 99999px;
-}
-.rc-tabs-right .rc-tabs-nav {
-  transition: top 0.5s cubic-bezier(0.35, 0, 0.25, 1);
-}
-.rc-tabs-right .rc-tabs-tab-prev,
-.rc-tabs-right .rc-tabs-tab-next {
-  margin-top: -2px;
-  height: 32px;
-  width: 100%;
-  display: block;
-  text-align: center;
-  line-height: 32px;
-}
-.rc-tabs-right .rc-tabs-tab-next {
-  bottom: 0;
-}
-.rc-tabs-right .rc-tabs-tab-next-icon {
-  -webkit-transform: rotate(90deg);
-  -ms-transform: rotate(90deg);
-  transform: rotate(90deg);
-  filter: progid:DXImageTransform.Microsoft.BasicImage(rotation=1);
-}
-.rc-tabs-right .rc-tabs-tab-next-icon:before {
-  font-family: "Glyphicons Halflings";
-  content: "\e079";
-}
-.rc-tabs-right .rc-tabs-tab-prev {
-  top: 2px;
-}
-.rc-tabs-right .rc-tabs-tab-prev-icon {
-  -webkit-transform: rotate(270deg);
-  -ms-transform: rotate(270deg);
-  transform: rotate(270deg);
-  filter: progid:DXImageTransform.Microsoft.BasicImage(rotation=3);
-}
-.rc-tabs-right .rc-tabs-tab-prev-icon:before {
-  font-family: "Glyphicons Halflings";
-  content: "\e080";
-}
-.rc-tabs-right .rc-tabs-content {
-  height: 100%;
-}
-.rc-tabs-right .rc-tabs-ink-bar {
-  width: 2px;
-  left: 0;
-}
-.rc-tabs-right .rc-tabs-ink-bar-transition-forward {
-  transition: bottom 0.3s cubic-bezier(0.35, 0, 0.25, 1), top 0.3s cubic-bezier(0.35, 0, 0.25, 1) 0.09s;
-}
-.rc-tabs-right .rc-tabs-ink-bar-transition-backward {
-  transition: bottom 0.3s cubic-bezier(0.35, 0, 0.25, 1) 0.09s, top 0.3s cubic-bezier(0.35, 0, 0.25, 1);
-}
-.rc-tabs-right .rc-tabs-nav .rc-tabs-tab {
-  padding: 16px 24px;
-}
-.rc-tabs-bottom {
-  border-top: 2px solid #f3f3f3;
-}
-.rc-tabs-bottom .rc-tabs-tabs-bar {
-  border-top: 1px solid #f3f3f3;
-}
-.rc-tabs-bottom .rc-tabs-nav-container-scrolling {
-  padding-left: 32px;
-  padding-right: 32px;
-}
-.rc-tabs-bottom .rc-tabs-nav-scroll {
-  width: 99999px;
-}
-.rc-tabs-bottom .rc-tabs-nav-wrap {
-  width: 100%;
-}
-.rc-tabs-bottom .rc-tabs-content {
-  width: 100%;
-}
-.rc-tabs-bottom .rc-tabs-nav {
-  transition: left 0.5s cubic-bezier(0.35, 0, 0.25, 1);
-}
-.rc-tabs-bottom .rc-tabs-tab-next {
-  right: 2px;
-}
-.rc-tabs-bottom .rc-tabs-tab-next-icon:before {
-  font-family: "Glyphicons Halflings";
-  content: "\e080";
-}
-.rc-tabs-bottom .rc-tabs-tab-prev {
-  left: 0;
-}
-.rc-tabs-bottom .rc-tabs-tab-prev-icon:before {
-  font-family: "Glyphicons Halflings";
-  content: "\e079";
-}
-.rc-tabs-bottom .rc-tabs-tab-prev,
-.rc-tabs-bottom .rc-tabs-tab-next {
-  margin-right: -2px;
-  width: 32px;
-  height: 100%;
-  top: 0;
-  text-align: center;
-}
-.rc-tabs-bottom .rc-tabs-ink-bar {
-  height: 2px;
-  top: 3px;
-  left: 0;
-}
-.rc-tabs-bottom .rc-tabs-ink-bar-transition-forward {
-  transition: right 0.3s cubic-bezier(0.35, 0, 0.25, 1), left 0.3s cubic-bezier(0.35, 0, 0.25, 1) 0.09s;
-}
-.rc-tabs-bottom .rc-tabs-ink-bar-transition-backward {
-  transition: right 0.3s cubic-bezier(0.35, 0, 0.25, 1) 0.09s, left 0.3s cubic-bezier(0.35, 0, 0.25, 1);
-}
-.rc-tabs-bottom .rc-tabs-nav .rc-tabs-tab {
-  float: left;
-  height: 100%;
-  margin-right: 30px;
-}
+/*
+ * we don't want a border on the bottom, commenting this out currently.
+*/
 .rc-tabs-top {
   //border-bottom: 2px solid #f3f3f3;
 }
@@ -466,18 +272,24 @@
 .rc-tabs-top .rc-tabs-tab-next {
   right: 2px;
 }
+/*
+ * Updated to use Harmony Icons
+*/
 .rc-tabs-top .rc-tabs-tab-next-icon:before {
   font-family: "harmonyicons";
   content: "\F06B";
-  font-size: 22px;
+  font-size: $chevronFontSize;
 }
 .rc-tabs-top .rc-tabs-tab-prev {
   left: 0;
 }
+/*
+ * Updated to use Harmony Icons
+*/
 .rc-tabs-top .rc-tabs-tab-prev-icon:before {
   font-family: "harmonyicons";
   content: "\F06A";
-  font-size: 22px;
+  font-size: $chevronFontSize;
 }
 .rc-tabs-top .rc-tabs-tab-prev,
 .rc-tabs-top .rc-tabs-tab-next {
@@ -502,5 +314,5 @@
   float: left;
   height: 100%;
   margin-right: 30px;
-  color: #969696;
+  color: $activeTab-color;
 }
