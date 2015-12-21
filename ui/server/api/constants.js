@@ -36,7 +36,10 @@
         URL             : 'URL',
         EMAIL_ADDRESS   : 'EMAIL_ADDRESS',
         USER            : 'USER',
-        FILE_ATTACHMENT : 'FILE_ATTACHMENT'
+        FILE_ATTACHMENT : 'FILE_ATTACHMENT',
+        //Query expressions
+        QUERY_AND       : 'AND',
+        QUERY_OR        : 'OR'
     });
 
 }());

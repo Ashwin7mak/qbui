@@ -18,7 +18,7 @@ var ReportRoute = React.createClass({
     loadReport(appId, tblId, rptId) {
 
         let flux = this.getFlux();
-        flux.actions.loadReport(appId, tblId, rptId, true);
+        flux.actions.loadReport_1(appId, tblId, rptId, true);
     },
     loadReportFromParams(params) {
 
@@ -31,7 +31,11 @@ var ReportRoute = React.createClass({
             this.loadReport(appId, tblId, rptId);
         }
     },
-
+    facetizeIt: function(){
+        alert(1);
+        let flux = this.getFlux();
+        flux.actions.loadReport_2(this.props.params.appId, this.props.params.tblId, this.props.params.rptId, true);
+    },
     componentDidMount() {
 
         if (this.props.params) {
@@ -45,6 +49,7 @@ var ReportRoute = React.createClass({
                 <Stage stageContent="this is the stage content text" >
                     <ReportStage reportName={this.props.reportData && this.props.reportData.data ? this.props.reportData.data.name : ""}/>
                 </Stage>
+                <div> This is hard wired to call filter by facets <button onClick={this.facetizeIt}> Facetize it </button></div>
                 <ReportContent reportData={this.props.reportData} />
                 </div>);
     }

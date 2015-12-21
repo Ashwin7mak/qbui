@@ -52,6 +52,11 @@ class ReportService extends BaseService {
         }
         return super.get(constants.APPS + '/' + appId + '/' + constants.TABLES + '/' + tableId + '/' + constants.REPORTS + '/' + reportId + '/' + constants.RESULTS, {params:params});
     }
+    resolveFacetExpression(facetExpression){
+        let params = {};
+        params.facetexpression = facetExpression
+        return super.get(constants.FACETS,  {params: params});
+    }
 
 
 }
