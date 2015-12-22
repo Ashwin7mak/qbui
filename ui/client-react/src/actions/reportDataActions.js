@@ -58,14 +58,12 @@ let reportDataActions = {
     * For now use a hard-coded facet expression for the sake of setting up node end point.
     * facetexpression parameter- expression representing all the facets selected by user so far example [{fid: fid1, values: value1, value2}, {fid: fid2, values: value3, value4}, ..]
     */
-    filterReport: function(appId, tblId, rptId, format) {
+    filterReport: function(appId, tblId, rptId, format, facetExpression) {
         let deferred = Promise.defer();
-        var facetExpression = [];
-        facetExpression.push({fid:'3', values:['10', '11']}, {fid:'4', values:['abc']});
+
         if (appId && tblId && rptId) {
             let reportService = new ReportService();
             let recordService = new RecordService();
-            //TODO: use the same load report calls or diff ones? We are basically doing the same thing over again.
             this.dispatch(actions.LOAD_REPORT, {appId, tblId, rptId});
             var promises = [];
             //1st call get report meta data. TODO: can we skip this somehow, do we store meta data somewhere that we could re-use?
@@ -75,7 +73,6 @@ let reportDataActions = {
             Promise.all(promises).then(
                 function(response) {
                     var queryString = response[1].data;
-
                     var report = {
                         name: response[0].data.name,
                         query: response[0].data.query,
@@ -101,18 +98,18 @@ let reportDataActions = {
                         function(recordresponse) {
                             logger.debug('Records service calls successful');
                             report.data = recordresponse[0].data;
-                            this.dispatch(actions.LOAD_REPORT_SUCCESS, report);
+                            this.dispatch(actions.LOAD_RECORDS_SUCCESS, report);
                             deferred.resolve(report);
                         }.bind(this),
                         function(error) {
                             logger.debug('Records service calls error:' + error);
-                            this.dispatch(actions.LOAD_REPORT_FAILED);
+                            this.dispatch(actions.LOAD_RECORDS_FAILED);
                             deferred.reject(error);
                         }.bind(this))
                         .catch(
                         function(ex) {
                             logger.debug('Records service calls exception:' + ex);
-                            this.dispatch(actions.LOAD_REPORT_FAILED);
+                            this.dispatch(actions.LOAD_RECORDS_FAILED);
                             deferred.reject(ex);
                         }.bind(this)
                     );

@@ -33,12 +33,12 @@
                         continue;
                     }
                     subquery = "{" + facetExpression[i].fid.toString() + consts.OPERATOR_ONORBEFORE + "'" + facetExpression[i].values[0] + "'}" +
-                        consts.QUERY_AND +
+                        consts.QUERY_OR +
                         "{" + facetExpression[i].fid.toString() + consts.OPERATOR_ONORAFTER + "'" + facetExpression[i].values[1] + "'}";
                 } else {
                     for (var j = 0; j < facetExpression[i].values.length; j++) {
                         if (subquery !== "") {
-                            subquery += consts.QUERY_AND;
+                            subquery += consts.QUERY_OR;
                         }
                         subquery += "{" + facetExpression[i].fid.toString() + consts.OPERATOR_EQUALS + "'" + facetExpression[i].values[j] + "'}";
                     }

@@ -13,6 +13,8 @@ let ReportDataStore = Fluxxor.createStore({
             actions.LOAD_REPORT, this.onLoadReport,
             actions.LOAD_REPORT_SUCCESS, this.onLoadReportSuccess,
             actions.LOAD_REPORT_FAILED, this.onLoadReportFailed,
+            actions.LOAD_RECORDS_SUCCESS, this.onLoadReportSuccess,
+            actions.LOAD_RECORDS_FAILED, this.onLoadReportFailed,
             actions.SEARCH_FOR, this.onSearchFor
         );
     },
