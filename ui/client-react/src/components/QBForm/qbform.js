@@ -19,8 +19,7 @@ class QBForm extends React.Component {
     initState(){
         let initialState = {
             "externalData": fakeFormClassyData,
-            readonly : true,
-            currentTab : this.props.activeTab
+            readonly : true
         };
         return initialState;
     }
@@ -80,7 +79,7 @@ class QBForm extends React.Component {
         }
         return (
             <div className="formContainer">
-                <Tabs defaultActiveKey={this.state.currentTab}>
+                <Tabs defaultActiveKey={this.props.activeTab}>
                     {tabs}
                 </Tabs>
             </div>
