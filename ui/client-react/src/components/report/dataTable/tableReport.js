@@ -7,7 +7,17 @@ import ReportActions from './reportActions';
 import TableActions from './tableActions';
 const resultsPerPage = 1000; //assume that this is the constant number of records per page. This can be passed in as a prop for diff reports
 
-var Content = React.createClass({
+
+let ActionsColumn = React.createClass({
+
+    render() {
+        let data = this.props.rowData;
+
+        return (<div><ReportActions /></div>);
+    }
+});
+
+let TableReport = React.createClass({
 
     getInitialState: function() {
         return {
@@ -16,10 +26,10 @@ var Content = React.createClass({
     },
 
     componentWillReceiveProps: function(nextProps) {
-        var self = this;
+
         if (nextProps.reportData.data) {
-            self.setState({
-                reportColumns: nextProps.reportData.data.columns ? self.getColumnProps(nextProps.reportData.data.columns) : []
+            this.setState({
+                reportColumns: nextProps.reportData.data.columns ? this.getColumnProps(nextProps.reportData.data.columns) : []
             });
         }
     },
@@ -32,10 +42,8 @@ var Content = React.createClass({
     },
     /* for each field attribute that has some presentation effect convert that to a css class before passing to griddle.*/
     getColumnProps: function(columns) {
-        var self = this;
-
         if (columns) {
-            var columnsData = columns.map(function(obj) {
+            var columnsData = columns.map((obj) => {
                 if (obj.datatypeAttributes) {
                     var datatypeAttributes = obj.datatypeAttributes;
                     for (var attr in datatypeAttributes) {
@@ -44,7 +52,7 @@ var Content = React.createClass({
                             {
                                 switch (datatypeAttributes[attr]) {
                                 case "NUMERIC" :
-                                    self.setCSSClass_helper(obj, "AlignRight");
+                                    this.setCSSClass_helper(obj, "AlignRight");
                                     obj.customComponent = NumericFormatter;
                                     break;
                                 case "DATE" :
@@ -61,12 +69,12 @@ var Content = React.createClass({
                             switch (cattr) {
                             case 'bold':
                                 if (clientSideAttributes[cattr]) {
-                                    self.setCSSClass_helper(obj, "Bold");
+                                    this.setCSSClass_helper(obj, "Bold");
                                 }
                                 break;
                             case 'word-wrap':
                                 if (clientSideAttributes[cattr]) {
-                                    self.setCSSClass_helper(obj, "NoWrap");
+                                    this.setCSSClass_helper(obj, "NoWrap");
                                 }
                                 break;
                             }
@@ -74,6 +82,15 @@ var Content = React.createClass({
                     }
                 }
                 return obj;
+            });
+            columnsData.push({
+                columnName: "actions",
+                //order:8,
+                //locked:false,
+                visible:true,
+                customComponent: ActionsColumn,
+                cssClassName:"actions"
+
             });
             return columnsData;
         }
@@ -97,7 +114,7 @@ var Content = React.createClass({
                                       resultsPerPage={resultsPerPage}
                                       externalResultsPerPage={resultsPerPage}
                                       actions={<TableActions/>}
-                                      selectionActions={<ReportActions customActions={["Mark Done","Change Status"]}/>}
+                                      selectionActions={<ReportActions customActions={["Mark Done", "Change Status"]}/>}
                         />
                     </div>
                 }
@@ -107,4 +124,4 @@ var Content = React.createClass({
 
 });
 
-export default Content;
+export default TableReport;

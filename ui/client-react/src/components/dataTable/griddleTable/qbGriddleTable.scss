@@ -111,7 +111,6 @@ $footer-next-button: $color2;
 .tableActionsContainer {
   position:relative;
   height:50px;
-  overflow:hidden;
   >div {
     position:absolute;
   }
@@ -129,12 +128,12 @@ $footer-next-button: $color2;
 }
 
 .tableActions-leave {
-  top: 0;
+  left: 0;
   opacity: 1;
 }
 
 .tableActions-leave.tableActions-leave-active {
-  top:100%;
+  left:100%;
   opacity: 0.01;
   transition: all 300ms ease-in-out;
 }
@@ -159,11 +158,53 @@ $footer-next-button: $color2;
     padding: 0 10px;
   }
   &.closed {
-    transition: width 200ms ease-in;
+    transition: width 500ms ease-in;
     width:0;
   }
   &.open {
-    transition: width 200ms ease-in;
-    width:135px;
+    transition: width 500ms ease-in;
+    width:auto;
   }
 }
+
+/* row actions on griddle trickery */
+
+/* hide actions column header */
+.QBGriddle tr th.actions:last-of-type {
+  display:none;
+}
+
+/* hide griddle cell containing actions */
+.QBGriddle tr td.actions:last-of-type {
+  position:relative;
+  width:0;
+  border:0;
+  margin:0;
+  padding:0;
+
+  /* actions */
+  >div {
+    margin:0;
+    visibility:hidden;
+    position:absolute;
+    display:flex;
+    flex-direction:row;
+    align-items:center;
+    top:0;
+    right:0;
+    height:100%;
+    background-color: $row-background-color-hover;
+    white-space:nowrap;
+    border-top: 1px dotted #dcdcdc;
+    border-right: 1px dotted  #969696;
+  }
+}
+.QBGriddle tr:hover td.actions:last-of-type > div {
+  visibility:visible;
+
+}
+
+.selectedRows .QBGriddle tr:hover td.actions:last-of-type > div {
+  visibility:hidden;
+}
+

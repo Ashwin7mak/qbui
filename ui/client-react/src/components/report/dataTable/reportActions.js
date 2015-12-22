@@ -7,7 +7,7 @@ import Hicon from '../../harmonyIcon/harmonyIcon';
 
 import './reportActions.scss';
 
-import {MenuItem, Dropdown, ButtonGroup, Button, Tooltip, OverlayTrigger, Popover, Glyphicon, Input} from 'react-bootstrap';
+import {MenuItem, Dropdown, CustomMenu, ButtonGroup, Button, Tooltip, OverlayTrigger, Popover, Glyphicon, Input} from 'react-bootstrap';
 
 let FluxMixin = Fluxxor.FluxMixin(React);
 
@@ -58,7 +58,7 @@ let ReportActions = React.createClass({
     },
 
     getEmailBody() {
-        const link = window.locations;
+        const link = window.location;
         return "Here's the '" + this.props.report.name + "' report from the table '" + this.props.table.name +
             "' in '" + this.props.app.name + "'%0D%0D" + window.location.href;
     },
@@ -66,7 +66,6 @@ let ReportActions = React.createClass({
     render() {
 
         const searchIcon = <Glyphicon glyph="search" />;
-
 
         return (
             <div className={'reportActions'}>
@@ -92,10 +91,20 @@ let ReportActions = React.createClass({
                             })}
 
                         </div>}
-                    {/*<div className="actionIcons">
-                        <a><Glyphicon glyph="option-horizontal"/></a>
 
-                    </div>*/}
+                    <Dropdown id="extraActionsMenu">
+                        <a href="#" bsRole="toggle">
+                            <Glyphicon glyph="option-horizontal"/>
+                        </a>
+
+                        <div className={"dropdown-menu"} bsRole="menu">
+                            <MenuItem eventKey="1">Extra 1</MenuItem>
+                            <MenuItem eventKey="2">Extra 2</MenuItem>
+                            <MenuItem eventKey="3">Extra 3</MenuItem>
+
+                        </div>
+                    </Dropdown>
+
                 </div>
             </div>
         );

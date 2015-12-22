@@ -11,7 +11,6 @@ import Fluxxor from 'fluxxor';
 import LeftNav from './leftNav';
 
 import TopNav from '../header/topNav';
-import MobileTopNav from '../header/mobileTopNav';
 
 import Footer from '../footer/footer';
 import MobileAddFooter from '../footer/mobileAddFooter';
@@ -131,7 +130,7 @@ var Nav = React.createClass({
                 globalActions={this.getGlobalActions()} />
 
             <div className="main">
-                <MobileTopNav title="QuickBase" searching={searching} searchBarOpen={searchBarOpen}  onNavClick={this.toggleNav} flux={flux} />
+                <TopNav title="QuickBase"  globalActions={this.getGlobalActions()} onNavClick={this.toggleNav} onAddClicked={this.showTrowser} flux={flux} />
 
                 {this.props.children && <div className="mainContent" >
                     {/* insert the component passed in by the router */}

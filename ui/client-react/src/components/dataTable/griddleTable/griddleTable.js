@@ -52,7 +52,7 @@ class GriddleTable extends React.Component {
                         React.cloneElement(this.props.actions, {key:"actions"})}
                     </ReactCSSTransitionGroup>
 
-                    <div onClick={this.onTableClick} onMouseMove={this.mouseMove} onMouseEnter={this.mouseEnter} onMouseLeave={this.mouseLeave}>
+                    <div onClick={this.onTableClick} className={this.state.selectedRows.length ? "selectedRows" : ""}>
                         <Griddle {...this.props}
                             ref="griddleTable"
                             isMultipleSelection={true}

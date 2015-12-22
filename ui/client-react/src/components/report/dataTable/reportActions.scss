@@ -1,5 +1,5 @@
 .reportActions {
-  padding: 5px 0 10px 0;
+  //padding: 5px 0 10px 0;
   display:flex;
   justify-content:space-between;
   button {
@@ -10,20 +10,22 @@
     margin:0 4px;
   }
   .selectedRowsLabel {
-    padding:2px;
+    padding:4px 8px;
     margin-right:10px;
     color:#fff;
     background-color: #7090ab;
-    border-radius: 4px;
+    border-radius: 12px;
   }
   .actionButtons {
     display:inline-block;
     margin: 0 20px;
   }
   .actionIcons {
-    .hi:hover {
-      font-size:28px;
-      transition: font-size 200ms ease;
+    a {
+      display:inline-block;
+      width:26px;
+      height:24px;
+      margin:0;
     }
     display:inline-block;
   }
