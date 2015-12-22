@@ -5,7 +5,7 @@
  * expects java server running and node server running
  *
  * expects NODE_ENV to be defined e.g. NODE_ENV=local
- * 
+ *
  * run from qbui directory with `node ui/e2e/qbapp/dataGen.js`
  *
  * */
@@ -17,7 +17,7 @@
     'use strict';
     var tableOneNumberOfRecords = 10;  // change value to how many records you want to generate for table 1
     var tableTwoNumberOfRecords = 10; // change value to how many records you want to generate for table 2
-    var realmToUse = 'cider';       // change this to a string i.e. "myRealm" of an existing realm to use
+    var realmToUse = 'localhost';       // change this to a string i.e. "myRealm" of an existing realm to use
                                        // if you leave realmToUse null it will randomly generated a new realm name
 
     var config = require('../../server/config/environment');
