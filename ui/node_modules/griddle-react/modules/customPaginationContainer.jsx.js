@@ -1,5 +1,3 @@
-"use strict";
-
 /*
    Griddle - Simple Grid Component for React
    https://github.com/DynamicTyped/Griddle
@@ -7,23 +5,26 @@
 
    See License / Disclaimer https://raw.githubusercontent.com/DynamicTyped/Griddle/master/LICENSE
 */
-var React = require("react");
+"use strict";
+
+var React = require('react');
 
 var CustomPaginationContainer = React.createClass({
   displayName: "CustomPaginationContainer",
-  getDefaultProps: function () {
+
+  getDefaultProps: function getDefaultProps() {
     return {
-      maxPage: 0,
-      nextText: "",
-      previousText: "",
-      currentPage: 0,
-      customPagerComponent: {}
+      "maxPage": 0,
+      "nextText": "",
+      "previousText": "",
+      "currentPage": 0,
+      "customPagerComponent": {}
     };
   },
-  render: function () {
+  render: function render() {
     var that = this;
 
-    if (typeof that.props.customPagerComponent !== "function") {
+    if (typeof that.props.customPagerComponent !== 'function') {
       console.log("Couldn't find valid template.");
       return React.createElement("div", null);
     }

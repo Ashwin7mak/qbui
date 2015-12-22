@@ -4,7 +4,7 @@ import ReactCSSTransitionGroup from 'react/lib/ReactCSSTransitionGroup';
 import * as breakpoints from '../../constants/breakpoints';
 import './nav.scss';
 import Button from 'react-bootstrap/lib/Button';
-import Trouser from '../trouser/trouser';
+import Trowser from '../trowser/trowser';
 
 import Fluxxor from 'fluxxor';
 
@@ -36,55 +36,77 @@ var Nav = React.createClass({
         };
     },
 
-    hideTrouserExample() {
-        let flux = this.getFlux();
-        flux.actions.hideTrouser();
-    },
+    getGlobalActions() {
 
+        return [
+            {msg:'globalActions.user', link:'/user', icon:'user'},
+            {msg:'globalActions.alerts', link:'/alerts', icon:'circle-alert'},
+            {msg:'globalActions.help', link:'/help', icon:'help'},
+            {msg:'globalActions.logout', link:'/signout', icon:'lock'}
+        ];
+    },
+    hideTrowserExample() {
+        let flux = this.getFlux();
+        flux.actions.hideTrowser();
+    },
+    onSelectTableReports(tableId) {
+        const flux = this.getFlux();
+        flux.actions.showReports();
+        flux.actions.loadReports(this.state.apps.selectedAppId, tableId);
+
+    },
+    onHideTableReports() {
+        const flux = this.getFlux();
+        flux.actions.hideReports();
+    },
+    toggleAppsList(open) {
+        const flux = this.getFlux();
+        flux.actions.toggleAppsList(open);
+    },
     renderLarge() {
+
         const flux = this.getFlux();
 
         let classes = 'navShell ';
 
         return (<div className={classes}>
 
-            <Trouser visible={this.state.nav.trouserOpen} onHide={this.hideTrouserExample}>
-                <Button bsStyle="success" onClick={this.hideTrouserExample}
+            <Trowser visible={this.state.nav.trowserOpen} onHide={this.hideTrowserExample}>
+                <Button bsStyle="success" onClick={this.hideTrowserExample}
                         style={{position:"absolute", bottom:"10px", right:"10px"}}>Done</Button>
-            </Trouser>
+            </Trowser>
 
             <LeftNav
-                items={this.state.nav.leftNavItems}
                 open={this.state.nav.leftNavOpen}
+                appsListOpen={this.state.nav.appsListOpen}
                 apps={this.state.apps.apps}
                 selectedAppId={this.state.apps.selectedAppId}
                 selectedTableId={this.state.apps.selectedTableId}
                 reportsData={this.state.reportsData}
                 selectedReportId={this.state.reportData.rptId}
-                flux={flux} />
+                showReports={this.state.nav.showReports}
+                toggleAppsList={this.toggleAppsList}
+                onSelectReports={this.onSelectTableReports}
+                onHideReports={this.onHideTableReports}/>
 
             <div className="main">
-                <TopNav title="QuickBase"  onNavClick={this.toggleNav} onAddClicked={this.showTrouser} flux={flux} />
-                {this.props.children && <ReactCSSTransitionGroup className="mainContent"
-                                         transitionName="main-transition"
-                                         transitionAppear={true}
-                                         transitionAppearTimeout={600}
-                                         transitionEnterTimeout={600}
-                                         transitionLeaveTimeout={600} >
+                <TopNav title="QuickBase"  globalActions={this.getGlobalActions()} onNavClick={this.toggleNav} onAddClicked={this.showTrowser} flux={flux} />
+                {this.props.children && <div className="mainContent" >
                     {/* insert the component passed in by the router */}
                     {React.cloneElement(this.props.children, {key: this.props.location ? this.props.location.pathname : "", selectedAppId: this.state.apps.selectedAppId, reportData: this.state.reportData,  flux: flux})}
-                </ReactCSSTransitionGroup>}
+                </div>}
 
                 <Footer flux= {flux} />
             </div>
         </div>);
     },
+    onSelectItem() {
+        const flux = this.getFlux();
+        flux.actions.toggleLeftNav(false); // hide left nav after selecting items on small breakpoint
+    },
     renderSmall() {
         const flux = this.getFlux();
 
-        function onSelectSmall() {
-            flux.actions.toggleLeftNav(false);
-        }
         const searchBarOpen = this.state.nav.searchBarOpen;
         const searching = this.state.nav.searching;
 
@@ -94,28 +116,27 @@ var Nav = React.createClass({
         }
         return (<div className={classes}>
             <LeftNav
-                items={this.state.nav.leftNavItems}
                 open={this.state.nav.leftNavOpen}
+                appsListOpen={this.state.nav.appsListOpen}
                 apps={this.state.apps.apps}
                 selectedAppId={this.state.apps.selectedAppId}
                 selectedTableId={this.state.apps.selectedTableId}
                 reportsData={this.state.reportsData}
                 selectedReportId={this.state.reportData.rptId}
-                onSelect={onSelectSmall}
-                flux={flux} />
+                showReports={this.state.nav.showReports}
+                toggleAppsList={this.toggleAppsList}
+                onSelectReports={this.onSelectTableReports}
+                onHideReports={this.onHideTableReports}
+                onSelect={this.onSelectItem}
+                globalActions={this.getGlobalActions()} />
 
             <div className="main">
                 <MobileTopNav title="QuickBase" searching={searching} searchBarOpen={searchBarOpen}  onNavClick={this.toggleNav} flux={flux} />
 
-                {this.props.children && <ReactCSSTransitionGroup className="mainContent"
-                                         transitionName="main-transition"
-                                         transitionAppear={true}
-                                         transitionAppearTimeout={600}
-                                         transitionEnterTimeout={600}
-                                         transitionLeaveTimeout={600} >
+                {this.props.children && <div className="mainContent" >
                     {/* insert the component passed in by the router */}
                     {React.cloneElement(this.props.children, {key: this.props.location ? this.props.location.pathname : "", selectedAppId: this.state.apps.selectedAppId, reportData: this.state.reportData, flux: flux})}
-                </ReactCSSTransitionGroup>}
+                </div>}
 
                 {/* insert the footer if route wants it */}
                 <MobileAddFooter newItemsOpen={this.state.nav.newItemsOpen} flux= {flux} />

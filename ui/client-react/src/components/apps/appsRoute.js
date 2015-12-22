@@ -3,6 +3,9 @@ import React from 'react';
 import Fluxxor from 'fluxxor';
 let FluxMixin = Fluxxor.FluxMixin(React);
 
+/**
+ * placeholder for my apps route
+ */
 let AppsRoute = React.createClass({
     mixins: [FluxMixin],
 
@@ -12,7 +15,7 @@ let AppsRoute = React.createClass({
     render: function() {
 
         return (<div>
-            <div>Apps go here... {this.context.breakpoint} whoo</div>
+            <div>Apps go here... {this.context.breakpoint}</div>
         </div>);
     }
 });

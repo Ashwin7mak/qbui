@@ -9,6 +9,25 @@ describe('Locales', () => {
         expect(i18n.locales).toBe('en-us');
     });
 
+    it('test invalid default locale', () => {
+        let mockConfig = {
+            locale: {
+                supported: ['en-us', 'fr-fr'],
+                default: null,
+            }
+        };
+
+        Locale.__Rewire__('config', mockConfig);
+        Locale.__Rewire__('locale', '');
+
+        //  default is undefined...sets to default of en-us
+        let i18n = Locale.getI18nBundle();
+        expect(i18n.locales).toBe('en-us');
+
+        Locale.__ResetDependency__('config');
+        Locale.__ResetDependency__('locale');
+    });
+
     it('test getSupportLocales', () => {
         let mockConfig = {
             locale: {
@@ -34,6 +53,13 @@ describe('Locales', () => {
         i18n = Locale.getI18nBundle();
         expect(i18n.locales).toBe('de-de');
         expect(Locale.getLocale()).toBe('de-de');
+    });
+
+    it('test getMessage', () => {
+        Locale.changeLocale('en-us');
+        Locale.getI18nBundle();
+        const testMsg = Locale.getMessage("test.testMsg");
+        expect(testMsg).toBe('test');
     });
 
     it('test invalid change locale', () => {

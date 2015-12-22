@@ -1,9 +1,8 @@
 import React from 'react';
 import TestUtils from 'react-addons-test-utils';
 import ReactDOM from 'react-dom';
-import {Link} from 'react-router';
-import {Glyphicon} from 'react-bootstrap';
 import LeftNav from '../../src/components/nav/leftNav';
+import NavItem from '../../src/components/nav/navItem';
 
 var I18nMessageMock = React.createClass({
     render: function() {
@@ -12,6 +11,7 @@ var I18nMessageMock = React.createClass({
         );
     }
 });
+
 
 let appsTestData = [
     {
@@ -64,24 +64,47 @@ describe('Left Nav functions', () => {
     var component;
 
     beforeEach(() => {
+        NavItem.__Rewire__('I18nMessage', I18nMessageMock);
         LeftNav.__Rewire__('I18nMessage', I18nMessageMock);
     });
 
     afterEach(() => {
+        NavItem.__ResetDependency__('I18nMessage');
         LeftNav.__ResetDependency__('I18nMessage');
     });
 
-    it('test render of component', () => {
-        component = TestUtils.renderIntoDocument(<LeftNav open={true}/>);
-        expect(TestUtils.isCompositeComponent(component)).toBeTruthy();
+
+    it('test render opened with app list', () => {
+
+        component = TestUtils.renderIntoDocument(<LeftNav open={true}
+                                                          apps={appsTestData}
+                                                          reportsData={reportsTestData}
+                                                          items={navItemsTestData}
+                                                          onHideReports={() => {}}
+                                                          showReports={false}
+                                                          onToggleAppsList={() => {}} />);
     });
 
+
     it('test render opened with app,table,reports', () => {
-        component = TestUtils.renderIntoDocument(<LeftNav open={true} apps={appsTestData} selectedAppId={'app1'} selectedTableId={'table1'} reportsData={reportsTestData} items={navItemsTestData}/>);
+        component = TestUtils.renderIntoDocument(<LeftNav open={true}
+                                                          apps={appsTestData}
+                                                          selectedAppId={'app1'}
+                                                          reportsData={reportsTestData}
+                                                          items={navItemsTestData}
+                                                          onHideReports={() => {}}
+                                                          showReports={true}/>);
     });
 
     it('test render closed with app,table,reports', () => {
-        component = TestUtils.renderIntoDocument(<LeftNav open={true} apps={appsTestData} selectedAppId={'app1'} selectedTableId={'table1'} reportsData={reportsTestData} items={navItemsTestData}/>);
+        component = TestUtils.renderIntoDocument(<LeftNav open={false}
+                                                          apps={appsTestData}
+                                                          selectedAppId={'app1'}
+                                                          reportsData={reportsTestData}
+                                                          items={navItemsTestData}
+                                                          onHideReports={() => {}}
+                                                          showReports={false}/>);
+
     });
 
 });

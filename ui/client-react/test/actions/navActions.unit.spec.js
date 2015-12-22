@@ -21,14 +21,14 @@ describe('Nav Actions functions', () => {
         spyOn(flux.dispatchBinder, 'dispatch');
     });
 
-    it('test show trouser action', () => {
-        flux.actions.showTrouser();
-        expect(flux.dispatchBinder.dispatch).toHaveBeenCalledWith(actions.SHOW_TROUSER);
+    it('test show trowser action', () => {
+        flux.actions.showTrowser();
+        expect(flux.dispatchBinder.dispatch).toHaveBeenCalledWith(actions.SHOW_TROWSER);
     });
 
-    it('test hide trouser action', () => {
-        flux.actions.hideTrouser();
-        expect(flux.dispatchBinder.dispatch).toHaveBeenCalledWith(actions.HIDE_TROUSER);
+    it('test hide trouwser action', () => {
+        flux.actions.hideTrowser();
+        expect(flux.dispatchBinder.dispatch).toHaveBeenCalledWith(actions.HIDE_TROWSER);
     });
 
     it('test toggle left nav action with state', () => {

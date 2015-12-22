@@ -1,3 +1,6 @@
+@import '../../assets/css/qbVariables';
+
+
 
 html, body {
     margin:0;
@@ -31,17 +34,16 @@ html, body {
         display:flex;
         flex-direction: column;
         flex:1;
-        position:relative;
 
         .topNav {
             display:flex;
             order: 1;
             flex-direction:column;
-            background-color: #e1eaf2;
+            background-color: $header-bg;
 
             >.top {
                 display:flex;
-                flex-basis:50px;
+                flex-basis:$top-nav-height;
                 align-items:center;
                 font-size:14px;
                 transition: flex-basis 300ms ease-in-out;
@@ -49,6 +51,7 @@ html, body {
             }
 
             .navGroup {
+                line-height: $top-nav-height;
                 .navItem {
                     display: inline-block;
 
@@ -66,18 +69,12 @@ html, body {
             .btn-group.harmonyButtons {
                 height:50px;
                 button {
-                    background-color: #476b8f;
                     border-radius: 0;
                     width: 50px;
                     height: 50px;
-                    span {
-                        top: 8px;
-                        color: #fff;
-                        height: 30px;
-                    }
                 }
-                button:hover {
-                    background-color:#193048;
+                button:hover .hi {
+                    color: #fff;
                 }
             }
 
@@ -112,33 +109,4 @@ html, body {
     }
 }
 
-
-
-// transitions
-
-.main-transition-enter {
-    position:absolute;
-    opacity: 0.01;
-    transform: scale(.4);
-}
-
-.main-transition-enter.main-transition-enter-active {
-    opacity: .9;
-    transform: scale(1);
-    transition: all 600ms ease-in-out;
-}
-
-.main-transition-leave {
-    opacity: .5;
-    position:absolute;
-    top:50px;
-    transition: all 600ms ease-out;
-}
-
-.main-transition-leave.main-transition-leave-active {
-    opacity: 0.01;
-    position:absolute;
-    top:850px;
-
-}
 

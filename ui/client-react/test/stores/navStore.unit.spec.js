@@ -42,12 +42,12 @@ describe('Test Nav Store', () => {
     it('test default nav store state', () => {
         // verify default states
         expect(flux.store(STORE_NAME).state.leftNavOpen).toBeTruthy();
-        expect(flux.store(STORE_NAME).state.trouserOpen).toBeFalsy();
+        expect(flux.store(STORE_NAME).state.trowserOpen).toBeFalsy();
         expect(flux.store(STORE_NAME).state.i18n).toBe(i18nBundle);
 
         //  expect 4 bindActions
-        expect(flux.store(STORE_NAME).__actions__.SHOW_TROUSER).toBeDefined();
-        expect(flux.store(STORE_NAME).__actions__.HIDE_TROUSER).toBeDefined();
+        expect(flux.store(STORE_NAME).__actions__.SHOW_TROWSER).toBeDefined();
+        expect(flux.store(STORE_NAME).__actions__.HIDE_TROWSER).toBeDefined();
         expect(flux.store(STORE_NAME).__actions__.TOGGLE_LEFT_NAV).toBeDefined();
         expect(flux.store(STORE_NAME).__actions__.CHANGE_LOCALE).toBeDefined();
     });
@@ -68,26 +68,26 @@ describe('Test Nav Store', () => {
         expect(flux.store(STORE_NAME).emit.calls.count()).toBe(1);
     });
 
-    it('test open/close trouser action', () => {
+    it('test open/close trowser action', () => {
 
-        let showTrouserAction = {
-            type: actions.SHOW_TROUSER
+        let showTrowserAction = {
+            type: actions.SHOW_TROWSER
         };
-        let hideTrouserAction = {
-            type: actions.HIDE_TROUSER
+        let hideTrowserAction = {
+            type: actions.HIDE_TROWSER
         };
 
         //  should be closed by default
-        expect(flux.store(STORE_NAME).state.trouserOpen).toBeFalsy();
+        expect(flux.store(STORE_NAME).state.trowserOpen).toBeFalsy();
 
-        flux.dispatcher.dispatch(showTrouserAction);
-        expect(flux.store(STORE_NAME).state.trouserOpen).toBeTruthy();
+        flux.dispatcher.dispatch(showTrowserAction);
+        expect(flux.store(STORE_NAME).state.trowserOpen).toBeTruthy();
         expect(flux.store(STORE_NAME).emit).toHaveBeenCalledWith('change');
         expect(flux.store(STORE_NAME).emit.calls.count()).toBe(1);
         flux.store(STORE_NAME).emit.calls.reset();
 
-        flux.dispatcher.dispatch(hideTrouserAction);
-        expect(flux.store(STORE_NAME).state.trouserOpen).toBeFalsy();
+        flux.dispatcher.dispatch(hideTrowserAction);
+        expect(flux.store(STORE_NAME).state.trowserOpen).toBeFalsy();
 
         expect(flux.store(STORE_NAME).emit).toHaveBeenCalledWith('change');
         expect(flux.store(STORE_NAME).emit.calls.count()).toBe(1);
@@ -109,7 +109,7 @@ describe('Test Nav Store', () => {
         flux.store('NavStore').emit.calls.reset();
 
         flux.dispatcher.dispatch(toggleSearchAction);
-        expect(flux.store('NavStore').state.trouserOpen).toBeFalsy();
+        expect(flux.store('NavStore').state.trowserOpen).toBeFalsy();
 
         expect(flux.store('NavStore').emit).toHaveBeenCalledWith('change');
         expect(flux.store('NavStore').emit.calls.count()).toBe(1);

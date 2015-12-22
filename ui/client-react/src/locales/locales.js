@@ -22,13 +22,13 @@ class Locale {
             // this is where all supported locales are defined
             switch (locale.toLowerCase()) {
             case 'en-us':
-                bundle = require('../locales/en_us');
+                bundle = require('../locales/bundles/en_us');
                 break;
             case 'fr-fr':
-                bundle = require('../locales/fr_fr');
+                bundle = require('../locales/bundles/fr_fr');
                 break;
             case 'de-de':
-                bundle = require('../locales/de_de');
+                bundle = require('../locales/bundles/de_de');
                 break;
             }
         } catch (e) {
@@ -37,7 +37,7 @@ class Locale {
 
         if (!bundle) {
             logger.warn('Locale (' + locale + ') is invalid or not supported.  Using default: en-us');
-            bundle = require('../locales/en_us');
+            bundle = require('../locales/bundles/en_us');
         }
 
         return bundle;
@@ -53,6 +53,17 @@ class Locale {
         } catch (e) {
             logger.error('Error changing locale..Locale not changed --> ' + e);
         }
+    }
+
+    // return message in bundle.messages object by dot-separated path
+    static getMessage(msgPath) {
+        var messages =  Locale.getI18nBundle().messages;
+
+        let message = msgPath.split('.').reduce((obj, pathPart) => {
+            return obj[pathPart];
+        }, messages);
+
+        return message;
     }
 
     static getSupportedLocales() {

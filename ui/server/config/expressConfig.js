@@ -1,6 +1,8 @@
 /**
  * Express configuration
  */
+var config = require('./environment');
+
 (function() {
     'use strict';
 
@@ -14,7 +16,7 @@
     var errorHandler = require('errorhandler');
     var path = require('path');
     var log = require('../logger').getLogger();
-    var config = require('./environment');
+
     var envConsts = require('./environment/environmentConstants');
     var routeGroups = require('../routes/routeGroups');
     var clientConsts = require('./environment/clientConsts');
@@ -38,7 +40,7 @@
         var env = config.env;
 
         //  Need to have a run-time environment configured
-        if (config.env === undefined) {
+        if (!config.env) {
             throw new Error('Missing environment configuration.  You must set a configuration environment variable. Under ' + process.env.NODE_ENV + '.js, make sure you have env: envConsts.ENVIRONMENT. Look at local.js.sample for an example.');
         }
 

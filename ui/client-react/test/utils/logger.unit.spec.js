@@ -7,9 +7,18 @@ describe('Logger', () => {
     'use strict';
 
     let logMsg = 'debug message';
+    class mockLogService {
+        constructor() { }
+        log(msg) {
+            return msg;
+        }
+    }
+    beforeEach(() => {
+        Logger.__Rewire__('LogService', mockLogService);
+    });
 
     afterEach(() => {
-
+        Logger.__ResetDependency__('LogService');
     });
 
     it('test instantiation of Logger with default environment settings(PROD)', () => {
@@ -19,6 +28,29 @@ describe('Logger', () => {
         expect(logger.logLevel).toBe(LogLevel.WARN);
         expect(logger.logToConsole).toBeFalsy();
         expect(logger.logToServer).toBeTruthy();
+    });
+
+    it('test exception is handled properly', () => {
+        let mockConfig = {
+            logger: {
+                logToConsole: false,
+                logToServer: true,
+                logLevel: LogLevel.DEBUG
+            }
+        };
+
+        Logger.__Rewire__('Configuration', mockConfig);
+        let logger = new Logger();
+
+        spyOn(console, 'log');
+        spyOn(logger, 'sendMessageToServer').and.throwError('myTestError');
+
+        logger.debug(logMsg);
+
+        expect(logger.sendMessageToServer).toHaveBeenCalled();
+        expect(console.log.calls.count()).toEqual(1);   // exception handling will output message to console
+
+        Logger.__ResetDependency__('Configuration');
     });
 
     it('test Logger with console and server logging', () => {
@@ -281,6 +313,27 @@ describe('Logger', () => {
         logger.error(logMsg);
         expect(logger.logTheMessage).not.toHaveBeenCalled();
         Logger.__ResetDependency__('Configuration');
+    });
+
+    it('test logging service is called', () => {
+        let mockConfig = {
+            logger: {
+                logToConsole: false,
+                logToServer: true,
+                logLevel: LogLevel.DEBUG
+            }
+        };
+        Logger.__Rewire__('Configuration', mockConfig);
+
+        let logger = new Logger();
+
+        spyOn(logger.logService, 'log');
+
+        logger.debug(logMsg);
+        expect(logger.logService.log).toHaveBeenCalled();
+
+        Logger.__ResetDependency__('Configuration');
+
     });
 
 });
