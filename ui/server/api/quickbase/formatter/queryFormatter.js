@@ -16,7 +16,7 @@
             var queryString = "";
             for (var i = 0; i < facetExpression.length; i++){
                 if (queryString !== "") {
-                    queryString += "AND";
+                    queryString += consts.QUERY_AND;
                 }
 
                 facetExpression[i] = decodeURI(facetExpression[i]);
@@ -32,21 +32,17 @@
                     if (facetExpression[i].values.length !== 2) {
                         continue;
                     }
-                    subquery = "{" + facetExpression[i].fid.toString() + ".OAF.'" + facetExpression[i].values[0] + "'}" +
-                        "AND" +
-                        "{" + facetExpression[i].fid.toString() + ".OBF.'" + facetExpression[i].values[1] + "'}";
-                }
-                else // using EX for all field types other than dates. TODO: is that correct?
-                {
+                    subquery = "{" + facetExpression[i].fid.toString() + consts.OPERATOR_ONORBEFORE + "'" + facetExpression[i].values[0] + "'}" +
+                        consts.QUERY_AND +
+                        "{" + facetExpression[i].fid.toString() + consts.OPERATOR_ONORAFTER + "'" + facetExpression[i].values[1] + "'}";
+                } else {
                     for (var j = 0; j < facetExpression[i].values.length; j++) {
                         if (subquery !== "") {
-                            subquery += "OR";
+                            subquery += consts.QUERY_AND;
                         }
-                        subquery += "{" + facetExpression[i].fid.toString() + ".EX.'" + facetExpression[i].values[j] + "'}";
+                        subquery += "{" + facetExpression[i].fid.toString() + consts.OPERATOR_EQUALS + "'" + facetExpression[i].values[j] + "'}";
                     }
                 }
-
-
                 queryString += subquery + ")";
             }
             return queryString;

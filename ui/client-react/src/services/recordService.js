@@ -14,7 +14,6 @@ class RecordService extends BaseService {
      *
      * @param appId
      * @param tableId
-     * @param reportId
      * @param formatted - is output formatted for UI display or the raw data
      * @param optionalParams may contain the any of the following -
      * @param query - unparsed expression to filter records by
@@ -23,24 +22,25 @@ class RecordService extends BaseService {
      * @param offset - zero based row offset
      * @param rows - number of rows to return on the request
      */
-    getRecords(appId, tableId, reportId, formatted, optionalparams) {
+    getRecords(appId, tableId, formatted, optionalparams) {
         let params = {};
         if (formatted === true) {
             params.format = 'display';  // default is 'raw'
         }
-
-        if (StringUtils.isString(optionalparams.query)){
-            params.query = optionalparams.query;
-        }
-        if (StringUtils.isString(optionalparams.clist)){
-            params.clist = optionalparams.clist;
-        }
-        if (StringUtils.isString(optionalparams.slist)){
-            params.slist = optionalparams.query;
-        }
-        if (NumberUtils.isInt(optionalparams.offset) && NumberUtils.isInt(optionalparams.rows)) {
-            params.offset = optionalparams.offset;
-            params.numRows = optionalparams.rows;
+        if (optionalparams) {
+            if (StringUtils.isString(optionalparams.query)) {
+                params.query = optionalparams.query;
+            }
+            if (StringUtils.isString(optionalparams.clist)) {
+                params.clist = optionalparams.clist;
+            }
+            if (StringUtils.isString(optionalparams.slist)) {
+                params.slist = optionalparams.slist;
+            }
+            if (NumberUtils.isInt(optionalparams.offset) && NumberUtils.isInt(optionalparams.rows)) {
+                params.offset = optionalparams.offset;
+                params.numRows = optionalparams.rows;
+            }
         }
         return super.get(constants.APPS + '/' + appId + '/' + constants.TABLES + '/' + tableId + '/' + constants.RECORDS, {params:params});
     }

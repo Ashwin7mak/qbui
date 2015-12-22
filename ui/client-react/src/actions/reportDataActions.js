@@ -89,15 +89,14 @@ let reportDataActions = {
                         if (queryString) {
                             mergedQueryString += "AND" + queryString;
                         }
-                    }
-                    else if (queryString) {
+                    } else if (queryString) {
                         mergedQueryString = queryString;
                     }
                     report.query = mergedQueryString;
 
                     promises = [];
                     //3rd call to get filtered records based off of the updated query string
-                    promises.push(recordService.getRecords(appId, tblId, rptId, format, report));
+                    promises.push(recordService.getRecords(appId, tblId, format, report));
                     Promise.all(promises).then(
                         function(recordresponse) {
                             logger.debug('Records service calls successful');
