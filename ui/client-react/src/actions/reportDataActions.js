@@ -9,11 +9,10 @@ let logger = new Logger();
 
 let reportDataActions = {
 
-    loadReport_1: function(appId, tblId, rptId, format) {
+    loadReport: function(appId, tblId, rptId, format) {
 
         let deferred = Promise.defer();
 
-        logger.debug("logging report call data " + appId + ":" + tblId + ":" + rptId);
         if (appId && tblId && rptId) {
             let reportService = new ReportService();
 
@@ -54,27 +53,28 @@ let reportDataActions = {
 
     },
 
-    loadReport_2: function(appId, tblId, rptId, format) {
-
+    /* Action call to filter a report when a facet is selected.
+    * TODO: This needs to be extended to accept a facetExpression that's built on client side.
+    * For now use a hard-coded facet expression for the sake of setting up node end point.
+    * facetexpression parameter- expression representing all the facets selected by user so far example [{fid: fid1, values: value1, value2}, {fid: fid2, values: value3, value4}, ..]
+    */
+    filterReport: function(appId, tblId, rptId, format) {
         let deferred = Promise.defer();
-        logger.debug("logging record call data " + appId + ":" + tblId + ":" + rptId);
+        var facetExpression = [];
+        facetExpression.push({fid:'3', values:['10', '11']}, {fid:'4', values:['abc']});
         if (appId && tblId && rptId) {
             let reportService = new ReportService();
             let recordService = new RecordService();
-
+            //TODO: use the same load report calls or diff ones? We are basically doing the same thing over again.
             this.dispatch(actions.LOAD_REPORT, {appId, tblId, rptId});
-
-            logger.debug('1');
             var promises = [];
-
-            var facetExpression = [];
-            facetExpression.push({fid:'3', values:['10', '11']}, {fid:'4', values:['abc']});
-
+            //1st call get report meta data. TODO: can we skip this somehow, do we store meta data somewhere that we could re-use?
             promises.push(reportService.getReport(appId, tblId, rptId));
+            // 2nd call to node server resolves facet expression to a query expression.
             promises.push(reportService.resolveFacetExpression(facetExpression));
             Promise.all(promises).then(
                 function(response) {
-                    logger.debug('Report2 service calls successful');
+                    var queryString = response[1].data;
 
                     var report = {
                         name: response[0].data.name,
@@ -83,29 +83,36 @@ let reportDataActions = {
                         slist: response[0].data.slist
                     };
 
-                    var queryString = response[1].data;
-                    console.log("queryString: " + queryString);
+                    var mergedQueryString = "";
+                    if (report.query){
+                        mergedQueryString = report.query;
+                        if (queryString) {
+                            mergedQueryString += "AND" + queryString;
+                        }
+                    }
+                    else if (queryString) {
+                        mergedQueryString = queryString;
+                    }
+                    report.query = mergedQueryString;
 
                     promises = [];
-
-                    promises.push(recordService.filterReport(appId, tblId, rptId, format, report, queryString));
-                    logger.debug('4');
+                    //3rd call to get filtered records based off of the updated query string
+                    promises.push(recordService.getRecords(appId, tblId, rptId, format, report));
                     Promise.all(promises).then(
                         function(recordresponse) {
                             logger.debug('Records service calls successful');
-                            console.log(recordresponse);
                             report.data = recordresponse[0].data;
                             this.dispatch(actions.LOAD_REPORT_SUCCESS, report);
                             deferred.resolve(report);
                         }.bind(this),
                         function(error) {
-                            logger.debug('Report service calls error:' + error);
+                            logger.debug('Records service calls error:' + error);
                             this.dispatch(actions.LOAD_REPORT_FAILED);
                             deferred.reject(error);
                         }.bind(this))
                         .catch(
                         function(ex) {
-                            logger.debug('Report service calls exception:' + ex);
+                            logger.debug('Records service calls exception:' + ex);
                             this.dispatch(actions.LOAD_REPORT_FAILED);
                             deferred.reject(ex);
                         }.bind(this)
@@ -124,7 +131,7 @@ let reportDataActions = {
                 }.bind(this)
             );
         } else {
-            logger.warn('Missing required input parameters to reportDataActions.loadReport');
+            logger.warn('Missing required input parameters to reportDataActions.filterReport');
             deferred.reject('error');
         }
 
