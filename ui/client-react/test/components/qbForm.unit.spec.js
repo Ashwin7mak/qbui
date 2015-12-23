@@ -1,7 +1,7 @@
 import React from 'react';
 import TestUtils from 'react-addons-test-utils';
 import ReactDOM from 'react-dom';
-import QBForm from '../../src/components/QBForm/qbform.js';
+import QBForm from '../../src/components/QBForm/qbform';
 
 const fakeQBFormData = {
     data: {
