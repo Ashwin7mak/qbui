@@ -184,6 +184,7 @@ body:not(.small-breakpoint) .leftNav.closed {
   border-right: 1px solid $nav-border;
   overflow-y: auto;
 
+  /* always show right link on mobile (no hover) */
   ul li.link a.right {
     opacity:1;
   }

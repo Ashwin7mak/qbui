@@ -2,7 +2,7 @@ import React from 'react';
 import Tappable from 'react-tappable';
 import Swipeable from 'react-swipeable';
 import {Glyphicon} from '../../../../../node_modules/react-bootstrap/lib';
-import ReportActions from '../../report/dataTable/reportActions';
+import ReportActions from '../../actions/reportActions';
 import './cardView.scss';
 
 const MAX_ACTIONS_RESIZE_WITH = 180; // max width while swiping
@@ -19,6 +19,7 @@ class CardView extends React.Component {
         this.swiped = this.swiped.bind(this);
         this.onRowPressed = this.onRowPressed.bind(this);
         this.onRowSelected = this.onRowSelected.bind(this);
+        this.onRowClick = this.onRowClick.bind(this);
     }
 
     initState() {
@@ -99,6 +100,12 @@ class CardView extends React.Component {
             this.props.data.onRowSelected(this.props.data);
         }
     }
+    /* close actions when row is clicked */
+    onRowClick() {
+        this.setState({
+            showActions:false
+        });
+    }
     render() {
 
         if (this.props.data) {
@@ -113,12 +120,13 @@ class CardView extends React.Component {
                     width: Math.min(MAX_ACTIONS_RESIZE_WITH, this.state.resizeWidth)
                 };
             } else {
+                // not swiping, don't add inline style (width and transitions come from css)
                 rowActionsClasses += this.state.showActions ? "open" : "closed";
             }
 
             return (
                 <Swipeable className={"swipeable"} onSwiping={this.swiping} onSwiped={this.swiped} onSwipedLeft={this.swipedLeft} onSwipedRight={this.swipedRight}>
-                    <Tappable onPress={this.onRowPressed} pressDelay={1000}>
+                    <Tappable onPress={this.onRowPressed} pressDelay={1000} onClick={this.onRowClick}>
                         <div className={this.state.showMoreCards ? "custom-row-card expanded" : "custom-row-card"}>
                             <div className="flexRow">
                                 <div className={"checkboxContainer"}><input checked={this.props.data.selected} onChange={this.onRowSelected} type="checkbox"></input></div>

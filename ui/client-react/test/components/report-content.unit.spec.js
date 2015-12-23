@@ -17,9 +17,9 @@ var DateFormatterMock = React.createClass({
     }
 });
 
-var TableActionsMock = React.createClass({
+var ReportHeaderMock = React.createClass({
     render: function() {
-        return <div>mock table actions</div>;
+        return <div>mock table header</div>;
     }
 });
 
@@ -111,11 +111,11 @@ describe('ReportContent functions', () => {
     var component;
     let flux = {};
     beforeEach(() => {
-        ReportContent.__Rewire__('TableActions', TableActionsMock);
+        ReportContent.__Rewire__('ReportHeader', ReportHeaderMock);
     });
 
     afterEach(() => {
-        ReportContent.__ResetDependency__('TableActions');
+        ReportContent.__ResetDependency__('ReportHeader');
 
     });
 

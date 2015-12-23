@@ -5,7 +5,8 @@ import {I18nMessage} from '../../../utils/i18nMessage';
 import * as breakpoints from '../../../constants/breakpoints';
 import ReactCSSTransitionGroup from 'react/lib/ReactCSSTransitionGroup';
 
-import ReportActions from '../../report/dataTable/reportActions';
+import ReportActions from '../../actions/reportActions';
+import ReportHeader from '../../report/dataTable/reportHeader';
 import CardView from './cardView.js';
 import _ from 'lodash';
 
@@ -23,7 +24,6 @@ class GriddleTable extends React.Component {
 
         this.state = {
             selectedRows: [],
-            selectedCards: [],
             allowCardSelection: false
         };
 
@@ -52,26 +52,36 @@ class GriddleTable extends React.Component {
         this.setState({allowCardSelection: true});
     }
 
+    /**
+     * card row selection callback
+     * @param row
+     */
     onCardRowSelected(row) {
 
         const id = row[this.props.uniqueIdentifier];
         if (this.state.selectedRows.indexOf(id) === -1) {
-
+            // not already selected, add to selectedRows
             this.state.selectedRows.push(row[this.props.uniqueIdentifier]);
             this.setState({selectedRows: this.state.selectedRows});
         } else {
+            // already selected, remove from selectedRows
             this.setState({selectedRows: _.without(this.state.selectedRows, id)});
         }
     }
 
+    /**
+     * get table actions if we have them - render selectionActions prop if we have an active selection,
+     * otherwise the reportHeader prop (cloned with extra key prop for transition group, and selected rows
+     * for selectionActions component)
+     */
     getTableActions() {
 
-        return (this.props.actions && this.props.selectionActions && (
+        return (this.props.reportHeader && this.props.selectionActions && (
             <ReactCSSTransitionGroup transitionName="tableActions" component="div" className={"tableActionsContainer"}  transitionEnterTimeout={300} transitionLeaveTimeout={300}>
 
                 {this.state.selectedRows.length ?
                     React.cloneElement(this.props.selectionActions, {key:"selectionActions", selection: this.state.selectedRows}) :
-                    React.cloneElement(this.props.actions, {key:"actions"})}
+                    React.cloneElement(this.props.reportHeader, {key:"reportHeader"})}
             </ReactCSSTransitionGroup>));
     }
 
@@ -85,8 +95,8 @@ class GriddleTable extends React.Component {
             griddleWrapperClasses += " allowCardSelection";
         }
         if (this.props.results) {
-            // unfortunately Griddle passes only a row data prop to our custom component (i.e. no shareable context property)
-            // so store our callback there...
+            // unfortunately Griddle passes only a row data prop to our custom component (i.e. can't pass in a shared prop)
+            // so we need store our callbacks in the row data...
 
             this.props.results.forEach((res) => {
                 res.onRowPressed = this.onCardRowPressed;

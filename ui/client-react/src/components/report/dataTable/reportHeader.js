@@ -5,13 +5,13 @@ import Locale from '../../../locales/locales';
 import Fluxxor from 'fluxxor';
 import Hicon from '../../harmonyIcon/harmonyIcon';
 
-import './tableActions.scss';
+import './reportHeader.scss';
 
-import {MenuItem, Dropdown, ButtonGroup, Button, OverlayTrigger, Popover, Glyphicon, Input} from 'react-bootstrap';
+import {Glyphicon, Input} from 'react-bootstrap';
 
 let FluxMixin = Fluxxor.FluxMixin(React);
 
-var TableActions = React.createClass({
+var ReportHeader = React.createClass({
     mixins: [FluxMixin],
 
     searchChanged(ev) {
@@ -37,4 +37,4 @@ var TableActions = React.createClass({
     }
 });
 
-export default TableActions;
+export default ReportHeader;
