@@ -95,18 +95,12 @@ describe('Report Data Actions Filterreport functions -- success', () => {
     };
     let responseResultData = {
         data: {
-            test: 'test'
+            fields: [],
+            records: []
         }
     };
     let responseResultQuery = {
         data: "testQuery"
-    };
-    let response = {
-        name: responseReportData.data.name,
-        query: responseResultQuery.data,
-        clist: undefined,
-        slist: undefined,
-        data: responseResultData.data
     };
 
     let promise;
@@ -166,7 +160,7 @@ describe('Report Data Actions Filterreport functions -- success', () => {
 
     it('test filter report action with parameters', () => {
         expect(promise.isFulfilled()).toBeTruthy();
-        expect(flux.dispatchBinder.dispatch).toHaveBeenCalledWith(actions.LOAD_RECORDS_SUCCESS, response);
+        expect(flux.dispatchBinder.dispatch).toHaveBeenCalledWith(actions.LOAD_RECORDS_SUCCESS, responseResultData.data);
     });
 
 });

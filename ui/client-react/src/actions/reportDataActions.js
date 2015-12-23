@@ -73,11 +73,10 @@ let reportDataActions = {
             Promise.all(promises).then(
                 function(response) {
                     var queryString = response[1].data;
+                    //TODO: Add the rest of query params like clist, slist, numRows, offset
                     var report = {
                         name: response[0].data.name,
-                        query: response[0].data.query,
-                        clist: response[0].data.clist,
-                        slist: response[0].data.slist
+                        query: response[0].data.query
                     };
 
                     var mergedQueryString = "";
@@ -97,9 +96,8 @@ let reportDataActions = {
                     Promise.all(promises).then(
                         function(recordresponse) {
                             logger.debug('Records service calls successful');
-                            report.data = recordresponse[0].data;
-                            this.dispatch(actions.LOAD_RECORDS_SUCCESS, report);
-                            deferred.resolve(report);
+                            this.dispatch(actions.LOAD_RECORDS_SUCCESS, recordresponse[0].data);
+                            deferred.resolve(recordresponse[0].data);
                         }.bind(this),
                         function(error) {
                             logger.debug('Records service calls error:' + error);

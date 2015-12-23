@@ -18,18 +18,12 @@ describe('Report Data Actions filter report fail on resolve facet', () => {
     };
     let responseResultData = {
         data: {
-            test: 'test'
+            fields: [],
+            records: []
         }
     };
     let responseResultQuery = {
         data: "testQuery"
-    };
-    let response = {
-        name: responseReportData.data.name,
-        query: responseResultQuery.data,
-        clist: undefined,
-        slist: undefined,
-        data: responseResultData.data
     };
 
     let promise;
@@ -107,18 +101,12 @@ describe('Report Data Actions filter report fail on get records', () => {
     };
     let responseResultData = {
         data: {
-            test: 'test'
+            fields: [],
+            records: []
         }
     };
     let responseResultQuery = {
         data: "testQuery"
-    };
-    let response = {
-        name: responseReportData.data.name,
-        query: responseResultQuery.data,
-        clist: undefined,
-        slist: undefined,
-        data: responseResultData.data
     };
 
     let promise;
@@ -189,18 +177,12 @@ describe('Report Data Actions filter report exception on get records', () => {
     };
     let responseResultData = {
         data: {
-            test: 'test'
+            fields: [],
+            records: []
         }
     };
     let responseResultQuery = {
         data: "testQuery"
-    };
-    let response = {
-        name: responseReportData.data.name,
-        query: responseResultQuery.data,
-        clist: undefined,
-        slist: undefined,
-        data: responseResultData.data
     };
 
     let promise;
@@ -270,20 +252,13 @@ describe('Report Data Actions filter report exception on resolve facet', () => {
     };
     let responseResultData = {
         data: {
-            test: 'test'
+            fields: [],
+            records: []
         }
     };
     let responseResultQuery = {
         data: "testQuery"
     };
-    let response = {
-        name: responseReportData.data.name,
-        query: responseResultQuery.data,
-        clist: undefined,
-        slist: undefined,
-        data: responseResultData.data
-    };
-
     let promise;
     class mockReportService {
         constructor() { }

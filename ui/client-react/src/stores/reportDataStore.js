@@ -13,8 +13,8 @@ let ReportDataStore = Fluxxor.createStore({
             actions.LOAD_REPORT, this.onLoadReport,
             actions.LOAD_REPORT_SUCCESS, this.onLoadReportSuccess,
             actions.LOAD_REPORT_FAILED, this.onLoadReportFailed,
-            actions.LOAD_RECORDS_SUCCESS, this.onLoadReportSuccess,
-            actions.LOAD_RECORDS_FAILED, this.onLoadReportFailed,
+            actions.LOAD_RECORDS_SUCCESS, this.onLoadRecordsSuccess,
+            actions.LOAD_RECORDS_FAILED, this.onLoadRecordsFailed,
             actions.SEARCH_FOR, this.onSearchFor
         );
     },
@@ -45,6 +45,15 @@ let ReportDataStore = Fluxxor.createStore({
             records: records,
             filteredRecords: records
         };
+        this.emit("change");
+    },
+
+    onLoadRecordsSuccess: function(records) {
+        this.data.filteredRecords = this.getReportData(records);
+        this.emit("change");
+    },
+    onLoadRecordsFailed: function(){
+        this.error = true;
         this.emit("change");
     },
 
