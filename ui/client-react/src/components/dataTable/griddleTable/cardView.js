@@ -1,5 +1,5 @@
 import React from 'react';
-
+import Tappable from 'react-tappable';
 import Swipeable from 'react-swipeable';
 import {Glyphicon} from '../../../../../node_modules/react-bootstrap/lib';
 import ReportActions from '../../report/dataTable/reportActions';
@@ -15,6 +15,8 @@ class CardView extends React.Component {
         this.swipedRight = this.swipedRight.bind(this);
         this.swiping = this.swiping.bind(this);
         this.swiped = this.swiped.bind(this);
+        this.onRowPressed = this.onRowPressed.bind(this);
+        this.onRowSelected = this.onRowSelected.bind(this);
     }
 
     initState() {
@@ -52,42 +54,45 @@ class CardView extends React.Component {
 
     swiping(event, delta) {
 
-        console.log('swiping');
-        if (!this.state.swiping) {
-            let widthStr = this.refs.actions.style.width;
-            console.log('init widthstr',this.refs.actions.style.width);
-            let width = Number(widthStr.substring(0, widthStr.length - 2));
-            console.log('init width',width);
-            this.setState({
-                resizeStartWidth: width});
+        let widthStr = this.refs.actions.style.width;
+        let width = (widthStr === "") ? 180 : Number(widthStr.substring(0, widthStr.length - 2));
 
-        }
         this.setState({
-            swiping: true,
-            resizingWidth: Math.max(delta + this.state.resizeStartWidth, 0)
+            resizeWidth: Math.max(this.state.showActions ? (delta + 180) : delta, 5),
+            swiping: true
         });
     }
 
     swiped() {
-        console.log('swipe done');
         this.setState({
             swiping:false
         });
     }
 
     swipedLeft(e) {
-        console.log('left');
         this.setState({
             showActions:true
         });
     }
     swipedRight(e) {
-        console.log('right');
         this.setState({
             showActions:false
         });
     }
+    /* callback when row is long-pressed */
+    onRowPressed() {
+        if (this.props.data.onRowPressed) {
+            this.props.data.onRowPressed(this.props.data);
+        }
+    }
+    /* callback when row is selected */
+    onRowSelected(e) {
+        if (this.props.data.onRowSelected) {
+            this.props.data.onRowSelected(this.props.data);
+        }
+    }
     render() {
+
         if (this.props.data) {
             let row = this.createRow();
 
@@ -95,27 +100,27 @@ class CardView extends React.Component {
 
             if (this.state.swiping) {
                 actionsStyle = {
-                    width: Math.min(200, this.state.resizingWidth)
+                    width: Math.min(200, this.state.resizeWidth)
                 };
             }
-            //console.log(actionsStyle);
-
             return (
                 <Swipeable className={"swipeable"} onSwiping={this.swiping} onSwiped={this.swiped} onSwipedLeft={this.swipedLeft} onSwipedRight={this.swipedRight}>
-                    <div className={this.state.showMoreCards ? "custom-row-card expanded" : "custom-row-card"}>
-                        <div className="flexRow">
-                            <div className="card">
-                                {row}
-                            </div>
-                            <div className="card-expander" onClick={this.handleMoreCard}>
-                                <span className={this.state.showMoreCards ? "chevron_opened" : "chevron_closed"}/>
-                            </div>
+                    <Tappable onPress={this.onRowPressed} pressDelay={1200}>
+                        <div className={this.state.showMoreCards ? "custom-row-card expanded" : "custom-row-card"}>
+                            <div className="flexRow">
+                                <div className={"checkboxContainer"}><input checked={this.props.data.selected} onChange={this.onRowSelected} type="checkbox"></input></div>
+                                <div className="card">
+                                    {row}
+                                </div>
+                                <div className="card-expander" onClick={this.handleMoreCard}>
+                                    <span className={this.state.showMoreCards ? "chevron_opened" : "chevron_closed"}/>
+                                </div>
 
+                            </div>
                         </div>
-                    </div>
-
+                    </Tappable>
                     <div ref={"actions"} style={actionsStyle} className={"rowActions " + (this.state.swiping ? "swiping" : (this.state.showActions ? "open" : "closed"))}>
-                        <ReportActions />
+                        <ReportActions {...this.props}/>
                     </div>
                 </Swipeable>
             );

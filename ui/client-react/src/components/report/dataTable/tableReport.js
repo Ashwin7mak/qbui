@@ -21,6 +21,7 @@ let TableReport = React.createClass({
 
     getInitialState: function() {
         return {
+            showSelectionColumn: false,
             reportColumns: this.props.reportData && this.props.reportData.data && this.props.reportData.data.columns ? this.getColumnProps(this.props.reportData.data.columns) : []
         };
     },
@@ -83,20 +84,32 @@ let TableReport = React.createClass({
                 }
                 return obj;
             });
+
+            columnsData.push({
+                columnName: "onRowPressed",
+                visible:false,
+                cssClassName:"cxallback",
+                order:1
+            });
+            columnsData.push({
+                columnName: "onRowSelected",
+                visible:false,
+                cssClassName:"xcallback",
+                order:1
+            });
+
             columnsData.push({
                 columnName: "actions",
-                //order:8,
-                //locked:false,
-                visible:true,
+                visible:false,
                 customComponent: ActionsColumn,
                 cssClassName:"actions"
 
             });
+
             return columnsData;
         }
         return [];
     },
-
 
     /* TODO: paging component that has "next and previous tied to callbacks from the store to get new data set*/
     render: function() {
@@ -114,7 +127,7 @@ let TableReport = React.createClass({
                                       resultsPerPage={resultsPerPage}
                                       externalResultsPerPage={resultsPerPage}
                                       actions={<TableActions/>}
-                                      selectionActions={<ReportActions customActions={["Mark Done", "Change Status"]}/>}
+                                      selectionActions={<ReportActions />}
                         />
                     </div>
                 }

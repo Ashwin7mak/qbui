@@ -158,24 +158,24 @@ $footer-next-button: $color2;
     padding: 0 10px;
   }
   &.closed {
-    transition: width 500ms ease-in;
+    transition: width 100ms ease-in;
     width:0;
   }
   &.open {
-    transition: width 500ms ease-in;
-    width:auto;
+    transition: width 100ms ease-in;
+    width:180px;
   }
 }
 
 /* row actions on griddle trickery */
 
 /* hide actions column header */
-.QBGriddle tr th.actions:last-of-type {
+.QBGriddle tr th.actions {
   display:none;
 }
 
 /* hide griddle cell containing actions */
-.QBGriddle tr td.actions:last-of-type {
+.QBGriddle tr td.actions {
   position:relative;
   width:0;
   border:0;
@@ -199,12 +199,12 @@ $footer-next-button: $color2;
     border-right: 1px dotted  #969696;
   }
 }
-.QBGriddle tr:hover td.actions:last-of-type > div {
+.QBGriddle tr:hover td.actions > div {
   visibility:visible;
 
 }
 
-.selectedRows .QBGriddle tr:hover td.actions:last-of-type > div {
+.selectedRows .QBGriddle tr:hover td.actions > div {
   visibility:hidden;
 }
 

@@ -77,8 +77,7 @@ let ReportActions = React.createClass({
                         <ActionIcon icon="print" tip="Print"/>
 
                         <EmailReportLink tip="Email report"
-                                         subject={this.getEmailSubject()}
-                                         body={this.getEmailBody()} />
+                                         subject={this.getEmailSubject()} />
 
                         <ActionIcon icon="copy" tip="Copy record"/>
                         <ActionIcon icon="delete" tip="Delete record"/>
@@ -97,12 +96,12 @@ let ReportActions = React.createClass({
                             <Glyphicon glyph="option-horizontal"/>
                         </a>
 
-                        <div className={"dropdown-menu"} bsRole="menu">
+                        <Dropdown.Menu>
                             <MenuItem eventKey="1">Extra 1</MenuItem>
                             <MenuItem eventKey="2">Extra 2</MenuItem>
                             <MenuItem eventKey="3">Extra 3</MenuItem>
+                        </Dropdown.Menu>
 
-                        </div>
                     </Dropdown>
 
                 </div>
