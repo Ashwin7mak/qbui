@@ -86,7 +86,7 @@ let NavStore = Fluxxor.createStore({
      */
     onToggleAppsList: function(show) {
         if (show === false || show === true) {
-            this.state.appsListOpen = open;
+            this.state.appsListOpen = show;
         } else {
             this.state.appsListOpen = !this.state.appsListOpen;
         }

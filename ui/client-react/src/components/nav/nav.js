@@ -59,9 +59,9 @@ var Nav = React.createClass({
         const flux = this.getFlux();
         flux.actions.hideReports();
     },
-    toggleAppsList() {
+    toggleAppsList(open) {
         const flux = this.getFlux();
-        flux.actions.toggleAppsList();
+        flux.actions.toggleAppsList(open);
     },
     renderLarge() {
 
@@ -85,7 +85,7 @@ var Nav = React.createClass({
                 reportsData={this.state.reportsData}
                 selectedReportId={this.state.reportData.rptId}
                 showReports={this.state.nav.showReports}
-                onToggleAppsList={this.toggleAppsList}
+                toggleAppsList={this.toggleAppsList}
                 onSelectReports={this.onSelectTableReports}
                 onHideReports={this.onHideTableReports}/>
 
@@ -100,12 +100,13 @@ var Nav = React.createClass({
             </div>
         </div>);
     },
+    onSelectItem() {
+        const flux = this.getFlux();
+        flux.actions.toggleLeftNav(false); // hide left nav after selecting items on small breakpoint
+    },
     renderSmall() {
         const flux = this.getFlux();
 
-        function onSelectSmall() {
-            flux.actions.toggleLeftNav(false);
-        }
         const searchBarOpen = this.state.nav.searchBarOpen;
         const searching = this.state.nav.searching;
 
@@ -123,10 +124,10 @@ var Nav = React.createClass({
                 reportsData={this.state.reportsData}
                 selectedReportId={this.state.reportData.rptId}
                 showReports={this.state.nav.showReports}
-                onToggleAppsList={this.toggleAppsList}
+                toggleAppsList={this.toggleAppsList}
                 onSelectReports={this.onSelectTableReports}
                 onHideReports={this.onHideTableReports}
-                onSelect={onSelectSmall}
+                onSelect={this.onSelectItem}
                 globalActions={this.getGlobalActions()} />
 
             <div className="main">

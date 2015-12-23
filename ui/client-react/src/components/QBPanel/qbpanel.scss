@@ -1,0 +1,103 @@
+@import '../../assets/css/qbVariables';
+
+$fieldLabel-font-size: $font-size-small;
+$fieldValue-font-size: $font-size-base;
+$fieldLabel-color: $color3;
+
+.qbPanel{
+  font-family: $font-family;
+  color: $font-color;
+}
+.qbPanelHeader {
+  padding-left: 3%;
+  padding-top: 0.2rem;
+  padding-bottom: 0.2rem;
+  cursor: pointer;
+  min-width: 30%;
+}
+.qbPanelHeaderIcon {
+  float: right;
+  margin-right:2rem;
+}
+.qbPanelBody {
+  padding-left: 1%;
+  display: flex;
+  flex-wrap: wrap;
+  flex-direction: row;
+}
+.rotateDown {
+  transition: all .25s linear;
+  transform: rotate(-180deg);
+  font-size: 22px;
+}
+.rotateUp {
+  transition: all .25s linear;
+  transform: rotate(0deg);
+  font-size: 22px;
+}
+.fieldRow{
+  display: flex;
+  flex-direction: row;
+  align-items: stretch;
+  flex-wrap: wrap;
+  overflow-y: hidden;
+}
+.field {
+  padding-right: 25px;
+  padding-bottom: 25px;
+  max-width: 25%;
+  .fieldLabel{
+    display: block;
+    color: $fieldLabel-color;
+  }
+  .fieldValue {
+    display:block;
+    min-width: 0;
+  }
+}
+
+  /* For mobile phones: */
+.small-breakpoint .qbPanel {
+  font-size: $font-size;
+  .qbPanelBody {
+    padding-left: 1%;
+    display: flex;
+    flex-wrap: wrap;
+    flex-direction: row;
+  }
+  .field {
+    max-width: 100%;
+    .fieldLabel {
+      display: block;
+      font-size: $fieldLabel-font-size
+    }
+    .fieldValue {
+      display: block;
+      min-width: 0;
+      font-size: $fieldValue-font-size;
+    }
+  }
+}
+
+/* For tablet like devices: */
+.medium-breakpoint .qbPanel {
+  font-size: $font-size;
+  .qbPanelBody {
+    padding-left: 1%;
+    display: flex;
+    flex-wrap: wrap;
+    flex-direction: row;
+  }
+  .field {
+    max-width: 60%;
+    .fieldLabel {
+      display: block;
+      font-size: $fieldLabel-font-size
+    }
+    .fieldValue {
+      display: block;
+      min-width: 0;
+      font-size: $fieldValue-font-size;
+    }
+  }
+}
