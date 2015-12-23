@@ -214,17 +214,9 @@
 
     function resolveFacets(req, res) {
         processRequest(req, res, function(req, res) {
+            log.debug("facetexpression in mapper =" + req.param('facetexpression'));
+            console.log("facetexpression in mapper=" + req.param('facetexpression'));
             res.send(queryFormatter.format(req.param('facetexpression')));
-                /*.then(function(response) {
-                    log.debug({req: req}, 'API response status: ' + response.statusCode);
-                    res.send(response);
-                })
-                .catch(function(error) {
-                    log.error({req: req}, 'API ERROR: ' + JSON.stringify(error));
-                    requestHelper.copyHeadersToResponse(res, error.headers);
-                    res.status(error.statusCode)
-                        .send(error.body);
-                });*/
         });
     }
 

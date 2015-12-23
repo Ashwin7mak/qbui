@@ -239,7 +239,7 @@ describe('Report Data Actions filter report exception on get records', () => {
         expect(flux.dispatchBinder.dispatch).toHaveBeenCalledWith(actions.LOAD_REPORT_FAILED);
     });
 });
-describe('Report Data Actions filter report exception on resolve facet', () => {
+/*describe('Report Data Actions filter report exception on resolve facet', () => {
     'use strict';
 
     let appId = '1';
@@ -317,7 +317,7 @@ describe('Report Data Actions filter report exception on resolve facet', () => {
         expect(flux.dispatchBinder.dispatch).toHaveBeenCalledWith(actions.LOAD_REPORT_FAILED);
     });
 
-});
+});*/
 describe('Report Data Actions filter report fail on invalid params ', () => {
     'use strict';
 

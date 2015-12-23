@@ -9,6 +9,7 @@
 
     module.exports = {
         format: function(facetExpression) {
+            console.log(facetExpression);
             if (!facetExpression) {
                 return '';
             }
@@ -18,24 +19,26 @@
                 if (queryString !== "") {
                     queryString += consts.QUERY_AND;
                 }
-
-                facetExpression[i] = decodeURI(facetExpression[i]);
-                facetExpression[i] = JSON.parse(facetExpression[i]);
+                // when the request comes from server since we are picking up a part of the url the facets are passed in as a string of json
+                if (typeof facetExpression[i] === "string"){
+                    facetExpression[i] = JSON.parse(facetExpression[i]);
+                }
 
                 if (!facetExpression[i].values) {
                     continue;
                 }
-                queryString += "(";
                 var subquery = "";
 
                 if (facetExpression[i].fieldtype === consts.DATE || facetExpression[i].fieldtype === consts.DATE_TIME){
                     if (facetExpression[i].values.length !== 2) {
                         continue;
                     }
+                    queryString += "(";
                     subquery = "{" + facetExpression[i].fid.toString() + consts.OPERATOR_ONORBEFORE + "'" + facetExpression[i].values[0] + "'}" +
-                        consts.QUERY_OR +
+                        consts.QUERY_AND +
                         "{" + facetExpression[i].fid.toString() + consts.OPERATOR_ONORAFTER + "'" + facetExpression[i].values[1] + "'}";
                 } else {
+                    queryString += "(";
                     for (var j = 0; j < facetExpression[i].values.length; j++) {
                         if (subquery !== "") {
                             subquery += consts.QUERY_OR;
