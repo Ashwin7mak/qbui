@@ -1,7 +1,7 @@
 import React from 'react';
 import TestUtils from 'react-addons-test-utils';
 import ReactDOM from 'react-dom';
-import QBPanel from '../../src/components/qbPanel/qbpanel.js';
+import QBPanel from '../../src/components/QBPanel/qbpanel.js';
 
 const fakeQBPanelData_valid = {
     data: {

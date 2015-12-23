@@ -1,5 +1,5 @@
 import React from 'react';
-import QBPanel from '../qbPanel/qbpanel.js';
+import QBPanel from '../QBPanel/qbpanel.js';
 import {fakeFormClassyData} from './fakeData.js';
 import Tabs, {TabPane} from 'rc-tabs';
 import './qbform.scss';
