@@ -18,7 +18,6 @@ describe('QBPanel functions', () => {
     it('test render of component', () => {
         component = TestUtils.renderIntoDocument(<QBPanel title={fakeQBPanelData_valid.data.title}></QBPanel>);
         expect(TestUtils.isCompositeComponent(component)).toBeTruthy();
-        //var qbPanel = TestUtils.findRenderedDOMComponentWithClass(component, "card");
         var qbPanel = ReactDOM.findDOMNode(component);
         expect(qbPanel).toBeDefined();
     });
