@@ -6,7 +6,7 @@ import ReportStage from './dataTable/stage';
 import Logger from '../../utils/logger';
 let logger = new Logger();
 
-import ReportContent from './dataTable/tableReport';
+import ReportContent from './dataTable/reportContent';
 import Fluxxor from 'fluxxor';
 import './report.scss';
 

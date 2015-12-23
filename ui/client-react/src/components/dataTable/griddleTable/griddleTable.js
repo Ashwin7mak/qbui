@@ -30,6 +30,7 @@ class GriddleTable extends React.Component {
         this.onTableClick = this.onTableClick.bind(this);
         this.onCardRowPressed = this.onCardRowPressed.bind(this);
         this.onCardRowSelected = this.onCardRowSelected.bind(this);
+        this.getTableActions = this.getTableActions.bind(this);
     }
 
     /**
@@ -63,17 +64,20 @@ class GriddleTable extends React.Component {
         }
     }
 
+    getTableActions() {
+
+        return (this.props.actions && this.props.selectionActions && (
+            <ReactCSSTransitionGroup transitionName="tableActions" component="div" className={"tableActionsContainer"}  transitionEnterTimeout={300} transitionLeaveTimeout={300}>
+
+                {this.state.selectedRows.length ?
+                    React.cloneElement(this.props.selectionActions, {key:"selectionActions", selection: this.state.selectedRows}) :
+                    React.cloneElement(this.props.actions, {key:"actions"})}
+            </ReactCSSTransitionGroup>));
+    }
+
     render() {
 
         const isCardLayout = this.context.breakpoint === breakpoints.SMALL_BREAKPOINT;
-
-        // unfortunately Griddle passes only a row data prop to our custom component (i.e. no shareable context property)
-        // so store our callback there...
-
-        this.props.results.forEach((res) => {
-            res.onRowPressed = this.onCardRowPressed;
-            res.onRowSelected = this.onCardRowSelected;
-        });
 
         let griddleWrapperClasses = this.state.selectedRows.length ? "selectedRows" : "";
 
@@ -81,15 +85,18 @@ class GriddleTable extends React.Component {
             griddleWrapperClasses += " allowCardSelection";
         }
         if (this.props.results) {
+            // unfortunately Griddle passes only a row data prop to our custom component (i.e. no shareable context property)
+            // so store our callback there...
+
+            this.props.results.forEach((res) => {
+                res.onRowPressed = this.onCardRowPressed;
+                res.onRowSelected = this.onCardRowSelected;
+            });
+
             return (
                 <div className="reportTable" >
 
-                    <ReactCSSTransitionGroup transitionName="tableActions" component="div" className={"tableActionsContainer"}  transitionEnterTimeout={300} transitionLeaveTimeout={300}>
-
-                        {this.props.selectionActions && this.state.selectedRows.length ?
-                            React.cloneElement(this.props.selectionActions, {key:"selectionActions", selection: this.state.selectedRows}) :
-                            React.cloneElement(this.props.actions, {key:"actions"})}
-                    </ReactCSSTransitionGroup>
+                    {this.getTableActions()}
 
                     <div onClick={this.onTableClick} className={griddleWrapperClasses}>
                         <Griddle {...this.props}

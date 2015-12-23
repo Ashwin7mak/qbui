@@ -13,6 +13,10 @@ var GriddleMock = React.createClass({
     }
 });
 
+var TableActionsMock = React.createClass({
+    render: function() {return <div>table actions</div>;}
+});
+
 var I18nMessageMock = React.createClass({
     render: function() {
         return (
@@ -68,7 +72,7 @@ describe('GriddleTable functions', () => {
     });
 
     it('test render of component', () => {
-        component = TestUtils.renderIntoDocument(<GriddleTable results={fakeReportData_empty.data} columnMetadata={fakeReportData_empty.data.columns}/>);
+        component = TestUtils.renderIntoDocument(<GriddleTable actions={TableActionsMock} results={fakeReportData_empty.data.records} columnMetadata={fakeReportData_empty.data.columns}/>);
         expect(TestUtils.isCompositeComponent(component)).toBeTruthy();
     });
 

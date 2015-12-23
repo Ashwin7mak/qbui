@@ -17,7 +17,7 @@ let ActionsColumn = React.createClass({
     }
 });
 
-let TableReport = React.createClass({
+let ReportContent = React.createClass({
 
     getInitialState: function() {
         return {
@@ -85,18 +85,6 @@ let TableReport = React.createClass({
                 return obj;
             });
 
-            columnsData.push({
-                columnName: "onRowPressed",
-                visible:false,
-                cssClassName:"cxallback",
-                order:1
-            });
-            columnsData.push({
-                columnName: "onRowSelected",
-                visible:false,
-                cssClassName:"xcallback",
-                order:1
-            });
 
             columnsData.push({
                 columnName: "actions",
@@ -137,4 +125,4 @@ let TableReport = React.createClass({
 
 });
 
-export default TableReport;
+export default ReportContent;

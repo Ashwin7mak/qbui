@@ -9,18 +9,18 @@ var LeftNavMock = React.createClass({
     render: function() {return <div className="leftMenu" ><a className="leftNavLink" onClick={() => this.props.onSelect()} >mock left nav</a></div>;}
 });
 
-var MobileTopNavMock = React.createClass({
-    render: function() {return <div>mock mobile top nav</div>;}
-});
+
 var TopNavMock = React.createClass({
     render: function() {return <div>mock top nav</div>;}
 });
 var FooterMock = React.createClass({
     render: function() {return <div>mock footer</div>;}
 });
+
 var MobileFooterMock = React.createClass({
     render: function() {return <div>mock mobile footer</div>;}
 });
+
 
 describe('Nav functions', () => {
     'use strict';
@@ -58,7 +58,6 @@ describe('Nav functions', () => {
 
     beforeEach(() => {
         Nav.__Rewire__('LeftNav', LeftNavMock);
-        Nav.__Rewire__('MobileTopNav', MobileTopNavMock);
         Nav.__Rewire__('TopNav', TopNavMock);
         Nav.__Rewire__('Footer', FooterMock);
         Nav.__Rewire__('MobileAddFooter', MobileFooterMock);
@@ -66,7 +65,6 @@ describe('Nav functions', () => {
 
     afterEach(() => {
         Nav.__ResetDependency__('LeftNav');
-        Nav.__ResetDependency__('MobileTopNav');
         Nav.__ResetDependency__('TopNav');
         Nav.__ResetDependency__('Footer');
         Nav.__ResetDependency__('MobileAddFooter');
@@ -110,7 +108,7 @@ describe('Nav functions', () => {
         component = parent.refs.nav;
 
         expect(TestUtils.scryRenderedComponentsWithType(component, LeftNavMock).length).toEqual(1);
-        expect(TestUtils.scryRenderedComponentsWithType(component, MobileTopNavMock).length).toEqual(1);
+        expect(TestUtils.scryRenderedComponentsWithType(component, TopNavMock).length).toEqual(1);
         expect(TestUtils.scryRenderedComponentsWithType(component, MobileFooterMock).length).toEqual(1);
 
         let leftLink = TestUtils.findRenderedDOMComponentWithClass(component, "leftNavLink");
