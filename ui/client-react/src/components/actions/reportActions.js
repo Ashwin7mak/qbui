@@ -3,8 +3,7 @@ import ReactIntl from 'react-intl';
 import {I18nMessage, I18nDate} from '../../utils/i18nMessage';
 import Locale from '../../locales/locales';
 
-import Hicon from '../harmonyIcon/harmonyIcon';
-import {MenuItem, Dropdown, ButtonGroup, Button, Tooltip, OverlayTrigger, Popover, Glyphicon, Input} from 'react-bootstrap';
+import {MenuItem, Dropdown, Glyphicon} from 'react-bootstrap';
 
 
 import ActionIcon from './actionIcon';
@@ -35,6 +34,13 @@ let ReportActions = React.createClass({
             "' in '" + this.props.app.name + "'%0D%0D" + window.location.href;
     },
 
+    getSelectionTip(action) {
+
+        const suffix = this.props.selection.length === 1 ? " record" : " records";
+
+        return action + " " + this.props.selection.length + suffix;
+    },
+
     render() {
 
         const searchIcon = <Glyphicon glyph="search" />;
@@ -45,36 +51,40 @@ let ReportActions = React.createClass({
                 <div>
                     {this.props.selection && <span className="selectedRowsLabel">{this.props.selection.length}</span>}
                     <div className="actionIcons">
-                        <ActionIcon icon="edit" tip="Edit record"/>
-                        <ActionIcon icon="print" tip="Print"/>
+                        {this.props.selection.length === 1 && <ActionIcon icon="edit" tip={this.getSelectionTip("Edit")}/>}
+                        <ActionIcon icon="print" tip={this.getSelectionTip("Print")}/>
 
-                        <EmailReportLink tip="Email report"
-                                         subject={this.getEmailSubject()} />
+                        <EmailReportLink tip={this.getSelectionTip("Email")}
+                                         subject={this.getEmailSubject()}
+                                         body={this.getEmailBody()}/>
 
-                        <ActionIcon icon="copy" tip="Copy record"/>
-                        <ActionIcon icon="delete" tip="Delete record"/>
+                        <ActionIcon icon="copy" tip={this.getSelectionTip("Copy")}/>
+                        <ActionIcon icon="delete" tip={this.getSelectionTip("Delete")}/>
+
+                        {/* custom actions some day
+                         {this.props.customActions &&
+                         <div className="actionButtons">
+                         {this.props.customActions.map((action) => {
+                         return (<a key={action}><Button bsStyle="primary">{action}</Button></a>);
+                         })}
+
+                         </div>}
+                         */}
+
+                        <Dropdown id="extraActionsMenu">
+
+                            <a href="#" bsRole="toggle">
+                                <Glyphicon glyph="option-horizontal"/>
+                            </a>
+
+                            <Dropdown.Menu>
+                                <MenuItem eventKey="1">Extra 1</MenuItem>
+                                <MenuItem eventKey="2">Extra 2</MenuItem>
+                                <MenuItem eventKey="3">Extra 3</MenuItem>
+                            </Dropdown.Menu>
+
+                        </Dropdown>
                     </div>
-
-                    {this.props.customActions &&
-                        <div className="actionButtons">
-                            {this.props.customActions.map((action) => {
-                                return (<a key={action}><Button bsStyle="primary">{action}</Button></a>);
-                            })}
-
-                        </div>}
-
-                    <Dropdown id="extraActionsMenu">
-                        <a href="#" bsRole="toggle">
-                            <Glyphicon glyph="option-horizontal"/>
-                        </a>
-
-                        <Dropdown.Menu>
-                            <MenuItem eventKey="1">Extra 1</MenuItem>
-                            <MenuItem eventKey="2">Extra 2</MenuItem>
-                            <MenuItem eventKey="3">Extra 3</MenuItem>
-                        </Dropdown.Menu>
-
-                    </Dropdown>
 
                 </div>
             </div>

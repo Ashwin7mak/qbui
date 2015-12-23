@@ -2,13 +2,18 @@ import React from 'react';
 import ReactIntl from 'react-intl';
 
 import Hicon from '../harmonyIcon/harmonyIcon';
-import {Tooltip, OverlayTrigger} from 'react-bootstrap';
+import {Tooltip, OverlayTrigger, Glyphicon} from 'react-bootstrap';
 
 let ActionIcon = React.createClass({
 
+    defaultProps: {
+        bsRole: ""
+    },
+
     propTypes: {
         tip:React.PropTypes.string,
-        icon:React.PropTypes.string
+        icon:React.PropTypes.string,
+        bsStyle:React.PropTypes.string
     },
 
     render() {
@@ -16,7 +21,10 @@ let ActionIcon = React.createClass({
 
         return (
             <OverlayTrigger placement="top" overlay={tooltip}>
-                <a><Hicon icon={this.props.icon}/></a>
+                <a href="#" bsStyle={this.props.bsRole}>{this.props.icon ?
+                    <Hicon icon={this.props.icon}/> :
+                    <Glyphicon glyph={this.props.glyph}/> }
+                </a>
             </OverlayTrigger>);
 
     }

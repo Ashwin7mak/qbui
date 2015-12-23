@@ -2,7 +2,7 @@ import React from 'react';
 import Tappable from 'react-tappable';
 import Swipeable from 'react-swipeable';
 import {Glyphicon} from '../../../../../node_modules/react-bootstrap/lib';
-import ReportActions from '../../actions/reportActions';
+import RecordActions from '../../actions/recordActions';
 import './cardView.scss';
 
 const MAX_ACTIONS_RESIZE_WITH = 180; // max width while swiping
@@ -142,7 +142,7 @@ class CardView extends React.Component {
                     </Tappable>
 
                     <div ref={"actions"} style={actionsStyle} className={rowActionsClasses}>
-                        <ReportActions {...this.props}/>
+                        <RecordActions {...this.props}/>
                     </div>
                 </Swipeable>
             );
