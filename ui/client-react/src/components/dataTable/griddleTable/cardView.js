@@ -5,6 +5,8 @@ import {Glyphicon} from '../../../../../node_modules/react-bootstrap/lib';
 import ReportActions from '../../report/dataTable/reportActions';
 import './cardView.scss';
 
+const MAX_ACTIONS_RESIZE_WITH = 180; // max width while swiping
+
 class CardView extends React.Component {
     constructor(...args) {
         super(...args);
@@ -32,7 +34,6 @@ class CardView extends React.Component {
         this.setState({showMoreCards: !this.state.showMoreCards});
     }
 
-
     createField(c, curKey) {
         return (<div key={c} className="field">
             <span className="fieldLabel">{curKey}</span>
@@ -47,18 +48,25 @@ class CardView extends React.Component {
         }
         var topField = <div className="top-card-row field"><strong>{this.props.data[keys[0]]}</strong></div>;
         for (var i = 1; i < keys.length; i++) {
-            fields.push(this.createField(i, keys[i]));
+
+            // ignore metadata columns
+            if (this.props.metadataColumns.indexOf(keys[i]) === -1) {
+                fields.push(this.createField(i, keys[i]));
+            }
         }
         return <div className="card">{topField}<div className={this.state.showMoreCards ? "fieldRow expanded" : "fieldRow collapsed"}>{fields}</div></div>;
     }
 
+    /**
+     * swipe in progress
+     * @param event
+     * @param delta x delta from touch starting position
+     */
     swiping(event, delta) {
 
-        let widthStr = this.refs.actions.style.width;
-        let width = (widthStr === "") ? 180 : Number(widthStr.substring(0, widthStr.length - 2));
-
+        // add delta to current width (MAX_ACTIONS_RESIZE_WITH if open, 0 if closed) to get new size
         this.setState({
-            resizeWidth: Math.max(this.state.showActions ? (delta + 180) : delta, 5),
+            resizeWidth: Math.max(this.state.showActions ? (delta + MAX_ACTIONS_RESIZE_WITH) : delta, 0),
             swiping: true
         });
     }
@@ -97,24 +105,20 @@ class CardView extends React.Component {
             let row = this.createRow();
 
             let actionsStyle = {};
-
-            if (this.state.swiping) {
-                actionsStyle = {
-                    width: Math.min(200, this.state.resizeWidth)
-                };
-            }
-
             let rowActionsClasses = "rowActions ";
 
             if (this.state.swiping) {
                 rowActionsClasses += "swiping";
+                actionsStyle = {
+                    width: Math.min(MAX_ACTIONS_RESIZE_WITH, this.state.resizeWidth)
+                };
             } else {
                 rowActionsClasses += this.state.showActions ? "open" : "closed";
             }
 
             return (
                 <Swipeable className={"swipeable"} onSwiping={this.swiping} onSwiped={this.swiped} onSwipedLeft={this.swipedLeft} onSwipedRight={this.swipedRight}>
-                    <Tappable onPress={this.onRowPressed} pressDelay={1200}>
+                    <Tappable onPress={this.onRowPressed} pressDelay={1000}>
                         <div className={this.state.showMoreCards ? "custom-row-card expanded" : "custom-row-card"}>
                             <div className="flexRow">
                                 <div className={"checkboxContainer"}><input checked={this.props.data.selected} onChange={this.onRowSelected} type="checkbox"></input></div>
@@ -128,6 +132,7 @@ class CardView extends React.Component {
                             </div>
                         </div>
                     </Tappable>
+
                     <div ref={"actions"} style={actionsStyle} className={rowActionsClasses}>
                         <ReportActions {...this.props}/>
                     </div>
@@ -137,7 +142,6 @@ class CardView extends React.Component {
             return null;
         }
     }
-
 }
 
 export default CardView;
