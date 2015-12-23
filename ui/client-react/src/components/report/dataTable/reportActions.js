@@ -2,14 +2,12 @@ import React from 'react';
 import ReactIntl from 'react-intl';
 import {I18nMessage, I18nDate} from '../../../utils/i18nMessage';
 import Locale from '../../../locales/locales';
-import Fluxxor from 'fluxxor';
+
 import Hicon from '../../harmonyIcon/harmonyIcon';
 
 import './reportActions.scss';
 
 import {MenuItem, Dropdown, CustomMenu, ButtonGroup, Button, Tooltip, OverlayTrigger, Popover, Glyphicon, Input} from 'react-bootstrap';
-
-let FluxMixin = Fluxxor.FluxMixin(React);
 
 let EmailReportLink = React.createClass({
 
@@ -19,7 +17,7 @@ let EmailReportLink = React.createClass({
     },
     render() {
         const href = "mailto:?subject=" + this.props.subject + "&body=" + this.props.body;
-        const tooltip = <Tooltip id={this.props.tip}>{this.props.tip}</Tooltip>
+        const tooltip = <Tooltip id={this.props.tip}>{this.props.tip}</Tooltip>;
         return (
             <OverlayTrigger placement="top" overlay={tooltip}>
                 <a  href={href} >
@@ -33,7 +31,7 @@ let EmailReportLink = React.createClass({
 let ActionIcon = React.createClass({
 
     render() {
-        const tooltip = <Tooltip id={this.props.tip} positionTop={22}>{this.props.tip}</Tooltip>
+        const tooltip = <Tooltip id={this.props.tip} positionTop={22}>{this.props.tip}</Tooltip>;
         return (
          <OverlayTrigger placement="top" overlay={tooltip}>
              <a><Hicon icon={this.props.icon}/></a>
@@ -43,7 +41,6 @@ let ActionIcon = React.createClass({
 });
 
 let ReportActions = React.createClass({
-    mixins: [FluxMixin],
 
     getDefaultProps() {
         return {

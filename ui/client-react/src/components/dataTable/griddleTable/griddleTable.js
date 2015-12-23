@@ -127,7 +127,7 @@ GriddleTable.defaultProps = {
     useExternal: false, /* this should always be false for us since the store takes care of just sending the data thats to be rendered at any point in time */
     columnMetadata: [],
     results: [],
-    metadataColumns: [ "onRowSelected", "onRowPressed"],
+    metadataColumns: ["onRowSelected", "onRowPressed"],
     gridClassName: 'QBGriddle',
     useGriddleStyles: false,
     sortAscendingClassName: "Sorted",

@@ -103,6 +103,15 @@ class CardView extends React.Component {
                     width: Math.min(200, this.state.resizeWidth)
                 };
             }
+
+            let rowActionsClasses = "rowActions ";
+
+            if (this.state.swiping) {
+                rowActionsClasses += "swiping";
+            } else {
+                rowActionsClasses += this.state.showActions ? "open" : "closed";
+            }
+
             return (
                 <Swipeable className={"swipeable"} onSwiping={this.swiping} onSwiped={this.swiped} onSwipedLeft={this.swipedLeft} onSwipedRight={this.swipedRight}>
                     <Tappable onPress={this.onRowPressed} pressDelay={1200}>
@@ -119,7 +128,7 @@ class CardView extends React.Component {
                             </div>
                         </div>
                     </Tappable>
-                    <div ref={"actions"} style={actionsStyle} className={"rowActions " + (this.state.swiping ? "swiping" : (this.state.showActions ? "open" : "closed"))}>
+                    <div ref={"actions"} style={actionsStyle} className={rowActionsClasses}>
                         <ReportActions {...this.props}/>
                     </div>
                 </Swipeable>

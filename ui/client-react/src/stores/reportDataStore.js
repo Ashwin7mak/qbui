@@ -55,7 +55,6 @@ let ReportDataStore = Fluxxor.createStore({
 
                 let match = false;
                 _.values(record).forEach((val) => {
-                    console.log(typeof val);
                     if (val && val.toString().toLowerCase().indexOf(text.toLowerCase()) !== -1) {
                         match = true;
                     }
