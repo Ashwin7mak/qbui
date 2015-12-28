@@ -29,7 +29,6 @@ describe('Query formatter unit test', function() {
         queryDataProvider().forEach(function(entry) {
             it('Test case: ' + entry.message, function(done) {
                 var query = queryFormatter.format(entry.facetExpression);
-                console.log(query);
                 assert.equal(query, entry.query, entry.message);
                 done();
             });

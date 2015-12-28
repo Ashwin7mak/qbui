@@ -215,8 +215,10 @@
     function resolveFacets(req, res) {
         processRequest(req, res, function(req, res) {
             log.debug("facetexpression in mapper =" + req.param('facetexpression'));
-            console.log("facetexpression in mapper=" + req.param('facetexpression'));
-            res.send(queryFormatter.format(req.param('facetexpression')));
+            queryFormatter.format(req.param('facetexpression'))
+                .then(function(response){
+                    res.send(response);
+                });
         });
     }
 
