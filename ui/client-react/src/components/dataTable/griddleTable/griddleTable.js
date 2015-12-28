@@ -52,6 +52,7 @@ let GriddleTable = React.createClass({
             useExternal: false, /* this should always be false for us since the store takes care of just sending the data thats to be rendered at any point in time */
             columnMetadata: [],
             results: [],
+            metadataColumns: ["selected"],
             gridClassName: 'QBGriddle',
             useGriddleStyles: false,
             sortAscendingClassName: "Sorted",
