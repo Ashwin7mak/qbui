@@ -13,7 +13,8 @@ let ActionIcon = React.createClass({
     propTypes: {
         tip:React.PropTypes.string,
         icon:React.PropTypes.string,
-        bsStyle:React.PropTypes.string
+        bsStyle:React.PropTypes.string,
+        onClick:React.PropTypes.func
     },
 
     render() {
@@ -21,7 +22,7 @@ let ActionIcon = React.createClass({
 
         return (
             <OverlayTrigger placement="top" overlay={tooltip}>
-                <a href="#" bsStyle={this.props.bsRole}>{this.props.icon ?
+                <a href="#" onClick={this.props.onClick} bsStyle={this.props.bsRole}>{this.props.icon ?
                     <Hicon icon={this.props.icon}/> :
                     <Glyphicon glyph={this.props.glyph}/> }
                 </a>

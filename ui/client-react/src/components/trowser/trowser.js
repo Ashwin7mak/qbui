@@ -10,8 +10,12 @@ class Trowser extends React.Component {
 
 
     render() {
+        let trowserClasses = "trowser " + this.props.position;
+        if (this.props.visible) {
+            trowserClasses += " visible";
+        }
         return (
-            <div className={(this.props.visible ? "visible " : "") + "trowser"} >
+            <div className={trowserClasses} >
                 {this.props.children}
             </div>
         );

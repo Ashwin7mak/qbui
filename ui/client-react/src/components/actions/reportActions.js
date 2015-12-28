@@ -5,7 +5,6 @@ import Locale from '../../locales/locales';
 
 import {MenuItem, Dropdown, Glyphicon} from 'react-bootstrap';
 
-
 import ActionIcon from './actionIcon';
 import EmailReportLink from './emailReportLink';
 
