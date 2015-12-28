@@ -2,6 +2,15 @@ import React from 'react';
 import TestUtils from 'react-addons-test-utils';
 import ReactDOM from 'react-dom';
 import CardView from '../../src/components/dataTable/griddleTable/cardView';
+import RecordActions from '../../src/components/actions/recordActions';
+
+var RecordActionsMock = React.createClass({
+    render: function() {
+        return (
+            <div>test</div>
+        );
+    }
+});
 
 const fakeReportData_empty = {
     data: {
@@ -28,33 +37,112 @@ describe('Report Mobile View functions', () => {
 
     var component;
 
+    beforeEach(() => {
+        CardView.__Rewire__('RecordActions', RecordActionsMock);
+    });
+
+    afterEach(() => {
+        CardView.__ResetDependency__('RecordActions');
+    });
+
     it('test render of component', () => {
-        component = TestUtils.renderIntoDocument(<CardView data={fakeReportData_empty.data.results} metadataColumns={fakeReportData_empty.data.columnMetadata}/>);
-        expect(TestUtils.isCompositeComponent(component)).toBeTruthy();
-        var rows = TestUtils.scryRenderedDOMComponentsWithClass(component, "fieldRow");
+
+        var TestParent = React.createFactory(React.createClass({
+
+            childContextTypes: {
+                allowCardSelection: React.PropTypes.func
+            },
+            getChildContext: function() {
+                return {
+                    allowCardSelection: function() {return false;}
+                };
+            },
+            render() {
+                return <CardView ref="refCardView" data={fakeReportData_empty.data.results} metadataColumns={fakeReportData_empty.data.columnMetadata}/>;
+            }
+        }));
+        var parent = TestUtils.renderIntoDocument(TestParent());
+        var cardView = TestUtils.scryRenderedComponentsWithType(parent.refs.refCardView, CardView);
+
+        expect(cardView.length).toEqual(1);
+
+        var rows = TestUtils.scryRenderedDOMComponentsWithClass(cardView[0], "fieldRow");
         expect(rows.length).toEqual(0);
     });
 
+
     it('test render of component with data', () => {
-        component = TestUtils.renderIntoDocument(<CardView data={fakeReportData_valid.data.results} metadataColumns={fakeReportData_valid.data.columnMetadata}/>);
-        expect(TestUtils.isCompositeComponent(component)).toBeTruthy();
-        var node = ReactDOM.findDOMNode(component);
+
+        var TestParent = React.createFactory(React.createClass({
+
+            childContextTypes: {
+                allowCardSelection: React.PropTypes.func
+            },
+            getChildContext: function() {
+                return {
+                    allowCardSelection: function() {return false;}
+                };
+            },
+            render() {
+                return <CardView ref="refCardView" data={fakeReportData_valid.data.results} metadataColumns={fakeReportData_valid.data.columnMetadata}/>;
+            }
+        }));
+        var parent = TestUtils.renderIntoDocument(TestParent());
+        var cardView = TestUtils.scryRenderedComponentsWithType(parent.refs.refCardView, CardView);
+
+        expect(cardView.length).toEqual(1);
+        var node = ReactDOM.findDOMNode(cardView[0]);
         var rows = node.getElementsByClassName("fieldRow");
         expect(rows.length).toEqual(1);
     });
 
+
     it('test rows are collapsed by default', () => {
-        component = TestUtils.renderIntoDocument(<CardView data={fakeReportData_valid.data.results} metadataColumns={fakeReportData_valid.data.columnMetadata}/>);
-        var node = ReactDOM.findDOMNode(component);
+
+        var TestParent = React.createFactory(React.createClass({
+
+            childContextTypes: {
+                allowCardSelection: React.PropTypes.func
+            },
+            getChildContext: function() {
+                return {
+                    allowCardSelection: function() {return false;}
+                };
+            },
+            render() {
+                return <CardView ref="refCardView" data={fakeReportData_valid.data.results} metadataColumns={fakeReportData_valid.data.columnMetadata}/>;
+            }
+        }));
+        var parent = TestUtils.renderIntoDocument(TestParent());
+        var cardView = TestUtils.scryRenderedComponentsWithType(parent.refs.refCardView, CardView);
+
+        var node = ReactDOM.findDOMNode(cardView[0]);
         var rows = node.getElementsByClassName("fieldRow");
         expect(rows[0].className).toContain("collapsed");
     });
 
     it('test expand row on click', () => {
-        component = TestUtils.renderIntoDocument(<CardView data={fakeReportData_valid.data.results} metadataColumns={fakeReportData_valid.data.columnMetadata}/>);
-        var node = ReactDOM.findDOMNode(component);
+        var TestParent = React.createFactory(React.createClass({
+
+            childContextTypes: {
+                allowCardSelection: React.PropTypes.func
+            },
+            getChildContext: function() {
+                return {
+                    allowCardSelection: function() {return false;}
+                };
+            },
+            render() {
+                return <CardView ref="refCardView" data={fakeReportData_valid.data.results} metadataColumns={fakeReportData_valid.data.columnMetadata}/>;
+            }
+        }));
+        var parent = TestUtils.renderIntoDocument(TestParent());
+        var cardView = TestUtils.scryRenderedComponentsWithType(parent.refs.refCardView, CardView);
+
+        var node = ReactDOM.findDOMNode(cardView[0]);
         var rows = node.getElementsByClassName("fieldRow");
         TestUtils.Simulate.click(rows[0]);
         expect(rows[0].className).toContain("collapsed");
     });
+
 });

@@ -11,7 +11,7 @@ import EmailReportLink from './emailReportLink';
 import './reportActions.scss';
 
 /**
- * report-level actins
+ * report-level actions
  */
 let ReportActions = React.createClass({
 
