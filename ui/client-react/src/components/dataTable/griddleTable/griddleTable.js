@@ -17,22 +17,54 @@ import './qbGriddleTable.scss';
  * <GriddleTable results={fakeGriddleData} columnMetadata={fakeGriddleColumnMetaData} useExternal={false}/>
  * */
 
-class GriddleTable extends React.Component {
+let GriddleTable = React.createClass({
+    contextTypes: {
+        breakpoint: React.PropTypes.string
+    },
+    childContextTypes: {
+        allowCardSelection: React.PropTypes.func,
+        onToggleCardSelection: React.PropTypes.func,
+        onRowSelected: React.PropTypes.func
+    },
 
-    constructor(...args) {
-        super(...args);
+    /**
+     * make row callbacks available via context since we can't pass them as props to a custom row
+     * in Griddle
+     */
+    getChildContext() {
+        return {
+            onToggleCardSelection: this.onToggleCardSelection,
+            allowCardSelection: this.allowCardSelection,
+            onRowSelected: this.onCardRowSelected
+        };
+    },
 
-        this.state = {
+    getDefaultProps() {
+        return {
+            mobile: false,
+            showFilter: false,
+            showSettings: false,
+            currentPage: 0,
+            resultsPerPage: 1000,
+            useCustomRowComponent: false,
+            customRowComponent: CardView,
+            customRowComponentClassName: "custom-row",
+            useExternal: false, /* this should always be false for us since the store takes care of just sending the data thats to be rendered at any point in time */
+            columnMetadata: [],
+            results: [],
+            gridClassName: 'QBGriddle',
+            useGriddleStyles: false,
+            sortAscendingClassName: "Sorted",
+            sortDescendingClassName: "Sorted"
+        };
+    },
+
+    getInitialState() {
+        return {
             selectedRows: [],
             allowCardSelection: false
         };
-
-        this.onTableClick = this.onTableClick.bind(this);
-        this.onCardRowPressed = this.onCardRowPressed.bind(this);
-        this.onCardRowSelected = this.onCardRowSelected.bind(this);
-        this.getTableActions = this.getTableActions.bind(this);
-    }
-
+    },
     /**
      * since Griddle stores the selected rows in its internal state instead of just using a prop
      * and a callback, we have to extract the selection in a roundabout way through a ref and
@@ -43,18 +75,22 @@ class GriddleTable extends React.Component {
         setTimeout(() => {
             this.setState({selectedRows: this.refs.griddleTable.getSelectedRowIds()});
         }, 0);
-    }
+    },
+
+    allowCardSelection() {
+        return this.state.allowCardSelection;
+    },
 
     /**
      * toggle the card selection mode
      */
-    onCardRowPressed(row) {
-        this.setState({allowCardSelection: !this.state.allowCardSelection});
+    onToggleCardSelection(allow = true) {
+        this.setState({allowCardSelection: allow});
 
-        if (!this.state.allowCardSelection) {
+        if (!allow) {
             this.setState({selectedRows: []});
         }
-    }
+    },
 
     /**
      * card row selection callback
@@ -71,7 +107,7 @@ class GriddleTable extends React.Component {
             // already selected, remove from selectedRows
             this.setState({selectedRows: _.without(this.state.selectedRows, id)});
         }
-    }
+    },
 
     /**
      * get table actions if we have them - render selectionActions prop if we have an active selection,
@@ -87,7 +123,7 @@ class GriddleTable extends React.Component {
                     React.cloneElement(this.props.selectionActions, {key:"selectionActions", selection: this.state.selectedRows}) :
                     React.cloneElement(this.props.reportHeader, {key:"reportHeader"})}
             </ReactCSSTransitionGroup>));
-    }
+    },
 
     render() {
 
@@ -100,11 +136,11 @@ class GriddleTable extends React.Component {
         }
         if (this.props.results) {
             // unfortunately Griddle passes only a row data prop to our custom component (i.e. can't pass in a shared prop)
-            // so we need store our callbacks in the row data...
+            // so we need store our shared props in the row data...
 
             this.props.results.forEach((result) => {
-                result.onRowPressed = this.onCardRowPressed;
-                result.onRowSelected = this.onCardRowSelected;
+                //result.onRowPressed = this.onCardRowPressed;
+                //result.onRowSelected = this.onCardRowSelected;
                 result.selected = this.state.selectedRows.indexOf(result[this.props.uniqueIdentifier]) !== -1;
             });
 
@@ -131,29 +167,6 @@ class GriddleTable extends React.Component {
             );
         }
     }
-}
-GriddleTable.contextTypes = {
-    breakpoint: React.PropTypes.string
-};
-
-GriddleTable.propTypes = {  };
-GriddleTable.defaultProps = {
-    mobile: false,
-    showFilter: false,
-    showSettings: false,
-    currentPage: 0,
-    resultsPerPage: 1000,
-    useCustomRowComponent: false,
-    customRowComponent: CardView,
-    customRowComponentClassName: "custom-row",
-    useExternal: false, /* this should always be false for us since the store takes care of just sending the data thats to be rendered at any point in time */
-    columnMetadata: [],
-    results: [],
-    metadataColumns: ["onRowSelected", "onRowPressed"],
-    gridClassName: 'QBGriddle',
-    useGriddleStyles: false,
-    sortAscendingClassName: "Sorted",
-    sortDescendingClassName: "Sorted"
-};
+});
 
 export default GriddleTable;
