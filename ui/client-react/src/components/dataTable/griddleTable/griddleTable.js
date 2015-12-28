@@ -50,6 +50,10 @@ class GriddleTable extends React.Component {
      */
     onCardRowPressed(row) {
         this.setState({allowCardSelection: !this.state.allowCardSelection});
+
+        if (!this.state.allowCardSelection) {
+            this.setState({selectedRows: []});
+        }
     }
 
     /**
@@ -98,9 +102,10 @@ class GriddleTable extends React.Component {
             // unfortunately Griddle passes only a row data prop to our custom component (i.e. can't pass in a shared prop)
             // so we need store our callbacks in the row data...
 
-            this.props.results.forEach((res) => {
-                res.onRowPressed = this.onCardRowPressed;
-                res.onRowSelected = this.onCardRowSelected;
+            this.props.results.forEach((result) => {
+                result.onRowPressed = this.onCardRowPressed;
+                result.onRowSelected = this.onCardRowSelected;
+                result.selected = this.state.selectedRows.indexOf(result[this.props.uniqueIdentifier]) !== -1;
             });
 
             return (

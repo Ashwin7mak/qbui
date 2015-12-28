@@ -138,12 +138,18 @@ $margin-spacer: 10px;
   }
 }
 
-.allowCardSelection .checkboxContainer {
-  overflow:hidden;
-  width:40px;
-  transition: all 300ms ease-in;
+.allowCardSelection {
+  .rowActions {
+    display:none;
+  }
+  .checkboxContainer {
+    overflow:hidden;
+    width:40px;
+    transition: all 300ms ease-in;
 
-  input {
-    display: inline-block;
+
+    input {
+      display: inline-block;
+    }
   }
 }
