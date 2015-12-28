@@ -11,7 +11,6 @@
     module.exports = {
         format: function(facetExpression) {
             var deferred = Promise.pending();
-            deferred.reject(new Error({statusCode: 10, body:"testerror"}));
             var queryString = "";
             if (facetExpression){
                 for (var i = 0; i < facetExpression.length; i++) {
