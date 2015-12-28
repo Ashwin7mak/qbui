@@ -61,7 +61,7 @@ let ReportActions = React.createClass({
                         <ActionIcon icon="copy" tip={this.getSelectionTip("Copy")}/>
                         <ActionIcon icon="delete" tip={this.getSelectionTip("Delete")}/>
 
-                        {/* custom actions some day
+                        {/* custom actions later
                          {this.props.customActions &&
                          <div className="actionButtons">
                          {this.props.customActions.map((action) => {
