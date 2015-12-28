@@ -49,7 +49,7 @@ class GriddleTable extends React.Component {
      * toggle the card selection mode
      */
     onCardRowPressed(row) {
-        this.setState({allowCardSelection: true});
+        this.setState({allowCardSelection: !this.state.allowCardSelection});
     }
 
     /**

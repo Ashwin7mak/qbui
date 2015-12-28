@@ -126,7 +126,7 @@ class CardView extends React.Component {
 
             return (
                 <Swipeable className={"swipeable"} onSwiping={this.swiping} onSwiped={this.swiped} onSwipedLeft={this.swipedLeft} onSwipedRight={this.swipedRight}>
-                    <Tappable onPress={this.onRowPressed} pressDelay={1000} onClick={this.onRowClick}>
+                    <Tappable onPress={this.onRowPressed} pressDelay={500} onClick={this.onRowClick}>
                         <div className={this.state.showMoreCards ? "custom-row-card expanded" : "custom-row-card"}>
                             <div className="flexRow">
                                 <div className={"checkboxContainer"}><input checked={this.props.data.selected} onChange={this.onRowSelected} type="checkbox"></input></div>
