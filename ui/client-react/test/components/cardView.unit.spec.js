@@ -54,7 +54,7 @@ describe('Report Mobile View functions', () => {
             },
             getChildContext: function() {
                 return {
-                    allowCardSelection: function() {return false;}
+                    allowCardSelection: () => {return false;}
                 };
             },
             render() {
@@ -80,7 +80,7 @@ describe('Report Mobile View functions', () => {
             },
             getChildContext: function() {
                 return {
-                    allowCardSelection: function() {return false;}
+                    allowCardSelection: () => {return false;}
                 };
             },
             render() {
@@ -106,7 +106,7 @@ describe('Report Mobile View functions', () => {
             },
             getChildContext: function() {
                 return {
-                    allowCardSelection: function() {return false;}
+                    allowCardSelection: () => {return false;}
                 };
             },
             render() {
@@ -129,7 +129,7 @@ describe('Report Mobile View functions', () => {
             },
             getChildContext: function() {
                 return {
-                    allowCardSelection: function() {return false;}
+                    allowCardSelection: () => {return true;}
                 };
             },
             render() {
@@ -143,6 +143,61 @@ describe('Report Mobile View functions', () => {
         var rows = node.getElementsByClassName("fieldRow");
         TestUtils.Simulate.click(rows[0]);
         expect(rows[0].className).toContain("collapsed");
+
     });
 
+    it('test row swiping', () => {
+        var TestParent = React.createFactory(React.createClass({
+
+            getInitialState() {
+                return {cardSelection: false} ;
+            },
+            childContextTypes: {
+                allowCardSelection: React.PropTypes.func,
+                onToggleCardSelection: React.PropTypes.func
+            },
+            getChildContext: function() {
+
+                return {
+                    allowCardSelection: () => {return this.state.cardSelection;},
+                    onToggleCardSelection: () => {this.setState({cardSelection: !this.state.cardSelection});}
+                };
+            },
+            render() {
+                return <CardView ref="refCardView" data={fakeReportData_valid.data.results} metadataColumns={fakeReportData_valid.data.columnMetadata}/>;
+            }
+        }));
+        var parent = TestUtils.renderIntoDocument(TestParent());
+        var cardView = TestUtils.scryRenderedComponentsWithType(parent.refs.refCardView, CardView)[0];
+
+        var node = ReactDOM.findDOMNode(cardView);
+        var rows = node.getElementsByClassName("fieldRow");
+        TestUtils.Simulate.click(rows[0]);
+        expect(rows[0].className).toContain("collapsed");
+
+        // not sure how to simulate these so just call the functions
+
+        // swipe left to reveal row actions
+        cardView.swiping(null, -100);
+        cardView.swipedLeft();
+        cardView.swiped();
+
+        // close row actions
+        cardView.swiping(null, 100);
+        cardView.swipedRight();
+        cardView.swiped();
+
+        // swipe right to reveal checkboxes
+        cardView.swiping(null, 100);
+        cardView.swipedRight();
+        cardView.swiped();
+
+        var checkbox = node.getElementsByTagName("input");
+        TestUtils.Simulate.click(checkbox[0]);
+
+        // close checkboxes
+        cardView.swiping(null, -100);
+        cardView.swipedLeft();
+        cardView.swiped();
+    });
 });

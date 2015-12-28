@@ -6,11 +6,27 @@ import Griddle from 'griddle-react';
 import * as breakpoints from '../../src/constants/breakpoints';
 
 var GriddleMock = React.createClass({
-    render: function() {
+
+    contextTypes: {
+        allowCardSelection: React.PropTypes.func,
+        onToggleCardSelection: React.PropTypes.func,
+        onRowSelected: React.PropTypes.func
+    },
+
+    render() {
+        const allowSelection = this.context.allowCardSelection();
         return (
             <div>test</div>
         );
+    },
+
+    simulateToggleCardSelection(allowSelection) {
+        this.context.onToggleCardSelection(allowSelection);
+    },
+    simulateRowSelection() {
+        this.context.onRowSelected({id:1});
     }
+
 });
 
 var TableActionsMock = React.createClass({
@@ -108,6 +124,13 @@ describe('GriddleTable functions', () => {
         var griddle = TestUtils.scryRenderedComponentsWithType(parent.refs.refGriddle, GriddleMock);
         expect(griddle.length).toEqual(1);
         expect(griddle[0].props.useCustomRowComponent).toBeTruthy();
+
+        griddle[0].simulateToggleCardSelection(true);
+        griddle[0].simulateToggleCardSelection(false);
+
+        griddle[0].simulateRowSelection();
+        // reselect same row to toggle
+        griddle[0].simulateRowSelection();
     });
 
     it('test re-render with new data pushed from parent', () => {
