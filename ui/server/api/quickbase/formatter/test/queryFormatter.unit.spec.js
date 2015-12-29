@@ -25,11 +25,16 @@ describe('Query formatter unit test', function() {
 
         return cases;
     }
+
     describe('should format given facetExpression into a valid query expression', function() {
         queryDataProvider().forEach(function(entry) {
             it('Test case: ' + entry.message, function(done) {
-                var query = queryFormatter.format(entry.facetExpression);
-                assert.equal(query, entry.query, entry.message);
+                var promise = queryFormatter.format(entry.facetExpression);
+                promise.then(
+                    function(query) {
+                        assert.equal(query, entry.query, entry.message);
+                    }
+                );
                 done();
             });
         });

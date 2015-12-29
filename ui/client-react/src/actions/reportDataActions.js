@@ -73,10 +73,12 @@ let reportDataActions = {
             Promise.all(promises).then(
                 function(response) {
                     var queryString = response[1].data;
-                    //TODO: Add the rest of query params like clist, slist, numRows, offset
+                    //TODO: Add the rest of query params like numRows, offset
                     var report = {
                         name: response[0].data.name,
-                        query: response[0].data.query
+                        query: response[0].data.query,
+                        columns:response[0].data.fids ? response[0].data.fids.join(",") : "",
+                        sortList: response[0].data.sortFids ? response[0].data.sortFids.join(",") : ""
                     };
 
                     var mergedQueryString = "";
