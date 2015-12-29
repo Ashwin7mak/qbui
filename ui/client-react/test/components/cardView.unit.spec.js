@@ -176,6 +176,7 @@ describe('Report Mobile View functions', () => {
         expect(rows[0].className).toContain("collapsed");
 
         // not sure how to simulate these so just call the functions
+        // with null event (not needed) and -/+ deltas (left/right)
 
         // swipe left to reveal row actions
         cardView.swiping(null, -100);
@@ -191,9 +192,6 @@ describe('Report Mobile View functions', () => {
         cardView.swiping(null, 100);
         cardView.swipedRight();
         cardView.swiped();
-
-        var checkbox = node.getElementsByTagName("input");
-        TestUtils.Simulate.click(checkbox[0]);
 
         // close checkboxes
         cardView.swiping(null, -100);
