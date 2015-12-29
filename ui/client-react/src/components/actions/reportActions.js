@@ -15,6 +15,12 @@ import './reportActions.scss';
  */
 let ReportActions = React.createClass({
 
+    propTypes: {
+        selection:React.PropTypes.array.required,
+        report:React.PropTypes.object,
+        app:React.PropTypes.object,
+        table:React.PropTypes.object
+    },
     getDefaultProps() {
         return {
             report: {name: 'report name'},
@@ -48,7 +54,7 @@ let ReportActions = React.createClass({
             <div className={'reportActions'}>
 
                 <div>
-                    {this.props.selection && <span className="selectedRowsLabel">{this.props.selection.length}</span>}
+                    {<span className="selectedRowsLabel">{this.props.selection.length}</span>}
                     <div className="actionIcons">
                         {this.props.selection.length === 1 && <ActionIcon icon="edit" tip={this.getSelectionTip("Edit")}/>}
                         <ActionIcon icon="print" tip={this.getSelectionTip("Print")}/>

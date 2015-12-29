@@ -1,15 +1,15 @@
 import React from 'react';
 import TestUtils from 'react-addons-test-utils';
-import EmailReportLink  from '../../src/components/actions/emailReportLink';
+import QBicon  from '../../src/components/qbIcon/qbIcon';
 
-describe('EmailReportLink functions', () => {
+describe('QBicon functions', () => {
     'use strict';
 
     let component;
 
 
     it('test render of component', () => {
-        component = TestUtils.renderIntoDocument(<EmailReportLink subject="subject" body="body" tip="tip"/>);
+        component = TestUtils.renderIntoDocument(<QBicon icon="pencil" />);
         expect(TestUtils.isCompositeComponent(component)).toBeTruthy();
     });
 });
