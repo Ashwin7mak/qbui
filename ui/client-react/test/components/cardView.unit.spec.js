@@ -50,11 +50,13 @@ describe('Report Mobile View functions', () => {
         var TestParent = React.createFactory(React.createClass({
 
             childContextTypes: {
-                allowCardSelection: React.PropTypes.func
+                allowCardSelection: React.PropTypes.func,
+                isRowSelected: React.PropTypes.func
             },
             getChildContext: function() {
                 return {
-                    allowCardSelection: () => {return false;}
+                    allowCardSelection: () => {return false;},
+                    isRowSelected: () => {return false;}
                 };
             },
             render() {
@@ -76,11 +78,13 @@ describe('Report Mobile View functions', () => {
         var TestParent = React.createFactory(React.createClass({
 
             childContextTypes: {
-                allowCardSelection: React.PropTypes.func
+                allowCardSelection: React.PropTypes.func,
+                isRowSelected: React.PropTypes.func
             },
             getChildContext: function() {
                 return {
-                    allowCardSelection: () => {return false;}
+                    allowCardSelection: () => {return false;},
+                    isRowSelected: () => {return false;}
                 };
             },
             render() {
@@ -102,11 +106,13 @@ describe('Report Mobile View functions', () => {
         var TestParent = React.createFactory(React.createClass({
 
             childContextTypes: {
-                allowCardSelection: React.PropTypes.func
+                allowCardSelection: React.PropTypes.func,
+                isRowSelected: React.PropTypes.func
             },
             getChildContext: function() {
                 return {
-                    allowCardSelection: () => {return false;}
+                    allowCardSelection: () => {return false;},
+                    isRowSelected: () => {return false;}
                 };
             },
             render() {
@@ -125,11 +131,13 @@ describe('Report Mobile View functions', () => {
         var TestParent = React.createFactory(React.createClass({
 
             childContextTypes: {
-                allowCardSelection: React.PropTypes.func
+                allowCardSelection: React.PropTypes.func,
+                isRowSelected: React.PropTypes.func
             },
             getChildContext: function() {
                 return {
-                    allowCardSelection: () => {return true;}
+                    allowCardSelection: () => {return false;},
+                    isRowSelected: () => {return false;}
                 };
             },
             render() {
@@ -154,13 +162,15 @@ describe('Report Mobile View functions', () => {
             },
             childContextTypes: {
                 allowCardSelection: React.PropTypes.func,
-                onToggleCardSelection: React.PropTypes.func
+                onToggleCardSelection: React.PropTypes.func,
+                isRowSelected: React.PropTypes.func
             },
             getChildContext: function() {
 
                 return {
                     allowCardSelection: () => {return this.state.cardSelection;},
-                    onToggleCardSelection: () => {this.setState({cardSelection: !this.state.cardSelection});}
+                    onToggleCardSelection: () => {this.setState({cardSelection: !this.state.cardSelection});},
+                    isRowSelected: () => {return false;}
                 };
             },
             render() {
