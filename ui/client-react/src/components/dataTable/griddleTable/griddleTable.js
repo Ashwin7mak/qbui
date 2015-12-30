@@ -74,7 +74,11 @@ let GriddleTable = React.createClass({
      */
     onTableClick() {
         setTimeout(() => {
-            this.setState({selectedRows: this.refs.griddleTable.getSelectedRowIds()});
+            let selectedRowIds = this.refs.griddleTable.getSelectedRowIds();
+            this.setState({
+                selectedRows: selectedRowIds,
+                allowCardSelection: selectedRowIds.length > 0
+            });
         }, 0);
     },
 
