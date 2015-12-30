@@ -8,10 +8,12 @@ const MAX_ACTIONS_RESIZE_WITH = 180; // max width while swiping
 
 let CardView = React.createClass({
 
+    // callbacks provided by GriddleTable context since we can't get these from props
     contextTypes: {
         allowCardSelection: React.PropTypes.func,
         onToggleCardSelection: React.PropTypes.func,
-        onRowSelected: React.PropTypes.func
+        onRowSelected: React.PropTypes.func,
+        isRowSelected: React.PropTypes.func
     },
     getInitialState() {
         return {
@@ -64,12 +66,19 @@ let CardView = React.createClass({
         }
     },
 
+    /**
+     * finished swipe
+     */
     swiped() {
         this.setState({
             swiping:false
         });
     },
 
+    /**
+     * either close selection column or show actions
+     * @param e
+     */
     swipedLeft(e) {
 
         if (this.context.allowCardSelection()) {
@@ -80,7 +89,11 @@ let CardView = React.createClass({
             });
         }
     },
-    swipedRight(e) {
+
+    /**
+     * either hide actions column or show selection column
+     */
+    swipedRight() {
 
         if (this.state.showActions) {
             this.setState({
@@ -120,12 +133,14 @@ let CardView = React.createClass({
                 rowActionsClasses += this.state.showActions ? "open" : "closed";
             }
 
+            const isSelected = this.context.isRowSelected(this.props.data);
+
             return (
                 <Swipeable className={"swipeable"} onSwiping={this.swiping} onSwiped={this.swiped} onSwipedLeft={this.swipedLeft} onSwipedRight={this.swipedRight}>
 
                     <div className={this.state.showMoreCards ? "custom-row-card expanded" : "custom-row-card"}>
                         <div className="flexRow">
-                            {this.context.allowCardSelection() && <div className={"checkboxContainer"}><input checked={this.props.data.selected} onChange={this.onRowSelected} type="checkbox"></input></div>}
+                            {this.context.allowCardSelection() && <div className={"checkboxContainer"}><input checked={isSelected} onChange={this.onRowSelected} type="checkbox"></input></div>}
                             <div className="card">
                                 {row}
                             </div>

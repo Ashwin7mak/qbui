@@ -21,21 +21,23 @@ let GriddleTable = React.createClass({
     contextTypes: {
         breakpoint: React.PropTypes.string
     },
-    childContextTypes: {
-        allowCardSelection: React.PropTypes.func,
-        onToggleCardSelection: React.PropTypes.func,
-        onRowSelected: React.PropTypes.func
-    },
 
     /**
      * make row callbacks available via context since we can't pass them as props to a custom row
      * in Griddle
      */
+    childContextTypes: {
+        allowCardSelection: React.PropTypes.func,
+        onToggleCardSelection: React.PropTypes.func,
+        onRowSelected: React.PropTypes.func,
+        isRowSelected: React.PropTypes.func
+    },
     getChildContext() {
         return {
             onToggleCardSelection: this.onToggleCardSelection,
             allowCardSelection: this.allowCardSelection,
-            onRowSelected: this.onCardRowSelected
+            onRowSelected: this.onCardRowSelected,
+            isRowSelected: this.isRowSelected
         };
     },
 
@@ -130,6 +132,13 @@ let GriddleTable = React.createClass({
             </ReactCSSTransitionGroup>));
     },
 
+    /**
+     * is row selected callback
+     */
+    isRowSelected(row) {
+        return this.state.selectedRows.indexOf(row[this.props.uniqueIdentifier]) !== -1;
+    },
+
     render() {
 
         const isCardLayout = this.context.breakpoint === breakpoints.SMALL_BREAKPOINT;
@@ -142,12 +151,6 @@ let GriddleTable = React.createClass({
         if (this.props.results) {
             // unfortunately Griddle passes only a row data prop to our custom component (i.e. can't pass in a shared prop)
             // so we need store our shared props in the row data...
-
-            this.props.results.forEach((result) => {
-                //result.onRowPressed = this.onCardRowPressed;
-                //result.onRowSelected = this.onCardRowSelected;
-                result.selected = this.state.selectedRows.indexOf(result[this.props.uniqueIdentifier]) !== -1;
-            });
 
             return (
                 <div className="reportTable" >

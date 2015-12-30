@@ -10,7 +10,7 @@ import './trowserRecordActions.scss';
 let TrowserRecordActions = React.createClass({
 
     propTypes: {
-
+        onClose: React.PropTypes.func
     },
     render() {
 
@@ -18,9 +18,9 @@ let TrowserRecordActions = React.createClass({
             <div className={"trowserRecordActions"}>
                 <a href="#" className="closeRecordActions" onClick={this.props.onClose}><Hicon icon="close" /></a>
                 <ul>
-                    <li>Extra action 1</li>
-                    <li>Extra action 2</li>
-                    <li>Extra action 3</li>
+                    <li>Extra action 1 goes here</li>
+                    <li>Extra action 2 goes here</li>
+                    <li>Extra action 3 goes here</li>
                 </ul>
             </div>);
     }
