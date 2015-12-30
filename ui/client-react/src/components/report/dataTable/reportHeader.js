@@ -11,6 +11,9 @@ import {Glyphicon, Input} from 'react-bootstrap';
 
 let FluxMixin = Fluxxor.FluxMixin(React);
 
+/**
+ * a header for table reports with search field and a filter icon
+ */
 var ReportHeader = React.createClass({
     mixins: [FluxMixin],
 

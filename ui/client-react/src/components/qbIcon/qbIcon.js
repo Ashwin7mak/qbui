@@ -1,9 +1,13 @@
 import React from 'react';
 import './quickBaseIcons.scss';
 
+/**
+ * an icon using a new qb icon font (from Lisa)
+ */
 const QBicon = React.createClass({
     propTypes: {
-        icon: React.PropTypes.string.isRequired
+        icon: React.PropTypes.string.isRequired,
+        className: React.PropTypes.string
     },
 
     render: function() {
