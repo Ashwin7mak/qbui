@@ -13,36 +13,44 @@ import './reportActions.scss';
 
 let FluxMixin = Fluxxor.FluxMixin(React);
 /**
- * report-level actins
+ * a set of record-level action icons
  */
 let RecordActions = React.createClass({
     mixins: [FluxMixin],
 
+    propTypes: {
+        selection: React.PropTypes.array,
+        report: React.PropTypes.object,
+        app: React.PropTypes.object,
+        table: React.PropTypes.object
+    },
+    // just placeholders for now, localize when we have specs
     getDefaultProps() {
         return {
             report: {name: 'report name'},
-            table: {name: 'projects'},
-            app: {name: 'project manager plus'}
+            table: {name: 'table name'},
+            app: {name: 'app name'},
+            record: {name: ' record name'}
         };
     },
     getEmailSubject() {
-        return "'" + this.props.report.name + "' report from QuickBase app '" + this.props.app.name + "'";
+        return "Email subject goes here";
     },
 
     getEmailBody() {
-        const link = window.location;
-        return "Here's the '" + this.props.report.name + "' report from the table '" + this.props.table.name +
-            "' in '" + this.props.app.name + "'%0D%0D" + window.location.href;
+        return "Email body goes here";
     },
 
     showExtraActions() {
         let flux = this.getFlux();
         flux.actions.showTrowser();
     },
-
+    getSelectionTip(actionMsg) {
+        return Locale.getMessage(actionMsg);
+    },
     render() {
 
-        const searchIcon = <Glyphicon glyph="search" />;
+        const record = Locale.getMessage('records.singular');
 
         return (
             <div className={'reportActions'}>
@@ -50,16 +58,16 @@ let RecordActions = React.createClass({
                 <div>
                     {this.props.selection && <span className="selectedRowsLabel">{this.props.selection.length}</span>}
                     <div className="actionIcons">
-                        <ActionIcon icon="edit" tip="Edit record"/>
-                        <ActionIcon icon="print" tip="Print record"/>
+                        <ActionIcon icon="edit" tip={this.getSelectionTip("selection.edit") + " " + record}/>
+                        <ActionIcon icon="print" tip={this.getSelectionTip("selection.print") + " " + record}/>
 
-                        <EmailReportLink tip="Email report"
+                        <EmailReportLink tip={this.getSelectionTip("selection.email") + " " + record}
                                          subject={this.getEmailSubject()}
                                          body={this.getEmailBody()}/>
 
-                        <ActionIcon icon="copy" tip="Copy record"/>
-                        <ActionIcon icon="delete" tip="Delete record"/>
-                        <ActionIcon glyph="option-horizontal" tip="More..." onClick={this.showExtraActions}/>
+                        <ActionIcon icon="copy" tip={this.getSelectionTip("selection.copy") + " " + record}/>
+                        <ActionIcon icon="delete" tip={this.getSelectionTip("selection.delete") + " " + record}/>
+                        <ActionIcon glyph="option-horizontal" tip={this.getSelectionTip("selection.more") } onClick={this.showExtraActions}/>
                     </div>
                 </div>
             </div>

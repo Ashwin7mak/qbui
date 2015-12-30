@@ -16,39 +16,42 @@ import './reportActions.scss';
 let ReportActions = React.createClass({
 
     propTypes: {
-        selection:React.PropTypes.array.required,
-        report:React.PropTypes.object,
-        app:React.PropTypes.object,
-        table:React.PropTypes.object
+        selection: React.PropTypes.array,
+        report: React.PropTypes.object,
+        app: React.PropTypes.object,
+        table: React.PropTypes.object
     },
     getDefaultProps() {
         return {
             report: {name: 'report name'},
-            table: {name: 'projects'},
-            app: {name: 'project manager plus'}
+            table: {name: 'table name'},
+            app: {name: 'app name'},
         };
     },
 
     getEmailSubject() {
-        return "'" + this.props.report.name + "' report from QuickBase app '" + this.props.app.name + "'";
+        return "Email subject goes here";
     },
 
     getEmailBody() {
-        const link = window.location;
-        return "Here's the '" + this.props.report.name + "' report from the table '" + this.props.table.name +
-            "' in '" + this.props.app.name + "'%0D%0D" + window.location.href;
+
+        return "Email body goes here";
     },
 
-    getSelectionTip(action) {
+    getSelectionTip(actionMsg) {
+        const action = Locale.getMessage(actionMsg);
+        const record = Locale.getMessage('records.singular');
+        const records = Locale.getMessage('records.plural');
 
-        const suffix = this.props.selection.length === 1 ? " record" : " records";
+        const suffix = this.props.selection.length === 1 ? record : records;
 
-        return action + " " + this.props.selection.length + suffix;
+        return action + " " + this.props.selection.length + " " + suffix;
     },
 
+    /**
+     * render the actions, omitting 'edit' if we have multiple selections
+     */
     render() {
-
-        const searchIcon = <Glyphicon glyph="search" />;
 
         return (
             <div className={'reportActions'}>
@@ -56,15 +59,15 @@ let ReportActions = React.createClass({
                 <div>
                     {<span className="selectedRowsLabel">{this.props.selection.length}</span>}
                     <div className="actionIcons">
-                        {this.props.selection.length === 1 && <ActionIcon icon="edit" tip={this.getSelectionTip("Edit")}/>}
-                        <ActionIcon icon="print" tip={this.getSelectionTip("Print")}/>
+                        {this.props.selection.length === 1 && <ActionIcon icon="edit" tip={this.getSelectionTip("selection.edit")}/>}
+                        <ActionIcon icon="print" tip={this.getSelectionTip("selection.print")}/>
 
-                        <EmailReportLink tip={this.getSelectionTip("Email")}
+                        <EmailReportLink tip={this.getSelectionTip("selection.email")}
                                          subject={this.getEmailSubject()}
                                          body={this.getEmailBody()}/>
 
-                        <ActionIcon icon="copy" tip={this.getSelectionTip("Copy")}/>
-                        <ActionIcon icon="delete" tip={this.getSelectionTip("Delete")}/>
+                        <ActionIcon icon="copy" tip={this.getSelectionTip("selection.copy")}/>
+                        <ActionIcon icon="delete" tip={this.getSelectionTip("selection.delete")}/>
 
                         {/* custom actions later
                          {this.props.customActions &&
@@ -83,9 +86,9 @@ let ReportActions = React.createClass({
                             </a>
 
                             <Dropdown.Menu>
-                                <MenuItem eventKey="1">Extra 1</MenuItem>
-                                <MenuItem eventKey="2">Extra 2</MenuItem>
-                                <MenuItem eventKey="3">Extra 3</MenuItem>
+                                <MenuItem eventKey="1">Extra 1 goes here</MenuItem>
+                                <MenuItem eventKey="2">Extra 2 goes here</MenuItem>
+                                <MenuItem eventKey="3">Extra 3 goes here</MenuItem>
                             </Dropdown.Menu>
 
                         </Dropdown>

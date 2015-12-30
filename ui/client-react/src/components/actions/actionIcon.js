@@ -4,6 +4,9 @@ import ReactIntl from 'react-intl';
 import Hicon from '../harmonyIcon/harmonyIcon';
 import {Tooltip, OverlayTrigger, Glyphicon} from 'react-bootstrap';
 
+/**
+ * an action icon link with a tooltip (icon is either Hicon or bootstrap Glyphicon)
+ */
 let ActionIcon = React.createClass({
 
     defaultProps: {
@@ -18,6 +21,7 @@ let ActionIcon = React.createClass({
     },
 
     render() {
+
         const tooltip = <Tooltip id={this.props.tip} positionTop={22}>{this.props.tip}</Tooltip>;
 
         return (

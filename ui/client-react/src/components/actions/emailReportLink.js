@@ -5,7 +5,7 @@ import Hicon from '../harmonyIcon/harmonyIcon';
 import {Tooltip, OverlayTrigger} from 'react-bootstrap';
 
 /**
- * mailto: link
+ * mailto: icon link with a tooltip
  */
 let EmailReportLink = React.createClass({
 
