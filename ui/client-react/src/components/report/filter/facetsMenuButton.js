@@ -12,10 +12,14 @@ import Hicon from '../../harmonyIcon/harmonyIcon';
 let FluxMixin = Fluxxor.FluxMixin(React);
 
 
-var FilterListButton = React.createClass({
+var FacetsMenuButton = React.createClass({
+    propTypes: {
+        //TODO
+    },
+
     render() {
-        return (<div className="filterListButton" >
-                    {/* trigger when the icon is clicked on, not the props.children */}
+        return (<div className="facetsMenuButton" >
+                    {/* trigger when the icon is clicked on, not on the props.children */}
                     <div onClick={this.props.onClick}>
                         <Hicon icon="filter"  />
                     </div>
@@ -24,4 +28,4 @@ var FilterListButton = React.createClass({
     }
 });
 
-export default FilterListButton;
+export default FacetsMenuButton;

@@ -11,15 +11,28 @@ import {I18nMessage} from '../../../../src/utils/i18nMessage';
 let FluxMixin = Fluxxor.FluxMixin(React);
 let logger = new Logger();
 
-var FacetsList = React.createClass({
+var FacetsMenu = React.createClass({
     mixins: [FluxMixin],
-
+    propTypes: {
+        //TODO
+    },
     getInitialState: function() {
         return {
         };
     },
+
+    selectHandler : function() {
+    },
+
+    facetsMenu: function() {
+        return this.props.facetsData.list && this.props.facetsData.list.map((facet) => {
+            return <FacetsItem key={facet.fid} item={facet} onSelect={this.props.selectHandler}
+                                {...this.props} />;
+        });
+    },
+
     render() {
-        let classes = 'facetList ' + (this.props.open ? '' : 'collapsed');
+        let classes = 'facetList ' + (this.props.showing ? '' : 'hidden');
         return (
             <div className={classes}>
                <div className="callout border-callout classes">
@@ -61,12 +74,12 @@ var FacetsList = React.createClass({
                         </ul>
                     </div>
                 </div>
-                <span className="border-notch notch"></span>
-                <span className="notch"></span>
+                <span className="border-notch notch"/>
+                <span className="notch"/>
                 </div>
             </div>
         );
     }
 
 });
-export default FacetsList;
+export default FacetsMenu;
