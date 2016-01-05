@@ -1,6 +1,7 @@
 'use strict';
 
 var recordFormatter = require('./../recordFormatter')();
+var testDateHelper = require('./recordFormatter.date.unit.helper');
 var assert = require('assert');
 
 /**
@@ -16,7 +17,7 @@ describe('DateTime record formatter unit test', function() {
         // Default DateTime record input
         var recordsInput = [[{
             id   : 7,
-            value: '2015-04-12T18:51:19z'
+            value: testDateHelper.thisYear + '-04-12T18:51:19z'
         }]];
 
         var recordsInputDiffYear = [[{
@@ -43,8 +44,8 @@ describe('DateTime record formatter unit test', function() {
         var expectedRecords_MMDDYYYY =
                 [[{
                     id     : 7,
-                    value  : '2015-04-12T18:51:19z',
-                    display: '04-12-2015'
+                    value  : testDateHelper.thisYear + '-04-12T18:51:19z',
+                    display: '04-12-' + testDateHelper.thisYear
                 }]];
 
         // FieldInfo and record expectation for field with MM_DD_YYYY format and ShowTime flag
@@ -54,8 +55,8 @@ describe('DateTime record formatter unit test', function() {
         var expectedRecords_MMDDYYYY_ShowTime =
                 [[{
                     id     : 7,
-                    value  : '2015-04-12T18:51:19z',
-                    display: '04-12-2015 2:51 PM'
+                    value  : testDateHelper.thisYear + '-04-12T18:51:19z',
+                    display: '04-12-' + testDateHelper.thisYear + ' 2:51 PM'
                 }]];
 
         // FieldInfo and record expectation for field with MM_DD_YYYY format and ShowTime, ShowTimeZone flag
@@ -66,8 +67,8 @@ describe('DateTime record formatter unit test', function() {
         var expectedRecords_MMDDYYYY_ShowTime_ShowTimeZone =
                 [[{
                     id     : 7,
-                    value  : '2015-04-12T18:51:19z',
-                    display: '04-12-2015 2:51 PM EDT'
+                    value  : testDateHelper.thisYear + '-04-12T18:51:19z',
+                    display: '04-12-' + testDateHelper.thisYear + ' 2:51 PM EDT'
                 }]];
 
 
@@ -79,8 +80,8 @@ describe('DateTime record formatter unit test', function() {
         var expectedRecords_MMDDYYYY_ShowTime_ShowMonthAsName =
                 [[{
                     id     : 7,
-                    value  : '2015-04-12T18:51:19z',
-                    display: 'Apr-12-2015 2:51 PM'
+                    value  : testDateHelper.thisYear + '-04-12T18:51:19z',
+                    display: 'Apr-12-' + testDateHelper.thisYear + ' 2:51 PM'
                 }]];
 
 
@@ -92,8 +93,8 @@ describe('DateTime record formatter unit test', function() {
         var expectedRecords_MMDDYYYY_ShowTime_ShowDayOfWeek =
                 [[{
                     id     : 7,
-                    value  : '2015-04-12T18:51:19z',
-                    display: 'Sunday, 04-12-2015 2:51 PM'
+                    value  : testDateHelper.thisYear + '-04-12T18:51:19z',
+                    display: testDateHelper.dayOfWeekAprilTwelve + ', 04-12-' + testDateHelper.thisYear + ' 2:51 PM'
                 }]];
 
         // FieldInfo and record expectation for field with MM_DD_YYYY format and ShowTime, HideYearIfCurrent flag
@@ -104,7 +105,7 @@ describe('DateTime record formatter unit test', function() {
         var expectedRecords_MMDDYYYY_ShowTime_HideYearIfCurrent =
                 [[{
                     id     : 7,
-                    value  : '2015-04-12T18:51:19z',
+                    value  : testDateHelper.thisYear + '-04-12T18:51:19z',
                     display: '04-12 2:51 PM'
                 }]];
         var expectedRecords_MMDDYYYY_ShowTime_HideYearIfCurrent_DiffYear =
@@ -123,8 +124,8 @@ describe('DateTime record formatter unit test', function() {
         var expectedRecords_MMDDYYYY_ShowTime_ShowTimeZone_ShowMonthAsName =
                 [[{
                     id     : 7,
-                    value  : '2015-04-12T18:51:19z',
-                    display: 'Apr-12-2015 2:51 PM EDT'
+                    value  : testDateHelper.thisYear + '-04-12T18:51:19z',
+                    display: 'Apr-12-' + testDateHelper.thisYear + ' 2:51 PM EDT'
                 }]];
 
         // FieldInfo and record expectation for field with MM_DD_YYYY format and ShowTime, ShowTimeZone, ShowMonthAsName, HideYearIfCurrent flag
@@ -137,7 +138,7 @@ describe('DateTime record formatter unit test', function() {
         var expectedRecords_MMDDYYYY_ShowTime_ShowTimeZone_ShowMonthAsName_HideYearIfCurrent =
                 [[{
                     id     : 7,
-                    value  : '2015-04-12T18:51:19z',
+                    value  : testDateHelper.thisYear + '-04-12T18:51:19z',
                     display: 'Apr-12 2:51 PM EDT'
                 }]];
 
@@ -150,8 +151,8 @@ describe('DateTime record formatter unit test', function() {
         var expectedRecords_MMDDYYYY_ShowTime_ShowTimeZone_ShowDayOfWeek =
                 [[{
                     id     : 7,
-                    value  : '2015-04-12T18:51:19z',
-                    display: 'Sunday, 04-12-2015 2:51 PM EDT'
+                    value  : testDateHelper.thisYear + '-04-12T18:51:19z',
+                    display: testDateHelper.dayOfWeekAprilTwelve + ', 04-12-' + testDateHelper.thisYear + ' 2:51 PM EDT'
                 }]];
 
         // FieldInfo and record expectation for field with MM_DD_YYYY format and ShowTime, ShowTimeZone, HideYearIfCurrent flag
@@ -163,7 +164,7 @@ describe('DateTime record formatter unit test', function() {
         var expectedRecords_MMDDYYYY_ShowTime_ShowTimeZone_HideYearIfCurrent =
                 [[{
                     id     : 7,
-                    value  : '2015-04-12T18:51:19z',
+                    value  : testDateHelper.thisYear + '-04-12T18:51:19z',
                     display: '04-12 2:51 PM EDT'
                 }]];
 
@@ -177,8 +178,8 @@ describe('DateTime record formatter unit test', function() {
         var expectedRecords_MMDDYYYY_ShowTime_ShowTimeZone_ShowDayOfWeek_HideYearIfCurrent =
                 [[{
                     id     : 7,
-                    value  : '2015-04-12T18:51:19z',
-                    display: 'Sunday, 04-12 2:51 PM EDT'
+                    value  : testDateHelper.thisYear + '-04-12T18:51:19z',
+                    display: testDateHelper.dayOfWeekAprilTwelve + ', 04-12 2:51 PM EDT'
                 }]];
 
         // FieldInfo and record expectation for field with MM_DD_YYYY format and ShowTime, ShowMonthAsName, ShowDayOfWeek flag
@@ -190,8 +191,8 @@ describe('DateTime record formatter unit test', function() {
         var expectedRecords_MMDDYYYY_ShowTime_ShowMonthAsName_ShowDayOfWeek =
                 [[{
                     id     : 7,
-                    value  : '2015-04-12T18:51:19z',
-                    display: 'Sunday, Apr-12-2015 2:51 PM'
+                    value  : testDateHelper.thisYear + '-04-12T18:51:19z',
+                    display: testDateHelper.dayOfWeekAprilTwelve + ', Apr-12-' + testDateHelper.thisYear + ' 2:51 PM'
                 }]];
 
         // FieldInfo and record expectation for field with MM_DD_YYYY format and ShowTime, ShowMonthAsName, ShowDayOfWeek, HideYearIfCurrent flag
@@ -204,8 +205,8 @@ describe('DateTime record formatter unit test', function() {
         var expectedRecords_MMDDYYYY_ShowTime_ShowMonthAsName_ShowDayOfWeek_HideYearIfCurrent =
                 [[{
                     id     : 7,
-                    value  : '2015-04-12T18:51:19z',
-                    display: 'Sunday, Apr-12 2:51 PM'
+                    value  : testDateHelper.thisYear + '-04-12T18:51:19z',
+                    display: testDateHelper.dayOfWeekAprilTwelve + ', Apr-12 2:51 PM'
                 }]];
 
         // FieldInfo and record expectation for field with MM_DD_YYYY format and ShowDayOfWeek flag
@@ -215,8 +216,8 @@ describe('DateTime record formatter unit test', function() {
         var expectedRecords_MMDDYYYY_ShowDayOfWeek =
                 [[{
                     id     : 7,
-                    value  : '2015-04-12T18:51:19z',
-                    display: 'Sunday, 04-12-2015'
+                    value  : testDateHelper.thisYear + '-04-12T18:51:19z',
+                    display: testDateHelper.dayOfWeekAprilTwelve + ', 04-12-' + testDateHelper.thisYear
                 }]];
 
         // FieldInfo and record expectation for field with MM_DD_YYYY format and ShowDayOfWeek, HideYearIfCurrent flag
@@ -227,8 +228,8 @@ describe('DateTime record formatter unit test', function() {
         var expectedRecords_MMDDYYYY_ShowDayOfWeek_HideYearIfCurrent =
                 [[{
                     id     : 7,
-                    value  : '2015-04-12T18:51:19z',
-                    display: 'Sunday, 04-12'
+                    value  : testDateHelper.thisYear + '-04-12T18:51:19z',
+                    display: testDateHelper.dayOfWeekAprilTwelve + ', 04-12'
                 }]];
 
         // FieldInfo and record expectation for field with MM_DD_YYYY format and showTimeZone flag
@@ -238,8 +239,8 @@ describe('DateTime record formatter unit test', function() {
         var expectedRecords_MMDDYYYY_ShowTimeZone =
                 [[{
                     id     : 7,
-                    value  : '2015-04-12T18:51:19z',
-                    display: '04-12-2015 EDT'
+                    value  : testDateHelper.thisYear + '-04-12T18:51:19z',
+                    display: '04-12-' + testDateHelper.thisYear + ' EDT'
                 }]];
 
         // FieldInfo and record expectation for field with MM_DD_YYYY format and ShowTimeZone, ShowMonthAsName flag
@@ -250,8 +251,8 @@ describe('DateTime record formatter unit test', function() {
         var expectedRecords_MMDDYYYY_ShowTimeZone_ShowMonthAsName =
                 [[{
                     id     : 7,
-                    value  : '2015-04-12T18:51:19z',
-                    display: 'Apr-12-2015 EDT'
+                    value  : testDateHelper.thisYear + '-04-12T18:51:19z',
+                    display: 'Apr-12-' + testDateHelper.thisYear + ' EDT'
                 }]];
 
         // FieldInfo and record expectation for field with MM_DD_YYYY format and ShowTimeZone, ShowDayOfWeek flag
@@ -262,8 +263,8 @@ describe('DateTime record formatter unit test', function() {
         var expectedRecords_MMDDYYYY_ShowTimeZone_ShowDayOfWeek =
                 [[{
                     id     : 7,
-                    value  : '2015-04-12T18:51:19z',
-                    display: 'Sunday, 04-12-2015 EDT'
+                    value  : testDateHelper.thisYear + '-04-12T18:51:19z',
+                    display: testDateHelper.dayOfWeekAprilTwelve + ', 04-12-' + testDateHelper.thisYear + ' EDT'
                 }]];
 
         // FieldInfo and record expectation for field with MM_DD_YYYY format and ShowTimeZone, HideYearIfCurrent flag
@@ -274,7 +275,7 @@ describe('DateTime record formatter unit test', function() {
         var expectedRecords_MMDDYYYY_ShowTimeZone_HideYearIfCurrent =
                 [[{
                     id     : 7,
-                    value  : '2015-04-12T18:51:19z',
+                    value  : testDateHelper.thisYear + '-04-12T18:51:19z',
                     display: '04-12 EDT'
                 }]];
 
@@ -287,8 +288,8 @@ describe('DateTime record formatter unit test', function() {
         var expectedRecords_MMDDYYYY_ShowTimeZone_ShowMonthAsName_ShowDayOfWeek =
                 [[{
                     id     : 7,
-                    value  : '2015-04-12T18:51:19z',
-                    display: 'Sunday, Apr-12-2015 EDT'
+                    value  : testDateHelper.thisYear + '-04-12T18:51:19z',
+                    display: testDateHelper.dayOfWeekAprilTwelve + ', Apr-12-' + testDateHelper.thisYear + ' EDT'
                 }]];
 
         // FieldInfo and record expectation for field with MM_DD_YYYY format and ShowTimeZone, ShowMonthAsName, HideYearIfCurrent flag
@@ -300,7 +301,7 @@ describe('DateTime record formatter unit test', function() {
         var expectedRecords_MMDDYYYY_ShowTimeZone_ShowMonthAsName_HideYearIfCurrent =
                 [[{
                     id     : 7,
-                    value  : '2015-04-12T18:51:19z',
+                    value  : testDateHelper.thisYear + '-04-12T18:51:19z',
                     display: 'Apr-12 EDT'
                 }]];
 
@@ -313,8 +314,8 @@ describe('DateTime record formatter unit test', function() {
         var expectedRecords_MMDDYYYY_ShowTimeZone_ShowDayOfWeek_HideYearIfCurrent =
                 [[{
                     id     : 7,
-                    value  : '2015-04-12T18:51:19z',
-                    display: 'Sunday, 04-12 EDT'
+                    value  : testDateHelper.thisYear + '-04-12T18:51:19z',
+                    display: testDateHelper.dayOfWeekAprilTwelve + ', 04-12 EDT'
                 }]];
 
         // FieldInfo and record expectation for field with MM_DD_YYYY format and ShowMonthAsName flag
@@ -324,8 +325,8 @@ describe('DateTime record formatter unit test', function() {
         var expectedRecords_MMDDYYYY_ShowMonthAsName =
                 [[{
                     id     : 7,
-                    value  : '2015-04-12T18:51:19z',
-                    display: 'Apr-12-2015'
+                    value  : testDateHelper.thisYear + '-04-12T18:51:19z',
+                    display: 'Apr-12-' + testDateHelper.thisYear
                 }]];
 
         // FieldInfo and record expectation for field with MM_DD_YYYY format and ShowMonthAsName, ShowDayOfWeek flag
@@ -336,8 +337,8 @@ describe('DateTime record formatter unit test', function() {
         var expectedRecords_MMDDYYYY_ShowMonthAsName_ShowDayOfWeek =
                 [[{
                     id     : 7,
-                    value  : '2015-04-12T18:51:19z',
-                    display: 'Sunday, Apr-12-2015'
+                    value  : testDateHelper.thisYear + '-04-12T18:51:19z',
+                    display: testDateHelper.dayOfWeekAprilTwelve + ', Apr-12-' + testDateHelper.thisYear
                 }]];
 
         // FieldInfo and record expectation for field with MM_DD_YYYY format and ShowMonthAsName, HideYearIfCurrent flag
@@ -348,7 +349,7 @@ describe('DateTime record formatter unit test', function() {
         var expectedRecords_MMDDYYYY_ShowMonthAsName_HideYearIfCurrent =
                 [[{
                     id     : 7,
-                    value  : '2015-04-12T18:51:19z',
+                    value  : testDateHelper.thisYear + '-04-12T18:51:19z',
                     display: 'Apr-12'
                 }]];
 
@@ -359,7 +360,7 @@ describe('DateTime record formatter unit test', function() {
         var expectedRecords_MMDDYYYY_HideYearIfCurrent =
                 [[{
                     id     : 7,
-                    value  : '2015-04-12T18:51:19z',
+                    value  : testDateHelper.thisYear + '-04-12T18:51:19z',
                     display: '04-12'
                 }]];
         var expectedRecords_MMDDYYYY_HideYearIfCurrent_DiffYear =
@@ -380,8 +381,8 @@ describe('DateTime record formatter unit test', function() {
         var expectedRecords_MMDDYYYY_AllFlags =
                 [[{
                     id     : 7,
-                    value  : '2015-04-12T18:51:19z',
-                    display: 'Sunday, Apr-12 2:51 PM EDT'
+                    value  : testDateHelper.thisYear + '-04-12T18:51:19z',
+                    display: testDateHelper.dayOfWeekAprilTwelve + ', Apr-12 2:51 PM EDT'
                 }]];
         var expectedRecords_MMDDYYYY_AllFlags_DiffYear =
                 [[{
@@ -472,7 +473,7 @@ describe('DateTime record formatter unit test', function() {
         //// Default DateTime record input
         var recordsInput = [[{
             id   : 7,
-            value: '2015-04-12T05:51:19z'
+            value: testDateHelper.thisYear + '-04-12T05:51:19z'
         }]];
 
         var recordsInputDiffYear = [[{
@@ -499,8 +500,8 @@ describe('DateTime record formatter unit test', function() {
         var expectedRecords_MMDDYY =
                 [[{
                     id     : 7,
-                    value  : '2015-04-12T05:51:19z',
-                    display: '04-12-15'
+                    value  : testDateHelper.thisYear + '-04-12T05:51:19z',
+                    display: '04-12-' + testDateHelper.thisYear2
                 }]];
 
         // FieldInfo and record expectation for field with MM_DD_YY format and ShowTime flag
@@ -510,8 +511,8 @@ describe('DateTime record formatter unit test', function() {
         var expectedRecords_MMDDYY_ShowTime =
                 [[{
                     id     : 7,
-                    value  : '2015-04-12T05:51:19z',
-                    display: '04-12-15 1:51 AM'
+                    value  : testDateHelper.thisYear + '-04-12T05:51:19z',
+                    display: '04-12-' + testDateHelper.thisYear2 + ' 1:51 AM'
                 }]];
 
         // FieldInfo and record expectation for field with MM_DD_YY format and ShowTime, ShowTimeZone flag
@@ -522,8 +523,8 @@ describe('DateTime record formatter unit test', function() {
         var expectedRecords_MMDDYY_ShowTime_ShowTimeZone =
                 [[{
                     id     : 7,
-                    value  : '2015-04-12T05:51:19z',
-                    display: '04-12-15 1:51 AM EDT'
+                    value  : testDateHelper.thisYear + '-04-12T05:51:19z',
+                    display: '04-12-' + testDateHelper.thisYear2 + ' 1:51 AM EDT'
                 }]];
 
 
@@ -535,8 +536,8 @@ describe('DateTime record formatter unit test', function() {
         var expectedRecords_MMDDYY_ShowTime_ShowMonthAsName =
                 [[{
                     id     : 7,
-                    value  : '2015-04-12T05:51:19z',
-                    display: 'Apr-12-15 1:51 AM'
+                    value  : testDateHelper.thisYear + '-04-12T05:51:19z',
+                    display: 'Apr-12-' + testDateHelper.thisYear2 + ' 1:51 AM'
                 }]];
 
 
@@ -548,8 +549,8 @@ describe('DateTime record formatter unit test', function() {
         var expectedRecords_MMDDYY_ShowTime_ShowDayOfWeek =
                 [[{
                     id     : 7,
-                    value  : '2015-04-12T05:51:19z',
-                    display: 'Sunday, 04-12-15 1:51 AM'
+                    value  : testDateHelper.thisYear + '-04-12T05:51:19z',
+                    display: testDateHelper.dayOfWeekAprilTwelve + ', 04-12-' + testDateHelper.thisYear2 + ' 1:51 AM'
                 }]];
 
         // FieldInfo and record expectation for field with MM_DD_YY format and ShowTime, HideYearIfCurrent flag
@@ -560,7 +561,7 @@ describe('DateTime record formatter unit test', function() {
         var expectedRecords_MMDDYY_ShowTime_HideYearIfCurrent =
                 [[{
                     id     : 7,
-                    value  : '2015-04-12T05:51:19z',
+                    value  : testDateHelper.thisYear + '-04-12T05:51:19z',
                     display: '04-12 1:51 AM'
                 }]];
         var expectedRecords_MMDDYY_ShowTime_HideYearIfCurrent_DiffYear =
@@ -579,8 +580,8 @@ describe('DateTime record formatter unit test', function() {
         var expectedRecords_MMDDYY_ShowTime_ShowTimeZone_ShowMonthAsName =
                 [[{
                     id     : 7,
-                    value  : '2015-04-12T05:51:19z',
-                    display: 'Apr-12-15 1:51 AM EDT'
+                    value  : testDateHelper.thisYear + '-04-12T05:51:19z',
+                    display: 'Apr-12-' + testDateHelper.thisYear2 + ' 1:51 AM EDT'
                 }]];
 
         // FieldInfo and record expectation for field with MM_DD_YY format and ShowTime, ShowTimeZone, ShowDayOfWeek flag
@@ -592,8 +593,8 @@ describe('DateTime record formatter unit test', function() {
         var expectedRecords_MMDDYY_ShowTime_ShowTimeZone_ShowDayOfWeek =
                 [[{
                     id     : 7,
-                    value  : '2015-04-12T05:51:19z',
-                    display: 'Sunday, 04-12-15 1:51 AM EDT'
+                    value  : testDateHelper.thisYear + '-04-12T05:51:19z',
+                    display: testDateHelper.dayOfWeekAprilTwelve + ', 04-12-' + testDateHelper.thisYear2 + ' 1:51 AM EDT'
                 }]];
 
         // FieldInfo and record expectation for field with MM_DD_YY format and ShowTime, ShowTimeZone, HideYearIfCurrent flag
@@ -605,7 +606,7 @@ describe('DateTime record formatter unit test', function() {
         var expectedRecords_MMDDYY_ShowTime_ShowTimeZone_HideYearIfCurrent =
                 [[{
                     id     : 7,
-                    value  : '2015-04-12T05:51:19z',
+                    value  : testDateHelper.thisYear + '-04-12T05:51:19z',
                     display: '04-12 1:51 AM EDT'
                 }]];
 
@@ -619,8 +620,8 @@ describe('DateTime record formatter unit test', function() {
         var expectedRecords_MMDDYY_ShowTime_ShowTimeZone_ShowDayOfWeek_HideYearIfCurrent =
                 [[{
                     id     : 7,
-                    value  : '2015-04-12T05:51:19z',
-                    display: 'Sunday, 04-12 1:51 AM EDT'
+                    value  : testDateHelper.thisYear + '-04-12T05:51:19z',
+                    display: testDateHelper.dayOfWeekAprilTwelve + ', 04-12 1:51 AM EDT'
                 }]];
 
         // FieldInfo and record expectation for field with MM_DD_YY format and ShowTime, ShowTimeZone, ShowMonthAsName, HideYearIfCurrent flag
@@ -633,7 +634,7 @@ describe('DateTime record formatter unit test', function() {
         var expectedRecords_MMDDYY_ShowTime_ShowTimeZone_ShowMonthAsName_HideYearIfCurrent =
                 [[{
                     id     : 7,
-                    value  : '2015-04-12T05:51:19z',
+                    value  : testDateHelper.thisYear + '-04-12T05:51:19z',
                     display: 'Apr-12 1:51 AM EDT'
                 }]];
 
@@ -647,8 +648,8 @@ describe('DateTime record formatter unit test', function() {
         var expectedRecords_MMDDYY_ShowTime_ShowMonthAsName_ShowDayOfWeek =
                 [[{
                     id     : 7,
-                    value  : '2015-04-12T05:51:19z',
-                    display: 'Sunday, Apr-12-15 1:51 AM'
+                    value  : testDateHelper.thisYear + '-04-12T05:51:19z',
+                    display: testDateHelper.dayOfWeekAprilTwelve + ', Apr-12-' + testDateHelper.thisYear2 + ' 1:51 AM'
                 }]];
 
         // FieldInfo and record expectation for field with MM_DD_YY format and ShowTime, ShowMonthAsName, ShowDayOfWeek, HideYearIfCurrent flag
@@ -661,8 +662,8 @@ describe('DateTime record formatter unit test', function() {
         var expectedRecords_MMDDYY_ShowTime_ShowMonthAsName_ShowDayOfWeek_HideYearIfCurrent =
                 [[{
                     id     : 7,
-                    value  : '2015-04-12T05:51:19z',
-                    display: 'Sunday, Apr-12 1:51 AM'
+                    value  : testDateHelper.thisYear + '-04-12T05:51:19z',
+                    display: testDateHelper.dayOfWeekAprilTwelve + ', Apr-12 1:51 AM'
                 }]];
 
         // FieldInfo and record expectation for field with MM_DD_YY format and showDayOfWeek flag
@@ -672,8 +673,8 @@ describe('DateTime record formatter unit test', function() {
         var expectedRecords_MMDDYY_ShowDayOfWeek =
                 [[{
                     id     : 7,
-                    value  : '2015-04-12T05:51:19z',
-                    display: 'Sunday, 04-12-15'
+                    value  : testDateHelper.thisYear + '-04-12T05:51:19z',
+                    display: testDateHelper.dayOfWeekAprilTwelve + ', 04-12-' + testDateHelper.thisYear2
                 }]];
 
         // FieldInfo and record expectation for field with MM_DD_YY format and ShowDayOfWeek, HideYearIfCurrent flag
@@ -684,8 +685,8 @@ describe('DateTime record formatter unit test', function() {
         var expectedRecords_MMDDYY_ShowDayOfWeek_HideYearIfCurrent =
                 [[{
                     id     : 7,
-                    value  : '2015-04-12T05:51:19z',
-                    display: 'Sunday, 04-12'
+                    value  : testDateHelper.thisYear + '-04-12T05:51:19z',
+                    display: testDateHelper.dayOfWeekAprilTwelve + ', 04-12'
                 }]];
 
         // FieldInfo and record expectation for field with MM_DD_YY format and showTimeZone flag
@@ -695,8 +696,8 @@ describe('DateTime record formatter unit test', function() {
         var expectedRecords_MMDDYY_ShowTimeZone =
                 [[{
                     id     : 7,
-                    value  : '2015-04-12T05:51:19z',
-                    display: '04-12-15 EDT'
+                    value  : testDateHelper.thisYear + '-04-12T05:51:19z',
+                    display: '04-12-' + testDateHelper.thisYear2 + ' EDT'
                 }]];
 
         // FieldInfo and record expectation for field with MM_DD_YY format and ShowTimeZone, ShowMonthAsName flag
@@ -707,8 +708,8 @@ describe('DateTime record formatter unit test', function() {
         var expectedRecords_MMDDYY_ShowTimeZone_ShowMonthAsName =
                 [[{
                     id     : 7,
-                    value  : '2015-04-12T05:51:19z',
-                    display: 'Apr-12-15 EDT'
+                    value  : testDateHelper.thisYear + '-04-12T05:51:19z',
+                    display: 'Apr-12-' + testDateHelper.thisYear2 + ' EDT'
                 }]];
 
         // FieldInfo and record expectation for field with MM_DD_YY format and ShowTimeZone, ShowDayOfWeek flag
@@ -719,8 +720,8 @@ describe('DateTime record formatter unit test', function() {
         var expectedRecords_MMDDYY_ShowTimeZone_ShowDayOfWeek =
                 [[{
                     id     : 7,
-                    value  : '2015-04-12T05:51:19z',
-                    display: 'Sunday, 04-12-15 EDT'
+                    value  : testDateHelper.thisYear + '-04-12T05:51:19z',
+                    display: testDateHelper.dayOfWeekAprilTwelve + ', 04-12-' + testDateHelper.thisYear2 + ' EDT'
                 }]];
 
         // FieldInfo and record expectation for field with MM_DD_YY format and ShowTimeZone, HideYearIfCurrent flag
@@ -731,7 +732,7 @@ describe('DateTime record formatter unit test', function() {
         var expectedRecords_MMDDYY_ShowTimeZone_HideYearIfCurrent =
                 [[{
                     id     : 7,
-                    value  : '2015-04-12T05:51:19z',
+                    value  : testDateHelper.thisYear + '-04-12T05:51:19z',
                     display: '04-12 EDT'
                 }]];
 
@@ -744,8 +745,8 @@ describe('DateTime record formatter unit test', function() {
         var expectedRecords_MMDDYY_ShowTimeZone_ShowMonthAsName_ShowDayOfWeek =
                 [[{
                     id     : 7,
-                    value  : '2015-04-12T05:51:19z',
-                    display: 'Sunday, Apr-12-15 EDT'
+                    value  : testDateHelper.thisYear + '-04-12T05:51:19z',
+                    display: testDateHelper.dayOfWeekAprilTwelve + ', Apr-12-' + testDateHelper.thisYear2 + ' EDT'
                 }]];
 
         // FieldInfo and record expectation for field with MM_DD_YY format and ShowTimeZone, ShowMonthAsName, HideYearIfCurrent flag
@@ -757,7 +758,7 @@ describe('DateTime record formatter unit test', function() {
         var expectedRecords_MMDDYY_ShowTimeZone_ShowMonthAsName_HideYearIfCurrent =
                 [[{
                     id     : 7,
-                    value  : '2015-04-12T05:51:19z',
+                    value  : testDateHelper.thisYear + '-04-12T05:51:19z',
                     display: 'Apr-12 EDT'
                 }]];
 
@@ -770,8 +771,8 @@ describe('DateTime record formatter unit test', function() {
         var expectedRecords_MMDDYY_ShowTimeZone_ShowDayOfWeek_HideYearIfCurrent =
                 [[{
                     id     : 7,
-                    value  : '2015-04-12T05:51:19z',
-                    display: 'Sunday, 04-12 EDT'
+                    value  : testDateHelper.thisYear + '-04-12T05:51:19z',
+                    display: testDateHelper.dayOfWeekAprilTwelve + ', 04-12 EDT'
                 }]];
 
 
@@ -782,8 +783,8 @@ describe('DateTime record formatter unit test', function() {
         var expectedRecords_MMDDYY_ShowMonthAsName =
                 [[{
                     id     : 7,
-                    value  : '2015-04-12T05:51:19z',
-                    display: 'Apr-12-15'
+                    value  : testDateHelper.thisYear + '-04-12T05:51:19z',
+                    display: 'Apr-12-' + testDateHelper.thisYear2
                 }]];
 
         // FieldInfo and record expectation for field with MM_DD_YY format and ShowMonthAsName, ShowDayOfWeek flag
@@ -794,8 +795,8 @@ describe('DateTime record formatter unit test', function() {
         var expectedRecords_MMDDYY_ShowMonthAsName_ShowDayOfWeek =
                 [[{
                     id     : 7,
-                    value  : '2015-04-12T05:51:19z',
-                    display: 'Sunday, Apr-12-15'
+                    value  : testDateHelper.thisYear + '-04-12T05:51:19z',
+                    display: testDateHelper.dayOfWeekAprilTwelve + ', Apr-12-' + testDateHelper.thisYear2
                 }]];
 
         // FieldInfo and record expectation for field with MM_DD_YY format and ShowMonthAsName, HideYearIfCurrent flag
@@ -806,7 +807,7 @@ describe('DateTime record formatter unit test', function() {
         var expectedRecords_MMDDYY_ShowMonthAsName_HideYearIfCurrent =
                 [[{
                     id     : 7,
-                    value  : '2015-04-12T05:51:19z',
+                    value  : testDateHelper.thisYear + '-04-12T05:51:19z',
                     display: 'Apr-12'
                 }]];
 
@@ -817,7 +818,7 @@ describe('DateTime record formatter unit test', function() {
         var expectedRecords_MMDDYY_HideYearIfCurrent =
                 [[{
                     id     : 7,
-                    value  : '2015-04-12T05:51:19z',
+                    value  : testDateHelper.thisYear + '-04-12T05:51:19z',
                     display: '04-12'
                 }]];
         var expectedRecords_MMDDYY_HideYearIfCurrent_DiffYear =
@@ -838,8 +839,8 @@ describe('DateTime record formatter unit test', function() {
         var expectedRecords_MMDDYY_AllFlags =
                 [[{
                     id     : 7,
-                    value  : '2015-04-12T05:51:19z',
-                    display: 'Sunday, Apr-12 1:51 AM EDT'
+                    value  : testDateHelper.thisYear + '-04-12T05:51:19z',
+                    display: testDateHelper.dayOfWeekAprilTwelve + ', Apr-12 1:51 AM EDT'
                 }]];
         var expectedRecords_MMDDYY_AllFlags_DiffYear =
                 [[{
@@ -930,7 +931,7 @@ describe('DateTime record formatter unit test', function() {
         //// Default DateTime record input
         var recordsInput = [[{
             id   : 7,
-            value: '2015-04-12T05:51:19z'
+            value: testDateHelper.thisYear + '-04-12T05:51:19z'
         }]];
 
         var recordsInputDiffYear = [[{
@@ -957,8 +958,8 @@ describe('DateTime record formatter unit test', function() {
         var expectedRecords_DDMMYY =
                 [[{
                     id     : 7,
-                    value  : '2015-04-12T05:51:19z',
-                    display: '12-04-15'
+                    value  : testDateHelper.thisYear + '-04-12T05:51:19z',
+                    display: '12-04-' + testDateHelper.thisYear2
                 }]];
 
         // FieldInfo and record expectation for field with DD_MM_YY format and showDayOfWeek flag
@@ -968,8 +969,8 @@ describe('DateTime record formatter unit test', function() {
         var expectedRecords_DDMMYY_ShowTime =
                 [[{
                     id     : 7,
-                    value  : '2015-04-12T05:51:19z',
-                    display: '12-04-15 1:51 AM'
+                    value  : testDateHelper.thisYear + '-04-12T05:51:19z',
+                    display: '12-04-' + testDateHelper.thisYear2 + ' 1:51 AM'
                 }]];
 
         // FieldInfo and record expectation for field with DD_MM_YY format and ShowTime, ShowTimeZone flag
@@ -980,8 +981,8 @@ describe('DateTime record formatter unit test', function() {
         var expectedRecords_DDMMYY_ShowTime_ShowTimeZone =
                 [[{
                     id     : 7,
-                    value  : '2015-04-12T05:51:19z',
-                    display: '12-04-15 1:51 AM EDT'
+                    value  : testDateHelper.thisYear + '-04-12T05:51:19z',
+                    display: '12-04-' + testDateHelper.thisYear2 + ' 1:51 AM EDT'
                 }]];
 
 
@@ -993,8 +994,8 @@ describe('DateTime record formatter unit test', function() {
         var expectedRecords_DDMMYY_ShowTime_ShowMonthAsName =
                 [[{
                     id     : 7,
-                    value  : '2015-04-12T05:51:19z',
-                    display: '12-Apr-15 1:51 AM'
+                    value  : testDateHelper.thisYear + '-04-12T05:51:19z',
+                    display: '12-Apr-' + testDateHelper.thisYear2 + ' 1:51 AM'
                 }]];
 
 
@@ -1006,8 +1007,8 @@ describe('DateTime record formatter unit test', function() {
         var expectedRecords_DDMMYY_ShowTime_ShowDayOfWeek =
                 [[{
                     id     : 7,
-                    value  : '2015-04-12T05:51:19z',
-                    display: 'Sunday, 12-04-15 1:51 AM'
+                    value  : testDateHelper.thisYear + '-04-12T05:51:19z',
+                    display: testDateHelper.dayOfWeekAprilTwelve + ', 12-04-' + testDateHelper.thisYear2 + ' 1:51 AM'
                 }]];
 
         // FieldInfo and record expectation for field with DD_MM_YY format and ShowTime, HideYearIfCurrent flag
@@ -1018,7 +1019,7 @@ describe('DateTime record formatter unit test', function() {
         var expectedRecords_DDMMYY_ShowTime_HideYearIfCurrent =
                 [[{
                     id     : 7,
-                    value  : '2015-04-12T05:51:19z',
+                    value  : testDateHelper.thisYear + '-04-12T05:51:19z',
                     display: '12-04 1:51 AM'
                 }]];
         var expectedRecords_DDMMYY_ShowTime_HideYearIfCurrent_DiffYear =
@@ -1037,8 +1038,8 @@ describe('DateTime record formatter unit test', function() {
         var expectedRecords_DDMMYY_ShowTime_ShowTimeZone_ShowMonthAsName =
                 [[{
                     id     : 7,
-                    value  : '2015-04-12T05:51:19z',
-                    display: '12-Apr-15 1:51 AM EDT'
+                    value  : testDateHelper.thisYear + '-04-12T05:51:19z',
+                    display: '12-Apr-' + testDateHelper.thisYear2 + ' 1:51 AM EDT'
                 }]];
 
         // FieldInfo and record expectation for field with DD_MM_YY format and ShowTime, ShowTimeZone, ShowDayOfWeek flag
@@ -1050,8 +1051,8 @@ describe('DateTime record formatter unit test', function() {
         var expectedRecords_DDMMYY_ShowTime_ShowTimeZone_ShowDayOfWeek =
                 [[{
                     id     : 7,
-                    value  : '2015-04-12T05:51:19z',
-                    display: 'Sunday, 12-04-15 1:51 AM EDT'
+                    value  : testDateHelper.thisYear + '-04-12T05:51:19z',
+                    display: testDateHelper.dayOfWeekAprilTwelve + ', 12-04-' + testDateHelper.thisYear2 + ' 1:51 AM EDT'
                 }]];
 
         // FieldInfo and record expectation for field with DD_MM_YY format and ShowTime, ShowTimeZone, HideYearIfCurrent flag
@@ -1063,7 +1064,7 @@ describe('DateTime record formatter unit test', function() {
         var expectedRecords_DDMMYY_ShowTime_ShowTimeZone_HideYearIfCurrent =
                 [[{
                     id     : 7,
-                    value  : '2015-04-12T05:51:19z',
+                    value  : testDateHelper.thisYear + '-04-12T05:51:19z',
                     display: '12-04 1:51 AM EDT'
                 }]];
 
@@ -1077,8 +1078,8 @@ describe('DateTime record formatter unit test', function() {
         var expectedRecords_DDMMYY_ShowTime_ShowTimeZone_ShowDayOfWeek_HideYearIfCurrent =
                 [[{
                     id     : 7,
-                    value  : '2015-04-12T05:51:19z',
-                    display: 'Sunday, 12-04 1:51 AM EDT'
+                    value  : testDateHelper.thisYear + '-04-12T05:51:19z',
+                    display: testDateHelper.dayOfWeekAprilTwelve + ', 12-04 1:51 AM EDT'
                 }]];
 
         // FieldInfo and record expectation for field with DD_MM_YY format and ShowTime, ShowTimeZone, ShowMonthAsName, HideYearIfCurrent flag
@@ -1091,7 +1092,7 @@ describe('DateTime record formatter unit test', function() {
         var expectedRecords_DDMMYY_ShowTime_ShowTimeZone_ShowMonthAsName_HideYearIfCurrent =
                 [[{
                     id     : 7,
-                    value  : '2015-04-12T05:51:19z',
+                    value  : testDateHelper.thisYear + '-04-12T05:51:19z',
                     display: '12-Apr 1:51 AM EDT'
                 }]];
 
@@ -1105,8 +1106,8 @@ describe('DateTime record formatter unit test', function() {
         var expectedRecords_DDMMYY_ShowTime_ShowMonthAsName_ShowDayOfWeek =
                 [[{
                     id     : 7,
-                    value  : '2015-04-12T05:51:19z',
-                    display: 'Sunday, 12-Apr-15 1:51 AM'
+                    value  : testDateHelper.thisYear + '-04-12T05:51:19z',
+                    display: testDateHelper.dayOfWeekAprilTwelve + ', 12-Apr-' + testDateHelper.thisYear2 + ' 1:51 AM'
                 }]];
 
         // FieldInfo and record expectation for field with DD_MM_YY format and ShowTime, ShowMonthAsName, ShowDayOfWeek, HideYearIfCurrent flag
@@ -1119,8 +1120,8 @@ describe('DateTime record formatter unit test', function() {
         var expectedRecords_DDMMYY_ShowTime_ShowMonthAsName_ShowDayOfWeek_HideYearIfCurrent =
                 [[{
                     id     : 7,
-                    value  : '2015-04-12T05:51:19z',
-                    display: 'Sunday, 12-Apr 1:51 AM'
+                    value  : testDateHelper.thisYear + '-04-12T05:51:19z',
+                    display: testDateHelper.dayOfWeekAprilTwelve + ', 12-Apr 1:51 AM'
                 }]];
 
         // FieldInfo and record expectation for field with DD_MM_YY format and showDayOfWeek flag
@@ -1130,8 +1131,8 @@ describe('DateTime record formatter unit test', function() {
         var expectedRecords_DDMMYY_ShowDayOfWeek =
                 [[{
                     id     : 7,
-                    value  : '2015-04-12T05:51:19z',
-                    display: 'Sunday, 12-04-15'
+                    value  : testDateHelper.thisYear + '-04-12T05:51:19z',
+                    display: testDateHelper.dayOfWeekAprilTwelve + ', 12-04-' + testDateHelper.thisYear2
                 }]];
 
         // FieldInfo and record expectation for field with DD_MM_YY format and ShowDayOfWeek, HideYearIfCurrent flag
@@ -1142,8 +1143,8 @@ describe('DateTime record formatter unit test', function() {
         var expectedRecords_DDMMYY_ShowDayOfWeek_HideYearIfCurrent =
                 [[{
                     id     : 7,
-                    value  : '2015-04-12T05:51:19z',
-                    display: 'Sunday, 12-04'
+                    value  : testDateHelper.thisYear + '-04-12T05:51:19z',
+                    display: testDateHelper.dayOfWeekAprilTwelve + ', 12-04'
                 }]];
 
         // FieldInfo and record expectation for field with DD_MM_YY format and showTimeZone flag
@@ -1153,8 +1154,8 @@ describe('DateTime record formatter unit test', function() {
         var expectedRecords_DDMMYY_ShowTimeZone =
                 [[{
                     id     : 7,
-                    value  : '2015-04-12T05:51:19z',
-                    display: '12-04-15 EDT'
+                    value  : testDateHelper.thisYear + '-04-12T05:51:19z',
+                    display: '12-04-' + testDateHelper.thisYear2 + ' EDT'
                 }]];
 
         // FieldInfo and record expectation for field with DD_MM_YY format and ShowTimeZone, ShowMonthAsName flag
@@ -1165,8 +1166,8 @@ describe('DateTime record formatter unit test', function() {
         var expectedRecords_DDMMYY_ShowTimeZone_ShowMonthAsName =
                 [[{
                     id     : 7,
-                    value  : '2015-04-12T05:51:19z',
-                    display: '12-Apr-15 EDT'
+                    value  : testDateHelper.thisYear + '-04-12T05:51:19z',
+                    display: '12-Apr-' + testDateHelper.thisYear2 + ' EDT'
                 }]];
 
         // FieldInfo and record expectation for field with DD_MM_YY format and ShowTimeZone, ShowDayOfWeek flag
@@ -1177,8 +1178,8 @@ describe('DateTime record formatter unit test', function() {
         var expectedRecords_DDMMYY_ShowTimeZone_ShowDayOfWeek =
                 [[{
                     id     : 7,
-                    value  : '2015-04-12T05:51:19z',
-                    display: 'Sunday, 12-04-15 EDT'
+                    value  : testDateHelper.thisYear + '-04-12T05:51:19z',
+                    display: testDateHelper.dayOfWeekAprilTwelve + ', 12-04-' + testDateHelper.thisYear2 + ' EDT'
                 }]];
 
         // FieldInfo and record expectation for field with DD_MM_YY format and ShowTimeZone, HideYearIfCurrent flag
@@ -1189,7 +1190,7 @@ describe('DateTime record formatter unit test', function() {
         var expectedRecords_DDMMYY_ShowTimeZone_HideYearIfCurrent =
                 [[{
                     id     : 7,
-                    value  : '2015-04-12T05:51:19z',
+                    value  : testDateHelper.thisYear + '-04-12T05:51:19z',
                     display: '12-04 EDT'
                 }]];
 
@@ -1202,8 +1203,8 @@ describe('DateTime record formatter unit test', function() {
         var expectedRecords_DDMMYY_ShowTimeZone_ShowMonthAsName_ShowDayOfWeek =
                 [[{
                     id     : 7,
-                    value  : '2015-04-12T05:51:19z',
-                    display: 'Sunday, 12-Apr-15 EDT'
+                    value  : testDateHelper.thisYear + '-04-12T05:51:19z',
+                    display: testDateHelper.dayOfWeekAprilTwelve + ', 12-Apr-' + testDateHelper.thisYear2 + ' EDT'
                 }]];
 
         // FieldInfo and record expectation for field with DD_MM_YY format and ShowTimeZone, ShowMonthAsName, HideYearIfCurrent flag
@@ -1215,7 +1216,7 @@ describe('DateTime record formatter unit test', function() {
         var expectedRecords_DDMMYY_ShowTimeZone_ShowMonthAsName_HideYearIfCurrent =
                 [[{
                     id     : 7,
-                    value  : '2015-04-12T05:51:19z',
+                    value  : testDateHelper.thisYear + '-04-12T05:51:19z',
                     display: '12-Apr EDT'
                 }]];
 
@@ -1228,8 +1229,8 @@ describe('DateTime record formatter unit test', function() {
         var expectedRecords_DDMMYY_ShowTimeZone_ShowDayOfWeek_HideYearIfCurrent =
                 [[{
                     id     : 7,
-                    value  : '2015-04-12T05:51:19z',
-                    display: 'Sunday, 12-04 EDT'
+                    value  : testDateHelper.thisYear + '-04-12T05:51:19z',
+                    display: testDateHelper.dayOfWeekAprilTwelve + ', 12-04 EDT'
                 }]];
 
 
@@ -1240,8 +1241,8 @@ describe('DateTime record formatter unit test', function() {
         var expectedRecords_DDMMYY_ShowMonthAsName =
                 [[{
                     id     : 7,
-                    value  : '2015-04-12T05:51:19z',
-                    display: '12-Apr-15'
+                    value  : testDateHelper.thisYear + '-04-12T05:51:19z',
+                    display: '12-Apr-' + testDateHelper.thisYear2
                 }]];
 
         // FieldInfo and record expectation for field with DD_MM_YY format and ShowMonthAsName, ShowDayOfWeek flag
@@ -1252,8 +1253,8 @@ describe('DateTime record formatter unit test', function() {
         var expectedRecords_DDMMYY_ShowMonthAsName_ShowDayOfWeek =
                 [[{
                     id     : 7,
-                    value  : '2015-04-12T05:51:19z',
-                    display: 'Sunday, 12-Apr-15'
+                    value  : testDateHelper.thisYear + '-04-12T05:51:19z',
+                    display: testDateHelper.dayOfWeekAprilTwelve + ', 12-Apr-' + testDateHelper.thisYear2
                 }]];
 
         // FieldInfo and record expectation for field with DD_MM_YY format and ShowMonthAsName, HideYearIfCurrent flag
@@ -1264,7 +1265,7 @@ describe('DateTime record formatter unit test', function() {
         var expectedRecords_DDMMYY_ShowMonthAsName_HideYearIfCurrent =
                 [[{
                     id     : 7,
-                    value  : '2015-04-12T05:51:19z',
+                    value  : testDateHelper.thisYear + '-04-12T05:51:19z',
                     display: '12-Apr'
                 }]];
 
@@ -1275,7 +1276,7 @@ describe('DateTime record formatter unit test', function() {
         var expectedRecords_DDMMYY_HideYearIfCurrent =
                 [[{
                     id     : 7,
-                    value  : '2015-04-12T05:51:19z',
+                    value  : testDateHelper.thisYear + '-04-12T05:51:19z',
                     display: '12-04'
                 }]];
         var expectedRecords_DDMMYY_HideYearIfCurrent_DiffYear =
@@ -1296,8 +1297,8 @@ describe('DateTime record formatter unit test', function() {
         var expectedRecords_DDMMYY_AllFlags =
                 [[{
                     id     : 7,
-                    value  : '2015-04-12T05:51:19z',
-                    display: 'Sunday, 12-Apr 1:51 AM EDT'
+                    value  : testDateHelper.thisYear + '-04-12T05:51:19z',
+                    display: testDateHelper.dayOfWeekAprilTwelve + ', 12-Apr 1:51 AM EDT'
                 }]];
         var expectedRecords_DDMMYY_AllFlags_DiffYear =
                 [[{
@@ -1388,7 +1389,7 @@ describe('DateTime record formatter unit test', function() {
         // Default DateTime record input
         var recordsInput = [[{
             id   : 7,
-            value: '2015-04-12T18:51:19z'
+            value: testDateHelper.thisYear + '-04-12T18:51:19z'
         }]];
 
         var recordsInputDiffYear = [[{
@@ -1415,8 +1416,8 @@ describe('DateTime record formatter unit test', function() {
         var expectedRecords_DDMMYYYY =
                 [[{
                     id     : 7,
-                    value  : '2015-04-12T18:51:19z',
-                    display: '12-04-2015'
+                    value  : testDateHelper.thisYear + '-04-12T18:51:19z',
+                    display: '12-04-' + testDateHelper.thisYear
                 }]];
 
         // FieldInfo and record expectation for field with DD_MM_YYYY format and showDayOfWeek flag
@@ -1426,8 +1427,8 @@ describe('DateTime record formatter unit test', function() {
         var expectedRecords_DDMMYYYY_ShowTime =
                 [[{
                     id     : 7,
-                    value  : '2015-04-12T18:51:19z',
-                    display: '12-04-2015 2:51 PM'
+                    value  : testDateHelper.thisYear + '-04-12T18:51:19z',
+                    display: '12-04-' + testDateHelper.thisYear + ' 2:51 PM'
                 }]];
 
         // FieldInfo and record expectation for field with DD_MM_YYYY format and ShowTime, ShowTimeZone flag
@@ -1438,8 +1439,8 @@ describe('DateTime record formatter unit test', function() {
         var expectedRecords_DDMMYYYY_ShowTime_ShowTimeZone =
                 [[{
                     id     : 7,
-                    value  : '2015-04-12T18:51:19z',
-                    display: '12-04-2015 2:51 PM EDT'
+                    value  : testDateHelper.thisYear + '-04-12T18:51:19z',
+                    display: '12-04-' + testDateHelper.thisYear + ' 2:51 PM EDT'
                 }]];
 
 
@@ -1451,8 +1452,8 @@ describe('DateTime record formatter unit test', function() {
         var expectedRecords_DDMMYYYY_ShowTime_ShowMonthAsName =
                 [[{
                     id     : 7,
-                    value  : '2015-04-12T18:51:19z',
-                    display: '12-Apr-2015 2:51 PM'
+                    value  : testDateHelper.thisYear + '-04-12T18:51:19z',
+                    display: '12-Apr-' + testDateHelper.thisYear + ' 2:51 PM'
                 }]];
 
 
@@ -1464,8 +1465,8 @@ describe('DateTime record formatter unit test', function() {
         var expectedRecords_DDMMYYYY_ShowTime_ShowDayOfWeek =
                 [[{
                     id     : 7,
-                    value  : '2015-04-12T18:51:19z',
-                    display: 'Sunday, 12-04-2015 2:51 PM'
+                    value  : testDateHelper.thisYear + '-04-12T18:51:19z',
+                    display: testDateHelper.dayOfWeekAprilTwelve + ', 12-04-' + testDateHelper.thisYear + ' 2:51 PM'
                 }]];
 
         // FieldInfo and record expectation for field with DD_MM_YYYY format and ShowTime, HideYearIfCurrent flag
@@ -1476,7 +1477,7 @@ describe('DateTime record formatter unit test', function() {
         var expectedRecords_DDMMYYYY_ShowTime_HideYearIfCurrent =
                 [[{
                     id     : 7,
-                    value  : '2015-04-12T18:51:19z',
+                    value  : testDateHelper.thisYear + '-04-12T18:51:19z',
                     display: '12-04 2:51 PM'
                 }]];
         var expectedRecords_DDMMYYYY_ShowTime_HideYearIfCurrent_DiffYear =
@@ -1495,8 +1496,8 @@ describe('DateTime record formatter unit test', function() {
         var expectedRecords_DDMMYYYY_ShowTime_ShowTimeZone_ShowMonthAsName =
                 [[{
                     id     : 7,
-                    value  : '2015-04-12T18:51:19z',
-                    display: '12-Apr-2015 2:51 PM EDT'
+                    value  : testDateHelper.thisYear + '-04-12T18:51:19z',
+                    display: '12-Apr-' + testDateHelper.thisYear + ' 2:51 PM EDT'
                 }]];
 
         // FieldInfo and record expectation for field with DD_MM_YYYY format and ShowTime, ShowDayOfWeek, ShowMonthAsName, HideYearIfCurrent flag
@@ -1509,7 +1510,7 @@ describe('DateTime record formatter unit test', function() {
         var expectedRecords_DDMMYYYY_ShowTime_ShowTimeZone_ShowMonthAsName_HideYearIfCurrent =
                 [[{
                     id     : 7,
-                    value  : '2015-04-12T18:51:19z',
+                    value  : testDateHelper.thisYear + '-04-12T18:51:19z',
                     display: '12-Apr 2:51 PM EDT'
                 }]];
 
@@ -1522,8 +1523,8 @@ describe('DateTime record formatter unit test', function() {
         var expectedRecords_DDMMYYYY_ShowTime_ShowTimeZone_ShowDayOfWeek =
                 [[{
                     id     : 7,
-                    value  : '2015-04-12T18:51:19z',
-                    display: 'Sunday, 12-04-2015 2:51 PM EDT'
+                    value  : testDateHelper.thisYear + '-04-12T18:51:19z',
+                    display: testDateHelper.dayOfWeekAprilTwelve + ', 12-04-' + testDateHelper.thisYear + ' 2:51 PM EDT'
                 }]];
 
         // FieldInfo and record expectation for field with DD_MM_YYYY format and ShowTime, ShowTimeZone, HideYearIfCurrent flag
@@ -1535,7 +1536,7 @@ describe('DateTime record formatter unit test', function() {
         var expectedRecords_DDMMYYYY_ShowTime_ShowTimeZone_HideYearIfCurrent =
                 [[{
                     id     : 7,
-                    value  : '2015-04-12T18:51:19z',
+                    value  : testDateHelper.thisYear + '-04-12T18:51:19z',
                     display: '12-04 2:51 PM EDT'
                 }]];
 
@@ -1549,8 +1550,8 @@ describe('DateTime record formatter unit test', function() {
         var expectedRecords_DDMMYYYY_ShowTime_ShowTimeZone_ShowDayOfWeek_HideYearIfCurrent =
                 [[{
                     id     : 7,
-                    value  : '2015-04-12T18:51:19z',
-                    display: 'Sunday, 12-04 2:51 PM EDT'
+                    value  : testDateHelper.thisYear + '-04-12T18:51:19z',
+                    display: testDateHelper.dayOfWeekAprilTwelve + ', 12-04 2:51 PM EDT'
                 }]];
 
         // FieldInfo and record expectation for field with DD_MM_YYYY format and ShowTime, ShowMonthAsName, ShowDayOfWeek flag
@@ -1562,8 +1563,8 @@ describe('DateTime record formatter unit test', function() {
         var expectedRecords_DDMMYYYY_ShowTime_ShowMonthAsName_ShowDayOfWeek =
                 [[{
                     id     : 7,
-                    value  : '2015-04-12T18:51:19z',
-                    display: 'Sunday, 12-Apr-2015 2:51 PM'
+                    value  : testDateHelper.thisYear + '-04-12T18:51:19z',
+                    display: testDateHelper.dayOfWeekAprilTwelve + ', 12-Apr-' + testDateHelper.thisYear + ' 2:51 PM'
                 }]];
 
         // FieldInfo and record expectation for field with DD_MM_YYYY format and ShowTime, ShowMonthAsName, ShowDayOfWeek, HideYearIfCurrent flag
@@ -1576,8 +1577,8 @@ describe('DateTime record formatter unit test', function() {
         var expectedRecords_DDMMYYYY_ShowTime_ShowMonthAsName_ShowDayOfWeek_HideYearIfCurrent =
                 [[{
                     id     : 7,
-                    value  : '2015-04-12T18:51:19z',
-                    display: 'Sunday, 12-Apr 2:51 PM'
+                    value  : testDateHelper.thisYear + '-04-12T18:51:19z',
+                    display: testDateHelper.dayOfWeekAprilTwelve + ', 12-Apr 2:51 PM'
                 }]];
 
         // FieldInfo and record expectation for field with DD_MM_YYYY format and ShowDayOfWeek flag
@@ -1587,8 +1588,8 @@ describe('DateTime record formatter unit test', function() {
         var expectedRecords_DDMMYYYY_ShowDayOfWeek =
                 [[{
                     id     : 7,
-                    value  : '2015-04-12T18:51:19z',
-                    display: 'Sunday, 12-04-2015'
+                    value  : testDateHelper.thisYear + '-04-12T18:51:19z',
+                    display: testDateHelper.dayOfWeekAprilTwelve + ', 12-04-' + testDateHelper.thisYear
                 }]];
 
         // FieldInfo and record expectation for field with DD_MM_YYYY format and ShowDayOfWeek, HideYearIfCurrent flag
@@ -1599,8 +1600,8 @@ describe('DateTime record formatter unit test', function() {
         var expectedRecords_DDMMYYYY_ShowDayOfWeek_HideYearIfCurrent =
                 [[{
                     id     : 7,
-                    value  : '2015-04-12T18:51:19z',
-                    display: 'Sunday, 12-04'
+                    value  : testDateHelper.thisYear + '-04-12T18:51:19z',
+                    display: testDateHelper.dayOfWeekAprilTwelve + ', 12-04'
                 }]];
 
         // FieldInfo and record expectation for field with DD_MM_YYYY format and showTimeZone flag
@@ -1610,8 +1611,8 @@ describe('DateTime record formatter unit test', function() {
         var expectedRecords_DDMMYYYY_ShowTimeZone =
                 [[{
                     id     : 7,
-                    value  : '2015-04-12T18:51:19z',
-                    display: '12-04-2015 EDT'
+                    value  : testDateHelper.thisYear + '-04-12T18:51:19z',
+                    display: '12-04-' + testDateHelper.thisYear + ' EDT'
                 }]];
 
         // FieldInfo and record expectation for field with DD_MM_YYYY format and ShowTimeZone, ShowMonthAsName flag
@@ -1622,8 +1623,8 @@ describe('DateTime record formatter unit test', function() {
         var expectedRecords_DDMMYYYY_ShowTimeZone_ShowMonthAsName =
                 [[{
                     id     : 7,
-                    value  : '2015-04-12T18:51:19z',
-                    display: '12-Apr-2015 EDT'
+                    value  : testDateHelper.thisYear + '-04-12T18:51:19z',
+                    display: '12-Apr-' + testDateHelper.thisYear + ' EDT'
                 }]];
 
         // FieldInfo and record expectation for field with DD_MM_YYYY format and ShowTimeZone, ShowDayOfWeek flag
@@ -1634,8 +1635,8 @@ describe('DateTime record formatter unit test', function() {
         var expectedRecords_DDMMYYYY_ShowTimeZone_ShowDayOfWeek =
                 [[{
                     id     : 7,
-                    value  : '2015-04-12T18:51:19z',
-                    display: 'Sunday, 12-04-2015 EDT'
+                    value  : testDateHelper.thisYear + '-04-12T18:51:19z',
+                    display: testDateHelper.dayOfWeekAprilTwelve + ', 12-04-' + testDateHelper.thisYear + ' EDT'
                 }]];
 
         // FieldInfo and record expectation for field with DD_MM_YYYY format and ShowTimeZone, HideYearIfCurrent flag
@@ -1646,7 +1647,7 @@ describe('DateTime record formatter unit test', function() {
         var expectedRecords_DDMMYYYY_ShowTimeZone_HideYearIfCurrent =
                 [[{
                     id     : 7,
-                    value  : '2015-04-12T18:51:19z',
+                    value  : testDateHelper.thisYear + '-04-12T18:51:19z',
                     display: '12-04 EDT'
                 }]];
 
@@ -1659,8 +1660,8 @@ describe('DateTime record formatter unit test', function() {
         var expectedRecords_DDMMYYYY_ShowTimeZone_ShowMonthAsName_ShowDayOfWeek =
                 [[{
                     id     : 7,
-                    value  : '2015-04-12T18:51:19z',
-                    display: 'Sunday, 12-Apr-2015 EDT'
+                    value  : testDateHelper.thisYear + '-04-12T18:51:19z',
+                    display: testDateHelper.dayOfWeekAprilTwelve + ', 12-Apr-' + testDateHelper.thisYear + ' EDT'
                 }]];
 
         // FieldInfo and record expectation for field with DD_MM_YYYY format and ShowTimeZone, ShowMonthAsName, HideYearIfCurrent flag
@@ -1672,7 +1673,7 @@ describe('DateTime record formatter unit test', function() {
         var expectedRecords_DDMMYYYY_ShowTimeZone_ShowMonthAsName_HideYearIfCurrent =
                 [[{
                     id     : 7,
-                    value  : '2015-04-12T18:51:19z',
+                    value  : testDateHelper.thisYear + '-04-12T18:51:19z',
                     display: '12-Apr EDT'
                 }]];
 
@@ -1685,8 +1686,8 @@ describe('DateTime record formatter unit test', function() {
         var expectedRecords_DDMMYYYY_ShowTimeZone_ShowDayOfWeek_HideYearIfCurrent =
                 [[{
                     id     : 7,
-                    value  : '2015-04-12T18:51:19z',
-                    display: 'Sunday, 12-04 EDT'
+                    value  : testDateHelper.thisYear + '-04-12T18:51:19z',
+                    display: testDateHelper.dayOfWeekAprilTwelve + ', 12-04 EDT'
                 }]];
 
         // FieldInfo and record expectation for field with DD_MM_YYYY format and ShowMonthAsName flag
@@ -1696,8 +1697,8 @@ describe('DateTime record formatter unit test', function() {
         var expectedRecords_DDMMYYYY_ShowMonthAsName =
                 [[{
                     id     : 7,
-                    value  : '2015-04-12T18:51:19z',
-                    display: '12-Apr-2015'
+                    value  : testDateHelper.thisYear + '-04-12T18:51:19z',
+                    display: '12-Apr-' + testDateHelper.thisYear
                 }]];
 
         // FieldInfo and record expectation for field with DD_MM_YYYY format and ShowMonthAsName, ShowDayOfWeek flag
@@ -1708,8 +1709,8 @@ describe('DateTime record formatter unit test', function() {
         var expectedRecords_DDMMYYYY_ShowMonthAsName_ShowDayOfWeek =
                 [[{
                     id     : 7,
-                    value  : '2015-04-12T18:51:19z',
-                    display: 'Sunday, 12-Apr-2015'
+                    value  : testDateHelper.thisYear + '-04-12T18:51:19z',
+                    display: testDateHelper.dayOfWeekAprilTwelve + ', 12-Apr-' + testDateHelper.thisYear
                 }]];
 
         // FieldInfo and record expectation for field with DD_MM_YYYY format and ShowMonthAsName, HideYearIfCurrent flag
@@ -1720,7 +1721,7 @@ describe('DateTime record formatter unit test', function() {
         var expectedRecords_DDMMYYYY_ShowMonthAsName_HideYearIfCurrent =
                 [[{
                     id     : 7,
-                    value  : '2015-04-12T18:51:19z',
+                    value  : testDateHelper.thisYear + '-04-12T18:51:19z',
                     display: '12-Apr'
                 }]];
 
@@ -1731,7 +1732,7 @@ describe('DateTime record formatter unit test', function() {
         var expectedRecords_DDMMYYYY_HideYearIfCurrent =
                 [[{
                     id     : 7,
-                    value  : '2015-04-12T18:51:19z',
+                    value  : testDateHelper.thisYear + '-04-12T18:51:19z',
                     display: '12-04'
                 }]];
         var expectedRecords_DDMMYYYY_HideYearIfCurrent_DiffYear =
@@ -1752,8 +1753,8 @@ describe('DateTime record formatter unit test', function() {
         var expectedRecords_DDMMYYYY_AllFlags =
                 [[{
                     id     : 7,
-                    value  : '2015-04-12T18:51:19z',
-                    display: 'Sunday, 12-Apr 2:51 PM EDT'
+                    value  : testDateHelper.thisYear + '-04-12T18:51:19z',
+                    display: testDateHelper.dayOfWeekAprilTwelve + ', 12-Apr 2:51 PM EDT'
                 }]];
         var expectedRecords_DDMMYYYY_AllFlags_DiffYear =
                 [[{
@@ -1844,7 +1845,7 @@ describe('DateTime record formatter unit test', function() {
         //// Default DateTime record input
         var recordsInput = [[{
             id   : 7,
-            value: '2015-04-12T05:51:19z'
+            value: testDateHelper.thisYear + '-04-12T05:51:19z'
         }]];
 
         var recordsInputDiffYear = [[{
@@ -1871,8 +1872,8 @@ describe('DateTime record formatter unit test', function() {
         var expectedRecords_YYYYMMDD =
                 [[{
                     id     : 7,
-                    value  : '2015-04-12T05:51:19z',
-                    display: '2015-04-12'
+                    value  : testDateHelper.thisYear + '-04-12T05:51:19z',
+                    display: testDateHelper.thisYear + '-04-12'
                 }]];
 
         // FieldInfo and record expectation for field with YYYY_MM_DD format and showDayOfWeek flag
@@ -1882,8 +1883,8 @@ describe('DateTime record formatter unit test', function() {
         var expectedRecords_YYYYMMDD_ShowTime =
                 [[{
                     id     : 7,
-                    value  : '2015-04-12T05:51:19z',
-                    display: '2015-04-12 1:51 AM'
+                    value  : testDateHelper.thisYear + '-04-12T05:51:19z',
+                    display: testDateHelper.thisYear + '-04-12 1:51 AM'
                 }]];
 
         // FieldInfo and record expectation for field with YYYY_MM_DD format and ShowTime, ShowTimeZone flag
@@ -1894,8 +1895,8 @@ describe('DateTime record formatter unit test', function() {
         var expectedRecords_YYYYMMDD_ShowTime_ShowTimeZone =
                 [[{
                     id     : 7,
-                    value  : '2015-04-12T05:51:19z',
-                    display: '2015-04-12 1:51 AM EDT'
+                    value  : testDateHelper.thisYear + '-04-12T05:51:19z',
+                    display: testDateHelper.thisYear + '-04-12 1:51 AM EDT'
                 }]];
 
 
@@ -1907,8 +1908,8 @@ describe('DateTime record formatter unit test', function() {
         var expectedRecords_YYYYMMDD_ShowTime_ShowMonthAsName =
                 [[{
                     id     : 7,
-                    value  : '2015-04-12T05:51:19z',
-                    display: '2015-Apr-12 1:51 AM'
+                    value  : testDateHelper.thisYear + '-04-12T05:51:19z',
+                    display: testDateHelper.thisYear + '-Apr-12 1:51 AM'
                 }]];
 
 
@@ -1920,8 +1921,8 @@ describe('DateTime record formatter unit test', function() {
         var expectedRecords_YYYYMMDD_ShowTime_ShowDayOfWeek =
                 [[{
                     id     : 7,
-                    value  : '2015-04-12T05:51:19z',
-                    display: 'Sunday, 2015-04-12 1:51 AM'
+                    value  : testDateHelper.thisYear + '-04-12T05:51:19z',
+                    display: testDateHelper.dayOfWeekAprilTwelve + ', ' + testDateHelper.thisYear + '-04-12 1:51 AM'
                 }]];
 
         // FieldInfo and record expectation for field with YYYY_MM_DD format and ShowTime, HideYearIfCurrent flag
@@ -1932,7 +1933,7 @@ describe('DateTime record formatter unit test', function() {
         var expectedRecords_YYYYMMDD_ShowTime_HideYearIfCurrent =
                 [[{
                     id     : 7,
-                    value  : '2015-04-12T05:51:19z',
+                    value  : testDateHelper.thisYear + '-04-12T05:51:19z',
                     display: '04-12 1:51 AM'
                 }]];
         var expectedRecords_YYYYMMDD_ShowTime_HideYearIfCurrent_DiffYear =
@@ -1951,8 +1952,8 @@ describe('DateTime record formatter unit test', function() {
         var expectedRecords_YYYYMMDD_ShowTime_ShowTimeZone_ShowMonthAsName =
                 [[{
                     id     : 7,
-                    value  : '2015-04-12T05:51:19z',
-                    display: '2015-Apr-12 1:51 AM EDT'
+                    value  : testDateHelper.thisYear + '-04-12T05:51:19z',
+                    display: testDateHelper.thisYear + '-Apr-12 1:51 AM EDT'
                 }]];
 
         // FieldInfo and record expectation for field with YYYY_MM_DD format and ShowTime, ShowTimeZone, ShowDayOfWeek flag
@@ -1964,8 +1965,8 @@ describe('DateTime record formatter unit test', function() {
         var expectedRecords_YYYYMMDD_ShowTime_ShowTimeZone_ShowDayOfWeek =
                 [[{
                     id     : 7,
-                    value  : '2015-04-12T05:51:19z',
-                    display: 'Sunday, 2015-04-12 1:51 AM EDT'
+                    value  : testDateHelper.thisYear + '-04-12T05:51:19z',
+                    display: testDateHelper.dayOfWeekAprilTwelve + ', ' + testDateHelper.thisYear + '-04-12 1:51 AM EDT'
                 }]];
 
         // FieldInfo and record expectation for field with YYYY_MM_DD format and ShowTime, ShowTimeZone, HideYearIfCurrent flag
@@ -1977,7 +1978,7 @@ describe('DateTime record formatter unit test', function() {
         var expectedRecords_YYYYMMDD_ShowTime_ShowTimeZone_HideYearIfCurrent =
                 [[{
                     id     : 7,
-                    value  : '2015-04-12T05:51:19z',
+                    value  : testDateHelper.thisYear + '-04-12T05:51:19z',
                     display: '04-12 1:51 AM EDT'
                 }]];
 
@@ -1991,8 +1992,8 @@ describe('DateTime record formatter unit test', function() {
         var expectedRecords_YYYYMMDD_ShowTime_ShowTimeZone_ShowDayOfWeek_HideYearIfCurrent =
                 [[{
                     id     : 7,
-                    value  : '2015-04-12T05:51:19z',
-                    display: 'Sunday, 04-12 1:51 AM EDT'
+                    value  : testDateHelper.thisYear + '-04-12T05:51:19z',
+                    display: testDateHelper.dayOfWeekAprilTwelve + ', 04-12 1:51 AM EDT'
                 }]];
 
         // FieldInfo and record expectation for field with YYYY_MM_DD format and ShowTime, ShowTimeZone, ShowMonthAsName, HideYearIfCurrent flag
@@ -2005,7 +2006,7 @@ describe('DateTime record formatter unit test', function() {
         var expectedRecords_YYYYMMDD_ShowTime_ShowTimeZone_ShowMonthAsName_HideYearIfCurrent =
                 [[{
                     id     : 7,
-                    value  : '2015-04-12T05:51:19z',
+                    value  : testDateHelper.thisYear + '-04-12T05:51:19z',
                     display: 'Apr-12 1:51 AM EDT'
                 }]];
 
@@ -2019,8 +2020,8 @@ describe('DateTime record formatter unit test', function() {
         var expectedRecords_YYYYMMDD_ShowTime_ShowMonthAsName_ShowDayOfWeek =
                 [[{
                     id     : 7,
-                    value  : '2015-04-12T05:51:19z',
-                    display: 'Sunday, 2015-Apr-12 1:51 AM'
+                    value  : testDateHelper.thisYear + '-04-12T05:51:19z',
+                    display: testDateHelper.dayOfWeekAprilTwelve + ', ' + testDateHelper.thisYear + '-Apr-12 1:51 AM'
                 }]];
 
         // FieldInfo and record expectation for field with YYYY_MM_DD format and ShowTime, ShowMonthAsName, ShowDayOfWeek, HideYearIfCurrent flag
@@ -2033,8 +2034,8 @@ describe('DateTime record formatter unit test', function() {
         var expectedRecords_YYYYMMDD_ShowTime_ShowMonthAsName_ShowDayOfWeek_HideYearIfCurrent =
                 [[{
                     id     : 7,
-                    value  : '2015-04-12T05:51:19z',
-                    display: 'Sunday, Apr-12 1:51 AM'
+                    value  : testDateHelper.thisYear + '-04-12T05:51:19z',
+                    display: testDateHelper.dayOfWeekAprilTwelve + ', Apr-12 1:51 AM'
                 }]];
 
         // FieldInfo and record expectation for field with YYYY_MM_DD format and showDayOfWeek flag
@@ -2044,8 +2045,8 @@ describe('DateTime record formatter unit test', function() {
         var expectedRecords_YYYYMMDD_ShowDayOfWeek =
                 [[{
                     id     : 7,
-                    value  : '2015-04-12T05:51:19z',
-                    display: 'Sunday, 2015-04-12'
+                    value  : testDateHelper.thisYear + '-04-12T05:51:19z',
+                    display: testDateHelper.dayOfWeekAprilTwelve + ', ' + testDateHelper.thisYear + '-04-12'
                 }]];
 
         // FieldInfo and record expectation for field with YYYY_MM_DD format and ShowDayOfWeek, HideYearIfCurrent flag
@@ -2056,8 +2057,8 @@ describe('DateTime record formatter unit test', function() {
         var expectedRecords_YYYYMMDD_ShowDayOfWeek_HideYearIfCurrent =
                 [[{
                     id     : 7,
-                    value  : '2015-04-12T05:51:19z',
-                    display: 'Sunday, 04-12'
+                    value  : testDateHelper.thisYear + '-04-12T05:51:19z',
+                    display: testDateHelper.dayOfWeekAprilTwelve + ', 04-12'
                 }]];
 
         // FieldInfo and record expectation for field with YYYY_MM_DD format and showTimeZone flag
@@ -2067,8 +2068,8 @@ describe('DateTime record formatter unit test', function() {
         var expectedRecords_YYYYMMDD_ShowTimeZone =
                 [[{
                     id     : 7,
-                    value  : '2015-04-12T05:51:19z',
-                    display: '2015-04-12 EDT'
+                    value  : testDateHelper.thisYear + '-04-12T05:51:19z',
+                    display: testDateHelper.thisYear + '-04-12 EDT'
                 }]];
 
         // FieldInfo and record expectation for field with YYYY_MM_DD format and ShowTimeZone, ShowMonthAsName flag
@@ -2079,8 +2080,8 @@ describe('DateTime record formatter unit test', function() {
         var expectedRecords_YYYYMMDD_ShowTimeZone_ShowMonthAsName =
                 [[{
                     id     : 7,
-                    value  : '2015-04-12T05:51:19z',
-                    display: '2015-Apr-12 EDT'
+                    value  : testDateHelper.thisYear + '-04-12T05:51:19z',
+                    display: testDateHelper.thisYear + '-Apr-12 EDT'
                 }]];
 
         // FieldInfo and record expectation for field with YYYY_MM_DD format and ShowTimeZone, ShowDayOfWeek flag
@@ -2091,8 +2092,8 @@ describe('DateTime record formatter unit test', function() {
         var expectedRecords_YYYYMMDD_ShowTimeZone_ShowDayOfWeek =
                 [[{
                     id     : 7,
-                    value  : '2015-04-12T05:51:19z',
-                    display: 'Sunday, 2015-04-12 EDT'
+                    value  : testDateHelper.thisYear + '-04-12T05:51:19z',
+                    display: testDateHelper.dayOfWeekAprilTwelve + ', ' + testDateHelper.thisYear + '-04-12 EDT'
                 }]];
 
         // FieldInfo and record expectation for field with YYYY_MM_DD format and ShowTimeZone, HideYearIfCurrent flag
@@ -2103,7 +2104,7 @@ describe('DateTime record formatter unit test', function() {
         var expectedRecords_YYYYMMDD_ShowTimeZone_HideYearIfCurrent =
                 [[{
                     id     : 7,
-                    value  : '2015-04-12T05:51:19z',
+                    value  : testDateHelper.thisYear + '-04-12T05:51:19z',
                     display: '04-12 EDT'
                 }]];
 
@@ -2116,8 +2117,8 @@ describe('DateTime record formatter unit test', function() {
         var expectedRecords_YYYYMMDD_ShowTimeZone_ShowMonthAsName_ShowDayOfWeek =
                 [[{
                     id     : 7,
-                    value  : '2015-04-12T05:51:19z',
-                    display: 'Sunday, 2015-Apr-12 EDT'
+                    value  : testDateHelper.thisYear + '-04-12T05:51:19z',
+                    display: testDateHelper.dayOfWeekAprilTwelve + ', ' + testDateHelper.thisYear + '-Apr-12 EDT'
                 }]];
 
         // FieldInfo and record expectation for field with YYYY_MM_DD format and ShowTimeZone, ShowMonthAsName, HideYearIfCurrent flag
@@ -2129,7 +2130,7 @@ describe('DateTime record formatter unit test', function() {
         var expectedRecords_YYYYMMDD_ShowTimeZone_ShowMonthAsName_HideYearIfCurrent =
                 [[{
                     id     : 7,
-                    value  : '2015-04-12T05:51:19z',
+                    value  : testDateHelper.thisYear + '-04-12T05:51:19z',
                     display: 'Apr-12 EDT'
                 }]];
 
@@ -2142,8 +2143,8 @@ describe('DateTime record formatter unit test', function() {
         var expectedRecords_YYYYMMDD_ShowTimeZone_ShowDayOfWeek_HideYearIfCurrent =
                 [[{
                     id     : 7,
-                    value  : '2015-04-12T05:51:19z',
-                    display: 'Sunday, 04-12 EDT'
+                    value  : testDateHelper.thisYear + '-04-12T05:51:19z',
+                    display: testDateHelper.dayOfWeekAprilTwelve + ', 04-12 EDT'
                 }]];
 
 
@@ -2154,8 +2155,8 @@ describe('DateTime record formatter unit test', function() {
         var expectedRecords_YYYYMMDD_ShowMonthAsName =
                 [[{
                     id     : 7,
-                    value  : '2015-04-12T05:51:19z',
-                    display: '2015-Apr-12'
+                    value  : testDateHelper.thisYear + '-04-12T05:51:19z',
+                    display: testDateHelper.thisYear + '-Apr-12'
                 }]];
 
         // FieldInfo and record expectation for field with YYYY_MM_DD format and ShowMonthAsName, ShowDayOfWeek flag
@@ -2166,8 +2167,8 @@ describe('DateTime record formatter unit test', function() {
         var expectedRecords_YYYYMMDD_ShowMonthAsName_ShowDayOfWeek =
                 [[{
                     id     : 7,
-                    value  : '2015-04-12T05:51:19z',
-                    display: 'Sunday, 2015-Apr-12'
+                    value  : testDateHelper.thisYear + '-04-12T05:51:19z',
+                    display: testDateHelper.dayOfWeekAprilTwelve + ', ' + testDateHelper.thisYear + '-Apr-12'
                 }]];
 
         // FieldInfo and record expectation for field with YYYY_MM_DD format and ShowMonthAsName, HideYearIfCurrent flag
@@ -2178,7 +2179,7 @@ describe('DateTime record formatter unit test', function() {
         var expectedRecords_YYYYMMDD_ShowMonthAsName_HideYearIfCurrent =
                 [[{
                     id     : 7,
-                    value  : '2015-04-12T05:51:19z',
+                    value  : testDateHelper.thisYear + '-04-12T05:51:19z',
                     display: 'Apr-12'
                 }]];
 
@@ -2189,7 +2190,7 @@ describe('DateTime record formatter unit test', function() {
         var expectedRecords_YYYYMMDD_HideYearIfCurrent =
                 [[{
                     id     : 7,
-                    value  : '2015-04-12T05:51:19z',
+                    value  : testDateHelper.thisYear + '-04-12T05:51:19z',
                     display: '04-12'
                 }]];
         var expectedRecords_YYYYMMDD_HideYearIfCurrent_DiffYear =
@@ -2210,8 +2211,8 @@ describe('DateTime record formatter unit test', function() {
         var expectedRecords_YYYYMMDD_AllFlags =
                 [[{
                     id     : 7,
-                    value  : '2015-04-12T05:51:19z',
-                    display: 'Sunday, Apr-12 1:51 AM EDT'
+                    value  : testDateHelper.thisYear + '-04-12T05:51:19z',
+                    display: testDateHelper.dayOfWeekAprilTwelve + ', Apr-12 1:51 AM EDT'
                 }]];
         var expectedRecords_YYYYMMDD_AllFlags_DiffYear =
                 [[{
@@ -2303,7 +2304,7 @@ describe('DateTime record formatter unit test', function() {
         // Default DateTime record input
         var recordsInput = [[{
             id   : 7,
-            value: '2015-04-12T18:51:19z'
+            value: testDateHelper.thisYear + '-04-12T18:51:19z'
         }]];
 
         var recordsInputDiffYear = [[{
@@ -2330,8 +2331,8 @@ describe('DateTime record formatter unit test', function() {
         var expectedRecords_InvalidFormat =
                 [[{
                     id     : 7,
-                    value  : '2015-04-12T18:51:19z',
-                    display: '04-12-2015'
+                    value  : testDateHelper.thisYear + '-04-12T18:51:19z',
+                    display: '04-12-' + testDateHelper.thisYear
                 }]];
 
         // FieldInfo and record expectation for field with invalid format and showDayOfWeek flag
@@ -2341,8 +2342,8 @@ describe('DateTime record formatter unit test', function() {
         var expectedRecords_InvalidFormat_ShowTime =
                 [[{
                     id     : 7,
-                    value  : '2015-04-12T18:51:19z',
-                    display: '04-12-2015 2:51 PM'
+                    value  : testDateHelper.thisYear + '-04-12T18:51:19z',
+                    display: '04-12-' + testDateHelper.thisYear + ' 2:51 PM'
                 }]];
 
         // FieldInfo and record expectation for field with invalid format and ShowTime, ShowTimeZone flag
@@ -2353,8 +2354,8 @@ describe('DateTime record formatter unit test', function() {
         var expectedRecords_InvalidFormat_ShowTime_ShowTimeZone =
                 [[{
                     id     : 7,
-                    value  : '2015-04-12T18:51:19z',
-                    display: '04-12-2015 2:51 PM EDT'
+                    value  : testDateHelper.thisYear + '-04-12T18:51:19z',
+                    display: '04-12-' + testDateHelper.thisYear + ' 2:51 PM EDT'
                 }]];
 
 
@@ -2366,8 +2367,8 @@ describe('DateTime record formatter unit test', function() {
         var expectedRecords_InvalidFormat_ShowTime_ShowMonthAsName =
                 [[{
                     id     : 7,
-                    value  : '2015-04-12T18:51:19z',
-                    display: 'Apr-12-2015 2:51 PM'
+                    value  : testDateHelper.thisYear + '-04-12T18:51:19z',
+                    display: 'Apr-12-' + testDateHelper.thisYear + ' 2:51 PM'
                 }]];
 
 
@@ -2379,8 +2380,8 @@ describe('DateTime record formatter unit test', function() {
         var expectedRecords_InvalidFormat_ShowTime_ShowDayOfWeek =
                 [[{
                     id     : 7,
-                    value  : '2015-04-12T18:51:19z',
-                    display: 'Sunday, 04-12-2015 2:51 PM'
+                    value  : testDateHelper.thisYear + '-04-12T18:51:19z',
+                    display: testDateHelper.dayOfWeekAprilTwelve + ', 04-12-' + testDateHelper.thisYear + ' 2:51 PM'
                 }]];
 
         // FieldInfo and record expectation for field with invalid format and ShowTime, HideYearIfCurrent flag
@@ -2391,7 +2392,7 @@ describe('DateTime record formatter unit test', function() {
         var expectedRecords_InvalidFormat_ShowTime_HideYearIfCurrent =
                 [[{
                     id     : 7,
-                    value  : '2015-04-12T18:51:19z',
+                    value  : testDateHelper.thisYear + '-04-12T18:51:19z',
                     display: '04-12 2:51 PM'
                 }]];
         var expectedRecords_InvalidFormat_ShowTime_HideYearIfCurrent_DiffYear =
@@ -2410,8 +2411,8 @@ describe('DateTime record formatter unit test', function() {
         var expectedRecords_InvalidFormat_ShowTime_ShowTimeZone_ShowMonthAsName =
                 [[{
                     id     : 7,
-                    value  : '2015-04-12T18:51:19z',
-                    display: 'Apr-12-2015 2:51 PM EDT'
+                    value  : testDateHelper.thisYear + '-04-12T18:51:19z',
+                    display: 'Apr-12-' + testDateHelper.thisYear + ' 2:51 PM EDT'
                 }]];
 
         // FieldInfo and record expectation for field with invalid format and ShowTime, ShowTimeZone, ShowDayOfWeek, HideYearIfCurrent flag
@@ -2424,7 +2425,7 @@ describe('DateTime record formatter unit test', function() {
         var expectedRecords_InvalidFormat_ShowTime_ShowTimeZone_ShowMonthAsName_HideYearIfCurrent =
                 [[{
                     id     : 7,
-                    value  : '2015-04-12T18:51:19z',
+                    value  : testDateHelper.thisYear + '-04-12T18:51:19z',
                     display: 'Apr-12 2:51 PM EDT'
                 }]];
 
@@ -2437,8 +2438,8 @@ describe('DateTime record formatter unit test', function() {
         var expectedRecords_InvalidFormat_ShowTime_ShowTimeZone_ShowDayOfWeek =
                 [[{
                     id     : 7,
-                    value  : '2015-04-12T18:51:19z',
-                    display: 'Sunday, 04-12-2015 2:51 PM EDT'
+                    value  : testDateHelper.thisYear + '-04-12T18:51:19z',
+                    display: testDateHelper.dayOfWeekAprilTwelve + ', 04-12-' + testDateHelper.thisYear + ' 2:51 PM EDT'
                 }]];
 
         // FieldInfo and record expectation for field with invalid format and ShowTime, ShowTimeZone, HideYearIfCurrent flag
@@ -2450,7 +2451,7 @@ describe('DateTime record formatter unit test', function() {
         var expectedRecords_InvalidFormat_ShowTime_ShowTimeZone_HideYearIfCurrent =
                 [[{
                     id     : 7,
-                    value  : '2015-04-12T18:51:19z',
+                    value  : testDateHelper.thisYear + '-04-12T18:51:19z',
                     display: '04-12 2:51 PM EDT'
                 }]];
 
@@ -2464,8 +2465,8 @@ describe('DateTime record formatter unit test', function() {
         var expectedRecords_InvalidFormat_ShowTime_ShowTimeZone_ShowDayOfWeek_HideYearIfCurrent =
                 [[{
                     id     : 7,
-                    value  : '2015-04-12T18:51:19z',
-                    display: 'Sunday, 04-12 2:51 PM EDT'
+                    value  : testDateHelper.thisYear + '-04-12T18:51:19z',
+                    display: testDateHelper.dayOfWeekAprilTwelve + ', 04-12 2:51 PM EDT'
                 }]];
 
         // FieldInfo and record expectation for field with invalid format and ShowTime, ShowMonthAsName, ShowDayOfWeek flag
@@ -2477,8 +2478,8 @@ describe('DateTime record formatter unit test', function() {
         var expectedRecords_InvalidFormat_ShowTime_ShowMonthAsName_ShowDayOfWeek =
                 [[{
                     id     : 7,
-                    value  : '2015-04-12T18:51:19z',
-                    display: 'Sunday, Apr-12-2015 2:51 PM'
+                    value  : testDateHelper.thisYear + '-04-12T18:51:19z',
+                    display: testDateHelper.dayOfWeekAprilTwelve + ', Apr-12-' + testDateHelper.thisYear + ' 2:51 PM'
                 }]];
 
         // FieldInfo and record expectation for field with invalid format and ShowTime, ShowMonthAsName, ShowDayOfWeek, HideYearIfCurrent flag
@@ -2491,8 +2492,8 @@ describe('DateTime record formatter unit test', function() {
         var expectedRecords_InvalidFormat_ShowTime_ShowMonthAsName_ShowDayOfWeek_HideYearIfCurrent =
                 [[{
                     id     : 7,
-                    value  : '2015-04-12T18:51:19z',
-                    display: 'Sunday, Apr-12 2:51 PM'
+                    value  : testDateHelper.thisYear + '-04-12T18:51:19z',
+                    display: testDateHelper.dayOfWeekAprilTwelve + ', Apr-12 2:51 PM'
                 }]];
 
         // FieldInfo and record expectation for field with invalid format and ShowDayOfWeek flag
@@ -2502,8 +2503,8 @@ describe('DateTime record formatter unit test', function() {
         var expectedRecords_InvalidFormat_ShowDayOfWeek =
                 [[{
                     id     : 7,
-                    value  : '2015-04-12T18:51:19z',
-                    display: 'Sunday, 04-12-2015'
+                    value  : testDateHelper.thisYear + '-04-12T18:51:19z',
+                    display: testDateHelper.dayOfWeekAprilTwelve + ', 04-12-' + testDateHelper.thisYear
                 }]];
 
         // FieldInfo and record expectation for field with invalid format and ShowDayOfWeek, HideYearIfCurrent flag
@@ -2514,8 +2515,8 @@ describe('DateTime record formatter unit test', function() {
         var expectedRecords_InvalidFormat_ShowDayOfWeek_HideYearIfCurrent =
                 [[{
                     id     : 7,
-                    value  : '2015-04-12T18:51:19z',
-                    display: 'Sunday, 04-12'
+                    value  : testDateHelper.thisYear + '-04-12T18:51:19z',
+                    display: testDateHelper.dayOfWeekAprilTwelve + ', 04-12'
                 }]];
 
         // FieldInfo and record expectation for field with invalid format and showTimeZone flag
@@ -2525,8 +2526,8 @@ describe('DateTime record formatter unit test', function() {
         var expectedRecords_InvalidFormat_ShowTimeZone =
                 [[{
                     id     : 7,
-                    value  : '2015-04-12T18:51:19z',
-                    display: '04-12-2015 EDT'
+                    value  : testDateHelper.thisYear + '-04-12T18:51:19z',
+                    display: '04-12-' + testDateHelper.thisYear + ' EDT'
                 }]];
 
         // FieldInfo and record expectation for field with invalid format and ShowTimeZone, ShowMonthAsName flag
@@ -2537,8 +2538,8 @@ describe('DateTime record formatter unit test', function() {
         var expectedRecords_InvalidFormat_ShowTimeZone_ShowMonthAsName =
                 [[{
                     id     : 7,
-                    value  : '2015-04-12T18:51:19z',
-                    display: 'Apr-12-2015 EDT'
+                    value  : testDateHelper.thisYear + '-04-12T18:51:19z',
+                    display: 'Apr-12-' + testDateHelper.thisYear + ' EDT'
                 }]];
 
         // FieldInfo and record expectation for field with invalid format and ShowTimeZone, ShowDayOfWeek flag
@@ -2549,8 +2550,8 @@ describe('DateTime record formatter unit test', function() {
         var expectedRecords_InvalidFormat_ShowTimeZone_ShowDayOfWeek =
                 [[{
                     id     : 7,
-                    value  : '2015-04-12T18:51:19z',
-                    display: 'Sunday, 04-12-2015 EDT'
+                    value  : testDateHelper.thisYear + '-04-12T18:51:19z',
+                    display: testDateHelper.dayOfWeekAprilTwelve + ', 04-12-' + testDateHelper.thisYear + ' EDT'
                 }]];
 
         // FieldInfo and record expectation for field with invalid format and ShowTimeZone, HideYearIfCurrent flag
@@ -2561,7 +2562,7 @@ describe('DateTime record formatter unit test', function() {
         var expectedRecords_InvalidFormat_ShowTimeZone_HideYearIfCurrent =
                 [[{
                     id     : 7,
-                    value  : '2015-04-12T18:51:19z',
+                    value  : testDateHelper.thisYear + '-04-12T18:51:19z',
                     display: '04-12 EDT'
                 }]];
 
@@ -2574,8 +2575,8 @@ describe('DateTime record formatter unit test', function() {
         var expectedRecords_InvalidFormat_ShowTimeZone_ShowMonthAsName_ShowDayOfWeek =
                 [[{
                     id     : 7,
-                    value  : '2015-04-12T18:51:19z',
-                    display: 'Sunday, Apr-12-2015 EDT'
+                    value  : testDateHelper.thisYear + '-04-12T18:51:19z',
+                    display: testDateHelper.dayOfWeekAprilTwelve + ', Apr-12-' + testDateHelper.thisYear + ' EDT'
                 }]];
 
         // FieldInfo and record expectation for field with invalid format and ShowTimeZone, ShowMonthAsName, HideYearIfCurrent flag
@@ -2587,7 +2588,7 @@ describe('DateTime record formatter unit test', function() {
         var expectedRecords_InvalidFormat_ShowTimeZone_ShowMonthAsName_HideYearIfCurrent =
                 [[{
                     id     : 7,
-                    value  : '2015-04-12T18:51:19z',
+                    value  : testDateHelper.thisYear + '-04-12T18:51:19z',
                     display: 'Apr-12 EDT'
                 }]];
 
@@ -2600,8 +2601,8 @@ describe('DateTime record formatter unit test', function() {
         var expectedRecords_InvalidFormat_ShowTimeZone_ShowDayOfWeek_HideYearIfCurrent =
                 [[{
                     id     : 7,
-                    value  : '2015-04-12T18:51:19z',
-                    display: 'Sunday, 04-12 EDT'
+                    value  : testDateHelper.thisYear + '-04-12T18:51:19z',
+                    display: testDateHelper.dayOfWeekAprilTwelve + ', 04-12 EDT'
                 }]];
 
         // FieldInfo and record expectation for field with invalid format and ShowMonthAsName flag
@@ -2611,8 +2612,8 @@ describe('DateTime record formatter unit test', function() {
         var expectedRecords_InvalidFormat_ShowMonthAsName =
                 [[{
                     id     : 7,
-                    value  : '2015-04-12T18:51:19z',
-                    display: 'Apr-12-2015'
+                    value  : testDateHelper.thisYear + '-04-12T18:51:19z',
+                    display: 'Apr-12-' + testDateHelper.thisYear
                 }]];
 
         // FieldInfo and record expectation for field with invalid format and ShowMonthAsName, ShowDayOfWeek flag
@@ -2623,8 +2624,8 @@ describe('DateTime record formatter unit test', function() {
         var expectedRecords_InvalidFormat_ShowMonthAsName_ShowDayOfWeek =
                 [[{
                     id     : 7,
-                    value  : '2015-04-12T18:51:19z',
-                    display: 'Sunday, Apr-12-2015'
+                    value  : testDateHelper.thisYear + '-04-12T18:51:19z',
+                    display: testDateHelper.dayOfWeekAprilTwelve + ', Apr-12-' + testDateHelper.thisYear
                 }]];
 
         // FieldInfo and record expectation for field with invalid format and ShowMonthAsName, HideYearIfCurrent flag
@@ -2635,7 +2636,7 @@ describe('DateTime record formatter unit test', function() {
         var expectedRecords_InvalidFormat_ShowMonthAsName_HideYearIfCurrent =
                 [[{
                     id     : 7,
-                    value  : '2015-04-12T18:51:19z',
+                    value  : testDateHelper.thisYear + '-04-12T18:51:19z',
                     display: 'Apr-12'
                 }]];
 
@@ -2646,7 +2647,7 @@ describe('DateTime record formatter unit test', function() {
         var expectedRecords_InvalidFormat_HideYearIfCurrent =
                 [[{
                     id     : 7,
-                    value  : '2015-04-12T18:51:19z',
+                    value  : testDateHelper.thisYear + '-04-12T18:51:19z',
                     display: '04-12'
                 }]];
         var expectedRecords_InvalidFormat_HideYearIfCurrent_DiffYear =
@@ -2667,8 +2668,8 @@ describe('DateTime record formatter unit test', function() {
         var expectedRecords_InvalidFormat_AllFlags =
                 [[{
                     id     : 7,
-                    value  : '2015-04-12T18:51:19z',
-                    display: 'Sunday, Apr-12 2:51 PM EDT'
+                    value  : testDateHelper.thisYear + '-04-12T18:51:19z',
+                    display: testDateHelper.dayOfWeekAprilTwelve + ', Apr-12 2:51 PM EDT'
                 }]];
         var expectedRecords_InvalidFormat_AllFlags_DiffYear =
                 [[{
