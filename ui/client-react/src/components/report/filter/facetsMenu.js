@@ -24,20 +24,25 @@ var FacetsMenu = React.createClass({
     selectHandler : function() {
     },
 
+    /**
+     * render a facet field item and its values
+     **/
     facetsMenu: function() {
         return this.props.facetsData.list && this.props.facetsData.list.map((facet) => {
-            return <FacetsItem key={facet.fid} item={facet} onSelect={this.props.selectHandler}
+            return <FacetsItem key={facet.fid}
+                               item={facet}
+                               onSelect={this.props.selectHandler}
                                 {...this.props} />;
         });
     },
 
     render() {
-        let classes = 'facetList ' + (this.props.showing ? '' : 'hidden');
+        let classes = 'facetsMenu ' + (this.props.showing ? '' : 'hidden');
         return (
             <div className={classes}>
                <div className="callout border-callout classes">
                {/* handle the sublists of facets each (type dependent)*/}
-                <div className="facets ">
+                <div className="facets">
                     <div className="facet collapsed">
                         <div className="facetFieldName">Names</div>
                         {/* handle the sublists of values each */}

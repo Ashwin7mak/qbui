@@ -16,8 +16,8 @@ var ReportToolsAndContent = React.createClass({
     render() {
 
         return (<div className="reportToolsAndContentContainer">
-            <ReportToolbar reportData={this.props.reportData} />
-            <ReportContent reportData={this.props.reportData} />
+            <ReportToolbar reportData={this.props.reportData}  {...this.props}  />
+            <ReportContent reportData={this.props.reportData}  {...this.props} />
         </div>);
     }
 });

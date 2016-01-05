@@ -10,6 +10,9 @@ import {I18nMessage} from '../../../../src/utils/i18nMessage';
 let FluxMixin = Fluxxor.FluxMixin(React);
 var FilterSearchBox = React.createClass({
     mixins: [FluxMixin],
+    propTypes: {
+        //TODO
+    },
 
     render() {
         var nameForRecords = "Records"; // todo get from table info

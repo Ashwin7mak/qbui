@@ -96,7 +96,8 @@ module.exports = function(grunt) {
                 port   : 9000,
                 sslPort: 9443,
                 host   : process.env.HOST || 'localhost',
-                script : '<%= express.root %>/app.js'
+                script : '<%= express.root %>/app.js',
+                realm : process.env.REALM ? (process.env.REALM + '.') : ''
             },
             local  : {
                 options: {
@@ -119,7 +120,7 @@ module.exports = function(grunt) {
         },
         open     : {
             server: {
-                url: 'http://<%= express.options.host %>:<%= express.options.port %>'
+                url: 'http://<%= express.options.realm %><%= express.options.host %>:<%= express.options.port %>'
             }
         },
         watch    : {
@@ -407,7 +408,8 @@ module.exports = function(grunt) {
                     mask          : '**/*.spec.js',
                     root          : 'server',
                     noColors      : !useColors,
-                    reportFormats : ['lcov'],
+                    mochaOptions: ['--harmony'],
+                    reportFormats : ['cobertura', 'lcov'],
                     coverageFolder: 'build/reports/server/coverage'
                 }
             }
@@ -638,7 +640,8 @@ module.exports = function(grunt) {
         grunt.task.run([
             'clean:client',
             'clean:server',
-            'clean:dist'
+            'clean:dist',
+            'clean:modulesProd'
         ]);
     });
 

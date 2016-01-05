@@ -6,27 +6,27 @@
   width: 25em;
 }
 
-.filterListButton {  /* icon button to bring up list of filters */
+.facetsMenuButton {  /* icon button to bring up list of filters */
   margin-left: 3.5rem;
 }
 
-.facetList { /* the container is shown when filter icon is clicked */
+.facetsMenu { /* the container is shown when filter icon is clicked */
   display: block;
   position: relative;
 }
-.facetList * { /* the container is shown when filter icon is clicked */
+.facetsMenu * { /* the container is shown when filter icon is clicked */
   margin: 0;
   padding: 0;
 }
 
-.facetList.collapsed { /* the container hidden when filter icon is closed */
+.facetsMenu.hidden { /* the container hidden when filter icon is closed */
   display: none;
 }
 
 .facets { /* collection of facets, contains facet elements */
   width : 400px;
-  border: 1px solid #dedede;
-  outline: 1px solid #f6f6f6;
+  border: 1px solid #f6f6f6;
+  outline: 1px solid #dedede;
   box-sizing : border-box;
   position: relative;
   font-style: normal;

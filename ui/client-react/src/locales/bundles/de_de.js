@@ -50,6 +50,10 @@ export default {
                 sign_out: "Austragen"
             }
 
+        },
+        report : {
+            filteredRecordCount : "{filteredRecordCount} von {recordCount} {nameForRecords} ",
+            recordCount : "{recordCount} {nameForRecords} "
         }
     }
 };

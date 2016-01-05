@@ -7,18 +7,30 @@ import Fluxxor from 'fluxxor';
 import './report.scss';
 import {I18nMessage} from '../../../src/utils/i18nMessage';
 import ReportSearchBox from './filter/filterSearchBox';
-import FilterResultsButton from './filter/filterListButton';
+import FilterResultsButton from './filter/facetsMenuButton';
 
 let FluxMixin = Fluxxor.FluxMixin(React);
 
 
 var RecordsCount = React.createClass({
+    /**
+     * renders the record count
+     * if we have some dynamic filtering in effect include the number of filtered records out of the total
+     * otherwise just show the reports total records
+     */
     render() {
+        let message = "report.recordCount";
+        if (this.props.isFiltering) {
+            message = "report.filteredRecordCount";
+        }
+
         return (<div className="recordsCount">
-            {// to do globalize this
-            }
-            {this.props.filteredNumberRecords} {this.props.numberRecords} {this.props.nameforRecords}
-        </div>);
+                <I18nMessage message={message}
+                    filteredRecordCount={this.props.filteredRecordCount}
+                    recordCount={this.props.recordCount}
+                    nameForRecords={this.props.nameForRecords}
+                />
+            </div>);
     }
 });
 

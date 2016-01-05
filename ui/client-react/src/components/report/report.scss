@@ -11,6 +11,10 @@
   margin-left:10px;
   margin-right:10px;
 
+  //background-image: linear-gradient(to top, $color13 0%, $color14 100%);
+  background-color: $color2;
+
+
   .reportToolsAndContentContainer {
 
     .reportToolbar {
@@ -27,7 +31,7 @@
         width: 25em;
       }
 
-      .filterListButton {
+      .facetsMenuButton {
         //margin-top: .5rem;
         margin-left: 1.5rem;
       }
@@ -43,11 +47,6 @@
     }
 
   }
-
-
-}
-
-.facetList {
 
 }
 
