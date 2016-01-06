@@ -28,13 +28,13 @@ class RecordService extends BaseService {
             params.format = 'display';  // default is 'raw'
         }
         if (optionalparams) {
-            if (StringUtils.isString(optionalparams.query)) {
+            if (StringUtils.isNonEmptyString(optionalparams.query)) {
                 params.query = optionalparams.query;
             }
-            if (StringUtils.isString(optionalparams.clist)) {
+            if (StringUtils.isNonEmptyString(optionalparams.clist)) {
                 params.clist = optionalparams.clist;
             }
-            if (StringUtils.isString(optionalparams.slist)) {
+            if (StringUtils.isNonEmptyString(optionalparams.slist)) {
                 params.slist = optionalparams.slist;
             }
             if (NumberUtils.isInt(optionalparams.offset) && NumberUtils.isInt(optionalparams.rows)) {

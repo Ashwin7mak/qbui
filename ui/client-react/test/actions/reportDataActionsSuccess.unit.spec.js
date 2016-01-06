@@ -11,6 +11,7 @@ describe('Report Data Actions Loadreport functions -- success', () => {
     let appId = '1';
     let tblId = '2';
     let rptId = '3';
+    let facetExp = 'abc';
     let responseReportData = {
         data: {
             name: 'name'
@@ -54,7 +55,7 @@ describe('Report Data Actions Loadreport functions -- success', () => {
         spyOn(flux.dispatchBinder, 'dispatch');
         reportDataActions.__Rewire__('ReportService', mockReportService);
 
-        promise = flux.actions.loadReport(appId, tblId, rptId, true);
+        promise = flux.actions.loadReport(appId, tblId, rptId, true, facetExp);
 
         //  expect a load report event to get fired before the promise returns
         expect(flux.dispatchBinder.dispatch).toHaveBeenCalledWith(actions.LOAD_REPORT, {appId, tblId, rptId});
@@ -88,6 +89,7 @@ describe('Report Data Actions Filterreport functions -- success', () => {
     let appId = '1';
     let tblId = '2';
     let rptId = '3';
+    let facetExp = 'abc';
     let responseReportData = {
         data: {
             name: 'name'
@@ -100,7 +102,7 @@ describe('Report Data Actions Filterreport functions -- success', () => {
         }
     };
     let responseResultQuery = {
-        data: "testQuery"
+        data: 'testQuery'
     };
 
     let promise;
@@ -135,7 +137,7 @@ describe('Report Data Actions Filterreport functions -- success', () => {
         reportDataActions.__Rewire__('ReportService', mockReportService);
         reportDataActions.__Rewire__('RecordService', mockRecordService);
 
-        promise = flux.actions.filterReport(appId, tblId, rptId, false);
+        promise = flux.actions.filterReport(appId, tblId, rptId, false, facetExp);
 
         expect(flux.dispatchBinder.dispatch).toHaveBeenCalledWith(actions.LOAD_REPORT, {appId, tblId, rptId});
         flux.dispatchBinder.dispatch.calls.reset();

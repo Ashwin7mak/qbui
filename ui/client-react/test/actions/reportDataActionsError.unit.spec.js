@@ -1,4 +1,7 @@
 /* jshint proto: true */
+/** TODO: Since the calls to be tested are async we are using beforeTest set up to make those calls and complete before the tests are run.
+ * This means that set up needs to happen for each test in a beforeTest block - causing lot of repetition. Is there a way to make the async call and get reponse right away before testing the outcome?
+ */
 
 import Fluxxor from 'fluxxor';
 import reportDataActions from '../../src/actions/reportDataActions';
@@ -11,6 +14,7 @@ describe('Report Data Actions filter report fail on resolve facet', () => {
     let appId = '1';
     let tblId = '2';
     let rptId = '3';
+    let facetExp = 'abc';
     let responseReportData = {
         data: {
             name: 'name'
@@ -23,7 +27,7 @@ describe('Report Data Actions filter report fail on resolve facet', () => {
         }
     };
     let responseResultQuery = {
-        data: "testQuery"
+        data: 'testQuery'
     };
 
     let promise;
@@ -58,7 +62,7 @@ describe('Report Data Actions filter report fail on resolve facet', () => {
         reportDataActions.__Rewire__('ReportService', mockReportService);
         reportDataActions.__Rewire__('RecordService', mockRecordService);
 
-        promise = flux.actions.filterReport(appId, tblId, rptId, false);
+        promise = flux.actions.filterReport(appId, tblId, rptId, false, facetExp);
 
         //  expect a load report event to get fired before the promise returns
         expect(flux.dispatchBinder.dispatch).toHaveBeenCalledWith(actions.LOAD_REPORT, {appId, tblId, rptId});
@@ -94,6 +98,7 @@ describe('Report Data Actions filter report fail on get records', () => {
     let appId = '1';
     let tblId = '2';
     let rptId = '3';
+    let facetExp = 'abc';
     let responseReportData = {
         data: {
             name: 'name'
@@ -141,7 +146,7 @@ describe('Report Data Actions filter report fail on get records', () => {
         reportDataActions.__Rewire__('ReportService', mockReportService);
         reportDataActions.__Rewire__('RecordService', mockRecordService);
 
-        promise = flux.actions.filterReport(appId, tblId, rptId, false);
+        promise = flux.actions.filterReport(appId, tblId, rptId, false, facetExp);
         expect(flux.dispatchBinder.dispatch).toHaveBeenCalledWith(actions.LOAD_REPORT, {appId, tblId, rptId});
         flux.dispatchBinder.dispatch.calls.reset();
         promise.then(
@@ -170,6 +175,7 @@ describe('Report Data Actions filter report exception on get records', () => {
     let appId = '1';
     let tblId = '2';
     let rptId = '3';
+    let facetExp = 'abc';
     let responseReportData = {
         data: {
             name: 'name'
@@ -216,7 +222,7 @@ describe('Report Data Actions filter report exception on get records', () => {
         reportDataActions.__Rewire__('ReportService', mockReportService);
         reportDataActions.__Rewire__('RecordService', mockRecordService);
 
-        promise = flux.actions.filterReport(appId, tblId, rptId, false);
+        promise = flux.actions.filterReport(appId, tblId, rptId, false, facetExp);
         expect(flux.dispatchBinder.dispatch).toHaveBeenCalledWith(actions.LOAD_REPORT, {appId, tblId, rptId});
         flux.dispatchBinder.dispatch.calls.reset();
         promise.then(

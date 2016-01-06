@@ -25,11 +25,11 @@ describe('StringUtils', () => {
         expect(StringUtils.trim(true)).toBe(true);
     });
 
-    it('test isString function', () => {
-        expect(StringUtils.isString('abc')).toBe(true);
-        expect(StringUtils.isString(' abc ')).toBe(true);
-        expect(StringUtils.isString(123)).toBe(false);
-        expect(StringUtils.isString('123')).toBe(true);
-        expect(StringUtils.isString(' ')).toBe(false);
+    it('test isNonEmptyString function', () => {
+        expect(StringUtils.isNonEmptyString('abc')).toBe(true);
+        expect(StringUtils.isNonEmptyString(' abc ')).toBe(true);
+        expect(StringUtils.isNonEmptyString(123)).toBe(false);
+        expect(StringUtils.isNonEmptyString('123')).toBe(true);
+        expect(StringUtils.isNonEmptyString(' ')).toBe(false);
     });
 });

@@ -1,5 +1,6 @@
 // action creators
 import * as actions from '../constants/actions';
+import * as query from '../constants/query';
 import ReportService from '../services/reportService';
 import RecordService from '../services/recordService';
 import Logger from '../utils/logger';
@@ -33,19 +34,19 @@ let reportDataActions = {
                     deferred.resolve(report);
                 }.bind(this),
                 function(error) {
-                    logger.debug('Report service calls error:' + error);
+                    logger.error('Report service calls error:' + error);
                     this.dispatch(actions.LOAD_REPORT_FAILED);
                     deferred.reject(error);
                 }.bind(this))
                 .catch(
                 function(ex) {
-                    logger.debug('Report service calls exception:' + ex);
+                    logger.error('Report service calls exception:' + ex);
                     this.dispatch(actions.LOAD_REPORT_FAILED);
                     deferred.reject(ex);
                 }.bind(this)
             );
         } else {
-            logger.warn('Missing required input parameters to reportDataActions.loadReport');
+            logger.error('Missing required input parameters to reportDataActions.loadReport');
             deferred.reject('error');
         }
 
@@ -61,7 +62,7 @@ let reportDataActions = {
     filterReport: function(appId, tblId, rptId, format, facetExpression) {
         let deferred = Promise.defer();
 
-        if (appId && tblId && rptId) {
+        if (appId && tblId && rptId && facetExpression) {
             let reportService = new ReportService();
             let recordService = new RecordService();
             this.dispatch(actions.LOAD_REPORT, {appId, tblId, rptId});
@@ -73,61 +74,66 @@ let reportDataActions = {
             Promise.all(promises).then(
                 function(response) {
                     var queryString = response[1].data;
-                    //TODO: Add the rest of query params like numRows, offset
-                    var report = {
-                        name: response[0].data.name,
-                        query: response[0].data.query,
-                        columns:response[0].data.fids ? response[0].data.fids.join(",") : "",
-                        sortList: response[0].data.sortFids ? response[0].data.sortFids.join(",") : ""
-                    };
 
-                    var mergedQueryString = "";
-                    if (report.query){
-                        mergedQueryString = report.query;
-                        if (queryString) {
-                            mergedQueryString += "AND" + queryString;
+                    if (queryString) {
+                        //TODO: Add the rest of query params like numRows, offset
+                        var report = {
+                            name: response[0].data.name,
+                            query: response[0].data.query,
+                            columns: response[0].data.fids ? response[0].data.fids.join(",") : "",
+                            sortList: response[0].data.sortFids ? response[0].data.sortFids.join(",") : ""
+                        };
+
+                        var mergedQueryString = "";
+                        if (report.query) {
+                            mergedQueryString = report.query;
+                            if (queryString) {
+                                mergedQueryString +=  query.QUERY_AND + queryString;
+                            }
+                        } else if (queryString) {
+                            mergedQueryString = queryString;
                         }
-                    } else if (queryString) {
-                        mergedQueryString = queryString;
-                    }
-                    report.query = mergedQueryString;
+                        report.query = mergedQueryString;
 
-                    promises = [];
-                    //3rd call to get filtered records based off of the updated query string
-                    promises.push(recordService.getRecords(appId, tblId, format, report));
-                    Promise.all(promises).then(
-                        function(recordresponse) {
-                            logger.debug('Records service calls successful');
-                            this.dispatch(actions.LOAD_RECORDS_SUCCESS, recordresponse[0].data);
-                            deferred.resolve(recordresponse[0].data);
-                        }.bind(this),
-                        function(error) {
-                            logger.debug('Records service calls error:' + error);
-                            this.dispatch(actions.LOAD_RECORDS_FAILED);
-                            deferred.reject(error);
-                        }.bind(this))
-                        .catch(
-                        function(ex) {
-                            logger.debug('Records service calls exception:' + ex);
-                            this.dispatch(actions.LOAD_RECORDS_FAILED);
-                            deferred.reject(ex);
-                        }.bind(this)
-                    );
+                        //3rd call to get filtered records based off of the updated query string
+                        recordService.getRecords(appId, tblId, format, report).then(
+                            function(recordresponse) {
+                                logger.debug('Records service calls successful');
+                                this.dispatch(actions.LOAD_RECORDS_SUCCESS, recordresponse.data);
+                                deferred.resolve(recordresponse.data);
+                                deferred.resolve(recordresponse.data);
+                            }.bind(this),
+                            function(error) {
+                                logger.error('Records service calls error:' + error);
+                                this.dispatch(actions.LOAD_RECORDS_FAILED);
+                                deferred.reject(error);
+                            }.bind(this))
+                            .catch(
+                            function(ex) {
+                                logger.error('Records service calls exception:' + ex);
+                                this.dispatch(actions.LOAD_RECORDS_FAILED);
+                                deferred.reject(ex);
+                            }.bind(this)
+                        );
+                    } else {
+                        logger.error('Error resolving facet expression to a query.');
+                        deferred.reject('error');
+                    }
                 }.bind(this),
                 function(error) {
-                    logger.debug('Report service calls error:' + error);
+                    logger.error('Report service calls error:' + error);
                     this.dispatch(actions.LOAD_REPORT_FAILED);
                     deferred.reject(error);
                 }.bind(this))
                 .catch(
                 function(ex) {
-                    logger.debug('Report service calls exception:' + ex);
+                    logger.error('Report service calls exception:' + ex);
                     this.dispatch(actions.LOAD_REPORT_FAILED);
                     deferred.reject(ex);
                 }.bind(this)
             );
         } else {
-            logger.warn('Missing required input parameters to reportDataActions.filterReport');
+            logger.error('Missing required input parameters to reportDataActions.filterReport');
             deferred.reject('error');
         }
 

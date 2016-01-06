@@ -19,7 +19,7 @@ class StringUtils {
      * @param val
      * @returns {boolean}
      */
-    static isString(val) {
+    static isNonEmptyString(val) {
         return (typeof val === 'string' && StringUtils.trim(val).length > 0);
     }
 }
