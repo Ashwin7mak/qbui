@@ -264,7 +264,7 @@
                                 currentRecord.forEach(function(fieldValue) {
                                     if (fieldValue.id === records[j].expectedFieldValue.id) {
                                         assert.deepEqual(fieldValue, records[j].expectedFieldValue, 'Unexpected field value returned: ' +
-                                                JSON.stringify(fieldValue) + ', ' + JSON.stringify(records[j].expectedFieldValue));
+                                            JSON.stringify(fieldValue) + ', ' + JSON.stringify(records[j].expectedFieldValue));
                                     }
                                 });
                             }
@@ -274,10 +274,7 @@
                         });
                 });
             });
-
-        }
-        );
-
+        });
 
         /**
          * DataProvider containing Records and record display expectations for MM_DD_YYYY Date field with all display props set
