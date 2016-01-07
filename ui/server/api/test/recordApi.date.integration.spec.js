@@ -6,6 +6,7 @@
     require('../../app');
     var testConsts = require('./api.test.constants');
     var promise = require('bluebird');
+    var testDateHelper = require('./date.test.helper');
 
 
     /**
@@ -14,7 +15,7 @@
     describe('API - Date record test cases - ', function() {
 
 
-        var dateCurrentYear = '2015-04-12';
+        var dateCurrentYear = testDateHelper.thisYear + '-04-12';
         var dateDiffYear = '2000-04-12';
 
         var appWithNoFlags = {
@@ -70,7 +71,7 @@
         function noFlagsDateDataProvider(fid) {
             // Date in current year
             var currentYearInput = [{id: fid, value: dateCurrentYear}];
-            var expectedCurrentYearRecord = {id: fid, value: dateCurrentYear, display: '04-12-2015'};
+            var expectedCurrentYearRecord = {id: fid, value: dateCurrentYear, display: '04-12-' + testDateHelper.thisYear};
 
             // Date in different year
             var diffYearInput = [{id: fid, value: dateDiffYear}];
@@ -163,8 +164,7 @@
                             }
                             done();
                         }).catch(function(errorMsg) {
-                            assert(false, 'unable to resolve all records: ' + JSON.stringify(errorMsg));
-                            done();
+                            done(new Error('unable to resolve all records: ' + JSON.stringify(errorMsg)));
                         });
                 });
             });
@@ -177,7 +177,7 @@
 
             // Date in current year
             var currentYearInput = [{id: fid, value: dateCurrentYear}];
-            var expectedCurrentYearRecord = {id: fid, value: dateCurrentYear, display: 'Sunday, 12-Apr'};
+            var expectedCurrentYearRecord = {id: fid, value: dateCurrentYear, display: testDateHelper.dayOfWeekAprilTwelve + ', 12-Apr'};
 
             // Date in different year
             var diffYearInput = [{id: fid, value: dateDiffYear}];
@@ -264,18 +264,20 @@
                                 currentRecord.forEach(function(fieldValue) {
                                     if (fieldValue.id === records[j].expectedFieldValue.id) {
                                         assert.deepEqual(fieldValue, records[j].expectedFieldValue, 'Unexpected field value returned: ' +
-                                            JSON.stringify(fieldValue) + ', ' + JSON.stringify(records[j].expectedFieldValue));
+                                                JSON.stringify(fieldValue) + ', ' + JSON.stringify(records[j].expectedFieldValue));
                                     }
                                 });
                             }
                             done();
                         }).catch(function(errorMsg) {
-                            assert(false, 'unable to resolve all records: ' + JSON.stringify(errorMsg));
-                            done();
+                            done(new Error('unable to resolve all records: ' + JSON.stringify(errorMsg)));
                         });
                 });
             });
-        });
+
+        }
+        );
+
 
         /**
          * DataProvider containing Records and record display expectations for MM_DD_YYYY Date field with all display props set
@@ -284,7 +286,7 @@
 
             // Date in current year
             var currentYearInput = [{id: fid, value: dateCurrentYear}];
-            var expectedCurrentYearRecord = {id: fid, value: dateCurrentYear, display: 'Sunday, Apr-12'};
+            var expectedCurrentYearRecord = {id: fid, value: dateCurrentYear, display: testDateHelper.dayOfWeekAprilTwelve + ', Apr-12'};
 
             // Date in different year
             var diffYearInput = [{id: fid, value: dateDiffYear}];
@@ -378,8 +380,7 @@
                             }
                             done();
                         }).catch(function(errorMsg) {
-                            assert(false, 'unable to resolve all records: ' + JSON.stringify(errorMsg));
-                            done();
+                            done(new Error('unable to resolve all records: ' + JSON.stringify(errorMsg)));
                         });
                 });
             });
@@ -392,7 +393,7 @@
 
             // Date in current year
             var currentYearInput = [{id: fid, value: dateCurrentYear}];
-            var expectedCurrentYearRecord = {id: fid, value: dateCurrentYear, display: 'Sunday, Apr-12'};
+            var expectedCurrentYearRecord = {id: fid, value: dateCurrentYear, display: testDateHelper.dayOfWeekAprilTwelve + ', Apr-12'};
 
             // Date in different year
             var diffYearInput = [{id: fid, value: dateDiffYear}];
@@ -485,8 +486,7 @@
                             }
                             done();
                         }).catch(function(errorMsg) {
-                            assert(false, 'unable to resolve all records: ' + JSON.stringify(errorMsg));
-                            done();
+                            done(new Error('unable to resolve all records: ' + JSON.stringify(errorMsg)));
                         });
                 });
             });
@@ -499,7 +499,7 @@
 
             // Date in current year
             var currentYearInput = [{id: fid, value: dateCurrentYear}];
-            var expectedCurrentYearRecord = {id: fid, value: dateCurrentYear, display: 'Sunday, 12-Apr'};
+            var expectedCurrentYearRecord = {id: fid, value: dateCurrentYear, display: testDateHelper.dayOfWeekAprilTwelve + ', 12-Apr'};
 
             // Date in different year
             var diffYearInput = [{id: fid, value: dateDiffYear}];
@@ -592,8 +592,7 @@
                             }
                             done();
                         }).catch(function(errorMsg) {
-                            assert(false, 'unable to resolve all records: ' + JSON.stringify(errorMsg));
-                            done();
+                            done(new Error('unable to resolve all records: ' + JSON.stringify(errorMsg)));
                         });
                 });
             });
@@ -606,7 +605,7 @@
 
             // Date in current year
             var currentYearInput = [{id: fid, value: dateCurrentYear}];
-            var expectedCurrentYearRecord = {id: fid, value: dateCurrentYear, display: 'Sunday, Apr-12'};
+            var expectedCurrentYearRecord = {id: fid, value: dateCurrentYear, display: testDateHelper.dayOfWeekAprilTwelve + ', Apr-12'};
 
             // Date in different year
             var diffYearInput = [{id: fid, value: dateDiffYear}];
@@ -699,8 +698,7 @@
                             }
                             done();
                         }).catch(function(errorMsg) {
-                            assert(false, 'unable to resolve all records: ' + JSON.stringify(errorMsg));
-                            done();
+                            done(new Error('unable to resolve all records: ' + JSON.stringify(errorMsg)));
                         });
                 });
             });

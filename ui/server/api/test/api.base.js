@@ -340,7 +340,7 @@
                 //delete the realm  if not null
                 var self = this;
                 var deferred = promise.pending();
-                if (self.realm) {
+                if (self.realm  && config && !config.realmToUse) {
                     self.executeRequest(self.resolveRealmsEndpoint(self.realm.id),
                                            consts.DELETE, '', DEFAULT_HEADERS)
                             .then(function(response) {

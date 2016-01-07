@@ -168,8 +168,7 @@
                                 }
                                 done();
                             }).catch(function(errorMsg) {
-                                assert(false, 'unable to resolve all records: ' + JSON.stringify(errorMsg));
-                                done();
+                                done(new Error('unable to resolve all records: ' + JSON.stringify(errorMsg)));
                             });
                 });
             });
@@ -275,8 +274,7 @@
                                 }
                                 done();
                             }).catch(function(errorMsg) {
-                                assert(false, 'unable to resolve all records: ' + JSON.stringify(errorMsg));
-                                done();
+                                done(new Error('unable to resolve all records: ' + JSON.stringify(errorMsg)));
                             });
                 });
             });
@@ -382,8 +380,7 @@
                                 }
                                 done();
                             }).catch(function(errorMsg) {
-                                assert(false, 'unable to resolve all records: ' + JSON.stringify(errorMsg));
-                                done();
+                                done(new Error('unable to resolve all records: ' + JSON.stringify(errorMsg)));
                             });
                 });
             });
