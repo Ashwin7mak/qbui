@@ -62,7 +62,19 @@ let reportDataActions = {
     filterReport: function(appId, tblId, rptId, format, facetExpression) {
         let deferred = Promise.defer();
 
-        if (appId && tblId && rptId && facetExpression) {
+        if (!appId){
+            logger.error('Missing required input parameter appId to reportDataActions.filterReport');
+            deferred.reject('error');
+        } else if (!tblId){
+            logger.error('Missing required input parameter table Id to reportDataActions.filterReport');
+            deferred.reject('error');
+        } else if (!rptId){
+            logger.error('Missing required input parameter report Id to reportDataActions.filterReport');
+            deferred.reject('error');
+        } else if (!facetExpression){
+            logger.error('Missing required input parameter facetExpression to reportDataActions.filterReport');
+            deferred.reject('error');
+        } else {
             let reportService = new ReportService();
             let recordService = new RecordService();
             this.dispatch(actions.LOAD_REPORT, {appId, tblId, rptId});
@@ -86,7 +98,7 @@ let reportDataActions = {
 
                         var mergedQueryString = "";
                         if (report.query) {
-                            mergedQueryString = "(" + report.query + ")";
+                            mergedQueryString = report.query;
                             if (queryString) {
                                 mergedQueryString +=  query.QUERY_AND + "(" + queryString + ")";
                             }
@@ -131,9 +143,6 @@ let reportDataActions = {
                     deferred.reject(ex);
                 }.bind(this)
             );
-        } else {
-            logger.error('Missing required input parameters to reportDataActions.filterReport');
-            deferred.reject('error');
         }
 
         return deferred.promise;
