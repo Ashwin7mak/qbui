@@ -1,11 +1,9 @@
-/* jshint proto: true */
-
 import Fluxxor from 'fluxxor';
 import reportDataActions from '../../src/actions/reportDataActions';
 import * as actions from '../../src/constants/actions';
 import Promise from 'bluebird';
 
-describe('Report Data Actions Loadreport functions -- success', () => {
+describe('Report Data Actions Load Report functions -- success', () => {
     'use strict';
 
     let appId = '1';
@@ -51,25 +49,9 @@ describe('Report Data Actions Loadreport functions -- success', () => {
     let flux = new Fluxxor.Flux(stores);
     flux.addActions(reportDataActions);
 
-    beforeEach((done) => {
+    beforeEach(() => {
         spyOn(flux.dispatchBinder, 'dispatch');
         reportDataActions.__Rewire__('ReportService', mockReportService);
-
-        promise = flux.actions.loadReport(appId, tblId, rptId, true, facetExp);
-
-        //  expect a load report event to get fired before the promise returns
-        expect(flux.dispatchBinder.dispatch).toHaveBeenCalledWith(actions.LOAD_REPORT, {appId, tblId, rptId});
-        flux.dispatchBinder.dispatch.calls.reset();
-
-        promise.then(
-            function() {
-                done();
-            },
-            function() {
-                done();
-            }
-        );
-
     });
 
     afterEach(() => {
@@ -77,13 +59,20 @@ describe('Report Data Actions Loadreport functions -- success', () => {
         promise = null;
     });
 
-    it('test load report action with report parameters', () => {
-        expect(promise.isFulfilled()).toBeTruthy();
-        expect(flux.dispatchBinder.dispatch).toHaveBeenCalledWith(actions.LOAD_REPORT_SUCCESS, response);
+    it('test load report action with report parameters', (done) => {
+        promise = flux.actions.loadReport(appId, tblId, rptId, true, facetExp);
+
+        //expect a load report event to get fired before the promise returns
+        expect(flux.dispatchBinder.dispatch).toHaveBeenCalledWith(actions.LOAD_REPORT, {appId, tblId, rptId});
+        flux.dispatchBinder.dispatch.calls.reset();
+        promise.then(function(){
+            expect(flux.dispatchBinder.dispatch).toHaveBeenCalledWith(actions.LOAD_REPORT_SUCCESS, response);
+            done();
+        });
     });
 });
 
-describe('Report Data Actions Filterreport functions -- success', () => {
+describe('Report Data Actions Filter Report functions -- success', () => {
     'use strict';
 
     let appId = '1';
@@ -120,8 +109,7 @@ describe('Report Data Actions Filterreport functions -- success', () => {
         }
     }
     class mockRecordService {
-        constructor() {
-        }
+        constructor() {}
         getRecords() {
             var p = Promise.defer();
             p.resolve(responseResultData);
@@ -132,25 +120,10 @@ describe('Report Data Actions Filterreport functions -- success', () => {
     let flux = new Fluxxor.Flux(stores);
     flux.addActions(reportDataActions);
 
-    beforeEach((done) => {
+    beforeEach(() => {
         spyOn(flux.dispatchBinder, 'dispatch');
         reportDataActions.__Rewire__('ReportService', mockReportService);
         reportDataActions.__Rewire__('RecordService', mockRecordService);
-
-        promise = flux.actions.filterReport(appId, tblId, rptId, false, facetExp);
-
-        expect(flux.dispatchBinder.dispatch).toHaveBeenCalledWith(actions.LOAD_REPORT, {appId, tblId, rptId});
-        flux.dispatchBinder.dispatch.calls.reset();
-
-        promise.then(
-            function() {
-                done();
-            },
-            function() {
-                done();
-            }
-        );
-
     });
 
     afterEach(() => {
@@ -160,9 +133,14 @@ describe('Report Data Actions Filterreport functions -- success', () => {
     });
 
 
-    it('test filter report action with parameters', () => {
-        expect(promise.isFulfilled()).toBeTruthy();
-        expect(flux.dispatchBinder.dispatch).toHaveBeenCalledWith(actions.LOAD_RECORDS_SUCCESS, responseResultData.data);
-    });
+    it('test filter report action with parameters', (done) => {
+        promise = flux.actions.filterReport(appId, tblId, rptId, true, facetExp);
 
+        expect(flux.dispatchBinder.dispatch).toHaveBeenCalledWith(actions.LOAD_REPORT, {appId, tblId, rptId});
+        flux.dispatchBinder.dispatch.calls.reset();
+        promise.then(function() {
+            expect(flux.dispatchBinder.dispatch).toHaveBeenCalledWith(actions.LOAD_RECORDS_SUCCESS, responseResultData.data);
+            done();
+        });
+    });
 });

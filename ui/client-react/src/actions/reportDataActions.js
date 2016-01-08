@@ -1,4 +1,6 @@
-// action creators
+/**
+ * Any actions related to Report model are defined here. This is responsible for making calls to Node layer api based on the action.
+ */
 import * as actions from '../constants/actions';
 import * as query from '../constants/query';
 import ReportService from '../services/reportService';
@@ -55,8 +57,6 @@ let reportDataActions = {
     },
 
     /* Action call to filter a report when a facet is selected.
-    * TODO: This needs to be extended to accept a facetExpression that's built on client side.
-    * For now use a hard-coded facet expression for the sake of setting up node end point.
     * facetexpression parameter- expression representing all the facets selected by user so far example [{fid: fid1, values: value1, value2}, {fid: fid2, values: value3, value4}, ..]
     */
     filterReport: function(appId, tblId, rptId, format, facetExpression) {
@@ -86,9 +86,9 @@ let reportDataActions = {
 
                         var mergedQueryString = "";
                         if (report.query) {
-                            mergedQueryString = report.query;
+                            mergedQueryString = "(" + report.query + ")";
                             if (queryString) {
-                                mergedQueryString +=  query.QUERY_AND + queryString;
+                                mergedQueryString +=  query.QUERY_AND + "(" + queryString + ")";
                             }
                         } else if (queryString) {
                             mergedQueryString = queryString;
@@ -100,7 +100,6 @@ let reportDataActions = {
                             function(recordresponse) {
                                 logger.debug('Records service calls successful');
                                 this.dispatch(actions.LOAD_RECORDS_SUCCESS, recordresponse.data);
-                                deferred.resolve(recordresponse.data);
                                 deferred.resolve(recordresponse.data);
                             }.bind(this),
                             function(error) {

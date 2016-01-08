@@ -40,7 +40,7 @@ describe('Report Actions functions -- error', () => {
                 done();
             },
             function() {
-                console.log('beforeEeach error done');
+                console.log('beforeEach error done');
                 done();
             }
         );

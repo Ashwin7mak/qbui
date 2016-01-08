@@ -26,12 +26,12 @@ let ReportDataStore = Fluxxor.createStore({
         this.tblId = report.tblId;
         this.rptId = report.rptId;
 
-        this.emit("change");
+        this.emit('change');
     },
     onLoadReportFailed: function() {
         this.loading = false;
         this.error = true;
-        this.emit("change");
+        this.emit('change');
     },
 
     onLoadReportSuccess: function(reportData) {
@@ -45,18 +45,18 @@ let ReportDataStore = Fluxxor.createStore({
             records: records,
             filteredRecords: records
         };
-        this.emit("change");
+        this.emit('change');
     },
 
     onLoadRecordsSuccess: function(records) {
         this.loading = false;
         this.error = false;
         this.data.filteredRecords = this.getReportData(records);
-        this.emit("change");
+        this.emit('change');
     },
     onLoadRecordsFailed: function(){
         this.error = true;
-        this.emit("change");
+        this.emit('change');
     },
 
     onSearchFor: function(text) {
@@ -78,7 +78,7 @@ let ReportDataStore = Fluxxor.createStore({
 
             });
         }
-        this.emit("change");
+        this.emit('change');
     },
 
     getReportColumns: function(fields) {
