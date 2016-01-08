@@ -6,6 +6,7 @@
     'use strict';
     //save the substrings for lack of repetition
     module.exports = Object.freeze({
+        FACETS               : '/api/api/:version/facets',
         LOG_CLIENT_MSG       : '/api/api/:version/log',
         REALM                : '/api/api/v1/realms',
         RECORD               : '/api/api/:version/apps/:appId/tables/:tableId/records/:recordId',

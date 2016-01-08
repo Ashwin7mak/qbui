@@ -143,4 +143,40 @@ describe('Test ReportData Store', () => {
         expect(flux.store(STORE_NAME).emit).toHaveBeenCalledWith('change');
     });
 
+    it('test load records failed action', () => {
+
+        let action = {
+            type: actions.LOAD_RECORDS_FAILED
+        };
+
+        flux.dispatcher.dispatch(action);
+        expect(flux.store(STORE_NAME).loading).toBeFalsy();
+        expect(flux.store(STORE_NAME).error).toBeTruthy();
+
+        expect(flux.store(STORE_NAME).emit).toHaveBeenCalledWith('change');
+        expect(flux.store(STORE_NAME).emit.calls.count()).toBe(1);
+    });
+
+    it('test load records success action with no data', () => {
+
+        let payload = {
+            data: {
+                fields: [],
+                records: []
+            }
+        };
+
+        let action = {
+            type: actions.LOAD_RECORDS_SUCCESS,
+            payload: payload
+        };
+
+        flux.dispatcher.dispatch(action);
+        expect(flux.store(STORE_NAME).data.filteredRecords).toBeDefined();
+
+        //  ensure the output of each report row includes an id, name and link
+        expect(flux.store(STORE_NAME).emit).toHaveBeenCalledWith('change');
+        expect(flux.store(STORE_NAME).emit.calls.count()).toBe(1);
+    });
+
 });

@@ -31,9 +31,16 @@ var ReportRoute = React.createClass({
             this.loadReport(appId, tblId, rptId);
         }
     },
+    /* Placeholder method to hook into node layer call to get filtered records when user selects a facet
+    * Hardcoded facetExpression for testing
+    * TODO: replace with a real method.*/
+    filterReport: function(){
+        var facetExpression = [{fid:'3', values:['10', '11']}, {fid:'4', values:['abc']}];
 
+        let flux = this.getFlux();
+        flux.actions.filterReport(this.props.params.appId, this.props.params.tblId, this.props.params.rptId, true, facetExpression);
+    },
     componentDidMount() {
-
         if (this.props.params) {
             this.loadReportFromParams(this.props.params);
         }
@@ -45,6 +52,7 @@ var ReportRoute = React.createClass({
                 <Stage stageContent="this is the stage content text" >
                     <ReportStage reportName={this.props.reportData && this.props.reportData.data ? this.props.reportData.data.name : ""}/>
                 </Stage>
+                <div> This is hard wired to call filter by facets - only matches Record#id = 10 OR 11 <button className="testFilterButton" onClick={this.filterReport}> Fake filter this report </button></div>
                 <ReportContent reportData={this.props.reportData} />
                 </div>);
     }
