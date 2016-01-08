@@ -146,4 +146,46 @@ describe('Report Data Actions -- Filter report', () => {
         });
     });
 
+    it('test filter report fail on missing params', (done) => {
+        class mockReportService {
+            constructor() { }
+            getReport = mockPromiseSuccess(responseReportData);
+            resolveFacetExpression = mockPromiseSuccess(responseResultQuery);
+        }
+        class mockRecordService {
+            constructor() {
+            }
+            getRecords = mockPromiseException();
+        }
+        reportDataActions.__Rewire__('ReportService', mockReportService);
+        reportDataActions.__Rewire__('RecordService', mockRecordService);
+        //no app id
+        let promise = flux.actions.filterReport(null, 2, 3, false);
+        expect(flux.dispatchBinder.dispatch).not.toHaveBeenCalled();
+        flux.dispatchBinder.dispatch.calls.reset();
+        promise.then(function(){
+            expect(promise.isRejected()).toBeTruthy();
+            expect(flux.dispatchBinder.dispatch).not.toHaveBeenCalled();
+            done();
+        });
+        //no table id
+        promise = flux.actions.filterReport(1, null, 3, false);
+        expect(flux.dispatchBinder.dispatch).not.toHaveBeenCalled();
+        flux.dispatchBinder.dispatch.calls.reset();
+        promise.then(function(){
+            expect(promise.isRejected()).toBeTruthy();
+            expect(flux.dispatchBinder.dispatch).not.toHaveBeenCalled();
+            done();
+        });
+        //no facet expression
+        promise = flux.actions.filterReport(1, 2, 3, false);
+        expect(flux.dispatchBinder.dispatch).not.toHaveBeenCalled();
+        flux.dispatchBinder.dispatch.calls.reset();
+        promise.then(function(){
+            expect(promise.isRejected()).toBeTruthy();
+            expect(flux.dispatchBinder.dispatch).not.toHaveBeenCalled();
+            done();
+        });
+    });
+
 });
