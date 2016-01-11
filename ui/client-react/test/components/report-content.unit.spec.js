@@ -30,7 +30,7 @@ const fakeReportData_empty = {
     loading: false,
     data: {
         name: "",
-        records: [],
+        filteredRecords: [],
         columns: []
     }
 };
@@ -140,7 +140,7 @@ describe('ReportContent functions', () => {
         var griddle = TestUtils.scryRenderedComponentsWithType(component, GriddleTable);
         expect(griddle.length).toEqual(1);
         griddle = griddle[0];
-        expect(griddle.props.results.length).toEqual(fakeReportData_simple.data.filteredRecords.length);
+        expect(griddle.props.reportData.data.filteredRecords.length).toEqual(fakeReportData_simple.data.filteredRecords.length);
         expect(_.intersection(griddle.props.columnMetadata, fakeReportData_simple.data.columns).length).toEqual(fakeReportData_simple.data.columns.length);
     });
 
@@ -151,8 +151,6 @@ describe('ReportContent functions', () => {
         component = TestUtils.renderIntoDocument(<ReportContent flux={flux} reportData={fakeReportData_attributes} />);
         var griddle = TestUtils.scryRenderedComponentsWithType(component, GriddleTable);
         expect(griddle.length).toEqual(1);
-        griddle = griddle[0];
-        expect(griddle.props.results.length).toEqual(fakeReportData_simple.data.filteredRecords.length);
 
         var col = cols_with_numeric_field[0];
         expect(col.cssClassName).toMatch('AlignRight');
@@ -168,8 +166,6 @@ describe('ReportContent functions', () => {
         component = TestUtils.renderIntoDocument(<ReportContent reportData={fakeReportData_attributes} />);
         var griddle = TestUtils.scryRenderedComponentsWithType(component, GriddleTable);
         expect(griddle.length).toEqual(1);
-        griddle = griddle[0];
-        expect(griddle.props.results.length).toEqual(fakeReportData_simple.data.filteredRecords.length);
 
         var col = cols_with_date_field[2];
         expect(col.customComponent).toBe(DateFormatterMock);
@@ -183,8 +179,6 @@ describe('ReportContent functions', () => {
         component = TestUtils.renderIntoDocument(<ReportContent reportData={fakeReportData_attributes} />);
         var griddle = TestUtils.scryRenderedComponentsWithType(component, GriddleTable);
         expect(griddle.length).toEqual(1);
-        griddle = griddle[0];
-        expect(griddle.props.results.length).toEqual(fakeReportData_simple.data.filteredRecords.length);
 
         var col = cols_with_bold_attrs[0];
         expect(col.cssClassName).toMatch('Bold');
@@ -195,8 +189,6 @@ describe('ReportContent functions', () => {
         component = TestUtils.renderIntoDocument(<ReportContent reportData={fakeReportData_attributes} />);
         var griddle = TestUtils.scryRenderedComponentsWithType(component, GriddleTable);
         expect(griddle.length).toEqual(1);
-        griddle = griddle[0];
-        expect(griddle.props.results.length).toEqual(fakeReportData_simple.data.filteredRecords.length);
 
         var col = cols_with_nowrap_attrs[0];
         expect(col.cssClassName).toMatch('NoWrap');

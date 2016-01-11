@@ -1,5 +1,4 @@
 import React from 'react';
-import ReactIntl from 'react-intl';
 
 import Hicon from '../harmonyIcon/harmonyIcon';
 import {Tooltip, OverlayTrigger, Glyphicon} from 'react-bootstrap';

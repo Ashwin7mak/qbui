@@ -13,6 +13,7 @@ let CardView = React.createClass({
         allowCardSelection: React.PropTypes.func,
         onToggleCardSelection: React.PropTypes.func,
         onRowSelected: React.PropTypes.func,
+        onRowClicked: React.PropTypes.func,
         isRowSelected: React.PropTypes.func
     },
     getInitialState() {
@@ -111,9 +112,14 @@ let CardView = React.createClass({
     },
     /* close actions when row is clicked */
     onRowClick() {
-        this.setState({
-            showActions:false
-        });
+
+        if (this.state.showActions) {
+            this.setState({
+                showActions: false
+            });
+        } else if (this.context.onRowClicked) {
+            this.context.onRowClicked(this.props.data);
+        }
     },
     render() {
 
@@ -136,12 +142,12 @@ let CardView = React.createClass({
             const isSelected = this.context.isRowSelected(this.props.data);
 
             return (
-                <Swipeable className={"swipeable"} onSwiping={this.swiping} onSwiped={this.swiped} onSwipedLeft={this.swipedLeft} onSwipedRight={this.swipedRight}>
+                <Swipeable  className={"swipeable"} onSwiping={this.swiping} onSwiped={this.swiped} onSwipedLeft={this.swipedLeft} onSwipedRight={this.swipedRight}>
 
-                    <div className={this.state.showMoreCards ? "custom-row-card expanded" : "custom-row-card"}>
+                    <div className={this.state.showMoreCards ? "custom-row-card expanded" : "custom-row-card"} >
                         <div className="flexRow">
                             {this.context.allowCardSelection() && <div className={"checkboxContainer"}><input checked={isSelected} onChange={this.onRowSelected} type="checkbox"></input></div>}
-                            <div className="card">
+                            <div className="card" onClick={this.onRowClick}>
                                 {row}
                             </div>
                             <div className="card-expander" onClick={this.handleMoreCard}>

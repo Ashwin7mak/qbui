@@ -4,7 +4,7 @@ import Griddle from 'griddle-react';
 import {I18nMessage} from '../../../utils/i18nMessage';
 import * as breakpoints from '../../../constants/breakpoints';
 import ReactCSSTransitionGroup from 'react/lib/ReactCSSTransitionGroup';
-
+//import {History} from 'react-router';
 import ReportActions from '../../actions/reportActions';
 import ReportHeader from '../../report/dataTable/reportHeader';
 import CardView from './cardView.js';
@@ -18,6 +18,9 @@ import './qbGriddleTable.scss';
  * */
 
 let GriddleTable = React.createClass({
+
+    //mixins: [History],
+
     contextTypes: {
         breakpoint: React.PropTypes.string
     },
@@ -30,6 +33,7 @@ let GriddleTable = React.createClass({
         allowCardSelection: React.PropTypes.func,
         onToggleCardSelection: React.PropTypes.func,
         onRowSelected: React.PropTypes.func,
+        onRowClicked: React.PropTypes.func,
         isRowSelected: React.PropTypes.func
     },
     getChildContext() {
@@ -37,6 +41,7 @@ let GriddleTable = React.createClass({
             onToggleCardSelection: this.onToggleCardSelection,
             allowCardSelection: this.allowCardSelection,
             onRowSelected: this.onCardRowSelected,
+            onRowClicked: this.onRowClicked,
             isRowSelected: this.isRowSelected
         };
     },
@@ -53,7 +58,7 @@ let GriddleTable = React.createClass({
             customRowComponentClassName: "custom-row",
             useExternal: false, /* this should always be false for us since the store takes care of just sending the data thats to be rendered at any point in time */
             columnMetadata: [],
-            results: [],
+            reportData: {},
             metadataColumns: ["selected"],
             gridClassName: 'QBGriddle',
             useGriddleStyles: false,
@@ -76,11 +81,13 @@ let GriddleTable = React.createClass({
      */
     onTableClick() {
         setTimeout(() => {
-            let selectedRowIds = this.refs.griddleTable.getSelectedRowIds();
-            this.setState({
-                selectedRows: selectedRowIds,
-                allowCardSelection: selectedRowIds.length > 0
-            });
+            if (this.refs.griddleTable) {
+                let selectedRowIds = this.refs.griddleTable.getSelectedRowIds();
+                this.setState({
+                    selectedRows: selectedRowIds,
+                    allowCardSelection: selectedRowIds.length > 0
+                });
+            }
         }, 0);
     },
 
@@ -97,6 +104,21 @@ let GriddleTable = React.createClass({
         if (!allow) {
             this.setState({selectedRows: []});
         }
+    },
+
+    /**
+     * report row was clicked
+     * @param row data
+     */
+    onRowClicked(row) {
+
+        const {appId, tblId} = this.props.reportData;
+        const recId = row[this.props.uniqueIdentifier];
+
+        const link = '/app/' + appId + '/table/' + tblId + '/record/' + recId;
+
+        // something like this I expect, maybe in an action instead:
+        // this.history.pushState(null, link);
     },
 
     /**
@@ -148,9 +170,10 @@ let GriddleTable = React.createClass({
         if (this.state.allowCardSelection) {
             griddleWrapperClasses += " allowCardSelection";
         }
-        if (this.props.results) {
-            // unfortunately Griddle passes only a row data prop to our custom component (i.e. can't pass in a shared prop)
-            // so we need store our shared props in the row data...
+
+        let results = this.props.reportData && this.props.reportData.data ? this.props.reportData.data.filteredRecords : [];
+
+        if (results) {
 
             return (
                 <div className="reportTable" >
@@ -163,8 +186,9 @@ let GriddleTable = React.createClass({
                             isMultipleSelection={true}
                             selectedRowIds={this.state.selectedRows}
                             uniqueIdentifier={this.props.uniqueIdentifier}
-                            results={this.props.results}
+                            results={results}
                             useCustomRowComponent={isCardLayout}
+                            onRowClick={this.onRowClicked}
                             />
                     </div>
                 </div>

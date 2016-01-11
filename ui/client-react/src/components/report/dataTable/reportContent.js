@@ -108,7 +108,7 @@ let ReportContent = React.createClass({
                 {this.props.reportData.error ?
                     <div>Error loading report!</div> :
                     <div>
-                        <GriddleTable results={this.props.reportData && this.props.reportData.data ? this.props.reportData.data.filteredRecords : []}
+                        <GriddleTable reportData={this.props.reportData}
                                       columnMetadata={this.state.reportColumns}
                                       uniqueIdentifier="Record ID#"
                                       showPager={false}

@@ -48,12 +48,16 @@ let RecordActions = React.createClass({
     getSelectionTip(actionMsg) {
         return Locale.getMessage(actionMsg);
     },
+    onClick(e) {
+        // prevent navigation to records
+        e.stopPropagation();
+    },
     render() {
 
         const record = Locale.getMessage('records.singular');
 
         return (
-            <div className={'reportActions'}>
+            <div className={'reportActions'} onClick={this.onClick}>
 
                 <div>
                     {this.props.selection && <span className="selectedRowsLabel">{this.props.selection.length}</span>}
