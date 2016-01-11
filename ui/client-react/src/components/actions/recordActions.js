@@ -19,20 +19,9 @@ let RecordActions = React.createClass({
     mixins: [FluxMixin],
 
     propTypes: {
-        selection: React.PropTypes.array,
-        report: React.PropTypes.object,
-        app: React.PropTypes.object,
-        table: React.PropTypes.object
+        selection: React.PropTypes.array
     },
-    // just placeholders for now, localize when we have specs
-    getDefaultProps() {
-        return {
-            report: {name: 'report name'},
-            table: {name: 'table name'},
-            app: {name: 'app name'},
-            record: {name: ' record name'}
-        };
-    },
+
     getEmailSubject() {
         return "Email subject goes here";
     },

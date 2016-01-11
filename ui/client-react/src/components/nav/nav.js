@@ -91,10 +91,18 @@ var Nav = React.createClass({
                 onHideReports={this.onHideTableReports}/>
 
             <div className="main">
-                <TopNav title="QuickBase"  globalActions={this.getGlobalActions()} onNavClick={this.toggleNav} flux={flux} />
+                <TopNav title="QuickBase"
+                        globalActions={this.getGlobalActions()}
+                        onNavClick={this.toggleNav}
+                        flux={flux} />
                 {this.props.children && <div className="mainContent" >
                     {/* insert the component passed in by the router */}
-                    {React.cloneElement(this.props.children, {key: this.props.location ? this.props.location.pathname : "", selectedAppId: this.state.apps.selectedAppId, reportData: this.state.reportData,  flux: flux})}
+                    {React.cloneElement(this.props.children, {
+                        key: this.props.location ? this.props.location.pathname : "",
+                        selectedAppId: this.state.apps.selectedAppId,
+                        reportData: this.state.reportData,
+                        flux: flux}
+                    )}
                 </div>}
 
                 <Footer flux= {flux} />
@@ -136,11 +144,19 @@ var Nav = React.createClass({
                 globalActions={this.getGlobalActions()} />
 
             <div className="main">
-                <TopNav title="QuickBase" globalActions={this.getGlobalActions()} onNavClick={this.toggleNav} flux={flux} />
+                <TopNav title="QuickBase"
+                        globalActions={this.getGlobalActions()}
+                        onNavClick={this.toggleNav}
+                        flux={flux} />
 
                 {this.props.children && <div className="mainContent" >
                     {/* insert the component passed in by the router */}
-                    {React.cloneElement(this.props.children, {key: this.props.location ? this.props.location.pathname : "", selectedAppId: this.state.apps.selectedAppId, reportData: this.state.reportData, flux: flux})}
+                    {React.cloneElement(this.props.children, {
+                        key: this.props.location ? this.props.location.pathname : "",
+                        selectedAppId: this.state.apps.selectedAppId,
+                        reportData: this.state.reportData,
+                        flux: flux}
+                    )}
                 </div>}
 
                 {/* insert the footer if route wants it */}
