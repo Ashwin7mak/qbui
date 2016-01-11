@@ -68,7 +68,7 @@
         //Helper method to sleep a specified number of seconds
         this.sleep = function(ms) {
             return browser.driver.sleep(ms);
-        }
+        };
 
     };
     module.exports = new BasePage();

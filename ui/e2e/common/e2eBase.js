@@ -105,8 +105,7 @@
                 try {
                     browser.driver.sleep(ms);
                     deferred.resolve();
-                }
-                catch (error) {
+                } catch (error) {
                     console.error(JSON.stringify(error));
                     deferred.reject(error);
                 }
