@@ -12,6 +12,7 @@
     var routeGroupMapper = require('./qbRouteGroupMapper');
     var routeGroup;
     var simpleStringify = require('./../components/utility/simpleStringify.js');
+    var queryFormatter = require('../api/quickbase/formatter/queryFormatter');
 
     module.exports = function(config) {
         requestHelper = require('../api/quickbase/requestHelper')(config);
@@ -24,6 +25,7 @@
          */
         var routeToGetFunction = {};
 
+        routeToGetFunction[routeConsts.FACETS] = resolveFacets;
         routeToGetFunction[routeConsts.RECORD] = fetchSingleRecord;
         routeToGetFunction[routeConsts.RECORDS] = fetchAllRecords;
         routeToGetFunction[routeConsts.REPORT_RESULTS] = fetchAllRecords;
@@ -207,6 +209,16 @@
                         res.status(error.statusCode)
                                        .send(error.body);
                     });
+        });
+    }
+
+    function resolveFacets(req, res) {
+        processRequest(req, res, function(req, res) {
+            log.debug("facetexpression in mapper =" + req.param('facetexpression'));
+            queryFormatter.format(req.param('facetexpression'))
+                .then(function(response){
+                    res.send(response);
+                });
         });
     }
 

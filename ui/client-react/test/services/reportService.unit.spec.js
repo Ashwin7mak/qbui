@@ -90,4 +90,19 @@ describe('ReportService functions', () => {
         expect(BaseService.prototype.get).toHaveBeenCalledWith(constants.APPS + '/' + appId + '/' + constants.TABLES + '/' + tblId + '/' + constants.REPORTS + '/' + rptId + '/' + constants.RESULTS, {params:params});
     });
 
+    it('test resolveFacets function with no parameters', () => {
+        reportService.resolveFacetExpression();
+
+        var params = {};
+        expect(BaseService.prototype.get).toHaveBeenCalledWith(constants.FACETS,  {params: params});
+    });
+
+    it('test resolveFacets function with parameters', () => {
+        var facetExp = [{fid: 3, values: [1, 2]}];
+        reportService.resolveFacetExpression(facetExp);
+
+        var params = {facetexpression: facetExp};
+        expect(BaseService.prototype.get).toHaveBeenCalledWith(constants.FACETS,  {params: params});
+    });
+
 });
