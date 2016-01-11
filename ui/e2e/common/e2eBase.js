@@ -65,6 +65,7 @@
             resizeBrowser : function(width, height) {
                 var deferred = promise.pending();
                 browser.driver.manage().window().setSize(width, height).then(function() {
+                    e2eBase.sleep(2500);
                     deferred.resolve();
                 });
                 return deferred.promise;
@@ -99,7 +100,17 @@
             },
             //Helper method to sleep a specified number of seconds
             sleep : function(ms) {
-                browser.driver.sleep(ms);
+                var deferred = promise.pending();
+
+                try {
+                    browser.driver.sleep(ms);
+                    deferred.resolve();
+                }
+                catch (error) {
+                    console.error(JSON.stringify(error));
+                    deferred.reject(error);
+                }
+                return deferred.promise;
             }
         };
         return e2eBase;

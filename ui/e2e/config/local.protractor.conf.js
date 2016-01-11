@@ -52,7 +52,7 @@
             // Lets Protractor know there is no Angular code to wait for
             browser.ignoreSynchronization = true;
             // Maximizes the browser window (known bug with Chrome)
-            browser.driver.manage().window().maximize();
+            //browser.driver.manage().window().maximize();
             // Add jasmine spec reporter
             var SpecReporter = require('jasmine-spec-reporter');
             jasmine.getEnv().addReporter(new SpecReporter({displayStacktrace: 'all'}));

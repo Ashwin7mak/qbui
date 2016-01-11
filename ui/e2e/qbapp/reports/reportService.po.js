@@ -9,7 +9,7 @@
     //Bluebird Promise library
     var promise = require('bluebird');
 
-    var e2ePageBase = require('./../../common/e2ePageBase.js');
+    var e2ePageBase = require('./../../common/e2ePageBase');
     var ReportServicePage = function() {
         // Page Elements using Locators
         // Left Nav
@@ -20,14 +20,43 @@
         this.navLinksElList = this.navStackedEl.all(by.className('leftNavLink'));
         this.appsHomeLinkEl = this.navLinksElList.first();
 
+        this.appToggleDivEl = element(by.className('appsToggle'));
         this.appsListDivEl = element(by.className('appsList'));
         this.appLinksElList = this.appsListDivEl.all(by.className('leftNavLink'));
+
+        this.searchAppsDivEl = element(by.className('searchApps'));
+        this.searchAppsInputEl = this.searchAppsDivEl.element(by.tagName('input'));
+
         this.tablesListDivEl = element(by.className('tablesList'));
-        this.tableLinksElList = this.tablesListDivEl.all(by.tagName('li'));
+        this.tableLinksElList = this.tablesListDivEl.all(by.className('link'));
         this.reportHamburgersElList = this.tablesListDivEl.all(by.className('right'));
         this.reportsListDivEl = element(by.className('reportsList'));
         this.reportLinksElList = this.reportsListDivEl.all(by.className('leftNavLink'));
         this.reportsBackLinkEl = this.reportsListDivEl.element(by.className('backLink'));
+
+
+        // Top Nav
+        this.topNavDivEl = element(by.className('topNav'));
+        // Left div (containing leftNav toggle hamburger)
+        this.topNavToggleHamburgerEl = this.topNavDivEl.element(by.className('iconLink'));
+        this.topNavLeftDivEl = this.topNavDivEl.element(by.className('left'));
+        // Center div (containing harmony icons)
+        this.topNavCenterDivEl = this.topNavDivEl.element(by.className('center'));
+        this.topNavHarButtonsListEl = this.topNavCenterDivEl.all(by.tagName('button'));
+        // Right div (containing global actions and right dropdown)
+        // global actions
+        this.topNavRightDivEl = this.topNavDivEl.element(by.className('right'));
+        this.topNavGlobalActDivEl = this.topNavRightDivEl.element(by.className('globalActions'));
+        this.topNavGlobalActionsListEl = this.topNavGlobalActDivEl.all(by.tagName('a'));
+        this.topNavUserGlobActEl = this.topNavGlobalActionsListEl.get(0);
+        this.topNavAlertsGlobActEl = this.topNavGlobalActionsListEl.get(1);
+        this.topNavHelpGlobActEl = this.topNavGlobalActionsListEl.get(2);
+        this.topNavLogoutGlobActEl = this.topNavGlobalActionsListEl.get(3);
+
+        // dropdown
+        this.topNavRightDropdownDivEl = this.topNavRightDivEl.element(by.className('dropdown'));
+        this.topNavDropdownEl = this.topNavRightDropdownDivEl.element(by.className('dropdownToggle'));
+
 
         // Report Container
         this.reportContainerEl = element.all(by.className('reportContainer')).first();
@@ -56,7 +85,9 @@
                     colHeaders.forEach(function(headerText) {
                         // The getText call above is returning the text value with a new line char on the end, need to remove it
                         var subText = headerText.replace(/(\r\n|\n|\r)/gm, '');
-                        fieldColHeaders.push(subText.trim());
+                        if(subText !== 'actions'){
+                            fieldColHeaders.push(subText.trim());
+                        }
                     });
                     deferred.resolve(fieldColHeaders);
                 });
@@ -67,7 +98,7 @@
         /**
          * Assertion function that will test the properties of the leftNav
          */
-        this.assertNavProperties = function(breakpointSize, open, clientWidth){
+        this.assertNavProperties = function(breakpointSize, open, clientWidth) {
             // Check properties of nav bar
             expect(this.navMenuBodyEl.getAttribute('class')).toMatch(breakpointSize + '-breakpoint');
             if (open){
@@ -79,9 +110,43 @@
             }
         };
 
-        this.clickReportsMenu = function(tableLinkEl){
+        this.assertGlobalNavTextVisible = function(visible) {
+            this.topNavGlobalActionsListEl.then(function(navActions) {
+                for (var i = 0; i < navActions.length; i++) {
+
+                    var textEl = navActions[i].all(by.tagName('span')).last();
+                    expect(textEl.isDisplayed()).toBe(visible);
+                }
+            });
+        };
+
+        this.clickReportsMenu = function(tableLinkEl) {
             tableLinkEl.by(className('right')).click();
         };
+
+        this.clickAppToggle = function() {
+            var deferred = promise.pending();
+
+            try {
+                this.appToggleDivEl.click().then(function() {
+                    // Sleep for a second to allow toggle animation to finish (and the DOM to refresh)
+                    e2ePageBase.sleep(1000);
+                    deferred.resolve();
+                });
+            }
+            catch (error) {
+                console.error(JSON.stringify(error));
+                deferred.reject(error);
+            }
+
+            return deferred.promise;
+        };
+
+        this.getGlobalNavTextEl = function(globalNavEl) {
+            var textEl = globalNavEl.all(by.tagName('span')).last();
+            return textEl;
+        }
+
     };
     ReportServicePage.prototype = e2ePageBase;
     module.exports = ReportServicePage;

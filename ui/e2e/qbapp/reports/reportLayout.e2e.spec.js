@@ -8,8 +8,6 @@
 (function() {
     'use strict';
 
-    // In order to manage the async nature of Protractor with a non-Angular page use the ExpectedConditions feature
-    var EC = protractor.ExpectedConditions;
     //Require the e2e base class and constants modules
     var e2eBase = require('../../common/e2eBase.js')();
     var consts = require('../../../server/api/constants.js');
@@ -22,8 +20,8 @@
     var reportServicePage = new ReportServicePage();
 
     describe('Report Page Layout Tests', function() {
-        var widthTest = 1024;
-        var heightTest = 2024;
+        var widthTest = 1025;
+        var heightTest = 1440;
         e2eBase.setBaseUrl(browser.baseUrl);
         e2eBase.initialize();
         var app;
@@ -83,6 +81,7 @@
                         reportServicePage.waitForElement(reportServicePage.appsListDivEl).then(function() {
                             // Select the app
                             reportServicePage.appLinksElList.get(0).click();
+                            e2eBase.sleep(1000);
                             done();
                         });
                     });
@@ -100,6 +99,25 @@
         });
 
         /**
+         * Test method. Tests the app toggle widget.
+         */
+        it('Apps toggle should show / hide App Dashboard Links and Search widget', function(done){
+            reportServicePage.tableLinksElList.then(function(links){
+                // Check we have the base links and two table links present
+                expect(links.length).toBe(5);
+                // Check that the app search widget is hidden
+                expect(reportServicePage.searchAppsDivEl.isPresent()).toBeFalsy();
+                reportServicePage.clickAppToggle();
+                // Check that the app search widget is visible
+                expect(reportServicePage.searchAppsDivEl.isPresent()).toBeTruthy();
+                reportServicePage.clickAppToggle().then(function() {
+                    done();
+                });
+            });
+        });
+
+
+        /**
         * Test method. Loads the first table containing 10 fields (10 columns). The table report (griddle) width should expand past the browser size
         * to give all columns enough space to show their data.
         */
@@ -112,8 +130,6 @@
                 reportServicePage.reportLinksElList.get(0).click();
                 // Make sure the table report has loaded
                 reportServicePage.waitForElement(reportServicePage.loadedContentEl).then(function() {
-                    // Sleep for animation
-                    e2eBase.sleep(2000);
                     // Check there is a scrollbar in the griddle table
                     var fetchRecordPromises = [];
                     fetchRecordPromises.push(reportServicePage.loadedContentEl.getAttribute('scrollWidth'));
@@ -141,8 +157,6 @@
                 reportServicePage.reportLinksElList.get(0).click();
                 // Make sure the table report has loaded
                 reportServicePage.waitForElement(reportServicePage.loadedContentEl).then(function() {
-                    // Sleep for animation
-                    e2eBase.sleep(2000);
                     // Check there is no scrollbar in the griddle table
                     var fetchRecordPromises = [];
                     fetchRecordPromises.push(reportServicePage.loadedContentEl.getAttribute('scrollWidth'));
@@ -170,20 +184,54 @@
                 // Make sure the table report has loaded
                 reportServicePage.waitForElement(reportServicePage.loadedContentEl).then(function() {
                     // Resize browser at different widths to check responsiveness
-                    e2eBase.resizeBrowser(1500, 600).then(function() {
+                    e2eBase.resizeBrowser(1500, heightTest).then(function() {
                         reportServicePage.assertNavProperties('xlarge', true, '399');
                     }).then(function() {
-                        e2eBase.resizeBrowser(1280, 600).then(function() {
+                        e2eBase.resizeBrowser(1280, heightTest).then(function() {
                             reportServicePage.assertNavProperties('large', true, '299');
                         }).then(function() {
-                            e2eBase.resizeBrowser(1024, 600).then(function() {
+                            e2eBase.resizeBrowser(1024, heightTest).then(function() {
                                 reportServicePage.assertNavProperties('medium', true, '199');
                             }).then(function() {
-                                e2eBase.resizeBrowser(640, 600).then(function() {
+                                e2eBase.resizeBrowser(640, heightTest).then(function() {
                                     reportServicePage.assertNavProperties('small', false, '0');
-                                }).then(function() {
-                                    // Reset the browser for other tests
-                                    e2eBase.resizeBrowser(widthTest, heightTest);
+                                    e2eBase.resizeBrowser(1500, heightTest).then(function() {
+                                        reportServicePage.reportsBackLinkEl.click();
+                                        done();
+                                    });
+                                });
+                            });
+                        });
+                    });
+                });
+            });
+        });
+
+        /**
+         * Test method. The left hand nav should expand responsively across the 4 breakpoints as the browser is re-sized
+         */
+        xit('Left hand nav should expand responsively', function(done) {
+            // Select the table
+            reportServicePage.tableLinksElList.get(3).click().then(function(){
+                // Open the reports list
+                reportServicePage.reportHamburgersElList.get(0).click();
+                // Select the report
+                reportServicePage.reportLinksElList.get(0).click();
+                // Make sure the table report has loaded
+                reportServicePage.waitForElement(reportServicePage.loadedContentEl).then(function() {
+                    // Resize browser at different widths to check responsiveness
+                    e2eBase.resizeBrowser(600, heightTest).then(function() {
+                        reportServicePage.assertNavProperties('small', false, '0');
+                    }).then(function() {
+                        e2eBase.resizeBrowser(1024, heightTest).then(function() {
+                            reportServicePage.assertNavProperties('medium', true, '199');
+                        }).then(function() {
+                            e2eBase.resizeBrowser(1280, heightTest).then(function() {
+                                reportServicePage.assertNavProperties('large', true, '299');
+                            }).then(function() {
+                                e2eBase.resizeBrowser(1500, heightTest).then(function() {
+                                    reportServicePage.assertNavProperties('xlarge', true, '399');
+                                    reportServicePage.reportsBackLinkEl.click();
                                     done();
                                 });
                             });
