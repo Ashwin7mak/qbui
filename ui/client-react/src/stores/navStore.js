@@ -16,8 +16,7 @@ let NavStore = Fluxxor.createStore({
             searching:false,
             trowserOpen: false,
             newItemsOpen: false,
-            showReports: false,
-            leftNavItems: []
+            showReports: false
         };
 
         this.setLocaleBundle();

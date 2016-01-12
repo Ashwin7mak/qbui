@@ -2,6 +2,15 @@ import React from 'react';
 import TestUtils from 'react-addons-test-utils';
 import ReactDOM from 'react-dom';
 import CardView from '../../src/components/dataTable/griddleTable/cardView';
+import RecordActions from '../../src/components/actions/recordActions';
+
+var RecordActionsMock = React.createClass({
+    render: function() {
+        return (
+            <div>test</div>
+        );
+    }
+});
 
 const fakeReportData_empty = {
     data: {
@@ -28,33 +37,175 @@ describe('Report Mobile View functions', () => {
 
     var component;
 
+    beforeEach(() => {
+        CardView.__Rewire__('RecordActions', RecordActionsMock);
+    });
+
+    afterEach(() => {
+        CardView.__ResetDependency__('RecordActions');
+    });
+
     it('test render of component', () => {
-        component = TestUtils.renderIntoDocument(<CardView data={fakeReportData_empty.data.results} metadataColumns={fakeReportData_empty.data.columnMetadata}/>);
-        expect(TestUtils.isCompositeComponent(component)).toBeTruthy();
-        var rows = TestUtils.scryRenderedDOMComponentsWithClass(component, "fieldRow");
+
+        var TestParent = React.createFactory(React.createClass({
+
+            childContextTypes: {
+                allowCardSelection: React.PropTypes.func,
+                isRowSelected: React.PropTypes.func
+            },
+            getChildContext: function() {
+                return {
+                    allowCardSelection: () => {return false;},
+                    isRowSelected: () => {return false;}
+                };
+            },
+            render() {
+                return <CardView ref="refCardView" data={fakeReportData_empty.data.results} metadataColumns={fakeReportData_empty.data.columnMetadata}/>;
+            }
+        }));
+        var parent = TestUtils.renderIntoDocument(TestParent());
+        var cardView = TestUtils.scryRenderedComponentsWithType(parent.refs.refCardView, CardView);
+
+        expect(cardView.length).toEqual(1);
+
+        var rows = TestUtils.scryRenderedDOMComponentsWithClass(cardView[0], "fieldRow");
         expect(rows.length).toEqual(0);
     });
 
+
     it('test render of component with data', () => {
-        component = TestUtils.renderIntoDocument(<CardView data={fakeReportData_valid.data.results} metadataColumns={fakeReportData_valid.data.columnMetadata}/>);
-        expect(TestUtils.isCompositeComponent(component)).toBeTruthy();
-        var node = ReactDOM.findDOMNode(component);
+
+        var TestParent = React.createFactory(React.createClass({
+
+            childContextTypes: {
+                allowCardSelection: React.PropTypes.func,
+                isRowSelected: React.PropTypes.func
+            },
+            getChildContext: function() {
+                return {
+                    allowCardSelection: () => {return false;},
+                    isRowSelected: () => {return false;}
+                };
+            },
+            render() {
+                return <CardView ref="refCardView" data={fakeReportData_valid.data.results} metadataColumns={fakeReportData_valid.data.columnMetadata}/>;
+            }
+        }));
+        var parent = TestUtils.renderIntoDocument(TestParent());
+        var cardView = TestUtils.scryRenderedComponentsWithType(parent.refs.refCardView, CardView);
+
+        expect(cardView.length).toEqual(1);
+        var node = ReactDOM.findDOMNode(cardView[0]);
         var rows = node.getElementsByClassName("fieldRow");
         expect(rows.length).toEqual(1);
     });
 
+
     it('test rows are collapsed by default', () => {
-        component = TestUtils.renderIntoDocument(<CardView data={fakeReportData_valid.data.results} metadataColumns={fakeReportData_valid.data.columnMetadata}/>);
-        var node = ReactDOM.findDOMNode(component);
+
+        var TestParent = React.createFactory(React.createClass({
+
+            childContextTypes: {
+                allowCardSelection: React.PropTypes.func,
+                isRowSelected: React.PropTypes.func
+            },
+            getChildContext: function() {
+                return {
+                    allowCardSelection: () => {return false;},
+                    isRowSelected: () => {return false;}
+                };
+            },
+            render() {
+                return <CardView ref="refCardView" data={fakeReportData_valid.data.results} metadataColumns={fakeReportData_valid.data.columnMetadata}/>;
+            }
+        }));
+        var parent = TestUtils.renderIntoDocument(TestParent());
+        var cardView = TestUtils.scryRenderedComponentsWithType(parent.refs.refCardView, CardView);
+
+        var node = ReactDOM.findDOMNode(cardView[0]);
         var rows = node.getElementsByClassName("fieldRow");
         expect(rows[0].className).toContain("collapsed");
     });
 
     it('test expand row on click', () => {
-        component = TestUtils.renderIntoDocument(<CardView data={fakeReportData_valid.data.results} metadataColumns={fakeReportData_valid.data.columnMetadata}/>);
-        var node = ReactDOM.findDOMNode(component);
+        var TestParent = React.createFactory(React.createClass({
+
+            childContextTypes: {
+                allowCardSelection: React.PropTypes.func,
+                isRowSelected: React.PropTypes.func
+            },
+            getChildContext: function() {
+                return {
+                    allowCardSelection: () => {return false;},
+                    isRowSelected: () => {return false;}
+                };
+            },
+            render() {
+                return <CardView ref="refCardView" data={fakeReportData_valid.data.results} metadataColumns={fakeReportData_valid.data.columnMetadata}/>;
+            }
+        }));
+        var parent = TestUtils.renderIntoDocument(TestParent());
+        var cardView = TestUtils.scryRenderedComponentsWithType(parent.refs.refCardView, CardView);
+
+        var node = ReactDOM.findDOMNode(cardView[0]);
         var rows = node.getElementsByClassName("fieldRow");
         TestUtils.Simulate.click(rows[0]);
         expect(rows[0].className).toContain("collapsed");
+
+    });
+
+    it('test row swiping', () => {
+        var TestParent = React.createFactory(React.createClass({
+
+            getInitialState() {
+                return {cardSelection: false} ;
+            },
+            childContextTypes: {
+                allowCardSelection: React.PropTypes.func,
+                onToggleCardSelection: React.PropTypes.func,
+                isRowSelected: React.PropTypes.func
+            },
+            getChildContext: function() {
+
+                return {
+                    allowCardSelection: () => {return this.state.cardSelection;},
+                    onToggleCardSelection: () => {this.setState({cardSelection: !this.state.cardSelection});},
+                    isRowSelected: () => {return false;}
+                };
+            },
+            render() {
+                return <CardView ref="refCardView" data={fakeReportData_valid.data.results} metadataColumns={fakeReportData_valid.data.columnMetadata}/>;
+            }
+        }));
+        var parent = TestUtils.renderIntoDocument(TestParent());
+        var cardView = TestUtils.scryRenderedComponentsWithType(parent.refs.refCardView, CardView)[0];
+
+        var node = ReactDOM.findDOMNode(cardView);
+        var rows = node.getElementsByClassName("fieldRow");
+        TestUtils.Simulate.click(rows[0]);
+        expect(rows[0].className).toContain("collapsed");
+
+        // not sure how to simulate these so just call the functions
+        // with null event (not needed) and -/+ deltas (left/right)
+
+        // swipe left to reveal row actions
+        cardView.swiping(null, -100);
+        cardView.swipedLeft();
+        cardView.swiped();
+
+        // close row actions
+        cardView.swiping(null, 100);
+        cardView.swipedRight();
+        cardView.swiped();
+
+        // swipe right to reveal checkboxes
+        cardView.swiping(null, 100);
+        cardView.swipedRight();
+        cardView.swiped();
+
+        // close checkboxes
+        cardView.swiping(null, -100);
+        cardView.swipedLeft();
+        cardView.swiped();
     });
 });
