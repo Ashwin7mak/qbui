@@ -57,7 +57,7 @@ var TopNav = React.createClass({
                     <div className="navGroup left">
                         <div className="navItem "><a className="iconLink toggleNavButton" href="#" onClick={this.toggleNav}><QBIcon icon="menu" /> </a></div>
 
-                        <div className="navItem">{this.props.title}</div>
+                        <div className="navItem topTitle">{this.props.title}</div>
                     </div>
 
                     <div className="navGroup center">

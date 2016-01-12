@@ -133,7 +133,7 @@ body:not(.small-breakpoint) .leftNav.closed {
 
       a {
         text-decoration:none;
-        line-height: 45px;
+        line-height: 35px;
         padding-left: 10px;
         color: $left-nav-link-fg;
         display:inline-block;
@@ -198,9 +198,9 @@ body:not(.small-breakpoint) .leftNav.closed {
     min-width:640px;
   }
   .main {
-    //position:absolute;
+    position:absolute;
   }
-  .mainContent {
+  .mainContent,.topNav {
     opacity: .1;
     transition: opacity 250ms ease-in-out;
     -moz-transition: opacity 250ms ease-in-out;
@@ -262,7 +262,7 @@ $travel-distance: 15;
   height:100%;
 
   .reportsTop {
-    flex: 1 0 auto;
+    flex: 0 0 auto;
   }
   .reportItems {
     overflow-y:auto;

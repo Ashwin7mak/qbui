@@ -159,8 +159,9 @@ var Nav = React.createClass({
                     )}
                 </div>}
 
-                {/* insert the footer if route wants it */}
+                {/* insert the footer if route wants it
                 <MobileAddFooter newItemsOpen={this.state.nav.newItemsOpen} flux= {flux} />
+                 */}
             </div>
 
         </div>);
