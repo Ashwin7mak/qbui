@@ -11,34 +11,9 @@ import {I18nMessage} from '../../../../src/utils/i18nMessage';
 let FluxMixin = Fluxxor.FluxMixin(React);
 let logger = new Logger();
 
-var FacetValues = React.createClass({
-    mixins: [FluxMixin],
-    propTypes: {
-        facet: React.PropTypes.shape({
-            fid: React.PropTypes.number.isRequired,
-            values: React.PropTypes.arrayOf(React.PropTypes.string)
-        }),
-        selectValueHandler: React.PropTypes.func,
-    },
+import {FacetValues, facetItemValue}  from './FacetValues';
 
-    renderValues(){
-        return this.props.facet.values && this.props.facet.values.map((value) => {
-            return <li key={this.props.facet.fid}
-                       onSelect={this.props.selectValueHandler}>
-            {value}
-        </li>;
-        });
-    },
 
-    render() {
-        /* handle the sublists of values each */
-        return (
-        <ul className="facetValues">
-            {renderValues()}
-        </ul>
-    );
-    }
-});
 
 var FacetsItem = React.createClass({
     mixins: [FluxMixin],
@@ -46,13 +21,13 @@ var FacetsItem = React.createClass({
         facet: React.PropTypes.shape({
             fid: React.PropTypes.number.isRequired,
             name: React.PropTypes.string.isRequired,
-            values: React.PropTypes.arrayOf(React.PropTypes.string)
+            values: React.PropTypes.arrayOf(facetItemValue)
         }),
         selectValueHandler: React.PropTypes.func,
     },
     getInitialState: function() {
         return {
-            selecetedValues: []
+            selectedValues: []
         };
     },
 

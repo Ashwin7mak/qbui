@@ -121,17 +121,40 @@ var ReportToolbar = React.createClass({
     componentDidMount() {
     },
 
+    populateDummyFacets() {
+        if (this.props.reportData && this.props.reportData.data)  {
+            this.props.reportData.data.facets = {
+                list : [
+                    {fid : 1, name : "Names", type: "text", blanks: false,
+                        values : [{value: "Item 1"}, {value: "Item 2"}, {value: "Item 3"}, {value: "Item 4"}, {value: "Item 5"}]},
+                    {fid : 2, name : "Types", type: "text", blanks: true,
+                        values : [{value:"Design"}, {value:"Development"}, {value:"Planning"}, {value:"Test"}]},
+                    {fid : 3, name : "Status", type: "text", blanks: false,
+                        values : [{value: "No Started"}, {value: "In Progress"}, {value: "Blocked"}, {value: "Completed"}]},
+                    {fid : 4, name : "Flag", type: "bool",  blanks: false,
+                        values : [{value: "True"}, {value: "False"}]},
+                    //{fid : 4, name : "Dates", type: "date",  blanks: false,
+                    //    range : {start: 1, end: 2}},
+                ],
+            };
+        }
+    },
+
     render() {
+        this.populateDummyFacets();
         return (<div>
                     <div className="reportToolbar">
                         {/*TODO : check if searchbox is enabled for this report, maybe disabled if facets are */}
                         <FilterSearchBox onChange={this.handleChange}
                                          {...this.props} />
-                        {/*TODO : check if facets is enabled for this report, hide is disabled */}
+                        {/*TODO :
+                            - check if facets is enabled for this report, hide is disabled
+                            - change to use react-bootstrap popover
+                        */}
                         <FacetsMenuButton onClick={this.handleFacetsMenuButtonClick}
                                         {...this.props} >
                             <FacetsMenu showing={this.state.facetsMenuShowing}
-                                        facets={this.props.reportData.data.facets}
+                                        facetsData={this.props.reportData.data.facets}
                                         onSelect={this.handleFacetSelect}
                                         {...this.props}
                             />
