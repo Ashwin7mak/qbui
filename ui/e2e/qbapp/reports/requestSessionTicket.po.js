@@ -18,8 +18,6 @@
          */
         this.get = function(sessionTicketRequest) {
             browser.get(sessionTicketRequest);
-            // Make sure the page is loaded before giving control back to the test class
-            browser.wait(EC.visibilityOf(this.ticketResponseBodyEl), 5000);
         };
     };
     module.exports = new RequestSessionTicketPage();

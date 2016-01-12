@@ -44,8 +44,6 @@
                 //        console.error('Browser console had errors: ' + JSON.stringify(browserLog));
                 //    }
                 //});
-                //Reset the browser size (note this doesn't work for Chrome on Mac OSX, a known bug - it will only max height)
-                //browser.driver.manage().window().maximize();
                 //Cleanup the realm and app
                 e2eBase.recordBase.apiBase.cleanup().then(function() {
                     done();
@@ -65,6 +63,7 @@
             resizeBrowser : function(width, height) {
                 var deferred = promise.pending();
                 browser.driver.manage().window().setSize(width, height).then(function() {
+                    e2eBase.sleep(browser.params.mediumSleep);
                     deferred.resolve();
                 });
                 return deferred.promise;
@@ -99,7 +98,16 @@
             },
             //Helper method to sleep a specified number of seconds
             sleep : function(ms) {
-                browser.driver.sleep(ms);
+                var deferred = promise.pending();
+
+                try {
+                    browser.driver.sleep(ms);
+                    deferred.resolve();
+                } catch (error) {
+                    console.error(JSON.stringify(error));
+                    deferred.reject(error);
+                }
+                return deferred.promise;
             }
         };
         return e2eBase;
