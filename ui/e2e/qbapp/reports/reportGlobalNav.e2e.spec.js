@@ -131,11 +131,19 @@
         /**
          * Test method.
          */
-        it('Small breakpoint: Global Nav actions should not be shown', function() {
+        it('Small breakpoint: Global Nav actions should only show icon', function() {
             e2eBase.resizeBrowser(e2eConsts.SMALL_BREAKPOINT_WIDTH, heightTest).then(function(){
-                expect(reportServicePage.topNavGlobalActDivEl.isPresent()).toBe(false);
+                reportServicePage.waitForElement(reportServicePage.topNavGlobalActDivEl).then(function() {
+                    expect(reportServicePage.topNavGlobalActDivEl.isDisplayed()).toBe(true);
+                    reportServicePage.topNavGlobalActionsListEl.then(function(navActions){
+                        expect(navActions.length).toBe(4);
+                    });
+                    reportServicePage.assertGlobalNavTextVisible(false);
+                });
             });
         });
+
+        //TODO: On Small breakpoint verify the global actions also appear in the left nav div
 
         /**
          * After all tests are done, run the cleanup function in the base class
