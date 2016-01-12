@@ -5,13 +5,12 @@ import * as breakpoints from '../../constants/breakpoints';
 import './nav.scss';
 import Button from 'react-bootstrap/lib/Button';
 import Trowser from '../trowser/trowser';
-
+import TrowserRecordActions from '../actions/trowserRecordActions';
 import Fluxxor from 'fluxxor';
 
 import LeftNav from './leftNav';
 
 import TopNav from '../header/topNav';
-import MobileTopNav from '../header/mobileTopNav';
 
 import Footer from '../footer/footer';
 import MobileAddFooter from '../footer/mobileAddFooter';
@@ -71,9 +70,11 @@ var Nav = React.createClass({
 
         return (<div className={classes}>
 
-            <Trowser visible={this.state.nav.trowserOpen} onHide={this.hideTrowserExample}>
-                <Button bsStyle="success" onClick={this.hideTrowserExample}
+            <Trowser position={"top"} visible={this.state.nav.trowserOpen} onHide={this.hideTrowserExample}>
+                <div style={{height: "400px"}}>
+                    <Button bsStyle="success" onClick={this.hideTrowserExample}
                         style={{position:"absolute", bottom:"10px", right:"10px"}}>Done</Button>
+                </div>
             </Trowser>
 
             <LeftNav
@@ -90,10 +91,18 @@ var Nav = React.createClass({
                 onHideReports={this.onHideTableReports}/>
 
             <div className="main">
-                <TopNav title="QuickBase"  globalActions={this.getGlobalActions()} onNavClick={this.toggleNav} onAddClicked={this.showTrowser} flux={flux} />
+                <TopNav title="QuickBase"
+                        globalActions={this.getGlobalActions()}
+                        onNavClick={this.toggleNav}
+                        flux={flux} />
                 {this.props.children && <div className="mainContent" >
                     {/* insert the component passed in by the router */}
-                    {React.cloneElement(this.props.children, {key: this.props.location ? this.props.location.pathname : "", selectedAppId: this.state.apps.selectedAppId, reportData: this.state.reportData,  flux: flux})}
+                    {React.cloneElement(this.props.children, {
+                        key: this.props.location ? this.props.location.pathname : "",
+                        selectedAppId: this.state.apps.selectedAppId,
+                        reportData: this.state.reportData,
+                        flux: flux}
+                    )}
                 </div>}
 
                 <Footer flux= {flux} />
@@ -115,6 +124,10 @@ var Nav = React.createClass({
             classes += ' leftNavOpen';
         }
         return (<div className={classes}>
+            <Trowser position={"bottom"} visible={this.state.nav.trowserOpen} onHide={this.hideTrowserExample}>
+                <TrowserRecordActions onClose={this.hideTrowserExample}/>
+            </Trowser>
+
             <LeftNav
                 open={this.state.nav.leftNavOpen}
                 appsListOpen={this.state.nav.appsListOpen}
@@ -131,16 +144,25 @@ var Nav = React.createClass({
                 globalActions={this.getGlobalActions()} />
 
             <div className="main">
-                <MobileTopNav title="QuickBase" searching={searching} searchBarOpen={searchBarOpen}  onNavClick={this.toggleNav} flux={flux} />
+                <TopNav title="QuickBase"
+                        globalActions={this.getGlobalActions()}
+                        onNavClick={this.toggleNav}
+                        flux={flux} />
 
                 {this.props.children && <div className="mainContent" >
                     {/* insert the component passed in by the router */}
-                    {React.cloneElement(this.props.children, {key: this.props.location ? this.props.location.pathname : "", selectedAppId: this.state.apps.selectedAppId, reportData: this.state.reportData, flux: flux})}
+                    {React.cloneElement(this.props.children, {
+                        key: this.props.location ? this.props.location.pathname : "",
+                        selectedAppId: this.state.apps.selectedAppId,
+                        reportData: this.state.reportData,
+                        flux: flux}
+                    )}
                 </div>}
 
                 {/* insert the footer if route wants it */}
                 <MobileAddFooter newItemsOpen={this.state.nav.newItemsOpen} flux= {flux} />
             </div>
+
         </div>);
     },
     render() {

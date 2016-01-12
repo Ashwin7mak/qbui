@@ -1,9 +1,10 @@
 import React from 'react';
 import TestUtils from 'react-addons-test-utils';
-import ReportContent from '../../src/components/report/dataTable/content';
+import ReportContent from '../../src/components/report/dataTable/reportContent';
 import Loader  from 'react-loader';
 import GriddleTable  from '../../src/components/dataTable/griddleTable/griddleTable';
 import {NumericFormatter, DateFormatter} from '../../src/components/dataTable/griddleTable/formatters';
+import _ from 'lodash';
 
 var NumericFormatterMock = React.createClass({
     render: function() {
@@ -16,6 +17,12 @@ var DateFormatterMock = React.createClass({
     }
 });
 
+var ReportHeaderMock = React.createClass({
+    render: function() {
+        return <div>mock table header</div>;
+    }
+});
+
 const fakeReportData_loading = {
     loading: true
 };
@@ -23,7 +30,7 @@ const fakeReportData_empty = {
     loading: false,
     data: {
         name: "",
-        records: [],
+        filteredRecords: [],
         columns: []
     }
 };
@@ -103,6 +110,14 @@ describe('ReportContent functions', () => {
 
     var component;
     let flux = {};
+    beforeEach(() => {
+        ReportContent.__Rewire__('ReportHeader', ReportHeaderMock);
+    });
+
+    afterEach(() => {
+        ReportContent.__ResetDependency__('ReportHeader');
+
+    });
 
     it('test render of component', () => {
         component = TestUtils.renderIntoDocument(<ReportContent reportData={fakeReportData_empty}/>);
@@ -125,8 +140,8 @@ describe('ReportContent functions', () => {
         var griddle = TestUtils.scryRenderedComponentsWithType(component, GriddleTable);
         expect(griddle.length).toEqual(1);
         griddle = griddle[0];
-        expect(griddle.props.results).toEqual(fakeReportData_simple.data.filteredRecords);
-        expect(griddle.props.columnMetadata).toEqual(fakeReportData_simple.data.columns);
+        expect(griddle.props.reportData.data.filteredRecords.length).toEqual(fakeReportData_simple.data.filteredRecords.length);
+        expect(_.intersection(griddle.props.columnMetadata, fakeReportData_simple.data.columns).length).toEqual(fakeReportData_simple.data.columns.length);
     });
 
     it('test render of data with numeric field', () => {
@@ -136,8 +151,6 @@ describe('ReportContent functions', () => {
         component = TestUtils.renderIntoDocument(<ReportContent flux={flux} reportData={fakeReportData_attributes} />);
         var griddle = TestUtils.scryRenderedComponentsWithType(component, GriddleTable);
         expect(griddle.length).toEqual(1);
-        griddle = griddle[0];
-        expect(griddle.props.results).toEqual(fakeReportData_simple.data.filteredRecords);
 
         var col = cols_with_numeric_field[0];
         expect(col.cssClassName).toMatch('AlignRight');
@@ -153,8 +166,6 @@ describe('ReportContent functions', () => {
         component = TestUtils.renderIntoDocument(<ReportContent reportData={fakeReportData_attributes} />);
         var griddle = TestUtils.scryRenderedComponentsWithType(component, GriddleTable);
         expect(griddle.length).toEqual(1);
-        griddle = griddle[0];
-        expect(griddle.props.results).toEqual(fakeReportData_simple.data.filteredRecords);
 
         var col = cols_with_date_field[2];
         expect(col.customComponent).toBe(DateFormatterMock);
@@ -168,8 +179,6 @@ describe('ReportContent functions', () => {
         component = TestUtils.renderIntoDocument(<ReportContent reportData={fakeReportData_attributes} />);
         var griddle = TestUtils.scryRenderedComponentsWithType(component, GriddleTable);
         expect(griddle.length).toEqual(1);
-        griddle = griddle[0];
-        expect(griddle.props.results).toEqual(fakeReportData_simple.data.filteredRecords);
 
         var col = cols_with_bold_attrs[0];
         expect(col.cssClassName).toMatch('Bold');
@@ -180,8 +189,6 @@ describe('ReportContent functions', () => {
         component = TestUtils.renderIntoDocument(<ReportContent reportData={fakeReportData_attributes} />);
         var griddle = TestUtils.scryRenderedComponentsWithType(component, GriddleTable);
         expect(griddle.length).toEqual(1);
-        griddle = griddle[0];
-        expect(griddle.props.results).toEqual(fakeReportData_simple.data.filteredRecords);
 
         var col = cols_with_nowrap_attrs[0];
         expect(col.cssClassName).toMatch('NoWrap');

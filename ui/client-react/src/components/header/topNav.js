@@ -6,7 +6,7 @@ import GlobalActions from '../global/globalActions';
 import Fluxxor from 'fluxxor';
 import _ from 'lodash';
 import Hicon from '../harmonyIcon/harmonyIcon';
-
+import QBIcon from '../qbIcon/qbIcon';
 let FluxMixin = Fluxxor.FluxMixin(React);
 import {MenuItem, Dropdown, ButtonGroup, Button, OverlayTrigger, Popover, Glyphicon, Input} from 'react-bootstrap';
 
@@ -55,7 +55,7 @@ var TopNav = React.createClass({
             <div className={'topNav'}>
                 <div className="top">
                     <div className="navGroup left">
-                        <div className="navItem "><a className="iconLink toggleNavButton" href="#" onClick={this.toggleNav}><Glyphicon glyph="menu-hamburger" /> </a></div>
+                        <div className="navItem "><a className="iconLink toggleNavButton" href="#" onClick={this.toggleNav}><QBIcon icon="menu" /> </a></div>
 
                         <div className="navItem">{this.props.title}</div>
                     </div>

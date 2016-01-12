@@ -68,7 +68,7 @@ let ReportDataStore = Fluxxor.createStore({
 
                 let match = false;
                 _.values(record).forEach((val) => {
-                    if (val.toString().toLowerCase().indexOf(text.toLowerCase()) !== -1) {
+                    if (val && val.toString().toLowerCase().indexOf(text.toLowerCase()) !== -1) {
                         match = true;
                     }
                 });
@@ -107,16 +107,17 @@ let ReportDataStore = Fluxxor.createStore({
         let map = new Map();
 
         if (fields && records) {
-            fields.forEach(function(field) {
+            fields.forEach((field) => {
                 map.set(field.id, field);
             });
 
-            records.forEach(function(record) {
+            records.forEach((record) => {
                 let columns = {};
-                record.forEach(function(column) {
+                record.forEach((column) => {
                     let fld = map.get(column.id);
                     columns[fld.name] = column.display;
                 });
+                columns.actions = record.id;
                 reportData.push(columns);
             });
         }

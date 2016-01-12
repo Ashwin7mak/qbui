@@ -38,6 +38,7 @@ $margin-spacer: 10px;
     top: $margin-spacer * 2;
   }
   .flexRow{
+    position:relative;
     display: flex;
     flex-direction: row;
   }
@@ -124,4 +125,29 @@ $margin-spacer: 10px;
 .reportContainer{
   background-image: linear-gradient(to top, $color13 0%, $color14 100%);
   background-color: $color12;
+}
+
+.checkboxContainer {
+  width:0;
+  transition: all 300ms ease-in;
+  position:relative;
+  input {
+    height:100%;
+    position:absolute;
+    display:none;
+  }
+}
+
+.allowCardSelection {
+
+  .checkboxContainer {
+    overflow:hidden;
+    width:40px;
+    transition: all 300ms ease-in;
+
+
+    input {
+      display: inline-block;
+    }
+  }
 }
