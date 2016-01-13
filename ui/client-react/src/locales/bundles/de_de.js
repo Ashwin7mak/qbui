@@ -5,6 +5,9 @@ export default {
         apps: {
             header: "Anwendungen"
         },
+        reports : {
+            emailReportTooltip: "Teilen Sie diese Datensätze mit einer anderen Person"
+        },
         records: {
             singular: "rekord",
             plural: "aufzeichnungen"

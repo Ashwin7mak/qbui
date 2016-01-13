@@ -9,6 +9,9 @@ html, body {
     overflow:hidden;
 }
 
+body.touch .tooltip {
+    display:none !important;
+}
 a {
     outline:none !important;
 }

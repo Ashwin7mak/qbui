@@ -80,6 +80,7 @@ let GriddleTable = React.createClass({
      * query the selection
      */
     onTableClick() {
+
         setTimeout(() => {
             if (this.refs.griddleTable) {
                 let selectedRowIds = this.refs.griddleTable.getSelectedRowIds();
@@ -150,7 +151,7 @@ let GriddleTable = React.createClass({
 
                 {this.state.selectedRows.length ?
                     React.cloneElement(this.props.selectionActions, {key:"selectionActions", selection: this.state.selectedRows}) :
-                    React.cloneElement(this.props.reportHeader, {key:"reportHeader"})}
+                    React.cloneElement(this.props.reportHeader, {key:"reportHeader", reportData: this.props.reportData})}
             </ReactCSSTransitionGroup>));
     },
 

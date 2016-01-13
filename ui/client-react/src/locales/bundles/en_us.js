@@ -8,6 +8,9 @@ export default {
         apps: {
             header: "Apps"
         },
+        reports : {
+            emailReportTooltip: "Share these records with someone else"
+        },
         records: {
             singular: "record",
             plural: "records"
