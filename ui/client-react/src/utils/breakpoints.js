@@ -4,7 +4,7 @@ import * as breakpoints from '../constants/breakpoints';
 class Breakpoints  {
 
     static getCurrentBreakpointClass() {
-        let w = window.innerWidth;
+        let w = window.innerWidth / window.devicePixelRatio;
 
         if (w <= 640) {
             return breakpoints.SMALL_BREAKPOINT;
