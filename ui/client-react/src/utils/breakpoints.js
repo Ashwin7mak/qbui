@@ -7,7 +7,7 @@ class Breakpoints  {
         let w = window.innerWidth;
 
         if (Breakpoints.isTouchDevice() && window.devicePixelRatio) {
-            w = window / window.devicePixelRatio;
+            w = window.innerWidth / window.devicePixelRatio;
         }
 
         if (w <= 640) {
