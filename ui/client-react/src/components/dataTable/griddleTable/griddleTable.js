@@ -4,7 +4,6 @@ import Griddle from 'griddle-react';
 import {I18nMessage} from '../../../utils/i18nMessage';
 import * as breakpoints from '../../../constants/breakpoints';
 import ReactCSSTransitionGroup from 'react/lib/ReactCSSTransitionGroup';
-//import {History} from 'react-router';
 import ReportActions from '../../actions/reportActions';
 import ReportHeader from '../../report/dataTable/reportHeader';
 import CardView from './cardView.js';
@@ -19,10 +18,9 @@ import './qbGriddleTable.scss';
 
 let GriddleTable = React.createClass({
 
-    //mixins: [History],
-
     contextTypes: {
-        breakpoint: React.PropTypes.string
+        breakpoint: React.PropTypes.string,
+        history: React.PropTypes.object
     },
 
     /**
@@ -113,9 +111,18 @@ let GriddleTable = React.createClass({
     onRowClicked(row) {
 
         const {appId, tblId} = this.props.reportData;
-        const recId = row[this.props.uniqueIdentifier];
+        var recId;
 
+        //check to see if props exist, if they do we need to get recId from row.props.data (this is for non-custom row component clicks)
+        if(row.props) {
+            recId = row.props.data[this.props.uniqueIdentifier];
+        }
+        else {
+            recId = row[this.props.uniqueIdentifier];
+        }
+        //create the link we want to send the user to and then send them on their way
         const link = '/app/' + appId + '/table/' + tblId + '/record/' + recId;
+        this.context.history.push(link);
 
         // something like this I expect, maybe in an action instead:
         // this.history.pushState(null, link);
