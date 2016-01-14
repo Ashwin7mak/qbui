@@ -4,7 +4,11 @@ import * as breakpoints from '../constants/breakpoints';
 class Breakpoints  {
 
     static getCurrentBreakpointClass() {
-        let w = window.innerWidth / window.devicePixelRatio;
+        let w = window.innerWidth;
+
+        if (Breakpoints.isTouchDevice() && window.devicePixelRatio) {
+            w = window / window.devicePixelRatio;
+        }
 
         if (w <= 640) {
             return breakpoints.SMALL_BREAKPOINT;
@@ -15,6 +19,11 @@ class Breakpoints  {
         } else {
             return breakpoints.XLARGE_BREAKPOINT;
         }
+    }
+
+    static isTouchDevice() {
+
+        return "ontouchstart" in window;
     }
 }
 

@@ -52,7 +52,7 @@ let NavWrapper = React.createClass({
     getInitialState() {
         return {
             breakpoint: Breakpoints.getCurrentBreakpointClass(),
-            touch: this.isTouchDevice()
+            touch: Breakpoints.isTouchDevice()
         };
     },
     childContextTypes: {
@@ -74,16 +74,13 @@ let NavWrapper = React.createClass({
      *
      * @returns {boolean}
      */
-    isTouchDevice() {
 
-        return "ontouchstart" in window;
-    },
     handleResize: function() {
 
         let breakpoint = Breakpoints.getCurrentBreakpointClass();
         let bodyClasses = breakpoint;
 
-        if (this.isTouchDevice()) {
+        if (Breakpoints.isTouchDevice()) {
             bodyClasses += " touch";
         }
 
