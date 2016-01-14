@@ -35,20 +35,20 @@ $left-nav-heading-fg: #bfcfe3;
   width:200px;
 }
 
-.small-breakpoint .leftNav.open {
+.small-breakpoint.touch .leftNav.open {
   width:350px;
 
 }
 
-/* show tooltips only if .show is present unless we're in small (phone) breakpoint */
+/* show tooltips only if .show is present unless we're on a touchscreen */
 div.leftNavTooltip {
   display:none;
 }
-body:not(.small-breakpoint) div.leftNavTooltip.show {
+body:not(.touch) div.leftNavTooltip.show {
   display:block;
 }
 
-body:not(.small-breakpoint) .leftNav.closed {
+body:not(.touch) .leftNav.closed {
   width:40px;
   overflow-y:hidden;
   li a.heading {
@@ -176,7 +176,7 @@ body:not(.small-breakpoint) .leftNav.closed {
 
 /* small (mobile) left nav behaves differently */
 
-.small-breakpoint .leftNav {
+.small-breakpoint.touch .leftNav {
   margin: 0;
   height: 100%;
   width:0;
@@ -190,7 +190,7 @@ body:not(.small-breakpoint) .leftNav.closed {
   }
 }
 
-.small-breakpoint .navShell.leftNavOpen {
+.small-breakpoint.touch .navShell.leftNavOpen {
   position: relative;
   left:-350px;
 

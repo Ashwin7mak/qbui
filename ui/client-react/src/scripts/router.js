@@ -51,17 +51,22 @@ flux.addActions(navActions);
 let NavWrapper = React.createClass({
     getInitialState() {
         return {
-            breakpoint: Breakpoints.getCurrentBreakpointClass()
+            breakpoint: Breakpoints.getCurrentBreakpointClass(),
+            touch: this.isTouchDevice()
         };
     },
     childContextTypes: {
-        breakpoint: React.PropTypes.string
+        breakpoint: React.PropTypes.string,
+        touch: React.PropTypes.bool
     },
     getChildContext: function() {
-        return {breakpoint: this.state.breakpoint};
+        return {
+            breakpoint: this.state.breakpoint,
+            touch: this.state.touch
+        };
     },
     render: function() {
-        return <Nav flux={flux} {...this.props}  breakpoint={this.state.breakpoint} />;
+        return <Nav flux={flux} {...this.props} />;
     },
 
     /**
