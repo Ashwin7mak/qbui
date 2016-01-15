@@ -6,7 +6,7 @@ class LogService extends BaseService {
     constructor() {
         super();
 
-        //  Define log service API endpoints
+        //  Log service API endpoints
         this.API = {
             LOG     : `${constants.BASE_URL.NODE}/${constants.LOG}`
         };

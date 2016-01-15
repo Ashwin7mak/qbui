@@ -8,7 +8,7 @@ class RecordService extends BaseService {
     constructor() {
         super();
 
-        //  Define record service API endpoints
+        //  Record service API endpoints
         this.API = {
             GET_RECORD  : `${constants.BASE_URL.QUICKBASE}/${constants.APPS}/{0}/${constants.TABLES}/{1}/${constants.RECORDS}`
         };

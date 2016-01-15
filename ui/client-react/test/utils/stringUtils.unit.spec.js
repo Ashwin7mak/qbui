@@ -65,6 +65,14 @@ describe('Token substitution tests', () => {
         expect(StringUtils.format("The quick brown fox jumps over the lazy dog.", ['fox', 'dog'])).toBe("The quick brown fox jumps over the lazy dog.");
     });
 
+    it("Token string substitution...mismatched token dataTypes", function() {
+        expect(StringUtils.format("{0} quick brown fox jumps over the lazy {1}.", [1, 'dog'])).toBe("1 quick brown fox jumps over the lazy dog.");
+    });
+
+    it("Token string substitution...mismatched tokens", function() {
+        expect(StringUtils.format("The quick brown fox jumps over the lazy {1}.", [1, 'dog'])).toBe("The quick brown fox jumps over the lazy dog.");
+    });
+
     it("Token string substitution...numeric tokens", function() {
         expect(StringUtils.format("{0} divided by {1} = {2}", [10, 5, 2])).toBe("10 divided by 5 = 2");
     });

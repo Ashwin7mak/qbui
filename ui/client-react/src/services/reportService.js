@@ -7,7 +7,7 @@ class ReportService extends BaseService {
     constructor() {
         super();
 
-        //  Define report service API endpoints
+        //  Report service API endpoints
         this.API = {
             GET_REPORT          : `${constants.BASE_URL.QUICKBASE}/${constants.APPS}/{0}/${constants.TABLES}/{1}/${constants.REPORTS}/{2}`,
             GET_REPORTS         : `${constants.BASE_URL.QUICKBASE}/${constants.APPS}/{0}/${constants.TABLES}/{1}/${constants.REPORTS}`,

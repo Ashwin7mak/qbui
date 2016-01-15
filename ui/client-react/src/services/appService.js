@@ -6,7 +6,7 @@ class AppService extends BaseService {
     constructor() {
         super();
 
-        //  Define App Service API endpoints.
+        //  App Service API endpoints
         this.API = {
             GET_APP     : `${constants.BASE_URL.QUICKBASE}/${constants.APPS}/{0}`,
             GET_APPS    : `${constants.BASE_URL.QUICKBASE}/${constants.APPS}`
