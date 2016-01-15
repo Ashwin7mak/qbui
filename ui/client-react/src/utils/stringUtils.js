@@ -7,7 +7,9 @@ class StringUtils {
      * Function that trims leading and trailing whitespace
      *
      * @param input string
-     * @returns trimmed string.
+     * @returns trimmed string.  If the input parameter is not a string,
+     * the input parameter is returned unchanged; otherwise the trimmed
+     * string is returned.
      */
     static trim(inString) {
         if (typeof inString === 'string') {
@@ -20,7 +22,8 @@ class StringUtils {
      * Function to test if the parameter value is an valid string
      *
      * @param val
-     * @returns {boolean}
+     * @returns {boolean} - returns true if the intput parameter is of
+     * type 'string' and the trimmed content length > 0; otherwise false.
      */
     static isNonEmptyString(val) {
         return (typeof val === 'string' && StringUtils.trim(val).length > 0);
@@ -35,8 +38,9 @@ class StringUtils {
      * @param tokenizedString - tokenized input string.
      * @param tokenArray - array used to replace each corresponding token.  The array's
      * zero based index is used to search for matching tokens in the input string.
-     * @returns string with tokens replaced.  The original tokenizedString is returned if the
-     * intput parameters are invalid.
+     * @returns string with tokens replaced.  The original tokenizedString is returned if
+     * the input parameters are invalid. The input parameters must be the correct data
+     * type (string and array).  If invalid, the tokenizedString is returned unchanged.
      *
      * Example calls:
      *  StringUtils.format( "My name is {0}, and my home town is {1}.", ["John Smith", "Denver, Colorado"] );

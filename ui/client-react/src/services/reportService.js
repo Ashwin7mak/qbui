@@ -15,11 +15,10 @@ class ReportService extends BaseService {
             GET_REPORT_FACETS   : `${constants.BASE_URL.QUICKBASE}/${constants.APPS}/{0}/${constants.TABLES}/{1}/${constants.REPORTS}/{2}/${constants.FACETS}/${constants.RESULTS}`,
             PARSE_FACET_EXPR    : `${constants.BASE_URL.NODE}/${constants.FACETS}/${constants.PARSE}`
         };
-
     }
 
     /**
-     * Return a report for a specific table
+     * Return the report meta data for a given table
      *
      * @param appId
      * @param tableId
@@ -32,7 +31,7 @@ class ReportService extends BaseService {
     }
 
     /**
-     * Get all reports available for a specific table
+     * Get all reports available for a given table
      *
      * @param appId
      * @param tableId
@@ -44,7 +43,7 @@ class ReportService extends BaseService {
     }
 
     /**
-     * Execute a report for a given table.
+     * Return the report data for a given table.
      *
      * @param appId
      * @param tableId
@@ -68,6 +67,14 @@ class ReportService extends BaseService {
         return super.get(url, {params:params});
     }
 
+    /**
+     * Return the list of report facets and facet values.
+     *
+     * @param appId
+     * @param tableId
+     * @param reportId
+     * @returns promise
+     */
     getReportFacets(appId, tableId, reportId) {
         let url = super.constructUrl(this.API.GET_REPORT_FACETS, [appId, tableId, reportId]);
         return super.get(url);
