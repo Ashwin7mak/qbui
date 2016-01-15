@@ -57,7 +57,7 @@ describe('Report Data Actions -- Filter report Negative', () => {
             getReport(){
                 return mockPromiseSuccess(responseReportData);
             }
-            resolveFacetExpression() {
+            parseFacetExpression() {
                 return mockPromiseError();
             }
         }
@@ -88,7 +88,7 @@ describe('Report Data Actions -- Filter report Negative', () => {
             getReport(){
                 return mockPromiseSuccess(responseReportData);
             }
-            resolveFacetExpression(){
+            parseFacetExpression(){
                 return mockPromiseSuccess(responseResultQuery);
             }
         }
@@ -119,7 +119,7 @@ describe('Report Data Actions -- Filter report Negative', () => {
             getReport(){
                 return mockPromiseSuccess(responseReportData);
             }
-            resolveFacetExpression(){
+            parseFacetExpression(){
                 return mockPromiseSuccess(responseResultQuery);
             }
         }
@@ -150,7 +150,7 @@ describe('Report Data Actions -- Filter report Negative', () => {
             getReport(){
                 return mockPromiseSuccess(responseReportData);
             }
-            resolveFacetExpression(){
+            parseFacetExpression(){
                 return mockPromiseSuccess(responseResultQuery);
             }
         }
@@ -187,7 +187,7 @@ describe('Report Data Actions -- Filter report Negative missing parameters', () 
         getReport() {
             return mockPromiseSuccess(responseReportData);
         }
-        resolveFacetExpression() {
+        parseFacetExpression() {
             return mockPromiseSuccess(responseResultQuery);
         }
     }

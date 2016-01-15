@@ -22,7 +22,8 @@ if (__QB_PROD__) {
         env: 'PROD',
         sid: uuid.v1(),
         api: {
-            version: 'v1'
+            qbVersion: 'v1',
+            nodeVersion: 'v1'
         },
         locale: {
             supported:['en-us', 'de-de', 'fr-fr'],
@@ -42,7 +43,8 @@ if (__QB_TEST__) {
         env: 'TEST',
         sid: uuid.v1(),
         api: {
-            version: 'v1'
+            qbVersion: 'v1',
+            nodeVersion: 'v1'
         },
         locale: {
             supported: ['en-us', 'de-de', 'fr-fr'],
@@ -62,7 +64,8 @@ if (__QB_LOCAL__) {
         env: 'LOCAL',
         sid: uuid.v1(),
         api: {
-            version: 'v1'
+            qbVersion: 'v1',
+            nodeVersion: 'v1'
         },
         locale: {
             supported:['en-us', 'de-de', 'fr-fr'],

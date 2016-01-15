@@ -6,6 +6,16 @@ class ReportService extends BaseService {
 
     constructor() {
         super();
+
+        //  Define report service API endpoints
+        this.API = {
+            GET_REPORT          : `${constants.BASE_URL.QUICKBASE}/${constants.APPS}/{0}/${constants.TABLES}/{1}/${constants.REPORTS}/{2}`,
+            GET_REPORTS         : `${constants.BASE_URL.QUICKBASE}/${constants.APPS}/{0}/${constants.TABLES}/{1}/${constants.REPORTS}`,
+            GET_REPORT_RESULTS  : `${constants.BASE_URL.QUICKBASE}/${constants.APPS}/{0}/${constants.TABLES}/{1}/${constants.REPORTS}/{2}/${constants.RESULTS}`,
+            GET_REPORT_FACETS   : `${constants.BASE_URL.QUICKBASE}/${constants.APPS}/{0}/${constants.TABLES}/{1}/${constants.REPORTS}/{2}/${constants.FACETS}/${constants.RESULTS}`,
+            PARSE_FACET_EXPR    : `${constants.BASE_URL.NODE}/${constants.FACETS}/${constants.PARSE}`
+        };
+
     }
 
     /**
@@ -14,10 +24,11 @@ class ReportService extends BaseService {
      * @param appId
      * @param tableId
      * @param reportId
-     * @returns {*}
+     * @returns promise
      */
     getReport(appId, tableId, reportId) {
-        return super.get(constants.APPS + '/' + appId + '/' + constants.TABLES + '/' + tableId + '/' + constants.REPORTS + '/' + reportId);
+        let url = super.constructUrl(this.API.GET_REPORT, [appId, tableId, reportId]);
+        return super.get(url);
     }
 
     /**
@@ -25,10 +36,11 @@ class ReportService extends BaseService {
      *
      * @param appId
      * @param tableId
-     * @returns {*}
+     * @returns promise
      */
     getReports(appId, tableId) {
-        return super.get(constants.APPS + '/' + appId + '/' + constants.TABLES + '/' + tableId + '/' + constants.REPORTS);
+        let url = super.constructUrl(this.API.GET_REPORTS, [appId, tableId]);
+        return super.get(url);
     }
 
     /**
@@ -40,6 +52,7 @@ class ReportService extends BaseService {
      * @param formatted - is output formatted for UI display or the raw data
      * @param offset - zero based row offset
      * @param rows - number of rows to return on the request
+     * @returns promise
      */
     getReportResults(appId, tableId, reportId, formatted, offset, rows) {
         let params = {};
@@ -50,19 +63,29 @@ class ReportService extends BaseService {
             params.offset = offset;
             params.numRows = rows;
         }
-        return super.get(constants.APPS + '/' + appId + '/' + constants.TABLES + '/' + tableId + '/' + constants.REPORTS + '/' + reportId + '/' + constants.RESULTS, {params:params});
+
+        let url = super.constructUrl(this.API.GET_REPORT_RESULTS, [appId, tableId, reportId]);
+        return super.get(url, {params:params});
+    }
+
+    getReportFacets(appId, tableId, reportId) {
+        let url = super.constructUrl(this.API.GET_REPORT_FACETS, [appId, tableId, reportId]);
+        return super.get(url);
     }
 
     /**
-     * Resolve a facet Expression to a queryString.
+     * Parse a facet Expression to a queryString.
+     *
      * @param facetExpression looks like [{fid: fid1, fieldtype:'', values: [value1, value2]}, {fid: fid2, fieldtype:'', values: [value3, value4]}, {fid: fid3, fieldtype:'DATE', values: [value3, value4]}]
+     * @returns promise
      */
-    resolveFacetExpression(facetExpression){
+    parseFacetExpression(facetExpression){
         let params = {};
         if (facetExpression) {
             params.facetexpression = facetExpression;
         }
-        return super.get(constants.FACETS,  {params: params});
+
+        return super.get(this.API.PARSE_FACET_EXPR, {params: params});
     }
 }
 

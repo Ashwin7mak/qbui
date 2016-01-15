@@ -20,7 +20,7 @@ describe('LogService functions', () => {
         logService.log(msg);
 
         expect(BaseService.prototype.get).not.toHaveBeenCalledWith();
-        expect(BaseService.prototype.post).toHaveBeenCalledWith(constants.LOG, msg);
+        expect(BaseService.prototype.post).toHaveBeenCalledWith(logService.API.LOG, msg);
     });
 
 });
