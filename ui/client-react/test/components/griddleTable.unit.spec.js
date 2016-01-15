@@ -98,14 +98,15 @@ describe('GriddleTable functions', () => {
         expect(ReactDOM.findDOMNode(component).textContent).toMatch("test");
     });
 
-    it('test render with small breakpoint', () => {
+    it('test render with small touchscreen breakpoint', () => {
         var TestParent = React.createFactory(React.createClass({
 
             childContextTypes: {
-                breakpoint: React.PropTypes.string
+                breakpoint: React.PropTypes.string,
+                touch: React.PropTypes.bool
             },
             getChildContext: function() {
-                return {breakpoint: breakpoints.SMALL_BREAKPOINT};
+                return {breakpoint: breakpoints.SMALL_BREAKPOINT, touch:true};
             },
             getInitialState() {
                 return {results: fakeReportData_before.data.results, columns: fakeReportData_before.data.columnMetadata};

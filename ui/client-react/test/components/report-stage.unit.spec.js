@@ -1,6 +1,6 @@
 import React from 'react';
 import TestUtils from 'react-addons-test-utils';
-import ReportStage  from '../../src/components/report/dataTable/stage';
+import ReportStage  from '../../src/components/report/dataTable/reportStage';
 
 var I18nMessageMock = React.createClass({
     render: function() {
@@ -26,11 +26,19 @@ describe('Report stage functions', () => {
     });
 
     it('test render of component', () => {
-        component = TestUtils.renderIntoDocument(<ReportStage reportName={"appheader"}/>);
+        const reportData = {
+            data: {
+                name: 'My Report',
+                appId: '123',
+                tblId: '456',
+                rptId: '789'
+            }
+        };
+        component = TestUtils.renderIntoDocument(<ReportStage reportData={reportData}/>);
         expect(TestUtils.isCompositeComponent(component)).toBeTruthy();
         let header = TestUtils.scryRenderedDOMComponentsWithClass(component, "header");
         expect(header.length).toEqual(2);
-        expect(header[0].textContent).toEqual("appheader");
+        expect(header[0].textContent).toEqual("My Report");
     });
 
 });

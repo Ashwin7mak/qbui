@@ -2,7 +2,7 @@ import React from 'react';
 import {I18nMessage} from '../../utils/i18nMessage';
 import Locale from '../../locales/locales';
 import Stage from '../stage/stage';
-import ReportStage from './dataTable/stage';
+import ReportStage from './dataTable/reportStage';
 
 import Logger from '../../utils/logger';
 let logger = new Logger();
@@ -52,7 +52,7 @@ var ReportRoute = React.createClass({
 
         return (<div className="reportContainer">
                 <Stage stageContent="this is the stage content text" >
-                    <ReportStage reportName={this.props.reportData && this.props.reportData.data ? this.props.reportData.data.name : ""}/>
+                    <ReportStage reportData={this.props.reportData}/>
                 </Stage>
 
                 <div> This is hard wired to call filter by facets - only matches Record#id = 10 OR 11 <button className="testFilterButton" onClick={this.filterReport}> Fake filter this report </button></div>
