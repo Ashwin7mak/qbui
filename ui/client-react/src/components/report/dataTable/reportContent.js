@@ -3,22 +3,34 @@ import React from 'react';
 import GriddleTable  from '../../../components/dataTable/griddleTable/griddleTable.js';
 import {DateFormatter, NumericFormatter}  from '../../../components/dataTable/griddleTable/formatters.js';
 import Loader  from 'react-loader';
-
+import ReportActions from '../../actions/reportActions';
+import RecordActions from '../../actions/recordActions';
 const resultsPerPage = 1000; //assume that this is the constant number of records per page. This can be passed in as a prop for diff reports
 
-var Content = React.createClass({
+
+let ActionsColumn = React.createClass({
+
+    render() {
+        let data = this.props.rowData;
+
+        return (<div><RecordActions /></div>);
+    }
+});
+
+let ReportContent = React.createClass({
 
     getInitialState: function() {
         return {
+            showSelectionColumn: false,
             reportColumns: this.props.reportData && this.props.reportData.data && this.props.reportData.data.columns ? this.getColumnProps(this.props.reportData.data.columns) : []
         };
     },
 
     componentWillReceiveProps: function(nextProps) {
-        var self = this;
+
         if (nextProps.reportData.data) {
-            self.setState({
-                reportColumns: nextProps.reportData.data.columns ? self.getColumnProps(nextProps.reportData.data.columns) : []
+            this.setState({
+                reportColumns: nextProps.reportData.data.columns ? this.getColumnProps(nextProps.reportData.data.columns) : []
             });
         }
     },
@@ -31,10 +43,8 @@ var Content = React.createClass({
     },
     /* for each field attribute that has some presentation effect convert that to a css class before passing to griddle.*/
     getColumnProps: function(columns) {
-        var self = this;
-
         if (columns) {
-            var columnsData = columns.map(function(obj) {
+            var columnsData = columns.map((obj) => {
                 if (obj.datatypeAttributes) {
                     var datatypeAttributes = obj.datatypeAttributes;
                     for (var attr in datatypeAttributes) {
@@ -43,7 +53,7 @@ var Content = React.createClass({
                             {
                                 switch (datatypeAttributes[attr]) {
                                 case "NUMERIC" :
-                                    self.setCSSClass_helper(obj, "AlignRight");
+                                    this.setCSSClass_helper(obj, "AlignRight");
                                     obj.customComponent = NumericFormatter;
                                     break;
                                 case "DATE" :
@@ -60,12 +70,12 @@ var Content = React.createClass({
                             switch (cattr) {
                             case 'bold':
                                 if (clientSideAttributes[cattr]) {
-                                    self.setCSSClass_helper(obj, "Bold");
+                                    this.setCSSClass_helper(obj, "Bold");
                                 }
                                 break;
                             case 'word-wrap':
                                 if (clientSideAttributes[cattr]) {
-                                    self.setCSSClass_helper(obj, "NoWrap");
+                                    this.setCSSClass_helper(obj, "NoWrap");
                                 }
                                 break;
                             }
@@ -74,21 +84,40 @@ var Content = React.createClass({
                 }
                 return obj;
             });
+
+
+            columnsData.push({
+                columnName: "actions",
+                visible:false,
+                customComponent: ActionsColumn,
+                cssClassName:"actions"
+
+            });
+
             return columnsData;
         }
         return [];
     },
 
-
     /* TODO: paging component that has "next and previous tied to callbacks from the store to get new data set*/
     render: function() {
+
         return (
             <Loader loaded={!this.props.reportData.loading}>
                 {this.props.reportData.error ?
                     <div>Error loading report!</div> :
-                        <div>
-                            <GriddleTable results={this.props.reportData && this.props.reportData.data ? this.props.reportData.data.filteredRecords : []} columnMetadata={this.state.reportColumns} showPager={false} useExternal={false} resultsPerPage={resultsPerPage} externalResultsPerPage={resultsPerPage} />
-                        </div>
+                    <div>
+                        <GriddleTable reportData={this.props.reportData}
+                                      columnMetadata={this.state.reportColumns}
+                                      uniqueIdentifier="Record ID#"
+                                      showPager={false}
+                                      useExternal={false}
+                                      resultsPerPage={resultsPerPage}
+                                      externalResultsPerPage={resultsPerPage}
+                                      reportHeader={this.props.reportHeader}
+                                      selectionActions={<ReportActions />}
+                        />
+                    </div>
                 }
             </Loader>
         );
@@ -96,4 +125,4 @@ var Content = React.createClass({
 
 });
 
-export default Content;
+export default ReportContent;

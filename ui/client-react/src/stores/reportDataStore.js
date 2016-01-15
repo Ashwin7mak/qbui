@@ -13,6 +13,8 @@ let ReportDataStore = Fluxxor.createStore({
             actions.LOAD_REPORT, this.onLoadReport,
             actions.LOAD_REPORT_SUCCESS, this.onLoadReportSuccess,
             actions.LOAD_REPORT_FAILED, this.onLoadReportFailed,
+            actions.LOAD_RECORDS_SUCCESS, this.onLoadRecordsSuccess,
+            actions.LOAD_RECORDS_FAILED, this.onLoadRecordsFailed,
             actions.SEARCH_FOR, this.onSearchFor
         );
     },
@@ -24,12 +26,12 @@ let ReportDataStore = Fluxxor.createStore({
         this.tblId = report.tblId;
         this.rptId = report.rptId;
 
-        this.emit("change");
+        this.emit('change');
     },
     onLoadReportFailed: function() {
         this.loading = false;
         this.error = true;
-        this.emit("change");
+        this.emit('change');
     },
 
     onLoadReportSuccess: function(reportData) {
@@ -43,7 +45,18 @@ let ReportDataStore = Fluxxor.createStore({
             records: records,
             filteredRecords: records
         };
-        this.emit("change");
+        this.emit('change');
+    },
+
+    onLoadRecordsSuccess: function(records) {
+        this.loading = false;
+        this.error = false;
+        this.data.filteredRecords = this.getReportData(records);
+        this.emit('change');
+    },
+    onLoadRecordsFailed: function(){
+        this.error = true;
+        this.emit('change');
     },
 
     onSearchFor: function(text) {
@@ -55,7 +68,7 @@ let ReportDataStore = Fluxxor.createStore({
 
                 let match = false;
                 _.values(record).forEach((val) => {
-                    if (val.toString().toLowerCase().indexOf(text.toLowerCase()) !== -1) {
+                    if (val && val.toString().toLowerCase().indexOf(text.toLowerCase()) !== -1) {
                         match = true;
                     }
                 });
@@ -65,7 +78,7 @@ let ReportDataStore = Fluxxor.createStore({
 
             });
         }
-        this.emit("change");
+        this.emit('change');
     },
 
     getReportColumns: function(fields) {
@@ -94,16 +107,17 @@ let ReportDataStore = Fluxxor.createStore({
         let map = new Map();
 
         if (fields && records) {
-            fields.forEach(function(field) {
+            fields.forEach((field) => {
                 map.set(field.id, field);
             });
 
-            records.forEach(function(record) {
+            records.forEach((record) => {
                 let columns = {};
-                record.forEach(function(column) {
+                record.forEach((column) => {
                     let fld = map.get(column.id);
                     columns[fld.name] = column.display;
                 });
+                columns.actions = record.id;
                 reportData.push(columns);
             });
         }

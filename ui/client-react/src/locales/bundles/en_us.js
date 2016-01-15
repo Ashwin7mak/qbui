@@ -8,6 +8,18 @@ export default {
         apps: {
             header: "Apps"
         },
+        records: {
+            singular: "record",
+            plural: "records"
+        },
+        selection: {
+            edit: "Edit",
+            email: "Email",
+            print: "Print",
+            copy: "Copy",
+            delete: "Delete",
+            more: "More..."
+        },
         footer: {
             copyright: "{year} Intuit Inc. All rights reserved."
         },

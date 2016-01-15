@@ -3,27 +3,25 @@
 .reportContainer {
   display: flex;
   flex-direction: column;
-  flex:1;
+  flex: 1;
   .layout-stage {
-    flex-shrink:0;
+    flex-shrink: 0;
   }
-  margin-top:10px;
-  margin-left:10px;
-  margin-right:10px;
+  margin-top: 10px;
+  margin-left: 10px;
+  margin-right: 10px;
 
-  //background-image: linear-gradient(to top, $color13 0%, $color14 100%);
-  background-color: $color2;
-
+  background-color: $report-backgroundColor;
 
   .reportToolsAndContentContainer {
 
     .reportToolbar {
       display: flex;
       flex-direction: row;
-      flex:1;
-      border: solid 1px $toolBar-borderColor;
-      background-color: $toolBar-backgroundColor;
-      padding :  .5rem 1rem .5rem 1rem;
+      flex: 1;
+      //border: solid 1px $toolBar-borderColor;
+      //background-color: $toolBar-backgroundColor;
+      //padding: .5rem 1rem .5rem 1rem;
       align-items: center;
 
       .filterSearchBox {
@@ -32,35 +30,34 @@
       }
 
       .facetsMenuButton {
-        //margin-top: .5rem;
+
         margin-left: 1.5rem;
       }
       .recordsCount {
-       // margin-top: .5rem;
+
         margin-left: 1.5rem;
       }
     }
 
     .loadedContent {
-      flex:1;
-      overflow-y:auto;
+      flex: 1;
+      overflow-y: auto;
+      margin-left: 10px;
+      margin-right: 10px;
     }
 
   }
 
-}
+  @media (max-width: 1150px) {
+    .layout-stage {
+      //display: none;//for now
+      .right {
+        display: none;
 
-
-@media (max-width: 1150px) {
-  .layout-stage {
-    //display: none;//for now
-    .right {
-      display: none;
-
-    }
-    .report-content .left {
-      width:100%;
+      }
+      .report-content .left {
+        width: 100%;
+      }
     }
   }
-
 }

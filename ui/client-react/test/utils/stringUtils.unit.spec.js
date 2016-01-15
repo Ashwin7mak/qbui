@@ -25,4 +25,11 @@ describe('StringUtils', () => {
         expect(StringUtils.trim(true)).toBe(true);
     });
 
+    it('test isNonEmptyString function', () => {
+        expect(StringUtils.isNonEmptyString('abc')).toBe(true);
+        expect(StringUtils.isNonEmptyString(' abc ')).toBe(true);
+        expect(StringUtils.isNonEmptyString(123)).toBe(false);
+        expect(StringUtils.isNonEmptyString('123')).toBe(true);
+        expect(StringUtils.isNonEmptyString(' ')).toBe(false);
+    });
 });

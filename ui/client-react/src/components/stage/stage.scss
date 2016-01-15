@@ -1,7 +1,7 @@
 .layout-stage {
     border-bottom: 1px solid #e3eaf3;
     position: relative;
-    margin-bottom:35px;
+    margin-bottom:20px;
 
     .toggleStage {
 
@@ -23,7 +23,7 @@
     .well {
         //background-image: linear-gradient(to top, #f6f8fb 0%, #f9fafb 100%);
         background-color: #f3f5f8;
-        border:0;
+        border:0 none transparent;
         margin:0;
     }
 }

@@ -37,7 +37,6 @@ var FacetValues = React.createClass({
     render() {
         /* handle the sublists of values each */
         return (
-            <FormattedPlural />
 
             <ul className="facetValues">
 

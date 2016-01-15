@@ -13,6 +13,7 @@ export default {
 
     // API REST ENDPOINTS
     APPS: 'apps',
+    FACETS: 'facets',
     FIELD: 'fields',
     LOG: 'log',
     RECORDS: 'records',

@@ -5,6 +5,18 @@ export default {
         apps: {
             header: "Anwendungen"
         },
+        records: {
+            singular: "rekord",
+            plural: "aufzeichnungen"
+        },
+        selection: {
+            edit: "Bearbeiten",
+            email: "Email",
+            print: "Drucken",
+            copy: "Kopieren",
+            delete: "Löschen",
+            more: "Mehr..."
+        },
         footer: {
             copyright: "{year} Intuit Inc. Alle Rechte vorbehalten."
         },

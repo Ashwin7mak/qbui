@@ -1,7 +1,7 @@
 'use strict';
 
 var recordFormatter = require('./../recordFormatter')();
-var testDateHelper = require('./recordFormatter.date.unit.helper');
+var testDateHelper = require('./../../../test/date.test.helper.js');
 var assert = require('assert');
 
 

@@ -19,6 +19,10 @@ let secondInMilliseconds = 1000;
 let debounceInputTime = .5 * secondInMilliseconds ; // 1/5 a second delay
 let facetVisValues = 50; // how many facets to list before showing more...link
 
+/**
+ * a header for table reports with search field and a filter icon
+ */
+
 var ReportToolbar = React.createClass({
     mixins: [FluxMixin],
 
@@ -63,8 +67,8 @@ var ReportToolbar = React.createClass({
         return deferred.promise;
     },
 
-    searchReport: function(ev) {
-        const text = ev.target.value;
+    searchReport: function(inputText) {
+        const text = inputText;
         let flux = this.getFlux();
         flux.actions.searchFor(text);
     },
@@ -79,9 +83,19 @@ var ReportToolbar = React.createClass({
         return answer;
     },
 
+    /* Placeholder method to hook into node layer call to get filtered records when user selects a facet
+     * Hardcoded facetExpression for testing
+     * TODO: replace with a real method.*/
+    filterReport: function(){
+        var facetExpression = [{fid:'3', values:['10', '11']}, {fid:'4', values:['abc']}];
+
+        let flux = this.getFlux();
+        flux.actions.filterReport(this.props.appId, this.props.tblId, this.props.rptId, true, facetExpression);
+    },
+
     handleFacetSelect : function(facet, value, enable) {
         //if enable == true (when selecting the value in the facet)
-            //if there is not an facet entry in the selecetfacets hash add it. then add the value
+            //if there is not an facet entry in the selecetFacets hash add it. then add the value
             //if (this.selectedFacets.z !== undefined ) {
                     // this.selectedFacets.z["9"]= [] or {} ?// add entry first selection
             //}
@@ -96,7 +110,8 @@ var ReportToolbar = React.createClass({
         //
     },
 
-    handleChange: function(searchTxt) {
+    handleChange: function(e) {
+        var searchTxt = e.target.value;
         var self = this;
         this.debouncedChange(searchTxt).then(function(result) {
             self.setState({
@@ -164,6 +179,10 @@ var ReportToolbar = React.createClass({
                                       filteredRecordCount="0"
                                       nameForRecords="Records"
                                         {...this.props} />
+                        <div>&nbsp; This button is hard wired filter by facets - only matches Record#id = 10 OR 11
+                            <button className="testFilterButton" onClick={this.filterReport}>
+                                Fake filter this report </button>
+                        </div>
                     </div>
         </div>);
     }

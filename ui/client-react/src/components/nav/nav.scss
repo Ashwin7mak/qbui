@@ -52,6 +52,7 @@ html, body {
 
             .navGroup {
                 line-height: $top-nav-height;
+                white-space: nowrap;
                 .navItem {
                     display: inline-block;
 

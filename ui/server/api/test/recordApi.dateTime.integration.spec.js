@@ -6,13 +6,14 @@
     var recordBase = require('./recordApi.base')(config);
     var testConsts = require('./api.test.constants');
     var promise = require('bluebird');
+    var testDateHelper = require('./date.test.helper');
 
     /**
      * Integration test for DateTime field formatting
      */
     describe('API - DateTime record test cases - ', function() {
 
-        var dateCurrentYear = '2015-04-12T05:51:19Z';
+        var dateCurrentYear = testDateHelper.thisYear + '-04-12T05:51:19Z';
         var dateDiffYear = '2000-04-12T05:51:19Z';
         var UTC = '[UTC]';
 
@@ -73,7 +74,7 @@
         function noFlagsDateTimeDataProvider(fid) {
             // DateTime in current year
             var currentYearInput = [{id: fid, value: dateCurrentYear}];
-            var expectedCurrentYearRecord = {id: fid, value: dateCurrentYear + UTC, display: '04-12-2015 1:51 AM'};
+            var expectedCurrentYearRecord = {id: fid, value: dateCurrentYear + UTC, display: '04-12-' + testDateHelper.thisYear + ' 1:51 AM'};
 
             // DateTime in different year
             var diffYearInput = [{id: fid, value: dateDiffYear}];
@@ -166,8 +167,7 @@
                             }
                             done();
                         }).catch(function(errorMsg) {
-                            assert(false, 'unable to resolve all records: ' + JSON.stringify(errorMsg));
-                            done();
+                            done(new Error('unable to resolve all records: ' + JSON.stringify(errorMsg)));
                         });
                 });
             });
@@ -183,7 +183,7 @@
             var expectedCurrentYearRecord = {
                 id: fid,
                 value: dateCurrentYear + UTC,
-                display: 'Sunday, 12-Apr 1:51 AM EDT'
+                display: testDateHelper.dayOfWeekAprilTwelve + ', 12-Apr 1:51 AM EDT'
             };
 
             // DateTime in different year
@@ -281,8 +281,7 @@
                             }
                             done();
                         }).catch(function(errorMsg) {
-                            assert(false, 'unable to resolve all records: ' + JSON.stringify(errorMsg));
-                            done();
+                            done(new Error('unable to resolve all records: ' + JSON.stringify(errorMsg)));
                         });
                 });
             });
@@ -298,7 +297,7 @@
             var expectedCurrentYearRecord = {
                 id: fid,
                 value: dateCurrentYear + UTC,
-                display: 'Sunday, Apr-12 1:51 AM EDT'
+                display: testDateHelper.dayOfWeekAprilTwelve + ', Apr-12 1:51 AM EDT'
             };
 
             // DateTime in different year
@@ -396,8 +395,7 @@
                             }
                             done();
                         }).catch(function(errorMsg) {
-                            assert(false, 'unable to resolve all records: ' + JSON.stringify(errorMsg));
-                            done();
+                            done(new Error('unable to resolve all records: ' + JSON.stringify(errorMsg)));
                         });
                 });
             });
@@ -413,7 +411,7 @@
             var expectedCurrentYearRecord = {
                 id: fid,
                 value: dateCurrentYear + UTC,
-                display: 'Sunday, Apr-12 1:51 AM EDT'
+                display: testDateHelper.dayOfWeekAprilTwelve + ', Apr-12 1:51 AM EDT'
             };
 
             // DateTime in different year
@@ -511,8 +509,7 @@
                             }
                             done();
                         }).catch(function(errorMsg) {
-                            assert(false, 'unable to resolve all records: ' + JSON.stringify(errorMsg));
-                            done();
+                            done(new Error('unable to resolve all records: ' + JSON.stringify(errorMsg)));
                         });
                 });
             });
@@ -528,7 +525,7 @@
             var expectedCurrentYearRecord = {
                 id: fid,
                 value: dateCurrentYear + UTC,
-                display: 'Sunday, 12-Apr 1:51 AM EDT'
+                display: testDateHelper.dayOfWeekAprilTwelve + ', 12-Apr 1:51 AM EDT'
             };
 
             // DateTime in different year
@@ -627,8 +624,7 @@
                             }
                             done();
                         }).catch(function(errorMsg) {
-                            assert(false, 'unable to resolve all records: ' + JSON.stringify(errorMsg));
-                            done();
+                            done(new Error('unable to resolve all records: ' + JSON.stringify(errorMsg)));
                         });
                 });
             });
@@ -644,7 +640,7 @@
             var expectedCurrentYearRecord = {
                 id: fid,
                 value: dateCurrentYear + UTC,
-                display: 'Sunday, Apr-12 1:51 AM EDT'
+                display: testDateHelper.dayOfWeekAprilTwelve + ', Apr-12 1:51 AM EDT'
             };
 
             // DateTime in different year
@@ -742,8 +738,7 @@
                             }
                             done();
                         }).catch(function(errorMsg) {
-                            assert(false, 'unable to resolve all records: ' + JSON.stringify(errorMsg));
-                            done();
+                            done(new Error('unable to resolve all records: ' + JSON.stringify(errorMsg)));
                         });
                 });
             });

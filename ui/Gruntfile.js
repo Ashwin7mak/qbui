@@ -169,7 +169,7 @@ module.exports = function(grunt) {
             },
             reactapp: {
                 files: ['Gruntfile.js', '<%= quickbase.client.src %>/**/*'],
-                tasks: ['webpack:build-dev'],
+                tasks: ['webpack-dev-server'],
                 options: {
                     spawn: false
                 }
@@ -416,6 +416,14 @@ module.exports = function(grunt) {
         },
 
         protractor: {
+            sauce_osx_chrome : {
+                options: {
+                    configFile: './e2e/config/sauce.chrome.osx.protractor.conf.js',
+                    args: {
+                        baseUrl   : baseUrl
+                    }
+                }
+            },
             sauce_win7_chrome : {
                 options: {
                     configFile: './e2e/config/sauce.chrome.win7.protractor.conf.js',
@@ -535,6 +543,14 @@ module.exports = function(grunt) {
 
         shell: {
             lint: {
+                // Make sure code styles are up to par and there are no obvious mistakes
+                command: 'npm run lint',
+                options: {
+                    execOptions: {
+                    }
+                }
+            },
+            lintFix: {
                 // Make sure code styles are up to par and there are no obvious mistakes
                 //fixes any fixables i.e. spacing, missing semicolon etc
                 // see (fixables) in the list http://eslint.org/docs/rules/
@@ -806,7 +822,7 @@ module.exports = function(grunt) {
             return grunt.task.run([
                 'env:e2e',
                 'sauce_connect:aws',
-                'protractor:sauce_win7_chrome'
+                'protractor:sauce_osx_chrome'
             ]);
         }
 

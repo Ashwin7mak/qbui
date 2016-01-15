@@ -31,9 +31,7 @@ var ReportRoute = React.createClass({
             this.loadReport(appId, tblId, rptId);
         }
     },
-
     componentDidMount() {
-
         if (this.props.params) {
             this.loadReportFromParams(this.props.params);
         }
@@ -45,7 +43,11 @@ var ReportRoute = React.createClass({
                 <Stage stageContent="this is the stage content text" >
                     <ReportStage reportName={this.props.reportData && this.props.reportData.data ? this.props.reportData.data.name : ""}/>
                 </Stage>
-                <ReportToolsAndContent reportData={this.props.reportData} />
+                <ReportToolsAndContent reportData={this.props.reportData}
+                                       appId={this.props.params.appId}
+                                       tblId={this.props.params.tblId}
+                                       rptId={this.props.params.rptId}
+                />
                 </div>);
     }
 });

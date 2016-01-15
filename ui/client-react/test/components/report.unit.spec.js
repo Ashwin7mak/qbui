@@ -18,7 +18,8 @@ describe('Report functions', () => {
 
     let flux = {
         actions:{
-            loadReport: function() {return;}
+            loadReport: function() {return;},
+            filterReport: function() {return;}
         }
     };
 
@@ -37,12 +38,14 @@ describe('Report functions', () => {
         Report.__Rewire__('ReportStage', ReportStageMock);
         Report.__Rewire__('ReportToolsAndContent', ReportContentMock);
         spyOn(flux.actions, 'loadReport');
+        spyOn(flux.actions, 'filterReport');
     });
 
     afterEach(() => {
         Report.__ResetDependency__('ReportStage', ReportStageMock);
         Report.__ResetDependency__('ReportToolsAndContent', ReportContentMock);
         flux.actions.loadReport.calls.reset();
+        flux.actions.filterReport.calls.reset();
     });
 
     it('test render of report', () => {
@@ -96,5 +99,13 @@ describe('Report functions', () => {
         ReactDOM.render(<Report {...i18n} flux={flux} params={reportParams} reportData={reportDataParams} />, div);
         expect(flux.actions.loadReport).not.toHaveBeenCalled();
     });
-
+    /* This test is here for the fake method only to fulfil the coverage needs. Needs to replaced when real method gets added*/
+    it('test flux action filterReport is called', () => {
+        var div = document.createElement('div');
+        ReactDOM.render(<Report {...i18n} flux={flux} />, div);
+        var testButton = TestUtils.scryRenderedDOMComponentsWithClass(component, "testFilterButton");
+        console.log(testButton[0]);
+        TestUtils.Simulate.click(testButton[0]);
+        expect(flux.actions.filterReport).toHaveBeenCalled();
+    });
 });
