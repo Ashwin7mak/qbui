@@ -20,9 +20,18 @@ describe('Report Data Actions Load Report functions -- success', () => {
             test: 'test'
         }
     };
+    let responseFacetData = {
+        data: {
+            facets: {
+                test: 'test'
+            }
+        }
+    };
+
     let response = {
         name: responseReportData.data.name,
-        data: responseResultData.data
+        data: responseResultData.data,
+        facets: responseFacetData.data
     };
 
     let promise;
@@ -38,9 +47,9 @@ describe('Report Data Actions Load Report functions -- success', () => {
             p.resolve(responseResultData);
             return p.promise;
         }
-        filterReport() {
+        getReportFacets() {
             var p = Promise.defer();
-            p.resolve(responseResultData);
+            p.resolve(responseFacetData);
             return p.promise;
         }
     }
@@ -102,7 +111,7 @@ describe('Report Data Actions Filter Report functions -- success', () => {
             p.resolve(responseReportData);
             return p.promise;
         }
-        resolveFacetExpression() {
+        parseFacetExpression() {
             var p = Promise.defer();
             p.resolve(responseResultQuery);
             return p.promise;

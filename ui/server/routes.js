@@ -15,7 +15,9 @@
 
         /*
          *  Route to log a message. Only a post request is supported.
+         *  This needs to be the first route defined.
          */
+        log.info('Routing POST method for route ' + routeConstants.LOG_CLIENT_MSG);
         app.all(routeConstants.LOG_CLIENT_MSG, function(req, res, next) {
 
             // TODO: this endpoint needs to be protected...validate that the requested

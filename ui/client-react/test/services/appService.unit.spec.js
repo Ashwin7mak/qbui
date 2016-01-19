@@ -15,14 +15,15 @@ describe('AppService functions', () => {
     });
 
     it('test getApp function', () => {
-        var url = 'test/url';
-        appService.getApp(url);
-        expect(BaseService.prototype.get).toHaveBeenCalledWith(constants.APPS + '/' + url);
+        var appId = '123';
+        var url = appService.constructUrl(appService.API.GET_APP, [appId]);
+        appService.getApp(appId);
+        expect(BaseService.prototype.get).toHaveBeenCalledWith(url);
     });
 
     it('test getApps function', () => {
         appService.getApps();
-        expect(BaseService.prototype.get).toHaveBeenCalledWith(constants.APPS);
+        expect(BaseService.prototype.get).toHaveBeenCalledWith(appService.API.GET_APPS);
     });
 
 });
