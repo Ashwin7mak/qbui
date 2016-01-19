@@ -17,8 +17,9 @@ export default {
     //
     // A Quickbase endpoint calls out to the public api, proxying through
     // the node server.
+    //
     // A Node endpoint DOES NOT require the Quickbase API to fulfill
-    // its request.  All work is done on the Node server.
+    // its request.  Work is done exclusively on the Node server.
     BASE_URL: {
         QUICKBASE   : '/api/api/' + Configuration.api.qbVersion,
         NODE        : '/api/n/' + Configuration.api.nodeVersion
@@ -29,10 +30,12 @@ export default {
     FIELD               : 'fields',
     RECORDS             : 'records',
     REPORTS             : 'reports',
-    RESULTS             : 'results',
     TABLES              : 'tables',
     FACETS              : 'facets',
     LOG                 : 'log',
+
+    // API Entity actions
+    RESULTS             : 'results',
     PARSE               : 'parse'
 
 };
