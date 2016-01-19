@@ -68,7 +68,7 @@ class ReportService extends BaseService {
     }
 
     /**
-     * Return the list of report facets and facet values.
+     * Return the list of facets and associated facet values for a given report.
      *
      * @param appId
      * @param tableId
