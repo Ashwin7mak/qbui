@@ -21,17 +21,24 @@ let reportDataActions = {
 
             this.dispatch(actions.LOAD_REPORT, {appId, tblId, rptId});
 
+            //  query for the report meta data, report results and report facets
             var promises = [];
             promises.push(reportService.getReport(appId, tblId, rptId));
             promises.push(reportService.getReportResults(appId, tblId, rptId, format));
+            promises.push(reportService.getReportFacets(appId, tblId, rptId));
 
             Promise.all(promises).then(
                 function(response) {
                     logger.debug('Report service calls successful');
                     var report = {
-                        name:response[0].data.name,
-                        data:response[1].data
+                        name: response[0].data.name,
+                        data: response[1].data,
+                        facets: response[2].data
                     };
+
+                    logger.debug("Report Name: " + report.name);
+                    logger.debug("Report Facets: " + JSON.stringify(report.facets));
+
                     this.dispatch(actions.LOAD_REPORT_SUCCESS, report);
                     deferred.resolve(report);
                 }.bind(this),
@@ -78,11 +85,13 @@ let reportDataActions = {
             let reportService = new ReportService();
             let recordService = new RecordService();
             this.dispatch(actions.LOAD_REPORT, {appId, tblId, rptId});
-            var promises = [];
-            //1st call get report meta data. TODO: can we skip this somehow, do we store meta data somewhere that we could re-use?
-            promises.push(reportService.getReport(appId, tblId, rptId));
+
+            //1st call get report meta data.
             // 2nd call to node server resolves facet expression to a query expression.
-            promises.push(reportService.resolveFacetExpression(facetExpression));
+            var promises = [];
+            promises.push(reportService.getReport(appId, tblId, rptId));
+            promises.push(reportService.parseFacetExpression(facetExpression));
+
             Promise.all(promises).then(
                 function(response) {
                     var queryString = response[1].data;

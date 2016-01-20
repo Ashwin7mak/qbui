@@ -17,21 +17,28 @@ describe('RecordService functions', () => {
     it('test getRecords function with reqd parameters', () => {
         var appId = 1;
         var tblId = 2;
+        var url = recordService.constructUrl(recordService.API.GET_RECORD, [appId, tblId]);
         recordService.getRecords(appId, tblId);
-        expect(BaseService.prototype.get).toHaveBeenCalledWith(constants.APPS + '/' + appId + '/' + constants.TABLES + '/' + tblId + '/' + constants.RECORDS, {params: {}});
+
+        expect(BaseService.prototype.get).toHaveBeenCalledWith(url, {params: {}});
     });
 
     it('test getRecords function with formatting', () => {
         var appId = 1;
         var tblId = 2;
         let formatted = true;
+
+        var url = recordService.constructUrl(recordService.API.GET_RECORD, [appId, tblId]);
         recordService.getRecords(appId, tblId, formatted);
-        expect(BaseService.prototype.get).toHaveBeenCalledWith(constants.APPS + '/' + appId + '/' + constants.TABLES + '/' + tblId + '/' + constants.RECORDS, {params : {format : 'display'}});
+
+        expect(BaseService.prototype.get).toHaveBeenCalledWith(url, {params: {format : 'display'}});
     });
 
     it('test getRecords function with valid optional parameters', () => {
         var appId = 1;
         var tblId = 2;
+        var url = recordService.constructUrl(recordService.API.GET_RECORD, [appId, tblId]);
+
         let params = {};
         params.query = "testQuery";
         params.clist = "testClist";
@@ -47,12 +54,14 @@ describe('RecordService functions', () => {
         expectedParams.slist = "testSlist";
         expectedParams.offset = 10;
         expectedParams.numRows = 10;
-        expect(BaseService.prototype.get).toHaveBeenCalledWith(constants.APPS + '/' + appId + '/' + constants.TABLES + '/' + tblId + '/' + constants.RECORDS, {params : expectedParams});
+        expect(BaseService.prototype.get).toHaveBeenCalledWith(url, {params : expectedParams});
     });
 
     it('test getRecords function with invalid clist', () => {
         var appId = 1;
         var tblId = 2;
+        var url = recordService.constructUrl(recordService.API.GET_RECORD, [appId, tblId]);
+
         let inputparams = {};
         inputparams.query = "testQuery";
         inputparams.clist = 123;
@@ -63,12 +72,14 @@ describe('RecordService functions', () => {
         expectedParams.format = "display";
         expectedParams.query = "testQuery";
         expectedParams.slist = "testSlist";
-        expect(BaseService.prototype.get).toHaveBeenCalledWith(constants.APPS + '/' + appId + '/' + constants.TABLES + '/' + tblId + '/' + constants.RECORDS, {params : expectedParams});
+        expect(BaseService.prototype.get).toHaveBeenCalledWith(url, {params : expectedParams});
     });
 
     it('test getRecords function with invalid slist', () => {
         var appId = 1;
         var tblId = 2;
+        var url = recordService.constructUrl(recordService.API.GET_RECORD, [appId, tblId]);
+
         let inputparams = {};
         inputparams.query = "testQuery";
         inputparams.clist = "testClist";
@@ -78,12 +89,14 @@ describe('RecordService functions', () => {
         let expectedParams = {};
         expectedParams.query = "testQuery";
         expectedParams.clist = "testClist";
-        expect(BaseService.prototype.get).toHaveBeenCalledWith(constants.APPS + '/' + appId + '/' + constants.TABLES + '/' + tblId + '/' + constants.RECORDS, {params : expectedParams});
+        expect(BaseService.prototype.get).toHaveBeenCalledWith(url, {params : expectedParams});
     });
 
     it('test getRecords function with invalid query', () => {
         var appId = 1;
         var tblId = 2;
+        var url = recordService.constructUrl(recordService.API.GET_RECORD, [appId, tblId]);
+
         let inputparams = {};
         inputparams.query = 123;
         inputparams.clist = "testClist";
@@ -93,12 +106,14 @@ describe('RecordService functions', () => {
         let expectedParams = {};
         expectedParams.clist = "testClist";
         expectedParams.slist = "testSlist";
-        expect(BaseService.prototype.get).toHaveBeenCalledWith(constants.APPS + '/' + appId + '/' + constants.TABLES + '/' + tblId + '/' + constants.RECORDS, {params : expectedParams});
+        expect(BaseService.prototype.get).toHaveBeenCalledWith(url, {params : expectedParams});
     });
 
     it('test getRecords function with invalid offset', () => {
         var appId = 1;
         var tblId = 2;
+        var url = recordService.constructUrl(recordService.API.GET_RECORD, [appId, tblId]);
+
         let inputparams = {};
         inputparams.query = "testQuery";
         inputparams.offset = "abc";
@@ -107,17 +122,19 @@ describe('RecordService functions', () => {
 
         let expectedParams = {};
         expectedParams.query = "testQuery";
-        expect(BaseService.prototype.get).toHaveBeenCalledWith(constants.APPS + '/' + appId + '/' + constants.TABLES + '/' + tblId + '/' + constants.RECORDS, {params : expectedParams});
+        expect(BaseService.prototype.get).toHaveBeenCalledWith(url, {params : expectedParams});
     });
 
     it('test getRecords function with invalid rows', () => {
         var appId = 1;
         var tblId = 2;
+        var url = recordService.constructUrl(recordService.API.GET_RECORD, [appId, tblId]);
+
         let inputparams = {};
         inputparams.rows = "abc";
         inputparams.offset = 10;
         recordService.getRecords(appId, tblId, false, inputparams);
 
-        expect(BaseService.prototype.get).toHaveBeenCalledWith(constants.APPS + '/' + appId + '/' + constants.TABLES + '/' + tblId + '/' + constants.RECORDS, {params : {}});
+        expect(BaseService.prototype.get).toHaveBeenCalledWith(url, {params : {}});
     });
 });

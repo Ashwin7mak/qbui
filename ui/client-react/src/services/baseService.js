@@ -4,11 +4,11 @@ import constants from './constants';
 import axios from 'axios';
 import Configuration from '../config/app.config';
 import Promise from 'bluebird';
+import StringUtils from '../utils/stringUtils';
 
 class BaseService {
 
     constructor() {
-        this.baseUrl = '/api/api/' + Configuration.api.version + '/';
         this.setRequestInterceptor();
         this.setResponseInterceptor();
     }
@@ -32,7 +32,7 @@ class BaseService {
      */
     get(url, conf) {
         let config = conf || {};
-        return axios.get(this.baseUrl + url, config);
+        return axios.get(url, config);
     }
 
     /**
@@ -45,7 +45,7 @@ class BaseService {
      */
     post(url, data, conf) {
         let config = conf || {};
-        return axios.post(this.baseUrl + url, data, config);
+        return axios.post(url, data, config);
     }
 
     /**
@@ -92,6 +92,28 @@ class BaseService {
                 return Promise.reject(error);
             }
         );
+    }
+
+    /**
+     * Takes a tokenized url string and replaces each token element with the content of
+     * the corresponding array element using the array's zero based index.
+     *
+     * Example1:
+     *      constructUrl('/api/v1/apps/{0}/tables/{1}',['123abc456', '234xyz456'])
+     *        outputs
+     *      /api/v1/apps/123abc456/tables/234xyz456
+     *
+     * Example2:
+     *      constructUrl('/api/v1/apps/{0}/tables/{0}/reports/{1}',['123abc456', 'xyz123'])
+     *        outputs
+     *      /api/v1/apps/123abc456/tables/123abc456/reports/xyz123
+     *
+     * @param urlMask
+     * @tokens array of tokens
+     * @returns urlMask input with tokens replaced
+     */
+    constructUrl(urlMask, tokens) {
+        return StringUtils.format(urlMask, tokens);
     }
 
 }
