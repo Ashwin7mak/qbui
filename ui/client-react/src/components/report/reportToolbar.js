@@ -20,7 +20,8 @@ let debounceInputTime = .5 * secondInMilliseconds ; // 1/5 a second delay
 let facetVisValues = 50; // how many facets to list before showing more...link
 
 /**
- * a header for table reports with search field and a filter icon
+ * a ReportToolbar for table reports with search field and a filter icon
+ * does the heavy lifting and maintaining of search and facets selections
  */
 
 var ReportToolbar = React.createClass({
@@ -28,7 +29,7 @@ var ReportToolbar = React.createClass({
 
     getDefaultProps : function() {
         // Facets  = array 1 per facet fid
-        // each entry in array has :
+        // in current stack each entry in array has :
         //      array of aspects(values)
         //      type of data (text, bool, or daterange), also field type
         //      has empty bool (if true include empty as a choice)
@@ -84,7 +85,8 @@ var ReportToolbar = React.createClass({
 
     /* Placeholder method to hook into node layer call to get filtered records when user selects a facet
      * Hardcoded facetExpression for testing
-     * TODO: replace with a real method.*/
+     * TODO: replace with a real method.
+     */
     filterReport: function(){
         var facetExpression = [{fid:'3', values:['10', '11']}, {fid:'4', values:['abc']}];
 
@@ -92,7 +94,10 @@ var ReportToolbar = React.createClass({
         flux.actions.filterReport(this.props.appId, this.props.tblId, this.props.rptId, true, facetExpression);
     },
 
-    handleFacetSelect : function(facet, value, enable) {
+    handleFacetSelect : function(facet, value) {
+        logger.debug("facet clicked field:" + facet.name + " value:" + value);
+        //determine enable if not in selectedFacets yet, return true for select, false for deselect
+        //TODO update selectedFacter:
         //if enable == true (when selecting the value in the facet)
             //if there is not an facet entry in the selecetFacets hash add it. then add the value
             //if (this.selectedFacets.z !== undefined ) {
@@ -124,8 +129,6 @@ var ReportToolbar = React.createClass({
 
     },
 
-    componentDidMount() {
-    },
 
     populateDummyFacets() {
         if (this.props.reportData && this.props.reportData.data)  {
@@ -146,8 +149,8 @@ var ReportToolbar = React.createClass({
         }
     },
 
+    /*TODO : remove this when facets ui is integrated with backend, only for dev testing not users */
     renderFakeFilterButton() {
-        {/*TODO : remove this when integrated with backend, only for dev testing not users */}
         let tooltip = (
                         <Tooltip  id="FakeFacetTip">This button is hard wired filter by facets - only matches
                                 Record#id = 10 OR 11
@@ -168,16 +171,18 @@ var ReportToolbar = React.createClass({
         let fakeFilterButton = this.renderFakeFilterButton();
         return (
                 <div className="reportToolbar">
+
                     {/*TODO : check if searchbox is enabled for this report,
                     if has facets has search too */}
                     <FilterSearchBox onChange={this.handleChange}
                                      {...this.props} />
 
                     {/*TODO :  - check if facets is enabled for this report,
-                    hide Facets Menu Button if disabled  */}
+                    hide Facets Menu Button if facets disabled  */}
                     <FacetsMenuButton id="facetMenuButton" {...this.props}
                                       onFacetSelect={this.handleFacetSelect} />
 
+                    {/*TODO :  - get real records count from props */}
                     <RecordsCount recordCount="100"
                                   isFiltered={this.isFiltered()}
                                   filteredRecordCount="0"

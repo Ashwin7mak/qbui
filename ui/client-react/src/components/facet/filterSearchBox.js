@@ -7,10 +7,11 @@ import {I18nMessage} from '../../utils/i18nMessage';
 import './facet.scss';
 
 let logger = new Logger();
-let FluxMixin = Fluxxor.FluxMixin(React);
-
+/*
+ FilterSearchBox component takes user input for filtering a report.
+ Takes the function to call on changes to search string, what he list is known as default is Records
+ */
 var FilterSearchBox = React.createClass({
-    mixins: [FluxMixin],
     propTypes: {
         onChange : React.PropTypes.func,
         nameForRecords: React.PropTypes.string

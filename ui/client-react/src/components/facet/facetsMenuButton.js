@@ -1,7 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import Fluxxor from 'fluxxor';
-import {Overlay, Popover} from 'react-bootstrap';
+import {OverlayTrigger, Popover} from 'react-bootstrap';
 
 import Logger from '../../utils/logger';
 import {I18nMessage} from '../../utils/i18nMessage';
@@ -12,9 +12,12 @@ import Hicon from '../harmonyIcon/harmonyIcon';
 import './facet.scss';
 
 let logger = new Logger();
-let FluxMixin = Fluxxor.FluxMixin(React);
 
-
+/*
+ FacetsMenuButton component presents a list of facets available to filter the report on when its button is clicked.
+ Takes the reportData which includes the list of facets
+ and a function to call when a facet value is selected.
+ */
 var FacetsMenuButton = React.createClass({
     propTypes: {
         reportsData: React.PropTypes.shape({
@@ -36,16 +39,18 @@ var FacetsMenuButton = React.createClass({
     /**
      * render a facet menu field item and its choices
      **/
-    facetsMenu: function(facetsData) {
+    facetsMenu(facetsData) {
         return facetsData.list && facetsData.list.map((item, index) => {
             return <FacetsItem key={item.fid}
                                facet={item}
-                               onSelect={this.props.onFacetSelect}
+                               selectValueHandler={this.props.onFacetSelect}
                 {...this.props} />;
         });
     },
-
-    render() {
+    /**
+     * arrowed box with contents of the facet menu list of item
+    **/
+    facetsPopup() {
         const style = {
             display: 'block',
             position: 'absolute',
@@ -53,39 +58,35 @@ var FacetsMenuButton = React.createClass({
             boxShadow: '0 5px 10px rgba(0, 0, 0, 0.2)',
             border: '1px solid #CCC',
             borderRadius: 3,
-            marginLeft: 0,
-            marginTop: -10,
+            marginLeft: 365,
+            marginTop: 20,
             minWidth: 220
         };
-
+        return (
+                <Popover style={style}
+                     id="facetsMenuPopup"
+                     className="facetMenuPopup">
+                    <div>
+                        {this.props.reportData && this.props.reportData.data && this.props.reportData.data.facets ?
+                            this.facetsMenu(this.props.reportData.data.facets) : "No Facets"}
+                    </div>
+                </Popover>
+        );
+    },
+    render() {
         return (
             <div ref="facetsMenuButtonContainer">
-                {/* the filter icon */}
-                <div className="facetsMenuButton"
-                     onClick={e => this.toggleMenu(e)}
-                     ref="facetsMenuButton" >
-                    <Hicon icon="filter"  />
-                </div>
+                {/*  list of facet options shown on filter icon click */}
+                <OverlayTrigger container={this} trigger="click"
+                                placement="bottom" overlay={this.facetsPopup()} >
 
-                {/* overlaid list of facet options shown on filter icon click */}
-                <Overlay
-                    show={this.state.show}
-                    onHide={() => this.setState({show: false})}
-                    placement="bottom"
-                    containerPadding={0}
-                    container={this}
-                    target={()=> ReactDOM.findDOMNode(this.state.target)}
-                    ref="facetsDropdown">
-
-                    {/* arrowed box with contents of the facet menu list of item */}
-                    <Popover style={style}
-                             id="facetsMenuPopup"
-                             className="facetMenuPopup">
-                        <div>
-                            {this.facetsMenu(this.props.reportData.data.facets)}
-                        </div>
-                    </Popover>
-                </Overlay>
+                    {/* the filter icon */}
+                    <div className="facetsMenuButton"
+                         onClick={e => this.toggleMenu(e)}
+                         ref="facetsMenuButton" >
+                        <Hicon icon="filter" />
+                    </div>
+                 </OverlayTrigger>
             </div>
             );
     }

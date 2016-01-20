@@ -1,16 +1,17 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import TestUtils from 'react-addons-test-utils';
-import FacetsItem  from '../../src/components/facets/facetsItem';
+import FilterSearchBox  from '../../src/components/facet/filterSearchBox';
 
-describe('facetItem functions', () => {
+describe('facetSearchBox functions', () => {
     'use strict';
 
     let component;
 
-    it('test render', () => {
-        component = TestUtils.renderIntoDocument(<FacetsItem/>);
+    it('test render FilterSearchBox', () => {
+        component = TestUtils.renderIntoDocument(<FilterSearchBox/>);
         expect(TestUtils.isCompositeComponent(component)).toBeTruthy();
     });
+    //TODO
 });
 

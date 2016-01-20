@@ -10,14 +10,16 @@ import './report.scss';
 
 let FluxMixin = Fluxxor.FluxMixin(React);
 
+/* The container for report and its toolbar */
 var ReportToolsAndContent = React.createClass({
     mixins: [FluxMixin],
 
     render() {
-        var header = <ReportToolbar reportData={this.props.reportData}  {...this.props}  />;
+        let toolbar = <ReportToolbar reportData={this.props.reportData}  {...this.props}  />;
+
         return (<div className="reportToolsAndContentContainer">
                     <ReportContent  reportData={this.props.reportData}
-                                    reportHeader={header}
+                                    reportHeader={toolbar}
                                     {...this.props} />
                 </div>);
     }

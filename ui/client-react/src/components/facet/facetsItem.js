@@ -10,7 +10,6 @@ import './facet.scss';
 import Logger from '../../utils/logger';
 import {I18nMessage} from '../../utils/i18nMessage';
 
-let FluxMixin = Fluxxor.FluxMixin(React);
 let logger = new Logger();
 
 /*TODO support type of facet date
@@ -26,7 +25,6 @@ const facetShape =  React.PropTypes.shape({
 });
 
 var FacetsItem = React.createClass({
-    mixins: [FluxMixin],
     propTypes: {
         facet:facetShape,
         selectValueHandler: React.PropTypes.func,
@@ -37,6 +35,11 @@ var FacetsItem = React.createClass({
             selectedValues: []
         };
     },
+    renderFieldName() {
+        return (
+            <span className="facetName">{this.props.facet.name}</span>
+        );
+    },
     /*TODO check type of facet list, date, boolean currently only handles
      array values
      */
@@ -45,21 +48,19 @@ var FacetsItem = React.createClass({
             this.props.facet.values && this.props.facet.values.map((item, index) => {
                 return (
                     <ListGroupItem key={this.props.facet.fid + "." + index}
-                              onSelect={this.props.selectValueHandler}>
+                              onClick={()=>this.props.selectValueHandler(this.props.facet, item.value)}>
                         {item.value}
                     </ListGroupItem>
                 );
             })
         );
     },
-    renderFieldName() {
-        return (
-            <span className="facetName">{this.props.facet.name}</span>
-        );
-    },
+
     render() {
         return (
-            <Panel fill collapsible defaultExpanded key={this.props.facet.fid} header={this.renderFieldName()}>
+            //todo: use qbpanel with style fixes
+            <Panel fill collapsible defaultExpanded
+                   key={this.props.facet.fid} title={this.renderFieldName()}>
                 <ListGroup fill>
                     {this.renderValues()}
                 </ListGroup>
