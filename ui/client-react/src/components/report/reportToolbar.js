@@ -6,9 +6,9 @@ import './report.scss';
 
 import Logger from '../../utils/logger';
 import {I18nMessage} from '../../../src/utils/i18nMessage';
-import FilterSearchBox from './filter/filterSearchBox';
-import FacetsMenuButton from './filter/facetsMenuButton';
-import FacetsMenu from './filter/facetsMenu';
+import {Tooltip, OverlayTrigger, Button} from 'react-bootstrap';
+import FilterSearchBox from '../facet/filterSearchBox';
+import FacetsMenuButton from '../facet/facetsMenuButton';
 import RecordsCount from './RecordsCount';
 
 let FluxMixin = Fluxxor.FluxMixin(React);
@@ -42,7 +42,6 @@ var ReportToolbar = React.createClass({
         return {
             searchInput: '',
             searchStringForFiltering: '',
-            facetsMenuShowing : false,
             selectedFacets : {}
         };
     },
@@ -125,14 +124,6 @@ var ReportToolbar = React.createClass({
 
     },
 
-    handleFacetsMenuButtonClick : function() {
-        var self = this;
-        this.setState({
-            facetsMenuShowing: !this.state.facetsMenuShowing
-        });
-
-    },
-
     componentDidMount() {
     },
 
@@ -155,36 +146,47 @@ var ReportToolbar = React.createClass({
         }
     },
 
+    renderFakeFilterButton() {
+        {/*TODO : remove this when integrated with backend, only for dev testing not users */}
+        let tooltip = (
+                        <Tooltip  id="FakeFacetTip">This button is hard wired filter by facets - only matches
+                                Record#id = 10 OR 11
+                        </Tooltip>);
+        return (
+                <OverlayTrigger id="FakeFacet" overlay={tooltip} placement="bottom">
+                    <div className="button-container">
+                        &nbsp;<Button className="testFilterButton"
+                                    bsStyle="link" onClick={this.filterReport}>
+                        Fake filter this report </Button>
+                    </div>
+                </OverlayTrigger>
+        );
+    },
+
     render() {
         this.populateDummyFacets();
-        return (<div>
-                    <div className="reportToolbar">
-                        {/*TODO : check if searchbox is enabled for this report, maybe disabled if facets are */}
-                        <FilterSearchBox onChange={this.handleChange}
-                                         {...this.props} />
-                        {/*TODO :
-                            - check if facets is enabled for this report, hide is disabled
-                            - change to use react-bootstrap popover
-                        */}
-                        <FacetsMenuButton onClick={this.handleFacetsMenuButtonClick}
-                                        {...this.props} >
-                            <FacetsMenu showing={this.state.facetsMenuShowing}
-                                        facetsData={this.props.reportData.data.facets}
-                                        onSelect={this.handleFacetSelect}
-                                        {...this.props}
-                            />
-                        </FacetsMenuButton>
-                        <RecordsCount recordCount="100"
-                                      isFiltered={this.isFiltered()}
-                                      filteredRecordCount="0"
-                                      nameForRecords="Records"
-                                        {...this.props} />
-                        <div>&nbsp; This button is hard wired filter by facets - only matches Record#id = 10 OR 11
-                            <button className="testFilterButton" onClick={this.filterReport}>
-                                Fake filter this report </button>
-                        </div>
-                    </div>
-        </div>);
+        let fakeFilterButton = this.renderFakeFilterButton();
+        return (
+                <div className="reportToolbar">
+                    {/*TODO : check if searchbox is enabled for this report,
+                    if has facets has search too */}
+                    <FilterSearchBox onChange={this.handleChange}
+                                     {...this.props} />
+
+                    {/*TODO :  - check if facets is enabled for this report,
+                    hide Facets Menu Button if disabled  */}
+                    <FacetsMenuButton id="facetMenuButton" {...this.props}
+                                      onFacetSelect={this.handleFacetSelect} />
+
+                    <RecordsCount recordCount="100"
+                                  isFiltered={this.isFiltered()}
+                                  filteredRecordCount="0"
+                                  nameForRecords="Records"
+                                    {...this.props} />
+
+                    {fakeFilterButton}
+                </div>
+        );
     }
 });
 

@@ -6,8 +6,8 @@ let logger = new Logger();
 import Fluxxor from 'fluxxor';
 import './report.scss';
 import {I18nMessage} from '../../../src/utils/i18nMessage';
-import ReportSearchBox from './filter/filterSearchBox';
-import FilterResultsButton from './filter/facetsMenuButton';
+import ReportSearchBox from '../facet/filterSearchBox';
+import FilterResultsButton from '../facet/facetsMenuButton';
 
 let FluxMixin = Fluxxor.FluxMixin(React);
 

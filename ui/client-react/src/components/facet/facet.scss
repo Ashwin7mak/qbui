@@ -1,0 +1,32 @@
+@import '../../assets/css/qbVariables';
+
+
+.filterSearchBox { /* input box for filtering records containing the string */
+  padding: .8rem;
+  width: 25em;
+}
+
+.facetsMenuButton {  /* icon button to bring up list of filters */
+  margin-left: 3.5rem;
+}
+
+.facetMenuPopup {
+  position : relative;
+}
+.facetMenuPopup .panel {
+  margin-bottom: 0;
+  border-radius: 0;
+  border: none;
+}
+
+.facetMenuPopup .popover-content {
+  padding: 0;
+  margin: 0;
+}
+
+.facetMenuPopup .facetName {
+  font-size: 14px;
+}
+.facetMenuPopup .list-group-item {
+ // padding: 2px 2px;
+}

@@ -1,12 +1,13 @@
 import React from 'react';
 import Fluxxor from 'fluxxor';
 import Promise from 'bluebird';
+import {MenuItem} from 'react-bootstrap';
 
-import './callout.scss';
+import './unused/callout.scss';
 import './filter.scss';
 
-import Logger from '../../../utils/logger';
-import {I18nMessage} from '../../../../src/utils/i18nMessage';
+import Logger from '../../utils/logger';
+import {I18nMessage} from '../../utils/i18nMessage';
 
 let FluxMixin = Fluxxor.FluxMixin(React);
 let logger = new Logger();
@@ -25,24 +26,16 @@ var FacetValues = React.createClass({
         selectValueHandler: React.PropTypes.func,
     },
 
-    renderValues(){
-        return this.props.facet.values && this.props.facet.values.map((item, index) => {
-            return <li key={this.props.facet.fid + "." + index}
-                       onSelect={this.props.selectValueHandler}>
-                {item.value}
-            </li>;
-        });
-    },
-
     render() {
         /* handle the sublists of values each */
         return (
-
-            <ul className="facetValues">
-
-                {this.renderValues()}
-            </ul>
-        );
+        this.props.facet.values && this.props.facet.values.map((item, index) => {
+            return <MenuItem key={this.props.facet.fid + "." + index}
+                       onSelect={this.props.selectValueHandler}>
+                {item.value}
+            </MenuItem>;
+        })
+    );
     }
 });
 exports.FacetValues = FacetValues;
