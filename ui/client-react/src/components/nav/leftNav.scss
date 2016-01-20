@@ -65,7 +65,7 @@ body:not(.touch) .leftNav.closed {
   background-color: $left-nav-bg;
   display:flex;
   flex-direction:column;
-
+  flex: 0 0 auto;
   color: $left-nav-fg;
 
   position:relative;
@@ -102,6 +102,7 @@ body:not(.touch) .leftNav.closed {
     padding:8px;
     input {
       padding: 5px 10px;
+      border:2px;
       width: 100%;
       color: $left-nav-input-fg;
       height:25px;
