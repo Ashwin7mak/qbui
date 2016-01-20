@@ -60,7 +60,7 @@ var FacetsItem = React.createClass({
         return (
             //todo: use qbpanel with style fixes
             <Panel fill collapsible defaultExpanded
-                   key={this.props.facet.fid} title={this.renderFieldName()}>
+                   key={this.props.facet.fid} header={this.renderFieldName()}>
                 <ListGroup fill>
                     {this.renderValues()}
                 </ListGroup>
