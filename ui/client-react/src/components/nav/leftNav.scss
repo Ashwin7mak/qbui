@@ -50,7 +50,7 @@ body:not(.touch) div.leftNavTooltip.show {
 
 body:not(.touch) .leftNav.closed {
   width:40px;
-  overflow-y:hidden;
+  overflow:hidden;
   li a.heading {
     background-color:$left-nav-heading-bg;
   }
@@ -97,6 +97,7 @@ body:not(.touch) .leftNav.closed {
   .transitionGroup {
     flex: 1;
     overflow-y:auto;
+    overflow-x:hidden;
   }
   .searchApps,.searchReports {
     padding:8px;
