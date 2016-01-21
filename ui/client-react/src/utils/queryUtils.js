@@ -9,7 +9,7 @@ class QueryUtils {
     /**
      * Output a Quickbase 'CONTAINS' query expression for the given input string
      *
-     * parseStringIntoContainsExpression('professional')  ==> {'0'.CT.'Professional'}
+     * parseStringIntoContainsExpression('professional')  ==> {0.CT.'Professional'}
      *
      * @param inputStr
      * @returns {string} contains query expression.  If input is not a string with content, returns empty string.
@@ -26,8 +26,8 @@ class QueryUtils {
      *
      *  queryList = [{'14'.EX.'Butter'}, {'13'.EX.'Oil'}]
      *
-     *  concatQueries(queryList) ==> ({'14'.EX.'Butter'})AND({'13'.EX.'Oil'})
-     *  concatQueries(queryList, true) ==> ({'14'.EX.'Butter'})OR({'13'.EX.'Oil'})
+     *  concatQueries(queryList) ==> ({14.EX.'Butter'})AND({13.EX.'Oil'})
+     *  concatQueries(queryList, true) ==> ({14.EX.'Butter'})OR({13.EX.'Oil'})
      *
      * @param queryList - list of query expressions to concatenate.  Each query expression must be a string or it is skipped.  If the queryList
      * is undefined or all entries in the list are invalid/empty, then empty string is returned.
