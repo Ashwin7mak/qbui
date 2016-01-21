@@ -51,10 +51,9 @@ a {
             >.top {
                 display:flex;
                 flex-basis:$top-nav-height;
-                align-items:center;
                 font-size:14px;
                 transition: flex-basis 300ms ease-in-out;
-                //overflow:hidden; mobile needs this
+                min-width:320px;
             }
 
             .navGroup {
