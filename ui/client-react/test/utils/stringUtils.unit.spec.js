@@ -40,21 +40,31 @@ describe('Token substitution tests', () => {
     'use strict';
 
     //  TOKEN SUBSTITUTION TESTS
+
     it("Token string substitution...valid tokens", function() {
         expect(StringUtils.format("The quick brown {0} jumps over the lazy {1}.", ['fox', 'dog'])).toBe("The quick brown fox jumps over the lazy dog.");
     });
     it("Token string substitution...missing token", function() {
         expect(StringUtils.format("The quick brown {0} jumps over the lazy {1}.", ['fox'])).toBe("The quick brown fox jumps over the lazy {1}.");
     });
+
     it("Token string substitution...no token", function() {
         expect(StringUtils.format("The quick brown {0} jumps over the lazy {1}.")).toBe("The quick brown {0} jumps over the lazy {1}.");
     });
+
     it("Token string substitution...no token string input", function() {
         expect(StringUtils.format("", ['fox', 'dog'])).toBe('');
+        expect(StringUtils.format("", {fox: 'fox', dog: 'dog'})).toBe('');
     });
 
     it("Token string substitution...multi string replacement.", function() {
         expect(StringUtils.format("The quick brown {0} jumps over the lazy {1}...Gray {0} and red {0} excluded!", ['fox', 'dog'])).toBe("The quick brown fox jumps over the lazy dog...Gray fox and red fox excluded!");
+        expect(StringUtils.format("The quick brown {fox} jumps over the lazy {dog}...Gray {fox} and red {fox} excluded!", {fox: 'fox', dog: 'dog'})).toBe("The quick brown fox jumps over the lazy dog...Gray fox and red fox excluded!");
+    });
+
+    it("Token string substitution... 0 tokens", function() {
+        expect(StringUtils.format("The quick brown {0} jumps over the lazy {1}.", [])).toBe("The quick brown {0} jumps over the lazy {1}.");
+        expect(StringUtils.format("The quick brown {0} jumps over the lazy {1}.", {})).toBe("The quick brown {0} jumps over the lazy {1}.");
     });
 
     it("Token string substitution...greater than 10 tokens", function() {
@@ -63,26 +73,31 @@ describe('Token substitution tests', () => {
 
     it("Token string substitution...no tokens", function() {
         expect(StringUtils.format("The quick brown fox jumps over the lazy dog.", ['fox', 'dog'])).toBe("The quick brown fox jumps over the lazy dog.");
+        expect(StringUtils.format("The quick brown fox jumps over the lazy dog.", {fox: 'fox', dog: 'dog'})).toBe("The quick brown fox jumps over the lazy dog.");
     });
 
     it("Token string substitution...mismatched token dataTypes", function() {
         expect(StringUtils.format("{0} quick brown fox jumps over the lazy {1}.", [1, 'dog'])).toBe("1 quick brown fox jumps over the lazy dog.");
+        expect(StringUtils.format("{one} quick brown fox jumps over the lazy {dog}.", {one: 1, dog:'dog'})).toBe("1 quick brown fox jumps over the lazy dog.");
     });
 
     it("Token string substitution...mismatched tokens", function() {
         expect(StringUtils.format("The quick brown fox jumps over the lazy {1}.", [1, 'dog'])).toBe("The quick brown fox jumps over the lazy dog.");
+        expect(StringUtils.format("The quick brown fox jumps over the lazy {dog}.", {one:1, dog:'dog'})).toBe("The quick brown fox jumps over the lazy dog.");
     });
 
     it("Token string substitution...numeric tokens", function() {
         expect(StringUtils.format("{0} divided by {1} = {2}", [10, 5, 2])).toBe("10 divided by 5 = 2");
+        expect(StringUtils.format("{one} divided by {two} = {three}", {one:10, two:5, three:2})).toBe("10 divided by 5 = 2");
     });
 
     it("Token string substitution...no input string", function() {
         var inputStr = null;
         expect(StringUtils.format(inputStr, ['fox', 'dog'])).toBe(inputStr);
+        expect(StringUtils.format(inputStr, {fox: 'fox', dog: 'dog'})).toBe(inputStr);
     });
 
-    it("Token string substitution...null array", function() {
+    it("Token string substitution...null tokens", function() {
         var inputStr = 'Some input string';
         expect(StringUtils.format(inputStr, null)).toBe(inputStr);
     });

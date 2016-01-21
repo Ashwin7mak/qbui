@@ -54,16 +54,25 @@ class StringUtils {
      */
     static format(tokenizedString, tokens) {
         if (typeof tokenizedString === 'string') {
-            let tokenArray = Array.isArray(tokens) ? tokens : Object.keys(tokens);
+            let tokenArray = [];
+            if (Array.isArray(tokens)) {
+                tokenArray = tokens;
+            } else  if (typeof tokens === 'object' && tokens !== null) {
+                tokenArray = Object.keys(tokens);
+            } else {
+                return tokenizedString;
+            }
+
+            // tokens is valid so do the replacement
             let replaceCallback = function(token, match, offset, str) {
-                return tokens[match];
+                // replace if match exists otherwise keep token
+                return tokens[match] || token;
             };
             return tokenizedString.replace(/\{([0-9A-Za-z]+)\}/g, replaceCallback);
         }
         //  nothing to do...return the original tokenized string
         return tokenizedString;
     }
-
 }
 
 export default StringUtils;
