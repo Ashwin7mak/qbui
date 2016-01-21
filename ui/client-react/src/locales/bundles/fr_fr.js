@@ -6,7 +6,9 @@ export default {
             header: "Vos Apps"
         },
         reports : {
-            emailReportTooltip: "Partager ces documents avec quelqu'un d'autre"
+            emailReportTooltip: "Partager ces documents avec quelqu'un d'autre",
+            emailSubject: "'{reportName}' rapport depuis l'application QuickBase '{appName}'",
+            emailBody: "Voici le rapport de la '{reportName}' '{tableName}' de table dans '{appName}'"
         },
         records: {
             singular: "enregistrement",

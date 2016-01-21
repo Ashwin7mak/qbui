@@ -9,7 +9,9 @@ export default {
             header: "Apps"
         },
         reports : {
-            emailReportTooltip: "Share these records with someone else"
+            emailReportTooltip: "Share these records with someone else",
+            emailSubject: "'{reportName}' report from the QuickBase app '{appName}'",
+            emailBody: "Here's the '{reportName}' report from the table '{tableName}' in '{appName}'"
         },
         records: {
             singular: "record",

@@ -3,18 +3,19 @@ import {I18nMessage} from '../../../utils/i18nMessage';
 import {Button} from 'react-bootstrap';
 import Logger from '../../../utils/logger';
 import Locale from '../../../locales/locales';
+import StringUtils from '../../../utils/stringUtils';
 import EmailReportLink from '../../actions/emailReportLink';
-var logger = new Logger();
+let logger = new Logger();
 
 import './reportStage.scss';
 
-var ReportStage = React.createClass({
+const ReportStage = React.createClass({
 
     propTypes: {
         reportData: React.PropTypes.object
     },
 
-    handleClick: function() {
+    handleClick() {
         logger.debug('report feedback button click event fired.');
         window.location.href = 'mailto:clay_nicolau@intuit.com?subject=ReArch LH Feedback';
     },
@@ -23,11 +24,21 @@ var ReportStage = React.createClass({
     },
     getEmailBody() {
         const reportName = this.props.reportData.data.name;
-        return 'Here\'s the "' + reportName + '" report from the table "Tasks" in "' + this.props.reportData.appId + '":%0D%0A%0D%0A' + this.getReportLink();
+        const appName = this.props.reportData.appId;
+        const tableName = this.props.reportData.tblId;
+
+        const bodyTemplate = Locale.getMessage("reports.emailBody");
+
+        return StringUtils.format(bodyTemplate, {reportName, appName, tableName}) + '":%0D%0A%0D%0A' + this.getReportLink();
     },
     getEmailSubject() {
+
         const reportName = this.props.reportData.data.name;
-        return '"' + reportName + '" report from the QuickBase app "' + this.props.reportData.appId + '"';
+        const appName = this.props.reportData.appId;
+
+        const subjectTemplate = Locale.getMessage("reports.emailSubject");
+
+        return StringUtils.format(subjectTemplate, {reportName, appName});
     },
     getEmailLinkText() {
         return Locale.getMessage('selection.email');
