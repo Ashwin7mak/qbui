@@ -81,7 +81,10 @@ describe('StringUtils - format function tests', () => {
         {test: 'Numeric tokens', input:'{0} divided by {1} = {2}', tokens:[10, 5, 2], expectation: '10 divided by 5 = 2'},
         {test: 'Invalid input string data type', input:callback, tokens:['fox'], expectation: callback},
         {test: 'Invalid token array data type', input:'The quick brown {0} jumps', tokens:'invalidStr', expectation: 'The quick brown {0} jumps'},
-        {test: 'Query search parameter', input:'{0.CT.\'{0}\'}', tokens:['pro'], expectation: "{0.CT.'pro'}"}
+        {test: 'Query search parameter', input:'{0.CT.\'{0}\'}', tokens:['pro'], expectation: "{0.CT.'pro'}"},
+        {test: 'Null token 1', input:'The quick brown {0} and {1}.', tokens:[null, 'dog'], expectation: 'The quick brown null and dog.'},
+        {test: 'Null token 2', input:'The quick brown {0} and {1}.', tokens:['cat', null], expectation: 'The quick brown cat and null.'}
+
     ];
 
     dataProvider.forEach(function(data) {

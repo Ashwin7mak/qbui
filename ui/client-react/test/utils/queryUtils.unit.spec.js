@@ -21,7 +21,6 @@ describe('QueryUtils - parseStringIntoAllFieldsContainsExpression tests with val
     'use strict';
 
     var template = '{' + Constants.ALL_FIELDS_ID + Constants.OPERATOR_CONTAINS + '\'{0}\'}';
-
     var dataProvider = [
         {test:'pro', input:'pro', expectation:StringUtils.format(template, ['pro'])},
         {test:'pro OR con', input:'pro OR con', expectation:StringUtils.format(template, ['pro OR con'])},
@@ -30,6 +29,40 @@ describe('QueryUtils - parseStringIntoAllFieldsContainsExpression tests with val
     dataProvider.forEach(function(data) {
         it(data.test, function() {
             expect(QueryUtils.parseStringIntoAllFieldsContainsExpression(data.input)).toBe(data.expectation);
+        });
+    });
+});
+
+describe('QueryUtils - parseStringIntoContainsExpression test with invalid search expressions', () => {
+    'use strict';
+
+    var fid = 10;
+    var dataProvider = [
+        {test:'empty input', input:''},
+        {test:'null input', input:null},
+        {test:'numeric input', input:3}
+    ];
+    dataProvider.forEach(function(data) {
+        it(data.test, function() {
+            expect(QueryUtils.parseStringIntoContainsExpression(fid, data.input)).toBe('');
+        });
+    });
+});
+
+describe('QueryUtils - parseStringIntoContainsExpression test with valid search expressions', () => {
+    'use strict';
+
+    var fid = '10';
+    var template = '{' + fid + Constants.OPERATOR_CONTAINS + '\'{0}\'}';
+    var dataProvider = [
+        {test:'pro', input:'pro', expectation:StringUtils.format(template, ['pro'])},
+        {test:'pro OR con', input:'pro OR con', expectation:StringUtils.format(template, ['pro OR con'])},
+        {test:' pro OR con ', input:' pro OR con ', expectation: StringUtils.format(template, ['pro OR con'])}
+
+    ];
+    dataProvider.forEach(function(data) {
+        it(data.test, function() {
+            expect(QueryUtils.parseStringIntoContainsExpression(fid, data.input)).toBe(data.expectation);
         });
     });
 });

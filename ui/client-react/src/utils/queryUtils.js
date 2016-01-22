@@ -4,10 +4,11 @@
 import * as Constants from '../constants/query';
 import StringUtils from './stringUtils';
 
+/*eslint-disable no-invalid-this */
 class QueryUtils {
 
     /**
-     * Output a Quickbase 'ALL FIELDS' 'CONTAINS' query expression that search's all fields on
+     * Output a Quickbase 'ALL FIELDS' 'CONTAINS' query expression that will search all fields on
      * a record for the given input string.
      *
      * parseStringIntoAllFieldsContainsExpression('professional')  ==> {0.CT.'Professional'}
@@ -16,11 +17,26 @@ class QueryUtils {
      * @returns {string} contains query expression.  If input is not a string with content, returns empty string.
      */
     static parseStringIntoAllFieldsContainsExpression(inputStr) {
+        return this.parseStringIntoContainsExpression(Constants.ALL_FIELDS_ID, inputStr);
+    }
+
+    /**
+     * Output a Quickbase 'CONTAINS' query expression that search's the fid for the given input string.  The supplied
+     * fid could be the 'all fields fid', where the entire record is searched, or just the column fid where just
+     * that field is searched.
+     *
+     * parseStringIntoContainsExpression(10, 'professional')  ==> {10.CT.'Professional'}
+     *
+     * @param fid
+     * @param inputStr
+     * @returns {string} contains query expression.  If input is not a string with content, returns empty string.
+     */
+    static parseStringIntoContainsExpression(fid, inputStr) {
         var containsExpr = '';
         if (typeof inputStr === 'string') {
             var trimmedInput = StringUtils.trim(inputStr);
             if (trimmedInput) {
-                containsExpr = StringUtils.format('{{0}{1}\'{2}\'}', [Constants.ALL_FIELDS_ID, Constants.OPERATOR_CONTAINS, trimmedInput]);
+                containsExpr = StringUtils.format('{{0}{1}\'{2}\'}', [fid, Constants.OPERATOR_CONTAINS, trimmedInput]);
             }
         }
         return containsExpr;
