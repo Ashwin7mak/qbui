@@ -9,8 +9,14 @@ html, body {
     overflow:hidden;
 }
 
-body.touch .tooltip {
-    display:none !important;
+body.small-breakpoint {
+    font-size: $font-size-small;
+}
+body.touch {
+
+    .tooltip {
+        display:none !important;
+    }
 }
 a {
     outline:none !important;
@@ -53,7 +59,7 @@ a {
                 flex-basis:$top-nav-height;
                 font-size:14px;
                 transition: flex-basis 300ms ease-in-out;
-                min-width:320px;
+                min-width:330px;
             }
 
             .navGroup {

@@ -70,14 +70,14 @@ body:not(.touch) .leftNav.closed {
 
   position:relative;
   .appsToggle {
-    margin-top:10px;
+    margin-top:4px;
     margin-bottom:10px;
     cursor:pointer;
   }
 
   .branding {
     flex: 0 0 auto;
-    padding:10px;
+    padding:6px;
     border-bottom: $global-actions-border;
     .hi-chevron-down {
       transition: transform 300ms ease-in;
@@ -91,6 +91,7 @@ body:not(.touch) .leftNav.closed {
       border-top: $global-actions-border;
       a {
         width:100%;
+        line-height:25px;
       }
     }
   }
@@ -186,6 +187,9 @@ body:not(.touch) .leftNav.closed {
   border-right: 1px solid $nav-border;
   overflow-y: auto;
 
+  ul li a {
+    line-height:25px;
+  }
   /* always show right link on mobile (no hover) */
   ul li.link a.right {
     opacity:1;
