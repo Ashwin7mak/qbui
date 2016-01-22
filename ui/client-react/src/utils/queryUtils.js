@@ -15,7 +15,14 @@ class QueryUtils {
      * @returns {string} contains query expression.  If input is not a string with content, returns empty string.
      */
     static parseStringIntoContainsExpression(inputStr) {
-        return typeof inputStr === 'string' && StringUtils.trim(inputStr) ? '{' + Constants.ALL_FIELDS_ID + Constants.OPERATOR_CONTAINS + '\'' + StringUtils.trim(inputStr) + '\'}' : '';
+        var containsExpr = '';
+        if (typeof inputStr === 'string') {
+            var trimmedInput = StringUtils.trim(inputStr);
+            if (trimmedInput) {
+                containsExpr = StringUtils.format('{{0}{1}\'{2}\'}', [Constants.ALL_FIELDS_ID, Constants.OPERATOR_CONTAINS, trimmedInput]);
+            }
+        }
+        return containsExpr;
     }
 
     /**
@@ -24,7 +31,7 @@ class QueryUtils {
      *
      * Example usage:
      *
-     *  queryList = [{'14'.EX.'Butter'}, {'13'.EX.'Oil'}]
+     *  queryList = [{14.EX.'Butter'}, {13.EX.'Oil'}]
      *
      *  concatQueries(queryList) ==> ({14.EX.'Butter'})AND({13.EX.'Oil'})
      *  concatQueries(queryList, true) ==> ({14.EX.'Butter'})OR({13.EX.'Oil'})
