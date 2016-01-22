@@ -2,7 +2,7 @@ import QueryUtils from '../../src/utils/queryUtils';
 import StringUtils from '../../src/utils/stringUtils';
 import * as Constants from '../../src/constants/query';
 
-describe('QueryUtils - parseStringIntoContainsExpression test with invalid search expressions', () => {
+describe('QueryUtils - parseStringIntoAllFieldsContainsExpression test with invalid search expressions', () => {
     'use strict';
 
     var dataProvider = [
@@ -12,12 +12,12 @@ describe('QueryUtils - parseStringIntoContainsExpression test with invalid searc
     ];
     dataProvider.forEach(function(data) {
         it(data.test, function() {
-            expect(QueryUtils.parseStringIntoContainsExpression(data.input)).toBe('');
+            expect(QueryUtils.parseStringIntoAllFieldsContainsExpression(data.input)).toBe('');
         });
     });
 });
 
-describe('QueryUtils - parseStringIntoContainsExpression tests with valid search expressions', () => {
+describe('QueryUtils - parseStringIntoAllFieldsContainsExpression tests with valid search expressions', () => {
     'use strict';
 
     var template = '{' + Constants.ALL_FIELDS_ID + Constants.OPERATOR_CONTAINS + '\'{0}\'}';
@@ -29,7 +29,7 @@ describe('QueryUtils - parseStringIntoContainsExpression tests with valid search
     ];
     dataProvider.forEach(function(data) {
         it(data.test, function() {
-            expect(QueryUtils.parseStringIntoContainsExpression(data.input)).toBe(data.expectation);
+            expect(QueryUtils.parseStringIntoAllFieldsContainsExpression(data.input)).toBe(data.expectation);
         });
     });
 });

@@ -101,7 +101,7 @@ let reportDataActions = {
                     let filterQueries = [];
                     filterQueries.push(response[0].data.query);
                     filterQueries.push(response[1].data);
-                    filterQueries.push(QueryUtils.parseStringIntoContainsExpression(filter.search));
+                    filterQueries.push(QueryUtils.parseStringIntoAllFieldsContainsExpression(filter.search));
                     queryParams.query = QueryUtils.concatQueries(filterQueries);
 
                     //  Get the filtered records

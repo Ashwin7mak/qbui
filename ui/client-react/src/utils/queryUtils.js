@@ -7,14 +7,15 @@ import StringUtils from './stringUtils';
 class QueryUtils {
 
     /**
-     * Output a Quickbase 'CONTAINS' query expression for the given input string
+     * Output a Quickbase 'ALL FIELDS' 'CONTAINS' query expression that search's all fields on
+     * a record for the given input string.
      *
-     * parseStringIntoContainsExpression('professional')  ==> {0.CT.'Professional'}
+     * parseStringIntoAllFieldsContainsExpression('professional')  ==> {0.CT.'Professional'}
      *
      * @param inputStr
      * @returns {string} contains query expression.  If input is not a string with content, returns empty string.
      */
-    static parseStringIntoContainsExpression(inputStr) {
+    static parseStringIntoAllFieldsContainsExpression(inputStr) {
         var containsExpr = '';
         if (typeof inputStr === 'string') {
             var trimmedInput = StringUtils.trim(inputStr);
@@ -27,7 +28,7 @@ class QueryUtils {
 
     /**
      * Concatenate a list of query expressions.  Each query expression in the input list is 'AND'ed by default.
-     * Set the 'useOr' parameter to true to 'OR' the query list.
+     * To 'OR' the query list, set the 'useOr' parameter to true.
      *
      * Example usage:
      *
