@@ -51,7 +51,7 @@
         // This function is run once before any of the test files. Acts as a global test preparation step
         onPrepare: function(){
             //Require the e2e base class and constants modules
-            //global.e2eBase = require('../common/e2eBase.js')();
+            global.e2eBase = require('../common/e2eBase.js')();
             global.consts = require('../../server/api/constants.js');
             global.e2eConsts = require('../common/e2eConsts.js');
             //Load the page Objects

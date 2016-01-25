@@ -9,14 +9,11 @@
     'use strict';
     // In order to manage the async nature of Protractor with a non-Angular page use the ExpectedConditions feature
     var EC = protractor.ExpectedConditions;
-    var e2eBase = require('../../common/e2eBase.js')();
 
     describe('Report Service E2E Tests', function() {
         var app;
         var recordList;
         var fieldNames;
-        e2eBase.setBaseUrl(browser.baseUrl);
-        e2eBase.initialize();
         /**
          * Setup method. Generates JSON for an app, a table, a set of records and a report. Then creates them via the REST API.
          * Have to specify the done() callback at the end of the promise chain, otherwise Protractor will not wait

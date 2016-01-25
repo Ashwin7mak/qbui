@@ -11,13 +11,8 @@
     //Bluebird Promise library
     var promise = require('bluebird');
     var reportServicePage = new ReportServicePage();
-    var e2eBase = require('../../common/e2eBase.js')();
 
     describe('Table Report Global Nav Tests', function() {
-        var heightTest = 1441;
-        var widthTest = 1025;
-        e2eBase.setBaseUrl(browser.baseUrl);
-        e2eBase.initialize();
         var app;
         var recordList;
 
@@ -38,9 +33,6 @@
                 requestSessionTicketPage.get(e2eBase.getSessionTicketRequestEndpoint(realmName, realmId, e2eBase.ticketEndpoint));
                 // Load the requestAppsPage (shows a list of all the apps and tables in a realm)
                 requestAppsPage.get(e2eBase.getRequestAppsPageEndpoint(realmName));
-
-                // Define the window size
-                 e2eBase.resizeBrowser(widthTest, heightTest);
 
                 // Wait for the left nav to load
                 reportServicePage.waitForElement(reportServicePage.appsListDivEl).then(function() {
@@ -73,7 +65,7 @@
          * Test method.
          */
         it('X-large breakpoint: Global Nav actions should show icon and text', function() {
-            e2eBase.resizeBrowser(e2eConsts.XLARGE_BREAKPOINT_WIDTH, heightTest).then(function(){
+            e2eBase.resizeBrowser(e2eConsts.XLARGE_BREAKPOINT_WIDTH, e2eConsts.XLARGE_BREAKPOINT_WIDTH).then(function(){
                 expect(reportServicePage.topNavGlobalActDivEl.isDisplayed()).toBe(true);
                 reportServicePage.topNavGlobalActionsListEl.then(function(navActions){
                     expect(navActions.length).toBe(4);
@@ -89,7 +81,7 @@
          * Test method.
          */
         it('Large breakpoint: Global Nav actions should show icon and text', function() {
-            e2eBase.resizeBrowser(e2eConsts.LARGE_BREAKPOINT_WIDTH, heightTest).then(function() {
+            e2eBase.resizeBrowser(e2eConsts.LARGE_BREAKPOINT_WIDTH, e2eConsts.XLARGE_BREAKPOINT_WIDTH).then(function() {
                 reportServicePage.waitForElement(reportServicePage.topNavGlobalActDivEl).then(function() {
                     reportServicePage.assertGlobalNavTextVisible(true);
                 });
@@ -100,7 +92,7 @@
          * Test method.
          */
         it('Medium breakpoint: Global Nav actions should only show icon', function() {
-            e2eBase.resizeBrowser(e2eConsts.MEDIUM_BREAKPOINT_WIDTH, heightTest).then(function(){
+            e2eBase.resizeBrowser(e2eConsts.MEDIUM_BREAKPOINT_WIDTH, e2eConsts.XLARGE_BREAKPOINT_WIDTH).then(function(){
                 reportServicePage.waitForElement(reportServicePage.topNavGlobalActDivEl).then(function() {
                     expect(reportServicePage.topNavGlobalActDivEl.isDisplayed()).toBe(true);
                     reportServicePage.topNavGlobalActionsListEl.then(function(navActions){
@@ -115,7 +107,7 @@
          * Test method.
          */
         it('Small breakpoint: Global Nav actions should only show icon', function() {
-            e2eBase.resizeBrowser(e2eConsts.SMALL_BREAKPOINT_WIDTH, heightTest).then(function(){
+            e2eBase.resizeBrowser(e2eConsts.SMALL_BREAKPOINT_WIDTH, e2eConsts.XLARGE_BREAKPOINT_WIDTH).then(function(){
                 reportServicePage.waitForElement(reportServicePage.topNavGlobalActDivEl).then(function() {
                     expect(reportServicePage.topNavGlobalActDivEl.isDisplayed()).toBe(true);
                     reportServicePage.topNavGlobalActionsListEl.then(function(navActions){

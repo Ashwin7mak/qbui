@@ -11,13 +11,10 @@
     //Bluebird Promise library
     var promise = require('bluebird');
     var reportServicePage = new ReportServicePage();
-    var e2eBase = require('../../common/e2eBase.js')();
 
     describe('Report Page Layout Tests', function() {
-        var widthTest = 1025;
-        var heightTest = 1440;
-        e2eBase.setBaseUrl(browser.baseUrl);
-        e2eBase.initialize();
+        //var widthTest = 1025;
+        //var heightTest = 1440;
         var app;
         var recordList;
 
@@ -46,8 +43,7 @@
                         requestSessionTicketPage.get(e2eBase.getSessionTicketRequestEndpoint(realmName, realmId, e2eBase.ticketEndpoint));
                         // Load the requestAppsPage (shows a list of all the apps and tables in a realm)
                         requestAppsPage.get(e2eBase.getRequestAppsPageEndpoint(realmName));
-                        // Define the window size
-                        e2eBase.resizeBrowser(widthTest, heightTest);
+
                         // Wait for the left nav to load
                         reportServicePage.waitForElement(reportServicePage.appsListDivEl).then(function() {
                             // Select the app
@@ -155,18 +151,18 @@
                 // Make sure the table report has loaded
                 reportServicePage.waitForElement(reportServicePage.loadedContentEl).then(function() {
                     // Resize browser at different widths to check responsiveness
-                    e2eBase.resizeBrowser(1500, heightTest).then(function() {
+                    e2eBase.resizeBrowser(e2eConsts.XLARGE_BREAKPOINT_WIDTH, e2eConsts.XLARGE_BREAKPOINT_WIDTH).then(function() {
                         reportServicePage.assertNavProperties('xlarge', true, '399');
                     }).then(function() {
-                        e2eBase.resizeBrowser(1280, heightTest).then(function() {
+                        e2eBase.resizeBrowser(e2eConsts.LARGE_BREAKPOINT_WIDTH, e2eConsts.XLARGE_BREAKPOINT_WIDTH).then(function() {
                             reportServicePage.assertNavProperties('large', true, '299');
                         }).then(function() {
-                            e2eBase.resizeBrowser(1024, heightTest).then(function() {
+                            e2eBase.resizeBrowser(e2eConsts.MEDIUM_BREAKPOINT_WIDTH, e2eConsts.XLARGE_BREAKPOINT_WIDTH).then(function() {
                                 reportServicePage.assertNavProperties('medium', true, '199');
                             }).then(function() {
-                                e2eBase.resizeBrowser(640, heightTest).then(function() {
+                                e2eBase.resizeBrowser(e2eConsts.SMALL_BREAKPOINT_WIDTH, e2eConsts.XLARGE_BREAKPOINT_WIDTH).then(function() {
                                     reportServicePage.assertNavProperties('small', false, '0');
-                                    e2eBase.resizeBrowser(1500, heightTest).then(function() {
+                                    e2eBase.resizeBrowser(1500, e2eConsts.XLARGE_BREAKPOINT_WIDTH).then(function() {
                                         reportServicePage.reportsBackLinkEl.click();
                                         done();
                                     });
@@ -191,16 +187,16 @@
                 // Make sure the table report has loaded
                 reportServicePage.waitForElement(reportServicePage.loadedContentEl).then(function() {
                     // Resize browser at different widths to check responsiveness
-                    e2eBase.resizeBrowser(600, heightTest).then(function() {
+                    e2eBase.resizeBrowser(e2eConsts.SMALL_BREAKPOINT_WIDTH, e2eConsts.XLARGE_BREAKPOINT_WIDTH).then(function() {
                         reportServicePage.assertNavProperties('small', false, '0');
                     }).then(function() {
-                        e2eBase.resizeBrowser(1024, heightTest).then(function() {
+                        e2eBase.resizeBrowser(e2eConsts.MEDIUM_BREAKPOINT_WIDTH, e2eConsts.XLARGE_BREAKPOINT_WIDTH).then(function() {
                             reportServicePage.assertNavProperties('medium', true, '199');
                         }).then(function() {
-                            e2eBase.resizeBrowser(1280, heightTest).then(function() {
+                            e2eBase.resizeBrowser(e2eConsts.LARGE_BREAKPOINT_WIDTH, e2eConsts.XLARGE_BREAKPOINT_WIDTH).then(function() {
                                 reportServicePage.assertNavProperties('large', true, '299');
                             }).then(function() {
-                                e2eBase.resizeBrowser(1500, heightTest).then(function() {
+                                e2eBase.resizeBrowser(e2eConsts.XLARGE_BREAKPOINT_WIDTH, e2eConsts.XLARGE_BREAKPOINT_WIDTH).then(function() {
                                     reportServicePage.assertNavProperties('xlarge', true, '399');
                                     reportServicePage.reportsBackLinkEl.click();
                                     done();

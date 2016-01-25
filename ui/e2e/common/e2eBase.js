@@ -18,6 +18,13 @@
         var e2eBase = {
             //Delegate to recordBase to initialize
             recordBase : recordBase,
+            //Create a realm
+            setUp : function () {
+                this.setBaseUrl(browser.baseUrl);
+                // Define the window size
+                e2eBase.resizeBrowser(e2eConsts.LARGE_BREAKPOINT_WIDTH, e2eConsts.XLARGE_BREAKPOINT_WIDTH);
+                this.initialize();
+            },
             initialize : function() {
                 recordBase.initialize();
             },
@@ -69,6 +76,7 @@
                 return deferred.promise;
             },
             basicSetup : function(tableToFieldToFieldTypeMap, numberOfRecords) {
+                e2eBase.setUp();
                 var deferred = promise.pending();
                 //Generate the app JSON object
                 var generatedApp = e2eBase.appService.generateAppFromMap(tableToFieldToFieldTypeMap);
