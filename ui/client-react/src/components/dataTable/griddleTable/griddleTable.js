@@ -114,7 +114,7 @@ let GriddleTable = React.createClass({
         var recId;
 
         //check to see if props exist, if they do we need to get recId from row.props.data (this is for non-custom row component clicks)
-        if(row.props) {
+        if (row.props) {
             recId = row.props.data[this.props.uniqueIdentifier];
         }
         else {

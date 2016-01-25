@@ -35,10 +35,13 @@ var ReportRoute = React.createClass({
     * Hardcoded facetExpression for testing
     * TODO: replace with a real method.*/
     filterReport: function(){
-        var facetExpression = [{fid:'3', values:['10', '11']}, {fid:'4', values:['abc']}];
+        var filter = {
+            facet: [{fid: '3', values: ['10', '11']}, {fid: '4', values: ['abc']}],
+            search: ''
+        };
 
         let flux = this.getFlux();
-        flux.actions.filterReport(this.props.params.appId, this.props.params.tblId, this.props.params.rptId, true, facetExpression);
+        flux.actions.filterReport(this.props.params.appId, this.props.params.tblId, this.props.params.rptId, true, filter);
     },
     componentDidMount() {
         if (this.props.params) {

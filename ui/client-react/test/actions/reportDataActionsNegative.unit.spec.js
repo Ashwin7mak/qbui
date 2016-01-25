@@ -3,7 +3,16 @@ import reportDataActions from '../../src/actions/reportDataActions';
 import * as actions from '../../src/constants/actions';
 import Promise from 'bluebird';
 
-let inputs = {appId: '1', tblId: '2', rptId: '3', formatted: true, facetExp: 'abc'};
+let inputs = {
+    appId: '1',
+    tblId: '2',
+    rptId: '3',
+    formatted: true,
+    filter: {
+        facet: 'abc',
+        search: ''
+    }
+};
 let responseReportData = {
     data: {
         name: 'name'
@@ -78,7 +87,7 @@ describe('Report Data Actions -- Filter report Negative', () => {
         }
         reportDataActions.__Rewire__('ReportService', mockReportService);
         reportDataActions.__Rewire__('RecordService', mockRecordService);
-        let promise = flux.actions.filterReport(inputs.appId, inputs.tblId, inputs.rptId, inputs.formatted, inputs.facetExp);
+        let promise = flux.actions.filterReport(inputs.appId, inputs.tblId, inputs.rptId, inputs.formatted, inputs.filter);
 
         expect(flux.dispatchBinder.dispatch).toHaveBeenCalledWith(actions.LOAD_REPORT, {appId: inputs.appId, tblId: inputs.tblId, rptId: inputs.rptId});
         flux.dispatchBinder.dispatch.calls.reset();
@@ -109,7 +118,7 @@ describe('Report Data Actions -- Filter report Negative', () => {
         }
         reportDataActions.__Rewire__('ReportService', mockReportService);
         reportDataActions.__Rewire__('RecordService', mockRecordService);
-        let promise = flux.actions.filterReport(inputs.appId, inputs.tblId, inputs.rptId, inputs.formatted, inputs.facetExp);
+        let promise = flux.actions.filterReport(inputs.appId, inputs.tblId, inputs.rptId, inputs.formatted, inputs.filter);
 
         expect(flux.dispatchBinder.dispatch).toHaveBeenCalledWith(actions.LOAD_REPORT, {appId: inputs.appId, tblId: inputs.tblId, rptId: inputs.rptId});
         flux.dispatchBinder.dispatch.calls.reset();
@@ -140,7 +149,7 @@ describe('Report Data Actions -- Filter report Negative', () => {
         }
         reportDataActions.__Rewire__('ReportService', mockReportService);
         reportDataActions.__Rewire__('RecordService', mockRecordService);
-        let promise = flux.actions.filterReport(inputs.appId, inputs.tblId, inputs.rptId, inputs.formatted, inputs.facetExp);
+        let promise = flux.actions.filterReport(inputs.appId, inputs.tblId, inputs.rptId, inputs.formatted, inputs.filter);
 
         expect(flux.dispatchBinder.dispatch).toHaveBeenCalledWith(actions.LOAD_REPORT, {appId: inputs.appId, tblId: inputs.tblId, rptId: inputs.rptId});
         flux.dispatchBinder.dispatch.calls.reset();
@@ -152,39 +161,6 @@ describe('Report Data Actions -- Filter report Negative', () => {
         });
     });
 
-    it('test filter report fail on invalid params', (done) => {
-        class mockReportService {
-            constructor() { }
-            getReport(){
-                return mockPromiseSuccess(responseReportData);
-            }
-            parseFacetExpression(){
-                return mockPromiseSuccess(responseResultQuery);
-            }
-        }
-        class mockRecordService {
-            constructor() {
-            }
-            getRecords(){
-                return mockPromiseSuccess(responseResultData);
-            }
-        }
-        reportDataActions.__Rewire__('ReportService', mockReportService);
-        reportDataActions.__Rewire__('RecordService', mockRecordService);
-        let promise = flux.actions.filterReport(1, 2, null, false);
-
-        expect(flux.dispatchBinder.dispatch).not.toHaveBeenCalled();
-        flux.dispatchBinder.dispatch.calls.reset();
-        promise.then(function(){
-            done();
-        }).catch(function(){
-            done();
-        }).finally(function(){
-            expect(promise.isRejected()).toBeTruthy();
-            expect(flux.dispatchBinder.dispatch).not.toHaveBeenCalled();
-            done();
-        });
-    });
 });
 
 describe('Report Data Actions -- Filter report Negative missing parameters', () => {
@@ -194,6 +170,9 @@ describe('Report Data Actions -- Filter report Negative missing parameters', () 
         }
         getReport() {
             return mockPromiseSuccess(responseReportData);
+        }
+        getReportResults() {
+            return mockPromiseSuccess(responseResultData);
         }
         parseFacetExpression() {
             return mockPromiseSuccess(responseResultQuery);
@@ -206,6 +185,11 @@ describe('Report Data Actions -- Filter report Negative missing parameters', () 
             return mockPromiseSuccess(responseResultData);
         }
     }
+
+    var filter = {
+        facet: 'abc',
+        search: ''
+    };
 
     beforeEach(() => {
         spyOn(flux.dispatchBinder, 'dispatch');
@@ -220,7 +204,7 @@ describe('Report Data Actions -- Filter report Negative missing parameters', () 
 
     it('test filter report fail on missing appId', (done) => {
         //no app id
-        let promise = flux.actions.filterReport(null, 2, 3, false, 'abc');
+        let promise = flux.actions.filterReport(null, 2, 3, false, filter);
         expect(flux.dispatchBinder.dispatch).not.toHaveBeenCalled();
         flux.dispatchBinder.dispatch.calls.reset();
         promise.then(function() {
@@ -236,7 +220,7 @@ describe('Report Data Actions -- Filter report Negative missing parameters', () 
 
     it('test filter report fail on missing tableId', (done) => {
         //no table id
-        let promise = flux.actions.filterReport(1, null, 3, false, 'abc');
+        let promise = flux.actions.filterReport(1, null, 3, false, filter);
         expect(flux.dispatchBinder.dispatch).not.toHaveBeenCalled();
         flux.dispatchBinder.dispatch.calls.reset();
         promise.then(function() {
@@ -252,7 +236,7 @@ describe('Report Data Actions -- Filter report Negative missing parameters', () 
 
     it('test filter report fail on missing reportId', (done) => {
         //no table id
-        let promise = flux.actions.filterReport(1, 2, null, false, 'abc');
+        let promise = flux.actions.filterReport(1, 2, null, false, filter);
         expect(flux.dispatchBinder.dispatch).not.toHaveBeenCalled();
         flux.dispatchBinder.dispatch.calls.reset();
         promise.then(function() {
@@ -266,21 +250,6 @@ describe('Report Data Actions -- Filter report Negative missing parameters', () 
         });
     });
 
-    it('test filter report fail on missing facetexpression', (done) => {
-        //no facet expression
-        let promise = flux.actions.filterReport(1, 2, 3, false, null);
-        expect(flux.dispatchBinder.dispatch).not.toHaveBeenCalled();
-        flux.dispatchBinder.dispatch.calls.reset();
-        promise.then(function() {
-            done();
-        }).catch(function() {
-            done();
-        }).finally(function() {
-            expect(promise.isRejected()).toBeTruthy();
-            expect(flux.dispatchBinder.dispatch).not.toHaveBeenCalled();
-            done();
-        });
-    });
 });
 
 describe('Report Data Actions -- load report Negative missing parameters', () => {
@@ -316,11 +285,11 @@ describe('Report Data Actions -- load report Negative missing parameters', () =>
         let promise = flux.actions.loadReport(null, 2, 3, false);
         expect(mockReportService.prototype.getReportFacets).not.toHaveBeenCalled();
 
-        promise.then(function () {
+        promise.then(function() {
             done();
-        }).catch(function () {
+        }).catch(function() {
             done();
-        }).finally(function () {
+        }).finally(function() {
             expect(promise.isRejected()).toBeTruthy();
             expect(flux.dispatchBinder.dispatch).not.toHaveBeenCalled();
             done();
@@ -331,11 +300,11 @@ describe('Report Data Actions -- load report Negative missing parameters', () =>
         let promise = flux.actions.loadReport(1, null, 3, false);
         expect(mockReportService.prototype.getReportFacets).not.toHaveBeenCalled();
 
-        promise.then(function () {
+        promise.then(function() {
             done();
-        }).catch(function () {
+        }).catch(function() {
             done();
-        }).finally(function () {
+        }).finally(function() {
             expect(promise.isRejected()).toBeTruthy();
             expect(flux.dispatchBinder.dispatch).not.toHaveBeenCalled();
             done();
@@ -346,11 +315,11 @@ describe('Report Data Actions -- load report Negative missing parameters', () =>
         let promise = flux.actions.loadReport(1, 2, null, false);
         expect(mockReportService.prototype.getReportFacets).not.toHaveBeenCalled();
 
-        promise.then(function () {
+        promise.then(function() {
             done();
-        }).catch(function () {
+        }).catch(function() {
             done();
-        }).finally(function () {
+        }).finally(function() {
             expect(promise.isRejected()).toBeTruthy();
             expect(flux.dispatchBinder.dispatch).not.toHaveBeenCalled();
             done();
@@ -363,11 +332,11 @@ describe('Report Data Actions -- load report Negative missing parameters', () =>
         expect(flux.dispatchBinder.dispatch).toHaveBeenCalled();
         flux.dispatchBinder.dispatch.calls.reset();
 
-        promise.then(function () {
+        promise.then(function() {
             done();
-        }).catch(function () {
+        }).catch(function() {
             done();
-        }).finally(function () {
+        }).finally(function() {
             expect(promise.isRejected()).toBeTruthy();
             expect(flux.dispatchBinder.dispatch).not.toHaveBeenCalledWith(actions.LOAD_REPORT_FAILED);
             done();
