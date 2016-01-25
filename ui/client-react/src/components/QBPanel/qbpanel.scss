@@ -8,12 +8,25 @@ $fieldLabel-color: $color3;
   font-family: $font-family;
   color: $font-color;
 }
+.panel {
+  border-top-width: 0 !important;
+  border-radius: 0 !important;
+}
+.panel-default {
+  border-top-width: 0 !important;
+  border-radius: 0 !important;
+}
+
 .qbPanelHeader {
-  padding-left: 3%;
+  padding-left: 33px;
   padding-top: 0.2rem;
   padding-bottom: 0.2rem;
   cursor: pointer;
   min-width: 30%;
+  background-color: #fff;
+  border: 1px solid #ddd;
+  border-bottom-width: 0;
+  border-radius: 0 0 0 0;
 }
 .qbPanelHeaderIcon {
   float: right;
@@ -27,7 +40,7 @@ $fieldLabel-color: $color3;
 }
 .rotateDown {
   transition: all .25s linear;
-  transform: rotate(-180deg);
+  transform: rotate(90deg);
   font-size: 22px;
 }
 .rotateUp {

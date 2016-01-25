@@ -26,7 +26,7 @@ class QBPanel extends React.Component {
             <div className={"qbPanel"}>
                 <div className="qbPanelHeader" onClick={ ()=> this.setState({open: !this.state.open})}>
                     <h3 id={panelId}>{this.props.title}<small className="qbPanelHeaderIcon">
-                        <Hicon icon="chevron-up" className={this.state.open ? "rotateDown" : "rotateUp"}/>
+                        <Hicon icon="chevron-right" className={this.state.open ? "rotateDown" : "rotateUp"}/>
                     </small></h3>
                 </div>
                 <Panel collapsible expanded={this.state.open}>
