@@ -20,7 +20,7 @@ jasmine.DEFAULT_TIMEOUT_INTERVAL = 600000; //10 minutes max allows for adding ma
     }
 
     //Require the e2e base class and constants modules
-    var e2eBase = require('../common/e2eBase.js')(config);
+    var e2eBase = require('../common/e2eBase.js')();
     var consts = require('../../server/api/constants.js');
 
     describe('Data Generation for E2E Tests', function() {
