@@ -11,6 +11,7 @@
     //Bluebird Promise library
     var promise = require('bluebird');
     var reportServicePage = new ReportServicePage();
+    var e2eBase = require('../../common/e2eBase.js')();
 
     describe('Table Report Global Nav Tests', function() {
         var heightTest = 1441;
@@ -20,17 +21,15 @@
         var app;
         var recordList;
 
-        /**
+        /**¶
          * Setup method. Generates JSON for an app, a table, a set of records and a report. Then creates them via the REST API.
          * Have to specify the done() callback at the end of the promise chain, otherwise Protractor will not wait
          * for the promises to be resolved
          */
         beforeAll(function(done) {
-            e2eBase.reportsBasicSetUp().then(function(results) {
-                app = results[0];
-                recordList = results[1];
-
-                console.log("The app is: "+app);
+            e2eBase.reportsBasicSetUp().then(function(appAndRecords) {
+                app = appAndRecords[0];
+                recordList = appAndRecords[1];
 
                 // Get a session ticket for that subdomain and realmId (stores it in the browser)
                 // Gather the necessary values to make the requests via the browser

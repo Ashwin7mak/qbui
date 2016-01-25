@@ -11,6 +11,7 @@
         baseUrl: process.env.DOMAIN,
         // list of files / patterns to load in the browser
         specs: [
+
             '../qbapp/reports/*.e2e.spec.js'
         ],
         // Patterns to exclude.
@@ -49,6 +50,15 @@
         },
         // This function is run once before any of the test files. Acts as a global test preparation step
         onPrepare: function(){
+            //Require the e2e base class and constants modules
+            //global.e2eBase = require('../common/e2eBase.js')();
+            global.consts = require('../../server/api/constants.js');
+            global.e2eConsts = require('../common/e2eConsts.js');
+            //Load the page Objects
+            global.ReportServicePage = require('../qbapp/reports/reportService.po.js');
+            global.requestAppsPage = require('../qbapp/reports/requestApps.po.js');
+            global.requestSessionTicketPage = require('../qbapp/reports/requestSessionTicket.po.js');
+
             // Lets Protractor know there is no Angular code to wait for
             browser.ignoreSynchronization = true;
             // Add jasmine spec reporter

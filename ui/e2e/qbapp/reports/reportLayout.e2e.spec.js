@@ -11,6 +11,7 @@
     //Bluebird Promise library
     var promise = require('bluebird');
     var reportServicePage = new ReportServicePage();
+    var e2eBase = require('../../common/e2eBase.js')();
 
     describe('Report Page Layout Tests', function() {
         var widthTest = 1025;
@@ -26,10 +27,10 @@
          * for the promises to be resolved
          */
         beforeAll(function(done) {
-            e2eBase.reportsBasicSetUp().then(function(results) {
+            e2eBase.reportsBasicSetUp().then(function(appAndRecords) {
                 //Set your global objects to use in the test functions
-                app = results[0];
-                recordList = results[1];
+                app = appAndRecords[0];
+                recordList = appAndRecords[1];
                 //Get the appropriate fields out of the second table
                 var nonBuiltInFields = e2eBase.tableService.getNonBuiltInFields(app.tables[1]);
                 //Generate the record JSON objects
@@ -58,63 +59,6 @@
                 });
             });
         });
-        //beforeAll(function(done) {
-        //    //Create the table schema (map object) to pass into the app generator
-        //    var tableToFieldToFieldTypeMap = {};
-        //    tableToFieldToFieldTypeMap['table 1'] = {};
-        //    tableToFieldToFieldTypeMap['table 1']['Text Field'] = {fieldType: consts.SCALAR, dataType: consts.TEXT};
-        //    tableToFieldToFieldTypeMap['table 1']['Rating Field'] = {fieldType: consts.SCALAR, dataType : consts.RATING};
-        //    tableToFieldToFieldTypeMap['table 1']['Phone Number Field'] = {fieldType: consts.SCALAR, dataType : consts.PHONE_NUMBER};
-        //    tableToFieldToFieldTypeMap['table 1']['Numeric'] = {fieldType: consts.SCALAR, dataType: consts.NUMERIC};
-        //    tableToFieldToFieldTypeMap['table 1']['Currency'] = {fieldType: consts.SCALAR, dataType : consts.CURRENCY};
-        //    tableToFieldToFieldTypeMap['table 1']['Percent'] = {fieldType: consts.SCALAR, dataType: consts.PERCENT};
-        //    tableToFieldToFieldTypeMap['table 1']['Url'] = {fieldType: consts.SCALAR, dataType: consts.URL};
-        //    tableToFieldToFieldTypeMap['table 1']['Duration'] = {fieldType: consts.SCALAR, dataType : consts.DURATION};
-        //    tableToFieldToFieldTypeMap['table 1']['Email'] = {fieldType: consts.SCALAR, dataType : consts.EMAIL_ADDRESS};
-        //    tableToFieldToFieldTypeMap['table 1']['Rating 2'] = {fieldType: consts.SCALAR, dataType: consts.RATING};
-        //    tableToFieldToFieldTypeMap['table 2'] = {};
-        //    tableToFieldToFieldTypeMap['table 2']['Text Field'] = {fieldType: consts.SCALAR, dataType: consts.TEXT};
-        //    tableToFieldToFieldTypeMap['table 2']['Rating Field'] = {fieldType: consts.SCALAR, dataType : consts.RATING};
-        //    tableToFieldToFieldTypeMap['table 2']['Phone Number Field'] = {fieldType: consts.SCALAR, dataType : consts.PHONE_NUMBER};
-        //    //Call the basic app setup function
-        //    e2eBase.basicSetup(tableToFieldToFieldTypeMap, 10).then(function(results) {
-        //        //Set your global objects to use in the test functions
-        //        app = results[0];
-        //        //Check that your setup completed properly
-        //        //There's no fail fast option using beforeAll yet in Jasmine to prevent other tests from running
-        //        //This will fail the test if setup did not complete properly so at least it doesn't run
-        //        if (!app) {
-        //            done.fail('test app / recordList was not created properly during setup');
-        //        }
-        //
-        //        //Get the appropriate fields out of the second table
-        //        var nonBuiltInFields = e2eBase.tableService.getNonBuiltInFields(app.tables[1]);
-        //        //Generate the record JSON objects
-        //        var generatedRecords = e2eBase.recordService.generateRecords(nonBuiltInFields, 10);
-        //        //Via the API create the records, a new report
-        //        //This is a promise chain since we need these actions to happen sequentially
-        //        e2eBase.recordService.addRecords(app, app.tables[1], generatedRecords).then(function() {
-        //            e2eBase.reportService.createReport(app.id, app.tables[1].id).then(function() {
-        //                // Get a session ticket for that subdomain and realmId (stores it in the browser)
-        //                // Gather the necessary values to make the requests via the browser
-        //                var realmName = e2eBase.recordBase.apiBase.realm.subdomain;
-        //                var realmId = e2eBase.recordBase.apiBase.realm.id;
-        //                requestSessionTicketPage.get(e2eBase.getSessionTicketRequestEndpoint(realmName, realmId, e2eBase.ticketEndpoint));
-        //                // Load the requestAppsPage (shows a list of all the apps and tables in a realm)
-        //                requestAppsPage.get(e2eBase.getRequestAppsPageEndpoint(realmName));
-        //                // Define the window size
-        //                e2eBase.resizeBrowser(widthTest, heightTest);
-        //                // Wait for the left nav to load
-        //                reportServicePage.waitForElement(reportServicePage.appsListDivEl).then(function() {
-        //                    // Select the app
-        //                    reportServicePage.appLinksElList.get(0).click();
-        //                    e2eBase.sleep(1000);
-        //                    done();
-        //                });
-        //            });
-        //        });
-        //    });
-        //});
 
         /**
          * Before each test starts just make sure the table list div has loaded

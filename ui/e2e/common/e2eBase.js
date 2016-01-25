@@ -132,7 +132,7 @@
                     recordList = results[1];
                     //Return back the created app and records
                     //Pass it back in an array as promise.resolve can only send back one object
-                    var appAndRecords = [app, recordList];
+                    var appAndRecords = [app, recordList, fieldNames];
                     deferred.resolve(appAndRecords);
                 }).catch(function(error) {
                     console.error(JSON.stringify(error));

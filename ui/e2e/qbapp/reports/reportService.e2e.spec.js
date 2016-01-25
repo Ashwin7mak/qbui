@@ -9,16 +9,12 @@
     'use strict';
     // In order to manage the async nature of Protractor with a non-Angular page use the ExpectedConditions feature
     var EC = protractor.ExpectedConditions;
-    //Require the e2e base class and constants modules
-    //var e2eBase = require('../../common/e2eBase.js')();
-    //var consts = require('../../../server/api/constants.js');
-    //Load the page objects
-    //var requestSessionTicketPage = require('./requestSessionTicket.po.js');
-    //var requestAppsPage = require('./requestApps.po.js');
-    //var ReportServicePage = require('./reportService.po.js');
+    var e2eBase = require('../../common/e2eBase.js')();
+
     describe('Report Service E2E Tests', function() {
         var app;
         var recordList;
+        var fieldNames;
         e2eBase.setBaseUrl(browser.baseUrl);
         e2eBase.initialize();
         /**
@@ -27,9 +23,10 @@
          * for the promises to be resolved
          */
         beforeAll(function(done) {
-            e2eBase.reportsBasicSetUp().then(function(results) {
-                app = results[0];
-                recordList = results[1];
+            e2eBase.reportsBasicSetUp().then(function(appAndRecords) {
+                app = appAndRecords[0];
+                recordList = appAndRecords[1];
+                fieldNames = appAndRecords[2];
                 done();
             });
         });
