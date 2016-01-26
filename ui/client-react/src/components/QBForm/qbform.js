@@ -53,7 +53,7 @@ class QBForm extends React.Component {
             fields.push(this.createField(curSection.elements[j]));
         }
         return (
-            <QBPanel title={curSection.title} key={curSection.id} isOpen={false}>
+            <QBPanel title={curSection.title} key={curSection.id} isOpen={false} panelNum={curSection.id}>
                 {fields}
             </QBPanel>
         );

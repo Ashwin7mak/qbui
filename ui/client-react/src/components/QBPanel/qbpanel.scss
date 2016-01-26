@@ -1,39 +1,57 @@
 @import '../../assets/css/qbVariables';
 
-$fieldLabel-font-size: $font-size-small;
+$fieldLabel-font-size-small: $font-size-small;
 $fieldValue-font-size: $font-size-base;
 $fieldLabel-color: $color3;
+$panel-border-color: $color4;
+$panel-background-color: $color2;
+$margin-spacer: 10px;
 
-.qbPanel{
-  font-family: $font-family;
-  color: $font-color;
-}
+/*
+ * Overwrite the following bootstrap classes in their panel component so we have the proper layout
+ * panel, panel-default, panel-body
+*/
 .panel {
   border-top-width: 0 !important;
   border-radius: 0 !important;
+  margin-bottom: 5px !important;
 }
 .panel-default {
   border-top-width: 0 !important;
   border-radius: 0 !important;
 }
+.panel-body {
+  padding: 0 !important;
+}
+.h3 {
+  margin: 0 !important;
+}
+h3 {
+  margin: 0 !important;
+}
 
+/*
+ * Custom css classes for our QBPanel component
+*/
+.qbPanel{
+  font-family: $font-family;
+  color: $font-color;
+  font-size: $font-size;
+}
 .qbPanelHeader {
-  padding-left: 33px;
-  padding-top: 0.2rem;
-  padding-bottom: 0.2rem;
+  padding: 5px 10px 5px 10px;
   cursor: pointer;
   min-width: 30%;
-  background-color: #fff;
-  border: 1px solid #ddd;
+  background-color: $panel-background-color;
+  border: 1px solid $panel-border-color;
   border-bottom-width: 0;
   border-radius: 0 0 0 0;
 }
 .qbPanelHeaderIcon {
   float: right;
-  margin-right:2rem;
 }
 .qbPanelBody {
-  padding-left: 1%;
+  padding: 0 10px 15px 10px;
   display: flex;
   flex-wrap: wrap;
   flex-direction: row;
@@ -56,8 +74,9 @@ $fieldLabel-color: $color3;
   overflow-y: hidden;
 }
 .field {
-  padding-right: 25px;
-  padding-bottom: 25px;
+  //top right bottom left
+  //padding: 0 25px 25px 0;
+  padding: $margin-spacer $margin-spacer 0 0;
   max-width: 25%;
   .fieldLabel{
     display: block;
@@ -80,9 +99,10 @@ $fieldLabel-color: $color3;
   }
   .field {
     max-width: 100%;
+    padding: $margin-spacer $margin-spacer 0 0;
     .fieldLabel {
       display: block;
-      font-size: $fieldLabel-font-size
+      font-size: $fieldLabel-font-size-small;
     }
     .fieldValue {
       display: block;
@@ -103,9 +123,10 @@ $fieldLabel-color: $color3;
   }
   .field {
     max-width: 60%;
+    padding: $margin-spacer $margin-spacer 0 0;
     .fieldLabel {
       display: block;
-      font-size: $fieldLabel-font-size
+      font-size: $fieldLabel-font-size-small;
     }
     .fieldValue {
       display: block;
