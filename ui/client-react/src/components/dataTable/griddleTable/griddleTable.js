@@ -116,8 +116,7 @@ let GriddleTable = React.createClass({
         //check to see if props exist, if they do we need to get recId from row.props.data (this is for non-custom row component clicks)
         if (row.props) {
             recId = row.props.data[this.props.uniqueIdentifier];
-        }
-        else {
+        } else {
             recId = row[this.props.uniqueIdentifier];
         }
         //create the link we want to send the user to and then send them on their way

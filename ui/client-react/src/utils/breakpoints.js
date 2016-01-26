@@ -6,6 +6,10 @@ class Breakpoints  {
     static getCurrentBreakpointClass() {
         let w = window.innerWidth;
 
+        if (Breakpoints.isTouchDevice() && window.devicePixelRatio) {
+            w = window.innerWidth / window.devicePixelRatio;
+        }
+
         if (w <= 640) {
             return breakpoints.SMALL_BREAKPOINT;
         } else if (w <= 1024) {
@@ -15,6 +19,11 @@ class Breakpoints  {
         } else {
             return breakpoints.XLARGE_BREAKPOINT;
         }
+    }
+
+    static isTouchDevice() {
+
+        return "ontouchstart" in window;
     }
 }
 
