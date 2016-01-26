@@ -53,9 +53,10 @@ class StringUtils {
      *  John is from Utah, Mary is from Utah.
      */
     static format(tokenizedString, tokens) {
+        const isTokenArray = Array.isArray(tokens);
         if (typeof tokenizedString === 'string') {
             let tokenArray = [];
-            if (Array.isArray(tokens)) {
+            if (isTokenArray) {
                 tokenArray = tokens;
             } else  if (typeof tokens === 'object' && tokens !== null) {
                 tokenArray = Object.keys(tokens);
@@ -66,13 +67,18 @@ class StringUtils {
             // tokens is valid so do the replacement
             let replaceCallback = function(token, match, offset, str) {
                 // replace if match exists otherwise keep token
-                return tokens[match] || token;
+                if (isTokenArray) {
+                    return tokenArray.length > match ? tokenArray[match] : token;
+                } else {
+                    return tokens[match] || token;
+                }
             };
             return tokenizedString.replace(/\{([0-9A-Za-z]+)\}/g, replaceCallback);
         }
         //  nothing to do...return the original tokenized string
         return tokenizedString;
     }
+
 }
 
 export default StringUtils;

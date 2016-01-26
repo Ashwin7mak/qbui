@@ -27,7 +27,7 @@ if (__QB_PROD__) {
         },
         locale: {
             supported:['en-us', 'de-de', 'fr-fr'],
-            default: 'en-us',
+            default: 'en-us'
         },
         logger: {
             logLevel: LogLevel.WARN,
@@ -48,7 +48,7 @@ if (__QB_TEST__) {
         },
         locale: {
             supported: ['en-us', 'de-de', 'fr-fr'],
-            default: 'en-us',
+            default: 'en-us'
         },
         logger: {
             logLevel: LogLevel.DEBUG,
@@ -69,7 +69,7 @@ if (__QB_LOCAL__) {
         },
         locale: {
             supported:['en-us', 'de-de', 'fr-fr'],
-            default: 'en-us',
+            default: 'en-us'
         },
         logger: {
             logLevel: LogLevel.DEBUG,

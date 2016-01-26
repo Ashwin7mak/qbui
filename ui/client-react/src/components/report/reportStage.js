@@ -1,10 +1,10 @@
 import React from 'react';
-import {I18nMessage} from '../../../utils/i18nMessage';
+import {I18nMessage} from '../../utils/i18nMessage';
 import {Button} from 'react-bootstrap';
-import Logger from '../../../utils/logger';
-import Locale from '../../../locales/locales';
-import StringUtils from '../../../utils/stringUtils';
-import EmailReportLink from '../../actions/emailReportLink';
+import Logger from '../../utils/logger';
+import Locale from '../../locales/locales';
+import StringUtils from '../../utils/stringUtils';
+import EmailReportLink from '../actions/emailReportLink';
 let logger = new Logger();
 
 import './reportStage.scss';
@@ -65,9 +65,9 @@ const ReportStage = React.createClass({
 
                     </div>
                 </div>
-                <div className="subheader"><I18nMessage message={'lighthouse.stage.sub_header'}/></div>
+                <div className="subheader"><I18nMessage message={'stage.sub_header'}/></div>
                 <div className="content">
-                    <div className="stage-showHide-content"><I18nMessage message={'lighthouse.stage.content'}/></div>
+                    <div className="stage-showHide-content"><I18nMessage message={'stage.content'}/></div>
                 </div>
             </div>
             <div className="right">
@@ -75,11 +75,11 @@ const ReportStage = React.createClass({
                     <div className="reminder">
                         <div className="stage-showHide-content">
                             <div className="icon"></div>
-                            <div className="header"><I18nMessage message={'lighthouse.stage.feedback.header'}/></div>
-                            <div className="subheader"><I18nMessage message={'lighthouse.stage.feedback.sub_header'}/></div>
+                            <div className="header"><I18nMessage message={'stage.feedback.header'}/></div>
+                            <div className="subheader"><I18nMessage message={'stage.feedback.sub_header'}/></div>
                         </div>
                         <div className="button-container">
-                            <Button bsStyle="primary" onClick={this.handleClick}> {<I18nMessage message={'lighthouse.stage.feedback.button'}/>}</Button>
+                            <Button bsStyle="primary" onClick={this.handleClick}> {<I18nMessage message={'stage.feedback.button'}/>}</Button>
                         </div>
                     </div>
                 </div>

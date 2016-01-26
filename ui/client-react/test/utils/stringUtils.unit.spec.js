@@ -1,116 +1,111 @@
 import StringUtils from '../../src/utils/stringUtils';
 
-describe('StringUtils', () => {
+describe('StringUtils - test trim input', () => {
     'use strict';
 
-    it('test trim function', () => {
-        expect(StringUtils.trim('abc')).toBe('abc');
-        expect(StringUtils.trim(' abc ')).toBe('abc');
-        expect(StringUtils.trim(' This is IT! ')).toBe('This is IT!');
-        expect(StringUtils.trim(' ab c')).toBe('ab c');
-        expect(StringUtils.trim('a bc ')).toBe('a bc');
-        expect(StringUtils.trim('')).toBe('');
+    var dataProvider = [
+        {test: 'string="abc"', input: 'abc', expectation: 'abc'},
+        {test: 'string=" abc"', input: ' abc ', expectation: 'abc'},
+        {test: 'string=" This is IT! "', input: ' This is IT! ', expectation: 'This is IT!'},
+        {test: 'string=" ab c"', input: ' ab c', expectation: 'ab c'},
+        {test: 'string="a bc "', input: 'a bc ', expectation: 'a bc'},
+        {test: 'string=""', input: '', expectation: ''}
+    ];
+    dataProvider.forEach(function(data) {
+        it(data.test, function() {
+            expect(StringUtils.trim(data.input)).toBe(data.expectation);
+        });
     });
+});
 
-    it('test trim function with invalid input', () => {
-        // non-string input returns the same value unchanged..
-        var a;
-        var date = new Date();
+describe('StringUtils - test trim function with invalid data types', () => {
+    'use strict';
 
-        a = ['1', ' 2 '];
-        expect(StringUtils.trim(a)).toBe(a);
-        expect(StringUtils.trim(date)).toBe(date);
+    var arr = ['1', ' 2 '];
+    var date = new Date();
+    var num = 230;
+    var bool = true;
+    var func = new function() {
+        return true;
+    };
 
-        expect(StringUtils.trim(20)).toBe(20);
-        expect(StringUtils.trim(true)).toBe(true);
-    });
+    var dataProvider = [
+        {test:'array', type:arr},
+        {test:'date', type:date},
+        {test:'numeric', type:num},
+        {test:'boolean', type:bool},
+        {test:'function', type:func}
+    ];
 
-    it('test isNonEmptyString function', () => {
-        expect(StringUtils.isNonEmptyString('abc')).toBe(true);
-        expect(StringUtils.isNonEmptyString(' abc ')).toBe(true);
-        expect(StringUtils.isNonEmptyString(123)).toBe(false);
-        expect(StringUtils.isNonEmptyString('123')).toBe(true);
-        expect(StringUtils.isNonEmptyString(' ')).toBe(false);
+    dataProvider.forEach(function(data) {
+        it(data.test, function() {
+            expect(StringUtils.trim(data.type)).toBe(data.type);
+        });
     });
 
 });
 
-
-describe('Token substitution tests', () => {
+describe('StringUtils - test isNonEmptyString function', () => {
     'use strict';
 
-    //  TOKEN SUBSTITUTION TESTS
+    var dataProvider = [
+        {test:'input="abc"', input:'abc', expectation: true},
+        {test:'input=" abc  "', input:' abc  ', expectation: true},
+        {test:'input=123', input: 123, expectation: false},
+        {test:'input="123"', input: '123', expectation: true},
+        {test:'input=" "', input: ' ', expectation: false}
+    ];
 
-    it("Token string substitution...valid tokens", function() {
-        expect(StringUtils.format("The quick brown {0} jumps over the lazy {1}.", ['fox', 'dog'])).toBe("The quick brown fox jumps over the lazy dog.");
+    dataProvider.forEach(function(data) {
+        it(data.test, function() {
+            expect(StringUtils.isNonEmptyString(data.input)).toBe(data.expectation);
+        });
     });
-    it("Token string substitution...missing token", function() {
-        expect(StringUtils.format("The quick brown {0} jumps over the lazy {1}.", ['fox'])).toBe("The quick brown fox jumps over the lazy {1}.");
-    });
+});
 
-    it("Token string substitution...no token", function() {
-        expect(StringUtils.format("The quick brown {0} jumps over the lazy {1}.")).toBe("The quick brown {0} jumps over the lazy {1}.");
-    });
+describe('StringUtils - format function tests', () => {
+    'use strict';
 
-    it("Token string substitution...no token string input", function() {
-        expect(StringUtils.format("", ['fox', 'dog'])).toBe('');
-        expect(StringUtils.format("", {fox: 'fox', dog: 'dog'})).toBe('');
-    });
+    var callback = function() {return null;};
+    var dataProvider = [
+        {test: 'Valid tokens', input:'The quick brown {0} jumps over the lazy {1}.', tokens:['fox', 'dog'], expectation: 'The quick brown fox jumps over the lazy dog.'},
+        {test: 'Missing token', input:'The quick brown {0} jumps over the lazy {1}.', tokens:['fox'], expectation: 'The quick brown fox jumps over the lazy {1}.'},
+        {test: 'No token', input:'The quick brown {0} jumps over the lazy {1}.', tokens:null, expectation: 'The quick brown {0} jumps over the lazy {1}.'},
+        {test: 'No token in input string', input:'The quick brown fox jumps over the lazy dog.', tokens:['fox', 'dog'], expectation: 'The quick brown fox jumps over the lazy dog.'},
+        {test: 'Empty String input', input:'', tokens:['fox', 'dog'], expectation: ''},
+        {test: 'Null String input', input:null, tokens:['fox', 'dog'], expectation: null},
+        {test: 'Multi string replacement', input:'The quick brown {0} jumps over the lazy {1}...Gray {0} and red {0} excluded!', tokens:['fox', 'dog'], expectation: 'The quick brown fox jumps over the lazy dog...Gray fox and red fox excluded!'},
+        {test: 'Greater than 10 tokens', input:'The {0},{1},{2},{3},{4},{5},{6},{7},{8},{9},{10},{11}', tokens:['fox', 'dog', 'fox', 'dog', 'fox', 'dog', 'fox', 'dog', 'fox', 'dog', 'fox', 'dog'], expectation: 'The fox,dog,fox,dog,fox,dog,fox,dog,fox,dog,fox,dog'},
+        {test: 'Mismatched token dataTypes', input:'{0} quick brown fox jumps over the lazy {1}.', tokens:[1, 'dog'], expectation: '1 quick brown fox jumps over the lazy dog.'},
+        {test: 'Mismatched tokens', input:'The quick brown fox jumps over the lazy {1}.', tokens:[1, 'dog'], expectation: 'The quick brown fox jumps over the lazy dog.'},
+        {test: 'Numeric tokens', input:'{0} divided by {1} = {2}', tokens:[10, 5, 2], expectation: '10 divided by 5 = 2'},
+        {test: 'Invalid input string data type', input:callback, tokens:['fox'], expectation: callback},
+        {test: 'Invalid token array data type', input:'The quick brown {0} jumps', tokens:'invalidStr', expectation: 'The quick brown {0} jumps'},
+        {test: 'Query search parameter', input:'{0.CT.\'{0}\'}', tokens:['pro'], expectation: "{0.CT.'pro'}"},
+        {test: 'Null token 1', input:'The quick brown {0} and {1}.', tokens:[null, 'dog'], expectation: 'The quick brown null and dog.'},
+        {test: 'Null token 2', input:'The quick brown {0} and {1}.', tokens:['cat', null], expectation: 'The quick brown cat and null.'},
 
-    it("Token string substitution...multi string replacement.", function() {
-        expect(StringUtils.format("The quick brown {0} jumps over the lazy {1}...Gray {0} and red {0} excluded!", ['fox', 'dog'])).toBe("The quick brown fox jumps over the lazy dog...Gray fox and red fox excluded!");
-        expect(StringUtils.format("The quick brown {fox} jumps over the lazy {dog}...Gray {fox} and red {fox} excluded!", {fox: 'fox', dog: 'dog'})).toBe("The quick brown fox jumps over the lazy dog...Gray fox and red fox excluded!");
-    });
+        {test: 'Valid tokens', input:'The quick brown {fox} jumps over the lazy {dog}.', tokens:{fox: "fox", dog: "dog"}, expectation: 'The quick brown fox jumps over the lazy dog.'},
+        {test: 'Missing token', input:'The quick brown {fox} jumps over the lazy {dog}.', tokens:{fox: "fox"}, expectation: 'The quick brown fox jumps over the lazy {fox}.'},
+        {test: 'No token', input:'The quick brown {fox} jumps over the lazy {dog}.', tokens:null, expectation: 'The quick brown {fox} jumps over the lazy {dog}.'},
+        {test: 'No token in input string', input:'The quick brown fox jumps over the lazy dog.', tokens:{fox: "fox", dog: "dog"}, expectation: 'The quick brown fox jumps over the lazy dog.'},
+        {test: 'Empty String input', input:'', tokens:{fox: "fox", dog: "dog"}, expectation: ''},
+        {test: 'Null String input', input:null, tokens:{fox: "fox", dog: "dog"}, expectation: null},
+        {test: 'Multi string replacement', input:'The quick brown {fox} jumps over the lazy {dog}...Gray {fox} and red {fox} excluded!', tokens:{fox: "fox", dog: "dog"}, expectation: 'The quick brown fox jumps over the lazy dog...Gray fox and red fox excluded!'},
+        {test: 'Numeric tokens', input:'{ten} divided by {five} = {two}', tokens:{ten: 10, five: 5, to: 2}, expectation: '10 divided by 5 = 2'},
+        {test: 'Null token', input:'The quick brown {fox} and {dog}.', tokens:{fox: 'cat', dog:null}, expectation: 'The quick brown cat and null.'}
 
-    it("Token string substitution... 0 tokens", function() {
-        expect(StringUtils.format("The quick brown {0} jumps over the lazy {1}.", [])).toBe("The quick brown {0} jumps over the lazy {1}.");
-        expect(StringUtils.format("The quick brown {0} jumps over the lazy {1}.", {})).toBe("The quick brown {0} jumps over the lazy {1}.");
-    });
+    ];
 
-    it("Token string substitution...greater than 10 tokens", function() {
-        expect(StringUtils.format("The {0},{1},{2},{3},{4},{5},{6},{7},{8},{9},{10},{11}", ['fox', 'dog', 'fox', 'dog', 'fox', 'dog', 'fox', 'dog', 'fox', 'dog', 'fox', 'dog'])).toBe("The fox,dog,fox,dog,fox,dog,fox,dog,fox,dog,fox,dog");
+    dataProvider.forEach(function(data) {
+        it(data.test, function() {
+            expect(StringUtils.format(data.input, data.tokens)).toBe(data.expectation);
+        });
     });
+});
 
-    it("Token string substitution...no tokens", function() {
-        expect(StringUtils.format("The quick brown fox jumps over the lazy dog.", ['fox', 'dog'])).toBe("The quick brown fox jumps over the lazy dog.");
-        expect(StringUtils.format("The quick brown fox jumps over the lazy dog.", {fox: 'fox', dog: 'dog'})).toBe("The quick brown fox jumps over the lazy dog.");
-    });
-
-    it("Token string substitution...mismatched token dataTypes", function() {
-        expect(StringUtils.format("{0} quick brown fox jumps over the lazy {1}.", [1, 'dog'])).toBe("1 quick brown fox jumps over the lazy dog.");
-        expect(StringUtils.format("{one} quick brown fox jumps over the lazy {dog}.", {one: 1, dog:'dog'})).toBe("1 quick brown fox jumps over the lazy dog.");
-    });
-
-    it("Token string substitution...mismatched tokens", function() {
-        expect(StringUtils.format("The quick brown fox jumps over the lazy {1}.", [1, 'dog'])).toBe("The quick brown fox jumps over the lazy dog.");
-        expect(StringUtils.format("The quick brown fox jumps over the lazy {dog}.", {one:1, dog:'dog'})).toBe("The quick brown fox jumps over the lazy dog.");
-    });
-
-    it("Token string substitution...numeric tokens", function() {
-        expect(StringUtils.format("{0} divided by {1} = {2}", [10, 5, 2])).toBe("10 divided by 5 = 2");
-        expect(StringUtils.format("{one} divided by {two} = {three}", {one:10, two:5, three:2})).toBe("10 divided by 5 = 2");
-    });
-
-    it("Token string substitution...no input string", function() {
-        var inputStr = null;
-        expect(StringUtils.format(inputStr, ['fox', 'dog'])).toBe(inputStr);
-        expect(StringUtils.format(inputStr, {fox: 'fox', dog: 'dog'})).toBe(inputStr);
-    });
-
-    it("Token string substitution...null tokens", function() {
-        var inputStr = 'Some input string';
-        expect(StringUtils.format(inputStr, null)).toBe(inputStr);
-    });
-
-    it("Token string substitution...invalid input string", function() {
-        var callback = function() {return null;};
-        expect(StringUtils.format(callback, ['fox'])).toBe(callback);
-    });
-
-    it("Token string substitution...invalid array", function() {
-        var inputStr = "The quick brown {0} jumps";
-        expect(StringUtils.format(inputStr, 'invalid')).toBe(inputStr);
-    });
+describe('StringUtils - test format with missing parameters', () => {
+    'use strict';
 
     it("Token string substitution...no parameters", function() {
         expect(StringUtils.format()).toBeUndefined();

@@ -55,6 +55,17 @@ println("cwd " + cwd )
 println( "Assembling: " + getProjectArchive() )
 println( "Branch : " + getProjectArchive() )
 
+def cargoHome = "/tmp/cargo";
+
+println "Checking cargo home directory ${cargoHome}"
+if (!file(cargoHome).exists()) {
+    println "Creating cargo home directory ${cargoHome}"
+    file(cargoHome).mkdir()
+    if (!file(cargoHome).exists()) {
+        println "Failed to create directory ${cargoHome}"
+    }
+}
+
 cargo {
     containerId = 'tomcat8x'
 
@@ -68,6 +79,10 @@ cargo {
     local {
         timeout=1000000
         logLevel = 'medium'
+
+        homeDir       = file(cargoHome)
+        configHomeDir = file(cargoHome)
+
         containerProperties {
             property 'cargo.tomcat.ajp.port', 9090
         }
