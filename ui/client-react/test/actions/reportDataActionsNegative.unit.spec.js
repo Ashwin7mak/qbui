@@ -316,11 +316,11 @@ describe('Report Data Actions -- load report Negative missing parameters', () =>
         let promise = flux.actions.loadReport(null, 2, 3, false);
         expect(mockReportService.prototype.getReportFacets).not.toHaveBeenCalled();
 
-        promise.then(function () {
+        promise.then(function() {
             done();
-        }).catch(function () {
+        }).catch(function() {
             done();
-        }).finally(function () {
+        }).finally(function() {
             expect(promise.isRejected()).toBeTruthy();
             expect(flux.dispatchBinder.dispatch).not.toHaveBeenCalled();
             done();
@@ -331,11 +331,11 @@ describe('Report Data Actions -- load report Negative missing parameters', () =>
         let promise = flux.actions.loadReport(1, null, 3, false);
         expect(mockReportService.prototype.getReportFacets).not.toHaveBeenCalled();
 
-        promise.then(function () {
+        promise.then(function() {
             done();
-        }).catch(function () {
+        }).catch(function() {
             done();
-        }).finally(function () {
+        }).finally(function() {
             expect(promise.isRejected()).toBeTruthy();
             expect(flux.dispatchBinder.dispatch).not.toHaveBeenCalled();
             done();
@@ -346,11 +346,11 @@ describe('Report Data Actions -- load report Negative missing parameters', () =>
         let promise = flux.actions.loadReport(1, 2, null, false);
         expect(mockReportService.prototype.getReportFacets).not.toHaveBeenCalled();
 
-        promise.then(function () {
+        promise.then(function() {
             done();
-        }).catch(function () {
+        }).catch(function() {
             done();
-        }).finally(function () {
+        }).finally(function() {
             expect(promise.isRejected()).toBeTruthy();
             expect(flux.dispatchBinder.dispatch).not.toHaveBeenCalled();
             done();
@@ -363,11 +363,11 @@ describe('Report Data Actions -- load report Negative missing parameters', () =>
         expect(flux.dispatchBinder.dispatch).toHaveBeenCalled();
         flux.dispatchBinder.dispatch.calls.reset();
 
-        promise.then(function () {
+        promise.then(function() {
             done();
-        }).catch(function () {
+        }).catch(function() {
             done();
-        }).finally(function () {
+        }).finally(function() {
             expect(promise.isRejected()).toBeTruthy();
             expect(flux.dispatchBinder.dispatch).not.toHaveBeenCalledWith(actions.LOAD_REPORT_FAILED);
             done();

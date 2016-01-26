@@ -15,290 +15,293 @@ $left-nav-heading-bg: #264a6d;
 $left-nav-heading-fg: #bfcfe3;
 
 .leftNav.open {
-  overflow:hidden;
+    overflow: hidden;
 }
 
 .leftNav a.leftNavLink {
-  width:100%;
-  cursor:pointer;
+    width: 100%;
+    cursor: pointer;
 }
 
 .xlarge-breakpoint .leftNav.open {
-  width:400px;
+    width: 400px;
 
 }
+
 .large-breakpoint .leftNav.open {
-  width:300px;
+    width: 300px;
 
 }
+
 .medium-breakpoint .leftNav.open {
-  width:200px;
+    width: 200px;
 }
 
 .small-breakpoint.touch .leftNav.open {
-  width:350px;
+    width: 350px;
 
 }
 
 /* show tooltips only if .show is present unless we're on a touchscreen */
 div.leftNavTooltip {
-  display:none;
+    display: none;
 }
+
 body:not(.touch) div.leftNavTooltip.show {
-  display:block;
+    display: block;
 }
 
 body:not(.touch) .leftNav.closed {
-  width:40px;
-  overflow:hidden;
-  li a.heading {
-    background-color:$left-nav-heading-bg;
-  }
+    width: 40px;
+    overflow: hidden;
+    li a.heading {
+        background-color: $left-nav-heading-bg;
+    }
 
-  .reportsList.open {
-    width:40px;
-  }
+    .reportsList.open {
+        width: 40px;
+    }
 }
 
 .leftNav {
-  border-right: 1px solid $nav-border;
-  background-color: $left-nav-bg;
-  display:flex;
-  flex-direction:column;
-  flex: 0 0 auto;
-  color: $left-nav-fg;
-
-  position:relative;
-  .appsToggle {
-    margin-top:4px;
-    margin-bottom:10px;
-    cursor:pointer;
-  }
-
-  .branding {
+    border-right: 1px solid $nav-border;
+    background-color: $left-nav-bg;
+    display: flex;
+    flex-direction: column;
     flex: 0 0 auto;
-    padding:6px;
-    border-bottom: $global-actions-border;
-    .hi-chevron-down {
-      transition: transform 300ms ease-in;
-    }
-  }
-  .globalActions {
-    flex: 0 1 auto;
-    bottom:0;
+    color: $left-nav-fg;
 
-    .globalAction {
-      border-top: $global-actions-border;
-      a {
-        width:100%;
-        line-height:25px;
-      }
-    }
-  }
-  .transitionGroup {
-    flex: 1;
-    overflow-y:auto;
-    overflow-x:hidden;
-  }
-  .searchApps,.searchReports {
-    padding:8px;
-    input {
-      padding: 5px 10px;
-      border:2px;
-      width: 100%;
-      color: $left-nav-input-fg;
-      height:25px;
-    }
-  }
-
-  ul {
-    list-style: none;
-    list-style-type: none;
-    list-style-position: initial;
-    list-style-image: initial;
-    padding: 0;
-    margin: 0;
-
-    .heading {
-      font-size: 12px;
-      line-height: 30px;
-      background-color: $left-nav-heading-bg;
-      color: $left-nav-heading-fg;
-      margin: 0;
-      padding-left: 10px;
-    }
-    .heading:hover {
-      color:$left-nav-heading-hover-fg;
+    position: relative;
+    .appsToggle {
+        margin-top: 4px;
+        margin-bottom: 10px;
+        cursor: pointer;
     }
 
-    li {
-      position:relative;
+    .branding {
+        flex: 0 0 auto;
+        padding: 6px;
+        border-bottom: $global-actions-border;
+        .hi-chevron-down {
+            transition: transform 300ms ease-in;
+        }
+    }
+    .globalActions {
+        flex: 0 1 auto;
+        bottom: 0;
 
-      a {
-        text-decoration:none;
-        line-height: 35px;
-        padding-left: 10px;
-        color: $left-nav-link-fg;
-        display:inline-block;
-        cursor:pointer;
-      }
-      a.right {
-        opacity:0;
-        position:absolute;
-        right: 5px;
-      }
-      a.backLink {
-        cursor:pointer;
-        width:100%
-      }
+        .globalAction {
+            border-top: $global-actions-border;
+            a {
+                width: 100%;
+                line-height: 25px;
+            }
+        }
+    }
+    .transitionGroup {
+        flex: 1;
+        overflow-y: auto;
+        overflow-x: hidden;
+    }
+    .searchApps, .searchReports {
+        padding: 8px;
+        input {
+            padding: 5px 10px;
+            border: 2px;
+            width: 100%;
+            color: $left-nav-input-fg;
+            height: 25px;
+        }
     }
 
+    ul {
+        list-style: none;
+        list-style-type: none;
+        list-style-position: initial;
+        list-style-image: initial;
+        padding: 0;
+        margin: 0;
 
-    li.link:hover {
-      color: $nav-hover-fg;
-      background-color: $nav-hover-bg;
+        .heading {
+            font-size: 12px;
+            line-height: 30px;
+            background-color: $left-nav-heading-bg;
+            color: $left-nav-heading-fg;
+            margin: 0;
+            padding-left: 10px;
+        }
+        .heading:hover {
+            color: $left-nav-heading-hover-fg;
+        }
 
-      .hi {
-        color: $left-nav-link-fg;
-      }
-      a.right {
-        opacity:1;
-        transition: all 0.2s ease-in-out;
-        -webkit-transition: all 0.2s ease-in-out;
-        -moz-transition: all 0.2s ease-in-out;
-      }
+        li {
+            position: relative;
+
+            a {
+                text-decoration: none;
+                line-height: 35px;
+                padding-left: 10px;
+                color: $left-nav-link-fg;
+                display: inline-block;
+                cursor: pointer;
+            }
+            a.right {
+                opacity: 0;
+                position: absolute;
+                right: 5px;
+            }
+            a.backLink {
+                cursor: pointer;
+                width: 100%
+            }
+        }
+
+        li.link:hover {
+            color: $nav-hover-fg;
+            background-color: $nav-hover-bg;
+
+            .hi {
+                color: $left-nav-link-fg;
+            }
+            a.right {
+                opacity: 1;
+                transition: all 0.2s ease-in-out;
+                -webkit-transition: all 0.2s ease-in-out;
+                -moz-transition: all 0.2s ease-in-out;
+            }
+        }
     }
-  }
 
-  .loader {
-    position:absolute;
-    right:20px;
-    top:20px;
-  }
+    .loader {
+        position: absolute;
+        right: 20px;
+        top: 20px;
+    }
 }
 
 /* small (mobile) left nav behaves differently */
 
 .small-breakpoint.touch .leftNav {
-  margin: 0;
-  height: 100%;
-  width:0;
-  z-index: 9999;
-  border-right: 1px solid $nav-border;
-  overflow-y: auto;
+    margin: 0;
+    height: 100%;
+    width: 0;
+    z-index: 9999;
+    border-right: 1px solid $nav-border;
+    overflow-y: auto;
 
-  ul li a {
-    line-height:25px;
-  }
-  /* always show right link on mobile (no hover) */
-  ul li.link a.right {
-    opacity:1;
-  }
+    ul li a {
+        line-height: 25px;
+    }
+    /* always show right link on mobile (no hover) */
+    ul li.link a.right {
+        opacity: 1;
+    }
 }
 
 .small-breakpoint.touch .navShell.leftNavOpen {
-  position: relative;
-  left:-350px;
+    position: relative;
+    left: -350px;
 
-  .topNav.mobile {
-    min-width:640px;
-  }
-  .main {
-    position:absolute;
-  }
-  .mainContent,.topNav {
-    opacity: .1;
-    transition: opacity 250ms ease-in-out;
-    -moz-transition: opacity 250ms ease-in-out;
-    -webkit-transition: opacity 250ms ease-in-out;
-  }
+    .topNav.mobile {
+        min-width: 640px;
+    }
+    .main {
+        position: absolute;
+    }
+    .mainContent, .topNav {
+        opacity: .1;
+        transition: opacity 250ms ease-in-out;
+        -moz-transition: opacity 250ms ease-in-out;
+        -webkit-transition: opacity 250ms ease-in-out;
+    }
 
-  transform: translate3d(350px, 0, 0);
-  -webkit-transform: translate3d(350px, 0, 0);
+    transform: translate3d(350px, 0, 0);
+    -webkit-transform: translate3d(350px, 0, 0);
 }
 
 /** REACTCSSTRANSITION BASE CLASSES **/
 
 .leftNavList-enter {
-  opacity: 0.01;
+    opacity: 0.01;
 }
 
 .leftNavList.leftNavList-enter-active {
-  opacity: 1;
-  transition: all 300ms ease-in;
-  // transition: opacity 500ms ease-in;
+    opacity: 1;
+    transition: all 300ms ease-in;
+    // transition: opacity 500ms ease-in;
 }
 
 .leftNavList-leave {
-  opacity: 1;
+    opacity: 1;
 }
 
 .leftNavList-leave.leftNavList-leave-active {
-  opacity: 0.01;
-  transition: opacity 300ms ease-in;
+    opacity: 0.01;
+    transition: opacity 300ms ease-in;
 }
 
 $transition-time: 300ms;
 $travel-distance: 15;
 
 .leftNavList-enter.appsList li {
-  margin-top: -#{$travel-distance}px;
+    margin-top: -#{$travel-distance}px;
 }
 
 .leftNavList-enter-active.appsList li {
-  margin-top: 0;
-  transition: all $transition-time ease-in;
+    margin-top: 0;
+    transition: all $transition-time ease-in;
 }
 
 .leftNavList-enter.tablesList li {
-  margin-top: #{$travel-distance}px;
+    margin-top: #{$travel-distance}px;
 }
 
 .leftNavList-enter-active.tablesList li {
-  margin-top: 0;
-  transition: all $transition-time ease-in;
+    margin-top: 0;
+    transition: all $transition-time ease-in;
 }
 
 .leftNav.appsListOpen .branding .hi-chevron-down {
-  transform: rotate(-180deg);
+    transform: rotate(-180deg);
 }
-.leftNav .reportsContainer {
-  flex-direction: column;
-  display: flex;
-  height:100%;
 
-  .reportsTop {
-    flex: 0 0 auto;
-  }
-  .reportItems {
-    overflow-y:auto;
-  }
+.leftNav .reportsContainer {
+    flex-direction: column;
+    display: flex;
+    height: 100%;
+
+    .reportsTop {
+        flex: 0 0 auto;
+    }
+    .reportItems {
+        flex: 1 1 auto;
+        overflow-y: auto;
+    }
 }
 
 .leftNav .reportsList {
-  opacity: 0.5;
-  transform: translate3d(100%, 0, 0);
-  transition: all 300ms cubic-bezier(0.175, 0.885, 0.32, 1.275);
-  position: absolute;
-  top: 0;
-  bottom: 0;
-  left: 0;
-  right: 0;
-  z-index: 900;
-  background-color: $left-nav-reports-bg;
+    opacity: 0.5;
+    transform: translate3d(100%, 0, 0);
+    transition: all 300ms cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    z-index: 900;
+    background-color: $left-nav-reports-bg;
 }
 
-
 .leftNav .reportsList.open {
-  overflow-x: hidden;
-  overflow-y: auto;
-  opacity: 1;
-  transform: translate3d(0, 0, 0);
+    overflow-x: hidden;
+    overflow-y: auto;
+    opacity: 1;
+    transform: translate3d(0, 0, 0);
 
-  a {
-    width:100%;
-    overflow:hidden;
-    text-overflow: ellipsis;
-    white-space:nowrap;
-  }
+    a {
+        width: 100%;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+    }
 }
