@@ -138,6 +138,7 @@
             });
         });
 
+        //TODO: Should use a data provider here see recordApi.currency.integration.spec.js for an example
         /**
         * Test method. The left hand nav should shrink responsively across the 4 breakpoints as the browser is re-sized
         */
@@ -151,18 +152,18 @@
                 // Make sure the table report has loaded
                 reportServicePage.waitForElement(reportServicePage.loadedContentEl).then(function() {
                     // Resize browser at different widths to check responsiveness
-                    e2eBase.resizeBrowser(e2eConsts.XLARGE_BREAKPOINT_WIDTH, e2eConsts.XLARGE_BREAKPOINT_WIDTH).then(function() {
+                    e2eBase.resizeBrowser(e2eConsts.XLARGE_BP_WIDTH, e2eConsts.XLARGE_BP_WIDTH).then(function() {
                         reportServicePage.assertNavProperties('xlarge', true, '399');
                     }).then(function() {
-                        e2eBase.resizeBrowser(e2eConsts.LARGE_BREAKPOINT_WIDTH, e2eConsts.XLARGE_BREAKPOINT_WIDTH).then(function() {
+                        e2eBase.resizeBrowser(e2eConsts.LARGE_BP_WIDTH, e2eConsts.XLARGE_BP_WIDTH).then(function() {
                             reportServicePage.assertNavProperties('large', true, '299');
                         }).then(function() {
-                            e2eBase.resizeBrowser(e2eConsts.MEDIUM_BREAKPOINT_WIDTH, e2eConsts.XLARGE_BREAKPOINT_WIDTH).then(function() {
+                            e2eBase.resizeBrowser(e2eConsts.MEDIUM_BP_WIDTH, e2eConsts.XLARGE_BP_WIDTH).then(function() {
                                 reportServicePage.assertNavProperties('medium', true, '199');
                             }).then(function() {
-                                e2eBase.resizeBrowser(e2eConsts.SMALL_BREAKPOINT_WIDTH, e2eConsts.XLARGE_BREAKPOINT_WIDTH).then(function() {
+                                e2eBase.resizeBrowser(e2eConsts.SMALL_BP_WIDTH, e2eConsts.XLARGE_BP_WIDTH).then(function() {
                                     reportServicePage.assertNavProperties('small', false, '0');
-                                    e2eBase.resizeBrowser(1500, e2eConsts.XLARGE_BREAKPOINT_WIDTH).then(function() {
+                                    e2eBase.resizeBrowser(e2eConsts.XLARGE_BP_WIDTH, e2eConsts.DEFAULT_HEIGHT).then(function() {
                                         reportServicePage.reportsBackLinkEl.click();
                                         done();
                                     });
@@ -174,10 +175,11 @@
             });
         });
 
+        //TODO: Should use a data provider here see recordApi.currency.integration.spec.js for an example
         /**
          * Test method. The left hand nav should expand responsively across the 4 breakpoints as the browser is re-sized
          */
-        xit('Left hand nav should expand responsively', function(done) {
+        it('Left hand nav should expand responsively', function(done) {
             // Select the table
             reportServicePage.tableLinksElList.get(3).click().then(function(){
                 // Open the reports list
@@ -187,16 +189,16 @@
                 // Make sure the table report has loaded
                 reportServicePage.waitForElement(reportServicePage.loadedContentEl).then(function() {
                     // Resize browser at different widths to check responsiveness
-                    e2eBase.resizeBrowser(e2eConsts.SMALL_BREAKPOINT_WIDTH, e2eConsts.XLARGE_BREAKPOINT_WIDTH).then(function() {
+                    e2eBase.resizeBrowser(e2eConsts.SMALL_BP_WIDTH, e2eConsts.XLARGE_BP_WIDTH).then(function() {
                         reportServicePage.assertNavProperties('small', false, '0');
                     }).then(function() {
-                        e2eBase.resizeBrowser(e2eConsts.MEDIUM_BREAKPOINT_WIDTH, e2eConsts.XLARGE_BREAKPOINT_WIDTH).then(function() {
+                        e2eBase.resizeBrowser(e2eConsts.MEDIUM_BP_WIDTH, e2eConsts.XLARGE_BP_WIDTH).then(function() {
                             reportServicePage.assertNavProperties('medium', true, '199');
                         }).then(function() {
-                            e2eBase.resizeBrowser(e2eConsts.LARGE_BREAKPOINT_WIDTH, e2eConsts.XLARGE_BREAKPOINT_WIDTH).then(function() {
+                            e2eBase.resizeBrowser(e2eConsts.LARGE_BP_WIDTH, e2eConsts.XLARGE_BP_WIDTH).then(function() {
                                 reportServicePage.assertNavProperties('large', true, '299');
                             }).then(function() {
-                                e2eBase.resizeBrowser(e2eConsts.XLARGE_BREAKPOINT_WIDTH, e2eConsts.XLARGE_BREAKPOINT_WIDTH).then(function() {
+                                e2eBase.resizeBrowser(e2eConsts.XLARGE_BP_WIDTH, e2eConsts.XLARGE_BP_WIDTH).then(function() {
                                     reportServicePage.assertNavProperties('xlarge', true, '399');
                                     reportServicePage.reportsBackLinkEl.click();
                                     done();

@@ -5,9 +5,10 @@
 (function() {
     'use strict';
     module.exports = Object.freeze({
-        XLARGE_BREAKPOINT_WIDTH : 1441,
-        LARGE_BREAKPOINT_WIDTH : 1025,
-        MEDIUM_BREAKPOINT_WIDTH : 641,
-        SMALL_BREAKPOINT_WIDTH : 400
+        XLARGE_BP_WIDTH : 1441,
+        LARGE_BP_WIDTH : 1025,
+        MEDIUM_BP_WIDTH : 641,
+        SMALL_BP_WIDTH : 400,
+        DEFAULT_HEIGHT : 1440
     });
 }());

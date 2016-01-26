@@ -65,7 +65,7 @@
          * Test method.
          */
         it('X-large breakpoint: Global Nav actions should show icon and text', function() {
-            e2eBase.resizeBrowser(e2eConsts.XLARGE_BREAKPOINT_WIDTH, e2eConsts.XLARGE_BREAKPOINT_WIDTH).then(function(){
+            e2eBase.resizeBrowser(e2eConsts.XLARGE_BP_WIDTH, e2eConsts.XLARGE_BP_WIDTH).then(function(){
                 expect(reportServicePage.topNavGlobalActDivEl.isDisplayed()).toBe(true);
                 reportServicePage.topNavGlobalActionsListEl.then(function(navActions){
                     expect(navActions.length).toBe(4);
@@ -81,7 +81,7 @@
          * Test method.
          */
         it('Large breakpoint: Global Nav actions should show icon and text', function() {
-            e2eBase.resizeBrowser(e2eConsts.LARGE_BREAKPOINT_WIDTH, e2eConsts.XLARGE_BREAKPOINT_WIDTH).then(function() {
+            e2eBase.resizeBrowser(e2eConsts.LARGE_BP_WIDTH, e2eConsts.XLARGE_BP_WIDTH).then(function() {
                 reportServicePage.waitForElement(reportServicePage.topNavGlobalActDivEl).then(function() {
                     reportServicePage.assertGlobalNavTextVisible(true);
                 });
@@ -92,7 +92,7 @@
          * Test method.
          */
         it('Medium breakpoint: Global Nav actions should only show icon', function() {
-            e2eBase.resizeBrowser(e2eConsts.MEDIUM_BREAKPOINT_WIDTH, e2eConsts.XLARGE_BREAKPOINT_WIDTH).then(function(){
+            e2eBase.resizeBrowser(e2eConsts.MEDIUM_BP_WIDTH, e2eConsts.XLARGE_BP_WIDTH).then(function(){
                 reportServicePage.waitForElement(reportServicePage.topNavGlobalActDivEl).then(function() {
                     expect(reportServicePage.topNavGlobalActDivEl.isDisplayed()).toBe(true);
                     reportServicePage.topNavGlobalActionsListEl.then(function(navActions){
@@ -107,7 +107,7 @@
          * Test method.
          */
         it('Small breakpoint: Global Nav actions should only show icon', function() {
-            e2eBase.resizeBrowser(e2eConsts.SMALL_BREAKPOINT_WIDTH, e2eConsts.XLARGE_BREAKPOINT_WIDTH).then(function(){
+            e2eBase.resizeBrowser(e2eConsts.SMALL_BP_WIDTH, e2eConsts.XLARGE_BP_WIDTH).then(function(){
                 reportServicePage.waitForElement(reportServicePage.topNavGlobalActDivEl).then(function() {
                     expect(reportServicePage.topNavGlobalActDivEl.isDisplayed()).toBe(true);
                     reportServicePage.topNavGlobalActionsListEl.then(function(navActions){
