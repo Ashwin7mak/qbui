@@ -70,7 +70,7 @@ class StringUtils {
                 if (isTokenArray) {
                     return tokenArray.length > match ? tokenArray[match] : token;
                 } else {
-                    return tokens[match] || token;
+                    return typeof tokens[match] === 'undefined' ? token : tokens[match];
                 }
             };
             return tokenizedString.replace(/\{([0-9A-Za-z]+)\}/g, replaceCallback);
