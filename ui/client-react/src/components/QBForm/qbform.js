@@ -40,7 +40,7 @@ class QBForm extends React.Component {
         var isCheckbox = curElement.type === "checkbox";
         return (
             <div key={curElement.id} className="field">
-                <h5 className={"fieldLabel"}>{curElement.name}</h5>
+                <h5><small className={"fieldLabel"}>{curElement.name}</small></h5>
                 {isCheckbox ? this.createCheckBox(curElement) : this.createSpan(curElement)}
             </div>
         );
