@@ -79,9 +79,11 @@ class QBForm extends React.Component {
         }
         return (
             <div className="formContainer">
-                <Tabs defaultActiveKey={this.props.activeTab}>
-                    {tabs}
-                </Tabs>
+                <form>
+                    <Tabs defaultActiveKey={this.props.activeTab}>
+                        {tabs}
+                    </Tabs>
+                </form>
             </div>
         );
     }
