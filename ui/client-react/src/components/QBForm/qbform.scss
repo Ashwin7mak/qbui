@@ -26,6 +26,13 @@ $fieldLabel-color: $color3;
     min-width: 0;
   }
 }
+.qbPanelHeaderIcon {
+  float: right;
+  color: #7090ab
+}
+.qbPanelHeaderIcon:hover {
+  color: #0098cd;
+}
 
 /* For mobile phones: */
 .small-breakpoint .field {

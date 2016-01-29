@@ -1,8 +1,9 @@
 import React from 'react';
 import Swipeable from 'react-swipeable';
-import {Glyphicon} from '../../../../../node_modules/react-bootstrap/lib';
+import Hicon from '../../harmonyIcon/harmonyIcon';
 import RecordActions from '../../actions/recordActions';
 import './cardView.scss';
+import '../../QBForm/qbform.scss';
 
 const MAX_ACTIONS_RESIZE_WITH = 180; // max width while swiping
 
@@ -30,7 +31,7 @@ let CardView = React.createClass({
 
     createField(c, curKey) {
         return (<div key={c} className="field">
-            <span className="fieldLabel">{curKey}</span>
+            <h5><small className="fieldLabel">{curKey}</small></h5>
             <span className="fieldValue">{this.props.data[curKey]}</span>
         </div>);
     },
@@ -151,7 +152,7 @@ let CardView = React.createClass({
                                 {row}
                             </div>
                             <div className="card-expander" onClick={this.handleMoreCard}>
-                                <span className={this.state.showMoreCards ? "chevron_opened" : "chevron_closed"}/>
+                                <Hicon icon="chevron-right" className={this.state.showMoreCards ? "qbPanelHeaderIcon rotateDown" : "qbPanelHeaderIcon rotateUp"}/>
                             </div>
 
                         </div>
