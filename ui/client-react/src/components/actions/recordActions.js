@@ -46,9 +46,8 @@ let RecordActions = React.createClass({
         const record = Locale.getMessage('records.singular');
 
         return (
-            <div className={'reportActions'} onClick={this.onClick}>
+            <div className={'recordActions'} onClick={this.onClick}>
 
-                <div>
                     {this.props.selection && <span className="selectedRowsLabel">{this.props.selection.length}</span>}
                     <div className="actionIcons">
                         <ActionIcon icon="edit" tip={this.getSelectionTip("selection.edit") + " " + record}/>
@@ -58,11 +57,11 @@ let RecordActions = React.createClass({
                                          subject={this.getEmailSubject()}
                                          body={this.getEmailBody()}/>
 
-                        <ActionIcon icon="copy" tip={this.getSelectionTip("selection.copy") + " " + record}/>
+                        <ActionIcon icon="duplicate" tip={this.getSelectionTip("selection.copy") + " " + record}/>
                         <ActionIcon icon="delete" tip={this.getSelectionTip("selection.delete") + " " + record}/>
-                        <ActionIcon glyph="option-horizontal" tip={this.getSelectionTip("selection.more") } onClick={this.showExtraActions}/>
+                        <ActionIcon icon="pickles" tip={this.getSelectionTip("selection.more") } onClick={this.showExtraActions}/>
                     </div>
-                </div>
+
             </div>
         );
     }

@@ -55,9 +55,9 @@ var TopNav = React.createClass({
             <div className={'topNav'}>
                 <div className="top">
                     <div className="navGroup left">
-                        <div className="navItem "><a className="iconLink toggleNavButton" href="#" onClick={this.toggleNav}><QBIcon icon="menu" /> </a></div>
+                        <div className="navItem "><a className="iconLink toggleNavButton" href="#" onClick={this.toggleNav}><QBIcon icon="hamburger" /> </a></div>
 
-                        <div className="navItem topTitle">{this.props.title}</div>
+                        {/*<div className="navItem topTitle">{this.props.title}</div>*/}
                     </div>
 
                     <div className="navGroup center">
@@ -65,14 +65,14 @@ var TopNav = React.createClass({
 
                             <OverlayTrigger trigger="click" rootClose placement="bottom" overlay={
                             <Popover id={0} className={'searchPopover'}  title="Search">
-                                <Input className="searchInputBox" key={'searchInput'} standalone addonBefore={searchIcon} type="text" placeholder="Search Records"  onChange={this.searchChanged} />
+                                <Input className="searchInputBox" key={'searchInput'} standalone type="text" placeholder="Search Records"  onChange={this.searchChanged} />
                             </Popover>}>
 
-                                <Button><Hicon icon="search" /></Button>
+                                <Button><QBIcon icon="search" /></Button>
                             </OverlayTrigger>
 
-                            <Button className="addNewButton" onClick={this.addNew} ><Hicon icon="create-lg" /></Button>
-                            <Button><Hicon icon="history" /></Button>
+                            <Button className="addNewButton" onClick={this.addNew} ><QBIcon icon="add" /></Button>
+                            <Button><QBIcon icon="history" /></Button>
                         </ButtonGroup>
                     </div>
 
@@ -83,7 +83,7 @@ var TopNav = React.createClass({
 
                         <Dropdown id="nav-right-dropdown">
 
-                            <a bsRole="toggle" className={"dropdownToggle"}><Glyphicon glyph="option-vertical"/> </a>
+                            <a bsRole="toggle" className={"dropdownToggle"}><QBIcon icon="fries"/> </a>
 
                             <Dropdown.Menu>
                                 <MenuItem href="/user" eventKey={eventKeyIdx++}><I18nMessage message={'header.menu.preferences'}/></MenuItem>
