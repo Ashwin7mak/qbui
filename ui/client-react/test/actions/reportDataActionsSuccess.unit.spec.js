@@ -37,7 +37,6 @@ describe('Report Data Actions Load Report functions -- success', () => {
         facets: responseFacetData.data
     };
 
-    let promise;
     class mockReportService {
         constructor() { }
         getReport() {
@@ -68,19 +67,16 @@ describe('Report Data Actions Load Report functions -- success', () => {
 
     afterEach(() => {
         reportDataActions.__ResetDependency__('ReportService');
-        promise = null;
     });
 
     it('test load report action with report parameters', (done) => {
-        promise = flux.actions.loadReport(appId, tblId, rptId, true);
+        flux.actions.loadReport(appId, tblId, rptId, true);
 
         //expect a load report event to get fired before the promise returns
         expect(flux.dispatchBinder.dispatch).toHaveBeenCalledWith(actions.LOAD_REPORT, {appId, tblId, rptId});
         flux.dispatchBinder.dispatch.calls.reset();
-        promise.then(function(){
-            expect(flux.dispatchBinder.dispatch).toHaveBeenCalledWith(actions.LOAD_REPORT_SUCCESS, response);
-            done();
-        });
+
+        expect(flux.dispatchBinder.dispatch).toHaveBeenCalledWith(actions.LOAD_REPORT_SUCCESS, response);
     });
 });
 
@@ -109,7 +105,6 @@ describe('Report Data Actions Filter Report functions -- success', () => {
         data: 'testQuery'
     };
 
-    let promise;
     class mockReportService {
         constructor() { }
         getReport() {
@@ -144,18 +139,16 @@ describe('Report Data Actions Filter Report functions -- success', () => {
     afterEach(() => {
         reportDataActions.__ResetDependency__('ReportService');
         reportDataActions.__ResetDependency__('RecordService');
-        promise = null;
     });
 
 
     it('test filter report action with parameters', (done) => {
-        promise = flux.actions.filterReport(appId, tblId, rptId, true, filter);
+        flux.actions.filterReport(appId, tblId, rptId, true, filter);
 
         expect(flux.dispatchBinder.dispatch).toHaveBeenCalledWith(actions.LOAD_REPORT, {appId, tblId, rptId});
         flux.dispatchBinder.dispatch.calls.reset();
-        promise.then(function() {
-            expect(flux.dispatchBinder.dispatch).toHaveBeenCalledWith(actions.LOAD_RECORDS_SUCCESS, responseResultData.data);
-            done();
-        });
+
+        expect(flux.dispatchBinder.dispatch).toHaveBeenCalledWith(actions.LOAD_RECORDS_SUCCESS, responseResultData.data);
+
     });
 });

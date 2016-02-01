@@ -9,14 +9,11 @@ import Promise from 'bluebird';
 let appsActions = {
 
     loadApps(withTables) {
+
         this.dispatch(actions.LOAD_APPS);
-
-        let deferred = Promise.defer();
-
         let appService = new AppService();
 
-        appService.getApps().
-            then(
+        appService.getApps().then(
             (response) => {
                 logger.debug('AppService getApps success:' + JSON.stringify(response));
 
@@ -32,34 +29,28 @@ let appsActions = {
                                 apps.push(a.data);
                             });
                     });
+
                     Promise.all(promises).then(
                         () => {
                             this.dispatch(actions.LOAD_APPS_SUCCESS, apps);
-                            deferred.resolve(apps);
                         },
-                        () => {
+                        (error) => {
                             logger.debug('AppService getApp error:' + JSON.stringify(error));
                             this.dispatch(actions.LOAD_APPS_FAILED);
-                            deferred.reject(error);
-                        });
+                        }
+                    );
                 } else {
                     this.dispatch(actions.LOAD_APPS_SUCCESS, response.data);
-                    deferred.resolve(response);
                 }
             },
             (error) => {
                 logger.debug('AppService getApps error:' + JSON.stringify(error));
                 this.dispatch(actions.LOAD_APPS_FAILED);
-                deferred.reject(error);
-            })
-            .catch(
-            (ex) => {
-                logger.debug('AppService getApps exception:' + JSON.stringify(ex));
-                this.dispatch(actions.LOAD_APPS_FAILED);
-                deferred.reject(ex);
             }
-        );
-        return deferred.promise;
+        ).catch((ex) => {
+            logger.debug('AppService getApps exception:' + JSON.stringify(ex));
+            this.dispatch(actions.LOAD_APPS_FAILED);
+        });
     },
 
     selectAppId(appID) {

@@ -11,7 +11,6 @@ describe('Report Actions functions -- success', () => {
     let testData = {appId: '1', tblId: '2'};
     let responseData = {appId: testData.appId, tblId: testData.tblId, data: 'testData'};
 
-    let promise;
     class mockReportService {
         constructor() {
         }
@@ -31,7 +30,7 @@ describe('Report Actions functions -- success', () => {
         spyOn(flux.dispatchBinder, 'dispatch');
         reportActions.__Rewire__('ReportService', mockReportService);
 
-        promise = flux.actions.loadReports(testData.appId, testData.tblId);
+        flux.actions.loadReports(testData.appId, testData.tblId);
 
         //  expect a load report event to get fired before the promise returns
         expect(flux.dispatchBinder.dispatch).toHaveBeenCalledWith(actions.LOAD_REPORTS);
@@ -50,11 +49,9 @@ describe('Report Actions functions -- success', () => {
 
     afterEach(() => {
         reportActions.__ResetDependency__('ReportService');
-        promise = null;
     });
 
     it('test load report action with report parameters', () => {
-        expect(promise.isFulfilled()).toBeTruthy();
         expect(flux.dispatchBinder.dispatch).toHaveBeenCalledWith(actions.LOAD_REPORTS_SUCCESS, responseData);
     });
 

@@ -7,7 +7,7 @@ describe('Apps Actions functions', () => {
     'use strict';
 
     let responseData = [{id:'tableId', link:'/app/tableId'}];
-    let promise;
+
     class mockAppService {
         constructor() { }
         getApps() {
@@ -30,29 +30,17 @@ describe('Apps Actions functions', () => {
         spyOn(flux.dispatchBinder, 'dispatch');
         appsActions.__Rewire__('AppService', mockAppService);
 
-        promise = flux.actions.loadApps(true);
+        flux.actions.loadApps(true);
 
-        //  expect a load apps event to get fired before the promise returns
         expect(flux.dispatchBinder.dispatch).toHaveBeenCalledWith(actions.LOAD_APPS);
         flux.dispatchBinder.dispatch.calls.reset();
-
-        promise.then(
-            function() {
-                done();
-            },
-            function() {
-                done();
-            }
-        );
     });
 
     afterEach(() => {
         appsActions.__ResetDependency__('AppService');
-        promise = null;
     });
 
     it('test load apps action', () => {
-        expect(promise.isFulfilled()).toBeTruthy();
         expect(flux.dispatchBinder.dispatch).toHaveBeenCalledWith(actions.LOAD_APPS_SUCCESS, responseData);
     });
 
