@@ -1,107 +1,140 @@
 @font-face {
-    font-family: 'QuickBaseTest';
+    font-family: 'icons_quickbase_v3d1';
     src:
-        url('fonts/QuickBaseTest.ttf?rn9006') format('truetype'),
-        url('fonts/QuickBaseTest.woff?rn9006') format('woff'),
-        url('fonts/QuickBaseTest.svg?rn9006#QuickBaseTest') format('svg');
+        url('fonts/icons_quickbase_v3d1.ttf?hmygvc') format('truetype'),
+        url('fonts/icons_quickbase_v3d1.woff?hmygvc') format('woff'),
+        url('fonts/icons_quickbase_v3d1.svg?hmygvc#icons_quickbase_v3d1') format('svg');
     font-weight: normal;
     font-style: normal;
 }
 
-[class^="qbtest-"], [class*=" qbtest-"] {
+[class^="iconssturdy-"], [class*=" iconssturdy-"] {
     /* use !important to prevent issues with browser extensions that change fonts */
-    font-family: 'QuickBaseTest' !important;
+    font-family: 'icons_quickbase_v3d1' !important;
     speak: none;
     font-style: normal;
     font-weight: normal;
     font-variant: normal;
     text-transform: none;
     line-height: 1;
-    
-    /* Enable Ligatures ================ */
-    letter-spacing: 0;
-    -webkit-font-feature-settings: "liga";
-    -moz-font-feature-settings: "liga=1";
-    -moz-font-feature-settings: "liga";
-    -ms-font-feature-settings: "liga" 1;
-    -o-font-feature-settings: "liga";
-    font-feature-settings: "liga";
 
     /* Better Font Rendering =========== */
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
 }
 
-.qbtest-home2:before {
-    content: "\e901";
-}
-.qbtest-pencil:before {
-    content: "\e902";
-}
-.qbtest-headphones:before {
-    content: "\e903";
-}
-.qbtest-file-empty:before {
-    content: "\e904";
-}
-.qbtest-files-empty:before {
-    content: "\e905";
-}
-.qbtest-stack:before {
-    content: "\e906";
-}
-.qbtest-equalizer:before {
-    content: "\e907";
-}
-.qbtest-list2:before {
-    content: "\e908";
-}
-.qbtest-menu:before {
-    content: "\e909";
-}
-.qbtest-link:before {
-    content: "\e90a";
-}
-.qbtest-flag:before {
+.iconssturdy-hamburger:before {
     content: "\e90b";
 }
-.qbtest-attachment:before {
-    content: "\e90c";
+.iconssturdy-fries:before {
+    content: "\e90a";
 }
-.qbtest-star-empty:before {
-    content: "\e90d";
-}
-.qbtest-star-half:before {
-    content: "\e90e";
-}
-.qbtest-star-full:before {
-    content: "\e90f";
-}
-.qbtest-heart:before {
-    content: "\e910";
-}
-.qbtest-cross:before {
+.iconssturdy-pickles:before {
     content: "\e911";
 }
-.qbtest-checkmark:before {
-    content: "\e912";
+.iconssturdy-home:before {
+    content: "\e90e";
 }
-.qbtest-checkmark2:before {
+.iconssturdy-user:before {
+    content: "\e90f";
+}
+.iconssturdy-edit:before {
+    content: "\e907";
+}
+.iconssturdy-print:before {
+    content: "\e91a";
+}
+.iconssturdy-mail:before {
+    content: "\e910";
+}
+.iconssturdy-duplicate:before {
+    content: "\e925";
+}
+.iconssturdy-delete:before {
+    content: "\e906";
+}
+.iconssturdy-search:before {
     content: "\e913";
 }
-.qbtest-sort-amount-asc:before {
+.iconssturdy-add:before {
+    content: "\e912";
+}
+.iconssturdy-history:before {
+    content: "\e905";
+}
+.iconssturdy-alert:before {
     content: "\e914";
 }
-.qbtest-sort-amount-desc:before {
+.iconssturdy-help:before {
+    content: "\e922";
+}
+.iconssturdy-unlock:before {
+    content: "\e91c";
+}
+.iconssturdy-lock:before {
+    content: "\e91e";
+}
+.iconssturdy-caret-filled-down:before {
+    content: "\e91f";
+}
+.iconssturdy-caret-filled-up:before {
+    content: "\e920";
+}
+.iconssturdy-close:before {
+    content: "\e901";
+}
+.iconssturdy-caret-down:before {
+    content: "\e900";
+}
+.iconssturdy-caret-right:before {
+    content: "\e902";
+}
+.iconssturdy-caret-up:before {
+    content: "\e903";
+}
+.iconssturdy-caret-left:before {
+    content: "\e8dd";
+}
+.iconssturdy-check:before {
+    content: "\e904";
+}
+.iconssturdy-filter-status:before {
+    content: "\e908";
+}
+.iconssturdy-filter-tool:before {
+    content: "\e909";
+}
+.iconssturdy-settings:before {
+    content: "\e923";
+}
+.iconssturdy-settings-hollow:before {
+    content: "\e924";
+}
+.iconssturdy-add-mini:before {
     content: "\e915";
 }
-.qbtest-file-pdf:before {
+.iconssturdy-clear-mini:before {
     content: "\e916";
 }
-.qbtest-file-word:before {
+.iconssturdy-sort-az:before {
     content: "\e917";
 }
-.qbtest-file-excel:before {
+.iconssturdy-sort-za:before {
     content: "\e918";
+}
+.iconssturdy-star-full:before {
+    content: "\e919";
+}
+.iconssturdy-star-half:before {
+    content: "\e91b";
+}
+.iconssturdy-star:before {
+    content: "\e91d";
+}
+.iconssturdy-heart-full:before {
+    content: "\e90c";
+}
+.iconssturdy-heart:before {
+    content: "\e90d";
 }
 
