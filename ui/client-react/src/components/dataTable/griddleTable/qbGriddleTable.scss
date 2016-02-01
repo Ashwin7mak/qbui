@@ -146,9 +146,6 @@ $footer-next-button: $color2;
 }
 
 .rowActions {
-    //display: flex;
-    //flex-direction: column;
-    //justify-content: center;
     height: 100%;
     top: 0;
     right: 0;
@@ -156,14 +153,11 @@ $footer-next-button: $color2;
 
     white-space: nowrap;
     position: absolute;
-    //background: lightsteelblue;
 
     .recordActions {
         padding: 0;
         height:100%;
-        width:100%;
-        //display:flex;
-        //flex-direction:column;
+        width:240px;
 
         .actionIcons {
             display:flex;

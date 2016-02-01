@@ -137,7 +137,7 @@
                 reportServicePage.waitForElement(reportServicePage.topNavGlobalActDivEl).then(function() {
                     expect(reportServicePage.topNavGlobalActDivEl.isDisplayed()).toBe(true);
                     reportServicePage.topNavGlobalActionsListEl.then(function(navActions){
-                        expect(navActions.length).toBe(4);
+                        expect(navActions.length).toBe(2);
                     });
                     reportServicePage.assertGlobalNavTextVisible(false);
                 });
