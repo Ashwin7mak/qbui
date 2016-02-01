@@ -102,7 +102,7 @@
                 expect(reportServicePage.getGlobalNavTextEl(reportServicePage.topNavHelpGlobActEl).getText()).toBe('Help');
             });
         });
-git
+
         /**
          * Test method.
          */
