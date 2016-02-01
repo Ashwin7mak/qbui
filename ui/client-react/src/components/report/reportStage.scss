@@ -1,95 +1,90 @@
 @import '../../../src/assets/css/qbVariables';
 
 .report-content {
-  display: flex;
-  min-height: 200px;
+    display: flex;
+    min-height: 200px;
 
-  .left {
-    flex: 1;
-    padding: 0 20px;
+    .left {
+        flex: 1;
+        padding: 0 20px;
 
-    .stage-showHide-content {
-      margin-top: 20px;
-    }
-
-    .stageTop {
-      display:flex;
-      flex-direction: row;
-      .header {
-        flex:1;
-        font-size: 22px;
-        font-family: "HelveticaNeueBold", Helvetica, Arial, sans-serif;
-        color: #404040;
-        line-height: 22px;
-        margin-top: 3px;
-      }
-      .stageActions {
-        a {
-          text-decoration: none;
+        .stage-showHide-content {
+            margin-top: 20px;
         }
-        flex: 0 1 auto;
-        .hi {
-          padding-right:4px;
+
+        .stageTop {
+            display: flex;
+            flex-direction: row;
+            .header {
+                flex: 1;
+                font-size: 22px;
+                color: #404040;
+                line-height: 22px;
+                margin-top: 3px;
+            }
+            .stageActions {
+                a {
+                    text-decoration: none;
+                }
+                flex: 0 1 auto;
+                .qbIcon {
+                    vertical-align: middle;
+                    padding-right: 4px;
+                }
+            }
         }
-      }
+
+        .subheader {
+            margin-top: 7px;
+            font-size: 14px;
+            color: #6e8ba8;
+            text-transform: inherit;
+        }
+
+        .content {
+            color: #404040;
+            font-size: 14px;
+            -webkit-font-smoothing: antialiased;
+        }
+
     }
 
-    .subheader {
-      margin-top: 7px;
-      font-size: 14px;
-      color: #6e8ba8;
-      text-transform: inherit;
-      font-family: "HelveticaNeueRoman", Helvetica, Arial, sans-serif;
+    .right {
+        border-left: 1px solid #dcdcdc;
+
+        .reminder {
+            white-space: nowrap;
+            padding: 1px 20px 15px 40px;
+
+            .button-container {
+                margin-top: 20px;
+            }
+
+            .icon {
+                width: 50px;
+                height: 60px;
+                background: url('../../assets/images/images-sf23742373d.png') 0 -30px no-repeat;
+            }
+
+            .header {
+                margin-top: 10px;
+                margin-left: 17px;
+                font-size: 1.2rem;
+                color: #404040;
+            }
+
+            .subheader {
+                font-size: 12px;
+                height: 18px;
+                margin-top: 2px;
+                margin-left: 17px;
+                color: #6e8ba8;
+                text-transform: uppercase;
+            }
+        }
     }
-
-    .content {
-      font-family: "HelveticaNeueRoman", Helvetica, Arial, sans-serif;
-      color: #404040;
-      font-size: 14px;
-      -webkit-font-smoothing: antialiased;
-    }
-
-
-  }
-
-  .right {
-    border-left: 1px solid #dcdcdc;
-
-    .reminder {
-      white-space: nowrap;
-      padding: 1px 20px 15px 40px;
-
-      .button-container {
-        margin-top:20px;
-      }
-
-      .icon {
-        width: 50px;
-        height: 60px;
-        background: url('../../assets/images/images-sf23742373d.png') 0 -30px no-repeat;
-      }
-
-      .header {
-        margin-top: 10px;
-        margin-left: 17px;
-        font-size: 1.2rem;
-        font-family: "HelveticaNeueBold", Helvetica, Arial, sans-serif;
-        color: #404040;
-      }
-
-      .subheader {
-        font-size: 12px;
-        height: 18px;
-        margin-top: 2px;
-        margin-left: 17px;
-        color: #6e8ba8;
-        text-transform: uppercase;
-        font-family: "HelveticaNeueRoman", Helvetica, Arial, sans-serif;
-      }
-    }
-  }
 }
 
-.layout-stage .well{
-  background: $color2;
+.layout-stage .well {
+    background: $color2;
 }
