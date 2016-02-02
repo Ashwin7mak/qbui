@@ -90,6 +90,9 @@
                         }
                     });
                     deferred.resolve(fieldColHeaders);
+                }).catch(function(error) {
+                    console.error(JSON.stringify(error));
+                    deferred.reject(error);
                 });
             });
             return deferred.promise;

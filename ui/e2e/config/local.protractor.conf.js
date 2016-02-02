@@ -3,6 +3,8 @@
 
 (function() {
     'use strict';
+    var baseE2EPath = '../../e2e/';
+
     exports.config = {
         // The timeout for each script run on the browser. This should be longer
         // than the maximum time your application needs to stabilize between tasks.
@@ -49,20 +51,26 @@
         },
         // This function is run once before any of the test files. Acts as a global test preparation step
         onPrepare: function(){
-            //Require the e2e base class and constants modules
-            global.e2eBase = require('../common/e2eBase.js')();
-            global.consts = require('../../server/api/constants.js');
-            global.e2eConsts = require('../common/e2eConsts.js');
-            //Load the page Objects
-            global.ReportServicePage = require('../qbapp/reports/reportService.po.js');
-            global.requestAppsPage = require('../qbapp/reports/requestApps.po.js');
-            global.requestSessionTicketPage = require('../qbapp/reports/requestSessionTicket.po.js');
+
+            //Method to initialize all Page Objects
+            global.requirePO = function (relativePath) {
+                return require(baseE2EPath + relativePath + '.po.js');
+            };
+
+            //Method to initialize all Common Files
+            global.requireCommon = function (relativePath) {
+                return require(baseE2EPath + relativePath + '.js');
+            };
+
+            //Globalize all Common Pages and Page objects before loading
+            var Pages = require(baseE2EPath+'common/e2ePageObjects.js')();
 
             // Lets Protractor know there is no Angular code to wait for
             browser.ignoreSynchronization = true;
             // Add jasmine spec reporter
             var SpecReporter = require('jasmine-spec-reporter');
             jasmine.getEnv().addReporter(new SpecReporter({displayStacktrace: 'all'}));
+
         }
     };
 }());
