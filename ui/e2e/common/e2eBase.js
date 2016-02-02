@@ -110,29 +110,26 @@
                 var deferred = promise.pending();
                 var app;
                 var recordList;
-                var fieldNames = ['Record ID#', 'Text Field', 'Numeric Field', 'Numeric Currency Field', 'Numeric Percent Field', 'Numeric Rating Field',
-                    'Date Field', 'Date Time Field', 'Time of Day Field', 'Duration Field', 'Checkbox Field', 'Phone Number Field',
-                    'Email Address Field', 'URL Field'];
                 // Create the table schema (map object) to pass into the app generator
                 var tableToFieldToFieldTypeMap = {};
                 tableToFieldToFieldTypeMap['table 1'] = {};
-                tableToFieldToFieldTypeMap['table 1'][fieldNames[1]] = {fieldType: consts.SCALAR, dataType : consts.TEXT};
-                tableToFieldToFieldTypeMap['table 1'][fieldNames[2]] = {fieldType: consts.SCALAR, dataType : consts.NUMERIC};
-                tableToFieldToFieldTypeMap['table 1'][fieldNames[3]] = {fieldType: consts.SCALAR, dataType : consts.CURRENCY};
-                tableToFieldToFieldTypeMap['table 1'][fieldNames[4]] = {fieldType: consts.SCALAR, dataType : consts.PERCENT};
-                tableToFieldToFieldTypeMap['table 1'][fieldNames[5]] = {fieldType: consts.SCALAR, dataType : consts.RATING};
-                tableToFieldToFieldTypeMap['table 1'][fieldNames[6]] = {fieldType: consts.SCALAR, dataType : consts.DATE};
-                tableToFieldToFieldTypeMap['table 1'][fieldNames[7]] = {fieldType: consts.SCALAR, dataType : consts.DATE_TIME};
-                tableToFieldToFieldTypeMap['table 1'][fieldNames[8]] = {fieldType: consts.SCALAR, dataType : consts.TIME_OF_DAY};
-                tableToFieldToFieldTypeMap['table 1'][fieldNames[9]] = {fieldType: consts.SCALAR, dataType : consts.DURATION};
-                tableToFieldToFieldTypeMap['table 1'][fieldNames[10]] = {fieldType: consts.SCALAR, dataType : consts.CHECKBOX};
-                tableToFieldToFieldTypeMap['table 1'][fieldNames[11]] = {fieldType: consts.SCALAR, dataType : consts.PHONE_NUMBER};
-                tableToFieldToFieldTypeMap['table 1'][fieldNames[12]] = {fieldType: consts.SCALAR, dataType : consts.EMAIL_ADDRESS};
-                tableToFieldToFieldTypeMap['table 1'][fieldNames[13]] = {fieldType: consts.SCALAR, dataType : consts.URL};
+                tableToFieldToFieldTypeMap['table 1'][e2eConsts.reportFieldNames[1]] = {fieldType: consts.SCALAR, dataType : consts.TEXT};
+                tableToFieldToFieldTypeMap['table 1'][e2eConsts.reportFieldNames[2]] = {fieldType: consts.SCALAR, dataType : consts.NUMERIC};
+                tableToFieldToFieldTypeMap['table 1'][e2eConsts.reportFieldNames[3]] = {fieldType: consts.SCALAR, dataType : consts.CURRENCY};
+                tableToFieldToFieldTypeMap['table 1'][e2eConsts.reportFieldNames[4]] = {fieldType: consts.SCALAR, dataType : consts.PERCENT};
+                tableToFieldToFieldTypeMap['table 1'][e2eConsts.reportFieldNames[5]] = {fieldType: consts.SCALAR, dataType : consts.RATING};
+                tableToFieldToFieldTypeMap['table 1'][e2eConsts.reportFieldNames[6]] = {fieldType: consts.SCALAR, dataType : consts.DATE};
+                tableToFieldToFieldTypeMap['table 1'][e2eConsts.reportFieldNames[7]] = {fieldType: consts.SCALAR, dataType : consts.DATE_TIME};
+                tableToFieldToFieldTypeMap['table 1'][e2eConsts.reportFieldNames[8]] = {fieldType: consts.SCALAR, dataType : consts.TIME_OF_DAY};
+                tableToFieldToFieldTypeMap['table 1'][e2eConsts.reportFieldNames[9]] = {fieldType: consts.SCALAR, dataType : consts.DURATION};
+                tableToFieldToFieldTypeMap['table 1'][e2eConsts.reportFieldNames[10]] = {fieldType: consts.SCALAR, dataType : consts.CHECKBOX};
+                tableToFieldToFieldTypeMap['table 1'][e2eConsts.reportFieldNames[11]] = {fieldType: consts.SCALAR, dataType : consts.PHONE_NUMBER};
+                tableToFieldToFieldTypeMap['table 1'][e2eConsts.reportFieldNames[12]] = {fieldType: consts.SCALAR, dataType : consts.EMAIL_ADDRESS};
+                tableToFieldToFieldTypeMap['table 1'][e2eConsts.reportFieldNames[13]] = {fieldType: consts.SCALAR, dataType : consts.URL};
                 tableToFieldToFieldTypeMap['table 2'] = {};
-                tableToFieldToFieldTypeMap['table 2']['Text Field'] = {fieldType: consts.SCALAR, dataType: consts.TEXT};
-                tableToFieldToFieldTypeMap['table 2']['Rating Field'] = {fieldType: consts.SCALAR, dataType : consts.RATING};
-                tableToFieldToFieldTypeMap['table 2']['Phone Number Field'] = {fieldType: consts.SCALAR, dataType : consts.PHONE_NUMBER};
+                tableToFieldToFieldTypeMap['table 2'][e2eConsts.reportFieldNames[2]] = {fieldType: consts.SCALAR, dataType: consts.TEXT};
+                tableToFieldToFieldTypeMap['table 2'][e2eConsts.reportFieldNames[6]] = {fieldType: consts.SCALAR, dataType : consts.RATING};
+                tableToFieldToFieldTypeMap['table 2'][e2eConsts.reportFieldNames[12]] = {fieldType: consts.SCALAR, dataType : consts.PHONE_NUMBER};
                 //Call the basic app setup function
                 e2eBase.basicSetup(tableToFieldToFieldTypeMap, 10).then(function(results){
                     //Set your global objects to use in the test functions
@@ -140,7 +137,7 @@
                     recordList = results[1];
                     //Return back the created app and records
                     //Pass it back in an array as promise.resolve can only send back one object
-                    var appAndRecords = [app, recordList, fieldNames];
+                    var appAndRecords = [app, recordList, e2eConsts.reportFieldNames];
                     deferred.resolve(appAndRecords);
                 }).catch(function(error) {
                     console.error(JSON.stringify(error));

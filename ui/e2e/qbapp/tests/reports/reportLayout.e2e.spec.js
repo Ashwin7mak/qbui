@@ -10,11 +10,13 @@
 
     //Bluebird Promise library
     var promise = require('bluebird');
+    //Load the page Objects
+    var ReportServicePage = requirePO('reportService');
+    var requestAppsPage = requirePO('requestApps');
+    var requestSessionTicketPage = requirePO('requestSessionTicket');
     var reportServicePage = new ReportServicePage();
 
     describe('Report Page Layout Tests', function() {
-        //var widthTest = 1025;
-        //var heightTest = 1440;
         var app;
         var recordList;
 
@@ -162,7 +164,7 @@
                                 reportServicePage.assertNavProperties('medium', true, '199');
                             }).then(function() {
                                 e2eBase.resizeBrowser(e2eConsts.SMALL_BP_WIDTH, e2eConsts.XLARGE_BP_WIDTH).then(function() {
-                                    reportServicePage.assertNavProperties('small', false, '0');
+                                    reportServicePage.assertNavProperties('small', false, '39');
                                     e2eBase.resizeBrowser(e2eConsts.XLARGE_BP_WIDTH, e2eConsts.DEFAULT_HEIGHT).then(function() {
                                         reportServicePage.reportsBackLinkEl.click();
                                         done();
@@ -190,7 +192,7 @@
                 reportServicePage.waitForElement(reportServicePage.loadedContentEl).then(function() {
                     // Resize browser at different widths to check responsiveness
                     e2eBase.resizeBrowser(e2eConsts.SMALL_BP_WIDTH, e2eConsts.XLARGE_BP_WIDTH).then(function() {
-                        reportServicePage.assertNavProperties('small', false, '0');
+                        reportServicePage.assertNavProperties('small', false, '39');
                     }).then(function() {
                         e2eBase.resizeBrowser(e2eConsts.MEDIUM_BP_WIDTH, e2eConsts.XLARGE_BP_WIDTH).then(function() {
                             reportServicePage.assertNavProperties('medium', true, '199');

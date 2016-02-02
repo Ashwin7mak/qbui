@@ -9,11 +9,14 @@
     'use strict';
     // In order to manage the async nature of Protractor with a non-Angular page use the ExpectedConditions feature
     var EC = protractor.ExpectedConditions;
+    //Load the page Objects
+    var ReportServicePage = requirePO('reportService');
+    var requestAppsPage = requirePO('requestApps');
+    var requestSessionTicketPage = requirePO('requestSessionTicket');
 
     describe('Report Service E2E Tests', function() {
         var app;
         var recordList;
-        var fieldNames;
         /**
          * Setup method. Generates JSON for an app, a table, a set of records and a report. Then creates them via the REST API.
          * Have to specify the done() callback at the end of the promise chain, otherwise Protractor will not wait
@@ -23,7 +26,6 @@
             e2eBase.reportsBasicSetUp().then(function(appAndRecords) {
                 app = appAndRecords[0];
                 recordList = appAndRecords[1];
-                fieldNames = appAndRecords[2];
                 done();
             });
         });
@@ -76,7 +78,7 @@
                             reportServicePage.getReportColumnHeaders(reportServicePage).then(function(resultArray) {
                                 // UI is currently using upper case to display the field names in columns
                                 //var upperFieldNames = e2eBase.e2eUtils.stringArrayToUpperCase(fieldNames);
-                                expect(resultArray).toEqual(fieldNames);
+                                expect(resultArray).toEqual(e2eConsts.reportFieldNames);
                             });
                             // Check all record values equal the ones we added via the API
                             reportServicePage.griddleRecordElList.getText().then(function(uiRecords) {

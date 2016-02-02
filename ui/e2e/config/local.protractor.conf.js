@@ -13,7 +13,7 @@
         baseUrl: process.env.DOMAIN,
         // list of files / patterns to load in the browser
         specs: [
-            '../qbapp/reports/*.e2e.spec.js'
+            '../qbapp/tests/reports/*.e2e.spec.js'
         ],
         // Patterns to exclude.
         exclude: [],
@@ -54,7 +54,7 @@
 
             //Method to initialize all Page Objects
             global.requirePO = function(relativePath) {
-                return require(baseE2EPath + relativePath + '.po.js');
+                return require(baseE2EPath + 'qbapp/pages/' + relativePath + '.po.js');
             };
 
             //Method to initialize all Common Files
@@ -62,8 +62,10 @@
                 return require(baseE2EPath + relativePath + '.js');
             };
 
-            //Globalize all Common Pages and Page objects before loading
-            var Pages = require(baseE2EPath + 'common/e2ePageObjects.js')();
+            //read the base classes
+            global.e2eBase = requireCommon('common/e2eBase')();
+            global.consts = require('../../server/api/constants');
+            global.e2eConsts = requireCommon('common/e2eConsts');
 
             // Lets Protractor know there is no Angular code to wait for
             browser.ignoreSynchronization = true;
