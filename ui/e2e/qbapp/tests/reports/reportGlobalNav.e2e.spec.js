@@ -19,10 +19,6 @@
     describe('Table Report Global Nav Tests', function() {
         var app;
         var recordList;
-        //Load the page Objects
-        var ReportServicePage = requirePO('reportService');
-        var requestAppsPage = requirePO('requestApps');
-        var requestSessionTicketPage = requirePO('requestSessionTicket');
 
         /**¶
          * Setup method. Generates JSON for an app, a table, a set of records and a report. Then creates them via the REST API.
