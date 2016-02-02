@@ -1,6 +1,6 @@
 import React from 'react';
 
-import QBicon from '../qbIcon/qbIcon';
+import Hicon from '../harmonyIcon/harmonyIcon';
 import {Tooltip, OverlayTrigger, Glyphicon} from 'react-bootstrap';
 
 /**
@@ -25,8 +25,8 @@ let ActionIcon = React.createClass({
 
         return (
             <OverlayTrigger placement="top" overlay={tooltip}>
-                <a href="#" className={"iconLink icon-" + this.props.icon} onClick={this.props.onClick} bsStyle={this.props.bsRole}>{this.props.icon ?
-                    <QBicon icon={this.props.icon}/> :
+                <a href="#" onClick={this.props.onClick} bsStyle={this.props.bsRole}>{this.props.icon ?
+                    <Hicon icon={this.props.icon}/> :
                     <Glyphicon glyph={this.props.glyph}/> }
                 </a>
             </OverlayTrigger>);
