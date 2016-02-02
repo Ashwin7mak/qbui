@@ -1,11 +1,8 @@
-@import '../../../src/assets/css/qbVariables';
-
 .reportContainer {
   display: flex;
   flex-direction: column;
   flex:1;
   min-width:0;
-  background:$report-container-bg;
   .layout-stage {
     flex-shrink:0;
   }

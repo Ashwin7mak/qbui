@@ -96,10 +96,12 @@
             e2eBase.resizeBrowser(e2eConsts.XLARGE_BREAKPOINT_WIDTH, heightTest).then(function(){
                 expect(reportServicePage.topNavGlobalActDivEl.isDisplayed()).toBe(true);
                 reportServicePage.topNavGlobalActionsListEl.then(function(navActions){
-                    expect(navActions.length).toBe(2);
+                    expect(navActions.length).toBe(4);
                 });
                 expect(reportServicePage.getGlobalNavTextEl(reportServicePage.topNavUserGlobActEl).getText()).toBe('User');
+                expect(reportServicePage.getGlobalNavTextEl(reportServicePage.topNavAlertsGlobActEl).getText()).toBe('Alerts');
                 expect(reportServicePage.getGlobalNavTextEl(reportServicePage.topNavHelpGlobActEl).getText()).toBe('Help');
+                expect(reportServicePage.getGlobalNavTextEl(reportServicePage.topNavLogoutGlobActEl).getText()).toBe('Logout');
             });
         });
 
@@ -122,7 +124,7 @@
                 reportServicePage.waitForElement(reportServicePage.topNavGlobalActDivEl).then(function() {
                     expect(reportServicePage.topNavGlobalActDivEl.isDisplayed()).toBe(true);
                     reportServicePage.topNavGlobalActionsListEl.then(function(navActions){
-                        expect(navActions.length).toBe(2);
+                        expect(navActions.length).toBe(4);
                     });
                     reportServicePage.assertGlobalNavTextVisible(false);
                 });
@@ -137,7 +139,7 @@
                 reportServicePage.waitForElement(reportServicePage.topNavGlobalActDivEl).then(function() {
                     expect(reportServicePage.topNavGlobalActDivEl.isDisplayed()).toBe(true);
                     reportServicePage.topNavGlobalActionsListEl.then(function(navActions){
-                        expect(navActions.length).toBe(2);
+                        expect(navActions.length).toBe(4);
                     });
                     reportServicePage.assertGlobalNavTextVisible(false);
                 });

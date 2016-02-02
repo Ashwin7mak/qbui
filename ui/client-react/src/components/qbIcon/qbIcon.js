@@ -9,13 +9,9 @@ const QBicon = React.createClass({
         icon: React.PropTypes.string.isRequired,
         className: React.PropTypes.string
     },
-    getDefaultProps() {
-        return {
-            className: ""
-        };
-    },
+
     render: function() {
-        let className = this.props.className + ' qbIcon iconssturdy-' + this.props.icon;
+        let className = this.props.className + ' qbIcon qbtest-' + this.props.icon;
 
         return (
             <span className={className}>

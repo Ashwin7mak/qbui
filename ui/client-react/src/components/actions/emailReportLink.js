@@ -1,7 +1,7 @@
 import React from 'react';
 import ReactIntl from 'react-intl';
 
-import QBicon from '../qbIcon/qbIcon';
+import Hicon from '../harmonyIcon/harmonyIcon';
 import {Tooltip, OverlayTrigger} from 'react-bootstrap';
 
 /**
@@ -23,8 +23,8 @@ let EmailReportLink = React.createClass({
         const tooltip = <Tooltip id={this.props.tip}>{this.props.tip}</Tooltip>;
         return (
             <OverlayTrigger placement={this.props.tipPlacement} overlay={tooltip} >
-                <a className={"iconLink icon-mail"} href={href} >
-                    <QBicon icon="mail" />
+                <a href={href} >
+                    <Hicon icon="email" />
                     {this.props.children}
                 </a>
             </OverlayTrigger>);

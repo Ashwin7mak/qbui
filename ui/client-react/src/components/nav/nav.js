@@ -40,7 +40,9 @@ var Nav = React.createClass({
 
         return [
             {msg:'globalActions.user', link:'/user', icon:'user'},
-            {msg:'globalActions.help', link:'/help', icon:'help'}
+            {msg:'globalActions.alerts', link:'/alerts', icon:'circle-alert'},
+            {msg:'globalActions.help', link:'/help', icon:'help'},
+            {msg:'globalActions.logout', link:'/signout', icon:'lock'}
         ];
     },
     hideTrowserExample() {
