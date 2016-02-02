@@ -16,20 +16,21 @@ $font-path: '../../assets/fonts/';
     font-style:normal;
 }
 
-html body {
+html, body {
     margin:0;
     height:100%;
     min-height:100%;
     overflow:hidden;
+}
+
+html body {
     font-family: 'Lato', sans-serif;
     font-weight: 300;
 
     h1,h2,h3,h4,h5,h6 {
         font-family: 'Source Serif Pro', serif;
-
     }
 }
-
 body.small-breakpoint {
     font-size: $font-size-small;
 }
