@@ -139,7 +139,7 @@ let CardView = React.createClass({
                 cardStyle = {
                     marginLeft: -actionsStyle.width,
                     marginRight: actionsStyle.width
-                }
+                };
             } else {
                 // not swiping, don't add inline style (width and transitions come from css)
                 rowActionsClasses += this.state.showActions ? "open" : "closed";
