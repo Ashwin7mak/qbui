@@ -25,8 +25,6 @@ jasmine.DEFAULT_TIMEOUT_INTERVAL = 600000; //10 minutes max allows for adding ma
 
     describe('Data Generation for E2E Tests', function() {
         var app;
-        e2eBase.setBaseUrl(browser.baseUrl);
-        e2eBase.initialize();
         /**
          * Setup method. Generates JSON for an app, a table, a set of records and a report. Then creates them via the REST API.
          */
