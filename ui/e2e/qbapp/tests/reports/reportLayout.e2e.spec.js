@@ -154,16 +154,16 @@
                 // Make sure the table report has loaded
                 reportServicePage.waitForElement(reportServicePage.loadedContentEl).then(function() {
                     // Resize browser at different widths to check responsiveness
-                    e2eBase.resizeBrowser(e2eConsts.XLARGE_BP_WIDTH, e2eConsts.XLARGE_BP_WIDTH).then(function() {
+                    e2eBase.resizeBrowser(e2eConsts.XLARGE_BP_WIDTH, e2eConsts.DEFAULT_HEIGHT).then(function() {
                         reportServicePage.assertNavProperties('xlarge', true, '399');
                     }).then(function() {
-                        e2eBase.resizeBrowser(e2eConsts.LARGE_BP_WIDTH, e2eConsts.XLARGE_BP_WIDTH).then(function() {
+                        e2eBase.resizeBrowser(e2eConsts.LARGE_BP_WIDTH, e2eConsts.DEFAULT_HEIGHT).then(function() {
                             reportServicePage.assertNavProperties('large', true, '299');
                         }).then(function() {
-                            e2eBase.resizeBrowser(e2eConsts.MEDIUM_BP_WIDTH, e2eConsts.XLARGE_BP_WIDTH).then(function() {
+                            e2eBase.resizeBrowser(e2eConsts.MEDIUM_BP_WIDTH, e2eConsts.DEFAULT_HEIGHT).then(function() {
                                 reportServicePage.assertNavProperties('medium', true, '199');
                             }).then(function() {
-                                e2eBase.resizeBrowser(e2eConsts.SMALL_BP_WIDTH, e2eConsts.XLARGE_BP_WIDTH).then(function() {
+                                e2eBase.resizeBrowser(e2eConsts.SMALL_BP_WIDTH, e2eConsts.DEFAULT_HEIGHT).then(function() {
                                     reportServicePage.assertNavProperties('small', false, '39');
                                     e2eBase.resizeBrowser(e2eConsts.XLARGE_BP_WIDTH, e2eConsts.DEFAULT_HEIGHT).then(function() {
                                         reportServicePage.reportsBackLinkEl.click();
@@ -191,16 +191,16 @@
                 // Make sure the table report has loaded
                 reportServicePage.waitForElement(reportServicePage.loadedContentEl).then(function() {
                     // Resize browser at different widths to check responsiveness
-                    e2eBase.resizeBrowser(e2eConsts.SMALL_BP_WIDTH, e2eConsts.XLARGE_BP_WIDTH).then(function() {
+                    e2eBase.resizeBrowser(e2eConsts.SMALL_BP_WIDTH, e2eConsts.DEFAULT_HEIGHT).then(function() {
                         reportServicePage.assertNavProperties('small', false, '39');
                     }).then(function() {
-                        e2eBase.resizeBrowser(e2eConsts.MEDIUM_BP_WIDTH, e2eConsts.XLARGE_BP_WIDTH).then(function() {
+                        e2eBase.resizeBrowser(e2eConsts.MEDIUM_BP_WIDTH, e2eConsts.DEFAULT_HEIGHT).then(function() {
                             reportServicePage.assertNavProperties('medium', true, '199');
                         }).then(function() {
-                            e2eBase.resizeBrowser(e2eConsts.LARGE_BP_WIDTH, e2eConsts.XLARGE_BP_WIDTH).then(function() {
+                            e2eBase.resizeBrowser(e2eConsts.LARGE_BP_WIDTH, e2eConsts.DEFAULT_HEIGHT).then(function() {
                                 reportServicePage.assertNavProperties('large', true, '299');
                             }).then(function() {
-                                e2eBase.resizeBrowser(e2eConsts.XLARGE_BP_WIDTH, e2eConsts.XLARGE_BP_WIDTH).then(function() {
+                                e2eBase.resizeBrowser(e2eConsts.XLARGE_BP_WIDTH, e2eConsts.DEFAULT_HEIGHT).then(function() {
                                     reportServicePage.assertNavProperties('xlarge', true, '399');
                                     reportServicePage.reportsBackLinkEl.click();
                                     done();

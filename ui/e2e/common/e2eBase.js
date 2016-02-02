@@ -22,7 +22,7 @@
             setUp : function() {
                 this.setBaseUrl(browser.baseUrl);
                 // Define the window size
-                e2eBase.resizeBrowser(e2eConsts.LARGE_BP_WIDTH, e2eConsts.XLARGE_BP_WIDTH);
+                e2eBase.resizeBrowser(e2eConsts.LARGE_BP_WIDTH, e2eConsts.DEFAULT_HEIGHT);
                 this.initialize();
             },
             initialize : function() {
