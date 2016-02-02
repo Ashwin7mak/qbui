@@ -2,20 +2,7 @@
 @import 'customVariables';
 @import 'qbColorVariables';
 
-/* Google fonts
-@import url(https://fonts.googleapis.com/css?family=Droid+Serif|Lato:400,300,700|Source+Sans+Pro);
-*/
-/* QuickBase font stack */
 $font-family: 'Lato', sans-serif;  /* default font face */
-$font-family-serif: 'Source Serif Pro', serif;
-
-html body {
-    font-family: $font-family;
-
-    h1,h2,h3,h4,h5,h6 {
-        font-family: $font-family-serif;
-    }
-}
 
 $font-size:   $font-size-base;          /* base/default body font size */
 $font-color:  $color11;                 /* default font color */
@@ -23,6 +10,3 @@ $font-color:  $color11;                 /* default font color */
 $global-actions-border: 1px solid rgba(255, 255, 255, 0.3);
 $top-nav-height:50px;
 
-body {
-    font-family: $font-family;
-}

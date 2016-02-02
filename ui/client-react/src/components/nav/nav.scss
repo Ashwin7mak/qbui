@@ -1,12 +1,33 @@
 @import '../../assets/css/qbVariables';
 
+$font-path: '../../assets/fonts/';
 
+@font-face {
+    font-family: 'Lato';
+    src: url('#{$font-path}Lato/Lato-Light.ttf') format('truetype');
+    font-weight:normal;
+    font-style:normal;
+}
 
-html, body {
+@font-face {
+    font-family: 'Source Serif Pro';
+    src: url('#{$font-path}Source_Serif_Pro/SourceSerifPro-Regular.ttf') format('truetype');
+    font-weight:normal;
+    font-style:normal;
+}
+
+html body {
     margin:0;
     height:100%;
     min-height:100%;
     overflow:hidden;
+    font-family: 'Lato', sans-serif;
+    font-weight: 300;
+
+    h1,h2,h3,h4,h5,h6 {
+        font-family: 'Source Serif Pro', serif;
+
+    }
 }
 
 body.small-breakpoint {
