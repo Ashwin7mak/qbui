@@ -9,6 +9,18 @@ html, body {
     overflow:hidden;
 }
 
+body.small-breakpoint {
+    font-size: $font-size-small;
+}
+body.touch {
+
+    .tooltip {
+        display:none !important;
+    }
+}
+a {
+    outline:none !important;
+}
 #content {
     height:100%;
 }
@@ -34,6 +46,7 @@ html, body {
         display:flex;
         flex-direction: column;
         flex:1;
+        min-width:0;
 
         .topNav {
             display:flex;
@@ -44,10 +57,9 @@ html, body {
             >.top {
                 display:flex;
                 flex-basis:$top-nav-height;
-                align-items:center;
                 font-size:14px;
                 transition: flex-basis 300ms ease-in-out;
-                //overflow:hidden; mobile needs this
+                min-width:330px;
             }
 
             .navGroup {
@@ -97,6 +109,7 @@ html, body {
             order: 2;
             overflow-y:auto;
             flex:1;
+            min-width:0;
         }
 
         .footer {

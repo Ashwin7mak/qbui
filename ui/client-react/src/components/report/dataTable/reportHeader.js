@@ -22,6 +22,7 @@ var ReportHeader = React.createClass({
         let flux = this.getFlux();
         flux.actions.searchFor(text);
     },
+
     render() {
 
         const searchIcon = <Glyphicon glyph="search" />;

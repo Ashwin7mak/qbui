@@ -17,7 +17,7 @@ class QueryUtils {
      * @returns {string} contains query expression.  If input is not a string with content, returns empty string.
      */
     static parseStringIntoAllFieldsContainsExpression(inputStr) {
-        return this.parseStringIntoContainsExpression(Constants.ALL_FIELDS_ID, inputStr);
+        return QueryUtils.parseStringIntoContainsExpression(Constants.ALL_FIELDS_ID, inputStr);
     }
 
     /**

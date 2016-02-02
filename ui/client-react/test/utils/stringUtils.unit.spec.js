@@ -83,7 +83,17 @@ describe('StringUtils - format function tests', () => {
         {test: 'Invalid token array data type', input:'The quick brown {0} jumps', tokens:'invalidStr', expectation: 'The quick brown {0} jumps'},
         {test: 'Query search parameter', input:'{0.CT.\'{0}\'}', tokens:['pro'], expectation: "{0.CT.'pro'}"},
         {test: 'Null token 1', input:'The quick brown {0} and {1}.', tokens:[null, 'dog'], expectation: 'The quick brown null and dog.'},
-        {test: 'Null token 2', input:'The quick brown {0} and {1}.', tokens:['cat', null], expectation: 'The quick brown cat and null.'}
+        {test: 'Null token 2', input:'The quick brown {0} and {1}.', tokens:['cat', null], expectation: 'The quick brown cat and null.'},
+
+        {test: 'Valid tokens', input:'The quick brown {fox} jumps over the lazy {dog}.', tokens:{fox: "fox", dog: "dog"}, expectation: 'The quick brown fox jumps over the lazy dog.'},
+        {test: 'Missing token', input:'The quick brown {fox} jumps over the lazy {dog}.', tokens:{fox: "fox"}, expectation: 'The quick brown fox jumps over the lazy {dog}.'},
+        {test: 'No token', input:'The quick brown {fox} jumps over the lazy {dog}.', tokens:null, expectation: 'The quick brown {fox} jumps over the lazy {dog}.'},
+        {test: 'No token in input string', input:'The quick brown fox jumps over the lazy dog.', tokens:{fox: "fox", dog: "dog"}, expectation: 'The quick brown fox jumps over the lazy dog.'},
+        {test: 'Empty String input', input:'', tokens:{fox: "fox", dog: "dog"}, expectation: ''},
+        {test: 'Null String input', input:null, tokens:{fox: "fox", dog: "dog"}, expectation: null},
+        {test: 'Multi string replacement', input:'The quick brown {fox} jumps over the lazy {dog}...Gray {fox} and red {fox} excluded!', tokens:{fox: "fox", dog: "dog"}, expectation: 'The quick brown fox jumps over the lazy dog...Gray fox and red fox excluded!'},
+        {test: 'Numeric tokens', input:'{ten} divided by {five} = {two}', tokens:{ten: 10, five: 5, two: 2}, expectation: '10 divided by 5 = 2'},
+        {test: 'Null token', input:'The quick brown {fox} and {dog}.', tokens:{fox: 'fox', dog:null}, expectation: 'The quick brown fox and null.'}
 
     ];
 

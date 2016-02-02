@@ -1,23 +1,19 @@
 .layout-stage {
     border-bottom: 1px solid #e3eaf3;
     position: relative;
-    margin-bottom:20px;
+    margin-bottom:30px;
 
     .toggleStage {
 
         cursor: pointer;
         position: absolute;
         bottom: -24px;
-        right: 0px;
-        margin-right: 25px;
+        right: 4px;
         height: 24px;
-        width: 27px;
         border: 1px solid #e3eaf3;
-        border-radius: 0px 0px 2px 2px;
-        background-position: -80px -20px;
-        background-size: 144px auto;
+        border-radius: 0 0 2px 2px;
         background-color: #f3f5f8;
-        outline: medium none;
+        outline: none;
     }
 
     .well {

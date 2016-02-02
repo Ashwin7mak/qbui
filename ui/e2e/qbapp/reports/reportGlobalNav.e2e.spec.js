@@ -42,11 +42,14 @@
                     reportServicePage.tableLinksElList.get(3).click();
                     // Open the reports list
                     reportServicePage.reportHamburgersElList.get(0).click();
-                    // Select the report
-                    reportServicePage.reportLinksElList.get(0).click();
-                    // Make sure the table report has loaded
-                    reportServicePage.waitForElement(reportServicePage.loadedContentEl).then(function() {
-                        done();
+                    // Wait for the report list to load
+                    reportServicePage.waitForElement(reportServicePage.reportsListDivEl).then(function() {
+                        // Select the report
+                        reportServicePage.reportLinksElList.get(0).click();
+                        // Make sure the table report has loaded
+                        reportServicePage.waitForElement(reportServicePage.loadedContentEl).then(function() {
+                            done();
+                        });
                     });
                 });
             });

@@ -36,14 +36,15 @@ class StringUtils {
      * This call has similar functionality/intent as Java's String.format() method.
      *
      * @param tokenizedString - tokenized input string.
-     * @param tokenArray - array used to replace each corresponding token.  The array's
-     * zero based index is used to search for matching tokens in the input string.
+     * @param tokens - an array or object used to replace each corresponding token.  An array's
+     * zero based index or an object's keys are used to search for matching tokens in the input string
      * @returns string with tokens replaced.  The original tokenizedString is returned if
      * the input parameters are invalid. The input parameters must be the correct data
      * type (string and array).  If invalid, the tokenizedString is returned unchanged.
      *
      * Example calls:
      *  StringUtils.format( "My name is {0}, and my home town is {1}.", ["John Smith", "Denver, Colorado"] );
+     *  StringUtils.format( "My name is {name}, and my home town is {home}.", {name: "John Smith", home: "Denver, Colorado"} );
      * Outputs:
      *  My name is John Smith, and my home town is Denver, Colorado.
      *
@@ -51,14 +52,28 @@ class StringUtils {
      * Outputs:
      *  John is from Utah, Mary is from Utah.
      */
-    static format(tokenizedString, tokenArray) {
+    static format(tokenizedString, tokens) {
+        const isTokenArray = Array.isArray(tokens);
         if (typeof tokenizedString === 'string') {
-            if (Array.isArray(tokenArray)) {
-                let replaceCallback = function(token, index, offset, str) {
-                    return tokenArray.length > index ? tokenArray[index] : token;
-                };
-                return tokenizedString.replace(/\{([0-9]+)\}/g, replaceCallback);
+            let tokenArray = [];
+            if (isTokenArray) {
+                tokenArray = tokens;
+            } else  if (typeof tokens === 'object' && tokens !== null) {
+                tokenArray = Object.keys(tokens);
+            } else {
+                return tokenizedString;
             }
+
+            // tokens is valid so do the replacement
+            let replaceCallback = function(token, match, offset, str) {
+                // replace if match exists otherwise keep token
+                if (isTokenArray) {
+                    return tokenArray.length > match ? tokenArray[match] : token;
+                } else {
+                    return typeof tokens[match] === 'undefined' ? token : tokens[match];
+                }
+            };
+            return tokenizedString.replace(/\{([0-9A-Za-z]+)\}/g, replaceCallback);
         }
         //  nothing to do...return the original tokenized string
         return tokenizedString;

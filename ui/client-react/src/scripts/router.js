@@ -51,23 +51,40 @@ flux.addActions(navActions);
 let NavWrapper = React.createClass({
     getInitialState() {
         return {
-            breakpoint: Breakpoints.getCurrentBreakpointClass()
+            breakpoint: Breakpoints.getCurrentBreakpointClass(),
+            touch: Breakpoints.isTouchDevice()
         };
     },
     childContextTypes: {
-        breakpoint: React.PropTypes.string
+        breakpoint: React.PropTypes.string,
+        touch: React.PropTypes.bool
     },
     getChildContext: function() {
-        return {breakpoint: this.state.breakpoint};
+        return {
+            breakpoint: this.state.breakpoint,
+            touch: this.state.touch
+        };
     },
     render: function() {
-        return <Nav flux={flux} {...this.props}  breakpoint={this.state.breakpoint} />;
+        return <Nav flux={flux} {...this.props} />;
     },
+
+    /**
+     * try to detect touch devices
+     *
+     * @returns {boolean}
+     */
 
     handleResize: function() {
 
         let breakpoint = Breakpoints.getCurrentBreakpointClass();
-        document.body.className = breakpoint;
+        let bodyClasses = breakpoint;
+
+        if (Breakpoints.isTouchDevice()) {
+            bodyClasses += " touch";
+        }
+
+        document.body.className = bodyClasses;
 
         // close left nav if resizing down to small
         if (breakpoint === breakpoints.SMALL_BREAKPOINT && this.state.breakpoint !== breakpoints.SMALL_BREAKPOINT) {
