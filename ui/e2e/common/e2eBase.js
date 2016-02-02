@@ -19,7 +19,7 @@
             //Delegate to recordBase to initialize
             recordBase : recordBase,
             //Create a realm
-            setUp : function () {
+            setUp : function() {
                 this.setBaseUrl(browser.baseUrl);
                 // Define the window size
                 e2eBase.resizeBrowser(e2eConsts.LARGE_BP_WIDTH, e2eConsts.XLARGE_BP_WIDTH);

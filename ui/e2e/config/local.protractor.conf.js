@@ -53,17 +53,17 @@
         onPrepare: function(){
 
             //Method to initialize all Page Objects
-            global.requirePO = function (relativePath) {
+            global.requirePO = function(relativePath) {
                 return require(baseE2EPath + relativePath + '.po.js');
             };
 
             //Method to initialize all Common Files
-            global.requireCommon = function (relativePath) {
+            global.requireCommon = function(relativePath) {
                 return require(baseE2EPath + relativePath + '.js');
             };
 
             //Globalize all Common Pages and Page objects before loading
-            var Pages = require(baseE2EPath+'common/e2ePageObjects.js')();
+            var Pages = require(baseE2EPath + 'common/e2ePageObjects.js')();
 
             // Lets Protractor know there is no Angular code to wait for
             browser.ignoreSynchronization = true;

@@ -47,9 +47,9 @@
                         // Wait for the left nav to load
                         reportServicePage.waitForElement(reportServicePage.appsListDivEl).then(function() {
                                 // Select the app
-                                reportServicePage.appLinksElList.get(0).click();
-                                e2eBase.sleep(1000);
-                                done();
+                            reportServicePage.appLinksElList.get(0).click();
+                            e2eBase.sleep(1000);
+                            done();
                         });
                     });
                 });
