@@ -1,5 +1,5 @@
 import React from 'react';
-import {Tooltip, OverlayTrigger, Glyphicon} from 'react-bootstrap';
+import {Tooltip, OverlayTrigger} from 'react-bootstrap';
 import {Link} from 'react-router';
 import Loader  from 'react-loader';
 import {I18nMessage} from '../../utils/i18nMessage';
@@ -9,8 +9,7 @@ import GlobalActions from '../global/globalActions';
 import AppsList from './appsList';
 import TablesList from './tablesList';
 import ReportsList from './reportsList';
-import Hicon from '../harmonyIcon/harmonyIcon';
-
+import QBicon from '../qbIcon/qbIcon';
 import './leftNav.scss';
 
 let LeftNav = React.createClass({
@@ -39,7 +38,7 @@ let LeftNav = React.createClass({
                 <img src={qbLogo} />
                 {this.props.selectedAppId &&
                     <div className="appsToggle" onClick={this.props.toggleAppsList}>{app ? app.name : ''}&nbsp;
-                        <Hicon icon="chevron-down"/>
+                        <QBicon icon="caret-down"/>
                     </div>
                 }
             </div>

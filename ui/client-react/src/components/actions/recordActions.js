@@ -3,8 +3,7 @@ import ReactIntl from 'react-intl';
 import {I18nMessage, I18nDate} from '../../utils/i18nMessage';
 import Locale from '../../locales/locales';
 import Fluxxor from 'fluxxor';
-import Hicon from '../harmonyIcon/harmonyIcon';
-import {MenuItem, Dropdown, Glyphicon, Input} from 'react-bootstrap';
+import {MenuItem, Dropdown, Input} from 'react-bootstrap';
 
 import ActionIcon from './actionIcon';
 import EmailReportLink from './emailReportLink';

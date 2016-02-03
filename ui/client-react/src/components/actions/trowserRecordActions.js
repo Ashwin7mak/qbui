@@ -1,7 +1,6 @@
 import React from 'react';
 import ReactIntl from 'react-intl';
-
-import Hicon from '../harmonyIcon/harmonyIcon';
+import QBicon from '../qbIcon/qbIcon';
 import './trowserRecordActions.scss';
 
 /**
@@ -16,7 +15,7 @@ let TrowserRecordActions = React.createClass({
 
         return (
             <div className={"trowserRecordActions"}>
-                <a href="#" className="closeRecordActions" onClick={this.props.onClose}><Hicon icon="close" /></a>
+                <a href="#" className="closeRecordActions" onClick={this.props.onClose}><QBicon icon="close" /></a>
                 <ul>
                     <li>Extra action 1 goes here</li>
                     <li>Extra action 2 goes here</li>

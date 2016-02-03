@@ -1,4 +1,5 @@
 import React from 'react';
+import './qbIcon.scss';
 import './quickBaseIcons.scss';
 
 /**

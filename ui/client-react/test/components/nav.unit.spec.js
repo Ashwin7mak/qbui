@@ -17,11 +17,6 @@ var FooterMock = React.createClass({
     render: function() {return <div>mock footer</div>;}
 });
 
-var MobileFooterMock = React.createClass({
-    render: function() {return <div>mock mobile footer</div>;}
-});
-
-
 describe('Nav functions', () => {
     'use strict';
 
@@ -60,14 +55,12 @@ describe('Nav functions', () => {
         Nav.__Rewire__('LeftNav', LeftNavMock);
         Nav.__Rewire__('TopNav', TopNavMock);
         Nav.__Rewire__('Footer', FooterMock);
-        Nav.__Rewire__('MobileAddFooter', MobileFooterMock);
     });
 
     afterEach(() => {
         Nav.__ResetDependency__('LeftNav');
         Nav.__ResetDependency__('TopNav');
         Nav.__ResetDependency__('Footer');
-        Nav.__ResetDependency__('MobileAddFooter');
     });
 
     it('test render of component', () => {

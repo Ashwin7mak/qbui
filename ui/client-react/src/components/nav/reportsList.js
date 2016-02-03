@@ -1,7 +1,8 @@
 import React from 'react';
-import {Tooltip, OverlayTrigger, Glyphicon} from 'react-bootstrap';
+import {Tooltip, OverlayTrigger} from 'react-bootstrap';
 import Locale from '../../locales/locales';
 import NavItem from './navItem';
+import QBicon from '../qbIcon/qbIcon';
 
 let ReportsList = React.createClass({
 
@@ -24,7 +25,7 @@ let ReportsList = React.createClass({
     },
     reportList() {
         return this.props.reportsData.list && this.props.reportsData.list.map((report) => {
-            report.icon = 'list';
+            report.icon = 'sort-az';
 
             return this.searchMatches(report.name) && <NavItem key={report.id} item={report} onSelect={this.props.onSelect} {...this.props} />;
         });
@@ -35,7 +36,7 @@ let ReportsList = React.createClass({
                 {this.props.open ?
                     <div className={"reportsContainer"}>
                         <ul className={"reportsTop"}>
-                            <li><a className="backLink" onClick={this.props.onBack}><Glyphicon glyph="chevron-left"/> Back</a></li>
+                            <li><a className="backLink" onClick={this.props.onBack}><QBicon icon="caret-left"/> Back</a></li>
 
                             <li className="searchReports">
                                 <input type="text" placeholder={Locale.getMessage('nav.searchReportsPlaceholder')} value={this.state.searchText} onChange={this.onChangeSearch}/>
@@ -49,7 +50,7 @@ let ReportsList = React.createClass({
                     </div> :
                     <div className={"reportsContainer"}>
                         <ul className={"reportsTop"}>
-                            <li><a className="backLink" onClick={this.props.onBack}><Glyphicon glyph="chevron-left"/></a></li>
+                            <li><a className="backLink" onClick={this.props.onBack}><QBicon icon="caret-left"/></a></li>
                         </ul>
                         <ul className={"reportItems"}>
                             {this.reportList()}

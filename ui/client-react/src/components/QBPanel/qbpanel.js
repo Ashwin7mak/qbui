@@ -1,7 +1,7 @@
 import React from 'react';
 import ReactBootstrap from 'react-bootstrap';
 import {Panel}  from 'react-bootstrap';
-import Hicon from '../harmonyIcon/harmonyIcon';
+import QBicon from '../qbIcon/qbIcon';
 import './qbpanel.scss';
 
 /*
@@ -26,7 +26,7 @@ class QBPanel extends React.Component {
             <div className={"qbPanel"}>
                 <div className="qbPanelHeader" onClick={ ()=> this.setState({open: !this.state.open})}>
                     <h3 id={panelId}>{this.props.title}<small className="qbPanelHeaderIcon">
-                        <Hicon icon="chevron-up" className={this.state.open ? "rotateDown" : "rotateUp"}/>
+                        <QBicon icon="caret-up" className={this.state.open ? "rotateDown" : "rotateUp"}/>
                     </small></h3>
                 </div>
                 <Panel collapsible expanded={this.state.open}>

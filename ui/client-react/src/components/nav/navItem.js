@@ -1,9 +1,9 @@
 import React from 'react';
-import {Tooltip, OverlayTrigger, Glyphicon} from 'react-bootstrap';
+import {Tooltip, OverlayTrigger} from 'react-bootstrap';
 import {Link} from 'react-router';
-import Hicon from '../harmonyIcon/harmonyIcon';
 import {I18nMessage} from '../../utils/i18nMessage';
 import Loader  from 'react-loader';
+import QBicon from '../qbIcon/qbIcon';
 
 let NavItem = React.createClass({
 
@@ -53,11 +53,11 @@ let NavItem = React.createClass({
                 <OverlayTrigger key={item.id} placement="right" overlay={tooltip}>
                     <li className={"link"}>
                         <Link className="leftNavLink" to={item.link} onClick={this.props.onSelect}>
-                            <Hicon icon={item.icon}/> {this.props.open ? label : ""}
+                            <QBicon icon={item.icon}/> {this.props.open ? label : ""}
                         </Link>
                         { this.props.open && this.props.secondaryIcon &&
                         <a href="#" className="right" onClick={()=>this.props.secondaryOnSelect(item.id)}>
-                            <Hicon icon="list"/>
+                            <QBicon icon="sort-az"/>
                         </a> }
                     </li>
                 </OverlayTrigger>);
