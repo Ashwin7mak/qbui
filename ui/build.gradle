@@ -312,7 +312,7 @@ def paramBranch =  System.getProperty("GIT_BRANCH", "master");
 http://pppdc9prd0t4:8081/nexus/index.html#welcome
 
 username is admin
-pw is qbtst987!!!!
+pw -- ask OPS or Agave
 
 The zips go to the Phoenix repository under QuickBase/ui/ if they are versioned, and to the Snapshots repository if
 they are not versioned.
