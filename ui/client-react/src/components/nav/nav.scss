@@ -71,6 +71,8 @@ a {
         min-width:0;
 
         .topNav {
+            flex: 0 0 auto;
+            flex-basis:$top-nav-height;
             display:flex;
             order: 1;
             flex-direction:column;
