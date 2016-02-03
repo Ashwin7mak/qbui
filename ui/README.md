@@ -34,7 +34,7 @@ FIRST - Do all the Quickbase java backend development [setup instructions](https
 * Java and Tomcat to run the backend	
     
 ##Installing 
-* Install node.js (v0.12.4 or higher, as of 2/1/2016, v5.5.0 is not fully tested with qbui) from the [Node.js site](http://nodejs.org/)
+* Install node.js (v4.2.x or higher, as of 2/1/2016, v5.5.0 is not fully tested with qbui) from the [Node.js site](http://nodejs.org/)
 
 * (*Optional*) Make a place for any global node modules and no permission issues
 
