@@ -34,7 +34,7 @@ FIRST - Do all the Quickbase java backend development [setup instructions](https
 * Java and Tomcat to run the backend	
     
 ##Installing 
-* Install node.js (v0.12.4 or higher) from the [Node.js site](http://nodejs.org/)
+* Install node.js (v0.12.4 or higher, as of 2/1/2016, v5.5.0 is not fully tested with qbui) from the [Node.js site](http://nodejs.org/)
 
 * (*Optional*) Make a place for any global node modules and no permission issues
 
@@ -62,7 +62,12 @@ FIRST - Do all the Quickbase java backend development [setup instructions](https
 	```
 	    ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"
 	```
-
+* Install grunt with npm
+	``` bash
+	npm install -g grunt
+	npm install -g grunt-cli
+	```
+    
 * **qbui** project uses npm as its *package managers* and Grunt as its *task runner*. 
 
     The top level of the project holds the CI Jenkins Gradle related files and the source for the ui is under the ui directory
@@ -130,6 +135,7 @@ The following run-time environment variable is supported:
  as the hotload server needs the ip of main express server. When running in production mode listen is just scoped to port, not ip.node -
 
 ## Testing
+cd to <project root>/qbui/ui directory
 ###Lint and Code Style tests
 Running `grunt codeStandards` will run the lint tasks. This task validates the javascript follows best practices and ensures the code is formatted to our qbui coding styles.
 
