@@ -57,7 +57,7 @@ $fieldLabel-color: $color3;
 }
 
   /* For mobile phones: */
-.small-breakpoint .qbPanel {
+.small-breakpoint.touch .qbPanel {
   font-size: $font-size;
   .qbPanelBody {
     padding-left: 1%;

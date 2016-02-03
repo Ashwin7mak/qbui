@@ -1,5 +1,6 @@
 
 import BaseService from '../../src/services/baseService';
+import StringUtils from '../../src/utils/stringUtils';
 
 describe('BaseService rewire tests', () => {
     'use strict';
@@ -19,6 +20,7 @@ describe('BaseService rewire tests', () => {
     beforeEach(() => {
         spyOn(BaseService.prototype, 'setRequestInterceptor');
         spyOn(BaseService.prototype, 'setResponseInterceptor');
+        spyOn(StringUtils, 'format');
 
         BaseService.__Rewire__('cookie', mockCookie);
         BaseService.__Rewire__('axios', mockAxios);
@@ -31,7 +33,6 @@ describe('BaseService rewire tests', () => {
 
     it('test constructor', () => {
         baseService = new BaseService();
-        expect(baseService.baseUrl).toBeDefined();
         expect(BaseService.prototype.setRequestInterceptor).toHaveBeenCalled();
         expect(BaseService.prototype.setResponseInterceptor).toHaveBeenCalled();
     });
@@ -47,4 +48,11 @@ describe('BaseService rewire tests', () => {
         var axios = baseService.get('url', 'config');
         expect(axios.getMethodCalled).toBeTruthy();
     });
+
+    it('test constructUrl method', () => {
+        baseService = new BaseService();
+        var url = baseService.constructUrl('mask', ['tokens']);
+        expect(StringUtils.format).toHaveBeenCalled();
+    });
+
 });

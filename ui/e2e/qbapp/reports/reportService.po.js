@@ -49,9 +49,7 @@
         this.topNavGlobalActDivEl = this.topNavRightDivEl.element(by.className('globalActions'));
         this.topNavGlobalActionsListEl = this.topNavGlobalActDivEl.all(by.tagName('a'));
         this.topNavUserGlobActEl = this.topNavGlobalActionsListEl.get(0);
-        this.topNavAlertsGlobActEl = this.topNavGlobalActionsListEl.get(1);
-        this.topNavHelpGlobActEl = this.topNavGlobalActionsListEl.get(2);
-        this.topNavLogoutGlobActEl = this.topNavGlobalActionsListEl.get(3);
+        this.topNavHelpGlobActEl = this.topNavGlobalActionsListEl.get(1);
 
         // dropdown
         this.topNavRightDropdownDivEl = this.topNavRightDivEl.element(by.className('dropdown'));

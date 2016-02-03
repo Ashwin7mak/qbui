@@ -5,25 +5,32 @@ class AppService extends BaseService {
 
     constructor() {
         super();
+
+        //  App Service API endpoints
+        this.API = {
+            GET_APP     : `${constants.BASE_URL.QUICKBASE}/${constants.APPS}/{0}`,
+            GET_APPS    : `${constants.BASE_URL.QUICKBASE}/${constants.APPS}`
+        };
     }
 
     /**
-     * Return an QuickBase App
+     * Return a QuickBase App
      *
      * @param appId
-     * @returns {*}
+     * @returns promise
      */
     getApp(appId) {
-        return super.get(constants.APPS + '/' + appId);
+        let url = super.constructUrl(this.API.GET_APP, [appId]);
+        return super.get(url);
     }
 
     /**
-     * Return all QuickBase apps for the authenticated user
+     * Return all QuickBase apps
      *
-     * @returns {*}
+     * @returns promise
      */
     getApps() {
-        return super.get(constants.APPS);
+        return super.get(this.API.GET_APPS);
     }
 
 }
