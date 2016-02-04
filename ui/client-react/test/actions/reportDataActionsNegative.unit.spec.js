@@ -13,6 +13,11 @@ let inputs = {
         search: ''
     }
 };
+let loadReportInputs = {
+    appId: inputs.appId,
+    tblId: inputs.tblId,
+    rptId: inputs.rptId
+};
 let responseReportData = {
     data: {
         name: 'name'
@@ -89,7 +94,7 @@ describe('Report Data Actions -- Filter report Negative', () => {
                 done();
             },
             () => {
-                expect(flux.dispatchBinder.dispatch.calls.argsFor(0)).toEqual([actions.LOAD_REPORT]);
+                expect(flux.dispatchBinder.dispatch.calls.argsFor(0)).toEqual([actions.LOAD_REPORT, loadReportInputs]);
                 expect(flux.dispatchBinder.dispatch.calls.argsFor(1)).toEqual([actions.LOAD_REPORT_FAILED]);
                 done();
             }
@@ -121,7 +126,7 @@ describe('Report Data Actions -- Filter report Negative', () => {
                 done();
             },
             () => {
-                expect(flux.dispatchBinder.dispatch.calls.argsFor(0)).toEqual([actions.LOAD_REPORT]);
+                expect(flux.dispatchBinder.dispatch.calls.argsFor(0)).toEqual([actions.LOAD_REPORT, loadReportInputs]);
                 expect(flux.dispatchBinder.dispatch.calls.argsFor(1)).toEqual([actions.LOAD_REPORT_FAILED]);
                 done();
             }
@@ -153,7 +158,7 @@ describe('Report Data Actions -- Filter report Negative', () => {
                 done();
             },
             () => {
-                expect(flux.dispatchBinder.dispatch.calls.argsFor(0)).toEqual([actions.LOAD_REPORT]);
+                expect(flux.dispatchBinder.dispatch.calls.argsFor(0)).toEqual([actions.LOAD_REPORT, loadReportInputs]);
                 expect(flux.dispatchBinder.dispatch.calls.argsFor(1)).toEqual([actions.LOAD_REPORT_FAILED]);
                 done();
             }

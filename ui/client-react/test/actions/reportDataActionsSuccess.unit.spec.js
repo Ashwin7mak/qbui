@@ -36,6 +36,11 @@ describe('Report Data Actions success -- ', () => {
         data: responseResultData.data,
         facets: responseFacetData.data
     };
+    let loadReportInputs = {
+        appId: appId,
+        tblId: tblId,
+        rptId: rptId
+    };
 
     class mockReportService {
         constructor() { }
@@ -73,7 +78,7 @@ describe('Report Data Actions success -- ', () => {
                 expect(mockReportService.prototype.getReportResults).toHaveBeenCalled();
                 expect(mockReportService.prototype.getReportFacets).toHaveBeenCalled();
                 expect(flux.dispatchBinder.dispatch.calls.count()).toEqual(2);
-                expect(flux.dispatchBinder.dispatch.calls.argsFor(0)).toEqual([actions.LOAD_REPORT]);
+                expect(flux.dispatchBinder.dispatch.calls.argsFor(0)).toEqual([actions.LOAD_REPORT, loadReportInputs]);
                 expect(flux.dispatchBinder.dispatch.calls.argsFor(1)).toEqual([actions.LOAD_REPORT_SUCCESS, response]);
                 done();
             },
@@ -112,6 +117,11 @@ describe('Report Data Actions Filter Report functions -- success', () => {
             records: [],
             query: 'someQuery'
         }
+    };
+    let loadReportInputs = {
+        appId: appId,
+        tblId: tblId,
+        rptId: rptId
     };
 
     class mockReportService {
@@ -155,7 +165,7 @@ describe('Report Data Actions Filter Report functions -- success', () => {
                 expect(mockReportService.prototype.parseFacetExpression).toHaveBeenCalled();
                 expect(mockRecordService.prototype.getRecords).toHaveBeenCalled();
                 expect(flux.dispatchBinder.dispatch.calls.count()).toEqual(2);
-                expect(flux.dispatchBinder.dispatch.calls.argsFor(0)).toEqual([actions.LOAD_REPORT]);
+                expect(flux.dispatchBinder.dispatch.calls.argsFor(0)).toEqual([actions.LOAD_REPORT, loadReportInputs]);
                 expect(flux.dispatchBinder.dispatch.calls.argsFor(1)).toEqual([actions.LOAD_REPORT_SUCCESS, responseRecordData.data]);
                 done();
             },

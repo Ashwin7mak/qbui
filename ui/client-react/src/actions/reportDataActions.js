@@ -18,7 +18,7 @@ let reportDataActions = {
         let deferred = Promise.defer();
 
         if (appId && tblId && rptId) {
-            this.dispatch(actions.LOAD_REPORT);
+            this.dispatch(actions.LOAD_REPORT, {appId, tblId, rptId});
             let reportService = new ReportService();
 
             //  query for the report meta data, report results and report facets
@@ -75,7 +75,7 @@ let reportDataActions = {
         let deferred = Promise.defer();
 
         if (appId && tblId && rptId) {
-            this.dispatch(actions.LOAD_REPORT);
+            this.dispatch(actions.LOAD_REPORT, {appId, tblId, rptId});
 
             let reportService = new ReportService();
             let recordService = new RecordService();
