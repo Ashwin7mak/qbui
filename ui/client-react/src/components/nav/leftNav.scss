@@ -82,7 +82,7 @@ body:not(.touch) .leftNav.closed {
         flex: 0 0 auto;
         padding: 6px;
         border-bottom: $global-actions-border;
-        .hi-chevron-down {
+        .iconssturdy-caret-down {
             transition: transform 300ms ease-in;
         }
     }
@@ -261,7 +261,7 @@ $travel-distance: 15;
     transition: all $transition-time ease-in;
 }
 
-.leftNav.appsListOpen .branding .hi-chevron-down {
+.leftNav.appsListOpen .branding .qbIcon.iconssturdy-caret-down {
     transform: rotate(-180deg);
 }
 

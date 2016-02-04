@@ -24,7 +24,7 @@ let TablesList = React.createClass({
                     <NavItem item={{msg: 'nav.tablesHeading'}} isHeading={true} {...this.props}/>
                     {this.props.getAppTables(this.props.selectedAppId).map((table) => {
                         table.link = '/app/' + this.props.selectedAppId + '/table/' + table.id;
-                        table.icon = 'heart';
+                        table.icon = 'report-table';
                         return <NavItem item={table}
                                         key={table.id}
                                         secondaryIcon={"list"}

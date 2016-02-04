@@ -57,7 +57,7 @@ let NavItem = React.createClass({
                         </Link>
                         { this.props.open && this.props.secondaryIcon &&
                         <a href="#" className="right" onClick={()=>this.props.secondaryOnSelect(item.id)}>
-                            <QBicon icon="sort-az"/>
+                            <QBicon icon="report-line-bar"/>
                         </a> }
                     </li>
                 </OverlayTrigger>);

@@ -25,7 +25,7 @@ let ReportsList = React.createClass({
     },
     reportList() {
         return this.props.reportsData.list && this.props.reportsData.list.map((report) => {
-            report.icon = 'sort-az';
+            report.icon = 'report-line-bar';
 
             return this.searchMatches(report.name) && <NavItem key={report.id} item={report} onSelect={this.props.onSelect} {...this.props} />;
         });
