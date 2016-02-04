@@ -1,8 +1,8 @@
 
 import React from 'react';
 import './stage.scss';
-
-import {Collapse, Well, Glyphicon} from 'react-bootstrap';
+import QBicon from '../qbIcon/qbIcon';
+import {Collapse, Well} from 'react-bootstrap';
 
 import Logger from '../../utils/logger';
 var logger = new Logger();
@@ -29,7 +29,7 @@ var Stage = React.createClass({
                 <Collapse in={this.state.open}>
                     <Well>{this.props.children}</Well>
                 </Collapse>
-                <button className="toggleStage" onClick={this.toggleStage} ><Glyphicon glyph={this.state.open ? "menu-up" : "menu-down"} /></button>
+                <button className="toggleStage" onClick={this.toggleStage} ><QBicon icon={this.state.open ? "caret-up" : "caret-down"} /></button>
             </div>);
     }
 

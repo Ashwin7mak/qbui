@@ -3,11 +3,11 @@ import ReactIntl from 'react-intl';
 import {I18nMessage, I18nDate} from '../../../utils/i18nMessage';
 import Locale from '../../../locales/locales';
 import Fluxxor from 'fluxxor';
-import Hicon from '../../harmonyIcon/harmonyIcon';
+import QBicon from '../../qbIcon/qbIcon';
 
 import './reportHeader.scss';
 
-import {Glyphicon, Input} from 'react-bootstrap';
+import {Input} from 'react-bootstrap';
 
 let FluxMixin = Fluxxor.FluxMixin(React);
 
@@ -25,8 +25,6 @@ var ReportHeader = React.createClass({
 
     render() {
 
-        const searchIcon = <Glyphicon glyph="search" />;
-
         return (
             <div className={"tableBar"}>
 
@@ -34,7 +32,7 @@ var ReportHeader = React.createClass({
                     <div className="searchInput">
                         <Input bsClass="search" size="20" className="searchInputBox" standalone type="text" placeholder="Search Records"  onChange={this.searchChanged} />
                     </div>
-                    <a><Hicon icon="filter"/></a>
+                    <a><QBicon icon="filter-tool"/></a>
                 </div>
             </div>
         );

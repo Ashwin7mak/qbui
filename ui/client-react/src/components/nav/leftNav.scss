@@ -38,7 +38,7 @@ $left-nav-heading-fg: #bfcfe3;
 }
 
 .small-breakpoint.touch .leftNav.open {
-    width: 350px;
+    width: 300px;
 
 }
 
@@ -82,7 +82,7 @@ body:not(.touch) .leftNav.closed {
         flex: 0 0 auto;
         padding: 6px;
         border-bottom: $global-actions-border;
-        .hi-chevron-down {
+        .iconssturdy-caret-down {
             transition: transform 300ms ease-in;
         }
     }
@@ -200,7 +200,7 @@ body:not(.touch) .leftNav.closed {
 
 .small-breakpoint.touch .navShell.leftNavOpen {
     position: relative;
-    left: -350px;
+    left: -300px;
 
     .topNav.mobile {
         min-width: 640px;
@@ -215,8 +215,8 @@ body:not(.touch) .leftNav.closed {
         -webkit-transition: opacity 250ms ease-in-out;
     }
 
-    transform: translate3d(350px, 0, 0);
-    -webkit-transform: translate3d(350px, 0, 0);
+    transform: translate3d(300px, 0, 0);
+    -webkit-transform: translate3d(300px, 0, 0);
 }
 
 /** REACTCSSTRANSITION BASE CLASSES **/
@@ -261,7 +261,7 @@ $travel-distance: 15;
     transition: all $transition-time ease-in;
 }
 
-.leftNav.appsListOpen .branding .hi-chevron-down {
+.leftNav.appsListOpen .branding .qbIcon.iconssturdy-caret-down {
     transform: rotate(-180deg);
 }
 

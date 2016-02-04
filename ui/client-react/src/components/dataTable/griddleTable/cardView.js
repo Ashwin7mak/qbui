@@ -1,6 +1,5 @@
 import React from 'react';
 import Swipeable from 'react-swipeable';
-import {Glyphicon} from '../../../../../node_modules/react-bootstrap/lib';
 import RecordActions from '../../actions/recordActions';
 import './cardView.scss';
 
