@@ -18,6 +18,13 @@
         var e2eBase = {
             //Delegate to recordBase to initialize
             recordBase : recordBase,
+            //Create a realm
+            setUp : function() {
+                this.setBaseUrl(browser.baseUrl);
+                // Define the window size
+                e2eBase.resizeBrowser(e2eConsts.LARGE_BP_WIDTH, e2eConsts.DEFAULT_HEIGHT);
+                this.initialize();
+            },
             initialize : function() {
                 recordBase.initialize();
             },
@@ -69,6 +76,7 @@
                 return deferred.promise;
             },
             basicSetup : function(tableToFieldToFieldTypeMap, numberOfRecords) {
+                e2eBase.setUp();
                 var deferred = promise.pending();
                 //Generate the app JSON object
                 var generatedApp = e2eBase.appService.generateAppFromMap(tableToFieldToFieldTypeMap);
@@ -96,6 +104,49 @@
                 });
                 return deferred.promise;
             },
+
+            //Reports setup
+            reportsBasicSetUp : function() {
+                var deferred = promise.pending();
+                var app;
+                var recordList;
+                // Create the table schema (map object) to pass into the app generator
+                var tableToFieldToFieldTypeMap = {};
+                tableToFieldToFieldTypeMap['table 1'] = {};
+                tableToFieldToFieldTypeMap['table 1'][e2eConsts.reportFieldNames[1]] = {fieldType: consts.SCALAR, dataType : consts.TEXT};
+                tableToFieldToFieldTypeMap['table 1'][e2eConsts.reportFieldNames[2]] = {fieldType: consts.SCALAR, dataType : consts.NUMERIC};
+                tableToFieldToFieldTypeMap['table 1'][e2eConsts.reportFieldNames[3]] = {fieldType: consts.SCALAR, dataType : consts.CURRENCY};
+                tableToFieldToFieldTypeMap['table 1'][e2eConsts.reportFieldNames[4]] = {fieldType: consts.SCALAR, dataType : consts.PERCENT};
+                tableToFieldToFieldTypeMap['table 1'][e2eConsts.reportFieldNames[5]] = {fieldType: consts.SCALAR, dataType : consts.RATING};
+                tableToFieldToFieldTypeMap['table 1'][e2eConsts.reportFieldNames[6]] = {fieldType: consts.SCALAR, dataType : consts.DATE};
+                tableToFieldToFieldTypeMap['table 1'][e2eConsts.reportFieldNames[7]] = {fieldType: consts.SCALAR, dataType : consts.DATE_TIME};
+                tableToFieldToFieldTypeMap['table 1'][e2eConsts.reportFieldNames[8]] = {fieldType: consts.SCALAR, dataType : consts.TIME_OF_DAY};
+                tableToFieldToFieldTypeMap['table 1'][e2eConsts.reportFieldNames[9]] = {fieldType: consts.SCALAR, dataType : consts.DURATION};
+                tableToFieldToFieldTypeMap['table 1'][e2eConsts.reportFieldNames[10]] = {fieldType: consts.SCALAR, dataType : consts.CHECKBOX};
+                tableToFieldToFieldTypeMap['table 1'][e2eConsts.reportFieldNames[11]] = {fieldType: consts.SCALAR, dataType : consts.PHONE_NUMBER};
+                tableToFieldToFieldTypeMap['table 1'][e2eConsts.reportFieldNames[12]] = {fieldType: consts.SCALAR, dataType : consts.EMAIL_ADDRESS};
+                tableToFieldToFieldTypeMap['table 1'][e2eConsts.reportFieldNames[13]] = {fieldType: consts.SCALAR, dataType : consts.URL};
+                tableToFieldToFieldTypeMap['table 2'] = {};
+                tableToFieldToFieldTypeMap['table 2'][e2eConsts.reportFieldNames[2]] = {fieldType: consts.SCALAR, dataType: consts.TEXT};
+                tableToFieldToFieldTypeMap['table 2'][e2eConsts.reportFieldNames[6]] = {fieldType: consts.SCALAR, dataType : consts.RATING};
+                tableToFieldToFieldTypeMap['table 2'][e2eConsts.reportFieldNames[12]] = {fieldType: consts.SCALAR, dataType : consts.PHONE_NUMBER};
+                //Call the basic app setup function
+                e2eBase.basicSetup(tableToFieldToFieldTypeMap, 10).then(function(results){
+                    //Set your global objects to use in the test functions
+                    app = results[0];
+                    recordList = results[1];
+                    //Return back the created app and records
+                    //Pass it back in an array as promise.resolve can only send back one object
+                    var appAndRecords = [app, recordList, e2eConsts.reportFieldNames];
+                    deferred.resolve(appAndRecords);
+                }).catch(function(error) {
+                    console.error(JSON.stringify(error));
+                    deferred.reject(error);
+                });
+                return deferred.promise;
+
+            },
+
             //Helper method to sleep a specified number of seconds
             sleep : function(ms) {
                 var deferred = promise.pending();

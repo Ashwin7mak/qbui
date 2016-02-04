@@ -9,49 +9,23 @@
     'use strict';
     // In order to manage the async nature of Protractor with a non-Angular page use the ExpectedConditions feature
     var EC = protractor.ExpectedConditions;
-    //Require the e2e base class and constants modules
-    var e2eBase = require('../../common/e2eBase.js')();
-    var consts = require('../../../server/api/constants.js');
-    //Load the page objects
-    var requestSessionTicketPage = require('./requestSessionTicket.po.js');
-    var requestAppsPage = require('./requestApps.po.js');
-    var ReportServicePage = require('./reportService.po.js');
+    //Load the page Objects
+    var ReportServicePage = requirePO('reportService');
+    var requestAppsPage = requirePO('requestApps');
+    var requestSessionTicketPage = requirePO('requestSessionTicket');
+
     describe('Report Service E2E Tests', function() {
         var app;
         var recordList;
-        var fieldNames = ['Record ID#', 'Text Field', 'Numeric Field', 'Numeric Currency Field', 'Numeric Percent Field', 'Numeric Rating Field',
-            'Date Field', 'Date Time Field', 'Time of Day Field', 'Duration Field', 'Checkbox Field', 'Phone Number Field',
-            'Email Address Field', 'URL Field'];
-        e2eBase.setBaseUrl(browser.baseUrl);
-        e2eBase.initialize();
         /**
          * Setup method. Generates JSON for an app, a table, a set of records and a report. Then creates them via the REST API.
          * Have to specify the done() callback at the end of the promise chain, otherwise Protractor will not wait
          * for the promises to be resolved
          */
         beforeAll(function(done) {
-            // Create the table schema (map object) to pass into the app generator
-            var tableToFieldToFieldTypeMap = {};
-            tableToFieldToFieldTypeMap['table 1'] = {};
-            tableToFieldToFieldTypeMap['table 1'][fieldNames[1]] = {fieldType: consts.SCALAR, dataType : consts.TEXT};
-            tableToFieldToFieldTypeMap['table 1'][fieldNames[2]] = {fieldType: consts.SCALAR, dataType : consts.NUMERIC};
-            tableToFieldToFieldTypeMap['table 1'][fieldNames[3]] = {fieldType: consts.SCALAR, dataType : consts.CURRENCY};
-            tableToFieldToFieldTypeMap['table 1'][fieldNames[4]] = {fieldType: consts.SCALAR, dataType : consts.PERCENT};
-            tableToFieldToFieldTypeMap['table 1'][fieldNames[5]] = {fieldType: consts.SCALAR, dataType : consts.RATING};
-            tableToFieldToFieldTypeMap['table 1'][fieldNames[6]] = {fieldType: consts.SCALAR, dataType : consts.DATE};
-            tableToFieldToFieldTypeMap['table 1'][fieldNames[7]] = {fieldType: consts.SCALAR, dataType : consts.DATE_TIME};
-            tableToFieldToFieldTypeMap['table 1'][fieldNames[8]] = {fieldType: consts.SCALAR, dataType : consts.TIME_OF_DAY};
-            tableToFieldToFieldTypeMap['table 1'][fieldNames[9]] = {fieldType: consts.SCALAR, dataType : consts.DURATION};
-            tableToFieldToFieldTypeMap['table 1'][fieldNames[10]] = {fieldType: consts.SCALAR, dataType : consts.CHECKBOX};
-            tableToFieldToFieldTypeMap['table 1'][fieldNames[11]] = {fieldType: consts.SCALAR, dataType : consts.PHONE_NUMBER};
-            tableToFieldToFieldTypeMap['table 1'][fieldNames[12]] = {fieldType: consts.SCALAR, dataType : consts.EMAIL_ADDRESS};
-            tableToFieldToFieldTypeMap['table 1'][fieldNames[13]] = {fieldType: consts.SCALAR, dataType : consts.URL};
-            //Call the basic app setup function
-            e2eBase.basicSetup(tableToFieldToFieldTypeMap, 10).then(function(results) {
-                //Set your global objects to use in the test functions
-                app = results[0];
-                recordList = results[1];
-                //Finished with the promise chain so call done here
+            e2eBase.reportsBasicSetUp().then(function(appAndRecords) {
+                app = appAndRecords[0];
+                recordList = appAndRecords[1];
                 done();
             });
         });
@@ -104,7 +78,7 @@
                             reportServicePage.getReportColumnHeaders(reportServicePage).then(function(resultArray) {
                                 // UI is currently using upper case to display the field names in columns
                                 //var upperFieldNames = e2eBase.e2eUtils.stringArrayToUpperCase(fieldNames);
-                                expect(resultArray).toEqual(fieldNames);
+                                expect(resultArray).toEqual(e2eConsts.reportFieldNames);
                             });
                             // Check all record values equal the ones we added via the API
                             reportServicePage.griddleRecordElList.getText().then(function(uiRecords) {
