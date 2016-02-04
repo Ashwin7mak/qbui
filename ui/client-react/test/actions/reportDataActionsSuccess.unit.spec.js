@@ -9,7 +9,10 @@ describe('Report Data Actions Load Report functions -- success', () => {
     let appId = '1';
     let tblId = '2';
     let rptId = '3';
-    let facetExp = 'abc';
+    let filter = {
+        facet: 'abc',
+        search: ''
+    };
     let responseReportData = {
         data: {
             name: 'name'
@@ -20,9 +23,18 @@ describe('Report Data Actions Load Report functions -- success', () => {
             test: 'test'
         }
     };
+    let responseFacetData = {
+        data: {
+            facets: {
+                test: 'test'
+            }
+        }
+    };
+
     let response = {
         name: responseReportData.data.name,
-        data: responseResultData.data
+        data: responseResultData.data,
+        facets: responseFacetData.data
     };
 
     let promise;
@@ -38,9 +50,9 @@ describe('Report Data Actions Load Report functions -- success', () => {
             p.resolve(responseResultData);
             return p.promise;
         }
-        filterReport() {
+        getReportFacets() {
             var p = Promise.defer();
-            p.resolve(responseResultData);
+            p.resolve(responseFacetData);
             return p.promise;
         }
     }
@@ -60,7 +72,7 @@ describe('Report Data Actions Load Report functions -- success', () => {
     });
 
     it('test load report action with report parameters', (done) => {
-        promise = flux.actions.loadReport(appId, tblId, rptId, true, facetExp);
+        promise = flux.actions.loadReport(appId, tblId, rptId, true);
 
         //expect a load report event to get fired before the promise returns
         expect(flux.dispatchBinder.dispatch).toHaveBeenCalledWith(actions.LOAD_REPORT, {appId, tblId, rptId});
@@ -78,7 +90,10 @@ describe('Report Data Actions Filter Report functions -- success', () => {
     let appId = '1';
     let tblId = '2';
     let rptId = '3';
-    let facetExp = 'abc';
+    let filter = {
+        facet: 'abc',
+        search: ''
+    };
     let responseReportData = {
         data: {
             name: 'name'
@@ -102,7 +117,7 @@ describe('Report Data Actions Filter Report functions -- success', () => {
             p.resolve(responseReportData);
             return p.promise;
         }
-        resolveFacetExpression() {
+        parseFacetExpression() {
             var p = Promise.defer();
             p.resolve(responseResultQuery);
             return p.promise;
@@ -134,7 +149,7 @@ describe('Report Data Actions Filter Report functions -- success', () => {
 
 
     it('test filter report action with parameters', (done) => {
-        promise = flux.actions.filterReport(appId, tblId, rptId, true, facetExp);
+        promise = flux.actions.filterReport(appId, tblId, rptId, true, filter);
 
         expect(flux.dispatchBinder.dispatch).toHaveBeenCalledWith(actions.LOAD_REPORT, {appId, tblId, rptId});
         flux.dispatchBinder.dispatch.calls.reset();

@@ -1,11 +1,10 @@
 import React from 'react';
 import Swipeable from 'react-swipeable';
-import Hicon from '../../harmonyIcon/harmonyIcon';
 import RecordActions from '../../actions/recordActions';
 import './cardView.scss';
 import '../../QBForm/qbform.scss';
 
-const MAX_ACTIONS_RESIZE_WITH = 180; // max width while swiping
+const MAX_ACTIONS_RESIZE_WITH = 240; // max width while swiping
 
 let CardView = React.createClass({
 
@@ -128,12 +127,18 @@ let CardView = React.createClass({
             let row = this.createRow();
 
             let actionsStyle = {};
+            let cardStyle = {};
+
             let rowActionsClasses = "rowActions ";
 
             if (this.state.swiping) {
                 rowActionsClasses += "swiping";
                 actionsStyle = {
                     width: Math.min(MAX_ACTIONS_RESIZE_WITH, this.state.resizeWidth)
+                };
+                cardStyle = {
+                    marginLeft: -actionsStyle.width,
+                    marginRight: actionsStyle.width
                 };
             } else {
                 // not swiping, don't add inline style (width and transitions come from css)
@@ -143,10 +148,14 @@ let CardView = React.createClass({
             const isSelected = this.context.isRowSelected(this.props.data);
 
             return (
-                <Swipeable  className={"swipeable"} onSwiping={this.swiping} onSwiped={this.swiped} onSwipedLeft={this.swipedLeft} onSwipedRight={this.swipedRight}>
+                <Swipeable  className={"swipeable " + (this.state.showActions && !this.state.swiping ? "actionsOpen" : "actionsClosed") }
+                            onSwiping={this.swiping}
+                            onSwiped={this.swiped}
+                            onSwipedLeft={this.swipedLeft}
+                            onSwipedRight={this.swipedRight}>
 
                     <div className={this.state.showMoreCards ? "custom-row-card expanded" : "custom-row-card"} >
-                        <div className="flexRow">
+                        <div style={cardStyle} className="flexRow">
                             {this.context.allowCardSelection() && <div className={"checkboxContainer"}><input checked={isSelected} onChange={this.onRowSelected} type="checkbox"></input></div>}
                             <div className="card" onClick={this.onRowClick}>
                                 {row}

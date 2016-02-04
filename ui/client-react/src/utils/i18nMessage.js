@@ -75,7 +75,9 @@ class I18nFlux {
 var I18nDate = I18nFlux.renderMessage(
     React.createClass({
         render: function() {
-            return (<DisplayI18n {...this.props} type={I18N_DATE}/>);
+            // convert dash delimited dates to slash delimited for FireFox
+            let value = this.props.value.replace(/-/g, '/');
+            return (<DisplayI18n {...this.props} value={value} type={I18N_DATE}/>);
         }
     })
 );

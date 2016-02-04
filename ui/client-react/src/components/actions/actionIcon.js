@@ -1,10 +1,10 @@
 import React from 'react';
 
-import Hicon from '../harmonyIcon/harmonyIcon';
-import {Tooltip, OverlayTrigger, Glyphicon} from 'react-bootstrap';
+import QBicon from '../qbIcon/qbIcon';
+import {Tooltip, OverlayTrigger} from 'react-bootstrap';
 
 /**
- * an action icon link with a tooltip (icon is either Hicon or bootstrap Glyphicon)
+ * an action icon link with a tooltip (icon is from quickbase icon font)
  */
 let ActionIcon = React.createClass({
 
@@ -14,7 +14,7 @@ let ActionIcon = React.createClass({
 
     propTypes: {
         tip:React.PropTypes.string,
-        icon:React.PropTypes.string,
+        icon:React.PropTypes.string.isRequired,
         bsStyle:React.PropTypes.string,
         onClick:React.PropTypes.func
     },
@@ -25,9 +25,8 @@ let ActionIcon = React.createClass({
 
         return (
             <OverlayTrigger placement="top" overlay={tooltip}>
-                <a href="#" onClick={this.props.onClick} bsStyle={this.props.bsRole}>{this.props.icon ?
-                    <Hicon icon={this.props.icon}/> :
-                    <Glyphicon glyph={this.props.glyph}/> }
+                <a href="#" className={"iconLink icon-" + this.props.icon} onClick={this.props.onClick} bsStyle={this.props.bsRole}>
+                    <QBicon icon={this.props.icon}/>
                 </a>
             </OverlayTrigger>);
 

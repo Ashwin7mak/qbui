@@ -1,7 +1,11 @@
+@import '../../../src/assets/css/qbVariables';
+
 .reportContainer {
   display: flex;
   flex-direction: column;
   flex:1;
+  min-width:0;
+  background:$report-container-bg;
   .layout-stage {
     flex-shrink:0;
   }
@@ -11,6 +15,19 @@
     overflow-y:auto;
     margin-left:10px;
     margin-right:10px;
+  }
+}
+
+.reportLinks {
+  margin: 0 10px;
+  a {
+    text-decoration: none;
+    .hi {
+      padding-right: 4px;
+    }
+  }
+  a:hover {
+    text-decoration: none;
   }
 }
 

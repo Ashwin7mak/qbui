@@ -17,11 +17,6 @@ var FooterMock = React.createClass({
     render: function() {return <div>mock footer</div>;}
 });
 
-var MobileFooterMock = React.createClass({
-    render: function() {return <div>mock mobile footer</div>;}
-});
-
-
 describe('Nav functions', () => {
     'use strict';
 
@@ -60,14 +55,12 @@ describe('Nav functions', () => {
         Nav.__Rewire__('LeftNav', LeftNavMock);
         Nav.__Rewire__('TopNav', TopNavMock);
         Nav.__Rewire__('Footer', FooterMock);
-        Nav.__Rewire__('MobileAddFooter', MobileFooterMock);
     });
 
     afterEach(() => {
         Nav.__ResetDependency__('LeftNav');
         Nav.__ResetDependency__('TopNav');
         Nav.__ResetDependency__('Footer');
-        Nav.__ResetDependency__('MobileAddFooter');
     });
 
     it('test render of component', () => {
@@ -94,10 +87,11 @@ describe('Nav functions', () => {
         var TestParent = React.createFactory(React.createClass({
 
             childContextTypes: {
-                breakpoint: React.PropTypes.string
+                breakpoint: React.PropTypes.string,
+                touch: React.PropTypes.bool
             },
             getChildContext: function() {
-                return {breakpoint: breakpoints.SMALL_BREAKPOINT};
+                return {breakpoint: breakpoints.SMALL_BREAKPOINT, touch: true};
             },
             render() {
                 return <Nav ref="nav" flux={flux}></Nav>;
@@ -109,7 +103,6 @@ describe('Nav functions', () => {
 
         expect(TestUtils.scryRenderedComponentsWithType(component, LeftNavMock).length).toEqual(1);
         expect(TestUtils.scryRenderedComponentsWithType(component, TopNavMock).length).toEqual(1);
-        expect(TestUtils.scryRenderedComponentsWithType(component, MobileFooterMock).length).toEqual(1);
 
         let leftLink = TestUtils.findRenderedDOMComponentWithClass(component, "leftNavLink");
         TestUtils.Simulate.click(leftLink);

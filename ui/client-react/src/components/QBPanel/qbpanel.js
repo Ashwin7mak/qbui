@@ -1,7 +1,7 @@
 import React from 'react';
 import ReactBootstrap from 'react-bootstrap';
 import {Panel}  from 'react-bootstrap';
-import Hicon from '../harmonyIcon/harmonyIcon';
+import QBicon from '../qbIcon/qbIcon';
 import './qbpanel.scss';
 
 /*

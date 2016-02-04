@@ -5,7 +5,11 @@ const Hicon = React.createClass({
     propTypes: {
         icon: React.PropTypes.string.isRequired
     },
-
+    getDefaultProps() {
+        return {
+            className: ""
+        };
+    },
     render: function() {
         let className = this.props.className + ' hi hi-' + this.props.icon;
 

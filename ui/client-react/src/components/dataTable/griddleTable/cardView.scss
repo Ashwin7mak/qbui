@@ -15,90 +15,118 @@ $chevron_closed_icon: url('../../../../src/assets/images/chevron_closed.svg');
 
 $margin-spacer: 10px;
 
-.custom-row{
-  display: block!important;
-  width: inherit!important;
-  margin: $margin-spacer;
+.custom-row {
+    display: block !important;
+    width: inherit !important;
+    margin: $margin-spacer;
+}
+
+.swipeable.actionsOpen .custom-row-card {
+    margin-left: -240px;
+    margin-right: 240px;
+}
+
+.swipeable.recordActions {
+    position: absolute;
+    right: 0;
 }
 
 .custom-row-card {
-  font-family: $font-family;
-  color: $font-color;
-  font-size: $font-size;
-  position: relative;
-  padding: 5px 10px 15px 10px;
-  background: $card-expanded-background-color;
-  margin-bottom: 5px;
-  .card {
-    flex: 1;
-    width: 100%;
-  }
-  .glyphicon{
-    position: absolute;
-    right: $margin-spacer * 2;
-    top: $margin-spacer * 2;
-  }
-  .flexRow{
-    position:relative;
-    display: flex;
-    flex-direction: row;
-  }
-  .fieldRow.collapsed{
-    max-height: 45px;
-  }
-  .fieldRow.expanded{
-    max-height: 100%;
-  }
-  .top-card-row{
-    font-size: $fieldLabel-font-size;
-  }
-  .field {
-    flex: 1 1 50%;
-    .fieldValue {
-      overflow: hidden;
-      text-overflow: ellipsis;
-      white-space: nowrap;
+    font-family: $font-family;
+    color: $font-color;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    font-size: $font-size;
+    border-bottom: 1px solid $card-border-color;
+    position: relative;
+    padding: 5px 10px 15px 10px;
+    .card {
+        flex: 1;
+        width: 100%;
     }
-    &:nth-child(n+3) {
-      .fieldValue {
-        white-space: normal;
-      }
+    .qbIcon {
+        position: absolute;
+        right: $margin-spacer * 2;
+        top: $margin-spacer * 2;
     }
-  }
-  .card-expander{
-    margin-top: $margin-spacer;
-    .chevron_opened {
-      display: block;
-      width: 14px;
-      height: 14px;
-      background: $chevron_opened_icon 0 0 no-repeat;
+    .flexRow {
+        position: relative;
+        display: flex;
+        flex-direction: row;
     }
-
-    .chevron_closed {
-      display: block;
-      width: 14px;
-      height: 14px;
-      background: $chevron_closed_icon 0 0 no-repeat;
-      opacity: .7;
+    .fieldRow {
+        display: flex;
+        flex-direction: row;
+        align-items: stretch;
+        flex-wrap: wrap;
+        overflow-y: hidden;
     }
-  }
-
-  @media (min-device-width: 300px) and (orientation: landscape) {
+    .fieldRow.collapsed {
+        max-height: 45px;
+    }
+    .fieldRow.expanded {
+        max-height: 100%;
+    }
+    .top-card-row {
+        font-size: $fieldLabel-font-size;
+    }
     .field {
-      flex-basis: 33%;
-      display: block;
-      &:nth-child(n+3) {
-        .fieldValue {
-          white-space: nowrap;
+        padding: $margin-spacer $margin-spacer 0 0;
+        flex: 1 1 50%;
+        .fieldLabel {
+            display: block;
+            color: $fieldLabel-color;
+            font-size: $fieldLabel-font-size
         }
-      }
-      &:nth-child(n+4) {
-        white-space: normal;
-      }
-
+        .fieldValue {
+            display: block;
+            min-width: 0;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+            font-size: $fieldValue-font-size;
+        }
+        &:nth-child(n+3) {
+            .fieldValue {
+                white-space: normal;
+            }
+        }
     }
-  }
+    .card-expander {
+        margin-top: $margin-spacer;
+        .chevron_opened {
+            display: block;
+            width: 14px;
+            height: 14px;
+            background: $chevron_opened_icon 0 0 no-repeat;
+        }
+
+        .chevron_closed {
+            display: block;
+            width: 14px;
+            height: 14px;
+            background: $chevron_closed_icon 0 0 no-repeat;
+            opacity: .7;
+        }
+    }
+
+    @media (min-device-width: 300px) and (orientation: landscape) {
+        .field {
+            flex-basis: 33%;
+            display: block;
+            &:nth-child(n+3) {
+                .fieldValue {
+                    white-space: nowrap;
+                }
+            }
+            &:nth-child(n+4) {
+                white-space: normal;
+            }
+
+        }
+    }
 }
+
 .custom-row-card.expanded {
   border: 0;
   -webkit-box-shadow: 0px 0px 2px 2px rgba(72, 108, 143, 0.2);
@@ -106,32 +134,31 @@ $margin-spacer: 10px;
   box-shadow: 0px 0px 2px 2px rgba(72, 108, 143, 0.2);
 }
 
-.reportContainer{
-  background-image: linear-gradient(to top, $color13 0%, $color14 100%);
-  background-color: $color12;
+.reportContainer {
+    background-image: linear-gradient(to top, $color13 0%, $color14 100%);
+    background-color: $color12;
 }
 
 .checkboxContainer {
-  width:0;
-  transition: all 300ms ease-in;
-  position:relative;
-  input {
-    height:100%;
-    position:absolute;
-    display:none;
-  }
+    width: 0;
+    transition: all 300ms ease-in;
+    position: relative;
+    input {
+        height: 100%;
+        position: absolute;
+        display: none;
+    }
 }
 
 .allowCardSelection {
 
-  .checkboxContainer {
-    overflow:hidden;
-    width:40px;
-    transition: all 300ms ease-in;
+    .checkboxContainer {
+        overflow: hidden;
+        width: 40px;
+        transition: all 300ms ease-in;
 
-
-    input {
-      display: inline-block;
+        input {
+            display: inline-block;
+        }
     }
-  }
 }

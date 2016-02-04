@@ -1,19 +1,14 @@
 import React from 'react';
 import ReactCSSTransitionGroup from 'react/lib/ReactCSSTransitionGroup';
-
 import * as breakpoints from '../../constants/breakpoints';
 import './nav.scss';
 import Button from 'react-bootstrap/lib/Button';
 import Trowser from '../trowser/trowser';
 import TrowserRecordActions from '../actions/trowserRecordActions';
 import Fluxxor from 'fluxxor';
-
 import LeftNav from './leftNav';
-
 import TopNav from '../header/topNav';
-
 import Footer from '../footer/footer';
-import MobileAddFooter from '../footer/mobileAddFooter';
 
 let FluxMixin = Fluxxor.FluxMixin(React);
 let StoreWatchMixin = Fluxxor.StoreWatchMixin;
@@ -22,7 +17,8 @@ var Nav = React.createClass({
     mixins: [FluxMixin, StoreWatchMixin('NavStore', 'AppsStore', 'ReportsStore', 'ReportDataStore')],
 
     contextTypes: {
-        breakpoint: React.PropTypes.string
+        breakpoint: React.PropTypes.string,
+        touch: React.PropTypes.bool
     },
     // todo: maybe we should move this up another level into the router...
     getStateFromFlux() {
@@ -39,9 +35,7 @@ var Nav = React.createClass({
 
         return [
             {msg:'globalActions.user', link:'/user', icon:'user'},
-            {msg:'globalActions.alerts', link:'/alerts', icon:'circle-alert'},
-            {msg:'globalActions.help', link:'/help', icon:'help'},
-            {msg:'globalActions.logout', link:'/signout', icon:'lock'}
+            {msg:'globalActions.help', link:'/help', icon:'help'}
         ];
     },
     hideTrowserExample() {
@@ -63,7 +57,6 @@ var Nav = React.createClass({
         flux.actions.toggleAppsList(open);
     },
     renderLarge() {
-
         const flux = this.getFlux();
 
         let classes = 'navShell ';
@@ -159,14 +152,12 @@ var Nav = React.createClass({
                     )}
                 </div>}
 
-                {/* insert the footer if route wants it */}
-                <MobileAddFooter newItemsOpen={this.state.nav.newItemsOpen} flux= {flux} />
             </div>
 
         </div>);
     },
     render() {
-        if (this.context.breakpoint === breakpoints.SMALL_BREAKPOINT) {
+        if ((this.context.breakpoint === breakpoints.SMALL_BREAKPOINT) && this.context.touch) {
             return this.renderSmall();
         } else {
             return this.renderLarge();

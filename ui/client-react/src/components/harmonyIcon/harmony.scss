@@ -3,408 +3,536 @@
 $icon-path: './fonts/';
 
 @font-face {
-  font-family: 'harmonyicons';
-  src: url('#{$icon-path}harmonyicons-regular-webfont.eot');
-  src: url('#{$icon-path}harmonyicons-regular-webfont.eot?#iefix') format('embedded-opentype'), url('#{$icon-path}harmonyicons-regular-webfont.woff') format('woff'), url('#{$icon-path}harmonyicons-regular-webfont.ttf') format('truetype'), url('#{$icon-path}harmonyicons-regular-webfont.svg#harmonyicons-regular-webfontRg') format('svg');
-  font-weight: normal;
-  font-style: normal;
+    font-family: 'harmonyicons';
+    src: url('#{$icon-path}harmonyicons-regular-webfont.eot');
+    src: url('#{$icon-path}harmonyicons-regular-webfont.eot?#iefix') format('embedded-opentype'), url('#{$icon-path}harmonyicons-regular-webfont.woff') format('woff'), url('#{$icon-path}harmonyicons-regular-webfont.ttf') format('truetype'), url('#{$icon-path}harmonyicons-regular-webfont.svg#harmonyicons-regular-webfontRg') format('svg');
+    font-weight: normal;
+    font-style: normal;
 }
 
-
 .hi {
-  vertical-align:middle;
-  display: inline-block;
-  color: $icon-color;
-  font-size:20px;
-  font-family: 'harmonyicons';
-  font-style: normal;
-  font-weight: normal;
-  line-height: 1;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
+    vertical-align: middle;
+    text-align: center;
+    display: inline-block;
+    color: $icon-color;
+    font-size: 20px;
+    font-family: 'harmonyicons';
+    font-style: normal;
+    font-weight: normal;
+    line-height: 1;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    width: 22px;
 }
 
 .hi-accountant:before {
-  content: "\f000";
+    content: "\f000";
 }
+
 .hi-apps:before {
-  content: "\f001";
+    content: "\f001";
 }
+
 .hi-bank:before {
-  content: "\f002";
+    content: "\f002";
 }
+
 .hi-chat:before {
-  content: "\f003";
+    content: "\f003";
 }
+
 .hi-customers:before {
-  content: "\f004";
+    content: "\f004";
 }
+
 .hi-dashboard:before {
-  content: "\f005";
+    content: "\f005";
 }
+
 .hi-employees:before {
-  content: "\f006";
+    content: "\f006";
 }
+
 .hi-expenses:before {
-  content: "\f007";
+    content: "\f007";
 }
+
 .hi-help:before {
-  content: "\f008";
+    content: "\f008";
 }
+
 .hi-accountant-tool:before {
-  content: "\f009";
+    content: "\f009";
 }
+
 .hi-inventory:before {
-  content: "\f00A";
+    content: "\f00A";
 }
+
 .hi-invoices:before {
-  content: "\f00B";
+    content: "\f00B";
 }
+
 .hi-payments:before {
-  content: "\f00C";
+    content: "\f00C";
 }
+
 .hi-checks:before {
-  content: "\f00D";
+    content: "\f00D";
 }
+
 .hi-products:before {
-  content: "\f00E";
+    content: "\f00E";
 }
+
 .hi-reports:before {
-  content: "\f00F";
+    content: "\f00F";
 }
+
 .hi-star:before {
-  content: "\f010";
+    content: "\f010";
 }
+
 .hi-receipts:before {
-  content: "\f011";
+    content: "\f011";
 }
+
 .hi-schedule:before {
-  content: "\f012";
+    content: "\f012";
 }
+
 .hi-settings:before {
-  content: "\f013";
+    content: "\f013";
 }
+
 .hi-taxes:before {
-  content: "\f014";
+    content: "\f014";
 }
+
 .hi-transactions:before {
-  content: "\f015";
+    content: "\f015";
 }
+
 .hi-vendors:before {
-  content: "\f016";
+    content: "\f016";
 }
+
 .hi-marketing:before {
-  content: "\f017";
+    content: "\f017";
 }
+
 .hi-mailbox:before {
-  content: "\f018";
+    content: "\f018";
 }
+
 .hi-appointment:before {
-  content: "\f019";
+    content: "\f019";
 }
+
 .hi-checkmark:before {
-  content: "\f01a";
+    content: "\f01a";
 }
+
 .hi-attach:before {
-  content: "\f01b";
+    content: "\f01b";
 }
+
 .hi-audio:before {
-  content: "\f01c";
+    content: "\f01c";
 }
+
 .hi-bookmark:before {
-  content: "\f01e";
+    content: "\f01e";
 }
+
 .hi-labs:before {
-  content: "\f01d";
+    content: "\f01d";
 }
+
 .hi-calendar:before {
-  content: "\f01f";
+    content: "\f01f";
 }
+
 .hi-camera:before {
-  content: "\f020";
+    content: "\f020";
 }
+
 .hi-cancel:before {
-  content: "\f021";
+    content: "\f021";
 }
+
 .hi-cash:before {
-  content: "\f022";
+    content: "\f022";
 }
+
 .hi-add-user:before {
-  content: "\f023";
+    content: "\f023";
 }
+
 .hi-chat-o:before {
-  content: "\f024";
+    content: "\f024";
 }
+
 .hi-check-o:before {
-  content: "\f025";
+    content: "\f025";
 }
+
 .hi-note:before {
-  content: "\f026";
+    content: "\f026";
 }
+
 .hi-offline:before {
-  content: "\f027";
+    content: "\f027";
 }
+
 .hi-phone:before {
-  content: "\f028";
+    content: "\f028";
 }
+
 .hi-pin:before {
-  content: "\f029";
+    content: "\f029";
 }
+
 .hi-preview:before {
-  content: "\f02a";
+    content: "\f02a";
 }
+
 .hi-print:before {
-  content: "\f02b";
+    content: "\f02b";
 }
+
 .hi-folder:before {
-  content: "\f02c";
+    content: "\f02c";
 }
+
 .hi-receipt-o:before {
-  content: "\f02d";
+    content: "\f02d";
 }
+
 .hi-history:before {
-  content: "\f02e";
+    content: "\f02e";
 }
+
 .hi-reconcile:before {
-  content: "\f030";
+    content: "\f030";
 }
+
 .hi-refresh:before {
-  content: "\f031";
+    content: "\f031";
 }
+
 .hi-speech-bubble:before {
-  content: "\f032";
+    content: "\f032";
 }
+
 .hi-copy:before {
-  content: "\f033";
+    content: "\f033";
 }
+
 .hi-newsletter:before {
-  content: "\f034";
+    content: "\f034";
 }
+
 .hi-tag:before {
-  content: "\f035";
+    content: "\f035";
 }
+
 .hi-credit-card:before {
-  content: "\f036";
+    content: "\f036";
 }
+
 .hi-headset:before {
-  content: "\f037";
+    content: "\f037";
 }
+
 .hi-customize:before {
-  content: "\f038";
+    content: "\f038";
 }
+
 .hi-delete:before {
-  content: "\f039";
+    content: "\f039";
 }
+
 .hi-direct-deposit:before {
-  content: "\f03a";
+    content: "\f03a";
 }
+
 .hi-download:before {
-  content: "\f03b";
+    content: "\f03b";
 }
+
 .hi-draft:before {
-  content: "\f03c";
+    content: "\f03c";
 }
+
 .hi-duplicate:before {
-  content: "\f03d";
+    content: "\f03d";
 }
+
 .hi-edit:before {
-  content: "\f03e";
+    content: "\f03e";
 }
+
 .hi-email:before {
-  content: "\f03f";
+    content: "\f03f";
 }
+
 .hi-expert:before {
-  content: "\f040";
+    content: "\f040";
 }
+
 .hi-save:before {
-  content: "\f041";
+    content: "\f041";
 }
+
 .hi-search:before {
-  content: "\f042";
+    content: "\f042";
 }
+
 .hi-send:before {
-  content: "\f043";
+    content: "\f043";
 }
+
 .hi-settings-o:before {
-  content: "\f044";
+    content: "\f044";
 }
+
 .hi-share:before {
-  content: "\f045";
+    content: "\f045";
 }
+
 .hi-message:before {
-  content: "\f046";
+    content: "\f046";
 }
+
 .hi-survey:before {
-  content: "\f047";
+    content: "\f047";
 }
+
 .hi-thumb-up:before {
-  content: "\f048";
+    content: "\f048";
 }
+
 .hi-thumb-down:before {
-  content: "\f049";
+    content: "\f049";
 }
+
 .hi-lightbulb-o:before {
-  content: "\f04a";
+    content: "\f04a";
 }
+
 .hi-checklist:before {
-  content: "\f04b";
+    content: "\f04b";
 }
+
 .hi-pro-advisor:before {
-  content: "\f04c";
+    content: "\f04c";
 }
+
 .hi-upload:before {
-  content: "\f04d";
+    content: "\f04d";
 }
+
 .hi-export:before {
-  content: "\f04e";
+    content: "\f04e";
 }
+
 .hi-star-o:before {
-  content: "\f04f";
+    content: "\f04f";
 }
+
 .hi-announce:before {
-  content: "\f050";
+    content: "\f050";
 }
+
 .hi-user:before {
-  content: "\f051";
+    content: "\f051";
 }
+
 .hi-filter:before {
-  content: "\f052";
+    content: "\f052";
 }
+
 .hi-flag:before {
-  content: "\f053";
+    content: "\f053";
 }
+
 .hi-help-o:before {
-  content: "\f054";
+    content: "\f054";
 }
+
 .hi-history:before {
-  content: "\f02e";
+    content: "\f02e";
 }
+
 .hi-image:before {
-  content: "\f056";
+    content: "\f056";
 }
+
 .hi-import:before {
-  content: "\f057";
+    content: "\f057";
 }
+
 .hi-list:before {
-  content: "\f058";
+    content: "\f058";
 }
+
 .hi-lock:before {
-  content: "\f059";
+    content: "\f059";
 }
+
 .hi-map:before {
-  content: "\f05a";
+    content: "\f05a";
 }
+
 .hi-map-pin:before {
-  content: "\f05b";
+    content: "\f05b";
 }
+
 .hi-microphone:before {
-  content: "\f05c";
+    content: "\f05c";
 }
+
 .hi-unlock:before {
-  content: "\f05e";
+    content: "\f05e";
 }
+
 .hi-create:before {
-  content: "\f05f";
+    content: "\f05f";
 }
+
 .hi-create-lg:before {
-  content: "\f060";
+    content: "\f060";
 }
+
 .hi-close:before {
-  content: "\f061";
+    content: "\f061";
 }
+
 .hi-document:before {
-  content: "\f02f";
+    content: "\f02f";
 }
+
 .hi-close:before {
-  content: "\f061";
+    content: "\f061";
 }
+
 .hi-pop-out:before {
-  content: "\f062";
+    content: "\f062";
 }
+
 .hi-pop-in:before {
-  content: "\f063";
+    content: "\f063";
 }
+
 .hi-maximize:before {
-  content: "\f065";
+    content: "\f065";
 }
+
 .hi-minimize:before {
-  content: "\f064";
+    content: "\f064";
 }
+
 .hi-marketing-alt:before {
-  content: "\f055";
+    content: "\f055";
 }
+
 .hi-adjust:before {
-  content: "\f05d";
+    content: "\f05d";
 }
+
 .hi-unlink:before {
-  content: "\f066";
+    content: "\f066";
 }
+
 .hi-play:before {
-  content: "\f067";
+    content: "\f067";
 }
+
 .hi-document-alt:before {
-  content: "\f068";
+    content: "\f068";
 }
+
 .hi-upgrade:before {
-  content: "\f069";
+    content: "\f069";
 }
+
 .hi-chevron-left:before {
-  content: "\f06a";
+    content: "\f06a";
 }
+
 .hi-chevron-right:before {
-  content: "\f06b";
+    content: "\f06b";
 }
+
 .hi-chevron-up:before {
-  content: "\f06c";
+    content: "\f06c";
 }
+
 .hi-chevron-down:before {
-  content: "\f06d";
+    content: "\f06d";
 }
+
 .hi-mileage:before {
-  content: "\f06e";
+    content: "\f06e";
 }
+
 .hi-new-window:before {
-  content: "\f06f";
+    content: "\f06f";
 }
+
 .hi-circle-alert:before {
-  content: "\f070";
+    content: "\f070";
 }
+
 .hi-circle-check:before {
-  content: "\f071";
+    content: "\f071";
 }
+
 .hi-circle-info:before {
-  content: "\f072";
+    content: "\f072";
 }
+
 .hi-tear-alert-rt:before {
-  content: "\f073";
+    content: "\f073";
 }
+
 .hi-tear-alert-lt:before {
-  content: "\f074";
+    content: "\f074";
 }
+
 .hi-tear-check-lt:before {
-  content: "\f075";
+    content: "\f075";
 }
+
 .hi-tear-check-rt:before {
-  content: "\f076";
+    content: "\f076";
 }
+
 .hi-drag:before {
-  content: "\f077";
+    content: "\f077";
 }
+
 .hi-arrange:before {
-  content: "\f078";
+    content: "\f078";
 }
+
 .hi-tear-pending:before {
-  content: "\f079";
+    content: "\f079";
 }
+
 .hi-birthday:before {
-  content: "\f07a";
+    content: "\f07a";
 }
+
 .hi-anniversary:before {
-  content: "\f07b";
+    content: "\f07b";
 }
+
 .hi-no-access:before {
-  content: "\f07c";
+    content: "\f07c";
 }
+
 .hi-swap:before {
-  content: "\f07d";
+    content: "\f07d";
 }

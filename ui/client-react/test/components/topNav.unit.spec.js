@@ -97,7 +97,7 @@ describe('TopNav functions', () => {
     });
 
     it('test search on change of searchtext', () => {
-        let searchInputContainer = TestUtils.scryRenderedDOMComponentsWithClass(component, "hi-search");
+        let searchInputContainer = TestUtils.scryRenderedDOMComponentsWithClass(component, "iconssturdy-search");
         expect(searchInputContainer.length).toEqual(1);
         TestUtils.Simulate.click(searchInputContainer[0]);
 
