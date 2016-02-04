@@ -3,7 +3,7 @@ import reportDataActions from '../../src/actions/reportDataActions';
 import * as actions from '../../src/constants/actions';
 import Promise from 'bluebird';
 
-describe('Report Data Actions Load Report functions -- success', () => {
+describe('Report Data Actions success -- ', () => {
     'use strict';
 
     let appId = '1';
@@ -40,19 +40,13 @@ describe('Report Data Actions Load Report functions -- success', () => {
     class mockReportService {
         constructor() { }
         getReport() {
-            var p = Promise.defer();
-            p.resolve(responseReportData);
-            return p.promise;
+            return Promise.resolve(responseReportData);
         }
         getReportResults() {
-            var p = Promise.defer();
-            p.resolve(responseResultData);
-            return p.promise;
+            return Promise.resolve(responseResultData);
         }
         getReportFacets() {
-            var p = Promise.defer();
-            p.resolve(responseFacetData);
-            return p.promise;
+            return Promise.resolve(responseFacetData);
         }
     }
 
@@ -62,6 +56,9 @@ describe('Report Data Actions Load Report functions -- success', () => {
 
     beforeEach(() => {
         spyOn(flux.dispatchBinder, 'dispatch');
+        spyOn(mockReportService.prototype, 'getReport').and.callThrough();
+        spyOn(mockReportService.prototype, 'getReportResults').and.callThrough();
+        spyOn(mockReportService.prototype, 'getReportFacets').and.callThrough();
         reportDataActions.__Rewire__('ReportService', mockReportService);
     });
 
@@ -70,13 +67,21 @@ describe('Report Data Actions Load Report functions -- success', () => {
     });
 
     it('test load report action with report parameters', (done) => {
-        flux.actions.loadReport(appId, tblId, rptId, true);
-
-        //expect a load report event to get fired before the promise returns
-        expect(flux.dispatchBinder.dispatch).toHaveBeenCalledWith(actions.LOAD_REPORT, {appId, tblId, rptId});
-        flux.dispatchBinder.dispatch.calls.reset();
-
-        expect(flux.dispatchBinder.dispatch).toHaveBeenCalledWith(actions.LOAD_REPORT_SUCCESS, response);
+        flux.actions.loadReport(appId, tblId, rptId, true).then(
+            () => {
+                expect(mockReportService.prototype.getReport).toHaveBeenCalled();
+                expect(mockReportService.prototype.getReportResults).toHaveBeenCalled();
+                expect(mockReportService.prototype.getReportFacets).toHaveBeenCalled();
+                expect(flux.dispatchBinder.dispatch.calls.count()).toEqual(2);
+                expect(flux.dispatchBinder.dispatch.calls.argsFor(0)).toEqual([actions.LOAD_REPORT]);
+                expect(flux.dispatchBinder.dispatch.calls.argsFor(1)).toEqual([actions.LOAD_REPORT_SUCCESS, response]);
+                done();
+            },
+            () => {
+                expect(true).toBe(false);
+                done();
+            }
+        );
     });
 });
 
@@ -92,38 +97,36 @@ describe('Report Data Actions Filter Report functions -- success', () => {
     };
     let responseReportData = {
         data: {
-            name: 'name'
+            name: 'name',
+            query: '',
+            fid: '',
+            sortFids: ''
         }
     };
-    let responseResultData = {
+    let responseFacetData = {
+        data: 'facetData'
+    };
+    let responseRecordData = {
         data: {
             fields: [],
-            records: []
+            records: [],
+            query: 'someQuery'
         }
-    };
-    let responseResultQuery = {
-        data: 'testQuery'
     };
 
     class mockReportService {
         constructor() { }
         getReport() {
-            var p = Promise.defer();
-            p.resolve(responseReportData);
-            return p.promise;
+            return Promise.resolve(responseReportData);
         }
         parseFacetExpression() {
-            var p = Promise.defer();
-            p.resolve(responseResultQuery);
-            return p.promise;
+            return Promise.resolve(responseFacetData);
         }
     }
     class mockRecordService {
         constructor() {}
         getRecords() {
-            var p = Promise.defer();
-            p.resolve(responseResultData);
-            return p.promise;
+            return Promise.resolve(responseRecordData);
         }
     }
     let stores = {};
@@ -132,6 +135,9 @@ describe('Report Data Actions Filter Report functions -- success', () => {
 
     beforeEach(() => {
         spyOn(flux.dispatchBinder, 'dispatch');
+        spyOn(mockReportService.prototype, 'getReport').and.callThrough();
+        spyOn(mockReportService.prototype, 'parseFacetExpression').and.callThrough();
+        spyOn(mockRecordService.prototype, 'getRecords').and.callThrough();
         reportDataActions.__Rewire__('ReportService', mockReportService);
         reportDataActions.__Rewire__('RecordService', mockRecordService);
     });
@@ -143,12 +149,20 @@ describe('Report Data Actions Filter Report functions -- success', () => {
 
 
     it('test filter report action with parameters', (done) => {
-        flux.actions.filterReport(appId, tblId, rptId, true, filter);
-
-        expect(flux.dispatchBinder.dispatch).toHaveBeenCalledWith(actions.LOAD_REPORT, {appId, tblId, rptId});
-        flux.dispatchBinder.dispatch.calls.reset();
-
-        expect(flux.dispatchBinder.dispatch).toHaveBeenCalledWith(actions.LOAD_RECORDS_SUCCESS, responseResultData.data);
-
+        flux.actions.filterReport(appId, tblId, rptId, true, filter).then(
+            () => {
+                expect(mockReportService.prototype.getReport).toHaveBeenCalled();
+                expect(mockReportService.prototype.parseFacetExpression).toHaveBeenCalled();
+                expect(mockRecordService.prototype.getRecords).toHaveBeenCalled();
+                expect(flux.dispatchBinder.dispatch.calls.count()).toEqual(2);
+                expect(flux.dispatchBinder.dispatch.calls.argsFor(0)).toEqual([actions.LOAD_REPORT]);
+                expect(flux.dispatchBinder.dispatch.calls.argsFor(1)).toEqual([actions.LOAD_REPORT_SUCCESS, responseRecordData.data]);
+                done();
+            },
+            () => {
+                expect(true).toBe(false);
+                done();
+            }
+        );
     });
 });

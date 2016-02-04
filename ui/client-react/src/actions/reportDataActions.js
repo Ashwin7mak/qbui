@@ -15,8 +15,10 @@ let reportDataActions = {
 
     loadReport: function(appId, tblId, rptId, format) {
 
+        let deferred = Promise.defer();
+
         if (appId && tblId && rptId) {
-            this.dispatch(actions.LOAD_REPORT, {appId, tblId, rptId});
+            this.dispatch(actions.LOAD_REPORT);
             let reportService = new ReportService();
 
             //  query for the report meta data, report results and report facets
@@ -38,21 +40,27 @@ let reportDataActions = {
                     logger.debug("Report Facets: " + JSON.stringify(report.facets));
 
                     this.dispatch(actions.LOAD_REPORT_SUCCESS, report);
+                    deferred.resolve();
                 }.bind(this),
                 function(error) {
                     logger.error('Report service call error:' + JSON.stringify(error));
                     this.dispatch(actions.LOAD_REPORT_FAILED);
+                    deferred.reject();
                 }.bind(this)
             ).catch(
                 function(ex) {
                     logger.error('Report service call exception:' + JSON.stringify(ex));
                     this.dispatch(actions.LOAD_REPORT_FAILED);
+                    deferred.reject();
                 }.bind(this)
             );
         } else {
             logger.error('Missing one or more required input parameters to reportDataActions.loadReport.  AppId:' + appId + '; TblId:' + tblId + '; RptId:' + rptId);
             this.dispatch(actions.LOAD_REPORT_FAILED);
+            deferred.reject();
         }
+
+        return deferred.promise;
 
     },
 
@@ -64,8 +72,10 @@ let reportDataActions = {
     */
     filterReport: function(appId, tblId, rptId, format, filter) {
 
+        let deferred = Promise.defer();
+
         if (appId && tblId && rptId) {
-            this.dispatch(actions.LOAD_REPORT, {appId, tblId, rptId});
+            this.dispatch(actions.LOAD_REPORT);
 
             let reportService = new ReportService();
             let recordService = new RecordService();
@@ -74,7 +84,10 @@ let reportDataActions = {
             // that is used when querying for the report data.
             var promises = [];
             promises.push(reportService.getReport(appId, tblId, rptId));
-            promises.push(reportService.parseFacetExpression(filter.facet));
+
+            // parse the facet into query language
+            let facetExpression = filter ? filter.facet : '';
+            promises.push(reportService.parseFacetExpression(facetExpression));
 
             Promise.all(promises).then(
                 function(response) {
@@ -92,7 +105,9 @@ let reportDataActions = {
                     let filterQueries = [];
                     filterQueries.push(response[0].data.query);
                     filterQueries.push(response[1].data);
-                    filterQueries.push(QueryUtils.parseStringIntoAllFieldsContainsExpression(filter.search));
+
+                    let searchExpression = filter ? filter.search : '';
+                    filterQueries.push(QueryUtils.parseStringIntoAllFieldsContainsExpression(searchExpression));
                     queryParams.query = QueryUtils.concatQueries(filterQueries);
 
                     //  Get the filtered records
@@ -100,15 +115,18 @@ let reportDataActions = {
                         function(recordResponse) {
                             logger.debug('Filter Report Records service call successful');
                             this.dispatch(actions.LOAD_REPORT_SUCCESS, recordResponse.data);
+                            return deferred.resolve();
                         }.bind(this),
                         function(error) {
                             logger.error('Filter Report Records service call error:' + JSON.stringify(error));
                             this.dispatch(actions.LOAD_REPORT_FAILED);
+                            return deferred.reject();
                         }.bind(this)
                     ).catch(
                         function(ex) {
                             logger.error('Filter Report Records service call exception:' + ex);
                             this.dispatch(actions.LOAD_REPORT_FAILED);
+                            return deferred.reject();
                         }.bind(this)
                     );
 
@@ -116,17 +134,22 @@ let reportDataActions = {
                 function(error) {
                     logger.error('Filter Report service call error:' + JSON.stringify(error));
                     this.dispatch(actions.LOAD_REPORT_FAILED);
+                    deferred.reject();
                 }.bind(this)
             ).catch(
                 function(ex) {
                     logger.error('Filter Report service calls exception:' + JSON.stringify(ex));
                     this.dispatch(actions.LOAD_REPORT_FAILED);
+                    deferred.reject();
                 }.bind(this)
             );
         } else {
             logger.error('Missing one or more required input parameters to reportDataActions.filterReport.  AppId:' + appId + '; TblId:' + tblId + '; RptId:' + rptId);
             this.dispatch(actions.LOAD_REPORT_FAILED);
+            deferred.reject();
         }
+
+        return deferred.promise;
 
     }
 };

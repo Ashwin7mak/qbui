@@ -1,14 +1,17 @@
 // action creators
 import * as actions from '../constants/actions';
-
 import AppService from '../services/appService';
+import Promise from 'bluebird';
+
 import Logger from '../utils/logger';
 var logger = new Logger();
-import Promise from 'bluebird';
 
 let appsActions = {
 
     loadApps(withTables) {
+
+        //  promise is returned for testing
+        let deferred = Promise.defer();
 
         this.dispatch(actions.LOAD_APPS);
         let appService = new AppService();
@@ -19,38 +22,47 @@ let appsActions = {
 
                 if (withTables) {
                     let promises = [];
-                    let apps = [];
                     response.data.forEach((app) => {
-                        let promise = appService.getApp(app.id);
-                        promises.push(promise);
-                        promise.then(
-                            (a) => {
-                                a.data.link = '/app/' + a.data.id;
-                                apps.push(a.data);
-                            });
+                        promises.push(appService.getApp(app.id));
                     });
 
                     Promise.all(promises).then(
-                        () => {
-                            this.dispatch(actions.LOAD_APPS_SUCCESS, apps);
+                        (apps) => {
+                            let appLinkList = [];
+                            apps.forEach((app) => {
+                                app.data.link = '/app/' + app.data.id;
+                                appLinkList.push(app.data);
+                            });
+                            this.dispatch(actions.LOAD_APPS_SUCCESS, appLinkList);
+                            deferred.resolve();
                         },
                         (error) => {
-                            logger.debug('AppService getApp error:' + JSON.stringify(error));
+                            logger.error('AppService getApp error:' + JSON.stringify(error));
                             this.dispatch(actions.LOAD_APPS_FAILED);
+                            deferred.reject();
                         }
-                    );
+                    ).catch((ex) => {
+                        logger.error('AppService getApp exception:' + JSON.stringify(ex));
+                        this.dispatch(actions.LOAD_APPS_FAILED);
+                        deferred.reject();
+                    });
                 } else {
                     this.dispatch(actions.LOAD_APPS_SUCCESS, response.data);
+                    deferred.resolve();
                 }
             },
             (error) => {
-                logger.debug('AppService getApps error:' + JSON.stringify(error));
+                logger.error('AppService getApps error:' + JSON.stringify(error));
                 this.dispatch(actions.LOAD_APPS_FAILED);
+                deferred.reject();
             }
         ).catch((ex) => {
-            logger.debug('AppService getApps exception:' + JSON.stringify(ex));
+            logger.error('AppService getApps exception:' + JSON.stringify(ex));
             this.dispatch(actions.LOAD_APPS_FAILED);
+            deferred.reject();
         });
+
+        return deferred.promise;
     },
 
     selectAppId(appID) {
