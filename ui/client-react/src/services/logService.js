@@ -5,18 +5,25 @@ class LogService extends BaseService {
 
     constructor() {
         super();
+
+        //  Log service API endpoints
+        this.API = {
+            LOG     : `${constants.BASE_URL.NODE}/${constants.LOG}`
+        };
     }
 
     /**
-     * Log the message
+     * Log a message on the node server
      *
-     * @param appId
-     * @param tableId
-     * @param reportId
-     * @returns {*}
+     * @param message - message object that contains the log level and message
+     *    {
+     *       level: level.bunyanLevel,
+     *       msg: msg
+     *    };
+     * @returns promise
      */
     log(message) {
-        return super.post(constants.LOG, message);
+        return super.post(this.API.LOG, message);
     }
 
 }

@@ -26,7 +26,7 @@
                 type: 'console',         //  file or console
                 file: {
                     dir: './logs',
-                    name: 'qbse-local-' + dateUtils.formatDate( new Date(), '%Y-%M-%D-%h.%m.%s') + '.log'
+                    name: 'qbse-local-' + dateUtils.formatDate(new Date(), '%Y-%M-%D-%h.%m.%s') + '.log'
                 }
             },
             src: true               // this is slow...do not use in prod

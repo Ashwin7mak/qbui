@@ -66,7 +66,7 @@ let ReportActions = React.createClass({
                                          subject={this.getEmailSubject()}
                                          body={this.getEmailBody()}/>
 
-                        <ActionIcon icon="copy" tip={this.getSelectionTip("selection.copy")}/>
+                        <ActionIcon icon="duplicate" tip={this.getSelectionTip("selection.copy")}/>
                         <ActionIcon icon="delete" tip={this.getSelectionTip("selection.delete")}/>
 
                         {/* custom actions later
@@ -81,9 +81,7 @@ let ReportActions = React.createClass({
 
                         <Dropdown id="extraActionsMenu">
 
-                            <a href="#" bsRole="toggle">
-                                <Glyphicon glyph="option-horizontal"/>
-                            </a>
+                            <ActionIcon icon="pickles" bsRole="toggle" tip={Locale.getMessage('selection.more')}/>
 
                             <Dropdown.Menu>
                                 <MenuItem eventKey="1">Extra 1 goes here</MenuItem>

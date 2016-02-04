@@ -67,11 +67,14 @@
                     reportServicePage.tableLinksElList.get(3).click();
                     // Open the reports list
                     reportServicePage.reportHamburgersElList.get(0).click();
-                    // Select the report
-                    reportServicePage.reportLinksElList.get(0).click();
-                    // Make sure the table report has loaded
-                    reportServicePage.waitForElement(reportServicePage.loadedContentEl).then(function() {
-                        done();
+                    // Wait for the report list to load
+                    reportServicePage.waitForElement(reportServicePage.reportsListDivEl).then(function() {
+                        // Select the report
+                        reportServicePage.reportLinksElList.get(0).click();
+                        // Make sure the table report has loaded
+                        reportServicePage.waitForElement(reportServicePage.loadedContentEl).then(function() {
+                            done();
+                        });
                     });
                 });
             });
@@ -93,12 +96,10 @@
             e2eBase.resizeBrowser(e2eConsts.XLARGE_BREAKPOINT_WIDTH, heightTest).then(function(){
                 expect(reportServicePage.topNavGlobalActDivEl.isDisplayed()).toBe(true);
                 reportServicePage.topNavGlobalActionsListEl.then(function(navActions){
-                    expect(navActions.length).toBe(4);
+                    expect(navActions.length).toBe(2);
                 });
                 expect(reportServicePage.getGlobalNavTextEl(reportServicePage.topNavUserGlobActEl).getText()).toBe('User');
-                expect(reportServicePage.getGlobalNavTextEl(reportServicePage.topNavAlertsGlobActEl).getText()).toBe('Alerts');
                 expect(reportServicePage.getGlobalNavTextEl(reportServicePage.topNavHelpGlobActEl).getText()).toBe('Help');
-                expect(reportServicePage.getGlobalNavTextEl(reportServicePage.topNavLogoutGlobActEl).getText()).toBe('Logout');
             });
         });
 
@@ -121,7 +122,7 @@
                 reportServicePage.waitForElement(reportServicePage.topNavGlobalActDivEl).then(function() {
                     expect(reportServicePage.topNavGlobalActDivEl.isDisplayed()).toBe(true);
                     reportServicePage.topNavGlobalActionsListEl.then(function(navActions){
-                        expect(navActions.length).toBe(4);
+                        expect(navActions.length).toBe(2);
                     });
                     reportServicePage.assertGlobalNavTextVisible(false);
                 });
@@ -136,7 +137,7 @@
                 reportServicePage.waitForElement(reportServicePage.topNavGlobalActDivEl).then(function() {
                     expect(reportServicePage.topNavGlobalActDivEl.isDisplayed()).toBe(true);
                     reportServicePage.topNavGlobalActionsListEl.then(function(navActions){
-                        expect(navActions.length).toBe(4);
+                        expect(navActions.length).toBe(2);
                     });
                     reportServicePage.assertGlobalNavTextVisible(false);
                 });

@@ -126,19 +126,22 @@
             reportServicePage.tableLinksElList.get(3).click().then(function(){
                 // Open the reports list
                 reportServicePage.reportHamburgersElList.get(0).click();
-                // Select the report
-                reportServicePage.reportLinksElList.get(0).click();
-                // Make sure the table report has loaded
-                reportServicePage.waitForElement(reportServicePage.loadedContentEl).then(function() {
-                    // Check there is a scrollbar in the griddle table
-                    var fetchRecordPromises = [];
-                    fetchRecordPromises.push(reportServicePage.loadedContentEl.getAttribute('scrollWidth'));
-                    fetchRecordPromises.push(reportServicePage.loadedContentEl.getAttribute('clientWidth'));
-                    //When all the dimensions have been fetched, assert the values match expectations
-                    promise.all(fetchRecordPromises).then(function(dimensions) {
-                        expect(Number(dimensions[0])).toBeGreaterThan(Number(dimensions[1]));
-                        reportServicePage.reportsBackLinkEl.click();
-                        done();
+                // Make sure the reports list has loaded
+                reportServicePage.waitForElement(reportServicePage.reportsListDivEl).then(function() {
+                    // Select the report
+                    reportServicePage.reportLinksElList.get(0).click();
+                    // Make sure the table report has loaded
+                    reportServicePage.waitForElement(reportServicePage.loadedContentEl).then(function() {
+                        // Check there is a scrollbar in the griddle table
+                        var fetchRecordPromises = [];
+                        fetchRecordPromises.push(reportServicePage.loadedContentEl.getAttribute('scrollWidth'));
+                        fetchRecordPromises.push(reportServicePage.loadedContentEl.getAttribute('clientWidth'));
+                        //When all the dimensions have been fetched, assert the values match expectations
+                        promise.all(fetchRecordPromises).then(function(dimensions) {
+                            expect(Number(dimensions[0])).toBeGreaterThan(Number(dimensions[1]));
+                            reportServicePage.reportsBackLinkEl.click();
+                            done();
+                        });
                     });
                 });
             });
@@ -153,19 +156,22 @@
             reportServicePage.tableLinksElList.get(4).click().then(function(){
                 // Open the reports list
                 reportServicePage.reportHamburgersElList.get(1).click();
-                // Select the report
-                reportServicePage.reportLinksElList.get(0).click();
-                // Make sure the table report has loaded
-                reportServicePage.waitForElement(reportServicePage.loadedContentEl).then(function() {
-                    // Check there is no scrollbar in the griddle table
-                    var fetchRecordPromises = [];
-                    fetchRecordPromises.push(reportServicePage.loadedContentEl.getAttribute('scrollWidth'));
-                    fetchRecordPromises.push(reportServicePage.loadedContentEl.getAttribute('clientWidth'));
-                    //When all the dimensions have been fetched, assert the values match expectations
-                    promise.all(fetchRecordPromises).then(function(dimensions) {
-                        expect(Number(dimensions[0])).not.toBeGreaterThan(Number(dimensions[1]));
-                        reportServicePage.reportsBackLinkEl.click();
-                        done();
+                // Make sure the reports list has loaded
+                reportServicePage.waitForElement(reportServicePage.reportsListDivEl).then(function() {
+                    // Select the report
+                    reportServicePage.reportLinksElList.get(0).click();
+                    // Make sure the table report has loaded
+                    reportServicePage.waitForElement(reportServicePage.loadedContentEl).then(function() {
+                        // Check there is no scrollbar in the griddle table
+                        var fetchRecordPromises = [];
+                        fetchRecordPromises.push(reportServicePage.loadedContentEl.getAttribute('scrollWidth'));
+                        fetchRecordPromises.push(reportServicePage.loadedContentEl.getAttribute('clientWidth'));
+                        //When all the dimensions have been fetched, assert the values match expectations
+                        promise.all(fetchRecordPromises).then(function(dimensions) {
+                            expect(Number(dimensions[0])).not.toBeGreaterThan(Number(dimensions[1]));
+                            reportServicePage.reportsBackLinkEl.click();
+                            done();
+                        });
                     });
                 });
             });
@@ -179,25 +185,28 @@
             reportServicePage.tableLinksElList.get(3).click().then(function(){
                 // Open the reports list
                 reportServicePage.reportHamburgersElList.get(0).click();
-                // Select the report
-                reportServicePage.reportLinksElList.get(0).click();
-                // Make sure the table report has loaded
-                reportServicePage.waitForElement(reportServicePage.loadedContentEl).then(function() {
-                    // Resize browser at different widths to check responsiveness
-                    e2eBase.resizeBrowser(1500, heightTest).then(function() {
-                        reportServicePage.assertNavProperties('xlarge', true, '399');
-                    }).then(function() {
-                        e2eBase.resizeBrowser(1280, heightTest).then(function() {
-                            reportServicePage.assertNavProperties('large', true, '299');
+                // Make sure the reports list has loaded
+                reportServicePage.waitForElement(reportServicePage.reportsListDivEl).then(function() {
+                    // Select the report
+                    reportServicePage.reportLinksElList.get(0).click();
+                    // Make sure the table report has loaded
+                    reportServicePage.waitForElement(reportServicePage.loadedContentEl).then(function() {
+                        // Resize browser at different widths to check responsiveness
+                        e2eBase.resizeBrowser(1500, heightTest).then(function() {
+                            reportServicePage.assertNavProperties('xlarge', true, '399');
                         }).then(function() {
-                            e2eBase.resizeBrowser(1024, heightTest).then(function() {
-                                reportServicePage.assertNavProperties('medium', true, '199');
+                            e2eBase.resizeBrowser(1280, heightTest).then(function() {
+                                reportServicePage.assertNavProperties('large', true, '299');
                             }).then(function() {
-                                e2eBase.resizeBrowser(640, heightTest).then(function() {
-                                    reportServicePage.assertNavProperties('small', false, '0');
-                                    e2eBase.resizeBrowser(1500, heightTest).then(function() {
-                                        reportServicePage.reportsBackLinkEl.click();
-                                        done();
+                                e2eBase.resizeBrowser(1024, heightTest).then(function() {
+                                    reportServicePage.assertNavProperties('medium', true, '199');
+                                }).then(function() {
+                                    e2eBase.resizeBrowser(640, heightTest).then(function() {
+                                        reportServicePage.assertNavProperties('small', false, '39');
+                                        e2eBase.resizeBrowser(1500, heightTest).then(function() {
+                                            reportServicePage.reportsBackLinkEl.click();
+                                            done();
+                                        });
                                     });
                                 });
                             });
@@ -210,29 +219,32 @@
         /**
          * Test method. The left hand nav should expand responsively across the 4 breakpoints as the browser is re-sized
          */
-        xit('Left hand nav should expand responsively', function(done) {
+        it('Left hand nav should expand responsively', function(done) {
             // Select the table
             reportServicePage.tableLinksElList.get(3).click().then(function(){
                 // Open the reports list
                 reportServicePage.reportHamburgersElList.get(0).click();
-                // Select the report
-                reportServicePage.reportLinksElList.get(0).click();
-                // Make sure the table report has loaded
-                reportServicePage.waitForElement(reportServicePage.loadedContentEl).then(function() {
-                    // Resize browser at different widths to check responsiveness
-                    e2eBase.resizeBrowser(600, heightTest).then(function() {
-                        reportServicePage.assertNavProperties('small', false, '0');
-                    }).then(function() {
-                        e2eBase.resizeBrowser(1024, heightTest).then(function() {
-                            reportServicePage.assertNavProperties('medium', true, '199');
+                // Make sure the reports list has loaded
+                reportServicePage.waitForElement(reportServicePage.reportsListDivEl).then(function() {
+                    // Select the report
+                    reportServicePage.reportLinksElList.get(0).click();
+                    // Make sure the table report has loaded
+                    reportServicePage.waitForElement(reportServicePage.loadedContentEl).then(function() {
+                        // Resize browser at different widths to check responsiveness
+                        e2eBase.resizeBrowser(600, heightTest).then(function() {
+                            reportServicePage.assertNavProperties('small', false, '39');
                         }).then(function() {
-                            e2eBase.resizeBrowser(1280, heightTest).then(function() {
-                                reportServicePage.assertNavProperties('large', true, '299');
+                            e2eBase.resizeBrowser(1024, heightTest).then(function() {
+                                reportServicePage.assertNavProperties('medium', true, '199');
                             }).then(function() {
-                                e2eBase.resizeBrowser(1500, heightTest).then(function() {
-                                    reportServicePage.assertNavProperties('xlarge', true, '399');
-                                    reportServicePage.reportsBackLinkEl.click();
-                                    done();
+                                e2eBase.resizeBrowser(1280, heightTest).then(function() {
+                                    reportServicePage.assertNavProperties('large', true, '299');
+                                }).then(function() {
+                                    e2eBase.resizeBrowser(1500, heightTest).then(function() {
+                                        reportServicePage.assertNavProperties('xlarge', true, '399');
+                                        reportServicePage.reportsBackLinkEl.click();
+                                        done();
+                                    });
                                 });
                             });
                         });

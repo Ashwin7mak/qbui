@@ -24,11 +24,11 @@
          * routeToGetFunction maps each route to the proper function associated with that route for a GET request
          */
         var routeToGetFunction = {};
-
-        routeToGetFunction[routeConsts.FACETS] = resolveFacets;
+        routeToGetFunction[routeConsts.FACET_EXPRESSION_PARSE] = resolveFacets;
         routeToGetFunction[routeConsts.RECORD] = fetchSingleRecord;
         routeToGetFunction[routeConsts.RECORDS] = fetchAllRecords;
         routeToGetFunction[routeConsts.REPORT_RESULTS] = fetchAllRecords;
+        routeToGetFunction[routeConsts.REPORT_FACETS] = mockReportFacets;
         routeToGetFunction[routeConsts.SWAGGER_API] = fetchSwagger;
         routeToGetFunction[routeConsts.SWAGGER_RESOURCES] = fetchSwagger;
         routeToGetFunction[routeConsts.SWAGGER_IMAGES] = fetchSwagger;
@@ -58,10 +58,9 @@
          * routeToAllFunction maps each route to the proper function associated with the route for all HTTP verb requests
          */
         var routeToAllFunction = {};
-
-        routeToAllFunction[routeConsts.TOMCAT_ALL] = forwardAllApiRequests;
-        routeToAllFunction[routeConsts.TICKET] = forwardAllApiRequests;
-        routeToAllFunction[routeConsts.REALM] = forwardAllApiRequests;
+        routeToAllFunction[routeConsts.TOMCAT_ALL] = forwardApiRequest;
+        routeToAllFunction[routeConsts.TICKET] = forwardApiRequest;
+        routeToAllFunction[routeConsts.REALM] = forwardApiRequest;
 
         /*** public data ****/
         return {
@@ -214,7 +213,7 @@
 
     function resolveFacets(req, res) {
         processRequest(req, res, function(req, res) {
-            log.debug("facetexpression in mapper =" + req.param('facetexpression'));
+            log.debug("facetExpression in mapper =" + req.param('expression'));
             queryFormatter.format(req.param('facetexpression'))
                 .then(function(response){
                     res.send(response);
@@ -246,12 +245,12 @@
     }
 
     /**
-     * This is the function for forwarding all other requests to the api
+     * This is the function for forwarding a request
      * @param req
      * @param res
      */
     /*eslint no-shadow:0 */
-    function forwardAllApiRequests(req, res) {
+    function forwardApiRequest(req, res) {
         processRequest(req, res, function(req, res) {
             var opts = requestHelper.setOptions(req);
             log.debug({req:req}, 'Java api request');
@@ -290,6 +289,16 @@
         }
 
         return enabled;
+    }
+
+    function mockReportFacets(req, res) {
+        var jsonStr = '{"facets": [' +
+              '{"id": "1", "name": "Facet01", "type": "text", "values": ["Facet01-Value01","Facet01-Value02"]},' +
+              '{"id": "2", "name": "Facet02", "type": "text", "values": ["Facet02-Value01","Facet02-Value02"]},' +
+              '{"id": "3", "name": "Facet03", "type": "numeric", "values": [1000, 1045.33, 2099]}' +
+              ']}';
+
+        res.json(JSON.parse(jsonStr));
     }
 
 }());

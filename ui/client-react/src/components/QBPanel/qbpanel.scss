@@ -1,67 +1,33 @@
 @import '../../assets/css/qbVariables';
 
-$panel-border-color: $color4;
-$panel-background-color: $color2;
-/*
- * Overwrite the following bootstrap classes in their panel component so we have the proper layout
- * panel, panel-default, panel-body
-*/
-.panel {
-  border-top-width: 0 !important;
-  border-radius: 0 !important;
-  margin-bottom: 5px !important;
-}
-.panel-default {
-  border-top-width: 0 !important;
-  border-radius: 0 !important;
-}
-.panel-body {
-  padding: 0 !important;
-}
-h3 {
-  margin: 0 !important;
-}
-h5 {
-  margin-bottom: 0 !important;
-  margin-top: 0 !important;
-}
+$fieldLabel-font-size: $font-size-small;
+$fieldValue-font-size: $font-size-base;
+$fieldLabel-color: $color3;
 
-/*
- * Custom css classes for our QBPanel component
-*/
 .qbPanel{
   font-family: $font-family;
   color: $font-color;
-  font-size: $font-size;
 }
 .qbPanelHeader {
-  padding: 5px 10px 5px 10px;
+  padding-left: 3%;
+  padding-top: 0.2rem;
+  padding-bottom: 0.2rem;
   cursor: pointer;
   min-width: 30%;
-  background-color: $panel-background-color;
-  border: 1px solid $panel-border-color;
-  border-bottom-width: 0;
-  border-radius: 0 0 0 0;
-}
-.qbPanelHeaderTitle {
-  padding: 10px 0 10px 0;
 }
 .qbPanelHeaderIcon {
   float: right;
-  color: #7090ab
-}
-.qbPanelHeaderIcon:hover {
-  color: #0098cd;
+  margin-right:2rem;
 }
 .qbPanelBody {
-  padding: 0 10px 10px 10px;
+  padding-left: 1%;
   display: flex;
   flex-wrap: wrap;
   flex-direction: row;
 }
 .rotateDown {
   transition: all .25s linear;
-  transform: rotate(90deg);
+  transform: rotate(-180deg);
   font-size: 22px;
 }
 .rotateUp {
@@ -69,26 +35,69 @@ h5 {
   transform: rotate(0deg);
   font-size: 22px;
 }
+.fieldRow{
+  display: flex;
+  flex-direction: row;
+  align-items: stretch;
+  flex-wrap: wrap;
+  overflow-y: hidden;
+}
+.field {
+  padding-right: 25px;
+  padding-bottom: 25px;
+  max-width: 25%;
+  .fieldLabel{
+    display: block;
+    color: $fieldLabel-color;
+  }
+  .fieldValue {
+    display:block;
+    min-width: 0;
+  }
+}
 
-/*
- * This needs to be cleaned up once we decide what will happen with Lisa's universal pattern story
- * Right now there is no different, but I'd rather leave a place holder incase in the future we do need it
-*/
-/* For mobile phones: */
-.small-breakpoint .qbPanel {
+  /* For mobile phones: */
+.small-breakpoint.touch .qbPanel {
   font-size: $font-size;
   .qbPanelBody {
+    padding-left: 1%;
     display: flex;
     flex-wrap: wrap;
     flex-direction: row;
   }
+  .field {
+    max-width: 100%;
+    .fieldLabel {
+      display: block;
+      font-size: $fieldLabel-font-size
+    }
+    .fieldValue {
+      display: block;
+      min-width: 0;
+      font-size: $fieldValue-font-size;
+    }
+  }
 }
+
 /* For tablet like devices: */
 .medium-breakpoint .qbPanel {
   font-size: $font-size;
   .qbPanelBody {
+    padding-left: 1%;
     display: flex;
     flex-wrap: wrap;
     flex-direction: row;
+  }
+  .field {
+    max-width: 60%;
+    .fieldLabel {
+      display: block;
+      font-size: $fieldLabel-font-size
+    }
+    .fieldValue {
+      display: block;
+      min-width: 0;
+      font-size: $fieldValue-font-size;
+    }
   }
 }

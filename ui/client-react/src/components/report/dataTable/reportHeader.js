@@ -22,6 +22,7 @@ var ReportHeader = React.createClass({
         let flux = this.getFlux();
         flux.actions.searchFor(text);
     },
+
     render() {
 
         const searchIcon = <Glyphicon glyph="search" />;
@@ -31,7 +32,7 @@ var ReportHeader = React.createClass({
 
                 <div>
                     <div className="searchInput">
-                        <Input bsClass="search" size="30" className="searchInputBox" standalone addonBefore={searchIcon} type="text" placeholder="Search Records"  onChange={this.searchChanged} />
+                        <Input bsClass="search" size="20" className="searchInputBox" standalone type="text" placeholder="Search Records"  onChange={this.searchChanged} />
                     </div>
                     <a><Hicon icon="filter"/></a>
                 </div>
