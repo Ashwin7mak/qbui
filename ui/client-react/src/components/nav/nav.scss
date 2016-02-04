@@ -1,6 +1,20 @@
 @import '../../assets/css/qbVariables';
 
+$font-path: '../../assets/fonts/';
 
+@font-face {
+    font-family: 'Lato';
+    src: url('#{$font-path}Lato/Lato-Light.ttf') format('truetype');
+    font-weight:normal;
+    font-style:normal;
+}
+
+@font-face {
+    font-family: 'Source Serif Pro';
+    src: url('#{$font-path}Source_Serif_Pro/SourceSerifPro-Regular.ttf') format('truetype');
+    font-weight:normal;
+    font-style:normal;
+}
 
 html, body {
     margin:0;
@@ -9,6 +23,14 @@ html, body {
     overflow:hidden;
 }
 
+html body {
+    font-family: 'Lato', sans-serif;
+    font-weight: 300;
+
+    h1,h2,h3,h4,h5,h6 {
+        font-family: 'Source Serif Pro', serif;
+    }
+}
 body.small-breakpoint {
     font-size: $font-size-small;
 }
@@ -49,6 +71,8 @@ a {
         min-width:0;
 
         .topNav {
+            flex: 0 0 auto;
+            flex-basis:$top-nav-height;
             display:flex;
             order: 1;
             flex-direction:column;
@@ -82,6 +106,8 @@ a {
             .btn-group.harmonyButtons {
                 height:50px;
                 button {
+                    font-size:22px;
+                    color: #7090ab;
                     border-radius: 0;
                     width: 50px;
                     height: 50px;
