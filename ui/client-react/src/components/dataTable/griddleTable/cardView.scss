@@ -34,12 +34,11 @@ $margin-spacer: 10px;
 .custom-row-card {
     font-family: $font-family;
     color: $font-color;
-    text-overflow: ellipsis;
-    white-space: nowrap;
     font-size: $font-size;
-    border-bottom: 1px solid $card-border-color;
     position: relative;
     padding: 5px 10px 15px 10px;
+    background: $card-expanded-background-color;
+    margin-bottom: 5px;
     .card {
         flex: 1;
         width: 100%;
@@ -54,13 +53,6 @@ $margin-spacer: 10px;
         display: flex;
         flex-direction: row;
     }
-    .fieldRow {
-        display: flex;
-        flex-direction: row;
-        align-items: stretch;
-        flex-wrap: wrap;
-        overflow-y: hidden;
-    }
     .fieldRow.collapsed {
         max-height: 45px;
     }
@@ -71,20 +63,11 @@ $margin-spacer: 10px;
         font-size: $fieldLabel-font-size;
     }
     .field {
-        padding: $margin-spacer $margin-spacer 0 0;
         flex: 1 1 50%;
-        .fieldLabel {
-            display: block;
-            color: $fieldLabel-color;
-            font-size: $fieldLabel-font-size
-        }
         .fieldValue {
-            display: block;
-            min-width: 0;
             overflow: hidden;
             text-overflow: ellipsis;
             white-space: nowrap;
-            font-size: $fieldValue-font-size;
         }
         &:nth-child(n+3) {
             .fieldValue {
@@ -128,10 +111,10 @@ $margin-spacer: 10px;
 }
 
 .custom-row-card.expanded {
-  border: 0;
-  -webkit-box-shadow: 0px 0px 2px 2px rgba(72, 108, 143, 0.2);
-  -moz-box-shadow: 0px 0px 2px 2px rgba(72, 108, 143, 0.2);
-  box-shadow: 0px 0px 2px 2px rgba(72, 108, 143, 0.2);
+    border: 0;
+    -webkit-box-shadow: 0px 0px 2px 2px rgba(72, 108, 143, 0.2);
+    -moz-box-shadow: 0px 0px 2px 2px rgba(72, 108, 143, 0.2);
+    box-shadow: 0px 0px 2px 2px rgba(72, 108, 143, 0.2);
 }
 
 .reportContainer {

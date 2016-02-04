@@ -3,6 +3,7 @@ import Swipeable from 'react-swipeable';
 import RecordActions from '../../actions/recordActions';
 import './cardView.scss';
 import '../../QBForm/qbform.scss';
+import QBicon from '../../qbIcon/qbIcon';
 
 const MAX_ACTIONS_RESIZE_WITH = 240; // max width while swiping
 
@@ -161,7 +162,7 @@ let CardView = React.createClass({
                                 {row}
                             </div>
                             <div className="card-expander" onClick={this.handleMoreCard}>
-                                <Hicon icon="chevron-right" className={this.state.showMoreCards ? "qbPanelHeaderIcon rotateDown" : "qbPanelHeaderIcon rotateUp"}/>
+                                <QBicon icon="caret-right" className={this.state.showMoreCards ? "qbPanelHeaderIcon rotateDown" : "qbPanelHeaderIcon rotateUp"}/>
                             </div>
 
                         </div>
