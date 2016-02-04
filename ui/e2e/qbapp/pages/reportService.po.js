@@ -58,6 +58,9 @@
 
         // Report Container
         this.reportContainerEl = element.all(by.className('reportContainer')).first();
+        //Report Stage Button
+        this.reportStageBtn = this.reportContainerEl.element(by.className('toggleStage'));
+        this.reportStageLayout = this.reportContainerEl.element(by.className('layout-stage ')).element(by.className('collapse'));
         // Loaded Content Div
         this.loadedContentEl = this.reportContainerEl.element(by.className('loadedContent'));
         // Griddle table
