@@ -6,7 +6,7 @@ $header-cell-background-color: $color7;
 $header-cell-color: $color8;
 
 $row-background-color-hover: $color1;
-$row-cell-vertical-border: $color9;
+$row-cell-vertical-border: $color4;
 $row-cell-horizontal-border: $color4;
 
 $footer-background: $color2;
@@ -52,8 +52,8 @@ $footer-next-button: $color2;
             word-wrap: break-word;
             padding: 5px 8px;
             border-width: 1px;
-            border-left-style: dotted;
-            border-right-style: dotted;
+            border-left-style: solid;
+            border-right-style: solid;
             border-bottom-style: solid;
             border-top-style: solid;
             border-left-color: $row-cell-vertical-border;
@@ -209,14 +209,14 @@ $footer-next-button: $color2;
         position: absolute;
         display: flex;
         flex-direction: row;
-        align-items: center;
+        //align-items: center;
         top: 0;
         right: 0;
         height: 100%;
         background-color: $row-background-color-hover;
         white-space: nowrap;
         border-top: 1px dotted #dcdcdc;
-        border-right: 1px dotted #969696;
+        //border-right: 1px dotted #969696;
     }
 }
 

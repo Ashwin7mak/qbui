@@ -58,7 +58,8 @@ var ReportRoute = React.createClass({
                     <ReportStage reportData={this.props.reportData}/>
                 </Stage>
 
-                <div> This is hard wired to call filter by facets - only matches Record#id = 10 OR 11 <button className="testFilterButton" onClick={this.filterReport}> Fake filter this report </button></div>
+                {/* hide this - devs can use document.getElementById('fakeFilter').style.display='block'; */}
+                <div id="fakeFilter" style={{display:'none'}}> This is hard wired to call filter by facets - only matches Record#id = 10 OR 11 <button className="testFilterButton" onClick={this.filterReport}> Fake filter this report </button></div>
 
                 <ReportContent reportData={this.props.reportData}/>
                 </div>);
