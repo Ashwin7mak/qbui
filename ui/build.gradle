@@ -28,6 +28,7 @@ buildscript {
             classpath 'com.moowork.gradle:gradle-grunt-plugin:0.9'
             classpath 'com.moowork.gradle:gradle-node-plugin:0.9'
             classpath 'com.bmuschko:gradle-cargo-plugin:2.2.1'
+            classpath 'org.sonarqube.gradle:gradle-sonarqube-plugin:1.1'
         }
     }
 }
@@ -379,6 +380,51 @@ sonarRunner {
         property "sonar.language", "js"
         property "sonar.jdbc.username", "sonar"
         property "sonar.jdbc.password", "sonar"
+        property "sonar.sources", "."
+        property "sonar.modules", "client-react,server"
+        property "sonar.coverage.exclusions", "**/*.spec.js"
+        property "client-react.sonar.projectName", "${user}:ui:${branchName}:client"
+        property "client-react.sonar.sources", "$projectDir/client-react/src"
+        property "client-react.sonar.exclusions", "**/assets/**,**/constants/**,**/locales/bundles/**"
+
+        //  import the ui LCOV coverage report
+        property "client-react.sonar.javascript.lcov.reportPath","${projectDir}/build/reports/client/coverage/lcov.info"
+
+        property "server.sonar.projectName", "${user}:ui:${branchName}:server"
+        property "server.sonar.sources", "$projectDir/server"
+        property "server.sonar.exclusions", "**/test/**,**/config/environment/**,**/mockserver/**"
+        //  import the ui LCOV coverage report
+        property "server.sonar.javascript.lcov.reportPath","${projectDir}/build/reports/server/coverage/lcov.info"
+
+        // Can be added back in for debugging purposes
+        //property "sonar.verbose", "true"
+    }
+}
+
+// sonarRunner is being depricated and sonarqube is the replacement
+sonarqube {
+    //Resolve the executing user's name
+    def user = System.getProperty("user.name")
+    //Resolve the branch name
+    def proc = "git rev-parse --abbrev-ref HEAD".execute()
+    proc.waitFor()
+    def branchName = proc.in.text.replace("\n", "").replace("\r", "").trim()
+    println 'branchName:' + branchName;
+
+    if (paramBranch) {
+        println 'paramBranch:' + paramBranch;
+        branchName = paramBranch;
+    }
+
+    properties {
+        // the user name becomes part of the project key, this way Jenkins builds are separated from the commoners, meaning you...
+        property "sonar.projectKey", "ui:${branchName}:${user}"
+        property "sonar.projectVersion", "0.1"
+        property "sonar.projectName", "${user}:ui:${branchName}"
+        //property "sonar.qualitygate", "Sonar%20way%20with%20Findbugs%20-%20reactjs"
+        property "sonar.host.url", "https://sonar1.ci.quickbaserocks.com/"
+        property "sonar.login", "quickbase"
+        property "sonar.password", "blue"
         property "sonar.sources", "."
         property "sonar.modules", "client-react,server"
         property "sonar.coverage.exclusions", "**/*.spec.js"
