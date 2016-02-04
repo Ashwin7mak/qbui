@@ -25,7 +25,7 @@ class QBPanel extends React.Component {
         return (
             <div className={"qbPanel"} id={panelId}>
                 <div className="qbPanelHeader" onClick={ ()=> this.setState({open: !this.state.open})}>
-                    <h3 className="qbPanelHeaderTitle">{this.props.title}<Hicon icon="chevron-right"
+                    <h3 className="qbPanelHeaderTitle">{this.props.title}<QBicon icon="caret-right"
                         className={this.state.open ? "qbPanelHeaderIcon rotateDown" : "qbPanelHeaderIcon rotateUp"}/>
                     </h3>
                 </div>
