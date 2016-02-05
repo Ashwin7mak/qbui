@@ -15,53 +15,52 @@ let reportDataActions = {
 
     loadReport: function(appId, tblId, rptId, format) {
 
-        let deferred = Promise.defer();
+        //  promise is returned in support of unit testing only
+        return new Promise(function(resolve, reject) {
 
-        if (appId && tblId && rptId) {
-            this.dispatch(actions.LOAD_REPORT, {appId, tblId, rptId});
-            let reportService = new ReportService();
+            if (appId && tblId && rptId) {
+                this.dispatch(actions.LOAD_REPORT, {appId, tblId, rptId});
+                let reportService = new ReportService();
 
-            //  query for the report meta data, report results and report facets
-            var promises = [];
-            promises.push(reportService.getReport(appId, tblId, rptId));
-            promises.push(reportService.getReportResults(appId, tblId, rptId, format));
-            promises.push(reportService.getReportFacets(appId, tblId, rptId));
+                //  query for the report meta data, report results and report facets
+                var promises = [];
+                promises.push(reportService.getReport(appId, tblId, rptId));
+                promises.push(reportService.getReportResults(appId, tblId, rptId, format));
+                promises.push(reportService.getReportFacets(appId, tblId, rptId));
 
-            Promise.all(promises).then(
-                function(response) {
-                    logger.debug('Report service call successful');
-                    var report = {
-                        name: response[0].data.name,
-                        data: response[1].data,
-                        facets: response[2].data
-                    };
+                Promise.all(promises).then(
+                    function(response) {
+                        logger.debug('Report service call successful');
+                        var report = {
+                            name: response[0].data.name,
+                            data: response[1].data,
+                            facets: response[2].data
+                        };
 
-                    logger.debug("Report Name: " + report.name);
-                    logger.debug("Report Facets: " + JSON.stringify(report.facets));
+                        logger.debug("Report Name: " + report.name);
+                        logger.debug("Report Facets: " + JSON.stringify(report.facets));
 
-                    this.dispatch(actions.LOAD_REPORT_SUCCESS, report);
-                    deferred.resolve();
-                }.bind(this),
-                function(error) {
-                    logger.error('Report service call error:' + JSON.stringify(error));
-                    this.dispatch(actions.LOAD_REPORT_FAILED);
-                    deferred.reject();
-                }.bind(this)
-            ).catch(
-                function(ex) {
-                    logger.error('Report service call exception:' + JSON.stringify(ex));
-                    this.dispatch(actions.LOAD_REPORT_FAILED);
-                    deferred.reject();
-                }.bind(this)
-            );
-        } else {
-            logger.error('Missing one or more required input parameters to reportDataActions.loadReport.  AppId:' + appId + '; TblId:' + tblId + '; RptId:' + rptId);
-            this.dispatch(actions.LOAD_REPORT_FAILED);
-            deferred.reject();
-        }
-
-        return deferred.promise;
-
+                        this.dispatch(actions.LOAD_REPORT_SUCCESS, report);
+                        resolve();
+                    }.bind(this),
+                    function(error) {
+                        logger.error('Report service call error:' + JSON.stringify(error));
+                        this.dispatch(actions.LOAD_REPORT_FAILED);
+                        reject();
+                    }.bind(this)
+                ).catch(
+                    function(ex) {
+                        logger.error('Report service call exception:' + JSON.stringify(ex));
+                        this.dispatch(actions.LOAD_REPORT_FAILED);
+                        reject();
+                    }.bind(this)
+                );
+            } else {
+                logger.error('Missing one or more required input parameters to reportDataActions.loadReport.  AppId:' + appId + '; TblId:' + tblId + '; RptId:' + rptId);
+                this.dispatch(actions.LOAD_REPORT_FAILED);
+                reject();
+            }
+        }.bind(this));
     },
 
     /* Action called to filter a report.
@@ -72,85 +71,84 @@ let reportDataActions = {
     */
     filterReport: function(appId, tblId, rptId, format, filter) {
 
-        let deferred = Promise.defer();
+        //  promise is returned in support of unit testing only
+        return new Promise(function(resolve, reject) {
 
-        if (appId && tblId && rptId) {
-            this.dispatch(actions.LOAD_REPORT, {appId, tblId, rptId});
+            if (appId && tblId && rptId) {
+                this.dispatch(actions.LOAD_REPORT, {appId, tblId, rptId});
 
-            let reportService = new ReportService();
-            let recordService = new RecordService();
+                let reportService = new ReportService();
+                let recordService = new RecordService();
 
-            // Fetch the report meta data and parse the facet expression into a query expression
-            // that is used when querying for the report data.
-            var promises = [];
-            promises.push(reportService.getReport(appId, tblId, rptId));
+                // Fetch the report meta data and parse the facet expression into a query expression
+                // that is used when querying for the report data.
+                var promises = [];
+                promises.push(reportService.getReport(appId, tblId, rptId));
 
-            // parse the facet into query language
-            let facetExpression = filter ? filter.facet : '';
-            promises.push(reportService.parseFacetExpression(facetExpression));
+                // parse the facet into query language
+                let facetExpression = filter ? filter.facet : '';
+                promises.push(reportService.parseFacetExpression(facetExpression));
 
-            Promise.all(promises).then(
-                function(response) {
-                    var queryParams = {
-                        cList: response[0].data.fids ? response[0].data.fids.join('.') : '',
-                        sList: response[0].data.sortFids ? response[0].data.sortFids.join('.') : ''
-                    };
+                Promise.all(promises).then(
+                    function(response) {
+                        var queryParams = {
+                            cList: response[0].data.fids ? response[0].data.fids.join('.') : '',
+                            sList: response[0].data.sortFids ? response[0].data.sortFids.join('.') : ''
+                        };
 
-                    //  Concatenate facet expression(if any) and search filter(if any) into single
-                    //  query expression where each individual expression is 'AND'ed with the other.
-                    //
-                    //  To optimize query performance, order the array elements 1..n in order of
-                    //  significance/most targeted selection as the outputted query is built starting
-                    //  at offset 0.
-                    let filterQueries = [];
-                    filterQueries.push(response[0].data.query);
-                    filterQueries.push(response[1].data);
+                        //  Concatenate facet expression(if any) and search filter(if any) into single
+                        //  query expression where each individual expression is 'AND'ed with the other.
+                        //
+                        //  To optimize query performance, order the array elements 1..n in order of
+                        //  significance/most targeted selection as the outputted query is built starting
+                        //  at offset 0.
+                        let filterQueries = [];
+                        filterQueries.push(response[0].data.query);
+                        filterQueries.push(response[1].data);
 
-                    let searchExpression = filter ? filter.search : '';
-                    filterQueries.push(QueryUtils.parseStringIntoAllFieldsContainsExpression(searchExpression));
-                    queryParams.query = QueryUtils.concatQueries(filterQueries);
+                        let searchExpression = filter ? filter.search : '';
+                        filterQueries.push(QueryUtils.parseStringIntoAllFieldsContainsExpression(searchExpression));
+                        queryParams.query = QueryUtils.concatQueries(filterQueries);
 
-                    //  Get the filtered records
-                    recordService.getRecords(appId, tblId, format, queryParams).then(
-                        function(recordResponse) {
-                            logger.debug('Filter Report Records service call successful');
-                            this.dispatch(actions.LOAD_REPORT_SUCCESS, recordResponse.data);
-                            return deferred.resolve();
-                        }.bind(this),
-                        function(error) {
-                            logger.error('Filter Report Records service call error:' + JSON.stringify(error));
-                            this.dispatch(actions.LOAD_REPORT_FAILED);
-                            return deferred.reject();
-                        }.bind(this)
-                    ).catch(
-                        function(ex) {
-                            logger.error('Filter Report Records service call exception:' + ex);
-                            this.dispatch(actions.LOAD_REPORT_FAILED);
-                            return deferred.reject();
-                        }.bind(this)
-                    );
+                        //  Get the filtered records
+                        recordService.getRecords(appId, tblId, format, queryParams).then(
+                            function(recordResponse) {
+                                logger.debug('Filter Report Records service call successful');
+                                this.dispatch(actions.LOAD_REPORT_SUCCESS, recordResponse.data);
+                                return resolve();
+                            }.bind(this),
+                            function(error) {
+                                logger.error('Filter Report Records service call error:' + JSON.stringify(error));
+                                this.dispatch(actions.LOAD_REPORT_FAILED);
+                                return reject();
+                            }.bind(this)
+                        ).catch(
+                            function(ex) {
+                                logger.error('Filter Report Records service call exception:' + ex);
+                                this.dispatch(actions.LOAD_REPORT_FAILED);
+                                return reject();
+                            }.bind(this)
+                        );
 
-                }.bind(this),
-                function(error) {
-                    logger.error('Filter Report service call error:' + JSON.stringify(error));
-                    this.dispatch(actions.LOAD_REPORT_FAILED);
-                    deferred.reject();
-                }.bind(this)
-            ).catch(
-                function(ex) {
-                    logger.error('Filter Report service calls exception:' + JSON.stringify(ex));
-                    this.dispatch(actions.LOAD_REPORT_FAILED);
-                    deferred.reject();
-                }.bind(this)
-            );
-        } else {
-            logger.error('Missing one or more required input parameters to reportDataActions.filterReport.  AppId:' + appId + '; TblId:' + tblId + '; RptId:' + rptId);
-            this.dispatch(actions.LOAD_REPORT_FAILED);
-            deferred.reject();
-        }
-
-        return deferred.promise;
-
+                    }.bind(this),
+                    function(error) {
+                        logger.error('Filter Report service call error:' + JSON.stringify(error));
+                        this.dispatch(actions.LOAD_REPORT_FAILED);
+                        reject();
+                    }.bind(this)
+                ).catch(
+                    function(ex) {
+                        logger.error('Filter Report service calls exception:' + JSON.stringify(ex));
+                        this.dispatch(actions.LOAD_REPORT_FAILED);
+                        reject();
+                    }.bind(this)
+                );
+            } else {
+                logger.error('Missing one or more required input parameters to reportDataActions.filterReport.  AppId:' + appId + '; TblId:' + tblId + '; RptId:' + rptId);
+                this.dispatch(actions.LOAD_REPORT_FAILED);
+                reject();
+            }
+        }.bind(this));
     }
 };
 
