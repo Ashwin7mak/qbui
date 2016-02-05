@@ -23,7 +23,22 @@ def cwd = project.getProjectDir().absolutePath
 //  Build dependencies...local
 //******************************************************
 buildscript {
+    ext {
+        nexusRoot = "https://nexus1.ci.quickbaserocks.com/nexus/content/repositories/"
+        nexusUser = "developer"
+        nexusPassword = "id2ubV8miEVhXtGd"
+        quickbaseVersion = "1.0"
+    }
     repositories {
+        maven {
+            url nexusRoot + "jcenter/"
+        }
+        maven {
+            url nexusRoot + "central/"
+        }
+        maven {
+            url nexusRoot + "gradle2/"
+        }
         flatDir name: 'ExternalJars', dirs: '../lib/plugins'
         dependencies {
             classpath 'com.moowork.gradle:gradle-grunt-plugin:0.9'
