@@ -336,7 +336,7 @@ they are not versioned.
 
  */
 uploadArchives {
-    def uploadUrl = "http://pppdc9prd0t4:8081/nexus/content/repositories"
+    def uploadUrl = "https://nexus1.ci.quickbaserocks.com/nexus/content/repositories/"
     def layoutStr = "[organisation]/[module]/[revision]/[artifact]-[revision](.[ext])"
     // release archives vs dev  have different archive path on repo server dev builds go to nonrelease snapshot dir
     // repo server policy for snapshots(update-able rpms) cannot live on release repo dirs
