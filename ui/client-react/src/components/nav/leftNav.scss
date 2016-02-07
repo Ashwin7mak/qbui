@@ -84,6 +84,7 @@ body:not(.touch) .leftNav.closed {
         border-bottom: $global-actions-border;
         .iconssturdy-caret-down {
             transition: transform 300ms ease-in;
+            transform: rotate(-90deg);
         }
     }
     .globalActions {
@@ -148,8 +149,11 @@ body:not(.touch) .leftNav.closed {
             a.right {
                 opacity: 0;
                 position: absolute;
-                right: 5px;
+                right: 0;
+                border-left: $global-actions-border;
+                border-bottom: $global-actions-border;
             }
+
             a.backLink {
                 cursor: pointer;
                 width: 100%
@@ -168,6 +172,7 @@ body:not(.touch) .leftNav.closed {
                 transition: all 0.2s ease-in-out;
                 -webkit-transition: all 0.2s ease-in-out;
                 -moz-transition: all 0.2s ease-in-out;
+                border-bottom:0;
             }
         }
     }
@@ -262,7 +267,7 @@ $travel-distance: 15;
 }
 
 .leftNav.appsListOpen .branding .qbIcon.iconssturdy-caret-down {
-    transform: rotate(-180deg);
+    transform: rotate(0deg);
 }
 
 .leftNav .reportsContainer {
