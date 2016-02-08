@@ -66,8 +66,8 @@
                 var sessionTicketRequestEndPoint = e2eBase.recordBase.apiBase.generateFullRequest(realmName, ticketEndpoint + realmId);
                 return sessionTicketRequestEndPoint;
             },
-            //Is element to the left
-            isElementToLeft: function(element, clientWidth) {
+            //Does element shows up on the Left Nav bar.
+            isElementInLeftNav: function(element, clientWidth) {
                 var result = false;
                 if (expect(element.getAttribute('offsetLeft'), '0') && expect(element.getAttribute('offsetWidth'), clientWidth)) {
                     result = true;
@@ -75,7 +75,7 @@
                 return result;
             },
             //Is element to the top
-            isElementToTop: function(element) {
+            isElementInTopNav: function(element) {
                 var result = false;
                 if (expect(element.getAttribute('offsetTop'), '0') && expect(element.getAttribute('offsetHeight'), '50')) {
                     result = true;

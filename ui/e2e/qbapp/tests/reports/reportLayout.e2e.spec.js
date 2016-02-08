@@ -45,7 +45,6 @@
                         requestSessionTicketPage.get(e2eBase.getSessionTicketRequestEndpoint(realmName, realmId, e2eBase.ticketEndpoint));
                         // Load the requestAppsPage (shows a list of all the apps and tables in a realm)
                         requestAppsPage.get(e2eBase.getRequestAppsPageEndpoint(realmName));
-
                         // Wait for the left nav to load
                         reportServicePage.waitForElement(reportServicePage.appsListDivEl).then(function() {
                                 // Select the app
@@ -57,7 +56,7 @@
                 });
             });
         });
-
+        
         /**
          * Before each test starts just make sure the table list div has loaded
          */
@@ -84,7 +83,6 @@
                 });
             });
         });
-
 
         /**
         * Test method. Loads the first table containing 10 fields (10 columns). The table report (griddle) width should expand past the browser size
@@ -140,36 +138,6 @@
             });
         });
 
-        function leftNavDimensionsDataProvider() {
-            return [
-                {
-
-                    browserWidth: e2eConsts.XLARGE_BP_WIDTH,
-                    breakpointSize: 'xlarge',
-                    open: true,
-                    clientWidth: '399'
-                },
-                {
-                    browserWidth: e2eConsts.LARGE_BP_WIDTH,
-                    breakpointSize: 'large',
-                    open: true,
-                    clientWidth: '299'
-                },
-                {
-                    browserWidth: e2eConsts.MEDIUM_BP_WIDTH,
-                    breakpointSize: 'medium',
-                    open: true,
-                    clientWidth: '199'
-                },
-                {
-                    browserWidth: e2eConsts.SMALL_BP_WIDTH,
-                    breakpointSize: 'small',
-                    open: false,
-                    clientWidth: '39'
-                },
-            ];
-        }
-
         /**
          * Test method. The left hand nav should shrink responsively across the 4 breakpoints as the browser is re-sized
          */
@@ -186,14 +154,11 @@
                         // Resize browser at different widths to check responsiveness
                         e2eBase.resizeBrowser(testcase.browserWidth, e2eConsts.DEFAULT_HEIGHT).then(function() {
                             reportServicePage.assertNavProperties(testcase.breakpointSize, testcase.open, testcase.clientWidth);
-                            //Verify if reports list element is on left Nav
-                            expect(e2eBase.isElementToLeft(reportServicePage.reportLinksElList, testcase.clientWidth)).toBeTruthy();
                         });
                     });
                     //reset bck to xlarge
                     e2eBase.resizeBrowser(e2eConsts.XLARGE_BP_WIDTH, e2eConsts.DEFAULT_HEIGHT);
                     reportServicePage.reportsBackLinkEl.click();
-
                 });
             });
             done();
@@ -213,13 +178,10 @@
                 reportServicePage.waitForElement(reportServicePage.loadedContentEl).then(function() {
                     //reverse the dataprovider to execute from small to xlarge
                     var reverseArray = leftNavDimensionsDataProvider().reverse();
-
                     reverseArray.forEach(function(testcase) {
                         // Resize browser at different widths to check responsiveness
                         e2eBase.resizeBrowser(testcase.browserWidth, e2eConsts.DEFAULT_HEIGHT).then(function() {
                             reportServicePage.assertNavProperties(testcase.breakpointSize, testcase.open, testcase.clientWidth);
-                            //Verify if reports list element is on left Nav
-                            expect(e2eBase.isElementToLeft(reportServicePage.reportLinksElList, testcase.clientWidth)).toBeTruthy();
                         });
                     });
                 });
@@ -227,29 +189,114 @@
             done();
         });
 
+        function leftNavDimensionsDataProvider() {
+            return [
+                {
+                    msg: 'X-large breakpoint:',
+                    browserWidth: e2eConsts.XLARGE_BP_WIDTH,
+                    breakpointSize: 'xlarge',
+                    open: true,
+                    clientWidth: '399'
+                },
+                {
+                    msg: 'large breakpoint:',
+                    browserWidth: e2eConsts.LARGE_BP_WIDTH,
+                    breakpointSize: 'large',
+                    open: true,
+                    clientWidth: '299'
+                },
+                {
+                    msg: 'medium breakpoint:',
+                    browserWidth: e2eConsts.MEDIUM_BP_WIDTH,
+                    breakpointSize: 'medium',
+                    open: true,
+                    clientWidth: '199'
+                },
+                {
+                    msg: 'small breakpoint:',
+                    browserWidth: e2eConsts.SMALL_BP_WIDTH,
+                    breakpointSize: 'small',
+                    open: false,
+                    clientWidth: '39'
+                },
+            ];
+        }
+
         /**
-         * Test method.Verify The left hand nav elements across the 4 breakpoints as the browser is re-sized
+         * Test method.Verify The elements present in left hand nav across the 4 breakpoints as the browser is re-sized
          */
-        it('Verify left Nav elements', function(done) {
+        it('Verify left Nav has 3 base links and 2 table links from xlarge to small breakpoints', function(done) {
             leftNavDimensionsDataProvider().forEach(function(testcase) {
-                // Resize browser at different widths to check responsiveness
+                // Resize browser at different widths
                 e2eBase.resizeBrowser(testcase.browserWidth, e2eConsts.DEFAULT_HEIGHT).then(function(tableLinksElList) {
-
                     (reportServicePage.tableLinksElList).then(function(links) {
-
                         // Check we have the 3 base links and two table links present on left Nav
                         expect(links.length).toBe(5);
                         for (var i = 0; i < links.length; i++) {
                             expect(links[i].isDisplayed()).toBe(true);
-                            expect(e2eBase.isElementToLeft(links[i], testcase.clientWidth)).toBeTruthy();
+                            expect(e2eBase.isElementInLeftNav(links[i], testcase.clientWidth)).toBeTruthy();
                         }
-
                     });
-
                 });
-
             });
             done();
+        });
+
+        /**
+         * Test method to verify all elements present in top Nav
+         */
+        it('Verify top nav elements display/not display depending on different breakpoints', function (done) {
+            leftNavDimensionsDataProvider().forEach(function (testcase) {
+                e2eBase.resizeBrowser(testcase.browserWidth, e2eConsts.DEFAULT_HEIGHT).then(function () {
+                    //Verify Icon link display in top Nav and  no text associated for that icon.
+                    reportServicePage.waitForElement(reportServicePage.topNavLeftDivEl).then(function () {
+                        //Verify icon link is displayed in topNav
+                        expect(e2eBase.isElementInTopNav(reportServicePage.topNavToggleHamburgerEl)).toBeTruthy();
+                        //verify no text displayed beside icon link in topnav
+                        expect(reportServicePage.topNavToggleHamburgerEl.getText()).toBeFalsy();
+                    });
+                    // Verify harmony icons display in topNav and no text associated to them.
+                    reportServicePage.waitForElement(reportServicePage.topNavCenterDivEl).then(function () {
+                        //reportServicePage.assertTopCenterNavElements(testcase.iconVisibility, testcase.textVisibility);
+                        for (var i = 0; i < reportServicePage.topNavHarButtonsListEl.length; i++) {
+                            //verify Harmony Icons displayed in top nav
+                            expect(e2eBase.isElementInTopNav(reportServicePage.topNavHarButtonsListEl[i])).toBeTruthy();
+                            //verify no text displayed beside Harmony Icons in top nav
+                            expect(reportServicePage.topNavHarButtonsListEl[i].getText()).toBeFalsy();
+                        }
+                    });
+                    //Verify right global icons display in topNav and verify text display depending on breakpoint.
+                    reportServicePage.waitForElement(reportServicePage.topNavRightDivEl).then(function () {
+                        reportServicePage.topNavGlobalActionsListEl.then(function (navActions) {
+                            expect(navActions.length).toBe(2);
+                            for (var i = 0; i < navActions.length; i++) {
+                                var textEl = navActions[i].all(by.tagName('span')).last();
+
+                                if (testcase.clientWidth === e2eConsts.XLARGE_BP_WIDTH || testcase.clientWidth === e2eConsts.LARGE_BP_WIDTH) {
+                                    //Verify global action icons is displayed in topNav
+                                    expect(e2eBase.isElementInTopNav(textEl)).toBeTruthy();
+                                    expect(reportServicePage.getGlobalNavTextEl(reportServicePage.topNavUserGlobActEl).getText()).toBe('User');
+                                    expect(reportServicePage.getGlobalNavTextEl(reportServicePage.topNavHelpGlobActEl).getText()).toBe('Help');
+
+                                }
+
+                                if (testcase.clientWidth === e2eConsts.MEDIUM_BP_WIDTH || testcase.clientWidth === e2eConsts.SMALL_BP_WIDTH) {
+                                    //Verify global action icons is not displayed in topNav
+                                    expect(e2eBase.isElementInTopNav(textEl)).toBeFalsy();
+                                }
+                            }
+                        });
+                    });
+                    //Verify the drop down toggle icon present on all breakpoints
+                    reportServicePage.waitForElement(reportServicePage.topNavCenterDivEl).then(function () {
+                        //Verify  drop down toggle icon is displayed on topNav
+                        expect(e2eBase.isElementInTopNav(reportServicePage.topNavDropdownEl)).toBeTruthy();
+                        //verify no text displayed beside  drop down toggle
+                        expect(reportServicePage.topNavDropdownEl.getText()).toBeFalsy();
+                    });
+                });
+                done();
+            });
         });
 
         /**

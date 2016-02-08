@@ -79,12 +79,10 @@
                         expect(text).toEqual('Test Report');
                     });
                 });
-
                 // Select the report
                 reportServicePage.reportLinksElList.then(function(links) {
                     links[0].click();
                 });
-
                 // Wait until the table has loaded
                 reportServicePage.waitForElement(reportServicePage.loadedContentEl).then(function() {
                     // Assert column headers
@@ -100,16 +98,12 @@
                     });
                 });
             });
-
-
         });
 
         /**
          * Test method: Test the report Stage Collapse and Expands
          */
         it('Should expand/collapse the reports stage after clicking on stage button in all breakpoints', function(done) {
-            var i = 0;
-
             reportServicePage.waitForElement(reportServicePage.reportsListDivEl).then(function() {
                 // Assert report name
                 reportServicePage.reportLinksElList.then(function(links) {
@@ -117,21 +111,17 @@
                         expect(text).toEqual('Test Report');
                     });
                 });
-
                 // Select the report
                 reportServicePage.reportLinksElList.then(function(links) {
                     links[0].click();
                 });
-
-
                 //Wait until report loaded
                 reportServicePage.waitForElement(reportServicePage.loadedContentEl).then(function() {
-                    for (i = 0; i < clientWidth.length; i++) {
+                    for (var i = 0; i < clientWidth.length; i++) {
                         console.log("The reportStage executing for " + clientWidth[i] + " breakpoint");
                         e2eBase.resizeBrowser(clientWidth[i], e2eConsts.DEFAULT_HEIGHT).then(function() {
                             //Verify that the report Stage is expanded by default
                             expect(reportServicePage.reportStageLayout.isDisplayed).toBeTruthy();
-
                             //Click on report Stage button to collapse the stage
                             reportServicePage.reportStageBtn.click().then(function() {
                                 e2eBase.sleep(1000);
@@ -141,16 +131,13 @@
                                 reportServicePage.reportStageBtn.click().then(function() {
                                     e2eBase.sleep(1000);
                                     expect(reportServicePage.reportStageLayout.isDisplayed).toBeTruthy();
-
                                 });
                             });
                         });
                     }
-
                     done();
                 });
             });
-
         });
 
         /**
