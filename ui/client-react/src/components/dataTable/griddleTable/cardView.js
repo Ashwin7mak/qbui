@@ -25,8 +25,10 @@ let CardView = React.createClass({
         };
     },
 
-    handleMoreCard() {
+    handleMoreCard(e) {
         this.setState({showMoreCards: !this.state.showMoreCards});
+
+        e.stopPropagation();
     },
 
     createField(c, curKey) {
@@ -35,13 +37,24 @@ let CardView = React.createClass({
             <span className="fieldValue">{this.props.data[curKey]}</span>
         </div>);
     },
+    createTopField(firstFieldValue) {
+        return (
+            <div className="top-card-row field" onClick={this.handleMoreCard}>
+                <strong>{firstFieldValue}</strong>
+                <div className="card-expander" >
+                    <QBicon icon="caret-right" className={this.state.showMoreCards ? "qbPanelHeaderIcon rotateDown" : "qbPanelHeaderIcon rotateUp"}/>
+                </div>
+            </div>
+        );
+    },
     createRow(){
         var fields = [];
         var keys = Object.keys(this.props.data);
         if (!keys.length) {
             return null;
         }
-        var topField = <div className="top-card-row field"><strong>{this.props.data[keys[0]]}</strong></div>;
+        let firstFieldValue = this.props.data[keys[0]];
+        var topField = this.createTopField(firstFieldValue);
         for (var i = 1; i < keys.length; i++) {
 
             // ignore metadata columns
@@ -161,10 +174,6 @@ let CardView = React.createClass({
                             <div className="card" onClick={this.onRowClick}>
                                 {row}
                             </div>
-                            <div className="card-expander" onClick={this.handleMoreCard}>
-                                <QBicon icon="caret-right" className={this.state.showMoreCards ? "qbPanelHeaderIcon rotateDown" : "qbPanelHeaderIcon rotateUp"}/>
-                            </div>
-
                         </div>
                     </div>
 
