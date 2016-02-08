@@ -47,7 +47,8 @@ describe('Apps Actions getApps -- ', () => {
                 expect(flux.dispatchBinder.dispatch.calls.argsFor(0)).toEqual([actions.LOAD_APPS]);
                 expect(flux.dispatchBinder.dispatch.calls.argsFor(1)).toEqual([actions.LOAD_APPS_FAILED]);
                 done();
-            });
+            }
+        );
     });
 });
 
@@ -95,7 +96,8 @@ describe('Apps Actions getApp -- ', () => {
                 expect(flux.dispatchBinder.dispatch.calls.argsFor(0)).toEqual([actions.LOAD_APPS]);
                 expect(flux.dispatchBinder.dispatch.calls.argsFor(1)).toEqual([actions.LOAD_APPS_FAILED]);
                 done();
-            });
+            }
+        );
     });
 });
 
@@ -141,7 +143,8 @@ describe('Apps Actions getApps -- ', () => {
                 expect(flux.dispatchBinder.dispatch.calls.argsFor(0)).toEqual([actions.LOAD_APPS]);
                 expect(flux.dispatchBinder.dispatch.calls.argsFor(1)).toEqual([actions.LOAD_APPS_FAILED]);
                 done();
-            });
+            }
+        );
     });
 });
 
@@ -187,7 +190,8 @@ describe('Apps Actions getApp -- ', () => {
                 expect(flux.dispatchBinder.dispatch.calls.argsFor(0)).toEqual([actions.LOAD_APPS]);
                 expect(flux.dispatchBinder.dispatch.calls.argsFor(1)).toEqual([actions.LOAD_APPS_FAILED]);
                 done();
-            });
+            }
+        );
     });
 });
 

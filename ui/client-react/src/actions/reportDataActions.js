@@ -11,6 +11,16 @@ import QueryUtils from '../utils/queryUtils';
 
 let logger = new Logger();
 
+//  Custom handling of 'possible unhandled rejection' error,  because we don't want
+//  to see an exception in the console output.  The exception is thrown by bluebird
+//  because the core application code has no logic implemented to handle a rejected
+//  promise.  This is expected as promises are NOT implemented in the application
+//  code.  Promises are returned only to support our unit tests, which are expected
+//  to implement the appropriate handlers.
+Promise.onPossiblyUnhandledRejection(function(err) {
+    logger.debug('Bluebird Unhandled rejection', err);
+});
+
 let reportDataActions = {
 
     loadReport: function(appId, tblId, rptId, format) {
@@ -27,6 +37,9 @@ let reportDataActions = {
                 promises.push(reportService.getReport(appId, tblId, rptId));
                 promises.push(reportService.getReportResults(appId, tblId, rptId, format));
                 promises.push(reportService.getReportFacets(appId, tblId, rptId));
+
+                var res = resolve;
+                var rej = reject;
 
                 Promise.all(promises).then(
                     function(response) {
@@ -115,21 +128,20 @@ let reportDataActions = {
                             function(recordResponse) {
                                 logger.debug('Filter Report Records service call successful');
                                 this.dispatch(actions.LOAD_REPORT_SUCCESS, recordResponse.data);
-                                return resolve();
+                                resolve();
                             }.bind(this),
                             function(error) {
                                 logger.error('Filter Report Records service call error:' + JSON.stringify(error));
                                 this.dispatch(actions.LOAD_REPORT_FAILED);
-                                return reject();
+                                reject();
                             }.bind(this)
                         ).catch(
                             function(ex) {
                                 logger.error('Filter Report Records service call exception:' + ex);
                                 this.dispatch(actions.LOAD_REPORT_FAILED);
-                                return reject();
+                                reject();
                             }.bind(this)
                         );
-
                     }.bind(this),
                     function(error) {
                         logger.error('Filter Report service call error:' + JSON.stringify(error));

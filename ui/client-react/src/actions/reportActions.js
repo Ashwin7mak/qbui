@@ -6,6 +6,16 @@ import Promise from 'bluebird';
 import Logger from '../utils/logger';
 let logger = new Logger();
 
+//  Custom handling of 'possible unhandled rejection' error,  because we don't want
+//  to see an exception in the console output.  The exception is thrown by bluebird
+//  because the core application code has no logic implemented to handle a rejected
+//  promise.  This is expected as promises are NOT implemented in the application
+//  code.  Promises are returned only to support our unit tests, which are expected
+//  to implement the appropriate handlers.
+Promise.onPossiblyUnhandledRejection(function(err) {
+    logger.debug('Bluebird Unhandled rejection', err);
+});
+
 let reportActions = {
 
     loadReports: function(appId, tblId) {
