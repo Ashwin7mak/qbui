@@ -24,7 +24,7 @@ let GlobalAction = React.createClass({
         return (
             <li className={"link globalAction"}>
                 <Link to={this.props.action.link} onClick={this.props.onSelect}>
-                    <QBicon icon={this.props.action.icon}/> <I18nMessage message={this.props.action.msg}/>
+                    <QBicon icon={this.props.action.icon}/><I18nMessage message={this.props.action.msg}/>
                 </Link>
             </li>);
     }
