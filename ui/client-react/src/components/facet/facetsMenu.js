@@ -15,16 +15,16 @@ import _ from 'lodash';
 
 let logger = new Logger();
 
-/*
- FacetsMenu component presents a list of facets available to filter the report on when its button is clicked.
- for each field with facet values there is collapsable field header and the list of facet values
-*/
-
+/**
+ *  FacetsMenu component presents a list of facets available to filter the report on when its button is clicked.
+ *  for each field with facet values there is collapsable field header and the list of facet values
+**/
 let FacetsMenu = React.createClass({
-    /* Takes the reportData which includes the list of facets
-    and a function to call when a facet value is selected.
-    */
     propTypes: {
+        /**
+         *  Takes in for properties the reportData which includes the list of facets
+         *  and a function to call when a facet value is selected.
+        **/
         reportData: React.PropTypes.shape({
             data: React.PropTypes.shape({
                 facets:  React.PropTypes.shape({
@@ -35,7 +35,18 @@ let FacetsMenu = React.createClass({
         onFacetSelect : React.PropTypes.func
     },
 
+    /**
+     * function getInitalState
+     * intializes the:
+     * - Facterlist popover (shown) state to not shown
+     *  -  collapse/expand state (expandedFacetFields) of all the facet fields sections in the
+     * popover using the allInitiallyCollapsed prop setting
+     *  - selected set of facet values (selected) state to nothing selected
+     *
+     * @returns {{show: boolean, expandedFacetFields: Array, selected: Array}}
+     */
     getInitialState() {
+        //TODO: move these to use fluxxor actions and stores to make the sticky across views.
         let expanded = [];
         let selected = [];
         if (!this.props.allInitiallyCollapsed){
@@ -54,19 +65,34 @@ let FacetsMenu = React.createClass({
         };
     },
 
+    /**
+     * function: getDefaultProps
+     * specifies what to use for the default collapse/expand mode to use for all the fields facets
+     * @returns {{allInitiallyCollapsed: boolean}}
+     */
     getDefaultProps() {
         return {
             allInitiallyCollapsed : true
         };
     },
 
+    /**
+     * function : toggleMenu
+     * changes of the state of the facet popover to hidden or shown
+      * @param e
+     */
     toggleMenu(e) {
         this.setState({target: e.target, show: !this.state.show});
     },
 
     /**
-     * change state of a facet to collapsed if parameter makeCollapsed is true or expanded if not
-     * by adding or removing the field id from a hash listing the expanded fields
+     * function: setFacetState
+     * change state of a facet field group to collapsed if parameter makeCollapsed is true or expanded if not
+     * by adding or removing the field id from a hash listing the expanded facet field groups
+     *
+     * @param facetField - the facet
+     * @param makeCollapsed
+     *
      **/
     setFacetState(facetField, makeCollapsed) {
         let expanded = _.clone(this.state.expandedFacetFields);
@@ -82,22 +108,44 @@ let FacetsMenu = React.createClass({
         this.setState({expandedFacetFields: expanded});
     },
 
+    /**
+     * function : isCollapsed
+     * Check if a facet field group section is collapsed or not
+     *
+     * @param id - the id of field to check
+     * @returns {boolean} returns true if it's collapsed
+     **/
     isCollapsed(id) {
         return (!_.includes(this.state.expandedFacetFields, id));
     },
 
+
     /**
+     * function: toggleCollapseFacet
+     * Toggle the fate of exppand Collapse of a facet field group in the popover
      * change state of a facet from expanded to collapsed or collapsed to expanded
+     * @param facetField - the fact field you want to toggle
      **/
     toggleCollapseFacet(facetField) {
         this.setFacetState(facetField, !this.isCollapsed(facetField.id));
     },
 
+    /**
+     * function: handleToggleCollapse
+     * handle the ui request ofevent occurs to handled changing the collapse/expand state of a
+     * facet field group. To make the facet field groups values hidden or shown.
+     * @param e - the event object from the browser/react
+     * @param facetField - the facet field group to act on
+     **/
     handleToggleCollapse(e, facetField) {
         //logger.debug("got toggle collapse on field id " + facetField.id);
         this.toggleCollapseFacet(facetField);
     },
 
+    /**
+     * function: render
+     * prepars the facet menu button used to show/hide the popover menu of feild aet groups when clicked
+     **/
 
     render() {
         return (
@@ -113,7 +161,6 @@ let FacetsMenu = React.createClass({
                     {/* the filter icon */}
                     <div className="facetsMenuButton"
                          onClick={e => this.toggleMenu(e)}
-                         //ref="facetsMenuButton"
                         >
                         <Hicon icon="filter" />
                     </div>
