@@ -9,7 +9,8 @@ describe('StringUtils - test trim input', () => {
         {test: 'string=" This is IT! "', input: ' This is IT! ', expectation: 'This is IT!'},
         {test: 'string=" ab c"', input: ' ab c', expectation: 'ab c'},
         {test: 'string="a bc "', input: 'a bc ', expectation: 'a bc'},
-        {test: 'string=""', input: '', expectation: ''}
+        {test: 'string=""', input: '', expectation: ''},
+        {test: 'null input', input: null, expectation: null}
     ];
     dataProvider.forEach(function(data) {
         it(data.test, function() {
