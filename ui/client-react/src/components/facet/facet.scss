@@ -18,12 +18,46 @@
 
 .facetMenuPopup {
   z-index: 10000;
-
+  margin-left: -15px;
+  border-radius: 3px;
+  min-width: 300px;
   > .arrow {
     left: 13% !important;
   }
+
+  .popover-content {
+    padding: 0;
+    margin: 0;
+    max-height: 500px;
+    overflow-y: auto;
+  }
+
+  .panel > .list-group .list-group-item,
+  .panel > .panel-collapse > .list-group .list-group-item {
+    border: none;
+  }
+
+  .panel {
+    margin-bottom: 0;
+    border-radius: 0;
+  }
+
+  .facetMenu.panel {
+    border : none;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.25);
+  }
+
+  .facetMenu.panel:last-child {
+    border-bottom: none;
+  }
+
+  .panel-default > .panel-heading {;
+    background-color: $color2;
+    border: none;
+  }
   .list-group-item {
-    padding-left: 1.8em;
+    font-family: 'Lato', sans-serif;
+    padding-top : 4px;
   }
 
   .list-group-item:hover {
@@ -34,20 +68,7 @@
     outline: none;
   }
 
-  .panel {
-    margin-bottom: 0;
-    border-radius: 0;
-    border: none;
-  }
-
-  .popover-content {
-    padding: 0;
-    margin: 0;
-    max-height: 500px;
-    overflow-y: auto;
-  }
   .facetName {
-    font-size: 14px;
   }
 }
 

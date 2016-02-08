@@ -38,7 +38,7 @@ var FacetsItem = React.createClass({
     },
     renderFieldName() {
         return (
-            <span className="facetName">{this.props.facet.name}</span>
+            <h4 className="facetName">{this.props.facet.name}</h4>
         );
     },
     /*TODO check type of facet list, date, boolean currently only handles

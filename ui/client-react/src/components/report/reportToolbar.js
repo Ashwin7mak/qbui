@@ -136,10 +136,15 @@ var ReportToolbar = React.createClass({
         if (this.props.reportData && this.props.reportData.data)  {
             this.props.reportData.data.facets = {
                 list : [
-                    {id : 1, name : "Names", type: "text", blanks: false,
-                        values : [{value: "Item 1"}, {value: "Item 2"}, {value: "Item 3"}, {value: "Item 4"}, {value: "Item 5"}]},
-                    {id : 2, name : "Types", type: "text", blanks: true,
+                    {id : 1, name : "Types", type: "text", blanks: true,
                         values : [{value:"Design"}, {value:"Development"}, {value:"Planning"}, {value:"Test"}]},
+                    {id : 2, name : "Names", type: "text", blanks: false,
+                        values : [
+                            {value: "Aditi Goel"}, {value: "Christopher Deery"}, {value: "Claire Martinez"}, {value: "Claude Keswani"}, {value: "Deborah Pontes"},
+                            {value: "Donald Hatch"}, {value: "Drew Stevens"}, {value: "Erica Rodrigues"}, {value: "Kana Eiref"},
+                            {value: "Ken LaBak"}, {value: "Lakshmi Kamineni"}, {value: "Lisa Davidson"}, {value: "Marc Labbe"},
+                            {value: "Matthew Saforrian"}, {value: "Micah Zimring"}, {value: "Rick Beyer"}, {value: "Sam Jones"}, {value: "XJ He"}
+                        ]},
                     {id : 3, name : "Status", type: "text", blanks: false,
                         values : [{value: "No Started"}, {value: "In Progress"}, {value: "Blocked"}, {value: "Completed"}]},
                     {id : 4, name : "Flag", type: "bool",  blanks: false,
@@ -182,7 +187,7 @@ var ReportToolbar = React.createClass({
 
                     {/*TODO :  - check if facets is enabled for this report,
                     hide Facets Menu Button if facets disabled  */}
-                    <FacetsMenu className="facetMenuButton" id="facetMenuButton" {...this.props}
+                    <FacetsMenu className="facetMenu"  {...this.props}
                                       onFacetSelect={this.handleFacetSelect} />
 
                     {/*TODO :  - get real records count from props */}
