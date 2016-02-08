@@ -140,76 +140,116 @@
             });
         });
 
-        //TODO: Should use a data provider here see recordApi.currency.integration.spec.js for an example
+        function leftNavDimensionsDataProvider() {
+            return [
+                {
+
+                    browserWidth: e2eConsts.XLARGE_BP_WIDTH,
+                    breakpointSize: 'xlarge',
+                    open: true,
+                    clientWidth: '399'
+                },
+                {
+                    browserWidth: e2eConsts.LARGE_BP_WIDTH,
+                    breakpointSize: 'large',
+                    open: true,
+                    clientWidth: '299'
+                },
+                {
+                    browserWidth: e2eConsts.MEDIUM_BP_WIDTH,
+                    breakpointSize: 'medium',
+                    open: true,
+                    clientWidth: '199'
+                },
+                {
+                    browserWidth: e2eConsts.SMALL_BP_WIDTH,
+                    breakpointSize: 'small',
+                    open: false,
+                    clientWidth: '39'
+                },
+            ];
+        }
+
         /**
-        * Test method. The left hand nav should shrink responsively across the 4 breakpoints as the browser is re-sized
-        */
-        it('Left hand nav should shrink responsively', function(done) {
+         * Test method. The left hand nav should shrink responsively across the 4 breakpoints as the browser is re-sized
+         */
+        it('Left hand nav should shrink responsively from xlarge to small breakpoints', function(done) {
             // Select the table
-            reportServicePage.tableLinksElList.get(3).click().then(function(){
+            reportServicePage.tableLinksElList.get(3).click().then(function() {
                 // Open the reports list
                 reportServicePage.reportHamburgersElList.get(0).click();
                 // Select the report
                 reportServicePage.reportLinksElList.get(0).click();
                 // Make sure the table report has loaded
                 reportServicePage.waitForElement(reportServicePage.loadedContentEl).then(function() {
-                    // Resize browser at different widths to check responsiveness
-                    e2eBase.resizeBrowser(e2eConsts.XLARGE_BP_WIDTH, e2eConsts.DEFAULT_HEIGHT).then(function() {
-                        reportServicePage.assertNavProperties('xlarge', true, '399');
-                    }).then(function() {
-                        e2eBase.resizeBrowser(e2eConsts.LARGE_BP_WIDTH, e2eConsts.DEFAULT_HEIGHT).then(function() {
-                            reportServicePage.assertNavProperties('large', true, '299');
-                        }).then(function() {
-                            e2eBase.resizeBrowser(e2eConsts.MEDIUM_BP_WIDTH, e2eConsts.DEFAULT_HEIGHT).then(function() {
-                                reportServicePage.assertNavProperties('medium', true, '199');
-                            }).then(function() {
-                                e2eBase.resizeBrowser(e2eConsts.SMALL_BP_WIDTH, e2eConsts.DEFAULT_HEIGHT).then(function() {
-                                    reportServicePage.assertNavProperties('small', false, '39');
-                                    e2eBase.resizeBrowser(e2eConsts.XLARGE_BP_WIDTH, e2eConsts.DEFAULT_HEIGHT).then(function() {
-                                        reportServicePage.reportsBackLinkEl.click();
-                                        done();
-                                    });
-                                });
-                            });
+                    leftNavDimensionsDataProvider().forEach(function(testcase) {
+                        // Resize browser at different widths to check responsiveness
+                        e2eBase.resizeBrowser(testcase.browserWidth, e2eConsts.DEFAULT_HEIGHT).then(function() {
+                            reportServicePage.assertNavProperties(testcase.breakpointSize, testcase.open, testcase.clientWidth);
+                            //Verify if reports list element is on left Nav
+                            expect(e2eBase.isElementToLeft(reportServicePage.reportLinksElList, testcase.clientWidth)).toBeTruthy();
                         });
                     });
+                    //reset bck to xlarge
+                    e2eBase.resizeBrowser(e2eConsts.XLARGE_BP_WIDTH, e2eConsts.DEFAULT_HEIGHT);
+                    reportServicePage.reportsBackLinkEl.click();
+
                 });
             });
+            done();
         });
 
-        //TODO: Should use a data provider here see recordApi.currency.integration.spec.js for an example
         /**
          * Test method. The left hand nav should expand responsively across the 4 breakpoints as the browser is re-sized
          */
-        it('Left hand nav should expand responsively', function(done) {
+        it('Left hand nav should expand responsively from small to xlarge breakpoints', function(done) {
             // Select the table
-            reportServicePage.tableLinksElList.get(3).click().then(function(){
+            reportServicePage.tableLinksElList.get(3).click().then(function() {
                 // Open the reports list
                 reportServicePage.reportHamburgersElList.get(0).click();
                 // Select the report
                 reportServicePage.reportLinksElList.get(0).click();
                 // Make sure the table report has loaded
                 reportServicePage.waitForElement(reportServicePage.loadedContentEl).then(function() {
-                    // Resize browser at different widths to check responsiveness
-                    e2eBase.resizeBrowser(e2eConsts.SMALL_BP_WIDTH, e2eConsts.DEFAULT_HEIGHT).then(function() {
-                        reportServicePage.assertNavProperties('small', false, '39');
-                    }).then(function() {
-                        e2eBase.resizeBrowser(e2eConsts.MEDIUM_BP_WIDTH, e2eConsts.DEFAULT_HEIGHT).then(function() {
-                            reportServicePage.assertNavProperties('medium', true, '199');
-                        }).then(function() {
-                            e2eBase.resizeBrowser(e2eConsts.LARGE_BP_WIDTH, e2eConsts.DEFAULT_HEIGHT).then(function() {
-                                reportServicePage.assertNavProperties('large', true, '299');
-                            }).then(function() {
-                                e2eBase.resizeBrowser(e2eConsts.XLARGE_BP_WIDTH, e2eConsts.DEFAULT_HEIGHT).then(function() {
-                                    reportServicePage.assertNavProperties('xlarge', true, '399');
-                                    reportServicePage.reportsBackLinkEl.click();
-                                    done();
-                                });
-                            });
+                    //reverse the dataprovider to execute from small to xlarge
+                    var reverseArray = leftNavDimensionsDataProvider().reverse();
+
+                    reverseArray.forEach(function(testcase) {
+                        // Resize browser at different widths to check responsiveness
+                        e2eBase.resizeBrowser(testcase.browserWidth, e2eConsts.DEFAULT_HEIGHT).then(function() {
+                            reportServicePage.assertNavProperties(testcase.breakpointSize, testcase.open, testcase.clientWidth);
+                            //Verify if reports list element is on left Nav
+                            expect(e2eBase.isElementToLeft(reportServicePage.reportLinksElList, testcase.clientWidth)).toBeTruthy();
                         });
                     });
                 });
             });
+            done();
+        });
+
+        /**
+         * Test method.Verify The left hand nav elements across the 4 breakpoints as the browser is re-sized
+         */
+        it('Verify left Nav elements', function(done) {
+            leftNavDimensionsDataProvider().forEach(function(testcase) {
+                // Resize browser at different widths to check responsiveness
+                e2eBase.resizeBrowser(testcase.browserWidth, e2eConsts.DEFAULT_HEIGHT).then(function(tableLinksElList) {
+
+                    (reportServicePage.tableLinksElList).then(function(links) {
+
+                        // Check we have the 3 base links and two table links present on left Nav
+                        expect(links.length).toBe(5);
+                        for (var i = 0; i < links.length; i++) {
+                            expect(links[i].isDisplayed()).toBe(true);
+                            expect(e2eBase.isElementToLeft(links[i], testcase.clientWidth)).toBeTruthy();
+                        }
+
+                    });
+
+                });
+
+            });
+            done();
         });
 
         /**

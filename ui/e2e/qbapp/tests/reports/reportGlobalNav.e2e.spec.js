@@ -16,7 +16,7 @@
     var requestSessionTicketPage = requirePO('requestSessionTicket');
     var reportServicePage = new ReportServicePage();
 
-    describe('Table Report Global Nav Tests', function() {
+    describe('Table Report Top Nav Tests', function() {
         var app;
         var recordList;
 
@@ -40,6 +40,7 @@
 
                 // Wait for the left nav to load
                 reportServicePage.waitForElement(reportServicePage.appsListDivEl).then(function() {
+
                     // Select the app
                     reportServicePage.appLinksElList.get(0).click();
                     // Select the table
@@ -53,6 +54,7 @@
                         // Make sure the table report has loaded
                         reportServicePage.waitForElement(reportServicePage.loadedContentEl).then(function() {
                             done();
+
                         });
                     });
                 });
@@ -62,68 +64,89 @@
         /**
          * Before each test starts just make sure the topNav has loaded
          */
-        beforeEach(function(done){
+        beforeEach(function(done) {
             reportServicePage.waitForElement(reportServicePage.topNavDivEl).then(function() {
                 done();
             });
         });
 
-        /**
-         * Test method.
-         */
-        it('X-large breakpoint: Global Nav actions should show icon and text', function() {
-            e2eBase.resizeBrowser(e2eConsts.XLARGE_BP_WIDTH, e2eConsts.DEFAULT_HEIGHT).then(function(){
-                expect(reportServicePage.topNavGlobalActDivEl.isDisplayed()).toBe(true);
-                reportServicePage.topNavGlobalActionsListEl.then(function(navActions){
-                    expect(navActions.length).toBe(2);
-                });
-                expect(reportServicePage.getGlobalNavTextEl(reportServicePage.topNavUserGlobActEl).getText()).toBe('User');
-                expect(reportServicePage.getGlobalNavTextEl(reportServicePage.topNavHelpGlobActEl).getText()).toBe('Help');
-            });
-        });
+        function topNavDataProvider() {
+            return [
+                {
+                    msg: 'X-large breakpoint: Top Nav actions show text and icon',
+                    clientWidth: e2eConsts.XLARGE_BP_WIDTH,
+                    textVisibility: true,
+                    iconVisibility: true
+                },
+                {
+                    msg: 'large breakpoint: Top Nav actions show text and icon',
+                    clientWidth: e2eConsts.LARGE_BP_WIDTH,
+                    textVisibility: true,
+                    iconVisibility: true
+                },
+                {
+                    msg: 'medium breakpoint: Top Nav actions show only icon',
+                    clientWidth: e2eConsts.MEDIUM_BP_WIDTH,
+                    textVisibility: false,
+                    iconVisibility: true
+                },
+                {
+                    msg: 'small breakpoint: Top Nav actions show only icon',
+                    clientWidth: e2eConsts.SMALL_BP_WIDTH,
+                    textVisibility: false,
+                    iconVisibility: true
+                },
+            ];
+        }
+
 
         /**
-         * Test method.
+         * Test method to verify all top Nav elements
          */
-        it('Large breakpoint: Global Nav actions should show icon and text', function() {
-            e2eBase.resizeBrowser(e2eConsts.LARGE_BP_WIDTH, e2eConsts.DEFAULT_HEIGHT).then(function() {
-                reportServicePage.waitForElement(reportServicePage.topNavGlobalActDivEl).then(function() {
-                    reportServicePage.assertGlobalNavTextVisible(true);
-                });
-            });
-        });
 
-        /**
-         * Test method.
-         */
-        it('Medium breakpoint: Global Nav actions should only show icon', function() {
-            e2eBase.resizeBrowser(e2eConsts.MEDIUM_BP_WIDTH, e2eConsts.DEFAULT_HEIGHT).then(function(){
-                reportServicePage.waitForElement(reportServicePage.topNavGlobalActDivEl).then(function() {
-                    expect(reportServicePage.topNavGlobalActDivEl.isDisplayed()).toBe(true);
-                    reportServicePage.topNavGlobalActionsListEl.then(function(navActions){
-                        expect(navActions.length).toBe(2);
+        topNavDataProvider().forEach(function(testcase) {
+            it(testcase.msg, function(done) {
+                e2eBase.resizeBrowser(testcase.clientWidth, e2eConsts.DEFAULT_HEIGHT).then(function() {
+                    reportServicePage.waitForElement(reportServicePage.topNavLeftDivEl).then(function() {
+                            //Verify Left Icon link display, no text display and location of icon on topNav
+                        reportServicePage.assertTopLeftNavElements(testcase.iconVisibility, testcase.textVisibility);
                     });
-                    reportServicePage.assertGlobalNavTextVisible(false);
-                });
-            });
-        });
 
-        /**
-         * Test method.
-         */
-        it('Small breakpoint: Global Nav actions should only show icon', function() {
-            e2eBase.resizeBrowser(e2eConsts.SMALL_BP_WIDTH, e2eConsts.DEFAULT_HEIGHT).then(function(){
-                reportServicePage.waitForElement(reportServicePage.topNavGlobalActDivEl).then(function() {
-                    expect(reportServicePage.topNavGlobalActDivEl.isDisplayed()).toBe(true);
-                    reportServicePage.topNavGlobalActionsListEl.then(function(navActions){
-                        expect(navActions.length).toBe(2);
+                        // Verify harmony icons display , no text display and location of icons on top Nav
+                    reportServicePage.waitForElement(reportServicePage.topNavCenterDivEl).then(function() {
+                        reportServicePage.assertTopCenterNavElements(testcase.iconVisibility, testcase.textVisibility);
                     });
-                    reportServicePage.assertGlobalNavTextVisible(false);
-                });
-            });
-        });
 
-        //TODO: On Small breakpoint verify the global actions also appear in the left nav div
+                        //Verify right global icons display, text display and location on topNav
+                    reportServicePage.waitForElement(reportServicePage.topNavRightDivEl).then(function() {
+
+                        if (testcase.clientWidth === e2eConsts.XLARGE_BP_WIDTH || testcase.clientWidth === e2eConsts.LARGE_BP_WIDTH) {
+                                //very text and icon visible for large and x-large breakpoints
+                                reportServicePage.assertTopRightNavElements(testcase.iconVisibility);
+                                expect(reportServicePage.getGlobalNavTextEl(reportServicePage.topNavUserGlobActEl).getText()).toBe('User');
+                                expect(reportServicePage.getGlobalNavTextEl(reportServicePage.topNavHelpGlobActEl).getText()).toBe('Help');
+                            }
+
+                        if (testcase.clientWidth === e2eConsts.MEDIUM_BP_WIDTH || testcase.clientWidth === e2eConsts.SMALL_BP_WIDTH) {
+                                //verify icon and text hidden for medium and small breakpoints
+                                reportServicePage.assertTopRightNavElements(false);
+                                expect(reportServicePage.getGlobalNavTextEl(reportServicePage.topNavUserGlobActEl).getText()).toBe('');
+                                expect(reportServicePage.getGlobalNavTextEl(reportServicePage.topNavHelpGlobActEl).getText()).toBe('');
+                            }
+
+                    });
+
+                        //Verify the drop down toggle icon present on all breakpoints
+                    reportServicePage.waitForElement(reportServicePage.topNavCenterDivEl).then(function() {
+                        reportServicePage.assertTopNavDropDown(testcase.iconVisibility, false);
+                    });
+
+                });
+                done();
+            });
+
+
+        });
 
         /**
          * After all tests are done, run the cleanup function in the base class

@@ -66,6 +66,23 @@
                 var sessionTicketRequestEndPoint = e2eBase.recordBase.apiBase.generateFullRequest(realmName, ticketEndpoint + realmId);
                 return sessionTicketRequestEndPoint;
             },
+            //Is element to the left
+            isElementToLeft: function(element, clientWidth) {
+                var result = false;
+                if (expect(element.getAttribute('offsetLeft'), '0') && expect(element.getAttribute('offsetWidth'), clientWidth)) {
+                    result = true;
+                }
+                return result;
+            },
+            //Is element to the top
+            isElementToTop: function(element) {
+                var result = false;
+                if (expect(element.getAttribute('offsetTop'), '0') && expect(element.getAttribute('offsetHeight'), '50')) {
+                    result = true;
+                }
+                return result;
+            },
+
             //Resize the browser window to the given pixel width and height. Returns a promise
             resizeBrowser : function(width, height) {
                 var deferred = promise.pending();

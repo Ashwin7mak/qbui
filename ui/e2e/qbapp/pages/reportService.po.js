@@ -42,7 +42,7 @@
         this.topNavLeftDivEl = this.topNavDivEl.element(by.className('left'));
         // Center div (containing harmony icons)
         this.topNavCenterDivEl = this.topNavDivEl.element(by.className('center'));
-        this.topNavHarButtonsListEl = this.topNavCenterDivEl.all(by.tagName('button'));
+        this.topNavHarButtonsListEl = this.topNavCenterDivEl.all(by.tagName('span'));
         // Right div (containing global actions and right dropdown)
         // global actions
         this.topNavRightDivEl = this.topNavDivEl.element(by.className('right'));
@@ -113,16 +113,54 @@
                 expect(this.navMenuEl.getAttribute('clientWidth')).toMatch(clientWidth);
             }
         };
+        // Assert left top nav elements
+        this.assertTopLeftNavElements = function(iconVisible, textVisible) {
+            //verify IconLink Present
+            expect(this.topNavToggleHamburgerEl.isDisplayed()).toBe(iconVisible);
+            //verify no text displayed beside left top Nav Icon link
+            expect(this.topNavToggleHamburgerEl.getText()).toBeFalsy();
+            //Verify icon is displayed on topNav
+            expect(e2eBase.isElementToTop(this.topNavToggleHamburgerEl)).toBeTruthy();
 
-        this.assertGlobalNavTextVisible = function(visible) {
+        };
+        //Assert center top nav elements
+        this.assertTopCenterNavElements = function(iconVisible, textVisible) {
+            for (var i = 0; i < this.topNavHarButtonsListEl.length; i++) {
+                //verify Harmony Icons Present
+                expect(this.topNavHarButtonsListEl[i].isDisplayed()).toBe(iconVisible);
+                //verify no text displayed beside center top Nav Harmony Icons
+                expect(this.topNavHarButtonsListEl[i].getText()).toBeFalsy();
+                //Verify Harmony icons is displayed on topNav
+
+            }
+
+        };
+        //Assert right top Nav elements
+        this.assertTopRightNavElements = function(iconVisible, textVisible) {
             this.topNavGlobalActionsListEl.then(function(navActions) {
+                expect(navActions.length).toBe(2);
                 for (var i = 0; i < navActions.length; i++) {
-
                     var textEl = navActions[i].all(by.tagName('span')).last();
-                    expect(textEl.isDisplayed()).toBe(visible);
+                    //Verify Icons present
+                    expect(textEl.isDisplayed()).toBe(iconVisible);
+                    //Verify global action icons is displayed on topNav
+                    expect(e2eBase.isElementToTop(textEl)).toBeTruthy();
+
                 }
+
             });
         };
+        //Assert drop down toggle on top nav
+        this.assertTopNavDropDown = function(iconVisible, textVisible) {
+            //verify drop down toggle Present
+            expect(this.topNavDropdownEl.isDisplayed()).toBe(iconVisible);
+            //verify no text displayed beside  drop down toggle
+            expect(this.topNavDropdownEl.getText()).toBeFalsy();
+            //Verify  drop down toggle icon is displayed on topNav
+            expect(e2eBase.isElementToTop(this.topNavDropdownEl)).toBeTruthy();
+
+        };
+
 
         this.clickReportsMenu = function(tableLinkEl) {
             tableLinkEl.by(className('right')).click();
