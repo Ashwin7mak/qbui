@@ -71,7 +71,7 @@ var FacetsItem = React.createClass({
      * prepares the markup content of one of the facet field's values
      * @returns {XML}
      */
-    renderValue() {
+    renderValue(item, index) {
         return (
             <ListGroupItem key={this.props.facet.fid + "." + index}
                            onClick={()=>this.props.handleSelectValue(this.props.facet, item.value)}>
@@ -91,7 +91,7 @@ var FacetsItem = React.createClass({
          */
         return (
             this.props.facet.values && this.props.facet.values.map((item, index) => {
-                return this.renderValue();
+                return this.renderValue(item, index);
             })
         );
     },

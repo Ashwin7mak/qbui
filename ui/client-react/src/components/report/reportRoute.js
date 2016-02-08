@@ -4,12 +4,16 @@ import Locale from '../../locales/locales';
 import Stage from '../stage/stage';
 import ReportStage from './reportStage';
 
+
 import Logger from '../../utils/logger';
 let logger = new Logger();
 
 import ReportToolsAndContent from './reportToolsAndContent';
 import EmailReportLink from '../actions/emailReportLink';
+import StringUtils from '../../utils/stringUtils';
+
 import Fluxxor from 'fluxxor';
+import _ from 'lodash';
 import './report.scss';
 
 let FluxMixin = Fluxxor.FluxMixin(React);
@@ -52,9 +56,15 @@ var ReportRoute = React.createClass({
     },
 
     render() {
-
-        return (<div className="reportContainer">
-                <Stage stageContent="this is the stage content text" >
+        if (_.isUndefined(this.props.params) ||
+            _.isUndefined(this.props.params.appId) ||
+            _.isUndefined(this.props.params.tblId) ||
+            _.isUndefined(this.props.params.rptId)) {
+            logger.info("the necessary params were not specified to reportRoute render params=" + StringUtils.simpleStringify(this.props.params));
+            return <div> Insufficient parameters supplied</div>;
+        } else {
+            return (<div className="reportContainer">
+                <Stage stageContent="this is the stage content text">
                     <ReportStage reportData={this.props.reportData}/>
                 </Stage>
 
@@ -64,8 +74,10 @@ var ReportRoute = React.createClass({
                                        tblId={this.props.params.tblId}
                                        rptId={this.props.params.rptId}
                 />
-                </div>);
+            </div>);
+        }
     }
 });
+
 
 export default ReportRoute;

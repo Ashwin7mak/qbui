@@ -11,7 +11,7 @@ describe('FacetsMenu functions', () => {
     const fakeReportData_valid = {
         data: {
             facets : {
-                list : [{fid:1, name:'test', values:["A", "B", "C"]}]
+                list : [{id:1, name:'test', values:["A", "B", "C"]}]
             }
         }
     };

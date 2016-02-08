@@ -2,6 +2,7 @@ import React from 'react';
 import TestUtils from 'react-addons-test-utils';
 import ReactDOM from 'react-dom';
 import Report from '../../src/components/report/reportRoute';
+import ReportToolbar from '../../src/components/report/reportToolbar';
 import Stage from '../../src/components/stage/stage';
 
 import Locale from '../../src/locales/locales';
@@ -33,10 +34,27 @@ describe('Report functions', () => {
             return <div className="report-content-mock" />;
         }
     });
-
+    let FilterSearchBoxMock = React.createClass({
+        render: function() {
+            return <div className="filter-search-box" />;
+        }
+    });
+    let FacetsMenuMock = React.createClass({
+        render: function() {
+            return <div className="filter-facets-menu" />;
+        }
+    });
+    let RecordsCountMock = React.createClass({
+        render: function() {
+            return <div className="filter-records-count" />;
+        }
+    });
     beforeEach(() => {
         Report.__Rewire__('ReportStage', ReportStageMock);
         Report.__Rewire__('ReportToolsAndContent', ReportContentMock);
+        Report.__Rewire__('FilterSearchBox', FilterSearchBoxMock);
+        Report.__Rewire__('FacetsMenu', FacetsMenuMock);
+        Report.__Rewire__('RecordsCount', RecordsCountMock);
         spyOn(flux.actions, 'loadReport');
         spyOn(flux.actions, 'filterReport');
     });
@@ -44,6 +62,10 @@ describe('Report functions', () => {
     afterEach(() => {
         Report.__ResetDependency__('ReportStage', ReportStageMock);
         Report.__ResetDependency__('ReportToolsAndContent', ReportContentMock);
+        Report.__ResetDependency__('FilterSearchBox', FilterSearchBoxMock);
+        Report.__ResetDependency__('FacetsMenu', FacetsMenuMock);
+        Report.__ResetDependency__('RecordsCount', RecordsCountMock);
+
         flux.actions.loadReport.calls.reset();
         flux.actions.filterReport.calls.reset();
     });
@@ -63,7 +85,7 @@ describe('Report functions', () => {
 
     it('test flux action loadReport is not called with no app data', () => {
         var div = document.createElement('div');
-        ReactDOM.render(<Report {...i18n} flux={flux} params={reportParams} />, div);
+        ReactDOM.render(<Report {...i18n} flux={flux}  />, div);
         expect(flux.actions.loadReport).not.toHaveBeenCalled();
     });
 
@@ -99,10 +121,11 @@ describe('Report functions', () => {
         ReactDOM.render(<Report {...i18n} flux={flux} params={reportParams} reportData={reportDataParams} />, div);
         expect(flux.actions.loadReport).not.toHaveBeenCalled();
     });
+
     /* This test is here for the fake method only to fulfil the coverage needs. Needs to replaced when real method gets added*/
     it('test flux action filterReport is called', () => {
         var div = document.createElement('div');
-        ReactDOM.render(<Report {...i18n} flux={flux} params={reportParams}  />, div);
+        ReactDOM.render(<ReportToolbar {...i18n} flux={flux} params={reportParams}  reportData={reportDataParams}  />, div);
         var testButton = TestUtils.scryRenderedDOMComponentsWithClass(component, "testFilterButton");
         console.log(testButton[0]);
         TestUtils.Simulate.click(testButton[0]);

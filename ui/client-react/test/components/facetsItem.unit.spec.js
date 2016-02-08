@@ -8,12 +8,16 @@ describe('facetItem functions', () => {
 
     let component;
     let item = {
-        fid:22,
+        id:22,
         name:"test",
+        type:"text",
         values:["a", "b", "c"]
     };
+
     it('test render facetItem', () => {
-        component = TestUtils.renderIntoDocument(<FacetsItem facet={item}/>);
+        component = TestUtils.renderIntoDocument(<FacetsItem facet={item}
+                                                             handleSelectValue={() => {}}
+                                                             handleToggleCollapse={() => {}}/>);
         expect(TestUtils.isCompositeComponent(component)).toBeTruthy();
     });
     //TODO
