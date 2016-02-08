@@ -38,9 +38,6 @@ let reportDataActions = {
                 promises.push(reportService.getReportResults(appId, tblId, rptId, format));
                 promises.push(reportService.getReportFacets(appId, tblId, rptId));
 
-                var res = resolve;
-                var rej = reject;
-
                 Promise.all(promises).then(
                     function(response) {
                         logger.debug('Report service call successful');
