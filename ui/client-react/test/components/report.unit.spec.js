@@ -63,7 +63,7 @@ describe('Report functions', () => {
 
     it('test flux action loadReport is not called with no app data', () => {
         var div = document.createElement('div');
-        ReactDOM.render(<Report {...i18n} flux={flux} />, div);
+        ReactDOM.render(<Report {...i18n} flux={flux} params={reportParams} />, div);
         expect(flux.actions.loadReport).not.toHaveBeenCalled();
     });
 
@@ -102,7 +102,7 @@ describe('Report functions', () => {
     /* This test is here for the fake method only to fulfil the coverage needs. Needs to replaced when real method gets added*/
     it('test flux action filterReport is called', () => {
         var div = document.createElement('div');
-        ReactDOM.render(<Report {...i18n} flux={flux} params={reportParams} />, div);
+        ReactDOM.render(<Report {...i18n} flux={flux} params={reportParams}  />, div);
         var testButton = TestUtils.scryRenderedDOMComponentsWithClass(component, "testFilterButton");
         console.log(testButton[0]);
         TestUtils.Simulate.click(testButton[0]);

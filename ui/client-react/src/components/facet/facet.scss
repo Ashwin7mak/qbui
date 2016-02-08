@@ -8,25 +8,46 @@
 
 .facetsMenuButton {  /* icon button to bring up list of filters */
   margin-left: 3.5rem;
+
+}
+.reportToolbar {
+  > div > div {
+    position: relative;
+  }
 }
 
 .facetMenuPopup {
-  position : relative;
-}
-.facetMenuPopup .panel {
-  margin-bottom: 0;
-  border-radius: 0;
-  border: none;
+  z-index: 10000;
+
+  > .arrow {
+    left: 13% !important;
+  }
+  .list-group-item {
+    padding-left: 1.8em;
+  }
+
+  .list-group-item:hover {
+    background-color: $color2;
+  }
+
+  .list-group-item:focus {
+    outline: none;
+  }
+
+  .panel {
+    margin-bottom: 0;
+    border-radius: 0;
+    border: none;
+  }
+
+  .popover-content {
+    padding: 0;
+    margin: 0;
+    max-height: 500px;
+    overflow-y: auto;
+  }
+  .facetName {
+    font-size: 14px;
+  }
 }
 
-.facetMenuPopup .popover-content {
-  padding: 0;
-  margin: 0;
-}
-
-.facetMenuPopup .facetName {
-  font-size: 14px;
-}
-.facetMenuPopup li.list-group-item {
-  padding-left: 1.3em;
-}

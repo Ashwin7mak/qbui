@@ -21,9 +21,6 @@
       display: flex;
       flex-direction: row;
       flex: 1;
-      //border: solid 1px $toolBar-borderColor;
-      //background-color: $toolBar-backgroundColor;
-      //padding: .5rem 1rem .5rem 1rem;
       align-items: center;
 
       .filterSearchBox {
@@ -32,20 +29,19 @@
       }
 
       .facetsMenuButton {
-
         margin-left: 1.5rem;
       }
       .recordsCount {
-
         margin-left: 1.5rem;
       }
     }
 
     .loadedContent {
-      flex: 1;
+      flex: 1 0 auto;
       overflow-y: auto;
       margin-left: 10px;
       margin-right: 10px;
+      min-height: 552px;
   }
 }
 

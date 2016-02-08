@@ -8,7 +8,7 @@ import Logger from '../../utils/logger';
 import {I18nMessage} from '../../../src/utils/i18nMessage';
 import {Tooltip, OverlayTrigger, Button} from 'react-bootstrap';
 import FilterSearchBox from '../facet/filterSearchBox';
-import FacetsMenuButton from '../facet/facetsMenuButton';
+import FacetsMenu from '../facet/facetsMenu';
 import RecordsCount from './RecordsCount';
 
 let FluxMixin = Fluxxor.FluxMixin(React);
@@ -129,20 +129,22 @@ var ReportToolbar = React.createClass({
 
     },
 
-
+    //Report Facets: {"facets":[{"id":"1","name":"Facet01","type":"text","values":["Facet01-Value01","Facet01-Value02"]},
+    // {"id":"2","name":"Facet02","type":"text","values":["Facet02-Value01","Facet02-Value02"]},
+    // {"id":"3","name":"Facet03","type":"numeric","values":[1000,1045.33,2099]}]}
     populateDummyFacets() {
         if (this.props.reportData && this.props.reportData.data)  {
             this.props.reportData.data.facets = {
                 list : [
-                    {fid : 1, name : "Names", type: "text", blanks: false,
+                    {id : 1, name : "Names", type: "text", blanks: false,
                         values : [{value: "Item 1"}, {value: "Item 2"}, {value: "Item 3"}, {value: "Item 4"}, {value: "Item 5"}]},
-                    {fid : 2, name : "Types", type: "text", blanks: true,
+                    {id : 2, name : "Types", type: "text", blanks: true,
                         values : [{value:"Design"}, {value:"Development"}, {value:"Planning"}, {value:"Test"}]},
-                    {fid : 3, name : "Status", type: "text", blanks: false,
+                    {id : 3, name : "Status", type: "text", blanks: false,
                         values : [{value: "No Started"}, {value: "In Progress"}, {value: "Blocked"}, {value: "Completed"}]},
-                    {fid : 4, name : "Flag", type: "bool",  blanks: false,
+                    {id : 4, name : "Flag", type: "bool",  blanks: false,
                         values : [{value: "True"}, {value: "False"}]},
-                    //{fid : 4, name : "Dates", type: "date",  blanks: false,
+                    //{id : 4, name : "Dates", type: "date",  blanks: false,
                     //    range : {start: 1, end: 2}},
                 ],
             };
@@ -156,7 +158,7 @@ var ReportToolbar = React.createClass({
                                 Record#id = 10 OR 11
                         </Tooltip>);
         return (
-                <OverlayTrigger id="FakeFacet" overlay={tooltip} placement="bottom">
+                <OverlayTrigger id="FakeFacet"  overlay={tooltip} placement="bottom">
                     <div className="button-container">
                         &nbsp;<Button className="testFilterButton"
                                     bsStyle="link" onClick={this.filterReport}>
@@ -175,11 +177,12 @@ var ReportToolbar = React.createClass({
                     {/*TODO : check if searchbox is enabled for this report,
                     if has facets has search too */}
                     <FilterSearchBox onChange={this.handleChange}
+                                     nameForRecords="Records"
                                      {...this.props} />
 
                     {/*TODO :  - check if facets is enabled for this report,
                     hide Facets Menu Button if facets disabled  */}
-                    <FacetsMenuButton id="facetMenuButton" {...this.props}
+                    <FacetsMenu className="facetMenuButton" id="facetMenuButton" {...this.props}
                                       onFacetSelect={this.handleFacetSelect} />
 
                     {/*TODO :  - get real records count from props */}

@@ -4,7 +4,6 @@ import Promise from 'bluebird';
 import {Dropdown, MenuItem, ListGroup, Panel, ListGroupItem} from 'react-bootstrap';
 import QBPanel from '../QBPanel/qbpanel.js';
 
-import './unused/callout.scss';
 import './facet.scss';
 
 import Logger from '../../utils/logger';
@@ -19,7 +18,8 @@ const facetItemValueShape = React.PropTypes.shape({
 });
 
 const facetShape =  React.PropTypes.shape({
-    fid: React.PropTypes.number.isRequired,
+    id: React.PropTypes.number.isRequired,
+    type:React.PropTypes.string.isRequired,
     name: React.PropTypes.string.isRequired,
     values: React.PropTypes.arrayOf(facetItemValueShape)
 });
@@ -27,7 +27,8 @@ const facetShape =  React.PropTypes.shape({
 var FacetsItem = React.createClass({
     propTypes: {
         facet:facetShape,
-        selectValueHandler: React.PropTypes.func,
+        handleSelectValue: React.PropTypes.func,
+        handleToggleCollapse: React.PropTypes.func
     },
 
     getInitialState: function() {
@@ -48,7 +49,7 @@ var FacetsItem = React.createClass({
             this.props.facet.values && this.props.facet.values.map((item, index) => {
                 return (
                     <ListGroupItem key={this.props.facet.fid + "." + index}
-                              onClick={()=>this.props.selectValueHandler(this.props.facet, item.value)}>
+                              onClick={()=>this.props.handleSelectValue(this.props.facet, item.value)}>
                         {item.value}
                     </ListGroupItem>
                 );
@@ -58,9 +59,9 @@ var FacetsItem = React.createClass({
 
     render() {
         return (
-            //todo: use qbpanel with style fixes
-            <Panel fill collapsible defaultExpanded
-                   key={this.props.facet.fid} header={this.renderFieldName()}>
+            <Panel fill collapsible defaultExpanded {...this.props}
+                   onSelect={this.props.handleToggleCollapse}
+                   header={this.renderFieldName()}>
                 <ListGroup fill>
                     {this.renderValues()}
                 </ListGroup>
