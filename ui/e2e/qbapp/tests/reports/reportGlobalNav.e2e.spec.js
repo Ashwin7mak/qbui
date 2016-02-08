@@ -8,48 +8,27 @@
 (function() {
     'use strict';
 
-    //Require the e2e base class and constants modules
-    var e2eBase = require('../../common/e2eBase.js')();
-    var e2eConsts = require('../../common/e2eConsts.js');
-    var consts = require('../../../server/api/constants.js');
     //Bluebird Promise library
     var promise = require('bluebird');
-    //Load the page objects
-    var requestSessionTicketPage = require('./requestSessionTicket.po.js');
-    var requestAppsPage = require('./requestApps.po.js');
-    var ReportServicePage = require('./reportService.po.js');
+    //Load the page Objects
+    var ReportServicePage = requirePO('reportService');
+    var requestAppsPage = requirePO('requestApps');
+    var requestSessionTicketPage = requirePO('requestSessionTicket');
     var reportServicePage = new ReportServicePage();
 
     describe('Table Report Global Nav Tests', function() {
-        var heightTest = 1441;
-        e2eBase.setBaseUrl(browser.baseUrl);
-        e2eBase.initialize();
         var app;
+        var recordList;
 
-        /**
+        /**¶
          * Setup method. Generates JSON for an app, a table, a set of records and a report. Then creates them via the REST API.
          * Have to specify the done() callback at the end of the promise chain, otherwise Protractor will not wait
          * for the promises to be resolved
          */
         beforeAll(function(done) {
-            //Create the table schema (map object) to pass into the app generator
-            var tableToFieldToFieldTypeMap = {};
-            tableToFieldToFieldTypeMap['table 1'] = {};
-            tableToFieldToFieldTypeMap['table 1']['Text Field'] = {fieldType: consts.SCALAR, dataType: consts.TEXT};
-            tableToFieldToFieldTypeMap['table 1']['Rating Field'] = {fieldType: consts.SCALAR, dataType : consts.RATING};
-            tableToFieldToFieldTypeMap['table 1']['Phone Number Field'] = {fieldType: consts.SCALAR, dataType : consts.PHONE_NUMBER};
-            tableToFieldToFieldTypeMap['table 1']['Numeric'] = {fieldType: consts.SCALAR, dataType: consts.NUMERIC};
-            tableToFieldToFieldTypeMap['table 1']['Currency'] = {fieldType: consts.SCALAR, dataType : consts.CURRENCY};
-            tableToFieldToFieldTypeMap['table 1']['Percent'] = {fieldType: consts.SCALAR, dataType: consts.PERCENT};
-            tableToFieldToFieldTypeMap['table 1']['Url'] = {fieldType: consts.SCALAR, dataType: consts.URL};
-            tableToFieldToFieldTypeMap['table 1']['Duration'] = {fieldType: consts.SCALAR, dataType : consts.DURATION};
-            tableToFieldToFieldTypeMap['table 1']['Email'] = {fieldType: consts.SCALAR, dataType : consts.EMAIL_ADDRESS};
-            tableToFieldToFieldTypeMap['table 1']['Rating 2'] = {fieldType: consts.SCALAR, dataType: consts.RATING};
-
-            //Call the basic app setup function
-            e2eBase.basicSetup(tableToFieldToFieldTypeMap, 10).then(function(results) {
-                //Set your global objects to use in the test functions
-                app = results[0];
+            e2eBase.reportsBasicSetUp().then(function(appAndRecords) {
+                app = appAndRecords[0];
+                recordList = appAndRecords[1];
 
                 // Get a session ticket for that subdomain and realmId (stores it in the browser)
                 // Gather the necessary values to make the requests via the browser
@@ -93,7 +72,7 @@
          * Test method.
          */
         it('X-large breakpoint: Global Nav actions should show icon and text', function() {
-            e2eBase.resizeBrowser(e2eConsts.XLARGE_BREAKPOINT_WIDTH, heightTest).then(function(){
+            e2eBase.resizeBrowser(e2eConsts.XLARGE_BP_WIDTH, e2eConsts.DEFAULT_HEIGHT).then(function(){
                 expect(reportServicePage.topNavGlobalActDivEl.isDisplayed()).toBe(true);
                 reportServicePage.topNavGlobalActionsListEl.then(function(navActions){
                     expect(navActions.length).toBe(2);
@@ -107,7 +86,7 @@
          * Test method.
          */
         it('Large breakpoint: Global Nav actions should show icon and text', function() {
-            e2eBase.resizeBrowser(e2eConsts.LARGE_BREAKPOINT_WIDTH, heightTest).then(function() {
+            e2eBase.resizeBrowser(e2eConsts.LARGE_BP_WIDTH, e2eConsts.DEFAULT_HEIGHT).then(function() {
                 reportServicePage.waitForElement(reportServicePage.topNavGlobalActDivEl).then(function() {
                     reportServicePage.assertGlobalNavTextVisible(true);
                 });
@@ -118,7 +97,7 @@
          * Test method.
          */
         it('Medium breakpoint: Global Nav actions should only show icon', function() {
-            e2eBase.resizeBrowser(e2eConsts.MEDIUM_BREAKPOINT_WIDTH, heightTest).then(function(){
+            e2eBase.resizeBrowser(e2eConsts.MEDIUM_BP_WIDTH, e2eConsts.DEFAULT_HEIGHT).then(function(){
                 reportServicePage.waitForElement(reportServicePage.topNavGlobalActDivEl).then(function() {
                     expect(reportServicePage.topNavGlobalActDivEl.isDisplayed()).toBe(true);
                     reportServicePage.topNavGlobalActionsListEl.then(function(navActions){
@@ -133,7 +112,7 @@
          * Test method.
          */
         it('Small breakpoint: Global Nav actions should only show icon', function() {
-            e2eBase.resizeBrowser(e2eConsts.SMALL_BREAKPOINT_WIDTH, heightTest).then(function(){
+            e2eBase.resizeBrowser(e2eConsts.SMALL_BP_WIDTH, e2eConsts.DEFAULT_HEIGHT).then(function(){
                 reportServicePage.waitForElement(reportServicePage.topNavGlobalActDivEl).then(function() {
                     expect(reportServicePage.topNavGlobalActDivEl.isDisplayed()).toBe(true);
                     reportServicePage.topNavGlobalActionsListEl.then(function(navActions){

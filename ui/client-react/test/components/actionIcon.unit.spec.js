@@ -9,22 +9,19 @@ describe('ActionIcon functions', () => {
     let component;
 
 
-    it('test render with hicon', () => {
+    it('test render with qbicon', () => {
         component = TestUtils.renderIntoDocument(<ActionIcon tip="tooltip" icon="email"/>);
         expect(TestUtils.isCompositeComponent(component)).toBeTruthy();
     });
 
-    it('test render with glyphicon', () => {
-        component = TestUtils.renderIntoDocument(<ActionIcon tip="tooltip" glyph="search"/>);
-        expect(TestUtils.isCompositeComponent(component)).toBeTruthy();
-    });
+
 
     it('test render with onclick', () => {
         let clicked = false;
-        component = TestUtils.renderIntoDocument(<ActionIcon tip="tooltip" glyph="search" onClick={()=>{clicked = true;}}/>);
+        component = TestUtils.renderIntoDocument(<ActionIcon tip="tooltip" icon="search" onClick={()=>{clicked = true;}}/>);
         expect(TestUtils.isCompositeComponent(component)).toBeTruthy();
 
-        const link = TestUtils.findRenderedDOMComponentWithTag(component, "a").getDOMNode();
+        const link = TestUtils.findRenderedDOMComponentWithTag(component, "a");//.getDOMNode();
         TestUtils.Simulate.click(link);
         expect(clicked).toBe(true);
 

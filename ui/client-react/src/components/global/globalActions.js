@@ -1,9 +1,8 @@
 import React from 'react';
 import Fluxxor from 'fluxxor';
 import {Link} from 'react-router';
-import {Glyphicon} from 'react-bootstrap';
 import Hicon from '../harmonyIcon/harmonyIcon';
-import QBIcon from '../qbIcon/qbIcon';
+import QBicon from '../qbIcon/qbIcon';
 import {I18nMessage} from '../../utils/i18nMessage';
 
 import './globalActions.scss';
@@ -25,7 +24,7 @@ let GlobalAction = React.createClass({
         return (
             <li className={"link globalAction"}>
                 <Link to={this.props.action.link} onClick={this.props.onSelect}>
-                    <QBIcon icon={this.props.action.icon}/> <I18nMessage message={this.props.action.msg}/>
+                    <QBicon icon={this.props.action.icon}/><I18nMessage message={this.props.action.msg}/>
                 </Link>
             </li>);
     }

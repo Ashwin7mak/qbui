@@ -3,7 +3,7 @@ import ReactIntl from 'react-intl';
 import {I18nMessage, I18nDate} from '../../utils/i18nMessage';
 import Locale from '../../locales/locales';
 
-import {MenuItem, Dropdown, Glyphicon} from 'react-bootstrap';
+import {MenuItem, Dropdown} from 'react-bootstrap';
 
 import ActionIcon from './actionIcon';
 import EmailReportLink from './emailReportLink';

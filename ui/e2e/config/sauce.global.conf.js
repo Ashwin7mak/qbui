@@ -2,6 +2,7 @@
 // https://github.com/angular/protractor/blob/master/docs/referenceConf.js
 (function() {
     'use strict';
+    var baseE2EPath = '../../e2e/';
     // Needed for Protractor's DriverProvider to be able to run it's updateJob function
     // to let Sauce Labs know when the tests have completed (for use in AWS pipeline job)
     var HttpsProxyAgent = require('https-proxy-agent');
@@ -22,7 +23,7 @@
         sauceSeleniumAddress: 'localhost:4445/wd/hub',
         // list of files / patterns to load in the browser
         specs: [
-            '../qbapp/reports/*.e2e.spec.js'
+            '../qbapp/tests/reports/*.e2e.spec.js'
         ],
         // Patterns to exclude.
         exclude: [],
@@ -52,6 +53,20 @@
         },
         // This function is run once before any of the test files. Acts as a global test preparation step
         onPrepare: function(){
+            //Method to initialize all Page Objects
+            global.requirePO = function(relativePath) {
+                return require(baseE2EPath + 'qbapp/pages/' + relativePath + '.po.js');
+            };
+
+            //Method to initialize all Common Files
+            global.requireCommon = function(relativePath) {
+                return require(baseE2EPath + relativePath + '.js');
+            };
+
+            //read the base classes
+            global.e2eBase = requireCommon('common/e2eBase')();
+            global.consts = require('../../server/api/constants');
+            global.e2eConsts = requireCommon('common/e2eConsts');
             // Lets Protractor know there is no Angular code to wait for
             browser.ignoreSynchronization = true;
             // Maximizes the browser window (known bug with Chrome)

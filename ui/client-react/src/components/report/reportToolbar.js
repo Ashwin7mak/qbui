@@ -159,11 +159,12 @@ var ReportToolbar = React.createClass({
     /*TODO : remove this when facets ui is integrated with backend, only for dev testing not users */
     renderFakeFilterButton() {
         let tooltip = (
-                        <Tooltip  id="FakeFacetTip">This button is hard wired filter by facets - only matches
+                        <Tooltip  id="fakeFacetTip">This button is hard wired filter by facets - only matches
                                 Record#id = 10 OR 11
                         </Tooltip>);
+        {/* hide this - devs can use document.getElementById('fakeFacet').style.display='block'; */}
         return (
-                <OverlayTrigger id="FakeFacet"  overlay={tooltip} placement="bottom">
+                <OverlayTrigger id="fakeFacet" style={{display:'none'}} overlay={tooltip} placement="bottom">
                     <div className="button-container">
                         &nbsp;<Button className="testFilterButton"
                                     bsStyle="link" onClick={this.filterReport}>
