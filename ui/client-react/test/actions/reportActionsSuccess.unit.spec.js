@@ -11,10 +11,15 @@ describe('Report Actions functions -- success', () => {
     let testData = {appId: '1', tblId: '2'};
     let responseData = {appId: testData.appId, tblId: testData.tblId, data: 'testData'};
 
+    let promise;
     class mockReportService {
-        constructor() { }
-        getReports(appId, tblId) {
-            return Promise.resolve({data:responseData});
+        constructor() {
+        }
+
+        getReports() {
+            var p = Promise.defer();
+            p.resolve(responseData);
+            return p.promise;
         }
     }
 
@@ -22,31 +27,35 @@ describe('Report Actions functions -- success', () => {
     let flux = new Fluxxor.Flux(stores);
     flux.addActions(reportActions);
 
-    beforeEach(() => {
+    beforeEach((done) => {
         spyOn(flux.dispatchBinder, 'dispatch');
-        spyOn(mockReportService.prototype, 'getReports').and.callThrough();
         reportActions.__Rewire__('ReportService', mockReportService);
+
+        promise = flux.actions.loadReports(testData.appId, testData.tblId);
+
+        //  expect a load report event to get fired before the promise returns
+        expect(flux.dispatchBinder.dispatch).toHaveBeenCalledWith(actions.LOAD_REPORTS);
+        flux.dispatchBinder.dispatch.calls.reset();
+
+        promise.then(
+            function() {
+                done();
+            },
+            function() {
+                done();
+            }
+        );
+
     });
 
     afterEach(() => {
         reportActions.__ResetDependency__('ReportService');
+        promise = null;
     });
 
-    it('test load report action with report parameters', (done) => {
-
-        flux.actions.loadReports(testData.appId, testData.tblId).then(
-            () => {
-                expect(mockReportService.prototype.getReports).toHaveBeenCalled();
-                expect(flux.dispatchBinder.dispatch.calls.count()).toEqual(2);
-                expect(flux.dispatchBinder.dispatch.calls.argsFor(0)).toEqual([actions.LOAD_REPORTS]);
-                expect(flux.dispatchBinder.dispatch.calls.argsFor(1)).toEqual([actions.LOAD_REPORTS_SUCCESS, {appId:testData.appId, tblId:testData.tblId, data:responseData}]);
-                done();
-            },
-            () => {
-                expect(false).toBe(true);
-                done();
-            }
-        );
+    it('test load report action with report parameters', () => {
+        expect(promise.isFulfilled()).toBeTruthy();
+        expect(flux.dispatchBinder.dispatch).toHaveBeenCalledWith(actions.LOAD_REPORTS_SUCCESS, responseData);
     });
 
 });
