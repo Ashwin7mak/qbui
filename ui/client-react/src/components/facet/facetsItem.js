@@ -8,13 +8,24 @@ import './facet.scss';
 
 import Logger from '../../utils/logger';
 import {I18nMessage} from '../../utils/i18nMessage';
+import QBicon from '../qbIcon/qbIcon';
 
 let logger = new Logger();
 
 /**
  * FacetsItem one of the fields from the set of field facets groups
  * a Facets item has a field id, type, field name and a collection of facet values
- */
+ *
+ *
+ * in current stack each entry in facet array has :
+ *      array of aspects(values)
+ *      type of data (text, bool, or daterange), also field type
+ *      has empty bool (if true include empty as a choice)
+ *      fid number
+ *      field name
+ *      toomany to facet? bool
+ *      reason = messageid for why no facets (too many values, other reasons?)
+ **/
 
 
 const facetItemValueShape = React.PropTypes.shape({
@@ -39,6 +50,7 @@ var FacetsItem = React.createClass({
      */
     propTypes: {
         facet:facetShape,
+        fieldSelections: React.PropTypes.array.isRequired,
         handleSelectValue: React.PropTypes.func,
         handleToggleCollapse: React.PropTypes.func
     },
@@ -60,9 +72,19 @@ var FacetsItem = React.createClass({
      * @returns {XML}
      */
     renderFieldName() {
+        var clearFacetsIcon = "";
+        if (this.props.fieldSelections.length > 0) {
+            clearFacetsIcon = (<QBicon className="clearFacet" icon="clear-mini"
+                                       onClick={(e)=>this.props.handleClearFieldsSelects(this.props.facet)}/>);
+        }
+        //todo: render text values in small text
+        var selectedValues = "";
         return (
-            <h4 className="facetName">{this.props.facet.name}</h4>
-        );
+                <h4 className="facetName" >
+                    <span >{this.props.facet.name}</span>
+                    {clearFacetsIcon}
+                </h4>
+            );
     },
 
 
@@ -72,9 +94,12 @@ var FacetsItem = React.createClass({
      * @returns {XML}
      */
     renderValue(item, index) {
+        var isSelected = _.indexOf(this.props.fieldSelections, item.value) !== -1;
         return (
             <ListGroupItem key={this.props.facet.fid + "." + index}
-                           onClick={()=>this.props.handleSelectValue(this.props.facet, item.value)}>
+                           onClick={(e)=>this.props.handleSelectValue(e, this.props.facet, item.value)}
+                           className={isSelected  ? "selected" : ""}>
+                <QBicon className={isSelected  ? "checkMark-selected" : "checkMark"} icon="check" />
                 {item.value}
             </ListGroupItem>
         );
@@ -104,6 +129,7 @@ var FacetsItem = React.createClass({
     render() {
         return (
             <Panel fill collapsible defaultExpanded {...this.props}
+                   className={(this.props.fieldSelections.length > 0) ? "selections" : ""}
                    onSelect={this.props.handleToggleCollapse}
                    header={this.renderFieldName()}>
                 <ListGroup fill>

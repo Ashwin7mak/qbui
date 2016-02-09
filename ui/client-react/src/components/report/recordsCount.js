@@ -22,8 +22,8 @@ var RecordsCount = React.createClass({
         if (this.props.isFiltered) {
             message = "report.filteredRecordCount";
         }
-        if ((this.props.isFiltered && this.props.filteredRecordCount == 0) ||
-            this.props.recordCount == 0) {
+        if ((this.props.isFiltered && this.props.filteredRecordCount === 0) ||
+            this.props.recordCount === 0) {
             // no records
             return null;
         } else {

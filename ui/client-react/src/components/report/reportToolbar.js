@@ -9,6 +9,7 @@ import {I18nMessage} from '../../../src/utils/i18nMessage';
 import {Tooltip, OverlayTrigger, Button} from 'react-bootstrap';
 import FilterSearchBox from '../facet/filterSearchBox';
 import {FacetsMenu} from '../facet/facetsMenu';
+import FacetSelections from '../facet/facetSelections';
 import RecordsCount from './RecordsCount';
 
 let FluxMixin = Fluxxor.FluxMixin(React);
@@ -28,22 +29,14 @@ var ReportToolbar = React.createClass({
     mixins: [FluxMixin],
 
     getDefaultProps : function() {
-        // Facets  = array 1 per facet fid
-        // in current stack each entry in array has :
-        //      array of aspects(values)
-        //      type of data (text, bool, or daterange), also field type
-        //      has empty bool (if true include empty as a choice)
-        //      fid number
-        //      field name
-        //      toomany to facet? bool
-        //      reason = messageid for why no facets (too many values, other reasons?)
-
+        return {initialSelections : new FacetSelections()};
     },
     getInitialState: function() {
+
         return {
             searchInput: '',
             searchStringForFiltering: '',
-            selectedFacets : {}
+            selections : this.props.initialSelections
         };
     },
 
@@ -78,7 +71,7 @@ var ReportToolbar = React.createClass({
         if (this.state.searchStringForFiltering.length !== 0){
             answer = true;
         } else {
-            answer = Object.keys(this.state.selectedFacets).length !== 0 ;
+            answer = this.state.selections.hasAnySelections();
         }
         return answer;
     },
@@ -94,24 +87,20 @@ var ReportToolbar = React.createClass({
         flux.actions.filterReport(this.props.appId, this.props.tblId, this.props.rptId, true, facetExpression);
     },
 
-    handleFacetSelect : function(facet, value) {
+    handleFacetSelect : function(e, facet, value) {
         logger.debug("facet clicked field:" + facet.name + " value:" + value);
-        //determine enable if not in selectedFacets yet, return true for select, false for deselect
-        //TODO update selectedFacter:
-        //if enable == true (when selecting the value in the facet)
-            //if there is not an facet entry in the selecetFacets hash add it. then add the value
-            //if (this.selectedFacets.z !== undefined ) {
-                    // this.selectedFacets.z["9"]= [] or {} ?// add entry first selection
-            //}
-            // this.selectedFacets.z["9] = {"9":"9"} // push the selection to the list
-            // }
-        // else { //disable the selected value
-            // find the item in the fids list of selected values
-            // this.selectFacets.z // list of values
-            // remove the item from the hash or array
-            // if the array is empty delete the fid from those with values selected
-                //}
-        //
+        this.state.selections.handleToggleSelect(e, facet, value);
+        var mutated = new FacetSelections();
+        mutated.initSelections(this.state.selections.getSelections());
+        this.setState({selections: mutated});
+    },
+
+    handleFacetClearFieldSelects : function(facet) {
+        logger.debug("facet clicked clear field:" + facet.name);
+        this.state.selections.removeAllFieldSelections(facet.id);
+        var mutated = new FacetSelections();
+        mutated.initSelections(this.state.selections.getSelections());
+        this.setState({selections: mutated});
     },
 
     handleChange: function(e) {
@@ -202,7 +191,10 @@ var ReportToolbar = React.createClass({
                 also hide Facets Menu Button if facets disabled  */}
                 { recordCount &&
                     (<FacetsMenu className="facetMenu"  {...this.props}
-                                  onFacetSelect={this.handleFacetSelect} />)
+                                  selectedValues = {this.state.selections}
+                                  onFacetSelect={this.handleFacetSelect}
+                                  onFacetClearFieldSelects={this.handleFacetClearFieldSelects}
+                    />)
                 }
 
                 {/*TODO :  - get real records count from props */}

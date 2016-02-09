@@ -8,7 +8,7 @@ import {I18nMessage} from '../../utils/i18nMessage';
 import StringUtils from '../../utils/stringUtils';
 
 import FacetsItem from './facetsItem';
-import Hicon from '../harmonyIcon/harmonyIcon';
+import QBicon from '../qbIcon/qbIcon';
 
 import './facet.scss';
 import _ from 'lodash';
@@ -161,7 +161,8 @@ var FacetsMenu = React.createClass({
                     <div className="facetsMenuButton"
                          onClick={e => this.toggleMenu(e)}
                     >
-                        <Hicon icon="filter" />
+                        <QBicon icon="filter-tool" />
+                        <QBicon icon="caret-filled-down" />
                     </div>
                 </OverlayTrigger>
             </div>
@@ -181,12 +182,15 @@ var FacetsList = React.createClass({
      */
     facetsList(facetsData) {
         return facetsData.list.map((facetField, index) => {
-            return <FacetsItem eventKey={facetField} key={facetField.id}
+            var fid = facetField.id;
+            return <FacetsItem eventKey={facetField} key={fid}
                                facet={facetField}
-                               ref={facetField.id}
-                               expanded={!this.props.isCollapsed(facetField.id)}
+                               ref={fid}
+                               fieldSelections={this.props.selectedValues.getFieldSelections(fid)}
+                               expanded={!this.props.isCollapsed(fid)}
                                handleToggleCollapse={this.props.handleToggleCollapse}
                                handleSelectValue={this.props.onFacetSelect}
+                               handleClearFieldSelects={this.props.onFacetClearFieldSelects}
                 {...this.props} />;
         });
     },
