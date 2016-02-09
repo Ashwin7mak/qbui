@@ -83,20 +83,22 @@ let ReportDataStore = Fluxxor.createStore({
 
     getReportColumns: function(fields) {
         let columns = [];
-        fields.forEach(function(field, index) {
-            let column = {};
-            column.order = index;
-            column.id = field.id;
-            column.columnName = field.name;
-            column.displayName = field.name;
-            column.fieldType = field.type;
-            column.builtIn = field.builtIn;
+        if (fields) {
+            fields.forEach(function(field, index) {
+                let column = {};
+                column.order = index;
+                column.id = field.id;
+                column.columnName = field.name;
+                column.displayName = field.name;
+                column.fieldType = field.type;
+                column.builtIn = field.builtIn;
 
-            //  client side attributes..
-            column.datatypeAttributes = field.datatypeAttributes;
+                //  client side attributes..
+                column.datatypeAttributes = field.datatypeAttributes;
 
-            columns.push(column);
-        });
+                columns.push(column);
+            });
+        }
         return columns;
     },
 
