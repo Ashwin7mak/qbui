@@ -19,17 +19,22 @@ var RecordsCount = React.createClass({
      */
     render() {
         let message = "report.recordCount";
-        if (this.props.isFiltering) {
+        if (this.props.isFiltered) {
             message = "report.filteredRecordCount";
         }
-
-        return (<div className="recordsCount">
+        if ((this.props.isFiltered && this.props.filteredRecordCount == 0) ||
+            this.props.recordCount == 0) {
+            // no records
+            return null;
+        } else {
+            return (<div className="recordsCount">
                 <I18nMessage message={message}
-                    filteredRecordCount={this.props.filteredRecordCount}
-                    recordCount={this.props.recordCount}
-                    nameForRecords={this.props.nameForRecords}
+                             filteredRecordCount={this.props.filteredRecordCount}
+                             recordCount={this.props.recordCount}
+                             nameForRecords={this.props.nameForRecords}
                 />
             </div>);
+        }
     }
 });
 

@@ -177,29 +177,43 @@ var ReportToolbar = React.createClass({
     render() {
         this.populateDummyFacets();
         let fakeFilterButton = this.renderFakeFilterButton();
+
+        let recordCount = this.props.reportData.data.records ? this.props.reportData.data.records.length : 0; //TODO what to show for pagination?
+        let filteredRecordCount  = this.props.reportData.data.filteredRecords ? this.props.reportData.data.filteredRecords.length : 0;
+
+        // determine if there is a search/filter in effect and if there are records/results to show
+        let hasRecords = true;
+        if (this.isFiltered()) {
+            hasRecords = this.props.filteredRecordCount ? true : false;
+        } else {
+            hasRecords = this.props.recordCount ? true : false;
+        }
+
         return (
-                <div className="reportToolbar">
+            <div className="reportToolbar">
 
-                    {/*TODO : check if searchbox is enabled for this report,
-                    if has facets has search too */}
-                    <FilterSearchBox onChange={this.handleChange}
-                                     nameForRecords="Records"
-                                     {...this.props} />
+                {/*TODO : check if searchbox is enabled for this report,
+                if has facets has search too */}
+                <FilterSearchBox onChange={this.handleChange}
+                                 nameForRecords="Records"
+                                 {...this.props} />
 
-                    {/*TODO :  - check if facets is enabled for this report,
-                    hide Facets Menu Button if facets disabled  */}
-                    <FacetsMenu className="facetMenu"  {...this.props}
-                                      onFacetSelect={this.handleFacetSelect} />
+                {/*TODO :  - check if facets is enabled for this report,
+                also hide Facets Menu Button if facets disabled  */}
+                { recordCount &&
+                    (<FacetsMenu className="facetMenu"  {...this.props}
+                                  onFacetSelect={this.handleFacetSelect} />)
+                }
 
-                    {/*TODO :  - get real records count from props */}
-                    <RecordsCount recordCount="100"
-                                  isFiltered={this.isFiltered()}
-                                  filteredRecordCount="0"
-                                  nameForRecords="Records"
-                                    {...this.props} />
+                {/*TODO :  - get real records count from props */}
+                <RecordsCount recordCount={recordCount}
+                              isFiltered={this.isFiltered()}
+                              filteredRecordCount={filteredRecordCount}
+                              nameForRecords="Records"
+                                {...this.props} />
 
-                    {fakeFilterButton}
-                </div>
+                {fakeFilterButton}
+            </div>
         );
     }
 });
