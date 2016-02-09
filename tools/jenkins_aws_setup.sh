@@ -5,7 +5,7 @@ echo PATH=$PATH
 
 #get phantomjs install
 
-echo PHANTOMJS_TAR=$PHANTOMJS_TAR
+echo PHANTOMJS_TAR=$PHANTOMJS_TARBALL
 if [ ! -d "$PHANTOMJS_TMP" ]; then
   echo creating tmp dir  [$PHANTOMJS_TMP for phantomjs
   mkdir "$PHANTOMJS_TMP"
@@ -23,7 +23,7 @@ fi
 
 
 if [ ! -d "$PHANTOMJS_INSTALL_DIR" ]; then
- echo unpacking jphantomjs
+ echo unpacking phantomjs
   tar -xf  $PHANTOMJS_TMP/$PHANTOMJS_TARBALL -C $TOOLS_DIR
   ls "$TOOLS_DIR"
 else
