@@ -5,17 +5,16 @@ import reportActions from '../../src/actions/reportActions';
 import * as actions from '../../src/constants/actions';
 import Promise from 'bluebird';
 
-describe('Report Actions functions -- error', () => {
+describe('Report Actions error functions --', () => {
     'use strict';
 
     let testData = {appId:'1', tblId:'2'};
 
-    let promise;
     class mockReportService {
         constructor() { }
         getReports() {
             var p = Promise.defer();
-            p.reject({message:'some error'});
+            p.reject({message:'someError'});
             return p.promise;
         }
     }
@@ -24,53 +23,58 @@ describe('Report Actions functions -- error', () => {
     let flux = new Fluxxor.Flux(stores);
     flux.addActions(reportActions);
 
-    beforeEach((done) => {
+    beforeEach(() => {
         spyOn(flux.dispatchBinder, 'dispatch');
+        spyOn(mockReportService.prototype, 'getReports').and.callThrough();
         reportActions.__Rewire__('ReportService', mockReportService);
-
-        promise = flux.actions.loadReports(testData.appId, testData.tblId);
-
-        //  expect a load report event to get fired before the promise returns
-        expect(flux.dispatchBinder.dispatch).toHaveBeenCalledWith(actions.LOAD_REPORTS);
-        flux.dispatchBinder.dispatch.calls.reset();
-
-        promise.then(
-            function() {
-                console.log('beforeEach successdone');
-                done();
-            },
-            function() {
-                console.log('beforeEach error done');
-                done();
-            }
-        );
-
     });
 
     afterEach(() => {
         reportActions.__ResetDependency__('ReportService');
-        promise = null;
     });
 
-    it('test load report action with error input', () => {
-        expect(promise.isRejected()).toBeTruthy();
-        expect(flux.dispatchBinder.dispatch).toHaveBeenCalledWith(actions.LOAD_REPORTS_FAILED);
+    it('test load report action with promise reject', (done) => {
+        flux.actions.loadReports(testData.appId, testData.tblId).then(
+            () => {
+                expect(true).toBe(false);
+                done();
+            },
+            () => {
+                expect(mockReportService.prototype.getReports).toHaveBeenCalled();
+                expect(flux.dispatchBinder.dispatch.calls.count()).toEqual(2);
+                expect(flux.dispatchBinder.dispatch.calls.argsFor(0)).toEqual([actions.LOAD_REPORTS]);
+                expect(flux.dispatchBinder.dispatch.calls.argsFor(1)).toEqual([actions.LOAD_REPORTS_FAILED]);
+                done();
+            }
+        );
+    });
+
+    it('test load report action with no data', (done) => {
+        flux.actions.loadReports().then(
+            () => {
+                expect(true).toBe(false);
+                done();
+            },
+            () => {
+                expect(mockReportService.prototype.getReports).not.toHaveBeenCalled();
+                expect(flux.dispatchBinder.dispatch.calls.count()).toEqual(1);
+                expect(flux.dispatchBinder.dispatch.calls.argsFor(0)).toEqual([actions.LOAD_REPORTS_FAILED]);
+                done();
+            }
+        );
     });
 
 });
 
-describe('Report Actions functions -- no data supplied', () => {
+describe('Report Actions error functions -- ', () => {
     'use strict';
 
-    let testData = {appId:null, tblId:null};
+    let testData = {appId:'1', tblId:'2'};
 
-    let promise;
-    class mockSuccessReportService {
+    class mockReportService {
         constructor() { }
         getReports() {
-            var p = Promise.defer();
-            p.reject({message:'some error'});
-            return p.promise;
+            return Promise.resolve(null);
         }
     }
 
@@ -78,37 +82,30 @@ describe('Report Actions functions -- no data supplied', () => {
     let flux = new Fluxxor.Flux(stores);
     flux.addActions(reportActions);
 
-    beforeEach((done) => {
+    beforeEach(() => {
         spyOn(flux.dispatchBinder, 'dispatch');
-        reportActions.__Rewire__('ReportService', mockSuccessReportService);
-
-        promise = flux.actions.loadReports(testData.appId, testData.tblId);
-
-        //  no spinner if missing input parameters
-        expect(flux.dispatchBinder.dispatch).not.toHaveBeenCalled();
-
-        promise.then(
-            function() {
-                console.log('beforeEach successdone');
-                done();
-            },
-            function() {
-                console.log('beforeEeach error done');
-                done();
-            }
-        );
-
+        spyOn(mockReportService.prototype, 'getReports').and.callThrough();
+        reportActions.__Rewire__('ReportService', mockReportService);
     });
 
     afterEach(() => {
         reportActions.__ResetDependency__('ReportService');
-        promise = null;
     });
 
-    it('test load report action with error input', () => {
-        expect(promise.isRejected()).toBeTruthy();
-        expect(flux.dispatchBinder.dispatch).not.toHaveBeenCalled();
+    it('test exception', (done) => {
+        flux.actions.loadReports(testData.appId, testData.tblId).then(
+            () => {
+                expect(true).toBe(false);
+                done();
+            },
+            () => {
+                expect(mockReportService.prototype.getReports).toHaveBeenCalled();
+                expect(flux.dispatchBinder.dispatch.calls.count()).toEqual(2);
+                expect(flux.dispatchBinder.dispatch.calls.argsFor(0)).toEqual([actions.LOAD_REPORTS]);
+                expect(flux.dispatchBinder.dispatch.calls.argsFor(1)).toEqual([actions.LOAD_REPORTS_FAILED]);
+                done();
+            }
+        );
     });
 
 });
-
