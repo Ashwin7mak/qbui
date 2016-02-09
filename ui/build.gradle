@@ -15,6 +15,7 @@ apply plugin: 'com.moowork.grunt'
 apply plugin: 'com.moowork.node'
 apply plugin: 'sonar-runner'
 apply plugin: 'org.sonarqube'
+apply plugin: 'sonarBuildBreak'
 apply plugin: 'com.bmuschko.cargo'
 
 //grab the current working directory to use later on
@@ -39,12 +40,16 @@ buildscript {
         maven {
             url nexusRoot + "gradle2/"
         }
+        maven {
+            url nexusRoot + "snapshots/"
+        }
         flatDir name: 'ExternalJars', dirs: '../lib/plugins'
         dependencies {
             classpath 'com.moowork.gradle:gradle-grunt-plugin:0.9'
             classpath 'com.moowork.gradle:gradle-node-plugin:0.9'
             classpath 'com.bmuschko:gradle-cargo-plugin:2.2.1'
             classpath 'org.sonarqube.gradle:gradle-sonarqube-plugin:1.1'
+            classpath 'com.quickbase.gradle:sonar-buildbreak-plugin:0.1.0-SNAPSHOT'
         }
     }
 }
