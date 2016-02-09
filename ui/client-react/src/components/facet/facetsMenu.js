@@ -131,7 +131,7 @@ var FacetsMenu = React.createClass({
     },
 
     /**
-     * Handle the ui event that occured - handled changing the collapse/expand state of a
+     * Handle the ui event that occurred - handled changing the collapse/expand state of a
      * facet field group. To make the facet field groups values hidden or shown.
      *
      * @param e - the event object from the browser/react

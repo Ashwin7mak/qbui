@@ -164,9 +164,9 @@ var ReportToolbar = React.createClass({
                         </Tooltip>);
         {/* hide this - devs can use document.getElementById('fakeFacet').style.display='block'; */}
         return (
-                <OverlayTrigger id="fakeFacet" style={{display:'none'}} overlay={tooltip} placement="bottom">
+                <OverlayTrigger overlay={tooltip} placement="bottom">
                     <div className="button-container">
-                        &nbsp;<Button className="testFilterButton"
+                        &nbsp;<Button  id="fakeFacet" className="testFilterButton"
                                     bsStyle="link" onClick={this.filterReport}>
                         Fake filter this report </Button>
                     </div>
