@@ -108,11 +108,12 @@
                 deferred.resolve(null);
             } else {
                 request(opts, function(error, response) {
-                    if (response.statusCode === 200) {
-                        deferred.resolve(response);
-                    } else {
-                        log.error("ERROR EXECUTING REQUEST: " + JSON.stringify(error));
+                    if (error) {
+                        deferred.reject(new Error(error));
+                    } else if (response.statusCode !== 200) {
                         deferred.reject(response);
+                    } else {
+                        deferred.resolve(response);
                     }
                 });
             }
