@@ -12,7 +12,7 @@ import {I18nMessage} from '../../utils/i18nMessage';
 let logger = new Logger();
 
 /**
- * FacetsItem one of the fields from the set of field facets grroups
+ * FacetsItem one of the fields from the set of field facets groups
  * a Facets item has a field id, type, field name and a collection of facet values
  */
 
@@ -34,8 +34,8 @@ var FacetsItem = React.createClass({
     /**
      * this takes in as props
      *  - the facet field,
-     *  -  a function to handle selection/deseletion of one of the facet fields values used to initiate filter the report results
-     *  - a function to handle to collaps/expansion of a the facee field to hide or show its list of values
+     *  -  a function to handle selection/deselection of one of the facet fields values used to initiate filter the report results
+     *  - a function to handle the collapse/expansion of the facet field ;  hide or show its list of values
      */
     propTypes: {
         facet:facetShape,

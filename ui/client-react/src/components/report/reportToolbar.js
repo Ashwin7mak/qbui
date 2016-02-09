@@ -8,7 +8,7 @@ import Logger from '../../utils/logger';
 import {I18nMessage} from '../../../src/utils/i18nMessage';
 import {Tooltip, OverlayTrigger, Button} from 'react-bootstrap';
 import FilterSearchBox from '../facet/filterSearchBox';
-import FacetsMenu from '../facet/facetsMenu';
+import {FacetsMenu} from '../facet/facetsMenu';
 import RecordsCount from './RecordsCount';
 
 let FluxMixin = Fluxxor.FluxMixin(React);

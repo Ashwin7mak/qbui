@@ -16,15 +16,19 @@ import _ from 'lodash';
 let logger = new Logger();
 
 /**
- *  FacetsMenu component presents a list of facets available to filter the report on when its button is clicked.
- *  for each field with facet values there is collapsable field header and the list of facet values
+ *  FacetsMenu component presents a trigger button that when clicked shows list of facets available to filter a report on.
+ *  When the list is shown and the trigger button is clicked again it hides the FacetMenu.
+ *
+ *  For each field with facet values there is collapsible field header and the list of facetItems
+ *
+ *  The FacetsMenu has a trigger button and the FacetsList
 **/
-let FacetsMenu = React.createClass({
+var FacetsMenu = React.createClass({
     propTypes: {
         /**
          *  Takes in for properties the reportData which includes the list of facets
          *  and a function to call when a facet value is selected.
-        **/
+         **/
         reportData: React.PropTypes.shape({
             data: React.PropTypes.shape({
                 facets:  React.PropTypes.shape({
@@ -36,12 +40,11 @@ let FacetsMenu = React.createClass({
     },
 
     /**
-     * function getInitalState
-     * intializes the:
-     * - Facterlist popover (shown) state to not shown
-     *  -  collapse/expand state (expandedFacetFields) of all the facet fields sections in the
-     * popover using the allInitiallyCollapsed prop setting
-     *  - selected set of facet values (selected) state to nothing selected
+     * Initializes the states:
+     *  - (shown)  : Facet List popover shown state to not shown
+     *  - (expandedFacetFields) : of all the facet fields sections in the
+     *                          popover using the allInitiallyCollapsed prop setting
+     *  - (selected): selected set of facet values  state to nothing selected
      *
      * @returns {{show: boolean, expandedFacetFields: Array, selected: Array}}
      */
@@ -66,8 +69,8 @@ let FacetsMenu = React.createClass({
     },
 
     /**
-     * function: getDefaultProps
-     * specifies what to use for the default collapse/expand mode to use for all the fields facets
+     * Specifies what to use for the default collapse/expand mode to use for all the fields facets
+     *
      * @returns {{allInitiallyCollapsed: boolean}}
      */
     getDefaultProps() {
@@ -77,17 +80,16 @@ let FacetsMenu = React.createClass({
     },
 
     /**
-     * function : toggleMenu
-     * changes of the state of the facet popover to hidden or shown
-      * @param e
+     * Changes of the state of the facet popover to hidden or shown
+     *
+     * @param e
      */
     toggleMenu(e) {
         this.setState({target: e.target, show: !this.state.show});
     },
 
     /**
-     * function: setFacetState
-     * change state of a facet field group to collapsed if parameter makeCollapsed is true or expanded if not
+     * Changes the state of a facet field group to collapsed if parameter makeCollapsed is true or expanded if not
      * by adding or removing the field id from a hash listing the expanded facet field groups
      *
      * @param facetField - the facet
@@ -109,7 +111,6 @@ let FacetsMenu = React.createClass({
     },
 
     /**
-     * function : isCollapsed
      * Check if a facet field group section is collapsed or not
      *
      * @param id - the id of field to check
@@ -121,8 +122,7 @@ let FacetsMenu = React.createClass({
 
 
     /**
-     * function: toggleCollapseFacet
-     * Toggle the fate of exppand Collapse of a facet field group in the popover
+     * Toggle the fate of expand Collapse of a facet field group in the popover
      * change state of a facet from expanded to collapsed or collapsed to expanded
      * @param facetField - the fact field you want to toggle
      **/
@@ -131,9 +131,9 @@ let FacetsMenu = React.createClass({
     },
 
     /**
-     * function: handleToggleCollapse
-     * handle the ui request ofevent occurs to handled changing the collapse/expand state of a
+     * Handle the ui event that occured - handled changing the collapse/expand state of a
      * facet field group. To make the facet field groups values hidden or shown.
+     *
      * @param e - the event object from the browser/react
      * @param facetField - the facet field group to act on
      **/
@@ -143,13 +143,12 @@ let FacetsMenu = React.createClass({
     },
 
     /**
-     * function: render
-     * prepars the facet menu button used to show/hide the popover menu of feild aet groups when clicked
+     * Prepares the facet menu button used to show/hide the popover menu of field facet groups when clicked
+     *
      **/
-
     render() {
         return (
-            <div ref="facetsMenuContainer" class="facetsMenuContainer">
+            <div className="facetsMenuContainer">
                 {/*  list of facet options shown when filter icon clicked */}
                 <OverlayTrigger container={this} trigger="click"
                                 placement="bottom"
@@ -161,16 +160,25 @@ let FacetsMenu = React.createClass({
                     {/* the filter icon */}
                     <div className="facetsMenuButton"
                          onClick={e => this.toggleMenu(e)}
-                        >
+                    >
                         <Hicon icon="filter" />
                     </div>
-                 </OverlayTrigger>
+                </OverlayTrigger>
             </div>
-            );
+        );
     }
 });
-
-let FacetsList = React.createClass({
+/**
+ *  FacetsList component presents a list of facets available to filter the report on;
+ *  For each facet field in the list it will make a FacetsItem component
+ **/
+var FacetsList = React.createClass({
+    /**
+     * Renders each field inf the list of facet fields with FacetItem component
+     *
+     * @param facetsData - the list of facet field object
+     * @returns the prepared set of FacetsItem components for rendering
+     */
     facetsList(facetsData) {
         return facetsData.list.map((facetField, index) => {
             return <FacetsItem eventKey={facetField} key={facetField.id}
@@ -183,22 +191,18 @@ let FacetsList = React.createClass({
         });
     },
 
+    /**
+     * Renders the arrowed popover box with contents of the facet menu list of items
+     * @returns {XML}
+     */
     render(){
-        /**
-         * arrowed box with contents of the facet menu list of items
-         **/
-        const style = {
-            marginLeft: -4,
-            borderRadius: 3,
-            minWidth: 220
-        };
         return (
-            <Popover fstyle={style}
-                     id="facetsMenuPopup"
+            <Popover id="facetsMenuPopup"
                      arrowOffsetLeft={28}
                      placement="bottom"
                      className="facetMenuPopup">
-                {this.props.reportData && this.props.reportData.data && this.props.reportData.data.facets && this.props.reportData.data.facets.list ?
+                {this.props.reportData && this.props.reportData.data &&
+                 this.props.reportData.data.facets && this.props.reportData.data.facets.list ?
                     this.facetsList(this.props.reportData.data.facets) :
                     "No Facets"
                 }
@@ -207,4 +211,4 @@ let FacetsList = React.createClass({
     }
 });
 
-export default FacetsMenu;
+export {FacetsMenu, FacetsList};

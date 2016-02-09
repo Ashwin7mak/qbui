@@ -11,7 +11,7 @@ describe('facetItem functions', () => {
         id:22,
         name:"test",
         type:"text",
-        values:["a", "b", "c"]
+        values:[{value:"a"}, {value:"b"}, {value:"c"}]
     };
 
     it('test render facetItem', () => {
