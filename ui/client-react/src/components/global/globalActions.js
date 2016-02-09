@@ -1,7 +1,6 @@
 import React from 'react';
 import Fluxxor from 'fluxxor';
 import {Link} from 'react-router';
-import Hicon from '../harmonyIcon/harmonyIcon';
 import QBicon from '../qbIcon/qbIcon';
 import {I18nMessage} from '../../utils/i18nMessage';
 
