@@ -28,7 +28,7 @@ module.exports = function(config) {
         },
 
         webpack: {
-            devtool: "eval",
+            devtool: "source-map",
             module: {
                 loaders: [
                     {

@@ -108,11 +108,12 @@
                 deferred.resolve(null);
             } else {
                 request(opts, function(error, response) {
-                    if (response.statusCode === 200) {
-                        deferred.resolve(response);
-                    } else {
-                        log.error("ERROR EXECUTING REQUEST: " + JSON.stringify(error));
+                    if (error) {
+                        deferred.reject(new Error(error));
+                    } else if (response.statusCode !== 200) {
                         deferred.reject(response);
+                    } else {
+                        deferred.resolve(response);
                     }
                 });
             }
@@ -132,34 +133,29 @@
 
             fetchSingleRecordAndFields: function(req) {
                 var deferred = Promise.pending();
-                var fetchRequests = [this.fetchRecords(req), this.fetchFields(req)];
-
-                Promise.all(fetchRequests).then(
-                    function(response) {
-                        var record = jsonBigNum.parse(response[0].body);
-                        var responseObject;
-                        if (req.param(FORMAT) === RAW) {
-                            //return raw undecorated record values due to flag format=raw
-                            responseObject = record;
-                        } else {
-                            //response object will include a fields meta data block plus record values
-                            var fields = removeUnusedFields(record, JSON.parse(response[1].body));
-                            //format records for display if requested with the flag format=display
-                            if (req.param(FORMAT) === DISPLAY) {
-                                //display format the record field values
-                                record = recordFormatter.formatRecords([record], fields)[0];
-                            }
-                            responseObject = {};
-                            responseObject[FIELDS] = fields;
-                            responseObject[RECORD] = record;
+                Promise.all([
+                    this.fetchRecords(req),
+                    this.fetchFields(req)
+                ]).then(function(response) {
+                    var record = jsonBigNum.parse(response[0].body);
+                    var responseObject;
+                    if (req.param(FORMAT) === RAW) {
+                        //return raw undecorated record values due to flag format=raw
+                        responseObject = record;
+                    } else {
+                        //response object will include a fields meta data block plus record values
+                        var fields = removeUnusedFields(record, JSON.parse(response[1].body));
+                        //format records for display if requested with the flag format=display
+                        if (req.param(FORMAT) === DISPLAY) {
+                            //display format the record field values
+                            record = recordFormatter.formatRecords([record], fields)[0];
                         }
-                        deferred.resolve(responseObject);
-                    },
-                    function(response) {
-                        deferred.reject(response);
+                        responseObject = {};
+                        responseObject[FIELDS] = fields;
+                        responseObject[RECORD] = record;
                     }
-                ).catch(function(error) {
-                    log.error("Caught unexpected error in fetchSingleRecordAndFields: " + JSON.stringify(error));
+                    deferred.resolve(responseObject);
+                }).catch(function(error) {
                     deferred.reject(error);
                 });
                 return deferred.promise;
@@ -169,34 +165,29 @@
             //or is rejected with a descriptive error code
             fetchRecordsAndFields: function(req) {
                 var deferred = Promise.pending();
-                var fetchRequests = [this.fetchRecords(req), this.fetchFields(req)];
-
-                Promise.all(fetchRequests).then(
-                    function(response) {
-                        var records = jsonBigNum.parse(response[0].body);
-                        var responseObject;
-                        if (req.param(FORMAT) === RAW) {
-                            //return raw undecorated record values due to flag format=raw
-                            responseObject = records;
-                        } else {
-                            //response object will include a fields meta data block plus record values
-                            var fields = removeUnusedFields(records[0], JSON.parse(response[1].body));
-                            //format records for display if requested with the flag format=display
-                            if (req.param(FORMAT) === DISPLAY) {
-                                //display format the record field values
-                                records = recordFormatter.formatRecords(records, fields);
-                            }
-                            responseObject = {};
-                            responseObject[FIELDS] = fields;
-                            responseObject[RECORDS] = records;
+                Promise.all([
+                    this.fetchRecords(req),
+                    this.fetchFields(req)
+                ]).then(function(response) {
+                    var records = jsonBigNum.parse(response[0].body);
+                    var responseObject;
+                    if (req.param(FORMAT) === RAW) {
+                        //return raw undecorated record values due to flag format=raw
+                        responseObject = records;
+                    } else {
+                        //response object will include a fields meta data block plus record values
+                        var fields = removeUnusedFields(records[0], JSON.parse(response[1].body));
+                        //format records for display if requested with the flag format=display
+                        if (req.param(FORMAT) === DISPLAY) {
+                            //display format the record field values
+                            records = recordFormatter.formatRecords(records, fields);
                         }
-                        deferred.resolve(responseObject);
-                    },
-                    function(response) {
-                        deferred.reject(response);
+                        responseObject = {};
+                        responseObject[FIELDS] = fields;
+                        responseObject[RECORDS] = records;
                     }
-                ).catch(function(error) {
-                    log.error("Caught unexpected error in fetchRecordsAndFields: " + JSON.stringify(error));
+                    deferred.resolve(responseObject);
+                }).catch(function(error) {
                     deferred.reject(error);
                 });
                 return deferred.promise;

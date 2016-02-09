@@ -3,18 +3,22 @@ import appsActions from '../../src/actions/appsActions';
 import * as actions from '../../src/constants/actions';
 import Promise from 'bluebird';
 
-describe('Apps Actions functions with Tables', () => {
+describe('Apps Actions functions', () => {
     'use strict';
 
     let responseData = [{id:'tableId', link:'/app/tableId'}];
-
+    let promise;
     class mockAppService {
         constructor() { }
         getApps() {
-            return Promise.resolve({data: responseData});
+            var p = Promise.defer();
+            p.resolve({data: responseData});
+            return p.promise;
         }
         getApp(id) {
-            return Promise.resolve({data: {id:'tableId'}});
+            var p = Promise.defer();
+            p.resolve({data: {id:'tableId'}});
+            return p.promise;
         }
     }
 
@@ -22,42 +26,35 @@ describe('Apps Actions functions with Tables', () => {
     let flux = new Fluxxor.Flux(stores);
     flux.addActions(appsActions);
 
-    beforeEach(() => {
+    beforeEach((done) => {
         spyOn(flux.dispatchBinder, 'dispatch');
-        spyOn(mockAppService.prototype, 'getApps').and.callThrough();
-        spyOn(mockAppService.prototype, 'getApp').and.callThrough();
         appsActions.__Rewire__('AppService', mockAppService);
+
+        promise = flux.actions.loadApps(true);
+
+        //  expect a load apps event to get fired before the promise returns
+        expect(flux.dispatchBinder.dispatch).toHaveBeenCalledWith(actions.LOAD_APPS);
+        flux.dispatchBinder.dispatch.calls.reset();
+
+        promise.then(
+            function() {
+                done();
+            },
+            function() {
+                done();
+            }
+        );
     });
 
     afterEach(() => {
         appsActions.__ResetDependency__('AppService');
+        promise = null;
     });
 
-    var appsActionTests = [
-        {name:'test load apps action', withTables: true},
-        {name:'test load apps action without tables', withTables: false}
-    ];
-
-    appsActionTests.forEach(function(test) {
-        it(test.name, function(done) {
-            flux.actions.loadApps(test.withTables).then(
-                () => {
-                    expect(mockAppService.prototype.getApps).toHaveBeenCalled();
-                    if (test.withTables === true) {
-                        expect(mockAppService.prototype.getApp).toHaveBeenCalled();
-                    } else {
-                        expect(mockAppService.prototype.getApp).not.toHaveBeenCalled();
-                    }
-                    expect(flux.dispatchBinder.dispatch.calls.count()).toEqual(2);
-                    expect(flux.dispatchBinder.dispatch.calls.argsFor(0)).toEqual([actions.LOAD_APPS]);
-                    expect(flux.dispatchBinder.dispatch.calls.argsFor(1)).toEqual([actions.LOAD_APPS_SUCCESS, responseData]);
-                    done();
-                },
-                () => {
-                    expect(false).toBe(true);
-                    done();
-                }
-            );
-        });
+    it('test load apps action', () => {
+        expect(promise.isFulfilled()).toBeTruthy();
+        expect(flux.dispatchBinder.dispatch).toHaveBeenCalledWith(actions.LOAD_APPS_SUCCESS, responseData);
     });
+
+
 });

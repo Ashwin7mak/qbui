@@ -1,76 +1,65 @@
 // action creators
 import * as actions from '../constants/actions';
-import AppService from '../services/appService';
-import Promise from 'bluebird';
 
+import AppService from '../services/appService';
 import Logger from '../utils/logger';
 var logger = new Logger();
-
-//  Custom handling of 'possible unhandled rejection' error,  because we don't want
-//  to see an exception in the console output.  The exception is thrown by bluebird
-//  because the core application code has no logic implemented to handle a rejected
-//  promise.  This is expected as promises are NOT implemented in the application
-//  code.  Promises are returned only to support our unit tests, which are expected
-//  to implement the appropriate handlers.
-Promise.onPossiblyUnhandledRejection(function(err) {
-    logger.debug('Bluebird Unhandled rejection', err);
-});
+import Promise from 'bluebird';
 
 let appsActions = {
 
     loadApps(withTables) {
+        this.dispatch(actions.LOAD_APPS);
 
-        //  promise is returned in support of unit testing only
-        return new Promise(function(resolve, reject) {
-            this.dispatch(actions.LOAD_APPS);
-            let appService = new AppService();
+        let deferred = Promise.defer();
 
-            appService.getApps().then(
-                (response) => {
-                    logger.debug('AppService getApps success:' + JSON.stringify(response));
+        let appService = new AppService();
 
-                    if (withTables) {
-                        let promises = [];
-                        response.data.forEach((app) => {
-                            promises.push(appService.getApp(app.id));
-                        });
+        appService.getApps().
+            then(
+            (response) => {
+                logger.debug('AppService getApps success:' + JSON.stringify(response));
 
-                        Promise.all(promises).then(
-                            (apps) => {
-                                let appLinkList = [];
-                                apps.forEach((app) => {
-                                    app.data.link = '/app/' + app.data.id;
-                                    appLinkList.push(app.data);
-                                });
-                                this.dispatch(actions.LOAD_APPS_SUCCESS, appLinkList);
-                                resolve();
-                            },
-                            (error) => {
-                                logger.error('AppService getApp error:' + JSON.stringify(error));
-                                this.dispatch(actions.LOAD_APPS_FAILED);
-                                reject();
-                            }
-                        ).catch((ex) => {
-                            logger.error('AppService getApp exception:' + JSON.stringify(ex));
+                if (withTables) {
+                    let promises = [];
+                    let apps = [];
+                    response.data.forEach((app) => {
+                        let promise = appService.getApp(app.id);
+                        promises.push(promise);
+                        promise.then(
+                            (a) => {
+                                a.data.link = '/app/' + a.data.id;
+                                apps.push(a.data);
+                            });
+                    });
+                    Promise.all(promises).then(
+                        () => {
+                            this.dispatch(actions.LOAD_APPS_SUCCESS, apps);
+                            deferred.resolve(apps);
+                        },
+                        () => {
+                            logger.debug('AppService getApp error:' + JSON.stringify(error));
                             this.dispatch(actions.LOAD_APPS_FAILED);
-                            reject();
+                            deferred.reject(error);
                         });
-                    } else {
-                        this.dispatch(actions.LOAD_APPS_SUCCESS, response.data);
-                        resolve();
-                    }
-                },
-                (error) => {
-                    logger.error('AppService getApps error:' + JSON.stringify(error));
-                    this.dispatch(actions.LOAD_APPS_FAILED);
-                    reject();
+                } else {
+                    this.dispatch(actions.LOAD_APPS_SUCCESS, response.data);
+                    deferred.resolve(response);
                 }
-            ).catch((ex) => {
-                logger.error('AppService getApps exception:' + JSON.stringify(ex));
+            },
+            (error) => {
+                logger.debug('AppService getApps error:' + JSON.stringify(error));
                 this.dispatch(actions.LOAD_APPS_FAILED);
-                reject();
-            });
-        }.bind(this));
+                deferred.reject(error);
+            })
+            .catch(
+            (ex) => {
+                logger.debug('AppService getApps exception:' + JSON.stringify(ex));
+                this.dispatch(actions.LOAD_APPS_FAILED);
+                deferred.reject(ex);
+            }
+        );
+        return deferred.promise;
     },
 
     selectAppId(appID) {

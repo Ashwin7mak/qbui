@@ -3,6 +3,7 @@ import cookie from 'react-cookie';
 import constants from './constants';
 import axios from 'axios';
 import Configuration from '../config/app.config';
+import Promise from 'bluebird';
 import StringUtils from '../utils/stringUtils';
 
 class BaseService {
@@ -66,21 +67,28 @@ class BaseService {
      */
     setResponseInterceptor() {
         axios.interceptors.response.use(
-            function(response) {
+            function success(response) {
                 //  success
                 return response;
             },
-            function(error) {
-                //  certain rest endpoint errors get redirected immediately
+            function fail(error) {
                 switch (error.status) {
+                case 400:
+                    window.location.href = '/pageNotFound';
+                    break;
                 case 401:
                     window.location.href = '/unauthorized';
                     break;
                 case 403:
                     window.location.href = '/unauthorized';
                     break;
+                case 404:
+                    //window.location.href = '/pageNotFound';
+                    break;
+                case 500:
+                    window.location.href = '/internalServerError';
+                    break;
                 }
-                //  let the service layer handle the error
                 return Promise.reject(error);
             }
         );
