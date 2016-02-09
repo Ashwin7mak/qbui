@@ -35,49 +35,54 @@ $margin-spacer: 10px;
     font-family: $font-family;
     color: $font-color;
     font-size: $font-size;
+    border-bottom: 1px solid $card-border-color;
     position: relative;
     padding: 5px 10px 15px 10px;
-    background: $card-expanded-background-color;
-    margin-bottom: 5px;
     .card {
         flex: 1;
         width: 100%;
     }
-
+    .qbIcon {
+        position: absolute;
+        right: $margin-spacer * 2;
+        top: $margin-spacer * 2;
+    }
     .flexRow {
         position: relative;
         display: flex;
         flex-direction: row;
     }
+    .fieldRow {
+        display: flex;
+        flex-direction: row;
+        align-items: stretch;
+        flex-wrap: wrap;
+        overflow-y: hidden;
+    }
     .fieldRow.collapsed {
         max-height: 45px;
-        -moz-transition: .35s;
-        -ms-transition: .35s;
-        -webkit-transition: .35s;
-        transition: .25s;
-        transition-timing-function: ease;
     }
     .fieldRow.expanded {
-        max-height: 1024px;
-        -moz-transition: .35s;
-        -ms-transition: .35s;
-        -webkit-transition: .35s;
-        transition: .35s;
-        transition-timing-function: ease;
+        max-height: 100%;
     }
     .top-card-row {
         font-size: $fieldLabel-font-size;
-        cursor: pointer;
-        .field {
-            position:relative;
-        }
     }
     .field {
+        padding: $margin-spacer $margin-spacer 0 0;
         flex: 1 1 50%;
+        .fieldLabel {
+            display: block;
+            color: $fieldLabel-color;
+            font-size: $fieldLabel-font-size
+        }
         .fieldValue {
+            display: block;
+            min-width: 0;
             overflow: hidden;
             text-overflow: ellipsis;
             white-space: nowrap;
+            font-size: $fieldValue-font-size;
         }
         &:nth-child(n+3) {
             .fieldValue {
@@ -86,13 +91,7 @@ $margin-spacer: 10px;
         }
     }
     .card-expander {
-        position:absolute;
-        right:0;
-        top:0;
-        .qbPanelHeaderIcon {
-            top:0;
-        }
-        //margin-top: $margin-spacer;
+        margin-top: $margin-spacer;
         .chevron_opened {
             display: block;
             width: 14px;
@@ -128,6 +127,7 @@ $margin-spacer: 10px;
 
 .custom-row-card.expanded {
     border: 0;
+    background: $card-expanded-background-color;
     -webkit-box-shadow: 0px 0px 2px 2px rgba(72, 108, 143, 0.2);
     -moz-box-shadow: 0px 0px 2px 2px rgba(72, 108, 143, 0.2);
     box-shadow: 0px 0px 2px 2px rgba(72, 108, 143, 0.2);
