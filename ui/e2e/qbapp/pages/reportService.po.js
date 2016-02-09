@@ -55,14 +55,18 @@
         this.topNavRightDropdownDivEl = this.topNavRightDivEl.element(by.className('dropdown'));
         this.topNavDropdownEl = this.topNavRightDropdownDivEl.element(by.className('dropdownToggle'));
 
-
         // Report Container
-        this.reportContainerEl = element.all(by.className('reportContainer')).first();
-        //Report Stage Button
+        //this.reportContainerEl = element.all(by.className('reportContainer')).first();
+        this.reportContainerEl = element(by.className('reportContainer'));
+        //Report Stage
+        this.reportStageContentEl = this.reportContainerEl.element(by.className('layout-stage '));
         this.reportStageBtn = this.reportContainerEl.element(by.className('toggleStage'));
-        this.reportStageLayout = this.reportContainerEl.element(by.className('layout-stage ')).element(by.className('collapse'));
+        this.reportStageArea = this.reportStageContentEl.element(by.className('collapse'));
+
         // Loaded Content Div
         this.loadedContentEl = this.reportContainerEl.element(by.className('loadedContent'));
+        //table actions container
+        this.tableActionsContainerEl = this.loadedContentEl.element(by.className('tableActionsContainer'));
         // Griddle table
         this.griddleContainerEl = element.all(by.className('griddle-container')).first();
         this.griddleBodyEl = element(by.className('griddle-body'));

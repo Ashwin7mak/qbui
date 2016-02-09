@@ -121,16 +121,16 @@
                         console.log("The reportStage executing for " + clientWidth[i] + " breakpoint");
                         e2eBase.resizeBrowser(clientWidth[i], e2eConsts.DEFAULT_HEIGHT).then(function() {
                             //Verify that the report Stage is expanded by default
-                            expect(reportServicePage.reportStageLayout.isDisplayed).toBeTruthy();
+                            expect(reportServicePage.reportStageArea.isDisplayed).toBeTruthy();
                             //Click on report Stage button to collapse the stage
                             reportServicePage.reportStageBtn.click().then(function() {
                                 e2eBase.sleep(1000);
                                 //expect(reportServicePage.reportStageLayout.isPresent()).toBeFalsy();
-                                expect(reportServicePage.reportStageLayout.getAttribute('clientHeight')).toMatch("0");
-                                expect(reportServicePage.reportStageLayout.getAttribute('clientWidth')).toMatch("0");
+                                expect(reportServicePage.reportStageArea.getAttribute('clientHeight')).toMatch("0");
+                                expect(reportServicePage.reportStageArea.getAttribute('clientWidth')).toMatch("0");
                                 reportServicePage.reportStageBtn.click().then(function() {
                                     e2eBase.sleep(1000);
-                                    expect(reportServicePage.reportStageLayout.isDisplayed).toBeTruthy();
+                                    expect(reportServicePage.reportStageArea.isDisplayed).toBeTruthy();
                                 });
                             });
                         });
