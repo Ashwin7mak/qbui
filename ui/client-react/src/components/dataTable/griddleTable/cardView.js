@@ -2,8 +2,6 @@ import React from 'react';
 import Swipeable from 'react-swipeable';
 import RecordActions from '../../actions/recordActions';
 import './cardView.scss';
-import '../../QBForm/qbform.scss';
-import QBicon from '../../qbIcon/qbIcon';
 
 const MAX_ACTIONS_RESIZE_WITH = 240; // max width while swiping
 
@@ -25,27 +23,15 @@ let CardView = React.createClass({
         };
     },
 
-    handleMoreCard(e) {
+    handleMoreCard() {
         this.setState({showMoreCards: !this.state.showMoreCards});
-
-        e.stopPropagation();
     },
 
     createField(c, curKey) {
         return (<div key={c} className="field">
-            <h5><small className="fieldLabel">{curKey}</small></h5>
+            <span className="fieldLabel">{curKey}</span>
             <span className="fieldValue">{this.props.data[curKey]}</span>
         </div>);
-    },
-    createTopField(firstFieldValue) {
-        return (
-            <div className="top-card-row field" onClick={this.handleMoreCard}>
-                <strong>{firstFieldValue}</strong>
-                <div className="card-expander" >
-                    <QBicon icon="caret-right" className={this.state.showMoreCards ? "qbPanelHeaderIcon rotateDown" : "qbPanelHeaderIcon rotateUp"}/>
-                </div>
-            </div>
-        );
     },
     createRow(){
         var fields = [];
@@ -53,8 +39,7 @@ let CardView = React.createClass({
         if (!keys.length) {
             return null;
         }
-        let firstFieldValue = this.props.data[keys[0]];
-        var topField = this.createTopField(firstFieldValue);
+        var topField = <div className="top-card-row field"><strong>{this.props.data[keys[0]]}</strong></div>;
         for (var i = 1; i < keys.length; i++) {
 
             // ignore metadata columns
@@ -174,6 +159,10 @@ let CardView = React.createClass({
                             <div className="card" onClick={this.onRowClick}>
                                 {row}
                             </div>
+                            <div className="card-expander" onClick={this.handleMoreCard}>
+                                <span className={this.state.showMoreCards ? "chevron_opened" : "chevron_closed"}/>
+                            </div>
+
                         </div>
                     </div>
 
