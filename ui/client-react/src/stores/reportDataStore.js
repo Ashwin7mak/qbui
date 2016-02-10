@@ -54,7 +54,7 @@ let ReportDataStore = Fluxxor.createStore({
         this.data.filteredRecords = this.getReportData(records);
         this.emit('change');
     },
-    onLoadRecordsFailed: function(){
+    onLoadRecordsFailed: function() {
         this.error = true;
         this.emit('change');
     },

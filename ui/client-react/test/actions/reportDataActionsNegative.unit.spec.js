@@ -40,15 +40,15 @@ let responseFacetData = {
 let responseResultQuery = {
     data: 'testQuery'
 };
-let mockPromiseSuccess = function(expectedResult){
+let mockPromiseSuccess = function(expectedResult) {
     return Promise.resolve(expectedResult);
 };
-let mockPromiseError = function(){
+let mockPromiseError = function() {
     var p = Promise.defer();
     p.reject({message:'someError'});
     return p.promise;
 };
-let mockPromiseException = function(){
+let mockPromiseException = function() {
     throw new Error("error");
 };
 
@@ -72,7 +72,7 @@ describe('Report Data Actions -- Filter report Negative', () => {
     it('test filter report fail on resolve facet', (done) => {
         class mockReportService {
             constructor() { }
-            getReport(){
+            getReport() {
                 return mockPromiseSuccess(responseReportData);
             }
             parseFacetExpression() {
@@ -82,7 +82,7 @@ describe('Report Data Actions -- Filter report Negative', () => {
         class mockRecordService {
             constructor() {
             }
-            getRecords(){
+            getRecords() {
                 return mockPromiseSuccess(responseResultData);
             }
         }
@@ -104,10 +104,10 @@ describe('Report Data Actions -- Filter report Negative', () => {
     it('test filter report fail on get records', (done) => {
         class mockReportService {
             constructor() { }
-            getReport(){
+            getReport() {
                 return mockPromiseSuccess(responseReportData);
             }
-            parseFacetExpression(){
+            parseFacetExpression() {
                 return mockPromiseSuccess(responseResultQuery);
             }
         }
@@ -136,17 +136,17 @@ describe('Report Data Actions -- Filter report Negative', () => {
     it('test filter report exception on get records', (done) => {
         class mockReportService {
             constructor() { }
-            getReport(){
+            getReport() {
                 return mockPromiseSuccess(responseReportData);
             }
-            parseFacetExpression(){
+            parseFacetExpression() {
                 return mockPromiseSuccess(responseResultQuery);
             }
         }
         class mockRecordService {
             constructor() {
             }
-            getRecords(){
+            getRecords() {
                 return mockPromiseException();
             }
         }

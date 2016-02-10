@@ -23,7 +23,7 @@ class PaginationComponent  extends React.Component {
             this.props.setPage(this.state.activePage + 1);
         }
     }
-    render(){
+    render() {
         return (
             <Pager>
                 <PageItem next onClick={this.handleNext}>Next</PageItem>

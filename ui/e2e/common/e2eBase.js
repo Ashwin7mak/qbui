@@ -131,7 +131,7 @@
                 tableToFieldToFieldTypeMap['table 2'][e2eConsts.reportFieldNames[6]] = {fieldType: consts.SCALAR, dataType : consts.RATING};
                 tableToFieldToFieldTypeMap['table 2'][e2eConsts.reportFieldNames[12]] = {fieldType: consts.SCALAR, dataType : consts.PHONE_NUMBER};
                 //Call the basic app setup function
-                e2eBase.basicSetup(tableToFieldToFieldTypeMap, 10).then(function(results){
+                e2eBase.basicSetup(tableToFieldToFieldTypeMap, 10).then(function(results) {
                     //Set your global objects to use in the test functions
                     app = results[0];
                     recordList = results[1];

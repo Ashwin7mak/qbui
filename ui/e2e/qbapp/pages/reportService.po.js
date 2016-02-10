@@ -83,7 +83,7 @@
                     colHeaders.forEach(function(headerText) {
                         // The getText call above is returning the text value with a new line char on the end, need to remove it
                         var subText = headerText.replace(/(\r\n|\n|\r)/gm, '');
-                        if (subText !== 'actions'){
+                        if (subText !== 'actions') {
                             fieldColHeaders.push(subText.trim());
                         }
                     });
@@ -102,7 +102,7 @@
         this.assertNavProperties = function(breakpointSize, open, clientWidth) {
             // Check properties of nav bar
             expect(this.navMenuBodyEl.getAttribute('class')).toMatch(breakpointSize + '-breakpoint');
-            if (open){
+            if (open) {
                 expect(this.navMenuEl.getAttribute('class')).toMatch('open');
                 expect(this.navMenuEl.getAttribute('clientWidth')).toMatch(clientWidth);
             } else {

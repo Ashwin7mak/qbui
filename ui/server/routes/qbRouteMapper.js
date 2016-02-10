@@ -210,7 +210,7 @@
         processRequest(req, res, function(req, res) {
             log.debug("facetExpression in mapper =" + req.param('expression'));
             queryFormatter.format(req.param('facetexpression'))
-                .then(function(response){
+                .then(function(response) {
                     res.pipe(response);
                 });
         });

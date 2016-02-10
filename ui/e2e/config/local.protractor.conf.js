@@ -50,7 +50,7 @@
             largeSleep: 5000
         },
         // This function is run once before any of the test files. Acts as a global test preparation step
-        onPrepare: function(){
+        onPrepare: function() {
 
             //Method to initialize all Page Objects
             global.requirePO = function(relativePath) {

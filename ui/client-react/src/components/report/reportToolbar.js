@@ -68,7 +68,7 @@ var ReportToolbar = React.createClass({
 
     isFiltered : function() {
         let answer = false;
-        if (this.state.searchStringForFiltering.length !== 0){
+        if (this.state.searchStringForFiltering.length !== 0) {
             answer = true;
         } else {
             answer = this.state.selections.hasAnySelections();
@@ -80,7 +80,7 @@ var ReportToolbar = React.createClass({
      * Hardcoded facetExpression for testing
      * TODO: replace with a real method.
      */
-    filterReport: function(){
+    filterReport: function() {
         var facetExpression = [{fid:'3', values:['10', '11']}, {fid:'4', values:['abc']}];
 
         let flux = this.getFlux();

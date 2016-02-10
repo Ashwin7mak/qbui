@@ -22,22 +22,22 @@ describe('Nav functions', () => {
 
     var component;
     let navStore = Fluxxor.createStore({
-        getState: function(){
+        getState: function() {
             return {leftNavOpen:true};
         }
     });
     let appStore = Fluxxor.createStore({
-        getState: function(){
+        getState: function() {
             return [];
         }
     });
     let reportsStore = Fluxxor.createStore({
-        getState: function(){
+        getState: function() {
             return [];
         }
     });
     let reportDataStore = Fluxxor.createStore({
-        getState: function(){
+        getState: function() {
             return [];
         }
     });

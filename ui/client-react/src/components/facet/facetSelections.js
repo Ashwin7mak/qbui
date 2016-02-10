@@ -112,7 +112,7 @@ class FacetSelections {
      * removes all values from a fields list of facet selections
      * mutates the array
      */
-    removeAllFieldSelections(fieldId){
+    removeAllFieldSelections(fieldId) {
         // if there is no array yet for the fieldId nothing to remove
         if (!this.selectionsHash[fieldId]) {
             return;
@@ -126,7 +126,7 @@ class FacetSelections {
      * removes all values from a fields list of facet selections
      * mutates the array
      */
-    removeAllSelections(fieldId){
+    removeAllSelections(fieldId) {
         this.initSelections();
     }
 
@@ -140,7 +140,7 @@ class FacetSelections {
      * @param select - bool to select or deselect
      *
      **/
-    setFacetValueSelectState(facetField, value, select){
+    setFacetValueSelectState(facetField, value, select) {
         if (!select) {
             //  remove to mark it deselected
             this.removeSelection(facetField.id, value);
@@ -160,7 +160,7 @@ class FacetSelections {
      * @param facetField - the fact field you want to toggle
      * @param value  - the facet value for filter
      **/
-    toggleSelectFacetValue(facetField, value){
+    toggleSelectFacetValue(facetField, value) {
         this.setFacetValueSelectState(facetField, value, !this.isValueInSelections(facetField.id, value));
     }
 
@@ -171,7 +171,7 @@ class FacetSelections {
      * @param e - the event object from the browser/react
      * @param facetField - the facet field group to act on
      **/
-    handleToggleSelect(e, facetField, value){
+    handleToggleSelect(e, facetField, value) {
         logger.debug("got toggle select on field id " + facetField.id + " value " + value);
         this.toggleSelectFacetValue(facetField, value);
     }

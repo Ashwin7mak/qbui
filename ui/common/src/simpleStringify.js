@@ -9,7 +9,7 @@
      */
     module.exports = simpleStringify;
     function simpleStringify(object) {
-        if (typeof object === undefined){
+        if (typeof object === undefined) {
             return ("object is not defined");
         }
         var simpleObject = {};

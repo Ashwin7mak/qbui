@@ -43,7 +43,7 @@ var FacetsList = React.createClass({
      * Renders the arrowed popover box with contents of the facet menu list of items
      * @returns {XML}
      */
-    render(){
+    render() {
         let noFacetsMessage = "report.noFacets";
         return (
             <Popover id="facetsMenuPopup"

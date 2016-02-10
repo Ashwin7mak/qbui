@@ -61,8 +61,8 @@
         /**
          * Before each test starts just make sure the table list div has loaded
          */
-        beforeEach(function(done){
-            reportServicePage.waitForElement(reportServicePage.tablesListDivEl).then(function(){
+        beforeEach(function(done) {
+            reportServicePage.waitForElement(reportServicePage.tablesListDivEl).then(function() {
                 done();
             });
         });
@@ -70,8 +70,8 @@
         /**
          * Test method. Tests the app toggle widget.
          */
-        it('Apps toggle should show / hide App Dashboard Links and Search widget', function(done){
-            reportServicePage.tableLinksElList.then(function(links){
+        it('Apps toggle should show / hide App Dashboard Links and Search widget', function(done) {
+            reportServicePage.tableLinksElList.then(function(links) {
                 // Check we have the base links and two table links present
                 expect(links.length).toBe(5);
                 // Check that the app search widget is hidden
@@ -92,7 +92,7 @@
         */
         it('Table report should expand width past the browser size to show all available data (large num columns)', function(done) {
             // Select the table
-            reportServicePage.tableLinksElList.get(3).click().then(function(){
+            reportServicePage.tableLinksElList.get(3).click().then(function() {
                 // Open the reports list
                 reportServicePage.reportHamburgersElList.get(0).click();
                 // Select the report
@@ -119,7 +119,7 @@
         */
         it('Table report should expand width to take up available space (small num of columns)', function(done) {
             // Select the table
-            reportServicePage.tableLinksElList.get(4).click().then(function(){
+            reportServicePage.tableLinksElList.get(4).click().then(function() {
                 // Open the reports list
                 reportServicePage.reportHamburgersElList.get(1).click();
                 // Select the report
@@ -146,7 +146,7 @@
         */
         it('Left hand nav should shrink responsively', function(done) {
             // Select the table
-            reportServicePage.tableLinksElList.get(3).click().then(function(){
+            reportServicePage.tableLinksElList.get(3).click().then(function() {
                 // Open the reports list
                 reportServicePage.reportHamburgersElList.get(0).click();
                 // Select the report
@@ -183,7 +183,7 @@
          */
         it('Left hand nav should expand responsively', function(done) {
             // Select the table
-            reportServicePage.tableLinksElList.get(3).click().then(function(){
+            reportServicePage.tableLinksElList.get(3).click().then(function() {
                 // Open the reports list
                 reportServicePage.reportHamburgersElList.get(0).click();
                 // Select the report

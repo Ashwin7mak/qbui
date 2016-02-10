@@ -7,7 +7,7 @@ import React from 'react';
 import {I18nDate, I18nNumber} from '../../../utils/i18nMessage';
 
 export var DateFormatter = React.createClass({
-    render: function(){
+    render: function() {
         if (this.props.data !== "") {
             return <I18nDate value={this.props.data}/>;
         }
@@ -16,7 +16,7 @@ export var DateFormatter = React.createClass({
 });
 
 export var NumericFormatter = React.createClass({
-    render: function(){
+    render: function() {
         if (this.props.data !== "") {
             return <I18nNumber value={this.props.data}/>;
         }

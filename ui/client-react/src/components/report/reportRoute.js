@@ -40,7 +40,7 @@ var ReportRoute = React.createClass({
     /* Placeholder method to hook into node layer call to get filtered records when user selects a facet
     * Hardcoded facetExpression for testing
     * TODO: replace with a real method.*/
-    filterReport: function(){
+    filterReport: function() {
         var filter = {
             facet: [{fid: '3', values: ['10', '11']}, {fid: '4', values: ['abc']}],
             search: ''

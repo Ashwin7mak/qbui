@@ -871,7 +871,7 @@ module.exports = function(grunt) {
         'build'
     ]);
 
-    grunt.registerTask('lint', 'Run eslint on code', function(){
+    grunt.registerTask('lint', 'Run eslint on code', function() {
         return grunt.task.run([
             'shell:lint',
         ]);
