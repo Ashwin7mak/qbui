@@ -116,7 +116,7 @@ module.exports = function(config) {
         // - IE (only Windows)
         browsers: ["PhantomJS"],
 
-        reporters: ["progress", "mocha", "coverage"],
+        reporters: ["progress", "mocha", "coverage", "junit"],
 
         //  define where the coverage reports live for the client code
         coverageReporter: {
