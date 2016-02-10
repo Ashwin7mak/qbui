@@ -88,7 +88,6 @@
                     // Assert column headers
                     reportServicePage.getReportColumnHeaders(reportServicePage).then(function(resultArray) {
                         // UI is currently using upper case to display the field names in columns
-                        //var upperFieldNames = e2eBase.e2eUtils.stringArrayToUpperCase(fieldNames);
                         expect(resultArray).toEqual(e2eConsts.reportFieldNames);
                     });
                     // Check all record values equal the ones we added via the API
@@ -125,7 +124,6 @@
                             //Click on report Stage button to collapse the stage
                             reportServicePage.reportStageBtn.click().then(function() {
                                 e2eBase.sleep(1000);
-                                //expect(reportServicePage.reportStageLayout.isPresent()).toBeFalsy();
                                 expect(reportServicePage.reportStageArea.getAttribute('clientHeight')).toMatch("0");
                                 expect(reportServicePage.reportStageArea.getAttribute('clientWidth')).toMatch("0");
                                 reportServicePage.reportStageBtn.click().then(function() {

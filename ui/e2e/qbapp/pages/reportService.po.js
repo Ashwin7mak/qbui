@@ -56,7 +56,6 @@
         this.topNavDropdownEl = this.topNavRightDropdownDivEl.element(by.className('dropdownToggle'));
 
         // Report Container
-        //this.reportContainerEl = element.all(by.className('reportContainer')).first();
         this.reportContainerEl = element(by.className('reportContainer'));
         //Report Stage
         this.reportStageContentEl = this.reportContainerEl.element(by.className('layout-stage '));
