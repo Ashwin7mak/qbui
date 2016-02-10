@@ -18,7 +18,14 @@ var FilterSearchBox = React.createClass({
         nameForRecords :"Records"
     },
     render() {
-        let placeMsg = (<I18nMessage message={"record.searchPlaceHolder"}  nameForRecords={this.props.nameForRecords} />);
+        //TODO: use Search these X records in i18n message formatter at "record.searchPlaceHolder" once Reeact.intl
+        // supports string only, currently it wraps the generated message with a span tag which is not valid
+        // within a placeholder element attribute.
+        //
+        // looks like this will be supported in
+        // reactintl 2.0 see - http://stackoverflow.com/questions/35286239/how-to-put-valuedata-into-html-attribute-with-reactjs-and-reactintl
+
+        let placeMsg = "Search these " + this.props.nameForRecords + "...";
         return (<input className="filterSearchBox" type="text" key="filterSearchBox"
                        onChange={this.props.onChange} placeholder={placeMsg}
                 />
