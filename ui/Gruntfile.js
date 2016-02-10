@@ -408,8 +408,7 @@ module.exports = function(grunt) {
                     mask          : '**/*.spec.js',
                     root          : 'server',
                     noColors      : !useColors,
-                    mochaOptions: ['--harmony'],
-                    reportFormats : ['cobertura', 'lcov'],
+                    reportFormats : ['lcov'],
                     coverageFolder: 'build/reports/server/coverage'
                 }
             }
