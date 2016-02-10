@@ -28,7 +28,7 @@ describe('Express Client Routes', function() {
 
     beforeEach(function() {
         stubLog = sinon.stub(log, 'info').returns(true);
-        this.timeout(0);
+        this.timeout(5000);
     });
     afterEach(function() {
         stubLog.restore();
