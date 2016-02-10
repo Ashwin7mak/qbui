@@ -42,7 +42,7 @@
   }
 
   .facetMenu.panel {
-    border : none;
+    border: none;
   }
 
   .facetMenu.panel:last-child {
@@ -52,8 +52,8 @@
   .panel-default > .panel-heading {;
     background-color: $facetMenu-backgroundColor;
     border: none;
-    border-bottom: 1px solid #ddd;
-    border-top: 1px solid #ddd;
+    border-bottom: 1px solid $color4;
+    border-top: 1px solid $color4;
     //border-bottom: 1px solid rgba(0, 0, 0, 0.25);
   }
 
@@ -67,7 +67,7 @@
 
   .list-group-item {
     font-family: 'Lato', sans-serif;
-    padding-top : 4px;
+    padding-top: 4px;
   }
 
   .list-group-item:hover {
@@ -82,7 +82,7 @@
   }
 
   button.selected.list-group-item {
-    color:$facetSelected-color;
+    color: $facetSelected-color;
   }
   .checkMark {
     color: $facetMenu-backgroundColor;
@@ -95,10 +95,10 @@
     color: $facetMenu-backgroundColor;
   }
   .selections .clearFacet {
-    color:$color9;
+    color: $color9;
   }
   .selections .facetName {
-    color:$facetSelected-color;
+    color: $facetSelected-color;
   }
 
 }
