@@ -154,9 +154,7 @@
      * @param returnFunction
      */
     function processRequest(req, res, returnFunction) {
-        //  log some route info and set the request options
-        log.info({req: req}, 'qbRouteMapper - process request');
-
+        //  request info is logged in routes.js
         if (!isRouteEnabled(req)) {
             routeTo404(req, res);
         } else {
@@ -232,7 +230,6 @@
         log.debug({req: req}, 'Fetch swagger');
 
         var opts = requestHelper.setOptions(req);
-
         request(opts)
             .on('error', function(error) {
                 log.error({req:req}, 'API SWAGGER ERROR: ' + JSON.stringify(error));
@@ -249,13 +246,12 @@
     function forwardApiRequest(req, res) {
         processRequest(req, res, function(req, res) {
             var opts = requestHelper.setOptions(req);
-            log.debug({req:req}, 'Java api request');
             request(opts)
                 .on('response', function(response) {
-                    log.debug({req:req, res:response});
+                    log.debug({req:req, res:response}, 'API SUCCESS');
                 })
                 .on('error', function(error) {
-                    log.error({req:req, res:res}, 'API REQUEST ERROR: ' + JSON.stringify(error));
+                    log.error({req:req, res:res}, 'API ERROR: ' + JSON.stringify(error));
                 })
                 .pipe(res);
         });

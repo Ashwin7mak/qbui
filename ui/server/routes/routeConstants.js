@@ -10,9 +10,9 @@
     //  Quickbase and Node server base url
     var baseUrl = {
         // TODO: merge the 2 quickbase_api constants into 1...need to fix integration tests first..
-        QUICKBASE_API   : '/api/api/:version',
-        QUICKBASE_API2  : '/api/:version',
-        NODE_API        : '/api/n/:version'
+        QUICKBASE   : '/api/api/:version',
+        QUICKBASE_2 : '/api/:version',
+        NODE_API    : '/api/n/:version'
     };
 
     /*
@@ -30,19 +30,16 @@
      *  in the node layer and are not just proxyed through to the quickbase public api.
      */
     var quickBaseApiEndpoints = {
+        HEALTH_CHECK            : baseUrl.QUICKBASE_2 + '/health',
         //  These routes are configured in qbRouteMapper to call node modules which perform
         //  additional processing either pre/post the API call.
-        RECORD                  : baseUrl.QUICKBASE_API + '/apps/:appId/tables/:tableId/records/:recordId',
-        RECORDS                 : baseUrl.QUICKBASE_API + '/apps/:appId/tables/:tableId/records',
-        REPORT_RESULTS          : baseUrl.QUICKBASE_API + '/apps/:appId/tables/:tableId/reports/:reportId/results',
-        REPORT_FACETS           : baseUrl.QUICKBASE_API + '/apps/:appId/tables/:tableId/reports/:reportId/facets/results',
+        RECORD                  : baseUrl.QUICKBASE + '/apps/:appId/tables/:tableId/records/:recordId',
+        RECORDS                 : baseUrl.QUICKBASE + '/apps/:appId/tables/:tableId/records',
+        REPORT_RESULTS          : baseUrl.QUICKBASE + '/apps/:appId/tables/:tableId/reports/:reportId/results',
+        REPORT_FACETS           : baseUrl.QUICKBASE + '/apps/:appId/tables/:tableId/reports/:reportId/facets/results',
         // No need to explictly declare other endpoints as there is no special pre-processing required.  qbRouteMapper
         // is configured to act as proxy and pass the request directly to the server side resource.
-        TOMCAT_ALL              : baseUrl.QUICKBASE_API + '/*'
-    };
-
-    var quickbaseApi2Endpoints = {
-        HEALTH_CHECK            : baseUrl.QUICKBASE_API2 + '/health'
+        TOMCAT_ALL              : baseUrl.QUICKBASE + '/*'
     };
 
     /**
@@ -55,7 +52,7 @@
         SWAGGER_RESOURCES       : '/api/resources/*'
     };
 
-    //  Export the combined list of endpoints.  THE ORDER of the routes is important..
-    module.exports = Object.freeze(_.assign({}, swaggerApiEndpoints, nodeApiEndpoints, quickbaseApi2Endpoints, quickBaseApiEndpoints));
+    //  Export the combined list of endpoints.
+    module.exports = Object.freeze(_.assign({}, swaggerApiEndpoints, nodeApiEndpoints, quickBaseApiEndpoints));
 
 }());
