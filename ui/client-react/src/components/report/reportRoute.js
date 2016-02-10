@@ -10,7 +10,7 @@ let logger = new Logger();
 
 import ReportToolsAndContent from './reportToolsAndContent';
 import EmailReportLink from '../actions/emailReportLink';
-import StringUtils from '../../utils/stringUtils';
+import simpleStringify from '../../../../common/src/simpleStringify';
 
 import Fluxxor from 'fluxxor';
 import _ from 'lodash';
@@ -60,8 +60,8 @@ var ReportRoute = React.createClass({
             _.isUndefined(this.props.params.appId) ||
             _.isUndefined(this.props.params.tblId) ||
             _.isUndefined(this.props.params.rptId)) {
-            logger.info("the necessary params were not specified to reportRoute render params=" + StringUtils.simpleStringify(this.props.params));
-            return <div> Insufficient parameters supplied</div>;
+            logger.info("the necessary params were not specified to reportRoute render params=" + simpleStringify(this.props.params));
+            return null;
         } else {
             return (<div className="reportContainer">
                 <Stage stageContent="this is the stage content text">

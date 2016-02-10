@@ -78,27 +78,6 @@ class StringUtils {
         //  nothing to do...return the original tokenized string
         return tokenizedString;
     }
-
-    static simpleStringify(object) {
-        if (typeof object === undefined){
-            return ("object is not defined");
-        }
-        var simpleObject = {};
-        for (var prop in object) {
-            if (!object.hasOwnProperty(prop)) {
-                continue;
-            }
-            if (typeof (object[prop]) === 'object') {
-                continue;
-            }
-            if (typeof (object[prop]) === 'function') {
-                continue;
-            }
-            simpleObject[prop] = object[prop];
-        }
-        var cleanedJson = JSON.stringify(simpleObject);
-        return cleanedJson;
-    }
 }
 
 export default StringUtils;

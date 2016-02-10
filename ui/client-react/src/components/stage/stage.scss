@@ -1,5 +1,7 @@
+@import '../../assets/css/qbVariables';
+
 .layout-stage {
-    border-bottom: 1px solid #e3eaf3;
+    border-bottom: 1px solid $header-bg;
     position: relative;
     margin-bottom:30px;
 
@@ -10,15 +12,14 @@
         bottom: -24px;
         right: 4px;
         height: 24px;
-        border: 1px solid #e3eaf3;
+        border: 1px solid $header-bg;
         border-radius: 0 0 2px 2px;
-        background-color: #f3f5f8;
+        background-color: $color17;
         outline: none;
     }
 
     .well {
-        //background-image: linear-gradient(to top, #f6f8fb 0%, #f9fafb 100%);
-        background-color: #f3f5f8;
+        background-color: $color17;
         border:0 none transparent;
         margin:0;
         padding: 10px 0;

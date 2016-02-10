@@ -1,6 +1,4 @@
 import React from 'react';
-import Fluxxor from 'fluxxor';
-import Promise from 'bluebird';
 import {Dropdown, MenuItem, ListGroup, Panel, ListGroupItem} from 'react-bootstrap';
 import QBPanel from '../QBPanel/qbpanel.js';
 
@@ -50,7 +48,7 @@ var FacetsItem = React.createClass({
      */
     propTypes: {
         facet:facetShape,
-        fieldSelections: React.PropTypes.array.isRequired,
+        fieldSelections: React.PropTypes.array,
         handleSelectValue: React.PropTypes.func,
         handleToggleCollapse: React.PropTypes.func
     },
@@ -60,9 +58,14 @@ var FacetsItem = React.createClass({
      * initializes the set of selected values for this facet field to empty/one
      * @returns {{selectedValues: Array}}
      */
-    getInitialState: function() {
+    getInitialState() {
         return {
             selectedValues: []
+        };
+    },
+    getDefaultProps() {
+        return {
+            fieldSelections : []
         };
     },
 

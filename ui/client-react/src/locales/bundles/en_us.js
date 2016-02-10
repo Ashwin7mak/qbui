@@ -50,7 +50,7 @@ export default {
             searchReportsPlaceholder: "Search reports..."
         },
         grid: {
-            no_data: "There is no data to display.",
+            no_data: "There is no data to display."
         },
         globalActions: {
             user: "User",
@@ -71,7 +71,10 @@ export default {
         },
         report : {
             filteredRecordCount : "{filteredRecordCount} of {recordCount} {nameForRecords} ",
-            recordCount : "{recordCount} {nameForRecords} "
+            recordCount : "{recordCount} {nameForRecords} ",
+            noFacets : "No Facets",
+            searchPlaceHolder:  "Search these {nameForRecords} ...",
+            badParams : "Insufficient parameters supplied"
         }
     }
 };

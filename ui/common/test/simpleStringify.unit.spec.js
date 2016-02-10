@@ -1,7 +1,7 @@
 'use strict';
 
 var assert = require('assert');
-var simpleStringify = require('./../utility/simpleStringify.js');
+var simpleStringify = require('./../src/simpleStringify.js');
 /**
  * Unit tests for User field formatting
  */
@@ -15,7 +15,7 @@ describe('Validate Simple Stringify Utility Functions', function() {
 
         //  this should pass through with no changes
         var y = simpleStringify(obj);
-        assert.equal(y, JSON.stringify(obj), 'Simplied object mismatch on simple object');
+        assert.equal(y, JSON.stringify(obj), 'SimpleStringify object mismatch on simple object');
     });
 
     it('validate objects and functions are removed', function() {
@@ -40,7 +40,7 @@ describe('Validate Simple Stringify Utility Functions', function() {
 
         //  the returned object will strip out the object and function...
         var y = simpleStringify(obj);
-        assert.equal(y, JSON.stringify(testObj), 'Simplied object mismatch on complex object');
+        assert.equal(y, JSON.stringify(testObj), 'SimpleStringify object mismatch on complex object');
     });
 
     it('validate inherited objects are removed', function() {
@@ -53,7 +53,7 @@ describe('Validate Simple Stringify Utility Functions', function() {
 
         //  the returned object will not include the inherited property from ObjCar
         var y = simpleStringify(ObjBmw);
-        assert.equal(y, JSON.stringify({'foreign':true}), 'Simplied object mismatch on inherited object');
+        assert.equal(y, JSON.stringify({'foreign':true}), 'SimpleStringify object mismatch on inherited object');
     });
 
 

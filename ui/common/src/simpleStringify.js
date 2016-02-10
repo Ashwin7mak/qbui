@@ -9,6 +9,9 @@
      */
     module.exports = simpleStringify;
     function simpleStringify(object) {
+        if (typeof object === undefined){
+            return ("object is not defined");
+        }
         var simpleObject = {};
         for (var prop in object) {
             if (!object.hasOwnProperty(prop)) {

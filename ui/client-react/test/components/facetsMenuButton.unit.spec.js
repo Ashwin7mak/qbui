@@ -1,7 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import TestUtils from 'react-addons-test-utils';
-import {FacetsMenu}  from '../../src/components/facet/facetsMenu';
+import FacetsMenu  from '../../src/components/facet/facetsMenu';
 
 describe('FacetsMenu functions', () => {
     'use strict';

@@ -68,7 +68,10 @@ export default {
         },
         report : {
             filteredRecordCount : "{filteredRecordCount} von {recordCount} {nameForRecords} ",
-            recordCount : "{recordCount} {nameForRecords} "
+            recordCount : "{recordCount} {nameForRecords} ",
+            noFacets : "Nein Facetten",
+            searchPlaceHolder:  "Suchen Sie diese {nameForRecords} ..."
+
         }
     }
 };

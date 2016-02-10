@@ -16,6 +16,7 @@ describe('facetItem functions', () => {
 
     it('test render facetItem', () => {
         component = TestUtils.renderIntoDocument(<FacetsItem facet={item}
+                                                             fieldSelections={[]}
                                                              handleSelectValue={() => {}}
                                                              handleToggleCollapse={() => {}}/>);
         expect(TestUtils.isCompositeComponent(component)).toBeTruthy();

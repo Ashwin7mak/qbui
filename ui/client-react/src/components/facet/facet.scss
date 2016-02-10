@@ -6,10 +6,6 @@
   width: 25em;
 }
 
-.facetsMenuButton {  /* icon button to bring up list of filters */
-  margin-left: 3.5rem;
-
-}
 .reportToolbar {
   > div > div {
     position: relative;
@@ -40,6 +36,9 @@
   .panel {
     margin-bottom: 0;
     border-radius: 0;
+  }
+  .facetsMenuButton:hover {
+    color:$icon-color-hover;
   }
 
   .facetMenu.panel {
@@ -96,11 +95,11 @@
     color: $facetMenu-backgroundColor;
   }
   .selections .clearFacet {
-    color:$facetSelected-color;
+    color:$color9;
   }
   .selections .facetName {
-       color:$facetSelected-color;
-     }
+    color:$facetSelected-color;
+  }
 
 }
 
