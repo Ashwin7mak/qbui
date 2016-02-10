@@ -12,7 +12,7 @@
         // TODO: merge the 2 quickbase_api constants into 1...need to fix integration tests first..
         QUICKBASE   : '/api/api/:version',
         QUICKBASE_2 : '/api/:version',
-        NODE    : '/api/n/:version'
+        NODE        : '/api/n/:version'
     };
 
     /*
