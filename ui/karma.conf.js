@@ -124,7 +124,6 @@ module.exports = function(config) {
             dir: "build/reports/client/",
             reporters: [
                 {type: "lcov", subdir: "coverage"},
-                {type: "cobertura", subdir: "unit"},
                 {type: "text-summary"}    // outputs to the console by default
             ]
         },
