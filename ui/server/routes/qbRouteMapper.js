@@ -34,6 +34,7 @@
         routeToGetFunction[routeConsts.SWAGGER_RESOURCES] = fetchSwagger;
         routeToGetFunction[routeConsts.SWAGGER_IMAGES] = fetchSwagger;
         routeToGetFunction[routeConsts.SWAGGER_DOCUMENTATION] = fetchSwagger;
+        routeToGetFunction[routeConsts.HEALTH_CHECK] = forwardApiRequest;
 
         /*
          * routeToGetFunction maps each route to the proper function associated with that route for a POST request
