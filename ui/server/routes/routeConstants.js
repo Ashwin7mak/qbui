@@ -12,7 +12,7 @@
         // TODO: merge the 2 quickbase_api constants into 1...need to fix integration tests first..
         QUICKBASE   : '/api/api/:version',
         QUICKBASE_2 : '/api/:version',
-        NODE_API    : '/api/n/:version'
+        NODE    : '/api/n/:version'
     };
 
     /*
@@ -21,8 +21,8 @@
      *  NO public QuickBase API endpoints are used to fulfill the request.
      */
     var nodeApiEndpoints = {
-        FACET_EXPRESSION_PARSE  : baseUrl.NODE_API + '/facets',
-        LOG_CLIENT_MSG          : baseUrl.NODE_API + '/log'
+        FACET_EXPRESSION_PARSE  : baseUrl.NODE + '/facets',
+        LOG_CLIENT_MSG          : baseUrl.NODE + '/log'
     };
 
     /*
