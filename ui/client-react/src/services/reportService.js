@@ -12,7 +12,6 @@ class ReportService extends BaseService {
             GET_REPORT          : `${constants.BASE_URL.QUICKBASE}/${constants.APPS}/{0}/${constants.TABLES}/{1}/${constants.REPORTS}/{2}`,
             GET_REPORTS         : `${constants.BASE_URL.QUICKBASE}/${constants.APPS}/{0}/${constants.TABLES}/{1}/${constants.REPORTS}`,
             GET_REPORT_RESULTS  : `${constants.BASE_URL.QUICKBASE}/${constants.APPS}/{0}/${constants.TABLES}/{1}/${constants.REPORTS}/{2}/${constants.RESULTS}`,
-            GET_REPORT_FACETS   : `${constants.BASE_URL.QUICKBASE}/${constants.APPS}/{0}/${constants.TABLES}/{1}/${constants.REPORTS}/{2}/${constants.FACETS}/${constants.RESULTS}`,
             PARSE_FACET_EXPR    : `${constants.BASE_URL.NODE}/${constants.FACETS}/${constants.PARSE}`
         };
     }
@@ -65,19 +64,6 @@ class ReportService extends BaseService {
 
         let url = super.constructUrl(this.API.GET_REPORT_RESULTS, [appId, tableId, reportId]);
         return super.get(url, {params:params});
-    }
-
-    /**
-     * Return the list of facets and associated facet values for a given report.
-     *
-     * @param appId
-     * @param tableId
-     * @param reportId
-     * @returns promise
-     */
-    getReportFacets(appId, tableId, reportId) {
-        let url = super.constructUrl(this.API.GET_REPORT_FACETS, [appId, tableId, reportId]);
-        return super.get(url);
     }
 
     /**

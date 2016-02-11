@@ -9,6 +9,7 @@
     var request = require('request');
     var requestHelper;
     var recordsApi;
+    var reportsApi;
     var routeGroupMapper = require('./qbRouteGroupMapper');
     var routeGroup;
     var simpleStringify = require('./../components/utility/simpleStringify.js');
@@ -17,6 +18,7 @@
     module.exports = function(config) {
         requestHelper = require('../api/quickbase/requestHelper')(config);
         recordsApi = require('../api/quickbase/recordsApi')(config);
+        reportsApi = require('../api/quickbase/reportsApi')(config);
         routeGroup = config.routeGroup;
 
         /* internal data */
@@ -27,8 +29,7 @@
         routeToGetFunction[routeConsts.FACET_EXPRESSION_PARSE] = resolveFacets;
         routeToGetFunction[routeConsts.RECORD] = fetchSingleRecord;
         routeToGetFunction[routeConsts.RECORDS] = fetchAllRecords;
-        routeToGetFunction[routeConsts.REPORT_RESULTS] = fetchAllRecords;
-        routeToGetFunction[routeConsts.REPORT_FACETS] = mockReportFacets;
+        routeToGetFunction[routeConsts.REPORT_RESULTS] = fetchReportData;
 
         routeToGetFunction[routeConsts.SWAGGER_API] = fetchSwagger;
         routeToGetFunction[routeConsts.SWAGGER_RESOURCES] = fetchSwagger;
@@ -125,7 +126,11 @@
              */
             setRecordsApi: function(recordsApiOverride) {
                 recordsApi = recordsApiOverride;
-            }
+            },
+
+            /*setReportsApi: function(recordsApiOverride) {
+                reportsApi = recordsApiOverride;
+            }*/
         };
     };
 
@@ -201,6 +206,27 @@
                 },
                 function(response) {
                     log.error({req:req, res:response}, 'FetchAllRecords API ERROR');
+                    res.status(response.statusCode).send(response);
+                });
+        });
+    }
+
+    /**
+     * This is the function for fetching all records from the recordsApi
+     * This is used for both the records endpoint and the reports endpoint
+     * @param req
+     * @param res
+     */
+    /*eslint no-shadow:0 */
+    function fetchReportData(req, res) {
+        processRequest(req, res, function(req, res) {
+            reportsApi.fetchReportResultsAndFacets(req).then(
+                function(response) {
+                    log.debug({req:req, res:response}, 'FetchReportData API SUCCESS');
+                    res.send(response);
+                },
+                function(response) {
+                    log.error({req:req, res:response}, 'FetchReportData API ERROR');
                     res.status(response.statusCode).send(response);
                 });
         });
@@ -285,15 +311,4 @@
 
         return enabled;
     }
-
-    function mockReportFacets(req, res) {
-        var jsonStr = '{"facets": [' +
-              '{"id": "1", "name": "Facet01", "type": "text", "values": ["Facet01-Value01","Facet01-Value02"]},' +
-              '{"id": "2", "name": "Facet02", "type": "text", "values": ["Facet02-Value01","Facet02-Value02"]},' +
-              '{"id": "3", "name": "Facet03", "type": "numeric", "values": [1000, 1045.33, 2099]}' +
-              ']}';
-
-        res.json(JSON.parse(jsonStr));
-    }
-
 }());

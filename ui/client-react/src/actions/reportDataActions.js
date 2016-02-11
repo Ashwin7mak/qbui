@@ -36,20 +36,15 @@ let reportDataActions = {
                 var promises = [];
                 promises.push(reportService.getReport(appId, tblId, rptId));
                 promises.push(reportService.getReportResults(appId, tblId, rptId, format));
-                promises.push(reportService.getReportFacets(appId, tblId, rptId));
 
                 Promise.all(promises).then(
                     function(response) {
                         logger.debug('Report service call successful');
                         var report = {
                             name: response[0].data.name,
-                            data: response[1].data,
-                            facets: response[2].data
+                            data: response[1].data
                         };
-
                         logger.debug("Report Name: " + report.name);
-                        logger.debug("Report Facets: " + JSON.stringify(report.facets));
-
                         this.dispatch(actions.LOAD_REPORT_SUCCESS, report);
                         resolve();
                     }.bind(this),
