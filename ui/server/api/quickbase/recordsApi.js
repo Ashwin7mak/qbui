@@ -60,8 +60,6 @@
         var recordFormatter = require('./formatter/recordFormatter')();
 
         //Module constants:
-        var FACETS = 'facets';
-        var FACETRESULTS = 'results';
         var FIELDS = 'fields';
         var RECORDS = 'records';
         var REPORTS = 'reports';

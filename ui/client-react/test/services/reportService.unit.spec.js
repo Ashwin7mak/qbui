@@ -119,15 +119,4 @@ describe('ReportService functions', () => {
         expect(BaseService.prototype.get).toHaveBeenCalledWith(reportService.API.PARSE_FACET_EXPR,  {params: params});
     });
 
-    it('test getReportFacets function', () => {
-        var appId = 1;
-        var tblId = 2;
-        var rptId = 3;
-        var url = reportService.constructUrl(reportService.API.GET_REPORT_FACETS, [appId, tblId, rptId]);
-
-        reportService.getReportFacets(appId, tblId, rptId);
-
-        expect(BaseService.prototype.get).toHaveBeenCalledWith(url);
-    });
-
 });
