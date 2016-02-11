@@ -12,94 +12,120 @@
   }
 }
 
-.facetMenuPopup {
-  z-index: 10000;
-  margin-left: -15px;
-  border-radius: 3px;
-  min-width: 300px;
-  > .arrow {
-    left: 13% !important;
-  }
 
-  .popover-content {
-    padding: 0;
-    margin: 0;
-    max-height: 500px;
-    overflow-y: auto;
+.facetsMenuButton {
+  &.popoverShown,
+  .facetButtons:hover {
+    color: $icon-color-hover;
   }
-
-  .panel > .list-group .list-group-item,
-  .panel > .panel-collapse > .list-group .list-group-item {
-    border: none;
+  .filterButton{
+    font-size: 20px;
   }
-
-  .panel {
-    margin-bottom: 0;
-    border-radius: 0;
+  .filterButtonCaret {
+    font-size: 16px;
   }
-  .facetsMenuButton:hover {
-    color:$icon-color-hover;
-  }
-
-  .facetMenu.panel {
-    border: none;
-  }
-
-  .facetMenu.panel:last-child {
-    border-bottom: none;
-  }
-
-  .panel-default > .panel-heading {;
-    background-color: $facetMenu-backgroundColor;
-    border: none;
-    border-bottom: 1px solid $color4;
-    border-top: 1px solid $color4;
-    //border-bottom: 1px solid rgba(0, 0, 0, 0.25);
-  }
-
-  .panel-default:first-child > .panel-heading {;
-    border-top:none;
-  }
-
-  .panel-default {
-    border: none;
-  }
-
-  .list-group-item {
-    font-family: 'Lato', sans-serif;
-    padding-top: 4px;
-  }
-
-  .list-group-item:hover {
-    background-color: $facetMenu-backgroundColor;
-  }
-
-  .list-group-item:focus {
-    outline: none;
-  }
-  .list-group-item .checkMark {
-    margin-left: auto;
-  }
-
-  button.selected.list-group-item {
-    color: $facetSelected-color;
-  }
-  .checkMark {
-    color: $facetMenu-backgroundColor;
-  }
-  .checkMark-selected {
-    color: $facetSelected-color;
-  }
-  .clearFacet {
-    float: right;
-    color: $facetMenu-backgroundColor;
-  }
-  .selections .clearFacet {
-    color: $color9;
-  }
-  .selections .facetName {
-    color: $facetSelected-color;
-  }
-
 }
+
+.facetMenuPopup {
+    z-index: 10000;
+    margin-left: -15px;
+    border-radius: 3px;
+    min-width: 300px;
+    > .arrow {
+      left: 13% !important;
+    }
+
+    .popover-content {
+      padding: 0;
+      margin: 0;
+      max-height: 500px;
+      overflow-y: auto;
+    }
+
+    .panel > .list-group .list-group-item,
+    .panel > .panel-collapse > .list-group .list-group-item {
+      border: none;
+    }
+
+    .panel {
+      margin-bottom: 0;
+      border-radius: 0;
+    }
+
+    .facetMenu.panel {
+      border: none;
+    }
+
+    .facetMenu.panel:last-child {
+      border-bottom: none;
+    }
+
+    .panel-default > .panel-heading {
+      background-color: $facetMenu-backgroundColor;
+      border: none;
+      box-shadow: none;
+      border-top:  1px solid $color4;
+      padding: 10px 15px 5px 15px;
+    }
+
+    .panel-default:first-child > .panel-heading {
+      border-top:none;
+    }
+
+    .panel-default > .panel-heading .panel-title a {
+      text-decoration:none;
+    }
+
+    .panel-default > .panel-heading .panel-title .facetName {
+      font-size: 16px;
+      margin: 0;
+    }
+    .selectionInfo.small {
+      opacity: 0.7;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .panel-default {
+      border: none;
+      box-shadow: none;
+    }
+
+    .list-group-item {
+      font-family: $font-family;
+      padding-top: 4px;
+    }
+
+    .list-group-item:hover {
+      background-color: $facetMenu-backgroundColor;
+    }
+
+    .list-group-item:focus {
+      outline: none;
+    }
+
+    .list-group-item .checkMark {
+      margin-left: auto;
+    }
+
+    .checkMark {
+      color: transparent;
+    }
+
+    .checkMark-selected {
+      color: $facetSelected-color;
+    }
+
+    .clearFacet {
+      float: right;
+      color: $facetMenu-backgroundColor;
+    }
+
+    .selections .clearFacet {
+      color: $color9;
+    }
+
+  }
+
 

@@ -22,6 +22,7 @@ let logger = new Logger();
  *  The FacetsMenu has a trigger button and the FacetsList
 **/
 var FacetsMenu = React.createClass({
+    displayName: 'FacetsMenu',
     propTypes: {
         /**
          *  Takes in for properties the reportData which includes the list of facets
@@ -145,20 +146,25 @@ var FacetsMenu = React.createClass({
     render() {
         return (
             <div className="facetsMenuContainer">
-                {/*  list of facet options shown when filter icon clicked */}
-                <OverlayTrigger container={this} trigger="click"
-                                placement="bottom"
-                                overlay={<FacetsList
-                                    handleToggleCollapse={this.handleToggleCollapse}
-                                    isCollapsed={this.isCollapsed}
-                                    {...this.props} />}
-                >
-                    {/* the filter icon */}
-                    <div className="facetsMenuButton"
-                         onClick={e => this.toggleMenu(e)}
-                    >
-                        <QBicon icon="filter-tool" />
-                        <QBicon icon="caret-filled-down" />
+                {/* list of facet options shown when filter icon clicked */}
+                <OverlayTrigger container={this} trigger="click" placement="bottom"
+                                key={"facets." + this.props.appId + "." +
+                                                 this.props.tblId + "." +
+                                                 this.props.rptId }
+                                overlay={
+                                    <FacetsList
+                                        handleToggleCollapse={this.handleToggleCollapse}
+                                        isCollapsed={this.isCollapsed}
+                                    {...this.props} />}>
+
+                    {/* the filter icon button */}
+                    <div className={"facetsMenuButton " +  (this.state.show ? "popoverShown" : "")}
+                         onClick={e => this.toggleMenu(e)}>
+                        <span className="facetButtons">
+                            <QBicon className="filterButton" icon={(this.props.selectedValues && this.props.selectedValues.hasAnySelections()) ?
+                                        "filter-status" : "filter-tool"} />
+                            <QBicon className="filterButtonCaret" icon="caret-filled-down" />
+                        </span>
                     </div>
                 </OverlayTrigger>
             </div>

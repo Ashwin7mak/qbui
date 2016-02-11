@@ -191,7 +191,7 @@ var ReportToolbar = React.createClass({
                 also hide Facets Menu Button if facets disabled  */}
                 { recordCount &&
                     (<FacetsMenu className="facetMenu"  {...this.props}
-                                  selectedValues = {this.state.selections}
+                                  selectedValues={this.state.selections}
                                   onFacetSelect={this.handleFacetSelect}
                                   onFacetClearFieldSelects={this.handleFacetClearFieldSelects}
                     />)

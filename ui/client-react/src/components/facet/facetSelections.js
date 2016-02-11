@@ -30,7 +30,14 @@ class FacetSelections {
      *
      */
     hasAnySelections() {
-        return (_.keys(this.selectionsHash).length !== 0);
+        if (_.keys(this.selectionsHash).length === 0) {
+            return false;
+        } else {
+            let foundAny =  _.some(this.selectionsHash, function(x) {
+                return (x && (x.length > 0));
+            });
+            return foundAny;
+        }
     }
 
     /**

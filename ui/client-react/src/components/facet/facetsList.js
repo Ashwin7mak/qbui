@@ -24,6 +24,7 @@ var FacetsList = React.createClass({
      * @param facetsData - the list of facet field object
      * @returns the prepared set of FacetsItem components for rendering
      */
+    displayName: 'FacetsList',
     facetsList(facetsData) {
         return facetsData.list.map((facetField, index) => {
             var fid = facetField.id;

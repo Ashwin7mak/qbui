@@ -46,6 +46,7 @@ var FacetsItem = React.createClass({
      *  -  a function to handle selection/deselection of one of the facet fields values used to initiate filter the report results
      *  - a function to handle the collapse/expansion of the facet field ;  hide or show its list of values
      */
+    displayName: 'FacetsItem',
     propTypes: {
         facet:facetShape,
         fieldSelections: React.PropTypes.array,
@@ -53,16 +54,6 @@ var FacetsItem = React.createClass({
         handleToggleCollapse: React.PropTypes.func
     },
 
-    /**
-     * function : getInitialState
-     * initializes the set of selected values for this facet field to empty/one
-     * @returns {{selectedValues: Array}}
-     */
-    getInitialState() {
-        return {
-            selectedValues: []
-        };
-    },
     getDefaultProps() {
         return {
             fieldSelections : []
@@ -75,18 +66,28 @@ var FacetsItem = React.createClass({
      * @returns {XML}
      */
     renderFieldName() {
+       // return <h3>{this.props.facet.name}</h3>;
         var clearFacetsIcon = "";
+        var selectionInfo = "";
+        var selectionStrings = "";
         if (this.props.fieldSelections.length > 0) {
             clearFacetsIcon = (<QBicon className="clearFacet" icon="clear-mini"
                                        onClick={(e)=>this.props.handleClearFieldsSelects(this.props.facet)}/>);
+            var listOfValues = _.map(this.props.facet.values, 'value');
+            var originalOrderSelected =  _.intersection(listOfValues, this.props.fieldSelections);
+            selectionStrings = (originalOrderSelected.map((item, index) => {
+                return item + (index === (this.props.fieldSelections.length - 1) ? "" : ", ");
+            }));
+            selectionInfo = (<div className="selectionInfo small">{selectionStrings}</div>);
         }
         //todo: render text values in small text
-        var selectedValues = "";
-        return (
-                <h4 className="facetName" >
-                    <span >{this.props.facet.name}</span>
-                    {clearFacetsIcon}
-                </h4>
+        return (<div>
+                    <h4 className="facetName" >
+                        <span>{this.props.facet.name}</span>
+                        {clearFacetsIcon}
+                    </h4>
+                    {selectionInfo}
+                </div>
             );
     },
 

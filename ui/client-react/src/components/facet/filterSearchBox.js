@@ -10,6 +10,7 @@ let logger = new Logger();
  Takes the function to call on changes to search string, what he list is known as default is Records
  */
 var FilterSearchBox = React.createClass({
+    displayName: 'FilterSearchBox',
     propTypes: {
         onChange : React.PropTypes.func,
         nameForRecords: React.PropTypes.string
