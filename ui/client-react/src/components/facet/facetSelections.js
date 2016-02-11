@@ -18,11 +18,16 @@ let logger = new Logger();
 
 class FacetSelections {
     constructor() {
-        this.initSelections();
+        let emptyList = {};
+        this.initSelections(emptyList);
     }
 
     initSelections(newSet) {
-        this.selectionsHash = _.clone(newSet) || {};
+        if (newSet && (typeof newSet === 'object')) {
+            this.selectionsHash = _.cloneDeep(newSet);
+        } else if (_.isUndefined(newSet)) {
+            this.selectionsHash = {};
+        }
     }
 
     /**
@@ -107,8 +112,8 @@ class FacetSelections {
     removeSelection(fieldId, value) {
         // if there is no array yet for the fieldId nothing to remove
         if (!this.selectionsHash[fieldId]) {
-            return;
-            // add the value to the array if its not there don't dup if its already there
+            return null;
+            // remove the value if its there
         } else if (this.isValueInSelections(fieldId, value)) {
             _.pull(this.selectionsHash[fieldId], value);
         }
@@ -122,19 +127,23 @@ class FacetSelections {
     removeAllFieldSelections(fieldId) {
         // if there is no array yet for the fieldId nothing to remove
         if (!this.selectionsHash[fieldId]) {
-            return;
-            // add the value to the array if its not there don't dup if its already there
+            return null;
+            // remove the value if its there
         } else {
             this.selectionsHash[fieldId] = [];
         }
+        return this.selectionsHash;
+
     }
 
     /**
      * removes all values from a fields list of facet selections
      * mutates the array
      */
-    removeAllSelections(fieldId) {
+    removeAllSelections() {
         this.initSelections();
+        return this.selectionsHash;
+
     }
 
 
