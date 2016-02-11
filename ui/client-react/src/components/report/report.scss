@@ -9,9 +9,9 @@
   .layout-stage {
     flex-shrink: 0;
   }
-  margin-top: 10px;
-  margin-left: 10px;
-  margin-right: 10px;
+  margin-top: 0;
+  margin-left: 0;
+  margin-right: 0;
 
   background-color: $report-backgroundColor;
 
@@ -25,7 +25,7 @@
 
       .filterSearchBox {
         padding: .8rem;
-        width: 25em;
+        width: 18em;
       }
 
       .facetsMenuButton {

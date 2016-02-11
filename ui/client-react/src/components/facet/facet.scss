@@ -14,6 +14,9 @@
 
 
 .facetsMenuButton {
+  .facetButtons {
+    color: $icon-color;
+  }
   &.popoverShown,
   .facetButtons:hover {
     color: $icon-color-hover;
