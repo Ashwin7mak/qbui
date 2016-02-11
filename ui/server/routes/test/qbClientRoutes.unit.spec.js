@@ -28,55 +28,49 @@ describe('Express Client Routes', function() {
 
     beforeEach(function() {
         stubLog = sinon.stub(log, 'info').returns(true);
+        this.timeout(5000);
     });
     afterEach(function() {
         stubLog.restore();
     });
 
     it('Validate default client route', function(done) {
-        this.timeout(5000);
         request(app).
             get('/').
             expect(200, done);
     });
 
     it('Validate get apps route', function(done) {
-        this.timeout(5000);
         request(app).
             get('/apps').
             expect(200, done);
     });
 
     it('Validate get app route', function(done) {
-        this.timeout(5000);
         request(app).
             get('/app/1').
             expect(200, done);
     });
 
     it('Validate get tables route', function(done) {
-        this.timeout(5000);
         request(app).
             get('/app/1/table/2').
             expect(200, done);
     });
 
     it('Validate get table reports route', function(done) {
-        this.timeout(5000);
         request(app).
             get('/app/1/table/2/reports').
             expect(200, done);
     });
 
     it('Validate get record route', function(done) {
-        this.timeout(5000);
         request(app).
             get('/app/1/table/2/record/3').
             expect(200, done);
     });
 
     it('Validate get table report route', function(done) {
-        this.timeout(5000);
         request(app).
             get('/app/1/table/2/report/3').
             expect(200, done);

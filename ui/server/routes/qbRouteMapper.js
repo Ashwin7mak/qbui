@@ -11,7 +11,7 @@
     var recordsApi;
     var routeGroupMapper = require('./qbRouteGroupMapper');
     var routeGroup;
-    var simpleStringify = require('./../components/utility/simpleStringify.js');
+    var simpleStringify = require('./../../common/src/simpleStringify.js');
     var queryFormatter = require('../api/quickbase/formatter/queryFormatter');
 
     module.exports = function(config) {
@@ -209,7 +209,7 @@
         processRequest(req, res, function(req, res) {
             log.debug("facetExpression in mapper =" + req.param('expression'));
             queryFormatter.format(req.param('facetexpression'))
-                .then(function(response){
+                .then(function(response) {
                     res.pipe(response);
                 });
         });

@@ -4,12 +4,16 @@ import Locale from '../../locales/locales';
 import Stage from '../stage/stage';
 import ReportStage from './reportStage';
 
+
 import Logger from '../../utils/logger';
 let logger = new Logger();
 
-import ReportContent from './dataTable/reportContent';
+import ReportToolsAndContent from './reportToolsAndContent';
 import EmailReportLink from '../actions/emailReportLink';
+import simpleStringify from '../../../../common/src/simpleStringify';
+
 import Fluxxor from 'fluxxor';
+import _ from 'lodash';
 import './report.scss';
 
 let FluxMixin = Fluxxor.FluxMixin(React);
@@ -36,7 +40,7 @@ var ReportRoute = React.createClass({
     /* Placeholder method to hook into node layer call to get filtered records when user selects a facet
     * Hardcoded facetExpression for testing
     * TODO: replace with a real method.*/
-    filterReport: function(){
+    filterReport: function() {
         var filter = {
             facet: [{fid: '3', values: ['10', '11']}, {fid: '4', values: ['abc']}],
             search: ''
@@ -52,18 +56,28 @@ var ReportRoute = React.createClass({
     },
 
     render() {
-
-        return (<div className="reportContainer">
-                <Stage stageContent="this is the stage content text" >
+        if (_.isUndefined(this.props.params) ||
+            _.isUndefined(this.props.params.appId) ||
+            _.isUndefined(this.props.params.tblId) ||
+            _.isUndefined(this.props.params.rptId)) {
+            logger.info("the necessary params were not specified to reportRoute render params=" + simpleStringify(this.props.params));
+            return null;
+        } else {
+            return (<div className="reportContainer">
+                <Stage stageContent="this is the stage content text">
                     <ReportStage reportData={this.props.reportData}/>
                 </Stage>
 
-                {/* hide this - devs can use document.getElementById('fakeFilter').style.display='block'; */}
-                <div id="fakeFilter" style={{display:'none'}}> This is hard wired to call filter by facets - only matches Record#id = 10 OR 11 <button className="testFilterButton" onClick={this.filterReport}> Fake filter this report </button></div>
 
-                <ReportContent reportData={this.props.reportData}/>
-                </div>);
+                <ReportToolsAndContent reportData={this.props.reportData}
+                                       appId={this.props.params.appId}
+                                       tblId={this.props.params.tblId}
+                                       rptId={this.props.params.rptId}
+                />
+            </div>);
+        }
     }
 });
+
 
 export default ReportRoute;

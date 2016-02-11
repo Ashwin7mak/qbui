@@ -1,0 +1,37 @@
+import React from 'react';
+import Logger from '../../utils/logger';
+import {I18nMessage} from '../../utils/i18nMessage';
+
+import './facet.scss';
+
+let logger = new Logger();
+/*
+ FilterSearchBox component takes user input for filtering a report.
+ Takes the function to call on changes to search string, what he list is known as default is Records
+ */
+var FilterSearchBox = React.createClass({
+    displayName: 'FilterSearchBox',
+    propTypes: {
+        onChange : React.PropTypes.func,
+        nameForRecords: React.PropTypes.string
+    },
+    defaultProps: {
+        nameForRecords :"Records"
+    },
+    render() {
+        //TODO: use Search these X records in i18n message formatter at "record.searchPlaceHolder" once Reeact.intl
+        // supports string only, currently it wraps the generated message with a span tag which is not valid
+        // within a placeholder element attribute.
+        //
+        // looks like this will be supported in
+        // reactintl 2.0 see - http://stackoverflow.com/questions/35286239/how-to-put-valuedata-into-html-attribute-with-reactjs-and-reactintl
+
+        let placeMsg = "Search these " + this.props.nameForRecords + "...";
+        return (<input className="filterSearchBox" type="text" key="filterSearchBox"
+                       onChange={this.props.onChange} placeholder={placeMsg}
+                />
+        );
+    }
+});
+
+export default FilterSearchBox;

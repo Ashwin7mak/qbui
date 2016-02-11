@@ -17,11 +17,7 @@ var DateFormatterMock = React.createClass({
     }
 });
 
-var ReportHeaderMock = React.createClass({
-    render: function() {
-        return <div>mock table header</div>;
-    }
-});
+const header_empty = <div>nothing</div>;
 
 const fakeReportData_loading = {
     loading: true
@@ -110,33 +106,30 @@ describe('ReportContent functions', () => {
 
     var component;
     let flux = {};
-    beforeEach(() => {
-        ReportContent.__Rewire__('ReportHeader', ReportHeaderMock);
-    });
 
-    afterEach(() => {
-        ReportContent.__ResetDependency__('ReportHeader');
-
-    });
 
     it('test render of component', () => {
-        component = TestUtils.renderIntoDocument(<ReportContent reportData={fakeReportData_empty}/>);
+        component = TestUtils.renderIntoDocument(<ReportContent
+            reportData={fakeReportData_empty} reportHeader={header_empty}/>);
         expect(TestUtils.isCompositeComponent(component)).toBeTruthy();
     });
 
     it('test render of loader', () => {
-        component = TestUtils.renderIntoDocument(<ReportContent reportData={fakeReportData_loading} />);
+        component = TestUtils.renderIntoDocument(<ReportContent
+            reportData={fakeReportData_loading} reportHeader={header_empty}/>);
         expect(TestUtils.scryRenderedComponentsWithType(component, Loader).length).toEqual(1);
         expect(TestUtils.scryRenderedComponentsWithType(component, GriddleTable).length).toEqual(0);
     });
 
     it('test render of empty component', () => {
-        component = TestUtils.renderIntoDocument(<ReportContent reportData={fakeReportData_empty} />);
+        component = TestUtils.renderIntoDocument(<ReportContent
+            reportData={fakeReportData_empty} reportHeader={header_empty}/>);
         expect(TestUtils.scryRenderedComponentsWithType(component, GriddleTable).length).toEqual(1);
     });
 
     it('test render of data without attributes', () => {
-        component = TestUtils.renderIntoDocument(<ReportContent reportData={fakeReportData_simple} />);
+        component = TestUtils.renderIntoDocument(<ReportContent
+            reportData={fakeReportData_simple}  reportHeader={header_empty}/>);
         var griddle = TestUtils.scryRenderedComponentsWithType(component, GriddleTable);
         expect(griddle.length).toEqual(1);
         griddle = griddle[0];
@@ -148,7 +141,9 @@ describe('ReportContent functions', () => {
         ReportContent.__Rewire__('NumericFormatter', NumericFormatterMock);
 
         fakeReportData_attributes.data.columns = cols_with_numeric_field;
-        component = TestUtils.renderIntoDocument(<ReportContent flux={flux} reportData={fakeReportData_attributes} />);
+        component = TestUtils.renderIntoDocument(<ReportContent flux={flux}
+                                                                reportData={fakeReportData_attributes}
+                                                                reportHeader={header_empty}/>);
         var griddle = TestUtils.scryRenderedComponentsWithType(component, GriddleTable);
         expect(griddle.length).toEqual(1);
 
@@ -163,7 +158,8 @@ describe('ReportContent functions', () => {
         ReportContent.__Rewire__('DateFormatter', DateFormatterMock);
 
         fakeReportData_attributes.data.columns = cols_with_date_field;
-        component = TestUtils.renderIntoDocument(<ReportContent reportData={fakeReportData_attributes} />);
+        component = TestUtils.renderIntoDocument(<ReportContent
+            reportData={fakeReportData_attributes} reportHeader={header_empty}/>);
         var griddle = TestUtils.scryRenderedComponentsWithType(component, GriddleTable);
         expect(griddle.length).toEqual(1);
 
@@ -176,7 +172,8 @@ describe('ReportContent functions', () => {
 
     it('test render of data with bold attribute', () => {
         fakeReportData_attributes.data.columns = cols_with_bold_attrs;
-        component = TestUtils.renderIntoDocument(<ReportContent reportData={fakeReportData_attributes} />);
+        component = TestUtils.renderIntoDocument(<ReportContent
+            reportData={fakeReportData_attributes} reportHeader={header_empty}/>);
         var griddle = TestUtils.scryRenderedComponentsWithType(component, GriddleTable);
         expect(griddle.length).toEqual(1);
 
@@ -186,7 +183,8 @@ describe('ReportContent functions', () => {
 
     it('test render of data with nowrap attribute', () => {
         fakeReportData_attributes.data.columns = cols_with_nowrap_attrs;
-        component = TestUtils.renderIntoDocument(<ReportContent reportData={fakeReportData_attributes} />);
+        component = TestUtils.renderIntoDocument(<ReportContent
+            reportData={fakeReportData_attributes} reportHeader={header_empty}/>);
         var griddle = TestUtils.scryRenderedComponentsWithType(component, GriddleTable);
         expect(griddle.length).toEqual(1);
 

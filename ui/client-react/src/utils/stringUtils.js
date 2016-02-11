@@ -78,7 +78,6 @@ class StringUtils {
         //  nothing to do...return the original tokenized string
         return tokenizedString;
     }
-
 }
 
 export default StringUtils;

@@ -7,6 +7,7 @@ import ReactCSSTransitionGroup from 'react/lib/ReactCSSTransitionGroup';
 import ReportActions from '../../actions/reportActions';
 import ReportHeader from '../../report/dataTable/reportHeader';
 import CardView from './cardView.js';
+import LimitConstants from './../../../../../common/src/limitConstants';
 import _ from 'lodash';
 
 import './griddleTable.scss';
@@ -50,7 +51,7 @@ let GriddleTable = React.createClass({
             showFilter: false,
             showSettings: false,
             currentPage: 0,
-            resultsPerPage: 1000,
+            resultsPerPage: LimitConstants.resultsPerPage,
             useCustomRowComponent: false,
             customRowComponent: CardView,
             customRowComponentClassName: "custom-row",

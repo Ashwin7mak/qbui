@@ -121,9 +121,9 @@ module.exports = function(config) {
         //  define where the coverage reports live for the client code
         coverageReporter: {
             // specify a common output directory
-            dir: "build/reports/client/coverage",
+            dir: "build/reports/client/",
             reporters: [
-                {type: "lcov", subdir: "."},
+                {type: "lcov", subdir: "coverage"},
                 {type: "text-summary"}    // outputs to the console by default
             ]
         },

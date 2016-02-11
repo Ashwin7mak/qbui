@@ -12,7 +12,7 @@
         format: function(facetExpression) {
             var deferred = Promise.pending();
             var queryString = "";
-            if (facetExpression){
+            if (facetExpression) {
                 for (var i = 0; i < facetExpression.length; i++) {
                     if (queryString !== "") {
                         queryString += consts.QUERY_AND;

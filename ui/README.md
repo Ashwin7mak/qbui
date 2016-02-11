@@ -219,6 +219,11 @@ a local DNS server (Dnsmasq):
 
         # Start Dnsmasq automatically when the OS starts:
         sudo launchctl load /Library/LaunchDaemons/homebrew.mxcl.dnsmasq.plist
+        
+        #if you ever need to unload it use
+        sudo launchctl remove homebrew.mxcl.dnsmasq
+        sudo launchctl unload /Library/LaunchDaemons/homebrew.mxcl.dnsmasq.plist
+
 
 Configure Dnsmasq: The configuration file lives at `/usr/local/etc/dnsmasq.conf` by default, so open this file in your favourite editor. Add or uncomment this line in config file:
 
