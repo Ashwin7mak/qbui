@@ -274,7 +274,7 @@ describe('FacetSelections', () => {
         it('it toggles', () => {
             let testSelections = new FacetSelections();
             let facetField = {
-                id : '4',
+                id : 'fieldid',
             };
             testSelections.setFacetValueSelectState(facetField, 'addSelect', true);
             expect(_.includes(testSelections.getFieldSelections('fieldid'), 'addSelect')).toBeTruthy();
@@ -287,7 +287,7 @@ describe('FacetSelections', () => {
         it('it toggles', () => {
             let testSelections = new FacetSelections();
             let facetField = {
-                id : '4',
+                id : 'fieldid',
             };
             testSelections.toggleSelectFacetValue(facetField, 'addSelect');
             expect(_.includes(testSelections.getFieldSelections('fieldid'), 'addSelect')).toBeTruthy();
