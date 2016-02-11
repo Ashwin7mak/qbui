@@ -40,7 +40,7 @@ class QBForm extends React.Component {
         var isCheckbox = curElement.type === "checkbox";
         return (
             <div key={curElement.id} className="field">
-                <h5 className={"fieldLabel"}>{curElement.name}</h5>
+                <h5><small className={"fieldLabel"}>{curElement.name}</small></h5>
                 {isCheckbox ? this.createCheckBox(curElement) : this.createSpan(curElement)}
             </div>
         );
@@ -53,7 +53,7 @@ class QBForm extends React.Component {
             fields.push(this.createField(curSection.elements[j]));
         }
         return (
-            <QBPanel title={curSection.title} key={curSection.id} isOpen={false}>
+            <QBPanel title={curSection.title} key={curSection.id} isOpen={false} panelNum={curSection.id}>
                 {fields}
             </QBPanel>
         );
@@ -79,9 +79,11 @@ class QBForm extends React.Component {
         }
         return (
             <div className="formContainer">
-                <Tabs defaultActiveKey={this.props.activeTab}>
-                    {tabs}
-                </Tabs>
+                <form>
+                    <Tabs defaultActiveKey={this.props.activeTab}>
+                        {tabs}
+                    </Tabs>
+                </form>
             </div>
         );
     }

@@ -1,19 +1,14 @@
 import React from 'react';
 import ReactCSSTransitionGroup from 'react/lib/ReactCSSTransitionGroup';
-
 import * as breakpoints from '../../constants/breakpoints';
 import './nav.scss';
 import Button from 'react-bootstrap/lib/Button';
 import Trowser from '../trowser/trowser';
 import TrowserRecordActions from '../actions/trowserRecordActions';
 import Fluxxor from 'fluxxor';
-
 import LeftNav from './leftNav';
-
 import TopNav from '../header/topNav';
-
 import Footer from '../footer/footer';
-import MobileAddFooter from '../footer/mobileAddFooter';
 
 let FluxMixin = Fluxxor.FluxMixin(React);
 let StoreWatchMixin = Fluxxor.StoreWatchMixin;
@@ -157,9 +152,6 @@ var Nav = React.createClass({
                     )}
                 </div>}
 
-                {/* insert the footer if route wants it
-                <MobileAddFooter newItemsOpen={this.state.nav.newItemsOpen} flux= {flux} />
-                 */}
             </div>
 
         </div>);

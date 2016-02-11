@@ -1,14 +1,14 @@
 import React from 'react';
 import ReactBootstrap from 'react-bootstrap';
 import {Panel}  from 'react-bootstrap';
-import Hicon from '../harmonyIcon/harmonyIcon';
+import QBicon from '../qbIcon/qbIcon';
 import './qbpanel.scss';
 
 /*
     Custom QuickBase Panel component that has 4 properties.
         title: the title to display in the Panel Header
         isOPen: boolean if we should start with the panel expanded or not
-        key: creates a unique id for each panel object (helps with accessibility)
+        panelNum: creates a unique id for each panel object (helps with accessibility)
         children: the content displayed within the panel itself
  */
 class QBPanel extends React.Component {
@@ -21,13 +21,13 @@ class QBPanel extends React.Component {
     }
 
     render() {
-        var panelId = "panelId" + this.props.key;
+        var panelId = "panelId" + this.props.panelNum;
         return (
-            <div className={"qbPanel"}>
+            <div className={"qbPanel"} id={panelId}>
                 <div className="qbPanelHeader" onClick={ ()=> this.setState({open: !this.state.open})}>
-                    <h3 id={panelId}>{this.props.title}<small className="qbPanelHeaderIcon">
-                        <Hicon icon="chevron-up" className={this.state.open ? "rotateDown" : "rotateUp"}/>
-                    </small></h3>
+                    <h3 className="qbPanelHeaderTitle">{this.props.title}<QBicon icon="caret-right"
+                        className={this.state.open ? "qbPanelHeaderIcon rotateDown" : "qbPanelHeaderIcon rotateUp"}/>
+                    </h3>
                 </div>
                 <Panel collapsible expanded={this.state.open}>
                     <div className="qbPanelBody">
@@ -39,7 +39,7 @@ class QBPanel extends React.Component {
     }
 }
 
-QBPanel.propTypes = {title: React.PropTypes.string, isOpen: React.PropTypes.bool, key: React.PropTypes.number};
+QBPanel.propTypes = {title: React.PropTypes.string, isOpen: React.PropTypes.bool, panelNum: React.PropTypes.number};
 QBPanel.defaultProps = {title: "Untitled", isOpen: false, key: -1};
 
 export default QBPanel;

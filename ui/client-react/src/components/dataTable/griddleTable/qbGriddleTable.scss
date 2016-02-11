@@ -6,8 +6,7 @@ $header-cell-background-color: $color7;
 $header-cell-color: $color8;
 
 $row-background-color-hover: $color1;
-$row-cell-vertical-border: $color9;
-$row-cell-horizontal-border: $color4;
+$row-cell-border-color: $color4;
 
 $footer-background: $color2;
 $footer-next-button-hover: $color10;
@@ -51,15 +50,7 @@ $footer-next-button: $color2;
         td {
             word-wrap: break-word;
             padding: 5px 8px;
-            border-width: 1px;
-            border-left-style: dotted;
-            border-right-style: dotted;
-            border-bottom-style: solid;
-            border-top-style: solid;
-            border-left-color: $row-cell-vertical-border;
-            border-right-color: $row-cell-vertical-border;
-            border-bottom-color: $row-cell-horizontal-border;
-            border-top-color: $row-cell-horizontal-border;
+            border: 1px solid $row-cell-border-color;
             height: 32px; /* this doesnt seem right - pass through props if possible*/
             &:nth-child(1) {
                 border-left: 0px;
@@ -96,7 +87,7 @@ $footer-next-button: $color2;
                     color: #365EBF;
                     border-style: solid;
                     border-width: 1px;
-                    border-color: $row-cell-vertical-border;
+                    border-color: $row-cell-border-color;
                     background-color: $footer-next-button;
                     font-size: 14px;
                     margin: 0;
@@ -209,14 +200,14 @@ $footer-next-button: $color2;
         position: absolute;
         display: flex;
         flex-direction: row;
-        align-items: center;
+        //align-items: center;
         top: 0;
         right: 0;
         height: 100%;
         background-color: $row-background-color-hover;
         white-space: nowrap;
         border-top: 1px dotted #dcdcdc;
-        border-right: 1px dotted #969696;
+        //border-right: 1px dotted #969696;
     }
 }
 

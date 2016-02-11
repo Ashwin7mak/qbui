@@ -17,9 +17,10 @@
         padding:2px 8px;
         margin-right:10px;
         color:#fff;
-        background-color: #7090ab;
+        background-color: $selection-badge-color;
         border-radius: 12px;
         font-size:10px;
+        font-weight:500;
         vertical-align:top;
     }
     .actionButtons {
@@ -28,7 +29,6 @@
     }
     .actionIcons {
         >* {
-            font-size:16px;
             display:inline-block;
             width:32px;
             height:32px;
@@ -53,7 +53,7 @@
     }
 
 }
-.reportActions {
+.reportActions,.recordActions {
     a.iconLink.icon-badge {
         color: $icon-badge-color;
     }
@@ -78,9 +78,39 @@
     a.iconLink {
         text-decoration:none;
     }
+    a.iconLink.icon-badge:hover {
+        background-color: $icon-badge-color;
+    }
+    a.iconLink.icon-edit:hover {
+        background-color: $icon-edit-color;
+    }
+    a.iconLink.icon-print:hover {
+        background-color: $icon-print-color;
+    }
+    a.iconLink.icon-mail:hover {
+        background-color: $icon-mail-color;
+    }
+    a.iconLink.icon-duplicate:hover {
+        background-color: $icon-duplicate-color;
+    }
+    a.iconLink.icon-delete:hover {
+        background-color: $icon-delete-color;
+    }
+    a.iconLink.icon-pickles:hover {
+        background-color: $icon-pickles-color;
+    }
+
+    a.iconLink:hover {
+        text-decoration:none;
+        color: #fff;
+    }
 }
 
-.recordActions {
+.touch .recordActions {
+   
+    a.iconLink {
+        text-decoration:none;
+    }
     a.iconLink.icon-badge {
         background-color: $icon-badge-color;
     }
@@ -102,32 +132,17 @@
     a.iconLink.icon-pickles {
         background-color: $icon-pickles-color;
     }
+
     a.iconLink {
         color: #fff;
     }
-    a.iconLink:hover {
-        text-decoration:none;
-        background: #fff;
-    }
-    a.iconLink.icon-badge:hover {
-        color: $icon-badge-color;
-    }
-    a.iconLink.icon-edit:hover {
-        color: $icon-edit-color;
-    }
-    a.iconLink.icon-print:hover {
-        color: $icon-print-color;
-    }
-    a.iconLink.icon-mail:hover {
-        color: $icon-mail-color;
-    }
-    a.iconLink.icon-duplicate:hover {
-        color: $icon-duplicate-color;
-    }
-    a.iconLink.icon-delete:hover {
-        color: $icon-delete-color;
-    }
-    a.iconLink.icon-pickles:hover {
-        color: $icon-pickles-color;
-    }
 }
+.reportActions {
+    font-size:20px;
+}
+.recordActions {
+    font-size:16px;
+}
+
+
+

@@ -29,6 +29,7 @@
         routeToGetFunction[routeConsts.RECORDS] = fetchAllRecords;
         routeToGetFunction[routeConsts.REPORT_RESULTS] = fetchAllRecords;
         routeToGetFunction[routeConsts.REPORT_FACETS] = mockReportFacets;
+
         routeToGetFunction[routeConsts.SWAGGER_API] = fetchSwagger;
         routeToGetFunction[routeConsts.SWAGGER_RESOURCES] = fetchSwagger;
         routeToGetFunction[routeConsts.SWAGGER_IMAGES] = fetchSwagger;
@@ -59,8 +60,6 @@
          */
         var routeToAllFunction = {};
         routeToAllFunction[routeConsts.TOMCAT_ALL] = forwardApiRequest;
-        routeToAllFunction[routeConsts.TICKET] = forwardApiRequest;
-        routeToAllFunction[routeConsts.REALM] = forwardApiRequest;
 
         /*** public data ****/
         return {
@@ -173,17 +172,15 @@
     /*eslint no-shadow:0 */
     function fetchSingleRecord(req, res) {
         processRequest(req, res, function(req, res) {
-            recordsApi.fetchSingleRecordAndFields(req)
-                    .then(function(response) {
-                        log.debug({req:req, res:res}, 'API response status: ' + response.statusCode);
-                        res.send(response);
-                    })
-                    .catch(function(error) {
-                        log.error({req:req}, 'API ERROR: ' + JSON.stringify(error));
-                        requestHelper.copyHeadersToResponse(res, error.headers);
-                        res.status(error.statusCode)
-                                       .send(error.body);
-                    });
+            recordsApi.fetchSingleRecordAndFields(req).then(
+                function(response) {
+                    log.debug({req:req, res:response}, 'FetchSingleRecord API SUCCESS');
+                    res.send(response);
+                },
+                function(response) {
+                    log.error({req:req, res:response}, 'FetchSingleRecord API ERROR');
+                    res.status(response.statusCode).send(response);
+                });
         });
 
     }
@@ -197,17 +194,15 @@
     /*eslint no-shadow:0 */
     function fetchAllRecords(req, res) {
         processRequest(req, res, function(req, res) {
-            recordsApi.fetchRecordsAndFields(req)
-                    .then(function(response) {
-                        log.debug({req:req}, 'API response status: ' + response.statusCode);
-                        res.send(response);
-                    })
-                    .catch(function(error) {
-                        log.error({req:req}, 'API ERROR: ' + JSON.stringify(error));
-                        requestHelper.copyHeadersToResponse(res, error.headers);
-                        res.status(error.statusCode)
-                                       .send(error.body);
-                    });
+            recordsApi.fetchRecordsAndFields(req).then(
+                function(response) {
+                    log.debug({req:req, res:response}, 'FetchAllRecords API SUCCESS');
+                    res.send(response);
+                },
+                function(response) {
+                    log.error({req:req, res:response}, 'FetchAllRecords API ERROR');
+                    res.status(response.statusCode).send(response);
+                });
         });
     }
 
@@ -216,7 +211,7 @@
             log.debug("facetExpression in mapper =" + req.param('expression'));
             queryFormatter.format(req.param('facetexpression'))
                 .then(function(response){
-                    res.send(response);
+                    res.pipe(response);
                 });
         });
     }
@@ -238,10 +233,10 @@
         var opts = requestHelper.setOptions(req);
 
         request(opts)
-                .on('error', function(error) {
-                    log.error({req:req}, 'API ERROR: ' + JSON.stringify(error));
-                })
-                .pipe(res);
+            .on('error', function(error) {
+                log.error({req:req}, 'API SWAGGER ERROR: ' + JSON.stringify(error));
+            })
+            .pipe(res);
     }
 
     /**
@@ -255,13 +250,13 @@
             var opts = requestHelper.setOptions(req);
             log.debug({req:req}, 'Java api request');
             request(opts)
-                    .on('response', function(response) {
-                        log.debug({req:req, res:response});
-                    })
-                    .on('error', function(error) {
-                        log.error({req:req, res:res}, 'API ERROR: ' + JSON.stringify(error));
-                    })
-                    .pipe(res);
+                .on('response', function(response) {
+                    log.debug({req:req, res:response});
+                })
+                .on('error', function(error) {
+                    log.error({req:req, res:res}, 'API REQUEST ERROR: ' + JSON.stringify(error));
+                })
+                .pipe(res);
         });
     }
 

@@ -10,6 +10,17 @@ $global-action-fg: #333;
   }
 }
 
+.topNav {
+    .qbIcon {
+      font-size: 22px;
+    }
+  .toggleNavButton,.dropdownToggle {
+      .qbIcon {
+        font-size: 16px;
+      }
+  }
+}
+
 .topNav .navGroup .harmonyButtons .btn {
   background: $header-bg;
   border:0;
@@ -46,18 +57,24 @@ $global-action-fg: #333;
 .topNav .globalActions {
   display:inline-block;
 
+
   .link {
     cursor:pointer;
     a {
+      color: $icon-color;
       display:inline-block;
       padding: 0 8px;
-      color: $global-action-fg;
+      color: $icon-color;
 
       .qbIcon {
         vertical-align:middle;
         font-size:22px;
-        color: #7090ab;
+
       }
+    }
+    a:hover {
+      color:#fff;
+      background:$nav-hover-bg;
     }
   }
 
@@ -68,6 +85,10 @@ $global-action-fg: #333;
   }
   .globalAction {
     border:0;
+
+    .qbIcon + span {
+      margin-left:6px;
+    }
   }
 
   .globalAction:hover {

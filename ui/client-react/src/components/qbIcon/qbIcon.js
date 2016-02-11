@@ -1,5 +1,6 @@
 import React from 'react';
-import './quickBaseIcons.scss';
+import './qbIcon.scss';
+import './style.css';
 
 /**
  * an icon using a new qb icon font (from Lisa)

@@ -77,6 +77,7 @@ describe('Left Nav functions', () => {
     it('test render opened with app list', () => {
 
         component = TestUtils.renderIntoDocument(<LeftNav open={true}
+                                                          appsListOpen={true}
                                                           apps={appsTestData}
                                                           reportsData={reportsTestData}
                                                           items={navItemsTestData}
@@ -88,6 +89,7 @@ describe('Left Nav functions', () => {
 
     it('test render opened with app,table,reports', () => {
         component = TestUtils.renderIntoDocument(<LeftNav open={true}
+                                                          appsListOpen={true}
                                                           apps={appsTestData}
                                                           selectedAppId={'app1'}
                                                           reportsData={reportsTestData}
@@ -98,6 +100,7 @@ describe('Left Nav functions', () => {
 
     it('test render closed with app,table,reports', () => {
         component = TestUtils.renderIntoDocument(<LeftNav open={false}
+                                                          appsListOpen={true}
                                                           apps={appsTestData}
                                                           selectedAppId={'app1'}
                                                           reportsData={reportsTestData}

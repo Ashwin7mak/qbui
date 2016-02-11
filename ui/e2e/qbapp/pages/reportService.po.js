@@ -42,7 +42,7 @@
         this.topNavLeftDivEl = this.topNavDivEl.element(by.className('left'));
         // Center div (containing harmony icons)
         this.topNavCenterDivEl = this.topNavDivEl.element(by.className('center'));
-        this.topNavHarButtonsListEl = this.topNavCenterDivEl.all(by.tagName('button'));
+        this.topNavHarButtonsListEl = this.topNavCenterDivEl.all(by.tagName('span'));
         // Right div (containing global actions and right dropdown)
         // global actions
         this.topNavRightDivEl = this.topNavDivEl.element(by.className('right'));
@@ -55,11 +55,17 @@
         this.topNavRightDropdownDivEl = this.topNavRightDivEl.element(by.className('dropdown'));
         this.topNavDropdownEl = this.topNavRightDropdownDivEl.element(by.className('dropdownToggle'));
 
-
         // Report Container
-        this.reportContainerEl = element.all(by.className('reportContainer')).first();
+        this.reportContainerEl = element(by.className('reportContainer'));
+        //Report Stage
+        this.reportStageContentEl = this.reportContainerEl.element(by.className('layout-stage '));
+        this.reportStageBtn = this.reportContainerEl.element(by.className('toggleStage'));
+        this.reportStageArea = this.reportStageContentEl.element(by.className('collapse'));
+
         // Loaded Content Div
         this.loadedContentEl = this.reportContainerEl.element(by.className('loadedContent'));
+        //table actions container
+        this.tableActionsContainerEl = this.loadedContentEl.element(by.className('tableActionsContainer'));
         // Griddle table
         this.griddleContainerEl = element.all(by.className('griddle-container')).first();
         this.griddleBodyEl = element(by.className('griddle-body'));
@@ -88,6 +94,9 @@
                         }
                     });
                     deferred.resolve(fieldColHeaders);
+                }).catch(function(error) {
+                    console.error(JSON.stringify(error));
+                    deferred.reject(error);
                 });
             });
             return deferred.promise;
@@ -106,16 +115,6 @@
                 expect(this.navMenuEl.getAttribute('class')).toMatch('closed');
                 expect(this.navMenuEl.getAttribute('clientWidth')).toMatch(clientWidth);
             }
-        };
-
-        this.assertGlobalNavTextVisible = function(visible) {
-            this.topNavGlobalActionsListEl.then(function(navActions) {
-                for (var i = 0; i < navActions.length; i++) {
-
-                    var textEl = navActions[i].all(by.tagName('span')).last();
-                    expect(textEl.isDisplayed()).toBe(visible);
-                }
-            });
         };
 
         this.clickReportsMenu = function(tableLinkEl) {

@@ -1,7 +1,6 @@
 import React from 'react';
-import {Tooltip, OverlayTrigger, Glyphicon} from 'react-bootstrap';
+import {Tooltip, OverlayTrigger} from 'react-bootstrap';
 import {Link} from 'react-router';
-import Hicon from '../harmonyIcon/harmonyIcon';
 import NavItem from './navItem';
 
 let TablesList = React.createClass({
@@ -18,14 +17,14 @@ let TablesList = React.createClass({
             <div className="tablesList leftNavList">
 
                 <ul>
-                    <NavItem item={{msg: 'nav.home', link:'/app/' + this.props.selectedAppId, icon:'dashboard'}} {...this.props} />
-                    <NavItem item={{msg: 'nav.users', link:'/users', icon:'customers'}} {...this.props}/>
+                    <NavItem item={{msg: 'nav.home', link:'/app/' + this.props.selectedAppId, icon:'home'}} {...this.props} />
+                    <NavItem item={{msg: 'nav.users', link:'/users', icon:'user'}} {...this.props}/>
                     <NavItem item={{msg: 'nav.favorites', link:'/favorites', icon:'star'}} {...this.props}/>
 
                     <NavItem item={{msg: 'nav.tablesHeading'}} isHeading={true} {...this.props}/>
                     {this.props.getAppTables(this.props.selectedAppId).map((table) => {
                         table.link = '/app/' + this.props.selectedAppId + '/table/' + table.id;
-                        table.icon = 'invoices';
+                        table.icon = 'report-table';
                         return <NavItem item={table}
                                         key={table.id}
                                         secondaryIcon={"list"}
