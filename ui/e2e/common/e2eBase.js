@@ -17,32 +17,32 @@
         var reportService = require('./services/reportService.js');
         var e2eBase = {
             //Delegate to recordBase to initialize
-            recordBase : recordBase,
+            recordBase: recordBase,
             //Create a realm
-            setUp : function() {
+            setUp: function() {
                 this.setBaseUrl(browser.baseUrl);
                 // Define the window size
                 e2eBase.resizeBrowser(e2eConsts.LARGE_BP_WIDTH, e2eConsts.DEFAULT_HEIGHT);
                 this.initialize();
             },
-            initialize : function() {
+            initialize: function() {
                 recordBase.initialize();
             },
             //Set the baseUrl we want to use to reach out for testing
-            setBaseUrl : function(baseUrlConfig) {
+            setBaseUrl: function(baseUrlConfig) {
                 recordBase.setBaseUrl(baseUrlConfig);
             },
             //Initialize the service modules to use the same base class
-            appService : appService(recordBase),
-            recordService : recordService(recordBase),
-            tableService : tableService(),
-            reportService : reportService(recordBase),
+            appService: appService(recordBase),
+            recordService: recordService(recordBase),
+            tableService: tableService(),
+            reportService: reportService(recordBase),
             //Initialize the utils class
-            e2eUtils : e2eUtils(),
+            e2eUtils: e2eUtils(),
             //Common variables
-            ticketEndpoint : recordBase.apiBase.resolveTicketEndpoint(),
+            ticketEndpoint: recordBase.apiBase.resolveTicketEndpoint(),
             //Checks for any JS errors in the browser, resets the browser window size and cleans up the test realm and app
-            cleanup : function(done) {
+            cleanup: function(done) {
                 //Checks for any JS errors in the browser console
                 //browser.manage().logs().get('browser').then(function(browserLog) {
                 //    // TODO: Errors in the console need to fix
@@ -57,17 +57,46 @@
                 });
             },
             //Helper method to get the proper URL for loading the dashboard page containing a list of apps and tables for a realm
-            getRequestAppsPageEndpoint : function(realmName) {
+            getRequestAppsPageEndpoint: function(realmName) {
                 var requestAppsPageEndPoint = e2eBase.recordBase.apiBase.generateFullRequest(realmName, '/apps/');
                 return requestAppsPageEndPoint;
             },
             //Get the proper URL for loading the session ticket page in the browser
-            getSessionTicketRequestEndpoint : function(realmName, realmId, ticketEndpoint) {
+            getSessionTicketRequestEndpoint: function(realmName, realmId, ticketEndpoint) {
                 var sessionTicketRequestEndPoint = e2eBase.recordBase.apiBase.generateFullRequest(realmName, ticketEndpoint + realmId);
                 return sessionTicketRequestEndPoint;
             },
+            //Does element shows up on the Left Nav bar.
+            isElementInLeftNav: function(element, clientWidth) {
+                expect(element.getAttribute('offsetLeft'), '0');
+                expect(element.getAttribute('offsetWidth'), clientWidth);
+            },
+            //Does element shows up on the Top Nav bar.
+            isElementInTopNav: function(element) {
+                expect(element.getAttribute('offsetTop'), '0');
+                expect(element.getAttribute('offsetHeight'), '50');
+            },
+
+            //Verify the element is located Top
+            isElementOnTop: function(element1, element2) {
+                //get element1 location
+                element1.getLocation().then(function(navDivLocation) {
+                    var element1xPosition = navDivLocation.x;
+                    var element1yPosition = navDivLocation.y;
+                    console.log("The coordinates of element1 are: " + element1xPosition + "," + element1yPosition);
+                    //get element2 location
+                    element2.getLocation().then(function(navDivLocation2) {
+                        var element2xPosition = navDivLocation2.x;
+                        var element2yPosition = navDivLocation2.y;
+                        console.log("The coordinates of element2 are: " + element2xPosition + "," + element2yPosition);
+                        //compare element2 coordinates to be greater than element1
+                        expect(element2xPosition === element1xPosition || element2xPosition > element1xPosition).toBeTruthy();
+                        expect(element2yPosition > element1yPosition).toBeTruthy();
+                    });
+                });
+            },
             //Resize the browser window to the given pixel width and height. Returns a promise
-            resizeBrowser : function(width, height) {
+            resizeBrowser: function(width, height) {
                 var deferred = promise.pending();
                 browser.driver.manage().window().setSize(width, height).then(function() {
                     e2eBase.sleep(browser.params.mediumSleep);
@@ -75,7 +104,7 @@
                 });
                 return deferred.promise;
             },
-            basicSetup : function(tableToFieldToFieldTypeMap, numberOfRecords) {
+            basicSetup: function(tableToFieldToFieldTypeMap, numberOfRecords) {
                 e2eBase.setUp();
                 var deferred = promise.pending();
                 //Generate the app JSON object
@@ -106,30 +135,78 @@
             },
 
             //Reports setup
-            reportsBasicSetUp : function() {
+            reportsBasicSetUp: function() {
                 var deferred = promise.pending();
                 var app;
                 var recordList;
                 // Create the table schema (map object) to pass into the app generator
                 var tableToFieldToFieldTypeMap = {};
                 tableToFieldToFieldTypeMap['table 1'] = {};
-                tableToFieldToFieldTypeMap['table 1'][e2eConsts.reportFieldNames[1]] = {fieldType: consts.SCALAR, dataType : consts.TEXT};
-                tableToFieldToFieldTypeMap['table 1'][e2eConsts.reportFieldNames[2]] = {fieldType: consts.SCALAR, dataType : consts.NUMERIC};
-                tableToFieldToFieldTypeMap['table 1'][e2eConsts.reportFieldNames[3]] = {fieldType: consts.SCALAR, dataType : consts.CURRENCY};
-                tableToFieldToFieldTypeMap['table 1'][e2eConsts.reportFieldNames[4]] = {fieldType: consts.SCALAR, dataType : consts.PERCENT};
-                tableToFieldToFieldTypeMap['table 1'][e2eConsts.reportFieldNames[5]] = {fieldType: consts.SCALAR, dataType : consts.RATING};
-                tableToFieldToFieldTypeMap['table 1'][e2eConsts.reportFieldNames[6]] = {fieldType: consts.SCALAR, dataType : consts.DATE};
-                tableToFieldToFieldTypeMap['table 1'][e2eConsts.reportFieldNames[7]] = {fieldType: consts.SCALAR, dataType : consts.DATE_TIME};
-                tableToFieldToFieldTypeMap['table 1'][e2eConsts.reportFieldNames[8]] = {fieldType: consts.SCALAR, dataType : consts.TIME_OF_DAY};
-                tableToFieldToFieldTypeMap['table 1'][e2eConsts.reportFieldNames[9]] = {fieldType: consts.SCALAR, dataType : consts.DURATION};
-                tableToFieldToFieldTypeMap['table 1'][e2eConsts.reportFieldNames[10]] = {fieldType: consts.SCALAR, dataType : consts.CHECKBOX};
-                tableToFieldToFieldTypeMap['table 1'][e2eConsts.reportFieldNames[11]] = {fieldType: consts.SCALAR, dataType : consts.PHONE_NUMBER};
-                tableToFieldToFieldTypeMap['table 1'][e2eConsts.reportFieldNames[12]] = {fieldType: consts.SCALAR, dataType : consts.EMAIL_ADDRESS};
-                tableToFieldToFieldTypeMap['table 1'][e2eConsts.reportFieldNames[13]] = {fieldType: consts.SCALAR, dataType : consts.URL};
+                tableToFieldToFieldTypeMap['table 1'][e2eConsts.reportFieldNames[1]] = {
+                    fieldType: consts.SCALAR,
+                    dataType: consts.TEXT
+                };
+                tableToFieldToFieldTypeMap['table 1'][e2eConsts.reportFieldNames[2]] = {
+                    fieldType: consts.SCALAR,
+                    dataType: consts.NUMERIC
+                };
+                tableToFieldToFieldTypeMap['table 1'][e2eConsts.reportFieldNames[3]] = {
+                    fieldType: consts.SCALAR,
+                    dataType: consts.CURRENCY
+                };
+                tableToFieldToFieldTypeMap['table 1'][e2eConsts.reportFieldNames[4]] = {
+                    fieldType: consts.SCALAR,
+                    dataType: consts.PERCENT
+                };
+                tableToFieldToFieldTypeMap['table 1'][e2eConsts.reportFieldNames[5]] = {
+                    fieldType: consts.SCALAR,
+                    dataType: consts.RATING
+                };
+                tableToFieldToFieldTypeMap['table 1'][e2eConsts.reportFieldNames[6]] = {
+                    fieldType: consts.SCALAR,
+                    dataType: consts.DATE
+                };
+                tableToFieldToFieldTypeMap['table 1'][e2eConsts.reportFieldNames[7]] = {
+                    fieldType: consts.SCALAR,
+                    dataType: consts.DATE_TIME
+                };
+                tableToFieldToFieldTypeMap['table 1'][e2eConsts.reportFieldNames[8]] = {
+                    fieldType: consts.SCALAR,
+                    dataType: consts.TIME_OF_DAY
+                };
+                tableToFieldToFieldTypeMap['table 1'][e2eConsts.reportFieldNames[9]] = {
+                    fieldType: consts.SCALAR,
+                    dataType: consts.DURATION
+                };
+                tableToFieldToFieldTypeMap['table 1'][e2eConsts.reportFieldNames[10]] = {
+                    fieldType: consts.SCALAR,
+                    dataType: consts.CHECKBOX
+                };
+                tableToFieldToFieldTypeMap['table 1'][e2eConsts.reportFieldNames[11]] = {
+                    fieldType: consts.SCALAR,
+                    dataType: consts.PHONE_NUMBER
+                };
+                tableToFieldToFieldTypeMap['table 1'][e2eConsts.reportFieldNames[12]] = {
+                    fieldType: consts.SCALAR,
+                    dataType: consts.EMAIL_ADDRESS
+                };
+                tableToFieldToFieldTypeMap['table 1'][e2eConsts.reportFieldNames[13]] = {
+                    fieldType: consts.SCALAR,
+                    dataType: consts.URL
+                };
                 tableToFieldToFieldTypeMap['table 2'] = {};
-                tableToFieldToFieldTypeMap['table 2'][e2eConsts.reportFieldNames[2]] = {fieldType: consts.SCALAR, dataType: consts.TEXT};
-                tableToFieldToFieldTypeMap['table 2'][e2eConsts.reportFieldNames[6]] = {fieldType: consts.SCALAR, dataType : consts.RATING};
-                tableToFieldToFieldTypeMap['table 2'][e2eConsts.reportFieldNames[12]] = {fieldType: consts.SCALAR, dataType : consts.PHONE_NUMBER};
+                tableToFieldToFieldTypeMap['table 2'][e2eConsts.reportFieldNames[2]] = {
+                    fieldType: consts.SCALAR,
+                    dataType: consts.TEXT
+                };
+                tableToFieldToFieldTypeMap['table 2'][e2eConsts.reportFieldNames[6]] = {
+                    fieldType: consts.SCALAR,
+                    dataType: consts.RATING
+                };
+                tableToFieldToFieldTypeMap['table 2'][e2eConsts.reportFieldNames[12]] = {
+                    fieldType: consts.SCALAR,
+                    dataType: consts.PHONE_NUMBER
+                };
                 //Call the basic app setup function
                 e2eBase.basicSetup(tableToFieldToFieldTypeMap, 10).then(function(results) {
                     //Set your global objects to use in the test functions
@@ -148,7 +225,7 @@
             },
 
             //Helper method to sleep a specified number of seconds
-            sleep : function(ms) {
+            sleep: function(ms) {
                 var deferred = promise.pending();
 
                 try {
