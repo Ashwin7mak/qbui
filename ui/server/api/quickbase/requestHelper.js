@@ -127,7 +127,21 @@
                 return req;
             },
 
-            //the immediately resolve flag is set, resolve the deferred without making a call
+            /**
+             * Allows you to override the
+             * @param requestOverride
+             */
+            setRequestObject: function(requestOverride) {
+                request = requestOverride;
+            },
+
+            /**
+             * Executes the http request. If the immediately resolve flag is set, resolve the deferred without making a call
+             * @param req
+             * @param opts
+             * @param immediatelyResolve
+             * @returns {*}
+             */
             executeRequest: function(req, opts, immediatelyResolve) {
                 //  Generate tid for all requests..and log it
                 this.setTidHeader(req);

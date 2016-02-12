@@ -58,15 +58,13 @@ describe('Facet formatter unit test', function() {
             expectedBlankFacets.values.push(formattedRecords[0][0].display);
         });
 
-        var facetRecords = [textFacetRecords];
-        var expectedFacets = [expectedTextFacets];
         var cases = [
             {message:"null records and fields", facetRecords:null, fields: null, expectedFacets: null},
             {message:"null records", facetRecords:null, fields: fields, expectedFacets: null},
-            {message:"null fields", facetRecords:facetRecords, fields: null, expectedFacets: facetRecords},
+            {message:"null fields", facetRecords:[textFacetRecords], fields: null, expectedFacets: [textFacetRecords]},
             {message:"empty records and fields", facetRecords:[], fields: [], expectedFacets: []},
             {message:"empty records", facetRecords:[], fields: fields, expectedFacets: []},
-            {message:"empty fields", facetRecords:facetRecords, fields: [], expectedFacets: facetRecords},
+            {message:"empty fields", facetRecords:[textFacetRecords], fields: [], expectedFacets: [textFacetRecords]},
             {message:"text facet", facetRecords:[textFacetRecords], fields: [textField], expectedFacets: [expectedTextFacets]},
             {message:"blank field value", facetRecords:[blankFacetRecords], fields: [textField], expectedFacets: [expectedBlankFacets]}
         ];

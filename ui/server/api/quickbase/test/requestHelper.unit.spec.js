@@ -13,6 +13,7 @@ var requestHelper = require('./../requestHelper')(config);
 var should = require('should');
 var assert = require('assert');
 var sinon = require('sinon');
+let defaultRequest = require('request');
 
 /**
  * Unit tests for User field formatting
@@ -200,6 +201,62 @@ describe('Validate RequestHelper unit tests', function() {
             done();
         });
 
+    });
+
+    describe('validate executeRequest method', function() {
+        var tid = 'tid';
+
+        var req = {
+            headers: {
+                tid: tid
+            }
+        };
+        var requestStub = sinon.stub();
+        requestHelper.setRequestObject(requestStub);
+        it('Test executeRequest with immediateResolve ', function(done) {
+            var promise = requestHelper.executeRequest(req, {}, true);
+            promise.then(
+                function(response) {
+                    assert.equal(req.headers.tid, tid);
+                    assert.equal(response, null);
+                }
+            );
+            done();
+        });
+        it('Test executeRequest success', function(done) {
+            requestStub.yields(null, {statusCode: 200}, {}); // override the params (error, response, body)
+            var promise = requestHelper.executeRequest(req, {}, true);
+            promise.then(
+                function(response) {
+                    assert.equal(req.headers.tid, tid);
+                    assert.equal(response, {statusCode: 200});
+                }
+            );
+            done();
+        });
+        it('Test executeRequest error', function(done) {
+            var errorResponse = new Error("error");
+            requestStub.yields(errorResponse, {}, {}); // override the params (error, response, body)
+            var promise = requestHelper.executeRequest(req, {}, true);
+            promise.then(
+                function(response) {
+                    assert.equal(req.headers.tid, tid);
+                    assert.equal(response, errorResponse);
+                }
+            );
+            done();
+        });
+        it('Test executeRequest status not OK', function(done) {
+            requestStub.yields(null, {statusCode: 400}, {}); // override the params (error, response, body)
+            var promise = requestHelper.executeRequest(req, {}, true);
+            promise.then(
+                function(response) {
+                    assert.equal(req.headers.tid, tid);
+                    assert.equal(response, {statusCode: 400});
+                }
+            );
+            done();
+        });
     });
 
 });
