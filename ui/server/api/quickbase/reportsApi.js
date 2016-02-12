@@ -1,9 +1,7 @@
 /**
- * Created by agoel on 2/10/16.
- */
-
-/*
-TODO: Update comments
+ The purpose of this module is to process /apps/<id>/tables/<id>/reports api requests.
+ This uses recordsApi to make calls out to /apps/<id>/tables/<id>/records end points when needed.
+ Created by agoel on 2/10/16.
  */
 (function() {
     'use strict';
@@ -67,6 +65,8 @@ TODO: Update comments
                 let opts = requestHelper.setOptions(req);
                 opts.headers[CONTENT_TYPE] = APPLICATION_JSON;
                 let inputUrl = opts.url.toLowerCase();
+                //the request came in for report/{reportId}/results.
+                // Convert that to report/{reportId}/facets/results to get facets data
                 if (inputUrl.indexOf("results") !== -1) {
                     opts.url = inputUrl.substring(0, inputUrl.indexOf("results")) + FACETS + "/" + FACETRESULTS;
                 }
@@ -86,7 +86,8 @@ TODO: Update comments
                         let fields = response[0].fields;
                         let facetRecords = jsonBigNum.parse(response[1].body);
 
-                        // format the facetRecords into Facet objects of type {id, name, type, [values]} using fields array.
+                        // format the facetRecords into Facet objects of type {id, name, type, hasBlanks, [values]} using fields array.
+                        // this also applies display properties to the raw record data.
                         let facets = facetRecordsFormatter.formatFacetRecords(facetRecords, fields);
 
                         let responseObject;

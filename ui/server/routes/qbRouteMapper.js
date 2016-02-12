@@ -126,11 +126,7 @@
              */
             setRecordsApi: function(recordsApiOverride) {
                 recordsApi = recordsApiOverride;
-            },
-
-            /*setReportsApi: function(recordsApiOverride) {
-                reportsApi = recordsApiOverride;
-            }*/
+            }
         };
     };
 
@@ -212,8 +208,8 @@
     }
 
     /**
-     * This is the function for fetching all records from the recordsApi
-     * This is used for both the records endpoint and the reports endpoint
+     * This is the function for fetching records and facets for a report from the reportssApi
+     * This is called from GetReportResults end point from client.
      * @param req
      * @param res
      */
