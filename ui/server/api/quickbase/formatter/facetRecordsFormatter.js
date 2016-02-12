@@ -1,6 +1,6 @@
 /*
  Given raw records input and field meta data from the Java capabilities API, this module is capable of
- formatting the records into a FacetItem type object which looks like {id, name, type, [values]}
+ formatting the records into a FacetItem type object which looks like {id, name, type, hasBlanks, [values]}
  where values are display formatted version of the raw record field values by addition of a display properties attribute.
  Recordformatter is used for the display formatting.
  */
