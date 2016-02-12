@@ -97,29 +97,6 @@
             return null;
         }
 
-        //the immediately resolve flag is set, resolve the deferred without making a call
-        function executeRequest(req, opts, immediatelyResolve) {
-            //  Generate tid for all requests..and log it
-            requestHelper.setTidHeader(req);
-            log.info({req: req});
-
-            var deferred = Promise.pending();
-            if (immediatelyResolve) {
-                deferred.resolve(null);
-            } else {
-                request(opts, function(error, response) {
-                    if (error) {
-                        deferred.reject(new Error(error));
-                    } else if (response.statusCode !== 200) {
-                        deferred.reject(response);
-                    } else {
-                        deferred.resolve(response);
-                    }
-                });
-            }
-            return deferred.promise;
-        }
-
         //TODO: only application/json is supported for content type.  Need a plan to support XML
         var recordsApi = {
 
@@ -208,7 +185,7 @@
                 var opts = requestHelper.setOptions(req);
                 opts.headers[CONTENT_TYPE] = APPLICATION_JSON;
 
-                return executeRequest(req, opts);
+                return requestHelper.executeRequest(req, opts);
             },
 
             //Returns a promise that is resolved with the table fields or rejected with an error code
@@ -225,7 +202,7 @@
                 }
 
                 //TODO: why do we immediately resolve if the format is raw?
-                return executeRequest(req, opts, (req.param(FORMAT) === RAW));
+                return requestHelper.executeRequest(req, opts, (req.param(FORMAT) === RAW));
             }
         };
         return recordsApi;

@@ -24,31 +24,6 @@
         let APPLICATION_JSON = 'application/json';
         let request = defaultRequest;
 
-        //the immediately resolve flag is set, resolve the deferred without making a call
-        function executeRequest(req, opts, immediatelyResolve) {
-            //  Generate tid for all requests..and log it
-            requestHelper.setTidHeader(req);
-            log.info({req: req});
-
-            let deferred = Promise.pending();
-            if (immediatelyResolve) {
-                deferred.resolve(null);
-            } else {
-                request(opts, function(error, response) {
-                    if (error) {
-                        deferred.reject(new Error(error));
-                    } else if (response.statusCode !== 200) {
-                        deferred.reject(response);
-                    } else {
-                        deferred.resolve(response);
-                    }
-                });
-            }
-            return deferred.promise;
-        }
-
-
-
         //TODO: only application/json is supported for content type.  Need a plan to support XML
         let reportsApi = {
 
@@ -71,7 +46,7 @@
                     opts.url = inputUrl.substring(0, inputUrl.indexOf("results")) + FACETS + "/" + FACETRESULTS;
                 }
 
-                return executeRequest(req, opts);
+                return requestHelper.executeRequest(req, opts);
             },
 
             //Returns a promise that is resolved with the records and fields meta data

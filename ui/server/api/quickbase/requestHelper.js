@@ -3,9 +3,12 @@
 
     var fs = require('fs');
     var uuid = require('uuid');
+    let Promise = require('bluebird');
+    let defaultRequest = require('request');
+    let log = require('../../logger').getLogger();
 
     module.exports = function(config) {
-
+        let request = defaultRequest;
         /**
          * Set of common methods used to parse out information from the http request object
          */
@@ -122,6 +125,28 @@
                 }
                 req.headers = headers;
                 return req;
+            },
+
+            //the immediately resolve flag is set, resolve the deferred without making a call
+            executeRequest: function(req, opts, immediatelyResolve) {
+                //  Generate tid for all requests..and log it
+                this.setTidHeader(req);
+                log.info({req: req});
+                let deferred = Promise.pending();
+                if (immediatelyResolve) {
+                    deferred.resolve(null);
+                } else {
+                    request(opts, function(error, response) {
+                        if (error) {
+                            deferred.reject(new Error(error));
+                        } else if (response.statusCode !== 200) {
+                            deferred.reject(response);
+                        } else {
+                            deferred.resolve(response);
+                        }
+                    });
+                }
+                return deferred.promise;
             }
 
         };

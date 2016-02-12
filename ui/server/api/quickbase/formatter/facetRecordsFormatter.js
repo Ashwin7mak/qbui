@@ -20,7 +20,7 @@
                     var facetList = [];
 
                     //for each array of records per facet
-                    for (let facetRecords of facetRecordsArray){
+                    for (let facetRecords of facetRecordsArray) {
                         //display format the records
                         var fieldsMap = {}; //also get back the fieldsMap so we dont need to iterate over fields again
                         let formattedFacetRecords = recordFormatter.formatRecords(facetRecords, fields, fieldsMap);
