@@ -79,6 +79,11 @@
             var SpecReporter = require('jasmine-spec-reporter');
             // Add jasmine spec reporter
             jasmine.getEnv().addReporter(new SpecReporter({displayStacktrace: 'all'}));
+
+            // Grab the browser name to use in spec files
+            browser.getCapabilities().then(function(cap) {
+                browser.browserName = cap.caps_.browserName;
+            });
         }
     };
 }());

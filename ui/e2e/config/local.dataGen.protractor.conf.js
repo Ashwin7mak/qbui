@@ -69,6 +69,11 @@
             browser.ignoreSynchronization = true;
             // Maximizes the browser window (known bug with Chrome)
             browser.driver.manage().window().maximize();
+
+            // Grab the browser name to use in spec files
+            browser.getCapabilities().then(function(cap) {
+                browser.browserName = cap.caps_.browserName;
+            });
         }
     };
 }());
