@@ -72,7 +72,7 @@ class ReportService extends BaseService {
      * @param facetExpression looks like [{fid: fid1, fieldtype:'', values: [value1, value2]}, {fid: fid2, fieldtype:'', values: [value3, value4]}, {fid: fid3, fieldtype:'DATE', values: [value3, value4]}]
      * @returns promise
      */
-    parseFacetExpression(facetExpression){
+    parseFacetExpression(facetExpression) {
         let params = {};
         if (facetExpression) {
             params.facetexpression = facetExpression;

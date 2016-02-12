@@ -12,7 +12,7 @@
     var reportsApi;
     var routeGroupMapper = require('./qbRouteGroupMapper');
     var routeGroup;
-    var simpleStringify = require('./../components/utility/simpleStringify.js');
+    var simpleStringify = require('./../../common/src/simpleStringify.js');
     var queryFormatter = require('../api/quickbase/formatter/queryFormatter');
 
     module.exports = function(config) {
@@ -35,6 +35,7 @@
         routeToGetFunction[routeConsts.SWAGGER_RESOURCES] = fetchSwagger;
         routeToGetFunction[routeConsts.SWAGGER_IMAGES] = fetchSwagger;
         routeToGetFunction[routeConsts.SWAGGER_DOCUMENTATION] = fetchSwagger;
+        routeToGetFunction[routeConsts.HEALTH_CHECK] = forwardApiRequest;
 
         /*
          * routeToGetFunction maps each route to the proper function associated with that route for a POST request
@@ -154,9 +155,7 @@
      * @param returnFunction
      */
     function processRequest(req, res, returnFunction) {
-        //  log some route info and set the request options
-        log.info({req: req}, 'qbRouteMapper - process request');
-
+        //  request info is logged in routes.js
         if (!isRouteEnabled(req)) {
             routeTo404(req, res);
         } else {
@@ -232,7 +231,7 @@
         processRequest(req, res, function(req, res) {
             log.debug("facetExpression in mapper =" + req.param('expression'));
             queryFormatter.format(req.param('facetexpression'))
-                .then(function(response){
+                .then(function(response) {
                     res.pipe(response);
                 });
         });
@@ -253,7 +252,6 @@
         log.debug({req: req}, 'Fetch swagger');
 
         var opts = requestHelper.setOptions(req);
-
         request(opts)
             .on('error', function(error) {
                 log.error({req:req}, 'API SWAGGER ERROR: ' + JSON.stringify(error));
@@ -270,13 +268,12 @@
     function forwardApiRequest(req, res) {
         processRequest(req, res, function(req, res) {
             var opts = requestHelper.setOptions(req);
-            log.debug({req:req}, 'Java api request');
             request(opts)
                 .on('response', function(response) {
-                    log.debug({req:req, res:response});
+                    log.debug({req:req, res:response}, 'API SUCCESS');
                 })
                 .on('error', function(error) {
-                    log.error({req:req, res:res}, 'API REQUEST ERROR: ' + JSON.stringify(error));
+                    log.error({req:req, res:res}, 'API ERROR: ' + JSON.stringify(error));
                 })
                 .pipe(res);
         });

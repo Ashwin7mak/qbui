@@ -47,7 +47,7 @@ let CardView = React.createClass({
             </div>
         );
     },
-    createRow(){
+    createRow() {
         var fields = [];
         var keys = Object.keys(this.props.data);
         if (!keys.length) {

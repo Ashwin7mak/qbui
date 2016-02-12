@@ -16,7 +16,7 @@ class QBForm extends React.Component {
         this.state = this.initState(...args);
     }
 
-    initState(){
+    initState() {
         let initialState = {
             "externalData": fakeFormClassyData,
             readonly : true
@@ -24,19 +24,19 @@ class QBForm extends React.Component {
         return initialState;
     }
 
-    createCheckBox(curElement){
+    createCheckBox(curElement) {
         return (
             <input type="checkbox" className="fieldValue" disabled={this.state.readonly} checked={curElement.value}></input>
         );
     }
 
-    createSpan(curElement){
+    createSpan(curElement) {
         return (
             <span className="fieldValue">{curElement.value}</span>
         );
     }
 
-    createField(curElement){
+    createField(curElement) {
         var isCheckbox = curElement.type === "checkbox";
         return (
             <div key={curElement.id} className="field">
@@ -46,10 +46,10 @@ class QBForm extends React.Component {
         );
     }
 
-    createSection(curSection){
+    createSection(curSection) {
 
         var fields = [];
-        for (var j = 0; j < curSection.elements.length; j++){
+        for (var j = 0; j < curSection.elements.length; j++) {
             fields.push(this.createField(curSection.elements[j]));
         }
         return (
@@ -59,9 +59,9 @@ class QBForm extends React.Component {
         );
     }
 
-    createTab(curTab){
+    createTab(curTab) {
         var sections = [];
-        for (var c = 0; c < curTab.sections.length; c++){
+        for (var c = 0; c < curTab.sections.length; c++) {
             sections.push(this.createSection(curTab.sections[c]));
         }
         return (
@@ -74,7 +74,7 @@ class QBForm extends React.Component {
 
     render() {
         var tabs = [];
-        for (var i = 0; i < this.state.externalData.tabs.length; i++){
+        for (var i = 0; i < this.state.externalData.tabs.length; i++) {
             tabs.push(this.createTab(this.state.externalData.tabs[i]));
         }
         return (

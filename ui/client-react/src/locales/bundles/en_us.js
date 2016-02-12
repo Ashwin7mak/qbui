@@ -34,6 +34,7 @@ export default {
             content: "Congratulations and welcome! You’re part of a small, early-access program. Your feedback now, will shape the way QuickBase looks and behaves in the future. Below is a snapshot of one of your reports. Browse through it as you normally would. How does it look? Does your data display the way you expect it to? Use the big button, to the right, to let us know. We look forward to hearing what you have to say.",
             feedback: {
                 header: "Remember",
+                    //TODO: conform message key naming to camel case not snake
                 sub_header: "Your Feedback Matters",
                 button: "Send your feedback"
             }
@@ -67,6 +68,13 @@ export default {
                 preferences: "Preferences",
                 sign_out: "Sign out"
             }
+        },
+        report : {
+            filteredRecordCount : "{filteredRecordCount} of {recordCount} {nameForRecords} ",
+            recordCount : "{recordCount} {nameForRecords} ",
+            noFacets : "No Facets",
+            searchPlaceHolder:  "Search these {nameForRecords} ...",
+            badParams : "Insufficient parameters supplied"
         }
     }
 };

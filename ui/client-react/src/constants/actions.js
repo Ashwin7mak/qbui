@@ -6,7 +6,6 @@ export const CHANGE_LOCALE = 'CHANGE_LOCALE';
 export const TOGGLE_APPS_LIST = 'TOGGLE_APPS_LIST';
 export const SHOW_REPORTS = 'SHOW_REPORTS';
 export const HIDE_REPORTS = 'HIDE_REPORTS';
-
 export const TOGGLE_SEARCH = 'TOGGLE_SEARCH';
 export const SEARCH_FOR = 'SEARCH_FOR';
 export const SEARCHING = 'SEARCH';

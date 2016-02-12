@@ -70,12 +70,10 @@ if (isCIBuild()) {
     rootProject.ext.allServicePrefix = getServicePrefix() + "_"
     rootProject.ext.CISystemUser = getCiSystemUser()
     rootProject.ext.releasePrefix = getReleasePrefix();
-    rootProject.ext.buildTime = "." + getBuildTime();
 }
+rootProject.ext.buildTime = "." + getBuildTime();
 
 println("cwd " + cwd )
-println( "Assembling: " + getProjectArchive() )
-println( "Branch : " + getProjectArchive() )
 
 def cargoHome = "/tmp/cargo";
 
@@ -171,6 +169,11 @@ task zip(type: Zip) {
     }
 }
 
+zip.doFirst {
+    println( "Assembling: " + getProjectArchive() )
+    println( "Branch : " + getProjectArchive() )
+}
+
 task clean_node_modules(type: Delete) {
     delete 'dist/node_modules'
 }
@@ -202,6 +205,36 @@ task npmInstallProduction (type: NpmTask) {
     execOverrides {
         it.workingDir = cwd + "/dist"
     }
+}
+
+task dumpSys <<{
+    println "System Properties:"
+    System.properties.each {
+        println "   $it"
+    }
+}
+
+task dumpProj<< {
+    println "Project Properties:"
+    project.properties.each { key, value ->
+        if (!key.equals("plugins") && !key.equals("tasks") && !key.equals("properties"))
+            println "   $key=$value" }
+}
+
+task dumpPlugins <<{
+    println "Plugin Properties:"
+    project.plugins.each {
+        println "    plugin: $it"
+        it.properties.each {
+            println "       $it"
+        }
+    }
+}
+
+task dumpEnv <<{
+     dumpSys
+     dumpProj
+     dumpPlugins
 }
 
 task npmRebuildJpegtran (type: NpmTask) {
@@ -313,7 +346,8 @@ zip.dependsOn clean, npmInstallProduction
 build.dependsOn clean, grunt_build
 clean.dependsOn grunt_clean, cleanBuildDir
 test.dependsOn clean, gruntUnitTestsNoColor
-npmInstallProduction.dependsOn grunt_build
+npmInstallProduction.dependsOn grunt_build, dumpSys
+
 
 // the directory for nightly builds used to release from
 project.group = "build_rpms"
@@ -326,7 +360,7 @@ artifacts {
 
 def ivyPasswd = System.getProperty("ivyPasswd", "");         // The IVY password for the Nexus repository
 def ivyUser = System.getProperty("ivyUser", "qbbuilds");     // By default use the qbbuilds user, password needs to be provided
-def paramBranch =  System.getProperty("GIT_BRANCH", "master");
+def paramBranch =  System.getProperty("GIT_BRANCH", "");
 
 /*
  Push the zip file with the build to the Nexus Repository.
@@ -381,12 +415,18 @@ sonarRunner {
     def proc = "git rev-parse --abbrev-ref HEAD".execute()
     proc.waitFor()
     def branchName = proc.in.text.replace("\n", "").replace("\r", "").trim()
-    println 'branchName:' + branchName;
+    def gitBranch = branchName;
+    println 'gitBranch:' + gitBranch;
 
     if (paramBranch) {
         println 'paramBranch:' + paramBranch;
         branchName = paramBranch;
     }
+    //Resolve the git revision
+    def procrev = "git rev-parse  HEAD".execute()
+    procrev.waitFor()
+    def gitRevision = procrev.in.text.replace("\n", "").replace("\r", "").trim()
+    println 'gitRevision:' + gitRevision;
 
     sonarProperties{
         // the user name becomes part of the project key, this way Jenkins builds are separated from the commoners, meaning you...

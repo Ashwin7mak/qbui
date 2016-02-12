@@ -49,13 +49,13 @@ let reportDataActions = {
                         resolve();
                     }.bind(this),
                     function(error) {
-                        logger.error('Report service call error:' + JSON.stringify(error));
+                        logger.error('Report service call error:', error);
                         this.dispatch(actions.LOAD_REPORT_FAILED);
                         reject();
                     }.bind(this)
                 ).catch(
                     function(ex) {
-                        logger.error('Report service call exception:' + JSON.stringify(ex));
+                        logger.error('Report service call exception:', ex);
                         this.dispatch(actions.LOAD_REPORT_FAILED);
                         reject();
                     }.bind(this)
@@ -123,7 +123,7 @@ let reportDataActions = {
                                 resolve();
                             }.bind(this),
                             function(error) {
-                                logger.error('Filter Report Records service call error:' + JSON.stringify(error));
+                                logger.error('Filter Report Records service call error:', error);
                                 this.dispatch(actions.LOAD_REPORT_FAILED);
                                 reject();
                             }.bind(this)
@@ -136,13 +136,13 @@ let reportDataActions = {
                         );
                     }.bind(this),
                     function(error) {
-                        logger.error('Filter Report service call error:' + JSON.stringify(error));
+                        logger.error('Filter Report service call error:', error);
                         this.dispatch(actions.LOAD_REPORT_FAILED);
                         reject();
                     }.bind(this)
                 ).catch(
                     function(ex) {
-                        logger.error('Filter Report service calls exception:' + JSON.stringify(ex));
+                        logger.error('Filter Report service calls exception:', ex);
                         this.dispatch(actions.LOAD_REPORT_FAILED);
                         reject();
                     }.bind(this)

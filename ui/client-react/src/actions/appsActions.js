@@ -46,12 +46,12 @@ let appsActions = {
                                 resolve();
                             },
                             (error) => {
-                                logger.error('AppService getApp error:' + JSON.stringify(error));
+                                logger.error('AppService getApp error:', error);
                                 this.dispatch(actions.LOAD_APPS_FAILED);
                                 reject();
                             }
                         ).catch((ex) => {
-                            logger.error('AppService getApp exception:' + JSON.stringify(ex));
+                            logger.error('AppService getApp exception:', ex);
                             this.dispatch(actions.LOAD_APPS_FAILED);
                             reject();
                         });
@@ -61,12 +61,12 @@ let appsActions = {
                     }
                 },
                 (error) => {
-                    logger.error('AppService getApps error:' + JSON.stringify(error));
+                    logger.error('AppService getApps error:', error);
                     this.dispatch(actions.LOAD_APPS_FAILED);
                     reject();
                 }
             ).catch((ex) => {
-                logger.error('AppService getApps exception:' + JSON.stringify(ex));
+                logger.error('AppService getApps exception:', ex);
                 this.dispatch(actions.LOAD_APPS_FAILED);
                 reject();
             });

@@ -41,7 +41,7 @@
                 res.render(viewFilePath);
             });
         }
-        log.error({req: req}, 'process error');
+        log.error({req: req, res:res}, 'Error fulfilling requested route.');
     }
 
 }());
