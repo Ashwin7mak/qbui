@@ -3,6 +3,7 @@
  formatting the records into a FacetItem type object which looks like {id, name, type, hasBlanks, [values]}
  where values are display formatted version of the raw record field values by addition of a display properties attribute.
  Recordformatter is used for the display formatting.
+ TODO: Handle the more than 200 values case + pass back error message upto client.
  */
 (function() {
     'use strict';
@@ -36,7 +37,7 @@
                         //now iterate over the records a second time to get just the values.
                         facet.values = [];
                         facet.hasBlanks = false;
-                        for (let record of facetRecords){
+                        for (let record of facetRecords) {
                             //each record should only have one field here so just open it up
                             facet.values.push(record[0].display);
                             if (!record[0].display) {

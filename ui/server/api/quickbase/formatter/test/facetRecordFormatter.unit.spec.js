@@ -40,7 +40,7 @@ describe('Facet formatter unit test', function() {
         var textFacetValues = [generateRandomString(3), generateRandomString(3)];
         var textFacetRecords = [];
         var expectedTextFacets = {id: 7, name:'text', type:'TEXT', values:[], hasBlanks: false};
-        textFacetValues.forEach(function(value){
+        textFacetValues.forEach(function(value) {
             var record = [{id:7, value:value}];
             textFacetRecords.push(record);
             var formattedRecords = recordFormatter.formatRecords([record], [textField]);
@@ -51,7 +51,7 @@ describe('Facet formatter unit test', function() {
         var blankFacetValues = [generateRandomString(3), null];
         var blankFacetRecords = [];
         var expectedBlankFacets = {id: 7, name:'text', type:'TEXT', values:[], hasBlanks: true};
-        blankFacetValues.forEach(function(value){
+        blankFacetValues.forEach(function(value) {
             var record = [{id:7, value:value}];
             blankFacetRecords.push(record);
             var formattedRecords = recordFormatter.formatRecords([record], [textField]);
