@@ -64,6 +64,12 @@ export default {
                 preferences: "Préférences",
                 sign_out: "Se déconnecter"
             }
+        },
+        report : {
+            filteredRecordCount : "{filteredRecordCount} des {recordCount} {nameForRecords} ",
+            recordCount : "{recordCount} {nameForRecords} ",
+            noFacets : "Aucun Facets",
+            searchPlaceHolder:  "Rechercher ces {nameForRecords} ..."
         }
     }
 };

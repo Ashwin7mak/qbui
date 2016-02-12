@@ -32,7 +32,7 @@ class Locale {
                 break;
             }
         } catch (e) {
-            logger.error('Error fetching locale:' + e);
+            logger.error('Error fetching locale:', e);
         }
 
         if (!bundle) {
@@ -51,7 +51,7 @@ class Locale {
                 locale = newLocale;
             }
         } catch (e) {
-            logger.error('Error changing locale..Locale not changed --> ' + e);
+            logger.error('Error changing locale..Locale not changed --> ', e);
         }
     }
 

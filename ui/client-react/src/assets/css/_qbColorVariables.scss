@@ -14,6 +14,9 @@ $color11:   #404040;
 $color12:   #f5f5f5;
 $color13:   #f6f8fb;
 $color14:   #f9fafb;
+$color15:   #f0f3f9;
+$color16:    #2ca01c;
+$color17:   #f3f5f8;
 
 $left-nav-bg: #193048;
 $icon-color: #7090ab;
@@ -38,3 +41,19 @@ $icon-delete-color: #d93b42;
 $icon-pickles-color: #404040;
 
 $selection-badge-color: #486c8f;
+
+
+//== Stage
+$stage-backgroundColor:           $color2;
+
+//== Report
+$report-backgroundColor:          $color13;
+
+//== Report Toolbar
+$toolBar-borderColor:              $color7;
+$toolBar-backgroundColor:          $color15;
+$toolBar-input-borderColor:        $color4;
+
+//==Facet list
+$facetMenu-backgroundColor:         $color2;
+$facetSelected-color:               $color16;

@@ -87,6 +87,7 @@ module.exports = function(grunt) {
             e2e       : 'e2e',
             //  dist contains the target folders of the build
             distDir   : 'dist',
+            commonDir   : 'common',
             distPublic: 'dist/public'
         },
         express  : {
@@ -96,7 +97,8 @@ module.exports = function(grunt) {
                 port   : 9000,
                 sslPort: 9443,
                 host   : process.env.HOST || 'localhost',
-                script : '<%= express.root %>/app.js'
+                script : '<%= express.root %>/app.js',
+                realm : process.env.REALM ? (process.env.REALM + '.') : ''
             },
             local  : {
                 options: {
@@ -119,7 +121,7 @@ module.exports = function(grunt) {
         },
         open     : {
             server: {
-                url: 'http://<%= express.options.host %>:<%= express.options.port %>'
+                url: 'http://<%= express.options.realm %><%= express.options.host %>:<%= express.options.port %>'
             }
         },
         watch    : {
@@ -168,7 +170,7 @@ module.exports = function(grunt) {
             },
             reactapp: {
                 files: ['Gruntfile.js', '<%= quickbase.client.src %>/**/*'],
-                tasks: ['webpack:build-dev'],
+                tasks: ['webpack-dev-server'],
                 options: {
                     spawn: false
                 }
@@ -303,6 +305,13 @@ module.exports = function(grunt) {
                         src   : [
                             'package.json',
                             '<%= express.root %>/**/*'
+                        ]
+                    },
+                    {
+                        expand: true,
+                        dest  : '<%= quickbase.distDir %>',
+                        src   : [
+                            '<%= quickbase.commonDir %>/src/**/*'
                         ]
                     }
                 ]
@@ -542,6 +551,14 @@ module.exports = function(grunt) {
         shell: {
             lint: {
                 // Make sure code styles are up to par and there are no obvious mistakes
+                command: 'npm run lint',
+                options: {
+                    execOptions: {
+                    }
+                }
+            },
+            lintFix: {
+                // Make sure code styles are up to par and there are no obvious mistakes
                 //fixes any fixables i.e. spacing, missing semicolon etc
                 // see (fixables) in the list http://eslint.org/docs/rules/
                 command: 'npm run lintFix',
@@ -646,7 +663,8 @@ module.exports = function(grunt) {
         grunt.task.run([
             'clean:client',
             'clean:server',
-            'clean:dist'
+            'clean:dist',
+            'clean:modulesProd'
         ]);
     });
 
@@ -861,7 +879,7 @@ module.exports = function(grunt) {
         'build'
     ]);
 
-    grunt.registerTask('lint', 'Run eslint on code', function(){
+    grunt.registerTask('lint', 'Run eslint on code', function() {
         return grunt.task.run([
             'shell:lint',
         ]);

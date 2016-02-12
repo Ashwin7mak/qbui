@@ -38,9 +38,9 @@ class Logger {
         }
     }
 
-    error(msg) {
+    error(msg, exception) {
         if (LogLevel.ERROR.id <= this.logLevel.id) {
-            this.logTheMessage(LogLevel.ERROR, msg);
+            this.logTheMessage(LogLevel.ERROR, msg, exception);
         }
     }
 
@@ -49,14 +49,25 @@ class Logger {
      *
      * @param logging level
      * @param message to log
+     * @param exception to log (optional)
      */
-    logTheMessage(level, msg) {
+    logTheMessage(level, msg, exception) {
         /*eslint no-console:0 */
         try {
+            //output the exception / stack trace
+            var exceptionMessage = "";
+            if (exception) {
+                exceptionMessage += exception.toString ? exception.toString() : (exception.name + " " + exception.message);
+                exceptionMessage += exception.stack && exception.stack.toString() ? (" StackTrace:" + exception.stack.toString()) : "";
+            }
+
             if (this.logToConsole === true) {
-                console.log(level.name + ': ' + msg);
+                console.log(level.name + ': ' + msg + exceptionMessage);
             }
             if (this.logToServer === true) {
+                if (exception) {
+                    msg += exceptionMessage;
+                }
                 this.sendMessageToServer(level, msg);
             }
         } catch (e) {

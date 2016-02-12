@@ -57,11 +57,11 @@
                 return classes.split(' ').indexOf(cls) !== -1;
             });
         };
-        this.waitForElement = function(element){
+        this.waitForElement = function(element) {
             return browser.wait(EC.visibilityOf(element), 5000, 'Timed out waiting for element to appear');
         };
 
-        this.waitForElementToBeClickable = function(element){
+        this.waitForElementToBeClickable = function(element) {
             return browser.wait(EC.elementToBeClickable(element), 5000, 'Timed out waiting for element to be clickable');
         };
 
