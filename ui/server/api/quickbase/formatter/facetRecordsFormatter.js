@@ -16,7 +16,7 @@
         var facetRecordsFormatter = {
             //Given an array of array of records, array of fields format the record values into facet objects
             formatFacetRecords: function(facetRecordsArray, fields) {
-                if (facetRecordsArray && fields) {
+                if (facetRecordsArray && fields && (facetRecordsArray.length > 0) && (fields.length > 0)) {
                     var facetList = [];
 
                     //for each array of records per facet
@@ -35,9 +35,13 @@
                         facet.type = relatedFacetField.datatypeAttributes.type;
                         //now iterate over the records a second time to get just the values.
                         facet.values = [];
+                        facet.hasBlanks = false;
                         for (let record of facetRecords){
                             //each record should only have one field here so just open it up
                             facet.values.push(record[0].display);
+                            if (!record[0].display) {
+                                facet.hasBlanks = true;
+                            }
                         }
                         facetList.push(facet);
                     }
