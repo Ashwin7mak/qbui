@@ -87,6 +87,7 @@ module.exports = function(grunt) {
             e2e       : 'e2e',
             //  dist contains the target folders of the build
             distDir   : 'dist',
+            commonDir   : 'common',
             distPublic: 'dist/public'
         },
         express  : {
@@ -304,6 +305,13 @@ module.exports = function(grunt) {
                         src   : [
                             'package.json',
                             '<%= express.root %>/**/*'
+                        ]
+                    },
+                    {
+                        expand: true,
+                        dest  : '<%= quickbase.distDir %>',
+                        src   : [
+                            '<%= quickbase.commonDir %>/src/**/*'
                         ]
                     }
                 ]
