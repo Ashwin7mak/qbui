@@ -1,5 +1,5 @@
 import React from 'react';
-
+import Button from 'react-bootstrap/lib/Button';
 import './trowser.scss';
 
 /**
@@ -17,7 +17,14 @@ let Trowser = React.createClass({
         }
         return (
             <div className={trowserClasses} >
-                {this.props.children}
+                <div className={"trowserBackground"}/>
+                <div className={"trowserContent"}>
+                    {this.props.children}
+
+                    <div style={{height: "40px"}}>
+                        <Button bsStyle="success" onClick={this.props.onHide}>Done</Button>
+                    </div>
+                </div>
             </div>
         );
     }

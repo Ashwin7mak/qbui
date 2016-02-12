@@ -2,9 +2,9 @@
     position:absolute;
     z-index:9999;
 
-    width:100%;
-    //height:80%;
-    background:#fdfdfd;
+    left:0;right:0;
+    height:100%;
+
     color: #000;
 
     max-height:0;
@@ -14,12 +14,36 @@
     transition: max-height ease 250ms;
 
     padding:0;
+
+    .trowserContent {
+        position:absolute;
+        left:0;
+        right:0;
+        top:0;
+        bottom:5px;
+        margin:auto;
+        background:#fdfdfd;
+        opacity:1;
+        max-width:1440px;
+
+    }
+    .trowserBackground {
+        position:absolute;
+        top:0;
+        width:100%;
+        bottom:0;
+        opacity:.4;
+        background: black;
+    }
 }
 
 .trowser.top {
     top:0;
+
     &.visible {
         max-height:100%;
+        -webkit-transition: max-height ease 250ms;
+        transition: max-height ease 250ms;
         border-bottom: 1px solid #ccc;
     }
 }

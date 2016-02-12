@@ -7,27 +7,46 @@ import {Link} from 'react-router';
 let Report = React.createClass({
 
     propTypes: {
+        onSelect: React.PropTypes.func,
         report: React.PropTypes.object.isRequired
     },
     render() {
 
-        return (<Link key={this.props.report.id} className="reportLink" to={this.props.report.link}><QBicon icon="report-line-bar"/>{this.props.report.name}</Link>);
+        return (<div key={this.props.report.id}
+                      className="reportLink"
+                      to={this.props.report.link}
+                      onClick={() => {this.props.onSelect(this.props.report);}}>
+                    <QBicon icon="report-line-bar"/>{this.props.report.name}
+                </div>);
+        /*
+        return (<Link key={this.props.report.id}
+                      className="reportLink"
+                      to={this.props.report.link}
+                      onClick={this.props.onSelect}>
+                    <QBicon icon="report-line-bar"/>{this.props.report.name}
+                </Link>);
+                */
     }
 });
 
 let ReportGroup = React.createClass({
     propTypes: {
         title: React.PropTypes.string.isRequired,
-        reports: React.PropTypes.array.isRequired
+        reports: React.PropTypes.array.isRequired,
+        onSelectReport: React.PropTypes.func,
+        isOpen: React.PropTypes.bool
+    },
+    defaultProps: {
+        isOpen: false
     },
     render() {
 
         return (
             <div className={"reportGroup"}>
-                <QBPanel isOpen={true} title={this.props.title} iconRight={false}>
+                <QBPanel isOpen={this.props.isOpen} title={this.props.title} iconRight={false}>
                     <div className={"reportItems"}>
                         {this.props.reports.map((report) => {
-                            return (<Report key={report.id} report={report}/>);
+                            return (<Report key={report.id} report={report} onSelect={this.props.onSelectReport}/>);
                         })}
                     </div>
                 </QBPanel>

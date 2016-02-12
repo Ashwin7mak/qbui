@@ -19,11 +19,21 @@
             display:flex;
             flex-wrap: wrap;
             flex-direction: row;
+            justify-content: flex-start;
         }
         .reportLink {
+            display:flex;
+            align-items:baseline;
+            min-width:100px;
+
+            .qbIcon {
+                flex: 0 0 auto;
+                color: red;
+            }
             margin-right: 20px;
             margin-bottom: 10px;
             flex:1;
+            cursor:pointer;
         }
     }
 }

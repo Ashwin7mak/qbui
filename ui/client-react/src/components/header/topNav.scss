@@ -108,8 +108,8 @@ $global-action-fg: #333;
 
 /* hide text not icons */
 
-.medium-breakpoint .topNav .globalActions span:not(.hi),
-.small-breakpoint .topNav .globalActions span:not(.hi)
+.medium-breakpoint .topNav .globalActions span:not(.qbIcon),
+.small-breakpoint .topNav .globalActions span:not(.qbIcon)
 {
   display:none;
 }

@@ -19,12 +19,9 @@ let LeftNav = React.createClass({
         appsListOpen:React.PropTypes.bool.isRequired,
         selectedAppId:React.PropTypes.string,
         selectedTableId:React.PropTypes.string,
-        reportsData:React.PropTypes.object,
-        selectedReportId:React.PropTypes.string,
-        showReports:React.PropTypes.bool.isRequired,
         onToggleAppsList:React.PropTypes.func,
-        onSelectReports:React.PropTypes.func,
         onSelect:React.PropTypes.func,
+        onSelectReports:React.PropTypes.func,
         globalActions:React.PropTypes.array
     },
 
@@ -68,8 +65,6 @@ let LeftNav = React.createClass({
                 </ReactCSSTransitionGroup>
 
                 {this.props.globalActions && <GlobalActions actions={this.props.globalActions} onSelect={this.props.onSelect}/>}
-
-                <ReportsList open={this.props.open} onSelect={this.props.onSelect} reportsOpen={this.props.showReports} onBack={this.props.onHideReports} reportsData={this.props.reportsData} />
 
             </div>
         );

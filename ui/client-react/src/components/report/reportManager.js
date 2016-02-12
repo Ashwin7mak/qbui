@@ -6,7 +6,7 @@ import './reportManager.scss';
 let ReportManager = React.createClass({
 
     propTypes: {
-
+        onSelectReport: React.PropTypes.func,
         reportsData: React.PropTypes.shape({
             list: React.PropTypes.array.isRequired
         })
@@ -39,9 +39,9 @@ let ReportManager = React.createClass({
 
                     </div>
                     <div className="reportGroups">
-                        <ReportGroup reports ={this.props.reportsData.list} title={"Recent"} />
-                        <ReportGroup reports ={this.props.reportsData.list} title={"Common"} />
-                        <ReportGroup reports ={this.props.reportsData.list} title={"My Reports"} />
+                        <ReportGroup reports ={this.props.reportsData.list} title={"Recent"} onSelectReport={this.props.onSelectReport} isOpen={true}/>
+                        <ReportGroup reports ={this.props.reportsData.list} title={"Common"} onSelectReport={this.props.onSelectReport}/>
+                        <ReportGroup reports ={this.props.reportsData.list} title={"My Reports"} onSelectReport={this.props.onSelectReport}/>
                     </div>
                 </div>
             </div>

@@ -4,20 +4,11 @@ import Locale from '../locales/locales';
 
 let navActions = {
 
-    showReports() {
-        this.dispatch(actions.SHOW_REPORTS);
-    },
-    hideReports() {
-        this.dispatch(actions.HIDE_REPORTS);
-    },
-    showTrowser(content = null) {
-        this.dispatch(actions.SHOW_TROWSER, content);
+    showTrowser() {
+        this.dispatch(actions.SHOW_TROWSER);
     },
     hideTrowser() {
         this.dispatch(actions.HIDE_TROWSER);
-    },
-    showNewItems() {
-        this.dispatch(actions.SHOW_NEW_ITEMS);
     },
     toggleLeftNav(open) {
         this.dispatch(actions.TOGGLE_LEFT_NAV, open);
