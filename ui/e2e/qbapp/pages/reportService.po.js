@@ -142,7 +142,16 @@
             var textEl = globalNavEl.all(by.tagName('span')).last();
             return textEl;
         };
-
+        // Does element shows up on the Left Nav bar.
+        this.isElementInLeftNav = function(element, clientWidth) {
+            expect(element.getAttribute('offsetLeft'), '0');
+            expect(element.getAttribute('offsetWidth'), clientWidth);
+        };
+        //Does element shows up on the Top Nav bar.
+        this.isElementInTopNav = function(element) {
+            expect(element.getAttribute('offsetTop'), '0');
+            expect(element.getAttribute('offsetHeight'), '50');
+        };
     };
     ReportServicePage.prototype = e2ePageBase;
     module.exports = ReportServicePage;

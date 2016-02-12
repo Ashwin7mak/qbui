@@ -69,7 +69,26 @@
         this.sleep = function(ms) {
             return browser.driver.sleep(ms);
         };
+        //Verify the element is located Top
+        this.isElementOnTop = function(element1, element2) {
+            //get element1 location
+            element1.getLocation().then(function(navDivLocation) {
+                var element1xPosition = navDivLocation.x;
+                var element1yPosition = navDivLocation.y;
+                console.log("The coordinates of element1 are: " + element1xPosition + "," + element1yPosition);
+                //get element2 location
+                element2.getLocation().then(function(navDivLocation2) {
+                    var element2xPosition = navDivLocation2.x;
+                    var element2yPosition = navDivLocation2.y;
+                    console.log("The coordinates of element2 are: " + element2xPosition + "," + element2yPosition);
+                    //compare element2 coordinates to be greater than element1
+                    expect(element2xPosition === element1xPosition || element2xPosition > element1xPosition).toBeTruthy();
+                    expect(element2yPosition > element1yPosition).toBeTruthy();
+                });
+            });
+        };
 
+        //TODO: Left, Right, Bottom functions
     };
     module.exports = new BasePage();
 }());

@@ -7,7 +7,7 @@
 (function() {
     'use strict';
     //Bluebird Promise library
-    var promise = require('bluebird');
+    var Promise = require('bluebird');
     module.exports = function(config) {
         var recordBase = require('../../server/api/test/recordApi.base.js')(config);
         var e2eUtils = require('./e2eUtils.js');
@@ -16,9 +16,9 @@
         var tableService = require('./services/tableService.js');
         var reportService = require('./services/reportService.js');
         var e2eBase = {
-            //Delegate to recordBase to initialize
+            // Delegate to recordBase to initialize
             recordBase: recordBase,
-            //Create a realm
+            // Create a realm
             setUp: function() {
                 this.setBaseUrl(browser.baseUrl);
                 // Define the window size
@@ -28,20 +28,20 @@
             initialize: function() {
                 recordBase.initialize();
             },
-            //Set the baseUrl we want to use to reach out for testing
+            // Set the baseUrl we want to use to reach out for testing
             setBaseUrl: function(baseUrlConfig) {
                 recordBase.setBaseUrl(baseUrlConfig);
             },
-            //Initialize the service modules to use the same base class
+            // Initialize the service modules to use the same base class
             appService: appService(recordBase),
             recordService: recordService(recordBase),
             tableService: tableService(),
             reportService: reportService(recordBase),
-            //Initialize the utils class
+            // Initialize the utils class
             e2eUtils: e2eUtils(),
-            //Common variables
+            // Common variables
             ticketEndpoint: recordBase.apiBase.resolveTicketEndpoint(),
-            //Checks for any JS errors in the browser, resets the browser window size and cleans up the test realm and app
+            // Checks for any JS errors in the browser, resets the browser window size and cleans up the test realm and app
             cleanup: function(done) {
                 //Checks for any JS errors in the browser console
                 //browser.manage().logs().get('browser').then(function(browserLog) {
@@ -56,87 +56,60 @@
                     done();
                 });
             },
-            //Helper method to get the proper URL for loading the dashboard page containing a list of apps and tables for a realm
+            // Helper method to get the proper URL for loading the dashboard page containing a list of apps and tables for a realm
             getRequestAppsPageEndpoint: function(realmName) {
                 var requestAppsPageEndPoint = e2eBase.recordBase.apiBase.generateFullRequest(realmName, '/apps/');
                 return requestAppsPageEndPoint;
             },
-            //Get the proper URL for loading the session ticket page in the browser
+            // Get the proper URL for loading the session ticket page in the browser
             getSessionTicketRequestEndpoint: function(realmName, realmId, ticketEndpoint) {
                 var sessionTicketRequestEndPoint = e2eBase.recordBase.apiBase.generateFullRequest(realmName, ticketEndpoint + realmId);
                 return sessionTicketRequestEndPoint;
             },
-            //Does element shows up on the Left Nav bar.
-            isElementInLeftNav: function(element, clientWidth) {
-                expect(element.getAttribute('offsetLeft'), '0');
-                expect(element.getAttribute('offsetWidth'), clientWidth);
-            },
-            //Does element shows up on the Top Nav bar.
-            isElementInTopNav: function(element) {
-                expect(element.getAttribute('offsetTop'), '0');
-                expect(element.getAttribute('offsetHeight'), '50');
-            },
-
-            //Verify the element is located Top
-            isElementOnTop: function(element1, element2) {
-                //get element1 location
-                element1.getLocation().then(function(navDivLocation) {
-                    var element1xPosition = navDivLocation.x;
-                    var element1yPosition = navDivLocation.y;
-                    console.log("The coordinates of element1 are: " + element1xPosition + "," + element1yPosition);
-                    //get element2 location
-                    element2.getLocation().then(function(navDivLocation2) {
-                        var element2xPosition = navDivLocation2.x;
-                        var element2yPosition = navDivLocation2.y;
-                        console.log("The coordinates of element2 are: " + element2xPosition + "," + element2yPosition);
-                        //compare element2 coordinates to be greater than element1
-                        expect(element2xPosition === element1xPosition || element2xPosition > element1xPosition).toBeTruthy();
-                        expect(element2yPosition > element1yPosition).toBeTruthy();
-                    });
-                });
-            },
-            //Resize the browser window to the given pixel width and height. Returns a promise
+            // Resize the browser window to the given pixel width and height. Returns a promise
             resizeBrowser: function(width, height) {
-                var deferred = promise.pending();
+                var deferred = Promise.pending();
                 browser.driver.manage().window().setSize(width, height).then(function() {
                     e2eBase.sleep(browser.params.mediumSleep);
                     deferred.resolve();
                 });
                 return deferred.promise;
             },
+            // Setup method that generates an application, table, report and a specified number of records
             basicSetup: function(tableToFieldToFieldTypeMap, numberOfRecords) {
+                var createdApp;
                 e2eBase.setUp();
-                var deferred = promise.pending();
-                //Generate the app JSON object
+                var deferred = Promise.pending();
+                // Generate the app JSON object
                 var generatedApp = e2eBase.appService.generateAppFromMap(tableToFieldToFieldTypeMap);
-                //Create the app via the API
-                e2eBase.appService.createApp(generatedApp).then(function(createdApp) {
-                    //Get the appropriate fields out of the Create App response (specifically the created field Ids)
+                // Create the app via the API
+                e2eBase.appService.createApp(generatedApp).then(function(app) {
+                    createdApp = app;
+                    // Get the appropriate fields out of the Create App response (specifically the created field Ids)
                     var nonBuiltInFields = e2eBase.tableService.getNonBuiltInFields(createdApp.tables[0]);
-                    //Generate the record JSON objects
+                    // Generate the record JSON objects
                     var generatedRecords = e2eBase.recordService.generateRecords(nonBuiltInFields, numberOfRecords);
-                    //Via the API create the records, a new report, then run the report.
-                    //This is a promise chain since we need these actions to happen sequentially
-                    e2eBase.recordService.addRecords(createdApp, createdApp.tables[0], generatedRecords).then(function() {
-                        e2eBase.reportService.createReport(createdApp.id, createdApp.tables[0].id).then(function(reportId) {
-                            e2eBase.reportService.runReport(createdApp.id, createdApp.tables[0].id, reportId).then(function(reportRecords) {
-                                //Return back the created app and records
-                                //Pass it back in an array as promise.resolve can only send back one object
-                                var appAndRecords = [createdApp, reportRecords];
-                                deferred.resolve(appAndRecords);
-                            }).catch(function(error) {
-                                console.error(JSON.stringify(error));
-                                deferred.reject(error);
-                            });
-                        });
-                    });
+                    // Via the API create the records, a new report, then run the report.
+                    return e2eBase.recordService.addRecords(createdApp, createdApp.tables[0], generatedRecords)
+                }).then(function() {
+                    return e2eBase.reportService.createReport(createdApp.id, createdApp.tables[0].id);
+                }).then(function(reportId) {
+                    return e2eBase.reportService.runReport(createdApp.id, createdApp.tables[0].id, reportId);
+                }).then(function(reportRecords) {
+                    // Return back the created app and records
+                    // Pass it back in an array as promise.resolve can only send back one object
+                    var appAndRecords = [createdApp, reportRecords];
+                    deferred.resolve(appAndRecords);
+                }).catch(function(error) {
+                    console.error(JSON.stringify(error));
+                    deferred.reject(error);
                 });
                 return deferred.promise;
             },
 
-            //Reports setup
+            // Setup method for the reports spec files. Creates the table / field mapping to be generated by basicSetup
             reportsBasicSetUp: function() {
-                var deferred = promise.pending();
+                var deferred = Promise.pending();
                 var app;
                 var recordList;
                 // Create the table schema (map object) to pass into the app generator
@@ -207,13 +180,13 @@
                     fieldType: consts.SCALAR,
                     dataType: consts.PHONE_NUMBER
                 };
-                //Call the basic app setup function
+                // Call the basic app setup function
                 e2eBase.basicSetup(tableToFieldToFieldTypeMap, 10).then(function(results) {
-                    //Set your global objects to use in the test functions
+                    // Set your global objects to use in the test functions
                     app = results[0];
                     recordList = results[1];
-                    //Return back the created app and records
-                    //Pass it back in an array as promise.resolve can only send back one object
+                    // Return back the created app and records
+                    // Pass it back in an array as promise.resolve can only send back one object
                     var appAndRecords = [app, recordList, e2eConsts.reportFieldNames];
                     deferred.resolve(appAndRecords);
                 }).catch(function(error) {
@@ -221,13 +194,11 @@
                     deferred.reject(error);
                 });
                 return deferred.promise;
-
             },
 
-            //Helper method to sleep a specified number of seconds
+            // Helper method to sleep a specified number of seconds
             sleep: function(ms) {
-                var deferred = promise.pending();
-
+                var deferred = Promise.pending();
                 try {
                     browser.driver.sleep(ms);
                     deferred.resolve();
