@@ -10,8 +10,8 @@ let navActions = {
     hideReports() {
         this.dispatch(actions.HIDE_REPORTS);
     },
-    showTrowser() {
-        this.dispatch(actions.SHOW_TROWSER);
+    showTrowser(content = null) {
+        this.dispatch(actions.SHOW_TROWSER, content);
     },
     hideTrowser() {
         this.dispatch(actions.HIDE_TROWSER);

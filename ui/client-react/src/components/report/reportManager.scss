@@ -1,0 +1,29 @@
+.reportsContainer {
+    background-color:#F2F9FE;
+}
+
+.reportGroups {
+    margin:16px;
+
+    max-height:60%;
+
+    .qbPanel {
+        width:100%;
+    }
+    .reportGroup {
+
+        margin-bottom:16px;
+        background-color: #fff;
+
+        .reportItems {
+            display:flex;
+            flex-wrap: wrap;
+            flex-direction: row;
+        }
+        .reportLink {
+            margin-right: 20px;
+            margin-bottom: 10px;
+            flex:1;
+        }
+    }
+}

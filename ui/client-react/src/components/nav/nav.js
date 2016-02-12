@@ -9,6 +9,7 @@ import Fluxxor from 'fluxxor';
 import LeftNav from './leftNav';
 import TopNav from '../header/topNav';
 import Footer from '../footer/footer';
+import ReportManager from '../report/reportManager';
 
 let FluxMixin = Fluxxor.FluxMixin(React);
 let StoreWatchMixin = Fluxxor.StoreWatchMixin;
@@ -44,9 +45,12 @@ var Nav = React.createClass({
     },
     onSelectTableReports(tableId) {
         const flux = this.getFlux();
-        flux.actions.showReports();
+
         flux.actions.loadReports(this.state.apps.selectedAppId, tableId);
 
+        let reportManager = <ReportManager reportsData={this.state.reportsData} />;
+
+        flux.actions.showTrowser(reportManager);
     },
     onHideTableReports() {
         const flux = this.getFlux();
@@ -64,7 +68,8 @@ var Nav = React.createClass({
         return (<div className={classes}>
 
             <Trowser position={"top"} visible={this.state.nav.trowserOpen} onHide={this.hideTrowserExample}>
-                <div style={{height: "400px"}}>
+                {this.state.nav.trowserContent}
+                <div style={{height: "40px"}}>
                     <Button bsStyle="success" onClick={this.hideTrowserExample}
                         style={{position:"absolute", bottom:"10px", right:"10px"}}>Done</Button>
                 </div>

@@ -57,13 +57,28 @@ h5 {
     padding: 10px 0 10px 0;
 }
 
-.qbPanelHeaderIcon {
-    position:absolute;
-    right:4px;
-    top:8px;
-    color: #7090ab
+.qbPanel.iconRight {
+    .qbPanelHeaderIcon {
+        position:absolute;
+        right:4px;
+        top:8px;
+    }
 }
 
+.qbPanel.iconLeft {
+    .qbPanelHeaderIcon {
+        position: absolute;
+        left: 4px;
+        top: 8px;
+    }
+    .qbPanelHeaderTitleText, .panel {
+        margin-left:30px;
+    }
+}
+
+.qbPanelHeaderIcon {
+    color: #7090ab
+}
 .qbPanelHeaderIcon:hover {
     color: #0098cd;
 }

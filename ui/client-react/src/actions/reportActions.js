@@ -21,7 +21,7 @@ let reportActions = {
     loadReports: function(appId, tblId) {
 
         //  promise is returned in support of unit testing only
-        return new Promise(function(resolve, reject) {
+        return new Promise((resolve, reject) => {
             if (appId && tblId) {
                 this.dispatch(actions.LOAD_REPORTS);
                 let reportService = new ReportService();
@@ -37,17 +37,17 @@ let reportActions = {
                         this.dispatch(actions.LOAD_REPORTS_FAILED);
                         reject();
                     }
-                ).catch((ex) => {
+                );/*.catch((ex) => {
                     logger.debug('ReportService getReports exception:' + JSON.stringify(ex));
                     this.dispatch(actions.LOAD_REPORTS_FAILED);
                     reject();
-                });
+                });*/
             } else {
                 logger.error('Missing required input parameters for reportService.getReports.');
                 this.dispatch(actions.LOAD_REPORTS_FAILED);
                 reject();
             }
-        }.bind(this));
+        });
     }
 };
 
