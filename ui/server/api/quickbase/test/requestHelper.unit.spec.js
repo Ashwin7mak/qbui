@@ -13,7 +13,6 @@ var requestHelper = require('./../requestHelper')(config);
 var should = require('should');
 var assert = require('assert');
 var sinon = require('sinon');
-let defaultRequest = require('request');
 
 /**
  * Unit tests for User field formatting
@@ -225,34 +224,38 @@ describe('Validate RequestHelper unit tests', function() {
         });
         it('Test executeRequest success', function(done) {
             requestStub.yields(null, {statusCode: 200}, {}); // override the params (error, response, body)
-            var promise = requestHelper.executeRequest(req, {}, true);
+            var promise = requestHelper.executeRequest(req, {}, false);
             promise.then(
                 function(response) {
                     assert.equal(req.headers.tid, tid);
-                    assert.equal(response, {statusCode: 200});
+                    assert.deepEqual(response, {statusCode: 200});
                 }
             );
             done();
         });
         it('Test executeRequest error', function(done) {
-            var errorResponse = new Error("error");
+            var errorResponse = new Error('error');
             requestStub.yields(errorResponse, {}, {}); // override the params (error, response, body)
-            var promise = requestHelper.executeRequest(req, {}, true);
+            var promise = requestHelper.executeRequest(req, {}, false);
             promise.then(
                 function(response) {
                     assert.equal(req.headers.tid, tid);
-                    assert.equal(response, errorResponse);
+                },
+                function(error) {
+                    assert.deepEqual(error, errorResponse);
                 }
             );
             done();
         });
         it('Test executeRequest status not OK', function(done) {
             requestStub.yields(null, {statusCode: 400}, {}); // override the params (error, response, body)
-            var promise = requestHelper.executeRequest(req, {}, true);
+            var promise = requestHelper.executeRequest(req, {}, false);
             promise.then(
                 function(response) {
                     assert.equal(req.headers.tid, tid);
-                    assert.equal(response, {statusCode: 400});
+                },
+                function(error) {
+                    assert.deepEqual(error, {statusCode: 400});
                 }
             );
             done();
