@@ -10,9 +10,22 @@
     transition: max-height ease 250ms;
     padding:0;
 
+    .rightIcons {
+        color: #fff;
+        float:right;
+    }
+
     .trowserHeader {
         flex:0 0 auto;
+        flex-basis:40px;
         background-color: #306d90;
+        .rightIcons button {
+            font-size: 18px;
+            color: #fff;
+            background-color: #306d90;
+            border-radius: 0;
+            border: 0;
+        }
     }
     .trowserChildren {
         flex: 1 1 auto;
@@ -20,6 +33,10 @@
     .trowserFooter {
         flex:0 0 auto;
         background-color: #002c46;
+        flex-basis:40px;
+        button {
+            margin:4px;
+        }
     }
     .trowserContent {
         display:flex;

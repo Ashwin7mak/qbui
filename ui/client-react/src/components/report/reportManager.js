@@ -15,7 +15,6 @@ let ReportManager = React.createClass({
         return {searchText:""};
     },
     onChangeSearch(ev) {
-        console.log('now',ev.target.value);
         this.setState({searchText: ev.target.value});
     },
     searchMatches(name) {

@@ -8,7 +8,6 @@ import ReactCSSTransitionGroup from 'react/lib/ReactCSSTransitionGroup';
 import GlobalActions from '../global/globalActions';
 import AppsList from './appsList';
 import TablesList from './tablesList';
-import ReportsList from './reportsList';
 import QBicon from '../qbIcon/qbIcon';
 import './leftNav.scss';
 

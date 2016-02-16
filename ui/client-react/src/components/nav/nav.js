@@ -62,7 +62,7 @@ var Nav = React.createClass({
             setTimeout(() => {
                 this.context.history.pushState(null, report.link);
             });
-        }
+        };
         return <ReportManager reportsData={this.state.reportsData}
                               onSelectReport={selectReport}/>;
     },
@@ -78,7 +78,7 @@ var Nav = React.createClass({
 
         return (<div className={classes}>
 
-            <Trowser position={"top"} visible={this.state.nav.trowserOpen} onHide={this.hideTrowser}>
+            <Trowser position={"top"} visible={this.state.nav.trowserOpen} onCancel={this.hideTrowser} onDone={this.hideTrowser}>
                 {this.getTrowserContent()}
 
             </Trowser>
