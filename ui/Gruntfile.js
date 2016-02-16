@@ -425,7 +425,7 @@ module.exports = function(grunt) {
         protractor: {
             sauce_osx_chrome : {
                 options: {
-                    configFile: './e2e/config/sauce.chrome.osx.protractor.conf.js',
+                    configFile: './e2e/config/sauceLabs/sauce.chrome.osx.protractor.conf.js',
                     args: {
                         baseUrl   : baseUrl
                     }
@@ -433,7 +433,7 @@ module.exports = function(grunt) {
             },
             sauce_win7_chrome : {
                 options: {
-                    configFile: './e2e/config/sauce.chrome.win7.protractor.conf.js',
+                    configFile: './e2e/config/sauceLabs/sauce.chrome.win7.protractor.conf.js',
                     args: {
                         baseUrl   : baseUrl
                     }
@@ -441,7 +441,7 @@ module.exports = function(grunt) {
             },
             sauce_linux_chrome : {
                 options: {
-                    configFile: './e2e/config/sauce.chrome.linux.protractor.conf.js',
+                    configFile: './e2e/config/sauceLabs/sauce.chrome.linux.protractor.conf.js',
                     args: {
                         baseUrl   : baseUrl
                     }
@@ -449,7 +449,7 @@ module.exports = function(grunt) {
             },
             sauce_linux_firefox : {
                 options: {
-                    configFile: './e2e/config/sauce.firefox.linux.protractor.conf.js',
+                    configFile: './e2e/config/sauceLabs/sauce.firefox.linux.protractor.conf.js',
                     args: {
                         baseUrl   : baseUrl
                     }
@@ -457,7 +457,7 @@ module.exports = function(grunt) {
             },
             sauce_multi_browser : {
                 options: {
-                    configFile: './e2e/config/sauce.multi.browser.protractor.conf.js',
+                    configFile: './e2e/config/sauceLabs/sauce.multi.browser.protractor.conf.js',
                     args: {
                         baseUrl   : baseUrl
                     }
