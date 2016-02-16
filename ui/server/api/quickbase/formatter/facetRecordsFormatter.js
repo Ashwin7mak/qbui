@@ -17,7 +17,7 @@
         var facetRecordsFormatter = {
             //Given an array of array of records, array of fields format the record values into facet objects
             formatFacetRecords: function(facetRecordsArray, fields) {
-                if (facetRecordsArray && fields && (facetRecordsArray.length > 0) && (fields.length > 0)) {
+                if (Array.isArray(facetRecordsArray) && Array.isArray(fields) && facetRecordsArray.length > 0 && fields.length > 0) {
                     var facetList = [];
 
                     //for each array of records per facet

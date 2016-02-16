@@ -146,23 +146,22 @@
                 //  Generate tid for all requests..and log it
                 this.setTidHeader(req);
                 log.info({req: req});
-                let deferred = Promise.pending();
-                if (immediatelyResolve) {
-                    deferred.resolve(null);
-                } else {
-                    request(opts, function(error, response) {
-                        if (error) {
-                            deferred.reject(new Error(error));
-                        } else if (response.statusCode !== 200) {
-                            deferred.reject(response);
-                        } else {
-                            deferred.resolve(response);
-                        }
-                    });
-                }
-                return deferred.promise;
+                return new Promise(function(resolve, reject) {
+                    if (immediatelyResolve) {
+                        resolve(null);
+                    } else {
+                        request(opts, function(error, response) {
+                            if (error) {
+                                reject(new Error(error));
+                            } else if (response.statusCode !== 200) {
+                                reject(response);
+                            } else {
+                                resolve(response);
+                            }
+                        });
+                    }
+                });
             }
-
         };
 
         return helper;

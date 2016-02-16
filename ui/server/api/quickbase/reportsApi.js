@@ -28,13 +28,11 @@
         let reportsApi = {
 
             /**
-             * Allows you to override the
              * @param requestOverride
              */
             setRequestObject: function(requestOverride) {
                 request = requestOverride;
             },
-
             //Returns a promise that is resolved with the facets data or rejected with an error code
             fetchFacetResults: function(req) {
                 let opts = requestHelper.setOptions(req);
@@ -52,35 +50,35 @@
             //Returns a promise that is resolved with the records and fields meta data
             //or is rejected with a descriptive error code
             fetchReportResultsAndFacets: function(req) {
-                let deferred = Promise.pending();
                 let fetchRequests = [recordsApi.fetchRecordsAndFields(req), this.fetchFacetResults(req)];
 
-                Promise.all(fetchRequests).then(
-                    function(response) {
-                        let records = response[0].records;
-                        let fields = response[0].fields;
-                        let facetRecords = jsonBigNum.parse(response[1].body);
+                return new Promise(function(resolve, reject) {
+                    Promise.all(fetchRequests).then(
+                        (response) => {
+                            let records = response[0].records;
+                            let fields = response[0].fields;
+                            let facetRecords = jsonBigNum.parse(response[1].body);
 
-                        // format the facetRecords into Facet objects of type {id, name, type, hasBlanks, [values]} using fields array.
-                        // this also applies display properties to the raw record data.
-                        let facets = facetRecordsFormatter.formatFacetRecords(facetRecords, fields);
+                            // format the facetRecords into Facet objects of type {id, name, type, hasBlanks, [values]} using fields array.
+                            // this also applies display properties to the raw record data.
+                            let facets = facetRecordsFormatter.formatFacetRecords(facetRecords, fields);
 
-                        let responseObject;
-                        responseObject = {};
-                        responseObject[FIELDS] = fields;
-                        responseObject[RECORDS] = records;
-                        responseObject[FACETS] = facets;
-
-                        deferred.resolve(responseObject);
-                    },
-                    function(response) {
-                        deferred.reject(response);
-                    }
-                ).catch(function(error) {
-                    log.error("Caught unexpected error in fetchReportResultsAndFacets: " + JSON.stringify(error));
-                    deferred.reject(error);
+                            let responseObject;
+                            responseObject = {};
+                            responseObject[FIELDS] = fields;
+                            responseObject[RECORDS] = records;
+                            responseObject[FACETS] = facets;
+                            resolve(responseObject);
+                        },
+                        (error) => {
+                            log.error("Error in fetchReportResultsAndFacets: " + JSON.stringify(error));
+                            reject(error);
+                        }
+                    ).catch((ex) => {
+                        log.error("Caught unexpected error in fetchReportResultsAndFacets: " + JSON.stringify(ex));
+                        reject(ex);
+                    });
                 });
-                return deferred.promise;
             }
         };
         return reportsApi;
