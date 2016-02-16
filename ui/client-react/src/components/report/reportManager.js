@@ -15,16 +15,15 @@ let ReportManager = React.createClass({
         return {searchText:""};
     },
     onChangeSearch(ev) {
+        console.log('now',ev.target.value);
         this.setState({searchText: ev.target.value});
     },
     searchMatches(name) {
         return name.toLowerCase().indexOf(this.state.searchText.toLowerCase()) !== -1;
     },
     reportList() {
-        return this.props.reportsData.list && this.props.reportsData.list.map((report) => {
-            report.icon = 'report-line-bar';
-
-            return this.searchMatches(report.name) && <div key={report.id} >{report.name}</div>;
+        return this.props.reportsData.list.filter((report) => {
+            return this.searchMatches(report.name);
         });
     },
     render() {
@@ -34,14 +33,14 @@ let ReportManager = React.createClass({
                     <div className={"reportsTop"}>
 
                         <div className="searchReports">
-                            <input type="text" placeholder={Locale.getMessage('nav.searchReportsPlaceholder')} value={this.state.searchText} onChange={this.onChangeSearch}/>
+                            <input tabIndex={0} type="text" placeholder={Locale.getMessage('nav.searchReportsPlaceholder')} value={this.state.searchText} onChange={this.onChangeSearch}/>
                         </div>
 
                     </div>
                     <div className="reportGroups">
-                        <ReportGroup reports ={this.props.reportsData.list} title={"Recent"} onSelectReport={this.props.onSelectReport} isOpen={true}/>
-                        <ReportGroup reports ={this.props.reportsData.list} title={"Common"} onSelectReport={this.props.onSelectReport}/>
-                        <ReportGroup reports ={this.props.reportsData.list} title={"My Reports"} onSelectReport={this.props.onSelectReport}/>
+                        <ReportGroup reports ={this.reportList()} title={"Recent"} onSelectReport={this.props.onSelectReport} isOpen={true}/>
+                        <ReportGroup reports ={this.reportList()} title={"Common"} onSelectReport={this.props.onSelectReport}/>
+                        <ReportGroup reports ={this.reportList()} title={"My Reports"} onSelectReport={this.props.onSelectReport}/>
                     </div>
                 </div>
             </div>

@@ -10,18 +10,26 @@ let Trowser = React.createClass({
         visible: React.PropTypes.bool,
         position: React.PropTypes.string // top or bottom
     },
+    onKeyDown(ev) {
+      if (ev.keyCode == 27)
+          this.props.onHide();
+    },
     render() {
         let trowserClasses = "trowser " + this.props.position;
         if (this.props.visible) {
             trowserClasses += " visible";
         }
         return (
-            <div className={trowserClasses} >
+            <div className={trowserClasses} onKeyDown={this.onKeyDown}>
                 <div className={"trowserBackground"}/>
                 <div className={"trowserContent"}>
-                    {this.props.children}
-
-                    <div style={{height: "40px"}}>
+                    <div className={"trowserHeader"}>
+                        header
+                    </div>
+                    <div className={"trowserChildren"}>
+                        {this.props.children}
+                    </div>
+                    <div className={"trowserFooter"}>
                         <Button bsStyle="success" onClick={this.props.onHide}>Done</Button>
                     </div>
                 </div>

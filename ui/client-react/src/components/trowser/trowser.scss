@@ -1,21 +1,29 @@
 .trowser  {
     position:absolute;
     z-index:9999;
-
     left:0;right:0;
     height:100%;
-
     color: #000;
-
-    max-height:0;
+    max-height:0%;
     overflow:hidden;
-
     -webkit-transition: max-height ease 250ms;
     transition: max-height ease 250ms;
-
     padding:0;
 
+    .trowserHeader {
+        flex:0 0 auto;
+        background-color: #306d90;
+    }
+    .trowserChildren {
+        flex: 1 1 auto;
+    }
+    .trowserFooter {
+        flex:0 0 auto;
+        background-color: #002c46;
+    }
     .trowserContent {
+        display:flex;
+        flex-direction: column;
         position:absolute;
         left:0;
         right:0;
@@ -39,18 +47,15 @@
 
 .trowser.top {
     top:0;
-
     &.visible {
         max-height:100%;
         -webkit-transition: max-height ease 250ms;
         transition: max-height ease 250ms;
-        border-bottom: 1px solid #ccc;
     }
 }
 .trowser.bottom {
     bottom:0;
     &.visible {
         max-height:100%;
-        border-top: 1px solid #ccc;
     }
 }
