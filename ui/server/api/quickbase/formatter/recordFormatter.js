@@ -110,11 +110,9 @@
 
         var recordsFormatter = {
             //Given an array of records, array of fields format the record values for display
-            formatRecords: function(records, fields, fieldsMap) {
+            formatRecords: function(records, fields) {
                 if (records && fields) {
-                    if (!fieldsMap) {
-                        fieldsMap = {};
-                    }
+                    var fieldsMap = {};
                     var formattedRecords = [];
 
                     //Precalculate any formatter strings & Generate a map for O(1) lookup on each field get
