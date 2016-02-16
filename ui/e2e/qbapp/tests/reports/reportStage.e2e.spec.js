@@ -1,25 +1,27 @@
 /**
- * E2E tests for the Report Service
- * Created by klabak on 6/1/15.
+ * E2E tests for the stage component on the Reports page
+ * klabak 2/16/16
  */
-// jshint sub: true
 // jscs:disable requireDotNotation
-
+// jshint sub: true
 (function() {
     'use strict';
 
-    //Load the page Objects
+    // Bluebird Promise library
+    var Promise = require('bluebird');
+    // Load the Page Objects
     var ReportServicePage = requirePO('reportService');
     var RequestAppsPage = requirePO('requestApps');
     var RequestSessionTicketPage = requirePO('requestSessionTicket');
     var ReportServicePage = new ReportServicePage();
 
-    describe('Report Service E2E Tests', function() {
+    describe('Report Page Layout Tests', function() {
         var realmName;
         var realmId;
         var app;
         var recordList;
         var clientWidths = [e2eConsts.XLARGE_BP_WIDTH, e2eConsts.LARGE_BP_WIDTH, e2eConsts.MEDIUM_BP_WIDTH, e2eConsts.SMALL_BP_WIDTH];
+
         /**
          * Setup method. Generates JSON for an app, a table, a set of records and a report.
          * Then creates them via the REST API.
@@ -54,44 +56,6 @@
                             done();
                         });
                     });
-                });
-            });
-        });
-
-        /**
-         * Before each test starts just make sure the report list has loaded
-         */
-        beforeEach(function(done) {
-            ReportServicePage.waitForElement(ReportServicePage.reportsListDivEl).then(function() {
-                done();
-            });
-        });
-
-        /**
-         * Test method. After setup completes, loads the browser, requests a session ticket, requests the list
-         * of reports for that app and table, then displays the report page in the browser
-         */
-        it('Should load the reports page with the appropriate table report and verify the fieldNames and records', function() {
-            // Assert report name
-            ReportServicePage.reportLinksElList.then(function(links) {
-                links[0].getText().then(function(text) {
-                    expect(text).toEqual('Test Report');
-                });
-            });
-            // Select the report
-            ReportServicePage.reportLinksElList.then(function(links) {
-                links[0].click();
-            });
-            // Wait until the table has loaded
-            ReportServicePage.waitForElement(ReportServicePage.loadedContentEl).then(function() {
-                // Assert column headers
-                ReportServicePage.getReportColumnHeaders(ReportServicePage).then(function(resultArray) {
-                    // UI is currently using upper case to display the field names in columns
-                    expect(resultArray).toEqual(e2eConsts.reportFieldNames);
-                });
-                // Check all record values equal the ones we added via the API
-                ReportServicePage.griddleRecordElList.getText().then(function(uiRecords) {
-                    e2eBase.recordService.assertRecordValues(uiRecords, recordList);
                 });
             });
         });

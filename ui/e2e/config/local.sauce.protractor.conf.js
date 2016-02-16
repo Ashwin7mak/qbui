@@ -18,7 +18,9 @@
             name            : 'local_' + process.env.SAUCE_JOB_NAME + '_OSX_Chrome',
             //Timeout in seconds for Sauce Labs to wait for another command (bumped this for sleeps in tests)
             idleTimeout: '120',
-            screenResolution : '1680x1050'
+            screenResolution : '1680x1050',
+            shardTestFiles: true,
+            maxInstances: 5
         },
         // The sauce user and access key allow us to run our browser tests remotely on a SauceLabs VM
         sauceUser           : 'sbg_qbse',

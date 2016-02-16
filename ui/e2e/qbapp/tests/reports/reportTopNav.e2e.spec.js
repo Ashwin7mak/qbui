@@ -1,8 +1,6 @@
 /**
- * E2E tests for the layout of the Reports page
- * Tests locations and layout of divs and elements in relation to each other
- * cmartinez2 6/21/15
- * klabak on 2/16/16
+ * E2E tests for the topNav of the Reports page
+ * klabak 2/16/16
  */
 // jscs:disable requireDotNotation
 // jshint sub: true
@@ -47,27 +45,20 @@
                 realmName = e2eBase.recordBase.apiBase.realm.subdomain;
                 realmId = e2eBase.recordBase.apiBase.realm.id;
                 return RequestSessionTicketPage.get(e2eBase.getSessionTicketRequestEndpoint(realmName, realmId, e2eBase.ticketEndpoint));
-            }).then(function () {
+            }).then(function() {
                 // Load the requestAppsPage (shows a list of all the apps and tables in a realm)
                 return RequestAppsPage.get(e2eBase.getRequestAppsPageEndpoint(realmName));
-            }).then(function () {
+            }).then(function() {
                 // Wait for the leftNav to load
                 return ReportServicePage.waitForElement(ReportServicePage.appsListDivEl).then(function() {
                     // Select the app
-                    return ReportServicePage.appLinksElList.get(0).click();
+                    return ReportServicePage.appLinksElList.get(0).click().then(function() {
+                        e2eBase.sleep(1000).then(function() {
+                            //Done callback to let Jasmine know we are done with our promise chain
+                            done();
+                        });
+                    });
                 });
-            }).then(function () {
-                return ReportServicePage.waitForElement(ReportServicePage.tablesListDivEl).then(function () {
-                    // Select the table
-                    return ReportServicePage.tableLinksElList.get(3).click();
-                });
-            }).then(function () {
-                // Open the reports list
-                ReportServicePage.reportHamburgersElList.get(0).click();
-                // Select the report
-                ReportServicePage.reportLinksElList.get(0).click();
-                // Done callback to let Jasmine know we are done with our promise chain
-                done();
             }).catch(function(error) {
                 // Global catch that will grab any errors from chain above
                 // Will appropriately fail the beforeAll method so other tests won't run
@@ -76,10 +67,10 @@
         });
 
         /**
-         * Before each test starts just make sure the report content has loaded
+         * Before each test starts just make sure the table list div has loaded
          */
         beforeEach(function(done) {
-            ReportServicePage.waitForElement(ReportServicePage.loadedContentEl).then(function() {
+            ReportServicePage.waitForElement(ReportServicePage.tablesListDivEl).then(function() {
                 done();
             });
         });
@@ -117,34 +108,53 @@
         }
 
         /**
-         * Layout test. Verify topNav is displayed above the report stage
+         * Test method to verify all elements present / hidden in topNav depending on breakpoint
          */
-        NavDimensionsDataProvider().forEach(function(testcase) {
-            it(testcase.breakpointSize + ': verify topNav is on top of report stage', function() {
+        it('Verify topNav elements display/not display depending on different breakpoints', function() {
+            NavDimensionsDataProvider().forEach(function(testcase) {
                 e2eBase.resizeBrowser(testcase.browserWidth, e2eConsts.DEFAULT_HEIGHT).then(function() {
-                    ReportServicePage.isElementOnTop(ReportServicePage.topNavDivEl, ReportServicePage.reportStageContentEl);
-                });
-            });
-        });
-
-        /**
-         * Layout test. Verify report actions are displayed above the report content
-         */
-        NavDimensionsDataProvider().forEach(function(testcase) {
-            it(testcase.breakpointSize + ': verify table actions Layout container is on top of report griddle container', function() {
-                e2eBase.resizeBrowser(testcase.browserWidth, e2eConsts.DEFAULT_HEIGHT).then(function() {
-                    ReportServicePage.isElementOnTop(ReportServicePage.tableActionsContainerEl, ReportServicePage.griddleContainerEl);
-                });
-            });
-        });
-
-        /**
-         * Layout test. Verify stage is displayed above the report actions container
-         */
-        NavDimensionsDataProvider().forEach(function(testcase) {
-            it(testcase.breakpointSize + ': verify report Stage Layout container is on top of table actions container', function() {
-                e2eBase.resizeBrowser(testcase.browserWidth, e2eConsts.DEFAULT_HEIGHT).then(function() {
-                    ReportServicePage.isElementOnTop(ReportServicePage.reportStageContentEl, ReportServicePage.tableActionsContainerEl);
+                    // Verify Icon link display in topNav and  no text associated for that icon.
+                    ReportServicePage.waitForElement(ReportServicePage.topNavLeftDivEl).then(function() {
+                        // Verify icon link is displayed in topNav
+                        ReportServicePage.isElementInTopNav(ReportServicePage.topNavToggleHamburgerEl);
+                        // Verify no text displayed beside icon link in topNav
+                        expect(ReportServicePage.topNavToggleHamburgerEl.getText()).toBeFalsy();
+                    });
+                    // Verify harmony icons display in topNav and no text associated to them.
+                    ReportServicePage.waitForElement(ReportServicePage.topNavCenterDivEl).then(function() {
+                        for (var i = 0; i < ReportServicePage.topNavHarButtonsListEl.length; i++) {
+                            // Verify Harmony Icons displayed in topNav
+                            ReportServicePage.isElementInTopNav(ReportServicePage.topNavHarButtonsListEl[i]);
+                            // Verify no text displayed beside Harmony Icons in topNav
+                            expect(ReportServicePage.topNavHarButtonsListEl[i].getText()).toBeFalsy();
+                        }
+                    });
+                    // Verify right global icons display in topNav and verify text display depending on breakpoint.
+                    ReportServicePage.waitForElement(ReportServicePage.topNavRightDivEl).then(function() {
+                        ReportServicePage.topNavGlobalActionsListEl.then(function(navActions) {
+                            expect(navActions.length).toBe(2);
+                            for (var i = 0; i < navActions.length; i++) {
+                                var textEl = navActions[i].all(by.tagName('span')).last();
+                                if (testcase.clientWidth === e2eConsts.XLARGE_BP_WIDTH || testcase.clientWidth === e2eConsts.LARGE_BP_WIDTH) {
+                                    // Verify global action icons is displayed in topNav
+                                    ReportServicePage.isElementInTopNav(textEl);
+                                    expect(ReportServicePage.getGlobalNavTextEl(ReportServicePage.topNavUserGlobActEl).getText()).toBe('User');
+                                    expect(ReportServicePage.getGlobalNavTextEl(ReportServicePage.topNavHelpGlobActEl).getText()).toBe('Help');
+                                }
+                                if (testcase.clientWidth === e2eConsts.MEDIUM_BP_WIDTH || testcase.clientWidth === e2eConsts.SMALL_BP_WIDTH) {
+                                    // Verify global action icons is not displayed in topNav
+                                    ReportServicePage.isElementInTopNav(textEl);
+                                }
+                            }
+                        });
+                    });
+                    // Verify the drop down toggle icon present on all breakpoints
+                    ReportServicePage.waitForElement(ReportServicePage.topNavCenterDivEl).then(function() {
+                        // Verify  drop down toggle icon is displayed on topNav
+                        ReportServicePage.isElementInTopNav(ReportServicePage.topNavDropdownEl);
+                        // Verify no text displayed beside  drop down toggle
+                        expect(ReportServicePage.topNavDropdownEl.getText()).toBeFalsy();
+                    });
                 });
             });
         });
