@@ -10,6 +10,7 @@ import LeftNav from './leftNav';
 import TopNav from '../header/topNav';
 import Footer from '../footer/footer';
 import ReportManager from '../report/reportManager';
+import QBicon from '../qbIcon/qbIcon';
 
 let FluxMixin = Fluxxor.FluxMixin(React);
 let StoreWatchMixin = Fluxxor.StoreWatchMixin;
@@ -55,11 +56,26 @@ var Nav = React.createClass({
         });
     },
 
+    getTrowserBreadcrumbs() {
+        let app = this.state.apps.apps.find((app) => app.id === this.state.reportData.appId);
+        let tables = app ? app.tables : [];
+        let table = tables.find((t) =>  t.id === this.state.reportData.tblId);
+
+        return (<div><QBicon icon="report-table"/>{table ? table.name : ""} > {this.state.reportData.data.name}</div>);
+    },
+
+    getTrowserActions() {
+
+    },
+    /**
+     * get trowser content (report nav for now)
+     */
     getTrowserContent() {
 
         let selectReport = (report) => {
             this.hideTrowser();
             setTimeout(() => {
+                // give UI transition a moment to execute
                 this.context.history.pushState(null, report.link);
             });
         };
@@ -78,10 +94,13 @@ var Nav = React.createClass({
 
         return (<div className={classes}>
 
-            <Trowser position={"top"} visible={this.state.nav.trowserOpen} onCancel={this.hideTrowser} onDone={this.hideTrowser}>
-                {this.getTrowserContent()}
-
-            </Trowser>
+            <Trowser position={"top"}
+                     visible={this.state.nav.trowserOpen}
+                     breadcrumbs={this.getTrowserBreadcrumbs()}
+                     centerActions={<div>actions</div>}
+                     onCancel={this.hideTrowser}
+                     onDone={this.hideTrowser}
+                     content={this.getTrowserContent()} />
 
             <LeftNav
                 open={this.state.nav.leftNavOpen}
@@ -91,6 +110,7 @@ var Nav = React.createClass({
                 selectedTableId={this.state.apps.selectedTableId}
                 onSelectReports={this.onSelectTableReports}
                 toggleAppsList={this.toggleAppsList} />
+
             <div className="main">
                 <TopNav title="QuickBase"
                         globalActions={this.getGlobalActions()}
@@ -122,9 +142,14 @@ var Nav = React.createClass({
             classes += ' leftNavOpen';
         }
         return (<div className={classes}>
-            <Trowser position={"top"} visible={this.state.nav.trowserOpen} onHide={this.hideTrowser}>
-                {this.getTrowserContent()}
-            </Trowser>
+            <Trowser position={"top"}
+                     visible={this.state.nav.trowserOpen}
+                     breadcrumbs={this.getTrowserBreadcrumbs()}
+                     centerActions={<div>actions</div>}
+                     content={this.getTrowserContent()}
+                     onCancel={this.hideTrowser}
+                     onDone={this.hideTrowser} />
+
 
             <LeftNav
                 open={this.state.nav.leftNavOpen}

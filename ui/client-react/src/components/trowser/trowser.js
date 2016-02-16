@@ -9,7 +9,9 @@ import './trowser.scss';
 let Trowser = React.createClass({
     propTypes: {
         visible: React.PropTypes.bool,
-        position: React.PropTypes.string // top or bottom
+        position: React.PropTypes.string, // top or bottom
+        leftActions: React.PropTypes.node,
+        centerActions: React.PropTypes.node
     },
     defaultProps: {
         position: "top"
@@ -24,7 +26,7 @@ let Trowser = React.createClass({
                 <div className={"trowserBackground"}/>
                 <div className={"trowserContent"}>
                     <div className={"trowserHeader"}>
-                        <div className={"breadCrumbs"}>
+                        <div className={"breadcrumbs"}>
                             {this.props.breadcrumbs}
                         </div>
                         <div className={"rightIcons"}>
@@ -32,10 +34,18 @@ let Trowser = React.createClass({
                             <Button onClick={this.props.onCancel}><QBicon icon={"close"}/></Button>
                         </div>
                     </div>
+
                     <div className={"trowserChildren"}>
-                        {this.props.children}
+                        {this.props.content}
                     </div>
+
                     <div className={"trowserFooter"}>
+                        <div className={"leftActions"}>
+                            {this.props.leftActions}
+                        </div>
+                        <div className={"centerActions"}>
+                            {this.props.centerActions}
+                        </div>
                         <div className={"rightIcons"}>
                             <Button bsStyle="primary" onClick={this.props.onDone}>Done</Button>
                         </div>

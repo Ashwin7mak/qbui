@@ -18,24 +18,54 @@
     .trowserHeader {
         flex:0 0 auto;
         flex-basis:40px;
+        color: #fff;
         background-color: #306d90;
-        .rightIcons button {
-            font-size: 18px;
-            color: #fff;
-            background-color: #306d90;
-            border-radius: 0;
-            border: 0;
+        display:flex;
+        align-items:center;
+        .breadcrumbs {
+            flex:1 1 auto;
+            margin-left:16px;
+        }
+        .rightIcons {
+            flex: 0 0 auto;
+            button {
+                font-size: 18px;
+                color: #fff;
+                background-color: #306d90;
+                border-radius: 0;
+                border: 0;
+            }
+            button:hover {
+                color: #306d90;
+                background-color: #fff;
+            }
         }
     }
     .trowserChildren {
         flex: 1 1 auto;
+        overflow-y:auto;
     }
     .trowserFooter {
+        color: #fff;
         flex:0 0 auto;
-        background-color: #002c46;
         flex-basis:40px;
-        button {
-            margin:4px;
+        display:flex;
+        flex-layout: flex-row;
+        background-color: #002c46;
+        .leftActions {
+            flex:0 0 auto;
+        }
+        .centerActions {
+
+            display:flex;
+            flex:1 1 auto;
+            justify-content:center;
+        }
+        .rightIcons {
+            flex:0 0 auto;
+            button {
+                margin: 4px;
+            }
         }
     }
     .trowserContent {
