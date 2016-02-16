@@ -57,11 +57,15 @@ var Nav = React.createClass({
     },
 
     getTrowserBreadcrumbs() {
-        let app = this.state.apps.apps.find((app) => app.id === this.state.reportData.appId);
-        let tables = app ? app.tables : [];
-        let table = tables.find((t) =>  t.id === this.state.reportData.tblId);
+        if (this.state.apps.apps && this.state.reportData.appId) {
+            let app = this.state.apps.apps.find((a) => a.id === this.state.reportData.appId);
+            let tables = app ? app.tables : [];
+            let table = tables.find((t) => t.id === this.state.reportData.tblId);
 
-        return (<div><QBicon icon="report-table"/>{table ? table.name : ""} > {this.state.reportData.data.name}</div>);
+            return (
+                <div><QBicon icon="report-table"/>{table ? table.name : ""} > {this.state.reportData.data.name}</div>);
+        }
+        return null;
     },
 
     getTrowserActions() {
