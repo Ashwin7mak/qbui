@@ -36,6 +36,6 @@ export default {
 
     // API Entity actions
     RESULTS             : 'results',
+    RESULTSANDFACETS    : 'resultsAndFacets',
     PARSE               : 'parse'
-
 };

@@ -70,6 +70,8 @@
         var DISPLAY = 'display';
         var RAW = 'raw';
         var request = defaultRequest;
+        let RESULTSANDFACETS = 'resultsandfacets';
+        let RESULTS = 'results';
 
         //Given an array of records and array of fields, remove any fields
         //not referenced in the records
@@ -184,6 +186,12 @@
             fetchRecords: function(req) {
                 var opts = requestHelper.setOptions(req);
                 opts.headers[CONTENT_TYPE] = APPLICATION_JSON;
+                let inputUrl = opts.url.toLowerCase();
+                //the request came in for report/{reportId}/results.
+                // Convert that to report/{reportId}/facets/results to get facets data
+                if (inputUrl.indexOf(RESULTSANDFACETS) !== -1) {
+                    opts.url = inputUrl.substring(0, inputUrl.indexOf(RESULTSANDFACETS)) + RESULTS;
+                }
 
                 return requestHelper.executeRequest(req, opts);
             },

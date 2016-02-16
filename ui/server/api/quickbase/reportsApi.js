@@ -17,7 +17,8 @@
 
         //Module constants:
         let FACETS = 'facets';
-        let FACETRESULTS = 'results';
+        let RESULTS = 'results';
+        let RESULTSANDFACETS = 'resultsandfacets';
         let FIELDS = 'fields';
         let RECORDS = 'records';
         let CONTENT_TYPE = 'Content-Type';
@@ -40,17 +41,22 @@
                 let inputUrl = opts.url.toLowerCase();
                 //the request came in for report/{reportId}/results.
                 // Convert that to report/{reportId}/facets/results to get facets data
-                if (inputUrl.indexOf("results") !== -1) {
-                    opts.url = inputUrl.substring(0, inputUrl.indexOf("results")) + FACETS + "/" + FACETRESULTS;
+                if (inputUrl.indexOf(RESULTSANDFACETS) !== -1) {
+                    opts.url = inputUrl.substring(0, inputUrl.indexOf(RESULTSANDFACETS)) + FACETS + "/" + RESULTS;
                 }
 
                 return requestHelper.executeRequest(req, opts);
             },
-
             //Returns a promise that is resolved with the records and fields meta data
             //or is rejected with a descriptive error code
+            //NOTE: This call just hands off responsibility to the recordsApi.
+            fetchReportResults: function(req) {
+                return recordsApi.fetchRecordsAndFields(req);
+            },
+            //Returns a promise that is resolved with the records, fields meta data and facets
+            //or is rejected with a descriptive error code
             fetchReportResultsAndFacets: function(req) {
-                let fetchRequests = [recordsApi.fetchRecordsAndFields(req), this.fetchFacetResults(req)];
+                let fetchRequests = [this.fetchReportResults(req), this.fetchFacetResults(req)];
 
                 return new Promise(function(resolve, reject) {
                     Promise.all(fetchRequests).then(

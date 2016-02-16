@@ -35,7 +35,7 @@ let reportDataActions = {
                 //  query for the report meta data, report results and report facets
                 var promises = [];
                 promises.push(reportService.getReport(appId, tblId, rptId));
-                promises.push(reportService.getReportResults(appId, tblId, rptId, format));
+                promises.push(reportService.getReportDataAndFacets(appId, tblId, rptId, format));
 
                 Promise.all(promises).then(
                     function(response) {

@@ -37,6 +37,7 @@
         RECORDS                 : baseUrl.QUICKBASE + '/apps/:appId/tables/:tableId/records',
         REPORT_RESULTS          : baseUrl.QUICKBASE + '/apps/:appId/tables/:tableId/reports/:reportId/results',
         REPORT_FACETS           : baseUrl.QUICKBASE + '/apps/:appId/tables/:tableId/reports/:reportId/facets/results',
+        REPORT_AND_FACETS       : baseUrl.QUICKBASE + '/apps/:appId/tables/:tableId/reports/:reportId/resultsAndFacets',
         // No need to explictly declare other endpoints as there is no special pre-processing required.  qbRouteMapper
         // is configured to act as proxy and pass the request directly to the server side resource.
         TOMCAT_ALL              : baseUrl.QUICKBASE + '/*'

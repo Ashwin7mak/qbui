@@ -29,6 +29,7 @@
         routeToGetFunction[routeConsts.FACET_EXPRESSION_PARSE] = resolveFacets;
         routeToGetFunction[routeConsts.RECORD] = fetchSingleRecord;
         routeToGetFunction[routeConsts.RECORDS] = fetchAllRecords;
+        routeToGetFunction[routeConsts.REPORT_AND_FACETS] = fetchReportAndFacets;
         routeToGetFunction[routeConsts.REPORT_RESULTS] = fetchReportData;
 
         routeToGetFunction[routeConsts.SWAGGER_API] = fetchSwagger;
@@ -208,6 +209,27 @@
 
     /**
      * This is the function for fetching records and facets for a report from the reportssApi
+     * This is called from GetReportAndFacets end point from client.
+     * @param req
+     * @param res
+     */
+    /*eslint no-shadow:0 */
+    function fetchReportAndFacets(req, res) {
+        processRequest(req, res, function(req, res) {
+            reportsApi.fetchReportResultsAndFacets(req).then(
+                function(response) {
+                    log.debug({req:req, res:response}, 'fetchReportAndFacets API SUCCESS');
+                    res.send(response);
+                },
+                function(response) {
+                    log.error({req:req, res:response}, 'fetchReportAndFacets API ERROR');
+                    res.status(response.statusCode).send(response);
+                });
+        });
+    }
+
+    /**
+     * This is the function for fetching records for a report from the reportssApi
      * This is called from GetReportResults end point from client.
      * @param req
      * @param res
@@ -215,7 +237,7 @@
     /*eslint no-shadow:0 */
     function fetchReportData(req, res) {
         processRequest(req, res, function(req, res) {
-            reportsApi.fetchReportResultsAndFacets(req).then(
+            reportsApi.fetchReportResults(req).then(
                 function(response) {
                     log.debug({req:req, res:response}, 'FetchReportData API SUCCESS');
                     res.send(response);
