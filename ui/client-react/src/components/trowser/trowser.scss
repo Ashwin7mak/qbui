@@ -50,16 +50,21 @@
         flex:0 0 auto;
         flex-basis:40px;
         display:flex;
-        flex-layout: flex-row;
+        flex-direction: row;
         background-color: #002c46;
         .leftActions {
             flex:0 0 auto;
         }
         .centerActions {
-
             display:flex;
             flex:1 1 auto;
             justify-content:center;
+            align-items:center;
+            a {
+                color: #fff;
+                text-decoration:none;
+                margin-left:20px;
+            }
         }
         .rightIcons {
             flex:0 0 auto;

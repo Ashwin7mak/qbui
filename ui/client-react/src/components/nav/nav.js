@@ -1,8 +1,7 @@
 import React from 'react';
 import ReactCSSTransitionGroup from 'react/lib/ReactCSSTransitionGroup';
 import * as breakpoints from '../../constants/breakpoints';
-import './nav.scss';
-
+import {I18nMessage} from '../../utils/i18nMessage';
 import Trowser from '../trowser/trowser';
 import TrowserRecordActions from '../actions/trowserRecordActions';
 import Fluxxor from 'fluxxor';
@@ -11,6 +10,7 @@ import TopNav from '../header/topNav';
 import Footer from '../footer/footer';
 import ReportManager from '../report/reportManager';
 import QBicon from '../qbIcon/qbIcon';
+import './nav.scss';
 
 let FluxMixin = Fluxxor.FluxMixin(React);
 let StoreWatchMixin = Fluxxor.StoreWatchMixin;
@@ -51,25 +51,31 @@ var Nav = React.createClass({
         if ((this.context.breakpoint === breakpoints.SMALL_BREAKPOINT) && this.context.touch) {
             flux.actions.toggleLeftNav(false);
         }
-        flux.actions.loadReports(this.state.apps.selectedAppId, tableId).then(() => {
+        flux.actions.loadReports(this.state.apps.selectedAppId, tableId).then((x) => {
             flux.actions.showTrowser();
         });
     },
 
     getTrowserBreadcrumbs() {
-        if (this.state.apps.apps && this.state.reportData.appId) {
-            let app = this.state.apps.apps.find((a) => a.id === this.state.reportData.appId);
+
+
+        if (this.state.reportsData.appId && this.state.reportsData.tableId) {
+
+            let app = this.state.apps.apps.find((a) => a.id === this.state.reportsData.appId);
             let tables = app ? app.tables : [];
-            let table = tables.find((t) => t.id === this.state.reportData.tblId);
+            let table = tables.find((t) => t.id === this.state.reportsData.tableId);
 
             return (
-                <div><QBicon icon="report-table"/>{table ? table.name : ""} > {this.state.reportData.data.name}</div>);
+                <div><QBicon icon="report-table"/>{table ? table.name : ""} > <I18nMessage message={'nav.reportsHeading'}/></div>);
         }
         return null;
     },
 
     getTrowserActions() {
-
+        return (<div>
+                <a href="#"><QBicon icon="add-mini"/>New</a>
+                <a href="#"><QBicon icon="settings"/>Organize</a>
+            </div>);
     },
     /**
      * get trowser content (report nav for now)
@@ -101,7 +107,7 @@ var Nav = React.createClass({
             <Trowser position={"top"}
                      visible={this.state.nav.trowserOpen}
                      breadcrumbs={this.getTrowserBreadcrumbs()}
-                     centerActions={<div>actions</div>}
+                     centerActions={this.getTrowserActions()}
                      onCancel={this.hideTrowser}
                      onDone={this.hideTrowser}
                      content={this.getTrowserContent()} />
@@ -149,7 +155,7 @@ var Nav = React.createClass({
             <Trowser position={"top"}
                      visible={this.state.nav.trowserOpen}
                      breadcrumbs={this.getTrowserBreadcrumbs()}
-                     centerActions={<div>actions</div>}
+                     centerActions={this.getTrowserActions()}
                      content={this.getTrowserContent()}
                      onCancel={this.hideTrowser}
                      onDone={this.hideTrowser} />

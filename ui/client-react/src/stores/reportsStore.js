@@ -34,7 +34,8 @@ let ReportsStore = Fluxxor.createStore({
     onLoadReportsSuccess: function(reports) {
         this.loading = false;
         this.error = false;
-
+        this.appId = reports.appId;
+        this.tableId = reports.tblId;
         this.reports = [];
         reports.data.forEach((rpt) => {
             this.reports.push({id: rpt.id, name: rpt.name, link: this.buildLink(reports.appId, reports.tblId, rpt.id)});
@@ -50,6 +51,8 @@ let ReportsStore = Fluxxor.createStore({
 
     getState: function() {
         return {
+            tableId: this.tableId,
+            appId: this.appId,
             list: this.reports,
             loading: this.loading,
             error: this.error
