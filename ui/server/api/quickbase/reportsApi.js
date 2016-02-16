@@ -40,9 +40,9 @@
                 let opts = requestHelper.setOptions(req);
                 opts.headers[CONTENT_TYPE] = APPLICATION_JSON;
                 let inputUrl = opts.url.toLowerCase();
-                //the request came in for report/{reportId}/results.
+                //the request came in for report/{reportId}/resultsAndFacets.
                 // Convert that to report/{reportId}/facets/results to get facets data
-                if ((inputUrl.indexOf(REPORTS) !== -1) && (inputUrl.indexOf(RESULTSANDFACETS) !== -1)) {
+                if (inputUrl.indexOf(RESULTSANDFACETS) !== -1) {
                     opts.url = inputUrl.substring(0, inputUrl.indexOf(RESULTSANDFACETS)) + FACETS + "/" + RESULTS;
                 }
 
