@@ -3,11 +3,11 @@
 
 # build support folders
 /build/
+/coverage/
 /dist/
 /logs/
 /lib/
 /.sass-cache/
-/coverage/
 
 # in the event a local build is configured to download node, don't want
 # to track the working directory where node is unpacked
@@ -26,5 +26,3 @@ npm-debug.log
 
 # Grunt intermediate storage (http://gruntjs.com/creating-plugins#storing-task-files)
 .grunt
-
-
