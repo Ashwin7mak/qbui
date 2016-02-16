@@ -16,13 +16,14 @@
         let recordsApi = require('./recordsApi')(config);
 
         //Module constants:
+        let APPLICATION_JSON = 'application/json';
+        let CONTENT_TYPE = 'Content-Type';
         let FACETS = 'facets';
-        let RESULTS = 'results';
-        let RESULTSANDFACETS = 'resultsandfacets';
         let FIELDS = 'fields';
         let RECORDS = 'records';
-        let CONTENT_TYPE = 'Content-Type';
-        let APPLICATION_JSON = 'application/json';
+        let REPORTS = 'reports';
+        let RESULTS = 'results';
+        let RESULTSANDFACETS = 'resultsandfacets';
         let request = defaultRequest;
 
         //TODO: only application/json is supported for content type.  Need a plan to support XML
@@ -41,7 +42,7 @@
                 let inputUrl = opts.url.toLowerCase();
                 //the request came in for report/{reportId}/results.
                 // Convert that to report/{reportId}/facets/results to get facets data
-                if (inputUrl.indexOf(RESULTSANDFACETS) !== -1) {
+                if ((inputUrl.indexOf(REPORTS) !== -1) && (inputUrl.indexOf(RESULTSANDFACETS) !== -1)) {
                     opts.url = inputUrl.substring(0, inputUrl.indexOf(RESULTSANDFACETS)) + FACETS + "/" + RESULTS;
                 }
 

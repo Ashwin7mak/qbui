@@ -60,18 +60,19 @@
         var recordFormatter = require('./formatter/recordFormatter')();
 
         //Module constants:
+        var APPLICATION_JSON = 'application/json';
+        var CONTENT_TYPE = 'Content-Type';
+        var DISPLAY = 'display';
         var FIELDS = 'fields';
+        var FORMAT = 'format';
+        var RAW = 'raw';
         var RECORDS = 'records';
         var REPORTS = 'reports';
         var RECORD = 'record';
-        var CONTENT_TYPE = 'Content-Type';
-        var APPLICATION_JSON = 'application/json';
-        var FORMAT = 'format';
-        var DISPLAY = 'display';
-        var RAW = 'raw';
+        var RESULTS = 'results';
+        var RESULTSANDFACETS = 'resultsandfacets';
         var request = defaultRequest;
-        let RESULTSANDFACETS = 'resultsandfacets';
-        let RESULTS = 'results';
+
 
         //Given an array of records and array of fields, remove any fields
         //not referenced in the records
