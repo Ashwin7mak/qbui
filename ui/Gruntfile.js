@@ -411,10 +411,10 @@ module.exports = function(grunt) {
         //  Code coverage against the express code
         mocha_istanbul: {
             coverage: {
-                src    : ['server/**/test/*.unit.spec.js'],
+                src    : ['server/**/test/*.unit.spec.js', 'common/**/test/*.unit.spec.js'],
                 options: {
                     mask          : '**/*.spec.js',
-                    root          : 'server',
+                    root          : '.',
                     noColors      : !useColors,
                     reportFormats : ['lcov'],
                     coverageFolder: 'build/reports/server/coverage'

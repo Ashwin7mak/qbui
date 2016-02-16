@@ -28,6 +28,7 @@ class FacetSelections {
         } else if (_.isUndefined(newSet)) {
             this.selectionsHash = {};
         }
+        return this;
     }
 
     /**

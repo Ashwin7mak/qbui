@@ -1,4 +1,5 @@
 import React from 'react';
+import ReactDOM from 'react-dom';
 import {OverlayTrigger, Popover} from 'react-bootstrap';
 
 import Logger from '../../utils/logger';
@@ -41,16 +42,47 @@ var FacetsList = React.createClass({
     },
 
     /**
+     * Add an event listener for document clicks, so when the click occurs outside the facet menu
+     * it closes the menu, this makes it easy to use for small displays not requiring the button
+     * be clicked again to close it.
+     */
+    componentDidMount() {
+        window.__app_container = document.getElementById('content');
+        window.__app_container.addEventListener('click', this.handleDocumentClick);
+    },
+
+    /**
+     * Stop the listener created on mount
+     */
+    componentWillUnmount() {
+        window.__app_container.removeEventListener('click', this.handleDocumentClick);
+    },
+
+    /**
+     * Close the menu if user clicks outside of the popover and menu button areas
+     * @param evt
+     */
+    handleDocumentClick(evt) {
+        const area = ReactDOM.findDOMNode(this._facetMenuArea);
+        const button = this.props.menuButton;
+
+        if (!area.contains(evt.target) && !button.contains(evt.target)) {
+            this.props.onClickOutside(evt);
+        }
+    },
+
+    /**
      * Renders the arrowed popover box with contents of the facet menu list of items
      * @returns {XML}
      */
     render() {
         let noFacetsMessage = "report.noFacets";
         return (
-            <Popover id="facetsMenuPopup"
+            <Popover id={this.props.popoverId}
                      arrowOffsetLeft={28}
                      placement="bottom"
-                     className="facetMenuPopup">
+                     className="facetMenuPopup"
+                     ref={(thisComponent) => this._facetMenuArea = thisComponent}>
                 {this.props.reportData && this.props.reportData.data &&
                 this.props.reportData.data.facets && this.props.reportData.data.facets.list ?
                     this.facetsList(this.props.reportData.data.facets) :

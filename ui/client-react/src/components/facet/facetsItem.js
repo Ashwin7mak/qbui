@@ -60,6 +60,12 @@ var FacetsItem = React.createClass({
         };
     },
 
+    clearSelects(e) {
+        this.props.handleClearFieldSelects(this.props.facet);
+        // prevent collapse of section just do the clear
+        e.stopPropagation();
+    },
+
     /**
      * function : renderFieldName
      * prepares the markup content of the facet field  name
@@ -71,8 +77,9 @@ var FacetsItem = React.createClass({
         var selectionInfo = "";
         var selectionStrings = "";
         if (this.props.fieldSelections.length > 0) {
-            clearFacetsIcon = (<QBicon className="clearFacet" icon="clear-mini"
-                                       onClick={(e)=>this.props.handleClearFieldsSelects(this.props.facet)}/>);
+            clearFacetsIcon = (<span onClick={this.clearSelects}>
+                                    <QBicon className="clearFacet" icon="clear-mini" />
+                                </span>);
             var listOfValues = _.map(this.props.facet.values, 'value');
             var originalOrderSelected =  _.intersection(listOfValues, this.props.fieldSelections);
             selectionStrings = (originalOrderSelected.map((item, index) => {

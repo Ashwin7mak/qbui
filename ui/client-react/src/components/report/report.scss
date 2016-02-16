@@ -22,6 +22,7 @@
       flex-direction: row;
       flex: 1;
       align-items: center;
+      color: $icon-color;
 
       .filterSearchBox {
         padding: .8rem;
@@ -31,6 +32,15 @@
       .facetsMenuButton {
         margin-left: 1.5rem;
       }
+
+      .clearAllFacets {
+        display: inline-block;
+        margin-left: .5rem;
+        vertical-align: top;
+        margin-top: -4px;
+        font-size: 16px;
+      }
+
       .recordsCount {
         margin-left: 1.5rem;
       }

@@ -11,9 +11,11 @@ import FilterSearchBox from '../facet/filterSearchBox';
 import FacetsMenu from '../facet/facetsMenu';
 import FacetSelections from '../facet/facetSelections';
 import RecordsCount from './recordsCount';
+import QBicon from '../qbIcon/qbIcon';
 
 let FluxMixin = Fluxxor.FluxMixin(React);
 let logger = new Logger();
+import _ from 'lodash';
 
 //interaction options
 let secondInMilliseconds = 1000;
@@ -31,12 +33,14 @@ var ReportToolbar = React.createClass({
     getDefaultProps : function() {
         return {initialSelections : new FacetSelections()};
     },
-    getInitialState: function() {
 
+    getInitialState: function() {
+        let initSel = this.props.initialSelections;
+        initSel.initSelections();
         return {
             searchInput: '',
             searchStringForFiltering: '',
-            selections : this.props.initialSelections
+            selections : initSel
         };
     },
 
@@ -88,7 +92,6 @@ var ReportToolbar = React.createClass({
     },
 
     handleFacetSelect : function(e, facet, value) {
-        logger.debug("facet clicked field:" + facet.name + " value:" + value);
         this.state.selections.handleToggleSelect(e, facet, value);
         var mutated = new FacetSelections();
         mutated.initSelections(this.state.selections.getSelections());
@@ -96,10 +99,15 @@ var ReportToolbar = React.createClass({
     },
 
     handleFacetClearFieldSelects : function(facet) {
-        logger.debug("facet clicked clear field:" + facet.name);
         this.state.selections.removeAllFieldSelections(facet.id);
         var mutated = new FacetSelections();
         mutated.initSelections(this.state.selections.getSelections());
+        this.setState({selections: mutated});
+    },
+
+    handleFacetClearAllSelects : function() {
+        this.state.selections.removeAllSelections();
+        var mutated = new FacetSelections();
         this.setState({selections: mutated});
     },
 
@@ -178,6 +186,8 @@ var ReportToolbar = React.createClass({
             hasRecords = this.props.recordCount ? true : false;
         }
 
+        let hasSelectedFacets = this.state.selections.hasAnySelections();
+
         return (
             <div className="reportToolbar">
 
@@ -189,7 +199,7 @@ var ReportToolbar = React.createClass({
 
                 {/*TODO :  - check if facets is enabled for this report,
                 also hide Facets Menu Button if facets disabled  */}
-                { recordCount &&
+                {recordCount &&
                     (<FacetsMenu className="facetMenu"  {...this.props}
                                   selectedValues={this.state.selections}
                                   onFacetSelect={this.handleFacetSelect}
@@ -204,7 +214,15 @@ var ReportToolbar = React.createClass({
                               nameForRecords="Records"
                                 {...this.props} />
 
+
+                {hasSelectedFacets &&
+                (<span onClick={this.handleFacetClearAllSelects}>
+                                    <QBicon className="clearAllFacets" icon="clear-mini" />
+                    </span>)
+                }
+
                 {fakeFilterButton}
+
             </div>
         );
     }
