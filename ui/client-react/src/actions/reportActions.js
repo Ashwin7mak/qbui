@@ -37,7 +37,11 @@ let reportActions = {
                         this.dispatch(actions.LOAD_REPORTS_FAILED);
                         reject();
                     }
-                );
+                ).catch((ex) => {
+                    logger.debug('ReportService getReports exception:' + JSON.stringify(ex));
+                    this.dispatch(actions.LOAD_REPORTS_FAILED);
+                    reject();
+                });
             } else {
                 logger.error('Missing required input parameters for reportService.getReports.');
                 this.dispatch(actions.LOAD_REPORTS_FAILED);

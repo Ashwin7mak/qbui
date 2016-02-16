@@ -79,10 +79,7 @@ describe('Left Nav functions', () => {
         component = TestUtils.renderIntoDocument(<LeftNav open={true}
                                                           appsListOpen={true}
                                                           apps={appsTestData}
-                                                          reportsData={reportsTestData}
                                                           items={navItemsTestData}
-                                                          onHideReports={() => {}}
-                                                          showReports={false}
                                                           onToggleAppsList={() => {}} />);
     });
 
@@ -92,10 +89,7 @@ describe('Left Nav functions', () => {
                                                           appsListOpen={true}
                                                           apps={appsTestData}
                                                           selectedAppId={'app1'}
-                                                          reportsData={reportsTestData}
-                                                          items={navItemsTestData}
-                                                          onHideReports={() => {}}
-                                                          showReports={true}/>);
+                                                          items={navItemsTestData}/>);
     });
 
     it('test render closed with app,table,reports', () => {
@@ -103,10 +97,7 @@ describe('Left Nav functions', () => {
                                                           appsListOpen={true}
                                                           apps={appsTestData}
                                                           selectedAppId={'app1'}
-                                                          reportsData={reportsTestData}
-                                                          items={navItemsTestData}
-                                                          onHideReports={() => {}}
-                                                          showReports={false}/>);
+                                                          items={navItemsTestData}/>);
 
     });
 

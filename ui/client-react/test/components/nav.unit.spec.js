@@ -9,7 +9,9 @@ var LeftNavMock = React.createClass({
     render: function() {return <div className="leftMenu" ><a className="leftNavLink" onClick={() => this.props.onSelect()} >mock left nav</a></div>;}
 });
 
-
+var TrowserMock = React.createClass({
+    render: function() {return <div>mock trowser</div>;}
+});
 var TopNavMock = React.createClass({
     render: function() {return <div>mock top nav</div>;}
 });
@@ -53,12 +55,14 @@ describe('Nav functions', () => {
 
     beforeEach(() => {
         Nav.__Rewire__('LeftNav', LeftNavMock);
+        Nav.__Rewire__('Trowser', TrowserMock);
         Nav.__Rewire__('TopNav', TopNavMock);
         Nav.__Rewire__('Footer', FooterMock);
     });
 
     afterEach(() => {
         Nav.__ResetDependency__('LeftNav');
+        Nav.__ResetDependency__('Trowser');
         Nav.__ResetDependency__('TopNav');
         Nav.__ResetDependency__('Footer');
     });
