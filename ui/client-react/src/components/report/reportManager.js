@@ -25,6 +25,9 @@ let ReportManager = React.createClass({
             return this.searchMatches(report.name);
         });
     },
+    /**
+     * render a searchable set of report categories (hardcoded until we get the real ones...)
+     */
     render() {
         return (
             <div className={"reportsList"}>

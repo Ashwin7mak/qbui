@@ -12,7 +12,7 @@ var logger = new Logger();
 var Stage = React.createClass({
 
     getInitialState: function() {
-        return {open: false};
+        return {open: true};
     },
 
     toggleStage: function() {

@@ -4,6 +4,9 @@ import QBicon from '../qbIcon/qbIcon';
 import QBPanel from '../QBPanel/qbpanel';
 import {Link} from 'react-router';
 
+/**
+ * a single report item
+ */
 let Report = React.createClass({
 
     propTypes: {
@@ -18,17 +21,12 @@ let Report = React.createClass({
                       onClick={() => {this.props.onSelect(this.props.report);}}>
                     <QBicon icon="report-line-bar"/>{this.props.report.name}
                 </div>);
-        /*
-        return (<Link key={this.props.report.id}
-                      className="reportLink"
-                      to={this.props.report.link}
-                      onClick={this.props.onSelect}>
-                    <QBicon icon="report-line-bar"/>{this.props.report.name}
-                </Link>);
-                */
     }
 });
 
+/**
+ * a group of report items (one for each category)
+ */
 let ReportGroup = React.createClass({
     propTypes: {
         title: React.PropTypes.string.isRequired,

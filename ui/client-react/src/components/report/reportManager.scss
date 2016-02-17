@@ -1,5 +1,7 @@
 
 $search-bar-bg: #5f8ba7;
+$report-group-bg: #fff;
+$report-icon-color: #f2b835;
 
 .reportsContainer {
 
@@ -19,7 +21,7 @@ $search-bar-bg: #5f8ba7;
     .reportGroup {
 
         margin-bottom:16px;
-        background-color: #fff;
+        background-color: $report-group-bg;
 
         .reportItems {
             display:flex;
@@ -35,7 +37,7 @@ $search-bar-bg: #5f8ba7;
             overflow:hidden;
             .qbIcon {
                 flex: 0 0 auto;
-                color: #f2b835;
+                color: $report-icon-color;
                 width:22px;
             }
             margin-right: 20px;

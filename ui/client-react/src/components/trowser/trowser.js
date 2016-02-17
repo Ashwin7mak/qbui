@@ -8,14 +8,23 @@ import './trowser.scss';
  */
 let Trowser = React.createClass({
     propTypes: {
-        visible: React.PropTypes.bool,
+        visible: React.PropTypes.bool.isRequired,
         position: React.PropTypes.string, // top or bottom
         leftActions: React.PropTypes.element,
-        centerActions: React.PropTypes.element
+        centerActions: React.PropTypes.element,
+        breadcrumbs: React.PropTypes.element,
+        content: React.PropTypes.element.isRequired,
+        onDone: React.PropTypes.func,
+        onCancel: React.PropTypes.func,
     },
     defaultProps: {
         position: "top"
     },
+
+    /**
+     *
+     * render trowser in front of a trowserBackground element (visible when browser is very wide)
+     */
     render() {
         let trowserClasses = "trowser " + this.props.position;
         if (this.props.visible) {

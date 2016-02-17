@@ -1,9 +1,14 @@
+$trowser-fg: #000;
+$trowser-icons-color: #fff;
+$trowser-header-bg:#486c8f;
+$trowser-footer-bg: #193048;
+
 .trowser  {
     position:absolute;
     z-index:9999;
     left:0;right:0;
     height:100%;
-    color: #000;
+    color: $trowser-fg;
     max-height:0%;
     overflow:hidden;
     -webkit-transition: max-height ease 250ms;
@@ -11,14 +16,14 @@
     padding:0;
 
     .rightIcons {
-        color: #fff;
+        color: $trowser-icons-color;
     }
 
     .trowserHeader {
         flex:0 0 auto;
         flex-basis:40px;
         color: #fff;
-        background-color: #486c8f;
+        background-color: $trowser-header-bg;
         display:flex;
         align-items:center;
         .breadcrumbs {
@@ -36,13 +41,13 @@
             button {
                 font-size: 18px;
                 color: #fff;
-                background-color: #306d90;
+                background-color: $trowser-header-bg;
                 border-radius: 0;
                 border: 0;
             }
             button:hover {
-                color: #306d90;
-                background-color: #fff;
+                color: $trowser-header-bg;
+                background-color: $trowser-icons-color;
             }
         }
     }
@@ -56,7 +61,7 @@
         flex-basis:54px;
         display:flex;
         flex-direction: row;
-        background-color: #193048;
+        background-color: $trowser-footer-bg;
         .leftActions {
             flex:0 0 auto;
         }
@@ -111,6 +116,7 @@
         transition: max-height ease 250ms;
     }
 }
+
 .trowser.bottom {
     bottom:0;
     &.visible {
@@ -118,7 +124,7 @@
     }
 }
 
-
+/* 2 rows on small breakpoint */
 .small-breakpoint .trowserFooter {
     flex-direction:column;
     flex-basis:80px;
