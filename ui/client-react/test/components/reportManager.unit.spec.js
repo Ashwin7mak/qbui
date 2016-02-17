@@ -11,24 +11,6 @@ var I18nMessageMock = React.createClass({
     }
 });
 
-
-let appsTestData = [
-    {
-        id: 'app1',
-        name: 'app1',
-        icon: 'apple',
-        link: '/app/app1',
-        tables: [
-            {
-                id: 'table1',
-                name: 'table1',
-                icon: 'book',
-                link: '/app/app1/table/table1'
-            }
-        ]
-    }
-];
-
 let reportsTestData = {
 
     list: [
@@ -45,16 +27,37 @@ let reportsTestData = {
     ]
 };
 
-
 describe('Report Manager functions', () => {
     'use strict';
 
     var component;
 
-    it('test render opened with app list', () => {
-
+    beforeEach(() => {
         component = TestUtils.renderIntoDocument(<ReportManager reportsData={reportsTestData}
                                                                 onSelectReport={()=>{}} />);
     });
 
+    it('test render opened with report list', () => {
+
+        let reportItems = TestUtils.scryRenderedDOMComponentsWithClass(component, "reportItems");
+        expect(reportItems.length).toBeGreaterThan(0);
+
+        // 2 reports * 3 sections = 6 links
+        let reportLinks = TestUtils.scryRenderedDOMComponentsWithClass(component, "reportLink");
+        expect(reportLinks.length).toEqual(6);
+    });
+
+    it('test searching report list', () => {
+
+        let searchInputBox = TestUtils.findRenderedDOMComponentWithTag(component, "input");
+        searchInputBox.value = "Changes";
+        TestUtils.Simulate.change(searchInputBox);
+
+        let reportItems = TestUtils.scryRenderedDOMComponentsWithClass(component, "reportItems");
+        expect(reportItems.length).toBeGreaterThan(0);
+
+        // 1 filtered report * 3 sections = 3 links
+        let reportLinks = TestUtils.scryRenderedDOMComponentsWithClass(component, "reportLink");
+        expect(reportLinks.length).toEqual(3);
+    });
 });
