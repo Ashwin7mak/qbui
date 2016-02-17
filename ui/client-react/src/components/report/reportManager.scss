@@ -2,7 +2,7 @@
 $search-bar-bg: #5f8ba7;
 
 .reportsContainer {
-    background-color:#F2F9FE;
+
     .reportsTop {
         background-color: $search-bar-bg;
         padding:10px 0 10px 16px;
@@ -35,7 +35,8 @@ $search-bar-bg: #5f8ba7;
             overflow:hidden;
             .qbIcon {
                 flex: 0 0 auto;
-                color: salmon;
+                color: #f2b835;
+                width:22px;
             }
             margin-right: 20px;
             margin-bottom: 10px;

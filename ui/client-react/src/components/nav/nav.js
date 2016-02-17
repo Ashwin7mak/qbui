@@ -51,8 +51,9 @@ var Nav = React.createClass({
         if ((this.context.breakpoint === breakpoints.SMALL_BREAKPOINT) && this.context.touch) {
             flux.actions.toggleLeftNav(false);
         }
-        flux.actions.showTrowser();
-        flux.actions.loadReports(this.state.apps.selectedAppId, tableId);
+        flux.actions.loadReports(this.state.apps.selectedAppId, tableId).then((x) => {
+            flux.actions.showTrowser();
+        });
     },
     /**
      *  get breadcrumb element for top of trowser

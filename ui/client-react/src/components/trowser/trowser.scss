@@ -12,22 +12,27 @@
 
     .rightIcons {
         color: #fff;
-        float:right;
     }
 
     .trowserHeader {
         flex:0 0 auto;
         flex-basis:40px;
         color: #fff;
-        background-color: #306d90;
+        background-color: #486c8f;
         display:flex;
         align-items:center;
         .breadcrumbs {
             flex:1 1 auto;
             margin-left:16px;
         }
+        .qbIcon {
+            font-size:22px;
+            width:32px;
+            vertical-align:top;
+        }
         .rightIcons {
             flex: 0 0 auto;
+            height:40px;
             button {
                 font-size: 18px;
                 color: #fff;
@@ -48,10 +53,10 @@
     .trowserFooter {
         color: #fff;
         flex:0 0 auto;
-        flex-basis:40px;
+        flex-basis:54px;
         display:flex;
         flex-direction: row;
-        background-color: #002c46;
+        background-color: #193048;
         .leftActions {
             flex:0 0 auto;
         }
@@ -68,6 +73,7 @@
         }
         .rightIcons {
             flex:0 0 auto;
+            align-self:center;
             button {
                 margin: 4px;
             }
@@ -80,9 +86,9 @@
         left:0;
         right:0;
         top:0;
-        bottom:5px;
+        bottom:0;
         margin:auto;
-        background:#fdfdfd;
+        background-color:#F2F9FE;
         opacity:1;
         max-width:1440px;
 
@@ -109,5 +115,19 @@
     bottom:0;
     &.visible {
         max-height:100%;
+    }
+}
+
+
+.small-breakpoint .trowserFooter {
+    flex-direction:column;
+    flex-basis:80px;
+
+    .rightIcons {
+        text-align:center;
+        width:100%;
+        button {
+            width: 90%;
+        }
     }
 }
