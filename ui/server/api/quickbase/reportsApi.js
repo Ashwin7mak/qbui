@@ -30,10 +30,18 @@
         let reportsApi = {
 
             /**
+             * This is for testing only
              * @param requestOverride
              */
-            setRequestObject: function(requestOverride) {
-                request = requestOverride;
+            setRequestHelper: function(requestOverride) {
+                requestHelper = requestOverride;
+            },
+            /**
+             * This is for testing only
+             * @param requestOverride
+             */
+            setRecordsApi: function(requestOverride) {
+                recordsApi = requestOverride;
             },
             //Returns a promise that is resolved with the facets data or rejected with an error code
             fetchFacetResults: function(req) {
@@ -64,11 +72,15 @@
                         (response) => {
                             let records = response[0].records;
                             let fields = response[0].fields;
-                            let facetRecords = jsonBigNum.parse(response[1].body);
-
-                            // format the facetRecords into Facet objects of type {id, name, type, hasBlanks, [values]} using fields array.
-                            // this also applies display properties to the raw record data.
-                            let facets = facetRecordsFormatter.formatFacetRecords(facetRecords, fields);
+                            let facetRecords = [];
+                            let facets = [];
+                            //jsonBigNum.parse throws exception if the input is empty array
+                            if (Array.isArray(response[1].body) && response[1].body.length > 0) {
+                                facetRecords = jsonBigNum.parse(response[1].body);
+                                // format the facetRecords into Facet objects of type {id, name, type, hasBlanks, [values]} using fields array.
+                                // this also applies display properties to the raw record data.
+                                facets = facetRecordsFormatter.formatFacetRecords(facetRecords, fields);
+                            }
 
                             let responseObject;
                             responseObject = {};
