@@ -1,3 +1,4 @@
+//these two imports are needed for safari and iOS to work with internationalization
 import Intl from 'intl';
 import en from 'intl/locale-data/jsonp/en.js';
 
