@@ -55,10 +55,10 @@ var Nav = React.createClass({
             flux.actions.showTrowser();
         });
     },
-
+    /**
+     *  get breadcrumb element for top of trowser
+     */
     getTrowserBreadcrumbs() {
-
-
         if (this.state.reportsData.appId && this.state.reportsData.tableId) {
 
             let app = this.state.apps.apps.find((a) => a.id === this.state.reportsData.appId);
@@ -70,7 +70,9 @@ var Nav = React.createClass({
         }
         return null;
     },
-
+    /**
+     *  get actions element for bottome center of trowser (placeholders for now)
+     */
     getTrowserActions() {
         return (<div>
                 <a href="#"><QBicon icon="add-mini"/>New</a>

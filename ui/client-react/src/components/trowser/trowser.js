@@ -10,8 +10,8 @@ let Trowser = React.createClass({
     propTypes: {
         visible: React.PropTypes.bool,
         position: React.PropTypes.string, // top or bottom
-        leftActions: React.PropTypes.node,
-        centerActions: React.PropTypes.node
+        leftActions: React.PropTypes.element,
+        centerActions: React.PropTypes.element
     },
     defaultProps: {
         position: "top"
