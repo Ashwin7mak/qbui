@@ -3,56 +3,71 @@
 $font-path: '../../assets/fonts/';
 
 @font-face {
-    font-family: 'Lato';
-    src: url('#{$font-path}Lato/Lato-Light.ttf') format('truetype');
-    font-weight:normal;
-    font-style:normal;
-}
-
-@font-face {
-    font-family: 'Source Serif Pro';
-    src: url('#{$font-path}Source_Serif_Pro/SourceSerifPro-Regular.ttf') format('truetype');
-    font-weight:normal;
-    font-style:normal;
+    font-family: 'Open Sans';
+    src: url('#{$font-path}Open_Sans/OpenSans-Regular.ttf') format('truetype');
+    font-weight: normal;
+    font-style: normal;
 }
 
 html, body {
-    margin:0;
-    height:100%;
-    min-height:100%;
-    overflow:hidden;
+    margin: 0;
+    height: 100%;
+    min-height: 100%;
+    overflow: hidden;
 }
 
 html body {
-    font-family: 'Lato', sans-serif;
-    font-weight: 300;
 
-    h1,h2,h3,h4,h5,h6 {
-        font-family: 'Source Serif Pro', serif;
+    font-family: Open Sans, Arial, Sans-Serif;
+    font-size: 14px;
+    font-style: normal;
+    font-variant: normal;
+    font-weight: 400;
+    line-height: 24px;
+
+    h1 {
+        font-family: Open Sans, Arial, Sans-Serif;
+        font-size: 24px;
+        font-style: normal;
+        font-variant: normal;
+        font-weight: 500;
+        line-height: 24px;
     }
+    h3 {
+        font-family: Open Sans, Arial, Sans-Serif;
+        font-size: 18px;
+        font-style: normal;
+        font-variant: normal;
+        font-weight: 500;
+        line-height: 24px;
+    }
+
 }
+
 body.small-breakpoint {
     font-size: $font-size-small;
 }
+
 body.touch {
 
     .tooltip {
-        display:none !important;
+        display: none !important;
     }
 }
+
 a {
-    outline:none !important;
+    outline: none !important;
 }
+
 #content {
-    height:100%;
+    height: 100%;
 }
 
 .navShell {
-    height:100%;
-    width:100%;
-    display:flex;
+    height: 100%;
+    width: 100%;
+    display: flex;
     flex-direction: row;
-
 
     transition: transform ease 250ms;
     -webkit-transition: transform ease 250ms;
@@ -65,25 +80,25 @@ a {
     }
 
     .main {
-        display:flex;
+        display: flex;
         flex-direction: column;
-        flex:1;
-        min-width:0;
+        flex: 1;
+        min-width: 0;
 
         .topNav {
             flex: 0 0 auto;
-            flex-basis:$top-nav-height;
-            display:flex;
+            flex-basis: $top-nav-height;
+            display: flex;
             order: 1;
-            flex-direction:column;
+            flex-direction: column;
             background-color: $header-bg;
 
-            >.top {
-                display:flex;
-                flex-basis:$top-nav-height;
-                font-size:14px;
+            > .top {
+                display: flex;
+                flex-basis: $top-nav-height;
+                font-size: 14px;
                 transition: flex-basis 300ms ease-in-out;
-                min-width:330px;
+                min-width: 330px;
             }
 
             .navGroup {
@@ -95,18 +110,18 @@ a {
                 }
             }
             .navGroup.center {
-                flex:1;
+                flex: 1;
 
                 .navItem {
-                    display:flex;
-                    justify-content:center;
+                    display: flex;
+                    justify-content: center;
                 }
             }
 
             .btn-group.harmonyButtons {
-                height:40px;
+                height: 40px;
                 button {
-                    font-size:22px;
+                    font-size: 22px;
                     color: $icon-color;
                     border-radius: 0;
                     width: $top-nav-height;
@@ -119,10 +134,10 @@ a {
 
             .iconLink {
                 color: $icon-color;
-                padding:10px;
+                padding: 10px;
             }
             .iconLink:hover {
-                color:#fff;
+                color: #fff;
                 background: $nav-hover-bg
             }
 
@@ -132,21 +147,21 @@ a {
         }
 
         .mainContent {
-            display:flex;
+            display: flex;
             order: 2;
-            overflow-y:auto;
-            flex:1;
-            min-width:0;
+            overflow-y: auto;
+            flex: 1;
+            min-width: 0;
         }
 
         .footer {
             order: 3;
             flex-shrink: 0;
-            margin-bottom:0;
-            border-radius:0;
+            margin-bottom: 0;
+            border-radius: 0;
             border: 0;
             border-top: 1px;
-            height:40px;
+            height: 40px;
         }
     }
 }

@@ -31,7 +31,8 @@ $search-bar-bg: #5f8ba7;
             display:flex;
             align-items:baseline;
             min-width:100px;
-
+            text-overflow:ellipsis;
+            overflow:hidden;
             .qbIcon {
                 flex: 0 0 auto;
                 color: salmon;
