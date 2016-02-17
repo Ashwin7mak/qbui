@@ -58,10 +58,11 @@
     // can show it by commenting this or running
     // document.getElementById('fakeFacet').style.display='block';  or
     // document.getElementsByClassName("testFilterButton").style.display='block';
+    // document.getElementsByClassName("testFilterButton").style.display='block';
     // in the browser debugger
     .testFilterButton {
       display: none;
-      margin-top: -20px;
+      margin-left: 1rem;
     }
 }
 

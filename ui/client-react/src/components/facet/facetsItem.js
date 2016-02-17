@@ -38,6 +38,10 @@ const facetShape =  React.PropTypes.shape({
 /*TODO support date type of facet field  */
 });
 
+const fieldSelections = React.PropTypes.shape({
+    selectionsHash: React.PropTypes.array
+});
+
 
 var FacetsItem = React.createClass({
     /**
@@ -49,7 +53,7 @@ var FacetsItem = React.createClass({
     displayName: 'FacetsItem',
     propTypes: {
         facet:facetShape,
-        fieldSelections: React.PropTypes.array,
+        fieldSelections: fieldSelections,
         handleSelectValue: React.PropTypes.func,
         handleToggleCollapse: React.PropTypes.func
     },
