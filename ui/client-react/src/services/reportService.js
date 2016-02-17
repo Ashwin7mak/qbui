@@ -44,7 +44,7 @@ class ReportService extends BaseService {
 
     /**
      * Return the records and facets list for a given report.
-     * Ideally this should be used teh 1st time a report is loaded to get all the pieces required to render the report.
+     * Ideally this should be used the 1st time a report is loaded to get all the pieces required to render the report.
      *
      * @param appId
      * @param tableId

@@ -22,7 +22,7 @@
  Consider a report with 2 facetFids - fid7 (type text) and fid8 (type date).
  FacetRecordsArray returned by getFacets Api:
  [[
- [{7, "abc"}] -- Assumption: All values over the list of records for a particular field will be unique. This is hanlded by server.
+ [{7, "abc"}] -- Assumption: All values over the list of records for a particular field will be unique. This is handled by server.
  [{7, "def"}]
  [{7, "xyz"}]
  ]
@@ -65,9 +65,7 @@
 (function() {
     'use strict';
     var _ = require('lodash');
-    var consts = require('../../constants');
     var recordFormatter = require('./recordFormatter')();
-
 
     module.exports = function() {
 
@@ -107,7 +105,7 @@
                     }
                     return facetList;
                 }
-                return facetRecordsArray;
+                return [];
             }
         };
         return facetRecordsFormatter;
