@@ -149,6 +149,19 @@ describe('Validate ReportsApi unit tests', function() {
             fields: [],
             facets: []
         };
+        var fetchReportResultsPromise =
+            new Promise(function(resolve, reject) {
+                resolve({
+                    records: [],
+                    fields: []
+                });
+            });
+        var fetchFacetsPromise =
+            new Promise(function(resolve, reject) {
+                resolve({
+                    facets: []
+                });
+            });
         afterEach(function() {
             reportsApi.fetchFacetResults.restore();
             reportsApi.fetchReportResults.restore();
@@ -156,11 +169,8 @@ describe('Validate ReportsApi unit tests', function() {
         it('Test success', function(done) {
             var getReportResults = sinon.stub(reportsApi, "fetchReportResults");
             var getFacetsStub = sinon.stub(reportsApi, "fetchFacetResults");
-            getReportResults.returns({
-                records: [],
-                fields: []
-            });
-            getFacetsStub.returns({body: []});
+            getReportResults.returns(fetchReportResultsPromise);
+            getFacetsStub.returns(fetchFacetsPromise);
             var promise = reportsApi.fetchReportResultsAndFacets(req);
             promise.then(
                 function(response) {
@@ -173,7 +183,7 @@ describe('Validate ReportsApi unit tests', function() {
             var getReportResults = sinon.stub(reportsApi, "fetchReportResults");
             var getFacetsStub = sinon.stub(reportsApi, "fetchFacetResults");
             getReportResults.returns(new Error("error"));
-            getFacetsStub.returns({body: []});
+            getFacetsStub.returns(fetchFacetsPromise);
             var promise = reportsApi.fetchReportResultsAndFacets(req);
             promise.then(
                 function(response) {
@@ -187,17 +197,12 @@ describe('Validate ReportsApi unit tests', function() {
         it('Test error from fetchFacets', function(done) {
             var getReportResults = sinon.stub(reportsApi, "fetchReportResults");
             var getFacetsStub = sinon.stub(reportsApi, "fetchFacetResults");
-            getReportResults.returns({
-                records: [],
-                fields: []
-            });
+            getReportResults.returns(fetchReportResultsPromise);
             getFacetsStub.returns(new Error("error"));
             var promise = reportsApi.fetchReportResultsAndFacets(req);
             promise.then(
                 function(response) {
-                },
-                function(error) {
-                    assert.deepEqual(error, new Error("error"));
+                    assert.deepEqual(response, expectedResponse);
                 }
             );
             done();
