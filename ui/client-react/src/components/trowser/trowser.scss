@@ -11,7 +11,13 @@ $trowser-footer-bg: #193048;
     color: $trowser-fg;
     max-height:0%;
     overflow:hidden;
+    -webkit-transition: max-height ease 250ms;
+    transition: max-height ease 250ms;
     padding:0;
+
+    &.visible {
+        max-height:100%;
+    }
 
     .rightIcons {
         color: $trowser-icons-color;
@@ -108,18 +114,10 @@ $trowser-footer-bg: #193048;
 
 .trowser.top {
     top:0;
-    &.visible {
-        max-height:100%;
-        -webkit-transition: max-height ease 250ms;
-        transition: max-height ease 250ms;
-    }
 }
 
 .trowser.bottom {
     bottom:0;
-    &.visible {
-        max-height:100%;
-    }
 }
 
 /* 2 rows on small breakpoint */
