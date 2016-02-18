@@ -9,12 +9,15 @@ describe('ReportToolbar functions', () => {
     'use strict';
 
     let component;
-    let item = {
-        id:22,
-        name:"test",
-        type:"text",
-        values:[{value:"a"}, {value:"b"}, {value:"c"}]
-    };
+
+    beforeEach(function() {
+        jasmine.clock().install();
+    });
+
+    afterEach(function() {
+        jasmine.clock().uninstall();
+    });
+
 
     let navStore = Fluxxor.createStore({
         getState: function() {
@@ -42,6 +45,7 @@ describe('ReportToolbar functions', () => {
         ReportsStore: new reportsStore(),
         ReportDataStore: new reportDataStore()
     };
+
     let flux = new Fluxxor.Flux(stores);
 
     flux.actions = {
@@ -101,6 +105,7 @@ describe('ReportToolbar functions', () => {
             facets: fakefacets
         }
     };
+
 
     it('test render reportToolbar no records', () => {
         component = TestUtils.renderIntoDocument(<ReportToolbar flux={flux}
@@ -200,14 +205,14 @@ describe('ReportToolbar functions', () => {
         flux.actions.searchFor.calls.reset();
 
         //timeout for debounce
-        setTimeout(function() {
-            // check that search ran after debounce time
-            expect(flux.actions.searchFor).toHaveBeenCalledWith(testValue);
-            // check that its considered filtered
-            expect(component.isFiltered()).toBe(true);
-            flux.actions.searchFor.calls.reset();
-            done();
-        }, component.debounceInputTime + 500);
+        jasmine.clock().tick(component.debounceInputTime + 30);
+
+        // check that search ran after debounce time
+        expect(flux.actions.searchFor).toHaveBeenCalledWith(testValue);
+        // check that its considered filtered
+        expect(component.isFiltered()).toBe(true);
+        flux.actions.searchFor.calls.reset();
+        done();
     });
 
     it('test render reportToolbar with selected values then clear a field selection', () => {

@@ -83,18 +83,8 @@ var FacetsMenu = React.createClass({
      */
     toggleMenu(e) {
         this.setState({target: e.target, show: !this.state.show});
-
     },
 
-
-    /**
-     * Changes of the state of the facet popover to hidden
-     *
-     */
-    hideMenu() {
-        this.refs.facetOverlayTrigger.hide();
-        this.setState({show: false});
-    },
 
     /**
      * Changes the state of a facet field group to collapsed if parameter makeCollapsed is true or expanded if not
@@ -158,10 +148,9 @@ var FacetsMenu = React.createClass({
         return (
             <div className="facetsMenuContainer">
                 {/* list of facet options shown when filter icon clicked */}
-                <OverlayTrigger container={this} trigger="click" placement="bottom" ref="facetOverlayTrigger"
+                <OverlayTrigger container={this} trigger="click" placement="bottom" ref="facetOverlayTrigger" rootClose={true}
                                 overlay={
                                     <FacetsList
-                                        onClickOutside={this.hideMenu}
                                         handleToggleCollapse={this.handleToggleCollapse}
                                         isCollapsed={this.isCollapsed}
                                         menuButton={this.refs.facetsMenuButton}
