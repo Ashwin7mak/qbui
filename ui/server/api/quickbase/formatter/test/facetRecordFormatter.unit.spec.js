@@ -35,7 +35,15 @@ describe('Facet formatter unit test', function() {
             },
             type                : 'SCALAR'
         };
-        var fields = [textField, checkboxField];
+        var anotherTextField = {
+            id                  : 9,
+            name                : 'text',
+            datatypeAttributes: {
+                type: 'TEXT'
+            },
+            type                : 'SCALAR'
+        };
+        var fields = [textField, checkboxField, anotherTextField];
 
         var textFacetValues = [generateRandomString(3), generateRandomString(3)];
         var textFacetRecords = [];
@@ -58,6 +66,12 @@ describe('Facet formatter unit test', function() {
             expectedBlankFacets.values.push(formattedRecords[0][0].display);
         });
 
+        var expectedTooManyFacets = {id: 9, name:'text', type:'TEXT', values:[], hasBlanks: false, errorMessage: "businessobject.error.report.facet.tooBig"};
+        var tooManyValuesRecord = [[{id:9, value:{
+            code: 100024,
+            message: "businessobject.error.report.facet.tooBig"
+        }}]];
+
         var cases = [
             {message:"null records and fields", facetRecords:null, fields: null, expectedFacets: []},
             {message:"null records", facetRecords:null, fields: fields, expectedFacets: []},
@@ -66,7 +80,9 @@ describe('Facet formatter unit test', function() {
             {message:"empty records", facetRecords:[], fields: fields, expectedFacets: []},
             {message:"empty fields", facetRecords:[textFacetRecords], fields: [], expectedFacets: []},
             {message:"text facet", facetRecords:[textFacetRecords], fields: [textField], expectedFacets: [expectedTextFacets]},
-            {message:"blank field value", facetRecords:[blankFacetRecords], fields: [textField], expectedFacets: [expectedBlankFacets]}
+            {message:"blank field value", facetRecords:[blankFacetRecords], fields: [textField], expectedFacets: [expectedBlankFacets]},
+            {message:"too many distinct values", facetRecords:[tooManyValuesRecord], fields: [anotherTextField], expectedFacets: [expectedTooManyFacets]},
+            {message:"one of the facets with too many distinct values", facetRecords:[textFacetRecords, tooManyValuesRecord], fields: [textField, anotherTextField], expectedFacets: [expectedTextFacets, expectedTooManyFacets]}
         ];
 
         return cases;

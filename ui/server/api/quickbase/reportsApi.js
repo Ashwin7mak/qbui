@@ -75,7 +75,7 @@
                             let facetRecords = [];
                             let facets = [];
                             //jsonBigNum.parse throws exception if the input is empty array
-                            if (Array.isArray(response[1].body) && response[1].body.length > 0) {
+                            if (response[1].body && response[1].body.length > 0) {
                                 facetRecords = jsonBigNum.parse(response[1].body);
                                 // format the facetRecords into Facet objects of type {id, name, type, hasBlanks, [values]} using fields array.
                                 // this also applies display properties to the raw record data.
