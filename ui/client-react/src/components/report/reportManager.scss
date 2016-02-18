@@ -1,3 +1,4 @@
+@import '../../../src/assets/css/qbVariables';
 
 $search-bar-bg: #5f8ba7;
 $report-group-bg: #fff;
@@ -36,8 +37,28 @@ $report-icon-color: #f87878;
             overflow:hidden;
             .qbIcon {
                 flex: 0 0 auto;
-                color: $report-icon-color;
                 width:22px;
+            }
+            .iconssturdy-report-table {
+                color: $report-icon-table-color;
+            }
+            .iconssturdy-report-summary {
+                color: $report-icon-summary-color;
+            }
+            .iconssturdy-report-pie {
+                color: $report-icon-pie-color;
+            }
+            .iconsturdy-report-calendar {
+                color: $report-icon-calendar-color;
+            }
+            .iconssturdy-report-grid-edit {
+                color: $report-icon-grid-edit-color;
+            }
+            .iconssturdy-report-timeline {
+                color: $report-icon-timeline-color;
+            }
+            .iconssturdy-report-map {
+                color: $report-icon-map-color;
             }
             margin-right: 20px;
             margin-bottom: 10px;

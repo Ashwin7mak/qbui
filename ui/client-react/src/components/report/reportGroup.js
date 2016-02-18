@@ -13,12 +13,34 @@ let Report = React.createClass({
         onSelect: React.PropTypes.func,
         report: React.PropTypes.object.isRequired
     },
+
+    getIconForReport(report) {
+
+        switch (report.type) {
+        case "TABLE":
+            return "report-table";
+        case "SUMMARY":
+            return "report-summary";
+        case "CHART":
+            return "report-pie";
+        case "CALENDAR":
+            return "report-calendar";
+        case "GRIDEDIT":
+            return "report-grid-edit";
+        case "TIMELINE":
+            return "report-timeline";
+        case "MAP":
+            return "report-map";
+        default:
+            return "report-table";
+        }
+    },
     render() {
         return (<div key={this.props.report.id}
                       className="reportLink"
                       to={this.props.report.link}
                       onClick={() => {this.props.onSelect(this.props.report);}}>
-                    <QBicon icon="report-table"/>{this.props.report.name}
+                    <QBicon icon={this.getIconForReport(this.props.report)}/>{this.props.report.name}
                 </div>);
     }
 });

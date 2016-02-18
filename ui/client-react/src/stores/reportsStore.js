@@ -38,7 +38,7 @@ let ReportsStore = Fluxxor.createStore({
         this.tableId = reports.tblId;
         this.reports = [];
         reports.data.forEach((rpt) => {
-            this.reports.push({id: rpt.id, name: rpt.name, link: this.buildLink(reports.appId, reports.tblId, rpt.id)});
+            this.reports.push({id: rpt.id, name: rpt.name, type:rpt.type, link: this.buildLink(reports.appId, reports.tblId, rpt.id)});
         });
 
         this.emit('change');
