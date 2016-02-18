@@ -1,4 +1,4 @@
-(function () {
+(function() {
     'use strict';
     var assert = require('assert');
     require('../../app');
@@ -9,7 +9,7 @@
     var testConsts = require('./api.test.constants');
 
 
-    describe('API - Validate report execution', function () {
+    describe('API - Validate report execution', function() {
         var app;
         var testRecord = '[{"id": 6 , "value": "abcdef"},{"id": 7 , "value": "2016-04-12"},{"id": 8,"value": "2016-04-12T05:51:19Z"},{"id": 9 , "value": "first_name_last_name@quickbase.com"},{"id": 10 , "value": true},{"id": 11 , "value": "null"},{"id": 12 , "value": ""}]';
         var expectedRecords = [
@@ -52,7 +52,7 @@
                     {name: 'Checkbox Field', datatypeAttributes: {type: 'CHECKBOX'}, type: 'SCALAR'},
                     {name: 'Null Field', datatypeAttributes: {type: 'TEXT'}, type: 'SCALAR'},
                     {name: 'Empty Field', datatypeAttributes: {type: 'TEXT'}, type: 'SCALAR'},
-                ]
+                    ]
                 }
             ]
 
@@ -61,10 +61,10 @@
         /**
          * Setup method. Generates JSON for an app, a table with different fields, and a single record with different field types.
          */
-        before(function (done) {
+        before(function(done) {
             //var record = '[{"id": 6 , "value": "abcdef"},{"id": 7 , "value": 0.74765432}]';
             this.timeout(testConsts.INTEGRATION_TIMEOUT * appWithNoFlags.length);
-            recordBase.createApp(appWithNoFlags).then(function (appResponse) {
+            recordBase.createApp(appWithNoFlags).then(function(appResponse) {
                 app = JSON.parse(appResponse.body);
                 console.log("app response is: " + JSON.stringify(app));
 
@@ -72,14 +72,13 @@
                 // testCases.forEach(function (test) {
 
                 var recordsEndpoint = recordBase.apiBase.resolveRecordsEndpoint(app.id, app.tables[0].id);
-                recordBase.createAndFetchRecord(recordsEndpoint, JSON.parse(testRecord), '?format=' + format).then(function (record) {
+                recordBase.createAndFetchRecord(recordsEndpoint, JSON.parse(testRecord), '?format=' + format).then(function(record) {
                     console.log("record response is: " + JSON.stringify(record));
                     done();
                 });
             });
 
             return app;
-            done();
         });
 
 
@@ -87,7 +86,7 @@
          * Test to create a report with all fields and verify the results.
          */
         it('Should create a report, execute the report, and validate the resulting ' +
-            'record matches the created record in setup', function (done) {
+            'record matches the created record in setup', function(done) {
             this.timeout(testConsts.INTEGRATION_TIMEOUT * appWithNoFlags.length);
             var reportEndpoint = recordBase.apiBase.resolveReportsEndpoint(app.id, app.tables[0].id);
             var reportToCreate = {
@@ -96,11 +95,11 @@
                 tableId: app.tables[0].id
             };
             //Create a report
-            recordBase.apiBase.executeRequest(reportEndpoint, consts.POST, reportToCreate).then(function (report) {
+            recordBase.apiBase.executeRequest(reportEndpoint, consts.POST, reportToCreate).then(function(report) {
                 var r = JSON.parse(report.body);
                 console.log("report response is: " + JSON.stringify(r));
                 //Execute a report
-                recordBase.apiBase.executeRequest(reportEndpoint + r.id + '/results?format=' + format, consts.GET).then(function (reportResults) {
+                recordBase.apiBase.executeRequest(reportEndpoint + r.id + '/results?format=' + format, consts.GET).then(function(reportResults) {
                     var results = JSON.parse(reportResults.body);
                     console.log("report results is: " + JSON.stringify(results));
                     //For each report record results push to an array.
@@ -116,7 +115,7 @@
                     done();
 
                 });
-            }).catch(function (error) {
+            }).catch(function(error) {
                 log.error(JSON.stringify(error));
                 done();
             });
@@ -162,14 +161,14 @@
                 },
 
                 //TODO Negative testcase for numeric not supporting facets should be added after implementation.
-            ]
+            ];
 
 
-        };
+        }
 
 
-        facetTestCases().forEach(function (testcase) {
-            it('Test case: ' + testcase.message, function (done) {
+        facetTestCases().forEach(function(testcase) {
+            it('Test case: ' + testcase.message, function(done) {
                 this.timeout(testConsts.INTEGRATION_TIMEOUT);
                 var reportEndpoint = recordBase.apiBase.resolveReportsEndpoint(app.id, app.tables[0].id);
                 console.log("*********");
@@ -182,12 +181,12 @@
                     facetFids: testcase.facetFId
                 };
                 //Create a report
-                recordBase.apiBase.executeRequest(reportEndpoint, consts.POST, reportToCreate).then(function (report) {
+                recordBase.apiBase.executeRequest(reportEndpoint, consts.POST, reportToCreate).then(function(report) {
                     var r = JSON.parse(report.body);
                     console.log("report response is: " + JSON.stringify(r));
                     //Execute report against 'resultsAndFacets' endpoint.
-                    recordBase.apiBase.executeRequest(reportEndpoint + r.id + '/resultsAndFacets?format=' + format, consts.GET).then(function (reportResults) {
-                        var results = JSON.parse(reportResults.body)
+                    recordBase.apiBase.executeRequest(reportEndpoint + r.id + '/resultsAndFacets?format=' + format, consts.GET).then(function(reportResults) {
+                        var results = JSON.parse(reportResults.body);
                         console.log("The results are: " + JSON.stringify(results));
                         //Verify records
                         //For each report record results push to an array.
@@ -220,10 +219,10 @@
         //TODO Negative testcase for 200k limit should be added. Implementation not yet available.
 
         // Cleanup the test realm after all tests in the block
-        after(function (done) {
+        after(function(done) {
             //Realm deletion takes time, bump the timeout
             this.timeout(testConsts.INTEGRATION_TIMEOUT);
-            recordBase.apiBase.cleanup().then(function () {
+            recordBase.apiBase.cleanup().then(function() {
                 done();
             });
         });
