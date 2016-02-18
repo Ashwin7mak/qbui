@@ -14,12 +14,11 @@ let Report = React.createClass({
         report: React.PropTypes.object.isRequired
     },
     render() {
-
         return (<div key={this.props.report.id}
                       className="reportLink"
                       to={this.props.report.link}
                       onClick={() => {this.props.onSelect(this.props.report);}}>
-                    <QBicon icon="report-line-bar"/>{this.props.report.name}
+                    <QBicon icon="report-table"/>{this.props.report.name}
                 </div>);
     }
 });
