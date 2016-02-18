@@ -18,14 +18,16 @@ let Report = React.createClass({
 
         switch (report.type) {
         case "TABLE":
+        case "PIVOT":
             return "report-table";
         case "SUMMARY":
+        case "NEWSUMMARY":
             return "report-summary";
         case "CHART":
             return "report-pie";
         case "CALENDAR":
             return "report-calendar";
-        case "GRIDEDIT":
+        case "GEDIT":
             return "report-grid-edit";
         case "TIMELINE":
             return "report-timeline";
