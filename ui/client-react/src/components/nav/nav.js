@@ -67,7 +67,7 @@ var Nav = React.createClass({
             let table = tables.find((t) => t.id === this.state.reportsData.tableId);
 
             return (
-                <div><QBicon icon="report-table"/>{table ? table.name : ""} > <I18nMessage message={'nav.reportsHeading'}/></div>);
+                <h3><QBicon icon="report-table"/>{table ? table.name : ""} > <I18nMessage message={'nav.reportsHeading'}/></h3>);
         }
         return null;
     },
