@@ -102,10 +102,8 @@
                         facet.values = [];
                         facet.hasBlanks = false;
                         //check  if thee is a single record returned for this facet field. If so this might point to an errorMessage
-                        if (facetRecords.length === 1) {
-                            if (facetRecords[0][0].value && facetRecords[0][0].value.code) {
-                                facet.errorMessage = facetRecords[0][0].value.message;
-                            }
+                        if (facetRecords.length === 1 && facetRecords[0][0].value && facetRecords[0][0].value.code) {
+                            facet.errorMessage = facetRecords[0][0].value.message;
                         } else {
                             //display format the records
                             let formattedFacetRecords = recordFormatter.formatRecords(facetRecords, fields);
