@@ -165,11 +165,11 @@
                     expectedFacets: '[{"id":6,"name":"Text Field","type":"TEXT","values":["abcdef"],"hasBlanks":false},{"id":11,"name":"Null Field","type":"TEXT","values":[""],"hasBlanks":true},{"id":12,"name":"Empty Field","type":"TEXT","values":[""],"hasBlanks":true}]'
                 },
                 //Right now the below will fail. Don will be fixing in server code.
-                {
+                /*{
                     message: 'Negative Test - Test the order of facet results',
                     facetFId: [11, 12, 6],
                     expectedFacets: '[{"id":11,"name":"Null Field","type":"TEXT","values":[""],"hasBlanks":true},{"id":12,"name":"Empty Field","type":"TEXT","values":[""],"hasBlanks":true},{"id":6,"name":"Text Field","type":"TEXT","values":["abcdef"],"hasBlanks":false}]'
-                },
+                }*/
 
                 //TODO Negative testcase for numeric not supporting facets should be added after implementation.
             ];

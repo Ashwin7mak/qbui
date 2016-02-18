@@ -148,7 +148,7 @@
                 log.info({req: req});
                 return new Promise(function(resolve, reject) {
                     if (immediatelyResolve) {
-                        resolve(null);
+                        resolve();
                     } else {
                         request(opts, function(error, response) {
                             if (error) {
