@@ -195,8 +195,8 @@
                 recordBase.apiBase.executeRequest(reportEndpoint, consts.POST, reportToCreate).then(function(report) {
                     var r = JSON.parse(report.body);
                     console.log("report response is: " + JSON.stringify(r));
-                    //Execute report against 'resultsAndFacets' endpoint.
-                    recordBase.apiBase.executeRequest(reportEndpoint + r.id + '/resultsAndFacets?format=' + format, consts.GET).then(function(reportResults) {
+                    //Execute report against 'resultComponents' endpoint.
+                    recordBase.apiBase.executeRequest(reportEndpoint + r.id + '/reportComponents?format=' + format, consts.GET).then(function(reportResults) {
                         var results = JSON.parse(reportResults.body);
                         console.log("The results are: " + JSON.stringify(results));
                         //Verify records
@@ -216,7 +216,7 @@
                         assert.deepEqual(JSON.stringify(results.facets), testcase.expectedFacets, 'Unexpected facet result returned: ' + JSON.stringify(results.facets) + ', ' + testcase.expectedFacets);
 
                         //Delete the report at the end
-                        recordBase.apiBase.executeRequest(reportEndpoint + r.id, consts.DELETE).then(function (deleteTestReport) {
+                        recordBase.apiBase.executeRequest(reportEndpoint + r.id, consts.DELETE).then(function(deleteTestReport) {
                             console.log("delete report response is: " + JSON.stringify(deleteTestReport));
                             done();
                         });

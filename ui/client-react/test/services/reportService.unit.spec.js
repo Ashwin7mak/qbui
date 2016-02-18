@@ -108,7 +108,7 @@ describe('ReportService functions', () => {
         var appId = 1;
         var tblId = 2;
         var rptId = 3;
-        var url = reportService.constructUrl(reportService.API.GET_REPORT_AND_FACETS, [appId, tblId, rptId]);
+        var url = reportService.constructUrl(reportService.API.GET_REPORT_COMPONENTS, [appId, tblId, rptId]);
 
         var formatted = true;
         var offset = 0;
@@ -123,7 +123,7 @@ describe('ReportService functions', () => {
         var appId = 1;
         var tblId = 2;
         var rptId = 3;
-        var url = reportService.constructUrl(reportService.API.GET_REPORT_AND_FACETS, [appId, tblId, rptId]);
+        var url = reportService.constructUrl(reportService.API.GET_REPORT_COMPONENTS, [appId, tblId, rptId]);
 
         var formatted = false;
         var offset = 0;
@@ -138,7 +138,7 @@ describe('ReportService functions', () => {
         var appId = 1;
         var tblId = 2;
         var rptId = 3;
-        var url = reportService.constructUrl(reportService.API.GET_REPORT_AND_FACETS, [appId, tblId, rptId]);
+        var url = reportService.constructUrl(reportService.API.GET_REPORT_COMPONENTS, [appId, tblId, rptId]);
 
         var formatted = true;
         var offset = [];
@@ -153,7 +153,7 @@ describe('ReportService functions', () => {
         var appId = 1;
         var tblId = 2;
         var rptId = 3;
-        var url = reportService.constructUrl(reportService.API.GET_REPORT_AND_FACETS, [appId, tblId, rptId]);
+        var url = reportService.constructUrl(reportService.API.GET_REPORT_COMPONENTS, [appId, tblId, rptId]);
 
         var formatted = true;
         var offset = 0;
@@ -167,7 +167,7 @@ describe('ReportService functions', () => {
         var appId = 1;
         var tblId = 2;
         var rptId = 3;
-        var url = reportService.constructUrl(reportService.API.GET_REPORT_AND_FACETS, [appId, tblId, rptId]);
+        var url = reportService.constructUrl(reportService.API.GET_REPORT_COMPONENTS, [appId, tblId, rptId]);
 
         reportService.getReportDataAndFacets(appId, tblId, rptId);
 

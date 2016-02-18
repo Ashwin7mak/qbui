@@ -11,7 +11,7 @@ class ReportService extends BaseService {
         this.API = {
             GET_REPORT              : `${constants.BASE_URL.QUICKBASE}/${constants.APPS}/{0}/${constants.TABLES}/{1}/${constants.REPORTS}/{2}`,
             GET_REPORTS             : `${constants.BASE_URL.QUICKBASE}/${constants.APPS}/{0}/${constants.TABLES}/{1}/${constants.REPORTS}`,
-            GET_REPORT_AND_FACETS   : `${constants.BASE_URL.QUICKBASE}/${constants.APPS}/{0}/${constants.TABLES}/{1}/${constants.REPORTS}/{2}/${constants.RESULTSANDFACETS}`,
+            GET_REPORT_COMPONENTS   : `${constants.BASE_URL.QUICKBASE}/${constants.APPS}/{0}/${constants.TABLES}/{1}/${constants.REPORTS}/{2}/${constants.REPORTCOMPONENTS}`,
             GET_REPORT_RESULTS      : `${constants.BASE_URL.QUICKBASE}/${constants.APPS}/{0}/${constants.TABLES}/{1}/${constants.REPORTS}/{2}/${constants.RESULTS}`,
             PARSE_FACET_EXPR        : `${constants.BASE_URL.NODE}/${constants.FACETS}/${constants.PARSE}`
         };
@@ -64,7 +64,7 @@ class ReportService extends BaseService {
             params.numRows = rows;
         }
 
-        let url = super.constructUrl(this.API.GET_REPORT_AND_FACETS, [appId, tableId, reportId]);
+        let url = super.constructUrl(this.API.GET_REPORT_COMPONENTS, [appId, tableId, reportId]);
         return super.get(url, {params:params});
     }
 

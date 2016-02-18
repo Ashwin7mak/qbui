@@ -54,7 +54,7 @@ describe('Validate ReportsApi unit tests', function() {
             done();
         });
         it('Test facets url ', function(done) {
-            req.url = "/reports/2/resultsAndFacets";
+            req.url = "/reports/2/reportComponents";
             var requestStub = sinon.stub();
             requestHelper.setRequestObject(requestStub);
             requestStub.yields(null, {statusCode: 200}, {'body': 'body'});
@@ -132,9 +132,9 @@ describe('Validate ReportsApi unit tests', function() {
     });
 
     /**
-     * Unit test fetchReportResultsAndFacets api
+     * Unit test fetchReportComponents api
      */
-    describe('validate fetchReportResultsAndFacets api', function() {
+    describe('validate fetchReportComponents api', function() {
         var req = {
             headers: {
                 'tid': 'tid'
@@ -171,7 +171,7 @@ describe('Validate ReportsApi unit tests', function() {
             var getFacetsStub = sinon.stub(reportsApi, "fetchFacetResults");
             getReportResults.returns(fetchReportResultsPromise);
             getFacetsStub.returns(fetchFacetsPromise);
-            var promise = reportsApi.fetchReportResultsAndFacets(req);
+            var promise = reportsApi.fetchReportComponents(req);
             promise.then(
                 function(response) {
                     assert.deepEqual(response, expectedResponse);
@@ -184,7 +184,7 @@ describe('Validate ReportsApi unit tests', function() {
             var getFacetsStub = sinon.stub(reportsApi, "fetchFacetResults");
             getReportResults.returns(new Error("error"));
             getFacetsStub.returns(fetchFacetsPromise);
-            var promise = reportsApi.fetchReportResultsAndFacets(req);
+            var promise = reportsApi.fetchReportComponents(req);
             promise.then(
                 function(response) {
                 },
@@ -199,7 +199,7 @@ describe('Validate ReportsApi unit tests', function() {
             var getFacetsStub = sinon.stub(reportsApi, "fetchFacetResults");
             getReportResults.returns(fetchReportResultsPromise);
             getFacetsStub.returns(new Error("error"));
-            var promise = reportsApi.fetchReportResultsAndFacets(req);
+            var promise = reportsApi.fetchReportComponents(req);
             promise.then(
                 function(response) {
                     assert.deepEqual(response, expectedResponse);

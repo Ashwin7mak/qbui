@@ -23,7 +23,7 @@
         let RECORDS = 'records';
         let REPORTS = 'reports';
         let RESULTS = 'results';
-        let RESULTSANDFACETS = 'resultsandfacets';
+        let REPORTCOMPONENTS = 'reportcomponents';
         let request = defaultRequest;
 
         //TODO: only application/json is supported for content type.  Need a plan to support XML
@@ -48,10 +48,10 @@
                 let opts = requestHelper.setOptions(req);
                 opts.headers[CONTENT_TYPE] = APPLICATION_JSON;
                 let inputUrl = opts.url.toLowerCase();
-                //the request came in for report/{reportId}/resultsAndFacets.
+                //the request came in for report/{reportId}/reportComponents.
                 // Convert that to report/{reportId}/facets/results to get facets data
-                if (inputUrl.indexOf(RESULTSANDFACETS) !== -1) {
-                    opts.url = inputUrl.substring(0, inputUrl.indexOf(RESULTSANDFACETS)) + FACETS + "/" + RESULTS;
+                if (inputUrl.indexOf(REPORTCOMPONENTS) !== -1) {
+                    opts.url = inputUrl.substring(0, inputUrl.indexOf(REPORTCOMPONENTS)) + FACETS + "/" + RESULTS;
                 }
 
                 return requestHelper.executeRequest(req, opts);
@@ -64,7 +64,7 @@
             },
             //Returns a promise that is resolved with the records, fields meta data and facets
             //or is rejected with a descriptive error code
-            fetchReportResultsAndFacets: function(req) {
+            fetchReportComponents: function(req) {
                 var self = this;
                 return new Promise(function(resolve, reject) {
                     self.fetchReportResults(req).then(
@@ -93,19 +93,19 @@
                                 // In future might want to tell client that fetching facets failed so it can display an error message.
                                 (error) => {
                                     resolve(responseObject);
-                                    log.error("Error getting facets in fetchReportResultsAndFacets: " + JSON.stringify(error));
+                                    log.error("Error getting facets in fetchReportComponents: " + JSON.stringify(error));
                                 }
                             ).catch((ex) => {
                                 resolve(responseObject);
-                                log.error("Caught unexpected error getting facets in fetchReportResultsAndFacets: " + JSON.stringify(ex));
+                                log.error("Caught unexpected error getting facets in fetchReportComponents: " + JSON.stringify(ex));
                             });
                         },
                         (error) => {
-                            log.error("Error getting report results in fetchReportResultsAndFacets: " + JSON.stringify(error));
+                            log.error("Error getting report results in fetchReportComponents: " + JSON.stringify(error));
                             reject(error);
                         }
                     ).catch((ex) => {
-                        log.error("Caught unexpected error getting report results in fetchReportResultsAndFacets: " + JSON.stringify(ex));
+                        log.error("Caught unexpected error getting report results in fetchReportComponents: " + JSON.stringify(ex));
                         reject(ex);
                     });
                 });

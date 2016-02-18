@@ -29,7 +29,7 @@
         routeToGetFunction[routeConsts.FACET_EXPRESSION_PARSE] = resolveFacets;
         routeToGetFunction[routeConsts.RECORD] = fetchSingleRecord;
         routeToGetFunction[routeConsts.RECORDS] = fetchAllRecords;
-        routeToGetFunction[routeConsts.REPORT_AND_FACETS] = fetchReportAndFacets;
+        routeToGetFunction[routeConsts.REPORT_COMPONENTS] = fetchReportComponents;
         routeToGetFunction[routeConsts.REPORT_RESULTS] = fetchReportData;
 
         routeToGetFunction[routeConsts.SWAGGER_API] = fetchSwagger;
@@ -214,15 +214,15 @@
      * @param res
      */
     /*eslint no-shadow:0 */
-    function fetchReportAndFacets(req, res) {
+    function fetchReportComponents(req, res) {
         processRequest(req, res, function(req, res) {
-            reportsApi.fetchReportResultsAndFacets(req).then(
+            reportsApi.fetchReportComponents(req).then(
                 function(response) {
-                    log.debug({req:req, res:response}, 'fetchReportAndFacets API SUCCESS');
+                    log.debug({req:req, res:response}, 'fetchReportComponents API SUCCESS');
                     res.send(response);
                 },
                 function(response) {
-                    log.error({req:req, res:response}, 'fetchReportAndFacets API ERROR');
+                    log.error({req:req, res:response}, 'fetchReportComponents API ERROR');
                     res.status(response.statusCode).send(response);
                 });
         });

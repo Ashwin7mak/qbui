@@ -66,11 +66,11 @@
         var FIELDS = 'fields';
         var FORMAT = 'format';
         var RAW = 'raw';
+        var RECORD = 'record';
         var RECORDS = 'records';
         var REPORTS = 'reports';
-        var RECORD = 'record';
+        var REPORTCOMPONENTS = 'reportcomponents';
         var RESULTS = 'results';
-        var RESULTSANDFACETS = 'resultsandfacets';
         var request = defaultRequest;
 
 
@@ -190,8 +190,8 @@
                 let inputUrl = opts.url.toLowerCase();
                 //the request came in for report/{reportId}/results.
                 // Convert that to report/{reportId}/facets/results to get facets data
-                if (inputUrl.indexOf(RESULTSANDFACETS) !== -1) {
-                    opts.url = inputUrl.substring(0, inputUrl.indexOf(RESULTSANDFACETS)) + RESULTS;
+                if (inputUrl.indexOf(REPORTCOMPONENTS) !== -1) {
+                    opts.url = inputUrl.substring(0, inputUrl.indexOf(REPORTCOMPONENTS)) + RESULTS;
                 }
 
                 return requestHelper.executeRequest(req, opts);
