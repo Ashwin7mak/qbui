@@ -11,8 +11,6 @@ $trowser-footer-bg: #193048;
     color: $trowser-fg;
     max-height:0%;
     overflow:hidden;
-    -webkit-transition: max-height ease 250ms;
-    transition: max-height ease 250ms;
     padding:0;
 
     .rightIcons {

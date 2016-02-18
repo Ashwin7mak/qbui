@@ -32,7 +32,6 @@ $report-icon-color: #f87878;
         .reportLink {
             display:flex;
             align-items:baseline;
-            min-width:100px;
             text-overflow:ellipsis;
             overflow:hidden;
             .qbIcon {
@@ -42,7 +41,7 @@ $report-icon-color: #f87878;
             }
             margin-right: 20px;
             margin-bottom: 10px;
-            flex:0 0 100px;
+            flex:0 0 200px;
             cursor:pointer;
         }
     }
