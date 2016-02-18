@@ -204,11 +204,11 @@
                         //Assert if report facet results matches expected
                         assert.deepEqual(JSON.stringify(results.facets), testcase.expectedFacets, 'Unexpected facet result returned: ' + JSON.stringify(results.facets) + ', ' + testcase.expectedFacets);
 
-                        ////Delete the report at the end
-                        //recordBase.apiBase.executeRequest(reportEndpoint + r.id, consts.DELETE).then(function (deleteTestReport) {
-                        //    console.log("delete report response is: " + JSON.stringify(deleteTestReport));
-                        //    done();
-                        //});
+                        //Delete the report at the end
+                        recordBase.apiBase.executeRequest(reportEndpoint + r.id, consts.DELETE).then(function (deleteTestReport) {
+                            console.log("delete report response is: " + JSON.stringify(deleteTestReport));
+                            done();
+                        });
                     });
 
                 });
