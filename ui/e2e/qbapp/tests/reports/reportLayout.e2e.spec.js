@@ -15,7 +15,7 @@
     var ReportServicePage = requirePO('reportService');
     var RequestAppsPage = requirePO('requestApps');
     var RequestSessionTicketPage = requirePO('requestSessionTicket');
-    var ReportServicePage = new ReportServicePage();
+    var reportServicePage = new ReportServicePage();
 
     describe('Report Page Layout Tests', function() {
         var realmName;
@@ -47,25 +47,25 @@
                 realmName = e2eBase.recordBase.apiBase.realm.subdomain;
                 realmId = e2eBase.recordBase.apiBase.realm.id;
                 return RequestSessionTicketPage.get(e2eBase.getSessionTicketRequestEndpoint(realmName, realmId, e2eBase.ticketEndpoint));
-            }).then(function () {
+            }).then(function() {
                 // Load the requestAppsPage (shows a list of all the apps and tables in a realm)
                 return RequestAppsPage.get(e2eBase.getRequestAppsPageEndpoint(realmName));
-            }).then(function () {
+            }).then(function() {
                 // Wait for the leftNav to load
-                return ReportServicePage.waitForElement(ReportServicePage.appsListDivEl).then(function() {
+                return reportServicePage.waitForElement(reportServicePage.appsListDivEl).then(function() {
                     // Select the app
-                    return ReportServicePage.appLinksElList.get(0).click();
+                    return reportServicePage.appLinksElList.get(0).click();
                 });
-            }).then(function () {
-                return ReportServicePage.waitForElement(ReportServicePage.tablesListDivEl).then(function () {
+            }).then(function() {
+                return reportServicePage.waitForElement(reportServicePage.tablesListDivEl).then(function() {
                     // Select the table
-                    return ReportServicePage.tableLinksElList.get(3).click();
+                    return reportServicePage.tableLinksElList.get(3).click();
                 });
-            }).then(function () {
+            }).then(function() {
                 // Open the reports list
-                ReportServicePage.reportHamburgersElList.get(0).click();
+                reportServicePage.reportHamburgersElList.get(0).click();
                 // Select the report
-                ReportServicePage.reportLinksElList.get(0).click();
+                reportServicePage.reportLinksElList.get(0).click();
                 // Done callback to let Jasmine know we are done with our promise chain
                 done();
             }).catch(function(error) {
@@ -79,7 +79,7 @@
          * Before each test starts just make sure the report content has loaded
          */
         beforeEach(function(done) {
-            ReportServicePage.waitForElement(ReportServicePage.loadedContentEl).then(function() {
+            reportServicePage.waitForElement(reportServicePage.loadedContentEl).then(function() {
                 done();
             });
         });
@@ -122,7 +122,7 @@
         NavDimensionsDataProvider().forEach(function(testcase) {
             it(testcase.breakpointSize + ': verify topNav is on top of report stage', function() {
                 e2eBase.resizeBrowser(testcase.browserWidth, e2eConsts.DEFAULT_HEIGHT).then(function() {
-                    ReportServicePage.isElementOnTop(ReportServicePage.topNavDivEl, ReportServicePage.reportStageContentEl);
+                    reportServicePage.isElementOnTop(reportServicePage.topNavDivEl, reportServicePage.reportStageContentEl);
                 });
             });
         });
@@ -133,7 +133,7 @@
         NavDimensionsDataProvider().forEach(function(testcase) {
             it(testcase.breakpointSize + ': verify table actions Layout container is on top of report griddle container', function() {
                 e2eBase.resizeBrowser(testcase.browserWidth, e2eConsts.DEFAULT_HEIGHT).then(function() {
-                    ReportServicePage.isElementOnTop(ReportServicePage.tableActionsContainerEl, ReportServicePage.griddleContainerEl);
+                    reportServicePage.isElementOnTop(reportServicePage.tableActionsContainerEl, reportServicePage.griddleContainerEl);
                 });
             });
         });
@@ -144,7 +144,7 @@
         NavDimensionsDataProvider().forEach(function(testcase) {
             it(testcase.breakpointSize + ': verify report Stage Layout container is on top of table actions container', function() {
                 e2eBase.resizeBrowser(testcase.browserWidth, e2eConsts.DEFAULT_HEIGHT).then(function() {
-                    ReportServicePage.isElementOnTop(ReportServicePage.reportStageContentEl, ReportServicePage.tableActionsContainerEl);
+                    reportServicePage.isElementOnTop(reportServicePage.reportStageContentEl, reportServicePage.tableActionsContainerEl);
                 });
             });
         });

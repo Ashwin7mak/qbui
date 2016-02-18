@@ -12,7 +12,7 @@
     var ReportServicePage = requirePO('reportService');
     var RequestAppsPage = requirePO('requestApps');
     var RequestSessionTicketPage = requirePO('requestSessionTicket');
-    var ReportServicePage = new ReportServicePage();
+    var reportServicePage = new ReportServicePage();
 
     describe('Report Service E2E Tests', function() {
         var realmName;
@@ -49,9 +49,9 @@
                 return RequestAppsPage.get(e2eBase.getRequestAppsPageEndpoint(realmName));
             }).then(function() {
                 // Wait for the leftNav to load
-                return ReportServicePage.waitForElement(ReportServicePage.appsListDivEl).then(function() {
+                return reportServicePage.waitForElement(reportServicePage.appsListDivEl).then(function() {
                     // Select the app
-                    return ReportServicePage.appLinksElList.get(0).click().then(function() {
+                    return reportServicePage.appLinksElList.get(0).click().then(function() {
                         e2eBase.sleep(1000).then(function() {
                             //Done callback to let Jasmine know we are done with our promise chain
                             done();
@@ -69,7 +69,7 @@
          * Before each test starts just make sure the report list has loaded
          */
         beforeEach(function(done) {
-            ReportServicePage.waitForElement(ReportServicePage.tablesListDivEl).then(function() {
+            reportServicePage.waitForElement(reportServicePage.tablesListDivEl).then(function() {
                 done();
             });
         });
@@ -80,35 +80,35 @@
          */
         it('Should load the reports page with the appropriate table report and verify the fieldNames and records', function() {
             // Select the table
-            ReportServicePage.tableLinksElList.get(3).click();
+            reportServicePage.tableLinksElList.get(3).click();
             // Open the reports list
-            ReportServicePage.reportHamburgersElList.get(0).click();
+            reportServicePage.reportHamburgersElList.get(0).click();
             // Wait for the report list to load
-            ReportServicePage.waitForElement(ReportServicePage.reportsListDivEl).then(function() {
+            reportServicePage.waitForElement(reportServicePage.reportsListDivEl).then(function() {
                 // Select the report
-                ReportServicePage.reportLinksElList.get(0).click();
+                reportServicePage.reportLinksElList.get(0).click();
             });
             // Assert report name
-            ReportServicePage.reportLinksElList.then(function(links) {
+            reportServicePage.reportLinksElList.then(function(links) {
                 links[0].getText().then(function(text) {
                     expect(text).toEqual('Test Report');
                 });
             });
             // Select the report
-            ReportServicePage.reportLinksElList.then(function(links) {
+            reportServicePage.reportLinksElList.then(function(links) {
                 links[0].click();
             });
             // Wait until the table has loaded
-            ReportServicePage.waitForElement(ReportServicePage.loadedContentEl).then(function() {
+            reportServicePage.waitForElement(reportServicePage.loadedContentEl).then(function() {
                 // Assert column headers
-                ReportServicePage.getReportColumnHeaders(ReportServicePage).then(function(resultArray) {
+                reportServicePage.getReportColumnHeaders(reportServicePage).then(function(resultArray) {
                     // UI is currently using upper case to display the field names in columns
                     expect(resultArray).toEqual(e2eConsts.reportFieldNames);
                 });
                 // Check all record values equal the ones we added via the API
-                ReportServicePage.griddleRecordElList.getText().then(function(uiRecords) {
+                reportServicePage.griddleRecordElList.getText().then(function(uiRecords) {
                     e2eBase.recordService.assertRecordValues(uiRecords, recordList);
-                    ReportServicePage.reportsBackLinkEl.click();
+                    reportServicePage.reportsBackLinkEl.click();
                 });
             });
         });
@@ -119,21 +119,21 @@
          */
         it('Table report should expand width past the browser size to show all available data (large num columns)', function() {
             // Select the table
-            ReportServicePage.tableLinksElList.get(3).click().then(function() {
+            reportServicePage.tableLinksElList.get(3).click().then(function() {
                 // Open the reports list
-                ReportServicePage.reportHamburgersElList.get(0).click();
+                reportServicePage.reportHamburgersElList.get(0).click();
                 // Select the report
-                ReportServicePage.reportLinksElList.get(0).click();
+                reportServicePage.reportLinksElList.get(0).click();
                 // Make sure the table report has loaded
-                ReportServicePage.waitForElement(ReportServicePage.loadedContentEl).then(function() {
+                reportServicePage.waitForElement(reportServicePage.loadedContentEl).then(function() {
                     // Check there is a scrollbar in the griddle table
                     var fetchRecordPromises = [];
-                    fetchRecordPromises.push(ReportServicePage.loadedContentEl.getAttribute('scrollWidth'));
-                    fetchRecordPromises.push(ReportServicePage.loadedContentEl.getAttribute('clientWidth'));
+                    fetchRecordPromises.push(reportServicePage.loadedContentEl.getAttribute('scrollWidth'));
+                    fetchRecordPromises.push(reportServicePage.loadedContentEl.getAttribute('clientWidth'));
                     //When all the dimensions have been fetched, assert the values match expectations
                     Promise.all(fetchRecordPromises).then(function(dimensions) {
                         expect(Number(dimensions[0])).toBeGreaterThan(Number(dimensions[1]));
-                        ReportServicePage.reportsBackLinkEl.click();
+                        reportServicePage.reportsBackLinkEl.click();
                     });
                 });
             });
@@ -145,21 +145,21 @@
          */
         it('Table report should expand width to take up available space (small num of columns)', function() {
             // Select the table
-            ReportServicePage.tableLinksElList.get(4).click().then(function() {
+            reportServicePage.tableLinksElList.get(4).click().then(function() {
                 // Open the reports list
-                ReportServicePage.reportHamburgersElList.get(1).click();
+                reportServicePage.reportHamburgersElList.get(1).click();
                 // Select the report
-                ReportServicePage.reportLinksElList.get(0).click();
+                reportServicePage.reportLinksElList.get(0).click();
                 // Make sure the table report has loaded
-                ReportServicePage.waitForElement(ReportServicePage.loadedContentEl).then(function() {
+                reportServicePage.waitForElement(reportServicePage.loadedContentEl).then(function() {
                     // Check there is no scrollbar in the griddle table
                     var fetchRecordPromises = [];
-                    fetchRecordPromises.push(ReportServicePage.loadedContentEl.getAttribute('scrollWidth'));
-                    fetchRecordPromises.push(ReportServicePage.loadedContentEl.getAttribute('clientWidth'));
+                    fetchRecordPromises.push(reportServicePage.loadedContentEl.getAttribute('scrollWidth'));
+                    fetchRecordPromises.push(reportServicePage.loadedContentEl.getAttribute('clientWidth'));
                     //When all the dimensions have been fetched, assert the values match expectations
                     Promise.all(fetchRecordPromises).then(function(dimensions) {
                         expect(Number(dimensions[0])).not.toBeGreaterThan(Number(dimensions[1]));
-                        ReportServicePage.reportsBackLinkEl.click();
+                        reportServicePage.reportsBackLinkEl.click();
                     });
                 });
             });

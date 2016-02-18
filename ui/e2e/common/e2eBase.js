@@ -90,7 +90,7 @@
                     // Generate the record JSON objects
                     var generatedRecords = e2eBase.recordService.generateRecords(nonBuiltInFields, numberOfRecords);
                     // Via the API create the records, a new report, then run the report.
-                    return e2eBase.recordService.addRecords(createdApp, createdApp.tables[0], generatedRecords)
+                    return e2eBase.recordService.addRecords(createdApp, createdApp.tables[0], generatedRecords);
                 }).then(function() {
                     return e2eBase.reportService.createReport(createdApp.id, createdApp.tables[0].id);
                 }).then(function(reportId) {

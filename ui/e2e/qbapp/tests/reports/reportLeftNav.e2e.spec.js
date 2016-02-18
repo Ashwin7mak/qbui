@@ -13,7 +13,7 @@
     var ReportServicePage = requirePO('reportService');
     var RequestAppsPage = requirePO('requestApps');
     var RequestSessionTicketPage = requirePO('requestSessionTicket');
-    var ReportServicePage = new ReportServicePage();
+    var reportServicePage = new ReportServicePage();
 
     describe('Report Page Layout Tests', function() {
         var realmName;
@@ -50,9 +50,9 @@
                 return RequestAppsPage.get(e2eBase.getRequestAppsPageEndpoint(realmName));
             }).then(function() {
                 // Wait for the leftNav to load
-                return ReportServicePage.waitForElement(ReportServicePage.appsListDivEl).then(function() {
+                return reportServicePage.waitForElement(reportServicePage.appsListDivEl).then(function() {
                     // Select the app
-                    return ReportServicePage.appLinksElList.get(0).click().then(function() {
+                    return reportServicePage.appLinksElList.get(0).click().then(function() {
                         e2eBase.sleep(1000).then(function() {
                             //Done callback to let Jasmine know we are done with our promise chain
                             done();
@@ -70,7 +70,7 @@
          * Before each test starts just make sure the table list div has loaded
          */
         beforeEach(function(done) {
-            ReportServicePage.waitForElement(ReportServicePage.tablesListDivEl).then(function() {
+            reportServicePage.waitForElement(reportServicePage.tablesListDivEl).then(function() {
                 done();
             });
         });
@@ -79,15 +79,15 @@
          * Test method. Tests the app toggle widget.
          */
         it('LeftNav Apps toggle should show / hide App Dashboard Links and Search widget', function() {
-            ReportServicePage.tableLinksElList.then(function(links) {
+            reportServicePage.tableLinksElList.then(function(links) {
                 // Check we have the base links and two table links present
                 expect(links.length).toBe(5);
                 // Check that the app search widget is hidden
-                expect(ReportServicePage.searchAppsDivEl.isPresent()).toBeFalsy();
-                ReportServicePage.clickAppToggle();
+                expect(reportServicePage.searchAppsDivEl.isPresent()).toBeFalsy();
+                reportServicePage.clickAppToggle();
                 // Check that the app search widget is visible
-                expect(ReportServicePage.searchAppsDivEl.isPresent()).toBeTruthy();
-                ReportServicePage.clickAppToggle();
+                expect(reportServicePage.searchAppsDivEl.isPresent()).toBeTruthy();
+                reportServicePage.clickAppToggle();
             });
         });
 
@@ -128,22 +128,22 @@
          */
         it('LeftNav should shrink responsively from xlarge to small breakpoints', function() {
             // Select the table
-            ReportServicePage.tableLinksElList.get(3).click().then(function() {
+            reportServicePage.tableLinksElList.get(3).click().then(function() {
                 // Open the reports list
-                ReportServicePage.reportHamburgersElList.get(0).click();
+                reportServicePage.reportHamburgersElList.get(0).click();
                 // Select the report
-                ReportServicePage.reportLinksElList.get(0).click();
+                reportServicePage.reportLinksElList.get(0).click();
                 // Make sure the table report has loaded
-                ReportServicePage.waitForElement(ReportServicePage.loadedContentEl).then(function() {
+                reportServicePage.waitForElement(reportServicePage.loadedContentEl).then(function() {
                     NavDimensionsDataProvider().forEach(function(testcase) {
                         // Resize browser at different widths to check responsiveness
                         e2eBase.resizeBrowser(testcase.browserWidth, e2eConsts.DEFAULT_HEIGHT).then(function() {
-                            ReportServicePage.assertNavProperties(testcase.breakpointSize, testcase.open, testcase.clientWidth);
+                            reportServicePage.assertNavProperties(testcase.breakpointSize, testcase.open, testcase.clientWidth);
                         });
                     });
                     // Reset back to xlarge
                     e2eBase.resizeBrowser(e2eConsts.XLARGE_BP_WIDTH, e2eConsts.DEFAULT_HEIGHT);
-                    ReportServicePage.reportsBackLinkEl.click();
+                    reportServicePage.reportsBackLinkEl.click();
                 });
             });
         });
@@ -153,19 +153,19 @@
          */
         it('LeftNav should expand responsively from small to xlarge breakpoints', function() {
             // Select the table
-            ReportServicePage.tableLinksElList.get(3).click().then(function() {
+            reportServicePage.tableLinksElList.get(3).click().then(function() {
                 // Open the reports list
-                ReportServicePage.reportHamburgersElList.get(0).click();
+                reportServicePage.reportHamburgersElList.get(0).click();
                 // Select the report
-                ReportServicePage.reportLinksElList.get(0).click();
+                reportServicePage.reportLinksElList.get(0).click();
                 // Make sure the table report has loaded
-                ReportServicePage.waitForElement(ReportServicePage.loadedContentEl).then(function() {
+                reportServicePage.waitForElement(reportServicePage.loadedContentEl).then(function() {
                     // Reverse the dataprovider to execute from small to xlarge
                     var reverseArray = NavDimensionsDataProvider().reverse();
                     reverseArray.forEach(function(testcase) {
                         // Resize browser at different widths to check responsiveness
                         e2eBase.resizeBrowser(testcase.browserWidth, e2eConsts.DEFAULT_HEIGHT).then(function() {
-                            ReportServicePage.assertNavProperties(testcase.breakpointSize, testcase.open, testcase.clientWidth);
+                            reportServicePage.assertNavProperties(testcase.breakpointSize, testcase.open, testcase.clientWidth);
                         });
                     });
                 });
@@ -179,13 +179,13 @@
             NavDimensionsDataProvider().forEach(function(testcase) {
                 // Resize browser at different widths
                 e2eBase.resizeBrowser(testcase.browserWidth, e2eConsts.DEFAULT_HEIGHT).then(function(tableLinksElList) {
-                    (ReportServicePage.tableLinksElList).then(function(links) {
+                    (reportServicePage.tableLinksElList).then(function(links) {
                         // Check we have the 3 base links and two table links present on left Nav
                         expect(links.length).toBe(5);
                         for (var i = 0; i < links.length; i++) {
                             expect(links[i].isDisplayed()).toBe(true);
                             // Verify elements present on leftNav with right dimensions
-                            ReportServicePage.isElementInLeftNav(links[i], testcase.clientWidth);
+                            reportServicePage.isElementInLeftNav(links[i], testcase.clientWidth);
                         }
                     });
                 });

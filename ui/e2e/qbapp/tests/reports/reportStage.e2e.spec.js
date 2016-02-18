@@ -13,7 +13,7 @@
     var ReportServicePage = requirePO('reportService');
     var RequestAppsPage = requirePO('requestApps');
     var RequestSessionTicketPage = requirePO('requestSessionTicket');
-    var ReportServicePage = new ReportServicePage();
+    var reportServicePage = new ReportServicePage();
 
     describe('Report Page Layout Tests', function() {
         var realmName;
@@ -40,19 +40,19 @@
                 RequestAppsPage.get(e2eBase.getRequestAppsPageEndpoint(realmName));
 
                 // Wait for the leftNav to load
-                ReportServicePage.waitForElement(ReportServicePage.appsListDivEl).then(function() {
+                reportServicePage.waitForElement(reportServicePage.appsListDivEl).then(function() {
                     // Select the app
-                    ReportServicePage.appLinksElList.get(0).click();
+                    reportServicePage.appLinksElList.get(0).click();
                     // Select the table
-                    ReportServicePage.tableLinksElList.get(3).click();
+                    reportServicePage.tableLinksElList.get(3).click();
                     // Open the reports list
-                    ReportServicePage.reportHamburgersElList.get(0).click();
+                    reportServicePage.reportHamburgersElList.get(0).click();
                     // Wait for the report list to load
-                    ReportServicePage.waitForElement(ReportServicePage.reportsListDivEl).then(function() {
+                    reportServicePage.waitForElement(reportServicePage.reportsListDivEl).then(function() {
                         // Select the report
-                        ReportServicePage.reportLinksElList.get(0).click();
+                        reportServicePage.reportLinksElList.get(0).click();
                         // Make sure the table report has loaded
-                        ReportServicePage.waitForElement(ReportServicePage.loadedContentEl).then(function() {
+                        reportServicePage.waitForElement(reportServicePage.loadedContentEl).then(function() {
                             done();
                         });
                     });
@@ -65,30 +65,30 @@
          */
         it('Should expand/collapse the reports stage after clicking on stage button in all breakpoints', function() {
             // Assert report name
-            ReportServicePage.reportLinksElList.then(function(links) {
+            reportServicePage.reportLinksElList.then(function(links) {
                 links[0].getText().then(function(text) {
                     expect(text).toEqual('Test Report');
                 });
             });
             // Select the report
-            ReportServicePage.reportLinksElList.then(function(links) {
+            reportServicePage.reportLinksElList.then(function(links) {
                 links[0].click();
             });
             // Wait until report loaded
-            ReportServicePage.waitForElement(ReportServicePage.loadedContentEl).then(function() {
+            reportServicePage.waitForElement(reportServicePage.loadedContentEl).then(function() {
                 for (var i = 0; i < clientWidths.length; i++) {
                     console.log("The reportStage executing for " + clientWidths[i] + " breakpoint");
                     e2eBase.resizeBrowser(clientWidths[i], e2eConsts.DEFAULT_HEIGHT).then(function() {
                         // Verify that the report Stage is expanded by default
-                        expect(ReportServicePage.reportStageArea.isDisplayed).toBeTruthy();
+                        expect(reportServicePage.reportStageArea.isDisplayed).toBeTruthy();
                         // Click on report Stage button to collapse the stage
-                        ReportServicePage.reportStageBtn.click().then(function() {
+                        reportServicePage.reportStageBtn.click().then(function() {
                             e2eBase.sleep(1000);
-                            expect(ReportServicePage.reportStageArea.getAttribute('clientHeight')).toMatch("0");
-                            expect(ReportServicePage.reportStageArea.getAttribute('clientWidth')).toMatch("0");
-                            ReportServicePage.reportStageBtn.click().then(function() {
+                            expect(reportServicePage.reportStageArea.getAttribute('clientHeight')).toMatch("0");
+                            expect(reportServicePage.reportStageArea.getAttribute('clientWidth')).toMatch("0");
+                            reportServicePage.reportStageBtn.click().then(function() {
                                 e2eBase.sleep(1000);
-                                expect(ReportServicePage.reportStageArea.isDisplayed).toBeTruthy();
+                                expect(reportServicePage.reportStageArea.isDisplayed).toBeTruthy();
                             });
                         });
                     });

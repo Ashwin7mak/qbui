@@ -13,7 +13,7 @@
     var ReportServicePage = requirePO('reportService');
     var RequestAppsPage = requirePO('requestApps');
     var RequestSessionTicketPage = requirePO('requestSessionTicket');
-    var ReportServicePage = new ReportServicePage();
+    var reportServicePage = new ReportServicePage();
 
     describe('Report Page Layout Tests', function() {
         var realmName;
@@ -50,9 +50,9 @@
                 return RequestAppsPage.get(e2eBase.getRequestAppsPageEndpoint(realmName));
             }).then(function() {
                 // Wait for the leftNav to load
-                return ReportServicePage.waitForElement(ReportServicePage.appsListDivEl).then(function() {
+                return reportServicePage.waitForElement(reportServicePage.appsListDivEl).then(function() {
                     // Select the app
-                    return ReportServicePage.appLinksElList.get(0).click().then(function() {
+                    return reportServicePage.appLinksElList.get(0).click().then(function() {
                         e2eBase.sleep(1000).then(function() {
                             //Done callback to let Jasmine know we are done with our promise chain
                             done();
@@ -70,7 +70,7 @@
          * Before each test starts just make sure the table list div has loaded
          */
         beforeEach(function(done) {
-            ReportServicePage.waitForElement(ReportServicePage.tablesListDivEl).then(function() {
+            reportServicePage.waitForElement(reportServicePage.tablesListDivEl).then(function() {
                 done();
             });
         });
@@ -114,46 +114,46 @@
             NavDimensionsDataProvider().forEach(function(testcase) {
                 e2eBase.resizeBrowser(testcase.browserWidth, e2eConsts.DEFAULT_HEIGHT).then(function() {
                     // Verify Icon link display in topNav and  no text associated for that icon.
-                    ReportServicePage.waitForElement(ReportServicePage.topNavLeftDivEl).then(function() {
+                    reportServicePage.waitForElement(reportServicePage.topNavLeftDivEl).then(function() {
                         // Verify icon link is displayed in topNav
-                        ReportServicePage.isElementInTopNav(ReportServicePage.topNavToggleHamburgerEl);
+                        reportServicePage.isElementInTopNav(reportServicePage.topNavToggleHamburgerEl);
                         // Verify no text displayed beside icon link in topNav
-                        expect(ReportServicePage.topNavToggleHamburgerEl.getText()).toBeFalsy();
+                        expect(reportServicePage.topNavToggleHamburgerEl.getText()).toBeFalsy();
                     });
                     // Verify harmony icons display in topNav and no text associated to them.
-                    ReportServicePage.waitForElement(ReportServicePage.topNavCenterDivEl).then(function() {
-                        for (var i = 0; i < ReportServicePage.topNavHarButtonsListEl.length; i++) {
+                    reportServicePage.waitForElement(reportServicePage.topNavCenterDivEl).then(function() {
+                        for (var i = 0; i < reportServicePage.topNavHarButtonsListEl.length; i++) {
                             // Verify Harmony Icons displayed in topNav
-                            ReportServicePage.isElementInTopNav(ReportServicePage.topNavHarButtonsListEl[i]);
+                            reportServicePage.isElementInTopNav(reportServicePage.topNavHarButtonsListEl[i]);
                             // Verify no text displayed beside Harmony Icons in topNav
-                            expect(ReportServicePage.topNavHarButtonsListEl[i].getText()).toBeFalsy();
+                            expect(reportServicePage.topNavHarButtonsListEl[i].getText()).toBeFalsy();
                         }
                     });
                     // Verify right global icons display in topNav and verify text display depending on breakpoint.
-                    ReportServicePage.waitForElement(ReportServicePage.topNavRightDivEl).then(function() {
-                        ReportServicePage.topNavGlobalActionsListEl.then(function(navActions) {
+                    reportServicePage.waitForElement(reportServicePage.topNavRightDivEl).then(function() {
+                        reportServicePage.topNavGlobalActionsListEl.then(function(navActions) {
                             expect(navActions.length).toBe(2);
                             for (var i = 0; i < navActions.length; i++) {
                                 var textEl = navActions[i].all(by.tagName('span')).last();
                                 if (testcase.clientWidth === e2eConsts.XLARGE_BP_WIDTH || testcase.clientWidth === e2eConsts.LARGE_BP_WIDTH) {
                                     // Verify global action icons is displayed in topNav
-                                    ReportServicePage.isElementInTopNav(textEl);
-                                    expect(ReportServicePage.getGlobalNavTextEl(ReportServicePage.topNavUserGlobActEl).getText()).toBe('User');
-                                    expect(ReportServicePage.getGlobalNavTextEl(ReportServicePage.topNavHelpGlobActEl).getText()).toBe('Help');
+                                    reportServicePage.isElementInTopNav(textEl);
+                                    expect(reportServicePage.getGlobalNavTextEl(reportServicePage.topNavUserGlobActEl).getText()).toBe('User');
+                                    expect(reportServicePage.getGlobalNavTextEl(reportServicePage.topNavHelpGlobActEl).getText()).toBe('Help');
                                 }
                                 if (testcase.clientWidth === e2eConsts.MEDIUM_BP_WIDTH || testcase.clientWidth === e2eConsts.SMALL_BP_WIDTH) {
                                     // Verify global action icons is not displayed in topNav
-                                    ReportServicePage.isElementInTopNav(textEl);
+                                    reportServicePage.isElementInTopNav(textEl);
                                 }
                             }
                         });
                     });
                     // Verify the drop down toggle icon present on all breakpoints
-                    ReportServicePage.waitForElement(ReportServicePage.topNavCenterDivEl).then(function() {
+                    reportServicePage.waitForElement(reportServicePage.topNavCenterDivEl).then(function() {
                         // Verify  drop down toggle icon is displayed on topNav
-                        ReportServicePage.isElementInTopNav(ReportServicePage.topNavDropdownEl);
+                        reportServicePage.isElementInTopNav(reportServicePage.topNavDropdownEl);
                         // Verify no text displayed beside  drop down toggle
-                        expect(ReportServicePage.topNavDropdownEl.getText()).toBeFalsy();
+                        expect(reportServicePage.topNavDropdownEl.getText()).toBeFalsy();
                     });
                 });
             });
