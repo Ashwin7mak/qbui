@@ -51,12 +51,12 @@
                     {name: 'Null Field', datatypeAttributes: {type: 'TEXT'}, type: 'SCALAR'},
                     {name: 'Empty Field', datatypeAttributes: {type: 'TEXT'}, type: 'SCALAR'},
                     {name: 'Date Field', datatypeAttributes: {type: 'DATE'}, type: 'SCALAR'},
-                ]
+                    ]
                 },
                 {
                     name: 'table2', fields: [
                     {name: 'Text Field', datatypeAttributes: {type: 'TEXT'}, type: 'SCALAR'}
-                ]
+                    ]
                 }
             ]
 
