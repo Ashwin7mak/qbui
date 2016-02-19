@@ -19,7 +19,8 @@
             {"id":9, "value":"first_name_last_name@quickbase.com", "display":"first_name_last_name@quickbase.com"},
             {"id":10, "value":true, "display":true},
             {"id":11, "value":null, "display":""},
-            {"id":12, "value":null, "display":""}
+            {"id":12, "value":null, "display":""},
+            {"id":13, "value":"2016-08-08", "display":"2016-08-08"},
         ]];
 
         var format = 'display';
@@ -51,6 +52,7 @@
                     {name: 'Checkbox Field', datatypeAttributes: {type: 'CHECKBOX'}, type: 'SCALAR'},
                     {name: 'Null Field', datatypeAttributes: {type: 'TEXT'}, type: 'SCALAR'},
                     {name: 'Empty Field', datatypeAttributes: {type: 'TEXT'}, type: 'SCALAR'},
+                    {name: 'Date Field', datatypeAttributes: {type: 'DATE'}, type: 'SCALAR'},
                 ]
                 },
                 {
@@ -144,6 +146,12 @@
                     '{"id":7,"name":"Date Field","type":"DATE","values":["04-12-2016","04-12-2016"],"hasBlanks":false}]'
                 },
                 {
+                    message: 'Multiple Dates facet',
+                    facetFId: [7, 13],
+                    expectedFacets: '[{"id":7,"name":"Date Field","type":"DATE","values":["04-12-2016","04-12-2016"],"hasBlanks":false},' +
+                    '{"id":13,"name":"Date Field","type":"DATE","values":["08-08-2016","08-08-2016"],"hasBlanks":false}]'
+                },
+                {
                     message: 'Text Date and Date Time',
                     facetFId: [6, 7, 8],
                     expectedFacets: '[{"id":6,"name":"Text Field","type":"TEXT","values":["abcdef"],"hasBlanks":false},' +
@@ -170,12 +178,11 @@
                     facetFId: [6, 11, 12],
                     expectedFacets: '[{"id":6,"name":"Text Field","type":"TEXT","values":["abcdef"],"hasBlanks":false},{"id":11,"name":"Null Field","type":"TEXT","values":[""],"hasBlanks":true},{"id":12,"name":"Empty Field","type":"TEXT","values":[""],"hasBlanks":true}]'
                 },
-                //Right now the below will fail. Don will be fixing in server code.
-                /*{
-                 message: 'Negative Test - Test the order of facet results',
-                 facetFId: [11, 12, 6],
-                 expectedFacets: '[{"id":11,"name":"Null Field","type":"TEXT","values":[""],"hasBlanks":true},{"id":12,"name":"Empty Field","type":"TEXT","values":[""],"hasBlanks":true},{"id":6,"name":"Text Field","type":"TEXT","values":["abcdef"],"hasBlanks":false}]'
-                 }*/
+                {
+                    message: 'Negative Test - Test the order of facet results',
+                    facetFId: [11, 12, 6],
+                    expectedFacets: '[{"id":11,"name":"Null Field","type":"TEXT","values":[""],"hasBlanks":true},{"id":12,"name":"Empty Field","type":"TEXT","values":[""],"hasBlanks":true},{"id":6,"name":"Text Field","type":"TEXT","values":["abcdef"],"hasBlanks":false}]'
+                }
 
                 //TODO Negative testcase for numeric not supporting facets should be added after implementation.
             ];
