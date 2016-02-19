@@ -13,6 +13,7 @@ var assert = require('assert');
 var requestHelper = require('./../requestHelper')(config);
 var reportsApi = require('../reportsApi')(config);
 var recordsApi = require('../recordsApi')(config);
+var consts = require('../../constants');
 /**
  * Unit tests for report apis
  */
@@ -149,19 +150,8 @@ describe('Validate ReportsApi unit tests', function() {
             fields: [],
             facets: []
         };
-        var fetchReportResultsPromise =
-            new Promise(function(resolve, reject) {
-                resolve({
-                    records: [],
-                    fields: []
-                });
-            });
-        var fetchFacetsPromise =
-            new Promise(function(resolve, reject) {
-                resolve({
-                    facets: []
-                });
-            });
+        var fetchReportResultsPromise = Promise.resolve({records: [], fields: []});
+        var fetchFacetsPromise = Promise.resolve({facets: []});
         afterEach(function() {
             reportsApi.fetchFacetResults.restore();
             reportsApi.fetchReportResults.restore();
@@ -182,7 +172,7 @@ describe('Validate ReportsApi unit tests', function() {
         it('Test error from reportResults', function(done) {
             var getReportResults = sinon.stub(reportsApi, "fetchReportResults");
             var getFacetsStub = sinon.stub(reportsApi, "fetchFacetResults");
-            getReportResults.returns(new Error("error"));
+            getReportResults.returns(Promise.reject(new Error("error")));
             getFacetsStub.returns(fetchFacetsPromise);
             var promise = reportsApi.fetchReportComponents(req);
             promise.then(
@@ -198,11 +188,31 @@ describe('Validate ReportsApi unit tests', function() {
             var getReportResults = sinon.stub(reportsApi, "fetchReportResults");
             var getFacetsStub = sinon.stub(reportsApi, "fetchFacetResults");
             getReportResults.returns(fetchReportResultsPromise);
-            getFacetsStub.returns(new Error("error"));
+            getFacetsStub.returns(Promise.reject(new Error("error")));
             var promise = reportsApi.fetchReportComponents(req);
             promise.then(
                 function(response) {
-                    assert.deepEqual(response, expectedResponse);
+                    assert.deepEqual(response, {records: [], fields: []});
+                }
+            );
+            done();
+        });
+        it('Test 10K error from fetchFacets', function(done) {
+            var getReportResults = sinon.stub(reportsApi, "fetchReportResults");
+            var fetchFacetsErrorPromise = Promise.reject({body:'[{"code":' + consts.FACET_REPORT_TOO_BIG_ERROR_CODE + '}]'});
+            var getFacetsErrorStub = sinon.stub(reportsApi, "fetchFacetResults");
+            getReportResults.returns(fetchReportResultsPromise);
+            getFacetsErrorStub.returns(fetchFacetsErrorPromise);
+
+            var errorExpectedResponse = {
+                records: [],
+                fields: [],
+                facets: [{id: null, errorMessage: consts.FACET_REPORT_TOO_BIG_ERROR_MSG}]
+            };
+            var promise = reportsApi.fetchReportComponents(req);
+            promise.then(
+                function(response) {
+                    assert.deepEqual(response, errorExpectedResponse);
                 }
             );
             done();

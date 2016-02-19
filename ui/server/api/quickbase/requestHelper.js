@@ -146,7 +146,7 @@
                 //  Generate tid for all requests..and log it
                 this.setTidHeader(req);
                 log.info({req: req});
-                return new Promise(function(resolve, reject) {
+                return new Promise((resolve, reject) =>{
                     if (immediatelyResolve) {
                         resolve();
                     } else {

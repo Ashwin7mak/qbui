@@ -3,6 +3,7 @@
 var facetRecordsFormatter = require('./../facetRecordsFormatter')();
 var recordFormatter = require('./../recordFormatter')();
 var assert = require('assert');
+var consts = require('../../../constants');
 
 /**
  * Unit tests for query formatter
@@ -66,10 +67,10 @@ describe('Facet formatter unit test', function() {
             expectedBlankFacets.values.push(formattedRecords[0][0].display);
         });
 
-        var expectedTooManyFacets = {id: 9, name:'text', type:'TEXT', values:[], hasBlanks: false, errorMessage: "businessobject.error.report.facet.tooBig"};
+        var expectedTooManyFacets = {id: 9, name:'text', type:'TEXT', values:[], hasBlanks: false, errorMessage: consts.FACET_RECORD_TOO_BIG_ERROR_MSG};
         var tooManyValuesRecord = [[{id:9, value:{
-            code: 100024,
-            message: "businessobject.error.report.facet.tooBig"
+            code: consts.FACET_RECORD_TOO_BIG_ERROR_CODE,
+            message: consts.FACET_RECORD_TOO_BIG_ERROR_MSG
         }}]];
 
         var cases = [
