@@ -66,7 +66,6 @@
          * Setup method. Generates JSON for an app, a table with different fields, and a single record with different field types.
          */
         before(function(done) {
-            //var record = '[{"id": 6 , "value": "abcdef"},{"id": 7 , "value": 0.74765432}]';
             this.timeout(testConsts.INTEGRATION_TIMEOUT * appWithNoFlags.length);
             recordBase.createApp(appWithNoFlags).then(function(appResponse) {
                 app = JSON.parse(appResponse.body);
