@@ -10,7 +10,7 @@
 
     describe('API - Validate report execution', function() {
         var app;
-        var testRecord = '[{"id": 6 , "value": "abcdef"},{"id": 7 , "value": "2016-04-12"},{"id": 8,"value": "2016-04-12T05:51:19Z"},{"id": 9 , "value": "first_name_last_name@quickbase.com"},{"id": 10 , "value": true},{"id": 11 , "value": ""},{"id": 12 , "value": ""}]';
+        var testRecord = '[{"id": 6 , "value": "abcdef"},{"id": 7 , "value": "2016-04-12"},{"id": 8,"value": "2016-04-12T05:51:19Z"},{"id": 9 , "value": "first_name_last_name@quickbase.com"},{"id": 10 , "value": true},{"id": 11 , "value": ""},{"id": 12 , "value": ""},{"id": 13 , "value": "2016-08-08"}]';
         var expectedRecords = [[
             {"id":3, "value":1, "display":"1"},
             {"id":6, "value":"abcdef", "display":"abcdef"},
@@ -20,12 +20,10 @@
             {"id":10, "value":true, "display":true},
             {"id":11, "value":null, "display":""},
             {"id":12, "value":null, "display":""},
-            {"id":13, "value":"2016-08-08", "display":"2016-08-08"},
+            {"id":13, "value":"2016-08-08", "display":"08-08-2016"},
         ]];
 
-        var format = 'display';
-        var actualReportResults = [];
-        var expectedTestRecords = [];
+        var FORMAT = 'display';
         /**
          * Generates and returns a random string of specified length
          */
@@ -72,22 +70,17 @@
             this.timeout(testConsts.INTEGRATION_TIMEOUT * appWithNoFlags.length);
             recordBase.createApp(appWithNoFlags).then(function(appResponse) {
                 app = JSON.parse(appResponse.body);
-                console.log("app response is: " + JSON.stringify(app));
                 var recordsEndpoint = recordBase.apiBase.resolveRecordsEndpoint(app.id, app.tables[0].id);
-                recordBase.createAndFetchRecord(recordsEndpoint, JSON.parse(testRecord), '?format=' + format).then(function(recordForTable1) {
-                });
+                recordBase.createAndFetchRecord(recordsEndpoint, JSON.parse(testRecord), '?format=' + FORMAT);
                 //second table records
                 for (var i = 0; i <= 210; i++) {
                     var value = generateRandomString(10);
                     var record = '[{"id": 6 , "value": "' + value + '"}]';
                     var recordsEndpoint2 = recordBase.apiBase.resolveRecordsEndpoint(app.id, app.tables[1].id);
-                    recordBase.createAndFetchRecord(recordsEndpoint2, JSON.parse(record), '?format=' + format).then(function(recordForTable2) {
-
-                    });
+                    recordBase.createAndFetchRecord(recordsEndpoint2, JSON.parse(record), '?format=' + FORMAT);
                 }
                 done();
             });
-
             return app;
         });
 
@@ -98,6 +91,8 @@
         it('Should create a report, execute the report, and validate the resulting ' +
             'record matches the created record in setup', function(done) {
             this.timeout(testConsts.INTEGRATION_TIMEOUT * appWithNoFlags.length);
+            var actualReportResults = [];
+            var expectedTestRecords = [];
             var reportEndpoint = recordBase.apiBase.resolveReportsEndpoint(app.id, app.tables[0].id);
             var reportToCreate = {
                 name: 'test report',
@@ -108,9 +103,8 @@
             recordBase.apiBase.executeRequest(reportEndpoint, consts.POST, reportToCreate).then(function(report) {
                 var r = JSON.parse(report.body);
                 //Execute a report
-                recordBase.apiBase.executeRequest(reportEndpoint + r.id + '/results?format=' + format, consts.GET).then(function(reportResults) {
+                recordBase.apiBase.executeRequest(reportEndpoint + r.id + '/results?format=' + FORMAT, consts.GET).then(function(reportResults) {
                     var results = JSON.parse(reportResults.body);
-                    console.log("report results is: " + JSON.stringify(results));
                     //For each report record results push to an array.
                     for (var i in results.records) {
                         actualReportResults.push(results.records[i]);
@@ -149,7 +143,7 @@
                     message: 'Multiple Dates facet',
                     facetFId: [7, 13],
                     expectedFacets: '[{"id":7,"name":"Date Field","type":"DATE","values":["04-12-2016","04-12-2016"],"hasBlanks":false},' +
-                    '{"id":13,"name":"Date Field","type":"DATE","values":["08-08-2016","08-08-2016"],"hasBlanks":false}]'
+                    '{"id":13,"name":"Date Field2","type":"DATE","values":["08-08-2016","08-08-2016"],"hasBlanks":false}]'
                 },
                 {
                     message: 'Text Date and Date Time',
@@ -193,6 +187,8 @@
 
         facetTestCases().forEach(function(testcase) {
             it('Test case: ' + testcase.message, function(done) {
+                var actualReportResults = [];
+                var expectedTestRecords = [];
                 this.timeout(testConsts.INTEGRATION_TIMEOUT);
                 var reportEndpoint = recordBase.apiBase.resolveReportsEndpoint(app.id, app.tables[0].id);
                 var reportToCreate = {
@@ -205,7 +201,7 @@
                 recordBase.apiBase.executeRequest(reportEndpoint, consts.POST, reportToCreate).then(function(report) {
                     var r = JSON.parse(report.body);
                     //Execute report against 'resultComponents' endpoint.
-                    recordBase.apiBase.executeRequest(reportEndpoint + r.id + '/reportComponents?format=' + format, consts.GET).then(function(reportResults) {
+                    recordBase.apiBase.executeRequest(reportEndpoint + r.id + '/reportComponents?format=' + FORMAT, consts.GET).then(function(reportResults) {
                         var results = JSON.parse(reportResults.body);
                         //Verify records
                         //For each report record results push to an array.
@@ -248,10 +244,8 @@
             recordBase.apiBase.executeRequest(reportEndpoint, consts.POST, reportToCreate).then(function(report) {
                 var r = JSON.parse(report.body);
                 //Execute report against 'resultComponents' endpoint.
-                recordBase.apiBase.executeRequest(reportEndpoint + r.id + '/reportComponents?format=' + format, consts.GET).then(function(reportResults) {
+                recordBase.apiBase.executeRequest(reportEndpoint + r.id + '/reportComponents?format=' + FORMAT, consts.GET).then(function(reportResults) {
                     var results = JSON.parse(reportResults.body);
-                    console.log("report records length is: " + JSON.stringify(results.records.length));
-                    console.log("report results response is: " + JSON.stringify(results));
                     assert(results.records.length > 200);
                     var expectedFacet = {"id":6, "name":"Text Field", "type":"TEXT", "values":[], "hasBlanks":false, "errorMessage": consts.FACET_RECORD_TOO_BIG_ERROR_MSG};
                     assert.deepEqual(JSON.stringify(results.facets), JSON.stringify([expectedFacet]));
@@ -263,8 +257,6 @@
 
 
         });
-
-        //TODO Negative testcase for 200k limit should be added. Implementation not yet available.
 
         // Cleanup the test realm after all tests in the block
         after(function(done) {
