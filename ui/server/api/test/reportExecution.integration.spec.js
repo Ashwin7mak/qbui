@@ -25,7 +25,6 @@
         var format = 'display';
         var actualReportResults = [];
         var expectedTestRecords = [];
-
         /**
          * Generates and returns a random string of specified length
          */
@@ -53,6 +52,11 @@
                     {name: 'Null Field', datatypeAttributes: {type: 'TEXT'}, type: 'SCALAR'},
                     {name: 'Empty Field', datatypeAttributes: {type: 'TEXT'}, type: 'SCALAR'},
                     ]
+                },
+                {
+                    name: 'table2', fields: [
+                    {name: 'Text Field', datatypeAttributes: {type: 'TEXT'}, type: 'SCALAR'}
+                ]
                 }
             ]
 
@@ -73,9 +77,20 @@
 
                 var recordsEndpoint = recordBase.apiBase.resolveRecordsEndpoint(app.id, app.tables[0].id);
                 recordBase.createAndFetchRecord(recordsEndpoint, JSON.parse(testRecord), '?format=' + format).then(function(record) {
-                    console.log("record response is: " + JSON.stringify(record));
-                    done();
+                    console.log("table1 record response is: " + JSON.stringify(record));
+                   // done();
                 });
+
+                //second table records
+                for (var i = 0; i <= 210; i++) {
+                    var value = generateRandomString(10);
+                    var record = '[{"id": 6 , "value": "'+value+'"}]';
+                    var recordsEndpoint = recordBase.apiBase.resolveRecordsEndpoint(app.id, app.tables[1].id);
+                    recordBase.createAndFetchRecord(recordsEndpoint, JSON.parse(record), '?format=' + format).then(function(record) {
+                        console.log("table2 record response is: " + JSON.stringify(record));
+                        done();
+                    });
+                }
             });
 
             return app;
@@ -182,9 +197,6 @@
             it('Test case: ' + testcase.message, function(done) {
                 this.timeout(testConsts.INTEGRATION_TIMEOUT);
                 var reportEndpoint = recordBase.apiBase.resolveReportsEndpoint(app.id, app.tables[0].id);
-                console.log("*********");
-                console.log("Executing testcase: " + testcase.message + " ,facetFid " + testcase.facetFId);
-                console.log("*********");
                 var reportToCreate = {
                     name: generateRandomString(5),
                     type: 'TABLE',
@@ -194,11 +206,9 @@
                 //Create a report
                 recordBase.apiBase.executeRequest(reportEndpoint, consts.POST, reportToCreate).then(function(report) {
                     var r = JSON.parse(report.body);
-                    console.log("report response is: " + JSON.stringify(r));
                     //Execute report against 'resultComponents' endpoint.
                     recordBase.apiBase.executeRequest(reportEndpoint + r.id + '/reportComponents?format=' + format, consts.GET).then(function(reportResults) {
                         var results = JSON.parse(reportResults.body);
-                        console.log("The results are: " + JSON.stringify(results));
                         //Verify records
                         //For each report record results push to an array.
                         for (var i in results.records) {
@@ -217,7 +227,6 @@
 
                         //Delete the report at the end
                         recordBase.apiBase.executeRequest(reportEndpoint + r.id, consts.DELETE).then(function(deleteTestReport) {
-                            console.log("delete report response is: " + JSON.stringify(deleteTestReport));
                             done();
                         });
                     });
@@ -227,15 +236,45 @@
 
         });
 
+        it('Negative Test case: Facet with text fields limit of 200 fields', function (done) {
+            this.timeout(testConsts.INTEGRATION_TIMEOUT);
+
+            //create a report
+            var reportEndpoint = recordBase.apiBase.resolveReportsEndpoint(app.id, app.tables[1].id);
+            var reportToCreate = {
+                name: generateRandomString(5),
+                type: 'TABLE',
+                tableId: app.tables[1].id,
+                facetFids: [6]
+            };
+
+            //Create a report
+            recordBase.apiBase.executeRequest(reportEndpoint, consts.POST, reportToCreate).then(function (report) {
+                var r = JSON.parse(report.body);
+                //Execute report against 'resultComponents' endpoint.
+                recordBase.apiBase.executeRequest(reportEndpoint + r.id + '/reportComponents?format=' + format, consts.GET).then(function (reportResults) {
+                    var results = JSON.parse(reportResults.body);
+                    console.log("report records length is: " + JSON.stringify(results.records.length));
+                    console.log("report results response is: " + JSON.stringify(results));
+
+                    //Need to add verification.
+                    done();
+                });
+
+            });
+
+
+        });
+
         //TODO Negative testcase for 200k limit should be added. Implementation not yet available.
 
         // Cleanup the test realm after all tests in the block
-        after(function(done) {
-            //Realm deletion takes time, bump the timeout
-            this.timeout(testConsts.INTEGRATION_TIMEOUT);
-            recordBase.apiBase.cleanup().then(function() {
-                done();
-            });
-        });
+        //after(function(done) {
+        //    //Realm deletion takes time, bump the timeout
+        //    this.timeout(testConsts.INTEGRATION_TIMEOUT);
+        //    recordBase.apiBase.cleanup().then(function() {
+        //        done();
+        //    });
+        //});
     });
 }());
