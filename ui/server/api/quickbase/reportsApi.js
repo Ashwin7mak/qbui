@@ -6,10 +6,10 @@
 (function() {
     'use strict';
     let Promise = require('bluebird');
-    let defaultRequest = require('request');
     let log = require('../../logger').getLogger();
     /* See comment in recordsApi.js */
     let jsonBigNum = require('json-bignum');
+    let consts = require('../constants');
     module.exports = function(config) {
         let requestHelper = require('./requestHelper')(config);
         let facetRecordsFormatter = require('./formatter/facetRecordsFormatter')();
@@ -21,10 +21,9 @@
         let FACETS = 'facets';
         let FIELDS = 'fields';
         let RECORDS = 'records';
-        let REPORTS = 'reports';
         let RESULTS = 'results';
         let REPORTCOMPONENTS = 'reportcomponents';
-        let request = defaultRequest;
+        let FACET_REPORT_TOO_BIG_ERROR = 100025; //error code returned by server if thefetchFacets is called on a table with more than 10K rows.
 
         //TODO: only application/json is supported for content type.  Need a plan to support XML
         let reportsApi = {
@@ -76,7 +75,6 @@
                             responseObject[FIELDS] = fields;
                             responseObject[RECORDS] = records;
                             self.fetchFacetResults(req).then(
-                                // TODO: handle the case when table has more than 10000K
                                 (facetResponse) => {
                                     let facetRecords = [];
                                     //jsonBigNum.parse throws exception if the input is empty array
@@ -92,6 +90,12 @@
                                 // In case of error or exception on getFacets we want to silently fail, that is, just return the records and fields.
                                 // In future might want to tell client that fetching facets failed so it can display an error message.
                                 (error) => {
+                                    //is the error because of more than 10K rows on table? If so pass this info to the client
+                                    if (JSON.parse(error.body)[0].code === consts.FACET_REPORT_TOO_BIG_ERROR_CODE) {
+                                        var errorFacet = {id: null, errorMessage: consts.FACET_REPORT_TOO_BIG_ERROR_MSG};
+                                        facets.push(errorFacet);
+                                        responseObject[FACETS] = facets;
+                                    }
                                     resolve(responseObject);
                                     log.error("Error getting facets in fetchReportComponents: " + JSON.stringify(error));
                                 }

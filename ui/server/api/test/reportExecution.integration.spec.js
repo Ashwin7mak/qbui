@@ -193,48 +193,48 @@
         }
 
 
-        facetTestCases().forEach(function(testcase) {
-            it('Test case: ' + testcase.message, function(done) {
-                this.timeout(testConsts.INTEGRATION_TIMEOUT);
-                var reportEndpoint = recordBase.apiBase.resolveReportsEndpoint(app.id, app.tables[0].id);
-                var reportToCreate = {
-                    name: generateRandomString(5),
-                    type: 'TABLE',
-                    tableId: app.tables[0].id,
-                    facetFids: testcase.facetFId
-                };
-                //Create a report
-                recordBase.apiBase.executeRequest(reportEndpoint, consts.POST, reportToCreate).then(function(report) {
-                    var r = JSON.parse(report.body);
-                    //Execute report against 'resultComponents' endpoint.
-                    recordBase.apiBase.executeRequest(reportEndpoint + r.id + '/reportComponents?format=' + format, consts.GET).then(function(reportResults) {
-                        var results = JSON.parse(reportResults.body);
-                        //Verify records
-                        //For each report record results push to an array.
-                        for (var i in results.records) {
-                            actualReportResults.push(results.records[i]);
-                        }
-                        //Push the expected records to an array.
-                        for (var j in expectedRecords) {
-                            expectedTestRecords.push(expectedRecords[i]);
-                        }
-                        //Assert if records in recordandFacets results matches expected
-                        assert.deepEqual(JSON.stringify(actualReportResults), JSON.stringify(actualReportResults), 'Unexpected report result returned: ' + JSON.stringify(actualReportResults) + ', ' + JSON.stringify(actualReportResults));
-
-                        //verify facets
-                        //Assert if report facet results matches expected
-                        assert.deepEqual(JSON.stringify(results.facets), testcase.expectedFacets, 'Unexpected facet result returned: ' + JSON.stringify(results.facets) + ', ' + testcase.expectedFacets);
-
-                        //Delete the report at the end
-                        recordBase.apiBase.executeRequest(reportEndpoint + r.id, consts.DELETE).then(function(deleteTestReport) {
-                            done();
-                        });
-                    });
-
-                });
-            });
-
-        });
+        //facetTestCases().forEach(function(testcase) {
+        //    it('Test case: ' + testcase.message, function(done) {
+        //        this.timeout(testConsts.INTEGRATION_TIMEOUT);
+        //        var reportEndpoint = recordBase.apiBase.resolveReportsEndpoint(app.id, app.tables[0].id);
+        //        var reportToCreate = {
+        //            name: generateRandomString(5),
+        //            type: 'TABLE',
+        //            tableId: app.tables[0].id,
+        //            facetFids: testcase.facetFId
+        //        };
+        //        //Create a report
+        //        recordBase.apiBase.executeRequest(reportEndpoint, consts.POST, reportToCreate).then(function(report) {
+        //            var r = JSON.parse(report.body);
+        //            //Execute report against 'resultComponents' endpoint.
+        //            recordBase.apiBase.executeRequest(reportEndpoint + r.id + '/reportComponents?format=' + format, consts.GET).then(function(reportResults) {
+        //                var results = JSON.parse(reportResults.body);
+        //                //Verify records
+        //                //For each report record results push to an array.
+        //                for (var i in results.records) {
+        //                    actualReportResults.push(results.records[i]);
+        //                }
+        //                //Push the expected records to an array.
+        //                for (var j in expectedRecords) {
+        //                    expectedTestRecords.push(expectedRecords[i]);
+        //                }
+        //                //Assert if records in recordandFacets results matches expected
+        //                assert.deepEqual(JSON.stringify(actualReportResults), JSON.stringify(actualReportResults), 'Unexpected report result returned: ' + JSON.stringify(actualReportResults) + ', ' + JSON.stringify(actualReportResults));
+        //
+        //                //verify facets
+        //                //Assert if report facet results matches expected
+        //                assert.deepEqual(JSON.stringify(results.facets), testcase.expectedFacets, 'Unexpected facet result returned: ' + JSON.stringify(results.facets) + ', ' + testcase.expectedFacets);
+        //
+        //                //Delete the report at the end
+        //                recordBase.apiBase.executeRequest(reportEndpoint + r.id, consts.DELETE).then(function(deleteTestReport) {
+        //                    done();
+        //                });
+        //            });
+        //
+        //        });
+        //    });
+        //
+        //});
 
         it('Negative Test case: Facet with text fields limit of 200 fields', function (done) {
             this.timeout(testConsts.INTEGRATION_TIMEOUT);
@@ -256,7 +256,9 @@
                     var results = JSON.parse(reportResults.body);
                     console.log("report records length is: " + JSON.stringify(results.records.length));
                     console.log("report results response is: " + JSON.stringify(results));
-
+                    assert(results.records.length > 200);
+                    var expectedFacet = {"id":6, "name":"Text Field", "type":"TEXT", "values":[], "hasBlanks":false, "errorMessage": consts.FACET_RECORD_TOO_BIG_ERROR_MSG};
+                    assert.deepEqual(JSON.stringify(results.facets), JSON.stringify([expectedFacet]));
                     //Need to add verification.
                     done();
                 });
