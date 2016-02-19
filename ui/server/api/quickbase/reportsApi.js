@@ -64,9 +64,8 @@
             //Returns a promise that is resolved with the records, fields meta data and facets
             //or is rejected with a descriptive error code
             fetchReportComponents: function(req) {
-                var self = this;
-                return new Promise(function(resolve, reject) {
-                    self.fetchReportResults(req).then(
+                return new Promise((resolve, reject) =>{
+                    this.fetchReportResults(req).then(
                         (resultsResponse) => {
                             let records = resultsResponse.records;
                             let fields = resultsResponse.fields;
@@ -74,7 +73,7 @@
                             let responseObject = {};
                             responseObject[FIELDS] = fields;
                             responseObject[RECORDS] = records;
-                            self.fetchFacetResults(req).then(
+                            this.fetchFacetResults(req).then(
                                 (facetResponse) => {
                                     let facetRecords = [];
                                     //jsonBigNum.parse throws exception if the input is empty array
