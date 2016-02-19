@@ -3,12 +3,12 @@ import {Dropdown, MenuItem, ListGroup, Panel, ListGroupItem} from 'react-bootstr
 import QBPanel from '../QBPanel/qbpanel.js';
 
 import './facet.scss';
+import  {facetShape} from './facetProps';
 
 import Logger from '../../utils/logger';
 import {I18nMessage} from '../../utils/i18nMessage';
 import QBicon from '../qbIcon/qbIcon';
 
-let logger = new Logger();
 
 /**
  * FacetsItem one of the fields from the set of field facets groups
@@ -21,27 +21,9 @@ let logger = new Logger();
  *      has empty bool (if true include empty as a choice)
  *      fid number
  *      field name
- *      toomany to facet? bool
- *      reason = messageid for why no facets (too many values, other reasons?)
+ *      too many to facet? bool
+ *      reason = messageId for why no facets (too many values, other reasons?)
  **/
-
-
-const facetItemValueShape = React.PropTypes.shape({
-    value: React.PropTypes.string
-});
-
-const facetShape =  React.PropTypes.shape({
-    id: React.PropTypes.number.isRequired,
-    type:React.PropTypes.string.isRequired,
-    name: React.PropTypes.string.isRequired,
-    values: React.PropTypes.arrayOf(facetItemValueShape)
-/*TODO support date type of facet field  */
-});
-
-const fieldSelections = React.PropTypes.shape({
-    selectionsHash: React.PropTypes.array
-});
-
 
 var FacetsItem = React.createClass({
     /**
@@ -53,9 +35,10 @@ var FacetsItem = React.createClass({
     displayName: 'FacetsItem',
     propTypes: {
         facet:facetShape,
-        fieldSelections: fieldSelections,
+        fieldSelections: React.PropTypes.array,
         handleSelectValue: React.PropTypes.func,
-        handleToggleCollapse: React.PropTypes.func
+        handleToggleCollapse: React.PropTypes.func,
+        handleClearFieldSelects: React.PropTypes.func
     },
 
     getDefaultProps() {
@@ -91,7 +74,6 @@ var FacetsItem = React.createClass({
             }));
             selectionInfo = (<div className="selectionInfo small">{selectionStrings}</div>);
         }
-        //todo: render text values in small text
         return (<div>
                     <h4 className="facetName" >
                         <span>{this.props.facet.name}</span>

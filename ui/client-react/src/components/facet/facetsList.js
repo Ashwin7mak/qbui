@@ -6,13 +6,14 @@ import Logger from '../../utils/logger';
 import {I18nMessage} from '../../utils/i18nMessage';
 import StringUtils from '../../utils/stringUtils';
 
+import  {fieldSelections} from './facetProps';
+
 import FacetsItem from './facetsItem';
 import QBicon from '../qbIcon/qbIcon';
 
 import './facet.scss';
 import _ from 'lodash';
 
-let logger = new Logger();
 
 /**
  *  FacetsList component presents a list of facets available to filter the report on;
@@ -26,18 +27,43 @@ var FacetsList = React.createClass({
      * @returns the prepared set of FacetsItem components for rendering
      */
     displayName: 'FacetsList',
+    propTypes: {
+        reportData: React.PropTypes.shape({
+            data: React.PropTypes.shape({
+                facets:  React.PropTypes.shape({
+                    list: React.PropTypes.array.isRequired
+                })
+            })
+        }),
+        selectedValues: fieldSelections
+    },
+
+    getDefaultProps() {
+        return {
+            isCollapsed : function() {return false;}
+        };
+    },
+
     facetsList(facetsData) {
-        return facetsData.list.map((facetField, index) => {
+        return facetsData.list.map((facetField) => {
             var fid = facetField.id;
-            return <FacetsItem eventKey={facetField} key={fid}
-                               facet={facetField}
-                               ref={fid}
-                               fieldSelections={this.props.selectedValues.getFieldSelections(fid)}
-                               expanded={!this.props.isCollapsed(fid)}
-                               handleToggleCollapse={this.props.handleToggleCollapse}
-                               handleSelectValue={this.props.onFacetSelect}
-                               handleClearFieldSelects={this.props.onFacetClearFieldSelects}
-                {...this.props} />;
+
+            var moreInputProps = {
+                eventKey: facetField,
+                facet: facetField,
+                key: fid,
+                ref: fid,
+                expanded: !this.props.isCollapsed(fid),
+                handleToggleCollapse: this.props.handleToggleCollapse,
+                handleSelectValue: this.props.onFacetSelect,
+                handleClearFieldSelects: this.props.onFacetClearFieldSelects
+            };
+
+            if (this.props.selectedValues && this.props.selectedValues.getFieldSelections) {
+                moreInputProps.fieldSelections = this.props.selectedValues.getFieldSelections(fid);
+            }
+
+            return <FacetsItem {...this.props}  {...moreInputProps} />;
         });
     },
 

@@ -205,7 +205,7 @@ describe('ReportToolbar functions', () => {
         flux.actions.searchFor.calls.reset();
 
         //timeout for debounce
-        jasmine.clock().tick(component.debounceInputTime + 30);
+        jasmine.clock().tick(component.debounceInputTime + 10000);
 
         // check that search ran after debounce time
         expect(flux.actions.searchFor).toHaveBeenCalledWith(testValue);

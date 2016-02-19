@@ -3,6 +3,7 @@ import ReactDOM from 'react-dom';
 import TestUtils from 'react-addons-test-utils';
 import FacetsItem  from '../../src/components/facet/facetsItem';
 import FacetSelections  from '../../src/components/facet/facetSelections';
+import {ListGroup, Panel, ListGroupItem} from 'react-bootstrap';
 
 describe('FacetItem functions', () => {
     'use strict';
@@ -17,7 +18,7 @@ describe('FacetItem functions', () => {
 
     it('test render facetItem', () => {
         component = TestUtils.renderIntoDocument(<FacetsItem facet={item}
-                                                             fieldSelections={{}}
+                                                             fieldSelections={[]}
                                                              handleSelectValue={() => {}}
                                                              handleToggleCollapse={() => {}}/>);
         expect(TestUtils.isCompositeComponent(component)).toBeTruthy();
@@ -28,7 +29,7 @@ describe('FacetItem functions', () => {
         let selected = new FacetSelections();
         selected.addSelection(22, 'b');
         component = TestUtils.renderIntoDocument(<FacetsItem facet={item}
-                                                             fieldSelections={selected.getSelections()}
+                                                             fieldSelections={selected.getFieldSelections(22)}
                                                              handleSelectValue={() => {}}
                                                              handleToggleCollapse={() => {}}/>);
         expect(TestUtils.isCompositeComponent(component)).toBeTruthy();
@@ -38,10 +39,72 @@ describe('FacetItem functions', () => {
         let selected = new FacetSelections();
         selected.addSelection(22, 'b');
         component = TestUtils.renderIntoDocument(<FacetsItem facet={item}
-                                                             fieldSelections={selected.getSelections()}
+                                                             fieldSelections={selected.getFieldSelections(22)}
                                                              handleSelectValue={() => {}}
                                                              handleToggleCollapse={() => {}}/>);
         expect(TestUtils.isCompositeComponent(component)).toBeTruthy();
+    });
+
+
+    it('test render facetItem value selection', () => {
+        let selected = new FacetSelections();
+        var callbacks = {
+            handleSelectValue : function handleSelectValue(e, facet, value) {
+            }
+        };
+
+
+        component = TestUtils.renderIntoDocument(<FacetsItem facet={item}
+                                                             fieldSelections={[]}
+                                                             handleSelectValue={() => callbacks.handleSelectValue()}/>);
+        expect(TestUtils.isCompositeComponent(component)).toBeTruthy();
+        let items = TestUtils.scryRenderedComponentsWithType(component, ListGroupItem);
+        expect(items.length).toBe(item.values.length);
+        spyOn(callbacks, 'handleSelectValue').and.callThrough();
+        TestUtils.Simulate.click(ReactDOM.findDOMNode(items[0]));
+        expect(callbacks.handleSelectValue).toHaveBeenCalled();
+
+    });
+
+    it('test render facetItem fieldname collapse ', () => {
+        let selected = new FacetSelections();
+        var callbacks = {
+            handleToggleCollapse: function handleToggleCollapse() {
+            }
+        };
+
+        component = TestUtils.renderIntoDocument(<FacetsItem facet={item}
+                                                             fieldSelections={[]}
+                                                             handleToggleCollapse={() => callbacks.handleToggleCollapse()}/>);
+        expect(TestUtils.isCompositeComponent(component)).toBeTruthy();
+        let facetName;
+        expect(function() {facetName = TestUtils.findRenderedDOMComponentWithClass(component, 'facetName');}).not.toThrow();
+        spyOn(callbacks, 'handleToggleCollapse').and.callThrough();
+        TestUtils.Simulate.click(ReactDOM.findDOMNode(facetName));
+        expect(callbacks.handleToggleCollapse).toHaveBeenCalled();
+
+    });
+
+    it('test render facetItem clearFacet clear selects ', () => {
+        let selected = new FacetSelections();
+        selected.addSelection(22, 'b');
+        selected.addSelection(22, 'c');
+
+        var callbacks = {
+            handleClearFieldSelects: function handleClearFieldSelects() {
+            }
+        };
+
+        component = TestUtils.renderIntoDocument(<FacetsItem facet={item}
+                                                             fieldSelections={selected.getFieldSelections(22)}
+                                                             handleClearFieldSelects={() => callbacks.handleClearFieldSelects()}/>);
+        expect(TestUtils.isCompositeComponent(component)).toBeTruthy();
+        let clearFacet;
+        expect(function() {clearFacet = TestUtils.findRenderedDOMComponentWithClass(component, 'clearFacet');}).not.toThrow();
+        spyOn(callbacks, 'handleClearFieldSelects').and.callThrough();
+        TestUtils.Simulate.click(ReactDOM.findDOMNode(clearFacet));
+        expect(callbacks.handleClearFieldSelects).toHaveBeenCalled();
+
     });
 
 });

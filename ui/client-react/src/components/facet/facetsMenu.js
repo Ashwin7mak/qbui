@@ -11,7 +11,6 @@ import FacetsList from './facetsList';
 import './facet.scss';
 import _ from 'lodash';
 
-let logger = new Logger();
 
 /**
  *  FacetsMenu component presents a trigger button that when clicked shows list of facets available to filter a report on.
@@ -48,20 +47,22 @@ var FacetsMenu = React.createClass({
      * @returns {{show: boolean, expandedFacetFields: Array, selected: Array}}
      */
     getInitialState() {
+
         //TODO: move these to use fluxxor actions and stores to make the sticky across views.
         let expanded = [];
         if (!this.props.allInitiallyCollapsed) {
-            // if we don't start with all collapsed then
+
+           // if we don't start with all collapsed then
             // add all facet fids to list of expanded facet fields
             if (this.props.reportData.data && this.props.reportData.data.facets && this.props.reportData.data.facets.list) {
-                for (let facet of this.props.reportData.data.facets.list) {
+                _.each(this.props.reportData.data.facets.list, function(facet) {
                     expanded.push(facet.id);
-                }
+                });
             }
         }
         return {
             show: false,
-            expandedFacetFields: expanded,
+            expandedFacetFields: expanded
         };
     },
 

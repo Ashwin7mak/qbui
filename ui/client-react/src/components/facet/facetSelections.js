@@ -59,16 +59,17 @@ class FacetSelections {
      * Checks list of selection value to see if param is in the set
      *
      * @param fieldId  - field to lookup
+     * @param value    - the value to check
      */
     isValueInSelections(fieldId, value) {
-        // nothing selected
-        if (!this.selectionsHash[fieldId]) {
-            return false;
-        } else {
+        if (this.selectionsHash[fieldId]) {
             // find the value,
-            // todo// sort it first (incase there lots might be faster find)
+            // todo// sort it first (in case there lots might be faster find)
             //return (_.indexOf(_.sortBy(this.selectionsHash[fieldId], value)) !== -1);
             return (_.indexOf(this.selectionsHash[fieldId], value) !== -1);
+        } else {
+            // nothing selected
+            return false;
         }
     }
 
@@ -83,9 +84,8 @@ class FacetSelections {
 
 
     /**
-     * Gets list of facet selection values for a all
+     * Gets list of facet selection values for all facets
      *
-     * @param fieldId  - field to retrieve selected values for
      */
     getSelections() {
         return (this.selectionsHash);
@@ -112,11 +112,13 @@ class FacetSelections {
      */
     removeSelection(fieldId, value) {
         // if there is no array yet for the fieldId nothing to remove
-        if (!this.selectionsHash[fieldId]) {
+        if (this.selectionsHash[fieldId]) {
+            if (this.isValueInSelections(fieldId, value)) {
+                _.pull(this.selectionsHash[fieldId], value);
+            }
+        } else {
             return null;
             // remove the value if its there
-        } else if (this.isValueInSelections(fieldId, value)) {
-            _.pull(this.selectionsHash[fieldId], value);
         }
         return this.selectionsHash;
     }
@@ -127,11 +129,11 @@ class FacetSelections {
      */
     removeAllFieldSelections(fieldId) {
         // if there is no array yet for the fieldId nothing to remove
-        if (!this.selectionsHash[fieldId]) {
-            return null;
+        if (this.selectionsHash[fieldId]) {
             // remove the value if its there
-        } else {
             this.selectionsHash[fieldId] = [];
+        } else {
+            return null;
         }
         return this.selectionsHash;
 
@@ -158,12 +160,12 @@ class FacetSelections {
      *
      **/
     setFacetValueSelectState(facetField, value, select) {
-        if (!select) {
-            //  remove to mark it deselected
-            this.removeSelection(facetField.id, value);
-        } else {
+        if (select) {
             // add it to toggle to select state
             this.addSelection(facetField.id, value);
+        } else {
+            // remove to mark it deselected
+            this.removeSelection(facetField.id, value);
         }
         ////caller to update the state
     }
@@ -187,6 +189,7 @@ class FacetSelections {
      * facet field group. To make the facet field groups values hidden or shown.
      * @param e - the event object from the browser/react
      * @param facetField - the facet field group to act on
+     * @param value - the value to select
      **/
     handleToggleSelect(e, facetField, value) {
         logger.debug("got toggle select on field id " + facetField.id + " value " + value);
