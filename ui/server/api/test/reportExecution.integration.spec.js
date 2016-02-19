@@ -8,7 +8,6 @@
     var log = require('../../logger').getLogger();
     var testConsts = require('./api.test.constants');
 
-
     describe('API - Validate report execution', function() {
         var app;
         var testRecord = '[{"id": 6 , "value": "abcdef"},{"id": 7 , "value": "2016-04-12"},{"id": 8,"value": "2016-04-12T05:51:19Z"},{"id": 9 , "value": "first_name_last_name@quickbase.com"},{"id": 10 , "value": true},{"id": 11 , "value": ""},{"id": 12 , "value": ""}]';
@@ -52,12 +51,12 @@
                     {name: 'Checkbox Field', datatypeAttributes: {type: 'CHECKBOX'}, type: 'SCALAR'},
                     {name: 'Null Field', datatypeAttributes: {type: 'TEXT'}, type: 'SCALAR'},
                     {name: 'Empty Field', datatypeAttributes: {type: 'TEXT'}, type: 'SCALAR'},
-                    ]
+                ]
                 },
                 {
                     name: 'table2', fields: [
                     {name: 'Text Field', datatypeAttributes: {type: 'TEXT'}, type: 'SCALAR'}
-                    ]
+                ]
                 }
             ]
 
@@ -142,14 +141,14 @@
                     message: 'Text and Date facet',
                     facetFId: [6, 7],
                     expectedFacets: '[{"id":6,"name":"Text Field","type":"TEXT","values":["abcdef"],"hasBlanks":false},' +
-                    '{"id":7,"name":"Date Field","type":"DATE","values":["04-12-2016"],"hasBlanks":false}]'
+                    '{"id":7,"name":"Date Field","type":"DATE","values":["04-12-2016","04-12-2016"],"hasBlanks":false}]'
                 },
                 {
                     message: 'Text Date and Date Time',
                     facetFId: [6, 7, 8],
                     expectedFacets: '[{"id":6,"name":"Text Field","type":"TEXT","values":["abcdef"],"hasBlanks":false},' +
-                    '{"id":7,"name":"Date Field","type":"DATE","values":["04-12-2016"],"hasBlanks":false},' +
-                    '{"id":8,"name":"Date Time Field","type":"DATE_TIME","values":["04-11-2016 10:51 PM"],"hasBlanks":false}]'
+                    '{"id":7,"name":"Date Field","type":"DATE","values":["04-12-2016","04-12-2016"],"hasBlanks":false},' +
+                    '{"id":8,"name":"Date Time Field","type":"DATE_TIME","values":["04-11-2016 10:51 PM","04-11-2016 10:51 PM"],"hasBlanks":false}]'
                 },
                 {
                     message: 'Facet with 1 Text record and 1 Empty Record',
@@ -173,10 +172,10 @@
                 },
                 //Right now the below will fail. Don will be fixing in server code.
                 /*{
-                    message: 'Negative Test - Test the order of facet results',
-                    facetFId: [11, 12, 6],
-                    expectedFacets: '[{"id":11,"name":"Null Field","type":"TEXT","values":[""],"hasBlanks":true},{"id":12,"name":"Empty Field","type":"TEXT","values":[""],"hasBlanks":true},{"id":6,"name":"Text Field","type":"TEXT","values":["abcdef"],"hasBlanks":false}]'
-                }*/
+                 message: 'Negative Test - Test the order of facet results',
+                 facetFId: [11, 12, 6],
+                 expectedFacets: '[{"id":11,"name":"Null Field","type":"TEXT","values":[""],"hasBlanks":true},{"id":12,"name":"Empty Field","type":"TEXT","values":[""],"hasBlanks":true},{"id":6,"name":"Text Field","type":"TEXT","values":["abcdef"],"hasBlanks":false}]'
+                 }*/
 
                 //TODO Negative testcase for numeric not supporting facets should be added after implementation.
             ];
