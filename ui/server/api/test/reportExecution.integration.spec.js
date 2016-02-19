@@ -13,14 +13,14 @@
         var app;
         var testRecord = '[{"id": 6 , "value": "abcdef"},{"id": 7 , "value": "2016-04-12"},{"id": 8,"value": "2016-04-12T05:51:19Z"},{"id": 9 , "value": "first_name_last_name@quickbase.com"},{"id": 10 , "value": true},{"id": 11 , "value": ""},{"id": 12 , "value": ""}]';
         var expectedRecords = [[
-            {"id":3,"value":1,"display":"1"},
-            {"id":6,"value":"abcdef","display":"abcdef"},
-            {"id":7,"value":"2016-04-12","display":"04-12-2016"},
-            {"id":8,"value":"2016-04-12T05:51:19Z[UTC]","display":"04-11-2016 10:51 PM"},
-            {"id":9,"value":"first_name_last_name@quickbase.com","display":"first_name_last_name@quickbase.com"},
-            {"id":10,"value":true,"display":true},
-            {"id":11,"value":null,"display":""},
-            {"id":12,"value":null,"display":""}
+            {"id":3, "value":1, "display":"1"},
+            {"id":6, "value":"abcdef", "display":"abcdef"},
+            {"id":7, "value":"2016-04-12", "display":"04-12-2016"},
+            {"id":8, "value":"2016-04-12T05:51:19Z[UTC]", "display":"04-11-2016 10:51 PM"},
+            {"id":9, "value":"first_name_last_name@quickbase.com", "display":"first_name_last_name@quickbase.com"},
+            {"id":10, "value":true, "display":true},
+            {"id":11, "value":null, "display":""},
+            {"id":12, "value":null, "display":""}
         ]];
 
         var format = 'display';
