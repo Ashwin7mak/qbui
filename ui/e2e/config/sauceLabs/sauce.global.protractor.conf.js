@@ -2,7 +2,7 @@
 // https://github.com/angular/protractor/blob/master/docs/referenceConf.js
 (function() {
     'use strict';
-    var baseE2EPath = '../../e2e/';
+    var baseE2EPath = '../../../e2e/';
     // Needed for Protractor's DriverProvider to be able to run it's updateJob function
     // to let Sauce Labs know when the tests have completed (for use in AWS pipeline job)
     var HttpsProxyAgent = require('https-proxy-agent');
@@ -23,7 +23,7 @@
         sauceSeleniumAddress: 'localhost:4445/wd/hub',
         // list of files / patterns to load in the browser
         specs: [
-            '../qbapp/tests/reports/*.e2e.spec.js'
+            baseE2EPath + 'qbapp/tests/reports/*.e2e.spec.js'
         ],
         // Patterns to exclude.
         exclude: [],
