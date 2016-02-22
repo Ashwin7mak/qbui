@@ -11,19 +11,21 @@
     describe('API - Validate report execution', function() {
         var app;
         var testRecord = '[{"id": 6 , "value": "abcdef"},{"id": 7 , "value": "2016-04-12"},{"id": 8,"value": "2016-04-12T05:51:19Z"},{"id": 9 , "value": "first_name_last_name@quickbase.com"},{"id": 10 , "value": true},{"id": 11 , "value": ""},{"id": 12 , "value": ""},{"id": 13 , "value": "2016-08-08"}]';
+        //TODO Hardcoded test data will be removed as seperate task..
         var expectedRecords = [[
-            {"id":3, "value":1, "display":"1"},
-            {"id":6, "value":"abcdef", "display":"abcdef"},
-            {"id":7, "value":"2016-04-12", "display":"04-12-2016"},
-            {"id":8, "value":"2016-04-12T05:51:19Z[UTC]", "display":"04-11-2016 10:51 PM"},
-            {"id":9, "value":"first_name_last_name@quickbase.com", "display":"first_name_last_name@quickbase.com"},
-            {"id":10, "value":true, "display":true},
-            {"id":11, "value":null, "display":""},
-            {"id":12, "value":null, "display":""},
-            {"id":13, "value":"2016-08-08", "display":"08-08-2016"},
+            {"id": 3, "value": 1, "display": "1"},
+            {"id": 6, "value": "abcdef", "display": "abcdef"},
+            {"id": 7, "value": "2016-04-12", "display": "04-12-2016"},
+            {"id": 8, "value": "2016-04-12T05:51:19Z[UTC]", "display": "04-11-2016 10:51 PM"},
+            {"id": 9, "value": "first_name_last_name@quickbase.com", "display": "first_name_last_name@quickbase.com"},
+            {"id": 10, "value": true, "display": true},
+            {"id": 11, "value": null, "display": ""},
+            {"id": 12, "value": null, "display": ""},
+            {"id": 13, "value": "2016-08-08", "display": "08-08-2016"},
         ]];
 
         var FORMAT = 'display';
+
         /**
          * Generates and returns a random string of specified length
          */
@@ -34,6 +36,26 @@
                 text += possible.charAt(Math.floor(Math.random() * possible.length));
             }
             return text;
+        }
+
+        /**
+         * Method to compare actual and expected records
+         */
+        function verifyRecords(reportResults) {
+            var actualReportRecords = [];
+            var expectedReportRecords = [];
+
+            //For each report record results push to an array.
+            for (var i in reportResults.records) {
+                actualReportRecords.push(reportResults.records[i]);
+            }
+            //Push the expected records to an array.
+            for (var j in expectedRecords) {
+                expectedReportRecords.push(expectedRecords[j]);
+            }
+            //Assert if records from report results matches expected records
+            assert.deepEqual(JSON.stringify(actualReportRecords), JSON.stringify(expectedReportRecords), 'Unexpected report result returned: ' + JSON.stringify(actualReportRecords) + ', ' + JSON.stringify(expectedReportRecords));
+
         }
 
 
@@ -48,8 +70,8 @@
                     {name: 'Date Time Field', datatypeAttributes: {type: 'DATE_TIME'}, type: 'SCALAR'},
                     {name: 'Email Field', datatypeAttributes: {type: 'EMAIL_ADDRESS'}, type: 'SCALAR'},
                     {name: 'Checkbox Field', datatypeAttributes: {type: 'CHECKBOX'}, type: 'SCALAR'},
-                    {name: 'Null Field', datatypeAttributes: {type: 'TEXT'}, type: 'SCALAR'},
-                    {name: 'Empty Field', datatypeAttributes: {type: 'TEXT'}, type: 'SCALAR'},
+                    {name: 'Null Text Field', datatypeAttributes: {type: 'TEXT'}, type: 'SCALAR'},
+                    {name: 'Empty Text Field', datatypeAttributes: {type: 'TEXT'}, type: 'SCALAR'},
                     {name: 'Date Field', datatypeAttributes: {type: 'DATE'}, type: 'SCALAR'},
                     ]
                 },
@@ -90,8 +112,6 @@
         it('Should create a report, execute the report, and validate the resulting ' +
             'record matches the created record in setup', function(done) {
             this.timeout(testConsts.INTEGRATION_TIMEOUT * appWithNoFlags.length);
-            var actualReportResults = [];
-            var expectedTestRecords = [];
             var reportEndpoint = recordBase.apiBase.resolveReportsEndpoint(app.id, app.tables[0].id);
             var reportToCreate = {
                 name: 'test report',
@@ -104,16 +124,8 @@
                 //Execute a report
                 recordBase.apiBase.executeRequest(reportEndpoint + r.id + '/results?format=' + FORMAT, consts.GET).then(function(reportResults) {
                     var results = JSON.parse(reportResults.body);
-                    //For each report record results push to an array.
-                    for (var i in results.records) {
-                        actualReportResults.push(results.records[i]);
-                    }
-                    //Push the expected records to an array.
-                    for (var j in expectedRecords) {
-                        expectedTestRecords.push(expectedRecords[j]);
-                    }
-                    //Assert if records from report results matches expected records
-                    assert.deepEqual(JSON.stringify(actualReportResults), JSON.stringify(expectedTestRecords), 'Unexpected report result returned: ' + JSON.stringify(actualReportResults) + ', ' + JSON.stringify(expectedTestRecords));
+                    //Verify actual and expected records
+                    verifyRecords(results);
                     done();
                 });
             }).catch(function(error) {
@@ -186,8 +198,6 @@
 
         facetTestCases().forEach(function(testcase) {
             it('Test case: ' + testcase.message, function(done) {
-                var actualReportResults = [];
-                var expectedTestRecords = [];
                 this.timeout(testConsts.INTEGRATION_TIMEOUT);
                 var reportEndpoint = recordBase.apiBase.resolveReportsEndpoint(app.id, app.tables[0].id);
                 var reportToCreate = {
@@ -202,26 +212,15 @@
                     //Execute report against 'resultComponents' endpoint.
                     recordBase.apiBase.executeRequest(reportEndpoint + r.id + '/reportComponents?format=' + FORMAT, consts.GET).then(function(reportResults) {
                         var results = JSON.parse(reportResults.body);
-                        //Verify records
-                        //For each report record results push to an array.
-                        for (var i in results.records) {
-                            actualReportResults.push(results.records[i]);
-                        }
-                        //Push the expected records to an array.
-                        for (var j in expectedRecords) {
-                            expectedTestRecords.push(expectedRecords[i]);
-                        }
-                        //Assert if records in recordandFacets results matches expected
-                        assert.deepEqual(JSON.stringify(actualReportResults), JSON.stringify(expectedTestRecords), 'Unexpected report result returned: ' + JSON.stringify(actualReportResults) + ', ' + JSON.stringify(expectedTestRecords));
-
-                        //verify facets
-                        //Assert if report facet results matches expected
-                        assert.deepEqual(JSON.stringify(results.facets), testcase.expectedFacets, 'Unexpected facet result returned: ' + JSON.stringify(results.facets) + ', ' + testcase.expectedFacets);
-
+                        //Verify actual and expected records
+                        verifyRecords(results);
                         //Delete the report at the end
                         recordBase.apiBase.executeRequest(reportEndpoint + r.id, consts.DELETE).then(function(deleteTestReport) {
                             done();
                         });
+                    }).catch(function(error) {
+                        log.error(JSON.stringify(error));
+                        done();
                     });
 
                 });
@@ -246,12 +245,21 @@
                 recordBase.apiBase.executeRequest(reportEndpoint + r.id + '/reportComponents?format=' + FORMAT, consts.GET).then(function(reportResults) {
                     var results = JSON.parse(reportResults.body);
                     assert(results.records.length > 200);
-                    var expectedFacet = {"id":6, "name":"Text Field", "type":"TEXT", "values":[], "hasBlanks":false, "errorMessage": consts.FACET_RECORD_TOO_BIG_ERROR_MSG};
+                    var expectedFacet = {
+                        "id": 6,
+                        "name": "Text Field",
+                        "type": "TEXT",
+                        "values": [],
+                        "hasBlanks": false,
+                        "errorMessage": consts.FACET_RECORD_TOO_BIG_ERROR_MSG
+                    };
                     assert.deepEqual(JSON.stringify(results.facets), JSON.stringify([expectedFacet]));
-                    //Need to add verification.
                     done();
                 });
 
+            }).catch(function(error) {
+                log.error(JSON.stringify(error));
+                done();
             });
 
 
