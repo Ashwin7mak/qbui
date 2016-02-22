@@ -52,7 +52,7 @@ var Nav = React.createClass({
         if ((this.context.breakpoint === breakpoints.SMALL_BREAKPOINT) && this.context.touch) {
             flux.actions.toggleLeftNav(false);
         }
-        flux.actions.loadReports(this.state.apps.selectedAppId, tableId).then((x) => {
+        flux.actions.loadReports(this.state.apps.selectedAppId, tableId).then(() => {
             flux.actions.showTrowser();
         });
     },
@@ -76,8 +76,8 @@ var Nav = React.createClass({
      */
     getTrowserActions() {
         return (<div>
-                <a href="#"><QBicon icon="add-mini"/>New</a>
-                <a href="#"><QBicon icon="settings"/>Organize</a>
+                <a href="#"><QBicon icon="add-mini"/><I18nMessage message={'report.newReport'}/></a>
+                <a href="#"><QBicon icon="settings"/><I18nMessage message={'report.organizeReports'}/></a>
             </div>);
     },
     /**

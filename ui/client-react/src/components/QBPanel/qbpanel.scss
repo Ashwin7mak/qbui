@@ -2,6 +2,8 @@
 
 $panel-border-color: $color4;
 $panel-background-color: $color2;
+$panel-header-icon-color: #404040;
+$panel-header-icon-hover-color: #0098cd;
 /*
  * Overwrite the following bootstrap classes in their panel component so we have the proper layout
  * panel, panel-default, panel-body
@@ -77,10 +79,10 @@ h5 {
 }
 
 .qbPanelHeaderIcon {
-    color: #404040;
+    color: $panel-header-icon-color;
 }
 .qbPanelHeaderIcon:hover {
-    color: #0098cd;
+    color: $panel-header-icon-hover-color;
 }
 
 .qbPanelBody {
