@@ -9,7 +9,7 @@
     let log = require('../../logger').getLogger();
     /* See comment in recordsApi.js */
     let jsonBigNum = require('json-bignum');
-    let consts = require('../constants');
+    let errorCodes = require('../errorCodes');
     module.exports = function(config) {
         let requestHelper = require('./requestHelper')(config);
         let facetRecordsFormatter = require('./formatter/facetRecordsFormatter')();
@@ -23,7 +23,6 @@
         let RECORDS = 'records';
         let RESULTS = 'results';
         let REPORTCOMPONENTS = 'reportcomponents';
-        let FACET_REPORT_TOO_BIG_ERROR = 100025; //error code returned by server if thefetchFacets is called on a table with more than 10K rows.
 
         //TODO: only application/json is supported for content type.  Need a plan to support XML
         let reportsApi = {
@@ -87,18 +86,25 @@
                                     resolve(responseObject);
                                 },
                                 // In case of error or exception on getFacets we want to silently fail, that is, just return the records and fields.
-                                // In future might want to tell client that fetching facets failed so it can display an error message.
+                                // But tell the client that an error has occurred.
                                 (error) => {
                                     //is the error because of more than 10K rows on table? If so pass this info to the client
-                                    if (JSON.parse(error.body)[0].code === consts.FACET_REPORT_TOO_BIG_ERROR_CODE) {
-                                        var errorFacet = {id: null, errorMessage: consts.FACET_REPORT_TOO_BIG_ERROR_MSG};
+                                    if (JSON.parse(error.body)[0].code === errorCodes.ERROR_CODE.FACET.REPORT_TOO_BIG) {
+                                        var errorFacet = {id: null, errorMessage: errorCodes.ERROR_MSG_KEY.FACET.REPORT_TOO_BIG};
                                         facets.push(errorFacet);
+                                        responseObject[FACETS] = facets;
+                                    } else { //some error that is not recognized by client occurred
+                                        var unknownErrorFacet = {id: null, errorMessage: errorCodes.ERROR_MSG_KEY.UNKNOWN_ERROR};
+                                        facets.push(unknownErrorFacet);
                                         responseObject[FACETS] = facets;
                                     }
                                     resolve(responseObject);
                                     log.error("Error getting facets in fetchReportComponents: " + JSON.stringify(error));
                                 }
                             ).catch((ex) => {
+                                var unknownErrorFacet = {id: null, errorMessage: errorCodes.ERROR_MSG_KEY.UNKNOWN_ERROR};
+                                facets.push(unknownErrorFacet);
+                                responseObject[FACETS] = facets;
                                 resolve(responseObject);
                                 log.error("Caught unexpected error getting facets in fetchReportComponents: " + JSON.stringify(ex));
                             });
