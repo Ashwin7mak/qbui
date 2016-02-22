@@ -15,7 +15,7 @@
     var RequestSessionTicketPage = requirePO('requestSessionTicket');
     var reportServicePage = new ReportServicePage();
 
-    describe('Report Page Layout Tests', function() {
+    describe('Report Page Stage Tests', function() {
         var realmName;
         var realmId;
         var app;
@@ -83,11 +83,13 @@
                         expect(reportServicePage.reportStageArea.isDisplayed).toBeTruthy();
                         // Click on report Stage button to collapse the stage
                         reportServicePage.reportStageBtn.click().then(function() {
-                            e2eBase.sleep(1000);
+                            // Sleep needed for animation of stage
+                            e2eBase.sleep(browser.params.smallSleep);
                             expect(reportServicePage.reportStageArea.getAttribute('clientHeight')).toMatch("0");
                             expect(reportServicePage.reportStageArea.getAttribute('clientWidth')).toMatch("0");
                             reportServicePage.reportStageBtn.click().then(function() {
-                                e2eBase.sleep(1000);
+                                // Sleep needed for animation of stage
+                                e2eBase.sleep(browser.params.smallSleep);
                                 expect(reportServicePage.reportStageArea.isDisplayed).toBeTruthy();
                             });
                         });

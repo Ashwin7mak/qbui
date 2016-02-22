@@ -14,7 +14,7 @@
     var RequestSessionTicketPage = requirePO('requestSessionTicket');
     var reportServicePage = new ReportServicePage();
 
-    describe('Report Service E2E Tests', function() {
+    describe('Report Page Table Tests', function() {
         var realmName;
         var realmId;
         var app;
@@ -52,10 +52,8 @@
                 return reportServicePage.waitForElement(reportServicePage.appsListDivEl).then(function() {
                     // Select the app
                     return reportServicePage.appLinksElList.get(0).click().then(function() {
-                        e2eBase.sleep(1000).then(function() {
-                            //Done callback to let Jasmine know we are done with our promise chain
-                            done();
-                        });
+                        //Done callback to let Jasmine know we are done with our promise chain
+                        done();
                     });
                 });
             }).catch(function(error) {

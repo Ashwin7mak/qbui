@@ -15,7 +15,7 @@
     var RequestSessionTicketPage = requirePO('requestSessionTicket');
     var reportServicePage = new ReportServicePage();
 
-    describe('Report Page Layout Tests', function() {
+    describe('Report Page Top Nav Tests', function() {
         var realmName;
         var realmId;
         var app;
@@ -53,10 +53,8 @@
                 return reportServicePage.waitForElement(reportServicePage.appsListDivEl).then(function() {
                     // Select the app
                     return reportServicePage.appLinksElList.get(0).click().then(function() {
-                        e2eBase.sleep(1000).then(function() {
-                            //Done callback to let Jasmine know we are done with our promise chain
-                            done();
-                        });
+                        //Done callback to let Jasmine know we are done with our promise chain
+                        done();
                     });
                 });
             }).catch(function(error) {
@@ -76,42 +74,10 @@
         });
 
         /**
-         * Data Provider for the different breakpoints. Also contains the state of the leftNav at each size for assertion
-         */
-        function NavDimensionsDataProvider() {
-            return [
-                {
-                    browserWidth: e2eConsts.XLARGE_BP_WIDTH,
-                    breakpointSize: 'xlarge',
-                    open: true,
-                    clientWidth: '399'
-                },
-                {
-                    browserWidth: e2eConsts.LARGE_BP_WIDTH,
-                    breakpointSize: 'large',
-                    open: true,
-                    clientWidth: '299'
-                },
-                {
-                    browserWidth: e2eConsts.MEDIUM_BP_WIDTH,
-                    breakpointSize: 'medium',
-                    open: true,
-                    clientWidth: '199'
-                },
-                {
-                    browserWidth: e2eConsts.SMALL_BP_WIDTH,
-                    breakpointSize: 'small',
-                    open: false,
-                    clientWidth: '39'
-                }
-            ];
-        }
-
-        /**
          * Test method to verify all elements present / hidden in topNav depending on breakpoint
          */
         it('Verify topNav elements display/not display depending on different breakpoints', function() {
-            NavDimensionsDataProvider().forEach(function(testcase) {
+            e2eConsts.NavDimensionsDataProvider().forEach(function(testcase) {
                 e2eBase.resizeBrowser(testcase.browserWidth, e2eConsts.DEFAULT_HEIGHT).then(function() {
                     // Verify Icon link display in topNav and  no text associated for that icon.
                     reportServicePage.waitForElement(reportServicePage.topNavLeftDivEl).then(function() {

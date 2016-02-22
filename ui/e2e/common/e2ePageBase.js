@@ -65,10 +65,6 @@
             return browser.wait(EC.elementToBeClickable(element), 5000, 'Timed out waiting for element to be clickable');
         };
 
-        //Helper method to sleep a specified number of seconds
-        this.sleep = function(ms) {
-            return browser.driver.sleep(ms);
-        };
         //Verify the element is located Top
         this.isElementOnTop = function(element1, element2) {
             //get element1 location

@@ -92,6 +92,7 @@
                     // Via the API create the records, a new report, then run the report.
                     return e2eBase.recordService.addRecords(createdApp, createdApp.tables[0], generatedRecords);
                 }).then(function() {
+                    //TODO: Creating / running a report can be run async so break it out of this chain into a separate function
                     return e2eBase.reportService.createReport(createdApp.id, createdApp.tables[0].id);
                 }).then(function(reportId) {
                     return e2eBase.reportService.runReport(createdApp.id, createdApp.tables[0].id, reportId);

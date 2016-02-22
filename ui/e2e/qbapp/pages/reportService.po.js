@@ -136,7 +136,7 @@
             try {
                 this.appToggleDivEl.click().then(function() {
                     // Sleep for a second to allow toggle animation to finish (and the DOM to refresh)
-                    e2ePageBase.sleep(1000);
+                    e2eBase.sleep(1000);
                     deferred.resolve();
                 });
             } catch (error) {

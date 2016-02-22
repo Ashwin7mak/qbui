@@ -15,7 +15,7 @@
     var RequestSessionTicketPage = requirePO('requestSessionTicket');
     var reportServicePage = new ReportServicePage();
 
-    describe('Report Page Layout Tests', function() {
+    describe('Report Page Left Nav Tests', function() {
         var realmName;
         var realmId;
         var app;
@@ -53,10 +53,8 @@
                 return reportServicePage.waitForElement(reportServicePage.appsListDivEl).then(function() {
                     // Select the app
                     return reportServicePage.appLinksElList.get(0).click().then(function() {
-                        e2eBase.sleep(1000).then(function() {
-                            //Done callback to let Jasmine know we are done with our promise chain
-                            done();
-                        });
+                        //Done callback to let Jasmine know we are done with our promise chain
+                        done();
                     });
                 });
             }).catch(function(error) {
@@ -82,46 +80,14 @@
             reportServicePage.tableLinksElList.then(function(links) {
                 // Check we have the base links and two table links present
                 expect(links.length).toBe(5);
-                // Check that the app search widget is hidden
-                expect(reportServicePage.searchAppsDivEl.isPresent()).toBeFalsy();
                 reportServicePage.clickAppToggle();
                 // Check that the app search widget is visible
-                expect(reportServicePage.searchAppsDivEl.isPresent()).toBeTruthy();
+                expect(reportServicePage.searchAppsDivEl.isDisplayed()).toBeTruthy();
                 reportServicePage.clickAppToggle();
+                // Check that the app search widget is hidden
+                expect(reportServicePage.searchAppsDivEl.isPresent()).toBeFalsy();
             });
         });
-
-        /**
-         * Data Provider for the different breakpoints. Also contains the state of the leftNav at each size for assertion
-         */
-        function NavDimensionsDataProvider() {
-            return [
-                {
-                    browserWidth: e2eConsts.XLARGE_BP_WIDTH,
-                    breakpointSize: 'xlarge',
-                    open: true,
-                    clientWidth: '399'
-                },
-                {
-                    browserWidth: e2eConsts.LARGE_BP_WIDTH,
-                    breakpointSize: 'large',
-                    open: true,
-                    clientWidth: '299'
-                },
-                {
-                    browserWidth: e2eConsts.MEDIUM_BP_WIDTH,
-                    breakpointSize: 'medium',
-                    open: true,
-                    clientWidth: '199'
-                },
-                {
-                    browserWidth: e2eConsts.SMALL_BP_WIDTH,
-                    breakpointSize: 'small',
-                    open: false,
-                    clientWidth: '39'
-                }
-            ];
-        }
 
         /**
          * Test method. The leftNav should shrink responsively across the 4 breakpoints as the browser is re-sized
@@ -135,7 +101,7 @@
                 reportServicePage.reportLinksElList.get(0).click();
                 // Make sure the table report has loaded
                 reportServicePage.waitForElement(reportServicePage.loadedContentEl).then(function() {
-                    NavDimensionsDataProvider().forEach(function(testcase) {
+                    e2eConsts.NavDimensionsDataProvider().forEach(function(testcase) {
                         // Resize browser at different widths to check responsiveness
                         e2eBase.resizeBrowser(testcase.browserWidth, e2eConsts.DEFAULT_HEIGHT).then(function() {
                             reportServicePage.assertNavProperties(testcase.breakpointSize, testcase.open, testcase.clientWidth);
@@ -161,7 +127,7 @@
                 // Make sure the table report has loaded
                 reportServicePage.waitForElement(reportServicePage.loadedContentEl).then(function() {
                     // Reverse the dataprovider to execute from small to xlarge
-                    var reverseArray = NavDimensionsDataProvider().reverse();
+                    var reverseArray = e2eConsts.NavDimensionsDataProvider().reverse();
                     reverseArray.forEach(function(testcase) {
                         // Resize browser at different widths to check responsiveness
                         e2eBase.resizeBrowser(testcase.browserWidth, e2eConsts.DEFAULT_HEIGHT).then(function() {
@@ -176,7 +142,7 @@
          * Test method.Verify The elements present in leftNav across the 4 breakpoints as the browser is re-sized
          */
         it('Verify leftNav has 3 base links and 2 table links from xlarge to small breakpoints', function() {
-            NavDimensionsDataProvider().forEach(function(testcase) {
+            e2eConsts.NavDimensionsDataProvider().forEach(function(testcase) {
                 // Resize browser at different widths
                 e2eBase.resizeBrowser(testcase.browserWidth, e2eConsts.DEFAULT_HEIGHT).then(function(tableLinksElList) {
                     (reportServicePage.tableLinksElList).then(function(links) {
