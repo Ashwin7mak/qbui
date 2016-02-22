@@ -8,6 +8,7 @@
     var log = require('../../logger').getLogger();
     var testConsts = require('./api.test.constants');
     var errorCodes = require('../errorCodes');
+    var testUtils = require('./api.test.Utils');
 
     describe('API - Validate report execution', function() {
         var app;
@@ -26,17 +27,6 @@
         ]];
 
         var FORMAT = 'display';
-        /**
-         * Generates and returns a random string of specified length
-         */
-        function generateRandomString(size) {
-            var possible = 'abcdefghijklmnopqrstuvwxyz0123456789';
-            var text = '';
-            for (var i = 0; i < size; i++) {
-                text += possible.charAt(Math.floor(Math.random() * possible.length));
-            }
-            return text;
-        }
 
         /**
          * Method to verify Records returned in reportResults with expectedRecords
@@ -93,11 +83,14 @@
                 recordBase.createAndFetchRecord(recordsEndpoint, JSON.parse(testRecord), '?format=' + FORMAT);
                 //second table records
                 for (var i = 0; i <= 210; i++) {
-                    var value = generateRandomString(10);
+                    var value = testUtils.generateRandomString(10);
                     var record = '[{"id": 6 , "value": "' + value + '"}]';
                     var recordsEndpoint2 = recordBase.apiBase.resolveRecordsEndpoint(app.id, app.tables[1].id);
                     recordBase.createAndFetchRecord(recordsEndpoint2, JSON.parse(record), '?format=' + FORMAT);
                 }
+                done();
+            }).catch(function(error) {
+                log.error(JSON.stringify(error));
                 done();
             });
             return app;
@@ -200,7 +193,7 @@
                 this.timeout(testConsts.INTEGRATION_TIMEOUT);
                 var reportEndpoint = recordBase.apiBase.resolveReportsEndpoint(app.id, app.tables[0].id);
                 var reportToCreate = {
-                    name: generateRandomString(5),
+                    name: testUtils.generateRandomString(5),
                     type: 'TABLE',
                     tableId: app.tables[0].id,
                     facetFids: testcase.facetFId
@@ -236,7 +229,7 @@
             //create a report
             var reportEndpoint = recordBase.apiBase.resolveReportsEndpoint(app.id, app.tables[1].id);
             var reportToCreate = {
-                name: generateRandomString(5),
+                name: testUtils.generateRandomString(5),
                 type: 'TABLE',
                 tableId: app.tables[1].id,
                 facetFids: [6]
