@@ -7,6 +7,7 @@
     var consts = require('../constants');
     var log = require('../../logger').getLogger();
     var testConsts = require('./api.test.constants');
+    var errorCodes = require('../errorCodes');
 
     describe('API - Validate report execution', function() {
         var app;
@@ -246,7 +247,7 @@
                 recordBase.apiBase.executeRequest(reportEndpoint + r.id + '/reportComponents?format=' + FORMAT, consts.GET).then(function(reportResults) {
                     var results = JSON.parse(reportResults.body);
                     assert(results.records.length > 200);
-                    var expectedFacet = {"id":6, "name":"Text Field", "type":"TEXT", "values":[], "hasBlanks":false, "errorMessage": consts.FACET_RECORD_TOO_BIG_ERROR_MSG};
+                    var expectedFacet = {"id":6, "name":"Text Field", "type":"TEXT", "values":[], "hasBlanks":false, "errorMessage": errorCodes.ERROR_MSG_KEY.FACET.RECORD_TOO_BIG};
                     assert.deepEqual(JSON.stringify(results.facets), JSON.stringify([expectedFacet]));
                     //Need to add verification.
                     done();

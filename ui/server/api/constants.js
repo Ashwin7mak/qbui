@@ -42,12 +42,7 @@
         QUERY_OR        : 'OR',
         OPERATOR_EQUALS : '.EX.',
         OPERATOR_ONORBEFORE : '.OBF.',
-        OPERATOR_ONORAFTER  : '.OAF.',
-        //Error codes/messages
-        FACET_RECORD_TOO_BIG_ERROR_CODE : 100024,//error code returned by server if a facet field has more than 200 distinct rows
-        FACET_RECORD_TOO_BIG_ERROR_MSG  :"businessobject.error.report.facet.record.tooBig",
-        FACET_REPORT_TOO_BIG_ERROR_CODE : 100025, //error code returned by server if thefetchFacets is called on a table with more than 10K rows.
-        FACET_REPORT_TOO_BIG_ERROR_MSG  :"businessobject.error.report.facet.table.tooBig"
+        OPERATOR_ONORAFTER  : '.OAF.'
     });
 
 }());
