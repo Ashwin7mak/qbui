@@ -51,18 +51,17 @@
         },
         // This function is run once before any of the test files. Acts as a global test preparation step
         onPrepare: function() {
-
-            //Method to initialize all Page Objects
+            // Initialize all Page Objects
             global.requirePO = function(relativePath) {
                 return require(baseE2EPath + 'qbapp/pages/' + relativePath + '.po.js');
             };
 
-            //Method to initialize all Common Files
+            // Initialize all Common Files
             global.requireCommon = function(relativePath) {
                 return require(baseE2EPath + relativePath + '.js');
             };
 
-            //read the base classes
+            // Read the base classes
             global.e2eBase = requireCommon('common/e2eBase')();
             global.consts = require('../../server/api/constants');
             global.e2eConsts = requireCommon('common/e2eConsts');
@@ -73,6 +72,10 @@
             var SpecReporter = require('jasmine-spec-reporter');
             jasmine.getEnv().addReporter(new SpecReporter({displayStacktrace: 'all'}));
 
+            // Grab the browser name to use in spec files
+            browser.getCapabilities().then(function(cap) {
+                browser.browserName = cap.caps_.browserName;
+            });
         }
     };
 }());
