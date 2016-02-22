@@ -10,10 +10,12 @@ import  {fieldSelections} from './facetProps';
 
 import FacetsItem from './facetsItem';
 import QBicon from '../qbIcon/qbIcon';
+import simpleStringify from '../../../../common/src/simpleStringify';
 
 import './facet.scss';
 import _ from 'lodash';
 
+let logger = new Logger();
 
 /**
  *  FacetsList component presents a list of facets available to filter the report on;
@@ -44,26 +46,59 @@ var FacetsList = React.createClass({
         };
     },
 
+
+    shouldComponentUpdate: function(nextProps, nextState) {
+
+        let answer = false;
+        if (!_.isEqual(nextProps.selectedValues.getSelections(), this.props.selectedValues.getSelections())) {
+            answer = true;
+            logger.debug('selection changed');
+        }
+
+        if (!_.isEqual(nextProps.expandedFacetFields, this.props.expandedFacetFields)) {
+            answer = true;
+            logger.debug('collapse changed');
+        }
+
+        if (!_.isEqual(nextProps.moreRevealedFacetFields, this.props.moreRevealedFacetFields)) {
+            answer = true;
+            logger.debug('reveal changed');
+        }
+
+        if (answer) {
+            logger.debug('FacetList shouldComponentUpdate \ncurrProps:' + simpleStringify(this.props) + ' \nnextProps:' + simpleStringify(nextProps));
+            logger.debug('currState:' + simpleStringify(this.state) + ' \nnextState:' + simpleStringify(nextState));
+            logger.debug('!=? ' + (nextProps !== this.props) + ' string!=? ' + (simpleStringify(nextProps) !== simpleStringify(this.props)));
+            logger.debug('--\n\n');
+        }
+
+
+        return answer;
+    },
+
     facetsList(facetsData) {
         return facetsData.list.map((facetField) => {
             var fid = facetField.id;
-
-            var moreInputProps = {
+            var inputProps = {
                 eventKey: facetField,
-                facet: facetField,
-                key: fid,
+                key: "FacetsItem." + this.props.popoverId + "." + fid,
                 ref: fid,
+                facet: facetField,
+                popoverId : this.props.popoverId,
+                maxInitRevealed : this.props.maxInitRevealed,
+                isRevealed : this.props.isRevealed(fid),
                 expanded: !this.props.isCollapsed(fid),
-                handleToggleCollapse: this.props.handleToggleCollapse,
                 handleSelectValue: this.props.onFacetSelect,
-                handleClearFieldSelects: this.props.onFacetClearFieldSelects
+                handleToggleCollapse: this.props.handleToggleCollapse,
+                handleClearFieldSelects: this.props.onFacetClearFieldSelects,
+                handleRevealMore: this.props.handleRevealMore
             };
 
             if (this.props.selectedValues && this.props.selectedValues.getFieldSelections) {
-                moreInputProps.fieldSelections = this.props.selectedValues.getFieldSelections(fid);
+                inputProps.fieldSelections = this.props.selectedValues.getFieldSelections(fid);
             }
 
-            return <FacetsItem {...this.props}  {...moreInputProps} />;
+            return <FacetsItem  {...inputProps} />;
         });
     },
 
@@ -79,10 +114,10 @@ var FacetsList = React.createClass({
                      placement="bottom"
                      className="facetMenuPopup"
                      ref={(thisComponent) => this._facetMenuArea = thisComponent}>
-                {this.props.reportData && this.props.reportData.data &&
-                this.props.reportData.data.facets && this.props.reportData.data.facets.list ?
-                    this.facetsList(this.props.reportData.data.facets) :
-                    <I18nMessage message={noFacetsMessage}/>}
+                    {this.props.reportData && this.props.reportData.data &&
+                    this.props.reportData.data.facets && this.props.reportData.data.facets.list ?
+                        this.facetsList(this.props.reportData.data.facets) :
+                        <I18nMessage message={noFacetsMessage}/>}
             </Popover>
         );
     }

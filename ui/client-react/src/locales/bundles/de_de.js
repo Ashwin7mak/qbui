@@ -70,7 +70,10 @@ export default {
             filteredRecordCount : "{filteredRecordCount} von {recordCount} {nameForRecords} ",
             recordCount : "{recordCount} {nameForRecords} ",
             noFacets : "Nein Facetten",
-            searchPlaceHolder:  "Suchen Sie diese {nameForRecords} ..."
+            searchPlaceHolder:  "Suchen Sie diese {nameForRecords} ...",
+            seeMore : "Mehr ...",
+            tooManyValues: "Zu viele Werte für die Filterung zu verwenden",
+            blank : "leer"
 
         }
     }

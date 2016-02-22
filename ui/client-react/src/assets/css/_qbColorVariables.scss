@@ -15,20 +15,22 @@ $color12:   #f5f5f5;
 $color13:   #f6f8fb;
 $color14:   #f9fafb;
 $color15:   #f0f3f9;
-$color16:    #2ca01c;
+$color16:   #2ca01c;
 $color17:   #f3f5f8;
+$color18:   #cccccc;
+
 
 $left-nav-bg: #193048;
 $icon-color: #7090ab;
 $icon-color-hover: #0098cd;
 
-$header-bg: #e3eaf3;
+$header-bg: $color7;
 $nav-hover-bg: #0097CD;
-$nav-hover-fg: #fff;
-$nav-link-fg: #fff;
-$nav-border: #ccc;
+$nav-hover-fg: $color2;
+$nav-link-fg: $color2;
+$nav-border: $color18;
 
-$report-container-bg: #fff;
+$report-container-bg: $color2;
 //tabs underline color
 $tabsUnderLine: #365ebf;
 

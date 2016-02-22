@@ -22,6 +22,12 @@ class FacetSelections {
         this.initSelections(emptyList);
     }
 
+    copy() {
+        let result = new FacetSelections();
+        result.initSelections(this.selectionsHash);
+        return result;
+    }
+
     initSelections(newSet) {
         if (newSet && (typeof newSet === 'object')) {
             this.selectionsHash = _.cloneDeep(newSet);
@@ -44,6 +50,20 @@ class FacetSelections {
             });
             return foundAny;
         }
+    }
+
+    /**
+     * Get list of fields with selections
+     *
+     */
+    whichHasAnySelections() {
+        let answer = [];
+        if (_.keys(this.selectionsHash).length !== 0) {
+            answer = _.all(this.selectionsHash, function(x) {
+                return (x && (x.length > 0));
+            });
+        }
+        return answer;
     }
 
     /**
@@ -183,18 +203,6 @@ class FacetSelections {
         this.setFacetValueSelectState(facetField, value, !this.isValueInSelections(facetField.id, value));
     }
 
-    /**
-     * function: handleToggleSelect
-     * handle the ui request of event occurs to handled changing the collapse/expand state of a
-     * facet field group. To make the facet field groups values hidden or shown.
-     * @param e - the event object from the browser/react
-     * @param facetField - the facet field group to act on
-     * @param value - the value to select
-     **/
-    handleToggleSelect(e, facetField, value) {
-        logger.debug("got toggle select on field id " + facetField.id + " value " + value);
-        this.toggleSelectFacetValue(facetField, value);
-    }
 }
 
 export default FacetSelections;

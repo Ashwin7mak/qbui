@@ -30,16 +30,30 @@ var ReportToolbar = React.createClass({
 
     mixins: [FluxMixin],
 
+    propTypes: {
+        /**
+         *  Takes in for properties the reportData which includes the list of facets
+         *  and a function to call when a facet value is selected.
+         **/
+        reportData: React.PropTypes.shape({
+            data: React.PropTypes.shape({
+                facets:  React.PropTypes.shape({
+                    list: React.PropTypes.array.isRequired
+                })
+            })
+        }),
+        onFacetSelect : React.PropTypes.func
+    },
+
     getDefaultProps : function() {
         return {
-            initialSelections : new FacetSelections()
+            fillinDummyFacets : true
         };
     },
 
     getInitialState: function() {
         this.debounceInputTime = .5 * this.secondInMilliseconds; // 1/5 a second delay
-        let initSel = this.props.initialSelections;
-        initSel.initSelections();
+        let initSel = new FacetSelections();
         return {
             searchInput: '',
             searchStringForFiltering: '',
@@ -94,22 +108,26 @@ var ReportToolbar = React.createClass({
         flux.actions.filterReport(this.props.appId, this.props.tblId, this.props.rptId, true, facetExpression);
     },
 
-    handleFacetSelect : function(e, facet, value) {
-        this.state.selections.handleToggleSelect(e, facet, value);
-        var mutated = new FacetSelections();
-        mutated.initSelections(this.state.selections.getSelections());
+    handleFacetDeselect : function(e, facet, value) {
+        var mutated = this.state.selections.copy();
+        mutated.setFacetValueSelectState(facet, value, false);
         this.setState({selections: mutated});
     },
 
+    handleFacetSelect : function(e, facet, value) {
+        var mutated = this.state.selections.copy();
+        mutated.toggleSelectFacetValue(facet, value);
+        this.setState({selections: mutated});
+    },
+
+
     handleFacetClearFieldSelects : function(facet) {
-        this.state.selections.removeAllFieldSelections(facet.id);
-        var mutated = new FacetSelections();
-        mutated.initSelections(this.state.selections.getSelections());
+        var mutated = this.state.selections.copy();
+        mutated.removeAllFieldSelections(facet.id);
         this.setState({selections: mutated});
     },
 
     handleFacetClearAllSelects : function() {
-        this.state.selections.removeAllSelections();
         var mutated = new FacetSelections();
         this.setState({selections: mutated});
     },
@@ -127,6 +145,31 @@ var ReportToolbar = React.createClass({
             searchInput: searchTxt
         });
 
+    },
+
+
+    /**
+     * Support filtering of blank values; add a (blank) entry to the end of the list of values
+     * if the facet has blanks.
+     * Note the I18nMessage version we are using only supports outputting a span wrapped component not just
+     * a translated string so until we move to reactintl 2.0
+     * see - http://stackoverflow.com/questions/35286239/how-to-put-valuedata-into-html-attribute-with-reactjs-and-reactintl
+     * user the english string, the resource and 'report.blank'message is has been added to the bundle
+     */
+    appendBlanks() {
+        let blankMsg = 'report.blank';
+        if (this.props.reportData.data.facets && this.props.reportData.data.facets.list) {
+            this.props.reportData.data.facets.list.map((facet) => {
+                if (facet.blanks && facet.type === "text") {
+                    // Note the I18nMessage version we are using only supports outputting a span wrapped component not just
+                    // a translated string so until we move to reactintl 2.0
+                    // see - http://stackoverflow.com/questions/35286239/how-to-put-valuedata-into-html-attribute-with-reactjs-and-reactintl
+                    // user the englisth string, the resource and 'report.blank'message is has been added to the bundle
+                    //facet.values.push(<I18nMessage message={(blankMsg)}/>);
+                    facet.values.push({value:'(blank)'});
+                }
+            });
+        }
     },
 
     //Report Facets: {"facets":[{"id":"1","name":"Facet01","type":"text","values":["Facet01-Value01","Facet01-Value02"]},
@@ -149,6 +192,8 @@ var ReportToolbar = React.createClass({
                         values : [{value: "No Started"}, {value: "In Progress"}, {value: "Blocked"}, {value: "Completed"}]},
                     {id : 4, name : "Flag", type: "bool",  blanks: false,
                         values : [{value: "True"}, {value: "False"}]},
+                    {id : 5, name : "Companies", type: "text",  blanks: false,
+                        values : []}, // too many values for facets example
                     //{id : 4, name : "Dates", type: "date",  blanks: false,
                     //    range : {start: 1, end: 2}},
                 ],
@@ -175,7 +220,10 @@ var ReportToolbar = React.createClass({
     },
 
     render() {
-        this.populateDummyFacets();
+        if (this.props.fillinDummyFacets) {
+            this.populateDummyFacets();
+            this.appendBlanks();
+        }
         let fakeFilterButton = this.renderFakeFilterButton();
 
         let recordCount = this.props.reportData && this.props.reportData.data && this.props.reportData.data.records ?
@@ -189,7 +237,7 @@ var ReportToolbar = React.createClass({
         if (this.isFiltered()) {
             hasRecords = filteredRecordCount ? true : false;
         } else {
-            hasRecords = this.props.recordCount ? true : false;
+            hasRecords = recordCount ? true : false;
         }
 
         let hasSelectedFacets = this.state.selections.hasAnySelections();
@@ -211,6 +259,7 @@ var ReportToolbar = React.createClass({
                     (<FacetsMenu className="facetMenu"  {...this.props}
                                   selectedValues={this.state.selections}
                                   onFacetSelect={this.handleFacetSelect}
+                                  onFacetDeselect={this.handleFacetDeselect}
                                   onFacetClearFieldSelects={this.handleFacetClearFieldSelects}
                     />)
                 }

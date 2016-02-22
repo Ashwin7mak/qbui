@@ -69,7 +69,10 @@ export default {
             filteredRecordCount : "{filteredRecordCount} des {recordCount} {nameForRecords} ",
             recordCount : "{recordCount} {nameForRecords} ",
             noFacets : "Aucun Facets",
-            searchPlaceHolder:  "Rechercher ces {nameForRecords} ..."
+            searchPlaceHolder:  "Rechercher ces {nameForRecords} ...",
+            seeMore : "Voir plus...",
+            tooManyValues: "Trop de valeurs à utiliser pour le filtrage",
+            blank : "blanc"
         }
     }
 };

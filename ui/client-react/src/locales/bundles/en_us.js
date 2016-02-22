@@ -74,7 +74,10 @@ export default {
             recordCount : "{recordCount} {nameForRecords} ",
             noFacets : "No Facets",
             searchPlaceHolder:  "Search these {nameForRecords} ...",
-            badParams : "Insufficient parameters supplied"
+            badParams : "Insufficient parameters supplied",
+            seeMore : "See more...",
+            tooManyValues : "Too many values to use for filtering.",
+            blank : "blank"
         }
     }
 };
