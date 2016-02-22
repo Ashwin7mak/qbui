@@ -11,6 +11,7 @@
 
     describe('API - Validate report execution', function() {
         var app;
+        //TODO Test Data should not hardcoded.
         var testRecord = '[{"id": 6 , "value": "abcdef"},{"id": 7 , "value": "2016-04-12"},{"id": 8,"value": "2016-04-12T05:51:19Z"},{"id": 9 , "value": "first_name_last_name@quickbase.com"},{"id": 10 , "value": true},{"id": 11 , "value": ""},{"id": 12 , "value": ""},{"id": 13 , "value": "2016-08-08"}]';
         var expectedRecords = [[
             {"id":3, "value":1, "display":"1"},
@@ -37,6 +38,24 @@
             return text;
         }
 
+        /**
+         * Method to verify Records returned in reportResults with expectedRecords
+         */
+        function verifyRecords(reportResults) {
+            var actualReportResults = [];
+            var expectedReportRecords = [];
+            //For each report record results push to an array.
+            for (var i in reportResults.records) {
+                actualReportResults.push(reportResults.records[i]);
+            }
+            //Push the expected records to an array.
+            for (var j in expectedRecords) {
+                expectedReportRecords.push(expectedRecords[j]);
+            }
+            //Assert if records from report results matches expected records
+            assert.deepEqual(JSON.stringify(actualReportResults), JSON.stringify(expectedReportRecords), 'Unexpected report result returned: ' + JSON.stringify(actualReportResults) + ', ' + JSON.stringify(expectedReportRecords));
+        }
+
 
         // App variable with different data fields
         var appWithNoFlags = {
@@ -49,8 +68,8 @@
                     {name: 'Date Time Field', datatypeAttributes: {type: 'DATE_TIME'}, type: 'SCALAR'},
                     {name: 'Email Field', datatypeAttributes: {type: 'EMAIL_ADDRESS'}, type: 'SCALAR'},
                     {name: 'Checkbox Field', datatypeAttributes: {type: 'CHECKBOX'}, type: 'SCALAR'},
-                    {name: 'Null Field', datatypeAttributes: {type: 'TEXT'}, type: 'SCALAR'},
-                    {name: 'Empty Field', datatypeAttributes: {type: 'TEXT'}, type: 'SCALAR'},
+                    {name: 'Null Text Field', datatypeAttributes: {type: 'TEXT'}, type: 'SCALAR'},
+                    {name: 'Empty Text Field', datatypeAttributes: {type: 'TEXT'}, type: 'SCALAR'},
                     {name: 'Date Field', datatypeAttributes: {type: 'DATE'}, type: 'SCALAR'},
                     ]
                 },
@@ -91,8 +110,7 @@
         it('Should create a report, execute the report, and validate the resulting ' +
             'record matches the created record in setup', function(done) {
             this.timeout(testConsts.INTEGRATION_TIMEOUT * appWithNoFlags.length);
-            var actualReportResults = [];
-            var expectedTestRecords = [];
+
             var reportEndpoint = recordBase.apiBase.resolveReportsEndpoint(app.id, app.tables[0].id);
             var reportToCreate = {
                 name: 'test report',
@@ -105,16 +123,8 @@
                 //Execute a report
                 recordBase.apiBase.executeRequest(reportEndpoint + r.id + '/results?format=' + FORMAT, consts.GET).then(function(reportResults) {
                     var results = JSON.parse(reportResults.body);
-                    //For each report record results push to an array.
-                    for (var i in results.records) {
-                        actualReportResults.push(results.records[i]);
-                    }
-                    //Push the expected records to an array.
-                    for (var j in expectedRecords) {
-                        expectedTestRecords.push(expectedRecords[j]);
-                    }
-                    //Assert if records from report results matches expected records
-                    assert.deepEqual(JSON.stringify(actualReportResults), JSON.stringify(expectedTestRecords), 'Unexpected report result returned: ' + JSON.stringify(actualReportResults) + ', ' + JSON.stringify(expectedTestRecords));
+                    //Verify records
+                    verifyRecords(results);
                     done();
                 });
             }).catch(function(error) {
@@ -155,27 +165,27 @@
                 {
                     message: 'Facet with 1 Text record and 1 Empty Record',
                     facetFId: [6, 12],
-                    expectedFacets: '[{"id":6,"name":"Text Field","type":"TEXT","values":["abcdef"],"hasBlanks":false},{"id":12,"name":"Empty Field","type":"TEXT","values":[""],"hasBlanks":true}]'
+                    expectedFacets: '[{"id":6,"name":"Text Field","type":"TEXT","values":["abcdef"],"hasBlanks":false},{"id":12,"name":"Empty Text Field","type":"TEXT","values":[""],"hasBlanks":true}]'
                 },
                 {
                     message: 'Facet with just Empty Record',
                     facetFId: [12],
-                    expectedFacets: '[{"id":12,"name":"Empty Field","type":"TEXT","values":[""],"hasBlanks":true}]'
+                    expectedFacets: '[{"id":12,"name":"Empty Text Field","type":"TEXT","values":[""],"hasBlanks":true}]'
                 },
                 {
                     message: 'Facet with just Null Record',
                     facetFId: [11],
-                    expectedFacets: '[{"id":11,"name":"Null Field","type":"TEXT","values":[""],"hasBlanks":true}]'
+                    expectedFacets: '[{"id":11,"name":"Null Text Field","type":"TEXT","values":[""],"hasBlanks":true}]'
                 },
                 {
                     message: 'Facet with Text null and Empty Records',
                     facetFId: [6, 11, 12],
-                    expectedFacets: '[{"id":6,"name":"Text Field","type":"TEXT","values":["abcdef"],"hasBlanks":false},{"id":11,"name":"Null Field","type":"TEXT","values":[""],"hasBlanks":true},{"id":12,"name":"Empty Field","type":"TEXT","values":[""],"hasBlanks":true}]'
+                    expectedFacets: '[{"id":6,"name":"Text Field","type":"TEXT","values":["abcdef"],"hasBlanks":false},{"id":11,"name":"Null Text Field","type":"TEXT","values":[""],"hasBlanks":true},{"id":12,"name":"Empty Text Field","type":"TEXT","values":[""],"hasBlanks":true}]'
                 },
                 {
                     message: 'Negative Test - Test the order of facet results',
                     facetFId: [11, 12, 6],
-                    expectedFacets: '[{"id":11,"name":"Null Field","type":"TEXT","values":[""],"hasBlanks":true},{"id":12,"name":"Empty Field","type":"TEXT","values":[""],"hasBlanks":true},{"id":6,"name":"Text Field","type":"TEXT","values":["abcdef"],"hasBlanks":false}]'
+                    expectedFacets: '[{"id":11,"name":"Null Text Field","type":"TEXT","values":[""],"hasBlanks":true},{"id":12,"name":"Empty Text Field","type":"TEXT","values":[""],"hasBlanks":true},{"id":6,"name":"Text Field","type":"TEXT","values":["abcdef"],"hasBlanks":false}]'
                 }
 
                 //TODO Negative testcase for numeric not supporting facets should be added after implementation.
@@ -187,8 +197,6 @@
 
         facetTestCases().forEach(function(testcase) {
             it('Test case: ' + testcase.message, function(done) {
-                var actualReportResults = [];
-                var expectedTestRecords = [];
                 this.timeout(testConsts.INTEGRATION_TIMEOUT);
                 var reportEndpoint = recordBase.apiBase.resolveReportsEndpoint(app.id, app.tables[0].id);
                 var reportToCreate = {
@@ -204,17 +212,7 @@
                     recordBase.apiBase.executeRequest(reportEndpoint + r.id + '/reportComponents?format=' + FORMAT, consts.GET).then(function(reportResults) {
                         var results = JSON.parse(reportResults.body);
                         //Verify records
-                        //For each report record results push to an array.
-                        for (var i in results.records) {
-                            actualReportResults.push(results.records[i]);
-                        }
-                        //Push the expected records to an array.
-                        for (var j in expectedRecords) {
-                            expectedTestRecords.push(expectedRecords[i]);
-                        }
-                        //Assert if records in recordandFacets results matches expected
-                        assert.deepEqual(JSON.stringify(actualReportResults), JSON.stringify(expectedTestRecords), 'Unexpected report result returned: ' + JSON.stringify(actualReportResults) + ', ' + JSON.stringify(expectedTestRecords));
-
+                        verifyRecords(results);
                         //verify facets
                         //Assert if report facet results matches expected
                         assert.deepEqual(JSON.stringify(results.facets), testcase.expectedFacets, 'Unexpected facet result returned: ' + JSON.stringify(results.facets) + ', ' + testcase.expectedFacets);
@@ -225,6 +223,9 @@
                         });
                     });
 
+                }).catch(function(error) {
+                    log.error(JSON.stringify(error));
+                    done();
                 });
             });
 
@@ -249,13 +250,13 @@
                     assert(results.records.length > 200);
                     var expectedFacet = {"id":6, "name":"Text Field", "type":"TEXT", "values":[], "hasBlanks":false, "errorMessage": errorCodes.ERROR_MSG_KEY.FACET.RECORD_TOO_BIG};
                     assert.deepEqual(JSON.stringify(results.facets), JSON.stringify([expectedFacet]));
-                    //Need to add verification.
                     done();
                 });
 
+            }).catch(function(error) {
+                log.error(JSON.stringify(error));
+                done();
             });
-
-
         });
 
         // Cleanup the test realm after all tests in the block
