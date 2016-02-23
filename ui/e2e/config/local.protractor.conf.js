@@ -13,7 +13,7 @@
         baseUrl: process.env.DOMAIN,
         // list of files / patterns to load in the browser
         specs: [
-            '../qbapp/tests/reports/*.e2e.spec.js'
+            baseE2EPath + 'qbapp/tests/reports/*.e2e.spec.js'
         ],
         // Patterns to exclude.
         exclude: [],

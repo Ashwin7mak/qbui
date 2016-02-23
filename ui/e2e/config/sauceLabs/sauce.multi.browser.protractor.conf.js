@@ -2,7 +2,7 @@
 // https://github.com/angular/protractor/blob/master/docs/referenceConf.js
 (function() {
     'use strict';
-    var globalSauceConfig = require('../sauce.global.protractor.conf.js');
+    var globalSauceConfig = require('./sauce.global.protractor.conf.js');
     // ----- Capabilities to be passed to the webdriver instance ----
     //
     // For a full list of available capabilities, see

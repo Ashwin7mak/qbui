@@ -9,11 +9,11 @@ class ReportService extends BaseService {
 
         //  Report service API endpoints
         this.API = {
-            GET_REPORT          : `${constants.BASE_URL.QUICKBASE}/${constants.APPS}/{0}/${constants.TABLES}/{1}/${constants.REPORTS}/{2}`,
-            GET_REPORTS         : `${constants.BASE_URL.QUICKBASE}/${constants.APPS}/{0}/${constants.TABLES}/{1}/${constants.REPORTS}`,
-            GET_REPORT_RESULTS  : `${constants.BASE_URL.QUICKBASE}/${constants.APPS}/{0}/${constants.TABLES}/{1}/${constants.REPORTS}/{2}/${constants.RESULTS}`,
-            GET_REPORT_FACETS   : `${constants.BASE_URL.QUICKBASE}/${constants.APPS}/{0}/${constants.TABLES}/{1}/${constants.REPORTS}/{2}/${constants.FACETS}/${constants.RESULTS}`,
-            PARSE_FACET_EXPR    : `${constants.BASE_URL.NODE}/${constants.FACETS}/${constants.PARSE}`
+            GET_REPORT              : `${constants.BASE_URL.QUICKBASE}/${constants.APPS}/{0}/${constants.TABLES}/{1}/${constants.REPORTS}/{2}`,
+            GET_REPORTS             : `${constants.BASE_URL.QUICKBASE}/${constants.APPS}/{0}/${constants.TABLES}/{1}/${constants.REPORTS}`,
+            GET_REPORT_COMPONENTS   : `${constants.BASE_URL.QUICKBASE}/${constants.APPS}/{0}/${constants.TABLES}/{1}/${constants.REPORTS}/{2}/${constants.REPORTCOMPONENTS}`,
+            GET_REPORT_RESULTS      : `${constants.BASE_URL.QUICKBASE}/${constants.APPS}/{0}/${constants.TABLES}/{1}/${constants.REPORTS}/{2}/${constants.RESULTS}`,
+            PARSE_FACET_EXPR        : `${constants.BASE_URL.NODE}/${constants.FACETS}/${constants.PARSE}`
         };
     }
 
@@ -43,7 +43,8 @@ class ReportService extends BaseService {
     }
 
     /**
-     * Return the report data for a given table.
+     * Return the records and facets list for a given report.
+     * Ideally this should be used the 1st time a report is loaded to get all the pieces required to render the report.
      *
      * @param appId
      * @param tableId
@@ -53,7 +54,32 @@ class ReportService extends BaseService {
      * @param rows - number of rows to return on the request
      * @returns promise
      */
-    getReportResults(appId, tableId, reportId, formatted, offset, rows) {
+    getReportDataAndFacets(appId, tableId, reportId, formatted, offset, rows) {
+        let params = {};
+        if (formatted === true) {
+            params.format = 'display';  // default is 'raw'
+        }
+        if (NumberUtils.isInt(offset) && NumberUtils.isInt(rows)) {
+            params.offset = offset;
+            params.numRows = rows;
+        }
+
+        let url = super.constructUrl(this.API.GET_REPORT_COMPONENTS, [appId, tableId, reportId]);
+        return super.get(url, {params:params});
+    }
+
+    /**
+     * Return the records for a given report.
+     *
+     * @param appId
+     * @param tableId
+     * @param reportId
+     * @param formatted - is output formatted for UI display or the raw data
+     * @param offset - zero based row offset
+     * @param rows - number of rows to return on the request
+     * @returns promise
+     */
+    getReportData(appId, tableId, reportId, formatted, offset, rows) {
         let params = {};
         if (formatted === true) {
             params.format = 'display';  // default is 'raw'
@@ -65,19 +91,6 @@ class ReportService extends BaseService {
 
         let url = super.constructUrl(this.API.GET_REPORT_RESULTS, [appId, tableId, reportId]);
         return super.get(url, {params:params});
-    }
-
-    /**
-     * Return the list of facets and associated facet values for a given report.
-     *
-     * @param appId
-     * @param tableId
-     * @param reportId
-     * @returns promise
-     */
-    getReportFacets(appId, tableId, reportId) {
-        let url = super.constructUrl(this.API.GET_REPORT_FACETS, [appId, tableId, reportId]);
-        return super.get(url);
     }
 
     /**
