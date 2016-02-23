@@ -2,6 +2,8 @@
 
 $panel-border-color: $color4;
 $panel-background-color: $color2;
+$panel-header-icon-color: #404040;
+$panel-header-icon-hover-color: #0098cd;
 /*
  * Overwrite the following bootstrap classes in their panel component so we have the proper layout
  * panel, panel-default, panel-body
@@ -57,15 +59,30 @@ h5 {
     padding: 10px 0 10px 0;
 }
 
-.qbPanelHeaderIcon {
-    position:absolute;
-    right:4px;
-    top:8px;
-    color: #7090ab
+.qbPanel.iconRight {
+    .qbPanelHeaderIcon {
+        position:absolute;
+        right:4px;
+        top:10px;
+    }
 }
 
+.qbPanel.iconLeft {
+    .qbPanelHeaderIcon {
+        position: absolute;
+        left: 4px;
+        top: 10px;
+    }
+    .qbPanelHeaderTitleText, .panel {
+        margin-left:30px;
+    }
+}
+
+.qbPanelHeaderIcon {
+    color: $panel-header-icon-color;
+}
 .qbPanelHeaderIcon:hover {
-    color: #0098cd;
+    color: $panel-header-icon-hover-color;
 }
 
 .qbPanelBody {
@@ -84,7 +101,7 @@ h5 {
 .rotateUp {
     transition: all .25s linear;
     transform: rotate(0deg);
-    font-size: 22px;
+    font-size: 18px;
 }
 
 /*

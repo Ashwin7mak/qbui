@@ -14,9 +14,7 @@ let NavStore = Fluxxor.createStore({
             appsListOpen: false,
             searchBarOpen: false,
             searching:false,
-            trowserOpen: false,
-            newItemsOpen: false,
-            showReports: false
+            trowserOpen: false
         };
 
         this.setLocaleBundle();
@@ -24,9 +22,6 @@ let NavStore = Fluxxor.createStore({
         this.bindActions(
             actions.SHOW_TROWSER, this.onShowTrowser,
             actions.HIDE_TROWSER, this.onHideTrowser,
-            actions.SHOW_REPORTS, this.onShowReports,
-            actions.HIDE_REPORTS, this.onHideReports,
-            actions.SHOW_NEW_ITEMS, this.onShowNewItems,
             actions.TOGGLE_LEFT_NAV, this.onToggleLeftNav,
             actions.TOGGLE_APPS_LIST, this.onToggleAppsList,
             actions.TOGGLE_SEARCH, this.onToggleSearch,
@@ -50,14 +45,6 @@ let NavStore = Fluxxor.createStore({
         this.emit('change');
     },
 
-    onShowReports: function() {
-        this.state.showReports = true;
-        this.emit('change');
-    },
-    onHideReports: function() {
-        this.state.showReports = false;
-        this.emit('change');
-    },
     onToggleSearch: function() {
         this.state.searchBarOpen = !this.state.searchBarOpen;
         this.emit('change');
@@ -89,10 +76,6 @@ let NavStore = Fluxxor.createStore({
         } else {
             this.state.appsListOpen = !this.state.appsListOpen;
         }
-        this.emit('change');
-    },
-    onShowNewItems: function() {
-        this.state.newItemsOpen = true;
         this.emit('change');
     },
     getState: function() {

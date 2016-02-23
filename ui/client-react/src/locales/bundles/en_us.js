@@ -70,6 +70,8 @@ export default {
             }
         },
         report : {
+            newReport: "New",
+            organizeReports: "Organize",
             filteredRecordCount : "{filteredRecordCount} of {recordCount} {nameForRecords} ",
             recordCount : "{recordCount} {nameForRecords} ",
             noFacets : "No Facets",

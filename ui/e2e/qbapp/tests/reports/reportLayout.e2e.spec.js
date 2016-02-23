@@ -64,10 +64,12 @@
             }).then(function() {
                 // Open the reports list
                 reportServicePage.reportHamburgersElList.get(0).click();
-                // Select the report
-                reportServicePage.reportLinksElList.get(0).click();
-                // Done callback to let Jasmine know we are done with our promise chain
-                done();
+                // Wait for the report list to load
+                reportServicePage.waitForElement(reportServicePage.reportGroupsDivEl).then(function() {
+                    // Find and select the report
+                    reportServicePage.selectReport('My Reports', 'Test Report');
+                    done();
+                });
             }).catch(function(error) {
                 // Global catch that will grab any errors from chain above
                 // Will appropriately fail the beforeAll method so other tests won't run
