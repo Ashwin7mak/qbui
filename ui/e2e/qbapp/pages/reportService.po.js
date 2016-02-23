@@ -92,20 +92,33 @@
                     return text === reportGroup;
                 });
             }).then(function(filteredElements) {
-                // filteredElements is the list of filtered elements
-                return filteredElements[0].click();
+                // filteredElements is the list of filtered elements (in this case the Report Group div)
+                // Check to see if the report group is already expanded (functionality is sticky from prior tests)
+                return e2ePageBase.hasClass(filteredElements[0].element(by.className('qbPanelHeaderIcon')), 'rotateUp').then(function(result) {
+                    if (result === true) {
+                        return filteredElements[0].click();
+                    }
+                });
             });
 
             // Find and select the report based on name
-            this.reportGroupElList.last().all(by.className('reportLink')).filter(function(elem) {
+            //TODO: Break this filter out into a separate function
+            this.reportGroupElList.filter(function(elem) {
                 // Return the element or elements
-                return elem.getText().then(function(text) {
+                return elem.element(by.className('qbPanelHeaderTitleText')).getText().then(function(text) {
                     // Match the text
-                    return text === reportName;
+                    return text === reportGroup;
                 });
-            }).then(function(filteredElements) {
-                //e2eBase.sleep(1000);
-                filteredElements[0].click();
+            }).then(function(reportGroupElements) {
+                reportGroupElements[0].all(by.className('reportLink')).filter(function(elem) {
+                    // Return the element or elements
+                    return elem.getText().then(function(text) {
+                        // Match the text
+                        return text === reportName;
+                    });
+                }).then(function(reportLinkElements) {
+                    return reportLinkElements[0].click();
+                });
             });
         };
 
