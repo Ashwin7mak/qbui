@@ -52,7 +52,7 @@
                 return reportServicePage.waitForElement(reportServicePage.appsListDivEl).then(function() {
                     // Select the app
                     return reportServicePage.appLinksElList.get(0).click().then(function() {
-                        //Done callback to let Jasmine know we are done with our promise chain
+                        // Done callback to let Jasmine know we are done with our promise chain
                         done();
                     });
                 });
@@ -82,19 +82,9 @@
             // Open the reports list
             reportServicePage.reportHamburgersElList.get(0).click();
             // Wait for the report list to load
-            reportServicePage.waitForElement(reportServicePage.reportsListDivEl).then(function() {
-                // Select the report
-                reportServicePage.reportLinksElList.get(0).click();
-            });
-            // Assert report name
-            reportServicePage.reportLinksElList.then(function(links) {
-                links[0].getText().then(function(text) {
-                    expect(text).toEqual('Test Report');
-                });
-            });
-            // Select the report
-            reportServicePage.reportLinksElList.then(function(links) {
-                links[0].click();
+            reportServicePage.waitForElement(reportServicePage.reportGroupsDivEl).then(function() {
+                // Find and select the report
+                reportServicePage.selectReport('My Reports', 'Test Report');
             });
             // Wait until the table has loaded
             reportServicePage.waitForElement(reportServicePage.loadedContentEl).then(function() {
@@ -106,7 +96,6 @@
                 // Check all record values equal the ones we added via the API
                 reportServicePage.griddleRecordElList.getText().then(function(uiRecords) {
                     e2eBase.recordService.assertRecordValues(uiRecords, recordList);
-                    reportServicePage.reportsBackLinkEl.click();
                 });
             });
         });
@@ -120,8 +109,11 @@
             reportServicePage.tableLinksElList.get(3).click().then(function() {
                 // Open the reports list
                 reportServicePage.reportHamburgersElList.get(0).click();
-                // Select the report
-                reportServicePage.reportLinksElList.get(0).click();
+                // Wait for the report list to load
+                reportServicePage.waitForElement(reportServicePage.reportGroupsDivEl).then(function() {
+                    // Find and select the report
+                    reportServicePage.selectReport('My Reports', 'Test Report');
+                });
                 // Make sure the table report has loaded
                 reportServicePage.waitForElement(reportServicePage.loadedContentEl).then(function() {
                     // Check there is a scrollbar in the griddle table
@@ -131,7 +123,6 @@
                     //When all the dimensions have been fetched, assert the values match expectations
                     Promise.all(fetchRecordPromises).then(function(dimensions) {
                         expect(Number(dimensions[0])).toBeGreaterThan(Number(dimensions[1]));
-                        reportServicePage.reportsBackLinkEl.click();
                     });
                 });
             });
@@ -146,8 +137,11 @@
             reportServicePage.tableLinksElList.get(4).click().then(function() {
                 // Open the reports list
                 reportServicePage.reportHamburgersElList.get(1).click();
-                // Select the report
-                reportServicePage.reportLinksElList.get(0).click();
+                // Wait for the report list to load
+                reportServicePage.waitForElement(reportServicePage.reportGroupsDivEl).then(function() {
+                    // Find and select the report
+                    reportServicePage.selectReport('My Reports', 'Test Report');
+                });
                 // Make sure the table report has loaded
                 reportServicePage.waitForElement(reportServicePage.loadedContentEl).then(function() {
                     // Check there is no scrollbar in the griddle table
@@ -157,12 +151,10 @@
                     //When all the dimensions have been fetched, assert the values match expectations
                     Promise.all(fetchRecordPromises).then(function(dimensions) {
                         expect(Number(dimensions[0])).not.toBeGreaterThan(Number(dimensions[1]));
-                        reportServicePage.reportsBackLinkEl.click();
                     });
                 });
             });
         });
-
 
         /**
          * After all tests are done, run the cleanup function in the base class
