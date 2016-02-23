@@ -265,7 +265,7 @@ var FacetsMenu = React.createClass({
                         </span>
                     </div>
                 </OverlayTrigger>
-                {((!(this.context.breakpoint === breakpoints.SMALL_BREAKPOINT) && this.context.touch)) &&
+                {(((this.context.breakpoint !== breakpoints.SMALL_BREAKPOINT) && !this.context.touch)) &&
                      <span className="selectedFacets">{this.renderSelectedFacets()}</span>
                 }
             </div>

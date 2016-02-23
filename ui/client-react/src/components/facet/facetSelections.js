@@ -187,6 +187,16 @@ class FacetSelections {
             // remove to mark it deselected
             this.removeSelection(facetField.id, value);
         }
+        // boolean only has either true or false set not both
+        if (facetField.type === 'bool') {
+            // if we just did a select and the selection for this field is both true & false
+            // disable the other one that the newly selected
+            if (select) {
+                let other = (value == 'True') ? 'False' : 'True';
+                this.removeSelection(facetField.id, other);
+            }
+
+        }
         ////caller to update the state
     }
 
