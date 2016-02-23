@@ -97,8 +97,11 @@
             reportServicePage.tableLinksElList.get(3).click().then(function() {
                 // Open the reports list
                 reportServicePage.reportHamburgersElList.get(0).click();
-                // Select the report
-                reportServicePage.reportLinksElList.get(0).click();
+                // Wait for the report list to load
+                reportServicePage.waitForElement(reportServicePage.reportGroupsDivEl).then(function() {
+                    // Find and select the report
+                    reportServicePage.selectReport('My Reports', 'Test Report');
+                });
                 // Make sure the table report has loaded
                 reportServicePage.waitForElement(reportServicePage.loadedContentEl).then(function() {
                     e2eConsts.NavDimensionsDataProvider().forEach(function(testcase) {
@@ -109,7 +112,6 @@
                     });
                     // Reset back to xlarge
                     e2eBase.resizeBrowser(e2eConsts.XLARGE_BP_WIDTH, e2eConsts.DEFAULT_HEIGHT);
-                    reportServicePage.reportsBackLinkEl.click();
                 });
             });
         });
@@ -122,8 +124,11 @@
             reportServicePage.tableLinksElList.get(3).click().then(function() {
                 // Open the reports list
                 reportServicePage.reportHamburgersElList.get(0).click();
-                // Select the report
-                reportServicePage.reportLinksElList.get(0).click();
+                // Wait for the report list to load
+                reportServicePage.waitForElement(reportServicePage.reportGroupsDivEl).then(function() {
+                    // Find and select the report
+                    reportServicePage.selectReport('My Reports', 'Test Report');
+                });
                 // Make sure the table report has loaded
                 reportServicePage.waitForElement(reportServicePage.loadedContentEl).then(function() {
                     // Reverse the dataprovider to execute from small to xlarge

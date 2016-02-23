@@ -31,8 +31,9 @@
         this.tableLinksElList = this.tablesListDivEl.all(by.className('link'));
         this.reportHamburgersElList = this.tablesListDivEl.all(by.className('right'));
         this.reportsListDivEl = element(by.className('reportsList'));
-        this.reportLinksElList = this.reportsListDivEl.all(by.className('leftNavLink'));
-        this.reportsBackLinkEl = this.reportsListDivEl.element(by.className('backLink'));
+        this.reportsTopDivEl = this.reportsListDivEl.element(by.className('reportsTop'));
+        this.reportGroupsDivEl = this.reportsListDivEl.element(by.className('reportGroups'));
+        this.reportGroupElList = this.reportsListDivEl.all(by.className('reportGroup'));
 
         // Top Nav
         this.topNavDivEl = element(by.className('topNav'));
@@ -73,6 +74,40 @@
         this.griddleLastColumnHeaderEl = this.griddleColHeaderElList.last();
         this.griddleDataBodyDivEl = this.griddleBodyEl.all(by.tagName('tbody')).first();
         this.griddleRecordElList = this.griddleDataBodyDivEl.all(by.tagName('tr'));
+
+        /**
+         * Function that will open the report group and load the report specified by name
+         * @param reportGroup
+         * @param reportName
+         */
+        this.selectReport = function(reportGroup, reportName){
+            // Let the trowser animate
+            e2eBase.sleep(browser.params.smallSleep);
+
+            // Expand the Report group
+            this.reportGroupElList.filter(function(elem) {
+                // Return the element or elements
+                return elem.element(by.className('qbPanelHeaderTitleText')).getText().then(function(text) {
+                    // Match the text
+                    return text === reportGroup;
+                });
+            }).then(function(filteredElements) {
+                // filteredElements is the list of filtered elements
+                return filteredElements[0].click();
+            });
+
+            // Find and select the report based on name
+            this.reportGroupElList.last().all(by.className('reportLink')).filter(function(elem) {
+                // Return the element or elements
+                return elem.getText().then(function(text) {
+                    // Match the text
+                    return text === reportName;
+                });
+            }).then(function(filteredElements) {
+                //e2eBase.sleep(1000);
+                filteredElements[0].click();
+            });
+        };
 
         /**
         * Helper function that will get all of the field column headers from the report. Returns an array of strings.
@@ -127,10 +162,7 @@
             }
         };
 
-        this.clickReportsMenu = function(tableLinkEl) {
-            tableLinkEl.by(className('right')).click();
-        };
-
+        // Click the app toggle in the leftNav
         this.clickAppToggle = function() {
             var deferred = Promise.pending();
             try {
@@ -146,6 +178,7 @@
             return deferred.promise;
         };
 
+        // Gets text from the topNav
         this.getGlobalNavTextEl = function(globalNavEl) {
             var textEl = globalNavEl.all(by.tagName('span')).last();
             return textEl;

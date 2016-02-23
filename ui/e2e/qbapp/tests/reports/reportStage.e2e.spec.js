@@ -48,9 +48,9 @@
                     // Open the reports list
                     reportServicePage.reportHamburgersElList.get(0).click();
                     // Wait for the report list to load
-                    reportServicePage.waitForElement(reportServicePage.reportsListDivEl).then(function() {
-                        // Select the report
-                        reportServicePage.reportLinksElList.get(0).click();
+                    reportServicePage.waitForElement(reportServicePage.reportGroupsDivEl).then(function() {
+                        // Find and select the report
+                        reportServicePage.selectReport('My Reports', 'Test Report');
                         // Make sure the table report has loaded
                         reportServicePage.waitForElement(reportServicePage.loadedContentEl).then(function() {
                             done();
@@ -64,16 +64,6 @@
          * Test method. Test the report Stage Collapse and Expands
          */
         it('Should expand/collapse the reports stage after clicking on stage button in all breakpoints', function() {
-            // Assert report name
-            reportServicePage.reportLinksElList.then(function(links) {
-                links[0].getText().then(function(text) {
-                    expect(text).toEqual('Test Report');
-                });
-            });
-            // Select the report
-            reportServicePage.reportLinksElList.then(function(links) {
-                links[0].click();
-            });
             // Wait until report loaded
             reportServicePage.waitForElement(reportServicePage.loadedContentEl).then(function() {
                 for (var i = 0; i < clientWidths.length; i++) {
