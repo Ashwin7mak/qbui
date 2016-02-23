@@ -18,6 +18,7 @@ $color15:   #f0f3f9;
 $color16:   #2ca01c;
 $color17:   #f3f5f8;
 $color18:   #cccccc;
+$color19:   #c7c7c7;
 
 
 $left-nav-bg: #193048;
@@ -59,3 +60,9 @@ $toolBar-input-borderColor:        $color4;
 //==Facet list
 $facetMenu-backgroundColor:         $color2;
 $facetSelected-color:               $color16;
+$facetMenu-BorderColor:             $color19;
+$facetMenu-NoOptionsColor:          $color19;
+$facetMenu-clearButtonColor:        $color9;
+$facetMenu-showMoreColor:           $color8;
+$facetMenu-facetTokenTextColor:     $color2;
+$facetMenu-facetTokenBackgroundColor:   $selection-badge-color;

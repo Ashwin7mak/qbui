@@ -26,7 +26,6 @@ var ReportToolbar = React.createClass({
     //interaction options
     secondInMilliseconds : 1000,
     debounceInputTime : 0, // 1/5 a second delay
-    facetVisValues : 50,  // how many facets to list before showing more...link
 
     mixins: [FluxMixin],
 
@@ -132,18 +131,36 @@ var ReportToolbar = React.createClass({
         this.setState({selections: mutated});
     },
 
-    handleChange: function(e) {
-        var searchTxt = e.target.value;
-        var self = this;
-        this.debouncedChange(searchTxt).then(function(result) {
-            self.setState({
-                searchStringForFiltering: searchTxt.trim()
-            });
-            self.searchReport(self.state.searchStringForFiltering);
+    executeSearchString : function(result) {
+        this.setState({
+            searchStringForFiltering: result
         });
+        this.searchReport(result);
+    },
+
+    searchTheString : function(searchTxt, debounced) {
+        var self = this;
+        if (debounced) {
+            this.debouncedChange(searchTxt).then(function(result) {
+                self.executeSearchString(result.trim());
+            });
+        }  else {
+            this.executeSearchString(searchTxt.trim());
+        }
+    },
+
+    handleFacetClearAllSelectsAndSearch : function() {
+        this.setState({selections: new FacetSelections(), searchInput:''});
+        this.searchTheString('', false);
+    },
+
+
+    handleSearchChange: function(e) {
+        var searchTxt = e.target.value.trim();
         this.setState({
             searchInput: searchTxt
         });
+        this.searchTheString(searchTxt, true);
 
     },
 
@@ -245,12 +262,31 @@ var ReportToolbar = React.createClass({
         return (
             <div className="reportToolbar">
 
+                <RecordsCount recordCount={recordCount}
+                              isFiltered={this.isFiltered()}
+                              filteredRecordCount={filteredRecordCount}
+                              nameForRecords="Records"
+                    {...this.props} />
+
+                {(this.isFiltered() || this.state.searchInput.length != 0) &&
+                (<span onClick={this.handleFacetClearAllSelectsAndSearch}>
+                                        <QBicon className="clearAllFacets" icon="clear-mini" />
+                    </span>)
+                }
+
+                {/* Search and grouping icon will go in the toolbar here per discussion with xd-ers */
+                }
+
+
                 {/*TODO : check if searchbox is enabled for this report,
-                if has facets has search too */}
+                if has facets has search too, eg no facets without searchbox */}
                 {recordCount &&
-                    <FilterSearchBox onChange={this.handleChange}
+                    <FilterSearchBox onChange={this.handleSearchChange}
                                      nameForRecords="Records"
-                                     {...this.props} />
+                                     ref="searchInputbox"
+                                     defaultValue=""
+                                     value={this.state.searchInput}
+                        {...this.props} />
                 }
 
                 {/*TODO :  - check if facets is enabled for this report,
@@ -264,18 +300,6 @@ var ReportToolbar = React.createClass({
                     />)
                 }
 
-                <RecordsCount recordCount={recordCount}
-                              isFiltered={this.isFiltered()}
-                              filteredRecordCount={filteredRecordCount}
-                              nameForRecords="Records"
-                                {...this.props} />
-
-
-                {hasSelectedFacets &&
-                    (<span onClick={this.handleFacetClearAllSelects}>
-                                        <QBicon className="clearAllFacets" icon="clear-mini" />
-                    </span>)
-                }
 
                 {fakeFilterButton}
 

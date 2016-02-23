@@ -6,6 +6,8 @@
   width: 25em;
 }
 
+
+
 .reportToolbar {
   > div > div {
     position: relative;
@@ -35,6 +37,7 @@
     z-index: 10000;
     margin-left: -15px;
     border-radius: 3px;
+    border-color : $facetMenu-BorderColor;
     min-width: 300px;
     > .arrow {
       left: 13% !important;
@@ -54,7 +57,7 @@
 
     .noOptions {
       margin-left: 2em;
-      color: $color18;
+      color: $facetMenu-NoOptionsColor;
       font-family: "Lato", sans-serif;
     }
 
@@ -75,7 +78,7 @@
       background-color: $facetMenu-backgroundColor;
       border: none;
       box-shadow: none;
-      border-top:  1px solid $color4;
+      border-top:  1px solid $facetMenu-BorderColor;
       padding: 10px 15px 5px 15px;
     }
 
@@ -121,7 +124,7 @@
     }
 
     .listMore {
-      color: $color8;
+      color: $facetMenu-showMoreColor;
       margin-left: 2.4em;
     }
 
@@ -139,33 +142,59 @@
     }
 
     .selections .clearFacet {
-      color: $color9;
+      color: $facetMenu-clearButtonColor;
     }
   }
 
 .facetToken {
     display : inline-block;
-    //border: 1px solid $color6;
-    //border-radius: 5px;
     padding: 3px;
 
   .facetNameToken {
     margin-right: .5em;
   }
 
+  .facetSelections {
+    display: flex;
+  }
+
   .selectedToken {
     padding:2px 8px;
     margin-right:10px;
-    color:#fff;
-    background-color: $selection-badge-color;
     border-radius: 12px;
     font-size:10px;
     font-weight:500;
+    /* dark background tokens */
+    // background-color: $selection-badge-color;
+    // color: $facetMenu-facetTokenTextColor;
+
+    /* paler background facet tokens */
+    background-color: #e3eaf3;
+    color: #5e7994;
   }
   .clearFacet {
     padding-left: 11px;
   }
 }
 
+.small-breakpoint .reportContainer .reportToolsAndContentContainer .reportToolbar {
+  .popover-content {
+    max-height: 454px;
+  }
+  .facetMenuPopup {
+    display: block;
+    left: -140px;
+    min-width: 250px;
+  }
+  .filterSearchBox {
+    padding: .4rem;
+    width: 11em;
+  }
+
+  .popover.bottom > .arrow {
+    display: none;
+  }
+
+}
 
 

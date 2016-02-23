@@ -4,6 +4,7 @@ import {OverlayTrigger, Popover} from 'react-bootstrap';
 import Logger from '../../utils/logger';
 import {I18nMessage} from '../../utils/i18nMessage';
 import StringUtils from '../../utils/stringUtils';
+import * as breakpoints from '../../constants/breakpoints';
 
 import QBicon from '../qbIcon/qbIcon';
 import FacetsList from './facetsList';
@@ -23,6 +24,10 @@ let logger = new Logger();
 **/
 var FacetsMenu = React.createClass({
     displayName: 'FacetsMenu',
+    contextTypes: {
+        breakpoint: React.PropTypes.string,
+        touch: React.PropTypes.bool
+    },
     propTypes: {
         /**
          *  Takes in for properties the reportData which includes the list of facets
@@ -209,7 +214,7 @@ var FacetsMenu = React.createClass({
                                          <QBicon className="clearFacet" icon="clear-mini" />
                                 </span></span>);
                 }));
-                components.push(<div className="facetToken" key={'token' + facet.name} ><span className="facetNameToken">{facet.name}:</span>
+                components.push(<div className="facetToken" key={'token' + facet.name} ><span className="facetNameToken">{facet.name}</span>
                     <span className="facetSelections">{kids}</span></div>);
             }
         });
@@ -258,7 +263,9 @@ var FacetsMenu = React.createClass({
                         </span>
                     </div>
                 </OverlayTrigger>
-                {this.renderSelectedFacets()}
+                {((!(this.context.breakpoint === breakpoints.SMALL_BREAKPOINT) && this.context.touch)) &&
+                     <span className="selectedFacets">{this.renderSelectedFacets()}</span>
+                }
             </div>
         );
     }

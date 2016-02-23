@@ -70,7 +70,7 @@ export default {
             recordCount : "{recordCount} {nameForRecords} ",
             noFacets : "Aucun Facets",
             searchPlaceHolder:  "Rechercher ces {nameForRecords} ...",
-            seeMore : "Voir plus...",
+            seeMore : "plus de filtres",
             tooManyValues: "Trop de valeurs à utiliser pour le filtrage",
             blank : "blanc"
         }

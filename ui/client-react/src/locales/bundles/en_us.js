@@ -75,7 +75,7 @@ export default {
             noFacets : "No Facets",
             searchPlaceHolder:  "Search these {nameForRecords} ...",
             badParams : "Insufficient parameters supplied",
-            seeMore : "See more...",
+            seeMore : "more filters...",
             tooManyValues : "Too many values to use for filtering.",
             blank : "blank"
         }
