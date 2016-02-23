@@ -94,8 +94,8 @@
             }).then(function(filteredElements) {
                 // filteredElements is the list of filtered elements (in this case the Report Group div)
                 // Check to see if the report group is already expanded (functionality is sticky from prior tests)
-                return e2ePageBase.hasClass(filteredElements[0].element(by.className('qbPanelHeaderIcon')), 'rotateUp').then(function(result){
-                    if(result === true){
+                return e2ePageBase.hasClass(filteredElements[0].element(by.className('qbPanelHeaderIcon')), 'rotateUp').then(function(result) {
+                    if (result === true) {
                         return filteredElements[0].click();
                     }
                 });
@@ -109,15 +109,15 @@
                     // Match the text
                     return text === reportGroup;
                 });
-            }).then(function(filteredElements) {
-                filteredElements[0].all(by.className('reportLink')).filter(function(elem) {
+            }).then(function(reportGroupElements) {
+                reportGroupElements[0].all(by.className('reportLink')).filter(function(elem) {
                     // Return the element or elements
                     return elem.getText().then(function(text) {
                         // Match the text
                         return text === reportName;
                     });
-                }).then(function(filteredElements) {
-                    return filteredElements[0].click();
+                }).then(function(reportLinkElements) {
+                    return reportLinkElements[0].click();
                 });
             });
         };
