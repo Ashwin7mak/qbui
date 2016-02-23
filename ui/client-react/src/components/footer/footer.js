@@ -3,7 +3,7 @@ import Nav from '../../../../node_modules/react-bootstrap/lib/Nav';
 import NavItem from '../../../../node_modules/react-bootstrap/lib/NavItem';
 import Navbar from '../../../../node_modules/react-bootstrap/lib/Navbar';
 import {I18nMessage} from '../../../src/utils/i18nMessage';
-import './footer.css';
+import './footer.scss';
 
 var Footer = React.createClass({
     render: function() {

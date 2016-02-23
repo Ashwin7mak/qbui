@@ -23,18 +23,9 @@ describe('Report Data Actions success -- ', () => {
             test: 'test'
         }
     };
-    let responseFacetData = {
-        data: {
-            facets: {
-                test: 'test'
-            }
-        }
-    };
-
     let response = {
         name: responseReportData.data.name,
-        data: responseResultData.data,
-        facets: responseFacetData.data
+        data: responseResultData.data
     };
     let loadReportInputs = {
         appId: appId,
@@ -47,11 +38,8 @@ describe('Report Data Actions success -- ', () => {
         getReport() {
             return Promise.resolve(responseReportData);
         }
-        getReportResults() {
+        getReportDataAndFacets() {
             return Promise.resolve(responseResultData);
-        }
-        getReportFacets() {
-            return Promise.resolve(responseFacetData);
         }
     }
 
@@ -62,8 +50,7 @@ describe('Report Data Actions success -- ', () => {
     beforeEach(() => {
         spyOn(flux.dispatchBinder, 'dispatch');
         spyOn(mockReportService.prototype, 'getReport').and.callThrough();
-        spyOn(mockReportService.prototype, 'getReportResults').and.callThrough();
-        spyOn(mockReportService.prototype, 'getReportFacets').and.callThrough();
+        spyOn(mockReportService.prototype, 'getReportDataAndFacets').and.callThrough();
         reportDataActions.__Rewire__('ReportService', mockReportService);
     });
 
@@ -75,8 +62,7 @@ describe('Report Data Actions success -- ', () => {
         flux.actions.loadReport(appId, tblId, rptId, true).then(
             () => {
                 expect(mockReportService.prototype.getReport).toHaveBeenCalled();
-                expect(mockReportService.prototype.getReportResults).toHaveBeenCalled();
-                expect(mockReportService.prototype.getReportFacets).toHaveBeenCalled();
+                expect(mockReportService.prototype.getReportDataAndFacets).toHaveBeenCalled();
                 expect(flux.dispatchBinder.dispatch.calls.count()).toEqual(2);
                 expect(flux.dispatchBinder.dispatch.calls.argsFor(0)).toEqual([actions.LOAD_REPORT, loadReportInputs]);
                 expect(flux.dispatchBinder.dispatch.calls.argsFor(1)).toEqual([actions.LOAD_REPORT_SUCCESS, response]);

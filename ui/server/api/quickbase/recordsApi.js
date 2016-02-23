@@ -60,16 +60,19 @@
         var recordFormatter = require('./formatter/recordFormatter')();
 
         //Module constants:
+        var APPLICATION_JSON = 'application/json';
+        var CONTENT_TYPE = 'Content-Type';
+        var DISPLAY = 'display';
         var FIELDS = 'fields';
+        var FORMAT = 'format';
+        var RAW = 'raw';
+        var RECORD = 'record';
         var RECORDS = 'records';
         var REPORTS = 'reports';
-        var RECORD = 'record';
-        var CONTENT_TYPE = 'Content-Type';
-        var APPLICATION_JSON = 'application/json';
-        var FORMAT = 'format';
-        var DISPLAY = 'display';
-        var RAW = 'raw';
+        var REPORTCOMPONENTS = 'reportcomponents';
+        var RESULTS = 'results';
         var request = defaultRequest;
+
 
         //Given an array of records and array of fields, remove any fields
         //not referenced in the records
@@ -95,29 +98,6 @@
                 }
             }
             return null;
-        }
-
-        //the immediately resolve flag is set, resolve the deferred without making a call
-        function executeRequest(req, opts, immediatelyResolve) {
-            //  Generate tid for all requests..and log it
-            requestHelper.setTidHeader(req);
-            log.info({req: req});
-
-            var deferred = Promise.pending();
-            if (immediatelyResolve) {
-                deferred.resolve(null);
-            } else {
-                request(opts, function(error, response) {
-                    if (error) {
-                        deferred.reject(new Error(error));
-                    } else if (response.statusCode !== 200) {
-                        deferred.reject(response);
-                    } else {
-                        deferred.resolve(response);
-                    }
-                });
-            }
-            return deferred.promise;
         }
 
         //TODO: only application/json is supported for content type.  Need a plan to support XML
@@ -207,8 +187,14 @@
             fetchRecords: function(req) {
                 var opts = requestHelper.setOptions(req);
                 opts.headers[CONTENT_TYPE] = APPLICATION_JSON;
+                let inputUrl = opts.url.toLowerCase();
+                //the request came in for report/{reportId}/results.
+                // Convert that to report/{reportId}/facets/results to get facets data
+                if (inputUrl.indexOf(REPORTCOMPONENTS) !== -1) {
+                    opts.url = inputUrl.substring(0, inputUrl.indexOf(REPORTCOMPONENTS)) + RESULTS;
+                }
 
-                return executeRequest(req, opts);
+                return requestHelper.executeRequest(req, opts);
             },
 
             //Returns a promise that is resolved with the table fields or rejected with an error code
@@ -225,7 +211,7 @@
                 }
 
                 //TODO: why do we immediately resolve if the format is raw?
-                return executeRequest(req, opts, (req.param(FORMAT) === RAW));
+                return requestHelper.executeRequest(req, opts, (req.param(FORMAT) === RAW));
             }
         };
         return recordsApi;

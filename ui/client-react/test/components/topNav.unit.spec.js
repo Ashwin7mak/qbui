@@ -80,13 +80,6 @@ describe('TopNav functions', () => {
         expect(flux.actions.toggleLeftNav).toHaveBeenCalled();
     });
 
-    it('test shows trowser on addNew button click', () => {
-        let addNewButton = TestUtils.scryRenderedDOMComponentsWithClass(component, "addNewButton");
-        expect(addNewButton.length).toEqual(1);
-        TestUtils.Simulate.click(addNewButton[0]);
-        expect(flux.actions.showTrowser).toHaveBeenCalled();
-    });
-
     it('test changes locale on selecting menu item', () => {
         var localeMenuOptions = TestUtils.scryRenderedDOMComponentsWithClass(component, "localeLink");
 

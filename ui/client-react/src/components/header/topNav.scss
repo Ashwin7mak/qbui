@@ -4,117 +4,118 @@ $global-action-fg: #333;
 
 .searchPopover {
 
-  .buttonContainer {
-    display:flex;
-    justify-content:center;
-  }
+    .buttonContainer {
+        display: flex;
+        justify-content: center;
+    }
 }
 
 .topNav {
     .qbIcon {
-      font-size: 22px;
+        font-size: 22px;
     }
-  .toggleNavButton,.dropdownToggle {
-      .qbIcon {
-        font-size: 16px;
-      }
-  }
+    .toggleNavButton, .dropdownToggle {
+        .qbIcon {
+            font-size: 16px;
+        }
+    }
 }
 
 .topNav .navGroup .harmonyButtons .btn {
-  background: $header-bg;
-  border:0;
+    background: $header-bg;
+    border: 0;
 }
-.topNav .navGroup .harmonyButtons .btn:hover {
-  background: $nav-hover-bg;
-  span {
-    color: $nav-hover-fg;
-  }
-}
-.topNav .dropdown {
-  outline:none;
-}
-.topNav .dropdown-menu {
-  right:0;
-  left:auto;
-}
-.topNav .dropdown {
 
-  a.dropdownToggle {
-    display:inline-block;
-    cursor:pointer;
-    padding: 0 8px;
-    color: $icon-color;
-  }
-  a.dropdownToggle:hover {
+.topNav .navGroup .harmonyButtons .btn:hover {
     background: $nav-hover-bg;
     span {
-      color: $nav-hover-fg;
+        color: $nav-hover-fg;
     }
-  }
+}
+
+.topNav .dropdown {
+    outline: none;
+}
+
+.topNav .dropdown-menu {
+    right: 0;
+    left: auto;
+}
+
+.topNav .dropdown {
+
+    a.dropdownToggle {
+        display: inline-block;
+        cursor: pointer;
+        padding: 0 8px;
+        color: $icon-color;
+    }
+    a.dropdownToggle:hover {
+        background: $nav-hover-bg;
+        span {
+            color: $nav-hover-fg;
+        }
+    }
 }
 
 .topNav .globalActions {
-  display:inline-block;
+    display: inline-block;
 
+    .link {
+        cursor: pointer;
+        a {
+            color: $icon-color;
+            display: inline-block;
+            padding: 0 8px;
+            color: $icon-color;
 
-  .link {
-    cursor:pointer;
-    a {
-      color: $icon-color;
-      display:inline-block;
-      padding: 0 8px;
-      color: $icon-color;
+            .qbIcon {
+                vertical-align: middle;
+                font-size: 22px;
 
-      .qbIcon {
-        vertical-align:middle;
-        font-size:22px;
-
-      }
+            }
+        }
+        a:hover {
+            color: #fff;
+            background: $nav-hover-bg;
+        }
     }
-    a:hover {
-      color:#fff;
-      background:$nav-hover-bg;
+
+    .globalActionsList {
+        margin: 0;
+        padding: 0;
+        vertical-align: middle;
     }
-  }
+    .globalAction {
+        border: 0;
 
-  .globalActionsList {
-    margin:0;
-    padding:0;
-    vertical-align:middle;
-  }
-  .globalAction {
-    border:0;
-
-    .qbIcon + span {
-      margin-left:6px;
+        .qbIcon + span {
+            margin-left: 6px;
+        }
     }
-  }
 
-  .globalAction:hover {
-    background: $nav-hover-bg;
-    a {
-      color: $nav-hover-fg;
-      .hi {
-        color: $nav-hover-fg;
-      }
+    .globalAction:hover {
+        background: $nav-hover-bg;
+        a {
+            color: $nav-hover-fg;
+            .hi {
+                color: $nav-hover-fg;
+            }
+        }
     }
-  }
 
-  li {
-    display:inline-block;
-  }
+    li {
+        display: inline-block;
+    }
 }
 
 /* hide text not icons */
 
-.medium-breakpoint .topNav .globalActions span:not(.hi),
-.small-breakpoint .topNav .globalActions span:not(.hi)
-{
-  display:none;
+.medium-breakpoint .topNav .globalActions span:not(.qbIcon),
+.small-breakpoint .topNav .globalActions span:not(.qbIcon) {
+    display: none;
 }
 
-.small-breakpoint .main .topNav .navGroup .navItem.topTitle
-{
-  display:none;
+.small-breakpoint .main .topNav .navGroup .navItem.topTitle {
+    display: none;
 }

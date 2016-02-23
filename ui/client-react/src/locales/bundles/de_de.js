@@ -6,6 +6,8 @@ export default {
             header: "Anwendungen"
         },
         reports : {
+            newReport: "Neu",
+            organizeReports: "Organisieren",
             emailReportTooltip: "Teilen Sie diese Datensätze mit einer anderen Person",
             emailSubject: "'{reportName}' bericht der QuickBase app '{appName}'",
             emailBody: "Hier is der Bericht aus der Tabelle '{reportName}' '{tableName}' '{appName}' in"
