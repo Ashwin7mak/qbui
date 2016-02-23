@@ -4,7 +4,6 @@ import {I18nMessage} from '../../utils/i18nMessage';
 
 import './facet.scss';
 
-let logger = new Logger();
 /*
  FilterSearchBox component takes user input for filtering a report.
  Takes the function to call on changes to search string, what he list is known as default is Records
@@ -19,7 +18,7 @@ var FilterSearchBox = React.createClass({
         nameForRecords :"Records"
     },
     render() {
-        //TODO: use Search these X records in i18n message formatter at "record.searchPlaceHolder" once Reeact.intl
+        //TODO: use Search these X records in i18n message formatter at "record.searchPlaceHolder" once React.intl
         // supports string only, currently it wraps the generated message with a span tag which is not valid
         // within a placeholder element attribute.
         //

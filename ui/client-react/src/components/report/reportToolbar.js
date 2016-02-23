@@ -11,14 +11,11 @@ import FilterSearchBox from '../facet/filterSearchBox';
 import FacetsMenu from '../facet/facetsMenu';
 import FacetSelections from '../facet/facetSelections';
 import RecordsCount from './recordsCount';
+import QBicon from '../qbIcon/qbIcon';
 
 let FluxMixin = Fluxxor.FluxMixin(React);
 let logger = new Logger();
-
-//interaction options
-let secondInMilliseconds = 1000;
-let debounceInputTime = .5 * secondInMilliseconds ; // 1/5 a second delay
-let facetVisValues = 50; // how many facets to list before showing more...link
+import _ from 'lodash';
 
 /**
  * a ReportToolbar for table reports with search field and a filter icon
@@ -26,17 +23,27 @@ let facetVisValues = 50; // how many facets to list before showing more...link
  */
 
 var ReportToolbar = React.createClass({
+    //interaction options
+    secondInMilliseconds : 1000,
+    debounceInputTime : 0, // 1/5 a second delay
+    facetVisValues : 50,  // how many facets to list before showing more...link
+
     mixins: [FluxMixin],
 
     getDefaultProps : function() {
-        return {initialSelections : new FacetSelections()};
+        return {
+            initialSelections : new FacetSelections()
+        };
     },
-    getInitialState: function() {
 
+    getInitialState: function() {
+        this.debounceInputTime = .5 * this.secondInMilliseconds; // 1/5 a second delay
+        let initSel = this.props.initialSelections;
+        initSel.initSelections();
         return {
             searchInput: '',
             searchStringForFiltering: '',
-            selections : this.props.initialSelections
+            selections : initSel
         };
     },
 
@@ -55,7 +62,7 @@ var ReportToolbar = React.createClass({
             };
         }
 
-        timerId = setTimeout((updateName)(name), debounceInputTime);
+        timerId = setTimeout((updateName)(name), this.debounceInputTime);
         this.timerId = timerId;
         return deferred.promise;
     },
@@ -88,7 +95,6 @@ var ReportToolbar = React.createClass({
     },
 
     handleFacetSelect : function(e, facet, value) {
-        logger.debug("facet clicked field:" + facet.name + " value:" + value);
         this.state.selections.handleToggleSelect(e, facet, value);
         var mutated = new FacetSelections();
         mutated.initSelections(this.state.selections.getSelections());
@@ -96,10 +102,15 @@ var ReportToolbar = React.createClass({
     },
 
     handleFacetClearFieldSelects : function(facet) {
-        logger.debug("facet clicked clear field:" + facet.name);
         this.state.selections.removeAllFieldSelections(facet.id);
         var mutated = new FacetSelections();
         mutated.initSelections(this.state.selections.getSelections());
+        this.setState({selections: mutated});
+    },
+
+    handleFacetClearAllSelects : function() {
+        this.state.selections.removeAllSelections();
+        var mutated = new FacetSelections();
         this.setState({selections: mutated});
     },
 
@@ -155,7 +166,7 @@ var ReportToolbar = React.createClass({
         return (
                 <OverlayTrigger overlay={tooltip} placement="bottom">
                     <div className="button-container">
-                        &nbsp;<Button  id="fakeFacet" className="testFilterButton"
+                        <Button  id="fakeFacet" className="testFilterButton"
                                     bsStyle="link" onClick={this.filterReport}>
                         Fake filter this report </Button>
                     </div>
@@ -167,29 +178,36 @@ var ReportToolbar = React.createClass({
         this.populateDummyFacets();
         let fakeFilterButton = this.renderFakeFilterButton();
 
-        let recordCount = this.props.reportData.data.records ? this.props.reportData.data.records.length : 0; //TODO what to show for pagination?
-        let filteredRecordCount  = this.props.reportData.data.filteredRecords ? this.props.reportData.data.filteredRecords.length : 0;
+        let recordCount = this.props.reportData && this.props.reportData.data && this.props.reportData.data.records ?
+                                this.props.reportData.data.records.length : null; //TODO what to show for pagination?
+
+        let filteredRecordCount  = this.props.reportData && this.props.reportData.data && this.props.reportData.data.filteredRecords ?
+                                this.props.reportData.data.filteredRecords.length : null;
 
         // determine if there is a search/filter in effect and if there are records/results to show
         let hasRecords = true;
         if (this.isFiltered()) {
-            hasRecords = this.props.filteredRecordCount ? true : false;
+            hasRecords = filteredRecordCount ? true : false;
         } else {
             hasRecords = this.props.recordCount ? true : false;
         }
+
+        let hasSelectedFacets = this.state.selections.hasAnySelections();
 
         return (
             <div className="reportToolbar">
 
                 {/*TODO : check if searchbox is enabled for this report,
                 if has facets has search too */}
-                <FilterSearchBox onChange={this.handleChange}
-                                 nameForRecords="Records"
-                                 {...this.props} />
+                {recordCount &&
+                    <FilterSearchBox onChange={this.handleChange}
+                                     nameForRecords="Records"
+                                     {...this.props} />
+                }
 
                 {/*TODO :  - check if facets is enabled for this report,
                 also hide Facets Menu Button if facets disabled  */}
-                { recordCount &&
+                {recordCount &&
                     (<FacetsMenu className="facetMenu"  {...this.props}
                                   selectedValues={this.state.selections}
                                   onFacetSelect={this.handleFacetSelect}
@@ -197,14 +215,21 @@ var ReportToolbar = React.createClass({
                     />)
                 }
 
-                {/*TODO :  - get real records count from props */}
                 <RecordsCount recordCount={recordCount}
                               isFiltered={this.isFiltered()}
                               filteredRecordCount={filteredRecordCount}
                               nameForRecords="Records"
                                 {...this.props} />
 
+
+                {hasSelectedFacets &&
+                    (<span onClick={this.handleFacetClearAllSelects}>
+                                        <QBicon className="clearAllFacets" icon="clear-mini" />
+                    </span>)
+                }
+
                 {fakeFilterButton}
+
             </div>
         );
     }
