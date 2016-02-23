@@ -192,7 +192,7 @@ class FacetSelections {
             // if we just did a select and the selection for this field is both true & false
             // disable the other one that the newly selected
             if (select) {
-                let other = (value == 'True') ? 'False' : 'True';
+                let other = (value === 'True') ? 'False' : 'True';
                 this.removeSelection(facetField.id, other);
             }
 
