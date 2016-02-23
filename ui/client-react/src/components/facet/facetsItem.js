@@ -58,6 +58,7 @@ class FacetsItem extends Component {
 
     shouldComponentUpdate(nextProps, nextState) {
         let answer = false;
+
         if (nextProps.expanded !== this.props.expanded) {
             answer = true;
             logger.debug("expanded changed");
@@ -76,8 +77,6 @@ class FacetsItem extends Component {
         if (answer) {
             logger.debug('FacetsItem shouldComponentUpdate ' + this.props.facet.name + '\ncurrProps:' + simpleStringify(this.props) + ' \nnextProps:' + simpleStringify(nextProps));
             logger.debug('currState:' + simpleStringify(this.state) + ' \nnextState:' + simpleStringify(nextState));
-            logger.debug('!=? ' + (nextProps !== this.props) + ' string!=? ' + (simpleStringify(nextProps) !== simpleStringify(this.props)));
-            logger.debug('--\n\n');
         }
         return answer;
     }
@@ -184,7 +183,8 @@ class FacetsItem extends Component {
                         (<ListGroup fill>
                             {this.renderValues()}
                             {(this.props.facet.values.length > this.props.maxInitRevealed &&  !this.props.isRevealed ?
-                                (<span className="listMore" onClick={(e) => this.props.handleRevealMore(e, this.props.facet)}><I18nMessage message={seeMore} /></span>) : null)}
+                                (<span className="listMore" onClick={(e) => this.props.handleRevealMore(e, this.props.facet)}>
+                                    <I18nMessage message={seeMore} /></span>) : null)}
                         </ListGroup>) :
                         null
                     }

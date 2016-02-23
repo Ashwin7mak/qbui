@@ -50,6 +50,7 @@ var FacetsList = React.createClass({
     shouldComponentUpdate: function(nextProps, nextState) {
 
         let answer = false;
+
         if (!_.isEqual(nextProps.selectedValues.getSelections(), this.props.selectedValues.getSelections())) {
             answer = true;
             logger.debug('selection changed');
@@ -68,8 +69,6 @@ var FacetsList = React.createClass({
         if (answer) {
             logger.debug('FacetList shouldComponentUpdate \ncurrProps:' + simpleStringify(this.props) + ' \nnextProps:' + simpleStringify(nextProps));
             logger.debug('currState:' + simpleStringify(this.state) + ' \nnextState:' + simpleStringify(nextState));
-            logger.debug('!=? ' + (nextProps !== this.props) + ' string!=? ' + (simpleStringify(nextProps) !== simpleStringify(this.props)));
-            logger.debug('--\n\n');
         }
 
 
@@ -86,8 +85,8 @@ var FacetsList = React.createClass({
                 facet: facetField,
                 popoverId : this.props.popoverId,
                 maxInitRevealed : this.props.maxInitRevealed,
-                isRevealed : this.props.isRevealed(fid),
-                expanded: !this.props.isCollapsed(fid),
+                isRevealed :!_.isUndefined(this.props.isRevealed) && this.props.isRevealed(fid),
+                expanded: !_.isUndefined(this.props.isCollapsed) && !this.props.isCollapsed(fid),
                 handleSelectValue: this.props.onFacetSelect,
                 handleToggleCollapse: this.props.handleToggleCollapse,
                 handleClearFieldSelects: this.props.onFacetClearFieldSelects,

@@ -34,8 +34,6 @@ class FacetAspect extends Component {
         if (answer) {
             logger.debug('FacetAspect shouldComponentUpdate isSelected changed' + this.props.facet.name + '/' + this.props.item.value + '\ncurrProps:' + simpleStringify(this.props) + ' \nnextProps:' + simpleStringify(nextProps));
             logger.debug('currState:' + simpleStringify(this.state) + ' \nnextState:' + simpleStringify(nextState));
-            logger.debug('!=? ' + (nextProps !== this.props) + ' string!=? ' + (simpleStringify(nextProps) !== simpleStringify(this.props)));
-            logger.debug('--\n\n');
         }
 
         return answer;

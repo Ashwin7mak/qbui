@@ -268,7 +268,7 @@ var ReportToolbar = React.createClass({
                               nameForRecords="Records"
                     {...this.props} />
 
-                {(this.isFiltered() || this.state.searchInput.length != 0) &&
+                {(this.isFiltered() || this.state.searchInput.length !== 0) &&
                 (<span onClick={this.handleFacetClearAllSelectsAndSearch}>
                                         <QBicon className="clearAllFacets" icon="clear-mini" />
                     </span>)

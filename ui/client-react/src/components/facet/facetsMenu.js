@@ -230,7 +230,8 @@ var FacetsMenu = React.createClass({
         return (
             <div className="facetsMenuContainer">
                 {/* list of facet options shown when filter icon clicked */}
-                <OverlayTrigger container={this} trigger="click" placement="bottom" ref="facetOverlayTrigger" rootCloseDoesntSupportStopPropagationOnClear={true}
+                <OverlayTrigger container={this} trigger="click" placement="bottom"
+                                ref="facetOverlayTrigger" rootCloseDoesntSupportStopPropagationOnClear={true}
                                 show={this.state.show}
                                 onHide={() => this.setState({show: false})}
                                 overlay={
@@ -257,7 +258,8 @@ var FacetsMenu = React.createClass({
                          ref="facetsMenuButton"
                          onClick={e => this.toggleMenu(e)}>
                         <span className="facetButtons">
-                            <QBicon className="filterButton" icon={(this.props.selectedValues && this.props.selectedValues.hasAnySelections()) ?
+                            <QBicon className="filterButton" icon={(this.props.selectedValues &&
+                                                    this.props.selectedValues.hasAnySelections()) ?
                                         "filter-status" : "filter-tool"} />
                             <QBicon className="filterButtonCaret" icon="caret-filled-down" />
                         </span>
