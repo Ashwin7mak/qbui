@@ -80,7 +80,7 @@
          * @param reportGroup
          * @param reportName
          */
-        this.selectReport = function(reportGroup, reportName){
+        this.selectReport = function(reportGroup, reportName) {
             // Let the trowser animate
             e2eBase.sleep(browser.params.smallSleep);
 
