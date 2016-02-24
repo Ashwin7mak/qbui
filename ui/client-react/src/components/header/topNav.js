@@ -30,10 +30,6 @@ var TopNav = React.createClass({
         flux.actions.toggleLeftNav();
     },
 
-    addNew: function() {
-        let flux = this.getFlux();
-        flux.actions.showTrowser();
-    },
 
     searchChanged: function(ev) {
         const text = ev.target.value;
@@ -71,7 +67,7 @@ var TopNav = React.createClass({
                                 <Button><QBicon icon="search" /></Button>
                             </OverlayTrigger>
 
-                            <Button className="addNewButton" onClick={this.addNew} ><QBicon icon="add" /></Button>
+                            <Button className="addNewButton"><QBicon icon="add" /></Button>
                             <Button><QBicon icon="history" /></Button>
                         </ButtonGroup>
                     </div>

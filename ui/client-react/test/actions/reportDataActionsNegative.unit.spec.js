@@ -26,17 +26,12 @@ let responseReportData = {
 let responseResultData = {
     data: {
         fields: [],
-        records: []
-    }
-};
-let responseFacetData = {
-    data: {
+        records: [],
         facets: {
             name: 'test'
         }
     }
 };
-
 let responseResultQuery = {
     data: 'testQuery'
 };
@@ -174,11 +169,8 @@ describe('Report Data Actions -- Filter report Negative missing parameters', () 
         getReport() {
             return mockPromiseSuccess(responseReportData);
         }
-        getReportResults() {
+        getReportDataAndFacets() {
             return mockPromiseSuccess(responseResultData);
-        }
-        parseFacetExpression() {
-            return mockPromiseSuccess(responseResultQuery);
         }
     }
     class mockRecordService {
@@ -234,11 +226,8 @@ describe('Report Data Actions -- load report Negative missing parameters', () =>
         getReport() {
             return mockPromiseSuccess(responseReportData);
         }
-        getReportResults() {
+        getReportDataAndFacets() {
             return mockPromiseSuccess(responseResultData);
-        }
-        parseFacetExpression() {
-            return mockPromiseSuccess(responseResultQuery);
         }
     }
 
@@ -282,11 +271,8 @@ describe('Report Data Actions -- ', () => {
         getReport() {
             return mockPromiseSuccess(null);
         }
-        getReportResults() {
+        getReportDataAndFacets() {
             return mockPromiseSuccess(responseResultQuery);
-        }
-        getReportFacets() {
-            return mockPromiseSuccess(responseFacetData);
         }
         parseFacetExpression() {
             return mockPromiseSuccess(responseResultQuery);

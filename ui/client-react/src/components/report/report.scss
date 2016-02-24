@@ -22,6 +22,7 @@
       flex-direction: row;
       flex: 1;
       align-items: center;
+      color: $icon-color;
 
       .filterSearchBox {
         padding: .8rem;
@@ -31,6 +32,15 @@
       .facetsMenuButton {
         margin-left: 1.5rem;
       }
+
+      .clearAllFacets {
+        display: inline-block;
+        margin-left: .5rem;
+        vertical-align: top;
+        margin-top: -4px;
+        font-size: 16px;
+      }
+
       .recordsCount {
         margin-left: 1.5rem;
       }
@@ -48,10 +58,11 @@
     // can show it by commenting this or running
     // document.getElementById('fakeFacet').style.display='block';  or
     // document.getElementsByClassName("testFilterButton").style.display='block';
+    // document.getElementsByClassName("testFilterButton").style.display='block';
     // in the browser debugger
     .testFilterButton {
       display: none;
-      margin-top: -20px;
+      margin-left: 1rem;
     }
 }
 

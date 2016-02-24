@@ -1,0 +1,76 @@
+@import '../../../src/assets/css/qbVariables';
+
+$search-bar-bg: #5f8ba7;
+$report-group-bg: #fff;
+$report-icon-color: #f87878;
+
+.reportsContainer {
+
+    .reportsTop {
+        background-color: $search-bar-bg;
+        padding:15px 0 15px 16px;
+
+        input {
+            width:220px;
+            padding-left:10px;
+            height:34px;
+            font-style:italic;
+        }
+    }
+}
+
+.reportGroups {
+    margin:16px;
+    max-height:60%;
+
+    .qbPanel {
+        width:100%;
+    }
+    .reportGroup {
+
+        margin-bottom:16px;
+        background-color: $report-group-bg;
+
+        .reportItems {
+            display:flex;
+            flex-wrap: wrap;
+            flex-direction: row;
+            justify-content: flex-start;
+        }
+        .reportLink {
+            display:flex;
+            align-items:baseline;
+            text-overflow:ellipsis;
+            overflow:hidden;
+            .qbIcon {
+                flex: 0 0 auto;
+                width:22px;
+            }
+            .iconssturdy-report-table {
+                color: $report-icon-table-color;
+            }
+            .iconssturdy-report-summary {
+                color: $report-icon-summary-color;
+            }
+            .iconssturdy-report-pie {
+                color: $report-icon-pie-color;
+            }
+            .iconsturdy-report-calendar {
+                color: $report-icon-calendar-color;
+            }
+            .iconssturdy-report-grid-edit {
+                color: $report-icon-grid-edit-color;
+            }
+            .iconssturdy-report-timeline {
+                color: $report-icon-timeline-color;
+            }
+            .iconssturdy-report-map {
+                color: $report-icon-map-color;
+            }
+            margin-right: 20px;
+            margin-bottom: 10px;
+            flex:0 0 200px;
+            cursor:pointer;
+        }
+    }
+}

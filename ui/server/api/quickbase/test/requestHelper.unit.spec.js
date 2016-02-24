@@ -202,4 +202,64 @@ describe('Validate RequestHelper unit tests', function() {
 
     });
 
+    describe('validate executeRequest method', function() {
+        var tid = 'tid';
+
+        var req = {
+            headers: {
+                tid: tid
+            }
+        };
+        var requestStub = sinon.stub();
+        requestHelper.setRequestObject(requestStub);
+        it('Test executeRequest with immediateResolve ', function(done) {
+            var promise = requestHelper.executeRequest(req, {}, true);
+            promise.then(
+                function(response) {
+                    assert.equal(req.headers.tid, tid);
+                    assert.equal(response, null);
+                }
+            );
+            done();
+        });
+        it('Test executeRequest success', function(done) {
+            requestStub.yields(null, {statusCode: 200}, {}); // override the params (error, response, body)
+            var promise = requestHelper.executeRequest(req, {}, false);
+            promise.then(
+                function(response) {
+                    assert.equal(req.headers.tid, tid);
+                    assert.deepEqual(response, {statusCode: 200});
+                }
+            );
+            done();
+        });
+        it('Test executeRequest error', function(done) {
+            var errorResponse = new Error('error');
+            requestStub.yields(errorResponse, {}, {}); // override the params (error, response, body)
+            var promise = requestHelper.executeRequest(req, {}, false);
+            promise.then(
+                function(response) {
+                    assert.equal(req.headers.tid, tid);
+                },
+                function(error) {
+                    assert.deepEqual(error, errorResponse);
+                }
+            );
+            done();
+        });
+        it('Test executeRequest status not OK', function(done) {
+            requestStub.yields(null, {statusCode: 400}, {}); // override the params (error, response, body)
+            var promise = requestHelper.executeRequest(req, {}, false);
+            promise.then(
+                function(response) {
+                    assert.equal(req.headers.tid, tid);
+                },
+                function(error) {
+                    assert.deepEqual(error, {statusCode: 400});
+                }
+            );
+            done();
+        });
+    });
+
 });

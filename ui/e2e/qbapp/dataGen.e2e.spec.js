@@ -10,18 +10,6 @@ jasmine.DEFAULT_TIMEOUT_INTERVAL = 600000; //10 minutes max allows for adding ma
 (function() {
     'use strict';
     var tableOneNumberOfRecords = 10;  // change value to how many records you want to generate for table 1
-    var tableTwoNumberOfRecords = 100; // change value to how many records you want to generate for table 2
-    var realmToUse = null;             // change this to a string i.e. "myRealm" of an existing realm to use
-                                       // if you leave realmToUse null it will randomly generated a new realm name
-
-    var config = require('../../server/config/environment');
-    if (realmToUse) {
-        config.realmToUse = realmToUse;
-    }
-
-    //Require the e2e base class and constants modules
-    var e2eBase = require('../common/e2eBase.js')();
-    var consts = require('../../server/api/constants.js');
 
     describe('Data Generation for E2E Tests', function() {
         var app;
@@ -51,27 +39,20 @@ jasmine.DEFAULT_TIMEOUT_INTERVAL = 600000; //10 minutes max allows for adding ma
             tableToFieldToFieldTypeMap['table 2']['Rating Field'] = {fieldType: consts.SCALAR, dataType : consts.RATING};
             tableToFieldToFieldTypeMap['table 2']['Phone Number Field'] = {fieldType: consts.SCALAR, dataType : consts.PHONE_NUMBER};
             //Call the basic app setup function
-            e2eBase.basicSetup(tableToFieldToFieldTypeMap, tableOneNumberOfRecords).then(function(results) {
-                //Set your global objects to use in the test functions
-                app = results[0];
-                //Check that your setup completed properly
-                //There's no fail fast option using beforeAll yet in Jasmine to prevent other tests from running
-                //This will fail the test if setup did not complete properly so at least it doesn't run
-                if (!app) {
-                    done.fail('test app / recordList was not created properly during setup');
-                }
-                //Get the appropriate fields out of the second table
-                var nonBuiltInFields = e2eBase.tableService.getNonBuiltInFields(app.tables[1]);
-                //Generate the record JSON objects
-                var generatedRecords = e2eBase.recordService.generateRecords(nonBuiltInFields, tableTwoNumberOfRecords);
-                //Via the API create the records, a new report
-                //This is a promise chain since we need these actions to happen sequentially
-                e2eBase.recordService.addRecords(app, app.tables[1], generatedRecords).then(function() {
-                    e2eBase.reportService.createReport(app.id, app.tables[1].id).then(function() {
-                        done();
-                    });
+            e2eBase.basicSetup(tableToFieldToFieldTypeMap, tableOneNumberOfRecords)
+                .then(function(results) {
+                    //Set your global objects to use in the test functions
+                    app = results[0];
+                    //Check that your setup completed properly
+                    //This will fail the test if setup did not complete properly so at least it doesn't run
+                    if (!app) {
+                        throw new Error('app not created successfully');
+                    }
+                    done();
+                })
+                .catch(function(err) {
+                    done.fail(err);
                 });
-            });
         });
         /**
          * Test method. Prints out the generated test data and endpoints to the console.

@@ -112,24 +112,21 @@ $footer-next-button: $color2;
 /* table actions transitions */
 .tableActions-enter {
     top: -100%;
-    opacity: 0.01;
 }
 
 .tableActions-enter.tableActions-enter-active {
     top: 0;
-    opacity: 1;
-    transition: all 300ms ease-in-out;
+    transition: all 300ms ease;
+
 }
 
 .tableActions-leave {
-    left: 0;
-    opacity: 1;
+    top: 0;
 }
 
 .tableActions-leave.tableActions-leave-active {
-    left: 100%;
-    opacity: 0.01;
-    transition: all 300ms ease-in-out;
+    top: 100%;
+    transition: all 300ms ease;
 }
 
 .swipeable {

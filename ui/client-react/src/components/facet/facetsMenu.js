@@ -11,7 +11,6 @@ import FacetsList from './facetsList';
 import './facet.scss';
 import _ from 'lodash';
 
-let logger = new Logger();
 
 /**
  *  FacetsMenu component presents a trigger button that when clicked shows list of facets available to filter a report on.
@@ -48,20 +47,22 @@ var FacetsMenu = React.createClass({
      * @returns {{show: boolean, expandedFacetFields: Array, selected: Array}}
      */
     getInitialState() {
+
         //TODO: move these to use fluxxor actions and stores to make the sticky across views.
         let expanded = [];
         if (!this.props.allInitiallyCollapsed) {
-            // if we don't start with all collapsed then
+
+           // if we don't start with all collapsed then
             // add all facet fids to list of expanded facet fields
             if (this.props.reportData.data && this.props.reportData.data.facets && this.props.reportData.data.facets.list) {
-                for (let facet of this.props.reportData.data.facets.list) {
+                _.each(this.props.reportData.data.facets.list, function(facet) {
                     expanded.push(facet.id);
-                }
+                });
             }
         }
         return {
             show: false,
-            expandedFacetFields: expanded,
+            expandedFacetFields: expanded
         };
     },
 
@@ -84,6 +85,7 @@ var FacetsMenu = React.createClass({
     toggleMenu(e) {
         this.setState({target: e.target, show: !this.state.show});
     },
+
 
     /**
      * Changes the state of a facet field group to collapsed if parameter makeCollapsed is true or expanded if not
@@ -147,18 +149,20 @@ var FacetsMenu = React.createClass({
         return (
             <div className="facetsMenuContainer">
                 {/* list of facet options shown when filter icon clicked */}
-                <OverlayTrigger container={this} trigger="click" placement="bottom"
-                                key={"facets." + this.props.appId + "." +
-                                                 this.props.tblId + "." +
-                                                 this.props.rptId }
+                <OverlayTrigger container={this} trigger="click" placement="bottom" ref="facetOverlayTrigger" rootClose={true}
                                 overlay={
                                     <FacetsList
                                         handleToggleCollapse={this.handleToggleCollapse}
                                         isCollapsed={this.isCollapsed}
+                                        menuButton={this.refs.facetsMenuButton}
+                                        popoverId={"facets." + this.props.appId + "." +
+                                                 this.props.tblId + "." +
+                                                 this.props.rptId }
                                     {...this.props} />}>
 
                     {/* the filter icon button */}
                     <div className={"facetsMenuButton " +  (this.state.show ? "popoverShown" : "")}
+                         ref="facetsMenuButton"
                          onClick={e => this.toggleMenu(e)}>
                         <span className="facetButtons">
                             <QBicon className="filterButton" icon={(this.props.selectedValues && this.props.selectedValues.hasAnySelections()) ?

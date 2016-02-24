@@ -82,7 +82,8 @@ describe('Test ReportData Store', () => {
             name: 'report_name',
             data: {
                 fields: [],
-                records: []
+                records: [],
+                facets: []
             }
         };
 

@@ -3,9 +3,12 @@
 
     var fs = require('fs');
     var uuid = require('uuid');
+    let Promise = require('bluebird');
+    let defaultRequest = require('request');
+    let log = require('../../logger').getLogger();
 
     module.exports = function(config) {
-
+        let request = defaultRequest;
         /**
          * Set of common methods used to parse out information from the http request object
          */
@@ -122,8 +125,43 @@
                 }
                 req.headers = headers;
                 return req;
-            }
+            },
 
+            /**
+             * Allows you to override the
+             * @param requestOverride
+             */
+            setRequestObject: function(requestOverride) {
+                request = requestOverride;
+            },
+
+            /**
+             * Executes the http request. If the immediately resolve flag is set, resolve the deferred without making a call
+             * @param req
+             * @param opts
+             * @param immediatelyResolve
+             * @returns {*}
+             */
+            executeRequest: function(req, opts, immediatelyResolve) {
+                //  Generate tid for all requests..and log it
+                this.setTidHeader(req);
+                log.info({req: req});
+                return new Promise((resolve, reject) =>{
+                    if (immediatelyResolve) {
+                        resolve();
+                    } else {
+                        request(opts, function(error, response) {
+                            if (error) {
+                                reject(new Error(error));
+                            } else if (response.statusCode !== 200) {
+                                reject(response);
+                            } else {
+                                resolve(response);
+                            }
+                        });
+                    }
+                });
+            }
         };
 
         return helper;

@@ -7,7 +7,7 @@
 (function() {
     'use strict';
     //Bluebird Promise library
-    var promise = require('bluebird');
+    var Promise = require('bluebird');
 
     var e2ePageBase = require('./../../common/e2ePageBase');
     var ReportServicePage = function() {
@@ -31,9 +31,9 @@
         this.tableLinksElList = this.tablesListDivEl.all(by.className('link'));
         this.reportHamburgersElList = this.tablesListDivEl.all(by.className('right'));
         this.reportsListDivEl = element(by.className('reportsList'));
-        this.reportLinksElList = this.reportsListDivEl.all(by.className('leftNavLink'));
-        this.reportsBackLinkEl = this.reportsListDivEl.element(by.className('backLink'));
-
+        this.reportsTopDivEl = this.reportsListDivEl.element(by.className('reportsTop'));
+        this.reportGroupsDivEl = this.reportsListDivEl.element(by.className('reportGroups'));
+        this.reportGroupElList = this.reportsListDivEl.all(by.className('reportGroup'));
 
         // Top Nav
         this.topNavDivEl = element(by.className('topNav'));
@@ -44,27 +44,27 @@
         this.topNavCenterDivEl = this.topNavDivEl.element(by.className('center'));
         this.topNavHarButtonsListEl = this.topNavCenterDivEl.all(by.tagName('span'));
         // Right div (containing global actions and right dropdown)
-        // global actions
+        // Global actions
         this.topNavRightDivEl = this.topNavDivEl.element(by.className('right'));
         this.topNavGlobalActDivEl = this.topNavRightDivEl.element(by.className('globalActions'));
         this.topNavGlobalActionsListEl = this.topNavGlobalActDivEl.all(by.tagName('a'));
         this.topNavUserGlobActEl = this.topNavGlobalActionsListEl.get(0);
         this.topNavHelpGlobActEl = this.topNavGlobalActionsListEl.get(1);
 
-        // dropdown
+        // Dropdown menu
         this.topNavRightDropdownDivEl = this.topNavRightDivEl.element(by.className('dropdown'));
         this.topNavDropdownEl = this.topNavRightDropdownDivEl.element(by.className('dropdownToggle'));
 
         // Report Container
         this.reportContainerEl = element(by.className('reportContainer'));
-        //Report Stage
+        // Report Stage
         this.reportStageContentEl = this.reportContainerEl.element(by.className('layout-stage '));
         this.reportStageBtn = this.reportContainerEl.element(by.className('toggleStage'));
         this.reportStageArea = this.reportStageContentEl.element(by.className('collapse'));
 
         // Loaded Content Div
         this.loadedContentEl = this.reportContainerEl.element(by.className('loadedContent'));
-        //table actions container
+        // Table actions container
         this.tableActionsContainerEl = this.loadedContentEl.element(by.className('tableActionsContainer'));
         // Griddle table
         this.griddleContainerEl = element.all(by.className('griddle-container')).first();
@@ -74,30 +74,88 @@
         this.griddleLastColumnHeaderEl = this.griddleColHeaderElList.last();
         this.griddleDataBodyDivEl = this.griddleBodyEl.all(by.tagName('tbody')).first();
         this.griddleRecordElList = this.griddleDataBodyDivEl.all(by.tagName('tr'));
+
+        /**
+         * Function that will open the report group and load the report specified by name
+         * @param reportGroup
+         * @param reportName
+         */
+        this.selectReport = function(reportGroup, reportName) {
+            // Let the trowser animate
+            e2eBase.sleep(browser.params.smallSleep);
+
+            // Expand the Report group
+            this.reportGroupElList.filter(function(elem) {
+                // Return the element or elements
+                return elem.element(by.className('qbPanelHeaderTitleText')).getText().then(function(text) {
+                    // Match the text
+                    return text === reportGroup;
+                });
+            }).then(function(filteredElements) {
+                // filteredElements is the list of filtered elements (in this case the Report Group div)
+                // Check to see if the report group is already expanded (functionality is sticky from prior tests)
+                return e2ePageBase.hasClass(filteredElements[0].element(by.className('qbPanelHeaderIcon')), 'rotateUp').then(function(result) {
+                    if (result === true) {
+                        return filteredElements[0].click();
+                    }
+                });
+            });
+
+            // Find and select the report based on name
+            //TODO: Break this filter out into a separate function
+            this.reportGroupElList.filter(function(elem) {
+                // Return the element or elements
+                return elem.element(by.className('qbPanelHeaderTitleText')).getText().then(function(text) {
+                    // Match the text
+                    return text === reportGroup;
+                });
+            }).then(function(reportGroupElements) {
+                reportGroupElements[0].all(by.className('reportLink')).filter(function(elem) {
+                    // Return the element or elements
+                    return elem.getText().then(function(text) {
+                        // Match the text
+                        return text === reportName;
+                    });
+                }).then(function(reportLinkElements) {
+                    return reportLinkElements[0].click();
+                });
+            });
+        };
+
         /**
         * Helper function that will get all of the field column headers from the report. Returns an array of strings.
         */
         this.getReportColumnHeaders = function() {
-            var deferred = promise.pending();
+            var deferred = Promise.pending();
             this.griddleColHeaderElList.then(function(elements) {
                 var fetchTextPromises = [];
                 for (var i = 0; i < elements.length; i++) {
-                    fetchTextPromises.push(elements[i].getAttribute('innerText'));
+                    // Firefox has innerHTML instead of innerText so use that instead
+                    if (browser.browserName === 'firefox') {
+                        fetchTextPromises.push(elements[i].getAttribute('innerHTML'));
+                    } else {
+                        fetchTextPromises.push(elements[i].getAttribute('innerText'));
+                    }
                 }
-                Promise.all(fetchTextPromises).then(function(colHeaders) {
-                    var fieldColHeaders = [];
-                    colHeaders.forEach(function(headerText) {
-                        // The getText call above is returning the text value with a new line char on the end, need to remove it
-                        var subText = headerText.replace(/(\r\n|\n|\r)/gm, '');
-                        if (subText !== 'actions') {
-                            fieldColHeaders.push(subText.trim());
-                        }
-                    });
-                    deferred.resolve(fieldColHeaders);
-                }).catch(function(error) {
-                    console.error(JSON.stringify(error));
-                    deferred.reject(error);
+                return Promise.all(fetchTextPromises);
+            }).then(function(colHeaders) {
+                var fieldColHeaders = [];
+                colHeaders.forEach(function(headerText) {
+                    if (!headerText) {
+                        throw Error('Did not find text for column header');
+                    }
+                    // The getText call above is returning the text value with a new line char on the end, need to remove it
+                    var subText = headerText.replace(/(\r\n|\n|\r)/gm, '');
+                    if (subText !== 'actions') {
+                        fieldColHeaders.push(subText.trim());
+                    }
                 });
+                return fieldColHeaders;
+            }).then(function(fieldColHeaders) {
+                return deferred.resolve(fieldColHeaders);
+            }).then(null, function(error) {
+                deferred.reject(error);
+                throw error;
             });
             return deferred.promise;
         };
@@ -117,32 +175,39 @@
             }
         };
 
-        this.clickReportsMenu = function(tableLinkEl) {
-            tableLinkEl.by(className('right')).click();
-        };
-
+        // Click the app toggle in the leftNav
         this.clickAppToggle = function() {
-            var deferred = promise.pending();
-
+            var deferred = Promise.pending();
             try {
                 this.appToggleDivEl.click().then(function() {
                     // Sleep for a second to allow toggle animation to finish (and the DOM to refresh)
-                    e2ePageBase.sleep(1000);
+                    e2eBase.sleep(1000);
                     deferred.resolve();
                 });
             } catch (error) {
                 console.error(JSON.stringify(error));
                 deferred.reject(error);
             }
-
             return deferred.promise;
         };
 
+        // Gets text from the topNav
         this.getGlobalNavTextEl = function(globalNavEl) {
             var textEl = globalNavEl.all(by.tagName('span')).last();
             return textEl;
         };
 
+        // Does element shows up on the Left Nav bar.
+        this.isElementInLeftNav = function(element, clientWidth) {
+            expect(element.getAttribute('offsetLeft'), '0');
+            expect(element.getAttribute('offsetWidth'), clientWidth);
+        };
+
+        //Does element shows up on the Top Nav bar.
+        this.isElementInTopNav = function(element) {
+            expect(element.getAttribute('offsetTop'), '0');
+            expect(element.getAttribute('offsetHeight'), '50');
+        };
     };
     ReportServicePage.prototype = e2ePageBase;
     module.exports = ReportServicePage;
