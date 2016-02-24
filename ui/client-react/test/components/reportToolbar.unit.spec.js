@@ -106,7 +106,6 @@ describe('ReportToolbar functions', () => {
         }
     };
 
-
     it('test render reportToolbar no records', () => {
         component = TestUtils.renderIntoDocument(<ReportToolbar flux={flux}
                                                              fieldSelections={[]}
@@ -118,6 +117,8 @@ describe('ReportToolbar functions', () => {
         expect(facetsMenuContainer.length).toEqual(0);
         let facetsMenuButton = TestUtils.scryRenderedDOMComponentsWithClass(component, "facetsMenuButton");
         expect(facetsMenuButton.length).toEqual(0);
+        let facetButtons = TestUtils.scryRenderedDOMComponentsWithClass(component, "facetButtons");
+        expect(facetButtons.length).toEqual(0);
         let recordsCount = TestUtils.scryRenderedDOMComponentsWithClass(component, "recordsCount");
         expect(recordsCount.length).toEqual(0);
     });
@@ -135,6 +136,8 @@ describe('ReportToolbar functions', () => {
         expect(facetsMenuContainer.length).toEqual(1);
         let facetsMenuButton = TestUtils.scryRenderedDOMComponentsWithClass(component, "facetsMenuButton");
         expect(facetsMenuButton.length).toEqual(1);
+        let facetButtons = TestUtils.scryRenderedDOMComponentsWithClass(component, "facetButtons");
+        expect(facetButtons.length).toEqual(1);
         let recordsCount = TestUtils.scryRenderedDOMComponentsWithClass(component, "recordsCount");
         expect(recordsCount.length).toEqual(1);
 

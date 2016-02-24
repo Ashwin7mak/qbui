@@ -1,7 +1,6 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import TestUtils from 'react-addons-test-utils';
-//import FacetsItem from '../../src/components/facet/facetsItem';
 import FacetsList  from '../../src/components/facet/facetsList';
 import FacetSelections  from '../../src/components/facet/facetSelections';
 

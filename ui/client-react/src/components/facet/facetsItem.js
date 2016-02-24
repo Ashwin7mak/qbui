@@ -54,7 +54,9 @@ class FacetsItem extends Component {
         this.props.handleClearFieldSelects(this.props.facet);
         // prevent collapse of section just do the clear
         e.stopPropagation();
-        e.nativeEvent.stopImmediatePropagation();
+        if (e.nativeEvent.stopImmediatePropagation && typeof e.nativeEvent.stopImmediatePropagation  === 'function') {
+            e.nativeEvent.stopImmediatePropagation();
+        }
     }
 
     shouldComponentUpdate(nextProps, nextState) {
@@ -199,7 +201,9 @@ class FacetsItem extends Component {
 }
 FacetsItem.defaultProps = {
     fieldSelections : [],
-    isRevealed: true
+    isRevealed: true,
+    maxInitRevealed : 10,
+    expanded : false
 };
 
 export default FacetsItem;

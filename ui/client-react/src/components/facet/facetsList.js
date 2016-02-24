@@ -51,7 +51,8 @@ var FacetsList = React.createClass({
 
         let answer = false;
 
-        if (!_.isEqual(nextProps.selectedValues.getSelections(), this.props.selectedValues.getSelections())) {
+        if (this.props.selectedValues &&
+            (!_.isEqual(nextProps.selectedValues.getSelections(), this.props.selectedValues.getSelections()))) {
             answer = true;
             logger.debug('selection changed');
         }

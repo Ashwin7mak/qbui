@@ -38,11 +38,13 @@ describe('FacetsMenu functions', () => {
 
 
     it('test render FacetsMenu click facet button', () => {
-        component = TestUtils.renderIntoDocument(<FacetsMenu params={reportParams} reportData={fakeReportData_valid} />);
+        component = TestUtils.renderIntoDocument(<FacetsMenu params={reportParams}
+                                                             allInitiallyCollapsed={false}
+                                                             reportData={fakeReportData_valid} />);
         expect(TestUtils.isCompositeComponent(component)).toBeTruthy();
         expect(component.state.show).toBeFalsy();
-        let facetsMenuButton = TestUtils.findRenderedDOMComponentWithClass(component, "facetsMenuButton");
-        TestUtils.Simulate.click(facetsMenuButton);
+        let facetButtons = TestUtils.findRenderedDOMComponentWithClass(component, "facetButtons");
+        TestUtils.Simulate.click(facetButtons);
         expect(component.state.show).toBeTruthy();
     });
 
@@ -71,8 +73,8 @@ describe('FacetsMenu functions', () => {
             let facetsMenu = component;
 
             // show the menu
-            var facetsMenuButton = TestUtils.findRenderedDOMComponentWithClass(facetsMenu, 'facetsMenuButton');
-            TestUtils.Simulate.click(facetsMenuButton);
+            var facetButtons = TestUtils.findRenderedDOMComponentWithClass(facetsMenu, 'facetButtons');
+            TestUtils.Simulate.click(facetButtons);
             expect(facetsMenu.state.show).toBeTruthy();
 
             // make sure it rendered
@@ -113,8 +115,8 @@ describe('FacetsMenu functions', () => {
             let facetsMenu = component;
 
             // show the menu
-            var facetsMenuButton = TestUtils.findRenderedDOMComponentWithClass(facetsMenu, 'facetsMenuButton');
-            TestUtils.Simulate.click(facetsMenuButton);
+            var facetButtons = TestUtils.findRenderedDOMComponentWithClass(facetsMenu, 'facetButtons');
+            TestUtils.Simulate.click(facetButtons);
             expect(facetsMenu.state.show).toBeTruthy();
 
             // make sure it rendered

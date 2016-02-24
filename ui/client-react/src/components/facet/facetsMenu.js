@@ -227,7 +227,7 @@ var FacetsMenu = React.createClass({
      */
     renderSelectedFacets() {
         let selections = this.props.selectedValues;
-        if (!selections.hasAnySelections()) {
+        if (!selections || !selections.hasAnySelections()) {
             return null;
         }
         let components = [];

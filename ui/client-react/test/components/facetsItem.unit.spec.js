@@ -16,6 +16,7 @@ describe('FacetItem functions', () => {
         values:[{value:"a"}, {value:"b"}, {value:"c"}]
     };
 
+
     it('test render facetItem', () => {
         component = TestUtils.renderIntoDocument(<FacetsItem facet={item}
                                                              fieldSelections={[]}
@@ -53,14 +54,22 @@ describe('FacetItem functions', () => {
             }
         };
 
-
-        component = TestUtils.renderIntoDocument(<FacetsItem facet={item}
-                                                             fieldSelections={[]}
-                                                             handleSelectValue={() => callbacks.handleSelectValue()}/>);
+        let element = (<FacetsItem facet={item}
+                                   expanded={true}
+                                   fieldSelections={[]}
+                                   handleSelectValue={() => callbacks.handleSelectValue()}/>);
+        component = TestUtils.renderIntoDocument(element);
         expect(TestUtils.isCompositeComponent(component)).toBeTruthy();
+        //click on field name to expand, values only rendered when expanded
+        let facetName;
+        expect(function() {facetName = TestUtils.findRenderedDOMComponentWithClass(component, 'facetName');}).not.toThrow();
+
+        // check that facets values are there
         let items = TestUtils.scryRenderedComponentsWithType(component, ListGroupItem);
         expect(items.length).toBe(item.values.length);
         spyOn(callbacks, 'handleSelectValue').and.callThrough();
+
+        // select first
         TestUtils.Simulate.click(ReactDOM.findDOMNode(items[0]));
         expect(callbacks.handleSelectValue).toHaveBeenCalled();
 
@@ -96,13 +105,14 @@ describe('FacetItem functions', () => {
         };
 
         component = TestUtils.renderIntoDocument(<FacetsItem facet={item}
+                                                             expanded={true}
                                                              fieldSelections={selected.getFieldSelections(22)}
                                                              handleClearFieldSelects={() => callbacks.handleClearFieldSelects()}/>);
         expect(TestUtils.isCompositeComponent(component)).toBeTruthy();
         let clearFacet;
         expect(function() {clearFacet = TestUtils.findRenderedDOMComponentWithClass(component, 'clearFacet');}).not.toThrow();
         spyOn(callbacks, 'handleClearFieldSelects').and.callThrough();
-        TestUtils.Simulate.click(ReactDOM.findDOMNode(clearFacet));
+        TestUtils.Simulate.mouseDown(ReactDOM.findDOMNode(clearFacet));
         expect(callbacks.handleClearFieldSelects).toHaveBeenCalled();
 
     });

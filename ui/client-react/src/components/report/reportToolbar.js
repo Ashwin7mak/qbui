@@ -119,7 +119,6 @@ var ReportToolbar = React.createClass({
         this.setState({selections: mutated});
     },
 
-
     handleFacetClearFieldSelects : function(facet) {
         var mutated = this.state.selections.copy();
         mutated.removeAllFieldSelections(facet.id);
@@ -175,7 +174,8 @@ var ReportToolbar = React.createClass({
      */
     appendBlanks() {
         let blankMsg = 'report.blank';
-        if (this.props.reportData.data.facets && this.props.reportData.data.facets.list) {
+        if (this.props.reportData && this.props.reportData.data &&
+            this.props.reportData.data.facets && this.props.reportData.data.facets.list) {
             this.props.reportData.data.facets.list.map((facet) => {
                 if (facet.blanks && facet.type === "text") {
                     // Note the I18nMessage version we are using only supports outputting a span wrapped component not just
