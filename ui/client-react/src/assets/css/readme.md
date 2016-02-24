@@ -9,7 +9,6 @@ The majority lays out a number of best practices that amount to code formatting 
     - This prevents source ordering problems. For instance, Nomalize.css is the last thing included right now. So that's dumb.
 - All variables should be defined in a master file instead of locally.
 
-
 ## Naming
 - We should move to a version of the BEM naming convention that works for us. That means no camel casing in CSS and using dashes and underscores to break up names.
 
@@ -20,8 +19,14 @@ The majority lays out a number of best practices that amount to code formatting 
 ## Missing things
 - A grid system
 - A folder/system for mixins
+- Don't [remove outlines for accessiblity reasons](http://a11yproject.com/posts/never-remove-css-outlines/)
 
-* Don't remove outlines http://a11yproject.com/posts/never-remove-css-outlines/
+## Open Questions/Issues
+- Is the NODE_ENV flag prod or production?
+- Does the PROD environment build a css file and set a cache-expire?
+- Should we look into [code-splitting with webpack](http://webpack.github.io/docs/code-splitting.html)?
+- Should we firewall the usage of bootstrap variables and mixins?
+- Should we be namespacing our CSS?
 
 # Architecture
 
@@ -239,10 +244,10 @@ width: 12;
 
 ## Colors
 * All colors should be defined as a variable in the global file. If it's not there, add it and work with the visual design team to name it.
-* Use hex notation first, or then rgb(a), or hsl(a).
+* Use hex notation first, then rgb(a) and hsl(a) last.
 * Both three-digit and six-digit hexadecimal notation are acceptable.
 * When denoting color using hexadecimal notation, use all lowercase letters.
-* In some cases we might use the [SASS](http://sass-lang.com/documentation/Sass/Script/Functions.html) `lighten($color, $amount)` and `darken($color, $amount)`. Still TBD.
+* In some cases we might use the [SASS](http://sass-lang.com/documentation/Sass/Script/Functions.html) `lighten($color, $amount)` and `darken($color, $amount)` functions instead of explicit SASS variables. Still TBD.
 
 ````sass
 // Good
@@ -273,17 +278,20 @@ color: #FFF;
 
 # Naming
 
-* HTML elements should be lowercase. Likewise, classes should also be in lowercase. I know that React eschews dashes and prefers camelcase but we're following Bootstraps code style for consistency across the (CSS) code base.
-  * CSS is already a hyphen-happy syntax
-  * It's easier to scan through a large file of selectors
-  * It works nicely with the BEM naming convention
-  * Bootstrap uses it anyways so 
+When it comes to naming, the most important thing is consistency. Since Bootstrap already has a naming convention, we will try to stick close to it. This means we will use our own form of the Block Element Modifier (BEM) naming convention. The naming convention follows this pattern:
+
+```sass
+.block {}
+.block__element {}
+.block--modifier {}
+````
 
 ```sass
 body,
 div {
 ```
 
+Additionally, along with naming components based of 
 * Name things clearly.
 * Write classes semantically. Name its function not its appearance.
 
@@ -358,20 +366,11 @@ div {
 .f18-component
 ```
 
-
-## Naming Methodologies
-
-When it comes to naming, the most important thing is consistency. The recommended way to do this is using an existing methodology like BEM (which stands for block, element, modifier), or use a custom one that’s clearly defined.
-
 ### BEM
 
 BEM (which stands for block, element, modifier) structures CSS such that every entity is composed of (you guessed it) blocks, elements and modifiers. From [Harry Roberts](http://csswizardry.com/2013/01/mindbemding-getting-your-head-round-bem-syntax/)
 
 > The point of BEM is to tell other developers more about what a piece of markup is doing from its name alone. By reading some HTML with some classes in, you can see how – if at all – the chunks are related; something might just be a component, something might be a child, or element, of that component, and something might be a variation or modifier of that component.
-
-18F generally recommends using a modified BEM methodology outlined in the next subsection. However, you might want to use standard BEM when:
-You need a naming scheme that general CSS developers will already be familiar with or an existing naming scheme hasn’t been consistent enough.
-When you want to use Javascript to modify the BEM class names dynamically.
 
 ### Suggested custom methodology
 
