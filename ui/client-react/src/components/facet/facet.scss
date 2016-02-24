@@ -7,16 +7,18 @@
 }
 
 
-
 .reportToolbar {
   > div > div {
     position: relative;
   }
 }
 
+.facetsMenuContainer {
+  margin-left: .5em;
+}
 
 .facetsMenuButton {
-  display: inline-block;
+  display: inline;
 
   .facetButtons {
     color: $icon-color;
@@ -25,8 +27,11 @@
   .facetButtons:hover {
     color: $icon-color-hover;
   }
-  .filterButton{
+  .filterButton {
     font-size: 20px;
+    .qbIcon {
+      display: inline;
+    }
   }
   .filterButtonCaret {
     font-size: 16px;
@@ -152,15 +157,12 @@
 
   .facetNameToken {
     margin-right: .5em;
-  }
-
-  .facetSelections {
-    display: flex;
+    display: block;
   }
 
   .selectedToken {
-    padding:2px 8px;
     margin-right:10px;
+    margin-top: 2px; //clm
     border-radius: 12px;
     font-size:10px;
     font-weight:500;
@@ -171,10 +173,20 @@
     /* paler background facet tokens */
     background-color: #e3eaf3;
     color: #5e7994;
+    display: inline-block;
+
+    .selectedTokenName {
+      white-space: normal;
+      padding: 2px 3px;
+
+      span {
+        white-space: nowrap;
+        padding-left: .5em;
+      }
+    }
+
   }
-  .clearFacet {
-    padding-left: 11px;
-  }
+
 }
 
 .small-breakpoint .reportContainer .reportToolsAndContentContainer .reportToolbar {

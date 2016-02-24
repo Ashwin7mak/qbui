@@ -300,6 +300,7 @@ var ReportToolbar = React.createClass({
                     />)
                 }
 
+                {<div id="facetsMenuTarget"></div>}
 
                 {fakeFilterButton}
 

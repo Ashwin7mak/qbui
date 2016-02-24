@@ -54,6 +54,7 @@ class FacetsItem extends Component {
         this.props.handleClearFieldSelects(this.props.facet);
         // prevent collapse of section just do the clear
         e.stopPropagation();
+        e.nativeEvent.stopImmediatePropagation();
     }
 
     shouldComponentUpdate(nextProps, nextState) {
@@ -91,7 +92,9 @@ class FacetsItem extends Component {
         var selectionInfo = "";
         var selectionStrings = "";
         if (this.props.fieldSelections.length > 0) {
-            clearFacetsIcon = (<span onClick={e => this.clearSelects(e)} >
+            // note onMouseDown instead of onClick necessary here to support rootClose on the menu
+            // so that it will not propagate to thru to parent collapse while clearing selection
+            clearFacetsIcon = (<span onMouseDown={e => this.clearSelects(e)} >
                                     <QBicon className="clearFacet" icon="clear-mini" />
                                 </span>);
             var listOfValues = _.map(this.props.facet.values, 'value');
@@ -124,7 +127,8 @@ class FacetsItem extends Component {
                          item={item}
                          index={index}
                          key={this.props.popoverId + "." + this.props.facet.id + "." + index}
-                        {...this.props}
+                         facet={this.props.facet}
+                         handleSelectValue={this.props.handleSelectValue}
             />
         );
     }

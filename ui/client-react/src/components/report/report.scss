@@ -23,7 +23,7 @@
       flex: 1;
       align-items: center;
       color: $icon-color;
-
+      margin-bottom: .5em;
       .filterSearchBox {
         padding: .8rem;
         width: 18em;
@@ -37,7 +37,6 @@
         display: inline-block;
         margin-right: .5rem;
         vertical-align: top;
-        margin-top: px;
         font-size: 16px;
       }
 

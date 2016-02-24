@@ -197,6 +197,31 @@ var FacetsMenu = React.createClass({
     },
 
     /**
+     * Don't handle other listeners i.e. avoid closing facet window on this event
+     * rootClose will close any click out side popover
+     * (we want to keep open on facet selections clicks)
+     * @param e
+     */
+    dontClose(e) {
+        // prevent close of popover just do the clear
+        e.stopPropagation();
+        e.nativeEvent.stopImmediatePropagation();
+    },
+
+    /**
+     * Clear the selected value,
+     * @param e
+     * @param facet
+     * @param value
+     */
+    clearSelect(e, facet, value) {
+        if (e.target.classList.contains('clearFacet')) {
+            this.props.onFacetDeselect(e, facet, value);
+        }
+        this.dontClose(e);
+    },
+
+    /**
      * render the selected facet value tokenized
      * @returns {null}
      */
@@ -206,13 +231,18 @@ var FacetsMenu = React.createClass({
             return null;
         }
         let components = [];
+        let self = this;
         this.props.reportData.data.facets.list.map((facet) => {
             if (selections.hasAnySelectionsForField(facet.id)) {
                 let kids = (selections.getFieldSelections(facet.id).map((value) => {
-                    return (<span key={'token.' + facet.name + '.' + value} className="selectedToken">{value}
-                                <span onClick={e => this.props.onFacetDeselect(e, facet, value)}>
-                                         <QBicon className="clearFacet" icon="clear-mini" />
-                                </span></span>);
+                    return (<span key={'token.' + facet.name + '.' + value}
+                                  className="selectedToken">
+                                 <span className="selectedTokenName"  onClick={(e) => self.clearSelect(e, facet, value)}>
+                                      {value}
+                                    <QBicon className="clearFacet" icon="clear-mini"/>
+                                 </span>
+
+                          </span>);
                 }));
                 components.push(<div className="facetToken" key={'token' + facet.name} ><span className="facetNameToken">{facet.name}</span>
                     <span className="facetSelections">{kids}</span></div>);
@@ -229,10 +259,12 @@ var FacetsMenu = React.createClass({
         let menuKey =  this.props.appId + "." +  this.props.tblId + "." +  this.props.rptId;
         return (
             <div className="facetsMenuContainer">
+            <div>
                 {/* list of facet options shown when filter icon clicked */}
                 <OverlayTrigger container={this} trigger="click" placement="bottom"
-                                ref="facetOverlayTrigger" rootCloseDoesntSupportStopPropagationOnClear={true}
+                                ref="facetOverlayTrigger" rootClose={true}
                                 show={this.state.show}
+                                target={()=> document.getElementById('facetsMenuTarget')}
                                 onHide={() => this.setState({show: false})}
                                 overlay={
                                     <FacetsList
@@ -256,8 +288,8 @@ var FacetsMenu = React.createClass({
                     {/* the filter icon button */}
                     <div className={"facetsMenuButton " +  (this.state.show ? "popoverShown" : "")}
                          ref="facetsMenuButton"
-                         onClick={e => this.toggleMenu(e)}>
-                        <span className="facetButtons">
+                         >
+                        <span className="facetButtons" onClick={e => this.toggleMenu(e)}>
                             <QBicon className="filterButton" icon={(this.props.selectedValues &&
                                                     this.props.selectedValues.hasAnySelections()) ?
                                         "filter-status" : "filter-tool"} />
@@ -265,9 +297,12 @@ var FacetsMenu = React.createClass({
                         </span>
                     </div>
                 </OverlayTrigger>
-                {(((this.context.breakpoint !== breakpoints.SMALL_BREAKPOINT) && !this.context.touch)) &&
-                     <span className="selectedFacets">{this.renderSelectedFacets()}</span>
+                {((this.context.breakpoint !== breakpoints.SMALL_BREAKPOINT) &&
+                   !this.context.touch) &&
+                <div className="selectedFacets" onClick={e => this.dontClose(e)}>{this.renderSelectedFacets()}</div>
                 }
+            </div>
+
             </div>
         );
     }
