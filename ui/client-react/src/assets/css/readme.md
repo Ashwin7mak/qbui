@@ -2,21 +2,26 @@
 The purpose of this document is to layout best practices when writing CSS for QuickBase. As part of the rearchitecture project QuickBase is now built atop of Bootstrap for React using a SASS preprocessor.
 
 # High Level Change Recommendations
-The majority lays out a number of best practices that amount to code formatting and structuring conventions–nothing too controversial or involved.
+The majority lays out a number of best practices that amount to code formatting and structuring conventions
 
 ## SASS Structuring
-- All SASS files should be explicitly included into one master `main.scss` file
-- There should be at a minimum two variables files, the bootstrap and ours. Variables for our system should be defined in one file.
+- All SASS files should be explicitly included into one master `main.scss` file. Except for a base set of styles required to bootstrap the page–i.e., we should prioritize loading the shell by inlining that CSS and then loading the rest. (We need to check and see if this will make much of a difference, including across different connection types)
+    - This prevents source ordering problems. For instance, Nomalize.css is the last thing included right now. So that's dumb.
+- All variables should be defined in a master file instead of locally.
+
 
 ## Naming
-- We should move to a version of the BEM naming convention that works for us.
+- We should move to a version of the BEM naming convention that works for us. That means no camel casing in CSS and using dashes and underscores to break up names.
 
+## Libraries we should start using
+- Animate.css
+- Autoprefixer
 
-* Should we be using Autoprefixer?
-* Where do mixins go?
+## Missing things
+- A grid system
+- A folder/system for mixins
+
 * Don't remove outlines http://a11yproject.com/posts/never-remove-css-outlines/
-* We need a grid system.
-* Can we do a two space indent system? It looks way better...
 
 # Architecture
 
@@ -496,7 +501,7 @@ You can use mixins in place of selectors. While mixins will copy more code, the 
 
 # Specificity
 
-* IDs should be reserved for JavaScript. Don’t use IDs for styles.
+* IDs are reserved for when you are absolutely certain that there will only ever be one of the thing on the page.
 
 ```sass
 // Bad
@@ -536,6 +541,33 @@ p.body_text { }
 ```sass
 // multi-class hack
 .component.component { }
+```
+
+It’s worth mentioning (repeatedly) that CSS selectors are not variables. Selectors are “patterns that match against elements in a tree” (see the W3C specification on Selectors) and constrain declarations to the matched elements. With that said, a **global selector is one that runs the risk of styling an element that it did not intend to style**. These kinds of selectors are potentially hazardous, and should be avoided:
+
+* Universal selector (*)
+* Type selectors (e.g. div, nav, ul li, .foo > span)
+* Non-namespaced class selectors (e.g. .button, .text-right, .foo > .bar)
+* Non-namespaced attribute selectors (e.g. [aria-checked], [data-foo], [type])
+* A pseudoselector that’s not within a compound selector (e.g. :hover, .foo > :checked)
+
+```sass
+// Bad
+* {
+    background: red;
+}
+
+div, nav, li {
+    font-weight: bold;
+}
+
+.item, [data-foo] {
+    margin-left: 20px;
+}
+
+:hover {
+    top: 20px;
+}
 ```
 
 ## Specificity graph
