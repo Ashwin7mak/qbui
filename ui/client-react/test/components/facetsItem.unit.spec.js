@@ -1,9 +1,29 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import TestUtils from 'react-addons-test-utils';
+import FacetAspect  from '../../src/components/facet/facetAspect';
 import FacetsItem  from '../../src/components/facet/facetsItem';
 import FacetSelections  from '../../src/components/facet/facetSelections';
 import {ListGroup, Panel, ListGroupItem} from 'react-bootstrap';
+
+var I18nMessageMock = React.createClass({
+    render: function() {
+        return (
+            <div>test</div>
+        );
+    }
+});
+
+beforeEach(() => {
+    FacetsItem.__Rewire__('I18nMessage', I18nMessageMock);
+    FacetAspect.__Rewire__('I18nMessage', I18nMessageMock);
+});
+
+afterEach(() => {
+    FacetsItem.__ResetDependency__('I18nMessage');
+    FacetAspect.__ResetDependency__('I18nMessage');
+});
+
 
 describe('FacetItem functions', () => {
     'use strict';
