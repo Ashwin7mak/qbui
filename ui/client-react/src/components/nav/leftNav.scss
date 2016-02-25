@@ -20,6 +20,13 @@ $left-nav-heading-fg: #bfcfe3;
 .leftNav a.leftNavLink {
     width: 100%;
     cursor: pointer;
+    white-space:nowrap;
+    text-overflow:ellipsis;
+    overflow:hidden;
+}
+
+.leftNav .link.withSecondary  a.leftNavLink {
+    padding-right:28px;
 }
 
 .xlarge-breakpoint .leftNav.open {
@@ -68,6 +75,7 @@ body:not(.touch) .leftNav.closed {
 
     position: relative;
     .appsToggle {
+        white-space:nowrap;
         margin-top: 4px;
         margin-bottom: 10px;
         cursor: pointer;
@@ -77,9 +85,9 @@ body:not(.touch) .leftNav.closed {
         flex: 0 0 auto;
         padding: 6px;
         border-bottom: $global-actions-border;
-        .iconssturdy-caret-down {
+        .iconssturdy-caret-filled-down {
             transition: transform 300ms ease-in;
-            transform: rotate(-90deg);
+            transform: rotate(-180deg);
         }
     }
     .globalActions {
@@ -99,16 +107,7 @@ body:not(.touch) .leftNav.closed {
         overflow-y: auto;
         overflow-x: hidden;
     }
-    .searchApps {
-        padding: 8px;
-        input {
-            padding: 5px 10px;
-            border: 2px;
-            width: 100%;
-            color: $left-nav-input-fg;
-            height: 25px;
-        }
-    }
+
 
     ul {
         list-style: none;
@@ -118,6 +117,25 @@ body:not(.touch) .leftNav.closed {
         padding: 0;
         margin: 0;
 
+        .search {
+
+            color: #555555;
+            overflow:hidden;
+            height:0;
+            transition: all 250ms ease;
+            input {
+                padding: 5px 10px;
+                border: 2px;
+                width: 100%;
+                color: $left-nav-input-fg;
+                height: 25px;
+            }
+        }
+        .search.open {
+            padding: 8px;
+            height: 41px;
+            transition: all 250ms ease;
+        }
         .heading {
             font-size: 12px;
             line-height: 30px;
@@ -125,6 +143,15 @@ body:not(.touch) .leftNav.closed {
             color: $left-nav-heading-fg;
             margin: 0;
             padding-left: 10px;
+
+            &.withSecondary {
+                cursor:pointer;
+                .qbIcon {
+                    position:absolute;
+                    right:0;
+                    top:8px;
+                }
+            }
         }
         .heading:hover {
             color: $left-nav-heading-hover-fg;
@@ -153,6 +180,11 @@ body:not(.touch) .leftNav.closed {
                 cursor: pointer;
                 width: 100%
             }
+
+            .qbIcon {
+                width:18px;
+            }
+
         }
 
         li.link:hover {
@@ -261,7 +293,7 @@ $travel-distance: 15;
     transition: all $transition-time ease-in;
 }
 
-.leftNav.appsListOpen .branding .qbIcon.iconssturdy-caret-down {
+.leftNav.appsListOpen .branding .qbIcon.iconssturdy-caret-filled-down {
     transform: rotate(0deg);
 }
 

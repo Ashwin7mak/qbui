@@ -34,7 +34,7 @@ let LeftNav = React.createClass({
                 <img src={qbLogo} />
                 {this.props.selectedAppId &&
                     <div className="appsToggle" onClick={this.props.toggleAppsList}>{app ? app.name : ''}&nbsp;
-                        <QBicon icon="caret-down"/>
+                        <QBicon icon="caret-filled-down"/>
                     </div>
                 }
             </div>

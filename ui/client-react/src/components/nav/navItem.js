@@ -2,7 +2,6 @@ import React from 'react';
 import {Tooltip, OverlayTrigger} from 'react-bootstrap';
 import {Link} from 'react-router';
 import {I18nMessage} from '../../utils/i18nMessage';
-import Loader  from 'react-loader';
 import QBicon from '../qbIcon/qbIcon';
 
 let NavItem = React.createClass({
@@ -16,7 +15,6 @@ let NavItem = React.createClass({
             link: React.PropTypes.string
         }),
         onSelect: React.PropTypes.func,
-        loadingCheck: React.PropTypes.bool,
         isHeading: React.PropTypes.bool,
         secondaryIcon: React.PropTypes.string,
         secondaryOnSelect: React.PropTypes.func
@@ -24,8 +22,7 @@ let NavItem = React.createClass({
 
     getDefaultProps() {
         return {
-            isHeading: false,
-            loadingCheck: false
+            isHeading: false
         };
     },
     render() {
@@ -35,8 +32,11 @@ let NavItem = React.createClass({
         if (this.props.isHeading) {
             if (this.props.open) {
                 return (
-                    <li key={item.msg} className="heading"><I18nMessage message={item.msg}/>
-                        <Loader scale={.5} right={'90%'} loaded={!this.props.loadingCheck}/>
+                    <li key={item.msg}
+                        onClick={this.props.onClick}
+                        className={ this.props.secondaryIcon ? "heading withSecondary" : "heading"}>
+                        <I18nMessage message={item.msg}/>
+                        {this.props.secondaryIcon && <QBicon icon={this.props.secondaryIcon} />}
                     </li>);
             } else {
                 return (<li key={item.msg}><a className="heading"></a></li>);
@@ -57,7 +57,7 @@ let NavItem = React.createClass({
                         </Link>
                         { this.props.open && this.props.secondaryIcon &&
                         <a href="#" className="right" onClick={()=>this.props.secondaryOnSelect(item.id)}>
-                            <QBicon icon="report-menu-3"/>
+                            <QBicon icon={this.props.secondaryIcon}/>
                         </a> }
                     </li>
                 </OverlayTrigger>);

@@ -52,9 +52,8 @@ var Nav = React.createClass({
         if ((this.context.breakpoint === breakpoints.SMALL_BREAKPOINT) && this.context.touch) {
             flux.actions.toggleLeftNav(false);
         }
-        flux.actions.loadReports(this.state.apps.selectedAppId, tableId).then(() => {
-            flux.actions.showTrowser();
-        });
+        flux.actions.showTrowser();
+        flux.actions.loadReports(this.state.apps.selectedAppId, tableId);
     },
     /**
      *  get breadcrumb element for top of trowser
@@ -67,7 +66,7 @@ var Nav = React.createClass({
             let table = tables.find((t) => t.id === this.state.reportsData.tableId);
 
             return (
-                <h3><QBicon icon="report-table"/>{table ? table.name : ""} > <I18nMessage message={'nav.reportsHeading'}/></h3>);
+                <h3><QBicon icon="report-table"/> {table ? table.name : ""} <QBicon icon="caret-right"/> <I18nMessage message={'nav.reportsHeading'}/></h3>);
         }
         return null;
     },

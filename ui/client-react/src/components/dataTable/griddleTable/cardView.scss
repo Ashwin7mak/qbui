@@ -18,7 +18,8 @@ $margin-spacer: 10px;
 .custom-row {
     display: block !important;
     width: inherit !important;
-    margin: $margin-spacer;
+    margin-top: $margin-spacer;
+    margin-bottom: $margin-spacer;
 }
 
 .swipeable.actionsOpen .custom-row-card {
@@ -39,6 +40,7 @@ $margin-spacer: 10px;
     padding: 5px 10px 15px 10px;
     background: $card-expanded-background-color;
     margin-bottom: 5px;
+    cursor:pointer;
     .card {
         flex: 1;
         width: 100%;

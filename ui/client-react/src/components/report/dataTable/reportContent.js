@@ -53,11 +53,11 @@ let ReportContent = React.createClass({
                             {
                                 switch (datatypeAttributes[attr]) {
                                 case "NUMERIC" :
-                                    this.setCSSClass_helper(obj, "AlignRight");
-                                    obj.customComponent = NumericFormatter;
+                                    //this.setCSSClass_helper(obj, "AlignRight");
+                                    //obj.customComponent = NumericFormatter;
                                     break;
                                 case "DATE" :
-                                    obj.customComponent = DateFormatter;
+                                    //obj.customComponent = DateFormatter;
                                     break;
                                 }
                             }

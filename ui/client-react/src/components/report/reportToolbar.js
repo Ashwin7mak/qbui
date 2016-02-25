@@ -211,7 +211,7 @@ var ReportToolbar = React.createClass({
                     (<FacetsMenu className="facetMenu"  {...this.props}
                                   selectedValues={this.state.selections}
                                   onFacetSelect={this.handleFacetSelect}
-                                  onFacetClearFieldSelects={this.handleFacetClearFieldSelects}
+                                  onFacetClearFieldSelects={this.handleFacetClearFieldSelects} {...this.props}
                     />)
                 }
 

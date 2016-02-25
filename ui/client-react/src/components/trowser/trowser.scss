@@ -30,14 +30,13 @@ $trowser-footer-bg: #193048;
         background-color: $trowser-header-bg;
         display:flex;
         align-items:center;
+        .qbIcon {
+            font-size:18px;
+            vertical-align: baseline;
+        }
         .breadcrumbs {
             flex:1 1 auto;
             margin-left:16px;
-        }
-        .qbIcon {
-            font-size:22px;
-            width:32px;
-            vertical-align:top;
         }
         .rightIcons {
             flex: 0 0 auto;

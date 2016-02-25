@@ -11,7 +11,10 @@ let AppsList = React.createClass({
         open: React.PropTypes.bool.isRequired
     },
     getInitialState() {
-        return {searchText:""};
+        return {
+            searching:false,
+            searchText:""
+        };
     },
 
     onChangeSearch(ev) {
@@ -26,16 +29,24 @@ let AppsList = React.createClass({
             return this.searchMatches(app.name) && <NavItem key={app.id} item={app} onSelect={this.props.onSelectApp} {...this.props} />;
         });
     },
-    render() {
+    onClickApps() {
+        this.setState({searching: !this.state.searching});
 
+        if (this.state.searching) {
+            this.setState({searchText: ""});
+        }
+    },
+    render() {
         return (
             <div className="appsList leftNavList">
-                {this.props.open ?
-                    <div className="searchApps">
-                        <input type="text" placeholder={Locale.getMessage('nav.searchAppsPlaceholder')} value={this.state.searchText} onChange={this.onChangeSearch}/>
-                    </div> : ""}
                 <ul>
-                    {this.props.apps &&  <NavItem item={{msg: 'nav.appsHeading'}} isHeading={true} {...this.props} />}
+
+                    <NavItem item={{msg: 'nav.appsHeading'}} isHeading={true} secondaryIcon={"search"} onClick={this.onClickApps} {...this.props} />
+
+                    <li className={this.state.searching ? "search open" : "search"}>
+                        <input type="text" placeholder={Locale.getMessage('nav.searchAppsPlaceholder')} value={this.state.searchText} onChange={this.onChangeSearch}/>
+                    </li>
+
                     {this.appList()}
                 </ul>
 
