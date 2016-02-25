@@ -54,22 +54,14 @@ var FacetsList = React.createClass({
         if (this.props.selectedValues &&
             (!_.isEqual(nextProps.selectedValues.getSelections(), this.props.selectedValues.getSelections()))) {
             answer = true;
-            logger.debug('selection changed');
         }
 
         if (!_.isEqual(nextProps.expandedFacetFields, this.props.expandedFacetFields)) {
             answer = true;
-            logger.debug('collapse changed');
         }
 
         if (!_.isEqual(nextProps.moreRevealedFacetFields, this.props.moreRevealedFacetFields)) {
             answer = true;
-            logger.debug('reveal changed');
-        }
-
-        if (answer) {
-            logger.debug('FacetList shouldComponentUpdate \ncurrProps:' + simpleStringify(this.props) + ' \nnextProps:' + simpleStringify(nextProps));
-            logger.debug('currState:' + simpleStringify(this.state) + ' \nnextState:' + simpleStringify(nextState));
         }
 
 

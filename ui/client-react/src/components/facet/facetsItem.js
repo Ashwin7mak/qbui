@@ -64,23 +64,16 @@ class FacetsItem extends Component {
 
         if (nextProps.expanded !== this.props.expanded) {
             answer = true;
-            logger.debug("expanded changed");
         }
 
         if (!_.isEqual(nextProps.fieldSelections, this.props.fieldSelections)) {
             answer = true;
-            logger.debug("fieldSelectons changed");
         }
 
         if (nextProps.isRevealed !== this.props.isRevealed) {
             answer = true;
-            logger.debug("isRevealed changed");
         }
 
-        if (answer) {
-            logger.debug('FacetsItem shouldComponentUpdate ' + this.props.facet.name + '\ncurrProps:' + simpleStringify(this.props) + ' \nnextProps:' + simpleStringify(nextProps));
-            logger.debug('currState:' + simpleStringify(this.state) + ' \nnextState:' + simpleStringify(nextState));
-        }
         return answer;
     }
 
