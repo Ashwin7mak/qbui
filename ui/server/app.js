@@ -63,7 +63,7 @@
                 // add back on an sslport if it's not default of 443
                 domain += ':' + sslPort;
             }
-            log.info('redirecting to: ' + domain + req.url);
+            log.debug('redirecting to: ' + domain + req.url);
             return res.redirect(domain + req.url);
         }
         next();
