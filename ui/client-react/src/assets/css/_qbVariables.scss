@@ -1,13 +1,14 @@
 /* This file should contain all shared variables for QuickBase styling. */
-@import 'customVariables';
 @import 'qbColorVariables';
 
 $font-family: 'Open Sans', sans-serif;  /* default font face */
 
-$font-size:   $font-size-base;          /* base/default body font size */
-$font-color:  $color11;                 /* default font color */
+$font-size-base:          14px !default;
+$font-size:               $font-size-base;          /* base/default body font size */
+$font-size-small:         ceil(($font-size-base * 0.85)) !default; // ~12px
+$font-color:              $color11;                 /* default font color */
 
 $global-actions-border: 1px solid rgba(255, 255, 255, 0.3);
 $top-nav-height:40px;
 
-
+$text-color: red;

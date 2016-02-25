@@ -15,9 +15,9 @@ module.exports = {
     // Use bootstrapCustomizations to utilize other sass variables defined in
     // preBootstrapCustomizations or the _variables.scss file. This is useful to set one
     // customization value based on another value.
-    bootstrapCustomizations: './client-react/src/assets/css/_customVariables.scss',
+    bootstrapCustomizations: './client-react/src/assets/css/_bootstrapVariables.scss',
 
-    mainSass: './client-react/src/assets/css/main.scss',
+    // mainSass: './client-react/src/assets/css/main.scss',
 
     // Default for the style loading
     styleLoader: 'style-loader!css-loader!sass-loader',
@@ -33,18 +33,20 @@ module.exports = {
     scripts: {
         //none, using react-bootstrap
     },
+
+    // Use these to configure what components we're loading from bootstrap
     styles: {
         'mixins': true,
 
         'normalize': true,
         'print': true,
-        'glyphicons': true,
+        'glyphicons': false,
 
         'scaffolding': true,
         'type': true,
-        'code': true,
-        'grid': true,
-        'tables': true,
+        'code': false,
+        'grid': false,
+        'tables': false,
         'forms': true,
         'buttons': true,
 
@@ -52,28 +54,28 @@ module.exports = {
         'dropdowns': true,
         'button-groups': true,
         'input-groups': true,
-        'navs': true,
-        'navbar': true,
-        'breadcrumbs': true,
-        'pagination': true,
+        'navs': false,
+        'navbar': false,
+        'breadcrumbs': false,
+        'pagination': false,
         'pager': true,
-        'labels': true,
-        'badges': true,
-        'jumbotron': true,
-        'thumbnails': true,
-        'alerts': true,
-        'progress-bars': true,
-        'media': true,
+        'labels': false,
+        'badges': false,
+        'jumbotron': false,
+        'thumbnails': false,
+        'alerts': false,
+        'progress-bars': false,
+        'media': false,
         'list-group': true,
         'panels': true,
         'wells': true,
-        'responsive-embed': true,
-        'close': true,
+        'responsive-embed': false,
+        'close': false,
 
         'modals': true,
         'tooltip': true,
         'popovers': true,
-        'carousel': true,
+        'carousel': false,
 
         'utilities': true,
         'responsive-utilities': true

@@ -1,11 +1,22 @@
 # Introduction
-The purpose of this document is to layout best practices when writing CSS for QuickBase. As part of the rearchitecture project QuickBase is now built atop of Bootstrap for React using a Sass preprocessor.
+The purpose of this document is to layout best practices when writing CSS for QuickBase. As part of the re-architecture project QuickBase is now built atop of Bootstrap for React using a Sass preprocessor.
 
 # High Level Change Recommendations
-The majority lays out a number of best practices that amount to code formatting and structuring conventions
+Top points of discussion:
+
+1. I recommend that we move rethink how we organize Sass files.
+  - The first is to keep them all into their own grouping of folders, see the Architecture diagram below for an explanation.
+  - The second is to use a single manifest file to bring everything together. This will give us better control of source ordering and easy sharing of variables and mixins
+  - Likewise, I'm proposing that we take a second look at how we organize React components. Some are reusable, some define the shell and others relate to pages. As we build out the UI a single components folder is going to get to be big.
+
+2. I recommend that we deliver all CSS as a single file. Currently it comes down in the bundle.js file and is then inserted into the DOM. Delivering it as a single file means it can be cached in users browsers.
+
+3. I recommend that we pass our variables into bootstrap via the `_bootstrapVariables.scss` file and then compile it separately from our Sass files. I'm on the fence about this but my reasoning is that it creates a clear separation between our code base and bootstrap.
+
+4. 
 
 ## Sass Structuring
-- All Sass files should be explicitly included into one master `main.scss` file. Except for a base set of styles required to bootstrap the page–i.e., we should prioritize loading the shell by inlining that CSS and then loading the rest. (We need to check and see if this will make much of a difference, including across different connection types)
+- I'm proposing that All Sass files should be explicitly included into one master `main.scss` file. Except for a base set of styles required to bootstrap the page–i.e., we should prioritize loading the shell by inlining that CSS and then loading the rest. (We need to check and see if this will make much of a difference, including across different connection types)
     - This prevents source ordering problems. For instance, Nomalize.css is the last thing included right now. So that's dumb.
 - All variables should be defined in a master file instead of locally.
 
@@ -20,11 +31,12 @@ The majority lays out a number of best practices that amount to code formatting 
 - A grid system
 
 ## Open Questions/Issues
-- Is the NODE_ENV flag prod or production?
 - Does the PROD environment build a css file and set a cache-expire? I can't find any evidence that it does. Is there any advantage to the current way CSS is delivered?
 - Should we look into [code-splitting with webpack](http://webpack.github.io/docs/code-splitting.html)?
 - Should we firewall the usage of bootstrap mixins?
 - Should we be name spacing our CSS?
+- [Bootstrap Sass Loader](https://github.com/shakacode/bootstrap-sass-loader) is deprecated :(
+- Can we use [twbs/mq4-hover-shim](https://github.com/twbs/mq4-hover-shim) for detecting hover behavior?
 
 # Architecture
 This proposed architecture is roughly based on the [7-1 Pattern](http://sass-guidelin.es/#architecture) (see below). Basically, all the partials for QuickBase are contained in about six folders and compiled together using a single `main.scss` file. This provides a couple of benefits:
@@ -74,7 +86,7 @@ sass/
 │   └─ _animate.scss     # Animate.css
 │   …                    # Etc.
 │
-└─ main.scss             # Main Sass file
+└─ main.scss             # Main Sass file (does not import Boostrap)
 ````
 
 Additionally, don't inline styles in React. Inline styles ruin the specificity graph, make it hard to share shared styles and can't make use of pseudo-selectors/media queries.
@@ -306,16 +318,14 @@ color: #FFF;
 
 # Naming
 
-When it comes to naming, the most important thing is consistency. Since Bootstrap already has a naming convention, we will try to stick close to it. 
-This means we will use our own form of the Block Element Modifier (BEM) naming convention. The naming convention follows this pattern:
+When it comes to naming, the most important thing is consistency. My recommendation is to use our own form of the Block Element Modifier (BEM) naming convention. The naming convention follows this pattern:
 
 ```sass
-.block {}
+.block {} // Name of the React component
 .block__element {}
 .block--modifier {}
 
 /** Examples **/
-
 // block
 .inset {
     margin-left: 15%;
@@ -341,6 +351,8 @@ This means we will use our own form of the Block Element Modifier (BEM) naming c
 }
 
 ```
+
+* Use your best judgment when deciding what needs to follow the BEM convention. If you're creating utility classes like `.left { ... }` they obviously don't have to follow the BEM convention.
 
 Additional reading:
 * [article explaining BEM](http://csswizardry.com/2013/01/mindbemding-getting-your-head-round-bem-syntax/)
@@ -592,6 +604,15 @@ $lg: new-breakpoint(min-width 0 max-width 40em $sm_cols);
 ```
 
 > TODO: We could share breakpoint settings between React and Sass using the [jsontosass-loader NPM module](https://www.npmjs.com/package/jsontosass-loader).
+
+## Types of Media Queries
+
+See [developer.mozilla.org](https://developer.mozilla.org/en-US/docs/Web/CSS/Media_Queries/Using_media_queries) for details on available media queries.
+
+- Use orientation to optimize layouts that may not work well when in landscape. (The majority of our designs assume a decent portrait design)
+- Use [resolution](http://caniuse.com/#feat=css-media-resolution) for serving up higher resolution assets (icons) for high resolution devices.
+- [Interaction media features](http://caniuse.com/#feat=css-media-interaction) are not yet fully supported by Firefox. Use them sparingly and only when other means are available.
+- 
 
 # Bootstrap
 - Use the bootstrap configuration file before trying to style a bootstrap component. You can find it in `client-react/src/assets/css/_customVariables.scss`.
