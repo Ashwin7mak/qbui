@@ -11,6 +11,7 @@ import FacetsList from './facetsList';
 import LimitConstants from './../../../../common/src/limitConstants';
 import './facet.scss';
 import _ from 'lodash';
+import  {facetsProp} from './facetProps';
 
 let logger = new Logger();
 
@@ -35,9 +36,7 @@ var FacetsMenu = React.createClass({
          **/
         reportData: React.PropTypes.shape({
             data: React.PropTypes.shape({
-                facets:  React.PropTypes.shape({
-                    list: React.PropTypes.array.isRequired
-                })
+                facets:  facetsProp
             })
         }),
         onFacetSelect : React.PropTypes.func,

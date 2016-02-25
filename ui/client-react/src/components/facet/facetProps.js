@@ -57,4 +57,12 @@ const fieldSelections = chainablePropType(() => {
     });
 });
 
-export {facetItemValueShape, facetShape, fieldSelections};
+// this check maybe too slow, just validate it's an object
+//const facetsProp = chainablePropType(() => {
+    //React.PropTypes.shape({
+    //    list: React.PropTypes.array
+//});
+const facetsProp =  React.PropTypes.object;
+
+
+export {facetItemValueShape, facetShape, fieldSelections, facetsProp};

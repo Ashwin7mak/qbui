@@ -6,28 +6,28 @@ import FacetsItem  from '../../src/components/facet/facetsItem';
 import FacetsList  from '../../src/components/facet/facetsList';
 import FacetSelections  from '../../src/components/facet/facetSelections';
 
-var I18nMessageMock = React.createClass({
-    render: function() {
-        return (
-            <div>test</div>
-        );
-    }
-});
-
-beforeEach(() => {
-    FacetsList.__Rewire__('I18nMessage', I18nMessageMock);
-    FacetsItem.__Rewire__('I18nMessage', I18nMessageMock);
-    FacetAspect.__Rewire__('I18nMessage', I18nMessageMock);
-});
-
-afterEach(() => {
-    FacetsList.__ResetDependency__('I18nMessage');
-    FacetsItem.__ResetDependency__('I18nMessage');
-    FacetAspect.__ResetDependency__('I18nMessage');
-});
-
 describe('FacetList functions', () => {
     'use strict';
+    var I18nMessageMock = React.createClass({
+        render: function() {
+            return (
+                <div>test</div>
+            );
+        }
+    });
+
+    beforeEach(() => {
+        FacetsList.__Rewire__('I18nMessage', I18nMessageMock);
+        FacetsItem.__Rewire__('I18nMessage', I18nMessageMock);
+        FacetAspect.__Rewire__('I18nMessage', I18nMessageMock);
+    });
+
+    afterEach(() => {
+        FacetsList.__ResetDependency__('I18nMessage');
+        FacetsItem.__ResetDependency__('I18nMessage');
+        FacetAspect.__ResetDependency__('I18nMessage');
+    });
+
 
 
     let component;

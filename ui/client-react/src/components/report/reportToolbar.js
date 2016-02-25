@@ -25,7 +25,6 @@ import _ from 'lodash';
 var ReportToolbar = React.createClass({
     //interaction options
     secondInMilliseconds : 1000,
-    debounceInputTime : 0, // 1/5 a second delay
 
     mixins: [FluxMixin],
 
@@ -46,12 +45,12 @@ var ReportToolbar = React.createClass({
 
     getDefaultProps : function() {
         return {
-            fillinDummyFacets : true
+            fillinDummyFacets : true,
+            debounceInputTime :.5 *  this.secondInMilliseconds, // 1/5 a second delay
         };
     },
 
     getInitialState: function() {
-        this.debounceInputTime = .5 * this.secondInMilliseconds; // 1/5 a second delay
         let initSel = new FacetSelections();
         return {
             searchInput: '',
@@ -75,7 +74,7 @@ var ReportToolbar = React.createClass({
             };
         }
 
-        timerId = setTimeout((updateName)(name), this.debounceInputTime);
+        timerId = setTimeout((updateName)(name), this.props.debounceInputTime);
         this.timerId = timerId;
         return deferred.promise;
     },

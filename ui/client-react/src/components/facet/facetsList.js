@@ -6,7 +6,7 @@ import Logger from '../../utils/logger';
 import {I18nMessage} from '../../utils/i18nMessage';
 import StringUtils from '../../utils/stringUtils';
 
-import  {fieldSelections} from './facetProps';
+import  {fieldSelections, facetsProp} from './facetProps';
 
 import FacetsItem from './facetsItem';
 import QBicon from '../qbIcon/qbIcon';
@@ -32,9 +32,7 @@ var FacetsList = React.createClass({
     propTypes: {
         reportData: React.PropTypes.shape({
             data: React.PropTypes.shape({
-                facets:  React.PropTypes.shape({
-                    list: React.PropTypes.array.isRequired
-                })
+                facets:  facetsProp
             })
         }),
         selectedValues: fieldSelections
