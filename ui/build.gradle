@@ -278,8 +278,6 @@ task integrationTestsNoColor(type: GruntTask) {
         tasks.invokeCheckForApiUp.execute()
         args = ["ciIntegration", "--no-color"]
     }
-    dependsOn startTomcat
-    finalizedBy stopTomcat
 }
 
 //browser tests not yet supported on ci
