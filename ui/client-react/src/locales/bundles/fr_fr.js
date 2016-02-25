@@ -6,8 +6,6 @@ export default {
             header: "Vos Apps"
         },
         reports : {
-            newReport: "Nouveau",
-            organizeReports: "Organiser",
             emailReportTooltip: "Partager ces documents avec quelqu'un d'autre",
             emailSubject: "'{reportName}' rapport depuis l'application QuickBase '{appName}'",
             emailBody: "Voici le rapport de la '{reportName}' '{tableName}' de table dans '{appName}'"
@@ -68,6 +66,8 @@ export default {
             }
         },
         report : {
+            newReport: "Nouveau",
+            organizeReports: "Organiser",
             filteredRecordCount : "{filteredRecordCount} des {recordCount} {nameForRecords} ",
             recordCount : "{recordCount} {nameForRecords} ",
             noFacets : "Aucun Facets",
