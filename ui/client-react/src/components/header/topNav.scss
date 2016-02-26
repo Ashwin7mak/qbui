@@ -1,9 +1,9 @@
 @import '../../assets/css/qbVariables';
 
 $global-action-fg: #333;
+$top-nav-color: #193048;
 
 .searchPopover {
-
     .buttonContainer {
         display: flex;
         justify-content: center;
@@ -48,7 +48,7 @@ $global-action-fg: #333;
         display: inline-block;
         cursor: pointer;
         padding: 0 8px;
-        color: $icon-color;
+        color: $topnav-icon-color;
     }
     a.dropdownToggle:hover {
         background: $nav-hover-bg;
@@ -64,10 +64,9 @@ $global-action-fg: #333;
     .link {
         cursor: pointer;
         a {
-            color: $icon-color;
+            color: $topnav-icon-color;
             display: inline-block;
             padding: 0 8px;
-            color: $icon-color;
 
             .qbIcon {
                 vertical-align: middle;

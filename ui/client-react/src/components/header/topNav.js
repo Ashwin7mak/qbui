@@ -67,8 +67,7 @@ var TopNav = React.createClass({
                                 <Button><QBicon icon="search" /></Button>
                             </OverlayTrigger>
 
-                            <Button className="addNewButton"><QBicon icon="add" /></Button>
-                            <Button><QBicon icon="history" /></Button>
+                            <Button className="favoritesButton"><QBicon icon="star-full" /></Button>
                         </ButtonGroup>
                     </div>
 

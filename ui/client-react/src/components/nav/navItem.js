@@ -53,7 +53,7 @@ let NavItem = React.createClass({
                 <OverlayTrigger key={item.id} placement="right" overlay={tooltip}>
                     <li className={ this.props.secondaryIcon ? "link withSecondary" : "link"}>
                         <Link className="leftNavLink" to={item.link} onClick={this.props.onSelect}>
-                            <QBicon icon={item.icon}/> {this.props.open ? label : ""}
+                            <QBicon icon={item.icon}/> <span className={"leftNavLabel"}>{this.props.open ? label : ""}</span>
                         </Link>
                         { this.props.open && this.props.secondaryIcon &&
                         <a href="#" className="right" onClick={()=>this.props.secondaryOnSelect(item.id)}>

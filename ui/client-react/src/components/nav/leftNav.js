@@ -3,7 +3,6 @@ import {Tooltip, OverlayTrigger} from 'react-bootstrap';
 import {Link} from 'react-router';
 import Loader  from 'react-loader';
 import {I18nMessage} from '../../utils/i18nMessage';
-import qbLogo from '../../assets/images/intuit_logo_white.png';
 import ReactCSSTransitionGroup from 'react/lib/ReactCSSTransitionGroup';
 import GlobalActions from '../global/globalActions';
 import AppsList from './appsList';
@@ -31,9 +30,11 @@ let LeftNav = React.createClass({
         let app = _.findWhere(this.props.apps, {id: this.props.selectedAppId});
         return (this.props.open &&
             <div className="branding">
-                <img src={qbLogo} />
+                <h2 className={"logo"}>QuickBase</h2>
                 {this.props.selectedAppId &&
-                    <div className="appsToggle" onClick={this.props.toggleAppsList}>{app ? app.name : ''}&nbsp;
+                    <div className="appsToggle" onClick={this.props.toggleAppsList}>
+                        <QBicon icon={"favicon"}/>
+                        <span className={"leftNavLabel"}> {app ? app.name : ''}</span>
                         <QBicon icon="caret-filled-down"/>
                     </div>
                 }

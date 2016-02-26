@@ -5,16 +5,25 @@
 $left-nav-padding: 15px;
 $left-nav-bg: #002b48;
 $left-nav-fg: #fff;
-$left-nav-link-fg: #cad8e9;
+$left-nav-link-fg: #7090ab;
+$left-nav-link-hover-fg: #fff;
 $left-nav-heading-bg: #002b48;
 $left-nav-input-fg: #555;
 
-$left-nav-heading-hover-fg: #bbd;
+$left-nav-hover-bg: #00b0c2;
 $left-nav-heading-bg: #264a6d;
 $left-nav-heading-fg: #bfcfe3;
+$left-nav-bg: #193048;
+
 
 .leftNav.open {
     overflow: hidden;
+}
+
+.leftNav {
+    .leftNavLabel {
+        vertical-align:middle;
+    }
 }
 
 .leftNav a.leftNavLink {
@@ -23,6 +32,7 @@ $left-nav-heading-fg: #bfcfe3;
     white-space:nowrap;
     text-overflow:ellipsis;
     overflow:hidden;
+
 }
 
 .leftNav .link.withSecondary  a.leftNavLink {
@@ -31,12 +41,10 @@ $left-nav-heading-fg: #bfcfe3;
 
 .xlarge-breakpoint .leftNav.open {
     width: 400px;
-
 }
 
 .large-breakpoint .leftNav.open {
     width: 300px;
-
 }
 
 .medium-breakpoint .leftNav.open {
@@ -45,7 +53,6 @@ $left-nav-heading-fg: #bfcfe3;
 
 .small-breakpoint.touch .leftNav.open {
     width: 300px;
-
 }
 
 /* show tooltips only if .show is present unless we're on a touchscreen */
@@ -61,7 +68,7 @@ body:not(.touch) .leftNav.closed {
     width: 40px;
     overflow: hidden;
     li a.heading {
-        background-color: $left-nav-heading-bg;
+        background-color: $header-bg;
     }
 }
 
@@ -74,20 +81,40 @@ body:not(.touch) .leftNav.closed {
     color: $left-nav-fg;
 
     position: relative;
-    .appsToggle {
-        white-space:nowrap;
-        margin-top: 4px;
-        margin-bottom: 10px;
-        cursor: pointer;
+
+    .qbIcon {
+        font-size:22px;
     }
 
     .branding {
         flex: 0 0 auto;
-        padding: 6px;
         border-bottom: $global-actions-border;
-        .iconssturdy-caret-filled-down {
-            transition: transform 300ms ease-in;
-            transform: rotate(-180deg);
+
+        .logo {
+            line-height:54px;
+            padding-left:10px;
+            margin:0;
+        }
+        .appsToggle {
+            padding-left:8px;
+            position:relative;
+            line-height:40px;
+            white-space:nowrap;
+            cursor: pointer;
+            background-color: $left-nav-hover-bg;
+            .qbIcon {
+                width:28px;
+                vertical-align:middle;
+            }
+            .iconssturdy-caret-filled-down {
+
+                position:absolute;
+                right:5px;
+                width:auto;
+                top:8px;
+                transition: transform 300ms ease-in;
+                transform: rotate(-180deg);
+            }
         }
     }
     .globalActions {
@@ -124,22 +151,20 @@ body:not(.touch) .leftNav.closed {
             height:0;
             transition: all 250ms ease;
             input {
-                padding: 5px 10px;
+                padding-left: 5px;
                 border: 2px;
                 width: 100%;
                 color: $left-nav-input-fg;
-                height: 25px;
+                //height: 25px;
             }
         }
         .search.open {
-            padding: 8px;
-            height: 41px;
+            padding: 0 8px;
+            height: 42px;
             transition: all 250ms ease;
         }
         .heading {
             font-size: 12px;
-            line-height: 30px;
-            background-color: $left-nav-heading-bg;
             color: $left-nav-heading-fg;
             margin: 0;
             padding-left: 10px;
@@ -147,22 +172,21 @@ body:not(.touch) .leftNav.closed {
             &.withSecondary {
                 cursor:pointer;
                 .qbIcon {
+                    font-size:16px;
                     position:absolute;
-                    right:0;
-                    top:8px;
+                    right:4px;
+                    top:10px;
                 }
             }
-        }
-        .heading:hover {
-            color: $left-nav-heading-hover-fg;
         }
 
         li {
             position: relative;
-
+            height:40px;
+            line-height: 40px;
             a {
                 text-decoration: none;
-                line-height: 35px;
+                line-height: 40px;
                 padding-left: 10px;
                 color: $left-nav-link-fg;
                 display: inline-block;
@@ -182,17 +206,15 @@ body:not(.touch) .leftNav.closed {
             }
 
             .qbIcon {
-                width:18px;
+                width: 28px;
+                vertical-align:middle;
             }
-
         }
 
         li.link:hover {
-            color: $nav-hover-fg;
-            background-color: $nav-hover-bg;
-
-            .hi {
-                color: $left-nav-link-fg;
+            background-color: $left-nav-hover-bg;
+            a {
+                color: $left-nav-link-hover-fg;
             }
             a.right {
                 opacity: 1;
