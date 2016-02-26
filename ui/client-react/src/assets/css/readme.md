@@ -1,45 +1,53 @@
-# Introduction
-The purpose of this document is to layout best practices when writing CSS for QuickBase. As part of the re-architecture project QuickBase is now built atop of Bootstrap for React using a Sass preprocessor.
-
 # High Level Change Recommendations
 Top points of discussion:
 
-1. I recommend that we move rethink how we organize Sass files.
-  - The first is to keep them all into their own grouping of folders, see the Architecture diagram below for an explanation.
-  - The second is to use a single manifest file to bring everything together. This will give us better control of source ordering and easy sharing of variables and mixins
-  - Likewise, I'm proposing that we take a second look at how we organize React components. Some are reusable, some define the shell and others relate to pages. As we build out the UI a single components folder is going to get to be big.
+1. Reorganize Sass files into their own folder structure and deliver as a single CSS file by using a single manifest file to control the build. See below for a proposed folder structure. Reasons why:
+  - Better control over build order of all Sass files. For instance, Normalize and Bootstrap styles are the last styles applied to the page.
+  - A single CSS file is cacheable whereas the current system is not
+  - We will need a separate folder structure for Sass variables, mixins and components that are not also React components
+  - We will need to generate a single CSS file in order to deliver themes
+  - Distinguishes between what is a reusable component, what is part of our base styles, what is specific to a layout and what is specific to QShell
 
-2. I recommend that we deliver all CSS as a single file. Currently it comes down in the bundle.js file and is then inserted into the DOM. Delivering it as a single file means it can be cached in users browsers.
+2. Move Boostrap from node_modules into a vendor folder, pass in variables via the `_bootstrapVariables.scss` file and compile it separately from our Sass files.
+  - Clear separation from our code base and bootstrap. This does mean that we will have to hoist bootstrap variables into our variables file and then assign them to the bootstrap variable but this also prevents accidentally creating duplicate variables.
+  - This will make it easier to to separate from Bootstrap if we decide to go that way down the line.
+  - We already have the need to import mixins from Bootstrap, making it available from a vendor folder will make it easier to do that.
+  - We already need a vendor folder anyways.
 
-3. I recommend that we pass our variables into bootstrap via the `_bootstrapVariables.scss` file and then compile it separately from our Sass files. I'm on the fence about this but my reasoning is that it creates a clear separation between our code base and bootstrap.
+3. Create a single `_qbVariables.scss` file.
+  - Helps the design/component team see what is shared across the system
+  - Makes it easier to create themes (go to one place to make tweaks)
+  - You can still have the variables set at the head of the component sass file. Just use the `!default` flag so that the proper file can be set from the master `_qbVariables.scss` file. See Foundation Sites for an example of how this works. ([Example component](https://github.com/zurb/foundation-sites/blob/develop/scss/components/_button.scss) and [example settings](https://github.com/zurb/foundation-sites/blob/develop/scss/settings/_settings.scss) files).
 
-4. 
+4. Use media queries to style components
+  - Using JavaScript to set breakpoints alters the specificity of selectors instead of relying on the cascading part of CSS.
+  - JavaScript switching is slower and requires more maintenance.
+  - We can use the [jsontosass-loader NPM module](https://www.npmjs.com/package/jsontosass-loader) to share media query settings between React and Sass.
+  - There are other media queries we can use besides `device-width`.
 
-## Sass Structuring
-- I'm proposing that All Sass files should be explicitly included into one master `main.scss` file. Except for a base set of styles required to bootstrap the page–i.e., we should prioritize loading the shell by inlining that CSS and then loading the rest. (We need to check and see if this will make much of a difference, including across different connection types)
-    - This prevents source ordering problems. For instance, Nomalize.css is the last thing included right now. So that's dumb.
-- All variables should be defined in a master file instead of locally.
+5. Use the BEM naming convention
+  - This helps name space our CSS selectors to the components we actually intend to style.
+  - This helps mentally reason about how our components are put together.
+  - This creates a single style for declaring components, their elements and state in CSS.
 
-## Naming
-- We should move to a version of the BEM naming convention that works for us. That means no camel casing in CSS and using dashes and underscores to break up names.
-
-## Libraries we should start using
-- Autoprefixer
-- [Easing](http://easings.net/) [functions](https://github.com/jhardy/compass-ceaser-easing)
-
-## Missing things
-- A grid system
+6. Start using some particular third-party libraries
+  - Autoprefixer
+  - [Easing](http://easings.net/) [functions](https://github.com/jhardy/compass-ceaser-easing)
 
 ## Open Questions/Issues
-- Does the PROD environment build a css file and set a cache-expire? I can't find any evidence that it does. Is there any advantage to the current way CSS is delivered?
-- Should we look into [code-splitting with webpack](http://webpack.github.io/docs/code-splitting.html)?
-- Should we firewall the usage of bootstrap mixins?
-- Should we be name spacing our CSS?
-- [Bootstrap Sass Loader](https://github.com/shakacode/bootstrap-sass-loader) is deprecated :(
-- Can we use [twbs/mq4-hover-shim](https://github.com/twbs/mq4-hover-shim) for detecting hover behavior?
+1. Should we look into [code-splitting with webpack](http://webpack.github.io/docs/code-splitting.html)?
+2. [Bootstrap Sass Loader](https://github.com/shakacode/bootstrap-sass-loader) is deprecated :(
+3. Can we use [twbs/mq4-hover-shim](https://github.com/twbs/mq4-hover-shim) for detecting hover behavior?
+4. In thinking about how all the CSS should be organized it begs the question of how to organize the React components.
+5. Should we switch to a mobile-first approach to styles? This would mean moving to `min-width` queries to add styles as the browser grows in width. [Additional reading](http://zellwk.com/blog/how-to-write-mobile-first-css/).
+
+---
+
+# Introduction
+The purpose of this document is to layout best practices when writing CSS for QuickBase. As part of the re-architecture project QuickBase is now built atop of Bootstrap for React using a Sass preprocessor.
 
 # Architecture
-This proposed architecture is roughly based on the [7-1 Pattern](http://sass-guidelin.es/#architecture) (see below). Basically, all the partials for QuickBase are contained in about six folders and compiled together using a single `main.scss` file. This provides a couple of benefits:
+The file structure is an adapted (for QuickBase) version of the the [7-1 Pattern](http://sass-guidelin.es/#architecture) (see below). Basically, all the partials for QuickBase are contained in seven folders (open to revising based on our needs) and compiled together using a single `main.scss` file. This provides a couple of benefits:
   - Control over source ordering. For instance, the current build applies Normalize and Bootstrap styles **last**.
   - A better home for styles that aren't directly tied to a component. For instance, `body` and `html` styles are found in the `nav.scss` file.
   - A single source of truth for shared variables and the ability to see how they relate to each other
@@ -51,7 +59,7 @@ This proposed architecture is roughly based on the [7-1 Pattern](http://sass-gui
 sass/
 │
 │– base/
-│   ├─ _variables.scss   # Sass Variables (I'm open to splitting this if it gets too big)
+│   ├─ _qbVariables.scss   # Sass Variables (I'm open to splitting this if it gets too big)
 │   ├─ _grid.scss        # Grid system
 │   └─ _typography.scss  # Typography rules
 │   …                    # Etc.
@@ -89,7 +97,29 @@ sass/
 └─ main.scss             # Main Sass file (does not import Boostrap)
 ````
 
-Additionally, don't inline styles in React. Inline styles ruin the specificity graph, make it hard to share shared styles and can't make use of pseudo-selectors/media queries.
+## Folder Details
+See below for notes on what goes into each folder.
+
+### Base
+These are styles and variables that should always be present on every page of the product. Most of this is actually already available in Bootstrap but I'm leaving it in as we add in our own base styles.
+
+### Components
+I know that this is going to be conflated with the idea that everything is a component in React but this is reserved for things that are truly a reusable component. See [Bootstrap](http://getbootstrap.com/components/), [Foundation](http://foundation.zurb.com/) or the [Harmony UI Component Library](http://fmsscm.corp.intuit.net/deploy-harmony-ui-component-gallery/origin/master/#typography) for examples of "component libraries". Items in here will eventually feed into our UI Component Library (TBD).
+
+### Shell
+This is for React components that build the generic shell of our product (see the Nav component) such as the Global Nav and Left Nav. Arguably, this could be put into the components library but I'd argue for keeping them separate because the shell 'glues' all the parts of the components together.
+
+### Pages
+This is for React components that make up specific parts of the product. For example the ReportRoute, RecordRoute and TableHomePageRoute components.
+
+### Utils
+This is reserved for helper classes (`.left` or `.hide-on-mobile`), mixins (`@include foobar()`) and functions (`calc-space()`).
+
+### Vendors
+This is for third-party libraries such as Bootstrap and Animate.css.
+
+## About Inlining Styles
+Don't inline styles in React. Inlined styles are difficult to override (thereby breaking the specificity graph), make it hard to share styles and can't make use of pseudo-selectors/media queries.
 
 # Formating
 
@@ -216,8 +246,8 @@ Use the following ordering within a component:
   2. Box model
   3. Typographic
   4. Visual
-4. Media queries
-5. Pseudo-states and pseudo-elements
+4. Pseudo-states and pseudo-elements
+5. Media queries (this includes `@include` media queries)
 6. Nested elements
 7. Nested classes
 
@@ -248,12 +278,12 @@ Use the following ordering within a component:
     margin-top: $amount * 1em;
     text-align: center;
 
-    @include media($small-screen) {
-        margin-top: ($amount + 10em);
-    }
-
     &::before {
         content: "hello";
+    }
+
+    @include media($small-screen) {
+        margin-top: ($amount + 10em);
     }
 
     .module__ele {
@@ -265,29 +295,28 @@ Use the following ordering within a component:
 # Units
 
 ## Measurements
-* Default to using px units for everything unless we're working on something that is deliberately scaled or fluid.
-* Avoid specifying units for zero values, e.g., `margin: 0;` instead of `margin: 0px;`.
+- Default to using px units for everything unless we're working on something that is deliberately scaled or fluid.
+  - Additional reading: [R.I.P. REM, Viva CSS Reference Pixel!](https://mindtheshift.wordpress.com/2015/04/02/r-i-p-rem-viva-css-reference-pixel/?utm_source=designernews)
+- Avoid specifying units for zero values, e.g., `margin: 0;` instead of `margin: 0px;`.
+- Definitely use a unit for dimensions, margins, borders, padding, and typography.
 
 ````sass
 // Good
 width: 0;
+
 // Bad
 width: 0px;
-````
 
-* Definitely use a unit for dimensions, margins, borders, padding, and typography.
-
-````sass
 // Bad
 width: 12;
 ````
 
 ## Colors
-* All colors should be defined as a variable in the global file. If it's not there, add it and work with the visual design team to name it.
-* Use hex notation first, then rgb(a) and hsl(a) last.
-* Both three-digit and six-digit hexadecimal notation are acceptable.
-* When denoting color using hexadecimal notation, use all lowercase letters.
-* In some cases we might use the [Sass](http://sass-lang.com/documentation/Sass/Script/Functions.html) `lighten($color, $amount)` and `darken($color, $amount)` functions instead of explicit Sass variables. Still TBD.
+- All colors should be defined as a variable in the global `_qbVariables.scss` file. If it's not there, add it and work with the visual design team to name it.
+- Use hex notation first, then rgb(a) and hsl(a) last.
+- Both three-digit and six-digit hexadecimal notation are acceptable.
+- When denoting color using hexadecimal notation, use all lowercase letters.
+- In some cases we might use the [Sass](http://sass-lang.com/documentation/Sass/Script/Functions.html) `lighten($color, $amount)` and `darken($color, $amount)` functions instead of explicit Sass variables. Still TBD.
 
 ````sass
 // Good
@@ -316,52 +345,52 @@ color: #FFF;
 }
 ````
 
-# Naming
+# Naming & Specificity
 
-When it comes to naming, the most important thing is consistency. My recommendation is to use our own form of the Block Element Modifier (BEM) naming convention. The naming convention follows this pattern:
+## Block Element Modifier (BEM)
+- use the Block Element Modifier (BEM) naming convention for naming components.
+- The name of block elements should match with their React component name.
+- Use your best judgment when deciding what needs to follow the BEM convention. If you're creating utility classes like `.left { ... }` they obviously don't have to follow the BEM convention.
 
 ```sass
 .block {} // Name of the React component
-.block__element {}
-.block--modifier {}
+.block__element {} // Element contained in the component
+.block--modifier {} // State change or variation
 
 /** Examples **/
 // block
-.inset {
-    margin-left: 15%;
+.trowser {
+    position: absolute;
 
     // element
-    .inset__content {
-      padding: 3em;
+    .trowser__content {
+        padding: 3em;
     }
 }
 
 // modifier
-.inset--sm {
-    margin-left: 10%;
-
-    .inset__content {
-      padding: 1em;
-    }
+.trowser--is-open {
+    display: block;
 }
 
 // modifier
-.inset--lg {
-    margin-left: 20%;
+.trowser--progress {
+    .trowser__progress-stage {
+        display: block;
+    }
 }
 
 ```
 
-* Use your best judgment when deciding what needs to follow the BEM convention. If you're creating utility classes like `.left { ... }` they obviously don't have to follow the BEM convention.
-
 Additional reading:
-* [article explaining BEM](http://csswizardry.com/2013/01/mindbemding-getting-your-head-round-bem-syntax/)
-* [BEM website](https://en.bem.info/method/)
+- [article explaining BEM](http://csswizardry.com/2013/01/mindbemding-getting-your-head-round-bem-syntax/)
+- [BEM website](https://en.bem.info/method/)
 
+## Naming
 Additionally, along with naming components using the BEM method be sure to follow these guidelines:
-* Name things clearly.
-* Write classes semantically. Name its function not its appearance.
-* Avoid presentation- or location-specific words in names, as this will cause problems when we (invariably) need to change the color, width, or feature later.
+- Name things clearly.
+- Write classes semantically. Name its function not its appearance.
+- Avoid presentation- or location-specific words in names, as this will cause problems when we (invariably) need to change the color, width, or feature later.
 
 ```sass
 // Bad
@@ -385,7 +414,7 @@ Additionally, along with naming components using the BEM method be sure to follo
 .lg-box
 ```
 
-* Be wary of naming components based on content, as this limits the use of the class.
+- Be wary of naming components based on content, as this limits the use of the class.
 
 ```sass
 // Danger zone
@@ -395,7 +424,7 @@ Additionally, along with naming components using the BEM method be sure to follo
 .item_list
 ```
 
-* Don't abbreviate unless it’s a well-known abbreviation.
+- Don't abbreviate unless it’s a well-known abbreviation.
 
 ```sass
 // Bad
@@ -405,30 +434,28 @@ Additionally, along with naming components using the BEM method be sure to follo
 .block--lg
 ```
 
-* Use quotes in type pseudo selectors.
+- Use quotes in type pseudo selectors.
 
 ```sass
 // Good
 .top_image[type=’text’] { }
 ```
 
-* Name CSS components and modules with singular nouns.
+- Name CSS components and modules with singular nouns.
 
 ```sass
 .button { }
 ```
 
-* Name modifiers and state-based rules with adjectives.
+- Name modifiers and state-based rules with adjectives.
 
 ```sass
-.inset--is_hovered { }
+.inset--is-hovered { }
 ```
 
-# Specificity, Nesting & Mixins
-
 ## Specificity
-
-* IDs are reserved for when you are absolutely certain that there will only ever be one of the thing on the page.
+- Pro Tip: Using the BEM convention should ameliorate most specificity problems
+- IDs are reserved for when you are absolutely certain that there will only ever be one of the thing on the page.
 
 ```sass
 // Bad
@@ -438,7 +465,7 @@ Additionally, along with naming components using the BEM method be sure to follo
 .component { }
 ```
 
-* Do not fix problems with ```!important```. Use ```!important``` purposefully.
+- Do not fix problems with ```!important```. Use ```!important``` purposefully.
 
 ```sass
 // Bad
@@ -452,8 +479,8 @@ Additionally, along with naming components using the BEM method be sure to follo
 }
 ```
 
-* Keep specificity low and trend upwards in specificity as you move further down file. See Specificity graph.
-* Don't use unnecessary tag selectors.
+- Keep specificity low and trend upwards in specificity as you move further down file. See Specificity graph.
+- Don't use unnecessary tag selectors.
 
 ```sass
 // Bad
@@ -463,14 +490,14 @@ p.body_text { }
 .body_text
 ```
 
-* If you have to hack specificity, use a safe hack: the multi class.
+- If you have to hack specificity, use a safe hack: the multi class.
 
 ```sass
 // multi-class hack
 .component.component { }
 ```
 
-* Global selectors should generally be avoided. A global selector is a selector that runs the risk of styling an element that it did not intend to style. In fact, this is the goal of using the BEM convention and will help alleviate problems caused by global selectors.
+- Global selectors should generally be avoided. A global selector is a selector that runs the risk of styling an element that it did not intend to style.
 
 ```sass
 // Bad
@@ -500,66 +527,12 @@ div, nav, li {
 ```
 
 Additional Reading:
-* [CSS specificity graph](http://jonassebastianohlsson.com/specificity-graph/)
-* [Explanation](http://csswizardry.com/2014/10/the-specificity-graph/)
+- [CSS specificity graph](http://jonassebastianohlsson.com/specificity-graph/)
+- [Explanation](http://csswizardry.com/2014/10/the-specificity-graph/)
 
-## Nesting
-Avoid unnecessary nesting. In fact, our linting tool restricts nesting to a maximum of 3 levels. If you're using BEM for components then elements and modifiers don't need to be nested, you can if it helps with readability.
+# Sass Functionality
 
-Additional reading:
-* [nesting in Sass and Less](http://markdotto.com/2015/07/20/css-nesting/)
-
-## @Mixins
-* Use mixins for groups of properties that appear together intentionally and are used multiple times.
-* Before creating a new mixin, check to see if Bootstrap already has one.
-
-```sass
-@mixin clearfix {
-    &:after {
-        content: '';
-        display: table;
-        clear: both;
-    }
-}
-```
-
-* Use mixins for components to change size.
-* Use mixins when something requires parameters.
-
-```sass
-@mixin size($width, $height: $width) {
-    width: $width;
-    height: $height;
-}
-```
-
-* Do not use mixins for browser prefixes. Use [Autoprefixer](https://github.com/postcss/autoprefixer).
-
-```sass
-// Bad
-@mixin transform($value) {
-    -webkit-transform: $value;
-    -moz-transform: $value;
-    transform: $value;
-}
-```
-
-## @Extend
-Be very careful with using @extend. It's a powerful tool that can have disastrous side-effects. Before using please consider:
-
-* Where is my current selector going to be appended?
-* Am I likely to be causing undesired side-effects?
-* How large is the CSS generated by this single extend?
-
-If you're unsure of using @extend, use these rules to not run into trouble:
-
-* Use extend from within a module, not across different modules.
-* Use extend on placeholders exclusively, not on actual selectors.
-* Make sure the placeholder you extend is present as little as possible in the stylesheet.
-
-You can use mixins in place of selectors. While mixins will copy more code, the difference will often be negligible once the output file has been gzipped.
-
-# Variables
+## Variables
 - Variables should be placed in the `_qbVariables.scss` file. This helps us understand what values really are shared and maintain consistency across the project.
 
 - Create new variables in the following circumstances:
@@ -569,6 +542,7 @@ You can use mixins in place of selectors. While mixins will copy more code, the 
 
 - Use the `!default` flag to allow overriding when setting variables.
   - [Further Reading](https://robots.thoughtbot.com/sass-default)
+- You can set variables at the top of a component file, just be sure to use the `!default` flag.
 
 ```sass
 $baseline: 1em !default;
@@ -586,24 +560,109 @@ $header-background: $bigleaf;
 $active-state: $bigleaf;
 ````
 
-# Responsive Design & Breakpoints
-We use variables for global breakpoints as a single source of truth throughout the CSS framework. These should be shared with both JavaScript and Bootstrap. You can find them in `_qbVariables.scss` (is this correct?). See the section on Property Ordering for details on where to place media queries.
+> PROTIP: You can do string interpolation in Sass using `#{$variable-name}`
 
-When laying out a component you should first try to make it work with Flexbox, then with the global breakpoints and lastly with a locally set breakpoint. If all else fails, switch to using JavaScript to swap out a component based on the breakpoint. This is preferred because:
+## Functions
+- Sass has a ton of [great functions](http://sass-lang.com/documentation/Sass/Script/Functions.html). Please review what's available and use them!
+- You can create your own [Sass functions](http://www.sitepoint.com/sass-basics-function-directive/) as needed. Do this when you need to calculate the same thing in more than one place.
+
+## Nesting
+Avoid unnecessary nesting. In fact, our linting tool (TODO: implement linting tool) restricts nesting to a maximum of 3 levels. If you're using BEM for components then elements and modifiers don't need to be nested, you can if it helps with readability.
+
+Additional reading:
+- [nesting in Sass and Less](http://markdotto.com/2015/07/20/css-nesting/)
+
+## @Mixins
+- Use mixins for groups of properties that appear together intentionally and are used multiple times.
+- Before creating a new mixin, check to see if Bootstrap already has one.
+
+```sass
+@mixin clearfix {
+    &:after {
+        content: '';
+        display: table;
+        clear: both;
+    }
+}
+```
+
+- Use mixins for components to change size.
+- Use mixins when something requires parameters.
+
+```sass
+@mixin size($width, $height: $width) {
+    width: $width;
+    height: $height;
+}
+```
+
+- Do not use mixins for browser prefixes. Likewise, you don't need to use vendor prefixing. Instead, we use [Autoprefixer](https://github.com/postcss/autoprefixer) to automatically apply the required prefixes.
+
+```sass
+// Bad
+@mixin transform($value) {
+    -webkit-transform: $value;
+    -moz-transform: $value;
+    transform: $value;
+}
+```
+
+## @Extend
+Be very careful with using @extend. It's a powerful tool that can have disastrous side-effects. Before using please consider:
+
+- Where is my current selector going to be appended?
+- Am I likely to be causing undesired side-effects?
+- How large is the CSS generated by this single extend?
+
+If you're unsure of using @extend, use these rules to not run into trouble:
+
+- Use extend from within a module, not across different modules.
+- Use extend on placeholders exclusively, not on actual selectors.
+- Make sure the placeholder you extend is present as little as possible in the stylesheet.
+
+You can use mixins in place of selectors. While mixins will copy more code, the difference will often be negligible once the output file has been gzipped.
+
+## Bootstrap
+- Use the bootstrap configuration file before trying to style a bootstrap component. You can find it in `client-react/src/assets/css/_bootstrapVariables.scss`.
+- Because of how the current build system is setup, you must remove the `!default` flag in order for the variable to take effect.
+- Don't use Bootstrap variables in QuickBase components. Instead, add a new variable to `_qbVariables.scss` and use that variable in your component or the Bootstrap config file.
+
+- Boostrap has a ton of great mixins, please read up on them and consider using them where necessary.
+- Generally, we should exclude bootstrap components that we're not using until we are.
+
+# Responsive Design & Breakpoints
+- We use variables for global breakpoints as a single source of truth throughout the CSS framework. These should be shared with both JavaScript and Bootstrap. They will eventually loaded via a JSON config file that is shared between Sass and React (TODO!).
+- See the section on Property Ordering for details on where to place media queries.
+
+## Principles for Responsive Layouts
+When laying out a component you should try to lay it out using the following techniques:
+
+1. Use Flexbox, it's pretty powerful and _flexible_.
+  - Don't forget that Flexbox can be used to PUSH and PULL the (horizontal or vertical) ordering of elements
+  - [Flexbox cheatsheet](https://css-tricks.com/snippets/css/a-guide-to-flexbox/)
+2. Use the global breakpoints.
+  - These combined with Flexbox should be able to do most of the heavy lifting
+3. Try a locally set breakpoint.
+  - Be sure to set the breakpoint as a variable at the top of the component.
+  - Add a comment explaining why it is needed
+4. Consider hiding and showing components wholesale if their effect on page weight is minimal
+4. If all else fails, switch to using JavaScript to swap out a component based on the breakpoint.
+
+This is recommended because:
   - Flexbox means it's one set of selectors for all breakpoints
-  - Using JavaScript to set breakpoints alters the specificity of selectors instead of relying on cascading
+  - Using JavaScript to set breakpoints alters the specificity of selectors instead of relying on the cascading part of CSS
   - JavaScript switching is slower and requires more maintenance.
 
 Our breakpoints are the following:
 
 ```sass
 // Need to be updated
-$sm: new-breakpoint(min-width 0 max-width 40em $sm_cols);
-$md: new-breakpoint(min-width 0 max-width 40em $sm_cols);
-$lg: new-breakpoint(min-width 0 max-width 40em $sm_cols);
+$sm: new-breakpoint(min-width 0 max-width XXpx);
+$md: new-breakpoint(min-width 0 max-width XXpx);
+$lg: new-breakpoint(min-width 0 max-width XXpx);
 ```
 
-> TODO: We could share breakpoint settings between React and Sass using the [jsontosass-loader NPM module](https://www.npmjs.com/package/jsontosass-loader).
+> TODO: Add point of view about mobile-first or desktop first breakpoints.
 
 ## Types of Media Queries
 
@@ -612,15 +671,6 @@ See [developer.mozilla.org](https://developer.mozilla.org/en-US/docs/Web/CSS/Med
 - Use orientation to optimize layouts that may not work well when in landscape. (The majority of our designs assume a decent portrait design)
 - Use [resolution](http://caniuse.com/#feat=css-media-resolution) for serving up higher resolution assets (icons) for high resolution devices.
 - [Interaction media features](http://caniuse.com/#feat=css-media-interaction) are not yet fully supported by Firefox. Use them sparingly and only when other means are available.
-- 
-
-# Bootstrap
-- Use the bootstrap configuration file before trying to style a bootstrap component. You can find it in `client-react/src/assets/css/_customVariables.scss`.
-- Because of how the current build system is setup, you must remove the `!default` flag in order for the variable to take effect.
-- Don't use Bootstrap variables in QuickBase components. Instead, add a new variable to `_qbVariables.scss` and use that variable in your component or the Bootstrap config file.
-
-- Boostrap has a ton of great mixins, please read up on them and consider using them where necessary.
-- Generally, we should exclude bootstrap components that we're not using until we are.
 
 # Accessibility
 - Don't [remove outlines for accessibility reasons](http://a11yproject.com/posts/never-remove-css-outlines/)
