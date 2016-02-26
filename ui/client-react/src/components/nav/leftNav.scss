@@ -310,7 +310,7 @@ body:not(.touch) .leftNav.closed {
     /* always show right link on mobile (no hover) */
     ul li.link a.right {
         opacity: 1;
-
+        border:0;
         .qbIcon {
             border-left: 1px solid $left-nav-link-fg;
             width: 32px;
