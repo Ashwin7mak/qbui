@@ -98,7 +98,7 @@
                 // Check to see if the report group is already expanded (functionality is sticky from prior tests)
                 return e2ePageBase.hasClass(filteredElements[0].element(by.className('qbPanelHeaderIcon')), 'rotateUp').then(function(result) {
                     if (result === true) {
-                        return filteredElements[0].click();
+                        return filteredElements[0].element(by.className('qbPanelHeaderIcon')).click();
                     }
                 });
             });
