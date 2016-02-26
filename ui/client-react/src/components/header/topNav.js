@@ -57,12 +57,12 @@ var TopNav = React.createClass({
                     </div>
 
                     <div className="navGroup center">
-                        <ButtonGroup className="navItem harmonyButtons" ButtonGroup>
+                        <ButtonGroup className="navItem" ButtonGroup>
 
                             <OverlayTrigger trigger="click" rootClose placement="bottom" overlay={
-                            <Popover id={0} className={'searchPopover'}  title="Search">
-                                <Input className="searchInputBox" key={'searchInput'} standalone type="text" placeholder="Search Records"  onChange={this.searchChanged} />
-                            </Popover>}>
+                                <Popover id={0} className={'searchPopover'}  title="Search">
+                                    <Input className="searchInputBox" key={'searchInput'} standalone type="text" placeholder="Search Records"  onChange={this.searchChanged} />
+                                </Popover>}>
 
                                 <Button><QBicon icon="search" /></Button>
                             </OverlayTrigger>

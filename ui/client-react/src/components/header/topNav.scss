@@ -21,12 +21,12 @@ $top-nav-color: #193048;
     }
 }
 
-.topNav .navGroup .harmonyButtons .btn {
+.topNav .navGroup .btn-group .btn {
     background: $header-bg;
     border: 0;
 }
 
-.topNav .navGroup .harmonyButtons .btn:hover {
+.topNav .navGroup .btn-group .btn:hover {
     background: $nav-hover-bg;
     span {
         color: $nav-hover-fg;

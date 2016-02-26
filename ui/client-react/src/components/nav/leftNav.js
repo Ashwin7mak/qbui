@@ -28,18 +28,16 @@ let LeftNav = React.createClass({
      */
     createBranding() {
         let app = _.findWhere(this.props.apps, {id: this.props.selectedAppId});
-        return (this.props.open &&
-            <div className="branding">
-                <h2 className={"logo"}>QuickBase</h2>
-                {this.props.selectedAppId &&
-                    <div className="appsToggle" onClick={this.props.toggleAppsList}>
-                        <QBicon icon={"favicon"}/>
-                        <span className={"leftNavLabel"}> {app ? app.name : ''}</span>
-                        <QBicon icon="caret-filled-down"/>
-                    </div>
-                }
-            </div>
-        );
+        return (<div className="branding">
+                    <h2 className={"logo"}>QuickBase</h2>
+                    {this.props.selectedAppId &&
+                        <div className="appsToggle" onClick={this.props.onToggleAppsList}>
+                            <QBicon icon={"favicon"}/>
+                            <span className={"navLabel"}> {app ? app.name : ''}</span>
+                            <QBicon className={"appsToggleIcon"} icon="caret-filled-down"/>
+                        </div>
+                    }
+                </div>);
     },
 
     getAppTables(appId) {

@@ -4,7 +4,6 @@ import {Link} from 'react-router';
 import QBicon from '../qbIcon/qbIcon';
 import {I18nMessage} from '../../utils/i18nMessage';
 
-import './globalActions.scss';
 
 const actionPropType = React.PropTypes.shape({
     icon: React.PropTypes.string.isRequired,
@@ -22,8 +21,8 @@ let GlobalAction = React.createClass({
     render: function() {
         return (
             <li className={"link globalAction"}>
-                <Link to={this.props.action.link} onClick={this.props.onSelect}>
-                    <QBicon icon={this.props.action.icon}/><I18nMessage message={this.props.action.msg}/>
+                <Link className={"globalActionLink"} to={this.props.action.link} onClick={this.props.onSelect}>
+                    <QBicon icon={this.props.action.icon}/><span className={"navLabel"}><I18nMessage message={this.props.action.msg}/></span>
                 </Link>
             </li>);
     }

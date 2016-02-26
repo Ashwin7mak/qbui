@@ -47,9 +47,12 @@ let TablesList = React.createClass({
         return (
             <div className="tablesList leftNavList">
                 <ul>
-                    <NavItem item={{msg: 'nav.home', link:'/app/' + this.props.selectedAppId, icon:'home'}} {...this.props} />
-                    <NavItem item={{msg: 'nav.users', link:'/users', icon:'user'}} {...this.props}/>
-                    <NavItem item={{msg: 'nav.favorites', link:'/favorites', icon:'star'}} {...this.props}/>
+                    <li className="horizontal">
+                        <ul>
+                            <NavItem item={{msg: 'nav.home', link:'/app/' + this.props.selectedAppId, icon:'home'}} {...this.props} />
+                            <NavItem item={{msg: 'nav.users', link:'/users', icon:'user'}} {...this.props}/>
+                        </ul>
+                    </li>
 
                     <NavItem item={{msg: 'nav.tablesHeading'}}
                              isHeading={true}
