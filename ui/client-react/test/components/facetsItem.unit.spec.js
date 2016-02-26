@@ -180,7 +180,7 @@ describe('FacetsItem functions', () => {
         ];
 
         dataProvider.forEach(function(data) {
-            it(data.test, function (){
+            it(data.test, function() {
                 // no change initially
                 expect(component.shouldComponentUpdate(component.props, component.state)).toBeFalsy();
 
