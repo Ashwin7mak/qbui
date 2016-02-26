@@ -81,11 +81,18 @@
                 // Check we have the base links and two table links present
                 expect(links.length).toBe(5);
                 reportServicePage.clickAppToggle();
-                // Check that the app search widget is visible
-                expect(reportServicePage.searchAppsDivEl.isDisplayed()).toBeTruthy();
-                reportServicePage.clickAppToggle();
                 // Check that the app search widget is hidden
-                expect(reportServicePage.searchAppsDivEl.isPresent()).toBeFalsy();
+                expect(reportServicePage.searchAppsDivEl.isDisplayed()).toBeFalsy();
+                // Open the search apps widget
+                reportServicePage.clickAppSearchToggle();
+                // Check that the app search widget is visible
+                expect(reportServicePage.searchAppsDivEl.isPresent()).toBeTruthy();
+                // Close the search apps widget
+                reportServicePage.clickAppSearchToggle();
+                // Check that the app search widget is visible
+                expect(reportServicePage.searchAppsDivEl.isDisplayed()).toBeFalsy();
+                // Go back to the table list
+                reportServicePage.clickAppToggle();
             });
         });
 
