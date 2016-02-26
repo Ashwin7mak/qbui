@@ -1,6 +1,7 @@
 import React from 'react';
 import {Tooltip, OverlayTrigger} from 'react-bootstrap';
 import {Link} from 'react-router';
+import QBicon from '../qbIcon/qbIcon';
 import NavItem from './navItem';
 import Locale from '../../locales/locales';
 
@@ -31,6 +32,12 @@ let TablesList = React.createClass({
             this.setState({searchText: ""});
         }
     },
+    getHoverComponent(table) {
+        return (<div className="hoverComponent"><span>{table.name}</span><a href="#" className="right" onClick={()=>this.props.showReports(table.id)}>
+            <QBicon icon={"report-menu-3"}/>
+        </a></div>);
+    },
+
     tablesList() {
 
         return this.props.getAppTables(this.props.selectedAppId).map((table) => {
@@ -40,6 +47,7 @@ let TablesList = React.createClass({
                             key={table.id}
                             secondaryIcon={"report-menu-3"}
                             secondaryOnSelect={this.props.showReports}
+                            hoverComponent={this.getHoverComponent(table)}
                 {...this.props}/>;
         });
     },

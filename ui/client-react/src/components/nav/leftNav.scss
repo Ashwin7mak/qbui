@@ -72,7 +72,7 @@ body:not(.touch) div.leftNavTooltip.show {
 body:not(.touch) .leftNav.closed {
     width: 40px;
     transition: width 200ms ease;
-    overflow: hidden;
+    //overflow: hidden;
     .branding {
         .logo, .appsToggle .navLabel, .appsToggleIcon {
             display:none;
@@ -85,6 +85,9 @@ body:not(.touch) .leftNav.closed {
         ul {
             flex-direction: column;
         }
+    }
+    li.link:hover .hoverComponent {
+        display:block;
     }
 }
 
@@ -146,8 +149,8 @@ body:not(.touch) .leftNav.closed {
     }
     .transitionGroup {
         flex: 1;
-        overflow-y: auto;
-        overflow-x: hidden;
+        overflow: visible;
+        z-index:1;
     }
 
     ul {
@@ -211,7 +214,7 @@ body:not(.touch) .leftNav.closed {
                 opacity: 0;
                 position: absolute;
                 right: 0;
-                //1px solid $left-nav-link-fg;
+                border-left: 1px solid $left-nav-heading-bg;
 
             }
 
@@ -223,6 +226,17 @@ body:not(.touch) .leftNav.closed {
             .qbIcon {
                 width: 28px;
                 vertical-align: middle;
+            }
+            .hoverComponent {
+                display:none;
+                position:absolute;
+                top:0;
+                left:39px;
+                vertical-align:middle;
+                line-height:40px;
+                width:200px;
+                background:$left-nav-hover-bg;
+                color:$left-nav-fg;
             }
         }
 
@@ -238,8 +252,9 @@ body:not(.touch) .leftNav.closed {
                 -webkit-transition: all 0.2s ease-in-out;
                 -moz-transition: all 0.2s ease-in-out;
                 border-bottom: 0;
-
+                border-left:1px solid
             }
+
         }
     }
 
