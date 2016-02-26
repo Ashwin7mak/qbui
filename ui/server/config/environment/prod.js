@@ -15,16 +15,13 @@
     var clientConsts = require('./clientConsts');
 
     var client = clientConsts.REACT;
-    //if (process.env.CLIENT) {
-    //    client = process.env.CLIENT;
-    //}
 
     module.exports = {
 
         //  Logging configuration
         LOG: {
             name: 'qbse-local',
-            level: 'error',
+            level: 'info',
             stream: {
                 type: 'console',         //  file or console
                 file: {
