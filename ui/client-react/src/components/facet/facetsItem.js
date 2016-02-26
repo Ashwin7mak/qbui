@@ -4,7 +4,7 @@ import QBPanel from '../QBPanel/qbpanel.js';
 
 import './facet.scss';
 import  {facetShape} from './facetProps';
-import  FacetAspect from './facetAspect';
+import  FacetsAspect from './facetsAspect';
 
 import Logger from '../../utils/logger';
 import {I18nMessage} from '../../utils/i18nMessage';
@@ -118,7 +118,7 @@ class FacetsItem extends Component {
     renderValue(item, index) {
         var isSelected = _.indexOf(this.props.fieldSelections, item.value) !== -1;
         return (
-            <FacetAspect isSelected={isSelected}
+            <FacetsAspect isSelected={isSelected}
                          item={item}
                          index={index}
                          key={this.props.popoverId + "." + this.props.facet.id + "." + index}

@@ -1,13 +1,13 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import TestUtils from 'react-addons-test-utils';
-import FacetAspect  from '../../src/components/facet/facetAspect';
+import FacetsAspect  from '../../src/components/facet/facetsAspect';
 import FacetsItem  from '../../src/components/facet/facetsItem';
 import FacetSelections  from '../../src/components/facet/facetSelections';
 import {ListGroup, Panel, ListGroupItem} from 'react-bootstrap';
 
 
-describe('FacetItem functions', () => {
+describe('FacetsItem functions', () => {
     'use strict';
 
     var I18nMessageMock = React.createClass({
@@ -20,12 +20,12 @@ describe('FacetItem functions', () => {
 
     beforeEach(() => {
         FacetsItem.__Rewire__('I18nMessage', I18nMessageMock);
-        FacetAspect.__Rewire__('I18nMessage', I18nMessageMock);
+        FacetsAspect.__Rewire__('I18nMessage', I18nMessageMock);
     });
 
     afterEach(() => {
         FacetsItem.__ResetDependency__('I18nMessage');
-        FacetAspect.__ResetDependency__('I18nMessage');
+        FacetsAspect.__ResetDependency__('I18nMessage');
     });
 
     let component;
@@ -37,7 +37,7 @@ describe('FacetItem functions', () => {
     };
 
 
-    it('test render facetItem', () => {
+    it('test render facetsItem', () => {
         component = TestUtils.renderIntoDocument(<FacetsItem facet={item}
                                                              fieldSelections={[]}
                                                              handleSelectValue={() => {}}
@@ -46,7 +46,7 @@ describe('FacetItem functions', () => {
     });
 
 
-    it('test render facetItem with selected values', () => {
+    it('test render facetsItem with selected values', () => {
         let selected = new FacetSelections();
         selected.addSelection(22, 'b');
         component = TestUtils.renderIntoDocument(<FacetsItem facet={item}
@@ -56,7 +56,7 @@ describe('FacetItem functions', () => {
         expect(TestUtils.isCompositeComponent(component)).toBeTruthy();
     });
 
-    it('test render facetItem with selected values and clear a selection', () => {
+    it('test render facetsItem with selected values and clear a selection', () => {
         let selected = new FacetSelections();
         selected.addSelection(22, 'b');
         component = TestUtils.renderIntoDocument(<FacetsItem facet={item}
@@ -67,7 +67,7 @@ describe('FacetItem functions', () => {
     });
 
 
-    it('test render facetItem value selection', () => {
+    it('test render facetsItem value selection', () => {
         let selected = new FacetSelections();
         var callbacks = {
             handleSelectValue : function handleSelectValue(e, facet, value) {
@@ -95,7 +95,7 @@ describe('FacetItem functions', () => {
 
     });
 
-    it('test render facetItem fieldname collapse ', () => {
+    it('test render facetsItem fieldname collapse ', () => {
         let selected = new FacetSelections();
         var callbacks = {
             handleToggleCollapse: function handleToggleCollapse() {
@@ -114,7 +114,7 @@ describe('FacetItem functions', () => {
 
     });
 
-    it('test render facetItem clearFacet clear selects ', () => {
+    it('test render facetsItem clearFacet clear selects ', () => {
         let selected = new FacetSelections();
         selected.addSelection(22, 'b');
         selected.addSelection(22, 'c');
@@ -136,6 +136,62 @@ describe('FacetItem functions', () => {
         expect(callbacks.handleClearFieldSelects).toHaveBeenCalled();
 
     });
+    describe('facetsItem -- shouldComponentUpdate when any its props change', () => {
+        var initialProps  = {
+            facet : item,
+            fieldSelections :new FacetSelections(),
+            isRevealed: false,
+            expanded : false
+        };
+
+        beforeEach(() => {
+            component = TestUtils.renderIntoDocument(
+                <FacetsItem facet={initialProps.facet}
+                         expanded={initialProps.expanded}
+                         fieldSelections={initialProps.fieldSelections}
+                />);
+
+        });
+
+        afterEach(() => {
+        });
+
+        var dataProvider = [
+            {
+                test:'test filter change expanded',
+                changes: function(prop) {
+                    prop.expanded = true;
+                }
+            },
+            {
+                test:'test filter change isRevealed',
+                changes: function(prop) {
+                    prop.isRevealed = true;
+                }
+            },
+            {
+                test:'test filter change fieldSelections',
+                changes: function(prop) {
+                    let selected = new FacetSelections();
+                    selected.addSelection(22, 'b');
+                    prop.fieldSelections = selected;
+                }
+            },
+        ];
+
+        dataProvider.forEach(function(data) {
+            it(data.test, function (){
+                // no change initially
+                expect(component.shouldComponentUpdate(component.props, component.state)).toBeFalsy();
+
+                // change data prop
+                let nextProps = _.clone(component.props, true);
+                data.changes(nextProps);
+                expect(component.shouldComponentUpdate(nextProps, component.state)).toBeTruthy();
+            });
+        });
+    });
+
 
 });
 

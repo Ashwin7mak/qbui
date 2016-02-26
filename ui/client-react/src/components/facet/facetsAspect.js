@@ -14,13 +14,13 @@ let logger = new Logger();
 
 
 /**
- * FacetAspect a value from fields facets
+ * FacetsAspect a value from fields facets
  * a Facets aspect has a value, whether its selected flag, and parent facet field info, its index in the set
  **/
-class FacetAspect extends Component {
+class FacetsAspect extends Component {
     constructor(props) {
         super(props);
-        this.displayName = 'FacetAspect';
+        this.displayName = 'FacetsAspect';
         this.propType = {
             isSelected: React.PropTypes.bool,
             facet: facetShape.isRequired,
@@ -53,4 +53,4 @@ class FacetAspect extends Component {
     }
 
 }
-export default FacetAspect;
+export default FacetsAspect;

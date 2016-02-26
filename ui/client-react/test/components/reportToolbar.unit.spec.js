@@ -213,7 +213,6 @@ describe('ReportToolbar functions', () => {
         let span = recordsCount[0];
         expect(span).not.toBeNull();
         expect(span.innerText.match(/\d+ .+\d+/)).toBeFalsy();
-        flux.actions.searchFor.calls.reset();
 
         //timeout for debounce
         setTimeout(function() {
