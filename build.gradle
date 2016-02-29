@@ -5,12 +5,17 @@ group = "com.quickbase.phoenix"
 
 defaultTasks 'clean', 'test', 'build'
 
-repositories {
-    jcenter()
-    mavenCentral()
+buildscript {
+    repositories {
+        jcenter()
+        mavenCentral()
+    }
+
+    dependencies {
+        classpath "org.apache.commons:commons-lang3:3.1"
+    }
 }
 
-//
 ext.webProject=true
 
 task wrapper(type: Wrapper) {
