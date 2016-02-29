@@ -24,25 +24,25 @@
                     browserWidth: e2eConsts.XLARGE_BP_WIDTH,
                     breakpointSize: 'xlarge',
                     open: true,
-                    clientWidth: '399'
+                    offsetWidth: '400'
                 },
                 {
                     browserWidth: e2eConsts.LARGE_BP_WIDTH,
                     breakpointSize: 'large',
                     open: true,
-                    clientWidth: '299'
+                    offsetWidth: '300'
                 },
                 {
                     browserWidth: e2eConsts.MEDIUM_BP_WIDTH,
                     breakpointSize: 'medium',
                     open: true,
-                    clientWidth: '199'
+                    offsetWidth: '200'
                 },
                 {
                     browserWidth: e2eConsts.SMALL_BP_WIDTH,
                     breakpointSize: 'small',
                     open: true,
-                    clientWidth: '157'
+                    offsetWidth: '180'
                 }
             ];
         }

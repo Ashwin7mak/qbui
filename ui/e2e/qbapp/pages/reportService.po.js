@@ -181,10 +181,10 @@
             expect(this.navMenuBodyEl.getAttribute('class')).toMatch(breakpointSize + '-breakpoint');
             if (open) {
                 expect(this.navMenuEl.getAttribute('class')).toMatch('open');
-                expect(this.navMenuEl.getAttribute('clientWidth')).toMatch(clientWidth);
+                expect(this.navMenuEl.getAttribute('offsetWidth')).toMatch(clientWidth);
             } else {
                 expect(this.navMenuEl.getAttribute('class')).toMatch('closed');
-                expect(this.navMenuEl.getAttribute('clientWidth')).toMatch(clientWidth);
+                expect(this.navMenuEl.getAttribute('offsetWidth')).toMatch(clientWidth);
             }
         };
 

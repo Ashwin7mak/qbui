@@ -114,7 +114,7 @@
                     e2eConsts.NavDimensionsDataProvider().forEach(function(testcase) {
                         // Resize browser at different widths to check responsiveness
                         e2eBase.resizeBrowser(testcase.browserWidth, e2eConsts.DEFAULT_HEIGHT).then(function() {
-                            reportServicePage.assertNavProperties(testcase.breakpointSize, testcase.open, testcase.clientWidth);
+                            reportServicePage.assertNavProperties(testcase.breakpointSize, testcase.open, testcase.offsetWidth);
                         });
                     });
                     // Reset back to xlarge
@@ -143,7 +143,7 @@
                     reverseArray.forEach(function(testcase) {
                         // Resize browser at different widths to check responsiveness
                         e2eBase.resizeBrowser(testcase.browserWidth, e2eConsts.DEFAULT_HEIGHT).then(function() {
-                            reportServicePage.assertNavProperties(testcase.breakpointSize, testcase.open, testcase.clientWidth);
+                            reportServicePage.assertNavProperties(testcase.breakpointSize, testcase.open, testcase.offsetWidth);
                         });
                     });
                 });
@@ -163,7 +163,7 @@
                         for (var i = 0; i < links.length; i++) {
                             expect(links[i].isDisplayed()).toBe(true);
                             // Verify elements present on leftNav with right dimensions
-                            reportServicePage.isElementInLeftNav(links[i], testcase.clientWidth);
+                            reportServicePage.isElementInLeftNav(links[i], testcase.offsetWidth);
                         }
                     });
                 });
@@ -178,19 +178,21 @@
             if(browser.browserName === 'chrome' || browser.browserName === 'firefox') {
                 try {
                     // Collapse the leftNav
-                    reportServicePage.topNavToggleHamburgerEl.click();
-                    e2eConsts.NavDimensionsDataProvider().forEach(function(testcase) {
-                        // Resize browser at different widths
-                        e2eBase.resizeBrowser(testcase.browserWidth, e2eConsts.DEFAULT_HEIGHT).then(function(tableLinksElList) {
-                            // Hover over the table link icon in leftNav
-                            browser.actions().mouseMove(reportServicePage.tableLinksElList.get(3)).perform();
-                            // Open the reportsMenu
-                            reportServicePage.openReportsMenu(reportServicePage.tableLinksElList.get(3));
-                            // Load report
-                            // Wait for the report list to load
-                            reportServicePage.waitForElement(reportServicePage.reportGroupsDivEl).then(function() {
-                                // Find and select the report
-                                reportServicePage.selectReport('My Reports', 'Test Report');
+                    reportServicePage.waitForElement(reportServicePage.topNavToggleHamburgerEl).then(function() {
+                        reportServicePage.topNavToggleHamburgerEl.click();
+                        e2eConsts.NavDimensionsDataProvider().forEach(function(testcase) {
+                            // Resize browser at different widths
+                            e2eBase.resizeBrowser(testcase.browserWidth, e2eConsts.DEFAULT_HEIGHT).then(function(tableLinksElList) {
+                                // Hover over the table link icon in leftNav
+                                browser.actions().mouseMove(reportServicePage.tableLinksElList.get(3)).perform();
+                                // Open the reportsMenu
+                                reportServicePage.openReportsMenu(reportServicePage.tableLinksElList.get(3));
+                                // Load report
+                                // Wait for the report list to load
+                                reportServicePage.waitForElement(reportServicePage.reportGroupsDivEl).then(function() {
+                                    // Find and select the report
+                                    reportServicePage.selectReport('My Reports', 'Test Report');
+                                });
                             });
                         });
                     });
