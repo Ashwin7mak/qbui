@@ -113,8 +113,9 @@ $margin-spacer: 10px;
 
     @media (min-device-width: 300px) and (orientation: landscape) {
         .field {
-            flex-basis: 33%;
+            flex-basis: 100%;
             display: block;
+            max-width:100%;
             &:nth-child(n+3) {
                 .fieldValue {
                     white-space: nowrap;

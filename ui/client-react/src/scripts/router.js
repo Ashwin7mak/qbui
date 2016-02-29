@@ -87,13 +87,6 @@ let NavWrapper = React.createClass({
 
         document.body.className = bodyClasses;
 
-        // close left nav if resizing down to small
-        if (breakpoint === breakpoints.SMALL_BREAKPOINT && this.state.breakpoint !== breakpoints.SMALL_BREAKPOINT) {
-            flux.actions.toggleLeftNav(false);
-        }
-        if (breakpoint !== breakpoints.SMALL_BREAKPOINT && this.state.breakpoint === breakpoints.SMALL_BREAKPOINT) {
-            flux.actions.toggleLeftNav(true);
-        }
         this.setState({breakpoint});
     },
 

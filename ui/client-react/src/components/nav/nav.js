@@ -49,7 +49,7 @@ var Nav = React.createClass({
     onSelectTableReports(tableId) {
         const flux = this.getFlux();
 
-        if ((this.context.breakpoint === breakpoints.SMALL_BREAKPOINT) && this.context.touch) {
+        if (this.context.touch) {
             flux.actions.toggleLeftNav(false);
         }
         flux.actions.showTrowser();
@@ -106,7 +106,7 @@ var Nav = React.createClass({
             flux.actions.toggleLeftNav(true);
         }
     },
-    renderLarge() {
+    renderForDesktop() {
         const flux = this.getFlux();
 
         let classes = 'navShell ';
@@ -153,7 +153,7 @@ var Nav = React.createClass({
         const flux = this.getFlux();
         flux.actions.toggleLeftNav(false); // hide left nav after selecting items on small breakpoint
     },
-    renderSmall() {
+    renderForTouch() {
         const flux = this.getFlux();
 
         let classes = 'navShell';
@@ -201,10 +201,10 @@ var Nav = React.createClass({
         </div>);
     },
     render() {
-        if ((this.context.breakpoint === breakpoints.SMALL_BREAKPOINT) && this.context.touch) {
-            return this.renderSmall();
+        if (this.context.touch) {
+            return this.renderForTouch();
         } else {
-            return this.renderLarge();
+            return this.renderForDesktop();
         }
     }
 });

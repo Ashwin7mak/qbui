@@ -41,22 +41,18 @@ $left-nav-horizontal-icon-border-color: #131f2b;
 
 .xlarge-breakpoint .leftNav.open {
     width: 400px;
-    transition: width 3200ms ease;
 }
 
 .large-breakpoint .leftNav.open {
     width: 300px;
-    transition: width 200ms ease;
 }
 
 .medium-breakpoint .leftNav.open {
     width: 200px;
-    transition: width 200ms ease;
 }
 
-.small-breakpoint.touch .leftNav.open {
+body.touch .leftNav.open {
     width: 300px;
-    transition: width 200ms ease;
 }
 
 /* show tooltips only if .show is present unless we're on a touchscreen */
@@ -297,9 +293,9 @@ body:not(.touch) .leftNav.closed {
     border-top:1px solid $left-nav-horizontal-icon-border-color;
 }
 
-/* small (mobile) left nav behaves differently */
+/* left nav behaves differently on touch devices */
 
-.small-breakpoint.touch .leftNav {
+body.touch .leftNav {
     margin: 0;
     height: 100%;
     width: 0;
@@ -319,7 +315,7 @@ body:not(.touch) .leftNav.closed {
     }
 }
 
-.small-breakpoint.touch .navShell.leftNavOpen {
+body.touch .navShell.leftNavOpen {
     position: relative;
     left: -300px;
 

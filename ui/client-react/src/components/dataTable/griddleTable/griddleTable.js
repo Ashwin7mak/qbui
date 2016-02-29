@@ -19,7 +19,7 @@ import './qbGriddleTable.scss';
 let GriddleTable = React.createClass({
 
     contextTypes: {
-        breakpoint: React.PropTypes.string,
+        touch: React.PropTypes.bool,
         history: React.PropTypes.object
     },
 
@@ -46,7 +46,6 @@ let GriddleTable = React.createClass({
 
     getDefaultProps() {
         return {
-            mobile: false,
             showFilter: false,
             showSettings: false,
             currentPage: 0,
@@ -180,7 +179,7 @@ let GriddleTable = React.createClass({
 
     render() {
 
-        const isCardLayout = this.context.breakpoint === breakpoints.SMALL_BREAKPOINT;
+        const isCardLayout = this.context.touch;
 
         let griddleWrapperClasses = this.state.selectedRows.length ? "selectedRows" : "";
 
