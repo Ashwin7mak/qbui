@@ -1,0 +1,18 @@
+
+function get_aws_account_id() {
+    accountId=$(aws iam get-user --query User.Arn --output text 2> /dev/null | awk -F: '{print $5}')
+    if [[ $? -ne 0 || -z ${accountId} ]]; then
+        accountId=$(wget -q -O - http://169.254.169.254/latest/dynamic/instance-identity/document | /usr/local/bin/jq '.accountId' --raw-output)
+    fi
+
+    echo ${accountId}
+}
+
+function get_aws_region() {
+    region=$(aws configure get region 2> /dev/null)
+    if [[ $? -ne 0 || -z ${region} ]]; then
+        region=$(wget -q -O - http://169.254.169.254/latest/dynamic/instance-identity/document | /usr/local/bin/jq '.region' --raw-output)
+    fi
+
+    echo ${region}
+}
