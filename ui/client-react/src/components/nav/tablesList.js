@@ -36,9 +36,10 @@ let TablesList = React.createClass({
      * toggle search tables list
      */
     onClickTables() {
+        const wasSearching = this.state.searching;
         this.setState({searching: !this.state.searching});
 
-        if (this.state.searching) {
+        if (!wasSearching) {
             this.setState({searchText: ""});
         }
     },
