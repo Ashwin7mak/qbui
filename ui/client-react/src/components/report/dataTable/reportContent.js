@@ -37,7 +37,7 @@ let ReportContent = React.createClass({
     setCSSClass_helper: function(obj, classname) {
         if (typeof (obj.cssClassName) === 'undefined') {
             obj.cssClassName = classname;
-        } else {
+        } else if (obj.cssClassName.indexOf(classname) === -1) {
             obj.cssClassName += " " + classname;
         }
     },
