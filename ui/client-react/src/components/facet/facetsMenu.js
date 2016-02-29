@@ -34,7 +34,9 @@ var FacetsMenu = React.createClass({
                 })
             })
         }),
-        onFacetSelect : React.PropTypes.func
+        onFacetSelect : React.PropTypes.func,
+        onMenuEnter : React.PropTypes.func,
+        onMenuExit : React.PropTypes.func
     },
 
     /**
@@ -150,7 +152,7 @@ var FacetsMenu = React.createClass({
             <div className="facetsMenuContainer">
                 {/* list of facet options shown when filter icon clicked */}
                 <OverlayTrigger container={this} trigger="click" placement="bottom" ref="facetOverlayTrigger" rootClose={true}
-                                overlay={
+                                onEntering={this.props.onMenuEnter} onExited={this.props.onMenuExit} overlay={
                                     <FacetsList
                                         handleToggleCollapse={this.handleToggleCollapse}
                                         isCollapsed={this.isCollapsed}

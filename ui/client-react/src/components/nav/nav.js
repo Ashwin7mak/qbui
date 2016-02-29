@@ -49,12 +49,11 @@ var Nav = React.createClass({
     onSelectTableReports(tableId) {
         const flux = this.getFlux();
 
-        if ((this.context.breakpoint === breakpoints.SMALL_BREAKPOINT) && this.context.touch) {
+        if (this.context.touch) {
             flux.actions.toggleLeftNav(false);
         }
-        flux.actions.loadReports(this.state.apps.selectedAppId, tableId).then(() => {
-            flux.actions.showTrowser();
-        });
+        flux.actions.showTrowser();
+        flux.actions.loadReports(this.state.apps.selectedAppId, tableId);
     },
     /**
      *  get breadcrumb element for top of trowser
@@ -67,7 +66,7 @@ var Nav = React.createClass({
             let table = tables.find((t) => t.id === this.state.reportsData.tableId);
 
             return (
-                <h3><QBicon icon="report-table"/>{table ? table.name : ""} > <I18nMessage message={'nav.reportsHeading'}/></h3>);
+                <h3><QBicon icon="report-table"/> {table ? table.name : ""} <QBicon icon="caret-right"/> <I18nMessage message={'nav.reportsHeading'}/></h3>);
         }
         return null;
     },
@@ -96,11 +95,18 @@ var Nav = React.createClass({
                               onSelectReport={selectReport}/>;
     },
 
+    /* toggle apps list - if on collapsed nav, open left nav and display apps */
     toggleAppsList(open) {
         const flux = this.getFlux();
-        flux.actions.toggleAppsList(open);
+
+        if (this.state.nav.leftNavOpen) {
+            flux.actions.toggleAppsList(open);
+        } else {
+            flux.actions.toggleAppsList(true);
+            flux.actions.toggleLeftNav(true);
+        }
     },
-    renderLarge() {
+    renderForDesktop() {
         const flux = this.getFlux();
 
         let classes = 'navShell ';
@@ -117,12 +123,12 @@ var Nav = React.createClass({
 
             <LeftNav
                 open={this.state.nav.leftNavOpen}
-                appsListOpen={this.state.nav.appsListOpen}
+                appsListOpen={this.state.nav.appsListOpen && this.state.nav.leftNavOpen}
                 apps={this.state.apps.apps}
                 selectedAppId={this.state.apps.selectedAppId}
                 selectedTableId={this.state.apps.selectedTableId}
                 onSelectReports={this.onSelectTableReports}
-                toggleAppsList={this.toggleAppsList} />
+                onToggleAppsList={this.toggleAppsList} />
 
             <div className="main">
                 <TopNav title="QuickBase"
@@ -147,7 +153,7 @@ var Nav = React.createClass({
         const flux = this.getFlux();
         flux.actions.toggleLeftNav(false); // hide left nav after selecting items on small breakpoint
     },
-    renderSmall() {
+    renderForTouch() {
         const flux = this.getFlux();
 
         let classes = 'navShell';
@@ -170,14 +176,13 @@ var Nav = React.createClass({
                 apps={this.state.apps.apps}
                 selectedAppId={this.state.apps.selectedAppId}
                 selectedTableId={this.state.apps.selectedTableId}
-                toggleAppsList={this.toggleAppsList}
+                onToggleAppsList={this.toggleAppsList}
                 onSelect={this.onSelectItem}
                 onSelectReports={this.onSelectTableReports}
                 globalActions={this.getGlobalActions()} />
 
             <div className="main">
                 <TopNav title="QuickBase"
-                        globalActions={this.getGlobalActions()}
                         onNavClick={this.toggleNav}
                         flux={flux} />
 
@@ -196,10 +201,10 @@ var Nav = React.createClass({
         </div>);
     },
     render() {
-        if ((this.context.breakpoint === breakpoints.SMALL_BREAKPOINT) && this.context.touch) {
-            return this.renderSmall();
+        if (this.context.touch) {
+            return this.renderForTouch();
         } else {
-            return this.renderLarge();
+            return this.renderForDesktop();
         }
     }
 });

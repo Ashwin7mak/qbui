@@ -22,9 +22,11 @@
 
         this.appToggleDivEl = element(by.className('appsToggle'));
         this.appsListDivEl = element(by.className('appsList'));
+        this.appSearchHeadingEl = this.appsListDivEl.element(by.className('heading'));
+        this.appsSearchIconEl = this.appSearchHeadingEl.element(by.className('qbIcon'));
         this.appLinksElList = this.appsListDivEl.all(by.className('leftNavLink'));
 
-        this.searchAppsDivEl = element(by.className('searchApps'));
+        this.searchAppsDivEl = this.appsListDivEl.element(by.className('search'));
         this.searchAppsInputEl = this.searchAppsDivEl.element(by.tagName('input'));
 
         this.tablesListDivEl = element(by.className('tablesList'));
@@ -76,6 +78,17 @@
         this.griddleRecordElList = this.griddleDataBodyDivEl.all(by.tagName('tr'));
 
         /**
+         * Given a table link element in the leftNav, open the reports menu for that table
+         * @param tableLinkEl
+         */
+        this.openReportsMenu = function(tableLinkEl) {
+            e2ePageBase.waitForElement(tableLinkEl).then(function() {
+                var hamburgerEl = tableLinkEl.all(by.className('right')).first();
+                return hamburgerEl.click();
+            });
+        };
+
+        /**
          * Function that will open the report group and load the report specified by name
          * @param reportGroup
          * @param reportName
@@ -96,7 +109,7 @@
                 // Check to see if the report group is already expanded (functionality is sticky from prior tests)
                 return e2ePageBase.hasClass(filteredElements[0].element(by.className('qbPanelHeaderIcon')), 'rotateUp').then(function(result) {
                     if (result === true) {
-                        return filteredElements[0].click();
+                        return filteredElements[0].element(by.className('qbPanelHeaderIcon')).click();
                     }
                 });
             });
@@ -168,18 +181,34 @@
             expect(this.navMenuBodyEl.getAttribute('class')).toMatch(breakpointSize + '-breakpoint');
             if (open) {
                 expect(this.navMenuEl.getAttribute('class')).toMatch('open');
-                expect(this.navMenuEl.getAttribute('clientWidth')).toMatch(clientWidth);
+                expect(this.navMenuEl.getAttribute('offsetWidth')).toMatch(clientWidth);
             } else {
                 expect(this.navMenuEl.getAttribute('class')).toMatch('closed');
-                expect(this.navMenuEl.getAttribute('clientWidth')).toMatch(clientWidth);
+                expect(this.navMenuEl.getAttribute('offsetWidth')).toMatch(clientWidth);
             }
         };
 
-        // Click the app toggle in the leftNav
+        // Click the app list toggle in the leftNav
         this.clickAppToggle = function() {
             var deferred = Promise.pending();
             try {
                 this.appToggleDivEl.click().then(function() {
+                    // Sleep for a second to allow toggle animation to finish (and the DOM to refresh)
+                    e2eBase.sleep(1000);
+                    deferred.resolve();
+                });
+            } catch (error) {
+                console.error(JSON.stringify(error));
+                deferred.reject(error);
+            }
+            return deferred.promise;
+        };
+
+        // Click the app search toggle in the leftNav
+        this.clickAppSearchToggle = function() {
+            var deferred = Promise.pending();
+            try {
+                this.appsSearchIconEl.click().then(function() {
                     // Sleep for a second to allow toggle animation to finish (and the DOM to refresh)
                     e2eBase.sleep(1000);
                     deferred.resolve();
