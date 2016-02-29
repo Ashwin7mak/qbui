@@ -78,6 +78,17 @@
         this.griddleRecordElList = this.griddleDataBodyDivEl.all(by.tagName('tr'));
 
         /**
+         * Given a table link element in the leftNav, open the reports menu for that table
+         * @param tableLinkEl
+         */
+        this.openReportsMenu = function(tableLinkEl) {
+            e2ePageBase.waitForElement(tableLinkEl).then(function() {
+                var hamburgerEl = tableLinkEl.all(by.className('right')).first();
+                return hamburgerEl.click();
+            });
+        };
+
+        /**
          * Function that will open the report group and load the report specified by name
          * @param reportGroup
          * @param reportName

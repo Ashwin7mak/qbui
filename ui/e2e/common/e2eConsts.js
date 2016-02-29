@@ -41,8 +41,8 @@
                 {
                     browserWidth: e2eConsts.SMALL_BP_WIDTH,
                     breakpointSize: 'small',
-                    open: false,
-                    clientWidth: '39'
+                    open: true,
+                    clientWidth: '157'
                 }
             ];
         }

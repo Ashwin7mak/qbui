@@ -78,7 +78,7 @@
          */
         it('Should load the reports page with the appropriate table report and verify the fieldNames and records', function() {
             // Select the table
-            reportServicePage.tableLinksElList.get(3).click();
+            reportServicePage.tableLinksElList.get(2).click();
             // Open the reports list
             reportServicePage.reportHamburgersElList.get(0).click();
             // Wait for the report list to load
@@ -106,7 +106,7 @@
          */
         it('Table report should expand width past the browser size to show all available data (large num columns)', function() {
             // Select the table
-            reportServicePage.tableLinksElList.get(3).click().then(function() {
+            reportServicePage.tableLinksElList.get(2).click().then(function() {
                 // Open the reports list
                 reportServicePage.reportHamburgersElList.get(0).click();
                 // Wait for the report list to load
@@ -134,9 +134,10 @@
          */
         it('Table report should expand width to take up available space (small num of columns)', function() {
             // Select the table
-            reportServicePage.tableLinksElList.get(4).click().then(function() {
-                // Open the reports list
-                reportServicePage.reportHamburgersElList.get(1).click();
+            reportServicePage.tableLinksElList.get(3).click().then(function() {
+                // Open the reports menu for the second table
+                reportServicePage.openReportsMenu(reportServicePage.tableLinksElList.get(3));
+
                 // Wait for the report list to load
                 reportServicePage.waitForElement(reportServicePage.reportGroupsDivEl).then(function() {
                     // Find and select the report
