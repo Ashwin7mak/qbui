@@ -13,6 +13,7 @@ $left-nav-hover-bg: #00b0c2;
 $left-nav-heading-bg: #264a6d;
 $left-nav-heading-fg: #bfcfe3;
 $left-nav-bg: #193048;
+$selected-table-fg: #fff;
 
 $left-nav-horizontal-icon-border-color: #131f2b;
 .leftNav.open {
@@ -36,6 +37,10 @@ $left-nav-horizontal-icon-border-color: #131f2b;
 
 .leftNav .link.withSecondary a.leftNavLink {
     padding-right: 28px;
+}
+
+.leftNav .link.selected  {
+    color: $selected-table-fg;
 }
 
 .xlarge-breakpoint .leftNav.open {

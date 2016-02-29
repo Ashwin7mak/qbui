@@ -77,6 +77,7 @@ let TablesList = React.createClass({
                          secondaryIcon={"report-menu-3"}
                          secondaryOnSelect={this.props.showReports}
                          hoverComponent={this.getHoverComponent(table)}
+                         selected={table.id === this.props.selectedTableId}
                             {...this.props}/>;
         });
     },
