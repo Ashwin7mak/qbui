@@ -32,16 +32,20 @@ let TablesList = React.createClass({
             this.setState({searchText: ""});
         }
     },
+    getTableLink(table) {
+        return '/app/' + this.props.selectedAppId + '/table/' + table.id;
+    },
     getHoverComponent(table) {
-        return (<div className="hoverComponent"><span>{table.name}</span><a href="#" className="right" onClick={()=>this.props.showReports(table.id)}>
-            <QBicon icon={"report-menu-3"}/>
-        </a></div>);
+        return (<div className="hoverComponent">
+            <Link to={table.link}>{table.name}</Link>
+            <a href="#" className="right" onClick={()=>this.props.showReports(table.id)}><QBicon icon={"report-menu-3"}/></a>
+        </div>);
     },
 
     tablesList() {
 
         return this.props.getAppTables(this.props.selectedAppId).map((table) => {
-            table.link = '/app/' + this.props.selectedAppId + '/table/' + table.id;
+            table.link = this.getTableLink(table);
             table.icon = 'report-table';
             return this.searchMatches(table.name) && <NavItem item={table}
                             key={table.id}
