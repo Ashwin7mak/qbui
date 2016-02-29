@@ -120,7 +120,7 @@ let GriddleTable = React.createClass({
             recId = row[this.props.uniqueIdentifier];
         }
         //create the link we want to send the user to and then send them on their way
-        const link = '/app/' + appId + '/table/' + tblId + '/record/' + recId;
+        const link = `/app/${appId}/table/${tblId}/record/${recId}`;
         this.context.history.push(link);
 
         // something like this I expect, maybe in an action instead:

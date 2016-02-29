@@ -15,7 +15,7 @@ var Content = React.createClass({
                                 <ul className="tables">
                                     {sortByAll(app.tables, ['name']).map((table) => {
                                         let tblName = table.name + ' (' + table.id + ')';
-                                        let href = '/app/' + app.id + '/table/' + table.id;
+                                        let href = `/app/${app.id}/table/${table.id}`;
                                         return (
                                             <li key={table.id}>
                                                 <div><a href={href}>{tblName}</a></div>
