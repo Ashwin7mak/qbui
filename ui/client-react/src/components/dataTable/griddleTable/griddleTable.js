@@ -93,13 +93,13 @@ let GriddleTable = React.createClass({
         return this.state.allowCardSelection;
     },
 
-    onToggleCardSelection(allow = true, row = null) {
+    onToggleCardSelection(allow = true, rowData = null) {
         this.setState({allowCardSelection: allow});
 
         if (!allow) {
             this.setState({selectedRows: []});
-        } else if (row) {
-            this.onCardRowSelected(row);
+        } else if (rowData) {
+            this.onCardRowSelected(rowData);
         }
     },
 
@@ -144,9 +144,15 @@ let GriddleTable = React.createClass({
         }
     },
 
+    /**
+     * keep track of tools menu being open (need to change overflow css style)
+     */
     onMenuEnter() {
         this.setState({toolsMenuOpen:true});
     },
+    /**
+     * keep track of tools menu being closed (need to change overflow css style)
+     */
     onMenuExit() {
         this.setState({toolsMenuOpen:false});
     },

@@ -25,11 +25,15 @@ let CardView = React.createClass({
         };
     },
 
+    /**
+     * toggle expanded card (unless in selection mode)
+     * @param e event
+     */
     handleMoreCard(e) {
         if (!this.context.allowCardSelection()) {
             this.setState({showMoreCards: !this.state.showMoreCards});
 
-            e.stopPropagation();
+            e.stopPropagation(); // don't navigate to record
         }
     },
 
@@ -108,7 +112,7 @@ let CardView = React.createClass({
     },
 
     /**
-     * either hide actions column or show selection column
+     * hide actions column or show selection column if actions are not open
      */
     swipedRight() {
 

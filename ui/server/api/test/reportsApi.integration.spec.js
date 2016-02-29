@@ -224,34 +224,6 @@
 
         });
 
-        it('Negative Test case: Facet with text fields limit of 200 fields', function(done) {
-            this.timeout(testConsts.INTEGRATION_TIMEOUT);
-            //create a report
-            var reportEndpoint = recordBase.apiBase.resolveReportsEndpoint(app.id, app.tables[1].id);
-            var reportToCreate = {
-                name: testUtils.generateRandomString(5),
-                type: 'TABLE',
-                tableId: app.tables[1].id,
-                facetFids: [6]
-            };
-            //Create a report
-            recordBase.apiBase.executeRequest(reportEndpoint, consts.POST, reportToCreate).then(function(report) {
-                var r = JSON.parse(report.body);
-                //Execute report against 'resultComponents' endpoint.
-                recordBase.apiBase.executeRequest(reportEndpoint + r.id + '/reportComponents?format=' + FORMAT, consts.GET).then(function(reportResults) {
-                    var results = JSON.parse(reportResults.body);
-                    assert(results.records.length > 200);
-                    var expectedFacet = {"id":6, "name":"Text Field", "type":"TEXT", "values":[], "hasBlanks":false, "errorMessage": errorCodes.ERROR_MSG_KEY.FACET.RECORD_TOO_BIG};
-                    assert.deepEqual(JSON.stringify(results.facets), JSON.stringify([expectedFacet]));
-                    done();
-                });
-
-            }).catch(function(error) {
-                log.error(JSON.stringify(error));
-                done();
-            });
-        });
-
         // Cleanup the test realm after all tests in the block
         after(function(done) {
             //Realm deletion takes time, bump the timeout
