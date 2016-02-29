@@ -19,12 +19,22 @@ let TablesList = React.createClass({
             searchText:""
         };
     },
+    /**
+     * update search text
+     * @param e
+     */
     onChangeSearch(ev) {
-        this.setState({searchText: ev.target.value});
+        this.setState({searchText: e.target.value});
     },
+    /**
+     * check for table name matching search text
+     */
     searchMatches(name) {
         return name.toLowerCase().indexOf(this.state.searchText.toLowerCase()) !== -1;
     },
+    /**
+     * toggle search tables list
+     */
     onClickTables() {
         this.setState({searching: !this.state.searching});
 
@@ -32,9 +42,19 @@ let TablesList = React.createClass({
             this.setState({searchText: ""});
         }
     },
+
+    /**
+     * get link to table homepage
+     */
     getTableLink(table) {
-        return '/app/' + this.props.selectedAppId + '/table/' + table.id;
+        return `/app/${this.props.selectedAppId}/table/${table.id}`;
     },
+
+    /**
+     * get component that appears when hovering over collapsed left nav
+     * @param table
+     * @returns {XML}
+     */
     getHoverComponent(table) {
         return (<div className="hoverComponent">
             <Link to={table.link}>{table.name}</Link>
@@ -42,17 +62,22 @@ let TablesList = React.createClass({
         </div>);
     },
 
+    /**
+     * get list of table links for left nav
+     * @returns {*}
+     */
     tablesList() {
 
         return this.props.getAppTables(this.props.selectedAppId).map((table) => {
             table.link = this.getTableLink(table);
             table.icon = 'report-table';
-            return this.searchMatches(table.name) && <NavItem item={table}
-                            key={table.id}
-                            secondaryIcon={"report-menu-3"}
-                            secondaryOnSelect={this.props.showReports}
-                            hoverComponent={this.getHoverComponent(table)}
-                {...this.props}/>;
+            return this.searchMatches(table.name) &&
+                <NavItem item={table}
+                         key={table.id}
+                         secondaryIcon={"report-menu-3"}
+                         secondaryOnSelect={this.props.showReports}
+                         hoverComponent={this.getHoverComponent(table)}
+                            {...this.props}/>;
         });
     },
     render() {
@@ -61,7 +86,7 @@ let TablesList = React.createClass({
                 <ul>
                     <li className="horizontal">
                         <ul>
-                            <NavItem item={{msg: 'nav.home', link:'/app/' + this.props.selectedAppId, icon:'home'}} {...this.props} />
+                            <NavItem item={{msg: 'nav.home', link:`/app/${this.props.selectedAppId}`, icon:'home'}} {...this.props} />
                             <NavItem item={{msg: 'nav.users', link:'/users', icon:'user'}} {...this.props}/>
                         </ul>
                     </li>
