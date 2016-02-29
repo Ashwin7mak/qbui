@@ -65,8 +65,8 @@ dependencies {
 }
 
 def extraJvmArgs = ""
-def testUser = getTestUser();
-def testUserPassword = generateRandomString(16);
+//def testUser = getTestUser();
+//def testUserPassword = generateRandomString(16);
 def sqlConnectInfo = new SqlConnectInfo(rootDir)
 def environment = System.getProperty("env");
 def awsEnv = (environment == "aws");
@@ -88,10 +88,12 @@ def cargoRmiPort = 8200;
 // If running in AWS, there is no manually created properties file, so the settings must be retrieved using secret-cli
 if (awsEnv) {
     // If there is a specific test user, either supplied or needed because using RDS, create the testUser in Oracle.
+    /*
     if (testUser) {
         logger.lifecycle("Running tests with user " + testUser)
         sqlConnectInfo.createTestUserInSQL(testUser, testUserPassword);
     }
+    */
 
     // Get the authorization secrets using the secret CLI
     salt = Utils.executeCmd("${rootDir}/tools/ci/getSecret.sh ticket NewStackTicketHashSalt");
