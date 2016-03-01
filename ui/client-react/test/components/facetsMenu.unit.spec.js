@@ -20,6 +20,32 @@ describe('FacetsMenu functions', () => {
                 ]
         }
     };
+    const fakeReportDataNoFacets_valid = {
+        data: {
+            facets : []
+        }
+    };
+    var I18nMessageMock = React.createClass({
+        render: function() {
+            return (
+                <div>test</div>
+            );
+        }
+    });
+
+    beforeEach(() => {
+        FacetsList.__Rewire__('I18nMessage', I18nMessageMock);
+        FacetsItem.__Rewire__('I18nMessage', I18nMessageMock);
+        FacetsAspect.__Rewire__('I18nMessage', I18nMessageMock);
+        FacetsMenu.__Rewire__('I18nMessage', I18nMessageMock);
+    });
+
+    afterEach(() => {
+        FacetsList.__ResetDependency__('I18nMessage');
+        FacetsItem.__ResetDependency__('I18nMessage');
+        FacetsAspect.__ResetDependency__('I18nMessage');
+        FacetsMenu.__ResetDependency__('I18nMessage');
+    });
 
     let reportParams = {appId:1, tblId:2, rptId:3};
 
@@ -52,6 +78,39 @@ describe('FacetsMenu functions', () => {
         expect(component.state.show).toBeTruthy();
     });
 
+    describe('test render FacetsMenu no values', () => {
+        let mountPoint;
+
+        beforeEach(() => {
+            mountPoint = document.createElement('div');
+            document.body.appendChild(mountPoint);
+        });
+
+        afterEach(() => {
+            ReactDOM.unmountComponentAtNode(mountPoint);
+            document.body.removeChild(mountPoint);
+        });
+
+        it('no values message shows when there are no values', () => {
+            component =  ReactDOM.render(<FacetsMenu id={"testempty"} params={reportParams}
+                                                                 allInitiallyCollapsed={true}
+                                                                 reportData={fakeReportDataNoFacets_valid}
+            />, mountPoint);
+            const testContainer = ReactDOM.findDOMNode(component);
+
+            expect(TestUtils.isCompositeComponent(component)).toBeTruthy();
+
+            expect(component.state.show).toBeFalsy();
+
+            let facetButtons = TestUtils.findRenderedDOMComponentWithClass(component, "facetButtons");
+            TestUtils.Simulate.click(facetButtons);
+            expect(component.state.show).toBeTruthy();
+
+            //verify the no values message appears
+            let noFacetValues =  document.getElementsByClassName("noFacetValues");
+            expect(noFacetValues.length).toBe(1);
+        });
+    });
 
     it('test render FacetsMenu shows selection tokens', () => {
         let selected = new FacetSelections();
@@ -186,13 +245,6 @@ describe('FacetsMenu functions', () => {
     });
 
     describe('Show More', () => {
-        var I18nMessageMock = React.createClass({
-            render: function() {
-                return (
-                    <div>test</div>
-                );
-            }
-        });
 
         let mountPoint;
         const fakeReportLongData_valid = {
@@ -203,19 +255,11 @@ describe('FacetsMenu functions', () => {
             }
         };
         beforeEach(() => {
-            FacetsList.__Rewire__('I18nMessage', I18nMessageMock);
-            FacetsItem.__Rewire__('I18nMessage', I18nMessageMock);
-            FacetsAspect.__Rewire__('I18nMessage', I18nMessageMock);
-
             mountPoint = document.createElement('div');
             document.body.appendChild(mountPoint);
         });
 
         afterEach(() => {
-            FacetsList.__ResetDependency__('I18nMessage');
-            FacetsItem.__ResetDependency__('I18nMessage');
-            FacetsAspect.__ResetDependency__('I18nMessage');
-
             ReactDOM.unmountComponentAtNode(mountPoint);
             document.body.removeChild(mountPoint);
         });

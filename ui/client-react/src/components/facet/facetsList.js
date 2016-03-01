@@ -129,9 +129,11 @@ var FacetsList = React.createClass({
                      className="facetMenuPopup"
                      ref={(thisComponent) => this._facetMenuArea = thisComponent}>
                     {this.props.reportData && this.props.reportData.data &&
-                    this.props.reportData.data.facets ?
+                    this.props.reportData.data.facets && this.props.reportData.data.facets.length > 0 ?
                         this.facetsList(this.props.reportData.data.facets) :
-                        <I18nMessage message={noFacetsMessage}/>}
+                        <div className="noFacetValues">
+                        <I18nMessage message={noFacetsMessage}/>
+                            </div>}
             </Popover>
         );
     }
