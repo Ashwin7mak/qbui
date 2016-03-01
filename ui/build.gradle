@@ -67,6 +67,7 @@ dependencies {
 def extraJvmArgs = ""
 def testUser = getTestUser();
 def testUserPassword = generateRandomString(16);
+println(rootDir);
 def sqlConnectInfo = new SqlConnectInfo(rootDir)
 def environment = System.getProperty("env");
 def awsEnv = (environment == "aws");
