@@ -24,7 +24,7 @@ let TablesList = React.createClass({
      * @param e
      */
     onChangeSearch(ev) {
-        this.setState({searchText: e.target.value});
+        this.setState({searchText: ev.target.value});
     },
     /**
      * check for table name matching search text
