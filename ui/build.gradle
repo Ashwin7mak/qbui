@@ -68,8 +68,6 @@ def cargoHome = "/tmp/cargo";
 def extraJvmArgs = ""
 def testUser = getTestUser();
 def testUserPassword = generateRandomString(16);
-println("******rootDir******")
-println(rootDir);
 def sqlConnectInfo = new SqlConnectInfo("${rootDir}/../quickbase")
 def environment = System.getProperty("env");
 def awsEnv = (environment == "aws");
@@ -175,13 +173,18 @@ cargo {
         configHomeDir = file(cargoHome)
 
         containerProperties {
-            property 'cargo.tomcat.ajp.port', 9090
+            property 'cargo.servlet.port', cargoHttpPort
+            property 'cargo.tomcat.ajp.port', cargoAjpPort
+            property 'cargo.rmi.port', cargoRmiPort
         }
 
         jvmArgs ="-Dspring.profiles.active=default" +
                 " -Dtangosol.coherence.override=${getCommonCoherenceResources(cwd)}/tangosol-coherence-override-test.xml" +
+                " -Dquickbase.coherence.cluster=${clusterName}" +
+                " -Dtangosol.coherence.clusteraddress=${clusterAddress}" +
+                " -Dtangosol.coherence.clusterport=${clusterPort}" +
                 " -Dtangosol.pof.enabled=true" +
-                " -Dtangosol.pof.config=${getCommonCoherenceResources(cwd)}/quickbase-pof-config.xml"
+                " -Dtangosol.pof.config=${getCommonCoherenceResources(cwd)}/quickbase-pof-config.xml" + extraJvmArgs
 
         installer {
             installUrl = "file://" + cwd + "/../tools/ci/apache-tomcat-8.0.20.zip"
