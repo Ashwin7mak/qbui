@@ -22,6 +22,12 @@ class FacetSelections {
         this.initSelections(emptyList);
     }
 
+    copy() {
+        let result = new FacetSelections();
+        result.initSelections(this.selectionsHash);
+        return result;
+    }
+
     initSelections(newSet) {
         if (newSet && (typeof newSet === 'object')) {
             this.selectionsHash = _.cloneDeep(newSet);
@@ -44,6 +50,20 @@ class FacetSelections {
             });
             return foundAny;
         }
+    }
+
+    /**
+     * Get list of fields with selections
+     *
+     */
+    whichHasAnySelections() {
+        let answer = [];
+        if (_.keys(this.selectionsHash).length !== 0) {
+            answer = _.filter(this.selectionsHash, function(x) {
+                return (x && (x.length > 0));
+            });
+        }
+        return answer;
     }
 
     /**
@@ -167,6 +187,19 @@ class FacetSelections {
             // remove to mark it deselected
             this.removeSelection(facetField.id, value);
         }
+        // boolean only has either true or false set not both
+        if (facetField.type === 'CHECKBOX') {
+            // if we just did a select and the selection for this field is both true & false
+            // disable the other one that the newly selected
+            let YesMsg = 'report.facets.yesCheck';
+            let NoMsg = 'report.facets.noCheck';
+            // when react 18n supports plain string (non dom wrapped) xtlate use the message keys above
+            if (select) {
+                let other = (value === 'Yes') ? 'No' : 'Yes';
+                this.removeSelection(facetField.id, other);
+            }
+
+        }
         ////caller to update the state
     }
 
@@ -183,18 +216,6 @@ class FacetSelections {
         this.setFacetValueSelectState(facetField, value, !this.isValueInSelections(facetField.id, value));
     }
 
-    /**
-     * function: handleToggleSelect
-     * handle the ui request of event occurs to handled changing the collapse/expand state of a
-     * facet field group. To make the facet field groups values hidden or shown.
-     * @param e - the event object from the browser/react
-     * @param facetField - the facet field group to act on
-     * @param value - the value to select
-     **/
-    handleToggleSelect(e, facetField, value) {
-        logger.debug("got toggle select on field id " + facetField.id + " value " + value);
-        this.toggleSelectFacetValue(facetField, value);
-    }
 }
 
 export default FacetSelections;

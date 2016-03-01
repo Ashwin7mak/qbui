@@ -1,14 +1,17 @@
-import React from 'react';
+import React,  {Component}from 'react';
 import {Dropdown, MenuItem, ListGroup, Panel, ListGroupItem} from 'react-bootstrap';
 import QBPanel from '../QBPanel/qbpanel.js';
 
 import './facet.scss';
 import  {facetShape} from './facetProps';
+import  FacetsAspect from './facetsAspect';
 
 import Logger from '../../utils/logger';
 import {I18nMessage} from '../../utils/i18nMessage';
 import QBicon from '../qbIcon/qbIcon';
+import simpleStringify from '../../../../common/src/simpleStringify';
 
+let logger = new Logger();
 
 /**
  * FacetsItem one of the fields from the set of field facets groups
@@ -24,34 +27,55 @@ import QBicon from '../qbIcon/qbIcon';
  *      too many to facet? bool
  *      reason = messageId for why no facets (too many values, other reasons?)
  **/
-
-var FacetsItem = React.createClass({
+class FacetsItem extends Component {
     /**
      * this takes in as props
      *  - the facet field,
      *  -  a function to handle selection/deselection of one of the facet fields values used to initiate filter the report results
      *  - a function to handle the collapse/expansion of the facet field ;  hide or show its list of values
      */
-    displayName: 'FacetsItem',
-    propTypes: {
-        facet:facetShape,
-        fieldSelections: React.PropTypes.array,
-        handleSelectValue: React.PropTypes.func,
-        handleToggleCollapse: React.PropTypes.func,
-        handleClearFieldSelects: React.PropTypes.func
-    },
-
-    getDefaultProps() {
-        return {
-            fieldSelections : []
+    constructor(props) {
+        super(props);
+        this.displayName = 'FacetsItem';
+        this.propType = {
+            facet: facetShape.isRequired,
+            popoverId : React.PropTypes.string,
+            maxInitRevealed : React.PropTypes.number,
+            isRevealed : React.PropTypes.bool,
+            expanded :  React.PropTypes.bool,
+            fieldSelections: React.PropTypes.array,
+            handleSelectValue: React.PropTypes.func,
+            handleToggleCollapse: React.PropTypes.func,
+            handleClearFieldSelects: React.PropTypes.func
         };
-    },
+    }
 
     clearSelects(e) {
         this.props.handleClearFieldSelects(this.props.facet);
         // prevent collapse of section just do the clear
         e.stopPropagation();
-    },
+        if (e.nativeEvent.stopImmediatePropagation && typeof e.nativeEvent.stopImmediatePropagation  === 'function') {
+            e.nativeEvent.stopImmediatePropagation();
+        }
+    }
+
+    shouldComponentUpdate(nextProps, nextState) {
+        let answer = false;
+
+        if (nextProps.expanded !== this.props.expanded) {
+            answer = true;
+        }
+
+        if (!_.isEqual(nextProps.fieldSelections, this.props.fieldSelections)) {
+            answer = true;
+        }
+
+        if (nextProps.isRevealed !== this.props.isRevealed) {
+            answer = true;
+        }
+
+        return answer;
+    }
 
     /**
      * function : renderFieldName
@@ -59,12 +83,13 @@ var FacetsItem = React.createClass({
      * @returns {XML}
      */
     renderFieldName() {
-       // return <h3>{this.props.facet.name}</h3>;
         var clearFacetsIcon = "";
         var selectionInfo = "";
         var selectionStrings = "";
         if (this.props.fieldSelections.length > 0) {
-            clearFacetsIcon = (<span onClick={this.clearSelects}>
+            // note onMouseDown instead of onClick necessary here to support rootClose on the menu
+            // so that it will not propagate to thru to parent collapse while clearing selection
+            clearFacetsIcon = (<span onMouseDown={e => this.clearSelects(e)} >
                                     <QBicon className="clearFacet" icon="clear-mini" />
                                 </span>);
             var listOfValues = _.map(this.props.facet.values, 'value');
@@ -82,7 +107,7 @@ var FacetsItem = React.createClass({
                     {selectionInfo}
                 </div>
             );
-    },
+    }
 
 
     /**
@@ -93,14 +118,15 @@ var FacetsItem = React.createClass({
     renderValue(item, index) {
         var isSelected = _.indexOf(this.props.fieldSelections, item.value) !== -1;
         return (
-            <ListGroupItem key={this.props.facet.fid + "." + index}
-                           onClick={(e)=>this.props.handleSelectValue(e, this.props.facet, item.value)}
-                           className={isSelected  ? "selected" : ""}>
-                <QBicon className={isSelected  ? "checkMark-selected" : "checkMark"} icon="check" />
-                {item.value}
-            </ListGroupItem>
+            <FacetsAspect isSelected={isSelected}
+                         item={item}
+                         index={index}
+                         key={this.props.popoverId + "." + this.props.facet.id + "." + index}
+                         facet={this.props.facet}
+                         handleSelectValue={this.props.handleSelectValue}
+            />
         );
-    },
+    }
 
     /**
      * function : renderValues
@@ -111,12 +137,26 @@ var FacetsItem = React.createClass({
         /*TODO check type of facet list, string, date, boolean currently only handles string
          array values
          */
+        let tooManyValues = 'report.facets.tooManyValues';
+
+        if ((!this.props.facet.values || this.props.facet.values.length === 0)) {
+            return (<div className="noOptions"><I18nMessage message={tooManyValues}/></div>);
+        }
+
+        let listToShow = this.props.facet.values;
+
+        // if there are a lot of values just show max and see more
+        if ((this.props.facet.values.length > this.props.maxInitRevealed) &&  !this.props.isRevealed) {
+            listToShow = _.take(this.props.facet.values, this.props.maxInitRevealed);
+        }
+
         return (
-            this.props.facet.values && this.props.facet.values.map((item, index) => {
+            listToShow.map((item, index) => {
                 return this.renderValue(item, index);
-            })
+            }
+            )
         );
-    },
+    }
 
     /**
      * function : render
@@ -124,18 +164,36 @@ var FacetsItem = React.createClass({
      * @returns {XML}
      */
     render() {
+        let seeMore = "report.facets.seeMore";
+
         return (
             <Panel fill collapsible defaultExpanded {...this.props}
+                   key = {"panel." + this.props.popoverId + "." + this.props.facet.id}
                    className={(this.props.fieldSelections.length > 0) ? "selections" : ""}
                    onSelect={this.props.handleToggleCollapse}
                    header={this.renderFieldName()}>
-                <ListGroup fill>
-                    {this.renderValues()}
-                </ListGroup>
+
+                    { // get values rendered only if its not expanded
+                    this.props.expanded ?
+                        (<ListGroup fill>
+                            {this.renderValues()}
+                            {(this.props.facet.values.length > this.props.maxInitRevealed &&  !this.props.isRevealed ?
+                                (<span className="listMore" onClick={(e) => this.props.handleRevealMore(e, this.props.facet)}>
+                                    <I18nMessage message={seeMore} /></span>) : null)}
+                        </ListGroup>) :
+                        null
+                    }
+
             </Panel>
         );
     }
+}
+FacetsItem.defaultProps = {
+    fieldSelections : [],
+    isRevealed: true,
+    maxInitRevealed : 10,
+    expanded : false
+};
 
-});
 export default FacetsItem;
 

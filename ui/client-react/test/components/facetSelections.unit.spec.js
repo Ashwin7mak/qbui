@@ -70,6 +70,30 @@ describe('FacetSelections', () => {
         });
     });
 
+    describe('test FacetSelections whichHasAnySelections', () => {
+        let testSelections;
+        beforeEach(function() {
+            testSelections = new FacetSelections();
+        });
+
+        it('which has selections', () => {
+            testSelections.initSelections(mySelections);
+            expect(testSelections.whichHasAnySelections().length).toBe(3);
+        });
+
+        it('initialized doesn\'t have selections', () => {
+            testSelections.initSelections();
+            expect(testSelections.whichHasAnySelections().length).toBe(0);
+        });
+
+        it('emptied array doesn\'t have selections', () => {
+            testSelections.initSelections({emptyList:[]});
+            expect(testSelections.whichHasAnySelections().length).toBe(0);
+        });
+    });
+
+
+
     describe('test FacetSelections isValueInSelections', () => {
         let testSelections;
         beforeEach(function() {
@@ -280,6 +304,39 @@ describe('FacetSelections', () => {
             expect(_.includes(testSelections.getFieldSelections('fieldid'), 'addSelect')).toBeTruthy();
             testSelections.setFacetValueSelectState(facetField, 'addSelect', false);
             expect(_.includes(testSelections.getFieldSelections('fieldid'), 'addSelect')).toBeFalsy();
+        });
+    });
+
+    describe('test FacetSelections setFacetValueSelectState checkboxes', () => {
+        let testSelections = new FacetSelections();
+        let facetField = {
+            type:"CHECKBOX",
+            id : 'fieldid',
+        };
+        it('it has false selected', () => {
+            testSelections.setFacetValueSelectState(facetField, 'No', true);
+            expect(_.includes(testSelections.getFieldSelections('fieldid'), 'No')).toBeTruthy();
+        });
+        it('it has true selected', () => {
+            testSelections.setFacetValueSelectState(facetField, 'Yes', true);
+            expect(_.includes(testSelections.getFieldSelections('fieldid'), 'Yes')).toBeTruthy();
+        });
+        it('it has selects false and true is not selected', () => {
+            testSelections.setFacetValueSelectState(facetField, 'No', true);
+            expect(_.includes(testSelections.getFieldSelections('fieldid'), 'Yes')).toBeFalsy();
+            expect(_.includes(testSelections.getFieldSelections('fieldid'), 'No')).toBeTruthy();
+        });
+
+        it('it has selects true and false is not selected', () => {
+            testSelections.setFacetValueSelectState(facetField, 'Yes', true);
+            expect(_.includes(testSelections.getFieldSelections('fieldid'), 'Yes')).toBeTruthy();
+            expect(_.includes(testSelections.getFieldSelections('fieldid'), 'No')).toBeFalsy();
+        });
+
+        it('it has selects true and false is still not selected', () => {
+            testSelections.setFacetValueSelectState(facetField, 'Yes', true);
+            expect(_.includes(testSelections.getFieldSelections('fieldid'), 'Yes')).toBeTruthy();
+            expect(_.includes(testSelections.getFieldSelections('fieldid'), 'No')).toBeFalsy();
         });
     });
 
