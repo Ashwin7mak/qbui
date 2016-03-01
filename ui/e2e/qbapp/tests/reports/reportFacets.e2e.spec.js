@@ -25,36 +25,50 @@
          */
         beforeAll(function(done) {
             e2eBase.reportsBasicSetUp().then(function(appAndRecords) {
+                // Set your global objects to use in the test functions
                 app = appAndRecords[0];
                 recordList = appAndRecords[1];
+                // Get the appropriate fields out of the second table
+                var nonBuiltInFields = e2eBase.tableService.getNonBuiltInFields(app.tables[1]);
+                // Generate the record JSON objects
+                var generatedRecords = e2eBase.recordService.generateRecords(nonBuiltInFields, 10);
+                // Via the API create some records
+                return e2eBase.recordService.addRecords(app, app.tables[1], generatedRecords);
+            }).then(function() {
+                //Create a new report
+                return e2eBase.reportService.createReport(app.id, app.tables[1].id);
+            }).then(function() {
                 // Get a session ticket for that subdomain and realmId (stores it in the browser)
-                // Gather the necessary values to make the requests via the browser
                 realmName = e2eBase.recordBase.apiBase.realm.subdomain;
                 realmId = e2eBase.recordBase.apiBase.realm.id;
-                RequestSessionTicketPage.get(e2eBase.getSessionTicketRequestEndpoint(realmName, realmId, e2eBase.ticketEndpoint));
+                return RequestSessionTicketPage.get(e2eBase.getSessionTicketRequestEndpoint(realmName, realmId, e2eBase.ticketEndpoint));
+            }).then(function() {
                 // Load the requestAppsPage (shows a list of all the apps and tables in a realm)
-                RequestAppsPage.get(e2eBase.getRequestAppsPageEndpoint(realmName));
-
+                return RequestAppsPage.get(e2eBase.getRequestAppsPageEndpoint(realmName));
+            }).then(function() {
                 // Wait for the leftNav to load
-                reportServicePage.waitForElement(reportServicePage.appsListDivEl).then(function() {
-                    // sleep
-                    e2eBase.sleep(browser.params.smallSleep);
+                return reportServicePage.waitForElement(reportServicePage.appsListDivEl).then(function() {
                     // Select the app
-                    reportServicePage.appLinksElList.get(0).click();
-                    // Select the table
-                    reportServicePage.tableLinksElList.get(3).click();
-                    // Open the reports list
-                    reportServicePage.reportHamburgersElList.get(0).click();
-                    // Wait for the report list to load
-                    reportServicePage.waitForElement(reportServicePage.reportGroupsDivEl).then(function() {
-                        // Find and select the report
-                        reportServicePage.selectReport('My Reports', 'Test Report');
-                        // Make sure the table report has loaded
-                        reportServicePage.waitForElement(reportServicePage.loadedContentEl).then(function() {
-                            done();
-                        });
-                    });
+                    return reportServicePage.appLinksElList.get(0).click();
                 });
+            }).then(function() {
+                return reportServicePage.waitForElement(reportServicePage.tablesListDivEl).then(function() {
+                    // Select the table
+                    return reportServicePage.tableLinksElList.get(3).click();
+                });
+            }).then(function() {
+                // Open the reports list
+                reportServicePage.reportHamburgersElList.get(0).click();
+                // Wait for the report list to load
+                reportServicePage.waitForElement(reportServicePage.reportGroupsDivEl).then(function() {
+                    // Find and select the report
+                    reportServicePage.selectReport('My Reports', 'Test Report');
+                    done();
+                });
+            }).catch(function(error) {
+                // Global catch that will grab any errors from chain above
+                // Will appropriately fail the beforeAll method so other tests won't run
+                done.fail('Error during test setup: ' + error.message);
             });
         });
 
@@ -67,7 +81,7 @@
             });
         });
 
-        xit('Verify reports toolbar', function(done) {
+        it('Verify reports toolbar', function(done) {
             reportServicePage.waitForElement(reportServicePage.reportsToolBar).then(function() {
                 //verify the records count
                 expect(reportServicePage.reportRecordsCount.getAttribute('innerText'), "10 Records", "Unexpected count of records.");
@@ -82,7 +96,7 @@
             });
         });
 
-        xit('Verify facet overlay menu and menu items expand and collapse', function(done) {
+        it('Verify facet overlay menu and menu items expand and collapse', function(done) {
             //Click on facet carat
             reportServicePage.reportFilterBtnCaret.click().then(function() {
                 //Verify the popup menu is displayed
@@ -115,22 +129,7 @@
             });
         });
 
-        xit('Verify selected facet Items got checked in facet popup', function(done) {
-            reportServicePage.waitForElement(reportServicePage.reportsToolBar).then(function () {
-                //Click on facet carat
-                reportServicePage.reportFilterBtnCaret.click().then(function () {
-                    //Verify the popup menu is displayed
-                    return expect(reportServicePage.reportFacetPopUpMenu.isDisplayed).toBeTruthy();
-                    //TODO verify table column names matches with menu contents after the integration part is done.
-                }).then(function () {
-                    //select the facet Items
-                    return reportServicePage.selectFacetAndVerifyChecked("Status", ["Blocked", "Completed"]);
-                });
-                done();
-            });
-        });
-
-        xit('Selected Facet Name and Facet Items and verify Facet tokens ', function(done) {
+        it('Select Facet Name and Facet Items and verify Facet tokens ', function(done) {
             reportServicePage.waitForElement(reportServicePage.reportsToolBar).then(function () {
                 //Click on facet carat
                 reportServicePage.reportFilterBtnCaret.click().then(function () {
@@ -141,10 +140,10 @@
                     //select the facet Items
                     reportServicePage.selectFacetAndVerifyChecked("Types", ["Design", "Development", "Test"]);
                 }).then(function () {
-                    reportServicePage.selectFacetAndVerifyChecked("Flag", ["True"]);
+                    reportServicePage.selectFacetAndVerifyChecked("Flag", ["Yes"]);
                     reportServicePage.reportFilterBtnCaret.click();
                 }).then(function () {
-                    reportServicePage.verifyFacetTokens([{index: 0, text: 'Types\nDesignDevelopmentTest'}, {index: 1, text: 'Flag\nTrue'}]);
+                    reportServicePage.verifyFacetTokens([{index: 0, text: 'Types\nDesignDevelopmentTest'}, {index: 1, text: 'Flag\nYes'}]);
                     done();
                 });
             });
@@ -161,11 +160,12 @@
                     //select the facet Items
                     reportServicePage.selectFacetAndVerifyChecked("Types", ["Design", "Development", "Test"]);
                 }).then(function () {
-                    reportServicePage.selectFacetAndVerifyChecked("Flag", ["True"]);
+                    reportServicePage.selectFacetAndVerifyChecked("Flag", ["Yes"]);
                     reportServicePage.reportFilterBtnCaret.click();
                 }).then(function () {
                     //remove facets by clicking on clear (X) in facet selection in the tokens and verify tokens got removed
-                    reportServicePage.clearFacetTokens(["Design", "Test", "True"]);
+                    reportServicePage.clearFacetTokens(["Design", "Test", "Yes"]);
+                    done();
                 });
 
             });

@@ -222,8 +222,7 @@
          * Function that will verify the facet tokens i.e facet Name and facet Selections along with the index in facet container.
          * @param facets array
          */
-        this.verifyFacetTokens = function (facets) {
-            var deferred = Promise.pending();
+        this.verifyFacetTokens = function(facets) {
             console.log("Entered verify");
             //Map all facet tokens from the facet container
             var tokens = this.reportFacetTokens.map(function(elm, index) {
@@ -234,7 +233,6 @@
             });
                 //verify the facet tokens and its contents along with the index
                 expect(tokens).toEqual(facets);
-                return deferred.promise;
         };
 
         /**
@@ -257,32 +255,27 @@
                             if (itemText === facetItem) {
                                 //if equal then remove the selected facet
                                 Items.element(by.className('clearFacet')).click();
-                                e2eBase.sleep(browser.params.smallSleep);
-                                return deferred.promise;
                             };
                         });
                     });
                 });
-                return deferred.promise;
-                    }).then(function () {
-                        //Map all facet tokens from the facet container
-                        element.all(by.className('selectedToken')).map(function (results) {
-                            return results.getText().then(function (resultText) {
-                                for (var i=0;i<facetItems.length;i++) {
+                }).then(function () {
+                    //Map all facet tokens from the facet container
+                    element.all(by.className('selectedToken')).map(function (results) {
+                        return results.getText().then(function (resultText) {
+                            for (var i = 0; i < facetItems.length; i++) {
                                 console.log("item deleted is: " + facetItems[i]);
-                                console.log("item remaining on UI is: " + resultText);
+                                console.log("items remaining on UI is: " + resultText);
                                 if (resultText !== facetItems[i]) {
                                     console.log("item deleted is: " + facetItems[i]);
                                     console.log("item remaining on UI is: " + resultText);
                                     return deferred.promise;
                                 };
                             };
-                                return deferred.promise;
                         });
 
                     });
-                return deferred.promise;
-            });
+                });
 
         };
 
