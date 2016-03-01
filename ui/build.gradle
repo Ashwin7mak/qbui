@@ -67,8 +67,9 @@ dependencies {
 def extraJvmArgs = ""
 def testUser = getTestUser();
 def testUserPassword = generateRandomString(16);
+println("******rootDir******")
 println(rootDir);
-def sqlConnectInfo = new SqlConnectInfo(rootDir)
+def sqlConnectInfo = new SqlConnectInfo("${rootDir}/../quickbase")
 def environment = System.getProperty("env");
 def awsEnv = (environment == "aws");
 
