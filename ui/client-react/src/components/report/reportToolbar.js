@@ -45,7 +45,7 @@ var ReportToolbar = React.createClass({
 
     getDefaultProps : function() {
         return {
-            fillinDummyFacets : true,
+            fillinDummyFacets : false,
             debounceInputTime :.5 *  secondInMilliseconds, // 1/5 a second delay
         };
     },
