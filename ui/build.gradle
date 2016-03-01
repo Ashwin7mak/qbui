@@ -64,6 +64,7 @@ dependencies {
             "jaxen:jaxen:1.1.6"
 }
 
+def cargoHome = "/tmp/cargo";
 def extraJvmArgs = ""
 def testUser = getTestUser();
 def testUserPassword = generateRandomString(16);
@@ -146,8 +147,6 @@ if (isCIBuild()) {
 println("cwd " + cwd )
 println( "Assembling: " + getProjectArchive() )
 println( "Branch : " + getProjectArchive() )
-
-def cargoHome = "/tmp/cargo";
 
 println "Checking cargo home directory ${cargoHome}"
 if (!file(cargoHome).exists()) {
