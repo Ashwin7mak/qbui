@@ -25,6 +25,7 @@ $panel-header-icon-hover-color: #0098cd;
     padding: 0 !important;
 }
 
+// Don't do this. This is bad. This affects ALL H3 and H5 elements
 h3 {
     margin: 0 !important;
 }

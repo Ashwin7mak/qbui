@@ -7,6 +7,7 @@ Top points of discussion:
   - We will need a separate folder structure for Sass variables, mixins and components that are not also React components
   - We will need to generate a single CSS file in order to deliver themes
   - Distinguishes between what is a reusable component, what is part of our base styles, what is specific to a layout and what is specific to QShell
+  - Eventually we may want to be able to publish a HTML/CSS toolkit for QSPs and other 3rd-parties. This sets us up to do that.
 
 2. Move Boostrap from node_modules into a vendor folder, pass in variables via the `_bootstrapVariables.scss` file and compile it separately from our Sass files.
   - Clear separation from our code base and bootstrap. This does mean that we will have to hoist bootstrap variables into our variables file and then assign them to the bootstrap variable but this also prevents accidentally creating duplicate variables.
