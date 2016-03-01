@@ -43,7 +43,9 @@ export default {
             tablesHeading: "Les Tables",
             appsHeading: "Vos Apps",
             searchAppsPlaceholder: "Chercher apps...",
-            searchReportsPlaceholder: "Chercher rapports..."
+            searchTablesPlaceholder: "Chercher tables...",
+            searchReportsPlaceholder: "Chercher rapports...",
+            searchRecordsPlaceholder: "Chercher..."
         },
         grid: {
             no_data: "Il n'y a pas de données à afficher."

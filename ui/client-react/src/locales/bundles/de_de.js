@@ -43,7 +43,9 @@ export default {
             tablesHeading: "Tische",
             appsHeading: "Anwendungen",
             searchAppsPlaceholder: "Suche anwendungen...",
-            searchReportsPlaceholder: "Suche berichte..."
+            searchTablesPlaceholder: "Suche tische...",
+            searchReportsPlaceholder: "Suche berichte...",
+            searchRecordsPlaceholder: "Suche..."
         },
         grid: {
             no_data: "Es liegen keine Daten zum Anzeigen."

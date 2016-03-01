@@ -47,7 +47,9 @@ export default {
             tablesHeading: "Tables",
             appsHeading: "Apps",
             searchAppsPlaceholder: "Search apps...",
-            searchReportsPlaceholder: "Search reports..."
+            searchTablesPlaceholder: "Search tables...",
+            searchReportsPlaceholder: "Search reports...",
+            searchRecordsPlaceholder: "Search..."
         },
         grid: {
             no_data: "There is no data to display."

@@ -44,7 +44,7 @@ let AppsList = React.createClass({
                     <NavItem item={{msg: 'nav.appsHeading'}} isHeading={true} secondaryIcon={"search"} onClick={this.onClickApps} {...this.props} />
 
                     <li className={this.state.searching ? "search open" : "search"}>
-                        <input type="text" placeholder={Locale.getMessage('nav.searchAppsPlaceholder')} value={this.state.searchText} onChange={this.onChangeSearch}/>
+                        <input type="text" className={"searchInput"} placeholder={Locale.getMessage('nav.searchAppsPlaceholder')} value={this.state.searchText} onChange={this.onChangeSearch}/>
                     </li>
 
                     {this.appList()}

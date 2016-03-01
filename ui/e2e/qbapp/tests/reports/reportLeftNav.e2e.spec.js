@@ -175,7 +175,7 @@
          */
         it('Verify leftNav can load the reportsMenu when collapsed', function() {
             //TODO: SafariDriver does not currently have an implementation for the mouseMove hover action (haven't found a workaround), need to skip this test if running Safari
-            if(browser.browserName === 'chrome' || browser.browserName === 'firefox') {
+            if (browser.browserName === 'chrome' || browser.browserName === 'firefox') {
                 try {
                     // Collapse the leftNav
                     reportServicePage.topNavToggleHamburgerEl.click();
@@ -194,10 +194,9 @@
                             });
                         });
                     });
-                } catch(e) {
+                } catch (e) {
                     throw new Error(e);
-                }
-                finally {
+                } finally {
                     // Expand the leftNav
                     reportServicePage.waitForElement(reportServicePage.topNavToggleHamburgerEl).then(function() {
                         reportServicePage.topNavToggleHamburgerEl.click();

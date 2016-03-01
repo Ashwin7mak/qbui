@@ -61,7 +61,7 @@ var TopNav = React.createClass({
 
                             <OverlayTrigger trigger="click" rootClose placement="bottom" overlay={
                                 <Popover id={0} className={'searchPopover'}  title="Search">
-                                    <Input className="searchInputBox" key={'searchInput'} standalone type="text" placeholder="Search Records"  onChange={this.searchChanged} />
+                                    <Input className="searchInput" key={'searchInput'} standalone type="text" placeholder={Locale.getMessage('nav.searchRecordsPlaceholder')}  onChange={this.searchChanged} />
                                 </Popover>}>
 
                                 <Button><QBicon icon="search" /></Button>

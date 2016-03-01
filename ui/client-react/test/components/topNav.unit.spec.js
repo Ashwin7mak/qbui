@@ -62,8 +62,11 @@ describe('TopNav functions', () => {
 
         //  test with zero supported locales
         var LocaleMock = {
-            getSupportedLocales: function() {
+            getSupportedLocales: () => {
                 return [];
+            },
+            getMessage: () => {
+                return "";
             }
         };
         TopNav.__Rewire__('Locale', LocaleMock);
@@ -94,7 +97,7 @@ describe('TopNav functions', () => {
         expect(searchInputContainer.length).toEqual(1);
         TestUtils.Simulate.click(searchInputContainer[0]);
 
-        let searchInputBox = document.querySelector(".searchInputBox");
+        let searchInputBox = document.querySelector(".searchPopover .searchInput");
         searchInputBox.value = "value";
         TestUtils.Simulate.change(searchInputBox);
         expect(flux.actions.searchFor).toHaveBeenCalledWith(searchInputBox.value);

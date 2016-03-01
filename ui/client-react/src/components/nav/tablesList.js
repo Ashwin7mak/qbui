@@ -97,7 +97,7 @@ let TablesList = React.createClass({
                              secondaryIcon={"search"}
                              onClick={this.onClickTables} {...this.props} />
                     <li className={this.state.searching ? "search open" : "search"}>
-                        <input type="text" placeholder={Locale.getMessage('nav.searchAppsPlaceholder')} value={this.state.searchText} onChange={this.onChangeSearch}/>
+                        <input type="text" className={"searchInput"} placeholder={Locale.getMessage('nav.searchTablesPlaceholder')} value={this.state.searchText} onChange={this.onChangeSearch}/>
                     </li>
                     {this.tablesList()}
                 </ul>
