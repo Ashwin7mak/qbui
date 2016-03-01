@@ -64,6 +64,50 @@
         this.reportStageBtn = this.reportContainerEl.element(by.className('toggleStage'));
         this.reportStageArea = this.reportStageContentEl.element(by.className('collapse'));
 
+        //report tools and content container
+        this.reportToolsAndContentEl = this.reportContainerEl.element(by.className('reportToolsAndContentContainer'));
+        // Loaded Content Div
+        this.loadedContentEl = this.reportToolsAndContentEl.element(by.className('loadedContent'));
+        // report table
+        this.reportTable = this.loadedContentEl.element(by.className('reportTable'));
+        // Table actions container
+        this.reportActionsContainerEl = this.reportTable.element(by.className('tableActionsContainer'));
+        //report toolbar
+        this.reportsToolBar = this.reportActionsContainerEl.element(by.className('reportToolbar'));
+        //report records count
+        this.reportRecordsCount = this.reportsToolBar.element(by.className('recordsCount'));
+        //report filter search Box
+        this.reportFilterSearchBox = this.reportsToolBar.element(by.className('filterSearchBox'));
+
+
+        //report facet Menu Container
+        this.reportFacetMenuContainer = this.reportsToolBar.element(by.className('facetsMenuContainer'));
+        //report facet buttons
+        this.reportFacetBtns = this.reportFacetMenuContainer.element(by.className('facetButtons'));
+        //report facet filter button
+        this.reportFilterBtn = this.reportFacetBtns.element(by.className('filterButton'));
+        //report facet filter carat button
+        this.reportFilterBtnCaret = this.reportFacetBtns.element(by.className('filterButtonCaret'));
+
+        //facet menu popup
+        this.reportFacetPopUpMenu = this.reportFacetMenuContainer.element(by.className('facetMenuPopup'));
+        //facets menu popup container
+        this.reportFacetPopUpContainerEl = this.reportFacetPopUpMenu.element(by.className('popover-content'));
+
+        //panel
+        this.facetPopUpContainerPanels = this.reportFacetPopUpMenu.all(by.className('panel'));
+        //panel heading which is facet group
+        this.PopUpContainerFacetGroup = this.facetPopUpContainerPanels.all(by.tagName('a'));
+
+        //selected Facets
+        this.reportSelectedFacets = this.reportFacetMenuContainer.element(by.className('selectedFacets'));
+        //facet tokens (token has facetName and facetSelections)
+        this.reportFacetTokens = this.reportSelectedFacets.all(by.className('facetToken'));
+        //facet name token
+        this.reportFacetNameToken = this.reportSelectedFacets.element(by.className('facetNameToken'));
+        //facet selections
+        this.reportFacetSelections = this.reportFacetTokens.all(by.className('facetSelections'));
+
         // Loaded Content Div
         this.loadedContentEl = this.reportContainerEl.element(by.className('loadedContent'));
         // Table actions container
@@ -131,6 +175,158 @@
                     });
                 }).then(function(reportLinkElements) {
                     return reportLinkElements[0].click();
+                });
+            });
+        };
+
+        /**
+         * Function that will open the facet group and select the facet Items and verify the checkmark
+         * @param facetName
+         * @param facetItems is an array
+         */
+        this.selectFacetAndVerifyChecked = function (facetName, facetItems) {
+            var deferred = Promise.pending();
+            // Expand the Facet group
+            var groups = this.PopUpContainerFacetGroup.map(function (groupName, index) {
+                return groupName.getText().then(function (groupText) {
+                    if (groupText === facetName && expect(groupName.getAttribute('class'), 'collapsed')) {
+                        groupName.click().then(function () {
+                            expect(groupName.getAttribute('class'), '', "Facet Group is not expanded");
+                            return deferred.promise;
+                        });
+                    };
+                });
+            }).then(function () {
+                //sleep to expand a group
+                e2eBase.sleep(browser.params.smallSleep);
+                //Select the facet Items
+                facetItems.forEach(function (facetItem) {
+                    var items = element.all(by.tagName('button')).map(function (groupItem, index) {
+                        return groupItem.getText().then(function (itemText) {
+                            if (itemText === facetItem) {
+                                expect(groupItem.getAttribute('class'), "list-group-item");
+                                groupItem.click().then(function () {
+                                    expect(groupItem.getAttribute('class'), "selected");
+                                    return deferred.promise;
+                                });
+                            };
+                        });
+                    });
+
+                });
+                return deferred.promise;
+            });
+        };
+
+        /**
+         * Function that will verify the facet tokens i.e facet Name and facet Selections along with the index in facet container.
+         * @param facets array
+         */
+        this.verifyFacetTokens = function (facets) {
+            var deferred = Promise.pending();
+            console.log("Entered verify");
+            //Map all facet tokens from the facet container
+            var tokens = this.reportFacetTokens.map(function(elm, index) {
+                return {
+                    index: index,
+                    text: elm.getText(),
+                };
+            });
+                //verify the facet tokens and its contents along with the index
+                expect(tokens).toEqual(facets);
+                return deferred.promise;
+        };
+
+        /**
+         * Function that will clear the facet tokens in facet container.
+         * @param facets array
+         */
+        this.clearFacetTokens = function (facetItems) {
+            var deferred = Promise.pending();
+            //Map all facet tokens from the facet container
+            this.reportFacetSelections.map(function (elm) {
+            }).then(function () {
+                //for all passed parameter facet Items
+                facetItems.forEach(function (facetItem) {
+                    //map all selected token in the container
+                    element.all(by.className('selectedToken')).map(function (Items) {
+                        return Items.getText().then(function (itemText) {
+                            console.log("item to delete: " + itemText);
+                            //verify selected facet text is same as parameter facet text
+                            console.log("item text and facet item are: " + itemText + " " + facetItem);
+                            if (itemText === facetItem) {
+                                //if equal then remove the selected facet
+                                Items.element(by.className('clearFacet')).click();
+                                e2eBase.sleep(browser.params.smallSleep);
+                                return deferred.promise;
+                            };
+                        });
+                    });
+                });
+                return deferred.promise;
+                    }).then(function () {
+                        //Map all facet tokens from the facet container
+                        element.all(by.className('selectedToken')).map(function (results) {
+                            return results.getText().then(function (resultText) {
+                                for (var i=0;i<facetItems.length;i++) {
+                                console.log("item deleted is: " + facetItems[i]);
+                                console.log("item remaining on UI is: " + resultText);
+                                if (resultText !== facetItems[i]) {
+                                    console.log("item deleted is: " + facetItems[i]);
+                                    console.log("item remaining on UI is: " + resultText);
+                                    return deferred.promise;
+                                };
+                            };
+                                return deferred.promise;
+                        });
+
+                    });
+                return deferred.promise;
+            });
+
+        };
+
+
+        /**
+         * Function that will clear the facet tokens in facet container.
+         * @param facets array
+         */
+        this.clearFacetTokens2 = function (facetItems) {
+            var deferred = Promise.pending();
+            //Map all facet tokens from the facet container
+            this.reportFacetSelections.map(function (elm) {
+                //map all selected token in the container
+                element.all(by.className('selectedToken')).map(function (Item) {
+                    //for all passed parameter facet Items
+                    facetItems.forEach(function (facetItem) {
+                        //get Text of selected facet in the container
+                        return Item.getText().then(function (itemText) {
+                            //verify selected facet text is same as parameter facet text
+                            if (itemText === facetItem) {
+                                //if equal then remove the selected facet
+                                Item.element(by.className('clearFacet')).click().then(function() {
+                                    //verify facet Item removed from container.
+                                    //get all selected token names from container
+                                    element.all(by.className('selectedTokenName')).each(function (results) {
+                                        return results.getText().then(function (resultItem) {
+                                            console.log("*****");
+                                            console.log("The result Item is:" + resultItem);
+                                            console.log("The facet Item is:" + facetItem);
+                                            console.log("*****");
+                                            //verify parameter passed text is not in the container.
+                                            if (resultItem !== facetItem) {
+                                                return deferred.promise;
+                                            };
+                                        });
+                                    });
+                                    return deferred.promise;
+                                });
+                                return deferred.promise;
+                            };
+                            return deferred.promise;
+                        });
+                    });
+                    return deferred.promise;
                 });
             });
         };
