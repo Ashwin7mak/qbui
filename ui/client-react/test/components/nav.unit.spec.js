@@ -35,7 +35,7 @@ describe('Nav functions', () => {
     });
     let reportsStore = Fluxxor.createStore({
         getState: function() {
-            return [];
+            return {list:[]} ;
         }
     });
     let reportDataStore = Fluxxor.createStore({

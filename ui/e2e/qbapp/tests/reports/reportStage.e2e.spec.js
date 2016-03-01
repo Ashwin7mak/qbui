@@ -43,17 +43,19 @@
                 reportServicePage.waitForElement(reportServicePage.appsListDivEl).then(function() {
                     // Select the app
                     reportServicePage.appLinksElList.get(0).click();
-                    // Select the table
-                    reportServicePage.tableLinksElList.get(3).click();
-                    // Open the reports list
-                    reportServicePage.reportHamburgersElList.get(0).click();
-                    // Wait for the report list to load
-                    reportServicePage.waitForElement(reportServicePage.reportGroupsDivEl).then(function() {
-                        // Find and select the report
-                        reportServicePage.selectReport('My Reports', 'Test Report');
-                        // Make sure the table report has loaded
-                        reportServicePage.waitForElement(reportServicePage.loadedContentEl).then(function() {
-                            done();
+                    reportServicePage.waitForElement(reportServicePage.tablesListDivEl).then(function() {
+                        // Select the table
+                        reportServicePage.tableLinksElList.get(3).click();
+                        // Open the reports list
+                        reportServicePage.reportHamburgersElList.get(0).click();
+                        // Wait for the report list to load
+                        reportServicePage.waitForElement(reportServicePage.reportGroupsDivEl).then(function() {
+                            // Find and select the report
+                            reportServicePage.selectReport('My Reports', 'Test Report');
+                            // Make sure the table report has loaded
+                            reportServicePage.waitForElement(reportServicePage.loadedContentEl).then(function() {
+                                done();
+                            });
                         });
                     });
                 });

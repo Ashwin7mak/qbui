@@ -5,7 +5,6 @@ import {I18nMessage} from '../../../utils/i18nMessage';
 import * as breakpoints from '../../../constants/breakpoints';
 import ReactCSSTransitionGroup from 'react/lib/ReactCSSTransitionGroup';
 import ReportActions from '../../actions/reportActions';
-import ReportHeader from '../../report/dataTable/reportHeader';
 import CardView from './cardView.js';
 import LimitConstants from './../../../../../common/src/limitConstants';
 import _ from 'lodash';
@@ -20,7 +19,7 @@ import './qbGriddleTable.scss';
 let GriddleTable = React.createClass({
 
     contextTypes: {
-        breakpoint: React.PropTypes.string,
+        touch: React.PropTypes.bool,
         history: React.PropTypes.object
     },
 
@@ -47,7 +46,6 @@ let GriddleTable = React.createClass({
 
     getDefaultProps() {
         return {
-            mobile: false,
             showFilter: false,
             showSettings: false,
             currentPage: 0,
@@ -69,7 +67,8 @@ let GriddleTable = React.createClass({
     getInitialState() {
         return {
             selectedRows: [],
-            allowCardSelection: false
+            allowCardSelection: false,
+            toolsMenuOpen: false
         };
     },
     /**
@@ -94,16 +93,16 @@ let GriddleTable = React.createClass({
         return this.state.allowCardSelection;
     },
 
-    /**
-     * toggle the card selection mode
-     */
-    onToggleCardSelection(allow = true) {
+    onToggleCardSelection(allow = true, rowData = null) {
         this.setState({allowCardSelection: allow});
 
         if (!allow) {
             this.setState({selectedRows: []});
+        } else if (rowData) {
+            this.onCardRowSelected(rowData);
         }
     },
+
 
     /**
      * report row was clicked
@@ -146,6 +145,18 @@ let GriddleTable = React.createClass({
     },
 
     /**
+     * keep track of tools menu being open (need to change overflow css style)
+     */
+    onMenuEnter() {
+        this.setState({toolsMenuOpen:true});
+    },
+    /**
+     * keep track of tools menu being closed (need to change overflow css style)
+     */
+    onMenuExit() {
+        this.setState({toolsMenuOpen:false});
+    },
+    /**
      * get table actions if we have them - render selectionActions prop if we have an active selection,
      * otherwise the reportHeader prop (cloned with extra key prop for transition group, and selected rows
      * for selectionActions component)
@@ -153,11 +164,15 @@ let GriddleTable = React.createClass({
     getTableActions() {
 
         return (this.props.reportHeader && this.props.selectionActions && (
-            <ReactCSSTransitionGroup transitionName="tableActions" component="div" className={"tableActionsContainer"}  transitionEnterTimeout={300} transitionLeaveTimeout={300}>
+            <ReactCSSTransitionGroup transitionName="tableActions"
+                                     component="div"
+                                     className={this.state.toolsMenuOpen ? "tableActionsContainer toolsMenuOpen" : "tableActionsContainer"}
+                                     transitionEnterTimeout={300}
+                                     transitionLeaveTimeout={300}>
 
                 {this.state.selectedRows.length ?
                     React.cloneElement(this.props.selectionActions, {key:"selectionActions", selection: this.state.selectedRows}) :
-                    React.cloneElement(this.props.reportHeader, {key:"reportHeader"})}
+                    React.cloneElement(this.props.reportHeader, {key:"reportHeader", onMenuEnter:this.onMenuEnter, onMenuExit:this.onMenuExit})}
             </ReactCSSTransitionGroup>));
     },
 
@@ -170,7 +185,7 @@ let GriddleTable = React.createClass({
 
     render() {
 
-        const isCardLayout = this.context.breakpoint === breakpoints.SMALL_BREAKPOINT;
+        const isCardLayout = this.context.touch;
 
         let griddleWrapperClasses = this.state.selectedRows.length ? "selectedRows" : "";
 

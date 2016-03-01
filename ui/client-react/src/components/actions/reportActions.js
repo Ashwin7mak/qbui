@@ -77,7 +77,7 @@ let ReportActions = React.createClass({
                          })}
 
                          </div>}
-                         */}
+
 
                         <Dropdown id="extraActionsMenu">
 
@@ -90,6 +90,7 @@ let ReportActions = React.createClass({
                             </Dropdown.Menu>
 
                         </Dropdown>
+                         */}
                     </div>
 
                 </div>

@@ -32,6 +32,7 @@ $footer-next-button: $color2;
         &:not(.footer-container) {
             background-color: $row-background-color-hover;
         }
+        cursor:pointer;
     }
     tr {
         th {
@@ -103,16 +104,20 @@ $footer-next-button: $color2;
 
 .tableActionsContainer {
     position: relative;
+    overflow:hidden;
+}
+.tableActionsContainer.toolsMenuOpen {
+    overflow:visible; /* hidden for css transitions but need overflow:visible to prevent clipping of facets menu etc. */
 }
 
 /* table actions transitions */
 .tableActions-enter {
-    top: -100%;
+    top: -50px;
 }
 
 .tableActions-enter.tableActions-enter-active {
     top: 0;
-    transition: all 300ms ease;
+    transition: top 300ms linear;
 
 }
 
@@ -121,8 +126,8 @@ $footer-next-button: $color2;
 }
 
 .tableActions-leave.tableActions-leave-active {
-    top: 100%;
-    transition: all 300ms ease;
+    top: 50px;
+    transition: top 300ms linear;
 }
 
 .swipeable {

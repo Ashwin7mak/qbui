@@ -41,6 +41,8 @@ var FacetsMenu = React.createClass({
         }),
         onFacetSelect : React.PropTypes.func,
         maxInitRevealed: React.PropTypes.number,
+        onMenuEnter : React.PropTypes.func,
+        onMenuExit : React.PropTypes.func
     },
 
     /**
@@ -257,7 +259,7 @@ var FacetsMenu = React.createClass({
      *
      **/
     render() {
-        let menuKey =  this.props.appId + "." +  this.props.tblId + "." +  this.props.rptId;
+        let menuKey =  this.props.rptId;
         return (
             <div className="facetsMenuContainer">
             <div>
@@ -267,7 +269,7 @@ var FacetsMenu = React.createClass({
                                 show={this.state.show}
                                 target={()=> document.getElementById('facetsMenuTarget')}
                                 onHide={() => this.setState({show: false})}
-                                overlay={
+                                onEntering={this.props.onMenuEnter} onExited={this.props.onMenuExit} overlay={
                                     <FacetsList
                                         key= {"FacetsList." + menuKey}
                                         popoverId={menuKey}

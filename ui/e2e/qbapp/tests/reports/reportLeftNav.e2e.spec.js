@@ -79,13 +79,20 @@
         it('LeftNav Apps toggle should show / hide App Dashboard Links and Search widget', function() {
             reportServicePage.tableLinksElList.then(function(links) {
                 // Check we have the base links and two table links present
-                expect(links.length).toBe(5);
-                reportServicePage.clickAppToggle();
-                // Check that the app search widget is visible
-                expect(reportServicePage.searchAppsDivEl.isDisplayed()).toBeTruthy();
+                expect(links.length).toBe(4);
                 reportServicePage.clickAppToggle();
                 // Check that the app search widget is hidden
-                expect(reportServicePage.searchAppsDivEl.isPresent()).toBeFalsy();
+                expect(reportServicePage.searchAppsDivEl.isDisplayed()).toBeFalsy();
+                // Open the search apps widget
+                reportServicePage.clickAppSearchToggle();
+                // Check that the app search widget is visible
+                expect(reportServicePage.searchAppsDivEl.isPresent()).toBeTruthy();
+                // Close the search apps widget
+                reportServicePage.clickAppSearchToggle();
+                // Check that the app search widget is visible
+                expect(reportServicePage.searchAppsDivEl.isDisplayed()).toBeFalsy();
+                // Go back to the table list
+                reportServicePage.clickAppToggle();
             });
         });
 
@@ -107,7 +114,7 @@
                     e2eConsts.NavDimensionsDataProvider().forEach(function(testcase) {
                         // Resize browser at different widths to check responsiveness
                         e2eBase.resizeBrowser(testcase.browserWidth, e2eConsts.DEFAULT_HEIGHT).then(function() {
-                            reportServicePage.assertNavProperties(testcase.breakpointSize, testcase.open, testcase.clientWidth);
+                            reportServicePage.assertNavProperties(testcase.breakpointSize, testcase.open, testcase.offsetWidth);
                         });
                     });
                     // Reset back to xlarge
@@ -136,7 +143,7 @@
                     reverseArray.forEach(function(testcase) {
                         // Resize browser at different widths to check responsiveness
                         e2eBase.resizeBrowser(testcase.browserWidth, e2eConsts.DEFAULT_HEIGHT).then(function() {
-                            reportServicePage.assertNavProperties(testcase.breakpointSize, testcase.open, testcase.clientWidth);
+                            reportServicePage.assertNavProperties(testcase.breakpointSize, testcase.open, testcase.offsetWidth);
                         });
                     });
                 });
@@ -152,15 +159,52 @@
                 e2eBase.resizeBrowser(testcase.browserWidth, e2eConsts.DEFAULT_HEIGHT).then(function(tableLinksElList) {
                     (reportServicePage.tableLinksElList).then(function(links) {
                         // Check we have the 3 base links and two table links present on left Nav
-                        expect(links.length).toBe(5);
+                        expect(links.length).toBe(4);
                         for (var i = 0; i < links.length; i++) {
                             expect(links[i].isDisplayed()).toBe(true);
                             // Verify elements present on leftNav with right dimensions
-                            reportServicePage.isElementInLeftNav(links[i], testcase.clientWidth);
+                            reportServicePage.isElementInLeftNav(links[i], testcase.offsetWidth);
                         }
                     });
                 });
             });
+        });
+
+        /**
+         * Test method.Verify The elements present in leftNav across the 4 breakpoints as the browser is re-sized
+         */
+        it('Verify leftNav can load the reportsMenu when collapsed', function() {
+            //TODO: SafariDriver does not currently have an implementation for the mouseMove hover action (haven't found a workaround), need to skip this test if running Safari
+            if (browser.browserName === 'chrome' || browser.browserName === 'firefox') {
+                try {
+                    // Collapse the leftNav
+                    reportServicePage.waitForElement(reportServicePage.topNavToggleHamburgerEl).then(function() {
+                        reportServicePage.topNavToggleHamburgerEl.click();
+                        e2eConsts.NavDimensionsDataProvider().forEach(function(testcase) {
+                            // Resize browser at different widths
+                            e2eBase.resizeBrowser(testcase.browserWidth, e2eConsts.DEFAULT_HEIGHT).then(function(tableLinksElList) {
+                                // Hover over the table link icon in leftNav
+                                browser.actions().mouseMove(reportServicePage.tableLinksElList.get(3)).perform();
+                                // Open the reportsMenu
+                                reportServicePage.openReportsMenu(reportServicePage.tableLinksElList.get(3));
+                                // Load report
+                                // Wait for the report list to load
+                                reportServicePage.waitForElement(reportServicePage.reportGroupsDivEl).then(function() {
+                                    // Find and select the report
+                                    reportServicePage.selectReport('My Reports', 'Test Report');
+                                });
+                            });
+                        });
+                    });
+                } catch (e) {
+                    throw new Error(e);
+                } finally {
+                    // Expand the leftNav
+                    reportServicePage.waitForElement(reportServicePage.topNavToggleHamburgerEl).then(function() {
+                        reportServicePage.topNavToggleHamburgerEl.click();
+                    });
+                }
+            }
         });
 
         /**

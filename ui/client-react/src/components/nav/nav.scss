@@ -2,6 +2,7 @@
 
 $font-path: '../../assets/fonts/';
 
+
 @font-face {
     font-family: 'Open Sans';
     src: url('#{$font-path}Open_Sans/OpenSans-Regular.ttf') format('truetype');
@@ -118,11 +119,11 @@ a {
                 }
             }
 
-            .btn-group.harmonyButtons {
+            .btn-group {
                 height: 40px;
                 button {
                     font-size: 22px;
-                    color: $icon-color;
+                    color: $topnav-icon-color;
                     border-radius: 0;
                     width: $top-nav-height;
                     height: $top-nav-height;
@@ -133,7 +134,7 @@ a {
             }
 
             .iconLink {
-                color: $icon-color;
+                color: $topnav-icon-color;
                 padding: 10px;
             }
             .iconLink:hover {
