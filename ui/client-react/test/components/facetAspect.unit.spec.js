@@ -27,7 +27,7 @@ describe('FacetsAspect functions', () => {
     let item = {
         id:22,
         name:"test",
-        type:"text",
+        type:"TEXT",
         values:[{value:"a"}, {value:"b"}, {value:"c"}]
     };
 

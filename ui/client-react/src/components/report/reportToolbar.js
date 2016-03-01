@@ -17,6 +17,8 @@ let FluxMixin = Fluxxor.FluxMixin(React);
 let logger = new Logger();
 import _ from 'lodash';
 
+const secondInMilliseconds = 1000;
+
 /**
  * a ReportToolbar for table reports with search field and a filter icon
  * does the heavy lifting and maintaining of search and facets selections
@@ -24,7 +26,7 @@ import _ from 'lodash';
 
 var ReportToolbar = React.createClass({
     //interaction options
-    secondInMilliseconds : 1000,
+
 
     mixins: [FluxMixin],
 
@@ -35,9 +37,7 @@ var ReportToolbar = React.createClass({
          **/
         reportData: React.PropTypes.shape({
             data: React.PropTypes.shape({
-                facets:  React.PropTypes.shape({
-                    list: React.PropTypes.array.isRequired
-                })
+                facets:  React.PropTypes.array
             })
         }),
         onFacetSelect : React.PropTypes.func
@@ -46,7 +46,7 @@ var ReportToolbar = React.createClass({
     getDefaultProps : function() {
         return {
             fillinDummyFacets : true,
-            debounceInputTime :.5 *  this.secondInMilliseconds, // 1/5 a second delay
+            debounceInputTime :.5 *  secondInMilliseconds, // 1/5 a second delay
         };
     },
 
@@ -174,46 +174,42 @@ var ReportToolbar = React.createClass({
     appendBlanks() {
         let blankMsg = 'report.blank';
         if (this.props.reportData && this.props.reportData.data &&
-            this.props.reportData.data.facets && this.props.reportData.data.facets.list) {
-            this.props.reportData.data.facets.list.map((facet) => {
-                if (facet.blanks && facet.type === "text") {
+            this.props.reportData.data.facets) {
+            this.props.reportData.data.facets.map((facet) => {
+                if (facet.blanks && facet.type === "text" && !facet.blankAdded) {
                     // Note the I18nMessage version we are using only supports outputting a span wrapped component not just
                     // a translated string so until we move to reactintl 2.0
                     // see - http://stackoverflow.com/questions/35286239/how-to-put-valuedata-into-html-attribute-with-reactjs-and-reactintl
-                    // user the englisth string, the resource and 'report.blank'message is has been added to the bundle
+                    // user the english string, the resource and 'report.blank'message is has been added to the bundle
                     //facet.values.push(<I18nMessage message={(blankMsg)}/>);
                     facet.values.push({value:'(blank)'});
+                    facet.blankAdded = true;
                 }
             });
         }
     },
 
-    //Report Facets: {"facets":[{"id":"1","name":"Facet01","type":"text","values":["Facet01-Value01","Facet01-Value02"]},
-    // {"id":"2","name":"Facet02","type":"text","values":["Facet02-Value01","Facet02-Value02"]},
-    // {"id":"3","name":"Facet03","type":"numeric","values":[1000,1045.33,2099]}]}
     populateDummyFacets() {
         if (this.props.reportData && this.props.reportData.data)  {
-            this.props.reportData.data.facets = {
-                list : [
-                    {id : 1, name : "Types", type: "text", blanks: true,
+            this.props.reportData.data.facets = [
+                    {id : 1, name : "Types", type: "TEXT", blanks: true,
                         values : [{value:"Design"}, {value:"Development"}, {value:"Planning"}, {value:"Test"}]},
-                    {id : 2, name : "Names", type: "text", blanks: false,
+                    {id : 2, name : "Names", type: "TEXT", blanks: false,
                         values : [
                             {value: "Aditi Goel"}, {value: "Christopher Deery"}, {value: "Claire Martinez"}, {value: "Claude Keswani"}, {value: "Deborah Pontes"},
                             {value: "Donald Hatch"}, {value: "Drew Stevens"}, {value: "Erica Rodrigues"}, {value: "Kana Eiref"},
                             {value: "Ken LaBak"}, {value: "Lakshmi Kamineni"}, {value: "Lisa Davidson"}, {value: "Marc Labbe"},
                             {value: "Matthew Saforrian"}, {value: "Micah Zimring"}, {value: "Rick Beyer"}, {value: "Sam Jones"}, {value: "XJ He"}
                         ]},
-                    {id : 3, name : "Status", type: "text", blanks: false,
+                    {id : 3, name : "Status", type: "TEXT", blanks: false,
                         values : [{value: "No Started"}, {value: "In Progress"}, {value: "Blocked"}, {value: "Completed"}]},
-                    {id : 4, name : "Flag", type: "bool",  blanks: false,
-                        values : [{value: "True"}, {value: "False"}]},
-                    {id : 5, name : "Companies", type: "text",  blanks: false,
+                    {id : 4, name : "Flag", type: "CHECKBOX",  blanks: false,
+                        values : [{value: "Yes"}, {value: "No"}]},
+                    {id : 5, name : "Companies", type: "TEXT",  blanks: false,
                         values : []}, // too many values for facets example
                     //{id : 4, name : "Dates", type: "date",  blanks: false,
                     //    range : {start: 1, end: 2}},
-                ],
-            };
+            ];
         }
     },
 
@@ -238,9 +234,10 @@ var ReportToolbar = React.createClass({
     render() {
         if (this.props.fillinDummyFacets) {
             this.populateDummyFacets();
-            this.appendBlanks();
         }
         let fakeFilterButton = this.renderFakeFilterButton();
+
+        this.appendBlanks();
 
         let recordCount = this.props.reportData && this.props.reportData.data && this.props.reportData.data.records ?
                                 this.props.reportData.data.records.length : null; //TODO what to show for pagination?
@@ -258,9 +255,8 @@ var ReportToolbar = React.createClass({
 
         let hasSelectedFacets = this.state.selections.hasAnySelections();
 
-        return (
+        let loadedReportToolbar = (
             <div className="reportToolbar">
-
                 <RecordsCount recordCount={recordCount}
                               isFiltered={this.isFiltered()}
                               filteredRecordCount={filteredRecordCount}
@@ -269,7 +265,7 @@ var ReportToolbar = React.createClass({
 
                 {(this.isFiltered() || this.state.searchInput.length !== 0) &&
                 (<span onClick={this.handleFacetClearAllSelectsAndSearch}>
-                                        <QBicon className="clearAllFacets" icon="clear-mini" />
+                                        <QBicon className="clearAllFacets" icon="clear-mini"/>
                     </span>)
                 }
 
@@ -278,33 +274,35 @@ var ReportToolbar = React.createClass({
 
 
                 {/*TODO : check if searchbox is enabled for this report,
-                if has facets has search too, eg no facets without searchbox */}
+                 if has facets has search too, eg no facets without searchbox */}
                 {recordCount &&
-                    <FilterSearchBox onChange={this.handleSearchChange}
-                                     nameForRecords="Records"
-                                     ref="searchInputbox"
-                                     defaultValue=""
-                                     value={this.state.searchInput}
-                        {...this.props} />
+                <FilterSearchBox onChange={this.handleSearchChange}
+                                 nameForRecords="Records"
+                                 ref="searchInputbox"
+                                 defaultValue=""
+                                 value={this.state.searchInput}
+                    {...this.props} />
                 }
 
                 {/*TODO :  - check if facets is enabled for this report,
-                also hide Facets Menu Button if facets disabled  */}
+                 also hide Facets Menu Button if facets disabled  */}
                 {recordCount &&
-                    (<FacetsMenu className="facetMenu"  {...this.props}
-                                  selectedValues={this.state.selections}
-                                  onFacetSelect={this.handleFacetSelect}
-                                  onFacetDeselect={this.handleFacetDeselect}
-                                  onFacetClearFieldSelects={this.handleFacetClearFieldSelects}
-                    />)
+                (<FacetsMenu className="facetMenu"  {...this.props}
+                             selectedValues={this.state.selections}
+                             onFacetSelect={this.handleFacetSelect}
+                             onFacetDeselect={this.handleFacetDeselect}
+                             onFacetClearFieldSelects={this.handleFacetClearFieldSelects}
+                />)
                 }
 
                 {<div id="facetsMenuTarget"></div>}
 
                 {fakeFilterButton}
-
             </div>
         );
+
+        let notLoadedReportToolbar = <div>Loading...</div>;
+        return (<div>{(this.props.reportData && this.props.reportData.loading) ? notLoadedReportToolbar : loadedReportToolbar } </div>);
     }
 });
 

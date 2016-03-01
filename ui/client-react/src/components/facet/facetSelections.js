@@ -59,7 +59,7 @@ class FacetSelections {
     whichHasAnySelections() {
         let answer = [];
         if (_.keys(this.selectionsHash).length !== 0) {
-            answer = _.all(this.selectionsHash, function(x) {
+            answer = _.filter(this.selectionsHash, function(x) {
                 return (x && (x.length > 0));
             });
         }
@@ -188,11 +188,14 @@ class FacetSelections {
             this.removeSelection(facetField.id, value);
         }
         // boolean only has either true or false set not both
-        if (facetField.type === 'bool') {
+        if (facetField.type === 'CHECKBOX') {
             // if we just did a select and the selection for this field is both true & false
             // disable the other one that the newly selected
+            let YesMsg = 'report.facets.yesCheck';
+            let NoMsg = 'report.facets.noCheck';
+            // when react 18n supports plain string (non dom wrapped) xtlate use the message keys above
             if (select) {
-                let other = (value === 'True') ? 'False' : 'True';
+                let other = (value === 'Yes') ? 'No' : 'Yes';
                 this.removeSelection(facetField.id, other);
             }
 

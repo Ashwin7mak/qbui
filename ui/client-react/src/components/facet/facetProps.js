@@ -62,7 +62,7 @@ const fieldSelections = chainablePropType(() => {
     //React.PropTypes.shape({
     //    list: React.PropTypes.array
 //});
-const facetsProp =  React.PropTypes.object;
+const facetsProp =  React.PropTypes.array;
 
 
-export {facetItemValueShape, facetShape, fieldSelections, facetsProp};
+export {facetItemValueShape, facetShape, fieldSelections, facetsProp, validSelectionHashMap};

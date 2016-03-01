@@ -62,8 +62,8 @@ var FacetsMenu = React.createClass({
 
            // if we don't start with all collapsed then
             // add all facet fids to list of expanded facet fields
-            if (this.props.reportData.data && this.props.reportData.data.facets && this.props.reportData.data.facets.list) {
-                _.each(this.props.reportData.data.facets.list, function(facet) {
+            if (this.props.reportData.data && this.props.reportData.data.facets) {
+                _.each(this.props.reportData.data.facets, function(facet) {
                     expanded.push(facet.id);
                 });
             }
@@ -204,7 +204,9 @@ var FacetsMenu = React.createClass({
     dontClose(e) {
         // prevent close of popover just do the clear
         e.stopPropagation();
-        e.nativeEvent.stopImmediatePropagation();
+        if (e.nativeEvent &&  e.nativeEvent.stopImmediatePropagation) {
+            e.nativeEvent.stopImmediatePropagation();
+        }
     },
 
     /**
@@ -231,7 +233,7 @@ var FacetsMenu = React.createClass({
         }
         let components = [];
         let self = this;
-        this.props.reportData.data.facets.list.map((facet) => {
+        this.props.reportData.data.facets.map((facet) => {
             if (selections.hasAnySelectionsForField(facet.id)) {
                 let kids = (selections.getFieldSelections(facet.id).map((value) => {
                     return (<span key={'token.' + facet.name + '.' + value}

@@ -48,6 +48,7 @@
       left: 13% !important;
     }
 
+
     .popover-content {
       padding: 0;
       margin: 0;
@@ -85,6 +86,11 @@
       box-shadow: none;
       border-top:  1px solid $facetMenu-BorderColor;
       padding: 10px 15px 5px 15px;
+      border-radius: 0;
+
+      &:hover {
+          background-color: $facetMenu-itemHoverColor;
+      }
     }
 
     .panel-default:first-child > .panel-heading {
@@ -117,11 +123,12 @@
     }
 
     .list-group-item:hover {
-      background-color: $facetMenu-backgroundColor;
+      background-color: $facetMenu-itemHoverColor;
     }
 
     .list-group-item:focus {
       outline: none;
+      background-color: $facetMenu-backgroundColor;
     }
 
     .list-group-item .checkMark {
@@ -171,8 +178,8 @@
     // color: $facetMenu-facetTokenTextColor;
 
     /* paler background facet tokens */
-    background-color: #e3eaf3;
-    color: #5e7994;
+    background-color: $facetMenu-facetTokenBackgroundColor;
+    color: $facetMenu-facetTokenTextColor;
     display: inline-block;
 
     .selectedTokenName {
@@ -199,7 +206,7 @@
     min-width: 150px;
     max-width: 200px;
   }
-  
+
   .filterSearchBox {
     padding: .4rem;
     width: 11em;

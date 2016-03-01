@@ -1,6 +1,10 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import TestUtils from 'react-addons-test-utils';
+import FacetsAspect  from '../../src/components/facet/facetsAspect';
+import FacetSelections  from '../../src/components/facet/facetSelections';
+import FacetsItem  from '../../src/components/facet/facetsItem';
+import FacetsList  from '../../src/components/facet/facetsList';
 import FacetsMenu  from '../../src/components/facet/facetsMenu';
 import _ from 'lodash';
 
@@ -11,10 +15,9 @@ describe('FacetsMenu functions', () => {
     let reportDataParams = {reportData: {loading:false}};
     const fakeReportData_valid = {
         data: {
-            facets : {
-                list : [{id:1, name:'test', type:"text",
-                        values:[{value:"a"}, {value:"b"}, {value:"c"}]}]
-            }
+            facets : [{id:1, name:'test', type:"TEXT",
+                        values:[{value:"a"}, {value:"b"}, {value:"c"}]}
+                ]
         }
     };
 
@@ -40,12 +43,49 @@ describe('FacetsMenu functions', () => {
     it('test render FacetsMenu click facet button', () => {
         component = TestUtils.renderIntoDocument(<FacetsMenu params={reportParams}
                                                              allInitiallyCollapsed={false}
-                                                             reportData={fakeReportData_valid} />);
+                                                             reportData={fakeReportData_valid}
+                                                             />);
         expect(TestUtils.isCompositeComponent(component)).toBeTruthy();
         expect(component.state.show).toBeFalsy();
         let facetButtons = TestUtils.findRenderedDOMComponentWithClass(component, "facetButtons");
         TestUtils.Simulate.click(facetButtons);
         expect(component.state.show).toBeTruthy();
+    });
+
+
+    it('test render FacetsMenu shows selection tokens', () => {
+        let selected = new FacetSelections();
+        selected.addSelection(1, 'a');
+        selected.addSelection(1, 'c');
+        var callbacks = {
+            onFacetDeselect : function onFacetDeselect(e, facet, value) {
+            }
+        };
+        component = TestUtils.renderIntoDocument(<FacetsMenu params={reportParams}
+                                                             allInitiallyCollapsed={false}
+                                                             reportData={fakeReportData_valid}
+                                                             selectedValues={selected}
+                                                             onFacetDeselect={(e, facet, value) => callbacks.onFacetDeselect(e, facet, value)}
+        />);
+        expect(TestUtils.isCompositeComponent(component)).toBeTruthy();
+        expect(component.state.show).toBeFalsy();
+
+        // selection tokens rendered
+        let tokens = TestUtils.scryRenderedDOMComponentsWithClass(component, "selectedTokenName");
+        expect(tokens.length).toEqual(2);
+
+        //click on token doesn't deselects
+        spyOn(callbacks, 'onFacetDeselect').and.callThrough();
+        tokens = TestUtils.scryRenderedDOMComponentsWithClass(component, "selectedTokenName");
+        TestUtils.Simulate.click(tokens[1]);
+        expect(callbacks.onFacetDeselect).not.toHaveBeenCalled();
+
+        //click on clear icon deselects
+        let tokenClears = TestUtils.scryRenderedDOMComponentsWithClass(component, "clearFacet");
+        TestUtils.Simulate.click(tokenClears[1]);
+        expect(callbacks.onFacetDeselect).toHaveBeenCalledWith(jasmine.any(Object), jasmine.any(Object), 'c');
+        callbacks.onFacetDeselect.calls.reset();
+
     });
 
     describe('Expand/Collapse sections', () => {
@@ -144,5 +184,75 @@ describe('FacetsMenu functions', () => {
 
         });
     });
+
+    describe('Show More', () => {
+        var I18nMessageMock = React.createClass({
+            render: function() {
+                return (
+                    <div>test</div>
+                );
+            }
+        });
+
+        let mountPoint;
+        const fakeReportLongData_valid = {
+            data: {
+                facets : [{id:1, name:'test', type:"TEXT",
+                            values:[{value:"a"}, {value:"b"}, {value:"c"}, {value:"d"}, {value:"e"}, {value:"f"}]}
+                ]
+            }
+        };
+        beforeEach(() => {
+            FacetsList.__Rewire__('I18nMessage', I18nMessageMock);
+            FacetsItem.__Rewire__('I18nMessage', I18nMessageMock);
+            FacetsAspect.__Rewire__('I18nMessage', I18nMessageMock);
+
+            mountPoint = document.createElement('div');
+            document.body.appendChild(mountPoint);
+        });
+
+        afterEach(() => {
+            FacetsList.__ResetDependency__('I18nMessage');
+            FacetsItem.__ResetDependency__('I18nMessage');
+            FacetsAspect.__ResetDependency__('I18nMessage');
+
+            ReactDOM.unmountComponentAtNode(mountPoint);
+            document.body.removeChild(mountPoint);
+        });
+
+        it('test render FacetsMenu click facet reveal', () => {
+
+            component = ReactDOM.render(<FacetsMenu params={reportParams}
+                                                    allInitiallyCollapsed={false}
+                                                    maxInitRevealed={4}
+                                                    reportData={fakeReportLongData_valid} />
+                , mountPoint);
+            const testContainer = ReactDOM.findDOMNode(component);
+            expect(TestUtils.isCompositeComponent(component)).toBeTruthy();
+
+            let facetsMenu = component;
+
+            // show the menu
+            var facetButtons = TestUtils.findRenderedDOMComponentWithClass(facetsMenu, 'facetButtons');
+            TestUtils.Simulate.click(facetButtons);
+            expect(facetsMenu.state.show).toBeTruthy();
+
+            // make sure it rendered
+            var popupLists = document.getElementsByClassName('facetMenuPopup');
+            expect(popupLists.length).toBe(1);
+            let popupList = popupLists[0];
+
+            // not initially revealed
+            expect(component.isRevealed(fakeReportLongData_valid.data.facets[0].id)).toBeFalsy();
+
+            // reveal the long facet values
+            component.handleRevealMore(null, fakeReportLongData_valid.data.facets[0]);
+            expect(component.isRevealed(fakeReportLongData_valid.data.facets[0].id)).toBeTruthy();
+
+        });
+
+
+    });
+
 });
 

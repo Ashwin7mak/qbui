@@ -1,29 +1,30 @@
 /* This file should contain ALL the colors used in QuickBase. This may be used to create themes in future. */
+/* see http://quickbase.design/colors/ */
 
-$color1:    #f3f8fe;
-$color2:    #ffffff;
+$color1:    #f3f8fe; // wispy-water
+$color2:    #ffffff; // white
 $color3:    #486c8f;
-$color4:    #dcdcdc;
-$color5:    #c0d0e4;
+$color4:    #dcdcdc; // rabbit
+$color5:    #c0d0e4; // periwinkle
 $color6:    #d2dce7;
-$color7:    #e3eaf3;
+$color7:    #e3eaf3; // clear-day
 $color8:    #486c8f;
-$color9:    #969696;
+$color9:    #969696; // walrus
 $color10:   #243F7F;
-$color11:   #404040;
-$color12:   #f5f5f5;
+$color11:   #404040; // charcoal
+$color12:   #f5f5f5; // kitten
 $color13:   #f6f8fb;
 $color14:   #f9fafb;
 $color15:   #f0f3f9;
-$color16:   #2ca01c;
+$color16:   #2ca01c; // lazy-lizard
 $color17:   #f3f5f8;
 $color18:   #cccccc;
-$color19:   #c7c7c7;
+$color19:   #c7c7c7; // porpoise
+$color20:   #486c8f; // dull-sapphire
 
-
-$left-nav-bg: #193048;
-$icon-color: #7090ab;
-$icon-color-hover: #0098cd;
+$left-nav-bg: #193048; // deep-sea
+$icon-color: #7090ab; // dragon-foot
+$icon-color-hover: #0098cd; // caribbean
 
 $header-bg: $color7;
 $nav-hover-bg: #0097CD;
@@ -43,7 +44,7 @@ $icon-duplicate-color: #c75ac2;
 $icon-delete-color: #d93b42;
 $icon-pickles-color: #404040;
 
-$selection-badge-color: #486c8f;
+$selection-badge-color: $color20;
 
 
 //== Stage
@@ -58,18 +59,19 @@ $toolBar-backgroundColor:          $color15;
 $toolBar-input-borderColor:        $color4;
 
 //==Facet list
-$facetMenu-backgroundColor:         $color2;
-$facetSelected-color:               $color16;
-$facetMenu-BorderColor:             $color19;
-$facetMenu-NoOptionsColor:          $color19;
-$facetMenu-clearButtonColor:        $color9;
-$facetMenu-showMoreColor:           $color8;
-$facetMenu-facetTokenTextColor:     $color2;
-$facetMenu-facetTokenBackgroundColor:   $selection-badge-color;
+$facetMenu-backgroundColor:             $color2;
+$facetSelected-color:                   $color16;
+$facetMenu-BorderColor:                 $color19;
+$facetMenu-NoOptionsColor:              $color19;
+$facetMenu-clearButtonColor:            $color9;
+$facetMenu-showMoreColor:               $color8;
+$facetMenu-facetTokenTextColor:         $color20;
+$facetMenu-facetTokenBackgroundColor:   $color7;
+$facetMenu-itemHoverColor:              $color4;
 
 //==report icon colors
 $report-icon-table-color: #f87878;
-$report-icon-summary-color: #486c8f;
+$report-icon-summary-color: $color20;
 $report-icon-pie-color: #f2b835;
 $report-icon-calendar-color: #56b349;
 $report-icon-grid-edit-color: #c72f79;

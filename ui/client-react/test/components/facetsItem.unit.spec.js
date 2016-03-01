@@ -32,7 +32,7 @@ describe('FacetsItem functions', () => {
     let item = {
         id:22,
         name:"test",
-        type:"text",
+        type:"TEXT",
         values:[{value:"a"}, {value:"b"}, {value:"c"}]
     };
 
@@ -136,6 +136,90 @@ describe('FacetsItem functions', () => {
         expect(callbacks.handleClearFieldSelects).toHaveBeenCalled();
 
     });
+
+
+
+    it('test render no values', () => {
+        let emptyItem = {
+            id:55,
+            name:"test",
+            type:"TEXT",
+            values:[]
+        };
+
+        component = TestUtils.renderIntoDocument(<FacetsItem facet={emptyItem}
+                                                             fieldSelections={[]}
+                                                             handleSelectValue={() => {}}
+                                                             expanded={true}
+                                                             handleToggleCollapse={() => {}}/>);
+        expect(TestUtils.isCompositeComponent(component)).toBeTruthy();
+        expect(function() {TestUtils.findRenderedDOMComponentWithClass(component, 'noOptions');}).not.toThrow();
+    });
+
+
+    describe('FacetsItem functions', () => {
+        let bigItem = {
+            id: 55,
+            name: "test",
+            type: "TEXT",
+            values: [{value: "a"}, {value: "b"}, {value: "c"}, {value: "d"}, {value: "e"}, {value: "f"}, {value: "g"}]
+        };
+
+        it('test render lots of values hidden', () => {
+            component = TestUtils.renderIntoDocument(<FacetsItem facet={bigItem}
+                                                                 fieldSelections={[]}
+                                                                 handleSelectValue={() => {}}
+                                                                 expanded={true}
+                                                                 isRevealed={false}
+                                                                 maxInitRevealed={4}
+                                                                 handleToggleCollapse={() => {}}/>);
+            expect(TestUtils.isCompositeComponent(component)).toBeTruthy();
+            expect(function() {
+                TestUtils.findRenderedDOMComponentWithClass(component, 'listMore');
+            }).not.toThrow();
+        });
+
+
+        it('test render lots of values shown', () => {
+
+            component = TestUtils.renderIntoDocument(<FacetsItem facet={bigItem}
+                                                                 fieldSelections={[]}
+                                                                 handleSelectValue={() => {}}
+                                                                 expanded={true}
+                                                                 isRevealed={true}
+                                                                 maxInitRevealed={4}
+                                                                 handleToggleCollapse={() => {}}/>);
+            expect(TestUtils.isCompositeComponent(component)).toBeTruthy();
+            expect(function() {
+                TestUtils.findRenderedDOMComponentWithClass(component, 'listMore');
+            }).toThrow();
+        });
+
+        it('test render lots of values hidden and clicked to reveal', () => {
+            var callbacks = {
+                handleRevealMore : function handleRevealMore(e, facet, value) {
+                }
+            };
+
+            component = TestUtils.renderIntoDocument(<FacetsItem facet={bigItem}
+                                                                 fieldSelections={[]}
+                                                                 handleSelectValue={() => {}}
+                                                                 handleRevealMore={() => callbacks.handleRevealMore()}
+                                                                 expanded={true}
+                                                                 isRevealed={false}
+                                                                 maxInitRevealed={4}
+                                                                 handleToggleCollapse={() => {}}
+            />);
+            expect(TestUtils.isCompositeComponent(component)).toBeTruthy();
+
+            spyOn(callbacks, 'handleRevealMore').and.callThrough();
+            let moreButton =  TestUtils.findRenderedDOMComponentWithClass(component, 'listMore');
+            TestUtils.Simulate.click(ReactDOM.findDOMNode(moreButton));
+            expect(callbacks.handleRevealMore).toHaveBeenCalled();
+        });
+
+    });
+
     describe('facetsItem -- shouldComponentUpdate when any its props change', () => {
         var initialProps  = {
             facet : item,
@@ -147,8 +231,9 @@ describe('FacetsItem functions', () => {
         beforeEach(() => {
             component = TestUtils.renderIntoDocument(
                 <FacetsItem facet={initialProps.facet}
-                         expanded={initialProps.expanded}
-                         fieldSelections={initialProps.fieldSelections}
+                            expanded={initialProps.expanded}
+                            isRevealed={initialProps.isRevealed}
+                            fieldSelections={initialProps.fieldSelections}
                 />);
 
         });

@@ -44,7 +44,6 @@ var FacetsList = React.createClass({
         };
     },
 
-
     shouldComponentUpdate: function(nextProps, nextState) {
 
         let answer = false;
@@ -62,12 +61,37 @@ var FacetsList = React.createClass({
             answer = true;
         }
 
-
         return answer;
     },
 
     facetsList(facetsData) {
-        return facetsData.list.map((facetField) => {
+        //values are expected to be objects {value:'xx'},
+        // make it so until node layer is changed
+        let YesMsg = 'report.facets.yesCheck';
+        let NoMsg = 'report.facets.noCheck';
+
+
+
+        if (facetsData.length && facetsData[0].values.length && typeof facetsData[0].values[0] !== 'object') {
+            facetsData = _.map(facetsData, function(aFacet) {
+                aFacet.values =  _.map(aFacet.values, function(val) {
+                    if (aFacet.type.toUpperCase() === 'CHECKBOX') {
+                        if (!val || val === "" || val === 0 ||
+                            val.toString().toUpperCase() === 'NO' ||
+                            val.toString().toUpperCase() === 'FALSE') {
+                            // when react 18n supports plain string (non dom wrapped)
+                            // xtlate use the message keys above
+                            val = 'No';
+                        } else {
+                            val = 'Yes';
+                        }
+                    }
+                    return {value: val};
+                });
+                return aFacet;
+            });
+        }
+        return facetsData.map((facetField) => {
             var fid = facetField.id;
             var inputProps = {
                 eventKey: facetField,
@@ -97,7 +121,7 @@ var FacetsList = React.createClass({
      * @returns {XML}
      */
     render() {
-        let noFacetsMessage = "report.noFacets";
+        let noFacetsMessage = "report.facets.noFacets";
         return (
             <Popover id={this.props.popoverId}
                      arrowOffsetLeft={28}
@@ -105,7 +129,7 @@ var FacetsList = React.createClass({
                      className="facetMenuPopup"
                      ref={(thisComponent) => this._facetMenuArea = thisComponent}>
                     {this.props.reportData && this.props.reportData.data &&
-                    this.props.reportData.data.facets && this.props.reportData.data.facets.list ?
+                    this.props.reportData.data.facets ?
                         this.facetsList(this.props.reportData.data.facets) :
                         <I18nMessage message={noFacetsMessage}/>}
             </Popover>

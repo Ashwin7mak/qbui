@@ -43,7 +43,7 @@ let ReportDataStore = Fluxxor.createStore({
             name: reportData.name,
             columns: this.getReportColumns(reportData.data.fields),
             records: records,
-            facets: reportData.facets,
+            facets: reportData.data.facets,
             filteredRecords: records
         };
         this.emit('change');

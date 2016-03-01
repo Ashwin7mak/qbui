@@ -137,7 +137,7 @@ class FacetsItem extends Component {
         /*TODO check type of facet list, string, date, boolean currently only handles string
          array values
          */
-        let tooManyValues = 'report.tooManyValues';
+        let tooManyValues = 'report.facets.tooManyValues';
 
         if ((!this.props.facet.values || this.props.facet.values.length === 0)) {
             return (<div className="noOptions"><I18nMessage message={tooManyValues}/></div>);
@@ -148,10 +148,6 @@ class FacetsItem extends Component {
         // if there are a lot of values just show max and see more
         if ((this.props.facet.values.length > this.props.maxInitRevealed) &&  !this.props.isRevealed) {
             listToShow = _.take(this.props.facet.values, this.props.maxInitRevealed);
-        }
-
-        if (this.props.facet.hasBlanks) {
-            listToShow.append("(blank)");
         }
 
         return (
@@ -168,7 +164,7 @@ class FacetsItem extends Component {
      * @returns {XML}
      */
     render() {
-        let seeMore = "report.seeMore";
+        let seeMore = "report.facets.seeMore";
 
         return (
             <Panel fill collapsible defaultExpanded {...this.props}
