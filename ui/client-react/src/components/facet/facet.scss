@@ -138,6 +138,7 @@
     .listMore {
       color: $facetMenu-showMoreColor;
       margin-left: 2.4em;
+      cursor: pointer;
     }
 
     .checkMark {
@@ -151,6 +152,7 @@
     .clearFacet {
       float: right;
       color: $facetMenu-backgroundColor;
+      cursor: pointer;
     }
 
     .selections .clearFacet {
@@ -189,6 +191,9 @@
       span {
         white-space: nowrap;
         padding-left: .5em;
+      }
+      .clearFacet {
+        cursor: pointer;
       }
     }
 

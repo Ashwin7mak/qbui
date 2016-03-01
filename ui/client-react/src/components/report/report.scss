@@ -31,13 +31,16 @@
 
       .facetsMenuButton {
         margin-left: 1.5rem;
+        cursor: pointer;
       }
+
 
       .clearAllFacets {
         display: inline-block;
         margin-right: .5rem;
         vertical-align: top;
         font-size: 16px;
+        cursor: pointer;
       }
 
       .recordsCount {
