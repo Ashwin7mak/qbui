@@ -6,7 +6,7 @@ ENDPOINT_URL=$2
 echo "Starting API health check.  Max verification time: $TOTAL_WAIT_TIME" seconds
 #loop and check whether the server is up, if so, return, otherwise up the wait time and loop again
 SERVER_RESPONSE=`curl -s -o /dev/null -w \"%{http_code}\" ${ENDPOINT_URL}`
-
+echo "this is the url we are trying to hit $ENDPOINT_URL"
 i=1
 while [ $i -lt $TOTAL_WAIT_TIME ] && [ "$SERVER_RESPONSE" != "\"200\"" ]; do
     echo "Server response: $SERVER_RESPONSE...Sleeping $i seconds"
