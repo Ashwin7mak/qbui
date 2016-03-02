@@ -2,7 +2,6 @@ import React from 'react';
 import Griddle from 'griddle-react';
 
 import {I18nMessage} from '../../../utils/i18nMessage';
-import * as breakpoints from '../../../constants/breakpoints';
 import ReactCSSTransitionGroup from 'react/lib/ReactCSSTransitionGroup';
 import ReportActions from '../../actions/reportActions';
 import CardView from './cardView.js';

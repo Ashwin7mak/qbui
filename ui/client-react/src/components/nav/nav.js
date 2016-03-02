@@ -1,6 +1,5 @@
 import React from 'react';
 import ReactCSSTransitionGroup from 'react/lib/ReactCSSTransitionGroup';
-import * as breakpoints from '../../constants/breakpoints';
 import {I18nMessage} from '../../utils/i18nMessage';
 import Trowser from '../trowser/trowser';
 import TrowserRecordActions from '../actions/trowserRecordActions';
@@ -20,7 +19,6 @@ var Nav = React.createClass({
     mixins: [FluxMixin, StoreWatchMixin('NavStore', 'AppsStore', 'ReportsStore', 'ReportDataStore')],
 
     contextTypes: {
-        breakpoint: React.PropTypes.string,
         touch: React.PropTypes.bool,
         history: React.PropTypes.object
     },
