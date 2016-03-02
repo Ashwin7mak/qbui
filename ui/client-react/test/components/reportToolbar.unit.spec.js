@@ -51,7 +51,10 @@ describe('ReportToolbar functions', () => {
         },
         searchFor: function(text) {
             return;
-        }
+        },
+        filterReport: function() {
+            return;
+        },
     };
 
     let fakefacets = [
@@ -196,14 +199,14 @@ describe('ReportToolbar functions', () => {
         expect(filterSearchBox.length).toEqual(1);
 
         // check that search input is debounced
-        spyOn(flux.actions, 'searchFor').and.callThrough();
+        spyOn(flux.actions, 'filterReport').and.callThrough();
         var searchInput = filterSearchBox[0];
         var testValue = 'xxx';
 
         //simulate search string was input
         TestUtils.Simulate.change(searchInput, {target: {value: testValue}});
         //initially don't search until debounced time has passed
-        expect(flux.actions.searchFor).not.toHaveBeenCalled();
+        expect(flux.actions.filterReport).not.toHaveBeenCalled();
 
         // count has 1 number e.g. X records when there is no search (not x of y records)
         let recordsCount = TestUtils.scryRenderedDOMComponentsWithClass(component, "recordsCount");
@@ -215,10 +218,10 @@ describe('ReportToolbar functions', () => {
         //timeout for debounce
         setTimeout(function() {
             // check that search ran after debounce time
-            expect(flux.actions.searchFor).toHaveBeenCalledWith(testValue);
+            expect(flux.actions.filterReport).toHaveBeenCalledWith(undefined, undefined, undefined, true, Object({ facet: [], search: testValue }) );
             // check that its considered filtered
             expect(component.isFiltered()).toBe(true);
-            flux.actions.searchFor.calls.reset();
+            flux.actions.filterReport.calls.reset();
             done();
         }, delay + 10);
 
