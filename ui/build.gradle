@@ -85,6 +85,8 @@ def cargoHttpPort=8080;
 def cargoAjpPort = 9090;
 def cargoRmiPort = 8200;
 
+def testURL = System.getProperty("endpoint");
+
 // TODO: Pull the code below out into a separate groovy class - QBSE-19142
 // If running in AWS, there is no manually created properties file, so the settings must be retrieved using secret-cli
 if (awsEnv) {
@@ -334,7 +336,7 @@ task stopTomcat {
 
 task invokeCheckForApiUp(type:Exec) {
     executable cwd + "/../tools/ci/checkForApiUp.sh"
-    args '60'
+    args '60', testURL
 }
 
 task checkForApiUp() {
