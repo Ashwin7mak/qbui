@@ -74,7 +74,7 @@ var Nav = React.createClass({
      *  get actions element for bottome center of trowser (placeholders for now)
      */
     getTrowserActions() {
-        return (<div>
+        return (<div className={"centerActions"}>
                 <a href="#"><QBicon icon="add-mini"/><I18nMessage message={'report.newReport'}/></a>
                 <a href="#"><QBicon icon="settings"/><I18nMessage message={'report.organizeReports'}/></a>
             </div>);
@@ -128,7 +128,8 @@ var Nav = React.createClass({
                 selectedAppId={this.state.apps.selectedAppId}
                 selectedTableId={this.state.apps.selectedTableId}
                 onSelectReports={this.onSelectTableReports}
-                onToggleAppsList={this.toggleAppsList} />
+                onToggleAppsList={this.toggleAppsList}
+                globalActions={this.getGlobalActions()}/>
 
             <div className="main">
                 <TopNav title="QuickBase"
@@ -144,8 +145,6 @@ var Nav = React.createClass({
                         flux: flux}
                     )}
                 </div>}
-
-                <Footer flux= {flux} />
             </div>
         </div>);
     },

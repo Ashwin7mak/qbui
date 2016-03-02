@@ -1,95 +1,102 @@
 @import '../../assets/css/qbVariables';
 
 .reportContainer {
-  display: flex;
-  flex-direction: column;
-  flex: 1;
-  min-width:0;
-  background:$report-container-bg;
-  .layout-stage {
-    flex-shrink: 0;
-  }
-  margin-top: 0;
-  margin-left: 0;
-  margin-right: 0;
-
-  background-color: $report-backgroundColor;
-
-  .reportToolsAndContentContainer {
-
-    .reportToolbar {
-      display: flex;
-      flex-direction: row;
-      flex: 1;
-      align-items: center;
-      color: $icon-color;
-
-      .filterSearchBox {
-        padding: .8rem;
-        width: 18em;
-      }
-
-      .facetsMenuButton {
-        margin-left: 1.5rem;
-      }
-
-      .clearAllFacets {
-        display: inline-block;
-        margin-left: .5rem;
-        vertical-align: top;
-        margin-top: -4px;
-        font-size: 16px;
-      }
-
-      .recordsCount {
-        margin-left: 1.5rem;
-      }
-    }
-
-    .loadedContent {
-      flex: 1 0 auto;
-      overflow-y: auto;
-      margin-left: 10px;
-      margin-right: 10px;
-      min-height: 552px;
-    }
-
-    // this fake facet button which hidden in release; devs
-    // can show it by commenting this or running
-    // document.getElementById('fakeFacet').style.display='block';  or
-    // document.getElementsByClassName("testFilterButton").style.display='block';
-    // document.getElementsByClassName("testFilterButton").style.display='block';
-    // in the browser debugger
-    .testFilterButton {
-      display: none;
-      margin-left: 1rem;
-    }
-}
-
-.reportLinks {
-  margin: 0 10px;
-  a {
-    text-decoration: none;
-    .hi {
-      padding-right: 4px;
-    }
-  }
-  a:hover {
-    text-decoration: none;
-    }
-
-  }
-
-  @media (max-width: 1150px) {
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+    min-width: 0;
+    background: $report-container-bg;
     .layout-stage {
-      //display: none;//for now
-      .right {
-        display: none;
-
-      }
-      .report-content .left {
-        width: 100%;
-      }
+        flex-shrink: 0;
     }
-  }
+    margin-top: 0;
+    margin-left: 0;
+    margin-right: 0;
+
+    background-color: $report-backgroundColor;
+
+    .reportToolsAndContentContainer {
+
+        .reportToolbar {
+            display: flex;
+            flex-direction: row;
+            flex: 1;
+            align-items: center;
+            color: $icon-color;
+
+            .filterSearchBox {
+                padding: .8rem;
+                width: 18em;
+            }
+
+            .facetsMenuButton {
+                margin-left: 1.5rem;
+            }
+
+            .clearAllFacets {
+                display: inline-block;
+                margin-left: .5rem;
+                vertical-align: top;
+                margin-top: -4px;
+                font-size: 16px;
+            }
+
+            .recordsCount {
+                margin-left: 1.5rem;
+            }
+        }
+
+        .loadedContent {
+            flex: 1 0 auto;
+            overflow-y: auto;
+            margin-left: 10px;
+            margin-right: 10px;
+            min-height: 552px;
+        }
+
+        // this fake facet button which hidden in release; devs
+        // can show it by commenting this or running
+        // document.getElementById('fakeFacet').style.display='block';  or
+        // document.getElementsByClassName("testFilterButton").style.display='block';
+        // document.getElementsByClassName("testFilterButton").style.display='block';
+        // in the browser debugger
+        .testFilterButton {
+            display: none;
+            margin-left: 1rem;
+        }
+    }
+
+    .reportLinks {
+        margin: 0 10px;
+        a {
+            text-decoration: none;
+            .hi {
+                padding-right: 4px;
+            }
+        }
+        a:hover {
+            text-decoration: none;
+        }
+    }
+
+    @include small-breakpoint {
+        .layout-stage {
+            .right {
+                display: none;
+            }
+            .report-content .left {
+                width: 100%;
+            }
+        }
+    }
+    @include medium-breakpoint {
+        .layout-stage {
+            .right {
+                display: none;
+            }
+            .report-content .left {
+                width: 100%;
+            }
+        }
+    }
 }

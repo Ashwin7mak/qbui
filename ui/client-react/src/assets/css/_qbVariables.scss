@@ -10,4 +10,29 @@ $font-color:  $color11;                 /* default font color */
 $global-actions-border: 1px solid rgba(255, 255, 255, 0.3);
 $top-nav-height:40px;
 
+/* breakpoints and mixins */
 
+$small-breakpoint-width: 640px;
+$medium-breakpoint-width: 1024px;
+$large-breakpoint-width: 1440px;
+
+@mixin small-breakpoint {
+    @media (max-width: #{$small-breakpoint-width}) {
+        @content;
+    }
+}
+@mixin medium-breakpoint {
+    @media (min-width: #{$small-breakpoint-width + 1px}) and (max-width: #{$medium-breakpoint-width}) {
+        @content;
+    }
+}
+@mixin large-breakpoint {
+    @media (min-width: #{$medium-breakpoint-width + 1px}) and (max-width: #{$large-breakpoint-width}) {
+        @content;
+    }
+}
+@mixin xlarge-breakpoint {
+    @media (min-width: #{$large-breakpoint-width + 1px}) {
+        @content;
+    }
+}

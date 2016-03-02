@@ -51,7 +51,7 @@ $top-nav-color: #193048;
         color: $topnav-icon-color;
     }
     a.dropdownToggle:hover {
-        background: $nav-hover-bg;
+        background-color: $nav-hover-bg;
         span {
             color: $nav-hover-fg;
         }
@@ -108,13 +108,22 @@ $top-nav-color: #193048;
     }
 }
 
-/* hide text not icons */
 
-.medium-breakpoint .topNav .globalActions span:not(.qbIcon),
-.small-breakpoint .topNav .globalActions span:not(.qbIcon) {
-    display: none;
+@include small-breakpoint {
+    .topNav .globalActions {
+        display:none; /* shown on left nav */
+    }
+    .leftNav .globalActions {
+        display:block;
+    }
+    /* hide text not icons */
+    .topNav .globalActions span:not(.qbIcon) {
+        display: none;
+    }
 }
-
-.small-breakpoint .main .topNav .navGroup .navItem.topTitle {
-    display: none;
+@include medium-breakpoint {
+    /* hide text not icons */
+    .topNav .globalActions span:not(.qbIcon) {
+        display: none;
+    }
 }

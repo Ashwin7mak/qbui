@@ -93,6 +93,10 @@ let NavWrapper = React.createClass({
     componentDidMount: function() {
         FastClick.attach(document.body);
 
+        if ("ontouchstart" in window) {
+            document.body.className = "touch";
+        }
+
         flux.actions.loadApps(true);
 
         if (this.props.params.appId && this.props.params.tblId) {
@@ -100,8 +104,8 @@ let NavWrapper = React.createClass({
             flux.actions.selectTableId(this.props.params.tblId);
             flux.actions.loadReports(this.props.params.appId, this.props.params.tblId);
         }
-        window.addEventListener('resize', this.handleResize);
-        this.handleResize();
+        //window.addEventListener('resize', this.handleResize);
+        //this.handleResize();
     },
 
     componentWillReceiveProps(props) {
