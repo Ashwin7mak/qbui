@@ -3,7 +3,6 @@ import TestUtils from 'react-addons-test-utils';
 import ReactDOM from 'react-dom';
 import Fluxxor from 'fluxxor';
 import Nav from '../../src/components/nav/nav';
-import * as breakpoints from '../../src/constants/breakpoints';
 
 var LeftNavMock = React.createClass({
     render: function() {return <div className="leftMenu" ><a className="leftNavLink" onClick={() => this.props.onSelect()} >mock left nav</a></div>;}
@@ -14,9 +13,6 @@ var TrowserMock = React.createClass({
 });
 var TopNavMock = React.createClass({
     render: function() {return <div>mock top nav</div>;}
-});
-var FooterMock = React.createClass({
-    render: function() {return <div>mock footer</div>;}
 });
 
 describe('Nav functions', () => {
@@ -57,14 +53,12 @@ describe('Nav functions', () => {
         Nav.__Rewire__('LeftNav', LeftNavMock);
         Nav.__Rewire__('Trowser', TrowserMock);
         Nav.__Rewire__('TopNav', TopNavMock);
-        Nav.__Rewire__('Footer', FooterMock);
     });
 
     afterEach(() => {
         Nav.__ResetDependency__('LeftNav');
         Nav.__ResetDependency__('Trowser');
         Nav.__ResetDependency__('TopNav');
-        Nav.__ResetDependency__('Footer');
     });
 
     it('test render of component', () => {
@@ -84,18 +78,16 @@ describe('Nav functions', () => {
         component = TestUtils.renderIntoDocument(<Nav flux={flux}></Nav>);
         expect(TestUtils.scryRenderedComponentsWithType(component, LeftNavMock).length).toEqual(1);
         expect(TestUtils.scryRenderedComponentsWithType(component, TopNavMock).length).toEqual(1);
-        expect(TestUtils.scryRenderedComponentsWithType(component, FooterMock).length).toEqual(1);
     });
 
     it('test renders small based on break point', () => {
         var TestParent = React.createFactory(React.createClass({
 
             childContextTypes: {
-                breakpoint: React.PropTypes.string,
                 touch: React.PropTypes.bool
             },
             getChildContext: function() {
-                return {breakpoint: breakpoints.SMALL_BREAKPOINT, touch: true};
+                return {touch: true};
             },
             render() {
                 return <Nav ref="nav" flux={flux}></Nav>;
