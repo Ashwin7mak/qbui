@@ -2,7 +2,7 @@
 
 #grab the total amount of time we are willing ot wait for the server to come up
 TOTAL_WAIT_TIME=$1
-ENDPOINT_URL=$2 + "/api/v1/health"
+ENDPOINT_URL="$2 /api/v1/health"
 echo "Starting API health check.  Max verification time: $TOTAL_WAIT_TIME" seconds
 #loop and check whether the server is up, if so, return, otherwise up the wait time and loop again
 SERVER_RESPONSE=`curl -s -o /dev/null -w \"%{http_code}\" ${ENDPOINT_URL}`
