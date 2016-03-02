@@ -83,25 +83,23 @@ let TablesList = React.createClass({
     },
     render() {
         return (
-            <div className="tablesList leftNavList">
-                <ul>
-                    <li className="horizontal">
-                        <ul>
-                            <NavItem item={{msg: 'nav.home', link:`/app/${this.props.selectedAppId}`, icon:'home'}} {...this.props} />
-                            <NavItem item={{msg: 'nav.users', link:'/users', icon:'user'}} {...this.props}/>
-                        </ul>
-                    </li>
+            <ul className="tablesList">
+                <li className="horizontal">
+                    <ul className="topLinks">
+                        <NavItem item={{msg: 'nav.home', link:`/app/${this.props.selectedAppId}`, icon:'home'}} {...this.props} />
+                        <NavItem item={{msg: 'nav.users', link:'/users', icon:'user'}} {...this.props}/>
+                    </ul>
+                </li>
 
-                    <NavItem item={{msg: 'nav.tablesHeading'}}
-                             isHeading={true}
-                             secondaryIcon={"search"}
-                             onClick={this.onClickTables} {...this.props} />
-                    <li className={this.state.searching ? "search open" : "search"}>
-                        <input type="text" className={"searchInput"} placeholder={Locale.getMessage('nav.searchTablesPlaceholder')} value={this.state.searchText} onChange={this.onChangeSearch}/>
-                    </li>
-                    {this.tablesList()}
-                </ul>
-            </div>
+                <NavItem item={{msg: 'nav.tablesHeading'}}
+                         isHeading={true}
+                         secondaryIcon={"search"}
+                         onClick={this.onClickTables} {...this.props} />
+                <li className={this.state.searching ? "search open" : "search"}>
+                    <input type="text" className={"searchInput"} placeholder={Locale.getMessage('nav.searchTablesPlaceholder')} value={this.state.searchText} onChange={this.onChangeSearch}/>
+                </li>
+                {this.tablesList()}
+            </ul>
         );
     }
 });

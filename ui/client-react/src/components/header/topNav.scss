@@ -63,21 +63,15 @@ $top-nav-color: #193048;
 
     .link {
         cursor: pointer;
-        a {
+        >a {
             color: $topnav-icon-color;
-            display: inline-block;
             padding: 0 8px;
 
             .qbIcon {
                 vertical-align: middle;
-                font-size: 22px;
-
             }
         }
-        a:hover {
-            color: #fff;
-            background: $nav-hover-bg;
-        }
+
     }
 
     .globalActionsList {
@@ -95,15 +89,12 @@ $top-nav-color: #193048;
 
     .globalAction:hover {
         background: $nav-hover-bg;
-        a {
+        >a {
             color: $nav-hover-fg;
-            .hi {
-                color: $nav-hover-fg;
-            }
         }
     }
 
-    li {
+    li.globalAction {
         display: inline-block;
     }
 }
@@ -117,13 +108,7 @@ $top-nav-color: #193048;
         display:block;
     }
     /* hide text not icons */
-    .topNav .globalActions span:not(.qbIcon) {
-        display: none;
-    }
-}
-@include medium-breakpoint {
-    /* hide text not icons */
-    .topNav .globalActions span:not(.qbIcon) {
+    .topNav .globalActions .navLabel {
         display: none;
     }
 }

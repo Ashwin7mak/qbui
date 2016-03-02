@@ -26,20 +26,41 @@ var CurrentDateMock = React.createClass({
 describe('TopNav functions', () => {
     'use strict';
 
-    var component;
-    let flux = {
-        actions:{
-            toggleLeftNav: function() {return;},
-            showTrowser: function() {return;},
-            changeLocale: function(locale) {return;},
-            searchFor: function(text) {return;}
+    let globalActions = [
+        {msg: 'globalActions.user', link: '/user', icon: 'user'},
+        {msg: 'globalActions.help', link: '/help', icon: 'help'}
+    ];
+    let component;
+
+    let navStore = Fluxxor.createStore({
+        getState: function() {
+            return {leftNavOpen: true};
         }
+    });
+
+    let stores = {
+        NavStore: new navStore()
     };
+    let flux = new Fluxxor.Flux(stores);
+    flux.addActions({
+        toggleLeftNav: function() {
+            return;
+        },
+        showTrowser: function() {
+            return;
+        },
+        changeLocale: function(locale) {
+            return;
+        },
+        searchFor: function(text) {
+            return;
+        }
+    });
 
     beforeEach(() => {
         TopNav.__Rewire__('I18nMessage', I18nMessageMock);
         TopNav.__Rewire__('CurrentDate', CurrentDateMock);
-        component = TestUtils.renderIntoDocument(<TopNav flux={flux}/>);
+        component = TestUtils.renderIntoDocument(<TopNav flux={flux} globalActions={globalActions}/>);
         spyOn(flux.actions, 'toggleLeftNav');
         spyOn(flux.actions, 'showTrowser');
         spyOn(flux.actions, 'changeLocale');

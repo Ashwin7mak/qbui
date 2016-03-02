@@ -5,14 +5,21 @@ import Fluxxor from 'fluxxor';
 import Nav from '../../src/components/nav/nav';
 
 var LeftNavMock = React.createClass({
-    render: function() {return <div className="leftMenu" ><a className="leftNavLink" onClick={() => this.props.onSelect()} >mock left nav</a></div>;}
+    render: function() {
+        return <div className="leftMenu"><a className="leftNavLink" onClick={() => this.props.onSelect()}>mock left
+            nav</a></div>;
+    }
 });
 
 var TrowserMock = React.createClass({
-    render: function() {return <div>mock trowser</div>;}
+    render: function() {
+        return <div>mock trowser</div>;
+    }
 });
 var TopNavMock = React.createClass({
-    render: function() {return <div>mock top nav</div>;}
+    render: function() {
+        return <div>mock top nav</div>;
+    }
 });
 
 describe('Nav functions', () => {
@@ -21,7 +28,7 @@ describe('Nav functions', () => {
     var component;
     let navStore = Fluxxor.createStore({
         getState: function() {
-            return {leftNavOpen:true};
+            return {leftNavOpen: true};
         }
     });
     let appStore = Fluxxor.createStore({
@@ -31,7 +38,7 @@ describe('Nav functions', () => {
     });
     let reportsStore = Fluxxor.createStore({
         getState: function() {
-            return {list:[]} ;
+            return {list: []};
         }
     });
     let reportDataStore = Fluxxor.createStore({
@@ -46,7 +53,11 @@ describe('Nav functions', () => {
         ReportDataStore: new reportDataStore()
     };
     let flux = new Fluxxor.Flux(stores);
-    flux.addActions({toggleLeftNav() {return;}});
+    flux.addActions({
+        toggleLeftNav() {
+            return;
+        }
+    });
 
 
     beforeEach(() => {

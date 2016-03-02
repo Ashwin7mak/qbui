@@ -8,7 +8,7 @@ import _ from 'lodash';
 
 import QBicon from '../qbIcon/qbIcon';
 let FluxMixin = Fluxxor.FluxMixin(React);
-import {MenuItem, Dropdown, ButtonGroup, Button, OverlayTrigger, Popover, Input} from 'react-bootstrap';
+import {OverlayTrigger, Popover, ButtonGroup, Button, Input} from 'react-bootstrap';
 
 import './topNav.scss';
 
@@ -37,14 +37,10 @@ var TopNav = React.createClass({
         flux.actions.searchFor(text);
     },
 
-    onSelect: function(ev) {
-        let flux = this.getFlux();
-        flux.actions.changeLocale(ev.currentTarget.title);
-    },
 
     render: function() {
         const searchIcon = <QBicon icon="search" />;
-        let supportedLocales = Locale.getSupportedLocales();
+
         let eventKeyIdx = 20;
 
         return (
@@ -71,28 +67,8 @@ var TopNav = React.createClass({
                         </ButtonGroup>
                     </div>
 
-
                     <div className="navGroup right">
-
-                        {this.props.globalActions && <GlobalActions actions={this.props.globalActions}/>}
-
-                        <Dropdown id="nav-right-dropdown">
-
-                            <a bsRole="toggle" className={"dropdownToggle"}><QBicon icon="fries"/> </a>
-
-                            <Dropdown.Menu>
-                                <MenuItem href="/user" eventKey={eventKeyIdx++}><I18nMessage message={'header.menu.preferences'}/></MenuItem>
-                                <MenuItem divider />
-
-                                {supportedLocales.length > 1 ? supportedLocales.map((locale) => {
-                                    return <MenuItem href="#" className="localeLink" onSelect={this.onSelect} title={locale} key={eventKeyIdx} eventKey={eventKeyIdx++}><I18nMessage message={'header.menu.locale.' + locale}/></MenuItem>;
-                                }) : null}
-                                {supportedLocales.length > 1 ? <MenuItem divider /> : null}
-
-                                <MenuItem href="/signout" eventKey={eventKeyIdx++}><I18nMessage message={'header.menu.sign_out'}/></MenuItem>
-                            </Dropdown.Menu>
-                        </Dropdown>
-                        &nbsp;
+                        {this.props.globalActions && <GlobalActions actions={this.props.globalActions} position={"top"}/>}
                     </div>
                 </div>
             </div>

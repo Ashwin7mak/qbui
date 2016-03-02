@@ -38,19 +38,17 @@ let AppsList = React.createClass({
     },
     render() {
         return (
-            <div className="appsList leftNavList">
-                <ul>
+            <ul className={"appsList"} >
 
-                    <NavItem item={{msg: 'nav.appsHeading'}} isHeading={true} secondaryIcon={"search"} onClick={this.onClickApps} {...this.props} />
+                <NavItem item={{msg: 'nav.appsHeading'}} isHeading={true} secondaryIcon={"search"} onClick={this.onClickApps} {...this.props} />
 
-                    <li className={this.state.searching ? "search open" : "search"}>
-                        <input type="text" className={"searchInput"} placeholder={Locale.getMessage('nav.searchAppsPlaceholder')} value={this.state.searchText} onChange={this.onChangeSearch}/>
-                    </li>
+                <li className={this.state.searching ? "search open" : "search"}>
+                    <input type="text" className={"searchInput"} placeholder={Locale.getMessage('nav.searchAppsPlaceholder')} value={this.state.searchText} onChange={this.onChangeSearch}/>
+                </li>
 
-                    {this.appList()}
-                </ul>
+                {this.appList()}
+            </ul>
 
-            </div>
         );
     }
 });

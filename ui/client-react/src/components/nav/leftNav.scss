@@ -18,7 +18,7 @@ $right-icon-separator-color:#13dbf1;
 $left-nav-horizontal-icon-border-color: #131f2b;
 
 .leftNav.open {
-    overflow: hidden;
+    //overflow: hidden;
 }
 
 .leftNav {
@@ -37,7 +37,7 @@ $left-nav-horizontal-icon-border-color: #131f2b;
 }
 
 .leftNav .link.withSecondary a.leftNavLink {
-    padding-right: 28px;
+    padding-right: 34px;
 }
 
 .leftNav .link.selected {
@@ -94,7 +94,6 @@ body:not(.touch) div.leftNavTooltip.show {
 /* collapsed nav overrides */
 body:not(.touch) .leftNav.closed {
     width: 40px;
-    //overflow: hidden;
     .branding {
         .logo, .appsToggle .navLabel, .appsToggleIcon {
             display: none;
@@ -160,10 +159,44 @@ body:not(.touch) .leftNav.closed {
         flex: 0 1 auto;
         bottom: 0;
 
-        .globalAction {
-            a {
-                width: 100%;
-                line-height: 25px;
+        a.globalActionLink, .dropup {
+            width: 100%;
+            line-height: 25px;
+        }
+    }
+
+    .search {
+        color: #555555;
+        overflow: hidden;
+        height: 0;
+        transition: all 250ms ease;
+        input {
+            padding-left: 5px;
+            border: 2px;
+            width: 100%;
+            color: $left-nav-input-fg;
+        }
+    }
+    .search.open {
+        padding: 0 8px;
+        height: 42px;
+        line-height: 28px;
+        transition: all 250ms ease;
+    }
+    .heading {
+        font-size: 12px;
+        color: $left-nav-heading-fg;
+        margin: 0;
+        padding-left: 10px;
+
+        &.withSecondary {
+            cursor: pointer;
+            line-height: 40px;
+            .qbIcon {
+                font-size: 16px;
+                position: absolute;
+                right: 4px;
+                top: 10px;
             }
         }
     }
@@ -178,51 +211,14 @@ body:not(.touch) .leftNav.closed {
         list-style-type: none;
         list-style-position: initial;
         list-style-image: initial;
-        padding: 0;
-        margin: 0;
+    }
 
-        .search {
-
-            color: #555555;
-            overflow: hidden;
-            height: 0;
-            transition: all 250ms ease;
-            input {
-                padding-left: 5px;
-                border: 2px;
-                width: 100%;
-                color: $left-nav-input-fg;
-            }
-        }
-        .search.open {
-            padding: 0 8px;
-            height: 42px;
-            line-height: 28px;
-            transition: all 250ms ease;
-        }
-        .heading {
-            font-size: 12px;
-            color: $left-nav-heading-fg;
-            margin: 0;
-            padding-left: 10px;
-
-            &.withSecondary {
-                cursor: pointer;
-                line-height: 40px;
-                .qbIcon {
-                    font-size: 16px;
-                    position: absolute;
-                    right: 4px;
-                    top: 10px;
-                }
-            }
-        }
-
-        li {
+    ul.topLinks, ul.tablesList, ul.appsList, ul.globalActionsList {
+        padding:0;
+        margin:0;
+        >li {
             position: relative;
-            height: 40px;
-
-            a {
+            >a, .globalActionLink {
                 text-decoration: none;
                 line-height: 40px;
                 padding-left: 8px;
@@ -230,20 +226,37 @@ body:not(.touch) .leftNav.closed {
                 display: inline-block;
                 cursor: pointer;
             }
-            a.right {
-                opacity: 0;
-                position: absolute;
-                right: 0;
-            }
 
-            a.backLink {
-                cursor: pointer;
-                width: 100%
-            }
 
             .qbIcon {
                 width: 28px;
                 vertical-align: middle;
+            }
+
+        }
+        >li.link:hover {
+            background-color: $left-nav-hover-bg;
+            >a, .dropdownToggle {
+                color: $left-nav-link-hover-fg;
+            }
+            >a.right {
+                opacity: 1;
+                transition: opacity 0.2s ease-in-out;
+                -webkit-transition: opacity 0.2s ease-in-out;
+                -moz-transition: opacity 0.2s ease-in-out;
+                border-bottom: 0;
+                border-left: 1px solid $right-icon-separator-color;
+            }
+        }
+    }
+
+    ul.tablesList {
+
+        >li {
+            >a.right {
+                opacity: 0;
+                position: absolute;
+                right: 0;
             }
             .hoverComponent {
                 display: none;
@@ -258,21 +271,7 @@ body:not(.touch) .leftNav.closed {
             }
         }
 
-        li.link:hover {
-            background-color: $left-nav-hover-bg;
-            a {
-                color: $left-nav-link-hover-fg;
-            }
-            a.right {
-                opacity: 1;
-                transition: opacity 0.2s ease-in-out;
-                -webkit-transition: opacity 0.2s ease-in-out;
-                -moz-transition: opacity 0.2s ease-in-out;
-                border-bottom: 0;
-                border-left: 1px solid $right-icon-separator-color;
-            }
 
-        }
     }
 
     .loader {
@@ -284,24 +283,25 @@ body:not(.touch) .leftNav.closed {
 
 .leftNav li.horizontal, .leftNav .globalActions {
     height: auto;
-    ul {
+    >ul {
         display: flex;
         flex-direction: row;
-        li {
+        >li {
             flex: 1 0 auto;
             height: auto;
-            a.leftNavLink, a.globalActionLink {
+            border-right: 1px solid $left-nav-horizontal-icon-border-color;
+            >a.leftNavLink, a.globalActionLink {
                 padding: 10px 0 0 0;
                 text-align: center;
                 line-height: 25px;
-                .qbIcon, .navLabel {
+                .qbIcon, .navLabel, .dropup {
                     display: block;
                     width: 100%;
                 }
             }
         }
-        li:first-child {
-            border-right: 1px solid $left-nav-horizontal-icon-border-color;
+        >li:last-child {
+            border-right:0;
         }
     }
 }
@@ -357,6 +357,13 @@ body.touch .navShell.leftNavOpen {
 
     transform: translate3d(300px, 0, 0);
     -webkit-transform: translate3d(300px, 0, 0);
+}
+
+.leftNav .globalActionsList .dropdown-menu {
+
+    a {
+        line-height:auto;
+    }
 }
 
 /** REACTCSSTRANSITION BASE CLASSES **/

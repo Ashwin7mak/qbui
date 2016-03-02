@@ -62,7 +62,7 @@ let LeftNav = React.createClass({
 
                 </ReactCSSTransitionGroup>
 
-                {this.props.globalActions && <GlobalActions actions={this.props.globalActions} onSelect={this.props.onSelect}/>}
+                {this.props.globalActions && <GlobalActions actions={this.props.globalActions} onSelect={this.props.onSelect} position={"left"}/>}
 
             </div>
         );
