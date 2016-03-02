@@ -201,26 +201,31 @@
 
 }
 
-.small-breakpoint .reportContainer .reportToolsAndContentContainer .reportToolbar {
-  .popover-content {
-    max-height: 454px;
-  }
-  .facetMenuPopup {
-    display: block;
-    left: -140px;
-    min-width: 150px;
-    max-width: 200px;
-  }
+@include small-breakpoint {
+    .selectedFacets {
+        display:none;
+    }
+    .reportContainer .reportToolsAndContentContainer .reportToolbar {
+        .popover-content {
+            max-height: 454px;
+        }
+        .facetMenuPopup {
+            display: block;
+            left: -140px;
+            min-width: 150px;
+            max-width: 200px;
+        }
 
-  .filterSearchBox {
-    padding: .4rem;
-    width: 11em;
-  }
+        .filterSearchBox {
+            padding: .4rem;
+            width: 11em;
+        }
 
-  .popover.bottom > .arrow {
-    display: none;
-  }
+        .popover.bottom > .arrow {
+            display: none;
+        }
 
+    }
 }
 
 
