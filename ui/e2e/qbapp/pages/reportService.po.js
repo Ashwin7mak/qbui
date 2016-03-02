@@ -192,7 +192,6 @@
                     if (groupText === facetName && expect(groupName.getAttribute('class'), 'collapsed')) {
                         groupName.click().then(function () {
                             expect(groupName.getAttribute('class'), '', "Facet Group is not expanded");
-                            return deferred.promise;
                         });
                     };
                 });
@@ -204,18 +203,18 @@
                     var items = element.all(by.tagName('button')).map(function (groupItem, index) {
                         return groupItem.getText().then(function (itemText) {
                             if (itemText === facetItem) {
-                                expect(groupItem.getAttribute('class'), "list-group-item");
+                                //before selecting its class attribute should not have selected.
+                                expect(groupItem.getAttribute('class')).toMatch("list-group-item");
                                 groupItem.click().then(function () {
-                                    expect(groupItem.getAttribute('class'), "selected");
-                                    return deferred.promise;
+                                    //After Item selected class attribute should chnage to selected
+                                    expect(groupItem.getAttribute('class')).toMatch("selected list-group-item");
                                 });
                             };
                         });
                     });
-
                 });
-                return deferred.promise;
             });
+            return deferred.promise;
         };
 
         /**
@@ -249,9 +248,7 @@
                     //map all selected token in the container
                     element.all(by.className('selectedToken')).map(function (Items) {
                         return Items.getText().then(function (itemText) {
-                            console.log("item to delete: " + itemText);
                             //verify selected facet text is same as parameter facet text
-                            console.log("item text and facet item are: " + itemText + " " + facetItem);
                             if (itemText === facetItem) {
                                 //if equal then remove the selected facet
                                 Items.element(by.className('clearFacet')).click();
@@ -264,19 +261,15 @@
                     element.all(by.className('selectedToken')).map(function (results) {
                         return results.getText().then(function (resultText) {
                             for (var i = 0; i < facetItems.length; i++) {
-                                console.log("item deleted is: " + facetItems[i]);
-                                console.log("items remaining on UI is: " + resultText);
                                 if (resultText !== facetItems[i]) {
-                                    console.log("item deleted is: " + facetItems[i]);
-                                    console.log("item remaining on UI is: " + resultText);
-                                    return deferred.promise;
+                                   // return deferred.promise;
                                 };
                             };
                         });
 
                     });
                 });
-
+            return deferred.promise;
         };
 
 

@@ -107,15 +107,16 @@
             reportServicePage.PopUpContainerFacetGroup.then(function(elements) {
                 expect(elements.length).toBe(5);
                 elements.forEach(function(menuItem){
-                    var textEl = menuItem.element(by.className('facetName')).getAttribute('outerText');
-                    //Verify by default it is in collapse state
-                    expect(menuItem.getAttribute('className'), "collapsed", "Facet Name "+ textEl +" should be in collapsed state.");
-                    //Verify after clicking menu item it expands
-                    menuItem.click();
-                    expect(menuItem.getAttribute('className'), "","Facet Name "+ textEl +" should be in expanded state after clicking on menu item..");
-                    //Clicking back again collapses.
-                    menuItem.click();
-                    expect(menuItem.getAttribute('className'), "collapsed", "Facet Name "+ textEl +" should be in collapsed state after clicking twice");
+                    //Verify by default group is in collapse state
+                    expect(menuItem.getAttribute('class')).toMatch("collapsed");
+                    //Verify after clicking group item it expands
+                    menuItem.click().then (function() {
+                        expect(menuItem.getAttribute('class')).toMatch("");
+                    });
+                    //Clicking back again should collapses.
+                    menuItem.click().then (function() {
+                        expect(menuItem.getAttribute('class')).toMatch("collapsed");
+                    });
                 });
 
             }).then(function() {
@@ -129,7 +130,7 @@
             });
         });
 
-        it('Select Facet Name and Facet Items and verify Facet tokens ', function(done) {
+        it('Expand Facet Group and select facet Items ,verify items have checkmark beside and also verify Facet tokens in container', function(done) {
             reportServicePage.waitForElement(reportServicePage.reportsToolBar).then(function () {
                 //Click on facet carat
                 reportServicePage.reportFilterBtnCaret.click().then(function () {
@@ -158,13 +159,13 @@
                     //TODO verify table column names matches with menu contents after the integration part is done.
                 }).then(function () {
                     //select the facet Items
-                    reportServicePage.selectFacetAndVerifyChecked("Types", ["Design", "Development", "Test"]);
+                    reportServicePage.selectFacetAndVerifyChecked("Names", ["Aditi Goel", "Claire Martinez"]);
                 }).then(function () {
-                    reportServicePage.selectFacetAndVerifyChecked("Flag", ["Yes"]);
+                    reportServicePage.selectFacetAndVerifyChecked("Flag", ["No"]);
                     reportServicePage.reportFilterBtnCaret.click();
                 }).then(function () {
                     //remove facets by clicking on clear (X) in facet selection in the tokens and verify tokens got removed
-                    reportServicePage.clearFacetTokens(["Design", "Test", "Yes"]);
+                    reportServicePage.clearFacetTokens(["Aditi Goel", "No"]);
                     done();
                 });
 
