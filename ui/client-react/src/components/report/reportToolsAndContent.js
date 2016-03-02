@@ -15,7 +15,7 @@ var ReportToolsAndContent = React.createClass({
     mixins: [FluxMixin],
 
     render() {
-        let toolbar = <ReportToolbar reportData={this.props.reportData}  {...this.props}  />;
+        let toolbar = <ReportToolbar {...this.props}  />;
 
         return (<div className="reportToolsAndContentContainer">
                     <ReportContent  reportData={this.props.reportData}

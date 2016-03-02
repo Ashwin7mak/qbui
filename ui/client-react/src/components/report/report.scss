@@ -23,7 +23,7 @@
             flex: 1;
             align-items: center;
             color: $icon-color;
-
+            margin-bottom: .5em;
             .filterSearchBox {
                 padding: .8rem;
                 width: 18em;
@@ -31,18 +31,19 @@
 
             .facetsMenuButton {
                 margin-left: 1.5rem;
+                cursor: pointer;
             }
 
             .clearAllFacets {
                 display: inline-block;
-                margin-left: .5rem;
+                margin-right: .5rem;
                 vertical-align: top;
-                margin-top: -4px;
                 font-size: 16px;
+                cursor: pointer;
             }
 
             .recordsCount {
-                margin-left: 1.5rem;
+                margin-right: 1rem;
             }
         }
 
@@ -51,7 +52,7 @@
             overflow-y: auto;
             margin-left: 10px;
             margin-right: 10px;
-            min-height: 552px;
+            min-height: 710px;
         }
 
         // this fake facet button which hidden in release; devs
@@ -77,26 +78,36 @@
         a:hover {
             text-decoration: none;
         }
-    }
 
-    @include small-breakpoint {
-        .layout-stage {
-            .right {
-                display: none;
-            }
-            .report-content .left {
-                width: 100%;
-            }
+    }
+}
+
+@include small-breakpoint {
+    .layout-stage {
+        .right {
+            display: none;
+
+        }
+        .report-content .left {
+            width: 100%;
         }
     }
-    @include medium-breakpoint {
-        .layout-stage {
-            .right {
-                display: none;
-            }
-            .report-content .left {
-                width: 100%;
-            }
+}
+
+@include medium-breakpoint {
+    .layout-stage {
+        .right {
+            display: none;
+
         }
+        .report-content .left {
+            width: 100%;
+        }
+    }
+}
+
+@include small-breakpoint {
+    .reportContainer .reportToolsAndContentContainer .loadedContent {
+        min-height: 430px;
     }
 }

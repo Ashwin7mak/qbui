@@ -19,7 +19,8 @@ let NavItem = React.createClass({
         secondaryIcon: React.PropTypes.string,
         secondaryOnSelect: React.PropTypes.func,
         hoverComponent: React.PropTypes.element,
-        showToolTip: React.PropTypes.bool
+        showToolTip: React.PropTypes.bool,
+        selected: React.PropTypes.bool
     },
 
     getDefaultProps() {

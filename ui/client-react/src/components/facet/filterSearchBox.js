@@ -27,6 +27,7 @@ var FilterSearchBox = React.createClass({
 
         let placeMsg = "Search these " + this.props.nameForRecords + "...";
         return (<input className="filterSearchBox" type="text" key="filterSearchBox"
+                       value={this.props.value}
                        onChange={this.props.onChange} placeholder={placeMsg}
                 />
         );

@@ -1,50 +1,54 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import TestUtils from 'react-addons-test-utils';
-//import FacetsItem from '../../src/components/facet/facetsItem';
+import FacetsAspect  from '../../src/components/facet/facetsAspect';
+import FacetsItem  from '../../src/components/facet/facetsItem';
 import FacetsList  from '../../src/components/facet/facetsList';
 import FacetSelections  from '../../src/components/facet/facetSelections';
 
-var I18nMessageMock = React.createClass({
-    render: function() {
-        return (
-            <div>test</div>
-        );
-    }
-});
-
 describe('FacetList functions', () => {
     'use strict';
+    var I18nMessageMock = React.createClass({
+        render: function() {
+            return (
+                <div>test</div>
+            );
+        }
+    });
 
     beforeEach(() => {
         FacetsList.__Rewire__('I18nMessage', I18nMessageMock);
+        FacetsItem.__Rewire__('I18nMessage', I18nMessageMock);
+        FacetsAspect.__Rewire__('I18nMessage', I18nMessageMock);
     });
 
     afterEach(() => {
         FacetsList.__ResetDependency__('I18nMessage');
+        FacetsItem.__ResetDependency__('I18nMessage');
+        FacetsAspect.__ResetDependency__('I18nMessage');
     });
+
+
 
     let component;
 
-    let fakefacets = {
-        list : [
-            {id : 1, name : "Types", type: "text", blanks: true,
+    let fakefacets =  [
+            {id : 1, name : "Types", type: "TEXT", blanks: true,
                 values : [{value:"Design"}, {value:"Development"}, {value:"Planning"}, {value:"Test"}]},
-            {id : 2, name : "Names", type: "text", blanks: false,
+            {id : 2, name : "Names", type: "TEXT", blanks: false,
                 values : [
                     {value: "Aditi Goel"}, {value: "Christopher Deery"}, {value: "Claire Martinez"}, {value: "Claude Keswani"}, {value: "Deborah Pontes"},
                     {value: "Donald Hatch"}, {value: "Drew Stevens"}, {value: "Erica Rodrigues"}, {value: "Kana Eiref"},
                     {value: "Ken LaBak"}, {value: "Lakshmi Kamineni"}, {value: "Lisa Davidson"}, {value: "Marc Labbe"},
                     {value: "Matthew Saforrian"}, {value: "Micah Zimring"}, {value: "Rick Beyer"}, {value: "Sam Jones"}, {value: "XJ He"}
                 ]},
-            {id : 3, name : "Status", type: "text", blanks: false,
+            {id : 3, name : "Status", type: "TEXT", blanks: false,
                 values : [{value: "No Started"}, {value: "In Progress"}, {value: "Blocked"}, {value: "Completed"}]},
-            {id : 4, name : "Flag", type: "bool",  blanks: false,
-                values : [{value: "True"}, {value: "False"}]},
+            {id : 4, name : "Flag", type: "CHECKBOX",  blanks: false,
+                values : [{value: "Yes"}, {value: "No"}]},
             //{id : 4, name : "Dates", type: "date",  blanks: false,
             //    range : {start: 1, end: 2}},
-        ],
-    };
+    ];
 
 
     const fakeReportData_simple = {

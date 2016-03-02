@@ -36,8 +36,11 @@ $left-nav-horizontal-icon-border-color: #131f2b;
 
 }
 
-.leftNav .link.withSecondary a.leftNavLink {
-    padding-right: 34px;
+.leftNav .link.withSecondary {
+    height:40px;
+    a.leftNavLink {
+        padding-right: 34px;
+    }
 }
 
 .leftNav .link.selected {
@@ -253,6 +256,7 @@ body:not(.touch) .leftNav.closed {
     ul.tablesList {
 
         >li {
+
             >a.right {
                 opacity: 0;
                 position: absolute;
@@ -294,6 +298,7 @@ body:not(.touch) .leftNav.closed {
                 padding: 10px 0 0 0;
                 text-align: center;
                 line-height: 25px;
+
                 .qbIcon, .navLabel, .dropup {
                     display: block;
                     width: 100%;

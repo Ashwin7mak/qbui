@@ -69,12 +69,20 @@ export default {
 
         },
         report : {
+            blank : "leer",
+            facets :{
+                noFacets :"Nein werte",
+                seeMore : "weitere filter...",
+                tooManyValues: "Zu viele Werte für die Filterung zu verwenden",
+                noCheck : "Nein",
+                yesCheck : "Ja"
+            },
+            filteredRecordCount :
+                "{filteredRecordCount} von {recordCount} {nameForRecords} ",
             newReport: "Neu",
             organizeReports: "Organisieren",
-            filteredRecordCount : "{filteredRecordCount} von {recordCount} {nameForRecords} ",
             recordCount : "{recordCount} {nameForRecords} ",
-            noFacets : "Nein Facetten",
-            searchPlaceHolder:  "Suchen Sie diese {nameForRecords} ..."
+            searchPlaceHolder:  "Suchen Sie diese {nameForRecords} ...",
         }
     }
 };

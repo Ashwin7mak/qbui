@@ -7,10 +7,12 @@ import StringUtils from '../../utils/stringUtils';
 
 import QBicon from '../qbIcon/qbIcon';
 import FacetsList from './facetsList';
-
+import LimitConstants from './../../../../common/src/limitConstants';
 import './facet.scss';
 import _ from 'lodash';
+import  {facetsProp} from './facetProps';
 
+let logger = new Logger();
 
 /**
  *  FacetsMenu component presents a trigger button that when clicked shows list of facets available to filter a report on.
@@ -22,6 +24,9 @@ import _ from 'lodash';
 **/
 var FacetsMenu = React.createClass({
     displayName: 'FacetsMenu',
+    contextTypes: {
+        touch: React.PropTypes.bool
+    },
     propTypes: {
         /**
          *  Takes in for properties the reportData which includes the list of facets
@@ -29,12 +34,11 @@ var FacetsMenu = React.createClass({
          **/
         reportData: React.PropTypes.shape({
             data: React.PropTypes.shape({
-                facets:  React.PropTypes.shape({
-                    list: React.PropTypes.array.isRequired
-                })
+                facets:  facetsProp
             })
         }),
         onFacetSelect : React.PropTypes.func,
+        maxInitRevealed: React.PropTypes.number,
         onMenuEnter : React.PropTypes.func,
         onMenuExit : React.PropTypes.func
     },
@@ -46,25 +50,27 @@ var FacetsMenu = React.createClass({
      *                          popover that are expanded (initialized using the allInitiallyCollapsed prop setting)
      *  - (selected): set of selected facet values
      *
-     * @returns {{show: boolean, expandedFacetFields: Array, selected: Array}}
+     * @returns {{expandedFacetFields: Array, selected: Array}}
      */
     getInitialState() {
 
         //TODO: move these to use fluxxor actions and stores to make the sticky across views.
         let expanded = [];
+        let moreRevealed = [];
+
         if (!this.props.allInitiallyCollapsed) {
 
            // if we don't start with all collapsed then
             // add all facet fids to list of expanded facet fields
-            if (this.props.reportData.data && this.props.reportData.data.facets && this.props.reportData.data.facets.list) {
-                _.each(this.props.reportData.data.facets.list, function(facet) {
+            if (this.props.reportData.data && this.props.reportData.data.facets) {
+                _.each(this.props.reportData.data.facets, function(facet) {
                     expanded.push(facet.id);
                 });
             }
         }
         return {
-            show: false,
-            expandedFacetFields: expanded
+            expandedFacetFields: expanded,
+            moreRevealedFacetFields : moreRevealed
         };
     },
 
@@ -75,9 +81,11 @@ var FacetsMenu = React.createClass({
      */
     getDefaultProps() {
         return {
-            allInitiallyCollapsed : true
+            allInitiallyCollapsed : true,
+            maxInitRevealed : LimitConstants.maxFacetValuesInitiallyRevealed
         };
     },
+
 
     /**
      * Changes of the state of the facet popover to hidden or shown
@@ -97,7 +105,7 @@ var FacetsMenu = React.createClass({
      * @param makeCollapsed
      *
      **/
-    setFacetState(facetField, makeCollapsed) {
+    setFacetCollapsedState(facetField, makeCollapsed) {
         let expanded = _.clone(this.state.expandedFacetFields);
         if (makeCollapsed) {
             //in expanded set?  remove to mark it collapsed
@@ -112,6 +120,21 @@ var FacetsMenu = React.createClass({
     },
 
     /**
+     * Changes the state of a facet field group to more revealed
+     * by adding the field id from a hash listing the more Revealed facet field groups
+     *
+     * @param facetField - the facet
+     * @param makeCollapsed
+     *
+     **/
+    setFacetMoreRevealedState(facetField) {
+        let revealed = _.clone(this.state.moreRevealedFacetFields);
+        // add it
+        revealed.push(facetField.id);
+        this.setState({moreRevealedFacetFields: revealed});
+    },
+
+    /**
      * Check if a facet field group section is collapsed or not
      *
      * @param id - the id of field to check
@@ -121,6 +144,15 @@ var FacetsMenu = React.createClass({
         return (!_.includes(this.state.expandedFacetFields, id));
     },
 
+    /**
+     * Check if a facet field group section has more revealed or not
+     *
+     * @param id - the id of field to check
+     * @returns {boolean} returns true if it's revealed
+     **/
+    isRevealed(id) {
+        return (_.includes(this.state.moreRevealedFacetFields, id));
+    },
 
     /**
      * Toggle the fate of expand Collapse of a facet field group in the popover
@@ -128,7 +160,16 @@ var FacetsMenu = React.createClass({
      * @param facetField - the fact field you want to toggle
      **/
     toggleCollapseFacet(facetField) {
-        this.setFacetState(facetField, !this.isCollapsed(facetField.id));
+        this.setFacetCollapsedState(facetField, !this.isCollapsed(facetField.id));
+    },
+
+    /**
+     * Se the fate of more values revealed for a large facet field group in the popover
+     * change state of a facet to more revealed
+     * @param facetField - the fact field you want to reveal all the values for
+     **/
+    setRevealMore(facetField) {
+        this.setFacetMoreRevealedState(facetField);
     },
 
     /**
@@ -144,35 +185,124 @@ var FacetsMenu = React.createClass({
     },
 
     /**
+     * Handle the ui event that occurred - handled changing the show more state of a
+     * facet field group. To make the remainder of facet field groups values shown.
+     *
+     * @param e - the event object from the browser/react
+     * @param facetField - the facet field group to act on
+     **/
+    handleRevealMore(e, facetField) {
+        this.setRevealMore(facetField);
+    },
+
+    /**
+     * Don't handle other listeners i.e. avoid closing facet window on this event
+     * rootClose will close any click out side popover
+     * (we want to keep open on facet selections clicks)
+     * @param e
+     */
+    dontClose(e) {
+        // prevent close of popover just do the clear
+        e.stopPropagation();
+        if (e.nativeEvent &&  e.nativeEvent.stopImmediatePropagation) {
+            e.nativeEvent.stopImmediatePropagation();
+        }
+    },
+
+    /**
+     * Clear the selected value,
+     * @param e
+     * @param facet
+     * @param value
+     */
+    clearSelect(e, facet, value) {
+        if (e.target.classList.contains('clearFacet')) {
+            this.props.onFacetDeselect(e, facet, value);
+        }
+        this.dontClose(e);
+    },
+
+    /**
+     * render the selected facet value tokenized
+     * @returns {null}
+     */
+    renderSelectedFacets() {
+        let selections = this.props.selectedValues;
+        if (!selections || !selections.hasAnySelections()) {
+            return null;
+        }
+        let components = [];
+        let self = this;
+        this.props.reportData.data.facets.map((facet) => {
+            if (selections.hasAnySelectionsForField(facet.id)) {
+                let kids = (selections.getFieldSelections(facet.id).map((value) => {
+                    return (<span key={'token.' + facet.name + '.' + value}
+                                  className="selectedToken">
+                                 <span className="selectedTokenName"  onClick={(e) => self.clearSelect(e, facet, value)}>
+                                      {value}
+                                    <QBicon className="clearFacet" icon="clear-mini"/>
+                                 </span>
+
+                          </span>);
+                }));
+                components.push(<div className="facetToken" key={'token' + facet.name} ><span className="facetNameToken">{facet.name}</span>
+                    <span className="facetSelections">{kids}</span></div>);
+            }
+        });
+        return components;
+    },
+
+    /**
      * Prepares the facet menu button used to show/hide the popover menu of field facet groups when clicked
      *
      **/
     render() {
+        let menuKey =  this.props.rptId;
         return (
             <div className="facetsMenuContainer">
+            <div>
                 {/* list of facet options shown when filter icon clicked */}
-                <OverlayTrigger container={this} trigger="click" placement="bottom" ref="facetOverlayTrigger" rootClose={true}
+                <OverlayTrigger container={this} trigger="click" placement="bottom"
+                                ref="facetOverlayTrigger" rootClose={true}
+                                show={this.state.show}
+                                target={()=> document.getElementById('facetsMenuTarget')}
+                                onHide={() => this.setState({show: false})}
                                 onEntering={this.props.onMenuEnter} onExited={this.props.onMenuExit} overlay={
                                     <FacetsList
-                                        handleToggleCollapse={this.handleToggleCollapse}
+                                        key= {"FacetsList." + menuKey}
+                                        popoverId={menuKey}
                                         isCollapsed={this.isCollapsed}
+                                        handleToggleCollapse={this.handleToggleCollapse}
+                                        isRevealed={this.isRevealed}
+                                        handleRevealMore={this.handleRevealMore}
+                                        maxInitRevealed={this.props.maxInitRevealed}
                                         menuButton={this.refs.facetsMenuButton}
-                                        popoverId={"facets." + this.props.appId + "." +
-                                                 this.props.tblId + "." +
-                                                 this.props.rptId }
-                                    {...this.props} />}>
+                                        expandedFacetFields={this.state.expandedFacetFields}
+                                        moreRevealedFacetFields={this.state.moreRevealedFacetFields}
+                                        onFacetClearFieldSelects={this.props.onFacetClearFieldSelects}
+                                        selectedValues={this.props.selectedValues}
+                                        reportData={this.props.reportData}
+                                        onFacetSelect={this.props.onFacetSelect}
+                                        onFacetDeselect={this.props.onFacetDeselect}
+                                    />}>
 
                     {/* the filter icon button */}
                     <div className={"facetsMenuButton " +  (this.state.show ? "popoverShown" : "")}
                          ref="facetsMenuButton"
-                         onClick={e => this.toggleMenu(e)}>
-                        <span className="facetButtons">
-                            <QBicon className="filterButton" icon={(this.props.selectedValues && this.props.selectedValues.hasAnySelections()) ?
+                         >
+                        <span className="facetButtons" onClick={e => this.toggleMenu(e)}>
+                            <QBicon className="filterButton" icon={(this.props.selectedValues &&
+                                                    this.props.selectedValues.hasAnySelections()) ?
                                         "filter-status" : "filter-tool"} />
                             <QBicon className="filterButtonCaret" icon="caret-filled-down" />
                         </span>
                     </div>
                 </OverlayTrigger>
+                {!this.context.touch &&
+                <div className="selectedFacets" onClick={e => this.dontClose(e)}>{this.renderSelectedFacets()}</div>
+                }
+            </div>
+
             </div>
         );
     }
