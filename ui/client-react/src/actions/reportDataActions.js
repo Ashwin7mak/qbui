@@ -119,18 +119,18 @@ let reportDataActions = {
                         recordService.getRecords(appId, tblId, format, queryParams).then(
                             function(recordResponse) {
                                 logger.debug('Filter Report Records service call successful');
-                                this.dispatch(actions.LOAD_REPORT_SUCCESS, recordResponse.data);
+                                this.dispatch(actions.LOAD_RECORDS_SUCCESS, recordResponse.data);
                                 resolve();
                             }.bind(this),
                             function(error) {
                                 logger.error('Filter Report Records service call error:', error);
-                                this.dispatch(actions.LOAD_REPORT_FAILED);
+                                this.dispatch(actions.LOAD_RECORDS_FAILED);
                                 reject();
                             }.bind(this)
                         ).catch(
                             function(ex) {
                                 logger.error('Filter Report Records service call exception:' + ex);
-                                this.dispatch(actions.LOAD_REPORT_FAILED);
+                                this.dispatch(actions.LOAD_RECORDS_FAILED);
                                 reject();
                             }.bind(this)
                         );

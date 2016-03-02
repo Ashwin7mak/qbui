@@ -79,6 +79,7 @@ describe('FacetSelections', () => {
         it('which has selections', () => {
             testSelections.initSelections(mySelections);
             expect(testSelections.whichHasAnySelections().length).toBe(3);
+            expect(_.includes(testSelections.whichHasAnySelections(), 'fieldid1', 'fieldid2', 'fieldid3'));
         });
 
         it('initialized doesn\'t have selections', () => {

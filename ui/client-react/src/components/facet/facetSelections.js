@@ -58,9 +58,11 @@ class FacetSelections {
      */
     whichHasAnySelections() {
         let answer = [];
-        if (_.keys(this.selectionsHash).length !== 0) {
-            answer = _.filter(this.selectionsHash, function(x) {
-                return (x && (x.length > 0));
+        let fields = _.keys(this.selectionsHash);
+        if (fields.length !== 0) {
+            answer = _.filter(fields, (x) => {
+                let selectionsForField = this.selectionsHash[x];
+                return (selectionsForField && (selectionsForField.length > 0));
             });
         }
         return answer;

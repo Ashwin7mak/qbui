@@ -101,15 +101,4 @@ describe('Report functions', () => {
         expect(flux.actions.loadReport).not.toHaveBeenCalled();
     });
 
-    /* This test is here for the fake method only to fulfil the coverage needs. Needs to replaced when real method gets added*/
-    /* disable test - button is hidden use is for devs only
-    it('test flux action filterReport is called', () => {
-        var div = document.createElement('div');
-        ReactDOM.render(<Report {...i18n} flux={flux} params={reportParams}  reportData={reportDataParams}  />, div);
-        var testButton = TestUtils.scryRenderedDOMComponentsWithClass(component, "testFilterButton");
-        console.log(testButton[0]);
-        TestUtils.Simulate.click(testButton[0]);
-        expect(flux.actions.filterReport).toHaveBeenCalled();
-    });
-     */
 });

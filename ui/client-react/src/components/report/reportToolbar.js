@@ -43,6 +43,7 @@ var ReportToolbar = React.createClass({
         onFacetSelect : React.PropTypes.func
     },
 
+
     getDefaultProps : function() {
         return {
             fillinDummyFacets : false,
@@ -95,52 +96,62 @@ var ReportToolbar = React.createClass({
         return answer;
     },
 
-    /* Placeholder method to hook into node layer call to get filtered records when user selects a facet
-     * Hardcoded facetExpression for testing
-     * TODO: replace with a real method.
-     */
     filterReport: function() {
-        var facetExpression = [{fid:'3', values:['10', '11']}, {fid:'4', values:['abc']}];
-
+        //var facetExpression = [{fid:'3', values:['10', '11']}, {fid:'4', values:['abc']}];
+        let facetExpression = [];
+        let selected = this.state.selections;
+        let fields = selected.whichHasAnySelections();
+        facetExpression = _.map(fields, function(field) {
+            return {fid : field, values: selected.getFieldSelections(field)};
+        });
+        let filterParam = {
+            facet : facetExpression,
+            search : this.state.searchStringForFiltering
+        };
         let flux = this.getFlux();
-        flux.actions.filterReport(this.props.appId, this.props.tblId, this.props.rptId, true, facetExpression);
+        flux.actions.filterReport(this.props.appId, this.props.tblId, this.props.rptId, true, filterParam);
+    },
+
+    setStateSelections : function(newState) {
+        this.setState({selections: newState}, () => {
+            this.filterReport();
+        });
     },
 
     handleFacetDeselect : function(e, facet, value) {
         var mutated = this.state.selections.copy();
         mutated.setFacetValueSelectState(facet, value, false);
-        this.setState({selections: mutated});
+        this.setStateSelections(mutated);
     },
 
     handleFacetSelect : function(e, facet, value) {
         var mutated = this.state.selections.copy();
         mutated.toggleSelectFacetValue(facet, value);
-        this.setState({selections: mutated});
+        this.setStateSelections(mutated);
     },
 
     handleFacetClearFieldSelects : function(facet) {
         var mutated = this.state.selections.copy();
         mutated.removeAllFieldSelections(facet.id);
-        this.setState({selections: mutated});
+        this.setStateSelections(mutated);
     },
 
     handleFacetClearAllSelects : function() {
         var mutated = new FacetSelections();
-        this.setState({selections: mutated});
+        this.setStateSelections(mutated);
     },
 
     executeSearchString : function(result) {
-        this.setState({
-            searchStringForFiltering: result
+        this.setState({searchStringForFiltering: result}, () => {
+            this.filterReport();
         });
-        this.searchReport(result);
+       // this.searchReport(result);
     },
 
     searchTheString : function(searchTxt, debounced) {
-        var self = this;
         if (debounced) {
-            this.debouncedChange(searchTxt).then(function(result) {
-                self.executeSearchString(result.trim());
+            this.debouncedChange(searchTxt).then((result) => {
+                this.executeSearchString(result.trim());
             });
         }  else {
             this.executeSearchString(searchTxt.trim());
