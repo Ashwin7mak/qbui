@@ -93,11 +93,11 @@ var config = require('./environment');
             if (config.DOMAIN) {
                 log.info("below this is the config.DOMAIN.hostname value!!!!");
                 log.info(config.DOMAIN);
+                var url = require('url');
                 if (envConsts.TEST === env){
                     config.ip = url.parse(config.DOMAIN).hostname;
                 }
                 else {
-                    var url = require('url');
                     url = new URL(config.DOMAIN);
                     log.info("THIS IS THE URL VALUE WITHOUT PARSING!!!!!!!!")
                     log.info(url);
