@@ -42,11 +42,11 @@
 
         //REST endpoint (protocol,server,port)
         //javaHost: 'https://quickbase-dev.com:8443',
-        javaHost: http://quickbase-dev.com:8080,
+        javaHost: 'http://quickbase-dev.com:8080',
 
         //Express Server
         //DOMAIN: 'https://quickbase-dev.com:9443'
-        DOMAIN: http://quickbase-dev.com:9000,
+        DOMAIN: 'http://quickbase-dev.com:9000',
 
         //Node understanding of RuntimeEnvironment
         env       : envConsts.TEST,
