@@ -91,20 +91,8 @@ var config = require('./environment');
 
         if (!config.ip) {
             if (config.DOMAIN) {
-                log.info("below this is the config.DOMAIN.hostname value!!!!");
-                log.info(config.DOMAIN);
                 var url = require('url');
-                if (envConsts.TEST === env){
-                    var duder = config.DOMAIN;
-                    duder = duder.replace(/\\"/g, '"');
-                    duder = url.parse(decodeURI(duder));
-                    log.info("THIS IS THE URL VALUE WITH Quote escaping and decoding!!!!!!!!");
-                    log.info(duder);
-                    config.ip = duder.hostname;
-                }
-                else {
-                    config.ip = url.parse(config.DOMAIN).hostname;
-                }
+                config.ip = url.parse(config.DOMAIN).hostname;
             } else {
                 config.ip = 'localhost';
             }
