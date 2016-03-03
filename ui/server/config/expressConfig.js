@@ -95,11 +95,12 @@ var config = require('./environment');
                 log.info(config.DOMAIN);
                 var url = require('url');
                 if (envConsts.TEST === env){
-                    url = new URL(config.DOMAIN);
-                    log.info("THIS IS THE URL VALUE WITHOUT PARSING!!!!!!!!")
-                    log.info(url);
-                    log.info(url.hostname);
-                    config.ip = url.hostname;
+                    var duder = new URL(config.DOMAIN);
+                    log.info("THIS IS THE URL VALUE WITH DECODING!!!!!!!!");
+                    log.info(decodeURI(config.DOMAIN));
+                    log.info(duder);
+                    log.info(duder.hostname);
+                    config.ip = duder.hostname;
                 }
                 else {
                     config.ip = url.parse(config.DOMAIN).hostname;
