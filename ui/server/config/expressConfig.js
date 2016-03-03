@@ -95,7 +95,6 @@ var config = require('./environment');
                 log.info(config.DOMAIN);
                 var url = require('url');
                 if (envConsts.TEST === env){
-                    x = x.replace(/\\"/g, '"');
                     var duder = config.DOMAIN;
                     duder = duder.replace(/\\"/g, '"');
                     duder = url.parse(duder);
