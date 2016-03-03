@@ -37,6 +37,7 @@ let LeftNav = React.createClass({
                             <QBicon className={"appsToggleIcon"} icon="caret-filled-up"/>
                         </div>
                     }
+                    <a className="iconLink toggleNavButton" href="#" onClick={this.props.onNavClick}><QBicon icon="hamburger" /> </a>
                 </div>);
     },
 

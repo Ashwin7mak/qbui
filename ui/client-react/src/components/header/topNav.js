@@ -25,18 +25,11 @@ const debounceSearchMillis = 100;
 var TopNav = React.createClass({
     mixins: [FluxMixin],
 
-    toggleNav: function() {
-        let flux = this.getFlux();
-        flux.actions.toggleLeftNav();
-    },
-
-
     searchChanged: function(ev) {
         const text = ev.target.value;
         let flux = this.getFlux();
         flux.actions.searchFor(text);
     },
-
 
     render: function() {
         const searchIcon = <QBicon icon="search" />;
@@ -47,7 +40,7 @@ var TopNav = React.createClass({
             <div className={'topNav'}>
                 <div className="top">
                     <div className="navGroup left">
-                        <div className="navItem "><a className="iconLink toggleNavButton" href="#" onClick={this.toggleNav}><QBicon icon="hamburger" /> </a></div>
+                        <div className="navItem "><a className="iconLink toggleNavButton" href="#" onClick={this.props.onNavClick}><QBicon icon="hamburger" /> </a></div>
 
                         {/*<div className="navItem topTitle">{this.props.title}</div>*/}
                     </div>

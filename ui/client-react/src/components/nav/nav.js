@@ -150,6 +150,11 @@ var Nav = React.createClass({
         const flux = this.getFlux();
         flux.actions.toggleLeftNav(false); // hide left nav after selecting items on small breakpoint
     },
+    toggleNav: function() {
+        let flux = this.getFlux();
+        flux.actions.toggleLeftNav();
+    },
+
     renderForTouch() {
         const flux = this.getFlux();
 
@@ -176,7 +181,8 @@ var Nav = React.createClass({
                 onToggleAppsList={this.toggleAppsList}
                 onSelect={this.onSelectItem}
                 onSelectReports={this.onSelectTableReports}
-                globalActions={this.getGlobalActions()} />
+                globalActions={this.getGlobalActions()}
+                onNavClick={this.toggleNav}/>
 
             <div className="main">
                 <TopNav title="QuickBase"

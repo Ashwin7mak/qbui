@@ -25,7 +25,7 @@ let AppsList = React.createClass({
     },
     appList() {
         return this.props.apps && this.props.apps.map((app) => {
-            app.icon = 'star-full';
+            app.icon = 'favicon';
             return this.searchMatches(app.name) && <NavItem key={app.id} item={app} onSelect={this.props.onSelectApp} {...this.props} />;
         });
     },

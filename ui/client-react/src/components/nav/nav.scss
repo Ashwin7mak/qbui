@@ -102,7 +102,7 @@ a {
                 flex-basis: $top-nav-height;
                 font-size: 14px;
                 transition: flex-basis 300ms ease-in-out;
-                min-width: 330px;
+                min-width: 300px;
             }
 
             .navGroup {
@@ -120,6 +120,11 @@ a {
                     display: flex;
                     justify-content: center;
                 }
+                @include small-breakpoint {
+                    .navItem {
+                        justify-content: flex-end;
+                    }
+                }
             }
 
             .btn-group {
@@ -130,6 +135,7 @@ a {
                     border-radius: 0;
                     width: $top-nav-height;
                     height: $top-nav-height;
+                    outline: none;
                 }
                 button:hover .hi {
                     color: #fff;

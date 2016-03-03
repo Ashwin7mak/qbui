@@ -43,9 +43,6 @@ describe('TopNav functions', () => {
     };
     let flux = new Fluxxor.Flux(stores);
     flux.addActions({
-        toggleLeftNav: function() {
-            return;
-        },
         showTrowser: function() {
             return;
         },
@@ -61,7 +58,6 @@ describe('TopNav functions', () => {
         TopNav.__Rewire__('I18nMessage', I18nMessageMock);
         TopNav.__Rewire__('CurrentDate', CurrentDateMock);
         component = TestUtils.renderIntoDocument(<TopNav flux={flux} globalActions={globalActions}/>);
-        spyOn(flux.actions, 'toggleLeftNav');
         spyOn(flux.actions, 'showTrowser');
         spyOn(flux.actions, 'changeLocale');
         spyOn(flux.actions, 'searchFor');
@@ -95,13 +91,6 @@ describe('TopNav functions', () => {
         menuItems = TestUtils.scryRenderedDOMComponentsWithClass(noLocaleComponent, "localeLink");
         expect(menuItems.length).toBe(0);
         TopNav.__ResetDependency__('Locale');
-    });
-
-    it('test toggles nav on hamburger click', () => {
-        let toggleNavButton = TestUtils.scryRenderedDOMComponentsWithClass(component, "toggleNavButton");
-        expect(toggleNavButton.length).toEqual(1);
-        TestUtils.Simulate.click(toggleNavButton[0]);
-        expect(flux.actions.toggleLeftNav).toHaveBeenCalled();
     });
 
     it('test changes locale on selecting menu item', () => {

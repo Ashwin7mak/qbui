@@ -51,7 +51,7 @@ let GlobalActions = React.createClass({
         let supportedLocales = Locale.getSupportedLocales();
         let eventKeyIdx = 20;
         return (
-            <Dropdown id="nav-right-dropdown" dropup={this.props.position === "left"} right={this.props.position === "left"}>
+            <Dropdown id="nav-right-dropdown" dropup={this.props.position === "left"} pullRight={this.props.position === "left"}>
 
                 <a bsRole="toggle" className={"dropdownToggle globalActionLink"}><QBicon icon="fries"/> </a>
 

@@ -47,7 +47,6 @@ $top-nav-color: #193048;
     a.dropdownToggle {
         display: inline-block;
         cursor: pointer;
-        padding: 0 8px;
         color: $topnav-icon-color;
     }
     a.dropdownToggle:hover {
@@ -71,7 +70,6 @@ $top-nav-color: #193048;
                 vertical-align: middle;
             }
         }
-
     }
 
     .globalActionsList {
@@ -83,8 +81,8 @@ $top-nav-color: #193048;
         border: 0;
 
         .qbIcon + span {
-            margin-left: 6px;
-        }
+              margin-left: 6px;
+          }
     }
 
     .globalAction:hover {
