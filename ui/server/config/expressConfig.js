@@ -91,6 +91,8 @@ var config = require('./environment');
 
         if (!config.ip) {
             if (config.DOMAIN) {
+                log.info("below this is the config.DOMAIN value!!!!");
+                log.info(config.DOMAIN);
                 var url = require('url');
                 config.ip = url.parse(config.DOMAIN).hostname;
             } else {
