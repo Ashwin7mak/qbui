@@ -97,10 +97,9 @@ var config = require('./environment');
                 if (envConsts.TEST === env){
                     var duder = config.DOMAIN;
                     duder = duder.replace(/\\"/g, '"');
-                    duder = url.parse(duder);
-                    log.info("THIS IS THE URL VALUE WITH Quote escaping!!!!!!!!");
+                    duder = url.parse(decodeURI(duder));
+                    log.info("THIS IS THE URL VALUE WITH Quote escaping and decoding!!!!!!!!");
                     log.info(duder);
-                    log.info(duder.hostname);
                     config.ip = duder.hostname;
                 }
                 else {
