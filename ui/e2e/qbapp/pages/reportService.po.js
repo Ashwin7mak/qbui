@@ -195,26 +195,36 @@
                         });
                     };
                 });
+                // Select the Items and verify there is check mark beside item
             }).then(function () {
                 //sleep to expand a group
                 e2eBase.sleep(browser.params.smallSleep);
                 //Select the facet Items
                 facetItems.forEach(function (facetItem) {
-                    var items = element.all(by.tagName('button')).map(function (groupItem, index) {
+                    var items = element.all(by.className('list-group-item')).map(function (groupItem, index) {
                         return groupItem.getText().then(function (itemText) {
-                            if (itemText === facetItem) {
+                            if (index === facetItem) {
                                 //before selecting its class attribute should not have selected.
                                 expect(groupItem.getAttribute('class')).toMatch("list-group-item");
                                 groupItem.click().then(function () {
                                     //After Item selected class attribute should chnage to selected
                                     expect(groupItem.getAttribute('class')).toMatch("selected list-group-item");
+                                    // Verify facet container
+                                }).then(function () {
+                                    //Map all facet tokens from the facet container
+                                    var tokens = element.all(by.className('facetSelections')).map(function (tokenName, tokenindex) {
+                                        return tokenName.getText().then(function (tokenText) {
+                                            console.log("The token text is: " + tokenText + "item text is " + itemText);
+                                            expect(tokenText).toMatch(itemText);
+                                        });
+                                    });
                                 });
                             };
                         });
                     });
                 });
+                return deferred.promise;
             });
-            return deferred.promise;
         };
 
         /**
@@ -222,7 +232,6 @@
          * @param facets array
          */
         this.verifyFacetTokens = function(facets) {
-            console.log("Entered verify");
             //Map all facet tokens from the facet container
             var tokens = this.reportFacetTokens.map(function(elm, index) {
                 return {
@@ -272,50 +281,6 @@
             return deferred.promise;
         };
 
-
-        /**
-         * Function that will clear the facet tokens in facet container.
-         * @param facets array
-         */
-        this.clearFacetTokens2 = function (facetItems) {
-            var deferred = Promise.pending();
-            //Map all facet tokens from the facet container
-            this.reportFacetSelections.map(function (elm) {
-                //map all selected token in the container
-                element.all(by.className('selectedToken')).map(function (Item) {
-                    //for all passed parameter facet Items
-                    facetItems.forEach(function (facetItem) {
-                        //get Text of selected facet in the container
-                        return Item.getText().then(function (itemText) {
-                            //verify selected facet text is same as parameter facet text
-                            if (itemText === facetItem) {
-                                //if equal then remove the selected facet
-                                Item.element(by.className('clearFacet')).click().then(function() {
-                                    //verify facet Item removed from container.
-                                    //get all selected token names from container
-                                    element.all(by.className('selectedTokenName')).each(function (results) {
-                                        return results.getText().then(function (resultItem) {
-                                            console.log("*****");
-                                            console.log("The result Item is:" + resultItem);
-                                            console.log("The facet Item is:" + facetItem);
-                                            console.log("*****");
-                                            //verify parameter passed text is not in the container.
-                                            if (resultItem !== facetItem) {
-                                                return deferred.promise;
-                                            };
-                                        });
-                                    });
-                                    return deferred.promise;
-                                });
-                                return deferred.promise;
-                            };
-                            return deferred.promise;
-                        });
-                    });
-                    return deferred.promise;
-                });
-            });
-        };
 
         /**
         * Helper function that will get all of the field column headers from the report. Returns an array of strings.
