@@ -95,14 +95,14 @@ var config = require('./environment');
                 log.info(config.DOMAIN);
                 var url = require('url');
                 if (envConsts.TEST === env){
-                    config.ip = url.parse(config.DOMAIN).hostname;
-                }
-                else {
                     url = new URL(config.DOMAIN);
                     log.info("THIS IS THE URL VALUE WITHOUT PARSING!!!!!!!!")
                     log.info(url);
                     log.info(url.hostname);
                     config.ip = url.hostname;
+                }
+                else {
+                    config.ip = url.parse(config.DOMAIN).hostname;
                 }
             } else {
                 config.ip = 'localhost';
