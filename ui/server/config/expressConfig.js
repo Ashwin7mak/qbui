@@ -95,7 +95,7 @@ var config = require('./environment');
                 log.info(config.DOMAIN);
                 var url = require('url');
                 if (envConsts.TEST === env){
-                    var duder = new URL(config.DOMAIN);
+                    var duder = url.parse(decodeURI(config.DOMAIN));
                     log.info("THIS IS THE URL VALUE WITH DECODING!!!!!!!!");
                     log.info(decodeURI(config.DOMAIN));
                     log.info(duder);
