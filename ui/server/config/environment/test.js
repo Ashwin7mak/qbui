@@ -42,11 +42,11 @@
 
         //REST endpoint (protocol,server,port)
         //javaHost: 'https://quickbase-dev.com:8443',
-        javaHost: process.env.ENDPOINT.trim(),
+        javaHost: decodeURI(process.env.ENDPOINT),
 
         //Express Server
         //DOMAIN: 'https://quickbase-dev.com:9443'
-        DOMAIN: process.env.ENDPOINT.trim(),
+        DOMAIN: decodeURI(process.env.ENDPOINT),
 
         //Node understanding of RuntimeEnvironment
         env       : envConsts.TEST,
