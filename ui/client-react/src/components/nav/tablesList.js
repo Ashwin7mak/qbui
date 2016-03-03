@@ -4,6 +4,7 @@ import {Link} from 'react-router';
 import QBicon from '../qbIcon/qbIcon';
 import NavItem from './navItem';
 import Locale from '../../locales/locales';
+import {I18nMessage} from '../../utils/i18nMessage';
 
 let TablesList = React.createClass({
 
@@ -82,15 +83,34 @@ let TablesList = React.createClass({
                             {...this.props}/>;
         });
     },
+    getNavItem(msg, link, icon) {
+        const hoverComponent = (<div className="hoverComponent">
+            <Link to={link}><I18nMessage message={msg}/></Link>
+        </div>);
+
+        return (<NavItem item={{msg: msg, link:link, icon:icon}}
+            hoverComponent={hoverComponent} {...this.props} />);
+
+    },
+    getTopLinksItem() {
+        return (
+        <li className="horizontal">
+            <ul className="topLinks">
+                {this.getNavItem('nav.home', `/app/${this.props.selectedAppId}`, 'home')}
+                {this.getNavItem('nav.users', '/users', 'user')}
+            </ul>
+        </li>);
+    },
+    getHoverComponent(table) {
+        return (<div className="hoverComponent">
+            <Link to={table.link}>{table.name}</Link>
+            <a href="#" className="right" onClick={()=>this.props.showReports(table.id)}><QBicon icon={"report-menu-3"}/></a>
+        </div>);
+    },
     render() {
         return (
             <ul className="tablesList">
-                <li className="horizontal">
-                    <ul className="topLinks">
-                        <NavItem item={{msg: 'nav.home', link:`/app/${this.props.selectedAppId}`, icon:'home'}} {...this.props} />
-                        <NavItem item={{msg: 'nav.users', link:'/users', icon:'user'}} {...this.props}/>
-                    </ul>
-                </li>
+                {this.getTopLinksItem()}
 
                 <NavItem item={{msg: 'nav.tablesHeading'}}
                          isHeading={true}

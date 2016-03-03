@@ -22,7 +22,7 @@ $left-nav-horizontal-icon-border-color: #131f2b;
 }
 
 .leftNav {
-    a:hover {
+    a,a:hover,a:focus {
         text-decoration: none;
     }
     .leftNavLabel {
@@ -39,7 +39,7 @@ $left-nav-horizontal-icon-border-color: #131f2b;
 
 }
 
-.leftNav .link.withSecondary {
+.leftNav .link {
     height: 40px;
     a.leftNavLink {
         padding-right: 34px;
@@ -136,7 +136,7 @@ body:not(.touch) .leftNav.closed {
             display: none;
         }
     }
-    .dropup {
+    .globalAction:last-child {
         display: none;
     }
 }
@@ -261,6 +261,9 @@ body.touch .leftNav.closed {
         list-style-image: initial;
     }
 
+    ul.globalActionsList li {
+        height:auto;
+    }
     ul.topLinks, ul.tablesList, ul.appsList, ul.globalActionsList {
         padding: 0;
         margin: 0;
@@ -310,7 +313,7 @@ body.touch .leftNav.closed {
 
                 position: absolute;
                 top: 0;
-                left: 39px;
+                left: 100%;
                 vertical-align: middle;
                 line-height: 40px;
                 width: 200px;
@@ -334,6 +337,9 @@ body.touch .leftNav.closed {
     }
 }
 
+.leftNav.open li.horizontal ul li {
+    height:auto;
+}
 .leftNav li.horizontal, .leftNav .globalActions {
     height: auto;
     > ul {
@@ -341,7 +347,6 @@ body.touch .leftNav.closed {
         flex-direction: row;
         > li {
             flex: 1 0 auto;
-            height: auto;
             border-right: 1px solid $left-nav-horizontal-icon-border-color;
             > a.leftNavLink, a.globalActionLink {
                 padding: 5px 0;
