@@ -120,6 +120,7 @@
         this.griddleLastColumnHeaderEl = this.griddleColHeaderElList.last();
         this.griddleDataBodyDivEl = this.griddleBodyEl.all(by.tagName('tbody')).first();
         this.griddleRecordElList = this.griddleDataBodyDivEl.all(by.tagName('tr'));
+        this.griddleRecordElColumnList = this.griddleDataBodyDivEl.all(by.tagName('th'));
 
         /**
          * Given a table link element in the leftNav, open the reports menu for that table
@@ -184,7 +185,7 @@
          * @param facetName
          * @param facetItems is an array
          */
-        this.selectFacetAndVerifyChecked = function (facetName, facetItems) {
+        this.selectFacetAndVerifyChecked_V2 = function (facetName, facetItems) {
             var deferred = Promise.pending();
             // Expand the Facet group
             var groups = this.PopUpContainerFacetGroup.map(function (groupName, index) {
@@ -228,6 +229,59 @@
         };
 
         /**
+         * Function that will open the facet group and select the facet Items and verify the checkmark and finally verify facet tokens.
+         * @param facetName
+         * @param facetItems is an array
+         */
+        this.selectFacetItemsAndVerifyTokens = function (facetName, facetItems) {
+            var itemsSelceted = [];
+            var deferred = Promise.pending();
+            // Expand the Facet group
+            var groups = this.PopUpContainerFacetGroup.map(function (groupName, index) {
+                return groupName.getText().then(function (groupText) {
+                    if (groupText === facetName && expect(groupName.getAttribute('class'), 'collapsed')) {
+                        groupName.click().then(function () {
+                            expect(groupName.getAttribute('class'), '', "Facet Group is not expanded");
+                        });
+                    };
+                });
+                // Select the Items and verify there is check mark beside item
+            }).then(function () {
+                //sleep to expand a group
+                e2eBase.sleep(browser.params.smallSleep);
+                //Select the facet Items
+                facetItems.forEach(function (facetItem) {
+                    var items = element.all(by.className('list-group-item')).map(function (groupItem, index) {
+                        return groupItem.getText().then(function (itemText) {
+                            //Click the facet item that matches the test argument value
+                            if (index === facetItem) {
+                                //before selecting its class attribute should not have selected.
+                                expect(groupItem.getAttribute('class')).toMatch("list-group-item");
+                                //click the item
+                                groupItem.click().then(function () {
+                                    //After Item selected class attribute should chanage to selected
+                                    expect(groupItem.getAttribute('class')).toMatch("selected list-group-item");
+                                });
+                            };
+                            //push into items selected array
+                            itemsSelceted.push(itemText);
+                        });
+                    });
+                    //verify the tokens
+                });
+            }).then(function() {
+                    //Map all facet tokens from the facet container
+                    var tokens = element.all(by.className('facetSelections')).map(function (tokenName, tokenindex) {
+                        return tokenName.getText().then(function(tokenText) {
+                        });
+                        expect(tokens).toMatch(itemsSelceted);
+                    });
+                    return deferred.promise;
+                });
+           // });
+        };
+
+        /**
          * Function that will verify the facet tokens i.e facet Name and facet Selections along with the index in facet container.
          * @param facets array
          */
@@ -241,6 +295,38 @@
             });
                 //verify the facet tokens and its contents along with the index
                 expect(tokens).toEqual(facets);
+        };
+
+        /**
+         * Function that will verify the facet tokens i.e facet Name and facet Selections along with the index in facet container.
+         * @param facets array
+         */
+        this.verifyTableResultsWithFacet = function() {
+            var tableResults = [];
+            //Map all facet tokens from the facet container
+            var tokens = this.reportFacetTokens.map(function(elm, index) {
+                    return elm.getText();
+            });
+            console.log("The tokens are: "+tokens);
+            // Assert column headers
+            this.getReportColumnHeaders().then(function(resultArray) {
+                console.log("The column headers are: "+resultArray);
+
+                // Check all record values equal the ones we added via the API
+                this.griddleRecordElList.getText().then(function(uiRecords) {
+                    console.log ("The records are: "+uiRecords);
+                    //
+                    //for (var i= 0;i<uiRecords.length;i++) {
+                    //    tableResults.push({});
+                    //}
+
+                    //e2eBase.recordService.assertRecordValues(uiRecords, recordList);
+                    //verify the facet tokens and its contents along with the index
+                    expect(tokens).toEqual(uiRecords);
+                });
+
+            });
+
         };
 
         /**

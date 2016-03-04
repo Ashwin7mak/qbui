@@ -198,6 +198,11 @@
                     fieldType: consts.SCALAR,
                     dataType: consts.CHECKBOX
                 };
+                tableToFieldToFieldTypeMap['table 4'] = {};
+                tableToFieldToFieldTypeMap['table 4'][e2eConsts.reportFieldNames[1]] = {
+                    fieldType: consts.SCALAR,
+                    dataType: consts.TEXT
+                };
                 // Call the basic app setup function
                 e2eBase.basicSetup(tableToFieldToFieldTypeMap, 10).then(function(results) {
                     // Set your global objects to use in the test functions

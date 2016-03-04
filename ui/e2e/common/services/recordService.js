@@ -33,6 +33,27 @@
                 return deferred.promise;
             },
             /**
+             * Given an already created app and table, create a list of generated record JSON objects via the API.
+             * Returns a promise.
+             */
+            addBulkRecords: function(app, table, genRecords) {
+                var deferred = promise.pending();
+                //Resolve the proper record endpoint specific to the generated app and table
+                var recordsEndpoint = recordBase.apiBase.resolveRecordsEndpoint(app.id, table.id);
+                var fetchRecordPromises = [];
+                genRecords.forEach(function(currentRecord) {
+                    fetchRecordPromises.push(recordBase.createRecord(recordsEndpoint, currentRecord, null));
+                });
+                promise.all(fetchRecordPromises)
+                    .then(function(results) {
+                        deferred.resolve(results);
+                    }).catch(function(error) {
+                    console.log(JSON.stringify(error));
+                    deferred.reject(error);
+                });
+                return deferred.promise;
+            },
+            /**
              * Uses the generators in the test_generators package to generate a list of record objects based on the
              * given list of fields and number of records. This list can then be passed into the addRecords function.
              */
@@ -44,6 +65,20 @@
                     generatedRecords.push(generatedRecord);
                 }
                 return generatedRecords;
+            },
+            /**
+             * Uses the generators in the test_generators package to generate a list of record objects based on the
+             * given list of fields and number of records. This list can then be passed into the addRecords function.
+             */
+            generateEmptyRecords: function(fields, numRecords) {
+                var generatedEmptyRecords = [];
+                for (var i = 0; i < numRecords; i++) {
+                    var generatedRecord = recordGenerator.generateEmptyRecord(fields);
+                    //console.log(generatedRecord);
+                    generatedEmptyRecords.push(generatedRecord);
+                }
+                console.log ("The empty records are: "+JSON.stringify(generatedEmptyRecords));
+                return generatedEmptyRecords;
             },
             /**
              * Function that will compare actual and expected record values
