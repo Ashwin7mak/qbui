@@ -218,7 +218,7 @@ describe('ReportToolbar functions', () => {
         //timeout for debounce
         setTimeout(function() {
             // check that search ran after debounce time
-            expect(flux.actions.filterReport).toHaveBeenCalledWith(undefined, undefined, undefined, true, Object({ facet: [], search: testValue }) );
+            expect(flux.actions.filterReport).toHaveBeenCalledWith(undefined, undefined, undefined, true, Object({facet: [], search: testValue}));
             // check that its considered filtered
             expect(component.isFiltered()).toBe(true);
             flux.actions.filterReport.calls.reset();
