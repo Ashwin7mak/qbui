@@ -48,7 +48,7 @@
         //Express Server
         //DOMAIN: 'https://quickbase-dev.com:9443'
         //DOMAIN: 'http://quickbase-dev.com:9000',
-        DOMAIN: testHost.replace(/['"]+/g, '').slice(0,-8) + '9000',
+        DOMAIN: testHost.replace(/['"]+/g, '').slice(0,-4),
 
         //Node understanding of RuntimeEnvironment
         env       : envConsts.TEST,

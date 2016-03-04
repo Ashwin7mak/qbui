@@ -69,13 +69,6 @@
         next();
     };
 
-    var testHost = process.env.ENDPOINT;
-    log.info("this is the testHOST value");
-    log.info(testHost);
-    testHost = testHost.replace(/['"]+/g, '').slice(0,-4);
-    log.info("testHost with quote strip");
-    log.info(testHost);
-
     require('./config/expressConfig')(app);
     require('./routes')(app, config);
     //  log some server config info...but don't include the secrets configuration
