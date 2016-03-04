@@ -85,7 +85,7 @@
       border: none;
       box-shadow: none;
       border-top:  1px solid $facetMenu-BorderColor;
-      padding: 10px 15px 5px 15px;
+      padding: 10px 15px 10px 15px;
       border-radius: 0;
 
       &:hover {
@@ -115,6 +115,7 @@
     .panel-default {
       border: none;
       box-shadow: none;
+      margin-bottom: 0 !important;
     }
 
     .list-group-item {
