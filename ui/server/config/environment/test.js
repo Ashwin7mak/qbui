@@ -12,11 +12,6 @@
 
     var client = clientConsts.REACT;
     var testHost = process.env.ENDPOINT;
-    log.info("this is the testHOST value");
-    log.info(testHost);
-    testHost = testHost.replace(/['"]+/g, '');
-    log.info("testHost with quote strip");
-    log.info(testHost);
 
     module.exports = {
 
@@ -48,7 +43,7 @@
 
         //REST endpoint (protocol,server,port)
         //javaHost: 'https://quickbase-dev.com:8443',
-        javaHost: testHost,
+        javaHost: testHost.replace(/['"]+/g, ''),
 
         //Express Server
         //DOMAIN: 'https://quickbase-dev.com:9443'
