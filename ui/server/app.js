@@ -72,7 +72,7 @@
     var testHost = process.env.ENDPOINT;
     log.info("this is the testHOST value");
     log.info(testHost);
-    testHost = testHost.replace(/['"]+/g, '');
+    testHost = testHost.replace(/['"]+/g, '').slice(0,-4);
     log.info("testHost with quote strip");
     log.info(testHost);
 

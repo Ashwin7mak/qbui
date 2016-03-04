@@ -43,7 +43,7 @@
 
         //REST endpoint (protocol,server,port)
         //javaHost: 'https://quickbase-dev.com:8443',
-        javaHost: testHost.replace(/['"]+/g, ''),
+        javaHost: testHost.replace(/['"]+/g, '').slice(0,-4),
 
         //Express Server
         //DOMAIN: 'https://quickbase-dev.com:9443'
