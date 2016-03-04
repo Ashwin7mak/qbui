@@ -8,8 +8,6 @@ var sinon = require('sinon');
 var assert = require('assert');
 var requestHelper = require('./../requestHelper')(config);
 var recordsApi = require('../recordsApi')(config);
-let errorCodes = require('../../errorCodes');
-let log = require('../../../logger').getLogger();
 
 /**
  * Unit tests for records apis
