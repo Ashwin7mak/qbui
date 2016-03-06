@@ -43,16 +43,17 @@ describe("Validate recordsApi", function() {
         it('success return results ', function(done) {
             req.url = '/reports/2/reportComponents';
 
-            executeReqStub.returns(Promise.resolve([{records: [], fields: []}, {records: [], fields: []}]));
+            var targetObject = "[{records: [], fields: []}, {records: [], fields: []}]";
+            executeReqStub.returns(Promise.resolve(targetObject));
             var promise = recordsApi.fetchRecords(req);
 
             promise.then(
                 function(response) {
-                    assert.deepEqual(response, {statusCode: 200});
-                    assert.equal(opts.headers['Content-Type'], 'application/json');
+                    assert.deepEqual(response, targetObject);
+                    done();
                 }
-            );
-            done();
+            ).catch(done);
+
         });
 
         it('fail return results ', function(done) {
@@ -66,10 +67,11 @@ describe("Validate recordsApi", function() {
                 function(error) {
                 },
                 function(error) {
-                    assert.equal(error, error_message);
+                    assert.equal(error, "Error: fail unit test case execution");
+                    done();
                 }
-            );
-            done();
+            ).catch(done);
+
         });
     });
 
@@ -87,17 +89,18 @@ describe("Validate recordsApi", function() {
 
         it('success return records array ', function(done) {
             req.url = '/reports/2/records';
+            var targetObject = "[{records: [], fields: []}, {records: [], fields: []}]";
 
-            executeReqStub.returns(Promise.resolve([{records: [], fields: []}, {records: [], fields: []}]));
+            executeReqStub.returns(Promise.resolve(targetObject));
             var promise = recordsApi.fetchFields(req);
 
             promise.then(
                 function(response) {
-                    assert.deepEqual(response, {statusCode: 200});
-                    assert.equal(opts.headers['Content-Type'], 'application/json');
+                    assert.deepEqual(response, targetObject);
+
+                    done();
                 }
-            );
-            done();
+            ).catch(done);
         });
 
         it('fail return value ', function(done) {
@@ -108,13 +111,15 @@ describe("Validate recordsApi", function() {
             var promise = recordsApi.fetchFields(req);
 
             promise.then(
-                function(error) {
+                function(msg) {
+                    done();
                 },
                 function(error) {
-                    assert.equal(error, error_message);
+                    assert.equal(error, "Error: " + error_message);
+                    done();
                 }
-            );
-            done();
+            ).catch(done);
+
         });
     });
 
@@ -138,9 +143,10 @@ describe("Validate recordsApi", function() {
             promise.then(
                 function(response) {
                     assert.equal(response, expectedID);
+                    done();
                 }
-            );
-            done();
+            ).catch(done);
+
         });
 
         it('success return records array with display parameter type', function(done) {
@@ -156,9 +162,9 @@ describe("Validate recordsApi", function() {
                 function(response) {
                     assert.equal(response.fields[0].display, '12-3454');
                     assert.equal(response.record[0].display, '1234525');
+                    done();
                 }
-            );
-            done();
+            ).catch(done);
         });
     });
 
