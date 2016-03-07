@@ -15,7 +15,15 @@ var ReportToolsAndContent = React.createClass({
     mixins: [FluxMixin],
 
     render() {
-        let toolbar = <ReportToolbar {...this.props}  />;
+        var {appId, tblId, rptId, reportData:{selections, searchStringForFiltering,   ...otherReportData}} = this.props;
+        let toolbar = <ReportToolbar appId={appId}
+                                    tblId={tblId}
+                                    rptId={rptId}
+                                    reportData={otherReportData}
+                                    selections={selections}
+                                    searchStringForFiltering={searchStringForFiltering}/>;
+
+        //let toolbar = <ReportToolbar {...this.props}  />;
 
         return (<div className="reportToolsAndContentContainer">
                     <ReportContent  reportData={this.props.reportData}
@@ -26,5 +34,3 @@ var ReportToolsAndContent = React.createClass({
 });
 
 export default ReportToolsAndContent;
-
-

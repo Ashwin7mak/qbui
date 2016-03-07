@@ -1,4 +1,5 @@
 import * as actions from '../../src/constants/actions';
+import FacetSelections from '../components/facet/facetSelections';
 
 import Fluxxor from 'fluxxor';
 
@@ -8,11 +9,14 @@ let ReportDataStore = Fluxxor.createStore({
         this.data = {};
         this.loading = false;
         this.error = false;
+        this.searchStringForFiltering = '' ;
+        this.selections  = new FacetSelections();
 
         this.bindActions(
             actions.LOAD_REPORT, this.onLoadReport,
             actions.LOAD_REPORT_SUCCESS, this.onLoadReportSuccess,
             actions.LOAD_REPORT_FAILED, this.onLoadReportFailed,
+            actions.LOAD_RECORDS,  this.onLoadRecords,
             actions.LOAD_RECORDS_SUCCESS, this.onLoadRecordsSuccess,
             actions.LOAD_RECORDS_FAILED, this.onLoadRecordsFailed,
             actions.SEARCH_FOR, this.onSearchFor
@@ -25,6 +29,8 @@ let ReportDataStore = Fluxxor.createStore({
         this.appId = report.appId;
         this.tblId = report.tblId;
         this.rptId = report.rptId;
+        this.searchStringForFiltering = '' ;
+        this.selections  = new FacetSelections();
 
         this.emit('change');
     },
@@ -49,13 +55,28 @@ let ReportDataStore = Fluxxor.createStore({
         this.emit('change');
     },
 
+    onLoadRecords: function(payload) {
+        this.loading = true;
+
+        this.appId = payload.appId;
+        this.tblId = payload.tblId;
+        this.rptId = payload.rptId;
+        this.selections = payload.filter.selections;
+        this.facetExpression = payload.filter.facet;
+        this.searchStringForFiltering =  payload.filter.search;
+
+        this.emit('change');
+    },
+
     onLoadRecordsSuccess: function(records) {
         this.loading = false;
         this.error = false;
         this.data.filteredRecords = this.getReportData(records);
         this.emit('change');
     },
+
     onLoadRecordsFailed: function() {
+        this.loading = false;
         this.error = true;
         this.emit('change');
     },
@@ -135,9 +156,12 @@ let ReportDataStore = Fluxxor.createStore({
             data: this.data,
             appId: this.appId,
             tblId: this.tblId,
-            rptId: this.rptId
+            rptId: this.rptId,
+            searchStringForFiltering: this.searchStringForFiltering,
+            selections: this.selections
         };
     }
+
 });
 
 export default ReportDataStore;

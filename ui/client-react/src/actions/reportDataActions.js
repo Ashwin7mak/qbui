@@ -49,14 +49,14 @@ let reportDataActions = {
                         resolve();
                     }.bind(this),
                     function(error) {
-                        logger.error('Report service call error:', error);
-                        this.dispatch(actions.LOAD_REPORT_FAILED);
+                        logger.error('Report service call error:' + JSON.stringify(error));
+                        this.dispatch(actions.LOAD_REPORT_FAILED, {error: error});
                         reject();
                     }.bind(this)
                 ).catch(
                     function(ex) {
                         logger.error('Report service call exception:', ex);
-                        this.dispatch(actions.LOAD_REPORT_FAILED);
+                        this.dispatch(actions.LOAD_REPORT_FAILED, {error: ex});
                         reject();
                     }.bind(this)
                 );
@@ -80,7 +80,7 @@ let reportDataActions = {
         return new Promise(function(resolve, reject) {
 
             if (appId && tblId && rptId) {
-                this.dispatch(actions.LOAD_REPORT, {appId, tblId, rptId});
+                this.dispatch(actions.LOAD_RECORDS, {appId, tblId, rptId, filter});
 
                 let reportService = new ReportService();
                 let recordService = new RecordService();
@@ -123,14 +123,14 @@ let reportDataActions = {
                                 resolve();
                             }.bind(this),
                             function(error) {
-                                logger.error('Filter Report Records service call error:', error);
-                                this.dispatch(actions.LOAD_RECORDS_FAILED);
+                                logger.error('Filter Report Records service call error:', JSON.stringify(error));
+                                this.dispatch(actions.LOAD_RECORDS_FAILED, {error: error});
                                 reject();
                             }.bind(this)
                         ).catch(
                             function(ex) {
-                                logger.error('Filter Report Records service call exception:' + ex);
-                                this.dispatch(actions.LOAD_RECORDS_FAILED);
+                                logger.error('Filter Report Records service call exception:', ex);
+                                this.dispatch(actions.LOAD_RECORDS_FAILED, {error: ex});
                                 reject();
                             }.bind(this)
                         );
@@ -148,8 +148,10 @@ let reportDataActions = {
                     }.bind(this)
                 );
             } else {
-                logger.error('Missing one or more required input parameters to reportDataActions.filterReport.  AppId:' + appId + '; TblId:' + tblId + '; RptId:' + rptId);
-                this.dispatch(actions.LOAD_REPORT_FAILED);
+                var errMessage = 'Missing one or more required input parameters to reportDataActions.filterReport. AppId:' +
+                    appId + '; TblId:' + tblId + '; RptId:' + rptId;
+                logger.error(errMessage);
+                this.dispatch(actions.LOAD_RECORDS_FAILED, {error: errMessage});
                 reject();
             }
         }.bind(this));

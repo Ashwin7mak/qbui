@@ -30,7 +30,6 @@ var TopNav = React.createClass({
         flux.actions.toggleLeftNav();
     },
 
-
     searchChanged: function(ev) {
         const text = ev.target.value;
         let flux = this.getFlux();

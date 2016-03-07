@@ -26,6 +26,7 @@ var ReportRoute = React.createClass({
         let flux = this.getFlux();
         flux.actions.loadReport(appId, tblId, rptId, true);
     },
+
     loadReportFromParams(params) {
 
         let appId = params.appId;
@@ -37,18 +38,7 @@ var ReportRoute = React.createClass({
             this.loadReport(appId, tblId, rptId);
         }
     },
-    /* Placeholder method to hook into node layer call to get filtered records when user selects a facet
-    * Hardcoded facetExpression for testing
-    * TODO: replace with a real method.*/
-    filterReport: function() {
-        var filter = {
-            facet: [{fid: '3', values: ['10', '11']}, {fid: '4', values: ['abc']}],
-            search: ''
-        };
 
-        let flux = this.getFlux();
-        flux.actions.filterReport(this.props.params.appId, this.props.params.tblId, this.props.params.rptId, true, filter);
-    },
     componentDidMount() {
         if (this.props.params) {
             this.loadReportFromParams(this.props.params);

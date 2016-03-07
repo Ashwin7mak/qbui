@@ -89,7 +89,7 @@ describe('Report Data Actions -- Filter report Negative', () => {
                 done();
             },
             () => {
-                expect(flux.dispatchBinder.dispatch.calls.argsFor(0)).toEqual([actions.LOAD_REPORT, loadReportInputs]);
+                expect(flux.dispatchBinder.dispatch.calls.argsFor(0)).toEqual([actions.LOAD_RECORDS, loadReportInputs]);
                 expect(flux.dispatchBinder.dispatch.calls.argsFor(1)).toEqual([actions.LOAD_REPORT_FAILED]);
                 done();
             }
@@ -121,7 +121,7 @@ describe('Report Data Actions -- Filter report Negative', () => {
                 done();
             },
             () => {
-                expect(flux.dispatchBinder.dispatch.calls.argsFor(0)).toEqual([actions.LOAD_REPORT, loadReportInputs]);
+                expect(flux.dispatchBinder.dispatch.calls.argsFor(0)).toEqual([actions.LOAD_RECORDS, loadReportInputs]);
                 expect(flux.dispatchBinder.dispatch.calls.argsFor(1)).toEqual([actions.LOAD_RECORDS_FAILED]);
                 done();
             }
@@ -153,7 +153,7 @@ describe('Report Data Actions -- Filter report Negative', () => {
                 done();
             },
             () => {
-                expect(flux.dispatchBinder.dispatch.calls.argsFor(0)).toEqual([actions.LOAD_REPORT, loadReportInputs]);
+                expect(flux.dispatchBinder.dispatch.calls.argsFor(0)).toEqual([actions.LOAD_RECORDS, loadReportInputs]);
                 expect(flux.dispatchBinder.dispatch.calls.argsFor(1)).toEqual([actions.LOAD_REPORT_FAILED]);
                 done();
             }
@@ -211,7 +211,7 @@ describe('Report Data Actions -- Filter report Negative missing parameters', () 
                 () => {
                     expect(mockReportService.prototype.getReport).not.toHaveBeenCalled();
                     expect(mockRecordService.prototype.getRecords).not.toHaveBeenCalled();
-                    expect(flux.dispatchBinder.dispatch).toHaveBeenCalledWith(actions.LOAD_REPORT_FAILED);
+                    expect(flux.dispatchBinder.dispatch).toHaveBeenCalledWith(actions.LOAD_RECORDS_FAILED);
                     done();
                 }
             );

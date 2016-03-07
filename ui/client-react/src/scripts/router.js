@@ -23,6 +23,9 @@ import appsActions from '../actions/appsActions';
 import NavStore from '../stores/navStore';
 import navActions from '../actions/navActions';
 
+import FacetMenuStore from '../stores/facetMenuStore';
+import facetMenuActions from '../actions/facetMenuActions';
+
 import AppsHome from '../components/apps/home';
 import AppsRoute from '../components/apps/appsRoute';
 import AppHomePageRoute from '../components/app/appHomePageRoute';
@@ -41,13 +44,15 @@ let stores = {
     ReportsStore: new ReportsStore(),
     ReportDataStore: new ReportDataStore(),
     AppsStore: new AppsStore(),
-    NavStore: new NavStore()
+    NavStore: new NavStore(),
+    FacetMenuStore: new FacetMenuStore()
 };
 let flux = new Fluxxor.Flux(stores);
 flux.addActions(reportActions);
 flux.addActions(reportDataActions);
 flux.addActions(appsActions);
 flux.addActions(navActions);
+flux.addActions(facetMenuActions);
 
 let NavWrapper = React.createClass({
     getInitialState() {

@@ -73,7 +73,7 @@ var FacetsList = React.createClass({
 
 
         if (facetsData.length && facetsData[0].values.length && typeof facetsData[0].values[0] !== 'object') {
-            facetsData = _.map(facetsData, function(aFacet) {
+            facetsData = facetsData.map((aFacet) => {
                 aFacet.values =  _.map(aFacet.values, function(val) {
                     if (aFacet.type.toUpperCase() === 'CHECKBOX') {
                         if (!val || val === "" || val === 0 ||
