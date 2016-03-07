@@ -52,7 +52,9 @@ describe("Validate recordsApi", function() {
                     assert.deepEqual(response, targetObject);
                     done();
                 }
-            ).catch(done);
+            ).catch(function(errorMsg) {
+                done(new Error('unable to resolve all records: ' + JSON.stringify(errorMsg)));
+            });
 
         });
 
@@ -70,7 +72,9 @@ describe("Validate recordsApi", function() {
                     assert.equal(error, "Error: fail unit test case execution");
                     done();
                 }
-            ).catch(done);
+            ).catch(function(errorMsg) {
+                done(new Error('unable to resolve all records: ' + JSON.stringify(errorMsg)));
+            });
 
         });
     });
@@ -100,7 +104,9 @@ describe("Validate recordsApi", function() {
 
                     done();
                 }
-            ).catch(done);
+            ).catch(function(errorMsg) {
+                done(new Error('unable to resolve all records: ' + JSON.stringify(errorMsg)));
+            });
         });
 
         it('fail return value ', function(done) {
@@ -118,7 +124,9 @@ describe("Validate recordsApi", function() {
                     assert.equal(error, "Error: " + error_message);
                     done();
                 }
-            ).catch(done);
+            ).catch(function(errorMsg) {
+                done(new Error('unable to resolve all records: ' + JSON.stringify(errorMsg)));
+            });
 
         });
     });
@@ -145,7 +153,9 @@ describe("Validate recordsApi", function() {
                     assert.equal(response, expectedID);
                     done();
                 }
-            ).catch(done);
+            ).catch(function(errorMsg) {
+                done(new Error('unable to resolve all records: ' + JSON.stringify(errorMsg)));
+            });
 
         });
 
@@ -164,7 +174,9 @@ describe("Validate recordsApi", function() {
                     assert.equal(response.record[0].display, '1234525');
                     done();
                 }
-            ).catch(done);
+            ).catch(function(errorMsg) {
+                done(new Error('unable to resolve all records: ' + JSON.stringify(errorMsg)));
+            });
         });
     });
 
@@ -193,9 +205,11 @@ describe("Validate recordsApi", function() {
                 function(response) {
                     assert.equal(response.fields[0].display, '12-3454');
                     assert.equal(response.records[0][0].display, '1234525');
+                    done();
                 }
-            );
-            done();
+            ).catch(function(errorMsg) {
+                done(new Error('unable to resolve all records: ' + JSON.stringify(errorMsg)));
+            });
         });
     });
 });
