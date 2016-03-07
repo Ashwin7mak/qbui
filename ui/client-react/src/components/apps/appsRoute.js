@@ -9,6 +9,10 @@ let FluxMixin = Fluxxor.FluxMixin(React);
 let AppsRoute = React.createClass({
     mixins: [FluxMixin],
 
+    componentDidMount() {
+        let flux = this.getFlux();
+        flux.actions.setTopTitle();
+    },
     render: function() {
 
         return (<div>

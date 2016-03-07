@@ -162,17 +162,20 @@ let GriddleTable = React.createClass({
      */
     getTableActions() {
 
-        return (this.props.reportHeader && this.props.selectionActions && (
-            <ReactCSSTransitionGroup transitionName="tableActions"
-                                     component="div"
-                                     className={this.state.toolsMenuOpen ? "tableActionsContainer toolsMenuOpen" : "tableActionsContainer"}
-                                     transitionEnterTimeout={300}
-                                     transitionLeaveTimeout={300}>
+        const hasSelection  = this.state.selectedRows.length;
 
-                {this.state.selectedRows.length ?
+        let classes = "tableActionsContainer";
+        if (this.state.toolsMenuOpen) {
+            classes += " toolsMenuOpen";
+        }
+        if (hasSelection) {
+            classes += " selectionActionsOpen";
+        }
+        return (this.props.reportHeader && this.props.selectionActions && (
+            <div className={classes}>{hasSelection ?
                     React.cloneElement(this.props.selectionActions, {key:"selectionActions", selection: this.state.selectedRows}) :
                     React.cloneElement(this.props.reportHeader, {key:"reportHeader", onMenuEnter:this.onMenuEnter, onMenuExit:this.onMenuExit})}
-            </ReactCSSTransitionGroup>));
+            </div>));
     },
 
     /**

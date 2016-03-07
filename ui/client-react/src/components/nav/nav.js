@@ -9,6 +9,7 @@ import TopNav from '../header/topNav';
 import Footer from '../footer/footer';
 import ReportManager from '../report/reportManager';
 import QBicon from '../qbIcon/qbIcon';
+import Loader  from 'react-loader';
 import './nav.scss';
 import '../../assets/css/animate.min.css';
 
@@ -130,19 +131,20 @@ var Nav = React.createClass({
                 globalActions={this.getGlobalActions()}/>
 
             <div className="main">
-                <TopNav title="QuickBase"
+                <TopNav title={this.state.nav.topTitle}
                         globalActions={this.getGlobalActions()}
                         onNavClick={this.toggleNav}
                         flux={flux} />
-                {this.props.children && <div className="mainContent" >
-                    {/* insert the component passed in by the router */}
-                    {React.cloneElement(this.props.children, {
-                        key: this.props.location ? this.props.location.pathname : "",
-                        selectedAppId: this.state.apps.selectedAppId,
-                        reportData: this.state.reportData,
-                        flux: flux}
-                    )}
-                </div>}
+                {this.props.children &&
+                    <div className="mainContent" >
+                        {/* insert the component passed in by the router */}
+                        {React.cloneElement(this.props.children, {
+                            key: this.props.location ? this.props.location.pathname : "",
+                            selectedAppId: this.state.apps.selectedAppId,
+                            reportData: this.state.reportData,
+                            flux: flux}
+                        )}
+                    </div>}
             </div>
         </div>);
     },
@@ -162,6 +164,8 @@ var Nav = React.createClass({
         if (this.state.nav.leftNavOpen) {
             classes += ' leftNavOpen';
         }
+
+
         return (<div className={classes}>
             <Trowser position={"top"}
                      visible={this.state.nav.trowserOpen}
@@ -185,7 +189,7 @@ var Nav = React.createClass({
                 onNavClick={this.toggleNav}/>
 
             <div className="main">
-                <TopNav title="QuickBase"
+                <TopNav title={this.state.nav.topTitle}
                         onNavClick={this.toggleNav}
                         flux={flux} />
 

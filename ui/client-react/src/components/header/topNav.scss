@@ -3,6 +3,7 @@
 $global-action-fg: #333;
 $top-nav-color: #193048;
 
+
 .searchPopover {
     .buttonContainer {
         display: flex;
@@ -21,12 +22,12 @@ $top-nav-color: #193048;
     }
 }
 
-.topNav .navGroup .btn-group .btn {
+.topNav  .btn {
     background: $header-bg;
     border: 0;
 }
 
-.topNav .navGroup .btn-group .btn:hover {
+body:not(.touch) .topNav .navGroup .btn-group .btn:hover {
     background: $nav-hover-bg;
     span {
         color: $nav-hover-fg;
@@ -62,7 +63,7 @@ $top-nav-color: #193048;
 
     .link {
         cursor: pointer;
-        >a {
+        > a {
             color: $topnav-icon-color;
             padding: 0 8px;
 
@@ -81,13 +82,13 @@ $top-nav-color: #193048;
         border: 0;
 
         .qbIcon + span {
-              margin-left: 6px;
-          }
+            margin-left: 6px;
+        }
     }
 
     .globalAction:hover {
         background: $nav-hover-bg;
-        >a {
+        > a {
             color: $nav-hover-fg;
         }
     }
@@ -97,16 +98,43 @@ $top-nav-color: #193048;
     }
 }
 
+.topNav .navItem {
+    display:inline-block;
+    &.topTitle {
+        display: none;
+    }
+}
+
+.topNav .topTitle {
+    display:inline;
+    .qbIcon {
+        vertical-align:middle;
+        color: $top-nav-title-icon-color;
+    }
+    .qbIcon+span {
+        margin-left: 5px;
+    }
+}
 
 @include small-breakpoint {
+    .navShell .main .topNav {
+        background-color: #fff !important;
+        .btn  {
+            background-color: #fff;
+        }
+    }
+    .topNav .navItem.topTitle {
+        display: inline;
+    }
     .topNav .globalActions {
-        display:none; /* shown on left nav */
+        display: none; /* shown on left nav */
     }
     .leftNav .globalActions {
-        display:block;
+        display: block;
     }
     /* hide text not icons */
     .topNav .globalActions .navLabel {
         display: none;
     }
 }
+

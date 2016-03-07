@@ -1,0 +1,15 @@
+$page-action-icon-color:#fff;
+
+.pageActions {
+    display:none;
+    background-color: #486c8f;
+
+    .pageActionButton {
+        display:inline-block;
+        vertical-align: middle;
+        text-align:center;
+        width: 32px;
+        font-size:20px;
+        color: $page-action-icon-color;
+    }
+}

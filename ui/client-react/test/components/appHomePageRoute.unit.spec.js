@@ -10,7 +10,8 @@ describe('AppHomePageRoute functions', () => {
     let component;
     let flux = {
         actions:{
-            selectAppId: function() {return;}
+            selectAppId: function() {return;},
+            setTopTitle: function() {return;}
         }
     };
 

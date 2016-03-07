@@ -106,7 +106,7 @@ let ReportContent = React.createClass({
             <Loader loaded={!this.props.reportData.loading}>
                 {this.props.reportData.error ?
                     <div>Error loading report!</div> :
-                    <div>
+                    <div className="reportContent">
                         <GriddleTable reportData={this.props.reportData}
                                       columnMetadata={this.state.reportColumns}
                                       uniqueIdentifier="Record ID#"
@@ -117,9 +117,9 @@ let ReportContent = React.createClass({
                                       reportHeader={this.props.reportHeader}
                                       selectionActions={<ReportActions />}
                         />
-                    </div>
-                }
+                    </div>}
             </Loader>
+
         );
     }
 

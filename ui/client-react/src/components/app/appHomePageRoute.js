@@ -38,6 +38,8 @@ let AppHomePageRoute = React.createClass({
     },
 
     componentDidMount() {
+        let flux = this.getFlux();
+        flux.actions.setTopTitle();
         this.selectAppFromParams(this.props.params);
     },
     // Triggered when properties change

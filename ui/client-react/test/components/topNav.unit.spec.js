@@ -43,29 +43,24 @@ describe('TopNav functions', () => {
     };
     let flux = new Fluxxor.Flux(stores);
     flux.addActions({
-        showTrowser: function() {
+        searchFor: function(text) {
             return;
         },
         changeLocale: function(locale) {
             return;
         },
-        searchFor: function(text) {
-            return;
-        }
     });
 
     beforeEach(() => {
         TopNav.__Rewire__('I18nMessage', I18nMessageMock);
-        TopNav.__Rewire__('CurrentDate', CurrentDateMock);
         component = TestUtils.renderIntoDocument(<TopNav flux={flux} globalActions={globalActions}/>);
-        spyOn(flux.actions, 'showTrowser');
-        spyOn(flux.actions, 'changeLocale');
         spyOn(flux.actions, 'searchFor');
+        spyOn(flux.actions, 'changeLocale');
     });
 
     afterEach(() => {
         TopNav.__ResetDependency__('I18nMessage');
-        TopNav.__ResetDependency__('CurrentDate');
+
     });
 
     it('test render of component', () => {

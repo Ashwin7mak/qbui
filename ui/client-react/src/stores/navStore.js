@@ -14,7 +14,8 @@ let NavStore = Fluxxor.createStore({
             appsListOpen: false,
             searchBarOpen: false,
             searching:false,
-            trowserOpen: false
+            trowserOpen: false,
+            topTitle: {label:"", icon:null}
         };
 
         this.setLocaleBundle();
@@ -26,7 +27,10 @@ let NavStore = Fluxxor.createStore({
             actions.TOGGLE_APPS_LIST, this.onToggleAppsList,
             actions.TOGGLE_SEARCH, this.onToggleSearch,
             actions.SEARCHING, this.onSearching,
-            actions.CHANGE_LOCALE, this.onChangeLocale
+            actions.SET_TOP_TITLE, this.onSetTopTitle,
+            actions.CHANGE_LOCALE, this.onChangeLocale,
+
+            actions.LOAD_REPORT_SUCCESS, this.onLoadReportSuccess
         );
     },
 
@@ -36,6 +40,15 @@ let NavStore = Fluxxor.createStore({
         this.emit('change');
     },
 
+    /* bind to load report success to update top title */
+    onLoadReportSuccess: function(reportData) {
+        this.state.topTitle = {name: reportData.name, icon: 'report-menu-3'};
+        this.emit('change');
+    },
+    onSetTopTitle: function(title) {
+        this.state.topTitle = title;
+        this.emit('change');
+    },
     onShowTrowser: function() {
         this.state.trowserOpen = true;
         this.emit('change');

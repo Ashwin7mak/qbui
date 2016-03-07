@@ -3,6 +3,7 @@ export const TOGGLE_LEFT_NAV = 'TOGGLE_LEFT_NAV';
 export const SHOW_TROWSER = 'SHOW_TROWSER';
 export const HIDE_TROWSER = 'HIDE_TROWSER';
 export const CHANGE_LOCALE = 'CHANGE_LOCALE';
+export const SET_TOP_TITLE = 'SET_TOP_TITLE';
 export const TOGGLE_APPS_LIST = 'TOGGLE_APPS_LIST';
 export const SHOW_REPORTS = 'SHOW_REPORTS';
 export const HIDE_REPORTS = 'HIDE_REPORTS';

@@ -22,10 +22,16 @@
 
   .facetButtons {
     color: $icon-color;
+      @include small-breakpoint {
+          color:$secondary-bar-fg;
+      }
   }
   &.popoverShown,
   .facetButtons:hover {
     color: $icon-color-hover;
+    @include small-breakpoint {
+        color: $secondary-bar-fg;
+    }
   }
   .filterButton {
     font-size: 20px;
@@ -196,9 +202,7 @@
         cursor: pointer;
       }
     }
-
   }
-
 }
 
 @include small-breakpoint {
@@ -206,6 +210,10 @@
         display:none;
     }
     .reportContainer .reportToolsAndContentContainer .reportToolbar {
+        color:$secondary-bar-fg;
+        input {
+            color: $search-input-fg;
+        }
         .popover-content {
             max-height: 454px;
         }
@@ -218,7 +226,7 @@
 
         .filterSearchBox {
             padding: .4rem;
-            width: 11em;
+            width: 5em;
         }
 
         .popover.bottom > .arrow {

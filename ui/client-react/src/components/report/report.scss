@@ -20,13 +20,28 @@
         .reportToolbar {
             display: flex;
             flex-direction: row;
+            justify-content:space-between;
             flex: 1;
+
+            >* {
+                flex: 0 0 auto;
+            }
+            >.recordsCount {
+                margin-left:5px;
+            }
+            >.pageActions {
+                line-height:40px;
+                align-self:stretch;
+            }
             align-items: center;
             color: $icon-color;
-            margin-bottom: .5em;
+
+
             .filterSearchBox {
+                flex-shrink:1;
                 padding: .8rem;
                 width: 18em;
+                margin: 5px 0;
             }
 
             .facetsMenuButton {
@@ -107,7 +122,11 @@
 }
 
 @include small-breakpoint {
+    .reportToolbar .pageActions {
+        display:block;
+    }
     .reportContainer .reportToolsAndContentContainer .loadedContent {
         min-height: 430px;
+        margin:0;
     }
 }

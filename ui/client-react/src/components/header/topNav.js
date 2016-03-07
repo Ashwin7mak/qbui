@@ -5,22 +5,11 @@ import Locale from '../../locales/locales';
 import GlobalActions from '../global/globalActions';
 import Fluxxor from 'fluxxor';
 import _ from 'lodash';
-
 import QBicon from '../qbIcon/qbIcon';
 let FluxMixin = Fluxxor.FluxMixin(React);
 import {OverlayTrigger, Popover, ButtonGroup, Button, Input} from 'react-bootstrap';
 
 import './topNav.scss';
-
-var CurrentDate = React.createClass({
-
-    render: function() {
-        return <I18nDate value={new Date()} day="numeric" month="long" year="numeric"/>;
-    }
-
-});
-
-const debounceSearchMillis = 100;
 
 var TopNav = React.createClass({
     mixins: [FluxMixin],
@@ -31,6 +20,12 @@ var TopNav = React.createClass({
         flux.actions.searchFor(text);
     },
 
+    getTopTitle() {
+        return this.props.title && (
+                <div className="navItem topTitle">{this.props.title.icon &&
+                    <QBicon icon={this.props.title.icon}/>}<span>{this.props.title.name}</span>
+                </div>);
+    },
     render: function() {
         const searchIcon = <QBicon icon="search" />;
 
@@ -42,7 +37,7 @@ var TopNav = React.createClass({
                     <div className="navGroup left">
                         <div className="navItem "><a className="iconLink toggleNavButton" href="#" onClick={this.props.onNavClick}><QBicon icon="hamburger" /> </a></div>
 
-                        {/*<div className="navItem topTitle">{this.props.title}</div>*/}
+                        {this.getTopTitle()}
                     </div>
 
                     <div className="navGroup center">

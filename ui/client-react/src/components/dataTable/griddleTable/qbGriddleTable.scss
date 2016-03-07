@@ -104,13 +104,20 @@ $footer-next-button: $color2;
 
 .tableActionsContainer {
     position: relative;
-    overflow:hidden;
-}
-.tableActionsContainer.toolsMenuOpen {
-    overflow:visible; /* hidden for css transitions but need overflow:visible to prevent clipping of facets menu etc. */
+    //overflow:hidden;
+    @include small-breakpoint {
+        &:not(.selectionActionsOpen) {
+            background-color: $secondary-bar-bg;
+        }
+    }
 }
 
-/* table actions transitions */
+/*
+.tableActionsContainer.toolsMenuOpen {
+    overflow:visible; // hidden for css transitions but need overflow:visible to prevent clipping of facets menu etc.
+}
+
+table actions transitions
 .tableActions-enter {
     top: -50px;
 }
@@ -129,6 +136,7 @@ $footer-next-button: $color2;
     top: 50px;
     transition: top 300ms linear;
 }
+*/
 
 .swipeable {
     position: relative;
@@ -205,7 +213,6 @@ $footer-next-button: $color2;
         background-color: $row-background-color-hover;
         white-space: nowrap;
         border-top: 1px dotted #dcdcdc;
-        //border-right: 1px dotted #969696;
     }
 }
 

@@ -101,12 +101,7 @@ let TablesList = React.createClass({
             </ul>
         </li>);
     },
-    getHoverComponent(table) {
-        return (<div className="hoverComponent">
-            <Link to={table.link}>{table.name}</Link>
-            <a href="#" className="right" onClick={()=>this.props.showReports(table.id)}><QBicon icon={"report-menu-3"}/></a>
-        </div>);
-    },
+
     render() {
         return (
             <ul className="tablesList">
