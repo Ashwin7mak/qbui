@@ -24,6 +24,7 @@ describe('Qb Route Mapper Unit Test', function() {
         requestStub = sinon.stub();
         recordsApi.setRequestObject(requestStub);
         routeMapper.setRecordsApi(recordsApi);
+        routeMapper.setRequest(requestStub);
     });
 
     function pathModificationProvider() {
