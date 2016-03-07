@@ -162,8 +162,6 @@
                         expect(links.length).toBe(4);
                         for (var i = 0; i < links.length; i++) {
                             expect(links[i].isDisplayed()).toBe(true);
-                            // Verify elements present on leftNav with right dimensions
-                            reportServicePage.isElementInLeftNav(links[i], testcase.offsetWidth);
                         }
                     });
                 });

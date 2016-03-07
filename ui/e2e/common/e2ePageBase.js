@@ -85,6 +85,12 @@
         };
 
         //TODO: Left, Right, Bottom functions
+
+        // Verify the element is present in the DOM and displayed (either by the display attribute or hidden prop)
+        this.isElementDisplayed = function(element) {
+            expect(element.isPresent()).toBeTruthy();
+            expect(element.isDisplayed()).toBeTruthy();
+        };
     };
     module.exports = new BasePage();
 }());

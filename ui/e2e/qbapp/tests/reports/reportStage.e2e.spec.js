@@ -68,25 +68,27 @@
         it('Should expand/collapse the reports stage after clicking on stage button in all breakpoints', function() {
             // Wait until report loaded
             reportServicePage.waitForElement(reportServicePage.loadedContentEl).then(function() {
-                for (var i = 0; i < clientWidths.length; i++) {
-                    console.log("The reportStage executing for " + clientWidths[i] + " breakpoint");
-                    e2eBase.resizeBrowser(clientWidths[i], e2eConsts.DEFAULT_HEIGHT).then(function() {
-                        // Verify that the report Stage is expanded by default
-                        expect(reportServicePage.reportStageArea.isDisplayed).toBeTruthy();
-                        // Click on report Stage button to collapse the stage
-                        reportServicePage.reportStageBtn.click().then(function() {
-                            // Sleep needed for animation of stage
-                            e2eBase.sleep(browser.params.smallSleep);
-                            expect(reportServicePage.reportStageArea.getAttribute('clientHeight')).toMatch("0");
-                            expect(reportServicePage.reportStageArea.getAttribute('clientWidth')).toMatch("0");
+                reportServicePage.waitForElement(reportServicePage.reportStageContentEl).then(function() {
+                    for (var i = 0; i < clientWidths.length; i++) {
+                        console.log("The reportStage executing for " + clientWidths[i] + " breakpoint");
+                        e2eBase.resizeBrowser(clientWidths[i], e2eConsts.DEFAULT_HEIGHT).then(function() {
+                            // Verify that the report Stage is expanded by default
+                            expect(reportServicePage.reportStageArea.isDisplayed()).toBeTruthy();
+                            // Click on report Stage button to collapse the stage
                             reportServicePage.reportStageBtn.click().then(function() {
                                 // Sleep needed for animation of stage
                                 e2eBase.sleep(browser.params.smallSleep);
-                                expect(reportServicePage.reportStageArea.isDisplayed).toBeTruthy();
+                                expect(reportServicePage.reportStageArea.getAttribute('clientHeight')).toMatch("0");
+                                expect(reportServicePage.reportStageArea.getAttribute('clientWidth')).toMatch("0");
+                                reportServicePage.reportStageBtn.click().then(function() {
+                                    // Sleep needed for animation of stage
+                                    e2eBase.sleep(browser.params.smallSleep);
+                                    expect(reportServicePage.reportStageArea.isDisplayed()).toBeTruthy();
+                                });
                             });
                         });
-                    });
-                }
+                    }
+                });
             });
         });
 
