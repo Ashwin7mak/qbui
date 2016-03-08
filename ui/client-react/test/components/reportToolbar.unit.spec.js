@@ -135,6 +135,7 @@ describe('ReportToolbar functions', () => {
         />);
         expect(TestUtils.isCompositeComponent(component)).toBeTruthy();
         let filterSearchBox = TestUtils.scryRenderedDOMComponentsWithClass(component, "filterSearchBox");
+
         expect(filterSearchBox.length).toEqual(1);
         let facetsMenuContainer = TestUtils.scryRenderedDOMComponentsWithClass(component, "facetsMenuContainer");
         expect(facetsMenuContainer.length).toEqual(1);
