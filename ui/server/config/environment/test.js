@@ -11,7 +11,7 @@
     var clientConsts = require('./clientConsts');
 
     var client = clientConsts.REACT;
-    var testHost = process.env.ENDPOINT;
+    var testHost = process.env.ENDPOINT.replace(/['"]+/g, '').slice(0,-4);
 
     module.exports = {
 
@@ -43,7 +43,7 @@
 
         //REST endpoint (protocol,server,port)
         //javaHost: 'https://quickbase-dev.com:8443',
-        javaHost: testHost.replace(/['"]+/g, '').slice(0,-4),
+        javaHost: 'http://quickbase-dev.com:' + testHost.slice(-4),
 
         //Express Server
         //DOMAIN: 'https://quickbase-dev.com:9443'
