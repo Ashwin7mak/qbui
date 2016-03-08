@@ -3,6 +3,7 @@ import * as actions from '../../src/constants/actions';
 import Store from '../../src/stores/reportDataStore';
 import Fluxxor from 'fluxxor';
 import _ from 'lodash';
+import FacetSelections  from '../../src/components/facet/facetSelections';
 
 describe('Test ReportData Store', () => {
     'use strict';
@@ -106,6 +107,7 @@ describe('Test ReportData Store', () => {
         expect(flux.store(STORE_NAME).emit.calls.count()).toBe(1);
     });
 
+
     it('test getState function', () => {
 
         let state = flux.store(STORE_NAME).getState();
@@ -116,7 +118,8 @@ describe('Test ReportData Store', () => {
         expect(state.data).toBeDefined();
         expect(state.appId).not.toBeDefined();
         expect(state.tblId).not.toBeDefined();
-        expect(state.rptId).not.toBeDefined();
+        expect(state.searchStringForFiltering).toBe('');
+        expect(state.selections).toEqual(new FacetSelections());
     });
 
     it('test getState function after report is loaded', () => {
@@ -143,6 +146,49 @@ describe('Test ReportData Store', () => {
         };
         flux.dispatcher.dispatch(searchForAction);
         expect(flux.store(STORE_NAME).emit).toHaveBeenCalledWith('change');
+    });
+
+
+
+    it('test getReportData function', () => {
+
+        let data = {
+            fields : [{id:1, name:"field1"}, {id:2, name:"field2"}],
+            records : [[{id: 1, display: "quickbase"}, {id:2, name:"inc"}],
+                [{id: 1, display: "intuit"}, {id:2, name:"corp"}]]
+        };
+        let state = flux.store(STORE_NAME).getReportData(data);
+
+        //  expect the following to be returned when 'getting ReportData'
+        expect(state).toBeDefined();
+        expect(state.length).toBeDefined();
+        expect(state.length).toBe(2);
+    });
+
+    it('test load records action', () => {
+
+        let loadRecordsAction = {
+            type: actions.LOAD_RECORDS,
+            payload: {
+                appId: appId,
+                tblId: tblId,
+                rptId: rptId,
+                filter : {selections : {}, facet: "", search: "abc"}
+            }
+        };
+
+        flux.dispatcher.dispatch(loadRecordsAction);
+        expect(flux.store(STORE_NAME).loading).toBeTruthy();
+
+        expect(flux.store(STORE_NAME).appId).toBe(appId);
+        expect(flux.store(STORE_NAME).tblId).toBe(tblId);
+        expect(flux.store(STORE_NAME).rptId).toBe(rptId);
+        expect(flux.store(STORE_NAME).selections).toEqual({});
+        expect(flux.store(STORE_NAME).facetExpression).toEqual('');
+        expect(flux.store(STORE_NAME).searchStringForFiltering).toEqual('abc');
+
+        expect(flux.store(STORE_NAME).emit).toHaveBeenCalledWith('change');
+        expect(flux.store(STORE_NAME).emit.calls.count()).toBe(1);
     });
 
     it('test load records failed action', () => {

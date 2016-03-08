@@ -14,6 +14,11 @@ let FluxMixin = Fluxxor.FluxMixin(React);
 var ReportToolsAndContent = React.createClass({
     mixins: [FluxMixin],
 
+    getDefaultProps : function() {
+        return {
+            selections:null,
+        };
+    },
     render() {
         var {appId, tblId, rptId, reportData:{selections, searchStringForFiltering,   ...otherReportData}} = this.props;
         let toolbar = <ReportToolbar appId={appId}

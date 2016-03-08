@@ -56,7 +56,7 @@ let reportDataActions = {
                 ).catch(
                     function(ex) {
                         logger.error('Report service call exception:', ex);
-                        this.dispatch(actions.LOAD_REPORT_FAILED, {error: ex});
+                        this.dispatch(actions.LOAD_REPORT_FAILED, {exception: ex});
                         reject();
                     }.bind(this)
                 );
@@ -137,13 +137,13 @@ let reportDataActions = {
                     }.bind(this),
                     function(error) {
                         logger.error('Filter Report service call error:', error);
-                        this.dispatch(actions.LOAD_REPORT_FAILED);
+                        this.dispatch(actions.LOAD_RECORDS_FAILED, {error: error});
                         reject();
                     }.bind(this)
                 ).catch(
                     function(ex) {
                         logger.error('Filter Report service calls exception:', ex);
-                        this.dispatch(actions.LOAD_REPORT_FAILED);
+                        this.dispatch(actions.LOAD_RECORDS_FAILED, {exception: ex});
                         reject();
                     }.bind(this)
                 );

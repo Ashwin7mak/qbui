@@ -55,6 +55,11 @@ var FacetsMenu = React.createClass({
 
     getStateFromFlux() {
         let flux = this.getFlux();
+        return flux.store('FacetMenuStore').getState();
+    },
+
+    componentDidMount() {
+        let flux = this.getFlux();
         if (!this.props.allInitiallyCollapsed) {
             let expanded = [];
             // if we don't start with all collapsed then
@@ -66,8 +71,6 @@ var FacetsMenu = React.createClass({
                 flux.actions.setFacetsExpanded({expanded});
             }
         }
-        let theState =  flux.store('FacetMenuStore').getState();
-        return theState;
     },
 
     /**

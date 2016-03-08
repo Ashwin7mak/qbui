@@ -56,7 +56,8 @@ var ReportToolbar = React.createClass({
 
     getInitialState: function() {
         return {
-            searchInput: '',
+            //seed the initial search value
+            searchInput: this.props.searchStringForFiltering ? this.props.searchStringForFiltering : '',
         };
     },
 
@@ -247,7 +248,7 @@ var ReportToolbar = React.createClass({
             hasRecords = recordCount ? true : false;
         }
 
-        let hasSelectedFacets = this.props.selections.hasAnySelections();
+        let hasSelectedFacets = this.props.selections && this.props.selections.hasAnySelections();
 
         let loadedReportToolbar = (
             <div className="reportToolbar">
@@ -273,7 +274,6 @@ var ReportToolbar = React.createClass({
                 <FilterSearchBox onChange={this.handleSearchChange}
                                  nameForRecords="Records"
                                  ref="searchInputbox"
-                                 defaultValue=""
                                  value={this.state.searchInput}
                     {...this.props} />
                 }

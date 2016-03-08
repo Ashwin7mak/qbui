@@ -32,6 +32,15 @@ describe('Report Data Actions success -- ', () => {
         tblId: tblId,
         rptId: rptId
     };
+    let filterReportInputs = {
+        appId: appId,
+        tblId: tblId,
+        rptId: rptId,
+        filter: {
+            facet: 'abc',
+            search: ''
+        }
+    };
 
     class mockReportService {
         constructor() { }
@@ -110,6 +119,16 @@ describe('Report Data Actions Filter Report functions -- success', () => {
         rptId: rptId
     };
 
+    let filterReportInputs = {
+        appId: appId,
+        tblId: tblId,
+        rptId: rptId,
+        filter : {
+            facet: 'abc',
+            search: ''
+        }
+    };
+
     class mockReportService {
         constructor() { }
         getReport() {
@@ -151,7 +170,7 @@ describe('Report Data Actions Filter Report functions -- success', () => {
                 expect(mockReportService.prototype.parseFacetExpression).toHaveBeenCalled();
                 expect(mockRecordService.prototype.getRecords).toHaveBeenCalled();
                 expect(flux.dispatchBinder.dispatch.calls.count()).toEqual(2);
-                expect(flux.dispatchBinder.dispatch.calls.argsFor(0)).toEqual([actions.LOAD_RECORDS, loadReportInputs]);
+                expect(flux.dispatchBinder.dispatch.calls.argsFor(0)).toEqual([actions.LOAD_RECORDS, filterReportInputs]);
                 expect(flux.dispatchBinder.dispatch.calls.argsFor(1)).toEqual([actions.LOAD_RECORDS_SUCCESS, responseRecordData.data]);
                 done();
             },
