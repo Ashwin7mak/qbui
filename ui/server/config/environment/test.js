@@ -14,7 +14,7 @@
 
     //we need to determine dynamically what port was opened with route53 shell script in core during jenkins build
     //so we add 8080 + exectutor number (which is what the shell script does to ensure uniqueness)
-    var javaHostPort = 8080 + process.env.EXECUTOR_NUMBER;
+    var javaHostPort = 8080 + Number(process.env.EXECUTOR_NUMBER);
 
     module.exports = {
 
