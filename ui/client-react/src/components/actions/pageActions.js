@@ -12,21 +12,29 @@ import './pageActions.scss';
  */
 let PageActions = React.createClass({
 
+    // actions don't have any functionality yet...
     propTypes: {
         actions: React.PropTypes.arrayOf(React.PropTypes.shape({
             icon: React.PropTypes.string,
             name: React.PropTypes.string
         })).isRequired,
-        menuAfter: React.PropTypes.number
+        menuAfter: React.PropTypes.number // show action in dropdown after this
     },
     getDefaultProps() {
         return {
             menuAfter: 0
         };
     },
+    /**
+     * get an action button
+     * @param action
+     */
     getActionButton(action) {
         return (<a key={action.name} className="pageActionButton"><QBicon icon={action.icon}/></a>);
     },
+    /**
+     * get dropdown containing remaining actions (after menuAfter index)
+     */
     getActionsMenu() {
         return (
             <Dropdown id="nav-right-dropdown" pullRight onToggle={this.onToggleMenu} onClose={this.onCloseMenu}>
