@@ -11,7 +11,10 @@
     var clientConsts = require('./clientConsts');
 
     var client = clientConsts.REACT;
-    var testHost = process.env.ENDPOINT.replace(/['"]+/g, '').slice(0,-4);
+
+    //we need to determine dynamically what port was opened with route53 shell script in core during jenkins build
+    //so we add 8080 + exectutor number (which is what the shell script does to ensure uniqueness)
+    var javaHostPort = 8080 + process.env.EXECUTOR_NUMBER;
 
     module.exports = {
 
@@ -43,7 +46,7 @@
 
         //REST endpoint (protocol,server,port)
         //javaHost: 'https://quickbase-dev.com:8443',
-        javaHost: 'http://quickbase-dev.com:' + testHost.slice(-4),
+        javaHost: 'http://quickbase-dev.com:' + javaHostPort,
 
         //Express Server
         //DOMAIN: 'https://quickbase-dev.com:9443'
