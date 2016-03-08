@@ -7,12 +7,16 @@ import QBicon from '../qbIcon/qbIcon';
 import './pageActions.scss';
 
 /**
- * a set of record-level action icons
+ * a set of page actions, of menuAfter are displayed
+ * followed by a dropdown containing the remainder
  */
 let PageActions = React.createClass({
 
     propTypes: {
-        actions: React.PropTypes.array,
+        actions: React.PropTypes.arrayOf(React.PropTypes.shape({
+            icon: React.PropTypes.string,
+            name: React.PropTypes.string
+        })).isRequired,
         menuAfter: React.PropTypes.number
     },
     getDefaultProps() {
@@ -21,17 +25,17 @@ let PageActions = React.createClass({
         };
     },
     getActionButton(action) {
-        return (<a key={action.name} className="pageActionButton"><QBicon icon={action.icon} /></a>);
+        return (<a key={action.name} className="pageActionButton"><QBicon icon={action.icon}/></a>);
     },
     getActionsMenu() {
         return (
-            <Dropdown id="nav-right-dropdown"  pullRight onToggle={this.onToggleMenu} onClose={this.onCloseMenu}>
+            <Dropdown id="nav-right-dropdown" pullRight onToggle={this.onToggleMenu} onClose={this.onCloseMenu}>
                 <a bsRole="toggle" className={"dropdownToggle pageActionButton"}><QBicon icon="fries"/> </a>
 
                 <Dropdown.Menu onEntering={this.props.onMenuEnter} onExited={this.props.onMenuExit}>
                     {this.props.actions.map((action, index) => {
                         if (index >= this.props.menuAfter) {
-                            return <MenuItem key={action.name} href="#" >{action.name}</MenuItem>;
+                            return <MenuItem key={action.name} href="#">{action.name}</MenuItem>;
                         }
                     })}
                 </Dropdown.Menu>
@@ -45,7 +49,6 @@ let PageActions = React.createClass({
                         return this.getActionButton(action);
                     }
                 })}
-
                 {(this.props.actions.length > this.props.menuAfter) && this.getActionsMenu()}
             </div>
         );

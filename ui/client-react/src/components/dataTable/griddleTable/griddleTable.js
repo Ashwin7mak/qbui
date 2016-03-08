@@ -164,7 +164,7 @@ let GriddleTable = React.createClass({
 
         const hasSelection  = this.state.selectedRows.length;
 
-        let classes = "tableActionsContainer";
+        let classes = "tableActionsContainer secondaryBar";
         if (this.state.toolsMenuOpen) {
             classes += " toolsMenuOpen";
         }

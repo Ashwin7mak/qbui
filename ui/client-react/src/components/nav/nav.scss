@@ -174,9 +174,19 @@ body:not(.touch) .navShell .main .topNav .iconLink:hover {
     color: #fff;
     background: $nav-hover-bg
 }
+
+
+.pageActions {
+    display:none;
+}
 @include small-breakpoint {
     .layout-stage {
         display:none;
+    }
+
+    .pageActions {
+        line-height:40px;
+        display:block;
     }
 }
 

@@ -245,12 +245,12 @@ var ReportToolbar = React.createClass({
 
     getPageActions() {
         const actions = [
-            {name: 'edit', icon:'edit'},
-            {name: 'mail', icon:'mail'},
-            {name: 'delete', icon:'delete'},
-            {name: 'print', icon:'print'}
+            {name: 'i.e. edit', icon:'edit'},
+            {name: 'i.e. mail', icon:'mail'},
+            {name: 'i.e. delete', icon:'delete'},
+            {name: 'i.e. print', icon:'print'}
         ];
-        return (<PageActions actions={actions} menuAfter={3} {...this.props}/>);
+        return (<PageActions actions={actions} menuAfter={0} {...this.props}/>);
     },
 
     render() {

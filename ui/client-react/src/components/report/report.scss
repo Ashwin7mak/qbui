@@ -17,6 +17,7 @@
 
     .reportToolsAndContentContainer {
 
+        //display:flex;
         .reportToolbar {
             display: flex;
             flex-direction: row;
@@ -36,12 +37,14 @@
             align-items: center;
             color: $icon-color;
 
-
             .filterSearchBox {
-                flex-shrink:1;
-                padding: .8rem;
-                width: 18em;
-                margin: 5px 0;
+                flex: 1 1 auto;
+                input {
+                    width:100%;
+                    margin: 5px 0;
+                    min-width: 60px;
+                    max-width: 150px;
+                }
             }
 
             .facetsMenuButton {
@@ -122,9 +125,6 @@
 }
 
 @include small-breakpoint {
-    .reportToolbar .pageActions {
-        display:block;
-    }
     .reportContainer .reportToolsAndContentContainer .loadedContent {
         min-height: 430px;
         margin:0;
