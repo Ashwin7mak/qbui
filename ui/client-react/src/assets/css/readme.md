@@ -1,49 +1,3 @@
-# High Level Change Recommendations
-Top points of discussion:
-
-1. Reorganize Sass files into their own folder structure and deliver as a single CSS file by using a single manifest file to control the build. See below for a proposed folder structure. Reasons why:
-  - Better control over build order of all Sass files. For instance, Normalize and Bootstrap styles are the last styles applied to the page.
-  - A single CSS file is cacheable whereas the current system is not
-  - We will need a separate folder structure for Sass variables, mixins and components that are not also React components
-  - We will need to generate a single CSS file in order to deliver themes
-  - Distinguishes between what is a reusable component, what is part of our base styles, what is specific to a layout and what is specific to QShell
-  - Eventually we may want to be able to publish a HTML/CSS toolkit for QSPs and other 3rd-parties. This sets us up to do that.
-
-2. Move Boostrap from node_modules into a vendor folder, pass in variables via the `_bootstrapVariables.scss` file and compile it separately from our Sass files.
-  - Clear separation from our code base and bootstrap. This does mean that we will have to hoist bootstrap variables into our variables file and then assign them to the bootstrap variable but this also prevents accidentally creating duplicate variables.
-  - This will make it easier to to separate from Bootstrap if we decide to go that way down the line.
-  - We already have the need to import mixins from Bootstrap, making it available from a vendor folder will make it easier to do that.
-  - We already need a vendor folder anyways.
-
-3. Create a single `_qbVariables.scss` file.
-  - Helps the design/component team see what is shared across the system
-  - Makes it easier to create themes (go to one place to make tweaks)
-  - You can still have the variables set at the head of the component sass file. Just use the `!default` flag so that the proper file can be set from the master `_qbVariables.scss` file. See Foundation Sites for an example of how this works. ([Example component](https://github.com/zurb/foundation-sites/blob/develop/scss/components/_button.scss) and [example settings](https://github.com/zurb/foundation-sites/blob/develop/scss/settings/_settings.scss) files).
-
-4. Use media queries to style components
-  - Using JavaScript to set breakpoints alters the specificity of selectors instead of relying on the cascading part of CSS.
-  - JavaScript switching is slower and requires more maintenance.
-  - We can use the [jsontosass-loader NPM module](https://www.npmjs.com/package/jsontosass-loader) to share media query settings between React and Sass.
-  - There are other media queries we can use besides `device-width`.
-
-5. Use the BEM naming convention
-  - This helps name space our CSS selectors to the components we actually intend to style.
-  - This helps mentally reason about how our components are put together.
-  - This creates a single style for declaring components, their elements and state in CSS.
-
-6. Start using some particular third-party libraries
-  - Autoprefixer
-  - [Easing](http://easings.net/) [functions](https://github.com/jhardy/compass-ceaser-easing)
-
-## Open Questions/Issues
-1. Should we look into [code-splitting with webpack](http://webpack.github.io/docs/code-splitting.html)?
-2. [Bootstrap Sass Loader](https://github.com/shakacode/bootstrap-sass-loader) is deprecated :(
-3. Can we use [twbs/mq4-hover-shim](https://github.com/twbs/mq4-hover-shim) for detecting hover behavior?
-4. In thinking about how all the CSS should be organized it begs the question of how to organize the React components.
-5. Should we switch to a mobile-first approach to styles? This would mean moving to `min-width` queries to add styles as the browser grows in width. [Additional reading](http://zellwk.com/blog/how-to-write-mobile-first-css/).
-
----
-
 # Introduction
 The purpose of this document is to layout best practices when writing CSS for QuickBase. As part of the re-architecture project QuickBase is now built atop of Bootstrap for React using a Sass preprocessor.
 
@@ -95,7 +49,7 @@ sass/
 │   └─ _animate.scss     # Animate.css
 │   …                    # Etc.
 │
-└─ main.scss             # Main Sass file (does not import Boostrap)
+└─ main.scss             # Main Sass file (does not import Bootstrap)
 ````
 
 ## Folder Details
@@ -123,6 +77,7 @@ This is for third-party libraries such as Bootstrap and Animate.css.
 Don't inline styles in React. Inlined styles are difficult to override (thereby breaking the specificity graph), make it hard to share styles and can't make use of pseudo-selectors/media queries.
 
 # Formating
+For the most part our formating guide will be enforced by the Sass linting tool but here's a full writeup on how it all works.
 
 ## Spacing
 * Where possible, limit CSS files width to 80 characters. There will be unavoidable exceptions to this rule, such as URLs, or gradient syntax. Don’t worry.
@@ -181,7 +136,6 @@ h1, h2 {
 
 * Spaces should separate values and operators in Sass expressions.
 * Comma-separated property values should include a space after each comma (e.g., `box-shadow`).
-* Don't include spaces after commas within `rgb()`, `rgba()`, `hsl()`, `hsla()`, or `rect()` values. This helps differentiate multiple color values (comma, no space) from multiple property values (comma with space).
 
 ````sass
 // Bad
@@ -197,7 +151,7 @@ h1, h2 {
 
 .rule {
     // Note the usage of commas
-    background: linear-gradient(to right, rgba(255,0,0,0), rgba(255,0,0,1));
+    background: linear-gradient(to right, rgba(255, 0, 0, 0), rgba(255, 0, 0, 1));
 }
 ````
 
@@ -349,39 +303,51 @@ color: #FFF;
 # Naming & Specificity
 
 ## Block Element Modifier (BEM)
+
+We use a modified version of BEM that follows the Bootstrap convention. It still uses blocks, sections within blocks and modifiers, but doesn’t use as long a syntax.
+
 - use the Block Element Modifier (BEM) naming convention for naming components.
 - The name of block elements should match with their React component name.
 - Use your best judgment when deciding what needs to follow the BEM convention. If you're creating utility classes like `.left { ... }` they obviously don't have to follow the BEM convention.
+- If you want an good reference, look at Bootstraps `_navbar.scss` implementation.
 
 ```sass
 .block {} // Name of the React component
-.block__element {} // Element contained in the component
-.block--modifier {} // State change or variation
+.block-element {} // Element contained in the component
+.block-modifier {} // State change or variation
 
 /** Examples **/
 // block
 .trowser {
     position: absolute;
+}
 
-    // element
-    .trowser__content {
-        padding: 3em;
-    }
+// element
+.trowser-content {
+    padding: 3em;
 }
 
 // modifier
-.trowser--is-open {
+
+.trowser-is-open {
     display: block;
 }
 
-// modifier
-.trowser--progress {
-    .trowser__progress-stage {
+// Protip
+.trowser-progress {
+    key: value
+    &-progress-stage {
         display: block;
     }
 }
 
+// Outputs
+.trowser-progress { key: value }
+.trowser-progress-stage { display: block }
+
 ```
+
+> PROTIP: You can use the `&` operator in Sass to [create new classes](http://alwaystwisted.com/articles/2014-02-27-even-easier-bem-ing-with-sass-33) when nested within a selector.
 
 Additional reading:
 - [article explaining BEM](http://csswizardry.com/2013/01/mindbemding-getting-your-head-round-bem-syntax/)
@@ -627,9 +593,8 @@ You can use mixins in place of selectors. While mixins will copy more code, the 
 - Use the bootstrap configuration file before trying to style a bootstrap component. You can find it in `client-react/src/assets/css/_bootstrapVariables.scss`.
 - Because of how the current build system is setup, you must remove the `!default` flag in order for the variable to take effect.
 - Don't use Bootstrap variables in QuickBase components. Instead, add a new variable to `_qbVariables.scss` and use that variable in your component or the Bootstrap config file.
-
-- Boostrap has a ton of great mixins, please read up on them and consider using them where necessary.
-- Generally, we should exclude bootstrap components that we're not using until we are.
+- Bootstrap has a ton of great mixins, please read up on them and consider using them where necessary.
+- Generally speaking, we exclude bootstrap components that we're not using until we need them.
 
 # Responsive Design & Breakpoints
 - We use variables for global breakpoints as a single source of truth throughout the CSS framework. These should be shared with both JavaScript and Bootstrap. They will eventually loaded via a JSON config file that is shared between Sass and React (TODO!).
@@ -677,3 +642,11 @@ See [developer.mozilla.org](https://developer.mozilla.org/en-US/docs/Web/CSS/Med
 - Don't [remove outlines for accessibility reasons](http://a11yproject.com/posts/never-remove-css-outlines/)
 
 > TODO: Fill out this section
+
+# Animations
+> TODO: Fill out this section.
+
+We have Animation.css but there are other techniques we might want to look into using.
+For example, [look at Repaintless.css](http://blog.lunarlogic.io/2016/boost-your-css-animation-performance-with-repaintless-css/)
+
+Additionally, we should have shared variables for easings.
