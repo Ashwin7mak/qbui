@@ -128,6 +128,13 @@
              */
             setRecordsApi: function(recordsApiOverride) {
                 recordsApi = recordsApiOverride;
+            },
+
+            /**
+             * Override the default functionality of the request
+             */
+            setRequest: function(requestOverride) {
+                request = requestOverride;
             }
         };
     };

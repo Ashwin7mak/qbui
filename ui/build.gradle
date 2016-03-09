@@ -64,6 +64,80 @@ dependencies {
             "jaxen:jaxen:1.1.6"
 }
 
+def cargoHome = "/tmp/cargo";
+def extraJvmArgs = ""
+def testUser = getTestUser();
+def testUserPassword = generateRandomString(16);
+def sqlConnectInfo = new SqlConnectInfo("${rootDir}/../quickbase")
+def environment = System.getProperty("env");
+def awsEnv = (environment == "aws");
+
+// TODO: after moving off of cloud9 and fully into AWS, remove the default values below - QBSE-19121
+def salt="salt123";
+def anotherSalt="salt456";
+def hashkey="*ad023,.SdfW";
+
+def clusterName="TestCluster";
+def clusterAddress="224.12.1.0";
+def clusterPort=8090;
+
+def cargoHttpPort=8080;
+def cargoAjpPort = 9090;
+def cargoRmiPort = 8200;
+
+def testURL = "http://localhost:8080/api";
+if(System.getProperty("endpoint")) {
+    testURL = System.getProperty("endpoint");
+}
+
+// TODO: Pull the code below out into a separate groovy class - QBSE-19142
+// If running in AWS, there is no manually created properties file, so the settings must be retrieved using secret-cli
+if (awsEnv) {
+    // If there is a specific test user, either supplied or needed because using RDS, create the testUser in Oracle.
+    if (testUser) {
+        logger.lifecycle("Running tests with user " + testUser)
+        sqlConnectInfo.createTestUserInSQL(testUser, testUserPassword);
+    }
+
+    // Get the authorization secrets using the secret CLI
+    salt = Utils.executeCmd("${rootDir}/tools/ci/getSecret.sh ticket NewStackTicketHashSalt");
+    anotherSalt = Utils.executeCmd("${rootDir}/tools/ci/getSecret.sh ticket NewStackTicketAnotherSalt");
+    hashkey = Utils.executeCmd("${rootDir}/tools/ci/getSecret.sh ticket NewStackTicketHashKey");
+
+    extraJvmArgs += " -Dauth.ticket.encryption.salt=\"${salt}\"";
+    extraJvmArgs += " -Dauth.ticket.encryption.anothersalt=\"${anotherSalt}\"";
+    extraJvmArgs += " -Dauth.ticket.encryption.hashkey=\"${hashkey}\"";
+
+    extraJvmArgs += " -Ducp.sql.url=" + sqlConnectInfo.getConnectUrl();
+
+    // Set the DB credentials
+    if (testUser) {
+        extraJvmArgs += " -Ducp.sql.user=" + testUser;
+        extraJvmArgs += " -Ducp.sql.password=" + testUserPassword;
+
+        clusterName = "TestCluster-${testUser}"
+    } else {
+        extraJvmArgs += " -Ducp.sql.user=" + sqlConnectInfo.user;
+        extraJvmArgs += " -Ducp.sql.password=" + sqlConnectInfo.password;
+    }
+
+    // Allow for multiple jobs to be run by dynamically setting cargo port numbers based on the jenkins executor number
+    def executorNumber = System.getenv("EXECUTOR_NUMBER");
+    if (executorNumber) {
+        def iExecutor = Integer.parseInt(executorNumber)
+        clusterAddress = "224.12.1." + executorNumber;
+        clusterPort = 12100 + iExecutor;
+
+        cargoHttpPort = 8080 + iExecutor;
+        cargoAjpPort = 9090 + iExecutor;
+        cargoRmiPort = 8200 + iExecutor;
+
+        cargoHome = "/tmp/cargo_" + executorNumber;
+    }
+
+    extraJvmArgs += " -Denv=aws";
+}
+
 //  CI Builds need the following properties to properly package and archive the build artifacts
 println("CI Build: " + isCIBuild() )
 if (isCIBuild()) {
@@ -74,8 +148,6 @@ if (isCIBuild()) {
 rootProject.ext.buildTime = "." + getBuildTime();
 
 println("cwd " + cwd )
-
-def cargoHome = "/tmp/cargo";
 
 println "Checking cargo home directory ${cargoHome}"
 if (!file(cargoHome).exists()) {
@@ -104,13 +176,18 @@ cargo {
         configHomeDir = file(cargoHome)
 
         containerProperties {
-            property 'cargo.tomcat.ajp.port', 9090
+            property 'cargo.servlet.port', cargoHttpPort
+            property 'cargo.tomcat.ajp.port', cargoAjpPort
+            property 'cargo.rmi.port', cargoRmiPort
         }
 
         jvmArgs ="-Dspring.profiles.active=default" +
                 " -Dtangosol.coherence.override=${getCommonCoherenceResources(cwd)}/tangosol-coherence-override-test.xml" +
+                " -Dquickbase.coherence.cluster=${clusterName}" +
+                " -Dtangosol.coherence.clusteraddress=${clusterAddress}" +
+                " -Dtangosol.coherence.clusterport=${clusterPort}" +
                 " -Dtangosol.pof.enabled=true" +
-                " -Dtangosol.pof.config=${getCommonCoherenceResources(cwd)}/quickbase-pof-config.xml"
+                " -Dtangosol.pof.config=${getCommonCoherenceResources(cwd)}/quickbase-pof-config.xml" + extraJvmArgs
 
         installer {
             installUrl = "file://" + cwd + "/../tools/ci/apache-tomcat-8.0.20.zip"
@@ -295,7 +372,7 @@ task stopTomcat {
 
 task invokeCheckForApiUp(type:Exec) {
     executable cwd + "/../tools/ci/checkForApiUp.sh"
-    args '60'
+    args '60', testURL
 }
 
 task checkForApiUp() {
