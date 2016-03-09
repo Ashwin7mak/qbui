@@ -20,15 +20,13 @@ var ReportToolsAndContent = React.createClass({
         };
     },
     render() {
-        var {appId, tblId, rptId, reportData:{selections, searchStringForFiltering,   ...otherReportData}} = this.props;
+        var {appId, tblId, rptId, reportData:{selections, searchStringForFiltering, ...otherReportData}} = this.props;
         let toolbar = <ReportToolbar appId={appId}
                                     tblId={tblId}
                                     rptId={rptId}
                                     reportData={otherReportData}
                                     selections={selections}
                                     searchStringForFiltering={searchStringForFiltering}/>;
-
-        //let toolbar = <ReportToolbar {...this.props}  />;
 
         return (<div className="reportToolsAndContentContainer">
                     <ReportContent  reportData={this.props.reportData}

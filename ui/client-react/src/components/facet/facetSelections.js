@@ -13,6 +13,7 @@
  * // using array as fieldids used for keys are not always sequential as a array would serve
 **/
 import Logger from '../../utils/logger';
+import * as schemaConsts from '../../constants/schema.js';
 import _ from 'lodash';
 let logger = new Logger();
 
@@ -190,7 +191,7 @@ class FacetSelections {
             this.removeSelection(facetField.id, value);
         }
         // boolean only has either true or false set not both
-        if (facetField.type === 'CHECKBOX') {
+        if (facetField.type === schemaConsts.CHECKBOX) {
             // if we just did a select and the selection for this field is both true & false
             // disable the other one that the newly selected
             let YesMsg = 'report.facets.yesCheck';

@@ -12,6 +12,7 @@ import FacetsMenu from '../facet/facetsMenu';
 import FacetSelections from '../facet/facetSelections';
 import RecordsCount from './recordsCount';
 import QBicon from '../qbIcon/qbIcon';
+import * as schemaConsts from '../../constants/schema.js';
 
 let FluxMixin = Fluxxor.FluxMixin(React);
 
@@ -99,7 +100,7 @@ var ReportToolbar = React.createClass({
         facetExpression = fields.map((field) => {
             let values = selected.getFieldSelections(field);
             // use 1 or 0 for searching bool field types not the text
-            if (this.fields[field].type === 'CHECKBOX') {
+            if (this.fields[field].type === schemaConsts.CHECKBOX) {
                 var boolVal = values[0] === "Yes" ? 1 : 0;
                 values = [boolVal];
             }
@@ -220,6 +221,7 @@ var ReportToolbar = React.createClass({
                 {id : 4, name : "Flag", type: "CHECKBOX",  blanks: false,
                     values : [{value: "Yes"}, {value: "No"}]},
                 {id : 5, name : "Companies", type: "TEXT",  blanks: false,
+                // TODO: support date ranges in filtering see https://jira.intuit.com/browse/QBSE-20422
                     values : []}, // too many values for facets example
                 //{id : 4, name : "Dates", type: "date",  blanks: false,
                 //    range : {start: 1, end: 2}},
