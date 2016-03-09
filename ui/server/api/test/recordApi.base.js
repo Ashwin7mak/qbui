@@ -124,14 +124,14 @@
                 var fetchRecordDeferred = promise.pending();
                 init.then(function() {
                     apiBase.executeRequest(recordsEndpoint, consts.POST, record)
-                        .then(function (recordIdResponse) {
+                        .then(function(recordIdResponse) {
                             var getEndpoint = recordsEndpoint + JSON.parse(recordIdResponse.body).id;
                             if (params) {
                                 getEndpoint += params;
                             }
-                        }).catch(function (err) {
-                        log.error(JSON.stringify(err));
-                    });
+                        }).catch(function(err) {
+                            log.error(JSON.stringify(err));
+                        });
                     return fetchRecordDeferred.promise;
                 });
             },

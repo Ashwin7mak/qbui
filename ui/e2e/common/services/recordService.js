@@ -48,9 +48,9 @@
                     .then(function(results) {
                         deferred.resolve(results);
                     }).catch(function(error) {
-                    console.log(JSON.stringify(error));
-                    deferred.reject(error);
-                });
+                        console.log(JSON.stringify(error));
+                        deferred.reject(error);
+                    });
                 return deferred.promise;
             },
             /**
@@ -77,7 +77,7 @@
                     //console.log(generatedRecord);
                     generatedEmptyRecords.push(generatedRecord);
                 }
-                console.log ("The empty records are: "+JSON.stringify(generatedEmptyRecords));
+                console.log("The empty records are: " + JSON.stringify(generatedEmptyRecords));
                 return generatedEmptyRecords;
             },
             /**
