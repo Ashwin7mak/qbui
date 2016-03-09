@@ -40,11 +40,11 @@ var FacetsList = React.createClass({
 
     getDefaultProps() {
         return {
-            isCollapsed : function() {return false;}
+            isCollapsed() {return false;}
         };
     },
 
-    shouldComponentUpdate: function(nextProps, nextState) {
+    shouldComponentUpdate(nextProps, nextState) {
 
         let answer = false;
 
@@ -73,8 +73,8 @@ var FacetsList = React.createClass({
 
 
         if (facetsData.length && facetsData[0].values.length && typeof facetsData[0].values[0] !== 'object') {
-            facetsData = _.map(facetsData, function(aFacet) {
-                aFacet.values =  _.map(aFacet.values, function(val) {
+            facetsData = facetsData.map((aFacet) => {
+                aFacet.values =  aFacet.values.map((val) => {
                     if (aFacet.type.toUpperCase() === 'CHECKBOX') {
                         if (!val || val === "" || val === 0 ||
                             val.toString().toUpperCase() === 'NO' ||

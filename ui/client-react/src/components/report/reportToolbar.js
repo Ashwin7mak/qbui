@@ -14,8 +14,9 @@ import RecordsCount from './recordsCount';
 import QBicon from '../qbIcon/qbIcon';
 
 let FluxMixin = Fluxxor.FluxMixin(React);
+
 let logger = new Logger();
-import _ from 'lodash';
+
 
 const secondInMilliseconds = 1000;
 
@@ -44,23 +45,23 @@ var ReportToolbar = React.createClass({
     },
 
 
-    getDefaultProps : function() {
+    getDefaultProps() {
         return {
             fillinDummyFacets : false,
+            selections:new FacetSelections(),
+            searchStringForFiltering: "",
             debounceInputTime :.5 *  secondInMilliseconds, // 1/5 a second delay
         };
     },
 
-    getInitialState: function() {
-        let initSel = new FacetSelections();
+    getInitialState() {
         return {
-            searchInput: '',
-            searchStringForFiltering: '',
-            selections : initSel
+            //seed the initial search value
+            searchInput: this.props.searchStringForFiltering ? this.props.searchStringForFiltering : '',
         };
     },
 
-    debouncedChange: function(name) {
+    debouncedChange(name) {
         let deferred = Promise.defer();
 
         var timerId = this.timerId;
@@ -80,75 +81,79 @@ var ReportToolbar = React.createClass({
         return deferred.promise;
     },
 
-    searchReport: function(inputText) {
-        const text = inputText;
-        let flux = this.getFlux();
-        flux.actions.searchFor(text);
-    },
-
-    isFiltered : function() {
+    isFiltered() {
         let answer = false;
-        if (this.state.searchStringForFiltering.length !== 0) {
+        if (this.props.searchStringForFiltering.length !== 0) {
             answer = true;
         } else {
-            answer = this.state.selections.hasAnySelections();
+            answer = this.props.selections.hasAnySelections();
         }
         return answer;
     },
 
-    filterReport: function() {
+    filterReport(searchString, selections) {
         //var facetExpression = [{fid:'3', values:['10', '11']}, {fid:'4', values:['abc']}];
         let facetExpression = [];
-        let selected = this.state.selections;
+        let selected = selections;
         let fields = selected.whichHasAnySelections();
-        facetExpression = _.map(fields, function(field) {
-            return {fid : field, values: selected.getFieldSelections(field)};
+        facetExpression = fields.map((field) => {
+            let values = selected.getFieldSelections(field);
+            // use 1 or 0 for searching bool field types not the text
+            if (this.fields[field].type === 'CHECKBOX') {
+                var boolVal = values[0] === "Yes" ? 1 : 0;
+                values = [boolVal];
+            }
+            return {fid : field, values: values};
         });
         let filterParam = {
+            selections: selections,
             facet : facetExpression,
-            search : this.state.searchStringForFiltering
+            search : searchString
         };
         let flux = this.getFlux();
         flux.actions.filterReport(this.props.appId, this.props.tblId, this.props.rptId, true, filterParam);
     },
 
-    setStateSelections : function(newState) {
-        this.setState({selections: newState}, () => {
-            this.filterReport();
-        });
+    filterOnSelections(newSelections) {
+        this.filterReport(this.props.searchStringForFiltering, newSelections);
+    },
+    filterOnSearch(newSearch) {
+        this.filterReport(newSearch, this.props.selections);
+    },
+    handleFacetSelect(e, facet, value) {
+        var newSelections = this.props.selections.copy();
+        newSelections.toggleSelectFacetValue(facet, value);
+        this.filterOnSelections(newSelections);
     },
 
-    handleFacetDeselect : function(e, facet, value) {
-        var mutated = this.state.selections.copy();
-        mutated.setFacetValueSelectState(facet, value, false);
-        this.setStateSelections(mutated);
+    handleFacetDeselect(e, facet, value) {
+        var newSelections = this.props.selections.copy();
+        newSelections.setFacetValueSelectState(facet, value, false);
+        this.filterOnSelections(newSelections);
     },
 
-    handleFacetSelect : function(e, facet, value) {
-        var mutated = this.state.selections.copy();
-        mutated.toggleSelectFacetValue(facet, value);
-        this.setStateSelections(mutated);
+    handleFacetClearFieldSelects(facet) {
+        var newSelections = this.props.selections.copy();
+        newSelections.removeAllFieldSelections(facet.id);
+        this.filterOnSelections(newSelections);
     },
 
-    handleFacetClearFieldSelects : function(facet) {
-        var mutated = this.state.selections.copy();
-        mutated.removeAllFieldSelections(facet.id);
-        this.setStateSelections(mutated);
+    handleFacetClearAllSelects() {
+        var newSelections = new FacetSelections();
+        this.filterOnSelections(newSelections);
     },
 
-    handleFacetClearAllSelects : function() {
-        var mutated = new FacetSelections();
-        this.setStateSelections(mutated);
+    handleFacetClearAllSelectsAndSearch() {
+        var newSelections = new FacetSelections();
+        this.setState({searchInput:''});
+        this.filterReport('', newSelections);
     },
 
-    executeSearchString : function(result) {
-        this.setState({searchStringForFiltering: result}, () => {
-            this.filterReport();
-        });
-       // this.searchReport(result);
+    executeSearchString(result) {
+        this.filterOnSearch(result);
     },
 
-    searchTheString : function(searchTxt, debounced) {
+    searchTheString(searchTxt, debounced) {
         if (debounced) {
             this.debouncedChange(searchTxt).then((result) => {
                 this.executeSearchString(result.trim());
@@ -158,13 +163,8 @@ var ReportToolbar = React.createClass({
         }
     },
 
-    handleFacetClearAllSelectsAndSearch : function() {
-        this.setState({selections: new FacetSelections(), searchInput:''});
-        this.searchTheString('', false);
-    },
 
-
-    handleSearchChange: function(e) {
+    handleSearchChange(e) {
         var searchTxt = e.target.value.trim();
         this.setState({
             searchInput: searchTxt
@@ -186,7 +186,10 @@ var ReportToolbar = React.createClass({
         let blankMsg = 'report.blank';
         if (this.props.reportData && this.props.reportData.data &&
             this.props.reportData.data.facets) {
+            this.fields = {};
             this.props.reportData.data.facets.map((facet) => {
+                // a fields id ->facet lookup
+                this.fields[facet.id] = facet;
                 if (facet.blanks && facet.type === "text" && !facet.blankAdded) {
                     // Note the I18nMessage version we are using only supports outputting a span wrapped component not just
                     // a translated string so until we move to reactintl 2.0
@@ -203,50 +206,31 @@ var ReportToolbar = React.createClass({
     populateDummyFacets() {
         if (this.props.reportData && this.props.reportData.data)  {
             this.props.reportData.data.facets = [
-                    {id : 1, name : "Types", type: "TEXT", blanks: true,
-                        values : [{value:"Design"}, {value:"Development"}, {value:"Planning"}, {value:"Test"}]},
-                    {id : 2, name : "Names", type: "TEXT", blanks: false,
-                        values : [
-                            {value: "Aditi Goel"}, {value: "Christopher Deery"}, {value: "Claire Martinez"}, {value: "Claude Keswani"}, {value: "Deborah Pontes"},
-                            {value: "Donald Hatch"}, {value: "Drew Stevens"}, {value: "Erica Rodrigues"}, {value: "Kana Eiref"},
-                            {value: "Ken LaBak"}, {value: "Lakshmi Kamineni"}, {value: "Lisa Davidson"}, {value: "Marc Labbe"},
-                            {value: "Matthew Saforrian"}, {value: "Micah Zimring"}, {value: "Rick Beyer"}, {value: "Sam Jones"}, {value: "XJ He"}
-                        ]},
-                    {id : 3, name : "Status", type: "TEXT", blanks: false,
-                        values : [{value: "No Started"}, {value: "In Progress"}, {value: "Blocked"}, {value: "Completed"}]},
-                    {id : 4, name : "Flag", type: "CHECKBOX",  blanks: false,
-                        values : [{value: "Yes"}, {value: "No"}]},
-                    {id : 5, name : "Companies", type: "TEXT",  blanks: false,
-                        values : []}, // too many values for facets example
-                    //{id : 4, name : "Dates", type: "date",  blanks: false,
-                    //    range : {start: 1, end: 2}},
+                {id : 1, name : "Types", type: "TEXT", blanks: true,
+                    values : [{value:"Design"}, {value:"Development"}, {value:"Planning"}, {value:"Test"}]},
+                {id : 2, name : "Names", type: "TEXT", blanks: false,
+                    values : [
+                        {value: "Aditi Goel"}, {value: "Christopher Deery"}, {value: "Claire Martinez"}, {value: "Claude Keswani"}, {value: "Deborah Pontes"},
+                        {value: "Donald Hatch"}, {value: "Drew Stevens"}, {value: "Erica Rodrigues"}, {value: "Kana Eiref"},
+                        {value: "Ken LaBak"}, {value: "Lakshmi Kamineni"}, {value: "Lisa Davidson"}, {value: "Marc Labbe"},
+                        {value: "Matthew Saforrian"}, {value: "Micah Zimring"}, {value: "Rick Beyer"}, {value: "Sam Jones"}, {value: "XJ He"}
+                    ]},
+                {id : 3, name : "Status", type: "TEXT", blanks: false,
+                    values : [{value: "No Started"}, {value: "In Progress"}, {value: "Blocked"}, {value: "Completed"}]},
+                {id : 4, name : "Flag", type: "CHECKBOX",  blanks: false,
+                    values : [{value: "Yes"}, {value: "No"}]},
+                {id : 5, name : "Companies", type: "TEXT",  blanks: false,
+                    values : []}, // too many values for facets example
+                //{id : 4, name : "Dates", type: "date",  blanks: false,
+                //    range : {start: 1, end: 2}},
             ];
         }
-    },
-
-    /*TODO : remove this when facets ui is integrated with backend, only for dev testing not users */
-    renderFakeFilterButton() {
-        let tooltip = (
-                        <Tooltip  id="fakeFacetTip">This button is hard wired filter by facets - only matches
-                                Record#id = 10 OR 11
-                        </Tooltip>);
-        {/* hide this - devs can use document.getElementById('fakeFacet').style.display='block'; */}
-        return (
-                <OverlayTrigger overlay={tooltip} placement="bottom">
-                    <div className="button-container">
-                        <Button  id="fakeFacet" className="testFilterButton"
-                                    bsStyle="link" onClick={this.filterReport}>
-                        Fake filter this report </Button>
-                    </div>
-                </OverlayTrigger>
-        );
     },
 
     render() {
         if (this.props.fillinDummyFacets) {
             this.populateDummyFacets();
         }
-        let fakeFilterButton = this.renderFakeFilterButton();
 
         this.appendBlanks();
 
@@ -264,7 +248,7 @@ var ReportToolbar = React.createClass({
             hasRecords = recordCount ? true : false;
         }
 
-        let hasSelectedFacets = this.state.selections.hasAnySelections();
+        let hasSelectedFacets = this.props.selections && this.props.selections.hasAnySelections();
 
         let loadedReportToolbar = (
             <div className="reportToolbar">
@@ -290,7 +274,6 @@ var ReportToolbar = React.createClass({
                 <FilterSearchBox onChange={this.handleSearchChange}
                                  nameForRecords="Records"
                                  ref="searchInputbox"
-                                 defaultValue=""
                                  value={this.state.searchInput}
                     {...this.props} />
                 }
@@ -300,7 +283,7 @@ var ReportToolbar = React.createClass({
                 {recordCount &&
                 (<FacetsMenu className="facetMenu"
                              {...this.props}
-                             selectedValues={this.state.selections}
+                             selectedValues={this.props.selections}
                              onFacetSelect={this.handleFacetSelect}
                              onFacetDeselect={this.handleFacetDeselect}
                              onFacetClearFieldSelects={this.handleFacetClearFieldSelects}
@@ -309,7 +292,6 @@ var ReportToolbar = React.createClass({
 
                 {<div id="facetsMenuTarget"></div>}
 
-                {fakeFilterButton}
             </div>
         );
 

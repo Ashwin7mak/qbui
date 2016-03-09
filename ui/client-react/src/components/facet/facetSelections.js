@@ -42,7 +42,7 @@ class FacetSelections {
      *
      */
     hasAnySelections() {
-        if (_.keys(this.selectionsHash).length === 0) {
+        if (Object.keys(this.selectionsHash).length === 0) {
             return false;
         } else {
             let foundAny =  _.some(this.selectionsHash, function(x) {
@@ -58,9 +58,9 @@ class FacetSelections {
      */
     whichHasAnySelections() {
         let answer = [];
-        let fields = _.keys(this.selectionsHash);
+        let fields = Object.keys(this.selectionsHash);
         if (fields.length !== 0) {
-            answer = _.filter(fields, (x) => {
+            answer = fields.filter((x) => {
                 let selectionsForField = this.selectionsHash[x];
                 return (selectionsForField && (selectionsForField.length > 0));
             });
@@ -87,8 +87,8 @@ class FacetSelections {
         if (this.selectionsHash[fieldId]) {
             // find the value,
             // todo// sort it first (in case there lots might be faster find)
-            //return (_.indexOf(_.sortBy(this.selectionsHash[fieldId], value)) !== -1);
-            return (_.indexOf(this.selectionsHash[fieldId], value) !== -1);
+            //return (sortBy(this.selectionsHash[fieldId].indexOf(value)) !== -1);
+            return (this.selectionsHash[fieldId].indexOf(value) !== -1);
         } else {
             // nothing selected
             return false;
