@@ -4,7 +4,6 @@ import {I18nMessage, I18nDate} from '../../utils/i18nMessage';
 import Locale from '../../locales/locales';
 import GlobalActions from '../global/globalActions';
 import Fluxxor from 'fluxxor';
-import _ from 'lodash';
 import QBicon from '../qbIcon/qbIcon';
 let FluxMixin = Fluxxor.FluxMixin(React);
 import {OverlayTrigger, Popover, ButtonGroup, Button, Input} from 'react-bootstrap';

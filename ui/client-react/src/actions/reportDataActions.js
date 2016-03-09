@@ -23,10 +23,10 @@ Promise.onPossiblyUnhandledRejection(function(err) {
 
 let reportDataActions = {
 
-    loadReport: function(appId, tblId, rptId, format) {
+    loadReport(appId, tblId, rptId, format) {
 
         //  promise is returned in support of unit testing only
-        return new Promise((resolve, reject) => {
+        return new Promise(function(resolve, reject) {
 
             if (appId && tblId && rptId) {
                 this.dispatch(actions.LOAD_REPORT, {appId, tblId, rptId});
@@ -38,7 +38,7 @@ let reportDataActions = {
                 promises.push(reportService.getReportDataAndFacets(appId, tblId, rptId, format));
 
                 Promise.all(promises).then(
-                    response => {
+                    function(response) {
                         logger.debug('Report service call successful');
                         var report = {
                             name: response[0].data.name,
@@ -47,25 +47,25 @@ let reportDataActions = {
                         logger.debug("Report Name: " + report.name);
                         this.dispatch(actions.LOAD_REPORT_SUCCESS, report);
                         resolve();
-                    },
-                    error => {
-                        logger.error('Report service call error:', error);
-                        this.dispatch(actions.LOAD_REPORT_FAILED);
+                    }.bind(this),
+                    function(error) {
+                        logger.error('Report service call error:' + JSON.stringify(error));
+                        this.dispatch(actions.LOAD_REPORT_FAILED, {error: error});
                         reject();
-                    }
+                    }.bind(this)
                 ).catch(
-                    ex => {
+                    function(ex) {
                         logger.error('Report service call exception:', ex);
-                        this.dispatch(actions.LOAD_REPORT_FAILED);
+                        this.dispatch(actions.LOAD_REPORT_FAILED, {exception: ex});
                         reject();
-                    }
+                    }.bind(this)
                 );
             } else {
                 logger.error('Missing one or more required input parameters to reportDataActions.loadReport.  AppId:' + appId + '; TblId:' + tblId + '; RptId:' + rptId);
                 this.dispatch(actions.LOAD_REPORT_FAILED);
                 reject();
             }
-        });
+        }.bind(this));
     },
 
     /* Action called to filter a report.
@@ -74,13 +74,13 @@ let reportDataActions = {
     *       facet  : expression representing all the facets selected by user so far example [{fid: fid1, values: value1, value2}, {fid: fid2, values: value3, value4}, ..]
     *       search : search string
     */
-    filterReport: function(appId, tblId, rptId, format, filter) {
+    filterReport(appId, tblId, rptId, format, filter) {
 
         //  promise is returned in support of unit testing only
-        return new Promise((resolve, reject) => {
+        return new Promise(function(resolve, reject) {
 
             if (appId && tblId && rptId) {
-                this.dispatch(actions.LOAD_REPORT, {appId, tblId, rptId});
+                this.dispatch(actions.LOAD_RECORDS, {appId, tblId, rptId, filter});
 
                 let reportService = new ReportService();
                 let recordService = new RecordService();
@@ -95,7 +95,7 @@ let reportDataActions = {
                 promises.push(reportService.parseFacetExpression(facetExpression));
 
                 Promise.all(promises).then(
-                    response => {
+                    function(response) {
                         var queryParams = {
                             cList: response[0].data.fids ? response[0].data.fids.join('.') : '',
                             sList: response[0].data.sortFids ? response[0].data.sortFids.join('.') : ''
@@ -117,42 +117,44 @@ let reportDataActions = {
 
                         //  Get the filtered records
                         recordService.getRecords(appId, tblId, format, queryParams).then(
-                            recordResponse => {
+                            function(recordResponse) {
                                 logger.debug('Filter Report Records service call successful');
-                                this.dispatch(actions.LOAD_REPORT_SUCCESS, recordResponse.data);
+                                this.dispatch(actions.LOAD_RECORDS_SUCCESS, recordResponse.data);
                                 resolve();
-                            },
-                            error => {
-                                logger.error('Filter Report Records service call error:', error);
-                                this.dispatch(actions.LOAD_REPORT_FAILED);
+                            }.bind(this),
+                            function(error) {
+                                logger.error('Filter Report Records service call error:', JSON.stringify(error));
+                                this.dispatch(actions.LOAD_RECORDS_FAILED, {error: error});
                                 reject();
-                            }
+                            }.bind(this)
                         ).catch(
-                            ex => {
-                                logger.error('Filter Report Records service call exception:' + ex);
-                                this.dispatch(actions.LOAD_REPORT_FAILED);
+                            function(ex) {
+                                logger.error('Filter Report Records service call exception:', ex);
+                                this.dispatch(actions.LOAD_RECORDS_FAILED, {error: ex});
                                 reject();
-                            }
+                            }.bind(this)
                         );
-                    },
-                    error => {
+                    }.bind(this),
+                    function(error) {
                         logger.error('Filter Report service call error:', error);
-                        this.dispatch(actions.LOAD_REPORT_FAILED);
+                        this.dispatch(actions.LOAD_RECORDS_FAILED, {error: error});
                         reject();
-                    }
+                    }.bind(this)
                 ).catch(
-                    ex => {
+                    function(ex) {
                         logger.error('Filter Report service calls exception:', ex);
-                        this.dispatch(actions.LOAD_REPORT_FAILED);
+                        this.dispatch(actions.LOAD_RECORDS_FAILED, {exception: ex});
                         reject();
-                    }
+                    }.bind(this)
                 );
             } else {
-                logger.error('Missing one or more required input parameters to reportDataActions.filterReport.  AppId:' + appId + '; TblId:' + tblId + '; RptId:' + rptId);
-                this.dispatch(actions.LOAD_REPORT_FAILED);
+                var errMessage = 'Missing one or more required input parameters to reportDataActions.filterReport. AppId:' +
+                    appId + '; TblId:' + tblId + '; RptId:' + rptId;
+                logger.error(errMessage);
+                this.dispatch(actions.LOAD_RECORDS_FAILED, {error: errMessage});
                 reject();
             }
-        });
+        }.bind(this));
     }
 };
 

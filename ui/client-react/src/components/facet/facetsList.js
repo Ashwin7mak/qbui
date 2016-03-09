@@ -11,6 +11,7 @@ import  {fieldSelections, facetsProp} from './facetProps';
 import FacetsItem from './facetsItem';
 import QBicon from '../qbIcon/qbIcon';
 import simpleStringify from '../../../../common/src/simpleStringify';
+import * as schemaConsts from '../../constants/schema.js';
 
 import './facet.scss';
 import _ from 'lodash';
@@ -40,11 +41,11 @@ var FacetsList = React.createClass({
 
     getDefaultProps() {
         return {
-            isCollapsed : function() {return false;}
+            isCollapsed() {return false;}
         };
     },
 
-    shouldComponentUpdate: function(nextProps, nextState) {
+    shouldComponentUpdate(nextProps, nextState) {
 
         let answer = false;
 
@@ -65,17 +66,16 @@ var FacetsList = React.createClass({
     },
 
     facetsList(facetsData) {
+
         //values are expected to be objects {value:'xx'},
         // make it so until node layer is changed
         let YesMsg = 'report.facets.yesCheck';
         let NoMsg = 'report.facets.noCheck';
 
-
-
-        if (facetsData.length && facetsData[0].values.length && typeof facetsData[0].values[0] !== 'object') {
-            facetsData = _.map(facetsData, function(aFacet) {
-                aFacet.values =  _.map(aFacet.values, function(val) {
-                    if (aFacet.type.toUpperCase() === 'CHECKBOX') {
+        if (facetsData.length && facetsData[0].values && facetsData[0].values.length && typeof facetsData[0].values[0] !== 'object') {
+            facetsData = facetsData.map((aFacet) => {
+                aFacet.values = aFacet.values.map((val) => {
+                    if (aFacet.type.toUpperCase() === schemaConsts.CHECKBOX) {
                         if (!val || val === "" || val === 0 ||
                             val.toString().toUpperCase() === 'NO' ||
                             val.toString().toUpperCase() === 'FALSE') {
@@ -91,6 +91,12 @@ var FacetsList = React.createClass({
                 return aFacet;
             });
         }
+        // filter out the date fields for now
+        // TODO: support date ranges in filtering see https://jira.intuit.com/browse/QBSE-20422
+        if (facetsData.length && facetsData[0].values) {
+            facetsData.filter((facetField) => !(facetField.type.toUpperCase().includes(schemaConsts.DATE)));
+        }
+        // create field facet sections
         return facetsData.map((facetField) => {
             var fid = facetField.id;
             var inputProps = {
@@ -122,16 +128,19 @@ var FacetsList = React.createClass({
      */
     render() {
         let noFacetsMessage = "report.facets.noFacets";
+        //TODO get xd specific for handle no facet info returned from server see https://jira.intuit.com/browse/QBSE-19865
         return (
             <Popover id={this.props.popoverId}
                      arrowOffsetLeft={28}
                      placement="bottom"
                      className="facetMenuPopup"
                      ref={(thisComponent) => this._facetMenuArea = thisComponent}>
-                    {this.props.reportData && this.props.reportData.data &&
-                    this.props.reportData.data.facets ?
+                    {this.props.reportData && this.props.reportData.data  &&
+                    this.props.reportData.data.facets && (this.props.reportData.data.facets.length > 0) && this.props.reportData.data.facets[0].values && this.props.reportData.data.facets.length > 0 ?
                         this.facetsList(this.props.reportData.data.facets) :
-                        <I18nMessage message={noFacetsMessage}/>}
+                        <div className="noFacetValues">
+                            <I18nMessage message={noFacetsMessage}/>
+                        </div>}
             </Popover>
         );
     }

@@ -6,10 +6,22 @@ import FacetSelections  from '../../src/components/facet/facetSelections';
 import FacetsItem  from '../../src/components/facet/facetsItem';
 import FacetsList  from '../../src/components/facet/facetsList';
 import FacetsMenu  from '../../src/components/facet/facetsMenu';
+import facetMenuActions from '../../src/actions/facetMenuActions';
+import Store from '../../src/stores/facetMenuStore';
+import * as actions from '../../src/constants/actions';
+
 import _ from 'lodash';
+import Fluxxor from 'fluxxor';
+
 
 describe('FacetsMenu functions', () => {
     'use strict';
+    let stores = {
+        FacetMenuStore:  new Store()
+    };
+
+    let flux = new Fluxxor.Flux(stores);
+    flux.addActions(facetMenuActions);
 
     let component;
     let reportDataParams = {reportData: {loading:false}};
@@ -20,28 +32,58 @@ describe('FacetsMenu functions', () => {
                 ]
         }
     };
+    const fakeReportDataNoFacets_valid = {
+        data: {
+            facets : []
+        }
+    };
+    var I18nMessageMock = React.createClass({
+        render() {
+            return (
+                <div>test</div>
+            );
+        }
+    });
+
+    beforeEach(() => {
+        FacetsList.__Rewire__('I18nMessage', I18nMessageMock);
+        FacetsItem.__Rewire__('I18nMessage', I18nMessageMock);
+        FacetsAspect.__Rewire__('I18nMessage', I18nMessageMock);
+        FacetsMenu.__Rewire__('I18nMessage', I18nMessageMock);
+        flux.store('FacetMenuStore').initMenu();
+    });
+
+    afterEach(() => {
+        FacetsList.__ResetDependency__('I18nMessage');
+        FacetsItem.__ResetDependency__('I18nMessage');
+        FacetsAspect.__ResetDependency__('I18nMessage');
+        FacetsMenu.__ResetDependency__('I18nMessage');
+    });
 
     let reportParams = {appId:1, tblId:2, rptId:3};
 
     it('test render FacetsMenu no facets', () => {
-        component = TestUtils.renderIntoDocument(<FacetsMenu params={reportParams} reportData={reportDataParams} />);
+        component = TestUtils.renderIntoDocument(<FacetsMenu flux={flux} params={reportParams} popoverId="test"
+                                                             reportData={reportDataParams} />);
         expect(TestUtils.isCompositeComponent(component)).toBeTruthy();
     });
 
     it('test render FacetsMenu', () => {
-        component = TestUtils.renderIntoDocument(<FacetsMenu params={reportParams} reportData={fakeReportData_valid} />);
+        component = TestUtils.renderIntoDocument(<FacetsMenu flux={flux} params={reportParams} popoverId="test"
+                                                             reportData={fakeReportData_valid} />);
         expect(TestUtils.isCompositeComponent(component)).toBeTruthy();
     });
 
 
     it('test render FacetsMenu with facets open', () => {
-        component = TestUtils.renderIntoDocument(<FacetsMenu params={reportParams} allInitiallyCollapsed={false} reportData={fakeReportData_valid} />);
+        component = TestUtils.renderIntoDocument(<FacetsMenu flux={flux} params={reportParams} popoverId="test"
+                                                             allInitiallyCollapsed={false} reportData={fakeReportData_valid} />);
         expect(TestUtils.isCompositeComponent(component)).toBeTruthy();
     });
 
 
     it('test render FacetsMenu click facet button', () => {
-        component = TestUtils.renderIntoDocument(<FacetsMenu params={reportParams}
+        component = TestUtils.renderIntoDocument(<FacetsMenu flux={flux}  params={reportParams} popoverId="test"
                                                              allInitiallyCollapsed={false}
                                                              reportData={fakeReportData_valid}
                                                              />);
@@ -52,6 +94,40 @@ describe('FacetsMenu functions', () => {
         expect(component.state.show).toBeTruthy();
     });
 
+    describe('test render FacetsMenu no values', () => {
+        let mountPoint;
+
+        beforeEach(() => {
+            mountPoint = document.createElement('div');
+            document.body.appendChild(mountPoint);
+        });
+
+        afterEach(() => {
+            ReactDOM.unmountComponentAtNode(mountPoint);
+            document.body.removeChild(mountPoint);
+        });
+
+        it('no values message shows when there are no values', () => {
+
+            component =  ReactDOM.render(<FacetsMenu flux={flux}  popoverId="test" params={reportParams}
+                                                                 allInitiallyCollapsed={true}
+                                                                 reportData={fakeReportDataNoFacets_valid}
+            />, mountPoint);
+            const testContainer = ReactDOM.findDOMNode(component);
+
+            expect(TestUtils.isCompositeComponent(component)).toBeTruthy();
+
+            expect(component.state.show).toBeFalsy();
+
+            let facetButtons = TestUtils.findRenderedDOMComponentWithClass(component, "facetButtons");
+            TestUtils.Simulate.click(facetButtons);
+            expect(component.state.show).toBeTruthy();
+
+            //verify the no values message appears
+            let noFacetValues =  document.getElementsByClassName("noFacetValues");
+            expect(noFacetValues.length).toBe(1);
+        });
+    });
 
     it('test render FacetsMenu shows selection tokens', () => {
         let selected = new FacetSelections();
@@ -61,7 +137,8 @@ describe('FacetsMenu functions', () => {
             onFacetDeselect : function onFacetDeselect(e, facet, value) {
             }
         };
-        component = TestUtils.renderIntoDocument(<FacetsMenu params={reportParams}
+        component = TestUtils.renderIntoDocument(<FacetsMenu flux={flux}  params={reportParams}
+                                                             popoverId="test"
                                                              allInitiallyCollapsed={false}
                                                              reportData={fakeReportData_valid}
                                                              selectedValues={selected}
@@ -103,7 +180,7 @@ describe('FacetsMenu functions', () => {
 
         it('test render FacetsMenu click facet section expand ', () => {
 
-            component = ReactDOM.render(<FacetsMenu params={reportParams}
+            component = ReactDOM.render(<FacetsMenu flux={flux}  params={reportParams}
                                                                     allInitiallyCollapsed={true}
                                                                     reportData={fakeReportData_valid} />
                                                         , mountPoint);
@@ -145,7 +222,8 @@ describe('FacetsMenu functions', () => {
 
 
         it('test render FacetsMenu click facet section collapse ', () => {
-            component = ReactDOM.render(<FacetsMenu params={reportParams}
+            component = ReactDOM.render(<FacetsMenu flux={flux}  params={reportParams}
+                                                    popoverId="test"
                                                     allInitiallyCollapsed={true}
                                                     reportData={fakeReportData_valid} />
                 , mountPoint);
@@ -186,13 +264,6 @@ describe('FacetsMenu functions', () => {
     });
 
     describe('Show More', () => {
-        var I18nMessageMock = React.createClass({
-            render: function() {
-                return (
-                    <div>test</div>
-                );
-            }
-        });
 
         let mountPoint;
         const fakeReportLongData_valid = {
@@ -203,26 +274,19 @@ describe('FacetsMenu functions', () => {
             }
         };
         beforeEach(() => {
-            FacetsList.__Rewire__('I18nMessage', I18nMessageMock);
-            FacetsItem.__Rewire__('I18nMessage', I18nMessageMock);
-            FacetsAspect.__Rewire__('I18nMessage', I18nMessageMock);
-
             mountPoint = document.createElement('div');
             document.body.appendChild(mountPoint);
         });
 
         afterEach(() => {
-            FacetsList.__ResetDependency__('I18nMessage');
-            FacetsItem.__ResetDependency__('I18nMessage');
-            FacetsAspect.__ResetDependency__('I18nMessage');
-
             ReactDOM.unmountComponentAtNode(mountPoint);
             document.body.removeChild(mountPoint);
         });
 
         it('test render FacetsMenu click facet reveal', () => {
 
-            component = ReactDOM.render(<FacetsMenu params={reportParams}
+            component = ReactDOM.render(<FacetsMenu flux={flux}  params={reportParams}
+                                                    popoverId="test"
                                                     allInitiallyCollapsed={false}
                                                     maxInitRevealed={4}
                                                     reportData={fakeReportLongData_valid} />

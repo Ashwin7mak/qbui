@@ -29,7 +29,7 @@ class FacetsAspect extends Component {
         };
     }
 
-    shouldComponentUpdate(nextProps, nextState) {
+    shouldComponentUpdate(nextProps) {
         let answer = (nextProps.isSelected !== this.props.isSelected);
         return answer;
     }

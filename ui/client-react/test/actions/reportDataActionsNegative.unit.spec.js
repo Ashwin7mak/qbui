@@ -18,6 +18,17 @@ let loadReportInputs = {
     tblId: inputs.tblId,
     rptId: inputs.rptId
 };
+
+let filterReportInputs = {
+    appId: inputs.appId,
+    tblId: inputs.tblId,
+    rptId: inputs.rptId,
+    filter: {
+        facet: 'abc',
+        search: ''
+    }
+};
+
 let responseReportData = {
     data: {
         name: 'name'
@@ -89,8 +100,8 @@ describe('Report Data Actions -- Filter report Negative', () => {
                 done();
             },
             () => {
-                expect(flux.dispatchBinder.dispatch.calls.argsFor(0)).toEqual([actions.LOAD_REPORT, loadReportInputs]);
-                expect(flux.dispatchBinder.dispatch.calls.argsFor(1)).toEqual([actions.LOAD_REPORT_FAILED]);
+                expect(flux.dispatchBinder.dispatch.calls.argsFor(0)).toEqual([actions.LOAD_RECORDS, filterReportInputs]);
+                expect(flux.dispatchBinder.dispatch.calls.argsFor(1)).toEqual([actions.LOAD_RECORDS_FAILED, jasmine.any(Object)]);
                 done();
             }
         );
@@ -121,8 +132,9 @@ describe('Report Data Actions -- Filter report Negative', () => {
                 done();
             },
             () => {
-                expect(flux.dispatchBinder.dispatch.calls.argsFor(0)).toEqual([actions.LOAD_REPORT, loadReportInputs]);
-                expect(flux.dispatchBinder.dispatch.calls.argsFor(1)).toEqual([actions.LOAD_REPORT_FAILED]);
+                expect(flux.dispatchBinder.dispatch.calls.argsFor(0)).toEqual([actions.LOAD_RECORDS, filterReportInputs]);
+                expect(flux.dispatchBinder.dispatch.calls.argsFor(1)).toEqual([actions.LOAD_RECORDS_FAILED,
+                                jasmine.objectContaining({error : jasmine.any(Object)})]);
                 done();
             }
         );
@@ -153,8 +165,9 @@ describe('Report Data Actions -- Filter report Negative', () => {
                 done();
             },
             () => {
-                expect(flux.dispatchBinder.dispatch.calls.argsFor(0)).toEqual([actions.LOAD_REPORT, loadReportInputs]);
-                expect(flux.dispatchBinder.dispatch.calls.argsFor(1)).toEqual([actions.LOAD_REPORT_FAILED]);
+                expect(flux.dispatchBinder.dispatch.calls.argsFor(0)).toEqual([actions.LOAD_RECORDS, filterReportInputs]);
+                expect(flux.dispatchBinder.dispatch.calls.argsFor(1)).toEqual([actions.LOAD_RECORDS_FAILED,
+                    jasmine.objectContaining({exception : jasmine.any(Object)})]);
                 done();
             }
         );
@@ -211,7 +224,7 @@ describe('Report Data Actions -- Filter report Negative missing parameters', () 
                 () => {
                     expect(mockReportService.prototype.getReport).not.toHaveBeenCalled();
                     expect(mockRecordService.prototype.getRecords).not.toHaveBeenCalled();
-                    expect(flux.dispatchBinder.dispatch).toHaveBeenCalledWith(actions.LOAD_REPORT_FAILED);
+                    expect(flux.dispatchBinder.dispatch).toHaveBeenCalledWith(actions.LOAD_RECORDS_FAILED, jasmine.any(Object));
                     done();
                 }
             );
@@ -290,8 +303,8 @@ describe('Report Data Actions -- ', () => {
     });
 
     var dataProvider = [
-        {test:'test throwing exception when loading a report', func:flux.actions.loadReport},
-        {test:'test throwing exception when filtering a report', func:flux.actions.filterReport}
+        {test:'test throwing exception when loading a report', func:flux.actions.loadReport, act: actions.LOAD_REPORT_FAILED},
+        {test:'test throwing exception when filtering a report', func:flux.actions.filterReport, act:actions.LOAD_RECORDS_FAILED}
     ];
     var filter = {facet: 'abc', search: ''};
 
@@ -304,7 +317,7 @@ describe('Report Data Actions -- ', () => {
                 },
                 () => {
                     expect(mockReportService.prototype.getReport).toHaveBeenCalled();
-                    expect(flux.dispatchBinder.dispatch).toHaveBeenCalledWith(actions.LOAD_REPORT_FAILED);
+                    expect(flux.dispatchBinder.dispatch).toHaveBeenCalledWith(data.act, jasmine.any(Object));
                     done();
                 }
             );

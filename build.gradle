@@ -1,14 +1,21 @@
+import org.apache.commons.lang3.RandomStringUtils
+
 description = "QuickBase UI Root Project"
 group = "com.quickbase.phoenix"
 
 defaultTasks 'clean', 'test', 'build'
 
-repositories {
-    jcenter()
-    mavenCentral()
+buildscript {
+    repositories {
+        jcenter()
+        mavenCentral()
+    }
+
+    dependencies {
+        classpath "org.apache.commons:commons-lang3:3.1"
+    }
 }
 
-//
 ext.webProject=true
 
 task wrapper(type: Wrapper) {
@@ -30,4 +37,29 @@ subprojects {
     }
 }
 
+/**
+ * Returns a test user if a the testUser property is set or Oracle RDS is being used
+ * @return the testUser property or a randomly generated sql user
+ */
+def getTestUser() {
+    if (System.getProperty("testUser")) {
+        return System.getProperty("testUser");
+    }
 
+    // if RDS but no testUser specified, the generate a random string.
+    if (System.getProperty("rdsTag")) {
+        return generateRandomString(8) + "_T";
+    }
+
+    return null;
+}
+
+/**
+ * Creates a random string
+ * @param length Length of string
+ * @return a radom string
+ */
+def generateRandomString(int length) {
+    String charset = ('A'..'Z').join();
+    return RandomStringUtils.random(length, charset.toCharArray());
+}
