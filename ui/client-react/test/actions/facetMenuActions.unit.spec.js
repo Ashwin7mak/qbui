@@ -15,15 +15,21 @@ describe('Facet Menu Actions functions', () => {
         spyOn(flux.dispatchBinder, 'dispatch');
     });
 
-    it('test show facet menu action', () => {
+    it('test show facet menu no param  action', () => {
         flux.actions.showFacetMenu();
         expect(flux.dispatchBinder.dispatch).toHaveBeenCalledWith(actions.SHOW_FACET_MENU);
     });
 
-    it('test hide facet menu action', () => {
-        flux.actions.hideFacetMenu();
+    it('test show facet menu true param action', () => {
+        flux.actions.showFacetMenu({show : true});
+        expect(flux.dispatchBinder.dispatch).toHaveBeenCalledWith(actions.SHOW_FACET_MENU);
+    });
+
+    it('test show facet menu false param action', () => {
+        flux.actions.showFacetMenu({show : false});
         expect(flux.dispatchBinder.dispatch).toHaveBeenCalledWith(actions.HIDE_FACET_MENU);
     });
+
 
     it('test set facets expanded array', () => {
         let payload = {};
