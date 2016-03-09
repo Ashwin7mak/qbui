@@ -71,14 +71,13 @@
                 var deferred = Promise.pending();
                 browser.driver.manage().window().getSize().then(function(dimension) {
                     // Currently our breakpoints only change when browser width is changed so don't need to check height (yet)
-                    if (dimension.width === width){
+                    if (dimension.width === width) {
                         // Do nothing because we are already at the current width
                         deferred.resolve();
-                    }
-                    else {
+                    } else {
                         // Resize browser if not at same width
                         browser.driver.manage().window().setSize(width, height).then(function() {
-                            e2eBase.sleep(browser.params.mediumSleep).then(function(){
+                            e2eBase.sleep(browser.params.mediumSleep).then(function() {
                                 deferred.resolve();
                             });
                         });
