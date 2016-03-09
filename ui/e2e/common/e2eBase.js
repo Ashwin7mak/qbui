@@ -181,6 +181,28 @@
                     fieldType: consts.SCALAR,
                     dataType: consts.PHONE_NUMBER
                 };
+                tableToFieldToFieldTypeMap['table 3'] = {};
+                tableToFieldToFieldTypeMap['table 3'][e2eConsts.reportFieldNames[1]] = {
+                    fieldType: consts.SCALAR,
+                    dataType: consts.TEXT
+                };
+                tableToFieldToFieldTypeMap['table 3'][e2eConsts.reportFieldNames[6]] = {
+                    fieldType: consts.SCALAR,
+                    dataType: consts.DATE
+                };
+                tableToFieldToFieldTypeMap['table 3'][e2eConsts.reportFieldNames[7]] = {
+                    fieldType: consts.SCALAR,
+                    dataType: consts.DATE_TIME
+                };
+                tableToFieldToFieldTypeMap['table 3'][e2eConsts.reportFieldNames[10]] = {
+                    fieldType: consts.SCALAR,
+                    dataType: consts.CHECKBOX
+                };
+                tableToFieldToFieldTypeMap['table 4'] = {};
+                tableToFieldToFieldTypeMap['table 4'][e2eConsts.reportFieldNames[1]] = {
+                    fieldType: consts.SCALAR,
+                    dataType: consts.TEXT
+                };
                 // Call the basic app setup function
                 e2eBase.basicSetup(tableToFieldToFieldTypeMap, 10).then(function(results) {
                     // Set your global objects to use in the test functions

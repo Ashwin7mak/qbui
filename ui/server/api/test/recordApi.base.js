@@ -119,6 +119,22 @@
                 }).catch(function(err) {log.error(JSON.stringify(err));});
                 return fetchRecordDeferred.promise;
             },
+            // Creates a record, returning a promise that is resolved or rejected on successful
+            createRecord: function(recordsEndpoint, record, params) {
+                var fetchRecordDeferred = promise.pending();
+                init.then(function() {
+                    apiBase.executeRequest(recordsEndpoint, consts.POST, record)
+                        .then(function(recordIdResponse) {
+                            var getEndpoint = recordsEndpoint + JSON.parse(recordIdResponse.body).id;
+                            if (params) {
+                                getEndpoint += params;
+                            }
+                        }).catch(function(err) {
+                            log.error(JSON.stringify(err));
+                        });
+                    return fetchRecordDeferred.promise;
+                });
+            },
             // Creates a list of records using the bulk record endpoint, returning a promise that is resolved or rejected on successful
             createRecords: function(recordsEndpoint, records) {
                 log.debug('Records to create: ' + JSON.stringify(records));
