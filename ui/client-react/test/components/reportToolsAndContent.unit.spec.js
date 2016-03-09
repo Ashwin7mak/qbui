@@ -14,7 +14,7 @@ describe('ReportToolsAndContent functions', () => {
     };
 
     var ReportContentMock = React.createClass({
-        render: function() {
+        render() {
             return (
                 <div>ReportContentMock</div>
             );

@@ -45,7 +45,7 @@ var ReportToolbar = React.createClass({
     },
 
 
-    getDefaultProps : function() {
+    getDefaultProps() {
         return {
             fillinDummyFacets : false,
             selections:new FacetSelections(),
@@ -54,14 +54,14 @@ var ReportToolbar = React.createClass({
         };
     },
 
-    getInitialState: function() {
+    getInitialState() {
         return {
             //seed the initial search value
             searchInput: this.props.searchStringForFiltering ? this.props.searchStringForFiltering : '',
         };
     },
 
-    debouncedChange: function(name) {
+    debouncedChange(name) {
         let deferred = Promise.defer();
 
         var timerId = this.timerId;
@@ -81,7 +81,7 @@ var ReportToolbar = React.createClass({
         return deferred.promise;
     },
 
-    isFiltered : function() {
+    isFiltered() {
         let answer = false;
         if (this.props.searchStringForFiltering.length !== 0) {
             answer = true;
@@ -91,7 +91,7 @@ var ReportToolbar = React.createClass({
         return answer;
     },
 
-    filterReport: function(searchString, selections) {
+    filterReport(searchString, selections) {
         //var facetExpression = [{fid:'3', values:['10', '11']}, {fid:'4', values:['abc']}];
         let facetExpression = [];
         let selected = selections;
@@ -114,46 +114,46 @@ var ReportToolbar = React.createClass({
         flux.actions.filterReport(this.props.appId, this.props.tblId, this.props.rptId, true, filterParam);
     },
 
-    filterOnSelections : function(newSelections) {
+    filterOnSelections(newSelections) {
         this.filterReport(this.props.searchStringForFiltering, newSelections);
     },
-    filterOnSearch : function(newSearch) {
+    filterOnSearch(newSearch) {
         this.filterReport(newSearch, this.props.selections);
     },
-    handleFacetSelect : function(e, facet, value) {
+    handleFacetSelect(e, facet, value) {
         var newSelections = this.props.selections.copy();
         newSelections.toggleSelectFacetValue(facet, value);
         this.filterOnSelections(newSelections);
     },
 
-    handleFacetDeselect : function(e, facet, value) {
+    handleFacetDeselect(e, facet, value) {
         var newSelections = this.props.selections.copy();
         newSelections.setFacetValueSelectState(facet, value, false);
         this.filterOnSelections(newSelections);
     },
 
-    handleFacetClearFieldSelects : function(facet) {
+    handleFacetClearFieldSelects(facet) {
         var newSelections = this.props.selections.copy();
         newSelections.removeAllFieldSelections(facet.id);
         this.filterOnSelections(newSelections);
     },
 
-    handleFacetClearAllSelects : function() {
+    handleFacetClearAllSelects() {
         var newSelections = new FacetSelections();
         this.filterOnSelections(newSelections);
     },
 
-    handleFacetClearAllSelectsAndSearch : function() {
+    handleFacetClearAllSelectsAndSearch() {
         var newSelections = new FacetSelections();
         this.setState({searchInput:''});
         this.filterReport('', newSelections);
     },
 
-    executeSearchString : function(result) {
+    executeSearchString(result) {
         this.filterOnSearch(result);
     },
 
-    searchTheString : function(searchTxt, debounced) {
+    searchTheString(searchTxt, debounced) {
         if (debounced) {
             this.debouncedChange(searchTxt).then((result) => {
                 this.executeSearchString(result.trim());
@@ -164,7 +164,7 @@ var ReportToolbar = React.createClass({
     },
 
 
-    handleSearchChange: function(e) {
+    handleSearchChange(e) {
         var searchTxt = e.target.value.trim();
         this.setState({
             searchInput: searchTxt

@@ -13,33 +13,33 @@ describe('ReportToolbar functions', () => {
     let component;
 
     let navStore = Fluxxor.createStore({
-        getState: function() {
+        getState() {
             return {leftNavOpen: true};
         }
     });
 
     let appStore = Fluxxor.createStore({
-        getState: function() {
+        getState() {
             return [];
         }
     });
     let reportsStore = Fluxxor.createStore({
-        getState: function() {
+        getState() {
             return [];
         }
     });
 
     let reportDataStore = Fluxxor.createStore({
-        getState: function() {
+        getState() {
             return [];
         }
     });
 
     let facetMenuStore = Fluxxor.createStore({
-        initMenu : function() {
+        initMenu() {
 
         },
-        getState: function() {
+        getState() {
             return {};
         }
     });
@@ -56,19 +56,19 @@ describe('ReportToolbar functions', () => {
     let flux = new Fluxxor.Flux(stores);
 
     flux.actions = {
-        selectTableId: function() {
+        selectTableId() {
             return;
         },
-        loadReports: function() {
+        loadReports() {
             return;
         },
-        searchFor: function(text) {
+        searchFor(text) {
             return;
         },
-        filterReport: function() {
+        filterReport() {
             return;
         },
-        getState: function() {
+        getState() {
             return;
         },
     };

@@ -14,7 +14,7 @@ let FluxMixin = Fluxxor.FluxMixin(React);
 var ReportToolsAndContent = React.createClass({
     mixins: [FluxMixin],
 
-    getDefaultProps : function() {
+    getDefaultProps() {
         return {
             selections:null,
         };

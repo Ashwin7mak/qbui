@@ -38,7 +38,7 @@ describe('FacetsMenu functions', () => {
         }
     };
     var I18nMessageMock = React.createClass({
-        render: function() {
+        render() {
             return (
                 <div>test</div>
             );

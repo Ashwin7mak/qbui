@@ -4,7 +4,7 @@ import Fluxxor from 'fluxxor';
 
 let FacetMenuStore = Fluxxor.createStore({
 
-    initialize: function() {
+    initialize() {
         this.initMenu();
         this.bindActions(
             actions.SHOW_FACET_MENU, this.onShowMenu,
@@ -15,34 +15,34 @@ let FacetMenuStore = Fluxxor.createStore({
         );
 
     },
-    initMenu: function() {
+    initMenu() {
         this.state =  {
             show: false,
             expandedFacetFields : [],
             moreRevealedFacetFields :[]
         };
     },
-    onShowMenu: function() {
+    onShowMenu() {
         this.state.show = true;
         this.emit("change");
     },
-    onHideMenu: function() {
+    onHideMenu() {
         this.state.show = false;
         this.emit("change");
     },
-    onSetExpanded: function(payload) {
+    onSetExpanded(payload) {
         this.state.expandedFacetFields = payload.expanded;
         this.emit("change");
     },
-    onSetMoreRevealed: function(payload) {
+    onSetMoreRevealed(payload) {
         this.state.moreRevealedFacetFields = payload.moreRevealed;
         this.emit("change");
     },
-    onChangedReport: function() {
+    onChangedReport() {
         this.initMenu();
         this.emit("change");
     },
-    getState: function() {
+    getState() {
         return this.state;
     },
 });
