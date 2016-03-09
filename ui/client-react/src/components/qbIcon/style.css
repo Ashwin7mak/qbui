@@ -9,6 +9,7 @@
 }
 
 [class^="iconssturdy-"], [class*=" iconssturdy-"] {
+    /* use !important to prevent issues with browser extensions that change fonts */
     font-family: 'icons_quickbase_v3d1' !important;
     speak: none;
     font-style: normal;
