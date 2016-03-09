@@ -22,10 +22,13 @@
             display: flex;
             flex-direction: row;
             justify-content:space-between;
-            flex: 1;
+            flex: 1 0 auto;
 
             >* {
                 flex: 0 0 auto;
+            }
+            >.facetsMenuContainer {
+                flex: 1 0 auto;
             }
             >.recordsCount {
                 margin-left:5px;
@@ -38,7 +41,7 @@
             color: $icon-color;
 
             .filterSearchBoxContainer {
-                flex: 1 1 auto;
+                flex: 0 0 auto;
                 input {
                     width:100%;
                     margin: 5px 0;

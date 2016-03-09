@@ -224,9 +224,15 @@
             max-width: 200px;
         }
 
-        .filterSearchBox {
-            padding: .4rem;
-            width: 5em;
+        .facetsMenuContainer {
+            flex: 0 0 auto;
+        }
+
+        .filterSearchBoxContainer {
+            flex: 1 0 auto;
+            .filterSearchBox {
+                padding: .4rem;
+            }
         }
 
         .popover.bottom > .arrow {
