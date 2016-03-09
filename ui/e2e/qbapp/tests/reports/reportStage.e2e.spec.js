@@ -38,7 +38,6 @@
                 // Load the requestAppsPage (shows a list of all the apps and tables in a realm)
                 RequestAppsPage.get(e2eBase.getRequestAppsPageEndpoint(realmName));
 
-                //TODO Fix promise chaining
                 // Wait for the leftNav to load
                 reportServicePage.waitForElement(reportServicePage.appsListDivEl).then(function() {
                     // Select the app
@@ -73,13 +72,13 @@
         });
 
         /**
-        * Test method. Test the report Stage Collapse and Expands
+        * Test methods. Test that the reportStage collapses and expands
         */
         e2eConsts.NavDimensionsDataProvider().forEach(function(testcase) {
             it('Should expand/collapse the reports stage on breakpoint: ' + testcase.breakpointSize, function() {
                 if (testcase.breakpointSize !== 'small') {
                     e2eBase.resizeBrowser(testcase.browserWidth, e2eConsts.DEFAULT_HEIGHT).then(function() {
-                        reportServicePage.waitForElement(reportServicePage.reportStageContentEl).then(function() {
+                        reportServicePage.waitForElement(reportServicePage.loadedContentEl).then(function() {
                             // Verify that the report Stage is expanded by default
                             expect(reportServicePage.reportStageArea.isDisplayed()).toBeTruthy();
                             // Click on report Stage button to collapse the stage

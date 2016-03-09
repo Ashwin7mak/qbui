@@ -86,10 +86,10 @@
             });
         });
 
-        /**
-         * Layout test. Verify topNav is displayed above the report stage
-         */
         e2eConsts.NavDimensionsDataProvider().forEach(function(testcase) {
+            /**
+             * Layout test. Verify topNav is displayed above the report stage
+             */
             if (testcase.breakpointSize !== 'small') {
                 it(testcase.breakpointSize + ' breakpoint: verify topNav is on top of report stage', function() {
                     e2eBase.resizeBrowser(testcase.browserWidth, e2eConsts.DEFAULT_HEIGHT).then(function() {
@@ -98,23 +98,19 @@
                 });
             }
             //TODO: Add test for small breakpoint (verify secondary bar is visible and topNav is above that, stage is not visible)
-        });
 
-        /**
-         * Layout test. Verify report actions are displayed above the report content
-         */
-        e2eConsts.NavDimensionsDataProvider().forEach(function(testcase) {
+            /**
+             * Layout test. Verify report actions are displayed above the report content
+             */
             it(testcase.breakpointSize + ' breakpoint: verify table actions Layout container is on top of report griddle container', function() {
                 e2eBase.resizeBrowser(testcase.browserWidth, e2eConsts.DEFAULT_HEIGHT).then(function() {
                     reportServicePage.isElementOnTop(reportServicePage.tableActionsContainerEl, reportServicePage.griddleContainerEl);
                 });
             });
-        });
 
-        /**
-         * Layout test. Verify stage is displayed above the report actions container
-         */
-        e2eConsts.NavDimensionsDataProvider().forEach(function(testcase) {
+            /**
+             * Layout test. Verify stage is displayed above the report actions container
+             */
             if (testcase.breakpointSize !== 'small') {
                 it(testcase.breakpointSize + ' breakpoint: verify report Stage Layout container is on top of table actions container', function() {
                     e2eBase.resizeBrowser(testcase.browserWidth, e2eConsts.DEFAULT_HEIGHT).then(function() {
@@ -123,6 +119,7 @@
                 });
             }
             //TODO: Test for small breakpoint size
+
         });
 
         /**
