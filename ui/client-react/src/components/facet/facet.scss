@@ -142,6 +142,10 @@
       cursor: pointer;
     }
 
+    .noFacetValues {
+      padding : 1em;
+    }
+
     .checkMark {
       color: transparent;
     }
@@ -160,7 +164,9 @@
       color: $facetMenu-clearButtonColor;
     }
   }
-
+.selectedFacets {
+  display: inline;
+}
 .facetToken {
     display : inline-block;
     padding: 3px;

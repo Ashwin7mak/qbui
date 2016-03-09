@@ -13,6 +13,7 @@
  * // using array as fieldids used for keys are not always sequential as a array would serve
 **/
 import Logger from '../../utils/logger';
+import * as schemaConsts from '../../constants/schema.js';
 import _ from 'lodash';
 let logger = new Logger();
 
@@ -42,7 +43,7 @@ class FacetSelections {
      *
      */
     hasAnySelections() {
-        if (_.keys(this.selectionsHash).length === 0) {
+        if (Object.keys(this.selectionsHash).length === 0) {
             return false;
         } else {
             let foundAny =  _.some(this.selectionsHash, function(x) {
@@ -58,9 +59,11 @@ class FacetSelections {
      */
     whichHasAnySelections() {
         let answer = [];
-        if (_.keys(this.selectionsHash).length !== 0) {
-            answer = _.filter(this.selectionsHash, function(x) {
-                return (x && (x.length > 0));
+        let fields = Object.keys(this.selectionsHash);
+        if (fields.length !== 0) {
+            answer = fields.filter((x) => {
+                let selectionsForField = this.selectionsHash[x];
+                return (selectionsForField && (selectionsForField.length > 0));
             });
         }
         return answer;
@@ -85,8 +88,8 @@ class FacetSelections {
         if (this.selectionsHash[fieldId]) {
             // find the value,
             // todo// sort it first (in case there lots might be faster find)
-            //return (_.indexOf(_.sortBy(this.selectionsHash[fieldId], value)) !== -1);
-            return (_.indexOf(this.selectionsHash[fieldId], value) !== -1);
+            //return (sortBy(this.selectionsHash[fieldId].indexOf(value)) !== -1);
+            return (this.selectionsHash[fieldId].indexOf(value) !== -1);
         } else {
             // nothing selected
             return false;
@@ -188,7 +191,7 @@ class FacetSelections {
             this.removeSelection(facetField.id, value);
         }
         // boolean only has either true or false set not both
-        if (facetField.type === 'CHECKBOX') {
+        if (facetField.type === schemaConsts.CHECKBOX) {
             // if we just did a select and the selection for this field is both true & false
             // disable the other one that the newly selected
             let YesMsg = 'report.facets.yesCheck';

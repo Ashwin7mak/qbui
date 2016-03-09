@@ -258,10 +258,10 @@
 
     function resolveFacets(req, res) {
         processRequest(req, res, function(req, res) {
-            log.debug("facetExpression in mapper =" + req.param('expression'));
-            queryFormatter.format(req.param('facetexpression'))
+            log.debug("facetExpression in mapper =" + req.query.facetexpression);
+            queryFormatter.format(req.query.facetexpression)
                 .then(function(response) {
-                    res.pipe(response);
+                    res.send(response);
                 });
         });
     }

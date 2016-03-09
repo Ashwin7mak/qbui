@@ -9,9 +9,12 @@ describe('ReportToolsAndContent functions', () => {
     let component;
     let flux = {
     };
+    let reportData = {
+
+    };
 
     var ReportContentMock = React.createClass({
-        render: function() {
+        render() {
             return (
                 <div>ReportContentMock</div>
             );
@@ -27,7 +30,7 @@ describe('ReportToolsAndContent functions', () => {
     });
 
     it('test render of component', () => {
-        component = TestUtils.renderIntoDocument(<ReportToolsAndContent flux={flux}/>);
+        component = TestUtils.renderIntoDocument(<ReportToolsAndContent flux={flux} reportData={reportData}/>);
         expect(TestUtils.isCompositeComponent(component)).toBeTruthy();
     });
 
