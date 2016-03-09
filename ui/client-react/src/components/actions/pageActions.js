@@ -9,7 +9,26 @@ import './pageActions.scss';
 /**
  * a set of page actions, of menuAfter are displayed
  * followed by a dropdown containing the remainder
+ *
+ * example:
+ *
+ * if the actions prop is passed:
+ * [
+ *  {name: 'name-a', icon: 'icon-a'},
+ *  {name: 'name-b', icon: 'icon-b'},
+ *  {name: 'name-c', icon: 'icon-b'}
+ * ];
+ *
+ * to render a dropdown containing name-a,name-b, and name-c we pass menuAfter={0}
+ * to render 3 QBIcons without a dropdown menu we pass menuAfter={2} (or greater)
+ * to render 1 icon with a dropdown containing name-b and name-c we pass menuAfter={1}
  */
+
+let actions = [
+    {name: 'a', icon: 'icon-a'},
+    {name: 'b', icon: 'icon-b'},
+    {name: 'ca', icon: 'icon-b'}
+];
 let PageActions = React.createClass({
 
     // actions don't have any functionality yet...

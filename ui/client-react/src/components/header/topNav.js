@@ -35,7 +35,11 @@ var TopNav = React.createClass({
             <div className={'topNav'}>
                 <div className="top">
                     <div className="navGroup left">
-                        <div className="navItem "><a className="iconLink toggleNavButton" href="#" onClick={this.props.onNavClick}><QBicon icon="hamburger" /> </a></div>
+                        <div className="navItem ">
+                            <a className="iconLink toggleNavButton" href="#" onClick={this.props.onNavClick}>
+                                <QBicon icon="hamburger" />
+                            </a>
+                        </div>
 
                         {this.getTopTitle()}
                     </div>
@@ -45,7 +49,12 @@ var TopNav = React.createClass({
 
                             <OverlayTrigger trigger="click" rootClose placement="bottom" overlay={
                                 <Popover id={0} className={'searchPopover'}  title="Search">
-                                    <Input className="searchInput" key={'searchInput'} standalone type="text" placeholder={Locale.getMessage('nav.searchRecordsPlaceholder')}  onChange={this.searchChanged} />
+                                    <Input className="searchInput"
+                                           key={'searchInput'}
+                                           standalone
+                                           type="text"
+                                           placeholder={Locale.getMessage('nav.searchRecordsPlaceholder')}
+                                           onChange={this.searchChanged} />
                                 </Popover>}>
 
                                 <Button><QBicon icon="search" /></Button>

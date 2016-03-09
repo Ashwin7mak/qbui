@@ -4,11 +4,11 @@ import sortByAll from 'lodash/collection/sortByAll.js';
 
 var Content = React.createClass({
 
-    render: function() {
+    render() {
         return (this.props.data.apps.length ?
                 <ol className="apps">
                     {(sortByAll(this.props.data.apps, ['id'])).map((app) => {
-                        let appName = app.name + ' (' + app.id + ')';
+                        let appName = `${app.name} (${app.id})`;
                         return (
                             <li className="app" key={appName}>
                                 <div>{appName}</div>

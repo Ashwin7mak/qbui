@@ -213,7 +213,7 @@ body.touch .leftNav.closed {
     }
 
     .search {
-        color: #555555;
+        color: $search-input-fg;
         overflow: hidden;
         height: 0;
         transition: all 250ms ease;
@@ -320,7 +320,7 @@ body.touch .leftNav.closed {
                 a {
                     flex: 1;
                     opacity: 1;
-                    color: #fff;
+                    color: $left-nav-fg;
                 }
                 a.right {
                     flex: 0 0 auto;
