@@ -2,7 +2,6 @@ import * as actions from '../../src/constants/actions';
 
 import Store from '../../src/stores/reportDataStore';
 import Fluxxor from 'fluxxor';
-import _ from 'lodash';
 import FacetSelections  from '../../src/components/facet/facetSelections';
 
 describe('Test ReportData Store', () => {
@@ -32,7 +31,7 @@ describe('Test ReportData Store', () => {
 
     it('test default report store state', () => {
         // verify default states
-        expect(_.keys(flux.store(STORE_NAME).data).length).toBe(0);
+        expect(Object.keys(flux.store(STORE_NAME).data).length).toBe(0);
         expect(flux.store(STORE_NAME).loading).toBeFalsy();
         expect(flux.store(STORE_NAME).error).toBeFalsy();
 

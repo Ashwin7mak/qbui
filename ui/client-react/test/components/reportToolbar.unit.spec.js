@@ -72,7 +72,7 @@ describe('ReportToolbar functions', () => {
             return;
         },
     };
-   // flux.addActions(facetMenuActions);
+
 
     let fakefacets = [
         {

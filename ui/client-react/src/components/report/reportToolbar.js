@@ -16,7 +16,7 @@ import QBicon from '../qbIcon/qbIcon';
 let FluxMixin = Fluxxor.FluxMixin(React);
 
 let logger = new Logger();
-import _ from 'lodash';
+
 
 const secondInMilliseconds = 1000;
 
