@@ -150,7 +150,8 @@ a {
         .mainContent {
             display: flex;
             order: 2;
-            overflow-y: auto;
+            overflow-y: scroll;
+            -webkit-overflow-scrolling: touch;
             flex: 1;
             min-width: 0;
         }
