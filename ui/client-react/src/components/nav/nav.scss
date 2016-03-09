@@ -9,7 +9,6 @@ $font-path: '../../assets/fonts/';
     font-style: normal;
 }
 
-// Main general styles should be moved to a base styles file.
 html, body {
     margin: 0;
     height: 100%;
@@ -56,7 +55,6 @@ body.touch {
     }
 }
 
-// Don't do this. This is bad. This affects ALL links. Moreover, removing outline can cause accessibility problems.
 a {
     outline: none !important;
 }
