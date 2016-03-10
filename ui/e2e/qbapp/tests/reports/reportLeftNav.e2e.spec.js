@@ -79,7 +79,7 @@
         it('LeftNav Apps toggle should show / hide App Dashboard Links and Search widget', function() {
             reportServicePage.tableLinksElList.then(function(links) {
                 // Check we have the base links and two table links present
-                expect(links.length).toBe(4);
+                expect(links.length).toBe(6);
                 reportServicePage.clickAppToggle();
                 // Check that the app search widget is hidden
                 expect(reportServicePage.searchAppsDivEl.isDisplayed()).toBeFalsy();
@@ -129,7 +129,7 @@
                 e2eBase.resizeBrowser(testcase.browserWidth, e2eConsts.DEFAULT_HEIGHT).then(function(tableLinksElList) {
                     (reportServicePage.tableLinksElList).then(function(links) {
                         // Check we have the 3 base links and two table links present on left Nav
-                        expect(links.length).toBe(4);
+                        expect(links.length).toBe(6);
                         for (var i = 0; i < links.length; i++) {
                             expect(links[i].isDisplayed()).toBe(true);
                         }
