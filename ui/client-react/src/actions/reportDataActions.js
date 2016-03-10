@@ -23,7 +23,7 @@ Promise.onPossiblyUnhandledRejection(function(err) {
 
 let reportDataActions = {
 
-    loadReport: function(appId, tblId, rptId, format) {
+    loadReport(appId, tblId, rptId, format) {
 
         //  promise is returned in support of unit testing only
         return new Promise(function(resolve, reject) {
@@ -56,7 +56,7 @@ let reportDataActions = {
                 ).catch(
                     function(ex) {
                         logger.error('Report service call exception:', ex);
-                        this.dispatch(actions.LOAD_REPORT_FAILED, {error: ex});
+                        this.dispatch(actions.LOAD_REPORT_FAILED, {exception: ex});
                         reject();
                     }.bind(this)
                 );
@@ -74,7 +74,7 @@ let reportDataActions = {
     *       facet  : expression representing all the facets selected by user so far example [{fid: fid1, values: value1, value2}, {fid: fid2, values: value3, value4}, ..]
     *       search : search string
     */
-    filterReport: function(appId, tblId, rptId, format, filter) {
+    filterReport(appId, tblId, rptId, format, filter) {
 
         //  promise is returned in support of unit testing only
         return new Promise(function(resolve, reject) {
@@ -137,13 +137,13 @@ let reportDataActions = {
                     }.bind(this),
                     function(error) {
                         logger.error('Filter Report service call error:', error);
-                        this.dispatch(actions.LOAD_REPORT_FAILED);
+                        this.dispatch(actions.LOAD_RECORDS_FAILED, {error: error});
                         reject();
                     }.bind(this)
                 ).catch(
                     function(ex) {
                         logger.error('Filter Report service calls exception:', ex);
-                        this.dispatch(actions.LOAD_REPORT_FAILED);
+                        this.dispatch(actions.LOAD_RECORDS_FAILED, {exception: ex});
                         reject();
                     }.bind(this)
                 );

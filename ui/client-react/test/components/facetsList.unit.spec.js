@@ -9,7 +9,7 @@ import FacetSelections  from '../../src/components/facet/facetSelections';
 describe('FacetList functions', () => {
     'use strict';
     var I18nMessageMock = React.createClass({
-        render: function() {
+        render() {
             return (
                 <div>test</div>
             );

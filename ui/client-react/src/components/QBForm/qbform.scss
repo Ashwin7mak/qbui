@@ -2,50 +2,58 @@
 
 $fieldLabel-color: $color3;
 
-.formContainer{
-  padding: 2%;
+.formContainer {
+    padding: 2%;
 }
-.fieldRow{
-  display: flex;
-  flex-direction: row;
-  align-items: stretch;
-  flex-wrap: wrap;
-  overflow-y: hidden;
+
+.fieldRow {
+    display: flex;
+    flex-direction: row;
+    align-items: stretch;
+    flex-wrap: wrap;
+    overflow-y: hidden;
 }
+
 .field {
-  //top right bottom left
-  padding: 0 35px 20px 0;
-  max-width: 25%;
-  .fieldLabel{
-    display: block;
-    color: $fieldLabel-color;
-    padding-bottom: 2px;
-  }
-  .fieldValue {
-    display:block;
-    min-width: 0;
-  }
+    //top right bottom left
+    padding: 0 35px 20px 0;
+    max-width: 25%;
+    .fieldLabel {
+        display: block;
+        color: $fieldLabel-color;
+        padding-bottom: 2px;
+    }
+    .fieldValue {
+        display: block;
+        min-width: 0;
+    }
 }
+
 .qbPanelHeaderIcon {
-  float: right;
-  color: #404040;
+    float: right;
+    color: #404040;
 }
+
 .qbPanelHeaderIcon:hover {
-  color: #0098cd;
+    color: #0098cd;
 }
 
 /* For mobile phones: */
-.small-breakpoint .field {
-  max-width: 100%;
-  .fieldLabel {
-    font-size: $font-size-small;
-  }
-  .fieldValue {
-    font-size: $font-size-small;
-  }
+@include small-breakpoint {
+    .field {
+        max-width: 100%;
+        .fieldLabel {
+            font-size: $font-size-small;
+        }
+        .fieldValue {
+            font-size: $font-size-small;
+        }
+    }
 }
 
 /* For tablet like devices: */
-.medium-breakpoint .field {
-  max-width: 60%;
+@include medium-breakpoint {
+    .field {
+        max-width: 60%;
+    }
 }

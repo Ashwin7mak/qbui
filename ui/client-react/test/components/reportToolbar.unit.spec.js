@@ -2,8 +2,10 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import TestUtils from 'react-addons-test-utils';
 import Fluxxor from 'fluxxor';
+import * as actions from '../../src/constants/actions';
 import ReportToolbar  from '../../src/components/report/reportToolbar';
 import FacetSelections  from '../../src/components/facet/facetSelections';
+import facetMenuActions from '../../src/actions/facetMenuActions';
 
 describe('ReportToolbar functions', () => {
     'use strict';
@@ -11,51 +13,66 @@ describe('ReportToolbar functions', () => {
     let component;
 
     let navStore = Fluxxor.createStore({
-        getState: function() {
+        getState() {
             return {leftNavOpen: true};
         }
     });
 
     let appStore = Fluxxor.createStore({
-        getState: function() {
+        getState() {
             return [];
         }
     });
     let reportsStore = Fluxxor.createStore({
-        getState: function() {
+        getState() {
             return [];
         }
     });
 
     let reportDataStore = Fluxxor.createStore({
-        getState: function() {
+        getState() {
             return [];
         }
     });
+
+    let facetMenuStore = Fluxxor.createStore({
+        initMenu() {
+
+        },
+        getState() {
+            return {};
+        }
+    });
+
 
     let stores = {
         NavStore: new navStore(),
         AppsStore: new appStore(),
         ReportsStore: new reportsStore(),
-        ReportDataStore: new reportDataStore()
+        ReportDataStore: new reportDataStore(),
+        FacetMenuStore:  new facetMenuStore()
     };
 
     let flux = new Fluxxor.Flux(stores);
 
     flux.actions = {
-        selectTableId: function() {
+        selectTableId() {
             return;
         },
-        loadReports: function() {
+        loadReports() {
             return;
         },
-        searchFor: function(text) {
+        searchFor(text) {
             return;
         },
-        filterReport: function() {
+        filterReport() {
+            return;
+        },
+        getState() {
             return;
         },
     };
+
 
     let fakefacets = [
         {
@@ -83,6 +100,9 @@ describe('ReportToolbar functions', () => {
         //    range : {start: 1, end: 2}},
     ];
 
+    beforeEach(() => {
+        flux.store('FacetMenuStore').initMenu();
+    });
 
     const fakeReportData_simple = {
         loading: false,
@@ -138,6 +158,7 @@ describe('ReportToolbar functions', () => {
         />);
         expect(TestUtils.isCompositeComponent(component)).toBeTruthy();
         let filterSearchBox = TestUtils.scryRenderedDOMComponentsWithClass(component, "filterSearchBox");
+
         expect(filterSearchBox.length).toEqual(1);
         let facetsMenuContainer = TestUtils.scryRenderedDOMComponentsWithClass(component, "facetsMenuContainer");
         expect(facetsMenuContainer.length).toEqual(1);
@@ -167,14 +188,11 @@ describe('ReportToolbar functions', () => {
     it('test render reportToolbar with selected facet values', () => {
         let selected = new FacetSelections();
         selected.addSelection(1, 'Development');
+        selected.addSelection(4, 'Yes');
         let fakeReportWithFacets = _.cloneDeep(fakeReportData_simple);
-        component = TestUtils.renderIntoDocument(<ReportToolbar flux={flux}
+        component = TestUtils.renderIntoDocument(<ReportToolbar flux={flux} selections={selected}
                                                                 reportData={fakeReportWithFacets}/>);
         expect(TestUtils.isCompositeComponent(component)).toBeTruthy();
-        component.handleFacetSelect(null, 1, 'Development');
-        // filled filter icon is shown when there's a selection
-        let filterIcon = TestUtils.scryRenderedDOMComponentsWithClass(component, "iconssturdy-filter-status");
-        expect(filterIcon.length).toEqual(1);
 
         //clear select button shown
         let clearAllFacets = TestUtils.scryRenderedDOMComponentsWithClass(component, "clearAllFacets");
@@ -186,6 +204,28 @@ describe('ReportToolbar functions', () => {
         let span = recordsCount[0];
         expect(span).not.toBeNull();
         expect(span.innerText.match(/\d+ .*\d+/)).toBeTruthy();
+    });
+
+    it('test render reportToolbar with selected facet values and add Boolean filter', () => {
+        let selected = new FacetSelections();
+        selected.addSelection(1, 'Development');
+        let fakeReportWithFacets = _.cloneDeep(fakeReportData_simple);
+        component = TestUtils.renderIntoDocument(<ReportToolbar flux={flux} selections={selected}
+                                                                reportData={fakeReportWithFacets}/>);
+        expect(TestUtils.isCompositeComponent(component)).toBeTruthy();
+
+        spyOn(flux.actions, 'filterReport').and.callThrough();
+
+        //add bool facet
+        selected.addSelection(4, 'Yes');
+        //search
+        component.filterOnSearch('');
+
+        // ensure the boolean facet becomes a number
+        expect(flux.actions.filterReport).toHaveBeenCalledWith(undefined, undefined, undefined, true,
+            {selections : selected, facet: [{fid : '1', values:['Development']}, {fid: '4', values:[1]}], search : ''});
+
+        flux.actions.filterReport.calls.reset();
     });
 
     it('test render reportToolbar searches text', (done) => {
@@ -207,6 +247,7 @@ describe('ReportToolbar functions', () => {
         TestUtils.Simulate.change(searchInput, {target: {value: testValue}});
         //initially don't search until debounced time has passed
         expect(flux.actions.filterReport).not.toHaveBeenCalled();
+        flux.actions.filterReport.calls.reset();
 
         // count has 1 number e.g. X records when there is no search (not x of y records)
         let recordsCount = TestUtils.scryRenderedDOMComponentsWithClass(component, "recordsCount");
@@ -218,12 +259,26 @@ describe('ReportToolbar functions', () => {
         //timeout for debounce
         setTimeout(function() {
             // check that search ran after debounce time
-            expect(flux.actions.filterReport).toHaveBeenCalledWith(undefined, undefined, undefined, true, Object({facet: [], search: testValue}));
-            // check that its considered filtered
-            expect(component.isFiltered()).toBe(true);
+            expect(flux.actions.filterReport).toHaveBeenCalledWith(undefined, undefined, undefined, true, Object({selections: jasmine.any(Object), facet: [], search: testValue}));
             flux.actions.filterReport.calls.reset();
             done();
         }, delay + 10);
+
+    });
+
+    it('test render reportToolbar with search text', (done) => {
+        component = TestUtils.renderIntoDocument(<ReportToolbar flux={flux}
+                                                                searchStringForFiltering={"abc"}
+                                                                reportData={fakeReportData_simple}/>);
+
+        // check for the search box shows up
+        let filterSearchBox = TestUtils.scryRenderedDOMComponentsWithClass(component, "filterSearchBox");
+        expect(filterSearchBox.length).toEqual(1);
+        expect(filterSearchBox[0].value).toEqual("abc");
+
+        // check that report is considered filter
+        expect(component.isFiltered()).toBeTruthy();
+        done();
 
     });
 
@@ -233,33 +288,38 @@ describe('ReportToolbar functions', () => {
                                                                 reportData={fakeReportWithFacets}
         />);
         expect(TestUtils.isCompositeComponent(component)).toBeTruthy();
+        spyOn(flux.actions, 'filterReport').and.callThrough();
+
         //select a couple of facets
         component.handleFacetSelect(null, {id: 1}, 'Development');
         component.handleFacetSelect(null, {id: 1}, 'Planning');
+        expect(flux.actions.filterReport).toHaveBeenCalled();
+        flux.actions.filterReport.calls.reset();
+
         //clear all selection for field 1
         component.handleFacetClearFieldSelects({id: 1});
-        // empty filter icon is shown no selection
-        let filterIcon = TestUtils.scryRenderedDOMComponentsWithClass(component, "iconssturdy-filter-tool");
-        expect(filterIcon.length).toEqual(1);
+        expect(flux.actions.filterReport).toHaveBeenCalled();
+        flux.actions.filterReport.calls.reset();
 
     });
 
-    it('test render reportToolbar with selected values then clear some field selections', () => {
+    it('test render reportToolbar with selected values then clear a value selection', () => {
         let fakeReportWithFacets = _.cloneDeep(fakeReportData_simple);
+        let startingSelections = new FacetSelections();
+        startingSelections.addSelection(1, "Development");
         component = TestUtils.renderIntoDocument(<ReportToolbar flux={flux}
+                                                                selections={startingSelections}
                                                                 reportData={fakeReportWithFacets}
         />);
         expect(TestUtils.isCompositeComponent(component)).toBeTruthy();
-        //select a couple of facets
-        component.handleFacetSelect(null, {id: 1}, 'Development');
-        component.handleFacetSelect(null, {id: 2}, 'Claire Martinez');
-        //clear all selection for field 1
-        component.handleFacetClearFieldSelects({id: 1});
-        // nonempty filter icon is shown still some selections for field 2
-        let filterIcon = TestUtils.scryRenderedDOMComponentsWithClass(component, "iconssturdy-filter-status");
-        expect(filterIcon.length).toEqual(1);
+        spyOn(flux.actions, 'filterReport').and.callThrough();
 
+        //select a couple of facets
+        component.handleFacetDeselect(null, {id: 1}, 'Development');
+        expect(flux.actions.filterReport).toHaveBeenCalled();
+        flux.actions.filterReport.calls.reset();
     });
+
 
     it('test render reportToolbar with selected values then clear all selection', () => {
         let fakeReportWithFacets = _.cloneDeep(fakeReportData_simple);
@@ -270,13 +330,37 @@ describe('ReportToolbar functions', () => {
         //select a couple of facets
         component.handleFacetSelect(null, {id: 1}, 'Development');
         component.handleFacetSelect(null, {id: 2}, 'Claire Martinez');
+        spyOn(flux.actions, 'filterReport').and.callThrough();
+
         //clear all selects
         component.handleFacetClearAllSelects();
-        // empty filter icon is shown no selections
-        let filterIcon = TestUtils.scryRenderedDOMComponentsWithClass(component, "iconssturdy-filter-tool");
-        expect(filterIcon.length).toEqual(1);
 
+        expect(flux.actions.filterReport).toHaveBeenCalled();
+        flux.actions.filterReport.calls.reset();
     });
+
+
+    it('test render reportToolbar with selected values and search then clear all ', () => {
+        let fakeReportWithFacets = _.cloneDeep(fakeReportData_simple);
+        component = TestUtils.renderIntoDocument(<ReportToolbar flux={flux}
+                                                                searchStringForFiltering={'abc'}
+                                                                reportData={fakeReportWithFacets}
+        />);
+        expect(TestUtils.isCompositeComponent(component)).toBeTruthy();
+        //select a couple of facets
+        component.handleFacetSelect(null, {id: 1}, 'Development');
+        component.handleFacetSelect(null, {id: 2}, 'Claire Martinez');
+        spyOn(flux.actions, 'filterReport').and.callThrough();
+        spyOn(component, 'filterReport').and.callThrough();
+
+        //clear all selects and search
+        component.handleFacetClearAllSelectsAndSearch();
+
+        expect(flux.actions.filterReport).toHaveBeenCalled();
+        expect(component.filterReport).toHaveBeenCalledWith('', new FacetSelections());
+        flux.actions.filterReport.calls.reset();
+    });
+
 
 });
 

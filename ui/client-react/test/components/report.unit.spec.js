@@ -19,18 +19,18 @@ describe('Report functions', () => {
 
     let flux = {
         actions:{
-            loadReport: function() {return;},
-            filterReport: function() {return;}
+            loadReport() {return;},
+            filterReport() {return;}
         }
     };
 
     let ReportStageMock = React.createClass({
-        render: function() {
+        render() {
             return <div className="stage-mock" />;
         }
     });
     let ReportContentMock = React.createClass({
-        render: function() {
+        render() {
             return <div className="report-content-mock" />;
         }
     });

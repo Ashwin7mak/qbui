@@ -5,7 +5,7 @@ import Fluxxor from 'fluxxor';
 
 let ReportDataStore = Fluxxor.createStore({
 
-    initialize: function() {
+    initialize() {
         this.data = {};
         this.loading = false;
         this.error = false;
@@ -23,7 +23,7 @@ let ReportDataStore = Fluxxor.createStore({
         );
     },
 
-    onLoadReport: function(report) {
+    onLoadReport(report) {
         this.loading = true;
 
         this.appId = report.appId;
@@ -34,13 +34,13 @@ let ReportDataStore = Fluxxor.createStore({
 
         this.emit('change');
     },
-    onLoadReportFailed: function() {
+    onLoadReportFailed() {
         this.loading = false;
         this.error = true;
         this.emit('change');
     },
 
-    onLoadReportSuccess: function(reportData) {
+    onLoadReportSuccess(reportData) {
         this.loading = false;
         this.error = false;
 
@@ -55,7 +55,7 @@ let ReportDataStore = Fluxxor.createStore({
         this.emit('change');
     },
 
-    onLoadRecords: function(payload) {
+    onLoadRecords(payload) {
         this.loading = true;
 
         this.appId = payload.appId;
@@ -68,20 +68,20 @@ let ReportDataStore = Fluxxor.createStore({
         this.emit('change');
     },
 
-    onLoadRecordsSuccess: function(records) {
+    onLoadRecordsSuccess(records) {
         this.loading = false;
         this.error = false;
         this.data.filteredRecords = this.getReportData(records);
         this.emit('change');
     },
 
-    onLoadRecordsFailed: function() {
+    onLoadRecordsFailed() {
         this.loading = false;
         this.error = true;
         this.emit('change');
     },
 
-    onSearchFor: function(text) {
+    onSearchFor(text) {
 
         this.data.filteredRecords = [];
 
@@ -103,7 +103,7 @@ let ReportDataStore = Fluxxor.createStore({
         this.emit('change');
     },
 
-    getReportColumns: function(fields) {
+    getReportColumns(fields) {
         let columns = [];
         if (fields) {
             fields.forEach(function(field, index) {
@@ -124,7 +124,7 @@ let ReportDataStore = Fluxxor.createStore({
         return columns;
     },
 
-    getReportData: function(data) {
+    getReportData(data) {
         let fields = data.fields;
         let records = data.records;
         let reportData = [];
@@ -149,7 +149,7 @@ let ReportDataStore = Fluxxor.createStore({
         return reportData;
     },
 
-    getState: function() {
+    getState() {
         return {
             loading: this.loading,
             error: this.error,

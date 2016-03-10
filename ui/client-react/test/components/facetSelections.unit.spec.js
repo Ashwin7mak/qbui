@@ -1,4 +1,5 @@
 import FacetSelections from '../../src/components/facet/facetSelections';
+import * as schemaConsts from '../../src/constants/schema.js';
 
 describe('FacetSelections', () => {
     'use strict';
@@ -311,7 +312,7 @@ describe('FacetSelections', () => {
     describe('test FacetSelections setFacetValueSelectState checkboxes', () => {
         let testSelections = new FacetSelections();
         let facetField = {
-            type:"CHECKBOX",
+            type:schemaConsts.CHECKBOX,
             id : 'fieldid',
         };
         it('it has false selected', () => {

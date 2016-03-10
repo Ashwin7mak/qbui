@@ -12,11 +12,13 @@ import FacetsMenu from '../facet/facetsMenu';
 import FacetSelections from '../facet/facetSelections';
 import RecordsCount from './recordsCount';
 import QBicon from '../qbIcon/qbIcon';
+import * as schemaConsts from '../../constants/schema.js';
+import PageActions from '../actions/pageActions';
 
 let FluxMixin = Fluxxor.FluxMixin(React);
 
 let logger = new Logger();
-import _ from 'lodash';
+
 
 const secondInMilliseconds = 1000;
 
@@ -45,7 +47,7 @@ var ReportToolbar = React.createClass({
     },
 
 
-    getDefaultProps : function() {
+    getDefaultProps() {
         return {
             fillinDummyFacets : false,
             selections:new FacetSelections(),
@@ -54,13 +56,14 @@ var ReportToolbar = React.createClass({
         };
     },
 
-    getInitialState: function() {
+    getInitialState() {
         return {
-            searchInput: '',
+            //seed the initial search value
+            searchInput: this.props.searchStringForFiltering ? this.props.searchStringForFiltering : '',
         };
     },
 
-    debouncedChange: function(name) {
+    debouncedChange(name) {
         let deferred = Promise.defer();
 
         var timerId = this.timerId;
@@ -80,7 +83,7 @@ var ReportToolbar = React.createClass({
         return deferred.promise;
     },
 
-    isFiltered : function() {
+    isFiltered() {
         let answer = false;
         if (this.props.searchStringForFiltering.length !== 0) {
             answer = true;
@@ -90,7 +93,7 @@ var ReportToolbar = React.createClass({
         return answer;
     },
 
-    filterReport: function(searchString, selections) {
+    filterReport(searchString, selections) {
         //var facetExpression = [{fid:'3', values:['10', '11']}, {fid:'4', values:['abc']}];
         let facetExpression = [];
         let selected = selections;
@@ -98,7 +101,7 @@ var ReportToolbar = React.createClass({
         facetExpression = fields.map((field) => {
             let values = selected.getFieldSelections(field);
             // use 1 or 0 for searching bool field types not the text
-            if (this.fields[field].type === 'CHECKBOX') {
+            if (this.fields[field].type === schemaConsts.CHECKBOX) {
                 var boolVal = values[0] === "Yes" ? 1 : 0;
                 values = [boolVal];
             }
@@ -113,46 +116,46 @@ var ReportToolbar = React.createClass({
         flux.actions.filterReport(this.props.appId, this.props.tblId, this.props.rptId, true, filterParam);
     },
 
-    filterOnSelections : function(newSelections) {
+    filterOnSelections(newSelections) {
         this.filterReport(this.props.searchStringForFiltering, newSelections);
     },
-    filterOnSearch : function(newSearch) {
+    filterOnSearch(newSearch) {
         this.filterReport(newSearch, this.props.selections);
     },
-    handleFacetSelect : function(e, facet, value) {
+    handleFacetSelect(e, facet, value) {
         var newSelections = this.props.selections.copy();
         newSelections.toggleSelectFacetValue(facet, value);
         this.filterOnSelections(newSelections);
     },
 
-    handleFacetDeselect : function(e, facet, value) {
+    handleFacetDeselect(e, facet, value) {
         var newSelections = this.props.selections.copy();
         newSelections.setFacetValueSelectState(facet, value, false);
         this.filterOnSelections(newSelections);
     },
 
-    handleFacetClearFieldSelects : function(facet) {
+    handleFacetClearFieldSelects(facet) {
         var newSelections = this.props.selections.copy();
         newSelections.removeAllFieldSelections(facet.id);
         this.filterOnSelections(newSelections);
     },
 
-    handleFacetClearAllSelects : function() {
+    handleFacetClearAllSelects() {
         var newSelections = new FacetSelections();
         this.filterOnSelections(newSelections);
     },
 
-    handleFacetClearAllSelectsAndSearch : function() {
+    handleFacetClearAllSelectsAndSearch() {
         var newSelections = new FacetSelections();
         this.setState({searchInput:''});
         this.filterReport('', newSelections);
     },
 
-    executeSearchString : function(result) {
+    executeSearchString(result) {
         this.filterOnSearch(result);
     },
 
-    searchTheString : function(searchTxt, debounced) {
+    searchTheString(searchTxt, debounced) {
         if (debounced) {
             this.debouncedChange(searchTxt).then((result) => {
                 this.executeSearchString(result.trim());
@@ -163,7 +166,7 @@ var ReportToolbar = React.createClass({
     },
 
 
-    handleSearchChange: function(e) {
+    handleSearchChange(e) {
         var searchTxt = e.target.value.trim();
         this.setState({
             searchInput: searchTxt
@@ -219,13 +222,22 @@ var ReportToolbar = React.createClass({
                 {id : 4, name : "Flag", type: "CHECKBOX",  blanks: false,
                     values : [{value: "Yes"}, {value: "No"}]},
                 {id : 5, name : "Companies", type: "TEXT",  blanks: false,
+                // TODO: support date ranges in filtering see https://jira.intuit.com/browse/QBSE-20422
                     values : []}, // too many values for facets example
                 //{id : 4, name : "Dates", type: "date",  blanks: false,
                 //    range : {start: 1, end: 2}},
             ];
         }
     },
-
+    getPageActions() {
+        const actions = [
+            {name: 'i.e. edit', icon:'edit'},
+            {name: 'i.e. mail', icon:'mail'},
+            {name: 'i.e. delete', icon:'delete'},
+            {name: 'i.e. print', icon:'print'}
+        ];
+        return (<PageActions actions={actions} menuAfter={0} {...this.props}/>);
+    },
     render() {
         if (this.props.fillinDummyFacets) {
             this.populateDummyFacets();
@@ -247,7 +259,7 @@ var ReportToolbar = React.createClass({
             hasRecords = recordCount ? true : false;
         }
 
-        let hasSelectedFacets = this.props.selections.hasAnySelections();
+        let hasSelectedFacets = this.props.selections && this.props.selections.hasAnySelections();
 
         let loadedReportToolbar = (
             <div className="reportToolbar">
@@ -273,7 +285,6 @@ var ReportToolbar = React.createClass({
                 <FilterSearchBox onChange={this.handleSearchChange}
                                  nameForRecords="Records"
                                  ref="searchInputbox"
-                                 defaultValue=""
                                  value={this.state.searchInput}
                     {...this.props} />
                 }
@@ -291,7 +302,7 @@ var ReportToolbar = React.createClass({
                 }
 
                 {<div id="facetsMenuTarget"></div>}
-
+                {this.getPageActions()}
             </div>
         );
 

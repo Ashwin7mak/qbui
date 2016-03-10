@@ -96,65 +96,35 @@
             });
         });
 
-        /**
-         * Test method. The leftNav should shrink responsively across the 4 breakpoints as the browser is re-sized
-         */
-        it('LeftNav should shrink responsively from xlarge to small breakpoints', function() {
-            // Select the table
-            reportServicePage.tableLinksElList.get(3).click().then(function() {
-                // Open the reports list
-                reportServicePage.reportHamburgersElList.get(0).click();
-                // Wait for the report list to load
-                reportServicePage.waitForElement(reportServicePage.reportGroupsDivEl).then(function() {
-                    // Find and select the report
-                    reportServicePage.selectReport('My Reports', 'Test Report');
-                });
-                // Make sure the table report has loaded
-                reportServicePage.waitForElement(reportServicePage.loadedContentEl).then(function() {
-                    e2eConsts.NavDimensionsDataProvider().forEach(function(testcase) {
-                        // Resize browser at different widths to check responsiveness
-                        e2eBase.resizeBrowser(testcase.browserWidth, e2eConsts.DEFAULT_HEIGHT).then(function() {
-                            reportServicePage.assertNavProperties(testcase.breakpointSize, testcase.open, testcase.offsetWidth);
-                        });
-                    });
-                    // Reset back to xlarge
-                    e2eBase.resizeBrowser(e2eConsts.XLARGE_BP_WIDTH, e2eConsts.DEFAULT_HEIGHT);
-                });
-            });
-        });
 
-        /**
-         * Test method. The leftNav should expand responsively across the 4 breakpoints as the browser is re-sized
-         */
-        it('LeftNav should expand responsively from small to xlarge breakpoints', function() {
-            // Select the table
-            reportServicePage.tableLinksElList.get(3).click().then(function() {
-                // Open the reports list
-                reportServicePage.reportHamburgersElList.get(0).click();
-                // Wait for the report list to load
-                reportServicePage.waitForElement(reportServicePage.reportGroupsDivEl).then(function() {
-                    // Find and select the report
-                    reportServicePage.selectReport('My Reports', 'Test Report');
-                });
-                // Make sure the table report has loaded
-                reportServicePage.waitForElement(reportServicePage.loadedContentEl).then(function() {
-                    // Reverse the dataprovider to execute from small to xlarge
-                    var reverseArray = e2eConsts.NavDimensionsDataProvider().reverse();
-                    reverseArray.forEach(function(testcase) {
-                        // Resize browser at different widths to check responsiveness
-                        e2eBase.resizeBrowser(testcase.browserWidth, e2eConsts.DEFAULT_HEIGHT).then(function() {
+        e2eConsts.NavDimensionsDataProvider().forEach(function(testcase) {
+            /**
+             * Test method. The leftNav should shrink responsively across the 4 breakpoints as the browser is re-sized
+             */
+            it('LeftNav should shrink responsively from xlarge to small breakpoints', function() {
+                // Resize browser at different widths to check responsiveness
+                e2eBase.resizeBrowser(testcase.browserWidth, e2eConsts.DEFAULT_HEIGHT).then(function() {
+                    // Select the table
+                    reportServicePage.tableLinksElList.get(3).click().then(function() {
+                        // Open the reports list
+                        reportServicePage.reportHamburgersElList.get(0).click();
+                        // Wait for the report list to load
+                        reportServicePage.waitForElement(reportServicePage.reportGroupsDivEl).then(function() {
+                            // Find and select the report
+                            reportServicePage.selectReport('My Reports', 'Test Report');
+                        });
+                        // Make sure the table report has loaded
+                        reportServicePage.waitForElement(reportServicePage.loadedContentEl).then(function() {
                             reportServicePage.assertNavProperties(testcase.breakpointSize, testcase.open, testcase.offsetWidth);
                         });
                     });
                 });
             });
-        });
 
-        /**
-         * Test method.Verify The elements present in leftNav across the 4 breakpoints as the browser is re-sized
-         */
-        it('Verify leftNav has 3 base links and 2 table links from xlarge to small breakpoints', function() {
-            e2eConsts.NavDimensionsDataProvider().forEach(function(testcase) {
+            /**
+             * Test method.Verify The elements present in leftNav across the 4 breakpoints as the browser is re-sized
+             */
+            it('Verify leftNav has 3 base links and 2 table links from xlarge to small breakpoints', function() {
                 // Resize browser at different widths
                 e2eBase.resizeBrowser(testcase.browserWidth, e2eConsts.DEFAULT_HEIGHT).then(function(tableLinksElList) {
                     (reportServicePage.tableLinksElList).then(function(links) {
@@ -162,25 +132,21 @@
                         expect(links.length).toBe(4);
                         for (var i = 0; i < links.length; i++) {
                             expect(links[i].isDisplayed()).toBe(true);
-                            // Verify elements present on leftNav with right dimensions
-                            reportServicePage.isElementInLeftNav(links[i], testcase.offsetWidth);
                         }
                     });
                 });
             });
-        });
 
-        /**
-         * Test method.Verify The elements present in leftNav across the 4 breakpoints as the browser is re-sized
-         */
-        it('Verify leftNav can load the reportsMenu when collapsed', function() {
-            //TODO: SafariDriver does not currently have an implementation for the mouseMove hover action (haven't found a workaround), need to skip this test if running Safari
-            if (browser.browserName === 'chrome' || browser.browserName === 'firefox') {
-                try {
-                    // Collapse the leftNav
-                    reportServicePage.waitForElement(reportServicePage.topNavToggleHamburgerEl).then(function() {
-                        reportServicePage.topNavToggleHamburgerEl.click();
-                        e2eConsts.NavDimensionsDataProvider().forEach(function(testcase) {
+            /**
+             * Test method.Verify The elements present in leftNav across the 4 breakpoints as the browser is re-sized
+             */
+            it('Verify leftNav can load the reportsMenu when collapsed', function() {
+                //TODO: SafariDriver does not currently have an implementation for the mouseMove hover action (haven't found a workaround), need to skip this test if running Safari
+                if (browser.browserName !== 'safari') {
+                    try {
+                        // Collapse the leftNav
+                        reportServicePage.waitForElement(reportServicePage.topNavToggleHamburgerEl).then(function() {
+                            reportServicePage.topNavToggleHamburgerEl.click();
                             // Resize browser at different widths
                             e2eBase.resizeBrowser(testcase.browserWidth, e2eConsts.DEFAULT_HEIGHT).then(function(tableLinksElList) {
                                 // Hover over the table link icon in leftNav
@@ -195,16 +161,45 @@
                                 });
                             });
                         });
-                    });
-                } catch (e) {
-                    throw new Error(e);
-                } finally {
-                    // Expand the leftNav
-                    reportServicePage.waitForElement(reportServicePage.topNavToggleHamburgerEl).then(function() {
-                        reportServicePage.topNavToggleHamburgerEl.click();
-                    });
+                    } catch (e) {
+                        throw new Error(e);
+                    } finally {
+                        // Expand the leftNav
+                        reportServicePage.waitForElement(reportServicePage.topNavToggleHamburgerEl).then(function() {
+                            reportServicePage.topNavToggleHamburgerEl.click();
+                        });
+                    }
                 }
-            }
+            });
+        });
+
+        // Reverse the dataprovider to execute from small to xlarge
+        var reverseArray = e2eConsts.NavDimensionsDataProvider().reverse();
+        reverseArray.forEach(function(testcase) {
+            /**
+             * Test method. The leftNav should expand responsively across the 4 breakpoints as the browser is re-sized
+             */
+            it('LeftNav should expand responsively from small to xlarge breakpoints', function() {
+                e2eBase.resizeBrowser(e2eConsts.XLARGE_BP_WIDTH, e2eConsts.DEFAULT_HEIGHT).then(function() {
+                    // Select the table
+                    reportServicePage.tableLinksElList.get(3).click().then(function() {
+                        // Open the reports list
+                        reportServicePage.reportHamburgersElList.get(0).click();
+                        // Wait for the report list to load
+                        reportServicePage.waitForElement(reportServicePage.reportGroupsDivEl).then(function() {
+                            // Find and select the report
+                            reportServicePage.selectReport('My Reports', 'Test Report');
+                        });
+                        // Make sure the table report has loaded
+                        reportServicePage.waitForElement(reportServicePage.loadedContentEl).then(function() {
+                            // Resize browser at different widths to check responsiveness
+                            e2eBase.resizeBrowser(testcase.browserWidth, e2eConsts.DEFAULT_HEIGHT).then(function() {
+                                reportServicePage.assertNavProperties(testcase.breakpointSize, testcase.open, testcase.offsetWidth);
+                            });
+                        });
+                    });
+                });
+            });
         });
 
         /**

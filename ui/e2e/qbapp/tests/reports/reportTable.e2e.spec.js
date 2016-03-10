@@ -88,6 +88,8 @@
             });
             // Wait until the table has loaded
             reportServicePage.waitForElement(reportServicePage.loadedContentEl).then(function() {
+                //TODO: Assert report icon has been highlighted to indicate which table you are on
+
                 // Assert column headers
                 reportServicePage.getReportColumnHeaders(reportServicePage).then(function(resultArray) {
                     // UI is currently using upper case to display the field names in columns

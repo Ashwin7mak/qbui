@@ -111,6 +111,14 @@
                 request = requestOverride;
             },
 
+            /**
+             * Allows you to override the
+             * @param requestOverride
+             */
+            setRequestHelperObject: function(requestHelperOverride) {
+                requestHelper = requestHelperOverride;
+            },
+
             fetchSingleRecordAndFields: function(req) {
                 var deferred = Promise.pending();
                 var fetchRequests = [this.fetchRecords(req), this.fetchFields(req)];

@@ -92,7 +92,7 @@ class FacetsItem extends Component {
             clearFacetsIcon = (<span onMouseDown={e => this.clearSelects(e)} >
                                     <QBicon className="clearFacet" icon="clear-mini" />
                                 </span>);
-            var listOfValues = _.map(this.props.facet.values, 'value');
+            var listOfValues = this.props.facet.values.map(x => x.value);
             var originalOrderSelected =  _.intersection(listOfValues, this.props.fieldSelections);
             selectionStrings = (originalOrderSelected.map((item, index) => {
                 return item + (index === (this.props.fieldSelections.length - 1) ? "" : ", ");
@@ -116,7 +116,7 @@ class FacetsItem extends Component {
      * @returns {XML}
      */
     renderValue(item, index) {
-        var isSelected = _.indexOf(this.props.fieldSelections, item.value) !== -1;
+        var isSelected = this.props.fieldSelections.indexOf(item.value) !== -1;
         return (
             <FacetsAspect isSelected={isSelected}
                          item={item}

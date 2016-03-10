@@ -71,7 +71,6 @@
 
     require('./config/expressConfig')(app);
     require('./routes')(app, config);
-
     //  log some server config info...but don't include the secrets configuration
     log.info('Express Server configuration:', JSON.stringify(_.omit(config, ['secrets', 'SESSION_SECRET'])));
 

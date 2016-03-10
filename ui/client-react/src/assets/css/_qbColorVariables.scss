@@ -68,7 +68,7 @@ $facetMenu-clearButtonColor:            $color9;
 $facetMenu-showMoreColor:               $color8;
 $facetMenu-facetTokenTextColor:         $color20;
 $facetMenu-facetTokenBackgroundColor:   $color7;
-$facetMenu-itemHoverColor:              $color4;
+$facetMenu-itemHoverColor:              rgba($color4, 0.5);
 
 //==report icon colors
 $report-icon-table-color: #f87878;
@@ -80,3 +80,9 @@ $report-icon-timeline-color: #e77700;
 $report-icon-map-color: #00c4d8;
 
 $search-input-fg: #555555;
+
+
+$top-nav-title-icon-color: #009AAE;
+$secondary-bar-fg: #fff;
+$secondary-bar-bg: #009AAE;
+$secondary-bar-page-actions-bg: #476B90;
