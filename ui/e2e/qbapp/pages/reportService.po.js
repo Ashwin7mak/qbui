@@ -264,11 +264,17 @@
          */
         this.clearFacetTokensFromContainer = function() {
             var deferred = Promise.pending();
-            this.reportFacetNameSelections.then(function(facetItems) {
-                console.log("facets length is: " + facetItems.length);
-                for (var i = 0; i < facetItems.length; i++) {
-                    console.log("the iteration is: " + i);
-                    facetItems[i].element(by.className('clearFacet')).click();
+            var locations = element.all(by.className('selectedToken'));
+            return locations.map(
+                function(locationElement, index) {
+                    return {
+                        index: index,
+                        text: locationElement.getText()
+                    };
+                }
+            ).then(function(items) {
+                for (var i = (items.length) - 1; i >= 0; --i) {
+                    locations.get(items[i].index).element(by.className('clearFacet')).click();
                     e2eBase.sleep(browser.params.largeSleep);
                 }
             });

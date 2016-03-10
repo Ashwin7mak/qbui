@@ -180,7 +180,6 @@
                             tableHeaders.push(tableColHeaders[i]);
                         }
                         expect(tableHeaders).toEqual(popUpFacetGrps);
-                        console.log("collapse the popup by clicking somewhee else");
                         reportServicePage.reportRecordsCount.click();
                         done();
                     });
@@ -258,7 +257,6 @@
                         reportServicePage.clearAllFacetTokensFromPopUp();
                     });
                 }).then(function() {
-                    console.log("collapse all popup group items and dissapear the popup");
                     reportServicePage.PopUpContainerFacetGroup.map(function(groupName, index) {
                         return groupName.getText().then(function(groupText) {
                             groupName.getAttribute('class').then(function(txt) {
@@ -270,7 +268,6 @@
                             });
                         });
                     }).then(function() {
-                        console.log("entered to collapse the popup finally");
                         reportServicePage.reportRecordsCount.click();
                         expect(reportServicePage.reportRecordsCount.getAttribute('innerText')).toEqual('6 Records');
                         done();
@@ -279,8 +276,8 @@
             });
         });
 
-        //TODO getting stale element error when cleaning all facets from a container
-        xit('Verify clear all facets tokens from the container', function(done) {
+        it('Verify clear all facets tokens from the container', function(done) {
+            var itemsSelceted = [];
             reportServicePage.waitForElement(reportServicePage.reportsToolBar).then(function() {
                 //Click on facet carat to show popup
                 reportServicePage.reportFilterBtnCaret.click().then(function() {
@@ -290,7 +287,6 @@
                     //select the facet Items
                     reportServicePage.selectFacetItemsAndVerifyTokens("Text Field", [1, 2, 3, 4]);
                 }).then(function() {
-                    console.log("Enter to clear tokens in the container");
                     //remove facets by clicking on clear (X) in popup beside Text Field and verify all tokens removed
                     reportServicePage.reportFilterBtnCaret.click().then(function() {
                         reportServicePage.clearFacetTokensFromContainer();
