@@ -146,11 +146,11 @@
             //verify the records count
             expect(reportServicePage.reportRecordsCount.getAttribute('innerText')).toEqual('6 Records');
             // Verify display of filter search box
-            expect(reportServicePage.reportFilterSearchBox.isDisplayed).toBeTruthy();
+            expect(reportServicePage.reportFilterSearchBox.isDisplayed()).toBeTruthy();
             //verify display of filter button
-            expect(reportServicePage.reportFilterBtn.isDisplayed).toBeTruthy();
+            expect(reportServicePage.reportFilterBtn.isDisplayed()).toBeTruthy();
             //verify display of filter carat/dropdown button
-            expect(reportServicePage.reportFilterBtnCaret.isDisplayed).toBeTruthy();
+            expect(reportServicePage.reportFilterBtnCaret.isDisplayed()).toBeTruthy();
             done();
         });
 
@@ -159,7 +159,7 @@
             //Click on facet carat
             reportServicePage.reportFilterBtnCaret.click().then(function() {
                 //Verify the popup menu is displayed
-                expect(reportServicePage.reportFacetPopUpMenu.isDisplayed).toBeTruthy();
+                expect(reportServicePage.reportFacetPopUpMenu.isDisplayed()).toBeTruthy();
             }).then(function() {
                 //verify expand and collapse of each items in an popup menu
                 reportServicePage.PopUpContainerFacetGroup.then(function(elements) {
@@ -237,7 +237,7 @@
                 //Click on facet carat
                 reportServicePage.reportFilterBtnCaret.click().then(function() {
                     //Verify the popup menu is displayed
-                    expect(reportServicePage.reportFacetPopUpMenu.isDisplayed).toBeTruthy();
+                    expect(reportServicePage.reportFacetPopUpMenu.isDisplayed()).toBeTruthy();
 
                 }).then(function() {
                     for (var i = 0; i < testcase.facets.length; i++) {
@@ -285,7 +285,7 @@
                 //Click on facet carat to show popup
                 reportServicePage.reportFilterBtnCaret.click().then(function() {
                     //Verify the popup menu is displayed
-                    expect(reportServicePage.reportFacetPopUpMenu.isDisplayed).toBeTruthy();
+                    expect(reportServicePage.reportFacetPopUpMenu.isDisplayed()).toBeTruthy();
                 }).then(function() {
                     //select the facet Items
                     reportServicePage.selectFacetItemsAndVerifyTokens("Text Field", [1, 2, 3, 4]);
@@ -320,7 +320,7 @@
                 reportServicePage.waitForElement(reportServicePage.reportsToolBar).then(function() {
                     reportServicePage.reportFilterBtnCaret.click().then(function() {
                         //Verify the popup menu is displayed
-                        expect(reportServicePage.reportFacetPopUpMenu.isDisplayed).toBeTruthy();
+                        expect(reportServicePage.reportFacetPopUpMenu.isDisplayed()).toBeTruthy();
                     });
                 });
             }).then(function() {
@@ -350,7 +350,7 @@
                 reportServicePage.waitForElement(reportServicePage.reportsToolBar).then(function() {
                     reportServicePage.reportFilterBtnCaret.click().then(function() {
                         //Verify the popup menu is displayed
-                        expect(reportServicePage.reportFacetPopUpMenu.isDisplayed).toBeTruthy();
+                        expect(reportServicePage.reportFacetPopUpMenu.isDisplayed()).toBeTruthy();
                     });
                 });
             }).then(function() {
