@@ -189,7 +189,7 @@ let GriddleTable = React.createClass({
 
         const isCardLayout = this.context.touch;
 
-        let griddleWrapperClasses = this.state.selectedRows.length ? "selectedRows" : "";
+        let griddleWrapperClasses = this.state.selectedRows.length ? "griddleWrapper selectedRows" : "griddleWrapper";
 
         if (this.state.allowCardSelection) {
             griddleWrapperClasses += " allowCardSelection";
