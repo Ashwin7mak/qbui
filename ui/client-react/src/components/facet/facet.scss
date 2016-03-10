@@ -221,10 +221,12 @@
         input {
             color: $search-input-fg;
         }
+
         .popover-content {
             max-height: 454px;
         }
         .facetMenuPopup {
+            color: $popup-fg;
             display: block;
             left: -140px;
             min-width: 150px;
