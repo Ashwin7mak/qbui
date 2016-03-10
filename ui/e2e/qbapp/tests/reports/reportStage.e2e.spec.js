@@ -20,7 +20,6 @@
         var realmId;
         var app;
         var recordList;
-        var clientWidths = [e2eConsts.XLARGE_BP_WIDTH, e2eConsts.LARGE_BP_WIDTH, e2eConsts.MEDIUM_BP_WIDTH, e2eConsts.SMALL_BP_WIDTH];
 
         /**
          * Setup method. Generates JSON for an app, a table, a set of records and a report.
@@ -63,32 +62,50 @@
         });
 
         /**
-         * Test method. Test the report Stage Collapse and Expands
+         * Before each test starts just make sure the report has loaded
          */
-        it('Should expand/collapse the reports stage after clicking on stage button in all breakpoints', function() {
+        beforeEach(function(done) {
             // Wait until report loaded
             reportServicePage.waitForElement(reportServicePage.loadedContentEl).then(function() {
-                for (var i = 0; i < clientWidths.length; i++) {
-                    console.log("The reportStage executing for " + clientWidths[i] + " breakpoint");
-                    e2eBase.resizeBrowser(clientWidths[i], e2eConsts.DEFAULT_HEIGHT).then(function() {
-                        // Verify that the report Stage is expanded by default
-                        expect(reportServicePage.reportStageArea.isDisplayed).toBeTruthy();
-                        // Click on report Stage button to collapse the stage
-                        reportServicePage.reportStageBtn.click().then(function() {
-                            // Sleep needed for animation of stage
-                            e2eBase.sleep(browser.params.smallSleep);
-                            expect(reportServicePage.reportStageArea.getAttribute('clientHeight')).toMatch("0");
-                            expect(reportServicePage.reportStageArea.getAttribute('clientWidth')).toMatch("0");
+                done();
+            });
+        });
+
+        /**
+        * Test methods. Test that the reportStage collapses and expands
+        */
+        e2eConsts.NavDimensionsDataProvider().forEach(function(testcase) {
+            it('Should expand/collapse the reports stage on breakpoint: ' + testcase.breakpointSize, function() {
+                if (testcase.breakpointSize !== 'small') {
+                    e2eBase.resizeBrowser(testcase.browserWidth, e2eConsts.DEFAULT_HEIGHT).then(function() {
+                        reportServicePage.waitForElement(reportServicePage.loadedContentEl).then(function() {
+                            // Verify that the report Stage is expanded by default
+                            expect(reportServicePage.reportStageArea.isDisplayed()).toBeTruthy();
+                            // Click on report Stage button to collapse the stage
                             reportServicePage.reportStageBtn.click().then(function() {
                                 // Sleep needed for animation of stage
                                 e2eBase.sleep(browser.params.smallSleep);
-                                expect(reportServicePage.reportStageArea.isDisplayed).toBeTruthy();
+                                expect(reportServicePage.reportStageArea.getAttribute('clientHeight')).toMatch("0");
+                                expect(reportServicePage.reportStageArea.getAttribute('clientWidth')).toMatch("0");
+                                reportServicePage.reportStageBtn.click().then(function() {
+                                    // Sleep needed for animation of stage
+                                    e2eBase.sleep(browser.params.smallSleep);
+                                    expect(reportServicePage.reportStageArea.isDisplayed()).toBeTruthy();
+                                });
                             });
                         });
+                    });
+                } else if (testcase.breakpointSize === 'small') {
+                    e2eBase.resizeBrowser(testcase.browserWidth, e2eConsts.DEFAULT_HEIGHT).then(function() {
+                        // Verify stage is present in the DOM but not displayed on small breakpoint
+                        expect(reportServicePage.reportStageContentEl.isPresent()).toBeTruthy();
+                        expect(reportServicePage.reportStageContentEl.isDisplayed()).toBeFalsy();
                     });
                 }
             });
         });
+
+        //TODO: Add tests for stage content (specifically email link and link hover)
 
         /**
          * After all tests are done, run the cleanup function in the base class

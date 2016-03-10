@@ -1,7 +1,10 @@
+@import '../../assets/css/qbVariables';
+
 $trowser-fg: #000;
 $trowser-icons-color: #fff;
 $trowser-header-bg:#486c8f;
 $trowser-footer-bg: #193048;
+$action-separator-color: #486c8f;
 
 .trowser  {
     position:absolute;
@@ -31,7 +34,7 @@ $trowser-footer-bg: #193048;
         display:flex;
         align-items:center;
         .qbIcon {
-            font-size:18px;
+            font-size:16px;
             vertical-align: baseline;
         }
         .breadcrumbs {
@@ -49,8 +52,9 @@ $trowser-footer-bg: #193048;
                 border: 0;
             }
             button:hover {
-                color: $trowser-header-bg;
-                background-color: $trowser-icons-color;
+                background-color: $nav-hover-bg;
+                color: $nav-hover-fg;
+
             }
         }
     }
@@ -74,9 +78,13 @@ $trowser-footer-bg: #193048;
             justify-content:center;
             align-items:center;
             a {
+                padding:0 10px;
+                border-left:1px solid $action-separator-color;
                 color: #fff;
                 text-decoration:none;
-                margin-left:20px;
+            }
+            a:last-child {
+                border-right:1px solid $action-separator-color;
             }
         }
         .rightIcons {
@@ -120,15 +128,30 @@ $trowser-footer-bg: #193048;
 }
 
 /* 2 rows on small breakpoint */
-.small-breakpoint .trowserFooter {
-    flex-direction:column;
-    flex-basis:80px;
+@include small-breakpoint {
+    .trowser .trowserFooter {
+        flex-direction:column;
+        flex-basis:80px;
 
-    .rightIcons {
-        text-align:center;
-        width:100%;
-        button {
-            width: 90%;
+        .centerActions {
+            a {
+                flex: 1 1 auto;
+                text-align:center;
+            }
+            a:first-child {
+                border-left:0;
+            }
+            a:last-child {
+                border-right:0;
+            }
+        }
+        .rightIcons {
+            text-align:center;
+            width:100%;
+            button {
+                width: 90%;
+                margin-bottom:10px;
+            }
         }
     }
 }

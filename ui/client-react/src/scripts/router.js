@@ -36,10 +36,6 @@ import TableHomePageRoute from '../components/table/tableHomePageRoute';
 
 import FastClick from 'fastclick';
 
-import Breakpoints from '../utils/breakpoints';
-
-import * as breakpoints from '../constants/breakpoints';
-
 let stores = {
     ReportsStore: new ReportsStore(),
     ReportDataStore: new ReportDataStore(),
@@ -55,19 +51,21 @@ flux.addActions(navActions);
 flux.addActions(facetMenuActions);
 
 let NavWrapper = React.createClass({
+
+    /* touch detection */
+    isTouchDevice() {
+        return "ontouchstart" in window;
+    },
     getInitialState() {
         return {
-            breakpoint: Breakpoints.getCurrentBreakpointClass(),
-            touch: Breakpoints.isTouchDevice()
+            touch: this.isTouchDevice()
         };
     },
     childContextTypes: {
-        breakpoint: React.PropTypes.string,
         touch: React.PropTypes.bool
     },
     getChildContext: function() {
         return {
-            breakpoint: this.state.breakpoint,
             touch: this.state.touch
         };
     },
@@ -75,28 +73,12 @@ let NavWrapper = React.createClass({
         return <Nav flux={flux} {...this.props} />;
     },
 
-    /**
-     * try to detect touch devices
-     *
-     * @returns {boolean}
-     */
-
-    handleResize: function() {
-
-        let breakpoint = Breakpoints.getCurrentBreakpointClass();
-        let bodyClasses = breakpoint;
-
-        if (Breakpoints.isTouchDevice()) {
-            bodyClasses += " touch";
-        }
-
-        document.body.className = bodyClasses;
-
-        this.setState({breakpoint});
-    },
-
     componentDidMount: function() {
         FastClick.attach(document.body);
+
+        if (this.isTouchDevice()) {
+            document.body.className = "touch";
+        }
 
         flux.actions.loadApps(true);
 
@@ -105,8 +87,6 @@ let NavWrapper = React.createClass({
             flux.actions.selectTableId(this.props.params.tblId);
             flux.actions.loadReports(this.props.params.appId, this.props.params.tblId);
         }
-        window.addEventListener('resize', this.handleResize);
-        this.handleResize();
     },
 
     componentWillReceiveProps(props) {

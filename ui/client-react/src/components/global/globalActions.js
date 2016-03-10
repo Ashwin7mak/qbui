@@ -2,8 +2,10 @@ import React from 'react';
 import Fluxxor from 'fluxxor';
 import {Link} from 'react-router';
 import QBicon from '../qbIcon/qbIcon';
+import {MenuItem, Dropdown} from 'react-bootstrap';
 import {I18nMessage} from '../../utils/i18nMessage';
-
+import Locale from '../../locales/locales';
+let FluxMixin = Fluxxor.FluxMixin(React);
 
 const actionPropType = React.PropTypes.shape({
     icon: React.PropTypes.string.isRequired,
@@ -32,11 +34,43 @@ let GlobalAction = React.createClass({
  * a list of global actions (user, alerts, help, logout etc.)
  */
 let GlobalActions = React.createClass({
+    mixins: [FluxMixin],
 
     propTypes: {
         linkClass: React.PropTypes.string,
         onSelect: React.PropTypes.func,
+        position: React.PropTypes.string.isRequired,
         actions: React.PropTypes.arrayOf(actionPropType)
+    },
+
+    onSelect: function(ev) {
+        let flux = this.getFlux();
+        flux.actions.changeLocale(ev.currentTarget.title);
+    },
+    getGlobalDropdown() {
+        let supportedLocales = Locale.getSupportedLocales();
+        let eventKeyIdx = 20;
+        return (
+            <Dropdown id="nav-right-dropdown" dropup={this.props.position === "left"} pullRight={this.props.position === "left"}>
+
+                <a bsRole="toggle" className={"dropdownToggle globalActionLink"}><QBicon icon="fries"/> </a>
+
+                <Dropdown.Menu>
+                    <MenuItem href="/user" eventKey={eventKeyIdx++}><I18nMessage
+                        message={'header.menu.preferences'}/></MenuItem>
+                    <MenuItem divider/>
+
+                    {supportedLocales.length > 1 ? supportedLocales.map((locale) => {
+                        return <MenuItem href="#" className="localeLink" onSelect={this.onSelect} title={locale}
+                                         key={eventKeyIdx} eventKey={eventKeyIdx++}><I18nMessage
+                            message={'header.menu.locale.' + locale}/></MenuItem>;
+                    }) : null}
+                    {supportedLocales.length > 1 ? <MenuItem divider/> : null}
+
+                    <MenuItem href="/signout" eventKey={eventKeyIdx++}><I18nMessage
+                        message={'header.menu.sign_out'}/></MenuItem>
+                </Dropdown.Menu>
+            </Dropdown>);
     },
     render: function() {
         return (
@@ -45,6 +79,7 @@ let GlobalActions = React.createClass({
                     {this.props.actions && this.props.actions.map((action) => {
                         return <GlobalAction key={action.msg} linkClass={this.props.linkClass} onSelect={this.props.onSelect} action={action}/>;
                     })}
+                    <li className={"link globalAction"}>{this.getGlobalDropdown()}</li>
                 </ul>
             </div>);
     }

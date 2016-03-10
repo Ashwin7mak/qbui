@@ -52,9 +52,9 @@ let Trowser = React.createClass({
                         <div className={"leftActions"}>
                             {this.props.leftActions}
                         </div>
-                        <div className={"centerActions"}>
-                            {this.props.centerActions}
-                        </div>
+
+                        {this.props.centerActions}
+
                         <div className={"rightIcons"}>
                             <Button bsStyle="primary" onClick={this.props.onDone}>Done</Button>
                         </div>

@@ -4,7 +4,6 @@ import {Overlay} from 'react-bootstrap';
 import Logger from '../../utils/logger';
 import {I18nMessage} from '../../utils/i18nMessage';
 import StringUtils from '../../utils/stringUtils';
-import * as breakpoints from '../../constants/breakpoints';
 
 import QBicon from '../qbIcon/qbIcon';
 import  {facetsProp} from './facetProps';
@@ -32,7 +31,6 @@ var FacetsMenu = React.createClass({
 
     displayName: 'FacetsMenu',
     contextTypes: {
-        breakpoint: React.PropTypes.string,
         touch: React.PropTypes.bool
     },
 
@@ -267,8 +265,7 @@ var FacetsMenu = React.createClass({
                                         onFacetDeselect={this.props.onFacetDeselect}
                                     />
                 </Overlay>
-                {((this.context.breakpoint !== breakpoints.SMALL_BREAKPOINT) &&
-                   !this.context.touch) &&
+                {!this.context.touch &&
                 <div className="selectedFacets" onClick={e => this.dontClose(e)}>{this.renderSelectedFacets()}</div>
                 }
             </div>

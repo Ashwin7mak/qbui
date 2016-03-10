@@ -71,7 +71,7 @@ h5 {
     .qbPanelHeaderIcon {
         position: absolute;
         left: 4px;
-        top: 10px;
+        top: 14px;
     }
     .qbPanelHeaderTitleText, .panel {
         margin-left:30px;
@@ -95,13 +95,15 @@ h5 {
 .rotateDown {
     transition: all .25s linear;
     transform: rotate(90deg);
-    font-size: 22px;
+    font-size: 16px;
+    width:auto;
 }
 
 .rotateUp {
     transition: all .25s linear;
     transform: rotate(0deg);
-    font-size: 18px;
+    font-size: 16px;
+    width:auto;
 }
 
 /*
@@ -110,22 +112,26 @@ h5 {
 */
 /* For mobile phones: */
 
-.small-breakpoint .qbPanel {
+@include small-breakpoint {
+    .qbPanel {
 
-    font-size: $font-size;
-    .qbPanelBody {
-        display: flex;
-        flex-wrap: wrap;
-        flex-direction: row;
+        font-size: $font-size;
+        .qbPanelBody {
+            display: flex;
+            flex-wrap: wrap;
+            flex-direction: row;
+        }
     }
 }
 
 /* For tablet like devices: */
-.medium-breakpoint .qbPanel {
-    font-size: $font-size;
-    .qbPanelBody {
-        display: flex;
-        flex-wrap: wrap;
-        flex-direction: row;
+@include medium-breakpoint {
+    .qbPanel {
+        font-size: $font-size;
+        .qbPanelBody {
+            display: flex;
+            flex-wrap: wrap;
+            flex-direction: row;
+        }
     }
 }

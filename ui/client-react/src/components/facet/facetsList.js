@@ -66,12 +66,13 @@ var FacetsList = React.createClass({
     },
 
     facetsList(facetsData) {
+
         //values are expected to be objects {value:'xx'},
         // make it so until node layer is changed
         let YesMsg = 'report.facets.yesCheck';
         let NoMsg = 'report.facets.noCheck';
 
-        if (facetsData.length && facetsData[0].values.length && typeof facetsData[0].values[0] !== 'object') {
+        if (facetsData.length && facetsData[0].values && facetsData[0].values.length && typeof facetsData[0].values[0] !== 'object') {
             facetsData = facetsData.map((aFacet) => {
                 aFacet.values = aFacet.values.map((val) => {
                     if (aFacet.type.toUpperCase() === schemaConsts.CHECKBOX) {
@@ -92,7 +93,9 @@ var FacetsList = React.createClass({
         }
         // filter out the date fields for now
         // TODO: support date ranges in filtering see https://jira.intuit.com/browse/QBSE-20422
-        facetsData.filter((facetField) => !(facetField.type.toUpperCase().includes(schemaConsts.DATE)));
+        if (facetsData.length && facetsData[0].values) {
+            facetsData.filter((facetField) => !(facetField.type.toUpperCase().includes(schemaConsts.DATE)));
+        }
         // create field facet sections
         return facetsData.map((facetField) => {
             var fid = facetField.id;
@@ -132,8 +135,8 @@ var FacetsList = React.createClass({
                      placement="bottom"
                      className="facetMenuPopup"
                      ref={(thisComponent) => this._facetMenuArea = thisComponent}>
-                    {this.props.reportData && this.props.reportData.data &&
-                    this.props.reportData.data.facets && this.props.reportData.data.facets.length > 0 ?
+                    {this.props.reportData && this.props.reportData.data  &&
+                    this.props.reportData.data.facets && (this.props.reportData.data.facets.length > 0) && this.props.reportData.data.facets[0].values && this.props.reportData.data.facets.length > 0 ?
                         this.facetsList(this.props.reportData.data.facets) :
                         <div className="noFacetValues">
                             <I18nMessage message={noFacetsMessage}/>
