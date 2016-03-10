@@ -91,9 +91,6 @@
 
         //facet menu popup
         this.reportFacetPopUpMenu = this.reportFacetMenuContainer.element(by.className('facetMenuPopup'));
-        //facets menu popup container
-        this.reportFacetPopUpContainerEl = this.reportFacetPopUpMenu.element(by.className('popover-content'));
-
         //panel
         this.facetPopUpContainerPanels = this.reportFacetPopUpMenu.all(by.className('panel'));
         //panel heading which is facet group
@@ -105,10 +102,12 @@
         this.reportSelectedFacets = this.reportFacetMenuContainer.element(by.className('selectedFacets'));
         //facet tokens (token has facetName and facetSelections)
         this.reportFacetTokens = this.reportSelectedFacets.all(by.className('facetToken'));
-        //facet name token
-        this.reportFacetNameToken = this.reportSelectedFacets.element(by.className('facetNameToken'));
         //facet selections
         this.reportFacetSelections = this.reportFacetTokens.all(by.className('facetSelections'));
+        //facet selections Names
+        this.reportFacetNameSelections = this.reportFacetSelections.all(by.className('selectedToken'));
+        //facet clear token selections
+        this.reportFacetClearTokenSelections = this.reportFacetNameSelections.all(by.className('clearFacet'));
 
 
         // Loaded Content Div
@@ -184,7 +183,7 @@
         };
 
         /**
-         * Function that will open the facet group and select the facet Items and verify the checkmark and finally verify facet tokens.
+         * Function that will open the facet group and select the facet Items and verify the checkmark and finally verify facet tokens in container.
          * @param facetName
          * @param facetItems is an array
          */
@@ -194,7 +193,7 @@
             // Expand the Facet group
             var groups = this.PopUpContainerFacetGroup.map(function(groupName, index) {
                 return groupName.getText().then(function(groupText) {
-                    if (groupText === facetName ) {
+                    if (groupText === facetName) {
                         groupName.getAttribute('class').then(function(txt) {
                             if (txt === 'collapsed') {
                                 groupName.click().then(function() {
@@ -204,11 +203,17 @@
                         });
                     }
                 });
-                return deferred.promise;
                 // Select the facet Items
             }).then(function() {
                 //sleep to expand a group
                 e2eBase.sleep(browser.params.smallSleep);
+                //click on more options link if items to select is grater than 5
+                facetItems.forEach(function(facetItem) {
+                    if (facetItem >= 5) {
+                        element.all(by.className('listMore')).click(); //click on more options link
+                        e2eBase.sleep(browser.params.mediumSleep);
+                    }
+                });
                 // Select the facet Items
                 var locations = element.all(by.className('list-group-item'));
                 return locations.map(function(groupItem, index) {
@@ -247,34 +252,13 @@
             });
             return deferred.promise;
         };
-
         /**
-         * Function that will verify the facet tokens i.e facet Name and facet Selections along with the index in facet container.
-         * @param facets array
-         */
-        this.verifyFacetTokens = function(facets) {
-            //Map all facet tokens from the facet container
-            var tokens = this.reportFacetTokens.map(function(elm, index) {
-                return {
-                    index: index,
-                    text: elm.getText(),
-                };
-            });
-                //verify the facet tokens and its contents along with the index
-            expect(tokens).toEqual(facets);
-        };
-
-        /**
-         * Function that will clear the facet tokens in facet container.
-         * @param facets array
-         */
-        /**
-         * Function that will clear the facet tokens in facet container.
-         * @param facets array
+         * Function that will clear all the facet tokens from the container.
+         *
          */
         this.clearFacetTokensFromContainer = function() {
             var deferred = Promise.pending();
-            this.reportFacetSelections.then(function(facetItems) {
+            this.reportFacetNameSelections.then(function(facetItems) {
                 console.log("facets length is: " + facetItems.length);
                 for (var i = 0; i < facetItems.length; i++) {
                     console.log("the iteration is: " + i);
@@ -284,7 +268,10 @@
             });
             return deferred.promise;
         };
-
+        /**
+         * Function that will clear all facet items form popup menu.
+         * @param facets array
+         */
         this.clearAllFacetTokensFromPopUp = function() {
             var deferred = Promise.pending();
             this.PopUpContainerClearFacet.then(function(facetItems) {
@@ -295,8 +282,6 @@
             });
             return deferred.promise;
         };
-
-
         /**
         * Helper function that will get all of the field column headers from the report. Returns an array of strings.
         */
