@@ -25,8 +25,9 @@ let AppsList = React.createClass({
     },
     appList() {
         return this.props.apps && this.props.apps.map((app) => {
-            app.icon = 'star';
-            return this.searchMatches(app.name) && <NavItem key={app.id} item={app} onSelect={this.props.onSelectApp} {...this.props} />;
+            app.icon = 'favicon';
+            return this.searchMatches(app.name) &&
+                <NavItem key={app.id} item={app} onSelect={this.props.onSelectApp} {...this.props} />;
         });
     },
     onClickApps() {
@@ -39,19 +40,24 @@ let AppsList = React.createClass({
     },
     render() {
         return (
-            <div className="appsList leftNavList">
-                <ul>
+            <ul className={"appsList"} >
 
-                    <NavItem item={{msg: 'nav.appsHeading'}} isHeading={true} secondaryIcon={"search"} onClick={this.onClickApps} {...this.props} />
+                <NavItem item={{msg: 'nav.appsHeading'}}
+                         isHeading={true}
+                         secondaryIcon={"search"}
+                         onClick={this.onClickApps} {...this.props} />
 
-                    <li className={this.state.searching ? "search open" : "search"}>
-                        <input type="text" placeholder={Locale.getMessage('nav.searchAppsPlaceholder')} value={this.state.searchText} onChange={this.onChangeSearch}/>
-                    </li>
+                <li className={this.state.searching ? "search open" : "search"}>
+                    <input type="text"
+                           className={"searchInput"}
+                           placeholder={Locale.getMessage('nav.searchAppsPlaceholder')}
+                           value={this.state.searchText}
+                           onChange={this.onChangeSearch}/>
+                </li>
 
-                    {this.appList()}
-                </ul>
+                {this.appList()}
+            </ul>
 
-            </div>
         );
     }
 });

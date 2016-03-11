@@ -26,10 +26,10 @@ var FilterSearchBox = React.createClass({
         // reactintl 2.0 see - http://stackoverflow.com/questions/35286239/how-to-put-valuedata-into-html-attribute-with-reactjs-and-reactintl
 
         let placeMsg = "Search these " + this.props.nameForRecords + "...";
-        return (<input className="filterSearchBox" type="text" key="filterSearchBox"
+        return (<div className="filterSearchBoxContainer"><input className="filterSearchBox" type="text" key="filterSearchBox"
                        value={this.props.value}
-                       onChange={this.props.onChange} placeholder={placeMsg}
-                />
+                       onChange={this.props.onChange} placeholder={placeMsg}/>
+                </div>
         );
     }
 });

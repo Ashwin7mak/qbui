@@ -34,9 +34,10 @@ let LeftNav = React.createClass({
                         <div className="appsToggle" onClick={this.props.onToggleAppsList}>
                             <QBicon icon={"favicon"}/>
                             <span className={"navLabel"}> {app ? app.name : ''}</span>
-                            <QBicon className={"appsToggleIcon"} icon="caret-filled-down"/>
+                            <QBicon className={"appsToggleIcon"} icon="caret-filled-up"/>
                         </div>
                     }
+                    <a className="iconLink toggleNavButton" href="#" onClick={this.props.onNavClick}><QBicon icon="hamburger" /> </a>
                 </div>);
     },
 
@@ -62,7 +63,7 @@ let LeftNav = React.createClass({
 
                 </ReactCSSTransitionGroup>
 
-                {this.props.globalActions && <GlobalActions actions={this.props.globalActions} onSelect={this.props.onSelect}/>}
+                {this.props.globalActions && <GlobalActions actions={this.props.globalActions} onSelect={this.props.onSelect} position={"left"}/>}
 
             </div>
         );

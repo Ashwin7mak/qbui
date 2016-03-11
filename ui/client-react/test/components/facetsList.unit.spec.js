@@ -9,7 +9,7 @@ import FacetSelections  from '../../src/components/facet/facetSelections';
 describe('FacetList functions', () => {
     'use strict';
     var I18nMessageMock = React.createClass({
-        render: function() {
+        render() {
             return (
                 <div>test</div>
             );
@@ -79,6 +79,39 @@ describe('FacetList functions', () => {
             facets: fakefacets
         }
     };
+
+    const fakeReportData_noValues = {
+        loading: false,
+        data: {
+            name: "testReportToolbar",
+            records: [
+                {
+                    col_num: 1,
+                    col_text: "Design",
+                    col_date: "01-01-2015"
+                },
+                {
+                    col_num: 2,
+                    col_text: "Development",
+                    col_date: "02-02-2015"
+                }, {
+                    col_num: 3,
+                    col_text: "Planning",
+                    col_date: "03-03-2015"
+                }],
+            filteredRecords: [{
+                col_num: 1,
+                col_text: "Planning",
+                col_date: "01-01-2015"
+            }],
+            columns: ["col_num", "col_text", "col_date"],
+            facets:  [{id : 1, name : "Types", type: "TEXT", blanks: true, values : []},
+                      {id : 2, name : "Names", type: "TEXT", blanks: false, values : []}]
+
+        }
+    };
+
+
     it('test render FacetsList no facets', () => {
         component = TestUtils.renderIntoDocument(<FacetsList popoverId={2}
                                                              selectedValues={{}}
@@ -95,10 +128,21 @@ describe('FacetList functions', () => {
     });
 
 
+    it('test render FacetsList with no values for a facet', () => {
+        let selected = new FacetSelections();
+        component = TestUtils.renderIntoDocument(<FacetsList popoverId={1}
+                                                             selectedValues={{}}
+                                                             reportData={fakeReportData_noValues}/>);
+        expect(TestUtils.isCompositeComponent(component)).toBeTruthy();
+        let noOptions = TestUtils.scryRenderedDOMComponentsWithClass(component, "noOptions");
+        expect(noOptions.length).toBe(2);
+    });
+
+
     it('test render FacetsList with empty selections', () => {
         let selected = new FacetSelections();
         component = TestUtils.renderIntoDocument(<FacetsList popoverId={1}
-                                                             selectedValues={selected}
+                                                             selectedValues={{}}
                                                              reportData={fakeReportData_simple}/>);
         expect(TestUtils.isCompositeComponent(component)).toBeTruthy();
     });

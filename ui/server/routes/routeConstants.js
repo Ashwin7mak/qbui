@@ -21,7 +21,7 @@
      *  NO public QuickBase API endpoints are used to fulfill the request.
      */
     var nodeApiEndpoints = {
-        FACET_EXPRESSION_PARSE  : baseUrl.NODE + '/facets',
+        FACET_EXPRESSION_PARSE  : baseUrl.NODE + '/facets/parse',
         LOG_CLIENT_MSG          : baseUrl.NODE + '/log'
     };
 

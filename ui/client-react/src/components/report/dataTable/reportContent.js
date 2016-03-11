@@ -50,8 +50,8 @@ let ReportContent = React.createClass({
         //for griddle
         if (typeof (obj.cssClassName) === 'undefined') {
             obj.cssClassName = classname;
-        } else {
-            obj.cssClassName += "," + classname;
+        } else if (obj.cssClassName.indexOf(classname) === -1) {
+            obj.cssClassName += " " + classname;
         }
     },
     /* for each field attribute that has some presentation effect convert that to a css class before passing to griddle.*/
@@ -123,7 +123,7 @@ let ReportContent = React.createClass({
             <Loader loaded={!this.props.reportData.loading}>
                 {this.props.reportData.error ?
                     <div>Error loading report!</div> :
-                    <div>
+                    <div className="reportContent">
                         {!isTouch ?
                             <AGGrid reportData={this.props.reportData}
                                     columnMetadata={this.state.reportColumns}
@@ -151,6 +151,7 @@ let ReportContent = React.createClass({
                     </div>
                 }
             </Loader>
+
         );
     }
 

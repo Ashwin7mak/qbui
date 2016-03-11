@@ -21,12 +21,12 @@ let appsActions = {
     loadApps(withTables) {
 
         //  promise is returned in support of unit testing only
-        return new Promise(function(resolve, reject) {
+        return new Promise((resolve, reject) => {
             this.dispatch(actions.LOAD_APPS);
             let appService = new AppService();
 
             appService.getApps().then(
-                (response) => {
+                response => {
                     logger.debug('AppService getApps success:' + JSON.stringify(response));
 
                     if (withTables) {
@@ -60,17 +60,17 @@ let appsActions = {
                         resolve();
                     }
                 },
-                (error) => {
+                error => {
                     logger.error('AppService getApps error:', error);
                     this.dispatch(actions.LOAD_APPS_FAILED);
                     reject();
                 }
-            ).catch((ex) => {
+            ).catch(ex => {
                 logger.error('AppService getApps exception:', ex);
                 this.dispatch(actions.LOAD_APPS_FAILED);
                 reject();
             });
-        }.bind(this));
+        });
     },
 
     selectAppId(appID) {

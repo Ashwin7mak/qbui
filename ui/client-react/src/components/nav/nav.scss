@@ -15,6 +15,9 @@ html, body {
     height: 100%;
     min-height: 100%;
     overflow: hidden;
+    * {
+        outline:none;
+    }
 }
 
 html body {
@@ -45,15 +48,15 @@ html body {
 
 }
 
-body.small-breakpoint {
-    font-size: $font-size-small;
-}
-
 body.touch {
 
     .tooltip {
         display: none !important;
     }
+}
+
+input.searchInput {
+    font-style: italic;
 }
 
 a {
@@ -73,14 +76,8 @@ a {
     transition: transform ease 250ms;
     -webkit-transition: transform ease 250ms;
 
-    .mainContent {
-        opacity: 1;
-        transition: opacity 250ms ease-in-out;
-        -moz-transition: opacity 250ms ease-in-out;
-        -webkit-transition: opacity 250ms ease-in-out;
-    }
-
     .main {
+        position:relative;
         display: flex;
         flex-direction: column;
         flex: 1;
@@ -98,24 +95,33 @@ a {
                 display: flex;
                 flex-basis: $top-nav-height;
                 font-size: 14px;
-                transition: flex-basis 300ms ease-in-out;
-                min-width: 330px;
+                //min-width: 300px;
             }
 
-            .navGroup {
+            .navGroup.left, .navGroup.right {
+                flex: 0 0 auto;
                 line-height: $top-nav-height;
                 white-space: nowrap;
-                .navItem {
-                    display: inline-block;
-
+            }
+            @include small-breakpoint {
+                .navGroup.left {
+                    flex: 1 1 auto;
+                    overflow:hidden;
+                    text-overflow:ellipsis;
                 }
             }
             .navGroup.center {
-                flex: 1;
+                flex: 1 0 auto;
 
                 .navItem {
                     display: flex;
                     justify-content: center;
+                }
+                @include small-breakpoint {
+                    flex: 0 0 auto;
+                    .navItem {
+                        justify-content: flex-end;
+                    }
                 }
             }
 
@@ -127,6 +133,7 @@ a {
                     border-radius: 0;
                     width: $top-nav-height;
                     height: $top-nav-height;
+                    outline: none;
                 }
                 button:hover .hi {
                     color: #fff;
@@ -137,10 +144,7 @@ a {
                 color: $topnav-icon-color;
                 padding: 10px;
             }
-            .iconLink:hover {
-                color: #fff;
-                background: $nav-hover-bg
-            }
+
 
             a {
                 text-decoration: none;
@@ -165,6 +169,33 @@ a {
             height: 40px;
         }
     }
+}
+body:not(.touch) .navShell .main .topNav .iconLink:hover {
+    color: #fff;
+    background: $nav-hover-bg
+}
+
+
+.pageActions {
+    display:none;
+}
+@include small-breakpoint {
+    .layout-stage {
+        display:none;
+    }
+
+    .pageActions {
+        line-height:40px;
+        display:block;
+    }
+}
+
+.loader {
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
 }
 
 

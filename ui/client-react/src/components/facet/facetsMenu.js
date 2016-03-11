@@ -1,19 +1,22 @@
 import React from 'react';
-import {OverlayTrigger, Popover} from 'react-bootstrap';
+import {Overlay} from 'react-bootstrap';
 
 import Logger from '../../utils/logger';
 import {I18nMessage} from '../../utils/i18nMessage';
 import StringUtils from '../../utils/stringUtils';
-import * as breakpoints from '../../constants/breakpoints';
 
 import QBicon from '../qbIcon/qbIcon';
+import  {facetsProp} from './facetProps';
 import FacetsList from './facetsList';
 import LimitConstants from './../../../../common/src/limitConstants';
 import './facet.scss';
+
 import _ from 'lodash';
-import  {facetsProp} from './facetProps';
+import Fluxxor from 'fluxxor';
 
 let logger = new Logger();
+let FluxMixin = Fluxxor.FluxMixin(React);
+let StoreWatchMixin = Fluxxor.StoreWatchMixin;
 
 /**
  *  FacetsMenu component presents a trigger button that when clicked shows list of facets available to filter a report on.
@@ -24,11 +27,13 @@ let logger = new Logger();
  *  The FacetsMenu has a trigger button and the FacetsList
 **/
 var FacetsMenu = React.createClass({
+    mixins: [FluxMixin, StoreWatchMixin('FacetMenuStore')],
+
     displayName: 'FacetsMenu',
     contextTypes: {
-        breakpoint: React.PropTypes.string,
         touch: React.PropTypes.bool
     },
+
     propTypes: {
         /**
          *  Takes in for properties the reportData which includes the list of facets
@@ -45,35 +50,23 @@ var FacetsMenu = React.createClass({
         onMenuExit : React.PropTypes.func
     },
 
-    /**
-     * Initializes the states:
-     *  - (shown)  : Facet List popover shown state or not shown
-     *  - (expandedFacetFields) : the facet fields sections in the
-     *                          popover that are expanded (initialized using the allInitiallyCollapsed prop setting)
-     *  - (selected): set of selected facet values
-     *
-     * @returns {{expandedFacetFields: Array, selected: Array}}
-     */
-    getInitialState() {
 
-        //TODO: move these to use fluxxor actions and stores to make the sticky across views.
-        let expanded = [];
-        let moreRevealed = [];
+    getStateFromFlux() {
+        let flux = this.getFlux();
+        return flux.store('FacetMenuStore').getState();
+    },
 
+    componentDidMount() {
+        let flux = this.getFlux();
         if (!this.props.allInitiallyCollapsed) {
-
-           // if we don't start with all collapsed then
+            let expanded = [];
+            // if we don't start with all collapsed then
             // add all facet fids to list of expanded facet fields
             if (this.props.reportData.data && this.props.reportData.data.facets) {
-                _.each(this.props.reportData.data.facets, function(facet) {
-                    expanded.push(facet.id);
-                });
+                this.props.reportData.data.facets.forEach((facet) => expanded.push(facet.id));
+                flux.actions.setFacetsExpanded({expanded});
             }
         }
-        return {
-            expandedFacetFields: expanded,
-            moreRevealedFacetFields : moreRevealed
-        };
     },
 
     /**
@@ -88,17 +81,6 @@ var FacetsMenu = React.createClass({
         };
     },
 
-
-    /**
-     * Changes of the state of the facet popover to hidden or shown
-     *
-     * @param e
-     */
-    toggleMenu(e) {
-        this.setState({target: e.target, show: !this.state.show});
-    },
-
-
     /**
      * Changes the state of a facet field group to collapsed if parameter makeCollapsed is true or expanded if not
      * by adding or removing the field id from a hash listing the expanded facet field groups
@@ -107,7 +89,7 @@ var FacetsMenu = React.createClass({
      * @param makeCollapsed
      *
      **/
-    setFacetCollapsedState(facetField, makeCollapsed) {
+    setFacetCollapsed(facetField, makeCollapsed) {
         let expanded = _.clone(this.state.expandedFacetFields);
         if (makeCollapsed) {
             //in expanded set?  remove to mark it collapsed
@@ -118,22 +100,23 @@ var FacetsMenu = React.createClass({
             // add it to toggle from collapsed state
             expanded.push(facetField.id);
         }
-        this.setState({expandedFacetFields: expanded});
+        let flux = this.getFlux();
+        flux.actions.setFacetsExpanded({expanded});
     },
 
     /**
-     * Changes the state of a facet field group to more revealed
+     * Invokes the action to change the state of a facet field group to more revealed
      * by adding the field id from a hash listing the more Revealed facet field groups
      *
      * @param facetField - the facet
-     * @param makeCollapsed
      *
      **/
-    setFacetMoreRevealedState(facetField) {
-        let revealed = _.clone(this.state.moreRevealedFacetFields);
+    setFacetMoreRevealed(facetField) {
+        let moreRevealed = _.clone(this.state.moreRevealedFacetFields);
         // add it
-        revealed.push(facetField.id);
-        this.setState({moreRevealedFacetFields: revealed});
+        moreRevealed.push(facetField.id);
+        let flux = this.getFlux();
+        flux.actions.setFacetsMoreRevealed({moreRevealed});
     },
 
     /**
@@ -157,33 +140,13 @@ var FacetsMenu = React.createClass({
     },
 
     /**
-     * Toggle the fate of expand Collapse of a facet field group in the popover
+     * Toggle the state of expand Collapse of a facet field group in the popover
      * change state of a facet from expanded to collapsed or collapsed to expanded
+     * @param e - the event object from the browser/react
      * @param facetField - the fact field you want to toggle
      **/
-    toggleCollapseFacet(facetField) {
-        this.setFacetCollapsedState(facetField, !this.isCollapsed(facetField.id));
-    },
-
-    /**
-     * Se the fate of more values revealed for a large facet field group in the popover
-     * change state of a facet to more revealed
-     * @param facetField - the fact field you want to reveal all the values for
-     **/
-    setRevealMore(facetField) {
-        this.setFacetMoreRevealedState(facetField);
-    },
-
-    /**
-     * Handle the ui event that occurred - handled changing the collapse/expand state of a
-     * facet field group. To make the facet field groups values hidden or shown.
-     *
-     * @param e - the event object from the browser/react
-     * @param facetField - the facet field group to act on
-     **/
     handleToggleCollapse(e, facetField) {
-        //logger.debug("got toggle collapse on field id " + facetField.id);
-        this.toggleCollapseFacet(facetField);
+        this.setFacetCollapsed(facetField, !this.isCollapsed(facetField.id));
     },
 
     /**
@@ -194,7 +157,7 @@ var FacetsMenu = React.createClass({
      * @param facetField - the facet field group to act on
      **/
     handleRevealMore(e, facetField) {
-        this.setRevealMore(facetField);
+        this.setFacetMoreRevealed(facetField);
     },
 
     /**
@@ -260,16 +223,30 @@ var FacetsMenu = React.createClass({
      **/
     render() {
         let menuKey =  this.props.rptId;
+        let flux = this.getFlux();
+
         return (
             <div className="facetsMenuContainer">
             <div>
+                {/* the filter icon button */}
+                <div className={"facetsMenuButton " +  (this.state.show ? "popoverShown" : "")}
+                     ref="facetsMenuButton"
+                     >
+                    <span className="facetButtons" onClick={() => flux.actions.showFacetMenu({show:!this.state.show})}>
+                        <QBicon className="filterButton" icon={(this.props.selectedValues &&
+                                                this.props.selectedValues.hasAnySelections()) ?
+                                    "filter-status" : "filter-tool"} />
+                        <QBicon className="filterButtonCaret" icon="caret-filled-down" />
+                    </span>
+                </div>
+
                 {/* list of facet options shown when filter icon clicked */}
-                <OverlayTrigger container={this} trigger="click" placement="bottom"
-                                ref="facetOverlayTrigger" rootClose={true}
-                                show={this.state.show}
-                                target={()=> document.getElementById('facetsMenuTarget')}
-                                onHide={() => this.setState({show: false})}
-                                onEntering={this.props.onMenuEnter} onExited={this.props.onMenuExit} overlay={
+                <Overlay container={this} placement="bottom"
+                         ref="facetOverlayTrigger" rootClose={true}
+                         show={this.state.show}
+                         target={()=> document.getElementById('facetsMenuTarget')}
+                         onHide={() => flux.actions.showFacetMenu({show:false})}
+                         onEntering={this.props.onMenuEnter} onExited={this.props.onMenuExit} >
                                     <FacetsList
                                         key= {"FacetsList." + menuKey}
                                         popoverId={menuKey}
@@ -286,22 +263,9 @@ var FacetsMenu = React.createClass({
                                         reportData={this.props.reportData}
                                         onFacetSelect={this.props.onFacetSelect}
                                         onFacetDeselect={this.props.onFacetDeselect}
-                                    />}>
-
-                    {/* the filter icon button */}
-                    <div className={"facetsMenuButton " +  (this.state.show ? "popoverShown" : "")}
-                         ref="facetsMenuButton"
-                         >
-                        <span className="facetButtons" onClick={e => this.toggleMenu(e)}>
-                            <QBicon className="filterButton" icon={(this.props.selectedValues &&
-                                                    this.props.selectedValues.hasAnySelections()) ?
-                                        "filter-status" : "filter-tool"} />
-                            <QBicon className="filterButtonCaret" icon="caret-filled-down" />
-                        </span>
-                    </div>
-                </OverlayTrigger>
-                {((this.context.breakpoint !== breakpoints.SMALL_BREAKPOINT) &&
-                   !this.context.touch) &&
+                                    />
+                </Overlay>
+                {!this.context.touch &&
                 <div className="selectedFacets" onClick={e => this.dontClose(e)}>{this.renderSelectedFacets()}</div>
                 }
             </div>

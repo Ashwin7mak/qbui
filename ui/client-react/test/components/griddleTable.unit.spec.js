@@ -3,7 +3,6 @@ import TestUtils from 'react-addons-test-utils';
 import ReactDOM from 'react-dom';
 import GriddleTable  from '../../src/components/dataTable/griddleTable/griddleTable';
 import Griddle from 'griddle-react';
-import * as breakpoints from '../../src/constants/breakpoints';
 
 var GriddleMock = React.createClass({
 
@@ -102,11 +101,10 @@ describe('GriddleTable functions', () => {
         var TestParent = React.createFactory(React.createClass({
 
             childContextTypes: {
-                breakpoint: React.PropTypes.string,
                 touch: React.PropTypes.bool
             },
             getChildContext: function() {
-                return {breakpoint: breakpoints.SMALL_BREAKPOINT, touch:true};
+                return {touch:true};
             },
             getInitialState() {
                 return {results: fakeReportData_before.data.results, columns: fakeReportData_before.data.columnMetadata};

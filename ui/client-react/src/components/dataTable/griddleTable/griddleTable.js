@@ -2,7 +2,6 @@ import React from 'react';
 import Griddle from 'griddle-react';
 
 import {I18nMessage} from '../../../utils/i18nMessage';
-import * as breakpoints from '../../../constants/breakpoints';
 import ReactCSSTransitionGroup from 'react/lib/ReactCSSTransitionGroup';
 import ReportActions from '../../actions/reportActions';
 import CardView from './cardView.js';
@@ -120,7 +119,7 @@ let GriddleTable = React.createClass({
             recId = row[this.props.uniqueIdentifier];
         }
         //create the link we want to send the user to and then send them on their way
-        const link = '/app/' + appId + '/table/' + tblId + '/record/' + recId;
+        const link = `/app/${appId}/table/${tblId}/record/${recId}`;
         this.context.history.push(link);
 
         // something like this I expect, maybe in an action instead:
@@ -163,17 +162,20 @@ let GriddleTable = React.createClass({
      */
     getTableActions() {
 
-        return (this.props.reportHeader && this.props.selectionActions && (
-            <ReactCSSTransitionGroup transitionName="tableActions"
-                                     component="div"
-                                     className={this.state.toolsMenuOpen ? "tableActionsContainer toolsMenuOpen" : "tableActionsContainer"}
-                                     transitionEnterTimeout={300}
-                                     transitionLeaveTimeout={300}>
+        const hasSelection  = this.state.selectedRows.length;
 
-                {this.state.selectedRows.length ?
+        let classes = "tableActionsContainer secondaryBar";
+        if (this.state.toolsMenuOpen) {
+            classes += " toolsMenuOpen";
+        }
+        if (hasSelection) {
+            classes += " selectionActionsOpen";
+        }
+        return (this.props.reportHeader && this.props.selectionActions && (
+            <div className={classes}>{hasSelection ?
                     React.cloneElement(this.props.selectionActions, {key:"selectionActions", selection: this.state.selectedRows}) :
                     React.cloneElement(this.props.reportHeader, {key:"reportHeader", onMenuEnter:this.onMenuEnter, onMenuExit:this.onMenuExit})}
-            </ReactCSSTransitionGroup>));
+            </div>));
     },
 
     /**

@@ -51,14 +51,14 @@ class BaseService {
      * Axiom interceptor for all http requests -- add a session tracking id and session ticket
      */
     setRequestInterceptor() {
-        axios.interceptors.request.use(function(config) {
+        axios.interceptors.request.use(config => {
             config.headers[constants.HEADER.SESSION_ID] = Configuration.sid;
             let ticket = this.getCookie(constants.COOKIE.TICKET);
             if (ticket) {
                 config.headers[constants.HEADER.TICKET] = ticket;
             }
             return config;
-        }.bind(this));
+        });
     }
 
     /**

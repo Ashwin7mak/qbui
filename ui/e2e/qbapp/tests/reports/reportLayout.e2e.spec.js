@@ -86,69 +86,40 @@
             });
         });
 
-        /**
-         * Data Provider for the different breakpoints. Also contains the state of the leftNav at each size for assertion
-         */
-        function NavDimensionsDataProvider() {
-            return [
-                {
-                    browserWidth: e2eConsts.XLARGE_BP_WIDTH,
-                    breakpointSize: 'xlarge',
-                    open: true,
-                    clientWidth: '399'
-                },
-                {
-                    browserWidth: e2eConsts.LARGE_BP_WIDTH,
-                    breakpointSize: 'large',
-                    open: true,
-                    clientWidth: '299'
-                },
-                {
-                    browserWidth: e2eConsts.MEDIUM_BP_WIDTH,
-                    breakpointSize: 'medium',
-                    open: true,
-                    clientWidth: '199'
-                },
-                {
-                    browserWidth: e2eConsts.SMALL_BP_WIDTH,
-                    breakpointSize: 'small',
-                    open: false,
-                    clientWidth: '39'
-                }
-            ];
-        }
-
-        /**
-         * Layout test. Verify topNav is displayed above the report stage
-         */
-        NavDimensionsDataProvider().forEach(function(testcase) {
-            it(testcase.breakpointSize + ': verify topNav is on top of report stage', function() {
-                e2eBase.resizeBrowser(testcase.browserWidth, e2eConsts.DEFAULT_HEIGHT).then(function() {
-                    reportServicePage.isElementOnTop(reportServicePage.topNavDivEl, reportServicePage.reportStageContentEl);
+        e2eConsts.NavDimensionsDataProvider().forEach(function(testcase) {
+            /**
+             * Layout test. Verify topNav is displayed above the report stage
+             */
+            if (testcase.breakpointSize !== 'small') {
+                it(testcase.breakpointSize + ' breakpoint: verify topNav is on top of report stage', function() {
+                    e2eBase.resizeBrowser(testcase.browserWidth, e2eConsts.DEFAULT_HEIGHT).then(function() {
+                        reportServicePage.isElementOnTop(reportServicePage.topNavDivEl, reportServicePage.reportStageContentEl);
+                    });
                 });
-            });
-        });
+            }
+            //TODO: Add test for small breakpoint (verify secondary bar is visible and topNav is above that, stage is not visible)
 
-        /**
-         * Layout test. Verify report actions are displayed above the report content
-         */
-        NavDimensionsDataProvider().forEach(function(testcase) {
-            it(testcase.breakpointSize + ': verify table actions Layout container is on top of report griddle container', function() {
+            /**
+             * Layout test. Verify report actions are displayed above the report content
+             */
+            it(testcase.breakpointSize + ' breakpoint: verify table actions Layout container is on top of report griddle container', function() {
                 e2eBase.resizeBrowser(testcase.browserWidth, e2eConsts.DEFAULT_HEIGHT).then(function() {
                     reportServicePage.isElementOnTop(reportServicePage.tableActionsContainerEl, reportServicePage.griddleContainerEl);
                 });
             });
-        });
 
-        /**
-         * Layout test. Verify stage is displayed above the report actions container
-         */
-        NavDimensionsDataProvider().forEach(function(testcase) {
-            it(testcase.breakpointSize + ': verify report Stage Layout container is on top of table actions container', function() {
-                e2eBase.resizeBrowser(testcase.browserWidth, e2eConsts.DEFAULT_HEIGHT).then(function() {
-                    reportServicePage.isElementOnTop(reportServicePage.reportStageContentEl, reportServicePage.tableActionsContainerEl);
+            /**
+             * Layout test. Verify stage is displayed above the report actions container
+             */
+            if (testcase.breakpointSize !== 'small') {
+                it(testcase.breakpointSize + ' breakpoint: verify report Stage Layout container is on top of table actions container', function() {
+                    e2eBase.resizeBrowser(testcase.browserWidth, e2eConsts.DEFAULT_HEIGHT).then(function() {
+                        reportServicePage.isElementOnTop(reportServicePage.reportStageContentEl, reportServicePage.tableActionsContainerEl);
+                    });
                 });
-            });
+            }
+            //TODO: Test for small breakpoint size
+
         });
 
         /**

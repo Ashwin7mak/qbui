@@ -57,8 +57,10 @@ let ReportGroup = React.createClass({
         onSelectReport: React.PropTypes.func,
         isOpen: React.PropTypes.bool
     },
-    defaultProps: {
-        isOpen: false
+    getDefaultProps() {
+        return {
+            isOpen: true
+        };
     },
     render() {
 

@@ -23,6 +23,8 @@
         sauceSeleniumAddress: 'localhost:4445/wd/hub',
         // list of files / patterns to load in the browser
         specs: [
+            //TODO: Temporary fix for stale element ref error reportTopNav tests are throwing. Will investigate.
+            baseE2EPath + 'qbapp/tests/reports/reportTopNav.e2e.spec.js',
             baseE2EPath + 'qbapp/tests/reports/*.e2e.spec.js'
         ],
         // Patterns to exclude.

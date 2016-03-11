@@ -65,19 +65,24 @@
             return browser.wait(EC.elementToBeClickable(element), 5000, 'Timed out waiting for element to be clickable');
         };
 
-        //Verify the element is located Top
+        // Verify the element is located Top
         this.isElementOnTop = function(element1, element2) {
-            //get element1 location
+            // First check that both elements are being displayed
+            this.isElementDisplayed(element1);
+            this.isElementDisplayed(element2);
+
+            // Get element1 location
             element1.getLocation().then(function(navDivLocation) {
                 var element1xPosition = navDivLocation.x;
                 var element1yPosition = navDivLocation.y;
-                console.log("The coordinates of element1 are: " + element1xPosition + "," + element1yPosition);
-                //get element2 location
+                //TODO Require logger.js instead of using console.log
+                //console.log("The coordinates of element1 are: " + element1xPosition + "," + element1yPosition);
+                // Get element2 location
                 element2.getLocation().then(function(navDivLocation2) {
                     var element2xPosition = navDivLocation2.x;
                     var element2yPosition = navDivLocation2.y;
-                    console.log("The coordinates of element2 are: " + element2xPosition + "," + element2yPosition);
-                    //compare element2 coordinates to be greater than element1
+                    //console.log("The coordinates of element2 are: " + element2xPosition + "," + element2yPosition);
+                    // Compare element2 coordinates to be greater than element1
                     expect(element2xPosition === element1xPosition || element2xPosition > element1xPosition).toBeTruthy();
                     expect(element2yPosition > element1yPosition).toBeTruthy();
                 });
@@ -85,6 +90,12 @@
         };
 
         //TODO: Left, Right, Bottom functions
+
+        // Verify the element is present in the DOM and displayed (either by the display attribute or hidden prop)
+        this.isElementDisplayed = function(element) {
+            expect(element.isPresent()).toBeTruthy('element not present in DOM');
+            expect(element.isDisplayed()).toBeTruthy('element not displayed on page');
+        };
     };
     module.exports = new BasePage();
 }());

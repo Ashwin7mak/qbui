@@ -22,10 +22,16 @@
 
   .facetButtons {
     color: $icon-color;
+      @include small-breakpoint {
+          color:$secondary-bar-fg;
+      }
   }
   &.popoverShown,
   .facetButtons:hover {
     color: $icon-color-hover;
+    @include small-breakpoint {
+        color: $secondary-bar-fg;
+    }
   }
   .filterButton {
     font-size: 20px;
@@ -142,6 +148,10 @@
       cursor: pointer;
     }
 
+    .noFacetValues {
+      padding : 1em;
+    }
+
     .checkMark {
       color: transparent;
     }
@@ -160,7 +170,9 @@
       color: $facetMenu-clearButtonColor;
     }
   }
-
+.selectedFacets {
+  display: inline;
+}
 .facetToken {
     display : inline-block;
     padding: 3px;
@@ -197,31 +209,44 @@
         cursor: pointer;
       }
     }
-
   }
-
 }
 
-.small-breakpoint .reportContainer .reportToolsAndContentContainer .reportToolbar {
-  .popover-content {
-    max-height: 454px;
-  }
-  .facetMenuPopup {
-    display: block;
-    left: -140px;
-    min-width: 150px;
-    max-width: 200px;
-  }
+@include small-breakpoint {
+    .selectedFacets {
+        display:none;
+    }
+    .reportContainer .reportToolsAndContentContainer .reportToolbar {
+        color:$secondary-bar-fg;
+        input {
+            color: $search-input-fg;
+        }
+        .popover-content {
+            max-height: 454px;
+        }
+        .facetMenuPopup {
+            display: block;
+            left: -140px;
+            min-width: 150px;
+            max-width: 200px;
+        }
 
-  .filterSearchBox {
-    padding: .4rem;
-    width: 11em;
-  }
+        .facetsMenuContainer {
+            flex: 0 0 auto;
+        }
 
-  .popover.bottom > .arrow {
-    display: none;
-  }
+        .filterSearchBoxContainer {
+            flex: 1 0 auto;
+            .filterSearchBox {
+                padding: .4rem;
+            }
+        }
 
+        .popover.bottom > .arrow {
+            display: none;
+        }
+
+    }
 }
 
 
