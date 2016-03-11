@@ -24,7 +24,8 @@ let GlobalAction = React.createClass({
         return (
             <li className={"link globalAction"}>
                 <Link className={"globalActionLink"} to={this.props.action.link} onClick={this.props.onSelect}>
-                    <QBicon icon={this.props.action.icon}/><span className={"navLabel"}><I18nMessage message={this.props.action.msg}/></span>
+                    <QBicon icon={this.props.action.icon}/>
+                    <span className={"navLabel"}><I18nMessage message={this.props.action.msg}/></span>
                 </Link>
             </li>);
     }
@@ -40,7 +41,16 @@ let GlobalActions = React.createClass({
         linkClass: React.PropTypes.string,
         onSelect: React.PropTypes.func,
         position: React.PropTypes.string.isRequired,
-        actions: React.PropTypes.arrayOf(actionPropType)
+        actions: React.PropTypes.arrayOf(actionPropType),
+        dropdownIcon: React.PropTypes.string,
+        dropdownMsg: React.PropTypes.string,
+    },
+
+    getDefaultProps() {
+        return {
+            dropdownIcon: 'fries',
+            dropdownMsg: ''
+        };
     },
 
     onSelect: function(ev) {
@@ -51,9 +61,12 @@ let GlobalActions = React.createClass({
         let supportedLocales = Locale.getSupportedLocales();
         let eventKeyIdx = 20;
         return (
-            <Dropdown id="nav-right-dropdown" dropup={this.props.position === "left"} pullRight={this.props.position === "left"}>
+            <Dropdown id="nav-right-dropdown" dropup={this.props.position === "left"}>
 
-                <a bsRole="toggle" className={"dropdownToggle globalActionLink"}><QBicon icon="fries"/> </a>
+                <a bsRole="toggle" className={"dropdownToggle globalActionLink"}>
+                    <QBicon icon={this.props.dropdownIcon}/>
+                    <span className={"navLabel"}>{this.props.dropdownMsg !== '' ? <I18nMessage message={this.props.dropdownMsg}/>: ''}</span>
+                </a>
 
                 <Dropdown.Menu>
                     <MenuItem href="/user" eventKey={eventKeyIdx++}><I18nMessage
@@ -79,7 +92,7 @@ let GlobalActions = React.createClass({
                     {this.props.actions && this.props.actions.map((action) => {
                         return <GlobalAction key={action.msg} linkClass={this.props.linkClass} onSelect={this.props.onSelect} action={action}/>;
                     })}
-                    <li className={"link globalAction"}>{this.getGlobalDropdown()}</li>
+                    <li className={"link globalAction withDropdown"}>{this.getGlobalDropdown()}</li>
                 </ul>
             </div>);
     }

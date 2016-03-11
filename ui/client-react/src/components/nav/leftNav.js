@@ -20,7 +20,7 @@ let LeftNav = React.createClass({
         onToggleAppsList:React.PropTypes.func,
         onSelect:React.PropTypes.func,
         onSelectReports:React.PropTypes.func,
-        globalActions:React.PropTypes.array
+        globalActions:React.PropTypes.elem
     },
 
     /**
@@ -63,7 +63,7 @@ let LeftNav = React.createClass({
 
                 </ReactCSSTransitionGroup>
 
-                {this.props.globalActions && <GlobalActions actions={this.props.globalActions} onSelect={this.props.onSelect} position={"left"}/>}
+                {this.props.globalActions}
 
             </div>
         );

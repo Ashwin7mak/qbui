@@ -64,7 +64,7 @@ var TopNav = React.createClass({
                     </div>
 
                     <div className="navGroup right">
-                        {this.props.globalActions && <GlobalActions actions={this.props.globalActions} position={"top"}/>}
+                        {this.props.globalActions}
                     </div>
                 </div>
             </div>

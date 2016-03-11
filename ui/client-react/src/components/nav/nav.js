@@ -9,6 +9,7 @@ import TopNav from '../header/topNav';
 import Footer from '../footer/footer';
 import ReportManager from '../report/reportManager';
 import QBicon from '../qbIcon/qbIcon';
+import GlobalActions from '../global/globalActions';
 import Loader  from 'react-loader';
 import './nav.scss';
 import '../../assets/css/animate.min.css';
@@ -34,12 +35,23 @@ var Nav = React.createClass({
         };
     },
 
-    getGlobalActions() {
-
-        return [
+    getTopGlobalActions() {
+        const actions = [
             {msg:'globalActions.user', link:'/user', icon:'user'},
             {msg:'globalActions.help', link:'/help', icon:'help'}
         ];
+        return (<GlobalActions actions={actions}
+                               position={"top"}/>);
+    },
+    getLeftGlobalActions() {
+        const actions = [
+            {msg:'globalActions.help', link:'/help', icon:'help'}
+        ];
+        return (<GlobalActions actions={actions}
+                               onSelect={this.onSelectItem}
+                               dropdownIcon="user"
+                               dropdownMsg="globalActions.user"
+                               position={"left"}/>);
     },
     hideTrowser() {
         let flux = this.getFlux();
@@ -105,7 +117,7 @@ var Nav = React.createClass({
             flux.actions.toggleLeftNav(true);
         }
     },
-    renderForDesktop() {
+    render() {
         const flux = this.getFlux();
 
         let classes = 'navShell ';
@@ -128,11 +140,11 @@ var Nav = React.createClass({
                 selectedTableId={this.state.apps.selectedTableId}
                 onSelectReports={this.onSelectTableReports}
                 onToggleAppsList={this.toggleAppsList}
-                globalActions={this.getGlobalActions()}/>
+                globalActions={this.getLeftGlobalActions()}/>
 
             <div className="main">
                 <TopNav title={this.state.nav.topTitle}
-                        globalActions={this.getGlobalActions()}
+                        globalActions={this.getTopGlobalActions()}
                         onNavClick={this.toggleNav}
                         flux={flux} />
                 {this.props.children &&
@@ -207,7 +219,7 @@ var Nav = React.createClass({
 
         </div>);
     },
-    render() {
+    renderxxx() {
         if (this.context.touch) {
             return this.renderForTouch();
         } else {

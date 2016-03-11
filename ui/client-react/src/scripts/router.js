@@ -95,9 +95,6 @@ let NavWrapper = React.createClass({
             flux.actions.selectTableId(this.props.params.tblId);
             flux.actions.loadReports(this.props.params.appId, this.props.params.tblId);
         }
-    },
-    componentWillUnmount: function() {
-        window.removeEventListener('resize', this.handleResize);
     }
 });
 

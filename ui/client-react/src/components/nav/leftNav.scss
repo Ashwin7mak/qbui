@@ -77,13 +77,13 @@ $left-nav-horizontal-icon-border-color: #131f2b;
 
 @include large-breakpoint {
     .leftNav.open {
-        width: 300px;
+        width: 220px;
     }
 }
 
 @include xlarge-breakpoint {
     .leftNav.open {
-        width: 400px;
+        width: 300px;
     }
 }
 
@@ -357,16 +357,15 @@ body.touch .leftNav.closed {
                     width: 100%;
                 }
             }
+            /* force dropdown menu to left when global actions are in left nav */
+            &.withDropdown {
+                order:-1;
+            }
         }
         > li:last-child {
             border-right: 0;
         }
     }
-}
-
-/* squish the pickle */
-.leftNav .globalActions > ul > li:last-child {
-    flex: 0 1 auto;
 }
 
 .leftNav .tablesList li.horizontal {
