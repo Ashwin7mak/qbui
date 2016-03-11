@@ -108,6 +108,7 @@ let ReportDataStore = Fluxxor.createStore({
         //columns.push({headerName: "Group", cellRenderer: {
         //    renderer: 'group'
         //}});
+        var isFirstColumn = true;
         if (fields) {
             fields.forEach(function(field, index) {
                 let column = {};
@@ -120,6 +121,10 @@ let ReportDataStore = Fluxxor.createStore({
                 column.fieldType = field.type;
                 column.builtIn = field.builtIn;
 
+                if (isFirstColumn) {
+                    column.checkboxSelection = true;
+                    isFirstColumn = false;
+                }
                 //  client side attributes..
                 column.datatypeAttributes = field.datatypeAttributes;
                 columns.push(column);

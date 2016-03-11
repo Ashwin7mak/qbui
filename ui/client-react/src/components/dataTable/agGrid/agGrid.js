@@ -135,7 +135,7 @@ class AGGrid extends React.Component {
         return (this.props.reportHeader && this.props.selectionActions && (
             <div className={classes}>{hasSelection ?
                 React.cloneElement(this.props.selectionActions, {key:"selectionActions", selection: this.state.selectedRows}) :
-                React.cloneElement(this.props.reportHeader, {key:"reportHeader", onMenuEnter:this.onMenuEnter, onMenuExit:this.onMenuExit})}
+                React.cloneElement(this.props.reportHeader, {key:"reportHeader", onMenuEnter:this.onMenuEnter.bind(this), onMenuExit:this.onMenuExit.bind(this)})}
             </div>));
     }
 
@@ -173,27 +173,26 @@ class AGGrid extends React.Component {
         if (rowData) {
             let columns = this.props.reportData.data.columns;
             let self = this;
-            if (this.props.allowRowSelection) {
-                //lets add a checkbox column to the columnDefs.
-                columns.unshift({
-                    headerCellRenderer:function() {
-                        var checkAll = document.createElement('input');
-                        checkAll.type = 'checkbox';
-                        checkAll.onclick = function(event) {
-                            self.allCheckBoxSelected(event.currentTarget.checked);
-                            event.stopPropagation();
-                        }
-                        return checkAll;
-                    },
-                    checkboxSelection: true,
-                    field: 'selectionField',
-                    width: '32px',
-                    suppressMenu: true,
-                    suppressSorting: true,
-                    suppressResize: true,
-                    pinned: 'left'
-                });
-            }
+            //if (this.props.allowRowSelection) {
+            //    //lets add a checkbox column to the columnDefs.
+            //    columns.unshift({
+            //        headerCellRenderer:function() {
+            //            var checkAll = document.createElement('input');
+            //            checkAll.type = 'checkbox';
+            //            checkAll.onclick = function(event) {
+            //                self.allCheckBoxSelected(event.currentTarget.checked);
+            //                event.stopPropagation();
+            //            }
+            //            return checkAll;
+            //        },
+            //        checkboxSelection: true,
+            //        field: 'selectionField',
+            //        width: '32px',
+            //        suppressMenu: true,
+            //        suppressSorting: true,
+            //        suppressResize: true
+            //    });
+            //}
             return (
                 <div className="reportTable" >
 
