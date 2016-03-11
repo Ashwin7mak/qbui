@@ -1,0 +1,93 @@
+@import '../../../../src/assets/css/qbVariables';
+
+$header-cell-border: $color5;
+$header-cell-border-bottom: $color6;
+$header-cell-background-color: $color7;
+$header-cell-color: $color8;
+
+$row-background-color-hover: $color1;
+$row-cell-border-color: $color4;
+
+$grid-font-size: $font-size - 2;
+// override default font style
+.ag-font-style {
+    font-size: $grid-font-size;
+}
+
+.agGrid {
+    font-family: $font-family;
+    color: $font-color;
+    font-size: $grid-font-size;
+    -webkit-font-smoothing: antialiased;
+    background-color: $color2;
+
+    .ag-header-cell {
+        color: $header-cell-color;
+        font-size: 12px;
+        font-weight: bold;
+        -webkit-font-smoothing: antialiased;
+        border-color: $header-cell-border;
+        border-right: 1px solid $header-cell-border;
+        border-bottom: 2px solid $header-cell-border-bottom;
+        background-color: $header-cell-background-color;
+        text-align: left;
+
+        .ag-header-cell-label {
+            padding: 5px 8px 2px 8px;
+        }
+    }
+
+    .ag-cell {
+        word-wrap: break-word;
+        padding: 8px;
+        border-right: 1px solid $row-cell-border-color;
+        border-bottom: 1px solid $row-cell-border-color;
+    }
+
+    .ag-row:hover {
+        background-color: $row-background-color-hover;
+        cursor:pointer;
+    }
+    .ag-cell.Bold {
+        font-weight: bold;
+    }
+    .NoWrap {
+        white-space: nowrap;
+    }
+    .ag-header-cell.AlignRight, .ag-cell.AlignRight {
+        text-align: right;
+    }
+}
+
+.tableActionsContainer {
+    position: relative;
+    overflow:hidden;
+}
+.tableActionsContainer.toolsMenuOpen {
+    overflow:visible; /* hidden for css transitions but need overflow:visible to prevent clipping of facets menu etc. */
+}
+
+/* table actions transitions */
+.tableActions-enter {
+    top: -50px;
+}
+
+.tableActions-enter.tableActions-enter-active {
+    top: 0;
+    transition: top 300ms linear;
+
+}
+
+.tableActions-leave {
+    top: 0;
+}
+
+.tableActions-leave.tableActions-leave-active {
+    top: 50px;
+    transition: top 300ms linear;
+}
+
+.swipeable {
+    position: relative;
+}
+

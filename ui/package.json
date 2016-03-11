@@ -3,6 +3,8 @@
   "version": "0.0.0",
   "main": "server/app.js",
   "dependencies": {
+    "ag-grid": "^4.0.0",
+    "ag-grid-react": "^4.0.0",
     "axios": "^0.7.0",
     "bigdecimal": "0.6.1",
     "bluebird": "2.9.24",

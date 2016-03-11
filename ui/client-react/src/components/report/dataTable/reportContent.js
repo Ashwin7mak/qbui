@@ -1,6 +1,7 @@
 import React from 'react';
 
 import GriddleTable  from '../../../components/dataTable/griddleTable/griddleTable.js';
+import AGGrid  from '../../../components/dataTable/agGrid/agGrid.js';
 import {DateFormatter, NumericFormatter}  from '../../../components/dataTable/griddleTable/formatters.js';
 import Loader  from 'react-loader';
 import ReportActions from '../../actions/reportActions';
@@ -35,10 +36,22 @@ let ReportContent = React.createClass({
         }
     },
     setCSSClass_helper: function(obj, classname) {
+        //for ag-grid
+        if (typeof (obj.cellClass) === 'undefined') {
+            obj.cellClass = classname;
+        } else {
+            obj.cellClass += "," + classname;
+        }
+        if (typeof (obj.headerClass) === 'undefined') {
+            obj.headerClass = classname;
+        } else {
+            obj.headerClass += "," + classname;
+        }
+        //for griddle
         if (typeof (obj.cssClassName) === 'undefined') {
             obj.cssClassName = classname;
         } else {
-            obj.cssClassName += " " + classname;
+            obj.cssClassName += "," + classname;
         }
     },
     /* for each field attribute that has some presentation effect convert that to a css class before passing to griddle.*/
@@ -82,15 +95,19 @@ let ReportContent = React.createClass({
                         }
                     }
                 }
+                obj.suppressMenu = true;
+                obj.minWidth = 100;
                 return obj;
             });
 
 
             columnsData.push({
-                columnName: "actions",
-                visible:false,
-                customComponent: ActionsColumn,
-                cssClassName:"actions"
+                headerName: "actions", //for ag-grid
+                field: "actions",      //for ag-grid
+                columnName: "actions", //for griddle
+                hide:false,
+                headerCellRenderer: ActionsColumn,
+                cellClass:"actions"
 
             });
 
@@ -101,22 +118,36 @@ let ReportContent = React.createClass({
 
     /* TODO: paging component that has "next and previous tied to callbacks from the store to get new data set*/
     render: function() {
-
+        let isTouch = this.context.touch;
         return (
             <Loader loaded={!this.props.reportData.loading}>
                 {this.props.reportData.error ?
                     <div>Error loading report!</div> :
                     <div>
-                        <GriddleTable reportData={this.props.reportData}
-                                      columnMetadata={this.state.reportColumns}
-                                      uniqueIdentifier="Record ID#"
-                                      showPager={false}
-                                      useExternal={false}
-                                      resultsPerPage={resultsPerPage}
-                                      externalResultsPerPage={resultsPerPage}
-                                      reportHeader={this.props.reportHeader}
-                                      selectionActions={<ReportActions />}
-                        />
+                        {!isTouch ?
+                            <AGGrid reportData={this.props.reportData}
+                                    columnMetadata={this.state.reportColumns}
+                                    uniqueIdentifier="Record ID#"
+                                    resultsPerPage={resultsPerPage}
+                                    reportHeader={this.props.reportHeader}
+                                    selectionActions={<ReportActions />}
+
+                                // Allow row selection = show checkbox on row or not. This is based on user perms?
+                                    allowRowSelection="true"
+                                // Whether the report has grouping enabled or not. Should this be decided by node and passed down or agGrid component can detect from looking at the data?
+                                    isReportGrouped="false"
+                            ></AGGrid> :
+                            <GriddleTable reportData={this.props.reportData}
+                                    columnMetadata={this.state.reportColumns}
+                                    uniqueIdentifier="Record ID#"
+                                    resultsPerPage={resultsPerPage}
+                                    reportHeader={this.props.reportHeader}
+                                    selectionActions={<ReportActions />}
+                                    showPager={false}
+                                    useExternal={false}
+                                    externalResultsPerPage={resultsPerPage}
+                            ></GriddleTable>
+                        }
                     </div>
                 }
             </Loader>
@@ -124,5 +155,9 @@ let ReportContent = React.createClass({
     }
 
 });
+
+ReportContent.contextTypes = {
+    touch: React.PropTypes.bool
+}
 
 export default ReportContent;

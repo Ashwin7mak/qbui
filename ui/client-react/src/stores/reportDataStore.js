@@ -84,19 +84,23 @@ let ReportDataStore = Fluxxor.createStore({
 
     getReportColumns: function(fields) {
         let columns = [];
+        //columns.push({headerName: "Group", cellRenderer: {
+        //    renderer: 'group'
+        //}});
         if (fields) {
             fields.forEach(function(field, index) {
                 let column = {};
                 column.order = index;
                 column.id = field.id;
-                column.columnName = field.name;
-                column.displayName = field.name;
+                column.headerName = field.name;     //for ag-grid
+                column.field = field.name;          //for ag-grid
+                column.columnName = field.name;     //for griddle
+                column.displayName = field.name;    //for griddle
                 column.fieldType = field.type;
                 column.builtIn = field.builtIn;
 
                 //  client side attributes..
                 column.datatypeAttributes = field.datatypeAttributes;
-
                 columns.push(column);
             });
         }
@@ -109,6 +113,8 @@ let ReportDataStore = Fluxxor.createStore({
         let reportData = [];
         let map = new Map();
 
+
+        var participants = [];
         if (fields && records) {
             fields.forEach((field) => {
                 map.set(field.id, field);
@@ -121,9 +127,11 @@ let ReportDataStore = Fluxxor.createStore({
                     columns[fld.name] = column.display;
                 });
                 columns.actions = record.id;
+                //participants.push(columns);
                 reportData.push(columns);
             });
         }
+        //reportData.push({'group': "groupA", 'participants': participants});
 
         return reportData;
     },
