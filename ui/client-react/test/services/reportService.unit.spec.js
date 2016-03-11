@@ -44,7 +44,7 @@ describe('ReportService functions', () => {
         expect(BaseService.prototype.get).not.toHaveBeenCalledWith(url);
         deferred.then(function() {
             getSpy.calls.reset();
-            getSpy.and.stub;
+            getSpy.and.stub();
             done();
         });
     });
