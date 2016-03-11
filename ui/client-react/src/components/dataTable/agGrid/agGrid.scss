@@ -91,3 +91,86 @@ $grid-font-size: $font-size - 2;
     position: relative;
 }
 
+.rowActions {
+    height: 100%;
+    top: 0;
+    right: 0;
+    overflow-x: hidden;
+
+    white-space: nowrap;
+    position: absolute;
+
+    .recordActions {
+        padding: 0;
+        height:100%;
+        width:240px;
+
+        .actionIcons {
+            display:flex;
+            flex-direction:row;
+            width:100%;
+            height:100%;
+
+            .iconLink {
+                flex:1 1 auto;
+                height:100%;
+                position:relative;
+                .qbIcon {
+                    position:absolute;
+                    top: calc(50% - 8px);
+                    left: calc(50% - 8px);
+                }
+            }
+        }
+    }
+    &.closed {
+        transition: width 100ms ease-in;
+        width: 0;
+    }
+    &.open {
+        transition: width 100ms ease-in;
+        width: 240px;
+    }
+}
+
+/* row actions on griddle trickery */
+
+/* hide actions column header */
+.QBGriddle tr th.actions {
+    display: none;
+}
+
+/* hide griddle cell containing actions */
+.QBGriddle tr td.actions {
+    position: relative;
+    width: 0;
+    border: 0;
+    margin: 0;
+    padding: 0;
+
+    /* actions */
+    > div {
+        margin: 0;
+        visibility: hidden;
+        position: absolute;
+        display: flex;
+        flex-direction: row;
+        //align-items: center;
+        top: 0;
+        right: 0;
+        height: 100%;
+        background-color: $row-background-color-hover;
+        white-space: nowrap;
+        border-top: 1px dotted #dcdcdc;
+    }
+}
+
+.QBGriddle tr:hover td.actions > div {
+    visibility: visible;
+
+}
+
+.selectedRows .QBGriddle tr:hover td.actions > div {
+    visibility: hidden;
+}
+
