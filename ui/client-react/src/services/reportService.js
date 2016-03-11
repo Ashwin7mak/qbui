@@ -2,6 +2,12 @@ import constants from './constants';
 import BaseService from './baseService';
 import NumberUtils from '../utils/numberUtils';
 
+// a new service is constructed with each actions request..
+// so cachedReportRequest is a global, should be able to keep with reportService
+// unless this needs to be recreated we can hygiene later..
+//cache
+var cachedReportRequest = {};
+
 class ReportService extends BaseService {
 
     constructor() {
@@ -18,6 +24,58 @@ class ReportService extends BaseService {
     }
 
     /**
+     * clear report metadata from cache
+     * @private
+     */
+    _clear() {
+        cachedReportRequest = {};
+    }
+
+    /**
+     * get a key for a given signature to locateitem in cache
+     * @param signature any value that can be stringified
+     * @private
+     */
+    _key(signature) {
+        return JSON.stringify(signature);
+    }
+
+    /**
+     * add a request to the report cache to reduce server fetches
+     * @param request - the payload (a request) that will be bypassed when found in cache
+     * @param signature - the unique information for the report
+     * @returns {promise}
+     * @private
+     */
+    _cache(request, signature) {
+        this._clear();
+        if (signature) {
+            const key = this._key(signature);
+            cachedReportRequest[key] = {};
+            cachedReportRequest[key].rq = request;
+        }
+        return request;
+    }
+
+    /**
+     * look up signature in the cache
+     * @param signature
+     * @returns return the request promise  or undefined if not found
+     * @private
+     */
+    _cached(signature) {
+        const key = this._key(signature);
+        return cachedReportRequest[key] ? cachedReportRequest[key].rq : undefined;
+    }
+
+    /**
+     * to support unit tests mainly get the cache
+     * @returns {{}}
+     */
+    _getCache() {
+        return cachedReportRequest;
+    }
+    /**
      * Return the report meta data for a given table
      *
      * @param appId
@@ -26,8 +84,24 @@ class ReportService extends BaseService {
      * @returns promise
      */
     getReport(appId, tableId, reportId) {
+        const existing = this._cached(arguments);
+        if (existing) {
+            // use result promise from prior request
+            return existing;
+        }
+
+        let args = arguments;
         let url = super.constructUrl(this.API.GET_REPORT, [appId, tableId, reportId]);
-        return super.get(url);
+        const request = super.get(url);
+        if (request) {
+            request.then((response) => {
+                cachedReportRequest[this._key(args)].resp = response;
+                return response;
+            });
+        }
+
+        // clear old and save a new so that report metadata gets loaded from server whenever app/table/reportId changes
+        return this._cache(request, arguments);
     }
 
     /**
@@ -110,3 +184,4 @@ class ReportService extends BaseService {
 }
 
 export default ReportService;
+export {cachedReportRequest};
