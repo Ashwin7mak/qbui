@@ -5,11 +5,12 @@ import constants from '../../src/services/constants';
 describe('ReportService functions', () => {
     'use strict';
     var reportService;
+    var getSpy;
 
     beforeEach(() => {
         spyOn(BaseService.prototype, 'setRequestInterceptor');
         spyOn(BaseService.prototype, 'setResponseInterceptor');
-        spyOn(BaseService.prototype, 'get');
+        getSpy = spyOn(BaseService.prototype, 'get');
 
         reportService = new ReportService();
     });
@@ -23,6 +24,31 @@ describe('ReportService functions', () => {
         reportService.getReport(appId, tblId, rptId);
         expect(BaseService.prototype.get).toHaveBeenCalledWith(url);
     });
+
+    it('test getReport where it finds it in cache', (done) => {
+        var appId = 1;
+        var tblId = 2;
+        var rptId = 3;
+        var url = reportService.constructUrl(reportService.API.GET_REPORT, [appId, tblId, rptId]);
+        var deferred;
+
+        getSpy.and.callFake(function() {
+            deferred = Promise.resolve("CachedVal");
+            return deferred;
+        });
+
+        reportService.getReport(appId, tblId, rptId);
+        expect(BaseService.prototype.get).toHaveBeenCalledWith(url);
+        getSpy.calls.reset();
+        reportService.getReport(appId, tblId, rptId);
+        expect(BaseService.prototype.get).not.toHaveBeenCalledWith(url);
+        deferred.then(function() {
+            getSpy.calls.reset();
+            getSpy.and.stub;
+            done();
+        });
+    });
+
 
     it('test getReports function', () => {
         var appId = 1;
@@ -228,7 +254,7 @@ describe('ReportService functions', () => {
             let cachedValue = reportService._cached(signature);
             expect(cachedValue).toEqual(expectedValue);
         });
-        
+
         it('should overwrite cache with diff entry', () => {
             let args1 = "A";
             let value1 = "setA";
