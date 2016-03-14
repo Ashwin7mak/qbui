@@ -84,7 +84,7 @@ $left-nav-horizontal-icon-border-color: #131f2b;
     }
     .leftNav.open {
         width: 300px;
-
+        transition: width 100ms ease;
         .topLinks .leftNavLink {
             padding: 10px 0;
             .qbIcon {
@@ -377,13 +377,14 @@ div.leftNavTooltip {
     border-top: 1px solid $left-nav-horizontal-icon-border-color;
 }
 
-/* left nav behaves differently on touch devices */
+/* left nav behaves differently on small breakpoint */
 
 @include small-breakpoint {
     .leftNav {
         margin: 0;
         height: 100%;
         width: 0;
+        transition:width 100ms ease;
         z-index: 9999;
 
         .branding {
@@ -393,6 +394,9 @@ div.leftNavTooltip {
             .logo {
                 padding-right: 24px;
             }
+        }
+        .tablesList li.horizontal {
+            min-width:300px;
         }
         /* always show right link on mobile (no hover) */
         ul li.link a.right {
