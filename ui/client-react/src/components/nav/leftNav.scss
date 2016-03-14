@@ -60,15 +60,6 @@ $left-nav-horizontal-icon-border-color: #131f2b;
     display: none;
 }
 
-@include small-breakpoint {
-    .leftNav.open {
-        width: 180px;
-    }
-    .leftNav .globalActions {
-        display: block;
-    }
-}
-
 @include medium-breakpoint {
     .leftNav.open {
         width: 200px;
@@ -88,6 +79,9 @@ $left-nav-horizontal-icon-border-color: #131f2b;
 }
 
 @include small-breakpoint {
+    .leftNav .globalActions {
+        display: block;
+    }
     .leftNav.open {
         width: 300px;
 
