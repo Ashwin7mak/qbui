@@ -241,13 +241,12 @@
                 }).then(function() {
                     for (var i = 0; i < testcase.facets.length; i++) {
                         //select facet group and items
-                        reportServicePage.selectGroupAndFacetItems(testcase.facets[i].group, testcase.facets[i].ItemIndex).then(function(facetList){
+                        reportServicePage.selectGroupAndFacetItems(testcase.facets[i].group, testcase.facets[i].ItemIndex).then(function(facetList) {
                             //Get facet tokens from container and verify against selected items
                             var tokens = element.all(by.className('facetSelections')).map(function(tokenName, tokenindex) {
-                                return tokenName.getText().then(function (tokenText) {
-                                });
-                                expect(tokens).toMatch(facetList);
+                                return tokenName.getText();
                             });
+                            expect(tokens).toMatch(facetList);
                         });
                     }
                 }).then(function() {
@@ -293,13 +292,12 @@
                     expect(reportServicePage.reportFacetPopUpMenu.isDisplayed()).toBeTruthy();
                 }).then(function() {
                     //select the facet Items
-                    reportServicePage.selectGroupAndFacetItems("Text Field", [1, 2, 3, 4]).then(function(facetList){
+                    reportServicePage.selectGroupAndFacetItems("Text Field", [1, 2, 3, 4]).then(function(facetList) {
                     //Map all facet tokens from the facet container
-                    var tokens = element.all(by.className('facetSelections')).map(function(tokenName, tokenindex) {
-                        return tokenName.getText().then(function (tokenText) {
+                        var tokens = element.all(by.className('facetSelections')).map(function(tokenName, tokenindex) {
+                            return tokenName.getText();
                         });
                         expect(tokens).toMatch(facetList);
-                    });
                     });
                 }).then(function() {
                     //remove facets by clicking on clear (X) in popup beside Text Field and verify all tokens removed
