@@ -9,6 +9,9 @@ describe('AppsRoute functions', () => {
 
     let component;
     let flux = {
+        actions:{
+            setTopTitle: function() {return;}
+        }
     };
     it('test render of component', () => {
         component = TestUtils.renderIntoDocument(<AppsRoute flux={flux}/>);

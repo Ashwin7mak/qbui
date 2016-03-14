@@ -19,7 +19,8 @@ let NavItem = React.createClass({
         secondaryIcon: React.PropTypes.string,
         secondaryOnSelect: React.PropTypes.func,
         hoverComponent: React.PropTypes.element,
-        showToolTip: React.PropTypes.bool
+        showToolTip: React.PropTypes.bool,
+        selected: React.PropTypes.bool
     },
 
     getDefaultProps() {
@@ -30,7 +31,14 @@ let NavItem = React.createClass({
     },
 
     getLinkItem(item, label) {
-        return (<li className={ this.props.secondaryIcon ? "link withSecondary" : "link"}>
+        let classes = "link";
+        if (this.props.secondaryIcon) {
+            classes += " withSecondary";
+        }
+        if (this.props.selected) {
+            classes += " selected";
+        }
+        return (<li className={classes}>
             <Link className="leftNavLink" to={item.link} onClick={this.props.onSelect}>
                 <QBicon icon={item.icon}/> <span className={"leftNavLabel"}>{this.props.open ? label : ""}</span>
             </Link>

@@ -45,7 +45,7 @@ let ReportsStore = Fluxxor.createStore({
     },
 
     buildLink: function(appId, tblId, rptId) {
-        return '/app/' + appId + '/table/' + tblId + '/report/' + rptId;
+        return `/app/${appId}/table/${tblId}/report/${rptId}`;
     },
 
 

@@ -1,6 +1,5 @@
 import React from 'react';
 import ReactCSSTransitionGroup from 'react/lib/ReactCSSTransitionGroup';
-import * as breakpoints from '../../constants/breakpoints';
 import {I18nMessage} from '../../utils/i18nMessage';
 import Trowser from '../trowser/trowser';
 import TrowserRecordActions from '../actions/trowserRecordActions';
@@ -10,6 +9,7 @@ import TopNav from '../header/topNav';
 import Footer from '../footer/footer';
 import ReportManager from '../report/reportManager';
 import QBicon from '../qbIcon/qbIcon';
+import Loader  from 'react-loader';
 import './nav.scss';
 import '../../assets/css/animate.min.css';
 
@@ -20,7 +20,6 @@ var Nav = React.createClass({
     mixins: [FluxMixin, StoreWatchMixin('NavStore', 'AppsStore', 'ReportsStore', 'ReportDataStore')],
 
     contextTypes: {
-        breakpoint: React.PropTypes.string,
         touch: React.PropTypes.bool,
         history: React.PropTypes.object
     },
@@ -74,7 +73,7 @@ var Nav = React.createClass({
      *  get actions element for bottome center of trowser (placeholders for now)
      */
     getTrowserActions() {
-        return (<div>
+        return (<div className={"centerActions"}>
                 <a href="#"><QBicon icon="add-mini"/><I18nMessage message={'report.newReport'}/></a>
                 <a href="#"><QBicon icon="settings"/><I18nMessage message={'report.organizeReports'}/></a>
             </div>);
@@ -128,24 +127,24 @@ var Nav = React.createClass({
                 selectedAppId={this.state.apps.selectedAppId}
                 selectedTableId={this.state.apps.selectedTableId}
                 onSelectReports={this.onSelectTableReports}
-                onToggleAppsList={this.toggleAppsList} />
+                onToggleAppsList={this.toggleAppsList}
+                globalActions={this.getGlobalActions()}/>
 
             <div className="main">
-                <TopNav title="QuickBase"
+                <TopNav title={this.state.nav.topTitle}
                         globalActions={this.getGlobalActions()}
                         onNavClick={this.toggleNav}
                         flux={flux} />
-                {this.props.children && <div className="mainContent" >
-                    {/* insert the component passed in by the router */}
-                    {React.cloneElement(this.props.children, {
-                        key: this.props.location ? this.props.location.pathname : "",
-                        selectedAppId: this.state.apps.selectedAppId,
-                        reportData: this.state.reportData,
-                        flux: flux}
-                    )}
-                </div>}
-
-                <Footer flux= {flux} />
+                {this.props.children &&
+                    <div className="mainContent" >
+                        {/* insert the component passed in by the router */}
+                        {React.cloneElement(this.props.children, {
+                            key: this.props.location ? this.props.location.pathname : "",
+                            selectedAppId: this.state.apps.selectedAppId,
+                            reportData: this.state.reportData,
+                            flux: flux}
+                        )}
+                    </div>}
             </div>
         </div>);
     },
@@ -153,6 +152,11 @@ var Nav = React.createClass({
         const flux = this.getFlux();
         flux.actions.toggleLeftNav(false); // hide left nav after selecting items on small breakpoint
     },
+    toggleNav: function() {
+        let flux = this.getFlux();
+        flux.actions.toggleLeftNav();
+    },
+
     renderForTouch() {
         const flux = this.getFlux();
 
@@ -160,6 +164,8 @@ var Nav = React.createClass({
         if (this.state.nav.leftNavOpen) {
             classes += ' leftNavOpen';
         }
+
+
         return (<div className={classes}>
             <Trowser position={"top"}
                      visible={this.state.nav.trowserOpen}
@@ -179,10 +185,11 @@ var Nav = React.createClass({
                 onToggleAppsList={this.toggleAppsList}
                 onSelect={this.onSelectItem}
                 onSelectReports={this.onSelectTableReports}
-                globalActions={this.getGlobalActions()} />
+                globalActions={this.getGlobalActions()}
+                onNavClick={this.toggleNav}/>
 
             <div className="main">
-                <TopNav title="QuickBase"
+                <TopNav title={this.state.nav.topTitle}
                         onNavClick={this.toggleNav}
                         flux={flux} />
 

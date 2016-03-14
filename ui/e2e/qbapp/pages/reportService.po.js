@@ -19,23 +19,31 @@
         this.navStackedEl = element(by.className('nav-stacked'));
         this.navLinksElList = this.navStackedEl.all(by.className('leftNavLink'));
         this.appsHomeLinkEl = this.navLinksElList.first();
-
+        // Apps List
         this.appToggleDivEl = element(by.className('appsToggle'));
         this.appsListDivEl = element(by.className('appsList'));
         this.appSearchHeadingEl = this.appsListDivEl.element(by.className('heading'));
         this.appsSearchIconEl = this.appSearchHeadingEl.element(by.className('qbIcon'));
         this.appLinksElList = this.appsListDivEl.all(by.className('leftNavLink'));
-
+        // App Search
         this.searchAppsDivEl = this.appsListDivEl.element(by.className('search'));
         this.searchAppsInputEl = this.searchAppsDivEl.element(by.tagName('input'));
-
+        // Tables List
         this.tablesListDivEl = element(by.className('tablesList'));
         this.tableLinksElList = this.tablesListDivEl.all(by.className('link'));
+        // Reports List
         this.reportHamburgersElList = this.tablesListDivEl.all(by.className('right'));
         this.reportsListDivEl = element(by.className('reportsList'));
         this.reportsTopDivEl = this.reportsListDivEl.element(by.className('reportsTop'));
         this.reportGroupsDivEl = this.reportsListDivEl.element(by.className('reportGroups'));
         this.reportGroupElList = this.reportsListDivEl.all(by.className('reportGroup'));
+        // Global Actions (only displayed on smallest breakpoint)
+        this.leftNavGlobActsDivEl = this.navMenuEl.element(by.className('globalActions'));
+        this.leftNavGlobActsUlEl = this.leftNavGlobActsDivEl.element(by.className('globalActionsList'));
+        this.leftNavGlobActsListEl = this.leftNavGlobActsUlEl.all(by.className('link'));
+        this.leftNavUserGlobActEl = this.leftNavGlobActsListEl.get(0);
+        this.leftNavHelpGlobActEl = this.leftNavGlobActsListEl.get(1);
+        this.leftNavElipsesGlobActEl = this.leftNavGlobActsListEl.get(2);
 
         // Top Nav
         this.topNavDivEl = element(by.className('topNav'));
@@ -44,18 +52,16 @@
         this.topNavLeftDivEl = this.topNavDivEl.element(by.className('left'));
         // Center div (containing harmony icons)
         this.topNavCenterDivEl = this.topNavDivEl.element(by.className('center'));
-        this.topNavHarButtonsListEl = this.topNavCenterDivEl.all(by.tagName('span'));
+        this.topNavHarButtonsListEl = this.topNavCenterDivEl.all(by.tagName('button'));
         // Right div (containing global actions and right dropdown)
         // Global actions
         this.topNavRightDivEl = this.topNavDivEl.element(by.className('right'));
         this.topNavGlobalActDivEl = this.topNavRightDivEl.element(by.className('globalActions'));
-        this.topNavGlobalActionsListEl = this.topNavGlobalActDivEl.all(by.tagName('a'));
+        this.topNavGlobalActionsListUlEl = this.topNavGlobalActDivEl.element(by.className('globalActionsList'));
+        this.topNavGlobalActionsListEl = this.topNavGlobalActionsListUlEl.all(by.className('link'));
         this.topNavUserGlobActEl = this.topNavGlobalActionsListEl.get(0);
         this.topNavHelpGlobActEl = this.topNavGlobalActionsListEl.get(1);
-
-        // Dropdown menu
-        this.topNavRightDropdownDivEl = this.topNavRightDivEl.element(by.className('dropdown'));
-        this.topNavDropdownEl = this.topNavRightDropdownDivEl.element(by.className('dropdownToggle'));
+        this.topNavElipsesGlobActEl = this.topNavGlobalActionsListEl.get(2);
 
         // Report Container
         this.reportContainerEl = element(by.className('reportContainer'));
@@ -178,7 +184,6 @@
          */
         this.assertNavProperties = function(breakpointSize, open, clientWidth) {
             // Check properties of nav bar
-            expect(this.navMenuBodyEl.getAttribute('class')).toMatch(breakpointSize + '-breakpoint');
             if (open) {
                 expect(this.navMenuEl.getAttribute('class')).toMatch('open');
                 expect(this.navMenuEl.getAttribute('offsetWidth')).toMatch(clientWidth);
@@ -226,17 +231,44 @@
             return textEl;
         };
 
-        // Does element shows up on the Left Nav bar.
+        // Does element show up on the Left Nav bar.
         this.isElementInLeftNav = function(element, clientWidth) {
-            expect(element.getAttribute('offsetLeft'), '0');
-            expect(element.getAttribute('offsetWidth'), clientWidth);
+            expect(element.isDisplayed()).toBeTruthy();
+            expect(element.getAttribute('offsetLeft')).toBe('0');
+            expect(element.getAttribute('offsetWidth')).toBe(clientWidth);
         };
 
-        //Does element shows up on the Top Nav bar.
-        this.isElementInTopNav = function(element) {
-            expect(element.getAttribute('offsetTop'), '0');
-            expect(element.getAttribute('offsetHeight'), '50');
+        // Assert that global actions are present in the Left Nav
+        this.assertGlobalActsDisplayedInLeftNav = function() {
+            expect(this.leftNavGlobActsUlEl.isPresent()).toBeTruthy();
+            // We can't use Protractor's isDisplayed method in this case because dev implementation is not using
+            // display value or the hidden property to hide the element from view, it is changing the widths of the elements
+            expect(this.leftNavGlobActsUlEl.getAttribute('clientWidth')).toBeGreaterThan('0');
+            expect(this.leftNavGlobActsUlEl.getAttribute('offsetWidth')).toBeGreaterThan('0');
         };
+
+        // Assert that global actions are present in the Left Nav
+        this.assertGlobalActsNotDisplayedInLeftNav = function() {
+            expect(this.leftNavGlobActsUlEl.isPresent()).toBeTruthy();
+            expect(this.leftNavGlobActsUlEl.getAttribute('clientWidth')).toBe('0');
+            expect(this.leftNavGlobActsUlEl.getAttribute('offsetWidth')).toBe('0');
+        };
+
+
+        // Assert that global actions are present in the Top Nav bar
+        this.assertGlobalActsDisplayedInTopNav = function() {
+            expect(this.topNavGlobalActionsListUlEl.isPresent()).toBeTruthy();
+            expect(this.topNavGlobalActionsListUlEl.getAttribute('clientWidth')).toBeGreaterThan('0');
+            expect(this.topNavGlobalActionsListUlEl.getAttribute('offsetWidth')).toBeGreaterThan('0');
+        };
+
+        // Assert that global actions are present in the Top Nav bar
+        this.assertGlobalActsNotDisplayedInTopNav = function() {
+            expect(this.topNavGlobalActionsListUlEl.isPresent()).toBeTruthy();
+            expect(this.topNavGlobalActionsListUlEl.getAttribute('clientWidth')).toBe('0');
+            expect(this.topNavGlobalActionsListUlEl.getAttribute('offsetWidth')).toBe('0');
+        };
+
     };
     ReportServicePage.prototype = e2ePageBase;
     module.exports = ReportServicePage;

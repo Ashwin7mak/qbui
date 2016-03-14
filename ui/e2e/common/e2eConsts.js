@@ -8,7 +8,7 @@
         XLARGE_BP_WIDTH : 1441,
         LARGE_BP_WIDTH : 1025,
         MEDIUM_BP_WIDTH : 641,
-        SMALL_BP_WIDTH : 400,
+        SMALL_BP_WIDTH : 500,
         DEFAULT_HEIGHT : 1440,
 
         reportFieldNames : ['Record ID#', 'Text Field', 'Numeric Field', 'Numeric Currency Field', 'Numeric Percent Field', 'Numeric Rating Field',
