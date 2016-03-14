@@ -2,7 +2,7 @@ import React from 'react';
 import ReactIntl from 'react-intl';
 import {I18nMessage, I18nDate} from '../../utils/i18nMessage';
 import Locale from '../../locales/locales';
-import GlobalActions from '../global/globalActions';
+import GlobalActions from '../actions/globalActions';
 import Fluxxor from 'fluxxor';
 import QBicon from '../qbIcon/qbIcon';
 let FluxMixin = Fluxxor.FluxMixin(React);

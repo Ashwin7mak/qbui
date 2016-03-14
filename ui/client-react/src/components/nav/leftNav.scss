@@ -87,17 +87,18 @@ $left-nav-horizontal-icon-border-color: #131f2b;
     }
 }
 
-body.touch .leftNav.open {
-    width: 300px;
+@include small-breakpoint {
+    .leftNav.open {
+        width: 300px;
 
-    .topLinks .leftNavLink {
-        padding: 10px 0;
-        .qbIcon {
-            display: inline-block;
-            width: auto;
+        .topLinks .leftNavLink {
+            padding: 10px 0;
+            .qbIcon {
+                display: inline-block;
+                width: auto;
+            }
         }
     }
-
 }
 
 /* show tooltips only if .show is present unless we're on a touchscreen */
@@ -105,43 +106,49 @@ div.leftNavTooltip {
     display: none;
 }
 
-body:not(.touch) div.leftNavTooltip.show {
-    display: block;
+@include not-small-breakpoint {
+    div.leftNavTooltip.show {
+        display: block;
+    }
 }
 
 /* collapsed nav overrides */
-body:not(.touch) .leftNav.closed {
-    width: 40px;
-    .branding {
-        .logo, .appsToggle .navLabel, .appsToggleIcon {
+@include not-small-breakpoint {
+    .leftNav.closed {
+        width: 40px;
+        .branding {
+            .logo, .appsToggle .navLabel, .appsToggleIcon {
+                display: none;
+            }
+        }
+        li a.heading {
             display: none;
         }
-    }
-    li a.heading {
-        display: none;
-    }
-    li.horizontal, .globalActions {
-        ul {
-            flex-direction: column;
+        li.horizontal, .globalActions {
+            ul {
+                flex-direction: column;
+            }
         }
-    }
-    li.link:hover .hoverComponent {
-        display: flex;
-    }
+        li.link:hover .hoverComponent {
+            display: flex;
+        }
 
-    .globalActions > ul > li > a.globalActionLink {
+        .globalActions > ul > li > a.globalActionLink {
 
-        .navLabel {
+            .navLabel {
+                display: none;
+            }
+        }
+        .globalAction:last-child {
             display: none;
         }
-    }
-    .globalAction:last-child {
-        display: none;
     }
 }
 
-body.touch .leftNav.closed {
-    overflow: hidden;
+@include small-breakpoint {
+    .leftNav.closed {
+        overflow: hidden;
+    }
 }
 
 .leftNav {
@@ -378,54 +385,56 @@ body.touch .leftNav.closed {
 
 /* left nav behaves differently on touch devices */
 
-body.touch .leftNav {
-    margin: 0;
-    height: 100%;
-    width: 0;
-    z-index: 9999;
+@include small-breakpoint {
+    .leftNav {
+        margin: 0;
+        height: 100%;
+        width: 0;
+        z-index: 9999;
 
-    .branding {
-        .toggleNavButton {
-            display: block;
+        .branding {
+            .toggleNavButton {
+                display: block;
+            }
+            .logo {
+                padding-right: 24px;
+            }
         }
-        .logo {
-            padding-right: 24px;
+        /* always show right link on mobile (no hover) */
+        ul li.link a.right {
+            opacity: 1;
+            border: 0;
+            .qbIcon {
+                border-left: 1px solid $left-nav-link-fg;
+                width: 32px;
+                padding-left: 2px;
+            }
+        }
+        ul li.link.selected a.right .qbIcon {
+            border-left: 0;
         }
     }
-    /* always show right link on mobile (no hover) */
-    ul li.link a.right {
-        opacity: 1;
-        border: 0;
-        .qbIcon {
-            border-left: 1px solid $left-nav-link-fg;
-            width: 32px;
-            padding-left: 2px;
+
+    .navShell.leftNavOpen {
+        position: relative;
+        left: -300px;
+
+        .topNav.mobile {
+            min-width: 640px;
         }
-    }
-    ul li.link.selected a.right .qbIcon {
-        border-left: 0;
-    }
-}
+        .main {
+            position: absolute;
+        }
+        .mainContent, .topNav {
+            opacity: .1;
+            transition: opacity 250ms ease-in-out;
+            -moz-transition: opacity 250ms ease-in-out;
+            -webkit-transition: opacity 250ms ease-in-out;
+        }
 
-body.touch .navShell.leftNavOpen {
-    position: relative;
-    left: -300px;
-
-    .topNav.mobile {
-        min-width: 640px;
+        transform: translate3d(300px, 0, 0);
+        -webkit-transform: translate3d(300px, 0, 0);
     }
-    .main {
-        position: absolute;
-    }
-    .mainContent, .topNav {
-        opacity: .1;
-        transition: opacity 250ms ease-in-out;
-        -moz-transition: opacity 250ms ease-in-out;
-        -webkit-transition: opacity 250ms ease-in-out;
-    }
-
-    transform: translate3d(300px, 0, 0);
-    -webkit-transform: translate3d(300px, 0, 0);
 }
 
 /** REACTCSSTRANSITION BASE CLASSES **/

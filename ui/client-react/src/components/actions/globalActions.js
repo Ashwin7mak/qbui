@@ -65,7 +65,7 @@ let GlobalActions = React.createClass({
 
                 <a bsRole="toggle" className={"dropdownToggle globalActionLink"}>
                     <QBicon icon={this.props.dropdownIcon}/>
-                    <span className={"navLabel"}>{this.props.dropdownMsg !== '' ? <I18nMessage message={this.props.dropdownMsg}/>: ''}</span>
+                    <span className={"navLabel"}>{this.props.dropdownMsg !== '' ? <I18nMessage message={this.props.dropdownMsg}/> : ''}</span>
                 </a>
 
                 <Dropdown.Menu>

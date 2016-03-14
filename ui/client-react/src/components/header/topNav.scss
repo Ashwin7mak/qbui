@@ -27,10 +27,12 @@ $top-nav-color: #193048;
     border: 0;
 }
 
-body:not(.touch) .topNav .navGroup .btn-group .btn:hover {
-    background: $nav-hover-bg;
-    span {
-        color: $nav-hover-fg;
+@include not-small-breakpoint {
+    .topNav .navGroup .btn-group .btn:hover {
+        background: $nav-hover-bg;
+        span {
+            color: $nav-hover-fg;
+        }
     }
 }
 

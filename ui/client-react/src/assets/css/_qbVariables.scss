@@ -35,3 +35,8 @@ $large-breakpoint-width: 1440px;
         @content;
     }
 }
+@mixin not-small-breakpoint {
+    @media (min-width: #{$small-breakpoint-width + 1px}) {
+        @content;
+    }
+}
