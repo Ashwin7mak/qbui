@@ -120,6 +120,7 @@
                 return fetchRecordDeferred.promise;
             },
             // Creates a record, returning a promise that is resolved or rejected on successful
+            //TODO: Fix promise anti-pattern QBSE-20581
             createRecord: function(recordsEndpoint, record, params) {
                 var fetchRecordDeferred = promise.pending();
                 init.then(function() {

@@ -49,11 +49,11 @@
                 // Get the appropriate fields out of the fourth table
                 var Fields = e2eBase.tableService.getNonBuiltInFields(app.tables[3]);
                 //generate greater than 201 text records in table 4 for negative testing
-                var generated201Records = e2eBase.recordService.generateRecords(Fields, 370);
-                // return e2eBase.recordService.addBulkRecords(app, app.tables[3], generated201Records);
+                var generated201Records = e2eBase.recordService.generateRecords(Fields, 300);
+                return e2eBase.recordService.addBulkRecords(app, app.tables[3], generated201Records);
             }).then(function() {
                 //Create a new report to do negative testing of >200 text records
-                //return e2eBase.reportService.createReportWithFacets(app.id, app.tables[3].id, [6]);
+                return e2eBase.reportService.createReportWithFacets(app.id, app.tables[3].id, [6]);
             }).then(function() {
                 // Get a session ticket for that subdomain and realmId (stores it in the browser)
                 realmName = e2eBase.recordBase.apiBase.realm.subdomain;
@@ -342,7 +342,7 @@
         });
 
         //TODO This should be enabled when bulkRecords is fixed
-        xit('Negative test to verify > 200k Text fields shows error message in facet drop down', function(done) {
+        it('Negative test to verify > 200k Text fields shows error message in facet drop down', function(done) {
             //select table 4
             reportServicePage.waitForElement(reportServicePage.tablesListDivEl).then(function() {
                 return reportServicePage.tableLinksElList.get(5).click();

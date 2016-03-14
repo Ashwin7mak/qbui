@@ -13,6 +13,7 @@
              * will generate a 'list all' report. Returns a promise.
              */
             // TODO: QBSE-13518 Write a report generator in the test_generators package
+            // TODO: Fix promise anti-pattern QBSE-20581
             createReport: function(appId, tableId, query) {
                 var deferred = promise.pending();
                 var reportJSON = {
