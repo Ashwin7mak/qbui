@@ -251,26 +251,7 @@
             });
             return deferred.promise;
         };
-
-        ///**
-        // * Function that will open the facet group and select the facet Items and verify the checkmark and finally verify facet tokens in container.
-        // * @param facetName
-        // * @param facetItems is an array
-        // */
-        //this.verifySelectedFacetItemsAndVerifyTokens = function(facetItems) {
-        //    var deferred = Promise.pending();
-        //    //select group and facet Items
-        //    this.selectGroupAndFacetItems (facetItems).then(function() {
-        //        //verify the tokens in the container that should match selected items in an 'itemsSelceted' array
-        //        //Map all facet tokens from the facet container
-        //        var tokens = element.all(by.className('facetSelections')).map(function(tokenName, tokenindex) {
-        //            return tokenName.getText().then(function (tokenText) {
-        //            });
-        //            expect(tokens).toMatch(facetItemsSelected);
-        //        });
-        //        });
-        //    return deferred.promise;
-        //    };
+        
         /**
          * Function that will clear all the facet tokens from the container.
          *
