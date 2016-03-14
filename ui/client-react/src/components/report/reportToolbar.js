@@ -260,7 +260,7 @@ var ReportToolbar = React.createClass({
             hasRecords = recordCount ? true : false;
         }
 
-        let hasFacets = this.props.reportData && this.props.reportData.data  &&
+        let hasFacets = this.props.reportData && this.props.reportData.data &&
             this.props.reportData.data.facets && (this.props.reportData.data.facets.length > 0) &&
             this.props.reportData.data.facets[0].values;
 
