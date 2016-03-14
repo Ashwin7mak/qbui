@@ -1,15 +1,16 @@
 import BaseService from '../../src/services/baseService';
-import ReportService from '../../src/services/reportService';
+import ReportService, {cachedReportRequest} from '../../src/services/reportService';
 import constants from '../../src/services/constants';
 
 describe('ReportService functions', () => {
     'use strict';
     var reportService;
+    var getSpy;
 
     beforeEach(() => {
         spyOn(BaseService.prototype, 'setRequestInterceptor');
         spyOn(BaseService.prototype, 'setResponseInterceptor');
-        spyOn(BaseService.prototype, 'get');
+        getSpy = spyOn(BaseService.prototype, 'get');
 
         reportService = new ReportService();
     });
@@ -23,6 +24,31 @@ describe('ReportService functions', () => {
         reportService.getReport(appId, tblId, rptId);
         expect(BaseService.prototype.get).toHaveBeenCalledWith(url);
     });
+
+    it('test getReport where it finds it in cache', (done) => {
+        var appId = 1;
+        var tblId = 2;
+        var rptId = 3;
+        var url = reportService.constructUrl(reportService.API.GET_REPORT, [appId, tblId, rptId]);
+        var deferred;
+
+        getSpy.and.callFake(function() {
+            deferred = Promise.resolve("CachedVal");
+            return deferred;
+        });
+
+        reportService.getReport(appId, tblId, rptId);
+        expect(BaseService.prototype.get).toHaveBeenCalledWith(url);
+        getSpy.calls.reset();
+        reportService.getReport(appId, tblId, rptId);
+        expect(BaseService.prototype.get).not.toHaveBeenCalledWith(url);
+        deferred.then(function() {
+            getSpy.calls.reset();
+            getSpy.and.stub();
+            done();
+        });
+    });
+
 
     it('test getReports function', () => {
         var appId = 1;
@@ -188,6 +214,63 @@ describe('ReportService functions', () => {
 
         var params = {facetexpression: facetExp};
         expect(BaseService.prototype.get).toHaveBeenCalledWith(reportService.API.PARSE_FACET_EXPR,  {params: params});
+    });
+
+    describe('Test Cache of a report fetch', () => {
+
+        beforeEach(() => {
+            reportService._clear();
+        });
+        afterEach(() => {
+            reportService._clear();
+        });
+
+        it('should clear the cache', () => {
+            let x = reportService._getCache();
+            x.a = 1;
+            reportService._clear();
+            expect(reportService._getCache()).toEqual({});
+        });
+
+        it('should make uniq keys', () => {
+            let args1 = ["a", "b", "c"];
+            let args2 = ["a", "c", "b"];
+            expect(reportService._key(args1)).not.toEqual(reportService._key(args2));
+        });
+
+        it('should make same keys', () => {
+            let args1 = ["a", "b", "c"];
+            let args2 = ["a", "c", "b"];
+            expect(reportService._key(args1)).toEqual(reportService._key(args1));
+            expect(reportService._key(args2)).toEqual(reportService._key(args2));
+        });
+
+        it('should add to cache and find it in cache', () => {
+            let args1 = ["a", "b", "c"];
+            let expectedValue = "claire";
+            let signature = reportService._key(args1);
+            reportService._cache(expectedValue, signature);
+            expect(reportService._getCache()).not.toEqual({});
+            let cachedValue = reportService._cached(signature);
+            expect(cachedValue).toEqual(expectedValue);
+        });
+
+        it('should overwrite cache with diff entry', () => {
+            let args1 = "A";
+            let value1 = "setA";
+            let args2 = "Z";
+            let value2 = "setZ";
+
+            let signature1 = reportService._key(args1);
+            reportService._cache(value1, signature1);
+            expect(reportService._cached(signature1)).toEqual(value1);
+
+            let signature2 = reportService._key(args2);
+            reportService._cache(value2, signature2);
+            expect(reportService._cached(signature2)).toEqual(value2);
+
+            expect(reportService._cached(signature1)).toEqual(undefined);
+        });
     });
 
 });
