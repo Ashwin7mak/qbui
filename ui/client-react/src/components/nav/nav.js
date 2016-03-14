@@ -146,7 +146,7 @@ var Nav = React.createClass({
                 onSelect={this.onSelectItem}
                 onNavClick={this.toggleNav}/>
 
-            <div className="main">
+            <div className={"main " + (this.state.nav.showTopNav ? "showSmall" : "hideSmall")} >
                 <TopNav title={this.state.nav.topTitle}
                         globalActions={this.getTopGlobalActions()}
                         onNavClick={this.toggleNav}

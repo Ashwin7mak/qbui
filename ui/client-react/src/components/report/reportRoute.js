@@ -3,7 +3,7 @@ import {I18nMessage} from '../../utils/i18nMessage';
 import Locale from '../../locales/locales';
 import Stage from '../stage/stage';
 import ReportStage from './reportStage';
-
+import Header from '../header/header';
 
 import Logger from '../../utils/logger';
 let logger = new Logger();
@@ -25,6 +25,7 @@ var ReportRoute = React.createClass({
 
         const flux = this.getFlux();
         flux.actions.loadReport(appId, tblId, rptId, true);
+        flux.actions.hideTopNav();
     },
 
     loadReportFromParams(params) {
@@ -45,6 +46,9 @@ var ReportRoute = React.createClass({
         }
     },
 
+    getHeader() {
+        return (<Header>sdafdsaf</Header>);
+    },
     render() {
         if (_.isUndefined(this.props.params) ||
             _.isUndefined(this.props.params.appId) ||
@@ -58,6 +62,7 @@ var ReportRoute = React.createClass({
                     <ReportStage reportData={this.props.reportData}/>
                 </Stage>
 
+                {this.getHeader()}
 
                 <ReportToolsAndContent reportData={this.props.reportData}
                                        appId={this.props.params.appId}

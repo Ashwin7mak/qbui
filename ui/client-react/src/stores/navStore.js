@@ -13,6 +13,7 @@ let NavStore = Fluxxor.createStore({
             leftNavOpen: true,
             appsListOpen: false,
             searchBarOpen: false,
+            showTopNav: true,
             searching:false,
             trowserOpen: false,
             topTitle: {label:"", icon:null}
@@ -29,7 +30,8 @@ let NavStore = Fluxxor.createStore({
             actions.SEARCHING, this.onSearching,
             actions.SET_TOP_TITLE, this.onSetTopTitle,
             actions.CHANGE_LOCALE, this.onChangeLocale,
-
+            actions.SHOW_TOP_NAV, this.onShowTopNav,
+            actions.HIDE_TOP_NAV, this.onHideTopNav,
             actions.LOAD_REPORT_SUCCESS, this.onLoadReportSuccess
         );
     },
@@ -57,7 +59,14 @@ let NavStore = Fluxxor.createStore({
         this.state.trowserOpen = false;
         this.emit('change');
     },
-
+    onShowTopNav: function() {
+        this.state.showTopNav = true;
+        this.emit('change');
+    },
+    onHideTopNav: function() {
+        this.state.showTopNav = false;
+        this.emit('change');
+    },
     onToggleSearch: function() {
         this.state.searchBarOpen = !this.state.searchBarOpen;
         this.emit('change');
