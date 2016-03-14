@@ -266,10 +266,10 @@ var ReportToolbar = React.createClass({
 
         let hasSelectedFacets = this.props.selections && this.props.selections.hasAnySelections();
 
-        let loadedReportToolbar = (
+        let reportToolbar = (
             <div className={"reportToolbar " + (hasFacets ? "" : "noFacets")}>
                 <RecordsCount recordCount={recordCount}
-                              isFiltered={this.isFiltered()}
+                              isFiltered={this.isFiltered() && !this.props.loading}
                               filteredRecordCount={filteredRecordCount}
                               nameForRecords="Records"
                     {...this.props} />
@@ -311,8 +311,7 @@ var ReportToolbar = React.createClass({
             </div>
         );
 
-        let notLoadedReportToolbar = <div>Loading...</div>;
-        return (<div>{(this.props.reportData && this.props.reportData.loading) ? notLoadedReportToolbar : loadedReportToolbar } </div>);
+        return (<div> {reportToolbar} </div>);
     }
 });
 
