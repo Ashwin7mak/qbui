@@ -67,7 +67,7 @@
                 return generatedRecords;
             },
             /**
-             * Uses the generators in the test_generators package to generate a list of record objects based on the
+             * Uses the generators in the test_generators package to generate a list of empty record objects based on the
              * given list of fields and number of records. This list can then be passed into the addRecords function.
              */
             generateEmptyRecords: function(fields, numRecords) {

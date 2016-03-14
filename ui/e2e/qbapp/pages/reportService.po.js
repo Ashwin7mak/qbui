@@ -10,6 +10,8 @@
     var Promise = require('bluebird');
 
     var e2ePageBase = require('./../../common/e2ePageBase');
+    var SHOW_POPUP_LIST_LIMIT = 5;
+    var facetItemsSelected = [];
     var ReportServicePage = function() {
         // Page Elements using Locators
         // Left Nav
@@ -193,8 +195,7 @@
          * @param facetName
          * @param facetItems is an array
          */
-        this.selectFacetItemsAndVerifyTokens = function(facetName, facetItems) {
-            var itemsSelceted = [];
+        this.selectGroupAndFacetItems = function(facetName, facetItems) {
             var deferred = Promise.pending();
             // Expand the Facet group
             var groups = this.PopUpContainerFacetGroup.map(function(groupName, index) {
@@ -211,11 +212,11 @@
                 });
                 // Select the facet Items
             }).then(function() {
-                //sleep to expand a group
+                //sleep to expand a group for animation to complete
                 e2eBase.sleep(browser.params.smallSleep);
-                //click on more options link if items to select is grater than 5
+                //click on more options link if items to select is greater than 5
                 facetItems.forEach(function(facetItem) {
-                    if (facetItem >= 5) {
+                    if (facetItem >= SHOW_POPUP_LIST_LIMIT) {
                         element.all(by.className('listMore')).click(); //click on more options link
                         e2eBase.sleep(browser.params.mediumSleep);
                     }
@@ -243,21 +244,33 @@
                 //get all Selected items from popup and push into an array
                 element.all(by.className('selected')).map(function(selectedGroupItem, index) {
                     return selectedGroupItem.getText().then(function(selectedItemText) {
-                        itemsSelceted.push(selectedItemText);
+                        facetItemsSelected.push(selectedItemText);
                     });
                 });
-                // Verify selected items matches the tokens on the container
-            }).then(function() {
-                //verify the tokens in the container that should match selected items in an 'itemsSelceted' array
-                //Map all facet tokens from the facet container
-                var tokens = element.all(by.className('facetSelections')).map(function(tokenName, tokenindex) {
-                    return tokenName.getText().then(function(tokenText) {
-                    });
-                    expect(tokens).toMatch(itemsSelceted);
-                });
+                return facetItemsSelected;
             });
             return deferred.promise;
         };
+
+        ///**
+        // * Function that will open the facet group and select the facet Items and verify the checkmark and finally verify facet tokens in container.
+        // * @param facetName
+        // * @param facetItems is an array
+        // */
+        //this.verifySelectedFacetItemsAndVerifyTokens = function(facetItems) {
+        //    var deferred = Promise.pending();
+        //    //select group and facet Items
+        //    this.selectGroupAndFacetItems (facetItems).then(function() {
+        //        //verify the tokens in the container that should match selected items in an 'itemsSelceted' array
+        //        //Map all facet tokens from the facet container
+        //        var tokens = element.all(by.className('facetSelections')).map(function(tokenName, tokenindex) {
+        //            return tokenName.getText().then(function (tokenText) {
+        //            });
+        //            expect(tokens).toMatch(facetItemsSelected);
+        //        });
+        //        });
+        //    return deferred.promise;
+        //    };
         /**
          * Function that will clear all the facet tokens from the container.
          *
@@ -275,6 +288,7 @@
             ).then(function(items) {
                 for (var i = (items.length) - 1; i >= 0; --i) {
                     locations.get(items[i].index).element(by.className('clearFacet')).click();
+                    //TODO stale element issue without this sleep.
                     e2eBase.sleep(browser.params.largeSleep);
                 }
             });
@@ -289,6 +303,7 @@
             this.PopUpContainerClearFacet.then(function(facetItems) {
                 for (var i = 0; i < facetItems.length; i++) {
                     facetItems[i].click();
+                    //TODO stale element issue without this sleep.
                     e2eBase.sleep(browser.params.largeSleep);
                 }
             });

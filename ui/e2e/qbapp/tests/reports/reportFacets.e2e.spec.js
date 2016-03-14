@@ -48,7 +48,7 @@
             }).then(function() {
                 // Get the appropriate fields out of the fourth table
                 var Fields = e2eBase.tableService.getNonBuiltInFields(app.tables[3]);
-                //generate 201 text records in table 4 for negative testing
+                //generate greater than 201 text records in table 4 for negative testing
                 var generated201Records = e2eBase.recordService.generateRecords(Fields, 370);
                 // return e2eBase.recordService.addBulkRecords(app, app.tables[3], generated201Records);
             }).then(function() {
@@ -240,7 +240,15 @@
 
                 }).then(function() {
                     for (var i = 0; i < testcase.facets.length; i++) {
-                        reportServicePage.selectFacetItemsAndVerifyTokens(testcase.facets[i].group, testcase.facets[i].ItemIndex);
+                        //select facet group and items
+                        reportServicePage.selectGroupAndFacetItems(testcase.facets[i].group, testcase.facets[i].ItemIndex).then(function(facetList){
+                            //Get facet tokens from container and verify against selected items
+                            var tokens = element.all(by.className('facetSelections')).map(function(tokenName, tokenindex) {
+                                return tokenName.getText().then(function (tokenText) {
+                                });
+                                expect(tokens).toMatch(facetList);
+                            });
+                        });
                     }
                 }).then(function() {
                     //collapse the popup menu and verify filtered table contents
@@ -285,7 +293,14 @@
                     expect(reportServicePage.reportFacetPopUpMenu.isDisplayed()).toBeTruthy();
                 }).then(function() {
                     //select the facet Items
-                    reportServicePage.selectFacetItemsAndVerifyTokens("Text Field", [1, 2, 3, 4]);
+                    reportServicePage.selectGroupAndFacetItems("Text Field", [1, 2, 3, 4]).then(function(facetList){
+                    //Map all facet tokens from the facet container
+                    var tokens = element.all(by.className('facetSelections')).map(function(tokenName, tokenindex) {
+                        return tokenName.getText().then(function (tokenText) {
+                        });
+                        expect(tokens).toMatch(facetList);
+                    });
+                    });
                 }).then(function() {
                     //remove facets by clicking on clear (X) in popup beside Text Field and verify all tokens removed
                     reportServicePage.reportFilterBtnCaret.click().then(function() {
@@ -329,7 +344,7 @@
         });
 
         //TODO This should be enabled when bulkRecords is fixed
-        xit('Negative test to verify > 200k Text fields shoes error message in facet drop down', function(done) {
+        xit('Negative test to verify > 200k Text fields shows error message in facet drop down', function(done) {
             //select table 4
             reportServicePage.waitForElement(reportServicePage.tablesListDivEl).then(function() {
                 return reportServicePage.tableLinksElList.get(5).click();
