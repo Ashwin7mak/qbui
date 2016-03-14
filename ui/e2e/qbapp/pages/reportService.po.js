@@ -196,7 +196,6 @@
          * @param facetItems is an array
          */
         this.selectGroupAndFacetItems = function(facetName, facetItems) {
-            var deferred = Promise.pending();
             // Expand the Facet group
             var groups = this.PopUpContainerFacetGroup.map(function(groupName, index) {
                 return groupName.getText().then(function(groupText) {
@@ -249,15 +248,13 @@
                 });
                 return facetItemsSelected;
             });
-            return deferred.promise;
         };
-        
+
         /**
          * Function that will clear all the facet tokens from the container.
          *
          */
         this.clearFacetTokensFromContainer = function() {
-            var deferred = Promise.pending();
             var locations = element.all(by.className('selectedToken'));
             return locations.map(
                 function(locationElement, index) {
@@ -273,14 +270,12 @@
                     e2eBase.sleep(browser.params.largeSleep);
                 }
             });
-            return deferred.promise;
         };
         /**
          * Function that will clear all facet items form popup menu.
          * @param facets array
          */
         this.clearAllFacetTokensFromPopUp = function() {
-            var deferred = Promise.pending();
             this.PopUpContainerClearFacet.then(function(facetItems) {
                 for (var i = 0; i < facetItems.length; i++) {
                     facetItems[i].click();
@@ -288,7 +283,6 @@
                     e2eBase.sleep(browser.params.largeSleep);
                 }
             });
-            return deferred.promise;
         };
         /**
         * Helper function that will get all of the field column headers from the report. Returns an array of strings.
