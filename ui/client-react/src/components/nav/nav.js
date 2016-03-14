@@ -165,8 +165,12 @@ var Nav = React.createClass({
         </div>);
     },
     onSelectItem() {
-        const flux = this.getFlux();
-        flux.actions.toggleLeftNav(false); // hide left nav after selecting items on small breakpoint
+
+        if (Breakpoints.isSmallBreakpoint()) {
+            const flux = this.getFlux();
+
+            flux.actions.toggleLeftNav(false); // hide left nav after selecting items on small breakpoint
+        }
     },
     toggleNav: function() {
         let flux = this.getFlux();
