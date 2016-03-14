@@ -158,16 +158,16 @@ var ReportToolbar = React.createClass({
     searchTheString(searchTxt, debounced) {
         if (debounced) {
             this.debouncedChange(searchTxt).then((result) => {
-                this.executeSearchString(result.trim());
+                this.executeSearchString(result);
             });
         }  else {
-            this.executeSearchString(searchTxt.trim());
+            this.executeSearchString(searchTxt);
         }
     },
 
 
     handleSearchChange(e) {
-        var searchTxt = e.target.value.trim();
+        var searchTxt = e.target.value;
         this.setState({
             searchInput: searchTxt
         });
@@ -248,7 +248,8 @@ var ReportToolbar = React.createClass({
         let recordCount = this.props.reportData && this.props.reportData.data && this.props.reportData.data.records ?
                                 this.props.reportData.data.records.length : null; //TODO what to show for pagination?
 
-        let filteredRecordCount  = this.props.reportData && this.props.reportData.data && this.props.reportData.data.filteredRecords ?
+        let filteredRecordCount  = this.props.reportData && this.props.reportData.data &&
+                                this.props.reportData.data.filteredRecords ?
                                 this.props.reportData.data.filteredRecords.length : null;
 
         // determine if there is a search/filter in effect and if there are records/results to show
@@ -259,10 +260,14 @@ var ReportToolbar = React.createClass({
             hasRecords = recordCount ? true : false;
         }
 
+        let hasFacets = this.props.reportData && this.props.reportData.data &&
+            this.props.reportData.data.facets && (this.props.reportData.data.facets.length > 0) &&
+            this.props.reportData.data.facets[0].values;
+
         let hasSelectedFacets = this.props.selections && this.props.selections.hasAnySelections();
 
         let loadedReportToolbar = (
-            <div className="reportToolbar">
+            <div className={"reportToolbar " + (hasFacets ? "" : "noFacets")}>
                 <RecordsCount recordCount={recordCount}
                               isFiltered={this.isFiltered()}
                               filteredRecordCount={filteredRecordCount}
@@ -289,9 +294,9 @@ var ReportToolbar = React.createClass({
                     {...this.props} />
                 }
 
-                {/*TODO :  - check if facets is enabled for this report,
+                {/* check if facets is enabled for this report,
                  also hide Facets Menu Button if facets disabled  */}
-                {recordCount &&
+                {(recordCount && hasFacets) &&
                 (<FacetsMenu className="facetMenu"
                              {...this.props}
                              selectedValues={this.props.selections}
@@ -301,7 +306,7 @@ var ReportToolbar = React.createClass({
                 />)
                 }
 
-                {<div id="facetsMenuTarget"></div>}
+                {hasFacets && <div id="facetsMenuTarget"></div>}
                 {this.getPageActions()}
             </div>
         );
