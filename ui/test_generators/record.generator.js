@@ -41,6 +41,23 @@
             return recordJson;
         },
 
+        generateEmptyRecord: function(fields) {
+            var recordJson = [];
+
+            for (var i = 0; i < fields.length; i++) {
+                var field = fields[i];
+
+                // Check that there is a mapping for the field type (otherwise don't generate a value for it)
+                if (field[fieldConsts.fieldKeys.TYPE] === consts.SCALAR || field[fieldConsts.fieldKeys.TYPE] === consts.REPORT_LINK) {
+                    recordJson.push({
+                        id   : field[fieldConsts.fieldKeys.ID],
+                        value: null
+                    });
+                }
+            }
+            return recordJson;
+        },
+
         /**
          @params: Table containing generated fields
          Helper method if you just want to generate a record for a table. Extracts the fields and passes them into
