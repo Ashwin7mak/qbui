@@ -105,10 +105,6 @@ let ReportDataStore = Fluxxor.createStore({
 
     getReportColumns(fields) {
         let columns = [];
-        //columns.push({headerName: "Group", cellRenderer: {
-        //    renderer: 'group'
-        //}});
-        var isFirstColumn = true;
         if (fields) {
             fields.forEach(function(field, index) {
                 let column = {};
@@ -121,10 +117,6 @@ let ReportDataStore = Fluxxor.createStore({
                 column.fieldType = field.type;
                 column.builtIn = field.builtIn;
 
-                if (isFirstColumn) {
-                    column.checkboxSelection = true;
-                    isFirstColumn = false;
-                }
                 //  client side attributes..
                 column.datatypeAttributes = field.datatypeAttributes;
                 columns.push(column);
@@ -139,8 +131,6 @@ let ReportDataStore = Fluxxor.createStore({
         let reportData = [];
         let map = new Map();
 
-
-        var participants = [];
         if (fields && records) {
             fields.forEach((field) => {
                 map.set(field.id, field);
@@ -153,11 +143,9 @@ let ReportDataStore = Fluxxor.createStore({
                     columns[fld.name] = column.display;
                 });
                 columns.actions = record.id;
-                //participants.push(columns);
                 reportData.push(columns);
             });
         }
-        //reportData.push({'group': "groupA", 'participants': participants});
 
         return reportData;
     },

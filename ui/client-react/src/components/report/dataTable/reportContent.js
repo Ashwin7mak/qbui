@@ -2,6 +2,7 @@ import React from 'react';
 
 import GriddleTable  from '../../../components/dataTable/griddleTable/griddleTable.js';
 import AGGrid  from '../../../components/dataTable/agGrid/agGrid.js';
+import {reactCellRendererFactory} from 'ag-grid-react';
 import {DateFormatter, NumericFormatter}  from '../../../components/dataTable/griddleTable/formatters.js';
 import Loader  from 'react-loader';
 import ReportActions from '../../actions/reportActions';
@@ -29,7 +30,7 @@ let ReportContent = React.createClass({
 
     componentWillReceiveProps: function(nextProps) {
 
-        if (nextProps.reportData.data) {
+        if (nextProps.reportData.data && this.props.reportData.data.columns !== nextProps.reportData.data.columns) {
             this.setState({
                 reportColumns: nextProps.reportData.data.columns ? this.getColumnProps(nextProps.reportData.data.columns) : []
             });
@@ -66,10 +67,14 @@ let ReportContent = React.createClass({
                             {
                                 switch (datatypeAttributes[attr]) {
                                 case "NUMERIC" :
-                                    this.setCSSClass_helper(obj, "AlignRight");
-                                    obj.customComponent = NumericFormatter;
+                                    if (obj.order !== 0) { //never make the 1st column right aligned because it will hold the checkboxes
+                                        this.setCSSClass_helper(obj, "AlignRight");
+                                        //obj.cellRenderer = reactCellRendererFactory(NumericFormatter);
+                                        obj.customComponent = NumericFormatter;
+                                    }
                                     break;
                                 case "DATE" :
+                                    //obj.cellRenderer = reactCellRendererFactory(DateFormatter);
                                     obj.customComponent = DateFormatter;
                                     break;
                                 }
@@ -101,15 +106,13 @@ let ReportContent = React.createClass({
             });
 
 
-            columnsData.push({
-                headerName: "actions", //for ag-grid
-                field: "actions",      //for ag-grid
-                columnName: "actions", //for griddle
-                hide:false,
-                headerCellRenderer: ActionsColumn,
-                cellClass:"actions"
-
-            });
+            //columnsData.push({
+            //    headerName: "Actions", //for ag-grid
+            //    field: "actions",      //for ag-grid
+            //    columnName: "actions", //for griddle
+            //    cellRenderer: reactCellRendererFactory(ActionsColumn),
+            //    cellClass:"actions"
+            //});
 
             return columnsData;
         }
@@ -126,16 +129,10 @@ let ReportContent = React.createClass({
                     <div className="reportContent">
                         {!isTouch ?
                             <AGGrid reportData={this.props.reportData}
-                                    columnMetadata={this.state.reportColumns}
                                     uniqueIdentifier="Record ID#"
                                     resultsPerPage={resultsPerPage}
                                     reportHeader={this.props.reportHeader}
                                     selectionActions={<ReportActions />}
-
-                                // Allow row selection = show checkbox on row or not. This is based on user perms?
-                                    allowRowSelection="true"
-                                // Whether the report has grouping enabled or not. Should this be decided by node and passed down or agGrid component can detect from looking at the data?
-                                    isReportGrouped="false"
                             ></AGGrid> :
                             <GriddleTable reportData={this.props.reportData}
                                     columnMetadata={this.state.reportColumns}

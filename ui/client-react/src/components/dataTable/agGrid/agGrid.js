@@ -1,89 +1,87 @@
 import React from 'react';
+import {AgGridReact} from 'ag-grid-react';
+import {reactCellRendererFactory} from 'ag-grid-react';
 import {I18nMessage} from '../../../utils/i18nMessage';
 import ReactCSSTransitionGroup from 'react/lib/ReactCSSTransitionGroup';
 import ReportActions from '../../actions/reportActions';
-import CardView from '../griddleTable/cardView.js';
 import LimitConstants from '../../../../../common/src/limitConstants';
 import _ from 'lodash';
-import {AgGridReact} from 'ag-grid-react';
-import '../../../../../node_modules/ag-grid/dist/styles/ag-grid.scss';
-import '../../../../../node_modules/ag-grid/dist/styles/theme-fresh.scss';
+
+import '../../../../../node_modules/ag-grid/dist/styles/ag-grid.css';
 import './agGrid.scss';
 
-class AGGrid extends React.Component {
 
-    contextTypes: {
+let AllSelector = React.createClass({
+
+    render() {
+        return (<div>test</div>);
+    }
+});
+
+let AGGrid = React.createClass({
+    contextTypes:{
         touch: React.PropTypes.bool,
         history: React.PropTypes.object
-    }
+    },
 
-    constructor(...args) {
-        super(...args);
-
-        this.state = {
-            showGrid: true,
-            icons: {
-                columnRemoveFromGroup: '<i class="fa fa-remove"/>',
-                filter: '<i class="fa fa-filter"/>',
-                sortAscending: '<i class="fa fa-long-arrow-down"/>',
-                sortDescending: '<i class="fa fa-long-arrow-up"/>',
-                groupExpanded: '<i class="fa fa-minus-square-o"/>',
-                groupContracted: '<i class="fa fa-plus-square-o"/>',
-                columnGroupOpened: '<i class="fa fa-minus-square-o"/>',
-                columnGroupClosed: '<i class="fa fa-plus-square-o"/>'
-            },
+    getInitialState() {
+        return {
             selectedRows: [],
-            allowCardSelection: false,
-            toolsMenuOpen: false
+            toolsMenuOpen: false,
+            allCheckboxClicked: false
         };
-
-        // the grid options are optional, because you can provide every property
-        // to the grid via standard React properties. however, the react interface
-        // doesn't block you from using the standard JavaScript interface if you
-        // wish. Maybe you have the gridOptions stored as JSON on your server? If
-        // you do, the providing the gridOptions as a standalone object is just
-        // what you want!
-        this.gridOptions = {
-            // this is how you listen for events using gridOptions
-            onModelUpdated: function() {
-                console.log('event onModelUpdated received');
-            }
-        };
-    }
-    onShowGrid(show) {
-        this.setState({
-            showGrid: show
-        });
-    }
-
-    onToggleToolPanel(event) {
-        this.setState({showToolPanel: event.target.checked});
-    }
+    },
 
     onGridReady(params) {
         this.api = params.api;
         this.columnApi = params.columnApi;
-        this.autoSizeAll();
-    }
+        this.autoSizeAllColumns();
+    },
 
+    /**
+     * Helper method to auto-resize all columns to the content's width. This is called on load.
+     */
+    autoSizeAllColumns() {
+        var allColumnIds = [];
+        this.props.reportData.data.columns.forEach(function(columnDef) {
+            allColumnIds.push(columnDef.field);
+        });
+        this.columnApi.autoSizeColumns(allColumnIds);
+    },
+
+    /**
+     * Grid API - selectAll "selects" all rows.
+     */
     selectAll() {
         this.api.selectAll();
-    }
-
+    },
+    /**
+     * Grid API - deselectAll "deselects" all rows.
+     */
     deselectAll() {
         this.api.deselectAll();
-    }
+    },
 
+    /**
+     * Capture the row-click event. Send to record view on row-click
+     * @param event
+     */
     onRowClicked(event) {
-        console.log('onRowClicked: ' + event.node.data);
         const {appId, tblId} = this.props.reportData;
         var recId = event.node.data[this.props.uniqueIdentifier];
         //create the link we want to send the user to and then send them on their way
         const link = '/app/' + appId + '/table/' + tblId + '/record/' + recId;
         this.context.history.push(link);
-    }
+    },
 
+    /**
+     * Capture the row-select (via checkbox) event.
+     * @param event
+     */
     onRowSelected(event) {
+        if (this.state.allCheckboxClicked) {
+            return;
+        }
         const id = event.node.data[this.props.uniqueIdentifier];
         if (this.state.selectedRows.indexOf(id) === -1) {
             // not already selected, add to selectedRows
@@ -93,29 +91,63 @@ class AGGrid extends React.Component {
             // already selected, remove from selectedRows
             this.setState({selectedRows: _.without(this.state.selectedRows, id)});
         }
-    }
+        this.updateAllCheckbox();
+    },
+    /**
+     * is row selected callback
+     */
+    isRowSelected(row) {
+        return this.state.selectedRows.indexOf(row[this.props.uniqueIdentifier]) !== -1;
+    },
 
-    autoSizeAll() {
-        var allColumnIds = [];
-        this.props.reportData.data.columns.forEach(function(columnDef) {
-            allColumnIds.push(columnDef.field);
-        });
-        this.columnApi.autoSizeColumns(allColumnIds);
-    }
+    updateAllCheckbox() {
+        if (this.props.reportData.data.filteredRecords.length === this.state.selectedRows.length) {
+            document.getElementsByClassName("SelectAllCheckbox")[0].checked = true;
+        } else {
+            document.getElementsByClassName("SelectAllCheckbox")[0].checked = false;
+        }
+    },
+    /**
+     * Capture the event if all-select checkbox is clicked.
+     * We want to make sure if all-checkbox is clicked then the event doesnt propagate to all rows in turn.
+     * Use allCheckboxClicked state variable to keep track of this.
+     */
+    allCheckBoxSelected() {
+        this.setState({allCheckboxClicked: true});
+        if (event.currentTarget.checked) {
+            this.selectAll();
+            //push all ids to selectedRows
+            let rowIds = [];
+            this.props.reportData.data.filteredRecords.forEach((row)=>{
+                rowIds.push(row[this.props.uniqueIdentifier]);
+            });
+            this.setState({selectedRows: rowIds});
+        } else {
+            this.deselectAll();
+            this.setState({selectedRows: []});
+        }
+    },
 
+    // After the component is updated turn off allCheckboxClicked variable's state.
+    // TODO: Better way to do this?
+    componentDidUpdate(prevProps, prevState) {
+        if (prevState.allCheckboxClicked) {
+            this.setState({allCheckboxClicked: false});
+        }
+    },
 
     /**
      * keep track of tools menu being open (need to change overflow css style)
      */
     onMenuEnter() {
         this.setState({toolsMenuOpen:true});
-    }
+    },
     /**
      * keep track of tools menu being closed (need to change overflow css style)
      */
     onMenuExit() {
         this.setState({toolsMenuOpen:false});
-    }
+    },
     /**
      * get table actions if we have them - render selectionActions prop if we have an active selection,
      * otherwise the reportHeader prop (cloned with extra key prop for transition group, and selected rows
@@ -135,98 +167,60 @@ class AGGrid extends React.Component {
         return (this.props.reportHeader && this.props.selectionActions && (
             <div className={classes}>{hasSelection ?
                 React.cloneElement(this.props.selectionActions, {key:"selectionActions", selection: this.state.selectedRows}) :
-                React.cloneElement(this.props.reportHeader, {key:"reportHeader", onMenuEnter:this.onMenuEnter.bind(this), onMenuExit:this.onMenuExit.bind(this)})}
+                React.cloneElement(this.props.reportHeader, {key:"reportHeader", onMenuEnter:this.onMenuEnter, onMenuExit:this.onMenuExit})}
             </div>));
-    }
+    },
 
-    /**
-     * is row selected callback
-     */
-    isRowSelected(row) {
-        return this.state.selectedRows.indexOf(row[this.props.uniqueIdentifier]) !== -1;
-    }
-    allCheckBoxSelected() {
-        if (event.currentTarget.checked) {
-            this.selectAll();
-            //push all ids to selectedRows
-            let rowIds = [];
-            this.props.reportData.data.filteredRecords.forEach((row)=>{
-                rowIds.push(row[this.props.uniqueIdentifier]);
-            });
-        } else {
-            this.deselectAll();
+    getColumns() {
+        let columns = this.props.reportData.data.columns.slice(0);
+        let self = this;
+        let checkBoxCol = {};
+        checkBoxCol.field = "checkbox";
+        var checkbox = document.createElement("input");
+        checkbox.type = "checkbox";
+        checkbox.className = "SelectAllCheckbox";
+        checkbox.onclick = function(event) {
+            self.allCheckBoxSelected(event);
         }
-    }
+        checkBoxCol.headerCellRenderer = function() {
+            return checkbox;
+        }
+        //checkBoxCol.headerCellRenderer = reactCellRendererFactory(AllSelector);
+        checkBoxCol.checkboxSelection = true;
+        columns.unshift(checkBoxCol);
+        return columns;
+    },
 
     render() {
 
-        const isCardLayout = this.context.touch;
-
-        let griddleWrapperClasses = this.state.selectedRows.length ? "selectedRows" : "";
-
-        if (this.state.allowCardSelection) {
-            griddleWrapperClasses += " allowCardSelection";
-        }
-
-        let rowData = this.props.reportData && this.props.reportData.data ? this.props.reportData.data.filteredRecords : [];
-
-        if (rowData) {
-            let columns = this.props.reportData.data.columns;
-            let self = this;
-            //if (this.props.allowRowSelection) {
-            //    //lets add a checkbox column to the columnDefs.
-            //    columns.unshift({
-            //        headerCellRenderer:function() {
-            //            var checkAll = document.createElement('input');
-            //            checkAll.type = 'checkbox';
-            //            checkAll.onclick = function(event) {
-            //                self.allCheckBoxSelected(event.currentTarget.checked);
-            //                event.stopPropagation();
-            //            }
-            //            return checkAll;
-            //        },
-            //        checkboxSelection: true,
-            //        field: 'selectionField',
-            //        width: '32px',
-            //        suppressMenu: true,
-            //        suppressSorting: true,
-            //        suppressResize: true
-            //    });
-            //}
+        if (this.props.reportData.data.filteredRecords) {
             return (
                 <div className="reportTable" >
 
                     {this.getTableActions()}
                     <div className="agGrid">
                         <AgGridReact
-                            // gridOptions is optional - it's possible to provide
-                            // all values as React props
                             gridOptions={this.gridOptions}
 
                             // listening for events
-                            onGridReady={this.onGridReady.bind(this)}
-                            onRowSelected={this.onRowSelected.bind(this)}
-                            onRowClicked={this.onRowClicked.bind(this)}
+                            onGridReady={this.onGridReady}
+                            onRowSelected={this.onRowSelected}
+                            onRowClicked={this.onRowClicked}
 
-                            // binding to an object property
-                            icons={this.state.icons}
 
                             // binding to array properties
-                            columnDefs={columns}
-                            rowData={rowData}
+                            columnDefs={this.getColumns()}
+                            rowData={this.props.reportData.data.filteredRecords}
 
-                            // no binding, just providing harde coded strings for the properties
+                            //default behavior properties
                             rowSelection="multiple"
                             enableColResize="true"
-                            enableSorting="true"
-                            enableFilter="true"
                             groupHeaders="true"
                             rowHeight="32"
                             //debug="true"
 
                             suppressRowClickSelection="true"
                             suppressCellSelection="true"
-                            suppressSizeToFit="true"
                         />
                     </div>
                 </div>
@@ -237,9 +231,6 @@ class AGGrid extends React.Component {
             );
         }
     }
-}
-AGGrid.defaultProps = {
-    "showToolPanel": false,
-    "quickFilterText": false
-};
+});
+
 export default AGGrid;
