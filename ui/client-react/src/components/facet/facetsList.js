@@ -74,20 +74,22 @@ var FacetsList = React.createClass({
 
         if (facetsData.length && facetsData[0].values && facetsData[0].values.length && typeof facetsData[0].values[0] !== 'object') {
             facetsData = facetsData.map((aFacet) => {
-                aFacet.values = aFacet.values.map((val) => {
-                    if (aFacet.type.toUpperCase() === schemaConsts.CHECKBOX) {
-                        if (!val || val === "" || val === 0 ||
-                            val.toString().toUpperCase() === 'NO' ||
-                            val.toString().toUpperCase() === 'FALSE') {
-                            // when react 18n supports plain string (non dom wrapped)
-                            // xtlate use the message keys above
-                            val = 'No';
-                        } else {
-                            val = 'Yes';
+                if (aFacet.values && aFacet.values.length) {
+                    aFacet.values = aFacet.values.map((val) => {
+                        if (aFacet.type.toUpperCase() === schemaConsts.CHECKBOX) {
+                            if (!val || val === "" || val === 0 ||
+                                val.toString().toUpperCase() === 'NO' ||
+                                val.toString().toUpperCase() === 'FALSE') {
+                                // when react 18n supports plain string (non dom wrapped)
+                                // xtlate use the message keys above
+                                val = 'No';
+                            } else {
+                                val = 'Yes';
+                            }
                         }
-                    }
-                    return {value: val};
-                });
+                        return {value: val};
+                    });
+                }
                 return aFacet;
             });
         }
@@ -136,8 +138,8 @@ var FacetsList = React.createClass({
                      className="facetMenuPopup"
                      ref={(thisComponent) => this._facetMenuArea = thisComponent}>
                     {this.props.reportData && this.props.reportData.data  &&
-                    this.props.reportData.data.facets && (this.props.reportData.data.facets.length > 0)
-                    && this.props.reportData.data.facets[0].values ?
+                    this.props.reportData.data.facets && (this.props.reportData.data.facets.length > 0) &&
+                    this.props.reportData.data.facets[0].values ?
                         this.facetsList(this.props.reportData.data.facets) :
                         <div className="noFacetValues">
                             <I18nMessage message={noFacetsMessage}/>

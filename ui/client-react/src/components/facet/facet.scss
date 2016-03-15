@@ -67,10 +67,15 @@
       border: none;
     }
 
+    .notActionable {
+      cursor : not-allowed;
+    }
+
     .noOptions {
-      margin-left: 2em;
+      margin-left: .5em;
       color: $facetMenu-NoOptionsColor;
       font-family: "Lato", sans-serif;
+      padding-top: .5em;
     }
 
     .panel {

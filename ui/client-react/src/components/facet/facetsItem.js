@@ -99,9 +99,18 @@ class FacetsItem extends Component {
             }));
             selectionInfo = (<div className="selectionInfo small">{selectionStrings}</div>);
         }
+
+        let actionable = null;
+        let tooManyValues = 'report.facets.tooManyValues';
+        let subtitle = null;
+        if ((!this.props.facet.values || this.props.facet.values.length === 0)) {
+            subtitle =  (<div className="noOptions small"><I18nMessage message={tooManyValues}/></div>);
+            actionable = "notActionable";
+        }
         return (<div>
-                    <h4 className="facetName" >
+                    <h4 className={"facetName " + actionable} >
                         <span>{this.props.facet.name}</span>
+                        {subtitle}
                         {clearFacetsIcon}
                     </h4>
                     {selectionInfo}
@@ -137,10 +146,8 @@ class FacetsItem extends Component {
         /*TODO check type of facet list, string, date, boolean currently only handles string
          array values
          */
-        let tooManyValues = 'report.facets.tooManyValues';
-
         if ((!this.props.facet.values || this.props.facet.values.length === 0)) {
-            return (<div className="noOptions"><I18nMessage message={tooManyValues}/></div>);
+            return null;
         }
 
         let listToShow = this.props.facet.values;

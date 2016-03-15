@@ -49,7 +49,7 @@ var ReportToolbar = React.createClass({
 
     getDefaultProps() {
         return {
-            fillinDummyFacets : false,
+            fillinDummyFacets : window.location.search.includes('dummy'),
             selections:new FacetSelections(),
             searchStringForFiltering: "",
             debounceInputTime :.5 *  secondInMilliseconds, // 1/5 a second delay
@@ -98,7 +98,8 @@ var ReportToolbar = React.createClass({
         let facetExpression = [];
         let selected = selections;
         let fields = selected.whichHasAnySelections();
-        facetExpression = fields.map((field) => {
+        //skip sending the dummy date to the server for query
+        facetExpression = fields.filter((field)  => !this.fields[field].dummyData || this.fields[field].dummyData === false).map((field) => {
             let values = selected.getFieldSelections(field);
             // use 1 or 0 for searching bool field types not the text
             if (this.fields[field].type === schemaConsts.CHECKBOX) {
@@ -205,28 +206,53 @@ var ReportToolbar = React.createClass({
         }
     },
 
-    populateDummyFacets() {
-        if (this.props.reportData && this.props.reportData.data)  {
-            this.props.reportData.data.facets = [
-                {id : 1, name : "Types", type: "TEXT", blanks: true,
-                    values : [{value:"Design"}, {value:"Development"}, {value:"Planning"}, {value:"Test"}]},
-                {id : 2, name : "Names", type: "TEXT", blanks: false,
-                    values : [
-                        {value: "Aditi Goel"}, {value: "Christopher Deery"}, {value: "Claire Martinez"}, {value: "Claude Keswani"}, {value: "Deborah Pontes"},
-                        {value: "Donald Hatch"}, {value: "Drew Stevens"}, {value: "Erica Rodrigues"}, {value: "Kana Eiref"},
-                        {value: "Ken LaBak"}, {value: "Lakshmi Kamineni"}, {value: "Lisa Davidson"}, {value: "Marc Labbe"},
-                        {value: "Matthew Saforrian"}, {value: "Micah Zimring"}, {value: "Rick Beyer"}, {value: "Sam Jones"}, {value: "XJ He"}
-                    ]},
-                {id : 3, name : "Status", type: "TEXT", blanks: false,
-                    values : [{value: "No Started"}, {value: "In Progress"}, {value: "Blocked"}, {value: "Completed"}]},
-                {id : 4, name : "Flag", type: "CHECKBOX",  blanks: false,
-                    values : [{value: "Yes"}, {value: "No"}]},
-                {id : 5, name : "Companies", type: "TEXT",  blanks: false,
+    dummyFacetsWithValueObjects: [
+            {id : 101, name : "Types", type: "TEXT", dummyData: true, blanks: true,
+                values : [{value:"Design"}, {value:"Development"}, {value:"Planning"}, {value:"Test"}]},
+            {id : 102, name : "Names", type: "TEXT", dummyData: true, blanks: false,
+                values : [
+                {value: "Aditi Goel"}, {value: "Christopher Deery"}, {value: "Claire Martinez"}, {value: "Claude Keswani"}, {value: "Deborah Pontes"},
+                {value: "Donald Hatch"}, {value: "Drew Stevens"}, {value: "Erica Rodrigues"}, {value: "Kana Eiref"},
+                {value: "Ken LaBak"}, {value: "Lakshmi Kamineni"}, {value: "Lisa Davidson"}, {value: "Marc Labbe"},
+                {value: "Matthew Saforrian"}, {value: "Micah Zimring"}, {value: "Rick Beyer"}, {value: "Sam Jones"}, {value: "XJ He"}
+                ]},
+            {id : 103, name : "Status", type: "TEXT", dummyData: true, blanks: false,
+                values : [{value: "No Started"}, {value: "In Progress"}, {value: "Blocked"}, {value: "Completed"}]},
+            {id : 104, name : "Flag", type: "CHECKBOX", dummyData: true,  blanks: false,
+                values : [{value: "No"}, {value: "Yes"}]},
+            {id : 105, name : "Companies", type: "TEXT", dummyData: true,  blanks: false,
                 // TODO: support date ranges in filtering see https://jira.intuit.com/browse/QBSE-20422
-                    values : []}, // too many values for facets example
-                //{id : 4, name : "Dates", type: "date",  blanks: false,
-                //    range : {start: 1, end: 2}},
-            ];
+                values : []}, // too many values for facets example
+            //{id : 4, name : "Dates", type: "date",  blanks: false,
+            //    range : {start: 1, end: 2}},
+    ],
+
+    dummyFacets: [
+            {id : 101, name : "Types", type: "TEXT", dummyData: true, blanks: true,
+                values : ["Design", "Development", "Planning", "Test"]},
+            {id : 102, name : "Names", type: "TEXT", dummyData: true, blanks: false,
+                values : [
+                    "Aditi Goel",  "Christopher Deery",  "Claire Martinez",  "Claude Keswani",  "Deborah Pontes",
+                    "Donald Hatch",  "Drew Stevens",  "Erica Rodrigues",  "Kana Eiref",
+                    "Ken LaBak",  "Lakshmi Kamineni",  "Lisa Davidson",  "Marc Labbe",
+                    "Matthew Saforrian",  "Micah Zimring",  "Rick Beyer",  "Sam Jones",  "XJ He"
+                ]},
+            {id : 103, name : "Status", type: "TEXT", dummyData: true, blanks: false,
+                values : ["No Started",  "In Progress",  "Blocked",  "Completed"]},
+            {id : 104, name : "Companies", type: "TEXT", dummyData: true, blanks: false,
+                // TODO: support date ranges in filtering see https://jira.intuit.com/browse/QBSE-20422
+                values : []}, // too many values for facets example
+            {id : 105, name : "Flag", type: "CHECKBOX", dummyData: true, blanks: false,
+             values : ["No",  "Yes"]},
+            //{id : 106, name : "Dates", type: "date",  blanks: false,
+            //    range : {start: 1, end: 2}},
+    ],
+
+
+    populateDummyFacets() {
+        if (this.props.reportData && this.props.reportData.data && !this.props.reportData.data.facets.appendedDummyData)  {
+            this.props.reportData.data.facets = [...this.props.reportData.data.facets, ...this.dummyFacets];
+            this.props.reportData.data.facets.appendedDummyData = true;
         }
     },
     getPageActions() {
@@ -238,6 +264,7 @@ var ReportToolbar = React.createClass({
         ];
         return (<PageActions actions={actions} menuAfter={0} {...this.props}/>);
     },
+
     render() {
         if (this.props.fillinDummyFacets) {
             this.populateDummyFacets();
@@ -246,7 +273,7 @@ var ReportToolbar = React.createClass({
         this.appendBlanks();
 
         let recordCount = this.props.reportData && this.props.reportData.data && this.props.reportData.data.records ?
-                                this.props.reportData.data.records.length : null; //TODO what to show for pagination?
+                                this.props.reportData.data.records.length : null;
 
         let filteredRecordCount  = this.props.reportData && this.props.reportData.data &&
                                 this.props.reportData.data.filteredRecords ?
