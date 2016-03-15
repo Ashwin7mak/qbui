@@ -101,7 +101,7 @@ let ReportContent = React.createClass({
     /* TODO: paging component that has "next and previous tied to callbacks from the store to get new data set*/
     render: function() {
 
-        return (<div>
+        return (<div className="loadedContent">
                 {this.props.reportData.error ?
                     <div>Error loading report!</div> :
                     <div className="reportContent">
