@@ -7,6 +7,7 @@ import ReportActions from '../../actions/reportActions';
 import CardView from './cardView.js';
 import LimitConstants from './../../../../../common/src/limitConstants';
 import _ from 'lodash';
+import Loader  from 'react-loader';
 
 import './griddleTable.scss';
 import './qbGriddleTable.scss';
@@ -200,26 +201,33 @@ let GriddleTable = React.createClass({
         if (results) {
 
             return (
-                <div className="reportTable" >
+                    <div className="reportTable" >
 
-                    {this.getTableActions()}
+                        {this.getTableActions()}
 
-                    <div onClick={this.onTableClick} className={griddleWrapperClasses}>
-                        <Griddle {...this.props}
-                            ref="griddleTable"
-                            isMultipleSelection={true}
-                            selectedRowIds={this.state.selectedRows}
-                            uniqueIdentifier={this.props.uniqueIdentifier}
-                            results={results}
-                            useCustomRowComponent={isCardLayout}
-                            onRowClick={this.onRowClicked}
-                            />
+                        <div onClick={this.onTableClick} className={griddleWrapperClasses}>
+                             <Loader loaded={!this.props.reportData.loading}>
+                                <Griddle {...this.props}
+                                    ref="griddleTable"
+                                    isMultipleSelection={true}
+                                    selectedRowIds={this.state.selectedRows}
+                                    uniqueIdentifier={this.props.uniqueIdentifier}
+                                    results={results}
+                                    useCustomRowComponent={isCardLayout}
+                                    onRowClick={this.onRowClicked}
+                                    />
+                             </Loader>
+                            { //keep empty placeholder when loading to reduce reflow of space, scrollbar changes
+                                this.props.reportData.loading ? <div className="loadedContent"></div> : null
+                            }
+                        </div>
                     </div>
-                </div>
             );
         } else {
             return (
-                <div><I18nMessage message={'grid.no_data'}/></div>
+                <Loader loaded={!this.props.reportData.loading}>
+                    <div><I18nMessage message={'grid.no_data'}/></div>
+                </Loader>
             );
         }
     }

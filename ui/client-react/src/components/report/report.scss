@@ -23,12 +23,14 @@
             flex-direction: row;
             justify-content:space-between;
             flex: 1 0 auto;
-
+            &.noFacets {
+                justify-content: flex-start;
+            }
             >* {
                 flex: 0 0 auto;
             }
             >.facetsMenuContainer {
-                flex: 1 0 auto;
+                flex: 1 1 auto;
             }
             >.recordsCount {
                 margin-left:5px;

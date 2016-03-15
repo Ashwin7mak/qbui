@@ -13,6 +13,7 @@
              * will generate a 'list all' report. Returns a promise.
              */
             // TODO: QBSE-13518 Write a report generator in the test_generators package
+            // TODO: Fix promise anti-pattern QBSE-20581
             createReport: function(appId, tableId, query) {
                 var deferred = promise.pending();
                 var reportJSON = {
@@ -21,6 +22,34 @@
                     ownerId   : '10000',
                     hideReport: false,
                     query: query
+                };
+                var reportsEndpoint = recordBase.apiBase.resolveReportsEndpoint(appId, tableId);
+
+                // TODO: QBSE-13843 Create helper GET And POST functions that extend this executeRequest function
+                recordBase.apiBase.executeRequest(reportsEndpoint, 'POST', reportJSON).then(function(result) {
+                    //console.log('Report create result');
+                    var parsed = JSON.parse(result.body);
+                    var id = parsed.id;
+                    deferred.resolve(id);
+                }).catch(function(error) {
+                    console.error(JSON.stringify(error));
+                    deferred.reject(error);
+                });
+                return deferred.promise;
+            },
+            /**
+             * Generates a report and creates it in a table via the API. Not supplying a query string
+             * will generate a 'list all' report. Returns a promise.
+             */
+            // TODO: QBSE-13518 Write a report generator in the test_generators package
+            createReportWithFacets: function(appId, tableId, fids, query) {
+                var deferred = promise.pending();
+                var reportJSON = {
+                    name      : 'Report With Facets',
+                    type      : 'TABLE',
+                    facetFids : fids,
+                    ownerId   : '10000',
+                    hideReport: false
                 };
                 var reportsEndpoint = recordBase.apiBase.resolveReportsEndpoint(appId, tableId);
 

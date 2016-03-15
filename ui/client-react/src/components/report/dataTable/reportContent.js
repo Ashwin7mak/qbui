@@ -4,7 +4,6 @@ import GriddleTable  from '../../../components/dataTable/griddleTable/griddleTab
 import AGGrid  from '../../../components/dataTable/agGrid/agGrid.js';
 import {reactCellRendererFactory} from 'ag-grid-react';
 import {DateFormatter, NumericFormatter}  from '../../../components/dataTable/griddleTable/formatters.js';
-import Loader  from 'react-loader';
 import ReportActions from '../../actions/reportActions';
 import RecordActions from '../../actions/recordActions';
 const resultsPerPage = 1000; //assume that this is the constant number of records per page. This can be passed in as a prop for diff reports
@@ -122,8 +121,8 @@ let ReportContent = React.createClass({
     /* TODO: paging component that has "next and previous tied to callbacks from the store to get new data set*/
     render: function() {
         let isTouch = this.context.touch;
-        return (
-            <Loader loaded={!this.props.reportData.loading}>
+
+        return (<div className="loadedContent">
                 {this.props.reportData.error ?
                     <div>Error loading report!</div> :
                     <div className="reportContent">
@@ -147,8 +146,7 @@ let ReportContent = React.createClass({
                         }
                     </div>
                 }
-            </Loader>
-
+            </div>
         );
     }
 

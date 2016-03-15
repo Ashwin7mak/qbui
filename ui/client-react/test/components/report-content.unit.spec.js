@@ -1,7 +1,6 @@
 import React from 'react';
 import TestUtils from 'react-addons-test-utils';
 import ReportContent from '../../src/components/report/dataTable/reportContent';
-import Loader  from 'react-loader';
 import GriddleTable  from '../../src/components/dataTable/griddleTable/griddleTable';
 import {NumericFormatter, DateFormatter} from '../../src/components/dataTable/griddleTable/formatters';
 import _ from 'lodash';
@@ -19,9 +18,6 @@ var DateFormatterMock = React.createClass({
 
 const header_empty = <div>nothing</div>;
 
-const fakeReportData_loading = {
-    loading: true
-};
 const fakeReportData_empty = {
     loading: false,
     data: {
@@ -112,13 +108,6 @@ describe('ReportContent functions', () => {
         component = TestUtils.renderIntoDocument(<ReportContent
             reportData={fakeReportData_empty} reportHeader={header_empty}/>);
         expect(TestUtils.isCompositeComponent(component)).toBeTruthy();
-    });
-
-    it('test render of loader', () => {
-        component = TestUtils.renderIntoDocument(<ReportContent
-            reportData={fakeReportData_loading} reportHeader={header_empty}/>);
-        expect(TestUtils.scryRenderedComponentsWithType(component, Loader).length).toEqual(1);
-        expect(TestUtils.scryRenderedComponentsWithType(component, GriddleTable).length).toEqual(0);
     });
 
     it('test render of empty component', () => {
