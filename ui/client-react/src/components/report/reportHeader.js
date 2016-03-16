@@ -25,11 +25,13 @@ var ReportHeader = React.createClass({
     },
     searchTheString(searchString)  {
         let flux = this.getFlux();
+        /*
         flux.actions.filterReport(this.props.reportData.appId,
             this.props.reportData.tblId,
             this.props.reportData.rptId,
             true, searchString,
             this.props.reportData.selections);
+            */
     },
 
     handleSearchChange(e) {
@@ -49,6 +51,8 @@ var ReportHeader = React.createClass({
     render: function() {
         const headerClasses = "reportHeader" + (this.state.searching ? " searching" : "");
 
+        const reportName = this.props.reportData && this.props.reportData.data && this.props.reportData.data.name;
+
         return (<div className={headerClasses}>
             <div className="left">
                 <a className="iconLink toggleNavButton" href="#" onClick={this.onNavClick}>
@@ -57,7 +61,7 @@ var ReportHeader = React.createClass({
             </div>
 
             <div className="center title">
-                <QBicon icon="report-menu-3"/><span className="reportLabel">{this.props.reportData.data.name}</span>
+                <QBicon icon="report-menu-3"/><span className="reportLabel">{reportName}</span>
             </div>
 
             <div className="center searchElements">
