@@ -61,6 +61,10 @@
             return browser.wait(EC.visibilityOf(element), 5000, 'Timed out waiting for element to appear');
         };
 
+        this.waitForElementToBePresent = function(element) {
+            return browser.wait(EC.presenceOf(element), 5000, 'Timed out waiting for element to appear');
+        };
+
         this.waitForElementToBeClickable = function(element) {
             return browser.wait(EC.elementToBeClickable(element), 5000, 'Timed out waiting for element to be clickable');
         };
