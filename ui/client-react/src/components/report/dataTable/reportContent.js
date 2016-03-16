@@ -68,12 +68,12 @@ let ReportContent = React.createClass({
                                 case "NUMERIC" :
                                     if (obj.order !== 0) { //never make the 1st column right aligned because it will hold the checkboxes
                                         this.setCSSClass_helper(obj, "AlignRight");
-                                        //obj.cellRenderer = reactCellRendererFactory(NumericFormatter);
+                                        obj.cellRenderer = reactCellRendererFactory(NumericFormatter);
                                         obj.customComponent = NumericFormatter;
                                     }
                                     break;
                                 case "DATE" :
-                                    //obj.cellRenderer = reactCellRendererFactory(DateFormatter);
+                                    obj.cellRenderer = reactCellRendererFactory(DateFormatter);
                                     obj.customComponent = DateFormatter;
                                     break;
                                 }
@@ -105,13 +105,13 @@ let ReportContent = React.createClass({
             });
 
 
-            //columnsData.push({
-            //    headerName: "Actions", //for ag-grid
-            //    field: "actions",      //for ag-grid
-            //    columnName: "actions", //for griddle
-            //    cellRenderer: reactCellRendererFactory(ActionsColumn),
-            //    cellClass:"actions"
-            //});
+            columnsData.push({
+                headerName: "Actions", //for ag-grid
+                field: "actions",      //for ag-grid
+                columnName: "actions", //for griddle
+                cellRenderer: reactCellRendererFactory(ActionsColumn),
+                cellClass:"actions"
+            });
 
             return columnsData;
         }
@@ -154,6 +154,6 @@ let ReportContent = React.createClass({
 
 ReportContent.contextTypes = {
     touch: React.PropTypes.bool
-}
+};
 
 export default ReportContent;

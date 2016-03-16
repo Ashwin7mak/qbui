@@ -2,11 +2,6 @@ import React from 'react';
 import ReactIntl from 'react-intl';
 import Locale from '../locales/locales';
 
-import Fluxxor from 'fluxxor';
-
-let FluxMixin = Fluxxor.FluxMixin(React);
-let StoreWatchMixin = Fluxxor.StoreWatchMixin;
-
 import Logger from '../utils/logger';
 var logger = new Logger();
 
@@ -54,14 +49,6 @@ class I18nFlux {
     static renderMessage(Component) {
 
         const fluxState = React.createClass({
-            mixins: [FluxMixin, StoreWatchMixin('NavStore')],
-            getStateFromFlux() {
-                let flux = this.getFlux();
-
-                return {
-                    nav: flux.store('NavStore').getState()
-                };
-            },
             render() {
                 const i18n = Locale.getI18nBundle();
                 return (<Component {...i18n} {...this.props}/>);
