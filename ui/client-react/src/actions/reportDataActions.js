@@ -77,11 +77,12 @@ let reportDataActions = {
     */
     filterReport(appId, tblId, rptId, format, searchString, selections) {
 
-        function getFilterParam(searchString, selections) {
-            let facetExpression = [];
-            let selected = selections;
+        function getFilterParam(search, selected) {
+            /*eslint-disable */
+            console.log('get filter param',search,selected);
+            /*eslint-enable*/
             let fields = selected.whichHasAnySelections();
-            facetExpression = fields.map(field => {
+            let facetExpression = fields.map(field => {
                 let values = selected.getFieldSelections(field);
                 // use 1 or 0 for searching bool field types not the text
                 if (fields[field].type === schemaConsts.CHECKBOX) {
@@ -91,9 +92,9 @@ let reportDataActions = {
                 return {fid : field, values: values};
             });
             return {
-                selections: selections,
+                selections: selected,
                 facet : facetExpression,
-                search : searchString
+                search : search
             };
         }
 

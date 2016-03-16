@@ -1,5 +1,6 @@
 import Fluxxor from 'fluxxor';
 import reportDataActions from '../../src/actions/reportDataActions';
+import FacetSelections from '../../src/components/facet/facetSelections';
 import * as actions from '../../src/constants/actions';
 import Promise from 'bluebird';
 
@@ -8,11 +9,14 @@ let inputs = {
     tblId: '2',
     rptId: '3',
     formatted: true,
-    filter: {
-        facet: 'abc',
-        search: ''
-    }
+    search: '',
+    selection: new FacetSelections()
 };
+
+inputs.selection.initSelections({
+    "abc": ["abc"]
+});
+
 let loadReportInputs = {
     appId: inputs.appId,
     tblId: inputs.tblId,
@@ -23,10 +27,8 @@ let filterReportInputs = {
     appId: inputs.appId,
     tblId: inputs.tblId,
     rptId: inputs.rptId,
-    filter: {
-        facet: 'abc',
-        search: ''
-    }
+    search: '',
+    selection: inputs.selection
 };
 
 let responseReportData = {
@@ -94,7 +96,7 @@ describe('Report Data Actions -- Filter report Negative', () => {
         }
         reportDataActions.__Rewire__('ReportService', mockReportService);
         reportDataActions.__Rewire__('RecordService', mockRecordService);
-        flux.actions.filterReport(inputs.appId, inputs.tblId, inputs.rptId, inputs.formatted, inputs.filter).then(
+        flux.actions.filterReport(inputs.appId, inputs.tblId, inputs.rptId, inputs.formatted, inputs.search, inputs.selection).then(
             () => {
                 expect(true).toBe(false);
                 done();
@@ -126,7 +128,7 @@ describe('Report Data Actions -- Filter report Negative', () => {
         }
         reportDataActions.__Rewire__('ReportService', mockReportService);
         reportDataActions.__Rewire__('RecordService', mockRecordService);
-        flux.actions.filterReport(inputs.appId, inputs.tblId, inputs.rptId, inputs.formatted, inputs.filter).then(
+        flux.actions.filterReport(inputs.appId, inputs.tblId, inputs.rptId, inputs.formatted, inputs.search, inputs.selection).then(
             () => {
                 expect(true).toBe(false);
                 done();
@@ -159,7 +161,7 @@ describe('Report Data Actions -- Filter report Negative', () => {
         }
         reportDataActions.__Rewire__('ReportService', mockReportService);
         reportDataActions.__Rewire__('RecordService', mockRecordService);
-        flux.actions.filterReport(inputs.appId, inputs.tblId, inputs.rptId, inputs.formatted, inputs.filter).then(
+        flux.actions.filterReport(inputs.appId, inputs.tblId, inputs.rptId, inputs.formatted, inputs.search, inputs.selection).then(
             () => {
                 expect(true).toBe(false);
                 done();
@@ -194,6 +196,11 @@ describe('Report Data Actions -- Filter report Negative missing parameters', () 
     }
 
     var filter = {facet: 'abc', search: ''};
+    var search = '';
+    var selection = new FacetSelections();
+    selection.initSelections({
+        "abc": ["abc"]
+    });
 
     beforeEach(() => {
         spyOn(flux.dispatchBinder, 'dispatch');
@@ -216,7 +223,7 @@ describe('Report Data Actions -- Filter report Negative missing parameters', () 
 
     dataProvider.forEach(function(data) {
         it(data.test, (done) => {
-            flux.actions.filterReport(data.appId, data.tblId, data.rptId, false, filter).then(
+            flux.actions.filterReport(data.appId, data.tblId, data.rptId, false, search, selection).then(
                 () => {
                     expect(true).toBe(false);
                     done();
@@ -306,6 +313,7 @@ describe('Report Data Actions -- ', () => {
         {test:'test throwing exception when loading a report', func:flux.actions.loadReport, act: actions.LOAD_REPORT_FAILED},
         {test:'test throwing exception when filtering a report', func:flux.actions.filterReport, act:actions.LOAD_RECORDS_FAILED}
     ];
+    var search = '';
     var filter = {facet: 'abc', search: ''};
 
     dataProvider.forEach(function(data) {

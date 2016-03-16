@@ -48,12 +48,10 @@ let NavStore = Fluxxor.createStore({
         this.emit('change');
     },
     onShowTopNav: function() {
-        console.log('showit');
         this.state.showTopNav = true;
         this.emit('change');
     },
     onHideTopNav: function() {
-        console.log('hideit');
         this.state.showTopNav = false;
         this.emit('change');
     },
