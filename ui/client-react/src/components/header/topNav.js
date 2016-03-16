@@ -30,8 +30,9 @@ var TopNav = React.createClass({
 
         let eventKeyIdx = 20;
 
+        const classes = "topNav" + (this.props.showOnSmall ? "" : " hideSmall");
         return (
-            <div className={'topNav'}>
+            <div className={classes}>
                 <div className="top">
                     <div className="navGroup left">
                         <div className="navItem ">

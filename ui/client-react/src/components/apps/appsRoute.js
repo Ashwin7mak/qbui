@@ -12,7 +12,7 @@ let AppsRoute = React.createClass({
     componentDidMount() {
         // no title for now...
         let flux = this.getFlux();
-        flux.actions.setTopTitle();
+        flux.actions.showTopNav();
     },
     render: function() {
 

@@ -171,6 +171,20 @@ describe('ReportToolbar functions', () => {
 
     });
 
+    it('test render reportToolbar with no facets', () => {
+        let fakeReportWithNoFacets = _.cloneDeep(fakeReportData_simple);
+        fakeReportWithNoFacets.data.facets = null;
+        component = TestUtils.renderIntoDocument(<ReportToolbar flux={flux}
+                                                                reportData={fakeReportWithNoFacets}
+                                                                fieldSelections={null}
+        />);
+        expect(TestUtils.isCompositeComponent(component)).toBeTruthy();
+        // empty filter icon is no shown
+        let filterIcon = TestUtils.scryRenderedDOMComponentsWithClass(component, "iconssturdy-filter-tool");
+        expect(filterIcon.length).toEqual(0);
+
+    });
+
     it('test render reportToolbar with no selected facet values', () => {
         let selected = new FacetSelections();
         let fakeReportWithFacets = _.cloneDeep(fakeReportData_simple);

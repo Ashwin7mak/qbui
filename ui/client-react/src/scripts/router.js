@@ -91,9 +91,6 @@ let NavWrapper = React.createClass({
 
     componentWillReceiveProps(props) {
 
-        // ensure top nav is visible initially, child routes can hide it if necessary
-        flux.actions.showTopNav();
-
         if (this.props.params.appId && this.props.params.tblId && this.props.params.appId !== props.params.appId && this.props.params.tblId !== props.params.tblId) {
             flux.actions.selectAppId(this.props.params.appId);
             flux.actions.selectTableId(this.props.params.tblId);

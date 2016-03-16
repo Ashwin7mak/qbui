@@ -216,44 +216,33 @@
     .selectedFacets {
         display:none;
     }
-    .reportContainer .reportToolsAndContentContainer {
+    .reportContainer .reportToolsAndContentContainer .reportToolbar {
 
-        .loadedContent {
-            margin:0;
+        input {
+            color: $search-input-fg;
         }
-        .reportToolbar {
-            color: $secondary-bar-fg;
-            input {
-                color: $search-input-fg;
-            }
-
-            .popover-content {
-                max-height: 454px;
-            }
-            .facetMenuPopup {
-                color: $popup-fg;
-                display: block;
-                left: -140px;
-                min-width: 150px;
-                max-width: 200px;
-            }
-
-            /* on small this is no the last item */
-            .facetsMenuContainer {
-                flex: 0 0 auto;
-            }
-
-            .filterSearchBoxContainer {
-                flex: 1 0 auto;
-                .filterSearchBox {
-                    padding: .4rem;
-                }
-            }
-
-            .popover.bottom > .arrow {
-                display: none;
-            }
+        .popover-content {
+            max-height: 454px;
         }
+        .facetMenuPopup {
+            display: block;
+            left: -140px;
+            min-width: 150px;
+            max-width: 200px;
+        }
+
+        .facetsMenuContainer {
+            flex: 0 0 auto;
+        }
+
+        .filterSearchBoxContainer {
+            display:none;
+        }
+
+        .popover.bottom > .arrow {
+            display: none;
+        }
+
     }
 }
 

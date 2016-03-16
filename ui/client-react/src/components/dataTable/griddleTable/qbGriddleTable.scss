@@ -20,6 +20,7 @@ $footer-next-button: $color2;
     flex:1 1 auto;
 }
 .QBGriddle {
+    flex: 1 0 auto;
     font-family: $font-family;
     color: $font-color;
     font-size: $font-size;
@@ -31,7 +32,6 @@ $footer-next-button: $color2;
     }
 
     .griddle-container { /* Temporary margin so the footer doesnt overlap the grid. Should be resolved by the layout in time. */
-        //margin-bottom: 70px;
         border: 0px;
     }
 
@@ -120,6 +120,7 @@ $footer-next-button: $color2;
 }
 
 .griddleWrapper {
+    display:flex;
     flex: 1 1 auto;
     overflow:auto;
 }

@@ -119,8 +119,11 @@ $top-nav-color: #193048;
 }
 
 @include small-breakpoint {
-    .navShell .main.hideSmall .topNav {
+    .navShell .main .topNav.hideSmall {
         display:none;
+    }
+    .topNav .globalActions {
+        display: none; /* shown on left nav */
     }
 
 }

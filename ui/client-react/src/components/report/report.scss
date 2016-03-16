@@ -16,20 +16,19 @@
     background-color: $report-backgroundColor;
 
     .reportToolsAndContentContainer {
-
         display:flex;
         flex: 1 1 auto;
         .reportToolbar {
             display: flex;
             flex-direction: row;
-            justify-content:space-between;
-            flex: 1 1 auto;
+
+            flex: 1 0 auto;
 
             >* {
                 flex: 0 0 auto;
             }
             >.facetsMenuContainer {
-                flex: 1 0 auto;
+                flex: 1 1 auto;
             }
             >.recordsCount {
                 margin-left:5px;
@@ -42,7 +41,7 @@
             color: $icon-color;
 
             .filterSearchBoxContainer {
-                flex: 0 0 auto;
+                flex: 1 0 auto;
                 input {
                     width:100%;
                     margin: 5px 0;
@@ -72,9 +71,20 @@
         .loadedContent {
             display:flex;
             flex: 1 1 auto;
+            //overflow-y: auto;
             margin-left: 10px;
             margin-right: 10px;
-            width:100%;
+        }
+
+        // this fake facet button which hidden in release; devs
+        // can show it by commenting this or running
+        // document.getElementById('fakeFacet').style.display='block';  or
+        // document.getElementsByClassName("testFilterButton").style.display='block';
+        // document.getElementsByClassName("testFilterButton").style.display='block';
+        // in the browser debugger
+        .testFilterButton {
+            display: none;
+            margin-left: 1rem;
         }
     }
 
@@ -91,12 +101,6 @@
         }
 
     }
-}
-
-.reportContent {
-    width:100%;
-    flex:1 1 auto;
-    display:flex;
 }
 
 @include small-breakpoint {
@@ -123,3 +127,19 @@
     }
 }
 
+.reportContent {
+    flex:1 1 auto;
+    display:flex;
+}
+
+
+@include small-breakpoint {
+    .reportContainer .reportToolsAndContentContainer .reportToolbar {
+        color:$secondary-bar-fg;
+        justify-content:space-between;
+    }
+    .reportContainer .reportToolsAndContentContainer .loadedContent {
+        min-height: 430px;
+        margin:0;
+    }
+}

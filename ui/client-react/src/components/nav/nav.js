@@ -146,11 +146,12 @@ var Nav = React.createClass({
                 onSelect={this.onSelectItem}
                 onNavClick={this.toggleNav}/>
 
-            <div className={"main " + (this.state.nav.showTopNav ? "showSmall" : "hideSmall")} >
+            <div className="main" >
                 <TopNav title={this.state.nav.topTitle}
                         globalActions={this.getTopGlobalActions()}
                         onNavClick={this.toggleNav}
-                        flux={flux} />
+                        flux={flux}
+                        showOnSmall = {this.state.nav.showTopNav}/>
                 {this.props.children &&
                     <div className="mainContent" >
                         {/* insert the component passed in by the router */}
