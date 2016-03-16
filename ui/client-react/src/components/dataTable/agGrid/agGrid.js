@@ -6,7 +6,6 @@ import ReactCSSTransitionGroup from 'react/lib/ReactCSSTransitionGroup';
 import ReportActions from '../../actions/reportActions';
 import LimitConstants from '../../../../../common/src/limitConstants';
 import _ from 'lodash';
-
 import '../../../../../node_modules/ag-grid/dist/styles/ag-grid.css';
 import './agGrid.scss';
 
@@ -44,8 +43,8 @@ let AGGrid = React.createClass({
      */
     autoSizeAllColumns() {
         var allColumnIds = [];
-        if (this.props.reportData.data.columns) {
-            this.props.reportData.data.columns.forEach(function(columnDef) {
+        if (this.props.columns) {
+            this.props.columns.forEach(function(columnDef) {
                 allColumnIds.push(columnDef.field);
             });
             this.columnApi.autoSizeColumns(allColumnIds);
@@ -131,11 +130,6 @@ let AGGrid = React.createClass({
         }
         this.updateAllCheckbox();
     },
-
-    componentDidMount() {
-        this.autoSizeAllColumns();
-    },
-
     // After the component is updated turn off selectAllClicked variable's state.
     // TODO: Better way to do this?
     componentDidUpdate(prevProps, prevState) {
@@ -180,7 +174,7 @@ let AGGrid = React.createClass({
     },
 
     getColumns() {
-        let columns = this.props.reportData.data.columns.slice(0);
+        let columns = this.props.columns.slice(0);
         let self = this;
         let checkBoxCol = {};
         checkBoxCol.field = "checkbox";
@@ -189,10 +183,10 @@ let AGGrid = React.createClass({
         checkbox.className = "SelectAllCheckbox";
         checkbox.onclick = function(event) {
             self.allCheckBoxSelected(event);
-        }
+        };
         checkBoxCol.headerCellRenderer = function() {
             return checkbox;
-        }
+        };
         //checkBoxCol.headerCellTemplate = reactCellRendererFactory(AllSelector);
         checkBoxCol.checkboxSelection = true;
         checkBoxCol.width = 30;
@@ -201,7 +195,6 @@ let AGGrid = React.createClass({
     },
 
     render() {
-
         if (this.props.reportData.data.filteredRecords) {
             let columnDefs = this.getColumns();
             return (
