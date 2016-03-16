@@ -10,15 +10,15 @@ import _ from 'lodash';
 import '../../../../../node_modules/ag-grid/dist/styles/ag-grid.css';
 import './agGrid.scss';
 
-
 let AllSelector = React.createClass({
 
     render() {
-        return (<div>test</div>);
+        return <div>test</div>;
     }
 });
 
 let AGGrid = React.createClass({
+
     contextTypes:{
         touch: React.PropTypes.bool,
         history: React.PropTypes.object
@@ -28,7 +28,7 @@ let AGGrid = React.createClass({
         return {
             selectedRows: [],
             toolsMenuOpen: false,
-            allCheckboxClicked: false
+            selectAllClicked: false
         };
     },
 
@@ -38,15 +38,18 @@ let AGGrid = React.createClass({
         this.autoSizeAllColumns();
     },
 
+
     /**
      * Helper method to auto-resize all columns to the content's width. This is called on load.
      */
     autoSizeAllColumns() {
         var allColumnIds = [];
-        this.props.reportData.data.columns.forEach(function(columnDef) {
-            allColumnIds.push(columnDef.field);
-        });
-        this.columnApi.autoSizeColumns(allColumnIds);
+        if (this.props.reportData.data.columns) {
+            this.props.reportData.data.columns.forEach(function(columnDef) {
+                allColumnIds.push(columnDef.field);
+            });
+            this.columnApi.autoSizeColumns(allColumnIds);
+        }
     },
 
     /**
@@ -79,7 +82,7 @@ let AGGrid = React.createClass({
      * @param event
      */
     onRowSelected(event) {
-        if (this.state.allCheckboxClicked) {
+        if (this.state.selectAllClicked) {
             return;
         }
         const id = event.node.data[this.props.uniqueIdentifier];
@@ -110,10 +113,10 @@ let AGGrid = React.createClass({
     /**
      * Capture the event if all-select checkbox is clicked.
      * We want to make sure if all-checkbox is clicked then the event doesnt propagate to all rows in turn.
-     * Use allCheckboxClicked state variable to keep track of this.
+     * Use selectAllClicked state variable to keep track of this.
      */
     allCheckBoxSelected() {
-        this.setState({allCheckboxClicked: true});
+        this.setState({selectAllClicked: true});
         if (event.currentTarget.checked) {
             this.selectAll();
             //push all ids to selectedRows
@@ -126,13 +129,18 @@ let AGGrid = React.createClass({
             this.deselectAll();
             this.setState({selectedRows: []});
         }
+        this.updateAllCheckbox();
     },
 
-    // After the component is updated turn off allCheckboxClicked variable's state.
+    componentDidMount() {
+        this.autoSizeAllColumns();
+    },
+
+    // After the component is updated turn off selectAllClicked variable's state.
     // TODO: Better way to do this?
     componentDidUpdate(prevProps, prevState) {
-        if (prevState.allCheckboxClicked) {
-            this.setState({allCheckboxClicked: false});
+        if (prevState.selectAllClicked) {
+            this.setState({selectAllClicked: false});
         }
     },
 
@@ -185,8 +193,9 @@ let AGGrid = React.createClass({
         checkBoxCol.headerCellRenderer = function() {
             return checkbox;
         }
-        //checkBoxCol.headerCellRenderer = reactCellRendererFactory(AllSelector);
+        //checkBoxCol.headerCellTemplate = reactCellRendererFactory(AllSelector);
         checkBoxCol.checkboxSelection = true;
+        checkBoxCol.width = 30;
         columns.unshift(checkBoxCol);
         return columns;
     },
@@ -194,6 +203,7 @@ let AGGrid = React.createClass({
     render() {
 
         if (this.props.reportData.data.filteredRecords) {
+            let columnDefs = this.getColumns();
             return (
                 <div className="reportTable" >
 
@@ -209,7 +219,7 @@ let AGGrid = React.createClass({
 
 
                             // binding to array properties
-                            columnDefs={this.getColumns()}
+                            columnDefs={columnDefs}
                             rowData={this.props.reportData.data.filteredRecords}
 
                             //default behavior properties
