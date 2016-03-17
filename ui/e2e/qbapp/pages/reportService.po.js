@@ -11,7 +11,7 @@
 
     var e2ePageBase = require('./../../common/e2ePageBase');
     var SHOW_POPUP_LIST_LIMIT = 5;
-    var facetItemsSelected = [];
+
     var ReportServicePage = function() {
         // Page Elements using Locators
         // Left Nav
@@ -97,14 +97,144 @@
         //report facet filter carat button
         this.reportFilterBtnCaret = this.reportFacetBtns.element(by.className('filterButtonCaret'));
 
-        //facet menu popup
-        this.reportFacetPopUpMenu = this.reportFacetMenuContainer.element(by.className('facetMenuPopup'));
-        //panel
-        this.facetPopUpContainerPanels = this.reportFacetPopUpMenu.all(by.className('panel'));
-        //panel heading which is facet group
-        this.PopUpContainerFacetGroup = this.facetPopUpContainerPanels.all(by.tagName('a'));
-        //clear facet button in popup
-        this.PopUpContainerClearFacet = this.PopUpContainerFacetGroup.all(by.className('clearFacet'));
+        // Facet Menu Popup
+        this.reportFacetPopUpMenu = element(by.className('facetMenuPopup'));
+        // Unselected Facet Groups
+        this.unselectedFacetGroupsElList = this.reportFacetPopUpMenu.all(by.className('panel'));
+        // Selected Facet Groups
+        this.selectedFacetGroupsElList = this.reportFacetPopUpMenu.all(by.className('selections'));
+
+        /*
+         * Function will return you the facet group element by name
+         */
+        this.getFacetGroupElement = function(facetGroupName) {
+            var that = this;
+            return e2ePageBase.waitForElementToBeClickable(this.reportFacetPopUpMenu).then(function() {
+                // First look through unselected facet groups
+                return that.unselectedFacetGroupsElList.filter(function(elem) {
+                    // Return the element or elements
+                    return elem.element(by.className('panel-heading')).getText().then(function(text) {
+                        //Strip off any Text Field\nElo
+                        // Match the text
+                        return text.indexOf(facetGroupName) > -1;
+                    });
+                }).then(function(filteredElements) {
+                    // If we didn't find it look through the selected groups
+                    if(filteredElements.length === 0){
+                        return that.selectedFacetGroupsElList.filter(function(elem) {
+                            // Return the element or elements
+                            return elem.element(by.className('panel-heading')).getText().then(function(text) {
+                                // Match the text
+                                return text.indexOf(facetGroupName) > -1;
+                            });
+                        }).then(function(filteredElements2) {
+                            //TODO: Handle facets with the same name (if this will happen)
+                            return filteredElements2[0];
+                        });
+                    }
+                    return filteredElements[0];
+                });
+            });
+        };
+
+        /*
+         * Function will click on the facet group element and assert that the group expands
+         */
+        this.clickFacetGroupElement = function(facetGroupName) {
+            var that = this;
+            return that.getFacetGroupElement(facetGroupName).then(function(facetGroupElement) {
+                facetGroupElement.click().then(function () {
+                    e2eBase.sleep(3000).then(function() {
+                            return facetGroupElement;
+                        }
+                    );
+                });
+            });
+        };
+
+        this.selectFacetItems = function(facetGroupName, facetItems) {
+            var that = this;
+            // First check to see click on more options link if items to select is greater than 5
+            facetItems.forEach(function (facetItem) {
+                if (facetItem >= SHOW_POPUP_LIST_LIMIT) {
+                    // Click on more options link
+                    element(by.className('listMore')).click().then(function () {
+                        e2eBase.sleep(browser.params.mediumSleep);
+                    });
+                }
+            });
+
+            facetItems.forEach(function (facetItem) {
+                // Select the facet Items
+                that.getFacetGroupElement(facetGroupName).then(function (facetGroupElement) {
+                    that.getAvailableFacetGroupSelections(facetGroupElement).then(function (buttons) {
+                        for (var i = 0; i < buttons.length; i++) {
+                            //Click the facet item that matches the test argument value
+                            if (i === facetItem) {
+                                //click the item
+                                buttons[i].click().then(function () {
+                                    e2eBase.sleep(browser.params.mediumSleep);
+                                });
+                            }
+                        }
+                    });
+                });
+            });
+        };
+
+        /*
+         * Function will get you the facet header for a facet group element
+         */
+        this.getFacetGroupTitle = function(facetGroupElement) {
+            return facetGroupElement.element(by.className('panel-title'));
+        };
+
+        /*
+         * Function will get you all the facet selections (buttons) for a facet group element
+         */
+        this.getAvailableFacetGroupSelections = function(facetGroupElement) {
+            return facetGroupElement.all(by.tagName('button'));
+        };
+
+        //{
+        //    message: 'Verify more filters - Create text facet',
+        //        facets: [{"group": "Text Field", "ItemIndex": [1, 5]}],
+        //},
+        //
+
+        /**
+         * Function that will open the facet group (facetName) and select the facet Items and verify the checkmark and finally verify facet tokens in container.
+         * @param facetName
+         * @param facetItems is an array
+         */
+        this.selectGroupAndFacetItems = function(facetName, facetItems) {
+            var facetItemsSelected = [];
+
+            // Expand the Facet group
+            this.clickFacetGroupElement(facetName);
+
+            // Select the facet Items
+            this.selectFacetItems(facetName, facetItems);
+
+            // get all Selected items from popup and push into an array for verification
+            return element.all(by.className('selected')).map(function(selectedGroupItem, index) {
+                return selectedGroupItem.getText().then(function(selectedItemText) {
+                    facetItemsSelected.push(selectedItemText);
+                });
+            });
+        };
+
+        /*
+         * Function will click the clear all facets icon for a facet group element
+         */
+        this.clickClearAllFacetsIcon = function(facetGroupElement) {
+            return this.getFacetGroupTitle(facetGroupElement).element(by.className('clearFacet')).click();
+        };
+
+        ////panel heading which is facet group
+        //this.PopUpContainerFacetGroup = this.facetPopUpContainerPanels.all(by.tagName('a'));
+        ////clear facet button in popup
+        //this.PopUpContainerClearFacet = this.PopUpContainerFacetGroup.all(by.className('clearFacet'));
 
         //selected Facets
         this.reportSelectedFacets = this.reportFacetMenuContainer.element(by.className('selectedFacets'));
@@ -190,65 +320,7 @@
             });
         };
 
-        /**
-         * Function that will open the facet group and select the facet Items and verify the checkmark and finally verify facet tokens in container.
-         * @param facetName
-         * @param facetItems is an array
-         */
-        this.selectGroupAndFacetItems = function(facetName, facetItems) {
-            // Expand the Facet group
-            var groups = this.PopUpContainerFacetGroup.map(function(groupName, index) {
-                return groupName.getText().then(function(groupText) {
-                    if (groupText === facetName) {
-                        groupName.getAttribute('class').then(function(txt) {
-                            if (txt === 'collapsed') {
-                                groupName.click().then(function() {
-                                    expect(groupName.getAttribute('class'), '', "Facet Group is not expanded");
-                                });
-                            }
-                        });
-                    }
-                });
-                // Select the facet Items
-            }).then(function() {
-                //sleep to expand a group for animation to complete
-                e2eBase.sleep(browser.params.smallSleep);
-                //click on more options link if items to select is greater than 5
-                facetItems.forEach(function(facetItem) {
-                    if (facetItem >= SHOW_POPUP_LIST_LIMIT) {
-                        element.all(by.className('listMore')).click(); //click on more options link
-                        e2eBase.sleep(browser.params.mediumSleep);
-                    }
-                });
-                // Select the facet Items
-                var locations = element.all(by.className('list-group-item'));
-                return locations.map(function(groupItem, index) {
-                    return {
-                        index: index,
-                        itemText: groupItem.getText()
-                    };
-                }).then(function(items) {
-                    items.forEach(function(item) {
-                        facetItems.forEach(function(facetItem) {
-                            //Click the facet item that matches the test argument value
-                            if (item.index === facetItem) {
-                                //click the item
-                                locations.get(item.index).click();
-                                e2eBase.sleep(browser.params.mediumSleep);
-                            }
-                        });
-                    });
-                });
-            }).then(function() {
-                //get all Selected items from popup and push into an array
-                element.all(by.className('selected')).map(function(selectedGroupItem, index) {
-                    return selectedGroupItem.getText().then(function(selectedItemText) {
-                        facetItemsSelected.push(selectedItemText);
-                    });
-                });
-                return facetItemsSelected;
-            });
-        };
+
 
         /**
          * Function that will clear all the facet tokens from the container.
