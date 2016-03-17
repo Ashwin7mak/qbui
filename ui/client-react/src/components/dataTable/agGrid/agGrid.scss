@@ -27,21 +27,33 @@ $grid-font-size: $font-size - 2;
         font-weight: bold;
         -webkit-font-smoothing: antialiased;
         border-color: $header-cell-border;
-        border-right: 1px solid $header-cell-border;
-        border-bottom: 2px solid $header-cell-border-bottom;
         background-color: $header-cell-background-color;
         text-align: left;
 
         .ag-header-cell-label {
-            padding: 5px 8px 2px 8px;
+            padding: 4px 8px 3px 8px;
         }
     }
 
     .ag-cell {
         word-wrap: break-word;
         padding: 8px;
+    }
+
+    .ag-header-row .ag-header-cell {
+        border-right: 1px solid $header-cell-border;
+        border-bottom: 2px solid $header-cell-border-bottom;
+        &:last-of-type {
+            border-right: 0px;
+        }
+    }
+
+    .ag-row .ag-cell {
         border-right: 1px solid $row-cell-border-color;
         border-bottom: 1px solid $row-cell-border-color;
+        &:last-of-type {
+            border-right: 0px;
+        }
     }
 
     .ag-row:hover {
