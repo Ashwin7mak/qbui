@@ -268,6 +268,11 @@ var ReportToolbar = React.createClass({
 
         let reportToolbar = (
             <div className={"reportToolbar " + (hasFacets ? "" : "noFacets")}>
+                <RecordsCount recordCount={recordCount}
+                              isFiltered={this.isFiltered() && !this.props.loading}
+                              filteredRecordCount={filteredRecordCount}
+                              nameForRecords="Records"
+                    {...this.props} />
 
                 {(this.isFiltered() || this.state.searchInput.length !== 0) &&
                 (<span onClick={this.handleFacetClearAllSelectsAndSearch}>
@@ -302,13 +307,6 @@ var ReportToolbar = React.createClass({
                 }
 
                 {hasFacets && <div id="facetsMenuTarget"></div>}
-
-                <RecordsCount recordCount={recordCount}
-                              isFiltered={this.isFiltered() && !this.props.loading}
-                              filteredRecordCount={filteredRecordCount}
-                              nameForRecords="Records"
-                    {...this.props} />
-
                 {this.getPageActions()}
             </div>
         );

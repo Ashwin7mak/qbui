@@ -58,6 +58,7 @@
             .clearAllFacets {
                 display: inline-block;
                 margin-right: .5rem;
+                margin-left: .5rem;
                 vertical-align: top;
                 font-size: 16px;
                 cursor: pointer;
@@ -71,6 +72,7 @@
         .loadedContent {
             display:flex;
             flex: 1 1 auto;
+            width:100%;
             //overflow-y: auto;
             margin-left: 10px;
             margin-right: 10px;
@@ -128,6 +130,7 @@
 }
 
 .reportContent {
+    width:100%;
     flex:1 1 auto;
     display:flex;
 }
@@ -141,5 +144,6 @@
     .reportContainer .reportToolsAndContentContainer .loadedContent {
         min-height: 430px;
         margin:0;
+        width:100%;
     }
 }
