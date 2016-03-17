@@ -34,7 +34,43 @@ let AGGrid = React.createClass({
     onGridReady(params) {
         this.api = params.api;
         this.columnApi = params.columnApi;
-        this.autoSizeAllColumns();
+        //this.autoSizeAllColumns();
+    },
+
+    shouldComponentUpdate(nextProps, nextState) {
+        if (nextState !== this.state) {
+            return true;
+        }
+        if (nextProps !== this.props) {
+            //iterate over props and state
+            for (var property in nextProps) {
+                if (nextProps.hasOwnProperty(property)) {
+                    if (!this.props[property]) {
+                        return true;
+                    } else if (!_.isEqual(this.props[property], nextProps[property])) {
+                        if (property === "columns") {
+                            if (this.props[property].length !== nextProps[property].length) {
+                                return true;
+                            } else {
+                                let prevColumns = this.props[property];
+                                let nextColumns = nextProps[property];
+                                for (var i = 0; i < prevColumns.length ; i++) {
+                                    if (!_.isEqual(prevColumns[i], nextColumns[i])) {
+                                        if (prevColumns[i].field === "actions") {
+                                            return false;
+                                        }
+                                        return true;
+                                    }
+                                }
+                            }
+                        }
+                        return true;
+                    }
+                }
+            }
+            return false;
+        }
+        return true;
     },
 
 
@@ -220,7 +256,6 @@ let AGGrid = React.createClass({
                             enableColResize="true"
                             groupHeaders="true"
                             rowHeight="32"
-                            //debug="true"
 
                             suppressRowClickSelection="true"
                             suppressCellSelection="true"
