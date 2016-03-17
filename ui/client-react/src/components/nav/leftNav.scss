@@ -376,6 +376,21 @@ div.leftNavTooltip {
 
 /* left nav behaves differently on small breakpoint */
 
+.touch .leftNav {
+    /* always show right link on touch */
+    ul li.link a.right {
+        opacity: 1;
+        border: 0;
+        .qbIcon {
+            border-left: 1px solid $left-nav-link-fg;
+            width: 32px;
+            padding-left: 2px;
+        }
+    }
+    ul li.link.selected a.right .qbIcon {
+        border-left: 0;
+    }
+}
 @include small-breakpoint {
     .leftNav {
         margin: 0;
@@ -395,19 +410,7 @@ div.leftNavTooltip {
         .tablesList li.horizontal {
             min-width:300px;
         }
-        /* always show right link on mobile (no hover) */
-        ul li.link a.right {
-            opacity: 1;
-            border: 0;
-            .qbIcon {
-                border-left: 1px solid $left-nav-link-fg;
-                width: 32px;
-                padding-left: 2px;
-            }
-        }
-        ul li.link.selected a.right .qbIcon {
-            border-left: 0;
-        }
+
     }
 
     .navShell.leftNavOpen {
