@@ -70,7 +70,7 @@ describe('BaseService rewire tests', () => {
      */
     it('test constructRedirectUrl method', () => {
         baseService = new BaseService();
-        var expectedUrl = 'https://localhost/db/main?a=nsredirect&nsurl=http://localhost:8083/context.html';
+        var expectedUrl = 'https://localhost/db/main?a=nsredirect&nsurl=' + window.location.href;
         var url = baseService.constructRedirectUrl();
         expect(expectedUrl).toEqual(url);
     });
