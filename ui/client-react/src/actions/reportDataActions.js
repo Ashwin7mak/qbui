@@ -3,6 +3,7 @@
  */
 import * as actions from '../constants/actions';
 import * as query from '../constants/query';
+import * as schemaConsts from '../constants/schema.js';
 import ReportService from '../services/reportService';
 import RecordService from '../services/recordService';
 import Logger from '../utils/logger';
@@ -74,7 +75,32 @@ let reportDataActions = {
      *       facet  : expression representing all the facets selected by user so far example [{fid: fid1, values: value1, value2}, {fid: fid2, values: value3, value4}, ..]
      *       search : search string
      */
-    filterReport(appId, tblId, rptId, format, filter) {
+    filterReport(appId, tblId, rptId, format, searchString, selections, facetFields) {
+
+        console.log('FILTER',searchString, selections, facetFields);
+        function getFilter(searchFor, selected) {
+            //var facetExpression = [{fid:'3', values:['10', '11']}, {fid:'4', values:['abc']}];
+            let facetExpression = [];
+
+            let fields = selected.whichHasAnySelections();
+            facetExpression = fields.map((field) => {
+
+                let values = selected.getFieldSelections(field);
+                // use 1 or 0 for searching bool field types not the text
+                if (facetFields[field].type === schemaConsts.CHECKBOX) {
+                    var boolVal = values[0] === "Yes" ? 1 : 0;
+                    values = [boolVal];
+                }
+                return {fid: field, values: values};
+            });
+            return {
+                selections: selections,
+                facet: facetExpression,
+                search: searchFor
+            };
+        }
+
+        const filter = getFilter(searchString, selections);
 
         //  promise is returned in support of unit testing only
         return new Promise(function(resolve, reject) {

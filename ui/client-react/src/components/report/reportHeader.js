@@ -14,8 +14,6 @@ var ReportHeader = React.createClass({
 
     getInitialState() {
         return {
-            //seed the initial search value
-            searchInput: '',
             searching: false,
             debounceInputMillis: 500
         };
@@ -24,32 +22,38 @@ var ReportHeader = React.createClass({
         let flux = this.getFlux();
         flux.actions.toggleLeftNav();
     },
+
+    getFacetFields() {
+        return [];
+    },
     searchTheString(searchString)  {
+
+
+        const facetFields = this.getFacetFields();
         let flux = this.getFlux();
-        /*
+
         flux.actions.filterReport(this.props.reportData.appId,
             this.props.reportData.tblId,
             this.props.reportData.rptId,
             true, searchString,
-            this.props.reportData.selections);
-            */
+            this.props.reportData.selections,
+            facetFields);
     },
 
     handleSearchChange(e) {
         var searchTxt = e.target.value;
-        this.setState({
-            searchInput: searchTxt
-        });
+
         this.searchTheString(searchTxt);
     },
     startSearching() {
         this.setState({searching: true});
     },
     cancelSearch() {
-        this.setState({searching: false, searchString: ''});
+        this.setState({searching: false});
     },
 
     render: function() {
+        console.log('header props',this.props);
         const headerClasses = "reportHeader" + (this.state.searching ? " searching" : "");
 
         const reportName = this.props.reportData && this.props.reportData.data && this.props.reportData.data.name;
@@ -69,7 +73,7 @@ var ReportHeader = React.createClass({
                 <FilterSearchBox onChange={this.handleSearchChange}
                                  nameForRecords="Records"
                                  ref="searchInputbox"
-                                 value={this.state.searchInput}
+                                 value={this.props.reportData.searchStringForFiltering}
                                 {...this.props} />
                 <a className="textLink" href="#" onClick={this.cancelSearch}>
                     <I18nMessage message="cancel"/>

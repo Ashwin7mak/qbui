@@ -94,26 +94,8 @@ var ReportToolbar = React.createClass({
     },
 
     filterReport(searchString, selections) {
-        //var facetExpression = [{fid:'3', values:['10', '11']}, {fid:'4', values:['abc']}];
-        let facetExpression = [];
-        let selected = selections;
-        let fields = selected.whichHasAnySelections();
-        facetExpression = fields.map((field) => {
-            let values = selected.getFieldSelections(field);
-            // use 1 or 0 for searching bool field types not the text
-            if (this.fields[field].type === schemaConsts.CHECKBOX) {
-                var boolVal = values[0] === "Yes" ? 1 : 0;
-                values = [boolVal];
-            }
-            return {fid : field, values: values};
-        });
-        let filterParam = {
-            selections: selections,
-            facet : facetExpression,
-            search : searchString
-        };
         let flux = this.getFlux();
-        flux.actions.filterReport(this.props.appId, this.props.tblId, this.props.rptId, true, filterParam);
+        flux.actions.filterReport(this.props.appId, this.props.tblId, this.props.rptId, true, searchString, selections, this.fields);
     },
 
     filterOnSelections(newSelections) {
@@ -168,11 +150,7 @@ var ReportToolbar = React.createClass({
 
     handleSearchChange(e) {
         var searchTxt = e.target.value;
-        this.setState({
-            searchInput: searchTxt
-        });
-        this.searchTheString(searchTxt, true);
-
+        this.searchTheString(searchTxt);
     },
 
 
@@ -189,6 +167,7 @@ var ReportToolbar = React.createClass({
         if (this.props.reportData && this.props.reportData.data &&
             this.props.reportData.data.facets) {
             this.fields = {};
+            console.log('toolbar facets = ',this.props.reportData.data.facets);
             this.props.reportData.data.facets.map((facet) => {
                 // a fields id ->facet lookup
                 this.fields[facet.id] = facet;
@@ -239,6 +218,7 @@ var ReportToolbar = React.createClass({
         return (<PageActions actions={actions} menuAfter={0} {...this.props}/>);
     },
     render() {
+        console.log('render!!!', this.props);
         if (this.props.fillinDummyFacets) {
             this.populateDummyFacets();
         }
@@ -290,7 +270,7 @@ var ReportToolbar = React.createClass({
                 <FilterSearchBox onChange={this.handleSearchChange}
                                  nameForRecords="Records"
                                  ref="searchInputbox"
-                                 value={this.state.searchInput}
+                                 value={this.props.searchStringForFiltering}
                     {...this.props} />
                 }
 
