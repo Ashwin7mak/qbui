@@ -120,8 +120,8 @@
                 reportServicePage.waitForElement(reportServicePage.loadedContentEl).then(function() {
                     // Check there is a scrollbar in the griddle table
                     var fetchRecordPromises = [];
-                    fetchRecordPromises.push(reportServicePage.loadedContentEl.getAttribute('scrollWidth'));
-                    fetchRecordPromises.push(reportServicePage.loadedContentEl.getAttribute('clientWidth'));
+                    fetchRecordPromises.push(reportServicePage.griddleWrapperEl.getAttribute('scrollWidth'));
+                    fetchRecordPromises.push(reportServicePage.griddleWrapperEl.getAttribute('clientWidth'));
                     //When all the dimensions have been fetched, assert the values match expectations
                     Promise.all(fetchRecordPromises).then(function(dimensions) {
                         expect(Number(dimensions[0])).toBeGreaterThan(Number(dimensions[1]));
@@ -149,8 +149,8 @@
                 reportServicePage.waitForElement(reportServicePage.loadedContentEl).then(function() {
                     // Check there is no scrollbar in the griddle table
                     var fetchRecordPromises = [];
-                    fetchRecordPromises.push(reportServicePage.loadedContentEl.getAttribute('scrollWidth'));
-                    fetchRecordPromises.push(reportServicePage.loadedContentEl.getAttribute('clientWidth'));
+                    fetchRecordPromises.push(reportServicePage.griddleWrapperEl.getAttribute('scrollWidth'));
+                    fetchRecordPromises.push(reportServicePage.griddleWrapperEl.getAttribute('clientWidth'));
                     //When all the dimensions have been fetched, assert the values match expectations
                     Promise.all(fetchRecordPromises).then(function(dimensions) {
                         expect(Number(dimensions[0])).not.toBeGreaterThan(Number(dimensions[1]));

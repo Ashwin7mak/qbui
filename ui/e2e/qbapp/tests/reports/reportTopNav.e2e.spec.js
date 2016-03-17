@@ -117,7 +117,7 @@
                             if (testcase.browserWidth === e2eConsts.SMALL_BP_WIDTH) {
                                 // Assert actions have moved to leftNav
                                 reportServicePage.assertGlobalActsDisplayedInLeftNav();
-                                expect(reportServicePage.getGlobalNavTextEl(reportServicePage.leftNavUserGlobActEl).getText()).toBe('User');
+                                expect(reportServicePage.getGlobalNavTextEl(reportServicePage.leftNavUserGlobActLabelEl).getText()).toBe('User');
                                 expect(reportServicePage.getGlobalNavTextEl(reportServicePage.leftNavHelpGlobActEl).getText()).toBe('Help');
                                 // Verify global action icons are not displayed in topNav
                                 reportServicePage.assertGlobalActsNotDisplayedInTopNav();

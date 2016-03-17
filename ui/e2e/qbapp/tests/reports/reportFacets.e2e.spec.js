@@ -119,26 +119,28 @@
          */
         var verifyFacetTableResults = function(facetGroup) {
             var expectedTableResuts = [];
-            reportServicePage.griddleRecordElList.map(function(row) {
-                return {
-                    'Text Field': row.$$('td').get(2).getText(),
-                    'Checkbox Field': row.$$('td').get(5).getText()
-                };
-            }).then(function(results) {
-                for (var i = 0; i < results.length; i++) {
-                    expectedTableResuts.push(results[i]);
-                }
-                var found = false;
-                for (var j = 0; j < expectedTableResuts.length; j++) {
-                    for (var k = 0; k < actualTableResuts.length; k++) {
-                        if (expectedTableResuts.length > 0 && JSON.stringify(expectedTableResuts[j]) === JSON.stringify(actualTableResuts[k])) {
-                            expect(expectedTableResuts[j]).toEqual(actualTableResuts[k]);
-                            found = true;
-                            break;
-                        }
-                        found = false;
+            reportServicePage.waitForElement(reportServicePage.griddleBodyEl).then(function() {
+                reportServicePage.griddleRecordElList.map(function(row) {
+                    return {
+                        'Text Field': row.$$('td').get(2).getText(),
+                        'Checkbox Field': row.$$('td').get(5).getText()
+                    };
+                }).then(function(results) {
+                    for (var i = 0; i < results.length; i++) {
+                        expectedTableResuts.push(results[i]);
                     }
-                }
+                    var found = false;
+                    for (var j = 0; j < expectedTableResuts.length; j++) {
+                        for (var k = 0; k < actualTableResuts.length; k++) {
+                            if (expectedTableResuts.length > 0 && JSON.stringify(expectedTableResuts[j]) === JSON.stringify(actualTableResuts[k])) {
+                                expect(expectedTableResuts[j]).toEqual(actualTableResuts[k]);
+                                found = true;
+                                break;
+                            }
+                            found = false;
+                        }
+                    }
+                });
             });
         };
 
@@ -195,15 +197,15 @@
             return [
                 {
                     message: 'Verify more filters - Create text facet',
-                    facets: [{"group": "Text Field", "ItemIndex": [1, 5]}],
+                    facets: [{"group": "Text Field", "ItemIndex": [1, 5]}]
                 },
                 {
                     message: 'Create text facet',
-                    facets: [{"group": "Text Field", "ItemIndex": [1, 3, 4]}],
+                    facets: [{"group": "Text Field", "ItemIndex": [1, 3, 4]}]
                 },
                 {
                     message: 'Create text facet with different Order and verify facet tokens',
-                    facets: [{"group": "Text Field", "ItemIndex": [4, 3, 1]}],
+                    facets: [{"group": "Text Field", "ItemIndex": [4, 3, 1]}]
                 },
                 {
                     message: 'Facet with 1 Text record and 1 Empty Record',
@@ -215,67 +217,92 @@
                 },
                 {
                     message: 'Create CheckBox facet',
-                    facets: [{"group": "Checkbox Field", "ItemIndex": [0]}],
+                    facets: [{"group": "Checkbox Field", "ItemIndex": [0]}]
 
                 },
-                //{
-                //    message: 'Create Checkbox and Text facet',
-                //    facets: [{"group": "Checkbox Field", "ItemIndex": [1]}, {"group": "Text Field", "ItemIndex": [2, 3]}],
-                //},
-                //{
-                //    message: 'Facet with 1 CheckBox record and 1 Empty Text',
-                //    facets: [{"group": "Checkbox Field", "ItemIndex": [0]}, {"group": "Text Field", "ItemIndex": [0]}],
-                //},
+                {
+                    message: 'Create Checkbox and Text facet',
+                    facets: [{"group": "Checkbox Field", "ItemIndex": [1]}, {"group": "Text Field", "ItemIndex": [2, 3]}]
+                },
+                {
+                    message: 'Facet with 1 CheckBox record and 1 Empty Text',
+                    facets: [{"group": "Checkbox Field", "ItemIndex": [0]}, {"group": "Text Field", "ItemIndex": [0]}]
+                }
             ];
-
-
         }
 
         facetTestCases().forEach(function(testcase) {
             it('Test case: ' + testcase.message, function(done) {
                 //Click on facet carat
-                reportServicePage.waitForElement(reportServicePage.reportFilterBtnCaret).then(function() {
-                    reportServicePage.reportFilterBtnCaret.click().then(function() {
-                        //Verify the popup menu is displayed
-                        expect(reportServicePage.reportFacetPopUpMenu.isDisplayed()).toBeTruthy();
-
-                    }).then(function() {
-                        for (var i = 0; i < testcase.facets.length; i++) {
-                            //select facet group and items
-                            reportServicePage.selectGroupAndFacetItems(testcase.facets[i].group, testcase.facets[i].ItemIndex).then(function(facetList) {
-                                ////Get facet tokens from container and verify against selected items
-                                //var tokens = element.all(by.className('facetSelections')).map(function(tokenName, tokenindex) {
-                                //    return tokenName.getText();
-                                //});
-                                ////expect(tokens).toMatch(facetList);
+                reportServicePage.waitForElementToBeClickable(reportServicePage.reportFilterBtnCaret).then(function() {
+                    reportServicePage.reportFilterBtnCaret.click();
+                    //Verify the popup menu is displayed
+                    expect(reportServicePage.reportFacetPopUpMenu.isDisplayed()).toBeTruthy();
+                }).then(function() {
+                    for (var i = 0; i < testcase.facets.length; i++) {
+                        //select facet group and items
+                        reportServicePage.selectGroupAndFacetItems(testcase.facets[i].group, testcase.facets[i].ItemIndex);
+                        //.then(function(facetList) {
+                        ////Get facet tokens from container and verify against selected items
+                        //var tokens = element.all(by.className('facetSelections')).map(function(tokenName, tokenindex) {
+                        //    return tokenName.getText();
+                        //});
+                        ////expect(tokens).toMatch(facetList);
+                        //});
+                    }
+                }).then(function() {
+                    // Finally clear all facets from popup menu
+                    // Reopen popup
+                    //reportServicePage.reportFilterBtnCaret.click();
+                    e2eBase.sleep(browser.params.smallSleep);
+                    for (var j = 0; j < testcase.facets.length; j++) {
+                        reportServicePage.getFacetGroupElement(testcase.facets[j].group).then(function(facetGroupEl) {
+                            reportServicePage.waitForElementToBeClickable(facetGroupEl).then(function() {
+                                reportServicePage.clickClearAllFacetsIcon(facetGroupEl);
                             });
-                        }
-                    }).then(function() {
-                        //collapse the popup menu and verify filtered table contents
-                        reportServicePage.reportFilterBtnCaret.click().then(function() {
-                            e2eBase.sleep(browser.params.smallSleep);
-                            for (var i = 0; i < testcase.facets.length; i++) {
-                                //Verfiy table filter results
-                                verifyFacetTableResults(testcase.facets[i].group);
-                            }
                         });
-                    }).then(function() {
-
-                        //finally clear all facets from popup menu and close the popup
+                    }
+                }).then(function() {
+                    // Collapse the popup menu and verify filtered table records
+                    reportServicePage.waitForElementToBeClickable(reportServicePage.reportFilterBtnCaret).then(function() {
                         reportServicePage.reportFilterBtnCaret.click().then(function() {
-                            for (var i = 0; i < testcase.facets.length; i++) {
-                                reportServicePage.getFacetGroupElement(testcase.facets[i].group).then(function(facetGroupEl){
-                                    reportServicePage.clickClearAllFacetsIcon(facetGroupEl).then(function() {
-                                        reportServicePage.waitForElement(reportServicePage.reportFilterBtnCaret).then(function() {
-                                            reportServicePage.reportFilterBtnCaret.click().then(function() {
-                                                done();
-                                            });
-                                        })
-                                    });
-                                })
-                            }
+                            done();
                         });
-                        //}).then(function() {
+                        //e2eBase.sleep(browser.params.smallSleep);
+                        //for (var i = 0; i < testcase.facets.length; i++) {
+                        //    // Verify table filter results
+                        //    verifyFacetTableResults(testcase.facets[i].group);
+                        //}
+                    });
+                });
+                //}).then(function() {
+                //    //// Finally clear all facets from popup menu
+                //    //// Reopen popup
+                //    //reportServicePage.reportFilterBtnCaret.click();
+                //    //e2eBase.sleep(browser.params.smallSleep);
+                //    //for (var j = 0; j < testcase.facets.length; j++) {
+                //    //    reportServicePage.getFacetGroupElement(testcase.facets[j].group).then(function(facetGroupEl) {
+                //    //        reportServicePage.waitForElementToBeClickable(facetGroupEl).then(function() {
+                //    //            reportServicePage.clickClearAllFacetsIcon(facetGroupEl);
+                //    //
+                //    //        })
+                //    //    })
+                //    //}
+                //}).then(function() {
+                //    // Close popup
+                //    reportServicePage.reportFilterBtnCaret.click();
+                //    e2eBase.sleep(1000).then(function() {
+                //        done();
+                //    });
+                //});
+                    //}).then(function() {
+                    //    // Close the popup
+                    //    reportServicePage.waitForElement(reportServicePage.reportFilterBtnCaret).then(function() {
+                    //        reportServicePage.reportFilterBtnCaret.click().then(function () {
+                    //            done();
+                    //        });
+                    //    });
+                    //});
                         //    reportServicePage.PopUpContainerFacetGroup.map(function(groupName, index) {
                         //        return groupName.getText().then(function(groupText) {
                         //            groupName.getAttribute('class').then(function(txt) {
@@ -291,11 +318,9 @@
                         //        expect(reportServicePage.reportRecordsCount.getAttribute('innerText')).toEqual('6 Records');
                         //        done();
                         //    });
-                    });
-                });
-            })
-
-
+                    //});
+                //});
+            });
         });
 
         xit('Verify clear all facets tokens from the container', function(done) {
