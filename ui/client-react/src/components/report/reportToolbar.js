@@ -167,7 +167,6 @@ var ReportToolbar = React.createClass({
         if (this.props.reportData && this.props.reportData.data &&
             this.props.reportData.data.facets) {
             this.fields = {};
-            console.log('toolbar facets = ',this.props.reportData.data.facets);
             this.props.reportData.data.facets.map((facet) => {
                 // a fields id ->facet lookup
                 this.fields[facet.id] = facet;
@@ -218,7 +217,6 @@ var ReportToolbar = React.createClass({
         return (<PageActions actions={actions} menuAfter={0} {...this.props}/>);
     },
     render() {
-        console.log('render!!!', this.props);
         if (this.props.fillinDummyFacets) {
             this.populateDummyFacets();
         }

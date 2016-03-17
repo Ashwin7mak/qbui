@@ -53,7 +53,6 @@ var ReportHeader = React.createClass({
     },
 
     render: function() {
-        console.log('header props',this.props);
         const headerClasses = "reportHeader" + (this.state.searching ? " searching" : "");
 
         const reportName = this.props.reportData && this.props.reportData.data && this.props.reportData.data.name;

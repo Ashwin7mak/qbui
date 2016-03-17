@@ -77,7 +77,6 @@ let reportDataActions = {
      */
     filterReport(appId, tblId, rptId, format, searchString, selections, facetFields) {
 
-        console.log('FILTER',searchString, selections, facetFields);
         function getFilter(searchFor, selected) {
             //var facetExpression = [{fid:'3', values:['10', '11']}, {fid:'4', values:['abc']}];
             let facetExpression = [];
