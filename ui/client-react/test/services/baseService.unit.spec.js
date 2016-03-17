@@ -20,7 +20,6 @@ describe('BaseService rewire tests', () => {
     beforeEach(() => {
         spyOn(BaseService.prototype, 'setRequestInterceptor');
         spyOn(BaseService.prototype, 'setResponseInterceptor');
-        //spyOn(StringUtils, 'format');
 
         BaseService.__Rewire__('cookie', mockCookie);
         BaseService.__Rewire__('axios', mockAxios);
