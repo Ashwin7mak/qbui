@@ -15,7 +15,7 @@ let FluxMixin = Fluxxor.FluxMixin(React);
  * a set of record-level action icons
  */
 let RecordActions = React.createClass({
-    mixins: [FluxMixin],
+    //mixins: [FluxMixin],
 
     propTypes: {
         selection: React.PropTypes.array
@@ -29,10 +29,10 @@ let RecordActions = React.createClass({
         return "Email body goes here";
     },
 
-    showExtraActions() {
-        let flux = this.getFlux();
-        flux.actions.showTrowser();
-    },
+    //showExtraActions() {
+    //    let flux = this.getFlux();
+    //    flux.actions.showTrowser();
+    //},
     getSelectionTip(actionMsg) {
         return Locale.getMessage(actionMsg);
     },

@@ -107,7 +107,7 @@ $grid-font-size: $font-size - 2;
     position: relative;
 }
 
-.rowActions {
+.actions {
     height: 100%;
     top: 0;
     right: 0;
@@ -149,20 +149,27 @@ $grid-font-size: $font-size - 2;
     }
 }
 
-/* row actions on griddle trickery */
-
-/* hide actions column header */
-.QBGriddle tr th.actions {
-    display: none;
-}
+/* row actions on aggrid trickery
+-- this isnt pretty but there is a good chance row actions design will change so for now just porting over logic from griddle*/
 
 /* hide griddle cell containing actions */
-.QBGriddle tr td.actions {
+.ag-row .ag-cell {
+    &:nth-last-child(2) {
+        border-right: 0px;
+    }
+}
+.ag-header-row .ag-header-cell {
+    &:nth-last-child(2) {
+        border-right: 0px;
+    }
+}
+.ag-cell[colid="actions"]{
     position: relative;
     width: 0;
     border: 0;
     margin: 0;
     padding: 0;
+    overflow: visible;
 
     /* actions */
     > div {
@@ -181,12 +188,12 @@ $grid-font-size: $font-size - 2;
     }
 }
 
-.QBGriddle tr:hover td.actions > div {
+.ag-row:hover .ag-cell.actions > div {
     visibility: visible;
 
 }
 
-.selectedRows .QBGriddle tr:hover td.actions > div {
+.selectedRows .ag-row:hover .ag-cell.actions > div {
     visibility: hidden;
 }
 

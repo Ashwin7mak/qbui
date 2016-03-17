@@ -115,7 +115,7 @@ let ReportContent = React.createClass({
                     columnName: "actions", //for griddle
                     cellRenderer: reactCellRendererFactory(ActionsColumn),
                     cellClass: "actions",
-                    hide: true
+                    width: 1
                 });
             }
 
