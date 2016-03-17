@@ -2,6 +2,7 @@ import React from 'react';
 import QBicon from '../qbIcon/qbIcon';
 import Fluxxor from 'fluxxor';
 import FilterSearchBox from '../facet/filterSearchBox';
+import {I18nMessage} from '../../utils/i18nMessage';
 import _ from 'lodash';
 
 import './reportHeader.scss';
@@ -70,8 +71,8 @@ var ReportHeader = React.createClass({
                                  ref="searchInputbox"
                                  value={this.state.searchInput}
                                 {...this.props} />
-                <a className="iconLink" href="#" onClick={this.cancelSearch}>
-                    <QBicon icon="clear-mini"/>
+                <a className="textLink" href="#" onClick={this.cancelSearch}>
+                    <I18nMessage message="cancel"/>
                 </a>
             </div>
 

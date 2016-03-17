@@ -83,6 +83,7 @@ export default {
             organizeReports: "Organisieren",
             recordCount : "{recordCount} {nameForRecords} ",
             searchPlaceHolder:  "Suchen Sie diese {nameForRecords} ...",
-        }
+        },
+        cancel: "Stornieren"
     }
 };
