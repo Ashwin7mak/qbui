@@ -62,11 +62,9 @@ let ReportContent = React.createClass({
                             {
                                 switch (datatypeAttributes[attr]) {
                                 case "NUMERIC" :
-                                    if (obj.order !== 0) { //never make the 1st column right aligned because it will hold the checkboxes
-                                        this.setCSSClass_helper(obj, "AlignRight");
-                                        obj.cellRenderer = reactCellRendererFactory(NumericFormatter);
-                                        obj.customComponent = NumericFormatter;
-                                    }
+                                    this.setCSSClass_helper(obj, "AlignRight");
+                                    obj.cellRenderer = reactCellRendererFactory(NumericFormatter);
+                                    obj.customComponent = NumericFormatter;
                                     break;
                                 case "DATE" :
                                     obj.cellRenderer = reactCellRendererFactory(DateFormatter);
