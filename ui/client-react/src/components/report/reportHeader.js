@@ -4,7 +4,7 @@ import Fluxxor from 'fluxxor';
 import FilterSearchBox from '../facet/filterSearchBox';
 import {I18nMessage} from '../../utils/i18nMessage';
 import _ from 'lodash';
-
+import FilterUtils from '../../utils/FilterUtils';
 import './reportHeader.scss';
 
 let FluxMixin = Fluxxor.FluxMixin(React);
@@ -32,12 +32,14 @@ var ReportHeader = React.createClass({
         const facetFields = this.getFacetFields();
         let flux = this.getFlux();
 
+        const filter = FilterUtils.getFilter(searchString,
+            this.props.reportData.selections,
+            facetFields);
+
         flux.actions.filterReport(this.props.reportData.appId,
             this.props.reportData.tblId,
             this.props.reportData.rptId,
-            true, searchString,
-            this.props.reportData.selections,
-            facetFields);
+            true, filter);
     },
 
     handleSearchChange(e) {

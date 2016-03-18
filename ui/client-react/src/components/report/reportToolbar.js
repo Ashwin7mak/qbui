@@ -12,8 +12,8 @@ import FacetsMenu from '../facet/facetsMenu';
 import FacetSelections from '../facet/facetSelections';
 import RecordsCount from './recordsCount';
 import QBicon from '../qbIcon/qbIcon';
-import * as schemaConsts from '../../constants/schema.js';
 import PageActions from '../actions/pageActions';
+import FilterUtils from '../../utils/FilterUtils';
 
 let FluxMixin = Fluxxor.FluxMixin(React);
 
@@ -95,7 +95,12 @@ var ReportToolbar = React.createClass({
 
     filterReport(searchString, selections) {
         let flux = this.getFlux();
-        flux.actions.filterReport(this.props.appId, this.props.tblId, this.props.rptId, true, searchString, selections, this.fields);
+
+        const filter = FilterUtils.getFilter(searchString,
+            selections,
+            this.fields);
+
+        flux.actions.filterReport(this.props.appId, this.props.tblId, this.props.rptId, true, filter);
     },
 
     filterOnSelections(newSelections) {
@@ -150,7 +155,7 @@ var ReportToolbar = React.createClass({
 
     handleSearchChange(e) {
         var searchTxt = e.target.value;
-        this.searchTheString(searchTxt);
+        this.searchTheString(searchTxt, true);
     },
 
 

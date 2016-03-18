@@ -48,7 +48,7 @@ html body {
 
 }
 
-@include small-breakpoint {
+body.touch {
 
     .tooltip {
         display: none !important;
@@ -154,9 +154,13 @@ a {
         .mainContent {
             display: flex;
             order: 2;
-            //overflow-y: auto;
-            flex: 1 1 auto;
+            flex: 1;
             min-width: 0;
+            overflow-y: auto;
+            // Enable momentum scrolling on iOS devices
+            -webkit-overflow-scrolling: touch;
+            // Enable hardware acceleration for scrolling through content.
+            transform: translate3d(0,0,0);
         }
 
         .footer {
@@ -170,12 +174,11 @@ a {
         }
     }
 }
-@include not-small-breakpoint {
-    .navShell .main .topNav .iconLink:hover {
-        color: #fff;
-        background: $nav-hover-bg
-    }
+body:not(.touch) .navShell .main .topNav .iconLink:hover {
+    color: #fff;
+    background: $nav-hover-bg
 }
+
 
 .pageActions {
     display:none;
