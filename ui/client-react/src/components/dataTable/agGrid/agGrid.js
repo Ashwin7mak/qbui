@@ -5,7 +5,6 @@ import {I18nMessage} from '../../../utils/i18nMessage';
 import ReactCSSTransitionGroup from 'react/lib/ReactCSSTransitionGroup';
 import ReportActions from '../../actions/reportActions';
 import RecordActions from '../../actions/recordActions';
-import LimitConstants from '../../../../../common/src/limitConstants';
 import _ from 'lodash';
 import Loader  from 'react-loader';
 import Fluxxor from 'fluxxor';
@@ -14,6 +13,10 @@ let FluxMixin = Fluxxor.FluxMixin(React);
 import '../../../../../node_modules/ag-grid/dist/styles/ag-grid.css';
 import './agGrid.scss';
 
+
+/**
+ * Renderer component for record-actions column.
+ */
 let ActionsColumn = React.createClass({
     render() {
         return (<div><RecordActions {...this.props}/></div>);
@@ -27,6 +30,9 @@ let AGGrid = React.createClass({
         history: React.PropTypes.object,
         flux: React.PropTypes.object
     },
+    // agGrid has a "context" param that is of type object and gets passed down to all cell renderer functions.
+    // Since the external components are not in the tree hierarchy as the grid itself, and hence dont share the same react context,
+    // use this "context" object to pass down such pieces to the components.
     gridOptions: {
         context :{}
     },
@@ -37,16 +43,16 @@ let AGGrid = React.createClass({
             selectAllClicked: false
         };
     },
-
     onGridReady(params) {
         this.api = params.api;
         this.columnApi = params.columnApi;
-        //this.autoSizeAllColumns();
     },
     componentDidMount() {
         this.gridOptions.context.flux = this.getFlux();
     },
-
+    // For some reason react always thinks the component needs to be re-rendered because props have changed.
+    // Analysis shows that the action column renderer is returning notEquals, event though nothing has changed.
+    // Since re-render is expensive the following figures out if ALL is same and the only piece that has changed is the "actions" column then dont update.
     shouldComponentUpdate(nextProps, nextState) {
         if (nextState !== this.state) {
             return true;
@@ -82,10 +88,8 @@ let AGGrid = React.createClass({
         }
         return true;
     },
-
-
     /**
-     * Helper method to auto-resize all columns to the content's width. This is called on load.
+     * Helper method to auto-resize all columns to the content's width. This is not called anywhere right now - more design is needed on sizing.
      */
     autoSizeAllColumns() {
         var allColumnIds = [];
@@ -96,7 +100,6 @@ let AGGrid = React.createClass({
             this.columnApi.autoSizeColumns(allColumnIds);
         }
     },
-
     /**
      * Grid API - selectAll "selects" all rows.
      */
@@ -109,10 +112,9 @@ let AGGrid = React.createClass({
     deselectAll() {
         this.api.deselectAll();
     },
-
     /**
      * Capture the row-click event. Send to record view on row-click
-     * @param event
+     * @param params
      */
     onRowClicked(params) {
         // we have overlapping events since we want the row click to open a record but a record action icon click to execute the action
@@ -129,24 +131,24 @@ let AGGrid = React.createClass({
         const link = '/app/' + appId + '/table/' + tblId + '/record/' + recId;
         this.context.history.push(link);
     },
-
     /**
      * Capture the row-select (via checkbox) event.
-     * @param event
+     * @param params
      */
-    onRowSelected(event) {
+    onRowSelected(params) {
         if (this.state.selectAllClicked) {
             return;
         }
-        const id = event.node.data[this.props.uniqueIdentifier];
+        const id = params.node.data[this.props.uniqueIdentifier];
         if (this.state.selectedRows.indexOf(id) === -1) {
             // not already selected, add to selectedRows
-            this.state.selectedRows.push(event.node.data[this.props.uniqueIdentifier]);
+            this.state.selectedRows.push(params.node.data[this.props.uniqueIdentifier]);
             this.setState({selectedRows: this.state.selectedRows});
         } else {
             // already selected, remove from selectedRows
             this.setState({selectedRows: _.without(this.state.selectedRows, id)});
         }
+        // for some reason the master checkbox click makes it check and then un-check itself. So updating this forcibly.
         this.updateAllCheckbox();
     },
     /**
@@ -155,7 +157,9 @@ let AGGrid = React.createClass({
     isRowSelected(row) {
         return this.state.selectedRows.indexOf(row[this.props.uniqueIdentifier]) !== -1;
     },
-
+    /**
+     * Helper method to flip the master checkbox if all rows are checked
+     */
     updateAllCheckbox() {
         if (this.props.reportData.data.filteredRecords.length === this.state.selectedRows.length) {
             document.getElementsByClassName("SelectAllCheckbox")[0].checked = true;
@@ -194,7 +198,6 @@ let AGGrid = React.createClass({
             this.setState({selectAllClicked: false});
         }
     },
-
     /**
      * keep track of tools menu being open (need to change overflow css style)
      */
@@ -229,10 +232,15 @@ let AGGrid = React.createClass({
                 React.cloneElement(this.props.reportHeader, {key:"reportHeader", onMenuEnter:this.onMenuEnter, onMenuExit:this.onMenuExit})}
             </div>));
     },
-
+    /**
+     * Add a couple of columns to the column definition sent through props -
+     * add checkbox column to the beginning of the array and
+     * add actions column to the end of the array.
+     */
     getColumns() {
         let columns = this.props.columns.slice(0);
         let self = this;
+        //Add checkbox column
         let checkBoxCol = {};
         checkBoxCol.field = "checkbox";
         var checkbox = document.createElement("input");
@@ -241,14 +249,16 @@ let AGGrid = React.createClass({
         checkbox.onclick = function(event) {
             self.allCheckBoxSelected(event);
         };
+        //ag-grid doesnt seem to allow react components sent into headerCellRender.
         checkBoxCol.headerCellRenderer = function() {
             return checkbox;
         };
-        //checkBoxCol.headerCellTemplate = reactCellRendererFactory(AllSelector);
         checkBoxCol.checkboxSelection = true;
         checkBoxCol.width = 30;
         columns.unshift(checkBoxCol);
 
+        // Add Actions column. Put this as the last column in the grid and then make the column 1px wide so it doesnt really "show".
+        // CSS takes care of positioning the content of this column over the previous columns so it looks like an overlay.
         if (columns.length > 0) {
             columns.push({
                 headerName: "Actions", //for ag-grid
