@@ -14,6 +14,13 @@ $grid-font-size: $font-size - 2;
     font-size: $grid-font-size;
 }
 
+.reportTable {
+    width:100%;
+    display:flex;
+    flex-direction:column;
+    flex:1 1 auto;
+}
+
 .agGrid {
     font-family: $font-family;
     color: $font-color;

@@ -275,7 +275,7 @@ let AGGrid = React.createClass({
     render() {
         if (this.props.reportData &&  this.props.reportData.data && this.props.reportData.data.filteredRecords) {
             let columnDefs = this.getColumns();
-            let griddleWrapperClasses = this.state.selectedRows.length ? "selectedRows" : "";
+            let griddleWrapperClasses = this.state.selectedRows.length ? "griddleWrapper selectedRows" : "griddleWrapper";
             return (
                 <div className="reportTable" >
 
