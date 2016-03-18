@@ -9,26 +9,37 @@ import './reportHeader.scss';
 
 let FluxMixin = Fluxxor.FluxMixin(React);
 
+/**
+ * A header that takes the place of the top nav when viewing a report
+ */
 var ReportHeader = React.createClass({
     mixins: [FluxMixin],
 
+    propTypes: {
+        reportData: React.PropTypes.object
+    },
     getInitialState() {
         return {
             searching: false,
             debounceInputMillis: 500
         };
     },
+    // no top nav present so the hamburger exists here
     onNavClick() {
         let flux = this.getFlux();
         flux.actions.toggleLeftNav();
     },
 
     getFacetFields() {
-        return [];
+        let fields = {};
+        this.props.reportData.data.facets.map(facet => {
+            // a fields id ->facet lookup
+            this.fields[facet.id] = facet;
+        });
+        return fields;
     },
+
     searchTheString(searchString)  {
-
-
         const facetFields = this.getFacetFields();
         let flux = this.getFlux();
 
@@ -47,9 +58,11 @@ var ReportHeader = React.createClass({
 
         this.searchTheString(searchTxt);
     },
+    // show the search elements
     startSearching() {
         this.setState({searching: true});
     },
+    // hide the search elements
     cancelSearch() {
         this.setState({searching: false});
     },
