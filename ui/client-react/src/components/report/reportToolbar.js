@@ -13,7 +13,7 @@ import FacetSelections from '../facet/facetSelections';
 import RecordsCount from './recordsCount';
 import QBicon from '../qbIcon/qbIcon';
 import PageActions from '../actions/pageActions';
-import FilterUtils from '../../utils/FilterUtils';
+import FilterUtils from '../../utils/filterUtils';
 
 let FluxMixin = Fluxxor.FluxMixin(React);
 

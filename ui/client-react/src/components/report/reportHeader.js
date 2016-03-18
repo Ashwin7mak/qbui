@@ -4,7 +4,7 @@ import Fluxxor from 'fluxxor';
 import FilterSearchBox from '../facet/filterSearchBox';
 import {I18nMessage} from '../../utils/i18nMessage';
 import _ from 'lodash';
-import FilterUtils from '../../utils/FilterUtils';
+import FilterUtils from '../../utils/filterUtils';
 import './reportHeader.scss';
 
 let FluxMixin = Fluxxor.FluxMixin(React);
