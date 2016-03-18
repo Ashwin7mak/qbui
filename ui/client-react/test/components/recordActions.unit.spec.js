@@ -11,7 +11,7 @@ describe('RecordActions functions', () => {
         actions:{
             showTrowser: function() {return;},
         }
-    }
+    };
     let fluxParams = {
         context: {
             flux : flux

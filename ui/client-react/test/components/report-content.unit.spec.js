@@ -9,10 +9,10 @@ import _ from 'lodash';
 
 var NumericFormatterMock = function() {
     return "mock numeric";
-}
+};
 var DateFormatterMock = function() {
     return "mock date";
-}
+};
 
 var AGGridMock = React.createClass({
     render: function() {
@@ -35,7 +35,7 @@ var GriddleMock = React.createClass({
 
 var reactCellRendererFactoryMock = function(component) {
     return component;
-}
+};
 
 const header_empty = <div>nothing</div>;
 
