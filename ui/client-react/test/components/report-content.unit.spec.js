@@ -16,7 +16,20 @@ var DateFormatterMock = function() {
 
 var AGGridMock = React.createClass({
     render: function() {
-        return <div>mock grid</div>;
+        return <div>mock aggrid</div>;
+    }
+});
+
+var GriddleMock = React.createClass({
+    contextTypes: {
+        allowCardSelection: React.PropTypes.func,
+        onToggleCardSelection: React.PropTypes.func,
+        onRowSelected: React.PropTypes.func
+    },
+    render() {
+        return (
+            <div>mock griddle</div>
+        );
     }
 });
 
@@ -224,6 +237,36 @@ describe('ReportContent functions', () => {
         var col = cols_with_nowrap_attrs[0];
         expect(col.cellClass).toMatch('NoWrap');
     });
+
+    it('test render of griddle for touch context', () => {
+        ReportContent.__Rewire__('GriddleTable', GriddleMock);
+        var TestParent = React.createFactory(React.createClass({
+
+            childContextTypes: {
+                touch: React.PropTypes.bool
+            },
+            getChildContext: function() {
+                return {touch:true};
+            },
+            getInitialState() {
+                return {reportData:fakeReportData_simple, reportHeader:header_empty};
+            },
+            render() {
+                return <ReportContent ref="refReportContent" reportData={this.state.reportData} reportHeader={this.state.reportHeader}/>;
+            }
+        }));
+        var parent = TestUtils.renderIntoDocument(TestParent());
+
+        parent.setState({
+            reportData: fakeReportData_simple,
+            reportHeader: header_empty
+        });
+
+        var griddle = TestUtils.scryRenderedComponentsWithType(parent.refs.refReportContent, GriddleMock);
+        expect(griddle.length).toEqual(1);
+        ReportContent.__ResetDependency__('GriddleTable');
+    });
+
 
 });
 
