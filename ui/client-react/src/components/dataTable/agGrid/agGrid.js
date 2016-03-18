@@ -104,9 +104,17 @@ let AGGrid = React.createClass({
      * Capture the row-click event. Send to record view on row-click
      * @param event
      */
-    onRowClicked(event) {
+    onRowClicked(params) {
+        // we have overlapping events since we want the row click to open a record but a record action icon click to execute the action
+        // ag grid seems to be listening on the container so it traps all the click events 1st so we need to ween out the icon click events.
+
+        let eventTarget = params.event.target;
+        if (eventTarget.className.indexOf("iconLink") !== -1 || eventTarget.className.indexOf("qbIcon") !== -1) {
+            return;
+        }
+
         const {appId, tblId} = this.props.reportData;
-        var recId = event.node.data[this.props.uniqueIdentifier];
+        var recId = params.data[this.props.uniqueIdentifier];
         //create the link we want to send the user to and then send them on their way
         const link = '/app/' + appId + '/table/' + tblId + '/record/' + recId;
         this.context.history.push(link);
