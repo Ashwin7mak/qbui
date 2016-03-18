@@ -6,15 +6,10 @@ import ReactCSSTransitionGroup from 'react/lib/ReactCSSTransitionGroup';
 import ReportActions from '../../actions/reportActions';
 import LimitConstants from '../../../../../common/src/limitConstants';
 import _ from 'lodash';
+import Loader  from 'react-loader';
 import '../../../../../node_modules/ag-grid/dist/styles/ag-grid.css';
 import './agGrid.scss';
 
-let AllSelector = React.createClass({
-
-    render() {
-        return <div>test</div>;
-    }
-});
 
 let AGGrid = React.createClass({
 
@@ -47,20 +42,20 @@ let AGGrid = React.createClass({
                 if (nextProps.hasOwnProperty(property)) {
                     if (!this.props[property]) {
                         return true;
-                    } else if (!_.isEqual(this.props[property], nextProps[property])) {
+                    }
+                    if (!_.isEqual(this.props[property], nextProps[property])) {
                         if (property === "columns") {
                             if (this.props[property].length !== nextProps[property].length) {
                                 return true;
-                            } else {
-                                let prevColumns = this.props[property];
-                                let nextColumns = nextProps[property];
-                                for (var i = 0; i < prevColumns.length ; i++) {
-                                    if (!_.isEqual(prevColumns[i], nextColumns[i])) {
-                                        if (prevColumns[i].field === "actions") {
-                                            return false;
-                                        }
-                                        return true;
+                            }
+                            let prevColumns = this.props[property];
+                            let nextColumns = nextProps[property];
+                            for (var i = 0; i < prevColumns.length ; i++) {
+                                if (!_.isEqual(prevColumns[i], nextColumns[i])) {
+                                    if (prevColumns[i].field === "actions") {
+                                        return false;
                                     }
+                                    return true;
                                 }
                             }
                         }
@@ -147,7 +142,7 @@ let AGGrid = React.createClass({
     },
 
     updateAllCheckbox() {
-        if (this.props.reportData.data.filteredRecords.length === this.state.selectedRows.length) {
+        if (this.props.rowData.length === this.state.selectedRows.length) {
             document.getElementsByClassName("SelectAllCheckbox")[0].checked = true;
         } else {
             document.getElementsByClassName("SelectAllCheckbox")[0].checked = false;
@@ -160,11 +155,14 @@ let AGGrid = React.createClass({
      */
     allCheckBoxSelected() {
         this.setState({selectAllClicked: true});
+        if (!this.props.reportData.data) {
+            return;
+        }
         if (event.currentTarget.checked) {
             this.selectAll();
             //push all ids to selectedRows
             let rowIds = [];
-            this.props.reportData.data.filteredRecords.forEach((row)=>{
+            this.props.rowData.forEach((row)=>{
                 rowIds.push(row[this.props.uniqueIdentifier]);
             });
             this.setState({selectedRows: rowIds});
@@ -239,41 +237,51 @@ let AGGrid = React.createClass({
     },
 
     render() {
-        if (this.props.reportData.data.filteredRecords) {
+        if (this.props.reportData &&  this.props.reportData.data && this.props.reportData.data.filteredRecords) {
             let columnDefs = this.getColumns();
+            let griddleWrapperClasses = this.state.selectedRows.length ? "selectedRows" : "";
             return (
                 <div className="reportTable" >
 
                     {this.getTableActions()}
-                    <div className="agGrid">
-                        <AgGridReact
-                            gridOptions={this.gridOptions}
+                    <div className={griddleWrapperClasses}>
+                        <Loader loaded={!this.props.reportData.loading}>
+                            <div className="agGrid">
+                                <AgGridReact
+                                    gridOptions={this.gridOptions}
 
-                            // listening for events
-                            onGridReady={this.onGridReady}
-                            onRowSelected={this.onRowSelected}
-                            onRowClicked={this.onRowClicked}
+                                    // listening for events
+                                    onGridReady={this.onGridReady}
+                                    onRowSelected={this.onRowSelected}
+                                    onRowClicked={this.onRowClicked}
 
 
-                            // binding to array properties
-                            columnDefs={columnDefs}
-                            rowData={this.props.reportData.data.filteredRecords}
+                                    // binding to array properties
+                                    columnDefs={columnDefs}
+                                    rowData={this.props.reportData.data.filteredRecords}
 
-                            //default behavior properties
-                            rowSelection="multiple"
-                            enableColResize="true"
-                            groupHeaders="true"
-                            rowHeight="32"
+                                    //default behavior properties
+                                    rowSelection="multiple"
+                                    enableColResize="true"
+                                    groupHeaders="true"
+                                    rowHeight="32"
 
-                            suppressRowClickSelection="true"
-                            suppressCellSelection="true"
-                        />
-                    </div>
+                                    suppressRowClickSelection="true"
+                                    suppressCellSelection="true"
+                                />
+                            </div>
+                        </Loader>
+                        { //keep empty placeholder when loading to reduce reflow of space, scrollbar changes
+                            this.props.reportData.loading ? <div className="loadedContent"></div> : null
+                        }
+                        </div>
                 </div>
             );
         } else {
             return (
-                <div><I18nMessage message={'grid.no_data'}/></div>
+                <Loader loaded={this.props.reportData && !this.props.reportData.loading}>
+                    <div><I18nMessage message={'grid.no_data'}/></div>
+                </Loader>
             );
         }
     }
