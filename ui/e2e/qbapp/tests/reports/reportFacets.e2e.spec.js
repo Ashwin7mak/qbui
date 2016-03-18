@@ -119,7 +119,7 @@
          */
         var verifyFacetTableResults = function(facetGroup) {
             var expectedTableResuts = [];
-            reportServicePage.waitForElement(reportServicePage.griddleBodyEl).then(function() {
+            reportServicePage.waitForElement(reportServicePage.griddleWrapperEl).then(function() {
                 reportServicePage.griddleRecordElList.map(function(row) {
                     return {
                         'Text Field': row.$$('td').get(2).getText(),

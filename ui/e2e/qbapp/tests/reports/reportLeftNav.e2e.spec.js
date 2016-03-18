@@ -92,17 +92,17 @@
                 // Check that the app search widget is visible
                 expect(reportServicePage.searchAppsDivEl.isDisplayed()).toBeFalsy();
                 // Go back to the table list
-                reportServicePage.clickAppToggle();
-                done();
+                reportServicePage.clickAppToggle().then(function() {
+                    done();
+                });
             });
         });
-
 
         e2eConsts.NavDimensionsDataProvider().forEach(function(testcase) {
             /**
              * Test method. The leftNav should shrink responsively across the 4 breakpoints as the browser is re-sized
              */
-            xit('LeftNav should shrink responsively from xlarge to small breakpoints', function(done) {
+            it('LeftNav should shrink responsively from xlarge to small breakpoints', function(done) {
                 // Resize browser at different widths to check responsiveness
                 e2eBase.resizeBrowser(testcase.browserWidth, e2eConsts.DEFAULT_HEIGHT).then(function() {
                     // Open the reports list
@@ -125,6 +125,8 @@
                                 });
                             } else {
                                 reportServicePage.assertNavProperties(testcase.breakpointSize, testcase.open, testcase.offsetWidth);
+                                // Go back to the table homepage
+                                reportServicePage.tableLinksElList.get(3).click();
                                 done();
                             }
                         });
@@ -135,7 +137,7 @@
             /**
              * Test method.Verify The elements present in leftNav across the 4 breakpoints as the browser is re-sized
              */
-            it('Verify leftNav has 3 base links and 2 table links from xlarge to small breakpoints', function(done) {
+            it('Verify leftNav has 2 base links and 4 table links from xlarge to small breakpoints', function(done) {
                 // Resize browser at different widths
                 e2eBase.resizeBrowser(testcase.browserWidth, e2eConsts.DEFAULT_HEIGHT).then(function(tableLinksElList) {
                     (reportServicePage.tableLinksElList).then(function(links) {
@@ -180,6 +182,8 @@
                         // Expand the leftNav
                         reportServicePage.waitForElement(reportServicePage.topNavToggleHamburgerEl).then(function() {
                             reportServicePage.topNavToggleHamburgerEl.click();
+                            // Go back to the table homepage
+                            reportServicePage.tableLinksElList.get(3).click();
                             done();
                         });
                     }
