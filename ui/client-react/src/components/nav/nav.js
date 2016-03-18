@@ -9,7 +9,10 @@ import TopNav from '../header/topNav';
 import Footer from '../footer/footer';
 import ReportManager from '../report/reportManager';
 import QBicon from '../qbIcon/qbIcon';
+import GlobalActions from '../actions/globalActions';
 import Loader  from 'react-loader';
+import Breakpoints from '../../utils/breakpoints';
+
 import './nav.scss';
 import '../../assets/css/animate.min.css';
 
@@ -34,12 +37,23 @@ var Nav = React.createClass({
         };
     },
 
-    getGlobalActions() {
-
-        return [
+    getTopGlobalActions() {
+        const actions = [
             {msg:'globalActions.user', link:'/user', icon:'user'},
             {msg:'globalActions.help', link:'/help', icon:'help'}
         ];
+        return (<GlobalActions actions={actions}
+                               position={"top"}/>);
+    },
+    getLeftGlobalActions() {
+        const actions = [
+            {msg:'globalActions.help', link:'/help', icon:'help'}
+        ];
+        return (<GlobalActions actions={actions}
+                               onSelect={this.onSelectItem}
+                               dropdownIcon="user"
+                               dropdownMsg="globalActions.user"
+                               position={"left"}/>);
     },
     hideTrowser() {
         let flux = this.getFlux();
@@ -48,7 +62,7 @@ var Nav = React.createClass({
     onSelectTableReports(tableId) {
         const flux = this.getFlux();
 
-        if (this.context.touch) {
+        if (Breakpoints.isSmallBreakpoint()) {
             flux.actions.toggleLeftNav(false);
         }
         flux.actions.showTrowser();
@@ -105,7 +119,7 @@ var Nav = React.createClass({
             flux.actions.toggleLeftNav(true);
         }
     },
-    renderForDesktop() {
+    render() {
         const flux = this.getFlux();
 
         let classes = 'navShell ';
@@ -128,13 +142,16 @@ var Nav = React.createClass({
                 selectedTableId={this.state.apps.selectedTableId}
                 onSelectReports={this.onSelectTableReports}
                 onToggleAppsList={this.toggleAppsList}
-                globalActions={this.getGlobalActions()}/>
+                globalActions={this.getLeftGlobalActions()}
+                onSelect={this.onSelectItem}
+                onNavClick={this.toggleNav}/>
 
-            <div className="main">
+            <div className="main" >
                 <TopNav title={this.state.nav.topTitle}
-                        globalActions={this.getGlobalActions()}
+                        globalActions={this.getTopGlobalActions()}
                         onNavClick={this.toggleNav}
-                        flux={flux} />
+                        flux={flux}
+                        showOnSmall = {this.state.nav.showTopNav}/>
                 {this.props.children &&
                     <div className="mainContent" >
                         {/* insert the component passed in by the router */}
@@ -149,70 +166,16 @@ var Nav = React.createClass({
         </div>);
     },
     onSelectItem() {
-        const flux = this.getFlux();
-        flux.actions.toggleLeftNav(false); // hide left nav after selecting items on small breakpoint
+
+        if (Breakpoints.isSmallBreakpoint()) {
+            const flux = this.getFlux();
+
+            flux.actions.toggleLeftNav(false); // hide left nav after selecting items on small breakpoint
+        }
     },
     toggleNav: function() {
         let flux = this.getFlux();
         flux.actions.toggleLeftNav();
-    },
-
-    renderForTouch() {
-        const flux = this.getFlux();
-
-        let classes = 'navShell';
-        if (this.state.nav.leftNavOpen) {
-            classes += ' leftNavOpen';
-        }
-
-
-        return (<div className={classes}>
-            <Trowser position={"top"}
-                     visible={this.state.nav.trowserOpen}
-                     breadcrumbs={this.getTrowserBreadcrumbs()}
-                     centerActions={this.getTrowserActions()}
-                     content={this.getTrowserContent()}
-                     onCancel={this.hideTrowser}
-                     onDone={this.hideTrowser} />
-
-
-            <LeftNav
-                open={this.state.nav.leftNavOpen}
-                appsListOpen={this.state.nav.appsListOpen}
-                apps={this.state.apps.apps}
-                selectedAppId={this.state.apps.selectedAppId}
-                selectedTableId={this.state.apps.selectedTableId}
-                onToggleAppsList={this.toggleAppsList}
-                onSelect={this.onSelectItem}
-                onSelectReports={this.onSelectTableReports}
-                globalActions={this.getGlobalActions()}
-                onNavClick={this.toggleNav}/>
-
-            <div className="main">
-                <TopNav title={this.state.nav.topTitle}
-                        onNavClick={this.toggleNav}
-                        flux={flux} />
-
-                {this.props.children && <div className="mainContent" >
-                    {/* insert the component passed in by the router */}
-                    {React.cloneElement(this.props.children, {
-                        key: this.props.location ? this.props.location.pathname : "",
-                        selectedAppId: this.state.apps.selectedAppId,
-                        reportData: this.state.reportData,
-                        flux: flux}
-                    )}
-                </div>}
-
-            </div>
-
-        </div>);
-    },
-    render() {
-        if (this.context.touch) {
-            return this.renderForTouch();
-        } else {
-            return this.renderForDesktop();
-        }
     }
 });
 

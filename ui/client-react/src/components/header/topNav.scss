@@ -27,12 +27,14 @@ $top-nav-color: #193048;
     border: 0;
 }
 
-body:not(.touch) .topNav .navGroup .btn-group .btn:hover {
+
+.topNav .navGroup .btn-group .btn:hover {
     background: $nav-hover-bg;
     span {
         color: $nav-hover-fg;
     }
 }
+
 
 .topNav .dropdown {
     outline: none;
@@ -117,24 +119,12 @@ body:not(.touch) .topNav .navGroup .btn-group .btn:hover {
 }
 
 @include small-breakpoint {
-    .navShell .main .topNav {
-        background-color: #fff !important;
-        .btn  {
-            background-color: #fff;
-        }
-    }
-    .topNav .navItem.topTitle {
-        display: inline;
+    .navShell .main .topNav.hideSmall {
+        display:none;
     }
     .topNav .globalActions {
         display: none; /* shown on left nav */
     }
-    .leftNav .globalActions {
-        display: block;
-    }
-    /* hide text not icons */
-    .topNav .globalActions .navLabel {
-        display: none;
-    }
+
 }
 

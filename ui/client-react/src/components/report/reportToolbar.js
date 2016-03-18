@@ -12,8 +12,8 @@ import FacetsMenu from '../facet/facetsMenu';
 import FacetSelections from '../facet/facetSelections';
 import RecordsCount from './recordsCount';
 import QBicon from '../qbIcon/qbIcon';
-import * as schemaConsts from '../../constants/schema.js';
 import PageActions from '../actions/pageActions';
+import FilterUtils from '../../utils/filterUtils';
 
 let FluxMixin = Fluxxor.FluxMixin(React);
 
@@ -94,26 +94,13 @@ var ReportToolbar = React.createClass({
     },
 
     filterReport(searchString, selections) {
-        //var facetExpression = [{fid:'3', values:['10', '11']}, {fid:'4', values:['abc']}];
-        let facetExpression = [];
-        let selected = selections;
-        let fields = selected.whichHasAnySelections();
-        facetExpression = fields.map((field) => {
-            let values = selected.getFieldSelections(field);
-            // use 1 or 0 for searching bool field types not the text
-            if (this.fields[field].type === schemaConsts.CHECKBOX) {
-                var boolVal = values[0] === "Yes" ? 1 : 0;
-                values = [boolVal];
-            }
-            return {fid : field, values: values};
-        });
-        let filterParam = {
-            selections: selections,
-            facet : facetExpression,
-            search : searchString
-        };
         let flux = this.getFlux();
-        flux.actions.filterReport(this.props.appId, this.props.tblId, this.props.rptId, true, filterParam);
+
+        const filter = FilterUtils.getFilter(searchString,
+            selections,
+            this.fields);
+
+        flux.actions.filterReport(this.props.appId, this.props.tblId, this.props.rptId, true, filter);
     },
 
     filterOnSelections(newSelections) {
@@ -168,11 +155,7 @@ var ReportToolbar = React.createClass({
 
     handleSearchChange(e) {
         var searchTxt = e.target.value;
-        this.setState({
-            searchInput: searchTxt
-        });
         this.searchTheString(searchTxt, true);
-
     },
 
 
@@ -222,7 +205,7 @@ var ReportToolbar = React.createClass({
                 {id : 4, name : "Flag", type: "CHECKBOX",  blanks: false,
                     values : [{value: "Yes"}, {value: "No"}]},
                 {id : 5, name : "Companies", type: "TEXT",  blanks: false,
-                // TODO: support date ranges in filtering see https://jira.intuit.com/browse/QBSE-20422
+                    // TODO: support date ranges in filtering see https://jira.intuit.com/browse/QBSE-20422
                     values : []}, // too many values for facets example
                 //{id : 4, name : "Dates", type: "date",  blanks: false,
                 //    range : {start: 1, end: 2}},
@@ -246,11 +229,11 @@ var ReportToolbar = React.createClass({
         this.appendBlanks();
 
         let recordCount = this.props.reportData && this.props.reportData.data && this.props.reportData.data.records ?
-                                this.props.reportData.data.records.length : null; //TODO what to show for pagination?
+            this.props.reportData.data.records.length : null; //TODO what to show for pagination?
 
         let filteredRecordCount  = this.props.reportData && this.props.reportData.data &&
-                                this.props.reportData.data.filteredRecords ?
-                                this.props.reportData.data.filteredRecords.length : null;
+        this.props.reportData.data.filteredRecords ?
+            this.props.reportData.data.filteredRecords.length : null;
 
         // determine if there is a search/filter in effect and if there are records/results to show
         let hasRecords = true;
@@ -290,7 +273,7 @@ var ReportToolbar = React.createClass({
                 <FilterSearchBox onChange={this.handleSearchChange}
                                  nameForRecords="Records"
                                  ref="searchInputbox"
-                                 value={this.state.searchInput}
+                                 value={this.props.searchStringForFiltering}
                     {...this.props} />
                 }
 
@@ -298,7 +281,7 @@ var ReportToolbar = React.createClass({
                  also hide Facets Menu Button if facets disabled  */}
                 {(recordCount && hasFacets) &&
                 (<FacetsMenu className="facetMenu"
-                             {...this.props}
+                    {...this.props}
                              selectedValues={this.props.selections}
                              onFacetSelect={this.handleFacetSelect}
                              onFacetDeselect={this.handleFacetDeselect}

@@ -20,7 +20,8 @@ describe('Report functions', () => {
     let flux = {
         actions:{
             loadReport() {return;},
-            filterReport() {return;}
+            filterReport() {return;},
+            hideTopNav() {return;}
         }
     };
 
@@ -34,17 +35,23 @@ describe('Report functions', () => {
             return <div className="report-content-mock" />;
         }
     });
-
+    let ReportHeaderMock = React.createClass({
+        render() {
+            return <div className="report-toolbar-mock" />;
+        }
+    });
     beforeEach(() => {
         Report.__Rewire__('ReportStage', ReportStageMock);
         Report.__Rewire__('ReportToolsAndContent', ReportContentMock);
+        Report.__Rewire__('ReportHeader', ReportHeaderMock);
         spyOn(flux.actions, 'loadReport');
         spyOn(flux.actions, 'filterReport');
     });
 
     afterEach(() => {
-        Report.__ResetDependency__('ReportStage', ReportStageMock);
-        Report.__ResetDependency__('ReportToolsAndContent', ReportContentMock);
+        Report.__ResetDependency__('ReportStage');
+        Report.__ResetDependency__('ReportToolsAndContent');
+        Report.__ResetDependency__('ReportHeader');
         flux.actions.loadReport.calls.reset();
         flux.actions.filterReport.calls.reset();
     });
