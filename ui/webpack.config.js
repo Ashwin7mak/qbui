@@ -69,7 +69,7 @@ var config = {
                 test: /\.css?$/,
                 include: [
                     path.resolve(__dirname, 'client-react/src'),
-                    nodeModulesPath
+                    path.resolve(__dirname, 'node_modules/ag-grid')
                 ],
                 loader: 'style!css'
             },
