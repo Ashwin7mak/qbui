@@ -22,10 +22,23 @@ var Stage = React.createClass({
 
     render: function() {
 
-        let classes = 'layout-stage ';// + (this.state.open ? 'stage-open' : 'state-closed');
-
         return (
-            <div className={classes}>
+            <div className="layout-stage">
+                <div className="stageHeader">
+                    <div className="stageLeft">
+                        <div className="stageIcon">
+                            icon
+                        </div>
+                        <div className="breadCrumbs">
+                            breadcrumbs|breadcrumbs
+                        </div>
+                    </div>
+                    <div className="stageRight">
+                        <div className="pageActions">
+                            actions
+                        </div>
+                    </div>
+                </div>
                 <Collapse in={this.state.open}>
                     <Well>{this.props.children}</Well>
                 </Collapse>

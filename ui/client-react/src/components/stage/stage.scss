@@ -4,7 +4,7 @@
     border-bottom: 1px solid $header-bg;
     position: relative;
     margin-bottom:30px;
-
+    background-color: $color2;
     .toggleStage {
 
         cursor: pointer;
@@ -19,10 +19,11 @@
     }
 
     .well {
-        background-color: $color17;
+        background-color: $color2;
         border:0 none transparent;
         margin:0;
         padding: 10px 0;
+        box-shadow: none;
     }
 }
 
