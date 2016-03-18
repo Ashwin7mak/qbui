@@ -34,7 +34,7 @@ var ReportHeader = React.createClass({
         let fields = {};
         this.props.reportData.data.facets.map(facet => {
             // a fields id ->facet lookup
-            this.fields[facet.id] = facet;
+            fields[facet.id] = facet;
         });
         return fields;
     },
