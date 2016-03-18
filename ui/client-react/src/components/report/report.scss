@@ -3,11 +3,11 @@
 .reportContainer {
     display: flex;
     flex-direction: column;
-    flex: 1;
+    flex: 1 1 auto;
     min-width: 0;
     background: $report-container-bg;
     .layout-stage {
-        flex-shrink: 0;
+        flex:0 0 auto;
     }
     margin-top: 0;
     margin-left: 0;
@@ -16,16 +16,14 @@
     background-color: $report-backgroundColor;
 
     .reportToolsAndContentContainer {
-
-        //display:flex;
+        display:flex;
+        flex: 1 1 auto;
         .reportToolbar {
             display: flex;
             flex-direction: row;
-            justify-content:space-between;
+
             flex: 1 0 auto;
-            &.noFacets {
-                justify-content: flex-start;
-            }
+
             >* {
                 flex: 0 0 auto;
             }
@@ -60,6 +58,7 @@
             .clearAllFacets {
                 display: inline-block;
                 margin-right: .5rem;
+                margin-left: .5rem;
                 vertical-align: top;
                 font-size: 16px;
                 cursor: pointer;
@@ -71,12 +70,12 @@
         }
 
         .loadedContent {
-            flex: 1 0 auto;
-            overflow-y: auto;
-            margin-left: 10px;
-            margin-right: 10px;
-            min-height: 710px;
+            display:flex;
+            flex: 1 1 auto;
+            width:100%;
+            //overflow-y: auto;
         }
+
 
         // this fake facet button which hidden in release; devs
         // can show it by commenting this or running
@@ -129,9 +128,21 @@
     }
 }
 
+.reportContent {
+    width:100%;
+    flex:1 1 auto;
+    display:flex;
+}
+
+
 @include small-breakpoint {
+    .reportContainer .reportToolsAndContentContainer .reportToolbar {
+        color:$secondary-bar-fg;
+        justify-content:space-between;
+    }
     .reportContainer .reportToolsAndContentContainer .loadedContent {
         min-height: 430px;
         margin:0;
+        width:100%;
     }
 }

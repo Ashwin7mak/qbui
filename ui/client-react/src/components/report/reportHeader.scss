@@ -1,0 +1,107 @@
+@import '../../assets/css/qbVariables';
+
+.reportHeader {
+    display:flex;
+    flex-direction:row;
+    line-height:40px;
+    order:0;
+    font-size:13px;
+    flex: 0 0 auto;
+    flex-basis: $top-nav-height;
+    justify-content: space-between;
+
+    background-color: #fff !important;
+
+    a.iconLink {
+        font-size:22px;
+    }
+    a {
+        margin-right:4px;
+        &:hover {
+            text-decoration: none;
+        }
+
+    }
+    .qbIcon {
+        width:auto;
+        padding: 0 4px;
+        color: $top-nav-title-icon-color;
+    }
+
+    .left {
+        flex: 0 0 auto;
+        margin-left:5px;
+        a.toggleNavButton {
+            font-size:14px;
+        }
+    }
+    .center {
+        font-size:18px;
+        display:flex;
+        flex-direction: row;
+        align-items:center;
+        flex: 1 1 auto;
+    }
+    .center.title {
+        overflow: hidden;
+        min-width: 40px;
+
+        .qbIcon {
+            flex: 0 0 auto;
+        }
+        .reportLabel {
+            flex: 1 1 auto;
+            white-space: nowrap;
+            overflow:hidden;
+            text-overflow:ellipsis;
+        }
+    }
+    .center.searchElements {
+        font-size: 14px;
+
+        width:100%;
+        input.filterSearchBox {
+            margin-left:4px;
+            line-height:20px;
+            padding: .4rem;
+            width:100%;
+        }
+
+    }
+    .right {
+        display:flex;
+        align-items:center;
+        flex: 0 0 auto;
+    }
+
+    .searchElements {
+        display:none;
+    }
+    &.searching {
+        .left, .right {
+            display:none;
+        }
+        .center.title {
+            display:none;
+        }
+        .center.searchElements {
+            display:flex;
+            flex-direction:row;
+            .filterSearchBoxContainer {
+                flex:1 1 auto;
+                margin-right:8px;
+            }
+            a.iconLink {
+                flex:0 0 auto;
+            }
+
+        }
+    }
+}
+
+
+@include not-small-breakpoint {
+    .reportHeader {
+        display:none;
+    }
+}
