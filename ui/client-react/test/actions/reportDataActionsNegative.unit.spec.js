@@ -134,7 +134,7 @@ describe('Report Data Actions -- Filter report Negative', () => {
             () => {
                 expect(flux.dispatchBinder.dispatch.calls.argsFor(0)).toEqual([actions.LOAD_RECORDS, filterReportInputs]);
                 expect(flux.dispatchBinder.dispatch.calls.argsFor(1)).toEqual([actions.LOAD_RECORDS_FAILED,
-                                jasmine.objectContaining({error : jasmine.any(Object)})]);
+                    jasmine.objectContaining({error : jasmine.any(Object)})]);
                 done();
             }
         );

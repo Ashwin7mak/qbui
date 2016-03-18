@@ -222,7 +222,7 @@
         display:none;
     }
     .reportContainer .reportToolsAndContentContainer .reportToolbar {
-        color:$secondary-bar-fg;
+
         input {
             color: $search-input-fg;
         }
@@ -231,7 +231,7 @@
         }
         .facetMenuPopup {
             display: block;
-            left: -140px;
+            left: 4px;
             min-width: 150px;
             max-width: 200px;
         }
@@ -241,10 +241,7 @@
         }
 
         .filterSearchBoxContainer {
-            flex: 1 1 auto;
-            .filterSearchBox {
-                padding: .4rem;
-            }
+            display:none;
         }
 
         .popover.bottom > .arrow {

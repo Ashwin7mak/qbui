@@ -12,7 +12,15 @@ $footer-background: $color2;
 $footer-next-button-hover: $color10;
 $footer-next-button: $color2;
 
+
+.reportTable {
+    width:100%;
+    display:flex;
+    flex-direction:column;
+    flex:1 1 auto;
+}
 .QBGriddle {
+    flex: 1 0 auto;
     font-family: $font-family;
     color: $font-color;
     font-size: $font-size;
@@ -24,7 +32,6 @@ $footer-next-button: $color2;
     }
 
     .griddle-container { /* Temporary margin so the footer doesnt overlap the grid. Should be resolved by the layout in time. */
-        margin-bottom: 70px;
         border: 0px;
     }
 
@@ -103,11 +110,22 @@ $footer-next-button: $color2;
 }
 
 .tableActionsContainer {
+    flex: 0 0 auto;
     position: relative;
     @include small-breakpoint {
         &:not(.selectionActionsOpen) {
             background-color: $secondary-bar-bg;
         }
+    }
+}
+
+.griddleWrapper {
+    display:flex;
+    flex: 1 1 auto;
+    overflow:auto;
+
+    .loadedContent {
+        margin: 0 10px;
     }
 }
 

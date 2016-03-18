@@ -69,11 +69,11 @@ let reportDataActions = {
     },
 
     /* Action called to filter a report.
-    *
-    *  Supported filtering options include:
-    *       facet  : expression representing all the facets selected by user so far example [{fid: fid1, values: value1, value2}, {fid: fid2, values: value3, value4}, ..]
-    *       search : search string
-    */
+     *
+     *  Supported filtering options include:
+     *       facet  : expression representing all the facets selected by user so far example [{fid: fid1, values: value1, value2}, {fid: fid2, values: value3, value4}, ..]
+     *       search : search string
+     */
     filterReport(appId, tblId, rptId, format, filter) {
 
         //  promise is returned in support of unit testing only

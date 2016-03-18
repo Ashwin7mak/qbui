@@ -73,7 +73,7 @@
                     // Verify hamburger toggle displayed in topNav and no text associated for that icon.
                     reportServicePage.waitForElement(reportServicePage.topNavDivEl).then(function() {
                         // Verify hamburger toggle is displayed in topNav
-                        reportServicePage.isElementDisplayed(reportServicePage.topNavToggleHamburgerEl);
+                        reportServicePage.assertElementDisplayed(reportServicePage.topNavToggleHamburgerEl);
                         // Verify no text displayed beside hamburger link in topNav
                         expect(reportServicePage.topNavToggleHamburgerEl.getText()).toBeFalsy();
                     });
@@ -89,7 +89,7 @@
                             expect(buttons.length).toBe(2);
                             for (var i = 0; i < buttons.length; i++) {
                                 // Verify Harmony Icons displayed in topNav
-                                reportServicePage.isElementDisplayed(buttons[i]);
+                                reportServicePage.assertElementDisplayed(buttons[i]);
                                 // Verify no text displayed beside Harmony Icons in topNav
                                 expect(buttons[i].getText()).toBeFalsy();
                             }
@@ -117,7 +117,7 @@
                             if (testcase.browserWidth === e2eConsts.SMALL_BP_WIDTH) {
                                 // Assert actions have moved to leftNav
                                 reportServicePage.assertGlobalActsDisplayedInLeftNav();
-                                expect(reportServicePage.getGlobalNavTextEl(reportServicePage.leftNavUserGlobActEl).getText()).toBe('User');
+                                expect(reportServicePage.getGlobalNavTextEl(reportServicePage.leftNavUserGlobActLabelEl).getText()).toBe('User');
                                 expect(reportServicePage.getGlobalNavTextEl(reportServicePage.leftNavHelpGlobActEl).getText()).toBe('Help');
                                 // Verify global action icons are not displayed in topNav
                                 reportServicePage.assertGlobalActsNotDisplayedInTopNav();
@@ -126,6 +126,9 @@
                     });
                 });
             });
+
+            //TODO: Add test for loaded report on small size
+
         });
 
         /**

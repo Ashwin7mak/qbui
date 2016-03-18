@@ -14,7 +14,7 @@ var RecordRoute = React.createClass({
     componentDidMount: function() {
 
         let flux = this.getFlux();
-        flux.actions.setTopTitle();
+        flux.actions.showTopNav();
 
         //this.loadRecordFromParams(this.props.params);
     },

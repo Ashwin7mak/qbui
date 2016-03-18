@@ -2,7 +2,7 @@ import React from 'react';
 import ReactIntl from 'react-intl';
 import {I18nMessage, I18nDate} from '../../utils/i18nMessage';
 import Locale from '../../locales/locales';
-import GlobalActions from '../global/globalActions';
+import GlobalActions from '../actions/globalActions';
 import Fluxxor from 'fluxxor';
 import QBicon from '../qbIcon/qbIcon';
 let FluxMixin = Fluxxor.FluxMixin(React);
@@ -30,8 +30,9 @@ var TopNav = React.createClass({
 
         let eventKeyIdx = 20;
 
+        const classes = "topNav" + (this.props.showOnSmall ? "" : " hideSmall");
         return (
-            <div className={'topNav'}>
+            <div className={classes}>
                 <div className="top">
                     <div className="navGroup left">
                         <div className="navItem ">
@@ -64,7 +65,7 @@ var TopNav = React.createClass({
                     </div>
 
                     <div className="navGroup right">
-                        {this.props.globalActions && <GlobalActions actions={this.props.globalActions} position={"top"}/>}
+                        {this.props.globalActions}
                     </div>
                 </div>
             </div>

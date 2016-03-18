@@ -11,7 +11,7 @@
 
     var e2ePageBase = require('./../../common/e2ePageBase');
     var SHOW_POPUP_LIST_LIMIT = 5;
-    var facetItemsSelected = [];
+
     var ReportServicePage = function() {
         // Page Elements using Locators
         // Left Nav
@@ -43,12 +43,16 @@
         this.leftNavGlobActsDivEl = this.navMenuEl.element(by.className('globalActions'));
         this.leftNavGlobActsUlEl = this.leftNavGlobActsDivEl.element(by.className('globalActionsList'));
         this.leftNavGlobActsListEl = this.leftNavGlobActsUlEl.all(by.className('link'));
-        this.leftNavUserGlobActEl = this.leftNavGlobActsListEl.get(0);
-        this.leftNavHelpGlobActEl = this.leftNavGlobActsListEl.get(1);
-        this.leftNavElipsesGlobActEl = this.leftNavGlobActsListEl.get(2);
+        this.leftNavHelpGlobActEl = this.leftNavGlobActsListEl.get(0);
+        this.leftNavUserGlobActEl = this.leftNavGlobActsListEl.get(1);
+        this.leftNavUserGlobActLabelEl = this.leftNavUserGlobActEl.element(by.className('navLabel'));
 
         // Top Nav
         this.topNavDivEl = element(by.className('topNav'));
+        // Top Nav on small breakpoint
+        this.reportHeaderEl = element(by.className('reportHeader'));
+        this.reportHeaderLeftEl = this.reportHeaderEl.element(by.className('left'));
+        this.reportHeaderToggleHamburgerEl = this.reportHeaderLeftEl.element(by.className('iconLink'));
         // Left div (containing leftNav toggle hamburger)
         this.topNavToggleHamburgerEl = this.topNavDivEl.element(by.className('iconLink'));
         this.topNavLeftDivEl = this.topNavDivEl.element(by.className('left'));
@@ -75,7 +79,7 @@
         //report tools and content container
         this.reportToolsAndContentEl = this.reportContainerEl.element(by.className('reportToolsAndContentContainer'));
         // Loaded Content Div
-        this.loadedContentEl = this.reportToolsAndContentEl.element(by.className('loadedContent'));
+        this.loadedContentEl = this.reportToolsAndContentEl.all(by.className('loadedContent')).first();
         // report table
         this.reportTable = this.loadedContentEl.element(by.className('reportTable'));
         // Table actions container
@@ -97,14 +101,143 @@
         //report facet filter carat button
         this.reportFilterBtnCaret = this.reportFacetBtns.element(by.className('filterButtonCaret'));
 
-        //facet menu popup
-        this.reportFacetPopUpMenu = this.reportFacetMenuContainer.element(by.className('facetMenuPopup'));
-        //panel
-        this.facetPopUpContainerPanels = this.reportFacetPopUpMenu.all(by.className('panel'));
-        //panel heading which is facet group
-        this.PopUpContainerFacetGroup = this.facetPopUpContainerPanels.all(by.tagName('a'));
-        //clear facet button in popup
-        this.PopUpContainerClearFacet = this.PopUpContainerFacetGroup.all(by.className('clearFacet'));
+        // Facet Menu Popup
+        this.reportFacetPopUpMenu = element(by.className('facetMenuPopup'));
+        // Unselected Facet Groups
+        this.unselectedFacetGroupsElList = this.reportFacetPopUpMenu.all(by.className('panel'));
+        // Selected Facet Groups
+        this.selectedFacetGroupsElList = this.reportFacetPopUpMenu.all(by.className('selections'));
+
+        /*
+         * Function will return you the facet group element by name
+         */
+        this.getFacetGroupElement = function(facetGroupName) {
+            var self = this;
+            return e2ePageBase.waitForElementToBeClickable(this.reportFacetPopUpMenu).then(function() {
+                // First look through unselected facet groups
+                return self.unselectedFacetGroupsElList.filter(function(elem) {
+                    // Return the element or elements
+                    return elem.element(by.className('panel-heading')).getText().then(function(text) {
+                        //Strip off any Text Field\nElo
+                        // Match the text
+                        return text.indexOf(facetGroupName) > -1;
+                    });
+                }).then(function(filteredElements) {
+                    // If we didn't find it look through the selected groups
+                    if (filteredElements.length === 0) {
+                        return self.selectedFacetGroupsElList.filter(function(elem) {
+                            // Return the element or elements
+                            return elem.element(by.className('panel-heading')).getText().then(function(text) {
+                                // Match the text
+                                return text.indexOf(facetGroupName) > -1;
+                            });
+                        }).then(function(filteredElements2) {
+                            //TODO: Handle facets with the same name (if this will happen)
+                            return filteredElements2[0];
+                        });
+                    }
+                    return filteredElements[0];
+                });
+            });
+        };
+
+        /*
+         * Function will click on the facet group element and assert that the group expands
+         */
+        this.clickFacetGroupElement = function(facetGroupName) {
+            var self = this;
+            return self.getFacetGroupElement(facetGroupName).then(function(facetGroupElement) {
+                return e2ePageBase.waitForElementToBeClickable(facetGroupElement).then(function() {
+                    //TODO Only click if it's collapsed
+                    return facetGroupElement.click().then(function() {
+                        return e2eBase.sleep(3000).then(function() {
+                            return facetGroupElement;
+                        });
+                    });
+                });
+            });
+        };
+
+        this.selectFacets = function(facetGroupElement, facetIndexes) {
+            var self = this;
+
+            facetIndexes.forEach(function(facetIndex) {
+                // First check to see click on more options link if items to select is greater than 5
+                if (facetIndex >= SHOW_POPUP_LIST_LIMIT) {
+                    // Click on more options link
+                    facetGroupElement.element(by.className('listMore')).click().then(function() {
+                        e2eBase.sleep(browser.params.mediumSleep);
+                    });
+                }
+                // Select the facet Items
+                self.getAvailableFacetGroupSelections(facetGroupElement).then(function(buttons) {
+                    for (var i = 0; i < buttons.length; i++) {
+                        //Click the facet item that matches the test argument value
+                        if (i === facetIndex) {
+                            var buttonEl = buttons[i];
+                            // If the facet is not already selected then click
+                            buttonEl.element(by.className('checkMark-selected')).isPresent().then(function(present) {
+                                if (!present) {
+                                    //click the item
+                                    buttonEl.click().then(function() {
+                                        e2eBase.sleep(browser.params.mediumSleep);
+                                    });
+                                }
+                            });
+                        }
+                    }
+                });
+            });
+        };
+
+        /**
+         * Function that will open the facet group (facetName) and select the facet Items and verify the checkmark and finally verify facet tokens in container.
+         * @param facetName
+         * @param facetItems is an array
+         */
+        this.selectGroupAndFacetItems = function(facetGroupName, facetIndexes) {
+            var facetItemsSelected = [];
+
+            var self = this;
+            // Expand the Facet group
+            this.clickFacetGroupElement(facetGroupName).then(function(facetGroupElement) {
+                // Select the facet Items
+                self.selectFacets(facetGroupElement, facetIndexes);
+            });
+
+            // get all Selected items from popup and push into an array for verification
+            return element.all(by.className('selected')).map(function(selectedGroupItem, index) {
+                return selectedGroupItem.getText().then(function(selectedItemText) {
+                    facetItemsSelected.push(selectedItemText);
+                });
+            });
+        };
+
+        /*
+         * Function will get you the facet header for a facet group element
+         */
+        this.getFacetGroupTitle = function(facetGroupElement) {
+            return facetGroupElement.element(by.className('panel-title'));
+        };
+
+        /*
+         * Function will get you all the facet selections (buttons) for a facet group element
+         */
+        this.getAvailableFacetGroupSelections = function(facetGroupElement) {
+            return facetGroupElement.all(by.tagName('button'));
+        };
+
+        /*
+         * Function will click the clear all facets icon for a facet group element
+         */
+        this.clickClearAllFacetsIcon = function(facetGroupElement) {
+            return this.getFacetGroupTitle(facetGroupElement).element(by.className('clearFacet')).click();
+        };
+
+        ////panel heading which is facet group
+        //this.PopUpContainerFacetGroup = this.facetPopUpContainerPanels.all(by.tagName('a'));
+        ////clear facet button in popup
+        //this.PopUpContainerClearFacet = this.PopUpContainerFacetGroup.all(by.className('clearFacet'));
 
         //selected Facets
         this.reportSelectedFacets = this.reportFacetMenuContainer.element(by.className('selectedFacets'));
@@ -117,12 +250,12 @@
         //facet clear token selections
         this.reportFacetClearTokenSelections = this.reportFacetNameSelections.all(by.className('clearFacet'));
 
-
         // Loaded Content Div
-        this.loadedContentEl = this.reportContainerEl.element(by.className('loadedContent'));
+        this.loadedContentEl = this.reportContainerEl.all(by.className('loadedContent')).first();
         // Table actions container
         this.tableActionsContainerEl = this.loadedContentEl.element(by.className('tableActionsContainer'));
         // Griddle table
+        this.griddleWrapperEl = this.loadedContentEl.element(by.className('griddleWrapper'));
         this.griddleContainerEl = element.all(by.className('griddle-container')).first();
         this.griddleBodyEl = element(by.className('griddle-body'));
         this.griddleTableHeaderEl = this.griddleBodyEl.all(by.tagName('thead'));
@@ -187,66 +320,6 @@
                 }).then(function(reportLinkElements) {
                     return reportLinkElements[0].click();
                 });
-            });
-        };
-
-        /**
-         * Function that will open the facet group and select the facet Items and verify the checkmark and finally verify facet tokens in container.
-         * @param facetName
-         * @param facetItems is an array
-         */
-        this.selectGroupAndFacetItems = function(facetName, facetItems) {
-            // Expand the Facet group
-            var groups = this.PopUpContainerFacetGroup.map(function(groupName, index) {
-                return groupName.getText().then(function(groupText) {
-                    if (groupText === facetName) {
-                        groupName.getAttribute('class').then(function(txt) {
-                            if (txt === 'collapsed') {
-                                groupName.click().then(function() {
-                                    expect(groupName.getAttribute('class'), '', "Facet Group is not expanded");
-                                });
-                            }
-                        });
-                    }
-                });
-                // Select the facet Items
-            }).then(function() {
-                //sleep to expand a group for animation to complete
-                e2eBase.sleep(browser.params.smallSleep);
-                //click on more options link if items to select is greater than 5
-                facetItems.forEach(function(facetItem) {
-                    if (facetItem >= SHOW_POPUP_LIST_LIMIT) {
-                        element.all(by.className('listMore')).click(); //click on more options link
-                        e2eBase.sleep(browser.params.mediumSleep);
-                    }
-                });
-                // Select the facet Items
-                var locations = element.all(by.className('list-group-item'));
-                return locations.map(function(groupItem, index) {
-                    return {
-                        index: index,
-                        itemText: groupItem.getText()
-                    };
-                }).then(function(items) {
-                    items.forEach(function(item) {
-                        facetItems.forEach(function(facetItem) {
-                            //Click the facet item that matches the test argument value
-                            if (item.index === facetItem) {
-                                //click the item
-                                locations.get(item.index).click();
-                                e2eBase.sleep(browser.params.mediumSleep);
-                            }
-                        });
-                    });
-                });
-            }).then(function() {
-                //get all Selected items from popup and push into an array
-                element.all(by.className('selected')).map(function(selectedGroupItem, index) {
-                    return selectedGroupItem.getText().then(function(selectedItemText) {
-                        facetItemsSelected.push(selectedItemText);
-                    });
-                });
-                return facetItemsSelected;
             });
         };
 
@@ -326,6 +399,7 @@
          * Assertion function that will test the properties of the leftNav
          */
         this.assertNavProperties = function(breakpointSize, open, clientWidth) {
+            e2eBase.sleep(browser.params.smallSleep);
             // Check properties of nav bar
             if (open) {
                 expect(this.navMenuEl.getAttribute('class')).toMatch('open');

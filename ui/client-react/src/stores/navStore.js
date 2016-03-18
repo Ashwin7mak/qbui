@@ -13,6 +13,7 @@ let NavStore = Fluxxor.createStore({
             leftNavOpen: true,
             appsListOpen: false,
             searchBarOpen: false,
+            showTopNav: true,
             searching:false,
             trowserOpen: false,
             topTitle: {label:"", icon:null}
@@ -27,26 +28,15 @@ let NavStore = Fluxxor.createStore({
             actions.TOGGLE_APPS_LIST, this.onToggleAppsList,
             actions.TOGGLE_SEARCH, this.onToggleSearch,
             actions.SEARCHING, this.onSearching,
-            actions.SET_TOP_TITLE, this.onSetTopTitle,
             actions.CHANGE_LOCALE, this.onChangeLocale,
-
-            actions.LOAD_REPORT_SUCCESS, this.onLoadReportSuccess
+            actions.SHOW_TOP_NAV, this.onShowTopNav,
+            actions.HIDE_TOP_NAV, this.onHideTopNav
         );
     },
 
     onChangeLocale: function() {
         logger.debug('changing locale: ' + Locale.getLocale());
         this.setLocaleBundle();
-        this.emit('change');
-    },
-
-    /* bind to load report success to update top title */
-    onLoadReportSuccess: function(reportData) {
-        this.state.topTitle = {name: reportData.name, icon: 'report-menu-3'};
-        this.emit('change');
-    },
-    onSetTopTitle: function(title) {
-        this.state.topTitle = title;
         this.emit('change');
     },
     onShowTrowser: function() {
@@ -57,7 +47,14 @@ let NavStore = Fluxxor.createStore({
         this.state.trowserOpen = false;
         this.emit('change');
     },
-
+    onShowTopNav: function() {
+        this.state.showTopNav = true;
+        this.emit('change');
+    },
+    onHideTopNav: function() {
+        this.state.showTopNav = false;
+        this.emit('change');
+    },
     onToggleSearch: function() {
         this.state.searchBarOpen = !this.state.searchBarOpen;
         this.emit('change');

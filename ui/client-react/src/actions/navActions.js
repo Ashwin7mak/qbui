@@ -25,12 +25,11 @@ let navActions = {
     setSearching(searching) {
         this.dispatch(actions.SEARCHING, searching);
     },
-    /**
-     * set a top nav tile
-     * @param title a react node (or null to omit one)
-     */
-    setTopTitle(title = null) {
-        this.dispatch(actions.SET_TOP_TITLE, title);
+    showTopNav() {
+        this.dispatch(actions.SHOW_TOP_NAV);
+    },
+    hideTopNav() {
+        this.dispatch(actions.HIDE_TOP_NAV);
     },
     changeLocale(locale) {
         Locale.changeLocale(locale);
