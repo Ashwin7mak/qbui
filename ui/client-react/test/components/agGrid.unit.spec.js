@@ -25,6 +25,8 @@ var I18nMessageMock = React.createClass({
     }
 });
 
+let flux = {};
+
 const fakeReportData_loading = {
     loading: true
 };
@@ -98,19 +100,19 @@ describe('AGGrid functions', () => {
     });
 
     it('test render of component', () => {
-        component = TestUtils.renderIntoDocument(<AGGrid actions={TableActionsMock} reportData={fakeReportData_empty.data.records} columns={fakeReportData_empty.data.columns}/>);
+        component = TestUtils.renderIntoDocument(<AGGrid actions={TableActionsMock} reportData={fakeReportData_empty.data.records} columns={fakeReportData_empty.data.columns} flux={flux}/>);
         expect(TestUtils.isCompositeComponent(component)).toBeTruthy();
     });
 
 
     it('test render of loader', () => {
-        component = TestUtils.renderIntoDocument(<AGGrid actions={TableActionsMock}   reportData={fakeReportData_loading}/>);
+        component = TestUtils.renderIntoDocument(<AGGrid actions={TableActionsMock}   reportData={fakeReportData_loading} flux={flux}/>);
         expect(TestUtils.scryRenderedComponentsWithType(component, Loader).length).toEqual(1);
         expect(TestUtils.scryRenderedComponentsWithType(component, AGGridReact).length).toEqual(0);
     });
 
     it('test render with empty data', () => {
-        component = TestUtils.renderIntoDocument(<AGGrid columns={fakeReportData_empty.data.columns} reportData={fakeReportData_empty.data.records}/>);
+        component = TestUtils.renderIntoDocument(<AGGrid columns={fakeReportData_empty.data.columns} reportData={fakeReportData_empty.data.records} flux={flux}/>);
         expect(TestUtils.scryRenderedComponentsWithType(component, AGGridReact).length).toEqual(0);
         expect(ReactDOM.findDOMNode(component).textContent).toMatch("I18Mock");
     });
@@ -121,7 +123,7 @@ describe('AGGrid functions', () => {
                 return {reportData: fakeReportData_before.data.reportData, columns: fakeReportData_before.data.columns};
             },
             render() {
-                return <AGGrid ref="refGriddle" reportData={this.state.reportData} columns={this.state.columns}/>;
+                return <AGGrid ref="refGriddle" reportData={this.state.reportData} columns={this.state.columns} flux={flux}/>;
             }
         }));
 

@@ -32,6 +32,8 @@ const fakeReportData_valid = {
     }
 };
 
+let flux = {};
+
 describe('Report Mobile View functions', () => {
     'use strict';
 
@@ -60,7 +62,7 @@ describe('Report Mobile View functions', () => {
                 };
             },
             render() {
-                return <CardView ref="refCardView" data={fakeReportData_empty.data.results} metadataColumns={fakeReportData_empty.data.columnMetadata}/>;
+                return <CardView ref="refCardView" data={fakeReportData_empty.data.results} metadataColumns={fakeReportData_empty.data.columnMetadata} flux={flux}/>;
             }
         }));
         var parent = TestUtils.renderIntoDocument(TestParent());
@@ -88,7 +90,7 @@ describe('Report Mobile View functions', () => {
                 };
             },
             render() {
-                return <CardView ref="refCardView" data={fakeReportData_valid.data.results} metadataColumns={fakeReportData_valid.data.columnMetadata}/>;
+                return <CardView ref="refCardView" data={fakeReportData_valid.data.results} metadataColumns={fakeReportData_valid.data.columnMetadata} flux={flux}/>;
             }
         }));
         var parent = TestUtils.renderIntoDocument(TestParent());
@@ -116,7 +118,7 @@ describe('Report Mobile View functions', () => {
                 };
             },
             render() {
-                return <CardView ref="refCardView" data={fakeReportData_valid.data.results} metadataColumns={fakeReportData_valid.data.columnMetadata}/>;
+                return <CardView ref="refCardView" data={fakeReportData_valid.data.results} metadataColumns={fakeReportData_valid.data.columnMetadata} flux={flux}/>;
             }
         }));
         var parent = TestUtils.renderIntoDocument(TestParent());
@@ -141,7 +143,7 @@ describe('Report Mobile View functions', () => {
                 };
             },
             render() {
-                return <CardView ref="refCardView" data={fakeReportData_valid.data.results} metadataColumns={fakeReportData_valid.data.columnMetadata}/>;
+                return <CardView ref="refCardView" data={fakeReportData_valid.data.results} metadataColumns={fakeReportData_valid.data.columnMetadata} flux={flux}/>;
             }
         }));
         var parent = TestUtils.renderIntoDocument(TestParent());
@@ -174,7 +176,7 @@ describe('Report Mobile View functions', () => {
                 };
             },
             render() {
-                return <CardView ref="refCardView" data={fakeReportData_valid.data.results} metadataColumns={fakeReportData_valid.data.columnMetadata}/>;
+                return <CardView ref="refCardView" data={fakeReportData_valid.data.results} metadataColumns={fakeReportData_valid.data.columnMetadata} flux={flux}/>;
             }
         }));
         var parent = TestUtils.renderIntoDocument(TestParent());
