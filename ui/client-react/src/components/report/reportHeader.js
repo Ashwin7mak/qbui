@@ -11,6 +11,7 @@ let FluxMixin = Fluxxor.FluxMixin(React);
 
 /**
  * A header that takes the place of the top nav when viewing a report
+ * (visible on small breakpoint currently)
  */
 var ReportHeader = React.createClass({
     mixins: [FluxMixin],
