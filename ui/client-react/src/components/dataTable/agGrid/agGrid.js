@@ -4,20 +4,32 @@ import {reactCellRendererFactory} from 'ag-grid-react';
 import {I18nMessage} from '../../../utils/i18nMessage';
 import ReactCSSTransitionGroup from 'react/lib/ReactCSSTransitionGroup';
 import ReportActions from '../../actions/reportActions';
+import RecordActions from '../../actions/recordActions';
 import LimitConstants from '../../../../../common/src/limitConstants';
 import _ from 'lodash';
 import Loader  from 'react-loader';
+import Fluxxor from 'fluxxor';
+let FluxMixin = Fluxxor.FluxMixin(React);
+
 import '../../../../../node_modules/ag-grid/dist/styles/ag-grid.css';
 import './agGrid.scss';
 
+let ActionsColumn = React.createClass({
+    render() {
+        return (<div><RecordActions {...this.props}/></div>);
+    }
+});
 
 let AGGrid = React.createClass({
-
+    mixins: [FluxMixin],
     contextTypes:{
         touch: React.PropTypes.bool,
-        history: React.PropTypes.object
+        history: React.PropTypes.object,
+        flux: React.PropTypes.object
     },
-
+    gridOptions: {
+        context :{}
+    },
     getInitialState() {
         return {
             selectedRows: [],
@@ -30,6 +42,9 @@ let AGGrid = React.createClass({
         this.api = params.api;
         this.columnApi = params.columnApi;
         //this.autoSizeAllColumns();
+    },
+    componentDidMount() {
+        this.gridOptions.context.flux = this.getFlux();
     },
 
     shouldComponentUpdate(nextProps, nextState) {
@@ -142,7 +157,7 @@ let AGGrid = React.createClass({
     },
 
     updateAllCheckbox() {
-        if (this.props.rowData.length === this.state.selectedRows.length) {
+        if (this.props.reportData.data.filteredRecords.length === this.state.selectedRows.length) {
             document.getElementsByClassName("SelectAllCheckbox")[0].checked = true;
         } else {
             document.getElementsByClassName("SelectAllCheckbox")[0].checked = false;
@@ -162,7 +177,7 @@ let AGGrid = React.createClass({
             this.selectAll();
             //push all ids to selectedRows
             let rowIds = [];
-            this.props.rowData.forEach((row)=>{
+            this.props.reportData.data.filteredRecords.forEach((row)=>{
                 rowIds.push(row[this.props.uniqueIdentifier]);
             });
             this.setState({selectedRows: rowIds});
@@ -233,6 +248,17 @@ let AGGrid = React.createClass({
         checkBoxCol.checkboxSelection = true;
         checkBoxCol.width = 30;
         columns.unshift(checkBoxCol);
+
+        if (columns.length > 0) {
+            columns.push({
+                headerName: "Actions", //for ag-grid
+                field: "actions",      //for ag-grid
+                columnName: "actions", //for griddle
+                cellRenderer: reactCellRendererFactory(ActionsColumn),
+                cellClass: "actions",
+                width: 1
+            });
+        }
         return columns;
     },
 

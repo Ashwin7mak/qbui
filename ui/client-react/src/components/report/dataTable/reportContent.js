@@ -4,18 +4,10 @@ import GriddleTable  from '../../../components/dataTable/griddleTable/griddleTab
 import AGGrid  from '../../../components/dataTable/agGrid/agGrid.js';
 import {reactCellRendererFactory} from 'ag-grid-react';
 import {DateFormatter, NumericFormatter}  from '../../../components/dataTable/griddleTable/formatters.js';
+
 import ReportActions from '../../actions/reportActions';
-import RecordActions from '../../actions/recordActions';
+
 const resultsPerPage = 1000; //assume that this is the constant number of records per page. This can be passed in as a prop for diff reports
-
-let ActionsColumn = React.createClass({
-
-    render() {
-        let data = this.props.rowData;
-
-        return (<div><RecordActions /></div>);
-    }
-});
 
 let ReportContent = React.createClass({
 
@@ -54,6 +46,7 @@ let ReportContent = React.createClass({
             obj.cssClassName += " " + classname;
         }
     },
+
     /* for each field attribute that has some presentation effect convert that to a css class before passing to griddle.*/
     getColumnProps: function(columns) {
         if (!columns) {
@@ -106,18 +99,6 @@ let ReportContent = React.createClass({
                 obj.minWidth = 100;
                 return obj;
             });
-
-
-            if (columnsData.length > 0) {
-                columnsData.push({
-                    headerName: "Actions", //for ag-grid
-                    field: "actions",      //for ag-grid
-                    columnName: "actions", //for griddle
-                    cellRenderer: reactCellRendererFactory(ActionsColumn),
-                    cellClass: "actions",
-                    width: 1
-                });
-            }
 
             return columnsData;
         }
