@@ -85,7 +85,7 @@
              */
             assertRecordValues: function(actualRecords, expectedRecords) {
                 // Check that we have the same number of records to compare
-                assert.equal(actualRecords.length, expectedRecords.length, 'actual and expected record length is equal');
+                expect(actualRecords.length).toEqual(expectedRecords.length, 'actual and expected record length is equal');
                 // Gather the record values
                 var actualRecordList = [];
                 // Each row of the repeater (one record) is returned as a string of values.
@@ -116,10 +116,10 @@
                             // ' with actual field value: ' + actualRecord[j]);
                             if (recordService.isNumeric(expectedRecord[j].value)) {
                                 expect(Number(expectedRecord[j].value)).toEqual(Number(actualRecord[j]), 'Ensure number values are equivalent not including precision');
-                                //TODO: QBSE-15108: Fix test expected value for precision adhering to defaiult display DECIMAL_PLACES option
+                                //TODO: QBSE-15108: Fix test expected value for precision adhering to default display DECIMAL_PLACES option
                                 //expect(expectedRecord[j].value).toEqual(actualRecord[j], '1. Ensure number values are equivalent including precision');
                             } else {
-                                expect(expectedRecord[j].value).toEqual(actualRecord[j]);
+                                expect(actualRecord[j]).toEqual(expectedRecord[j].value);
                             }
                         }
                     }
