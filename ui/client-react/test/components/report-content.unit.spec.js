@@ -176,7 +176,7 @@ describe('ReportContent functions', () => {
         var agGrid = TestUtils.scryRenderedComponentsWithType(component, AGGridMock);
         expect(agGrid.length).toEqual(1);
         agGrid = agGrid[0];
-        expect(agGrid.props.reportData.data.filteredRecords.length).toEqual(fakeReportData_simple.data.filteredRecords.length);
+        expect(agGrid.props.records.length).toEqual(fakeReportData_simple.data.filteredRecords.length);
         expect(_.intersection(agGrid.props.columns, fakeReportData_simple.data.columns).length).toEqual(fakeReportData_simple.data.columns.length);
     });
 

@@ -13,18 +13,8 @@ let ReportContent = React.createClass({
 
     getInitialState: function() {
         return {
-            showSelectionColumn: false,
-            reportColumns: this.props.reportData && this.props.reportData.data && this.props.reportData.data.columns ? this.getColumnProps(this.props.reportData.data.columns) : []
+            showSelectionColumn: false
         };
-    },
-
-    componentWillReceiveProps: function(nextProps) {
-
-        if (nextProps.reportData.data && this.props.reportData.data.columns !== nextProps.reportData.data.columns) {
-            this.setState({
-                reportColumns: nextProps.reportData.data.columns ? this.getColumnProps(nextProps.reportData.data.columns) : []
-            });
-        }
     },
 
     setCSSClass_helper: function(obj, classname) {
@@ -113,10 +103,12 @@ let ReportContent = React.createClass({
                     <div>Error loading report!</div> :
                     <div className="reportContent">
                         {!isTouch ?
-                            <AGGrid reportData={this.props.reportData}
+                            <AGGrid loading={this.props.reportData.loading}
+                                    records={this.props.reportData.data ? this.props.reportData.data.filteredRecords : []}
                                     columns={columnsDef}
                                     uniqueIdentifier="Record ID#"
-                                    resultsPerPage={resultsPerPage}
+                                    appId={this.props.reportData.appId}
+                                    tblId={this.props.reportData.tblId}
                                     reportHeader={this.props.reportHeader}
                                     selectionActions={<ReportActions />}
                             ></AGGrid> :
