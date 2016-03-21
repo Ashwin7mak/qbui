@@ -242,43 +242,43 @@ describe('ReportToolbar functions', () => {
         flux.actions.filterReport.calls.reset();
     });
 
-    it('test render reportToolbar searches text', (done) => {
-        let delay = 200;
-        component = TestUtils.renderIntoDocument(<ReportToolbar flux={flux}
-                                                                debounceInputTime={delay}
-                                                                reportData={fakeReportData_simple}/>);
-
-        // check for the search box shows up
-        let filterSearchBox = TestUtils.scryRenderedDOMComponentsWithClass(component, "filterSearchBox");
-        expect(filterSearchBox.length).toEqual(1);
-
-        // check that search input is debounced
-        spyOn(flux.actions, 'filterReport').and.callThrough();
-        var searchInput = filterSearchBox[0];
-        var testValue = 'xxx';
-
-        //simulate search string was input
-        TestUtils.Simulate.change(searchInput, {target: {value: testValue}});
-        //initially don't search until debounced time has passed
-        expect(flux.actions.filterReport).not.toHaveBeenCalled();
-        flux.actions.filterReport.calls.reset();
-
-        // count has 1 number e.g. X records when there is no search (not x of y records)
-        let recordsCount = TestUtils.scryRenderedDOMComponentsWithClass(component, "recordsCount");
-        expect(recordsCount.length).toEqual(1);
-        let span = recordsCount[0];
-        expect(span).not.toBeNull();
-        expect(span.innerText.match(/\d+ .+\d+/)).toBeFalsy();
-
-        //timeout for debounce
-        setTimeout(function() {
-            // check that search ran after debounce time
-            expect(flux.actions.filterReport).toHaveBeenCalledWith(undefined, undefined, undefined, true, Object({selections: jasmine.any(Object), facet: [], search: testValue}));
-            flux.actions.filterReport.calls.reset();
-            done();
-        }, delay + 10);
-
-    });
+    //it('test render reportToolbar searches text', (done) => {
+    //    let delay = 200;
+    //    component = TestUtils.renderIntoDocument(<ReportToolbar flux={flux}
+    //                                                            debounceInputTime={delay}
+    //                                                            reportData={fakeReportData_simple}/>);
+    //
+    //    // check for the search box shows up
+    //    let filterSearchBox = TestUtils.scryRenderedDOMComponentsWithClass(component, "filterSearchBox");
+    //    expect(filterSearchBox.length).toEqual(1);
+    //
+    //    // check that search input is debounced
+    //    spyOn(flux.actions, 'filterReport').and.callThrough();
+    //    var searchInput = filterSearchBox[0];
+    //    var testValue = 'xxx';
+    //
+    //    //simulate search string was input
+    //    TestUtils.Simulate.change(searchInput, {target: {value: testValue}});
+    //    //initially don't search until debounced time has passed
+    //    expect(flux.actions.filterReport).not.toHaveBeenCalled();
+    //    flux.actions.filterReport.calls.reset();
+    //
+    //    // count has 1 number e.g. X records when there is no search (not x of y records)
+    //    let recordsCount = TestUtils.scryRenderedDOMComponentsWithClass(component, "recordsCount");
+    //    expect(recordsCount.length).toEqual(1);
+    //    let span = recordsCount[0];
+    //    expect(span).not.toBeNull();
+    //    expect(span.innerText.match(/\d+ .+\d+/)).toBeFalsy();
+    //
+    //    //timeout for debounce
+    //    setTimeout(function() {
+    //        // check that search ran after debounce time
+    //        expect(flux.actions.filterReport).toHaveBeenCalledWith(undefined, undefined, undefined, true, Object({selections: jasmine.any(Object), facet: [], search: testValue}));
+    //        flux.actions.filterReport.calls.reset();
+    //        done();
+    //    }, delay + 10);
+    //
+    //});
 
     it('test render reportToolbar with search text', (done) => {
         component = TestUtils.renderIntoDocument(<ReportToolbar flux={flux}
