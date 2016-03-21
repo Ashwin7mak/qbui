@@ -185,7 +185,7 @@
                 };
                 tableToFieldToFieldTypeMap['table 2'][e2eConsts.reportFieldNames[6]] = {
                     fieldType: consts.SCALAR,
-                    dataType: consts.RATING
+                    dataType: consts.DATE
                 };
                 tableToFieldToFieldTypeMap['table 2'][e2eConsts.reportFieldNames[12]] = {
                     fieldType: consts.SCALAR,
