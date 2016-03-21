@@ -253,13 +253,27 @@ var ReportToolbar = React.createClass({
         }
 
         this.appendBlanks();
+        let isLoading = false;
+        let filteredRecordCount = null;
+        let recordCount = null;
+        let hasFacets = false;
 
-        let recordCount = this.props.reportData && this.props.reportData.data && this.props.reportData.data.records ?
-                                this.props.reportData.data.records.length : null;
-
-        let filteredRecordCount  = this.props.reportData && this.props.reportData.data &&
-        this.props.reportData.data.filteredRecords ?
-            this.props.reportData.data.filteredRecords.length : null;
+        if (this.props.reportData) {
+            if (this.props.reportData.loading) {
+                isLoading = this.props.reportData.loading;
+            }
+            if (this.props.reportData.data) {
+                if (this.props.reportData.data.filteredRecords) {
+                    filteredRecordCount =  this.props.reportData.data.filteredRecords.length;
+                }
+                if (this.props.reportData.data.records) {
+                    recordCount =  this.props.reportData.data.records.length;
+                }
+                if (this.props.reportData.data.facets && (this.props.reportData.data.facets.length > 0)) {
+                    hasFacets =  this.props.reportData.data.facets[0].values;
+                }
+            }
+        }
 
         // determine if there is a search/filter in effect and if there are records/results to show
         let hasRecords = true;
@@ -268,51 +282,50 @@ var ReportToolbar = React.createClass({
         } else {
             hasRecords = recordCount ? true : false;
         }
-
-        let hasFacets = this.props.reportData && this.props.reportData.data &&
-            this.props.reportData.data.facets && (this.props.reportData.data.facets.length > 0) &&
-            this.props.reportData.data.facets[0].values;
-
         let hasSelectedFacets = this.props.selections && this.props.selections.hasAnySelections();
 
         let reportToolbar = (
             <div className={"reportToolbar " + (hasFacets ? "" : "noFacets")}>
-                <RecordsCount recordCount={recordCount}
-                              isFiltered={this.isFiltered() && !this.props.loading}
-                              filteredRecordCount={filteredRecordCount}
-                              nameForRecords="Records"
-                    {...this.props} />
 
-                {(this.isFiltered() || this.state.searchInput.length !== 0) &&
-                (<span onClick={this.handleFacetClearAllSelectsAndSearch}>
-                                        <QBicon className="clearAllFacets" icon="clear-mini"/>
-                    </span>)
-                }
+                    <div className="leftReportToolbar">
+                    <RecordsCount recordCount={recordCount}
+                                   isFiltered={this.isFiltered() && !this.props.reportData.loading}
+                                   isLoading={isLoading}
+                                   filteredRecordCount={filteredRecordCount}
+                                   nameForRecords="Records"
+                        {...this.props} />
 
-                {/* Search and grouping icon will go in the toolbar here per discussion with xd-ers */
-                }
+                        {(this.isFiltered() || this.state.searchInput.length !== 0) &&
+                            (<span onClick={this.handleFacetClearAllSelectsAndSearch}>
+                                <QBicon className="clearAllFacets" icon="clear-mini"/>
+                                </span>)
+                        }
 
 
-                {/*TODO : check if searchbox is enabled for this report,
-                 if has facets has search too, eg no facets without searchbox */}
-                {recordCount &&
-                <FilterSearchBox onChange={this.handleSearchChange}
-                                 nameForRecords="Records"
-                                 ref="searchInputbox"
-                                 value={this.props.searchStringForFiltering}
-                    {...this.props} />
-                }
+                        {/* Search and grouping icon will go in the toolbar here per discussion with xd-ers */}
+
+                        {/*TODO : check if searchbox is enabled for this report,
+                         if has facets has search too, eg no facets without searchbox */}
+                        {recordCount &&
+                            <FilterSearchBox onChange={this.handleSearchChange}
+                                             nameForRecords="Records"
+                                             ref="searchInputbox"
+                                             value={this.props.searchStringForFiltering}
+                                {...this.props} />
+                        }
+                </div>
 
                 {/* check if facets is enabled for this report,
                  also hide Facets Menu Button if facets disabled  */}
                 {(recordCount && hasFacets) &&
-                (<FacetsMenu className="facetMenu"
-                    {...this.props}
-                             selectedValues={this.props.selections}
-                             onFacetSelect={this.handleFacetSelect}
-                             onFacetDeselect={this.handleFacetDeselect}
-                             onFacetClearFieldSelects={this.handleFacetClearFieldSelects}
-                />)
+                    (<FacetsMenu className="facetMenu"
+                        {...this.props}
+                                 isLoading={isLoading}
+                                 selectedValues={this.props.selections}
+                                 onFacetSelect={this.handleFacetSelect}
+                                 onFacetDeselect={this.handleFacetDeselect}
+                                 onFacetClearFieldSelects={this.handleFacetClearFieldSelects}
+                    />)
                 }
 
                 {hasFacets && <div id="facetsMenuTarget"></div>}

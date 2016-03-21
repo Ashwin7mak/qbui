@@ -224,17 +224,17 @@ var FacetsMenu = React.createClass({
     render() {
         let menuKey =  this.props.rptId;
         let flux = this.getFlux();
-
+        let hasSelections = this.props.selectedValues && this.props.selectedValues.hasAnySelections();
         return (
             <div className="facetsMenuContainer">
             <div>
                 {/* the filter icon button */}
-                <div className={"facetsMenuButton " +  (this.state.show ? "popoverShown" : "")}
+                <div className={"facetsMenuButton " +  (this.state.show ? "popoverShown " : "") +
+                  (hasSelections ? "withSelections " : "withoutSelections")}
                      ref="facetsMenuButton"
                      >
                     <span className="facetButtons" onClick={() => flux.actions.showFacetMenu({show:!this.state.show})}>
-                        <QBicon className="filterButton" icon={(this.props.selectedValues &&
-                                                this.props.selectedValues.hasAnySelections()) ?
+                        <QBicon className="filterButton" icon={(hasSelections) ?
                                     "filter-status" : "filter-tool"} />
                         <QBicon className="filterButtonCaret" icon="caret-filled-down" />
                     </span>
@@ -245,7 +245,9 @@ var FacetsMenu = React.createClass({
                          ref="facetOverlayTrigger" rootClose={true}
                          show={this.state.show}
                          target={()=> document.getElementById('facetsMenuTarget')}
-                         onHide={() => flux.actions.showFacetMenu({show:false})}
+                         onHide={(x) => {
+                             flux.actions.showFacetMenu({show:false});
+                         }}
                          onEntering={this.props.onMenuEnter} onExited={this.props.onMenuExit} >
                                     <FacetsList
                                         key= {"FacetsList." + menuKey}

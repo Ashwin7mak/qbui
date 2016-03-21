@@ -9,6 +9,7 @@ let ReportDataStore = Fluxxor.createStore({
         this.data = {};
         this.loading = false;
         this.error = false;
+        this.nonFacetClicksEnabled = true;
         this.searchStringForFiltering = '' ;
         this.selections  = new FacetSelections();
 
@@ -19,6 +20,8 @@ let ReportDataStore = Fluxxor.createStore({
             actions.LOAD_RECORDS,  this.onLoadRecords,
             actions.LOAD_RECORDS_SUCCESS, this.onLoadRecordsSuccess,
             actions.LOAD_RECORDS_FAILED, this.onLoadRecordsFailed,
+            actions.SHOW_FACET_MENU, this.onShowFacetMenu,
+            actions.HIDE_FACET_MENU, this.onHideFacetMenu,
             actions.SEARCH_FOR, this.onSearchFor
         );
     },
@@ -103,6 +106,16 @@ let ReportDataStore = Fluxxor.createStore({
         this.emit('change');
     },
 
+    onShowFacetMenu() {
+        this.nonFacetClicksEnabled = false;
+        this.emit('change');
+    },
+
+    onHideFacetMenu() {
+        this.nonFacetClicksEnabled = true;
+        this.emit('change');
+    },
+
     getReportColumns(fields) {
         let columns = [];
         if (fields) {
@@ -158,7 +171,8 @@ let ReportDataStore = Fluxxor.createStore({
             tblId: this.tblId,
             rptId: this.rptId,
             searchStringForFiltering: this.searchStringForFiltering,
-            selections: this.selections
+            selections: this.selections,
+            nonFacetClicksEnabled : this.nonFacetClicksEnabled,
         };
     }
 

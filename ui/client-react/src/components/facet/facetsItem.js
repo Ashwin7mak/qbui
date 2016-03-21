@@ -185,7 +185,7 @@ class FacetsItem extends Component {
                         (<ListGroup fill>
                             {this.renderValues()}
                             {(this.props.facet.values.length > this.props.maxInitRevealed &&  !this.props.isRevealed ?
-                                (<span className="listMore" onClick={(e) => this.props.handleRevealMore(e, this.props.facet)}>
+                                (<span className="listMore list-group-item" onClick={(e) => this.props.handleRevealMore(e, this.props.facet)}>
                                     <I18nMessage message={seeMore} /></span>) : null)}
                         </ListGroup>) :
                         null

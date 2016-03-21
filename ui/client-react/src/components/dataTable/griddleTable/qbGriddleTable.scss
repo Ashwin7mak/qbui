@@ -109,25 +109,6 @@ $footer-next-button: $color2;
     }
 }
 
-.tableActionsContainer {
-    flex: 0 0 auto;
-    position: relative;
-    @include small-breakpoint {
-        &:not(.selectionActionsOpen) {
-            background-color: $secondary-bar-bg;
-        }
-    }
-}
-
-.griddleWrapper {
-    display:flex;
-    flex: 1 1 auto;
-    overflow:auto;
-
-    .loadedContent {
-        margin: 0 10px;
-    }
-}
 
 .swipeable {
     position: relative;
