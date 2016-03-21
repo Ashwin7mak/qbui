@@ -2,6 +2,10 @@ import * as actions from '../../src/constants/actions';
 import FacetSelections from '../components/facet/facetSelections';
 
 import Fluxxor from 'fluxxor';
+import Logger from '../utils/logger';
+
+let logger = new Logger();
+
 
 let ReportDataStore = Fluxxor.createStore({
 
@@ -43,11 +47,36 @@ let ReportDataStore = Fluxxor.createStore({
         this.emit('change');
     },
 
+    checkForFacetErrors(reportData) {
+        if (reportData.data.facets) {
+            let facets = reportData.data.facets;
+            //check for error message returned
+            //i.e facets : [{id: null, errorMessage: "unknownError"}]
+            if (facets.length > 0) {
+                if (facets[0].id === null) {
+                    //log error
+                    let msg = facets[0].errorMessage;
+                    logger.error(`error response from server request : ${msg} getting facet information for app:${this.appId} table:${this.tblId} report:${this.rptId} `);
+                    //no facets
+                    reportData.data.facets = [];
+                }
+                //else good id data
+            } else {
+                //empty facet data ok there are no filters for this report
+            }
+        } else {
+            //log error
+            logger.error(`error got no facet property returned for app:${this.appId} table:${this.tblId} report:${this.rptId} `);
+            reportData.data.facets = [];
+        }
+    },
+
     onLoadReportSuccess(reportData) {
         this.loading = false;
         this.error = false;
 
         let records = this.getReportData(reportData.data);
+        this.checkForFacetErrors(reportData);
         this.data = {
             name: reportData.name,
             columns: this.getReportColumns(reportData.data.fields),

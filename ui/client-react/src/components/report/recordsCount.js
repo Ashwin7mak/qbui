@@ -13,7 +13,7 @@ let FluxMixin = Fluxxor.FluxMixin(React);
 
 var RecordsCount = React.createClass({
     shouldComponentUpdate(nextProps, nextState) {
-        return (this.props.isLoading != nextProps.isLoading) && (!nextProps.isLoading);
+        return (this.props.isLoading !== nextProps.isLoading) && (!nextProps.isLoading);
     },
 
     /**

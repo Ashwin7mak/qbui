@@ -11,7 +11,7 @@ class FilterUtils {
         let fields = selected.whichHasAnySelections();
 
         //skip sending the dummy date to the server for query
-        facetExpression = fields.filter((field)  => !facetFields[field].dummyData || facetFields[field].dummyData === false)
+        facetExpression = fields.filter((field)  => !facetFields[field].mockFilter || facetFields[field].mockFilter === false)
                                 .map((field) => {
                                     let values = selected.getFieldSelections(field);
                                     // use 1 or 0 for searching bool field types not the text

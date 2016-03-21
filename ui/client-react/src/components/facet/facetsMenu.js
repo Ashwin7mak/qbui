@@ -248,9 +248,7 @@ var FacetsMenu = React.createClass({
                          ref="facetOverlayTrigger" rootClose={true}
                          show={this.state.show}
                          target={()=> document.getElementById('facetsMenuTarget')}
-                         onHide={(x) => {
-                             flux.actions.showFacetMenu({show:false});
-                         }}
+                         onHide={() => flux.actions.showFacetMenu({show:false})}
                          onEntering={this.props.onMenuEnter} onExited={this.props.onMenuExit} >
                                     <FacetsList
                                         key= {"FacetsList." + menuKey}
