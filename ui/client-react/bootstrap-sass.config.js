@@ -17,7 +17,7 @@ module.exports = {
     // customization value based on another value.
     bootstrapCustomizations: './client-react/src/assets/css/_customVariables.scss',
 
-    mainSass: './client-react/src/assets/css/main.scss',
+    // mainSass: './client-react/src/assets/css/main.scss',
 
     // Default for the style loading
     styleLoader: 'style-loader!css-loader!sass-loader',
@@ -33,6 +33,8 @@ module.exports = {
     scripts: {
         //none, using react-bootstrap
     },
+
+    // Use these to configure what components we're loading from bootstrap
     styles: {
         'mixins': true,
 
