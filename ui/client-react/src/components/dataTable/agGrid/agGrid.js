@@ -258,7 +258,7 @@ let AGGrid = React.createClass({
         var checkbox = document.createElement("input");
         checkbox.type = "checkbox";
         checkbox.className = "SelectAllCheckbox";
-        checkbox.onclick = function(event) {
+        checkbox.onclick = (event) => {
             self.allCheckBoxSelected(event);
         };
         //ag-grid doesnt seem to allow react components sent into headerCellRender.
