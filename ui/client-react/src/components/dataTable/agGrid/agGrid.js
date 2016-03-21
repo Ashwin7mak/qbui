@@ -25,6 +25,17 @@ let ActionsColumn = React.createClass({
 
 let AGGrid = React.createClass({
     mixins: [FluxMixin],
+
+    propTypes: {
+        uniqueIdentifier: React.PropTypes.string,
+        selectionActions: React.PropTypes.element,
+        reportHeader: React.PropTypes.element,
+        columns: React.PropTypes.array,
+        loading: React.PropTypes.bool,
+        records: React.PropTypes.array,
+        appId: React.PropTypes.string,
+        tblId: React.PropTypes.string
+    },
     contextTypes:{
         touch: React.PropTypes.bool,
         history: React.PropTypes.object,
@@ -125,10 +136,11 @@ let AGGrid = React.createClass({
             return;
         }
 
-        const {appId, tblId} = this.props.reportData;
+        const appId = this.props.appId;
+        const tblId = this.props.tblId;
         var recId = params.data[this.props.uniqueIdentifier];
         //create the link we want to send the user to and then send them on their way
-        const link = '/app/' + appId + '/table/' + tblId + '/record/' + recId;
+        const link = `/app/${appId}/table/${tblId}/record/${recId}`;
         this.context.history.push(link);
     },
     /**
@@ -161,7 +173,7 @@ let AGGrid = React.createClass({
      * Helper method to flip the master checkbox if all rows are checked
      */
     updateAllCheckbox() {
-        if (this.props.reportData.data.filteredRecords.length === this.state.selectedRows.length) {
+        if (this.props.records.length === this.state.selectedRows.length) {
             document.getElementsByClassName("SelectAllCheckbox")[0].checked = true;
         } else {
             document.getElementsByClassName("SelectAllCheckbox")[0].checked = false;
@@ -174,14 +186,14 @@ let AGGrid = React.createClass({
      */
     allCheckBoxSelected() {
         this.setState({selectAllClicked: true});
-        if (!this.props.reportData.data) {
+        if (!this.props.records) {
             return;
         }
         if (event.currentTarget.checked) {
             this.selectAll();
             //push all ids to selectedRows
             let rowIds = [];
-            this.props.reportData.data.filteredRecords.forEach((row)=>{
+            this.props.records.forEach((row)=>{
                 rowIds.push(row[this.props.uniqueIdentifier]);
             });
             this.setState({selectedRows: rowIds});
@@ -273,7 +285,7 @@ let AGGrid = React.createClass({
     },
 
     render() {
-        if (this.props.reportData &&  this.props.reportData.data && this.props.reportData.data.filteredRecords) {
+        if (this.props.records && this.props.records.length > 0) {
             let columnDefs = this.getColumns();
             let griddleWrapperClasses = this.state.selectedRows.length ? "griddleWrapper selectedRows" : "griddleWrapper";
             return (
@@ -281,7 +293,7 @@ let AGGrid = React.createClass({
 
                     {this.getTableActions()}
                     <div className={griddleWrapperClasses}>
-                        <Loader loaded={!this.props.reportData.loading}>
+                        <Loader loaded={!this.props.loading}>
                             <div className="agGrid">
                                 <AgGridReact
                                     gridOptions={this.gridOptions}
@@ -294,7 +306,7 @@ let AGGrid = React.createClass({
 
                                     // binding to array properties
                                     columnDefs={columnDefs}
-                                    rowData={this.props.reportData.data.filteredRecords}
+                                    rowData={this.props.records}
 
                                     //default behavior properties
                                     rowSelection="multiple"
@@ -308,14 +320,14 @@ let AGGrid = React.createClass({
                             </div>
                         </Loader>
                         { //keep empty placeholder when loading to reduce reflow of space, scrollbar changes
-                            this.props.reportData.loading ? <div className="loadedContent"></div> : null
+                            this.props.loading ? <div className="loadedContent"></div> : null
                         }
                         </div>
                 </div>
             );
         } else {
             return (
-                <Loader loaded={this.props.reportData && !this.props.reportData.loading}>
+                <Loader loaded={!this.props.loading}>
                     <div><I18nMessage message={'grid.no_data'}/></div>
                 </Loader>
             );

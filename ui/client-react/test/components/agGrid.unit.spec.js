@@ -41,7 +41,7 @@ const fakeReportData_empty = {
 
 const fakeReportData_before = {
     data: {
-        reportData: [{
+        records: [{
             col_num: 1,
             col_text: "abc",
             col_date: "01-01-2015"
@@ -62,7 +62,7 @@ const fakeReportData_before = {
 };
 const fakeReportData_after = {
     data: {
-        reportData: [{
+        records: [{
             col_num1: 2,
             col_text1: "xyz",
             col_date1: "01-01-2018"
@@ -100,19 +100,19 @@ describe('AGGrid functions', () => {
     });
 
     it('test render of component', () => {
-        component = TestUtils.renderIntoDocument(<AGGrid actions={TableActionsMock} reportData={fakeReportData_empty.data.records} columns={fakeReportData_empty.data.columns} flux={flux}/>);
+        component = TestUtils.renderIntoDocument(<AGGrid actions={TableActionsMock} records={fakeReportData_empty.data.records} columns={fakeReportData_empty.data.columns} flux={flux}/>);
         expect(TestUtils.isCompositeComponent(component)).toBeTruthy();
     });
 
 
     it('test render of loader', () => {
-        component = TestUtils.renderIntoDocument(<AGGrid actions={TableActionsMock}   reportData={fakeReportData_loading} flux={flux}/>);
+        component = TestUtils.renderIntoDocument(<AGGrid actions={TableActionsMock}   loading={fakeReportData_loading} flux={flux}/>);
         expect(TestUtils.scryRenderedComponentsWithType(component, Loader).length).toEqual(1);
         expect(TestUtils.scryRenderedComponentsWithType(component, AGGridReact).length).toEqual(0);
     });
 
     it('test render with empty data', () => {
-        component = TestUtils.renderIntoDocument(<AGGrid columns={fakeReportData_empty.data.columns} reportData={fakeReportData_empty.data.records} flux={flux}/>);
+        component = TestUtils.renderIntoDocument(<AGGrid columns={fakeReportData_empty.data.columns} records={fakeReportData_empty.data.records} loading={false} flux={flux}/>);
         expect(TestUtils.scryRenderedComponentsWithType(component, AGGridReact).length).toEqual(0);
         expect(ReactDOM.findDOMNode(component).textContent).toMatch("I18Mock");
     });
@@ -120,22 +120,22 @@ describe('AGGrid functions', () => {
     it('test re-render with new data pushed from parent', () => {
         var TestParent = React.createFactory(React.createClass({
             getInitialState() {
-                return {reportData: fakeReportData_before.data.reportData, columns: fakeReportData_before.data.columns};
+                return {records: fakeReportData_before.data.records, columns: fakeReportData_before.data.columns};
             },
             render() {
-                return <AGGrid ref="refGriddle" reportData={this.state.reportData} columns={this.state.columns} flux={flux}/>;
+                return <AGGrid ref="regGrid" records={this.state.records} columns={this.state.columns} flux={flux}/>;
             }
         }));
 
         var parent = TestUtils.renderIntoDocument(TestParent());
 
         parent.setState({
-            reportData: fakeReportData_after.data.reportData,
+            records: fakeReportData_after.data.records,
             columns: fakeReportData_after.data.columns
         });
 
-        expect(parent.refs.refGriddle.props.reportData).toEqual(fakeReportData_after.data.reportData);
-        expect(parent.refs.refGriddle.props.columns).toEqual(fakeReportData_after.data.columns);
+        expect(parent.refs.regGrid.props.records).toEqual(fakeReportData_after.data.records);
+        expect(parent.refs.regGrid.props.columns).toEqual(fakeReportData_after.data.columns);
     });
 });
 
