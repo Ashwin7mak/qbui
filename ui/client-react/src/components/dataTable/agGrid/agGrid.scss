@@ -26,9 +26,12 @@ $grid-font-size: $font-size - 2;
     color: $font-color;
     font-size: $grid-font-size;
     -webkit-font-smoothing: antialiased;
-    background-color: $color2;
 
-    .ag-header-cell {
+    .ag-body {
+        background-color: $color2;
+    }
+
+    .gridHeaderCell {
         color: $header-cell-color;
         font-size: 12px;
         font-weight: bold;
@@ -42,12 +45,12 @@ $grid-font-size: $font-size - 2;
         }
     }
 
-    .ag-cell {
+    .gridCell {
         word-wrap: break-word;
         padding: 8px;
     }
 
-    .ag-header-row .ag-header-cell {
+    .ag-header-row .gridHeaderCell {
         border-right: 1px solid $header-cell-border;
         border-bottom: 2px solid $header-cell-border-bottom;
         &:last-of-type {
@@ -55,7 +58,7 @@ $grid-font-size: $font-size - 2;
         }
     }
 
-    .ag-row .ag-cell {
+    .ag-row .gridCell {
         border-right: 1px solid $row-cell-border-color;
         border-bottom: 1px solid $row-cell-border-color;
         &:last-of-type {
@@ -67,13 +70,13 @@ $grid-font-size: $font-size - 2;
         background-color: $row-background-color-hover;
         cursor:pointer;
     }
-    .ag-cell.Bold {
+    .gridCell.Bold {
         font-weight: bold;
     }
     .NoWrap {
         white-space: nowrap;
     }
-    .ag-header-cell.AlignRight, .ag-cell.AlignRight {
+    .gridHeaderCell.AlignRight, .gridCell.AlignRight {
         text-align: right;
     }
 

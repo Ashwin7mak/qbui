@@ -251,7 +251,6 @@ let AGGrid = React.createClass({
      */
     getColumns() {
         let columns = this.props.columns.slice(0);
-        let self = this;
         //Add checkbox column
         let checkBoxCol = {};
         checkBoxCol.field = "checkbox";
@@ -259,7 +258,7 @@ let AGGrid = React.createClass({
         checkbox.type = "checkbox";
         checkbox.className = "SelectAllCheckbox";
         checkbox.onclick = (event) => {
-            self.allCheckBoxSelected(event);
+            this.allCheckBoxSelected(event);
         };
         //ag-grid doesnt seem to allow react components sent into headerCellRender.
         checkBoxCol.headerCellRenderer = function() {
@@ -267,17 +266,20 @@ let AGGrid = React.createClass({
         };
         checkBoxCol.checkboxSelection = true;
         checkBoxCol.width = 30;
+        checkBoxCol.headerClass = "gridHeaderCell";
+        checkBoxCol.cellClass = "gridCell";
         columns.unshift(checkBoxCol);
 
         // Add Actions column. Put this as the last column in the grid and then make the column 1px wide so it doesnt really "show".
         // CSS takes care of positioning the content of this column over the previous columns so it looks like an overlay.
         if (columns.length > 0) {
             columns.push({
-                headerName: "Actions", //for ag-grid
+                headerName: "", //for ag-grid
                 field: "actions",      //for ag-grid
                 columnName: "actions", //for griddle
                 cellRenderer: reactCellRendererFactory(ActionsColumn),
-                cellClass: "actions",
+                cellClass: "gridCell actions",
+                headerClass: "gridHeaderCell",
                 width: 1
             });
         }

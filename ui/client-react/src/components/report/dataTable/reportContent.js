@@ -22,12 +22,12 @@ let ReportContent = React.createClass({
         if (typeof (obj.cellClass) === 'undefined') {
             obj.cellClass = classname;
         } else {
-            obj.cellClass += "," + classname;
+            obj.cellClass += " " + classname;
         }
         if (typeof (obj.headerClass) === 'undefined') {
             obj.headerClass = classname;
         } else {
-            obj.headerClass += "," + classname;
+            obj.headerClass += " " + classname;
         }
         //for griddle
         if (typeof (obj.cssClassName) === 'undefined') {
@@ -44,6 +44,11 @@ let ReportContent = React.createClass({
         }
         if (columns) {
             var columnsData = columns.map((obj) => {
+                obj.headerClass = "gridHeaderCell";
+                obj.cellClass = "gridCell";
+                obj.suppressMenu = true;
+                obj.suppressResize = true;
+                obj.minWidth = 100;
                 if (obj.datatypeAttributes) {
                     var datatypeAttributes = obj.datatypeAttributes;
                     for (var attr in datatypeAttributes) {
@@ -83,8 +88,6 @@ let ReportContent = React.createClass({
                         }
                     }
                 }
-                obj.suppressMenu = true;
-                obj.minWidth = 100;
                 return obj;
             });
 
