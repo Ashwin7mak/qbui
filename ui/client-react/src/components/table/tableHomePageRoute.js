@@ -16,6 +16,7 @@ let TableHomePageRoute = React.createClass({
     loadReportsFromParams(params, checkParams) {
 
         let flux = this.getFlux();
+
         if (params) {
             let appId = params.appId;
             let tblId = params.tblId;
@@ -42,6 +43,8 @@ let TableHomePageRoute = React.createClass({
         }
     },
     componentDidMount() {
+        let flux = this.getFlux();
+        flux.actions.showTopNav();
         this.loadReportsFromParams(this.props.params);
     },
     componentWillReceiveProps: function(props) {

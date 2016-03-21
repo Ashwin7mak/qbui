@@ -3,7 +3,7 @@ import TestUtils from 'react-addons-test-utils';
 import ReactDOM from 'react-dom';
 import GriddleTable  from '../../src/components/dataTable/griddleTable/griddleTable';
 import Griddle from 'griddle-react';
-import * as breakpoints from '../../src/constants/breakpoints';
+import Loader  from 'react-loader';
 
 var GriddleMock = React.createClass({
 
@@ -40,6 +40,10 @@ var I18nMessageMock = React.createClass({
         );
     }
 });
+
+const fakeReportData_loading = {
+    loading: true
+};
 
 const fakeReportData_empty = {
     data: {
@@ -92,6 +96,13 @@ describe('GriddleTable functions', () => {
         expect(TestUtils.isCompositeComponent(component)).toBeTruthy();
     });
 
+
+    it('test render of loader', () => {
+        component = TestUtils.renderIntoDocument(<GriddleTable actions={TableActionsMock}   reportData={fakeReportData_loading}/>);
+        expect(TestUtils.scryRenderedComponentsWithType(component, Loader).length).toEqual(1);
+        expect(TestUtils.scryRenderedComponentsWithType(component, Griddle).length).toEqual(0);
+    });
+
     it('test render with empty data', () => {
         component = TestUtils.renderIntoDocument(<GriddleTable columnMetadata={fakeReportData_empty.data.columns}/>);
         expect(TestUtils.scryRenderedComponentsWithType(component, Griddle).length).toEqual(0);
@@ -102,11 +113,10 @@ describe('GriddleTable functions', () => {
         var TestParent = React.createFactory(React.createClass({
 
             childContextTypes: {
-                breakpoint: React.PropTypes.string,
                 touch: React.PropTypes.bool
             },
             getChildContext: function() {
-                return {breakpoint: breakpoints.SMALL_BREAKPOINT, touch:true};
+                return {touch:true};
             },
             getInitialState() {
                 return {results: fakeReportData_before.data.results, columns: fakeReportData_before.data.columnMetadata};

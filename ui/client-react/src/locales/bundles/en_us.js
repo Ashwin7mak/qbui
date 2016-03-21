@@ -47,7 +47,9 @@ export default {
             tablesHeading: "Tables",
             appsHeading: "Apps",
             searchAppsPlaceholder: "Search apps...",
-            searchReportsPlaceholder: "Search reports..."
+            searchTablesPlaceholder: "Search tables...",
+            searchReportsPlaceholder: "Search reports...",
+            searchRecordsPlaceholder: "Search..."
         },
         grid: {
             no_data: "There is no data to display."
@@ -70,13 +72,21 @@ export default {
             }
         },
         report : {
+            blank : "blank",
+            facets :{
+                noFacets : "No values",
+                seeMore : "more filters...",
+                tooManyValues : "Too many values to use for filtering.",
+                noCheck : "No",
+                yesCheck : "Yes"
+            },
+            filteredRecordCount :
+                "{filteredRecordCount} of {recordCount} {nameForRecords} ",
             newReport: "New",
             organizeReports: "Organize",
-            filteredRecordCount : "{filteredRecordCount} of {recordCount} {nameForRecords} ",
             recordCount : "{recordCount} {nameForRecords} ",
-            noFacets : "No Facets",
             searchPlaceHolder:  "Search these {nameForRecords} ...",
-            badParams : "Insufficient parameters supplied"
-        }
+        },
+        cancel: "Cancel"
     }
 };

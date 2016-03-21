@@ -2,7 +2,6 @@ import React from 'react';
 
 import GriddleTable  from '../../../components/dataTable/griddleTable/griddleTable.js';
 import {DateFormatter, NumericFormatter}  from '../../../components/dataTable/griddleTable/formatters.js';
-import Loader  from 'react-loader';
 import ReportActions from '../../actions/reportActions';
 import RecordActions from '../../actions/recordActions';
 const resultsPerPage = 1000; //assume that this is the constant number of records per page. This can be passed in as a prop for diff reports
@@ -37,7 +36,7 @@ let ReportContent = React.createClass({
     setCSSClass_helper: function(obj, classname) {
         if (typeof (obj.cssClassName) === 'undefined') {
             obj.cssClassName = classname;
-        } else {
+        } else if (obj.cssClassName.indexOf(classname) === -1) {
             obj.cssClassName += " " + classname;
         }
     },
@@ -102,11 +101,10 @@ let ReportContent = React.createClass({
     /* TODO: paging component that has "next and previous tied to callbacks from the store to get new data set*/
     render: function() {
 
-        return (
-            <Loader loaded={!this.props.reportData.loading}>
+        return (<div className="loadedContent">
                 {this.props.reportData.error ?
                     <div>Error loading report!</div> :
-                    <div>
+                    <div className="reportContent">
                         <GriddleTable reportData={this.props.reportData}
                                       columnMetadata={this.state.reportColumns}
                                       uniqueIdentifier="Record ID#"
@@ -119,8 +117,7 @@ let ReportContent = React.createClass({
                         />
                     </div>
                 }
-            </Loader>
-        );
+       </div>);
     }
 
 });

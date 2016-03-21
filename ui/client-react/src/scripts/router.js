@@ -23,6 +23,9 @@ import appsActions from '../actions/appsActions';
 import NavStore from '../stores/navStore';
 import navActions from '../actions/navActions';
 
+import FacetMenuStore from '../stores/facetMenuStore';
+import facetMenuActions from '../actions/facetMenuActions';
+
 import AppsHome from '../components/apps/home';
 import AppsRoute from '../components/apps/appsRoute';
 import AppHomePageRoute from '../components/app/appHomePageRoute';
@@ -33,36 +36,36 @@ import TableHomePageRoute from '../components/table/tableHomePageRoute';
 
 import FastClick from 'fastclick';
 
-import Breakpoints from '../utils/breakpoints';
-
-import * as breakpoints from '../constants/breakpoints';
-
 let stores = {
     ReportsStore: new ReportsStore(),
     ReportDataStore: new ReportDataStore(),
     AppsStore: new AppsStore(),
-    NavStore: new NavStore()
+    NavStore: new NavStore(),
+    FacetMenuStore: new FacetMenuStore()
 };
 let flux = new Fluxxor.Flux(stores);
 flux.addActions(reportActions);
 flux.addActions(reportDataActions);
 flux.addActions(appsActions);
 flux.addActions(navActions);
+flux.addActions(facetMenuActions);
 
 let NavWrapper = React.createClass({
+
+    /* touch detection */
+    isTouchDevice() {
+        return "ontouchstart" in window;
+    },
     getInitialState() {
         return {
-            breakpoint: Breakpoints.getCurrentBreakpointClass(),
-            touch: Breakpoints.isTouchDevice()
+            touch: this.isTouchDevice()
         };
     },
     childContextTypes: {
-        breakpoint: React.PropTypes.string,
         touch: React.PropTypes.bool
     },
     getChildContext: function() {
         return {
-            breakpoint: this.state.breakpoint,
             touch: this.state.touch
         };
     },
@@ -70,35 +73,12 @@ let NavWrapper = React.createClass({
         return <Nav flux={flux} {...this.props} />;
     },
 
-    /**
-     * try to detect touch devices
-     *
-     * @returns {boolean}
-     */
-
-    handleResize: function() {
-
-        let breakpoint = Breakpoints.getCurrentBreakpointClass();
-        let bodyClasses = breakpoint;
-
-        if (Breakpoints.isTouchDevice()) {
-            bodyClasses += " touch";
-        }
-
-        document.body.className = bodyClasses;
-
-        // close left nav if resizing down to small
-        if (breakpoint === breakpoints.SMALL_BREAKPOINT && this.state.breakpoint !== breakpoints.SMALL_BREAKPOINT) {
-            flux.actions.toggleLeftNav(false);
-        }
-        if (breakpoint !== breakpoints.SMALL_BREAKPOINT && this.state.breakpoint === breakpoints.SMALL_BREAKPOINT) {
-            flux.actions.toggleLeftNav(true);
-        }
-        this.setState({breakpoint});
-    },
-
     componentDidMount: function() {
         FastClick.attach(document.body);
+
+        if (this.isTouchDevice()) {
+            document.body.className = "touch";
+        }
 
         flux.actions.loadApps(true);
 
@@ -107,19 +87,15 @@ let NavWrapper = React.createClass({
             flux.actions.selectTableId(this.props.params.tblId);
             flux.actions.loadReports(this.props.params.appId, this.props.params.tblId);
         }
-        window.addEventListener('resize', this.handleResize);
-        this.handleResize();
     },
 
     componentWillReceiveProps(props) {
+
         if (this.props.params.appId && this.props.params.tblId && this.props.params.appId !== props.params.appId && this.props.params.tblId !== props.params.tblId) {
             flux.actions.selectAppId(this.props.params.appId);
             flux.actions.selectTableId(this.props.params.tblId);
             flux.actions.loadReports(this.props.params.appId, this.props.params.tblId);
         }
-    },
-    componentWillUnmount: function() {
-        window.removeEventListener('resize', this.handleResize);
     }
 });
 

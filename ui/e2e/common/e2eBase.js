@@ -69,9 +69,19 @@
             // Resize the browser window to the given pixel width and height. Returns a promise
             resizeBrowser: function(width, height) {
                 var deferred = Promise.pending();
-                browser.driver.manage().window().setSize(width, height).then(function() {
-                    e2eBase.sleep(browser.params.mediumSleep);
-                    deferred.resolve();
+                browser.driver.manage().window().getSize().then(function(dimension) {
+                    // Currently our breakpoints only change when browser width is changed so don't need to check height (yet)
+                    if (dimension.width === width) {
+                        // Do nothing because we are already at the current width
+                        deferred.resolve();
+                    } else {
+                        // Resize browser if not at same width
+                        browser.driver.manage().window().setSize(width, height).then(function() {
+                            e2eBase.sleep(browser.params.mediumSleep).then(function() {
+                                deferred.resolve();
+                            });
+                        });
+                    }
                 });
                 return deferred.promise;
             },
@@ -180,6 +190,28 @@
                 tableToFieldToFieldTypeMap['table 2'][e2eConsts.reportFieldNames[12]] = {
                     fieldType: consts.SCALAR,
                     dataType: consts.PHONE_NUMBER
+                };
+                tableToFieldToFieldTypeMap['table 3'] = {};
+                tableToFieldToFieldTypeMap['table 3'][e2eConsts.reportFieldNames[1]] = {
+                    fieldType: consts.SCALAR,
+                    dataType: consts.TEXT
+                };
+                tableToFieldToFieldTypeMap['table 3'][e2eConsts.reportFieldNames[6]] = {
+                    fieldType: consts.SCALAR,
+                    dataType: consts.DATE
+                };
+                tableToFieldToFieldTypeMap['table 3'][e2eConsts.reportFieldNames[7]] = {
+                    fieldType: consts.SCALAR,
+                    dataType: consts.DATE_TIME
+                };
+                tableToFieldToFieldTypeMap['table 3'][e2eConsts.reportFieldNames[10]] = {
+                    fieldType: consts.SCALAR,
+                    dataType: consts.CHECKBOX
+                };
+                tableToFieldToFieldTypeMap['table 4'] = {};
+                tableToFieldToFieldTypeMap['table 4'][e2eConsts.reportFieldNames[1]] = {
+                    fieldType: consts.SCALAR,
+                    dataType: consts.TEXT
                 };
                 // Call the basic app setup function
                 e2eBase.basicSetup(tableToFieldToFieldTypeMap, 10).then(function(results) {

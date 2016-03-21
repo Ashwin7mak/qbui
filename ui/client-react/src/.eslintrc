@@ -8,6 +8,7 @@
 
     ////////// Possible Errors //////////
 
-    "no-console": 2                   // disallow use of console (off by default in the node environment) (recommended)
+    "no-console": 1,                  // disallow use of console (off by default in the node environment) (recommended)
+    "react/jsx-no-duplicate-props" : [2, {"ignoreCase" : true}] //disallow JSX elements with duplicate props (ignore case)
   }
 }

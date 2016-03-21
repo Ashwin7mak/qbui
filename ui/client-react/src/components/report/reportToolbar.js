@@ -12,10 +12,15 @@ import FacetsMenu from '../facet/facetsMenu';
 import FacetSelections from '../facet/facetSelections';
 import RecordsCount from './recordsCount';
 import QBicon from '../qbIcon/qbIcon';
+import PageActions from '../actions/pageActions';
+import FilterUtils from '../../utils/filterUtils';
 
 let FluxMixin = Fluxxor.FluxMixin(React);
+
 let logger = new Logger();
-import _ from 'lodash';
+
+
+const secondInMilliseconds = 1000;
 
 /**
  * a ReportToolbar for table reports with search field and a filter icon
@@ -24,30 +29,41 @@ import _ from 'lodash';
 
 var ReportToolbar = React.createClass({
     //interaction options
-    secondInMilliseconds : 1000,
-    debounceInputTime : 0, // 1/5 a second delay
-    facetVisValues : 50,  // how many facets to list before showing more...link
+
 
     mixins: [FluxMixin],
 
-    getDefaultProps : function() {
+    propTypes: {
+        /**
+         *  Takes in for properties the reportData which includes the list of facets
+         *  and a function to call when a facet value is selected.
+         **/
+        reportData: React.PropTypes.shape({
+            data: React.PropTypes.shape({
+                facets:  React.PropTypes.array
+            })
+        }),
+        onFacetSelect : React.PropTypes.func
+    },
+
+
+    getDefaultProps() {
         return {
-            initialSelections : new FacetSelections()
+            fillinDummyFacets : false,
+            selections:new FacetSelections(),
+            searchStringForFiltering: "",
+            debounceInputTime :.5 *  secondInMilliseconds, // 1/5 a second delay
         };
     },
 
-    getInitialState: function() {
-        this.debounceInputTime = .5 * this.secondInMilliseconds; // 1/5 a second delay
-        let initSel = this.props.initialSelections;
-        initSel.initSelections();
+    getInitialState() {
         return {
-            searchInput: '',
-            searchStringForFiltering: '',
-            selections : initSel
+            //seed the initial search value
+            searchInput: this.props.searchStringForFiltering ? this.props.searchStringForFiltering : '',
         };
     },
 
-    debouncedChange: function(name) {
+    debouncedChange(name) {
         let deferred = Promise.defer();
 
         var timerId = this.timerId;
@@ -62,176 +78,223 @@ var ReportToolbar = React.createClass({
             };
         }
 
-        timerId = setTimeout((updateName)(name), this.debounceInputTime);
+        timerId = setTimeout((updateName)(name), this.props.debounceInputTime);
         this.timerId = timerId;
         return deferred.promise;
     },
 
-    searchReport: function(inputText) {
-        const text = inputText;
-        let flux = this.getFlux();
-        flux.actions.searchFor(text);
-    },
-
-    isFiltered : function() {
+    isFiltered() {
         let answer = false;
-        if (this.state.searchStringForFiltering.length !== 0) {
+        if (this.props.searchStringForFiltering.length !== 0) {
             answer = true;
         } else {
-            answer = this.state.selections.hasAnySelections();
+            answer = this.props.selections.hasAnySelections();
         }
         return answer;
     },
 
-    /* Placeholder method to hook into node layer call to get filtered records when user selects a facet
-     * Hardcoded facetExpression for testing
-     * TODO: replace with a real method.
-     */
-    filterReport: function() {
-        var facetExpression = [{fid:'3', values:['10', '11']}, {fid:'4', values:['abc']}];
-
+    filterReport(searchString, selections) {
         let flux = this.getFlux();
-        flux.actions.filterReport(this.props.appId, this.props.tblId, this.props.rptId, true, facetExpression);
+
+        const filter = FilterUtils.getFilter(searchString,
+            selections,
+            this.fields);
+
+        flux.actions.filterReport(this.props.appId, this.props.tblId, this.props.rptId, true, filter);
     },
 
-    handleFacetSelect : function(e, facet, value) {
-        this.state.selections.handleToggleSelect(e, facet, value);
-        var mutated = new FacetSelections();
-        mutated.initSelections(this.state.selections.getSelections());
-        this.setState({selections: mutated});
+    filterOnSelections(newSelections) {
+        this.filterReport(this.props.searchStringForFiltering, newSelections);
+    },
+    filterOnSearch(newSearch) {
+        this.filterReport(newSearch, this.props.selections);
+    },
+    handleFacetSelect(e, facet, value) {
+        var newSelections = this.props.selections.copy();
+        newSelections.toggleSelectFacetValue(facet, value);
+        this.filterOnSelections(newSelections);
     },
 
-    handleFacetClearFieldSelects : function(facet) {
-        this.state.selections.removeAllFieldSelections(facet.id);
-        var mutated = new FacetSelections();
-        mutated.initSelections(this.state.selections.getSelections());
-        this.setState({selections: mutated});
+    handleFacetDeselect(e, facet, value) {
+        var newSelections = this.props.selections.copy();
+        newSelections.setFacetValueSelectState(facet, value, false);
+        this.filterOnSelections(newSelections);
     },
 
-    handleFacetClearAllSelects : function() {
-        this.state.selections.removeAllSelections();
-        var mutated = new FacetSelections();
-        this.setState({selections: mutated});
+    handleFacetClearFieldSelects(facet) {
+        var newSelections = this.props.selections.copy();
+        newSelections.removeAllFieldSelections(facet.id);
+        this.filterOnSelections(newSelections);
     },
 
-    handleChange: function(e) {
-        var searchTxt = e.target.value;
-        var self = this;
-        this.debouncedChange(searchTxt).then(function(result) {
-            self.setState({
-                searchStringForFiltering: searchTxt.trim()
+    handleFacetClearAllSelects() {
+        var newSelections = new FacetSelections();
+        this.filterOnSelections(newSelections);
+    },
+
+    handleFacetClearAllSelectsAndSearch() {
+        var newSelections = new FacetSelections();
+        this.setState({searchInput:''});
+        this.filterReport('', newSelections);
+    },
+
+    executeSearchString(result) {
+        this.filterOnSearch(result);
+    },
+
+    searchTheString(searchTxt, debounced) {
+        if (debounced) {
+            this.debouncedChange(searchTxt).then((result) => {
+                this.executeSearchString(result);
             });
-            self.searchReport(self.state.searchStringForFiltering);
-        });
-        this.setState({
-            searchInput: searchTxt
-        });
-
-    },
-
-    //Report Facets: {"facets":[{"id":"1","name":"Facet01","type":"text","values":["Facet01-Value01","Facet01-Value02"]},
-    // {"id":"2","name":"Facet02","type":"text","values":["Facet02-Value01","Facet02-Value02"]},
-    // {"id":"3","name":"Facet03","type":"numeric","values":[1000,1045.33,2099]}]}
-    populateDummyFacets() {
-        if (this.props.reportData && this.props.reportData.data)  {
-            this.props.reportData.data.facets = {
-                list : [
-                    {id : 1, name : "Types", type: "text", blanks: true,
-                        values : [{value:"Design"}, {value:"Development"}, {value:"Planning"}, {value:"Test"}]},
-                    {id : 2, name : "Names", type: "text", blanks: false,
-                        values : [
-                            {value: "Aditi Goel"}, {value: "Christopher Deery"}, {value: "Claire Martinez"}, {value: "Claude Keswani"}, {value: "Deborah Pontes"},
-                            {value: "Donald Hatch"}, {value: "Drew Stevens"}, {value: "Erica Rodrigues"}, {value: "Kana Eiref"},
-                            {value: "Ken LaBak"}, {value: "Lakshmi Kamineni"}, {value: "Lisa Davidson"}, {value: "Marc Labbe"},
-                            {value: "Matthew Saforrian"}, {value: "Micah Zimring"}, {value: "Rick Beyer"}, {value: "Sam Jones"}, {value: "XJ He"}
-                        ]},
-                    {id : 3, name : "Status", type: "text", blanks: false,
-                        values : [{value: "No Started"}, {value: "In Progress"}, {value: "Blocked"}, {value: "Completed"}]},
-                    {id : 4, name : "Flag", type: "bool",  blanks: false,
-                        values : [{value: "True"}, {value: "False"}]},
-                    //{id : 4, name : "Dates", type: "date",  blanks: false,
-                    //    range : {start: 1, end: 2}},
-                ],
-            };
+        }  else {
+            this.executeSearchString(searchTxt);
         }
     },
 
-    /*TODO : remove this when facets ui is integrated with backend, only for dev testing not users */
-    renderFakeFilterButton() {
-        let tooltip = (
-                        <Tooltip  id="fakeFacetTip">This button is hard wired filter by facets - only matches
-                                Record#id = 10 OR 11
-                        </Tooltip>);
-        {/* hide this - devs can use document.getElementById('fakeFacet').style.display='block'; */}
-        return (
-                <OverlayTrigger overlay={tooltip} placement="bottom">
-                    <div className="button-container">
-                        <Button  id="fakeFacet" className="testFilterButton"
-                                    bsStyle="link" onClick={this.filterReport}>
-                        Fake filter this report </Button>
-                    </div>
-                </OverlayTrigger>
-        );
+
+    handleSearchChange(e) {
+        var searchTxt = e.target.value;
+        this.searchTheString(searchTxt, true);
     },
 
+
+    /**
+     * Support filtering of blank values; add a (blank) entry to the end of the list of values
+     * if the facet has blanks.
+     * Note the I18nMessage version we are using only supports outputting a span wrapped component not just
+     * a translated string so until we move to reactintl 2.0
+     * see - http://stackoverflow.com/questions/35286239/how-to-put-valuedata-into-html-attribute-with-reactjs-and-reactintl
+     * user the english string, the resource and 'report.blank'message is has been added to the bundle
+     */
+    appendBlanks() {
+        let blankMsg = 'report.blank';
+        if (this.props.reportData && this.props.reportData.data &&
+            this.props.reportData.data.facets) {
+            this.fields = {};
+            this.props.reportData.data.facets.map((facet) => {
+                // a fields id ->facet lookup
+                this.fields[facet.id] = facet;
+                if (facet.blanks && facet.type === "text" && !facet.blankAdded) {
+                    // Note the I18nMessage version we are using only supports outputting a span wrapped component not just
+                    // a translated string so until we move to reactintl 2.0
+                    // see - http://stackoverflow.com/questions/35286239/how-to-put-valuedata-into-html-attribute-with-reactjs-and-reactintl
+                    // user the english string, the resource and 'report.blank'message is has been added to the bundle
+                    //facet.values.push(<I18nMessage message={(blankMsg)}/>);
+                    facet.values.push({value:'(blank)'});
+                    facet.blankAdded = true;
+                }
+            });
+        }
+    },
+
+    populateDummyFacets() {
+        if (this.props.reportData && this.props.reportData.data)  {
+            this.props.reportData.data.facets = [
+                {id : 1, name : "Types", type: "TEXT", blanks: true,
+                    values : [{value:"Design"}, {value:"Development"}, {value:"Planning"}, {value:"Test"}]},
+                {id : 2, name : "Names", type: "TEXT", blanks: false,
+                    values : [
+                        {value: "Aditi Goel"}, {value: "Christopher Deery"}, {value: "Claire Martinez"}, {value: "Claude Keswani"}, {value: "Deborah Pontes"},
+                        {value: "Donald Hatch"}, {value: "Drew Stevens"}, {value: "Erica Rodrigues"}, {value: "Kana Eiref"},
+                        {value: "Ken LaBak"}, {value: "Lakshmi Kamineni"}, {value: "Lisa Davidson"}, {value: "Marc Labbe"},
+                        {value: "Matthew Saforrian"}, {value: "Micah Zimring"}, {value: "Rick Beyer"}, {value: "Sam Jones"}, {value: "XJ He"}
+                    ]},
+                {id : 3, name : "Status", type: "TEXT", blanks: false,
+                    values : [{value: "No Started"}, {value: "In Progress"}, {value: "Blocked"}, {value: "Completed"}]},
+                {id : 4, name : "Flag", type: "CHECKBOX",  blanks: false,
+                    values : [{value: "Yes"}, {value: "No"}]},
+                {id : 5, name : "Companies", type: "TEXT",  blanks: false,
+                    // TODO: support date ranges in filtering see https://jira.intuit.com/browse/QBSE-20422
+                    values : []}, // too many values for facets example
+                //{id : 4, name : "Dates", type: "date",  blanks: false,
+                //    range : {start: 1, end: 2}},
+            ];
+        }
+    },
+    getPageActions() {
+        const actions = [
+            {name: 'i.e. edit', icon:'edit'},
+            {name: 'i.e. mail', icon:'mail'},
+            {name: 'i.e. delete', icon:'delete'},
+            {name: 'i.e. print', icon:'print'}
+        ];
+        return (<PageActions actions={actions} menuAfter={0} {...this.props}/>);
+    },
     render() {
-        this.populateDummyFacets();
-        let fakeFilterButton = this.renderFakeFilterButton();
+        if (this.props.fillinDummyFacets) {
+            this.populateDummyFacets();
+        }
+
+        this.appendBlanks();
 
         let recordCount = this.props.reportData && this.props.reportData.data && this.props.reportData.data.records ?
-                                this.props.reportData.data.records.length : null; //TODO what to show for pagination?
+            this.props.reportData.data.records.length : null; //TODO what to show for pagination?
 
-        let filteredRecordCount  = this.props.reportData && this.props.reportData.data && this.props.reportData.data.filteredRecords ?
-                                this.props.reportData.data.filteredRecords.length : null;
+        let filteredRecordCount  = this.props.reportData && this.props.reportData.data &&
+        this.props.reportData.data.filteredRecords ?
+            this.props.reportData.data.filteredRecords.length : null;
 
         // determine if there is a search/filter in effect and if there are records/results to show
         let hasRecords = true;
         if (this.isFiltered()) {
             hasRecords = filteredRecordCount ? true : false;
         } else {
-            hasRecords = this.props.recordCount ? true : false;
+            hasRecords = recordCount ? true : false;
         }
 
-        let hasSelectedFacets = this.state.selections.hasAnySelections();
+        let hasFacets = this.props.reportData && this.props.reportData.data &&
+            this.props.reportData.data.facets && (this.props.reportData.data.facets.length > 0) &&
+            this.props.reportData.data.facets[0].values;
 
-        return (
-            <div className="reportToolbar">
+        let hasSelectedFacets = this.props.selections && this.props.selections.hasAnySelections();
 
-                {/*TODO : check if searchbox is enabled for this report,
-                if has facets has search too */}
-                {recordCount &&
-                    <FilterSearchBox onChange={this.handleChange}
-                                     nameForRecords="Records"
-                                     {...this.props} />
-                }
-
-                {/*TODO :  - check if facets is enabled for this report,
-                also hide Facets Menu Button if facets disabled  */}
-                {recordCount &&
-                    (<FacetsMenu className="facetMenu"  {...this.props}
-                                  selectedValues={this.state.selections}
-                                  onFacetSelect={this.handleFacetSelect}
-                                  onFacetClearFieldSelects={this.handleFacetClearFieldSelects}
-                    />)
-                }
-
+        let reportToolbar = (
+            <div className={"reportToolbar " + (hasFacets ? "" : "noFacets")}>
                 <RecordsCount recordCount={recordCount}
-                              isFiltered={this.isFiltered()}
+                              isFiltered={this.isFiltered() && !this.props.loading}
                               filteredRecordCount={filteredRecordCount}
                               nameForRecords="Records"
-                                {...this.props} />
+                    {...this.props} />
 
-
-                {hasSelectedFacets &&
-                    (<span onClick={this.handleFacetClearAllSelects}>
-                                        <QBicon className="clearAllFacets" icon="clear-mini" />
+                {(this.isFiltered() || this.state.searchInput.length !== 0) &&
+                (<span onClick={this.handleFacetClearAllSelectsAndSearch}>
+                                        <QBicon className="clearAllFacets" icon="clear-mini"/>
                     </span>)
                 }
 
-                {fakeFilterButton}
+                {/* Search and grouping icon will go in the toolbar here per discussion with xd-ers */
+                }
 
+
+                {/*TODO : check if searchbox is enabled for this report,
+                 if has facets has search too, eg no facets without searchbox */}
+                {recordCount &&
+                <FilterSearchBox onChange={this.handleSearchChange}
+                                 nameForRecords="Records"
+                                 ref="searchInputbox"
+                                 value={this.props.searchStringForFiltering}
+                    {...this.props} />
+                }
+
+                {/* check if facets is enabled for this report,
+                 also hide Facets Menu Button if facets disabled  */}
+                {(recordCount && hasFacets) &&
+                (<FacetsMenu className="facetMenu"
+                    {...this.props}
+                             selectedValues={this.props.selections}
+                             onFacetSelect={this.handleFacetSelect}
+                             onFacetDeselect={this.handleFacetDeselect}
+                             onFacetClearFieldSelects={this.handleFacetClearFieldSelects}
+                />)
+                }
+
+                {hasFacets && <div id="facetsMenuTarget"></div>}
+                {this.getPageActions()}
             </div>
         );
+
+        return (<div> {reportToolbar} </div>);
     }
 });
 

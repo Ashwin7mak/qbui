@@ -3,6 +3,7 @@
 .reportActions,.recordActions {
     display:flex;
 
+    margin-left:8px;
     justify-content:space-between;
     line-height:32px;
     button {
@@ -107,7 +108,6 @@
 }
 
 .touch .recordActions {
-   
     a.iconLink {
         text-decoration:none;
     }

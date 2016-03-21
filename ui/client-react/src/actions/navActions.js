@@ -25,6 +25,12 @@ let navActions = {
     setSearching(searching) {
         this.dispatch(actions.SEARCHING, searching);
     },
+    showTopNav() {
+        this.dispatch(actions.SHOW_TOP_NAV);
+    },
+    hideTopNav() {
+        this.dispatch(actions.HIDE_TOP_NAV);
+    },
     changeLocale(locale) {
         Locale.changeLocale(locale);
         this.dispatch(actions.CHANGE_LOCALE);

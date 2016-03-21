@@ -6,23 +6,38 @@
   width: 25em;
 }
 
+
 .reportToolbar {
   > div > div {
     position: relative;
   }
 }
 
+.facetsMenuContainer {
+  margin-left: .5em;
+}
 
 .facetsMenuButton {
+  display: inline;
+
   .facetButtons {
     color: $icon-color;
+      @include small-breakpoint {
+          color:$secondary-bar-fg;
+      }
   }
   &.popoverShown,
   .facetButtons:hover {
     color: $icon-color-hover;
+    @include small-breakpoint {
+        color: $secondary-bar-fg;
+    }
   }
-  .filterButton{
+  .filterButton {
     font-size: 20px;
+    .qbIcon {
+      display: inline;
+    }
   }
   .filterButtonCaret {
     font-size: 16px;
@@ -33,10 +48,12 @@
     z-index: 10000;
     margin-left: -15px;
     border-radius: 3px;
+    border-color : $facetMenu-BorderColor;
     min-width: 300px;
     > .arrow {
       left: 13% !important;
     }
+
 
     .popover-content {
       padding: 0;
@@ -48,6 +65,12 @@
     .panel > .list-group .list-group-item,
     .panel > .panel-collapse > .list-group .list-group-item {
       border: none;
+    }
+
+    .noOptions {
+      margin-left: 2em;
+      color: $facetMenu-NoOptionsColor;
+      font-family: "Lato", sans-serif;
     }
 
     .panel {
@@ -67,8 +90,13 @@
       background-color: $facetMenu-backgroundColor;
       border: none;
       box-shadow: none;
-      border-top:  1px solid $color4;
-      padding: 10px 15px 5px 15px;
+      border-top:  1px solid $facetMenu-BorderColor;
+      padding: 10px 15px 10px 15px;
+      border-radius: 0;
+
+      &:hover {
+          background-color: $facetMenu-itemHoverColor;
+      }
     }
 
     .panel-default:first-child > .panel-heading {
@@ -93,6 +121,7 @@
     .panel-default {
       border: none;
       box-shadow: none;
+      margin-bottom: 0 !important;
     }
 
     .list-group-item {
@@ -101,15 +130,26 @@
     }
 
     .list-group-item:hover {
-      background-color: $facetMenu-backgroundColor;
+      background-color: $facetMenu-itemHoverColor;
     }
 
     .list-group-item:focus {
       outline: none;
+      background-color: $facetMenu-backgroundColor;
     }
 
     .list-group-item .checkMark {
       margin-left: auto;
+    }
+
+    .listMore {
+      color: $facetMenu-showMoreColor;
+      margin-left: 2.4em;
+      cursor: pointer;
+    }
+
+    .noFacetValues {
+      padding : 1em;
     }
 
     .checkMark {
@@ -123,12 +163,87 @@
     .clearFacet {
       float: right;
       color: $facetMenu-backgroundColor;
+      cursor: pointer;
     }
 
     .selections .clearFacet {
-      color: $color9;
+      color: $facetMenu-clearButtonColor;
     }
-
   }
+.selectedFacets {
+  display: inline;
+}
+.facetToken {
+    display : inline-block;
+    padding: 3px;
+
+  .facetNameToken {
+    margin-right: .5em;
+    display: block;
+  }
+
+  .selectedToken {
+    margin-right:10px;
+    margin-top: 2px; //clm
+    border-radius: 12px;
+    font-size:10px;
+    font-weight:500;
+    /* dark background tokens */
+    // background-color: $selection-badge-color;
+    // color: $facetMenu-facetTokenTextColor;
+
+    /* paler background facet tokens */
+    background-color: $facetMenu-facetTokenBackgroundColor;
+    color: $facetMenu-facetTokenTextColor;
+    display: inline-block;
+
+    .selectedTokenName {
+      white-space: normal;
+      padding: 2px 3px;
+
+      span {
+        white-space: nowrap;
+        padding-left: .5em;
+      }
+      .clearFacet {
+        cursor: pointer;
+      }
+    }
+  }
+}
+
+@include small-breakpoint {
+    .selectedFacets {
+        display:none;
+    }
+    .reportContainer .reportToolsAndContentContainer .reportToolbar {
+
+        input {
+            color: $search-input-fg;
+        }
+        .popover-content {
+            max-height: 454px;
+        }
+        .facetMenuPopup {
+            display: block;
+            left: 4px;
+            min-width: 150px;
+            max-width: 200px;
+        }
+
+        .facetsMenuContainer {
+            flex: 0 0 auto;
+        }
+
+        .filterSearchBoxContainer {
+            display:none;
+        }
+
+        .popover.bottom > .arrow {
+            display: none;
+        }
+
+    }
+}
 
 

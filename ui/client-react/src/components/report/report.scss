@@ -1,95 +1,148 @@
 @import '../../assets/css/qbVariables';
 
 .reportContainer {
-  display: flex;
-  flex-direction: column;
-  flex: 1;
-  min-width:0;
-  background:$report-container-bg;
-  .layout-stage {
-    flex-shrink: 0;
-  }
-  margin-top: 0;
-  margin-left: 0;
-  margin-right: 0;
+    display: flex;
+    flex-direction: column;
+    flex: 1 1 auto;
+    min-width: 0;
+    background: $report-container-bg;
+    .layout-stage {
+        flex:0 0 auto;
+    }
+    margin-top: 0;
+    margin-left: 0;
+    margin-right: 0;
 
-  background-color: $report-backgroundColor;
+    background-color: $report-backgroundColor;
 
-  .reportToolsAndContentContainer {
+    .reportToolsAndContentContainer {
+        display:flex;
+        flex: 1 1 auto;
+        .reportToolbar {
+            display: flex;
+            flex-direction: row;
 
-    .reportToolbar {
-      display: flex;
-      flex-direction: row;
-      flex: 1;
-      align-items: center;
-      color: $icon-color;
+            flex: 1 0 auto;
 
-      .filterSearchBox {
-        padding: .8rem;
-        width: 18em;
-      }
+            >* {
+                flex: 0 0 auto;
+            }
+            >.facetsMenuContainer {
+                flex: 1 1 auto;
+            }
+            >.recordsCount {
+                margin-left:5px;
+            }
+            >.pageActions {
+                line-height:40px;
+                align-self:stretch;
+            }
+            align-items: center;
+            color: $icon-color;
 
-      .facetsMenuButton {
-        margin-left: 1.5rem;
-      }
+            .filterSearchBoxContainer {
+                flex: 0 0 auto;
+                input {
+                    width:100%;
+                    margin: 5px 0;
+                    min-width: 60px;
+                    max-width: 180px;
+                }
+            }
 
-      .clearAllFacets {
-        display: inline-block;
-        margin-left: .5rem;
-        vertical-align: top;
-        margin-top: -4px;
-        font-size: 16px;
-      }
+            .facetsMenuButton {
+                margin-left: 1.5rem;
+                cursor: pointer;
+            }
 
-      .recordsCount {
-        margin-left: 1.5rem;
-      }
+            .clearAllFacets {
+                display: inline-block;
+                margin-right: .5rem;
+                margin-left: .5rem;
+                vertical-align: top;
+                font-size: 16px;
+                cursor: pointer;
+            }
+
+            .recordsCount {
+                margin-right: 1rem;
+            }
+        }
+
+        .loadedContent {
+            display:flex;
+            flex: 1 1 auto;
+            width:100%;
+            //overflow-y: auto;
+        }
+
+
+        // this fake facet button which hidden in release; devs
+        // can show it by commenting this or running
+        // document.getElementById('fakeFacet').style.display='block';  or
+        // document.getElementsByClassName("testFilterButton").style.display='block';
+        // document.getElementsByClassName("testFilterButton").style.display='block';
+        // in the browser debugger
+        .testFilterButton {
+            display: none;
+            margin-left: 1rem;
+        }
     }
 
-    .loadedContent {
-      flex: 1 0 auto;
-      overflow-y: auto;
-      margin-left: 10px;
-      margin-right: 10px;
-      min-height: 552px;
-    }
+    .reportLinks {
+        margin: 0 10px;
+        a {
+            text-decoration: none;
+            .hi {
+                padding-right: 4px;
+            }
+        }
+        a:hover {
+            text-decoration: none;
+        }
 
-    // this fake facet button which hidden in release; devs
-    // can show it by commenting this or running
-    // document.getElementById('fakeFacet').style.display='block';  or
-    // document.getElementsByClassName("testFilterButton").style.display='block';
-    // document.getElementsByClassName("testFilterButton").style.display='block';
-    // in the browser debugger
-    .testFilterButton {
-      display: none;
-      margin-left: 1rem;
     }
 }
 
-.reportLinks {
-  margin: 0 10px;
-  a {
-    text-decoration: none;
-    .hi {
-      padding-right: 4px;
-    }
-  }
-  a:hover {
-    text-decoration: none;
-    }
-
-  }
-
-  @media (max-width: 1150px) {
+@include small-breakpoint {
     .layout-stage {
-      //display: none;//for now
-      .right {
-        display: none;
+        .right {
+            display: none;
 
-      }
-      .report-content .left {
-        width: 100%;
-      }
+        }
+        .report-content .left {
+            width: 100%;
+        }
     }
-  }
+}
+
+@include medium-breakpoint {
+    .layout-stage {
+        .right {
+            display: none;
+
+        }
+        .report-content .left {
+            width: 100%;
+        }
+    }
+}
+
+.reportContent {
+    width:100%;
+    flex:1 1 auto;
+    display:flex;
+}
+
+
+@include small-breakpoint {
+    .reportContainer .reportToolsAndContentContainer .reportToolbar {
+        color:$secondary-bar-fg;
+        justify-content:space-between;
+    }
+    .reportContainer .reportToolsAndContentContainer .loadedContent {
+        min-height: 430px;
+        margin:0;
+        width:100%;
+    }
 }

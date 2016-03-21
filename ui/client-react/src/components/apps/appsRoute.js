@@ -9,13 +9,15 @@ let FluxMixin = Fluxxor.FluxMixin(React);
 let AppsRoute = React.createClass({
     mixins: [FluxMixin],
 
-    contextTypes: {
-        breakpoint: React.PropTypes.string
+    componentDidMount() {
+        // no title for now...
+        let flux = this.getFlux();
+        flux.actions.showTopNav();
     },
     render: function() {
 
         return (<div>
-            <div>Apps go here... {this.context.breakpoint}</div>
+            <div>Apps go here...</div>
         </div>);
     }
 });

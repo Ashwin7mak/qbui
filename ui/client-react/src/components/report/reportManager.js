@@ -40,7 +40,7 @@ let ReportManager = React.createClass({
 
                     </div>
                     <div className="reportGroups">
-                        <ReportGroup reports ={this.reportList()} title={"Recent"} onSelectReport={this.props.onSelectReport} isOpen={true}/>
+                        <ReportGroup reports ={this.reportList()} title={"Recent"} onSelectReport={this.props.onSelectReport}/>
                         <ReportGroup reports ={this.reportList()} title={"Common"} onSelectReport={this.props.onSelectReport}/>
                         <ReportGroup reports ={this.reportList()} title={"My Reports"} onSelectReport={this.props.onSelectReport}/>
                     </div>

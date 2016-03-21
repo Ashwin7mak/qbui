@@ -13,6 +13,7 @@
  * // using array as fieldids used for keys are not always sequential as a array would serve
 **/
 import Logger from '../../utils/logger';
+import * as schemaConsts from '../../constants/schema.js';
 import _ from 'lodash';
 let logger = new Logger();
 
@@ -20,6 +21,12 @@ class FacetSelections {
     constructor() {
         let emptyList = {};
         this.initSelections(emptyList);
+    }
+
+    copy() {
+        let result = new FacetSelections();
+        result.initSelections(this.selectionsHash);
+        return result;
     }
 
     initSelections(newSet) {
@@ -36,7 +43,7 @@ class FacetSelections {
      *
      */
     hasAnySelections() {
-        if (_.keys(this.selectionsHash).length === 0) {
+        if (Object.keys(this.selectionsHash).length === 0) {
             return false;
         } else {
             let foundAny =  _.some(this.selectionsHash, function(x) {
@@ -44,6 +51,22 @@ class FacetSelections {
             });
             return foundAny;
         }
+    }
+
+    /**
+     * Get list of fields with selections
+     *
+     */
+    whichHasAnySelections() {
+        let answer = [];
+        let fields = Object.keys(this.selectionsHash);
+        if (fields.length !== 0) {
+            answer = fields.filter((x) => {
+                let selectionsForField = this.selectionsHash[x];
+                return (selectionsForField && (selectionsForField.length > 0));
+            });
+        }
+        return answer;
     }
 
     /**
@@ -65,8 +88,8 @@ class FacetSelections {
         if (this.selectionsHash[fieldId]) {
             // find the value,
             // todo// sort it first (in case there lots might be faster find)
-            //return (_.indexOf(_.sortBy(this.selectionsHash[fieldId], value)) !== -1);
-            return (_.indexOf(this.selectionsHash[fieldId], value) !== -1);
+            //return (sortBy(this.selectionsHash[fieldId].indexOf(value)) !== -1);
+            return (this.selectionsHash[fieldId].indexOf(value) !== -1);
         } else {
             // nothing selected
             return false;
@@ -167,6 +190,19 @@ class FacetSelections {
             // remove to mark it deselected
             this.removeSelection(facetField.id, value);
         }
+        // boolean only has either true or false set not both
+        if (facetField.type === schemaConsts.CHECKBOX) {
+            // if we just did a select and the selection for this field is both true & false
+            // disable the other one that the newly selected
+            let YesMsg = 'report.facets.yesCheck';
+            let NoMsg = 'report.facets.noCheck';
+            // when react 18n supports plain string (non dom wrapped) xtlate use the message keys above
+            if (select) {
+                let other = (value === 'Yes') ? 'No' : 'Yes';
+                this.removeSelection(facetField.id, other);
+            }
+
+        }
         ////caller to update the state
     }
 
@@ -183,18 +219,6 @@ class FacetSelections {
         this.setFacetValueSelectState(facetField, value, !this.isValueInSelections(facetField.id, value));
     }
 
-    /**
-     * function: handleToggleSelect
-     * handle the ui request of event occurs to handled changing the collapse/expand state of a
-     * facet field group. To make the facet field groups values hidden or shown.
-     * @param e - the event object from the browser/react
-     * @param facetField - the facet field group to act on
-     * @param value - the value to select
-     **/
-    handleToggleSelect(e, facetField, value) {
-        logger.debug("got toggle select on field id " + facetField.id + " value " + value);
-        this.toggleSelectFacetValue(facetField, value);
-    }
 }
 
 export default FacetSelections;

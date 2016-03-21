@@ -6,14 +6,17 @@ import Logger from '../../utils/logger';
 import {I18nMessage} from '../../utils/i18nMessage';
 import StringUtils from '../../utils/stringUtils';
 
-import  {fieldSelections} from './facetProps';
+import  {fieldSelections, facetsProp} from './facetProps';
 
 import FacetsItem from './facetsItem';
 import QBicon from '../qbIcon/qbIcon';
+import simpleStringify from '../../../../common/src/simpleStringify';
+import * as schemaConsts from '../../constants/schema.js';
 
 import './facet.scss';
 import _ from 'lodash';
 
+let logger = new Logger();
 
 /**
  *  FacetsList component presents a list of facets available to filter the report on;
@@ -30,9 +33,7 @@ var FacetsList = React.createClass({
     propTypes: {
         reportData: React.PropTypes.shape({
             data: React.PropTypes.shape({
-                facets:  React.PropTypes.shape({
-                    list: React.PropTypes.array.isRequired
-                })
+                facets:  facetsProp
             })
         }),
         selectedValues: fieldSelections
@@ -40,30 +41,84 @@ var FacetsList = React.createClass({
 
     getDefaultProps() {
         return {
-            isCollapsed : function() {return false;}
+            isCollapsed() {return false;}
         };
     },
 
-    facetsList(facetsData) {
-        return facetsData.list.map((facetField) => {
-            var fid = facetField.id;
+    shouldComponentUpdate(nextProps, nextState) {
 
-            var moreInputProps = {
+        let answer = false;
+
+        if (this.props.selectedValues &&
+            (!_.isEqual(nextProps.selectedValues.getSelections(), this.props.selectedValues.getSelections()))) {
+            answer = true;
+        }
+
+        if (!_.isEqual(nextProps.expandedFacetFields, this.props.expandedFacetFields)) {
+            answer = true;
+        }
+
+        if (!_.isEqual(nextProps.moreRevealedFacetFields, this.props.moreRevealedFacetFields)) {
+            answer = true;
+        }
+
+        return answer;
+    },
+
+    facetsList(facetsData) {
+
+        //values are expected to be objects {value:'xx'},
+        // make it so until node layer is changed
+        let YesMsg = 'report.facets.yesCheck';
+        let NoMsg = 'report.facets.noCheck';
+
+        if (facetsData.length && facetsData[0].values && facetsData[0].values.length && typeof facetsData[0].values[0] !== 'object') {
+            facetsData = facetsData.map((aFacet) => {
+                aFacet.values = aFacet.values.map((val) => {
+                    if (aFacet.type.toUpperCase() === schemaConsts.CHECKBOX) {
+                        if (!val || val === "" || val === 0 ||
+                            val.toString().toUpperCase() === 'NO' ||
+                            val.toString().toUpperCase() === 'FALSE') {
+                            // when react 18n supports plain string (non dom wrapped)
+                            // xtlate use the message keys above
+                            val = 'No';
+                        } else {
+                            val = 'Yes';
+                        }
+                    }
+                    return {value: val};
+                });
+                return aFacet;
+            });
+        }
+        // filter out the date fields for now
+        // TODO: support date ranges in filtering see https://jira.intuit.com/browse/QBSE-20422
+        if (facetsData.length && facetsData[0].values) {
+            facetsData.filter((facetField) => !(facetField.type.toUpperCase().includes(schemaConsts.DATE)));
+        }
+        // create field facet sections
+        return facetsData.map((facetField) => {
+            var fid = facetField.id;
+            var inputProps = {
                 eventKey: facetField,
-                facet: facetField,
-                key: fid,
+                key: "FacetsItem." + this.props.popoverId + "." + fid,
                 ref: fid,
-                expanded: !this.props.isCollapsed(fid),
-                handleToggleCollapse: this.props.handleToggleCollapse,
+                facet: facetField,
+                popoverId : this.props.popoverId,
+                maxInitRevealed : this.props.maxInitRevealed,
+                isRevealed :!_.isUndefined(this.props.isRevealed) && this.props.isRevealed(fid),
+                expanded: !_.isUndefined(this.props.isCollapsed) && !this.props.isCollapsed(fid),
                 handleSelectValue: this.props.onFacetSelect,
-                handleClearFieldSelects: this.props.onFacetClearFieldSelects
+                handleToggleCollapse: this.props.handleToggleCollapse,
+                handleClearFieldSelects: this.props.onFacetClearFieldSelects,
+                handleRevealMore: this.props.handleRevealMore
             };
 
             if (this.props.selectedValues && this.props.selectedValues.getFieldSelections) {
-                moreInputProps.fieldSelections = this.props.selectedValues.getFieldSelections(fid);
+                inputProps.fieldSelections = this.props.selectedValues.getFieldSelections(fid);
             }
 
-            return <FacetsItem {...this.props}  {...moreInputProps} />;
+            return <FacetsItem  {...inputProps} />;
         });
     },
 
@@ -72,17 +127,21 @@ var FacetsList = React.createClass({
      * @returns {XML}
      */
     render() {
-        let noFacetsMessage = "report.noFacets";
+        let noFacetsMessage = "report.facets.noFacets";
+        //TODO get xd specific for handle no facet info returned from server see https://jira.intuit.com/browse/QBSE-19865
         return (
             <Popover id={this.props.popoverId}
                      arrowOffsetLeft={28}
                      placement="bottom"
                      className="facetMenuPopup"
                      ref={(thisComponent) => this._facetMenuArea = thisComponent}>
-                {this.props.reportData && this.props.reportData.data &&
-                this.props.reportData.data.facets && this.props.reportData.data.facets.list ?
-                    this.facetsList(this.props.reportData.data.facets) :
-                    <I18nMessage message={noFacetsMessage}/>}
+                    {this.props.reportData && this.props.reportData.data  &&
+                    this.props.reportData.data.facets && (this.props.reportData.data.facets.length > 0) &&
+                    this.props.reportData.data.facets[0].values ?
+                        this.facetsList(this.props.reportData.data.facets) :
+                        <div className="noFacetValues">
+                            <I18nMessage message={noFacetsMessage}/>
+                        </div>}
             </Popover>
         );
     }

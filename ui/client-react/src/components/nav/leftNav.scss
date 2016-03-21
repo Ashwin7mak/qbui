@@ -1,44 +1,98 @@
 @import '../../assets/css/qbVariables';
-@import '../../assets/css/qbColorVariables';
 
 /*left nav vars */
 $left-nav-padding: 15px;
-$left-nav-bg: #002b48;
 $left-nav-fg: #fff;
-$left-nav-link-fg: #cad8e9;
+$left-nav-link-fg: #7090ab;
+$left-nav-link-hover-fg: #fff;
 $left-nav-heading-bg: #002b48;
 $left-nav-input-fg: #555;
 
-$left-nav-heading-hover-fg: #bbd;
+$left-nav-hover-bg: #00b0c2;
 $left-nav-heading-bg: #264a6d;
 $left-nav-heading-fg: #bfcfe3;
+$left-nav-bg: #193048;
+$selected-table-fg: #fff;
+$right-icon-separator-color: #13dbf1;
+$left-nav-horizontal-icon-border-color: #131f2b;
 
 .leftNav.open {
-    overflow: hidden;
+    overflow: visible;
+}
+
+.leftNav {
+    a,a:hover,a:focus {
+        text-decoration: none;
+    }
+    .leftNavLabel {
+        vertical-align: middle;
+    }
 }
 
 .leftNav a.leftNavLink {
     width: 100%;
     cursor: pointer;
-}
-
-.xlarge-breakpoint .leftNav.open {
-    width: 400px;
-
-}
-
-.large-breakpoint .leftNav.open {
-    width: 300px;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    overflow: hidden;
 
 }
 
-.medium-breakpoint .leftNav.open {
-    width: 200px;
+.leftNav .link {
+    height: 40px;
+    a.leftNavLink {
+        padding-right: 34px;
+    }
 }
 
-.small-breakpoint.touch .leftNav.open {
-    width: 300px;
+.leftNav .link.selected {
+    a.leftNavLink {
+        color: $selected-table-fg;
+    }
+    a.right {
+        opacity: 1;
+        color: $selected-table-fg;
+        background-color: $left-nav-hover-bg;
+    }
+}
 
+.leftNav .globalActions {
+    display: none;
+}
+
+@include medium-breakpoint {
+    .leftNav.open {
+        width: 200px;
+    }
+}
+
+@include large-breakpoint {
+    .leftNav.open {
+        width: 220px;
+    }
+}
+
+@include xlarge-breakpoint {
+    .leftNav.open {
+        width: 300px;
+    }
+}
+
+@include small-breakpoint {
+    .leftNav .globalActions {
+        display: block;
+    }
+    .leftNav.open {
+        width: 300px;
+        transition: width 100ms ease;
+        .topLinks .leftNavLink {
+            padding: 10px 0;
+            .qbIcon {
+                display: inline-block;
+                width: auto;
+            }
+        }
+    }
 }
 
 /* show tooltips only if .show is present unless we're on a touchscreen */
@@ -46,20 +100,52 @@ div.leftNavTooltip {
     display: none;
 }
 
-body:not(.touch) div.leftNavTooltip.show {
-    display: block;
+@include not-small-breakpoint {
+    div.leftNavTooltip.show {
+        display: block;
+    }
 }
 
-body:not(.touch) .leftNav.closed {
-    width: 40px;
-    overflow: hidden;
-    li a.heading {
-        background-color: $left-nav-heading-bg;
+/* collapsed nav overrides */
+@include not-small-breakpoint {
+    .leftNav.closed {
+        width: 40px;
+        .branding {
+            .logo, .appsToggle .navLabel, .appsToggleIcon {
+                display: none;
+            }
+        }
+        li a.heading {
+            display: none;
+        }
+        li.horizontal, .globalActions {
+            ul {
+                flex-direction: column;
+            }
+        }
+        li.link:hover .hoverComponent {
+            display: flex;
+        }
+
+        .globalActions > ul > li > a.globalActionLink {
+
+            .navLabel {
+                display: none;
+            }
+        }
+        .globalAction:last-child {
+            display: none;
+        }
+    }
+}
+
+@include small-breakpoint {
+    .leftNav.closed {
+        overflow: hidden;
     }
 }
 
 .leftNav {
-    border-right: 1px solid $nav-border;
     background-color: $left-nav-bg;
     display: flex;
     flex-direction: column;
@@ -67,47 +153,105 @@ body:not(.touch) .leftNav.closed {
     color: $left-nav-fg;
 
     position: relative;
-    .appsToggle {
-        margin-top: 4px;
-        margin-bottom: 10px;
-        cursor: pointer;
+
+    .qbIcon {
+        font-size: 22px;
     }
 
     .branding {
+        position: relative;
+
         flex: 0 0 auto;
-        padding: 6px;
-        border-bottom: $global-actions-border;
-        .iconssturdy-caret-down {
-            transition: transform 300ms ease-in;
-            transform: rotate(-90deg);
+        border-bottom: 1px solid $left-nav-horizontal-icon-border-color;
+
+        .toggleNavButton {
+            display: none;
+            position: absolute;
+            right: 10px;
+            top: 11px;
+            color: $left-nav-heading-fg;
+            .qbIcon {
+                font-size: 16px;
+            }
+        }
+        .logo {
+            line-height: 54px;
+            padding-left: 10px;
+            margin: 0;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+        .appsToggle {
+            padding-left: 8px;
+            position: relative;
+            line-height: 40px;
+            white-space: nowrap;
+            cursor: pointer;
+            background-color: $left-nav-hover-bg;
+            .qbIcon {
+                width: 28px;
+                vertical-align: middle;
+            }
+            .iconssturdy-caret-filled-up {
+                position: absolute;
+                right: 5px;
+                width: auto;
+                top: 8px;
+                transition: transform 300ms ease-in;
+                transform: rotate(-180deg);
+            }
         }
     }
     .globalActions {
         flex: 0 1 auto;
         bottom: 0;
 
-        .globalAction {
-            border-top: $global-actions-border;
-            a {
-                width: 100%;
-                line-height: 25px;
+        a.globalActionLink, .dropup {
+            width: 100%;
+            line-height: 25px;
+        }
+    }
+
+    .search {
+        color: $search-input-fg;
+        overflow: hidden;
+        height: 0;
+        transition: all 250ms ease;
+        input {
+            padding-left: 5px;
+            border: 2px;
+            width: 100%;
+            color: $left-nav-input-fg;
+        }
+    }
+    .search.open {
+        padding: 0 8px;
+        height: 42px;
+        line-height: 28px;
+        transition: all 250ms ease;
+    }
+    .heading {
+        font-size: 12px;
+        color: $left-nav-heading-fg;
+        margin: 0;
+        padding-left: 10px;
+
+        &.withSecondary {
+            cursor: pointer;
+            line-height: 40px;
+            .qbIcon {
+                font-size: 16px;
+                position: absolute;
+                right: 4px;
+                top: 10px;
             }
         }
     }
     .transitionGroup {
         flex: 1;
-        overflow-y: auto;
-        overflow-x: hidden;
-    }
-    .searchApps {
-        padding: 8px;
-        input {
-            padding: 5px 10px;
-            border: 2px;
-            width: 100%;
-            color: $left-nav-input-fg;
-            height: 25px;
-        }
+        overflow: visible;
+        z-index: 1;
     }
 
     ul {
@@ -115,59 +259,73 @@ body:not(.touch) .leftNav.closed {
         list-style-type: none;
         list-style-position: initial;
         list-style-image: initial;
+    }
+
+    ul.globalActionsList li {
+        height:auto;
+    }
+    ul.topLinks, ul.tablesList, ul.appsList, ul.globalActionsList {
         padding: 0;
         margin: 0;
-
-        .heading {
-            font-size: 12px;
-            line-height: 30px;
-            background-color: $left-nav-heading-bg;
-            color: $left-nav-heading-fg;
-            margin: 0;
-            padding-left: 10px;
-        }
-        .heading:hover {
-            color: $left-nav-heading-hover-fg;
-        }
-
-        li {
+        > li {
             position: relative;
+            > a, .globalActionLink {
 
-            a {
-                text-decoration: none;
-                line-height: 35px;
-                padding-left: 10px;
+                line-height: 40px;
+                padding-left: 8px;
                 color: $left-nav-link-fg;
                 display: inline-block;
                 cursor: pointer;
             }
+            .qbIcon {
+                width: 28px;
+                vertical-align: middle;
+            }
+
+        }
+        > li.link:hover {
+            background-color: $left-nav-hover-bg;
+            > a, .dropdownToggle {
+                color: $left-nav-link-hover-fg;
+            }
+            > a.right {
+                opacity: 1;
+                transition: opacity 0.2s ease-in-out;
+                -webkit-transition: opacity 0.2s ease-in-out;
+                -moz-transition: opacity 0.2s ease-in-out;
+                border-bottom: 0;
+                border-left: 1px solid $right-icon-separator-color;
+            }
+        }
+    }
+
+    ul.tablesList {
+
+        > li {
+
             a.right {
                 opacity: 0;
                 position: absolute;
                 right: 0;
-                border-left: $global-actions-border;
-                border-bottom: $global-actions-border;
             }
+            .hoverComponent {
+                display: none;
 
-            a.backLink {
-                cursor: pointer;
-                width: 100%
-            }
-        }
-
-        li.link:hover {
-            color: $nav-hover-fg;
-            background-color: $nav-hover-bg;
-
-            .hi {
-                color: $left-nav-link-fg;
-            }
-            a.right {
-                opacity: 1;
-                transition: all 0.2s ease-in-out;
-                -webkit-transition: all 0.2s ease-in-out;
-                -moz-transition: all 0.2s ease-in-out;
-                border-bottom:0;
+                position: absolute;
+                top: 0;
+                left: 100%;
+                vertical-align: middle;
+                line-height: 40px;
+                width: 200px;
+                background: $left-nav-hover-bg;
+                a {
+                    flex: 1;
+                    opacity: 1;
+                    color: $left-nav-fg;
+                }
+                a.right {
+                    flex: 0 0 auto;
+                }
             }
         }
     }
@@ -179,44 +337,102 @@ body:not(.touch) .leftNav.closed {
     }
 }
 
-/* small (mobile) left nav behaves differently */
+.leftNav.open li.horizontal ul li {
+    height:auto;
+}
+.leftNav li.horizontal, .leftNav .globalActions {
+    height: auto;
+    > ul {
+        display: flex;
+        flex-direction: row;
+        > li {
+            flex: 1 0 auto;
+            border-right: 1px solid $left-nav-horizontal-icon-border-color;
+            > a.leftNavLink, a.globalActionLink {
+                padding: 5px 0;
+                text-align: center;
+                line-height: 20px;
 
-.small-breakpoint.touch .leftNav {
-    margin: 0;
-    height: 100%;
-    width: 0;
-    z-index: 9999;
-    border-right: 1px solid $nav-border;
-    overflow-y: auto;
-
-    ul li a {
-        line-height: 25px;
-    }
-    /* always show right link on mobile (no hover) */
-    ul li.link a.right {
-        opacity: 1;
+                .qbIcon, .navLabel, .dropup {
+                    display: block;
+                    width: 100%;
+                }
+            }
+            /* force dropdown menu to left when global actions are in left nav */
+            &.withDropdown {
+                order:-1;
+            }
+        }
     }
 }
 
-.small-breakpoint.touch .navShell.leftNavOpen {
-    position: relative;
-    left: -300px;
+.leftNav .tablesList li.horizontal {
+    border-bottom: 1px solid $left-nav-horizontal-icon-border-color;
+}
 
-    .topNav.mobile {
-        min-width: 640px;
+.leftNav .globalActions {
+    border-top: 1px solid $left-nav-horizontal-icon-border-color;
+}
+
+/* left nav behaves differently on small breakpoint */
+
+.touch .leftNav {
+    /* always show right link on touch */
+    ul li.link a.right {
+        opacity: 1;
+        border: 0;
+        .qbIcon {
+            border-left: 1px solid $left-nav-link-fg;
+            width: 32px;
+            padding-left: 2px;
+        }
     }
-    .main {
-        position: absolute;
+    ul li.link.selected a.right .qbIcon {
+        border-left: 0;
     }
-    .mainContent, .topNav {
-        opacity: .1;
-        transition: opacity 250ms ease-in-out;
-        -moz-transition: opacity 250ms ease-in-out;
-        -webkit-transition: opacity 250ms ease-in-out;
+}
+@include small-breakpoint {
+    .leftNav {
+        margin: 0;
+        height: 100%;
+        width: 0;
+        transition:width 100ms ease;
+        z-index: 9999;
+
+        .branding {
+            .toggleNavButton {
+                display: block;
+            }
+            .logo {
+                padding-right: 24px;
+            }
+        }
+        .tablesList li.horizontal {
+            min-width:300px;
+        }
+
     }
 
-    transform: translate3d(300px, 0, 0);
-    -webkit-transform: translate3d(300px, 0, 0);
+    .navShell.leftNavOpen {
+        position: relative;
+        left: -300px;
+
+        .topNav.mobile {
+            min-width: 640px;
+        }
+        .main {
+            position: absolute;
+        }
+        .mainContent, .topNav {
+            opacity: .1;
+            transition: opacity 250ms ease-in-out;
+            -moz-transition: opacity 250ms ease-in-out;
+            -webkit-transition: opacity 250ms ease-in-out;
+        }
+
+        transform: translate3d(300px, 0, 0);
+        -webkit-transform: translate3d(300px, 0, 0);
+    }
 }
 
 /** REACTCSSTRANSITION BASE CLASSES **/
@@ -227,8 +443,7 @@ body:not(.touch) .leftNav.closed {
 
 .leftNavList.leftNavList-enter-active {
     opacity: 1;
-    transition: all 300ms ease-in;
-    // transition: opacity 500ms ease-in;
+    transition: opacity 300ms ease-in;
 }
 
 .leftNavList-leave {
@@ -261,7 +476,10 @@ $travel-distance: 15;
     transition: all $transition-time ease-in;
 }
 
-.leftNav.appsListOpen .branding .qbIcon.iconssturdy-caret-down {
+.leftNav.appsListOpen .branding .qbIcon.iconssturdy-caret-filled-up {
     transform: rotate(0deg);
 }
+
+
+
 

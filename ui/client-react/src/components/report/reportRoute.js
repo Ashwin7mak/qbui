@@ -3,7 +3,7 @@ import {I18nMessage} from '../../utils/i18nMessage';
 import Locale from '../../locales/locales';
 import Stage from '../stage/stage';
 import ReportStage from './reportStage';
-
+import ReportHeader from './reportHeader';
 
 import Logger from '../../utils/logger';
 let logger = new Logger();
@@ -22,12 +22,11 @@ var ReportRoute = React.createClass({
     mixins: [FluxMixin],
 
     loadReport(appId, tblId, rptId) {
-
-        let flux = this.getFlux();
+        const flux = this.getFlux();
         flux.actions.loadReport(appId, tblId, rptId, true);
     },
-    loadReportFromParams(params) {
 
+    loadReportFromParams(params) {
         let appId = params.appId;
         let tblId = params.tblId;
         let rptId = params.rptId;
@@ -37,24 +36,19 @@ var ReportRoute = React.createClass({
             this.loadReport(appId, tblId, rptId);
         }
     },
-    /* Placeholder method to hook into node layer call to get filtered records when user selects a facet
-    * Hardcoded facetExpression for testing
-    * TODO: replace with a real method.*/
-    filterReport: function() {
-        var filter = {
-            facet: [{fid: '3', values: ['10', '11']}, {fid: '4', values: ['abc']}],
-            search: ''
-        };
-
-        let flux = this.getFlux();
-        flux.actions.filterReport(this.props.params.appId, this.props.params.tblId, this.props.params.rptId, true, filter);
-    },
     componentDidMount() {
+        const flux = this.getFlux();
+        flux.actions.hideTopNav();
+
         if (this.props.params) {
             this.loadReportFromParams(this.props.params);
         }
     },
 
+    getHeader() {
+        return (
+            <ReportHeader reportData={this.props.reportData}/>);
+    },
     render() {
         if (_.isUndefined(this.props.params) ||
             _.isUndefined(this.props.params.appId) ||
@@ -68,6 +62,7 @@ var ReportRoute = React.createClass({
                     <ReportStage reportData={this.props.reportData}/>
                 </Stage>
 
+                {this.getHeader()}
 
                 <ReportToolsAndContent reportData={this.props.reportData}
                                        appId={this.props.params.appId}

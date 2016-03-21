@@ -1,40 +1,46 @@
 import * as actions from '../../src/constants/actions';
+import FacetSelections from '../components/facet/facetSelections';
 
 import Fluxxor from 'fluxxor';
 
 let ReportDataStore = Fluxxor.createStore({
 
-    initialize: function() {
-        this.data = [];
+    initialize() {
+        this.data = {};
         this.loading = false;
         this.error = false;
+        this.searchStringForFiltering = '' ;
+        this.selections  = new FacetSelections();
 
         this.bindActions(
             actions.LOAD_REPORT, this.onLoadReport,
             actions.LOAD_REPORT_SUCCESS, this.onLoadReportSuccess,
             actions.LOAD_REPORT_FAILED, this.onLoadReportFailed,
+            actions.LOAD_RECORDS,  this.onLoadRecords,
             actions.LOAD_RECORDS_SUCCESS, this.onLoadRecordsSuccess,
             actions.LOAD_RECORDS_FAILED, this.onLoadRecordsFailed,
             actions.SEARCH_FOR, this.onSearchFor
         );
     },
 
-    onLoadReport: function(report) {
+    onLoadReport(report) {
         this.loading = true;
 
         this.appId = report.appId;
         this.tblId = report.tblId;
         this.rptId = report.rptId;
+        this.searchStringForFiltering = '' ;
+        this.selections  = new FacetSelections();
 
         this.emit('change');
     },
-    onLoadReportFailed: function() {
+    onLoadReportFailed() {
         this.loading = false;
         this.error = true;
         this.emit('change');
     },
 
-    onLoadReportSuccess: function(reportData) {
+    onLoadReportSuccess(reportData) {
         this.loading = false;
         this.error = false;
 
@@ -43,24 +49,39 @@ let ReportDataStore = Fluxxor.createStore({
             name: reportData.name,
             columns: this.getReportColumns(reportData.data.fields),
             records: records,
-            facets: reportData.facets,
+            facets: reportData.data.facets,
             filteredRecords: records
         };
         this.emit('change');
     },
 
-    onLoadRecordsSuccess: function(records) {
+    onLoadRecords(payload) {
+        this.loading = true;
+
+        this.appId = payload.appId;
+        this.tblId = payload.tblId;
+        this.rptId = payload.rptId;
+        this.selections = payload.filter.selections;
+        this.facetExpression = payload.filter.facet;
+        this.searchStringForFiltering =  payload.filter.search;
+
+        this.emit('change');
+    },
+
+    onLoadRecordsSuccess(records) {
         this.loading = false;
         this.error = false;
         this.data.filteredRecords = this.getReportData(records);
         this.emit('change');
     },
-    onLoadRecordsFailed: function() {
+
+    onLoadRecordsFailed() {
+        this.loading = false;
         this.error = true;
         this.emit('change');
     },
 
-    onSearchFor: function(text) {
+    onSearchFor(text) {
 
         this.data.filteredRecords = [];
 
@@ -82,7 +103,7 @@ let ReportDataStore = Fluxxor.createStore({
         this.emit('change');
     },
 
-    getReportColumns: function(fields) {
+    getReportColumns(fields) {
         let columns = [];
         if (fields) {
             fields.forEach(function(field, index) {
@@ -103,7 +124,7 @@ let ReportDataStore = Fluxxor.createStore({
         return columns;
     },
 
-    getReportData: function(data) {
+    getReportData(data) {
         let fields = data.fields;
         let records = data.records;
         let reportData = [];
@@ -128,16 +149,19 @@ let ReportDataStore = Fluxxor.createStore({
         return reportData;
     },
 
-    getState: function() {
+    getState() {
         return {
             loading: this.loading,
             error: this.error,
             data: this.data,
             appId: this.appId,
             tblId: this.tblId,
-            rptId: this.rptId
+            rptId: this.rptId,
+            searchStringForFiltering: this.searchStringForFiltering,
+            selections: this.selections
         };
     }
+
 });
 
 export default ReportDataStore;

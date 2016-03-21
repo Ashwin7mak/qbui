@@ -8,7 +8,7 @@
         XLARGE_BP_WIDTH : 1441,
         LARGE_BP_WIDTH : 1025,
         MEDIUM_BP_WIDTH : 641,
-        SMALL_BP_WIDTH : 400,
+        SMALL_BP_WIDTH : 500,
         DEFAULT_HEIGHT : 1440,
 
         reportFieldNames : ['Record ID#', 'Text Field', 'Numeric Field', 'Numeric Currency Field', 'Numeric Percent Field', 'Numeric Rating Field',
@@ -24,25 +24,25 @@
                     browserWidth: e2eConsts.XLARGE_BP_WIDTH,
                     breakpointSize: 'xlarge',
                     open: true,
-                    clientWidth: '399'
+                    offsetWidth: '300'
                 },
                 {
                     browserWidth: e2eConsts.LARGE_BP_WIDTH,
                     breakpointSize: 'large',
                     open: true,
-                    clientWidth: '299'
+                    offsetWidth: '220'
                 },
                 {
                     browserWidth: e2eConsts.MEDIUM_BP_WIDTH,
                     breakpointSize: 'medium',
                     open: true,
-                    clientWidth: '199'
+                    offsetWidth: '200'
                 },
                 {
                     browserWidth: e2eConsts.SMALL_BP_WIDTH,
                     breakpointSize: 'small',
-                    open: false,
-                    clientWidth: '39'
+                    open: true,
+                    offsetWidth: '300'
                 }
             ];
         }

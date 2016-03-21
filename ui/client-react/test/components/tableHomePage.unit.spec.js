@@ -11,7 +11,8 @@ describe('TableHomePage functions', () => {
     let flux = {
         actions:{
             selectTableId: function() {return;},
-            loadReports: function() {return;}
+            loadReports: function() {return;},
+            showTopNav: function() {return;}
         }
     };
 

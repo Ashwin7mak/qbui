@@ -2,13 +2,12 @@ import React from 'react';
 import Griddle from 'griddle-react';
 
 import {I18nMessage} from '../../../utils/i18nMessage';
-import * as breakpoints from '../../../constants/breakpoints';
 import ReactCSSTransitionGroup from 'react/lib/ReactCSSTransitionGroup';
 import ReportActions from '../../actions/reportActions';
-import ReportHeader from '../../report/dataTable/reportHeader';
 import CardView from './cardView.js';
 import LimitConstants from './../../../../../common/src/limitConstants';
 import _ from 'lodash';
+import Loader  from 'react-loader';
 
 import './griddleTable.scss';
 import './qbGriddleTable.scss';
@@ -20,7 +19,7 @@ import './qbGriddleTable.scss';
 let GriddleTable = React.createClass({
 
     contextTypes: {
-        breakpoint: React.PropTypes.string,
+        touch: React.PropTypes.bool,
         history: React.PropTypes.object
     },
 
@@ -47,7 +46,6 @@ let GriddleTable = React.createClass({
 
     getDefaultProps() {
         return {
-            mobile: false,
             showFilter: false,
             showSettings: false,
             currentPage: 0,
@@ -69,7 +67,8 @@ let GriddleTable = React.createClass({
     getInitialState() {
         return {
             selectedRows: [],
-            allowCardSelection: false
+            allowCardSelection: false,
+            toolsMenuOpen: false
         };
     },
     /**
@@ -94,16 +93,16 @@ let GriddleTable = React.createClass({
         return this.state.allowCardSelection;
     },
 
-    /**
-     * toggle the card selection mode
-     */
-    onToggleCardSelection(allow = true) {
+    onToggleCardSelection(allow = true, rowData = null) {
         this.setState({allowCardSelection: allow});
 
         if (!allow) {
             this.setState({selectedRows: []});
+        } else if (rowData) {
+            this.onCardRowSelected(rowData);
         }
     },
+
 
     /**
      * report row was clicked
@@ -121,7 +120,7 @@ let GriddleTable = React.createClass({
             recId = row[this.props.uniqueIdentifier];
         }
         //create the link we want to send the user to and then send them on their way
-        const link = '/app/' + appId + '/table/' + tblId + '/record/' + recId;
+        const link = `/app/${appId}/table/${tblId}/record/${recId}`;
         this.context.history.push(link);
 
         // something like this I expect, maybe in an action instead:
@@ -146,19 +145,38 @@ let GriddleTable = React.createClass({
     },
 
     /**
+     * keep track of tools menu being open (need to change overflow css style)
+     */
+    onMenuEnter() {
+        this.setState({toolsMenuOpen:true});
+    },
+    /**
+     * keep track of tools menu being closed (need to change overflow css style)
+     */
+    onMenuExit() {
+        this.setState({toolsMenuOpen:false});
+    },
+    /**
      * get table actions if we have them - render selectionActions prop if we have an active selection,
      * otherwise the reportHeader prop (cloned with extra key prop for transition group, and selected rows
      * for selectionActions component)
      */
     getTableActions() {
 
-        return (this.props.reportHeader && this.props.selectionActions && (
-            <ReactCSSTransitionGroup transitionName="tableActions" component="div" className={"tableActionsContainer"}  transitionEnterTimeout={300} transitionLeaveTimeout={300}>
+        const hasSelection  = this.state.selectedRows.length;
 
-                {this.state.selectedRows.length ?
+        let classes = "tableActionsContainer secondaryBar";
+        if (this.state.toolsMenuOpen) {
+            classes += " toolsMenuOpen";
+        }
+        if (hasSelection) {
+            classes += " selectionActionsOpen";
+        }
+        return (this.props.reportHeader && this.props.selectionActions && (
+            <div className={classes}>{hasSelection ?
                     React.cloneElement(this.props.selectionActions, {key:"selectionActions", selection: this.state.selectedRows}) :
-                    React.cloneElement(this.props.reportHeader, {key:"reportHeader"})}
-            </ReactCSSTransitionGroup>));
+                    React.cloneElement(this.props.reportHeader, {key:"reportHeader", onMenuEnter:this.onMenuEnter, onMenuExit:this.onMenuExit})}
+            </div>));
     },
 
     /**
@@ -170,9 +188,9 @@ let GriddleTable = React.createClass({
 
     render() {
 
-        const isCardLayout = this.context.breakpoint === breakpoints.SMALL_BREAKPOINT;
+        const isCardLayout = this.context.touch;
 
-        let griddleWrapperClasses = this.state.selectedRows.length ? "selectedRows" : "";
+        let griddleWrapperClasses = this.state.selectedRows.length ? "griddleWrapper selectedRows" : "griddleWrapper";
 
         if (this.state.allowCardSelection) {
             griddleWrapperClasses += " allowCardSelection";
@@ -183,26 +201,33 @@ let GriddleTable = React.createClass({
         if (results) {
 
             return (
-                <div className="reportTable" >
+                    <div className="reportTable" >
 
-                    {this.getTableActions()}
+                        {this.getTableActions()}
 
-                    <div onClick={this.onTableClick} className={griddleWrapperClasses}>
-                        <Griddle {...this.props}
-                            ref="griddleTable"
-                            isMultipleSelection={true}
-                            selectedRowIds={this.state.selectedRows}
-                            uniqueIdentifier={this.props.uniqueIdentifier}
-                            results={results}
-                            useCustomRowComponent={isCardLayout}
-                            onRowClick={this.onRowClicked}
-                            />
+                        <div onClick={this.onTableClick} className={griddleWrapperClasses}>
+                             <Loader loaded={!this.props.reportData.loading}>
+                                <Griddle {...this.props}
+                                    ref="griddleTable"
+                                    isMultipleSelection={true}
+                                    selectedRowIds={this.state.selectedRows}
+                                    uniqueIdentifier={this.props.uniqueIdentifier}
+                                    results={results}
+                                    useCustomRowComponent={isCardLayout}
+                                    onRowClick={this.onRowClicked}
+                                    />
+                             </Loader>
+                            { //keep empty placeholder when loading to reduce reflow of space, scrollbar changes
+                                this.props.reportData.loading ? <div className="loadedContent"></div> : null
+                            }
+                        </div>
                     </div>
-                </div>
             );
         } else {
             return (
-                <div><I18nMessage message={'grid.no_data'}/></div>
+                <Loader loaded={!this.props.reportData.loading}>
+                    <div><I18nMessage message={'grid.no_data'}/></div>
+                </Loader>
             );
         }
     }

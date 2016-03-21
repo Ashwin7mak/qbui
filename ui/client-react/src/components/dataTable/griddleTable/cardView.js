@@ -25,10 +25,16 @@ let CardView = React.createClass({
         };
     },
 
+    /**
+     * toggle expanded card (unless in selection mode)
+     * @param e event
+     */
     handleMoreCard(e) {
-        this.setState({showMoreCards: !this.state.showMoreCards});
+        if (!this.context.allowCardSelection()) {
+            this.setState({showMoreCards: !this.state.showMoreCards});
 
-        e.stopPropagation();
+            e.stopPropagation(); // don't navigate to record
+        }
     },
 
     createField(c, curKey) {
@@ -106,7 +112,7 @@ let CardView = React.createClass({
     },
 
     /**
-     * either hide actions column or show selection column
+     * hide actions column or show selection column if actions are not open
      */
     swipedRight() {
 
@@ -115,7 +121,7 @@ let CardView = React.createClass({
                 showActions: false
             });
         } else if (!this.context.allowCardSelection()) {
-            this.context.onToggleCardSelection(true);
+            this.context.onToggleCardSelection(true, this.props.data);
         }
     },
     /* callback when row is selected */
@@ -126,12 +132,11 @@ let CardView = React.createClass({
     },
     /* close actions when row is clicked */
     onRowClick() {
-
         if (this.state.showActions) {
             this.setState({
                 showActions: false
             });
-        } else if (this.context.onRowClicked) {
+        } else if (this.context.onRowClicked && !this.context.allowCardSelection()) {
             this.context.onRowClicked(this.props.data);
         }
     },

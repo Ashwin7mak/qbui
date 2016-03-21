@@ -78,7 +78,7 @@
          */
         it('Should load the reports page with the appropriate table report and verify the fieldNames and records', function() {
             // Select the table
-            reportServicePage.tableLinksElList.get(3).click();
+            reportServicePage.tableLinksElList.get(2).click();
             // Open the reports list
             reportServicePage.reportHamburgersElList.get(0).click();
             // Wait for the report list to load
@@ -88,6 +88,8 @@
             });
             // Wait until the table has loaded
             reportServicePage.waitForElement(reportServicePage.loadedContentEl).then(function() {
+                //TODO: Assert report icon has been highlighted to indicate which table you are on
+
                 // Assert column headers
                 reportServicePage.getReportColumnHeaders(reportServicePage).then(function(resultArray) {
                     // UI is currently using upper case to display the field names in columns
@@ -106,7 +108,7 @@
          */
         it('Table report should expand width past the browser size to show all available data (large num columns)', function() {
             // Select the table
-            reportServicePage.tableLinksElList.get(3).click().then(function() {
+            reportServicePage.tableLinksElList.get(2).click().then(function() {
                 // Open the reports list
                 reportServicePage.reportHamburgersElList.get(0).click();
                 // Wait for the report list to load
@@ -118,8 +120,8 @@
                 reportServicePage.waitForElement(reportServicePage.loadedContentEl).then(function() {
                     // Check there is a scrollbar in the griddle table
                     var fetchRecordPromises = [];
-                    fetchRecordPromises.push(reportServicePage.loadedContentEl.getAttribute('scrollWidth'));
-                    fetchRecordPromises.push(reportServicePage.loadedContentEl.getAttribute('clientWidth'));
+                    fetchRecordPromises.push(reportServicePage.griddleWrapperEl.getAttribute('scrollWidth'));
+                    fetchRecordPromises.push(reportServicePage.griddleWrapperEl.getAttribute('clientWidth'));
                     //When all the dimensions have been fetched, assert the values match expectations
                     Promise.all(fetchRecordPromises).then(function(dimensions) {
                         expect(Number(dimensions[0])).toBeGreaterThan(Number(dimensions[1]));
@@ -134,9 +136,10 @@
          */
         it('Table report should expand width to take up available space (small num of columns)', function() {
             // Select the table
-            reportServicePage.tableLinksElList.get(4).click().then(function() {
-                // Open the reports list
-                reportServicePage.reportHamburgersElList.get(1).click();
+            reportServicePage.tableLinksElList.get(3).click().then(function() {
+                // Open the reports menu for the second table
+                reportServicePage.openReportsMenu(reportServicePage.tableLinksElList.get(3));
+
                 // Wait for the report list to load
                 reportServicePage.waitForElement(reportServicePage.reportGroupsDivEl).then(function() {
                     // Find and select the report
@@ -146,8 +149,8 @@
                 reportServicePage.waitForElement(reportServicePage.loadedContentEl).then(function() {
                     // Check there is no scrollbar in the griddle table
                     var fetchRecordPromises = [];
-                    fetchRecordPromises.push(reportServicePage.loadedContentEl.getAttribute('scrollWidth'));
-                    fetchRecordPromises.push(reportServicePage.loadedContentEl.getAttribute('clientWidth'));
+                    fetchRecordPromises.push(reportServicePage.griddleWrapperEl.getAttribute('scrollWidth'));
+                    fetchRecordPromises.push(reportServicePage.griddleWrapperEl.getAttribute('clientWidth'));
                     //When all the dimensions have been fetched, assert the values match expectations
                     Promise.all(fetchRecordPromises).then(function(dimensions) {
                         expect(Number(dimensions[0])).not.toBeGreaterThan(Number(dimensions[1]));

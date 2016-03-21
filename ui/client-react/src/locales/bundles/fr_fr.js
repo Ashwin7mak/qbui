@@ -6,8 +6,6 @@ export default {
             header: "Vos Apps"
         },
         reports : {
-            newReport: "Nouveau",
-            organizeReports: "Organiser",
             emailReportTooltip: "Partager ces documents avec quelqu'un d'autre",
             emailSubject: "'{reportName}' rapport depuis l'application QuickBase '{appName}'",
             emailBody: "Voici le rapport de la '{reportName}' '{tableName}' de table dans '{appName}'"
@@ -45,7 +43,9 @@ export default {
             tablesHeading: "Les Tables",
             appsHeading: "Vos Apps",
             searchAppsPlaceholder: "Chercher apps...",
-            searchReportsPlaceholder: "Chercher rapports..."
+            searchTablesPlaceholder: "Chercher tables...",
+            searchReportsPlaceholder: "Chercher rapports...",
+            searchRecordsPlaceholder: "Chercher..."
         },
         grid: {
             no_data: "Il n'y a pas de données à afficher."
@@ -68,10 +68,21 @@ export default {
             }
         },
         report : {
-            filteredRecordCount : "{filteredRecordCount} des {recordCount} {nameForRecords} ",
+            blank : "blanc",
+            facets :{
+                noFacets : "Non valeurs",
+                seeMore : "plus de filtres",
+                tooManyValues: "Trop de valeurs à utiliser pour le filtrage",
+                noCheck : "Non",
+                yesCheck : "Oui"
+            },
+            filteredRecordCount :
+                "{filteredRecordCount} des {recordCount} {nameForRecords} ",
+            newReport: "Nouveau",
+            organizeReports: "Organiser",
             recordCount : "{recordCount} {nameForRecords} ",
-            noFacets : "Aucun Facets",
-            searchPlaceHolder:  "Rechercher ces {nameForRecords} ..."
-        }
+            searchPlaceHolder:  "Rechercher ces {nameForRecords} ...",
+        },
+        cancel: "Annuler"
     }
 };

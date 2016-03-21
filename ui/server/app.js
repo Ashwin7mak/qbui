@@ -63,7 +63,7 @@
                 // add back on an sslport if it's not default of 443
                 domain += ':' + sslPort;
             }
-            log.info('redirecting to: ' + domain + req.url);
+            log.debug('redirecting to: ' + domain + req.url);
             return res.redirect(domain + req.url);
         }
         next();
@@ -71,7 +71,6 @@
 
     require('./config/expressConfig')(app);
     require('./routes')(app, config);
-
     //  log some server config info...but don't include the secrets configuration
     log.info('Express Server configuration:', JSON.stringify(_.omit(config, ['secrets', 'SESSION_SECRET'])));
 

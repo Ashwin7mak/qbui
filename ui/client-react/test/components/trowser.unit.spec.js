@@ -12,12 +12,12 @@ describe('Trowser functions', () => {
     var component;
 
     it('test render of visible trowser', () => {
-        component = TestUtils.renderIntoDocument(<Trowser visible={true} />);
+        component = TestUtils.renderIntoDocument(<Trowser visible={true} content={<div/>} />);
         expect(TestUtils.isCompositeComponent(component)).toBeTruthy();
     });
 
     it('test render of invisible trowser', () => {
-        component = TestUtils.renderIntoDocument(<Trowser visible={false} />);
+        component = TestUtils.renderIntoDocument(<Trowser visible={false} content={<div/>} />);
         expect(TestUtils.isCompositeComponent(component)).toBeTruthy();
     });
 
@@ -31,7 +31,7 @@ describe('Trowser functions', () => {
                 this.setState({trowserOpen:false});
             },
             render() {
-                return <Trowser ref="trowser" visible={this.state.trowserOpen} onHide={this.hideTrowserExample}/>;
+                return <Trowser ref="trowser" content={<div/>} visible={this.state.trowserOpen} onHide={this.hideTrowserExample}/>;
             }
         }));
         var parent = TestUtils.renderIntoDocument(TestParent());
