@@ -104,7 +104,7 @@
              */
             it(testcase.breakpointSize + ' breakpoint: verify table actions Layout container is on top of report griddle container', function() {
                 e2eBase.resizeBrowser(testcase.browserWidth, e2eConsts.DEFAULT_HEIGHT).then(function() {
-                    reportServicePage.isElementOnTop(reportServicePage.tableActionsContainerEl, reportServicePage.griddleContainerEl);
+                    reportServicePage.isElementOnTop(reportServicePage.tableActionsContainerEl, reportServicePage.agGridContainerEl);
                 });
             });
 

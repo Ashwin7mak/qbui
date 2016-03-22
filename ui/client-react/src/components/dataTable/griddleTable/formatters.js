@@ -8,8 +8,14 @@ import {I18nDate, I18nNumber} from '../../../utils/i18nMessage';
 
 export var DateFormatter = React.createClass({
     render: function() {
-        if (this.props.data !== "") {
-            return <I18nDate value={this.props.data}/>;
+        var data = "";
+        if (this.props.data) { //for griddle
+            data = this.props.data;
+        } else if (this.props.params.value) { //for ag grid
+            data = this.props.params.value;
+        }
+        if (data !== "") {
+            return <I18nDate value={data}/>;
         }
         return null;
     }
@@ -17,8 +23,14 @@ export var DateFormatter = React.createClass({
 
 export var NumericFormatter = React.createClass({
     render: function() {
-        if (this.props.data !== "") {
-            return <I18nNumber value={this.props.data}/>;
+        var data = "";
+        if (this.props.data) { //for griddle
+            data = this.props.data;
+        } else if (this.props.params.value) { //for ag grid
+            data = this.props.params.value;
+        }
+        if (data !== "") {
+            return <I18nNumber value={data}/>;
         }
         return null;
     }

@@ -2,21 +2,16 @@ import React from 'react';
 import ReactIntl from 'react-intl';
 import {I18nMessage, I18nDate} from '../../utils/i18nMessage';
 import Locale from '../../locales/locales';
-import Fluxxor from 'fluxxor';
 import {MenuItem, Dropdown, Input} from 'react-bootstrap';
 
 import ActionIcon from './actionIcon';
 import EmailReportLink from './emailReportLink';
 
 import './reportActions.scss';
-
-let FluxMixin = Fluxxor.FluxMixin(React);
 /**
  * a set of record-level action icons
  */
 let RecordActions = React.createClass({
-    mixins: [FluxMixin],
-
     propTypes: {
         selection: React.PropTypes.array
     },
@@ -30,8 +25,10 @@ let RecordActions = React.createClass({
     },
 
     showExtraActions() {
-        let flux = this.getFlux();
-        flux.actions.showTrowser();
+        if (this.props.params.context) {
+            let flux = this.props.params.context.flux;
+            flux.actions.showTrowser();
+        }
     },
     getSelectionTip(actionMsg) {
         return Locale.getMessage(actionMsg);
