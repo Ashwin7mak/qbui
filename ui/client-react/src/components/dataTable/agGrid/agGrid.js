@@ -250,6 +250,9 @@ let AGGrid = React.createClass({
      * add actions column to the end of the array.
      */
     getColumns() {
+        if (!this.props.columns) {
+            return;
+        }
         let columns = this.props.columns.slice(0);
         //Add checkbox column
         let checkBoxCol = {};
@@ -287,15 +290,15 @@ let AGGrid = React.createClass({
     },
 
     render() {
-        if (this.props.records && this.props.records.length > 0) {
-            let columnDefs = this.getColumns();
-            let griddleWrapperClasses = this.state.selectedRows.length ? "griddleWrapper selectedRows" : "griddleWrapper";
-            return (
-                <div className="reportTable" >
+        let columnDefs = this.getColumns();
+        let griddleWrapperClasses = this.state.selectedRows.length ? "griddleWrapper selectedRows" : "griddleWrapper";
+        return (
+            <div className="reportTable" >
 
-                    {this.getTableActions()}
-                    <div className={griddleWrapperClasses}>
-                        <Loader loaded={!this.props.loading}>
+                {this.getTableActions()}
+                <div className={griddleWrapperClasses}>
+                    <Loader loaded={!this.props.loading}>
+                        {this.props.records && this.props.records.length > 0 ?
                             <div className="agGrid">
                                 <AgGridReact
                                     gridOptions={this.gridOptions}
@@ -319,21 +322,16 @@ let AGGrid = React.createClass({
                                     suppressRowClickSelection="true"
                                     suppressCellSelection="true"
                                 />
-                            </div>
-                        </Loader>
-                        { //keep empty placeholder when loading to reduce reflow of space, scrollbar changes
-                            this.props.loading ? <div className="loadedContent"></div> : null
+                            </div> :
+                            <div><I18nMessage message={'grid.no_data'}/></div>
                         }
-                        </div>
+                    </Loader>
+                    { //keep empty placeholder when loading to reduce reflow of space, scrollbar changes
+                        this.props.loading ? <div className="loadedContent"></div> : null
+                    }
                 </div>
-            );
-        } else {
-            return (
-                <Loader loaded={!this.props.loading}>
-                    <div><I18nMessage message={'grid.no_data'}/></div>
-                </Loader>
-            );
-        }
+            </div>
+        );
     }
 });
 
