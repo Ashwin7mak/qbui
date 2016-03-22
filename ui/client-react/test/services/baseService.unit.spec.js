@@ -62,11 +62,7 @@ describe('BaseService rewire tests', () => {
         var url = baseService.constructUrl(mask, tokens);
         expect(output).toEqual(url);
     });
-
-    /**
-     * This test is dependent on the karma.conf.js value of port not changing from 8083. If it does change, the hardcoded
-     * will need to be updated to reflect the new port number.
-     */
+    
     it('test constructRedirectUrl method', () => {
         baseService = new BaseService();
         var expectedUrl = 'https://localhost/db/main?a=nsredirect&nsurl=' + window.location.href;
