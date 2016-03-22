@@ -68,9 +68,9 @@ var config = {
                 // all css files can be required into js files with this
                 test: /\.css?$/,
                 include: [
-                    path.resolve(__dirname, 'client-react/src')
+                    path.resolve(__dirname, 'client-react/src'),
+                    path.resolve(__dirname, 'node_modules/ag-grid')
                 ],
-                exclude: [nodeModulesPath],
                 loader: 'style!css'
             },
             {

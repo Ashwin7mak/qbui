@@ -72,8 +72,8 @@
         // Verify the element is located Top
         this.isElementOnTop = function(element1, element2) {
             // First check that both elements are being displayed
-            this.isElementDisplayed(element1);
-            this.isElementDisplayed(element2);
+            this.assertElementDisplayed(element1);
+            this.assertElementDisplayed(element2);
 
             // Get element1 location
             element1.getLocation().then(function(navDivLocation) {
@@ -96,7 +96,7 @@
         //TODO: Left, Right, Bottom functions
 
         // Verify the element is present in the DOM and displayed (either by the display attribute or hidden prop)
-        this.isElementDisplayed = function(element) {
+        this.assertElementDisplayed = function(element) {
             expect(element.isPresent()).toBeTruthy('element not present in DOM');
             expect(element.isDisplayed()).toBeTruthy('element not displayed on page');
         };
