@@ -310,7 +310,7 @@
             });
         });
 
-        xit('Negative test to verify a facet dropdown has No Values with report without facetsFIDS', function(done) {
+        it('Negative test to verify a facet dropdown has No Values with report without facetsFIDS', function(done) {
             //select table 1 which has report without facetFIDS
             reportServicePage.waitForElement(reportServicePage.tablesListDivEl).then(function() {
                 return reportServicePage.tableLinksElList.get(3).click();
@@ -322,17 +322,11 @@
                     // Find and select the report
                     reportServicePage.selectReport('My Reports', 'Test Report');
                 });
-            }).then(function() {
+            }).then(function () {
                 // expand the popup ad select group
-                reportServicePage.waitForElement(reportServicePage.reportsToolBar).then(function() {
-                    reportServicePage.reportFilterBtnCaret.click().then(function() {
-                        //Verify the popup menu is displayed
-                        expect(reportServicePage.reportFacetPopUpMenu.isDisplayed()).toBeTruthy();
-                    });
-                });
-            }).then(function() {
-                element(by.className('noFacetValues')).getText().then(function(text) {
-                    expect(text).toEqual("No values");
+                reportServicePage.waitForElement(reportServicePage.loadedContentEl).then(function() {
+                    //Verify the facet container is not present in DOM without facets for a report.
+                    expect(reportServicePage.reportFacetMenuContainer.isPresent()).toBeFalsy();
                     done();
                 });
             });
