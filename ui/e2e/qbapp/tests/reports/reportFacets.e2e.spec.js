@@ -48,10 +48,12 @@
             }).then(function() {
                 // Get the appropriate fields out of the fourth table
                 var Fields = e2eBase.tableService.getNonBuiltInFields(app.tables[3]);
-                //generate greater than 201 text records in table 4 for negative testing
+                //TODO: Need to re-enable this once bulk records is fixed
+                // Generate greater than 201 text records in table 4 for negative testing
                 //var generated201Records = e2eBase.recordService.generateRecords(Fields, 300);
                 //return e2eBase.recordService.addBulkRecords(app, app.tables[3], generated201Records);
             }).then(function() {
+                //TODO: Need to re-enable this once bulk records is fixed
                 //Create a new report to do negative testing of >200 text records
                 //return e2eBase.reportService.createReportWithFacets(app.id, app.tables[3].id, [6]);
             }).then(function() {
@@ -101,7 +103,6 @@
                 done.fail('Error during test setup: ' + error.message);
             });
         });
-
 
         /**
          * Before each test starts just make sure the table list div has loaded
@@ -156,8 +157,7 @@
             done();
         });
 
-        xit('Verify facet overlay menu contents are collapsed to start with and matches with table column headers', function(done) {
-            var tableHeaders = [];
+        it('Verify facet overlay menu contents are collapsed to start with and matches with table column headers', function(done) {
             //Click on facet carat
             reportServicePage.reportFilterBtnCaret.click().then(function() {
                 //Verify the popup menu is displayed
@@ -168,22 +168,26 @@
                     expect(elements.length).toBe(4);
                     elements.forEach(function(menuItem) {
                         //Verify by default group is in collapse state
-                        expect(menuItem.getAttribute('class')).toMatch("collapsed");
+                        expect(reportServicePage.getFacetGroupTitle(menuItem).element(by.tagName('a')).getAttribute('class')).toMatch("collapsed");
                     });
                 }).then(function() {
                     // Assert column headers are equal to the popup facet groups
                     reportServicePage.getReportColumnHeaders(reportServicePage).then(function(tableColHeaders) {
-                        //Map all facet groups from the facet popup
-                        var popUpFacetGrps = reportServicePage.unselectedFacetGroupsElList.map(function(elm) {
+                        // Remove Record ID# from the array since it cannot be a facet
+                        tableColHeaders.shift();
+                        // Map all facet groups from the facet popup
+                        reportServicePage.unselectedFacetGroupsElList.map(function(elm) {
                             return elm.getText();
+                        }).then(function(facetGroupNames) {
+                            expect(facetGroupNames).toEqual(tableColHeaders);
+                            // Click out of the facet popup and ensure it closes
+                            reportServicePage.reportRecordsCount.click().then(function() {
+                                // Animation of the popup disappearing
+                                e2eBase.sleep(browser.params.smallSleep);
+                                expect(reportServicePage.reportFacetPopUpMenu.isPresent()).toBeFalsy();
+                                done();
+                            });
                         });
-                        //verify table column names matches with facet group menu contents in the popup.
-                        for (var i = 1; i < tableColHeaders.length; i++) {
-                            tableHeaders.push(tableColHeaders[i]);
-                        }
-                        expect(tableHeaders).toEqual(popUpFacetGrps);
-                        reportServicePage.reportRecordsCount.click();
-                        done();
                     });
                 });
             });
@@ -217,18 +221,19 @@
                 {
                     message: 'Create CheckBox facet',
                     facets: [{"group": "Checkbox Field", "ItemIndex": [0]}]
-                },
-                {
-                    message: 'Create Checkbox and Text facet',
-                    facets: [{"group": "Checkbox Field", "ItemIndex": [1]}, {
-                        "group": "Text Field",
-                        "ItemIndex": [2, 3]
-                    }]
-                },
-                {
-                    message: 'Facet with 1 CheckBox record and 1 Empty Text',
-                    facets: [{"group": "Checkbox Field", "ItemIndex": [0]}, {"group": "Text Field", "ItemIndex": [0]}]
                 }
+                //TODO: Re-enable once bug is fixed for showing no results based on facet selections
+                //{
+                //    message: 'Create Checkbox and Text facet',
+                //    facets: [{"group": "Checkbox Field", "ItemIndex": [0]}, {
+                //        "group": "Text Field",
+                //        "ItemIndex": [2, 3]
+                //    }]
+                //},
+                //{
+                //    message: 'Facet with 1 CheckBox record and 1 Empty Text',
+                //    facets: [{"group": "Checkbox Field", "ItemIndex": [0]}, {"group": "Text Field", "ItemIndex": [0]}]
+                //}
             ];
         }
 
@@ -249,20 +254,17 @@
                             reportServicePage.reportFacetNameSelections.map(function(tokenName, tokenindex) {
                                 return tokenName.getText();
                             }).then(function(selections) {
-                                //TODO: Sort each array before comparing
-                                //expect(selections).toEqual(facetSelections);
+                                // Sort each array before comparing
+                                expect(selections.sort()).toEqual(facetSelections.sort());
                             });
                         });
                     }
                 }).then(function() {
-                    e2eBase.sleep(browser.params.smallSleep);
                     for (var i = 0; i < testcase.facets.length; i++) {
-                        // Verify table filter results
                         verifyFacetTableResults(testcase.facets[i].group);
                     }
                 }).then(function() {
                     // Finally clear all facets from popup menu
-                    e2eBase.sleep(browser.params.smallSleep);
                     for (var j = 0; j < testcase.facets.length; j++) {
                         reportServicePage.getFacetGroupElement(testcase.facets[j].group).then(function(facetGroupEl) {
                             reportServicePage.waitForElementToBeClickable(facetGroupEl).then(function() {
@@ -311,7 +313,7 @@
         });
 
         it('Negative test to verify a facet dropdown has No Values with report without facetsFIDS', function(done) {
-            //select table 1 which has report without facetFIDS
+            // Select table 1 which has report without facetFIDS
             reportServicePage.waitForElement(reportServicePage.tablesListDivEl).then(function() {
                 return reportServicePage.tableLinksElList.get(3).click();
             }).then(function() {
@@ -322,10 +324,10 @@
                     // Find and select the report
                     reportServicePage.selectReport('My Reports', 'Test Report');
                 });
-            }).then(function () {
-                // expand the popup ad select group
+            }).then(function() {
+                // Expand the popup and select group
                 reportServicePage.waitForElement(reportServicePage.loadedContentEl).then(function() {
-                    //Verify the facet container is not present in DOM without facets for a report.
+                    // Verify the facet container is not present in DOM without facets for a report.
                     expect(reportServicePage.reportFacetMenuContainer.isPresent()).toBeFalsy();
                     done();
                 });
@@ -333,7 +335,9 @@
 
         });
 
-        //TODO This should be enabled when bulkRecords is fixed
+        //TODO: Negative test for when your facet selections return no results
+
+        //TODO: This should be enabled when bulkRecords is fixed
         xit('Negative test to verify > 200k Text fields shows error message in facet drop down', function(done) {
             //select table 4
             reportServicePage.waitForElement(reportServicePage.tablesListDivEl).then(function() {
