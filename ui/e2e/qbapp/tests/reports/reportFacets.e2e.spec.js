@@ -283,32 +283,34 @@
             });
         });
 
-        xit('Verify clear all facets tokens from the container', function(done) {
-            var itemsSelceted = [];
-            reportServicePage.waitForElement(reportServicePage.reportsToolBar).then(function() {
+        it('Verify clear all facets tokens from the container', function (done) {
+            reportServicePage.waitForElementToBeClickable(reportServicePage.reportFilterBtnCaret).then(function() {
                 //Click on facet carat to show popup
                 reportServicePage.reportFilterBtnCaret.click().then(function() {
                     //Verify the popup menu is displayed
                     expect(reportServicePage.reportFacetPopUpMenu.isDisplayed()).toBeTruthy();
-                }).then(function() {
+                }).then(function () {
                     //select the facet Items
-                    reportServicePage.selectGroupAndFacetItems("Text Field", [1, 2, 3, 4]).then(function(facetList) {
+                    reportServicePage.selectGroupAndFacetItems("Text Field", [1, 2, 3, 4]).then(function(facetSelections) {
                         //Map all facet tokens from the facet container
-                        var tokens = element.all(by.className('facetSelections')).map(function(tokenName, tokenindex) {
+                        reportServicePage.reportFacetNameSelections.map(function(tokenName, tokenindex) {
                             return tokenName.getText();
+                        }).then(function(selections) {
+                            // Sort each array before comparing
+                            expect(selections.sort()).toEqual(facetSelections.sort());
                         });
-                        //expect(tokens).toMatch(facetList);
                     });
                 }).then(function() {
                     //remove facets by clicking on clear (X) in popup beside Text Field and verify all tokens removed
-                    reportServicePage.reportFilterBtnCaret.click().then(function() {
-                        reportServicePage.clearFacetTokensFromContainer();
+                    reportServicePage.waitForElementToBeClickable(reportServicePage.reportFilterBtnCaret).then(function() {
+                        reportServicePage.reportFilterBtnCaret.click().then(function() {
+                            reportServicePage.clearFacetTokensFromContainer().then(function() {
+                                expect(reportServicePage.reportRecordsCount.getAttribute('innerText')).toEqual('6 Records');
+                                done();
+                            });
+                        });
                     });
-                }).then(function() {
-                    expect(reportServicePage.reportRecordsCount.getAttribute('innerText')).toEqual('6 Records');
-                    done();
                 });
-
             });
         });
 
