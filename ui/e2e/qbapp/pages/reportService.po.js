@@ -197,13 +197,15 @@
                         if (i === facetIndex) {
                             var buttonEl = buttons[i];
                             // If the facet is not already selected then click
-                            buttonEl.element(by.className('checkMark-selected')).isPresent().then(function(present) {
-                                if (!present) {
-                                    // Click the item
-                                    buttonEl.click().then(function() {
-                                        e2eBase.sleep(browser.params.mediumSleep);
-                                    });
-                                }
+                            e2ePageBase.waitForElementToBeClickable(buttonEl).then(function() {
+                                buttonEl.element(by.className('checkMark-selected')).isPresent().then(function(present) {
+                                    if (!present) {
+                                        // Click the item
+                                        buttonEl.click().then(function() {
+                                            e2eBase.sleep(browser.params.mediumSleep);
+                                        });
+                                    }
+                                });
                             });
                         }
                     }
@@ -259,9 +261,10 @@
         this.tableActionsContainerEl = this.loadedContentEl.element(by.className('tableActionsContainer'));
         // agGrid table
         this.griddleWrapperEl = this.loadedContentEl.element(by.className('griddleWrapper'));
-        this.agGridContainerEl = element.all(by.className('agGrid')).first();
+        this.agGridContainerEl = this.griddleWrapperEl.all(by.className('agGrid')).first();
         this.agGridBodyEl = this.agGridContainerEl.element(by.className('ag-body-container'));
         this.agGridHeaderEl = this.agGridContainerEl.element(by.className('ag-header-container'));
+        // All column headers from agGrid including first checkbox and last hidden actions column
         this.agGridColHeaderElList = this.agGridHeaderEl.all(by.className('ag-header-cell'));
         this.agGridLastColHeaderEl = this.agGridColHeaderElList.last();
         this.agGridRecordElList = this.agGridBodyEl.all(by.className('ag-row'));
@@ -378,6 +381,11 @@
                 return Promise.all(fetchTextPromises);
             }).then(function(colHeaders) {
                 var fieldColHeaders = [];
+                // Remove the first column header (record select column) and the last (hidden record actions)
+                // Remove the select all checkbox column header
+                colHeaders.shift();
+                // Remove the actions column header
+                colHeaders.pop();
                 colHeaders.forEach(function(headerText) {
                     if (!headerText) {
                         throw Error('Did not find text for column header');
@@ -390,10 +398,6 @@
                 });
                 return fieldColHeaders;
             }).then(function(fieldColHeaders) {
-                // Remove the select all checkbox column header
-                fieldColHeaders.shift();
-                // Remove the actions column header
-                fieldColHeaders.pop();
                 return deferred.resolve(fieldColHeaders);
             }).then(null, function(error) {
                 deferred.reject(error);

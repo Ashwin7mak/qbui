@@ -81,7 +81,7 @@
                     return reportServicePage.selectReport('My Reports', 'Report With Facets');
                 });
             }).then(function() {
-                reportServicePage.waitForElement(reportServicePage.loadedContentEl).then(function() {
+                reportServicePage.waitForElement(reportServicePage.agGridBodyEl).then(function() {
                     // Get all records from table before filter applied
                     reportServicePage.agGridRecordElList.map(function(row) {
                         return {
