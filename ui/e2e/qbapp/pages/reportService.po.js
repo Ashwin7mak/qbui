@@ -76,7 +76,7 @@
         this.reportStageBtn = this.reportContainerEl.element(by.className('toggleStage'));
         this.reportStageArea = this.reportStageContentEl.element(by.className('collapse'));
 
-        //report tools and content container
+        // Report tools and content container
         this.reportToolsAndContentEl = this.reportContainerEl.element(by.className('reportToolsAndContentContainer'));
         // Loaded Content Div
         this.loadedContentEl = this.reportToolsAndContentEl.all(by.className('loadedContent')).first();
@@ -84,21 +84,20 @@
         this.reportTable = this.loadedContentEl.element(by.className('reportTable'));
         // Table actions container
         this.reportActionsContainerEl = this.reportTable.element(by.className('tableActionsContainer'));
-        //report toolbar
+        // Report toolbar
         this.reportsToolBar = this.reportActionsContainerEl.element(by.className('reportToolbar'));
-        //report records count
+        // Report records count
         this.reportRecordsCount = this.reportsToolBar.element(by.className('recordsCount'));
-        //report filter search Box
+        // Report filter search Box
         this.reportFilterSearchBox = this.reportsToolBar.element(by.className('filterSearchBox'));
 
-
-        //report facet Menu Container
+        // Report facet Menu Container
         this.reportFacetMenuContainer = this.reportsToolBar.element(by.className('facetsMenuContainer'));
-        //report facet buttons
+        // Report facet buttons
         this.reportFacetBtns = this.reportFacetMenuContainer.element(by.className('facetButtons'));
-        //report facet filter button
+        // Report facet filter button
         this.reportFilterBtn = this.reportFacetBtns.element(by.className('filterButton'));
-        //report facet filter carat button
+        // Report facet filter carat button
         this.reportFilterBtnCaret = this.reportFacetBtns.element(by.className('filterButtonCaret'));
 
         // Facet Menu Popup
@@ -107,6 +106,17 @@
         this.unselectedFacetGroupsElList = this.reportFacetPopUpMenu.all(by.className('panel'));
         // Selected Facet Groups
         this.selectedFacetGroupsElList = this.reportFacetPopUpMenu.all(by.className('selections'));
+
+        // Selected Facets
+        this.reportSelectedFacets = this.reportFacetMenuContainer.element(by.className('selectedFacets'));
+        // Facet tokens (token has facetName and facetSelections)
+        this.reportFacetTokens = this.reportSelectedFacets.all(by.className('facetToken'));
+        // Facet selections
+        this.reportFacetSelections = this.reportFacetTokens.all(by.className('facetSelections'));
+        // Facet selections Names
+        this.reportFacetNameSelections = this.reportFacetSelections.all(by.className('selectedToken'));
+        // Facet clear token selections
+        this.reportFacetClearTokenSelections = this.reportFacetNameSelections.all(by.className('clearFacet'));
 
         /*
          * Function will return you the facet group element by name
@@ -148,41 +158,54 @@
             var self = this;
             return self.getFacetGroupElement(facetGroupName).then(function(facetGroupElement) {
                 return e2ePageBase.waitForElementToBeClickable(facetGroupElement).then(function() {
-                    //TODO Only click if it's collapsed
-                    return facetGroupElement.click().then(function() {
-                        return e2eBase.sleep(3000).then(function() {
+                    // Only click if the panel is collapsed
+                    return facetGroupElement.element(by.className('panel-collapse')).getAttribute('offsetHeight').then(function(height) {
+                        if (height === '0') {
+                            return facetGroupElement.click().then(function() {
+                                return e2eBase.sleep(3000).then(function() {
+                                    return facetGroupElement;
+                                });
+                            });
+                        } else {
                             return facetGroupElement;
-                        });
+                        }
                     });
                 });
             });
         };
 
+        /*
+         * Function will click on the specified facet indexes for the facet group
+         */
         this.selectFacets = function(facetGroupElement, facetIndexes) {
             var self = this;
-
+            // First check to see click on more options link if items to select is greater than 5
             facetIndexes.forEach(function(facetIndex) {
-                // First check to see click on more options link if items to select is greater than 5
                 if (facetIndex >= SHOW_POPUP_LIST_LIMIT) {
                     // Click on more options link
                     facetGroupElement.element(by.className('listMore')).click().then(function() {
                         e2eBase.sleep(browser.params.mediumSleep);
                     });
                 }
-                // Select the facet Items
-                self.getAvailableFacetGroupSelections(facetGroupElement).then(function(buttons) {
+            });
+
+            // Select the facet Items
+            self.getAvailableFacetGroupSelections(facetGroupElement).then(function(buttons) {
+                facetIndexes.forEach(function(facetIndex) {
                     for (var i = 0; i < buttons.length; i++) {
-                        //Click the facet item that matches the test argument value
+                        // Click the facet item that matches the test argument value
                         if (i === facetIndex) {
                             var buttonEl = buttons[i];
                             // If the facet is not already selected then click
-                            buttonEl.element(by.className('checkMark-selected')).isPresent().then(function(present) {
-                                if (!present) {
-                                    //click the item
-                                    buttonEl.click().then(function() {
-                                        e2eBase.sleep(browser.params.mediumSleep);
-                                    });
-                                }
+                            e2ePageBase.waitForElementToBeClickable(buttonEl).then(function() {
+                                buttonEl.element(by.className('checkMark-selected')).isPresent().then(function(present) {
+                                    if (!present) {
+                                        // Click the item
+                                        buttonEl.click().then(function() {
+                                            e2eBase.sleep(browser.params.mediumSleep);
+                                        });
+                                    }
+                                });
                             });
                         }
                     }
@@ -196,8 +219,6 @@
          * @param facetItems is an array
          */
         this.selectGroupAndFacetItems = function(facetGroupName, facetIndexes) {
-            var facetItemsSelected = [];
-
             var self = this;
             // Expand the Facet group
             this.clickFacetGroupElement(facetGroupName).then(function(facetGroupElement) {
@@ -205,12 +226,12 @@
                 self.selectFacets(facetGroupElement, facetIndexes);
             });
 
-            // get all Selected items from popup and push into an array for verification
-            return element.all(by.className('selected')).map(function(selectedGroupItem, index) {
-                return selectedGroupItem.getText().then(function(selectedItemText) {
-                    facetItemsSelected.push(selectedItemText);
-                });
-            });
+            // Get all Selected items from popup and push into an array for verification
+            return this.reportFacetPopUpMenu.all(by.className('selected')).map(
+                function(selectedGroupItem, index) {
+                    return selectedGroupItem.getText();
+                }
+            );
         };
 
         /*
@@ -224,7 +245,7 @@
          * Function will get you all the facet selections (buttons) for a facet group element
          */
         this.getAvailableFacetGroupSelections = function(facetGroupElement) {
-            return facetGroupElement.all(by.tagName('button'));
+            return facetGroupElement.all(by.className('list-group-item'));
         };
 
         /*
@@ -234,36 +255,19 @@
             return this.getFacetGroupTitle(facetGroupElement).element(by.className('clearFacet')).click();
         };
 
-        ////panel heading which is facet group
-        //this.PopUpContainerFacetGroup = this.facetPopUpContainerPanels.all(by.tagName('a'));
-        ////clear facet button in popup
-        //this.PopUpContainerClearFacet = this.PopUpContainerFacetGroup.all(by.className('clearFacet'));
-
-        //selected Facets
-        this.reportSelectedFacets = this.reportFacetMenuContainer.element(by.className('selectedFacets'));
-        //facet tokens (token has facetName and facetSelections)
-        this.reportFacetTokens = this.reportSelectedFacets.all(by.className('facetToken'));
-        //facet selections
-        this.reportFacetSelections = this.reportFacetTokens.all(by.className('facetSelections'));
-        //facet selections Names
-        this.reportFacetNameSelections = this.reportFacetSelections.all(by.className('selectedToken'));
-        //facet clear token selections
-        this.reportFacetClearTokenSelections = this.reportFacetNameSelections.all(by.className('clearFacet'));
-
         // Loaded Content Div
         this.loadedContentEl = this.reportContainerEl.all(by.className('loadedContent')).first();
         // Table actions container
         this.tableActionsContainerEl = this.loadedContentEl.element(by.className('tableActionsContainer'));
-        // Griddle table
+        // agGrid table
         this.griddleWrapperEl = this.loadedContentEl.element(by.className('griddleWrapper'));
-        this.griddleContainerEl = element.all(by.className('griddle-container')).first();
-        this.griddleBodyEl = element(by.className('griddle-body'));
-        this.griddleTableHeaderEl = this.griddleBodyEl.all(by.tagName('thead'));
-        this.griddleColHeaderElList = this.griddleTableHeaderEl.all(by.tagName('span'));
-        this.griddleLastColumnHeaderEl = this.griddleColHeaderElList.last();
-        this.griddleDataBodyDivEl = this.griddleBodyEl.all(by.tagName('tbody')).first();
-        this.griddleRecordElList = this.griddleDataBodyDivEl.all(by.tagName('tr'));
-        this.griddleRecordElColumnList = this.griddleDataBodyDivEl.all(by.tagName('td'));
+        this.agGridContainerEl = this.griddleWrapperEl.all(by.className('agGrid')).first();
+        this.agGridBodyEl = this.agGridContainerEl.element(by.className('ag-body-container'));
+        this.agGridHeaderEl = this.agGridContainerEl.element(by.className('ag-header-container'));
+        // All column headers from agGrid including first checkbox and last hidden actions column
+        this.agGridColHeaderElList = this.agGridHeaderEl.all(by.className('ag-header-cell'));
+        this.agGridLastColHeaderEl = this.agGridColHeaderElList.last();
+        this.agGridRecordElList = this.agGridBodyEl.all(by.className('ag-row'));
 
         /**
          * Given a table link element in the leftNav, open the reports menu for that table
@@ -344,6 +348,7 @@
                 }
             });
         };
+
         /**
          * Function that will clear all facet items form popup menu.
          * @param facets array
@@ -357,12 +362,13 @@
                 }
             });
         };
+
         /**
         * Helper function that will get all of the field column headers from the report. Returns an array of strings.
         */
         this.getReportColumnHeaders = function() {
             var deferred = Promise.pending();
-            this.griddleColHeaderElList.then(function(elements) {
+            this.agGridColHeaderElList.then(function(elements) {
                 var fetchTextPromises = [];
                 for (var i = 0; i < elements.length; i++) {
                     // Firefox has innerHTML instead of innerText so use that instead
@@ -375,6 +381,11 @@
                 return Promise.all(fetchTextPromises);
             }).then(function(colHeaders) {
                 var fieldColHeaders = [];
+                // Remove the first column header (record select column) and the last (hidden record actions)
+                // Remove the select all checkbox column header
+                colHeaders.shift();
+                // Remove the actions column header
+                colHeaders.pop();
                 colHeaders.forEach(function(headerText) {
                     if (!headerText) {
                         throw Error('Did not find text for column header');
@@ -485,7 +496,6 @@
             expect(this.topNavGlobalActionsListUlEl.getAttribute('clientWidth')).toBe('0');
             expect(this.topNavGlobalActionsListUlEl.getAttribute('offsetWidth')).toBe('0');
         };
-
     };
     ReportServicePage.prototype = e2ePageBase;
     module.exports = ReportServicePage;

@@ -152,14 +152,15 @@ let ReportDataStore = Fluxxor.createStore({
                 let column = {};
                 column.order = index;
                 column.id = field.id;
-                column.columnName = field.name;
-                column.displayName = field.name;
+                column.headerName = field.name;     //for ag-grid
+                column.field = field.name;          //for ag-grid
+                column.columnName = field.name;     //for griddle
+                column.displayName = field.name;    //for griddle
                 column.fieldType = field.type;
                 column.builtIn = field.builtIn;
 
                 //  client side attributes..
                 column.datatypeAttributes = field.datatypeAttributes;
-
                 columns.push(column);
             });
         }

@@ -4,18 +4,22 @@ import RecordActions from '../../actions/recordActions';
 import './cardView.scss';
 import '../../QBForm/qbform.scss';
 import QBicon from '../../qbIcon/qbIcon';
+import Fluxxor from 'fluxxor';
+let FluxMixin = Fluxxor.FluxMixin(React);
+
 
 const MAX_ACTIONS_RESIZE_WITH = 240; // max width while swiping
 
 let CardView = React.createClass({
-
+    mixins: [FluxMixin],
     // callbacks provided by GriddleTable context since we can't get these from props
     contextTypes: {
         allowCardSelection: React.PropTypes.func,
         onToggleCardSelection: React.PropTypes.func,
         onRowSelected: React.PropTypes.func,
         onRowClicked: React.PropTypes.func,
-        isRowSelected: React.PropTypes.func
+        isRowSelected: React.PropTypes.func,
+        flux: React.PropTypes.object
     },
     getInitialState() {
         return {
@@ -165,6 +169,12 @@ let CardView = React.createClass({
             }
 
             const isSelected = this.context.isRowSelected(this.props.data);
+            //the following is a temporary hack. Until card view is replaced by a new component (ag-grid or some other) lets pass flux down as ag-grid expects it.
+            let fluxParams = {
+                context: {
+                    flux : this.getFlux()
+                }
+            };
 
             return (
                 <Swipeable  className={"swipeable " + (this.state.showActions && !this.state.swiping ? "actionsOpen" : "actionsClosed") }
@@ -183,7 +193,7 @@ let CardView = React.createClass({
                     </div>
 
                     <div ref={"actions"} style={actionsStyle} className={rowActionsClasses}>
-                        <RecordActions {...this.props}/>
+                        <RecordActions params={fluxParams} {...this.props}/>
                     </div>
                 </Swipeable>
             );
