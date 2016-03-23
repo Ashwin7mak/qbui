@@ -122,27 +122,29 @@
          */
         var verifyFacetTableResults = function(facetGroup) {
             var expectedTableResuts = [];
-            reportServicePage.waitForElement(reportServicePage.agGridContainerEl).then(function() {
-                reportServicePage.agGridRecordElList.map(function(row) {
-                    return {
-                        'Text Field': row.all(by.className('ag-cell-no-focus')).get(2).getText(),
-                        'Checkbox Field': row.all(by.className('ag-cell-no-focus')).get(5).getText()
-                    };
-                }).then(function(results) {
-                    for (var i = 0; i < results.length; i++) {
-                        expectedTableResuts.push(results[i]);
-                    }
-                    var found = false;
-                    for (var j = 0; j < expectedTableResuts.length; j++) {
-                        for (var k = 0; k < actualTableResuts.length; k++) {
-                            if (expectedTableResuts.length > 0 && JSON.stringify(expectedTableResuts[j]) === JSON.stringify(actualTableResuts[k])) {
-                                expect(expectedTableResuts[j]).toEqual(actualTableResuts[k]);
-                                found = true;
-                                break;
-                            }
-                            found = false;
+            reportServicePage.waitForElement(reportServicePage.griddleWrapperEl).then(function() {
+                reportServicePage.waitForElement(reportServicePage.agGridContainerEl).then(function() {
+                    reportServicePage.agGridRecordElList.map(function(row) {
+                        return {
+                            'Text Field': row.all(by.className('ag-cell-no-focus')).get(2).getText(),
+                            'Checkbox Field': row.all(by.className('ag-cell-no-focus')).get(5).getText()
+                        };
+                    }).then(function(results) {
+                        for (var i = 0; i < results.length; i++) {
+                            expectedTableResuts.push(results[i]);
                         }
-                    }
+                        var found = false;
+                        for (var j = 0; j < expectedTableResuts.length; j++) {
+                            for (var k = 0; k < actualTableResuts.length; k++) {
+                                if (expectedTableResuts.length > 0 && JSON.stringify(expectedTableResuts[j]) === JSON.stringify(actualTableResuts[k])) {
+                                    expect(expectedTableResuts[j]).toEqual(actualTableResuts[k]);
+                                    found = true;
+                                    break;
+                                }
+                                found = false;
+                            }
+                        }
+                    });
                 });
             });
         };
@@ -167,7 +169,7 @@
             }).then(function() {
                 //verify expand and collapse of each items in an popup menu
                 reportServicePage.unselectedFacetGroupsElList.then(function(elements) {
-                    expect(elements.length).toBe(4);
+                    expect(elements.length).toBe(2);
                     elements.forEach(function(menuItem) {
                         //Verify by default group is in collapse state
                         expect(reportServicePage.getFacetGroupTitle(menuItem).element(by.tagName('a')).getAttribute('class')).toMatch("collapsed");
@@ -181,11 +183,15 @@
                         reportServicePage.unselectedFacetGroupsElList.map(function(elm) {
                             return elm.getText();
                         }).then(function(facetGroupNames) {
-                            expect(facetGroupNames).toEqual(tableColHeaders);
+                            // Ensure each facet group field is present on the table report
+                            facetGroupNames.forEach(function(facetGroupName) {
+                                expect(tableColHeaders).toContain(facetGroupName);
+                            });
                             // Click out of the facet popup and ensure it closes
                             reportServicePage.reportRecordsCount.click().then(function() {
                                 // Animation of the popup disappearing
                                 e2eBase.sleep(browser.params.smallSleep);
+                                // Check that the popup is removed
                                 expect(reportServicePage.reportFacetPopUpMenu.isPresent()).toBeFalsy();
                                 done();
                             });
@@ -228,7 +234,7 @@
                     message: 'Create Checkbox and Text facet',
                     facets: [{"group": "Checkbox Field", "ItemIndex": [0]}, {
                         "group": "Text Field",
-                        "ItemIndex": [1, 2]
+                        "ItemIndex": [0, 2]
                     }]
                 },
                 {
