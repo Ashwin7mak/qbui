@@ -97,7 +97,7 @@
                             }
                             done();
                         });
-                    })
+                    });
                 });
             }).catch(function(error) {
                 // Global catch that will grab any errors from chain above
@@ -290,13 +290,13 @@
             });
         });
 
-        it('Verify clear all facets tokens from the container', function (done) {
+        it('Verify clear all facets tokens from the container', function(done) {
             reportServicePage.waitForElementToBeClickable(reportServicePage.reportFilterBtnCaret).then(function() {
                 //Click on facet carat to show popup
                 reportServicePage.reportFilterBtnCaret.click().then(function() {
                     //Verify the popup menu is displayed
                     expect(reportServicePage.reportFacetPopUpMenu.isDisplayed()).toBeTruthy();
-                }).then(function () {
+                }).then(function() {
                     //select the facet Items
                     reportServicePage.selectGroupAndFacetItems("Text Field", [1, 2, 3, 4]).then(function(facetSelections) {
                         //Map all facet tokens from the facet container
