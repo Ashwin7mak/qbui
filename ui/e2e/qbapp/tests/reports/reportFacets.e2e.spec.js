@@ -83,19 +83,21 @@
                     return reportServicePage.selectReport('My Reports', 'Report With Facets');
                 });
             }).then(function() {
-                reportServicePage.waitForElement(reportServicePage.agGridBodyEl).then(function() {
-                    // Get all records from table before filter applied
-                    reportServicePage.agGridRecordElList.map(function(row) {
-                        return {
-                            'Text Field': row.all(by.className('ag-cell-no-focus')).get(2).getText(),
-                            'Checkbox Field': row.all(by.className('ag-cell-no-focus')).get(5).getText()
-                        };
-                    }).then(function(results) {
-                        for (var i = 0; i < results.length; i++) {
-                            actualTableResuts.push(results[i]);
-                        }
-                        done();
-                    });
+                reportServicePage.waitForElement(reportServicePage.griddleWrapperEl).then(function() {
+                    reportServicePage.waitForElement(reportServicePage.agGridBodyEl).then(function() {
+                        // Get all records from table before filter applied
+                        reportServicePage.agGridRecordElList.map(function(row) {
+                            return {
+                                'Text Field': row.all(by.className('ag-cell-no-focus')).get(2).getText(),
+                                'Checkbox Field': row.all(by.className('ag-cell-no-focus')).get(5).getText()
+                            };
+                        }).then(function(results) {
+                            for (var i = 0; i < results.length; i++) {
+                                actualTableResuts.push(results[i]);
+                            }
+                            done();
+                        });
+                    })
                 });
             }).catch(function(error) {
                 // Global catch that will grab any errors from chain above
@@ -221,19 +223,18 @@
                 {
                     message: 'Create CheckBox facet',
                     facets: [{"group": "Checkbox Field", "ItemIndex": [0]}]
+                },
+                {
+                    message: 'Create Checkbox and Text facet',
+                    facets: [{"group": "Checkbox Field", "ItemIndex": [0]}, {
+                        "group": "Text Field",
+                        "ItemIndex": [1, 2]
+                    }]
+                },
+                {
+                    message: 'Facet with 1 CheckBox record and 1 Empty Text',
+                    facets: [{"group": "Checkbox Field", "ItemIndex": [0]}, {"group": "Text Field", "ItemIndex": [0]}]
                 }
-                //TODO: Re-enable once bug is fixed for showing no results based on facet selections
-                //{
-                //    message: 'Create Checkbox and Text facet',
-                //    facets: [{"group": "Checkbox Field", "ItemIndex": [0]}, {
-                //        "group": "Text Field",
-                //        "ItemIndex": [2, 3]
-                //    }]
-                //},
-                //{
-                //    message: 'Facet with 1 CheckBox record and 1 Empty Text',
-                //    facets: [{"group": "Checkbox Field", "ItemIndex": [0]}, {"group": "Text Field", "ItemIndex": [0]}]
-                //}
             ];
         }
 
