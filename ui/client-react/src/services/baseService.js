@@ -130,7 +130,7 @@ class BaseService {
     constructRedirectUrl() {
         let currentStackSignInUrl = "/db/main?a=nsredirect&nsurl=";
         let newStackDestination = window.location.href;
-        let currentStackDomain = window.location.hostname.replace(".newstack","");
+        let currentStackDomain = window.location.hostname.replace(".newstack", "");
         currentStackSignInUrl = "https://" + currentStackDomain + currentStackSignInUrl + newStackDestination;
         return currentStackSignInUrl;
     }
