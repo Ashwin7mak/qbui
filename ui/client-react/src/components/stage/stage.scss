@@ -16,6 +16,7 @@
         border-radius: 0 0 2px 2px;
         background-color: $color17;
         outline: none;
+        z-index: $zindex-dropdown;
     }
 
     .well {
