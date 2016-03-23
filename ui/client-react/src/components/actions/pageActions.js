@@ -35,7 +35,7 @@ let PageActions = React.createClass({
     propTypes: {
         actions: React.PropTypes.arrayOf(React.PropTypes.shape({
             icon: React.PropTypes.string,
-            name: React.PropTypes.string
+            msg: React.PropTypes.string
         })).isRequired,
         menuAfter: React.PropTypes.number // show action in dropdown after this
     },
@@ -49,7 +49,7 @@ let PageActions = React.createClass({
      * @param action
      */
     getActionButton(action) {
-        return (<a key={action.name} className="pageActionButton"><QBicon icon={action.icon}/></a>);
+        return (<a key={action.msg} className="pageActionButton"><QBicon icon={action.icon}/></a>);
     },
     /**
      * get dropdown containing remaining actions (after menuAfter index)
@@ -62,7 +62,7 @@ let PageActions = React.createClass({
                 <Dropdown.Menu onEntering={this.props.onMenuEnter} onExited={this.props.onMenuExit}>
                     {this.props.actions.map((action, index) => {
                         if (index >= this.props.menuAfter) {
-                            return <MenuItem key={action.name} href="#">{action.name}</MenuItem>;
+                            return <MenuItem key={action.msg} href="#"><I18nMessage message={action.msg} /></MenuItem>;
                         }
                     })}
                 </Dropdown.Menu>

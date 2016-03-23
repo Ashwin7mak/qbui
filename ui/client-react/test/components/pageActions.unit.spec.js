@@ -2,16 +2,32 @@ import React from 'react';
 import TestUtils from 'react-addons-test-utils';
 import PageActions  from '../../src/components/actions/pageActions';
 
+var I18nMessageMock = React.createClass({
+    render: function() {
+        return (
+            <div>I18Mock</div>
+        );
+    }
+});
+
 describe('PageActions functions', () => {
     'use strict';
 
     let component;
 
     const actions = [
-        {name: 'action1', icon:'icon1'},
-        {name: 'action2', icon:'icon2'},
-        {name: 'action3', icon:'icon3'}
+        {msg: 'action1', icon:'icon1'},
+        {msg: 'action2', icon:'icon2'},
+        {msg: 'action3', icon:'icon3'}
     ];
+
+    beforeEach(() => {
+        PageActions.__Rewire__('I18nMessage', I18nMessageMock);
+    });
+
+    afterEach(() => {
+        PageActions.__ResetDependency__('I18nMessage');
+    });
 
     it('test render of empty component', () => {
         const emptyActions = [];

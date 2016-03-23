@@ -25,10 +25,12 @@ let RecordActions = React.createClass({
     },
 
     showExtraActions() {
+        /*
         if (this.props.params.context) {
             let flux = this.props.params.context.flux;
             flux.actions.showTrowser();
         }
+        */
     },
     getSelectionTip(actionMsg) {
         return Locale.getMessage(actionMsg);

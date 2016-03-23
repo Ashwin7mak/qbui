@@ -7,11 +7,7 @@ describe('RecordActions functions', () => {
 
     let component;
 
-    let flux = {
-        actions:{
-            showTrowser: function() {return;},
-        }
-    };
+    let flux = {};
     let fluxParams = {
         context: {
             flux : flux
@@ -20,7 +16,6 @@ describe('RecordActions functions', () => {
 
     beforeEach(() => {
         component = TestUtils.renderIntoDocument(<RecordActions params={fluxParams}/>);
-        spyOn(flux.actions, 'showTrowser');
     });
     it('test render of component', () => {
         expect(TestUtils.isCompositeComponent(component)).toBeTruthy();
@@ -33,6 +28,5 @@ describe('RecordActions functions', () => {
         let actions = TestUtils.scryRenderedDOMComponentsWithTag(component, "a");
         expect(actions.length).toBeGreaterThan(0);
         TestUtils.Simulate.click(actions[actions.length - 1]);
-        expect(flux.actions.showTrowser).toHaveBeenCalled();
     });
 });

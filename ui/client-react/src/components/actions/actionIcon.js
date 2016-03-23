@@ -8,15 +8,17 @@ import {Tooltip, OverlayTrigger} from 'react-bootstrap';
  */
 let ActionIcon = React.createClass({
 
-    defaultProps: {
-        bsRole: ""
-    },
-
     propTypes: {
         tip:React.PropTypes.string,
         icon:React.PropTypes.string.isRequired,
         bsStyle:React.PropTypes.string,
         onClick:React.PropTypes.func
+    },
+
+    getDefaultProps() {
+        return {
+            bsRole: ""
+        };
     },
 
     render() {

@@ -56,6 +56,14 @@ export default {
             help: "Hilfe",
             logout: "Abmelden"
         },
+        pageActions: {
+            addRecord: "Datensatz hinzufügen",
+            favorite: "Favorit",
+            gridEdit: "Gitter bearbeiten",
+            email: "Email",
+            print: "Drucken",
+            customizeReport: "Fertigen Sie diesen Bericht"
+        },
         header: {
             menu: {
                 locale: {

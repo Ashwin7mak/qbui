@@ -14,6 +14,13 @@ let FluxMixin = Fluxxor.FluxMixin(React);
 var ReportToolsAndContent = React.createClass({
     mixins: [FluxMixin],
 
+    propTypes: {
+        appId: React.PropTypes.string,
+        tblId: React.PropTypes.string,
+        rptId: React.PropTypes.string,
+        reportData: React.PropTypes.object,
+        pageActions: React.PropTypes.element
+    },
     getDefaultProps() {
         return {
             selections:null,
@@ -26,7 +33,8 @@ var ReportToolsAndContent = React.createClass({
                                     rptId={rptId}
                                     reportData={otherReportData}
                                     selections={selections}
-                                    searchStringForFiltering={searchStringForFiltering}/>;
+                                    searchStringForFiltering={searchStringForFiltering}
+                                    pageActions={this.props.pageActions}/>;
 
         return (<div className="reportToolsAndContentContainer">
                     <ReportContent  reportData={this.props.reportData}

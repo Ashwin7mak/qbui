@@ -105,12 +105,18 @@ div.leftNavTooltip {
         display: block;
     }
 }
+.appsToggle {
+    text-overflow:ellipsis;
+    overflow:hidden;
+    padding-right:25px;
+}
 
 /* collapsed nav overrides */
 @include not-small-breakpoint {
     .leftNav.closed {
         width: 40px;
         .branding {
+
             .logo, .appsToggle .navLabel, .appsToggleIcon {
                 display: none;
             }

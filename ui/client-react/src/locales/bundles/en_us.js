@@ -60,6 +60,14 @@ export default {
             help: "Help",
             logout: "Logout"
         },
+        pageActions: {
+            addRecord: "Add a record",
+            favorite: "Favorite",
+            gridEdit: "Grid Edit",
+            email: "Email",
+            print: "Print",
+            customizeReport: "Customize this Report"
+        },
         header: {
             menu: {
                 locale: {

@@ -1,5 +1,27 @@
 @import '../../assets/css/qbVariables';
 
+.stageHeader {
+    display:flex;
+    flex-direction:row;
+    justify-content: space-between;
+    line-height:70px;
+    align-items:center;
+    .stageLeft {
+        flex:1 1 auto;
+        .stageHeadline>* {
+            display:inline-block;
+            margin:0 8px;
+        }
+        .qbIcon {
+            font-size: 16px;
+            color:$stage-headline-icon-color
+        }
+    }
+
+    .stageRight {
+        flex:0 0 auto;
+    }
+}
 .layout-stage {
     border-bottom: 1px solid $header-bg;
     position: relative;
@@ -22,7 +44,7 @@
         background-color: $color2;
         border:0 none transparent;
         margin:0;
-        padding: 10px 0;
+        padding: 0 0 10px 0;
         box-shadow: none;
     }
 }

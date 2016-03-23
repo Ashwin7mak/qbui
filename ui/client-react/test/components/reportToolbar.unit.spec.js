@@ -225,7 +225,7 @@ describe('ReportToolbar functions', () => {
         selected.addSelection(1, 'Development');
         let fakeReportWithFacets = _.cloneDeep(fakeReportData_simple);
         component = TestUtils.renderIntoDocument(<ReportToolbar flux={flux} selections={selected}
-                                                                reportData={fakeReportWithFacets}/>);
+                                                                reportData={fakeReportWithFacets} pageActions="" />);
         expect(TestUtils.isCompositeComponent(component)).toBeTruthy();
 
         spyOn(flux.actions, 'filterReport').and.callThrough();

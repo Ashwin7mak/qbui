@@ -1,14 +1,44 @@
+@import '../../assets/css/qbVariables';
+
 $page-action-icon-color:#fff;
 
-.pageActions {
-    background-color: #486c8f;
+@include not-small-breakpoint {
+    .reportToolbar .pageActions {
+        display: none;
+    }
 
-    .pageActionButton {
+    .pageActions {
+        line-height:40px;
         display:inline-block;
-        vertical-align: middle;
-        text-align:center;
-        width: 32px;
-        font-size:20px;
-        color: $page-action-icon-color;
+
+        .pageActionButton {
+            display: inline-block;
+            vertical-align: middle;
+            text-align: center;
+            width: 32px;
+            font-size: 20px;
+            color: $topnav-icon-color;
+        }
+        .pageActionButton:hover {
+            background: $nav-hover-bg;
+            color: $nav-hover-fg;
+        }
+    }
+}
+
+@include small-breakpoint {
+    .pageActions {
+        line-height:40px;
+        display:block;
+        background-color: #486c8f;
+
+        .pageActionButton {
+            display: inline-block;
+            vertical-align: middle;
+            text-align: center;
+            width: 32px;
+            font-size: 20px;
+            color: $page-action-icon-color;
+        }
     }
 }

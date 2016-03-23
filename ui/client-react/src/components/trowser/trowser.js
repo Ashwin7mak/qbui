@@ -21,9 +21,23 @@ let Trowser = React.createClass({
         position: "top"
     },
 
+    handleKey(e) {
+        // close trowser when Esc is pressed
+        if (e.keyCode === 27) {
+            this.props.onCancel();
+        }
+    },
+    componentWillMount() {
+        window.addEventListener("keydown", this.handleKey, false);
+    },
+
+    componentWillUnmount() {
+        window.removeEventListener("keydown", this.handleKey, false);
+    },
     /**
      *
      * render trowser in front of a trowserBackground element (visible when browser is very wide)
+     * (clicking on visible background closes trowser)
      */
     render() {
         let trowserClasses = "trowser " + this.props.position;
@@ -32,7 +46,7 @@ let Trowser = React.createClass({
         }
         return (
             <div className={trowserClasses} >
-                <div className={"trowserBackground"}/>
+                <div className={"trowserBackground"} onClick={this.props.onCancel}/>
                 <div className={"trowserContent"}>
                     <div className={"trowserHeader"}>
                         <div className={"breadcrumbs"}>

@@ -45,6 +45,7 @@ var Nav = React.createClass({
         return (<GlobalActions actions={actions}
                                position={"top"}/>);
     },
+
     getLeftGlobalActions() {
         const actions = [
             {msg:'globalActions.help', link:'/help', icon:'help'}
@@ -68,20 +69,38 @@ var Nav = React.createClass({
         flux.actions.showTrowser();
         flux.actions.loadReports(this.state.apps.selectedAppId, tableId);
     },
+
+    getSelectedApp() {
+        if (this.state.reportsData.appId) {
+
+            return this.state.apps.apps.find((a) => a.id === this.state.reportsData.appId);
+        }
+        return null;
+    },
+    /**
+     * get table object for currently selecte table (or null if no table selected);
+     *
+     */
+    getSelectedTable() {
+        const app = this.getSelectedApp();
+
+        if (app && this.state.reportsData.tableId) {
+            return app.tables.find((t) => t.id === this.state.reportsData.tableId);
+        }
+        return null;
+    },
     /**
      *  get breadcrumb element for top of trowser
      */
     getTrowserBreadcrumbs() {
-        if (this.state.reportsData.appId && this.state.reportsData.tableId) {
+        const table = this.getSelectedTable();
 
-            let app = this.state.apps.apps.find((a) => a.id === this.state.reportsData.appId);
-            let tables = app ? app.tables : [];
-            let table = tables.find((t) => t.id === this.state.reportsData.tableId);
+        return (
+            <h3>
+                <QBicon icon="report-table"/> {table ? table.name : ""} <QBicon icon="caret-right"/>
+                <I18nMessage message={'nav.reportsHeading'}/>
+            </h3>);
 
-            return (
-                <h3><QBicon icon="report-table"/> {table ? table.name : ""} <QBicon icon="caret-right"/> <I18nMessage message={'nav.reportsHeading'}/></h3>);
-        }
-        return null;
     },
     /**
      *  get actions element for bottome center of trowser (placeholders for now)
@@ -159,6 +178,8 @@ var Nav = React.createClass({
                             key: this.props.location ? this.props.location.pathname : "",
                             selectedAppId: this.state.apps.selectedAppId,
                             reportData: this.state.reportData,
+                            selectedApp: this.getSelectedApp(),
+                            selectedTable: this.getSelectedTable(),
                             flux: flux}
                         )}
                     </div>}

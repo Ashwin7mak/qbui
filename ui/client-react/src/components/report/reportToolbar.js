@@ -43,7 +43,8 @@ var ReportToolbar = React.createClass({
                 facets:  React.PropTypes.array
             })
         }),
-        onFacetSelect : React.PropTypes.func
+        onFacetSelect: React.PropTypes.func,
+        pageActions: React.PropTypes.element
     },
 
 
@@ -212,15 +213,7 @@ var ReportToolbar = React.createClass({
             ];
         }
     },
-    getPageActions() {
-        const actions = [
-            {name: 'i.e. edit', icon:'edit'},
-            {name: 'i.e. mail', icon:'mail'},
-            {name: 'i.e. delete', icon:'delete'},
-            {name: 'i.e. print', icon:'print'}
-        ];
-        return (<PageActions actions={actions} menuAfter={0} {...this.props}/>);
-    },
+
     render() {
         if (this.props.fillinDummyFacets) {
             this.populateDummyFacets();
@@ -290,7 +283,7 @@ var ReportToolbar = React.createClass({
                 }
 
                 {hasFacets && <div id="facetsMenuTarget"></div>}
-                {this.getPageActions()}
+                {this.props.pageActions}
             </div>
         );
 
