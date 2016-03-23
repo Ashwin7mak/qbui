@@ -65,38 +65,49 @@ var FacetsList = React.createClass({
         return answer;
     },
 
-    facetsList(facetsData) {
-
-        //values are expected to be objects {value:'xx'},
-        // make it so until node layer is changed
+    normalizeValue(aFacet, val) {
         let YesMsg = 'report.facets.yesCheck';
         let NoMsg = 'report.facets.noCheck';
 
+        //convert false/true to i18n version of boolean value
+        if (aFacet.type.toUpperCase() === schemaConsts.CHECKBOX) {
+            if (!val || val === "" || val === 0 ||
+                val.toString().toUpperCase() === 'NO' ||
+                val.toString().toUpperCase() === 'FALSE') {
+                // when react 18n supports plain string (non dom wrapped)
+                // xtlate use the message keys above
+                val = 'No';
+            } else {
+                val = 'Yes';
+            }
+        }
+        return val;
+    },
+
+    mapFacetValues(facetsData) {
+        //values are expected to be objects {value:'xx'},
+        // make it so until node layer is changed
         if (facetsData.length && facetsData[0].values && facetsData[0].values.length && typeof facetsData[0].values[0] !== 'object') {
             facetsData = facetsData.map((aFacet) => {
                 if (aFacet.values && aFacet.values.length) {
                     aFacet.values = aFacet.values.map((val) => {
-                        if (aFacet.type.toUpperCase() === schemaConsts.CHECKBOX) {
-                            if (!val || val === "" || val === 0 ||
-                                val.toString().toUpperCase() === 'NO' ||
-                                val.toString().toUpperCase() === 'FALSE') {
-                                // when react 18n supports plain string (non dom wrapped)
-                                // xtlate use the message keys above
-                                val = 'No';
-                            } else {
-                                val = 'Yes';
-                            }
-                        }
-                        return {value: val};
+                        return {value: this.normalizeValue(aFacet, val)};
                     });
                 }
                 return aFacet;
             });
         }
+    },
+
+    facetsList(facetsData) {
+        //massge input data for rendering
+        this.mapFacetValues(facetsData);
+
         // filter out the date fields for now
         // TODO: support date ranges in filtering see https://jira.intuit.com/browse/QBSE-20422
         if (facetsData.length && facetsData[0].values) {
-            facetsData.filter((facetField) => !(facetField.type.toUpperCase().includes(schemaConsts.DATE)));
+            facetsData = facetsData.filter((facetField) => !(facetField.type.toUpperCase().includes(schemaConsts.DATE) ||
+                                                             facetField.type.toUpperCase().includes(schemaConsts.USER)));
         }
         // create field facet sections
         return facetsData.map((facetField) => {

@@ -205,8 +205,9 @@ var ReportToolbar = React.createClass({
             {id : 105, name : "Companies", type: "TEXT", mockFilter: true,  blanks: false,
                     // TODO: support date ranges in filtering see https://jira.intuit.com/browse/QBSE-20422
                 values : []}, // too many values for facets example
-            //{id : 4, name : "Dates", type: "date",  blanks: false,
-            //    range : {start: 1, end: 2}},
+            //Date facets yet supported
+            //{id : 4, name : "Dates", type: "date",  mockFilter: true, blanks: false,
+                //    values[{range: {start: 1, end: 2}}],
     ],
 
     dummyFacets: [
@@ -226,13 +227,14 @@ var ReportToolbar = React.createClass({
                 values : []}, // too many values for facets example
             {id : 105, name : "Flag", type: "CHECKBOX", mockFilter: true, blanks: false,
              values : ["No",  "Yes"]},
-            //{id : 106, name : "Dates", type: "date",  blanks: false,
-            //    range : {start: 1, end: 2}},
+            //Date facets yet supported
+            //{id : 106, name : "Dates", type: "DATE", mockFilter: true, blanks: false,
+            //    values : {start: 1, end: 2}},
     ],
 
 
     populateDummyFacets() {
-        if (this.props.reportData && this.props.reportData.data && !this.props.reportData.data.facets.appendedMockFilter)  {
+        if (this.props.reportData && this.props.reportData.data && this.props.reportData.data.facets && !this.props.reportData.data.facets.appendedMockFilter)  {
             this.props.reportData.data.facets = [...this.props.reportData.data.facets, ...this.dummyFacets];
             this.props.reportData.data.facets.appendedMockFilter = true;
         }
@@ -278,9 +280,9 @@ var ReportToolbar = React.createClass({
         // determine if there is a search/filter in effect and if there are records/results to show
         let hasRecords = true;
         if (this.isFiltered()) {
-            hasRecords = filteredRecordCount ? true : false;
+            hasRecords = !!filteredRecordCount;
         } else {
-            hasRecords = recordCount ? true : false;
+            hasRecords = !!recordCount;
         }
         let hasSelectedFacets = this.props.selections && this.props.selections.hasAnySelections();
 
@@ -293,7 +295,7 @@ var ReportToolbar = React.createClass({
                                    isLoading={isLoading}
                                    filteredRecordCount={filteredRecordCount}
                                    nameForRecords="Records"
-                        {...this.props} />
+                       />
 
                         {/* Search and grouping icon will go in the toolbar here per discussion with xd-ers */}
 

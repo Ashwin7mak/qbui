@@ -47,15 +47,13 @@
   }
 }
 
-.facetMenuPopup {
-    z-index: $zindex-popover;
-    margin-left: -15px;
+.facetsMenuContainer .facetMenuPopup.popover {
     border-radius: 3px;
     border-color : $facetMenu-BorderColor;
     min-width: 300px;
-    max-width: 100%;
+    max-width: 98%;
     > .arrow {
-      left: 13% !important;
+      left: 13%;
     }
 
 
@@ -76,7 +74,7 @@
     }
 
     .noOptions {
-      margin-left: .5em;
+      margin-left: 19px;
       color: $facetMenu-NoOptionsColor;
       font-family: "Lato", sans-serif;
       padding-top: .5em;
@@ -231,7 +229,7 @@
         }
         .facetMenuPopup {
             display: block;
-            left: -55px;
+            left: -88px;
             min-width: 150px;
             max-width: 232px;
         }
