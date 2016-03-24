@@ -229,11 +229,11 @@ var ReportToolbar = React.createClass({
         this.appendBlanks();
 
         let recordCount = this.props.reportData && this.props.reportData.data && this.props.reportData.data.records ?
-            this.props.reportData.data.records.length : null; //TODO what to show for pagination?
+            this.props.reportData.data.recordsCount : null; //TODO what to show for pagination?
 
         let filteredRecordCount  = this.props.reportData && this.props.reportData.data &&
         this.props.reportData.data.filteredRecords ?
-            this.props.reportData.data.filteredRecords.length : null;
+            this.props.reportData.data.filteredRecordsCount : null;
 
         // determine if there is a search/filter in effect and if there are records/results to show
         let hasRecords = true;

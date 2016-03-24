@@ -114,6 +114,7 @@ let ReportContent = React.createClass({
                                     tblId={this.props.reportData.tblId}
                                     reportHeader={this.props.reportHeader}
                                     selectionActions={<ReportActions />}
+                                    showGrouping={this.props.reportData.data.hasGrouping}
                             ></AGGrid> :
                             <GriddleTable reportData={this.props.reportData}
                                     columnMetadata={columnsDef}

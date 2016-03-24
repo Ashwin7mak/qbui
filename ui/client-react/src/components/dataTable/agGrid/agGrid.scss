@@ -27,7 +27,7 @@ $grid-font-size: $font-size - 2;
     font-size: $grid-font-size;
     -webkit-font-smoothing: antialiased;
 
-    .ag-body {
+    .ag-body-container {
         background-color: $color2;
     }
 
@@ -65,6 +65,9 @@ $grid-font-size: $font-size - 2;
             border-right: 0px;
         }
     }
+    .ag-row-group .gridCell {
+        border-right: 0px;
+    }
 
     .ag-row:hover {
         background-color: $row-background-color-hover;
@@ -80,8 +83,28 @@ $grid-font-size: $font-size - 2;
         text-align: right;
     }
 
+    .qbIcon {
+        font-size: 20px;
+    }
     .SelectAllCheckbox {
         margin: 0px;
+        margin-left: 10px;
+        height: 20px;
+    }
+    .grid-checkbox {
+        padding-left: 36px;
+    }
+
+    .ag-group-cell-entire-row {
+        background-color: #f3f8fe;
+        padding: 8px;
+        border-top: 3px solid #e3eaf3;
+    }
+    .group-header {
+        margin-left: 10px;
+    }
+    .ag-group-expand {
+        width: 15px;
     }
 }
 

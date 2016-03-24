@@ -44,13 +44,15 @@ let ReportDataStore = Fluxxor.createStore({
         this.loading = false;
         this.error = false;
 
-        let records = this.getReportData(reportData.data);
+        let records = this.getReportData(reportData.data, reportData.hasGrouping);
         this.data = {
             name: reportData.name,
+            hasGrouping: reportData.hasGrouping, //TODO: this should come from report meta data.
             columns: this.getReportColumns(reportData.data.fields),
             records: records,
             facets: reportData.data.facets,
-            filteredRecords: records
+            filteredRecords: records,
+            recordsCount: reportData.data.records.length
         };
         this.emit('change');
     },
@@ -71,7 +73,9 @@ let ReportDataStore = Fluxxor.createStore({
     onLoadRecordsSuccess(records) {
         this.loading = false;
         this.error = false;
-        this.data.filteredRecords = this.getReportData(records);
+        this.data.filteredRecords = this.getReportData(records, records.hasGrouping);
+        this.data.hasGrouping = records.hasGrouping;
+        this.data.filteredRecordsCount = records.length;
         this.emit('change');
     },
 
@@ -105,6 +109,7 @@ let ReportDataStore = Fluxxor.createStore({
 
     getReportColumns(fields) {
         let columns = [];
+
         if (fields) {
             fields.forEach(function(field, index) {
                 let column = {};
@@ -125,7 +130,7 @@ let ReportDataStore = Fluxxor.createStore({
         return columns;
     },
 
-    getReportData(data) {
+    getReportData(data, hasGrouping) {
         let fields = data.fields;
         let records = data.records;
         let reportData = [];
@@ -147,6 +152,34 @@ let ReportDataStore = Fluxxor.createStore({
             });
         }
 
+        if (hasGrouping) {
+            //fake group data for now. find a text and a numeric field and group data on that
+            let groupingField1 = null;
+            let groupingField2 = null;
+            fields.forEach((field) => {
+                if (field.datatypeAttributes.type === "TEXT" && groupingField1 === null) {
+                    groupingField1 = field.name;
+                }
+                if (field.datatypeAttributes.type === "RATING" && groupingField2 === null) {
+                    groupingField2 = field.name;
+                }
+            });
+            var groupedData = _.groupBy(reportData, function(record) {
+                return record[groupingField1];
+            });
+            var newData = [];
+            for (var group in groupedData) {
+                var subgroupedData = _.groupBy(groupedData[group], ((record) => {
+                    return record[groupingField2];
+                }));
+                var children = [];
+                for (var subgroup in subgroupedData) {
+                    children.push({group: subgroup, children: subgroupedData[subgroup]});
+                }
+                newData.push({group: group, children: children});
+            }
+            return newData;
+        }
         return reportData;
     },
 

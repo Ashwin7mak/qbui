@@ -23,6 +23,14 @@ let ActionsColumn = React.createClass({
     }
 });
 
+function buildIconElement(icon) {
+    return "<span class='qbIcon iconssturdy-" + icon + "'></span>";
+}
+let gridIcons = {
+    groupExpanded: buildIconElement("caret-filled-up"),
+    groupContracted: buildIconElement("caret-filled-down")
+}
+
 let AGGrid = React.createClass({
     mixins: [FluxMixin],
 
@@ -41,6 +49,7 @@ let AGGrid = React.createClass({
         history: React.PropTypes.object,
         flux: React.PropTypes.object
     },
+
     // agGrid has a "context" param that is of type object and gets passed down to all cell renderer functions.
     // Since the external components are not in the tree hierarchy as the grid itself, and hence dont share the same react context,
     // use this "context" object to pass down such pieces to the components.
@@ -58,8 +67,29 @@ let AGGrid = React.createClass({
         this.api = params.api;
         this.columnApi = params.columnApi;
     },
+
+    getNodeChildDetails(rowItem) {
+        if (rowItem.group) {
+            return {
+                group: true,
+                expanded: false,
+                children: rowItem.children,
+                field: 'group',
+                key: rowItem.group
+            };
+        } else {
+            return null;
+        }
+    },
+    getGroupRowRenderer(params) {
+        let groupCellText = document.createElement("span");
+        groupCellText.className = "group-header";
+        groupCellText.textContent = params.data.group;
+        return groupCellText;
+    },
     componentDidMount() {
         this.gridOptions.context.flux = this.getFlux();
+        this.gridOptions.getNodeChildDetails = this.getNodeChildDetails;
     },
     // For some reason react always thinks the component needs to be re-rendered because props have changed.
     // Analysis shows that the action column renderer is returning notEquals, event though nothing has changed.
@@ -104,11 +134,13 @@ let AGGrid = React.createClass({
      */
     autoSizeAllColumns() {
         var allColumnIds = [];
-        if (this.props.columns) {
-            this.props.columns.forEach(function(columnDef) {
-                allColumnIds.push(columnDef.field);
-            });
-            this.columnApi.autoSizeColumns(allColumnIds);
+        if (this.columnApi) {
+            if (this.props.columns) {
+                this.props.columns.forEach(function (columnDef) {
+                    allColumnIds.push(columnDef.field);
+                });
+                this.columnApi.autoSizeColumns(allColumnIds);
+            }
         }
     },
     /**
@@ -128,10 +160,14 @@ let AGGrid = React.createClass({
      * @param params
      */
     onRowClicked(params) {
+        return;
         // we have overlapping events since we want the row click to open a record but a record action icon click to execute the action
         // ag grid seems to be listening on the container so it traps all the click events 1st so we need to ween out the icon click events.
 
         let eventTarget = params.event.target;
+        if (!eventTarget.className || (typeof eventTarget.className !== "string")) {
+            return;
+        }
         if (eventTarget.className.indexOf("iconLink") !== -1 || eventTarget.className.indexOf("qbIcon") !== -1) {
             return;
         }
@@ -209,6 +245,7 @@ let AGGrid = React.createClass({
         if (prevState.selectAllClicked) {
             this.setState({selectAllClicked: false});
         }
+        this.autoSizeAllColumns();
     },
     /**
      * keep track of tools menu being open (need to change overflow css style)
@@ -244,13 +281,18 @@ let AGGrid = React.createClass({
                 React.cloneElement(this.props.reportHeader, {key:"reportHeader", onMenuEnter:this.onMenuEnter, onMenuExit:this.onMenuExit})}
             </div>));
     },
-    /**
-     * Add a couple of columns to the column definition sent through props -
-     * add checkbox column to the beginning of the array and
-     * add actions column to the end of the array.
-     */
-    getColumns() {
-        let columns = this.props.columns.slice(0);
+
+    onGroupsExpand(element) {
+        if (element.getAttribute("state") === "close") {
+            element.setAttribute("state", "open");
+            this.api.expandAll();
+        } else {
+            element.setAttribute("state", "close");
+            this.api.collapseAll();
+        }
+    },
+
+    getCheckBoxColumn(showCollapseAll) {
         //Add checkbox column
         let checkBoxCol = {};
         checkBoxCol.field = "checkbox";
@@ -260,28 +302,55 @@ let AGGrid = React.createClass({
         checkbox.onclick = (event) => {
             this.allCheckBoxSelected(event);
         };
+        var collapser = document.createElement("span");
+        collapser.setAttribute("state", "close");
+        collapser.innerHTML = gridIcons.groupContracted;
+        collapser.onclick = (event) => {
+            this.onGroupsExpand(event.target);
+        };
+        var headerCell = document.createElement("div");
+        headerCell.appendChild(collapser);
+        headerCell.appendChild(checkbox);
         //ag-grid doesnt seem to allow react components sent into headerCellRender.
         checkBoxCol.headerCellRenderer = function() {
-            return checkbox;
+            return headerCell;
         };
         checkBoxCol.checkboxSelection = true;
-        checkBoxCol.width = 30;
+        checkBoxCol.width = 100;
         checkBoxCol.headerClass = "gridHeaderCell";
-        checkBoxCol.cellClass = "gridCell";
-        columns.unshift(checkBoxCol);
+        checkBoxCol.cellClass = "gridCell grid-checkbox";
+        checkBoxCol.suppressMenu = true;
+        checkBoxCol.suppressResize = true;
+        return checkBoxCol;
+    },
+    getActionsColumn() {
+        return {
+            headerName: "", //for ag-grid
+            field: "actions",      //for ag-grid
+            columnName: "actions", //for griddle
+            cellRenderer: reactCellRendererFactory(ActionsColumn),
+            cellClass: "gridCell actions",
+            headerClass: "gridHeaderCell",
+            width: 1,
+            suppressMenu: true,
+            suppressResize: true
+        };
+    },
+    /**
+     * Add a couple of columns to the column definition sent through props -
+     * add checkbox column to the beginning of the array and
+     * add actions column to the end of the array.
+     */
+    getColumns() {
+        let columns = this.props.columns.slice(0);
+
+        //This should be based on perms -- something like if(this.props.allowMultiSelection)
+        columns.unshift(this.getCheckBoxColumn(this.props.showGrouping));
 
         // Add Actions column. Put this as the last column in the grid and then make the column 1px wide so it doesnt really "show".
         // CSS takes care of positioning the content of this column over the previous columns so it looks like an overlay.
         if (columns.length > 0) {
-            columns.push({
-                headerName: "", //for ag-grid
-                field: "actions",      //for ag-grid
-                columnName: "actions", //for griddle
-                cellRenderer: reactCellRendererFactory(ActionsColumn),
-                cellClass: "gridCell actions",
-                headerClass: "gridHeaderCell",
-                width: 1
-            });
+            columns.push(this.getActionsColumn());
         }
         return columns;
     },
@@ -318,7 +387,14 @@ let AGGrid = React.createClass({
 
                                     suppressRowClickSelection="true"
                                     suppressCellSelection="true"
-                                />
+
+                                    //grouping behavior
+                                    groupSelectsChildren="true"
+                                    groupUseEntireRow={this.props.showGrouping}
+                                    groupRowInnerRenderer={this.getGroupRowRenderer}
+
+                                    icons={gridIcons}
+                            />
                             </div>
                         </Loader>
                         { //keep empty placeholder when loading to reduce reflow of space, scrollbar changes
