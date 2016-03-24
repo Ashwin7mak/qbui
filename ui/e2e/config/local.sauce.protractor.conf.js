@@ -20,7 +20,8 @@
             idleTimeout: '120',
             screenResolution : '1680x1050',
             shardTestFiles: true,
-            maxInstances: 5
+            maxInstances: 5,
+            maxDuration: 10800
         },
         // The sauce user and access key allow us to run our browser tests remotely on a SauceLabs VM
         sauceUser           : 'sbg_qbse',

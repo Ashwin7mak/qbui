@@ -98,7 +98,7 @@
                             e2eBase.sleep(browser.params.smallSleep);
                             reportServicePage.waitForElement(reportServicePage.agGridBodyEl).then(function() {
                                 // Get all records from table before filter applied
-                                reportServicePage.agGridRecordElList.map(function (row) {
+                                reportServicePage.agGridRecordElList.map(function(row) {
                                     return {
                                         'Text Field': row.all(by.className('ag-cell-no-focus')).get(2).getText(),
                                         'Checkbox Field': row.all(by.className('ag-cell-no-focus')).get(5).getText()
@@ -377,20 +377,20 @@
                         e2eBase.sleep(browser.params.smallSleep);
                     }
                 }).then(function() {
-                    reportServicePage.waitForElement(reportServicePage.tablesListDivEl).then(function () {
+                    reportServicePage.waitForElement(reportServicePage.tablesListDivEl).then(function() {
                         // Click on report hamburger list
                         reportServicePage.reportHamburgersElList.get(0).click();
                     });
                 }).then(function() {
                     // Wait for the report list to load
-                    reportServicePage.waitForElement(reportServicePage.reportGroupsDivEl).then(function () {
+                    reportServicePage.waitForElement(reportServicePage.reportGroupsDivEl).then(function() {
                         // Find and select the report
                         reportServicePage.selectReport('My Reports', 'Test Report');
                         e2eBase.sleep(browser.params.smallSleep);
                     });
                 }).then(function() {
                     // Expand the popup and select group
-                    reportServicePage.waitForElement(reportServicePage.reportsToolBar).then(function () {
+                    reportServicePage.waitForElement(reportServicePage.reportsToolBar).then(function() {
                         // Verify the facet container is not present in DOM without facets for a report.
                         expect(reportServicePage.reportFacetMenuContainer.isPresent()).toBeFalsy();
                         done();
