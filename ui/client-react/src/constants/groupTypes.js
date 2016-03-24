@@ -5,7 +5,7 @@ let COMMON = {
     firstWord: 'I',
     day: 'D',
     week: 'W'
-}
+};
 
 export const GROUP_TYPE = {
 
