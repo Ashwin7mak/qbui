@@ -8,7 +8,7 @@
 
 
 .reportToolbar {
-  > div > div {
+  > .facetsMenuContainer > div {
     position: relative;
   }
 }
@@ -18,14 +18,17 @@
 }
 
 .facetsMenuButton {
-  display: inline;
-
+  display: inline-block;
+  &.withoutSelections {
+    margin-top:10px;
+  }
   .facetButtons {
     color: $icon-color;
       @include small-breakpoint {
           color:$secondary-bar-fg;
       }
   }
+
   &.popoverShown,
   .facetButtons:hover {
     color: $icon-color-hover;
@@ -35,7 +38,7 @@
   }
   .filterButton {
     font-size: 20px;
-    .qbIcon {
+    &.qbIcon {
       display: inline;
     }
   }
@@ -44,12 +47,11 @@
   }
 }
 
-.facetMenuPopup {
-    z-index: 10000;
-    margin-left: -15px;
+.facetsMenuContainer .facetMenuPopup.popover {
     border-radius: 3px;
     border-color : $facetMenu-BorderColor;
     min-width: 300px;
+    max-width: 98%;
     > .arrow {
       left: 13% !important;
     }
@@ -67,10 +69,15 @@
       border: none;
     }
 
+    .notActionable {
+      cursor : not-allowed;
+    }
+
     .noOptions {
-      margin-left: 2em;
+      margin-left: 19px;
       color: $facetMenu-NoOptionsColor;
       font-family: "Lato", sans-serif;
+      padding-top: .5em;
     }
 
     .panel {
@@ -144,7 +151,7 @@
 
     .listMore {
       color: $facetMenu-showMoreColor;
-      margin-left: 2.4em;
+      padding-left: 2.4em;
       cursor: pointer;
     }
 
@@ -180,19 +187,15 @@
   .facetNameToken {
     margin-right: .5em;
     display: block;
+    font-size: 85%;
   }
 
   .selectedToken {
     margin-right:10px;
-    margin-top: 2px; //clm
+    margin-top: 2px;
     border-radius: 12px;
     font-size:10px;
     font-weight:500;
-    /* dark background tokens */
-    // background-color: $selection-badge-color;
-    // color: $facetMenu-facetTokenTextColor;
-
-    /* paler background facet tokens */
     background-color: $facetMenu-facetTokenBackgroundColor;
     color: $facetMenu-facetTokenTextColor;
     display: inline-block;
@@ -226,9 +229,9 @@
         }
         .facetMenuPopup {
             display: block;
-            left: 4px;
+            left: -88px;
             min-width: 150px;
-            max-width: 200px;
+            max-width: 232px;
         }
 
         .facetsMenuContainer {

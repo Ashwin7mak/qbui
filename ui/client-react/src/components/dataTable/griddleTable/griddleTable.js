@@ -226,7 +226,7 @@ let GriddleTable = React.createClass({
         } else {
             return (
                 <Loader loaded={!this.props.reportData.loading}>
-                    <div><I18nMessage message={'grid.no_data'}/></div>
+                    <div className="noData"><I18nMessage message={'grid.no_data'}/></div>
                 </Loader>
             );
         }
