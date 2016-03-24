@@ -190,12 +190,7 @@ let AGGrid = React.createClass({
      */
     updateAllCheckbox() {
         let flux = this.getFlux();
-        let allRowsSelected = false;
-        if (flux.stores.ReportDataStore.data.filteredRecords.length > 0) {
-            allRowsSelected = flux.stores.ReportDataStore.data.filteredRecordsCount === this.getSelectedRows().length;
-        } else {
-            allRowsSelected = flux.stores.ReportDataStore.data.recordsCount === this.getSelectedRows().length;
-        }
+        let allRowsSelected = flux.stores.ReportDataStore.data.filteredRecordsCount === this.getSelectedRows().length;
         if (allRowsSelected) {
             document.getElementsByClassName("selectAllCheckbox")[0].checked = true;
         } else {
