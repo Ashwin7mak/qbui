@@ -107,6 +107,7 @@ $grid-default-padding: 10px;
 
     .checkboxHolder {
         position: relative;
+        height: 30px;
     }
     .selectAllCheckbox {
         margin: 0px;
@@ -125,7 +126,6 @@ $grid-default-padding: 10px;
     @for $i from 1 through 6 {
         .ag-row-level-#{$i}{
             .ag-group-cell-entire-row {
-            //.grid-checkbox {
                 padding-left: $i*($grid-default-padding+$grid-group-expand-icon-size)!important;
                 $groups: $groups + 1;
             }

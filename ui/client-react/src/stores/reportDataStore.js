@@ -76,7 +76,7 @@ let ReportDataStore = Fluxxor.createStore({
         this.error = false;
         this.data.filteredRecords = this.getReportData(records, records.hasGrouping);
         this.data.hasGrouping = records.hasGrouping;
-        this.data.filteredRecordsCount = records.length;
+        this.data.filteredRecordsCount = records.records.length;
         this.emit('change');
     },
 

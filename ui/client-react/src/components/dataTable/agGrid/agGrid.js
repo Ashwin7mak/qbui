@@ -58,9 +58,7 @@ let AGGrid = React.createClass({
     },
     getInitialState() {
         return {
-            selectedRows: [],
-            toolsMenuOpen: false,
-            selectAllClicked: false
+            toolsMenuOpen: false
         };
     },
     onGridReady(params) {
@@ -177,22 +175,14 @@ let AGGrid = React.createClass({
      * @param params
      */
     onRowSelected(params) {
-        if (this.state.selectAllClicked) {
-            return;
-        }
-        const id = params.node.data[this.props.uniqueIdentifier];
-        if (id) {
-            if (this.state.selectedRows.indexOf(id) === -1) {
-                // not already selected, add to selectedRows
-                this.state.selectedRows.push(params.node.data[this.props.uniqueIdentifier]);
-                this.setState({selectedRows: this.state.selectedRows});
-            } else {
-                // already selected, remove from selectedRows
-                this.setState({selectedRows: _.without(this.state.selectedRows, id)});
+        this.api.getSelectedRows().forEach((row) => {
+            if (row.selected) {//atleast one row is selected
+                this.setState({toolsMenuOpen:true});
+                this.updateAllCheckbox();
+                return;
             }
-            // for some reason the master checkbox click makes it check and then un-check itself. So updating this forcibly.
-            this.updateAllCheckbox();
-        }
+        });
+        this.updateAllCheckbox();
     },
 
     /**
@@ -200,10 +190,17 @@ let AGGrid = React.createClass({
      */
     updateAllCheckbox() {
         let flux = this.getFlux();
-        if (flux.stores.ReportDataStore.data.recordsCount === this.state.selectedRows.length) {
+        let allRowsSelected = false;
+        if (flux.stores.ReportDataStore.data.filteredRecords.length > 0) {
+            allRowsSelected = flux.stores.ReportDataStore.data.filteredRecordsCount === this.getSelectedRows().length;
+        } else {
+            allRowsSelected = flux.stores.ReportDataStore.data.recordsCount === this.getSelectedRows().length;
+        }
+        if (allRowsSelected) {
             document.getElementsByClassName("selectAllCheckbox")[0].checked = true;
         } else {
             document.getElementsByClassName("selectAllCheckbox")[0].checked = false;
+            this.setState({toolsMenuOpen:false});
         }
     },
     /**
@@ -212,31 +209,17 @@ let AGGrid = React.createClass({
      * Use selectAllClicked state variable to keep track of this.
      */
     allCheckBoxSelected() {
-        this.setState({selectAllClicked: true});
         if (!this.props.records) {
             return;
         }
         if (event.currentTarget.checked) {
             this.selectAll();
-            //push all ids to selectedRows
-            let rowIds = [];
-            this.props.records.forEach((row)=>{
-                rowIds.push(row[this.props.uniqueIdentifier]);
-            });
-            this.setState({selectedRows: rowIds});
         } else {
             this.deselectAll();
-            this.setState({selectedRows: []});
         }
-        this.updateAllCheckbox();
     },
-    // After the component is updated turn off selectAllClicked variable's state.
-    // TODO: Better way to do this?
     componentDidUpdate(prevProps, prevState) {
-        if (prevState.selectAllClicked) {
-            this.setState({selectAllClicked: false});
-        }
-        this.autoSizeAllColumns();
+        //this.autoSizeAllColumns();
     },
     /**
      * keep track of tools menu being open (need to change overflow css style)
@@ -250,6 +233,17 @@ let AGGrid = React.createClass({
     onMenuExit() {
         this.setState({toolsMenuOpen:false});
     },
+    getSelectedRows() {
+        let rows = [];
+        if (this.api) {
+            this.api.getSelectedRows().forEach((row) => {
+                if (row[this.props.uniqueIdentifier]) {
+                    rows.push(row[this.props.uniqueIdentifier]);
+                }
+            });
+        }
+        return rows;
+    },
     /**
      * get table actions if we have them - render selectionActions prop if we have an active selection,
      * otherwise the reportHeader prop (cloned with extra key prop for transition group, and selected rows
@@ -257,7 +251,8 @@ let AGGrid = React.createClass({
      */
     getTableActions() {
 
-        const hasSelection  = this.state.selectedRows.length;
+        const selectedRows = this.getSelectedRows();
+        const hasSelection  = selectedRows.length;
 
         let classes = "tableActionsContainer secondaryBar";
         if (this.state.toolsMenuOpen) {
@@ -268,7 +263,7 @@ let AGGrid = React.createClass({
         }
         return (this.props.reportHeader && this.props.selectionActions && (
             <div className={classes}>{hasSelection ?
-                React.cloneElement(this.props.selectionActions, {key:"selectionActions", selection: this.state.selectedRows}) :
+                React.cloneElement(this.props.selectionActions, {key:"selectionActions", selection: selectedRows}) :
                 React.cloneElement(this.props.reportHeader, {key:"reportHeader", onMenuEnter:this.onMenuEnter, onMenuExit:this.onMenuExit})}
             </div>));
     },
@@ -296,6 +291,9 @@ let AGGrid = React.createClass({
         checkbox.onclick = (event) => {
             this.allCheckBoxSelected(event);
         };
+        var headerCell = document.createElement("div");
+        headerCell.className = "checkboxHolder";
+
         if (this.props.showGrouping) {
             var collapser = document.createElement("span");
             collapser.className = "collapser";
@@ -304,8 +302,6 @@ let AGGrid = React.createClass({
             collapser.onclick = (event) => {
                 this.onGroupsExpand(event.target);
             };
-            var headerCell = document.createElement("div");
-            headerCell.className = "checkboxHolder";
             headerCell.appendChild(collapser);
         }
 
@@ -316,13 +312,17 @@ let AGGrid = React.createClass({
         };
         checkBoxCol.checkboxSelection = true;
         checkBoxCol.headerClass = "gridHeaderCell";
-        checkBoxCol.cellClass = "gridCell grid-checkbox";
+        checkBoxCol.cellClass = "gridCell";
         checkBoxCol.suppressMenu = true;
         checkBoxCol.suppressResize = true;
-        // this is a weird calculation but this is because we want the checkbox to always show based on number of grouping levels
-        // for now this is being calulated as num_groups*30 + num_checkboxes*20 + 10
-        let flux = this.getFlux();
-        checkBoxCol.width = flux.stores.ReportDataStore.data.groupLevel * 30 + 20 + 10;
+        if (this.props.showGrouping) {
+            // this is a weird calculation but this is because we want the checkbox to always show based on number of grouping levels
+            // for now this is being calulated as num_groups*30 + num_checkboxes*20 + 10
+            let flux = this.getFlux();
+            checkBoxCol.width = flux.stores.ReportDataStore.data.groupLevel * 30 + 20 + 10;
+        } else {
+            checkBoxCol.width = 60;
+        }
         return checkBoxCol;
     },
     getActionsColumn() {
@@ -360,7 +360,7 @@ let AGGrid = React.createClass({
     render() {
         if (this.props.records && this.props.records.length > 0) {
             let columnDefs = this.getColumns();
-            let griddleWrapperClasses = this.state.selectedRows.length ? "griddleWrapper selectedRows" : "griddleWrapper";
+            let griddleWrapperClasses = this.getSelectedRows().length ? "griddleWrapper selectedRows" : "griddleWrapper";
             return (
                 <div className="reportTable" >
 
