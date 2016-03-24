@@ -62,7 +62,7 @@ let AppHomePageRoute = React.createClass({
         return (this.props.selectedApp &&
             <div className="stageHeadline">
                 <QBicon icon="favicon"/>
-                <h3>{this.props.selectedApp.name}</h3>
+                <h3 className="appName">{this.props.selectedApp.name}</h3>
 
             </div>
         );

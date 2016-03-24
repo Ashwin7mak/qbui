@@ -134,6 +134,13 @@
     display:flex;
 }
 
+.reportContainer {
+    .layout-stage {
+        .breadCrumbs {
+            padding-left:5px;
+        }
+    }
+}
 
 @include small-breakpoint {
     .reportContainer .reportToolsAndContentContainer .reportToolbar {

@@ -2,7 +2,7 @@ import React from 'react';
 import ReactIntl from 'react-intl';
 import {I18nMessage, I18nDate} from '../../utils/i18nMessage';
 import Locale from '../../locales/locales';
-import {MenuItem, Button, Input, Dropdown} from 'react-bootstrap';
+import {MenuItem, Button, Input, Dropdown, OverlayTrigger, Tooltip} from 'react-bootstrap';
 import QBicon from '../qbIcon/qbIcon';
 import './pageActions.scss';
 
@@ -49,15 +49,25 @@ let PageActions = React.createClass({
      * @param action
      */
     getActionButton(action) {
-        return (<a key={action.msg} className="pageActionButton"><QBicon icon={action.icon}/></a>);
+        const tooltip = (<Tooltip id={action.msg}><I18nMessage message={action.msg} /></Tooltip>);
+        return (<OverlayTrigger key={action.msg} placement="bottom" overlay={tooltip}>
+                    <a key={action.msg} className="pageActionButton"><QBicon icon={action.icon}/></a>
+                </OverlayTrigger>);
     },
     /**
      * get dropdown containing remaining actions (after menuAfter index)
      */
     getActionsMenu() {
+        const moreTooltip = (
+            <Tooltip id="pageActions.more">
+                <I18nMessage message={"pageActions.more"} />
+            </Tooltip>);
+
         return (
             <Dropdown id="nav-right-dropdown" pullRight onToggle={this.onToggleMenu} onClose={this.onCloseMenu}>
-                <a bsRole="toggle" className={"dropdownToggle pageActionButton"}><QBicon icon="fries"/> </a>
+                <OverlayTrigger bsRole="toggle" key={"pageActions.more"} placement="bottom" overlay={moreTooltip}>
+                    <a className={"dropdownToggle pageActionButton"}><QBicon icon="fries"/> </a>
+                </OverlayTrigger>
 
                 <Dropdown.Menu onEntering={this.props.onMenuEnter} onExited={this.props.onMenuExit}>
                     {this.props.actions.map((action, index) => {

@@ -4,13 +4,13 @@
     display:flex;
     flex-direction:row;
     justify-content: space-between;
-    line-height:70px;
+    height:70px;
     align-items:center;
     .stageLeft {
         flex:1 1 auto;
+        padding-left:10px;
         .stageHeadline>* {
             display:inline-block;
-            margin:0 8px;
         }
         .qbIcon {
             font-size: 16px;

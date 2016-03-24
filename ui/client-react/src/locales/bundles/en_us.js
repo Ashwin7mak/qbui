@@ -70,7 +70,8 @@ export default {
             print: "Print",
             customizeReport: "Customize this Report",
             customizeForm: "Customize this Form",
-            customizePage: "Customize this Page"
+            customizePage: "Customize this Page",
+            more: "More..."
         },
         header: {
             menu: {

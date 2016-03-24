@@ -10,21 +10,24 @@
 
 
     .recordStageHeadline {
-        line-height:70px;
+        height:70px;
+        display:flex;
+        flex-direction:column;
+        justify-content:center;
         .linkBack {
+
             font-size: 12px;
-            color: blue;
-            line-height:25px;
+            color: $text-link-color;
+            line-height:normal;
             .qbIcon {
-                color: blue;
-                font-size: 12px;
+                width:auto;
+                color: $text-link-color;
+                font-size: 10px;
             }
         }
-        .stageHeadline {
-            line-height: 35px;
+        .stageHeadline .breadCrumbs {
+            padding-left:5px;
         }
-
-
     }
     .recordActionsContainer {
         display: flex;

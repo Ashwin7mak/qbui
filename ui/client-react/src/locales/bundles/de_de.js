@@ -66,7 +66,8 @@ export default {
             print: "Drucken",
             customizeReport: "Fertigen Sie diesen Bericht",
             customizeForm: "Fertigen Sie dieses Formular",
-            customizePage: "Fertigen Sie diese Seite"
+            customizePage: "Fertigen Sie diese Seite",
+            more: "Mehr..."
         },
         header: {
             menu: {
