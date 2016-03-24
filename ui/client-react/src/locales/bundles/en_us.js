@@ -64,9 +64,13 @@ export default {
             addRecord: "Add a record",
             favorite: "Favorite",
             gridEdit: "Grid Edit",
+            edit: "Edit",
+            delete: "Delete",
             email: "Email",
             print: "Print",
-            customizeReport: "Customize this Report"
+            customizeReport: "Customize this Report",
+            customizeForm: "Customize this Form",
+            customizePage: "Customize this Page"
         },
         header: {
             menu: {

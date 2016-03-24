@@ -3,7 +3,9 @@
 $page-action-icon-color:#fff;
 
 @include not-small-breakpoint {
-    .reportToolbar .pageActions {
+    .reportToolbar .pageActions,
+    .recordActionsContainer .pageActions
+    {
         display: none;
     }
 

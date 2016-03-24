@@ -1,10 +1,31 @@
 @import '../../assets/css/qbVariables';
 
+.record-content {
+    padding: 0 10px;
+}
 .recordContainer {
     width: 100%;
     background-image: linear-gradient(to top, $color13 0%, $color14 100%);
     background-color: $color12;
 
+
+    .recordStageHeadline {
+        line-height:70px;
+        .linkBack {
+            font-size: 12px;
+            color: blue;
+            line-height:25px;
+            .qbIcon {
+                color: blue;
+                font-size: 12px;
+            }
+        }
+        .stageHeadline {
+            line-height: 35px;
+        }
+
+
+    }
     .recordActionsContainer {
         display: flex;
         justify-content: space-between;

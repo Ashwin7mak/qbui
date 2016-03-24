@@ -60,9 +60,13 @@ export default {
             addRecord: "Datensatz hinzufügen",
             favorite: "Favorit",
             gridEdit: "Gitter bearbeiten",
+            edit: "Bearbeiten",
+            delete: "Löschen",
             email: "Email",
             print: "Drucken",
-            customizeReport: "Fertigen Sie diesen Bericht"
+            customizeReport: "Fertigen Sie diesen Bericht",
+            customizeForm: "Fertigen Sie dieses Formular",
+            customizePage: "Fertigen Sie diese Seite"
         },
         header: {
             menu: {
