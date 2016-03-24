@@ -1,7 +1,7 @@
 import React from 'react';
 import Stage from '../stage/stage';
 import QBicon from '../qbIcon/qbIcon';
-import PageActions from '../actions/pageActions';
+import IconActions from '../actions/iconActions';
 import {I18nMessage} from '../../utils/i18nMessage';
 import Record from './record';
 import {Link} from 'react-router';
@@ -31,10 +31,14 @@ var RecordRoute = React.createClass({
     },
 
     getSecondaryBar() {
-        return (
-            <div className="secondaryFormActions">
-                {/* todo */}
-            </div>);
+
+        const actions = [
+            {msg: 'recordActions.previous', icon:'caret-left'},
+            {msg: 'recordActions.return', icon:'return', onClick:this.returnToReport},
+            {msg: 'recordActions.next', icon:'caret-right'}
+
+        ];
+        return (<IconActions className="secondaryFormActions" actions={actions} />);
     },
 
     // just navigate back for now since the record ui does not
@@ -67,16 +71,16 @@ var RecordRoute = React.createClass({
         }
 
     },
-    getPageActions(menuAfter) {
+    getPageActions(menuAfter = 0) {
         const actions = [
-            {msg: 'pageActions.addRecord', icon:'add'},
+            {msg: 'pageActions.addRecord', icon:'add', className:'addRecord'},
             {msg: 'pageActions.edit', icon:'edit'},
             {msg: 'pageActions.email', icon:'mail'},
             {msg: 'pageActions.print', icon:'print'},
             {msg: 'pageActions.delete', icon:'delete'},
             {msg: 'pageActions.customizeForm', icon:'settings-hollow'},
         ];
-        return (<PageActions actions={actions} menuAfter={menuAfter} {...this.props}/>);
+        return (<IconActions className="pageActions" actions={actions} menuAfter={menuAfter} {...this.props}/>);
     },
 
     render() {
@@ -91,7 +95,7 @@ var RecordRoute = React.createClass({
 
             <div className="recordActionsContainer secondaryBar">
                 {this.getSecondaryBar()}
-                {this.getPageActions()}
+                {this.getPageActions(4)}
             </div>
             <Record recordData={this.props.recordData} />
         </div>);

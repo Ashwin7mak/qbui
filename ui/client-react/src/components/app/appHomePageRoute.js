@@ -1,7 +1,7 @@
 import React from 'react';
 import Stage from '../stage/stage';
 import QBicon from '../qbIcon/qbIcon';
-import PageActions from '../actions/pageActions';
+import IconActions from '../actions/iconActions';
 import Fluxxor from 'fluxxor';
 import Logger from '../../utils/logger';
 
@@ -51,12 +51,12 @@ let AppHomePageRoute = React.createClass({
         this.selectAppFromParams(props.params, true);
     },
 
-    getPageActions(menuAfter) {
+    getPageActions(menuAfter = 0) {
         const actions = [
             {msg: 'pageActions.print', icon:'print'},
             {msg: 'pageActions.customizePage', icon:'settings-hollow'}
         ];
-        return (<PageActions actions={actions} menuAfter={menuAfter} {...this.props}/>);
+        return (<IconActions className="pageActions" actions={actions} menuAfter={menuAfter} {...this.props}/>);
     },
     getStageHeadline() {
         return (this.props.selectedApp &&
@@ -67,8 +67,14 @@ let AppHomePageRoute = React.createClass({
             </div>
         );
     },
+    getSecondaryBar() {
+        return (
+            <div className="secondaryAppHomePageActions">
+                {/* todo */}
+            </div>);
+    },
     render: function() {
-        return (<div className="appHomepageContainer">
+        return (<div className="appHomePageContainer">
             <Stage stageHeadline={this.getStageHeadline()}
                    pageActions={this.getPageActions(2)}>
 
@@ -77,6 +83,11 @@ let AppHomePageRoute = React.createClass({
                 </div>
 
             </Stage>
+
+            <div className="appHomePageActionsContainer secondaryBar">
+                {this.getSecondaryBar()}
+                {this.getPageActions(2)}
+            </div>
             <div>App Dashboard goes here...</div>
         </div>);
     }

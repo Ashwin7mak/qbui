@@ -43,9 +43,8 @@
 }
 
 @include small-breakpoint {
-    .recordActionsContainer.secondaryBar {
-        height:40px;
-
-        background-color: $secondary-bar-bg;
+    .secondaryBar .iconActions.pageActions .iconActionButton.addRecord {
+        display:none; /* hide on small, use a floating add button */
     }
 }
+

@@ -12,6 +12,7 @@ $footer-background: $color2;
 $footer-next-button-hover: $color10;
 $footer-next-button: $color2;
 
+$table-actions-container-bg: #fff;
 
 .reportTable {
     width:100%;
@@ -113,6 +114,7 @@ $footer-next-button: $color2;
     flex: 0 0 auto;
     position: relative;
     @include small-breakpoint {
+        background-color: $table-actions-container-bg;
         &:not(.selectionActionsOpen) {
             background-color: $secondary-bar-bg;
         }

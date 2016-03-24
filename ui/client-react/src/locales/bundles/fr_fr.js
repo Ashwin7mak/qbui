@@ -67,8 +67,15 @@ export default {
             print: "Imprimer",
             customizeReport: "Personnaliser ce Rapport",
             customizeForm: "Personnaliser ce formulaire",
-            customizePage: "Personnaliser cette page",
+            customizePage: "Personnaliser cette page"
+        },
+        iconActions: {
             more: "Plus..."
+        },
+        recordActions: {
+            previous: "Précédent",
+            return: "Retour au rapport",
+            next: "Prochain"
         },
         header: {
             menu: {

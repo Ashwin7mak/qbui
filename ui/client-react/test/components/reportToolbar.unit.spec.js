@@ -3,7 +3,7 @@ import ReactDOM from 'react-dom';
 import TestUtils from 'react-addons-test-utils';
 import Fluxxor from 'fluxxor';
 import * as actions from '../../src/constants/actions';
-import PageActions from '../../src/components/actions/pageActions';
+import IconActions from '../../src/components/actions/iconActions';
 import ReportToolbar  from '../../src/components/report/reportToolbar';
 import FacetSelections  from '../../src/components/facet/facetSelections';
 import facetMenuActions from '../../src/actions/facetMenuActions';
@@ -134,7 +134,7 @@ describe('ReportToolbar functions', () => {
         }
     };
 
-    const pageActions = <PageActions actions={[]}/>;
+    const pageActions = <IconActions actions={[]}/>;
 
     it('test render reportToolbar no records', () => {
         component = TestUtils.renderIntoDocument(<ReportToolbar flux={flux}

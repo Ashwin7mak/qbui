@@ -1,7 +1,7 @@
 import React from 'react';
 import Stage from '../stage/stage';
 import QBicon from '../qbIcon/qbIcon';
-import PageActions from '../actions/pageActions';
+import IconActions from '../actions/iconActions';
 import Fluxxor from 'fluxxor';
 let FluxMixin = Fluxxor.FluxMixin(React);
 import Logger from '../../utils/logger';
@@ -63,7 +63,7 @@ let TableHomePageRoute = React.createClass({
             </div>
         );
     },
-    getPageActions(menuAfter) {
+    getPageActions(menuAfter = 0) {
         const actions = [
             {msg: 'pageActions.addRecord', icon:'add'},
             {msg: 'pageActions.gridEdit', icon:'report-grid-edit'},
@@ -71,7 +71,14 @@ let TableHomePageRoute = React.createClass({
             {msg: 'pageActions.print', icon:'print'},
             {msg: 'pageActions.customizePage', icon:'settings-hollow'}
         ];
-        return (<PageActions actions={actions} menuAfter={menuAfter} {...this.props}/>);
+        return (<IconActions className="pageActions" actions={actions} menuAfter={menuAfter} {...this.props}/>);
+    },
+
+    getSecondaryBar() {
+        return (
+            <div className="secondaryTableHomePageActions">
+                {/* todo */}
+            </div>);
     },
 
     render: function() {
@@ -85,6 +92,10 @@ let TableHomePageRoute = React.createClass({
                 </div>
 
             </Stage>
+            <div className="tableHomePageActionsContainer secondaryBar">
+                {this.getSecondaryBar()}
+                {this.getPageActions()}
+            </div>
             <div>Table homepage goes here...</div>
         </div>);
     }

@@ -12,7 +12,7 @@ import FacetsMenu from '../facet/facetsMenu';
 import FacetSelections from '../facet/facetSelections';
 import RecordsCount from './recordsCount';
 import QBicon from '../qbIcon/qbIcon';
-import PageActions from '../actions/pageActions';
+import IconActions from '../actions/iconActions';
 import FilterUtils from '../../utils/filterUtils';
 
 let FluxMixin = Fluxxor.FluxMixin(React);
@@ -287,7 +287,7 @@ var ReportToolbar = React.createClass({
             </div>
         );
 
-        return (<div> {reportToolbar} </div>);
+        return (<div className="reportToolbarContainer"> {reportToolbar} </div>);
     }
 });
 

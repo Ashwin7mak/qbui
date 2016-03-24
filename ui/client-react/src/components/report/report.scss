@@ -142,6 +142,10 @@
     }
 }
 
+.reportToolbarContainer {
+    width:100%;
+}
+
 @include small-breakpoint {
     .reportContainer .reportToolsAndContentContainer .reportToolbar {
         color:$secondary-bar-fg;

@@ -273,8 +273,8 @@ let AGGrid = React.createClass({
         // Add Actions column. Put this as the last column in the grid and then make the column 1px wide so it doesnt really "show".
         // CSS takes care of positioning the content of this column over the previous columns so it looks like an overlay.
 
-        /*
-        if (columns.length > 0) {
+        // todo: optimize/refactor actions hover for performance
+        if (false && columns.length > 0) {
             columns.push({
                 headerName: "", //for ag-grid
                 field: "actions",      //for ag-grid
@@ -284,7 +284,7 @@ let AGGrid = React.createClass({
                 headerClass: "gridHeaderCell",
                 width: 1
             });
-        }*/
+        }
         return columns;
     },
 

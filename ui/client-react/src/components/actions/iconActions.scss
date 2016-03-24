@@ -1,0 +1,57 @@
+@import '../../assets/css/qbVariables';
+
+$icon-action-icon-color:#fff;
+
+@include not-small-breakpoint {
+    .secondaryBar .iconActions
+    {
+        display: none;
+    }
+
+    .iconActions {
+        line-height:40px;
+        display:inline-block;
+
+        .iconActionButton {
+            display: inline-block;
+            vertical-align: middle;
+            text-align: center;
+            width: 32px;
+            font-size: 20px;
+            color: $topnav-icon-color;
+        }
+        .iconActionButton:hover {
+            background: $nav-hover-bg;
+            color: $nav-hover-fg;
+        }
+    }
+}
+
+@include small-breakpoint {
+    .secondaryBar {
+        display: flex;
+        flex-direction: row;
+        justify-content:space-between;
+        height:40px;
+        background-color: $secondary-bar-bg;
+        width:100%;
+        .iconActions {
+            flex: 0 0 auto;
+            line-height: 40px;
+            display: block;
+
+
+            .iconActionButton {
+                display: inline-block;
+                vertical-align: middle;
+                text-align: center;
+                width: 32px;
+                font-size: 20px;
+                color: $icon-action-icon-color;
+            }
+        }
+        .pageActions {
+            background-color: #486c8f;
+        }
+    }
+}

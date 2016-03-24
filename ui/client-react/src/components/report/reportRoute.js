@@ -5,19 +5,17 @@ import Stage from '../stage/stage';
 import QBicon from '../qbIcon/qbIcon';
 import ReportStage from './reportStage';
 import ReportHeader from './reportHeader';
-import PageActions from '../actions/pageActions';
+import IconActions from '../actions/iconActions';
 import {Link} from 'react-router';
 import Logger from '../../utils/logger';
-let logger = new Logger();
-
 import ReportToolsAndContent from './reportToolsAndContent';
 import EmailReportLink from '../actions/emailReportLink';
 import simpleStringify from '../../../../common/src/simpleStringify';
-
 import Fluxxor from 'fluxxor';
 import _ from 'lodash';
 import './report.scss';
 
+let logger = new Logger();
 let FluxMixin = Fluxxor.FluxMixin(React);
 
 var ReportRoute = React.createClass({
@@ -61,7 +59,7 @@ var ReportRoute = React.createClass({
             {msg: 'pageActions.print', icon:'print'},
             {msg: 'pageActions.customizeReport', icon:'settings-hollow'},
         ];
-        return (<PageActions actions={actions} menuAfter={menuAfter} {...this.props}/>);
+        return (<IconActions className="pageActions" actions={actions} menuAfter={menuAfter} {...this.props}/>);
     },
 
     getBreadcrumbs() {
