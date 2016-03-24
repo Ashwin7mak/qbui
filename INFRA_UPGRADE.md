@@ -6,3 +6,8 @@
 4. We had references to a module in router.js that was not part of package.json but was checked in (preventing our build from breaking). Removed references to this code in router.js
 5. All changes to checked in modules will occur in a future jira story about upgrading our build process
 6. Added a local npm settings file (.npmrc) that tells our project to use our nexus as the registry, this allows other projects on the computer to continue reaching out to the public npm registry.
+
+#Modules we should upgrade
+1. react-intl
+2. react-addons-test-utils
+3. babel-core
