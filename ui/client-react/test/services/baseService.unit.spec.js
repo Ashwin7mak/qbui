@@ -20,7 +20,6 @@ describe('BaseService rewire tests', () => {
     beforeEach(() => {
         spyOn(BaseService.prototype, 'setRequestInterceptor');
         spyOn(BaseService.prototype, 'setResponseInterceptor');
-        spyOn(StringUtils, 'format');
 
         BaseService.__Rewire__('cookie', mockCookie);
         BaseService.__Rewire__('axios', mockAxios);
@@ -49,10 +48,26 @@ describe('BaseService rewire tests', () => {
         expect(axios.getMethodCalled).toBeTruthy();
     });
 
+    /**
+     * * Example2:
+     *      constructUrl('/api/v1/apps/{0}/tables/{0}/reports/{1}',['123abc456', 'xyz123'])
+     *        outputs
+     *      /api/v1/apps/123abc456/tables/123abc456/reports/xyz123
+     */
     it('test constructUrl method', () => {
         baseService = new BaseService();
-        var url = baseService.constructUrl('mask', ['tokens']);
-        expect(StringUtils.format).toHaveBeenCalled();
+        var mask = '/api/v1/apps/{0}/tables/{0}/reports/{1}';
+        var tokens = ['123abc456', 'xyz123'];
+        var output = '/api/v1/apps/123abc456/tables/123abc456/reports/xyz123';
+        var url = baseService.constructUrl(mask, tokens);
+        expect(output).toEqual(url);
+    });
+    
+    it('test constructRedirectUrl method', () => {
+        baseService = new BaseService();
+        var expectedUrl = 'https://localhost/db/main?a=nsredirect&nsurl=' + window.location.href;
+        var url = baseService.constructRedirectUrl();
+        expect(expectedUrl).toEqual(url);
     });
 
 });

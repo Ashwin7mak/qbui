@@ -3,6 +3,8 @@ import TestUtils from 'react-addons-test-utils';
 import ReactDOM from 'react-dom';
 import Fluxxor from 'fluxxor';
 import TopNav from '../../src/components/header/topNav';
+import GlobalActions from '../../src/components/actions/globalActions';
+
 import {MenuItem, OverlayTrigger} from 'react-bootstrap';
 import _ from 'lodash';
 import Locale from '../../src/locales/locales';
@@ -26,10 +28,12 @@ var CurrentDateMock = React.createClass({
 describe('TopNav functions', () => {
     'use strict';
 
-    let globalActions = [
+    let globalActionsData = [
         {msg: 'globalActions.user', link: '/user', icon: 'user'},
         {msg: 'globalActions.help', link: '/help', icon: 'help'}
     ];
+    let globalActions = (<GlobalActions actions={globalActionsData}
+                           position={"top"}/>);
     let component;
 
     let navStore = Fluxxor.createStore({

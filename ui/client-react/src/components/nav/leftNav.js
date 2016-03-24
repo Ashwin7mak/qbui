@@ -1,10 +1,11 @@
 import React from 'react';
+import Swipeable from 'react-swipeable';
 import {Tooltip, OverlayTrigger} from 'react-bootstrap';
 import {Link} from 'react-router';
 import Loader  from 'react-loader';
 import {I18nMessage} from '../../utils/i18nMessage';
 import ReactCSSTransitionGroup from 'react/lib/ReactCSSTransitionGroup';
-import GlobalActions from '../global/globalActions';
+import GlobalActions from '../actions/globalActions';
 import AppsList from './appsList';
 import TablesList from './tablesList';
 import QBicon from '../qbIcon/qbIcon';
@@ -20,7 +21,7 @@ let LeftNav = React.createClass({
         onToggleAppsList:React.PropTypes.func,
         onSelect:React.PropTypes.func,
         onSelectReports:React.PropTypes.func,
-        globalActions:React.PropTypes.array
+        globalActions:React.PropTypes.element
     },
 
     /**
@@ -37,7 +38,6 @@ let LeftNav = React.createClass({
                             <QBicon className={"appsToggleIcon"} icon="caret-filled-up"/>
                         </div>
                     }
-                    <a className="iconLink toggleNavButton" href="#" onClick={this.props.onNavClick}><QBicon icon="hamburger" /> </a>
                 </div>);
     },
 
@@ -50,10 +50,14 @@ let LeftNav = React.createClass({
     onSelectApp() {
         this.props.toggleAppsList(false);
     },
+
+    swipedLeft() {
+        this.props.onNavClick();
+    },
+
     render() {
         return (
-
-            <div className={"leftNav " + (this.props.open ? "open " : "closed ") + (this.props.appsListOpen ? "appsListOpen" : "")}>
+            <Swipeable className={"leftNav " + (this.props.open ? "open " : "closed ") + (this.props.appsListOpen ? "appsListOpen" : "")} onSwipedLeft={this.swipedLeft}>
                 {this.createBranding()}
 
                 <ReactCSSTransitionGroup transitionName="leftNavList" component="div" className={"transitionGroup"} transitionEnterTimeout={300} transitionLeaveTimeout={300}>
@@ -63,9 +67,8 @@ let LeftNav = React.createClass({
 
                 </ReactCSSTransitionGroup>
 
-                {this.props.globalActions && <GlobalActions actions={this.props.globalActions} onSelect={this.props.onSelect} position={"left"}/>}
-
-            </div>
+                {this.props.globalActions}
+            </Swipeable>
         );
     }
 });

@@ -82,6 +82,7 @@ export default {
             organizeReports: "Organiser",
             recordCount : "{recordCount} {nameForRecords} ",
             searchPlaceHolder:  "Rechercher ces {nameForRecords} ...",
-        }
+        },
+        cancel: "Annuler"
     }
 };

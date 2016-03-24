@@ -4,8 +4,8 @@
 
 $font-family: 'Open Sans', sans-serif;  /* default font face */
 
-$font-size:   $font-size-base;          /* base/default body font size */
-$font-color:  $color11;                 /* default font color */
+$font-size:               $font-size-base;          /* base/default body font size */
+$font-color:              $color11;                 /* default font color */
 
 $top-nav-height:40px;
 
@@ -32,6 +32,11 @@ $large-breakpoint-width: 1440px;
 }
 @mixin xlarge-breakpoint {
     @media (min-width: #{$large-breakpoint-width + 1px}) {
+        @content;
+    }
+}
+@mixin not-small-breakpoint {
+    @media (min-width: #{$small-breakpoint-width + 1px}) {
         @content;
     }
 }

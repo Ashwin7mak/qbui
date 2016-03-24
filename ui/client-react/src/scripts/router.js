@@ -90,14 +90,12 @@ let NavWrapper = React.createClass({
     },
 
     componentWillReceiveProps(props) {
+
         if (this.props.params.appId && this.props.params.tblId && this.props.params.appId !== props.params.appId && this.props.params.tblId !== props.params.tblId) {
             flux.actions.selectAppId(this.props.params.appId);
             flux.actions.selectTableId(this.props.params.tblId);
             flux.actions.loadReports(this.props.params.appId, this.props.params.tblId);
         }
-    },
-    componentWillUnmount: function() {
-        window.removeEventListener('resize', this.handleResize);
     }
 });
 

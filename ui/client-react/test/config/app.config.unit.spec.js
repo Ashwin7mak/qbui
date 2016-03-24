@@ -19,6 +19,7 @@ describe('Logger', () => {
         expect(config.logger.logToServer).toBeDefined();
         expect(config.locale.supported).toBeDefined();
         expect(config.locale.default).toBeDefined();
+        expect(config.unauthorizedRedirect).toBeDefined();
     });
 
 });

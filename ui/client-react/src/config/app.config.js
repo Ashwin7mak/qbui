@@ -33,7 +33,8 @@ if (__QB_PROD__) {
             logLevel: LogLevel.WARN,
             logToConsole: false,
             logToServer: true
-        }
+        },
+        unauthorizedRedirect: null
     };
 }
 
@@ -54,7 +55,8 @@ if (__QB_TEST__) {
             logLevel: LogLevel.DEBUG,
             logToConsole: true,
             logToServer: true
-        }
+        },
+        unauthorizedRedirect: '/unauthorized'
     };
 }
 
@@ -75,7 +77,8 @@ if (__QB_LOCAL__) {
             logLevel: LogLevel.DEBUG,
             logToConsole: true,
             logToServer: true
-        }
+        },
+        unauthorizedRedirect: '/unauthorized'
     };
 }
 

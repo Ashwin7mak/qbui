@@ -11,7 +11,7 @@ describe('AppHomePageRoute functions', () => {
     let flux = {
         actions:{
             selectAppId: function() {return;},
-            setTopTitle: function() {return;}
+            showTopNav: function() {return;}
         }
     };
 
