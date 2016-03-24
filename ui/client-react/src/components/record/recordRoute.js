@@ -2,6 +2,7 @@ import React from 'react';
 import Stage from '../stage/stage';
 import QBicon from '../qbIcon/qbIcon';
 import PageActions from '../actions/pageActions';
+import {I18nMessage} from '../../utils/i18nMessage';
 import Record from './record';
 import {Link} from 'react-router';
 import Fluxxor from 'fluxxor';
@@ -12,7 +13,9 @@ let FluxMixin = Fluxxor.FluxMixin(React);
 var RecordRoute = React.createClass({
     mixins: [FluxMixin],
 
-
+    contextTypes: {
+        history: React.PropTypes.object
+    },
     componentDidMount: function() {
 
         let flux = this.getFlux();
@@ -34,6 +37,12 @@ var RecordRoute = React.createClass({
             </div>);
     },
 
+    // just navigate back for now since the record ui does not
+    // currently use any actual data from which to build a link
+    returnToReport() {
+        this.context.history.goBack();
+    },
+
     getStageHeadline() {
 
         if (this.props.params) {
@@ -46,7 +55,9 @@ var RecordRoute = React.createClass({
             const linkback = `/app/${appId}/table/${tblId}`;
 
             return (<div className="recordStageHeadline">
-                <div className="linkBack"><QBicon icon="caret-left"/><Link to={linkback}>Back to report</Link></div>
+                <div className="linkBack"><QBicon icon="caret-left"/>
+                    <a href="#" onClick={this.returnToReport}><I18nMessage message={'nav.backToReport'}/></a>
+                </div>
 
                 <div className="stageHeadline"><QBicon icon="report-table"/> <h3 className="breadCrumbs">
                     Record {recordId}</h3></div>

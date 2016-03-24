@@ -49,7 +49,8 @@ export default {
             searchAppsPlaceholder: "Search apps...",
             searchTablesPlaceholder: "Search tables...",
             searchReportsPlaceholder: "Search reports...",
-            searchRecordsPlaceholder: "Search..."
+            searchRecordsPlaceholder: "Search...",
+            backToReport: "Back to the report"
         },
         grid: {
             no_data: "There is no data to display."

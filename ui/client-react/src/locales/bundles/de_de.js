@@ -45,7 +45,8 @@ export default {
             searchAppsPlaceholder: "Suche anwendungen...",
             searchTablesPlaceholder: "Suche tische...",
             searchReportsPlaceholder: "Suche berichte...",
-            searchRecordsPlaceholder: "Suche..."
+            searchRecordsPlaceholder: "Suche...",
+            backToReport: "Zurück zu melden"
         },
         grid: {
             no_data: "Es liegen keine Daten zum Anzeigen."
