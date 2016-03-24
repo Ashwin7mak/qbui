@@ -277,7 +277,7 @@ let AGGrid = React.createClass({
         // CSS takes care of positioning the content of this column over the previous columns so it looks like an overlay.
 
         // todo: optimize/refactor actions hover for performance
-        if (false && columns.length > 0) {
+        if (columns.length > 0) {
             columns.push({
                 headerName: "", //for ag-grid
                 field: "actions",      //for ag-grid

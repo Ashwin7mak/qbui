@@ -21,7 +21,7 @@ $table-actions-container-bg: #fff;
     flex:1 1 auto;
 }
 .QBGriddle {
-    flex: 1 0 auto;
+    flex: 1 1 auto;
     font-family: $font-family;
     color: $font-color;
     font-size: $font-size;
@@ -127,7 +127,7 @@ $table-actions-container-bg: #fff;
     overflow:auto;
 
     .loadedContent {
-        margin: 0 10px;
+        padding: 0 10px;
     }
 }
 
