@@ -29,7 +29,7 @@ function buildIconElement(icon) {
 let gridIcons = {
     groupExpanded: buildIconElement("caret-filled-up"),
     groupContracted: buildIconElement("caret-filled-down")
-}
+};
 
 let AGGrid = React.createClass({
     mixins: [FluxMixin],
@@ -72,7 +72,7 @@ let AGGrid = React.createClass({
         if (rowItem.group) {
             return {
                 group: true,
-                expanded: false,
+                expanded: true,
                 children: rowItem.children,
                 field: 'group',
                 key: rowItem.group
@@ -160,14 +160,8 @@ let AGGrid = React.createClass({
      * @param params
      */
     onRowClicked(params) {
-        // we have overlapping events since we want the row click to open a record but a record action icon click to execute the action
-        // ag grid seems to be listening on the container so it traps all the click events 1st so we need to ween out the icon click events.
-
-        let eventTarget = params.event.target;
-        if (!eventTarget.className || (typeof eventTarget.className !== "string")) {
-            return;
-        }
-        if (eventTarget.className.indexOf("iconLink") !== -1 || eventTarget.className.indexOf("qbIcon") !== -1) {
+        //For click on group headers do nothing
+        if (params.node.field === "group") {
             return;
         }
 
@@ -280,6 +274,9 @@ let AGGrid = React.createClass({
     },
 
     onGroupsExpand(element) {
+        if (!element.getAttribute("state")) {
+            element = element.parentElement;
+        }
         if (element.getAttribute("state") === "close") {
             element.setAttribute("state", "open");
             this.api.expandAll();
@@ -301,7 +298,8 @@ let AGGrid = React.createClass({
         };
         if (this.props.showGrouping) {
             var collapser = document.createElement("span");
-            collapser.setAttribute("state", "close");
+            collapser.className = "collapser";
+            collapser.setAttribute("state", "open");
             collapser.innerHTML = gridIcons.groupContracted;
             collapser.onclick = (event) => {
                 this.onGroupsExpand(event.target);
