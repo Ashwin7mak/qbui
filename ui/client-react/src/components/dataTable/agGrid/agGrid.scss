@@ -88,7 +88,6 @@ $grid-font-size: $font-size - 2;
 
 .tableActionsContainer {
     position: relative;
-    //overflow:hidden;
 }
 .tableActionsContainer.toolsMenuOpen {
     overflow:visible; /* hidden for css transitions but need overflow:visible to prevent clipping of facets menu etc. */

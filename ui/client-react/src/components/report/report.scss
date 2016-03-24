@@ -15,80 +15,6 @@
 
     background-color: $report-backgroundColor;
 
-    .reportToolsAndContentContainer {
-        display:flex;
-        flex: 1 1 auto;
-        .reportToolbar {
-            display: flex;
-            flex-direction: row;
-
-            flex: 1 0 auto;
-
-            >* {
-                flex: 0 0 auto;
-            }
-            >.facetsMenuContainer {
-                flex: 1 1 auto;
-            }
-            >.recordsCount {
-                margin-left:5px;
-            }
-            >.pageActions {
-                line-height:40px;
-                align-self:stretch;
-            }
-            align-items: center;
-            color: $icon-color;
-
-            .filterSearchBoxContainer {
-                flex: 0 0 auto;
-                input {
-                    width:100%;
-                    margin: 5px 0;
-                    min-width: 60px;
-                    max-width: 180px;
-                }
-            }
-
-            .facetsMenuButton {
-                margin-left: 1.5rem;
-                cursor: pointer;
-            }
-
-            .clearAllFacets {
-                display: inline-block;
-                margin-right: .5rem;
-                margin-left: .5rem;
-                vertical-align: top;
-                font-size: 16px;
-                cursor: pointer;
-            }
-
-            .recordsCount {
-                margin-right: 1rem;
-            }
-        }
-
-        .loadedContent {
-            display:flex;
-            flex: 1 1 auto;
-            width:100%;
-            //overflow-y: auto;
-        }
-
-
-        // this fake facet button which hidden in release; devs
-        // can show it by commenting this or running
-        // document.getElementById('fakeFacet').style.display='block';  or
-        // document.getElementsByClassName("testFilterButton").style.display='block';
-        // document.getElementsByClassName("testFilterButton").style.display='block';
-        // in the browser debugger
-        .testFilterButton {
-            display: none;
-            margin-left: 1rem;
-        }
-    }
-
     .reportLinks {
         margin: 0 10px;
         a {
@@ -103,6 +29,86 @@
 
     }
 }
+.reportToolsAndContentContainer {
+    .tableActionsContainer {
+        position: relative;
+        padding-left: 10px;
+        padding-top: 10px; // space after stage
+        @include small-breakpoint {
+            padding-top: 0px; // no stage so to need add space after
+            &:not(.selectionActionsOpen) {
+                background-color: $secondary-bar-bg;
+            }
+
+        }
+    }
+
+    flex: 1 1 auto;
+    .reportToolbar {
+        display: flex;
+        flex-direction: row;
+        flex: 1 0 auto;
+        align-items: center;
+        color: $icon-color;
+
+
+        &.noFacets {
+            justify-content: flex-start;
+        }
+
+        >.pageActions {
+            line-height:40px;
+            align-self:stretch;
+        }
+        .leftReportToolbar {
+            display: flex;
+            align-items: center;
+            margin-top: 10px;
+        }
+        .recordsCount{
+            flex: 0 0 auto;
+            margin-left:5px;
+        }
+        .filterSearchBoxContainer {
+            flex: 0 1 auto;
+            margin-bottom: 10px;
+            input {
+                width:100%;
+                min-width: 60px;
+                max-width: 180px;
+            }
+        }
+        >.facetsMenuContainer {
+            flex: 1 2 auto;
+        }
+        .facetsMenuButton {
+            margin-left: 1.5rem;
+            cursor: pointer;
+        }
+
+        .clearAllFacets {
+            display: inline-block;
+            margin-right: .5rem;
+            margin-left: .5rem;
+            vertical-align: top;
+            font-size: 16px;
+            cursor: pointer;
+        }
+
+        .recordsCount {
+            margin-right: 1rem;
+        }
+    }
+
+    .loadedContent {
+        display:flex;
+        flex: 1 1 auto;
+        width:100%;
+    }
+
+
+}
+
 
 @include small-breakpoint {
     .layout-stage {
@@ -134,6 +140,7 @@
     display:flex;
 }
 
+
 .reportContainer {
     .layout-stage {
         .breadCrumbs {
@@ -143,7 +150,11 @@
 }
 
 .reportToolbarContainer {
-    width:100%;
+    width: 100%;
+}
+.noData {
+    padding-left: 1.5rem;
+
 }
 
 @include small-breakpoint {

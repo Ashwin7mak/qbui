@@ -20,7 +20,8 @@
             idleTimeout: '120',
             screenResolution : '1680x1050',
             shardTestFiles: true,
-            maxInstances: 5
+            maxInstances: 5,
+            maxDuration: 10800
         },
         // The sauce user and access key allow us to run our browser tests remotely on a SauceLabs VM
         sauceUser           : 'sbg_qbse',
@@ -29,8 +30,6 @@
         sauceSeleniumAddress: 'localhost:4445/wd/hub',
         // list of files / patterns to load in the browser
         specs: [
-            //TODO: Temporary fix for stale element ref error reportTopNav tests are throwing. Will investigate.
-            baseE2EPath + 'qbapp/tests/reports/reportTopNav.e2e.spec.js',
             baseE2EPath + 'qbapp/tests/reports/*.e2e.spec.js'
         ],
         // Patterns to exclude.

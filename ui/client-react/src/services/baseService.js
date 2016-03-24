@@ -65,19 +65,27 @@ class BaseService {
      * Axiom interceptor for all http responses
      */
     setResponseInterceptor() {
+        var self = this;
         axios.interceptors.response.use(
             function(response) {
                 //  success
                 return response;
             },
             function(error) {
-                //  certain rest endpoint errors get redirected immediately
+                /**
+                 * certain rest endpoint errors get redirected immediately
+                 * if the unauthorizedRedirect config value is setup for the current runtime environment in app.config.js
+                 * use that first, other wise try and create one
+                */
+                let currentStackSignInUrl = "";
                 switch (error.status) {
                 case 401:
-                    window.location.href = '/unauthorized';
+                    currentStackSignInUrl = Configuration.unauthorizedRedirect || self.constructRedirectUrl();
+                    window.location.replace(currentStackSignInUrl);
                     break;
                 case 403:
-                    window.location.href = '/unauthorized';
+                    currentStackSignInUrl = Configuration.unauthorizedRedirect || self.constructRedirectUrl();
+                    window.location.replace(currentStackSignInUrl);
                     break;
                 }
                 //  let the service layer handle the error
@@ -106,6 +114,25 @@ class BaseService {
      */
     constructUrl(urlMask, tokens) {
         return StringUtils.format(urlMask, tokens);
+    }
+
+    /**
+     * Construct a redirect url so that the user is sent to the login page and then redirected back to where they were prior to unauthorized error
+     * This method is only hit if the unauthorizedRedirect value in the current runtime environment for app.config.js is null
+     *
+     * First we store the only constant part of the string, the current stacks endpoint and parameter arguments
+     * Then we create a variable to store where the user was trying to get to (window.location.href) so that our redirect url can have the user sent back there
+     * To find the hostname for current stack, we can do a string replace on the current window.location.hostname value and strip out ".newstack"
+     * Now we combine these 3 values with an https to construct the full redirect url.
+     *
+     * example prod output: intuitcorp.quickbase.com/db/main?a=nsredirect&nsurl=https://intuitcorp.newstack.quickbase.com/apps
+     */
+    constructRedirectUrl() {
+        let currentStackSignInUrl = "/db/main?a=nsredirect&nsurl=";
+        let newStackDestination = window.location.href;
+        let currentStackDomain = window.location.hostname.replace(".newstack", "");
+        currentStackSignInUrl = "https://" + currentStackDomain + currentStackSignInUrl + newStackDestination;
+        return currentStackSignInUrl;
     }
 
 }

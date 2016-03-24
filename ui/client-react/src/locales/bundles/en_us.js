@@ -96,13 +96,13 @@ export default {
             blank : "blank",
             facets :{
                 noFacets : "No values",
-                seeMore : "more filters...",
+                seeMore : "more...",
                 tooManyValues : "Too many values to use for filtering.",
                 noCheck : "No",
                 yesCheck : "Yes"
             },
             filteredRecordCount :
-                "{filteredRecordCount} of {recordCount} {nameForRecords} ",
+                "{padding}{filteredRecordCount} of {recordCount}",
             newReport: "New",
             organizeReports: "Organize",
             recordCount : "{recordCount} {nameForRecords} ",

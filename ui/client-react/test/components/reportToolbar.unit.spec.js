@@ -215,9 +215,6 @@ describe('ReportToolbar functions', () => {
                                                                 reportData={fakeReportWithFacets} pageActions={pageActions} />);
         expect(TestUtils.isCompositeComponent(component)).toBeTruthy();
 
-        //clear select button shown
-        let clearAllFacets = TestUtils.scryRenderedDOMComponentsWithClass(component, "clearAllFacets");
-        expect(clearAllFacets.length).toEqual(1);
 
         // count has 2 numbers X of X when there is a selection
         let recordsCount = TestUtils.scryRenderedDOMComponentsWithClass(component, "recordsCount");
