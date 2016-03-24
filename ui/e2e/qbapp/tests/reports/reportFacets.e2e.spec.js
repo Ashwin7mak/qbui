@@ -94,6 +94,8 @@
                 }).then(function() {
                     reportServicePage.waitForElement(reportServicePage.loadedContentEl).then(function() {
                         reportServicePage.waitForElement(reportServicePage.griddleWrapperEl).then(function() {
+                            // Animation of the popup disappearing
+                            e2eBase.sleep(browser.params.smallSleep);
                             reportServicePage.waitForElement(reportServicePage.agGridBodyEl).then(function() {
                                 // Get all records from table before filter applied
                                 reportServicePage.agGridRecordElList.map(function (row) {
@@ -354,6 +356,7 @@
                             //remove facets by clicking on clear (X) in popup beside Text Field and verify all tokens removed
                             reportServicePage.waitForElementToBeClickable(reportServicePage.reportFilterBtnCaret).then(function() {
                                 reportServicePage.reportFilterBtnCaret.click().then(function() {
+                                    e2eBase.sleep(browser.params.smallSleep);
                                     reportServicePage.clearFacetTokensFromContainer().then(function() {
                                         expect(reportServicePage.reportRecordsCount.getAttribute('innerText')).toEqual('6 Records');
                                         done();
@@ -367,25 +370,27 @@
 
             it('Negative test to verify a facet dropdown has No Values with report without facetsFIDS', function(done) {
                 // Select table 1 which has report without facetFIDS
-                if (testcase.breakpointSize === 'small') {
-                    reportServicePage.reportHeaderToggleHamburgerEl.click();
-                }
-                reportServicePage.waitForElement(reportServicePage.tablesListDivEl).then(function() {
-                    return reportServicePage.tableLinksElList.get(3).click();
-                }).then(function() {
+                reportServicePage.waitForElement(reportServicePage.reportRecordsCount).then(function() {
                     if (testcase.breakpointSize === 'small') {
-                        reportServicePage.topNavToggleHamburgerEl.click();
+                        reportServicePage.reportHeaderToggleHamburgerEl.click();
+                        //animation
+                        e2eBase.sleep(browser.params.smallSleep);
                     }
-                    // Open the reports list
-                    reportServicePage.reportHamburgersElList.get(0).click();
+                }).then(function() {
+                    reportServicePage.waitForElement(reportServicePage.tablesListDivEl).then(function () {
+                        // Click on report hamburger list
+                        reportServicePage.reportHamburgersElList.get(0).click();
+                    });
+                }).then(function() {
                     // Wait for the report list to load
-                    reportServicePage.waitForElement(reportServicePage.reportGroupsDivEl).then(function() {
+                    reportServicePage.waitForElement(reportServicePage.reportGroupsDivEl).then(function () {
                         // Find and select the report
                         reportServicePage.selectReport('My Reports', 'Test Report');
+                        e2eBase.sleep(browser.params.smallSleep);
                     });
                 }).then(function() {
                     // Expand the popup and select group
-                    reportServicePage.waitForElement(reportServicePage.loadedContentEl).then(function() {
+                    reportServicePage.waitForElement(reportServicePage.reportsToolBar).then(function () {
                         // Verify the facet container is not present in DOM without facets for a report.
                         expect(reportServicePage.reportFacetMenuContainer.isPresent()).toBeFalsy();
                         done();
