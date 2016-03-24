@@ -33,7 +33,7 @@ describe("Validate recordsApi", function() {
 
         beforeEach(function() {
             executeReqStub = sinon.stub(requestHelper, "executeRequest");
-            recordsApi.setRequestHelperObject(requestHelper);
+            recordsApi.setRequestObject(requestHelper);
         });
 
         afterEach(function() {
@@ -84,7 +84,7 @@ describe("Validate recordsApi", function() {
 
         beforeEach(function() {
             executeReqStub = sinon.stub(requestHelper, "executeRequest");
-            recordsApi.setRequestHelperObject(requestHelper);
+            recordsApi.setRequestObject(requestHelper);
         });
 
         afterEach(function() {
@@ -136,7 +136,7 @@ describe("Validate recordsApi", function() {
 
         beforeEach(function() {
             executeReqStub = sinon.stub(requestHelper, "executeRequest");
-            recordsApi.setRequestHelperObject(requestHelper);
+            recordsApi.setRequestObject(requestHelper);
         });
 
         afterEach(function() {
@@ -185,7 +185,7 @@ describe("Validate recordsApi", function() {
 
         beforeEach(function() {
             executeReqStub = sinon.stub(requestHelper, "executeRequest");
-            recordsApi.setRequestHelperObject(requestHelper);
+            recordsApi.setRequestObject(requestHelper);
         });
 
         afterEach(function() {

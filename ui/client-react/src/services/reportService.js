@@ -117,8 +117,11 @@ class ReportService extends BaseService {
     }
 
     /**
-     * Return the records and facets list for a given report.
-     * Ideally this should be used the 1st time a report is loaded to get all the pieces required to render the report.
+     * Return a completely hydrated report.  This is defined as the report data, report
+     * facet data and other report data used by the UI.
+     *
+     * This method is intended to be called the 1st time a report is loaded as it will fetch
+     * all the components that makeup a report.
      *
      * @param appId
      * @param tableId
@@ -129,21 +132,11 @@ class ReportService extends BaseService {
      * @returns promise
      */
     getReportDataAndFacets(appId, tableId, reportId, formatted, offset, rows) {
-        let params = {};
-        if (formatted === true) {
-            params.format = 'display';  // default is 'raw'
-        }
-        if (NumberUtils.isInt(offset) && NumberUtils.isInt(rows)) {
-            params.offset = offset;
-            params.numRows = rows;
-        }
-
-        let url = super.constructUrl(this.API.GET_REPORT_COMPONENTS, [appId, tableId, reportId]);
-        return super.get(url, {params:params});
+        return this.getReportData(appId, tableId, reportId, formatted, offset, rows, true);
     }
 
     /**
-     * Return the records for a given report.
+     * Return the data records for a given report.
      *
      * @param appId
      * @param tableId
@@ -151,26 +144,29 @@ class ReportService extends BaseService {
      * @param formatted - is output formatted for UI display or the raw data
      * @param offset - zero based row offset
      * @param rows - number of rows to return on the request
+     * @param includeFacets - include facet data in result
      * @returns promise
      */
-    getReportData(appId, tableId, reportId, formatted, offset, rows) {
+    getReportData(appId, tableId, reportId, formatted, offset, rows, includeFacets) {
         let params = {};
+
+        //  is the result set returned formatted/organized for UI display or in 'raw' un-edited format
         if (formatted === true) {
-            params.format = 'display';  // default is 'raw'
+            params.format = 'display';
         }
         if (NumberUtils.isInt(offset) && NumberUtils.isInt(rows)) {
             params.offset = offset;
             params.numRows = rows;
         }
 
-        let url = super.constructUrl(this.API.GET_REPORT_RESULTS, [appId, tableId, reportId]);
+        let url = super.constructUrl(includeFacets === true ? this.API.GET_REPORT_COMPONENTS : this.API.GET_REPORT_RESULTS, [appId, tableId, reportId]);
         return super.get(url, {params:params});
     }
 
     /**
      * Parse a facet Expression to a queryString.
      *
-     * @param facetExpression looks like [{fid: fid1, fieldtype:'', values: [value1, value2]}, {fid: fid2, fieldtype:'', values: [value3, value4]}, {fid: fid3, fieldtype:'DATE', values: [value3, value4]}]
+     * @param facetExpression looks like [{fid: fid1, fieldtype:'', values: [value1, value2]}, {fid: fid3, fieldtype:'DATE', values: [value3, value4]}, ... ]
      * @returns promise
      */
     parseFacetExpression(facetExpression) {

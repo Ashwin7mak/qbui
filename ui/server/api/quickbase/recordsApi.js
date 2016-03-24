@@ -38,6 +38,7 @@
  */
 (function() {
     'use strict';
+
     var Promise = require('bluebird');
     var defaultRequest = require('request');
     var log = require('../../logger').getLogger();
@@ -55,24 +56,23 @@
      * of precision. For more info, google it!
      */
     var jsonBigNum = require('json-bignum');
+
     module.exports = function(config) {
         var requestHelper = require('./requestHelper')(config);
         var recordFormatter = require('./formatter/recordFormatter')();
+        var constants = require('./../constants');
 
         //Module constants:
         var APPLICATION_JSON = 'application/json';
         var CONTENT_TYPE = 'Content-Type';
-        var DISPLAY = 'display';
+
         var FIELDS = 'fields';
-        var FORMAT = 'format';
-        var RAW = 'raw';
         var RECORD = 'record';
         var RECORDS = 'records';
         var REPORTS = 'reports';
         var REPORTCOMPONENTS = 'reportcomponents';
         var RESULTS = 'results';
         var request = defaultRequest;
-
 
         //Given an array of records and array of fields, remove any fields
         //not referenced in the records
@@ -110,13 +110,12 @@
             setRequestObject: function(requestOverride) {
                 request = requestOverride;
             },
+            isDisplayFormat: function(req) {
+                return req.param(constants.REQUEST_PARAMETER.FORMAT) === 'display';
+            },
 
-            /**
-             * Allows you to override the
-             * @param requestOverride
-             */
-            setRequestHelperObject: function(requestHelperOverride) {
-                requestHelper = requestHelperOverride;
+            isRawFormat: function(req) {
+                return req.param(constants.REQUEST_PARAMETER.FORMAT) === 'raw';
             },
 
             fetchSingleRecordAndFields: function(req) {
@@ -127,15 +126,16 @@
                     function(response) {
                         var record = jsonBigNum.parse(response[0].body);
                         var responseObject;
-                        if (req.param(FORMAT) === RAW) {
-                            //return raw undecorated record values due to flag format=raw
+
+                        //return raw undecorated record values due to flag format=raw
+                        if (this.isRawFormat(req)) {
                             responseObject = record;
                         } else {
                             //response object will include a fields meta data block plus record values
                             var fields = removeUnusedFields(record, JSON.parse(response[1].body));
+
                             //format records for display if requested with the flag format=display
-                            if (req.param(FORMAT) === DISPLAY) {
-                                //display format the record field values
+                            if (this.isDisplayFormat(req)) {
                                 record = recordFormatter.formatRecords([record], fields)[0];
                             }
                             responseObject = {};
@@ -143,7 +143,7 @@
                             responseObject[RECORD] = record;
                         }
                         deferred.resolve(responseObject);
-                    },
+                    }.bind(this),
                     function(response) {
                         deferred.reject(response);
                     }
@@ -164,15 +164,16 @@
                     function(response) {
                         var records = jsonBigNum.parse(response[0].body);
                         var responseObject;
-                        if (req.param(FORMAT) === RAW) {
-                            //return raw undecorated record values due to flag format=raw
+
+                        //return raw undecorated record values due to flag format=raw
+                        if (this.isRawFormat(req)) {
                             responseObject = records;
                         } else {
                             //response object will include a fields meta data block plus record values
                             var fields = removeUnusedFields(records[0], JSON.parse(response[1].body));
+
                             //format records for display if requested with the flag format=display
-                            if (req.param(FORMAT) === DISPLAY) {
-                                //display format the record field values
+                            if (this.isDisplayFormat(req)) {
                                 records = recordFormatter.formatRecords(records, fields);
                             }
                             responseObject = {};
@@ -180,7 +181,7 @@
                             responseObject[RECORDS] = records;
                         }
                         deferred.resolve(responseObject);
-                    },
+                    }.bind(this),
                     function(response) {
                         deferred.reject(response);
                     }
@@ -210,6 +211,7 @@
                 var opts = requestHelper.setOptions(req);
                 opts.headers[CONTENT_TYPE] = APPLICATION_JSON;
                 var inputUrl = opts.url.toLowerCase();
+
                 //If the endpoint provided is the records or report execution endpoint,
                 // replace records or reports with the /fields path
                 if (inputUrl.indexOf(RECORDS) !== -1) {
@@ -219,7 +221,7 @@
                 }
 
                 //TODO: why do we immediately resolve if the format is raw?
-                return requestHelper.executeRequest(req, opts, (req.param(FORMAT) === RAW));
+                return requestHelper.executeRequest(req, opts, this.isRawFormat(req));
             }
         };
         return recordsApi;

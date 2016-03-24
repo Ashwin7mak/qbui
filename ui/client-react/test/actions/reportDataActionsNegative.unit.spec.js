@@ -100,8 +100,8 @@ describe('Report Data Actions -- Filter report Negative', () => {
                 done();
             },
             () => {
-                expect(flux.dispatchBinder.dispatch.calls.argsFor(0)).toEqual([actions.LOAD_RECORDS, filterReportInputs]);
-                expect(flux.dispatchBinder.dispatch.calls.argsFor(1)).toEqual([actions.LOAD_RECORDS_FAILED, jasmine.any(Object)]);
+                expect(flux.dispatchBinder.dispatch.calls.argsFor(0)).toEqual([actions.LOAD_REPORT, filterReportInputs]);
+                expect(flux.dispatchBinder.dispatch.calls.argsFor(1)).toEqual([actions.LOAD_REPORT_FAILED, jasmine.any(Object)]);
                 done();
             }
         );
@@ -132,8 +132,8 @@ describe('Report Data Actions -- Filter report Negative', () => {
                 done();
             },
             () => {
-                expect(flux.dispatchBinder.dispatch.calls.argsFor(0)).toEqual([actions.LOAD_RECORDS, filterReportInputs]);
-                expect(flux.dispatchBinder.dispatch.calls.argsFor(1)).toEqual([actions.LOAD_RECORDS_FAILED,
+                expect(flux.dispatchBinder.dispatch.calls.argsFor(0)).toEqual([actions.LOAD_REPORT, filterReportInputs]);
+                expect(flux.dispatchBinder.dispatch.calls.argsFor(1)).toEqual([actions.LOAD_REPORT_FAILED,
                                 jasmine.objectContaining({error : jasmine.any(Object)})]);
                 done();
             }
@@ -165,8 +165,8 @@ describe('Report Data Actions -- Filter report Negative', () => {
                 done();
             },
             () => {
-                expect(flux.dispatchBinder.dispatch.calls.argsFor(0)).toEqual([actions.LOAD_RECORDS, filterReportInputs]);
-                expect(flux.dispatchBinder.dispatch.calls.argsFor(1)).toEqual([actions.LOAD_RECORDS_FAILED,
+                expect(flux.dispatchBinder.dispatch.calls.argsFor(0)).toEqual([actions.LOAD_REPORT, filterReportInputs]);
+                expect(flux.dispatchBinder.dispatch.calls.argsFor(1)).toEqual([actions.LOAD_REPORT_FAILED,
                     jasmine.objectContaining({exception : jasmine.any(Object)})]);
                 done();
             }
@@ -224,7 +224,7 @@ describe('Report Data Actions -- Filter report Negative missing parameters', () 
                 () => {
                     expect(mockReportService.prototype.getReport).not.toHaveBeenCalled();
                     expect(mockRecordService.prototype.getRecords).not.toHaveBeenCalled();
-                    expect(flux.dispatchBinder.dispatch).toHaveBeenCalledWith(actions.LOAD_RECORDS_FAILED, jasmine.any(Object));
+                    expect(flux.dispatchBinder.dispatch).toHaveBeenCalledWith(actions.LOAD_REPORT_FAILED, jasmine.any(Object));
                     done();
                 }
             );
@@ -285,10 +285,17 @@ describe('Report Data Actions -- ', () => {
             return mockPromiseSuccess(null);
         }
         getReportDataAndFacets() {
-            return mockPromiseSuccess(responseResultQuery);
+            return mockPromiseError();
         }
         parseFacetExpression() {
             return mockPromiseSuccess(responseResultQuery);
+        }
+    }
+
+    class mockRecordService {
+        constructor() { }
+        getRecords() {
+            return mockPromiseError();
         }
     }
 
@@ -296,15 +303,17 @@ describe('Report Data Actions -- ', () => {
         spyOn(flux.dispatchBinder, 'dispatch');
         spyOn(mockReportService.prototype, 'getReport');
         reportDataActions.__Rewire__('ReportService', mockReportService);
+        reportDataActions.__Rewire__('RecordService', mockRecordService);
     });
 
     afterEach(() => {
         reportDataActions.__ResetDependency__('ReportService');
+        reportDataActions.__ResetDependency__('RecordService');
     });
 
     var dataProvider = [
         {test:'test throwing exception when loading a report', func:flux.actions.loadReport, act: actions.LOAD_REPORT_FAILED},
-        {test:'test throwing exception when filtering a report', func:flux.actions.filterReport, act:actions.LOAD_RECORDS_FAILED}
+        {test:'test throwing exception when filtering a report', func:flux.actions.filterReport, act:actions.LOAD_REPORT_FAILED}
     ];
     var filter = {facet: 'abc', search: ''};
 
