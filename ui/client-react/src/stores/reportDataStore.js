@@ -44,8 +44,9 @@ let ReportDataStore = Fluxxor.createStore({
         this.loading = false;
         this.error = false;
 
+        this.data = {};
         let records = this.getReportData(reportData.data, reportData.hasGrouping);
-        this.data = {
+        _.extend(this.data, {
             name: reportData.name,
             hasGrouping: reportData.hasGrouping, //TODO: this should come from report meta data.
             columns: this.getReportColumns(reportData.data.fields),
@@ -53,7 +54,7 @@ let ReportDataStore = Fluxxor.createStore({
             facets: reportData.data.facets,
             filteredRecords: records,
             recordsCount: reportData.data.records.length
-        };
+        });
         this.emit('change');
     },
 
@@ -164,6 +165,11 @@ let ReportDataStore = Fluxxor.createStore({
                     groupingField2 = field.name;
                 }
             });
+            if (groupingField1 &&  groupingField2) {
+                this.data.groupLevel = 2;
+            } else if (groupingField1 ||  groupingField2) {
+                this.data.groupLevel = 1;
+            }
             var groupedData = _.groupBy(reportData, function(record) {
                 return record[groupingField1];
             });

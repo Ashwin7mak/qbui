@@ -136,7 +136,7 @@ let AGGrid = React.createClass({
         var allColumnIds = [];
         if (this.columnApi) {
             if (this.props.columns) {
-                this.props.columns.forEach(function (columnDef) {
+                this.props.columns.forEach(function(columnDef) {
                     allColumnIds.push(columnDef.field);
                 });
                 this.columnApi.autoSizeColumns(allColumnIds);
@@ -160,7 +160,6 @@ let AGGrid = React.createClass({
      * @param params
      */
     onRowClicked(params) {
-        return;
         // we have overlapping events since we want the row click to open a record but a record action icon click to execute the action
         // ag grid seems to be listening on the container so it traps all the click events 1st so we need to ween out the icon click events.
 
@@ -188,31 +187,29 @@ let AGGrid = React.createClass({
             return;
         }
         const id = params.node.data[this.props.uniqueIdentifier];
-        if (this.state.selectedRows.indexOf(id) === -1) {
-            // not already selected, add to selectedRows
-            this.state.selectedRows.push(params.node.data[this.props.uniqueIdentifier]);
-            this.setState({selectedRows: this.state.selectedRows});
-        } else {
-            // already selected, remove from selectedRows
-            this.setState({selectedRows: _.without(this.state.selectedRows, id)});
+        if (id) {
+            if (this.state.selectedRows.indexOf(id) === -1) {
+                // not already selected, add to selectedRows
+                this.state.selectedRows.push(params.node.data[this.props.uniqueIdentifier]);
+                this.setState({selectedRows: this.state.selectedRows});
+            } else {
+                // already selected, remove from selectedRows
+                this.setState({selectedRows: _.without(this.state.selectedRows, id)});
+            }
+            // for some reason the master checkbox click makes it check and then un-check itself. So updating this forcibly.
+            this.updateAllCheckbox();
         }
-        // for some reason the master checkbox click makes it check and then un-check itself. So updating this forcibly.
-        this.updateAllCheckbox();
     },
-    /**
-     * is row selected callback
-     */
-    isRowSelected(row) {
-        return this.state.selectedRows.indexOf(row[this.props.uniqueIdentifier]) !== -1;
-    },
+
     /**
      * Helper method to flip the master checkbox if all rows are checked
      */
     updateAllCheckbox() {
-        if (this.props.records.length === this.state.selectedRows.length) {
-            document.getElementsByClassName("SelectAllCheckbox")[0].checked = true;
+        let flux = this.getFlux();
+        if (flux.stores.ReportDataStore.data.recordsCount === this.state.selectedRows.length) {
+            document.getElementsByClassName("selectAllCheckbox")[0].checked = true;
         } else {
-            document.getElementsByClassName("SelectAllCheckbox")[0].checked = false;
+            document.getElementsByClassName("selectAllCheckbox")[0].checked = false;
         }
     },
     /**
@@ -292,35 +289,42 @@ let AGGrid = React.createClass({
         }
     },
 
-    getCheckBoxColumn(showCollapseAll) {
+    getCheckBoxColumn() {
         //Add checkbox column
         let checkBoxCol = {};
         checkBoxCol.field = "checkbox";
         var checkbox = document.createElement("input");
         checkbox.type = "checkbox";
-        checkbox.className = "SelectAllCheckbox";
+        checkbox.className = "selectAllCheckbox";
         checkbox.onclick = (event) => {
             this.allCheckBoxSelected(event);
         };
-        var collapser = document.createElement("span");
-        collapser.setAttribute("state", "close");
-        collapser.innerHTML = gridIcons.groupContracted;
-        collapser.onclick = (event) => {
-            this.onGroupsExpand(event.target);
-        };
-        var headerCell = document.createElement("div");
-        headerCell.appendChild(collapser);
+        if (this.props.showGrouping) {
+            var collapser = document.createElement("span");
+            collapser.setAttribute("state", "close");
+            collapser.innerHTML = gridIcons.groupContracted;
+            collapser.onclick = (event) => {
+                this.onGroupsExpand(event.target);
+            };
+            var headerCell = document.createElement("div");
+            headerCell.className = "checkboxHolder";
+            headerCell.appendChild(collapser);
+        }
+
         headerCell.appendChild(checkbox);
         //ag-grid doesnt seem to allow react components sent into headerCellRender.
         checkBoxCol.headerCellRenderer = function() {
             return headerCell;
         };
         checkBoxCol.checkboxSelection = true;
-        checkBoxCol.width = 100;
         checkBoxCol.headerClass = "gridHeaderCell";
         checkBoxCol.cellClass = "gridCell grid-checkbox";
         checkBoxCol.suppressMenu = true;
         checkBoxCol.suppressResize = true;
+        // this is a weird calculation but this is because we want the checkbox to always show based on number of grouping levels
+        // for now this is being calulated as num_groups*30 + num_checkboxes*20 + 10
+        let flux = this.getFlux();
+        checkBoxCol.width = flux.stores.ReportDataStore.data.groupLevel * 30 + 20 + 10;
         return checkBoxCol;
     },
     getActionsColumn() {
@@ -383,7 +387,7 @@ let AGGrid = React.createClass({
                                     rowSelection="multiple"
                                     enableColResize="true"
                                     groupHeaders="true"
-                                    rowHeight="32"
+                                    rowHeight="34"
 
                                     suppressRowClickSelection="true"
                                     suppressCellSelection="true"

@@ -9,6 +9,13 @@ $row-background-color-hover: $color1;
 $row-cell-border-color: $color4;
 
 $grid-font-size: $font-size - 2;
+
+$grid-group-row-header-bkgrd-color: #f3f8fe;
+$grid-group-row-header-border-top: #e3eaf3;
+
+$grid-group-expand-icon-size: 20px;
+$grid-default-padding: 10px;
+
 // override default font style
 .ag-font-style {
     font-size: $grid-font-size;
@@ -41,13 +48,13 @@ $grid-font-size: $font-size - 2;
         text-align: left;
 
         .ag-header-cell-label {
-            padding: 4px 8px 3px 8px;
+            padding: 4px $grid-default-padding 3px $grid-default-padding;
         }
     }
 
     .gridCell {
         word-wrap: break-word;
-        padding: 8px;
+        padding: $grid-default-padding;
     }
 
     .ag-header-row .gridHeaderCell {
@@ -84,27 +91,45 @@ $grid-font-size: $font-size - 2;
     }
 
     .qbIcon {
-        font-size: 20px;
-    }
-    .SelectAllCheckbox {
-        margin: 0px;
-        margin-left: 10px;
-        height: 20px;
-    }
-    .grid-checkbox {
-        padding-left: 36px;
+        font-size: $grid-group-expand-icon-size;
     }
 
     .ag-group-cell-entire-row {
-        background-color: #f3f8fe;
-        padding: 8px;
-        border-top: 3px solid #e3eaf3;
+        background-color: $grid-group-row-header-bkgrd-color;
+        padding: $grid-default-padding;
+        border-top: 3px solid $grid-group-row-header-border-top;
     }
     .group-header {
-        margin-left: 10px;
+        margin-left: $grid-default-padding;
+        display: inline-block;
+        vertical-align: top;
     }
-    .ag-group-expand {
-        width: 15px;
+
+    .checkboxHolder {
+        position: relative;
+    }
+    .selectAllCheckbox {
+        margin: 0px;
+        height: 20px;
+    }
+    .selectAllCheckbox {
+        position: absolute;
+        right: $grid-font-size;
+    }
+    .ag-selection-checkbox {
+        position: absolute;
+        right: $grid-font-size + $grid-default-padding;
+    }
+    //assuming that we can have upto 6 group levels
+    $groups: 0;
+    @for $i from 1 through 6 {
+        .ag-row-level-#{$i}{
+            .ag-group-cell-entire-row {
+            //.grid-checkbox {
+                padding-left: $i*($grid-default-padding+$grid-group-expand-icon-size)!important;
+                $groups: $groups + 1;
+            }
+        }
     }
 }
 
