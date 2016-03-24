@@ -35,7 +35,7 @@ let IconActions = React.createClass({
             className: React.PropTypes.string
         })).isRequired,
         menuAfter: React.PropTypes.number, // show action in dropdown after this,
-        className: React.PropTypes.string.isRequired
+        className: React.PropTypes.string
 
     },
     getDefaultProps() {

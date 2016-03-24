@@ -1,6 +1,7 @@
 // action creators
 import * as actions from '../constants/actions';
 import Locale from '../locales/locales';
+import Breakpoints from '../utils/breakpoints';
 
 let navActions = {
 
@@ -10,8 +11,12 @@ let navActions = {
     hideTrowser() {
         this.dispatch(actions.HIDE_TROWSER);
     },
+    /**
+     * either toggle the visibility of the left nav or toggle the expanded/collapsed state depending on the breakpoint
+     */
     toggleLeftNav(open) {
-        this.dispatch(actions.TOGGLE_LEFT_NAV, open);
+        const toggleLeftNavAction = Breakpoints.isSmallBreakpoint() ? actions.TOGGLE_LEFT_NAV_VISIBLE : actions.TOGGLE_LEFT_NAV_EXPANDED;
+        this.dispatch(toggleLeftNavAction, open);
     },
     toggleAppsList(open) {
         this.dispatch(actions.TOGGLE_APPS_LIST, open);

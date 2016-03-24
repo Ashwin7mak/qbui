@@ -10,7 +10,8 @@ let NavStore = Fluxxor.createStore({
 
     initialize: function() {
         this.state = {
-            leftNavOpen: true,
+            leftNavVisible: false,
+            leftNavExpanded: true,
             appsListOpen: false,
             searchBarOpen: false,
             showTopNav: true,
@@ -24,7 +25,8 @@ let NavStore = Fluxxor.createStore({
         this.bindActions(
             actions.SHOW_TROWSER, this.onShowTrowser,
             actions.HIDE_TROWSER, this.onHideTrowser,
-            actions.TOGGLE_LEFT_NAV, this.onToggleLeftNav,
+            actions.TOGGLE_LEFT_NAV_VISIBLE, this.onToggleLeftNavVisible,
+            actions.TOGGLE_LEFT_NAV_EXPANDED, this.onToggleLeftNavExpanded,
             actions.TOGGLE_APPS_LIST, this.onToggleAppsList,
             actions.TOGGLE_SEARCH, this.onToggleSearch,
             actions.SEARCHING, this.onSearching,
@@ -65,14 +67,26 @@ let NavStore = Fluxxor.createStore({
     },
 
     /*
-     * toggle left nav open/closed
-     * @param show force shown/hidden
+     * toggle left nav visible (small breakpoint state)
+     * @param visible force visible/hidden
      */
-    onToggleLeftNav: function(show) {
-        if (show === false || show === true) {
-            this.state.leftNavOpen = show;
+    onToggleLeftNavVisible: function(visible) {
+        if (visible === false || visible === true) {
+            this.state.leftNavVisible = visible;
         } else {
-            this.state.leftNavOpen = !this.state.leftNavOpen;
+            this.state.leftNavVisible = !this.state.leftNavVisible;
+        }
+        this.emit('change');
+    },
+    /*
+     * toggle left nav expanded/collapsed (non-small breakpoint state)
+     * @param expanded force expanded/collapsed
+     */
+    onToggleLeftNavExpanded: function(expanded) {
+        if (expanded === false || expanded === true) {
+            this.state.leftNavExpanded = expanded;
+        } else {
+            this.state.leftNavExpanded = !this.state.leftNavExpanded;
         }
         this.emit('change');
     },

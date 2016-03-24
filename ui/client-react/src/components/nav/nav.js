@@ -131,7 +131,7 @@ var Nav = React.createClass({
     toggleAppsList(open) {
         const flux = this.getFlux();
 
-        if (this.state.nav.leftNavOpen) {
+        if (this.state.nav.leftNavExpanded) {
             flux.actions.toggleAppsList(open);
         } else {
             flux.actions.toggleAppsList(true);
@@ -141,9 +141,7 @@ var Nav = React.createClass({
     render() {
         const flux = this.getFlux();
 
-        let classes = 'navShell ';
-
-        return (<div className={classes}>
+        return (<div className="navShell">
 
             <Trowser position={"top"}
                      visible={this.state.nav.trowserOpen}
@@ -154,8 +152,9 @@ var Nav = React.createClass({
                      content={this.getTrowserContent()} />
 
             <LeftNav
-                open={this.state.nav.leftNavOpen}
-                appsListOpen={this.state.nav.appsListOpen && this.state.nav.leftNavOpen}
+                visible={this.state.nav.leftNavVisible}
+                expanded={this.state.nav.leftNavExpanded}
+                appsListOpen={this.state.nav.appsListOpen}
                 apps={this.state.apps.apps}
                 selectedAppId={this.state.apps.selectedAppId}
                 selectedTableId={this.state.apps.selectedTableId}

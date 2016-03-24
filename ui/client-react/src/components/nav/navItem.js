@@ -16,6 +16,7 @@ let NavItem = React.createClass({
         }),
         onSelect: React.PropTypes.func,
         isHeading: React.PropTypes.bool,
+        showSecondary: React.PropTypes.bool,
         secondaryIcon: React.PropTypes.string,
         secondaryOnSelect: React.PropTypes.func,
         hoverComponent: React.PropTypes.element,
@@ -25,6 +26,7 @@ let NavItem = React.createClass({
 
     getDefaultProps() {
         return {
+            showSecondary: true,
             isHeading: false,
             showToolTip: false
         };
@@ -40,9 +42,9 @@ let NavItem = React.createClass({
         }
         return (<li className={classes}>
             <Link className="leftNavLink" to={item.link} onClick={this.props.onSelect}>
-                <QBicon icon={item.icon}/> <span className={"leftNavLabel"}>{this.props.open ? label : ""}</span>
+                <QBicon icon={item.icon}/> <span className={"leftNavLabel"}>{label}</span>
             </Link>
-            { this.props.open && this.props.secondaryIcon &&
+            { this.props.showSecondary && this.props.secondaryIcon &&
             <a href="#" className="right" onClick={()=>this.props.secondaryOnSelect(item.id)}>
                 <QBicon icon={this.props.secondaryIcon}/>
             </a> }
@@ -51,28 +53,23 @@ let NavItem = React.createClass({
     },
 
     render() {
-
         const item = this.props.item;
 
         if (this.props.isHeading) {
-            if (this.props.open) {
-                return (
-                    <li key={item.msg}
-                        onClick={this.props.onClick}
-                        className={ this.props.secondaryIcon ? "heading withSecondary" : "heading"}>
-                        <I18nMessage message={item.msg}/>
-                        {this.props.secondaryIcon && <QBicon icon={this.props.secondaryIcon} />}
-                    </li>);
-            } else {
-                return (<li key={item.msg}><a className="heading"></a></li>);
-            }
+            return (
+                <li key={item.msg}
+                    onClick={this.props.onClick}
+                    className={ this.props.secondaryIcon ? "heading withSecondary" : "heading"}>
+                    <I18nMessage message={item.msg}/>
+                    {this.props.secondaryIcon && <QBicon icon={this.props.secondaryIcon} />}
+                </li>);
         } else {
             let label = item.name;
             let tooltipID = item.msg ? item.msg : item.name;
             if (item.msg) {
                 label = (<I18nMessage message={item.msg}/>);
             }
-            const tooltip = (<Tooltip className={ this.props.open ? 'leftNavTooltip' : 'leftNavTooltip show' }
+            const tooltip = (<Tooltip className={ this.props.showTooltip ? 'leftNavTooltip' : 'leftNavTooltip show' }
                                       id={tooltipID}>{label}</Tooltip>);
 
             return this.props.showToolTip ?
