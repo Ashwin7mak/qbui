@@ -6,21 +6,21 @@
   width: 25em;
 }
 
+.facetsMenuContainer {
+  margin-left: 10px;
 
-.reportToolbar {
-  > .facetsMenuContainer > div {
+  //the generated wrapper on facetMenuPopup
+  > div:not(.facetsMenuButton) > div:first-child {
     position: relative;
   }
 }
 
-.facetsMenuContainer {
-  margin-left: .5em;
-}
-
 .facetsMenuButton {
   display: inline-block;
+  cursor: pointer;
   &.withoutSelections {
-    margin-top:10px;
+    margin-top:14px;
+    margin-bottom: 4px;
   }
   .facetButtons {
     color: $icon-color;
@@ -52,6 +52,8 @@
     border-color : $facetMenu-BorderColor;
     min-width: 300px;
     max-width: 98%;
+    position: absolute;
+    margin-left: -29px;
     > .arrow {
       left: 13% !important;
     }
@@ -176,7 +178,8 @@
     .selections .clearFacet {
       color: $facetMenu-clearButtonColor;
     }
-  }
+}
+
 .selectedFacets {
   display: inline;
 }
@@ -229,9 +232,9 @@
         }
         .facetMenuPopup {
             display: block;
-            left: -88px;
             min-width: 150px;
             max-width: 232px;
+            margin-left: 0px;
         }
 
         .facetsMenuContainer {
@@ -241,7 +244,9 @@
         .filterSearchBoxContainer {
             display:none;
         }
-
+        .facetsMenuButton.withoutSelections {
+            margin:0; // no search box to effect centered height in small
+        }
         .popover.bottom > .arrow {
             display: none;
         }

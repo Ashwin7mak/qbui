@@ -273,7 +273,7 @@ describe('ReportToolbar functions', () => {
             expect(flux.actions.filterReport).toHaveBeenCalledWith(undefined, undefined, undefined, true, Object({selections: jasmine.any(Object), facet: [], search: testValue}));
             flux.actions.filterReport.calls.reset();
             done();
-        }, delay + 10);
+        }, delay + 100);
 
     });
 
