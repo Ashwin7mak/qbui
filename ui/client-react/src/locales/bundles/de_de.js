@@ -78,7 +78,7 @@ export default {
                 yesCheck : "Ja"
             },
             filteredRecordCount :
-                "{padding}{filteredRecordCount} von {recordCount}",
+                "{filteredRecordCount} von {recordCount} {nameForRecords} ",
             newReport: "Neu",
             organizeReports: "Organisieren",
             recordCount : "{recordCount} {nameForRecords} ",
