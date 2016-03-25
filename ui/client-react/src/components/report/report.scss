@@ -30,6 +30,9 @@
     }
 }
 .reportToolsAndContentContainer {
+    display:flex;
+    flex: 1 1 auto;
+
     .tableActionsContainer {
         position: relative;
         padding-left: 10px;
@@ -43,7 +46,6 @@
         }
     }
 
-    flex: 1 1 auto;
     .reportToolbar {
         display: flex;
         flex-direction: row;
