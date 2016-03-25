@@ -189,7 +189,7 @@ let AGGrid = React.createClass({
         var newState = {
             toolsMenuOpen: selectedRows > 0,
             allRowsSelected : allRowsSelected
-        }
+        };
         this.setState(newState);
     },
     /**
@@ -349,15 +349,15 @@ let AGGrid = React.createClass({
     },
 
     render() {
-        if (this.props.records && this.props.records.length > 0) {
-            let columnDefs = this.getColumns();
-            let griddleWrapperClasses = this.getSelectedRows().length ? "griddleWrapper selectedRows" : "griddleWrapper";
-            return (
-                <div className="reportTable" >
+        let columnDefs = this.getColumns();
+        let griddleWrapperClasses = this.getSelectedRows().length ? "griddleWrapper selectedRows" : "griddleWrapper";
+        return (
+            <div className="reportTable" >
 
-                    {this.getTableActions()}
-                    <div className={griddleWrapperClasses}>
-                        <Loader loaded={!this.props.loading}>
+                {this.getTableActions()}
+                <div className={griddleWrapperClasses}>
+                    <Loader loaded={!this.props.loading}>
+                        {this.props.records && this.props.records.length > 0 ?
                             <div className="agGrid">
                                 <AgGridReact
                                     gridOptions={this.gridOptions}
@@ -387,22 +387,16 @@ let AGGrid = React.createClass({
                                     groupRowInnerRenderer={this.getGroupRowRenderer}
 
                                     icons={gridIcons}
-                            />
-                            </div>
-                        </Loader>
-                        { //keep empty placeholder when loading to reduce reflow of space, scrollbar changes
-                            this.props.loading ? <div className="loadedContent"></div> : null
+                                />
+                            </div> :
+                            <Loader loaded={!this.props.loading}>
+                                <div><I18nMessage message={'grid.no_data'}/></div>
+                            </Loader>
                         }
-                        </div>
+                    </Loader>
                 </div>
-            );
-        } else {
-            return (
-                <Loader loaded={!this.props.loading}>
-                    <div><I18nMessage message={'grid.no_data'}/></div>
-                </Loader>
-            );
-        }
+            </div>
+        );
     }
 });
 

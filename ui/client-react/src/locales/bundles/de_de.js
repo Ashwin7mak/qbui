@@ -72,7 +72,7 @@ export default {
             blank : "leer",
             facets :{
                 noFacets :"Nein werte",
-                seeMore : "weitere filter...",
+                seeMore : "weitere...",
                 tooManyValues: "Zu viele Werte für die Filterung zu verwenden",
                 noCheck : "Nein",
                 yesCheck : "Ja"

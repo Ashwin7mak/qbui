@@ -135,7 +135,6 @@ $grid-default-padding: 10px;
 
 .tableActionsContainer {
     position: relative;
-    overflow:hidden;
 }
 .tableActionsContainer.toolsMenuOpen {
     overflow:visible; /* hidden for css transitions but need overflow:visible to prevent clipping of facets menu etc. */

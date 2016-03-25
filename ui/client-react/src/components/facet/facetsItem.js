@@ -89,7 +89,7 @@ class FacetsItem extends Component {
         if (this.props.fieldSelections.length > 0) {
             // note onMouseDown instead of onClick necessary here to support rootClose on the menu
             // so that it will not propagate to thru to parent collapse while clearing selection
-            clearFacetsIcon = (<span onMouseDown={e => this.clearSelects(e)} >
+            clearFacetsIcon = (<span onMouseDown={e => this.clearSelects(e)} onTouchEnd={e => this.clearSelects(e)}>
                                     <QBicon className="clearFacet" icon="clear-mini" />
                                 </span>);
             var listOfValues = this.props.facet.values.map(x => x.value);
@@ -99,9 +99,18 @@ class FacetsItem extends Component {
             }));
             selectionInfo = (<div className="selectionInfo small">{selectionStrings}</div>);
         }
+
+        let actionable = null;
+        let tooManyValues = 'report.facets.tooManyValues';
+        let subtitle = null;
+        if (this.props.facet.values.length === 0) {
+            subtitle =  (<div className="noOptions small"><I18nMessage message={tooManyValues}/></div>);
+            actionable = "notActionable";
+        }
         return (<div>
-                    <h4 className="facetName" >
+                    <h4 className={"facetName " + actionable} >
                         <span>{this.props.facet.name}</span>
+                        {subtitle}
                         {clearFacetsIcon}
                     </h4>
                     {selectionInfo}
@@ -137,10 +146,8 @@ class FacetsItem extends Component {
         /*TODO check type of facet list, string, date, boolean currently only handles string
          array values
          */
-        let tooManyValues = 'report.facets.tooManyValues';
-
         if ((!this.props.facet.values || this.props.facet.values.length === 0)) {
-            return (<div className="noOptions"><I18nMessage message={tooManyValues}/></div>);
+            return null;
         }
 
         let listToShow = this.props.facet.values;
@@ -178,7 +185,7 @@ class FacetsItem extends Component {
                         (<ListGroup fill>
                             {this.renderValues()}
                             {(this.props.facet.values.length > this.props.maxInitRevealed &&  !this.props.isRevealed ?
-                                (<span className="listMore" onClick={(e) => this.props.handleRevealMore(e, this.props.facet)}>
+                                (<span className="listMore list-group-item" onClick={(e) => this.props.handleRevealMore(e, this.props.facet)}>
                                     <I18nMessage message={seeMore} /></span>) : null)}
                         </ListGroup>) :
                         null

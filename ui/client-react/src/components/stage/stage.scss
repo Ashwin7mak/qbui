@@ -3,7 +3,7 @@
 .layout-stage {
     border-bottom: 1px solid $header-bg;
     position: relative;
-    margin-bottom:30px;
+
 
     .toggleStage {
 
@@ -16,6 +16,7 @@
         border-radius: 0 0 2px 2px;
         background-color: $color17;
         outline: none;
+        z-index: $zindex-dropdown;
     }
 
     .well {

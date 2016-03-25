@@ -221,9 +221,6 @@ describe('ReportToolbar functions', () => {
                                                                 reportData={fakeReportWithFacets}/>);
         expect(TestUtils.isCompositeComponent(component)).toBeTruthy();
 
-        //clear select button shown
-        let clearAllFacets = TestUtils.scryRenderedDOMComponentsWithClass(component, "clearAllFacets");
-        expect(clearAllFacets.length).toEqual(1);
 
         // count has 2 numbers X of X when there is a selection
         let recordsCount = TestUtils.scryRenderedDOMComponentsWithClass(component, "recordsCount");
@@ -289,7 +286,7 @@ describe('ReportToolbar functions', () => {
             expect(flux.actions.filterReport).toHaveBeenCalledWith(undefined, undefined, undefined, true, Object({selections: jasmine.any(Object), facet: [], search: testValue}));
             flux.actions.filterReport.calls.reset();
             done();
-        }, delay + 10);
+        }, delay + 100);
 
     });
 

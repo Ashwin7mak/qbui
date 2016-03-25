@@ -2,6 +2,10 @@ import * as actions from '../../src/constants/actions';
 import FacetSelections from '../components/facet/facetSelections';
 
 import Fluxxor from 'fluxxor';
+import Logger from '../utils/logger';
+
+let logger = new Logger();
+
 
 let ReportDataStore = Fluxxor.createStore({
 
@@ -9,6 +13,7 @@ let ReportDataStore = Fluxxor.createStore({
         this.data = {};
         this.loading = false;
         this.error = false;
+        this.nonFacetClicksEnabled = true;
         this.searchStringForFiltering = '' ;
         this.selections  = new FacetSelections();
 
@@ -19,6 +24,8 @@ let ReportDataStore = Fluxxor.createStore({
             actions.LOAD_RECORDS,  this.onLoadRecords,
             actions.LOAD_RECORDS_SUCCESS, this.onLoadRecordsSuccess,
             actions.LOAD_RECORDS_FAILED, this.onLoadRecordsFailed,
+            actions.SHOW_FACET_MENU, this.onShowFacetMenu,
+            actions.HIDE_FACET_MENU, this.onHideFacetMenu,
             actions.SEARCH_FOR, this.onSearchFor
         );
     },
@@ -40,12 +47,37 @@ let ReportDataStore = Fluxxor.createStore({
         this.emit('change');
     },
 
+    checkForFacetErrors(reportData) {
+        if (reportData.data.facets) {
+            let facets = reportData.data.facets;
+            //check for error message returned
+            //i.e facets : [{id: null, errorMessage: "unknownError"}]
+            if (facets.length > 0) {
+                if (facets[0].id === null) {
+                    //log error
+                    let msg = facets[0].errorMessage;
+                    logger.error(`error response from server request : ${msg} getting facet information for app:${this.appId} table:${this.tblId} report:${this.rptId} `);
+                    //no facets
+                    reportData.data.facets = [];
+                }
+                //else good id data
+            } else {
+                //empty facet data ok there are no filters for this report
+            }
+        } else {
+            //log error
+            logger.error(`error got no facet property returned for app:${this.appId} table:${this.tblId} report:${this.rptId} `);
+            reportData.data.facets = [];
+        }
+    },
+
     onLoadReportSuccess(reportData) {
         this.loading = false;
         this.error = false;
 
         this.data = {};
         let records = this.getReportData(reportData.data, reportData.hasGrouping);
+        this.checkForFacetErrors(reportData);
         _.extend(this.data, {
             name: reportData.name,
             hasGrouping: reportData.hasGrouping, //TODO: this should come from report meta data.
@@ -106,6 +138,16 @@ let ReportDataStore = Fluxxor.createStore({
 
             });
         }
+        this.emit('change');
+    },
+
+    onShowFacetMenu() {
+        this.nonFacetClicksEnabled = false;
+        this.emit('change');
+    },
+
+    onHideFacetMenu() {
+        this.nonFacetClicksEnabled = true;
         this.emit('change');
     },
 
@@ -199,7 +241,8 @@ let ReportDataStore = Fluxxor.createStore({
             tblId: this.tblId,
             rptId: this.rptId,
             searchStringForFiltering: this.searchStringForFiltering,
-            selections: this.selections
+            selections: this.selections,
+            nonFacetClicksEnabled : this.nonFacetClicksEnabled,
         };
     }
 
