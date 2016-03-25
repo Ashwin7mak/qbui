@@ -53,7 +53,8 @@ let ReportDataStore = Fluxxor.createStore({
             records: records,
             facets: reportData.data.facets,
             filteredRecords: records,
-            recordsCount: reportData.data.records.length
+            recordsCount: reportData.data.records.length,
+            filteredRecordsCount: reportData.data.records.length
         });
         this.emit('change');
     },
@@ -76,7 +77,7 @@ let ReportDataStore = Fluxxor.createStore({
         this.error = false;
         this.data.filteredRecords = this.getReportData(records, records.hasGrouping);
         this.data.hasGrouping = records.hasGrouping;
-        this.data.filteredRecordsCount = records.records.length;
+        this.data.filteredRecordsCount = records.records ? records.records.length : null;
         this.emit('change');
     },
 

@@ -88,7 +88,7 @@ var ReportToolbar = React.createClass({
         if (this.props.searchStringForFiltering.length !== 0) {
             answer = true;
         } else {
-            answer = this.props.selections.hasAnySelections();
+            answer = this.props.selections ? this.props.selections.hasAnySelections() : false;
         }
         return answer;
     },
