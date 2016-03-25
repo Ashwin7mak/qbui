@@ -78,6 +78,20 @@
             browser.getCapabilities().then(function(cap) {
                 browser.browserName = cap.caps_.browserName;
             });
+
+            // Use this code if you want to slow down your Protractor tests (does not work in Protractor 3.0)
+            //var origFn = browser.driver.controlFlow().execute;
+            //
+            //browser.driver.controlFlow().execute = function() {
+            //    var args = arguments;
+            //
+            //    // Queue 100ms wait
+            //    origFn.call(browser.driver.controlFlow(), function() {
+            //        return protractor.promise.delayed(100);
+            //    });
+            //
+            //    return origFn.apply(browser.driver.controlFlow(), args);
+            //};
         }
     };
 }());
