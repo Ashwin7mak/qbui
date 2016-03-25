@@ -335,6 +335,10 @@ let AGGrid = React.createClass({
      * add actions column to the end of the array.
      */
     getColumns() {
+        if (!this.props.columns) {
+            return;
+        }
+
         let columns = this.props.columns.slice(0);
 
         //This should be based on perms -- something like if(this.props.allowMultiSelection)
@@ -389,11 +393,12 @@ let AGGrid = React.createClass({
                                     icons={gridIcons}
                                 />
                             </div> :
-                            <Loader loaded={!this.props.loading}>
-                                <div><I18nMessage message={'grid.no_data'}/></div>
-                            </Loader>
+                            <div><I18nMessage message={'grid.no_data'}/></div>
                         }
                     </Loader>
+                    { //keep empty placeholder when loading to reduce reflow of space, scrollbar changes
+                        this.props.loading ? <div className="loadedContent"></div> : null
+                    }
                 </div>
             </div>
         );
