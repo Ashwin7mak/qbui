@@ -58,7 +58,8 @@ let AGGrid = React.createClass({
     },
     getInitialState() {
         return {
-            toolsMenuOpen: false
+            toolsMenuOpen: false,
+            allRowsSelected: false
         };
     },
     onGridReady(params) {
@@ -93,7 +94,7 @@ let AGGrid = React.createClass({
     // Analysis shows that the action column renderer is returning notEquals, event though nothing has changed.
     // Since re-render is expensive the following figures out if ALL is same and the only piece that has changed is the "actions" column then dont update.
     shouldComponentUpdate(nextProps, nextState) {
-        if (nextState !== this.state) {
+        if (!_.isEqual(nextState, this.state)) {
             return true;
         }
         if (nextProps !== this.props) {
@@ -171,17 +172,10 @@ let AGGrid = React.createClass({
         this.context.history.push(link);
     },
     /**
-     * Capture the row-select (via checkbox) event.
-     * @param params
+     * Capture the row-selection/deselection change events.
+     * For some reason this doesnt seem to fire on deselectAll but doesnt matter for us.
      */
-    onRowSelected(params) {
-        this.api.getSelectedRows().forEach((row) => {
-            if (row.selected) {//atleast one row is selected
-                this.setState({toolsMenuOpen:true});
-                this.updateAllCheckbox();
-                return;
-            }
-        });
+    onSelectionChanged() {
         this.updateAllCheckbox();
     },
 
@@ -190,13 +184,13 @@ let AGGrid = React.createClass({
      */
     updateAllCheckbox() {
         let flux = this.getFlux();
-        let allRowsSelected = flux.stores.ReportDataStore.data.filteredRecordsCount === this.getSelectedRows().length;
-        if (allRowsSelected) {
-            document.getElementsByClassName("selectAllCheckbox")[0].checked = true;
-        } else {
-            document.getElementsByClassName("selectAllCheckbox")[0].checked = false;
-            this.setState({toolsMenuOpen:false});
+        let selectedRows = this.getSelectedRows().length;
+        let allRowsSelected = flux.stores.ReportDataStore.data.filteredRecordsCount === selectedRows;
+        var newState = {
+            toolsMenuOpen: selectedRows > 0,
+            allRowsSelected : allRowsSelected
         }
+        this.setState(newState);
     },
     /**
      * Capture the event if all-select checkbox is clicked.
@@ -212,6 +206,7 @@ let AGGrid = React.createClass({
         } else {
             this.deselectAll();
         }
+        this.updateAllCheckbox();
     },
     componentDidUpdate(prevProps, prevState) {
         //this.autoSizeAllColumns();
@@ -259,7 +254,7 @@ let AGGrid = React.createClass({
         return (this.props.reportHeader && this.props.selectionActions && (
             <div className={classes}>{hasSelection ?
                 React.cloneElement(this.props.selectionActions, {key:"selectionActions", selection: selectedRows}) :
-                React.cloneElement(this.props.reportHeader, {key:"reportHeader", onMenuEnter:this.onMenuEnter, onMenuExit:this.onMenuExit})}
+                React.cloneElement(this.props.reportHeader, {key:"reportHeader"/*, onMenuEnter:this.onMenuEnter, onMenuExit:this.onMenuExit*/})}
             </div>));
     },
 
@@ -283,6 +278,7 @@ let AGGrid = React.createClass({
         var checkbox = document.createElement("input");
         checkbox.type = "checkbox";
         checkbox.className = "selectAllCheckbox";
+        checkbox.checked = this.state.allRowsSelected;
         checkbox.onclick = (event) => {
             this.allCheckBoxSelected(event);
         };
@@ -368,8 +364,8 @@ let AGGrid = React.createClass({
 
                                     // listening for events
                                     onGridReady={this.onGridReady}
-                                    onRowSelected={this.onRowSelected}
                                     onRowClicked={this.onRowClicked}
+                                    onSelectionChanged={this.onSelectionChanged}
 
 
                                     // binding to array properties
