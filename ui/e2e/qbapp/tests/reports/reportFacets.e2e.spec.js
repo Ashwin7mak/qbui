@@ -223,11 +223,10 @@
                                     });
                                     // Click out of the facet popup and ensure it closes
                                     reportServicePage.reportRecordsCount.click().then(function() {
-                                        // Animation of the popup disappearing
-                                        e2eBase.sleep(browser.params.smallSleep);
-                                        // Check that the popup is removed
-                                        expect(reportServicePage.reportFacetPopUpMenu.isPresent()).toBeFalsy();
-                                        done();
+                                        // Check that the popup is removed from DOM
+                                        reportServicePage.waitForElementToBeStale(reportServicePage.reportFacetPopUpMenu).then(function() {
+                                            done();
+                                        });
                                     });
                                 });
                             });
@@ -289,7 +288,7 @@
                 }
 
                 facetTestCases().forEach(function(facetTestcase) {
-                    fit('Test case: ' + facetTestcase.message, function(done) {
+                    it('Test case: ' + facetTestcase.message, function(done) {
                         // Click on facet carat
                         reportServicePage.waitForElementToBeClickable(reportServicePage.reportFilterBtnCaret).then(function() {
                             reportServicePage.reportFilterBtnCaret.click();
@@ -335,7 +334,6 @@
                                 reportServicePage.getFacetGroupElement(facetTestcase.facets[j].group).then(function(facetGroupEl) {
                                     reportServicePage.waitForElementToBeClickable(facetGroupEl).then(function() {
                                         reportServicePage.clickClearAllFacetsIcon(facetGroupEl);
-                                        e2eBase.sleep(browser.params.smallSleep);
                                     });
                                 });
                             }
@@ -373,7 +371,6 @@
                                 //remove facets by clicking on clear (X) in popup beside Text Field and verify all tokens removed
                                 reportServicePage.waitForElementToBeClickable(reportServicePage.reportFilterBtnCaret).then(function() {
                                     reportServicePage.reportFilterBtnCaret.click().then(function() {
-                                        e2eBase.sleep(browser.params.smallSleep);
                                         reportServicePage.clearFacetTokensFromContainer().then(function() {
                                             expect(reportServicePage.reportRecordsCount.getAttribute('innerText')).toEqual('6 Records');
                                             done();
@@ -393,17 +390,15 @@
                         reportServicePage.waitForElement(reportServicePage.reportGroupsDivEl).then(function() {
                             // Find and select the report
                             reportServicePage.selectReport('My Reports', 'Test Report');
-                            e2eBase.sleep(browser.params.smallSleep);
-                            // Expand the popup and select group
-                            reportServicePage.waitForElement(reportServicePage.reportsToolBar).then(function() {
-                                // Verify the facet container is not present in DOM without facets for a report.
-                                expect(reportServicePage.reportFacetMenuContainer.isPresent()).toBeFalsy();
-                                if (testcase.breakpointSize === 'small') {
-                                    reportServicePage.reportHeaderToggleHamburgerEl.click();
-                                }
-                                done();
-                            });
                         });
+                        // Let the report load
+                        e2eBase.sleep(browser.params.smallSleep);
+                        // Verify the facet container is not present in DOM without facets for a report.
+                       expect(reportServicePage.reportFacetMenuContainer.isPresent()).toBeFalsy();
+                        if (testcase.breakpointSize === 'small') {
+                            reportServicePage.reportHeaderToggleHamburgerEl.click();
+                        }
+                        done();
                     });
                 });
 

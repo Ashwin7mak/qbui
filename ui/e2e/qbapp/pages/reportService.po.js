@@ -92,7 +92,7 @@
         this.reportFilterSearchBox = this.reportsToolBar.element(by.className('filterSearchBox'));
 
         // Report facet Menu Container
-        this.reportFacetMenuContainer = this.reportsToolBar.element(by.className('facetsMenuContainer'));
+        this.reportFacetMenuContainer = element(by.className('facetsMenuContainer'));
         // Report facet buttons
         this.reportFacetBtns = this.reportFacetMenuContainer.element(by.className('facetButtons'));
         // Report facet filter button
@@ -332,21 +332,15 @@
          *
          */
         this.clearFacetTokensFromContainer = function() {
-            var locations = element.all(by.className('selectedToken'));
-            return locations.map(
-                function(locationElement, index) {
-                    return {
-                        index: index,
-                        text: locationElement.getText()
-                    };
-                }
-            ).then(function(items) {
-                for (var i = (items.length) - 1; i >= 0; --i) {
-                    locations.get(items[i].index).element(by.className('clearFacet')).click();
-                    //TODO stale element issue without this sleep.
-                    e2eBase.sleep(browser.params.largeSleep);
-                }
-            });
+            return e2ePageBase.waitForElement(element(by.className('facetSelections'))).then(function() {
+                element.all(by.className('selectedToken')).then(function(items) {
+                    for (var i = (items.length) - 1; i >= 0; --i) {
+                        items[i].element(by.className('clearFacet')).click();
+                    }
+                }).then(function() {
+                    e2ePageBase.waitForElementToBeStale(element(by.className('facetSelections')));
+                });
+            })
         };
 
         /**

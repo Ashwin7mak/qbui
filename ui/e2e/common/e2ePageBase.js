@@ -62,11 +62,15 @@
         };
 
         this.waitForElementToBePresent = function(element) {
-            return browser.wait(EC.presenceOf(element), 5000, 'Timed out waiting for element to appear');
+            return browser.wait(EC.presenceOf(element), 5000, 'Timed out waiting for element to be present on the DOM');
         };
 
         this.waitForElementToBeClickable = function(element) {
             return browser.wait(EC.elementToBeClickable(element), 5000, 'Timed out waiting for element to be clickable');
+        };
+
+        this.waitForElementToBeStale = function(element) {
+            return browser.wait(EC.stalenessOf(element), 3000, 'Timed out waiting for element to become stale');
         };
 
         // Verify the element is located Top
