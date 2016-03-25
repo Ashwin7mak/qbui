@@ -40,7 +40,7 @@ var RecordsCount = React.createClass({
         } else {
             return (<div className="recordsCount">
                 <I18nMessage message={message}
-                             filteredRecordCount={this.props.filteredRecordCount}
+                             filteredRecordCount={this.props.filteredRecordCount + ''}
                              recordCount={this.props.recordCount}
                              nameForRecords={this.props.nameForRecords}
                 />
