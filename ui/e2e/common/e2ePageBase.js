@@ -73,6 +73,18 @@
             return browser.wait(EC.stalenessOf(element), 3000, 'Timed out waiting for element to become stale');
         };
 
+        this.waitForElementToBeInvisible = function(element) {
+            return browser.wait(EC.invisibilityOf(element), 3000, 'Timed out waiting for element to be invisible');
+        };
+
+        this.waitForElementsToBeClickable = function(element1, element2) {
+            var condition = EC.and(EC.elementToBeClickable(element1), EC.elementToBeClickable(element2));
+            //wait for condition to be true.
+            return browser.wait(condition, 5000, 'Timed out waiting for elements to be visible');
+        };
+
+
+
         // Verify the element is located Top
         this.isElementOnTop = function(element1, element2) {
             // First check that both elements are being displayed

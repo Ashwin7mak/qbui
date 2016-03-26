@@ -10,7 +10,9 @@
     var ReportServicePage = requirePO('reportService');
     var RequestAppsPage = requirePO('requestApps');
     var RequestSessionTicketPage = requirePO('requestSessionTicket');
+    var ReportFacetsPage = requirePO('reportFacets');
     var reportServicePage = new ReportServicePage();
+    var reportFacetsPage = new ReportFacetsPage();
 
     describe('Report Faceting Test Setup', function() {
         var realmName;
@@ -179,7 +181,7 @@
                 };
 
                 it('Verify reports toolbar', function(done) {
-                    //verify the records count
+                    // Verify the records count
                     expect(reportServicePage.reportRecordsCount.getAttribute('innerText')).toEqual('6 Records');
                     if (testcase.breakpointSize === 'small') {
                         // Verify display of filter search box
@@ -188,43 +190,42 @@
                         // Verify display of filter search box
                         expect(reportServicePage.reportFilterSearchBox.isDisplayed()).toBeTruthy();
                     }
-                    //verify display of filter button
-                    expect(reportServicePage.reportFilterBtn.isDisplayed()).toBeTruthy();
-                    //verify display of filter carat/dropdown button
-                    expect(reportServicePage.reportFilterBtnCaret.isDisplayed()).toBeTruthy();
+                    // Verify display of facets filter button
+                    expect(reportFacetsPage.reportFacetFilterBtn.isDisplayed()).toBeTruthy();
+                    // Verify display of facets filter carat/dropdown button
+                    expect(reportFacetsPage.reportFacetFilterBtnCaret.isDisplayed()).toBeTruthy();
                     done();
                 });
 
                 it('Verify facet overlay menu contents are collapsed to start with and matches with table column headers', function(done) {
-                    //Click on facet carat
-                    reportServicePage.reportFilterBtnCaret.click().then(function() {
+                    // Click on facet carat
+                    reportFacetsPage.reportFacetFilterBtnCaret.click().then(function() {
                         //Verify the popup menu is displayed
-                        expect(reportServicePage.reportFacetPopUpMenu.isDisplayed()).toBeTruthy();
-                    }).then(function() {
-                        //verify expand and collapse of each items in an popup menu
-                        reportServicePage.unselectedFacetGroupsElList.then(function(elements) {
+                        expect(reportFacetsPage.reportFacetPopUpMenu.isDisplayed()).toBeTruthy();
+                        // Verify expand and collapse of each items in an popup menu
+                        reportFacetsPage.unselectedFacetGroupsElList.then(function(elements) {
                             expect(elements.length).toBe(2);
                             elements.forEach(function(menuItem) {
                                 //Verify by default group is in collapse state
-                                expect(reportServicePage.getFacetGroupTitle(menuItem).element(by.tagName('a')).getAttribute('class')).toMatch("collapsed");
+                                expect(reportFacetsPage.getFacetGroupTitle(menuItem).element(by.tagName('a')).getAttribute('class')).toMatch("collapsed");
                             });
-                        }).then(function() {
                             // Assert column headers are equal to the popup facet groups
-                            reportServicePage.getReportColumnHeaders(reportServicePage).then(function(tableColHeaders) {
+                            reportServicePage.getReportColumnHeaders().then(function(tableColHeaders) {
                                 // Remove Record ID# from the array since it cannot be a facet
                                 tableColHeaders.shift();
                                 // Map all facet groups from the facet popup
-                                reportServicePage.unselectedFacetGroupsElList.map(function(elm) {
+                                reportFacetsPage.unselectedFacetGroupsElList.map(function (elm) {
                                     return elm.getText();
-                                }).then(function(facetGroupNames) {
+                                }).then(function (facetGroupNames) {
                                     // Ensure each facet group field is present on the table report
-                                    facetGroupNames.forEach(function(facetGroupName) {
+                                    facetGroupNames.forEach(function (facetGroupName) {
                                         expect(tableColHeaders).toContain(facetGroupName);
                                     });
-                                    // Click out of the facet popup and ensure it closes
-                                    reportServicePage.reportRecordsCount.click().then(function() {
-                                        // Check that the popup is removed from DOM
-                                        reportServicePage.waitForElementToBeStale(reportServicePage.reportFacetPopUpMenu).then(function() {
+                                }).then(function() {
+                                    // Click out of the facet popup
+                                    reportServicePage.reportRecordsCount.click();
+                                    reportServicePage.waitForElement(reportServicePage.mainContentEl).then(function() {
+                                        reportServicePage.waitForElementToBeStale(reportFacetsPage.reportFacetPopUpMenu).then(function() {
                                             done();
                                         });
                                     });
@@ -290,23 +291,23 @@
                 facetTestCases().forEach(function(facetTestcase) {
                     it('Test case: ' + facetTestcase.message, function(done) {
                         // Click on facet carat
-                        reportServicePage.waitForElementToBeClickable(reportServicePage.reportFilterBtnCaret).then(function() {
-                            reportServicePage.reportFilterBtnCaret.click();
+                        reportFacetsPage.waitForElementToBeClickable(reportFacetsPage.reportFacetFilterBtnCaret).then(function() {
+                            reportFacetsPage.reportFacetFilterBtnCaret.click();
                             // Verify the popup menu is displayed
-                            reportServicePage.waitForElement(reportServicePage.reportFacetPopUpMenu).then(function() {
-                                expect(reportServicePage.reportFacetPopUpMenu.isDisplayed()).toBeTruthy();
+                            reportFacetsPage.waitForElement(reportFacetsPage.reportFacetPopUpMenu).then(function() {
+                                expect(reportFacetsPage.reportFacetPopUpMenu.isDisplayed()).toBeTruthy();
                             });
                         }).then(function() {
                             for (var i = 0; i < facetTestcase.facets.length; i++) {
                                 // Select facet group and items
-                                reportServicePage.selectGroupAndFacetItems(facetTestcase.facets[i].group, facetTestcase.facets[i].ItemIndex).then(function(facetSelections) {
+                                reportFacetsPage.selectGroupAndFacetItems(facetTestcase.facets[i].group, facetTestcase.facets[i].ItemIndex).then(function(facetSelections) {
                                     if (testcase.breakpointSize === 'small') {
                                         // Verify tokens is present in the DOM but not displayed on small breakpoint
-                                        expect(reportServicePage.reportSelectedFacets.isPresent).toBeTruthy();
-                                        expect(reportServicePage.reportSelectedFacets.isDisplayed()).toBeFalsy();
+                                        expect(reportFacetsPage.reportSelectedFacets.isPresent).toBeTruthy();
+                                        expect(reportFacetsPage.reportSelectedFacets.isDisplayed()).toBeFalsy();
                                     } else {
                                         // Get facet tokens from the reports toolbar and verify against selected items on reports toolbar
-                                        reportServicePage.reportFacetNameSelections.map(function(tokenName, tokenindex) {
+                                        reportFacetsPage.reportFacetNameSelections.map(function(tokenName, tokenindex) {
                                             return tokenName.getText();
                                         }).then(function(selections) {
                                             // Sort each array before comparing
@@ -321,7 +322,7 @@
                                     //Verify the toolbar still displays with filter button in it
                                     expect(reportServicePage.griddleWrapperEl.getAttribute('innerText')).toEqual('There is no data to display.');
                                     expect(reportServicePage.reportRecordsCount.getAttribute('innerText')).toEqual('0 of 6 Records');
-                                    expect(reportServicePage.reportFilterBtn.isDisplayed()).toBeTruthy();
+                                    expect(reportFacetsPage.reportFacetFilterBtn.isDisplayed()).toBeTruthy();
                                 } else if (txt !== 'There is no data to display.') {
                                     for (var i = 0; i < facetTestcase.facets.length; i++) {
                                         verifyFacetTableResults(facetTestcase.facets[i].group);
@@ -331,16 +332,16 @@
                         }).then(function() {
                             // Finally clear all facets from popup menu
                             for (var j = 0; j < facetTestcase.facets.length; j++) {
-                                reportServicePage.getFacetGroupElement(facetTestcase.facets[j].group).then(function(facetGroupEl) {
-                                    reportServicePage.waitForElementToBeClickable(facetGroupEl).then(function() {
-                                        reportServicePage.clickClearAllFacetsIcon(facetGroupEl);
+                                reportFacetsPage.getFacetGroupElement(facetTestcase.facets[j].group).then(function(facetGroupEl) {
+                                    reportFacetsPage.waitForElementToBeClickable(facetGroupEl).then(function() {
+                                        reportFacetsPage.clickClearAllFacetsIcon(facetGroupEl);
                                     });
                                 });
                             }
                         }).then(function() {
                             // Collapse the popup menu
-                            reportServicePage.waitForElementToBeClickable(reportServicePage.reportFilterBtnCaret).then(function() {
-                                reportServicePage.reportFilterBtnCaret.click().then(function() {
+                            reportFacetsPage.waitForElementToBeClickable(reportFacetsPage.reportFacetFilterBtnCaret).then(function() {
+                                reportFacetsPage.reportFacetFilterBtnCaret.click().then(function() {
                                     done();
                                 });
                             });
@@ -351,16 +352,16 @@
                 //There wont be any facet tokens in the container for small breakpoint
                 if (testcase.breakpointSize !== 'small') {
                     it('Verify clear all facets tokens from the container', function(done) {
-                        reportServicePage.waitForElementToBeClickable(reportServicePage.reportFilterBtnCaret).then(function() {
+                        reportFacetsPage.waitForElementToBeClickable(reportFacetsPage.reportFacetFilterBtnCaret).then(function() {
                             //Click on facet carat to show popup
-                            reportServicePage.reportFilterBtnCaret.click().then(function() {
+                            reportFacetsPage.reportFacetFilterBtnCaret.click().then(function() {
                                 //Verify the popup menu is displayed
-                                expect(reportServicePage.reportFacetPopUpMenu.isDisplayed()).toBeTruthy();
+                                expect(reportFacetsPage.reportFacetPopUpMenu.isDisplayed()).toBeTruthy();
                             }).then(function() {
                                 //select the facet Items
-                                reportServicePage.selectGroupAndFacetItems("Text Field", [1, 2, 3, 4]).then(function(facetSelections) {
+                                reportFacetsPage.selectGroupAndFacetItems("Text Field", [1, 2, 3, 4]).then(function(facetSelections) {
                                     //Map all facet tokens from the facet container
-                                    reportServicePage.reportFacetNameSelections.map(function(tokenName, tokenindex) {
+                                    reportFacetsPage.reportFacetNameSelections.map(function(tokenName, tokenindex) {
                                         return tokenName.getText();
                                     }).then(function(selections) {
                                         // Sort each array before comparing
@@ -369,9 +370,9 @@
                                 });
                             }).then(function() {
                                 //remove facets by clicking on clear (X) in popup beside Text Field and verify all tokens removed
-                                reportServicePage.waitForElementToBeClickable(reportServicePage.reportFilterBtnCaret).then(function() {
-                                    reportServicePage.reportFilterBtnCaret.click().then(function() {
-                                        reportServicePage.clearFacetTokensFromContainer().then(function() {
+                                reportFacetsPage.waitForElementToBeClickable(reportFacetsPage.reportFacetFilterBtnCaret).then(function() {
+                                    reportFacetsPage.reportFacetFilterBtnCaret.click().then(function() {
+                                        reportFacetsPage.clearFacetTokensFromContainer().then(function() {
                                             expect(reportServicePage.reportRecordsCount.getAttribute('innerText')).toEqual('6 Records');
                                             done();
                                         });
@@ -391,14 +392,16 @@
                             // Find and select the report
                             reportServicePage.selectReport('My Reports', 'Test Report');
                         });
-                        // Let the report load
-                        e2eBase.sleep(browser.params.smallSleep);
-                        // Verify the facet container is not present in DOM without facets for a report.
-                       expect(reportServicePage.reportFacetMenuContainer.isPresent()).toBeFalsy();
-                        if (testcase.breakpointSize === 'small') {
-                            reportServicePage.reportHeaderToggleHamburgerEl.click();
-                        }
-                        done();
+                        reportServicePage.waitForElement(reportServicePage.mainContentEl).then(function() {
+                            // Verify the facet container is not present in DOM without facets for a report.
+                            expect(reportFacetsPage.reportFacetMenuContainer.isPresent()).toBeFalsy();
+                            if (testcase.breakpointSize === 'small') {
+                                reportServicePage.reportHeaderToggleHamburgerEl.click();
+                                done();
+                            } else {
+                                done();
+                            }
+                        });
                     });
                 });
 
@@ -418,14 +421,14 @@
                     }).then(function() {
                         // expand the popup ad select group
                         reportServicePage.waitForElement(reportServicePage.reportsToolBar).then(function() {
-                            reportServicePage.reportFilterBtnCaret.click().then(function() {
+                            reportFacetsPage.reportFacetFilterBtnCaret.click().then(function() {
                                 //Verify the popup menu is displayed
-                                expect(reportServicePage.reportFacetPopUpMenu.isDisplayed()).toBeTruthy();
+                                expect(reportFacetsPage.reportFacetPopUpMenu.isDisplayed()).toBeTruthy();
                             });
                         });
                     }).then(function() {
                         // Expand the Text Facet group
-                        reportServicePage.PopUpContainerFacetGroup.map(function(groupName) {
+                        reportFacetsPage.PopUpContainerFacetGroup.map(function(groupName) {
                             return groupName.getText().then(function(groupText) {
                                 groupName.click().then(function() {
                                     expect(groupName.getAttribute('class'), '', "Facet Group is not expanded");
