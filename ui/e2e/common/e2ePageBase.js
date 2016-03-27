@@ -70,11 +70,11 @@
         };
 
         this.waitForElementToBeStale = function(element) {
-            return browser.wait(EC.stalenessOf(element), 3000, 'Timed out waiting for element to become stale');
+            return browser.wait(EC.stalenessOf(element), 5000, 'Timed out waiting for element to become stale');
         };
 
         this.waitForElementToBeInvisible = function(element) {
-            return browser.wait(EC.invisibilityOf(element), 3000, 'Timed out waiting for element to be invisible');
+            return browser.wait(EC.invisibilityOf(element), 5000, 'Timed out waiting for element to be invisible');
         };
 
         this.waitForElementsToBeClickable = function(element1, element2) {

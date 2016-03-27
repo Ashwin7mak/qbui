@@ -113,8 +113,6 @@
                     });
                     reportServicePage.waitForElement(reportServicePage.loadedContentEl).then(function() {
                         reportServicePage.waitForElement(reportServicePage.griddleWrapperEl).then(function() {
-                            // Animation of the popup disappearing
-                            e2eBase.sleep(browser.params.smallSleep);
                             reportServicePage.waitForElement(reportServicePage.agGridBodyEl).then(function() {
                                 // Get all records from table before filter applied
                                 reportServicePage.agGridRecordElList.map(function(row) {
@@ -222,11 +220,11 @@
                                         expect(tableColHeaders).toContain(facetGroupName);
                                     });
                                 }).then(function() {
-                                    // Click out of the facet popup
-                                    reportServicePage.reportRecordsCount.click();
-                                    reportServicePage.waitForElement(reportServicePage.mainContentEl).then(function() {
-                                        reportServicePage.waitForElementToBeStale(reportFacetsPage.reportFacetPopUpMenu).then(function() {
-                                            done();
+                                    reportServicePage.reportRecordsCount.click().then(function() {
+                                        reportFacetsPage.waitForElementToBeClickable(reportFacetsPage.reportFacetMenuContainer).then(function() {
+                                            reportFacetsPage.waitForElementToBeStale(reportFacetsPage.reportFacetPopUpMenu).then(function () {
+                                                done();
+                                            });
                                         });
                                     });
                                 });
@@ -340,8 +338,8 @@
                             }
                         }).then(function() {
                             // Collapse the popup menu
-                            reportFacetsPage.waitForElementToBeClickable(reportFacetsPage.reportFacetFilterBtnCaret).then(function() {
-                                reportFacetsPage.reportFacetFilterBtnCaret.click().then(function() {
+                            reportFacetsPage.waitForElementToBeClickable(reportFacetsPage.reportFacetMenuContainer).then(function() {
+                                reportFacetsPage.reportFacetMenuContainer.click().then(function() {
                                     done();
                                 });
                             });
@@ -437,8 +435,6 @@
                         });
                     }).then(function() {
                         // Verify the text shows are "too many values to use for filtering"
-                        //sleep to expand a group required as there are 2 many records
-                        e2eBase.sleep(browser.params.smallSleep);
                         element(by.className('noOptions')).getText().then(function(text) {
                             expect(text).toEqual("Too many values to use for filtering.");
                             done();

@@ -52,7 +52,7 @@
          * Function will get you all the facet selections (buttons) for a facet group element
          */
         this.getAvailableFacetGroupSelections = function(facetGroupElement) {
-            return facetGroupElement.all(by.className('list-group-item'));
+            return facetGroupElement.all(by.tagName('button'));
         };
 
 
@@ -65,10 +65,12 @@
                 // First look through unselected facet groups
                 return self.unselectedFacetGroupsElList.filter(function(elem) {
                     // Return the element or elements
-                    return elem.element(by.className('panel-heading')).getText().then(function(text) {
-                        //Strip off any Text Field\nElo
-                        // Match the text
-                        return text.indexOf(facetGroupName) > -1;
+                    return e2ePageBase.waitForElementToBeClickable(elem.element(by.className('panel-heading'))).then(function() {
+                        return elem.element(by.className('panel-heading')).getText().then(function(text) {
+                            //Strip off any Text Field\nElo
+                            // Match the text
+                            return text.indexOf(facetGroupName) > -1;
+                        });
                     });
                 }).then(function(filteredElements) {
                     // If we didn't find it look through the selected groups
@@ -99,8 +101,8 @@
                     // Only click if the panel is collapsed
                     return facetGroupElement.element(by.className('panel-collapse')).getAttribute('offsetHeight').then(function(height) {
                         if (height === '0') {
-                            return facetGroupElement.click().then(function() {
-                                return e2eBase.sleep(3000).then(function() {
+                            return e2ePageBase.waitForElement(facetGroupElement).then(function() {
+                                return facetGroupElement.click().then(function() {
                                     return facetGroupElement;
                                 });
                             });
@@ -121,9 +123,7 @@
             facetIndexes.forEach(function(facetIndex) {
                 if (facetIndex >= SHOW_POPUP_LIST_LIMIT) {
                     // Click on more options link
-                    facetGroupElement.element(by.className('listMore')).click().then(function() {
-                        e2eBase.sleep(browser.params.mediumSleep);
-                    });
+                    facetGroupElement.element(by.className('listMore')).click();
                 }
             });
 
@@ -139,8 +139,10 @@
                                 buttonEl.element(by.className('checkMark-selected')).isPresent().then(function(present) {
                                     if (!present) {
                                         // Click the item
-                                        buttonEl.click().then(function() {
-                                            e2eBase.sleep(browser.params.mediumSleep);
+                                        e2ePageBase.waitForElement(buttonEl).then(function() {
+                                            buttonEl.click().then(function() {
+                                                e2ePageBase.waitForElementToBeStale(buttonEl.element(by.className('checkMark')));
+                                            });
                                         });
                                     }
                                 });
@@ -188,26 +190,11 @@
                 element.all(by.className('selectedToken')).then(function(items) {
                     for (var i = (items.length) - 1; i >= 0; --i) {
                         items[i].element(by.className('clearFacet')).click();
-                        e2ePageBase.waitForElementToBeStale(items[i]);
                     }
                 }).then(function() {
                     e2ePageBase.waitForElementToBeStale(element(by.className('facetSelections')));
                 });
             })
-        };
-
-        /**
-         * Function that will clear all facet items form popup menu.
-         * @param facets array
-         */
-        this.clearAllFacetTokensFromPopUp = function() {
-            this.PopUpContainerClearFacet.then(function(facetItems) {
-                for (var i = 0; i < facetItems.length; i++) {
-                    facetItems[i].click();
-                    //TODO stale element issue without this sleep.
-                    e2eBase.sleep(browser.params.largeSleep);
-                }
-            });
         };
 
     };
