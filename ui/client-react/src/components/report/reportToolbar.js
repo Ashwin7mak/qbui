@@ -316,7 +316,9 @@ var ReportToolbar = React.createClass({
                           filteredRecordCount={filteredRecordCount}
                           nameForRecords="Records"
                     />
+
                 {this.props.pageActions}
+
             </div>
         );
 
