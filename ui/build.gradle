@@ -266,6 +266,10 @@ task npmInstallVerbose(type: NpmTask) {
     args = ['install', '--verbose', '--debug' ]
 }
 
+task npmInstallLean(type: NpmTask) {
+    args = ['install']
+}
+
 task npmListConfig(type: NpmTask) {
     args = ['config', 'ls', '-l' ]
 }
