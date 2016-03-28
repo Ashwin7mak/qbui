@@ -67,6 +67,12 @@ let AGGrid = React.createClass({
         this.columnApi = params.columnApi;
     },
 
+    /**
+     * Callback that the grid uses to figure out whether to show grouped data or not.
+     * And if so then how to use the rowItems to figure out grouped info.
+     * @param rowItem
+     * @returns {*}
+     */
     getNodeChildDetails(rowItem) {
         if (rowItem.group) {
             return {
@@ -80,6 +86,11 @@ let AGGrid = React.createClass({
             return null;
         }
     },
+    /**
+     * Renderer for the group header row.
+     * @param params
+     * @returns {Element}
+     */
     getGroupRowRenderer(params) {
         let groupCellText = document.createElement("span");
         groupCellText.className = "group-header";
@@ -92,7 +103,8 @@ let AGGrid = React.createClass({
     },
     // For some reason react always thinks the component needs to be re-rendered because props have changed.
     // Analysis shows that the action column renderer is returning notEquals, event though nothing has changed.
-    // Since re-render is expensive the following figures out if ALL is same and the only piece that has changed is the "actions" column then dont update.
+    // Since re-render is expensive the following figures out if ALL is same
+    // and the only piece that has changed is the "actions" column then don't update.
     shouldComponentUpdate(nextProps, nextState) {
         if (!_.isEqual(nextState, this.state)) {
             return true;
@@ -228,6 +240,12 @@ let AGGrid = React.createClass({
     onMenuExit() {
         this.setState({toolsMenuOpen:false});
     },
+    /**
+     * There seems to be bug in getSelectedRows callback of grid where
+     * it also returns group header rows. This one weans those out to select
+     * only valid rows.
+     * @returns {Array}
+     */
     getSelectedRows() {
         let rows = [];
         if (this.api) {
@@ -262,7 +280,10 @@ let AGGrid = React.createClass({
                 React.cloneElement(this.props.reportHeader, {key:"reportHeader", onMenuEnter:this.onMenuEnter, onMenuExit:this.onMenuExit})}
             </div>));
     },
-
+    /**
+     * Callback - what to do when the master group expand/collapse is clicked
+     * @param element
+     */
     onGroupsExpand(element) {
         if (!element.getAttribute("state")) {
             element = element.parentElement;
@@ -276,6 +297,10 @@ let AGGrid = React.createClass({
         }
     },
 
+    /**
+     * Builder for "checkbox" column for the grid
+     * Also contains grouping expand/collpase icon if grouping is turned on
+     */
     getCheckBoxColumn() {
         //Add checkbox column
         let checkBoxCol = {};
@@ -321,6 +346,9 @@ let AGGrid = React.createClass({
         }
         return checkBoxCol;
     },
+    /**
+     * Builder for record actions column for the grid.
+     */
     getActionsColumn() {
         return {
             headerName: "", //for ag-grid
