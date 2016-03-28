@@ -13,6 +13,13 @@ import './topNav.scss';
 var TopNav = React.createClass({
     mixins: [FluxMixin],
 
+    propTypes: {
+        showOnSmall: React.PropTypes.bool,
+        title: React.PropTypes.node,
+        onNavClick: React.PropTypes.func,
+        globalActions: React.PropTypes.element
+    },
+
     searchChanged: function(ev) {
         const text = ev.target.value;
         let flux = this.getFlux();
@@ -21,8 +28,8 @@ var TopNav = React.createClass({
 
     getTopTitle() {
         return this.props.title && (
-                <div className="navItem topTitle">{this.props.title.icon &&
-                    <QBicon icon={this.props.title.icon}/>}<span>{this.props.title.name}</span>
+                <div className="topTitle">
+                    {this.props.title}
                 </div>);
     },
     render: function() {
@@ -40,11 +47,11 @@ var TopNav = React.createClass({
                                 <QBicon icon="hamburger" />
                             </a>
                         </div>
-
                         {this.getTopTitle()}
                     </div>
 
                     <div className="navGroup center">
+
                         <ButtonGroup className="navItem" ButtonGroup>
 
                             <OverlayTrigger trigger="click" rootClose placement="bottom" overlay={

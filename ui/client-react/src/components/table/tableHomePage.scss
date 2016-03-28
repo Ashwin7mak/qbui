@@ -1,0 +1,17 @@
+.tableHomepageContainer {
+    display:flex;
+    flex-direction:column;
+    flex:1 1 auto;
+
+    .layout-stage {
+        flex: 0 0 auto;
+
+        .tableName {
+            padding-left:5px;
+        }
+    }
+    .table-content {
+        flex:1 1 auto;
+        padding: 0 10px;
+    }
+}

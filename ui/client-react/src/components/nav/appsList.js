@@ -7,8 +7,7 @@ let AppsList = React.createClass({
 
     propTypes: {
         apps: React.PropTypes.array.isRequired,
-        onSelectApp: React.PropTypes.func.isRequired,
-        open: React.PropTypes.bool.isRequired
+        onSelectApp: React.PropTypes.func.isRequired
     },
     getInitialState() {
         return {
@@ -27,7 +26,7 @@ let AppsList = React.createClass({
         return this.props.apps && this.props.apps.map((app) => {
             app.icon = 'favicon';
             return this.searchMatches(app.name) &&
-                <NavItem key={app.id} item={app} onSelect={this.props.onSelectApp} {...this.props} />;
+                <NavItem key={app.id} item={app} onSelect={this.props.onSelectApp} open={true}  />;
         });
     },
     onClickApps() {
@@ -45,7 +44,7 @@ let AppsList = React.createClass({
                 <NavItem item={{msg: 'nav.appsHeading'}}
                          isHeading={true}
                          secondaryIcon={"search"}
-                         onClick={this.onClickApps} {...this.props} />
+                         onClick={this.onClickApps} open={true} />
 
                 <li className={this.state.searching ? "search open" : "search"}>
                     <input type="text"

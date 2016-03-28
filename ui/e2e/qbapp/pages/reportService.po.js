@@ -409,16 +409,26 @@
         /**
          * Assertion function that will test the properties of the leftNav
          */
-        this.assertNavProperties = function(breakpointSize, open, clientWidth) {
-            e2eBase.sleep(browser.params.smallSleep);
+        this.assertNavProperties = function(breakpointSize, open, offsetWidth) {
+            // Sleep to handle any animations of the leftNav (opening or closing)
+            e2eBase.sleep(browser.params.tinySleep);
             // Check properties of nav bar
-            if (open) {
-                expect(this.navMenuEl.getAttribute('class')).toMatch('open');
-                expect(this.navMenuEl.getAttribute('offsetWidth')).toMatch(clientWidth);
+            // First subclass of leftNav deals with the small BP - either open or closed
+            // Second subclass is for the other BPs - either collapsed or expanded
+            if (open && breakpointSize === 'small') {
+                expect(this.navMenuEl.getAttribute('class')).toContain('open');
+                expect(this.navMenuEl.getAttribute('offsetWidth')).toMatch(offsetWidth);
+            } else if (open && breakpointSize !== 'small') {
+                expect(this.navMenuEl.getAttribute('class')).toContain('expanded');
+                expect(this.navMenuEl.getAttribute('offsetWidth')).toMatch(offsetWidth);
+            } else if (!open && breakpointSize === 'small') {
+                expect(this.navMenuEl.getAttribute('class')).toContain('closed');
+                expect(this.navMenuEl.getAttribute('offsetWidth')).toMatch(offsetWidth);
             } else {
-                expect(this.navMenuEl.getAttribute('class')).toMatch('closed');
-                expect(this.navMenuEl.getAttribute('offsetWidth')).toMatch(clientWidth);
+                expect(this.navMenuEl.getAttribute('class')).toContain('collapsed');
+                expect(this.navMenuEl.getAttribute('offsetWidth')).toMatch(offsetWidth);
             }
+
         };
 
         // Click the app list toggle in the leftNav
@@ -451,6 +461,27 @@
                 deferred.reject(error);
             }
             return deferred.promise;
+        };
+
+        // Click the topNav hamburger icon (need to be on a dashboard page or loaded report not on small)
+        this.clickTopNavHamburger = function() {
+            var self = this;
+            return e2ePageBase.waitForElement(self.topNavDivEl).then(function() {
+                self.topNavToggleHamburgerEl.click().then(function() {
+                    e2ePageBase.waitForElement(self.navMenuEl);
+                });
+            });
+        };
+
+
+        // Click the reportHeader hamburger icon (need to be on a loaded report on small)
+        this.clickReportHeaderHamburger = function() {
+            var self = this;
+            return e2ePageBase.waitForElement(self.reportHeaderEl).then(function() {
+                self.reportHeaderToggleHamburgerEl.click().then(function() {
+                    e2ePageBase.waitForElement(self.navMenuEl);
+                });
+            });
         };
 
         // Gets text from the topNav

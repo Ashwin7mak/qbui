@@ -100,7 +100,7 @@
       border: none;
       box-shadow: none;
       border-top:  1px solid $facetMenu-BorderColor;
-      padding: 10px 15px 10px 15px;
+      padding: 0;
       border-radius: 0;
 
       &:hover {
@@ -119,6 +119,7 @@
     .panel-default > .panel-heading .panel-title .facetName {
       font-size: 16px;
       margin: 0;
+      padding: 10px 15px 10px 15px;
     }
     .selectionInfo.small {
       opacity: 0.7;
@@ -224,6 +225,7 @@
     }
     .reportContainer .reportToolsAndContentContainer .reportToolbar {
 
+        height:40px;
         input {
             color: $search-input-fg;
         }

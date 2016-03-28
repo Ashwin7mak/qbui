@@ -7,9 +7,12 @@ import {Collapse, Well} from 'react-bootstrap';
 import Logger from '../../utils/logger';
 var logger = new Logger();
 
-//dangerouslySetInnerHTML={{__html: this.props.stageContent}}
-
 var Stage = React.createClass({
+
+    propTypes: {
+        pageActions: React.PropTypes.element,
+        stageHeadline: React.PropTypes.node
+    },
 
     getInitialState: function() {
         return {open: true};
@@ -22,10 +25,16 @@ var Stage = React.createClass({
 
     render: function() {
 
-        let classes = 'layout-stage ';// + (this.state.open ? 'stage-open' : 'state-closed');
-
         return (
-            <div className={classes}>
+            <div className="layout-stage">
+                <div className="stageHeader">
+                    <div className="stageLeft">
+                        {this.props.stageHeadline}
+                    </div>
+                    <div className="stageRight pageActions">
+                        {this.props.pageActions}
+                    </div>
+                </div>
                 <Collapse in={this.state.open}>
                     <Well>{this.props.children}</Well>
                 </Collapse>

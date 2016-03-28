@@ -49,7 +49,8 @@ export default {
             searchAppsPlaceholder: "Search apps...",
             searchTablesPlaceholder: "Search tables...",
             searchReportsPlaceholder: "Search reports...",
-            searchRecordsPlaceholder: "Search..."
+            searchRecordsPlaceholder: "Search...",
+            backToReport: "Back to the report"
         },
         grid: {
             no_data: "There is no data to display."
@@ -59,6 +60,26 @@ export default {
             alerts: "Alerts",
             help: "Help",
             logout: "Logout"
+        },
+        pageActions: {
+            addRecord: "Add a record",
+            favorite: "Favorite",
+            gridEdit: "Grid Edit",
+            edit: "Edit",
+            delete: "Delete",
+            email: "Email",
+            print: "Print",
+            customizeReport: "Customize this Report",
+            customizeForm: "Customize this Form",
+            customizePage: "Customize this Page"
+        },
+        iconActions: {
+            more: "More..."
+        },
+        recordActions: {
+            previous: "Previous",
+            return: "Return to report",
+            next: "Next"
         },
         header: {
             menu: {

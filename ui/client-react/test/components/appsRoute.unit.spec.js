@@ -10,7 +10,8 @@ describe('AppsRoute functions', () => {
     let component;
     let flux = {
         actions:{
-            showTopNav: function() {return;}
+            showTopNav: function() {return;},
+            setTopTitle: function() {return;}
         }
     };
     it('test render of component', () => {

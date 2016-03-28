@@ -241,7 +241,7 @@ let AGGrid = React.createClass({
         return (this.props.reportHeader && this.props.selectionActions && (
             <div className={classes}>{hasSelection ?
                 React.cloneElement(this.props.selectionActions, {key:"selectionActions", selection: this.state.selectedRows}) :
-                React.cloneElement(this.props.reportHeader, {key:"reportHeader", onMenuEnter:this.onMenuEnter, onMenuExit:this.onMenuExit})}
+                React.cloneElement(this.props.reportHeader, {key:"reportHeader", pageActions: this.props.pageActions, onMenuEnter:this.onMenuEnter, onMenuExit:this.onMenuExit})}
             </div>));
     },
     /**
@@ -275,6 +275,8 @@ let AGGrid = React.createClass({
 
         // Add Actions column. Put this as the last column in the grid and then make the column 1px wide so it doesnt really "show".
         // CSS takes care of positioning the content of this column over the previous columns so it looks like an overlay.
+
+        // todo: optimize/refactor actions hover for performance
         if (columns.length > 0) {
             columns.push({
                 headerName: "", //for ag-grid
