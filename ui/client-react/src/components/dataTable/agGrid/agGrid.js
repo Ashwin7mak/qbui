@@ -175,6 +175,7 @@ let AGGrid = React.createClass({
         if (params.node.field === "group") {
             return;
         }
+        //For click on record action icons do nothing
         if (params.event.target &&
             params.event.target.className.indexOf("qbIcon") !== -1 ||
             params.event.target.className.indexOf("iconLink") !== -1) {
