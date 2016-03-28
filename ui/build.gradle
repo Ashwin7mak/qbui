@@ -274,6 +274,10 @@ task npmListConfig(type: NpmTask) {
     args = ['config', 'ls', '-l' ]
 }
 
+task npmPrune(type: NpmTask) {
+    args = ['prune']
+}
+
 task npmPruneProduction (type: NpmTask) {
     args = ['prune', '--production']
     execOverrides {
