@@ -33,7 +33,6 @@
     display:flex;
     flex: 1 1 auto;
 
-
     .tableActionsContainer {
         position: relative;
         padding-left: 10px;
@@ -46,7 +45,6 @@
 
         }
     }
-
 
     .reportToolbar {
         display: flex;
@@ -66,16 +64,18 @@
         }
         .leftReportToolbar {
             display: flex;
+            flex-direction: row;
+            flex: 1 1 auto;
             align-items: center;
             margin-top: 10px;
+            margin-bottom: 10px;
         }
         .recordsCount{
             flex: 0 0 auto;
             margin-left:5px;
         }
         .filterSearchBoxContainer {
-            flex: 0 1 auto;
-            margin-bottom: 10px;
+            flex-shrink: 0;
             input {
                 width:100%;
                 min-width: 60px;
@@ -83,11 +83,7 @@
             }
         }
         >.facetsMenuContainer {
-            flex: 1 2 auto;
-        }
-        .facetsMenuButton {
-            margin-left: 1.5rem;
-            cursor: pointer;
+            flex-shrink: 1;
         }
 
         .clearAllFacets {
@@ -109,7 +105,6 @@
         flex: 1 1 auto;
         width:100%;
     }
-
 
 }
 

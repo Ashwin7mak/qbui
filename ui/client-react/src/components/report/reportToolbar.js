@@ -282,12 +282,6 @@ var ReportToolbar = React.createClass({
             <div className={"reportToolbar " + (hasFacets ? "" : "noFacets")}>
 
                     <div className="leftReportToolbar">
-                    <RecordsCount recordCount={recordCount}
-                                   isFiltered={this.isFiltered() && !this.props.reportData.loading}
-                                   isLoading={isLoading}
-                                   filteredRecordCount={filteredRecordCount}
-                                   nameForRecords="Records"
-                       />
 
                         {/* Search and grouping icon will go in the toolbar here per discussion with xd-ers */}
 
@@ -300,22 +294,28 @@ var ReportToolbar = React.createClass({
                                              value={this.props.searchStringForFiltering}
                                 {...this.props} />
                         }
-                </div>
 
-                {/* check if facets is enabled for this report,
-                 also hide Facets Menu Button if facets disabled  */}
-                {(recordCount && hasFacets) &&
-                    (<FacetsMenu className="facetMenu"
-                        {...this.props}
-                                 isLoading={isLoading}
-                                 selectedValues={this.props.selections}
-                                 onFacetSelect={this.handleFacetSelect}
-                                 onFacetDeselect={this.handleFacetDeselect}
-                                 onFacetClearFieldSelects={this.handleFacetClearFieldSelects}
-                    />)
-                }
+                        {/* check if facets is enabled for this report,
+                         also hide Facets Menu Button if facets disabled  */}
+                        {(recordCount && hasFacets) &&
+                            (<FacetsMenu className="facetMenu"
+                                {...this.props}
+                                         isLoading={isLoading}
+                                         selectedValues={this.props.selections}
+                                         onFacetSelect={this.handleFacetSelect}
+                                         onFacetDeselect={this.handleFacetDeselect}
+                                         onFacetClearFieldSelects={this.handleFacetClearFieldSelects}
+                            />)
+                        }
+                    </div>
 
-                {hasFacets && <div id="facetsMenuTarget"></div>}
+
+                    <RecordsCount recordCount={recordCount}
+                          isFiltered={this.isFiltered() && !this.props.reportData.loading}
+                          isLoading={isLoading}
+                          filteredRecordCount={filteredRecordCount}
+                          nameForRecords="Records"
+                    />
                 {this.props.pageActions}
             </div>
         );

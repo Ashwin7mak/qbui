@@ -230,7 +230,7 @@ var FacetsMenu = React.createClass({
         let hasSelections = this.props.selectedValues && this.props.selectedValues.hasAnySelections();
         return (
             <div className="facetsMenuContainer">
-            <div>
+
                 {/* the filter icon button */}
                 <div className={"facetsMenuButton " +  (this.state.show ? "popoverShown " : "") +
                   (hasSelections ? "withSelections " : "withoutSelections")}
@@ -247,7 +247,6 @@ var FacetsMenu = React.createClass({
                 <Overlay container={this} placement="bottom"
                          ref="facetOverlayTrigger" rootClose={true}
                          show={this.state.show}
-                         target={()=> document.getElementById('facetsMenuTarget')}
                          onHide={() => flux.actions.showFacetMenu({show:false})}
                          onEntering={this.props.onMenuEnter} onExited={this.props.onMenuExit} >
                                     <FacetsList
@@ -271,7 +270,6 @@ var FacetsMenu = React.createClass({
                 {!this.context.touch &&
                 <div className="selectedFacets" onClick={e => this.dontClose(e)}>{this.renderSelectedFacets()}</div>
                 }
-            </div>
 
             </div>
         );

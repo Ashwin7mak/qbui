@@ -305,7 +305,7 @@
                             if (txt === 'There is no data to display.') {
                                 //Verify the toolbar still displays with filter button in it
                                 expect(reportServicePage.griddleWrapperEl.getAttribute('innerText')).toEqual('There is no data to display.');
-                                expect(reportServicePage.reportRecordsCount.getAttribute('innerText')).toEqual('0 of 6');
+                                expect(reportServicePage.reportRecordsCount.getAttribute('innerText')).toEqual('0 of 6 Records');
                                 expect(reportServicePage.reportFilterBtn.isDisplayed()).toBeTruthy();
                             } else if (txt !== 'There is no data to display.') {
                                 for (var i = 0; i < facetTestcase.facets.length; i++) {
