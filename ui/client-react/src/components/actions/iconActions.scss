@@ -22,6 +22,7 @@ $icon-action-icon-color:#fff;
         .iconActionButton:hover {
             background: $nav-hover-bg;
             color: $nav-hover-fg;
+            cursor: pointer;
         }
     }
 }
