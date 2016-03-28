@@ -199,7 +199,7 @@
                 }).then(function() {
                     e2ePageBase.waitForElementToBeStale(element(by.className('facetSelections')));
                 });
-            })
+            });
         };
 
     };

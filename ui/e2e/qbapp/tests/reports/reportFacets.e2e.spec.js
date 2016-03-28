@@ -212,17 +212,17 @@
                                 // Remove Record ID# from the array since it cannot be a facet
                                 tableColHeaders.shift();
                                 // Map all facet groups from the facet popup
-                                reportFacetsPage.unselectedFacetGroupsElList.map(function (elm) {
+                                reportFacetsPage.unselectedFacetGroupsElList.map(function(elm) {
                                     return elm.getText();
-                                }).then(function (facetGroupNames) {
+                                }).then(function(facetGroupNames) {
                                     // Ensure each facet group field is present on the table report
-                                    facetGroupNames.forEach(function (facetGroupName) {
+                                    facetGroupNames.forEach(function(facetGroupName) {
                                         expect(tableColHeaders).toContain(facetGroupName);
                                     });
                                 }).then(function() {
                                     reportServicePage.reportRecordsCount.click().then(function() {
                                         reportFacetsPage.waitForElementToBeClickable(reportFacetsPage.reportFacetMenuContainer).then(function() {
-                                            reportFacetsPage.waitForElementToBeStale(reportFacetsPage.reportFacetPopUpMenu).then(function () {
+                                            reportFacetsPage.waitForElementToBeStale(reportFacetsPage.reportFacetPopUpMenu).then(function() {
                                                 done();
                                             });
                                         });
