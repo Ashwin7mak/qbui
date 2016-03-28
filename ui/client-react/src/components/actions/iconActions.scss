@@ -3,8 +3,7 @@
 $icon-action-icon-color:#fff;
 
 @include not-small-breakpoint {
-    .secondaryBar .iconActions
-    {
+    .secondaryBar .iconActions {
         display: none;
     }
 

@@ -69,7 +69,7 @@ let NavItem = React.createClass({
             if (item.msg) {
                 label = (<I18nMessage message={item.msg}/>);
             }
-            const tooltip = (<Tooltip className={ this.props.showTooltip ? 'leftNavTooltip' : 'leftNavTooltip show' }
+            const tooltip = (<Tooltip className={ this.props.showTooltip ? 'leftNavTooltip show' : 'leftNavTooltip' }
                                       id={tooltipID}>{label}</Tooltip>);
 
             return this.props.showToolTip ?

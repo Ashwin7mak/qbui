@@ -51,12 +51,12 @@ let AppHomePageRoute = React.createClass({
         this.selectAppFromParams(props.params, true);
     },
 
-    getPageActions(menuAfter = 0) {
+    getPageActions(maxButtonsBeforeMenu = 0) {
         const actions = [
             {msg: 'pageActions.print', icon:'print'},
             {msg: 'pageActions.customizePage', icon:'settings-hollow'}
         ];
-        return (<IconActions className="pageActions" actions={actions} menuAfter={menuAfter} {...this.props}/>);
+        return (<IconActions className="pageActions" actions={actions} maxButtonsBeforeMenu={maxButtonsBeforeMenu} {...this.props}/>);
     },
     getStageHeadline() {
         return (this.props.selectedApp &&

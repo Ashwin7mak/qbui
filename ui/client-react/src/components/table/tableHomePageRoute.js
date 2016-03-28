@@ -63,7 +63,7 @@ let TableHomePageRoute = React.createClass({
             </div>
         );
     },
-    getPageActions(menuAfter = 0) {
+    getPageActions(maxButtonsBeforeMenu = 0) {
         const actions = [
             {msg: 'pageActions.addRecord', icon:'add'},
             {msg: 'pageActions.gridEdit', icon:'report-grid-edit'},
@@ -71,7 +71,7 @@ let TableHomePageRoute = React.createClass({
             {msg: 'pageActions.print', icon:'print'},
             {msg: 'pageActions.customizePage', icon:'settings-hollow'}
         ];
-        return (<IconActions className="pageActions" actions={actions} menuAfter={menuAfter} {...this.props}/>);
+        return (<IconActions className="pageActions" actions={actions} maxButtonsBeforeMenu={maxButtonsBeforeMenu} {...this.props}/>);
     },
 
     getSecondaryBar() {

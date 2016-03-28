@@ -15,19 +15,13 @@ let ActionIcon = React.createClass({
         onClick:React.PropTypes.func
     },
 
-    getDefaultProps() {
-        return {
-            bsRole: ""
-        };
-    },
-
     render() {
 
         const tooltip = <Tooltip id={this.props.tip} positionTop={22}>{this.props.tip}</Tooltip>;
 
         return (
             <OverlayTrigger placement="top" overlay={tooltip}>
-                <a href="#" className={"iconLink icon-" + this.props.icon} onClick={this.props.onClick} bsStyle={this.props.bsRole}>
+                <a href="#" className={"iconLink icon-" + this.props.icon} onClick={this.props.onClick}>
                     <QBicon icon={this.props.icon}/>
                 </a>
             </OverlayTrigger>);

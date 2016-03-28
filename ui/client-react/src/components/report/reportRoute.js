@@ -50,7 +50,7 @@ var ReportRoute = React.createClass({
             <ReportHeader reportData={this.props.reportData}/>);
     },
 
-    getPageActions(menuAfter) {
+    getPageActions(maxButtonsBeforeMenu) {
         const actions = [
             {msg: 'pageActions.addRecord', icon:'add'},
             {msg: 'pageActions.favorite', icon:'star'},
@@ -59,7 +59,7 @@ var ReportRoute = React.createClass({
             {msg: 'pageActions.print', icon:'print'},
             {msg: 'pageActions.customizeReport', icon:'settings-hollow'},
         ];
-        return (<IconActions className="pageActions" actions={actions} menuAfter={menuAfter} {...this.props}/>);
+        return (<IconActions className="pageActions" actions={actions} maxButtonsBeforeMenu={maxButtonsBeforeMenu} {...this.props}/>);
     },
 
     getBreadcrumbs() {

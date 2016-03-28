@@ -71,7 +71,7 @@ var RecordRoute = React.createClass({
         }
 
     },
-    getPageActions(menuAfter = 0) {
+    getPageActions(maxButtonsBeforeMenu = 0) {
         const actions = [
             {msg: 'pageActions.addRecord', icon:'add', className:'addRecord'},
             {msg: 'pageActions.edit', icon:'edit'},
@@ -80,7 +80,7 @@ var RecordRoute = React.createClass({
             {msg: 'pageActions.delete', icon:'delete'},
             {msg: 'pageActions.customizeForm', icon:'settings-hollow'},
         ];
-        return (<IconActions className="pageActions" actions={actions} menuAfter={menuAfter} {...this.props}/>);
+        return (<IconActions className="pageActions" actions={actions} maxButtonsBeforeMenu={maxButtonsBeforeMenu} {...this.props}/>);
     },
 
     render() {

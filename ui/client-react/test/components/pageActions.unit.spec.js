@@ -47,7 +47,7 @@ describe('IconActions functions', () => {
     });
 
     it('test render of all-menu component', () => {
-        component = TestUtils.renderIntoDocument(<IconActions actions={actions} menuAfter={0}/>);
+        component = TestUtils.renderIntoDocument(<IconActions actions={actions} maxButtonsBeforeMenu={0}/>);
         expect(TestUtils.isCompositeComponent(component)).toBeTruthy();
 
         var icons = TestUtils.scryRenderedDOMComponentsWithClass(component, "iconActionButton");
@@ -58,7 +58,7 @@ describe('IconActions functions', () => {
     });
 
     it('test render of menu after 1st component', () => {
-        component = TestUtils.renderIntoDocument(<IconActions actions={actions} menuAfter={1}/>);
+        component = TestUtils.renderIntoDocument(<IconActions actions={actions} maxButtonsBeforeMenu={1}/>);
         expect(TestUtils.isCompositeComponent(component)).toBeTruthy();
 
         var icons = TestUtils.scryRenderedDOMComponentsWithClass(component, "iconActionButton");
