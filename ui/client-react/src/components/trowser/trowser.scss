@@ -43,8 +43,8 @@ $action-separator-color: #486c8f;
         }
         .rightIcons {
             flex: 0 0 auto;
-            height:40px;
             button {
+                height:40px;
                 font-size: 18px;
                 color: #fff;
                 background-color: $trowser-header-bg;
@@ -54,7 +54,6 @@ $action-separator-color: #486c8f;
             button:hover {
                 background-color: $nav-hover-bg;
                 color: $nav-hover-fg;
-
             }
         }
     }
