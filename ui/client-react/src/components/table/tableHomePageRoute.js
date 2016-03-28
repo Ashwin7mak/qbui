@@ -49,6 +49,7 @@ let TableHomePageRoute = React.createClass({
     componentDidMount() {
         let flux = this.getFlux();
         flux.actions.showTopNav();
+        flux.actions.setTopTitle();
         this.loadReportsFromParams(this.props.params);
     },
     componentWillReceiveProps: function(props) {

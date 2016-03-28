@@ -12,7 +12,8 @@ describe('TableHomePage functions', () => {
         actions:{
             selectTableId: function() {return;},
             loadReports: function() {return;},
-            showTopNav: function() {return;}
+            showTopNav: function() {return;},
+            setTopTitle: function() {return;}
         }
     };
 

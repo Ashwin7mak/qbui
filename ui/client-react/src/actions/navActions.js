@@ -30,6 +30,13 @@ let navActions = {
     setSearching(searching) {
         this.dispatch(actions.SEARCHING, searching);
     },
+    /**
+     * set a top nav title
+     * @param title a react node (or null to omit one)
+     */
+    setTopTitle(title = null) {
+        this.dispatch(actions.SET_TOP_TITLE, title);
+    },
     showTopNav() {
         this.dispatch(actions.SHOW_TOP_NAV);
     },

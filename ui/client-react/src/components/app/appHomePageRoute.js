@@ -40,10 +40,20 @@ let AppHomePageRoute = React.createClass({
         }
     },
 
+    getTopTitle() {
+        return (this.props.selectedApp &&
+            <div className="topTitle">
+                <QBicon icon="favicon"/>
+                <span>{this.props.selectedApp.name}</span>
+            </div>
+        );
+    },
+
     componentDidMount() {
         // no title for now...
         let flux = this.getFlux();
         flux.actions.showTopNav();
+        flux.actions.setTopTitle(this.getTopTitle());
         this.selectAppFromParams(this.props.params);
     },
     // Triggered when properties change
@@ -63,7 +73,6 @@ let AppHomePageRoute = React.createClass({
             <div className="stageHeadline">
                 <QBicon icon="favicon"/>
                 <h3 className="appName">{this.props.selectedApp.name}</h3>
-
             </div>
         );
     },
