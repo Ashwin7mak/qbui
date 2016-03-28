@@ -103,6 +103,12 @@ var ReportRoute = React.createClass({
                                        rptId={this.props.params.rptId}
                                        pageActions={this.getPageActions(0)}
                 />
+
+                {/*
+                <div className="addNewRecord">
+                    <a href="#" className="addRecordLink"><QBicon icon="add-mini" /></a>
+                </div>
+                */}
             </div>);
         }
     }
