@@ -34,20 +34,6 @@ const ReportStage = React.createClass({
                     <div className="stage-showHide-content"><I18nMessage message={'stage.content'}/></div>
                 </div>
             </div>
-            <div className="right">
-                <div className="content">
-                    <div className="reminder">
-                        <div className="stage-showHide-content">
-                            <div className="icon"></div>
-                            <div className="header"><I18nMessage message={'stage.feedback.header'}/></div>
-                            <div className="subheader"><I18nMessage message={'stage.feedback.sub_header'}/></div>
-                        </div>
-                        <div className="button-container">
-                            <Button bsStyle="primary" onClick={this.handleClick}> {<I18nMessage message={'stage.feedback.button'}/>}</Button>
-                        </div>
-                    </div>
-                </div>
-            </div>
          </div>) :
         <div>empty</div>);
 
