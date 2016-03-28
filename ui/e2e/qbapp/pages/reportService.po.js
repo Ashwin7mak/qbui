@@ -463,6 +463,17 @@
             return deferred.promise;
         };
 
+        // Click the topNav hamburger icon (need to be on a dashboard page or loaded report not on small)
+        this.clickTopNavHamburger = function() {
+            var self = this;
+            return e2ePageBase.waitForElement(self.topNavDivEl).then(function() {
+                self.topNavToggleHamburgerEl.click().then(function() {
+                    e2ePageBase.waitForElement(self.navMenuEl);
+                });
+            });
+        };
+
+
         // Click the reportHeader hamburger icon (need to be on a loaded report on small)
         this.clickReportHeaderHamburger = function() {
             var self = this;
