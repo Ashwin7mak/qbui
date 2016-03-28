@@ -25,7 +25,15 @@ var I18nMessageMock = React.createClass({
     }
 });
 
-let flux = {};
+let flux = {
+    stores: {
+        ReportDataStore: {
+            data: {
+                filteredRecordsCount: 0
+            }
+        }
+    }
+};
 
 const fakeReportData_loading = {
     loading: true
@@ -136,6 +144,26 @@ describe('AGGrid functions', () => {
 
         expect(parent.refs.regGrid.props.records).toEqual(fakeReportData_after.data.records);
         expect(parent.refs.regGrid.props.columns).toEqual(fakeReportData_after.data.columns);
+    });
+
+    it('test render of grouped data', () => {
+        var TestParent = React.createFactory(React.createClass({
+            getInitialState() {
+                return {records: fakeReportData_before.data.records, columns: fakeReportData_before.data.columns};
+            },
+            render() {
+                return <AGGrid ref="regGrid" records={this.state.records} columns={this.state.columns} flux={flux} showGrouping={true}/>;
+            }
+        }));
+
+        var parent = TestUtils.renderIntoDocument(TestParent());
+
+        parent.setState({
+            records: fakeReportData_after.data.records,
+            columns: fakeReportData_after.data.columns
+        });
+
+        expect(parent.refs.regGrid.props.showGrouping).toEqual(true);
     });
 });
 

@@ -163,6 +163,11 @@ let AGGrid = React.createClass({
         if (params.node.field === "group") {
             return;
         }
+        if (params.event.target &&
+            params.event.target.className.indexOf("qbIcon") !== -1 ||
+            params.event.target.className.indexOf("iconLink") !== -1) {
+            return;
+        }
 
         const appId = this.props.appId;
         const tblId = this.props.tblId;
@@ -254,7 +259,7 @@ let AGGrid = React.createClass({
         return (this.props.reportHeader && this.props.selectionActions && (
             <div className={classes}>{hasSelection ?
                 React.cloneElement(this.props.selectionActions, {key:"selectionActions", selection: selectedRows}) :
-                React.cloneElement(this.props.reportHeader, {key:"reportHeader"/*, onMenuEnter:this.onMenuEnter, onMenuExit:this.onMenuExit*/})}
+                React.cloneElement(this.props.reportHeader, {key:"reportHeader", onMenuEnter:this.onMenuEnter, onMenuExit:this.onMenuExit})}
             </div>));
     },
 

@@ -173,6 +173,39 @@ let ReportDataStore = Fluxxor.createStore({
         }
         return columns;
     },
+    createTempGroupedData(reportData, fields) {
+        let groupingField1 = null;
+        let groupingField2 = null;
+        fields.forEach((field) => {
+            if (field.datatypeAttributes.type === "TEXT" && groupingField1 === null) {
+                groupingField1 = field.name;
+            }
+            if (field.datatypeAttributes.type === "RATING" && groupingField2 === null) {
+                groupingField2 = field.name;
+            }
+        });
+        if (groupingField1 &&  groupingField2) {
+            this.data.groupLevel = 2;
+        } else if (groupingField1 ||  groupingField2) {
+            this.data.groupLevel = 1;
+        }
+        var groupedData = _.groupBy(reportData, function(record) {
+            return record[groupingField1];
+        });
+        var newData = [];
+        function groupByPredicate(rec) {
+            return rec[groupingField2];
+        }
+        for (var group in groupedData) {
+            var subgroupedData = _.groupBy(groupedData[group], groupByPredicate);
+            var children = [];
+            for (var subgroup in subgroupedData) {
+                children.push({group: subgroup, children: subgroupedData[subgroup]});
+            }
+            newData.push({group: group, children: children});
+        }
+        return newData;
+    },
 
     getReportData(data, hasGrouping) {
         let fields = data.fields;
@@ -198,36 +231,7 @@ let ReportDataStore = Fluxxor.createStore({
 
         if (hasGrouping) {
             //fake group data for now. find a text and a numeric field and group data on that
-            let groupingField1 = null;
-            let groupingField2 = null;
-            fields.forEach((field) => {
-                if (field.datatypeAttributes.type === "TEXT" && groupingField1 === null) {
-                    groupingField1 = field.name;
-                }
-                if (field.datatypeAttributes.type === "RATING" && groupingField2 === null) {
-                    groupingField2 = field.name;
-                }
-            });
-            if (groupingField1 &&  groupingField2) {
-                this.data.groupLevel = 2;
-            } else if (groupingField1 ||  groupingField2) {
-                this.data.groupLevel = 1;
-            }
-            var groupedData = _.groupBy(reportData, function(record) {
-                return record[groupingField1];
-            });
-            var newData = [];
-            for (var group in groupedData) {
-                var subgroupedData = _.groupBy(groupedData[group], ((record) => {
-                    return record[groupingField2];
-                }));
-                var children = [];
-                for (var subgroup in subgroupedData) {
-                    children.push({group: subgroup, children: subgroupedData[subgroup]});
-                }
-                newData.push({group: group, children: children});
-            }
-            return newData;
+            return this.createTempGroupedData(reportData, fields);
         }
         return reportData;
     },
