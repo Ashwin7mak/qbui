@@ -139,7 +139,7 @@
                                 buttonEl.element(by.className('checkMark-selected')).isPresent().then(function(present) {
                                     if (!present) {
                                         // Click the item
-                                        e2ePageBase.waitForElement(buttonEl).then(function() {
+                                        e2ePageBase.waitForElementToBeClickable(buttonEl).then(function() {
                                             buttonEl.click().then(function() {
                                                 e2ePageBase.waitForElementToBeStale(buttonEl.element(by.className('checkMark')));
                                             });
@@ -169,7 +169,9 @@
             // Get all Selected items from popup and push into an array for verification
             return this.reportFacetPopUpMenu.all(by.className('selected')).map(
                 function(selectedGroupItem, index) {
-                    return selectedGroupItem.getText();
+                    return e2ePageBase.waitForElement(selectedGroupItem).then(function() {
+                        return selectedGroupItem.getText();
+                    });
                 }
             );
         };
@@ -189,7 +191,10 @@
             return e2ePageBase.waitForElement(element(by.className('facetSelections'))).then(function() {
                 element.all(by.className('selectedToken')).then(function(items) {
                     for (var i = (items.length) - 1; i >= 0; --i) {
-                        items[i].element(by.className('clearFacet')).click();
+                        items[i].element(by.className('clearFacet')).click().then(function() {
+                            //TODO: Figure out how to handle with sleeps (waiting for element to be stale doesn't seem to work)
+                            e2eBase.sleep(browser.params.tinySleep);
+                        });
                     }
                 }).then(function() {
                     e2ePageBase.waitForElementToBeStale(element(by.className('facetSelections')));

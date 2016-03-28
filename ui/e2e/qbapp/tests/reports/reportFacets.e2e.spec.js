@@ -286,66 +286,68 @@
                     ];
                 }
 
-                facetTestCases().forEach(function(facetTestcase) {
-                    it('Test case: ' + facetTestcase.message, function(done) {
-                        // Click on facet carat
-                        reportFacetsPage.waitForElementToBeClickable(reportFacetsPage.reportFacetFilterBtnCaret).then(function() {
-                            reportFacetsPage.reportFacetFilterBtnCaret.click();
-                            // Verify the popup menu is displayed
-                            reportFacetsPage.waitForElement(reportFacetsPage.reportFacetPopUpMenu).then(function() {
-                                expect(reportFacetsPage.reportFacetPopUpMenu.isDisplayed()).toBeTruthy();
-                            });
-                        }).then(function() {
-                            for (var i = 0; i < facetTestcase.facets.length; i++) {
-                                // Select facet group and items
-                                reportFacetsPage.selectGroupAndFacetItems(facetTestcase.facets[i].group, facetTestcase.facets[i].ItemIndex).then(function(facetSelections) {
-                                    if (testcase.breakpointSize === 'small') {
-                                        // Verify tokens is present in the DOM but not displayed on small breakpoint
-                                        expect(reportFacetsPage.reportSelectedFacets.isPresent).toBeTruthy();
-                                        expect(reportFacetsPage.reportSelectedFacets.isDisplayed()).toBeFalsy();
-                                    } else {
-                                        // Get facet tokens from the reports toolbar and verify against selected items on reports toolbar
-                                        reportFacetsPage.reportFacetNameSelections.map(function(tokenName, tokenindex) {
-                                            return tokenName.getText();
-                                        }).then(function(selections) {
-                                            // Sort each array before comparing
-                                            expect(selections.sort()).toEqual(facetSelections.sort());
-                                        });
-                                    }
+                if (testcase.breakpointSize === 'xlarge') {
+                    facetTestCases().forEach(function(facetTestcase) {
+                        it('Test case: ' + facetTestcase.message, function(done) {
+                            // Click on facet carat
+                            reportFacetsPage.waitForElementToBeClickable(reportFacetsPage.reportFacetFilterBtnCaret).then(function() {
+                                reportFacetsPage.reportFacetFilterBtnCaret.click();
+                                // Verify the popup menu is displayed
+                                reportFacetsPage.waitForElement(reportFacetsPage.reportFacetPopUpMenu).then(function() {
+                                    expect(reportFacetsPage.reportFacetPopUpMenu.isDisplayed()).toBeTruthy();
                                 });
-                            }
-                        }).then(function() {
-                            reportServicePage.griddleWrapperEl.getAttribute('innerText').then(function(txt) {
-                                if (txt === 'There is no data to display.') {
-                                    //Verify the toolbar still displays with filter button in it
-                                    expect(reportServicePage.griddleWrapperEl.getAttribute('innerText')).toEqual('There is no data to display.');
-                                    expect(reportServicePage.reportRecordsCount.getAttribute('innerText')).toEqual('0 of 6 Records');
-                                    expect(reportFacetsPage.reportFacetFilterBtn.isDisplayed()).toBeTruthy();
-                                } else if (txt !== 'There is no data to display.') {
-                                    for (var i = 0; i < facetTestcase.facets.length; i++) {
-                                        verifyFacetTableResults(facetTestcase.facets[i].group);
-                                    }
-                                }
-                            });
-                        }).then(function() {
-                            // Finally clear all facets from popup menu
-                            for (var j = 0; j < facetTestcase.facets.length; j++) {
-                                reportFacetsPage.getFacetGroupElement(facetTestcase.facets[j].group).then(function(facetGroupEl) {
-                                    reportFacetsPage.waitForElementToBeClickable(facetGroupEl).then(function() {
-                                        reportFacetsPage.clickClearAllFacetsIcon(facetGroupEl);
+                            }).then(function() {
+                                for (var i = 0; i < facetTestcase.facets.length; i++) {
+                                    // Select facet group and items
+                                    reportFacetsPage.selectGroupAndFacetItems(facetTestcase.facets[i].group, facetTestcase.facets[i].ItemIndex).then(function(facetSelections) {
+                                        if (testcase.breakpointSize === 'small') {
+                                            // Verify tokens is present in the DOM but not displayed on small breakpoint
+                                            expect(reportFacetsPage.reportSelectedFacets.isPresent).toBeTruthy();
+                                            expect(reportFacetsPage.reportSelectedFacets.isDisplayed()).toBeFalsy();
+                                        } else {
+                                            // Get facet tokens from the reports toolbar and verify against selected items on reports toolbar
+                                            reportFacetsPage.reportFacetNameSelections.map(function(tokenName, tokenindex) {
+                                                return tokenName.getText();
+                                            }).then(function(selections) {
+                                                // Sort each array before comparing
+                                                expect(selections.sort()).toEqual(facetSelections.sort());
+                                            });
+                                        }
                                     });
+                                }
+                            }).then(function() {
+                                reportServicePage.griddleWrapperEl.getAttribute('innerText').then(function(txt) {
+                                    if (txt === 'There is no data to display.') {
+                                        //Verify the toolbar still displays with filter button in it
+                                        expect(reportServicePage.griddleWrapperEl.getAttribute('innerText')).toEqual('There is no data to display.');
+                                        expect(reportServicePage.reportRecordsCount.getAttribute('innerText')).toEqual('0 of 6 Records');
+                                        expect(reportFacetsPage.reportFacetFilterBtn.isDisplayed()).toBeTruthy();
+                                    } else if (txt !== 'There is no data to display.') {
+                                        for (var i = 0; i < facetTestcase.facets.length; i++) {
+                                            verifyFacetTableResults(facetTestcase.facets[i].group);
+                                        }
+                                    }
                                 });
-                            }
-                        }).then(function() {
-                            // Collapse the popup menu
-                            reportFacetsPage.waitForElementToBeClickable(reportFacetsPage.reportFacetMenuContainer).then(function() {
-                                reportFacetsPage.reportFacetMenuContainer.click().then(function() {
-                                    done();
+                            }).then(function() {
+                                // Finally clear all facets from popup menu
+                                for (var j = 0; j < facetTestcase.facets.length; j++) {
+                                    reportFacetsPage.getFacetGroupElement(facetTestcase.facets[j].group).then(function(facetGroupEl) {
+                                        reportFacetsPage.waitForElementToBeClickable(facetGroupEl).then(function() {
+                                            reportFacetsPage.clickClearAllFacetsIcon(facetGroupEl);
+                                        });
+                                    });
+                                }
+                            }).then(function() {
+                                // Collapse the popup menu
+                                reportFacetsPage.waitForElementToBeClickable(reportFacetsPage.reportFacetMenuContainer).then(function() {
+                                    reportFacetsPage.reportFacetMenuContainer.click().then(function() {
+                                        done();
+                                    });
                                 });
                             });
                         });
                     });
-                });
+                }
 
                 //There wont be any facet tokens in the container for small breakpoint
                 if (testcase.breakpointSize !== 'small') {
@@ -392,13 +394,14 @@
                         });
                         reportServicePage.waitForElement(reportServicePage.mainContentEl).then(function() {
                             // Verify the facet container is not present in DOM without facets for a report.
-                            expect(reportFacetsPage.reportFacetMenuContainer.isPresent()).toBeFalsy();
-                            if (testcase.breakpointSize === 'small') {
-                                reportServicePage.reportHeaderToggleHamburgerEl.click();
-                                done();
-                            } else {
-                                done();
-                            }
+                            reportFacetsPage.waitForElementToBeStale(reportFacetsPage.reportFacetMenuContainer).then(function() {
+                                if (testcase.breakpointSize === 'small') {
+                                    reportServicePage.reportHeaderToggleHamburgerEl.click();
+                                    done();
+                                } else {
+                                    done();
+                                }
+                            });
                         });
                     });
                 });
