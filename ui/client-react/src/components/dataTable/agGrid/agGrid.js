@@ -27,8 +27,8 @@ function buildIconElement(icon) {
     return "<span class='qbIcon iconssturdy-" + icon + "'></span>";
 }
 let gridIcons = {
-    groupExpanded: buildIconElement("caret-filled-up"),
-    groupContracted: buildIconElement("caret-filled-down")
+    groupExpanded: buildIconElement("caret-filled-down"),
+    groupContracted: buildIconElement("caret-filled-up")
 };
 
 let AGGrid = React.createClass({
@@ -84,6 +84,13 @@ let AGGrid = React.createClass({
             };
         } else {
             return null;
+        }
+    },
+    getRowHeight(rowItem) {
+        if (rowItem.node.field === "group") {
+            return 41;
+        } else {
+            return 32;
         }
     },
     /**
@@ -298,6 +305,19 @@ let AGGrid = React.createClass({
         }
     },
 
+    getCheckBoxColumnGroupedHeaderWidth() {
+        // this is a weird calculation but this is because we want the checkbox to always show based on number of grouping levels
+        // for now this is being calulated as num_groups*(font size + padding) + num_checkboxes*(size of checkbox + padding)
+        // 3px error is because icons need to be fixed, so that'll be removed.
+        let flux = this.getFlux();
+        const padding_between_icons = 10;
+        const cell_padding = 8;
+        const font_size = 20;
+        const checkbox_size = 12;
+        return cell_padding +
+            flux.stores.ReportDataStore.data.groupLevel * (font_size + padding_between_icons) +
+            checkbox_size + cell_padding - 3;
+    },
     /**
      * Builder for "checkbox" column for the grid
      * Also contains grouping expand/collpase icon if grouping is turned on
@@ -320,7 +340,7 @@ let AGGrid = React.createClass({
             var collapser = document.createElement("span");
             collapser.className = "collapser";
             collapser.setAttribute("state", "open");
-            collapser.innerHTML = gridIcons.groupContracted;
+            collapser.innerHTML = gridIcons.groupExpanded;
             collapser.onclick = (event) => {
                 this.onGroupsExpand(event.target);
             };
@@ -338,10 +358,7 @@ let AGGrid = React.createClass({
         checkBoxCol.suppressMenu = true;
         checkBoxCol.suppressResize = true;
         if (this.props.showGrouping) {
-            // this is a weird calculation but this is because we want the checkbox to always show based on number of grouping levels
-            // for now this is being calulated as num_groups*30 + num_checkboxes*20 + 10
-            let flux = this.getFlux();
-            checkBoxCol.width = flux.stores.ReportDataStore.data.groupLevel * 30 + 20 + 10;
+            checkBoxCol.width = this.getCheckBoxColumnGroupedHeaderWidth();
         } else {
             checkBoxCol.width = 60;
         }
@@ -414,7 +431,7 @@ let AGGrid = React.createClass({
                                     rowSelection="multiple"
                                     enableColResize="true"
                                     groupHeaders="true"
-                                    rowHeight="34"
+                                    getRowHeight={this.getRowHeight}
 
                                     suppressRowClickSelection="true"
                                     suppressCellSelection="true"

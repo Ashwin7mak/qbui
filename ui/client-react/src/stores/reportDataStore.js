@@ -184,23 +184,28 @@ let ReportDataStore = Fluxxor.createStore({
                 groupingField2 = field.name;
             }
         });
-        if (groupingField1 &&  groupingField2) {
+        if (groupingField1 !== null && groupingField2 !== null) {
             this.data.groupLevel = 2;
-        } else if (groupingField1 ||  groupingField2) {
+        } else if (groupingField1 || groupingField2) {
             this.data.groupLevel = 1;
         }
-        var groupedData = _.groupBy(reportData, function(record) {
+        var groupedData = _.groupBy(reportData, function (record) {
             return record[groupingField1];
         });
         var newData = [];
+
         function groupByPredicate(rec) {
             return rec[groupingField2];
         }
         for (var group in groupedData) {
-            var subgroupedData = _.groupBy(groupedData[group], groupByPredicate);
             var children = [];
-            for (var subgroup in subgroupedData) {
-                children.push({group: subgroup, children: subgroupedData[subgroup]});
+            if (groupingField2) {
+                var subgroupedData = _.groupBy(groupedData[group], groupByPredicate);
+                for (var subgroup in subgroupedData) {
+                    children.push({group: subgroup, children: subgroupedData[subgroup]});
+                }
+            } else {
+                children = groupedData[group];
             }
             newData.push({group: group, children: children});
         }

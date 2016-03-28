@@ -14,7 +14,8 @@ $grid-group-row-header-bkgrd-color: #f3f8fe;
 $grid-group-row-header-border-top: #e3eaf3;
 
 $grid-group-expand-icon-size: 20px;
-$grid-default-padding: 10px;
+$grid-default-group-padding: 7px;
+$grid-default-cell-padding: 8px;
 
 // override default font style
 .ag-font-style {
@@ -48,13 +49,13 @@ $grid-default-padding: 10px;
         text-align: left;
 
         .ag-header-cell-label {
-            padding: 4px $grid-default-padding 3px $grid-default-padding;
+            padding: 4px $grid-default-cell-padding 3px $grid-default-cell-padding;
         }
     }
 
     .gridCell {
         word-wrap: break-word;
-        padding: $grid-default-padding;
+        padding: $grid-default-cell-padding;
     }
 
     .ag-header-row .gridHeaderCell {
@@ -92,17 +93,20 @@ $grid-default-padding: 10px;
 
     .qbIcon {
         font-size: $grid-group-expand-icon-size;
+        width: $grid-group-expand-icon-size;
     }
 
     .ag-group-cell-entire-row {
         background-color: $grid-group-row-header-bkgrd-color;
-        padding: $grid-default-padding;
-        border-top: 3px solid $grid-group-row-header-border-top;
+        padding: $grid-default-cell-padding + 2 $grid-default-cell-padding $grid-default-cell-padding $grid-default-cell-padding;
+        border-top: 4px solid $grid-group-row-header-border-top;
+        border-bottom: 1px solid #dcdcdc;
     }
     .group-header {
-        margin-left: $grid-default-padding;
+        margin-left: $grid-default-group-padding + 3;
         display: inline-block;
         vertical-align: top;
+        font-weight: bold;
     }
 
     .checkboxHolder {
@@ -115,19 +119,17 @@ $grid-default-padding: 10px;
     }
     .selectAllCheckbox {
         position: absolute;
-        right: $grid-font-size;
+        right: $grid-default-group-padding - $grid-default-group-padding;
     }
     .ag-selection-checkbox {
         position: absolute;
-        right: $grid-font-size + $grid-default-padding;
+        right: $grid-default-group-padding;
     }
     //assuming that we can have upto 6 group levels
-    $groups: 0;
     @for $i from 1 through 6 {
         .ag-row-level-#{$i}{
             .ag-group-cell-entire-row {
-                padding-left: $i*($grid-default-padding+$grid-group-expand-icon-size)!important;
-                $groups: $groups + 1;
+                padding-left: $grid-default-cell-padding + $i*($grid-default-group-padding+$grid-group-expand-icon-size)!important;
             }
         }
     }
