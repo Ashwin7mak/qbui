@@ -153,53 +153,60 @@ let ReportDataStore = Fluxxor.createStore({
 
     getReportColumns(fields) {
         let columns = [];
+        let groupingFields = this.data.groupingFields;
 
         if (fields) {
             fields.forEach(function(field, index) {
-                let column = {};
-                column.order = index;
-                column.id = field.id;
-                column.headerName = field.name;     //for ag-grid
-                column.field = field.name;          //for ag-grid
-                column.columnName = field.name;     //for griddle
-                column.displayName = field.name;    //for griddle
-                column.fieldType = field.type;
-                column.builtIn = field.builtIn;
+                //skip showing grouped fields on report
+                let isFieldGrouped = groupingFields.find((groupingField) => {
+                    return field.name === groupingField;
+                });
+                if (!isFieldGrouped) {
+                    let column = {};
+                    column.order = index;
+                    column.id = field.id;
+                    column.headerName = field.name;     //for ag-grid
+                    column.field = field.name;          //for ag-grid
+                    column.columnName = field.name;     //for griddle
+                    column.displayName = field.name;    //for griddle
+                    column.fieldType = field.type;
+                    column.builtIn = field.builtIn;
 
-                //  client side attributes..
-                column.datatypeAttributes = field.datatypeAttributes;
-                columns.push(column);
+                    //  client side attributes..
+                    column.datatypeAttributes = field.datatypeAttributes;
+                    columns.push(column);
+                }
             });
         }
         return columns;
     },
-    createTempGroupedData(reportData, fields) {
-        let groupingField1 = null;
-        let groupingField2 = null;
+    findTempGroupingFields(fields) {
+        let groupingFields = [];
         fields.forEach((field) => {
-            if (field.datatypeAttributes.type === "TEXT" && groupingField1 === null) {
-                groupingField1 = field.name;
+            if (field.datatypeAttributes.type === "TEXT" && groupingFields.length < 2) {
+                groupingFields.push(field.name);
             }
-            if (field.datatypeAttributes.type === "RATING" && groupingField2 === null) {
-                groupingField2 = field.name;
+            if (field.datatypeAttributes.type === "RATING" && groupingFields.length < 2) {
+                groupingFields.push(field.name);
             }
         });
-        if (groupingField1 !== null && groupingField2 !== null) {
-            this.data.groupLevel = 2;
-        } else if (groupingField1 || groupingField2) {
-            this.data.groupLevel = 1;
-        }
+        this.data.groupingFields = groupingFields;
+        this.data.groupLevel = groupingFields.length;
+        return groupingFields;
+    },
+    createTempGroupedData(reportData, fields) {
+        let groupingFields = this.findTempGroupingFields(fields);
         var groupedData = _.groupBy(reportData, function(record) {
-            return record[groupingField1];
+            return record[groupingFields[0]];
         });
         var newData = [];
 
         function groupByPredicate(rec) {
-            return rec[groupingField2];
+            return rec[groupingFields[1]];
         }
         for (var group in groupedData) {
             var children = [];
-            if (groupingField2) {
+            if (groupingFields[1]) {
                 var subgroupedData = _.groupBy(groupedData[group], groupByPredicate);
                 for (var subgroup in subgroupedData) {
                     children.push({group: subgroup, children: subgroupedData[subgroup]});

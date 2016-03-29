@@ -10,8 +10,9 @@ $row-cell-border-color: $color4;
 
 $grid-font-size: $font-size - 2;
 
-$grid-group-row-header-bkgrd-color: #f3f8fe;
-$grid-group-row-header-border-top: #e3eaf3;
+$grid-group-row-header-bkgrd-color: $color1;
+$grid-group-row-header-border-top: $color7;
+$grid-group-row-header-divider: $ghost;
 
 $grid-group-expand-icon-size: 20px;
 $grid-default-group-padding: 7px;
@@ -100,7 +101,15 @@ $grid-default-cell-padding: 8px;
         background-color: $grid-group-row-header-bkgrd-color;
         padding: $grid-default-cell-padding + 2 $grid-default-cell-padding $grid-default-cell-padding $grid-default-cell-padding;
         border-top: 4px solid $grid-group-row-header-border-top;
-        border-bottom: 1px solid #dcdcdc;
+    }
+    .ag-group-cell-entire-row::before {
+        border-top: 1px solid $grid-group-row-header-divider;
+        position: absolute;
+        top: -1px;
+        bottom: 0;
+        right: 0;
+        left: 0;
+        content: " ";
     }
     .group-header {
         margin-left: $grid-default-group-padding + 3;
@@ -225,7 +234,7 @@ $grid-default-cell-padding: 8px;
         height: 100%;
         background-color: $row-background-color-hover;
         white-space: nowrap;
-        border-top: 1px dotted #dcdcdc;
+        border-top: 1px dotted $row-cell-border-color;
     }
 }
 
