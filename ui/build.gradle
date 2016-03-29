@@ -1,3 +1,6 @@
+import com.quickbase.utils.OracleSqlConnectInfo
+import com.quickbase.utils.Utils
+import java.text.SimpleDateFormat
 //
 //  MOVE TO Root project FOLDER ONCE gradle-grunt-plugin IS UPDATED TO ALLOW
 //  FOR GruntFile.js to be located in a folder other than where the gradle
@@ -587,7 +590,6 @@ sonarqube {
 //******************************************************
 //  Supporting Groovy functions
 //******************************************************
-import java.text.SimpleDateFormat
 def getRpmVersion() {
     return "1.0"
 }
