@@ -8,10 +8,6 @@ import {Tooltip, OverlayTrigger} from 'react-bootstrap';
  */
 let ActionIcon = React.createClass({
 
-    defaultProps: {
-        bsRole: ""
-    },
-
     propTypes: {
         tip:React.PropTypes.string,
         icon:React.PropTypes.string.isRequired,
@@ -25,7 +21,7 @@ let ActionIcon = React.createClass({
 
         return (
             <OverlayTrigger placement="top" overlay={tooltip}>
-                <a href="#" className={"iconLink icon-" + this.props.icon} onClick={this.props.onClick} bsStyle={this.props.bsRole}>
+                <a href="#" className={"iconLink icon-" + this.props.icon} onClick={this.props.onClick}>
                     <QBicon icon={this.props.icon}/>
                 </a>
             </OverlayTrigger>);

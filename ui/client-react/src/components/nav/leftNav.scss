@@ -16,7 +16,7 @@ $selected-table-fg: #fff;
 $right-icon-separator-color: #13dbf1;
 $left-nav-horizontal-icon-border-color: #131f2b;
 
-.leftNav.open {
+.leftNav.expanded {
     overflow: visible;
 }
 
@@ -61,19 +61,19 @@ $left-nav-horizontal-icon-border-color: #131f2b;
 }
 
 @include medium-breakpoint {
-    .leftNav.open {
+    .leftNav.expanded {
         width: 200px;
     }
 }
 
 @include large-breakpoint {
-    .leftNav.open {
+    .leftNav.expanded {
         width: 220px;
     }
 }
 
 @include xlarge-breakpoint {
-    .leftNav.open {
+    .leftNav.expanded {
         width: 300px;
     }
 }
@@ -105,19 +105,23 @@ div.leftNavTooltip {
         display: block;
     }
 }
+.appsToggle {
+    text-overflow:ellipsis;
+    overflow:hidden;
+    padding-right:25px;
+}
 
 /* collapsed nav overrides */
 @include not-small-breakpoint {
-    .leftNav.closed {
+    .leftNav.collapsed {
         width: 40px;
         .branding {
+
             .logo, .appsToggle .navLabel, .appsToggleIcon {
                 display: none;
             }
         }
-        li a.heading {
-            display: none;
-        }
+
         li.horizontal, .globalActions {
             ul {
                 flex-direction: column;
@@ -135,6 +139,16 @@ div.leftNavTooltip {
         }
         .globalAction:last-child {
             display: none;
+        }
+
+        .heading {
+            display:none;
+        }
+        li.search {
+            display: none;
+        }
+        .leftNavLabel {
+            display:none;
         }
     }
 }
@@ -243,7 +257,7 @@ div.leftNavTooltip {
             .qbIcon {
                 font-size: 16px;
                 position: absolute;
-                right: 4px;
+                right: -3px;
                 top: 10px;
             }
         }
@@ -337,7 +351,7 @@ div.leftNavTooltip {
     }
 }
 
-.leftNav.open li.horizontal ul li {
+.leftNav.expanded li.horizontal ul li {
     height:auto;
 }
 .leftNav li.horizontal, .leftNav .globalActions {

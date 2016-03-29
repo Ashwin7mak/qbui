@@ -131,7 +131,6 @@ a {
                     font-size: 22px;
                     color: $topnav-icon-color;
                     border-radius: 0;
-                    width: $top-nav-height;
                     height: $top-nav-height;
                     outline: none;
                 }
@@ -179,19 +178,11 @@ body:not(.touch) .navShell .main .topNav .iconLink:hover {
     background: $nav-hover-bg
 }
 
-
-.pageActions {
-    display:none;
-}
 @include small-breakpoint {
     .layout-stage {
         display:none;
     }
 
-    .pageActions {
-        line-height:40px;
-        display:block;
-    }
 }
 
 .loader {

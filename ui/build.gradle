@@ -1,3 +1,6 @@
+import com.quickbase.utils.OracleSqlConnectInfo
+import com.quickbase.utils.Utils
+import java.text.SimpleDateFormat
 //
 //  MOVE TO Root project FOLDER ONCE gradle-grunt-plugin IS UPDATED TO ALLOW
 //  FOR GruntFile.js to be located in a folder other than where the gradle
@@ -68,7 +71,7 @@ def cargoHome = "/tmp/cargo";
 def extraJvmArgs = ""
 def testUser = getTestUser();
 def testUserPassword = generateRandomString(16);
-def sqlConnectInfo = new SqlConnectInfo("${rootDir}/../quickbase")
+def sqlConnectInfo = new OracleSqlConnectInfo("${rootDir}/../quickbase")
 def environment = System.getProperty("env");
 def awsEnv = (environment == "aws");
 
@@ -96,7 +99,7 @@ if (awsEnv) {
     // If there is a specific test user, either supplied or needed because using RDS, create the testUser in Oracle.
     if (testUser) {
         logger.lifecycle("Running tests with user " + testUser)
-        sqlConnectInfo.createTestUserInSQL(testUser, testUserPassword);
+        sqlConnectInfo.createTestUser(testUser, testUserPassword);
     }
 
     // Get the authorization secrets using the secret CLI
@@ -595,7 +598,6 @@ sonarqube {
 //******************************************************
 //  Supporting Groovy functions
 //******************************************************
-import java.text.SimpleDateFormat
 def getRpmVersion() {
     return "1.0"
 }

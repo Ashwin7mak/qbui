@@ -41,14 +41,16 @@ describe('Test Nav Store', () => {
 
     it('test default nav store state', () => {
         // verify default states
-        expect(flux.store(STORE_NAME).state.leftNavOpen).toBeTruthy();
+        expect(flux.store(STORE_NAME).state.leftNavVisible).toBeFalsy();
+        expect(flux.store(STORE_NAME).state.leftNavExpanded).toBeTruthy();
         expect(flux.store(STORE_NAME).state.trowserOpen).toBeFalsy();
         expect(flux.store(STORE_NAME).state.i18n).toBe(i18nBundle);
 
         //  expect 4 bindActions
         expect(flux.store(STORE_NAME).__actions__.SHOW_TROWSER).toBeDefined();
         expect(flux.store(STORE_NAME).__actions__.HIDE_TROWSER).toBeDefined();
-        expect(flux.store(STORE_NAME).__actions__.TOGGLE_LEFT_NAV).toBeDefined();
+        expect(flux.store(STORE_NAME).__actions__.TOGGLE_LEFT_NAV_VISIBLE).toBeDefined();
+        expect(flux.store(STORE_NAME).__actions__.TOGGLE_LEFT_NAV_EXPANDED).toBeDefined();
         expect(flux.store(STORE_NAME).__actions__.CHANGE_LOCALE).toBeDefined();
     });
 
@@ -118,19 +120,19 @@ describe('Test Nav Store', () => {
     it('test toggle left nav action', () => {
 
         let toggleLeftNavAction = {
-            type: actions.TOGGLE_LEFT_NAV
+            type: actions.TOGGLE_LEFT_NAV_VISIBLE
         };
 
-        expect(flux.store(STORE_NAME).state.leftNavOpen).toBeTruthy();
+        expect(flux.store(STORE_NAME).state.leftNavVisible).toBeFalsy();
 
         flux.dispatcher.dispatch(toggleLeftNavAction);
-        expect(flux.store(STORE_NAME).state.leftNavOpen).toBeFalsy();
+        expect(flux.store(STORE_NAME).state.leftNavVisible).toBeTruthy();
         expect(flux.store(STORE_NAME).emit).toHaveBeenCalledWith('change');
         expect(flux.store(STORE_NAME).emit.calls.count()).toBe(1);
         flux.store(STORE_NAME).emit.calls.reset();
 
         flux.dispatcher.dispatch(toggleLeftNavAction);
-        expect(flux.store(STORE_NAME).state.leftNavOpen).toBeTruthy();
+        expect(flux.store(STORE_NAME).state.leftNavVisible).toBeFalsy();
 
         expect(flux.store(STORE_NAME).emit).toHaveBeenCalledWith('change');
         expect(flux.store(STORE_NAME).emit.calls.count()).toBe(1);

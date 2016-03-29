@@ -241,7 +241,7 @@ let AGGrid = React.createClass({
         return (this.props.reportHeader && this.props.selectionActions && (
             <div className={classes}>{hasSelection ?
                 React.cloneElement(this.props.selectionActions, {key:"selectionActions", selection: this.state.selectedRows}) :
-                React.cloneElement(this.props.reportHeader, {key:"reportHeader", onMenuEnter:this.onMenuEnter, onMenuExit:this.onMenuExit})}
+                React.cloneElement(this.props.reportHeader, {key:"reportHeader", pageActions: this.props.pageActions, onMenuEnter:this.onMenuEnter, onMenuExit:this.onMenuExit})}
             </div>));
     },
     /**
@@ -250,6 +250,9 @@ let AGGrid = React.createClass({
      * add actions column to the end of the array.
      */
     getColumns() {
+        if (!this.props.columns) {
+            return;
+        }
         let columns = this.props.columns.slice(0);
         //Add checkbox column
         let checkBoxCol = {};
@@ -272,6 +275,8 @@ let AGGrid = React.createClass({
 
         // Add Actions column. Put this as the last column in the grid and then make the column 1px wide so it doesnt really "show".
         // CSS takes care of positioning the content of this column over the previous columns so it looks like an overlay.
+
+        // todo: optimize/refactor actions hover for performance
         if (columns.length > 0) {
             columns.push({
                 headerName: "", //for ag-grid
@@ -287,15 +292,15 @@ let AGGrid = React.createClass({
     },
 
     render() {
-        if (this.props.records && this.props.records.length > 0) {
-            let columnDefs = this.getColumns();
-            let griddleWrapperClasses = this.state.selectedRows.length ? "griddleWrapper selectedRows" : "griddleWrapper";
-            return (
-                <div className="reportTable" >
+        let columnDefs = this.getColumns();
+        let griddleWrapperClasses = this.state.selectedRows.length ? "griddleWrapper selectedRows" : "griddleWrapper";
+        return (
+            <div className="reportTable" >
 
-                    {this.getTableActions()}
-                    <div className={griddleWrapperClasses}>
-                        <Loader loaded={!this.props.loading}>
+                {this.getTableActions()}
+                <div className={griddleWrapperClasses}>
+                    <Loader loaded={!this.props.loading}>
+                        {this.props.records && this.props.records.length > 0 ?
                             <div className="agGrid">
                                 <AgGridReact
                                     gridOptions={this.gridOptions}
@@ -319,21 +324,16 @@ let AGGrid = React.createClass({
                                     suppressRowClickSelection="true"
                                     suppressCellSelection="true"
                                 />
-                            </div>
-                        </Loader>
-                        { //keep empty placeholder when loading to reduce reflow of space, scrollbar changes
-                            this.props.loading ? <div className="loadedContent"></div> : null
+                            </div> :
+                            <div><I18nMessage message={'grid.no_data'}/></div>
                         }
-                        </div>
+                    </Loader>
+                    { //keep empty placeholder when loading to reduce reflow of space, scrollbar changes
+                        this.props.loading ? <div className="loadedContent"></div> : null
+                    }
                 </div>
-            );
-        } else {
-            return (
-                <Loader loaded={!this.props.loading}>
-                    <div><I18nMessage message={'grid.no_data'}/></div>
-                </Loader>
-            );
-        }
+            </div>
+        );
     }
 });
 

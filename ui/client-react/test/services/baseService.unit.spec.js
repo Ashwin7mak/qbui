@@ -62,7 +62,7 @@ describe('BaseService rewire tests', () => {
         var url = baseService.constructUrl(mask, tokens);
         expect(output).toEqual(url);
     });
-    
+
     it('test constructRedirectUrl method', () => {
         baseService = new BaseService();
         var expectedUrl = 'https://localhost/db/main?a=nsredirect&nsurl=' + window.location.href;
