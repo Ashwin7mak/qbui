@@ -298,9 +298,11 @@ let AGGrid = React.createClass({
         }
         if (element.getAttribute("state") === "close") {
             element.setAttribute("state", "open");
+            element.innerHTML = gridIcons.groupExpanded;
             this.api.expandAll();
         } else {
             element.setAttribute("state", "close");
+            element.innerHTML = gridIcons.groupContracted;
             this.api.collapseAll();
         }
     },
