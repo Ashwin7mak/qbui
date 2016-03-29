@@ -123,7 +123,7 @@ $grid-default-cell-padding: 8px;
     }
     .ag-selection-checkbox {
         position: absolute;
-        right: $grid-default-group-padding;
+        right: $grid-default-group-padding + 1;
     }
     //assuming that we can have upto 6 group levels
     @for $i from 1 through 6 {
@@ -142,25 +142,7 @@ $grid-default-cell-padding: 8px;
     overflow:visible; /* hidden for css transitions but need overflow:visible to prevent clipping of facets menu etc. */
 }
 
-/* table actions transitions */
-.tableActions-enter {
-    top: -50px;
-}
 
-.tableActions-enter.tableActions-enter-active {
-    top: 0;
-    transition: top 300ms linear;
-
-}
-
-.tableActions-leave {
-    top: 0;
-}
-
-.tableActions-leave.tableActions-leave-active {
-    top: 50px;
-    transition: top 300ms linear;
-}
 
 .swipeable {
     position: relative;

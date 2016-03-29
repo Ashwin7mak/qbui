@@ -14,7 +14,8 @@ import './leftNav.scss';
 let LeftNav = React.createClass({
 
     propTypes: {
-        open:React.PropTypes.bool.isRequired,
+        expanded:React.PropTypes.bool.isRequired,
+        visible:React.PropTypes.bool.isRequired,
         appsListOpen:React.PropTypes.bool.isRequired,
         selectedAppId:React.PropTypes.string,
         selectedTableId:React.PropTypes.string,
@@ -56,14 +57,21 @@ let LeftNav = React.createClass({
     },
 
     render() {
+        let classes = "leftNav";
+        classes += (this.props.visible ? " open" : " closed");
+        classes += (this.props.expanded ? " expanded" : " collapsed");
+
+        if (this.props.appsListOpen) {
+            classes += " appsListOpen";
+        }
         return (
-            <Swipeable className={"leftNav " + (this.props.open ? "open " : "closed ") + (this.props.appsListOpen ? "appsListOpen" : "")} onSwipedLeft={this.swipedLeft}>
+            <Swipeable className={classes} onSwipedLeft={this.swipedLeft}>
                 {this.createBranding()}
 
                 <ReactCSSTransitionGroup transitionName="leftNavList" component="div" className={"transitionGroup"} transitionEnterTimeout={300} transitionLeaveTimeout={300}>
                     {!this.props.selectedAppId || this.props.appsListOpen ?
                         <AppsList key={"apps"} {...this.props} onSelectApp={this.onSelectApp}  /> :
-                        <TablesList key={"tables"} {...this.props} showReports={(id)=>{this.props.onSelectReports(id);} } getAppTables={this.getAppTables}/> }
+                        <TablesList key={"tables"} expanded={this.props.expanded} showReports={(id)=>{this.props.onSelectReports(id);} } getAppTables={this.getAppTables} {...this.props} /> }
 
                 </ReactCSSTransitionGroup>
 

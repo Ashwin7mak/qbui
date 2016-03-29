@@ -115,6 +115,8 @@
                                 reportServicePage.assertGlobalActsNotDisplayedInLeftNav();
                             }
                             if (testcase.browserWidth === e2eConsts.SMALL_BP_WIDTH) {
+                                // Open the leftNav since it's hidden by default on small
+                                reportServicePage.clickTopNavHamburger();
                                 // Assert actions have moved to leftNav
                                 reportServicePage.assertGlobalActsDisplayedInLeftNav();
                                 expect(reportServicePage.getGlobalNavTextEl(reportServicePage.leftNavUserGlobActLabelEl).getText()).toBe('User');

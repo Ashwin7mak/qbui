@@ -1,11 +1,14 @@
 import React from 'react';
-
+import Stage from '../stage/stage';
+import QBicon from '../qbIcon/qbIcon';
+import IconActions from '../actions/iconActions';
 import Fluxxor from 'fluxxor';
-let FluxMixin = Fluxxor.FluxMixin(React);
-
 import Logger from '../../utils/logger';
-let logger = new Logger();
 
+import './appHomePage.scss';
+
+let FluxMixin = Fluxxor.FluxMixin(React);
+let logger = new Logger();
 /**
  * placeholder for app dashboard route
  */
@@ -37,18 +40,63 @@ let AppHomePageRoute = React.createClass({
         }
     },
 
+    getTopTitle() {
+        return (this.props.selectedApp &&
+            <div className="topTitle">
+                <QBicon icon="favicon"/>
+                <span>{this.props.selectedApp.name}</span>
+            </div>
+        );
+    },
+
     componentDidMount() {
         // no title for now...
         let flux = this.getFlux();
         flux.actions.showTopNav();
+        flux.actions.setTopTitle(this.getTopTitle());
         this.selectAppFromParams(this.props.params);
     },
     // Triggered when properties change
     componentWillReceiveProps: function(props) {
         this.selectAppFromParams(props.params, true);
     },
+
+    getPageActions(maxButtonsBeforeMenu = 0) {
+        const actions = [
+            {msg: 'pageActions.print', icon:'print'},
+            {msg: 'pageActions.customizePage', icon:'settings-hollow'}
+        ];
+        return (<IconActions className="pageActions" actions={actions} maxButtonsBeforeMenu={maxButtonsBeforeMenu} {...this.props}/>);
+    },
+    getStageHeadline() {
+        return (this.props.selectedApp &&
+            <div className="stageHeadline">
+                <QBicon icon="favicon"/>
+                <h3 className="appName">{this.props.selectedApp.name}</h3>
+            </div>
+        );
+    },
+    getSecondaryBar() {
+        return (
+            <div className="secondaryAppHomePageActions">
+                {/* todo */}
+            </div>);
+    },
     render: function() {
-        return (<div>
+        return (<div className="appHomePageContainer">
+            <Stage stageHeadline={this.getStageHeadline()}
+                   pageActions={this.getPageActions(2)}>
+
+                <div className="app-content">
+                    Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+                </div>
+
+            </Stage>
+
+            <div className="appHomePageActionsContainer secondaryBar">
+                {this.getSecondaryBar()}
+                {this.getPageActions(2)}
+            </div>
             <div>App Dashboard goes here...</div>
         </div>);
     }

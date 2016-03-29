@@ -113,6 +113,7 @@ let ReportContent = React.createClass({
                                     appId={this.props.reportData.appId}
                                     tblId={this.props.reportData.tblId}
                                     reportHeader={this.props.reportHeader}
+                                    pageActions={this.props.pageActions}
                                     selectionActions={<ReportActions />}
                                     showGrouping={this.props.reportData.data.hasGrouping}
                             ></AGGrid> :

@@ -3,6 +3,7 @@ import ReactDOM from 'react-dom';
 import TestUtils from 'react-addons-test-utils';
 import Fluxxor from 'fluxxor';
 import * as actions from '../../src/constants/actions';
+import IconActions from '../../src/components/actions/iconActions';
 import ReportToolbar  from '../../src/components/report/reportToolbar';
 import FacetSelections  from '../../src/components/facet/facetSelections';
 import facetMenuActions from '../../src/actions/facetMenuActions';
@@ -147,9 +148,11 @@ describe('ReportToolbar functions', () => {
         }
     };
 
+    const pageActions = <IconActions actions={[]}/>;
+
     it('test render reportToolbar no records', () => {
         component = TestUtils.renderIntoDocument(<ReportToolbar flux={flux}
-                                                                fieldSelections={[]}
+                                                                pageActions={pageActions}
         />);
         expect(TestUtils.isCompositeComponent(component)).toBeTruthy();
         let filterSearchBox = TestUtils.scryRenderedDOMComponentsWithClass(component, "filterSearchBox");
@@ -168,6 +171,7 @@ describe('ReportToolbar functions', () => {
     it('test render reportToolbar with records', () => {
         component = TestUtils.renderIntoDocument(<ReportToolbar flux={flux}
                                                                 reportData={fakeReportData_simple}
+                                                                pageActions={pageActions}
         />);
         expect(TestUtils.isCompositeComponent(component)).toBeTruthy();
         let filterSearchBox = TestUtils.scryRenderedDOMComponentsWithClass(component, "filterSearchBox");
@@ -190,6 +194,7 @@ describe('ReportToolbar functions', () => {
         component = TestUtils.renderIntoDocument(<ReportToolbar flux={flux}
                                                                 reportData={fakeReportWithNoFacets}
                                                                 selections={null}
+                                                                pageActions={pageActions}
         />);
         expect(TestUtils.isCompositeComponent(component)).toBeTruthy();
         // empty filter icon is no shown
@@ -204,6 +209,7 @@ describe('ReportToolbar functions', () => {
         component = TestUtils.renderIntoDocument(<ReportToolbar flux={flux}
                                                                 reportData={fakeReportWithFacets}
                                                                 selections={selected}
+                                                                pageActions={pageActions}
         />);
         expect(TestUtils.isCompositeComponent(component)).toBeTruthy();
         // empty filter icon is shown
@@ -218,7 +224,7 @@ describe('ReportToolbar functions', () => {
         selected.addSelection(4, 'Yes');
         let fakeReportWithFacets = _.cloneDeep(fakeReportData_simple);
         component = TestUtils.renderIntoDocument(<ReportToolbar flux={flux} selections={selected}
-                                                                reportData={fakeReportWithFacets}/>);
+                                                                reportData={fakeReportWithFacets} pageActions={pageActions} />);
         expect(TestUtils.isCompositeComponent(component)).toBeTruthy();
 
 
@@ -231,11 +237,12 @@ describe('ReportToolbar functions', () => {
     });
 
     it('test render reportToolbar with selected facet values and add Boolean filter', () => {
+
         let selected = new FacetSelections();
         selected.addSelection(1, 'Development');
         let fakeReportWithFacets = _.cloneDeep(fakeReportData_simple);
         component = TestUtils.renderIntoDocument(<ReportToolbar flux={flux} selections={selected}
-                                                                reportData={fakeReportWithFacets}/>);
+                                                                reportData={fakeReportWithFacets} pageActions={pageActions} />);
         expect(TestUtils.isCompositeComponent(component)).toBeTruthy();
 
         spyOn(flux.actions, 'filterReport').and.callThrough();
@@ -253,9 +260,10 @@ describe('ReportToolbar functions', () => {
     });
 
     it('test render reportToolbar searches text', (done) => {
+
         let delay = 200;
         component = TestUtils.renderIntoDocument(<ReportToolbar flux={flux}
-                                                                debounceInputTime={delay}
+                                                                debounceInputTime={delay} pageActions={pageActions}
                                                                 reportData={fakeReportData_simple}/>);
 
         // check for the search box shows up
@@ -293,7 +301,8 @@ describe('ReportToolbar functions', () => {
     it('test render reportToolbar with search text', (done) => {
         component = TestUtils.renderIntoDocument(<ReportToolbar flux={flux}
                                                                 searchStringForFiltering={"abc"}
-                                                                reportData={fakeReportData_simple}/>);
+                                                                reportData={fakeReportData_simple}
+                                                                pageActions={pageActions} />);
 
         // check for the search box shows up
         let filterSearchBox = TestUtils.scryRenderedDOMComponentsWithClass(component, "filterSearchBox");
@@ -310,6 +319,7 @@ describe('ReportToolbar functions', () => {
         let fakeReportWithFacets = _.cloneDeep(fakeReportData_simple);
         component = TestUtils.renderIntoDocument(<ReportToolbar flux={flux}
                                                                 reportData={fakeReportWithFacets}
+                                                                pageActions={pageActions}
         />);
         expect(TestUtils.isCompositeComponent(component)).toBeTruthy();
         spyOn(flux.actions, 'filterReport').and.callThrough();
@@ -334,6 +344,7 @@ describe('ReportToolbar functions', () => {
         component = TestUtils.renderIntoDocument(<ReportToolbar flux={flux}
                                                                 selections={startingSelections}
                                                                 reportData={fakeReportWithFacets}
+                                                                pageActions={pageActions}
         />);
         expect(TestUtils.isCompositeComponent(component)).toBeTruthy();
         spyOn(flux.actions, 'filterReport').and.callThrough();
@@ -349,6 +360,7 @@ describe('ReportToolbar functions', () => {
         let fakeReportWithFacets = _.cloneDeep(fakeReportData_simple);
         component = TestUtils.renderIntoDocument(<ReportToolbar flux={flux}
                                                                 reportData={fakeReportWithFacets}
+                                                                pageActions={pageActions}
         />);
         expect(TestUtils.isCompositeComponent(component)).toBeTruthy();
         //select a couple of facets

@@ -45,7 +45,8 @@ export default {
             searchAppsPlaceholder: "Suche anwendungen...",
             searchTablesPlaceholder: "Suche tische...",
             searchReportsPlaceholder: "Suche berichte...",
-            searchRecordsPlaceholder: "Suche..."
+            searchRecordsPlaceholder: "Suche...",
+            backToReport: "Zurück zu melden"
         },
         grid: {
             no_data: "Es liegen keine Daten zum Anzeigen."
@@ -55,6 +56,26 @@ export default {
             alerts: "Benachrichtigung",
             help: "Hilfe",
             logout: "Abmelden"
+        },
+        pageActions: {
+            addRecord: "Datensatz hinzufügen",
+            favorite: "Favorit",
+            gridEdit: "Gitter bearbeiten",
+            edit: "Bearbeiten",
+            delete: "Löschen",
+            email: "Email",
+            print: "Drucken",
+            customizeReport: "Fertigen Sie diesen Bericht",
+            customizeForm: "Fertigen Sie dieses Formular",
+            customizePage: "Fertigen Sie diese Seite"
+        },
+        iconActions: {
+            more: "Mehr..."
+        },
+        recordActions: {
+            previous: "Früher",
+            return: "Zurück zu berichten",
+            next: "Nächster"
         },
         header: {
             menu: {

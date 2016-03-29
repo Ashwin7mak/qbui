@@ -28,7 +28,7 @@ function buildIconElement(icon) {
 }
 let gridIcons = {
     groupExpanded: buildIconElement("caret-filled-down"),
-    groupContracted: buildIconElement("caret-filled-up")
+    groupContracted: buildIconElement("icon_caretfilledright")
 };
 
 let AGGrid = React.createClass({
@@ -360,7 +360,7 @@ let AGGrid = React.createClass({
         if (this.props.showGrouping) {
             checkBoxCol.width = this.getCheckBoxColumnGroupedHeaderWidth();
         } else {
-            checkBoxCol.width = 60;
+            checkBoxCol.width = 30;
         }
         return checkBoxCol;
     },
@@ -397,6 +397,8 @@ let AGGrid = React.createClass({
 
         // Add Actions column. Put this as the last column in the grid and then make the column 1px wide so it doesnt really "show".
         // CSS takes care of positioning the content of this column over the previous columns so it looks like an overlay.
+
+        // todo: optimize/refactor actions hover for performance
         if (columns.length > 0) {
             columns.push(this.getActionsColumn());
         }

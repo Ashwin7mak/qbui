@@ -189,7 +189,7 @@ let ReportDataStore = Fluxxor.createStore({
         } else if (groupingField1 || groupingField2) {
             this.data.groupLevel = 1;
         }
-        var groupedData = _.groupBy(reportData, function (record) {
+        var groupedData = _.groupBy(reportData, function(record) {
             return record[groupingField1];
         });
         var newData = [];

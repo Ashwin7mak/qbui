@@ -1,16 +1,16 @@
 @font-face {
-    font-family: 'icons_quickbase_v3d1';
+    font-family: 'QuickBase-Sturdy';
     src:
-        url('fonts/icons_quickbase_v3d1.ttf?rex0fu') format('truetype'),
-        url('fonts/icons_quickbase_v3d1.woff?rex0fu') format('woff'),
-        url('fonts/icons_quickbase_v3d1.svg?rex0fu#icons_quickbase_v3d1') format('svg');
+        url('fonts/QuickBase-Sturdy.ttf?5aptom') format('truetype'),
+        url('fonts/QuickBase-Sturdy.woff?5aptom') format('woff'),
+        url('fonts/QuickBase-Sturdy.svg?5aptom#QuickBase-Sturdy') format('svg');
     font-weight: normal;
     font-style: normal;
 }
 
 [class^="iconssturdy-"], [class*=" iconssturdy-"] {
     /* use !important to prevent issues with browser extensions that change fonts */
-    font-family: 'icons_quickbase_v3d1' !important;
+    font-family: 'QuickBase-Sturdy' !important;
     speak: none;
     font-style: normal;
     font-weight: normal;
@@ -24,10 +24,10 @@
 }
 
 .iconssturdy-hamburger:before {
-    content: "\e90b";
+    content: "\e100";
 }
 .iconssturdy-fries:before {
-    content: "\e90a";
+    content: "\e101";
 }
 .iconssturdy-pickles:before {
     content: "\e911";
@@ -37,6 +37,12 @@
 }
 .iconssturdy-user:before {
     content: "\e90f";
+}
+.iconssturdy-add-user:before {
+    content: "\e901";
+}
+.iconssturdy-users:before {
+    content: "\e90a";
 }
 .iconssturdy-edit:before {
     content: "\e907";
@@ -80,8 +86,20 @@
 .iconssturdy-caret-filled-up:before {
     content: "\e920";
 }
+.iconssturdy-icon_caretfilledright:before {
+    content: "\e90b";
+}
 .iconssturdy-close:before {
-    content: "\e901";
+    content: "\1234";
+}
+.iconssturdy-x-secondary:before {
+    content: "\e94a";
+}
+.iconssturdy-small-clear-b:before {
+    content: "\e94b";
+}
+.iconssturdy-clear-mini:before {
+    content: "\e916";
 }
 .iconssturdy-caret-down:before {
     content: "\e900";
@@ -94,6 +112,9 @@
 }
 .iconssturdy-caret-left:before {
     content: "\e8dd";
+}
+.iconssturdy-return:before {
+    content: "\e94c";
 }
 .iconssturdy-check:before {
     content: "\e904";
@@ -112,9 +133,6 @@
 }
 .iconssturdy-add-mini:before {
     content: "\e915";
-}
-.iconssturdy-clear-mini:before {
-    content: "\e916";
 }
 .iconssturdy-sort-az:before {
     content: "\e917";
@@ -247,5 +265,8 @@
 }
 .iconssturdy-eye:before {
     content: "\e943";
+}
+.iconssturdy-thumbs-up:before {
+    content: "\e94d";
 }
 
