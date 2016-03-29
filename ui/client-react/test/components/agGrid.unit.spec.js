@@ -165,5 +165,67 @@ describe('AGGrid functions', () => {
 
         expect(parent.refs.regGrid.props.showGrouping).toEqual(true);
     });
+    it('test expand all of grouped data', () => {
+        AGGrid.__ResetDependency__('AgGridReact');
+        component = TestUtils.renderIntoDocument(<AGGrid actions={TableActionsMock}
+                                                         records={fakeReportData_before.data.records}
+                                                         columns={fakeReportData_before.data.columns} flux={flux}
+                                                         showGrouping={true} loading={false}/>);
+        expect(TestUtils.isCompositeComponent(component)).toBeTruthy();
+        let gridElement = TestUtils.scryRenderedDOMComponentsWithClass(component, "agGrid");
+        expect(gridElement.length).toEqual(1);
+        var expandAllIcon = gridElement[0].getElementsByClassName("collapser");
+        expect(expandAllIcon.length).toEqual(1);
+        TestUtils.Simulate.click(expandAllIcon[0]);
+        expect(expandAllIcon[0].getAttribute("state")).toEqual("open");
+    });
+    it('test collapse all of grouped data', () => {
+        AGGrid.__ResetDependency__('AgGridReact');
+        component = TestUtils.renderIntoDocument(<AGGrid actions={TableActionsMock}
+                                                         records={fakeReportData_before.data.records}
+                                                         columns={fakeReportData_before.data.columns} flux={flux}
+                                                         showGrouping={true} loading={false}/>);
+        expect(TestUtils.isCompositeComponent(component)).toBeTruthy();
+        let gridElement = TestUtils.scryRenderedDOMComponentsWithClass(component, "agGrid");
+        expect(gridElement.length).toEqual(1);
+        let expandAllIcon = gridElement[0].getElementsByClassName("collapser");
+        expect(expandAllIcon.length).toEqual(1);
+        TestUtils.Simulate.click(expandAllIcon[0]);
+        TestUtils.Simulate.click(expandAllIcon[0]);
+        expect(expandAllIcon[0].getAttribute("state")).toEqual("open");
+    });
+    it('test selectAll checkbox rendered', () => {
+        AGGrid.__ResetDependency__('AgGridReact');
+        component = TestUtils.renderIntoDocument(<AGGrid actions={TableActionsMock}
+                                                         records={fakeReportData_before.data.records}
+                                                         columns={fakeReportData_before.data.columns} flux={flux}
+                                                         loading={false}/>);
+        expect(TestUtils.isCompositeComponent(component)).toBeTruthy();
+        let gridElement = TestUtils.scryRenderedDOMComponentsWithClass(component, "agGrid");
+        expect(gridElement.length).toEqual(1);
+        let selectAllCheckbox = gridElement[0].getElementsByClassName("selectAllCheckbox");
+        expect(selectAllCheckbox.length).toEqual(1);
+    });
+    it('test selects all rows', () => {
+        AGGrid.__ResetDependency__('AgGridReact');
+        component = TestUtils.renderIntoDocument(<AGGrid actions={TableActionsMock}
+                                                         records={fakeReportData_before.data.records}
+                                                         columns={fakeReportData_before.data.columns} flux={flux}
+                                                         loading={false}/>);
+        expect(TestUtils.isCompositeComponent(component)).toBeTruthy();
+        let gridElement = TestUtils.scryRenderedDOMComponentsWithClass(component, "agGrid");
+        expect(gridElement.length).toEqual(1);
+        let selectAllCheckbox = gridElement[0].getElementsByClassName("selectAllCheckbox");
+        expect(selectAllCheckbox.length).toEqual(1);
+        selectAllCheckbox[0].click();
+        let listOfCheckboxes = gridElement[0].getElementsByClassName("ag-selection-checkbox");
+        let rowsSelected = 0;
+        for (var i = 0; i < listOfCheckboxes.length; i++) {
+            if (listOfCheckboxes[i].checked) {
+                rowsSelected++;
+            }
+        }
+        expect(rowsSelected).toEqual(fakeReportData_before.data.records.length);
+    });
 });
 
