@@ -39,9 +39,7 @@
                 // Via the API create some records
                 return e2eBase.recordService.addRecords(app, app.tables[2], generatedRecords);
             }).then(function() {
-                // Get the appropriate fields out of the third table
-                nonBuiltInFields = e2eBase.tableService.getNonBuiltInFields(app.tables[2]);
-                //generate 1 empty record
+                // Generate 1 empty record
                 var generatedEmptyRecords = e2eBase.recordService.generateEmptyRecords(nonBuiltInFields, 1);
                 return e2eBase.recordService.addRecords(app, app.tables[2], generatedEmptyRecords);
             }).then(function() {
@@ -89,12 +87,14 @@
                 beforeAll(function(done) {
                     // Resize the browser taking values from the data provider
                     e2eBase.resizeBrowser(testcase.browserWidth, e2eConsts.DEFAULT_HEIGHT);
+                    if (testcase.breakpointSize === 'small') {
+                        reportServicePage.clickReportHeaderHamburger();
+                    }
                     // Select the table homepage
                     reportServicePage.waitForElement(reportServicePage.tablesListDivEl).then(function() {
                         reportServicePage.tableLinksElList.get(4).click();
                         if (testcase.breakpointSize === 'small') {
-                            reportServicePage.waitForElementToBeClickable(reportServicePage.topNavToggleHamburgerEl);
-                            reportServicePage.topNavToggleHamburgerEl.click();
+                            reportServicePage.clickTopNavHamburger();
                         }
                     });
                     // Open the reports list
@@ -106,9 +106,7 @@
                         // Find and select the report
                         reportServicePage.selectReport('My Reports', 'Report With Facets');
                         if (testcase.breakpointSize === 'small') {
-                            reportServicePage.waitForElement(reportServicePage.reportHeaderToggleHamburgerEl).then(function() {
-                                reportServicePage.reportHeaderToggleHamburgerEl.click();
-                            });
+                            reportServicePage.clickReportHeaderHamburger();
                         }
                     });
                     reportServicePage.waitForElement(reportServicePage.loadedContentEl).then(function() {
@@ -300,19 +298,13 @@
                                 for (var i = 0; i < facetTestcase.facets.length; i++) {
                                     // Select facet group and items
                                     reportFacetsPage.selectGroupAndFacetItems(facetTestcase.facets[i].group, facetTestcase.facets[i].ItemIndex).then(function(facetSelections) {
-                                        if (testcase.breakpointSize === 'small') {
-                                            // Verify tokens is present in the DOM but not displayed on small breakpoint
-                                            expect(reportFacetsPage.reportSelectedFacets.isPresent).toBeTruthy();
-                                            expect(reportFacetsPage.reportSelectedFacets.isDisplayed()).toBeFalsy();
-                                        } else {
-                                            // Get facet tokens from the reports toolbar and verify against selected items on reports toolbar
-                                            reportFacetsPage.reportFacetNameSelections.map(function(tokenName, tokenindex) {
-                                                return tokenName.getText();
-                                            }).then(function(selections) {
-                                                // Sort each array before comparing
-                                                expect(selections.sort()).toEqual(facetSelections.sort());
-                                            });
-                                        }
+                                        // Get facet tokens from the reports toolbar and verify against selected items on reports toolbar
+                                        reportFacetsPage.reportFacetNameSelections.map(function(tokenName, tokenindex) {
+                                            return tokenName.getText();
+                                        }).then(function(selections) {
+                                            // Sort each array before comparing
+                                            expect(selections.sort()).toEqual(facetSelections.sort());
+                                        });
                                     });
                                 }
                             }).then(function() {

@@ -3,7 +3,6 @@
  * All new page objects should inherit this module by default.
  * Created by klabak on 4/15/15.
  */
-
 (function() {
     'use strict';
     var promise = require('bluebird');
@@ -39,6 +38,7 @@
                     });
             return linkDeferred.promise;
         };
+
         /**
          * Gets all links within a div element
          * Returns a promise (calls Protractor's element.all() function)
@@ -48,6 +48,7 @@
             expect(div).not.toEqual({});
             return div.all(by.tagName('a'));
         };
+
         /**
          * Helper method that checks the classes of an element for only exact matches
          * Use this method instead of toMatch() as that will return true for partial matches.
@@ -57,35 +58,37 @@
                 return classes.split(' ').indexOf(cls) !== -1;
             });
         };
+
+        /*
+         * Wrapper functions for Protractor's ExpectedConditions feature which allows you to wait for non-Angular elements
+         */
         this.waitForElement = function(element) {
-            return browser.wait(EC.visibilityOf(element), 5000, 'Timed out waiting for element to appear');
+            return browser.wait(EC.visibilityOf(element), browser.params.ecTimeout, 'Timed out waiting for element to appear');
         };
 
         this.waitForElementToBePresent = function(element) {
-            return browser.wait(EC.presenceOf(element), 5000, 'Timed out waiting for element to be present on the DOM');
+            return browser.wait(EC.presenceOf(element), browser.params.ecTimeout, 'Timed out waiting for element to be present on the DOM');
         };
 
         this.waitForElementToBeClickable = function(element) {
-            return browser.wait(EC.elementToBeClickable(element), 5000, 'Timed out waiting for element to be clickable');
+            return browser.wait(EC.elementToBeClickable(element), browser.params.ecTimeout, 'Timed out waiting for element to be clickable');
         };
 
         this.waitForElementToBeStale = function(element) {
-            return browser.wait(EC.stalenessOf(element), 5000, 'Timed out waiting for element to become stale');
+            return browser.wait(EC.stalenessOf(element), browser.params.ecTimeout, 'Timed out waiting for element to become stale');
         };
 
         this.waitForElementToBeInvisible = function(element) {
-            return browser.wait(EC.invisibilityOf(element), 5000, 'Timed out waiting for element to be invisible');
+            return browser.wait(EC.invisibilityOf(element), browser.params.ecTimeout, 'Timed out waiting for element to be invisible');
         };
 
         this.waitForElementsToBeClickable = function(element1, element2) {
             var condition = EC.and(EC.elementToBeClickable(element1), EC.elementToBeClickable(element2));
             //wait for condition to be true.
-            return browser.wait(condition, 5000, 'Timed out waiting for elements to be visible');
+            return browser.wait(condition, browser.params.ecTimeout, 'Timed out waiting for elements to be visible');
         };
 
-
-
-        // Verify the element is located Top
+        // Verify the element is located on top of the other
         this.isElementOnTop = function(element1, element2) {
             // First check that both elements are being displayed
             this.assertElementDisplayed(element1);

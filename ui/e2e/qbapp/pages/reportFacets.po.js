@@ -67,7 +67,6 @@
                     // Return the element or elements
                     return e2ePageBase.waitForElementToBeClickable(elem.element(by.className('panel-heading'))).then(function() {
                         return elem.element(by.className('panel-heading')).getText().then(function(text) {
-                            //Strip off any Text Field\nElo
                             // Match the text
                             return text.indexOf(facetGroupName) > -1;
                         });
@@ -82,7 +81,6 @@
                                 return text.indexOf(facetGroupName) > -1;
                             });
                         }).then(function(filteredElements2) {
-                            //TODO: Handle facets with the same name (if this will happen)
                             return filteredElements2[0];
                         });
                     }
@@ -92,7 +90,7 @@
         };
 
         /*
-         * Function will click on the facet group element and assert that the group expands
+         * Function will click on the facet group element
          */
         this.clickFacetGroupElement = function(facetGroupName) {
             var self = this;
@@ -154,9 +152,9 @@
         };
 
         /**
-         * Function that will open the facet group (facetName) and select the facet Items and verify the checkmark and finally verify facet tokens in container.
-         * @param facetName
-         * @param facetItems is an array
+         * Function that will open the facet group (facetName) and select the facet Items
+         * @param facetGroupName
+         * @param facetIndexes is an array of facet selections
          */
         this.selectGroupAndFacetItems = function(facetGroupName, facetIndexes) {
             var self = this;
