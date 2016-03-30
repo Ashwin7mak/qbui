@@ -102,6 +102,13 @@ $grid-default-cell-padding: 8px;
         padding: $grid-default-cell-padding + 2 $grid-default-cell-padding $grid-default-cell-padding $grid-default-cell-padding;
         border-top: 4px solid $grid-group-row-header-border-top;
     }
+    .ag-row-group {
+        &:first-of-type {
+            .ag-group-cell-entire-row {
+                border-top: 0;
+            }
+        }
+    }
     .ag-group-cell-entire-row::before {
         border-top: 1px solid $grid-group-row-header-divider;
         position: absolute;
@@ -138,6 +145,7 @@ $grid-default-cell-padding: 8px;
     @for $i from 1 through 6 {
         .ag-row-level-#{$i}{
             .ag-group-cell-entire-row {
+                border-top: 0;
                 padding-left: $grid-default-cell-padding + $i*($grid-default-group-padding+$grid-group-expand-icon-size)!important;
             }
         }
