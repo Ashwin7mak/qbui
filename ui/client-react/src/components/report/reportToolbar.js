@@ -13,14 +13,10 @@ import FacetSelections from '../facet/facetSelections';
 import RecordsCount from './recordsCount';
 import QBicon from '../qbIcon/qbIcon';
 import IconActions from '../actions/iconActions';
-import FilterUtils from '../../utils/filterUtils';
 
 let FluxMixin = Fluxxor.FluxMixin(React);
 
 let logger = new Logger();
-
-
-const secondInMilliseconds = 1000;
 
 /**
  * a ReportToolbar for table reports with search field and a filter icon
@@ -43,8 +39,14 @@ var ReportToolbar = React.createClass({
                 facets:  React.PropTypes.array
             })
         }),
+        searchStringForFiltering: React.PropTypes.string,
+        searchInput: React.PropTypes.string,
+        selections: React.PropTypes.object,
+        nameForRecords:React.PropTypes.string,
+        pageActions: React.PropTypes.element,
         onFacetSelect: React.PropTypes.func,
-        pageActions: React.PropTypes.element
+        filterOnSelections: React.PropTypes.func,
+        searchTheString: React.PropTypes.func,
     },
 
 
@@ -52,37 +54,10 @@ var ReportToolbar = React.createClass({
         return {
             fillinMockFacets : window.location.search.includes('mockFilter'),
             selections:new FacetSelections(),
-            searchStringForFiltering: "",
-            debounceInputTime :.5 *  secondInMilliseconds, // 1/5 a second delay
+            searchStringForFiltering: ""
         };
     },
 
-    getInitialState() {
-        return {
-            //seed the initial search value
-            searchInput: this.props.searchStringForFiltering ? this.props.searchStringForFiltering : '',
-        };
-    },
-
-    debouncedChange(name) {
-        let deferred = Promise.defer();
-
-        var timerId = this.timerId;
-        var self = this;
-        if (timerId) {
-            clearTimeout(timerId);
-        }
-
-        function updateName(innerName) {
-            return function() {
-                deferred.resolve(innerName);
-            };
-        }
-
-        timerId = setTimeout((updateName)(name), this.props.debounceInputTime);
-        this.timerId = timerId;
-        return deferred.promise;
-    },
 
     isFiltered() {
         let answer = false;
@@ -94,71 +69,34 @@ var ReportToolbar = React.createClass({
         return answer;
     },
 
-    filterReport(searchString, selections) {
-        let flux = this.getFlux();
 
-        const filter = FilterUtils.getFilter(searchString,
-            selections,
-            this.fields);
-
-        flux.actions.filterReport(this.props.appId, this.props.tblId, this.props.rptId, true, filter);
-    },
-
-    filterOnSelections(newSelections) {
-        this.filterReport(this.props.searchStringForFiltering, newSelections);
-    },
-    filterOnSearch(newSearch) {
-        this.filterReport(newSearch, this.props.selections);
-    },
     handleFacetSelect(e, facet, value) {
         var newSelections = this.props.selections.copy();
         newSelections.toggleSelectFacetValue(facet, value);
-        this.filterOnSelections(newSelections);
+        this.props.filterOnSelections(newSelections);
     },
 
     handleFacetDeselect(e, facet, value) {
         var newSelections = this.props.selections.copy();
         newSelections.setFacetValueSelectState(facet, value, false);
-        this.filterOnSelections(newSelections);
+        this.props.filterOnSelections(newSelections);
     },
 
     handleFacetClearFieldSelects(facet) {
         var newSelections = this.props.selections.copy();
         newSelections.removeAllFieldSelections(facet.id);
-        this.filterOnSelections(newSelections);
+        this.props.filterOnSelections(newSelections);
     },
 
     handleFacetClearAllSelects() {
         var newSelections = new FacetSelections();
-        this.filterOnSelections(newSelections);
+        this.props.filterOnSelections(newSelections);
     },
-
-    handleFacetClearAllSelectsAndSearch() {
-        var newSelections = new FacetSelections();
-        this.setState({searchInput:''});
-        this.filterReport('', newSelections);
-    },
-
-    executeSearchString(result) {
-        this.filterOnSearch(result);
-    },
-
-    searchTheString(searchTxt, debounced) {
-        if (debounced) {
-            this.debouncedChange(searchTxt).then((result) => {
-                this.executeSearchString(result);
-            });
-        }  else {
-            this.executeSearchString(searchTxt);
-        }
-    },
-
 
     handleSearchChange(e) {
         var searchTxt = e.target.value;
-        this.searchTheString(searchTxt, true);
+        this.props.searchTheString(searchTxt);
     },
-
 
     /**
      * Support filtering of blank values; add a (blank) entry to the end of the list of values
@@ -172,10 +110,8 @@ var ReportToolbar = React.createClass({
         let blankMsg = 'report.blank';
         if (this.props.reportData && this.props.reportData.data &&
             this.props.reportData.data.facets) {
-            this.fields = {};
             this.props.reportData.data.facets.map((facet) => {
                 // a fields id ->facet lookup
-                this.fields[facet.id] = facet;
                 if (facet.blanks && facet.type === "text" && !facet.blankAdded) {
                     // Note the I18nMessage version we are using only supports outputting a span wrapped component not just
                     // a translated string so until we move to reactintl 2.0
@@ -270,12 +206,7 @@ var ReportToolbar = React.createClass({
         }
 
         // determine if there is a search/filter in effect and if there are records/results to show
-        let hasRecords = true;
-        if (this.isFiltered()) {
-            hasRecords = !!filteredRecordCount;
-        } else {
-            hasRecords = !!recordCount;
-        }
+        let hasRecords = this.isFiltered() ? !!filteredRecordCount : !!recordCount;
         let hasSelectedFacets = this.props.selections && this.props.selections.hasAnySelections();
 
         let reportToolbar = (
@@ -289,9 +220,9 @@ var ReportToolbar = React.createClass({
                          if has facets has search too, eg no facets without searchbox */}
                         {recordCount &&
                             <FilterSearchBox onChange={this.handleSearchChange}
-                                             nameForRecords="Records"
-                                             ref="searchInputbox"
-                                             value={this.props.searchStringForFiltering}
+                                             nameForRecords={this.props.nameForRecords}
+                                             searchBoxKey="reportToolBar"
+                                             value={this.props.searchInput}
                                 {...this.props} />
                         }
 
@@ -314,7 +245,8 @@ var ReportToolbar = React.createClass({
                           isFiltered={this.isFiltered() && !this.props.reportData.loading}
                           isLoading={isLoading}
                           filteredRecordCount={filteredRecordCount}
-                          nameForRecords="Records"
+                          nameForRecords={this.props.nameForRecords}
+                          clearAllFilters={this.props.clearAllFilters}
                     />
 
                 {this.props.pageActions}

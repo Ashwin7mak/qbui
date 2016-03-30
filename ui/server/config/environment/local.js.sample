@@ -61,6 +61,9 @@
         //Node understanding of RuntimeEnvironment
         env: envConsts.LOCAL,
 
+        //set false if you don't want growl notifications on webpack / watch updates
+        growlNotify: true,
+
         //Node's understanding of a grouping of routes to be enabled/disabled
         routeGroup: routeGroups.DEBUG,
 

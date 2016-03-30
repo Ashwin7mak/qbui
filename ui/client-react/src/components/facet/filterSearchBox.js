@@ -12,7 +12,8 @@ var FilterSearchBox = React.createClass({
     displayName: 'FilterSearchBox',
     propTypes: {
         onChange : React.PropTypes.func,
-        nameForRecords: React.PropTypes.string
+        nameForRecords: React.PropTypes.string,
+        value : React.PropTypes.string.isRequired
     },
     defaultProps: {
         nameForRecords :"Records"
@@ -24,11 +25,12 @@ var FilterSearchBox = React.createClass({
         //
         // looks like this will be supported in
         // reactintl 2.0 see - http://stackoverflow.com/questions/35286239/how-to-put-valuedata-into-html-attribute-with-reactjs-and-reactintl
-
         let placeMsg = "Search these " + this.props.nameForRecords + "...";
-        return (<div className="filterSearchBoxContainer"><input className="filterSearchBox" type="text" key="filterSearchBox"
-                       value={this.props.value}
-                       onChange={this.props.onChange} placeholder={placeMsg}/>
+        return (<div className="filterSearchBoxContainer">
+                    <input className="filterSearchBox" type="text"
+                           key={"filterSearchBox_" + this.props.searchBoxKey}
+                           value={this.props.value}
+                           onChange={this.props.onChange} placeholder={placeMsg}/>
                 </div>
         );
     }

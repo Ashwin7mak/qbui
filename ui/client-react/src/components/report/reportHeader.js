@@ -17,12 +17,14 @@ var ReportHeader = React.createClass({
     mixins: [FluxMixin],
 
     propTypes: {
-        reportData: React.PropTypes.object
+        reportData: React.PropTypes.object,
+        searchInput: React.PropTypes.string,
+        nameForRecords: React.PropTypes.string,
+        searchTheString: React.PropTypes.func,
     },
     getInitialState() {
         return {
             searching: false,
-            debounceInputMillis: 500
         };
     },
     // no top nav present so the hamburger exists here
@@ -31,33 +33,9 @@ var ReportHeader = React.createClass({
         flux.actions.toggleLeftNav();
     },
 
-    getFacetFields() {
-        let fields = {};
-        this.props.reportData.data.facets.map(facet => {
-            // a fields id ->facet lookup
-            fields[facet.id] = facet;
-        });
-        return fields;
-    },
-
-    searchTheString(searchString)  {
-        const facetFields = this.getFacetFields();
-        let flux = this.getFlux();
-
-        const filter = FilterUtils.getFilter(searchString,
-            this.props.reportData.selections,
-            facetFields);
-
-        flux.actions.filterReport(this.props.reportData.appId,
-            this.props.reportData.tblId,
-            this.props.reportData.rptId,
-            true, filter);
-    },
-
     handleSearchChange(e) {
         var searchTxt = e.target.value;
-
-        this.searchTheString(searchTxt);
+        this.props.searchTheString(searchTxt);
     },
     // show the search elements
     startSearching() {
@@ -86,9 +64,9 @@ var ReportHeader = React.createClass({
 
             <div className="center searchElements">
                 <FilterSearchBox onChange={this.handleSearchChange}
-                                 nameForRecords="Records"
-                                 ref="searchInputbox"
-                                 value={this.props.reportData.searchStringForFiltering}
+                                 nameForRecords={this.props.nameForRecords}
+                                 searchBoxKey="reportHeader"
+                                 value={this.props.searchInput}
                                 {...this.props} />
                 <a className="textLink" href="#" onClick={this.cancelSearch}>
                     <I18nMessage message="cancel"/>

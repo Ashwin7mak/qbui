@@ -19,7 +19,8 @@ var ReportToolsAndContent = React.createClass({
         tblId: React.PropTypes.string,
         rptId: React.PropTypes.string,
         reportData: React.PropTypes.object,
-        pageActions: React.PropTypes.element
+        pageActions: React.PropTypes.element,
+        callbacks :  React.PropTypes.object,
     },
     getDefaultProps() {
         return {
@@ -27,14 +28,18 @@ var ReportToolsAndContent = React.createClass({
         };
     },
     render() {
-        var {appId, tblId, rptId, reportData:{selections, searchStringForFiltering, ...otherReportData}} = this.props;
+        var {appId, tblId, rptId,
+             reportData:{selections, ...otherReportData}} = this.props;
         let toolbar = <ReportToolbar appId={appId}
-                                    tblId={tblId}
-                                    rptId={rptId}
-                                    reportData={otherReportData}
-                                    selections={selections}
-                                    searchStringForFiltering={searchStringForFiltering}
-                                    pageActions={this.props.pageActions}/>;
+                                     tblId={tblId}
+                                     rptId={rptId}
+                                     reportData={otherReportData}
+                                     selections={selections}
+                                     searchStringForFiltering={this.props.searchStringForFiltering}
+                                     searchInput={this.props.searchInput}
+                                     pageActions={this.props.pageActions}
+                                     nameForRecords={this.props.nameForRecords}
+                                     {...this.props.callbacks} />;
 
         return (<div className="reportToolsAndContentContainer">
                     <ReportContent  reportData={this.props.reportData}

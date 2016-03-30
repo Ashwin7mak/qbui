@@ -156,6 +156,7 @@
   "scripts": {
     "webpack": "webpack --config webpack.config.js",
     "watch": "webpack --config webpack.config.js --watch",
+    "hotload": "node_modules/grunt-nodemon/node_modules/.bin/nodemon --watch server --watch common server/app.js",
     "clean": "rm -r client-react/dist",
     "start": "node server/app.js",
     "mockServer": "node_modules/grunt-nodemon/node_modules/.bin/nodemon --watch server/mockserver -e js,json server/mockserver/mocker.js",

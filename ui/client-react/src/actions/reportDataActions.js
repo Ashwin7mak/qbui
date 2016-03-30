@@ -155,6 +155,10 @@ let reportDataActions = {
                 reject();
             }
         }.bind(this));
+    },
+
+    filterSelectionsPending(selections) {
+        this.dispatch(actions.FILTER_SELECTIONS_PENDING, {selections});
     }
 };
 

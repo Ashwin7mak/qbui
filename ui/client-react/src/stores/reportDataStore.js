@@ -24,6 +24,7 @@ let ReportDataStore = Fluxxor.createStore({
             actions.LOAD_RECORDS,  this.onLoadRecords,
             actions.LOAD_RECORDS_SUCCESS, this.onLoadRecordsSuccess,
             actions.LOAD_RECORDS_FAILED, this.onLoadRecordsFailed,
+            actions.FILTER_SELECTIONS_PENDING, this.onFilterSelectionsPending,
             actions.SHOW_FACET_MENU, this.onShowFacetMenu,
             actions.HIDE_FACET_MENU, this.onHideFacetMenu,
             actions.SEARCH_FOR, this.onSearchFor
@@ -97,6 +98,11 @@ let ReportDataStore = Fluxxor.createStore({
         this.facetExpression = payload.filter.facet;
         this.searchStringForFiltering =  payload.filter.search;
 
+        this.emit('change');
+    },
+
+    onFilterSelectionsPending(payload) {
+        this.selections = payload.selections;
         this.emit('change');
     },
 
