@@ -210,9 +210,8 @@ let AGGrid = React.createClass({
      * Helper method to flip the master checkbox if all rows are checked
      */
     updateAllCheckbox() {
-        let flux = this.getFlux();
         let selectedRows = this.getSelectedRows().length;
-        let allRowsSelected = flux.stores.ReportDataStore.data.filteredRecordsCount === selectedRows;
+        let allRowsSelected = this.props.filteredRecordsCount === selectedRows;
         var newState = {
             toolsMenuOpen: selectedRows > 0,
             allRowsSelected : allRowsSelected
@@ -234,9 +233,6 @@ let AGGrid = React.createClass({
             this.deselectAll();
         }
         this.updateAllCheckbox();
-    },
-    componentDidUpdate(prevProps, prevState) {
-        //this.autoSizeAllColumns();
     },
     /**
      * keep track of tools menu being open (need to change overflow css style)
@@ -287,7 +283,7 @@ let AGGrid = React.createClass({
         return (this.props.reportHeader && this.props.selectionActions && (
             <div className={classes}>{hasSelection ?
                 React.cloneElement(this.props.selectionActions, {key:"selectionActions", selection: selectedRows}) :
-                React.cloneElement(this.props.reportHeader, {key:"reportHeader", onMenuEnter:this.onMenuEnter, onMenuExit:this.onMenuExit})}
+                React.cloneElement(this.props.reportHeader, {key:"reportHeader", pageActions: this.props.pageActions, onMenuEnter:this.onMenuEnter, onMenuExit:this.onMenuExit})}
             </div>));
     },
     /**
@@ -313,13 +309,12 @@ let AGGrid = React.createClass({
         // this is a weird calculation but this is because we want the checkbox to always show based on number of grouping levels
         // for now this is being calulated as num_groups*(font size + padding) + num_checkboxes*(size of checkbox + padding)
         // 3px error is because icons need to be fixed, so that'll be removed.
-        let flux = this.getFlux();
         const padding_between_icons = 10;
         const cell_padding = 8;
         const font_size = 20;
         const checkbox_size = 12;
         return cell_padding +
-            flux.stores.ReportDataStore.data.groupLevel * (font_size + padding_between_icons) +
+            this.props.groupLevel * (font_size + padding_between_icons) +
             checkbox_size + cell_padding - 3;
     },
     /**

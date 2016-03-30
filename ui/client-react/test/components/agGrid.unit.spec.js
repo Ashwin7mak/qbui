@@ -25,15 +25,7 @@ var I18nMessageMock = React.createClass({
     }
 });
 
-let flux = {
-    stores: {
-        ReportDataStore: {
-            data: {
-                filteredRecordsCount: 0
-            }
-        }
-    }
-};
+let flux = {};
 
 const fakeReportData_loading = {
     loading: true

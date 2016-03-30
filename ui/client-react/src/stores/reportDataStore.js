@@ -81,7 +81,7 @@ let ReportDataStore = Fluxxor.createStore({
         _.extend(this.data, {
             name: reportData.name,
             hasGrouping: reportData.hasGrouping, //TODO: this should come from report meta data.
-            columns: this.getReportColumns(reportData.data.fields),
+            columns: this.getReportColumns(reportData.data.fields, reportData.hasGrouping),
             records: records,
             facets: reportData.data.facets,
             filteredRecords: records,
@@ -151,16 +151,19 @@ let ReportDataStore = Fluxxor.createStore({
         this.emit('change');
     },
 
-    getReportColumns(fields) {
+    getReportColumns(fields, hasGrouping) {
         let columns = [];
         let groupingFields = this.data.groupingFields;
 
         if (fields) {
             fields.forEach(function(field, index) {
                 //skip showing grouped fields on report
-                let isFieldGrouped = groupingFields.find((groupingField) => {
-                    return field.name === groupingField;
-                });
+                let isFieldGrouped = false;
+                if (hasGrouping) {
+                    isFieldGrouped = groupingFields.find((groupingField) => {
+                        return field.name === groupingField;
+                    });
+                }
                 if (!isFieldGrouped) {
                     let column = {};
                     column.order = index;
@@ -196,19 +199,19 @@ let ReportDataStore = Fluxxor.createStore({
     },
     createTempGroupedData(reportData, fields) {
         let groupingFields = this.findTempGroupingFields(fields);
-        var groupedData = _.groupBy(reportData, function(record) {
+        let groupedData = _.groupBy(reportData, function(record) {
             return record[groupingFields[0]];
         });
-        var newData = [];
+        let newData = [];
 
         function groupByPredicate(rec) {
             return rec[groupingFields[1]];
         }
-        for (var group in groupedData) {
-            var children = [];
+        for (let group in groupedData) {
+            let children = [];
             if (groupingFields[1]) {
-                var subgroupedData = _.groupBy(groupedData[group], groupByPredicate);
-                for (var subgroup in subgroupedData) {
+                let subgroupedData = _.groupBy(groupedData[group], groupByPredicate);
+                for (let subgroup in subgroupedData) {
                     children.push({group: subgroup, children: subgroupedData[subgroup]});
                 }
             } else {
