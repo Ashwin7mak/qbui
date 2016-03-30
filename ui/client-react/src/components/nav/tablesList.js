@@ -10,9 +10,14 @@ let TablesList = React.createClass({
 
     propTypes: {
         selectedAppId: React.PropTypes.string.isRequired,
-        open: React.PropTypes.bool.isRequired,
         onSelect: React.PropTypes.func,
-        showReports: React.PropTypes.func.isRequired
+        showReports: React.PropTypes.func.isRequired,
+        expanded: React.PropTypes.bool
+    },
+    getDefaultProps() {
+        return {
+            expanded: true
+        };
     },
     getInitialState() {
         return {
@@ -69,18 +74,19 @@ let TablesList = React.createClass({
      * @returns {*}
      */
     tablesList() {
-
         return this.props.getAppTables(this.props.selectedAppId).map((table) => {
             table.link = this.getTableLink(table);
             table.icon = 'report-table';
             return this.searchMatches(table.name) &&
                 <NavItem item={table}
                          key={table.id}
+                         showSecondary={this.props.expanded}
                          secondaryIcon={"report-menu-3"}
                          secondaryOnSelect={this.props.showReports}
                          hoverComponent={this.getHoverComponent(table)}
+                         onSelect={this.props.onSelect}
                          selected={table.id === this.props.selectedTableId}
-                            {...this.props}/>;
+                         open={true}/>;
         });
     },
     getNavItem(msg, link, icon) {
@@ -89,7 +95,7 @@ let TablesList = React.createClass({
         </div>);
 
         return (<NavItem item={{msg: msg, link:link, icon:icon}}
-            hoverComponent={hoverComponent} {...this.props} />);
+            hoverComponent={hoverComponent} open={true} onSelect={this.props.onSelect}/>);
 
     },
     getTopLinksItem() {
@@ -110,7 +116,7 @@ let TablesList = React.createClass({
                 <NavItem item={{msg: 'nav.tablesHeading'}}
                          isHeading={true}
                          secondaryIcon={"search"}
-                         onClick={this.onClickTables} {...this.props} />
+                         onClick={this.onClickTables} open={true} />
                 <li className={this.state.searching ? "search open" : "search"}>
                     <input type="text" className={"searchInput"} placeholder={Locale.getMessage('nav.searchTablesPlaceholder')} value={this.state.searchText} onChange={this.onChangeSearch}/>
                 </li>

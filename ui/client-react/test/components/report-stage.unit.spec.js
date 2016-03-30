@@ -36,9 +36,6 @@ describe('Report stage functions', () => {
         };
         component = TestUtils.renderIntoDocument(<ReportStage reportData={reportData}/>);
         expect(TestUtils.isCompositeComponent(component)).toBeTruthy();
-        let header = TestUtils.scryRenderedDOMComponentsWithClass(component, "header");
-        expect(header.length).toEqual(2);
-        expect(header[0].textContent).toEqual("My Report");
     });
 
 });

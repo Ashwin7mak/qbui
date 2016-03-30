@@ -33,12 +33,12 @@ describe('Nav Actions functions', () => {
 
     it('test toggle left nav action with state', () => {
         flux.actions.toggleLeftNav(true);
-        expect(flux.dispatchBinder.dispatch).toHaveBeenCalledWith(actions.TOGGLE_LEFT_NAV, true);
+        expect(flux.dispatchBinder.dispatch).toHaveBeenCalledWith(actions.TOGGLE_LEFT_NAV_VISIBLE, true);
     });
 
     it('test toggle left nav action', () => {
         flux.actions.toggleLeftNav();
-        expect(flux.dispatchBinder.dispatch).toHaveBeenCalledWith(actions.TOGGLE_LEFT_NAV, undefined);
+        expect(flux.dispatchBinder.dispatch).toHaveBeenCalledWith(actions.TOGGLE_LEFT_NAV_VISIBLE, undefined);
     });
 
     it('test searching action', () => {

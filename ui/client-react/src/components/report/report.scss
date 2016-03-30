@@ -139,8 +139,21 @@
     display:flex;
 }
 
+
+.reportContainer {
+    .layout-stage {
+        .breadCrumbs {
+            padding-left:5px;
+        }
+    }
+}
+
+.reportToolbarContainer {
+    width: 100%;
+}
 .noData {
     padding-left: 1.5rem;
+
 }
 
 @include small-breakpoint {

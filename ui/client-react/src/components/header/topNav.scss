@@ -108,14 +108,7 @@ $top-nav-color: #193048;
 }
 
 .topNav .topTitle {
-    display:inline;
-    .qbIcon {
-        vertical-align:middle;
-        color: $top-nav-title-icon-color;
-    }
-    .qbIcon+span {
-        margin-left: 5px;
-    }
+    display:none;
 }
 
 @include small-breakpoint {
@@ -125,6 +118,28 @@ $top-nav-color: #193048;
     .topNav .globalActions {
         display: none; /* shown on left nav */
     }
-
+    .topNav .topTitle {
+        display:inline-block;
+        .qbIcon {
+            vertical-align:middle;
+            color: $top-nav-title-icon-color;
+        }
+        .qbIcon+span {
+            margin-left: 5px;
+        }
+    }
+    .topNav .top .navGroup.left {
+        display:flex;
+        flex-direction:row;
+        .navItem {
+            flex: 0 0 auto;
+        }
+        .topTitle {
+            display:flex;
+            flex: 1 1 auto;
+            justify-content:center;
+            align-items:center;
+        }
+    }
 }
 

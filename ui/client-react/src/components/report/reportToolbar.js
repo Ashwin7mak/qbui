@@ -12,7 +12,7 @@ import FacetsMenu from '../facet/facetsMenu';
 import FacetSelections from '../facet/facetSelections';
 import RecordsCount from './recordsCount';
 import QBicon from '../qbIcon/qbIcon';
-import PageActions from '../actions/pageActions';
+import IconActions from '../actions/iconActions';
 import FilterUtils from '../../utils/filterUtils';
 
 let FluxMixin = Fluxxor.FluxMixin(React);
@@ -43,7 +43,8 @@ var ReportToolbar = React.createClass({
                 facets:  React.PropTypes.array
             })
         }),
-        onFacetSelect : React.PropTypes.func
+        onFacetSelect: React.PropTypes.func,
+        pageActions: React.PropTypes.element
     },
 
 
@@ -239,15 +240,6 @@ var ReportToolbar = React.createClass({
             this.props.reportData.data.facets.appendedMockFilter = true;
         }
     },
-    getPageActions() {
-        const actions = [
-            {name: 'i.e. edit', icon:'edit'},
-            {name: 'i.e. mail', icon:'mail'},
-            {name: 'i.e. delete', icon:'delete'},
-            {name: 'i.e. print', icon:'print'}
-        ];
-        return (<PageActions actions={actions} menuAfter={0} {...this.props}/>);
-    },
 
     render() {
         if (this.props.fillinMockFacets) {
@@ -324,11 +316,13 @@ var ReportToolbar = React.createClass({
                           filteredRecordCount={filteredRecordCount}
                           nameForRecords="Records"
                     />
-                {this.getPageActions()}
+
+                {this.props.pageActions}
+
             </div>
         );
 
-        return (<div> {reportToolbar} </div>);
+        return (<div className="reportToolbarContainer"> {reportToolbar} </div>);
     }
 });
 
