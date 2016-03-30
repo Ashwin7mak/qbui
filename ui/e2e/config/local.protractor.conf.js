@@ -49,7 +49,9 @@
             tinySleep: 100,
             smallSleep: 1000,
             mediumSleep: 2500,
-            largeSleep: 5000
+            largeSleep: 5000,
+            // Constant for protractors ExpectedConditions functions (see e2ePageBase)
+            ecTimeout: 5000
         },
         // This function is run once before any of the test files. Acts as a global test preparation step
         onPrepare: function() {
@@ -78,6 +80,20 @@
             browser.getCapabilities().then(function(cap) {
                 browser.browserName = cap.caps_.browserName;
             });
+
+            //// Use this code if you want to slow down your Protractor tests (does not work in Protractor 3.0)
+            //var origFn = browser.driver.controlFlow().execute;
+            //
+            //browser.driver.controlFlow().execute = function() {
+            //    var args = arguments;
+            //
+            //    // Queue 10ms wait
+            //    origFn.call(browser.driver.controlFlow(), function() {
+            //        return protractor.promise.delayed(10);
+            //    });
+            //
+            //    return origFn.apply(browser.driver.controlFlow(), args);
+            //};
         }
     };
 }());
