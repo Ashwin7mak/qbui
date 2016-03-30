@@ -80,7 +80,7 @@ let ReportDataStore = Fluxxor.createStore({
         this.checkForFacetErrors(reportData);
         _.extend(this.data, {
             name: reportData.name,
-            hasGrouping: reportData.hasGrouping, //TODO: this should come from report meta data.
+            hasGrouping: reportData.hasGrouping, //TODO: QBSE-19937 this should come from report meta data.
             columns: this.getReportColumns(reportData.data.fields, reportData.hasGrouping),
             records: records,
             facets: reportData.data.facets,
@@ -245,7 +245,7 @@ let ReportDataStore = Fluxxor.createStore({
         }
 
         if (hasGrouping) {
-            //fake group data for now. find a text and a numeric field and group data on that
+            //QBSE-19937: fake group data for now. find a text and a numeric field and group data on that
             return this.createTempGroupedData(reportData, fields);
         }
         return reportData;
