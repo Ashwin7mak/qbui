@@ -97,9 +97,12 @@ $grid-default-cell-padding: 8px;
         width: $grid-group-expand-icon-size;
     }
 
+    //styling for grouped row headers
     .ag-group-cell-entire-row {
         background-color: $grid-group-row-header-bkgrd-color;
         padding: $grid-default-cell-padding + 2 $grid-default-cell-padding $grid-default-cell-padding $grid-default-cell-padding;
+    }
+    .ag-row-level-0 .ag-group-cell-entire-row {
         border-top: 4px solid $grid-group-row-header-border-top;
     }
     .ag-row-group {
@@ -124,7 +127,15 @@ $grid-default-cell-padding: 8px;
         vertical-align: top;
         font-weight: bold;
     }
-
+    //assuming that we can have upto 6 group levels
+    @for $i from 1 through 6 {
+        .ag-row-level-#{$i}{
+            .ag-group-cell-entire-row {
+                padding-left: $grid-default-cell-padding + $i*($grid-default-group-padding+$grid-group-expand-icon-size)!important;
+            }
+        }
+    }
+    //styling for checkboxes - master and rows
     .checkboxHolder {
         position: relative;
         height: 30px;
@@ -140,15 +151,6 @@ $grid-default-cell-padding: 8px;
     .ag-selection-checkbox {
         position: absolute;
         right: $grid-default-group-padding + 1;
-    }
-    //assuming that we can have upto 6 group levels
-    @for $i from 1 through 6 {
-        .ag-row-level-#{$i}{
-            .ag-group-cell-entire-row {
-                border-top: 0;
-                padding-left: $grid-default-cell-padding + $i*($grid-default-group-padding+$grid-group-expand-icon-size)!important;
-            }
-        }
     }
 }
 

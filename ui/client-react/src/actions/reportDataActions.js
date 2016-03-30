@@ -20,6 +20,7 @@ let logger = new Logger();
 Promise.onPossiblyUnhandledRejection(function(err) {
     logger.debug('Bluebird Unhandled rejection', err);
 });
+const GROUPING_ON = false; //change this to enable/disable grouped view on report
 
 let reportDataActions = {
 
@@ -42,7 +43,7 @@ let reportDataActions = {
                         logger.debug('Report service call successful');
                         var report = {
                             name: response[0].data.name,
-                            hasGrouping: false, //TODO: pull this from the real report meta data
+                            hasGrouping: GROUPING_ON, //TODO: pull this from the real report meta data
                             data: response[1].data
                         };
                         logger.debug("Report Name: " + report.name);
@@ -119,7 +120,7 @@ let reportDataActions = {
                         //  Get the filtered records
                         recordService.getRecords(appId, tblId, format, queryParams).then(
                             function(recordResponse) {
-                                recordResponse.data.hasGrouping = false; //TODO: pull this from the real report meta data
+                                recordResponse.data.hasGrouping = GROUPING_ON; //TODO: pull this from the real report meta data
                                 logger.debug('Filter Report Records service call successful');
                                 this.dispatch(actions.LOAD_RECORDS_SUCCESS, recordResponse.data);
                                 resolve();

@@ -30,6 +30,14 @@ let gridIcons = {
     groupExpanded: buildIconElement("caret-filled-down"),
     groupContracted: buildIconElement("icon_caretfilledright")
 };
+let consts = {
+    GROUP_HEADER_HEIGHT: 41,
+    ROW_HEIGHT: 32,
+    DEFAULT_CHECKBOX_COL_WIDTH: 30,
+    GROUP_ICON_PADDING: 10,
+    DEFAULT_CELL_PADDING: 8,
+    FONT_SIZE: 20
+};
 
 let AGGrid = React.createClass({
     mixins: [FluxMixin],
@@ -88,9 +96,9 @@ let AGGrid = React.createClass({
     },
     getRowHeight(rowItem) {
         if (rowItem.node.field === "group") {
-            return 41;
+            return consts.GROUP_HEADER_HEIGHT;
         } else {
-            return 32;
+            return consts.ROW_HEIGHT;
         }
     },
     /**
@@ -309,13 +317,10 @@ let AGGrid = React.createClass({
         // this is a weird calculation but this is because we want the checkbox to always show based on number of grouping levels
         // for now this is being calulated as num_groups*(font size + padding) + num_checkboxes*(size of checkbox + padding)
         // 3px error is because icons need to be fixed, so that'll be removed.
-        const padding_between_icons = 10;
-        const cell_padding = 8;
-        const font_size = 20;
         const checkbox_size = 12;
-        return cell_padding +
-            this.props.groupLevel * (font_size + padding_between_icons) +
-            checkbox_size + cell_padding - 3;
+        return consts.DEFAULT_CELL_PADDING +
+            this.props.groupLevel * (consts.FONT_SIZE + consts.GROUP_ICON_PADDING) +
+            checkbox_size + consts.DEFAULT_CELL_PADDING - 3;
     },
     /**
      * Builder for "checkbox" column for the grid
@@ -359,7 +364,7 @@ let AGGrid = React.createClass({
         if (this.props.showGrouping) {
             checkBoxCol.width = this.getCheckBoxColumnGroupedHeaderWidth();
         } else {
-            checkBoxCol.width = 30;
+            checkBoxCol.width = consts.DEFAULT_CHECKBOX_COL_WIDTH;
         }
         return checkBoxCol;
     },
