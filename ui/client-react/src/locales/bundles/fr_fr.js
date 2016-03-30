@@ -45,7 +45,8 @@ export default {
             searchAppsPlaceholder: "Chercher apps...",
             searchTablesPlaceholder: "Chercher tables...",
             searchReportsPlaceholder: "Chercher rapports...",
-            searchRecordsPlaceholder: "Chercher..."
+            searchRecordsPlaceholder: "Chercher...",
+            backToReport: "Retour au rapport"
         },
         grid: {
             no_data: "Il n'y a pas de données à afficher."
@@ -55,6 +56,26 @@ export default {
             alerts: "Alertes",
             help: "Aidez-moi",
             logout: "Se déconnecter"
+        },
+        pageActions: {
+            addRecord: "Ajouter un enregistrement",
+            favorite: "Préféré",
+            gridEdit: "Grille modifier",
+            edit: "Modifier",
+            delete: "Effacer",
+            email: "Email",
+            print: "Imprimer",
+            customizeReport: "Personnaliser ce Rapport",
+            customizeForm: "Personnaliser ce formulaire",
+            customizePage: "Personnaliser cette page"
+        },
+        iconActions: {
+            more: "Plus..."
+        },
+        recordActions: {
+            previous: "Précédent",
+            return: "Retour au rapport",
+            next: "Prochain"
         },
         header: {
             menu: {
@@ -71,7 +92,7 @@ export default {
             blank : "blanc",
             facets :{
                 noFacets : "Non valeurs",
-                seeMore : "plus de filtres",
+                seeMore : "plus...",
                 tooManyValues: "Trop de valeurs à utiliser pour le filtrage",
                 noCheck : "Non",
                 yesCheck : "Oui"

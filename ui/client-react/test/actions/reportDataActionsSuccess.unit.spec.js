@@ -25,6 +25,7 @@ describe('Report Data Actions success -- ', () => {
     };
     let response = {
         name: responseReportData.data.name,
+        hasGrouping: false, //for now just false tests until real grouping is implemented
         data: responseResultData.data
     };
     let loadReportInputs = {

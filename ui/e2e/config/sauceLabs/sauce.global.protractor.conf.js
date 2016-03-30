@@ -23,8 +23,6 @@
         sauceSeleniumAddress: 'localhost:4445/wd/hub',
         // list of files / patterns to load in the browser
         specs: [
-            //TODO: Temporary fix for stale element ref error reportTopNav tests are throwing. Will investigate.
-            baseE2EPath + 'qbapp/tests/reports/reportTopNav.e2e.spec.js',
             baseE2EPath + 'qbapp/tests/reports/*.e2e.spec.js'
         ],
         // Patterns to exclude.
@@ -51,7 +49,9 @@
             tinySleep : 1000,
             smallSleep : 5000,
             mediumSleep : 10000,
-            largeSleep :30000
+            largeSleep :30000,
+            // Constant for protractors ExpectedConditions functions (see e2ePageBase)
+            ecTimeout: 5000
         },
         // This function is run once before any of the test files. Acts as a global test preparation step
         onPrepare: function() {

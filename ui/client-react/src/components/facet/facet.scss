@@ -6,26 +6,29 @@
   width: 25em;
 }
 
+.facetsMenuContainer {
+  margin-left: 10px;
 
-.reportToolbar {
-  > div > div {
+  //the generated wrapper on facetMenuPopup
+  > div:not(.facetsMenuButton) > div:first-child {
     position: relative;
   }
 }
 
-.facetsMenuContainer {
-  margin-left: .5em;
-}
-
 .facetsMenuButton {
-  display: inline;
-
+  display: inline-block;
+  cursor: pointer;
+  &.withoutSelections {
+    margin-top:14px;
+    margin-bottom: 4px;
+  }
   .facetButtons {
     color: $icon-color;
       @include small-breakpoint {
           color:$secondary-bar-fg;
       }
   }
+
   &.popoverShown,
   .facetButtons:hover {
     color: $icon-color-hover;
@@ -35,7 +38,7 @@
   }
   .filterButton {
     font-size: 20px;
-    .qbIcon {
+    &.qbIcon {
       display: inline;
     }
   }
@@ -44,12 +47,13 @@
   }
 }
 
-.facetMenuPopup {
-    z-index: 10000;
-    margin-left: -15px;
+.facetsMenuContainer .facetMenuPopup.popover {
     border-radius: 3px;
     border-color : $facetMenu-BorderColor;
     min-width: 300px;
+    max-width: 98%;
+    position: absolute;
+    margin-left: -29px;
     > .arrow {
       left: 13% !important;
     }
@@ -67,10 +71,15 @@
       border: none;
     }
 
+    .notActionable {
+      cursor : not-allowed;
+    }
+
     .noOptions {
-      margin-left: 2em;
+      margin-left: 19px;
       color: $facetMenu-NoOptionsColor;
       font-family: "Lato", sans-serif;
+      padding-top: .5em;
     }
 
     .panel {
@@ -91,7 +100,7 @@
       border: none;
       box-shadow: none;
       border-top:  1px solid $facetMenu-BorderColor;
-      padding: 10px 15px 10px 15px;
+      padding: 0;
       border-radius: 0;
 
       &:hover {
@@ -110,6 +119,7 @@
     .panel-default > .panel-heading .panel-title .facetName {
       font-size: 16px;
       margin: 0;
+      padding: 10px 15px 10px 15px;
     }
     .selectionInfo.small {
       opacity: 0.7;
@@ -144,7 +154,7 @@
 
     .listMore {
       color: $facetMenu-showMoreColor;
-      margin-left: 2.4em;
+      padding-left: 2.4em;
       cursor: pointer;
     }
 
@@ -169,7 +179,8 @@
     .selections .clearFacet {
       color: $facetMenu-clearButtonColor;
     }
-  }
+}
+
 .selectedFacets {
   display: inline;
 }
@@ -180,19 +191,15 @@
   .facetNameToken {
     margin-right: .5em;
     display: block;
+    font-size: 85%;
   }
 
   .selectedToken {
     margin-right:10px;
-    margin-top: 2px; //clm
+    margin-top: 2px;
     border-radius: 12px;
     font-size:10px;
     font-weight:500;
-    /* dark background tokens */
-    // background-color: $selection-badge-color;
-    // color: $facetMenu-facetTokenTextColor;
-
-    /* paler background facet tokens */
     background-color: $facetMenu-facetTokenBackgroundColor;
     color: $facetMenu-facetTokenTextColor;
     display: inline-block;
@@ -218,6 +225,7 @@
     }
     .reportContainer .reportToolsAndContentContainer .reportToolbar {
 
+        height:40px;
         input {
             color: $search-input-fg;
         }
@@ -226,9 +234,9 @@
         }
         .facetMenuPopup {
             display: block;
-            left: 4px;
             min-width: 150px;
-            max-width: 200px;
+            max-width: 232px;
+            margin-left: 0px;
         }
 
         .facetsMenuContainer {
@@ -238,7 +246,9 @@
         .filterSearchBoxContainer {
             display:none;
         }
-
+        .facetsMenuButton.withoutSelections {
+            margin:0; // no search box to effect centered height in small
+        }
         .popover.bottom > .arrow {
             display: none;
         }

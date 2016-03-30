@@ -1,9 +1,32 @@
 @import '../../assets/css/qbVariables';
 
+.stageHeader {
+    display:flex;
+    flex-direction:row;
+    justify-content: space-between;
+    height:70px;
+    align-items:center;
+    .stageLeft {
+        flex:1 1 auto;
+        padding-left:10px;
+        .stageHeadline>* {
+            display:inline-block;
+        }
+        .qbIcon {
+            font-size: 16px;
+            color:$stage-headline-icon-color
+        }
+    }
+
+    .stageRight {
+        flex:0 0 auto;
+    }
+}
 .layout-stage {
     border-bottom: 1px solid $header-bg;
     position: relative;
     margin-bottom:30px;
+    background-color: $color2;
 
     .toggleStage {
 
@@ -16,13 +39,15 @@
         border-radius: 0 0 2px 2px;
         background-color: $color17;
         outline: none;
+        z-index: $zindex-dropdown;
     }
 
     .well {
-        background-color: $color17;
+        background-color: $color2;
         border:0 none transparent;
         margin:0;
-        padding: 10px 0;
+        padding: 0 0 10px 0;
+        box-shadow: none;
     }
 }
 

@@ -1,29 +1,45 @@
 import React from 'react';
 import TestUtils from 'react-addons-test-utils';
-import PageActions  from '../../src/components/actions/pageActions';
+import IconActions  from '../../src/components/actions/iconActions';
 
-describe('PageActions functions', () => {
+var I18nMessageMock = React.createClass({
+    render: function() {
+        return (
+            <div>I18Mock</div>
+        );
+    }
+});
+
+describe('IconActions functions', () => {
     'use strict';
 
     let component;
 
     const actions = [
-        {name: 'action1', icon:'icon1'},
-        {name: 'action2', icon:'icon2'},
-        {name: 'action3', icon:'icon3'}
+        {msg: 'action1', icon:'icon1'},
+        {msg: 'action2', icon:'icon2'},
+        {msg: 'action3', icon:'icon3'}
     ];
+
+    beforeEach(() => {
+        IconActions.__Rewire__('I18nMessage', I18nMessageMock);
+    });
+
+    afterEach(() => {
+        IconActions.__ResetDependency__('I18nMessage');
+    });
 
     it('test render of empty component', () => {
         const emptyActions = [];
-        component = TestUtils.renderIntoDocument(<PageActions actions={emptyActions} />);
+        component = TestUtils.renderIntoDocument(<IconActions actions={emptyActions} />);
         expect(TestUtils.isCompositeComponent(component)).toBeTruthy();
     });
 
     it('test render of no-menu component', () => {
-        component = TestUtils.renderIntoDocument(<PageActions actions={actions} menuAfter={actions.length}/>);
+        component = TestUtils.renderIntoDocument(<IconActions actions={actions} />);
         expect(TestUtils.isCompositeComponent(component)).toBeTruthy();
 
-        var icons = TestUtils.scryRenderedDOMComponentsWithClass(component, "pageActionButton");
+        var icons = TestUtils.scryRenderedDOMComponentsWithClass(component, "iconActionButton");
         expect(icons.length).toEqual(actions.length);
 
         var menuItems = TestUtils.scryRenderedDOMComponentsWithTag(component, "li");
@@ -31,10 +47,10 @@ describe('PageActions functions', () => {
     });
 
     it('test render of all-menu component', () => {
-        component = TestUtils.renderIntoDocument(<PageActions actions={actions} />);
+        component = TestUtils.renderIntoDocument(<IconActions actions={actions} maxButtonsBeforeMenu={0}/>);
         expect(TestUtils.isCompositeComponent(component)).toBeTruthy();
 
-        var icons = TestUtils.scryRenderedDOMComponentsWithClass(component, "pageActionButton");
+        var icons = TestUtils.scryRenderedDOMComponentsWithClass(component, "iconActionButton");
         expect(icons.length).toEqual(1); // the dropdown button
 
         var menuItems = TestUtils.scryRenderedDOMComponentsWithTag(component, "li");
@@ -42,10 +58,10 @@ describe('PageActions functions', () => {
     });
 
     it('test render of menu after 1st component', () => {
-        component = TestUtils.renderIntoDocument(<PageActions actions={actions} menuAfter={1}/>);
+        component = TestUtils.renderIntoDocument(<IconActions actions={actions} maxButtonsBeforeMenu={1}/>);
         expect(TestUtils.isCompositeComponent(component)).toBeTruthy();
 
-        var icons = TestUtils.scryRenderedDOMComponentsWithClass(component, "pageActionButton");
+        var icons = TestUtils.scryRenderedDOMComponentsWithClass(component, "iconActionButton");
         expect(icons.length).toEqual(2);
 
         var menuItems = TestUtils.scryRenderedDOMComponentsWithTag(component, "li");

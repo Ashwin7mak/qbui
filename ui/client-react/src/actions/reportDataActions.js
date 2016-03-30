@@ -11,6 +11,9 @@ import QueryUtils from '../utils/queryUtils';
 
 let logger = new Logger();
 
+// TODO: change this to enable/disable grouped view on report
+const GROUPING_ON = false;
+
 //  Model object referenced by UI layer for presentation of a report.
 //  TODO: initial implementation...still in progress..
 let reportModel = {
@@ -21,6 +24,9 @@ let reportModel = {
         if (reportMeta && reportMeta.data) {
             //  make available to the client the meta data that we think is necessary
             obj.name = reportMeta.data.name;
+
+            //TODO: pull this from the real report meta data
+            obj.hasGrouping = GROUPING_ON;
             //  TODO: not sure if sortList/grouping and summary info is needed OR if needed,
             //  TODO: that it is organized in the best way...
             //obj.sortList = reportMeta.data.sortList;
@@ -28,6 +34,8 @@ let reportModel = {
         }
 
         if (reportData) {
+            //TODO: pull this from the real report meta data
+            reportData.data.hasGrouping = GROUPING_ON;
             obj.data = reportData.data;
             //  TODO: not sure if this is how report summary information will be made available to the client
             //obj.summary = reportData.summary;
@@ -177,6 +185,7 @@ let reportDataActions = {
                         //  Get the filtered records
                         recordService.getRecords(appId, tblId, format, queryParams).then(
                             function(recordResponse) {
+                                recordResponse.data.hasGrouping = GROUPING_ON; //TODO: pull this from the real report meta data
                                 logger.debug('Filter Report Records service call successful');
                                 var model = reportModel.set(null, recordResponse);
                                 this.dispatch(actions.LOAD_REPORT_SUCCESS, model);
