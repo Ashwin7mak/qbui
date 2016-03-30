@@ -75,15 +75,19 @@ let ReportDataStore = Fluxxor.createStore({
         this.loading = false;
         this.error = false;
 
-        let records = this.getReportData(reportData.data);
+        this.data = {};
+        let records = this.getReportData(reportData.data, reportData.hasGrouping);
         this.checkForFacetErrors(reportData);
-        this.data = {
+        _.extend(this.data, {
             name: reportData.name,
-            columns: this.getReportColumns(reportData.data.fields),
+            hasGrouping: reportData.hasGrouping, //TODO: QBSE-19937 this should come from report meta data.
+            columns: this.getReportColumns(reportData.data.fields, reportData.hasGrouping),
             records: records,
             facets: reportData.data.facets,
-            filteredRecords: records
-        };
+            filteredRecords: records,
+            recordsCount: reportData.data.records.length,
+            filteredRecordsCount: reportData.data.records.length
+        });
         this.emit('change');
     },
 
@@ -103,7 +107,9 @@ let ReportDataStore = Fluxxor.createStore({
     onLoadRecordsSuccess(records) {
         this.loading = false;
         this.error = false;
-        this.data.filteredRecords = this.getReportData(records);
+        this.data.filteredRecords = this.getReportData(records, records.hasGrouping);
+        this.data.hasGrouping = records.hasGrouping;
+        this.data.filteredRecordsCount = records.records ? records.records.length : null;
         this.emit('change');
     },
 
@@ -145,29 +151,78 @@ let ReportDataStore = Fluxxor.createStore({
         this.emit('change');
     },
 
-    getReportColumns(fields) {
+    getReportColumns(fields, hasGrouping) {
         let columns = [];
+        let groupingFields = this.data.groupingFields;
+
         if (fields) {
             fields.forEach(function(field, index) {
-                let column = {};
-                column.order = index;
-                column.id = field.id;
-                column.headerName = field.name;     //for ag-grid
-                column.field = field.name;          //for ag-grid
-                column.columnName = field.name;     //for griddle
-                column.displayName = field.name;    //for griddle
-                column.fieldType = field.type;
-                column.builtIn = field.builtIn;
+                //skip showing grouped fields on report
+                let isFieldGrouped = false;
+                if (hasGrouping) {
+                    isFieldGrouped = groupingFields.find((groupingField) => {
+                        return field.name === groupingField;
+                    });
+                }
+                if (!isFieldGrouped) {
+                    let column = {};
+                    column.order = index;
+                    column.id = field.id;
+                    column.headerName = field.name;     //for ag-grid
+                    column.field = field.name;          //for ag-grid
+                    column.columnName = field.name;     //for griddle
+                    column.displayName = field.name;    //for griddle
+                    column.fieldType = field.type;
+                    column.builtIn = field.builtIn;
 
-                //  client side attributes..
-                column.datatypeAttributes = field.datatypeAttributes;
-                columns.push(column);
+                    //  client side attributes..
+                    column.datatypeAttributes = field.datatypeAttributes;
+                    columns.push(column);
+                }
             });
         }
         return columns;
     },
+    findTempGroupingFields(fields) {
+        let groupingFields = [];
+        fields.forEach((field) => {
+            if (field.datatypeAttributes.type === "TEXT" && groupingFields.length < 2) {
+                groupingFields.push(field.name);
+            }
+            if (field.datatypeAttributes.type === "RATING" && groupingFields.length < 2) {
+                groupingFields.push(field.name);
+            }
+        });
+        this.data.groupingFields = groupingFields;
+        this.data.groupLevel = groupingFields.length;
+        return groupingFields;
+    },
+    createTempGroupedData(reportData, fields) {
+        let groupingFields = this.findTempGroupingFields(fields);
+        let groupedData = _.groupBy(reportData, function(record) {
+            return record[groupingFields[0]];
+        });
+        let newData = [];
 
-    getReportData(data) {
+        function groupByPredicate(rec) {
+            return rec[groupingFields[1]];
+        }
+        for (let group in groupedData) {
+            let children = [];
+            if (groupingFields[1]) {
+                let subgroupedData = _.groupBy(groupedData[group], groupByPredicate);
+                for (let subgroup in subgroupedData) {
+                    children.push({group: subgroup, children: subgroupedData[subgroup]});
+                }
+            } else {
+                children = groupedData[group];
+            }
+            newData.push({group: group, children: children});
+        }
+        return newData;
+    },
+
+    getReportData(data, hasGrouping) {
         let fields = data.fields;
         let records = data.records;
         let reportData = [];
@@ -189,6 +244,10 @@ let ReportDataStore = Fluxxor.createStore({
             });
         }
 
+        if (hasGrouping) {
+            //QBSE-19937: fake group data for now. find a text and a numeric field and group data on that
+            return this.createTempGroupedData(reportData, fields);
+        }
         return reportData;
     },
 

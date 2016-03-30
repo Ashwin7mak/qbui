@@ -23,6 +23,22 @@ let ActionsColumn = React.createClass({
     }
 });
 
+function buildIconElement(icon) {
+    return "<span class='qbIcon iconssturdy-" + icon + "'></span>";
+}
+let gridIcons = {
+    groupExpanded: buildIconElement("caret-filled-down"),
+    groupContracted: buildIconElement("icon_caretfilledright")
+};
+let consts = {
+    GROUP_HEADER_HEIGHT: 41,
+    ROW_HEIGHT: 32,
+    DEFAULT_CHECKBOX_COL_WIDTH: 30,
+    GROUP_ICON_PADDING: 10,
+    DEFAULT_CELL_PADDING: 8,
+    FONT_SIZE: 20
+};
+
 let AGGrid = React.createClass({
     mixins: [FluxMixin],
 
@@ -41,6 +57,7 @@ let AGGrid = React.createClass({
         history: React.PropTypes.object,
         flux: React.PropTypes.object
     },
+
     // agGrid has a "context" param that is of type object and gets passed down to all cell renderer functions.
     // Since the external components are not in the tree hierarchy as the grid itself, and hence dont share the same react context,
     // use this "context" object to pass down such pieces to the components.
@@ -49,23 +66,62 @@ let AGGrid = React.createClass({
     },
     getInitialState() {
         return {
-            selectedRows: [],
             toolsMenuOpen: false,
-            selectAllClicked: false
+            allRowsSelected: false
         };
     },
     onGridReady(params) {
         this.api = params.api;
         this.columnApi = params.columnApi;
     },
+
+    /**
+     * Callback that the grid uses to figure out whether to show grouped data or not.
+     * And if so then how to use the rowItems to figure out grouped info.
+     * @param rowItem
+     * @returns {*}
+     */
+    getNodeChildDetails(rowItem) {
+        if (rowItem.group) {
+            return {
+                group: true,
+                expanded: true,
+                children: rowItem.children,
+                field: 'group',
+                key: rowItem.group
+            };
+        } else {
+            return null;
+        }
+    },
+    getRowHeight(rowItem) {
+        if (rowItem.node.field === "group") {
+            return consts.GROUP_HEADER_HEIGHT;
+        } else {
+            return consts.ROW_HEIGHT;
+        }
+    },
+    /**
+     * Renderer for the group header row.
+     * @param params
+     * @returns {Element}
+     */
+    getGroupRowRenderer(params) {
+        let groupCellText = document.createElement("span");
+        groupCellText.className = "group-header";
+        groupCellText.textContent = params.data.group;
+        return groupCellText;
+    },
     componentDidMount() {
         this.gridOptions.context.flux = this.getFlux();
+        this.gridOptions.getNodeChildDetails = this.getNodeChildDetails;
     },
     // For some reason react always thinks the component needs to be re-rendered because props have changed.
     // Analysis shows that the action column renderer is returning notEquals, event though nothing has changed.
-    // Since re-render is expensive the following figures out if ALL is same and the only piece that has changed is the "actions" column then dont update.
+    // Since re-render is expensive the following figures out if ALL is same
+    // and the only piece that has changed is the "actions" column then don't update.
     shouldComponentUpdate(nextProps, nextState) {
-        if (nextState !== this.state) {
+        if (!_.isEqual(nextState, this.state)) {
             return true;
         }
         if (nextProps !== this.props) {
@@ -104,11 +160,13 @@ let AGGrid = React.createClass({
      */
     autoSizeAllColumns() {
         var allColumnIds = [];
-        if (this.props.columns) {
-            this.props.columns.forEach(function(columnDef) {
-                allColumnIds.push(columnDef.field);
-            });
-            this.columnApi.autoSizeColumns(allColumnIds);
+        if (this.columnApi) {
+            if (this.props.columns) {
+                this.props.columns.forEach(function(columnDef) {
+                    allColumnIds.push(columnDef.field);
+                });
+                this.columnApi.autoSizeColumns(allColumnIds);
+            }
         }
     },
     /**
@@ -128,11 +186,16 @@ let AGGrid = React.createClass({
      * @param params
      */
     onRowClicked(params) {
-        // we have overlapping events since we want the row click to open a record but a record action icon click to execute the action
-        // ag grid seems to be listening on the container so it traps all the click events 1st so we need to ween out the icon click events.
-
-        let eventTarget = params.event.target;
-        if (eventTarget.className.indexOf("iconLink") !== -1 || eventTarget.className.indexOf("qbIcon") !== -1) {
+        //For click on group, expand/collapse the group.
+        if (params.node.field === "group") {
+            params.node.expanded = !params.node.expanded;
+            this.api.onGroupExpandedOrCollapsed();
+            return;
+        }
+        //For click on record action icons do nothing
+        if (params.event.target &&
+            params.event.target.className.indexOf("qbIcon") !== -1 ||
+            params.event.target.className.indexOf("iconLink") !== -1) {
             return;
         }
 
@@ -144,40 +207,24 @@ let AGGrid = React.createClass({
         this.context.history.push(link);
     },
     /**
-     * Capture the row-select (via checkbox) event.
-     * @param params
+     * Capture the row-selection/deselection change events.
+     * For some reason this doesnt seem to fire on deselectAll but doesnt matter for us.
      */
-    onRowSelected(params) {
-        if (this.state.selectAllClicked) {
-            return;
-        }
-        const id = params.node.data[this.props.uniqueIdentifier];
-        if (this.state.selectedRows.indexOf(id) === -1) {
-            // not already selected, add to selectedRows
-            this.state.selectedRows.push(params.node.data[this.props.uniqueIdentifier]);
-            this.setState({selectedRows: this.state.selectedRows});
-        } else {
-            // already selected, remove from selectedRows
-            this.setState({selectedRows: _.without(this.state.selectedRows, id)});
-        }
-        // for some reason the master checkbox click makes it check and then un-check itself. So updating this forcibly.
+    onSelectionChanged() {
         this.updateAllCheckbox();
     },
-    /**
-     * is row selected callback
-     */
-    isRowSelected(row) {
-        return this.state.selectedRows.indexOf(row[this.props.uniqueIdentifier]) !== -1;
-    },
+
     /**
      * Helper method to flip the master checkbox if all rows are checked
      */
     updateAllCheckbox() {
-        if (this.props.records.length === this.state.selectedRows.length) {
-            document.getElementsByClassName("SelectAllCheckbox")[0].checked = true;
-        } else {
-            document.getElementsByClassName("SelectAllCheckbox")[0].checked = false;
-        }
+        let selectedRows = this.getSelectedRows().length;
+        let allRowsSelected = this.props.filteredRecordsCount === selectedRows;
+        var newState = {
+            toolsMenuOpen: selectedRows > 0,
+            allRowsSelected : allRowsSelected
+        };
+        this.setState(newState);
     },
     /**
      * Capture the event if all-select checkbox is clicked.
@@ -185,30 +232,15 @@ let AGGrid = React.createClass({
      * Use selectAllClicked state variable to keep track of this.
      */
     allCheckBoxSelected() {
-        this.setState({selectAllClicked: true});
         if (!this.props.records) {
             return;
         }
         if (event.currentTarget.checked) {
             this.selectAll();
-            //push all ids to selectedRows
-            let rowIds = [];
-            this.props.records.forEach((row)=>{
-                rowIds.push(row[this.props.uniqueIdentifier]);
-            });
-            this.setState({selectedRows: rowIds});
         } else {
             this.deselectAll();
-            this.setState({selectedRows: []});
         }
         this.updateAllCheckbox();
-    },
-    // After the component is updated turn off selectAllClicked variable's state.
-    // TODO: Better way to do this?
-    componentDidUpdate(prevProps, prevState) {
-        if (prevState.selectAllClicked) {
-            this.setState({selectAllClicked: false});
-        }
     },
     /**
      * keep track of tools menu being open (need to change overflow css style)
@@ -223,13 +255,31 @@ let AGGrid = React.createClass({
         this.setState({toolsMenuOpen:false});
     },
     /**
+     * There seems to be bug in getSelectedRows callback of grid where
+     * it also returns group header rows. This one weans those out to select
+     * only valid rows.
+     * @returns {Array}
+     */
+    getSelectedRows() {
+        let rows = [];
+        if (this.api) {
+            this.api.getSelectedRows().forEach((row) => {
+                if (row[this.props.uniqueIdentifier]) {
+                    rows.push(row[this.props.uniqueIdentifier]);
+                }
+            });
+        }
+        return rows;
+    },
+    /**
      * get table actions if we have them - render selectionActions prop if we have an active selection,
      * otherwise the reportHeader prop (cloned with extra key prop for transition group, and selected rows
      * for selectionActions component)
      */
     getTableActions() {
 
-        const hasSelection  = this.state.selectedRows.length;
+        const selectedRows = this.getSelectedRows();
+        const hasSelection  = selectedRows.length;
 
         let classes = "tableActionsContainer secondaryBar";
         if (this.state.toolsMenuOpen) {
@@ -240,9 +290,99 @@ let AGGrid = React.createClass({
         }
         return (this.props.reportHeader && this.props.selectionActions && (
             <div className={classes}>{hasSelection ?
-                React.cloneElement(this.props.selectionActions, {key:"selectionActions", selection: this.state.selectedRows}) :
+                React.cloneElement(this.props.selectionActions, {key:"selectionActions", selection: selectedRows}) :
                 React.cloneElement(this.props.reportHeader, {key:"reportHeader", pageActions: this.props.pageActions, onMenuEnter:this.onMenuEnter, onMenuExit:this.onMenuExit})}
             </div>));
+    },
+    /**
+     * Callback - what to do when the master group expand/collapse is clicked
+     * @param element
+     */
+    onGroupsExpand(element) {
+        if (!element.getAttribute("state")) {
+            element = element.parentElement;
+        }
+        if (element.getAttribute("state") === "close") {
+            element.setAttribute("state", "open");
+            element.innerHTML = gridIcons.groupExpanded;
+            this.api.expandAll();
+        } else {
+            element.setAttribute("state", "close");
+            element.innerHTML = gridIcons.groupContracted;
+            this.api.collapseAll();
+        }
+    },
+
+    getCheckBoxColumnGroupedHeaderWidth() {
+        // this is a weird calculation but this is because we want the checkbox to always show based on number of grouping levels
+        // for now this is being calulated as num_groups*(font size + padding) + num_checkboxes*(size of checkbox + padding)
+        // 3px error is because icons need to be fixed, so that'll be removed.
+        const checkbox_size = 12;
+        return consts.DEFAULT_CELL_PADDING +
+            this.props.groupLevel * (consts.FONT_SIZE + consts.GROUP_ICON_PADDING) +
+            checkbox_size + consts.DEFAULT_CELL_PADDING - 3;
+    },
+    /**
+     * Builder for "checkbox" column for the grid
+     * Also contains grouping expand/collpase icon if grouping is turned on
+     */
+    getCheckBoxColumn() {
+        //Add checkbox column
+        let checkBoxCol = {};
+        checkBoxCol.field = "checkbox";
+        var checkbox = document.createElement("input");
+        checkbox.type = "checkbox";
+        checkbox.className = "selectAllCheckbox";
+        checkbox.checked = this.state.allRowsSelected;
+        checkbox.onclick = (event) => {
+            this.allCheckBoxSelected(event);
+        };
+        var headerCell = document.createElement("div");
+        headerCell.className = "checkboxHolder";
+
+        if (this.props.showGrouping) {
+            var collapser = document.createElement("span");
+            collapser.className = "collapser";
+            collapser.setAttribute("state", "open");
+            collapser.innerHTML = gridIcons.groupExpanded;
+            collapser.onclick = (event) => {
+                this.onGroupsExpand(event.target);
+            };
+            headerCell.appendChild(collapser);
+        }
+
+        headerCell.appendChild(checkbox);
+        //ag-grid doesnt seem to allow react components sent into headerCellRender.
+        checkBoxCol.headerCellRenderer = function() {
+            return headerCell;
+        };
+        checkBoxCol.checkboxSelection = true;
+        checkBoxCol.headerClass = "gridHeaderCell";
+        checkBoxCol.cellClass = "gridCell";
+        checkBoxCol.suppressMenu = true;
+        checkBoxCol.suppressResize = true;
+        if (this.props.showGrouping) {
+            checkBoxCol.width = this.getCheckBoxColumnGroupedHeaderWidth();
+        } else {
+            checkBoxCol.width = consts.DEFAULT_CHECKBOX_COL_WIDTH;
+        }
+        return checkBoxCol;
+    },
+    /**
+     * Builder for record actions column for the grid.
+     */
+    getActionsColumn() {
+        return {
+            headerName: "", //for ag-grid
+            field: "actions",      //for ag-grid
+            columnName: "actions", //for griddle
+            cellRenderer: reactCellRendererFactory(ActionsColumn),
+            cellClass: "gridCell actions",
+            headerClass: "gridHeaderCell",
+            width: 1,
+            suppressMenu: true,
+            suppressResize: true
+        };
     },
     /**
      * Add a couple of columns to the column definition sent through props -
@@ -253,47 +393,25 @@ let AGGrid = React.createClass({
         if (!this.props.columns) {
             return;
         }
+
         let columns = this.props.columns.slice(0);
-        //Add checkbox column
-        let checkBoxCol = {};
-        checkBoxCol.field = "checkbox";
-        var checkbox = document.createElement("input");
-        checkbox.type = "checkbox";
-        checkbox.className = "SelectAllCheckbox";
-        checkbox.onclick = (event) => {
-            this.allCheckBoxSelected(event);
-        };
-        //ag-grid doesnt seem to allow react components sent into headerCellRender.
-        checkBoxCol.headerCellRenderer = function() {
-            return checkbox;
-        };
-        checkBoxCol.checkboxSelection = true;
-        checkBoxCol.width = 30;
-        checkBoxCol.headerClass = "gridHeaderCell";
-        checkBoxCol.cellClass = "gridCell";
-        columns.unshift(checkBoxCol);
+
+        //This should be based on perms -- something like if(this.props.allowMultiSelection)
+        columns.unshift(this.getCheckBoxColumn(this.props.showGrouping));
 
         // Add Actions column. Put this as the last column in the grid and then make the column 1px wide so it doesnt really "show".
         // CSS takes care of positioning the content of this column over the previous columns so it looks like an overlay.
 
         // todo: optimize/refactor actions hover for performance
         if (columns.length > 0) {
-            columns.push({
-                headerName: "", //for ag-grid
-                field: "actions",      //for ag-grid
-                columnName: "actions", //for griddle
-                cellRenderer: reactCellRendererFactory(ActionsColumn),
-                cellClass: "gridCell actions",
-                headerClass: "gridHeaderCell",
-                width: 1
-            });
+            columns.push(this.getActionsColumn());
         }
         return columns;
     },
 
     render() {
         let columnDefs = this.getColumns();
-        let griddleWrapperClasses = this.state.selectedRows.length ? "griddleWrapper selectedRows" : "griddleWrapper";
+        let griddleWrapperClasses = this.getSelectedRows().length ? "griddleWrapper selectedRows" : "griddleWrapper";
         return (
             <div className="reportTable" >
 
@@ -307,8 +425,8 @@ let AGGrid = React.createClass({
 
                                     // listening for events
                                     onGridReady={this.onGridReady}
-                                    onRowSelected={this.onRowSelected}
                                     onRowClicked={this.onRowClicked}
+                                    onSelectionChanged={this.onSelectionChanged}
 
 
                                     // binding to array properties
@@ -319,10 +437,17 @@ let AGGrid = React.createClass({
                                     rowSelection="multiple"
                                     enableColResize="true"
                                     groupHeaders="true"
-                                    rowHeight="32"
+                                    getRowHeight={this.getRowHeight}
 
                                     suppressRowClickSelection="true"
                                     suppressCellSelection="true"
+
+                                    //grouping behavior
+                                    groupSelectsChildren="true"
+                                    groupUseEntireRow={this.props.showGrouping}
+                                    groupRowInnerRenderer={this.getGroupRowRenderer}
+
+                                    icons={gridIcons}
                                 />
                             </div> :
                             <div><I18nMessage message={'grid.no_data'}/></div>

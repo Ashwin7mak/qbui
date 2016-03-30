@@ -89,7 +89,7 @@ var ReportToolbar = React.createClass({
         if (this.props.searchStringForFiltering.length !== 0) {
             answer = true;
         } else {
-            answer = this.props.selections.hasAnySelections();
+            answer = this.props.selections ? this.props.selections.hasAnySelections() : false;
         }
         return answer;
     },
@@ -258,10 +258,10 @@ var ReportToolbar = React.createClass({
             }
             if (this.props.reportData.data) {
                 if (this.props.reportData.data.filteredRecords) {
-                    filteredRecordCount =  this.props.reportData.data.filteredRecords.length;
+                    filteredRecordCount =  this.props.reportData.data.filteredRecordsCount;
                 }
                 if (this.props.reportData.data.records) {
-                    recordCount =  this.props.reportData.data.records.length;
+                    recordCount =  this.props.reportData.data.recordsCount;
                 }
                 if (this.props.reportData.data.facets && (this.props.reportData.data.facets.length > 0)) {
                     hasFacets =  this.props.reportData.data.facets[0].values;
