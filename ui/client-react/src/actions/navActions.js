@@ -46,7 +46,11 @@ let navActions = {
     changeLocale(locale) {
         Locale.changeLocale(locale);
         this.dispatch(actions.CHANGE_LOCALE);
+    },
+    scrollingReport(isScrolling = true) {
+        this.dispatch(actions.SCROLLING_REPORT, isScrolling);
     }
+
 };
 
 export default navActions;

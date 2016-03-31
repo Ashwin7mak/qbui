@@ -52,7 +52,7 @@ let AGGrid = React.createClass({
         appId: React.PropTypes.string,
         tblId: React.PropTypes.string
     },
-    contextTypes:{
+    contextTypes: {
         touch: React.PropTypes.bool,
         history: React.PropTypes.object,
         flux: React.PropTypes.object
@@ -62,7 +62,7 @@ let AGGrid = React.createClass({
     // Since the external components are not in the tree hierarchy as the grid itself, and hence dont share the same react context,
     // use this "context" object to pass down such pieces to the components.
     gridOptions: {
-        context :{}
+        context: {}
     },
     getInitialState() {
         return {
@@ -75,6 +75,24 @@ let AGGrid = React.createClass({
         this.columnApi = params.columnApi;
     },
 
+    /**
+     * when we scroll the grid wrapper, hide the add record
+     * icon for a bit
+     */
+    onScrollGriddleWrapper() {
+
+        if (this.scrollTimer) {
+            return;
+        }
+        const flux = this.getFlux();
+
+        flux.actions.scrollingReport(true);
+
+        this.scrollTimer = setTimeout(() => {
+            this.scrollTimer = null;
+            flux.actions.scrollingReport(false);
+        }, 500);
+    },
     /**
      * Callback that the grid uses to figure out whether to show grouped data or not.
      * And if so then how to use the rowItems to figure out grouped info.
@@ -115,8 +133,14 @@ let AGGrid = React.createClass({
     componentDidMount() {
         this.gridOptions.context.flux = this.getFlux();
         this.gridOptions.getNodeChildDetails = this.getNodeChildDetails;
+
+        this.refs.griddleWrapper.addEventListener("scroll", this.onScrollGriddleWrapper);
     },
-    // For some reason react always thinks the component needs to be re-rendered because props have changed.
+    componentWillUnmount() {
+        this.refs.griddleWrapper.removeEventListener("scroll", this.onScrollGriddleWrapper);
+    },
+
+// For some reason react always thinks the component needs to be re-rendered because props have changed.
     // Analysis shows that the action column renderer is returning notEquals, event though nothing has changed.
     // Since re-render is expensive the following figures out if ALL is same
     // and the only piece that has changed is the "actions" column then don't update.
@@ -138,7 +162,7 @@ let AGGrid = React.createClass({
                             }
                             let prevColumns = this.props[property];
                             let nextColumns = nextProps[property];
-                            for (var i = 0; i < prevColumns.length ; i++) {
+                            for (var i = 0; i < prevColumns.length; i++) {
                                 if (!_.isEqual(prevColumns[i], nextColumns[i])) {
                                     if (prevColumns[i].field === "actions") {
                                         return false;
@@ -222,7 +246,7 @@ let AGGrid = React.createClass({
         let allRowsSelected = this.props.filteredRecordsCount === selectedRows;
         var newState = {
             toolsMenuOpen: selectedRows > 0,
-            allRowsSelected : allRowsSelected
+            allRowsSelected: allRowsSelected
         };
         this.setState(newState);
     },
@@ -246,13 +270,13 @@ let AGGrid = React.createClass({
      * keep track of tools menu being open (need to change overflow css style)
      */
     onMenuEnter() {
-        this.setState({toolsMenuOpen:true});
+        this.setState({toolsMenuOpen: true});
     },
     /**
      * keep track of tools menu being closed (need to change overflow css style)
      */
     onMenuExit() {
-        this.setState({toolsMenuOpen:false});
+        this.setState({toolsMenuOpen: false});
     },
     /**
      * There seems to be bug in getSelectedRows callback of grid where
@@ -279,7 +303,7 @@ let AGGrid = React.createClass({
     getTableActions() {
 
         const selectedRows = this.getSelectedRows();
-        const hasSelection  = selectedRows.length;
+        const hasSelection = selectedRows.length;
 
         let classes = "tableActionsContainer secondaryBar";
         if (this.state.toolsMenuOpen) {
@@ -290,8 +314,13 @@ let AGGrid = React.createClass({
         }
         return (this.props.reportHeader && this.props.selectionActions && (
             <div className={classes}>{hasSelection ?
-                React.cloneElement(this.props.selectionActions, {key:"selectionActions", selection: selectedRows}) :
-                React.cloneElement(this.props.reportHeader, {key:"reportHeader", pageActions: this.props.pageActions, onMenuEnter:this.onMenuEnter, onMenuExit:this.onMenuExit})}
+                React.cloneElement(this.props.selectionActions, {key: "selectionActions", selection: selectedRows}) :
+                React.cloneElement(this.props.reportHeader, {
+                    key: "reportHeader",
+                    pageActions: this.props.pageActions,
+                    onMenuEnter: this.onMenuEnter,
+                    onMenuExit: this.onMenuExit
+                })}
             </div>));
     },
     /**
@@ -413,10 +442,10 @@ let AGGrid = React.createClass({
         let columnDefs = this.getColumns();
         let griddleWrapperClasses = this.getSelectedRows().length ? "griddleWrapper selectedRows" : "griddleWrapper";
         return (
-            <div className="reportTable" >
+            <div className="reportTable">
 
                 {this.getTableActions()}
-                <div className={griddleWrapperClasses}>
+                <div className={griddleWrapperClasses} ref="griddleWrapper">
                     <Loader loaded={!this.props.loading}>
                         {this.props.records && this.props.records.length > 0 ?
                             <div className="agGrid">
