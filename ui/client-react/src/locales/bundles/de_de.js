@@ -69,9 +69,6 @@ export default {
             customizeForm: "Fertigen Sie dieses Formular",
             customizePage: "Fertigen Sie diese Seite"
         },
-        iconActions: {
-            more: "Mehr..."
-        },
         recordActions: {
             previous: "Früher",
             return: "Zurück zu berichten",

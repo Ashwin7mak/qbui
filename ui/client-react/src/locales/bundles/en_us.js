@@ -73,9 +73,6 @@ export default {
             customizeForm: "Customize this Form",
             customizePage: "Customize this Page"
         },
-        iconActions: {
-            more: "More..."
-        },
         recordActions: {
             previous: "Previous",
             return: "Return to report",
