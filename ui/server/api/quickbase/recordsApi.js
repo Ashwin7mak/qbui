@@ -104,12 +104,20 @@
         var recordsApi = {
 
             /**
-             * Allows you to override the
+             * Allows you to override the request object
              * @param requestOverride
              */
             setRequestObject: function(requestOverride) {
                 request = requestOverride;
             },
+            /**
+             * Allows you to override the requestHelper object
+             * @param requestRequestOverride
+             */
+            setRequestHelperObject: function(requestHelperOverride) {
+                requestHelper = requestHelperOverride;
+            },
+
             isDisplayFormat: function(req) {
                 return req.param(constants.REQUEST_PARAMETER.FORMAT) === 'display';
             },
