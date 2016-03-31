@@ -123,16 +123,16 @@
                         } else {
                             //  No error...set the distinct facet information
                             facet.values = [];
-                            facet.hasBlanks = false;
 
                             //  iterate over the list of records and format the record values as appropriate
                             recordFormatter.formatRecords(facetRecords, fields);
 
-                            //  Format of the facet data is based on the data type as follows:
+                            //  Format of the facet data is set based on the following supported data types:
                             //      DATE/DATETIME:  values:[{data: {min:'',max:''}}]
                             //      USER:   values:[{data:{string: 'val1',userId:'user1'}},...,{data:{string:'valN',userId:'userN')}]
                             //      TEXT:   values:[{data:'val1'},{data:'val2'},...,{data:'valN'}]
                             var facetData = {};
+                            var hasBlanks = false;
 
                             if (facet.type === constants.DATE || facet.type === constants.DATE_TIME) {
                                 //  initialize
@@ -151,12 +151,10 @@
 
                                 //  test if there is blank data returned
                                 if (!facetData.data.min && !facetData.data.max) {
-                                    facet.hasBlanks = true;
+                                    hasBlanks = true;
                                 }
                             } else {
                                 for (let record of facetRecords) {
-                                    facetData.data = {};  // initialize for each facet record
-
                                     if (facet.type === constants.USER) {
                                         //  initialize data structure for a USER
                                         facetData.data = {
@@ -165,20 +163,25 @@
                                         };
                                         //  set the userId if one is defined.
                                         if (record[0].value && record[0].value.userId) {
-                                            facetData.userId = record[0].value.userId;
+                                            facetData.data.userId = record[0].value.userId;
                                         }
                                     } else {
-                                        facetData.data = record[0].display;
+                                        facetData = {
+                                            data: record[0].display
+                                        };
                                     }
 
                                     facet.values.push(facetData);
 
                                     //  test if there is blank data returned
                                     if (!record[0].display) {
-                                        facet.hasBlanks = true;
+                                        hasBlanks = true;
                                     }
                                 }
                             }
+
+                            facet.hasBlanks = hasBlanks;
+
                         }
                         facetList.push(facet);
                     }

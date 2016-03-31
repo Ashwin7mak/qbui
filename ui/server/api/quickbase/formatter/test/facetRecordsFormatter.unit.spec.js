@@ -53,7 +53,10 @@ describe('Facet formatter unit test', function() {
             var record = [{id:7, value:value}];
             textFacetRecords.push(record);
             var formattedRecords = recordFormatter.formatRecords([record], [textField]);
-            expectedTextFacets.values.push(formattedRecords[0][0].display);
+            var data = {
+                data: formattedRecords[0][0].display
+            };
+            expectedTextFacets.values.push(data);
         });
 
 
@@ -64,13 +67,15 @@ describe('Facet formatter unit test', function() {
             var record = [{id:7, value:value}];
             blankFacetRecords.push(record);
             var formattedRecords = recordFormatter.formatRecords([record], [textField]);
-            expectedBlankFacets.values.push(formattedRecords[0][0].display);
+            var data = {
+                data: formattedRecords[0][0].display
+            };
+            expectedBlankFacets.values.push(data);
         });
 
-        var expectedTooManyFacets = {id: 9, name:'text', type:'TEXT', values:[], hasBlanks: false, errorMessage: errorCodes.ERROR_MSG_KEY.FACET.RECORD_TOO_BIG};
-        var tooManyValuesRecord = [[{id:9, value:{
-            code: errorCodes.ERROR_CODE.FACET.RECORD_TOO_BIG,
-            message: errorCodes.ERROR_MSG_KEY.FACET.RECORD_TOO_BIG
+        var expectedTooManyFacets = {id: 9, name:'text', type:'TEXT', errorCode: 99};
+        var tooManyValuesRecord = [[{id:9, name:'text', type:'TEXT', value:{
+            code: 99
         }}]];
 
         var cases = [
