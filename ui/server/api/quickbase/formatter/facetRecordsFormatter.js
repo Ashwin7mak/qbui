@@ -159,12 +159,8 @@
                                         //  initialize data structure for a USER
                                         facetData.data = {
                                             string: record[0].display,
-                                            userId: ''
+                                            userId: record[0].id
                                         };
-                                        //  set the userId if one is defined.
-                                        if (record[0].value && record[0].value.userId) {
-                                            facetData.data.userId = record[0].value.userId;
-                                        }
                                     } else {
                                         facetData = {
                                             data: record[0].display

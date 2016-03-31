@@ -94,6 +94,8 @@
                 fieldValue.display = durationFormatter.format(fieldValue, tempFieldInfo);
                 break;
             case consts.USER:
+                fieldValue.display = fieldValue.value;
+                break;
             case consts.FORMULA_USER:
                 fieldValue.display = userFormatter.format(fieldValue, tempFieldInfo);
                 break;
