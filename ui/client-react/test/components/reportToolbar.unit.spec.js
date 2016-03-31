@@ -129,8 +129,22 @@ describe('ReportToolbar functions', () => {
                 col_text: "Planning",
                 col_date: "01-01-2015"
             }],
-            columns: ["col_num", "col_text", "col_date"],
-            facets: fakefacets
+            columns: [
+                {
+                    field: "col_num",
+                    headerName: "col_num"
+                },
+                {
+                    field: "col_text",
+                    headerName: "col_text"
+                },
+                {
+                    field: "col_date",
+                    headerName: "col_date"
+                }],
+            facets: fakefacets,
+            recordsCount: 3,
+            filteredRecordsCount: 1
         }
     };
 
@@ -138,7 +152,6 @@ describe('ReportToolbar functions', () => {
 
     it('test render reportToolbar no records', () => {
         component = TestUtils.renderIntoDocument(<ReportToolbar flux={flux}
-                                                                fieldSelections={[]}
                                                                 pageActions={pageActions}
         />);
         expect(TestUtils.isCompositeComponent(component)).toBeTruthy();
@@ -158,7 +171,6 @@ describe('ReportToolbar functions', () => {
     it('test render reportToolbar with records', () => {
         component = TestUtils.renderIntoDocument(<ReportToolbar flux={flux}
                                                                 reportData={fakeReportData_simple}
-                                                                fieldSelections={[]}
                                                                 pageActions={pageActions}
         />);
         expect(TestUtils.isCompositeComponent(component)).toBeTruthy();
@@ -181,7 +193,7 @@ describe('ReportToolbar functions', () => {
         fakeReportWithNoFacets.data.facets = null;
         component = TestUtils.renderIntoDocument(<ReportToolbar flux={flux}
                                                                 reportData={fakeReportWithNoFacets}
-                                                                fieldSelections={null}
+                                                                selections={null}
                                                                 pageActions={pageActions}
         />);
         expect(TestUtils.isCompositeComponent(component)).toBeTruthy();
@@ -196,7 +208,7 @@ describe('ReportToolbar functions', () => {
         let fakeReportWithFacets = _.cloneDeep(fakeReportData_simple);
         component = TestUtils.renderIntoDocument(<ReportToolbar flux={flux}
                                                                 reportData={fakeReportWithFacets}
-                                                                fieldSelections={selected}
+                                                                selections={selected}
                                                                 pageActions={pageActions}
         />);
         expect(TestUtils.isCompositeComponent(component)).toBeTruthy();
