@@ -128,15 +128,15 @@
                             recordFormatter.formatRecords(facetRecords, fields);
 
                             //  Format of the facet data is set based on the following supported data types:
-                            //      DATE/DATETIME:  values:[{data: {min:'',max:''}}]
-                            //      USER:   values:[{data:{string: 'val1',userId:'user1'}},...,{data:{string:'valN',userId:'userN')}]
-                            //      TEXT:   values:[{data:'val1'},{data:'val2'},...,{data:'valN'}]
+                            //      DATE/DATETIME:  values:[{value: {min:'',max:''}}]
+                            //      USER:   values:[{value:{string: 'val1',userId:'user1'}},...,{value:{string:'valN',userId:'userN')}]
+                            //      TEXT:   values:[{value:'val1'},{value:'val2'},...,{value:'valN'}]
                             var facetData = {};
                             var hasBlanks = false;
 
                             if (facet.type === constants.DATE || facet.type === constants.DATE_TIME) {
                                 //  initialize
-                                facetData.data = {
+                                facetData.value = {
                                     min: '',
                                     max: ''
                                 };
@@ -144,26 +144,26 @@
                                 //  2 rows are expected for DATES;  row 1 is the minimum date  and row 2
                                 //  is the maximum date that make up the facet range
                                 if (facetRecords && facetRecords.length === 2) {
-                                    facetData.data.min = facetRecords[0][0].display;
-                                    facetData.data.max = facetRecords[1][0].display;
+                                    facetData.value.min = facetRecords[0][0].display;
+                                    facetData.value.max = facetRecords[1][0].display;
                                 }
                                 facet.values.push(facetData);
 
                                 //  test if there is blank data returned
-                                if (!facetData.data.min && !facetData.data.max) {
+                                if (!facetData.value.min && !facetData.value.max) {
                                     hasBlanks = true;
                                 }
                             } else {
                                 for (let record of facetRecords) {
                                     if (facet.type === constants.USER) {
                                         //  initialize data structure for a USER
-                                        facetData.data = {
+                                        facetData.value = {
                                             string: record[0].display,
                                             userId: record[0].id
                                         };
                                     } else {
                                         facetData = {
-                                            data: record[0].display
+                                            value: record[0].display
                                         };
                                     }
 

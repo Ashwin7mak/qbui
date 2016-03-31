@@ -23,7 +23,7 @@ describe('Facet formatter unit test', function() {
     function setUpDateFacet(id, facetDates, field) {
         var facetRecords = [];
         var facetValues = {
-            data: {
+            value: {
                 min: '',
                 max: ''
             }
@@ -32,10 +32,10 @@ describe('Facet formatter unit test', function() {
             var record = [{id:id, value:value}];
             facetRecords.push(record);
             var formattedRecords = recordFormatter.formatRecords([record], [field]);
-            if (!facetValues.data.min) {
-                facetValues.data.min = formattedRecords[0][0].display;
+            if (!facetValues.value.min) {
+                facetValues.value.min = formattedRecords[0][0].display;
             } else {
-                facetValues.data.max = formattedRecords[0][0].display;
+                facetValues.value.max = formattedRecords[0][0].display;
             }
         });
         return {
@@ -111,7 +111,7 @@ describe('Facet formatter unit test', function() {
         var expectedUserFacets = {id: 10, name:'user', type:constants.USER, values:[], hasBlanks: false};
 
         var facetUserValues = {
-            data: {
+            value: {
                 string: '',
                 userId: ''
             }
@@ -120,8 +120,8 @@ describe('Facet formatter unit test', function() {
             var record = [{id:10, value:value}];
             userFacetRecords.push(record);
             var formattedRecords = recordFormatter.formatRecords([record], [userField]);
-            facetUserValues.data.string = formattedRecords[0][0].display;
-            facetUserValues.data.userId = formattedRecords[0][0].id;
+            facetUserValues.value.string = formattedRecords[0][0].display;
+            facetUserValues.value.userId = formattedRecords[0][0].id;
             expectedUserFacets.values.push(facetUserValues);
         });
 
@@ -134,7 +134,7 @@ describe('Facet formatter unit test', function() {
             textFacetRecords.push(record);
             var formattedRecords = recordFormatter.formatRecords([record], [textField]);
             var data = {
-                data: formattedRecords[0][0].display
+                value: formattedRecords[0][0].display
             };
             expectedTextFacets.values.push(data);
         });
@@ -148,7 +148,7 @@ describe('Facet formatter unit test', function() {
             blankFacetRecords.push(record);
             var formattedRecords = recordFormatter.formatRecords([record], [textField]);
             var data = {
-                data: formattedRecords[0][0].display
+                value: formattedRecords[0][0].display
             };
             expectedBlankFacets.values.push(data);
         });
