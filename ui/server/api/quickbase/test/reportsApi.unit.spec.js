@@ -204,7 +204,7 @@ describe('Validate ReportsApi unit tests', function() {
         });
         it('Test 10K error from fetchFacets', function(done) {
             var getReportResults = sinon.stub(reportsApi, "fetchReportResults");
-            var fetchFacetsErrorPromise = Promise.reject({body:'[{"code":' + errorCodes.ERROR_CODE.FACET.REPORT_TOO_BIG + '}]'});
+            var fetchFacetsErrorPromise = Promise.reject({body:'[{"code":' + errorCodes.UNKNOWN + '}]'});
             var getFacetsErrorStub = sinon.stub(reportsApi, "fetchFacetResults");
             getReportResults.returns(fetchReportResultsPromise);
             getFacetsErrorStub.returns(fetchFacetsErrorPromise);
@@ -212,7 +212,7 @@ describe('Validate ReportsApi unit tests', function() {
             var errorExpectedResponse = {
                 records: [],
                 fields: [],
-                facets: [{id: null, errorMessage: errorCodes.ERROR_MSG_KEY.FACET.REPORT_TOO_BIG}]
+                facets: [{id: null, errorMessage: errorCodes.UNKNOWN}]
             };
             var promise = reportsApi.fetchReportComponents(req);
             promise.then(
