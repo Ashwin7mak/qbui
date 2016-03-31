@@ -67,16 +67,10 @@ let IconActions = React.createClass({
      * get dropdown containing remaining actions (after maxButtonsBeforeMenu index)
      */
     getActionsMenu() {
-        const moreTooltip = (
-            <Tooltip id="iconActions.more">
-                <I18nMessage message={"iconActions.more"} />
-            </Tooltip>);
-
         return (
             <Dropdown id="nav-right-dropdown" pullRight onToggle={this.onToggleMenu} onClose={this.onCloseMenu}>
-                <OverlayTrigger bsRole="toggle" key={"iconActions.more"} placement="bottom" overlay={moreTooltip}>
-                    <a className={"dropdownToggle iconActionButton"}><QBicon icon="fries"/> </a>
-                </OverlayTrigger>
+
+                <a  bsRole="toggle" className={"dropdownToggle iconActionButton"}><QBicon icon="fries"/> </a>
 
                 <Dropdown.Menu onEntering={this.props.onMenuEnter} onExited={this.props.onMenuExit}>
                     {this.props.actions.map((action, index) => {

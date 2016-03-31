@@ -69,9 +69,6 @@ export default {
             customizeForm: "Personnaliser ce formulaire",
             customizePage: "Personnaliser cette page"
         },
-        iconActions: {
-            more: "Plus..."
-        },
         recordActions: {
             previous: "Précédent",
             return: "Retour au rapport",
