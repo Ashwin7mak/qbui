@@ -157,10 +157,15 @@
                                 for (let record of facetRecords) {
                                     if (facet.type === constants.USER) {
                                         //  initialize data structure for a USER
-                                        facetData.value = {
-                                            string: record[0].display,
-                                            userId: record[0].id
+                                        facetData = {
+                                            value: {
+                                                string: record[0].display,
+                                                userId: ''
+                                            }
                                         };
+                                        if (record[0].value) {
+                                            facetData.value.userId = record[0].value.userId;
+                                        }
                                     } else {
                                         facetData = {
                                             value: record[0].display

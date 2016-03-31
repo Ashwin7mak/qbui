@@ -106,7 +106,11 @@ describe('Facet formatter unit test', function() {
         expectedDateFacets.values.push(dateFacet.facetValues);
 
         // setup user test
-        var userFacetValues = ['User one', 'user two'];
+        var userFacetValues = [
+            {firstName: 'First1',
+             lastName: 'Last1',
+             userId: 1}
+        ];
         var userFacetRecords = [];
         var expectedUserFacets = {id: 10, name:'user', type:constants.USER, values:[], hasBlanks: false};
 
@@ -117,11 +121,15 @@ describe('Facet formatter unit test', function() {
             }
         };
         userFacetValues.forEach(function(value) {
-            var record = [{id:10, value:value}];
+            var record = [{id:10, value: {
+                firstName: value.firstName,
+                lastName: value.lastName,
+                userId: value.userId
+            }}];
             userFacetRecords.push(record);
             var formattedRecords = recordFormatter.formatRecords([record], [userField]);
             facetUserValues.value.string = formattedRecords[0][0].display;
-            facetUserValues.value.userId = formattedRecords[0][0].id;
+            facetUserValues.value.userId = formattedRecords[0][0].value.userId;
             expectedUserFacets.values.push(facetUserValues);
         });
 
