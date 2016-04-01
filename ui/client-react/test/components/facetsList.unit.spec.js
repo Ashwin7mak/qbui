@@ -33,20 +33,20 @@ describe('FacetList functions', () => {
     let component;
 
     let fakefacets =  [
-            {id : 1, name : "Types", type: "TEXT", blanks: true,
+            {id : 1, name : "Types", type: "TEXT", hasBlanks: true,
                 values : [{value:"Design"}, {value:"Development"}, {value:"Planning"}, {value:"Test"}]},
-            {id : 2, name : "Names", type: "TEXT", blanks: false,
+            {id : 2, name : "Names", type: "TEXT", hasBlanks: false,
                 values : [
                     {value: "Aditi Goel"}, {value: "Christopher Deery"}, {value: "Claire Martinez"}, {value: "Claude Keswani"}, {value: "Deborah Pontes"},
                     {value: "Donald Hatch"}, {value: "Drew Stevens"}, {value: "Erica Rodrigues"}, {value: "Kana Eiref"},
                     {value: "Ken LaBak"}, {value: "Lakshmi Kamineni"}, {value: "Lisa Davidson"}, {value: "Marc Labbe"},
                     {value: "Matthew Saforrian"}, {value: "Micah Zimring"}, {value: "Rick Beyer"}, {value: "Sam Jones"}, {value: "XJ He"}
                 ]},
-            {id : 3, name : "Status", type: "TEXT", blanks: false,
+            {id : 3, name : "Status", type: "TEXT", hasBlanks: false,
                 values : [{value: "No Started"}, {value: "In Progress"}, {value: "Blocked"}, {value: "Completed"}]},
-            {id : 4, name : "Flag", type: "CHECKBOX",  blanks: false,
-                values : [{value: "Yes"}, {value: "No"}]},
-            //{id : 4, name : "Dates", type: "date",  blanks: false,
+            {id : 4, name : "Flag", type: "CHECKBOX",  hasBlanks: false,
+                values : [{value: "true"}, {value: "false"}]}
+            //{id : 4, name : "Dates", type: "date",  hasBlanks: false,
             //    range : {start: 1, end: 2}},
     ];
 
@@ -105,8 +105,8 @@ describe('FacetList functions', () => {
                 col_date: "01-01-2015"
             }],
             columns: ["col_num", "col_text", "col_date"],
-            facets:  [{id : 1, name : "Types", type: "TEXT", blanks: true, values : []},
-                      {id : 2, name : "Names", type: "TEXT", blanks: false, values : []}]
+            facets:  [{id : 1, name : "Types", type: "TEXT", hasBlanks: true, values : []},
+                      {id : 2, name : "Names", type: "TEXT", hasBlanks: false, values : []}]
 
         }
     };
