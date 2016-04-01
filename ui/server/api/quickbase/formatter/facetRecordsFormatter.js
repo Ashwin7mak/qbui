@@ -93,6 +93,15 @@
             return null;
         }
 
+        function isBlank(inValue) {
+            if (inValue === null) {return true;}
+            if (inValue === 'undefined') {return true;}
+            if (inValue === false) {return false;}
+            if (inValue === true) {return false;}
+            if (inValue === 0) {return false;}
+            return !inValue;
+        }
+
         var facetRecordsFormatter = {
 
             //Given an array of array of records, array of fields format the record values into facet objects
@@ -150,8 +159,8 @@
                                 }
                                 facet.values.push(facetData);
 
-                                //  test if there is blank data returned
-                                if (!facetData.value.min && !facetData.value.max) {
+                                //  test if there is blank min or max date returned
+                                if (isBlank(facetData.value.min) || isBlank(facetData.value.max)) {
                                     hasBlanks = true;
                                 }
                             } else {
@@ -175,8 +184,9 @@
 
                                     facet.values.push(facetData);
 
-                                    //  test if there is blank data returned
-                                    if (!record[0].display) {
+                                    //  test if there is blank data returned..could have 'false' as display
+                                    //  value, so doing a negative test is not good enough
+                                    if (isBlank(record[0].display)) {
                                         hasBlanks = true;
                                     }
                                 }

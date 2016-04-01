@@ -71,9 +71,10 @@ var FacetsList = React.createClass({
 
         //convert false/true to i18n version of boolean value
         if (aFacet.type.toUpperCase() === schemaConsts.CHECKBOX) {
-            if (!val || val === "" || val === 0 ||
-                val.toString().toUpperCase() === 'NO' ||
-                val.toString().toUpperCase() === 'FALSE') {
+            let value = val ? val.value : '';
+            if (!value || value === '' || value === 0 ||
+                value.toString().toUpperCase() === 'NO' ||
+                value.toString().toUpperCase() === 'FALSE') {
                 // when react 18n supports plain string (non dom wrapped)
                 // xtlate use the message keys above
                 val = 'No';
@@ -87,7 +88,7 @@ var FacetsList = React.createClass({
     mapFacetValues(facetsData) {
         //values are expected to be objects {value:'xx'},
         // make it so until node layer is changed
-        if (facetsData.length && facetsData[0].values && facetsData[0].values.length && typeof facetsData[0].values[0] !== 'object') {
+        if (facetsData.length && facetsData[0].values && facetsData[0].values.length) {
             facetsData = facetsData.map((aFacet) => {
                 if (aFacet.values && aFacet.values.length) {
                     aFacet.values = aFacet.values.map((val) => {
