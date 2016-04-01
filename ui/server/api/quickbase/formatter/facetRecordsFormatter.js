@@ -131,6 +131,7 @@
                             //      DATE/DATETIME:  values:[{value: {min:'',max:''}}]
                             //      USER:   values:[{value:{string: 'val1',userId:'user1'}},...,{value:{string:'valN',userId:'userN')}]
                             //      TEXT:   values:[{value:'val1'},{value:'val2'},...,{value:'valN'}]
+                            //      CHECKBOX: values:[{value:'val1'},{value:'val2'},...,{value:'valN'}]
                             var facetData = {};
                             var hasBlanks = false;
 
