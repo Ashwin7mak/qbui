@@ -126,8 +126,10 @@ $table-actions-container-bg: #fff;
     flex: 1 1 auto;
     overflow:auto;
 
-    .loadedContent {
-        padding: 0 10px;
+    @include not-small-breakpoint {
+        .loadedContent {
+            padding: 0 10px;
+        }
     }
 }
 

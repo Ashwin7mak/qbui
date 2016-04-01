@@ -57,31 +57,8 @@ let TableHomePageRoute = React.createClass({
         let flux = this.getFlux();
         flux.actions.showTopNav();
         flux.actions.setTopTitle();
-        //this.loadReportsFromParams(this.props.params);
     },
-    componentDidUpdate() {
-
-        // get table and app ID from URL params set by router
-
-
-        const {tblId, appId} = this.props.params;
-        //console.log(this.props.params);
-
-        if (this.props.selectedApp && (this.props.selectedApp.id !== appId)) {
-            //console.log('doit app');
-            //this.selectAppId(appId);
-        }
-        if (this.props.selectedTable && (this.props.selectedTable.id !== tblId)) {
-            //console.log('doit tbl');
-            //this.selectTableId(tblId);
-        }
-
-        //this.loadReportsFromParams(props.params, true);
-
-        //this.selectTableId(props.params.tblId);
-
-    },
-
+    
     getStageHeadline() {
         return (this.props.selectedTable &&
             <div className="stageHeadline">
