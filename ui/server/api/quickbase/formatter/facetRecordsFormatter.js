@@ -14,6 +14,7 @@
     name: string. Facet field's name
     values: array. Array of distinct values for the facet field that the user can filter the report on.
     hasBlanks: boolean. Set to true of any of the values for this field was found to be null or empty.
+    userId: for user data types, will include the userId of the distinct value
     errorMessage: string. If values array is empty, a message indicating why the values is empty.
             For example this could be because all values are null or because the table is larger than 10K rows or because the facet field has more than 200 distinct values.
  }
@@ -30,7 +31,7 @@
  [{8, "02/16/2016"}]
  ]
  [
- [{9, {code: 100024, message: "businessobject.error.report.facet.tooBig"}}] -- Example of error message returned by server - this indicates no results were sent back and this is the reason why.
+ [{10, {code: 100024, message: "Number of records is too big...."}}] -- Example of error message returned by server - this indicates no results were sent back and this is the reason why.
  ]]
  Using the field's meta data:
  Field 7 -                              Field 8 -               Field 9 -
@@ -65,57 +66,134 @@
      {
          hasBlanks: false
          id: 9
+         name: "User Field"
+         type: "USER"
+         values: [{"John Smith", userId: 111", {...}]
+     }
+     {
+         id: 10
          name: "Some name"
          type: "TEXT"
-         values: []
-         errorMessage: "businessobject.error.report.facet.tooBig"
+         errorCode: 100024
      }
  ]
  */
 (function() {
     'use strict';
-    var _ = require('lodash');
+
     var recordFormatter = require('./recordFormatter')();
+    var constants = require('../../constants');
 
     module.exports = function() {
 
+        function checkForFacetErrorCode(facetRecords) {
+            if (facetRecords.length === 1 && facetRecords[0][0].value && facetRecords[0][0].value.code) {
+                return facetRecords[0][0].value.code;
+            }
+            return null;
+        }
+
+        function isBlank(inValue) {
+            if (inValue === null) {return true;}
+            if (inValue === 'undefined') {return true;}
+            if (inValue === false) {return false;}
+            if (inValue === true) {return false;}
+            if (inValue === 0) {return false;}
+            return !inValue;
+        }
+
         var facetRecordsFormatter = {
+
             //Given an array of array of records, array of fields format the record values into facet objects
             formatFacetRecords: function(facetRecordsArray, fields) {
                 if (Array.isArray(facetRecordsArray) && Array.isArray(fields) && facetRecordsArray.length > 0 && fields.length > 0) {
                     var facetList = [];
-                    let fieldsMap = {};
+                    var fieldsMap = {};
+
                     //populate the fieldsMap for easy access to fields by id
                     fields.forEach(function(entry) {
                         fieldsMap[entry.id] = entry;
                     });
-                    //for each array of records per facet
-                    for (let facetRecords of facetRecordsArray) {
-                        //populate a facet object
-                        var facet = {};
-                        //all records in this list should contain same fid so just pick it from the 1st one
-                        facet.id = facetRecords[0][0].id;
-                        //get the facet field based on the fid
-                        var relatedFacetField = fieldsMap[facet.id];
-                        facet.name = relatedFacetField.name;
-                        facet.type = relatedFacetField.datatypeAttributes.type;
-                        facet.values = [];
-                        facet.hasBlanks = false;
-                        //check  if thee is a single record returned for this facet field. If so this might point to an errorMessage
-                        if (facetRecords.length === 1 && facetRecords[0][0].value && facetRecords[0][0].value.code) {
-                            facet.errorMessage = facetRecords[0][0].value.message;
-                        } else {
-                            //display format the records
-                            let formattedFacetRecords = recordFormatter.formatRecords(facetRecords, fields);
-                            //now iterate over the records a second time to get just the values.
 
-                            for (let record of facetRecords) {
-                                //each record should only have one field here so just open it up
-                                facet.values.push(record[0].display);
-                                if (!record[0].display) {
-                                    facet.hasBlanks = true;
+                    // Loop through the facets for this report
+                    for (let facetRecords of facetRecordsArray) {
+
+                        var facet = {};
+
+                        //  Basic information about the facet...the fid, name and data type
+                        facet.id = facetRecords[0][0].id;
+                        facet.name = fieldsMap[facet.id].name;
+                        facet.type = fieldsMap[facet.id].datatypeAttributes.type;
+
+                        // check for any facet business rule errors
+                        var facetErrorCode = checkForFacetErrorCode(facetRecords);
+                        if (facetErrorCode) {
+                            facet.errorCode = facetErrorCode;
+                        } else {
+                            //  No error...set the distinct facet information
+                            facet.values = [];
+
+                            //  iterate over the list of records and format the record values as appropriate
+                            recordFormatter.formatRecords(facetRecords, fields);
+
+                            //  Format of the facet data is set based on the following supported data types:
+                            //      DATE/DATETIME:  values:[{value: {min:'',max:''}}]
+                            //      USER:   values:[{value:{string: 'val1',userId:'user1'}},...,{value:{string:'valN',userId:'userN')}]
+                            //      TEXT:   values:[{value:'val1'},{value:'val2'},...,{value:'valN'}]
+                            //      CHECKBOX: values:[{value:'val1'},{value:'val2'},...,{value:'valN'}]
+                            var facetData = {};
+                            var hasBlanks = false;
+
+                            if (facet.type === constants.DATE || facet.type === constants.DATE_TIME) {
+                                //  initialize
+                                facetData.value = {
+                                    min: '',
+                                    max: ''
+                                };
+
+                                //  2 rows are expected for DATES;  row 1 is the minimum date  and row 2
+                                //  is the maximum date that make up the facet range
+                                if (facetRecords && facetRecords.length === 2) {
+                                    facetData.value.min = facetRecords[0][0].display;
+                                    facetData.value.max = facetRecords[1][0].display;
+                                }
+                                facet.values.push(facetData);
+
+                                //  test if there is blank min or max date returned
+                                if (isBlank(facetData.value.min) || isBlank(facetData.value.max)) {
+                                    hasBlanks = true;
+                                }
+                            } else {
+                                for (let record of facetRecords) {
+                                    if (facet.type === constants.USER) {
+                                        //  initialize data structure for a USER
+                                        facetData = {
+                                            value: {
+                                                string: record[0].display,
+                                                userId: ''
+                                            }
+                                        };
+                                        if (record[0].value) {
+                                            facetData.value.userId = record[0].value.userId;
+                                        }
+                                    } else {
+                                        facetData = {
+                                            value: record[0].display
+                                        };
+                                    }
+
+                                    facet.values.push(facetData);
+
+                                    //  test if there is blank data returned..could have 'false' as display
+                                    //  value, so doing a negative test is not good enough
+                                    if (isBlank(record[0].display)) {
+                                        hasBlanks = true;
+                                    }
                                 }
                             }
+
+                            facet.hasBlanks = hasBlanks;
+
                         }
                         facetList.push(facet);
                     }

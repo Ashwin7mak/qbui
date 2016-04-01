@@ -94,8 +94,13 @@
                 fieldValue.display = durationFormatter.format(fieldValue, tempFieldInfo);
                 break;
             case consts.USER:
+                fieldValue.display = userFormatter.format(fieldValue, tempFieldInfo);
+                break;
             case consts.FORMULA_USER:
                 fieldValue.display = userFormatter.format(fieldValue, tempFieldInfo);
+                break;
+            case consts.CHECKBOX:
+                fieldValue.display = fieldValue.value;
                 break;
             default:
                     //TODO: handle LOOKUP fields, need to return rootFieldType in the fieldInfo in order to display format properly

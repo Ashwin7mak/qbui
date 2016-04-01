@@ -11,6 +11,40 @@ import QueryUtils from '../utils/queryUtils';
 
 let logger = new Logger();
 
+// TODO: change this to enable/disable grouped view on report
+const GROUPING_ON = false;
+
+//  Model object referenced by UI layer for presentation of a report.
+//  TODO: initial implementation...still in progress..
+let reportModel = {
+    //  build a report model object that is used by the front-end to render a report
+    set: function(reportMeta, reportData) {
+        var obj = {};
+
+        if (reportMeta && reportMeta.data) {
+            //  make available to the client the meta data that we think is necessary
+            obj.name = reportMeta.data.name;
+
+            //TODO: pull this from the real report meta data
+            obj.hasGrouping = GROUPING_ON;
+            //  TODO: not sure if sortList/grouping and summary info is needed OR if needed,
+            //  TODO: that it is organized in the best way...
+            //obj.sortList = reportMeta.data.sortList;
+            //obj.summary = reportMeta.data.summary;
+        }
+
+        if (reportData) {
+            //TODO: pull this from the real report meta data
+            obj.data = reportData.data;
+            obj.data.hasGrouping = GROUPING_ON;//TODO: pull this from the real report meta data
+            //  TODO: not sure if this is how report summary information will be made available to the client
+            //obj.summary = reportData.summary;
+        }
+
+        return obj;
+    }
+};
+
 //  Custom handling of 'possible unhandled rejection' error,  because we don't want
 //  to see an exception in the console output.  The exception is thrown by bluebird
 //  because the core application code has no logic implemented to handle a rejected
@@ -20,7 +54,6 @@ let logger = new Logger();
 Promise.onPossiblyUnhandledRejection(function(err) {
     logger.debug('Bluebird Unhandled rejection', err);
 });
-const GROUPING_ON = false; //change this to enable/disable grouped view on report
 
 let reportDataActions = {
 
@@ -41,13 +74,8 @@ let reportDataActions = {
                 Promise.all(promises).then(
                     function(response) {
                         logger.debug('Report service call successful');
-                        var report = {
-                            name: response[0].data.name,
-                            hasGrouping: GROUPING_ON, //TODO: pull this from the real report meta data
-                            data: response[1].data
-                        };
-                        logger.debug("Report Name: " + report.name);
-                        this.dispatch(actions.LOAD_REPORT_SUCCESS, report);
+                        var model = reportModel.set(response[0], response[1]);
+                        this.dispatch(actions.LOAD_REPORT_SUCCESS, model);
                         resolve();
                     }.bind(this),
                     function(error) {
@@ -78,6 +106,57 @@ let reportDataActions = {
      */
     filterReport(appId, tblId, rptId, format, filter) {
 
+        //  Build list of fids that is sent to the server as a part of the query parameters
+        function getReportSortFids(reportMetaData) {
+            let fids = [];
+
+            if (reportMetaData.data.sortList) {
+                reportMetaData.data.sortList.forEach(function(sort) {
+                    if (sort) {
+                        //var sortEl = sort.split(':');
+                        //  split guarentees at least 1 array element returned
+                        //fids.push(sortEl[0]);
+                        fids.push(sort);
+                    }
+                });
+            }
+            return fids ? fids.join('.') : '';
+        }
+
+        //  Build the request query parameters needed to properly filter the report request.  Information
+        //  that could be sent include fid list, sort list and query parameters
+        function buildRequestQuery(reportMetaData, facetQueryExpression, searchExpression) {
+            var queryParams = {};
+
+            if (reportMetaData && reportMetaData.data) {
+                queryParams.cList = reportMetaData.data.fids ? reportMetaData.data.fids.join('.') : '';
+                queryParams.sList = getReportSortFids(reportMetaData);
+                //  TODO: pass grouping and summary information with the query
+
+
+                //  Concatenate facet expression(if any) and search filter(if any) into single
+                //  query expression where each individual expression is 'AND'ed with the other.
+                //
+                //  To optimize query performance, order the array elements 1..n in order of
+                //  significance/most targeted selection as the outputted query is built starting
+                //  at offset 0.
+                let filterQueries = [];
+                if (reportMetaData.data.query) {
+                    filterQueries.push(reportMetaData.data.query);
+                }
+
+                if (facetQueryExpression) {
+                    filterQueries.push(facetQueryExpression.data);
+                }
+                if (searchExpression) {
+                    filterQueries.push(QueryUtils.parseStringIntoAllFieldsContainsExpression(searchExpression));
+                }
+                queryParams.query = QueryUtils.concatQueries(filterQueries);
+            }
+
+            return queryParams;
+        }
+
         //  promise is returned in support of unit testing only
         return new Promise(function(resolve, reject) {
 
@@ -92,37 +171,21 @@ let reportDataActions = {
                 var promises = [];
                 promises.push(reportService.getReport(appId, tblId, rptId));
 
-                // parse the facet into query language
+                // The filter parameter may contain a searchExpression and facetExpression
+                let searchExpression = filter ? filter.search : '';
                 let facetExpression = filter ? filter.facet : '';
                 promises.push(reportService.parseFacetExpression(facetExpression));
 
                 Promise.all(promises).then(
                     function(response) {
-                        var queryParams = {
-                            cList: response[0].data.fids ? response[0].data.fids.join('.') : '',
-                            sList: response[0].data.sortFids ? response[0].data.sortFids.join('.') : ''
-                        };
-
-                        //  Concatenate facet expression(if any) and search filter(if any) into single
-                        //  query expression where each individual expression is 'AND'ed with the other.
-                        //
-                        //  To optimize query performance, order the array elements 1..n in order of
-                        //  significance/most targeted selection as the outputted query is built starting
-                        //  at offset 0.
-                        let filterQueries = [];
-                        filterQueries.push(response[0].data.query);
-                        filterQueries.push(response[1].data);
-
-                        let searchExpression = filter ? filter.search : '';
-                        filterQueries.push(QueryUtils.parseStringIntoAllFieldsContainsExpression(searchExpression));
-                        queryParams.query = QueryUtils.concatQueries(filterQueries);
+                        var queryParams = buildRequestQuery(response[0], response[1], searchExpression);
 
                         //  Get the filtered records
                         recordService.getRecords(appId, tblId, format, queryParams).then(
                             function(recordResponse) {
-                                recordResponse.data.hasGrouping = GROUPING_ON; //TODO: pull this from the real report meta data
                                 logger.debug('Filter Report Records service call successful');
-                                this.dispatch(actions.LOAD_RECORDS_SUCCESS, recordResponse.data);
+                                var model = reportModel.set(null, recordResponse);
+                                this.dispatch(actions.LOAD_RECORDS_SUCCESS, model.data);
                                 resolve();
                             }.bind(this),
                             function(error) {
