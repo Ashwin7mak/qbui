@@ -35,8 +35,8 @@ let reportModel = {
 
         if (reportData) {
             //TODO: pull this from the real report meta data
-            reportData.data.hasGrouping = GROUPING_ON;
             obj.data = reportData.data;
+            obj.data.hasGrouping = GROUPING_ON;//TODO: pull this from the real report meta data
             //  TODO: not sure if this is how report summary information will be made available to the client
             //obj.summary = reportData.summary;
         }
@@ -183,10 +183,9 @@ let reportDataActions = {
                         //  Get the filtered records
                         recordService.getRecords(appId, tblId, format, queryParams).then(
                             function(recordResponse) {
-                                recordResponse.data.hasGrouping = GROUPING_ON; //TODO: pull this from the real report meta data
                                 logger.debug('Filter Report Records service call successful');
                                 var model = reportModel.set(null, recordResponse);
-                                this.dispatch(actions.LOAD_RECORDS_SUCCESS, model);
+                                this.dispatch(actions.LOAD_RECORDS_SUCCESS, model.data);
                                 resolve();
                             }.bind(this),
                             function(error) {
