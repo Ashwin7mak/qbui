@@ -94,12 +94,18 @@
                     reportServicePage.waitForElement(reportServicePage.tablesListDivEl).then(function() {
                         reportServicePage.tableLinksElList.get(4).click();
                         if (testcase.breakpointSize === 'small') {
-                            reportServicePage.clickTopNavHamburger();
+                            reportServicePage.clickTopNavHamburger().then(function() {
+                                // Open the reports list
+                                reportServicePage.waitForElementToBeClickable(reportServicePage.tableLinksElList.get(4)).then(function() {
+                                    reportServicePage.reportHamburgersElList.get(4).click();
+                                });
+                            });
+                        } else {
+                            // Open the reports list
+                            reportServicePage.waitForElementToBeClickable(reportServicePage.tableLinksElList.get(4)).then(function() {
+                                reportServicePage.reportHamburgersElList.get(4).click();
+                            });
                         }
-                    });
-                    // Open the reports list
-                    reportServicePage.waitForElementToBeClickable(reportServicePage.reportHamburgersElList.get(4)).then(function() {
-                        reportServicePage.reportHamburgersElList.get(4).click();
                     });
                     // Wait for the report list to load
                     reportServicePage.waitForElement(reportServicePage.reportGroupsDivEl).then(function() {
