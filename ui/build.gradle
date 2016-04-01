@@ -207,7 +207,7 @@ node {
     //version = '0.10.31'
     version = '4.2.1'
 
-    npmVersion = '2.14.4'
+    npmVersion = '2.14.10'
     // Base URL for fetching node distributions (change if you have a mirror).
     //distBaseUrl = 'http://nodejs.org/dist'
     // full URL is http://nodejs.org/dist/v0.10.31/node-v0.10.31-darwin-x64.tar.gz
