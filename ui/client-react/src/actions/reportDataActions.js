@@ -109,18 +109,14 @@ let reportDataActions = {
         //  Build list of fids that is sent to the server as a part of the query parameters
         function getReportSortFids(reportMetaData) {
             let fids = [];
+
             if (reportMetaData.data.sortList) {
                 reportMetaData.data.sortList.forEach(function(sort) {
-                    if (sort.fid) {
-                        if (sort.order) {
-                            if (sort.order.toUpperCase() === query.SORT_ASC) {
-                                fids.push(sort.fid);
-                            } else {
-                                fids.push('-' + sort.fid);
-                            }
-                        } else {
-                            fids.push(sort.fid);    // default is ASC
-                        }
+                    if (sort) {
+                        //var sortEl = sort.split(':');
+                        //  split guarentees at least 1 array element returned
+                        //fids.push(sortEl[0]);
+                        fids.push(sort);
                     }
                 });
             }
@@ -145,7 +141,9 @@ let reportDataActions = {
                 //  significance/most targeted selection as the outputted query is built starting
                 //  at offset 0.
                 let filterQueries = [];
-                filterQueries.push(reportMetaData.data.query);
+                if (reportMetaData.data.query) {
+                    filterQueries.push(reportMetaData.data.query);
+                }
 
                 if (facetQueryExpression) {
                     filterQueries.push(facetQueryExpression.data);
