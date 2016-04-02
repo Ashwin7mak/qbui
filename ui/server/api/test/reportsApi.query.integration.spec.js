@@ -76,7 +76,7 @@
                     count:'0'
                 },
                 {
-                    message: 'Query Is Not(XEX) Operator',
+                    message: 'Query Is AND Operator',
                     Query: "{'6'.XEX.''}AND{'11'.EX.''}",
                     count:'3'
                 },
