@@ -16,6 +16,20 @@ Promise.onPossiblyUnhandledRejection(function(err) {
     logger.debug('Bluebird Unhandled rejection', err);
 });
 
+//  Define the model object returned to the UI layer for the list of apps
+//  TODO: initial implementation...still in progress..
+let appsModel = {
+    set: function(apps) {
+        if (apps) {
+            //  add a link element to each individual app
+            apps.forEach((app) => {
+                app.link = '/app/' + app.id;
+            });
+        }
+        return apps;
+    }
+};
+
 let appsActions = {
 
     loadApps(withTables) {
@@ -25,11 +39,17 @@ let appsActions = {
             this.dispatch(actions.LOAD_APPS);
             let appService = new AppService();
 
+            //  fetch the list of apps that this user can view
             appService.getApps().then(
                 response => {
                     logger.debug('AppService getApps success:' + JSON.stringify(response));
 
-                    if (withTables) {
+                    if (withTables === true) {
+                        //  The tables fetched from getApps are lazily loaded, so we need to
+                        //  fetch each app explicitly to ensure the app object returned to the client
+                        //  is fully hydrated.
+                        //  TODO: potential for a large volume of async calls...
+                        //  TODO: move the loop to the NODE layer.
                         let promises = [];
                         response.data.forEach((app) => {
                             promises.push(appService.getApp(app.id));
@@ -37,12 +57,14 @@ let appsActions = {
 
                         Promise.all(promises).then(
                             (apps) => {
-                                let appLinkList = [];
+                                //  build of list that contains the app data
+                                let appList = [];
                                 apps.forEach((app) => {
-                                    app.data.link = '/app/' + app.data.id;
-                                    appLinkList.push(app.data);
+                                    appList.push(app.data);
                                 });
-                                this.dispatch(actions.LOAD_APPS_SUCCESS, appLinkList);
+
+                                var model = appsModel.set(appList);
+                                this.dispatch(actions.LOAD_APPS_SUCCESS, model);
                                 resolve();
                             },
                             (error) => {
@@ -55,8 +77,10 @@ let appsActions = {
                             this.dispatch(actions.LOAD_APPS_FAILED);
                             reject();
                         });
+
                     } else {
-                        this.dispatch(actions.LOAD_APPS_SUCCESS, response.data);
+                        var model = appsModel.set(response.data);
+                        this.dispatch(actions.LOAD_APPS_SUCCESS, model);
                         resolve();
                     }
                 },
@@ -73,12 +97,12 @@ let appsActions = {
         });
     },
 
-    selectAppId(appID) {
-        this.dispatch(actions.SELECT_APP, appID);
+    selectAppId(appId) {
+        this.dispatch(actions.SELECT_APP, appId);
     },
 
-    selectTableId(tblID) {
-        this.dispatch(actions.SELECT_TABLE, tblID);
+    selectTableId(tblId) {
+        this.dispatch(actions.SELECT_TABLE, tblId);
     }
 };
 

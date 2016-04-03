@@ -23,7 +23,7 @@
             {"id":10, "value":true, "display":true},
             {"id":11, "value":null, "display":""},
             {"id":12, "value":null, "display":""},
-            {"id":13, "value":"2016-08-08", "display":"08-08-2016"},
+            {"id":13, "value":"2016-08-08", "display":"08-08-2016"}
         ]];
 
         var FORMAT = 'display';
@@ -60,7 +60,7 @@
                     {name: 'Checkbox Field', datatypeAttributes: {type: 'CHECKBOX'}, type: 'SCALAR'},
                     {name: 'Null Text Field', datatypeAttributes: {type: 'TEXT'}, type: 'SCALAR'},
                     {name: 'Empty Text Field', datatypeAttributes: {type: 'TEXT'}, type: 'SCALAR'},
-                    {name: 'Date Field', datatypeAttributes: {type: 'DATE'}, type: 'SCALAR'},
+                    {name: 'Date Field', datatypeAttributes: {type: 'DATE'}, type: 'SCALAR'}
                     ]
                 },
                 {
@@ -132,56 +132,54 @@
         function facetTestCases() {
             return [
                 {
-                    message: 'text facet',
+                    message: 'Facet text facet',
                     facetFId: [6],
-                    expectedFacets: '[{"id":6,"name":"Text Field","type":"TEXT","values":["abcdef"],"hasBlanks":false}]'
+                    expectedFacets: '[{"id":6,"name":"Text Field","type":"TEXT","values":[{"value":"abcdef"}],"hasBlanks":false}]'
                 },
                 {
-                    message: 'Text and Date facet',
+                    message: 'Facet Text and Date facet',
                     facetFId: [6, 7],
-                    expectedFacets: '[{"id":6,"name":"Text Field","type":"TEXT","values":["abcdef"],"hasBlanks":false},' +
-                    '{"id":7,"name":"Date Field","type":"DATE","values":["04-12-2016","04-12-2016"],"hasBlanks":false}]'
+                    expectedFacets: '[{"id":6,"name":"Text Field","type":"TEXT","values":[{"value":"abcdef"}],"hasBlanks":false},' +
+                    '{"id":7,"name":"Date Field","type":"DATE","values":[{"value":{"min":"04-12-2016","max":"04-12-2016"}}],"hasBlanks":false}]'
                 },
                 {
-                    message: 'Multiple Dates facet',
+                    message: 'Facet Multiple Dates facet',
                     facetFId: [7, 13],
-                    expectedFacets: '[{"id":7,"name":"Date Field","type":"DATE","values":["04-12-2016","04-12-2016"],"hasBlanks":false},' +
-                    '{"id":13,"name":"Date Field2","type":"DATE","values":["08-08-2016","08-08-2016"],"hasBlanks":false}]'
+                    expectedFacets: '[{"id":7,"name":"Date Field","type":"DATE","values":[{"value":{"min":"04-12-2016","max":"04-12-2016"}}],"hasBlanks":false},' +
+                    '{"id":13,"name":"Date Field2","type":"DATE","values":[{"value":{"min":"08-08-2016","max":"08-08-2016"}}],"hasBlanks":false}]'
                 },
                 {
-                    message: 'Text Date and Date Time',
+                    message: 'Facet Text Date and Date Time',
                     facetFId: [6, 7, 8],
-                    expectedFacets: '[{"id":6,"name":"Text Field","type":"TEXT","values":["abcdef"],"hasBlanks":false},' +
-                    '{"id":7,"name":"Date Field","type":"DATE","values":["04-12-2016","04-12-2016"],"hasBlanks":false},' +
-                    '{"id":8,"name":"Date Time Field","type":"DATE_TIME","values":["04-11-2016 10:51 PM","04-11-2016 10:51 PM"],"hasBlanks":false}]'
+                    expectedFacets: '[{"id":6,"name":"Text Field","type":"TEXT","values":[{"value":"abcdef"}],"hasBlanks":false},' +
+                    '{"id":7,"name":"Date Field","type":"DATE","values":[{"value":{"min":"04-12-2016","max":"04-12-2016"}}],"hasBlanks":false},' +
+                    '{"id":8,"name":"Date Time Field","type":"DATE_TIME","values":[{"value":{"min":"04-11-2016 10:51 PM","max":"04-11-2016 10:51 PM"}}],"hasBlanks":false}]'
                 },
                 {
                     message: 'Facet with 1 Text record and 1 Empty Record',
                     facetFId: [6, 12],
-                    expectedFacets: '[{"id":6,"name":"Text Field","type":"TEXT","values":["abcdef"],"hasBlanks":false},{"id":12,"name":"Empty Text Field","type":"TEXT","values":[""],"hasBlanks":true}]'
+                    expectedFacets: '[{"id":6,"name":"Text Field","type":"TEXT","values":[{"value":"abcdef"}],"hasBlanks":false},{"id":12,"name":"Empty Text Field","type":"TEXT","values":[{"value":""}],"hasBlanks":true}]'
                 },
                 {
                     message: 'Facet with just Empty Record',
                     facetFId: [12],
-                    expectedFacets: '[{"id":12,"name":"Empty Text Field","type":"TEXT","values":[""],"hasBlanks":true}]'
+                    expectedFacets: '[{"id":12,"name":"Empty Text Field","type":"TEXT","values":[{"value":""}],"hasBlanks":true}]'
                 },
                 {
                     message: 'Facet with just Null Record',
                     facetFId: [11],
-                    expectedFacets: '[{"id":11,"name":"Null Text Field","type":"TEXT","values":[""],"hasBlanks":true}]'
+                    expectedFacets: '[{"id":11,"name":"Null Text Field","type":"TEXT","values":[{"value":""}],"hasBlanks":true}]'
                 },
                 {
                     message: 'Facet with Text null and Empty Records',
                     facetFId: [6, 11, 12],
-                    expectedFacets: '[{"id":6,"name":"Text Field","type":"TEXT","values":["abcdef"],"hasBlanks":false},{"id":11,"name":"Null Text Field","type":"TEXT","values":[""],"hasBlanks":true},{"id":12,"name":"Empty Text Field","type":"TEXT","values":[""],"hasBlanks":true}]'
+                    expectedFacets: '[{"id":6,"name":"Text Field","type":"TEXT","values":[{"value":"abcdef"}],"hasBlanks":false},{"id":11,"name":"Null Text Field","type":"TEXT","values":[{"value":""}],"hasBlanks":true},{"id":12,"name":"Empty Text Field","type":"TEXT","values":[{"value":""}],"hasBlanks":true}]'
                 },
                 {
-                    message: 'Negative Test - Test the order of facet results',
+                    message: 'Negative Facet Test - Test the order of facet results',
                     facetFId: [11, 12, 6],
-                    expectedFacets: '[{"id":11,"name":"Null Text Field","type":"TEXT","values":[""],"hasBlanks":true},{"id":12,"name":"Empty Text Field","type":"TEXT","values":[""],"hasBlanks":true},{"id":6,"name":"Text Field","type":"TEXT","values":["abcdef"],"hasBlanks":false}]'
+                    expectedFacets: '[{"id":11,"name":"Null Text Field","type":"TEXT","values":[{"value":""}],"hasBlanks":true},{"id":12,"name":"Empty Text Field","type":"TEXT","values":[{"value":""}],"hasBlanks":true},{"id":6,"name":"Text Field","type":"TEXT","values":[{"value":"abcdef"}],"hasBlanks":false}]'
                 }
-
-                //TODO Negative testcase for numeric not supporting facets should be added after implementation.
             ];
 
 

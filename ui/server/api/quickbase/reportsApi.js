@@ -5,11 +5,13 @@
  */
 (function() {
     'use strict';
+
     let Promise = require('bluebird');
     let log = require('../../logger').getLogger();
     /* See comment in recordsApi.js */
     let jsonBigNum = require('json-bignum');
     let errorCodes = require('../errorCodes');
+
     module.exports = function(config) {
         let requestHelper = require('./requestHelper')(config);
         let facetRecordsFormatter = require('./formatter/facetRecordsFormatter')();
@@ -34,6 +36,7 @@
             setRequestHelper: function(requestOverride) {
                 requestHelper = requestOverride;
             },
+
             /**
              * This is for testing only
              * @param requestOverride
@@ -41,12 +44,14 @@
             setRecordsApi: function(requestOverride) {
                 recordsApi = requestOverride;
             },
+
             //Returns a promise that is resolved with the facets data or rejected with an error code
             fetchFacetResults: function(req) {
                 let opts = requestHelper.setOptions(req);
                 opts.headers[CONTENT_TYPE] = APPLICATION_JSON;
                 let inputUrl = opts.url.toLowerCase();
-                //the request came in for report/{reportId}/reportComponents.
+
+                // The request came in for report/{reportId}/reportComponents.
                 // Convert that to report/{reportId}/facets/results to get facets data
                 if (inputUrl.indexOf(REPORTCOMPONENTS) !== -1) {
                     opts.url = inputUrl.substring(0, inputUrl.indexOf(REPORTCOMPONENTS)) + FACETS + "/" + RESULTS;
@@ -54,30 +59,50 @@
 
                 return requestHelper.executeRequest(req, opts);
             },
-            //Returns a promise that is resolved with the records and fields meta data
-            //or is rejected with a descriptive error code
-            //NOTE: This call just hands off responsibility to the recordsApi.
+
             fetchReportResults: function(req) {
-                return recordsApi.fetchRecordsAndFields(req);
+                return new Promise((resolve, reject) => {
+                    recordsApi.fetchRecordsAndFields(req).then(
+                        (response) => {
+                            if (recordsApi.isDisplayFormat(req)) {
+                                // TODO: the result set returned is a 'flat' heirarchy.  Since we are formatting our
+                                // TODO: result data, look to summarize the records per grouping requirement.
+                            }
+                            resolve(response);
+                        },
+                        (error) => {
+                            reject(error);
+                        }
+                    );
+                });
             },
+
             //Returns a promise that is resolved with the records, fields meta data and facets
             //or is rejected with a descriptive error code
             fetchReportComponents: function(req) {
                 return new Promise((resolve, reject) =>{
+                    //  TODO: current implementation requires 2 synchronized calls.
+                    //  TODO: Investigate whether there is a way to call async, but only drop
+                    //  TODO: into the error flow if the reportResults returns an error.
                     this.fetchReportResults(req).then(
                         (resultsResponse) => {
                             let records = resultsResponse.records;
                             let fields = resultsResponse.fields;
+
                             let facets = [];
+
                             let responseObject = {};
                             responseObject[FIELDS] = fields;
                             responseObject[RECORDS] = records;
+
                             this.fetchFacetResults(req).then(
                                 (facetResponse) => {
                                     let facetRecords = [];
+
                                     //jsonBigNum.parse throws exception if the input is empty array
                                     if (facetResponse.body && facetResponse.body.length > 0) {
                                         facetRecords = jsonBigNum.parse(facetResponse.body);
+
                                         // format the facetRecords into Facet objects of type {id, name, type, hasBlanks, [values]} using fields array.
                                         // this also applies display properties to the raw record data.
                                         facets = facetRecordsFormatter.formatFacetRecords(facetRecords, fields);
@@ -85,28 +110,19 @@
                                     responseObject[FACETS] = facets;
                                     resolve(responseObject);
                                 },
-                                // In case of error or exception on getFacets we want to silently fail, that is, just return the records and fields.
-                                // But tell the client that an error has occurred.
+
                                 (error) => {
-                                    //is the error because of more than 10K rows on table? If so pass this info to the client
-                                    if (JSON.parse(error.body)[0].code === errorCodes.ERROR_CODE.FACET.REPORT_TOO_BIG) {
-                                        var errorFacet = {id: null, errorMessage: errorCodes.ERROR_MSG_KEY.FACET.REPORT_TOO_BIG};
-                                        facets.push(errorFacet);
-                                        responseObject[FACETS] = facets;
-                                    } else { //some error that is not recognized by client occurred
-                                        var unknownErrorFacet = {id: null, errorMessage: errorCodes.ERROR_MSG_KEY.UNKNOWN_ERROR};
-                                        facets.push(unknownErrorFacet);
-                                        responseObject[FACETS] = facets;
-                                    }
-                                    resolve(responseObject);
                                     log.error("Error getting facets in fetchReportComponents: " + JSON.stringify(error));
+                                    var facetError = JSON.parse(error.body)[0];
+                                    facets.push({id: null, errorCode: facetError && facetError.code ? facetError.code : errorCodes.UNKNOWN});
+                                    responseObject[FACETS] = facets;
+                                    resolve(responseObject);
                                 }
                             ).catch((ex) => {
-                                var unknownErrorFacet = {id: null, errorMessage: errorCodes.ERROR_MSG_KEY.UNKNOWN_ERROR};
-                                facets.push(unknownErrorFacet);
+                                log.error("Caught unexpected error getting facets in fetchReportComponents: " + JSON.stringify(ex));
+                                facets.push({id: null, errorCode: errorCodes.UNKNOWN});
                                 responseObject[FACETS] = facets;
                                 resolve(responseObject);
-                                log.error("Caught unexpected error getting facets in fetchReportComponents: " + JSON.stringify(ex));
                             });
                         },
                         (error) => {

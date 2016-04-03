@@ -104,30 +104,43 @@ describe('Validate ReportsApi unit tests', function() {
             'url': '/testurl.com',
             'method': 'get'
         };
+        var getRecordsStub;
         beforeEach(function() {
+            getRecordsStub = sinon.stub(recordsApi, "fetchRecordsAndFields");
             reportsApi.setRecordsApi(recordsApi);
         });
         afterEach(function() {
-            recordsApi.fetchRecordsAndFields.restore();
+            getRecordsStub.restore();
         });
         it('Test success ', function(done) {
-            var getRecordsStub = sinon.stub(recordsApi, "fetchRecordsAndFields");
-            getRecordsStub.returns({
+            getRecordsStub.returns(Promise.resolve({
                 records: [],
                 fields: []
-            });
-            var response = reportsApi.fetchReportResults(req);
-            assert.deepEqual(response, {
-                records: [],
-                fields: []
+            }));
+            var promise = reportsApi.fetchReportResults(req);
+            promise.then(
+                function(response) {
+                    assert.deepEqual(response, {
+                        records: [],
+                        fields: []
+                    });
+                    done();
+                }
+            ).catch(function(errorMsg) {
+                done(new Error('unable to resolve fetchReportResults success: ' + JSON.stringify(errorMsg)));
             });
             done();
         });
         it('Test failure ', function(done) {
-            var getRecordsStub = sinon.stub(recordsApi, "fetchRecordsAndFields");
-            getRecordsStub.returns(new Error("error"));
-            var response = reportsApi.fetchReportResults(req);
-            assert.deepEqual(response, new Error("error"));
+            getRecordsStub.returns(Promise.reject(new Error("error")));
+            var promise = reportsApi.fetchReportResults(req);
+            promise.then(
+                function(response) {
+                },
+                function(error) {
+                    assert.deepEqual(error, new Error("error"));
+                }
+            );
             done();
         });
     });
@@ -153,7 +166,7 @@ describe('Validate ReportsApi unit tests', function() {
         var expectedUnknownErrorResponse = {
             records: [],
             fields: [],
-            facets: [{id: null, errorMessage: 'unknownError'}]
+            facets: [{id: null, errorCode: errorCodes.UNKNOWN}]
         };
         var fetchReportResultsPromise = Promise.resolve({records: [], fields: []});
         var fetchFacetsPromise = Promise.resolve({facets: []});
@@ -204,7 +217,7 @@ describe('Validate ReportsApi unit tests', function() {
         });
         it('Test 10K error from fetchFacets', function(done) {
             var getReportResults = sinon.stub(reportsApi, "fetchReportResults");
-            var fetchFacetsErrorPromise = Promise.reject({body:'[{"code":' + errorCodes.ERROR_CODE.FACET.REPORT_TOO_BIG + '}]'});
+            var fetchFacetsErrorPromise = Promise.reject({body:'[{"code":' + errorCodes.UNKNOWN + '}]'});
             var getFacetsErrorStub = sinon.stub(reportsApi, "fetchFacetResults");
             getReportResults.returns(fetchReportResultsPromise);
             getFacetsErrorStub.returns(fetchFacetsErrorPromise);
@@ -212,7 +225,7 @@ describe('Validate ReportsApi unit tests', function() {
             var errorExpectedResponse = {
                 records: [],
                 fields: [],
-                facets: [{id: null, errorMessage: errorCodes.ERROR_MSG_KEY.FACET.REPORT_TOO_BIG}]
+                facets: [{id: null, errorCode: errorCodes.UNKNOWN}]
             };
             var promise = reportsApi.fetchReportComponents(req);
             promise.then(

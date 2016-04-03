@@ -215,8 +215,9 @@
     }
 
     /**
-     * This is the function for fetching records and facets for a report from the reportssApi
-     * This is called from GetReportAndFacets end point from client.
+     * This is the function for fetching a completely hydrated report from the reportssApi endpoint.
+     * Currently, a hydrated report means report data plus facet information.
+     *
      * @param req
      * @param res
      */
@@ -236,8 +237,10 @@
     }
 
     /**
-     * This is the function for fetching records for a report from the reportssApi
-     * This is called from GetReportResults end point from client.
+     * This is the function for fetching data records for a report from the reportsApi endpoint.
+     * This endpoint is intended to be used primarily when a client needs to refresh the data for
+     * a report.   Report paging is one use case.
+     *
      * @param req
      * @param res
      */
