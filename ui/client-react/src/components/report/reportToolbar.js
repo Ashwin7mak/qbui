@@ -17,7 +17,7 @@ let FluxMixin = Fluxxor.FluxMixin(React);
  * does the heavy lifting and maintaining of search and facets selections
  */
 
-var ReportToolbar = React.createClass({
+const ReportToolbar = React.createClass({
     //interaction options
 
     mixins: [FluxMixin],
@@ -51,7 +51,7 @@ var ReportToolbar = React.createClass({
 
     isFiltered() {
         let answer = false;
-        if (this.props.searchStringForFiltering.length !== 0) {
+        if (this.props.searchStringForFiltering && this.props.searchStringForFiltering.length !== 0) {
             answer = true;
         } else {
             answer = this.props.selections ? this.props.selections.hasAnySelections() : false;
@@ -61,7 +61,7 @@ var ReportToolbar = React.createClass({
 
     handleFacetSelect(e, facet, value) {
         if (this.props.filterOnSelections) {
-            var newSelections = this.props.selections.copy();
+            let newSelections = this.props.selections.copy();
             newSelections.toggleSelectFacetValue(facet, value);
             this.props.filterOnSelections(newSelections);
         }
@@ -69,7 +69,7 @@ var ReportToolbar = React.createClass({
 
     handleFacetDeselect(e, facet, value) {
         if (this.props.filterOnSelections) {
-            var newSelections = this.props.selections.copy();
+            let newSelections = this.props.selections.copy();
             newSelections.setFacetValueSelectState(facet, value, false);
             this.props.filterOnSelections(newSelections);
         }
@@ -77,7 +77,7 @@ var ReportToolbar = React.createClass({
 
     handleFacetClearFieldSelects(facet) {
         if (this.props.filterOnSelections) {
-            var newSelections = this.props.selections.copy();
+            let newSelections = this.props.selections.copy();
             newSelections.removeAllFieldSelections(facet.id);
             this.props.filterOnSelections(newSelections);
         }
@@ -85,14 +85,14 @@ var ReportToolbar = React.createClass({
 
     handleFacetClearAllSelects() {
         if (this.props.filterOnSelections) {
-            var newSelections = new FacetSelections();
+            let newSelections = new FacetSelections();
             this.props.filterOnSelections(newSelections);
         }
     },
 
     handleSearchChange(e) {
-        if (this.props.searchTheString) {
-            var searchTxt = e.target.value;
+        if (this.props.searchTheString && e && e.target) {
+            let searchTxt = e.target.value;
             this.props.searchTheString(searchTxt);
         }
     },
@@ -213,7 +213,7 @@ var ReportToolbar = React.createClass({
 
 
                     <RecordsCount recordCount={recordCount}
-                          isFiltered={this.isFiltered() && !this.props.reportData.loading}
+                          isFiltered={this.isFiltered() && this.props.reportData && !this.props.reportData.loading}
                           isLoading={isLoading}
                           filteredRecordCount={filteredRecordCount}
                           nameForRecords={this.props.nameForRecords}

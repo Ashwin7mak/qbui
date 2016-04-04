@@ -222,14 +222,14 @@ describe('Test ReportData Store', () => {
         };
 
         let action = {
-            type: actions.LOAD_RECORDS_SUCCESS,
+            type: actions.LOAD_REPORT_SUCCESS,
             payload: payload
         };
 
         flux.dispatcher.dispatch(action);
         expect(flux.store(STORE_NAME).data.filteredRecords).toBeDefined();
-        //facets error handles
-        expect(flux.store(STORE_NAME).data.facets).length().toBe(0);
+        let state = flux.store(STORE_NAME).getState();
+        expect(state.data.facets.length).toBe(0);
 
         // ensure the output of each report row includes an id, name and link
         expect(flux.store(STORE_NAME).emit).toHaveBeenCalledWith('change');
@@ -246,14 +246,15 @@ describe('Test ReportData Store', () => {
         };
 
         let action = {
-            type: actions.LOAD_RECORDS_SUCCESS,
+            type: actions.LOAD_REPORT_SUCCESS,
             payload: payload
         };
 
         flux.dispatcher.dispatch(action);
         expect(flux.store(STORE_NAME).data.filteredRecords).toBeDefined();
         //facets error handles
-        expect(flux.store(STORE_NAME).data.facets).length().toBe(0);
+        let state = flux.store(STORE_NAME).getState();
+        expect(state.data.facets.length).toBe(0);
 
         // ensure the output of each report row includes an id, name and link
         expect(flux.store(STORE_NAME).emit).toHaveBeenCalledWith('change');

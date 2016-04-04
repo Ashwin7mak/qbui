@@ -114,8 +114,8 @@ var FacetsList = React.createClass({
         }
         // create field facet sections
         return facetsData.map((facetField) => {
-            var fid = facetField.id;
-            var inputProps = {
+            let fid = facetField.id;
+            let inputProps = {
                 eventKey: facetField,
                 key: "FacetsItem." + this.props.popoverId + "." + fid,
                 ref: fid,

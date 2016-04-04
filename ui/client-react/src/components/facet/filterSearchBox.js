@@ -14,7 +14,7 @@ let StoreWatchMixin = Fluxxor.StoreWatchMixin;
  FilterSearchBox component takes user input for filtering a report.
  Takes the function to call on changes to search string, what he list is known as default is Records
  */
-var FilterSearchBox = React.createClass({
+const FilterSearchBox = React.createClass({
     mixins: [FluxMixin, StoreWatchMixin('ReportDataSearchStore')],
 
     displayName: 'FilterSearchBox',

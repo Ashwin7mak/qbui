@@ -157,7 +157,7 @@ const ReportRoute = React.createClass({
     },
 
     clearAllFilters() {
-        var noSelections = new FacetSelections();
+        let noSelections = new FacetSelections();
         this.getFlux().actions.filterSelectionsPending(noSelections);
         this.getFlux().actions.filterSearchPending('');
         this.debouncedFilterReport('', noSelections);

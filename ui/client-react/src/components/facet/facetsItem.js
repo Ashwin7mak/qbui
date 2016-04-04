@@ -83,17 +83,17 @@ class FacetsItem extends Component {
      * @returns {XML}
      */
     renderFieldName() {
-        var clearFacetsIcon = "";
-        var selectionInfo = "";
-        var selectionStrings = "";
+        let clearFacetsIcon = "";
+        let selectionInfo = "";
+        let selectionStrings = "";
         if (this.props.fieldSelections.length > 0) {
             // note onMouseDown instead of onClick necessary here to support rootClose on the menu
             // so that it will not propagate to thru to parent collapse while clearing selection
             clearFacetsIcon = (<span onMouseDown={e => this.clearSelects(e)} onTouchEnd={e => this.clearSelects(e)}>
                                     <QBicon className="clearFacet" icon="clear-mini" />
                                 </span>);
-            var listOfValues = this.props.facet.values.map(x => x.value);
-            var originalOrderSelected =  _.intersection(listOfValues, this.props.fieldSelections);
+            let listOfValues = this.props.facet.values.map(x => x.value);
+            let originalOrderSelected =  _.intersection(listOfValues, this.props.fieldSelections);
             selectionStrings = (originalOrderSelected.map((item, index) => {
                 return item + (index === (this.props.fieldSelections.length - 1) ? "" : ", ");
             }));
@@ -125,7 +125,7 @@ class FacetsItem extends Component {
      * @returns {XML}
      */
     renderValue(item, index) {
-        var isSelected = this.props.fieldSelections.indexOf(item.value) !== -1;
+        let isSelected = this.props.fieldSelections.indexOf(item.value) !== -1;
         return (
             <FacetsAspect isSelected={isSelected}
                          item={item}
