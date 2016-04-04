@@ -140,14 +140,6 @@
 }
 
 
-.reportContainer {
-    .layout-stage {
-        .breadCrumbs {
-            padding-left:5px;
-        }
-    }
-}
-
 .reportToolbarContainer {
     width: 100%;
 }
@@ -155,6 +147,13 @@
     padding-left: 1.5rem;
 
 }
+.addNewRecord {
+    display:none;
+}
+
+$add-record-fg: #fff;
+$add-record-bg: #a52363;
+$add-record-radius: 20px;
 
 @include small-breakpoint {
     .reportContainer .reportToolsAndContentContainer .reportToolbar {
@@ -162,8 +161,33 @@
         justify-content:space-between;
     }
     .reportContainer .reportToolsAndContentContainer .loadedContent {
-        min-height: 430px;
         margin:0;
         width:100%;
+    }
+    .addNewRecord {
+        display:inline-block;
+        position:fixed;
+        right:24px;
+        bottom:24px;
+        font-size:24px;
+
+        color: $add-record-fg;
+        background-color: $add-record-bg;
+        vertical-align: middle;
+        text-align:center;
+        width: $add-record-radius * 2;
+        height: $add-record-radius * 2;
+        -moz-border-radius: $add-record-radius;
+        -webkit-border-radius: $add-record-radius;
+        border-radius: $add-record-radius;
+        .qbIcon {
+            line-height: $add-record-radius * 2;
+        }
+        &:hover {
+            color: $add-record-fg;
+        }
+        &:focus {
+            color:$add-record-fg;
+        }
     }
 }

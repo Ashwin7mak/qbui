@@ -82,19 +82,37 @@ let NavWrapper = React.createClass({
 
         flux.actions.loadApps(true);
 
-        if (this.props.params.appId && this.props.params.tblId) {
+        if (this.props.params.appId) {
             flux.actions.selectAppId(this.props.params.appId);
-            flux.actions.selectTableId(this.props.params.tblId);
-            flux.actions.loadReports(this.props.params.appId, this.props.params.tblId);
+
+            if (this.props.params.tblId) {
+                flux.actions.selectTableId(this.props.params.tblId);
+                flux.actions.loadReports(this.props.params.appId, this.props.params.tblId);
+            } else {
+                flux.actions.selectTableId(null);
+            }
         }
     },
 
     componentWillReceiveProps(props) {
+        if (props.params.appId) {
+            if (this.props.params.appId !== props.params.appId) {
+                flux.actions.selectAppId(props.params.appId);
+            }
+        } else {
+            flux.actions.selectAppId(null);
+        }
 
-        if (this.props.params.appId && this.props.params.tblId && this.props.params.appId !== props.params.appId && this.props.params.tblId !== props.params.tblId) {
-            flux.actions.selectAppId(this.props.params.appId);
-            flux.actions.selectTableId(this.props.params.tblId);
-            flux.actions.loadReports(this.props.params.appId, this.props.params.tblId);
+        if (this.props.params.appId !== props.params.appId) {
+            flux.actions.selectAppId(props.params.appId);
+        }
+        if (props.params.tblId) {
+            if (this.props.params.tblId !== props.params.tblId) {
+                flux.actions.selectTableId(props.params.tblId);
+                flux.actions.loadReports(props.params.appId, props.params.tblId);
+            }
+        } else {
+            flux.actions.selectTableId(null);
         }
     }
 });
