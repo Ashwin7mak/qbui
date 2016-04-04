@@ -126,6 +126,7 @@
       white-space: nowrap;
       overflow: hidden;
       text-overflow: ellipsis;
+      padding-left: 15px;
     }
 
     .panel-default {
@@ -164,10 +165,12 @@
 
     .checkMark {
       color: transparent;
+      padding-right: 5px;
     }
 
     .checkMark-selected {
       color: $facetSelected-color;
+      padding-right: 5px;
     }
 
     .clearFacet {

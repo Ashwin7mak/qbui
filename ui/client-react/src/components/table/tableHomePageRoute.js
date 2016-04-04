@@ -58,7 +58,7 @@ let TableHomePageRoute = React.createClass({
         flux.actions.showTopNav();
         flux.actions.setTopTitle();
     },
-    
+
     getStageHeadline() {
         return (this.props.selectedTable &&
             <div className="stageHeadline">

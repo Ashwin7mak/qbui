@@ -14,6 +14,8 @@ import simpleStringify from '../../../../common/src/simpleStringify';
 import Fluxxor from 'fluxxor';
 import _ from 'lodash';
 import './report.scss';
+import FilterUtils from '../../utils/filterUtils';
+import FacetSelections from '../facet/facetSelections';
 
 let logger = new Logger();
 let FluxMixin = Fluxxor.FluxMixin(React);
@@ -28,6 +30,9 @@ const AddRecordButton = React.createClass({
 
 const ReportRoute = React.createClass({
     mixins: [FluxMixin],
+    facetFields : {},
+    debounceInputMillis: 700, // a key send delay
+    nameForRecords: "Records",  // get from table meta data
 
     loadReport(appId, tblId, rptId) {
         const flux = this.getFlux();
@@ -46,6 +51,16 @@ const ReportRoute = React.createClass({
             this.loadReport(appId, tblId, rptId);
         }
     },
+
+    componentWillMount() {
+        // Create a debounced function that delays invoking filterReport func
+        // until after debounceInputMillis milliseconds have elapsed since the
+        // last time the debouncedFilterReport was invoked.
+        this.debouncedFilterReport = _.debounce(this.filterReport, this.debounceInputMillis);
+        // note the facets by id
+        this.mapFacetFields();
+    },
+
     componentDidMount() {
         const flux = this.getFlux();
         flux.actions.hideTopNav();
@@ -55,9 +70,17 @@ const ReportRoute = React.createClass({
         }
     },
 
+    componentWillReceiveProps() {
+        this.mapFacetFields();
+    },
+
     getHeader() {
         return (
-            <ReportHeader reportData={this.props.reportData}/>);
+            <ReportHeader reportData={this.props.reportData}
+                          nameForRecords={this.nameForRecords}
+                          searchTheString={this.searchTheString}
+                          clearSearchString={this.clearSearchString}
+            />);
     },
 
     getPageActions(maxButtonsBeforeMenu) {
@@ -88,6 +111,58 @@ const ReportRoute = React.createClass({
             </div>
         );
     },
+
+    mapFacetFields() {
+        this.facetFields = {};
+        if (this.props.reportData && this.props.reportData.data &&
+            this.props.reportData.data.facets) {
+            this.props.reportData.data.facets.map((facet) => {
+                // a fields id ->facet lookup
+                this.facetFields[facet.id] = facet;
+            });
+        }
+    },
+
+    searchTheString(searchTxt) {
+        this.getFlux().actions.filterSearchPending(searchTxt);
+        this.filterOnSearch(searchTxt);
+    },
+
+    clearSearchString() {
+        this.getFlux().actions.filterSearchPending('');
+        this.filterOnSearch('');
+    },
+
+    filterReport(searchString, selections) {
+        let flux = this.getFlux();
+
+        const filter = FilterUtils.getFilter(searchString,
+            selections,
+            this.facetFields);
+
+        logger.debug('Sending filter action with:' + searchString);
+
+        flux.actions.filterReport(this.props.selectedAppId,
+                                    this.props.routeParams.tblId,
+                                    this.props.routeParams.rptId, true, filter);
+    },
+
+    filterOnSelections(newSelections) {
+        this.getFlux().actions.filterSelectionsPending(newSelections);
+        this.debouncedFilterReport(this.props.searchStringForFiltering, newSelections);
+    },
+
+    filterOnSearch(newSearch) {
+        this.debouncedFilterReport(newSearch, this.props.reportData.selections);
+    },
+
+    clearAllFilters() {
+        let noSelections = new FacetSelections();
+        this.getFlux().actions.filterSelectionsPending(noSelections);
+        this.getFlux().actions.filterSearchPending('');
+        this.debouncedFilterReport('', noSelections);
+    },
+
     render() {
         if (_.isUndefined(this.props.params) ||
             _.isUndefined(this.props.params.appId) ||
@@ -110,9 +185,20 @@ const ReportRoute = React.createClass({
                                        appId={this.props.params.appId}
                                        tblId={this.props.params.tblId}
                                        rptId={this.props.params.rptId}
-                                       pageActions={this.getPageActions(0)}/>
+                                       pageActions={this.getPageActions(0)}
+                                       nameForRecords={this.nameForRecords}
+                                       selections={this.props.reportData.selections}
+                                       searchStringForFiltering={this.props.reportData.searchStringForFiltering}
+                                       callbacks={{
+                                           searchTheString: this.searchTheString,
+                                           filterOnSelections: this.filterOnSelections,
+                                           clearSearchString : this.clearSearchString,
+                                           clearAllFilters : this.clearAllFilters
+                                       }}
+                />
 
                 {!this.props.scrollingReport && <AddRecordButton />}
+
 
             </div>);
         }

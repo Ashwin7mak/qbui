@@ -15,6 +15,7 @@ import ReportsStore from '../stores/reportsStore';
 import reportActions from'../actions/reportActions';
 
 import ReportDataStore from '../stores/reportDataStore';
+import ReportDataSearchStore from '../stores/reportDataSearchStore';
 import reportDataActions from'../actions/reportDataActions';
 
 import AppsStore from '../stores/appsStore';
@@ -41,7 +42,8 @@ let stores = {
     ReportDataStore: new ReportDataStore(),
     AppsStore: new AppsStore(),
     NavStore: new NavStore(),
-    FacetMenuStore: new FacetMenuStore()
+    FacetMenuStore: new FacetMenuStore(),
+    ReportDataSearchStore: new ReportDataSearchStore()
 };
 let flux = new Fluxxor.Flux(stores);
 flux.addActions(reportActions);
