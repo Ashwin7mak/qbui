@@ -31,8 +31,8 @@ describe('Test FacetMenuStore Store', () => {
     it('test default FacetMenuStore state', () => {
         // verify default states
         expect(flux.store(STORE_NAME).state.show).toBeFalsy();
-        expect(Object.keys(flux.store(STORE_NAME).expandedFacetFields).length).toBe(0);
-        expect(Object.keys(flux.store(STORE_NAME).moreRevealedFacetFields).length).toBe(0);
+        expect(flux.store(STORE_NAME).state.expandedFacetFields.length).toBe(0);
+        expect(flux.store(STORE_NAME).state.moreRevealedFacetFields.length).toBe(0);
 
         //  expect bindActions
         expect(flux.store(STORE_NAME).__actions__.SHOW_FACET_MENU).toBeDefined();
@@ -70,17 +70,17 @@ describe('Test FacetMenuStore Store', () => {
 
     it('test set facets expanded action', () => {
 
-        let expanded = {
-            me: "expand"
+        let data = {
+            expanded: "expand"
         };
 
         let setFacetsExpandedAction = {
             type: actions.SET_FACETS_EXPANDED,
-            expanded: expanded
+            payload: data
         };
 
         flux.dispatcher.dispatch(setFacetsExpandedAction);
-        expect(flux.store(STORE_NAME).state.expandedFacetFields).toEqual(expanded);
+        expect(flux.store(STORE_NAME).state.expandedFacetFields).toEqual(data.expanded);
 
         expect(flux.store(STORE_NAME).emit).toHaveBeenCalledWith('change');
         expect(flux.store(STORE_NAME).emit.calls.count()).toBe(1);
@@ -88,17 +88,17 @@ describe('Test FacetMenuStore Store', () => {
 
     it('test set facets more revealed action', () => {
 
-        let moreRevealed = {
-            me: "moreRevealed"
+        let data = {
+            moreRevealed: "moreRevealed"
         };
 
         let setFacetsMoreRevealed = {
             type: actions.SET_FACETS_MORE_REVEALED,
-            moreRevealed: moreRevealed
+            payload: data
         };
 
         flux.dispatcher.dispatch(setFacetsMoreRevealed);
-        expect(flux.store(STORE_NAME).state.moreRevealedFacetFields).toEqual(moreRevealed);
+        expect(flux.store(STORE_NAME).state.moreRevealedFacetFields).toEqual(data.moreRevealed);
 
         expect(flux.store(STORE_NAME).emit).toHaveBeenCalledWith('change');
         expect(flux.store(STORE_NAME).emit.calls.count()).toBe(1);
@@ -123,21 +123,8 @@ describe('Test FacetMenuStore Store', () => {
 
         //  expect the following to be returned when 'getting state'
         expect(state.show).toBe(false);
-        expect(state.expandedFacetFields).toBe([]);
-        expect(state.moreRevealedFacetFields).toBe([]);
-    });
-
-    it('test getState function after showing', () => {
-        let searchStringAction = {
-            type: actions.SHOW_FACET_MENU,
-            payload: {
-                string: "abc",
-            }
-        };
-        flux.dispatcher.dispatch(searchStringAction);
-        let state = flux.store(STORE_NAME).getState();
-
-        expect(state.searchStringInput).toBeDefined(searchStringAction.payload.string);
+        expect(state.expandedFacetFields).toEqual([]);
+        expect(state.moreRevealedFacetFields).toEqual([]);
     });
 
     it('test getState function after showing', () => {
@@ -193,7 +180,7 @@ describe('Test FacetMenuStore Store', () => {
         let state = flux.store(STORE_NAME).getState();
         //  expect the following to be reset
         expect(state.show).toBe(false);
-        expect(state.expandedFacetFields).toBe([]);
-        expect(state.moreRevealedFacetFields).toBe([]);
+        expect(state.expandedFacetFields).toEqual([]);
+        expect(state.moreRevealedFacetFields).toEqual([]);
     });
 });

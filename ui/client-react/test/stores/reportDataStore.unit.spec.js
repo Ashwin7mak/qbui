@@ -210,6 +210,57 @@ describe('Test ReportData Store', () => {
         expect(flux.store(STORE_NAME).emit.calls.count()).toBe(1);
     });
 
+
+    it('test load records success action with error data', () => {
+
+        let payload = {
+            data: {
+                fields: [],
+                records: [],
+                facets: [{id:null, errorMessage:"testing error"}]
+            }
+        };
+
+        let action = {
+            type: actions.LOAD_RECORDS_SUCCESS,
+            payload: payload
+        };
+
+        flux.dispatcher.dispatch(action);
+        expect(flux.store(STORE_NAME).data.filteredRecords).toBeDefined();
+        //facets error handles
+        expect(flux.store(STORE_NAME).data.facets).length().toBe(0);
+
+        // ensure the output of each report row includes an id, name and link
+        expect(flux.store(STORE_NAME).emit).toHaveBeenCalledWith('change');
+        expect(flux.store(STORE_NAME).emit.calls.count()).toBe(1);
+    });
+
+    it('test load records success action with unspecified data', () => {
+
+        let payload = {
+            data: {
+                fields: [],
+                records: [],
+            }
+        };
+
+        let action = {
+            type: actions.LOAD_RECORDS_SUCCESS,
+            payload: payload
+        };
+
+        flux.dispatcher.dispatch(action);
+        expect(flux.store(STORE_NAME).data.filteredRecords).toBeDefined();
+        //facets error handles
+        expect(flux.store(STORE_NAME).data.facets).length().toBe(0);
+
+        // ensure the output of each report row includes an id, name and link
+        expect(flux.store(STORE_NAME).emit).toHaveBeenCalledWith('change');
+        expect(flux.store(STORE_NAME).emit.calls.count()).toBe(1);
+    });
+
+
     it('test load records success action with no data', () => {
 
         let payload = {
@@ -232,6 +283,26 @@ describe('Test ReportData Store', () => {
         expect(flux.store(STORE_NAME).emit.calls.count()).toBe(1);
     });
 
+
+    it('test getState function after showing', () => {
+        let action = {
+            type: actions.SHOW_FACET_MENU,
+        };
+        flux.dispatcher.dispatch(action);
+        let state = flux.store(STORE_NAME).getState();
+
+        expect(state.nonFacetClicksEnabled).toBeDefined(false);
+    });
+
+    it('test getState function after hiding', () => {
+        let action = {
+            type: actions.HIDE_FACET_MENU,
+        };
+        flux.dispatcher.dispatch(action);
+        let state = flux.store(STORE_NAME).getState();
+
+        expect(state.nonFacetClicksEnabled).toBeDefined(true);
+    });
 
 
     it('test filter selection pending action', () => {

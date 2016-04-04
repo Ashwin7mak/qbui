@@ -65,7 +65,7 @@ describe('Test ReportDataSearchFilter Store', () => {
                 string: "abc",
             }
         };
-        flux.dispatcher.dispatch(searchStringFilterAction);
+        flux.dispatcher.dispatch(searchStringAction);
         let state = flux.store(STORE_NAME).getState();
 
         expect(state.searchStringInput).toBeDefined(searchStringInput);
