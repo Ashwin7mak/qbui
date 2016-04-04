@@ -12,6 +12,7 @@ describe('Query formatter unit test', function() {
         var cases = [
             {message:"null req", req:null, query: ""},
             {message:"null query", req:{query:null}, query: ""},
+            {message:"null query", req:{notQuery:'blah'}, query: ""},
             {message:"null facet expression", req:{query:{facetexpression: null}}, query: ""},
             {message:"empty facet expression", req:{query:{facetexpression: []}}, query: ""},
             {message:"simple facet expression", req:{query:{facetexpression: [{fid: 1, values: [2]}]}}, query: "({1.EX.'2'})"},
