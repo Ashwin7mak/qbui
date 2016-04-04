@@ -20,6 +20,7 @@ describe('Report functions', () => {
     let flux = {
         actions:{
             loadReport() {return;},
+            selectTableId() {return;},
             filterReport() {return;},
             hideTopNav() {return;}
         }

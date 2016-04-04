@@ -3,7 +3,6 @@ import * as actions from '../constants/actions';
 import Fluxxor from 'fluxxor';
 import Logger from '../utils/logger';
 var logger = new Logger();
-import _ from 'lodash';
 
 let AppsStore = Fluxxor.createStore({
 

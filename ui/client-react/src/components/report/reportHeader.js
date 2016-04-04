@@ -20,6 +20,7 @@ var ReportHeader = React.createClass({
         reportData: React.PropTypes.object,
         nameForRecords: React.PropTypes.string,
         searchTheString: React.PropTypes.func,
+        clearSearchString: React.PropTypes.func,
     },
     getInitialState() {
         return {

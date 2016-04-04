@@ -46,6 +46,7 @@ var FilterSearchBox = React.createClass({
                            key={"filterSearchBox_" + this.props.searchBoxKey}
                            value={this.state.searchStringInput}
                            onChange={this.props.onChange}
+                           onDoubleClick={this.props.clearSearchString} // till we get the icon
                            placeholder={placeMsg}/>
                 </div>
         );

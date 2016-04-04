@@ -2,15 +2,12 @@
 
 .report-content {
     display: flex;
-    min-height: 200px;
+    margin-bottom: 35px;
 
     .left {
         flex: 1;
         padding: 0 10px;
         margin-right: 120px;
-        .stage-showHide-content {
-            margin-top: 20px;
-        }
 
         .stageTop {
             display: flex;

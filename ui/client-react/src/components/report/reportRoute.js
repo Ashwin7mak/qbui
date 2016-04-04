@@ -20,7 +20,15 @@ import FacetSelections from '../facet/facetSelections';
 let logger = new Logger();
 let FluxMixin = Fluxxor.FluxMixin(React);
 
-var ReportRoute = React.createClass({
+const AddRecordButton = React.createClass({
+    render() {
+        return (
+            <a href="#" className="addNewRecord"><QBicon icon="add" /></a>
+        );
+    }
+});
+
+const ReportRoute = React.createClass({
     mixins: [FluxMixin],
     facetFields : {},
     debounceInputMillis: 700, // a key send delay
@@ -28,6 +36,8 @@ var ReportRoute = React.createClass({
 
     loadReport(appId, tblId, rptId) {
         const flux = this.getFlux();
+        flux.actions.selectTableId(tblId);
+
         flux.actions.loadReport(appId, tblId, rptId, true);
     },
 
@@ -69,6 +79,7 @@ var ReportRoute = React.createClass({
             <ReportHeader reportData={this.props.reportData}
                           nameForRecords={this.nameForRecords}
                           searchTheString={this.searchTheString}
+                          clearSearchString={this.clearSearchString}
             />);
     },
 
@@ -87,16 +98,15 @@ var ReportRoute = React.createClass({
     getBreadcrumbs() {
         let reportName = this.props.reportData && this.props.reportData.data && this.props.reportData.data.name;
 
-        return (this.props.selectedTable && <h3 className="breadCrumbs">
-            <Link to={this.props.selectedTable.link}>{this.props.selectedTable.name}</Link> | {reportName}
-            </h3>);
+        return (this.props.selectedTable &&
+        <h3 className="breadCrumbs"><QBicon icon="report-table"/> {this.props.selectedTable.name}
+            <span className="breadCrumbsSeparator"> | </span>{reportName}</h3>);
+
     },
 
     getStageHeadline() {
         return (
             <div className="stageHeadline">
-                <QBicon icon="report-table"/>
-
                 {this.getBreadcrumbs()}
             </div>
         );
@@ -113,10 +123,14 @@ var ReportRoute = React.createClass({
         }
     },
 
-
     searchTheString(searchTxt) {
         this.getFlux().actions.filterSearchPending(searchTxt);
         this.filterOnSearch(searchTxt);
+    },
+
+    clearSearchString() {
+        this.getFlux().actions.filterSearchPending('');
+        this.filterOnSearch('');
     },
 
     filterReport(searchString, selections) {
@@ -178,15 +192,14 @@ var ReportRoute = React.createClass({
                                        callbacks={{
                                            searchTheString: this.searchTheString,
                                            filterOnSelections: this.filterOnSelections,
+                                           clearSearchString : this.clearSearchString,
                                            clearAllFilters : this.clearAllFilters
                                        }}
                 />
 
-                {/*
-                <div className="addNewRecord">
-                    <a href="#" className="addRecordLink"><QBicon icon="add-mini" /></a>
-                </div>
-                */}
+                {!this.props.scrollingReport && <AddRecordButton />}
+
+
             </div>);
         }
     }
