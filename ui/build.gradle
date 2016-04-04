@@ -205,7 +205,7 @@ cargo {
 node {
     // Version of node to use.
     //version = '0.10.31'
-    version = '4.2.1'
+    version = '4.2.3'
 
     npmVersion = '2.14.10'
     // Base URL for fetching node distributions (change if you have a mirror).
