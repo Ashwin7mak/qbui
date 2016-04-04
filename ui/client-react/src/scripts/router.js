@@ -15,7 +15,7 @@ import ReportsStore from '../stores/reportsStore';
 import reportActions from'../actions/reportActions';
 
 import ReportDataStore from '../stores/reportDataStore';
-import ReportDataSearchStore from '../stores/ReportDataSearchStore';
+import ReportDataSearchStore from '../stores/reportDataSearchStore';
 import reportDataActions from'../actions/reportDataActions';
 
 import AppsStore from '../stores/appsStore';
