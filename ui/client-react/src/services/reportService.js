@@ -1,6 +1,7 @@
 import constants from './constants';
 import BaseService from './baseService';
 import NumberUtils from '../utils/numberUtils';
+import * as query from '../constants/query';
 
 // a new service is constructed with each actions request..
 // so cachedReportRequest is a global, should be able to keep with reportService
@@ -143,20 +144,20 @@ class ReportService extends BaseService {
      * @param reportId
      * @param formatted - is output formatted for UI display or the raw data
      * @param offset - zero based row offset
-     * @param rows - number of rows to return on the request
+     * @param numRows - number of rows to return on the request
      * @param includeFacets - include facet data in result
      * @returns promise
      */
-    getReportData(appId, tableId, reportId, formatted, offset, rows, includeFacets) {
+    getReportData(appId, tableId, reportId, formatted, offset, numRows, includeFacets) {
         let params = {};
 
         //  is the result set returned formatted/organized for UI display or in 'raw' un-edited format
         if (formatted === true) {
-            params.format = 'display';
+            params[query.FORMAT_PARAM] = query.DISPLAY_FORMAT;
         }
-        if (NumberUtils.isInt(offset) && NumberUtils.isInt(rows)) {
-            params.offset = offset;
-            params.numRows = rows;
+        if (NumberUtils.isInt(offset) && NumberUtils.isInt(numRows)) {
+            params[query.OFFSET_PARAM] = offset;
+            params[query.NUMROWS_PARAM] = numRows;
         }
 
         let url = super.constructUrl(includeFacets === true ? this.API.GET_REPORT_COMPONENTS : this.API.GET_REPORT_RESULTS, [appId, tableId, reportId]);
@@ -172,7 +173,7 @@ class ReportService extends BaseService {
     parseFacetExpression(facetExpression) {
         let params = {};
         if (facetExpression) {
-            params.facetexpression = facetExpression;
+            params[query.FACET_EXPRESSION] = facetExpression;
         }
 
         return super.get(this.API.PARSE_FACET_EXPR, {params: params});

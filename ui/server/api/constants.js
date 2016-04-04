@@ -47,7 +47,8 @@
 
         //Formatting request parameter
         REQUEST_PARAMETER : {
-            FORMAT: 'format'
+            FORMAT: 'format',
+            FACET_EXPRESSION: 'facetexpression'
         }
 
 
