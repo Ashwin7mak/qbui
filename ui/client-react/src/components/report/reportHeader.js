@@ -18,7 +18,6 @@ var ReportHeader = React.createClass({
 
     propTypes: {
         reportData: React.PropTypes.object,
-        searchInput: React.PropTypes.string,
         nameForRecords: React.PropTypes.string,
         searchTheString: React.PropTypes.func,
     },
@@ -34,8 +33,10 @@ var ReportHeader = React.createClass({
     },
 
     handleSearchChange(e) {
-        var searchTxt = e.target.value;
-        this.props.searchTheString(searchTxt);
+        if (this.props.searchTheString) {
+            var searchTxt = e.target.value;
+            this.props.searchTheString(searchTxt);
+        }
     },
     // show the search elements
     startSearching() {
@@ -66,7 +67,6 @@ var ReportHeader = React.createClass({
                 <FilterSearchBox onChange={this.handleSearchChange}
                                  nameForRecords={this.props.nameForRecords}
                                  searchBoxKey="reportHeader"
-                                 value={this.props.searchInput}
                                 {...this.props} />
                 <a className="textLink" href="#" onClick={this.cancelSearch}>
                     <I18nMessage message="cancel"/>

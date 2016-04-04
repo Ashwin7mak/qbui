@@ -13,8 +13,14 @@ describe('ReportHeader functions', () => {
             return {};
         }
     });
+    let reportDataSearchStore = Fluxxor.createStore({
+        getState() {
+            return {searchStringInput :''};
+        }
+    });
     let stores = {
-        NavStore: new navStore()
+        NavStore: new navStore(),
+        ReportDataSearchStore: new reportDataSearchStore()
     };
 
     let flux = new Fluxxor.Flux(stores);
@@ -38,17 +44,25 @@ describe('ReportHeader functions', () => {
         },
         selections: selections
     };
-
+    let mockCallbacks = {};
 
     beforeEach(() => {
-        component = TestUtils.renderIntoDocument(<ReportHeader flux={flux} reportData={reportData}/>);
+
+        mockCallbacks = {
+            searchHappened : function(value) {
+            }
+        };
+        spyOn(mockCallbacks, 'searchHappened').and.callThrough();
         spyOn(flux.actions, 'toggleLeftNav');
-        spyOn(flux.actions, 'filterReport');
+
+        component = TestUtils.renderIntoDocument(<ReportHeader flux={flux} reportData={reportData}
+                                                               searchTheString={mockCallbacks.searchHappened}
+        />);
     });
 
     afterEach(() => {
         flux.actions.toggleLeftNav.calls.reset();
-        flux.actions.filterReport.calls.reset();
+        mockCallbacks.searchHappened.calls.reset();
     });
 
     it('test render of component', () => {
@@ -72,14 +86,12 @@ describe('ReportHeader functions', () => {
         let filterSearchBox = TestUtils.scryRenderedDOMComponentsWithClass(component, "filterSearchBox");
         expect(filterSearchBox.length).toEqual(1);
 
-        // check that search input is debounced
-
         var searchInput = filterSearchBox[0];
         var testValue = 'xxx';
 
         //simulate search string was input
         TestUtils.Simulate.change(searchInput, {target: {value: testValue}});
-        expect(flux.actions.filterReport).toHaveBeenCalled();
+        expect(mockCallbacks.searchHappened).toHaveBeenCalled();
     });
 
 });

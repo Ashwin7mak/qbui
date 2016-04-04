@@ -126,15 +126,17 @@ let ReportDataStore = Fluxxor.createStore({
     },
 
     onSearchFor(text) {
-
+        // placeholder which will be obsolete
+        // when other searches from global are supported
         this.data.filteredRecords = [];
 
         if (this.data.records) {
             this.data.records.forEach((record) => {
 
                 let match = false;
+                let lText = text.toLowerCase();
                 _.values(record).forEach((val) => {
-                    if (val && val.toString().toLowerCase().indexOf(text.toLowerCase()) !== -1) {
+                    if (val && val.toString().toLowerCase(lText).indexOf() !== -1) {
                         match = true;
                     }
                 });

@@ -22,10 +22,9 @@ let FluxMixin = Fluxxor.FluxMixin(React);
 
 var ReportRoute = React.createClass({
     mixins: [FluxMixin],
-    fields : {},
-    debounceInputMillis: 500, // a 1/2 second delay
+    facetFields : {},
+    debounceInputMillis: 700, // a key send delay
     nameForRecords: "Records",  // get from table meta data
-    searchReportStringForFiltering:'',
 
     loadReport(appId, tblId, rptId) {
         const flux = this.getFlux();
@@ -44,8 +43,12 @@ var ReportRoute = React.createClass({
     },
 
     componentWillMount() {
-        this.filterReport = _.debounce(this.filterReport, this.debounceInputMillis); // debounce the filter action
-        this.mapFields();
+        // Create a debounced function that delays invoking filterReport func
+        // until after debounceInputMillis milliseconds have elapsed since the
+        // last time the debouncedFilterReport was invoked.
+        this.debouncedFilterReport = _.debounce(this.filterReport, this.debounceInputMillis);
+        // note the facets by id
+        this.mapFacetFields();
     },
 
     componentDidMount() {
@@ -58,13 +61,12 @@ var ReportRoute = React.createClass({
     },
 
     componentWillReceiveProps() {
-        this.mapFields();
+        this.mapFacetFields();
     },
 
     getHeader() {
         return (
             <ReportHeader reportData={this.props.reportData}
-                          searchInput={this.state.searchReportInputPending}
                           nameForRecords={this.nameForRecords}
                           searchTheString={this.searchTheString}
             />);
@@ -100,32 +102,21 @@ var ReportRoute = React.createClass({
         );
     },
 
-    getInitialState() {
-        return {
-            searchReportInputPending: '',
-        };
-    },
-
-    mapFields() {
-        this.fields = {};
+    mapFacetFields() {
+        this.facetFields = {};
         if (this.props.reportData && this.props.reportData.data &&
             this.props.reportData.data.facets) {
             this.props.reportData.data.facets.map((facet) => {
                 // a fields id ->facet lookup
-                this.fields[facet.id] = facet;
+                this.facetFields[facet.id] = facet;
             });
         }
     },
 
-    executeSearchString(result) {
-        this.filterOnSearch(result);
-    },
 
     searchTheString(searchTxt) {
-        this.executeSearchString(searchTxt);
-        this.setState({
-            searchReportInputPending: searchTxt
-        });
+        this.getFlux().actions.filterSearchPending(searchTxt);
+        this.filterOnSearch(searchTxt);
     },
 
     filterReport(searchString, selections) {
@@ -133,29 +124,29 @@ var ReportRoute = React.createClass({
 
         const filter = FilterUtils.getFilter(searchString,
             selections,
-            this.fields);
+            this.facetFields);
+
+        logger.debug('Sending filter action with:' + searchString);
 
         flux.actions.filterReport(this.props.selectedAppId,
                                     this.props.routeParams.tblId,
                                     this.props.routeParams.rptId, true, filter);
-        this.searchReportStringForFiltering = searchString;
     },
 
     filterOnSelections(newSelections) {
         this.getFlux().actions.filterSelectionsPending(newSelections);
-        this.filterReport(this.props.searchStringForFiltering, newSelections);
+        this.debouncedFilterReport(this.props.searchStringForFiltering, newSelections);
     },
+
     filterOnSearch(newSearch) {
-        this.filterReport(newSearch, this.props.reportData.selections);
+        this.debouncedFilterReport(newSearch, this.props.reportData.selections);
     },
 
     clearAllFilters() {
         var noSelections = new FacetSelections();
         this.getFlux().actions.filterSelectionsPending(noSelections);
-        this.filterReport('', noSelections);
-        this.setState({
-            searchReportInputPending: ''
-        });
+        this.getFlux().actions.filterSearchPending('');
+        this.debouncedFilterReport('', noSelections);
     },
 
     render() {
@@ -183,8 +174,7 @@ var ReportRoute = React.createClass({
                                        pageActions={this.getPageActions(0)}
                                        nameForRecords={this.nameForRecords}
                                        selections={this.props.reportData.selections}
-                                       searchInput={this.state.searchReportInputPending}
-                                       searchStringForFiltering={this.searchReportStringForFiltering}
+                                       searchStringForFiltering={this.props.reportData.searchStringForFiltering}
                                        callbacks={{
                                            searchTheString: this.searchTheString,
                                            filterOnSelections: this.filterOnSelections,

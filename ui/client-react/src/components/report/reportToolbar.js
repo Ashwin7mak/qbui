@@ -1,22 +1,16 @@
 import React from 'react';
 import Fluxxor from 'fluxxor';
-import Promise from 'bluebird';
 
 import './report.scss';
 
-import Logger from '../../utils/logger';
 import {I18nMessage} from '../../../src/utils/i18nMessage';
-import {Tooltip, OverlayTrigger, Button} from 'react-bootstrap';
 import FilterSearchBox from '../facet/filterSearchBox';
 import FacetsMenu from '../facet/facetsMenu';
 import FacetSelections from '../facet/facetSelections';
 import RecordsCount from './recordsCount';
-import QBicon from '../qbIcon/qbIcon';
-import IconActions from '../actions/iconActions';
 
 let FluxMixin = Fluxxor.FluxMixin(React);
 
-let logger = new Logger();
 
 /**
  * a ReportToolbar for table reports with search field and a filter icon
@@ -25,7 +19,6 @@ let logger = new Logger();
 
 var ReportToolbar = React.createClass({
     //interaction options
-
 
     mixins: [FluxMixin],
 
@@ -40,7 +33,6 @@ var ReportToolbar = React.createClass({
             })
         }),
         searchStringForFiltering: React.PropTypes.string,
-        searchInput: React.PropTypes.string,
         selections: React.PropTypes.object,
         nameForRecords:React.PropTypes.string,
         pageActions: React.PropTypes.element,
@@ -49,7 +41,6 @@ var ReportToolbar = React.createClass({
         searchTheString: React.PropTypes.func,
     },
 
-
     getDefaultProps() {
         return {
             fillinMockFacets : window.location.search.includes('mockFilter'),
@@ -57,7 +48,6 @@ var ReportToolbar = React.createClass({
             searchStringForFiltering: ""
         };
     },
-
 
     isFiltered() {
         let answer = false;
@@ -69,33 +59,42 @@ var ReportToolbar = React.createClass({
         return answer;
     },
 
-
     handleFacetSelect(e, facet, value) {
-        var newSelections = this.props.selections.copy();
-        newSelections.toggleSelectFacetValue(facet, value);
-        this.props.filterOnSelections(newSelections);
+        if (this.props.filterOnSelections) {
+            var newSelections = this.props.selections.copy();
+            newSelections.toggleSelectFacetValue(facet, value);
+            this.props.filterOnSelections(newSelections);
+        }
     },
 
     handleFacetDeselect(e, facet, value) {
-        var newSelections = this.props.selections.copy();
-        newSelections.setFacetValueSelectState(facet, value, false);
-        this.props.filterOnSelections(newSelections);
+        if (this.props.filterOnSelections) {
+            var newSelections = this.props.selections.copy();
+            newSelections.setFacetValueSelectState(facet, value, false);
+            this.props.filterOnSelections(newSelections);
+        }
     },
 
     handleFacetClearFieldSelects(facet) {
-        var newSelections = this.props.selections.copy();
-        newSelections.removeAllFieldSelections(facet.id);
-        this.props.filterOnSelections(newSelections);
+        if (this.props.filterOnSelections) {
+            var newSelections = this.props.selections.copy();
+            newSelections.removeAllFieldSelections(facet.id);
+            this.props.filterOnSelections(newSelections);
+        }
     },
 
     handleFacetClearAllSelects() {
-        var newSelections = new FacetSelections();
-        this.props.filterOnSelections(newSelections);
+        if (this.props.filterOnSelections) {
+            var newSelections = new FacetSelections();
+            this.props.filterOnSelections(newSelections);
+        }
     },
 
     handleSearchChange(e) {
-        var searchTxt = e.target.value;
-        this.props.searchTheString(searchTxt);
+        if (this.props.searchTheString) {
+            var searchTxt = e.target.value;
+            this.props.searchTheString(searchTxt);
+        }
     },
 
     /**
@@ -147,32 +146,9 @@ var ReportToolbar = React.createClass({
                 //    values[{range: {start: 1, end: 2}}],
     ],
 
-    dummyFacets: [
-            {id : 101, name : "Types", type: "TEXT", mockFilter: true, blanks: true,
-                values : ["Design", "Development", "Planning", "Test"]},
-            {id : 102, name : "Names", type: "TEXT", mockFilter: true, blanks: false,
-                values : [
-                    "Aditi Goel",  "Christopher Deery",  "Claire Martinez",  "Claude Keswani",  "Deborah Pontes",
-                    "Donald Hatch",  "Drew Stevens",  "Erica Rodrigues",  "Kana Eiref",
-                    "Ken LaBak",  "Lakshmi Kamineni",  "Lisa Davidson",  "Marc Labbe",
-                    "Matthew Saforrian",  "Micah Zimring",  "Rick Beyer",  "Sam Jones",  "XJ He"
-                ]},
-            {id : 103, name : "Status", type: "TEXT", mockFilter: true, blanks: false,
-                values : ["No Started",  "In Progress",  "Blocked",  "Completed"]},
-            {id : 104, name : "Companies", type: "TEXT", mockFilter: true, blanks: false,
-                // TODO: support date ranges in filtering see https://jira.intuit.com/browse/QBSE-20422
-                values : []}, // too many values for facets example
-            {id : 105, name : "Flag", type: "CHECKBOX", mockFilter: true, blanks: false,
-             values : ["No",  "Yes"]},
-            //Date facets yet supported
-            //{id : 106, name : "Dates", type: "DATE", mockFilter: true, blanks: false,
-            //    values : {start: 1, end: 2}},
-    ],
-
-
     populateDummyFacets() {
         if (this.props.reportData && this.props.reportData.data && this.props.reportData.data.facets && !this.props.reportData.data.facets.appendedMockFilter)  {
-            this.props.reportData.data.facets = [...this.props.reportData.data.facets, ...this.dummyFacets];
+            this.props.reportData.data.facets = [...this.props.reportData.data.facets, ...this.dummyFacetsWithValueObjects];
             this.props.reportData.data.facets.appendedMockFilter = true;
         }
     },
@@ -205,10 +181,6 @@ var ReportToolbar = React.createClass({
             }
         }
 
-        // determine if there is a search/filter in effect and if there are records/results to show
-        let hasRecords = this.isFiltered() ? !!filteredRecordCount : !!recordCount;
-        let hasSelectedFacets = this.props.selections && this.props.selections.hasAnySelections();
-
         let reportToolbar = (
             <div className={"reportToolbar " + (hasFacets ? "" : "noFacets")}>
 
@@ -216,13 +188,12 @@ var ReportToolbar = React.createClass({
 
                         {/* Search and grouping icon will go in the toolbar here per discussion with xd-ers */}
 
-                        {/*TODO : check if searchbox is enabled for this report,
-                         if has facets has search too, eg no facets without searchbox */}
+                        {/*TODO : check if searchBox is enabled for this report,
+                         if has facets has search too, eg no facets without searchBox */}
                         {recordCount &&
                             <FilterSearchBox onChange={this.handleSearchChange}
                                              nameForRecords={this.props.nameForRecords}
                                              searchBoxKey="reportToolBar"
-                                             value={this.props.searchInput}
                                 {...this.props} />
                         }
 

@@ -63,6 +63,7 @@ let reportDataActions = {
         return new Promise(function(resolve, reject) {
 
             if (appId && tblId && rptId) {
+                //logger.debug("triggering: " + actions.LOAD_REPORT);
                 this.dispatch(actions.LOAD_REPORT, {appId, tblId, rptId});
                 let reportService = new ReportService();
 
@@ -161,6 +162,7 @@ let reportDataActions = {
         return new Promise(function(resolve, reject) {
 
             if (appId && tblId && rptId) {
+                //logger.debug("triggering: " + actions.LOAD_RECORDS);
                 this.dispatch(actions.LOAD_RECORDS, {appId, tblId, rptId, filter});
 
                 let reportService = new ReportService();
@@ -224,7 +226,13 @@ let reportDataActions = {
     },
 
     filterSelectionsPending(selections) {
+        //logger.debug("triggering: " + actions.FILTER_SELECTIONS_PENDING);
         this.dispatch(actions.FILTER_SELECTIONS_PENDING, {selections});
+    },
+
+    filterSearchPending(string) {
+        //logger.debug("triggering: " + actions.FILTER_SEARCH_PENDING);
+        this.dispatch(actions.FILTER_SEARCH_PENDING, {string});
     }
 };
 

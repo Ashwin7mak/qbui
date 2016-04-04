@@ -36,7 +36,6 @@ var ReportToolsAndContent = React.createClass({
                                      reportData={otherReportData}
                                      selections={selections}
                                      searchStringForFiltering={this.props.searchStringForFiltering}
-                                     searchInput={this.props.searchInput}
                                      pageActions={this.props.pageActions}
                                      nameForRecords={this.props.nameForRecords}
                                      {...this.props.callbacks} />;

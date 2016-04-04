@@ -35,10 +35,17 @@ describe('Test ReportData Store', () => {
         expect(flux.store(STORE_NAME).loading).toBeFalsy();
         expect(flux.store(STORE_NAME).error).toBeFalsy();
 
-        //  expect 3 bindActions
+        //  expect bindActions
         expect(flux.store(STORE_NAME).__actions__.LOAD_REPORT).toBeDefined();
         expect(flux.store(STORE_NAME).__actions__.LOAD_REPORT_SUCCESS).toBeDefined();
         expect(flux.store(STORE_NAME).__actions__.LOAD_REPORT_FAILED).toBeDefined();
+        expect(flux.store(STORE_NAME).__actions__.LOAD_RECORDS).toBeDefined();
+        expect(flux.store(STORE_NAME).__actions__.LOAD_RECORDS_SUCCESS).toBeDefined();
+        expect(flux.store(STORE_NAME).__actions__.LOAD_RECORDS_FAILED).toBeDefined();
+        expect(flux.store(STORE_NAME).__actions__.FILTER_SELECTIONS_PENDING).toBeDefined();
+        expect(flux.store(STORE_NAME).__actions__.SHOW_FACET_MENU).toBeDefined();
+        expect(flux.store(STORE_NAME).__actions__.HIDE_FACET_MENU).toBeDefined();
+        expect(flux.store(STORE_NAME).__actions__.SEARCH_FOR).toBeDefined();
     });
 
     it('test load reports action', () => {
@@ -185,7 +192,6 @@ describe('Test ReportData Store', () => {
         expect(flux.store(STORE_NAME).selections).toEqual({});
         expect(flux.store(STORE_NAME).facetExpression).toEqual('');
         expect(flux.store(STORE_NAME).searchStringForFiltering).toEqual('abc');
-
         expect(flux.store(STORE_NAME).emit).toHaveBeenCalledWith('change');
         expect(flux.store(STORE_NAME).emit.calls.count()).toBe(1);
     });
@@ -226,4 +232,22 @@ describe('Test ReportData Store', () => {
         expect(flux.store(STORE_NAME).emit.calls.count()).toBe(1);
     });
 
+
+
+    it('test filter selection pending action', () => {
+        let selections = new FacetSelections();
+        selections.addSelection(1, 'Development');
+        let selectionsPendingAction = {
+            type: actions.FILTER_SELECTIONS_PENDING,
+            payload: {
+                selections: selections,
+            }
+        };
+
+        flux.dispatcher.dispatch(selectionsPendingAction);
+        expect(flux.store(STORE_NAME).selections).toEqual(selections);
+
+        expect(flux.store(STORE_NAME).emit).toHaveBeenCalledWith('change');
+        expect(flux.store(STORE_NAME).emit.calls.count()).toBe(1);
+    });
 });
