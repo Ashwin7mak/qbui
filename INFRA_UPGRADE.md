@@ -11,3 +11,4 @@
 1. react-intl
 2. react-addons-test-utils
 3. babel-core
+4. lodash
