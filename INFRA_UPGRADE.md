@@ -12,3 +12,5 @@
 2. react-addons-test-utils
 3. babel-core
 4. lodash
+5. bootstrap-sass-loader no longer valid, bootstrap-loader is the new version
+6. bunyans
