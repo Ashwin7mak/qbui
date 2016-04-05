@@ -221,6 +221,14 @@ let reportDataActions = {
                 reject();
             }
         }.bind(this));
+    },
+
+    filterSelectionsPending(selections) {
+        this.dispatch(actions.FILTER_SELECTIONS_PENDING, {selections});
+    },
+
+    filterSearchPending(string) {
+        this.dispatch(actions.FILTER_SEARCH_PENDING, {string});
     }
 };
 

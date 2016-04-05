@@ -15,8 +15,15 @@ let TableHomePageRoute = React.createClass({
     selectTableId(tblId) {
         let flux = this.getFlux();
         flux.actions.selectTableId(tblId);
-        flux.actions.loadReports(this.props.params.appId, tblId);
+        //flux.actions.loadReports(this.props.params.appId, tblId);
     },
+    selectAppId(appId) {
+        let flux = this.getFlux();
+        flux.actions.selectAppId(appId);
+        //flux.actions.loadReports(this.props.params.appId, tblId);
+        //flux.actions.loadReports(this.props.params.appId, tblId);
+    },
+
     loadReportsFromParams(params, checkParams) {
 
         let flux = this.getFlux();
@@ -50,10 +57,6 @@ let TableHomePageRoute = React.createClass({
         let flux = this.getFlux();
         flux.actions.showTopNav();
         flux.actions.setTopTitle();
-        this.loadReportsFromParams(this.props.params);
-    },
-    componentWillReceiveProps: function(props) {
-        this.loadReportsFromParams(props.params, true);
     },
 
     getStageHeadline() {
@@ -82,7 +85,7 @@ let TableHomePageRoute = React.createClass({
             </div>);
     },
 
-    render: function() {
+    render() {
 
         return (<div className="tableHomepageContainer">
             <Stage stageHeadline={this.getStageHeadline()}
@@ -97,7 +100,7 @@ let TableHomePageRoute = React.createClass({
                 {this.getSecondaryBar()}
                 {this.getPageActions()}
             </div>
-            <div>Table homepage goes here...</div>
+            <div>Table homepage for {this.props.selectedTable && this.props.selectedTable.name} goes here...</div>
         </div>);
     }
 });

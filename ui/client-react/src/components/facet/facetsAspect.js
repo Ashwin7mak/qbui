@@ -42,12 +42,13 @@ class FacetsAspect extends Component {
      * @returns {XML}
      */
     render() {
+        let itemValue =  this.props.item ? this.props.item.value : null;
         return (
             <ListGroupItem
-                           onClick={(e)=>this.props.handleSelectValue(e, this.props.facet, this.props.item.value)}
+                           onClick={(e)=>this.props.handleSelectValue(e, this.props.facet, itemValue)}
                            className={this.props.isSelected  ? "selected" : ""}>
                 <QBicon className={this.props.isSelected  ? "checkMark-selected" : "checkMark"} icon="check" />
-                {this.props.item.value}
+                {itemValue}
             </ListGroupItem>
         );
     }

@@ -43,7 +43,7 @@ const facetShape = chainablePropType(() => {
 function validSelectionHashMap(props, propName, componentName, location, propFullName)  {
     let obj = props[propName];
     // Check if `obj` is an Array using `PropTypes.array`
-    var isObjectError = React.PropTypes.array(props, propFullName, componentName, location);
+    let isObjectError = React.PropTypes.array(props, propFullName, componentName, location);
     if (isObjectError) {
         return isObjectError;
     }

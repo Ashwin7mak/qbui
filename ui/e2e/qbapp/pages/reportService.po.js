@@ -211,24 +211,26 @@
          * Assertion function that will test the properties of the leftNav
          */
         this.assertNavProperties = function(breakpointSize, open, offsetWidth) {
-            // Sleep to handle any animations of the leftNav (opening or closing)
-            e2eBase.sleep(browser.params.tinySleep);
-            // Check properties of nav bar
-            // First subclass of leftNav deals with the small BP - either open or closed
-            // Second subclass is for the other BPs - either collapsed or expanded
-            if (open && breakpointSize === 'small') {
-                expect(this.navMenuEl.getAttribute('class')).toContain('open');
-                expect(this.navMenuEl.getAttribute('offsetWidth')).toMatch(offsetWidth);
-            } else if (open && breakpointSize !== 'small') {
-                expect(this.navMenuEl.getAttribute('class')).toContain('expanded');
-                expect(this.navMenuEl.getAttribute('offsetWidth')).toMatch(offsetWidth);
-            } else if (!open && breakpointSize === 'small') {
-                expect(this.navMenuEl.getAttribute('class')).toContain('closed');
-                expect(this.navMenuEl.getAttribute('offsetWidth')).toMatch(offsetWidth);
-            } else {
-                expect(this.navMenuEl.getAttribute('class')).toContain('collapsed');
-                expect(this.navMenuEl.getAttribute('offsetWidth')).toMatch(offsetWidth);
-            }
+            var self = this;
+
+            return browser.controlFlow().execute(function() {
+                // Check properties of nav bar
+                // First subclass of leftNav deals with the small BP - either open or closed
+                // Second subclass is for the other BPs - either collapsed or expanded
+                if (open && breakpointSize === 'small') {
+                    expect(self.navMenuEl.getAttribute('class')).toContain('open');
+                    expect(self.navMenuEl.getAttribute('offsetWidth')).toMatch(offsetWidth);
+                } else if (open && breakpointSize !== 'small') {
+                    expect(self.navMenuEl.getAttribute('class')).toContain('expanded');
+                    expect(self.navMenuEl.getAttribute('offsetWidth')).toMatch(offsetWidth);
+                } else if (!open && breakpointSize === 'small') {
+                    expect(self.navMenuEl.getAttribute('class')).toContain('closed');
+                    expect(self.navMenuEl.getAttribute('offsetWidth')).toMatch(offsetWidth);
+                } else {
+                    expect(self.navMenuEl.getAttribute('class')).toContain('collapsed');
+                    expect(self.navMenuEl.getAttribute('offsetWidth')).toMatch(offsetWidth);
+                }
+            });
 
         };
 
@@ -274,7 +276,6 @@
             });
         };
 
-
         // Click the reportHeader hamburger icon (need to be on a loaded report on small)
         this.clickReportHeaderHamburger = function() {
             var self = this;
@@ -284,6 +285,97 @@
                 });
             });
         };
+
+        // For small breakpoint only, use expand / collapse for other BPs
+        this.openLeftNav = function() {
+            var self = this;
+            var fetchTextPromises = [];
+
+            // LeftNav
+            fetchTextPromises.push(this.navMenuEl.getAttribute('class'));
+            // Shows if you are on a dashboard page
+            fetchTextPromises.push(this.topNavToggleHamburgerEl.isPresent());
+            // Shows if you are on a loaded report
+            fetchTextPromises.push(this.reportHeaderToggleHamburgerEl.isPresent());
+
+            return Promise.all(fetchTextPromises).then(function(promises) {
+                // LeftNav is closed
+                if (promises[0].includes('closed')) {
+                    // Must be on a dashboard page
+                    if (promises[1] && !promises[2]) {
+                        // Click the hamburger and wait for the leftNav to be displayed
+                        return self.topNavToggleHamburgerEl.click().then(function() {
+                            return e2ePageBase.waitForElement(self.navMenuEl);
+                        }).then(function() {
+                            // Sleep for animation of the leftNav
+                            return e2eBase.sleep(browser.params.tinySleep);
+                        });
+                        // Must be on a loaded report
+                    } else if (promises[1] && promises[2]) {
+                        // Click the hamburger and wait for the leftNav to be displayed
+                        return self.reportHeaderToggleHamburgerEl.click().then(function() {
+                            return e2ePageBase.waitForElement(self.navMenuEl);
+                        }).then(function() {
+                            // Sleep for animation of the leftNav
+                            return e2eBase.sleep(browser.params.tinySleep);
+                        });
+                    } else {
+                        throw Error('Error trying to open the leftNav');
+                    }
+                } else if (promises[0].includes('open')) {
+                    // LeftNav is already open so do nothing
+                    return promises[0];
+                } else {
+                    throw Error('Error getting leftNav state');
+                }
+            });
+        };
+
+        // For small breakpoint only. Use expand / collapse for other BPs
+        this.closeLeftNav = function() {
+            var self = this;
+            var fetchTextPromises = [];
+
+            // LeftNav
+            fetchTextPromises.push(this.navMenuEl.getAttribute('class'));
+            // Shows if you are on a dashboard page
+            fetchTextPromises.push(this.topNavToggleHamburgerEl.isPresent());
+            // Shows if you are on a loaded report
+            fetchTextPromises.push(this.reportHeaderToggleHamburgerEl.isPresent());
+
+            return Promise.all(fetchTextPromises).then(function(promises) {
+                // LeftNav is open
+                if (promises[0].includes('open')) {
+                    // Must be on a dashboard page
+                    if (promises[1] && !promises[2]) {
+                        // Click the hamburger and wait for the leftNav to be closed
+                        return self.topNavToggleHamburgerEl.click().then(function() {
+                            return e2ePageBase.waitForElementToBeInvisible(self.navMenuEl);
+                        }).then(function() {
+                            // Sleep for animation of the leftNav
+                            return e2eBase.sleep(browser.params.tinySleep);
+                        });
+                        // Must be on a loaded report
+                    } else if (promises[1] && promises[2]) {
+                        // Click the hamburger and wait for the leftNav to be closed
+                        return self.reportHeaderToggleHamburgerEl.click().then(function() {
+                            return e2ePageBase.waitForElementToBeInvisible(self.navMenuEl);
+                        }).then(function() {
+                            // Sleep for animation of the leftNav
+                            return e2eBase.sleep(browser.params.tinySleep);
+                        });
+                    } else {
+                        throw Error('Error trying to close the leftNav');
+                    }
+                } else if (promises[0].includes('closed')) {
+                    // LeftNav is already closed so do nothing
+                    return promises[0];
+                } else {
+                    throw Error('Error getting leftNav state');
+                }
+            });
+        };
+
 
         // Gets text from the topNav
         this.getGlobalNavTextEl = function(globalNavEl) {

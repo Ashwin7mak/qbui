@@ -24,6 +24,7 @@ let ReportDataStore = Fluxxor.createStore({
             actions.LOAD_RECORDS,  this.onLoadRecords,
             actions.LOAD_RECORDS_SUCCESS, this.onLoadRecordsSuccess,
             actions.LOAD_RECORDS_FAILED, this.onLoadRecordsFailed,
+            actions.FILTER_SELECTIONS_PENDING, this.onFilterSelectionsPending,
             actions.SHOW_FACET_MENU, this.onShowFacetMenu,
             actions.HIDE_FACET_MENU, this.onHideFacetMenu,
             actions.SEARCH_FOR, this.onSearchFor
@@ -104,6 +105,11 @@ let ReportDataStore = Fluxxor.createStore({
         this.emit('change');
     },
 
+    onFilterSelectionsPending(payload) {
+        this.selections = payload.selections;
+        this.emit('change');
+    },
+
     onLoadRecordsSuccess(records) {
         this.loading = false;
         this.error = false;
@@ -120,15 +126,17 @@ let ReportDataStore = Fluxxor.createStore({
     },
 
     onSearchFor(text) {
-
+        // placeholder which will be obsolete
+        // when other searches from global are supported
         this.data.filteredRecords = [];
 
         if (this.data.records) {
             this.data.records.forEach((record) => {
 
                 let match = false;
+                let lText = text.toLowerCase();
                 _.values(record).forEach((val) => {
-                    if (val && val.toString().toLowerCase().indexOf(text.toLowerCase()) !== -1) {
+                    if (val && val.toString().toLowerCase(lText).indexOf() !== -1) {
                         match = true;
                     }
                 });

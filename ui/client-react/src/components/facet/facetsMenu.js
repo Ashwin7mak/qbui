@@ -26,7 +26,7 @@ let StoreWatchMixin = Fluxxor.StoreWatchMixin;
  *
  *  The FacetsMenu has a trigger button and the FacetsList
 **/
-var FacetsMenu = React.createClass({
+const FacetsMenu = React.createClass({
     mixins: [FluxMixin, StoreWatchMixin('FacetMenuStore')],
 
     displayName: 'FacetsMenu',

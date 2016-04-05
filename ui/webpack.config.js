@@ -2,6 +2,7 @@
 
 var path = require('path');
 var webpack = require('webpack');
+var exec = require('child_process').exec;
 
 // node modules
 var nodeModulesPath = path.resolve(__dirname, 'node_modules');
@@ -25,11 +26,28 @@ var envPlugin = new webpack.DefinePlugin({
     __QB_LOCAL__: JSON.stringify(LOCAL)
 });
 
+function MyNotifyPlugin() {
+}
+MyNotifyPlugin.prototype.apply = function(compiler) {
+    if (envConfig.growlNotify) {
+        compiler.plugin('done', function(stats) {
+            //notify watched update is done
+            process.stdout.write('\x07');
+            if (stats.hasErrors()) {
+                exec('growlnotify -n "Build" -m "Failed"');
+            } else {
+                exec('growlnotify -n "Build" -m "Built"');
+            }
+        });
+    }
+};
+
 var config = {
     // devtool Makes sure errors in console map to the correct file
     // and line number
     // eval is faster than 'source-map' for dev but eval is not supported for prod
     devtool: PROD ? 'source-map' : 'eval',
+    watchDelay: 50,
 
     entry: [
         // main entry point to the app
@@ -117,7 +135,9 @@ var config = {
         new webpack.NoErrorsPlugin(),
 
         //  run-time environment for our application
-        envPlugin
+        envPlugin,
+
+        new MyNotifyPlugin()
     ]
 };
 
