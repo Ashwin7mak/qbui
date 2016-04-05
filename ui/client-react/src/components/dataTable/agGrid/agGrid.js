@@ -30,9 +30,8 @@ function buildIconElement(icon) {
 let gridIcons = {
     groupExpanded: buildIconElement("caret-filled-down"),
     groupContracted: buildIconElement("icon_caretfilledright"),
-    menu: buildIconElement("check"),
+    menu: buildIconElement("caret-filled-down"),
     check: buildIconElement("check")
-    //menu: '<i class="fa fa-long-arrow-down"/>'
 };
 let consts = {
     GROUP_HEADER_HEIGHT: 41,
@@ -484,6 +483,7 @@ let AGGrid = React.createClass({
                                     suppressRowClickSelection="true"
                                     suppressCellSelection="true"
 
+                                    //column menus
                                     getMainMenuItems={this.getMainMenuItems}
                                     suppressMenuFilterPanel="true"
                                     suppressMenuColumnPanel="true"

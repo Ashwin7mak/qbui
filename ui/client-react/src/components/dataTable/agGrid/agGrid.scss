@@ -165,7 +165,7 @@ $grid-default-cell-padding: 8px;
     .ag-menu-separator {
         border-bottom: 1px solid #dcdcdc;
     }
-    .ag-menu-option-active {
+    .ag-menu-option:hover {
         background-color: #00b0c2;
     }
     .ag-menu-option-icon {
@@ -177,7 +177,20 @@ $grid-default-cell-padding: 8px;
         vertical-align: middle;
     }
     .ag-menu {
-        top: 3px!important;
+        top: 24px!important;
+    }
+    .ag-tab-selected {
+        display: none;
+    }
+    .ag-header-cell-menu-button {
+        display: none;
+        padding: 0;
+    }
+    .ag-header-cell:hover {
+        .ag-header-cell-menu-button {
+            display: block;
+            padding: 4px 0px 3px 0px;
+        }
     }
 }
 
