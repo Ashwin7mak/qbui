@@ -17,9 +17,9 @@
         var searchTableResults = [];
 
         var testRecord = [
-            [{"id": 6, "value": ""}, {"id": 7, "value": "2016-04-12"}, {"id": 8, "value": "2016-04-12T05:51:19Z"}, {"id": 9, "value": "first_name_last_name@quickbase.com"}, {"id": 10, "value": true}, {"id": 11, "value": 7.642}],
-            [{"id": 6, "value": "xyz"}, {"id": 7, "value": "2015-04-12"}, {"id": 8, "value": "2015-04-12T05:51:19Z"}, {"id": 9, "value": "xyz_last_name@quickbase.com"}, {"id": 10, "value": false}, {"id": 11, "value": 9.292}],
-            [{"id": 6, "value": "wuv"}, {"id": 7, "value": "2016-01-12"}, {"id": 8, "value": "2016-01-12T05:51:19Z"}, {"id": 9, "value": "abcxyz_LastName@quickbase.com"}, {"id": 10, "value": true}, {"id": 11, "value": 6.05}]
+            [{'id': 6, 'value': ''}, {'id': 7, 'value': '2016-04-12'}, {'id': 8, 'value': '2016-04-12T05:51:19Z'}, {'id': 9, 'value': 'first_name_last_name@quickbase.com'}, {'id': 10, 'value': true}, {'id': 11, 'value': 7.642}],
+            [{'id': 6, 'value': 'xyz'}, {'id': 7, 'value': '2015-04-12'}, {'id': 8, 'value': '2015-04-12T05:51:19Z'}, {'id': 9, 'value': 'xyz_last_name@quickbase.com'}, {'id': 10, 'value': false}, {'id': 11, 'value': 9.292}],
+            [{'id': 6, 'value': 'wuv'}, {'id': 7, 'value': '2016-01-12'}, {'id': 8, 'value': '2016-01-12T05:51:19Z'}, {'id': 9, 'value': 'abcxyz_LastName@quickbase.com'}, {'id': 10, 'value': true}, {'id': 11, 'value': 6.05}]
         ];
 
         beforeAll(function(done) {
@@ -61,7 +61,6 @@
             });
         });
 
-
         afterAll(function(done) {
             e2eBase.cleanup(done);
         });
@@ -70,7 +69,7 @@
          * Function that will verify the filtered rows are contained in actual record list.
          * @param facets Group
          */
-        var verifySearchTableResults = function(expectedTableResuts) {
+        var verifySearchTableResults = function(expectedTableResults) {
             var actualTableResults = [];
             reportServicePage.waitForElement(reportServicePage.griddleWrapperEl).then(function() {
                 //sleep for loading of table to finish
@@ -84,7 +83,7 @@
                             cells.get(4).getText(),
                             cells.get(5).getText(),
                             cells.get(6).getText(),
-                            cells.get(7).getText(),
+                            cells.get(7).getText()
                         ];
                     }).then(function(results) {
                         for (var i = 0; i < results.length; i++) {
@@ -92,9 +91,9 @@
                         }
                         var found = false;
                         actualTableResults.sort();
-                        expectedTableResuts.sort();
-                        expect(actualTableResults.length).toEqual(expectedTableResuts.length);
-                        expect(actualTableResults).toEqual(expectedTableResuts);
+                        expectedTableResults.sort();
+                        expect(actualTableResults.length).toEqual(expectedTableResults.length);
+                        expect(actualTableResults).toEqual(expectedTableResults);
                     });
                 });
             });
@@ -110,43 +109,43 @@
                     query: '7.642',
                     columnId: 7,
                     expectedSearchResults:[
-                        ["", "4/12/2016", "04-11-2016 10:51 PM", "first_name_last_name@quickbase.com", "true", "7.642"]
+                        ['', '4/12/2016', '04-11-2016 10:51 PM', 'first_name_last_name@quickbase.com', 'true', '7.642']
                     ]
                 },
                 {
                     message: ' Checkbox value',
                     query: 'true',
                     expectedSearchResults: [
-                        ["", "4/12/2016", "04-11-2016 10:51 PM", "first_name_last_name@quickbase.com", "true", "7.642"],
-                        ["wuv", "1/12/2016", "01-11-2016 9:51 PM", "abcxyz_LastName@quickbase.com", "true", "6.05"]
+                        ['', '4/12/2016', '04-11-2016 10:51 PM', 'first_name_last_name@quickbase.com', 'true', '7.642'],
+                        ['wuv', '1/12/2016', '01-11-2016 9:51 PM', 'abcxyz_LastName@quickbase.com', 'true', '6.05']
                     ]
                 },
                 {
                     message: ' Text value',
                     query: 'xyz',
                     expectedSearchResults: [
-                        ["wuv", "1/12/2016", "01-11-2016 9:51 PM", "abcxyz_LastName@quickbase.com", "true", "6.05"],
-                        ["xyz", "4/12/2015", "04-11-2015 10:51 PM", "xyz_last_name@quickbase.com", "", "9.292"]
+                        ['wuv', '1/12/2016', '01-11-2016 9:51 PM', 'abcxyz_LastName@quickbase.com', 'true', '6.05'],
+                        ['xyz', '4/12/2015', '04-11-2015 10:51 PM', 'xyz_last_name@quickbase.com', 'false', '9.292']
                     ]
-                },
+                }
                 //TODO the below gives error loading report error
                 //{
                 //    message: ' with null value',
                 //    query: '',
-                //    expectedSearchResults: [{"Text":"","Date":"4/12/2016","DateTime":"04-11-2016 10:51 PM","Email":"first_name_last_name@quickbase.com","Checkbox":"true"}]
+                //    expectedSearchResults: [{'Text':'','Date':'4/12/2016','DateTime':'04-11-2016 10:51 PM','Email':'first_name_last_name@quickbase.com','Checkbox':'true'}]
                 //},
                 //{
                 //    message: ' Text value',
                 //    query: 'd',
                 //    expectedSearchResults: [
-                //        ["wuv","1/12/2016","01-11-2016 9:51 PM","abcxyz_LastName@quickbase.com","true","6.05"]
+                //        ['wuv','1/12/2016','01-11-2016 9:51 PM','abcxyz_LastName@quickbase.com','true','6.05']
                 //    ]
                 //},
                 //{
                 //    message: ' Text value',
                 //    query: 'today',
                 //    expectedSearchResults: [
-                //        ["wuv","1/12/2016","01-11-2016 9:51 PM","abcxyz_LastName@quickbase.com","true","6.05"]
+                //        ['wuv','1/12/2016','01-11-2016 9:51 PM','abcxyz_LastName@quickbase.com','true','6.05']
                 //    ]
                 //},
             ];
@@ -155,7 +154,7 @@
         searchTestCases().forEach(function(testcase) {
             it(' With Facets - ' + testcase.message, function(done) {
                 //go to report page directly
-                RequestAppsPage.get(e2eBase.getRequestReportsPageEndpoint(realmName, app.id, app.tables[0].id, "2"));
+                RequestAppsPage.get(e2eBase.getRequestReportsPageEndpoint(realmName, app.id, app.tables[0].id, '2'));
                 reportServicePage.waitForElement(reportServicePage.loadedContentEl).then(function() {
                     reportServicePage.waitForElementToBeClickable(reportServicePage.reportFilterSearchBox).then(function() {
                         reportServicePage.reportFilterSearchBox.clear().sendKeys(testcase.query, protractor.Key.ENTER).then(function() {
@@ -167,12 +166,10 @@
                     });
                 });
             });
-        });
 
-        searchTestCases().forEach(function(testcase) {
             it(' Without Facets - ' + testcase.message, function(done) {
                 //go to report page directly
-                RequestAppsPage.get(e2eBase.getRequestReportsPageEndpoint(realmName, app.id, app.tables[0].id, "1"));
+                RequestAppsPage.get(e2eBase.getRequestReportsPageEndpoint(realmName, app.id, app.tables[0].id, '1'));
                 reportServicePage.waitForElement(reportServicePage.loadedContentEl).then(function() {
                     reportServicePage.waitForElementToBeClickable(reportServicePage.reportFilterSearchBox).then(function() {
                         reportServicePage.reportFilterSearchBox.clear().sendKeys(testcase.query, protractor.Key.ENTER).then(function() {
@@ -185,25 +182,23 @@
                 });
             });
         });
-
-
 
         e2eConsts.NavDimensionsDataProvider().forEach(function(testBreakpoints) {
             it(testBreakpoints.breakpointSize + ' breakpoint Special characters Test', function(done) {
                 e2eBase.resizeBrowser(testBreakpoints.browserWidth, e2eConsts.DEFAULT_HEIGHT).then(function() {
                     //go to report page directly
-                    RequestAppsPage.get(e2eBase.getRequestReportsPageEndpoint(realmName, app.id, app.tables[0].id, "2"));
+                    RequestAppsPage.get(e2eBase.getRequestReportsPageEndpoint(realmName, app.id, app.tables[0].id, '2'));
                     reportServicePage.waitForElement(reportServicePage.griddleWrapperEl).then(function() {
                         if (testBreakpoints.breakpointSize === 'small') {
                             //verify present in DOM but not displayed
                             expect(reportServicePage.reportFilterSearchBox.isDisplayed()).toBeFalsy();
                             done();
                         } else {
-                            reportServicePage.reportFilterSearchBox.clear().sendKeys("@#^&*!!", protractor.Key.ENTER).then(function() {
+                            reportServicePage.reportFilterSearchBox.clear().sendKeys('@#^&*!!', protractor.Key.ENTER).then(function() {
                                 reportServicePage.waitForElement(reportServicePage.griddleWrapperEl).then(function() {
                                     //sleep for loading of table to finish
                                     e2eBase.sleep(browser.params.smallSleep);
-                                    expect(reportServicePage.griddleWrapperEl.getText()).toEqual("There is no data to display.");
+                                    expect(reportServicePage.griddleWrapperEl.getText()).toEqual('There is no data to display.');
                                     expect(reportServicePage.reportFilterSearchBox.isDisplayed()).toBeTruthy();
                                     done();
                                 });
@@ -213,6 +208,5 @@
                 });
             });
         });
-
     });
 }());
