@@ -1,6 +1,7 @@
 import BaseService from '../../src/services/baseService';
 import ReportService, {cachedReportRequest} from '../../src/services/reportService';
 import constants from '../../src/services/constants';
+import * as query from '../../src/constants/query';
 
 describe('ReportService functions', () => {
     'use strict';
@@ -70,7 +71,10 @@ describe('ReportService functions', () => {
         var rows = 10;
         reportService.getReportData(appId, tblId, rptId, formatted, offset, rows);
 
-        var params = {format:'display', offset:offset, numRows:rows};
+        var params = {};
+        params[query.FORMAT_PARAM] = query.DISPLAY_FORMAT;
+        params[query.OFFSET_PARAM] = offset;
+        params[query.NUMROWS_PARAM] = rows;
         expect(BaseService.prototype.get).toHaveBeenCalledWith(url, {params:params});
     });
 
@@ -85,7 +89,9 @@ describe('ReportService functions', () => {
         var rows = 10;
         reportService.getReportData(appId, tblId, rptId, formatted, offset, rows);
 
-        var params = {offset:offset, numRows:rows};
+        var params = {};
+        params[query.OFFSET_PARAM] = offset;
+        params[query.NUMROWS_PARAM] = rows;
         expect(BaseService.prototype.get).toHaveBeenCalledWith(url, {params:params});
     });
 
@@ -100,7 +106,8 @@ describe('ReportService functions', () => {
         var rows = 10;
         reportService.getReportData(appId, tblId, rptId, formatted, offset, rows);
 
-        var params = {format:'display'};
+        var params = {};
+        params[query.FORMAT_PARAM] = query.DISPLAY_FORMAT;
         expect(BaseService.prototype.get).toHaveBeenCalledWith(url, {params:params});
     });
 
@@ -114,7 +121,8 @@ describe('ReportService functions', () => {
         var offset = 0;
         reportService.getReportData(appId, tblId, rptId, formatted, offset);
 
-        var params = {format:'display'};
+        var params = {};
+        params[query.FORMAT_PARAM] = query.DISPLAY_FORMAT;
         expect(BaseService.prototype.get).toHaveBeenCalledWith(url, {params:params});
     });
 
@@ -141,7 +149,10 @@ describe('ReportService functions', () => {
         var rows = 10;
         reportService.getReportDataAndFacets(appId, tblId, rptId, formatted, offset, rows);
 
-        var params = {format:'display', offset:offset, numRows:rows};
+        var params = {};
+        params[query.FORMAT_PARAM] = query.DISPLAY_FORMAT;
+        params[query.OFFSET_PARAM] = offset;
+        params[query.NUMROWS_PARAM] = rows;
         expect(BaseService.prototype.get).toHaveBeenCalledWith(url, {params:params});
     });
 
@@ -156,7 +167,26 @@ describe('ReportService functions', () => {
         var rows = 10;
         reportService.getReportDataAndFacets(appId, tblId, rptId, formatted, offset, rows);
 
-        var params = {offset:offset, numRows:rows};
+        var params = {};
+        params[query.OFFSET_PARAM] = offset;
+        params[query.NUMROWS_PARAM] = rows;
+        expect(BaseService.prototype.get).toHaveBeenCalledWith(url, {params:params});
+    });
+
+    it('test getReport and facets function with no formatting and raw display set explicitly', () => {
+        var appId = 1;
+        var tblId = 2;
+        var rptId = 3;
+        var url = reportService.constructUrl(reportService.API.GET_REPORT_COMPONENTS, [appId, tblId, rptId]);
+
+        var formatted = false;
+        var offset = 0;
+        var rows = 10;
+        reportService.getReportDataAndFacets(appId, tblId, rptId, formatted, offset, rows);
+
+        var params = {};
+        params[query.OFFSET_PARAM] = offset;
+        params[query.NUMROWS_PARAM] = rows;
         expect(BaseService.prototype.get).toHaveBeenCalledWith(url, {params:params});
     });
 
@@ -171,7 +201,8 @@ describe('ReportService functions', () => {
         var rows = 10;
         reportService.getReportDataAndFacets(appId, tblId, rptId, formatted, offset, rows);
 
-        var params = {format:'display'};
+        var params = {};
+        params[query.FORMAT_PARAM] = query.DISPLAY_FORMAT;
         expect(BaseService.prototype.get).toHaveBeenCalledWith(url, {params:params});
     });
 
@@ -185,7 +216,8 @@ describe('ReportService functions', () => {
         var offset = 0;
         reportService.getReportDataAndFacets(appId, tblId, rptId, formatted, offset);
 
-        var params = {format:'display'};
+        var params = {};
+        params[query.FORMAT_PARAM] = query.DISPLAY_FORMAT;
         expect(BaseService.prototype.get).toHaveBeenCalledWith(url, {params:params});
     });
 
@@ -212,7 +244,8 @@ describe('ReportService functions', () => {
         var facetExp = [{fid: 3, values: [1, 2]}];
         reportService.parseFacetExpression(facetExp);
 
-        var params = {facetexpression: facetExp};
+        var params = {};
+        params[query.FACET_EXPRESSION] = facetExp;
         expect(BaseService.prototype.get).toHaveBeenCalledWith(reportService.API.PARSE_FACET_EXPR,  {params: params});
     });
 

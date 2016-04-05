@@ -106,17 +106,17 @@ let reportDataActions = {
      */
     filterReport(appId, tblId, rptId, format, filter) {
 
-        //  Build list of fids that is sent to the server as a part of the query parameters
+        //  Build list of fids that is sent to the server to fulfill report sorting requirements
         function getReportSortFids(reportMetaData) {
             let fids = [];
 
             if (reportMetaData.data.sortList) {
                 reportMetaData.data.sortList.forEach(function(sort) {
                     if (sort) {
-                        //var sortEl = sort.split(':');
-                        //  split guarentees at least 1 array element returned
-                        //fids.push(sortEl[0]);
-                        fids.push(sort);
+                        //  format is fid:groupType..split by delimiter(':') to allow us
+                        // to pass in the fid for server side sorting.
+                        var sortEl = sort.split(':');
+                        fids.push(sortEl[0]);
                     }
                 });
             }
@@ -129,14 +129,16 @@ let reportDataActions = {
             var queryParams = {};
 
             if (reportMetaData && reportMetaData.data) {
-                queryParams.cList = reportMetaData.data.fids ? reportMetaData.data.fids.join('.') : '';
-                queryParams.sList = getReportSortFids(reportMetaData);
-                //  TODO: pass grouping and summary information with the query
+                //  TODO: add any paging (offset and rowNums) to the query
 
+                queryParams[query.COLUMNS_PARAM] = reportMetaData.data.fids ? reportMetaData.data.fids.join('.') : '';
+                queryParams[query.SORT_LIST_PARAM] = getReportSortFids(reportMetaData);
+
+                //  TODO: pass grouping and summary information with the query
 
                 //  Concatenate facet expression(if any) and search filter(if any) into single
                 //  query expression where each individual expression is 'AND'ed with the other.
-                //
+                //ui/client-react/src/actions/reportDataActions.js:141
                 //  To optimize query performance, order the array elements 1..n in order of
                 //  significance/most targeted selection as the outputted query is built starting
                 //  at offset 0.
@@ -144,14 +146,13 @@ let reportDataActions = {
                 if (reportMetaData.data.query) {
                     filterQueries.push(reportMetaData.data.query);
                 }
-
                 if (facetQueryExpression) {
                     filterQueries.push(facetQueryExpression.data);
                 }
                 if (searchExpression) {
                     filterQueries.push(QueryUtils.parseStringIntoAllFieldsContainsExpression(searchExpression));
                 }
-                queryParams.query = QueryUtils.concatQueries(filterQueries);
+                queryParams[query.QUERY_PARAM] = QueryUtils.concatQueries(filterQueries);
             }
 
             return queryParams;
