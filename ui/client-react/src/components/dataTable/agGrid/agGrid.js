@@ -1,5 +1,6 @@
 import React from 'react';
 import {AgGridReact} from 'ag-grid-react';
+import {AgGridEnterprise} from 'ag-grid-enterprise';
 import {reactCellRendererFactory} from 'ag-grid-react';
 import {I18nMessage} from '../../../utils/i18nMessage';
 import ReactCSSTransitionGroup from 'react/lib/ReactCSSTransitionGroup';
@@ -28,7 +29,10 @@ function buildIconElement(icon) {
 }
 let gridIcons = {
     groupExpanded: buildIconElement("caret-filled-down"),
-    groupContracted: buildIconElement("icon_caretfilledright")
+    groupContracted: buildIconElement("icon_caretfilledright"),
+    menu: buildIconElement("check"),
+    check: buildIconElement("check")
+    //menu: '<i class="fa fa-long-arrow-down"/>'
 };
 let consts = {
     GROUP_HEADER_HEIGHT: 41,
@@ -75,6 +79,44 @@ let AGGrid = React.createClass({
         this.columnApi = params.columnApi;
     },
 
+    getSortAscText(column) {
+        switch (column.datatypeAttributes.type) {
+        case "TEXT": return "A to Z";
+        case "DATE": return "Newest to oldest";
+        case "NUMERIC":
+        case "RATING":
+        default: return "Low to high";
+        }
+    },
+    getSortDescText(column) {
+        switch (column.datatypeAttributes.type) {
+        case "TEXT": return "Z to A";
+        case "DATE": return "Oldest to newest";
+        case "NUMERIC":
+        case "RATING":
+        default: return "High to low";
+        }
+    },
+
+    getMainMenuItems(params) {
+        let menuItems = [
+            {"name": "Sort " + this.getSortAscText(params.column.colDef), "icon": gridIcons.check},
+            {"name": "Sort " + this.getSortDescText(params.column.colDef)}];
+        menuItems.push("separator");
+        menuItems.push({"name": "Group " + this.getSortAscText(params.column.colDef)},
+            {"name": "Group " + this.getSortDescText(params.column.colDef)});
+        menuItems.push("separator");
+        menuItems.push({"name": "Add column before"},
+            {"name": "Add column after"},
+            {"name": "Hide this column"}
+        );
+        menuItems.push("separator");
+        menuItems.push({"name": "New table based on this column"});
+        menuItems.push("separator");
+        menuItems.push({"name": "Column properties"},
+            {"name": "Field properties"});
+        return menuItems;
+    },
     /**
      * Callback that the grid uses to figure out whether to show grouped data or not.
      * And if so then how to use the rowItems to figure out grouped info.
@@ -441,6 +483,11 @@ let AGGrid = React.createClass({
 
                                     suppressRowClickSelection="true"
                                     suppressCellSelection="true"
+
+                                    getMainMenuItems={this.getMainMenuItems}
+                                    suppressMenuFilterPanel="true"
+                                    suppressMenuColumnPanel="true"
+
 
                                     //grouping behavior
                                     groupSelectsChildren="true"

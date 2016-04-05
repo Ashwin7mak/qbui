@@ -152,6 +152,33 @@ $grid-default-cell-padding: 8px;
         position: absolute;
         right: $grid-default-group-padding + 1;
     }
+
+    .ag-menu-list {
+        border: 1px solid #dcdcdc;
+        min-width: 250px;
+        background: #fff;
+    }
+    .ag-menu-option {
+        line-height: 28px;
+        font-weight: 600;
+    }
+    .ag-menu-separator {
+        border-bottom: 1px solid #dcdcdc;
+    }
+    .ag-menu-option-active {
+        background-color: #00b0c2;
+    }
+    .ag-menu-option-icon {
+        padding: 0 5px;
+    }
+    .qbIcon.iconssturdy-check {
+        font-size: $grid-font-size + 2;
+        width: $grid-font-size + 2;
+        vertical-align: middle;
+    }
+    .ag-menu {
+        top: 3px!important;
+    }
 }
 
 .tableActionsContainer {

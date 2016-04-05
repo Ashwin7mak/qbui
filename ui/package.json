@@ -4,6 +4,7 @@
   "main": "server/app.js",
   "dependencies": {
     "ag-grid": "^4.0.5",
+    "ag-grid-enterprise": "^4.0.7",
     "ag-grid-react": "^4.0.0",
     "axios": "^0.7.0",
     "bigdecimal": "0.6.1",

@@ -46,7 +46,6 @@ let ReportContent = React.createClass({
             var columnsData = columns.map((obj) => {
                 obj.headerClass = "gridHeaderCell";
                 obj.cellClass = "gridCell";
-                obj.suppressMenu = true;
                 obj.suppressResize = true;
                 obj.minWidth = 100;
                 if (obj.datatypeAttributes) {
