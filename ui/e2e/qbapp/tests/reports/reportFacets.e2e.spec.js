@@ -268,7 +268,7 @@
             facetTestCases().forEach(function(facetTestcase) {
                 it('Test case: ' + facetTestcase.message, function(done) {
                     // Click on facet carat
-                    reportServicePage.waitForElement(reportServicePage.loadedContentEl).then(function() {
+                    reportServicePage.waitForElement(reportServicePage.agGridContainerEl).then(function() {
                         reportFacetsPage.waitForElementToBeClickable(reportFacetsPage.reportFacetFilterBtnCaret).then(function() {
                             reportFacetsPage.reportFacetFilterBtnCaret.click();
                             // Verify the popup menu is displayed
