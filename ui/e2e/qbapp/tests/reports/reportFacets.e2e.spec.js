@@ -143,12 +143,16 @@
                             var found = false;
                             for (var j = 0; j < expectedTableResuts.length; j++) {
                                 for (var k = 0; k < actualTableResuts.length; k++) {
-                                    if (expectedTableResuts.length > 0 && JSON.stringify(expectedTableResuts[j]) === JSON.stringify(actualTableResuts[k])) {
-                                        expect(expectedTableResuts[j]).toEqual(actualTableResuts[k]);
-                                        found = true;
-                                        break;
+                                    try {
+                                        if (expectedTableResuts.length > 0 && JSON.stringify(expectedTableResuts[j]) === JSON.stringify(actualTableResuts[k])) {
+                                            expect(expectedTableResuts[j]).toEqual(actualTableResuts[k]);
+                                            found = true;
+                                            break;
+                                        }
+                                    } catch (e) {
+                                        found = false;
+                                        throw new Error(e);
                                     }
-                                    found = false;
                                 }
                             }
                         });
