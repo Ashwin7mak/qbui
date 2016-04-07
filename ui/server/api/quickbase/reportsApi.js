@@ -113,15 +113,15 @@
                             resolve2(facetResponse);
                         },
                         (error) => {
-                            log.error("Error getting facets in fetchReportComponents: " + error.message);
                             var facetError = JSON.parse(error.body)[0];
-                            facets.push({id: null, errorCode: facetError && facetError.code ? facetError.code : errorCodes.UNKNOWN});
-                            resolve2(null);
+                            log.error("Error getting facets in fetchReportComponents: " + facetError);
+                            var errorObj = {id: null, errorCode: facetError && facetError.code ? facetError.code : errorCodes.UNKNOWN};
+                            resolve2(errorObj);
                         }
                     ).catch((ex) => {
                         log.error("Caught unexpected error getting facets in fetchReportComponents: " + ex.message);
-                        facets.push({id: null, errorCode: errorCodes.UNKNOWN});
-                        resolve2(null);
+                        var errorObj = {id: null, errorCode: errorCodes.UNKNOWN};
+                        resolve2(errorObj);
                     });
                 });
 
@@ -136,11 +136,16 @@
                             responseObject[RECORDS] = result[0].records;
                             responseObject[FACETS] = [];
                             if (result[1]) {
-                                if (result[1].body && result[1].body.length > 0) {
-                                    //jsonBigNum.parse throws exception if the input is empty array
-                                    let facetRecords = jsonBigNum.parse(result[1].body);
-                                    // format the facetRecords into Facet objects of type {id, name, type, hasBlanks, [values]} using fields array.
-                                    responseObject[FACETS] = facetRecordsFormatter.formatFacetRecords(facetRecords, result[0].fields);
+                                if (result[1].errorCode) {
+                                    responseObject[FACETS].push(result[1]);
+                                } else {
+                                    /*eslint no-lonely-if: "error" */
+                                    if (result[1].body && result[1].body.length > 0) {
+                                        //jsonBigNum.parse throws exception if the input is empty array
+                                        let facetRecords = jsonBigNum.parse(result[1].body);
+                                        // format the facetRecords into Facet objects of type {id, name, type, hasBlanks, [values]} using fields array.
+                                        responseObject[FACETS] = facetRecordsFormatter.formatFacetRecords(facetRecords, result[0].fields);
+                                    }
                                 }
                             }
                             resolve(responseObject);
