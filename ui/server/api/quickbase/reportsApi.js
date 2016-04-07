@@ -114,8 +114,8 @@
                         },
                         (error) => {
                             var facetError = JSON.parse(error.body)[0];
-                            log.error("Error getting facets in fetchReportComponents: " + facetError);
                             var errorObj = {id: null, errorCode: facetError && facetError.code ? facetError.code : errorCodes.UNKNOWN};
+                            log.error("Error getting facets in fetchReportComponents.  Facet Error Code: " + errorObj.errorCode);
                             resolve2(errorObj);
                         }
                     ).catch((ex) => {
