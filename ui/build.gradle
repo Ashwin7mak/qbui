@@ -289,7 +289,7 @@ task npmPruneProduction (type: NpmTask) {
 }
 
 task npmUpdateWebdriver(type: NpmTask) {
-    args = ['run update-webdriver']
+    args = ['run', 'update-webdriver']
 }
 
 task npmInstallProduction (type: NpmTask) {
