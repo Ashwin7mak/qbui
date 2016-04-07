@@ -27,7 +27,8 @@ let reportModel = {
      */
     getReportColumns(fields, hasGrouping) {
         let columns = [];
-        let groupingFields = this.findTempGroupingFields(fields);
+        this.findTempGroupingFields(fields);
+        let groupingFields = this.model.groupingFields;
 
         if (fields) {
             fields.forEach(function(field, index) {
@@ -68,13 +69,14 @@ let reportModel = {
                 groupingFields.push(field.name);
             }
         });
-        this.model.groupingFields = groupingFields;
-        this.model.groupLevel = groupingFields.length;
-        return groupingFields;
+        this.setGroupingFields(groupingFields);
+        this.setGroupingLevel(groupingFields.length);
+        //return groupingFields;
     },
     // Temporary helper for creating fake grouped data
     createTempGroupedData(reportData, fields) {
-        let groupingFields = this.findTempGroupingFields(fields);
+        this.findTempGroupingFields(fields);
+        let groupingFields = this.model.groupingFields;
         let groupedData = _.groupBy(reportData, function(record) {
             return record[groupingFields[0]];
         });
@@ -212,6 +214,12 @@ let reportModel = {
      */
     setFacetData: function(recordData) {
         this.model.facets = this.checkForFacetErrors(recordData.facets);
+    },
+    setGroupingLevel: function(groupingLevel) {
+        this.model.groupLevel = groupingLevel;
+    },
+    setGroupingFields: function(groupingFields) {
+        this.model.groupingFields = groupingFields;
     }
 };
 
