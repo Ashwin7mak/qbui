@@ -39,23 +39,12 @@
                 RequestAppsPage.get(e2eBase.getRequestAppsPageEndpoint(realmName));
 
                 // Wait for the leftNav to load
-                reportServicePage.waitForElement(reportServicePage.appsListDivEl).then(function() {
-                    // Select the app
-                    reportServicePage.appLinksElList.get(0).click();
-                    reportServicePage.waitForElement(reportServicePage.tablesListDivEl).then(function() {
-                        // Select the table
-                        reportServicePage.tableLinksElList.get(3).click();
-                        // Open the reports list
-                        reportServicePage.reportHamburgersElList.get(0).click();
-                        // Wait for the report list to load
-                        reportServicePage.waitForElement(reportServicePage.reportGroupsDivEl).then(function() {
-                            // Find and select the report
-                            reportServicePage.selectReport('My Reports', 'Test Report');
-                            // Make sure the table report has loaded
-                            reportServicePage.waitForElement(reportServicePage.loadedContentEl).then(function() {
-                                done();
-                            });
-                        });
+                reportServicePage.waitForElement(reportServicePage.appsListDivEl).then(function () {
+                    //go to report page directly.
+                    RequestAppsPage.get(e2eBase.getRequestReportsPageEndpoint(realmName, app.id, app.tables[0].id, "1"));
+                    // Make sure the table report has loaded
+                    reportServicePage.waitForElement(reportServicePage.loadedContentEl).then(function () {
+                        done();
                     });
                 });
             });
