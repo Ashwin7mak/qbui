@@ -292,34 +292,57 @@
                     }).then(function() {
                         //sleep for loading of table to finish
                         e2eBase.sleep(browser.params.smallSleep);
-                        reportServicePage.griddleWrapperEl.getAttribute('innerText').then(function(txt) {
+                        reportServicePage.griddleWrapperEl.getAttribute('innerText').then(function (txt) {
                             if (txt === 'There is no data to display.') {
                                 //Verify the toolbar still displays with filter button in it
                                 expect(reportServicePage.griddleWrapperEl.getAttribute('innerText')).toEqual('There is no data to display.');
                                 expect(reportServicePage.reportRecordsCount.getAttribute('innerText')).toEqual('0 of 6 Records');
                                 expect(reportFacetsPage.reportFacetFilterBtn.isDisplayed()).toBeTruthy();
+                                done();
                             } else if (txt !== 'There is no data to display.') {
                                 for (var i = 0; i < facetTestcase.facets.length; i++) {
                                     verifyFacetTableResults(facetTestcase.facets[i].group);
+                                    done();
                                 }
                             }
                         });
-                    }).then(function() {
-                        // Finally clear all facets from popup menu
-                        for (var j = 0; j < facetTestcase.facets.length; j++) {
-                            reportFacetsPage.getFacetGroupElement(facetTestcase.facets[j].group).then(function(facetGroupEl) {
+                    });
+                });
+            });
+
+            it('Verify clear all facets tokens from the popUp menu', function(done) {
+                reportServicePage.waitForElement(reportServicePage.loadedContentEl).then(function() {
+                    reportFacetsPage.waitForElementToBeClickable(reportFacetsPage.reportFacetFilterBtnCaret).then(function() {
+                        //Click on facet carat to show popup
+                        reportFacetsPage.reportFacetFilterBtnCaret.click().then(function() {
+                            //Verify the popup menu is displayed
+                            expect(reportFacetsPage.reportFacetPopUpMenu.isDisplayed()).toBeTruthy();
+                        });
+                    });
+                }).then(function() {
+                    //select the facet Items
+                    reportFacetsPage.selectGroupAndFacetItems("Text Field", [1, 2, 3, 4]).then(function(facetSelections) {
+                        //Map all facet tokens from the facet container
+                        reportFacetsPage.reportFacetNameSelections.map(function(tokenName, tokenindex) {
+                            return tokenName.getText();
+                        }).then(function(selections) {
+                            // Sort each array before comparing
+                            expect(selections.sort()).toEqual(facetSelections.sort());
+                        }).then(function() {
+                            // Finally clear all facets from popup menu
+                            reportFacetsPage.getFacetGroupElement("Text Field").then(function(facetGroupEl) {
                                 reportFacetsPage.waitForElementToBeClickable(facetGroupEl).then(function() {
-                                    reportFacetsPage.clickClearAllFacetsIcon(facetGroupEl);
+                                    reportFacetsPage.clickClearAllFacetsIcon(facetGroupEl).then(function() {
+                                        e2eBase.sleep(browser.params.smallSleep);
+                                        reportFacetsPage.waitForElementToBeClickable(reportFacetsPage.reportFacetFilterBtnCaret).then(function() {
+                                            expect(reportServicePage.reportRecordsCount.getAttribute('innerText')).toEqual('6 Records');
+                                            done();
+                                        });
+                                    });
                                 });
                             });
-                        }
-                    }).then(function() {
-                        // Collapse the popup menu
-                        reportFacetsPage.waitForElementToBeClickable(reportFacetsPage.reportFacetMenuContainer).then(function() {
-                            reportFacetsPage.reportFacetMenuContainer.click().then(function() {
-                                done();
-                            });
                         });
+
                     });
                 });
             });

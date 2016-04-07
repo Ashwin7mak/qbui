@@ -50,9 +50,10 @@
             }).then(function() {
                 // Wait for the leftNav to load
                 return reportServicePage.waitForElement(reportServicePage.appsListDivEl).then(function() {
-                    // Select the app
-                    return reportServicePage.appLinksElList.get(0).click().then(function() {
-                        // Done callback to let Jasmine know we are done with our promise chain
+                    //go to report page directly.
+                    RequestAppsPage.get(e2eBase.getRequestReportsPageEndpoint(realmName, app.id, app.tables[0].id, "1"));
+                    // Make sure the table report has loaded
+                    reportServicePage.waitForElement(reportServicePage.loadedContentEl).then(function () {
                         done();
                     });
                 });
@@ -67,7 +68,7 @@
          * Before each test starts just make sure the report list has loaded
          */
         beforeEach(function(done) {
-            reportServicePage.waitForElement(reportServicePage.tablesListDivEl).then(function() {
+            reportServicePage.waitForElement(reportServicePage.loadedContentEl).then(function() {
                 done();
             });
         });
@@ -77,15 +78,6 @@
          * of reports for that app and table, then displays the report page in the browser
          */
         it('Should load the reports page with the appropriate table report and verify the fieldNames and records', function() {
-            // Select the table
-            reportServicePage.tableLinksElList.get(2).click();
-            // Open the reports list
-            reportServicePage.reportHamburgersElList.get(0).click();
-            // Wait for the report list to load
-            reportServicePage.waitForElement(reportServicePage.reportGroupsDivEl).then(function() {
-                // Find and select the report
-                reportServicePage.selectReport('My Reports', 'Test Report');
-            });
             // Wait until the table has loaded
             reportServicePage.waitForElement(reportServicePage.loadedContentEl).then(function() {
                 //TODO: Assert report icon has been highlighted to indicate which table you are on
@@ -111,15 +103,6 @@
          * to give all columns enough space to show their data.
          */
         it('Table report should expand width past the browser size to show all available data (large num columns)', function(done) {
-            // Select the table
-            reportServicePage.tableLinksElList.get(2).click().then(function() {
-                // Open the reports list
-                reportServicePage.reportHamburgersElList.get(0).click();
-                // Wait for the report list to load
-                reportServicePage.waitForElement(reportServicePage.reportGroupsDivEl).then(function() {
-                    // Find and select the report
-                    reportServicePage.selectReport('My Reports', 'Test Report');
-                });
                 // Make sure the table report has loaded
                 reportServicePage.waitForElement(reportServicePage.loadedContentEl).then(function() {
                     // Check there is a scrollbar in the griddle table
@@ -133,23 +116,12 @@
                     });
                 });
             });
-        });
 
         /**
          * Test method. Loads the second table containing 3 fields (3 columns). The table report (griddle) width should expand
          * it's columns to fill the available space (and not show a scrollbar).
          */
         it('Table report should expand width to take up available space (small num of columns)', function(done) {
-            // Select the table
-            reportServicePage.tableLinksElList.get(3).click().then(function() {
-                // Open the reports menu for the second table
-                reportServicePage.openReportsMenu(reportServicePage.tableLinksElList.get(3));
-
-                // Wait for the report list to load
-                reportServicePage.waitForElement(reportServicePage.reportGroupsDivEl).then(function() {
-                    // Find and select the report
-                    reportServicePage.selectReport('My Reports', 'Test Report');
-                });
                 // Make sure the table report has loaded
                 reportServicePage.waitForElement(reportServicePage.loadedContentEl).then(function() {
                     // Check there is no scrollbar in the griddle table
@@ -164,7 +136,6 @@
                     });
                 });
             });
-        });
 
         /**
          * After all tests are done, run the cleanup function in the base class
