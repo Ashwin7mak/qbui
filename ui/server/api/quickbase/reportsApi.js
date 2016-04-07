@@ -135,6 +135,7 @@
                             responseObject[FIELDS] = result[0].fields;
                             responseObject[RECORDS] = result[0].records;
                             responseObject[FACETS] = [];
+
                             /*eslint no-lonely-if: 0 */
                             if (result[1]) {
                                 if (result[1].errorCode) {
