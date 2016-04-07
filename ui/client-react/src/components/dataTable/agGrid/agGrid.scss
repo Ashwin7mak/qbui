@@ -194,6 +194,11 @@ $grid-default-cell-padding: 8px;
     }
 }
 
+//Temporary hack - opened an issue with ag-grid
+#centerRow {
+    height: 100%!important;
+}
+
 .tableActionsContainer {
     position: relative;
 }
