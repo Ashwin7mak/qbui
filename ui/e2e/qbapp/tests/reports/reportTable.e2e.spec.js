@@ -53,7 +53,7 @@
                     //go to report page directly.
                     RequestAppsPage.get(e2eBase.getRequestReportsPageEndpoint(realmName, app.id, app.tables[0].id, "1"));
                     // Make sure the table report has loaded
-                    reportServicePage.waitForElement(reportServicePage.loadedContentEl).then(function () {
+                    reportServicePage.waitForElement(reportServicePage.loadedContentEl).then(function() {
                         done();
                     });
                 });
@@ -103,39 +103,39 @@
          * to give all columns enough space to show their data.
          */
         it('Table report should expand width past the browser size to show all available data (large num columns)', function(done) {
-                // Make sure the table report has loaded
-                reportServicePage.waitForElement(reportServicePage.loadedContentEl).then(function() {
-                    // Check there is a scrollbar in the griddle table
-                    var fetchRecordPromises = [];
-                    fetchRecordPromises.push(reportServicePage.griddleWrapperEl.getAttribute('scrollWidth'));
-                    fetchRecordPromises.push(reportServicePage.griddleWrapperEl.getAttribute('clientWidth'));
-                    //When all the dimensions have been fetched, assert the values match expectations
-                    Promise.all(fetchRecordPromises).then(function(dimensions) {
-                        expect(Number(dimensions[0])).toBeGreaterThan(Number(dimensions[1]));
-                        done();
-                    });
+            // Make sure the table report has loaded
+            reportServicePage.waitForElement(reportServicePage.loadedContentEl).then(function() {
+                // Check there is a scrollbar in the griddle table
+                var fetchRecordPromises = [];
+                fetchRecordPromises.push(reportServicePage.griddleWrapperEl.getAttribute('scrollWidth'));
+                fetchRecordPromises.push(reportServicePage.griddleWrapperEl.getAttribute('clientWidth'));
+                //When all the dimensions have been fetched, assert the values match expectations
+                Promise.all(fetchRecordPromises).then(function(dimensions) {
+                    expect(Number(dimensions[0])).toBeGreaterThan(Number(dimensions[1]));
+                    done();
                 });
             });
+        });
 
         /**
          * Test method. Loads the second table containing 3 fields (3 columns). The table report (griddle) width should expand
          * it's columns to fill the available space (and not show a scrollbar).
          */
         it('Table report should expand width to take up available space (small num of columns)', function(done) {
-                // Make sure the table report has loaded
-                reportServicePage.waitForElement(reportServicePage.loadedContentEl).then(function() {
-                    // Check there is no scrollbar in the griddle table
-                    var fetchRecordPromises = [];
-                    fetchRecordPromises.push(reportServicePage.griddleWrapperEl.getAttribute('scrollWidth'));
-                    fetchRecordPromises.push(reportServicePage.griddleWrapperEl.getAttribute('clientWidth'));
-                    //When all the dimensions have been fetched, assert the values match expectations
-                    Promise.all(fetchRecordPromises).then(function(dimensions) {
-                        //TODO: Need to disable for now until we get more design around default column width
-                        //expect(Number(dimensions[0])).not.toBeGreaterThan(Number(dimensions[1]));
-                        done();
-                    });
+            // Make sure the table report has loaded
+            reportServicePage.waitForElement(reportServicePage.loadedContentEl).then(function() {
+                // Check there is no scrollbar in the griddle table
+                var fetchRecordPromises = [];
+                fetchRecordPromises.push(reportServicePage.griddleWrapperEl.getAttribute('scrollWidth'));
+                fetchRecordPromises.push(reportServicePage.griddleWrapperEl.getAttribute('clientWidth'));
+                //When all the dimensions have been fetched, assert the values match expectations
+                Promise.all(fetchRecordPromises).then(function(dimensions) {
+                    //TODO: Need to disable for now until we get more design around default column width
+                    //expect(Number(dimensions[0])).not.toBeGreaterThan(Number(dimensions[1]));
+                    done();
                 });
             });
+        });
 
         /**
          * After all tests are done, run the cleanup function in the base class

@@ -292,7 +292,7 @@
                     }).then(function() {
                         //sleep for loading of table to finish
                         e2eBase.sleep(browser.params.smallSleep);
-                        reportServicePage.griddleWrapperEl.getAttribute('innerText').then(function (txt) {
+                        reportServicePage.griddleWrapperEl.getAttribute('innerText').then(function(txt) {
                             if (txt === 'There is no data to display.') {
                                 //Verify the toolbar still displays with filter button in it
                                 expect(reportServicePage.griddleWrapperEl.getAttribute('innerText')).toEqual('There is no data to display.');
