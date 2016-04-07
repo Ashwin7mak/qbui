@@ -135,11 +135,11 @@
                             responseObject[FIELDS] = result[0].fields;
                             responseObject[RECORDS] = result[0].records;
                             responseObject[FACETS] = [];
+                            /*eslint no-lonely-if: 0 */
                             if (result[1]) {
                                 if (result[1].errorCode) {
                                     responseObject[FACETS].push(result[1]);
                                 } else {
-                                    /*eslint no-lonely-if: "error" */
                                     if (result[1].body && result[1].body.length > 0) {
                                         //jsonBigNum.parse throws exception if the input is empty array
                                         let facetRecords = jsonBigNum.parse(result[1].body);
