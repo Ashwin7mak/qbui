@@ -31,7 +31,7 @@ describe('Test ReportData Store', () => {
 
     it('test default report store state', () => {
         // verify default states
-        expect(Object.keys(flux.store(STORE_NAME).data).length).toBe(0);
+        expect(Object.keys(flux.store(STORE_NAME).reportModel).length).not.toBe(0);
         expect(flux.store(STORE_NAME).loading).toBeFalsy();
         expect(flux.store(STORE_NAME).error).toBeFalsy();
 
@@ -87,8 +87,10 @@ describe('Test ReportData Store', () => {
     it('test load reports success action with no data', () => {
 
         let payload = {
-            name: 'report_name',
-            data: {
+            metaData: {
+                name: 'report_name'
+            },
+            recordData: {
                 fields: [],
                 records: [],
                 facets: []
@@ -104,9 +106,9 @@ describe('Test ReportData Store', () => {
         expect(flux.store(STORE_NAME).loading).toBeFalsy();
         expect(flux.store(STORE_NAME).error).toBeFalsy();
 
-        expect(flux.store(STORE_NAME).data.name).toBe(payload.name);
-        expect(flux.store(STORE_NAME).data.columns).toBeDefined();
-        expect(flux.store(STORE_NAME).data.records).toBeDefined();
+        expect(flux.store(STORE_NAME).reportModel.model.name).toBe(payload.metaData.name);
+        expect(flux.store(STORE_NAME).reportModel.model.columns).toBeDefined();
+        expect(flux.store(STORE_NAME).reportModel.model.records).toBeDefined();
 
         //  ensure the output of each report row includes an id, name and link
         expect(flux.store(STORE_NAME).emit).toHaveBeenCalledWith('change');
@@ -163,7 +165,7 @@ describe('Test ReportData Store', () => {
             records : [[{id: 1, display: "quickbase"}, {id:2, name:"inc"}],
                 [{id: 1, display: "intuit"}, {id:2, name:"corp"}]]
         };
-        let state = flux.store(STORE_NAME).getReportData(data);
+        let state = flux.store(STORE_NAME).reportModel.getReportData(data.fields, data.records, false);
 
         //  expect the following to be returned when 'getting ReportData'
         expect(state).toBeDefined();
@@ -214,7 +216,8 @@ describe('Test ReportData Store', () => {
     it('test load records success action with error data', () => {
 
         let payload = {
-            data: {
+            metaData: {},
+            recordData: {
                 fields: [],
                 records: [],
                 facets: [{id:null, errorMessage:"testing error"}]
@@ -227,7 +230,7 @@ describe('Test ReportData Store', () => {
         };
 
         flux.dispatcher.dispatch(action);
-        expect(flux.store(STORE_NAME).data.filteredRecords).toBeDefined();
+        expect(flux.store(STORE_NAME).reportModel.model.filteredRecords).toBeDefined();
         let state = flux.store(STORE_NAME).getState();
         expect(state.data.facets.length).toBe(0);
 
@@ -239,7 +242,8 @@ describe('Test ReportData Store', () => {
     it('test load records success action with unspecified data', () => {
 
         let payload = {
-            data: {
+            metaData: {},
+            recordData: {
                 fields: [],
                 records: [],
             }
@@ -251,7 +255,7 @@ describe('Test ReportData Store', () => {
         };
 
         flux.dispatcher.dispatch(action);
-        expect(flux.store(STORE_NAME).data.filteredRecords).toBeDefined();
+        expect(flux.store(STORE_NAME).reportModel.model.filteredRecords).toBeDefined();
         //facets error handles
         let state = flux.store(STORE_NAME).getState();
         expect(state.data.facets.length).toBe(0);
@@ -265,7 +269,8 @@ describe('Test ReportData Store', () => {
     it('test load records success action with no data', () => {
 
         let payload = {
-            data: {
+            metaData: {},
+            recordData: {
                 fields: [],
                 records: []
             }
@@ -277,7 +282,7 @@ describe('Test ReportData Store', () => {
         };
 
         flux.dispatcher.dispatch(action);
-        expect(flux.store(STORE_NAME).data.filteredRecords).toBeDefined();
+        expect(flux.store(STORE_NAME).reportModel.model.filteredRecords).toBeDefined();
 
         //  ensure the output of each report row includes an id, name and link
         expect(flux.store(STORE_NAME).emit).toHaveBeenCalledWith('change');
