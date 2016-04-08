@@ -100,6 +100,9 @@ def sauceURL = "https://"+ instanceId + "-" + executorId + ".slave.ci.quickbaser
 def sauceKey = System.getProperty("SAUCE_KEY");
 def sauceJobName = "JENKINS_UI_E2E_" + System.getProperty("BUILD_NUMBER");
 def tunnelIdentifier = "JENKINS_TUNNEL_E2E_" + System.getProperty("BUILD_NUMBER");
+println(sauceKey);
+println(sauceJobName);
+println(tunnelIdentifier);
 
 // TODO: Pull the code below out into a separate groovy class - QBSE-19142
 // If running in AWS, there is no manually created properties file, so the settings must be retrieved using secret-cli
