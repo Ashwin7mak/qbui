@@ -105,8 +105,8 @@
 
                 //  Fetch report facet data (if any).
                 //
-                //  NOTE:  if an error occurs, the promise resolves as we want to always display
-                //  the report data even though there may be an error fetching the facet information.
+                //  NOTE:  if an error occurs while fetching the faceting information, we still want the promise to
+                //  resolve as we want to always display the report data if that promise returns w/o error.
                 var facetPromise = new Promise((resolve2, reject2) => {
                     this.fetchFacetResults(req).then(
                         (facetResponse) => {
@@ -127,7 +127,8 @@
 
                 return new Promise((resolve, reject) => {
 
-                    //  Fetch the report data and report facet information
+                    //  Now fetch the report data and report facet information asynchronously.  Return a responseObject with
+                    //  field, record and facet(if any) information for processing by the client.
                     var promises = [reportPromise, facetPromise];
                     Promise.all(promises).then(
                         (result) => {
@@ -136,15 +137,18 @@
                             responseObject[RECORDS] = result[0].records;
                             responseObject[FACETS] = [];
 
-                            /*eslint no-lonely-if: 0 */
+                            /*eslint no-lonely-if:0 */
                             if (result[1]) {
+                                //  check for any facet error...if one found, return the error object to the client
+                                //  in the facet response.
                                 if (result[1].errorCode) {
                                     responseObject[FACETS].push(result[1]);
                                 } else {
+                                    //  Parse the facet response and format into an object that the client can consume and process
+                                    //  IE: Facet objects of type {id, name, type, hasBlanks, [values]} using fields array.
                                     if (result[1].body && result[1].body.length > 0) {
-                                        //jsonBigNum.parse throws exception if the input is empty array
+                                        //  jsonBigNum.parse throws exception if the input is empty array
                                         let facetRecords = jsonBigNum.parse(result[1].body);
-                                        // format the facetRecords into Facet objects of type {id, name, type, hasBlanks, [values]} using fields array.
                                         responseObject[FACETS] = facetRecordsFormatter.formatFacetRecords(facetRecords, result[0].fields);
                                     }
                                 }
