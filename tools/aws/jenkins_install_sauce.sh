@@ -22,7 +22,7 @@ fi
 
 if [ ! -d "$SAUCELABS_SC_INSTALLED_DIR" ]; then
  echo unpacking saucelabs_sc
-  tar -xf  $SAUCELABS_SC_INSTALL_DIR/$SAUCELABS_SC_TARBALL -C $SAUCELABS_SC_INSTALL_DIR
+  tar -zxvf  $SAUCELABS_SC_INSTALL_DIR/$SAUCELABS_SC_TARBALL -C $SAUCELABS_SC_INSTALL_DIR
   ls "$SAUCELABS_SC_INSTALL_DIR"
 else
   echo "Saucelabs_sc install dir $SAUCELABS_SC_INSTALLED_DIR already exists"
