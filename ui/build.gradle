@@ -93,6 +93,14 @@ if(System.getProperty("endpoint")) {
     testURL = System.getProperty("endpoint");
 }
 
+// Setup Sauce Connection information for try job
+def instanceId = System.getProperty("INSTANCE_ID");
+def executorId = System.getenv("EXECUTOR_NUMBER");
+def sauceURL = "https://"+ instanceId + "-" + executorId + ".slave.ci.quickbaserocks.com";
+def sauceKey = System.getProperty("SAUCE_KEY");
+def sauceJobName = "JENKINS_UI_E2E_" + System.getProperty("BUILD_NUMBER");
+def tunnelIdentifier = "JENKINS_TUNNEL_E2E_" + System.getProperty("BUILD_NUMBER");
+
 // TODO: Pull the code below out into a separate groovy class - QBSE-19142
 // If running in AWS, there is no manually created properties file, so the settings must be retrieved using secret-cli
 if (awsEnv) {
@@ -384,6 +392,9 @@ task stopTomcat {
     }
 }
 
+task invokeInstallSauceLabs(type:Exec) {
+    executable cwd + "/../tools/aws/jenkins_install_sauce.sh"
+}
 
 task invokeCheckForApiUp(type:Exec) {
     executable cwd + "/../tools/ci/checkForApiUp.sh"
@@ -412,6 +423,17 @@ task gruntCiE2ETestsNoColor(type: GruntTask) {
     doFirst {
         tasks.invokeCheckForApiUp.execute()
         args = ["test:e2e", "--no-color"]
+    }
+    dependsOn startTomcat
+    finalizedBy stopTomcat
+}
+
+//browser tests in AWS
+task gruntE2EAWSSauce(type: GruntTask) {
+    doFirst {
+        tasks.invokeInstallSauceLabs.execute()
+        tasks.invokeCheckForApiUp.execute()
+        args = ["test:e2eAWSSauce", "--baseUrl", sauceURL, "--sauceKey", sauceKey, "--sauceJobName", sauceJobName, "--tunnelIdentifier", tunnelIdentifier]
     }
     dependsOn startTomcat
     finalizedBy stopTomcat
