@@ -65,17 +65,20 @@
                 return require(baseE2EPath + relativePath + '.js');
             };
 
-            //read the base classes
+            // Read the base classes
             global.e2eBase = requireCommon('common/e2eBase')();
             global.consts = require('../../../server/api/constants');
             global.e2eConsts = requireCommon('common/e2eConsts');
+
             // Lets Protractor know there is no Angular code to wait for
             browser.ignoreSynchronization = true;
+
             // Maximizes the browser window (known bug with Chrome)
             browser.driver.manage().window().maximize();
-            var SpecReporter = require('jasmine-spec-reporter');
+
             // Add jasmine spec reporter
-            jasmine.getEnv().addReporter(new SpecReporter({displayStacktrace: 'all'}));
+            var SpecReporter = require('jasmine-spec-reporter');
+            jasmine.getEnv().addReporter(new SpecReporter({displayStacktrace: 'all', displaySpecDuration: true}));
 
             // Grab the browser name to use in spec files
             browser.getCapabilities().then(function(cap) {

@@ -26,19 +26,11 @@
          * Have to specify the done() callback at the end of the promise chain to let Jasmine know we are done with async calls
          */
         beforeAll(function(done) {
+            //Create a app, table and report
             e2eBase.reportsBasicSetUp().then(function(appAndRecords) {
                 // Set your global objects to use in the test functions
                 app = appAndRecords[0];
                 recordList = appAndRecords[1];
-                // Get the appropriate fields out of the second table
-                var nonBuiltInFields = e2eBase.tableService.getNonBuiltInFields(app.tables[1]);
-                // Generate the record JSON objects
-                var generatedRecords = e2eBase.recordService.generateRecords(nonBuiltInFields, 10);
-                // Via the API create some records
-                return e2eBase.recordService.addRecords(app, app.tables[1], generatedRecords);
-            }).then(function() {
-                //Create a new report
-                return e2eBase.reportService.createReport(app.id, app.tables[1].id);
             }).then(function() {
                 // Get a session ticket for that subdomain and realmId (stores it in the browser)
                 realmName = e2eBase.recordBase.apiBase.realm.subdomain;
@@ -50,9 +42,10 @@
             }).then(function() {
                 // Wait for the leftNav to load
                 return reportServicePage.waitForElement(reportServicePage.appsListDivEl).then(function() {
-                    // Select the app
-                    return reportServicePage.appLinksElList.get(0).click().then(function() {
-                        // Done callback to let Jasmine know we are done with our promise chain
+                    //go to report page directly.
+                    RequestAppsPage.get(e2eBase.getRequestReportsPageEndpoint(realmName, app.id, app.tables[e2eConsts.TABLE1].id, "1"));
+                    // Make sure the table report has loaded
+                    reportServicePage.waitForElement(reportServicePage.loadedContentEl).then(function() {
                         done();
                     });
                 });
@@ -67,7 +60,7 @@
          * Before each test starts just make sure the report list has loaded
          */
         beforeEach(function(done) {
-            reportServicePage.waitForElement(reportServicePage.tablesListDivEl).then(function() {
+            reportServicePage.waitForElement(reportServicePage.loadedContentEl).then(function() {
                 done();
             });
         });
@@ -77,15 +70,6 @@
          * of reports for that app and table, then displays the report page in the browser
          */
         it('Should load the reports page with the appropriate table report and verify the fieldNames and records', function() {
-            // Select the table
-            reportServicePage.tableLinksElList.get(2).click();
-            // Open the reports list
-            reportServicePage.reportHamburgersElList.get(0).click();
-            // Wait for the report list to load
-            reportServicePage.waitForElement(reportServicePage.reportGroupsDivEl).then(function() {
-                // Find and select the report
-                reportServicePage.selectReport('My Reports', 'Test Report');
-            });
             // Wait until the table has loaded
             reportServicePage.waitForElement(reportServicePage.loadedContentEl).then(function() {
                 //TODO: Assert report icon has been highlighted to indicate which table you are on
@@ -111,26 +95,16 @@
          * to give all columns enough space to show their data.
          */
         it('Table report should expand width past the browser size to show all available data (large num columns)', function(done) {
-            // Select the table
-            reportServicePage.tableLinksElList.get(2).click().then(function() {
-                // Open the reports list
-                reportServicePage.reportHamburgersElList.get(0).click();
-                // Wait for the report list to load
-                reportServicePage.waitForElement(reportServicePage.reportGroupsDivEl).then(function() {
-                    // Find and select the report
-                    reportServicePage.selectReport('My Reports', 'Test Report');
-                });
-                // Make sure the table report has loaded
-                reportServicePage.waitForElement(reportServicePage.loadedContentEl).then(function() {
-                    // Check there is a scrollbar in the griddle table
-                    var fetchRecordPromises = [];
-                    fetchRecordPromises.push(reportServicePage.griddleWrapperEl.getAttribute('scrollWidth'));
-                    fetchRecordPromises.push(reportServicePage.griddleWrapperEl.getAttribute('clientWidth'));
-                    //When all the dimensions have been fetched, assert the values match expectations
-                    Promise.all(fetchRecordPromises).then(function(dimensions) {
-                        expect(Number(dimensions[0])).toBeGreaterThan(Number(dimensions[1]));
-                        done();
-                    });
+            // Make sure the table report has loaded
+            reportServicePage.waitForElement(reportServicePage.loadedContentEl).then(function() {
+                // Check there is a scrollbar in the griddle table
+                var fetchRecordPromises = [];
+                fetchRecordPromises.push(reportServicePage.griddleWrapperEl.getAttribute('scrollWidth'));
+                fetchRecordPromises.push(reportServicePage.griddleWrapperEl.getAttribute('clientWidth'));
+                //When all the dimensions have been fetched, assert the values match expectations
+                Promise.all(fetchRecordPromises).then(function(dimensions) {
+                    expect(Number(dimensions[0])).toBeGreaterThan(Number(dimensions[1]));
+                    done();
                 });
             });
         });
@@ -140,28 +114,17 @@
          * it's columns to fill the available space (and not show a scrollbar).
          */
         it('Table report should expand width to take up available space (small num of columns)', function(done) {
-            // Select the table
-            reportServicePage.tableLinksElList.get(3).click().then(function() {
-                // Open the reports menu for the second table
-                reportServicePage.openReportsMenu(reportServicePage.tableLinksElList.get(3));
-
-                // Wait for the report list to load
-                reportServicePage.waitForElement(reportServicePage.reportGroupsDivEl).then(function() {
-                    // Find and select the report
-                    reportServicePage.selectReport('My Reports', 'Test Report');
-                });
-                // Make sure the table report has loaded
-                reportServicePage.waitForElement(reportServicePage.loadedContentEl).then(function() {
-                    // Check there is no scrollbar in the griddle table
-                    var fetchRecordPromises = [];
-                    fetchRecordPromises.push(reportServicePage.griddleWrapperEl.getAttribute('scrollWidth'));
-                    fetchRecordPromises.push(reportServicePage.griddleWrapperEl.getAttribute('clientWidth'));
-                    //When all the dimensions have been fetched, assert the values match expectations
-                    Promise.all(fetchRecordPromises).then(function(dimensions) {
-                        //TODO: Need to disable for now until we get more design around default column width
-                        //expect(Number(dimensions[0])).not.toBeGreaterThan(Number(dimensions[1]));
-                        done();
-                    });
+            // Make sure the table report has loaded
+            reportServicePage.waitForElement(reportServicePage.loadedContentEl).then(function() {
+                // Check there is no scrollbar in the griddle table
+                var fetchRecordPromises = [];
+                fetchRecordPromises.push(reportServicePage.griddleWrapperEl.getAttribute('scrollWidth'));
+                fetchRecordPromises.push(reportServicePage.griddleWrapperEl.getAttribute('clientWidth'));
+                //When all the dimensions have been fetched, assert the values match expectations
+                Promise.all(fetchRecordPromises).then(function(dimensions) {
+                    //TODO: Need to disable for now until we get more design around default column width
+                    //expect(Number(dimensions[0])).not.toBeGreaterThan(Number(dimensions[1]));
+                    done();
                 });
             });
         });
