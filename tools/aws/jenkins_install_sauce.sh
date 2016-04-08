@@ -14,7 +14,7 @@ fi
 
 if [ ! -f "$SAUCELABS_SC_INSTALL_DIR/$SAUCELABS_SC_TARBALL" ]; then
   echo fetching saucelabs_sc
-  wget -q "--directory-prefix=$SAUCELABS_SC_INSTALL_DIR" "https://nexus1.ci.quickbaserocks.com/nexus/content/repositories/thirdparty/phantomjs/phantomjs/1.9.8-linux/phantomjs-1.9.8-linux-x86_64.tar.bz2"
+  wget -q "--directory-prefix=$SAUCELABS_SC_INSTALL_DIR" "https://nexus1.ci.quickbaserocks.com/nexus/content/repositories/thirdparty/saucelabs_sc/saucelabs_sc/sc-4.3.11-linux/saucelabs_sc-sc-4.3.11-linux-linux.tar.gz"
   ls "$SAUCELABS_SC_INSTALL_DIR"
 else
   echo "SauceLabs_sc archive $SAUCELABS_SC_INSTALL_DIR/$SAUCELABS_SC_TARBALL already exists"
