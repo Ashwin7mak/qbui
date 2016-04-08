@@ -26,19 +26,11 @@
          * Have to specify the done() callback at the end of the promise chain to let Jasmine know we are done with async calls
          */
         beforeAll(function(done) {
+            //Create a app, table and report
             e2eBase.reportsBasicSetUp().then(function(appAndRecords) {
                 // Set your global objects to use in the test functions
                 app = appAndRecords[0];
                 recordList = appAndRecords[1];
-                // Get the appropriate fields out of the second table
-                var nonBuiltInFields = e2eBase.tableService.getNonBuiltInFields(app.tables[1]);
-                // Generate the record JSON objects
-                var generatedRecords = e2eBase.recordService.generateRecords(nonBuiltInFields, 10);
-                // Via the API create some records
-                return e2eBase.recordService.addRecords(app, app.tables[1], generatedRecords);
-            }).then(function() {
-                //Create a new report
-                return e2eBase.reportService.createReport(app.id, app.tables[1].id);
             }).then(function() {
                 // Get a session ticket for that subdomain and realmId (stores it in the browser)
                 realmName = e2eBase.recordBase.apiBase.realm.subdomain;
@@ -51,7 +43,7 @@
                 // Wait for the leftNav to load
                 return reportServicePage.waitForElement(reportServicePage.appsListDivEl).then(function() {
                     //go to report page directly.
-                    RequestAppsPage.get(e2eBase.getRequestReportsPageEndpoint(realmName, app.id, app.tables[0].id, "1"));
+                    RequestAppsPage.get(e2eBase.getRequestReportsPageEndpoint(realmName, app.id, app.tables[e2eConsts.TABLE1].id, "1"));
                     // Make sure the table report has loaded
                     reportServicePage.waitForElement(reportServicePage.loadedContentEl).then(function() {
                         done();

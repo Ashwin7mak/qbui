@@ -41,7 +41,7 @@
                 // Wait for the leftNav to load
                 reportServicePage.waitForElement(reportServicePage.appsListDivEl).then(function() {
                     //go to report page directly.
-                    RequestAppsPage.get(e2eBase.getRequestReportsPageEndpoint(realmName, app.id, app.tables[0].id, "1"));
+                    RequestAppsPage.get(e2eBase.getRequestReportsPageEndpoint(realmName, app.id, app.tables[e2eConsts.TABLE1].id, "1"));
                     // Make sure the table report has loaded
                     reportServicePage.waitForElement(reportServicePage.loadedContentEl).then(function() {
                         done();

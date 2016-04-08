@@ -33,18 +33,18 @@
                 app = appAndRecords[0];
                 recordList = appAndRecords[1];
                 // Get the appropriate fields out of the third table
-                nonBuiltInFields = e2eBase.tableService.getNonBuiltInFields(app.tables[2]);
+                nonBuiltInFields = e2eBase.tableService.getNonBuiltInFields(app.tables[e2eConsts.TABLE3]);
                 // Generate the record JSON objects
                 var generatedRecords = e2eBase.recordService.generateRecords(nonBuiltInFields, 5);
                 // Via the API create some records
-                return e2eBase.recordService.addRecords(app, app.tables[2], generatedRecords);
+                return e2eBase.recordService.addRecords(app, app.tables[e2eConsts.TABLE3], generatedRecords);
             }).then(function() {
                 // Generate 1 empty record
                 var generatedEmptyRecords = e2eBase.recordService.generateEmptyRecords(nonBuiltInFields, 1);
-                return e2eBase.recordService.addRecords(app, app.tables[2], generatedEmptyRecords);
+                return e2eBase.recordService.addRecords(app, app.tables[e2eConsts.TABLE3], generatedEmptyRecords);
             }).then(function() {
                 //Create a report with facets in table 3
-                return e2eBase.reportService.createReportWithFacets(app.id, app.tables[2].id, [6, 7, 8, 9]);
+                return e2eBase.reportService.createReportWithFacets(app.id, app.tables[e2eConsts.TABLE3].id, [6, 7, 8, 9]);
             }).then(function() {
                 // Get the appropriate fields out of the fourth table
                 var Fields = e2eBase.tableService.getNonBuiltInFields(app.tables[3]);
@@ -83,7 +83,7 @@
 
             beforeAll(function(done) {
                 //go to report page directly
-                RequestAppsPage.get(e2eBase.getRequestReportsPageEndpoint(realmName, app.id, app.tables[2].id, "1"));
+                RequestAppsPage.get(e2eBase.getRequestReportsPageEndpoint(realmName, app.id, app.tables[e2eConsts.TABLE3].id, "1"));
                 reportServicePage.waitForElement(reportServicePage.loadedContentEl).then(function() {
                     reportServicePage.waitForElement(reportServicePage.griddleWrapperEl).then(function() {
                         reportServicePage.waitForElement(reportServicePage.agGridBodyEl).then(function() {
@@ -111,7 +111,7 @@
                 // Make sure the table report has loaded
                 reportServicePage.waitForElement(reportServicePage.reportsToolBar).then(function() {
                     //go to report page directly. Adding this extra step to avoid any leftover errors at the end of each test and also to avoid stale element error.
-                    RequestAppsPage.get(e2eBase.getRequestReportsPageEndpoint(realmName, app.id, app.tables[2].id, "1"));
+                    RequestAppsPage.get(e2eBase.getRequestReportsPageEndpoint(realmName, app.id, app.tables[e2eConsts.TABLE3].id, "1"));
                     reportServicePage.waitForElement(reportServicePage.loadedContentEl);
                     done();
                 });
@@ -399,7 +399,7 @@
 
             it('Negative test to verify a facet dropdown not displayed with report without facetsFIDS', function(done) {
                 //go to report page directly
-                RequestAppsPage.get(e2eBase.getRequestReportsPageEndpoint(realmName, app.id, app.tables[0].id, "1"));
+                RequestAppsPage.get(e2eBase.getRequestReportsPageEndpoint(realmName, app.id, app.tables[e2eConsts.TABLE1].id, "1"));
                 // Verify the facet container is not present in DOM without facets for a report.
                 reportFacetsPage.waitForElementToBeStale(reportFacetsPage.reportFacetMenuContainer);
                 done();
