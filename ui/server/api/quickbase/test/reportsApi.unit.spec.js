@@ -169,7 +169,7 @@ describe('Validate ReportsApi unit tests', function() {
             facets: [{id: null, errorCode: errorCodes.UNKNOWN}]
         };
         var fetchReportResultsPromise = Promise.resolve({records: [], fields: []});
-        var fetchFacetsPromise = Promise.resolve({facets: []});
+        var fetchFacetsPromise = Promise.resolve({body:'[[[{"id":142,"value":"2015-08-13"}],[{"id":142,"value":"2015-09-10"}]],[[{"id":7,"value":"Email Received"}],[{"id":7,"value":"Email Sent"}]]]'});
         afterEach(function() {
             reportsApi.fetchFacetResults.restore();
             reportsApi.fetchReportResults.restore();
