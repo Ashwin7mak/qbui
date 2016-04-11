@@ -96,13 +96,10 @@ if(System.getProperty("endpoint")) {
 // Setup Sauce Connection information for try job
 def instanceId = System.getenv("INSTANCE_ID");
 def executorId = System.getenv("EXECUTOR_NUMBER");
-def sauceURL = "https://"+ instanceId + "-" + executorId + ".slave.ci.quickbaserocks.com";
+def sauceURL = "https://foo."+ instanceId + "-" + executorId + ".slave.ci.quickbaserocks.com";
 def sauceKey = System.getenv("SAUCE_KEY");
 def sauceJobName = "JENKINS_UI_E2E_" + System.getenv("BUILD_NUMBER");
 def tunnelIdentifier = "JENKINS_TUNNEL_E2E_" + System.getenv("BUILD_NUMBER");
-println(sauceKey);
-println(sauceJobName);
-println(tunnelIdentifier);
 
 // TODO: Pull the code below out into a separate groovy class - QBSE-19142
 // If running in AWS, there is no manually created properties file, so the settings must be retrieved using secret-cli
