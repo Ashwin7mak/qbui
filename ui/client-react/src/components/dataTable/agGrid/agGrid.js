@@ -145,6 +145,7 @@ let AGGrid = React.createClass({
     // Since re-render is expensive the following figures out if ALL is same
     // and the only piece that has changed is the "actions" column then don't update.
     shouldComponentUpdate(nextProps, nextState) {
+        console.log('shuold');
         if (!_.isEqual(nextState, this.state)) {
             return true;
         }
@@ -152,12 +153,10 @@ let AGGrid = React.createClass({
             //iterate over props and state
             for (var property in nextProps) {
                 if (nextProps.hasOwnProperty(property)) {
-                    if (!this.props[property]) {
-                        return true;
-                    }
                     if (!_.isEqual(this.props[property], nextProps[property])) {
                         if (property === "columns") {
                             if (this.props[property].length !== nextProps[property].length) {
+                                console.log('yes');
                                 return true;
                             }
                             let prevColumns = this.props[property];
@@ -167,11 +166,13 @@ let AGGrid = React.createClass({
                                     if (prevColumns[i].field === "actions") {
                                         return false;
                                     }
+                                    console.log('yup');
                                     return true;
                                 }
                             }
+                        } else if (property !== "reportHeader" && property !== "pageActions") {
+                            return true;
                         }
-                        return true;
                     }
                 }
             }
