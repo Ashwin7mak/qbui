@@ -58,6 +58,26 @@ let reportDataActions = {
 
     loadReport(appId, tblId, rptId, format) {
 
+        function hasReportGrouping(reportMetaData) {
+
+            if (reportMetaData && reportMetaData.data && reportMetaData.data.sortList) {
+                for (let sort of reportMetaData.data.sortList) {
+                    if (sort) {
+                        //  format is fid:groupType..split by delimiter(':') to allow us
+                        // to allow us to determine if there is any grouping requirements.
+                        var el = sort.split(':');
+
+                        //  if the length > 1, there is grouping, so return true
+                        if (el.length > 1) {
+                            // TODO: consider whether to validate the group type..
+                            return true;
+                        }
+                    }
+                }
+            }
+            return false;
+        }
+
         //  promise is returned in support of unit testing only
         return new Promise(function(resolve, reject) {
 
@@ -65,26 +85,47 @@ let reportDataActions = {
                 this.dispatch(actions.LOAD_REPORT, {appId, tblId, rptId});
                 let reportService = new ReportService();
 
-                //  query for the report meta data, report results and report facets
-                var promises = [];
-                promises.push(reportService.getReport(appId, tblId, rptId));
-                promises.push(reportService.getReportDataAndFacets(appId, tblId, rptId, format));
+                //  query for the report meta data
+                reportService.getReport(appId, tblId, rptId).then(
+                    (reportMetaData) => {
+                        var queryParams = {};
+                        queryParams[query.FORMAT_PARAM] = format;
 
-                Promise.all(promises).then(
-                    function(response) {
-                        logger.debug('Report service call successful');
-                        var model = reportModel.set(response[0], response[1]);
-                        this.dispatch(actions.LOAD_REPORT_SUCCESS, model);
-                        resolve();
-                    }.bind(this),
-                    function(error) {
-                        logger.error('Report service call error:' + JSON.stringify(error));
+                        //  TODO: need to feed in offset and number of rows to return
+                        queryParams[query.OFFSET_PARAM] = null;
+                        queryParams[query.NUMROWS_PARAM] = null;
+
+                        logger.debug("getReport success callback");
+
+                        //  look for an grouping requirements from the meta data and include when fetching
+                        //  the report data and facets.  The node layer will use this information and
+                        //  return the data grouped for easy client rendering
+                        if (hasReportGrouping(reportMetaData)) {
+                            queryParams[query.GLIST_PARAM] = reportMetaData.data.sortList;
+                        }
+
+                        reportService.getReportDataAndFacets(appId, tblId, rptId, queryParams).then(
+                            function(reportData) {
+                                logger.debug('ReportDataAndFacets service call successful');
+                                var model = reportModel.set(reportMetaData, reportData);
+                                this.dispatch(actions.LOAD_REPORT_SUCCESS, model);
+                                resolve();
+                            }.bind(this),
+                            function(error) {
+                                logger.error('ReportDataAndFacets service call error:' + JSON.stringify(error));
+                                this.dispatch(actions.LOAD_REPORT_FAILED, {error: error});
+                                reject();
+                            }.bind(this)
+                        );
+                    },
+                    (error) => {
+                        logger.error('Report service call error when querying for report meta data:' + JSON.stringify(error));
                         this.dispatch(actions.LOAD_REPORT_FAILED, {error: error});
                         reject();
-                    }.bind(this)
+                    }
                 ).catch(
                     function(ex) {
-                        logger.error('Report service call exception:', ex);
+                        logger.error('Unexpected Report service call exception:', ex);
                         this.dispatch(actions.LOAD_REPORT_FAILED, {exception: ex});
                         reject();
                     }.bind(this)
@@ -177,22 +218,22 @@ let reportDataActions = {
                 promises.push(reportService.parseFacetExpression(facetExpression));
 
                 Promise.all(promises).then(
-                    function(response) {
+                    (response) => {
                         var queryParams = buildRequestQuery(response[0], response[1], searchExpression);
 
                         //  Get the filtered records
                         recordService.getRecords(appId, tblId, format, queryParams).then(
-                            function(recordResponse) {
+                            (recordResponse) => {
                                 logger.debug('Filter Report Records service call successful');
                                 var model = reportModel.set(null, recordResponse);
                                 this.dispatch(actions.LOAD_RECORDS_SUCCESS, model);
                                 resolve();
-                            }.bind(this),
-                            function(error) {
+                            },
+                            (error) => {
                                 logger.error('Filter Report Records service call error:', JSON.stringify(error));
                                 this.dispatch(actions.LOAD_RECORDS_FAILED, {error: error});
                                 reject();
-                            }.bind(this)
+                            }
                         ).catch(
                             function(ex) {
                                 logger.error('Filter Report Records service call exception:', ex);
@@ -200,12 +241,12 @@ let reportDataActions = {
                                 reject();
                             }.bind(this)
                         );
-                    }.bind(this),
-                    function(error) {
+                    },
+                    (error) => {
                         logger.error('Filter Report service call error:', error);
                         this.dispatch(actions.LOAD_RECORDS_FAILED, {error: error});
                         reject();
-                    }.bind(this)
+                    }
                 ).catch(
                     function(ex) {
                         logger.error('Filter Report service calls exception:', ex);
