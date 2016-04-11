@@ -38,6 +38,11 @@ let NavItem = React.createClass({
             this.props.onSelect(event);
         }
     },
+    onHeadingClick(event) {
+        if (this.props.onClick && A11Utils.isA11yClick(event)) {
+            this.props.onClick(event);
+        }
+    },
     onSecondaryClick(event, id) {
         if (this.props.secondaryOnSelect && A11Utils.isA11yClick(event)) {
             this.props.secondaryOnSelect(id);
@@ -72,8 +77,8 @@ let NavItem = React.createClass({
 
         if (this.props.isHeading) {
             return (
-                <li key={item.msg}
-                    onClick={this.props.onClick}
+                <li key={item.msg} tabIndex="0"
+                    onClick={this.onHeadingClick} onKeyDown={this.onHeadingClick}
                     className={ this.props.secondaryIcon ? "heading withSecondary" : "heading"}>
                     <I18nMessage message={item.msg}/>
                     {this.props.secondaryIcon && <QBicon icon={this.props.secondaryIcon} />}

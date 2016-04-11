@@ -49,7 +49,7 @@ let LeftNav = React.createClass({
     },
 
     onSelectApp() {
-        this.props.toggleAppsList(false);
+        this.props.onToggleAppsList(false);
     },
 
     swipedLeft() {

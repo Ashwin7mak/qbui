@@ -7,7 +7,7 @@ class A11Utils {
 
         if (event.nativeEvent.type === 'click') {
             return true;
-        } else if (event.nativeEvent.type === 'keypress') {
+        } else if (event.nativeEvent.type === 'keydown') {
             var code = event.charCode || event.keyCode;
             if ((code === 32) || (code === 13)) {
                 return true;
