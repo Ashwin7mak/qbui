@@ -58,26 +58,6 @@ let reportDataActions = {
 
     loadReport(appId, tblId, rptId, format) {
 
-        function hasReportGrouping(reportMetaData) {
-
-            if (reportMetaData && reportMetaData.data && reportMetaData.data.sortList) {
-                for (let sort of reportMetaData.data.sortList) {
-                    if (sort) {
-                        //  format is fid:groupType..split by delimiter(':') to allow us
-                        // to allow us to determine if there is any grouping requirements.
-                        var el = sort.split(':');
-
-                        //  if the length > 1, there is grouping, so return true
-                        if (el.length > 1) {
-                            // TODO: consider whether to validate the group type..
-                            return true;
-                        }
-                    }
-                }
-            }
-            return false;
-        }
-
         //  promise is returned in support of unit testing only
         return new Promise(function(resolve, reject) {
 
@@ -89,20 +69,17 @@ let reportDataActions = {
                 reportService.getReport(appId, tblId, rptId).then(
                     (reportMetaData) => {
                         var queryParams = {};
-                        queryParams[query.FORMAT_PARAM] = format;
 
-                        //  TODO: need to feed in offset and number of rows to return
+                        //  Node query parameters
+                        queryParams[query.FORMAT_PARAM] = format;
+                        if (reportMetaData.data) {
+                            queryParams[query.GLIST_PARAM] = reportMetaData.data.sortList ? reportMetaData.data.sortList.join('.') : '';
+                        } else {
+                            queryParams[query.GLIST_PARAM] = '';
+                        }
+
                         queryParams[query.OFFSET_PARAM] = null;
                         queryParams[query.NUMROWS_PARAM] = null;
-
-                        logger.debug("getReport success callback");
-
-                        //  look for an grouping requirements from the meta data and include when fetching
-                        //  the report data and facets.  The node layer will use this information and
-                        //  return the data grouped for easy client rendering
-                        if (hasReportGrouping(reportMetaData)) {
-                            queryParams[query.GLIST_PARAM] = reportMetaData.data.sortList;
-                        }
 
                         reportService.getReportDataAndFacets(appId, tblId, rptId, queryParams).then(
                             function(reportData) {
@@ -149,12 +126,10 @@ let reportDataActions = {
         //  Build list of fids that is sent to the server to fulfill report sorting requirements
         function getReportSortFids(reportMetaData) {
             let fids = [];
-
             if (reportMetaData.data.sortList) {
                 reportMetaData.data.sortList.forEach(function(sort) {
                     if (sort) {
-                        //  format is fid:groupType..split by delimiter(':') to allow us
-                        // to pass in the fid for server side sorting.
+                        //  format is fid:groupType..split by delimiter(':')
                         var sortEl = sort.split(':');
                         fids.push(sortEl[0]);
                     }
@@ -169,16 +144,15 @@ let reportDataActions = {
             var queryParams = {};
 
             if (reportMetaData && reportMetaData.data) {
-                //  TODO: add any paging (offset and rowNums) to the query
 
                 queryParams[query.COLUMNS_PARAM] = reportMetaData.data.fids ? reportMetaData.data.fids.join('.') : '';
-                queryParams[query.SORT_LIST_PARAM] = getReportSortFids(reportMetaData);
+                queryParams[query.GLIST_PARAM] = reportMetaData.data.sortList ? reportMetaData.data.sortList.join('.') : '';
 
-                //  TODO: pass grouping and summary information with the query
+                queryParams[query.SORT_LIST_PARAM] = getReportSortFids(reportMetaData);
 
                 //  Concatenate facet expression(if any) and search filter(if any) into single
                 //  query expression where each individual expression is 'AND'ed with the other.
-                //ui/client-react/src/actions/reportDataActions.js:141
+                //
                 //  To optimize query performance, order the array elements 1..n in order of
                 //  significance/most targeted selection as the outputted query is built starting
                 //  at offset 0.
@@ -221,8 +195,12 @@ let reportDataActions = {
                     (response) => {
                         var queryParams = buildRequestQuery(response[0], response[1], searchExpression);
 
+                        queryParams[query.FORMAT_PARAM] = format;
+                        queryParams[query.OFFSET_PARAM] = null;
+                        queryParams[query.NUMROWS_PARAM] = null;
+
                         //  Get the filtered records
-                        recordService.getRecords(appId, tblId, format, queryParams).then(
+                        recordService.getRecords(appId, tblId, queryParams).then(
                             (recordResponse) => {
                                 logger.debug('Filter Report Records service call successful');
                                 var model = reportModel.set(null, recordResponse);

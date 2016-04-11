@@ -69,7 +69,7 @@ describe('ReportService functions', () => {
         queryParams[query.FORMAT_PARAM] = true;
         queryParams[query.OFFSET_PARAM] = 0;
         queryParams[query.NUMROWS_PARAM] = 10;
-        queryParams[query.GLIST_PARAM] = ['1', '2:V'];
+        queryParams[query.GLIST_PARAM] = ['1', '2:V'].join('.');
         reportService.getReportData(appId, tblId, rptId, queryParams);
 
         var params = {};

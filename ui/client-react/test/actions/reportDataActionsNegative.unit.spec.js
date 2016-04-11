@@ -101,7 +101,7 @@ describe('Report Data Actions -- Filter report Negative', () => {
                 done();
             },
             () => {
-                expect(flux.dispatchBinder.dispatch.calls.argsFor(0)).toEqual([actions.LOAD_RECORDS, filterReportInputs]);
+                expect(flux.dispatchBinder.dispatch.calls.argsFor(0)).toEqual([actions.LOAD_RECORDS, jasmine.any(Object)]);
                 expect(flux.dispatchBinder.dispatch.calls.argsFor(1)).toEqual([actions.LOAD_RECORDS_FAILED, jasmine.any(Object)]);
                 done();
             }
