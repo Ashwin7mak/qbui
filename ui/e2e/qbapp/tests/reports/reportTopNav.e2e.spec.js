@@ -31,15 +31,6 @@
                 // Set your global objects to use in the test functions
                 app = appAndRecords[0];
                 recordList = appAndRecords[1];
-                // Get the appropriate fields out of the second table
-                var nonBuiltInFields = e2eBase.tableService.getNonBuiltInFields(app.tables[1]);
-                // Generate the record JSON objects
-                var generatedRecords = e2eBase.recordService.generateRecords(nonBuiltInFields, 10);
-                // Via the API create some records
-                return e2eBase.recordService.addRecords(app, app.tables[1], generatedRecords);
-            }).then(function() {
-                //Create a new report
-                return e2eBase.reportService.createReport(app.id, app.tables[1].id);
             }).then(function() {
                 // Get a session ticket for that subdomain and realmId (stores it in the browser)
                 realmName = e2eBase.recordBase.apiBase.realm.subdomain;

@@ -15,6 +15,11 @@
             'Date Field', 'Date Time Field', 'Time of Day Field', 'Duration Field', 'Checkbox Field', 'Phone Number Field',
             'Email Address Field', 'URL Field'],
 
+        TABLE1 : 0,
+        TABLE2: 1,
+        TABLE3 : 2,
+        TABLE4 : 3,
+
         /**
          * Data Provider for the different breakpoints. Also contains the state of the leftNav at each size for assertion
          */
