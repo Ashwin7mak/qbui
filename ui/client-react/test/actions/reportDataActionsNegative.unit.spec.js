@@ -94,7 +94,7 @@ describe('Report Data Actions -- Filter report Negative', () => {
         }
         reportDataActions.__Rewire__('ReportService', mockReportService);
         reportDataActions.__Rewire__('RecordService', mockRecordService);
-        flux.actions.filterReport(inputs.appId, inputs.tblId, inputs.rptId, inputs.formatted, inputs.filter).then(
+        flux.actions.getFilteredRecords(inputs.appId, inputs.tblId, inputs.rptId, inputs.formatted, inputs.filter).then(
             () => {
                 expect(true).toBe(false);
                 done();
@@ -126,7 +126,7 @@ describe('Report Data Actions -- Filter report Negative', () => {
         }
         reportDataActions.__Rewire__('ReportService', mockReportService);
         reportDataActions.__Rewire__('RecordService', mockRecordService);
-        flux.actions.filterReport(inputs.appId, inputs.tblId, inputs.rptId, inputs.formatted, inputs.filter).then(
+        flux.actions.getFilteredRecords(inputs.appId, inputs.tblId, inputs.rptId, inputs.formatted, inputs.filter).then(
             () => {
                 expect(true).toBe(false);
                 done();
@@ -159,7 +159,7 @@ describe('Report Data Actions -- Filter report Negative', () => {
         }
         reportDataActions.__Rewire__('ReportService', mockReportService);
         reportDataActions.__Rewire__('RecordService', mockRecordService);
-        flux.actions.filterReport(inputs.appId, inputs.tblId, inputs.rptId, inputs.formatted, inputs.filter).then(
+        flux.actions.getFilteredRecords(inputs.appId, inputs.tblId, inputs.rptId, inputs.formatted, inputs.filter).then(
             () => {
                 expect(true).toBe(false);
                 done();
@@ -216,7 +216,7 @@ describe('Report Data Actions -- Filter report Negative missing parameters', () 
 
     dataProvider.forEach(function(data) {
         it(data.test, (done) => {
-            flux.actions.filterReport(data.appId, data.tblId, data.rptId, false, filter).then(
+            flux.actions.getFilteredRecords(data.appId, data.tblId, data.rptId, false, filter).then(
                 () => {
                     expect(true).toBe(false);
                     done();
@@ -313,7 +313,7 @@ describe('Report Data Actions -- ', () => {
 
     var dataProvider = [
         {test:'test throwing exception when loading a report', func:flux.actions.loadReport, act: actions.LOAD_REPORT_FAILED},
-        {test:'test throwing exception when filtering a report', func:flux.actions.filterReport, act:actions.LOAD_RECORDS_FAILED}
+        {test:'test throwing exception when filtering a report', func:flux.actions.getFilteredRecords, act:actions.LOAD_RECORDS_FAILED}
     ];
     var filter = {facet: 'abc', search: ''};
 

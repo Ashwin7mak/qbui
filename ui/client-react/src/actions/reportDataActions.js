@@ -97,13 +97,24 @@ let reportDataActions = {
         }.bind(this));
     },
 
-    /* Action called to filter a report.
+    filterSelectionsPending(selections) {
+        this.dispatch(actions.FILTER_SELECTIONS_PENDING, {selections});
+    },
+
+    filterSearchPending(string) {
+        this.dispatch(actions.FILTER_SEARCH_PENDING, {string});
+    },
+
+    /* Action called to get a new set of records given a report.
+     * Override params can override report's sortlist/query etc
      *
+     * Extended filter criteria can be attached to the query -
      *  Supported filtering options include:
      *       facet  : expression representing all the facets selected by user so far example [{fid: fid1, values: value1, value2}, {fid: fid2, values: value3, value4}, ..]
      *       search : search string
      */
-    filterReport(appId, tblId, rptId, format, filter) {
+
+    getFilteredRecords(appId, tblId, rptId, format, filter, overrideQueryParams) {
 
         //  Build list of fids that is sent to the server to fulfill report sorting requirements
         function getReportSortFids(reportMetaData) {
@@ -130,28 +141,40 @@ let reportDataActions = {
             if (reportMetaData && reportMetaData.data) {
                 //  TODO: add any paging (offset and rowNums) to the query
 
-                queryParams[query.COLUMNS_PARAM] = reportMetaData.data.fids ? reportMetaData.data.fids.join('.') : '';
-                queryParams[query.SORT_LIST_PARAM] = getReportSortFids(reportMetaData);
+                if (overrideQueryParams && overrideQueryParams[query.COLUMNS_PARAM]) {
+                    queryParams[query.COLUMNS_PARAM] = overrideQueryParams[query.COLUMNS_PARAM];
+                } else {
+                    queryParams[query.COLUMNS_PARAM] = reportMetaData.data.fids ? reportMetaData.data.fids.join('.') : '';
+                }
+                if (overrideQueryParams && overrideQueryParams[query.SORT_LIST_PARAM]) {
+                    queryParams[query.SORT_LIST_PARAM] = overrideQueryParams[query.SORT_LIST_PARAM];
+                } else {
+                    queryParams[query.SORT_LIST_PARAM] = getReportSortFids(reportMetaData);
+                }
 
                 //  TODO: pass grouping and summary information with the query
 
-                //  Concatenate facet expression(if any) and search filter(if any) into single
-                //  query expression where each individual expression is 'AND'ed with the other.
-                //ui/client-react/src/actions/reportDataActions.js:141
-                //  To optimize query performance, order the array elements 1..n in order of
-                //  significance/most targeted selection as the outputted query is built starting
-                //  at offset 0.
-                let filterQueries = [];
-                if (reportMetaData.data.query) {
-                    filterQueries.push(reportMetaData.data.query);
+                if (overrideQueryParams && overrideQueryParams[query.QUERY_PARAM]) {
+                    queryParams[query.QUERY_PARAM] = overrideQueryParams[query.QUERY_PARAM];
+                } else {
+                    //  Concatenate facet expression(if any) and search filter(if any) into single
+                    //  query expression where each individual expression is 'AND'ed with the other.
+                    //ui/client-react/src/actions/reportDataActions.js:141
+                    //  To optimize query performance, order the array elements 1..n in order of
+                    //  significance/most targeted selection as the outputted query is built starting
+                    //  at offset 0.
+                    let filterQueries = [];
+                    if (reportMetaData.data.query) {
+                        filterQueries.push(reportMetaData.data.query);
+                    }
+                    if (facetQueryExpression) {
+                        filterQueries.push(facetQueryExpression.data);
+                    }
+                    if (searchExpression) {
+                        filterQueries.push(QueryUtils.parseStringIntoAllFieldsContainsExpression(searchExpression));
+                    }
+                    queryParams[query.QUERY_PARAM] = QueryUtils.concatQueries(filterQueries);
                 }
-                if (facetQueryExpression) {
-                    filterQueries.push(facetQueryExpression.data);
-                }
-                if (searchExpression) {
-                    filterQueries.push(QueryUtils.parseStringIntoAllFieldsContainsExpression(searchExpression));
-                }
-                queryParams[query.QUERY_PARAM] = QueryUtils.concatQueries(filterQueries);
             }
 
             return queryParams;
@@ -174,7 +197,9 @@ let reportDataActions = {
                 // The filter parameter may contain a searchExpression and facetExpression
                 let searchExpression = filter ? filter.search : '';
                 let facetExpression = filter ? filter.facet : '';
-                promises.push(reportService.parseFacetExpression(facetExpression));
+                if (facetExpression !== '') {
+                    promises.push(reportService.parseFacetExpression(facetExpression));
+                }
 
                 Promise.all(promises).then(
                     function(response) {
@@ -222,14 +247,6 @@ let reportDataActions = {
             }
         }.bind(this));
     },
-
-    filterSelectionsPending(selections) {
-        this.dispatch(actions.FILTER_SELECTIONS_PENDING, {selections});
-    },
-
-    filterSearchPending(string) {
-        this.dispatch(actions.FILTER_SEARCH_PENDING, {string});
-    }
 };
 
 export default reportDataActions;

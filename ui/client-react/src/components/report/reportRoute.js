@@ -142,7 +142,7 @@ const ReportRoute = React.createClass({
 
         logger.debug('Sending filter action with:' + searchString);
 
-        flux.actions.filterReport(this.props.selectedAppId,
+        flux.actions.getFilteredRecords(this.props.selectedAppId,
                                     this.props.routeParams.tblId,
                                     this.props.routeParams.rptId, true, filter);
     },

@@ -111,12 +111,15 @@ let ReportContent = React.createClass({
                                     uniqueIdentifier="Record ID#"
                                     appId={this.props.reportData.appId}
                                     tblId={this.props.reportData.tblId}
+                                    rptId={this.props.reportData.rptId}
                                     reportHeader={this.props.reportHeader}
                                     pageActions={this.props.pageActions}
                                     selectionActions={<ReportActions />}
                                     showGrouping={this.props.reportData.data.hasGrouping}
                                     filteredRecordCount={this.props.reportData.data ? this.props.reportData.data.filteredRecordCount : 0}
                                     groupLevel={this.props.reportData.data ? this.props.reportData.data.groupLevel : 0}
+                                    groupFids={this.props.reportData.data ? this.props.reportData.data.groupFids : []}
+                                    sortFids={this.props.reportData.data ? this.props.reportData.data.sortFids : []}
                             ></AGGrid> :
                             <GriddleTable reportData={this.props.reportData}
                                     columnMetadata={columnsDef}

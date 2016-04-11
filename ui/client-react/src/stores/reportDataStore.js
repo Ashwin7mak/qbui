@@ -17,7 +17,9 @@ let reportModel = {
         hasGrouping: false,     //TODO: QBSE-19937 this should come from report meta data.
         name: null,
         records: null,
-        recordsCount: null
+        recordsCount: null,
+        sortFids: [],         //TODO: QBSE-19937 this should come from report meta data.
+        groupFids: null
     },
     /**
      * Given the field list format the columnDefinition as needed by data grid.
@@ -27,16 +29,18 @@ let reportModel = {
      */
     getReportColumns(fields, hasGrouping) {
         let columns = [];
-        this.findTempGroupingFields(fields);
-        let groupingFields = this.model.groupingFields;
+        if (this.model.hasGrouping) {
+            this.findTempGroupingFields(fields);
+        }
+        let groupFids = this.model.groupFids;
 
         if (fields) {
             fields.forEach(function(field, index) {
                 //skip showing grouped fields on report
                 let isFieldGrouped = false;
                 if (hasGrouping) {
-                    isFieldGrouped = groupingFields.find((groupingField) => {
-                        return field.name === groupingField;
+                    isFieldGrouped = groupFids.find((fid) => {
+                        return field.id === fid;
                     });
                 }
                 if (!isFieldGrouped) {
@@ -61,17 +65,20 @@ let reportModel = {
     // Temporary helper for finding grouping fields for fake grouped data
     findTempGroupingFields(fields) {
         let groupingFields = [];
+        let groupFids = [];
         fields.forEach((field) => {
             if (field.datatypeAttributes.type === "TEXT" && groupingFields.length < 2) {
                 groupingFields.push(field.name);
+                groupFids.push(field.id);
             }
             if (field.datatypeAttributes.type === "RATING" && groupingFields.length < 2) {
                 groupingFields.push(field.name);
+                groupFids.push(field.id);
             }
         });
+        this.setGroupFids(groupFids);
         this.setGroupingFields(groupingFields);
         this.setGroupingLevel(groupingFields.length);
-        //return groupingFields;
     },
     // Temporary helper for creating fake grouped data
     createTempGroupedData(reportData, fields) {
@@ -220,6 +227,9 @@ let reportModel = {
     },
     setGroupingFields: function(groupingFields) {
         this.model.groupingFields = groupingFields;
+    },
+    setGroupFids: function(groupFids) {
+        this.model.groupFids = groupFids;
     }
 };
 
