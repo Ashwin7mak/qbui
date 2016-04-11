@@ -45,6 +45,7 @@ let GlobalActions = React.createClass({
         position: React.PropTypes.string.isRequired,
         actions: React.PropTypes.arrayOf(actionPropType),
         dropdownIcon: React.PropTypes.string,
+        dropdownMsg: React.PropTypes.string,
         startTabIndex: React.PropTypes.number.isRequired
     },
 
@@ -65,8 +66,11 @@ let GlobalActions = React.createClass({
         return (
             <Dropdown id="nav-right-dropdown" dropup={this.props.position === "left"}>
 
-                <Button bsRole="toggle" className={"dropdownToggle globalActionLink"} tabIndex={this.props.startTabIndex + this.props.actions.length}>
+                <Button bsRole="toggle"
+                        className={"dropdownToggle globalActionLink"}
+                        tabIndex={this.props.startTabIndex + this.props.actions.length}>
                     <QBicon icon={this.props.dropdownIcon}/>
+                    <span className={"navLabel"}>{this.props.dropdownMsg !== '' ? <I18nMessage message={this.props.dropdownMsg}/> : ''}</span>
                 </Button>
 
                 <Dropdown.Menu>
@@ -91,7 +95,11 @@ let GlobalActions = React.createClass({
             <div className={"globalActions"}>
                 <ul className={"globalActionsList"}>
                     {this.props.actions && this.props.actions.map((action, index) => {
-                        return <GlobalAction tabIndex={this.props.startTabIndex + index} key={action.msg} linkClass={this.props.linkClass} onSelect={this.props.onSelect} action={action}/>;
+                        return <GlobalAction tabIndex={this.props.startTabIndex + index}
+                                             key={action.msg}
+                                             linkClass={this.props.linkClass}
+                                             onSelect={this.props.onSelect}
+                                             action={action}/>;
                     })}
                     <li className={"link globalAction withDropdown"}>{this.getGlobalDropdown()}</li>
                 </ul>

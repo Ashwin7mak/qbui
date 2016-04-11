@@ -1,6 +1,7 @@
 @import '../../assets/css/qbVariables';
 
 $icon-action-icon-color:#fff;
+$page-actions-background-color: #486c8f;
 
 @include not-small-breakpoint {
     .secondaryBar .iconActions {
@@ -51,16 +52,22 @@ $icon-action-icon-color:#fff;
 
 
             .iconActionButton {
+                border:0;
+                border-radius:0;
+                padding: 0;
+                padding-right:6px;
+                padding-left:6px;
                 display: inline-block;
                 vertical-align: middle;
                 text-align: center;
                 width: 32px;
                 font-size: 20px;
                 color: $icon-action-icon-color;
+                background-color: $page-actions-background-color;
             }
         }
         .pageActions {
-            background-color: #486c8f;
+            background-color: $page-actions-background-color;
         }
     }
 }

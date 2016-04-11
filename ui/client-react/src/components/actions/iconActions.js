@@ -71,7 +71,7 @@ let IconActions = React.createClass({
         return (
             <Dropdown id="nav-right-dropdown" pullRight onToggle={this.onToggleMenu} onClose={this.onCloseMenu}>
 
-                <a tabIndex="0" bsRole="toggle" className={"dropdownToggle iconActionButton"}><QBicon icon="fries"/> </a>
+                <Button tabIndex="0" bsRole="toggle" className={"dropdownToggle iconActionButton"}><QBicon icon="fries"/> </Button>
 
                 <Dropdown.Menu onEntering={this.props.onMenuEnter} onExited={this.props.onMenuExit}>
                     {this.props.actions.map((action, index) => {

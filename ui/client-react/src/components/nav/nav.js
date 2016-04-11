@@ -49,10 +49,12 @@ var Nav = React.createClass({
 
     getLeftGlobalActions() {
         const actions = [
-            {msg:'globalActions.help', link:'/help', icon:'help'}
+            {msg:'globalActions.user', link:'/user', icon:'user'}
         ];
         return (<GlobalActions actions={actions}
                                onSelect={this.onSelectItem}
+                               dropdownIcon="help"
+                               dropdownMsg="globalActions.help"
                                startTabIndex={100}
                                position={"left"}/>);
     },

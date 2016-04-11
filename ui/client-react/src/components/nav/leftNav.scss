@@ -141,7 +141,7 @@ div.leftNavTooltip {
             display: flex;
         }
 
-        .globalActions > ul > li > a.globalActionLink {
+        .globalActions > ul > li > .globalActionLink {
 
             .navLabel {
                 display: none;
@@ -241,7 +241,7 @@ div.leftNavTooltip {
         flex: 0 1 auto;
         bottom: 0;
 
-        a.globalActionLink, .dropup {
+        .globalActionLink, .dropup {
             width: 100%;
             line-height: 25px;
         }
@@ -298,7 +298,7 @@ div.leftNavTooltip {
         list-style-image: initial;
     }
 
-    ul.globalActionsList li {
+    ul.globalActionsList>li {
         height:auto;
     }
     ul.topLinks, ul.tablesList, ul.appsList, ul.globalActionsList {
@@ -387,19 +387,17 @@ div.leftNavTooltip {
         > li {
             flex: 1 0 auto;
             border-right: 1px solid $left-nav-horizontal-icon-border-color;
-            > a.leftNavLink, a.globalActionLink {
+            > a.leftNavLink, .globalActionLink {
                 padding: 5px 0;
                 text-align: center;
                 line-height: 20px;
-
+                border-radius:0;
+                border:0;
+                background-color:inherit;
                 .qbIcon, .navLabel, .dropup {
                     display: block;
                     width: 100%;
                 }
-            }
-            /* force dropdown menu to left when global actions are in left nav */
-            &.withDropdown {
-                order:-1;
             }
         }
     }
