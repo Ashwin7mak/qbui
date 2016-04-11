@@ -1,6 +1,6 @@
 import * as actions from '../../src/constants/actions';
 import FacetSelections from '../components/facet/facetSelections';
-
+import ReportUtils from '../utils/reportUtils';
 import Fluxxor from 'fluxxor';
 import Logger from '../utils/logger';
 
@@ -233,9 +233,9 @@ let reportModel = {
     setGroupFids: function(groupFids) {
         this.model.groupFids = groupFids;
     },
-    setSelectedSortFids: function(sortFids) {
-        if (sortFids !== this.model.sortFids) {
-            this.model.selectedSortFids = sortFids.split(".");
+    setSelectedSortFids: function(sortList) {
+        if (sortList !== this.model.sortFids) {
+            this.model.selectedSortFids = ReportUtils.getSortFids(sortList);
         }
     }
 };
@@ -303,7 +303,7 @@ let ReportDataStore = Fluxxor.createStore({
         this.selections = payload.filter.selections;
         this.facetExpression = payload.filter.facet;
         this.searchStringForFiltering =  payload.filter.search;
-        this.reportModel.setSelectedSortFids(payload.sortFids);
+        this.reportModel.setSelectedSortFids(payload.sortList);
         this.emit('change');
     },
 

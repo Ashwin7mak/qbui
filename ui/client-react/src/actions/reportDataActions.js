@@ -8,6 +8,7 @@ import RecordService from '../services/recordService';
 import Logger from '../utils/logger';
 import Promise from 'bluebird';
 import QueryUtils from '../utils/queryUtils';
+import ReportUtils from '../utils/reportUtils';
 
 let logger = new Logger();
 
@@ -118,8 +119,7 @@ let reportDataActions = {
 
         //  Build list of fids that is sent to the server to fulfill report sorting requirements
         function getReportSortFids(reportMetaData) {
-            let fids = [];
-
+            //TODO: Replace this with reportutils. Not sure why we are doing this.
             if (reportMetaData.data.sortList) {
                 reportMetaData.data.sortList.forEach(function(sort) {
                     if (sort) {
@@ -144,7 +144,7 @@ let reportDataActions = {
                 if (overrideQueryParams && overrideQueryParams[query.COLUMNS_PARAM]) {
                     queryParams[query.COLUMNS_PARAM] = overrideQueryParams[query.COLUMNS_PARAM];
                 } else {
-                    queryParams[query.COLUMNS_PARAM] = reportMetaData.data.fids ? reportMetaData.data.fids.join('.') : '';
+                    queryParams[query.COLUMNS_PARAM] = ReportUtils.getSortListString(reportMetaData.data.fids);
                 }
                 if (overrideQueryParams && overrideQueryParams[query.SORT_LIST_PARAM]) {
                     queryParams[query.SORT_LIST_PARAM] = overrideQueryParams[query.SORT_LIST_PARAM];
@@ -184,8 +184,8 @@ let reportDataActions = {
         return new Promise(function(resolve, reject) {
 
             if (appId && tblId && rptId) {
-                let sortFidsParam = overrideQueryParams ? overrideQueryParams[query.SORT_LIST_PARAM] : "";
-                this.dispatch(actions.LOAD_RECORDS, {appId, tblId, rptId, filter, sortFids: sortFidsParam});
+                let sortListParam = overrideQueryParams ? overrideQueryParams[query.SORT_LIST_PARAM] : "";
+                this.dispatch(actions.LOAD_RECORDS, {appId, tblId, rptId, filter, sortList: sortListParam});
 
                 let reportService = new ReportService();
                 let recordService = new RecordService();

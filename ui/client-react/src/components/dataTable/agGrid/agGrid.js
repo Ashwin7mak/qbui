@@ -10,6 +10,8 @@ import _ from 'lodash';
 import Loader  from 'react-loader';
 import Fluxxor from 'fluxxor';
 import * as query from '../../../constants/query';
+import ReportUtils from '../../../utils/reportUtils';
+
 let FluxMixin = Fluxxor.FluxMixin(React);
 
 import '../../../../../node_modules/ag-grid/dist/styles/ag-grid.css';
@@ -104,13 +106,9 @@ let AGGrid = React.createClass({
         // for on-the-fly sort selection, this selection will result in removal of old sort order
         // BUT since out grouped fields are also sorted we still need to keep those in the sort list.
         let sortFid = asc ? column.id.toString() : "-" + column.id.toString();
-        if (this.props.groupFids && this.props.groupFids.length > 0) {
-            let groupFids = this.props.groupFids.join(".");
-            queryParams[query.SORT_LIST_PARAM] = groupFids + ".";
-            queryParams[query.SORT_LIST_PARAM] += sortFid;
-        } else {
-            queryParams[query.SORT_LIST_PARAM] = sortFid;
-        }
+
+        let sortList = ReportUtils.getSortListString(this.props.groupFids);
+        queryParams[query.SORT_LIST_PARAM] = ReportUtils.appendSortFidToList(sortList, sortFid);
 
         flux.actions.getFilteredRecords(this.props.appId,
             this.props.tblId,
@@ -121,11 +119,10 @@ let AGGrid = React.createClass({
 
         let queryParams = {};
         //for on-the-fly grouping, forget the previous group and go with the selection but add the previous sort fids.
-        let sortFid = (asc ? column.id.toString() : "-" + column.id.toString()) + ":V";
-        if (this.props.sortFids && this.props.sortFids.length > 0) {
-            sortFid += this.props.sortFids.join(".");
-        }
-        queryParams[query.SORT_LIST_PARAM] = sortFid;
+        //TODO: how to pass back grouping info?
+        let sortFid = (asc ? column.id.toString() : "-" + column.id.toString());
+        let sortList = ReportUtils.getSortListString(this.props.groupFids);
+        queryParams[query.SORT_LIST_PARAM] = ReportUtils.prependSortFidToList(sortList, sortFid);
 
         flux.actions.getFilteredRecords(this.props.appId,
             this.props.tblId,
