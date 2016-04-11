@@ -120,6 +120,10 @@ let ReportContent = React.createClass({
                                     groupLevel={this.props.reportData.data ? this.props.reportData.data.groupLevel : 0}
                                     groupFids={this.props.reportData.data ? this.props.reportData.data.groupFids : []}
                                     sortFids={this.props.reportData.data ? this.props.reportData.data.sortFids : []}
+                                    filter={{selections: this.props.reportData.selections,
+                                        facet: this.props.reportData.facetExpression,
+                                        search: this.props.reportData.searchStringForFiltering}}
+                                    selectedSortFids={this.props.reportData.data ? this.props.reportData.data.selectedSortFids : []}
                             ></AGGrid> :
                             <GriddleTable reportData={this.props.reportData}
                                     columnMetadata={columnsDef}

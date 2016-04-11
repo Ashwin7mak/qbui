@@ -19,7 +19,8 @@ let reportModel = {
         records: null,
         recordsCount: null,
         sortFids: [],         //TODO: QBSE-19937 this should come from report meta data.
-        groupFids: null
+        groupFids: [],
+        selectedSortFids: []
     },
     /**
      * Given the field list format the columnDefinition as needed by data grid.
@@ -185,6 +186,7 @@ let reportModel = {
     setMetaData: function(reportMetaData) {
         this.model.name = reportMetaData.name;
         this.model.hasGrouping = reportMetaData.hasGrouping;
+        this.model.selectedSortFids = reportMetaData.sortList;
         //TODO: Add other sorting/grouping info needed by client
     },
     /**
@@ -230,6 +232,11 @@ let reportModel = {
     },
     setGroupFids: function(groupFids) {
         this.model.groupFids = groupFids;
+    },
+    setSelectedSortFids: function(sortFids) {
+        if (sortFids !== this.model.sortFids) {
+            this.model.selectedSortFids = sortFids.split(".");
+        }
     }
 };
 
@@ -242,6 +249,7 @@ let ReportDataStore = Fluxxor.createStore({
         this.error = false;
         this.nonFacetClicksEnabled = true;
         this.searchStringForFiltering = '' ;
+        this.facetExpression = {};
         this.selections  = new FacetSelections();
 
         this.bindActions(
@@ -295,7 +303,7 @@ let ReportDataStore = Fluxxor.createStore({
         this.selections = payload.filter.selections;
         this.facetExpression = payload.filter.facet;
         this.searchStringForFiltering =  payload.filter.search;
-
+        this.reportModel.setSelectedSortFids(payload.sortFids);
         this.emit('change');
     },
 
@@ -362,6 +370,7 @@ let ReportDataStore = Fluxxor.createStore({
             rptId: this.rptId,
             searchStringForFiltering: this.searchStringForFiltering,
             selections: this.selections,
+            facetExpression: this.facetExpression,
             nonFacetClicksEnabled : this.nonFacetClicksEnabled
         };
     }

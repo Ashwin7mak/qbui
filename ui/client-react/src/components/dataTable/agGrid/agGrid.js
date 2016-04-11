@@ -9,6 +9,7 @@ import RecordActions from '../../actions/recordActions';
 import _ from 'lodash';
 import Loader  from 'react-loader';
 import Fluxxor from 'fluxxor';
+import * as query from '../../../constants/query';
 let FluxMixin = Fluxxor.FluxMixin(React);
 
 import '../../../../../node_modules/ag-grid/dist/styles/ag-grid.css';
@@ -96,14 +97,54 @@ let AGGrid = React.createClass({
         default: return "High to low";
         }
     },
+    sortReport(column, asc) {
+        let flux = this.getFlux();
 
+        let queryParams = {};
+        // for on-the-fly sort selection, this selection will result in removal of old sort order
+        // BUT since out grouped fields are also sorted we still need to keep those in the sort list.
+        let sortFid = asc ? column.id.toString() : "-" + column.id.toString();
+        if (this.props.groupFids && this.props.groupFids.length > 0) {
+            let groupFids = this.props.groupFids.join(".");
+            queryParams[query.SORT_LIST_PARAM] = groupFids + ".";
+            queryParams[query.SORT_LIST_PARAM] += sortFid;
+        } else {
+            queryParams[query.SORT_LIST_PARAM] = sortFid;
+        }
+
+        flux.actions.getFilteredRecords(this.props.appId,
+            this.props.tblId,
+            this.props.rptId, true, this.props.filter, queryParams);
+    },
+    groupReport(column, asc) {
+        let flux = this.getFlux();
+
+        let queryParams = {};
+        //for on-the-fly grouping, forget the previous group and go with the selection but add the previous sort fids.
+        let sortFid = (asc ? column.id.toString() : "-" + column.id.toString()) + ":V";
+        if (this.props.sortFids && this.props.sortFids.length > 0) {
+            sortFid += this.props.sortFids.join(".");
+        }
+        queryParams[query.SORT_LIST_PARAM] = sortFid;
+
+        flux.actions.getFilteredRecords(this.props.appId,
+            this.props.tblId,
+            this.props.rptId, true, this.props.filter, queryParams);
+    },
     getMainMenuItems(params) {
+        let isSortedAsc = true;
+        let isFieldSorted = _.find(this.props.selectedSortFids, (fid) => {
+            if (Math.abs(fid) === params.column.colDef.id) {
+                isSortedAsc = fid > 0;
+                return true;
+            }
+        });
         let menuItems = [
-            {"name": "Sort " + this.getSortAscText(params.column.colDef), "icon": gridIcons.check},
-            {"name": "Sort " + this.getSortDescText(params.column.colDef)}];
+            {"name": "Sort " + this.getSortAscText(params.column.colDef), "icon": isFieldSorted && isSortedAsc ? gridIcons.check : "", action: () => this.sortReport(params.column.colDef, true)},
+            {"name": "Sort " + this.getSortDescText(params.column.colDef), "icon": isFieldSorted && !isSortedAsc ? gridIcons.check : "", action: () => this.sortReport(params.column.colDef, false)}];
         menuItems.push("separator");
-        menuItems.push({"name": "Group " + this.getSortAscText(params.column.colDef)},
-            {"name": "Group " + this.getSortDescText(params.column.colDef)});
+        menuItems.push({"name": "Group " + this.getSortAscText(params.column.colDef), action: () => this.groupReport(params.column.colDef, true)},
+            {"name": "Group " + this.getSortDescText(params.column.colDef), action: () => this.groupReport(params.column.colDef)});
         menuItems.push("separator");
         menuItems.push({"name": "Add column before"},
             {"name": "Add column after"},

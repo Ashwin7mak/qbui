@@ -184,7 +184,8 @@ let reportDataActions = {
         return new Promise(function(resolve, reject) {
 
             if (appId && tblId && rptId) {
-                this.dispatch(actions.LOAD_RECORDS, {appId, tblId, rptId, filter});
+                let sortFidsParam = overrideQueryParams ? overrideQueryParams[query.SORT_LIST_PARAM] : "";
+                this.dispatch(actions.LOAD_RECORDS, {appId, tblId, rptId, filter, sortFids: sortFidsParam});
 
                 let reportService = new ReportService();
                 let recordService = new RecordService();
@@ -197,7 +198,7 @@ let reportDataActions = {
                 // The filter parameter may contain a searchExpression and facetExpression
                 let searchExpression = filter ? filter.search : '';
                 let facetExpression = filter ? filter.facet : '';
-                if (facetExpression !== '') {
+                if (facetExpression !== '' && facetExpression.length) {
                     promises.push(reportService.parseFacetExpression(facetExpression));
                 }
 
@@ -208,38 +209,38 @@ let reportDataActions = {
                         //  Get the filtered records
                         recordService.getRecords(appId, tblId, format, queryParams).then(
                             function(recordResponse) {
-                                logger.debug('Filter Report Records service call successful');
+                                logger.debug('Get Filtered Records- Records service call successful');
                                 var model = reportModel.set(null, recordResponse);
                                 this.dispatch(actions.LOAD_RECORDS_SUCCESS, model);
                                 resolve();
                             }.bind(this),
                             function(error) {
-                                logger.error('Filter Report Records service call error:', JSON.stringify(error));
+                                logger.error('Get Filtered Records- Records service call error:', JSON.stringify(error));
                                 this.dispatch(actions.LOAD_RECORDS_FAILED, {error: error});
                                 reject();
                             }.bind(this)
                         ).catch(
                             function(ex) {
-                                logger.error('Filter Report Records service call exception:', ex);
+                                logger.error('Get Filtered Records- Records service call exception:', ex);
                                 this.dispatch(actions.LOAD_RECORDS_FAILED, {error: ex});
                                 reject();
                             }.bind(this)
                         );
                     }.bind(this),
                     function(error) {
-                        logger.error('Filter Report service call error:', error);
+                        logger.error('Get Filtered Records- service call error:', error);
                         this.dispatch(actions.LOAD_RECORDS_FAILED, {error: error});
                         reject();
                     }.bind(this)
                 ).catch(
                     function(ex) {
-                        logger.error('Filter Report service calls exception:', ex);
+                        logger.error('Get Filtered Records- service calls exception:', ex);
                         this.dispatch(actions.LOAD_RECORDS_FAILED, {exception: ex});
                         reject();
                     }.bind(this)
                 );
             } else {
-                var errMessage = 'Missing one or more required input parameters to reportDataActions.filterReport. AppId:' +
+                var errMessage = 'Missing one or more required input parameters to reportDataActions.getFilteredRecords. AppId:' +
                     appId + '; TblId:' + tblId + '; RptId:' + rptId;
                 logger.error(errMessage);
                 this.dispatch(actions.LOAD_RECORDS_FAILED, {error: errMessage});
