@@ -33,15 +33,6 @@
                 // Set your global objects to use in the test functions
                 app = appAndRecords[0];
                 recordList = appAndRecords[1];
-                // Get the appropriate fields out of the second table
-                var nonBuiltInFields = e2eBase.tableService.getNonBuiltInFields(app.tables[1]);
-                // Generate the record JSON objects
-                var generatedRecords = e2eBase.recordService.generateRecords(nonBuiltInFields, 10);
-                // Via the API create some records
-                return e2eBase.recordService.addRecords(app, app.tables[1], generatedRecords);
-            }).then(function() {
-                //Create a new report
-                return e2eBase.reportService.createReport(app.id, app.tables[1].id);
             }).then(function() {
                 // Get a session ticket for that subdomain and realmId (stores it in the browser)
                 realmName = e2eBase.recordBase.apiBase.realm.subdomain;
@@ -54,21 +45,21 @@
                 // Wait for the leftNav to load
                 return reportServicePage.waitForElement(reportServicePage.appsListDivEl).then(function() {
                     // Select the app
-                    return reportServicePage.appLinksElList.get(0).click();
-                });
-            }).then(function() {
-                return reportServicePage.waitForElement(reportServicePage.tablesListDivEl).then(function() {
-                    // Select the table
-                    return reportServicePage.tableLinksElList.get(3).click();
-                });
-            }).then(function() {
-                // Open the reports list
-                reportServicePage.reportHamburgersElList.get(0).click();
-                // Wait for the report list to load
-                reportServicePage.waitForElement(reportServicePage.reportGroupsDivEl).then(function() {
-                    // Find and select the report
-                    reportServicePage.selectReport('My Reports', 'Test Report');
-                    done();
+                    reportServicePage.appLinksElList.get(0).click();
+                    // Open the reports list
+                    reportServicePage.waitForElement(reportServicePage.tablesListDivEl).then(function() {
+                        reportServicePage.reportHamburgersElList.get(0).click();
+                    });
+                    // Wait for the report list to load
+                    reportServicePage.waitForElement(reportServicePage.reportGroupsDivEl).then(function() {
+                        // Find and select the report
+                        reportServicePage.selectReport('My Reports', 'Test Report');
+                    });
+                    // Make sure the table report has loaded
+                    reportServicePage.waitForElement(reportServicePage.reportContainerEl).then(function() {
+                        //Done callback to let Jasmine know we are done with our promise chain
+                        done();
+                    });
                 });
             }).catch(function(error) {
                 // Global catch that will grab any errors from chain above

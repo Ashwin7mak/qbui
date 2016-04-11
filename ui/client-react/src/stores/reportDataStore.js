@@ -6,11 +6,228 @@ import Logger from '../utils/logger';
 
 let logger = new Logger();
 
+let reportModel = {
+    model: {
+        columns: null,
+        facets: null,
+        filteredRecords: null,
+        filteredRecordsCount: null,
+        groupingFields: null,   //TODO: QBSE-19937 this should come from report meta data.
+        groupLevel: 0,          //TODO: QBSE-19937 this should come from report meta data.
+        hasGrouping: false,     //TODO: QBSE-19937 this should come from report meta data.
+        name: null,
+        records: null,
+        recordsCount: null
+    },
+    /**
+     * Given the field list format the columnDefinition as needed by data grid.
+     * @param fields
+     * @param hasGrouping
+     * @returns {Array}
+     */
+    getReportColumns(fields, hasGrouping) {
+        let columns = [];
+        this.findTempGroupingFields(fields);
+        let groupingFields = this.model.groupingFields;
+
+        if (fields) {
+            fields.forEach(function(field, index) {
+                //skip showing grouped fields on report
+                let isFieldGrouped = false;
+                if (hasGrouping) {
+                    isFieldGrouped = groupingFields.find((groupingField) => {
+                        return field.name === groupingField;
+                    });
+                }
+                if (!isFieldGrouped) {
+                    let column = {};
+                    column.order = index;
+                    column.id = field.id;
+                    column.headerName = field.name;     //for ag-grid
+                    column.field = field.name;          //for ag-grid
+                    column.columnName = field.name;     //for griddle
+                    column.displayName = field.name;    //for griddle
+                    column.fieldType = field.type;
+                    column.builtIn = field.builtIn;
+
+                    //  client side attributes..
+                    column.datatypeAttributes = field.datatypeAttributes;
+                    columns.push(column);
+                }
+            });
+        }
+        return columns;
+    },
+    // Temporary helper for finding grouping fields for fake grouped data
+    findTempGroupingFields(fields) {
+        let groupingFields = [];
+        fields.forEach((field) => {
+            if (field.datatypeAttributes.type === "TEXT" && groupingFields.length < 2) {
+                groupingFields.push(field.name);
+            }
+            if (field.datatypeAttributes.type === "RATING" && groupingFields.length < 2) {
+                groupingFields.push(field.name);
+            }
+        });
+        this.setGroupingFields(groupingFields);
+        this.setGroupingLevel(groupingFields.length);
+        //return groupingFields;
+    },
+    // Temporary helper for creating fake grouped data
+    createTempGroupedData(reportData, fields) {
+        this.findTempGroupingFields(fields);
+        let groupingFields = this.model.groupingFields;
+        let groupedData = _.groupBy(reportData, function(record) {
+            return record[groupingFields[0]];
+        });
+        let newData = [];
+
+        function groupByPredicate(rec) {
+            return rec[groupingFields[1]];
+        }
+        for (let group in groupedData) {
+            let children = [];
+            if (groupingFields[1]) {
+                let subgroupedData = _.groupBy(groupedData[group], groupByPredicate);
+                for (let subgroup in subgroupedData) {
+                    children.push({group: subgroup, children: subgroupedData[subgroup]});
+                }
+            } else {
+                children = groupedData[group];
+            }
+            newData.push({group: group, children: children});
+        }
+        return newData;
+    },
+    /**
+     * Using fields and records format the report's data.
+     * TODO: hasGrouping is temporary here until node implementation is done.
+     * @param fields
+     * @param records
+     * @param hasGrouping
+     * @returns {*}
+     */
+    getReportData(fields, records, hasGrouping) {
+        let reportData = [];
+        let map = new Map();
+
+        if (fields && records) {
+            fields.forEach((field) => {
+                map.set(field.id, field);
+            });
+
+            records.forEach((record) => {
+                let columns = {};
+                record.forEach((column) => {
+                    let fld = map.get(column.id);
+                    columns[fld.name] = column.display;
+                });
+                columns.actions = record.id;
+                reportData.push(columns);
+            });
+        }
+
+        if (hasGrouping) {
+            //QBSE-19937: fake group data for now. find a text and a numeric field and group data on that
+            return this.createTempGroupedData(reportData, fields);
+        }
+        return reportData;
+    },
+    /**
+     * Check if we have facets at all or any errors returned by server.
+     * @param facets
+     * @returns {*}
+     */
+    checkForFacetErrors(facets) {
+        if (facets) {
+            //check for error message returned
+            //i.e facets : [{id: null, errorMessage: "unknownError"}]
+            if (facets.length > 0) {
+                if (facets[0].id === null) {
+                    //log error
+                    let msg = facets[0].errorMessage;
+                    logger.error(`error response from server request : ${msg} getting facet information for app:${this.appId} table:${this.tblId} report:${this.rptId} `);
+                    //no facets
+                    return [];
+                }
+                //else good id data
+            } else {
+                //empty facet data ok there are no filters for this report
+            }
+            return facets;
+        } else {
+            //log error
+            logger.error(`error got no facet property returned for app:${this.appId} table:${this.tblId} report:${this.rptId} `);
+            return [];
+        }
+    },
+    /**
+     * Returns the model object
+     * @returns {reportModel.model|{columns, facets, filteredRecords, filteredRecordsCount, groupingFields, groupLevel, hasGrouping, name, records, recordsCount}}
+     */
+    get: function() {
+        return this.model;
+    },
+    getRecords: function() {
+        return this.model.records;
+    },
+    /**
+     * Set everything related to report's meta data that's needed by components in state
+     * @param reportMetaData
+     */
+    setMetaData: function(reportMetaData) {
+        this.model.name = reportMetaData.name;
+        this.model.hasGrouping = reportMetaData.hasGrouping;
+        //TODO: Add other sorting/grouping info needed by client
+    },
+    /**
+     * Set all records related state
+     * @param recordData
+     */
+    setRecordData: function(recordData) {
+        this.model.columns = this.getReportColumns(recordData.fields, this.model.hasGrouping);
+        this.model.records = this.getReportData(recordData.fields, recordData.records, this.model.hasGrouping);
+        this.model.recordsCount = recordData.records.length;
+        this.model.filteredRecords = this.model.records;
+        this.model.filteredRecordsCount = recordData.records.length;
+    },
+    /**
+     * Set just the filteredRecords. No change to fields. This has to be client side
+     * TODO: Is this being used anymore?
+     * @param records
+     */
+    setFilteredRecords: function(records) {
+        this.model.filteredRecords = records;
+        this.model.filteredRecordsCount = records.length;
+    },
+    /**
+     * Update the filtered Records from response.
+     * @param recordData
+     */
+    updateFilteredRecords: function(recordData) {
+        this.model.filteredRecords = this.getReportData(recordData.fields, recordData.records, this.model.hasGrouping);
+        this.model.filteredRecordsCount = recordData.records.length;
+    },
+    /**
+     * Set facets data from response
+     * @param recordData
+     */
+    setFacetData: function(recordData) {
+        this.model.facets = this.checkForFacetErrors(recordData.facets);
+    },
+    setGroupingLevel: function(groupingLevel) {
+        this.model.groupLevel = groupingLevel;
+    },
+    setGroupingFields: function(groupingFields) {
+        this.model.groupingFields = groupingFields;
+    }
+};
+
 
 let ReportDataStore = Fluxxor.createStore({
 
     initialize() {
-        this.data = {};
+        this.reportModel = reportModel;
         this.loading = false;
         this.error = false;
         this.nonFacetClicksEnabled = true;
@@ -48,48 +265,14 @@ let ReportDataStore = Fluxxor.createStore({
         this.emit('change');
     },
 
-    checkForFacetErrors(reportData) {
-        if (reportData.data.facets) {
-            let facets = reportData.data.facets;
-            //check for error message returned
-            //i.e facets : [{id: null, errorMessage: "unknownError"}]
-            if (facets.length > 0) {
-                if (facets[0].id === null) {
-                    //log error
-                    let msg = facets[0].errorMessage;
-                    logger.error(`error response from server request : ${msg} getting facet information for app:${this.appId} table:${this.tblId} report:${this.rptId} `);
-                    //no facets
-                    reportData.data.facets = [];
-                }
-                //else good id data
-            } else {
-                //empty facet data ok there are no filters for this report
-            }
-        } else {
-            //log error
-            logger.error(`error got no facet property returned for app:${this.appId} table:${this.tblId} report:${this.rptId} `);
-            reportData.data.facets = [];
-        }
-    },
-
-    onLoadReportSuccess(reportData) {
+    onLoadReportSuccess(response) {
         this.loading = false;
         this.error = false;
 
-        this.data = {};
-        let records = this.getReportData(reportData.data, reportData.hasGrouping);
-
-        this.checkForFacetErrors(reportData);
-        _.extend(this.data, {
-            name: reportData.name,
-            hasGrouping: reportData.hasGrouping, //TODO: QBSE-19937 this should come from report meta data.
-            columns: this.getReportColumns(reportData.data.fields, reportData.hasGrouping),
-            records: records,
-            facets: reportData.data.facets,
-            filteredRecords: records,
-            recordsCount: reportData.data.records.length,
-            filteredRecordsCount: reportData.data.records.length
-        });
+        this.reportModel = reportModel;
+        reportModel.setMetaData(response.metaData);
+        reportModel.setRecordData(response.recordData);
+        reportModel.setFacetData(response.recordData);
         this.emit('change');
     },
 
@@ -111,12 +294,10 @@ let ReportDataStore = Fluxxor.createStore({
         this.emit('change');
     },
 
-    onLoadRecordsSuccess(records) {
+    onLoadRecordsSuccess(response) {
         this.loading = false;
         this.error = false;
-        this.data.filteredRecords = this.getReportData(records, records.hasGrouping);
-        this.data.hasGrouping = records.hasGrouping;
-        this.data.filteredRecordsCount = records.records ? records.records.length : null;
+        this.reportModel.updateFilteredRecords(response.recordData);
         this.emit('change');
     },
 
@@ -129,10 +310,10 @@ let ReportDataStore = Fluxxor.createStore({
     onSearchFor(text) {
         // placeholder which will be obsolete
         // when other searches from global are supported
-        this.data.filteredRecords = [];
-
-        if (this.data.records) {
-            this.data.records.forEach((record) => {
+        let filteredRecords = [];
+        let records = this.reportModel.getRecords();
+        if (records) {
+            records.forEach((record) => {
 
                 let match = false;
                 let lText = text.toLowerCase();
@@ -142,11 +323,12 @@ let ReportDataStore = Fluxxor.createStore({
                     }
                 });
                 if (match) {
-                    this.data.filteredRecords.push(record);
+                    filteredRecords.push(record);
                 }
 
             });
         }
+        this.reportModel.setFilteredRecords(filteredRecords);
         this.emit('change');
     },
 
@@ -160,117 +342,17 @@ let ReportDataStore = Fluxxor.createStore({
         this.emit('change');
     },
 
-    getReportColumns(fields, hasGrouping) {
-        let columns = [];
-        let groupingFields = this.data.groupingFields;
-
-        if (fields) {
-            fields.forEach(function(field, index) {
-                //skip showing grouped fields on report
-                let isFieldGrouped = false;
-                if (hasGrouping) {
-                    isFieldGrouped = groupingFields.find((groupingField) => {
-                        return field.name === groupingField;
-                    });
-                }
-                if (!isFieldGrouped) {
-                    let column = {};
-                    column.order = index;
-                    column.id = field.id;
-                    column.headerName = field.name;     //for ag-grid
-                    column.field = field.name;          //for ag-grid
-                    column.columnName = field.name;     //for griddle
-                    column.displayName = field.name;    //for griddle
-                    column.fieldType = field.type;
-                    column.builtIn = field.builtIn;
-
-                    //  client side attributes..
-                    column.datatypeAttributes = field.datatypeAttributes;
-                    columns.push(column);
-                }
-            });
-        }
-        return columns;
-    },
-    findTempGroupingFields(fields) {
-        let groupingFields = [];
-        fields.forEach((field) => {
-            if (field.datatypeAttributes.type === "TEXT" && groupingFields.length < 2) {
-                groupingFields.push(field.name);
-            }
-            if (field.datatypeAttributes.type === "RATING" && groupingFields.length < 2) {
-                groupingFields.push(field.name);
-            }
-        });
-        this.data.groupingFields = groupingFields;
-        this.data.groupLevel = groupingFields.length;
-        return groupingFields;
-    },
-    createTempGroupedData(reportData, fields) {
-        let groupingFields = this.findTempGroupingFields(fields);
-        let groupedData = _.groupBy(reportData, function(record) {
-            return record[groupingFields[0]];
-        });
-        let newData = [];
-
-        function groupByPredicate(rec) {
-            return rec[groupingFields[1]];
-        }
-        for (let group in groupedData) {
-            let children = [];
-            if (groupingFields[1]) {
-                let subgroupedData = _.groupBy(groupedData[group], groupByPredicate);
-                for (let subgroup in subgroupedData) {
-                    children.push({group: subgroup, children: subgroupedData[subgroup]});
-                }
-            } else {
-                children = groupedData[group];
-            }
-            newData.push({group: group, children: children});
-        }
-        return newData;
-    },
-
-    getReportData(data, hasGrouping) {
-        let fields = data.fields;
-        let records = data.records;
-        let reportData = [];
-        let map = new Map();
-
-        if (fields && records) {
-            fields.forEach((field) => {
-                map.set(field.id, field);
-            });
-
-            records.forEach((record) => {
-                let columns = {};
-                record.forEach((column) => {
-                    let fld = map.get(column.id);
-                    columns[fld.name] = column.display;
-                });
-                columns.actions = record.id;
-                reportData.push(columns);
-            });
-        }
-
-        if (hasGrouping) {
-            //QBSE-19937: fake group data for now. find a text and a numeric field and group data on that
-            return this.createTempGroupedData(reportData, fields);
-        }
-        return reportData;
-    },
-
     getState() {
         return {
             loading: this.loading,
             error: this.error,
-            data: this.data,
+            data: this.reportModel.get(),
             appId: this.appId,
             tblId: this.tblId,
             rptId: this.rptId,
             searchStringForFiltering: this.searchStringForFiltering,
             selections: this.selections,
-            nonFacetClicksEnabled : this.nonFacetClicksEnabled,
+            nonFacetClicksEnabled : this.nonFacetClicksEnabled
         };
     }
 

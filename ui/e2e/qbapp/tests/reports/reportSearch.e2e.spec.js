@@ -37,10 +37,10 @@
                 app = appAndRecords[0];
                 recordList = appAndRecords[1];
                 // Via the API create some records
-                return e2eBase.recordService.addRecords(app, app.tables[0], testRecord);
+                return e2eBase.recordService.addRecords(app, app.tables[e2eConsts.TABLE1], testRecord);
             }).then(function() {
                 //Create a report with facets [text field and checkbox field]
-                return e2eBase.reportService.createReportWithFacets(app.id, app.tables[0].id, [6, 10]);
+                return e2eBase.reportService.createReportWithFacets(app.id, app.tables[e2eConsts.TABLE1].id, [6, 10]);
             }).then(function() {
                 // Get a session ticket for that subdomain and realmId (stores it in the browser)
                 realmName = e2eBase.recordBase.apiBase.realm.subdomain;
@@ -154,7 +154,7 @@
         searchTestCases().forEach(function(testcase) {
             it(' With Facets - ' + testcase.message, function(done) {
                 //go to report page directly
-                RequestAppsPage.get(e2eBase.getRequestReportsPageEndpoint(realmName, app.id, app.tables[0].id, '2'));
+                RequestAppsPage.get(e2eBase.getRequestReportsPageEndpoint(realmName, app.id, app.tables[e2eConsts.TABLE1].id, '2'));
                 reportServicePage.waitForElement(reportServicePage.loadedContentEl).then(function() {
                     reportServicePage.waitForElementToBeClickable(reportServicePage.reportFilterSearchBox).then(function() {
                         reportServicePage.reportFilterSearchBox.clear().sendKeys(testcase.query, protractor.Key.ENTER).then(function() {
@@ -169,7 +169,7 @@
 
             it(' Without Facets - ' + testcase.message, function(done) {
                 //go to report page directly
-                RequestAppsPage.get(e2eBase.getRequestReportsPageEndpoint(realmName, app.id, app.tables[0].id, '1'));
+                RequestAppsPage.get(e2eBase.getRequestReportsPageEndpoint(realmName, app.id, app.tables[e2eConsts.TABLE1].id, '1'));
                 reportServicePage.waitForElement(reportServicePage.loadedContentEl).then(function() {
                     reportServicePage.waitForElementToBeClickable(reportServicePage.reportFilterSearchBox).then(function() {
                         reportServicePage.reportFilterSearchBox.clear().sendKeys(testcase.query, protractor.Key.ENTER).then(function() {
@@ -187,7 +187,7 @@
             it(testBreakpoints.breakpointSize + ' breakpoint Special characters Test', function(done) {
                 e2eBase.resizeBrowser(testBreakpoints.browserWidth, e2eConsts.DEFAULT_HEIGHT).then(function() {
                     //go to report page directly
-                    RequestAppsPage.get(e2eBase.getRequestReportsPageEndpoint(realmName, app.id, app.tables[0].id, '2'));
+                    RequestAppsPage.get(e2eBase.getRequestReportsPageEndpoint(realmName, app.id, app.tables[e2eConsts.TABLE1].id, '2'));
                     reportServicePage.waitForElement(reportServicePage.griddleWrapperEl).then(function() {
                         if (testBreakpoints.breakpointSize === 'small') {
                             //verify present in DOM but not displayed

@@ -166,8 +166,9 @@ let AGGrid = React.createClass({
                                     return true;
                                 }
                             }
+                        } else if (property !== "reportHeader" && property !== "pageActions") {
+                            return true;
                         }
-                        return true;
                     }
                 }
             }

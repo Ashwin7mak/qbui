@@ -19,26 +19,25 @@ const GROUPING_ON = false;
 let reportModel = {
     //  build a report model object that is used by the front-end to render a report
     set: function(reportMeta, reportData) {
-        var obj = {};
+        var obj = {
+            metaData: {},
+            recordData: {}
+        };
 
         if (reportMeta && reportMeta.data) {
             //  make available to the client the meta data that we think is necessary
-            obj.name = reportMeta.data.name;
+            obj.metaData = reportMeta.data;
 
-            //TODO: pull this from the real report meta data
-            obj.hasGrouping = GROUPING_ON;
-            //  TODO: not sure if sortList/grouping and summary info is needed OR if needed,
-            //  TODO: that it is organized in the best way...
-            //obj.sortList = reportMeta.data.sortList;
-            //obj.summary = reportMeta.data.summary;
+            ////TODO: pull this from the real report meta data
+            obj.metaData.hasGrouping = GROUPING_ON;
+            ////  TODO: not sure if sortList/grouping and summary info is needed OR if needed,
+            ////  TODO: that it is organized in the best way...
+            ////obj.sortList = reportMeta.data.sortList;
+            ////obj.summary = reportMeta.data.summary;
         }
 
-        if (reportData) {
-            //TODO: pull this from the real report meta data
-            obj.data = reportData.data;
-            obj.data.hasGrouping = GROUPING_ON;//TODO: pull this from the real report meta data
-            //  TODO: not sure if this is how report summary information will be made available to the client
-            //obj.summary = reportData.summary;
+        if (reportData && reportData.data) {
+            obj.recordData = reportData.data;
         }
 
         return obj;
@@ -186,7 +185,7 @@ let reportDataActions = {
                             function(recordResponse) {
                                 logger.debug('Filter Report Records service call successful');
                                 var model = reportModel.set(null, recordResponse);
-                                this.dispatch(actions.LOAD_RECORDS_SUCCESS, model.data);
+                                this.dispatch(actions.LOAD_RECORDS_SUCCESS, model);
                                 resolve();
                             }.bind(this),
                             function(error) {

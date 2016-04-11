@@ -24,9 +24,11 @@ describe('Report Data Actions success -- ', () => {
         }
     };
     let response = {
-        name: responseReportData.data.name,
-        hasGrouping: false, //for now just false tests until real grouping is implemented
-        data: responseResultData.data
+        metaData: {
+            name: responseReportData.data.name,
+            hasGrouping: false, //for now just false tests until real grouping is implemented
+        },
+        recordData: responseResultData.data
     };
     let loadReportInputs = {
         appId: appId,
@@ -114,6 +116,14 @@ describe('Report Data Actions Filter Report functions -- success', () => {
             query: 'someQuery'
         }
     };
+    let responseRecordModel = {
+        metaData: {},
+        recordData: {
+            fields: [],
+            records: [],
+            query: 'someQuery'
+        }
+    };
     let loadReportInputs = {
         appId: appId,
         tblId: tblId,
@@ -172,7 +182,7 @@ describe('Report Data Actions Filter Report functions -- success', () => {
                 expect(mockRecordService.prototype.getRecords).toHaveBeenCalled();
                 expect(flux.dispatchBinder.dispatch.calls.count()).toEqual(2);
                 expect(flux.dispatchBinder.dispatch.calls.argsFor(0)).toEqual([actions.LOAD_RECORDS, filterReportInputs]);
-                expect(flux.dispatchBinder.dispatch.calls.argsFor(1)).toEqual([actions.LOAD_RECORDS_SUCCESS, responseRecordData.data]);
+                expect(flux.dispatchBinder.dispatch.calls.argsFor(1)).toEqual([actions.LOAD_RECORDS_SUCCESS, responseRecordModel]);
                 done();
             },
             () => {

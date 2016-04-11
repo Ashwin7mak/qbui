@@ -19,8 +19,8 @@
             //Timeout in seconds for Sauce Labs to wait for another command (bumped this for sleeps in tests)
             idleTimeout: '120',
             screenResolution : '1680x1050',
-            shardTestFiles: true,
-            maxInstances: 5,
+            //shardTestFiles: true,
+            //maxInstances: 5,
             maxDuration: 10800
         },
         // The sauce user and access key allow us to run our browser tests remotely on a SauceLabs VM
@@ -79,11 +79,13 @@
 
             // Lets Protractor know there is no Angular code to wait for
             browser.ignoreSynchronization = true;
+
             // Maximizes the browser window (known bug with Chrome)
             browser.driver.manage().window().maximize();
-            var SpecReporter = require('jasmine-spec-reporter');
+
             // Add jasmine spec reporter
-            jasmine.getEnv().addReporter(new SpecReporter({displayStacktrace: 'all'}));
+            var SpecReporter = require('jasmine-spec-reporter');
+            jasmine.getEnv().addReporter(new SpecReporter({displayStacktrace: 'all', displaySpecDuration: true}));
 
             // Grab the browser name to use in spec files
             browser.getCapabilities().then(function(cap) {
