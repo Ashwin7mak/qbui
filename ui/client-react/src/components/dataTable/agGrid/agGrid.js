@@ -156,7 +156,6 @@ let AGGrid = React.createClass({
                     if (!_.isEqual(this.props[property], nextProps[property])) {
                         if (property === "columns") {
                             if (this.props[property].length !== nextProps[property].length) {
-                                console.log('yes');
                                 return true;
                             }
                             let prevColumns = this.props[property];
@@ -166,7 +165,6 @@ let AGGrid = React.createClass({
                                     if (prevColumns[i].field === "actions") {
                                         return false;
                                     }
-                                    console.log('yup');
                                     return true;
                                 }
                             }
