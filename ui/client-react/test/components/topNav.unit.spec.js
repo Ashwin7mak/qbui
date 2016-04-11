@@ -32,7 +32,7 @@ describe('TopNav functions', () => {
         {msg: 'globalActions.user', link: '/user', icon: 'user'},
         {msg: 'globalActions.help', link: '/help', icon: 'help'}
     ];
-    let globalActions = (<GlobalActions actions={globalActionsData}
+    let globalActions = (<GlobalActions actions={globalActionsData} startTabIndex={0}
                            position={"top"}/>);
     let component;
 
