@@ -145,7 +145,6 @@ let AGGrid = React.createClass({
     // Since re-render is expensive the following figures out if ALL is same
     // and the only piece that has changed is the "actions" column then don't update.
     shouldComponentUpdate(nextProps, nextState) {
-        console.log('shuold');
         if (!_.isEqual(nextState, this.state)) {
             return true;
         }
