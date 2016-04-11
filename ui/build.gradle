@@ -96,7 +96,7 @@ if(System.getProperty("endpoint")) {
 // Setup Sauce Connection information for try job
 def instanceId = System.getenv("INSTANCE_ID");
 def executorId = System.getenv("EXECUTOR_NUMBER");
-def sauceURL = "https://foo."+ instanceId + "-" + executorId + ".slave.ci.quickbaserocks.com";
+def sauceURL = "https://localhost."+ instanceId + "-" + executorId + ".slave.ci.quickbaserocks.com";
 def sauceKey = System.getenv("SAUCE_KEY");
 def sauceJobName = "JENKINS_UI_E2E_" + System.getenv("BUILD_NUMBER");
 def tunnelIdentifier = "JENKINS_TUNNEL_E2E_" + System.getenv("BUILD_NUMBER");
