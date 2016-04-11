@@ -121,7 +121,9 @@
             facetIndexes.forEach(function(facetIndex) {
                 if (facetIndex >= SHOW_POPUP_LIST_LIMIT) {
                     // Click on more options link
-                    facetGroupElement.element(by.className('listMore')).click();
+                    e2ePageBase.waitForElementToBeClickable(facetGroupElement.element(by.className('listMore'))).then(function() {
+                        facetGroupElement.element(by.className('listMore')).click();
+                    });
                 }
             });
 
