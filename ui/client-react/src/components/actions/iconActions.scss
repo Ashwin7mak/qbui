@@ -12,13 +12,22 @@ $icon-action-icon-color:#fff;
         display:inline-block;
 
         .iconActionButton {
+            border:0;
+            margin-right:2px;
+            border-radius:0;
             display: inline-block;
             vertical-align: middle;
             text-align: center;
-            width: 42px;
+            width: 40px;
+            height: 40px;
             font-size: 20px;
             color: $topnav-icon-color;
+            padding:0;
+            &.dropdownToggle {
+                width: 20px;
+            }
         }
+
         .iconActionButton:hover {
             background: $nav-hover-bg;
             color: $nav-hover-fg;

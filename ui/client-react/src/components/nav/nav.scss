@@ -15,9 +15,6 @@ html, body {
     height: 100%;
     min-height: 100%;
     overflow: hidden;
-    * {
-        outline:none;
-    }
 }
 
 html body {
@@ -59,9 +56,6 @@ input.searchInput {
     font-style: italic;
 }
 
-a {
-    outline: none !important;
-}
 
 #content {
     height: 100%;
@@ -100,7 +94,6 @@ a {
 
             .navGroup.left, .navGroup.right {
                 flex: 0 0 auto;
-                line-height: $top-nav-height;
                 white-space: nowrap;
             }
             @include small-breakpoint {
@@ -128,11 +121,15 @@ a {
             .btn-group {
                 height: 40px;
                 button {
-                    font-size: 22px;
+                    width:40px;
                     color: $topnav-icon-color;
                     border-radius: 0;
+                    padding:0;
                     height: $top-nav-height;
-                    outline: none;
+                    text-align:center;
+                    &.dropdownToggle {
+                        width:20px;
+                    }
                 }
                 button:hover .hi {
                     color: #fff;
@@ -141,7 +138,6 @@ a {
 
             .iconLink {
                 color: $topnav-icon-color;
-                padding: 10px;
             }
 
 

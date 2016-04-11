@@ -92,7 +92,7 @@ const ReportRoute = React.createClass({
             {msg: 'pageActions.print', icon:'print'},
             {msg: 'pageActions.customizeReport', icon:'settings-hollow'},
         ];
-        return (<IconActions className="pageActions" actions={actions} maxButtonsBeforeMenu={maxButtonsBeforeMenu} {...this.props}/>);
+        return (<IconActions className="pageActions" actions={actions} maxButtonsBeforeMenu={maxButtonsBeforeMenu}/>);
     },
 
     getBreadcrumbs() {

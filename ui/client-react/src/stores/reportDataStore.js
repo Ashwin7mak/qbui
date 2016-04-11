@@ -78,6 +78,7 @@ let ReportDataStore = Fluxxor.createStore({
 
         this.data = {};
         let records = this.getReportData(reportData.data, reportData.hasGrouping);
+
         this.checkForFacetErrors(reportData);
         _.extend(this.data, {
             name: reportData.name,

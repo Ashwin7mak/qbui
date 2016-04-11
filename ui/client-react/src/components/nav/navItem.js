@@ -3,6 +3,7 @@ import {Tooltip, OverlayTrigger} from 'react-bootstrap';
 import {Link} from 'react-router';
 import {I18nMessage} from '../../utils/i18nMessage';
 import QBicon from '../qbIcon/qbIcon';
+import A11Utils from '../../utils/a11yUtils';
 
 let NavItem = React.createClass({
 
@@ -32,6 +33,17 @@ let NavItem = React.createClass({
         };
     },
 
+    onClick(event) {
+        if (this.props.onSelect && A11Utils.isA11yClick(event)) {
+            this.props.onSelect(event);
+        }
+    },
+    onSecondaryClick(event, id) {
+        if (this.props.secondaryOnSelect && A11Utils.isA11yClick(event)) {
+            this.props.secondaryOnSelect(id);
+        }
+    },
+
     getLinkItem(item, label) {
         let classes = "link";
         if (this.props.secondaryIcon) {
@@ -41,11 +53,14 @@ let NavItem = React.createClass({
             classes += " selected";
         }
         return (<li className={classes}>
-            <Link className="leftNavLink" to={item.link} onClick={this.props.onSelect}>
+            <Link className="leftNavLink" to={item.link} onClick={this.onClick} onKeyDown={this.onClick}>
                 <QBicon icon={item.icon}/> <span className={"leftNavLabel"}>{label}</span>
             </Link>
             { this.props.showSecondary && this.props.secondaryIcon &&
-            <a href="#" className="right" onClick={()=>this.props.secondaryOnSelect(item.id)}>
+            <a href="#"
+               onClick={(event)=> this.onSecondaryClick(event, item.id)}
+               onKeyDown={(event)=> this.onSecondaryClick(event, item.id)}
+               className="right">
                 <QBicon icon={this.props.secondaryIcon}/>
             </a> }
             {this.props.hoverComponent}
