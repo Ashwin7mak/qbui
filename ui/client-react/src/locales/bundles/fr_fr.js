@@ -106,7 +106,9 @@ export default {
                     newToOld: "Trier récent au plus ancien",
                     zToA: "Trier Z à A",
                     lowToHigh: "Trier du plus bas au plus élevé",
-                    oldToNew: "Trier le plus ancien au plus récent"
+                    oldToNew: "Trier le plus ancien au plus récent",
+                    uncheckedToChecked: "Trier décochée à vérifier",
+                    checkedToUnchecked: "Trier vérifié pour décochée"
                 },
                 group: {
                     aToZ: "Groupe A à Z",
@@ -114,7 +116,9 @@ export default {
                     newToOld: "Groupe récent au plus ancien",
                     zToA: "Groupe Z à A",
                     lowToHigh: "Groupe bas au plus haut",
-                    oldToNew: "Groupe le plus ancien au plus récent"
+                    oldToNew: "Groupe le plus ancien au plus récent",
+                    uncheckedToChecked: "Groupe décochée à vérifier",
+                    checkedToUnchecked: "Groupe cochés décochée"
                 },
                 addColumnBefore: "Ajouter une colonne avant",
                 addColumnAfter: "Ajouter colonne après",
