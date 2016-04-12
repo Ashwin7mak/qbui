@@ -56,7 +56,7 @@ Promise.onPossiblyUnhandledRejection(function(err) {
 
 let reportDataActions = {
 
-    loadReport(appId, tblId, rptId, format) {
+    loadReport(appId, tblId, rptId, format, offset, rows) {
 
         //  promise is returned in support of unit testing only
         return new Promise(function(resolve, reject) {
@@ -70,16 +70,16 @@ let reportDataActions = {
                     (reportMetaData) => {
                         var queryParams = {};
 
-                        //  Node query parameters
-                        queryParams[query.FORMAT_PARAM] = format;
                         if (reportMetaData.data) {
                             queryParams[query.GLIST_PARAM] = reportMetaData.data.sortList ? reportMetaData.data.sortList.join('.') : '';
                         } else {
                             queryParams[query.GLIST_PARAM] = '';
                         }
 
-                        queryParams[query.OFFSET_PARAM] = null;
-                        queryParams[query.NUMROWS_PARAM] = null;
+                        //  Node query parameters which are all optional and could be null/undefined
+                        queryParams[query.FORMAT_PARAM] = format;
+                        queryParams[query.OFFSET_PARAM] = offset;
+                        queryParams[query.NUMROWS_PARAM] = rows;
 
                         reportService.getReportDataAndFacets(appId, tblId, rptId, queryParams).then(
                             function(reportData) {
@@ -121,7 +121,7 @@ let reportDataActions = {
      *       facet  : expression representing all the facets selected by user so far example [{fid: fid1, values: value1, value2}, {fid: fid2, values: value3, value4}, ..]
      *       search : search string
      */
-    filterReport(appId, tblId, rptId, format, filter) {
+    filterReport(appId, tblId, rptId, format, filter, offset, rows) {
 
         //  Build list of fids that is sent to the server to fulfill report sorting requirements
         function getReportSortFids(reportMetaData) {
@@ -138,8 +138,8 @@ let reportDataActions = {
             return fids ? fids.join('.') : '';
         }
 
-        //  Build the request query parameters needed to properly filter the report request.  Information
-        //  that could be sent include fid list, sort list and query parameters
+        //  Build the request query parameters needed to properly filter the report request based on the report
+        //  meta data.  Information that could be sent include fid list, sort list, grouping and query parameters
         function buildRequestQuery(reportMetaData, facetQueryExpression, searchExpression) {
             var queryParams = {};
 
@@ -195,9 +195,10 @@ let reportDataActions = {
                     (response) => {
                         var queryParams = buildRequestQuery(response[0], response[1], searchExpression);
 
+                        //  Node query parameters which are all optional and could be null/undefined
                         queryParams[query.FORMAT_PARAM] = format;
-                        queryParams[query.OFFSET_PARAM] = null;
-                        queryParams[query.NUMROWS_PARAM] = null;
+                        queryParams[query.OFFSET_PARAM] = offset;
+                        queryParams[query.NUMROWS_PARAM] = rows;
 
                         //  Get the filtered records
                         recordService.getRecords(appId, tblId, queryParams).then(

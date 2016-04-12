@@ -191,4 +191,22 @@ describe('Report Data Actions Filter Report functions -- success', () => {
             }
         );
     });
+
+    it('test filter report action with parameters and row limit/offset', (done) => {
+        flux.actions.filterReport(appId, tblId, rptId, true, filter, 20, 10).then(
+            () => {
+                expect(mockReportService.prototype.getReport).toHaveBeenCalled();
+                expect(mockReportService.prototype.parseFacetExpression).toHaveBeenCalled();
+                expect(mockRecordService.prototype.getRecords).toHaveBeenCalled();
+                expect(flux.dispatchBinder.dispatch.calls.count()).toEqual(2);
+                expect(flux.dispatchBinder.dispatch.calls.argsFor(0)).toEqual([actions.LOAD_RECORDS, filterReportInputs]);
+                expect(flux.dispatchBinder.dispatch.calls.argsFor(1)).toEqual([actions.LOAD_RECORDS_SUCCESS, jasmine.any(Object)]);
+                done();
+            },
+            () => {
+                expect(true).toBe(false);
+                done();
+            }
+        );
+    });
 });
