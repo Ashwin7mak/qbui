@@ -53,8 +53,11 @@ class ReportUtils {
      * @returns {*}
      */
     static appendSortFidToList(sortList, sortFid) {
-        if (sortList.length) {
-            sortList += sortFidDelimiter + sortFid;
+        if (typeof sortFid === 'number') {
+            sortFid = sortFid.toString();
+        }
+        if (sortList && sortList.length) {
+            sortList += sortFid && sortFid.length ? sortFidDelimiter + sortFid : "";
         } else {
             sortList = sortFid;
         }
@@ -69,11 +72,19 @@ class ReportUtils {
      * @returns {*}
      */
     static prependSortFidToList(sortList, sortFid) {
-        let result = sortFid;
-        if (sortList.length) {
-            result += sortFidDelimiter + sortList;
+        if (typeof sortFid === 'number') {
+            sortFid = sortFid.toString();
         }
-        return result;
+        if (sortFid && sortFid.length) {
+            let result = sortFid;
+            if (sortList && sortList.length) {
+                result += sortFidDelimiter + sortList;
+            }
+            return result;
+        } else {
+            return sortList;
+        }
+
     }
 
 }

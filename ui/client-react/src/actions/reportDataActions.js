@@ -197,8 +197,8 @@ let reportDataActions = {
                 promises.push(reportService.getReport(appId, tblId, rptId));
 
                 // The filter parameter may contain a searchExpression and facetExpression
-                let searchExpression = filter ? filter.search : '';
-                let facetExpression = filter ? filter.facet : '';
+                let searchExpression = filter && filter.search ? filter.search : '';
+                let facetExpression = filter && filter.facet ? filter.facet : '';
                 if (facetExpression !== '' && facetExpression.length) {
                     promises.push(reportService.parseFacetExpression(facetExpression));
                 }

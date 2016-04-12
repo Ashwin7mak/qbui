@@ -1,6 +1,7 @@
 import Fluxxor from 'fluxxor';
 import reportDataActions from '../../src/actions/reportDataActions';
 import * as actions from '../../src/constants/actions';
+import * as query from '../../src/constants/query';
 import Promise from 'bluebird';
 
 describe('Report Data Actions success -- ', () => {
@@ -42,7 +43,8 @@ describe('Report Data Actions success -- ', () => {
         filter: {
             facet: 'abc',
             search: ''
-        }
+        },
+        sortList: '6.-7'
     };
 
     class mockReportService {
@@ -98,6 +100,8 @@ describe('Report Data Actions Filter Report functions -- success', () => {
         facet: 'abc',
         search: ''
     };
+    let columns = '1.2.3.4';
+    let sortList = '6.-7';
     let responseReportData = {
         data: {
             name: 'name',
@@ -138,7 +142,14 @@ describe('Report Data Actions Filter Report functions -- success', () => {
             facet: 'abc',
             search: ''
         },
-        sortList:''
+        sortList: ''
+    };
+    let filterReportInputsWithOverrides = {
+        appId: appId,
+        tblId: tblId,
+        rptId: rptId,
+        filter: {},
+        sortList: '6.-7'
     };
 
     class mockReportService {
@@ -175,7 +186,7 @@ describe('Report Data Actions Filter Report functions -- success', () => {
     });
 
 
-    it('test filter report action with parameters', (done) => {
+    it('test get filtered records action with parameters', (done) => {
         flux.actions.getFilteredRecords(appId, tblId, rptId, true, filter, {}).then(
             () => {
                 expect(mockReportService.prototype.getReport).toHaveBeenCalled();
@@ -183,6 +194,28 @@ describe('Report Data Actions Filter Report functions -- success', () => {
                 expect(mockRecordService.prototype.getRecords).toHaveBeenCalled();
                 expect(flux.dispatchBinder.dispatch.calls.count()).toEqual(2);
                 expect(flux.dispatchBinder.dispatch.calls.argsFor(0)).toEqual([actions.LOAD_RECORDS, filterReportInputs]);
+                expect(flux.dispatchBinder.dispatch.calls.argsFor(1)).toEqual([actions.LOAD_RECORDS_SUCCESS, responseRecordModel]);
+                done();
+            },
+            () => {
+                expect(true).toBe(false);
+                done();
+            }
+        );
+    });
+
+    it('test get filtered records action with override parameters', (done) => {
+        let overrideParams = {};
+        overrideParams[query.COLUMNS_PARAM] = columns;
+        overrideParams[query.SORT_LIST_PARAM] = sortList;
+
+        flux.actions.getFilteredRecords(appId, tblId, rptId, true, {}, overrideParams).then(
+            () => {
+                expect(mockReportService.prototype.getReport).toHaveBeenCalled();
+                overrideParams[query.QUERY_PARAM] = "";
+                expect(mockRecordService.prototype.getRecords).toHaveBeenCalledWith(appId, tblId, true, overrideParams);
+                expect(flux.dispatchBinder.dispatch.calls.count()).toEqual(2);
+                expect(flux.dispatchBinder.dispatch.calls.argsFor(0)).toEqual([actions.LOAD_RECORDS, filterReportInputsWithOverrides]);
                 expect(flux.dispatchBinder.dispatch.calls.argsFor(1)).toEqual([actions.LOAD_RECORDS_SUCCESS, responseRecordModel]);
                 done();
             },
