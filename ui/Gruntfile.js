@@ -704,11 +704,7 @@ module.exports = function(grunt) {
             return grunt.task.run([
                 'clean:server',
                 'build',
-                'shell:webpack',
-                'env:e2e',
-                'express:test',
-                'wait',
-                'express-keepalive'
+                'env:e2e'
             ]);
         }
         grunt.task.run([
