@@ -6,6 +6,7 @@ import {I18nMessage} from '../../../utils/i18nMessage';
 import ReactCSSTransitionGroup from 'react/lib/ReactCSSTransitionGroup';
 import ReportActions from '../../actions/reportActions';
 import RecordActions from '../../actions/recordActions';
+import Locale from '../../../locales/locales';
 import _ from 'lodash';
 import Loader  from 'react-loader';
 import Fluxxor from 'fluxxor';
@@ -81,23 +82,27 @@ let AGGrid = React.createClass({
         this.columnApi = params.columnApi;
     },
 
-    getSortAscText(column) {
+    getSortAscText(column, prependText) {
+        let message = " ";
         switch (column.datatypeAttributes.type) {
-        case "TEXT": return "A to Z";
-        case "DATE": return "Newest to oldest";
+        case "TEXT": message =  "aToZ"; break;
+        case "DATE": message =  "newToOld"; break;
         case "NUMERIC":
         case "RATING":
-        default: return "Low to high";
+        default: message = "lowToHigh"; break;
         }
+        return Locale.getMessage("report.menu." + prependText + "." + message);
     },
-    getSortDescText(column) {
+    getSortDescText(column, prependText) {
+        let message = " ";
         switch (column.datatypeAttributes.type) {
-        case "TEXT": return "Z to A";
-        case "DATE": return "Oldest to newest";
+        case "TEXT": message =  "zToA"; break;
+        case "DATE": message =  "oldtoNew"; break;
         case "NUMERIC":
         case "RATING":
-        default: return "High to low";
+        default: message =  "highToLow"; break;
         }
+        return Locale.getMessage("report.menu." + prependText + "." + message);
     },
     sortReport(column, asc) {
         let flux = this.getFlux();
@@ -137,11 +142,11 @@ let AGGrid = React.createClass({
             }
         });
         let menuItems = [
-            {"name": "Sort " + this.getSortAscText(params.column.colDef), "icon": isFieldSorted && isSortedAsc ? gridIcons.check : "", action: () => this.sortReport(params.column.colDef, true)},
-            {"name": "Sort " + this.getSortDescText(params.column.colDef), "icon": isFieldSorted && !isSortedAsc ? gridIcons.check : "", action: () => this.sortReport(params.column.colDef, false)}];
+            {"name": this.getSortAscText(params.column.colDef, "sort"), "icon": isFieldSorted && isSortedAsc ? gridIcons.check : "", action: () => this.sortReport(params.column.colDef, true)},
+            {"name": this.getSortDescText(params.column.colDef, "sort"), "icon": isFieldSorted && !isSortedAsc ? gridIcons.check : "", action: () => this.sortReport(params.column.colDef, false)}];
         menuItems.push("separator");
-        menuItems.push({"name": "Group " + this.getSortAscText(params.column.colDef), action: () => this.groupReport(params.column.colDef, true)},
-            {"name": "Group " + this.getSortDescText(params.column.colDef), action: () => this.groupReport(params.column.colDef)});
+        menuItems.push({"name": this.getSortAscText(params.column.colDef, "group"), action: () => this.groupReport(params.column.colDef, true)},
+            {"name": this.getSortDescText(params.column.colDef, "group"), action: () => this.groupReport(params.column.colDef)});
         menuItems.push("separator");
         menuItems.push({"name": "Add column before"},
             {"name": "Add column after"},

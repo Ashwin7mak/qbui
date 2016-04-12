@@ -100,6 +100,30 @@ export default {
             organizeReports: "Organisieren",
             recordCount : "{recordCount} {nameForRecords} ",
             searchPlaceHolder:  "Suchen Sie diese {nameForRecords} ...",
+            menu: {
+                sort: {
+                    aToZ: "Sortieren von A bis Z",
+                    highToLow: "Sortieren höchsten zum niedrigsten",
+                    newToOld: "Sortieren neu nach alt",
+                    zToA: "Sortieren von Z nach A",
+                    lowToHigh: "Sortieren der niedrigsten zur höchsten",
+                    oldToNew: "Sortieren ältesten Bild"
+                },
+                group: {
+                    aToZ: "Gruppe A bis Z",
+                    highToLow: "Gruppe höchsten zum niedrigsten",
+                    newToOld: "Gruppe neu nach alt",
+                    zToA: "Gruppe Z bis A",
+                    lowToHigh: "Gruppe der niedrigsten zur höchsten",
+                    oldToNew: "Gruppe ältesten Bild"
+                },
+                addColumnBefore: "In Spalte vor",
+                addColumnAfter: "In Spalte nach",
+                hideColumn: "Ausblenden dieser Spalte",
+                newTable: "Neue Tabelle auf dieser Spalte über",
+                columnProps: "Spalteneigenschaften",
+                fieldProps: "Feldeigenschaften"
+            }
         },
         cancel: "Stornieren"
     }

@@ -154,19 +154,21 @@ $grid-default-cell-padding: 8px;
     }
 
     .ag-menu-list {
-        border: 1px solid #dcdcdc;
-        min-width: 250px;
-        background: #fff;
+        border: 1px solid $color4;
+        background: $color2;
     }
     .ag-menu-option {
         line-height: 28px;
         font-weight: 600;
     }
     .ag-menu-separator {
-        border-bottom: 1px solid #dcdcdc;
+        border-bottom: 1px solid $color4;
+    }
+    .ag-menu-option-text {
+        padding-right: 20px;
     }
     .ag-menu-option:hover {
-        background-color: #00b0c2;
+        background-color: $color1;
     }
     .ag-menu-option-icon {
         padding: 0 5px;
@@ -175,9 +177,13 @@ $grid-default-cell-padding: 8px;
         font-size: $grid-font-size + 2;
         width: $grid-font-size + 2;
         vertical-align: middle;
+        color: $fiddlehead;
     }
     .ag-menu {
         top: 24px!important;
+        -webkit-box-shadow: 0px 4px 15px 0px rgba(70,66,66,0.15);
+        -moz-box-shadow: 0px 4px 15px 0px rgba(70,66,66,0.15);
+        box-shadow: 0px 4px 15px 0px rgba(70,66,66,0.15);
     }
     .ag-tab-selected {
         display: none;
