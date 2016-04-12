@@ -80,6 +80,7 @@ let AGGrid = React.createClass({
     onGridReady(params) {
         this.api = params.api;
         this.columnApi = params.columnApi;
+        this.onMenuClose();
     },
 
     getSortAscText(column, prependText) {
@@ -133,7 +134,39 @@ let AGGrid = React.createClass({
             this.props.tblId,
             this.props.rptId, true, this.props.filter, queryParams);
     },
+    prevSelectedColumnId: "",
+    selectedColumnId: "",
+    selectColumnHeader(column) {
+        let selectedColumnHeader = document.querySelectorAll('div.ag-header-cell.selected');
+        if (selectedColumnHeader.length) {
+            this.prevSelectedColumnId = selectedColumnHeader[0].getAttribute("colid");
+        }
+        let columnHeader = document.querySelectorAll('div.ag-header-cell[colId="' + column.field + '"]');
+        columnHeader[0].classList.add("selected");
+        this.selectedColumnId = column.field;
+    },
+    onMenuClose() {
+        let self = this;
+        document.addEventListener("DOMNodeRemoved", function(ev) {
+            if (ev.target && ev.target.className && ev.target.className.indexOf("ag-menu") !== -1) {
+                // a menu was closed remove selected behavior from all column headers
+                if (self.prevSelectedColumnId !== "") {
+                    let columnHeader = document.querySelectorAll('div.ag-header-cell[colId="' + self.prevSelectedColumnId + '"]');
+                    columnHeader[0].classList.remove("selected");
+                } else if (self.selectedColumnId !== "") {
+                    let columnHeader = document.querySelectorAll('div.ag-header-cell[colId="' + self.selectedColumnId + '"]');
+                    columnHeader[0].classList.remove("selected");
+                } else {
+                    let headerCells = document.querySelectorAll('div.ag-header-cell');
+                    _.each(headerCells, (cell) => {
+                        cell.classList.remove("selected");
+                    });
+                }
+            }
+        });
+    },
     getMainMenuItems(params) {
+        this.selectColumnHeader(params.column.colDef);
         let isSortedAsc = true;
         let isFieldSorted = _.find(this.props.selectedSortFids, (fid) => {
             if (Math.abs(fid) === params.column.colDef.id) {
@@ -148,15 +181,15 @@ let AGGrid = React.createClass({
         menuItems.push({"name": this.getSortAscText(params.column.colDef, "group"), action: () => this.groupReport(params.column.colDef, true)},
             {"name": this.getSortDescText(params.column.colDef, "group"), action: () => this.groupReport(params.column.colDef)});
         menuItems.push("separator");
-        menuItems.push({"name": "Add column before"},
-            {"name": "Add column after"},
-            {"name": "Hide this column"}
+        menuItems.push({"name": Locale.getMessage("report.menu.addColumnBefore")},
+            {"name": Locale.getMessage("report.menu.addColumnAfter")},
+            {"name": Locale.getMessage("report.menu.hideColumn")}
         );
         menuItems.push("separator");
-        menuItems.push({"name": "New table based on this column"});
+        menuItems.push({"name": Locale.getMessage("report.menu.newTable")});
         menuItems.push("separator");
-        menuItems.push({"name": "Column properties"},
-            {"name": "Field properties"});
+        menuItems.push({"name": Locale.getMessage("report.menu.columnProps")},
+            {"name": Locale.getMessage("report.menu.fieldProps")});
         return menuItems;
     },
     /**

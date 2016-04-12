@@ -52,6 +52,22 @@ $grid-default-cell-padding: 8px;
         .ag-header-cell-label {
             padding: 4px $grid-default-cell-padding 3px $grid-default-cell-padding;
         }
+        &.selected {
+            background-color: $color5;
+            .ag-header-cell-menu-button {
+                opacity: 1!important;
+                display: block;
+            }
+        }
+    }
+    .ag-header-cell-menu-button {
+        display: none;
+        padding: 4px 0px 3px 0px;
+    }
+    .ag-header-cell:hover {
+        .ag-header-cell-menu-button {
+            display: block;
+        }
     }
 
     .gridCell {
@@ -187,16 +203,6 @@ $grid-default-cell-padding: 8px;
     }
     .ag-tab-selected {
         display: none;
-    }
-    .ag-header-cell-menu-button {
-        display: none;
-        padding: 0;
-    }
-    .ag-header-cell:hover {
-        .ag-header-cell-menu-button {
-            display: block;
-            padding: 4px 0px 3px 0px;
-        }
     }
 }
 
