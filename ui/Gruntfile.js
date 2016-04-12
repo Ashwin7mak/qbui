@@ -707,8 +707,7 @@ module.exports = function(grunt) {
                 'shell:webpack',
                 'env:e2e',
                 'express:test',
-                'wait',
-                'express-keepalive'
+                'wait'
             ]);
         }
         grunt.task.run([
