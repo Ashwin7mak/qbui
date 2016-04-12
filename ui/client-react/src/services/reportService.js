@@ -136,7 +136,6 @@ class ReportService extends BaseService {
      * @returns promise
      */
     getReportDataAndFacets(appId, tableId, reportId, queryParams) {
-        let params = queryParams || {};
         return this.getReportData(appId, tableId, reportId, queryParams, true);
     }
 

@@ -69,16 +69,16 @@
                 return new Promise((resolve, reject) => {
                     recordsApi.fetchRecordsAndFields(req).then(
                         (response) => {
-                            if (recordsApi.isDisplayFormat(req)) {
-                                // TODO: the result set returned is a 'flat' heirarchy.  Since we are formatting our
-                                // TODO: result data, look to summarize the records per grouping requirement.
-                            }
                             resolve(response);
                         },
                         (error) => {
+                            log.error("Error getting report results in fetchReportResults: " + error.message);
                             reject(error);
                         }
-                    );
+                    ).catch((ex) => {
+                        log.error("Caught unexpected error getting report results in fetchReportResults: " + ex.message);
+                        reject1(ex);
+                    });
                 });
             },
 
