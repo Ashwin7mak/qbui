@@ -70,6 +70,15 @@ let reportDataActions = {
                     (reportMetaData) => {
                         var queryParams = {};
 
+                        //  Optional parameter used by the Node layer to return the result set in grouping order for
+                        //  easier client rendering of the result set.  The input sortList is a string array of
+                        //  fids/grouptype, delimited by ':'.  The groupList parameter converts the array
+                        //  into a string, with each individual entry separated by a '.' and included on the request
+                        //  as a query parameter.  Example:
+                        //
+                        //      sortList: ['2', '1:V', '33:C']
+                        //      glist: '2.1:V.33:C'
+                        //
                         if (reportMetaData.data) {
                             queryParams[query.GLIST_PARAM] = reportMetaData.data.sortList ? reportMetaData.data.sortList.join('.') : '';
                         } else {
@@ -123,13 +132,14 @@ let reportDataActions = {
      */
     filterReport(appId, tblId, rptId, format, filter, offset, rows) {
 
-        //  Build list of fids that is sent to the server to fulfill report sorting requirements
+        //  Build list of fids that is sent to the server to fulfill report sorting requirements.
+        //  The input sortList is a string array of fids/grouptype, delimited by ':'. Will extract
+        //  out the fids and return as a string, with each fid separated by a '.'
         function getReportSortFids(reportMetaData) {
             let fids = [];
             if (reportMetaData.data.sortList) {
                 reportMetaData.data.sortList.forEach(function(sort) {
                     if (sort) {
-                        //  format is fid:groupType..split by delimiter(':')
                         var sortEl = sort.split(':');
                         fids.push(sortEl[0]);
                     }
@@ -146,9 +156,18 @@ let reportDataActions = {
             if (reportMetaData && reportMetaData.data) {
 
                 queryParams[query.COLUMNS_PARAM] = reportMetaData.data.fids ? reportMetaData.data.fids.join('.') : '';
-                queryParams[query.GLIST_PARAM] = reportMetaData.data.sortList ? reportMetaData.data.sortList.join('.') : '';
-
                 queryParams[query.SORT_LIST_PARAM] = getReportSortFids(reportMetaData);
+
+                //  Optional parameter used by the Node layer to return the result set in grouping order for
+                //  easier client rendering of the result set.  The input sortList is a string array of
+                //  fids/grouptype, delimited by ':'.  The groupList parameter converts the array
+                //  into a string, with each individual entry separated by a '.' and included on the request
+                //  as a query parameter.  Example:
+                //
+                //      sortList: ['2', '1:V', '33:C']
+                //      glist: '2.1:V.33:C'
+                //
+                queryParams[query.GLIST_PARAM] = reportMetaData.data.sortList ? reportMetaData.data.sortList.join('.') : '';
 
                 //  Concatenate facet expression(if any) and search filter(if any) into single
                 //  query expression where each individual expression is 'AND'ed with the other.
@@ -195,7 +214,7 @@ let reportDataActions = {
                     (response) => {
                         var queryParams = buildRequestQuery(response[0], response[1], searchExpression);
 
-                        //  Node query parameters which are all optional and could be null/undefined
+                        //  parameters which are all optional and could be null/undefined
                         queryParams[query.FORMAT_PARAM] = format;
                         queryParams[query.OFFSET_PARAM] = offset;
                         queryParams[query.NUMROWS_PARAM] = rows;
