@@ -708,7 +708,6 @@ module.exports = function(grunt) {
                 'env:e2e',
                 'express:test',
                 'wait',
-                'open',
                 'express-keepalive'
             ]);
         }
