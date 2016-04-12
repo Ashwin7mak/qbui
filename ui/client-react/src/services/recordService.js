@@ -20,20 +20,22 @@ class RecordService extends BaseService {
      *
      * @param appId
      * @param tableId
-     * @param formatted - is output formatted for UI display or the raw data
      * @param optionalParams may contain the any of the following -
+     *  formatted - is output formatted for UI display or raw data
      *  query - unparsed expression to filter records by
      *  clist - columns to query
      *  slist - sortby columns
+     *  glist - groupBy columns
      *  offset - zero based row offset
      *  numRows - number of rows to return on the request
      */
-    getRecords(appId, tableId, formatted, optionalparams) {
+    getRecords(appId, tableId, optionalparams) {
         let params = {};
-        if (formatted === true) {
-            params[query.FORMAT_PARAM] = query.DISPLAY_FORMAT;  // default is 'raw'
-        }
+
         if (optionalparams) {
+            if (optionalparams[query.FORMAT_PARAM] === true) {
+                params[query.FORMAT_PARAM] = query.DISPLAY_FORMAT;
+            }
             if (StringUtils.isNonEmptyString(optionalparams[query.QUERY_PARAM])) {
                 params[query.QUERY_PARAM] = optionalparams[query.QUERY_PARAM];
             }
@@ -42,6 +44,9 @@ class RecordService extends BaseService {
             }
             if (StringUtils.isNonEmptyString(optionalparams[query.SORT_LIST_PARAM])) {
                 params[query.SORT_LIST_PARAM] = optionalparams[query.SORT_LIST_PARAM];
+            }
+            if (StringUtils.isNonEmptyString(optionalparams[query.GLIST_PARAM])) {
+                params[query.GLIST_PARAM] = optionalparams[query.GLIST_PARAM];
             }
             if (NumberUtils.isInt(optionalparams[query.OFFSET_PARAM]) && NumberUtils.isInt(optionalparams[query.NUMROWS_PARAM])) {
                 params[query.OFFSET_PARAM] = optionalparams[query.OFFSET_PARAM];
