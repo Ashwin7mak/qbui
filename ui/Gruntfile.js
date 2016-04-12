@@ -704,7 +704,8 @@ module.exports = function(grunt) {
             return grunt.task.run([
                 'clean:server',
                 'build',
-                'env:e2e'
+                'env:e2e',
+                'express:test'
             ]);
         }
         grunt.task.run([
