@@ -107,7 +107,9 @@ export default {
                     newToOld: "Sortieren neu nach alt",
                     zToA: "Sortieren von Z nach A",
                     lowToHigh: "Sortieren der niedrigsten zur höchsten",
-                    oldToNew: "Sortieren ältesten Bild"
+                    oldToNew: "Sortieren ältesten Bild",
+                    uncheckedToChecked: "Sortieren ungeprüft geprüft",
+                    checkedToUnchecked: "Sortieren markiert zu nicht markiert"
                 },
                 group: {
                     aToZ: "Gruppe A bis Z",
@@ -115,7 +117,10 @@ export default {
                     newToOld: "Gruppe neu nach alt",
                     zToA: "Gruppe Z bis A",
                     lowToHigh: "Gruppe der niedrigsten zur höchsten",
-                    oldToNew: "Gruppe ältesten Bild"
+                    oldToNew: "Gruppe ältesten Bild",
+                    uncheckedToChecked: "Sortieren ungeprüft geprüft",
+                    uncheckedToChecked: "Gruppe ungeprüft geprüft",
+                    checkedToUnchecked: "Gruppe geprüft ungeprüft"
                 },
                 addColumnBefore: "In Spalte vor",
                 addColumnAfter: "In Spalte nach",

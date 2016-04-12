@@ -82,12 +82,20 @@ let AGGrid = React.createClass({
         this.columnApi = params.columnApi;
         this.onMenuClose();
     },
-
+    /**
+     * Build the menu items for sort/group
+     * @param column
+     * @param prependText
+     * @returns {*}
+     */
     getSortAscText(column, prependText) {
         let message = " ";
         switch (column.datatypeAttributes.type) {
-        case "TEXT": message =  "aToZ"; break;
-        case "DATE": message =  "newToOld"; break;
+        case "CHECKBOX": message =  "uncheckedToChecked"; break;
+        case "TEXT":
+        case "EMAIL": message =  "aToZ"; break;
+        case "DATE":
+        case "DATETIME": message =  "oldToNew"; break;
         case "NUMERIC":
         case "RATING":
         default: message = "lowToHigh"; break;
@@ -97,14 +105,22 @@ let AGGrid = React.createClass({
     getSortDescText(column, prependText) {
         let message = " ";
         switch (column.datatypeAttributes.type) {
-        case "TEXT": message =  "zToA"; break;
-        case "DATE": message =  "oldtoNew"; break;
+        case "CHECKBOX": message =  "checkedToUnchecked"; break;
+        case "TEXT":
+        case "EMAIL": message =  "zToA"; break;
+        case "DATE":
+        case "DATETIME": message =  "newToOld"; break;
         case "NUMERIC":
         case "RATING":
         default: message =  "highToLow"; break;
         }
         return Locale.getMessage("report.menu." + prependText + "." + message);
     },
+    /**
+     * On selection of sort option from menu fire off the action to sort the data
+     * @param column
+     * @param asc
+     */
     sortReport(column, asc) {
         let flux = this.getFlux();
 
@@ -120,6 +136,11 @@ let AGGrid = React.createClass({
             this.props.tblId,
             this.props.rptId, true, this.props.filter, queryParams);
     },
+    /**
+     * On selection of group option from menu fire off the action to group the data
+     * @param column
+     * @param asc
+     */
     groupReport(column, asc) {
         let flux = this.getFlux();
 
@@ -134,6 +155,10 @@ let AGGrid = React.createClass({
             this.props.tblId,
             this.props.rptId, true, this.props.filter, queryParams);
     },
+    /**
+     * AG-grid doesnt fire any events or add any classes to the column for which menu has been opened
+     * This makes the menu look like its detached from the header. The following is a hack to handle this.
+     */
     prevSelectedColumnId: "",
     selectedColumnId: "",
     selectColumnHeader(column) {
@@ -165,6 +190,11 @@ let AGGrid = React.createClass({
             }
         });
     },
+    /**
+     * Build the column menu. This gets called every time menu is opened
+     * @param params
+     * @returns {*[]}
+     */
     getMainMenuItems(params) {
         this.selectColumnHeader(params.column.colDef);
         let isSortedAsc = true;
@@ -550,7 +580,7 @@ let AGGrid = React.createClass({
 
         // todo: optimize/refactor actions hover for performance
         if (columns.length > 0) {
-            columns.push(this.getActionsColumn());
+            //columns.push(this.getActionsColumn());
         }
         return columns;
     },

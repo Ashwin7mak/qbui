@@ -110,7 +110,9 @@ export default {
                     newToOld: "Sort newest to oldest",
                     zToA: "Sort Z to A",
                     lowToHigh: "Sort lowest to highest",
-                    oldToNew: "Sort oldest to newest"
+                    oldToNew: "Sort oldest to newest",
+                    uncheckedToChecked: "Sort unchecked to checked",
+                    checkedToUnchecked: "Sort checked to unchecked"
                 },
                 group: {
                     aToZ: "Group A to Z",
@@ -118,7 +120,9 @@ export default {
                     newToOld: "Group newest to oldest",
                     zToA: "Group Z to A",
                     lowToHigh: "Group lowest to highest",
-                    oldToNew: "Group oldest to newest"
+                    oldToNew: "Group oldest to newest",
+                    uncheckedToChecked: "Group unchecked to checked",
+                    checkedToUnchecked: "Group checked to unchecked"
                 },
                 addColumnBefore: "Add column before",
                 addColumnAfter: "Add column after",
