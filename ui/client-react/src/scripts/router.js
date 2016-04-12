@@ -15,6 +15,7 @@ import ReportsStore from '../stores/reportsStore';
 import reportActions from'../actions/reportActions';
 
 import ReportDataStore from '../stores/reportDataStore';
+import ReportDataSearchStore from '../stores/reportDataSearchStore';
 import reportDataActions from'../actions/reportDataActions';
 
 import AppsStore from '../stores/appsStore';
@@ -41,7 +42,8 @@ let stores = {
     ReportDataStore: new ReportDataStore(),
     AppsStore: new AppsStore(),
     NavStore: new NavStore(),
-    FacetMenuStore: new FacetMenuStore()
+    FacetMenuStore: new FacetMenuStore(),
+    ReportDataSearchStore: new ReportDataSearchStore()
 };
 let flux = new Fluxxor.Flux(stores);
 flux.addActions(reportActions);
@@ -82,19 +84,37 @@ let NavWrapper = React.createClass({
 
         flux.actions.loadApps(true);
 
-        if (this.props.params.appId && this.props.params.tblId) {
+        if (this.props.params.appId) {
             flux.actions.selectAppId(this.props.params.appId);
-            flux.actions.selectTableId(this.props.params.tblId);
-            flux.actions.loadReports(this.props.params.appId, this.props.params.tblId);
+
+            if (this.props.params.tblId) {
+                flux.actions.selectTableId(this.props.params.tblId);
+                flux.actions.loadReports(this.props.params.appId, this.props.params.tblId);
+            } else {
+                flux.actions.selectTableId(null);
+            }
         }
     },
 
     componentWillReceiveProps(props) {
+        if (props.params.appId) {
+            if (this.props.params.appId !== props.params.appId) {
+                flux.actions.selectAppId(props.params.appId);
+            }
+        } else {
+            flux.actions.selectAppId(null);
+        }
 
-        if (this.props.params.appId && this.props.params.tblId && this.props.params.appId !== props.params.appId && this.props.params.tblId !== props.params.tblId) {
-            flux.actions.selectAppId(this.props.params.appId);
-            flux.actions.selectTableId(this.props.params.tblId);
-            flux.actions.loadReports(this.props.params.appId, this.props.params.tblId);
+        if (this.props.params.appId !== props.params.appId) {
+            flux.actions.selectAppId(props.params.appId);
+        }
+        if (props.params.tblId) {
+            if (this.props.params.tblId !== props.params.tblId) {
+                flux.actions.selectTableId(props.params.tblId);
+                flux.actions.loadReports(props.params.appId, props.params.tblId);
+            }
+        } else {
+            flux.actions.selectTableId(null);
         }
     }
 });

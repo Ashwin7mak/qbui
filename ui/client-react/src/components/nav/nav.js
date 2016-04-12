@@ -71,9 +71,9 @@ var Nav = React.createClass({
     },
 
     getSelectedApp() {
-        if (this.state.reportsData.appId) {
+        if (this.state.apps.selectedAppId) {
 
-            return this.state.apps.apps.find((a) => a.id === this.state.reportsData.appId);
+            return this.state.apps.apps.find((a) => a.id === this.state.apps.selectedAppId);
         }
         return null;
     },
@@ -179,6 +179,7 @@ var Nav = React.createClass({
                             reportData: this.state.reportData,
                             selectedApp: this.getSelectedApp(),
                             selectedTable: this.getSelectedTable(),
+                            scrollingReport: this.state.nav.scrollingReport,
                             flux: flux}
                         )}
                     </div>}

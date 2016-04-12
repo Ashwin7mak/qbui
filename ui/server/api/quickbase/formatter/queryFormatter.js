@@ -7,47 +7,57 @@
     'use strict';
     var Promise = require('bluebird');
     var consts = require('../../constants');
+    var log = require('../../../logger').getLogger();
 
     module.exports = {
-        format: function(facetExpression) {
+        format: function(req) {
             var deferred = Promise.pending();
+
             var queryString = "";
-            if (facetExpression) {
-                for (var i = 0; i < facetExpression.length; i++) {
-                    if (queryString !== "") {
-                        queryString += consts.QUERY_AND;
-                    }
-                    // when the request comes from server since we are picking up a part of the url the facets are passed in as a string of json
-                    if (typeof facetExpression[i] === "string") {
-                        facetExpression[i] = JSON.parse(facetExpression[i]);
-                    }
+            if (req && req.query) {
+                var facetExpression = req.query[consts.REQUEST_PARAMETER.FACET_EXPRESSION];
+                if (facetExpression) {
+                    log.debug("facetExpression to parse: " + facetExpression);
 
-                    if (!facetExpression[i].values) {
-                        continue;
-                    }
-                    var subquery = "";
+                    for (var i = 0; i < facetExpression.length; i++) {
+                        if (queryString !== "") {
+                            queryString += consts.QUERY_AND;
+                        }
+                        // when the request comes from server since we are picking up a part of the url the facets are passed in as a string of json
+                        if (typeof facetExpression[i] === "string") {
+                            facetExpression[i] = JSON.parse(facetExpression[i]);
+                        }
 
-                    if (facetExpression[i].fieldtype === consts.DATE || facetExpression[i].fieldtype === consts.DATE_TIME) {
-                        if (facetExpression[i].values.length !== 2) {
+                        if (!facetExpression[i].values) {
                             continue;
                         }
-                        queryString += "(";
-                        subquery = "{" + facetExpression[i].fid.toString() + consts.OPERATOR_ONORBEFORE + "'" + facetExpression[i].values[0] + "'}" +
-                            consts.QUERY_AND +
-                            "{" + facetExpression[i].fid.toString() + consts.OPERATOR_ONORAFTER + "'" + facetExpression[i].values[1] + "'}";
-                    } else {
-                        queryString += "(";
-                        for (var j = 0; j < facetExpression[i].values.length; j++) {
-                            if (subquery !== "") {
-                                subquery += consts.QUERY_OR;
+                        var subquery = "";
+
+                        if (facetExpression[i].fieldtype === consts.DATE || facetExpression[i].fieldtype === consts.DATE_TIME) {
+                            if (facetExpression[i].values.length !== 2) {
+                                continue;
                             }
-                            subquery += "{" + facetExpression[i].fid.toString() + consts.OPERATOR_EQUALS + "'" + facetExpression[i].values[j] + "'}";
+                            queryString += "(";
+                            subquery = "{" + facetExpression[i].fid.toString() + consts.OPERATOR_ONORBEFORE + "'" + facetExpression[i].values[0] + "'}" +
+                                consts.QUERY_AND +
+                                "{" + facetExpression[i].fid.toString() + consts.OPERATOR_ONORAFTER + "'" + facetExpression[i].values[1] + "'}";
+                        } else {
+                            queryString += "(";
+                            for (var j = 0; j < facetExpression[i].values.length; j++) {
+                                if (subquery !== "") {
+                                    subquery += consts.QUERY_OR;
+                                }
+                                subquery += "{" + facetExpression[i].fid.toString() + consts.OPERATOR_EQUALS + "'" + facetExpression[i].values[j] + "'}";
+                            }
                         }
+                        queryString += subquery + ")";
                     }
-                    queryString += subquery + ")";
+                    log.debug("facetExpression parsed into query: " + queryString);
                 }
             }
+
             deferred.resolve(queryString);
+
             return deferred.promise;
         }
     };

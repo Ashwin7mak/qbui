@@ -11,7 +11,7 @@ import './report.scss';
 let FluxMixin = Fluxxor.FluxMixin(React);
 
 /* The container for report and its toolbar */
-var ReportToolsAndContent = React.createClass({
+const ReportToolsAndContent = React.createClass({
     mixins: [FluxMixin],
 
     propTypes: {
@@ -19,7 +19,8 @@ var ReportToolsAndContent = React.createClass({
         tblId: React.PropTypes.string,
         rptId: React.PropTypes.string,
         reportData: React.PropTypes.object,
-        pageActions: React.PropTypes.element
+        pageActions: React.PropTypes.element,
+        callbacks :  React.PropTypes.object,
     },
     getDefaultProps() {
         return {
@@ -27,14 +28,17 @@ var ReportToolsAndContent = React.createClass({
         };
     },
     render() {
-        var {appId, tblId, rptId, reportData:{selections, searchStringForFiltering, ...otherReportData}} = this.props;
+        let {appId, tblId, rptId,
+             reportData:{selections, ...otherReportData}} = this.props;
         let toolbar = <ReportToolbar appId={appId}
-                                    tblId={tblId}
-                                    rptId={rptId}
-                                    reportData={otherReportData}
-                                    selections={selections}
-                                    searchStringForFiltering={searchStringForFiltering}
-                                    pageActions={this.props.pageActions}/>;
+                                     tblId={tblId}
+                                     rptId={rptId}
+                                     reportData={otherReportData}
+                                     selections={selections}
+                                     searchStringForFiltering={this.props.searchStringForFiltering}
+                                     pageActions={this.props.pageActions}
+                                     nameForRecords={this.props.nameForRecords}
+                                     {...this.props.callbacks} />;
 
         return (<div className="reportToolsAndContentContainer">
                     <ReportContent  reportData={this.props.reportData}

@@ -44,14 +44,19 @@ describe('ReportToolbar functions', () => {
             return {};
         }
     });
-
+    let reportDataSearchStore = Fluxxor.createStore({
+        getState() {
+            return {searchStringInput :'abc'};
+        }
+    });
 
     let stores = {
         NavStore: new navStore(),
         AppsStore: new appStore(),
         ReportsStore: new reportsStore(),
         ReportDataStore: new reportDataStore(),
-        FacetMenuStore:  new facetMenuStore()
+        FacetMenuStore:  new facetMenuStore(),
+        ReportDataSearchStore: new reportDataSearchStore()
     };
 
     let flux = new Fluxxor.Flux(stores);
@@ -95,14 +100,29 @@ describe('ReportToolbar functions', () => {
         },
         {
             id: 4, name: "Flag", type: "CHECKBOX", blanks: false,
-            values: [{value: "Yes"}, {value: "No"}]
+            values: [{value: true}, {value: false}]
         },
         //{id : 4, name : "Dates", type: "date",  blanks: false,
         //    range : {start: 1, end: 2}},
     ];
 
+    let callBacks = {};
+
     beforeEach(() => {
         flux.store('FacetMenuStore').initMenu();
+        callBacks = {
+            filterOnSelections: function() {
+            },
+            searchTheString: function() {
+            },
+        };
+        spyOn(callBacks, 'searchTheString');
+        spyOn(callBacks, 'filterOnSelections');
+    });
+
+    afterEach(() => {
+        callBacks.searchTheString.calls.reset();
+        callBacks.filterOnSelections.calls.reset();
     });
 
     const fakeReportData_simple = {
@@ -240,30 +260,30 @@ describe('ReportToolbar functions', () => {
 
         let selected = new FacetSelections();
         selected.addSelection(1, 'Development');
+
+        let initialSelected = selected.copy();
         let fakeReportWithFacets = _.cloneDeep(fakeReportData_simple);
-        component = TestUtils.renderIntoDocument(<ReportToolbar flux={flux} selections={selected}
-                                                                reportData={fakeReportWithFacets} pageActions={pageActions} />);
+
+        component = TestUtils.renderIntoDocument(<ReportToolbar flux={flux} selections={initialSelected}
+                                                                reportData={fakeReportWithFacets}
+                                                                filterOnSelections={callBacks.filterOnSelections}
+                                                                searchTheString={callBacks.searchTheString}
+                                                                pageActions={pageActions} />);
         expect(TestUtils.isCompositeComponent(component)).toBeTruthy();
 
-        spyOn(flux.actions, 'filterReport').and.callThrough();
-
         //add bool facet
+        component.handleFacetSelect(null, {id: 4}, 'Yes');
+
+        // ensure the boolean facet becomes a member
         selected.addSelection(4, 'Yes');
-        //search
-        component.filterOnSearch('');
-
-        // ensure the boolean facet becomes a number
-        expect(flux.actions.filterReport).toHaveBeenCalledWith(undefined, undefined, undefined, true,
-            {selections : selected, facet: [{fid : '1', values:['Development']}, {fid: '4', values:[1]}], search : ''});
-
-        flux.actions.filterReport.calls.reset();
+        expect(callBacks.filterOnSelections).toHaveBeenCalledWith(selected);
     });
 
-    it('test render reportToolbar searches text', (done) => {
-
-        let delay = 200;
+    it('test render reportToolbar searches text', () => {
         component = TestUtils.renderIntoDocument(<ReportToolbar flux={flux}
-                                                                debounceInputTime={delay} pageActions={pageActions}
+                                                                pageActions={pageActions}
+                                                                filterOnSelections={callBacks.filterOnSelections}
+                                                                searchTheString={callBacks.searchTheString}
                                                                 reportData={fakeReportData_simple}/>);
 
         // check for the search box shows up
@@ -271,30 +291,12 @@ describe('ReportToolbar functions', () => {
         expect(filterSearchBox.length).toEqual(1);
 
         // check that search input is debounced
-        spyOn(flux.actions, 'filterReport').and.callThrough();
         var searchInput = filterSearchBox[0];
         var testValue = 'xxx';
 
         //simulate search string was input
         TestUtils.Simulate.change(searchInput, {target: {value: testValue}});
-        //initially don't search until debounced time has passed
-        expect(flux.actions.filterReport).not.toHaveBeenCalled();
-        flux.actions.filterReport.calls.reset();
-
-        // count has 1 number e.g. X records when there is no search (not x of y records)
-        let recordsCount = TestUtils.scryRenderedDOMComponentsWithClass(component, "recordsCount");
-        expect(recordsCount.length).toEqual(1);
-        let span = recordsCount[0];
-        expect(span).not.toBeNull();
-        expect(span.innerText.match(/\d+ .+\d+/)).toBeFalsy();
-
-        //timeout for debounce
-        setTimeout(function() {
-            // check that search ran after debounce time
-            expect(flux.actions.filterReport).toHaveBeenCalledWith(undefined, undefined, undefined, true, Object({selections: jasmine.any(Object), facet: [], search: testValue}));
-            flux.actions.filterReport.calls.reset();
-            done();
-        }, delay + 100);
+        expect(callBacks.searchTheString).toHaveBeenCalled();
 
     });
 
@@ -316,24 +318,25 @@ describe('ReportToolbar functions', () => {
     });
 
     it('test render reportToolbar with selected values then clear a field selection', () => {
+
         let fakeReportWithFacets = _.cloneDeep(fakeReportData_simple);
         component = TestUtils.renderIntoDocument(<ReportToolbar flux={flux}
                                                                 reportData={fakeReportWithFacets}
+                                                                filterOnSelections={callBacks.filterOnSelections}
+                                                                searchTheString={callBacks.searchTheString}
                                                                 pageActions={pageActions}
         />);
         expect(TestUtils.isCompositeComponent(component)).toBeTruthy();
-        spyOn(flux.actions, 'filterReport').and.callThrough();
 
         //select a couple of facets
         component.handleFacetSelect(null, {id: 1}, 'Development');
         component.handleFacetSelect(null, {id: 1}, 'Planning');
-        expect(flux.actions.filterReport).toHaveBeenCalled();
-        flux.actions.filterReport.calls.reset();
+        expect(callBacks.filterOnSelections).toHaveBeenCalled();
+        callBacks.filterOnSelections.calls.reset();
 
         //clear all selection for field 1
         component.handleFacetClearFieldSelects({id: 1});
-        expect(flux.actions.filterReport).toHaveBeenCalled();
-        flux.actions.filterReport.calls.reset();
+        expect(callBacks.filterOnSelections).toHaveBeenCalled();
 
     });
 
@@ -344,15 +347,15 @@ describe('ReportToolbar functions', () => {
         component = TestUtils.renderIntoDocument(<ReportToolbar flux={flux}
                                                                 selections={startingSelections}
                                                                 reportData={fakeReportWithFacets}
+                                                                filterOnSelections={callBacks.filterOnSelections}
+                                                                searchTheString={callBacks.searchTheString}
                                                                 pageActions={pageActions}
         />);
         expect(TestUtils.isCompositeComponent(component)).toBeTruthy();
-        spyOn(flux.actions, 'filterReport').and.callThrough();
 
         //select a couple of facets
         component.handleFacetDeselect(null, {id: 1}, 'Development');
-        expect(flux.actions.filterReport).toHaveBeenCalled();
-        flux.actions.filterReport.calls.reset();
+        expect(callBacks.filterOnSelections).toHaveBeenCalled();
     });
 
 
@@ -360,43 +363,21 @@ describe('ReportToolbar functions', () => {
         let fakeReportWithFacets = _.cloneDeep(fakeReportData_simple);
         component = TestUtils.renderIntoDocument(<ReportToolbar flux={flux}
                                                                 reportData={fakeReportWithFacets}
+                                                                filterOnSelections={callBacks.filterOnSelections}
+                                                                searchTheString={callBacks.searchTheString}
                                                                 pageActions={pageActions}
         />);
         expect(TestUtils.isCompositeComponent(component)).toBeTruthy();
         //select a couple of facets
         component.handleFacetSelect(null, {id: 1}, 'Development');
         component.handleFacetSelect(null, {id: 2}, 'Claire Martinez');
-        spyOn(flux.actions, 'filterReport').and.callThrough();
+        callBacks.filterOnSelections.calls.reset();
 
         //clear all selects
         component.handleFacetClearAllSelects();
 
-        expect(flux.actions.filterReport).toHaveBeenCalled();
-        flux.actions.filterReport.calls.reset();
+        expect(callBacks.filterOnSelections).toHaveBeenCalled();
     });
-
-
-    it('test render reportToolbar with selected values and search then clear all ', () => {
-        let fakeReportWithFacets = _.cloneDeep(fakeReportData_simple);
-        component = TestUtils.renderIntoDocument(<ReportToolbar flux={flux}
-                                                                searchStringForFiltering={'abc'}
-                                                                reportData={fakeReportWithFacets}
-        />);
-        expect(TestUtils.isCompositeComponent(component)).toBeTruthy();
-        //select a couple of facets
-        component.handleFacetSelect(null, {id: 1}, 'Development');
-        component.handleFacetSelect(null, {id: 2}, 'Claire Martinez');
-        spyOn(flux.actions, 'filterReport').and.callThrough();
-        spyOn(component, 'filterReport').and.callThrough();
-
-        //clear all selects and search
-        component.handleFacetClearAllSelectsAndSearch();
-
-        expect(flux.actions.filterReport).toHaveBeenCalled();
-        expect(component.filterReport).toHaveBeenCalledWith('', new FacetSelections());
-        flux.actions.filterReport.calls.reset();
-    });
-
 
 });
 

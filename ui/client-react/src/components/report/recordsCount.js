@@ -18,6 +18,7 @@ var RecordsCount = React.createClass({
         recordCount : React.PropTypes.number,
         filteredRecordCount : React.PropTypes.number,
         nameForRecords : React.PropTypes.string,
+        clearAllFilters : React.PropTypes.func,
     },
 
     shouldComponentUpdate(nextProps, nextState) {
@@ -31,14 +32,16 @@ var RecordsCount = React.createClass({
      */
     render() {
         let message = "report.recordCount";
+        let dbl = null;
         if (this.props.isFiltered) {
             message = "report.filteredRecordCount";
+            dbl = this.props.clearAllFilters;
         }
         if ((this.props.isFiltered && (this.props.filteredRecordCount === null) || this.props.recordCount === null)) {
             // no records
             return null;
         } else {
-            return (<div className="recordsCount">
+            return (<div className="recordsCount" onDoubleClick={dbl}>
                 <I18nMessage message={message}
                              filteredRecordCount={this.props.filteredRecordCount + ''}
                              recordCount={this.props.recordCount}

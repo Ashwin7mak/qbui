@@ -89,20 +89,22 @@ let TablesList = React.createClass({
                          open={true}/>;
         });
     },
-    getNavItem(msg, link, icon) {
+    getNavItem(msg, link, icon, selected) {
         const hoverComponent = (<div className="hoverComponent">
             <Link to={link}><I18nMessage message={msg}/></Link>
         </div>);
 
-        return (<NavItem item={{msg: msg, link:link, icon:icon}}
+        return (<NavItem item={{msg: msg, link:link, icon:icon}} selected={selected}
             hoverComponent={hoverComponent} open={true} onSelect={this.props.onSelect}/>);
 
     },
     getTopLinksItem() {
+        const appHomePageSelected = !this.props.selectedTableId;
+
         return (
         <li className="horizontal">
             <ul className="topLinks">
-                {this.getNavItem('nav.home', `/app/${this.props.selectedAppId}`, 'home')}
+                {this.getNavItem('nav.home', `/app/${this.props.selectedAppId}`, 'home', appHomePageSelected)}
                 {this.getNavItem('nav.users', '/users', 'user')}
             </ul>
         </li>);

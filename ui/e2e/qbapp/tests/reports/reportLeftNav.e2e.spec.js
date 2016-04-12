@@ -80,24 +80,24 @@
                 /**
                  * Test method. The leftNav should shrink responsively across the 4 breakpoints as the browser is re-sized
                  */
-                it('LeftNav should shrink responsively from xlarge to small breakpoints', function(done) {
+                it('LeftNav should shrink responsively from xlarge to small breakpoints.', function(done) {
                     // Resize browser at different widths to check responsiveness
-                    e2eBase.resizeBrowser(testcase.browserWidth, e2eConsts.DEFAULT_HEIGHT);
-                    if (testcase.breakpointSize === 'small') {
-                        // On small the leftNav will be hidden on a loaded report by default
-                        reportServicePage.assertNavProperties(testcase.breakpointSize, false, '0');
-                        // Open the leftNav
-                        reportServicePage.clickReportHeaderHamburger();
-                        // Assert leftNav properties
-                        reportServicePage.waitForElement(reportServicePage.navMenuEl).then(function() {
+                    e2eBase.resizeBrowser(testcase.browserWidth, e2eConsts.DEFAULT_HEIGHT).then(function() {
+                        if (testcase.breakpointSize === 'small') {
+                            // On small the leftNav will be hidden on a loaded report by default
+                            reportServicePage.assertNavProperties(testcase.breakpointSize, false, '0').then(function() {
+                                // Open the leftNav
+                                reportServicePage.openLeftNav().then(function() {
+                                    reportServicePage.assertNavProperties(testcase.breakpointSize, true, testcase.offsetWidth);
+                                    done();
+                                });
+                            });
+                        } else {
+                            // Assert leftNav properties
                             reportServicePage.assertNavProperties(testcase.breakpointSize, true, testcase.offsetWidth);
                             done();
-                        });
-                    } else {
-                        // Assert leftNav properties
-                        reportServicePage.assertNavProperties(testcase.breakpointSize, true, testcase.offsetWidth);
-                        done();
-                    }
+                        }
+                    });
                 });
             });
 
@@ -108,22 +108,20 @@
                  * Test method. The leftNav should expand responsively across the 4 breakpoints as the browser is re-sized
                  */
                 it('LeftNav should expand responsively from small to xlarge breakpoints', function(done) {
-                    e2eBase.resizeBrowser(testcase.browserWidth, e2eConsts.DEFAULT_HEIGHT);
-                    if (testcase.breakpointSize === 'small') {
-                        // leftNav will be shown due to previous test (we want this state to be sticky)
-                        reportServicePage.assertNavProperties(testcase.breakpointSize, true, testcase.offsetWidth);
-                        // Close the leftNav
-                        reportServicePage.clickReportHeaderHamburger();
-                        // Assert leftNav properties
-                        reportServicePage.waitForElement(reportServicePage.navMenuEl).then(function() {
-                            reportServicePage.assertNavProperties(testcase.breakpointSize, false, '0');
+                    e2eBase.resizeBrowser(testcase.browserWidth, e2eConsts.DEFAULT_HEIGHT).then(function() {
+                        if (testcase.breakpointSize === 'small') {
+                            // Open the leftNav
+                            reportServicePage.openLeftNav().then(function() {
+                                // leftNav will be shown due to previous test (we want this state to be sticky)
+                                reportServicePage.assertNavProperties(testcase.breakpointSize, true, testcase.offsetWidth);
+                                done();
+                            });
+                        } else {
+                            // Assert leftNav properties
+                            reportServicePage.assertNavProperties(testcase.breakpointSize, true, testcase.offsetWidth);
                             done();
-                        });
-                    } else {
-                        // Assert leftNav properties
-                        reportServicePage.assertNavProperties(testcase.breakpointSize, true, testcase.offsetWidth);
-                        done();
-                    }
+                        }
+                    });
                 });
             });
         });

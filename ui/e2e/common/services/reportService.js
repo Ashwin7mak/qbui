@@ -14,15 +14,18 @@
              */
             // TODO: QBSE-13518 Write a report generator in the test_generators package
             // TODO: Fix promise anti-pattern QBSE-20581
-            createReport: function(appId, tableId, query) {
+            createReport: function(appId, tableId, query, reportName, facetFids) {
                 var deferred = promise.pending();
                 var reportJSON = {
-                    name      : 'Test Report',
+                    name      : reportName || 'Test Report',
                     type      : 'TABLE',
                     ownerId   : '10000',
                     hideReport: false,
                     query: query
                 };
+                if (facetFids) {
+                    reportJSON.facetFids = facetFids;
+                }
                 var reportsEndpoint = recordBase.apiBase.resolveReportsEndpoint(appId, tableId);
 
                 // TODO: QBSE-13843 Create helper GET And POST functions that extend this executeRequest function

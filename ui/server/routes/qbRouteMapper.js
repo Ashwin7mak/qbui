@@ -261,8 +261,7 @@
 
     function resolveFacets(req, res) {
         processRequest(req, res, function(req, res) {
-            log.debug("facetExpression in mapper =" + req.query.facetexpression);
-            queryFormatter.format(req.query.facetexpression)
+            queryFormatter.format(req)
                 .then(function(response) {
                     res.send(response);
                 });
