@@ -120,6 +120,7 @@ let reportDataActions = {
         //  Build list of fids that is sent to the server to fulfill report sorting requirements
         function getReportSortFids(reportMetaData) {
             //TODO: Replace this with reportutils. Not sure why we are doing this.
+            let fids = [];
             if (reportMetaData.data.sortList) {
                 reportMetaData.data.sortList.forEach(function(sort) {
                     if (sort) {
@@ -184,7 +185,7 @@ let reportDataActions = {
         return new Promise(function(resolve, reject) {
 
             if (appId && tblId && rptId) {
-                let sortListParam = overrideQueryParams ? overrideQueryParams[query.SORT_LIST_PARAM] : "";
+                let sortListParam = overrideQueryParams && overrideQueryParams[query.SORT_LIST_PARAM] ? overrideQueryParams[query.SORT_LIST_PARAM] : "";
                 this.dispatch(actions.LOAD_RECORDS, {appId, tblId, rptId, filter, sortList: sortListParam});
 
                 let reportService = new ReportService();

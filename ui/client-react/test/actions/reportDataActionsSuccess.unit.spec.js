@@ -137,7 +137,8 @@ describe('Report Data Actions Filter Report functions -- success', () => {
         filter : {
             facet: 'abc',
             search: ''
-        }
+        },
+        sortList:''
     };
 
     class mockReportService {
@@ -175,7 +176,7 @@ describe('Report Data Actions Filter Report functions -- success', () => {
 
 
     it('test filter report action with parameters', (done) => {
-        flux.actions.getFilteredRecords(appId, tblId, rptId, true, filter).then(
+        flux.actions.getFilteredRecords(appId, tblId, rptId, true, filter, {}).then(
             () => {
                 expect(mockReportService.prototype.getReport).toHaveBeenCalled();
                 expect(mockReportService.prototype.parseFacetExpression).toHaveBeenCalled();

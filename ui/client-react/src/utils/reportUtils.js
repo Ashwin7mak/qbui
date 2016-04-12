@@ -24,15 +24,17 @@ class ReportUtils {
      */
     static getSortFids(sortList) {
         let sortFids = [];
-        let sortListParts = sortList.split(sortFidDelimiter);
-        sortListParts.forEach(function(sort) {
-            if (sort) {
-                //  format is fid:groupType..split by delimiter(':') to allow us
-                // to pass in the fid for server side sorting.
-                var sortEl = sort.split(groupDelimiter);
-                sortFids.push(sortEl[0]);
-            }
-        });
+        if (sortList && sortList.length) {
+            let sortListParts = sortList.split(sortFidDelimiter);
+            sortListParts.forEach((sort) => {
+                if (sort) {
+                    //  format is fid:groupType..split by delimiter(':') to allow us
+                    // to pass in the fid for server side sorting.
+                    var sortEl = sort.split(groupDelimiter);
+                    sortFids.push(sortEl[0]);
+                }
+            });
+        }
         return sortFids;
     }
     //TODO

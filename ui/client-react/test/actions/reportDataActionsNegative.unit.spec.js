@@ -26,7 +26,8 @@ let filterReportInputs = {
     filter: {
         facet: 'abc',
         search: ''
-    }
+    },
+    sortList: ""
 };
 
 let responseReportData = {
@@ -126,7 +127,7 @@ describe('Report Data Actions -- Filter report Negative', () => {
         }
         reportDataActions.__Rewire__('ReportService', mockReportService);
         reportDataActions.__Rewire__('RecordService', mockRecordService);
-        flux.actions.getFilteredRecords(inputs.appId, inputs.tblId, inputs.rptId, inputs.formatted, inputs.filter).then(
+        flux.actions.getFilteredRecords(inputs.appId, inputs.tblId, inputs.rptId, inputs.formatted, inputs.filter, {}).then(
             () => {
                 expect(true).toBe(false);
                 done();
