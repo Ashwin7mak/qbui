@@ -703,6 +703,7 @@ module.exports = function(grunt) {
         if (target === 'AWSe2e') {
             return grunt.task.run([
                 'clean:server',
+                'build',
                 'shell:webpack',
                 'env:e2e',
                 'express:test',
