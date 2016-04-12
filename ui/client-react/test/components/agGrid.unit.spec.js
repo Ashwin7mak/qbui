@@ -4,6 +4,7 @@ import ReactDOM from 'react-dom';
 import AGGrid  from '../../src/components/dataTable/agGrid/agGrid';
 import AGGridReact from 'ag-grid-react';
 import Loader  from 'react-loader';
+import * as query from '../../src/constants/query';
 
 var AGGridMock = React.createClass({
     render() {
@@ -25,7 +26,13 @@ var I18nMessageMock = React.createClass({
     }
 });
 
-let flux = {};
+let flux = {
+    actions: {
+        getFilteredRecords: function() {
+            return;
+        }
+    }
+};
 
 const fakeReportData_loading = {
     loading: true
@@ -46,17 +53,24 @@ const fakeReportData_before = {
             col_text: "abc",
             col_date: "01-01-2015"
         }],
-        columns: [{
-            field: "col_num",
-            headerName: "col_num"
-        },
+        columns: [
             {
-                field: "col_text",
-                headerName: "col_text"
+                id: "1",
+                field: "col_num",
+                headerName: "col_num",
+                datatypeAttributes: {type:"NUMERIC"}
             },
             {
+                id:"2",
+                field: "col_text",
+                headerName: "col_text",
+                datatypeAttributes: {type:"TEXT"}
+            },
+            {
+                id:"3",
                 field: "col_date",
-                headerName: "col_date"
+                headerName: "col_date",
+                datatypeAttributes: {type:"DATE"}
             }]
     }
 };
@@ -92,11 +106,13 @@ describe('AGGrid functions', () => {
     beforeEach(() => {
         AGGrid.__Rewire__('AgGridReact', AGGridMock);
         AGGrid.__Rewire__('I18nMessage', I18nMessageMock);
+        spyOn(flux.actions, 'getFilteredRecords');
     });
 
     afterEach(() => {
         AGGrid.__ResetDependency__('AgGridReact');
         AGGrid.__ResetDependency__('I18nMessage');
+        flux.actions.getFilteredRecords.calls.reset();
     });
 
     it('test render of component', () => {
@@ -218,6 +234,149 @@ describe('AGGrid functions', () => {
             }
         }
         expect(rowsSelected).toEqual(fakeReportData_before.data.records.length);
+    });
+    it('renders column menu', () => {
+        AGGrid.__ResetDependency__('AgGridReact');
+        component = TestUtils.renderIntoDocument(<AGGrid actions={TableActionsMock}
+                                                         records={fakeReportData_before.data.records}
+                                                         columns={fakeReportData_before.data.columns} flux={flux}
+                                                         loading={false}/>);
+        expect(TestUtils.isCompositeComponent(component)).toBeTruthy();
+        let gridElement = TestUtils.scryRenderedDOMComponentsWithClass(component, "agGrid");
+        let menuButton = gridElement[0].getElementsByClassName("ag-header-cell-menu-button");
+        menuButton[0].click();
+        let menu = gridElement[0].getElementsByClassName("ag-menu");
+        expect(menu.length).toEqual(1);
+    });
+    it('sorts asc from menu', () => {
+        AGGrid.__ResetDependency__('AgGridReact');
+        component = TestUtils.renderIntoDocument(<AGGrid appId="1" tblId="2" rptId="3" actions={TableActionsMock}
+                                                         records={fakeReportData_before.data.records}
+                                                         columns={fakeReportData_before.data.columns} flux={flux}
+                                                         loading={false}/>);
+        expect(TestUtils.isCompositeComponent(component)).toBeTruthy();
+        let gridElement = TestUtils.scryRenderedDOMComponentsWithClass(component, "agGrid");
+        let menuButton = gridElement[0].getElementsByClassName("ag-header-cell-menu-button");
+        menuButton[0].click();
+        let menu = gridElement[0].getElementsByClassName("ag-menu");
+        expect(menu.length).toEqual(1);
+        let sortAscOption = menu[0].getElementsByClassName("ag-menu-option-text");
+        sortAscOption[0].click();
+        let queryParams = {};
+        queryParams[query.SORT_LIST_PARAM] = fakeReportData_before.data.columns[0].id;
+        expect(flux.actions.getFilteredRecords).toHaveBeenCalledWith("1", "2", "3", true, undefined, queryParams);
+    });
+    it('sorts desc from menu', () => {
+        AGGrid.__ResetDependency__('AgGridReact');
+        component = TestUtils.renderIntoDocument(<AGGrid appId="1" tblId="2" rptId="3" actions={TableActionsMock}
+                                                         records={fakeReportData_before.data.records}
+                                                         columns={fakeReportData_before.data.columns} flux={flux}
+                                                         loading={false}/>);
+        expect(TestUtils.isCompositeComponent(component)).toBeTruthy();
+        let gridElement = TestUtils.scryRenderedDOMComponentsWithClass(component, "agGrid");
+        let menuButton = gridElement[0].getElementsByClassName("ag-header-cell-menu-button");
+        menuButton[0].click();
+        let menu = gridElement[0].getElementsByClassName("ag-menu");
+        expect(menu.length).toEqual(1);
+        let sortDescOption = menu[0].getElementsByClassName("ag-menu-option-text");
+        sortDescOption[1].click();
+        let queryParams = {};
+        queryParams[query.SORT_LIST_PARAM] = "-" + fakeReportData_before.data.columns[0].id;
+        expect(flux.actions.getFilteredRecords).toHaveBeenCalledWith("1", "2", "3", true, undefined, queryParams);
+    });
+    it('overrides existing sort from menu', () => {
+        AGGrid.__ResetDependency__('AgGridReact');
+        component = TestUtils.renderIntoDocument(<AGGrid appId="1" tblId="2" rptId="3" actions={TableActionsMock}
+                                                         records={fakeReportData_before.data.records}
+                                                         columns={fakeReportData_before.data.columns} flux={flux}
+                                                         loading={false} sortFids={[6, 7]} groupFids={[10, 11]}/>);
+        expect(TestUtils.isCompositeComponent(component)).toBeTruthy();
+        let gridElement = TestUtils.scryRenderedDOMComponentsWithClass(component, "agGrid");
+        let menuButton = gridElement[0].getElementsByClassName("ag-header-cell-menu-button");
+        menuButton[0].click();
+        let menu = gridElement[0].getElementsByClassName("ag-menu");
+        expect(menu.length).toEqual(1);
+        let sortAscOption = menu[0].getElementsByClassName("ag-menu-option-text");
+        sortAscOption[0].click();
+        let queryParams = {};
+        queryParams[query.SORT_LIST_PARAM] = "10.11." + fakeReportData_before.data.columns[0].id;
+        expect(flux.actions.getFilteredRecords).toHaveBeenCalledWith("1", "2", "3", true, undefined, queryParams);
+    });
+    it('sort a sorted column from menu', () => {
+        AGGrid.__ResetDependency__('AgGridReact');
+        component = TestUtils.renderIntoDocument(<AGGrid appId="1" tblId="2" rptId="3" actions={TableActionsMock}
+                                                         records={fakeReportData_before.data.records}
+                                                         columns={fakeReportData_before.data.columns} flux={flux}
+                                                         loading={false}/>);
+        expect(TestUtils.isCompositeComponent(component)).toBeTruthy();
+        let gridElement = TestUtils.scryRenderedDOMComponentsWithClass(component, "agGrid");
+        let menuButton = gridElement[0].getElementsByClassName("ag-header-cell-menu-button");
+        menuButton[0].click();
+        let menu = gridElement[0].getElementsByClassName("ag-menu");
+        expect(menu.length).toEqual(1);
+        let sortAscOption = menu[0].getElementsByClassName("ag-menu-option-text");
+        sortAscOption[0].click();
+        expect(flux.actions.getFilteredRecords).toHaveBeenCalled();
+        menuButton = gridElement[0].getElementsByClassName("ag-header-cell-menu-button");
+        menuButton[0].click();
+        menu = gridElement[0].getElementsByClassName("ag-menu");
+        sortAscOption = menu[0].getElementsByClassName("ag-menu-option-text");
+        sortAscOption[0].click();
+        expect(flux.actions.getFilteredRecords).not.toHaveBeenCalled();
+    });
+    it('groups asc from menu', () => {
+        AGGrid.__ResetDependency__('AgGridReact');
+        component = TestUtils.renderIntoDocument(<AGGrid appId="1" tblId="2" rptId="3" actions={TableActionsMock}
+                                                         records={fakeReportData_before.data.records}
+                                                         columns={fakeReportData_before.data.columns} flux={flux}
+                                                         loading={false}/>);
+        expect(TestUtils.isCompositeComponent(component)).toBeTruthy();
+        let gridElement = TestUtils.scryRenderedDOMComponentsWithClass(component, "agGrid");
+        let menuButton = gridElement[0].getElementsByClassName("ag-header-cell-menu-button");
+        menuButton[0].click();
+        let menu = gridElement[0].getElementsByClassName("ag-menu");
+        expect(menu.length).toEqual(1);
+        let groupAscOption = menu[0].getElementsByClassName("ag-menu-option-text");
+        groupAscOption[2].click();
+        let queryParams = {};
+        queryParams[query.SORT_LIST_PARAM] = fakeReportData_before.data.columns[0].id;
+        expect(flux.actions.getFilteredRecords).toHaveBeenCalledWith("1", "2", "3", true, undefined, queryParams);
+    });
+    it('groups desc from menu', () => {
+        AGGrid.__ResetDependency__('AgGridReact');
+        component = TestUtils.renderIntoDocument(<AGGrid appId="1" tblId="2" rptId="3" actions={TableActionsMock}
+                                                         records={fakeReportData_before.data.records}
+                                                         columns={fakeReportData_before.data.columns} flux={flux}
+                                                         loading={false}/>);
+        expect(TestUtils.isCompositeComponent(component)).toBeTruthy();
+        let gridElement = TestUtils.scryRenderedDOMComponentsWithClass(component, "agGrid");
+        let menuButton = gridElement[0].getElementsByClassName("ag-header-cell-menu-button");
+        menuButton[0].click();
+        let menu = gridElement[0].getElementsByClassName("ag-menu");
+        expect(menu.length).toEqual(1);
+        let groupDescOption = menu[0].getElementsByClassName("ag-menu-option-text");
+        groupDescOption[3].click();
+        let queryParams = {};
+        queryParams[query.SORT_LIST_PARAM] = "-" + fakeReportData_before.data.columns[0].id;
+        expect(flux.actions.getFilteredRecords).toHaveBeenCalledWith("1", "2", "3", true, undefined, queryParams);
+    });
+    it('overrides existing grouping from menu', () => {
+        AGGrid.__ResetDependency__('AgGridReact');
+        component = TestUtils.renderIntoDocument(<AGGrid appId="1" tblId="2" rptId="3" actions={TableActionsMock}
+                                                         records={fakeReportData_before.data.records}
+                                                         columns={fakeReportData_before.data.columns} flux={flux}
+                                                         loading={false} sortFids={[6, 7]} groupFids={[10, 11]}/>);
+        expect(TestUtils.isCompositeComponent(component)).toBeTruthy();
+        let gridElement = TestUtils.scryRenderedDOMComponentsWithClass(component, "agGrid");
+        let menuButton = gridElement[0].getElementsByClassName("ag-header-cell-menu-button");
+        menuButton[0].click();
+        let menu = gridElement[0].getElementsByClassName("ag-menu");
+        expect(menu.length).toEqual(1);
+        let groupAscOption = menu[0].getElementsByClassName("ag-menu-option-text");
+        groupAscOption[2].click();
+        let queryParams = {};
+        queryParams[query.SORT_LIST_PARAM] = fakeReportData_before.data.columns[0].id + ".6.7";
+        expect(flux.actions.getFilteredRecords).toHaveBeenCalledWith("1", "2", "3", true, undefined, queryParams);
     });
 });
 

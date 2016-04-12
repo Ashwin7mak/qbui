@@ -118,7 +118,6 @@ export default {
                     zToA: "Gruppe Z bis A",
                     lowToHigh: "Gruppe der niedrigsten zur höchsten",
                     oldToNew: "Gruppe ältesten Bild",
-                    uncheckedToChecked: "Sortieren ungeprüft geprüft",
                     uncheckedToChecked: "Gruppe ungeprüft geprüft",
                     checkedToUnchecked: "Gruppe geprüft ungeprüft"
                 },

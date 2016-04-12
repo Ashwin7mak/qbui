@@ -121,7 +121,10 @@ let AGGrid = React.createClass({
      * @param column
      * @param asc
      */
-    sortReport(column, asc) {
+    sortReport(column, asc, alreadySorted) {
+        if (alreadySorted) {
+            return;
+        }
         let flux = this.getFlux();
 
         let queryParams = {};
@@ -148,7 +151,7 @@ let AGGrid = React.createClass({
         //for on-the-fly grouping, forget the previous group and go with the selection but add the previous sort fids.
         //TODO: how to pass back grouping info?
         let sortFid = (asc ? column.id.toString() : "-" + column.id.toString());
-        let sortList = ReportUtils.getSortListString(this.props.groupFids);
+        let sortList = ReportUtils.getSortListString(this.props.sortFids);
         queryParams[query.SORT_LIST_PARAM] = ReportUtils.prependSortFidToList(sortList, sortFid);
 
         flux.actions.getFilteredRecords(this.props.appId,
@@ -167,13 +170,22 @@ let AGGrid = React.createClass({
             this.prevSelectedColumnId = selectedColumnHeader[0].getAttribute("colid");
         }
         let columnHeader = document.querySelectorAll('div.ag-header-cell[colId="' + column.field + '"]');
-        columnHeader[0].classList.add("selected");
-        this.selectedColumnId = column.field;
+        if (columnHeader.length) {
+            columnHeader[0].classList.add("selected");
+            this.selectedColumnId = column.field;
+        }
     },
     onMenuClose() {
         let self = this;
+
+        document.addEventListener("DOMNodeInserted", function(ev) {
+            if (ev.target && ev.target.className && ev.target.className.indexOf("ag-menu") !== -1) {
+                console.log(1);
+            }
+        });
         document.addEventListener("DOMNodeRemoved", function(ev) {
             if (ev.target && ev.target.className && ev.target.className.indexOf("ag-menu") !== -1) {
+                console.log(2);
                 // a menu was closed remove selected behavior from all column headers
                 if (self.prevSelectedColumnId !== "") {
                     let columnHeader = document.querySelectorAll('div.ag-header-cell[colId="' + self.prevSelectedColumnId + '"]');
@@ -205,8 +217,8 @@ let AGGrid = React.createClass({
             }
         });
         let menuItems = [
-            {"name": this.getSortAscText(params.column.colDef, "sort"), "icon": isFieldSorted && isSortedAsc ? gridIcons.check : "", action: () => this.sortReport(params.column.colDef, true)},
-            {"name": this.getSortDescText(params.column.colDef, "sort"), "icon": isFieldSorted && !isSortedAsc ? gridIcons.check : "", action: () => this.sortReport(params.column.colDef, false)}];
+            {"name": this.getSortAscText(params.column.colDef, "sort"), "icon": isFieldSorted && isSortedAsc ? gridIcons.check : "", action: () => this.sortReport(params.column.colDef, true, isFieldSorted && isSortedAsc)},
+            {"name": this.getSortDescText(params.column.colDef, "sort"), "icon": isFieldSorted && !isSortedAsc ? gridIcons.check : "", action: () => this.sortReport(params.column.colDef, false, isFieldSorted && !isSortedAsc)}];
         menuItems.push("separator");
         menuItems.push({"name": this.getSortAscText(params.column.colDef, "group"), action: () => this.groupReport(params.column.colDef, true)},
             {"name": this.getSortDescText(params.column.colDef, "group"), action: () => this.groupReport(params.column.colDef)});
@@ -580,7 +592,7 @@ let AGGrid = React.createClass({
 
         // todo: optimize/refactor actions hover for performance
         if (columns.length > 0) {
-            //columns.push(this.getActionsColumn());
+            columns.push(this.getActionsColumn());
         }
         return columns;
     },
