@@ -700,7 +700,17 @@ module.exports = function(grunt) {
                 'concurrent:debug'
             ]);
         }
-
+        if (target === 'AWSe2e') {
+            return grunt.task.run([
+                'clean:server',
+                'shell:webpack',
+                'env:e2e',
+                'express:test',
+                'wait',
+                'open',
+                'express-keepalive'
+            ]);
+        }
         grunt.task.run([
             'clean:server',
             'shell:webpack',
