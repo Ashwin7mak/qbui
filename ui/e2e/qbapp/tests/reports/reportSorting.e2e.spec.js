@@ -90,7 +90,7 @@
                     message: 'Verify Checkbox sorting',
                     ColumnName: 'Checkbox',
                     ColumnId: 5,
-                    ItemText: 'Sort uncheck to check'
+                    ItemText: 'Sort unchecked to checked'
                 },
             ];
         }
@@ -122,7 +122,7 @@
                     message: 'Verify Checkbox sorting',
                     ColumnName: 'Checkbox',
                     ColumnId: 5,
-                    ItemText: 'Sort check to uncheck'
+                    ItemText: 'Sort checked to unchecked'
                 },
             ];
         }
@@ -215,10 +215,6 @@
                     }).then(function() {
                         //Finally verify both the arrays
                         reportSortingPage.verifyDescending(sortingTestcase.ColumnName, actualTableResults, sortedTableResults);
-                    }).then(function() {
-                        //finally clean both arrays
-                        actualTableResults = [];
-                        sortedTableResults = [];
                         done();
                     });
                 });
@@ -276,10 +272,6 @@
                     }).then(function() {
                         //Finally verify both the arrays
                         reportSortingPage.verifyAscending(sortingTestcase.ColumnName, actualTableResults, sortedTableResults);
-                    }).then(function() {
-                        //finally clean both arrays
-                        actualTableResults = [];
-                        sortedTableResults = [];
                         done();
                     });
                 });
@@ -317,10 +309,6 @@
                     }).then(function() {
                         //Finally verify both the arrays
                         reportSortingPage.verifyDescending(sortingTestcase.ColumnName, actualTableResults, sortedTableResults);
-                    }).then(function() {
-                        //finally clean both arrays
-                        actualTableResults = [];
-                        sortedTableResults = [];
                         done();
                     });
                 });

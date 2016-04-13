@@ -83,14 +83,12 @@
                 //Finally verify both the arrays
                 if (columnName.includes("Numeric")) {
                     expect(actualColumnRecords.sort(function(a, b) {return a - b;})).toEqual(sortedColumnRecords);
-                } else if (columnName.includes("Text")) {
-                    console.log("the actual after sorting are: " + actualColumnRecords.sort());
-                    console.log("The sorted are: " + sortedColumnRecords);
+                } else if (columnName.includes("Text") || columnName.includes("Checkbox")) {
                     expect(actualColumnRecords.sort()).toEqual(sortedColumnRecords);
                 } else if (columnName.includes("Date")) {
-                    console.log("the actual after sorting are: " + actualColumnRecords.sort(function(a, b) {return new Date(a).getTime() - new Date(b).getTime();}));
-                    console.log("The sorted are: " + sortedColumnRecords);
-                    expect(actualColumnRecords.sort(function(a, b) {return new Date(a).getTime() - new Date(b).getTime();})).toEqual(sortedColumnRecords);
+                    //sort the array
+                    actualColumnRecords.sort(function(a, b) {return new Date(a) - new Date(b);});
+                    expect(JSON.stringify(actualColumnRecords)).toEqual(JSON.stringify(sortedColumnRecords));
                 }
             }).then(function() {
                 //finally clean both arrays
@@ -106,18 +104,19 @@
             reportServicePage.waitForElement(reportServicePage.loadedContentEl).then(function() {
                 //Finally verify both the arrays
                 if (columnName.includes("Numeric")) {
-                    console.log("the actual after sorting are: " + actualColumnRecords.sort(function(a, b) {return a - b;}).reverse());
-                    console.log("The sorted are: " + sortedColumnRecords);
-                    expect(actualColumnRecords.sort(function(a, b) {return a - b;}).reverse()).toEqual(sortedColumnRecords);
-                } else if (columnName.includes("Text")) {
-                    console.log("the actual after sorting are: " + actualColumnRecords.sort().reverse());
-                    console.log("The sorted are: " + sortedColumnRecords);
+                    expect(actualColumnRecords.sort(function(a, b) {return b - a;})).toEqual(sortedColumnRecords);
+                } else if (columnName.includes("Text") || columnName.includes("Checkbox")) {
                     expect(actualColumnRecords.sort().reverse()).toEqual(sortedColumnRecords);
                 } else if (columnName.includes("Date")) {
-                    console.log("the actual after sorting are: " + actualColumnRecords.sort(function(a, b) {return new Date(a).getTime() - new Date(b).getTime();}).reverse());
-                    console.log("The sorted are: " + sortedColumnRecords);
-                    expect(actualColumnRecords.sort(function(a, b) {return new Date(a).getTime() - new Date(b).getTime();}).reverse()).toEqual(sortedColumnRecords);
+                    //sort the array
+                    actualColumnRecords.sort(function(a, b) {return new Date(b) - new Date(a);});
+                    expect(JSON.stringify(actualColumnRecords)).toEqual(JSON.stringify(sortedColumnRecords));
+
                 }
+            }).then(function() {
+                //finally clean both arrays
+                actualColumnRecords = [];
+                sortedColumnRecords = [];
             });
         };
 
