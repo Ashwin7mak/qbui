@@ -191,7 +191,7 @@ describe('Report Data Actions Filter Report functions -- success', () => {
 
 
     it('test get filtered records action with parameters', (done) => {
-        flux.actions.getFilteredRecords(appId, tblId, rptId, true, filter, {}).then(
+        flux.actions.getFilteredRecords(appId, tblId, rptId, {format:true}, filter, {}).then(
             () => {
                 expect(mockReportService.prototype.getReport).toHaveBeenCalled();
                 expect(mockReportService.prototype.parseFacetExpression).toHaveBeenCalled();

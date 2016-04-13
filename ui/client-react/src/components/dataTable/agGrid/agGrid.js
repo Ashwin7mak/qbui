@@ -137,7 +137,7 @@ let AGGrid = React.createClass({
 
         flux.actions.getFilteredRecords(this.props.appId,
             this.props.tblId,
-            this.props.rptId, true, this.props.filter, queryParams);
+            this.props.rptId, {format:true}, this.props.filter, queryParams);
     },
     /**
      * On selection of group option from menu fire off the action to group the data
@@ -156,7 +156,7 @@ let AGGrid = React.createClass({
 
         flux.actions.getFilteredRecords(this.props.appId,
             this.props.tblId,
-            this.props.rptId, true, this.props.filter, queryParams);
+            this.props.rptId, {format:true}, this.props.filter, queryParams);
     },
     /**
      * AG-grid doesnt fire any events or add any classes to the column for which menu has been opened

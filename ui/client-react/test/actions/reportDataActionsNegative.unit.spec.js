@@ -96,7 +96,7 @@ describe('Report Data Actions -- Filter report Negative', () => {
         }
         reportDataActions.__Rewire__('ReportService', mockReportService);
         reportDataActions.__Rewire__('RecordService', mockRecordService);
-        flux.actions.getFilteredRecords(inputs.appId, inputs.tblId, inputs.rptId, inputs.formatted, inputs.filter).then(
+        flux.actions.getFilteredRecords(inputs.appId, inputs.tblId, inputs.rptId, {format:inputs.formatted}, inputs.filter).then(
             () => {
                 expect(true).toBe(false);
                 done();
@@ -128,7 +128,7 @@ describe('Report Data Actions -- Filter report Negative', () => {
         }
         reportDataActions.__Rewire__('ReportService', mockReportService);
         reportDataActions.__Rewire__('RecordService', mockRecordService);
-        flux.actions.getFilteredRecords(inputs.appId, inputs.tblId, inputs.rptId, inputs.formatted, inputs.filter, {}).then(
+        flux.actions.getFilteredRecords(inputs.appId, inputs.tblId, inputs.rptId, {format:inputs.formatted}, inputs.filter, {}).then(
             () => {
                 expect(true).toBe(false);
                 done();
@@ -161,7 +161,7 @@ describe('Report Data Actions -- Filter report Negative', () => {
         }
         reportDataActions.__Rewire__('ReportService', mockReportService);
         reportDataActions.__Rewire__('RecordService', mockRecordService);
-        flux.actions.getFilteredRecords(inputs.appId, inputs.tblId, inputs.rptId, inputs.formatted, inputs.filter).then(
+        flux.actions.getFilteredRecords(inputs.appId, inputs.tblId, inputs.rptId, {format:inputs.formatted}, inputs.filter).then(
             () => {
                 expect(true).toBe(false);
                 done();
@@ -218,7 +218,7 @@ describe('Report Data Actions -- Filter report Negative missing parameters', () 
 
     dataProvider.forEach(function(data) {
         it(data.test, (done) => {
-            flux.actions.getFilteredRecords(data.appId, data.tblId, data.rptId, false, filter).then(
+            flux.actions.getFilteredRecords(data.appId, data.tblId, data.rptId, {format:false}, filter).then(
                 () => {
                     expect(true).toBe(false);
                     done();

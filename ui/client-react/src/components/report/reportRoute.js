@@ -149,7 +149,7 @@ const ReportRoute = React.createClass({
         queryParams[query.SORT_LIST_PARAM] = ReportUtils.getSortListString(this.props.reportData.data.selectedSortFids);
         flux.actions.getFilteredRecords(this.props.selectedAppId,
                                     this.props.routeParams.tblId,
-                                    this.props.routeParams.rptId, true, filter, queryParams);
+                                    this.props.routeParams.rptId, {format:true}, filter, queryParams);
     },
 
     filterOnSelections(newSelections) {
