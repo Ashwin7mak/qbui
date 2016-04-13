@@ -32,7 +32,8 @@ let filterReportInputs = {
 
 let responseReportData = {
     data: {
-        name: 'name'
+        name: 'name',
+        sortList: ['2', '1:V']
     }
 };
 let responseResultData = {
@@ -101,7 +102,7 @@ describe('Report Data Actions -- Filter report Negative', () => {
                 done();
             },
             () => {
-                expect(flux.dispatchBinder.dispatch.calls.argsFor(0)).toEqual([actions.LOAD_RECORDS, filterReportInputs]);
+                expect(flux.dispatchBinder.dispatch.calls.argsFor(0)).toEqual([actions.LOAD_RECORDS, jasmine.any(Object)]);
                 expect(flux.dispatchBinder.dispatch.calls.argsFor(1)).toEqual([actions.LOAD_RECORDS_FAILED, jasmine.any(Object)]);
                 done();
             }
@@ -283,7 +284,7 @@ describe('Report Data Actions -- ', () => {
     class mockReportService {
         constructor() { }
         getReport() {
-            return mockPromiseSuccess(null);
+            return mockPromiseSuccess(responseReportData);
         }
         getReportDataAndFacets() {
             return mockPromiseError();
@@ -302,9 +303,9 @@ describe('Report Data Actions -- ', () => {
 
     beforeEach(() => {
         spyOn(flux.dispatchBinder, 'dispatch');
-        spyOn(mockReportService.prototype, 'getReport');
         reportDataActions.__Rewire__('ReportService', mockReportService);
         reportDataActions.__Rewire__('RecordService', mockRecordService);
+        spyOn(mockReportService.prototype, 'getReport').and.callThrough();
     });
 
     afterEach(() => {

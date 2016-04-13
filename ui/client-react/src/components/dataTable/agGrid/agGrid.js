@@ -299,9 +299,6 @@ let AGGrid = React.createClass({
             //iterate over props and state
             for (var property in nextProps) {
                 if (nextProps.hasOwnProperty(property)) {
-                    if (!this.props[property]) {
-                        return true;
-                    }
                     if (!_.isEqual(this.props[property], nextProps[property])) {
                         if (property === "columns") {
                             if (this.props[property].length !== nextProps[property].length) {
@@ -317,8 +314,9 @@ let AGGrid = React.createClass({
                                     return true;
                                 }
                             }
+                        } else if (property !== "reportHeader" && property !== "pageActions") {
+                            return true;
                         }
-                        return true;
                     }
                 }
             }
