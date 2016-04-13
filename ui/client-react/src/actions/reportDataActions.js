@@ -145,7 +145,7 @@ let reportDataActions = {
     getFilteredRecords(appId, tblId, rptId, format, filter, overrideQueryParams) {
 
         //  Build list of fids that is sent to the server to fulfill report sorting requirements
-		//  The input sortList is a string array of fids/grouptype, delimited by ':'. Will extract
+        //  The input sortList is a string array of fids/grouptype, delimited by ':'. Will extract
         //  out the fids and return as a string, with each fid separated by a '.'
         function getReportSortFids(reportMetaData) {
             //TODO: Replace this with reportutils. Not sure why we are doing this.
@@ -203,7 +203,6 @@ let reportDataActions = {
                 } else {
                     //  Concatenate facet expression(if any) and search filter(if any) into single
                     //  query expression where each individual expression is 'AND'ed with the other.
-                    //ui/client-react/src/actions/reportDataActions.js:141
                     //  To optimize query performance, order the array elements 1..n in order of
                     //  significance/most targeted selection as the outputted query is built starting
                     //  at offset 0.
