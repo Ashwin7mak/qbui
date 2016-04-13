@@ -55,19 +55,19 @@ const fakeReportData_before = {
         }],
         columns: [
             {
-                id: "1",
+                id: 1,
                 field: "col_num",
                 headerName: "col_num",
                 datatypeAttributes: {type:"NUMERIC"}
             },
             {
-                id:"2",
+                id:2,
                 field: "col_text",
                 headerName: "col_text",
                 datatypeAttributes: {type:"TEXT"}
             },
             {
-                id:"3",
+                id:3,
                 field: "col_date",
                 headerName: "col_date",
                 datatypeAttributes: {type:"DATE"}
@@ -244,6 +244,7 @@ describe('AGGrid functions', () => {
         expect(TestUtils.isCompositeComponent(component)).toBeTruthy();
         let gridElement = TestUtils.scryRenderedDOMComponentsWithClass(component, "agGrid");
         let menuButton = gridElement[0].getElementsByClassName("ag-header-cell-menu-button");
+        expect(menuButton.length).toBeGreaterThan(1);
         menuButton[0].click();
         let menu = gridElement[0].getElementsByClassName("ag-menu");
         expect(menu.length).toEqual(1);
@@ -263,7 +264,7 @@ describe('AGGrid functions', () => {
         let sortAscOption = menu[0].getElementsByClassName("ag-menu-option-text");
         sortAscOption[0].click();
         let queryParams = {};
-        queryParams[query.SORT_LIST_PARAM] = fakeReportData_before.data.columns[0].id;
+        queryParams[query.SORT_LIST_PARAM] = fakeReportData_before.data.columns[0].id.toString();
         expect(flux.actions.getFilteredRecords).toHaveBeenCalledWith("1", "2", "3", true, undefined, queryParams);
     });
     it('sorts desc from menu', () => {
@@ -307,7 +308,7 @@ describe('AGGrid functions', () => {
         component = TestUtils.renderIntoDocument(<AGGrid appId="1" tblId="2" rptId="3" actions={TableActionsMock}
                                                          records={fakeReportData_before.data.records}
                                                          columns={fakeReportData_before.data.columns} flux={flux}
-                                                         loading={false}/>);
+                                                         loading={false} selectedSortFids={[1]}/>);
         expect(TestUtils.isCompositeComponent(component)).toBeTruthy();
         let gridElement = TestUtils.scryRenderedDOMComponentsWithClass(component, "agGrid");
         let menuButton = gridElement[0].getElementsByClassName("ag-header-cell-menu-button");
@@ -315,12 +316,6 @@ describe('AGGrid functions', () => {
         let menu = gridElement[0].getElementsByClassName("ag-menu");
         expect(menu.length).toEqual(1);
         let sortAscOption = menu[0].getElementsByClassName("ag-menu-option-text");
-        sortAscOption[0].click();
-        expect(flux.actions.getFilteredRecords).toHaveBeenCalled();
-        menuButton = gridElement[0].getElementsByClassName("ag-header-cell-menu-button");
-        menuButton[0].click();
-        menu = gridElement[0].getElementsByClassName("ag-menu");
-        sortAscOption = menu[0].getElementsByClassName("ag-menu-option-text");
         sortAscOption[0].click();
         expect(flux.actions.getFilteredRecords).not.toHaveBeenCalled();
     });
@@ -339,7 +334,7 @@ describe('AGGrid functions', () => {
         let groupAscOption = menu[0].getElementsByClassName("ag-menu-option-text");
         groupAscOption[2].click();
         let queryParams = {};
-        queryParams[query.SORT_LIST_PARAM] = fakeReportData_before.data.columns[0].id;
+        queryParams[query.SORT_LIST_PARAM] = fakeReportData_before.data.columns[0].id.toString();
         expect(flux.actions.getFilteredRecords).toHaveBeenCalledWith("1", "2", "3", true, undefined, queryParams);
     });
     it('groups desc from menu', () => {
