@@ -1,0 +1,13 @@
+@import '../../../../src/assets/css/qbVariables';
+
+$margin-spacer: 10px;
+
+.tableLoaderContainer {
+    flex: 1 1 auto;
+    overflow-y:scroll;
+}
+.cardViewList {
+    display: block !important;
+    width: inherit !important;
+    margin-bottom: $margin-spacer;
+}

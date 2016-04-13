@@ -4,7 +4,7 @@ import Griddle from 'griddle-react';
 import {I18nMessage} from '../../../utils/i18nMessage';
 import ReactCSSTransitionGroup from 'react/lib/ReactCSSTransitionGroup';
 import ReportActions from '../../actions/reportActions';
-import CardView from './cardView.js';
+import CardView from '../cardView/cardView';
 import LimitConstants from './../../../../../common/src/limitConstants';
 import _ from 'lodash';
 import Loader  from 'react-loader';
