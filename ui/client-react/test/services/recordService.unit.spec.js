@@ -27,12 +27,13 @@ describe('RecordService functions', () => {
     it('test getRecords function with formatting', () => {
         var appId = 1;
         var tblId = 2;
-        let formatted = true;
+        let params = {};
+        params[query.FORMAT_PARAM] = true;
 
         var url = recordService.constructUrl(recordService.API.GET_RECORD, [appId, tblId]);
-        recordService.getRecords(appId, tblId, formatted);
+        recordService.getRecords(appId, tblId, params);
 
-        expect(BaseService.prototype.get).toHaveBeenCalledWith(url, {params: {format : 'display'}});
+        expect(BaseService.prototype.get).toHaveBeenCalledWith(url, {params: {format : query.DISPLAY_FORMAT}});
     });
 
     it('test getRecords function with valid optional parameters', () => {
@@ -41,20 +42,23 @@ describe('RecordService functions', () => {
         var url = recordService.constructUrl(recordService.API.GET_RECORD, [appId, tblId]);
 
         let params = {};
+        params[query.FORMAT_PARAM] = true;
         params[query.QUERY_PARAM] = "testQuery";
         params[query.COLUMNS_PARAM] = "testClist";
         params[query.SORT_LIST_PARAM] = "testSlist";
+        params[query.GLIST_PARAM] = "testGlist";
         params[query.OFFSET_PARAM] = 10;
         params[query.NUMROWS_PARAM] = 10;
-        recordService.getRecords(appId, tblId, true, params);
+        recordService.getRecords(appId, tblId, params);
 
         let expectedParams = {};
         expectedParams[query.FORMAT_PARAM] = query.DISPLAY_FORMAT;
-        expectedParams[query.QUERY_PARAM] = "testQuery";
-        expectedParams[query.COLUMNS_PARAM] = "testClist";
-        expectedParams[query.SORT_LIST_PARAM] = "testSlist";
-        expectedParams[query.OFFSET_PARAM] = 10;
-        expectedParams[query.NUMROWS_PARAM] = 10;
+        expectedParams[query.QUERY_PARAM] = params[query.QUERY_PARAM];
+        expectedParams[query.COLUMNS_PARAM] = params[query.COLUMNS_PARAM];
+        expectedParams[query.SORT_LIST_PARAM] = params[query.SORT_LIST_PARAM];
+        expectedParams[query.GLIST_PARAM] = params[query.GLIST_PARAM];
+        expectedParams[query.OFFSET_PARAM] = params[query.OFFSET_PARAM];
+        expectedParams[query.NUMROWS_PARAM] = params[query.NUMROWS_PARAM];
         expect(BaseService.prototype.get).toHaveBeenCalledWith(url, {params : expectedParams});
     });
 
@@ -64,15 +68,16 @@ describe('RecordService functions', () => {
         var url = recordService.constructUrl(recordService.API.GET_RECORD, [appId, tblId]);
 
         let inputparams = {};
+        inputparams[query.FORMAT_PARAM] = true;
         inputparams[query.QUERY_PARAM] = "testQuery";
         inputparams[query.COLUMNS_PARAM] = 123;
         inputparams[query.SORT_LIST_PARAM] = "testSlist";
-        recordService.getRecords(appId, tblId, true, inputparams);
+        recordService.getRecords(appId, tblId, inputparams);
 
         let expectedParams = {};
         expectedParams[query.FORMAT_PARAM] = query.DISPLAY_FORMAT;
-        expectedParams[query.QUERY_PARAM] = "testQuery";
-        expectedParams[query.SORT_LIST_PARAM] = "testSlist";
+        expectedParams[query.QUERY_PARAM] = inputparams[query.QUERY_PARAM];
+        expectedParams[query.SORT_LIST_PARAM] = inputparams[query.SORT_LIST_PARAM];
         expect(BaseService.prototype.get).toHaveBeenCalledWith(url, {params : expectedParams});
     });
 
@@ -82,15 +87,16 @@ describe('RecordService functions', () => {
         var url = recordService.constructUrl(recordService.API.GET_RECORD, [appId, tblId]);
 
         let inputparams = {};
+        inputparams[query.FORMAT_PARAM] = true;
         inputparams[query.QUERY_PARAM] = "testQuery";
         inputparams[query.COLUMNS_PARAM] = "testClist";
         inputparams[query.SORT_LIST_PARAM] = 123;
-        recordService.getRecords(appId, tblId, true, inputparams);
+        recordService.getRecords(appId, tblId, inputparams);
 
         let expectedParams = {};
         expectedParams[query.FORMAT_PARAM] = query.DISPLAY_FORMAT;
-        expectedParams[query.QUERY_PARAM] = "testQuery";
-        expectedParams[query.COLUMNS_PARAM] = "testClist";
+        expectedParams[query.QUERY_PARAM] = inputparams[query.QUERY_PARAM];
+        expectedParams[query.COLUMNS_PARAM] = inputparams[query.COLUMNS_PARAM];
         expect(BaseService.prototype.get).toHaveBeenCalledWith(url, {params : expectedParams});
     });
 
@@ -100,15 +106,16 @@ describe('RecordService functions', () => {
         var url = recordService.constructUrl(recordService.API.GET_RECORD, [appId, tblId]);
 
         let inputparams = {};
+        inputparams[query.FORMAT_PARAM] = false;
         inputparams[query.QUERY_PARAM] = 123;
         inputparams[query.COLUMNS_PARAM] = "testClist";
         inputparams[query.SORT_LIST_PARAM] = "testSlist";
 
-        recordService.getRecords(appId, tblId, false, inputparams);
+        recordService.getRecords(appId, tblId, inputparams);
 
         let expectedParams = {};
-        expectedParams[query.COLUMNS_PARAM] = "testClist";
-        expectedParams[query.SORT_LIST_PARAM] = "testSlist";
+        expectedParams[query.COLUMNS_PARAM] = inputparams[query.COLUMNS_PARAM];
+        expectedParams[query.SORT_LIST_PARAM] = inputparams[query.SORT_LIST_PARAM];
         expect(BaseService.prototype.get).toHaveBeenCalledWith(url, {params : expectedParams});
     });
 
@@ -118,13 +125,14 @@ describe('RecordService functions', () => {
         var url = recordService.constructUrl(recordService.API.GET_RECORD, [appId, tblId]);
 
         let inputparams = {};
+        inputparams[query.FORMAT_PARAM] = false;
         inputparams[query.QUERY_PARAM] = "testQuery";
         inputparams[query.OFFSET_PARAM] = "abc";
         inputparams[query.NUMROWS_PARAM] = 10;
-        recordService.getRecords(appId, tblId, false, inputparams);
+        recordService.getRecords(appId, tblId, inputparams);
 
         let expectedParams = {};
-        expectedParams[query.QUERY_PARAM] = "testQuery";
+        expectedParams[query.QUERY_PARAM] = inputparams[query.QUERY_PARAM];
         expect(BaseService.prototype.get).toHaveBeenCalledWith(url, {params : expectedParams});
     });
 
@@ -134,9 +142,10 @@ describe('RecordService functions', () => {
         var url = recordService.constructUrl(recordService.API.GET_RECORD, [appId, tblId]);
 
         let inputparams = {};
+        inputparams[query.FORMAT_PARAM] = false;
         inputparams[query.OFFSET_PARAM] = 10;
         inputparams[query.NUMROWS_PARAM] = "abc";
-        recordService.getRecords(appId, tblId, false, inputparams);
+        recordService.getRecords(appId, tblId, inputparams);
 
         expect(BaseService.prototype.get).toHaveBeenCalledWith(url, {params : {}});
     });

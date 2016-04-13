@@ -93,9 +93,9 @@ let AGGrid = React.createClass({
         switch (column.datatypeAttributes.type) {
         case "CHECKBOX": message =  "uncheckedToChecked"; break;
         case "TEXT":
-        case "EMAIL": message =  "aToZ"; break;
+        case "EMAIL_ADDRESS": message =  "aToZ"; break;
         case "DATE":
-        case "DATETIME": message =  "oldToNew"; break;
+        case "DATE_TIME": message =  "oldToNew"; break;
         case "NUMERIC":
         case "RATING":
         default: message = "lowToHigh"; break;
@@ -107,9 +107,9 @@ let AGGrid = React.createClass({
         switch (column.datatypeAttributes.type) {
         case "CHECKBOX": message =  "checkedToUnchecked"; break;
         case "TEXT":
-        case "EMAIL": message =  "zToA"; break;
+        case "EMAIL_ADDRESS": message =  "zToA"; break;
         case "DATE":
-        case "DATETIME": message =  "newToOld"; break;
+        case "DATE_TIME": message =  "newToOld"; break;
         case "NUMERIC":
         case "RATING":
         default: message =  "highToLow"; break;
@@ -161,43 +161,31 @@ let AGGrid = React.createClass({
     /**
      * AG-grid doesnt fire any events or add any classes to the column for which menu has been opened
      * This makes the menu look like its detached from the header. The following is a hack to handle this.
+     * When a menu opens store the selectedColumn and then on DonNodeRemoved event if menu has been closed then
+     * remove the class from selectedColumn
      */
-    prevSelectedColumnId: "",
-    selectedColumnId: "",
+    selectedColumnId: [],
     selectColumnHeader(column) {
-        let selectedColumnHeader = document.querySelectorAll('div.ag-header-cell.selected');
-        if (selectedColumnHeader.length) {
-            this.prevSelectedColumnId = selectedColumnHeader[0].getAttribute("colid");
-        }
         let columnHeader = document.querySelectorAll('div.ag-header-cell[colId="' + column.field + '"]');
         if (columnHeader.length) {
             columnHeader[0].classList.add("selected");
-            this.selectedColumnId = column.field;
+            this.selectedColumnId.push(column.field);
         }
     },
     onMenuClose() {
         let self = this;
-
-        document.addEventListener("DOMNodeInserted", function(ev) {
-            if (ev.target && ev.target.className && ev.target.className.indexOf("ag-menu") !== -1) {
-                console.log(1);
-            }
-        });
         document.addEventListener("DOMNodeRemoved", function(ev) {
             if (ev.target && ev.target.className && ev.target.className.indexOf("ag-menu") !== -1) {
-                console.log(2);
-                // a menu was closed remove selected behavior from all column headers
-                if (self.prevSelectedColumnId !== "") {
-                    let columnHeader = document.querySelectorAll('div.ag-header-cell[colId="' + self.prevSelectedColumnId + '"]');
-                    columnHeader[0].classList.remove("selected");
-                } else if (self.selectedColumnId !== "") {
-                    let columnHeader = document.querySelectorAll('div.ag-header-cell[colId="' + self.selectedColumnId + '"]');
-                    columnHeader[0].classList.remove("selected");
-                } else {
-                    let headerCells = document.querySelectorAll('div.ag-header-cell');
-                    _.each(headerCells, (cell) => {
-                        cell.classList.remove("selected");
+                if (self.selectedColumnId.length) {
+                    let toRemove = self.selectedColumnId[0];
+                    let occurences = _.filter(self.selectedColumnId, function(column) {
+                        return column === toRemove;
                     });
+                    self.selectedColumnId = self.selectedColumnId.splice(1, self.selectedColumnId.length);
+                    let columnHeader = document.querySelectorAll('div.ag-header-cell[colId="' + toRemove + '"]');
+                    if (occurences.length <= 1) {
+                        columnHeader[0].classList.remove("selected");
+                    }
                 }
             }
         });
@@ -311,9 +299,6 @@ let AGGrid = React.createClass({
             //iterate over props and state
             for (var property in nextProps) {
                 if (nextProps.hasOwnProperty(property)) {
-                    if (!this.props[property]) {
-                        return true;
-                    }
                     if (!_.isEqual(this.props[property], nextProps[property])) {
                         if (property === "columns") {
                             if (this.props[property].length !== nextProps[property].length) {
@@ -329,8 +314,9 @@ let AGGrid = React.createClass({
                                     return true;
                                 }
                             }
+                        } else if (property !== "reportHeader" && property !== "pageActions") {
+                            return true;
                         }
-                        return true;
                     }
                 }
             }
