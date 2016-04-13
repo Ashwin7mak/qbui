@@ -258,6 +258,7 @@ describe('AGGrid functions', () => {
         expect(TestUtils.isCompositeComponent(component)).toBeTruthy();
         let gridElement = TestUtils.scryRenderedDOMComponentsWithClass(component, "agGrid");
         let menuButton = gridElement[0].getElementsByClassName("ag-header-cell-menu-button");
+        expect(menuButton.length).toBeGreaterThan(1);
         menuButton[0].click();
         let menu = gridElement[0].getElementsByClassName("ag-menu");
         expect(menu.length).toEqual(1);
