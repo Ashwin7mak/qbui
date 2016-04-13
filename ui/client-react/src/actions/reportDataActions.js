@@ -140,43 +140,36 @@ let reportDataActions = {
      *  Supported filtering options include:
      *       facet  : expression representing all the facets selected by user so far example [{fid: fid1, values: value1, value2}, {fid: fid2, values: value3, value4}, ..]
      *       search : search string
+     *
+     * @param requiredQueryParams: {format, offset, numrows}
+     * @param filter: {facet, search}
+     * @param overrideQueryParams: {columns, sortlist, query}
      */
 
-    getFilteredRecords(appId, tblId, rptId, format, filter, overrideQueryParams) {
-
-        //  Build list of fids that is sent to the server to fulfill report sorting requirements
-        //  The input sortList is a string array of fids/grouptype, delimited by ':'. Will extract
-        //  out the fids and return as a string, with each fid separated by a '.'
-        function getReportSortFids(reportMetaData) {
-            //TODO: Replace this with reportutils. Not sure why we are doing this.
-            let fids = [];
-            if (reportMetaData.data.sortList) {
-                reportMetaData.data.sortList.forEach(function(sort) {
-                    if (sort) {
-                        var sortEl = sort.split(':');
-                        fids.push(sortEl[0]);
-                    }
-                });
-            }
-            return fids ? fids.join('.') : '';
-        }
+    getFilteredRecords(appId, tblId, rptId, requiredQueryParams, filter, overrideQueryParams) {
 
         //  Build the request query parameters needed to properly filter the report request based on the report
         //  meta data.  Information that could be sent include fid list, sort list, grouping and query parameters
         function buildRequestQuery(reportMetaData, facetQueryExpression, searchExpression) {
             var queryParams = {};
 
-            if (reportMetaData && reportMetaData.data) {
+            //required query params
+            queryParams[query.OFFSET_PARAM] = requiredQueryParams[query.OFFSET_PARAM];
+            queryParams[query.NUMROWS_PARAM] = requiredQueryParams[query.NUMROWS_PARAM];
+            queryParams[query.FORMAT_PARAM] = requiredQueryParams[query.FORMAT_PARAM];
 
-                if (overrideQueryParams && overrideQueryParams[query.COLUMNS_PARAM]) {
+            //for the optional ones, if something is null/undefined pull from report's meta data
+            if (reportMetaData && reportMetaData.data) {
+                overrideQueryParams = overrideQueryParams || {};
+                if (overrideQueryParams[query.COLUMNS_PARAM]) {
                     queryParams[query.COLUMNS_PARAM] = overrideQueryParams[query.COLUMNS_PARAM];
                 } else {
-                    queryParams[query.COLUMNS_PARAM] = ReportUtils.getSortListString(reportMetaData.data.fids);
+                    queryParams[query.COLUMNS_PARAM] = reportMetaData.data ? reportMetaData.data.fids : "";
                 }
-                if (overrideQueryParams && overrideQueryParams[query.SORT_LIST_PARAM]) {
+                if (overrideQueryParams[query.SORT_LIST_PARAM]) {
                     queryParams[query.SORT_LIST_PARAM] = overrideQueryParams[query.SORT_LIST_PARAM];
                 } else {
-                    queryParams[query.SORT_LIST_PARAM] = getReportSortFids(reportMetaData);
+                    queryParams[query.SORT_LIST_PARAM] = ReportUtils.getSortStringFromSortListArray(reportMetaData.data.sortList);
                 }
 
                 //  Optional parameter used by the Node layer to return the result set in grouping order for
@@ -187,18 +180,10 @@ let reportDataActions = {
                 //
                 //      sortList: ['2', '1:V', '33:C']
                 //      glist: '2.1:V.33:C'
-                //
-                queryParams[query.GLIST_PARAM] = reportMetaData.data.sortList ? reportMetaData.data.sortList.join('.') : '';
+                //TODO: make this dependent on override param
+                queryParams[query.GLIST_PARAM] = ReportUtils.getSortListString(reportMetaData.data.sortList);
 
-                if (overrideQueryParams && overrideQueryParams[query.OFFSET_PARAM]) {
-                    queryParams[query.OFFSET_PARAM] = overrideQueryParams[query.OFFSET_PARAM];
-                }
-                if (overrideQueryParams && overrideQueryParams[query.NUMROWS_PARAM]) {
-                    queryParams[query.NUMROWS_PARAM] = overrideQueryParams[query.NUMROWS_PARAM];
-                }
-
-
-                if (overrideQueryParams && overrideQueryParams[query.QUERY_PARAM]) {
+                if (overrideQueryParams[query.QUERY_PARAM]) {
                     queryParams[query.QUERY_PARAM] = overrideQueryParams[query.QUERY_PARAM];
                 } else {
                     //  Concatenate facet expression(if any) and search filter(if any) into single
@@ -239,8 +224,8 @@ let reportDataActions = {
                 promises.push(reportService.getReport(appId, tblId, rptId));
 
                 // The filter parameter may contain a searchExpression and facetExpression
-                let searchExpression = filter && filter.search ? filter.search : '';
-                let facetExpression = filter && filter.facet ? filter.facet : '';
+                let searchExpression = filter ? filter.search : '';
+                let facetExpression = filter ? filter.facet : '';
                 if (facetExpression !== '' && facetExpression.length) {
                     promises.push(reportService.parseFacetExpression(facetExpression));
                 }
@@ -248,9 +233,6 @@ let reportDataActions = {
                 Promise.all(promises).then(
                     (response) => {
                         var queryParams = buildRequestQuery(response[0], response[1], searchExpression);
-
-                        //  parameters which are all optional and could be null/undefined
-                        queryParams[query.FORMAT_PARAM] = format;
 
                         //  Get the filtered records
                         recordService.getRecords(appId, tblId, queryParams).then(

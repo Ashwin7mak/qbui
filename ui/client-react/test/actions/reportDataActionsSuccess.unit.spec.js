@@ -148,9 +148,13 @@ describe('Report Data Actions Filter Report functions -- success', () => {
         appId: appId,
         tblId: tblId,
         rptId: rptId,
-        filter: {},
+        filter: undefined,
         sortList: '6.-7'
     };
+    let queryParams = {};
+    queryParams[query.FORMAT_PARAM] = true;
+    queryParams[query.OFFSET_PARAM] = 10;
+    queryParams[query.NUMROWS_PARAM] = 50;
 
     class mockReportService {
         constructor() { }
@@ -205,7 +209,7 @@ describe('Report Data Actions Filter Report functions -- success', () => {
     });
 
     it('test filter report action with parameters and row limit/offset', (done) => {
-        flux.actions.getFilteredRecords(appId, tblId, rptId, true, filter, 20, 10).then(
+        flux.actions.getFilteredRecords(appId, tblId, rptId, queryParams, filter).then(
             () => {
                 expect(mockReportService.prototype.getReport).toHaveBeenCalled();
                 expect(mockReportService.prototype.parseFacetExpression).toHaveBeenCalled();
@@ -227,14 +231,15 @@ describe('Report Data Actions Filter Report functions -- success', () => {
         overrideParams[query.COLUMNS_PARAM] = columns;
         overrideParams[query.SORT_LIST_PARAM] = sortList;
 
-        flux.actions.getFilteredRecords(appId, tblId, rptId, true, {}, overrideParams).then(
+        flux.actions.getFilteredRecords(appId, tblId, rptId, queryParams, undefined, overrideParams).then(
             () => {
                 expect(mockReportService.prototype.getReport).toHaveBeenCalled();
-                overrideParams[query.FORMAT_PARAM] = true;
-                overrideParams[query.GLIST_PARAM] = "";
-                overrideParams[query.QUERY_PARAM] = "";
+                let resultingParams = {};
+                _.extend(resultingParams, queryParams, overrideParams);
+                resultingParams[query.GLIST_PARAM] = "";
+                resultingParams[query.QUERY_PARAM] = "";
 
-                expect(mockRecordService.prototype.getRecords).toHaveBeenCalledWith(appId, tblId, overrideParams);
+                expect(mockRecordService.prototype.getRecords).toHaveBeenCalledWith(appId, tblId, resultingParams);
                 expect(flux.dispatchBinder.dispatch.calls.count()).toEqual(2);
                 expect(flux.dispatchBinder.dispatch.calls.argsFor(0)).toEqual([actions.LOAD_RECORDS, filterReportInputsWithOverrides]);
                 expect(flux.dispatchBinder.dispatch.calls.argsFor(1)).toEqual([actions.LOAD_RECORDS_SUCCESS, responseRecordModel]);

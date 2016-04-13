@@ -87,6 +87,43 @@ class ReportUtils {
 
     }
 
+    /**
+     * Takes in a query's sortlist which can have sort and grouping strings
+     * and returns a string with just sort fids delimited by "."
+     * @param sortList
+     * @returns {string}
+     */
+    static getSortStringFromSortListArray(sortList) {
+        let sortFids = [];
+        if (sortList && sortList.length) {
+            sortList.forEach((sort) =>{
+                if (sort) {
+                    var sortEl = sort.split(groupDelimiter);
+                    sortFids.push(sortEl[0]);
+                }
+            });
+        }
+        return sortFids.join(sortFidDelimiter);
+    }
+
+    /**
+     * Takes in a query's sortlist which can have sort and grouping strings
+     * and returns a string with just sort fids delimited by "."
+     * @param sortList
+     * @returns {string}
+     */
+    static getGroupStringFromSortListArray(sortList) {
+        let sortFids = [];
+        if (sortList && sortList.length) {
+            sortList.forEach((sort) =>{
+                if (sort) {
+                    var sortEl = sort.split(groupDelimiter);
+                    sortFids.push(sortEl[0]);
+                }
+            });
+        }
+        return sortFids.join(sortFidDelimiter);
+    }
 }
 
 export default ReportUtils;
