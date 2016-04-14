@@ -1,6 +1,6 @@
 import * as actions from '../../src/constants/actions';
 import FacetSelections from '../components/facet/facetSelections';
-
+import ReportUtils from '../utils/reportUtils';
 import Fluxxor from 'fluxxor';
 import Logger from '../utils/logger';
 
@@ -17,7 +17,10 @@ let reportModel = {
         hasGrouping: false,     //TODO: QBSE-19937 this should come from report meta data.
         name: null,
         records: null,
-        recordsCount: null
+        recordsCount: null,
+        sortFids: [],         //TODO: QBSE-19937 this should come from report meta data.
+        groupFids: [],
+        selectedSortFids: []
     },
     /**
      * Given the field list format the columnDefinition as needed by data grid.
@@ -27,16 +30,18 @@ let reportModel = {
      */
     getReportColumns(fields, hasGrouping) {
         let columns = [];
-        this.findTempGroupingFields(fields);
-        let groupingFields = this.model.groupingFields;
+        if (this.model.hasGrouping) {
+            this.findTempGroupingFields(fields);
+        }
+        let groupFids = this.model.groupFids;
 
         if (fields) {
             fields.forEach(function(field, index) {
                 //skip showing grouped fields on report
                 let isFieldGrouped = false;
                 if (hasGrouping) {
-                    isFieldGrouped = groupingFields.find((groupingField) => {
-                        return field.name === groupingField;
+                    isFieldGrouped = groupFids.find((fid) => {
+                        return field.id === fid;
                     });
                 }
                 if (!isFieldGrouped) {
@@ -61,17 +66,20 @@ let reportModel = {
     // Temporary helper for finding grouping fields for fake grouped data
     findTempGroupingFields(fields) {
         let groupingFields = [];
+        let groupFids = [];
         fields.forEach((field) => {
             if (field.datatypeAttributes.type === "TEXT" && groupingFields.length < 2) {
                 groupingFields.push(field.name);
+                groupFids.push(field.id);
             }
             if (field.datatypeAttributes.type === "RATING" && groupingFields.length < 2) {
                 groupingFields.push(field.name);
+                groupFids.push(field.id);
             }
         });
+        this.setGroupFids(groupFids);
         this.setGroupingFields(groupingFields);
         this.setGroupingLevel(groupingFields.length);
-        //return groupingFields;
     },
     // Temporary helper for creating fake grouped data
     createTempGroupedData(reportData, fields) {
@@ -178,6 +186,7 @@ let reportModel = {
     setMetaData: function(reportMetaData) {
         this.model.name = reportMetaData.name;
         this.model.hasGrouping = reportMetaData.hasGrouping;
+        this.model.selectedSortFids = reportMetaData.sortList;
         //TODO: Add other sorting/grouping info needed by client
     },
     /**
@@ -220,6 +229,14 @@ let reportModel = {
     },
     setGroupingFields: function(groupingFields) {
         this.model.groupingFields = groupingFields;
+    },
+    setGroupFids: function(groupFids) {
+        this.model.groupFids = groupFids;
+    },
+    setSelectedSortFids: function(sortList) {
+        if (sortList !== this.model.sortFids) {
+            this.model.selectedSortFids = ReportUtils.getSortFids(sortList);
+        }
     }
 };
 
@@ -232,6 +249,7 @@ let ReportDataStore = Fluxxor.createStore({
         this.error = false;
         this.nonFacetClicksEnabled = true;
         this.searchStringForFiltering = '' ;
+        this.facetExpression = {};
         this.selections  = new FacetSelections();
 
         this.bindActions(
@@ -285,7 +303,7 @@ let ReportDataStore = Fluxxor.createStore({
         this.selections = payload.filter.selections;
         this.facetExpression = payload.filter.facet;
         this.searchStringForFiltering =  payload.filter.search;
-
+        this.reportModel.setSelectedSortFids(payload.sortList);
         this.emit('change');
     },
 
@@ -352,6 +370,7 @@ let ReportDataStore = Fluxxor.createStore({
             rptId: this.rptId,
             searchStringForFiltering: this.searchStringForFiltering,
             selections: this.selections,
+            facetExpression: this.facetExpression,
             nonFacetClicksEnabled : this.nonFacetClicksEnabled
         };
     }

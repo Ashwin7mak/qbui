@@ -46,7 +46,6 @@ let ReportContent = React.createClass({
             var columnsData = columns.map((obj) => {
                 obj.headerClass = "gridHeaderCell";
                 obj.cellClass = "gridCell";
-                obj.suppressMenu = true;
                 obj.suppressResize = true;
                 obj.minWidth = 100;
                 if (obj.datatypeAttributes) {
@@ -112,12 +111,19 @@ let ReportContent = React.createClass({
                                     uniqueIdentifier="Record ID#"
                                     appId={this.props.reportData.appId}
                                     tblId={this.props.reportData.tblId}
+                                    rptId={this.props.reportData.rptId}
                                     reportHeader={this.props.reportHeader}
                                     pageActions={this.props.pageActions}
                                     selectionActions={<ReportActions />}
                                     showGrouping={this.props.reportData.data.hasGrouping}
                                     filteredRecordCount={this.props.reportData.data ? this.props.reportData.data.filteredRecordCount : 0}
                                     groupLevel={this.props.reportData.data ? this.props.reportData.data.groupLevel : 0}
+                                    groupFids={this.props.reportData.data ? this.props.reportData.data.groupFids : []}
+                                    sortFids={this.props.reportData.data ? this.props.reportData.data.sortFids : []}
+                                    filter={{selections: this.props.reportData.selections,
+                                        facet: this.props.reportData.facetExpression,
+                                        search: this.props.reportData.searchStringForFiltering}}
+                                    selectedSortFids={this.props.reportData.data ? this.props.reportData.data.selectedSortFids : []}
                             ></AGGrid> :
                             <GriddleTable reportData={this.props.reportData}
                                     columnMetadata={columnsDef}

@@ -16,6 +16,9 @@ import _ from 'lodash';
 import './report.scss';
 import FilterUtils from '../../utils/filterUtils';
 import FacetSelections from '../facet/facetSelections';
+import * as query from '../../constants/query';
+import ReportUtils from '../../utils/reportUtils';
+
 
 let logger = new Logger();
 let FluxMixin = Fluxxor.FluxMixin(React);
@@ -142,9 +145,11 @@ const ReportRoute = React.createClass({
 
         logger.debug('Sending filter action with:' + searchString);
 
-        flux.actions.filterReport(this.props.selectedAppId,
+        let queryParams = {};
+        queryParams[query.SORT_LIST_PARAM] = ReportUtils.getSortListString(this.props.reportData.data.selectedSortFids);
+        flux.actions.getFilteredRecords(this.props.selectedAppId,
                                     this.props.routeParams.tblId,
-                                    this.props.routeParams.rptId, true, filter);
+                                    this.props.routeParams.rptId, {format:true}, filter, queryParams);
     },
 
     filterOnSelections(newSelections) {
