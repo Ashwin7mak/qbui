@@ -12,7 +12,7 @@ $grid-font-size: $font-size - 2;
 
 $grid-group-row-header-bkgrd-color: $color1;
 $grid-group-row-header-border-top: $color7;
-$grid-group-row-header-divider: $ghost;
+$grid-group-row-header-divider: $color21;
 
 $grid-group-expand-icon-size: 20px;
 $grid-default-group-padding: 7px;
@@ -192,7 +192,7 @@ $grid-default-cell-padding: 8px;
         font-size: $grid-font-size + 2;
         width: $grid-font-size + 2;
         vertical-align: middle;
-        color: $fiddlehead;
+        color: $color22;
     }
     .ag-menu {
         top: 24px!important;
