@@ -10,10 +10,10 @@
     function createGroupDataGrid(groupFields, fields, records) {
         let data = [];
 
-        let reportData = [];
-        let map = new Map();
-
         if (fields && records) {
+            let map = new Map();
+            let reportData = [];
+
             fields.forEach((field) => {
                 map.set(field.id, field);
             });
@@ -27,9 +27,9 @@
                 columns.record = record;
                 reportData.push(columns);
             });
-        }
 
-        data = getData(groupFields, 0, reportData);
+            data = getData(groupFields, 0, reportData);
+        }
 
         return data;
     }
@@ -56,66 +56,74 @@
 
     }
 
-    function getGroupFields(req, fields, records) {
-        let groupData = {
-            hasGrouping: false,
-            groupByFields: [],
-            gridColumns: [],
-            gridData: []
-        };
+    module.exports = {
 
-        if (fields) {
-            //
-            // Is there a grouping parameter included on the request.  The format of the parameter
-            // is 'fid1:groupType1.fid2:groupType2...fidN:groupTypeN'
-            //
-            let glist = req.param(constants.REQUEST_PARAMETER.GROUP_LIST);
-            if (glist) {
-                let groups = glist.split(constants.REQUEST_PARAMETER.LIST_DELIMITER);
-                if (groups) {
-                    fields.forEach(function(field) {
-                        let isGroupByField = false;
-                        if (groupData.groupByFields.length < groups.length) {
-                            for (let i = 0; i < groups.length; i++) {
-                                let el = groups[i].split(constants.REQUEST_PARAMETER.GROUP_DELIMITER);
+        group: function(req, fields, records) {
 
-                                if (field.id && el[0] === field.id.toString() && el.length > 1) {
-                                    //  add the group by type to the field
-                                    field.groupByType = el[1];
+            let groupBy = {
+                hasGrouping: false,
+                columns: [],
+                gridColumns: [],
+                gridData: [],
+                totalRows: 0
+            };
 
-                                    //  add the field to the list of group fields
-                                    groupData.groupByFields.push(field);
-                                    isGroupByField = true;
-                                    break;
+            if (fields) {
+                //
+                // Is there a grouping parameter included on the request.  The format of the parameter
+                // is 'fid1:groupType1.fid2:groupType2...fidN:groupTypeN'
+                //
+                let glist = req.param(constants.REQUEST_PARAMETER.GROUP_LIST);
+                if (glist) {
+                    //  get the list of fields to group
+                    let groups = glist.split(constants.REQUEST_PARAMETER.LIST_DELIMITER);
+                    if (groups) {
+                        //  Loop through all the fields and find those that are to grouped
+                        fields.forEach(function(field) {
+                            let isGroupByField = false;
+
+                            //  we want identify the fields that we are to group by and add those to the
+                            //  groupBy.columns list.
+                            if (groupBy.columns.length < groups.length) {
+                                for (let i = 0; i < groups.length; i++) {
+                                    let el = groups[i].split(constants.REQUEST_PARAMETER.GROUP_DELIMITER);
+
+                                    if (field.id && el[0] === field.id.toString() && el.length > 1) {
+                                        //  add the group by type to the field
+                                        field.groupByType = el[1];
+
+                                        //  add the field to the list of group fields
+                                        groupBy.columns.push(field);
+                                        isGroupByField = true;
+                                        break;
+                                    }
                                 }
                             }
-                        }
 
-                        //  If the field is not grouped, add it to the gridColumns array.  This will contain
-                        //  all of the columns except for the group by columns.
-                        if (isGroupByField === false) {
-                            groupData.gridColumns.push(field);
-                        }
-                    });
+                            //  If the field is not grouped, add it to the gridColumns array.  This will contain
+                            //  all of the fields except for the group by fields (those in groupBy.columns).
+                            if (isGroupByField === false) {
+                                groupBy.gridColumns.push(field);
+                            }
+                        });
 
-                    if (groupData.groupByFields.length > 0) {
-                        groupData.hasGrouping = true;
-                        groupData.gridData = createGroupDataGrid(groupData.groupByFields, fields, records);
+                        // if there are grouping columns, set the grouping flag to true and organize the
+                        // grid data per grouping fields requirements.
+                        if (groupBy.columns.length > 0) {
+                            groupBy.hasGrouping = true;
+                            groupBy.gridData = createGroupDataGrid(groupBy.columns, fields, records);
+
+                            //  TODO: with paging, this is flawed...
+                            if (groupBy.gridData.length > 0) {
+                                groupBy.totalRows = records.length;
+                            }
+                        }
                     }
                 }
             }
-        }
 
-        return groupData;
-    }
+            return groupBy;
 
-    module.exports = {
-
-        format: function(req, fields, records) {
-
-            let groupFields = getGroupFields(req, fields, records);
-
-            return groupFields;
         }
     };
 }());

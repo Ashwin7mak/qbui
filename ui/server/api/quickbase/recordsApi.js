@@ -162,6 +162,7 @@
                             }
 
                             resolve(responseObject);
+
                         }.bind(this),
                         function(response) {
                             reject(response);
@@ -187,8 +188,9 @@
 
                     Promise.all(fetchRequests).then(
                         function(response) {
-                            var records = jsonBigNum.parse(response[0].body);
                             var responseObject;
+
+                            var records = jsonBigNum.parse(response[0].body);
                             var groupedRecords;
 
                             //return raw undecorated record values due to flag format=raw
@@ -200,18 +202,17 @@
 
                                 if (this.isDisplayFormat(req)) {
                                     records = recordFormatter.formatRecords(records, fields);
-
-                                    //  check if any grouping requirements.
-                                    groupedRecords = groupFormatter.format(req, fields, records);
-
+                                    groupedRecords = groupFormatter.group(req, fields, records);
                                 }
+
                                 responseObject = {};
                                 responseObject[FIELDS] = fields;
                                 responseObject[RECORDS] = records;
                                 responseObject[GROUPS] = groupedRecords;
-
                             }
+
                             resolve(responseObject);
+
                         }.bind(this),
                         function(response) {
                             reject(response);

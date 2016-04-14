@@ -12,9 +12,9 @@ let reportModel = {
         facets: null,
         filteredRecords: null,
         filteredRecordsCount: null,
-        groupingFields: null,   //TODO: QBSE-19937 this should come from report meta data.
-        groupLevel: 0,          //TODO: QBSE-19937 this should come from report meta data.
-        hasGrouping: false,     //TODO: QBSE-19937 this should come from report meta data.
+        groupingFields: null,
+        groupLevel: 0,
+        hasGrouping: false,
         name: null,
         records: null,
         recordsCount: null
@@ -25,89 +25,37 @@ let reportModel = {
      * @param hasGrouping
      * @returns {Array}
      */
-    getReportColumns(fields, hasGrouping) {
+    getReportColumns(fields) {
         let columns = [];
-        this.findTempGroupingFields(fields);
-        let groupingFields = this.model.groupingFields;
 
         if (fields) {
             fields.forEach(function(field, index) {
-                //skip showing grouped fields on report
-                let isFieldGrouped = false;
-                if (hasGrouping) {
-                    isFieldGrouped = groupingFields.find((groupingField) => {
-                        return field.name === groupingField;
-                    });
-                }
-                if (!isFieldGrouped) {
-                    let column = {};
-                    column.order = index;
-                    column.id = field.id;
-                    column.headerName = field.name;     //for ag-grid
-                    column.field = field.name;          //for ag-grid
-                    column.columnName = field.name;     //for griddle
-                    column.displayName = field.name;    //for griddle
-                    column.fieldType = field.type;
-                    column.builtIn = field.builtIn;
+                let column = {};
+                column.order = index;
+                column.id = field.id;
+                column.headerName = field.name;     //for ag-grid
+                column.field = field.name;          //for ag-grid
+                column.columnName = field.name;     //for griddle
+                column.displayName = field.name;    //for griddle
+                column.fieldType = field.type;
+                column.builtIn = field.builtIn;
 
-                    //  client side attributes..
-                    column.datatypeAttributes = field.datatypeAttributes;
-                    columns.push(column);
-                }
+                //  client side attributes..
+                column.datatypeAttributes = field.datatypeAttributes;
+                columns.push(column);
             });
         }
         return columns;
     },
-    // Temporary helper for finding grouping fields for fake grouped data
-    findTempGroupingFields(fields) {
-        let groupingFields = [];
-        fields.forEach((field) => {
-            if (field.datatypeAttributes.type === "TEXT" && groupingFields.length < 2) {
-                groupingFields.push(field.name);
-            }
-            if (field.datatypeAttributes.type === "RATING" && groupingFields.length < 2) {
-                groupingFields.push(field.name);
-            }
-        });
-        this.setGroupingFields(groupingFields);
-        this.setGroupingLevel(groupingFields.length);
-        //return groupingFields;
-    },
-    // Temporary helper for creating fake grouped data
-    createTempGroupedData(reportData, fields) {
-        this.findTempGroupingFields(fields);
-        let groupingFields = this.model.groupingFields;
-        let groupedData = _.groupBy(reportData, function(record) {
-            return record[groupingFields[0]];
-        });
-        let newData = [];
 
-        function groupByPredicate(rec) {
-            return rec[groupingFields[1]];
-        }
-        for (let group in groupedData) {
-            let children = [];
-            if (groupingFields[1]) {
-                let subgroupedData = _.groupBy(groupedData[group], groupByPredicate);
-                for (let subgroup in subgroupedData) {
-                    children.push({group: subgroup, children: subgroupedData[subgroup]});
-                }
-            } else {
-                children = groupedData[group];
-            }
-            newData.push({group: group, children: children});
-        }
-        return newData;
-    },
     /**
      * Using fields and records format the report's data.
-     * TODO: hasGrouping is temporary here until node implementation is done.
      * @param fields
      * @param records
      * @param hasGrouping
      * @returns {*}
      */
-    getReportData(fields, records, hasGrouping) {
+    getReportData(fields, records) {
         let reportData = [];
         let map = new Map();
 
@@ -127,10 +75,6 @@ let reportModel = {
             });
         }
 
-        if (hasGrouping) {
-            //QBSE-19937: fake group data for now. find a text and a numeric field and group data on that
-            return this.createTempGroupedData(reportData, fields);
-        }
         return reportData;
     },
     /**
@@ -177,17 +121,35 @@ let reportModel = {
      */
     setMetaData: function(reportMetaData) {
         this.model.name = reportMetaData.name;
-        this.model.hasGrouping = reportMetaData.hasGrouping;
-        //TODO: Add other sorting/grouping info needed by client
     },
     /**
      * Set all records related state
      * @param recordData
      */
     setRecordData: function(recordData) {
-        this.model.columns = this.getReportColumns(recordData.fields, this.model.hasGrouping);
-        this.model.records = this.getReportData(recordData.fields, recordData.records, this.model.hasGrouping);
-        this.model.recordsCount = recordData.records.length;
+        this.model.hasGrouping = false;
+        if (recordData.groups) {
+            this.model.hasGrouping = recordData.groups.hasGrouping;
+        }
+
+        if (this.model.hasGrouping === true) {
+            this.model.columns = this.getReportColumns(recordData.groups.gridColumns);
+            this.model.records = recordData.groups.gridData;
+            this.model.groupLevel = recordData.groups.columns.length;
+            this.model.groupingFields = recordData.groups.columns;
+
+            //  TODO: with paging, this is flawed...
+            this.model.recordsCount = recordData.groups.totalRows;
+        } else {
+            this.model.columns = this.getReportColumns(recordData.fields);
+            this.model.records = this.getReportData(recordData.fields, recordData.records);
+            this.model.groupLevel = 0;
+            this.model.groupingFields = null;
+
+            //  TODO: with paging, this is flawed...
+            this.model.recordsCount = recordData.records.length;
+        }
+
         this.model.filteredRecords = this.model.records;
         this.model.filteredRecordsCount = recordData.records.length;
     },
@@ -205,8 +167,13 @@ let reportModel = {
      * @param recordData
      */
     updateFilteredRecords: function(recordData) {
-        this.model.filteredRecords = this.getReportData(recordData.fields, recordData.records, this.model.hasGrouping);
-        this.model.filteredRecordsCount = recordData.records.length;
+        if (this.model.hasGrouping === true) {
+            this.model.filteredRecords = recordData.groups.gridData;
+            this.model.filteredRecordsCount = recordData.groups.totalRows;
+        } else {
+            this.model.filteredRecords = this.getReportData(recordData.fields, recordData.records);
+            this.model.filteredRecordsCount = recordData.records.length;
+        }
     },
     /**
      * Set facets data from response
@@ -214,13 +181,8 @@ let reportModel = {
      */
     setFacetData: function(recordData) {
         this.model.facets = this.checkForFacetErrors(recordData.facets);
-    },
-    setGroupingLevel: function(groupingLevel) {
-        this.model.groupLevel = groupingLevel;
-    },
-    setGroupingFields: function(groupingFields) {
-        this.model.groupingFields = groupingFields;
     }
+
 };
 
 
