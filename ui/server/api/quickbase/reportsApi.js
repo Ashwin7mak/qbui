@@ -23,6 +23,7 @@
         let FACETS = 'facets';
         let FIELDS = 'fields';
         let RECORDS = 'records';
+        let GROUPS = 'groups';
         let RESULTS = 'results';
         let REPORTCOMPONENTS = 'reportcomponents';
 
@@ -135,6 +136,7 @@
                             let responseObject = {};
                             responseObject[FIELDS] = result[0].fields;
                             responseObject[RECORDS] = result[0].records;
+                            responseObject[GROUPS] = result[0].groups;
                             responseObject[FACETS] = [];
 
                             /*eslint no-lonely-if:0 */

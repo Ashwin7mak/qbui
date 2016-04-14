@@ -59,6 +59,7 @@
 
     module.exports = function(config) {
         var requestHelper = require('./requestHelper')(config);
+        var groupFormatter = require('./formatter/groupFormatter');
         var recordFormatter = require('./formatter/recordFormatter')();
         var constants = require('./../constants');
 
@@ -70,6 +71,7 @@
         var RECORD = 'record';
         var RECORDS = 'records';
         var REPORTS = 'reports';
+        var GROUPS = 'groups';
         var REPORTCOMPONENTS = 'reportcomponents';
         var RESULTS = 'results';
         var request = defaultRequest;
@@ -153,10 +155,12 @@
                                 if (this.isDisplayFormat(req)) {
                                     record = recordFormatter.formatRecords([record], fields)[0];
                                 }
+
                                 responseObject = {};
                                 responseObject[FIELDS] = fields;
                                 responseObject[RECORD] = record;
                             }
+
                             resolve(responseObject);
                         }.bind(this),
                         function(response) {
@@ -185,6 +189,7 @@
                         function(response) {
                             var records = jsonBigNum.parse(response[0].body);
                             var responseObject;
+                            var groupedRecords;
 
                             //return raw undecorated record values due to flag format=raw
                             if (this.isRawFormat(req)) {
@@ -193,13 +198,18 @@
                                 //response object will include a fields meta data block plus record values
                                 var fields = removeUnusedFields(records[0], JSON.parse(response[1].body));
 
-                                //format records for display if requested with the flag format=display
                                 if (this.isDisplayFormat(req)) {
                                     records = recordFormatter.formatRecords(records, fields);
+
+                                    //  check if any grouping requirements.
+                                    groupedRecords = groupFormatter.format(req, fields, records);
+
                                 }
                                 responseObject = {};
                                 responseObject[FIELDS] = fields;
                                 responseObject[RECORDS] = records;
+                                responseObject[GROUPS] = groupedRecords;
+
                             }
                             resolve(responseObject);
                         }.bind(this),
