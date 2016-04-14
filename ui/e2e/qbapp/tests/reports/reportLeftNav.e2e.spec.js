@@ -201,7 +201,7 @@
                     if (browser.browserName !== 'safari' && testcase.breakpointSize !== 'small') {
                         try {
                             // Collapse the leftNav
-                            reportServicePage.waitForElement(reportServicePage.topNavToggleHamburgerEl).then(function() {
+                            reportServicePage.waitForElementToBeClickable(reportServicePage.topNavToggleHamburgerEl).then(function() {
                                 reportServicePage.topNavToggleHamburgerEl.click();
                                 // Hover over the table link icon in leftNav
                                 browser.actions().mouseMove(reportServicePage.tableLinksElList.get(3)).perform();
@@ -219,7 +219,7 @@
                             throw new Error(e);
                         } finally {
                             // Expand the leftNav
-                            reportServicePage.waitForElement(reportServicePage.topNavToggleHamburgerEl).then(function() {
+                            reportServicePage.waitForElementToBeClickable(reportServicePage.topNavToggleHamburgerEl).then(function() {
                                 reportServicePage.topNavToggleHamburgerEl.click();
                             //    // Go back to the table homepage
                             //    reportServicePage.tableLinksElList.get(3).click();
