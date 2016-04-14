@@ -93,6 +93,7 @@ let AGGrid = React.createClass({
         switch (column.datatypeAttributes.type) {
         case "CHECKBOX": message =  "uncheckedToChecked"; break;
         case "TEXT":
+        case "URL":
         case "EMAIL_ADDRESS": message =  "aToZ"; break;
         case "DATE":
         case "DATE_TIME": message =  "oldToNew"; break;
@@ -107,6 +108,7 @@ let AGGrid = React.createClass({
         switch (column.datatypeAttributes.type) {
         case "CHECKBOX": message =  "checkedToUnchecked"; break;
         case "TEXT":
+        case "URL":
         case "EMAIL_ADDRESS": message =  "zToA"; break;
         case "DATE":
         case "DATE_TIME": message =  "newToOld"; break;
