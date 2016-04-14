@@ -3,6 +3,7 @@
 $search-bar-bg: #5f8ba7;
 $report-group-bg: #fff;
 $report-icon-color: #f87878;
+$report-link-color: #404040;
 
 .reportsContainer {
 
@@ -37,11 +38,13 @@ $report-icon-color: #f87878;
             flex-direction: row;
             justify-content: flex-start;
         }
+
         .reportLink {
             display:flex;
             align-items:baseline;
             text-overflow:ellipsis;
             overflow:hidden;
+            color: $report-link-color;
             .qbIcon {
                 flex: 0 0 auto;
                 width:22px;
@@ -71,6 +74,10 @@ $report-icon-color: #f87878;
             margin-bottom: 10px;
             flex:0 0 200px;
             cursor:pointer;
+
+            &:hover,&:focus {
+                text-decoration: none;
+            }
         }
     }
 }

@@ -229,7 +229,6 @@ let AGGrid = React.createClass({
      * icon for a bit
      */
     onScrollGriddleWrapper() {
-
         if (this.scrollTimer) {
             return;
         }
