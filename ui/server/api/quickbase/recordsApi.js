@@ -207,8 +207,14 @@
 
                                 responseObject = {};
                                 responseObject[FIELDS] = fields;
-                                responseObject[RECORDS] = records;
+                                responseObject[RECORDS] = [];
                                 responseObject[GROUPS] = groupedRecords;
+
+                                //  if we are grouping our results, then don't send back the flat display order
+                                //  as it will not be used by the client.
+                                if (groupedRecords.hasGrouping !== true) {
+                                    responseObject[RECORDS] = records;
+                                }
                             }
 
                             resolve(responseObject);
