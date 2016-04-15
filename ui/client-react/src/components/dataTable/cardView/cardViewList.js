@@ -12,27 +12,42 @@ let CardViewList = React.createClass({
     contextTypes: {
         history: React.PropTypes.object
     },
+    propTypes: {
+        reportData: React.PropTypes.object,
+        uniqueIdentifier: React.PropTypes.string,
+        reportHeader: React.PropTypes.element,
+        selectionActions: React.PropTypes.element,
+        onScroll: React.PropTypes.func
+    },
+
     getInitialState() {
         return {
             selectedRows: [],
-            allowCardSelection: false,
-            toolsMenuOpen: false
+            allowCardSelection: false
         };
     },
 
+    /**
+     * are we in card selection mode
+     */
     allowCardSelection() {
         return this.state.allowCardSelection;
     },
 
+    /**
+     * card has requested card selection (by swiping right)
+     * or has finished card selection (by swiping left to hide selection column)
+     */
     onToggleCardSelection(allow = true, rowData = null) {
         this.setState({allowCardSelection: allow});
 
         if (!allow) {
-            this.setState({selectedRows: []});
+            this.setState({selectedRows: []}); // reset selection
         } else if (rowData) {
-            this.onCardRowSelected(rowData);
+            this.onCardRowSelected(rowData); // pre-select the card that started selection
         }
     },
+
     /**
      * is row selected callback
      */
@@ -47,7 +62,7 @@ let CardViewList = React.createClass({
     onRowClicked(row) {
 
         const {appId, tblId} = this.props.reportData;
-        var recId;
+        let recId;
 
         //check to see if props exist, if they do we need to get recId from row.props.data (this is for non-custom row component clicks)
         if (row.props) {
@@ -58,9 +73,6 @@ let CardViewList = React.createClass({
         //create the link we want to send the user to and then send them on their way
         const link = `/app/${appId}/table/${tblId}/record/${recId}`;
         this.context.history.push(link);
-
-        // something like this I expect, maybe in an action instead:
-        // this.history.pushState(null, link);
     },
 
     /**
@@ -90,9 +102,7 @@ let CardViewList = React.createClass({
         const hasSelection = this.state.selectedRows.length;
 
         let classes = "tableActionsContainer secondaryBar";
-        if (this.state.toolsMenuOpen) {
-            classes += " toolsMenuOpen";
-        }
+
         if (hasSelection) {
             classes += " selectionActionsOpen";
         }
@@ -133,9 +143,17 @@ let CardViewList = React.createClass({
                 }
             </div>);
     },
+
+    /**
+     * tell parent we're scrolling so they can hide the add record icon
+     */
     componentDidMount() {
         this.refs.cardViewListWrapper.addEventListener("scroll", this.props.onScroll);
     },
+
+    /**
+     * tell parent we've stopped scrolling so they can re-display the add record icon
+     */
     componentWillUnmount() {
         this.refs.cardViewListWrapper.removeEventListener("scroll", this.props.onScroll);
     },
