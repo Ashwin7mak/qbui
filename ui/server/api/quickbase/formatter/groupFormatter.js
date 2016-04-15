@@ -197,7 +197,7 @@
 
             return [];
         });
-        
+
         //  We've grouped the data for this field based on it's grouping requirement.  To support
         //  multi-level grouping, we need to group each element returned in outputted list
         //  against the next grouping level(if any).  This continues until all grouping levels
@@ -224,7 +224,7 @@
     module.exports = {
 
         /**
-         * Group the supplied records according to the glist content(if any) definedon the request.
+         * Group the supplied records according to the glist content(if any) defined on the request.
          *
          * @param req
          * @param fields
@@ -236,7 +236,7 @@
             //  object structure that provides the following information about report grouping:
             //      hasGrouping: does this report have a grouping requirement
             //      fields: list of report fields that are grouped
-            //      gridColumns: list of field columns to display in the grid
+            //      gridColumns: list of field columns to display in the grid (does not contain the group fields)
             //      gridData: grid content in grouped order
             //      totalRows: total number of rows in the grid
             let groupBy = {
