@@ -21,9 +21,11 @@
                     return columnHeader === columnName;
                 });
             }).then(function(filteredColumn) {
+                var scrollToElm1 = filteredColumn[0].scrollIntoView;
                 e2ePageBase.waitForElementToBeClickable(filteredColumn[0]).then(function() {
                     return filteredColumn[0].click();
                 }).then(function() {
+                    var scrollToElm2 = filteredColumn[0].element(by.className('ag-header-cell-menu-button')).scrollIntoView;
                     e2ePageBase.waitForElementToBeClickable(filteredColumn[0].element(by.className('ag-header-cell-menu-button'))).then(function() {
                         return filteredColumn[0].element(by.className('ag-header-cell-menu-button')).click();
                     });
@@ -44,11 +46,13 @@
             return reportServicePage.waitForElement(reportServicePage.loadedContentEl).then(function() {
                 return reportServicePage.waitForElement(reportServicePage.griddleWrapperEl).then(function() {
                     return reportServicePage.waitForElement(reportServicePage.agGridBodyEl).then(function() {
-                        // Get all records from table before filter applied
-                        return reportServicePage.agGridRecordElList.map(function(row) {
-                            return row.all(by.className('ag-cell-no-focus')).get(columnId).getText();
-                        }).then(function(results) {
-                            return results;
+                        return reportServicePage.waitForElement(reportServicePage.reportRecordsCount).then(function() {
+                            // Get all records from table before filter applied
+                            return reportServicePage.agGridRecordElList.map(function(row) {
+                                return row.all(by.className('ag-cell-no-focus')).get(columnId).getText();
+                            }).then(function(results) {
+                                return results;
+                            });
                         });
                     });
                 });
@@ -76,20 +80,63 @@
         };
 
         /*
+         * Function will Expand the Column header Menu and select the Item passed in parameter
+         */
+        this.expandColumnHeaderMenuAndSelectItem = function(columnName, itemToSelect) {
+            var self = this;
+            return reportServicePage.waitForElement(reportServicePage.loadedContentEl).then(function() {
+                //open the Column Header PopUp Menu
+                return self.openColumnHeaderMenu(columnName);
+            }).then(function() {
+                return reportServicePage.waitForElement(element(by.className('ag-menu-list'))).then(function() {
+                    //Select the sort order Item to be Ascending (eg:A to Z , small to Large, lower to highest etc)
+                    return self.selectItems(itemToSelect);
+                });
+            });
+        };
+
+        /*
          * Function to verify ascending of column Records
          */
         this.verifyAscending = function(columnName, actualColumnRecords, sortedColumnRecords) {
             reportServicePage.waitForElement(reportServicePage.loadedContentEl).then(function() {
                 //Finally verify both the arrays
-                if (columnName.includes("Numeric")) {
-                    expect(actualColumnRecords.sort(function(a, b) {return a - b;})).toEqual(sortedColumnRecords);
-                } else if (columnName.includes("Text") || columnName.includes("Checkbox")) {
-                    expect(actualColumnRecords.sort()).toEqual(sortedColumnRecords);
-                } else if (columnName.includes("Date")) {
-                    //sort the array
+                if (columnName.includes("Numeric Field")) {
+                    actualColumnRecords.sort(function(a, b) {return (a) - (b);});
+                } else if (columnName.includes("Numeric Currency Field")) {
+                    actualColumnRecords.sort(function(a, b) {return (a.substring(1)) - (b.substring(1));});
+                } else if (columnName.includes("Numeric Percent Field")) {
+                    actualColumnRecords.sort(function(a, b) {return (a.substring(0, a.length - 1)) - (b.substring(0, b.length - 1));});
+                } else if (columnName.includes("Duration Field")) {
+                    actualColumnRecords.sort(function(a, b) {return (a.substring(0, a.length - 6)) - (b.substring(0, b.length - 6));});
+                } else if (columnName.includes("Date Field")) {
+                    //remove null first before sorting
+                    var index = actualColumnRecords.indexOf('');
+                    actualColumnRecords.splice(index, 1);
+                    //sort the array to ascending
                     actualColumnRecords.sort(function(a, b) {return new Date(a) - new Date(b);});
-                    expect(JSON.stringify(actualColumnRecords)).toEqual(JSON.stringify(sortedColumnRecords));
+                    //add the null bck
+                    actualColumnRecords.unshift('');
+                } else if (columnName.includes("Date Time Field")) {
+                    //remove null
+                    var index1 = actualColumnRecords.indexOf('');
+                    actualColumnRecords.splice(index1, 1);
+                    //sort
+                    actualColumnRecords.sort(function(a, b) {return new Date(a).getTime() - new Date(b).getTime();});
+                    //add null bck
+                    actualColumnRecords.unshift('');
+                } else if (columnName.includes("Time of Day Field")) {
+                    //remove null
+                    var index2 = actualColumnRecords.indexOf('');
+                    actualColumnRecords.splice(index2, 1);
+                    //sort
+                    actualColumnRecords.sort(function(a, b) {return new Date(a).getHours - new Date(b).getHours();});
+                    //add null bck
+                    actualColumnRecords.unshift('');
+                } else {
+                    actualColumnRecords.sort();
                 }
+                expect(JSON.stringify(actualColumnRecords)).toEqual(JSON.stringify(sortedColumnRecords));
             }).then(function() {
                 //finally clean both arrays
                 actualColumnRecords = [];
@@ -103,23 +150,47 @@
         this.verifyDescending = function(columnName, actualColumnRecords, sortedColumnRecords) {
             reportServicePage.waitForElement(reportServicePage.loadedContentEl).then(function() {
                 //Finally verify both the arrays
-                if (columnName.includes("Numeric")) {
-                    expect(actualColumnRecords.sort(function(a, b) {return b - a;})).toEqual(sortedColumnRecords);
-                } else if (columnName.includes("Text") || columnName.includes("Checkbox")) {
-                    expect(actualColumnRecords.sort().reverse()).toEqual(sortedColumnRecords);
-                } else if (columnName.includes("Date")) {
-                    //sort the array
-                    actualColumnRecords.sort(function(a, b) {return new Date(b) - new Date(a);});
-                    expect(JSON.stringify(actualColumnRecords)).toEqual(JSON.stringify(sortedColumnRecords));
-
+                if (columnName.includes("Numeric Field")) {
+                    actualColumnRecords.sort(function(a, b) {return (b) - (a);});
+                } else if (columnName.includes("Numeric Currency Field")) {
+                    actualColumnRecords.sort(function(a, b) {return (b.substring(1)) - (a.substring(1));});
+                } else if (columnName.includes("Numeric Percent Field")) {
+                    actualColumnRecords.sort(function(a, b) {return (b.substring(0, b.length - 1)) - (a.substring(0, a.length - 1));});
+                } else if (columnName.includes("Duration Field")) {
+                    actualColumnRecords.sort(function(a, b) {return (b.substring(0, b.length - 6)) - (a.substring(0, a.length - 6));});
+                } else if (columnName.includes("Date Field")) {
+                    //remove null
+                    var index = actualColumnRecords.indexOf('');
+                    actualColumnRecords.splice(index, 1);
+                    //sort the array to ascending
+                    actualColumnRecords.sort(function(a, b) {return new Date(a) - new Date(b);});
+                    //reverse the array and add null bck
+                    actualColumnRecords.reverse();
+                    actualColumnRecords.push('');
+                } else if (columnName.includes("Date Time Field")) {
+                    //remove null
+                    var index2 = actualColumnRecords.indexOf('');
+                    actualColumnRecords.splice(index2, 1);
+                    //sort the array to ascending
+                    actualColumnRecords.sort(function(a, b) {return new Date(a).getTime() - new Date(b).getTime();});
+                    //reverse and add null bck
+                    actualColumnRecords.reverse();
+                    actualColumnRecords.push('');
+                } else if (columnName.includes("Time of Day Field")) {
+                    //actualColumnRecords.sort(function (a,b){return new Date(b).getTime() - new Date(a).getTime()});
+                    actualColumnRecords.sort(function(a, b) {
+                        return new Date(b).getTime() - new Date(a).getTime();
+                    });
+                } else {
+                    actualColumnRecords.sort().reverse();
                 }
+                expect(JSON.stringify(actualColumnRecords)).toEqual(JSON.stringify(sortedColumnRecords));
             }).then(function() {
                 //finally clean both arrays
                 actualColumnRecords = [];
                 sortedColumnRecords = [];
             });
         };
-
 
     };
     ReportSortingPage.prototype = e2ePageBase;
