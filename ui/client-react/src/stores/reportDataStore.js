@@ -1,6 +1,6 @@
 import * as actions from '../../src/constants/actions';
 import FacetSelections from '../components/facet/facetSelections';
-
+import ReportUtils from '../utils/reportUtils';
 import Fluxxor from 'fluxxor';
 import Logger from '../utils/logger';
 
@@ -17,8 +17,12 @@ let reportModel = {
         hasGrouping: false,
         name: null,
         records: null,
-        recordsCount: null
+        recordsCount: null,
+        sortFids: [],         //TODO: QBSE-19937 this should come from report meta data.
+        groupFids: [],
+        selectedSortFids: []
     },
+
     /**
      * Given the field list format the columnDefinition as needed by data grid.
      * @param fields
@@ -77,6 +81,7 @@ let reportModel = {
 
         return reportData;
     },
+
     /**
      * Check if we have facets at all or any errors returned by server.
      * @param facets
@@ -105,6 +110,7 @@ let reportModel = {
             return [];
         }
     },
+
     /**
      * Returns the model object
      * @returns {reportModel.model|{columns, facets, filteredRecords, filteredRecordsCount, groupingFields, groupLevel, hasGrouping, name, records, recordsCount}}
@@ -112,16 +118,20 @@ let reportModel = {
     get: function() {
         return this.model;
     },
+
     getRecords: function() {
         return this.model.records;
     },
+
     /**
      * Set everything related to report's meta data that's needed by components in state
      * @param reportMetaData
      */
     setMetaData: function(reportMetaData) {
         this.model.name = reportMetaData.name;
+        this.model.selectedSortFids = reportMetaData.sortList;
     },
+
     /**
      * Set all records related state
      * @param recordData
@@ -136,7 +146,12 @@ let reportModel = {
             this.model.columns = this.getReportColumns(recordData.groups.gridColumns);
             this.model.records = recordData.groups.gridData;
             this.model.groupLevel = recordData.groups.columns.length;
-            this.model.groupingFields = recordData.groups.columns;
+            this.model.groupingFields = [];
+            this.model.groupFids = [];
+            recordData.groups.columns.forEach((groupField) => {
+                this.model.groupFids.push(groupField.id);
+                this.model.groupingFields.push(groupField.name);
+            });
 
             //  TODO: with paging, this is flawed...
             this.model.recordsCount = recordData.groups.totalRows;
@@ -145,6 +160,7 @@ let reportModel = {
             this.model.records = this.getReportData(recordData.fields, recordData.records);
             this.model.groupLevel = 0;
             this.model.groupingFields = null;
+            this.model.groupFids = null;
 
             //  TODO: with paging, this is flawed...
             this.model.recordsCount = recordData.records.length;
@@ -181,6 +197,25 @@ let reportModel = {
      */
     setFacetData: function(recordData) {
         this.model.facets = this.checkForFacetErrors(recordData.facets);
+    },
+
+    // TODO -- Remove?
+    //setGroupingLevel: function(groupingLevel) {
+    //    this.model.groupLevel = groupingLevel;
+    //},
+    //
+    //setGroupingFields: function(groupingFields) {
+    //    this.model.groupingFields = groupingFields;
+    //},
+    //
+    //setGroupFids: function(groupFids) {
+    //    this.model.groupFids = groupFids;
+    //},
+
+    setSelectedSortFids: function(sortList) {
+        if (sortList !== this.model.sortFids) {
+            this.model.selectedSortFids = ReportUtils.getSortFids(sortList);
+        }
     }
 
 };
@@ -194,6 +229,7 @@ let ReportDataStore = Fluxxor.createStore({
         this.error = false;
         this.nonFacetClicksEnabled = true;
         this.searchStringForFiltering = '' ;
+        this.facetExpression = {};
         this.selections  = new FacetSelections();
 
         this.bindActions(
@@ -247,7 +283,7 @@ let ReportDataStore = Fluxxor.createStore({
         this.selections = payload.filter.selections;
         this.facetExpression = payload.filter.facet;
         this.searchStringForFiltering =  payload.filter.search;
-
+        this.reportModel.setSelectedSortFids(payload.sortList);
         this.emit('change');
     },
 
@@ -314,6 +350,7 @@ let ReportDataStore = Fluxxor.createStore({
             rptId: this.rptId,
             searchStringForFiltering: this.searchStringForFiltering,
             selections: this.selections,
+            facetExpression: this.facetExpression,
             nonFacetClicksEnabled : this.nonFacetClicksEnabled
         };
     }

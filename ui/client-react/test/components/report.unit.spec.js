@@ -21,7 +21,7 @@ describe('Report functions', () => {
         actions:{
             loadReport() {return;},
             selectTableId() {return;},
-            filterReport() {return;},
+            getFilteredRecords() {return;},
             hideTopNav() {return;}
         }
     };
@@ -46,7 +46,7 @@ describe('Report functions', () => {
         Report.__Rewire__('ReportToolsAndContent', ReportContentMock);
         Report.__Rewire__('ReportHeader', ReportHeaderMock);
         spyOn(flux.actions, 'loadReport');
-        spyOn(flux.actions, 'filterReport');
+        spyOn(flux.actions, 'getFilteredRecords');
     });
 
     afterEach(() => {
@@ -54,7 +54,7 @@ describe('Report functions', () => {
         Report.__ResetDependency__('ReportToolsAndContent');
         Report.__ResetDependency__('ReportHeader');
         flux.actions.loadReport.calls.reset();
-        flux.actions.filterReport.calls.reset();
+        flux.actions.getFilteredRecords.calls.reset();
     });
 
     it('test render of report', () => {

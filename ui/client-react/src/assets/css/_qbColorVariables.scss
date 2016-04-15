@@ -21,7 +21,8 @@ $color17:   #f3f5f8;
 $color18:   #cccccc;
 $color19:   #c7c7c7; // porpoise
 $color20:   #486c8f; // dull-sapphire
-$ghost:     #b8b8b8;
+$color21:   #b8b8b8; //ghost
+$color22:   #56b349; //fiddlehead
 
 $left-nav-bg: #193048; // deep-sea
 $icon-color: #7090ab; // dragon-foot
@@ -77,7 +78,7 @@ $facetMenu-itemHoverColor:              rgba($color4, 0.5);
 $report-icon-table-color: #f87878;
 $report-icon-summary-color: $color20;
 $report-icon-pie-color: #f2b835;
-$report-icon-calendar-color: #56b349;
+$report-icon-calendar-color: $color22;
 $report-icon-grid-edit-color: #c72f79;
 $report-icon-timeline-color: #e77700;
 $report-icon-map-color: #00c4d8;

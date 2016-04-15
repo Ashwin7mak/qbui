@@ -12,7 +12,7 @@ $grid-font-size: $font-size - 2;
 
 $grid-group-row-header-bkgrd-color: $color1;
 $grid-group-row-header-border-top: $color7;
-$grid-group-row-header-divider: $ghost;
+$grid-group-row-header-divider: $color21;
 
 $grid-group-expand-icon-size: 20px;
 $grid-default-group-padding: 7px;
@@ -51,6 +51,22 @@ $grid-default-cell-padding: 8px;
 
         .ag-header-cell-label {
             padding: 4px $grid-default-cell-padding 3px $grid-default-cell-padding;
+        }
+        &.selected {
+            background-color: $color5;
+            .ag-header-cell-menu-button {
+                opacity: 1!important;
+                display: block;
+            }
+        }
+    }
+    .ag-header-cell-menu-button {
+        display: none;
+        padding: 4px 0px 3px 0px;
+    }
+    .ag-header-cell:hover {
+        .ag-header-cell-menu-button {
+            display: block;
         }
     }
 
@@ -152,6 +168,46 @@ $grid-default-cell-padding: 8px;
         position: absolute;
         right: $grid-default-group-padding + 1;
     }
+
+    .ag-menu-list {
+        border: 1px solid $color4;
+        background: $color2;
+    }
+    .ag-menu-option {
+        line-height: 28px;
+    }
+    .ag-menu-separator {
+        border-bottom: 1px solid $color4;
+    }
+    .ag-menu-option-text {
+        padding-right: 20px;
+    }
+    .ag-menu-option:hover {
+        background-color: $color1;
+    }
+    .ag-menu-option-icon {
+        padding: 0 5px;
+    }
+    .qbIcon.iconssturdy-check {
+        font-size: $grid-font-size + 2;
+        width: $grid-font-size + 2;
+        vertical-align: middle;
+        color: $color22;
+    }
+    .ag-menu {
+        top: 24px!important;
+        -webkit-box-shadow: 0px 4px 15px 0px rgba(70,66,66,0.15);
+        -moz-box-shadow: 0px 4px 15px 0px rgba(70,66,66,0.15);
+        box-shadow: 0px 4px 15px 0px rgba(70,66,66,0.15);
+    }
+    .ag-tab-selected {
+        display: none;
+    }
+}
+
+//Temporary hack - opened an issue with ag-grid
+#centerRow {
+    height: 100%!important;
 }
 
 .tableActionsContainer {

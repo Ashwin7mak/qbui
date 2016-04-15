@@ -99,6 +99,34 @@ export default {
             organizeReports: "Organiser",
             recordCount : "{recordCount} {nameForRecords} ",
             searchPlaceHolder:  "Rechercher ces {nameForRecords} ...",
+            menu: {
+                sort: {
+                    aToZ: "Trier A à Z",
+                    highToLow: "Trier du plus haut au plus bas",
+                    newToOld: "Trier récent au plus ancien",
+                    zToA: "Trier Z à A",
+                    lowToHigh: "Trier du plus bas au plus élevé",
+                    oldToNew: "Trier le plus ancien au plus récent",
+                    uncheckedToChecked: "Trier décochée à vérifier",
+                    checkedToUnchecked: "Trier vérifié pour décochée"
+                },
+                group: {
+                    aToZ: "Groupe A à Z",
+                    highToLow: "Groupe haut au plus bas",
+                    newToOld: "Groupe récent au plus ancien",
+                    zToA: "Groupe Z à A",
+                    lowToHigh: "Groupe bas au plus haut",
+                    oldToNew: "Groupe le plus ancien au plus récent",
+                    uncheckedToChecked: "Groupe décochée à vérifier",
+                    checkedToUnchecked: "Groupe cochés décochée"
+                },
+                addColumnBefore: "Ajouter une colonne avant",
+                addColumnAfter: "Ajouter colonne après",
+                hideColumn: "Masquer cette colonne",
+                newTable: "Nouvelle table basée sur cette colonne",
+                columnProps: "Propriétés de la colonne",
+                fieldProps: "Propriétés de champ"
+            }
         },
         cancel: "Annuler"
     }

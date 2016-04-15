@@ -1,13 +1,18 @@
 import React from 'react';
 import {AgGridReact} from 'ag-grid-react';
+import {AgGridEnterprise} from 'ag-grid-enterprise';
 import {reactCellRendererFactory} from 'ag-grid-react';
 import {I18nMessage} from '../../../utils/i18nMessage';
 import ReactCSSTransitionGroup from 'react/lib/ReactCSSTransitionGroup';
 import ReportActions from '../../actions/reportActions';
 import RecordActions from '../../actions/recordActions';
+import Locale from '../../../locales/locales';
 import _ from 'lodash';
 import Loader  from 'react-loader';
 import Fluxxor from 'fluxxor';
+import * as query from '../../../constants/query';
+import ReportUtils from '../../../utils/reportUtils';
+
 let FluxMixin = Fluxxor.FluxMixin(React);
 
 import '../../../../../node_modules/ag-grid/dist/styles/ag-grid.css';
@@ -28,7 +33,9 @@ function buildIconElement(icon) {
 }
 let gridIcons = {
     groupExpanded: buildIconElement("caret-filled-down"),
-    groupContracted: buildIconElement("icon_caretfilledright")
+    groupContracted: buildIconElement("icon_caretfilledright"),
+    menu: buildIconElement("caret-filled-down"),
+    check: buildIconElement("check")
 };
 let consts = {
     GROUP_HEADER_HEIGHT: 41,
@@ -73,14 +80,155 @@ let AGGrid = React.createClass({
     onGridReady(params) {
         this.api = params.api;
         this.columnApi = params.columnApi;
+        this.onMenuClose();
     },
+    /**
+     * Build the menu items for sort/group
+     * @param column
+     * @param prependText
+     * @returns {*}
+     */
+    getSortAscText(column, prependText) {
+        let message = " ";
+        switch (column.datatypeAttributes.type) {
+        case "CHECKBOX": message =  "uncheckedToChecked"; break;
+        case "TEXT":
+        case "URL":
+        case "EMAIL_ADDRESS": message =  "aToZ"; break;
+        case "DATE":
+        case "DATE_TIME": message =  "oldToNew"; break;
+        case "NUMERIC":
+        case "RATING":
+        default: message = "lowToHigh"; break;
+        }
+        return Locale.getMessage("report.menu." + prependText + "." + message);
+    },
+    getSortDescText(column, prependText) {
+        let message = " ";
+        switch (column.datatypeAttributes.type) {
+        case "CHECKBOX": message =  "checkedToUnchecked"; break;
+        case "TEXT":
+        case "URL":
+        case "EMAIL_ADDRESS": message =  "zToA"; break;
+        case "DATE":
+        case "DATE_TIME": message =  "newToOld"; break;
+        case "NUMERIC":
+        case "RATING":
+        default: message =  "highToLow"; break;
+        }
+        return Locale.getMessage("report.menu." + prependText + "." + message);
+    },
+    /**
+     * On selection of sort option from menu fire off the action to sort the data
+     * @param column
+     * @param asc
+     */
+    sortReport(column, asc, alreadySorted) {
+        if (alreadySorted) {
+            return;
+        }
+        let flux = this.getFlux();
 
+        let queryParams = {};
+        // for on-the-fly sort selection, this selection will result in removal of old sort order
+        // BUT since out grouped fields are also sorted we still need to keep those in the sort list.
+        let sortFid = asc ? column.id.toString() : "-" + column.id.toString();
+
+        let sortList = ReportUtils.getSortListString(this.props.groupFids);
+        queryParams[query.SORT_LIST_PARAM] = ReportUtils.appendSortFidToList(sortList, sortFid);
+
+        flux.actions.getFilteredRecords(this.props.appId,
+            this.props.tblId,
+            this.props.rptId, {format:true}, this.props.filter, queryParams);
+    },
+    /**
+     * On selection of group option from menu fire off the action to group the data
+     * @param column
+     * @param asc
+     */
+    groupReport(column, asc) {
+        let flux = this.getFlux();
+
+        let queryParams = {};
+        //for on-the-fly grouping, forget the previous group and go with the selection but add the previous sort fids.
+        //TODO: how to pass back grouping info?
+        let sortFid = (asc ? column.id.toString() : "-" + column.id.toString());
+        let sortList = ReportUtils.getSortListString(this.props.sortFids);
+        queryParams[query.SORT_LIST_PARAM] = ReportUtils.prependSortFidToList(sortList, sortFid);
+
+        flux.actions.getFilteredRecords(this.props.appId,
+            this.props.tblId,
+            this.props.rptId, {format:true}, this.props.filter, queryParams);
+    },
+    /**
+     * AG-grid doesnt fire any events or add any classes to the column for which menu has been opened
+     * This makes the menu look like its detached from the header. The following is a hack to handle this.
+     * When a menu opens store the selectedColumn and then on DonNodeRemoved event if menu has been closed then
+     * remove the class from selectedColumn
+     */
+    selectedColumnId: [],
+    selectColumnHeader(column) {
+        let columnHeader = document.querySelectorAll('div.ag-header-cell[colId="' + column.field + '"]');
+        if (columnHeader.length) {
+            columnHeader[0].classList.add("selected");
+            this.selectedColumnId.push(column.field);
+        }
+    },
+    onMenuClose() {
+        let self = this;
+        document.addEventListener("DOMNodeRemoved", function(ev) {
+            if (ev.target && ev.target.className && ev.target.className.indexOf("ag-menu") !== -1) {
+                if (self.selectedColumnId.length) {
+                    let toRemove = self.selectedColumnId[0];
+                    let occurences = _.filter(self.selectedColumnId, function(column) {
+                        return column === toRemove;
+                    });
+                    self.selectedColumnId = self.selectedColumnId.splice(1, self.selectedColumnId.length);
+                    let columnHeader = document.querySelectorAll('div.ag-header-cell[colId="' + toRemove + '"]');
+                    if (occurences.length <= 1) {
+                        columnHeader[0].classList.remove("selected");
+                    }
+                }
+            }
+        });
+    },
+    /**
+     * Build the column menu. This gets called every time menu is opened
+     * @param params
+     * @returns {*[]}
+     */
+    getMainMenuItems(params) {
+        this.selectColumnHeader(params.column.colDef);
+        let isSortedAsc = true;
+        let isFieldSorted = _.find(this.props.selectedSortFids, (fid) => {
+            if (Math.abs(fid) === params.column.colDef.id) {
+                isSortedAsc = fid > 0;
+                return true;
+            }
+        });
+        let menuItems = [
+            {"name": this.getSortAscText(params.column.colDef, "sort"), "icon": isFieldSorted && isSortedAsc ? gridIcons.check : "", action: () => this.sortReport(params.column.colDef, true, isFieldSorted && isSortedAsc)},
+            {"name": this.getSortDescText(params.column.colDef, "sort"), "icon": isFieldSorted && !isSortedAsc ? gridIcons.check : "", action: () => this.sortReport(params.column.colDef, false, isFieldSorted && !isSortedAsc)}];
+        menuItems.push("separator");
+        menuItems.push({"name": this.getSortAscText(params.column.colDef, "group"), action: () => this.groupReport(params.column.colDef, true)},
+            {"name": this.getSortDescText(params.column.colDef, "group"), action: () => this.groupReport(params.column.colDef)});
+        menuItems.push("separator");
+        menuItems.push({"name": Locale.getMessage("report.menu.addColumnBefore")},
+            {"name": Locale.getMessage("report.menu.addColumnAfter")},
+            {"name": Locale.getMessage("report.menu.hideColumn")}
+        );
+        menuItems.push("separator");
+        menuItems.push({"name": Locale.getMessage("report.menu.newTable")});
+        menuItems.push("separator");
+        menuItems.push({"name": Locale.getMessage("report.menu.columnProps")},
+            {"name": Locale.getMessage("report.menu.fieldProps")});
+        return menuItems;
+    },
     /**
      * when we scroll the grid wrapper, hide the add record
      * icon for a bit
      */
     onScrollGriddleWrapper() {
-
         if (this.scrollTimer) {
             return;
         }
@@ -468,6 +616,12 @@ let AGGrid = React.createClass({
 
                                     suppressRowClickSelection="true"
                                     suppressCellSelection="true"
+
+                                    //column menus
+                                    getMainMenuItems={this.getMainMenuItems}
+                                    suppressMenuFilterPanel="true"
+                                    suppressMenuColumnPanel="true"
+
 
                                     //grouping behavior
                                     groupSelectsChildren="true"

@@ -1,4 +1,5 @@
 import React from 'react';
+
 import Locale from '../../locales/locales';
 import ReportGroup from './reportGroup';
 import './reportManager.scss';
@@ -35,7 +36,7 @@ let ReportManager = React.createClass({
                     <div className={"reportsTop"}>
 
                         <div className="searchReports">
-                            <input tabIndex={0} type="text" placeholder={Locale.getMessage('nav.searchReportsPlaceholder')} value={this.state.searchText} onChange={this.onChangeSearch}/>
+                            <input autoFocus tabIndex="0" type="text" placeholder={Locale.getMessage('nav.searchReportsPlaceholder')} value={this.state.searchText} onChange={this.onChangeSearch}/>
                         </div>
 
                     </div>

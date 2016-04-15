@@ -8,6 +8,7 @@ import RecordService from '../services/recordService';
 import Logger from '../utils/logger';
 import Promise from 'bluebird';
 import QueryUtils from '../utils/queryUtils';
+import ReportUtils from '../utils/reportUtils';
 
 let logger = new Logger();
 
@@ -124,39 +125,52 @@ let reportDataActions = {
         }.bind(this));
     },
 
-    /* Action called to filter a report.
+    filterSelectionsPending(selections) {
+        this.dispatch(actions.FILTER_SELECTIONS_PENDING, {selections});
+    },
+
+    filterSearchPending(string) {
+        this.dispatch(actions.FILTER_SEARCH_PENDING, {string});
+    },
+
+    /* Action called to get a new set of records given a report.
+     * Override params can override report's sortlist/query etc
      *
+     * Extended filter criteria can be attached to the query -
      *  Supported filtering options include:
      *       facet  : expression representing all the facets selected by user so far example [{fid: fid1, values: value1, value2}, {fid: fid2, values: value3, value4}, ..]
      *       search : search string
+     *
+     * @param requiredQueryParams: {format, offset, numrows}
+     * @param filter: {facet, search}
+     * @param overrideQueryParams: {columns, sortlist, query}
      */
-    filterReport(appId, tblId, rptId, format, filter, offset, rows) {
 
-        //  Build list of fids that is sent to the server to fulfill report sorting requirements.
-        //  The input sortList is a string array of fids/grouptype, delimited by ':'. Will extract
-        //  out the fids and return as a string, with each fid separated by a '.'
-        function getReportSortFids(reportMetaData) {
-            let fids = [];
-            if (reportMetaData.data.sortList) {
-                reportMetaData.data.sortList.forEach(function(sort) {
-                    if (sort) {
-                        var sortEl = sort.split(':');
-                        fids.push(sortEl[0]);
-                    }
-                });
-            }
-            return fids ? fids.join('.') : '';
-        }
+    getFilteredRecords(appId, tblId, rptId, requiredQueryParams, filter, overrideQueryParams) {
 
         //  Build the request query parameters needed to properly filter the report request based on the report
         //  meta data.  Information that could be sent include fid list, sort list, grouping and query parameters
         function buildRequestQuery(reportMetaData, facetQueryExpression, searchExpression) {
             var queryParams = {};
 
-            if (reportMetaData && reportMetaData.data) {
+            //required query params
+            queryParams[query.OFFSET_PARAM] = requiredQueryParams[query.OFFSET_PARAM];
+            queryParams[query.NUMROWS_PARAM] = requiredQueryParams[query.NUMROWS_PARAM];
+            queryParams[query.FORMAT_PARAM] = requiredQueryParams[query.FORMAT_PARAM];
 
-                queryParams[query.COLUMNS_PARAM] = reportMetaData.data.fids ? reportMetaData.data.fids.join('.') : '';
-                queryParams[query.SORT_LIST_PARAM] = getReportSortFids(reportMetaData);
+            //for the optional ones, if something is null/undefined pull from report's meta data
+            if (reportMetaData && reportMetaData.data) {
+                overrideQueryParams = overrideQueryParams || {};
+                if (overrideQueryParams[query.COLUMNS_PARAM]) {
+                    queryParams[query.COLUMNS_PARAM] = overrideQueryParams[query.COLUMNS_PARAM];
+                } else {
+                    queryParams[query.COLUMNS_PARAM] = reportMetaData.data ? reportMetaData.data.fids : "";
+                }
+                if (overrideQueryParams[query.SORT_LIST_PARAM]) {
+                    queryParams[query.SORT_LIST_PARAM] = overrideQueryParams[query.SORT_LIST_PARAM];
+                } else {
+                    queryParams[query.SORT_LIST_PARAM] = ReportUtils.getSortStringFromSortListArray(reportMetaData.data.sortList);
+                }
 
                 //  Optional parameter used by the Node layer to return the result set in grouping order for
                 //  easier client rendering of the result set.  The input sortList is a string array of
@@ -166,26 +180,29 @@ let reportDataActions = {
                 //
                 //      sortList: ['2', '1:V', '33:C']
                 //      glist: '2.1:V.33:C'
-                //
-                queryParams[query.GLIST_PARAM] = reportMetaData.data.sortList ? reportMetaData.data.sortList.join('.') : '';
+                //TODO: make this dependent on override param
+                queryParams[query.GLIST_PARAM] = ReportUtils.getSortListString(reportMetaData.data.sortList);
 
-                //  Concatenate facet expression(if any) and search filter(if any) into single
-                //  query expression where each individual expression is 'AND'ed with the other.
-                //
-                //  To optimize query performance, order the array elements 1..n in order of
-                //  significance/most targeted selection as the outputted query is built starting
-                //  at offset 0.
-                let filterQueries = [];
-                if (reportMetaData.data.query) {
-                    filterQueries.push(reportMetaData.data.query);
+                if (overrideQueryParams[query.QUERY_PARAM]) {
+                    queryParams[query.QUERY_PARAM] = overrideQueryParams[query.QUERY_PARAM];
+                } else {
+                    //  Concatenate facet expression(if any) and search filter(if any) into single
+                    //  query expression where each individual expression is 'AND'ed with the other.
+                    //  To optimize query performance, order the array elements 1..n in order of
+                    //  significance/most targeted selection as the outputted query is built starting
+                    //  at offset 0.
+                    let filterQueries = [];
+                    if (reportMetaData.data.query) {
+                        filterQueries.push(reportMetaData.data.query);
+                    }
+                    if (facetQueryExpression) {
+                        filterQueries.push(facetQueryExpression.data);
+                    }
+                    if (searchExpression) {
+                        filterQueries.push(QueryUtils.parseStringIntoAllFieldsContainsExpression(searchExpression));
+                    }
+                    queryParams[query.QUERY_PARAM] = QueryUtils.concatQueries(filterQueries);
                 }
-                if (facetQueryExpression) {
-                    filterQueries.push(facetQueryExpression.data);
-                }
-                if (searchExpression) {
-                    filterQueries.push(QueryUtils.parseStringIntoAllFieldsContainsExpression(searchExpression));
-                }
-                queryParams[query.QUERY_PARAM] = QueryUtils.concatQueries(filterQueries);
             }
 
             return queryParams;
@@ -195,7 +212,8 @@ let reportDataActions = {
         return new Promise(function(resolve, reject) {
 
             if (appId && tblId && rptId) {
-                this.dispatch(actions.LOAD_RECORDS, {appId, tblId, rptId, filter});
+                let sortListParam = overrideQueryParams && overrideQueryParams[query.SORT_LIST_PARAM] ? overrideQueryParams[query.SORT_LIST_PARAM] : "";
+                this.dispatch(actions.LOAD_RECORDS, {appId, tblId, rptId, filter, sortList: sortListParam});
 
                 let reportService = new ReportService();
                 let recordService = new RecordService();
@@ -208,16 +226,13 @@ let reportDataActions = {
                 // The filter parameter may contain a searchExpression and facetExpression
                 let searchExpression = filter ? filter.search : '';
                 let facetExpression = filter ? filter.facet : '';
-                promises.push(reportService.parseFacetExpression(facetExpression));
+                if (facetExpression !== '' && facetExpression.length) {
+                    promises.push(reportService.parseFacetExpression(facetExpression));
+                }
 
                 Promise.all(promises).then(
                     (response) => {
                         var queryParams = buildRequestQuery(response[0], response[1], searchExpression);
-
-                        //  parameters which are all optional and could be null/undefined
-                        queryParams[query.FORMAT_PARAM] = format;
-                        queryParams[query.OFFSET_PARAM] = offset;
-                        queryParams[query.NUMROWS_PARAM] = rows;
 
                         //  Get the filtered records
                         recordService.getRecords(appId, tblId, queryParams).then(
@@ -234,7 +249,7 @@ let reportDataActions = {
                             }
                         ).catch(
                             function(ex) {
-                                logger.error('Filter Report Records service call exception:', ex);
+                                logger.error('Get Filtered Records- Records service call exception:', ex);
                                 this.dispatch(actions.LOAD_RECORDS_FAILED, {error: ex});
                                 reject();
                             }.bind(this)
@@ -247,13 +262,13 @@ let reportDataActions = {
                     }
                 ).catch(
                     function(ex) {
-                        logger.error('Filter Report service calls exception:', ex);
+                        logger.error('Get Filtered Records- service calls exception:', ex);
                         this.dispatch(actions.LOAD_RECORDS_FAILED, {exception: ex});
                         reject();
                     }.bind(this)
                 );
             } else {
-                var errMessage = 'Missing one or more required input parameters to reportDataActions.filterReport. AppId:' +
+                var errMessage = 'Missing one or more required input parameters to reportDataActions.getFilteredRecords. AppId:' +
                     appId + '; TblId:' + tblId + '; RptId:' + rptId;
                 logger.error(errMessage);
                 this.dispatch(actions.LOAD_RECORDS_FAILED, {error: errMessage});
@@ -261,14 +276,6 @@ let reportDataActions = {
             }
         }.bind(this));
     },
-
-    filterSelectionsPending(selections) {
-        this.dispatch(actions.FILTER_SELECTIONS_PENDING, {selections});
-    },
-
-    filterSearchPending(string) {
-        this.dispatch(actions.FILTER_SEARCH_PENDING, {string});
-    }
 };
 
 export default reportDataActions;
