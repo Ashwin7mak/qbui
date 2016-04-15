@@ -26,12 +26,14 @@ let filterReportInputs = {
     filter: {
         facet: 'abc',
         search: ''
-    }
+    },
+    sortList: ""
 };
 
 let responseReportData = {
     data: {
-        name: 'name'
+        name: 'name',
+        sortList: ['2', '1:V']
     }
 };
 let responseResultData = {
@@ -94,13 +96,13 @@ describe('Report Data Actions -- Filter report Negative', () => {
         }
         reportDataActions.__Rewire__('ReportService', mockReportService);
         reportDataActions.__Rewire__('RecordService', mockRecordService);
-        flux.actions.filterReport(inputs.appId, inputs.tblId, inputs.rptId, inputs.formatted, inputs.filter).then(
+        flux.actions.getFilteredRecords(inputs.appId, inputs.tblId, inputs.rptId, {format:inputs.formatted}, inputs.filter).then(
             () => {
                 expect(true).toBe(false);
                 done();
             },
             () => {
-                expect(flux.dispatchBinder.dispatch.calls.argsFor(0)).toEqual([actions.LOAD_RECORDS, filterReportInputs]);
+                expect(flux.dispatchBinder.dispatch.calls.argsFor(0)).toEqual([actions.LOAD_RECORDS, jasmine.any(Object)]);
                 expect(flux.dispatchBinder.dispatch.calls.argsFor(1)).toEqual([actions.LOAD_RECORDS_FAILED, jasmine.any(Object)]);
                 done();
             }
@@ -126,7 +128,7 @@ describe('Report Data Actions -- Filter report Negative', () => {
         }
         reportDataActions.__Rewire__('ReportService', mockReportService);
         reportDataActions.__Rewire__('RecordService', mockRecordService);
-        flux.actions.filterReport(inputs.appId, inputs.tblId, inputs.rptId, inputs.formatted, inputs.filter).then(
+        flux.actions.getFilteredRecords(inputs.appId, inputs.tblId, inputs.rptId, {format:inputs.formatted}, inputs.filter, {}).then(
             () => {
                 expect(true).toBe(false);
                 done();
@@ -159,7 +161,7 @@ describe('Report Data Actions -- Filter report Negative', () => {
         }
         reportDataActions.__Rewire__('ReportService', mockReportService);
         reportDataActions.__Rewire__('RecordService', mockRecordService);
-        flux.actions.filterReport(inputs.appId, inputs.tblId, inputs.rptId, inputs.formatted, inputs.filter).then(
+        flux.actions.getFilteredRecords(inputs.appId, inputs.tblId, inputs.rptId, {format:inputs.formatted}, inputs.filter).then(
             () => {
                 expect(true).toBe(false);
                 done();
@@ -216,7 +218,7 @@ describe('Report Data Actions -- Filter report Negative missing parameters', () 
 
     dataProvider.forEach(function(data) {
         it(data.test, (done) => {
-            flux.actions.filterReport(data.appId, data.tblId, data.rptId, false, filter).then(
+            flux.actions.getFilteredRecords(data.appId, data.tblId, data.rptId, {format:false}, filter).then(
                 () => {
                     expect(true).toBe(false);
                     done();
@@ -282,7 +284,7 @@ describe('Report Data Actions -- ', () => {
     class mockReportService {
         constructor() { }
         getReport() {
-            return mockPromiseSuccess(null);
+            return mockPromiseSuccess(responseReportData);
         }
         getReportDataAndFacets() {
             return mockPromiseError();
@@ -301,9 +303,9 @@ describe('Report Data Actions -- ', () => {
 
     beforeEach(() => {
         spyOn(flux.dispatchBinder, 'dispatch');
-        spyOn(mockReportService.prototype, 'getReport');
         reportDataActions.__Rewire__('ReportService', mockReportService);
         reportDataActions.__Rewire__('RecordService', mockRecordService);
+        spyOn(mockReportService.prototype, 'getReport').and.callThrough();
     });
 
     afterEach(() => {
@@ -313,7 +315,7 @@ describe('Report Data Actions -- ', () => {
 
     var dataProvider = [
         {test:'test throwing exception when loading a report', func:flux.actions.loadReport, act: actions.LOAD_REPORT_FAILED},
-        {test:'test throwing exception when filtering a report', func:flux.actions.filterReport, act:actions.LOAD_RECORDS_FAILED}
+        {test:'test throwing exception when filtering a report', func:flux.actions.getFilteredRecords, act:actions.LOAD_RECORDS_FAILED}
     ];
     var filter = {facet: 'abc', search: ''};
 

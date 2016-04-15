@@ -1,0 +1,903 @@
+@font-face {
+    font-family: 'icomoon';
+    src:    url('fonts/icomoon.eot?61nitj');
+    src:    url('fonts/icomoon.eot?61nitj#iefix') format('embedded-opentype'),
+        url('fonts/icomoon.ttf?61nitj') format('truetype'),
+        url('fonts/icomoon.woff?61nitj') format('woff'),
+        url('fonts/icomoon.svg?61nitj#icomoon') format('svg');
+    font-weight: normal;
+    font-style: normal;
+}
+
+[class^="icon-"], [class*=" icon-"] {
+    /* use !important to prevent issues with browser extensions that change fonts */
+    font-family: 'icomoon' !important;
+    speak: none;
+    font-style: normal;
+    font-weight: normal;
+    font-variant: normal;
+    text-transform: none;
+    line-height: 1;
+
+    /* Better Font Rendering =========== */
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
+
+.icon-TableIcons_sturdy_1:before {
+    content: "\e900";
+}
+.icon-TableIcons_sturdy_2:before {
+    content: "\e901";
+}
+.icon-TableIcons_sturdy_3:before {
+    content: "\e902";
+}
+.icon-TableIcons_sturdy_4:before {
+    content: "\e903";
+}
+.icon-TableIcons_sturdy_5:before {
+    content: "\e904";
+}
+.icon-TableIcons_sturdy_6:before {
+    content: "\e905";
+}
+.icon-TableIcons_sturdy_7:before {
+    content: "\e906";
+}
+.icon-TableIcons_sturdy_8:before {
+    content: "\e907";
+}
+.icon-TableIcons_sturdy_9:before {
+    content: "\e908";
+}
+.icon-TableIcons_sturdy_accessibility:before {
+    content: "\e909";
+}
+.icon-TableIcons_sturdy_Accreditations:before {
+    content: "\e90a";
+}
+.icon-TableIcons_sturdy_activity:before {
+    content: "\e90b";
+}
+.icon-TableIcons_sturdy_Aid:before {
+    content: "\e90c";
+}
+.icon-TableIcons_sturdy_ambulance:before {
+    content: "\e90d";
+}
+.icon-TableIcons_sturdy_Apple:before {
+    content: "\e90e";
+}
+.icon-TableIcons_sturdy_arrowdown:before {
+    content: "\e90f";
+}
+.icon-TableIcons_sturdy_arrowleft:before {
+    content: "\e910";
+}
+.icon-TableIcons_sturdy_arrowright:before {
+    content: "\e911";
+}
+.icon-TableIcons_sturdy_arrowup:before {
+    content: "\e912";
+}
+.icon-TableIcons_sturdy_balloons:before {
+    content: "\e913";
+}
+.icon-TableIcons_sturdy_bananas:before {
+    content: "\e914";
+}
+.icon-TableIcons_sturdy_Beverage:before {
+    content: "\e915";
+}
+.icon-TableIcons_sturdy_binoculars:before {
+    content: "\e916";
+}
+.icon-TableIcons_sturdy_blood:before {
+    content: "\e917";
+}
+.icon-TableIcons_sturdy_boy:before {
+    content: "\e918";
+}
+.icon-TableIcons_sturdy_bus:before {
+    content: "\e919";
+}
+.icon-TableIcons_sturdy_camera:before {
+    content: "\e91a";
+}
+.icon-TableIcons_sturdy_cap:before {
+    content: "\e91b";
+}
+.icon-TableIcons_sturdy_carfront:before {
+    content: "\e91c";
+}
+.icon-TableIcons_sturdy_car_side:before {
+    content: "\e91d";
+}
+.icon-TableIcons_sturdy_Carrot:before {
+    content: "\e91e";
+}
+.icon-TableIcons_sturdy_cat:before {
+    content: "\e91f";
+}
+.icon-TableIcons_sturdy_chart:before {
+    content: "\e920";
+}
+.icon-TableIcons_sturdy_checkmarkblack:before {
+    content: "\e921";
+}
+.icon-TableIcons_sturdy_checkmarkknockout:before {
+    content: "\e922";
+}
+.icon-TableIcons_sturdy_Cheese:before {
+    content: "\e923";
+}
+.icon-TableIcons_sturdy_Chicken:before {
+    content: "\e924";
+}
+.icon-TableIcons_sturdy_Coffee_cup:before {
+    content: "\e925";
+}
+.icon-TableIcons_sturdy_customers:before {
+    content: "\e926";
+}
+.icon-TableIcons_sturdy_Cutlery:before {
+    content: "\e927";
+}
+.icon-TableIcons_sturdy_deliverytruck2:before {
+    content: "\e928";
+}
+.icon-TableIcons_sturdy_deliverytruck:before {
+    content: "\e929";
+}
+.icon-TableIcons_sturdy_desktopmonitor:before {
+    content: "\e92a";
+}
+.icon-TableIcons_sturdy_dog:before {
+    content: "\e92b";
+}
+.icon-TableIcons_sturdy_drugs:before {
+    content: "\e92c";
+}
+.icon-TableIcons_sturdy_estimates:before {
+    content: "\e92d";
+}
+.icon-TableIcons_sturdy_Exclamation:before {
+    content: "\e92e";
+}
+.icon-TableIcons_sturdy_exercise:before {
+    content: "\e92f";
+}
+.icon-TableIcons_sturdy_female:before {
+    content: "\e930";
+}
+.icon-TableIcons_sturdy_Fish:before {
+    content: "\e931";
+}
+.icon-TableIcons_sturdy_girl:before {
+    content: "\e932";
+}
+.icon-TableIcons_sturdy_heart:before {
+    content: "\e933";
+}
+.icon-TableIcons_sturdy_hospital:before {
+    content: "\e934";
+}
+.icon-TableIcons_sturdy_house:before {
+    content: "\e935";
+}
+.icon-TableIcons_sturdy_invoices:before {
+    content: "\e936";
+}
+.icon-TableIcons_sturdy_iPad:before {
+    content: "\e937";
+}
+.icon-TableIcons_sturdy_laptop:before {
+    content: "\e938";
+}
+.icon-TableIcons_sturdy_lineitems:before {
+    content: "\e939";
+}
+.icon-TableIcons_sturdy_login:before {
+    content: "\e93a";
+}
+.icon-TableIcons_sturdy_mailbox:before {
+    content: "\e93b";
+}
+.icon-TableIcons_sturdy_male:before {
+    content: "\e93c";
+}
+.icon-TableIcons_sturdy_medicine2:before {
+    content: "\e93d";
+}
+.icon-TableIcons_sturdy_medicine:before {
+    content: "\e93e";
+}
+.icon-TableIcons_sturdy_monitor:before {
+    content: "\e93f";
+}
+.icon-TableIcons_sturdy_newbadge:before {
+    content: "\e940";
+}
+.icon-TableIcons_sturdy_person:before {
+    content: "\e941";
+}
+.icon-TableIcons_sturdy_plus:before {
+    content: "\e942";
+}
+.icon-TableIcons_sturdy_printer:before {
+    content: "\e943";
+}
+.icon-TableIcons_sturdy_products:before {
+    content: "\e944";
+}
+.icon-TableIcons_sturdy_projects:before {
+    content: "\e945";
+}
+.icon-TableIcons_sturdy_purse:before {
+    content: "\e946";
+}
+.icon-TableIcons_sturdy_questionmark:before {
+    content: "\e947";
+}
+.icon-TableIcons_sturdy_reports:before {
+    content: "\e948";
+}
+.icon-TableIcons_sturdy_ruler:before {
+    content: "\e949";
+}
+.icon-TableIcons_sturdy_Sandals:before {
+    content: "\e94a";
+}
+.icon-TableIcons_sturdy_schedule:before {
+    content: "\e94b";
+}
+.icon-TableIcons_sturdy_signs:before {
+    content: "\e94c";
+}
+.icon-TableIcons_sturdy_snowflake:before {
+    content: "\e94d";
+}
+.icon-TableIcons_sturdy_student:before {
+    content: "\e94e";
+}
+.icon-TableIcons_sturdy_Stuffedanimal:before {
+    content: "\e94f";
+}
+.icon-TableIcons_sturdy_talk:before {
+    content: "\e950";
+}
+.icon-TableIcons_sturdy_tasks:before {
+    content: "\e951";
+}
+.icon-TableIcons_sturdy_taxi:before {
+    content: "\e952";
+}
+.icon-TableIcons_sturdy_teammembers:before {
+    content: "\e953";
+}
+.icon-TableIcons_sturdy_templatedprojects:before {
+    content: "\e954";
+}
+.icon-TableIcons_sturdy_testtube:before {
+    content: "\e955";
+}
+.icon-TableIcons_sturdy_tooth:before {
+    content: "\e956";
+}
+.icon-TableIcons_sturdy_towtruck:before {
+    content: "\e957";
+}
+.icon-TableIcons_sturdy_trash:before {
+    content: "\e958";
+}
+.icon-TableIcons_sturdy_vendors:before {
+    content: "\e959";
+}
+.icon-TableIcons_sturdy_Whiteboard:before {
+    content: "\e95a";
+}
+.icon-TableIcons_sturdy_x:before {
+    content: "\e95b";
+}
+.icon-TableIcons_sturdy_add-person:before {
+    content: "\e95c";
+}
+.icon-TableIcons_sturdy_at-sign:before {
+    content: "\e95d";
+}
+.icon-TableIcons_sturdy_backpack:before {
+    content: "\e95e";
+}
+.icon-TableIcons_sturdy_barbell:before {
+    content: "\e95f";
+}
+.icon-TableIcons_sturdy_bell:before {
+    content: "\e960";
+}
+.icon-TableIcons_sturdy_bicycle:before {
+    content: "\e961";
+}
+.icon-TableIcons_sturdy_Cellphone:before {
+    content: "\e962";
+}
+.icon-TableIcons_sturdy_Cloud:before {
+    content: "\e963";
+}
+.icon-TableIcons_sturdy_command:before {
+    content: "\e964";
+}
+.icon-TableIcons_sturdy_cube:before {
+    content: "\e965";
+}
+.icon-TableIcons_sturdy_cupcake:before {
+    content: "\e966";
+}
+.icon-TableIcons_sturdy_diamond:before {
+    content: "\e967";
+}
+.icon-TableIcons_sturdy_document:before {
+    content: "\e968";
+}
+.icon-TableIcons_sturdy_dots:before {
+    content: "\e969";
+}
+.icon-TableIcons_sturdy_Download:before {
+    content: "\e96a";
+}
+.icon-TableIcons_sturdy_ducky:before {
+    content: "\e96b";
+}
+.icon-TableIcons_sturdy_envelope:before {
+    content: "\e96c";
+}
+.icon-TableIcons_sturdy_eyeball:before {
+    content: "\e96d";
+}
+.icon-TableIcons_sturdy_Female:before {
+    content: "\e96e";
+}
+.icon-TableIcons_sturdy_Female2:before {
+    content: "\e96f";
+}
+.icon-TableIcons_sturdy_film:before {
+    content: "\e970";
+}
+.icon-TableIcons_sturdy_fire:before {
+    content: "\e971";
+}
+.icon-TableIcons_sturdy_firstaid:before {
+    content: "\e972";
+}
+.icon-TableIcons_sturdy_flag:before {
+    content: "\e973";
+}
+.icon-TableIcons_sturdy_Growth:before {
+    content: "\e974";
+}
+.icon-TableIcons_sturdy_kettlebell:before {
+    content: "\e975";
+}
+.icon-TableIcons_sturdy_lift:before {
+    content: "\e976";
+}
+.icon-TableIcons_sturdy_lightbulb:before {
+    content: "\e977";
+}
+.icon-TableIcons_sturdy_Lock:before {
+    content: "\e978";
+}
+.icon-TableIcons_sturdy_moneyperson:before {
+    content: "\e979";
+}
+.icon-TableIcons_sturdy_pages:before {
+    content: "\e97a";
+}
+.icon-TableIcons_sturdy_paperclip:before {
+    content: "\e97b";
+}
+.icon-TableIcons_sturdy_phone:before {
+    content: "\e97c";
+}
+.icon-TableIcons_sturdy_Piggy:before {
+    content: "\e97d";
+}
+.icon-TableIcons_sturdy_Presentation:before {
+    content: "\e97e";
+}
+.icon-TableIcons_sturdy_pricetag:before {
+    content: "\e97f";
+}
+.icon-TableIcons_sturdy_Question:before {
+    content: "\e980";
+}
+.icon-TableIcons_sturdy_quote:before {
+    content: "\e981";
+}
+.icon-TableIcons_sturdy_Report:before {
+    content: "\e982";
+}
+.icon-TableIcons_sturdy_Report2:before {
+    content: "\e983";
+}
+.icon-TableIcons_sturdy_Risk:before {
+    content: "\e984";
+}
+.icon-TableIcons_sturdy_rooster:before {
+    content: "\e985";
+}
+.icon-TableIcons_sturdy_Router:before {
+    content: "\e986";
+}
+.icon-TableIcons_sturdy_Row_Zoom:before {
+    content: "\e987";
+}
+.icon-TableIcons_sturdy_Salary:before {
+    content: "\e988";
+}
+.icon-TableIcons_sturdy_Salesman:before {
+    content: "\e989";
+}
+.icon-TableIcons_sturdy_Satellite_Dish:before {
+    content: "\e98a";
+}
+.icon-TableIcons_sturdy_Schedule:before {
+    content: "\e98b";
+}
+.icon-TableIcons_sturdy_School_Bell:before {
+    content: "\e98c";
+}
+.icon-TableIcons_sturdy_School:before {
+    content: "\e98d";
+}
+.icon-TableIcons_sturdy_Semi_Trailer_Truck:before {
+    content: "\e98e";
+}
+.icon-TableIcons_sturdy_Send_Package:before {
+    content: "\e98f";
+}
+.icon-TableIcons_sturdy_Ship:before {
+    content: "\e990";
+}
+.icon-TableIcons_sturdy_Shopping_Cart:before {
+    content: "\e991";
+}
+.icon-TableIcons_sturdy_shopping-bag:before {
+    content: "\e992";
+}
+.icon-TableIcons_sturdy_Sku:before {
+    content: "\e993";
+}
+.icon-TableIcons_sturdy_SMS:before {
+    content: "\e994";
+}
+.icon-TableIcons_sturdy_Smudge:before {
+    content: "\e995";
+}
+.icon-TableIcons_sturdy_Social_Studies:before {
+    content: "\e996";
+}
+.icon-TableIcons_sturdy_Sole_Proprietorship_Pencil:before {
+    content: "\e997";
+}
+.icon-TableIcons_sturdy_Sole_Proprietorship:before {
+    content: "\e998";
+}
+.icon-TableIcons_sturdy_speedometer:before {
+    content: "\e999";
+}
+.icon-TableIcons_sturdy_Spreadsheet:before {
+    content: "\e99a";
+}
+.icon-TableIcons_sturdy_Stamp:before {
+    content: "\e99b";
+}
+.icon-TableIcons_sturdy_Star:before {
+    content: "\e99c";
+}
+.icon-TableIcons_sturdy_Stats_Bar_Chart_Star:before {
+    content: "\e99d";
+}
+.icon-TableIcons_sturdy_Stats_Pie_Chart:before {
+    content: "\e99e";
+}
+.icon-TableIcons_sturdy_Stock_Market:before {
+    content: "\e99f";
+}
+.icon-TableIcons_sturdy_Store:before {
+    content: "\e9a0";
+}
+.icon-TableIcons_sturdy_student-girl:before {
+    content: "\e9a1";
+}
+.icon-TableIcons_sturdy_Summary_Arrow_Right:before {
+    content: "\e9a2";
+}
+.icon-TableIcons_sturdy_Summary_Zoom:before {
+    content: "\e9a3";
+}
+.icon-TableIcons_sturdy_Swimming:before {
+    content: "\e9a4";
+}
+.icon-TableIcons_sturdy_Table_Footer_Gear:before {
+    content: "\e9a5";
+}
+.icon-TableIcons_sturdy_Table_Header2:before {
+    content: "\e9a6";
+}
+.icon-TableIcons_sturdy_task-complete:before {
+    content: "\e9a7";
+}
+.icon-TableIcons_sturdy_Task:before {
+    content: "\e9a8";
+}
+.icon-TableIcons_sturdy_Tax:before {
+    content: "\e9a9";
+}
+.icon-TableIcons_sturdy_team:before {
+    content: "\e9aa";
+}
+.icon-TableIcons_sturdy_Technical_Hammer:before {
+    content: "\e9ab";
+}
+.icon-TableIcons_sturdy_Technical_Screwdriver:before {
+    content: "\e9ac";
+}
+.icon-TableIcons_sturdy_Technical_Wrench:before {
+    content: "\e9ad";
+}
+.icon-TableIcons_sturdy_thumbtack:before {
+    content: "\e9ae";
+}
+.icon-TableIcons_sturdy_Timer:before {
+    content: "\e9af";
+}
+.icon-TableIcons_sturdy_Treasure_Chest:before {
+    content: "\e9b0";
+}
+.icon-TableIcons_sturdy_Trojan:before {
+    content: "\e9b1";
+}
+.icon-TableIcons_sturdy_Trophy:before {
+    content: "\e9b2";
+}
+.icon-TableIcons_sturdy_Truck:before {
+    content: "\e9b3";
+}
+.icon-TableIcons_sturdy_trumpet:before {
+    content: "\e9b4";
+}
+.icon-TableIcons_sturdy_umbrella:before {
+    content: "\e9b5";
+}
+.icon-TableIcons_sturdy_University:before {
+    content: "\e9b6";
+}
+.icon-TableIcons_sturdy_Upload:before {
+    content: "\e9b7";
+}
+.icon-TableIcons_sturdy_Upload2:before {
+    content: "\e9b8";
+}
+.icon-TableIcons_sturdy_User:before {
+    content: "\e9b9";
+}
+.icon-TableIcons_sturdy_video:before {
+    content: "\e9ba";
+}
+.icon-TableIcons_sturdy_Videocamera:before {
+    content: "\e9bb";
+}
+.icon-TableIcons_sturdy_Warehouse:before {
+    content: "\e9bc";
+}
+.icon-TableIcons_sturdy_Whistle:before {
+    content: "\e9bd";
+}
+.icon-TableIcons_sturdy_White_List:before {
+    content: "\e9be";
+}
+.icon-TableIcons_sturdy_Wire_Transfer:before {
+    content: "\e9bf";
+}
+.icon-TableIcons_sturdy_Achievement:before {
+    content: "\e9c0";
+}
+.icon-TableIcons_sturdy_Acquisition_Clock:before {
+    content: "\e9c1";
+}
+.icon-TableIcons_sturdy_Administrator:before {
+    content: "\e9c2";
+}
+.icon-TableIcons_sturdy_Advertising:before {
+    content: "\e9c3";
+}
+.icon-TableIcons_sturdy_Animation:before {
+    content: "\e9c4";
+}
+.icon-TableIcons_sturdy_Anonymous:before {
+    content: "\e9c5";
+}
+.icon-TableIcons_sturdy_Architecture:before {
+    content: "\e9c6";
+}
+.icon-TableIcons_sturdy_Attendance_List:before {
+    content: "\e9c7";
+}
+.icon-TableIcons_sturdy_Audio_Knob:before {
+    content: "\e9c8";
+}
+.icon-TableIcons_sturdy_Bank_Transaction:before {
+    content: "\e9c9";
+}
+.icon-TableIcons_sturdy_Blackboard:before {
+    content: "\e9ca";
+}
+.icon-TableIcons_sturdy_Bomb:before {
+    content: "\e9cb";
+}
+.icon-TableIcons_sturdy_Book:before {
+    content: "\e9cc";
+}
+.icon-TableIcons_sturdy_Bookmark:before {
+    content: "\e9cd";
+}
+.icon-TableIcons_sturdy_Bread:before {
+    content: "\e9ce";
+}
+.icon-TableIcons_sturdy_Briefcase:before {
+    content: "\e9cf";
+}
+.icon-TableIcons_sturdy_Bug:before {
+    content: "\e9d0";
+}
+.icon-TableIcons_sturdy_Building:before {
+    content: "\e9d1";
+}
+.icon-TableIcons_sturdy_Calculator:before {
+    content: "\e9d2";
+}
+.icon-TableIcons_sturdy_Calendar_Month:before {
+    content: "\e9d3";
+}
+.icon-TableIcons_sturdy_Calendar_Year:before {
+    content: "\e9d4";
+}
+.icon-TableIcons_sturdy_Calendar:before {
+    content: "\e9d5";
+}
+.icon-TableIcons_sturdy_Campus:before {
+    content: "\e9d6";
+}
+.icon-TableIcons_sturdy_Certificate:before {
+    content: "\e9d7";
+}
+.icon-TableIcons_sturdy_Champagne:before {
+    content: "\e9d8";
+}
+.icon-TableIcons_sturdy_Chat_Exclamation:before {
+    content: "\e9d9";
+}
+.icon-TableIcons_sturdy_Check2:before {
+    content: "\e9da";
+}
+.icon-TableIcons_sturdy_Classroom:before {
+    content: "\e9db";
+}
+.icon-TableIcons_sturdy_Clipboard_Pencil:before {
+    content: "\e9dc";
+}
+.icon-TableIcons_sturdy_Clipboard:before {
+    content: "\e9dd";
+}
+.icon-TableIcons_sturdy_Clock:before {
+    content: "\e9de";
+}
+.icon-TableIcons_sturdy_College:before {
+    content: "\e9df";
+}
+.icon-TableIcons_sturdy_Color:before {
+    content: "\e9e0";
+}
+.icon-TableIcons_sturdy_Company:before {
+    content: "\e9e1";
+}
+.icon-TableIcons_sturdy_Competitors:before {
+    content: "\e9e2";
+}
+.icon-TableIcons_sturdy_Contact:before {
+    content: "\e9e3";
+}
+.icon-TableIcons_sturdy_Contract:before {
+    content: "\e9e4";
+}
+.icon-TableIcons_sturdy_Copy:before {
+    content: "\e9e5";
+}
+.icon-TableIcons_sturdy_Copy2:before {
+    content: "\e9e6";
+}
+.icon-TableIcons_sturdy_Currency_Sign_Dollar2:before {
+    content: "\e9e7";
+}
+.icon-TableIcons_sturdy_Curriculum:before {
+    content: "\e9e8";
+}
+.icon-TableIcons_sturdy_Customer:before {
+    content: "\e9e9";
+}
+.icon-TableIcons_sturdy_Defective_Product:before {
+    content: "\e9ea";
+}
+.icon-TableIcons_sturdy_Dimensions:before {
+    content: "\e9eb";
+}
+.icon-TableIcons_sturdy_Directive_Board:before {
+    content: "\e9ec";
+}
+.icon-TableIcons_sturdy_Dispatch_Order:before {
+    content: "\e9ed";
+}
+.icon-TableIcons_sturdy_Door:before {
+    content: "\e9ee";
+}
+.icon-TableIcons_sturdy_Economics:before {
+    content: "\e9ef";
+}
+.icon-TableIcons_sturdy_Edit:before {
+    content: "\e9f0";
+}
+.icon-TableIcons_sturdy_Engineering:before {
+    content: "\e9f1";
+}
+.icon-TableIcons_sturdy_Essay:before {
+    content: "\e9f2";
+}
+.icon-TableIcons_sturdy_Etiquette:before {
+    content: "\e9f3";
+}
+.icon-TableIcons_sturdy_Field_Image:before {
+    content: "\e9f4";
+}
+.icon-TableIcons_sturdy_File2:before {
+    content: "\e9f5";
+}
+.icon-TableIcons_sturdy_Focus_Group:before {
+    content: "\e9f6";
+}
+.icon-TableIcons_sturdy_Folder:before {
+    content: "\e9f7";
+}
+.icon-TableIcons_sturdy_Foreign_Language:before {
+    content: "\e9f8";
+}
+.icon-TableIcons_sturdy_Fountain_Pen:before {
+    content: "\e9f9";
+}
+.icon-TableIcons_sturdy_Frames2:before {
+    content: "\e9fa";
+}
+.icon-TableIcons_sturdy_Front_Desk:before {
+    content: "\e9fb";
+}
+.icon-TableIcons_sturdy_Geography:before {
+    content: "\e9fc";
+}
+.icon-TableIcons_sturdy_Graduate:before {
+    content: "\e9fd";
+}
+.icon-TableIcons_sturdy_Group:before {
+    content: "\e9fe";
+}
+.icon-TableIcons_sturdy_Hand_Handshake:before {
+    content: "\e9ff";
+}
+.icon-TableIcons_sturdy_Hand_Point:before {
+    content: "\ea00";
+}
+.icon-TableIcons_sturdy_Hand_Thumbs-up:before {
+    content: "\ea01";
+}
+.icon-TableIcons_sturdy_Hourglass:before {
+    content: "\ea02";
+}
+.icon-TableIcons_sturdy_ID:before {
+    content: "\ea03";
+}
+.icon-TableIcons_sturdy_Inventory_Category2:before {
+    content: "\ea04";
+}
+.icon-TableIcons_sturdy_Inventory:before {
+    content: "\ea05";
+}
+.icon-TableIcons_sturdy_Invoice:before {
+    content: "\ea06";
+}
+.icon-TableIcons_sturdy_ISP:before {
+    content: "\ea07";
+}
+.icon-TableIcons_sturdy_Justice:before {
+    content: "\ea08";
+}
+.icon-TableIcons_sturdy_Key:before {
+    content: "\ea09";
+}
+.icon-TableIcons_sturdy_Laws:before {
+    content: "\ea0a";
+}
+.icon-TableIcons_sturdy_List:before {
+    content: "\ea0b";
+}
+.icon-TableIcons_sturdy_Location:before {
+    content: "\ea0c";
+}
+.icon-TableIcons_sturdy_Marker:before {
+    content: "\ea0d";
+}
+.icon-TableIcons_sturdy_Market_Segmentation:before {
+    content: "\ea0e";
+}
+.icon-TableIcons_sturdy_Meeting:before {
+    content: "\ea0f";
+}
+.icon-TableIcons_sturdy_Meeting3:before {
+    content: "\ea10";
+}
+.icon-TableIcons_sturdy_Money_Bag_Dollar:before {
+    content: "\ea11";
+}
+.icon-TableIcons_sturdy_Network_Monitor:before {
+    content: "\ea12";
+}
+.icon-TableIcons_sturdy_Nurse:before {
+    content: "\ea13";
+}
+.icon-TableIcons_sturdy_Objects:before {
+    content: "\ea14";
+}
+.icon-TableIcons_sturdy_Offer:before {
+    content: "\ea15";
+}
+.icon-TableIcons_sturdy_OSI_Model:before {
+    content: "\ea16";
+}
+.icon-TableIcons_sturdy_OSI_Model2:before {
+    content: "\ea17";
+}
+.icon-TableIcons_sturdy_Paste2:before {
+    content: "\ea18";
+}
+.icon-TableIcons_sturdy_Personal_Record:before {
+    content: "\ea19";
+}
+.icon-TableIcons_sturdy_Phone_Book:before {
+    content: "\ea1a";
+}
+.icon-TableIcons_sturdy_Physics_Pendulum:before {
+    content: "\ea1b";
+}
+.icon-TableIcons_sturdy_Ping:before {
+    content: "\ea1c";
+}
+.icon-TableIcons_sturdy_Plane:before {
+    content: "\ea1d";
+}
+.icon-TableIcons_sturdy_Poetry:before {
+    content: "\ea1e";
+}
+.icon-TableIcons_sturdy_Product:before {
+    content: "\ea1f";
+}
+.icon-TableIcons_sturdy_Protocol2:before {
+    content: "\ea20";
+}
+.icon-TableIcons_sturdy_Purchase:before {
+    content: "\ea21";
+}
+.icon-TableIcons_sturdy_Quality:before {
+    content: "\ea22";
+}
+.icon-TableIcons_sturdy_Refresh:before {
+    content: "\ea23";
+}
+

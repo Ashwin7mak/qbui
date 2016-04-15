@@ -11,6 +11,7 @@ export const SORT_LIST_PARAM = "sortList";
 export const COLUMNS_PARAM = "columns";
 export const OFFSET_PARAM = "offset";
 export const NUMROWS_PARAM = "numRows";
+export const GLIST_PARAM = "glist";
 
 //  NODE API PARAMETERS
 export const FORMAT_PARAM = "format";

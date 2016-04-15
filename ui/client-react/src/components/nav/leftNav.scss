@@ -105,10 +105,20 @@ div.leftNavTooltip {
         display: block;
     }
 }
-.appsToggle {
+.branding .appsToggle {
     text-overflow:ellipsis;
     overflow:hidden;
     padding-right:25px;
+    color: $left-nav-fg;
+    height:40px;
+    border: 0;
+    border-radius:0;
+    margin:0;
+    text-align:left;
+    width:100%;
+}
+.branding .appsToggle::hover {
+    color: $left-nav-fg;
 }
 
 /* collapsed nav overrides */
@@ -131,7 +141,7 @@ div.leftNavTooltip {
             display: flex;
         }
 
-        .globalActions > ul > li > a.globalActionLink {
+        .globalActions > ul > li > .globalActionLink {
 
             .navLabel {
                 display: none;
@@ -197,9 +207,19 @@ div.leftNavTooltip {
             text-overflow: ellipsis;
         }
         .appsToggle {
+            text-overflow:ellipsis;
+            overflow:hidden;
+            padding-right:25px;
+            color: $left-nav-fg;
+            height:40px;
+            border: 0;
+            border-radius:0;
+            margin:0;
+            text-align:left;
+            width:100%;
+
             padding-left: 8px;
             position: relative;
-            line-height: 40px;
             white-space: nowrap;
             cursor: pointer;
             background-color: $left-nav-hover-bg;
@@ -221,7 +241,7 @@ div.leftNavTooltip {
         flex: 0 1 auto;
         bottom: 0;
 
-        a.globalActionLink, .dropup {
+        .globalActionLink, .dropup {
             width: 100%;
             line-height: 25px;
         }
@@ -231,6 +251,7 @@ div.leftNavTooltip {
         color: $search-input-fg;
         overflow: hidden;
         height: 0;
+        visibility:hidden;
         transition: all 250ms ease;
         input {
             padding-left: 5px;
@@ -240,6 +261,7 @@ div.leftNavTooltip {
         }
     }
     .search.open {
+        visibility: visible;
         padding: 0 8px;
         height: 42px;
         line-height: 28px;
@@ -257,7 +279,8 @@ div.leftNavTooltip {
             .qbIcon {
                 font-size: 16px;
                 position: absolute;
-                right: -3px;
+                right: 8px;
+                width:auto;
                 top: 10px;
             }
         }
@@ -275,7 +298,7 @@ div.leftNavTooltip {
         list-style-image: initial;
     }
 
-    ul.globalActionsList li {
+    ul.globalActionsList>li {
         height:auto;
     }
     ul.topLinks, ul.tablesList, ul.appsList, ul.globalActionsList {
@@ -302,7 +325,7 @@ div.leftNavTooltip {
             > a, .dropdownToggle {
                 color: $left-nav-link-hover-fg;
             }
-            > a.right {
+            > a.right, a.right:focus {
                 opacity: 1;
                 transition: opacity 0.2s ease-in-out;
                 -webkit-transition: opacity 0.2s ease-in-out;
@@ -321,10 +344,12 @@ div.leftNavTooltip {
                 opacity: 0;
                 position: absolute;
                 right: 0;
+                &:focus {
+                    opacity:1;
+                }
             }
             .hoverComponent {
                 display: none;
-
                 position: absolute;
                 top: 0;
                 left: 100%;
@@ -362,19 +387,17 @@ div.leftNavTooltip {
         > li {
             flex: 1 0 auto;
             border-right: 1px solid $left-nav-horizontal-icon-border-color;
-            > a.leftNavLink, a.globalActionLink {
+            > a.leftNavLink, .globalActionLink {
                 padding: 5px 0;
                 text-align: center;
                 line-height: 20px;
-
+                border-radius:0;
+                border:0;
+                background-color:inherit;
                 .qbIcon, .navLabel, .dropup {
                     display: block;
                     width: 100%;
                 }
-            }
-            /* force dropdown menu to left when global actions are in left nav */
-            &.withDropdown {
-                order:-1;
             }
         }
     }

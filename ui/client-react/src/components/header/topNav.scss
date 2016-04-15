@@ -35,11 +35,6 @@ $top-nav-color: #193048;
     }
 }
 
-
-.topNav .dropdown {
-    outline: none;
-}
-
 .topNav .dropdown-menu {
     right: 0;
     left: auto;
@@ -66,6 +61,7 @@ $top-nav-color: #193048;
     .link {
         cursor: pointer;
         > a {
+            display:inline-block;
             color: $topnav-icon-color;
             padding: 0 8px;
 
@@ -79,6 +75,7 @@ $top-nav-color: #193048;
         margin: 0;
         padding: 0;
         vertical-align: middle;
+        line-height: 40px;
     }
     .globalAction {
         border: 0;
@@ -101,7 +98,7 @@ $top-nav-color: #193048;
 }
 
 .topNav .navItem {
-    display:inline-block;
+
     &.topTitle {
         display: none;
     }

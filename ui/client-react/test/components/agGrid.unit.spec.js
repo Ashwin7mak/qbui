@@ -4,6 +4,7 @@ import ReactDOM from 'react-dom';
 import AGGrid  from '../../src/components/dataTable/agGrid/agGrid';
 import AGGridReact from 'ag-grid-react';
 import Loader  from 'react-loader';
+import * as query from '../../src/constants/query';
 
 var AGGridMock = React.createClass({
     render() {
@@ -25,7 +26,13 @@ var I18nMessageMock = React.createClass({
     }
 });
 
-let flux = {};
+let flux = {
+    actions: {
+        getFilteredRecords: function() {
+            return;
+        }
+    }
+};
 
 const fakeReportData_loading = {
     loading: true
@@ -46,17 +53,24 @@ const fakeReportData_before = {
             col_text: "abc",
             col_date: "01-01-2015"
         }],
-        columns: [{
-            field: "col_num",
-            headerName: "col_num"
-        },
+        columns: [
             {
-                field: "col_text",
-                headerName: "col_text"
+                id: 1,
+                field: "col_num",
+                headerName: "col_num",
+                datatypeAttributes: {type:"NUMERIC"}
             },
             {
+                id:2,
+                field: "col_text",
+                headerName: "col_text",
+                datatypeAttributes: {type:"TEXT"}
+            },
+            {
+                id:3,
                 field: "col_date",
-                headerName: "col_date"
+                headerName: "col_date",
+                datatypeAttributes: {type:"DATE"}
             }]
     }
 };
@@ -92,11 +106,13 @@ describe('AGGrid functions', () => {
     beforeEach(() => {
         AGGrid.__Rewire__('AgGridReact', AGGridMock);
         AGGrid.__Rewire__('I18nMessage', I18nMessageMock);
+        spyOn(flux.actions, 'getFilteredRecords');
     });
 
     afterEach(() => {
         AGGrid.__ResetDependency__('AgGridReact');
         AGGrid.__ResetDependency__('I18nMessage');
+        flux.actions.getFilteredRecords.calls.reset();
     });
 
     it('test render of component', () => {

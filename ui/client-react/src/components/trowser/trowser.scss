@@ -17,9 +17,11 @@ $action-separator-color: #486c8f;
     -webkit-transition: max-height ease 250ms;
     transition: max-height ease 250ms;
     padding:0;
+    visibility:hidden;
 
     &.visible {
         max-height:100%;
+        visibility:visible;
     }
 
     .rightIcons {

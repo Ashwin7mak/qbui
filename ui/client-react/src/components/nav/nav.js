@@ -43,17 +43,19 @@ var Nav = React.createClass({
             {msg:'globalActions.help', link:'/help', icon:'help'}
         ];
         return (<GlobalActions actions={actions}
-                               position={"top"}/>);
+                               position={"top"}
+                               startTabIndex={4}/>);
     },
 
     getLeftGlobalActions() {
         const actions = [
-            {msg:'globalActions.help', link:'/help', icon:'help'}
+            {msg:'globalActions.user', link:'/user', icon:'user'}
         ];
         return (<GlobalActions actions={actions}
                                onSelect={this.onSelectItem}
-                               dropdownIcon="user"
-                               dropdownMsg="globalActions.user"
+                               dropdownIcon="help"
+                               dropdownMsg="globalActions.help"
+                               startTabIndex={100}
                                position={"left"}/>);
     },
     hideTrowser() {

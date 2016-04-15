@@ -1,6 +1,6 @@
 import React from 'react';
 import Swipeable from 'react-swipeable';
-import {Tooltip, OverlayTrigger} from 'react-bootstrap';
+import {Tooltip, OverlayTrigger, Button} from 'react-bootstrap';
 import {Link} from 'react-router';
 import Loader  from 'react-loader';
 import {I18nMessage} from '../../utils/i18nMessage';
@@ -33,11 +33,11 @@ let LeftNav = React.createClass({
         return (<div className="branding">
                     <h2 className={"logo"}>QuickBase</h2>
                     {this.props.selectedAppId &&
-                        <div className="appsToggle" onClick={this.props.onToggleAppsList}>
+                        <Button className="appsToggle" onClick={this.props.onToggleAppsList}>
                             <QBicon icon={"favicon"}/>
                             <span className={"navLabel"}> {app ? app.name : ''}</span>
                             <QBicon className={"appsToggleIcon"} icon="caret-filled-up"/>
-                        </div>
+                        </Button>
                     }
                 </div>);
     },
@@ -49,7 +49,7 @@ let LeftNav = React.createClass({
     },
 
     onSelectApp() {
-        this.props.toggleAppsList(false);
+        this.props.onToggleAppsList(false);
     },
 
     swipedLeft() {
