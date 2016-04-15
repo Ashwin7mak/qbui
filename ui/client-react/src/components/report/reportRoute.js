@@ -99,7 +99,7 @@ const ReportRoute = React.createClass({
         let reportName = this.props.reportData && this.props.reportData.data && this.props.reportData.data.name;
 
         return (this.props.selectedTable &&
-        <h3 className="breadCrumbs"><QBicon icon="report-table"/> {this.props.selectedTable.name}
+        <h3 className="breadCrumbs"><QBicon icon="report-table"/>{this.props.selectedTable.name}
             <span className="breadCrumbsSeparator"> | </span>{reportName}</h3>);
 
     },
