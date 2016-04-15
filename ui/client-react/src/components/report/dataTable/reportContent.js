@@ -128,24 +128,11 @@ let ReportContent = React.createClass({
         let isTouch = this.context.touch;
         let columnsDef = this.getColumnProps();
 
-        const fakeReportData_valid = {
-            loading:false,
-            data: {
-                filteredRecords: [
-                    {
-                        col_num: 1,
-                        col_text: "abc",
-                        col_date: "01-01-2015"
-                    }],
-
-            }
-        };
         return (<div className="loadedContent">
                 {this.props.reportData.error ?
                     <div>Error loading report!</div> :
                     <div className="reportContent">
                         {!isTouch ?
-
                             <AGGrid loading={this.props.reportData.loading}
                                     records={this.props.reportData.data ? this.props.reportData.data.filteredRecords : []}
                                     columns={columnsDef}
@@ -167,8 +154,11 @@ let ReportContent = React.createClass({
                                         search: this.props.reportData.searchStringForFiltering}}
                                     selectedSortFids={this.props.reportData.data ? this.props.reportData.data.selectedSortFids : []} /> :
 
-                            <CardViewList reportData={fakeReportData_valid}
-                                uniqueIdentifier="col_num"/>
+                            <CardViewList reportData={this.props.reportData}
+                                uniqueIdentifier="Record ID#"
+                                reportHeader={this.props.reportHeader}
+                                selectionActions={<ReportActions />}
+                                onScroll={this.onScrollRecords}/>
                         }
                     </div>
                 }

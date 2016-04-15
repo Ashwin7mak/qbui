@@ -15,7 +15,7 @@ let LeftNav = React.createClass({
 
     propTypes: {
         expanded:React.PropTypes.bool,
-        visible:React.PropTypes.bool.isRequired,
+        visible:React.PropTypes.bool,
         appsListOpen:React.PropTypes.bool.isRequired,
         selectedAppId:React.PropTypes.string,
         selectedTableId:React.PropTypes.string,
