@@ -202,17 +202,21 @@
 
                                 if (this.isDisplayFormat(req)) {
                                     records = recordFormatter.formatRecords(records, fields);
+
+                                    //  the formatter will determine if grouping is requested and return
+                                    //  a data structure grouped according to the grouping requirements.
                                     groupedRecords = groupFormatter.group(req, fields, records);
                                 }
 
                                 responseObject = {};
                                 responseObject[FIELDS] = fields;
                                 responseObject[RECORDS] = [];
-                                responseObject[GROUPS] = groupedRecords;
+                                responseObject[GROUPS] = [];
 
-                                //  if we are grouping our results, then don't send back the flat display order
-                                //  as it will not be used by the client.
-                                if (groupedRecords.hasGrouping !== true) {
+                                //  if we are grouping our results, no need to send the flat result set.
+                                if (groupedRecords && groupedRecords.hasGrouping === true) {
+                                    responseObject[GROUPS] = groupedRecords;
+                                } else {
                                     responseObject[RECORDS] = records;
                                 }
                             }
