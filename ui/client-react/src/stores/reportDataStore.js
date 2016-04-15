@@ -123,15 +123,16 @@ let reportModel = {
         if (this.model.hasGrouping === true) {
             this.model.columns = this.getReportColumns(recordData.groups.gridColumns);
             this.model.records = recordData.groups.gridData;
-            this.model.groupLevel = recordData.groups.columns.length;
+            this.model.groupLevel = 0;
             this.model.groupingFields = [];
             this.model.groupFids = [];
-            recordData.groups.columns.forEach((groupField) => {
+            recordData.groups.fields.forEach((groupField) => {
                 this.model.groupFids.push(groupField.id);
                 this.model.groupingFields.push(groupField.name);
+                this.model.groupLevel++;
             });
 
-            //  TODO: with paging, this is flawed...
+            //  TODO: with paging, this count is flawed...
             this.model.recordsCount = recordData.groups.totalRows;
         } else {
             this.model.columns = this.getReportColumns(recordData.fields);
@@ -140,7 +141,7 @@ let reportModel = {
             this.model.groupingFields = null;
             this.model.groupFids = null;
 
-            //  TODO: with paging, this is flawed...
+            //  TODO: with paging, this count is flawed...
             this.model.recordsCount = recordData.records.length;
         }
 

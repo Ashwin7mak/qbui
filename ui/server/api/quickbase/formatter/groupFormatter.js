@@ -1,5 +1,6 @@
 //
-//        GROUPING DESCRIPTION GOES HERE....
+//      Formatter that takes report records and outputs a data structure that
+//      meets the grouping requirements of each supplied group field element.
 //
 (function() {
     'use strict';
@@ -9,10 +10,19 @@
     var lodash = require('lodash');
 
 
+    /**
+     * Return the supplied record data grouped to match the grouping
+     * requirements of each groupField element.
+     *
+     * @param groupFields
+     * @param fields
+     * @param records
+     * @returns {Array}
+     */
     function createGroupDataGrid(groupFields, fields, records) {
         let data = [];
 
-        if (fields && records) {
+        if (groupFields && fields && records) {
             let map = new Map();
             let reportData = [];
 
@@ -20,23 +30,34 @@
                 map.set(field.id, field);
             });
 
+            //  Some prep work to organize the report data where we output a
+            //  list of rows, with each entry containing key/value pairs that
+            //  represent the data row cells displayed on each report row.
             records.forEach((record) => {
                 let columns = {};
                 record.forEach((column) => {
                     let fld = map.get(column.id);
                     columns[fld.name] = column.display;
                 });
-                //columns.record = record;
                 reportData.push(columns);
             });
 
-            data = groupTheData(groupFields, 0, reportData);
+            data = groupTheData(groupFields, reportData, 0);
         }
 
         return data;
     }
 
-    function groupTheData(groupFields, idx, reportData) {
+    /**
+     * For each group field, group the supplied report data according to the business
+     * rules defined for each field type and group type combination.
+     *
+     * @param groupFields - report fields which are to be grouped
+     * @param reportData - the report data
+     * @param idx - which groupField element are we working on.
+     * @returns {Array}
+     */
+    function groupTheData(groupFields, reportData, idx) {
 
         let data = [];
         let groupField = groupFields[idx];
@@ -79,7 +100,9 @@
             //  what is the groupType for this field
             let groupType = groupField.groupType;
 
-            //  Group the data based on the data type
+            //  Group the data based on the data type.  Grouping is supported
+            //  for DATE, DURATION, EMAIL, NUMERIC, TEXT and USER data types only.
+            //
             switch (groupField.datatypeAttributes.type) {
             case constants.DATE:
                 switch (groupType) {
@@ -174,14 +197,21 @@
 
             return [];
         });
-
+        
+        //  We've grouped the data for this field based on it's grouping requirement.  To support
+        //  multi-level grouping, we need to group each element returned in outputted list
+        //  against the next grouping level(if any).  This continues until all grouping levels
+        //  have been processed.
         for (let group in groupedData) {
             let children = [];
+
             if (idx < groupFields.length - 1) {
-                //  recursive call to get the children of each group node.  Will continue
-                //  until we get to the last grouping field in the list and then work our way back out
-                //  with a fully populated grouping data object.
-                children = groupTheData(groupFields, idx + 1, groupedData[group]);
+                //
+                //  recursive call to get the children of the next group node in the groupFields list.
+                //  Continue until we get to the last grouping field, and then populate the data
+                //  object as we work our way back to the top of the stack.
+                //
+                children = groupTheData(groupFields, groupedData[group], idx + 1);
             } else {
                 children = groupedData[group];
             }
@@ -193,11 +223,25 @@
 
     module.exports = {
 
+        /**
+         * Group the supplied records according to the glist content(if any) definedon the request.
+         *
+         * @param req
+         * @param fields
+         * @param records
+         * @returns {{hasGrouping: boolean, fields: Array, gridColumns: Array, gridData: Array, totalRows: number}}
+         */
         group: function(req, fields, records) {
 
+            //  object structure that provides the following information about report grouping:
+            //      hasGrouping: does this report have a grouping requirement
+            //      fields: list of report fields that are grouped
+            //      gridColumns: list of field columns to display in the grid
+            //      gridData: grid content in grouped order
+            //      totalRows: total number of rows in the grid
             let groupBy = {
                 hasGrouping: false,
-                columns: [],
+                fields: [],
                 gridColumns: [],
                 gridData: [],
                 totalRows: 0
@@ -210,12 +254,15 @@
                 //
                 let glist = req.param(constants.REQUEST_PARAMETER.GROUP_LIST);
                 if (glist) {
-                    //  get the list of fields to group
+                    //
+                    //  get the list of fields to group.  This is an optional parameter, so it could be undefined.
+                    //
                     let groups = glist.split(constants.REQUEST_PARAMETER.LIST_DELIMITER);
                     if (groups) {
-
+                        //
                         //  organize the groups by fid for easy lookup when looping through the fields
                         //  TODO: can a fid be in more than 1 grouping definition per report??
+                        //
                         let map = new Map();
                         groups.forEach((group) => {
                             let el = group.split(constants.REQUEST_PARAMETER.GROUP_DELIMITER);
@@ -225,7 +272,7 @@
                             }
                         });
 
-                        //  Loop through all the fields and find those that are to be grouped
+                        //  Loop through all the fields and populate the groupBy structure appropriately.
                         for (let idx = 0; idx < fields.length; idx++) {
                             let field = fields[idx];
 
@@ -237,18 +284,18 @@
                             if (groupType) {
                                 //  add the groupType to the field
                                 field.groupType = groupType;
-                                groupBy.columns.push(field);
+                                groupBy.fields.push(field);
                             } else {
                                 groupBy.gridColumns.push(field);
                             }
                         }
 
-                        // if there are fields in the grouping columns list, we have grouping; set
+                        // if there are fields in the grouping fields list, we have grouping; set
                         // the grouping flag to true and organize the grid data per grouping fields
                         // requirements.
-                        if (groupBy.columns.length > 0) {
+                        if (groupBy.fields.length > 0) {
                             groupBy.hasGrouping = true;
-                            groupBy.gridData = createGroupDataGrid(groupBy.columns, fields, records);
+                            groupBy.gridData = createGroupDataGrid(groupBy.fields, fields, records);
 
                             //  TODO: with paging, this is flawed...
                             if (groupBy.gridData.length > 0) {
