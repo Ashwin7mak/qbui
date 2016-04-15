@@ -140,7 +140,8 @@ let CardViewList = React.createClass({
                                      onToggleCardSelection={this.onToggleCardSelection}
                                      onRowSelected={this.onCardRowSelected}
                                      onRowClicked={this.onRowClicked}
-                                     isRowSelected={this.isRowSelected}/>;
+                                     isRowSelected={this.isRowSelected}
+                                     metadataColumns={["actions"]}/>;
                 })
                 }
             </div>);
@@ -161,7 +162,6 @@ let CardViewList = React.createClass({
     },
 
     render() {
-
         let results = this.props.reportData && this.props.reportData.data ? this.props.reportData.data.filteredRecords : [];
 
         return (

@@ -58,7 +58,9 @@ let CardView = React.createClass({
         let firstFieldValue = this.props.data[keys[0]];
         var topField = this.createTopField(firstFieldValue);
         for (var i = 1; i < keys.length; i++) {
-            fields.push(this.createField(i, keys[i]));
+            if (this.props.metadataColumns.indexOf(keys[i]) === -1) {
+                fields.push(this.createField(i, keys[i]));
+            }
         }
 
         return <div className="card">{topField}<div className={this.state.showMoreCards ? "fieldRow expanded" : "fieldRow collapsed"}>{fields}</div></div>;
