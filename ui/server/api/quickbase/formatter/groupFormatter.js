@@ -1,6 +1,7 @@
 //
-//      Formatter that takes report records and outputs a data structure that
-//      meets the grouping requirements of each supplied group field element.
+//      Formatter that takes report records and outputs a data structure that meets the
+//      grouping requirements of each supplied group field element and organizes the data
+//      to make i easier for the client to render the data grid.
 //
 (function() {
     'use strict';
@@ -8,7 +9,6 @@
     var groupTypes = require('../../groupTypes');
     var log = require('../../../logger').getLogger();
     var lodash = require('lodash');
-
 
     /**
      * Return the supplied record data grouped to match the grouping
@@ -247,7 +247,7 @@
                 totalRows: 0
             };
 
-            if (fields) {
+            if (fields && records) {
                 //
                 // Is there a grouping parameter included on the request.  The format of the parameter
                 // is 'fid1:groupType1.fid2:groupType2...fidN:groupTypeN'
