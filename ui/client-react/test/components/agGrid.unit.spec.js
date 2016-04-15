@@ -39,6 +39,7 @@ const fakeReportData_loading = {
 };
 
 const fakeReportData_empty = {
+    loading: false,
     data: {
         name: "",
         records: [],
@@ -47,6 +48,7 @@ const fakeReportData_empty = {
 };
 
 const fakeReportData_before = {
+    loading: false,
     data: {
         records: [{
             col_num: 1,
@@ -75,6 +77,7 @@ const fakeReportData_before = {
     }
 };
 const fakeReportData_after = {
+    loading: false,
     data: {
         records: [{
             col_num1: 2,
@@ -122,7 +125,7 @@ describe('AGGrid functions', () => {
 
 
     it('test render of loader', () => {
-        component = TestUtils.renderIntoDocument(<AGGrid actions={TableActionsMock}   loading={fakeReportData_loading} flux={flux}/>);
+        component = TestUtils.renderIntoDocument(<AGGrid actions={TableActionsMock} loading={fakeReportData_loading.loading} flux={flux}/>);
         expect(TestUtils.scryRenderedComponentsWithType(component, Loader).length).toEqual(1);
         expect(TestUtils.scryRenderedComponentsWithType(component, AGGridReact).length).toEqual(0);
     });

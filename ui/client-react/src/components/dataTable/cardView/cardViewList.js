@@ -13,7 +13,7 @@ let CardViewList = React.createClass({
         history: React.PropTypes.object
     },
     propTypes: {
-        reportData: React.PropTypes.object,
+        reportData: React.PropTypes.object.isRequired,
         uniqueIdentifier: React.PropTypes.string,
         reportHeader: React.PropTypes.element,
         selectionActions: React.PropTypes.element,
@@ -127,6 +127,8 @@ let CardViewList = React.createClass({
             cardViewListClasses += " allowCardSelection";
         }
         const records = this.props.reportData.data ? this.props.reportData.data.filteredRecords : [];
+
+
         return (
             <div className={cardViewListClasses} ref="cardViewList">
 

@@ -9,6 +9,7 @@ const MAX_ACTIONS_RESIZE_WITH = 240; // max width while swiping
 
 let CardView = React.createClass({
     propTypes: {
+        data: React.PropTypes.object,
         rowId: React.PropTypes.number
     },
 

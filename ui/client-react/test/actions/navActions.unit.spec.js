@@ -3,6 +3,7 @@
 import Fluxxor from 'fluxxor';
 import navActions from '../../src/actions/navActions';
 import * as actions from '../../src/constants/actions';
+import Breakpoints from '../../src/utils/breakpoints';
 
 describe('Nav Actions functions', () => {
     'use strict';
@@ -33,12 +34,18 @@ describe('Nav Actions functions', () => {
 
     it('test toggle left nav action with state', () => {
         flux.actions.toggleLeftNav(true);
-        expect(flux.dispatchBinder.dispatch).toHaveBeenCalledWith(actions.TOGGLE_LEFT_NAV_VISIBLE, true);
+
+        let action = Breakpoints.isSmallBreakpoint() ? actions.TOGGLE_LEFT_NAV_VISIBLE : actions.TOGGLE_LEFT_NAV_EXPANDED;
+
+        expect(flux.dispatchBinder.dispatch).toHaveBeenCalledWith(action, true);
     });
 
     it('test toggle left nav action', () => {
         flux.actions.toggleLeftNav();
-        expect(flux.dispatchBinder.dispatch).toHaveBeenCalledWith(actions.TOGGLE_LEFT_NAV_VISIBLE, undefined);
+
+        let action = Breakpoints.isSmallBreakpoint() ? actions.TOGGLE_LEFT_NAV_VISIBLE : actions.TOGGLE_LEFT_NAV_EXPANDED;
+
+        expect(flux.dispatchBinder.dispatch).toHaveBeenCalledWith(action, undefined);
     });
 
     it('test searching action', () => {

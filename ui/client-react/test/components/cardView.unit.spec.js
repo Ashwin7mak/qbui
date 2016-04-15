@@ -14,7 +14,7 @@ var RecordActionsMock = React.createClass({
 
 const fakeReportData_empty = {
     data: {
-        results: [],
+        results: {},
         columnMetadata: []
     }
 };
