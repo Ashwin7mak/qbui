@@ -4,12 +4,13 @@ import CardView from './cardView';
 import Loader  from 'react-loader';
 import './cardViewList.scss';
 
+/**
+ * A list of CardView items used to render a report at the small breakpoint
+ */
 let CardViewList = React.createClass({
 
     contextTypes: {
-        touch: React.PropTypes.bool,
-        history: React.PropTypes.object,
-        flux: React.PropTypes.object
+        history: React.PropTypes.object
     },
     getInitialState() {
         return {

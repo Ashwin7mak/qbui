@@ -11,3 +11,9 @@ $margin-spacer: 10px;
     width: inherit !important;
     margin-bottom: $margin-spacer;
 }
+
+.cardViewList.allowCardSelection {
+    .custom-row-card .card-expander {
+        display:none;
+    }
+}

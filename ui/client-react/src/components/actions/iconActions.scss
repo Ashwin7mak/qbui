@@ -63,8 +63,12 @@ $page-actions-background-color: #486c8f;
                 width: 32px;
                 font-size: 20px;
                 color: $icon-action-icon-color;
+                background-color: inherit;
+            }
+            &.pageActions .iconActionButton {
                 background-color: $page-actions-background-color;
             }
+
         }
         .pageActions {
             background-color: $page-actions-background-color;
