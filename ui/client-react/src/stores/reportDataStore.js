@@ -18,7 +18,7 @@ let reportModel = {
         name: null,
         records: null,
         recordsCount: null,
-        sortFids: [],         //TODO: QBSE-19937 this should come from report meta data.
+        sortFids: [],
         groupFids: [],
         selectedSortFids: []
     },
@@ -87,29 +87,7 @@ let reportModel = {
      * @param facets
      * @returns {*}
      */
-    checkForFacetErrors(facets) {
-        if (facets) {
-            //check for error message returned
-            //i.e facets : [{id: null, errorMessage: "unknownError"}]
-            if (facets.length > 0) {
-                if (facets[0].id === null) {
-                    //log error
-                    let msg = facets[0].errorMessage;
-                    logger.error(`error response from server request : ${msg} getting facet information for app:${this.appId} table:${this.tblId} report:${this.rptId} `);
-                    //no facets
-                    return [];
-                }
-                //else good id data
-            } else {
-                //empty facet data ok there are no filters for this report
-            }
-            return facets;
-        } else {
-            //log error
-            logger.error(`error got no facet property returned for app:${this.appId} table:${this.tblId} report:${this.rptId} `);
-            return [];
-        }
-    },
+
 
     /**
      * Returns the model object
@@ -192,30 +170,30 @@ let reportModel = {
         }
     },
     /**
-     * Set facets data from response
+     * Set facets data(if any) from response
      * @param recordData
      */
     setFacetData: function(recordData) {
-        this.model.facets = this.checkForFacetErrors(recordData.facets);
+        this.model.facets = [];
+
+        if (recordData && recordData.facets) {
+            //check for an error message ==> [{id:x, name:y, type:z, errorCode: errorCode}]
+            if (recordData.facets.length > 0) {
+                if (recordData.facets[0].errorCode) {
+                    //  TODO: implement translating the error code into a descriptive message
+                    let errorCode = recordData.facets[0].errorCode;
+                    let id = recordData.facets[0].id;
+                    let name = recordData.facets[0].name;
+                    logger.error(`Error response from server. Facet:${id}, name:{$name}, error: ${errorCode}; app:${this.appId}; table:${this.tblId}; report:${this.rptId}.`);
+                } else {
+                    this.model.facets = recordData.facets;
+                }
+            }
+        }
     },
 
-    // TODO -- Remove?
-    //setGroupingLevel: function(groupingLevel) {
-    //    this.model.groupLevel = groupingLevel;
-    //},
-    //
-    //setGroupingFields: function(groupingFields) {
-    //    this.model.groupingFields = groupingFields;
-    //},
-    //
-    //setGroupFids: function(groupFids) {
-    //    this.model.groupFids = groupFids;
-    //},
-
     setSelectedSortFids: function(sortList) {
-        if (sortList !== this.model.sortFids) {
-            this.model.selectedSortFids = ReportUtils.getSortFids(sortList);
-        }
+        this.model.selectedSortFids = ReportUtils.getSortFids(sortList);
     }
 
 };
@@ -283,7 +261,9 @@ let ReportDataStore = Fluxxor.createStore({
         this.selections = payload.filter.selections;
         this.facetExpression = payload.filter.facet;
         this.searchStringForFiltering =  payload.filter.search;
+
         this.reportModel.setSelectedSortFids(payload.sortList);
+
         this.emit('change');
     },
 
