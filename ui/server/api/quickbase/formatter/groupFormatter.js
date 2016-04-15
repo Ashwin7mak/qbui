@@ -272,34 +272,38 @@
                             }
                         });
 
-                        //  Loop through all the fields and populate the groupBy structure appropriately.
-                        for (let idx = 0; idx < fields.length; idx++) {
-                            let field = fields[idx];
+                        //  if the map is empty, we have no group requirements
+                        if (map.size > 0) {
 
-                            //  need to ensure the id is a string for the map lookup
-                            let fieldId = field.id + '';
+                            //  Loop through all the fields and populate the groupBy structure appropriately.
+                            for (let idx = 0; idx < fields.length; idx++) {
+                                let field = fields[idx];
 
-                            //  if a groupBy field, want to separate from those that are not grouped.
-                            let groupType = map.get(fieldId);
-                            if (groupType) {
-                                //  add the groupType to the field
-                                field.groupType = groupType;
-                                groupBy.fields.push(field);
-                            } else {
-                                groupBy.gridColumns.push(field);
+                                //  need to ensure the id is a string for the map lookup
+                                let fieldId = field.id + '';
+
+                                //  if a groupBy field, want to separate from those that are not grouped.
+                                let groupType = map.get(fieldId);
+                                if (groupType) {
+                                    //  add the groupType to the field
+                                    field.groupType = groupType;
+                                    groupBy.fields.push(field);
+                                } else {
+                                    groupBy.gridColumns.push(field);
+                                }
                             }
-                        }
 
-                        // if there are fields in the grouping fields list, we have grouping; set
-                        // the grouping flag to true and organize the grid data per grouping fields
-                        // requirements.
-                        if (groupBy.fields.length > 0) {
-                            groupBy.hasGrouping = true;
-                            groupBy.gridData = createGroupDataGrid(groupBy.fields, fields, records);
+                            // if there are fields in the grouping fields list, we have grouping; set
+                            // the grouping flag to true and organize the grid data per grouping fields
+                            // requirements.
+                            if (groupBy.fields.length > 0) {
+                                groupBy.hasGrouping = true;
+                                groupBy.gridData = createGroupDataGrid(groupBy.fields, fields, records);
 
-                            //  TODO: with paging, this is flawed...
-                            if (groupBy.gridData.length > 0) {
-                                groupBy.totalRows = records.length;
+                                //  TODO: with paging, this is flawed...
+                                if (groupBy.gridData.length > 0) {
+                                    groupBy.totalRows = records.length;
+                                }
                             }
                         }
                     }
