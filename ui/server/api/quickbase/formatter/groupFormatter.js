@@ -9,6 +9,7 @@
     var groupTypes = require('../../groupTypes');
     var log = require('../../../logger').getLogger();
     var lodash = require('lodash');
+    var groupUtils = require('../../../components/utility/groupUtils');
 
     /**
      * Return the supplied record data grouped to match the grouping
@@ -30,9 +31,9 @@
                 map.set(field.id, field);
             });
 
-            //  Some prep work to organize the report data where we output a
-            //  list of rows, with each entry containing key/value pairs that
-            //  represent the data row cells displayed on each report row.
+            //  Some prep work to organize the report data: for each row,
+            //  add N key/value pairs, with each pair representing a data
+            //  cell that is displayed on a report row.
             records.forEach((record) => {
                 let columns = {};
                 record.forEach((column) => {
@@ -60,45 +61,13 @@
     function groupTheData(groupFields, reportData, idx) {
 
         let data = [];
-        let groupField = groupFields[idx];
-
-        /**
-         * Private function to extract the first word from the given content.
-         * Will return the original content if any exception is thrown.
-         *
-         * @param content
-         * @returns first word found in the content.
-         */
-        function getFirstWord(content) {
-            try {
-                return content.split(' ')[0];
-            } catch (e) {
-                // do nothing..just return the original content
-            }
-            return content;
-        }
-
-        /**
-         * Private function to extract the first letter from the given content.
-         * Will return the original content if any exception is thrown.
-         *
-         * @param content
-         * @returns first letter found in the content.
-         */
-        function getFirstLetter(content) {
-            try {
-                return content.substr(0, 1);
-            } catch (e) {
-                // do nothing..just return the original content
-            }
-            return content;
-        }
 
         //  Group the data based on the field dataType and grouping type
         let groupedData = lodash.groupBy(reportData, function(record) {
 
-            //  what is the groupType for this field
-            let groupType = groupField.groupType;
+            //  get the groupType and field from the input array
+            let groupType = groupFields[idx].groupType;
+            let groupField = groupFields[idx].field;
 
             //  Group the data based on the data type.  Grouping is supported
             //  for DATE, DURATION, EMAIL, NUMERIC, TEXT and USER data types only.
@@ -108,7 +77,6 @@
                 switch (groupType) {
                 case groupTypes.DATE.equals:
                     return record[groupField.name];
-                // TODO: implement the below DATE grouping types
                 //case groupTypes.DATE.day:
                 //case groupTypes.DATE.week:
                 //case groupTypes.DATE.month:
@@ -117,13 +85,10 @@
                 //case groupTypes.DATE.fiscalQuarter:
                 //case groupTypes.DATE.fiscalYear:
                 //case groupTypes.DATE.decade:
-                default:
-                    log.warn("Trying to group by date field with an unsupported group type.  FieldId/name: " + groupField.id + '/' + groupField.name + '; GroupType: ' + groupType);
                 }
                 break;
             case constants.DURATION:
-                switch (groupType) {
-                // TODO: implement the below DURATION grouping types
+                //switch (groupType) {
                 //case groupTypes.DURATION.equals:
                 //case groupTypes.DURATION.second:
                 //case groupTypes.DURATION.minute:
@@ -131,25 +96,19 @@
                 //case groupTypes.DURATION.am_pm:
                 //case groupTypes.DURATION.week:
                 //case groupTypes.DURATION.day:
-                default:
-                    log.warn("Trying to group by duration field with an unsupported group type.  FieldId/name: " + groupField.id + '/' + groupField.name + '; GroupType: ' + groupType);
-                }
+                //}
                 break;
             case constants.EMAIL:
-                switch (groupType) {
-                // TODO: implement the below NUMERIC grouping types
+                //switch (groupType) {
                 //case groupTypes.EMAIL.domain:
                 //case groupTypes.EMAIL.domain_topLevel:
                 //case groupTypes.EMAIL.name:
-                default:
-                    log.warn("Trying to group by email field with an unsupported group type.  FieldId/name: " + groupField.id + '/' + groupField.name + '; GroupType: ' + groupType);
-                }
+                //}
                 break;
             case constants.NUMERIC:
                 switch (groupType) {
                 case groupTypes.NUMERIC.equals:
                     return record[groupField.name];
-                // TODO: implement the below NUMERIC grouping types
                 //case groupTypes.NUMERIC.range:
                 //case groupTypes.NUMERIC.thousandth:
                 //case groupTypes.NUMERIC.hundredth:
@@ -162,8 +121,6 @@
                 //case groupTypes.NUMERIC.ten_k:
                 //case groupTypes.NUMERIC.hundred_k:
                 //case groupTypes.NUMERIC.million:
-                default:
-                    log.warn("Trying to group by numeric field with an unsupported group type.  FieldId/name: " + groupField.id + '/' + groupField.name + '; GroupType: ' + groupType);
                 }
                 break;
             case constants.TEXT:
@@ -171,11 +128,9 @@
                 case groupTypes.TEXT.equals:
                     return record[groupField.name];
                 case groupTypes.TEXT.firstLetter:
-                    return getFirstLetter(record[groupField.name]);
+                    return groupUtils.getFirstLetter(record[groupField.name]);
                 case groupTypes.TEXT.firstWord:
-                    return getFirstWord(record[groupField.name]);
-                default:
-                    log.warn("Trying to group by text field with an unsupported group type.  FieldId/name: " + groupField.id + '/' + groupField.name + '; GroupType: ' + groupType);
+                    return groupUtils.getFirstWord(record[groupField.name]);
                 }
                 break;
             case constants.USER:
@@ -183,11 +138,9 @@
                 case groupTypes.USER.equals:
                     return record[groupField.name];
                 case groupTypes.USER.firstLetter:
-                    return getFirstLetter(record[groupField.name]);
+                    return groupUtils.getFirstLetter(record[groupField.name]);
                 case groupTypes.USER.firstWord:
-                    return getFirstWord(record[groupField.name]);
-                default:
-                    log.warn("Trying to group by user field with an unsupported group type.  FieldId/name: " + groupField.id + '/' + groupField.name + '; GroupType: ' + groupType);
+                    return groupUtils.getFirstWord(record[groupField.name]);
                 }
                 break;
             default:
@@ -248,63 +201,67 @@
             };
 
             if (fields && records) {
+
+                let map = new Map();
+                fields.forEach((field) => {
+                    map.set(field.id + '', field);
+                });
+
                 //
                 // Is there a grouping parameter included on the request.  The format of the parameter
-                // is 'fid1:groupType1.fid2:groupType2...fidN:groupTypeN'
+                // is 'fid1:groupType1.fid2:groupType2...fidN:groupTypeN'.
                 //
-                let glist = req.param(constants.REQUEST_PARAMETER.GROUP_LIST);
-                if (glist) {
-                    //
-                    //  get the list of fields to group.  This is an optional parameter, so it could be undefined.
-                    //
-                    let groups = glist.split(constants.REQUEST_PARAMETER.LIST_DELIMITER);
-                    if (groups) {
-                        //
-                        //  organize the groups by fid for easy lookup when looping through the fields
-                        //  TODO: can a fid be in more than 1 grouping definition per report??
-                        //
-                        let map = new Map();
-                        groups.forEach((group) => {
-                            let el = group.split(constants.REQUEST_PARAMETER.GROUP_DELIMITER);
-                            //  if no group element in parameter(valid case), then skip it
-                            if (el.length > 1) {
-                                map.set(el[0], el[1]);
-                            }
-                        });
+                let groupList = req.param(constants.REQUEST_PARAMETER.GROUP_LIST);
+                if (groupList) {
+                    let groups = groupList.split(constants.REQUEST_PARAMETER.LIST_DELIMITER);
 
-                        //  if the map is empty, we have no group requirements
-                        if (map.size > 0) {
+                    // Loop through the list of groups and determine whether we have any grouping requirements.
+                    // Fields that are to be grouped are added to the groupBy.fields array in the same order
+                    // as the groups array.  This is to ensure proper order of precedence.
+                    groups.forEach((group) => {
+                        if (group) {
+                            //  must have a fid and group type element
+                            let el = group.split(constants.REQUEST_PARAMETER.GROUP_DELIMITER, 2);
+                            if (el.length === 2) {
+                                let groupFidId = el[0];
+                                let groupType = el[1];
 
-                            //  Loop through all the fields and populate the groupBy structure appropriately.
-                            for (let idx = 0; idx < fields.length; idx++) {
-                                let field = fields[idx];
-
-                                //  need to ensure the id is a string for the map lookup
-                                let fieldId = field.id + '';
-
-                                //  if a groupBy field, want to separate from those that are not grouped.
-                                let groupType = map.get(fieldId);
-                                if (groupType) {
-                                    //  add the groupType to the field
-                                    field.groupType = groupType;
-                                    groupBy.fields.push(field);
-                                } else {
-                                    groupBy.gridColumns.push(field);
+                                //  skip if we can't find the field
+                                let field = map.get(groupFidId);
+                                if (field) {
+                                    // found the field; now see if the data type/group type combination is valid.
+                                    if (groupUtils.isValidGroupType(field.datatypeAttributes.type, groupType) === true) {
+                                        // add the field to the groupBy list.
+                                        field.grouped = true;
+                                        groupBy.fields.push(
+                                            {field: field,
+                                             groupType: groupType}
+                                        );
+                                    } else {
+                                        log.warn("Trying to group a field with an unsupported group type.  FieldId: " + field.id + "; name: " + field.name + "; DataType: " + field.datatypeAttributes.type + "; GroupType: " + groupType);
+                                    }
                                 }
                             }
+                        }
 
-                            // if there are fields in the grouping fields list, we have grouping; set
-                            // the grouping flag to true and organize the grid data per grouping fields
-                            // requirements.
-                            if (groupBy.fields.length > 0) {
-                                groupBy.hasGrouping = true;
-                                groupBy.gridData = createGroupDataGrid(groupBy.fields, fields, records);
+                    });
 
-                                //  TODO: with paging, this is flawed...
-                                if (groupBy.gridData.length > 0) {
-                                    groupBy.totalRows = records.length;
-                                }
-                            }
+                    //  fields not grouped are added to the gridColumns array for display in the grid
+                    fields.forEach(function(field) {
+                        if (!field.grouped === true) {
+                            groupBy.gridColumns.push(field);
+                        }
+                    });
+
+                    // if there are fields in the grouping fields list, set the grouping flag
+                    // to true and organize the grid data per grouping fields requirement.
+                    if (groupBy.fields.length > 0) {
+                        groupBy.hasGrouping = true;
+                        groupBy.gridData = createGroupDataGrid(groupBy.fields, fields, records);
+
+                        //  TODO: with paging, this is flawed...
+                        if (groupBy.gridData.length > 0) {
+                            groupBy.totalRows = records.length;
                         }
                     }
                 }

@@ -127,8 +127,8 @@ let reportModel = {
             this.model.groupingFields = [];
             this.model.groupFids = [];
             recordData.groups.fields.forEach((groupField) => {
-                this.model.groupFids.push(groupField.id);
-                this.model.groupingFields.push(groupField.name);
+                this.model.groupFids.push(groupField.field.id);
+                this.model.groupingFields.push(groupField.field.name);
                 this.model.groupLevel++;
             });
 

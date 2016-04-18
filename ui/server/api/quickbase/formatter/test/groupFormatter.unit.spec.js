@@ -5,6 +5,7 @@
 var assert = require('assert');
 var constants = require('../../../constants');
 var groupFormatter = require('./../groupFormatter');
+var groupUtils = require('../../../../components/utility/groupUtils');
 
 describe('Validate GroupFormatter unit tests', function() {
 
@@ -57,12 +58,14 @@ describe('Validate GroupFormatter unit tests', function() {
         return setup;
     }
 
-    it('test no grouping because of insufficient input data', function() {
+    it('test no grouping because of insufficient or invalid input data', function() {
         var testCases = [
             {message: 'Null glist parameter', numFields: 3, numRecords: 5, gList: null, dataType: constants.TEXT},
             {message: 'Empty glist parameter', numFields: 3, numRecords: 5, gList: '', dataType: constants.TEXT},
             {message: 'No input fields', numFields: 0, numRecords: 5, gList: '1:V', dataType: constants.TEXT},
-            {message: 'No grouping specified', numFields: 4, numRecords: 10, gList: '1,2', dataType: constants.TEXT}
+            {message: 'No grouping specified', numFields: 4, numRecords: 10, gList: '1.2', dataType: constants.TEXT},
+            {message: 'invalid TEXT grouping specified', numFields: 4, numRecords: 10, gList: '1:?', dataType: constants.TEXT},
+            {message: 'invalid TEXT grouping specified', numFields: 4, numRecords: 10, gList: 'blah', dataType: constants.TEXT}
         ];
 
         testCases.forEach(function(testCase) {
@@ -71,20 +74,6 @@ describe('Validate GroupFormatter unit tests', function() {
             assert.equal(groupData.hasGrouping, false);
             assert.equal(groupData.fields.length, 0);
             assert.equal(groupData.totalRows, 0);
-        });
-    });
-
-
-    it('test no grouping because of invalid grouping data', function() {
-        var testCases = [
-            {message: 'invalid TEXT grouping specified', numFields: 4, numRecords: 10, gList: '1:?', dataType: constants.TEXT}
-        ];
-
-        testCases.forEach(function(testCase) {
-            var setup = setupRecords(testCase.numFields, testCase.numRecords, testCase.dataType, testCase.gList);
-            var groupData = groupFormatter.group(setup.req, setup.fields, setup.records);
-            assert.equal(groupData.hasGrouping, true);
-           // assert.equal(groupData.totalRows, 0);
         });
     });
 
@@ -104,13 +93,14 @@ describe('Validate GroupFormatter unit tests', function() {
         });
     });
 
-    it('test grouping - TEXT fields', function() {
+    it('test valid grouping - TEXT fields', function() {
         var testCases = [
             {message: 'No input records', numFields: 5, numRecords: 0, gList: '1:V', dataType: constants.TEXT},
             {message: 'Input with one equals grouping', numFields: 5, numRecords: 1, gList: '1:V', dataType: constants.TEXT},
             {message: 'Input with two equals groupings', numFields: 5, numRecords: 2, gList: '1:V.2:V', dataType: constants.TEXT},
-            {message: 'Input with two first letter grouping', numFields: 5, numRecords: 2, gList: '1:F', dataType: constants.TEXT},
-            {message: 'Input with two first word grouping', numFields: 5, numRecords: 2, gList: '1:I', dataType: constants.TEXT}
+            {message: 'Input with one first word grouping', numFields: 5, numRecords: 2, gList: '1:I', dataType: constants.TEXT},
+            {message: 'Input with three first letter grouping', numFields: 5, numRecords: 2, gList: '1:F.2:F.3:F', dataType: constants.TEXT},
+            {message: 'Input with multiple grouping against same fid', numFields: 5, numRecords: 2, gList: '1:I.1:V', dataType: constants.TEXT}
         ];
 
         testCases.forEach(function(testCase) {
@@ -118,7 +108,21 @@ describe('Validate GroupFormatter unit tests', function() {
             var groupData = groupFormatter.group(setup.req, setup.fields, setup.records);
             assert.equal(groupData.hasGrouping, true);
             assert.equal(groupData.totalRows, testCase.numRecords);
+
+            //  the order of the fids in the list need to match the order in the groupData.fields array
+            var groupList = testCase.gList.split(constants.REQUEST_PARAMETER.LIST_DELIMITER);
+            for (var idx = 0; idx < groupList.length; idx++) {
+                var el = groupList[idx].split(constants.REQUEST_PARAMETER.GROUP_DELIMITER);
+                assert.equal(el[0], groupData.fields[idx].field.id);
+                assert.equal(el[1], groupData.fields[idx].groupType);
+            }
+
+            //  number of group list elements should match the number of elements in the groupData.fields array
+            assert.equal(groupList.length, groupData.fields.length);
+
         });
+
+
     });
 
 });
