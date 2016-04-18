@@ -30,7 +30,7 @@
             week: COMMON.week,
             day: COMMON.day
         },
-        EMAIL: {
+        EMAIL_ADDRESS: {
             name: 'N',
             domain: 'O',
             domain_topLevel: 'C'

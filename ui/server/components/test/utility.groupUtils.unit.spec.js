@@ -108,9 +108,9 @@ describe('Validate Group Utility', function() {
 
         describe('validate EMAIL group types', function() {
             var validGroupTypeTestCases = [
-                {name: 'email domain', dataType: constants.EMAIL_ADDRESS, groupType: groupTypes.EMAIL.domain, expectation: true},
-                {name: 'email domain_toplevel', dataType: constants.EMAIL_ADDRESS, groupType: groupTypes.EMAIL.domain_topLevel, expectation: true},
-                {name: 'email name', dataType: constants.EMAIL_ADDRESS, groupType: groupTypes.EMAIL.name, expectation: true}
+                {name: 'email domain', dataType: constants.EMAIL_ADDRESS, groupType: groupTypes.EMAIL_ADDRESS.domain, expectation: true},
+                {name: 'email domain_toplevel', dataType: constants.EMAIL_ADDRESS, groupType: groupTypes.EMAIL_ADDRESS.domain_topLevel, expectation: true},
+                {name: 'email name', dataType: constants.EMAIL_ADDRESS, groupType: groupTypes.EMAIL_ADDRESS.name, expectation: true}
             ];
             var invalidGroupTypeTestCases = [
                 {name: 'email missing group type', dataType: constants.EMAIL_ADDRESS, groupType: null, expectation: false},

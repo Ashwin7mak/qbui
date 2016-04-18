@@ -6,12 +6,19 @@ var assert = require('assert');
 var constants = require('../../../constants');
 var groupFormatter = require('./../groupFormatter');
 var groupUtils = require('../../../../components/utility/groupUtils');
+var dateUtils = require('../../../../components/utility/dateUtils');
 
 describe('Validate GroupFormatter unit tests', function() {
 
     function generateData(dataType) {
-        if (dataType === constants.TEXT) {
+        if (dataType === constants.TEXT || dataType === constants.USER || dataType === constants.EMAIL_ADDRESS) {
             return (0 | Math.random() * 9e6).toString(36);
+        }
+        if (dataType === constants.NUMERIC) {
+            return (0 | Math.random() * 9e6);
+        }
+        if (dataType === constants.DATE) {
+            return dateUtils.formatDate(new Date(), '%M/%D/%Y %h:%m');
         }
         return '';
     }

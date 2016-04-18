@@ -98,11 +98,11 @@
                 //case groupTypes.DURATION.day:
                 //}
                 break;
-            case constants.EMAIL:
+            case constants.EMAIL_ADDRESS:
                 //switch (groupType) {
-                //case groupTypes.EMAIL.domain:
-                //case groupTypes.EMAIL.domain_topLevel:
-                //case groupTypes.EMAIL.name:
+                //case groupTypes.EMAIL_ADDRESS.domain:
+                //case groupTypes.EMAIL_ADDRESS.domain_topLevel:
+                //case groupTypes.EMAIL_ADDRESS.name:
                 //}
                 break;
             case constants.NUMERIC:

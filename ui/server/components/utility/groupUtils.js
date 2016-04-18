@@ -42,9 +42,9 @@
                 return false;
             case constants.EMAIL_ADDRESS:
                 switch (groupType) {
-                case groupTypes.EMAIL.domain: return true;
-                case groupTypes.EMAIL.domain_topLevel: return true;
-                case groupTypes.EMAIL.name: return true;
+                case groupTypes.EMAIL_ADDRESS.domain: return true;
+                case groupTypes.EMAIL_ADDRESS.domain_topLevel: return true;
+                case groupTypes.EMAIL_ADDRESS.name: return true;
                 }
                 return false;
             case constants.NUMERIC:
