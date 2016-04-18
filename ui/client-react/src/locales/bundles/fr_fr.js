@@ -99,6 +99,9 @@ export default {
             organizeReports: "Organiser",
             recordCount : "{recordCount} {nameForRecords} ",
             searchPlaceHolder:  "Rechercher ces {nameForRecords} ...",
+            sortAndGroup : {
+                header : "Trier & Groupe"
+            },
             menu: {
                 sort: {
                     aToZ: "Trier A à Z",

@@ -13,8 +13,8 @@ import LimitConstants from './../../../../common/src/limitConstants';
 import './sortAndGroup.scss';
 
 import SortAndGroupDialog from './sortAndGroupDialog';
-import thwartClickOutside from '../../utils/thwartClickOutside';
-import closeOnEscape from '../../utils/catchEscapeKey';
+import thwartClickOutside from '../hoc/thwartClickOutside';
+import closeOnEscape from '../hoc/catchEscapeKey';
 
 
 import _ from 'lodash';

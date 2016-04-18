@@ -10,7 +10,7 @@ import  {facetsProp} from './facetProps';
 import FacetsList from './facetsList';
 import LimitConstants from './../../../../common/src/limitConstants';
 import './facet.scss';
-import thwartClickOutside from '../../utils/thwartClickOutside';
+import thwartClickOutside from '../hoc/thwartClickOutside';
 
 import _ from 'lodash';
 import Fluxxor from 'fluxxor';

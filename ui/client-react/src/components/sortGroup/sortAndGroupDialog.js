@@ -5,6 +5,7 @@ import Logger from '../../utils/logger';
 import Locale from '../../locales/locales';
 import StringUtils from '../../utils/stringUtils';
 import {Popover} from 'react-bootstrap';
+import OverlayDialogHeader from '../overLay/overlayDialogHeader';
 import './sortAndGroup.scss';
 
 let logger = new Logger();
@@ -17,15 +18,20 @@ var SortAndGroupDialog = React.createClass({
 
     render() {
         return (
-            <Popover container={this} className="sortAndGroupDialog"
+            <Popover container={this} id="sortAndGroupDialog" className="sortAndGroupDialog"
                                       placement="bottom">
+                    <OverlayDialogHeader
+                        iconName="sortButton"
+                        icon="sort-az"
+                        dialogTitleI18N="report.sortAndGroup.header"
+                        onCancel={this.props.onClose}
+                    />
                      <div>
-                         <Button onClick={()=>this.props.onClose()}>Close</Button>
+                         Body here..
                      </div>
             </Popover>
-    );
+        );
     }
 });
-
 
 export default SortAndGroupDialog;

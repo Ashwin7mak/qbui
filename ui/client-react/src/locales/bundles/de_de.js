@@ -100,6 +100,9 @@ export default {
             organizeReports: "Organisieren",
             recordCount : "{recordCount} {nameForRecords} ",
             searchPlaceHolder:  "Suchen Sie diese {nameForRecords} ...",
+            sortAndGroup : {
+                header : "Sortieren & Gruppen"
+            },
             menu: {
                 sort: {
                     aToZ: "Sortieren von A bis Z",

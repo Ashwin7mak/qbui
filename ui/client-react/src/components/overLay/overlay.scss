@@ -1,0 +1,35 @@
+@import '../../assets/css/qbVariables';
+
+.overlayDialogHeader {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content : space-between;
+    color: $icon-color;
+
+    > .overlayLeft, .overlayCenter, .overlayRight {
+        flex: 0 0 auto;
+    }
+    .btn.btn-default {
+        border:none;
+        padding:0;
+        color: $icon-color;
+    }
+    .btn.btn-default:hover {
+        background-color: transparent;
+    }
+}
+
+.overlayTitle {
+    color: $icon-color
+}
+
+//@include small-breakpoint {
+//    .layout-stage {
+//        display:none;
+//    }
+
+
+
+
+

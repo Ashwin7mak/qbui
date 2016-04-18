@@ -18,20 +18,37 @@
   }
 
   .popover.bottom {
-    margin-left:  -27px;
-    margin-top:  0;
+    margin-left: -12px;
+    margin-top: -39px;
     > .arrow {
-      left: 13% !important;
+      display: none;
     }
   }
-}
-.sortAndGroupButton:hover {
-  color: $icon-color-hover;
+
+  .sortAndGroupButton .sortButtonSpan:hover {
+    color: $icon-color-hover;
+  }
 }
 
 .sortAndGroupDialog {
   height: 400px;
-  width: 400px;
+  width: 340px;
   background-color: $color2;
   z-index: $zindex-popover;
+  -webkit-box-shadow: 0px 4px 15px 0px rgba(70,66,66,0.15);
+  -moz-box-shadow: 0px 4px 15px 0px rgba(70,66,66,0.15);
+  box-shadow: 0px 4px 15px 0px rgba(70,66,66,0.15);
+
+  .sortButtonSpan.btn.btn-default {
+    margin-top: 0;
+    margin-bottom: 0;
+    color: $icon-color-hover;
+  }
+
+  .popover-content {
+      padding: 10px;
+  }
+
 }
+
+
