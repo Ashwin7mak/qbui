@@ -12,11 +12,12 @@ describe('Validate Group Utility', function() {
 
     describe('validate group utility functions', function() {
 
-        it('validate get first word', function() {
+        describe('validate get first word', function() {
+            var obj = {one:'one'};
             var firstWordTestCases = [
                 {name: 'empty content', content: '', expectation: ''},
                 {name: 'null content', content: null, expectation: null},
-                {name: 'invalid object', content: {one:'one'}, expectation: {one:'one'}},
+                {name: 'invalid object', content: obj, expectation: obj},
                 {name: 'boolean object', content: false, expectation: false},
                 {name: 'single word content', content: 'one', expectation: 'one'},
                 {name: 'multi word content', content: 'one two three', expectation: 'one'}
@@ -24,17 +25,18 @@ describe('Validate Group Utility', function() {
             ];
 
             firstWordTestCases.forEach(function(test) {
-                it('TestCase: ' + test.name, function() {
+                it('Test case: ' + test.name, function() {
                     assert.equal(groupUtils.getFirstWord(test.content), test.expectation);
                 });
             });
         });
 
-        it('validate get first letter', function() {
+        describe('validate get first letter', function() {
+            var obj = {one:'one'};
             var firstWordTestCases = [
                 {name: 'empty content', content: '', expectation: ''},
                 {name: 'null content', content: null, expectation: null},
-                {name: 'invalid object', content: {one:'one'}, expectation: {one:'one'}},
+                {name: 'invalid object', content: obj, expectation: obj},
                 {name: 'boolean object', content: false, expectation: false},
                 {name: 'single word content', content: 'one', expectation: 'o'},
                 {name: 'multi word content', content: 'one two three', expectation: 'o'}
@@ -42,13 +44,13 @@ describe('Validate Group Utility', function() {
             ];
 
             firstWordTestCases.forEach(function(test) {
-                it('TestCase: ' + test.name, function() {
+                it('Test case: ' + test.name, function() {
                     assert.equal(groupUtils.getFirstLetter(test.content), test.expectation);
                 });
             });
         });
 
-        it('validate Date group types', function() {
+        describe('validate Date group types', function() {
             var validGroupTypeTestCases = [
                 {name: 'date equals', dataType: constants.DATE, groupType: groupTypes.DATE.equals, expectation: true},
                 {name: 'date day', dataType: constants.DATE, groupType: groupTypes.DATE.day, expectation: true},
@@ -66,18 +68,18 @@ describe('Validate Group Utility', function() {
                 {name: 'date invalid group type', dataType: constants.DATE, groupType: groupTypes.TEXT.firstLetter, expectation: false}
             ];
             validGroupTypeTestCases.forEach(function(test) {
-                it('TestCase: ' + test.name, function() {
+                it('Test case: ' + test.name, function() {
                     assert.equal(groupUtils.isValidGroupType(test.dataType, test.groupType), test.expectation);
                 });
             });
             invalidGroupTypeTestCases.forEach(function(test) {
-                it('TestCase: ' + test.name, function() {
+                it('Test case: ' + test.name, function() {
                     assert.equal(groupUtils.isValidGroupType(test.dataType, test.groupType), test.expectation);
                 });
             });
         });
 
-        it('validate DURATION group types', function() {
+        describe('validate DURATION group types', function() {
             var validGroupTypeTestCases = [
                 {name: 'duration equals', dataType: constants.DURATION, groupType: groupTypes.DURATION.equals, expectation: true},
                 {name: 'duration second', dataType: constants.DURATION, groupType: groupTypes.DURATION.second, expectation: true},
@@ -93,18 +95,18 @@ describe('Validate Group Utility', function() {
                 {name: 'duration invalid group type', dataType: constants.DURATION, groupType: groupTypes.TEXT.firstLetter, expectation: false}
             ];
             validGroupTypeTestCases.forEach(function(test) {
-                it('TestCase: ' + test.name, function() {
+                it('Test case: ' + test.name, function() {
                     assert.equal(groupUtils.isValidGroupType(test.dataType, test.groupType), test.expectation);
                 });
             });
             invalidGroupTypeTestCases.forEach(function(test) {
-                it('TestCase: ' + test.name, function() {
+                it('Test case: ' + test.name, function() {
                     assert.equal(groupUtils.isValidGroupType(test.dataType, test.groupType), test.expectation);
                 });
             });
         });
 
-        it('validate EMAIL group types', function() {
+        describe('validate EMAIL group types', function() {
             var validGroupTypeTestCases = [
                 {name: 'email domain', dataType: constants.EMAIL_ADDRESS, groupType: groupTypes.EMAIL.domain, expectation: true},
                 {name: 'email domain_toplevel', dataType: constants.EMAIL_ADDRESS, groupType: groupTypes.EMAIL.domain_topLevel, expectation: true},
@@ -116,18 +118,18 @@ describe('Validate Group Utility', function() {
                 {name: 'email invalid group type', dataType: constants.EMAIL_ADDRESS, groupType: groupTypes.TEXT.firstLetter, expectation: false}
             ];
             validGroupTypeTestCases.forEach(function(test) {
-                it('TestCase: ' + test.name, function() {
+                it('Test case: ' + test.name, function() {
                     assert.equal(groupUtils.isValidGroupType(test.dataType, test.groupType), test.expectation);
                 });
             });
             invalidGroupTypeTestCases.forEach(function(test) {
-                it('TestCase: ' + test.name, function() {
+                it('Test case: ' + test.name, function() {
                     assert.equal(groupUtils.isValidGroupType(test.dataType, test.groupType), test.expectation);
                 });
             });
         });
 
-        it('validate NUMERIC group types', function() {
+        describe('validate NUMERIC group types', function() {
             var validGroupTypeTestCases = [
                 {name: 'numeric equals', dataType: constants.NUMERIC, groupType: groupTypes.NUMERIC.equals, expectation: true},
                 {name: 'numeric range', dataType: constants.NUMERIC, groupType: groupTypes.NUMERIC.range, expectation: true},
@@ -149,18 +151,18 @@ describe('Validate Group Utility', function() {
                 {name: 'numeric invalid group type', dataType: constants.NUMERIC, groupType: groupTypes.DATE.decade, expectation: false}
             ];
             validGroupTypeTestCases.forEach(function(test) {
-                it('TestCase: ' + test.name, function() {
+                it('Test case: ' + test.name, function() {
                     assert.equal(groupUtils.isValidGroupType(test.dataType, test.groupType), test.expectation);
                 });
             });
             invalidGroupTypeTestCases.forEach(function(test) {
-                it('TestCase: ' + test.name, function() {
+                it('Test case: ' + test.name, function() {
                     assert.equal(groupUtils.isValidGroupType(test.dataType, test.groupType), test.expectation);
                 });
             });
         });
 
-        it('validate TEXT group types', function() {
+        describe('validate TEXT group types', function() {
             var validGroupTypeTestCases = [
                 {name: 'text equals', dataType: constants.TEXT, groupType: groupTypes.TEXT.equals, expectation: true},
                 {name: 'text first letter', dataType: constants.TEXT, groupType: groupTypes.TEXT.firstLetter, expectation: true},
@@ -172,18 +174,18 @@ describe('Validate Group Utility', function() {
                 {name: 'text invalid group type', dataType: constants.TEXT, groupType: groupTypes.DATE.decade, expectation: false}
             ];
             validGroupTypeTestCases.forEach(function(test) {
-                it('TestCase: ' + test.name, function() {
+                it('Test case: ' + test.name, function() {
                     assert.equal(groupUtils.isValidGroupType(test.dataType, test.groupType), test.expectation);
                 });
             });
             invalidGroupTypeTestCases.forEach(function(test) {
-                it('TestCase: ' + test.name, function() {
+                it('Test case: ' + test.name, function() {
                     assert.equal(groupUtils.isValidGroupType(test.dataType, test.groupType), test.expectation);
                 });
             });
         });
 
-        it('validate USER group types', function() {
+        describe('validate USER group types', function() {
             var validGroupTypeTestCases = [
                 {name: 'user equals', dataType: constants.USER, groupType: groupTypes.USER.equals, expectation: true},
                 {name: 'user first letter', dataType: constants.USER, groupType: groupTypes.USER.firstLetter, expectation: true},
@@ -195,12 +197,12 @@ describe('Validate Group Utility', function() {
                 {name: 'user invalid group type', dataType: constants.USER, groupType: groupTypes.DATE.decade, expectation: false}
             ];
             validGroupTypeTestCases.forEach(function(test) {
-                it('TestCase: ' + test.name, function() {
+                it('Test case: ' + test.name, function() {
                     assert.equal(groupUtils.isValidGroupType(test.dataType, test.groupType), test.expectation);
                 });
             });
             invalidGroupTypeTestCases.forEach(function(test) {
-                it('TestCase: ' + test.name, function() {
+                it('Test case: ' + test.name, function() {
                     assert.equal(groupUtils.isValidGroupType(test.dataType, test.groupType), test.expectation);
                 });
             });
