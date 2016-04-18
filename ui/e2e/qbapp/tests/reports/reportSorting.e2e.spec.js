@@ -105,13 +105,6 @@
                     ColumnId: 8,
                     ItemText: 'Sort oldest to newest'
                 },
-                //TODO need to figure out Time of Day sorting in my code
-                //{
-                //    message: 'Time of Day Field',
-                //    ColumnName: 'Time of Day Field',
-                //    ColumnId: 9,
-                //    ItemText: 'Sort lowest to highest'
-                //},
                 {
                     message: 'Duration Numeric Field',
                     ColumnName: 'Duration Field',
@@ -192,13 +185,6 @@
                     ColumnId: 8,
                     ItemText: 'Sort newest to oldest'
                 },
-                //TODO need to figure out Time of Day sorting in my code
-                //{
-                //    message: 'Time of Day Field',
-                //    ColumnName: 'Time of Day Field',
-                //    ColumnId: 9,
-                //    ItemText: 'Sort highest to lowest'
-                //},
                 {
                     message: 'Duration Field',
                     ColumnName: 'Duration Field',
