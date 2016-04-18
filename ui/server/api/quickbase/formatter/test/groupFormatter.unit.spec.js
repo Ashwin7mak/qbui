@@ -58,7 +58,7 @@ describe('Validate GroupFormatter unit tests', function() {
         return setup;
     }
 
-    it('test no grouping because of insufficient or invalid input data', function() {
+    describe('test no grouping because of insufficient or invalid input data', function() {
         var testCases = [
             {message: 'Null glist parameter', numFields: 3, numRecords: 5, gList: null, dataType: constants.TEXT},
             {message: 'Empty glist parameter', numFields: 3, numRecords: 5, gList: '', dataType: constants.TEXT},
@@ -69,15 +69,18 @@ describe('Validate GroupFormatter unit tests', function() {
         ];
 
         testCases.forEach(function(testCase) {
-            var setup = setupRecords(testCase.numFields, testCase.numRecords, testCase.dataType, testCase.gList);
-            var groupData = groupFormatter.group(setup.req, setup.fields, setup.records);
-            assert.equal(groupData.hasGrouping, false);
-            assert.equal(groupData.fields.length, 0);
-            assert.equal(groupData.totalRows, 0);
+            it('Test case: ' + testCase.message, function(done) {
+                var setup = setupRecords(testCase.numFields, testCase.numRecords, testCase.dataType, testCase.gList);
+                var groupData = groupFormatter.group(setup.req, setup.fields, setup.records);
+                assert.equal(groupData.hasGrouping, false);
+                assert.equal(groupData.fields.length, 0);
+                assert.equal(groupData.totalRows, 0);
+                done();
+            });
         });
     });
 
-    it('test no grouping because of null input', function() {
+    describe('test no grouping because of null input', function() {
         var setup = setupRecords(3, 5, constants.TEXT, '1:V');
         var testCases = [
             {message: 'Null fields parameter', req:setup.req, fields:null, records:setup.records},
@@ -86,14 +89,17 @@ describe('Validate GroupFormatter unit tests', function() {
         ];
 
         testCases.forEach(function(testCase) {
-            var groupData = groupFormatter.group(testCase.req, testCase.fields, testCase.records);
-            assert.equal(groupData.hasGrouping, false);
-            assert.equal(groupData.fields.length, 0);
-            assert.equal(groupData.totalRows, 0);
+            it('Test case: ' + testCase.message, function(done) {
+                var groupData = groupFormatter.group(testCase.req, testCase.fields, testCase.records);
+                assert.equal(groupData.hasGrouping, false);
+                assert.equal(groupData.fields.length, 0);
+                assert.equal(groupData.totalRows, 0);
+                done();
+            });
         });
     });
 
-    it('Valid grouping tests', function() {
+    describe('Valid grouping tests', function() {
         var testCases = [
             //  TEXT data type
             {message: 'TEXT: No input records', numFields: 5, numRecords: 0, gList: '1:V', dataType: constants.TEXT},
@@ -116,31 +122,33 @@ describe('Validate GroupFormatter unit tests', function() {
         ];
 
         testCases.forEach(function(testCase) {
-            var setup = setupRecords(testCase.numFields, testCase.numRecords, testCase.dataType, testCase.gList);
-            var groupData = groupFormatter.group(setup.req, setup.fields, setup.records);
-            assert.equal(groupData.hasGrouping, true);
-            assert.equal(groupData.totalRows, testCase.numRecords);
+            it('Test case: ' + testCase.message, function(done) {
+                var setup = setupRecords(testCase.numFields, testCase.numRecords, testCase.dataType, testCase.gList);
+                var groupData = groupFormatter.group(setup.req, setup.fields, setup.records);
+                assert.equal(groupData.hasGrouping, true);
+                assert.equal(groupData.totalRows, testCase.numRecords);
 
-            //  keep track of how many unique fids are in the gList parameter
-            var map = new Map();
+                //  keep track of how many unique fids are in the gList parameter
+                var map = new Map();
 
-            //  the order of the fids in the list must match the order in the groupData.fields array
-            var groupList = testCase.gList.split(constants.REQUEST_PARAMETER.LIST_DELIMITER);
-            for (var idx = 0; idx < groupList.length; idx++) {
-                var el = groupList[idx].split(constants.REQUEST_PARAMETER.GROUP_DELIMITER);
-                assert.equal(el[0], groupData.fields[idx].field.id);
-                assert.equal(el[1], groupData.fields[idx].groupType);
+                //  the order of the fids in the list must match the order in the groupData.fields array
+                var groupList = testCase.gList.split(constants.REQUEST_PARAMETER.LIST_DELIMITER);
+                for (var idx = 0; idx < groupList.length; idx++) {
+                    var el = groupList[idx].split(constants.REQUEST_PARAMETER.GROUP_DELIMITER);
+                    assert.equal(el[0], groupData.fields[idx].field.id);
+                    assert.equal(el[1], groupData.fields[idx].groupType);
 
-                //  add the fid to the map.
-                map.set(el[0]);
-            }
+                    //  add the fid to the map.
+                    map.set(el[0]);
+                }
 
-            //  number of valid group list elements must match the number of elements in the groupData.fields array
-            assert.equal(groupList.length, groupData.fields.length);
+                //  number of valid group list elements must match the number of elements in the groupData.fields array
+                assert.equal(groupList.length, groupData.fields.length);
 
-            //  the gridColumns array should not include the fields being grouped
-            assert.equal(testCase.numFields - map.size, groupData.gridColumns.length);
-
+                //  the gridColumns array should not include the fields being grouped
+                assert.equal(testCase.numFields - map.size, groupData.gridColumns.length);
+                done();
+            });
         });
     });
 
