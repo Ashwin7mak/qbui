@@ -36,6 +36,7 @@ const ReportRoute = React.createClass({
     facetFields : {},
     debounceInputMillis: 700, // a key send delay
     nameForRecords: "Records",  // get from table meta data
+    reportRouteReportId: '',
 
     loadReport(appId, tblId, rptId) {
         const flux = this.getFlux();
@@ -47,7 +48,7 @@ const ReportRoute = React.createClass({
     loadReportFromParams(params) {
         let appId = params.appId;
         let tblId = params.tblId;
-        let rptId = params.rptId;
+        let rptId = this.reportRouteReportId;
 
         if (appId && tblId && rptId) {
             //logger.debug('Loading report. AppId:' + appId + ' ;tblId:' + tblId + ' ;rptId:' + rptId);
@@ -67,6 +68,15 @@ const ReportRoute = React.createClass({
     componentDidMount() {
         const flux = this.getFlux();
         flux.actions.hideTopNav();
+
+        if (typeof this.props.rptId !== "undefined") {
+            this.reportRouteReportId = this.props.rptId;
+            this.getFlux().actions.filterSearchPending('');
+        }
+
+        if (this.props.params && typeof this.props.params.rptId !== "undefined") {
+            this.reportRouteReportId = this.props.params.rptId;
+        }
 
         if (this.props.params) {
             this.loadReportFromParams(this.props.params);
@@ -149,7 +159,7 @@ const ReportRoute = React.createClass({
         queryParams[query.SORT_LIST_PARAM] = ReportUtils.getSortListString(this.props.reportData.data.selectedSortFids);
         flux.actions.getFilteredRecords(this.props.selectedAppId,
                                     this.props.routeParams.tblId,
-                                    this.props.routeParams.rptId, {format:true}, filter, queryParams);
+                                    this.reportRouteReportId, {format:true}, filter, queryParams);
     },
 
     filterOnSelections(newSelections) {
@@ -172,7 +182,9 @@ const ReportRoute = React.createClass({
         if (_.isUndefined(this.props.params) ||
             _.isUndefined(this.props.params.appId) ||
             _.isUndefined(this.props.params.tblId) ||
-            _.isUndefined(this.props.params.rptId)) {
+            _.isUndefined(this.props.params.tblId) ||
+            (_.isUndefined(this.props.params.rptId) && _.isUndefined(this.props.rptId))
+        ) {
             logger.info("the necessary params were not specified to reportRoute render params=" + simpleStringify(this.props.params));
             return null;
         } else {
@@ -189,7 +201,7 @@ const ReportRoute = React.createClass({
                 <ReportToolsAndContent reportData={this.props.reportData}
                                        appId={this.props.params.appId}
                                        tblId={this.props.params.tblId}
-                                       rptId={this.props.params.rptId}
+                                       rptId={this.reportRouteReportId}
                                        pageActions={this.getPageActions(0)}
                                        nameForRecords={this.nameForRecords}
                                        selections={this.props.reportData.selections}
