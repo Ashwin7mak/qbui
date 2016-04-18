@@ -61,156 +61,94 @@
          'Date Field', 'Date Time Field', 'Time of Day Field', 'Duration Field', 'Checkbox Field', 'Phone Number Field',
          'Email Address Field', 'URL Field'],
          */
-        var sortingTestCases = {
-            ascendingCases : [
+        function sortingTestCases() {
+            return [
                 {
                     message: 'Text Field',
                     ColumnName: 'Text Field',
                     ColumnId: 2,
-                    ItemText: 'Sort A to Z'
-                },
-                {
-                    message: 'Numeric Field',
-                    ColumnName: 'Numeric Field',
-                    ColumnId: 3,
-                    ItemText: 'Sort lowest to highest'
-                },
-                {
-                    message: 'Numeric Currency Field',
-                    ColumnName: 'Numeric Currency Field',
-                    ColumnId: 4,
-                    ItemText: 'Sort lowest to highest'
-                },
-                {
-                    message: 'Numeric Percent Field',
-                    ColumnName: 'Numeric Percent Field',
-                    ColumnId: 5,
-                    ItemText: 'Sort lowest to highest'
-                },
-                {
-                    message: 'Numeric Rating Field',
-                    ColumnName: 'Numeric Rating Field',
-                    ColumnId: 6,
-                    ItemText: 'Sort lowest to highest'
-                },
-                {
-                    message: 'Date Field',
-                    ColumnName: 'Date Field',
-                    ColumnId: 7,
-                    ItemText: 'Sort oldest to newest'
-                },
-                {
-                    message: 'Date Time Field',
-                    ColumnName: 'Date Time Field',
-                    ColumnId: 8,
-                    ItemText: 'Sort oldest to newest'
-                },
-                {
-                    message: 'Duration Numeric Field',
-                    ColumnName: 'Duration Field',
-                    ColumnId: 10,
-                    ItemText: 'Sort lowest to highest'
-                },
-                {
-                    message: 'Checkbox Field',
-                    ColumnName: 'Checkbox Field',
-                    ColumnId: 11,
-                    ItemText: 'Sort unchecked to checked'
-                },
-                {
-                    message: 'Phone Number Numeric Field',
-                    ColumnName: 'Phone Number Field',
-                    ColumnId: 12,
-                    ItemText: 'Sort lowest to highest'
-                },
-                {
-                    message: 'Email Address Text Field',
-                    ColumnName: 'Email Address Field',
-                    ColumnId: 13,
-                    ItemText: 'Sort A to Z'
-                },
-                {
-                    message: 'URL Text Field',
-                    ColumnName: 'URL Field',
-                    ColumnId: 14,
-                    ItemText: 'Sort A to Z'
-                },
-            ],
+                    AscItemText: 'Sort A to Z',
+                    DescItemText:'Sort Z to A',
 
-            descendingCases : [
-                {
-                    message: 'Text Field',
-                    ColumnName: 'Text Field',
-                    ColumnId: 2,
-                    ItemText: 'Sort Z to A'
                 },
                 {
                     message: 'Numeric Field',
                     ColumnName: 'Numeric Field',
                     ColumnId: 3,
-                    ItemText: 'Sort highest to lowest'
+                    AscItemText:'Sort lowest to highest',
+                    DescItemText: 'Sort highest to lowest'
                 },
                 {
                     message: 'Numeric Currency Field',
                     ColumnName: 'Numeric Currency Field',
                     ColumnId: 4,
-                    ItemText: 'Sort highest to lowest'
+                    AscItemText: 'Sort lowest to highest',
+                    DescItemText: 'Sort highest to lowest'
                 },
                 {
                     message: 'Numeric Percent Field',
                     ColumnName: 'Numeric Percent Field',
                     ColumnId: 5,
-                    ItemText: 'Sort highest to lowest'
+                    AscItemText: 'Sort lowest to highest',
+                    DescItemText: 'Sort highest to lowest'
                 },
                 {
                     message: 'Numeric Rating Field',
                     ColumnName: 'Numeric Rating Field',
                     ColumnId: 6,
-                    ItemText: 'Sort highest to lowest'
+                    AscItemText: 'Sort lowest to highest',
+                    DescItemText: 'Sort highest to lowest'
                 },
                 {
                     message: 'Date Field',
                     ColumnName: 'Date Field',
                     ColumnId: 7,
-                    ItemText: 'Sort newest to oldest'
+                    AscItemText: 'Sort oldest to newest',
+                    DescItemText: 'Sort newest to oldest'
                 },
                 {
                     message: 'Date Time Field',
                     ColumnName: 'Date Time Field',
                     ColumnId: 8,
-                    ItemText: 'Sort newest to oldest'
+                    AscItemText: 'Sort oldest to newest',
+                    DescItemText: 'Sort newest to oldest'
                 },
                 {
                     message: 'Duration Field',
                     ColumnName: 'Duration Field',
                     ColumnId: 10,
-                    ItemText: 'Sort highest to lowest'
+                    AscItemText: 'Sort lowest to highest',
+                    DescItemText: 'Sort highest to lowest'
                 },
                 {
                     message: 'Checkbox Field',
                     ColumnName: 'Checkbox Field',
                     ColumnId: 11,
-                    ItemText: 'Sort checked to unchecked'
+                    AscItemText: 'Sort unchecked to checked',
+                    DescItemText:'Sort checked to unchecked'
                 },
                 {
                     message: 'Phone Number Field',
                     ColumnName: 'Phone Number Field',
                     ColumnId: 12,
-                    ItemText: 'Sort highest to lowest'
+                    AscItemText: 'Sort lowest to highest',
+                    DescItemText: 'Sort highest to lowest'
                 },
                 {
                     message: 'Email Address Field',
                     ColumnName: 'Email Address Field',
                     ColumnId: 13,
-                    ItemText: 'Sort Z to A'
+                    AscItemText: 'Sort A to Z',
+                    DescItemText:'Sort Z to A',
                 },
                 {
-                    message: 'URL Field',
+                    message: 'URL Text Field',
                     ColumnName: 'URL Field',
                     ColumnId: 14,
-                    ItemText: 'Sort Z to A'
-                },
-            ]
+                    AscItemText: 'Sort A to Z',
+                    DescItemText:'Sort Z to A',
+                }
+            ];
         }
 
         describe('Report Sorting without Facets', function() {
@@ -235,7 +173,7 @@
             /*
              * Ascending Testcases
              */
-            sortingTestCases.ascendingCases.forEach(function(sortingTestcase) {
+            sortingTestCases().forEach(function(sortingTestcase) {
                 it('Ascending : ' + sortingTestcase.message, function(done) {
                     var actualTableResults;
                     var sortedTableResults;
@@ -244,7 +182,7 @@
                         actualTableResults = actualResults;
                     }).then(function() {
                         //expand column header menu and select the Item
-                        reportSortingPage.expandColumnHeaderMenuAndSelectItem(sortingTestcase.ColumnName, sortingTestcase.ItemText);
+                        reportSortingPage.expandColumnHeaderMenuAndSelectItem(sortingTestcase.ColumnName, sortingTestcase.AscItemText);
                     }).then(function() {
                         // Get the records from column after sorting
                         reportSortingPage.getColumnRecords(sortingTestcase.ColumnId).then(function(sortedResults) {
@@ -261,7 +199,7 @@
             /*
              * Descending Testcases
              */
-            sortingTestCases.descendingCases.forEach(function(sortingTestcase) {
+            sortingTestCases().forEach(function(sortingTestcase) {
                 it('Descending : ' + sortingTestcase.message, function(done) {
                     var actualTableResults;
                     var sortedTableResults;
@@ -270,7 +208,7 @@
                         actualTableResults = actualResults;
                     }).then(function() {
                         //expand column header menu and select the Item
-                        reportSortingPage.expandColumnHeaderMenuAndSelectItem(sortingTestcase.ColumnName, sortingTestcase.ItemText);
+                        reportSortingPage.expandColumnHeaderMenuAndSelectItem(sortingTestcase.ColumnName, sortingTestcase.DescItemText);
                     }).then(function() {
                         // Get the records from column after sorting
                         reportSortingPage.getColumnRecords(sortingTestcase.ColumnId).then(function(sortedResults) {
@@ -307,7 +245,7 @@
             /*
              * Ascending Testcases
              */
-            sortingTestCases.ascendingCases.forEach(function(sortingTestcase) {
+            sortingTestCases().forEach(function(sortingTestcase) {
                 it('Ascending : ' + sortingTestcase.message, function(done) {
                     var actualTableResults;
                     var sortedTableResults;
@@ -316,7 +254,7 @@
                         actualTableResults = actualResults;
                     }).then(function() {
                         //expand column header menu and select the Item
-                        reportSortingPage.expandColumnHeaderMenuAndSelectItem(sortingTestcase.ColumnName, sortingTestcase.ItemText);
+                        reportSortingPage.expandColumnHeaderMenuAndSelectItem(sortingTestcase.ColumnName, sortingTestcase.AscItemText);
                     }).then(function() {
                         // Get the records from column after sorting
                         reportSortingPage.getColumnRecords(sortingTestcase.ColumnId).then(function(sortedResults) {
@@ -333,7 +271,7 @@
             /*
              * Descending Testcases
              */
-            sortingTestCases.descendingCases.forEach(function(sortingTestcase) {
+            sortingTestCases().forEach(function(sortingTestcase) {
                 it('Descending : ' + sortingTestcase.message, function(done) {
                     var actualTableResults;
                     var sortedTableResults;
@@ -342,7 +280,7 @@
                         actualTableResults = actualResults;
                     }).then(function() {
                         //expand column header menu and select the Item
-                        reportSortingPage.expandColumnHeaderMenuAndSelectItem(sortingTestcase.ColumnName, sortingTestcase.ItemText);
+                        reportSortingPage.expandColumnHeaderMenuAndSelectItem(sortingTestcase.ColumnName, sortingTestcase.DescItemText);
                     }).then(function() {
                         // Get the records from column after sorting
                         reportSortingPage.getColumnRecords(sortingTestcase.ColumnId).then(function(sortedResults) {

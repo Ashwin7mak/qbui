@@ -125,14 +125,6 @@
                     actualColumnRecords.sort(function(a, b) {return new Date(a).getTime() - new Date(b).getTime();});
                     //add null bck
                     actualColumnRecords.unshift('');
-                } else if (columnName.includes("Time of Day Field")) {
-                    //remove null
-                    var index2 = actualColumnRecords.indexOf('');
-                    actualColumnRecords.splice(index2, 1);
-                    //sort
-                    actualColumnRecords.sort(function(a, b) {return new Date(a).getHours - new Date(b).getHours();});
-                    //add null bck
-                    actualColumnRecords.unshift('');
                 } else {
                     actualColumnRecords.sort();
                 }
@@ -176,11 +168,6 @@
                     //reverse and add null bck
                     actualColumnRecords.reverse();
                     actualColumnRecords.push('');
-                } else if (columnName.includes("Time of Day Field")) {
-                    //actualColumnRecords.sort(function (a,b){return new Date(b).getTime() - new Date(a).getTime()});
-                    actualColumnRecords.sort(function(a, b) {
-                        return new Date(b).getTime() - new Date(a).getTime();
-                    });
                 } else {
                     actualColumnRecords.sort().reverse();
                 }
