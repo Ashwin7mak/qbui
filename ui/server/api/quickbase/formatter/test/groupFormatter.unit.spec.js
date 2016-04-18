@@ -121,8 +121,36 @@ describe('Validate GroupFormatter unit tests', function() {
             assert.equal(groupList.length, groupData.fields.length);
 
         });
+    });
 
+    it('test valid grouping - USER fields', function() {
+        var testCases = [
+            {message: 'No input records', numFields: 5, numRecords: 0, gList: '1:V', dataType: constants.USER},
+            {message: 'Input with one equals grouping', numFields: 5, numRecords: 1, gList: '1:V', dataType: constants.USER},
+            {message: 'Input with two equals groupings', numFields: 5, numRecords: 2, gList: '1:V.2:V', dataType: constants.USER},
+            {message: 'Input with one first word grouping', numFields: 5, numRecords: 2, gList: '1:I', dataType: constants.USER},
+            {message: 'Input with three first letter grouping', numFields: 5, numRecords: 2, gList: '1:F.2:F.3:F', dataType: constants.USER},
+            {message: 'Input with multiple grouping against same fid', numFields: 5, numRecords: 2, gList: '1:I.1:V', dataType: constants.USER}
+        ];
 
+        testCases.forEach(function(testCase) {
+            var setup = setupRecords(testCase.numFields, testCase.numRecords, testCase.dataType, testCase.gList);
+            var groupData = groupFormatter.group(setup.req, setup.fields, setup.records);
+            assert.equal(groupData.hasGrouping, true);
+            assert.equal(groupData.totalRows, testCase.numRecords);
+
+            //  the order of the fids in the list need to match the order in the groupData.fields array
+            var groupList = testCase.gList.split(constants.REQUEST_PARAMETER.LIST_DELIMITER);
+            for (var idx = 0; idx < groupList.length; idx++) {
+                var el = groupList[idx].split(constants.REQUEST_PARAMETER.GROUP_DELIMITER);
+                assert.equal(el[0], groupData.fields[idx].field.id);
+                assert.equal(el[1], groupData.fields[idx].groupType);
+            }
+
+            //  number of group list elements should match the number of elements in the groupData.fields array
+            assert.equal(groupList.length, groupData.fields.length);
+
+        });
     });
 
 });
