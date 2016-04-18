@@ -15,7 +15,7 @@ describe('Validate GroupFormatter unit tests', function() {
             return (0 | Math.random() * 9e6).toString(36);
         }
         if (dataType === constants.NUMERIC) {
-            return (0 | Math.random() * 9e6);
+            return (0 | Math.random() * 10000000);
         }
         if (dataType === constants.DATE) {
             return dateUtils.formatDate(new Date(), '%M/%D/%Y %h:%m');
