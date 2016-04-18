@@ -61,8 +61,8 @@
          'Date Field', 'Date Time Field', 'Time of Day Field', 'Duration Field', 'Checkbox Field', 'Phone Number Field',
          'Email Address Field', 'URL Field'],
          */
-        function sortingAscendingTestCases() {
-            return [
+        var sortingTestCases = {
+            ascendingCases : [
                 {
                     message: 'Text Field',
                     ColumnName: 'Text Field',
@@ -135,14 +135,9 @@
                     ColumnId: 14,
                     ItemText: 'Sort A to Z'
                 },
-            ];
-        }
+            ],
 
-        /**
-         * Data Provider for reports sorting Descending testCases.
-         */
-        function sortingDescendingTestCases() {
-            return [
+            descendingCases : [
                 {
                     message: 'Text Field',
                     ColumnName: 'Text Field',
@@ -215,7 +210,7 @@
                     ColumnId: 14,
                     ItemText: 'Sort Z to A'
                 },
-            ];
+            ]
         }
 
         describe('Report Sorting without Facets', function() {
@@ -240,7 +235,7 @@
             /*
              * Ascending Testcases
              */
-            sortingAscendingTestCases().forEach(function(sortingTestcase) {
+            sortingTestCases.ascendingCases.forEach(function(sortingTestcase) {
                 it('Ascending : ' + sortingTestcase.message, function(done) {
                     var actualTableResults;
                     var sortedTableResults;
@@ -266,7 +261,7 @@
             /*
              * Descending Testcases
              */
-            sortingDescendingTestCases().forEach(function(sortingTestcase) {
+            sortingTestCases.descendingCases.forEach(function(sortingTestcase) {
                 it('Descending : ' + sortingTestcase.message, function(done) {
                     var actualTableResults;
                     var sortedTableResults;
@@ -312,7 +307,7 @@
             /*
              * Ascending Testcases
              */
-            sortingAscendingTestCases().forEach(function(sortingTestcase) {
+            sortingTestCases.ascendingCases.forEach(function(sortingTestcase) {
                 it('Ascending : ' + sortingTestcase.message, function(done) {
                     var actualTableResults;
                     var sortedTableResults;
@@ -338,7 +333,7 @@
             /*
              * Descending Testcases
              */
-            sortingDescendingTestCases().forEach(function(sortingTestcase) {
+            sortingTestCases.descendingCases.forEach(function(sortingTestcase) {
                 it('Descending : ' + sortingTestcase.message, function(done) {
                     var actualTableResults;
                     var sortedTableResults;
