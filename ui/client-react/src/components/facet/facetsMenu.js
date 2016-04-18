@@ -10,6 +10,7 @@ import  {facetsProp} from './facetProps';
 import FacetsList from './facetsList';
 import LimitConstants from './../../../../common/src/limitConstants';
 import './facet.scss';
+import thwartClickOutside from '../../utils/thwartClickOutside';
 
 import _ from 'lodash';
 import Fluxxor from 'fluxxor';
@@ -164,8 +165,8 @@ const FacetsMenu = React.createClass({
     },
 
     /**
-     * Don't handle other listeners i.e. avoid closing facet window on this event
-     * rootClose will close any click out side popover
+     * Don't handle other listeners i.e. avoid closing facet window on this click
+     * outside event
      * (we want to keep open on facet selections clicks)
      * @param e
      */
@@ -188,6 +189,23 @@ const FacetsMenu = React.createClass({
             this.props.onFacetDeselect(e, facet, value);
         }
         this.dontClose(e);
+    },
+
+    isAllowedOutsideClick(evt) {
+        let answer = false;
+        let localButtonNode = this.refs.facetsMenuButton;
+        let localFacetSelections = this.refs.selectedFacets;
+        if (evt && evt.target && localButtonNode) {
+            let target = evt.target;
+            while (target.parentNode) {
+                answer = (target === localButtonNode || target === localFacetSelections);
+                if (answer) {
+                    break;
+                }
+                target = target.parentNode;
+            }
+        }
+        return answer;
     },
 
     /**
@@ -228,6 +246,10 @@ const FacetsMenu = React.createClass({
         let menuKey =  this.props.rptId;
         let flux = this.getFlux();
         let hasSelections = this.props.selectedValues && this.props.selectedValues.hasAnySelections();
+
+        let FacetsListWrapped = thwartClickOutside(FacetsList,
+                                (e) => flux.actions.showFacetMenu({show:false}),
+                                (e) => this.isAllowedOutsideClick(e));
         return (
             <div className="facetsMenuContainer">
 
@@ -245,11 +267,12 @@ const FacetsMenu = React.createClass({
 
                 {/* list of facet options shown when filter icon clicked */}
                 <Overlay container={this} placement="bottom"
-                         ref="facetOverlayTrigger" rootClose={true}
+                         ref="facetOverlayTrigger"
                          show={this.state.show}
                          onHide={() => flux.actions.showFacetMenu({show:false})}
                          onEntering={this.props.onMenuEnter} onExited={this.props.onMenuExit} >
-                                    <FacetsList
+                                    <div className="facetsRelativePos">
+                                        <FacetsListWrapped
                                         key= {"FacetsList." + menuKey}
                                         popoverId={menuKey}
                                         isCollapsed={this.isCollapsed}
@@ -265,10 +288,11 @@ const FacetsMenu = React.createClass({
                                         reportData={this.props.reportData}
                                         onFacetSelect={this.props.onFacetSelect}
                                         onFacetDeselect={this.props.onFacetDeselect}
-                                    />
+                                    /></div>
                 </Overlay>
                 {!this.context.touch &&
-                <div className="selectedFacets" onClick={e => this.dontClose(e)}>{this.renderSelectedFacets()}</div>
+                <div className="selectedFacets" ref="selectedFacets"
+                     >{this.renderSelectedFacets()}</div>
                 }
 
             </div>

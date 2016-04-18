@@ -151,6 +151,29 @@
     display:none;
 }
 
+.sortAndGroupPopoverContainer {
+    margin-left: 10px;
+}
+
+.sortButtonSpan  {
+    display: inline-block;
+    cursor: pointer;
+    margin-top: 14px;
+    margin-bottom: 4px;
+    color: $icon-color;
+        @include small-breakpoint {
+            color:$secondary-bar-fg;
+        }
+
+    .sortButton {
+        font-size: 20px;
+        &.qbIcon {
+            display: inline;
+        }
+    }
+}
+
+
 $add-record-fg: #fff;
 $add-record-bg: #a52363;
 $add-record-radius: 20px;

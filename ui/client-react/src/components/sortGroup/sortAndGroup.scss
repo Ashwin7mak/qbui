@@ -1,0 +1,37 @@
+@import '../../assets/css/qbVariables';
+
+.backdrop {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  //background-color: rgba(0,0,0,0.5); /*dim the background*/
+}
+
+.sortAndGroupContainer {
+  margin-left: 10px;
+
+  //the generated wrapper on sortAndGroupDialog
+  > div:not(.sortAndGroupButton)  {
+    position: relative;
+  }
+
+  .popover.bottom {
+    margin-left:  -27px;
+    margin-top:  0;
+    > .arrow {
+      left: 13% !important;
+    }
+  }
+}
+.sortAndGroupButton:hover {
+  color: $icon-color-hover;
+}
+
+.sortAndGroupDialog {
+  height: 400px;
+  width: 400px;
+  background-color: $color2;
+  z-index: $zindex-popover;
+}

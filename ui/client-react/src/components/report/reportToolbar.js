@@ -8,7 +8,7 @@ import FilterSearchBox from '../facet/filterSearchBox';
 import FacetsMenu from '../facet/facetsMenu';
 import FacetSelections from '../facet/facetSelections';
 import RecordsCount from './recordsCount';
-
+import SortAndGroup from '../sortGroup/sortAndGroup';
 let FluxMixin = Fluxxor.FluxMixin(React);
 
 
@@ -175,7 +175,8 @@ const ReportToolbar = React.createClass({
                 if (this.props.reportData.data.records) {
                     recordCount =  this.props.reportData.data.recordsCount;
                 }
-                if (this.props.reportData.data.facets && (this.props.reportData.data.facets.length > 0)) {
+                if (this.props.reportData.data.facets &&
+                    (this.props.reportData.data.facets.length > 0)) {
                     hasFacets =  this.props.reportData.data.facets[0].values;
                 }
             }
@@ -197,6 +198,10 @@ const ReportToolbar = React.createClass({
                                 {...this.props} />
                         }
 
+                        {recordCount &&
+                            <SortAndGroup   />
+                        }
+
                         {/* check if facets is enabled for this report,
                          also hide Facets Menu Button if facets disabled  */}
                         {(recordCount && hasFacets) &&
@@ -212,13 +217,15 @@ const ReportToolbar = React.createClass({
                     </div>
 
 
-                    <RecordsCount recordCount={recordCount}
-                          isFiltered={this.isFiltered() && this.props.reportData && !this.props.reportData.loading}
-                          isLoading={isLoading}
-                          filteredRecordCount={filteredRecordCount}
-                          nameForRecords={this.props.nameForRecords}
-                          clearAllFilters={this.props.clearAllFilters}
-                    />
+                    {!isLoading &&
+                        <RecordsCount recordCount={recordCount}
+                              isFiltered={this.isFiltered() && this.props.reportData}
+                              isLoading={isLoading}
+                              filteredRecordCount={filteredRecordCount}
+                              nameForRecords={this.props.nameForRecords}
+                              clearAllFilters={this.props.clearAllFilters}
+                        />
+                    }
 
                 {this.props.pageActions}
 
