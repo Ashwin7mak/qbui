@@ -129,7 +129,6 @@ describe('Validate ReportsApi unit tests', function() {
             ).catch(function(errorMsg) {
                 done(new Error('unable to resolve fetchReportResults success: ' + JSON.stringify(errorMsg)));
             });
-            done();
         });
         it('Test failure ', function(done) {
             getRecordsStub.returns(Promise.reject(new Error("error")));
