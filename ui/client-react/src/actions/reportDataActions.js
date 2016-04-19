@@ -70,10 +70,13 @@ let reportDataActions = {
                         //      sortList: ['2', '1:V', '33:C']
                         //      glist: '2.1:V.33:C'
                         //
+                        //  NOTE: the gList parameter is used by the node layer only;  it is ignored on the api server.
+                        //
                         if (reportMetaData.data) {
-                            queryParams[query.GLIST_PARAM] = reportMetaData.data.sortList ? reportMetaData.data.sortList.join('.') : '';
-                        } else {
-                            queryParams[query.GLIST_PARAM] = '';
+                            let groupList = ReportUtils.getSortListString(reportMetaData.data.sortList);
+                            if (ReportUtils.hasGroupingFids(groupList)) {
+                                queryParams[query.GLIST_PARAM] = groupList;
+                            }
                         }
 
                         //  Node query parameters which are all optional and could be null/undefined
@@ -156,25 +159,32 @@ let reportDataActions = {
                     queryParams[query.COLUMNS_PARAM] = overrideQueryParams[query.COLUMNS_PARAM];
                 } else {
                     if (reportMetaData.data && reportMetaData.data.fids) {
-                        queryParams[query.COLUMNS_PARAM] = reportMetaData.data.fids.join('.');
+                        queryParams[query.COLUMNS_PARAM] = ReportUtils.getFidListString(reportMetaData.data.fids);
                     }
                 }
 
-                //  Optional parameter used by the Node layer to return the result set in grouping order for
-                //  easier client rendering of the result set.
+                //  Optional parameters used to return a result set in sorted and/or grouped order for
+                //  easier client rendering of the result set data.
                 //
                 //      sortList: ==>  '2.1.33'
                 //      glist: ==> '2.1:V.33:C'
                 //
+                //  NOTE: the optional gList parameter is used by the node layer only;  it is ignored on the api server.
+                //
+                let groupList = '';
                 if (overrideQueryParams[query.SORT_LIST_PARAM]) {
-                    queryParams[query.SORT_LIST_PARAM] = ReportUtils.getSortListString(ReportUtils.getSortFids(overrideQueryParams[query.SORT_LIST_PARAM]));
-                    queryParams[query.GLIST_PARAM] = overrideQueryParams[query.SORT_LIST_PARAM];
+                    let sortList = ReportUtils.getSortFids(overrideQueryParams[query.SORT_LIST_PARAM]);
+                    queryParams[query.SORT_LIST_PARAM] = ReportUtils.getSortListString(sortList);
+                    groupList = overrideQueryParams[query.SORT_LIST_PARAM];
                 } else {
                     /*eslint no-lonely-if:0*/
                     if (reportMetaData.data.sortList) {
                         queryParams[query.SORT_LIST_PARAM] = ReportUtils.getSortStringFromSortListArray(reportMetaData.data.sortList);
-                        queryParams[query.GLIST_PARAM] = ReportUtils.getSortListString(reportMetaData.data.sortList);
+                        groupList = ReportUtils.getSortListString(reportMetaData.data.sortList);
                     }
+                }
+                if (ReportUtils.hasGroupingFids(groupList)) {
+                    queryParams[query.GLIST_PARAM] = groupList;
                 }
 
                 if (overrideQueryParams[query.QUERY_PARAM]) {
