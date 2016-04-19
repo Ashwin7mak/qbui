@@ -1,15 +1,19 @@
 import React from 'react';
 
-import GriddleTable  from '../../../components/dataTable/griddleTable/griddleTable.js';
-import AGGrid  from '../../../components/dataTable/agGrid/agGrid.js';
+import GriddleTable  from '../../../components/dataTable/griddleTable/griddleTable';
+import CardViewList from '../../../components/dataTable/cardView/cardViewList';
+import AGGrid  from '../../../components/dataTable/agGrid/agGrid';
 import {reactCellRendererFactory} from 'ag-grid-react';
-import {DateFormatter, NumericFormatter}  from '../../../components/dataTable/griddleTable/formatters.js';
-
+import {DateFormatter, NumericFormatter}  from '../../../components/dataTable/griddleTable/formatters';
 import ReportActions from '../../actions/reportActions';
+import Fluxxor from 'fluxxor';
+
+let FluxMixin = Fluxxor.FluxMixin(React);
 
 const resultsPerPage = 1000; //assume that this is the constant number of records per page. This can be passed in as a prop for diff reports
 
 let ReportContent = React.createClass({
+    mixins: [FluxMixin],
 
     getInitialState: function() {
         return {
@@ -94,6 +98,30 @@ let ReportContent = React.createClass({
         }
         return [];
     },
+    /**
+     * when we scroll the grid wrapper, hide the add record
+     * icon for a bit
+     */
+    onScrollRecords() {
+        const flux = this.getFlux();
+
+        const createTimeout = () => {
+            this.scrollTimer = setTimeout(() => {
+                this.scrollTimer = null;
+                flux.actions.scrollingReport(false);
+            }, 1000);
+        };
+
+        if (this.scrollTimer) {
+            //reset timeout
+            clearTimeout(this.scrollTimer);
+            createTimeout();
+        } else {
+            flux.actions.scrollingReport(true);
+            createTimeout();
+        }
+
+    },
 
     /* TODO: paging component that has "next and previous tied to callbacks from the store to get new data set*/
     render: function() {
@@ -115,6 +143,7 @@ let ReportContent = React.createClass({
                                     reportHeader={this.props.reportHeader}
                                     pageActions={this.props.pageActions}
                                     selectionActions={<ReportActions />}
+                                    onScroll={this.onScrollRecords}
                                     showGrouping={this.props.reportData.data.hasGrouping}
                                     filteredRecordCount={this.props.reportData.data ? this.props.reportData.data.filteredRecordCount : 0}
                                     groupLevel={this.props.reportData.data ? this.props.reportData.data.groupLevel : 0}
@@ -123,18 +152,13 @@ let ReportContent = React.createClass({
                                     filter={{selections: this.props.reportData.selections,
                                         facet: this.props.reportData.facetExpression,
                                         search: this.props.reportData.searchStringForFiltering}}
-                                    selectedSortFids={this.props.reportData.data ? this.props.reportData.data.selectedSortFids : []}
-                            ></AGGrid> :
-                            <GriddleTable reportData={this.props.reportData}
-                                    columnMetadata={columnsDef}
-                                    uniqueIdentifier="Record ID#"
-                                    resultsPerPage={resultsPerPage}
-                                    reportHeader={this.props.reportHeader}
-                                    selectionActions={<ReportActions />}
-                                    showPager={false}
-                                    useExternal={false}
-                                    externalResultsPerPage={resultsPerPage}
-                            ></GriddleTable>
+                                    selectedSortFids={this.props.reportData.data ? this.props.reportData.data.selectedSortFids : []} /> :
+
+                            <CardViewList reportData={this.props.reportData}
+                                uniqueIdentifier="Record ID#"
+                                reportHeader={this.props.reportHeader}
+                                selectionActions={<ReportActions />}
+                                onScroll={this.onScrollRecords}/>
                         }
                     </div>
                 }

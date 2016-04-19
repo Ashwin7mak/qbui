@@ -1,7 +1,7 @@
 import React from 'react';
 import TestUtils from 'react-addons-test-utils';
 import ReactDOM from 'react-dom';
-import CardView from '../../src/components/dataTable/griddleTable/cardView';
+import CardView from '../../src/components/dataTable/cardView/cardView';
 import RecordActions from '../../src/components/actions/recordActions';
 
 var RecordActionsMock = React.createClass({
@@ -14,7 +14,7 @@ var RecordActionsMock = React.createClass({
 
 const fakeReportData_empty = {
     data: {
-        results: [],
+        results: {},
         columnMetadata: []
     }
 };
@@ -24,9 +24,9 @@ const fakeReportData_valid = {
             col_num: 1,
             col_text: "abc",
             col_date: "01-01-2015"/*,
-            col_4: 2,
-            col_5: 3,
-            col_6: 4*/
+             col_4: 2,
+             col_5: 3,
+             col_6: 4*/
         },
         columnMetadata: ["col_num", "col_text", "col_date"/*, "col_4", "col_5", "col_6"*/]
     }
@@ -51,18 +51,10 @@ describe('Report Mobile View functions', () => {
 
         var TestParent = React.createFactory(React.createClass({
 
-            childContextTypes: {
-                allowCardSelection: React.PropTypes.func,
-                isRowSelected: React.PropTypes.func
-            },
-            getChildContext: function() {
-                return {
-                    allowCardSelection: () => {return false;},
-                    isRowSelected: () => {return false;}
-                };
-            },
             render() {
-                return <CardView ref="refCardView" data={fakeReportData_empty.data.results} metadataColumns={fakeReportData_empty.data.columnMetadata} flux={flux}/>;
+                return <CardView ref="refCardView" data={fakeReportData_empty.data.results}
+                                 allowCardSelection={() => {return false;} }
+                                 isRowSelected={() => {return false;} }/>;
             }
         }));
         var parent = TestUtils.renderIntoDocument(TestParent());
@@ -78,19 +70,11 @@ describe('Report Mobile View functions', () => {
     it('test render of component with data', () => {
 
         var TestParent = React.createFactory(React.createClass({
-
-            childContextTypes: {
-                allowCardSelection: React.PropTypes.func,
-                isRowSelected: React.PropTypes.func
-            },
-            getChildContext: function() {
-                return {
-                    allowCardSelection: () => {return false;},
-                    isRowSelected: () => {return false;}
-                };
-            },
             render() {
-                return <CardView ref="refCardView" data={fakeReportData_valid.data.results} metadataColumns={fakeReportData_valid.data.columnMetadata} flux={flux}/>;
+                return <CardView ref="refCardView"
+                                 data={fakeReportData_valid.data.results}
+                                 allowCardSelection={() => {return false;} }
+                                 isRowSelected={() => {return false;} }/>;
             }
         }));
         var parent = TestUtils.renderIntoDocument(TestParent());
@@ -107,18 +91,11 @@ describe('Report Mobile View functions', () => {
 
         var TestParent = React.createFactory(React.createClass({
 
-            childContextTypes: {
-                allowCardSelection: React.PropTypes.func,
-                isRowSelected: React.PropTypes.func
-            },
-            getChildContext: function() {
-                return {
-                    allowCardSelection: () => {return false;},
-                    isRowSelected: () => {return false;}
-                };
-            },
             render() {
-                return <CardView ref="refCardView" data={fakeReportData_valid.data.results} metadataColumns={fakeReportData_valid.data.columnMetadata} flux={flux}/>;
+                return <CardView ref="refCardView"
+                                 data={fakeReportData_valid.data.results}
+                                 allowCardSelection={() => {return false;} }
+                                 isRowSelected={() => {return false;} }/>;
             }
         }));
         var parent = TestUtils.renderIntoDocument(TestParent());
@@ -132,18 +109,11 @@ describe('Report Mobile View functions', () => {
     it('test expand row on click', () => {
         var TestParent = React.createFactory(React.createClass({
 
-            childContextTypes: {
-                allowCardSelection: React.PropTypes.func,
-                isRowSelected: React.PropTypes.func
-            },
-            getChildContext: function() {
-                return {
-                    allowCardSelection: () => {return false;},
-                    isRowSelected: () => {return false;}
-                };
-            },
             render() {
-                return <CardView ref="refCardView" data={fakeReportData_valid.data.results} metadataColumns={fakeReportData_valid.data.columnMetadata} flux={flux}/>;
+                return <CardView ref="refCardView"
+                                 data={fakeReportData_valid.data.results}
+                                 allowCardSelection={() => {return false;} }
+                                 isRowSelected={() => {return false;} }/>;
             }
         }));
         var parent = TestUtils.renderIntoDocument(TestParent());
@@ -160,23 +130,24 @@ describe('Report Mobile View functions', () => {
         var TestParent = React.createFactory(React.createClass({
 
             getInitialState() {
-                return {cardSelection: false} ;
+                return {cardSelection: false};
             },
-            childContextTypes: {
-                allowCardSelection: React.PropTypes.func,
-                onToggleCardSelection: React.PropTypes.func,
-                isRowSelected: React.PropTypes.func
+            allowCardSelection() {
+                return this.state.cardSelection;
             },
-            getChildContext: function() {
-
-                return {
-                    allowCardSelection: () => {return this.state.cardSelection;},
-                    onToggleCardSelection: () => {this.setState({cardSelection: !this.state.cardSelection});},
-                    isRowSelected: () => {return false;}
-                };
+            onToggleCardSelection() {
+                this.setState({cardSelection: !this.state.cardSelection});
+            },
+            isRowSelected() {
+                return false;
             },
             render() {
-                return <CardView ref="refCardView" data={fakeReportData_valid.data.results} metadataColumns={fakeReportData_valid.data.columnMetadata} flux={flux}/>;
+                return <CardView ref="refCardView"
+                                 data={fakeReportData_valid.data.results}
+                                 allowCardSelection={this.allowCardSelection }
+                                 onToggleCardSelection={this.onToggleCardSelection}
+                                 isRowSelected={this.isRowSelected}
+                />;
             }
         }));
         var parent = TestUtils.renderIntoDocument(TestParent());

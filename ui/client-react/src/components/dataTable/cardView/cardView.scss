@@ -13,13 +13,8 @@ $card-border-color: $color4;
 $chevron_opened_icon: url('../../../../src/assets/images/chevron_opened.svg');
 $chevron_closed_icon: url('../../../../src/assets/images/chevron_closed.svg');
 
-$margin-spacer: 10px;
 
-.custom-row {
-    display: block !important;
-    width: inherit !important;
-    margin-bottom: $margin-spacer;
-}
+
 
 .swipeable.actionsOpen .custom-row-card {
     margin-left: -240px;

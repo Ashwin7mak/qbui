@@ -251,7 +251,7 @@ const FacetsMenu = React.createClass({
                          onEntering={this.props.onMenuEnter} onExited={this.props.onMenuExit} >
                                     <FacetsList
                                         key= {"FacetsList." + menuKey}
-                                        popoverId={menuKey}
+                                        popoverId={menuKey || 1}
                                         isCollapsed={this.isCollapsed}
                                         handleToggleCollapse={this.handleToggleCollapse}
                                         isRevealed={this.isRevealed}

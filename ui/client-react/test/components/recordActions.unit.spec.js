@@ -7,22 +7,15 @@ describe('RecordActions functions', () => {
 
     let component;
 
-    let flux = {};
-    let fluxParams = {
-        context: {
-            flux : flux
-        }
-    };
-
     beforeEach(() => {
-        component = TestUtils.renderIntoDocument(<RecordActions params={fluxParams}/>);
+        component = TestUtils.renderIntoDocument(<RecordActions/>);
     });
     it('test render of component', () => {
         expect(TestUtils.isCompositeComponent(component)).toBeTruthy();
     });
 
     it('test extra actions', () => {
-        component = TestUtils.renderIntoDocument(<RecordActions params={fluxParams}/>);
+        component = TestUtils.renderIntoDocument(<RecordActions/>);
         expect(TestUtils.isCompositeComponent(component)).toBeTruthy();
 
         let actions = TestUtils.scryRenderedDOMComponentsWithTag(component, "a");

@@ -21,7 +21,7 @@ describe('ActionIcon functions', () => {
         component = TestUtils.renderIntoDocument(<ActionIcon tip="tooltip" icon="search" onClick={()=>{clicked = true;}}/>);
         expect(TestUtils.isCompositeComponent(component)).toBeTruthy();
 
-        const link = TestUtils.findRenderedDOMComponentWithTag(component, "a");//.getDOMNode();
+        const link = TestUtils.findRenderedDOMComponentWithTag(component, "a");
         TestUtils.Simulate.click(link);
         expect(clicked).toBe(true);
 

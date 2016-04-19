@@ -4,23 +4,15 @@ import RecordActions from '../../actions/recordActions';
 import './cardView.scss';
 import '../../QBForm/qbform.scss';
 import QBicon from '../../qbIcon/qbIcon';
-import Fluxxor from 'fluxxor';
-let FluxMixin = Fluxxor.FluxMixin(React);
-
 
 const MAX_ACTIONS_RESIZE_WITH = 240; // max width while swiping
 
 let CardView = React.createClass({
-    mixins: [FluxMixin],
-    // callbacks provided by GriddleTable context since we can't get these from props
-    contextTypes: {
-        allowCardSelection: React.PropTypes.func,
-        onToggleCardSelection: React.PropTypes.func,
-        onRowSelected: React.PropTypes.func,
-        onRowClicked: React.PropTypes.func,
-        isRowSelected: React.PropTypes.func,
-        flux: React.PropTypes.object
+    propTypes: {
+        data: React.PropTypes.object,
+        rowId: React.PropTypes.number
     },
+
     getInitialState() {
         return {
             showMoreCards: false,
@@ -34,7 +26,7 @@ let CardView = React.createClass({
      * @param e event
      */
     handleMoreCard(e) {
-        if (!this.context.allowCardSelection()) {
+        if (!this.props.allowCardSelection()) {
             this.setState({showMoreCards: !this.state.showMoreCards});
 
             e.stopPropagation(); // don't navigate to record
@@ -66,12 +58,11 @@ let CardView = React.createClass({
         let firstFieldValue = this.props.data[keys[0]];
         var topField = this.createTopField(firstFieldValue);
         for (var i = 1; i < keys.length; i++) {
-
-            // ignore metadata columns
-            if (this.props.metadataColumns.indexOf(keys[i]) === -1) {
+            if (this.props.metadataColumns && this.props.metadataColumns.indexOf(keys[i]) === -1) {
                 fields.push(this.createField(i, keys[i]));
             }
         }
+
         return <div className="card">{topField}<div className={this.state.showMoreCards ? "fieldRow expanded" : "fieldRow collapsed"}>{fields}</div></div>;
     },
 
@@ -82,7 +73,7 @@ let CardView = React.createClass({
      */
     swiping(event, delta) {
 
-        if (!this.context.allowCardSelection()) {
+        if (!this.props.allowCardSelection()) {
             // add delta to current width (MAX_ACTIONS_RESIZE_WITH if open, 0 if closed) to get new size
             this.setState({
                 resizeWidth: Math.max(this.state.showActions ? (delta + MAX_ACTIONS_RESIZE_WITH) : delta, 0),
@@ -106,8 +97,8 @@ let CardView = React.createClass({
      */
     swipedLeft(e) {
 
-        if (this.context.allowCardSelection()) {
-            this.context.onToggleCardSelection(false);
+        if (this.props.allowCardSelection()) {
+            this.props.onToggleCardSelection(false);
         } else if (!this.state.showActions) {
             this.setState({
                 showActions: true
@@ -124,14 +115,14 @@ let CardView = React.createClass({
             this.setState({
                 showActions: false
             });
-        } else if (!this.context.allowCardSelection()) {
-            this.context.onToggleCardSelection(true, this.props.data);
+        } else if (!this.props.allowCardSelection()) {
+            this.props.onToggleCardSelection(true, this.props.data);
         }
     },
     /* callback when row is selected */
     onRowSelected(e) {
-        if (this.context.onRowSelected) {
-            this.context.onRowSelected(this.props.data);
+        if (this.props.onRowSelected) {
+            this.props.onRowSelected(this.props.data);
         }
     },
     /* close actions when row is clicked */
@@ -140,12 +131,11 @@ let CardView = React.createClass({
             this.setState({
                 showActions: false
             });
-        } else if (this.context.onRowClicked && !this.context.allowCardSelection()) {
-            this.context.onRowClicked(this.props.data);
+        } else if (this.props.onRowClicked && !this.props.allowCardSelection()) {
+            this.props.onRowClicked(this.props.data);
         }
     },
     render() {
-
         if (this.props.data) {
             let row = this.createRow();
 
@@ -168,24 +158,18 @@ let CardView = React.createClass({
                 rowActionsClasses += this.state.showActions ? "open" : "closed";
             }
 
-            const isSelected = this.context.isRowSelected(this.props.data);
-            //the following is a temporary hack. Until card view is replaced by a new component (ag-grid or some other) lets pass flux down as ag-grid expects it.
-            let fluxParams = {
-                context: {
-                    flux : this.getFlux()
-                }
-            };
+            const isSelected = this.props.isRowSelected(this.props.data);
 
             return (
                 <Swipeable  className={"swipeable " + (this.state.showActions && !this.state.swiping ? "actionsOpen" : "actionsClosed") }
                             onSwiping={this.swiping}
                             onSwiped={this.swiped}
                             onSwipedLeft={this.swipedLeft}
-                            onSwipedRight={this.swipedRight}>
+                            onSwipedRight={this.swipedRight} >
 
                     <div className={this.state.showMoreCards ? "custom-row-card expanded" : "custom-row-card"} >
                         <div style={cardStyle} className="flexRow">
-                            {this.context.allowCardSelection() && <div className={"checkboxContainer"}><input checked={isSelected} onChange={this.onRowSelected} type="checkbox"></input></div>}
+                            {this.props.allowCardSelection() && <div className={"checkboxContainer"}><input checked={isSelected} onChange={this.onRowSelected} type="checkbox"></input></div>}
                             <div className="card" onClick={this.onRowClick}>
                                 {row}
                             </div>
@@ -193,7 +177,7 @@ let CardView = React.createClass({
                     </div>
 
                     <div ref={"actions"} style={actionsStyle} className={rowActionsClasses}>
-                        <RecordActions params={fluxParams} {...this.props}/>
+                        <RecordActions  {...this.props}/>
                     </div>
                 </Swipeable>
             );
