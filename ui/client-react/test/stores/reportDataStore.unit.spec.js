@@ -220,7 +220,7 @@ describe('Test ReportData Store', () => {
             recordData: {
                 fields: [],
                 records: [],
-                facets: [{id:null, errorCode:12345}]
+                facets: [{id:null, name:null, errorCode:12345}]
             }
         };
 

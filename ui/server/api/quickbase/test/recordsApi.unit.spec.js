@@ -8,6 +8,7 @@ var sinon = require('sinon');
 var assert = require('assert');
 var requestHelper = require('./../requestHelper')(config);
 var recordsApi = require('../recordsApi')(config);
+var constants = require('../../constants');
 
 /**
  * Unit tests for records apis
@@ -192,9 +193,12 @@ describe("Validate recordsApi", function() {
             executeReqStub.restore();
         });
 
-        it('success return records array with display parameter type', function(done) {
+        it('success return records array with display parameter type and no grouping', function(done) {
             req.url = '/reports/2/records/2/fields';
             req.param = function(key) {
+                if (key === constants.REQUEST_PARAMETER.GROUP_LIST) {
+                    return '1:V';  // field id is not defined, so there is no grouping
+                }
                 return 'display';
             };
             var expectedID = "7777";
@@ -205,6 +209,57 @@ describe("Validate recordsApi", function() {
                 function(response) {
                     assert.equal(response.fields[0].display, '12-3454');
                     assert.equal(response.records[0][0].display, '1234525');
+                    assert.notEqual(response.groups.hasGrouping, true);
+                    done();
+                }
+            ).catch(function(errorMsg) {
+                done(new Error('unable to resolve all records: ' + JSON.stringify(errorMsg)));
+            });
+        });
+
+        it('success return records array with raw parameter type', function(done) {
+            req.url = '/reports/2/records/2/fields';
+            req.param = function(key) {
+                return 'raw';
+            };
+            var expectedID = "7777";
+            executeReqStub.onCall(0).returns(Promise.resolve({'body': '[[ {"id":2, "value": 1234525} ], [ {"id":2, "value": 1234525} ]]'}));
+            executeReqStub.onCall(1).returns(Promise.resolve({'body': '[{ "id":2, "value": 123454, "datatypeAttributes": { "type": "TEXT"}, "display": "12-3454"}, { "id":2, "value": 123454, "datatypeAttributes": { "type": "TEXT"}, "display": "12-3454"}]'}));
+            var promise = recordsApi.fetchRecordsAndFields(req);
+            promise.then(
+                function(response) {
+                    assert.equal(response.fields, undefined);
+                    assert.equal(response.records, undefined);
+                    assert.equal(response.groups, undefined);
+                    assert.equal(response.length, 2);
+                    assert.equal(response[0][0].id, 2);
+                    assert.equal(response[0][0].value, '1234525');
+                    done();
+                }
+            ).catch(function(errorMsg) {
+                done(new Error('unable to resolve all records: ' + JSON.stringify(errorMsg)));
+            });
+        });
+
+        it('success return records array with display parameter type with grouping', function(done) {
+            req.url = '/reports/2/records/2/fields';
+            req.param = function(key) {
+                if (key === constants.REQUEST_PARAMETER.GROUP_LIST) {
+                    return '2:V';
+                }
+                return 'display';
+            };
+            var expectedID = "7777";
+            executeReqStub.onCall(0).returns(Promise.resolve({'body': '[[ {"id":2, "value": 1234525} ], [ {"id":2, "value": 1234525} ]]'}));
+            executeReqStub.onCall(1).returns(Promise.resolve({'body': '[{ "id":2, "value": 123454, "datatypeAttributes": { "type": "TEXT"}, "display": "12-3454"}, { "id":2, "value": 123454, "datatypeAttributes": { "type": "TEXT"}, "display": "12-3454"}]'}));
+            var promise = recordsApi.fetchRecordsAndFields(req);
+            promise.then(
+                function(response) {
+                    assert.equal(response.fields[0].display, '12-3454');
+                    assert.equal(response.groups.fields[0].field.display, '12-3454');
+                    assert.equal(response.groups.hasGrouping, true);
+                    assert.equal(response.groups.totalRows, 2);
+                    assert.equal(response.records.length, 0);
                     done();
                 }
             ).catch(function(errorMsg) {

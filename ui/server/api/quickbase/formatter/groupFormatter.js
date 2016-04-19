@@ -70,13 +70,13 @@
             let groupField = groupFields[idx].field;
 
             //  Group the data based on the data type.  Grouping is supported
-            //  for DATE, DURATION, EMAIL, NUMERIC, TEXT and USER data types only.
-            //
+            //  for DATE, DURATION, EMAIL, NUMERIC, TEXT and USER data types.
             switch (groupField.datatypeAttributes.type) {
             case constants.DATE:
                 switch (groupType) {
                 case groupTypes.DATE.equals:
                     return record[groupField.name];
+                //jira: qbse-21434
                 //case groupTypes.DATE.day:
                 //case groupTypes.DATE.week:
                 //case groupTypes.DATE.month:
@@ -88,6 +88,7 @@
                 }
                 break;
             case constants.DURATION:
+                //jira: qbse-21438
                 //switch (groupType) {
                 //case groupTypes.DURATION.equals:
                 //case groupTypes.DURATION.second:
@@ -99,6 +100,7 @@
                 //}
                 break;
             case constants.EMAIL_ADDRESS:
+                //jira: qbse-21438
                 //switch (groupType) {
                 //case groupTypes.EMAIL_ADDRESS.domain:
                 //case groupTypes.EMAIL_ADDRESS.domain_topLevel:
@@ -109,6 +111,7 @@
                 switch (groupType) {
                 case groupTypes.NUMERIC.equals:
                     return record[groupField.name];
+                //jira: qbse-21427
                 //case groupTypes.NUMERIC.range:
                 //case groupTypes.NUMERIC.thousandth:
                 //case groupTypes.NUMERIC.hundredth:
@@ -144,8 +147,8 @@
                 }
                 break;
             default:
-                // we have an unimplemented data type or grouping option
-                log.warn("Trying to group by an unsupported field type.  FieldId/name: " + groupField.id + '/' + groupField.name + '; GroupType: ' + groupType);
+                // unsupported data type or grouping option
+                log.warn("Unsupported grouping option.  FieldId: " + groupField.id + "; name: " + groupField.name + "; DataType: " + groupField.datatypeAttributes.type + "; GroupType: " + groupType);
             }
 
             return [];
@@ -191,7 +194,7 @@
             //      fields: list of report fields that are grouped
             //      gridColumns: list of field columns to display in the grid (does not contain the group fields)
             //      gridData: grid content in grouped order
-            //      totalRows: total number of rows in the grid
+            //      totalRows: total number of data rows in the grid
             let groupBy = {
                 hasGrouping: false,
                 fields: [],
@@ -201,18 +204,18 @@
             };
 
             if (fields && records) {
-
-                let map = new Map();
-                fields.forEach((field) => {
-                    map.set(field.id + '', field);
-                });
-
                 //
                 // Is there a grouping parameter included on the request.  The format of the parameter
                 // is 'fid1:groupType1.fid2:groupType2...fidN:groupTypeN'.
                 //
                 let groupList = req.param(constants.REQUEST_PARAMETER.GROUP_LIST);
                 if (groupList) {
+                    //  build a fields map for quick field access when looping through the groups list.
+                    let map = new Map();
+                    fields.forEach((field) => {
+                        map.set(field.id + '', field);
+                    });
+
                     let groups = groupList.split(constants.REQUEST_PARAMETER.LIST_DELIMITER);
 
                     // Loop through the list of groups and determine whether we have any grouping requirements.
@@ -231,31 +234,33 @@
                                 if (field) {
                                     // found the field; now see if the data type/group type combination is valid.
                                     if (groupUtils.isValidGroupType(field.datatypeAttributes.type, groupType) === true) {
-                                        // add the field to the groupBy list.
+                                        // add the field and the group type to the groupBy list
                                         field.grouped = true;
                                         groupBy.fields.push(
                                             {field: field,
                                              groupType: groupType}
                                         );
                                     } else {
-                                        log.warn("Trying to group a field with an unsupported group type.  FieldId: " + field.id + "; name: " + field.name + "; DataType: " + field.datatypeAttributes.type + "; GroupType: " + groupType);
+                                        log.warn("Unsupported group type.  FieldId: " + field.id + "; name: " + field.name + "; DataType: " + field.datatypeAttributes.type + "; GroupType: " + groupType);
                                     }
+                                } else {
+                                    log.warn("Invalid field for grouping.  FieldId: " + groupFidId + "; GroupType: " + groupType);
                                 }
                             }
                         }
-
                     });
 
-                    //  fields not grouped are added to the gridColumns array for display in the grid
-                    fields.forEach(function(field) {
-                        if (!field.grouped === true) {
-                            groupBy.gridColumns.push(field);
-                        }
-                    });
-
-                    // if there are fields in the grouping fields list, set the grouping flag
-                    // to true and organize the grid data per grouping fields requirement.
+                    // we have grouping if there are fields in groupBy.fields array.  Set the grouping flag
+                    // to true and populate the grid columns and data arrays.
                     if (groupBy.fields.length > 0) {
+                        //  Business rule is to not include grouped fields in the grid.  So, add to the gridColumns
+                        //  array the fields NOT designated to be grouped.
+                        fields.forEach(function(field) {
+                            if (!field.grouped) {
+                                groupBy.gridColumns.push(field);
+                            }
+                        });
+
                         groupBy.hasGrouping = true;
                         groupBy.gridData = createGroupDataGrid(groupBy.fields, fields, records);
 
