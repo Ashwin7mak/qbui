@@ -140,7 +140,7 @@ let reportDataActions = {
 
         //  Build the request query parameters needed to properly filter the report request based on the report
         //  meta data.  Information that could be sent include fid list, sort list, grouping and query parameters
-        function buildRequestQuery(reportMetaData, facetQueryExpression, searchExpression) {
+        function buildRequestQuery(reportMetaData, facetQueryExpression) {
             var queryParams = {};
 
             //required query params
@@ -161,10 +161,7 @@ let reportDataActions = {
                 }
 
                 //  Optional parameter used by the Node layer to return the result set in grouping order for
-                //  easier client rendering of the result set.  The input sortList is a string array of
-                //  fids/grouptype, delimited by ':'.  The groupList parameter converts the array
-                //  into a string, with each individual entry separated by a '.' and included on the request
-                //  as a query parameter.  Example:
+                //  easier client rendering of the result set.
                 //
                 //      sortList: ==>  '2.1.33'
                 //      glist: ==> '2.1:V.33:C'
@@ -183,11 +180,10 @@ let reportDataActions = {
                 if (overrideQueryParams[query.QUERY_PARAM]) {
                     queryParams[query.QUERY_PARAM] = overrideQueryParams[query.QUERY_PARAM];
                 } else {
-                    //  Concatenate facet expression(if any) and search filter(if any) into single
-                    //  query expression where each individual expression is 'AND'ed with the other.
-                    //  To optimize query performance, order the array elements 1..n in order of
-                    //  significance/most targeted selection as the outputted query is built starting
-                    //  at offset 0.
+                    //  Concatenate facet expression(if any) and search filter(if any) into single query expression
+                    //  where each individual expression is 'AND'ed with the other.  To optimize query performance,
+                    //  order the array elements 1..n in order of significance/most targeted selection as the
+                    //  outputted query is built starting at offset 0.
                     let filterQueries = [];
                     if (reportMetaData.data.query) {
                         filterQueries.push(reportMetaData.data.query);
@@ -195,8 +191,9 @@ let reportDataActions = {
                     if (facetQueryExpression) {
                         filterQueries.push(facetQueryExpression.data);
                     }
-                    if (searchExpression) {
-                        filterQueries.push(QueryUtils.parseStringIntoAllFieldsContainsExpression(searchExpression));
+
+                    if (filter && filter.search) {
+                        filterQueries.push(QueryUtils.parseStringIntoAllFieldsContainsExpression(filter.search));
                     }
                     queryParams[query.QUERY_PARAM] = QueryUtils.concatQueries(filterQueries);
                 }
@@ -220,8 +217,7 @@ let reportDataActions = {
                 var promises = [];
                 promises.push(reportService.getReport(appId, tblId, rptId));
 
-                // The filter parameter may contain a searchExpression and facetExpression
-                let searchExpression = filter ? filter.search : '';
+                // The filter parameter may contain a facetExpression
                 let facetExpression = filter ? filter.facet : '';
                 if (facetExpression !== '' && facetExpression.length) {
                     promises.push(reportService.parseFacetExpression(facetExpression));
@@ -229,7 +225,7 @@ let reportDataActions = {
 
                 Promise.all(promises).then(
                     (response) => {
-                        var queryParams = buildRequestQuery(response[0], response[1], searchExpression);
+                        var queryParams = buildRequestQuery(response[0], response[1]);
 
                         //  Get the filtered records
                         recordService.getRecords(appId, tblId, queryParams).then(
