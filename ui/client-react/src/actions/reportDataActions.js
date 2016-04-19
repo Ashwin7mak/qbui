@@ -12,31 +12,21 @@ import ReportUtils from '../utils/reportUtils';
 
 let logger = new Logger();
 
-// TODO: change this to enable/disable grouped view on report
-const GROUPING_ON = false;
-
-//  Model object referenced by UI layer for presentation of a report.
-//  TODO: initial implementation...still in progress..
+//  Report model object used by the client to render a report
 let reportModel = {
-    //  build a report model object that is used by the front-end to render a report
+
     set: function(reportMeta, reportData) {
         var obj = {
             metaData: {},
             recordData: {}
         };
 
+        //  make available to the client the report meta data
         if (reportMeta && reportMeta.data) {
-            //  make available to the client the meta data that we think is necessary
             obj.metaData = reportMeta.data;
-
-            ////TODO: pull this from the real report meta data
-            obj.metaData.hasGrouping = GROUPING_ON;
-            ////  TODO: not sure if sortList/grouping and summary info is needed OR if needed,
-            ////  TODO: that it is organized in the best way...
-            ////obj.sortList = reportMeta.data.sortList;
-            ////obj.summary = reportMeta.data.summary;
         }
 
+        //  make available to the client the report grid data
         if (reportData && reportData.data) {
             obj.recordData = reportData.data;
         }
@@ -161,15 +151,13 @@ let reportDataActions = {
             //for the optional ones, if something is null/undefined pull from report's meta data
             if (reportMetaData && reportMetaData.data) {
                 overrideQueryParams = overrideQueryParams || {};
+
                 if (overrideQueryParams[query.COLUMNS_PARAM]) {
                     queryParams[query.COLUMNS_PARAM] = overrideQueryParams[query.COLUMNS_PARAM];
                 } else {
-                    queryParams[query.COLUMNS_PARAM] = reportMetaData.data ? reportMetaData.data.fids : "";
-                }
-                if (overrideQueryParams[query.SORT_LIST_PARAM]) {
-                    queryParams[query.SORT_LIST_PARAM] = overrideQueryParams[query.SORT_LIST_PARAM];
-                } else {
-                    queryParams[query.SORT_LIST_PARAM] = ReportUtils.getSortStringFromSortListArray(reportMetaData.data.sortList);
+                    if (reportMetaData.data && reportMetaData.data.fids) {
+                        queryParams[query.COLUMNS_PARAM] = reportMetaData.data.fids.join('.');
+                    }
                 }
 
                 //  Optional parameter used by the Node layer to return the result set in grouping order for
@@ -178,10 +166,19 @@ let reportDataActions = {
                 //  into a string, with each individual entry separated by a '.' and included on the request
                 //  as a query parameter.  Example:
                 //
-                //      sortList: ['2', '1:V', '33:C']
-                //      glist: '2.1:V.33:C'
-                //TODO: make this dependent on override param
-                queryParams[query.GLIST_PARAM] = ReportUtils.getSortListString(reportMetaData.data.sortList);
+                //      sortList: ==>  '2.1.33'
+                //      glist: ==> '2.1:V.33:C'
+                //
+                if (overrideQueryParams[query.SORT_LIST_PARAM]) {
+                    queryParams[query.SORT_LIST_PARAM] = ReportUtils.getSortListString(ReportUtils.getSortFids(overrideQueryParams[query.SORT_LIST_PARAM]));
+                    queryParams[query.GLIST_PARAM] = overrideQueryParams[query.SORT_LIST_PARAM];
+                } else {
+                    /*eslint no-lonely-if:0*/
+                    if (reportMetaData.data.sortList) {
+                        queryParams[query.SORT_LIST_PARAM] = ReportUtils.getSortStringFromSortListArray(reportMetaData.data.sortList);
+                        queryParams[query.GLIST_PARAM] = ReportUtils.getSortListString(reportMetaData.data.sortList);
+                    }
+                }
 
                 if (overrideQueryParams[query.QUERY_PARAM]) {
                     queryParams[query.QUERY_PARAM] = overrideQueryParams[query.QUERY_PARAM];
