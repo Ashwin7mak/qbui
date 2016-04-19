@@ -5,6 +5,7 @@ import AGGrid  from '../../src/components/dataTable/agGrid/agGrid';
 import AGGridReact from 'ag-grid-react';
 import Loader  from 'react-loader';
 import * as query from '../../src/constants/query';
+import Locale from '../../src/locales/locales';
 
 var AGGridMock = React.createClass({
     render() {
@@ -53,7 +54,8 @@ const fakeReportData_before = {
         records: [{
             col_num: 1,
             col_text: "abc",
-            col_date: "01-01-2015"
+            col_date: "01-01-2015",
+            col_checkbox: true
         }],
         columns: [
             {
@@ -73,6 +75,12 @@ const fakeReportData_before = {
                 field: "col_date",
                 headerName: "col_date",
                 datatypeAttributes: {type:"DATE"}
+            },
+            {
+                id:4,
+                field: "col_check",
+                headerName: "col_check",
+                datatypeAttributes: {type:"CHECKBOX"}
             }]
     }
 };
@@ -100,7 +108,14 @@ const fakeReportData_after = {
 };
 
 
+function mouseclick(element) {
+    // create a mouse click event
+    var event = document.createEvent('MouseEvents');
+    event.initMouseEvent('click', true, true, window, 1, 0, 0);
 
+    // send click to element
+    element.dispatchEvent(event);
+}
 describe('AGGrid functions', () => {
     'use strict';
 
@@ -238,5 +253,118 @@ describe('AGGrid functions', () => {
         }
         expect(rowsSelected).toEqual(fakeReportData_before.data.records.length);
     });
-});
+    it('renders column menu', (done) => {
+        AGGrid.__ResetDependency__('AgGridReact');
+        component = TestUtils.renderIntoDocument(<AGGrid actions={TableActionsMock}
+                                                         records={fakeReportData_before.data.records}
+                                                         columns={fakeReportData_before.data.columns} flux={flux}
+                                                         loading={false}/>);
+        expect(TestUtils.isCompositeComponent(component)).toBeTruthy();
+        let gridElement = TestUtils.scryRenderedDOMComponentsWithClass(component, "agGrid");
+        let menuButton = gridElement[0].getElementsByClassName("ag-header-cell-menu-button");
+        expect(menuButton.length).toBeGreaterThan(1);
+        mouseclick(menuButton[0]);
+        window.setTimeout(function() {
+            let menu = gridElement[0].getElementsByClassName("ag-menu");
+            expect(menu.length).toEqual(1);
+            done();
+        }, 100);
+    });
+    it('menu options numeric field', () => {
+        AGGrid.__ResetDependency__('AgGridReact');
+        component = TestUtils.renderIntoDocument(<AGGrid appId="1" tblId="2" rptId="3" actions={TableActionsMock}
+                                                         records={fakeReportData_before.data.records}
+                                                         columns={fakeReportData_before.data.columns} flux={flux}
+                                                         loading={false}/>);
+        expect(TestUtils.isCompositeComponent(component)).toBeTruthy();
 
+        let numericcol = _.find(fakeReportData_before.data.columns, function(col) {
+            return col.datatypeAttributes.type === "NUMERIC";
+        });
+
+        let gridElement = TestUtils.scryRenderedDOMComponentsWithClass(component, "agGrid");
+        let menuButtons = gridElement[0].getElementsByClassName("ag-header-cell-menu-button");
+        expect(menuButtons.length).toEqual(fakeReportData_before.data.columns.length);
+        mouseclick(menuButtons[numericcol.id - 1]);
+        let menu = gridElement[0].getElementsByClassName("ag-menu");
+        expect(menu.length).toEqual(1);
+        let menuoptions = menu[0].getElementsByClassName("ag-menu-option-text");
+        expect(menuoptions[0].innerHTML).toEqual(Locale.getMessage("report.menu.sort.lowToHigh"));
+        expect(menuoptions[1].innerHTML).toEqual(Locale.getMessage("report.menu.sort.highToLow"));
+        expect(menuoptions[2].innerHTML).toEqual(Locale.getMessage("report.menu.group.lowToHigh"));
+        expect(menuoptions[3].innerHTML).toEqual(Locale.getMessage("report.menu.group.highToLow"));
+    });
+    it('menu options text field', () => {
+        AGGrid.__ResetDependency__('AgGridReact');
+        component = TestUtils.renderIntoDocument(<AGGrid appId="1" tblId="2" rptId="3" actions={TableActionsMock}
+                                                         records={fakeReportData_before.data.records}
+                                                         columns={fakeReportData_before.data.columns} flux={flux}
+                                                         loading={false}/>);
+        expect(TestUtils.isCompositeComponent(component)).toBeTruthy();
+
+        let textcol = _.find(fakeReportData_before.data.columns, function(col) {
+            return col.datatypeAttributes.type === "TEXT";
+        });
+
+        let gridElement = TestUtils.scryRenderedDOMComponentsWithClass(component, "agGrid");
+        let menuButtons = gridElement[0].getElementsByClassName("ag-header-cell-menu-button");
+        expect(menuButtons.length).toEqual(fakeReportData_before.data.columns.length);
+        mouseclick(menuButtons[textcol.id - 1]);
+        let menu = gridElement[0].getElementsByClassName("ag-menu");
+        expect(menu.length).toEqual(1);
+        let menuoptions = menu[0].getElementsByClassName("ag-menu-option-text");
+        expect(menuoptions[0].innerHTML).toEqual(Locale.getMessage("report.menu.sort.aToZ"));
+        expect(menuoptions[1].innerHTML).toEqual(Locale.getMessage("report.menu.sort.zToA"));
+        expect(menuoptions[2].innerHTML).toEqual(Locale.getMessage("report.menu.group.aToZ"));
+        expect(menuoptions[3].innerHTML).toEqual(Locale.getMessage("report.menu.group.zToA"));
+    });
+    it('menu options date field', () => {
+        AGGrid.__ResetDependency__('AgGridReact');
+        component = TestUtils.renderIntoDocument(<AGGrid appId="1" tblId="2" rptId="3" actions={TableActionsMock}
+                                                         records={fakeReportData_before.data.records}
+                                                         columns={fakeReportData_before.data.columns} flux={flux}
+                                                         loading={false}/>);
+        expect(TestUtils.isCompositeComponent(component)).toBeTruthy();
+
+        let datecol = _.find(fakeReportData_before.data.columns, function(col) {
+            return col.datatypeAttributes.type === "DATE";
+        });
+
+
+        let gridElement = TestUtils.scryRenderedDOMComponentsWithClass(component, "agGrid");
+        let menuButtons = gridElement[0].getElementsByClassName("ag-header-cell-menu-button");
+        expect(menuButtons.length).toEqual(fakeReportData_before.data.columns.length);
+        mouseclick(menuButtons[datecol.id - 1]);
+        let menu = gridElement[0].getElementsByClassName("ag-menu");
+        expect(menu.length).toEqual(1);
+        let menuoptions = menu[0].getElementsByClassName("ag-menu-option-text");
+        expect(menuoptions[0].innerHTML).toEqual(Locale.getMessage("report.menu.sort.oldToNew"));
+        expect(menuoptions[1].innerHTML).toEqual(Locale.getMessage("report.menu.sort.newToOld"));
+        expect(menuoptions[2].innerHTML).toEqual(Locale.getMessage("report.menu.group.oldToNew"));
+        expect(menuoptions[3].innerHTML).toEqual(Locale.getMessage("report.menu.group.newToOld"));
+    });
+    it('menu options checkbox field', () => {
+        AGGrid.__ResetDependency__('AgGridReact');
+        component = TestUtils.renderIntoDocument(<AGGrid appId="1" tblId="2" rptId="3" actions={TableActionsMock}
+                                                         records={fakeReportData_before.data.records}
+                                                         columns={fakeReportData_before.data.columns} flux={flux}
+                                                         loading={false} selectedSortFids={[3]}/>);
+        expect(TestUtils.isCompositeComponent(component)).toBeTruthy();
+
+        let checkcol = _.find(fakeReportData_before.data.columns, function(col) {
+            return col.datatypeAttributes.type === "CHECKBOX";
+        });
+
+        let gridElement = TestUtils.scryRenderedDOMComponentsWithClass(component, "agGrid");
+        let menuButtons = gridElement[0].getElementsByClassName("ag-header-cell-menu-button");
+        expect(menuButtons.length).toEqual(fakeReportData_before.data.columns.length);
+        mouseclick(menuButtons[checkcol.id - 1]);
+        let menu = gridElement[0].getElementsByClassName("ag-menu");
+        expect(menu.length).toEqual(1);
+        let menuoptions = menu[0].getElementsByClassName("ag-menu-option-text");
+        expect(menuoptions[0].innerHTML).toEqual(Locale.getMessage("report.menu.sort.uncheckedToChecked"));
+        expect(menuoptions[1].innerHTML).toEqual(Locale.getMessage("report.menu.sort.checkedToUnchecked"));
+        expect(menuoptions[2].innerHTML).toEqual(Locale.getMessage("report.menu.group.uncheckedToChecked"));
+        expect(menuoptions[3].innerHTML).toEqual(Locale.getMessage("report.menu.group.checkedToUnchecked"));
+    });
+});
