@@ -58,7 +58,7 @@ let CardView = React.createClass({
         let firstFieldValue = this.props.data[keys[0]];
         var topField = this.createTopField(firstFieldValue);
         for (var i = 1; i < keys.length; i++) {
-            if (this.props.metadataColumns.indexOf(keys[i]) === -1) {
+            if (this.props.metadataColumns && this.props.metadataColumns.indexOf(keys[i]) === -1) {
                 fields.push(this.createField(i, keys[i]));
             }
         }
