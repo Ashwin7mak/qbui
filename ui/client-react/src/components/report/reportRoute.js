@@ -47,7 +47,7 @@ const ReportRoute = React.createClass({
     loadReportFromParams(params) {
         let appId = params.appId;
         let tblId = params.tblId;
-        let rptId = typeof this.props.rptId !== "undefined" ? this.props.rptId : params.rptId ;
+        let rptId = typeof this.props.rptId !== "undefined" ? this.props.rptId : params.rptId;
 
         if (appId && tblId && rptId) {
             //logger.debug('Loading report. AppId:' + appId + ' ;tblId:' + tblId + ' ;rptId:' + rptId);
@@ -148,8 +148,8 @@ const ReportRoute = React.createClass({
         let queryParams = {};
         queryParams[query.SORT_LIST_PARAM] = ReportUtils.getSortListString(this.props.reportData.data.selectedSortFids);
         flux.actions.getFilteredRecords(this.props.selectedAppId,
-            this.props.routeParams.tblId,
-            typeof this.props.rptId !== "undefined" ? this.props.rptId : this.props.routeParams.rptId, {format:true}, filter, queryParams);
+                                    this.props.routeParams.tblId,
+                                    typeof this.props.rptId !== "undefined" ? this.props.rptId : this.props.routeParams.rptId, {format:true}, filter, queryParams);
     },
 
     filterOnSelections(newSelections) {
