@@ -138,8 +138,8 @@ let reportModel = {
             this.model.columns = this.getReportColumns(recordData.fields);
             this.model.records = this.getReportData(recordData.fields, recordData.records);
             this.model.groupLevel = 0;
-            this.model.groupingFields = null;
-            this.model.groupFids = null;
+            this.model.groupingFields = [];
+            this.model.groupFids = [];
 
             //  TODO: with paging, this count is flawed...
             this.model.recordsCount = recordData.records.length;

@@ -123,9 +123,9 @@ describe('Validate GroupFormatter unit tests', function() {
             {message: 'USER: Input with three first letter grouping', numFields: 5, numRecords: 2, gList: '1:F.2:F.3:F', dataType: constants.USER},
             {message: 'USER: Input with multiple grouping against same fid', numFields: 5, numRecords: 2, gList: '1:I.1:V', dataType: constants.USER},
             //  DATE data type
-            {message: 'TEXT: Input with multiple grouping against same fid', numFields: 5, numRecords: 2, gList: '1:V', dataType: constants.DATE},
+            {message: 'DATE: Input with multiple grouping against same fid', numFields: 5, numRecords: 2, gList: '1:V', dataType: constants.DATE},
             //  NUMERIC data type
-            {message: 'TEXT: Input with multiple grouping against same fid', numFields: 5, numRecords: 2, gList: '1:V', dataType: constants.NUMERIC}
+            {message: 'NUMERIC: Input with multiple grouping against same fid', numFields: 5, numRecords: 2, gList: '1:V', dataType: constants.NUMERIC}
         ];
 
         testCases.forEach(function(testCase) {
