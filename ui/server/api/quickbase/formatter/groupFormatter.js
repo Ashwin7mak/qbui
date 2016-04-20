@@ -229,7 +229,10 @@
                                 let groupFidId = el[0];
                                 let groupType = el[1];
 
-                                //  skip if we can't find the field
+                                //  Take the absolute value as the fid may be a negative value (descending sort)
+                                //
+                                //  Note: Math.abs(''), Math.abs(null) returns 0.  Given a fid must be > 0, this
+                                //  results in the field not being found in the map, which is the correct expectation.
                                 let field = map.get(Math.abs(groupFidId));
                                 if (field) {
                                     // found the field; now see if the data type/group type combination is valid.
