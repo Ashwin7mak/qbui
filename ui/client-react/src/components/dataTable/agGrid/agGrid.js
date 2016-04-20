@@ -12,6 +12,7 @@ import Loader  from 'react-loader';
 import Fluxxor from 'fluxxor';
 import * as query from '../../../constants/query';
 import ReportUtils from '../../../utils/reportUtils';
+import * as GroupTypes from '../../../constants/groupTypes';
 
 let FluxMixin = Fluxxor.FluxMixin(React);
 
@@ -153,8 +154,9 @@ let AGGrid = React.createClass({
         //for on-the-fly grouping, forget the previous group and go with the selection but add the previous sort fids.
         //TODO: how to pass back grouping info?
         let sortFid = (asc ? column.id.toString() : "-" + column.id.toString());
+        let groupString = ReportUtils.getGroupString(sortFid, GroupTypes.GROUP_TYPE.text.equals);
         let sortList = ReportUtils.getSortListString(this.props.sortFids);
-        queryParams[query.SORT_LIST_PARAM] = ReportUtils.prependSortFidToList(sortList, sortFid);
+        queryParams[query.SORT_LIST_PARAM] = ReportUtils.prependSortFidToList(sortList, groupString);
 
         flux.actions.getFilteredRecords(this.props.appId,
             this.props.tblId,
@@ -200,7 +202,7 @@ let AGGrid = React.createClass({
     getMainMenuItems(params) {
         this.selectColumnHeader(params.column.colDef);
         let isSortedAsc = true;
-        let isFieldSorted = _.find(this.props.selectedSortFids, (fid) => {
+        let isFieldSorted = _.find(this.props.sortFids, (fid) => {
             if (Math.abs(fid) === params.column.colDef.id) {
                 isSortedAsc = fid > 0;
                 return true;
@@ -272,7 +274,7 @@ let AGGrid = React.createClass({
         this.refs.griddleWrapper.removeEventListener("scroll", this.props.onScroll);
     },
 
-// For some reason react always thinks the component needs to be re-rendered because props have changed.
+    // For some reason react always thinks the component needs to be re-rendered because props have changed.
     // Analysis shows that the action column renderer is returning notEquals, event though nothing has changed.
     // Since re-render is expensive the following figures out if ALL is same
     // and the only piece that has changed is the "actions" column then don't update.
@@ -605,12 +607,13 @@ let AGGrid = React.createClass({
                                     getMainMenuItems={this.getMainMenuItems}
                                     suppressMenuFilterPanel="true"
                                     suppressMenuColumnPanel="true"
+                                    suppressContextMenu="true"
 
 
                                     //grouping behavior
                                     groupSelectsChildren="true"
-                                    groupUseEntireRow={this.props.showGrouping}
                                     groupRowInnerRenderer={this.getGroupRowRenderer}
+                                    groupUseEntireRow={this.props.showGrouping}
 
                                     icons={gridIcons}
                                 />

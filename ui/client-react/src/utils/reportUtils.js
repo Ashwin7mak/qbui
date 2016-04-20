@@ -78,6 +78,53 @@ class ReportUtils {
         }
         return sortFids;
     }
+    /**
+     * Given a sortList string pull out sort fids
+     * @param sortList -- sortList could be a string like 6.7:V.-10 or an array ["6", "7:V", "-10"]
+     * @returns {Array}
+     */
+    static getSortFidsOnly(sortList) {
+        let sortFids = [];
+        let sortListParts = [];
+        if (typeof sortList === 'string') {
+            sortListParts = sortList.split(listDelimiter);
+        } else { //should be an array
+            sortListParts = sortList;
+        }
+        sortListParts.forEach((sort) => {
+            if (sort) {
+                //  format is fid:groupType..split by delimiter(':') to allow us
+                // to pass in the fid for server side sorting.
+                var sortEl = sort.split(groupDelimiter);
+                if (sortEl.length === 1) {
+                    sortFids.push(sortEl[0]);
+                }
+            }
+        });
+        return sortFids;
+    }
+    //TODO
+    /**
+     * Given a sortList string pull out group fids
+     * @param sortList
+     */
+    static getGroupFids(sortList) {
+        let groupFids = [];
+        if (sortList && sortList.length) {
+            let sortListParts = sortList.split(listDelimiter);
+            sortListParts.forEach((sort) => {
+                if (sort) {
+                    //  format is fid:groupType..split by delimiter(':') to allow us
+                    // to pass in the fid for server side sorting.
+                    var sortEl = sort.split(groupDelimiter);
+                    if (sortEl.length > 1) {
+                        groupFids.push(sort);
+                    }
+                }
+            });
+        }
+        return groupFids;
+    }
 
     /**
      * Given a sortList, append a sortFid to this list
@@ -139,6 +186,10 @@ class ReportUtils {
             });
         }
         return ReportUtils.getSortListString(sortFids);
+    }
+
+    static getGroupString(fid, groupType) {
+        return fid + groupDelimiter + groupType;
     }
 }
 

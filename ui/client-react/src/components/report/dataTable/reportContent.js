@@ -151,9 +151,7 @@ let ReportContent = React.createClass({
                                     sortFids={this.props.reportData.data ? this.props.reportData.data.sortFids : []}
                                     filter={{selections: this.props.reportData.selections,
                                         facet: this.props.reportData.facetExpression,
-                                        search: this.props.reportData.searchStringForFiltering}}
-                                    selectedSortFids={this.props.reportData.data ? this.props.reportData.data.selectedSortFids : []} /> :
-
+                                        search: this.props.reportData.searchStringForFiltering}} /> :
                             <CardViewList reportData={this.props.reportData}
                                 uniqueIdentifier="Record ID#"
                                 reportHeader={this.props.reportHeader}
