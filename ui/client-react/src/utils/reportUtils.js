@@ -16,6 +16,15 @@ class ReportUtils {
         return ReportUtils.getListString(sortFids);
     }
 
+    static getGroupListString(sortFids, groupFids) {
+        let gListString = ReportUtils.getListString(sortFids);
+        if (gListString) {
+            gListString += listDelimiter;
+        }
+        gListString += ReportUtils.getListString(groupFids);
+        return gListString;
+    }
+
     /**
      * Given an array of fids, return a string with each entry in the list separated by a delimiter ('.');
      * @param fids

@@ -137,6 +137,7 @@ let AGGrid = React.createClass({
 
         let sortList = ReportUtils.getSortListString(this.props.groupFids);
         queryParams[query.SORT_LIST_PARAM] = ReportUtils.appendSortFidToList(sortList, sortFid);
+        queryParams[query.GLIST_PARAM] = ReportUtils.appendSortFidToList(sortList, sortFid);
 
         flux.actions.getFilteredRecords(this.props.appId,
             this.props.tblId,
@@ -157,6 +158,7 @@ let AGGrid = React.createClass({
         let groupString = ReportUtils.getGroupString(sortFid, GroupTypes.GROUP_TYPE.text.equals);
         let sortList = ReportUtils.getSortListString(this.props.sortFids);
         queryParams[query.SORT_LIST_PARAM] = ReportUtils.prependSortFidToList(sortList, groupString);
+        queryParams[query.GLIST_PARAM] = ReportUtils.prependSortFidToList(sortList, groupString);
 
         flux.actions.getFilteredRecords(this.props.appId,
             this.props.tblId,

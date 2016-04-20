@@ -146,7 +146,8 @@ const ReportRoute = React.createClass({
         logger.debug('Sending filter action with:' + searchString);
 
         let queryParams = {};
-        queryParams[query.SORT_LIST_PARAM] = ReportUtils.getSortListString(this.props.reportData.data.sortFids);
+        queryParams[query.SORT_LIST_PARAM] = ReportUtils.getGroupListString(this.props.reportData.data.sortFids, this.props.reportData.data.groupFids);
+        queryParams[query.GLIST_PARAM] = ReportUtils.getGroupListString(this.props.reportData.data.sortFids, this.props.reportData.data.groupFids);
         flux.actions.getFilteredRecords(this.props.selectedAppId,
                                     this.props.routeParams.tblId,
                                     typeof this.props.rptId !== "undefined" ? this.props.rptId : this.props.routeParams.rptId, {format:true}, filter, queryParams);

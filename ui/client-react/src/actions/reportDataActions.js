@@ -216,8 +216,8 @@ let reportDataActions = {
         return new Promise(function(resolve, reject) {
 
             if (appId && tblId && rptId) {
-                let sortListParam = overrideQueryParams && overrideQueryParams[query.SORT_LIST_PARAM] ? overrideQueryParams[query.SORT_LIST_PARAM] : "";
-                this.dispatch(actions.LOAD_RECORDS, {appId, tblId, rptId, filter, sortList: sortListParam});
+                let gListParam = overrideQueryParams && overrideQueryParams[query.GLIST_PARAM] ? overrideQueryParams[query.GLIST_PARAM] : "";
+                this.dispatch(actions.LOAD_RECORDS, {appId, tblId, rptId, filter, sortList: gListParam});
 
                 let reportService = new ReportService();
                 let recordService = new RecordService();
