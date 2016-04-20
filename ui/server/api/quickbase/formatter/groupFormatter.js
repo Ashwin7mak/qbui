@@ -213,7 +213,7 @@
                     //  build a fields map for quick field access when looping through the groups list.
                     let map = new Map();
                     fields.forEach((field) => {
-                        map.set(field.id + '', field);
+                        map.set(field.id, field);
                     });
 
                     let groups = groupList.split(constants.REQUEST_PARAMETER.LIST_DELIMITER);
@@ -230,7 +230,7 @@
                                 let groupType = el[1];
 
                                 //  skip if we can't find the field
-                                let field = map.get(groupFidId);
+                                let field = map.get(Math.abs(groupFidId));
                                 if (field) {
                                     // found the field; now see if the data type/group type combination is valid.
                                     if (groupUtils.isValidGroupType(field.datatypeAttributes.type, groupType) === true) {

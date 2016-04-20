@@ -111,6 +111,7 @@ describe('Validate GroupFormatter unit tests', function() {
             //  TEXT data type
             {message: 'TEXT: No input records', numFields: 5, numRecords: 0, gList: '1:V', dataType: constants.TEXT},
             {message: 'TEXT: Input with one equals grouping', numFields: 5, numRecords: 1, gList: '1:V', dataType: constants.TEXT},
+            {message: 'TEXT: Input with one equals grouping descending', numFields: 5, numRecords: 1, gList: '-1:V', dataType: constants.TEXT},
             {message: 'TEXT: Input with two equals groupings', numFields: 5, numRecords: 2, gList: '1:V.2:V', dataType: constants.TEXT},
             {message: 'TEXT: Input with one first word grouping', numFields: 5, numRecords: 2, gList: '1:I', dataType: constants.TEXT},
             {message: 'TEXT: Input with three first letter grouping', numFields: 5, numRecords: 2, gList: '1:F.2:F.3:F', dataType: constants.TEXT},
@@ -142,7 +143,7 @@ describe('Validate GroupFormatter unit tests', function() {
                 var groupList = testCase.gList.split(constants.REQUEST_PARAMETER.LIST_DELIMITER);
                 for (var idx = 0; idx < groupList.length; idx++) {
                     var el = groupList[idx].split(constants.REQUEST_PARAMETER.GROUP_DELIMITER);
-                    assert.equal(el[0], groupData.fields[idx].field.id);
+                    assert.equal(Math.abs(el[0]), groupData.fields[idx].field.id);
                     assert.equal(el[1], groupData.fields[idx].groupType);
 
                     //  add the fid to the map.
