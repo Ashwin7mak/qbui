@@ -11,6 +11,20 @@
     var lodash = require('lodash');
     var groupUtils = require('../../../components/utility/groupUtils');
 
+    //  TODO: refactor into a shared module
+    var startDate;
+    function perfStart() {
+        startDate = new Date();
+    }
+    function perfEnd(trackingMsg) {
+        if (startDate) {
+            let endDate = new Date();
+            let ms = endDate.getTime() - startDate.getTime();
+            log.debug((trackingMsg ? trackingMsg : 'Elapsed: ') + ms + 'ms');
+            startDate = null;
+        }
+    }
+
     /**
      * Return the supplied record data grouped to match the grouping
      * requirements of each groupField element.
@@ -210,17 +224,23 @@
                 //
                 let groupList = req.param(constants.REQUEST_PARAMETER.GROUP_LIST);
                 if (groupList) {
+                    log.debug("Build grouping for groupList: " + groupList + "; Number of fields: " + fields.length + "; Number of records: " + records.length);
+
+                    perfStart();
                     //  build a fields map for quick field access when looping through the groups list.
                     let map = new Map();
                     fields.forEach((field) => {
                         map.set(field.id, field);
                     });
+                    let endDate = new Date();
+                    perfEnd("Build map for field grouping: ");
 
                     let groups = groupList.split(constants.REQUEST_PARAMETER.LIST_DELIMITER);
 
                     // Loop through the list of groups and determine whether we have any grouping requirements.
                     // Fields that are to be grouped are added to the groupBy.fields array in the same order
                     // as the groups array.  This is to ensure proper order of precedence.
+                    perfStart();
                     groups.forEach((group) => {
                         if (group) {
                             //  must have a fid and group type element
@@ -252,10 +272,12 @@
                             }
                         }
                     });
+                    perfEnd("Build groupBy.fields array: ");
 
                     // we have grouping if there are fields in groupBy.fields array.  Set the grouping flag
                     // to true and populate the grid columns and data arrays.
                     if (groupBy.fields.length > 0) {
+                        perfStart();
                         //  Business rule is to not include grouped fields in the grid.  So, add to the gridColumns
                         //  array the fields NOT designated to be grouped.
                         fields.forEach(function(field) {
@@ -263,9 +285,13 @@
                                 groupBy.gridColumns.push(field);
                             }
                         });
+                        perfEnd("Build groupBy.gridColumns array: ");
 
                         groupBy.hasGrouping = true;
+
+                        perfStart();
                         groupBy.gridData = createGroupDataGrid(groupBy.fields, fields, records);
+                        perfEnd("Build groupBy.gridData array: ");
 
                         //  TODO: with paging, this is flawed...
                         if (groupBy.gridData.length > 0) {
