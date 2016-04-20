@@ -100,7 +100,12 @@ export default {
             recordCount : "{recordCount} {nameForRecords} ",
             searchPlaceHolder:  "Rechercher ces {nameForRecords} ...",
             sortAndGroup : {
-                header : "Trier & Groupe"
+                by: "par",
+                group: "Groupe",
+                header : "Trier & Groupe",
+                reset: "Réinitialiser",
+                sort:   "Trier",
+                thenBy: "puis par",
             },
             menu: {
                 sort: {

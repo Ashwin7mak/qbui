@@ -101,7 +101,12 @@ export default {
             recordCount : "{recordCount} {nameForRecords} ",
             searchPlaceHolder:  "Suchen Sie diese {nameForRecords} ...",
             sortAndGroup : {
-                header : "Sortieren & Gruppen"
+                by: "nach",
+                group: "Gruppen",
+                header : "Sortieren & Gruppen",
+                reset: "Zurückstellen",
+                sort:   "Sortieren",
+                thenBy: "dann durch",
             },
             menu: {
                 sort: {
