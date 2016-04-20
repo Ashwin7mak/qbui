@@ -21,8 +21,6 @@
         let APPLICATION_JSON = 'application/json';
         let CONTENT_TYPE = 'Content-Type';
         let FACETS = 'facets';
-        let FIELDS = 'fields';
-        let RECORDS = 'records';
         let RESULTS = 'results';
         let REPORTCOMPONENTS = 'reportcomponents';
 
@@ -69,16 +67,16 @@
                 return new Promise((resolve, reject) => {
                     recordsApi.fetchRecordsAndFields(req).then(
                         (response) => {
-                            if (recordsApi.isDisplayFormat(req)) {
-                                // TODO: the result set returned is a 'flat' heirarchy.  Since we are formatting our
-                                // TODO: result data, look to summarize the records per grouping requirement.
-                            }
                             resolve(response);
                         },
                         (error) => {
+                            log.error("Error getting report results in fetchReportResults: " + error.message);
                             reject(error);
                         }
-                    );
+                    ).catch((ex) => {
+                        log.error("Caught unexpected error getting report results in fetchReportResults: " + ex.message);
+                        reject1(ex);
+                    });
                 });
             },
 
@@ -127,14 +125,14 @@
 
                 return new Promise((resolve, reject) => {
 
-                    //  Now fetch the report data and report facet information asynchronously.  Return a responseObject with
-                    //  field, record and facet(if any) information for processing by the client.
+                    //  Now fetch the report data and report facet information asynchronously.  Return a
+                    //  responseObject with field, record, grouping(if any) and facet(if any) information for client processing.
                     var promises = [reportPromise, facetPromise];
                     Promise.all(promises).then(
                         (result) => {
-                            let responseObject = {};
-                            responseObject[FIELDS] = result[0].fields;
-                            responseObject[RECORDS] = result[0].records;
+                            //  populate the response object with the report with fields, groups and
+                            //  records output from recordsApi.
+                            let responseObject = result[0];
                             responseObject[FACETS] = [];
 
                             /*eslint no-lonely-if:0 */
