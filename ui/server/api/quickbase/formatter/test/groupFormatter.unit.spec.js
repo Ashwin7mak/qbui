@@ -72,7 +72,7 @@ describe('Validate GroupFormatter unit tests', function() {
             {message: 'No input fields', numFields: 0, numRecords: 5, gList: '1:V', dataType: constants.TEXT},
             {message: 'No grouping specified', numFields: 4, numRecords: 10, gList: '1.2', dataType: constants.TEXT},
             {message: 'invalid TEXT grouping specified', numFields: 4, numRecords: 10, gList: '1:?', dataType: constants.TEXT},
-            {message: 'invalid TEXT grouping specified', numFields: 4, numRecords: 10, gList: 'blah', dataType: constants.TEXT},
+            {message: 'invalid grouping specified', numFields: 4, numRecords: 10, gList: 'blah', dataType: constants.TEXT},
             {message: 'Group specified with fid=0', numFields: 4, numRecords: 10, gList: '0:V', dataType: constants.TEXT}
         ];
 
