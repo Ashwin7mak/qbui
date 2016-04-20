@@ -1,6 +1,7 @@
 /* This file should contain ALL the colors used in QuickBase. This may be used to create themes in future. */
 /* see http://quickbase.design/colors/ */
 
+
 $color1:    #f3f8fe; // wispy-water
 $color2:    #ffffff; // white
 $color3:    #486c8f;
@@ -23,6 +24,10 @@ $color19:   #c7c7c7; // porpoise
 $color20:   #486c8f; // dull-sapphire
 $color21:   #b8b8b8; //ghost
 $color22:   #56b349; //fiddlehead
+$color23:   #365ebf; //big-leaf
+
+$color24:   #efefef;
+$color25:   #f7f7f7;
 
 $left-nav-bg: #193048; // deep-sea
 $icon-color: #7090ab; // dragon-foot
@@ -37,7 +42,7 @@ $nav-border: $color18;
 
 $report-container-bg: $color2;
 //tabs underline color
-$tabsUnderLine: #365ebf;
+$tabsUnderLine: $color23;
 
 $icon-badge-color: #2d6c92;
 $icon-edit-color: #00b0c2;

@@ -1,14 +1,5 @@
 @import '../../assets/css/qbVariables';
 
-.backdrop {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  //background-color: rgba(0,0,0,0.5); /*dim the background*/
-}
-
 .sortAndGroupContainer {
   margin-left: 10px;
 
@@ -20,6 +11,8 @@
   .popover.bottom {
     margin-left: -12px;
     margin-top: -39px;
+    height: 100%;
+    border-radius: 0;
     > .arrow {
       display: none;
     }
@@ -31,7 +24,8 @@
 }
 
 .sortAndGroupDialog {
-  height: 400px;
+  min-height: 550px;
+  overflow: auto;
   width: 340px;
   background-color: $color2;
   z-index: $zindex-popover;
@@ -44,11 +38,98 @@
     margin-bottom: 0;
     color: $icon-color-hover;
   }
-
   .popover-content {
-      padding: 10px;
+    height: 100%;
+    padding: 0;
+    > div {
+      height: 100%;
+    }
+  }
+  .settingsDialog{
+    padding: 10px;
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    justify-content: space-between;
+  }
+
+  .fieldSelectorContainer {
+    width: 100%;
+
+    .fieldSelector {
+      width: 100%;
+
+    }
+    .fieldName {
+      flex-grow: 1;
+    }
+    .sortOrderIcon {
+      padding-right: 10px;
+    }
+  }
+
+  .title {
+    color: $color11;
+    margin-bottom: 6px;
+  }
+
+  .sortBySettings {
+    margin-top: 20px;
+    margin-left : 10px;
+
+    .fieldChoice {
+      border : 1px solid $color15;
+      border-top : 6px solid $color25;
+    }
+  }
+
+  .groupBySettings {
+    margin-top: 20px;
+
+    .fieldChoice {
+      background-color: $color12;
+      border-top : 6px solid $color24;
+    }
+  }
+
+  .fieldChoice {
+    padding : 10px;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    margin-bottom: 2px;
+
+    .prefix {
+      color: $color9;
+      flex-grow: 1;
+    }
+  }
+
+  .dialogButtons {
+    margin-top: 10px;
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-end;
+    align-items: center;
+    margin-top: auto;
+    .reset {
+      margin-right : 10px;
+    }
+  }
+}
+.fieldsPanel {
+  position: absolute;
+  height: 98%;
+  width: 98%;
+  &.notShown {
+    display: none;
+  }
+  .panel {
+    box-shadow : none;
+    border : 1px solid #ddd;
+    .list-group-item:first-child {
+      boder-radius : 0;
+    }
   }
 
 }
-
-
