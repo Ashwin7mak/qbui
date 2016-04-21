@@ -123,9 +123,10 @@
         },
 
         /**
-         * Return the first day of the week for a given date.  Monday is considered the
-         * first day.  Format of the date returned is based on the display input format
-         * parameter.
+         * Return the first day of the week of a given date.  Monday is considered the first day of the
+         * (work) week, so the date returned will be the preceding Monday.
+         *
+         * The format of the date return will match the displayFormat parameter.
          *
          * @param displayDate
          * @param displayFormat
@@ -140,7 +141,7 @@
         },
 
         /**
-         * Return the Month and year for a given date.  The return format is
+         * Return the Month and year of a given date.  The return format is
          * MMM YYYY.
          *
          * @param displayDate
@@ -155,6 +156,13 @@
             return '';
         },
 
+        /**
+         * Return the Year of a given date.
+         *
+         * @param displayDate
+         * @param displayFormat
+         * @returns {*}
+         */
         getYear: function(displayDate, displayFormat) {
             if (displayDate) {
                 let format = dateFormatter.generateFormat({dateFormat: displayFormat});
@@ -163,6 +171,14 @@
             return '';
         },
 
+        /**
+         * Return the Calendar quarter and Year of the given date.  IE:  If the input date
+         * is Mar 15, 2012, the return value is Q1 2012.
+         *
+         * @param displayDate
+         * @param displayFormat
+         * @returns {*}
+         */
         getQuarter: function(displayDate, displayFormat) {
             if (displayDate) {
                 let format = dateFormatter.generateFormat({dateFormat: displayFormat});
@@ -172,6 +188,14 @@
             return '';
         },
 
+        /**
+         * Return the Fiscal quarter and Year of the given date.  IE:  If the input date
+         * is Mar 15, 2012, the return value is Q1 FY2012.
+         *
+         * @param displayDate
+         * @param displayFormat
+         * @returns {*}
+         */
         getFiscalQuarter: function(displayDate, displayFormat) {
             if (displayDate) {
                 let format = dateFormatter.generateFormat({dateFormat: displayFormat});
@@ -181,6 +205,14 @@
             return '';
         },
 
+        /**
+         * Return the Fiscal Year of the given date.  IE:  If the input date
+         * is Mar 15, 2012, the return value is FY2012.
+         *
+         * @param displayDate
+         * @param displayFormat
+         * @returns {*}
+         */
         getFiscalYear: function(displayDate, displayFormat) {
             if (displayDate) {
                 let format = dateFormatter.generateFormat({dateFormat:displayFormat});
@@ -189,6 +221,14 @@
             return '';
         },
 
+        /**
+         * Return the Decade of the given date.  IE:  If the input date
+         * is Mar 15, 2012, the return value is 2012.
+         *
+         * @param displayDate
+         * @param displayFormat
+         * @returns {*}
+         */
         getDecade: function(displayDate, displayFormat) {
             if (displayDate) {
                 let format = dateFormatter.generateFormat({dateFormat:displayFormat});
