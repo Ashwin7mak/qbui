@@ -106,7 +106,6 @@ let reportModel = {
      */
     setMetaData: function(reportMetaData) {
         this.model.name = reportMetaData.name;
-        let sortList = reportMetaData.sortList;
         // in report's meta data sortlist is returned as an array of sort elements
         this.setSortFids(reportMetaData.sortList);
         this.setGroupElements(reportMetaData.sortList);
