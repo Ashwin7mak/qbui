@@ -21,15 +21,15 @@ class ReportUtils {
      * The grouping fids always go before sort fids
      * @param sortFids array of sort fids ex: [3]
      * @param groupEls array of group elements ex: [-6:V]
-     * @returns sorlList string ex: [-6:V.3]
+     * @returns sortList string ex: [-6:V.3]
      */
-    static getGroupListString(sortFids, groupEls) {
-        let gListString = ReportUtils.getListString(groupEls);
-        if (gListString) {
-            gListString += listDelimiter;
+    static getGListString(sortFids, groupEls) {
+        let groupString = ReportUtils.getListString(groupEls);
+        let sortString = ReportUtils.getListString(sortFids);
+        if (groupString.length) {
+            return sortString.length ? groupString + listDelimiter + sortString : groupString;
         }
-        gListString += ReportUtils.getListString(sortFids);
-        return gListString;
+        return sortString;
     }
 
     /**
@@ -75,26 +75,34 @@ class ReportUtils {
         return false;
     }
 
+    static getSortListPartsHelper(sortList) {
+        if (sortList) {
+            if (Array.isArray(sortList)) {
+                return sortList;
+            }
+            if (typeof sortList === 'string') {
+                return sortList.split(listDelimiter);
+            }
+        }
+        return false;
+    }
     /**
      * Given a sortList string or array, pull out sort fids
      * @param sortList
      * @returns array of fids
      */
     static getSortFids(sortList) {
+        let sortListParts = ReportUtils.getSortListPartsHelper(sortList);
         let sortFids = [];
-        let sortListParts = [];
-        if (typeof sortList === 'string') {
-            sortListParts = sortList.split(listDelimiter);
-        } else { //should be an array
-            sortListParts = sortList;
+        if (sortListParts) {
+            sortListParts.forEach((sort) => {
+                if (sort) {
+                    //  each element is formated as fid:groupType
+                    var sortEl = sort.split(groupDelimiter);
+                    sortFids.push(sortEl[0]);
+                }
+            });
         }
-        sortListParts.forEach((sort) => {
-            if (sort) {
-                //  each element is formated as fid:groupType
-                var sortEl = sort.split(groupDelimiter);
-                sortFids.push(sortEl[0]);
-            }
-        });
         return sortFids;
     }
     /**
@@ -103,23 +111,20 @@ class ReportUtils {
      * @returns array of sort fids ( ignores all grouped fids)
      */
     static getSortFidsOnly(sortList) {
+        let sortListParts = ReportUtils.getSortListPartsHelper(sortList);
         let sortFids = [];
-        let sortListParts = [];
-        if (typeof sortList === 'string') {
-            sortListParts = sortList.split(listDelimiter);
-        } else { //should be an array
-            sortListParts = sortList;
-        }
-        sortListParts.forEach((sort) => {
-            if (sort) {
-                //  format is fid:groupType..split by delimiter(':') to allow us
-                // to pass in the fid for server side sorting.
-                var sortEl = sort.split(groupDelimiter);
-                if (sortEl.length === 1) {
-                    sortFids.push(sortEl[0]);
+        if (sortListParts) {
+            sortListParts.forEach((sort) => {
+                if (sort) {
+                    //  format is fid:groupType..split by delimiter(':') to allow us
+                    // to pass in the fid for server side sorting.
+                    var sortEl = sort.split(groupDelimiter);
+                    if (sortEl.length === 1) {
+                        sortFids.push(sortEl[0]);
+                    }
                 }
-            }
-        });
+            });
+        }
         return sortFids;
     }
     //TODO
@@ -129,23 +134,20 @@ class ReportUtils {
      * @returns array of group elements ( ignores all sort fids)
      */
     static getGroupElements(sortList) {
+        let sortListParts = ReportUtils.getSortListPartsHelper(sortList);
         let groupFids = [];
-        let sortListParts = [];
-        if (typeof sortList === 'string') {
-            sortListParts = sortList.split(listDelimiter);
-        } else { //should be an array
-            sortListParts = sortList;
-        }
-        sortListParts.forEach((sort) => {
-            if (sort) {
-                //  format is fid:groupType..split by delimiter(':') to allow us
-                // to pass in the fid for server side sorting.
-                var sortEl = sort.split(groupDelimiter);
-                if (sortEl.length > 1) {
-                    groupFids.push(sort);
+        if (sortListParts) {
+            sortListParts.forEach((sort) => {
+                if (sort) {
+                    //  format is fid:groupType..split by delimiter(':') to allow us
+                    // to pass in the fid for server side sorting.
+                    var sortEl = sort.split(groupDelimiter);
+                    if (sortEl.length > 1) {
+                        groupFids.push(sort);
+                    }
                 }
-            }
-        });
+            });
+        }
         return groupFids;
     }
 
@@ -158,7 +160,7 @@ class ReportUtils {
      */
     static appendSortFidToList(sortList, sortEl) {
         if (typeof sortEl === 'number') {
-            sortFid = sortEl.toString();
+            sortEl = sortEl.toString();
         }
         if (sortList && sortList.length) {
             sortList += sortEl && sortEl.length ? listDelimiter + sortEl : "";
@@ -199,7 +201,17 @@ class ReportUtils {
      * @returns {string}
      */
     static getGroupString(fid, order, groupType) {
-        return (order ? "" : "-") + fid + groupDelimiter + groupType;
+        let result = '';
+        if (fid) {
+            if (typeof order === 'boolean') {
+                result += order ? '' : '-';
+            }
+            result += fid;
+            if (groupType) {
+                result += groupDelimiter + groupType;
+            }
+        }
+        return result;
     }
 }
 
