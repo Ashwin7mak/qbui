@@ -4,7 +4,6 @@ import Fluxxor from 'fluxxor';
 import {I18nMessage} from '../../utils/i18nMessage';
 import Button from 'react-bootstrap/lib/Button';
 import QBicon from '../qbIcon/qbIcon';
-import Breakpoints from '../../utils/breakpoints';
 import './overlay.scss';
 
 let FluxMixin = Fluxxor.FluxMixin(React);
@@ -14,7 +13,7 @@ var OverlayDialogHeader = React.createClass({
 
     smallHeaderRender() {
         return (
-            <div className="overlayDialogHeader">
+            <div className="overlayDialogHeader smallHeader">
                 <div className="overlayLeft">
                     <Button onClick={this.props.onCancel}><QBicon icon={"close"}/></Button>
                 </div>
@@ -34,7 +33,7 @@ var OverlayDialogHeader = React.createClass({
 
     nonSmallHeaderRender() {
         return (
-            <div className="overlayDialogHeader">
+            <div className="overlayDialogHeader nonSmallHeader">
                 <div className="overlayLeft">
                             <Button className={this.props.iconName + "Span" }
                                     onClick={this.props.onCancel}>
@@ -55,11 +54,12 @@ var OverlayDialogHeader = React.createClass({
     },
 
     render() {
-        if (Breakpoints.isSmallBreakpoint()) {
-            return this.smallHeaderRender();
-        } else {
-            return this.nonSmallHeaderRender();
-        }
+        return (
+        <div>
+            {this.smallHeaderRender()}
+            {this.nonSmallHeaderRender()}
+        </div>
+        );
     }
 });
 
