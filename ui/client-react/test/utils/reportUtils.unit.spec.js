@@ -60,7 +60,7 @@ describe('ReportUtils - test getSortFidsOnly', () => {
     });
 });
 
-describe('ReportUtils - test getGroupFids', () => {
+describe('ReportUtils - test getGroupElements', () => {
     var dataProvider = [
         {test:'empty input', input:'', output: []},
         {test:'null input', input:null, output: []},
@@ -69,7 +69,7 @@ describe('ReportUtils - test getGroupFids', () => {
     ];
     dataProvider.forEach(function(data) {
         it(data.test, function() {
-            expect(ReportUtils.getGroupFids(data.input)).toEqual(data.output);
+            expect(ReportUtils.getGroupElements(data.input)).toEqual(data.output);
         });
     });
 });
@@ -126,16 +126,3 @@ describe('ReportUtils - test prependSortFidToList', () => {
     });
 });
 
-describe('ReportUtils - test getSortStringFromList', () => {
-    var dataProvider = [
-        {test:'empty input', input:'', output: ''},
-        {test:'null input', input:null, output: ''},
-        {test:'valid input with sort', input:["3", "-4"], output: '3.-4'},
-        {test:'valid input with group', input:["3", "-4:V"], output: '3.-4'},
-    ];
-    dataProvider.forEach(function(data) {
-        it(data.test, function() {
-            expect(ReportUtils.getSortStringFromSortListArray(data.input)).toBe(data.output);
-        });
-    });
-});

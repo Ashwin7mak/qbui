@@ -16,12 +16,19 @@ class ReportUtils {
         return ReportUtils.getListString(sortFids);
     }
 
-    static getGroupListString(sortFids, groupFids) {
-        let gListString = ReportUtils.getListString(sortFids);
+    /**
+     * Given arrays of sort fids and group elements combines them into a sortList type string.
+     * The grouping fids always go before sort fids
+     * @param sortFids array of sort fids ex: [3]
+     * @param groupEls array of group elements ex: [-6:V]
+     * @returns sorlList string ex: [-6:V.3]
+     */
+    static getGroupListString(sortFids, groupEls) {
+        let gListString = ReportUtils.getListString(groupEls);
         if (gListString) {
             gListString += listDelimiter;
         }
-        gListString += ReportUtils.getListString(groupFids);
+        gListString += ReportUtils.getListString(sortFids);
         return gListString;
     }
 
@@ -69,28 +76,31 @@ class ReportUtils {
     }
 
     /**
-     * Given a sortList string, pull out sort fids
+     * Given a sortList string or array, pull out sort fids
      * @param sortList
-     * @returns {Array}
+     * @returns array of fids
      */
     static getSortFids(sortList) {
         let sortFids = [];
+        let sortListParts = [];
         if (typeof sortList === 'string') {
-            let sortListParts = sortList.split(listDelimiter);
-            sortListParts.forEach((sort) => {
-                if (sort) {
-                    //  each element is formated as fid:groupType
-                    var sortEl = sort.split(groupDelimiter);
-                    sortFids.push(sortEl[0]);
-                }
-            });
+            sortListParts = sortList.split(listDelimiter);
+        } else { //should be an array
+            sortListParts = sortList;
         }
+        sortListParts.forEach((sort) => {
+            if (sort) {
+                //  each element is formated as fid:groupType
+                var sortEl = sort.split(groupDelimiter);
+                sortFids.push(sortEl[0]);
+            }
+        });
         return sortFids;
     }
     /**
-     * Given a sortList string pull out sort fids
+     * Given a sortList string or array pull out sort fids
      * @param sortList -- sortList could be a string like 6.7:V.-10 or an array ["6", "7:V", "-10"]
-     * @returns {Array}
+     * @returns array of sort fids ( ignores all grouped fids)
      */
     static getSortFidsOnly(sortList) {
         let sortFids = [];
@@ -114,42 +124,46 @@ class ReportUtils {
     }
     //TODO
     /**
-     * Given a sortList string pull out group fids
-     * @param sortList
+     * Given a sortList string or array pull out group fids
+     * @param sortList -- sortList could be a string like 6.7:V.-10 or an array ["6", "7:V", "-10"]
+     * @returns array of group elements ( ignores all sort fids)
      */
-    static getGroupFids(sortList) {
+    static getGroupElements(sortList) {
         let groupFids = [];
-        if (sortList && sortList.length) {
-            let sortListParts = sortList.split(listDelimiter);
-            sortListParts.forEach((sort) => {
-                if (sort) {
-                    //  format is fid:groupType..split by delimiter(':') to allow us
-                    // to pass in the fid for server side sorting.
-                    var sortEl = sort.split(groupDelimiter);
-                    if (sortEl.length > 1) {
-                        groupFids.push(sort);
-                    }
-                }
-            });
+        let sortListParts = [];
+        if (typeof sortList === 'string') {
+            sortListParts = sortList.split(listDelimiter);
+        } else { //should be an array
+            sortListParts = sortList;
         }
+        sortListParts.forEach((sort) => {
+            if (sort) {
+                //  format is fid:groupType..split by delimiter(':') to allow us
+                // to pass in the fid for server side sorting.
+                var sortEl = sort.split(groupDelimiter);
+                if (sortEl.length > 1) {
+                    groupFids.push(sort);
+                }
+            }
+        });
         return groupFids;
     }
 
     /**
      * Given a sortList, append a sortFid to this list
      *
-     * @param sortList
-     * @param sortFid
-     * @returns {*}
+     * @param sortList -- string of format <+/-|fid|:groupType>.<+/-|fid|:groupType>..
+     * @param sortEl -- can be a fid or a group element
+     * @returns concatenated sortlist string of format <+/-|fid|:groupType>.<+/-|fid|:groupType>..
      */
-    static appendSortFidToList(sortList, sortFid) {
-        if (typeof sortFid === 'number') {
-            sortFid = sortFid.toString();
+    static appendSortFidToList(sortList, sortEl) {
+        if (typeof sortEl === 'number') {
+            sortFid = sortEl.toString();
         }
         if (sortList && sortList.length) {
-            sortList += sortFid && sortFid.length ? listDelimiter + sortFid : "";
+            sortList += sortEl && sortEl.length ? listDelimiter + sortEl : "";
         } else {
-            sortList = sortFid;
+            sortList = sortEl;
         }
         return sortList;
     }
@@ -157,16 +171,16 @@ class ReportUtils {
     /**
      * Given a sortList, prepend a sortFid to this list
      *
-     * @param sortList
-     * @param sortFid
-     * @returns {*}
+     * @param sortList -- string of format <+/-|fid|:groupType>.<+/-|fid|:groupType>..
+     * @param sortFid -- can be a fid or a group element
+     * @returns concatenated sortlist string of format <+/-|fid|:groupType>.<+/-|fid|:groupType>..
      */
-    static prependSortFidToList(sortList, sortFid) {
-        if (typeof sortFid === 'number') {
-            sortFid = sortFid.toString();
+    static prependSortFidToList(sortList, sortEl) {
+        if (typeof sortEl === 'number') {
+            sortEl = sortEl.toString();
         }
-        if (sortFid && sortFid.length) {
-            let result = sortFid;
+        if (sortEl && sortEl.length) {
+            let result = sortEl;
             if (sortList && sortList.length) {
                 result += listDelimiter + sortList;
             }
@@ -178,27 +192,14 @@ class ReportUtils {
     }
 
     /**
-     * Takes in a query's sortlist which can have sort and grouping strings
-     * and returns a string with just sort fids delimited by "."
-     *
-     * @param sortList
+     * Combines a fid + order + groupType into a groupEl of format <+/-|fid|:groupType>
+     * @param fid
+     * @param order
+     * @param groupType
      * @returns {string}
      */
-    static getSortStringFromSortListArray(sortList) {
-        let sortFids = [];
-        if (sortList && sortList.length) {
-            sortList.forEach((sort) =>{
-                if (sort) {
-                    var sortEl = sort.split(groupDelimiter);
-                    sortFids.push(sortEl[0]);
-                }
-            });
-        }
-        return ReportUtils.getSortListString(sortFids);
-    }
-
-    static getGroupString(fid, groupType) {
-        return fid + groupDelimiter + groupType;
+    static getGroupString(fid, order, groupType) {
+        return (order ? "" : "-") + fid + groupDelimiter + groupType;
     }
 }
 

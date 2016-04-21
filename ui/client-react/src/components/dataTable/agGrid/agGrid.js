@@ -135,7 +135,7 @@ let AGGrid = React.createClass({
         // BUT since out grouped fields are also sorted we still need to keep those in the sort list.
         let sortFid = asc ? column.id.toString() : "-" + column.id.toString();
 
-        let sortList = ReportUtils.getSortListString(this.props.groupFids);
+        let sortList = ReportUtils.getSortListString(this.props.groupEls);
         queryParams[query.SORT_LIST_PARAM] = ReportUtils.appendSortFidToList(sortList, sortFid);
         queryParams[query.GLIST_PARAM] = ReportUtils.appendSortFidToList(sortList, sortFid);
 
@@ -154,8 +154,8 @@ let AGGrid = React.createClass({
         let queryParams = {};
         //for on-the-fly grouping, forget the previous group and go with the selection but add the previous sort fids.
         //TODO: how to pass back grouping info?
-        let sortFid = (asc ? column.id.toString() : "-" + column.id.toString());
-        let groupString = ReportUtils.getGroupString(sortFid, GroupTypes.GROUP_TYPE.text.equals);
+        let sortFid = column.id.toString();
+        let groupString = ReportUtils.getGroupString(sortFid, asc, GroupTypes.GROUP_TYPE.text.equals);
         let sortList = ReportUtils.getSortListString(this.props.sortFids);
         queryParams[query.SORT_LIST_PARAM] = ReportUtils.prependSortFidToList(sortList, groupString);
         queryParams[query.GLIST_PARAM] = ReportUtils.prependSortFidToList(sortList, groupString);

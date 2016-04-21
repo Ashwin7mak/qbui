@@ -147,7 +147,7 @@ let ReportContent = React.createClass({
                                     showGrouping={this.props.reportData.data.hasGrouping}
                                     filteredRecordCount={this.props.reportData.data ? this.props.reportData.data.filteredRecordCount : 0}
                                     groupLevel={this.props.reportData.data ? this.props.reportData.data.groupLevel : 0}
-                                    groupFids={this.props.reportData.data ? this.props.reportData.data.groupFids : []}
+                                    groupEls={this.props.reportData.data ? this.props.reportData.data.groupEls : []}
                                     sortFids={this.props.reportData.data ? this.props.reportData.data.sortFids : []}
                                     filter={{selections: this.props.reportData.selections,
                                         facet: this.props.reportData.facetExpression,

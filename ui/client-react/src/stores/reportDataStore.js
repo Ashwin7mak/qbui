@@ -19,7 +19,7 @@ let reportModel = {
         records: null,
         recordsCount: null,
         sortFids: [],
-        groupFids: []
+        groupEls: []
     },
 
     /**
@@ -109,6 +109,7 @@ let reportModel = {
         let sortList = reportMetaData.sortList;
         // in report's meta data sortlist is returned as an array of sort elements
         this.setSortFids(reportMetaData.sortList);
+        this.setGroupElements(reportMetaData.sortList);
     },
 
     /**
@@ -133,7 +134,6 @@ let reportModel = {
             //  TODO: with paging, this count is flawed...
             this.model.recordsCount = recordData.records.length;
         }
-        this.setGroupData(recordData);
         this.model.filteredRecords = this.model.records;
         this.model.filteredRecordsCount = recordData.records.length;
     },
@@ -159,7 +159,6 @@ let reportModel = {
             this.model.filteredRecords = this.getReportData(recordData.fields, recordData.records);
             this.model.filteredRecordsCount = recordData.records.length;
         }
-        this.setGroupData(recordData);
     },
     /**
      * Set facets data(if any) from response
@@ -188,23 +187,10 @@ let reportModel = {
         this.model.sortFids = ReportUtils.getSortFidsOnly(sortList);
     },
 
-    setGroupFids: function(sortList) {
-        this.model.groupFids = ReportUtils.getGroupFids(sortList);
-    },
-
-    setGroupData: function(recordData) {
-        this.model.groupLevel = 0;
-        this.model.groupingFields = [];
-        this.model.groupFids = [];
-        if (recordData && recordData.groups && recordData.groups.fields) {
-            recordData.groups.fields.forEach((groupField) => {
-                this.model.groupFids.push(ReportUtils.getGroupString(groupField.field.id, groupField.groupType));
-                this.model.groupingFields.push(groupField.field.name);
-                this.model.groupLevel++;
-            });
-        }
+    setGroupElements: function(sortList) {
+        this.model.groupEls = ReportUtils.getGroupElements(sortList);
+        this.model.groupLevel = this.model.groupEls.length;
     }
-
 };
 
 
@@ -272,7 +258,7 @@ let ReportDataStore = Fluxxor.createStore({
         this.searchStringForFiltering =  payload.filter.search;
 
         this.reportModel.setSortFids(payload.sortList);
-        this.reportModel.setGroupFids(payload.sortList);
+        this.reportModel.setGroupElements(payload.sortList);
         this.emit('change');
     },
 

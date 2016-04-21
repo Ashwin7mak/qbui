@@ -261,7 +261,8 @@
                                         field.grouped = true;
                                         groupBy.fields.push(
                                             {field: field,
-                                             groupType: groupType}
+                                                order: groupFidId > 0,
+                                                groupType: groupType}
                                         );
                                     } else {
                                         log.warn("Unsupported group type.  FieldId: " + field.id + "; name: " + field.name + "; DataType: " + field.datatypeAttributes.type + "; GroupType: " + groupType);
