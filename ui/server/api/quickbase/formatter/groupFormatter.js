@@ -97,19 +97,19 @@
                 case groupTypes.DATE.day:
                     return dataValue;
                 case groupTypes.DATE.week:
-                    return groupUtils.getFirstDayOfWeek(dateValue, groupField.datatypeAttributes.dateFormat);
+                    return groupUtils.getFirstDayOfWeek(dataValue, groupField.datatypeAttributes.dateFormat);
                 case groupTypes.DATE.month:
-                    return groupUtils.getMonth(dateValue, groupField.datatypeAttributes.dateFormat);
+                    return groupUtils.getMonth(dataValue, groupField.datatypeAttributes.dateFormat);
                 case groupTypes.DATE.year:
-                    return groupUtils.getYear(dateValue, groupField.datatypeAttributes.dateFormat);
+                    return groupUtils.getYear(dataValue, groupField.datatypeAttributes.dateFormat);
                 case groupTypes.DATE.quarter:
-                    return groupUtils.getQuarter(dateValue, groupField.datatypeAttributes.dateFormat);
+                    return groupUtils.getQuarter(dataValue, groupField.datatypeAttributes.dateFormat);
                 case groupTypes.DATE.fiscalQuarter:
-                    return groupUtils.getFiscalQuarter(dateValue, groupField.datatypeAttributes.dateFormat);
+                    return groupUtils.getFiscalQuarter(dataValue, groupField.datatypeAttributes.dateFormat);
                 case groupTypes.DATE.fiscalYear:
-                    return groupUtils.getFiscalYear(dateValue, groupField.datatypeAttributes.dateFormat);
+                    return groupUtils.getFiscalYear(dataValue, groupField.datatypeAttributes.dateFormat);
                 case groupTypes.DATE.decade:
-                    return groupUtils.getDecade(dateValue, groupField.datatypeAttributes.dateFormat);
+                    return groupUtils.getDecade(dataValue, groupField.datatypeAttributes.dateFormat);
                 }
                 break;
             case constants.DURATION:

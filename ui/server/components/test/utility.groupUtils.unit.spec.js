@@ -10,9 +10,9 @@ var moment = require('moment');
 /**
  * Unit tests for Group Utility functions
  */
-describe('Validate Group Utility', function() {
+describe('Validate Group Utility functions', function() {
 
-    function generateTestCases(positiveTests) {
+    function generateDateGroupingTestCases(positiveTests) {
 
         var testCases = [];
 
@@ -45,7 +45,7 @@ describe('Validate Group Utility', function() {
                         testDate: testDate,
                         displayDate: formattedDate,
                         displayFormat: dateFormatKey,
-                        momentFormat: obj[dateFormatKey],
+                        momentFormat: obj[dateFormatKey]
                     });
                 });
             });
@@ -98,7 +98,7 @@ describe('Validate Group Utility', function() {
 
         describe('validate getFirstDayOfWeek', function() {
             //  negative test cases
-            var testCases = generateTestCases(true);
+            var testCases = generateDateGroupingTestCases(true);
             testCases.forEach(function(test) {
                 it('Test case: ' + test.name, function() {
                     var mondayDate = groupUtils.getFirstDayOfWeek(test.displayDate, test.displayFormat);
@@ -109,7 +109,7 @@ describe('Validate Group Utility', function() {
 
         describe('validate getMonth', function() {
             //  positive test cases
-            var testCases = generateTestCases(true);
+            var testCases = generateDateGroupingTestCases(true);
             testCases.forEach(function(test) {
                 it('Test case: ' + test.name, function() {
                     var month = groupUtils.getMonth(test.displayDate, test.displayFormat);
@@ -120,7 +120,7 @@ describe('Validate Group Utility', function() {
 
         describe('validate getYear', function() {
             //  positive test cases
-            var testCases = generateTestCases(true);
+            var testCases = generateDateGroupingTestCases(true);
             testCases.forEach(function(test) {
                 it('Test case: ' + test.name, function() {
                     var year = groupUtils.getYear(test.displayDate, test.displayFormat);
@@ -131,7 +131,7 @@ describe('Validate Group Utility', function() {
 
         describe('validate getQuarter', function() {
             //  positive test cases
-            var testCases = generateTestCases(true);
+            var testCases = generateDateGroupingTestCases(true);
             testCases.forEach(function(test) {
                 it('Test case: ' + test.name, function() {
                     var quarter = groupUtils.getQuarter(test.displayDate, test.displayFormat);
@@ -142,7 +142,7 @@ describe('Validate Group Utility', function() {
 
         describe('validate getFiscalQuarter', function() {
             //  positive test cases
-            var testCases = generateTestCases(true);
+            var testCases = generateDateGroupingTestCases(true);
             testCases.forEach(function(test) {
                 it('Test case: ' + test.name, function() {
                     var quarter = groupUtils.getFiscalQuarter(test.displayDate, test.displayFormat);
@@ -153,7 +153,7 @@ describe('Validate Group Utility', function() {
 
         describe('validate getFiscalYear', function() {
             //  positive test cases
-            var testCases = generateTestCases(true);
+            var testCases = generateDateGroupingTestCases(true);
             testCases.forEach(function(test) {
                 it('Test case: ' + test.name, function() {
                     var year = groupUtils.getFiscalYear(test.displayDate, test.displayFormat);
@@ -164,7 +164,7 @@ describe('Validate Group Utility', function() {
 
         describe('validate getDecade', function() {
             //  positive test cases
-            var testCases = generateTestCases(true);
+            var testCases = generateDateGroupingTestCases(true);
             testCases.forEach(function(test) {
                 it('Test case: ' + test.name, function() {
                     var decade = groupUtils.getDecade(test.displayDate, test.displayFormat);
@@ -175,7 +175,7 @@ describe('Validate Group Utility', function() {
 
         describe('validate negative test cases against date functions', function() {
             //  positive test cases
-            var testCases = generateTestCases(false);
+            var testCases = generateDateGroupingTestCases(false);
             testCases.forEach(function(test) {
                 var results = [];
                 it('Test case: ' + test.name, function() {

@@ -122,7 +122,15 @@
             return content;
         },
 
-        // Monday is first day of the wek
+        /**
+         * Return the first day of the week for a given date.  Monday is considered the
+         * first day.  Format of the date returned is based on the display input format
+         * parameter.
+         *
+         * @param displayDate
+         * @param displayFormat
+         * @returns {*}
+         */
         getFirstDayOfWeek: function(displayDate, displayFormat) {
             if (displayDate) {
                 let format = dateFormatter.generateFormat({dateFormat: displayFormat});
@@ -131,6 +139,14 @@
             return '';
         },
 
+        /**
+         * Return the Month and year for a given date.  The return format is
+         * MMM YYYY.
+         *
+         * @param displayDate
+         * @param displayFormat
+         * @returns {*}
+         */
         getMonth: function(displayDate, displayFormat) {
             if (displayDate) {
                 let format = dateFormatter.generateFormat({dateFormat: displayFormat});
