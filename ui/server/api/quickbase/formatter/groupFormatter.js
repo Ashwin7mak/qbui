@@ -51,12 +51,12 @@
             //  add N key/value pairs, with each pair representing a data
             //  cell that is displayed on a report row.
             records.forEach((record) => {
-                let displayColumns = {};
+                let columns = {};
                 record.forEach((column) => {
                     let fld = map.get(column.id);
-                    displayColumns[fld.name] = column.display;
+                    columns[fld.name] = column.display;
                 });
-                reportData.push(displayColumns);
+                reportData.push(columns);
             });
 
             data = groupTheData(groupFields, reportData, 0);
