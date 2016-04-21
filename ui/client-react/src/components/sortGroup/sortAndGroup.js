@@ -101,27 +101,6 @@ const SortAndGroup = React.createClass({
         return answer;
     },
 
- /*
-    props to receive
-        list of sort fields and ascend of descend  = array or fids, neg for descend, posit for ascend
-        list of group fields 3 max  array of fids, neg for descend, posit for ascend, how options
-        max num allowed to add
-
-    actions
-        actions to add a sort field / remove a sort field / toggle order of a sort field
-        action to add a group field and how to group enum / remove a group field / toggle order of a group field
-        action to apply the edited groups/sorts
-        action to cancel the edits
-        later? action to order the items in sort/grouplist
-
-    states to maintain
-        dialog hidden shown
-        edited groups array - last field selected -
-        edited sorts array
-
-    queries for is field in list of sort fields2, in list of group fields
-
-  */
 
     /**
      * Prepares the menu button used to show/hide the dialog of sort and group options when clicked
@@ -134,6 +113,7 @@ const SortAndGroup = React.createClass({
         // and to not handle any outside clicks while the dialog is open
         let SortAndGroupDialogWrapped = closeOnEscape(thwartClickOutside(
                             SortAndGroupDialog, (e) => this.isButton(e)));
+
 
         return (
             <div ref="sortAndGroupContainer" className="sortAndGroupContainer">
@@ -155,6 +135,7 @@ const SortAndGroup = React.createClass({
                          onClose={() => this.hide()}
                          onEntering={this.props.onMenuEnter} onExited={this.props.onMenuExit} >
                     <SortAndGroupDialogWrapped  show={this.state.show}
+                                                reportData={this.props.reportData}
                                                 onClose={() => this.hide()}/>
                 </Overlay>
             </div>

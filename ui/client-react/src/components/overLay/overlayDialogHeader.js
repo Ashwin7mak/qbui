@@ -14,7 +14,21 @@ var OverlayDialogHeader = React.createClass({
 
     smallHeaderRender() {
         return (
-            <div>TBD..</div>
+            <div className="overlayDialogHeader">
+                <div className="overlayLeft">
+                    <Button onClick={this.props.onCancel}><QBicon icon={"close"}/></Button>
+                </div>
+
+                <div className="overlayTitle overlayCenter">
+                    <I18nMessage message={this.props.dialogTitleI18N} />
+                </div>
+
+                <div className="overlayLeft">
+                    <Button  onClick={this.props.onApply}>
+                    <I18nMessage message="apply"/>
+                    </Button>
+                </div>
+            </div>
         );
     },
 

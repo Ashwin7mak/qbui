@@ -137,6 +137,8 @@ export default {
                 fieldProps: "Feldeigenschaften"
             }
         },
-        cancel: "Stornieren"
+        cancel: "Stornieren",
+        apply: "Anwenden"
+
     }
 };

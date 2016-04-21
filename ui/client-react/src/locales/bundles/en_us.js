@@ -140,6 +140,7 @@ export default {
                 fieldProps: "Field properties"
             }
         },
-        cancel: "Cancel"
+        cancel: "Cancel",
+        apply: "Apply"
     }
 };

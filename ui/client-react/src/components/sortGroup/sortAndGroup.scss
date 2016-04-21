@@ -61,6 +61,7 @@
 
     }
     .fieldName {
+      color: $color11;
       flex-grow: 1;
     }
     .sortOrderIcon {
@@ -106,17 +107,21 @@
   }
 
   .dialogButtons {
-    margin-top: 10px;
     display: flex;
     flex-direction: row;
     justify-content: flex-end;
     align-items: center;
     margin-top: auto;
+    padding: 20px 0 5px 0;
     .reset {
       margin-right : 10px;
     }
   }
+  .dialogBand {
+      display: none;
+  }
 }
+
 .fieldsPanel {
   position: absolute;
   height: 98%;
@@ -129,6 +134,58 @@
     border : 1px solid #ddd;
     .list-group-item:first-child {
       boder-radius : 0;
+    }
+  }
+}
+
+
+@include small-breakpoint {
+  .reportContainer .reportToolsAndContentContainer .reportToolbar
+
+  .sortAndGroupDialog {
+    position: fixed;
+    top: 0px;
+    left: 0px;
+    margin-top: 0;
+    margin-left: 0;
+    width: 100%;
+    max-width: $small-breakpoint-width;
+    min-height: 100%;
+    max-height: 400px;
+
+    .groupBySettings {
+      margin-top: 10px;
+      .fieldChoice {
+        background-color: $color1;
+        border-top-width: 3px;
+      }
+    }
+    .sortBySettings {
+      .fieldChoice {
+        border-top-width: 3px;
+      }
+    }
+
+    .settingsDialog {
+      padding: 5px 0 0;
+
+      .overlayDialogHeader {
+        border-bottom: 1px solid $color21;
+        padding: 0 10px 10px;
+      }
+      .title {
+        padding: 0 10px;
+      }
+    }
+
+    .dialogButtons {
+      display: none;
+    }
+    .dialogBand {
+      background-color: $color12;
+      display:flex;
+      padding: 15px;
+      justify-content: center;
     }
   }
 

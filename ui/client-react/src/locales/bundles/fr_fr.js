@@ -136,6 +136,7 @@ export default {
                 fieldProps: "Propriétés de champ"
             }
         },
-        cancel: "Annuler"
+        cancel: "Annuler",
+        apply: "Aappliquer"
     }
 };
