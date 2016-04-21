@@ -18,7 +18,7 @@ describe('Validate GroupFormatter unit tests', function() {
             return (0 | Math.random() * 10000000);
         }
         if (dataType === constants.DATE) {
-            return dateUtils.formatDate(new Date(), '%M/%D/%Y %h:%m');
+            return dateUtils.formatDate(new Date(), '%M-%D-%Y');
         }
         return '';
     }
@@ -126,6 +126,14 @@ describe('Validate GroupFormatter unit tests', function() {
             {message: 'USER: Input with multiple grouping against same fid', numFields: 5, numRecords: 2, gList: '1:I.1:V', dataType: constants.USER},
             //  DATE data type
             {message: 'DATE: Input with multiple grouping against same fid', numFields: 5, numRecords: 2, gList: '1:V', dataType: constants.DATE},
+            {message: 'DATE: Input with multiple grouping against same fid', numFields: 5, numRecords: 2, gList: '1:D', dataType: constants.DATE},
+            {message: 'DATE: Input with multiple grouping against same fid', numFields: 5, numRecords: 2, gList: '1:W', dataType: constants.DATE},
+            {message: 'DATE: Input with multiple grouping against same fid', numFields: 5, numRecords: 2, gList: '1:M', dataType: constants.DATE},
+            {message: 'DATE: Input with multiple grouping against same fid', numFields: 5, numRecords: 2, gList: '1:Y', dataType: constants.DATE},
+            {message: 'DATE: Input with multiple grouping against same fid', numFields: 5, numRecords: 2, gList: '1:Q', dataType: constants.DATE},
+            {message: 'DATE: Input with multiple grouping against same fid', numFields: 5, numRecords: 2, gList: '1:U', dataType: constants.DATE},
+            {message: 'DATE: Input with multiple grouping against same fid', numFields: 5, numRecords: 2, gList: '1:FY', dataType: constants.DATE},
+            {message: 'DATE: Input with multiple grouping against same fid', numFields: 5, numRecords: 2, gList: '1:T', dataType: constants.DATE},
             //  NUMERIC data type
             {message: 'NUMERIC: Input with multiple grouping against same fid', numFields: 5, numRecords: 2, gList: '1:V', dataType: constants.NUMERIC}
         ];
