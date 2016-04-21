@@ -3,6 +3,8 @@
 
     var constants = require('../../api/constants');
     var groupTypes = require('../../api/groupTypes');
+    var moment = require('moment');
+    var dateFormatter = require('../../api/quickbase/formatter/dateTimeFormatter');
 
     module.exports = {
 
@@ -48,6 +50,9 @@
                 }
                 return false;
             case constants.NUMERIC:
+            case constants.RATING:
+            case constants.CURRENCY:
+            case constants.PERCENT:
                 switch (groupType) {
                 case groupTypes.NUMERIC.equals: return true;
                 case groupTypes.NUMERIC.range: return true;
@@ -115,7 +120,68 @@
                 // do nothing..just return the original content
             }
             return content;
+        },
+
+        // Monday is first day of the wek
+        getFirstDayOfWeek: function(displayDate, displayFormat) {
+            if (displayDate) {
+                let format = dateFormatter.generateFormat({dateFormat: displayFormat});
+                return moment(displayDate, format).startOf('isoWeek').format(format);
+            }
+            return '';
+        },
+
+        getMonth: function(displayDate, displayFormat) {
+            if (displayDate) {
+                let format = dateFormatter.generateFormat({dateFormat: displayFormat});
+                return moment(displayDate, format).format('MMM YYYY');
+            }
+            return '';
+        },
+
+        getYear: function(displayDate, displayFormat) {
+            if (displayDate) {
+                let format = dateFormatter.generateFormat({dateFormat: displayFormat});
+                return moment(displayDate, format).format('YYYY');
+            }
+            return '';
+        },
+
+        getQuarter: function(displayDate, displayFormat) {
+            if (displayDate) {
+                let format = dateFormatter.generateFormat({dateFormat: displayFormat});
+                let momentDate = moment(displayDate, format);
+                return constants.GROUPING.QUARTER + momentDate.quarter() + ' ' + momentDate.format('YYYY');
+            }
+            return '';
+        },
+
+        getFiscalQuarter: function(displayDate, displayFormat) {
+            if (displayDate) {
+                let format = dateFormatter.generateFormat({dateFormat: displayFormat});
+                let momentDate = moment(displayDate, format);
+                return constants.GROUPING.QUARTER + momentDate.quarter() + ' ' + constants.GROUPING.FISCAL_YR + momentDate.format('YYYY');
+            }
+            return '';
+        },
+
+        getFiscalYear: function(displayDate, displayFormat) {
+            if (displayDate) {
+                let format = dateFormatter.generateFormat({dateFormat:displayFormat});
+                return constants.GROUPING.FISCAL_YR + moment(displayDate, format).format('YYYY');
+            }
+            return '';
+        },
+
+        getDecade: function(displayDate, displayFormat) {
+            if (displayDate) {
+                let format = dateFormatter.generateFormat({dateFormat:displayFormat});
+                let year = moment(displayDate, format).year();
+                return (year - (year % 10)) + '';   // return as a string
+            }
+            return '';
         }
+
     };
 
 }());

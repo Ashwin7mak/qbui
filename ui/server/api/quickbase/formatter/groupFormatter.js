@@ -40,6 +40,7 @@
         if (groupFields && fields && records) {
             let map = new Map();
             let reportData = [];
+            let rawData = [];
 
             fields.forEach((field) => {
                 map.set(field.id, field);
@@ -49,12 +50,12 @@
             //  add N key/value pairs, with each pair representing a data
             //  cell that is displayed on a report row.
             records.forEach((record) => {
-                let columns = {};
+                let displayColumns = {};
                 record.forEach((column) => {
                     let fld = map.get(column.id);
-                    columns[fld.name] = column.display;
+                    displayColumns[fld.name] = column.display;
                 });
-                reportData.push(columns);
+                reportData.push(displayColumns);
             });
 
             data = groupTheData(groupFields, reportData, 0);
@@ -83,22 +84,32 @@
             let groupType = groupFields[idx].groupType;
             let groupField = groupFields[idx].field;
 
+            //  the data value to group by
+            let dataValue = record[groupField.name];
+
             //  Group the data based on the data type.  Grouping is supported
             //  for DATE, DURATION, EMAIL, NUMERIC, TEXT and USER data types.
             switch (groupField.datatypeAttributes.type) {
             case constants.DATE:
                 switch (groupType) {
                 case groupTypes.DATE.equals:
-                    return record[groupField.name];
-                //jira: qbse-21434
-                //case groupTypes.DATE.day:
-                //case groupTypes.DATE.week:
-                //case groupTypes.DATE.month:
-                //case groupTypes.DATE.year:
-                //case groupTypes.DATE.quarter:
-                //case groupTypes.DATE.fiscalQuarter:
-                //case groupTypes.DATE.fiscalYear:
-                //case groupTypes.DATE.decade:
+                    return dataValue;
+                case groupTypes.DATE.day:
+                    return dataValue;
+                case groupTypes.DATE.week:
+                    return groupUtils.getFirstDayOfWeek(dateValue, groupField.datatypeAttributes.dateFormat);
+                case groupTypes.DATE.month:
+                    return groupUtils.getMonth(dateValue, groupField.datatypeAttributes.dateFormat);
+                case groupTypes.DATE.year:
+                    return groupUtils.getYear(dateValue, groupField.datatypeAttributes.dateFormat);
+                case groupTypes.DATE.quarter:
+                    return groupUtils.getQuarter(dateValue, groupField.datatypeAttributes.dateFormat);
+                case groupTypes.DATE.fiscalQuarter:
+                    return groupUtils.getFiscalQuarter(dateValue, groupField.datatypeAttributes.dateFormat);
+                case groupTypes.DATE.fiscalYear:
+                    return groupUtils.getFiscalYear(dateValue, groupField.datatypeAttributes.dateFormat);
+                case groupTypes.DATE.decade:
+                    return groupUtils.getDecade(dateValue, groupField.datatypeAttributes.dateFormat);
                 }
                 break;
             case constants.DURATION:
@@ -122,9 +133,12 @@
                 //}
                 break;
             case constants.NUMERIC:
+            case constants.CURRENCY:    // CURRENCY is a sub-type of NUMERIC
+            case constants.PERCENT:     // PERCENT is a sub-type of NUMERIC
+            case constants.RATING:      // RATING is a sub-type of NUMERIC
                 switch (groupType) {
                 case groupTypes.NUMERIC.equals:
-                    return record[groupField.name];
+                    return dataValue;
                 //jira: qbse-21427
                 //case groupTypes.NUMERIC.range:
                 //case groupTypes.NUMERIC.thousandth:
@@ -143,21 +157,21 @@
             case constants.TEXT:
                 switch (groupType) {
                 case groupTypes.TEXT.equals:
-                    return record[groupField.name];
+                    return dataValue;
                 case groupTypes.TEXT.firstLetter:
-                    return groupUtils.getFirstLetter(record[groupField.name]);
+                    return groupUtils.getFirstLetter(dataValue);
                 case groupTypes.TEXT.firstWord:
-                    return groupUtils.getFirstWord(record[groupField.name]);
+                    return groupUtils.getFirstWord(dataValue);
                 }
                 break;
             case constants.USER:
                 switch (groupType) {
                 case groupTypes.USER.equals:
-                    return record[groupField.name];
+                    return dataValue;
                 case groupTypes.USER.firstLetter:
-                    return groupUtils.getFirstLetter(record[groupField.name]);
+                    return groupUtils.getFirstLetter(dataValue);
                 case groupTypes.USER.firstWord:
-                    return groupUtils.getFirstWord(record[groupField.name]);
+                    return groupUtils.getFirstWord(dataValue);
                 }
                 break;
             default:
