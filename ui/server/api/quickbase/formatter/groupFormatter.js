@@ -261,7 +261,6 @@
                                         field.grouped = true;
                                         groupBy.fields.push(
                                             {field: field,
-                                                order: groupFidId > 0,
                                                 groupType: groupType}
                                         );
                                     } else {
