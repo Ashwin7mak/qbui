@@ -224,23 +224,7 @@ let AGGrid = React.createClass({
             {"name": Locale.getMessage("report.menu.fieldProps")});
         return menuItems;
     },
-    /**
-     * when we scroll the grid wrapper, hide the add record
-     * icon for a bit
-     */
-    onScrollGriddleWrapper() {
-        if (this.scrollTimer) {
-            return;
-        }
-        const flux = this.getFlux();
 
-        flux.actions.scrollingReport(true);
-
-        this.scrollTimer = setTimeout(() => {
-            this.scrollTimer = null;
-            flux.actions.scrollingReport(false);
-        }, 500);
-    },
     /**
      * Callback that the grid uses to figure out whether to show grouped data or not.
      * And if so then how to use the rowItems to figure out grouped info.
@@ -282,10 +266,10 @@ let AGGrid = React.createClass({
         this.gridOptions.context.flux = this.getFlux();
         this.gridOptions.getNodeChildDetails = this.getNodeChildDetails;
 
-        this.refs.griddleWrapper.addEventListener("scroll", this.onScrollGriddleWrapper);
+        this.refs.griddleWrapper.addEventListener("scroll", this.props.onScroll);
     },
     componentWillUnmount() {
-        this.refs.griddleWrapper.removeEventListener("scroll", this.onScrollGriddleWrapper);
+        this.refs.griddleWrapper.removeEventListener("scroll", this.props.onScroll);
     },
 
 // For some reason react always thinks the component needs to be re-rendered because props have changed.

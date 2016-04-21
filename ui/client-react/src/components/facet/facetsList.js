@@ -41,7 +41,7 @@ var FacetsList = React.createClass({
 
     getDefaultProps() {
         return {
-            isCollapsed() {return false;}
+            isCollapsed() {return false;},
         };
     },
 

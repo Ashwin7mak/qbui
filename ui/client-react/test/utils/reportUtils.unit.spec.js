@@ -5,11 +5,27 @@ describe('ReportUtils - test getSortList', () => {
         {test:'empty input', input:'', output: ''},
         {test:'null input', input:null, output: ''},
         {test:'empty array input', input:[], output: ''},
-        {test:'valid input', input:[3, -4], output: '3.-4'}
+        {test:'valid input', input:[3, -4], output: '3.-4'},
+        {test:'valid input', input:['3', '-4'], output: '3.-4'},
+        {test:'valid input with grouping', input:['3:V', '-4:I'], output: '3:V.-4:I'}
     ];
     dataProvider.forEach(function(data) {
         it(data.test, function() {
             expect(ReportUtils.getSortListString(data.input)).toBe(data.output);
+        });
+    });
+});
+
+describe('ReportUtils - test getFidList', () => {
+    var dataProvider = [
+        {test:'empty input', input:'', output: ''},
+        {test:'null input', input:null, output: ''},
+        {test:'empty array input', input:[], output: ''},
+        {test:'valid input', input:[3, 4], output: '3.4'}
+    ];
+    dataProvider.forEach(function(data) {
+        it(data.test, function() {
+            expect(ReportUtils.getFidListString(data.input)).toBe(data.output);
         });
     });
 });
@@ -24,6 +40,24 @@ describe('ReportUtils - test getSortFids', () => {
     dataProvider.forEach(function(data) {
         it(data.test, function() {
             expect(ReportUtils.getSortFids(data.input)).toEqual(data.output);
+        });
+    });
+});
+
+describe('ReportUtils - test doesSortListIncludeGrouping', () => {
+    var dataProvider = [
+        {test:'empty input', input:'', output: false},
+        {test:'null input', input:null, output: false},
+        {test:'empty array input', input:[], output: false},
+        {test:'non array input', input:'5', output: false},
+        {test:'valid input', input:'3.-4', output: false},
+        {test:'valid input 2', input:'3.-4', output: false},
+        {test:'valid input with grouping', input:'3:V.-4:I', output: true},
+        {test:'valid input with grouping 2', input:'3.-4:I', output: true}
+    ];
+    dataProvider.forEach(function(data) {
+        it(data.test, function() {
+            expect(ReportUtils.hasGroupingFids(data.input)).toBe(data.output);
         });
     });
 });

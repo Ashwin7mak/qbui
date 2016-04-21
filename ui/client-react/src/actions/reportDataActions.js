@@ -12,31 +12,21 @@ import ReportUtils from '../utils/reportUtils';
 
 let logger = new Logger();
 
-// TODO: change this to enable/disable grouped view on report
-const GROUPING_ON = false;
-
-//  Model object referenced by UI layer for presentation of a report.
-//  TODO: initial implementation...still in progress..
+//  Report model object used by the client to render a report
 let reportModel = {
-    //  build a report model object that is used by the front-end to render a report
+
     set: function(reportMeta, reportData) {
         var obj = {
             metaData: {},
             recordData: {}
         };
 
+        //  make available to the client the report meta data
         if (reportMeta && reportMeta.data) {
-            //  make available to the client the meta data that we think is necessary
             obj.metaData = reportMeta.data;
-
-            ////TODO: pull this from the real report meta data
-            obj.metaData.hasGrouping = GROUPING_ON;
-            ////  TODO: not sure if sortList/grouping and summary info is needed OR if needed,
-            ////  TODO: that it is organized in the best way...
-            ////obj.sortList = reportMeta.data.sortList;
-            ////obj.summary = reportMeta.data.summary;
         }
 
+        //  make available to the client the report grid data
         if (reportData && reportData.data) {
             obj.recordData = reportData.data;
         }
@@ -80,10 +70,13 @@ let reportDataActions = {
                         //      sortList: ['2', '1:V', '33:C']
                         //      glist: '2.1:V.33:C'
                         //
+                        //  NOTE: the gList parameter is used by the node layer only;  it is ignored on the api server.
+                        //
                         if (reportMetaData.data) {
-                            queryParams[query.GLIST_PARAM] = reportMetaData.data.sortList ? reportMetaData.data.sortList.join('.') : '';
-                        } else {
-                            queryParams[query.GLIST_PARAM] = '';
+                            let groupList = ReportUtils.getSortListString(reportMetaData.data.sortList);
+                            if (ReportUtils.hasGroupingFids(groupList)) {
+                                queryParams[query.GLIST_PARAM] = groupList;
+                            }
                         }
 
                         //  Node query parameters which are all optional and could be null/undefined
@@ -150,7 +143,7 @@ let reportDataActions = {
 
         //  Build the request query parameters needed to properly filter the report request based on the report
         //  meta data.  Information that could be sent include fid list, sort list, grouping and query parameters
-        function buildRequestQuery(reportMetaData, facetQueryExpression, searchExpression) {
+        function buildRequestQuery(reportMetaData, facetQueryExpression) {
             var queryParams = {};
 
             //required query params
@@ -161,36 +154,46 @@ let reportDataActions = {
             //for the optional ones, if something is null/undefined pull from report's meta data
             if (reportMetaData && reportMetaData.data) {
                 overrideQueryParams = overrideQueryParams || {};
+
                 if (overrideQueryParams[query.COLUMNS_PARAM]) {
                     queryParams[query.COLUMNS_PARAM] = overrideQueryParams[query.COLUMNS_PARAM];
                 } else {
-                    queryParams[query.COLUMNS_PARAM] = reportMetaData.data ? reportMetaData.data.fids : "";
-                }
-                if (overrideQueryParams[query.SORT_LIST_PARAM]) {
-                    queryParams[query.SORT_LIST_PARAM] = overrideQueryParams[query.SORT_LIST_PARAM];
-                } else {
-                    queryParams[query.SORT_LIST_PARAM] = ReportUtils.getSortStringFromSortListArray(reportMetaData.data.sortList);
+                    if (reportMetaData.data && reportMetaData.data.fids) {
+                        queryParams[query.COLUMNS_PARAM] = ReportUtils.getFidListString(reportMetaData.data.fids);
+                    }
                 }
 
-                //  Optional parameter used by the Node layer to return the result set in grouping order for
-                //  easier client rendering of the result set.  The input sortList is a string array of
-                //  fids/grouptype, delimited by ':'.  The groupList parameter converts the array
-                //  into a string, with each individual entry separated by a '.' and included on the request
-                //  as a query parameter.  Example:
+                //  Optional parameters used to return a result set in sorted and/or grouped order for
+                //  easier client rendering of the result set data.
                 //
-                //      sortList: ['2', '1:V', '33:C']
-                //      glist: '2.1:V.33:C'
-                //TODO: make this dependent on override param
-                queryParams[query.GLIST_PARAM] = ReportUtils.getSortListString(reportMetaData.data.sortList);
+                //      sortList: ==>  '2.1.33'
+                //      glist: ==> '2.1:V.33:C'
+                //
+                //  NOTE: the optional gList parameter is used by the node layer only;  it is ignored on the api server.
+                //
+                let groupList = '';
+                if (overrideQueryParams[query.SORT_LIST_PARAM]) {
+                    let sortList = ReportUtils.getSortFids(overrideQueryParams[query.SORT_LIST_PARAM]);
+                    queryParams[query.SORT_LIST_PARAM] = ReportUtils.getSortListString(sortList);
+                    groupList = overrideQueryParams[query.SORT_LIST_PARAM];
+                } else {
+                    /*eslint no-lonely-if:0*/
+                    if (reportMetaData.data.sortList) {
+                        queryParams[query.SORT_LIST_PARAM] = ReportUtils.getSortStringFromSortListArray(reportMetaData.data.sortList);
+                        groupList = ReportUtils.getSortListString(reportMetaData.data.sortList);
+                    }
+                }
+                if (ReportUtils.hasGroupingFids(groupList)) {
+                    queryParams[query.GLIST_PARAM] = groupList;
+                }
 
                 if (overrideQueryParams[query.QUERY_PARAM]) {
                     queryParams[query.QUERY_PARAM] = overrideQueryParams[query.QUERY_PARAM];
                 } else {
-                    //  Concatenate facet expression(if any) and search filter(if any) into single
-                    //  query expression where each individual expression is 'AND'ed with the other.
-                    //  To optimize query performance, order the array elements 1..n in order of
-                    //  significance/most targeted selection as the outputted query is built starting
-                    //  at offset 0.
+                    //  Concatenate facet expression(if any) and search filter(if any) into single query expression
+                    //  where each individual expression is 'AND'ed with the other.  To optimize query performance,
+                    //  order the array elements 1..n in order of significance/most targeted selection as the
+                    //  outputted query is built starting at offset 0.
                     let filterQueries = [];
                     if (reportMetaData.data.query) {
                         filterQueries.push(reportMetaData.data.query);
@@ -198,8 +201,9 @@ let reportDataActions = {
                     if (facetQueryExpression) {
                         filterQueries.push(facetQueryExpression.data);
                     }
-                    if (searchExpression) {
-                        filterQueries.push(QueryUtils.parseStringIntoAllFieldsContainsExpression(searchExpression));
+
+                    if (filter && filter.search) {
+                        filterQueries.push(QueryUtils.parseStringIntoAllFieldsContainsExpression(filter.search));
                     }
                     queryParams[query.QUERY_PARAM] = QueryUtils.concatQueries(filterQueries);
                 }
@@ -223,8 +227,7 @@ let reportDataActions = {
                 var promises = [];
                 promises.push(reportService.getReport(appId, tblId, rptId));
 
-                // The filter parameter may contain a searchExpression and facetExpression
-                let searchExpression = filter ? filter.search : '';
+                // The filter parameter may contain a facetExpression
                 let facetExpression = filter ? filter.facet : '';
                 if (facetExpression !== '' && facetExpression.length) {
                     promises.push(reportService.parseFacetExpression(facetExpression));
@@ -232,7 +235,7 @@ let reportDataActions = {
 
                 Promise.all(promises).then(
                     (response) => {
-                        var queryParams = buildRequestQuery(response[0], response[1], searchExpression);
+                        var queryParams = buildRequestQuery(response[0], response[1]);
 
                         //  Get the filtered records
                         recordService.getRecords(appId, tblId, queryParams).then(

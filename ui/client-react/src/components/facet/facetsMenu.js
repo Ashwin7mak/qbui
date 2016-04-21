@@ -274,7 +274,7 @@ const FacetsMenu = React.createClass({
                                     <div className="facetsRelativePos">
                                         <FacetsListWrapped
                                         key= {"FacetsList." + menuKey}
-                                        popoverId={menuKey}
+                                        popoverId={menuKey || 1}
                                         isCollapsed={this.isCollapsed}
                                         handleToggleCollapse={this.handleToggleCollapse}
                                         isRevealed={this.isRevealed}

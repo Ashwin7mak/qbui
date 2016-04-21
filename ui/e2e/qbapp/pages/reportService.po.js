@@ -47,6 +47,9 @@
         this.leftNavUserGlobActEl = this.leftNavGlobActsListEl.get(1);
         this.leftNavUserGlobActLabelEl = this.leftNavUserGlobActEl.element(by.className('navLabel'));
 
+        // Report Trowser
+        this.reportTrowserContent = element(by.className('trowserContent'));
+
         // Top Nav
         this.topNavDivEl = element(by.className('topNav'));
         // Top Nav on small breakpoint
@@ -123,6 +126,7 @@
          * @param reportName
          */
         this.selectReport = function(reportGroup, reportName) {
+            var self = this;
             // Let the trowser animate
             e2eBase.sleep(browser.params.smallSleep);
 
@@ -159,7 +163,9 @@
                         return text === reportName;
                     });
                 }).then(function(reportLinkElements) {
-                    return reportLinkElements[0].click();
+                    return reportLinkElements[0].click().then(function() {
+                        e2ePageBase.waitForElementToBeInvisible(self.reportTrowserContent);
+                    });
                 });
             });
         };

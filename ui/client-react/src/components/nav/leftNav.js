@@ -14,8 +14,8 @@ import './leftNav.scss';
 let LeftNav = React.createClass({
 
     propTypes: {
-        expanded:React.PropTypes.bool.isRequired,
-        visible:React.PropTypes.bool.isRequired,
+        expanded:React.PropTypes.bool,
+        visible:React.PropTypes.bool,
         appsListOpen:React.PropTypes.bool.isRequired,
         selectedAppId:React.PropTypes.string,
         selectedTableId:React.PropTypes.string,
@@ -23,6 +23,13 @@ let LeftNav = React.createClass({
         onSelect:React.PropTypes.func,
         onSelectReports:React.PropTypes.func,
         globalActions:React.PropTypes.element
+    },
+
+    getDefaultProps() {
+        return {
+            expanded: true,
+            visible: true
+        };
     },
 
     /**

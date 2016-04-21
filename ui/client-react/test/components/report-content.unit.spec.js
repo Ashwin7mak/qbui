@@ -1,7 +1,7 @@
 import React from 'react';
 import TestUtils from 'react-addons-test-utils';
 import ReportContent from '../../src/components/report/dataTable/reportContent';
-import GriddleTable  from '../../src/components/dataTable/griddleTable/griddleTable';
+import CardViewList from '../../src/components/dataTable/cardView/cardViewList';
 import AGGrid  from '../../src/components/dataTable/agGrid/agGrid';
 import {reactCellRendererFactory} from 'ag-grid-react';
 import {NumericFormatter, DateFormatter} from '../../src/components/dataTable/griddleTable/formatters';
@@ -20,15 +20,10 @@ var AGGridMock = React.createClass({
     }
 });
 
-var GriddleMock = React.createClass({
-    contextTypes: {
-        allowCardSelection: React.PropTypes.func,
-        onToggleCardSelection: React.PropTypes.func,
-        onRowSelected: React.PropTypes.func
-    },
+var CardViewListMock = React.createClass({
     render() {
         return (
-            <div>mock griddle</div>
+            <div>mock CardViewListMock</div>
         );
     }
 });
@@ -143,7 +138,11 @@ const fakeReportData_attributes = {
     }
 };
 
-
+const flux = {
+    actions: {
+        scrollingReport(scrolling) { }
+    }
+};
 
 describe('ReportContent functions', () => {
     'use strict';
@@ -159,19 +158,19 @@ describe('ReportContent functions', () => {
     });
 
     it('test render of component', () => {
-        component = TestUtils.renderIntoDocument(<ReportContent
+        component = TestUtils.renderIntoDocument(<ReportContent flux={flux}
             reportData={fakeReportData_empty} reportHeader={header_empty}/>);
         expect(TestUtils.isCompositeComponent(component)).toBeTruthy();
     });
 
     it('test render of empty component', () => {
-        component = TestUtils.renderIntoDocument(<ReportContent
+        component = TestUtils.renderIntoDocument(<ReportContent flux={flux}
             reportData={fakeReportData_empty} reportHeader={header_empty}/>);
         expect(TestUtils.scryRenderedComponentsWithType(component, AGGridMock).length).toEqual(1);
     });
 
     it('test render of data without attributes', () => {
-        component = TestUtils.renderIntoDocument(<ReportContent
+        component = TestUtils.renderIntoDocument(<ReportContent flux={flux}
             reportData={fakeReportData_simple}  reportHeader={header_empty}/>);
         var agGrid = TestUtils.scryRenderedComponentsWithType(component, AGGridMock);
         expect(agGrid.length).toEqual(1);
@@ -185,7 +184,8 @@ describe('ReportContent functions', () => {
         ReportContent.__Rewire__('reactCellRendererFactory', reactCellRendererFactoryMock);
 
         fakeReportData_attributes.data.columns = cols_with_numeric_field;
-        component = TestUtils.renderIntoDocument(<ReportContent reportData={fakeReportData_attributes}
+        component = TestUtils.renderIntoDocument(<ReportContent flux={flux}
+                                                                reportData={fakeReportData_attributes}
                                                                 reportHeader={header_empty}/>);
         var agGrid = TestUtils.scryRenderedComponentsWithType(component, AGGridMock);
         expect(agGrid.length).toEqual(1);
@@ -203,7 +203,7 @@ describe('ReportContent functions', () => {
         ReportContent.__Rewire__('reactCellRendererFactory', reactCellRendererFactoryMock);
 
         fakeReportData_attributes.data.columns = cols_with_date_field;
-        component = TestUtils.renderIntoDocument(<ReportContent
+        component = TestUtils.renderIntoDocument(<ReportContent flux={flux}
             reportData={fakeReportData_attributes} reportHeader={header_empty}/>);
         var agGrid = TestUtils.scryRenderedComponentsWithType(component, AGGridMock);
         expect(agGrid.length).toEqual(1);
@@ -218,7 +218,7 @@ describe('ReportContent functions', () => {
 
     it('test render of data with bold attribute', () => {
         fakeReportData_attributes.data.columns = cols_with_bold_attrs;
-        component = TestUtils.renderIntoDocument(<ReportContent
+        component = TestUtils.renderIntoDocument(<ReportContent flux={flux}
             reportData={fakeReportData_attributes} reportHeader={header_empty}/>);
         var agGrid = TestUtils.scryRenderedComponentsWithType(component, AGGridMock);
         expect(agGrid.length).toEqual(1);
@@ -229,7 +229,7 @@ describe('ReportContent functions', () => {
 
     it('test render of data with nowrap attribute', () => {
         fakeReportData_attributes.data.columns = cols_with_nowrap_attrs;
-        component = TestUtils.renderIntoDocument(<ReportContent
+        component = TestUtils.renderIntoDocument(<ReportContent flux={flux}
             reportData={fakeReportData_attributes} reportHeader={header_empty}/>);
         var agGrid = TestUtils.scryRenderedComponentsWithType(component, AGGridMock);
         expect(agGrid.length).toEqual(1);
@@ -238,8 +238,8 @@ describe('ReportContent functions', () => {
         expect(col.cellClass).toMatch('NoWrap');
     });
 
-    it('test render of griddle for touch context', () => {
-        ReportContent.__Rewire__('GriddleTable', GriddleMock);
+    it('test render of CardViewListMock for touch context', () => {
+        ReportContent.__Rewire__('CardViewList', CardViewListMock);
         var TestParent = React.createFactory(React.createClass({
 
             childContextTypes: {
@@ -252,7 +252,7 @@ describe('ReportContent functions', () => {
                 return {reportData:fakeReportData_simple, reportHeader:header_empty};
             },
             render() {
-                return <ReportContent ref="refReportContent" reportData={this.state.reportData} reportHeader={this.state.reportHeader}/>;
+                return <ReportContent ref="refReportContent" flux={flux} reportData={this.state.reportData} reportHeader={this.state.reportHeader}/>;
             }
         }));
         var parent = TestUtils.renderIntoDocument(TestParent());
@@ -262,9 +262,9 @@ describe('ReportContent functions', () => {
             reportHeader: header_empty
         });
 
-        var griddle = TestUtils.scryRenderedComponentsWithType(parent.refs.refReportContent, GriddleMock);
-        expect(griddle.length).toEqual(1);
-        ReportContent.__ResetDependency__('GriddleTable');
+        var cardViewListMock = TestUtils.scryRenderedComponentsWithType(parent.refs.refReportContent, CardViewListMock);
+        expect(cardViewListMock.length).toEqual(1);
+        ReportContent.__ResetDependency__('CardViewList');
     });
 
 

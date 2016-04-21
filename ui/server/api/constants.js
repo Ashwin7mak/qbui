@@ -48,7 +48,10 @@
         //Formatting request parameter
         REQUEST_PARAMETER : {
             FORMAT: 'format',
-            FACET_EXPRESSION: 'facetexpression'
+            FACET_EXPRESSION: 'facetexpression',
+            GROUP_LIST: 'glist',
+            LIST_DELIMITER: '.',
+            GROUP_DELIMITER: ':'
         }
 
 

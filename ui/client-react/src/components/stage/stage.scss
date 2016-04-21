@@ -11,15 +11,29 @@ $breadCrumbsSeparatorColor: #c7c7c7;
     .stageLeft {
         flex:1 1 auto;
         padding-left:10px;
+        white-space: nowrap;
+        overflow:hidden;
         .stageHeadline {
-            white-space: nowrap;
+
+        }
+        .breadCrumbs {
+            line-height:40px;
+            display:flex;
+            align-items:center;
+            > .qbIcon {
+                margin-right:6px;
+            }
             > * {
-                display:inline-block;
-                overflow: hidden;
-                text-overflow: ellipsis;
-                .breadCrumbsSeparator {
-                    color: $breadCrumbsSeparatorColor;
-                }
+                flex: 0 0 auto;
+
+            }
+            > *:last-child {
+                flex: 0 1 auto;
+                overflow:hidden;
+                text-overflow:ellipsis;
+            }
+            .breadCrumbsSeparator {
+                color: $breadCrumbsSeparatorColor;
             }
         }
         .qbIcon {
