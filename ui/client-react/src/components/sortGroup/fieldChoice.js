@@ -25,22 +25,24 @@ const FieldChoice = React.createClass({
         let byMessage = this.props.then ?
             "report.sortAndGroup.thenBy" : "report.sortAndGroup.by";
         return (
-            (<div className={"fieldChoice " + this.props.type + isEmpty}>
+            (<div className={"fieldChoice " + this.props.type + isEmpty}  tabIndex="0">
                   <span className="prefix">
                       <I18nMessage message={byMessage}/>
                   </span>
                 <span className="fieldName">{name}</span>
                 { order &&
-                <span className={"sortOrderIcon " + order}>
+                <span className={"sortOrderIcon " + order} tabIndex="0" >
                         <QBicon icon={"caret-filled-"  +                                  order} />
                     </span>
                 }
                  <span>
                     { hasField ?
-                        <QBicon className="groupFieldDelete"
-                                icon="clear-mini"/> :
-                        <QBicon className="groupFieldOpen"
-                                icon="caret-right"/>
+                        <span className="groupFieldDeleteIcon" tabIndex="0">
+                            <QBicon className="groupFieldDelete"
+                                icon="clear-mini"/></span> :
+                        <span className="groupFieldOpenIcon" tabIndex="0" >
+                            <QBicon className="groupFieldOpen"                                 icon="caret-right"/>
+                        </span>
                     }
                 </span>
             </div>)

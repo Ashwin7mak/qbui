@@ -77,11 +77,11 @@ var SortAndGroupDialog = React.createClass({
                                  </div>
                             </div>
                              <div className="dialogButtons">
-                                 <span className="reset">Reset</span>
+                                 <span className="reset" tabIndex="0">Reset</span>
                                  <Button className="apply" bsStyle="primary">Apply</Button>
                              </div>
                             <div className="dialogBand">
-                                <div className="reset">Reset</div>
+                                <div className="reset" tabIndex="0">Reset</div>
                             </div>
                             </div>
                         </div>

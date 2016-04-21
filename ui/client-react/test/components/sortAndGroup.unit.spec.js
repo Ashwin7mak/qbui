@@ -6,7 +6,7 @@ import SortAndGroup  from '../../src/components/sortGroup/sortAndGroup';
 import TestUtils from 'react-addons-test-utils';
 
 
-fdescribe('SortAndGroup functions', () => {
+describe('SortAndGroup functions', () => {
     'use strict';
 
     var component;

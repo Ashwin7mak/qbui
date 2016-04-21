@@ -3,7 +3,7 @@ import {I18nMessage} from '../../utils/i18nMessage';
 import Locale from '../../locales/locales';
 import Logger from '../../utils/logger';
 import StringUtils from '../../utils/stringUtils';
-import {ListGroup, ListGroupItem, Panel } from 'react-bootstrap';
+import {ListGroup, ListGroupItem, Panel} from 'react-bootstrap';
 import QBicon from '../qbIcon/qbIcon';
 import FieldChoiceList from './fieldChoiceList';
 import './sortAndGroup.scss';

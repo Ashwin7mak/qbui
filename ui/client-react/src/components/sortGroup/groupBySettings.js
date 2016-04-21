@@ -17,8 +17,8 @@ const GroupBySettings = React.createClass({
 
     render() {
         return (
-            <div className="groupBySettings">
-                <div className="title">
+            <div className="groupBySettings"  tabIndex="0" >
+                <div className="title" >
                     <I18nMessage message="report.sortAndGroup.group"/>
                 </div>
 

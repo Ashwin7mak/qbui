@@ -14,7 +14,7 @@ const SortBySettings = React.createClass({
 
     render() {
         return (
-            <div className="sortBySettings">
+            <div className="sortBySettings"  tabIndex="0" >
                 <div className="title">
                     <I18nMessage message="report.sortAndGroup.sort"/>
                 </div>
