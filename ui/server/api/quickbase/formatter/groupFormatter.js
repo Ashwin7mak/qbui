@@ -41,7 +41,6 @@
         if (groupFields && fields && records) {
             let map = new Map();
             let reportData = [];
-            let rawData = [];
 
             fields.forEach((field) => {
                 map.set(field.id, field);
