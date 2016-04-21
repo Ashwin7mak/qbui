@@ -127,7 +127,6 @@ class ReportUtils {
         }
         return sortFids;
     }
-    //TODO
     /**
      * Given a sortList string or array pull out group fids
      * @param sortList -- sortList could be a string like 6.7:V.-10 or an array ["6", "7:V", "-10"]
