@@ -10,6 +10,7 @@
     var log = require('../../../logger').getLogger();
     var lodash = require('lodash');
     var groupUtils = require('../../../components/utility/groupUtils');
+    var dateFormatter = require('../../../api/quickbase/formatter/dateTimeFormatter');
 
     //  TODO: refactor into a shared module
     var startDate;
@@ -91,25 +92,26 @@
             //  for DATE, DURATION, EMAIL, NUMERIC, TEXT and USER data types.
             switch (groupField.datatypeAttributes.type) {
             case constants.DATE:
+                let dateFormat = dateFormatter.generateFormat({dateFormat: groupField.datatypeAttributes.dateFormat});
                 switch (groupType) {
                 case groupTypes.DATE.equals:
                     return dataValue;
                 case groupTypes.DATE.day:
                     return dataValue;
                 case groupTypes.DATE.week:
-                    return groupUtils.getFirstDayOfWeek(dataValue, groupField.datatypeAttributes.dateFormat);
+                    return groupUtils.getFirstDayOfWeek(dataValue, dateFormat);
                 case groupTypes.DATE.month:
-                    return groupUtils.getMonth(dataValue, groupField.datatypeAttributes.dateFormat);
+                    return groupUtils.getMonth(dataValue, dateFormat);
                 case groupTypes.DATE.year:
-                    return groupUtils.getYear(dataValue, groupField.datatypeAttributes.dateFormat);
+                    return groupUtils.getYear(dataValue, dateFormat);
                 case groupTypes.DATE.quarter:
-                    return groupUtils.getQuarter(dataValue, groupField.datatypeAttributes.dateFormat);
+                    return groupUtils.getQuarter(dataValue, dateFormat);
                 case groupTypes.DATE.fiscalQuarter:
-                    return groupUtils.getFiscalQuarter(dataValue, groupField.datatypeAttributes.dateFormat);
+                    return groupUtils.getFiscalQuarter(dataValue, dateFormat);
                 case groupTypes.DATE.fiscalYear:
-                    return groupUtils.getFiscalYear(dataValue, groupField.datatypeAttributes.dateFormat);
+                    return groupUtils.getFiscalYear(dataValue, dateFormat);
                 case groupTypes.DATE.decade:
-                    return groupUtils.getDecade(dataValue, groupField.datatypeAttributes.dateFormat);
+                    return groupUtils.getDecade(dataValue, dateFormat);
                 }
                 break;
             case constants.DURATION:

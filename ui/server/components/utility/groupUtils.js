@@ -4,7 +4,6 @@
     var constants = require('../../api/constants');
     var groupTypes = require('../../api/groupTypes');
     var moment = require('moment');
-    var dateFormatter = require('../../api/quickbase/formatter/dateTimeFormatter');
 
     module.exports = {
 
@@ -129,12 +128,11 @@
          * The format of the date return will match the displayFormat parameter.
          *
          * @param displayDate
-         * @param displayFormat
+         * @param format
          * @returns {*}
          */
-        getFirstDayOfWeek: function(displayDate, displayFormat) {
+        getFirstDayOfWeek: function(displayDate, format) {
             if (displayDate) {
-                let format = dateFormatter.generateFormat({dateFormat: displayFormat});
                 return moment(displayDate, format).startOf('isoWeek').format(format);
             }
             return '';
@@ -145,12 +143,11 @@
          * MMM YYYY.
          *
          * @param displayDate
-         * @param displayFormat
+         * @param format
          * @returns {*}
          */
-        getMonth: function(displayDate, displayFormat) {
+        getMonth: function(displayDate, format) {
             if (displayDate) {
-                let format = dateFormatter.generateFormat({dateFormat: displayFormat});
                 return moment(displayDate, format).format('MMM YYYY');
             }
             return '';
@@ -160,12 +157,11 @@
          * Return the Year of a given date.
          *
          * @param displayDate
-         * @param displayFormat
+         * @param format
          * @returns {*}
          */
-        getYear: function(displayDate, displayFormat) {
+        getYear: function(displayDate, format) {
             if (displayDate) {
-                let format = dateFormatter.generateFormat({dateFormat: displayFormat});
                 return moment(displayDate, format).format('YYYY');
             }
             return '';
@@ -176,12 +172,11 @@
          * is Mar 15, 2012, the return value is Q1 2012.
          *
          * @param displayDate
-         * @param displayFormat
+         * @param format
          * @returns {*}
          */
-        getQuarter: function(displayDate, displayFormat) {
+        getQuarter: function(displayDate, format) {
             if (displayDate) {
-                let format = dateFormatter.generateFormat({dateFormat: displayFormat});
                 let momentDate = moment(displayDate, format);
                 return constants.GROUPING.QUARTER + momentDate.quarter() + ' ' + momentDate.format('YYYY');
             }
@@ -193,12 +188,11 @@
          * is Mar 15, 2012, the return value is Q1 FY2012.
          *
          * @param displayDate
-         * @param displayFormat
+         * @param format
          * @returns {*}
          */
-        getFiscalQuarter: function(displayDate, displayFormat) {
+        getFiscalQuarter: function(displayDate, format) {
             if (displayDate) {
-                let format = dateFormatter.generateFormat({dateFormat: displayFormat});
                 let momentDate = moment(displayDate, format);
                 return constants.GROUPING.QUARTER + momentDate.quarter() + ' ' + constants.GROUPING.FISCAL_YR + momentDate.format('YYYY');
             }
@@ -210,12 +204,11 @@
          * is Mar 15, 2012, the return value is FY2012.
          *
          * @param displayDate
-         * @param displayFormat
+         * @param format
          * @returns {*}
          */
-        getFiscalYear: function(displayDate, displayFormat) {
+        getFiscalYear: function(displayDate, format) {
             if (displayDate) {
-                let format = dateFormatter.generateFormat({dateFormat:displayFormat});
                 return constants.GROUPING.FISCAL_YR + moment(displayDate, format).format('YYYY');
             }
             return '';
@@ -229,9 +222,8 @@
          * @param displayFormat
          * @returns {*}
          */
-        getDecade: function(displayDate, displayFormat) {
+        getDecade: function(displayDate, format) {
             if (displayDate) {
-                let format = dateFormatter.generateFormat({dateFormat:displayFormat});
                 let year = moment(displayDate, format).year();
                 return (year - (year % 10)) + '';   // return as a string
             }

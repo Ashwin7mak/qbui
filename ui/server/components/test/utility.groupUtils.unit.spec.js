@@ -101,7 +101,7 @@ describe('Validate Group Utility functions', function() {
             var testCases = generateDateGroupingTestCases(true);
             testCases.forEach(function(test) {
                 it('Test case: ' + test.name, function() {
-                    var mondayDate = groupUtils.getFirstDayOfWeek(test.displayDate, test.displayFormat);
+                    var mondayDate = groupUtils.getFirstDayOfWeek(test.displayDate, test.momentFormat);
                     assert.equal(mondayDate, moment(test.testDate.expectation.week, 'MM-DD-YYYY').format(test.momentFormat));
                 });
             });
@@ -112,7 +112,7 @@ describe('Validate Group Utility functions', function() {
             var testCases = generateDateGroupingTestCases(true);
             testCases.forEach(function(test) {
                 it('Test case: ' + test.name, function() {
-                    var month = groupUtils.getMonth(test.displayDate, test.displayFormat);
+                    var month = groupUtils.getMonth(test.displayDate, test.momentFormat);
                     assert.equal(month, test.testDate.expectation.month + ' ' + test.testDate.expectation.year);
                 });
             });
@@ -123,7 +123,7 @@ describe('Validate Group Utility functions', function() {
             var testCases = generateDateGroupingTestCases(true);
             testCases.forEach(function(test) {
                 it('Test case: ' + test.name, function() {
-                    var year = groupUtils.getYear(test.displayDate, test.displayFormat);
+                    var year = groupUtils.getYear(test.displayDate, test.momentFormat);
                     assert.equal(year, test.testDate.expectation.year);
                 });
             });
@@ -134,7 +134,7 @@ describe('Validate Group Utility functions', function() {
             var testCases = generateDateGroupingTestCases(true);
             testCases.forEach(function(test) {
                 it('Test case: ' + test.name, function() {
-                    var quarter = groupUtils.getQuarter(test.displayDate, test.displayFormat);
+                    var quarter = groupUtils.getQuarter(test.displayDate, test.momentFormat);
                     assert.equal(quarter, constants.GROUPING.QUARTER + test.testDate.expectation.qtr + ' ' + test.testDate.expectation.year);
                 });
             });
@@ -145,7 +145,7 @@ describe('Validate Group Utility functions', function() {
             var testCases = generateDateGroupingTestCases(true);
             testCases.forEach(function(test) {
                 it('Test case: ' + test.name, function() {
-                    var quarter = groupUtils.getFiscalQuarter(test.displayDate, test.displayFormat);
+                    var quarter = groupUtils.getFiscalQuarter(test.displayDate, test.momentFormat);
                     assert.equal(quarter, constants.GROUPING.QUARTER + test.testDate.expectation.qtr + ' ' + constants.GROUPING.FISCAL_YR + test.testDate.expectation.year);
                 });
             });
@@ -156,7 +156,7 @@ describe('Validate Group Utility functions', function() {
             var testCases = generateDateGroupingTestCases(true);
             testCases.forEach(function(test) {
                 it('Test case: ' + test.name, function() {
-                    var year = groupUtils.getFiscalYear(test.displayDate, test.displayFormat);
+                    var year = groupUtils.getFiscalYear(test.displayDate, test.momentFormat);
                     assert.equal(year, constants.GROUPING.FISCAL_YR + test.testDate.expectation.year);
                 });
             });
@@ -167,7 +167,7 @@ describe('Validate Group Utility functions', function() {
             var testCases = generateDateGroupingTestCases(true);
             testCases.forEach(function(test) {
                 it('Test case: ' + test.name, function() {
-                    var decade = groupUtils.getDecade(test.displayDate, test.displayFormat);
+                    var decade = groupUtils.getDecade(test.displayDate, test.momentFormat);
                     assert.equal(decade, test.testDate.expectation.decade + '');
                 });
             });
@@ -179,13 +179,13 @@ describe('Validate Group Utility functions', function() {
             testCases.forEach(function(test) {
                 var results = [];
                 it('Test case: ' + test.name, function() {
-                    results.push(groupUtils.getFirstDayOfWeek(test.displayDate, test.displayFormat));
-                    results.push(groupUtils.getMonth(test.displayDate, test.displayFormat));
-                    results.push(groupUtils.getYear(test.displayDate, test.displayFormat));
-                    results.push(groupUtils.getQuarter(test.displayDate, test.displayFormat));
-                    results.push(groupUtils.getFiscalQuarter(test.displayDate, test.displayFormat));
-                    results.push(groupUtils.getFiscalYear(test.displayDate, test.displayFormat));
-                    results.push(groupUtils.getDecade(test.displayDate, test.displayFormat));
+                    results.push(groupUtils.getFirstDayOfWeek(test.displayDate, test.momentFormat));
+                    results.push(groupUtils.getMonth(test.displayDate, test.momentFormat));
+                    results.push(groupUtils.getYear(test.displayDate, test.momentFormat));
+                    results.push(groupUtils.getQuarter(test.displayDate, test.momentFormat));
+                    results.push(groupUtils.getFiscalQuarter(test.displayDate, test.momentFormat));
+                    results.push(groupUtils.getFiscalYear(test.displayDate, test.momentFormat));
+                    results.push(groupUtils.getDecade(test.displayDate, test.momentFormat));
 
                     results.forEach(function(result) {
                         assert.equal(result, test.expectation);
