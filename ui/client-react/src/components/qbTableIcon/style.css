@@ -1,17 +1,17 @@
 @font-face {
-    font-family: 'icomoon';
-    src:    url('fonts/icomoon.eot?61nitj');
-    src:    url('fonts/icomoon.eot?61nitj#iefix') format('embedded-opentype'),
-        url('fonts/icomoon.ttf?61nitj') format('truetype'),
-        url('fonts/icomoon.woff?61nitj') format('woff'),
-        url('fonts/icomoon.svg?61nitj#icomoon') format('svg');
+    font-family: 'QuickBase-TableIcon';
+    src:    url('fonts/QuickBase-TableIcon.eot?61nitj');
+    src:    url('fonts/QuickBase-TableIcon.eot?61nitj#iefix') format('embedded-opentype'),
+        url('fonts/QuickBase-TableIcon.ttf?61nitj') format('truetype'),
+        url('fonts/QuickBase-TableIcon.woff?61nitj') format('woff'),
+        url('fonts/QuickBase-TableIcon.svg?61nitj#QuickBase-TableIcon') format('svg');
     font-weight: normal;
     font-style: normal;
 }
 
 [class^="icon-"], [class*=" icon-"] {
     /* use !important to prevent issues with browser extensions that change fonts */
-    font-family: 'icomoon' !important;
+    font-family: 'QuickBase-TableIcon' !important;
     speak: none;
     font-style: normal;
     font-weight: normal;
