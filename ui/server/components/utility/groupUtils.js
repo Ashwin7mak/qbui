@@ -148,15 +148,16 @@
         },
 
         /**
-         * Return the Month and year of a given date.  The return format is MMM YYYY.
+         * Return the Month and year of a given date.
          *
          * Strict parsing is enforced.  This means the displayDate string must match the format.
          * For example:
          *
-         *      ...('2015-05-31','YYYY-MM-DD') is a valid date
-         *      ...('05-31-2015','YYYY-MM-DD') is an invalid date
+         *      ...('2015-04-30','YYYY-MM-DD') is a valid date
+         *      ...('04-30-2015','YYYY-MM-DD') is an invalid date
          *
-         * Invalid input will result in an empty string being returned.
+         * If the input date is Apr 30, 2015, and it is parsed successfully, the return
+         * value is 'Apr 2015'.  Invalid input will result in an empty string being returned.
          *
          * @param displayDate
          * @param format
@@ -181,7 +182,8 @@
          *      ...('2015-05-31','YYYY-MM-DD') is a valid date
          *      ...('05-31-2015','YYYY-MM-DD') is an invalid date
          *
-         * Invalid input will result in an empty string being returned.
+         * If the input date is May 31, 2015, and it is parsed successfully, the return
+         * value is '2015'.  Invalid input will result in an empty string being returned.
          *
          * @param displayDate
          * @param format
@@ -198,8 +200,7 @@
         },
 
         /**
-         * Return the Calendar quarter and Year of the given date.  If the input date
-         * is May 31, 2015, the return value is 'Q2 2015'.
+         * Return the Calendar quarter and Year of the given date.
          *
          * Strict parsing is enforced.  This means the displayDate string must match the format.
          * For example:
@@ -207,7 +208,8 @@
          *      ...('2015-05-31','YYYY-MM-DD') is a valid date
          *      ...('05-31-2015','YYYY-MM-DD') is an invalid date
          *
-         * Invalid input will result in an empty string being returned.
+         * If the input date is May 31, 2015, and it is parsed successfully, the return
+         * value is 'Q2 2015'.  Invalid input will result in an empty string being returned.
          *
          * @param displayDate
          * @param format
@@ -224,8 +226,7 @@
         },
 
         /**
-         * Return the Fiscal quarter and Year of the given date.  If the input date
-         * is May 31, 2015, the return value is 'Q2 FY2015'.
+         * Return the Fiscal quarter and Year of the given date.
          *
          * Strict parsing is enforced.  This means the displayDate string must match the format.
          * For example:
@@ -233,7 +234,8 @@
          *      ...('2015-05-31','YYYY-MM-DD') is a valid date
          *      ...('05-31-2015','YYYY-MM-DD') is an invalid date
          *
-         * Invalid input will result in an empty string being returned.
+         * If the input date is May 31, 2015, and it is parsed successfully, the return
+         * value is 'Q2 FY2015'.  Invalid input will result in an empty string being returned.
          *
          * @param displayDate
          * @param format
@@ -250,8 +252,7 @@
         },
 
         /**
-         * Return the Fiscal Year of the given date.  If the input date is May 31, 2015,
-         * the return value is 'FY2015'.
+         * Return the Fiscal Year of the given date.
          *
          * Strict parsing is enforced.  This means the displayDate string must match the format.
          * For example:
@@ -259,7 +260,8 @@
          *      ...('2015-05-31','YYYY-MM-DD') is a valid date
          *      ...('05-31-2015','YYYY-MM-DD') is an invalid date
          *
-         * Invalid input will result in an empty string being returned.
+         * If the input date is May 31, 2015, and it is parsed successfully, the return
+         * value is 'FY2015'.  Invalid input will result in an empty string being returned.
          *
          * @param displayDate
          * @param format
@@ -276,8 +278,7 @@
         },
 
         /**
-         * Return the Decade of the given date.  If the input date is May 31, 2015,
-         * the return value is '2010'.
+         * Return the Decade of the given date.
          *
          * Strict parsing is enforced.  This means the displayDate string must match the format.
          * For example:
@@ -285,10 +286,11 @@
          *      ...('2015-05-31','YYYY-MM-DD') is a valid date
          *      ...('05-31-2015','YYYY-MM-DD') is an invalid date
          *
-         * Invalid input will result in an empty string being returned.
+         * If the input date is May 31, 2015, and it is parsed successfully, the return
+         * value is '2010'.  Invalid input will result in an empty string being returned.
          *
          * @param displayDate
-         * @param displayFormat
+         * @param format
          * @returns {*}
          */
         getDecade: function(displayDate, format) {
