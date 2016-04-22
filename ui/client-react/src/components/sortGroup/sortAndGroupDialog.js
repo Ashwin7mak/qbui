@@ -52,7 +52,7 @@ var SortAndGroupDialog = React.createClass({
         let sortByFields = [{name:'Claire', decendOrder:true},
                            //{name:'A longer klhlhklh lkh klh field ', decendOrder:false},
                            //{name:'A longer klhlhklh lkh klh field ', decendOrder:false},
-                           {name:'A longer klhlhklh lkh klh field ', decendOrder:false},
+                           {name:'A longer klhlhklh lkh klh ldskf lskdfhlksdhf lkhsdf lheld ', decendOrder:false},
                            //{name:'A longer klhlhklh lkh klh field ', decendOrder:false},
                            //{name:'A longer klhlhklh lkh klh field ', decendOrder:false},
                            //{name:'A longer klhlhklh lkh klh field ', decendOrder:false},
