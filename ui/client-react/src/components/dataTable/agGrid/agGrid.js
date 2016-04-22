@@ -7,7 +7,7 @@ import ReactCSSTransitionGroup from 'react/lib/ReactCSSTransitionGroup';
 import ReportActions from '../../actions/reportActions';
 import RecordActions from '../../actions/recordActions';
 import Locale from '../../../locales/locales';
-import {DateFormatter, NumericFormatter, TextFormatter}  from './formatters';
+
 import _ from 'lodash';
 import Loader  from 'react-loader';
 import Fluxxor from 'fluxxor';
@@ -280,7 +280,7 @@ let AGGrid = React.createClass({
     // Performance improvement - only update the component when certain state/props change
     // Since this is a heavy component we dont want this updating all times.
     shouldComponentUpdate(nextProps, nextState) {
-return true;
+
         if (!_.isEqual(nextState, this.state)) {
             return true;
         }
@@ -537,84 +537,7 @@ return true;
             suppressResize: true
         };
     },
-    setCSSClass_helper: function(obj, classname) {
-        if (typeof (obj.cellClass) === 'undefined') {
-            obj.cellClass = classname;
-        } else {
-            obj.cellClass += " " + classname;
-        }
-        if (typeof (obj.headerClass) === 'undefined') {
-            obj.headerClass = classname;
-        } else {
-            obj.headerClass += " " + classname;
-        }
-    },
 
-    /* for each field attribute that has some presentation effect convert that to a css class before passing to griddle.*/
-    getColumnProps: function() {
-
-        let columns = this.props.columns;
-
-        if (columns) {
-            var columnsData = columns.map((obj, index) => {
-                obj.headerClass = "gridHeaderCell";
-                obj.cellClass = "gridCell";
-                obj.suppressResize = true;
-                obj.minWidth = 100;
-
-                if (index === 1) {
-                    obj.addEditActions = true;
-                }
-
-                if (obj.datatypeAttributes) {
-                    var datatypeAttributes = obj.datatypeAttributes;
-                    for (var attr in datatypeAttributes) {
-                        switch (attr) {
-                        case 'type': {
-                            switch (datatypeAttributes[attr]) {
-                                case "NUMERIC" :
-                                    this.setCSSClass_helper(obj, "AlignRight");
-                                    obj.cellRenderer = reactCellRendererFactory(NumericFormatter);
-                                    obj.customComponent = NumericFormatter;
-                                    break;
-                                case "DATE" :
-                                    obj.cellRenderer = reactCellRendererFactory(DateFormatter);
-                                    obj.customComponent = DateFormatter;
-                                    break;
-                            default:
-                                obj.cellRenderer = reactCellRendererFactory(TextFormatter);
-                                obj.customComponent = TextFormatter;
-                                break;
-                            }
-                        }
-                        }
-                    }
-
-                    if (datatypeAttributes.clientSideAttributes) {
-                        var clientSideAttributes = datatypeAttributes.clientSideAttributes;
-                        for (var cattr in clientSideAttributes) {
-                            switch (cattr) {
-                            case 'bold':
-                                if (clientSideAttributes[cattr]) {
-                                    this.setCSSClass_helper(obj, "Bold");
-                                }
-                                break;
-                            case 'word-wrap':
-                                if (clientSideAttributes[cattr]) {
-                                    this.setCSSClass_helper(obj, "NoWrap");
-                                }
-                                break;
-                            }
-                        }
-                    }
-                }
-                return obj;
-            });
-
-            return columnsData;
-        }
-        return [];
-    },
     /**
      * Add a couple of columns to the column definition sent through props -
      * add checkbox column to the beginning of the array and
@@ -622,12 +545,12 @@ return true;
      */
     getColumns() {
 console.log('get columns');
-        let columnProps = this.getColumnProps();
-        if (!columnProps) {
+
+        if (!this.props.columns) {
             return;
         }
 
-        let columns = columnProps.slice(0);
+        let columns = this.props.columns.slice(0);
 
         //This should be based on perms -- something like if(this.props.allowMultiSelection)
         columns.unshift(this.getCheckBoxColumn(this.props.showGrouping));
@@ -645,6 +568,8 @@ console.log('get columns');
     },
 
     getRecordsToRender() {
+        console.log(this.props.records);
+        
         let paddedRecords = this.props.records.slice(0);
         paddedRecords.push({});
         paddedRecords.push({});
@@ -653,8 +578,7 @@ console.log('get columns');
 
     render() {
         console.log('render',this.state,this.getSelectedRows().length);
-        if (!this.columnDefs)
-            this.columnDefs = this.getColumns();
+        let columnDefs = this.getColumns();
 
         let griddleWrapperClasses = this.getSelectedRows().length ? "griddleWrapper selectedRows" : "griddleWrapper";
         return (
@@ -674,7 +598,7 @@ console.log('get columns');
                                     //onSelectionChanged={this.onSelectionChanged}
 
                                     // binding to array properties
-                                    columnDefs={this.columnDefs}
+                                    columnDefs={columnDefs}
                                     rowData={this.getRecordsToRender()}
 
                                     //default behavior properties
