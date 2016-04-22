@@ -123,9 +123,15 @@
 
         /**
          * Return the first day of the week of a given date.  Monday is considered the first day of the
-         * (work) week, so the date returned will be the preceding Monday.
+         * (work) week, so the date returned will be the preceding Monday in the supplied format.
          *
-         * The format of the date return will match the displayFormat parameter.
+         * Strict parsing is enforced.  This means the displayDate string must match the supplied format.
+         * For example:
+         *
+         *      ...('2015-05-31','YYYY-MM-DD') is a valid date
+         *      ...('05-31-2015','YYYY-MM-DD') is an invalid date
+         *
+         * Invalid input will result in an empty string being returned.
          *
          * @param displayDate
          * @param format
@@ -133,7 +139,10 @@
          */
         getFirstDayOfWeek: function(displayDate, format) {
             if (displayDate) {
-                return moment(displayDate, format).startOf('isoWeek').format(format);
+                let momentDate = moment(displayDate, format, true);
+                if (momentDate.isValid()) {
+                    return momentDate.startOf('isoWeek').format(format);
+                }
             }
             return '';
         },
@@ -142,13 +151,24 @@
          * Return the Month and year of a given date.  The return format is
          * MMM YYYY.
          *
+         * Strict parsing is enforced.  This means the displayDate string must match the supplied format.
+         * For example:
+         *
+         *      ...('2015-05-31','YYYY-MM-DD') is a valid date
+         *      ...('05-31-2015','YYYY-MM-DD') is an invalid date
+         *
+         * Invalid input will result in an empty string being returned.
+         *
          * @param displayDate
          * @param format
          * @returns {*}
          */
         getMonth: function(displayDate, format) {
             if (displayDate) {
-                return moment(displayDate, format).format('MMM YYYY');
+                let momentDate = moment(displayDate, format, true);
+                if (momentDate.isValid()) {
+                    return momentDate.format('MMM YYYY');
+                }
             }
             return '';
         },
@@ -156,13 +176,24 @@
         /**
          * Return the Year of a given date.
          *
+         * Strict parsing is enforced.  This means the displayDate string must match the supplied format.
+         * For example:
+         *
+         *      ...('2015-05-31','YYYY-MM-DD') is a valid date
+         *      ...('05-31-2015','YYYY-MM-DD') is an invalid date
+         *
+         * Invalid input will result in an empty string being returned.
+         *
          * @param displayDate
          * @param format
          * @returns {*}
          */
         getYear: function(displayDate, format) {
             if (displayDate) {
-                return moment(displayDate, format).format('YYYY');
+                let momentDate = moment(displayDate, format, true);
+                if (momentDate.isValid()) {
+                    return momentDate.format('YYYY');
+                }
             }
             return '';
         },
@@ -171,14 +202,24 @@
          * Return the Calendar quarter and Year of the given date.  IE:  If the input date
          * is Mar 15, 2012, the return value is Q1 2012.
          *
+         * Strict parsing is enforced.  This means the displayDate string must match the supplied format.
+         * For example:
+         *
+         *      ...('2015-05-31','YYYY-MM-DD') is a valid date
+         *      ...('05-31-2015','YYYY-MM-DD') is an invalid date
+         *
+         * Invalid input will result in an empty string being returned.
+         *
          * @param displayDate
          * @param format
          * @returns {*}
          */
         getQuarter: function(displayDate, format) {
             if (displayDate) {
-                let momentDate = moment(displayDate, format);
-                return constants.GROUPING.QUARTER + momentDate.quarter() + ' ' + momentDate.format('YYYY');
+                let momentDate = moment(displayDate, format, true);
+                if (momentDate.isValid()) {
+                    return constants.GROUPING.QUARTER + momentDate.quarter() + ' ' + momentDate.format('YYYY');
+                }
             }
             return '';
         },
@@ -187,14 +228,24 @@
          * Return the Fiscal quarter and Year of the given date.  IE:  If the input date
          * is Mar 15, 2012, the return value is Q1 FY2012.
          *
+         * Strict parsing is enforced.  This means the displayDate string must match the supplied format.
+         * For example:
+         *
+         *      ...('2015-05-31','YYYY-MM-DD') is a valid date
+         *      ...('05-31-2015','YYYY-MM-DD') is an invalid date
+         *
+         * Invalid input will result in an empty string being returned.
+         *
          * @param displayDate
          * @param format
          * @returns {*}
          */
         getFiscalQuarter: function(displayDate, format) {
             if (displayDate) {
-                let momentDate = moment(displayDate, format);
-                return constants.GROUPING.QUARTER + momentDate.quarter() + ' ' + constants.GROUPING.FISCAL_YR + momentDate.format('YYYY');
+                let momentDate = moment(displayDate, format, true);
+                if (momentDate.isValid()) {
+                    return constants.GROUPING.QUARTER + momentDate.quarter() + ' ' + constants.GROUPING.FISCAL_YR + momentDate.format('YYYY');
+                }
             }
             return '';
         },
@@ -203,20 +254,39 @@
          * Return the Fiscal Year of the given date.  IE:  If the input date
          * is Mar 15, 2012, the return value is FY2012.
          *
+         * Strict parsing is enforced.  This means the displayDate string must match the supplied format.
+         * For example:
+         *
+         *      ...('2015-05-31','YYYY-MM-DD') is a valid date
+         *      ...('05-31-2015','YYYY-MM-DD') is an invalid date
+         *
+         * Invalid input will result in an empty string being returned.
+         *
          * @param displayDate
          * @param format
          * @returns {*}
          */
         getFiscalYear: function(displayDate, format) {
             if (displayDate) {
-                return constants.GROUPING.FISCAL_YR + moment(displayDate, format).format('YYYY');
+                let momentDate = moment(displayDate, format, true);
+                if (momentDate.isValid()) {
+                    return constants.GROUPING.FISCAL_YR + momentDate.format('YYYY');
+                }
             }
             return '';
         },
 
         /**
          * Return the Decade of the given date.  IE:  If the input date
-         * is Mar 15, 2012, the return value is 2012.
+         * is Mar 15, 2012, the return value is '2012'.
+         *
+         * Strict parsing is enforced.  This means the displayDate string must match the supplied format.
+         * For example:
+         *
+         *      ...('2015-05-31','YYYY-MM-DD') is a valid date
+         *      ...('05-31-2015','YYYY-MM-DD') is an invalid date
+         *
+         * Invalid input will result in an empty string being returned.
          *
          * @param displayDate
          * @param displayFormat
@@ -224,8 +294,11 @@
          */
         getDecade: function(displayDate, format) {
             if (displayDate) {
-                let year = moment(displayDate, format).year();
-                return (year - (year % 10)) + '';   // return as a string
+                let momentDate = moment(displayDate, format, true);
+                if (momentDate.isValid()) {
+                    let year = momentDate.year();
+                    return (year - (year % 10)).toString();
+                }
             }
             return '';
         }
