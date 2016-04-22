@@ -35,11 +35,45 @@ describe('ReportUtils - test getSortFids', () => {
         {test:'empty input', input:'', output: []},
         {test:'null input', input:null, output: []},
         {test:'valid input with sort', input:'3.-4', output: ['3', '-4']},
-        {test:'valid input with group', input:'3:V.-4', output: ['3', '-4']}
+        {test:'valid input with group', input:'3:V.-4', output: ['3', '-4']},
+        {test:'valid input with sort- array input', input:['3', '-4'], output: ['3', '-4']},
+        {test:'valid input with group- array input', input:['3:V', '-4'], output: ['3', '-4']}
     ];
     dataProvider.forEach(function(data) {
         it(data.test, function() {
             expect(ReportUtils.getSortFids(data.input)).toEqual(data.output);
+        });
+    });
+});
+
+describe('ReportUtils - test getSortFidsOnly', () => {
+    var dataProvider = [
+        {test:'empty input', input:'', output: []},
+        {test:'null input', input:null, output: []},
+        {test:'valid input with sort- string input', input:'3.-4', output: ['3', '-4']},
+        {test:'valid input with group- string input', input:'3:V.-4', output: ['-4']},
+        {test:'valid input with sort- array input', input:['3', '-4'], output: ['3', '-4']},
+        {test:'valid input with group- array input', input:['3:V', '-4'], output: ['-4']}
+    ];
+    dataProvider.forEach(function(data) {
+        it(data.test, function() {
+            expect(ReportUtils.getSortFidsOnly(data.input)).toEqual(data.output);
+        });
+    });
+});
+
+describe('ReportUtils - test getGroupElements', () => {
+    var dataProvider = [
+        {test:'empty input', input:'', output: []},
+        {test:'null input', input:null, output: []},
+        {test:'valid input with sort', input:'3.-4', output: []},
+        {test:'valid input with group', input:'3:V.-4', output: ['3:V']},
+        {test:'valid input with sort- array input', input:['3', '-4'], output: []},
+        {test:'valid input with group- array input', input:['3:V', '-4'], output: ['3:V']}
+    ];
+    dataProvider.forEach(function(data) {
+        it(data.test, function() {
+            expect(ReportUtils.getGroupElements(data.input)).toEqual(data.output);
         });
     });
 });
@@ -96,16 +130,36 @@ describe('ReportUtils - test prependSortFidToList', () => {
     });
 });
 
-describe('ReportUtils - test getSortStringFromList', () => {
+describe('ReportUtils - test getGroupString', () => {
     var dataProvider = [
-        {test:'empty input', input:'', output: ''},
-        {test:'null input', input:null, output: ''},
-        {test:'valid input with sort', input:["3", "-4"], output: '3.-4'},
-        {test:'valid input with group', input:["3", "-4:V"], output: '3.-4'},
+        {test:'empty input', fid:'', order: '', gtype: '', output: ''},
+        {test:'null fid', fid:null, order: '', gtype: '', output: ''},
+        {test:'null order', fid:1, order: null, gtype: '', output: '1'},
+        {test:'null gtype', fid:1, order: '', gtype: null, output: '1'},
+        {test:'valid fid no gtype', fid:2, order: true, gtype: '', output: '2'},
+        {test:'valid input with gtype', fid:3, order: false, gtype: 'V', output: '-3:V'},
     ];
     dataProvider.forEach(function(data) {
         it(data.test, function() {
-            expect(ReportUtils.getSortStringFromSortListArray(data.input)).toBe(data.output);
+            expect(ReportUtils.getGroupString(data.fid, data.order, data.gtype)).toBe(data.output);
         });
     });
 });
+
+describe('ReportUtils - test getGListString', () => {
+    var dataProvider = [
+        {test:'empty input', sortFids:[], groupEls:[], output: ''},
+        {test:'null sorfids', sortFids:null, groupEls:['3', '4'], output: '3.4'},
+        {test:'null groupfids', sortFids:['3', '4'], groupEls:null, output: '3.4'},
+        {test:'only sortfids', sortFids:['3', '4'], groupEls:[], output: '3.4'},
+        {test:'only groupfids', sortFids:[], groupEls:['3', '4:V'], output: '3.4:V'},
+        {test:'sort and groupfids', sortFids:['1', '2'], groupEls:['3', '4:V'], output: '3.4:V.1.2'}
+    ];
+    dataProvider.forEach(function(data) {
+        it(data.test, function() {
+            expect(ReportUtils.getGListString(data.sortFids, data.groupEls)).toBe(data.output);
+        });
+    });
+});
+
+

@@ -19,8 +19,7 @@ let reportModel = {
         records: null,
         recordsCount: null,
         sortFids: [],
-        groupFids: [],
-        selectedSortFids: []
+        groupEls: []
     },
 
     /**
@@ -107,7 +106,9 @@ let reportModel = {
      */
     setMetaData: function(reportMetaData) {
         this.model.name = reportMetaData.name;
-        this.model.selectedSortFids = reportMetaData.sortList;
+        // in report's meta data sortlist is returned as an array of sort elements
+        this.setSortFids(reportMetaData.sortList);
+        this.setGroupElements(reportMetaData.sortList);
     },
 
     /**
@@ -123,28 +124,15 @@ let reportModel = {
         if (this.model.hasGrouping === true) {
             this.model.columns = this.getReportColumns(recordData.groups.gridColumns);
             this.model.records = recordData.groups.gridData;
-            this.model.groupLevel = 0;
-            this.model.groupingFields = [];
-            this.model.groupFids = [];
-            recordData.groups.fields.forEach((groupField) => {
-                this.model.groupFids.push(groupField.field.id);
-                this.model.groupingFields.push(groupField.field.name);
-                this.model.groupLevel++;
-            });
-
             //  TODO: with paging, this count is flawed...
             this.model.recordsCount = recordData.groups.totalRows;
         } else {
             this.model.columns = this.getReportColumns(recordData.fields);
             this.model.records = this.getReportData(recordData.fields, recordData.records);
-            this.model.groupLevel = 0;
-            this.model.groupingFields = [];
-            this.model.groupFids = [];
 
             //  TODO: with paging, this count is flawed...
             this.model.recordsCount = recordData.records.length;
         }
-
         this.model.filteredRecords = this.model.records;
         this.model.filteredRecordsCount = recordData.records.length;
     },
@@ -162,7 +150,8 @@ let reportModel = {
      * @param recordData
      */
     updateFilteredRecords: function(recordData) {
-        if (this.model.hasGrouping === true) {
+        if (recordData.groups && recordData.groups.hasGrouping) {
+            this.model.columns = this.getReportColumns(recordData.groups.gridColumns);
             this.model.filteredRecords = recordData.groups.gridData;
             this.model.filteredRecordsCount = recordData.groups.totalRows;
         } else {
@@ -193,10 +182,14 @@ let reportModel = {
         }
     },
 
-    setSelectedSortFids: function(sortList) {
-        this.model.selectedSortFids = ReportUtils.getSortFids(sortList);
-    }
+    setSortFids: function(sortList) {
+        this.model.sortFids = ReportUtils.getSortFidsOnly(sortList);
+    },
 
+    setGroupElements: function(sortList) {
+        this.model.groupEls = ReportUtils.getGroupElements(sortList);
+        this.model.groupLevel = this.model.groupEls.length;
+    }
 };
 
 
@@ -263,8 +256,8 @@ let ReportDataStore = Fluxxor.createStore({
         this.facetExpression = payload.filter.facet;
         this.searchStringForFiltering =  payload.filter.search;
 
-        this.reportModel.setSelectedSortFids(payload.sortList);
-
+        this.reportModel.setSortFids(payload.sortList);
+        this.reportModel.setGroupElements(payload.sortList);
         this.emit('change');
     },
 

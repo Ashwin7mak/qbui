@@ -179,7 +179,7 @@ let reportDataActions = {
                 } else {
                     /*eslint no-lonely-if:0*/
                     if (reportMetaData.data.sortList) {
-                        queryParams[query.SORT_LIST_PARAM] = ReportUtils.getSortStringFromSortListArray(reportMetaData.data.sortList);
+                        queryParams[query.SORT_LIST_PARAM] = ReportUtils.getSortListString(ReportUtils.getSortFids(reportMetaData.data.sortList));
                         groupList = ReportUtils.getSortListString(reportMetaData.data.sortList);
                     }
                 }
@@ -216,8 +216,8 @@ let reportDataActions = {
         return new Promise(function(resolve, reject) {
 
             if (appId && tblId && rptId) {
-                let sortListParam = overrideQueryParams && overrideQueryParams[query.SORT_LIST_PARAM] ? overrideQueryParams[query.SORT_LIST_PARAM] : "";
-                this.dispatch(actions.LOAD_RECORDS, {appId, tblId, rptId, filter, sortList: sortListParam});
+                let sortList = overrideQueryParams && overrideQueryParams[query.SORT_LIST_PARAM] ? overrideQueryParams[query.SORT_LIST_PARAM] : "";
+                this.dispatch(actions.LOAD_RECORDS, {appId, tblId, rptId, filter, sortList: sortList});
 
                 let reportService = new ReportService();
                 let recordService = new RecordService();
