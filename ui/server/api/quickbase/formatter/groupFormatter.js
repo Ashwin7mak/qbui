@@ -10,6 +10,7 @@
     var log = require('../../../logger').getLogger();
     var lodash = require('lodash');
     var groupUtils = require('../../../components/utility/groupUtils');
+    var dateFormatter = require('../../../api/quickbase/formatter/dateTimeFormatter');
 
     //  TODO: refactor into a shared module
     var startDate;
@@ -83,22 +84,33 @@
             let groupType = groupFields[idx].groupType;
             let groupField = groupFields[idx].field;
 
+            //  the data value to group by
+            let dataValue = record[groupField.name];
+
             //  Group the data based on the data type.  Grouping is supported
             //  for DATE, DURATION, EMAIL, NUMERIC, TEXT and USER data types.
             switch (groupField.datatypeAttributes.type) {
             case constants.DATE:
+                let dateFormat = dateFormatter.generateFormat({dateFormat: groupField.datatypeAttributes.dateFormat});
                 switch (groupType) {
                 case groupTypes.DATE.equals:
-                    return record[groupField.name];
-                //jira: qbse-21434
-                //case groupTypes.DATE.day:
-                //case groupTypes.DATE.week:
-                //case groupTypes.DATE.month:
-                //case groupTypes.DATE.year:
-                //case groupTypes.DATE.quarter:
-                //case groupTypes.DATE.fiscalQuarter:
-                //case groupTypes.DATE.fiscalYear:
-                //case groupTypes.DATE.decade:
+                    return dataValue;
+                case groupTypes.DATE.day:
+                    return dataValue;
+                case groupTypes.DATE.week:
+                    return groupUtils.getFirstDayOfWeek(dataValue, dateFormat);
+                case groupTypes.DATE.month:
+                    return groupUtils.getMonth(dataValue, dateFormat);
+                case groupTypes.DATE.year:
+                    return groupUtils.getYear(dataValue, dateFormat);
+                case groupTypes.DATE.quarter:
+                    return groupUtils.getQuarter(dataValue, dateFormat);
+                case groupTypes.DATE.fiscalQuarter:
+                    return groupUtils.getFiscalQuarter(dataValue, dateFormat);
+                case groupTypes.DATE.fiscalYear:
+                    return groupUtils.getFiscalYear(dataValue, dateFormat);
+                case groupTypes.DATE.decade:
+                    return groupUtils.getDecade(dataValue, dateFormat);
                 }
                 break;
             case constants.DURATION:
@@ -122,9 +134,12 @@
                 //}
                 break;
             case constants.NUMERIC:
+            case constants.CURRENCY:    // CURRENCY is a sub-type of NUMERIC
+            case constants.PERCENT:     // PERCENT is a sub-type of NUMERIC
+            case constants.RATING:      // RATING is a sub-type of NUMERIC
                 switch (groupType) {
                 case groupTypes.NUMERIC.equals:
-                    return record[groupField.name];
+                    return dataValue;
                 //jira: qbse-21427
                 //case groupTypes.NUMERIC.range:
                 //case groupTypes.NUMERIC.thousandth:
@@ -143,21 +158,21 @@
             case constants.TEXT:
                 switch (groupType) {
                 case groupTypes.TEXT.equals:
-                    return record[groupField.name];
+                    return dataValue;
                 case groupTypes.TEXT.firstLetter:
-                    return groupUtils.getFirstLetter(record[groupField.name]);
+                    return groupUtils.getFirstLetter(dataValue);
                 case groupTypes.TEXT.firstWord:
-                    return groupUtils.getFirstWord(record[groupField.name]);
+                    return groupUtils.getFirstWord(dataValue);
                 }
                 break;
             case constants.USER:
                 switch (groupType) {
                 case groupTypes.USER.equals:
-                    return record[groupField.name];
+                    return dataValue;
                 case groupTypes.USER.firstLetter:
-                    return groupUtils.getFirstLetter(record[groupField.name]);
+                    return groupUtils.getFirstLetter(dataValue);
                 case groupTypes.USER.firstWord:
-                    return groupUtils.getFirstWord(record[groupField.name]);
+                    return groupUtils.getFirstWord(dataValue);
                 }
                 break;
             default:
@@ -261,7 +276,7 @@
                                         field.grouped = true;
                                         groupBy.fields.push(
                                             {field: field,
-                                             groupType: groupType}
+                                                groupType: groupType}
                                         );
                                     } else {
                                         log.warn("Unsupported group type.  FieldId: " + field.id + "; name: " + field.name + "; DataType: " + field.datatypeAttributes.type + "; GroupType: " + groupType);

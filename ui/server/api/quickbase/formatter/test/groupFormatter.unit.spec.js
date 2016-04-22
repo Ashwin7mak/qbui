@@ -18,7 +18,7 @@ describe('Validate GroupFormatter unit tests', function() {
             return (0 | Math.random() * 10000000);
         }
         if (dataType === constants.DATE) {
-            return dateUtils.formatDate(new Date(), '%M/%D/%Y %h:%m');
+            return dateUtils.formatDate(new Date(), '%M-%D-%Y');
         }
         return '';
     }
@@ -111,23 +111,31 @@ describe('Validate GroupFormatter unit tests', function() {
         var testCases = [
             //  TEXT data type
             {message: 'TEXT: No input records', numFields: 5, numRecords: 0, gList: '1:V', dataType: constants.TEXT},
-            {message: 'TEXT: Input with one equals grouping', numFields: 5, numRecords: 1, gList: '1:V', dataType: constants.TEXT},
-            {message: 'TEXT: Input with one equals grouping descending', numFields: 5, numRecords: 1, gList: '-1:V', dataType: constants.TEXT},
-            {message: 'TEXT: Input with two equals groupings', numFields: 5, numRecords: 2, gList: '1:V.2:V', dataType: constants.TEXT},
-            {message: 'TEXT: Input with one first word grouping', numFields: 5, numRecords: 2, gList: '1:I', dataType: constants.TEXT},
-            {message: 'TEXT: Input with three first letter grouping', numFields: 5, numRecords: 2, gList: '1:F.2:F.3:F', dataType: constants.TEXT},
-            {message: 'TEXT: Input with multiple grouping against same fid', numFields: 5, numRecords: 2, gList: '1:I.1:V', dataType: constants.TEXT},
+            {message: 'TEXT: one equals grouping', numFields: 5, numRecords: 1, gList: '1:V', dataType: constants.TEXT},
+            {message: 'TEXT: one equals grouping descending', numFields: 5, numRecords: 1, gList: '-1:V', dataType: constants.TEXT},
+            {message: 'TEXT: two equals groupings', numFields: 5, numRecords: 2, gList: '1:V.2:V', dataType: constants.TEXT},
+            {message: 'TEXT: first word grouping', numFields: 5, numRecords: 2, gList: '1:I', dataType: constants.TEXT},
+            {message: 'TEXT: first letter grouping', numFields: 5, numRecords: 2, gList: '1:F.2:F.3:F', dataType: constants.TEXT},
+            {message: 'TEXT: multiple grouping against same fid', numFields: 5, numRecords: 2, gList: '1:I.1:V', dataType: constants.TEXT},
             //  USER data type
             {message: 'USER: No input records', numFields: 5, numRecords: 0, gList: '1:V', dataType: constants.USER},
-            {message: 'USER: Input with one equals grouping', numFields: 5, numRecords: 1, gList: '1:V', dataType: constants.USER},
-            {message: 'USER: Input with two equals groupings', numFields: 5, numRecords: 2, gList: '1:V.2:V', dataType: constants.USER},
-            {message: 'USER: Input with one first word grouping', numFields: 5, numRecords: 2, gList: '1:I', dataType: constants.USER},
-            {message: 'USER: Input with three first letter grouping', numFields: 5, numRecords: 2, gList: '1:F.2:F.3:F', dataType: constants.USER},
-            {message: 'USER: Input with multiple grouping against same fid', numFields: 5, numRecords: 2, gList: '1:I.1:V', dataType: constants.USER},
+            {message: 'USER: one equals grouping', numFields: 5, numRecords: 1, gList: '1:V', dataType: constants.USER},
+            {message: 'USER: two equals groupings', numFields: 5, numRecords: 2, gList: '1:V.2:V', dataType: constants.USER},
+            {message: 'USER: first word grouping', numFields: 5, numRecords: 2, gList: '1:I', dataType: constants.USER},
+            {message: 'USER: first letter grouping', numFields: 5, numRecords: 2, gList: '1:F.2:F.3:F', dataType: constants.USER},
+            {message: 'USER: multiple grouping against same fid', numFields: 5, numRecords: 2, gList: '1:I.1:V', dataType: constants.USER},
             //  DATE data type
-            {message: 'DATE: Input with multiple grouping against same fid', numFields: 5, numRecords: 2, gList: '1:V', dataType: constants.DATE},
+            {message: 'DATE: equals grouping', numFields: 5, numRecords: 2, gList: '1:V', dataType: constants.DATE},
+            {message: 'DATE: day grouping', numFields: 5, numRecords: 2, gList: '1:D', dataType: constants.DATE},
+            {message: 'DATE: week grouping', numFields: 5, numRecords: 2, gList: '1:W', dataType: constants.DATE},
+            {message: 'DATE: month grouping', numFields: 5, numRecords: 2, gList: '1:M', dataType: constants.DATE},
+            {message: 'DATE: year grouping', numFields: 5, numRecords: 2, gList: '1:Y', dataType: constants.DATE},
+            {message: 'DATE: quarter grouping', numFields: 5, numRecords: 2, gList: '1:Q', dataType: constants.DATE},
+            {message: 'DATE: fiscalQtr grouping', numFields: 5, numRecords: 2, gList: '1:U', dataType: constants.DATE},
+            {message: 'DATE: fiscalYr grouping', numFields: 5, numRecords: 2, gList: '1:FY', dataType: constants.DATE},
+            {message: 'DATE: decade grouping', numFields: 5, numRecords: 2, gList: '1:T', dataType: constants.DATE},
             //  NUMERIC data type
-            {message: 'NUMERIC: Input with multiple grouping against same fid', numFields: 5, numRecords: 2, gList: '1:V', dataType: constants.NUMERIC}
+            {message: 'NUMERIC: multiple grouping against same fid', numFields: 5, numRecords: 2, gList: '1:V', dataType: constants.NUMERIC}
         ];
 
         testCases.forEach(function(testCase) {

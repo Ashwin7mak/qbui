@@ -52,6 +52,11 @@
             GROUP_LIST: 'glist',
             LIST_DELIMITER: '.',
             GROUP_DELIMITER: ':'
+        },
+
+        GROUPING : {
+            QUARTER: 'Q',
+            FISCAL_YR: 'FY'
         }
 
 

@@ -5,10 +5,66 @@ var assert = require('assert');
 var groupUtils = require('../utility/groupUtils.js');
 var groupTypes = require('../../api/groupTypes');
 var constants = require('../../api/constants');
+var dateTimeFormatter = require('../../api/quickbase/formatter/dateTimeFormatter');
+var moment = require('moment');
 /**
  * Unit tests for Group Utility functions
  */
-describe('Validate Group Utility', function() {
+describe('Validate Group Utility functions', function() {
+
+    function generateDateGroupingTestCases(positiveTests) {
+
+        var testCases = [];
+
+        if (positiveTests) {
+            var testDates = [
+                {day: 'Sun', date: '02-28-2016', expectation:{week:'02-22-2016', month:'Feb', year:2016, qtr:1, decade:2010}},
+                {day: 'Mon', date: '02-29-2016', expectation:{week:'02-29-2016', month:'Feb', year:2016, qtr:1, decade:2010}},
+                {day: 'Tue', date: '03-01-2016', expectation:{week:'02-29-2016', month:'Mar', year:2016, qtr:1, decade:2010}},
+                {day: 'Tue', date: '04-05-2016', expectation:{week:'04-04-2016', month:'Apr', year:2016, qtr:2, decade:2010}},
+                {day: 'Wed', date: '12-31-2008', expectation:{week:'12-29-2008', month:'Dec', year:2008, qtr:4, decade:2000}},
+                {day: 'Thu', date: '01-01-2009', expectation:{week:'12-29-2008', month:'Jan', year:2009, qtr:1, decade:2000}},
+                {day: 'Fri', date: '01-01-2010', expectation:{week:'12-28-2009', month:'Jan', year:2010, qtr:1, decade:2010}},
+                {day: 'Sat', date: '01-09-2010', expectation:{week:'01-04-2010', month:'Jan', year:2010, qtr:1, decade:2010}}
+            ];
+
+            var obj = dateTimeFormatter.getJavaToJavaScriptDateFormats();
+            var dateFormatKeys = Object.keys(obj);
+
+            dateFormatKeys.forEach(function(dateFormatKey) {
+                //  get one of the supported date formats
+                var dateFormat = obj[dateFormatKey];
+
+                //  generate a test for each day/format combination
+                testDates.forEach(function(testDate) {
+                    var formattedDate = moment(testDate.date, 'MM-DD-YYYY').format(dateFormat);
+
+                    //  build a test case for each possible date format using the random date
+                    testCases.push({
+                        name: formattedDate + '(' + dateFormat + ')',
+                        testDate: testDate,
+                        displayDate: formattedDate,
+                        displayFormat: dateFormatKey,
+                        momentFormat: obj[dateFormatKey]
+                    });
+                });
+            });
+        } else {
+            let emptyVal = '';
+            testCases.push({name: 'empty date', displayDate: '', displayFormat: 'MM-DD-YYYY', expectation: emptyVal});
+            testCases.push({name: 'null date', displayDate: null, displayFormat: 'MM-DD-YYYY', expectation: emptyVal});
+            testCases.push({name: 'mismatched date format', displayDate: '2015-05-20', displayFormat: 'MM-DD-YYYY', expectation: emptyVal});
+            testCases.push({name: 'invalid format', displayDate: '2015-05-20', displayFormat: 'blah', expectation: emptyVal});
+
+            // NOTE: this test throws a deprecation warning..see https://github.com/moment/moment/issues/1407 for more info.
+            // In summary, the parser currently parses the bad input successfully...but future releases will not.  In either
+            // case, the isValid() test we execute against the parsed date returns false for both implementations, which
+            // is the behavior we want.  Once the new code is released, their will be no deprecation warning and the test
+            // should continue to pass.
+            testCases.push({name: 'invalid date', displayDate: 'blah', displayFormat: 'MM-DD-YYYY', expectation: emptyVal});
+        }
+        return testCases;
+    }
 
     describe('validate group utility functions', function() {
 
@@ -46,6 +102,104 @@ describe('Validate Group Utility', function() {
             firstWordTestCases.forEach(function(test) {
                 it('Test case: ' + test.name, function() {
                     assert.equal(groupUtils.getFirstLetter(test.content), test.expectation);
+                });
+            });
+        });
+
+        describe('validate getFirstDayOfWeek', function() {
+            //  negative test cases
+            var testCases = generateDateGroupingTestCases(true);
+            testCases.forEach(function(test) {
+                it('Test case: ' + test.name, function() {
+                    var mondayDate = groupUtils.getFirstDayOfWeek(test.displayDate, test.momentFormat);
+                    assert.equal(mondayDate, moment(test.testDate.expectation.week, 'MM-DD-YYYY').format(test.momentFormat));
+                });
+            });
+        });
+
+        describe('validate getMonth', function() {
+            //  positive test cases
+            var testCases = generateDateGroupingTestCases(true);
+            testCases.forEach(function(test) {
+                it('Test case: ' + test.name, function() {
+                    var month = groupUtils.getMonth(test.displayDate, test.momentFormat);
+                    assert.equal(month, test.testDate.expectation.month + ' ' + test.testDate.expectation.year);
+                });
+            });
+        });
+
+        describe('validate getYear', function() {
+            //  positive test cases
+            var testCases = generateDateGroupingTestCases(true);
+            testCases.forEach(function(test) {
+                it('Test case: ' + test.name, function() {
+                    var year = groupUtils.getYear(test.displayDate, test.momentFormat);
+                    assert.equal(year, test.testDate.expectation.year);
+                });
+            });
+        });
+
+        describe('validate getQuarter', function() {
+            //  positive test cases
+            var testCases = generateDateGroupingTestCases(true);
+            testCases.forEach(function(test) {
+                it('Test case: ' + test.name, function() {
+                    var quarter = groupUtils.getQuarter(test.displayDate, test.momentFormat);
+                    assert.equal(quarter, constants.GROUPING.QUARTER + test.testDate.expectation.qtr + ' ' + test.testDate.expectation.year);
+                });
+            });
+        });
+
+        describe('validate getFiscalQuarter', function() {
+            //  positive test cases
+            var testCases = generateDateGroupingTestCases(true);
+            testCases.forEach(function(test) {
+                it('Test case: ' + test.name, function() {
+                    var quarter = groupUtils.getFiscalQuarter(test.displayDate, test.momentFormat);
+                    assert.equal(quarter, constants.GROUPING.QUARTER + test.testDate.expectation.qtr + ' ' + constants.GROUPING.FISCAL_YR + test.testDate.expectation.year);
+                });
+            });
+        });
+
+        describe('validate getFiscalYear', function() {
+            //  positive test cases
+            var testCases = generateDateGroupingTestCases(true);
+            testCases.forEach(function(test) {
+                it('Test case: ' + test.name, function() {
+                    var year = groupUtils.getFiscalYear(test.displayDate, test.momentFormat);
+                    assert.equal(year, constants.GROUPING.FISCAL_YR + test.testDate.expectation.year);
+                });
+            });
+        });
+
+        describe('validate getDecade', function() {
+            //  positive test cases
+            var testCases = generateDateGroupingTestCases(true);
+            testCases.forEach(function(test) {
+                it('Test case: ' + test.name, function() {
+                    var decade = groupUtils.getDecade(test.displayDate, test.momentFormat);
+                    assert.equal(decade, test.testDate.expectation.decade + '');
+                });
+            });
+        });
+
+        describe('validate negative test cases against date functions', function() {
+            //  negative test cases against all of the implemented date functions
+            var testCases = generateDateGroupingTestCases(false);
+            testCases.forEach(function(test) {
+                var results = [];
+                it('Test case: ' + test.name, function() {
+                    results.push(groupUtils.getFirstDayOfWeek(test.displayDate, test.momentFormat));
+                    results.push(groupUtils.getMonth(test.displayDate, test.momentFormat));
+                    results.push(groupUtils.getYear(test.displayDate, test.momentFormat));
+                    results.push(groupUtils.getQuarter(test.displayDate, test.momentFormat));
+                    results.push(groupUtils.getFiscalQuarter(test.displayDate, test.momentFormat));
+                    results.push(groupUtils.getFiscalYear(test.displayDate, test.momentFormat));
+                    results.push(groupUtils.getDecade(test.displayDate, test.momentFormat));
+
+                    results.forEach(function(result) {
+                        assert.equal(result, test.expectation);
+                    });
                 });
             });
         });
@@ -204,6 +358,23 @@ describe('Validate Group Utility', function() {
             invalidGroupTypeTestCases.forEach(function(test) {
                 it('Test case: ' + test.name, function() {
                     assert.equal(groupUtils.isValidGroupType(test.dataType, test.groupType), test.expectation);
+                });
+            });
+        });
+
+        describe('validate unsupported date type tests', function() {
+            var unsupportedGroupTypes = [
+                {name: 'CHECKBOX', dataType: constants.CHECKBOX},
+                {name: 'DATE_TIME', dataType: constants.DATE_TIME},
+                {name: 'FILE_ATTACHMENT', dataType: constants.FILE_ATTACHMENT},
+                {name: 'PHONE_NUMBER', dataType: constants.PHONE_NUMBER},
+                {name: 'TIME_OF_DAY', dataType: constants.TIME_OF_DAY},
+                {name: 'URL', dataType: constants.URL}
+            ];
+
+            unsupportedGroupTypes.forEach(function(test) {
+                it('Test case: ' + test.name, function() {
+                    assert.equal(groupUtils.isValidGroupType(test.dataType, groupTypes.TEXT.equals), false);
                 });
             });
         });

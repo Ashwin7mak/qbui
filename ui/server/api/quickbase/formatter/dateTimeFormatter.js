@@ -60,6 +60,10 @@
     }
 
     module.exports = {
+        getJavaToJavaScriptDateFormats: function() {
+            return JAVA_TO_JS_DATE_FORMATS;
+        },
+
         generateFormat: function(fieldInfo) {
             var jsDateFormat;
             if (fieldInfo) {
@@ -82,6 +86,7 @@
             }
             return jsDateFormat;
         },
+
         format        : function(fieldValue, fieldInfo) {
             if (!fieldValue || !fieldValue.value) {
                 return '';
