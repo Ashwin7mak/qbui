@@ -10,6 +10,17 @@
 
     var ReportSortingPage = function() {
 
+        // Report sorting grouping Menu Container
+        this.reportSortingGroupingContainer = element(by.className('sortAndGroupContainer'));
+        // Report sorting grouping button
+        this.reportSortAndGroupBtn = this.reportSortingGroupingContainer.element(by.className('sortAndGroupButton '));
+        //sorting/grouping popup
+        this.reportSortAndGroupDialogue = this.reportSortingGroupingContainer.element(by.id('sortAndGroupDialog'));
+        //sorting/grouping popup title
+        this.reportSortAndGroupTitle = this.reportSortingGroupingContainer.element(by.className('overlayTitle'));
+        //sorting/grouping close button
+        this.reportSortAndGroupCloseBtn = this.reportSortingGroupingContainer.element(by.className('overlayRight'));
+
         /*
          * Function will open the column headers popUp menu
          */
