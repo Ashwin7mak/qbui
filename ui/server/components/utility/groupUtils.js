@@ -122,10 +122,10 @@
         },
 
         /**
-         * Return the first day of the week of a given date.  Monday is considered the first day of the
-         * (work) week, so the date returned will be the preceding Monday in the supplied format.
+         * Return the first day of the week of a given date.  QuickBase considers Monday as the first day
+         * of the(work) week, so the date returned will be the preceding Monday in the format specified.
          *
-         * Strict parsing is enforced.  This means the displayDate string must match the supplied format.
+         * Strict parsing is enforced.  This means the displayDate string must match the format.
          * For example:
          *
          *      ...('2015-05-31','YYYY-MM-DD') is a valid date
@@ -148,10 +148,9 @@
         },
 
         /**
-         * Return the Month and year of a given date.  The return format is
-         * MMM YYYY.
+         * Return the Month and year of a given date.  The return format is MMM YYYY.
          *
-         * Strict parsing is enforced.  This means the displayDate string must match the supplied format.
+         * Strict parsing is enforced.  This means the displayDate string must match the format.
          * For example:
          *
          *      ...('2015-05-31','YYYY-MM-DD') is a valid date
@@ -176,7 +175,7 @@
         /**
          * Return the Year of a given date.
          *
-         * Strict parsing is enforced.  This means the displayDate string must match the supplied format.
+         * Strict parsing is enforced.  This means the displayDate string must match the format.
          * For example:
          *
          *      ...('2015-05-31','YYYY-MM-DD') is a valid date
@@ -199,10 +198,10 @@
         },
 
         /**
-         * Return the Calendar quarter and Year of the given date.  IE:  If the input date
-         * is Mar 15, 2012, the return value is Q1 2012.
+         * Return the Calendar quarter and Year of the given date.  If the input date
+         * is May 31, 2015, the return value is 'Q2 2015'.
          *
-         * Strict parsing is enforced.  This means the displayDate string must match the supplied format.
+         * Strict parsing is enforced.  This means the displayDate string must match the format.
          * For example:
          *
          *      ...('2015-05-31','YYYY-MM-DD') is a valid date
@@ -225,10 +224,10 @@
         },
 
         /**
-         * Return the Fiscal quarter and Year of the given date.  IE:  If the input date
-         * is Mar 15, 2012, the return value is Q1 FY2012.
+         * Return the Fiscal quarter and Year of the given date.  If the input date
+         * is May 31, 2015, the return value is 'Q2 FY2015'.
          *
-         * Strict parsing is enforced.  This means the displayDate string must match the supplied format.
+         * Strict parsing is enforced.  This means the displayDate string must match the format.
          * For example:
          *
          *      ...('2015-05-31','YYYY-MM-DD') is a valid date
@@ -251,10 +250,10 @@
         },
 
         /**
-         * Return the Fiscal Year of the given date.  IE:  If the input date
-         * is Mar 15, 2012, the return value is FY2012.
+         * Return the Fiscal Year of the given date.  If the input date is May 31, 2015,
+         * the return value is 'FY2015'.
          *
-         * Strict parsing is enforced.  This means the displayDate string must match the supplied format.
+         * Strict parsing is enforced.  This means the displayDate string must match the format.
          * For example:
          *
          *      ...('2015-05-31','YYYY-MM-DD') is a valid date
@@ -277,10 +276,10 @@
         },
 
         /**
-         * Return the Decade of the given date.  IE:  If the input date
-         * is Mar 15, 2012, the return value is '2012'.
+         * Return the Decade of the given date.  If the input date is May 31, 2015,
+         * the return value is '2010'.
          *
-         * Strict parsing is enforced.  This means the displayDate string must match the supplied format.
+         * Strict parsing is enforced.  This means the displayDate string must match the format.
          * For example:
          *
          *      ...('2015-05-31','YYYY-MM-DD') is a valid date
