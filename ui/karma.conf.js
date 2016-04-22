@@ -49,7 +49,8 @@ module.exports = function(config) {
                         test: /\.css?$/,
                         include: [
                             path.resolve(__dirname, "client-react/src"),
-                            path.resolve(__dirname, "node_modules/ag-grid")
+                            path.resolve(__dirname, "node_modules/ag-grid"),
+                            path.resolve(__dirname, "node_modules/react-notifications")
                         ],
                         loader: "style!css"
                     },

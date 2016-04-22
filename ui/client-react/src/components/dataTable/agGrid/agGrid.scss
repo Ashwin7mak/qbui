@@ -313,3 +313,94 @@ $grid-default-cell-padding: 8px;
     visibility: hidden;
 }
 
+.editTools {
+    display:none;
+}
+
+.ag-row:nth-last-child(-n+2) {
+    visibility:hidden;
+
+}
+.ag-body-container {
+    .ag-row {
+        background-color: #fff;
+    }
+    background-color:inherit !important;
+}
+.ag-row.ag-row-selected {
+
+    .ag-cell.gridCell {
+        display: flex;
+        overflow:visible;
+        padding: 0;
+        margin: 0;
+
+
+        > .cellWrapper,.ag-cell-wrapper {
+            padding:8px;
+            position: absolute;
+            border-top:1px solid #ddd;
+            border-bottom:1px solid #ddd;
+            top:-5px;
+            left:-5px;
+            right:-5px;
+            bottom:-5px;
+            background-color: #f3f8fe;
+            box-shadow: 2px 2px 2px #888888;
+            z-index:1;
+            display:flex;
+
+            .cellData {
+                border:1px solid #ddd;
+                border-right:2px solid #ddd;
+                background: #fff;
+                flex:1 1 auto;
+                padding:2px;
+                margin-right:2px;
+            }
+        }
+        > .ag-cell-wrapper:first-child {
+            border-left:1px solid #ddd;
+            left:0;
+        }
+    }
+
+    .gridCell {
+
+        .editTools {
+            display:block;
+            flex: 0 0 auto;
+            background-color:#f3f8fe;
+            box-shadow: 2px 2px 2px #888888;
+            position:absolute;
+            top:100%;
+            right:30px;
+
+            border-left: 1px solid #ddd;
+            border-right: 1px solid #ddd;
+            border-bottom:1px solid #ddd;
+            button {
+                border:0;
+                background-color:#f3f8fe;
+                margin-right:2px;
+                .qbIcon.openRecord {
+                    color:teal;
+                }
+                .qbIcon.saveRecord {
+                    color:green;
+                }
+                .qbIcon.cancelSelection {
+                    color:#333;
+                }
+                .qbIcon.deleteRecord {
+                    color:red;
+                }
+                .qbIcon.addRecord {
+                    color:blue;
+                }
+            }
+        }
+    }
+}
+
+

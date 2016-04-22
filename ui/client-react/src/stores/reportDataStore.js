@@ -51,11 +51,11 @@ let reportModel = {
                     column.headerName = field.name;     //for ag-grid
                     column.field = field.name;          //for ag-grid
                     column.columnName = field.name;     //for griddle
-                    column.displayName = field.name;    //for griddle
+                    column.headerName = field.name;    //for griddle
                     column.fieldType = field.type;
                     column.builtIn = field.builtIn;
 
-                    //  client side attributes..
+                    //  client side attributes.
                     column.datatypeAttributes = field.datatypeAttributes;
                     columns.push(column);
                 }
@@ -262,7 +262,8 @@ let ReportDataStore = Fluxxor.createStore({
             actions.FILTER_SELECTIONS_PENDING, this.onFilterSelectionsPending,
             actions.SHOW_FACET_MENU, this.onShowFacetMenu,
             actions.HIDE_FACET_MENU, this.onHideFacetMenu,
-            actions.SEARCH_FOR, this.onSearchFor
+            actions.SEARCH_FOR, this.onSearchFor,
+            actions.ADD_REPORT_RECORD, this.onAddReportRecord
         );
     },
 
@@ -291,6 +292,22 @@ let ReportDataStore = Fluxxor.createStore({
         reportModel.setMetaData(response.metaData);
         reportModel.setRecordData(response.recordData);
         reportModel.setFacetData(response.recordData);
+        this.emit('change');
+    },
+
+    onAddReportRecord() {
+        const recordData = this.reportModel.getRecords();
+
+        let newRec = recordData[recordData.length - 1];
+
+        for (var key of Object.keys(newRec)) {
+            newRec[key] = "";
+        }
+        newRec["Record ID#"] = "" + recordData.length;
+
+        recordData.push(newRec);
+        this.reportModel.filteredRecords = recordData;
+
         this.emit('change');
     },
 

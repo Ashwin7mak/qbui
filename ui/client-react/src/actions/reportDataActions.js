@@ -146,6 +146,9 @@ let reportDataActions = {
      * @param overrideQueryParams: {columns, sortlist, query}
      */
 
+    addReportRecord() {
+        this.dispatch(actions.ADD_REPORT_RECORD);
+    },
     getFilteredRecords(appId, tblId, rptId, requiredQueryParams, filter, overrideQueryParams) {
 
         //  Build the request query parameters needed to properly filter the report request based on the report
