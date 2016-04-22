@@ -3,7 +3,7 @@
 
 .filterSearchBox { /* input box for filtering records containing the string */
   padding: .8rem;
-  width: 25em;
+  min-width: 172px;
 }
 
 .facetsMenuContainer {

@@ -13,14 +13,24 @@ let logger = new Logger();
 const FieldsPanel = React.createClass({
 
     render() {
-        return (
-            <Panel className="fieldsPanel notShown">
+        let shownClass = this.props.showFields ? '' : 'notShown';
+        return (this.props.showFields ?
+            <Panel className={"fieldsPanel " + shownClass}>
+                <div className="fieldPanelHeader">
+                    <span className="cancel" tabIndex="0" onClick={this.props.onHideFields}>
+                        <I18nMessage message="cancel"/>
+                    </span>
+                    <span>
+                        <I18nMessage message={"report.sortAndGroup.chooseFields." + this.props.fieldsForType}/>
+                    </span>
+                </div>
                 <ListGroup>
                     <ListGroupItem>Item 1</ListGroupItem>
                     <ListGroupItem>Item 2</ListGroupItem>
                     <ListGroupItem>Item 3</ListGroupItem>
                     <ListGroupItem>Item 4</ListGroupItem>
                     <ListGroupItem>Item 5</ListGroupItem>
+                    {/* */}
                     <ListGroupItem>Item 6</ListGroupItem>
                     <ListGroupItem>Item 7</ListGroupItem>
                     <ListGroupItem>Item 8</ListGroupItem>
@@ -30,7 +40,8 @@ const FieldsPanel = React.createClass({
                     <ListGroupItem>Item 12</ListGroupItem>
                     <ListGroupItem>...</ListGroupItem>
                 </ListGroup>
-            </Panel>
+            </Panel> :
+                null
         );
     }
 });

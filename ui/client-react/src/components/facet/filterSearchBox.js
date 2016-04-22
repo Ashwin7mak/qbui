@@ -42,7 +42,7 @@ const FilterSearchBox = React.createClass({
         let placeMsg = "Search these " + this.props.nameForRecords + "...";
         logger.debug('rendering search box with:' + this.state.searchStringInput);
         return (<div className="filterSearchBoxContainer">
-                    <input className="filterSearchBox" type="text"
+                    <input className="filterSearchBox searchInput" type="text"
                            key={"filterSearchBox_" + this.props.searchBoxKey}
                            value={this.state.searchStringInput}
                            onChange={this.props.onChange}

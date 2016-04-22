@@ -76,11 +76,6 @@
         }
         .filterSearchBoxContainer {
             flex-shrink: 0;
-            input {
-                width:100%;
-                min-width: 60px;
-                max-width: 180px;
-            }
         }
         >.facetsMenuContainer {
             flex-shrink: 1;

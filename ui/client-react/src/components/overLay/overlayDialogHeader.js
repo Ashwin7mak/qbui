@@ -11,6 +11,13 @@ let StoreWatchMixin = Fluxxor.StoreWatchMixin;
 
 var OverlayDialogHeader = React.createClass({
 
+    renderTitle() {
+        return (
+        <h5 className="overlayTitle overlayCenter">
+            <I18nMessage message={this.props.dialogTitleI18N} />
+        </h5>
+        );
+    },
     smallHeaderRender() {
         return (
             <div className="overlayDialogHeader smallHeader">
@@ -18,9 +25,7 @@ var OverlayDialogHeader = React.createClass({
                     <Button onClick={this.props.onCancel}><QBicon icon={"close"}/></Button>
                 </div>
 
-                <div className="overlayTitle overlayCenter">
-                    <I18nMessage message={this.props.dialogTitleI18N} />
-                </div>
+                {this.renderTitle()}
 
                 <div className="overlayLeft">
                     <Button  onClick={this.props.onApply}>
@@ -42,9 +47,7 @@ var OverlayDialogHeader = React.createClass({
                             </Button>
                 </div>
 
-                <div className="overlayTitle overlayCenter">
-                    <I18nMessage message={this.props.dialogTitleI18N} />
-                </div>
+                {this.renderTitle()}
 
                 <div className="overlayRight">
                     <Button onClick={this.props.onCancel}><QBicon icon={"close"}/></Button>

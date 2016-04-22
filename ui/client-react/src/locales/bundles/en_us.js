@@ -110,6 +110,10 @@ export default {
                 reset: "Reset",
                 sort:   "Sort",
                 thenBy: "then by",
+                chooseFields :  {
+                    group: "Choose Field for grouping",
+                    sort: "Choose Field for sorting",
+                }
             },
             menu: {
                 sort: {

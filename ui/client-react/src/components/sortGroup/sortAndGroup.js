@@ -55,7 +55,10 @@ const SortAndGroup = React.createClass({
     },
 
     getInitialState: function() {
-        return {show: false};
+        return {show: false,
+                showFields: false,
+                fieldsForType:null
+        };
     },
 
     toggleShow: function() {
@@ -64,10 +67,24 @@ const SortAndGroup = React.createClass({
         this.setState({show: !this.state.show});
     },
 
+    toggleShowFields: function() {
+        //let flux = this.getFlux();
+        //flux.actions.showSortAndGroup({show:!this.state.show});
+        this.setState({showFields: !this.state.showFields});
+    },
+
     hide: function() {
         //let flux = this.getFlux();
         //flux.actions.showSortAndGroup({show:false});
         this.setState({show: false});
+    },
+
+    showFields: function(type) {
+        this.setState({showFields: true, fieldsForType:type});
+    },
+
+    hideFields : function() {
+        this.setState({showFields: false, fieldsForType:null});
     },
 
     show: function() {
@@ -135,7 +152,11 @@ const SortAndGroup = React.createClass({
                          onClose={() => this.hide()}
                          onEntering={this.props.onMenuEnter} onExited={this.props.onMenuExit} >
                     <SortAndGroupDialogWrapped  show={this.state.show}
+                                                showFields={this.state.showFields}
+                                                fieldsForType={this.state.fieldsForType}
                                                 reportData={this.props.reportData}
+                                                onShowFields={(type) => this.showFields(type)}
+                                                onHideFields={() => this.hideFields()}
                                                 onClose={() => this.hide()}/>
                 </Overlay>
             </div>

@@ -107,6 +107,10 @@ export default {
                 reset: "Zurückstellen",
                 sort:   "Sortieren",
                 thenBy: "dann durch",
+                chooseFields :  {
+                    group: "Wählen Sie Feld für die Gruppierung",
+                    sort: "Wählen Sie für die Sortierung",
+                }
             },
             menu: {
                 sort: {

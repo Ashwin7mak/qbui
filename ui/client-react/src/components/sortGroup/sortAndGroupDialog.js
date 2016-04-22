@@ -6,8 +6,7 @@ import Locale from '../../locales/locales';
 import StringUtils from '../../utils/stringUtils';
 import {Popover} from 'react-bootstrap';
 import OverlayDialogHeader from '../overLay/overlayDialogHeader';
-import SortBySettings from './sortBySettings';
-import GroupBySettings from './groupBySettings';
+import FieldSettings from './fieldSettings';
 import FieldsPanel from './fieldsPanel';
 
 
@@ -20,7 +19,6 @@ var SortAndGroupDialog = React.createClass({
     propTypes: {
         onClose  : React.PropTypes.func
     },
-
 
     /*
      props to receive report data which has the currentSortGroupInfo
@@ -48,43 +46,64 @@ var SortAndGroupDialog = React.createClass({
      */
     render() {
         //get groupFields from reportdata prop
-        let groupByFields = [//{name:'Project'},
-                            {name:'Date', decendOrder:true}
+        let groupByFields = [//{name:'Project', decendOrder:true},
+                           // {name:'Date', decendOrder:false}
         ];
-        let sortByFields = [//{name:'Claire', decendOrder:true},
-                           // {name:'A longer klhlhklh lkh klh field ', decendOrder:false},
-                           // {name:'Company'},  {name:'Company'}
+        let sortByFields = [{name:'Claire', decendOrder:true},
+                           //{name:'A longer klhlhklh lkh klh field ', decendOrder:false},
+                           //{name:'A longer klhlhklh lkh klh field ', decendOrder:false},
+                           {name:'A longer klhlhklh lkh klh field ', decendOrder:false},
+                           //{name:'A longer klhlhklh lkh klh field ', decendOrder:false},
+                           //{name:'A longer klhlhklh lkh klh field ', decendOrder:false},
+                           //{name:'A longer klhlhklh lkh klh field ', decendOrder:false},
+                            {name:'Company'},  {name:'Company'}
         ];
         return (
             <Popover container={this} id="sortAndGroupDialog"
                      className="sortAndGroupDialog"
                      placement="bottom">
                     <div>
-                        <FieldsPanel />
-                        <div className="settingsDialog">
-                            <div className="topDialog">
+                        <FieldsPanel onHideFields={this.props.onHideFields}
+                                     showFields={this.props.showFields}
+                                     fieldsForType={this.props.fieldsForType}/>
+                        <div className={"settingsDialog" + (this.props.showFields ? ' fieldsShown' : '')} >
+                            <div className="dialogTop">
                                 <OverlayDialogHeader
                                     iconName="sortButton"
                                     icon="sort-az"
                                     dialogTitleI18N="report.sortAndGroup.header"
                                     onCancel={this.props.onClose}
                                 />
-                                 <div className="dialogContent">
-                                     <GroupBySettings maxLength={3}
-                                                      type="group" fields={groupByFields}/>
-                                     <SortBySettings  maxLength={5}
-                                                      type="sort" fields={sortByFields}/>
-                                 </div>
                             </div>
-                             <div className="dialogButtons">
-                                 <span className="reset" tabIndex="0">Reset</span>
-                                 <Button className="apply" bsStyle="primary">Apply</Button>
+                             <div className="dialogContent">
+                                 <FieldSettings maxLength={3}
+                                                  type="group" fields={groupByFields}
+                                                  onShowFields={this.props.onShowFields}
+                                                  onHideFields={this.props.onHideFields}
+                                 />
+                                 <FieldSettings  maxLength={5}
+                                                  type="sort" fields={sortByFields}
+                                                  onShowFields={this.props.onShowFields}
+                                                  onHideFields={this.props.onHideFields}
+                                 />
                              </div>
-                            <div className="dialogBand">
-                                <div className="reset" tabIndex="0">Reset</div>
-                            </div>
+                            <div className="dialogBottom">
+                                <div className="dialogButtons">
+                                     <span className="reset" tabIndex="0">
+                                        <I18nMessage message="report.sortAndGroup.reset"/>
+                                     </span>
+                                     <Button className="apply" bsStyle="primary">
+                                         <I18nMessage message="apply"/>
+                                     </Button>
+                                 </div>
+                                <div className="dialogBand">
+                                    <div className="reset" tabIndex="0">
+                                        <I18nMessage message="report.sortAndGroup.reset"/>
+                                    </div>
+                                </div>
                             </div>
                         </div>
+                    </div>
             </Popover>
         );
     }

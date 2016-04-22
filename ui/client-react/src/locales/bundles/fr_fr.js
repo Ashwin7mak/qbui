@@ -106,6 +106,10 @@ export default {
                 reset: "Réinitialiser",
                 sort:   "Trier",
                 thenBy: "puis par",
+                chooseFields :  {
+                    group: "Choisir un champ pour le groupement",
+                    sort: "Choisir un champ pour le tri",
+                }
             },
             menu: {
                 sort: {
