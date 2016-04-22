@@ -22,7 +22,6 @@ let ReportContent = React.createClass({
     },
 
     setCSSClass_helper: function(obj, classname) {
-        //for ag-grid
         if (typeof (obj.cellClass) === 'undefined') {
             obj.cellClass = classname;
         } else {
@@ -33,15 +32,9 @@ let ReportContent = React.createClass({
         } else {
             obj.headerClass += " " + classname;
         }
-        //for griddle
-        if (typeof (obj.cssClassName) === 'undefined') {
-            obj.cssClassName = classname;
-        } else if (obj.cssClassName.indexOf(classname) === -1) {
-            obj.cssClassName += " " + classname;
-        }
     },
 
-    /* for each field attribute that has some presentation effect convert that to a css class before passing to griddle.*/
+    /* for each field attribute that has some presentation effect convert that to a css class before passing to the grid.*/
     getColumnProps: function(columns) {
         if (!columns) {
             columns = this.props.reportData.data.columns;
@@ -127,6 +120,10 @@ let ReportContent = React.createClass({
     render: function() {
         let isTouch = this.context.touch;
         let columnsDef = this.getColumnProps();
+        let recordCount = 0;
+        if (this.props.reportData.data) {
+            recordCount = this.props.reportData.data.filteredRecordsCount ? this.props.reportData.data.filteredRecordsCount : this.props.reportData.data.recordsCount;
+        }
 
         return (<div className="loadedContent">
                 {this.props.reportData.error ?
@@ -145,7 +142,7 @@ let ReportContent = React.createClass({
                                     selectionActions={<ReportActions />}
                                     onScroll={this.onScrollRecords}
                                     showGrouping={this.props.reportData.data.hasGrouping}
-                                    filteredRecordCount={this.props.reportData.data ? this.props.reportData.data.filteredRecordCount : 0}
+                                    recordCount={recordCount}
                                     groupLevel={this.props.reportData.data ? this.props.reportData.data.groupLevel : 0}
                                     groupEls={this.props.reportData.data ? this.props.reportData.data.groupEls : []}
                                     sortFids={this.props.reportData.data ? this.props.reportData.data.sortFids : []}

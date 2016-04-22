@@ -36,10 +36,8 @@ let reportModel = {
                 let column = {};
                 column.order = index;
                 column.id = field.id;
-                column.headerName = field.name;     //for ag-grid
-                column.field = field.name;          //for ag-grid
-                column.columnName = field.name;     //for griddle
-                column.displayName = field.name;    //for griddle
+                column.headerName = field.name;
+                column.field = field.name;
                 column.fieldType = field.type;
                 column.builtIn = field.builtIn;
 
