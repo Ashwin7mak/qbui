@@ -277,44 +277,20 @@ let AGGrid = React.createClass({
         this.refs.griddleWrapper.removeEventListener("scroll", this.props.onScroll);
     },
 
-    // For some reason react always thinks the component needs to be re-rendered because props have changed.
-    // Analysis shows that the action column renderer is returning notEquals, event though nothing has changed.
-    // Since re-render is expensive the following figures out if ALL is same
-    // and the only piece that has changed is the "actions" column then don't update.
+    // Performance improvement - only update the component when certain state/props change
+    // Since this is a heavy component we dont want this updating all times.
     shouldComponentUpdate(nextProps, nextState) {
-
+return true;
         if (!_.isEqual(nextState, this.state)) {
             return true;
         }
-        if (nextProps !== this.props) {
-            //iterate over props and state
-            for (var property in nextProps) {
-                if (nextProps.hasOwnProperty(property)) {
-                    if (!_.isEqual(this.props[property], nextProps[property])) {
-                        if (property === "columns") {
-                            if (this.props[property].length !== nextProps[property].length) {
-                                return true;
-                            }
-                            let prevColumns = this.props[property];
-                            let nextColumns = nextProps[property];
-                            for (var i = 0; i < prevColumns.length; i++) {
-                                if (!_.isEqual(prevColumns[i], nextColumns[i])) {
-                                    if (prevColumns[i].field === "actions") {
-                                        return false;
-                                    }
-                                    return true;
-                                }
-                            }
-                        } else if (property !== "reportHeader" && property !== "pageActions") {
-                            return true;
-                        }
-                    }
-
-                }
-            }
-            return false;
+        if (!_.isEqual(nextProps.loading, this.props.loading)) {
+            return true;
         }
-        return true;
+        if (!_.isEqual(nextProps.records, this.props.records)) {
+            return true;
+        }
+        return false;
     },
     /**
      * Helper method to auto-resize all columns to the content's width. This is not called anywhere right now - more design is needed on sizing.
@@ -334,12 +310,14 @@ let AGGrid = React.createClass({
      * Grid API - selectAll "selects" all rows.
      */
     selectAll() {
+        console.log('selectall');
         this.api.selectAll();
     },
     /**
      * Grid API - deselectAll "deselects" all rows.
      */
     deselectAll() {
+        console.log('deselectall');
         this.api.deselectAll();
     },
     /**
@@ -373,7 +351,7 @@ let AGGrid = React.createClass({
      * For some reason this doesnt seem to fire on deselectAll but doesnt matter for us.
      */
     onSelectionChanged() {
-
+        console.log('selection changed');
         this.updateAllCheckbox();
     },
 
@@ -381,13 +359,17 @@ let AGGrid = React.createClass({
      * Helper method to flip the master checkbox if all rows are checked
      */
     updateAllCheckbox() {
+
         let selectedRows = this.getSelectedRows().length;
-        let allRowsSelected = this.props.filteredRecordsCount === selectedRows;
+
+        let allRowsSelected = this.props.recordCount === selectedRows;
 
         var newState = {
             toolsMenuOpen: selectedRows > 0,
             allRowsSelected: allRowsSelected
         };
+
+        console.log(newState);
         this.setState(newState);
     },
     /**
@@ -396,6 +378,7 @@ let AGGrid = React.createClass({
      * Use selectAllClicked state variable to keep track of this.
      */
     allCheckBoxSelected() {
+        console.log('all selected',event.currentTarget.checked);
 
         if (!this.props.records) {
             return;
@@ -555,7 +538,6 @@ let AGGrid = React.createClass({
         };
     },
     setCSSClass_helper: function(obj, classname) {
-        //for ag-grid
         if (typeof (obj.cellClass) === 'undefined') {
             obj.cellClass = classname;
         } else {
@@ -565,12 +547,6 @@ let AGGrid = React.createClass({
             obj.headerClass = classname;
         } else {
             obj.headerClass += " " + classname;
-        }
-        //for griddle
-        if (typeof (obj.cssClassName) === 'undefined') {
-            obj.cssClassName = classname;
-        } else if (obj.cssClassName.indexOf(classname) === -1) {
-            obj.cssClassName += " " + classname;
         }
     },
 
@@ -596,15 +572,15 @@ let AGGrid = React.createClass({
                         switch (attr) {
                         case 'type': {
                             switch (datatypeAttributes[attr]) {
-                                //case "NUMERIC" :
-                                //    this.setCSSClass_helper(obj, "AlignRight");
-                                //    obj.cellRenderer = reactCellRendererFactory(NumericFormatter);
-                                //    obj.customComponent = NumericFormatter;
-                                //    break;
-                                //case "DATE" :
-                                //    obj.cellRenderer = reactCellRendererFactory(DateFormatter);
-                                //    obj.customComponent = DateFormatter;
-                                //    break;
+                                case "NUMERIC" :
+                                    this.setCSSClass_helper(obj, "AlignRight");
+                                    obj.cellRenderer = reactCellRendererFactory(NumericFormatter);
+                                    obj.customComponent = NumericFormatter;
+                                    break;
+                                case "DATE" :
+                                    obj.cellRenderer = reactCellRendererFactory(DateFormatter);
+                                    obj.customComponent = DateFormatter;
+                                    break;
                             default:
                                 obj.cellRenderer = reactCellRendererFactory(TextFormatter);
                                 obj.customComponent = TextFormatter;
@@ -645,7 +621,7 @@ let AGGrid = React.createClass({
      * add actions column to the end of the array.
      */
     getColumns() {
-
+console.log('get columns');
         let columnProps = this.getColumnProps();
         if (!columnProps) {
             return;
@@ -676,7 +652,10 @@ let AGGrid = React.createClass({
     },
 
     render() {
-        let columnDefs = this.getColumns();
+        console.log('render',this.state,this.getSelectedRows().length);
+        if (!this.columnDefs)
+            this.columnDefs = this.getColumns();
+
         let griddleWrapperClasses = this.getSelectedRows().length ? "griddleWrapper selectedRows" : "griddleWrapper";
         return (
             <div className="reportTable">
@@ -695,7 +674,7 @@ let AGGrid = React.createClass({
                                     //onSelectionChanged={this.onSelectionChanged}
 
                                     // binding to array properties
-                                    columnDefs={columnDefs}
+                                    columnDefs={this.columnDefs}
                                     rowData={this.getRecordsToRender()}
 
                                     //default behavior properties

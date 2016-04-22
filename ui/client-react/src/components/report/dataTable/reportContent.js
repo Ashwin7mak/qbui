@@ -21,7 +21,6 @@ let ReportContent = React.createClass({
         };
     },
 
-
     /**
      * when we scroll the grid wrapper, hide the add record
      * icon for a bit
@@ -51,6 +50,11 @@ let ReportContent = React.createClass({
     render: function() {
         let isTouch = this.context.touch;
 
+        let recordCount = 0;
+        if (this.props.reportData.data) {
+            recordCount = this.props.reportData.data.filteredRecordsCount ? this.props.reportData.data.filteredRecordsCount : this.props.reportData.data.recordsCount;
+        }
+
         return (<div className="loadedContent">
                 {this.props.reportData.error ?
                     <div>Error loading report!</div> :
@@ -68,7 +72,7 @@ let ReportContent = React.createClass({
                                     selectionActions={<ReportActions />}
                                     onScroll={this.onScrollRecords}
                                     showGrouping={this.props.reportData.data.hasGrouping}
-                                    filteredRecordCount={this.props.reportData.data ? this.props.reportData.data.filteredRecordCount : 0}
+                                    recordCount={recordCount}
                                     groupLevel={this.props.reportData.data ? this.props.reportData.data.groupLevel : 0}
                                     groupEls={this.props.reportData.data ? this.props.reportData.data.groupEls : []}
                                     sortFids={this.props.reportData.data ? this.props.reportData.data.sortFids : []}

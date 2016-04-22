@@ -19,7 +19,12 @@ export const DateFormatter = React.createClass({
         }
         if (data !== "") {
             return (
-                <span className="cellWrapper"><RowEditActions/><span className="cellData"><I18nDate value={data}/></span></span>);
+                <span className="cellWrapper">
+                        {this.props.params.colDef && this.props.params.colDef.addEditActions &&
+                        <RowEditActions flux={this.props.params.context.flux}
+                                        api={this.props.params.api}
+                                        data={this.props.params.data}/>}
+                    <span className="cellData"><I18nDate value={data}/></span></span>);
         }
         return null;
     }
@@ -34,7 +39,12 @@ export const NumericFormatter = React.createClass({
             data = this.props.params.value;
         }
         if (data !== "") {
-            return <span className="cellWrapper"><RowEditActions/><span className="cellData"><I18nNumber value={data}/></span></span>;
+            return <span className="cellWrapper">
+                    {this.props.params.colDef && this.props.params.colDef.addEditActions &&
+                    <RowEditActions flux={this.props.params.context.flux}
+                                    api={this.props.params.api}
+                                    data={this.props.params.data}/>}
+                <span className="cellData"><I18nNumber value={data}/></span></span>;
         }
         return null;
     }
@@ -64,7 +74,10 @@ export const TextFormatter = React.createClass({
 
         if (data) {
             return (<span className="cellWrapper">
-                {this.props.params.colDef && this.props.params.colDef.addEditActions && <RowEditActions flux={this.props.params.context.flux} api={this.props.params.api} data={this.props.params.data}/>}
+                {this.props.params.colDef && this.props.params.colDef.addEditActions &&
+                    <RowEditActions flux={this.props.params.context.flux}
+                                    api={this.props.params.api}
+                                    data={this.props.params.data}/>}
                 {!this.state.editing ?
                     <span className="cellData" onClick={this.onClickCell}>{data}</span> :
                     <input ref="cellInput" onBlur={this.onBlurCell} tabIndex="0" className="cellData" type="text"/>
