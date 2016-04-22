@@ -90,6 +90,7 @@
             //  Group the data based on the data type.  Grouping is supported
             //  for DATE, DURATION, EMAIL, NUMERIC, TEXT and USER data types.
             switch (groupField.datatypeAttributes.type) {
+            case constants.DATE_TIME:   // DATE_TIME and DATE are treated the same for grouping
             case constants.DATE:
                 let dateFormat = dateFormatter.generateFormat({dateFormat: groupField.datatypeAttributes.dateFormat});
                 switch (groupType) {

@@ -17,7 +17,7 @@ describe('Validate GroupFormatter unit tests', function() {
         if (dataType === constants.NUMERIC) {
             return (0 | Math.random() * 10000000);
         }
-        if (dataType === constants.DATE) {
+        if (dataType === constants.DATE || dataType === constants.DATE_TIME) {
             return dateUtils.formatDate(new Date(), '%M-%D-%Y');
         }
         return '';
@@ -134,6 +134,16 @@ describe('Validate GroupFormatter unit tests', function() {
             {message: 'DATE: fiscalQtr grouping', numFields: 5, numRecords: 2, gList: '1:U', dataType: constants.DATE},
             {message: 'DATE: fiscalYr grouping', numFields: 5, numRecords: 2, gList: '1:FY', dataType: constants.DATE},
             {message: 'DATE: decade grouping', numFields: 5, numRecords: 2, gList: '1:T', dataType: constants.DATE},
+            //  DATE_TIME data type
+            {message: 'DATE_TIME: equals grouping', numFields: 5, numRecords: 2, gList: '1:V', dataType: constants.DATE_TIME},
+            {message: 'DATE_TIME: day grouping', numFields: 5, numRecords: 2, gList: '1:D', dataType: constants.DATE_TIME},
+            {message: 'DATE_TIME: week grouping', numFields: 5, numRecords: 2, gList: '1:W', dataType: constants.DATE_TIME},
+            {message: 'DATE_TIME: month grouping', numFields: 5, numRecords: 2, gList: '1:M', dataType: constants.DATE_TIME},
+            {message: 'DATE_TIME: year grouping', numFields: 5, numRecords: 2, gList: '1:Y', dataType: constants.DATE_TIME},
+            {message: 'DATE_TIME: quarter grouping', numFields: 5, numRecords: 2, gList: '1:Q', dataType: constants.DATE_TIME},
+            {message: 'DATE_TIME: fiscalQtr grouping', numFields: 5, numRecords: 2, gList: '1:U', dataType: constants.DATE_TIME},
+            {message: 'DATE_TIME: fiscalYr grouping', numFields: 5, numRecords: 2, gList: '1:FY', dataType: constants.DATE_TIME},
+            {message: 'DATE_TIME: decade grouping', numFields: 5, numRecords: 2, gList: '1:T', dataType: constants.DATE_TIME},
             //  NUMERIC data type
             {message: 'NUMERIC: multiple grouping against same fid', numFields: 5, numRecords: 2, gList: '1:V', dataType: constants.NUMERIC}
         ];

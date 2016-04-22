@@ -17,6 +17,7 @@
         isValidGroupType: function(dataType, groupType) {
 
             switch (dataType) {
+            case constants.DATE_TIME:
             case constants.DATE:
                 switch (groupType) {
                 case groupTypes.DATE.equals: return true;
@@ -48,10 +49,10 @@
                 case groupTypes.EMAIL_ADDRESS.name: return true;
                 }
                 return false;
-            case constants.NUMERIC:
-            case constants.RATING:
             case constants.CURRENCY:
+            case constants.RATING:
             case constants.PERCENT:
+            case constants.NUMERIC:
                 switch (groupType) {
                 case groupTypes.NUMERIC.equals: return true;
                 case groupTypes.NUMERIC.range: return true;
