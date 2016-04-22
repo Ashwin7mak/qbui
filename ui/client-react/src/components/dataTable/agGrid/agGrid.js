@@ -354,7 +354,7 @@ let AGGrid = React.createClass({
      */
     updateAllCheckbox() {
         let selectedRows = this.getSelectedRows().length;
-        let allRowsSelected = this.props.filteredRecordsCount === selectedRows;
+        let allRowsSelected = this.props.recordCount === selectedRows;
         var newState = {
             toolsMenuOpen: selectedRows > 0,
             allRowsSelected: allRowsSelected
