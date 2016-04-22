@@ -236,7 +236,6 @@ describe('Report Data Actions Filter Report functions -- success', () => {
                 expect(mockReportService.prototype.getReport).toHaveBeenCalled();
                 let resultingParams = {};
                 _.extend(resultingParams, queryParams, overrideParams);
-                resultingParams[query.GLIST_PARAM] = "";
                 resultingParams[query.QUERY_PARAM] = "";
 
                 expect(mockRecordService.prototype.getRecords).toHaveBeenCalledWith(appId, tblId, resultingParams);

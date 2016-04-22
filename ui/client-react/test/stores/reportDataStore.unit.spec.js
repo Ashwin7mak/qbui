@@ -109,6 +109,59 @@ describe('Test ReportData Store', () => {
         expect(flux.store(STORE_NAME).reportModel.model.name).toBe(payload.metaData.name);
         expect(flux.store(STORE_NAME).reportModel.model.columns).toBeDefined();
         expect(flux.store(STORE_NAME).reportModel.model.records).toBeDefined();
+        expect(flux.store(STORE_NAME).reportModel.model.hasGrouping).toBe(false);
+        expect(flux.store(STORE_NAME).reportModel.model.groupLevel).toBe(0);
+
+        //  ensure the output of each report row includes an id, name and link
+        expect(flux.store(STORE_NAME).emit).toHaveBeenCalledWith('change');
+        expect(flux.store(STORE_NAME).emit.calls.count()).toBe(1);
+    });
+
+    it('test load reports success action with group data', () => {
+
+        let payload = {
+            metaData: {
+                name: 'report_name',
+                sortList: "1:V"
+            },
+            recordData: {
+                fields: [],
+                records: [],
+                facets: [],
+                groups: {
+                    hasGrouping: true,
+                    fields: [{
+                        field: [{
+                            id: 1,
+                            name: 'group-field1'
+                        }],
+                        groupType: 'V'
+                    }],
+                    gridColumns: [{
+                        id: 2,
+                        name: 'grid-field2'
+                    }],
+                    gridData: [{
+                        id: 2,
+                        value: 'grid-data2'
+                    }],
+                    totalRows: 1
+                }
+            }
+        };
+
+        let action = {
+            type: actions.LOAD_REPORT_SUCCESS,
+            payload: payload
+        };
+
+        flux.dispatcher.dispatch(action);
+
+        expect(flux.store(STORE_NAME).reportModel.model.name).toBe(payload.metaData.name);
+        expect(flux.store(STORE_NAME).reportModel.model.columns).toBeDefined();
+        expect(flux.store(STORE_NAME).reportModel.model.records).toBe(payload.recordData.groups.gridData);
+        expect(flux.store(STORE_NAME).reportModel.model.hasGrouping).toBe(true);
+        expect(flux.store(STORE_NAME).reportModel.model.groupLevel).toBe(1);
 
         //  ensure the output of each report row includes an id, name and link
         expect(flux.store(STORE_NAME).emit).toHaveBeenCalledWith('change');
@@ -220,7 +273,7 @@ describe('Test ReportData Store', () => {
             recordData: {
                 fields: [],
                 records: [],
-                facets: [{id:null, errorMessage:"testing error"}]
+                facets: [{id:null, name:null, errorCode:12345}]
             }
         };
 
@@ -266,13 +319,14 @@ describe('Test ReportData Store', () => {
     });
 
 
-    it('test load records success action with no data', () => {
+    it('test filtered load records success action with no data', () => {
 
         let payload = {
             metaData: {},
             recordData: {
                 fields: [],
-                records: []
+                records: [],
+                groups: []
             }
         };
 
@@ -288,7 +342,6 @@ describe('Test ReportData Store', () => {
         expect(flux.store(STORE_NAME).emit).toHaveBeenCalledWith('change');
         expect(flux.store(STORE_NAME).emit.calls.count()).toBe(1);
     });
-
 
     it('test getState function after showing', () => {
         let action = {
