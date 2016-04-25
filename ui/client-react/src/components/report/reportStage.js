@@ -33,7 +33,7 @@ const ReportStage = React.createClass({
                 </div>
             </div>
          </div>) :
-        <div>empty</div>);
+         null);
 
     }
 });
