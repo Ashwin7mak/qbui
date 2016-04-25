@@ -9,48 +9,42 @@ import {I18nDate, I18nNumber} from '../../../utils/i18nMessage';
 import {Input} from 'react-bootstrap';
 import RowEditActions from './rowEditActions';
 
-export const DateFormatter = React.createClass({
-    render: function() {
-        let data = "";
-        if (this.props.data) { //for griddle
-            data = this.props.data;
-        } else if (this.props.params.value) { //for ag grid
-            data = this.props.params.value;
-        }
-        if (data !== "") {
-            return (
-                <span className="cellWrapper">
-                        {this.props.params.colDef && this.props.params.colDef.addEditActions &&
-                        <RowEditActions flux={this.props.params.context.flux}
-                                        api={this.props.params.api}
-                                        data={this.props.params.data}/>}
-                    <span className="cellData"><I18nDate value={data}/></span></span>);
-        }
-        return null;
+const TextFormat = 1;
+const NumberFormat = 2;
+const DateFormat = 3;
+
+const CellEditor = React.createClass({
+
+    getInitialState() {
+        return {
+            value: this.props.initialValue
+        };
+    },
+    onChange(ev) {
+        const newValue = ev.target.value;
+
+        this.setState({value: newValue});
+    },
+    onBlur() {
+
+    },
+    render() {
+        return <input ref="cellInput"
+                      onChange={this.onChange}
+                      onBlur={this.onBlue}
+                      tabIndex="0"
+                      className="cellData"
+                      type="text"
+                      value={this.state.value}/>;
     }
 });
 
-export const NumericFormatter = React.createClass({
-    render: function() {
-        let data = "";
-        if (this.props.data) { //for griddle
-            data = this.props.data;
-        } else if (this.props.params.value) { //for ag grid
-            data = this.props.params.value;
-        }
-        if (data !== "") {
-            return <span className="cellWrapper">
-                    {this.props.params.colDef && this.props.params.colDef.addEditActions &&
-                    <RowEditActions flux={this.props.params.context.flux}
-                                    api={this.props.params.api}
-                                    data={this.props.params.data}/>}
-                <span className="cellData"><I18nNumber value={data}/></span></span>;
-        }
-        return null;
-    }
-});
+const CellFormatter = React.createClass({
 
-export const TextFormatter = React.createClass({
+    propTypes: {
+        type: React.PropTypes.number.isRequired,
+        params: React.PropTypes.object.isRequired
+    },
 
     getInitialState() {
         return {
@@ -64,29 +58,67 @@ export const TextFormatter = React.createClass({
             ReactDOM.findDOMNode(this.refs.cellInput).focus();
         }, 0);
     },
+
     onBlurCell() {
         this.setState({editing:false});
     },
 
+    renderCell(data) {
+
+        switch (this.props.type) {
+        case NumberFormat:
+            return <span className="cellData" onClick={this.onClickCell}>
+                {data && <I18nNumber value={data}></I18nNumber>}
+                </span>;
+
+        case DateFormat:
+            return <span className="cellData" onClick={this.onClickCell}>
+                {data && <I18nDate value={data}></I18nDate>}
+                </span>;
+
+        default:
+            return <span className="cellData" onClick={this.onClickCell}>
+                {data}
+                </span>;
+        }
+    },
+
+
     render: function() {
         let data = this.props.params.value;
 
+        let classes = "cellWrapper";
+        if (this.state.editing) {
+            classes += " editing";
+        }
 
-        if (data) {
-            return (<span className="cellWrapper">
+        return (<span className={classes}>
                 {this.props.params.colDef && this.props.params.colDef.addEditActions &&
-                    <RowEditActions flux={this.props.params.context.flux}
-                                    api={this.props.params.api}
-                                    data={this.props.params.data}/>}
-                {!this.state.editing ?
-                    <span className="cellData" onClick={this.onClickCell}>{data}</span> :
-                    <input ref="cellInput" onBlur={this.onBlurCell} tabIndex="0" className="cellData" type="text"/>
-                    }
+                <RowEditActions flux={this.props.params.context.flux}
+                                api={this.props.params.api}
+                                data={this.props.params.data}/>}
+                {this.renderCell(data)}
+                <CellEditor initialValue={data}/>
                 </span>);
-        }
-        if (this.state.editing && this.refs.cellInput) {
-            ReactDOM.findDOMNode(this.refs.cellInput).focus();
-        }
-        return null;
+
+    }
+});
+
+export const DateFormatter = React.createClass({
+    render: function() {
+        return  <CellFormatter type={DateFormat} params={this.props.params} />;
+    }
+});
+
+export const NumericFormatter = React.createClass({
+    render: function() {
+        return  <CellFormatter type={NumberFormat} params={this.props.params}/>;
+    }
+});
+
+export const TextFormatter = React.createClass({
+
+    render: function() {
+        return  <CellFormatter type={TextFormat} params={this.props.params} />;
     }
 });

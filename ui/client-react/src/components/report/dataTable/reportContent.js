@@ -44,29 +44,28 @@ let ReportContent = React.createClass({
                 obj.cellClass = "gridCell";
                 obj.suppressResize = true;
                 obj.minWidth = 100;
-                obj.addEditActions = (index === 1)
+                obj.addEditActions = (index === 1);
                 if (obj.datatypeAttributes) {
                     var datatypeAttributes = obj.datatypeAttributes;
                     for (var attr in datatypeAttributes) {
                         switch (attr) {
-                            case 'type':
-                            {
-                                switch (datatypeAttributes[attr]) {
-                                    case "NUMERIC" :
-                                        this.setCSSClass_helper(obj, "AlignRight");
-                                        obj.cellRenderer = reactCellRendererFactory(NumericFormatter);
-                                        obj.customComponent = NumericFormatter;
-                                        break;
-                                    case "DATE" :
-                                        obj.cellRenderer = reactCellRendererFactory(DateFormatter);
-                                        obj.customComponent = DateFormatter;
-                                        break;
-                                    default:
-                                        obj.cellRenderer = reactCellRendererFactory(TextFormatter);
-                                        obj.customComponent = TextFormatter;
-                                        break;
-                                }
+                        case 'type': {
+                            switch (datatypeAttributes[attr]) {
+                            case "NUMERIC" :
+                                this.setCSSClass_helper(obj, "AlignRight");
+                                obj.cellRenderer = reactCellRendererFactory(NumericFormatter);
+                                obj.customComponent = NumericFormatter;
+                                break;
+                            case "DATE" :
+                                obj.cellRenderer = reactCellRendererFactory(DateFormatter);
+                                obj.customComponent = DateFormatter;
+                                break;
+                            default:
+                                obj.cellRenderer = reactCellRendererFactory(TextFormatter);
+                                obj.customComponent = TextFormatter;
+                                break;
                             }
+                        }
                         }
                     }
 
@@ -74,16 +73,16 @@ let ReportContent = React.createClass({
                         var clientSideAttributes = datatypeAttributes.clientSideAttributes;
                         for (var cattr in clientSideAttributes) {
                             switch (cattr) {
-                                case 'bold':
-                                    if (clientSideAttributes[cattr]) {
-                                        this.setCSSClass_helper(obj, "Bold");
-                                    }
-                                    break;
-                                case 'word-wrap':
-                                    if (clientSideAttributes[cattr]) {
-                                        this.setCSSClass_helper(obj, "NoWrap");
-                                    }
-                                    break;
+                            case 'bold':
+                                if (clientSideAttributes[cattr]) {
+                                    this.setCSSClass_helper(obj, "Bold");
+                                }
+                                break;
+                            case 'word-wrap':
+                                if (clientSideAttributes[cattr]) {
+                                    this.setCSSClass_helper(obj, "NoWrap");
+                                }
+                                break;
                             }
                         }
                     }

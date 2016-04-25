@@ -310,14 +310,12 @@ let AGGrid = React.createClass({
      * Grid API - selectAll "selects" all rows.
      */
     selectAll() {
-        console.log('selectall');
         this.api.selectAll();
     },
     /**
      * Grid API - deselectAll "deselects" all rows.
      */
     deselectAll() {
-        console.log('deselectall');
         this.api.deselectAll();
     },
     /**
@@ -351,7 +349,6 @@ let AGGrid = React.createClass({
      * For some reason this doesnt seem to fire on deselectAll but doesnt matter for us.
      */
     onSelectionChanged() {
-        console.log('selection changed');
         this.updateAllCheckbox();
     },
 
@@ -369,7 +366,6 @@ let AGGrid = React.createClass({
             allRowsSelected: allRowsSelected
         };
 
-        console.log(newState);
         this.setState(newState);
     },
     /**
@@ -378,8 +374,6 @@ let AGGrid = React.createClass({
      * Use selectAllClicked state variable to keep track of this.
      */
     allCheckBoxSelected() {
-        console.log('all selected',event.currentTarget.checked);
-
         if (!this.props.records) {
             return;
         }
@@ -544,7 +538,6 @@ let AGGrid = React.createClass({
      * add actions column to the end of the array.
      */
     getColumns() {
-console.log('get columns');
 
         if (!this.props.columns) {
             return;
@@ -568,8 +561,6 @@ console.log('get columns');
     },
 
     getRecordsToRender() {
-        console.log(this.props.records);
-        
         let paddedRecords = this.props.records.slice(0);
         paddedRecords.push({});
         paddedRecords.push({});
@@ -577,7 +568,7 @@ console.log('get columns');
     },
 
     render() {
-        console.log('render',this.state,this.getSelectedRows().length);
+
         let columnDefs = this.getColumns();
 
         let griddleWrapperClasses = this.getSelectedRows().length ? "griddleWrapper selectedRows" : "griddleWrapper";
@@ -591,7 +582,6 @@ console.log('get columns');
                             <div className="agGrid">
                                 <AgGridReact
                                     gridOptions={this.gridOptions}
-                                    suppressContextMenu="true"
                                     // listening for events
                                     onGridReady={this.onGridReady}
                                     //onRowClicked={this.onRowClicked}

@@ -14,7 +14,7 @@ let reportModel = {
         filteredRecordsCount: null,
         groupingFields: null,
         groupLevel: 0,
-        hasGrouping: false,
+        hasGrouping: true,
         name: null,
         records: null,
         recordsCount: null,

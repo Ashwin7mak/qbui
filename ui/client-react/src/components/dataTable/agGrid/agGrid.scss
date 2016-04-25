@@ -327,10 +327,13 @@ $grid-default-cell-padding: 8px;
     }
     background-color:inherit !important;
 }
+.ag-row .gridCell input.cellData {
+     display:none;
+}
 .ag-row.ag-row-selected {
 
     .ag-cell.gridCell {
-        display: flex;
+
         overflow:visible;
         padding: 0;
         margin: 0;
@@ -350,7 +353,11 @@ $grid-default-cell-padding: 8px;
             z-index:1;
             display:flex;
 
-            .cellData {
+            span.cellData {
+                display:none;
+            }
+            input {
+                display:inline;
                 border:1px solid #ddd;
                 border-right:2px solid #ddd;
                 background: #fff;
@@ -383,6 +390,9 @@ $grid-default-cell-padding: 8px;
                 border:0;
                 background-color:#f3f8fe;
                 margin-right:2px;
+                .qbIcon {
+                    font-size: 20px;
+                }
                 .qbIcon.openRecord {
                     color:teal;
                 }
