@@ -5,7 +5,7 @@ import QBicon from '../qbIcon/qbIcon';
 import NavItem from './navItem';
 import Locale from '../../locales/locales';
 import {I18nMessage} from '../../utils/i18nMessage';
-import {tableIcon} from './TagsToIconsMap';
+import TableIconUtils from '../../utils/tableIconUtils';
 
 let TablesList = React.createClass({
 
@@ -77,7 +77,7 @@ let TablesList = React.createClass({
     tablesList() {
         return this.props.getAppTables(this.props.selectedAppId).map((table) => {
             table.link = this.getTableLink(table);
-            table.icon = tableIcon(table.name);
+            table.icon = TableIconUtils.getTableIcon(table.name);
             return this.searchMatches(table.name) &&
                 <NavItem item={table}
                          key={table.id}
