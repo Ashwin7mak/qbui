@@ -202,6 +202,7 @@ const ReportRoute = React.createClass({
                                            clearSearchString : this.clearSearchString,
                                            clearAllFilters : this.clearAllFilters
                                        }}
+                                       history={this.props.history}
                 />
 
                 {!this.props.scrollingReport && <AddRecordButton />}

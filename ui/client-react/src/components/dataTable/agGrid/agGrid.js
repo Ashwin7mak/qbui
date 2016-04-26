@@ -184,7 +184,7 @@ let AGGrid = React.createClass({
         document.addEventListener("DOMNodeRemoved", (ev) => {
             if (ev.target && ev.target.className && ev.target.className.indexOf("ag-menu") !== -1) {
                 if (this.selectedColumnId.length) {
-                    let toRemove = self.selectedColumnId[0];
+                    let toRemove = this.selectedColumnId[0];
                     let occurences = _.filter(this.selectedColumnId, (column) => {
                         return column === toRemove;
                     });
@@ -290,7 +290,7 @@ let AGGrid = React.createClass({
         if (!_.isEqual(nextProps.records, this.props.records)) {
             return true;
         }
-        return false;
+        return true; // for now
     },
     /**
      * Helper method to auto-resize all columns to the content's width. This is not called anywhere right now - more design is needed on sizing.
@@ -324,6 +324,8 @@ let AGGrid = React.createClass({
      */
     onRowClicked(params) {
 
+        //this.props.rowClicked(params.rowIndex);
+
         //For click on group, expand/collapse the group.
         if (params.node.field === "group") {
             params.node.expanded = !params.node.expanded;
@@ -336,13 +338,6 @@ let AGGrid = React.createClass({
             params.event.target.className.indexOf("iconLink") !== -1) {
             return;
         }
-
-        const appId = this.props.appId;
-        const tblId = this.props.tblId;
-        var recId = params.data[this.props.uniqueIdentifier];
-        //create the link we want to send the user to and then send them on their way
-        const link = `/app/${appId}/table/${tblId}/record/${recId}`;
-        this.context.history.push(link);
     },
     /**
      * Capture the row-selection/deselection change events.
@@ -356,7 +351,6 @@ let AGGrid = React.createClass({
      * Helper method to flip the master checkbox if all rows are checked
      */
     updateAllCheckbox() {
-
         let selectedRows = this.getSelectedRows().length;
 
         let allRowsSelected = this.props.recordCount === selectedRows;
@@ -513,6 +507,7 @@ let AGGrid = React.createClass({
         } else {
             checkBoxCol.width = consts.DEFAULT_CHECKBOX_COL_WIDTH;
         }
+
         return checkBoxCol;
     },
     /**
@@ -584,7 +579,7 @@ let AGGrid = React.createClass({
                                     gridOptions={this.gridOptions}
                                     // listening for events
                                     onGridReady={this.onGridReady}
-                                    //onRowClicked={this.onRowClicked}
+                                    onRowClicked={this.onRowClicked}
                                     //onSelectionChanged={this.onSelectionChanged}
 
                                     // binding to array properties
@@ -597,6 +592,7 @@ let AGGrid = React.createClass({
                                     groupHeaders="true"
                                     getRowHeight={this.getRowHeight}
 
+                                    getRowClass={this.getRowClass}
                                     //suppressRowClickSelection="true"
                                     suppressCellSelection="true"
 

@@ -142,6 +142,10 @@ let reportDataActions = {
     addReportRecord() {
         this.dispatch(actions.ADD_REPORT_RECORD);
     },
+    deleteReportRecord(id) {
+        this.dispatch(actions.DELETE_REPORT_RECORD, id);
+    },
+
     getFilteredRecords(appId, tblId, rptId, requiredQueryParams, filter, overrideQueryParams) {
 
         //  Build the request query parameters needed to properly filter the report request based on the report

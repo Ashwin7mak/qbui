@@ -46,38 +46,21 @@ const CellFormatter = React.createClass({
         params: React.PropTypes.object.isRequired
     },
 
-    getInitialState() {
-        return {
-            editing: false
-        };
-    },
-
-    onClickCell() {
-        this.setState({editing:!this.state.editing});
-        setTimeout(() => {
-            ReactDOM.findDOMNode(this.refs.cellInput).focus();
-        }, 0);
-    },
-
-    onBlurCell() {
-        this.setState({editing:false});
-    },
-
     renderCell(data) {
 
         switch (this.props.type) {
         case NumberFormat:
-            return <span className="cellData" onClick={this.onClickCell}>
+            return <span className="cellData">
                 {data && <I18nNumber value={data}></I18nNumber>}
                 </span>;
 
         case DateFormat:
-            return <span className="cellData" onClick={this.onClickCell}>
+            return <span className="cellData">
                 {data && <I18nDate value={data}></I18nDate>}
                 </span>;
 
         default:
-            return <span className="cellData" onClick={this.onClickCell}>
+            return <span className="cellData">
                 {data}
                 </span>;
         }
@@ -85,18 +68,17 @@ const CellFormatter = React.createClass({
 
 
     render: function() {
+
         let data = this.props.params.value;
 
-        let classes = "cellWrapper";
-        if (this.state.editing) {
-            classes += " editing";
-        }
-
-        return (<span className={classes}>
+        return (<span className="cellWrapper">
                 {this.props.params.colDef && this.props.params.colDef.addEditActions &&
                 <RowEditActions flux={this.props.params.context.flux}
                                 api={this.props.params.api}
-                                data={this.props.params.data}/>}
+                                data={this.props.params.data}
+                                onOpen={this.props.params.colDef.openActiveRow}
+
+                />}
                 {this.renderCell(data)}
                 <CellEditor initialValue={data}/>
                 </span>);

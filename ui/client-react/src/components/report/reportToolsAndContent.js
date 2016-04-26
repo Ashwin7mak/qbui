@@ -43,6 +43,7 @@ let ReportToolsAndContent = React.createClass({
         return (<div className="reportToolsAndContentContainer">
                     <ReportContent  reportData={this.props.reportData}
                                     reportHeader={toolbar}
+                                    uniqueIdentifier="Record ID#"
                                     flux={this.getFlux()}
                                     {...this.props} />
                 </div>);

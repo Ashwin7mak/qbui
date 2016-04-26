@@ -212,7 +212,10 @@ let ReportDataStore = Fluxxor.createStore({
             actions.FILTER_SELECTIONS_PENDING, this.onFilterSelectionsPending,
             actions.SHOW_FACET_MENU, this.onShowFacetMenu,
             actions.HIDE_FACET_MENU, this.onHideFacetMenu,
-            actions.SEARCH_FOR, this.onSearchFor
+            actions.SEARCH_FOR, this.onSearchFor,
+
+            actions.ADD_REPORT_RECORD, this.onAddReportRecord, // for empower demo
+            actions.DELETE_REPORT_RECORD, this.onDeleteReportRecord // for empower demo
         );
     },
 
@@ -309,6 +312,32 @@ let ReportDataStore = Fluxxor.createStore({
 
     onHideFacetMenu() {
         this.nonFacetClicksEnabled = true;
+        this.emit('change');
+    },
+
+    onAddReportRecord() {
+        const model = this.reportModel.get();
+
+        if (model.filteredRecords.length > 0) {
+
+            const lastRecord = model.filteredRecords[model.filteredRecords.length - 1];
+            const newRecord = _.mapValues(lastRecord, (obj) => {return null;});
+
+            const id = parseInt(lastRecord["Record ID#"]) + 1;
+            newRecord["Record ID#"] = id;
+
+            model.filteredRecords.push(newRecord);
+            model.filteredRecordsCount++;
+
+            this.emit('change');
+        }
+    },
+    onDeleteReportRecord(id) {
+        const model = this.reportModel.get();
+
+        const index = _.findIndex(model.filteredRecords, {"Record ID#": id});
+
+        model.filteredRecords.splice(index, 1);
         this.emit('change');
     },
 

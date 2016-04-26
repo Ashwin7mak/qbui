@@ -15,9 +15,13 @@ const resultsPerPage = 1000; //assume that this is the constant number of record
 let ReportContent = React.createClass({
     mixins: [FluxMixin],
 
+    contextTypes: {
+        history: React.PropTypes.object
+    },
     getInitialState: function() {
         return {
-            showSelectionColumn: false
+            showSelectionColumn: false,
+            activeRow: -1
         };
     },
     setCSSClass_helper: function(obj, classname) {
@@ -33,6 +37,17 @@ let ReportContent = React.createClass({
         }
     },
 
+    openActiveRow(data) {
+
+        const appId = this.props.appId;
+        const tblId = this.props.tblId;
+        var recId = data[this.props.uniqueIdentifier];
+        //create the link we want to send the user to and then send them on their way
+        const link = `/app/${appId}/table/${tblId}/record/${recId}`;
+
+        //this.context.history.push(link);
+        this.props.history.pushState(null, link);
+    },
     /* for each field attribute that has some presentation effect convert that to a css class before passing to the grid.*/
     getColumnProps: function(columns) {
         if (!columns) {
@@ -45,6 +60,8 @@ let ReportContent = React.createClass({
                 obj.suppressResize = true;
                 obj.minWidth = 100;
                 obj.addEditActions = (index === 1);
+                obj.openActiveRow = this.openActiveRow;
+
                 if (obj.datatypeAttributes) {
                     var datatypeAttributes = obj.datatypeAttributes;
                     for (var attr in datatypeAttributes) {
@@ -137,7 +154,7 @@ let ReportContent = React.createClass({
                             <AGGrid loading={this.props.reportData.loading}
                                     records={this.props.reportData.data ? this.props.reportData.data.filteredRecords : []}
                                     columns={columnsDef}
-                                    uniqueIdentifier="Record ID#"
+                                    uniqueIdentifier={this.props.uniqueIdentifier}
                                     appId={this.props.reportData.appId}
                                     tblId={this.props.reportData.tblId}
                                     rptId={this.props.reportData.rptId}
@@ -147,6 +164,9 @@ let ReportContent = React.createClass({
                                     onScroll={this.onScrollRecords}
                                     showGrouping={this.props.reportData.data.hasGrouping}
                                     recordCount={recordCount}
+                                    activeRow={this.state.activeRow}
+                                    rowClicked={this.onGridRowClicked}
+                                    //rowSelected={(e)=>{console.log('sel',e)}}
                                     groupLevel={this.props.reportData.data ? this.props.reportData.data.groupLevel : 0}
                                     groupEls={this.props.reportData.data ? this.props.reportData.data.groupEls : []}
                                     sortFids={this.props.reportData.data ? this.props.reportData.data.sortFids : []}
