@@ -8,7 +8,7 @@
  * Leveraging same logic here to fill out icons
  */
 import _ from 'lodash';
-const defaultTableIcon = "iconssturdy-report-table";
+const DefaultTableIcon = "iconssturdy-report-table";
 
 const IconPrefix = "icon-TableIcons_sturdy_";
 
@@ -36,5 +36,5 @@ export function tableIcon(tableName) {
     if (matchedTag) {
         return IconPrefix + TagsToIconsMap[matchedTag];
     }
-    return defaultTableIcon;
+    return DefaultTableIcon;
 }

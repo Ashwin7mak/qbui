@@ -6,13 +6,7 @@ import './style.css';
  */
 const TableIcon = React.createClass({
     propTypes: {
-        icon: React.PropTypes.string.isRequired,
-        className: React.PropTypes.string
-    },
-    getDefaultProps() {
-        return {
-            className: ""
-        };
+        icon: React.PropTypes.string.isRequired
     },
     render: function() {
         let className = 'qbIcon ' + this.props.icon;
