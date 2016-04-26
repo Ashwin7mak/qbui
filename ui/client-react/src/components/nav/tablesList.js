@@ -77,7 +77,6 @@ let TablesList = React.createClass({
     tablesList() {
         return this.props.getAppTables(this.props.selectedAppId).map((table) => {
             table.link = this.getTableLink(table);
-            table.icon = TableIconUtils.getTableIcon(table.name);
             return this.searchMatches(table.name) &&
                 <NavItem item={table}
                          key={table.id}

@@ -3,6 +3,7 @@ import * as actions from '../constants/actions';
 import Fluxxor from 'fluxxor';
 import Logger from '../utils/logger';
 var logger = new Logger();
+import TableIconUtils from '../utils/tableIconUtils';
 
 let AppsStore = Fluxxor.createStore({
 
@@ -30,12 +31,24 @@ let AppsStore = Fluxxor.createStore({
         this.error = true;
         this.emit("change");
     },
+    setTableIcons() {
+        let appsCopy = this.apps.slice(0);
+        appsCopy.forEach((app) => {
+            if (app.tables) {
+                app.tables.forEach((table) => {
+                    table.icon = TableIconUtils.getTableIcon(table.name);
+                });
+            }
+        });
+        this.apps = appsCopy;
+    },
     onLoadAppsSuccess: function(apps) {
 
         this.loading = false;
         this.error = false;
 
         this.apps = apps;
+        this.setTableIcons();
 
         this.emit('change');
     },
