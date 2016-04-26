@@ -9,6 +9,7 @@ let logger = new Logger();
 let reportModel = {
     model: {
         columns: null,
+        description: "",
         facets: null,
         filteredRecords: null,
         filteredRecordsCount: null,
@@ -104,6 +105,7 @@ let reportModel = {
      */
     setMetaData: function(reportMetaData) {
         this.model.name = reportMetaData.name;
+        this.model.description = reportMetaData.description;
         // in report's meta data sortlist is returned as an array of sort elements
         this.setSortFids(reportMetaData.sortList);
         this.setGroupElements(reportMetaData.sortList);

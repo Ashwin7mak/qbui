@@ -93,6 +93,15 @@ if(System.getProperty("endpoint")) {
     testURL = System.getProperty("endpoint");
 }
 
+// Setup Sauce Connection information for try job
+def instanceId = System.getenv("INSTANCE_ID");
+def executorId = System.getenv("EXECUTOR_NUMBER");
+//def sauceURL = "https://localhost."+ instanceId + "-" + executorId + ".slave.ci.quickbaserocks.com";
+def sauceURL = "http://quickbase-dev.com:9000";
+def sauceKey = System.getenv("SAUCE_KEY");
+def sauceJobName = "JENKINS_UI_E2E_" + System.getenv("BUILD_NUMBER");
+def tunnelIdentifier = "JENKINS_TUNNEL_E2E_" + System.getenv("BUILD_NUMBER");
+
 // TODO: Pull the code below out into a separate groovy class - QBSE-19142
 // If running in AWS, there is no manually created properties file, so the settings must be retrieved using secret-cli
 if (awsEnv) {
@@ -205,9 +214,9 @@ cargo {
 node {
     // Version of node to use.
     //version = '0.10.31'
-    version = '4.2.1'
+    version = '4.2.3'
 
-    npmVersion = '2.14.4'
+    npmVersion = '2.14.10'
     // Base URL for fetching node distributions (change if you have a mirror).
     //distBaseUrl = 'http://nodejs.org/dist'
     // full URL is http://nodejs.org/dist/v0.10.31/node-v0.10.31-darwin-x64.tar.gz
@@ -269,8 +278,16 @@ task npmInstallVerbose(type: NpmTask) {
     args = ['install', '--verbose', '--debug' ]
 }
 
+task npmInstallLean(type: NpmTask) {
+    args = ['install']
+}
+
 task npmListConfig(type: NpmTask) {
     args = ['config', 'ls', '-l' ]
+}
+
+task npmPrune(type: NpmTask) {
+    args = ['prune']
 }
 
 task npmPruneProduction (type: NpmTask) {
@@ -278,6 +295,10 @@ task npmPruneProduction (type: NpmTask) {
     execOverrides {
         it.workingDir = cwd + "/dist"
     }
+}
+
+task npmUpdateWebdriver(type: NpmTask) {
+    args = ['run', 'update-webdriver']
 }
 
 task npmInstallProduction (type: NpmTask) {
@@ -372,6 +393,9 @@ task stopTomcat {
     }
 }
 
+task invokeInstallSauceLabs(type:Exec) {
+    executable cwd + "/../tools/aws/jenkins_install_sauce.sh"
+}
 
 task invokeCheckForApiUp(type:Exec) {
     executable cwd + "/../tools/ci/checkForApiUp.sh"
@@ -400,6 +424,17 @@ task gruntCiE2ETestsNoColor(type: GruntTask) {
     doFirst {
         tasks.invokeCheckForApiUp.execute()
         args = ["test:e2e", "--no-color"]
+    }
+    dependsOn startTomcat
+    finalizedBy stopTomcat
+}
+
+//browser tests in AWS
+task gruntE2EAWSSauce(type: GruntTask) {
+    doFirst {
+        tasks.invokeInstallSauceLabs.execute()
+        tasks.invokeCheckForApiUp.execute()
+        args = ["test:e2eAWSSauce", "--baseUrl", sauceURL, "--sauceKey", sauceKey, "--sauceJobName", sauceJobName, "--tunnelIdentifier", tunnelIdentifier]
     }
     dependsOn startTomcat
     finalizedBy stopTomcat

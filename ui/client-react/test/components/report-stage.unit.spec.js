@@ -15,8 +15,6 @@ var I18nMessageMock = React.createClass({
 describe('Report stage functions', () => {
     'use strict';
 
-    let component;
-
     beforeEach(() => {
         ReportStage.__Rewire__('I18nMessage', I18nMessageMock);
     });
@@ -34,8 +32,25 @@ describe('Report stage functions', () => {
                 rptId: '789'
             }
         };
-        component = TestUtils.renderIntoDocument(<ReportStage reportData={reportData}/>);
+        let component = TestUtils.renderIntoDocument(<ReportStage reportData={reportData}/>);
         expect(TestUtils.isCompositeComponent(component)).toBeTruthy();
+    });
+
+    it('test render of description', () => {
+        const reportData = {
+            data: {
+                name: 'My Report',
+                description: "Report description",
+                appId: '123',
+                tblId: '456',
+                rptId: '789'
+            }
+        };
+        let component = TestUtils.renderIntoDocument(<ReportStage reportData={reportData}/>);
+        expect(TestUtils.isCompositeComponent(component)).toBeTruthy();
+        let descElement = TestUtils.scryRenderedDOMComponentsWithClass(component, "stage-showHide-content");
+        expect(descElement.length).toEqual(1);
+        expect(descElement[0].innerHTML).toEqual(reportData.data.description);
     });
 
 });
