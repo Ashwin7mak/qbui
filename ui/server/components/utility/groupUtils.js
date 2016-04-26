@@ -303,6 +303,73 @@
                 }
             }
             return '';
+        },
+
+        /**
+         *
+         * @param input
+         * @param scale
+         * @returns {{lower: null, upper: null}}
+         */
+        getRangeFraction: function(input, scale) {
+            var range = {
+                lower: null,
+                upper: null
+            };
+
+            if (typeof input === 'number' && typeof scale === 'number') {
+
+                var factor = Math.pow(10, scale - 1);
+
+                //  remove trailing zeros from input(if any) so that we can figure out the scale of the input value
+                var value = (input * factor) / factor;
+
+                //  figure out the scale(if any) of the input value.  For example:
+                //      20.39  ==> scale of 2
+                //      20.4  ==> scale of 1
+                //      20     ==> scale of 0
+                var s = value.toString().split('.');
+                var valueScale = s.length > 1 ? s[1].length : 0;
+
+                //  ensure correct precision if the scale of the input number is less than what is requested
+                if (valueScale < scale) {
+                    value = value + (1 / (factor * 10));
+                }
+
+                //  calculate the upper and lower boundary ranges based on the requested scale
+                range.upper = (Math.ceil(value * factor) / factor).toFixed(scale);
+                range.lower = (Math.floor(value * factor) / factor).toFixed(scale);
+
+                //  for scale of 1, return the integer value.  IE:  76.0 --> 76
+                if (scale === 1) {
+                    range.upper = Number.parseFloat(range.upper).toFixed(0);
+                    range.lower = Number.parseFloat(range.lower).toFixed(0);
+                }
+            }
+
+            return range;
+        },
+
+        /**
+         *
+         * @param input
+         * @param factor
+         * @returns {{lower: null, upper: null}}
+         */
+        getRangeWhole: function(input, factor) {
+            var range = {
+                lower: null,
+                upper: null
+            };
+
+            if (typeof input === 'number' && typeof factor === 'number') {
+                if (factor !== 0) {
+                    range.lower = factor * (Math.floor(input / factor));
+                    range.upper = range.lower + factor;
+                }
+            }
+
+            return range;
         }
 
     };

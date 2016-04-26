@@ -141,19 +141,28 @@
                 switch (groupType) {
                 case groupTypes.NUMERIC.equals:
                     return dataValue;
-                //jira: qbse-21427
-                //case groupTypes.NUMERIC.range:
-                //case groupTypes.NUMERIC.thousandth:
-                //case groupTypes.NUMERIC.hundredth:
-                //case groupTypes.NUMERIC.tenth:
-                //case groupTypes.NUMERIC.one:
-                //case groupTypes.NUMERIC.five:
-                //case groupTypes.NUMERIC.ten:
-                //case groupTypes.NUMERIC.hundred:
-                //case groupTypes.NUMERIC.one_k:
-                //case groupTypes.NUMERIC.ten_k:
-                //case groupTypes.NUMERIC.hundred_k:
-                //case groupTypes.NUMERIC.million:
+                case groupTypes.NUMERIC.thousandth:
+                    return groupUtils.getRangeFraction(dataValue, 4);
+                case groupTypes.NUMERIC.hundredth:
+                    return groupUtils.getRangeFraction(dataValue, 3);
+                case groupTypes.NUMERIC.tenth:
+                    return groupUtils.getRangeFraction(dataValue, 2);
+                case groupTypes.NUMERIC.one:
+                    return groupUtils.getRangeFraction(dataValue, 1);
+                case groupTypes.NUMERIC.five:
+                    return groupUtils.getRangeWhole(dataValue, 5);
+                case groupTypes.NUMERIC.ten:
+                    return groupUtils.getRangeWhole(dataValue, 10);
+                case groupTypes.NUMERIC.hundred:
+                    return groupUtils.getRangeWhole(dataValue, 100);
+                case groupTypes.NUMERIC.one_k:
+                    return groupUtils.getRangeWhole(dataValue, 1000);
+                case groupTypes.NUMERIC.ten_k:
+                    return groupUtils.getRangeWhole(dataValue, 10000);
+                case groupTypes.NUMERIC.hundred_k:
+                    return groupUtils.getRangeWhole(dataValue, 100000);
+                case groupTypes.NUMERIC.million:
+                    return groupUtils.getRangeWhole(dataValue, 1000000);
                 }
                 break;
             case constants.TEXT:
