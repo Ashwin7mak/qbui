@@ -12,9 +12,28 @@ var moment = require('moment');
  */
 describe('Validate Group Utility functions', function() {
 
+    //  Return random number where min <= randomNumber < max
     function getRandomNumber(min, max, scale) {
-        var num = Math.random() * (max - min) + min;
-        return num.toFixed(scale);
+        var num;
+        if (min < max) {
+            if (scale === undefined || scale ===  null) {
+                scale = Math.floor(Math.random() * (5 - 0));
+            }
+            num = Math.random() * ((max - 1 / Math.pow(10, scale)) - min) + min;
+        } else {
+            num = min;
+        }
+
+        if (scale === 0) {
+            return Math.floor(num);
+        } else {
+            //  possible parsed number could get rounded up to the max
+            var parsedNumber = Number.parseFloat(num.toFixed(scale));
+            if (Number.parseFloat(parsedNumber) >= max) {
+                return num;
+            }
+        }
+        return Number.parseFloat(num.toFixed(scale));
     }
 
     function generateDateGroupingTestCases(positiveTests) {
@@ -166,7 +185,6 @@ describe('Validate Group Utility functions', function() {
         describe('validate numeric fractions - tens fractional tests', function() {
 
             var testCases = [];
-
             testCases.push({name: 'tens (76.12345)', input:76.12345, scale:2, expectation:{lower:'76.10', upper:'76.20'}});
             testCases.push({name: 'tens (76.1234)', input:76.1234, scale:2, expectation:{lower:'76.10', upper:'76.20'}});
             testCases.push({name: 'tens (76.123)', input:76.123, scale:2, expectation:{lower:'76.10', upper:'76.20'}});
@@ -183,7 +201,7 @@ describe('Validate Group Utility functions', function() {
             testCases.push({name: 'tens (-76.12345)', input:-76.12345, scale:2, expectation:{lower:'-76.20', upper:'-76.10'}});
 
             testCases.forEach(function(test) {
-                it('Test case: ' + test.name, function() {
+                it('Test case: ' + test.name + ':' + test.input, function() {
                     assert.deepEqual(groupUtils.getRangeFraction(test.input, test.scale), test.expectation);
                 });
             });
@@ -192,27 +210,19 @@ describe('Validate Group Utility functions', function() {
         describe('validate numeric fractions - ones fractional tests', function() {
 
             var testCases = [];
-
-            testCases.push({name: 'ones (76.12345)', input:76.12345, scale:1, expectation:{lower:'76', upper:'77'}});
-            testCases.push({name: 'ones (76.1234)', input:76.1234, scale:1, expectation:{lower:'76', upper:'77'}});
-            testCases.push({name: 'ones (76.123)', input:76.123, scale:1, expectation:{lower:'76', upper:'77'}});
-            testCases.push({name: 'ones (76.12)', input:76.12, scale:1, expectation:{lower:'76', upper:'77'}});
-            testCases.push({name: 'ones (76.1)', input:76.1, scale:1, expectation:{lower:'76', upper:'77'}});
-            testCases.push({name: 'ones (76)', input:76, scale:1, expectation:{lower:'76', upper:'77'}});
-            testCases.push({name: 'tens (.76)', input:.76, scale:1, expectation:{lower:'0', upper:'1'}});
-            testCases.push({name: 'tens (-.76)', input:-.76, scale:1, expectation:{lower:'-1', upper:'0'}});
-            testCases.push({name: 'tens (-76)', input:-76, scale:1, expectation:{lower:'-76', upper:'-75'}});
-            testCases.push({name: 'tens (-76.1)', input:-76.1, scale:1, expectation:{lower:'-77', upper:'-76'}});
-            testCases.push({name: 'tens (-76.12)', input:-76.12, scale:1, expectation:{lower:'-77', upper:'-76'}});
-            testCases.push({name: 'tens (-76.123)', input:-76.123, scale:1, expectation:{lower:'-77', upper:'-76'}});
-            testCases.push({name: 'tens (-76.1234)', input:-76.1234, scale:1, expectation:{lower:'-77', upper:'-76'}});
-            testCases.push({name: 'tens (-76.12345)', input:-76.12345, scale:1, expectation:{lower:'-77', upper:'-76'}});
-
-            testCases.forEach(function(test) {
-                it('Test case: ' + test.name, function() {
-                    assert.deepEqual(groupUtils.getRangeFraction(test.input, test.scale), test.expectation);
+            for (var idx = 1; idx < 5; idx++) {
+                var lowerBound = getRandomNumber(-100, 100, 0);  // generate random number between 0 and 100
+                var upperBound = lowerBound + 1;
+                testCases.push({
+                    name: 'ones scale ' + idx,
+                    input: getRandomNumber(lowerBound, upperBound, idx),
+                    scale: 1,
+                    expectation: {lower: lowerBound.toString(), upper: upperBound.toString()}
                 });
-            });
+            }
+
+            testCases.push({name: 'ones pos fraction', input:getRandomNumber(0, 1, 2), scale:1, expectation:{lower:'0', upper:'1'}});
+            testCases.push({name: 'ones neg fraction', input:getRandomNumber(-1, 0, 2), scale:1, expectation:{lower:'-1', upper:'0'}});
         });
 
         describe('validate numeric fractions - negative fractional tests', function() {
@@ -227,6 +237,48 @@ describe('Validate Group Utility functions', function() {
             testCases.forEach(function(test) {
                 it('Test case: ' + test.name, function() {
                     assert.deepEqual(groupUtils.getRangeFraction(test.input, test.scale), test.expectation);
+                });
+            });
+        });
+
+        describe('validate numeric fractions - positive value range tests', function() {
+
+            var testCases = [];
+
+            testCases.push({name: 'five (pos)', input:getRandomNumber(75, 80), factor:5, expectation:{lower:'75', upper:'80'}});
+            testCases.push({name: 'ten (pos)', input:getRandomNumber(70, 80), factor:10, expectation:{lower:'70', upper:'80'}});
+            testCases.push({name: 'hundred (pos)', input:getRandomNumber(0, 100), factor:100, expectation:{lower:'0', upper:'100'}});
+            testCases.push({name: 'thousand (pos)', input:getRandomNumber(0, 1000), factor:1000, expectation:{lower:'0', upper:'1000'}});
+            testCases.push({name: '10Thousand (pos)', input:getRandomNumber(0, 10000), factor:10000, expectation:{lower:'0', upper:'10000'}});
+            testCases.push({name: '100Thousand (pos)', input:getRandomNumber(0, 100000), factor:100000, expectation:{lower:'0', upper:'100000'}});
+            testCases.push({name: 'million (pos)', input:getRandomNumber(0, 1000000), factor:1000000, expectation:{lower:'0', upper:'1000000'}});
+            testCases.push({name: 'five (neg)', input:getRandomNumber(-80, -75), factor:5, expectation:{lower:'-80', upper:'-75'}});
+            testCases.push({name: 'ten (neg)', input:getRandomNumber(-80, -70), factor:10, expectation:{lower:'-80', upper:'-70'}});
+            testCases.push({name: 'hundred (neg)', input:getRandomNumber(-100, -1), factor:100, expectation:{lower:'-100', upper:'0'}});
+            testCases.push({name: 'thousand (neg)', input:getRandomNumber(-1000, -1), factor:1000, expectation:{lower:'-1000', upper:'0'}});
+            testCases.push({name: '10Thousand (neg)', input:getRandomNumber(-10000, -1), factor:10000, expectation:{lower:'-10000', upper:'0'}});
+            testCases.push({name: '100Thousand (neg)', input:getRandomNumber(-100000, -1), factor:100000, expectation:{lower:'-100000', upper:'0'}});
+            testCases.push({name: 'million (neg)', input:getRandomNumber(-1000000, -1), factor:1000000, expectation:{lower:'-1000000', upper:'0'}});
+
+            testCases.forEach(function(test) {
+                it('Test case: ' + test.name + ': ' + test.input, function() {
+                    assert.deepEqual(groupUtils.getRangeWhole(test.input, test.factor), test.expectation);
+                });
+            });
+        });
+
+        describe('validate numeric fractions - negative whole tests', function() {
+
+            var testCases = [];
+
+            testCases.push({name: 'null input', input:null, factor:5, expectation:{lower:null, upper:null}});
+            testCases.push({name: 'non-number input', input:'', factor:5, expectation:{lower:null, upper:null}});
+            testCases.push({name: 'null factor', input:76.1, factor:null, expectation:{lower:null, upper:null}});
+            testCases.push({name: 'non-number factor', input:76.1, factor:'', expectation:{lower:null, upper:null}});
+
+            testCases.forEach(function(test) {
+                it('Test case: ' + test.name, function() {
+                    assert.deepEqual(groupUtils.getRangeWhole(test.input, test.factor), test.expectation);
                 });
             });
         });
