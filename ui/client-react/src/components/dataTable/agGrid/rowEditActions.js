@@ -1,5 +1,5 @@
 import React from 'react';
-import {Button} from 'react-bootstrap';
+import {Button,OverlayTrigger,Tooltip} from 'react-bootstrap';
 import QBIcon from '../../qbIcon/qbIcon';
 import {NotificationManager} from 'react-notifications';
 
@@ -38,11 +38,17 @@ const RowEditActions = React.createClass({
     render: function() {
         return (
             <span className="editTools">
-                <Button onClick={this.onClickOpen}><QBIcon icon="eye" className="openRecord"/></Button>
-                <Button onClick={this.onClickSave}><QBIcon icon="check" className="saveRecord"/></Button>
-                <Button onClick={this.onClickCancel}><QBIcon icon="close" className="cancelSelection"/></Button>
-                <Button onClick={this.onClickDelete}><QBIcon icon="delete" className="deleteRecord"/></Button>
-                <Button onClick={this.onClickAdd}><QBIcon icon="add" className="addRecord"/></Button>
+                <OverlayTrigger  placement="bottom" overlay={<Tooltip id="saveRecord">Save changes</Tooltip>}>
+                    <Button onClick={this.onClickSave}><QBIcon icon="check" className="saveRecord"/></Button>
+                </OverlayTrigger>
+
+                <OverlayTrigger  placement="bottom" overlay={<Tooltip id="cancelSelection">Cancel changes</Tooltip>}>
+                    <Button onClick={this.onClickCancel}><QBIcon icon="close" className="cancelSelection"/></Button>
+                </OverlayTrigger>
+
+                <OverlayTrigger placement="bottom" overlay={<Tooltip id="addRecord" >Add new record</Tooltip>}>
+                    <Button onClick={this.onClickAdd}><QBIcon icon="add" className="addRecord"/></Button>
+                </OverlayTrigger>
             </span>);
     }
 });

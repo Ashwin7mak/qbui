@@ -391,23 +391,26 @@ $grid-default-cell-padding: 8px;
                 border:0;
                 background-color:#f3f8fe;
                 margin-right:2px;
+                padding:6px 8px;
+
                 .qbIcon {
+                    width:20px;
                     font-size: 20px;
+                    vertical-align:top;
                 }
-                .qbIcon.openRecord {
-                    color:teal;
-                }
+
                 .qbIcon.saveRecord {
                     color:green;
+                    font-size:24px;
                 }
                 .qbIcon.cancelSelection {
-                    color:#333;
+                    color:$icon-color;
                 }
                 .qbIcon.deleteRecord {
                     color:red;
                 }
                 .qbIcon.addRecord {
-                    color:blue;
+                    color:$icon-color;
                 }
             }
         }
