@@ -31,7 +31,7 @@
     "json-server": "^0.8.2",
     "lodash": "3.10.1",
     "method-override": "~1.0.2",
-    "moment": "^2.10.2",
+    "moment": "~2.10.2",
     "moment-timezone": "^0.3.1",
     "morgan": "~1.0.1",
     "rc-tabs": "~5.5.0",
