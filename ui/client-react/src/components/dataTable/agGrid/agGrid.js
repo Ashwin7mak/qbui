@@ -7,7 +7,7 @@ import ReactCSSTransitionGroup from 'react/lib/ReactCSSTransitionGroup';
 import ReportActions from '../../actions/reportActions';
 import RecordActions from '../../actions/recordActions';
 import Locale from '../../../locales/locales';
-
+import {DateFormatter, NumericFormatter, TextFormatter}  from './formatters';
 import _ from 'lodash';
 import Loader  from 'react-loader';
 import Fluxxor from 'fluxxor';
@@ -76,7 +76,8 @@ let AGGrid = React.createClass({
     getInitialState() {
         return {
             toolsMenuOpen: false,
-            allRowsSelected: false
+            allRowsSelected: false,
+            selectedRows: []
         };
     },
     onGridReady(params) {
@@ -280,6 +281,8 @@ let AGGrid = React.createClass({
     // Performance improvement - only update the component when certain state/props change
     // Since this is a heavy component we dont want this updating all times.
     shouldComponentUpdate(nextProps, nextState) {
+//console.log('have',this.props);
+//console.log('get',nextProps);
 
         if (!_.isEqual(nextState, this.state)) {
             return true;
@@ -290,7 +293,7 @@ let AGGrid = React.createClass({
         if (!_.isEqual(nextProps.records, this.props.records)) {
             return true;
         }
-        return true; // for now
+        return false; // for now
     },
     /**
      * Helper method to auto-resize all columns to the content's width. This is not called anywhere right now - more design is needed on sizing.
@@ -324,8 +327,6 @@ let AGGrid = React.createClass({
      */
     onRowClicked(params) {
 
-        //this.props.rowClicked(params.rowIndex);
-
         //For click on group, expand/collapse the group.
         if (params.node.field === "group") {
             params.node.expanded = !params.node.expanded;
@@ -344,9 +345,19 @@ let AGGrid = React.createClass({
      * For some reason this doesnt seem to fire on deselectAll but doesnt matter for us.
      */
     onSelectionChanged() {
-        this.updateAllCheckbox();
+        //console.log('selection changed');
+        //console.log('selected  is now',this.api.getSelectedRows());
+        this.setState({selectedRows: this.api.getSelectedRows()});
+
+
+        //this.updateAllCheckbox();
     },
 
+    onRowSelected(row) {
+        //console.log('row selected',row.node.selected);
+
+
+    },
     /**
      * Helper method to flip the master checkbox if all rows are checked
      */
@@ -534,11 +545,12 @@ let AGGrid = React.createClass({
      */
     getColumns() {
 
-        if (!this.props.columns) {
+        let columns = this.getColumnDefs();
+        if (!columns) {
             return;
         }
 
-        let columns = this.props.columns.slice(0);
+        columns = columns.slice(0);
 
         //This should be based on perms -- something like if(this.props.allowMultiSelection)
         columns.unshift(this.getCheckBoxColumn(this.props.showGrouping));
@@ -562,8 +574,88 @@ let AGGrid = React.createClass({
         return paddedRecords;
     },
 
-    render() {
+    componentDidUpdate(prevProps, prevState) {
 
+        //console.log('did update', this.state);
+
+    },
+    setCSSClass_helper: function(obj, classname) {
+        if (typeof (obj.cellClass) === 'undefined') {
+            obj.cellClass = classname;
+        } else {
+            obj.cellClass += " " + classname;
+        }
+        if (typeof (obj.headerClass) === 'undefined') {
+            obj.headerClass = classname;
+        } else {
+            obj.headerClass += " " + classname;
+        }
+    },
+
+    /* for each field attribute that has some presentation effect convert that to a css class before passing to the grid.*/
+    getColumnDefs: function() {
+        const columns = this.props.columns;
+
+        if (columns) {
+            let columnsData = columns.map((obj, index) => {
+                obj.headerClass = "gridHeaderCell";
+                obj.cellClass = "gridCell";
+                obj.suppressResize = true;
+                obj.minWidth = 100;
+                obj.addEditActions = (index === 1);
+                obj.openActiveRow = this.openActiveRow;
+
+                if (obj.datatypeAttributes) {
+                    var datatypeAttributes = obj.datatypeAttributes;
+                    for (var attr in datatypeAttributes) {
+                        switch (attr) {
+                        case 'type': {
+                            switch (datatypeAttributes[attr]) {
+                            case "NUMERIC" :
+                                this.setCSSClass_helper(obj, "AlignRight");
+                                obj.cellRenderer = reactCellRendererFactory(NumericFormatter);
+                                obj.customComponent = NumericFormatter;
+                                break;
+                            case "DATE" :
+                                obj.cellRenderer = reactCellRendererFactory(DateFormatter);
+                                obj.customComponent = DateFormatter;
+                                break;
+                            default:
+                                obj.cellRenderer = reactCellRendererFactory(TextFormatter);
+                                obj.customComponent = TextFormatter;
+                                break;
+                            }
+                        }
+                        }
+                    }
+
+                    if (datatypeAttributes.clientSideAttributes) {
+                        var clientSideAttributes = datatypeAttributes.clientSideAttributes;
+                        for (var cattr in clientSideAttributes) {
+                            switch (cattr) {
+                            case 'bold':
+                                if (clientSideAttributes[cattr]) {
+                                    this.setCSSClass_helper(obj, "Bold");
+                                }
+                                break;
+                            case 'word-wrap':
+                                if (clientSideAttributes[cattr]) {
+                                    this.setCSSClass_helper(obj, "NoWrap");
+                                }
+                                break;
+                            }
+                        }
+                    }
+                }
+                return obj;
+            });
+
+            return columnsData;
+        }
+        return null;
+    },
+    render() {
+//console.log('render all');
         let columnDefs = this.getColumns();
 
         let griddleWrapperClasses = this.getSelectedRows().length ? "griddleWrapper selectedRows" : "griddleWrapper";
@@ -580,7 +672,8 @@ let AGGrid = React.createClass({
                                     // listening for events
                                     onGridReady={this.onGridReady}
                                     onRowClicked={this.onRowClicked}
-                                    //onSelectionChanged={this.onSelectionChanged}
+                                    onSelectionChanged={this.onSelectionChanged}
+                                    onRowSelected={this.onRowSelected}
 
                                     // binding to array properties
                                     columnDefs={columnDefs}
@@ -592,7 +685,6 @@ let AGGrid = React.createClass({
                                     groupHeaders="true"
                                     getRowHeight={this.getRowHeight}
 
-                                    getRowClass={this.getRowClass}
                                     //suppressRowClickSelection="true"
                                     suppressCellSelection="true"
 
