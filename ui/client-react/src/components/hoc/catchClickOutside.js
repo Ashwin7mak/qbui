@@ -24,7 +24,10 @@ var catchClicksOutsideWrapper = (Component, handler, isException) => {
             var found = false;
             // if source=local then this event came from "somewhere" inside
             // and should be ignored.
-            while (source.parentNode) {
+            if (this.localNode == null) {
+                this.localNode =  ReactDOM.findDOMNode(this);
+            }
+            while (source) {
                 found = (source === this.localNode);
                 if (found) {
                     return;
@@ -41,21 +44,22 @@ var catchClicksOutsideWrapper = (Component, handler, isException) => {
         },
 
         componentWillUnmount() {
-            if (document && document.removeEventListener) {
-                document.removeEventListener("click", this.catchClick, true);
+            if (window && window.removeEventListener) {
+                window.removeEventListener("click", (e) => this.catchClick(e));
             }
+            this.localNode = null;
         },
 
         componentDidMount() {
             if (!handler) {
                 return;
             }
-            if (document && document.addEventListener) {
+            if (window && window.addEventListener) {
                 this.localNode =  ReactDOM.findDOMNode(this);
 
-                document.addEventListener("click", this.catchClick, true);
+                window.addEventListener("click", (e) => this.catchClick(e), true);
                 // true param on addEventListener binds the listener to the capture phase
-                // and execute this function before anything else gets executed
+                // and executes this function before anything else gets executed
             }
         },
 

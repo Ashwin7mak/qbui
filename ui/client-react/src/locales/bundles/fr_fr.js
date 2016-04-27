@@ -101,15 +101,16 @@ export default {
             searchPlaceHolder:  "Rechercher ces {nameForRecords} ...",
             sortAndGroup : {
                 by: "par",
-                group: "Groupe",
-                header : "Trier & Groupe",
-                reset: "Réinitialiser",
-                sort:   "Trier",
-                thenBy: "puis par",
                 chooseFields :  {
                     group: "Choisir un champ pour le groupement",
                     sort: "Choisir un champ pour le tri",
-                }
+                },
+                group: "Groupe",
+                header : "Trier & Groupe",
+                moreFields : "plus de champs ...",
+                reset: "Réinitialiser",
+                sort:   "Trier",
+                thenBy: "puis par",
             },
             menu: {
                 sort: {

@@ -97,7 +97,7 @@ class ReportUtils {
         if (sortListParts) {
             sortListParts.forEach((sort) => {
                 if (sort) {
-                    //  each element is formated as fid:groupType
+                    //  each element is formatted as fid:groupType
                     var sortEl = sort.split(groupDelimiter);
                     sortFids.push(sortEl[0]);
                 }
@@ -213,5 +213,6 @@ class ReportUtils {
         return result;
     }
 }
-
+ReportUtils.listDelimiter = listDelimiter;
+ReportUtils.groupDelimiter = groupDelimiter;
 export default ReportUtils;

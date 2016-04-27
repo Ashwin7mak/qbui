@@ -41,7 +41,9 @@ const ReportRoute = React.createClass({
         const flux = this.getFlux();
         flux.actions.selectTableId(tblId);
 
+        flux.actions.loadFields(appId, tblId);
         flux.actions.loadReport(appId, tblId, rptId, true);
+
     },
 
     loadReportFromParams(params) {
@@ -192,6 +194,7 @@ const ReportRoute = React.createClass({
                                        appId={this.props.params.appId}
                                        tblId={this.props.params.tblId}
                                        rptId={typeof this.props.rptId !== "undefined" ? this.props.rptId : this.props.params.rptId}
+                                       fields={this.props.fields}
                                        pageActions={this.getPageActions(0)}
                                        nameForRecords={this.nameForRecords}
                                        selections={this.props.reportData.selections}

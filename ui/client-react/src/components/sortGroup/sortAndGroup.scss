@@ -11,8 +11,9 @@
   .popover.bottom {
     margin-left: -12px;
     margin-top: -39px;
-    //height: 100%;
+    overflow-y: hidden;
     border-radius: 0;
+    padding: 0;
     > .arrow {
       display: none;
     }
@@ -71,7 +72,7 @@
       white-space: nowrap;
     }
     .sortOrderIcon {
-      padding-right: 10px;
+      margin-right: 10px;
     }
     .sortOrderIcon.down .qbIcon{
       transform: rotate(-180deg);
@@ -160,7 +161,8 @@
   }
   .panel {
     box-shadow : none;
-    border : 1px solid #ddd;
+    width: 100%;
+    border : 1px solid $color4;
     .list-group-item:first-child {
       boder-radius : 0;
     }
@@ -175,11 +177,29 @@
     text-overflow: ellipsis;
     overflow: hidden;
     white-space: nowrap;
+    border: 1px solid $color4;
+    border-right: none;
+    border-left: none;
   }
   .list-group-item:first-child,
   .list-group-item:last-child {
     border-radius: 0;
   }
+
+  .list-group-item .checkMark {
+    margin-left: auto;
+  }
+
+  .checkMark {
+    color: transparent;
+    padding-right: 5px;
+  }
+
+  .checkMark-selected {
+    color: $selected-check-color;
+    padding-right: 5px;
+  }
+
 }
 
 $dialog-max-height-small : 475px;

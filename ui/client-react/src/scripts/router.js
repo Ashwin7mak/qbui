@@ -18,6 +18,9 @@ import ReportDataStore from '../stores/reportDataStore';
 import ReportDataSearchStore from '../stores/reportDataSearchStore';
 import reportDataActions from'../actions/reportDataActions';
 
+import FieldsStore from '../stores/fieldsStore';
+import fieldsActions from '../actions/fieldsActions';
+
 import AppsStore from '../stores/appsStore';
 import appsActions from '../actions/appsActions';
 
@@ -45,7 +48,8 @@ let stores = {
     AppsStore: new AppsStore(),
     NavStore: new NavStore(),
     FacetMenuStore: new FacetMenuStore(),
-    ReportDataSearchStore: new ReportDataSearchStore()
+    ReportDataSearchStore: new ReportDataSearchStore(),
+    FieldsStore: new FieldsStore()
 };
 let flux = new Fluxxor.Flux(stores);
 flux.addActions(reportActions);
@@ -53,6 +57,7 @@ flux.addActions(reportDataActions);
 flux.addActions(appsActions);
 flux.addActions(navActions);
 flux.addActions(facetMenuActions);
+flux.addActions(fieldsActions);
 
 let NavWrapper = React.createClass({
 
@@ -91,6 +96,7 @@ let NavWrapper = React.createClass({
 
             if (this.props.params.tblId) {
                 flux.actions.selectTableId(this.props.params.tblId);
+                flux.actions.loadFields(this.props.params.appId, this.props.params.tblId);
                 flux.actions.loadReports(this.props.params.appId, this.props.params.tblId);
             } else {
                 flux.actions.selectTableId(null);
@@ -113,6 +119,7 @@ let NavWrapper = React.createClass({
         if (props.params.tblId) {
             if (this.props.params.tblId !== props.params.tblId) {
                 flux.actions.selectTableId(props.params.tblId);
+                flux.actions.loadFields(props.params.appId, props.params.tblId);
                 flux.actions.loadReports(props.params.appId, props.params.tblId);
             }
         } else {

@@ -31,6 +31,7 @@ export default {
     RECORDS             : 'records',
     REPORTS             : 'reports',
     TABLES              : 'tables',
+    FIELDS              : 'fields',
     FACETS              : 'facets',
     LOG                 : 'log',
 

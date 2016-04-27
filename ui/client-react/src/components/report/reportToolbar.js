@@ -199,7 +199,7 @@ const ReportToolbar = React.createClass({
                         }
 
                         {recordCount &&
-                            <SortAndGroup   />
+                            <SortAndGroup  {...this.props} />
                         }
 
                         {/* check if facets is enabled for this report,
