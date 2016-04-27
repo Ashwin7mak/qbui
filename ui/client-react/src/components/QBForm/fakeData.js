@@ -53,9 +53,9 @@ export const fakeForm1Tab = {
                         }
                     ]
                 }
-            ]// end of sections array
+            ] // end of sections array
         }
-    ],//end of tabs array
+    ], //end of tabs array
     "properties": [
         {
             "labelWrap": true
@@ -118,8 +118,8 @@ export const fakeForm2Tabs = {
                         }
                     ]
                 }
-            ]// end of sections array
-        },//tab1
+            ] // end of sections array
+        }, //tab1
         {
             "id": 1,
             "title": "War Machine",
@@ -172,9 +172,9 @@ export const fakeForm2Tabs = {
                         }
                     ]
                 }
-            ]// end of sections array
+            ] // end of sections array
         }//tab2
-    ],//end of tabs array
+    ], //end of tabs array
     "properties": [
         {
             "labelWrap": true
@@ -188,81 +188,59 @@ export const fakeFormOnlyTabs = {
         {
             "id": 0,
             "title": "Captain America",
-            "sections": [
-
-            ]// end of sections array
+            "sections": [] // end of sections array
         },
         {
             "id": 1,
             "title": "The Incredible Hulk",
-            "sections": [
-
-            ]// end of sections array
+            "sections": [] // end of sections array
         },
         {
             "id": 2,
             "title": "Hawkeye",
-            "sections": [
-
-            ]// end of sections array
+            "sections": [] // end of sections array
         },
         {
             "id": 3,
             "title": "Black Widow",
-            "sections": [
-
-            ]// end of sections array
+            "sections": [] // end of sections array
         },
         {
             "id": 4,
             "title": "Iron Man",
-            "sections": [
-
-            ]// end of sections array
+            "sections": [] // end of sections array
         },
         {
             "id": 5,
             "title": "Thor",
-            "sections": [
-
-            ]// end of sections array
+            "sections": [] // end of sections array
         },
         {
             "id": 6,
             "title": "Nick Fury",
-            "sections": [
-
-            ]// end of sections array
+            "sections": [] // end of sections array
         },
         {
             "id": 7,
             "title": "Falcon",
-            "sections": [
-
-            ]// end of sections array
+            "sections": [] // end of sections array
         },
         {
             "id": 8,
             "title": "Ant Man",
-            "sections": [
-
-            ]// end of sections array
+            "sections": [] // end of sections array
         },
         {
             "id": 9,
             "title": "Star Lord",
-            "sections": [
-
-            ]// end of sections array
+            "sections": [] // end of sections array
         },
         {
             "id": 10,
             "title": "Rocket",
-            "sections": [
-
-            ]// end of sections array
+            "sections": [] // end of sections array
         }
-    ],//end of tabs array
+    ], //end of tabs array
     "properties": [
         {
             "labelWrap": true
@@ -355,7 +333,7 @@ export const fakeFormLotsOfData = {
                         }
                     ]
                 }
-            ]// end of sections array
+            ] // end of sections array
         },
         {
             "id": 1,
@@ -409,21 +387,17 @@ export const fakeFormLotsOfData = {
                         }
                     ]
                 }
-            ]// end of sections array
+            ] // end of sections array
         },
         {
             "id": 2,
             "title": "Hawkeye",
-            "sections": [
-
-            ]// end of sections array
+            "sections": [] // end of sections array
         },
         {
             "id": 3,
             "title": "Black Widow",
-            "sections": [
-
-            ]// end of sections array
+            "sections": [] // end of sections array
         },
         {
             "id": 4,
@@ -477,51 +451,39 @@ export const fakeFormLotsOfData = {
                         }
                     ]
                 }
-            ]// end of sections array
+            ] // end of sections array
         },
         {
             "id": 5,
             "title": "Thor",
-            "sections": [
-
-            ]// end of sections array
+            "sections": [] // end of sections array
         },
         {
             "id": 6,
             "title": "Nick Fury",
-            "sections": [
-
-            ]// end of sections array
+            "sections": [] // end of sections array
         },
         {
             "id": 7,
             "title": "Falcon",
-            "sections": [
-
-            ]// end of sections array
+            "sections": [] // end of sections array
         },
         {
             "id": 8,
             "title": "Ant Man",
-            "sections": [
-
-            ]// end of sections array
+            "sections": [] // end of sections array
         },
         {
             "id": 9,
             "title": "Star Lord",
-            "sections": [
-
-            ]// end of sections array
+            "sections": [] // end of sections array
         },
         {
             "id": 10,
             "title": "Rocket",
-            "sections": [
-
-            ]// end of sections array
+            "sections": [] // end of sections array
         }
-    ],//end of tabs array
+    ], //end of tabs array
     "properties": [
         {
             "labelWrap": true
@@ -651,7 +613,7 @@ export const fakeFormClassyData = {
                         }
                     ]
                 }
-            ]// end of sections array
+            ] // end of sections array
         },
         {
             "id": 1,
@@ -741,7 +703,7 @@ export const fakeFormClassyData = {
                         }
                     ]
                 }
-            ]// end of sections array
+            ] // end of sections array
         },
         {
             "id": 2,
@@ -801,7 +763,7 @@ export const fakeFormClassyData = {
                         }
                     ]
                 }
-            ]// end of sections array
+            ] // end of sections array
         },
         {
             "id": 3,
@@ -810,19 +772,16 @@ export const fakeFormClassyData = {
                 {
                     "id": 4,
                     "title": "Untitled",
-                    "elements": [
-                    ]
+                    "elements": []
                 }
-            ]// end of sections array
+            ] // end of sections array
         },
         {
             "id": 4,
             "title": "Time Cards",
-            "sections": [
-
-            ]// end of sections array
+            "sections": [] // end of sections array
         }
-    ],//end of tabs array
+    ], //end of tabs array
     "properties": [
         {
             "labelWrap": true

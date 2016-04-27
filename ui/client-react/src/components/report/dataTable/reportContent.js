@@ -104,7 +104,7 @@ let ReportContent = React.createClass({
         return [];
     },
     openActiveRow(data) {
-
+//console.log('go');
         const appId = this.props.appId;
         const tblId = this.props.tblId;
         var recId = data[this.props.uniqueIdentifier];

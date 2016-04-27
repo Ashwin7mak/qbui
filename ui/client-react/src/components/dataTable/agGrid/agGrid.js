@@ -595,9 +595,9 @@ let AGGrid = React.createClass({
                                     gridOptions={this.gridOptions}
                                     // listening for events
                                     onGridReady={this.onGridReady}
-                                    onRowClicked={this.onRowClicked}
+                                    //onRowClicked={this.onRowClicked}
                                     onSelectionChanged={this.onSelectionChanged}
-                                    onRowSelected={this.onRowSelected}
+                                    //onRowSelected={this.onRowSelected}
 
                                     // binding to array properties
                                     columnDefs={columnDefs}
