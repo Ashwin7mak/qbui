@@ -4,11 +4,11 @@
 
 import _ from 'lodash';
 
-const DefaultTableIcon = "iconssturdy-report-table";
+const DEFAULT_TABLE_ICON = "iconssturdy-report-table";
 
-const IconPrefix = "icon-TableIcons_sturdy_";
+const ICON_PREFIX = "icon-TableIcons_sturdy_";
 
-const TagsToIconsMap =  {
+const TAGS_TO_ICONS_MAP =  {
     "Regions": "dots",
     "States": "Geography",
     "Cities": "Company",
@@ -18,11 +18,11 @@ const TagsToIconsMap =  {
     "Feedback": "Hand_Thumbs-up",
     "Financial Aid Applications": "Currency_Sign"
 };
-const Tags = _.keys(TagsToIconsMap);
+const Tags = _.keys(TAGS_TO_ICONS_MAP);
 class TableIconUtils {
     static getTableIcon(tableName) {
-        if (TagsToIconsMap[tableName]) {
-            return IconPrefix + TagsToIconsMap[tableName];
+        if (TAGS_TO_ICONS_MAP[tableName]) {
+            return ICON_PREFIX + TAGS_TO_ICONS_MAP[tableName];
         }
         let matchedTag = _.find(Tags, function(tag) {
             if (tag.indexOf(tableName) !== -1 || tableName.indexOf(tag) !== -1) {
@@ -30,9 +30,9 @@ class TableIconUtils {
             }
         });
         if (matchedTag) {
-            return IconPrefix + TagsToIconsMap[matchedTag];
+            return ICON_PREFIX + TAGS_TO_ICONS_MAP[matchedTag];
         }
-        return DefaultTableIcon;
+        return DEFAULT_TABLE_ICON;
     }
 }
 export default TableIconUtils;

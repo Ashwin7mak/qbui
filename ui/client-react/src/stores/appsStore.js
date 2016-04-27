@@ -32,15 +32,13 @@ let AppsStore = Fluxxor.createStore({
         this.emit("change");
     },
     setTableIcons() {
-        let appsCopy = this.apps.slice(0);
-        appsCopy.forEach((app) => {
+        this.apps.forEach((app) => {
             if (app.tables) {
                 app.tables.forEach((table) => {
                     table.icon = TableIconUtils.getTableIcon(table.name);
                 });
             }
         });
-        this.apps = appsCopy;
     },
     onLoadAppsSuccess: function(apps) {
 
