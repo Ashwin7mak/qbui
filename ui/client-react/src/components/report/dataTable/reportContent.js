@@ -3,6 +3,8 @@ import React from 'react';
 import GriddleTable  from '../../../components/dataTable/griddleTable/griddleTable';
 import CardViewList from '../../../components/dataTable/cardView/cardViewList';
 import AGGrid  from '../../../components/dataTable/agGrid/agGrid';
+import {reactCellRendererFactory} from 'ag-grid-react';
+import {DateFormatter, NumericFormatter}  from '../../../components/dataTable/agGrid/formatters';
 
 import ReportActions from '../../actions/reportActions';
 import Fluxxor from 'fluxxor';
@@ -23,7 +25,81 @@ let ReportContent = React.createClass({
         };
     },
 
+    setCSSClass_helper: function(obj, classname) {
+        if (typeof (obj.cellClass) === 'undefined') {
+            obj.cellClass = classname;
+        } else {
+            obj.cellClass += " " + classname;
+        }
+        if (typeof (obj.headerClass) === 'undefined') {
+            obj.headerClass = classname;
+        } else {
+            obj.headerClass += " " + classname;
+        }
+    },
 
+    /* for each field attribute that has some presentation effect convert that to a css class before passing to the grid.*/
+    getColumnProps: function() {
+        const columns = this.props.columns;
+
+        if (columns) {
+            let columnsData = columns.map((obj, index) => {
+                obj.headerClass = "gridHeaderCell";
+                obj.cellClass = "gridCell";
+                obj.suppressResize = true;
+                obj.minWidth = 100;
+                obj.addEditActions = (index === 1);
+                obj.openActiveRow = this.openActiveRow;
+
+                if (obj.datatypeAttributes) {
+                    var datatypeAttributes = obj.datatypeAttributes;
+                    for (var attr in datatypeAttributes) {
+                        switch (attr) {
+                            case 'type': {
+                                switch (datatypeAttributes[attr]) {
+                                    case "NUMERIC" :
+                                        this.setCSSClass_helper(obj, "AlignRight");
+                                        obj.cellRenderer = reactCellRendererFactory(NumericFormatter);
+                                        obj.customComponent = NumericFormatter;
+                                        break;
+                                    case "DATE" :
+                                        obj.cellRenderer = reactCellRendererFactory(DateFormatter);
+                                        obj.customComponent = DateFormatter;
+                                        break;
+                                    default:
+                                        obj.cellRenderer = reactCellRendererFactory(TextFormatter);
+                                        obj.customComponent = TextFormatter;
+                                        break;
+                                }
+                            }
+                        }
+                    }
+
+                    if (datatypeAttributes.clientSideAttributes) {
+                        var clientSideAttributes = datatypeAttributes.clientSideAttributes;
+                        for (var cattr in clientSideAttributes) {
+                            switch (cattr) {
+                                case 'bold':
+                                    if (clientSideAttributes[cattr]) {
+                                        this.setCSSClass_helper(obj, "Bold");
+                                    }
+                                    break;
+                                case 'word-wrap':
+                                    if (clientSideAttributes[cattr]) {
+                                        this.setCSSClass_helper(obj, "NoWrap");
+                                    }
+                                    break;
+                            }
+                        }
+                    }
+                }
+                return obj;
+            });
+
+            return columnsData;
+        }
+        return null;
+    },
     openActiveRow(data) {
 
         const appId = this.props.appId;
@@ -63,6 +139,7 @@ let ReportContent = React.createClass({
     /* TODO: paging component that has "next and previous tied to callbacks from the store to get new data set*/
     render: function() {
         let isTouch = this.context.touch;
+        let columnsDef = this.getColumnProps();
 
         let recordCount = 0;
         if (this.props.reportData.data) {
@@ -76,7 +153,7 @@ let ReportContent = React.createClass({
                         {!isTouch ?
                             <AGGrid loading={this.props.reportData.loading}
                                     records={this.props.reportData.data ? this.props.reportData.data.filteredRecords : []}
-                                    columns={this.props.reportData.data.columns}
+                                    columns={columnsDef}
                                     uniqueIdentifier={this.props.uniqueIdentifier}
                                     appId={this.props.reportData.appId}
                                     tblId={this.props.reportData.tblId}

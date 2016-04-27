@@ -7,7 +7,6 @@ import ReactCSSTransitionGroup from 'react/lib/ReactCSSTransitionGroup';
 import ReportActions from '../../actions/reportActions';
 import RecordActions from '../../actions/recordActions';
 import Locale from '../../../locales/locales';
-import {DateFormatter, NumericFormatter, TextFormatter}  from './formatters';
 import _ from 'lodash';
 import Loader  from 'react-loader';
 import Fluxxor from 'fluxxor';
@@ -545,12 +544,11 @@ let AGGrid = React.createClass({
      */
     getColumns() {
 
-        let columns = this.getColumnDefs();
-        if (!columns) {
+        if (!this.props.columns) {
             return;
         }
 
-        columns = columns.slice(0);
+        let columns = this.props.columns.slice(0);
 
         //This should be based on perms -- something like if(this.props.allowMultiSelection)
         columns.unshift(this.getCheckBoxColumn(this.props.showGrouping));
@@ -579,81 +577,7 @@ let AGGrid = React.createClass({
         //console.log('did update', this.state);
 
     },
-    setCSSClass_helper: function(obj, classname) {
-        if (typeof (obj.cellClass) === 'undefined') {
-            obj.cellClass = classname;
-        } else {
-            obj.cellClass += " " + classname;
-        }
-        if (typeof (obj.headerClass) === 'undefined') {
-            obj.headerClass = classname;
-        } else {
-            obj.headerClass += " " + classname;
-        }
-    },
 
-    /* for each field attribute that has some presentation effect convert that to a css class before passing to the grid.*/
-    getColumnDefs: function() {
-        const columns = this.props.columns;
-
-        if (columns) {
-            let columnsData = columns.map((obj, index) => {
-                obj.headerClass = "gridHeaderCell";
-                obj.cellClass = "gridCell";
-                obj.suppressResize = true;
-                obj.minWidth = 100;
-                obj.addEditActions = (index === 1);
-                obj.openActiveRow = this.openActiveRow;
-
-                if (obj.datatypeAttributes) {
-                    var datatypeAttributes = obj.datatypeAttributes;
-                    for (var attr in datatypeAttributes) {
-                        switch (attr) {
-                        case 'type': {
-                            switch (datatypeAttributes[attr]) {
-                            case "NUMERIC" :
-                                this.setCSSClass_helper(obj, "AlignRight");
-                                obj.cellRenderer = reactCellRendererFactory(NumericFormatter);
-                                obj.customComponent = NumericFormatter;
-                                break;
-                            case "DATE" :
-                                obj.cellRenderer = reactCellRendererFactory(DateFormatter);
-                                obj.customComponent = DateFormatter;
-                                break;
-                            default:
-                                obj.cellRenderer = reactCellRendererFactory(TextFormatter);
-                                obj.customComponent = TextFormatter;
-                                break;
-                            }
-                        }
-                        }
-                    }
-
-                    if (datatypeAttributes.clientSideAttributes) {
-                        var clientSideAttributes = datatypeAttributes.clientSideAttributes;
-                        for (var cattr in clientSideAttributes) {
-                            switch (cattr) {
-                            case 'bold':
-                                if (clientSideAttributes[cattr]) {
-                                    this.setCSSClass_helper(obj, "Bold");
-                                }
-                                break;
-                            case 'word-wrap':
-                                if (clientSideAttributes[cattr]) {
-                                    this.setCSSClass_helper(obj, "NoWrap");
-                                }
-                                break;
-                            }
-                        }
-                    }
-                }
-                return obj;
-            });
-
-            return columnsData;
-        }
-        return null;
-    },
     render() {
 //console.log('render all');
         let columnDefs = this.getColumns();
