@@ -90,6 +90,34 @@ describe('Validate Group Utility functions', function() {
         return testCases;
     }
 
+    describe('validate random number generator', function() {
+
+        var testRuns = 5000000; // 5 million
+        var testFail = false;
+
+        var min = 75;
+        var max = 76;
+        var randomNum;
+
+        //  run this outside of the 'it test block'; otherwise susceptible to timeout error
+        for (var x = 0; x < testRuns; x++) {
+            randomNum = getRandomNumber(min, max);
+            if (randomNum < min || randomNum >= max) {
+                testFail = true;
+            }
+        }
+
+        //  test to ensure random number generator works as expected.
+        it('Number of test runs: ' + testRuns, function() {
+            if (testFail) {
+                assert.fail(n, '75 <= n < 80', 'random number generator out of range');
+            } else {
+                assert.ok(true, 'random number generator tested ' + testRuns + ' runs.');
+            }
+        });
+
+    });
+
     describe('validate group utility functions', function() {
 
         describe('validate get first word', function() {
