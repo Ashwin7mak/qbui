@@ -76,7 +76,6 @@ const CellFormatter = React.createClass({
                 <RowEditActions flux={this.props.params.context.flux}
                                 api={this.props.params.api}
                                 data={this.props.params.data}
-                                onOpen={this.props.params.colDef.openActiveRow}
 
                 />}
                 {this.renderCell(data)}

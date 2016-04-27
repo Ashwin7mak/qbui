@@ -58,7 +58,8 @@ let AGGrid = React.createClass({
         loading: React.PropTypes.bool,
         records: React.PropTypes.array,
         appId: React.PropTypes.string,
-        tblId: React.PropTypes.string
+        tblId: React.PropTypes.string,
+        onRowClick: React.PropTypes.func
     },
     contextTypes: {
         touch: React.PropTypes.bool,
@@ -326,6 +327,7 @@ let AGGrid = React.createClass({
      */
     onRowClicked(params) {
 
+
         //For click on group, expand/collapse the group.
         if (params.node.field === "group") {
             params.node.expanded = !params.node.expanded;
@@ -338,6 +340,21 @@ let AGGrid = React.createClass({
             params.event.target.className.indexOf("iconLink") !== -1) {
             return;
         }
+
+        if (params.event.detail === 2) {
+            clearTimeout(this.clickTimeout);
+            this.clickTimeout = null;
+            params.node.setSelected(true, true);
+            return;
+        }
+        if (this.clickTimeout) {
+            return;
+        }
+
+        this.clickTimeout = setTimeout(() => {
+            this.clickTimeout = null;
+            this.props.onRowClick(params.data);
+        }, 500);
     },
     /**
      * Capture the row-selection/deselection change events.
@@ -595,7 +612,7 @@ let AGGrid = React.createClass({
                                     gridOptions={this.gridOptions}
                                     // listening for events
                                     onGridReady={this.onGridReady}
-                                    //onRowClicked={this.onRowClicked}
+                                    onRowClicked={this.onRowClicked}
                                     onSelectionChanged={this.onSelectionChanged}
                                     //onRowSelected={this.onRowSelected}
 
@@ -609,7 +626,7 @@ let AGGrid = React.createClass({
                                     groupHeaders="true"
                                     getRowHeight={this.getRowHeight}
 
-                                    //suppressRowClickSelection="true"
+                                    suppressRowClickSelection="true"
                                     suppressCellSelection="true"
 
                                     //column menus

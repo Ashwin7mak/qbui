@@ -52,7 +52,6 @@ let ReportContent = React.createClass({
                 obj.suppressResize = true;
                 obj.minWidth = 100;
                 obj.addEditActions = (index === 1);
-                obj.openActiveRow = this.openActiveRow;
 
                 if (obj.datatypeAttributes) {
                     var datatypeAttributes = obj.datatypeAttributes;
@@ -103,7 +102,7 @@ let ReportContent = React.createClass({
         }
         return [];
     },
-    openActiveRow(data) {
+    openRow(data) {
 //console.log('go');
         const appId = this.props.appId;
         const tblId = this.props.tblId;
@@ -165,6 +164,7 @@ let ReportContent = React.createClass({
                                     pageActions={this.props.pageActions}
                                     selectionActions={<ReportActions />}
                                     onScroll={this.onScrollRecords}
+                                    onRowClick={this.openRow}
                                     showGrouping={this.props.reportData.data.hasGrouping}
                                     recordCount={recordCount}
                                     groupLevel={this.props.reportData.data ? this.props.reportData.data.groupLevel : 0}
