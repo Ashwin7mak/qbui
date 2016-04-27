@@ -165,8 +165,7 @@ describe('FacetsMenu functions', () => {
 
     });
 
-    // todo update to handle wrapped component and click to show/collapse
-    xdescribe('Expand/Collapse sections', () => {
+    describe('Expand/Collapse sections', () => {
         let mountPoint;
 
         beforeEach(() => {
@@ -194,31 +193,32 @@ describe('FacetsMenu functions', () => {
             var facetButtons = TestUtils.findRenderedDOMComponentWithClass(facetsMenu, 'facetButtons');
             TestUtils.Simulate.click(facetButtons);
             expect(facetsMenu.state.show).toBeTruthy();
-            // expand the facet panel
-            component.setFacetCollapsed({id:1}, false);
 
             // make sure it rendered
             var popupLists = document.getElementsByClassName('facetMenuPopup');
             expect(popupLists.length).toBe(1);
             let popupList = popupLists[0];
-            //console.log("popupList expanded: " + popupList.innerHTML);
 
             // check that the field facet exists
             let facetPanels = popupList.getElementsByClassName('panel');
             expect(facetPanels.length).toBe(1);
             let facetPanel = facetPanels[0];
 
+            // expand the facet panel
+            component.handleToggleCollapse(null, {id:1});
+
             //ensure its in the expanded list
             expect(_.includes(component.state.expandedFacetFields, 1)).toBeTruthy();
 
-            let panelCollapses = facetPanel.getElementsByClassName('panel-collapse');
+            let panelCollapses = ReactDOM.findDOMNode(component).getElementsByClassName('panel-collapse');
             expect(panelCollapses.length).toBe(1);
 
-            //console.log("should expand " + panelCollapses.innerHTML);
-            expect(panelCollapses[0].innerText).toBe('abc');
+            let panelCollapse = panelCollapses[0];
+            expect(panelCollapse.innerText).toBe('abc');
             //and not hidden
-            expect(panelCollapses[0].style.height).not.toBe("0px");
-
+            console.log(panelCollapse.style.height);
+            let subItem = panelCollapse.getElementsByClassName('list-group-item');
+            expect(subItem.length).toBe(3); //expanded has children
 
         });
 
@@ -258,9 +258,11 @@ describe('FacetsMenu functions', () => {
             expect(_.includes(component.state.expandedFacetFields, 1)).toBeFalsy();
 
             // and not visible
-            let panelCollapses = facetPanel.getElementsByClassName('panel-collapse');
+            let panelCollapses = ReactDOM.findDOMNode(component).getElementsByClassName('panel-collapse');
             expect(panelCollapses.length).toBe(1);
-            expect(panelCollapses[0].style.height).toBe("0px"); //collapsed height
+            let panelCollapse = panelCollapses[0];
+            let subItem = panelCollapse.getElementsByClassName('list-group-item');
+            expect(subItem.length).toBe(0); //collapsed no children
 
         });
     });

@@ -10,12 +10,6 @@ let TestComponent = React.createClass({
 });
 
 
-let OuterComponent = React.createClass({
-    render() {
-        return <div className="outer">outer text</div>;
-    }
-});
-
 describe('catchClickOutside functions', () => {
     'use strict';
 
@@ -53,8 +47,13 @@ describe('catchClickOutside functions', () => {
 
         expect(TestUtils.isCompositeComponent(component)).toBeTruthy();
 
-        let outer = document.getElementsByClassName("outer");
-        component.catchClick({target:outer[0]});
+        //let outer = document.getElementsByClassName("outer");
+        // create a mouse click
+        var event = document.createEvent('MouseEvents');
+        event.initMouseEvent('click', true, true, window, 1, 0, 0);
+
+        // send click to outer
+        mountPoint.dispatchEvent(event);
 
         expect(callbacks.handleClick).toHaveBeenCalled();
         expect(handled).toBe(true);

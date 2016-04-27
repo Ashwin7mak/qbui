@@ -24,7 +24,7 @@ var catchClicksOutsideWrapper = (Component, handler, isException) => {
             var found = false;
             // if source=local then this event came from "somewhere" inside
             // and should be ignored.
-            if (this.localNode == null) {
+            if (this.localNode === null) {
                 this.localNode =  ReactDOM.findDOMNode(this);
             }
             while (source) {
