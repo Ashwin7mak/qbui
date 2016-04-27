@@ -346,7 +346,7 @@ let AGGrid = React.createClass({
     onSelectionChanged() {
         //console.log('selection changed');
         //console.log('selected  is now',this.api.getSelectedRows());
-        this.setState({selectedRows: this.api.getSelectedRows()});
+        //this.setState({selectedRows: this.api.getSelectedRows()});
 
 
         //this.updateAllCheckbox();
