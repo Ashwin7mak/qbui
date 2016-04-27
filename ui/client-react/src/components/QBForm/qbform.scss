@@ -11,7 +11,9 @@ $fieldLabel-color: $color3;
     flex-direction: row;
     align-items: stretch;
     flex-wrap: wrap;
-    overflow-y: hidden;
+}
+.qbPanelBody {
+    display: block;
 }
 
 .field {

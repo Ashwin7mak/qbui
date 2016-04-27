@@ -1,6 +1,6 @@
 import React from 'react';
 import QBPanel from '../QBPanel/qbpanel.js';
-import {fakeFormClassyData} from './fakeData.js';
+import {fakeFormEmpowerData} from './fakeData.js';
 import Tabs, {TabPane} from 'rc-tabs';
 import './qbform.scss';
 import './tabs.scss';
@@ -18,7 +18,7 @@ class QBForm extends React.Component {
 
     initState() {
         let initialState = {
-            "externalData": fakeFormClassyData,
+            "externalData": fakeFormEmpowerData,
             readonly : true
         };
         return initialState;
@@ -45,16 +45,26 @@ class QBForm extends React.Component {
             </div>
         );
     }
+    createRow(fields) {
+        return <div className="fieldRow">{fields}</div>;
+    }
 
     createSection(curSection) {
 
         var fields = [];
+        var rows = [];
         for (var j = 0; j < curSection.elements.length; j++) {
-            fields.push(this.createField(curSection.elements[j]));
+            if (curSection.elements[j].id !== -1) {
+                fields.push(this.createField(curSection.elements[j]));
+            } else {
+                rows.push(this.createRow(fields));
+                fields = [];
+            }
         }
+        rows.push(this.createRow(fields));
         return (
             <QBPanel title={curSection.title} key={curSection.id} isOpen={false} panelNum={curSection.id}>
-                {fields}
+                {rows}
             </QBPanel>
         );
     }
