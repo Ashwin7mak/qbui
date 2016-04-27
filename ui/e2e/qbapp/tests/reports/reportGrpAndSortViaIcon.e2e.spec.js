@@ -8,8 +8,10 @@
     var ReportSortingPage = requirePO('reportSorting');
     var reportServicePage = new ReportServicePage();
     var reportSortingPage = new ReportSortingPage();
+    //include underScore js
+    var _ = require('underscore');
 
-    describe('Report Grouping and Sorting Via Icon on ToolBar', function() {
+    describe('Report Grouping and Sorting SetUp', function() {
         var realmName;
         var realmId;
         var app;
@@ -17,14 +19,6 @@
 
         var durationMax = '9223372036854775807';
         var durationMin = '-9223372036854775807';
-
-        //var testRecord = [
-        //    [{'id': 6, 'value': 'Chris Baker'}, {'id': 7, 'value': 'Development'}, {'id': 8, 'value': 'Upgrade DBMS'}, {'id': 9, 'value': '2009-03-19'}, {'id': 10, 'value': '2009-04-28'}, {'id': 11, 'value': 1234456},{'id': 12, 'value': 99}],
-        //    [{'id': 6, 'value': 'Gregory Baxter'}, {'id': 7, 'value': 'Planning'}, {'id': 8, 'value': 'Server purchase'}, {'id': 9, 'value': '2009-03-16'}, {'id': 10, 'value': '2009-04-10'}, {'id': 11, 'value': +durationMax},{'id': 12, 'value': 100}],
-        //    [{'id': 6, 'value': 'Angela Leon'}, {'id': 7, 'value': 'Planning'}, {'id': 8, 'value': 'Workstation purchase'}, {'id': 9, 'value': '2009-03-21'}, {'id': 10, 'value': '2009-04-10'}, {'id': 11, 'value': +durationMin},{'id': 12, 'value': 0.74765432}],
-        //    [{'id': 6, 'value': 'Jon Nelson'}, {'id': 7, 'value': 'Development'}, {'id': 8, 'value': 'Install latest software'}, {'id': 9, 'value': '2009-03-31'}, {'id': 10, 'value': '2009-04-28'}, {'id': 11, 'value': 0.345678},{'id': 12, 'value': 100}]
-        //];
-        //{'id': 6, 'value': {id : 1, firstName: 'First1', lastName: 'Last1'}}
 
         var user1 = {
             id: null,
@@ -129,31 +123,132 @@
             });
         });
 
+        /*
+         * Grouping/Sorting Test Cases
+         */
+        describe('Report Grouping and Sorting Tests', function() {
+            var tableResultsBeforeSortOrGrp = [];
+            var tableResultsAfterSortOrGrp = [];
+
+            beforeAll(function(done) {
+                //go to report page directly
+                RequestAppsPage.get(e2eBase.getRequestReportsPageEndpoint(realmName, app.id, app.tables[e2eConsts.TABLE1].id, '1'));
+                reportServicePage.waitForElement(reportServicePage.loadedContentEl).then(function() {
+                    reportServicePage.waitForElement(reportServicePage.griddleWrapperEl).then(function() {
+                        reportServicePage.waitForElement(reportServicePage.agGridBodyEl).then(function() {
+                            // Get all records from table before filter applied
+                            reportServicePage.agGridRecordElList.map(function(row) {
+                                return {
+                                    'User Name': row.all(by.className('ag-cell-no-focus')).get(2).getText(),
+                                    'Project Phase': row.all(by.className('ag-cell-no-focus')).get(3).getText(),
+                                    'Task Name': row.all(by.className('ag-cell-no-focus')).get(4).getText(),
+                                    'Start Date': row.all(by.className('ag-cell-no-focus')).get(5).getText(),
+                                    'Finish Date': row.all(by.className('ag-cell-no-focus')).get(6).getText(),
+                                    'Duration Taken': row.all(by.className('ag-cell-no-focus')).get(7).getText(),
+                                    '% Completed': row.all(by.className('ag-cell-no-focus')).get(8).getText()
+                                };
+                            }).then(function(results) {
+                                for (var i = 0; i < results.length; i++) {
+                                    tableResultsBeforeSortOrGrp.push(results[i]);
+                                }
+                                console.log("the actual table results are: " + JSON.stringify(tableResultsBeforeSortOrGrp));
+                                done();
+                            });
+                        });
+                    });
+                });
+            });
+
+            /**
+             * Data Provider for reports and faceting results.
+             */
+            function TestCases() {
+                return [
+                    {
+                        message: 'GroupBy Text field and SortBy User Field',
+                        groupBy: ['Project Phase'],
+                        sortBy: ['User Name']
+                    },
+                    {
+                        message: 'GroupBy Text and Date fields then SortBy Date field',
+                        groupBy: ['Project Phase', 'Start Date'],
+                        sortBy: ['Start Date']
+                    },
+                    {
+                        message: 'GroupBy Numeric and Duration fields then sort by Duration and Text fields',
+                        groupBy: ['% Completed', 'Duration Taken'],
+                        sortBy: ['Duration Taken', 'Project Phase']
+                    },
+                    {
+                        message: 'GroupBy Date field and Sort by User and Numeric field',
+                        groupBy: ['Finish Date'],
+                        sortBy: ['User Name', '% Completed']
+                    }
+                ];
+            }
+
+            TestCases().forEach(function(testCase) {
+                it('' + testCase.message, function(done) {
+                    var groupResults = [];
+                    var sortResults = [];
+                    //RequestAppsPage.get(e2eBase.getRequestReportsPageEndpoint(realmName, app.id, app.tables[e2eConsts.TABLE1].id, '1'));
+                    reportServicePage.waitForElement(reportSortingPage.reportSortingGroupingContainer).then(function() {
+                        reportServicePage.waitForElementToBeClickable(reportSortingPage.reportSortAndGroupBtn).then(function() {
+                            reportSortingPage.reportSortAndGroupBtn.click().then(function() {
+                                //Verify grouping/sorting popOver
+                                expect(reportSortingPage.reportSortAndGroupDialogue.isDisplayed()).toBeTruthy();
+                                //Verify the title
+                                expect(reportSortingPage.reportSortAndGroupTitle.getAttribute('innerText')).toEqual('Sort & Group');
+                                //Verify title of groupBy
+                                expect(reportSortingPage.reportGroupByContainerTitle.getText()).toEqual('Group');
+                                //Verify prefix of field choice
+                                expect(reportSortingPage.GroupByFieldPrefix.getText()).toEqual('by');
+                                //Verify title of sortBy
+                                expect(reportSortingPage.reportSortByContainerTitle.getText()).toEqual('Sort');
+                                //Verify prefix of field choice
+                                expect(reportSortingPage.SortByFieldPrefix.getText()).toEqual('by');
+                            }).then(function() {
+                                //Select sort By items
+                                for (var j = 0; j < testCase.sortBy.length; j++) {
+                                    reportSortingPage.selectSortByItems(testCase.sortBy[j]);
+                                    //sort by the actual results array
+                                    sortResults = _.sortBy(tableResultsBeforeSortOrGrp, testCase.sortBy[j].toString());
+                                    console.log("The actual results array after sorting is: " + JSON.stringify(sortResults));
+                                }
+                            }).then(function() {
+                                //Select group By items
+                                for (var i = 0; i < testCase.groupBy.length; i++) {
+                                    reportSortingPage.selectGroupByItems(testCase.groupBy[i]);
+                                    //take the sorted results and group them
+                                    groupResults = _.groupBy(sortResults, testCase.groupBy[i].toString());
+                                    console.log("The actual results array after grouping is: " + JSON.stringify(groupResults));
+                                }
+                            }).then(function() {
+                                //Click reset button
+                                reportSortingPage.sortAndGrpDialogueResetBtn.click();
+                                //Close the popup
+                                reportSortingPage.reportSortAndGroupCloseBtn.click();
+
+                                //Just to shift focus
+                                reportServicePage.reportRecordsCount.click();
+                                //clean the array
+                                groupResults = [];
+                                sortResults = [];
+                                done();
+                            });
+
+                        });
+                    });
+                });
+            });
+
+
+        }); //test cases describe block
+        /**
+         * After all tests are done, run the cleanup function in the base class
+         */
         afterAll(function(done) {
             e2eBase.cleanup(done);
         });
-
-        it(' Grouping - ', function(done) {
-            //go to report page directly
-            RequestAppsPage.get(e2eBase.getRequestReportsPageEndpoint(realmName, app.id, app.tables[e2eConsts.TABLE1].id, '1'));
-            reportServicePage.waitForElement(reportSortingPage.reportSortingGroupingContainer).then(function() {
-                reportServicePage.waitForElementToBeClickable(reportSortingPage.reportSortAndGroupBtn).then(function() {
-                    reportSortingPage.reportSortAndGroupBtn.click().then(function() {
-                        expect(reportSortingPage.reportSortAndGroupDialogue.isDisplayed()).toBeTruthy();
-                    });
-                    //Verify the title
-                    expect(reportSortingPage.reportSortAndGroupTitle.getAttribute('innerText')).toEqual('Sort & Group');
-                    //Close the popover and verify closed
-                    reportSortingPage.reportSortAndGroupCloseBtn.click().then(function() {
-                        //expect(reportSortingPage.reportSortAndGroupDialogue.isDisplayed()).toBeFalsy();
-                    });
-                    done();
-
-                });
-            });
-        });
-
-
-
-    });
+    }); //topmost setup describe block
 }());
