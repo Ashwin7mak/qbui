@@ -327,7 +327,6 @@ let AGGrid = React.createClass({
      */
     onRowClicked(params) {
 
-
         //For click on group, expand/collapse the group.
         if (params.node.field === "group") {
             params.node.expanded = !params.node.expanded;
@@ -337,7 +336,8 @@ let AGGrid = React.createClass({
         //For click on record action icons do nothing
         if (params.event.target &&
             params.event.target.className.indexOf("qbIcon") !== -1 ||
-            params.event.target.className.indexOf("iconLink") !== -1) {
+            params.event.target.className.indexOf("iconLink") !== -1 ||
+            params.event.target.tagName === "INPUT") {
             return;
         }
 

@@ -1,5 +1,5 @@
 import React from 'react';
-import {Button,OverlayTrigger,Tooltip} from 'react-bootstrap';
+import {Button, OverlayTrigger, Tooltip} from 'react-bootstrap';
 import QBIcon from '../../qbIcon/qbIcon';
 import {NotificationManager} from 'react-notifications';
 
