@@ -337,7 +337,9 @@ let ReportDataStore = Fluxxor.createStore({
             const id = parseInt(lastRecord["Record ID#"]) + 1;
             newRecord["Record ID#"] = id;
 
-            model.filteredRecords.push(newRecord);
+            const newRecords = model.filteredRecords.slice(0);
+            newRecords.push(newRecord);
+            model.filteredRecords = newRecords;
             model.filteredRecordsCount++;
 
             this.emit('change');

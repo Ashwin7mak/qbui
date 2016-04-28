@@ -274,13 +274,8 @@ let AGGrid = React.createClass({
 
     // Performance improvement - only update the component when certain state/props change
     // Since this is a heavy component we dont want this updating all times.
-    shouldComponentUpdate(nextProps, nextState) {
-//console.log('have',this.props);
-//console.log('get',nextProps);
+    shouldComponentUpdate(nextProps) {
 
-        if (!_.isEqual(nextState, this.state)) {
-            return true;
-        }
         if (!_.isEqual(nextProps.loading, this.props.loading)) {
             return true;
         }
@@ -343,7 +338,6 @@ let AGGrid = React.createClass({
             clearTimeout(this.clickTimeout);
             this.clickTimeout = null;
             params.node.setSelected(true, true);
-            flux.actions.selectedRows(this.getSelectedRows());
             return;
         }
         if (this.clickTimeout) {
@@ -352,7 +346,9 @@ let AGGrid = React.createClass({
 
         this.clickTimeout = setTimeout(() => {
             this.clickTimeout = null;
-            this.props.onRowClick(params.data);
+            if (this.api.getSelectedRows().length === 0) {
+                this.props.onRowClick(params.data);
+            }
         }, 500);
     },
     /**
@@ -529,16 +525,11 @@ let AGGrid = React.createClass({
     },
 
     getRecordsToRender() {
+
         let paddedRecords = this.props.records.slice(0);
         paddedRecords.push({});
         paddedRecords.push({});
         return paddedRecords;
-    },
-
-    componentDidUpdate(prevProps, prevState) {
-
-        //console.log('did update', this.state);
-
     },
 
     render() {
@@ -558,7 +549,6 @@ let AGGrid = React.createClass({
                                     onGridReady={this.onGridReady}
                                     onRowClicked={this.onRowClicked}
                                     onSelectionChanged={this.onSelectionChanged}
-                                    //onRowSelected={this.onRowSelected}
 
                                     // binding to array properties
                                     columnDefs={columnDefs}

@@ -38,7 +38,8 @@
         var RECORDS_ENDPOINT = '/records/';
         var REALMS_ENDPOINT = '/realms/';
         var USERS_ENDPOINT = '/users/';
-        var LOCALHOST_REALM = 117000;
+        var ADMIN_REALM = 'localhost';
+        var ADMIN_REALM_ID = 117000;
         var TICKETS_ENDPOINT = '/ticket?uid=10000&realmID=';
         var HEALTH_ENDPOINT = '/health';
         var SUBDOMAIN_CHARS = 'abcdefghijklmnopqrstuvwxyz0123456789';
@@ -69,8 +70,9 @@
             log.debug('baseUrl: ' + baseUrl + ' methodLess: ' + methodLess);
             //If there is no subdomain, hit the javaHost directly and don't proxy through the node server
             //This is required for actions like ticket creation and realm creation
+            //Both of these requests must now hit localhost.<javaHostUrl> to create the admin ticket and new realm
             if (realmSubdomain === '') {
-                fullPath = baseUrl + path;
+                fullPath = protocol + ADMIN_REALM + '.' + methodLess + path;
                 log.debug('resulting fullpath: ' + fullPath);
             } else {
                 fullPath = protocol + realmSubdomain + '.' + methodLess + path;
@@ -264,7 +266,7 @@
                      *  3) create a ticket valid on the realm in question
                      *  4) If any step above fails, assert!
                      */
-                    self.createTicket(LOCALHOST_REALM)
+                    self.createTicket(ADMIN_REALM_ID)
                             .then(function(authResponse) {
                                       //TODO: tickets come back quoted, invalid JSON, we regex the quotes away.  hack.
                                 self.authTicket = authResponse.body.replace(/"/g, '');

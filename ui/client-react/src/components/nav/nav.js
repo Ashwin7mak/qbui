@@ -9,6 +9,7 @@ import TopNav from '../header/topNav';
 import Footer from '../footer/footer';
 import ReportManager from '../report/reportManager';
 import QBicon from '../qbIcon/qbIcon';
+import TableIcon from '../qbTableIcon/qbTableIcon';
 import GlobalActions from '../actions/globalActions';
 import Loader  from 'react-loader';
 import Breakpoints from '../../utils/breakpoints';
@@ -101,7 +102,7 @@ var Nav = React.createClass({
 
         return (
             <h3>
-                <QBicon icon="report-table"/> {table ? table.name : ""} <QBicon icon="caret-right"/>
+                <TableIcon icon={table ? table.icon : ""}/> {table ? table.name : ""} <QBicon icon="caret-right"/>
                 <I18nMessage message={'nav.reportsHeading'}/>
             </h3>);
 

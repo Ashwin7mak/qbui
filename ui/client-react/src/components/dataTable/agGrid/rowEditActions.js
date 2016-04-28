@@ -8,6 +8,8 @@ const RowEditActions = React.createClass({
     onClickSave() {
         this.props.api.deselectAll();
 
+        const id = this.props.data["Record ID#"];
+
         setTimeout(()=> {
             NotificationManager.success('Record saved', 'Success', 1500);
         }, 1000);
@@ -26,6 +28,7 @@ const RowEditActions = React.createClass({
     },
     onClickCancel() {
         this.props.api.deselectAll();
+        this.props.flux.actions.selectedRows([]);
     },
     onClickAdd() {
         this.props.api.deselectAll();

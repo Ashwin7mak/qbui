@@ -15,15 +15,10 @@ const DateFormat = 3;
 
 const CellEditor = React.createClass({
 
-    getInitialState() {
-        return {
-            value: this.props.initialValue
-        };
-    },
     onChange(ev) {
         const newValue = ev.target.value;
 
-        this.setState({value: newValue});
+        this.props.onChange(newValue);
     },
     onBlur() {
 
@@ -31,11 +26,11 @@ const CellEditor = React.createClass({
     render() {
         return <input ref="cellInput"
                       onChange={this.onChange}
-                      onBlur={this.onBlue}
+                      onBlur={this.onBlur}
                       tabIndex="0"
                       className="cellData"
                       type="text"
-                      value={this.state.value}/>;
+                      value={this.props.value}/>;
     }
 });
 
@@ -46,30 +41,38 @@ const CellFormatter = React.createClass({
         params: React.PropTypes.object.isRequired
     },
 
-    renderCell(data) {
+    getInitialState() {
+
+        return {
+            value: this.props.params.value
+        };
+    },
+
+    renderCell() {
 
         switch (this.props.type) {
         case NumberFormat:
             return <span className="cellData">
-                {data && <I18nNumber value={data}></I18nNumber>}
+                {this.state.value && <I18nNumber value={this.state.value}></I18nNumber>}
                 </span>;
 
         case DateFormat:
             return <span className="cellData">
-                {data && <I18nDate value={data}></I18nDate>}
+                {this.state.value && <I18nDate value={this.state.value}></I18nDate>}
                 </span>;
 
         default:
             return <span className="cellData">
-                {data}
+                {this.state.value}
                 </span>;
         }
     },
 
 
+    cellEdited(newValue) {
+        this.setState({value: newValue});
+    },
     render: function() {
-
-        let data = this.props.params.value;
 
         return (<span className="cellWrapper">
                 {this.props.params.colDef && this.props.params.colDef.addEditActions &&
@@ -78,8 +81,8 @@ const CellFormatter = React.createClass({
                                 data={this.props.params.data}
 
                 />}
-                {this.renderCell(data)}
-                <CellEditor initialValue={data}/>
+                {this.renderCell()}
+                <CellEditor value={this.state.value} onChange={this.cellEdited} />
                 </span>);
 
     }
