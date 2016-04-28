@@ -282,7 +282,7 @@ let AGGrid = React.createClass({
         if (!_.isEqual(nextProps.records, this.props.records)) {
             return true;
         }
-        return false; // for now
+        return false;
     },
     /**
      * Helper method to auto-resize all columns to the content's width. This is not called anywhere right now - more design is needed on sizing.
@@ -291,7 +291,7 @@ let AGGrid = React.createClass({
         var allColumnIds = [];
         if (this.columnApi) {
             if (this.props.columns) {
-                this.props.columns.forEach(function(columnDef) {
+                this.props.columns.forEach(columnDef => {
                     allColumnIds.push(columnDef.field);
                 });
                 this.columnApi.autoSizeColumns(allColumnIds);
@@ -326,7 +326,7 @@ let AGGrid = React.createClass({
             this.api.onGroupExpandedOrCollapsed();
             return;
         }
-        //For click on record action icons do nothing
+        //For click on record action icons or input fieldsdo nothing
         if (params.event.target &&
             params.event.target.className.indexOf("qbIcon") !== -1 ||
             params.event.target.className.indexOf("iconLink") !== -1 ||
@@ -334,6 +334,7 @@ let AGGrid = React.createClass({
             return;
         }
 
+        // select row on doubleclick
         if (params.event.detail === 2) {
             clearTimeout(this.clickTimeout);
             this.clickTimeout = null;
@@ -341,10 +342,12 @@ let AGGrid = React.createClass({
             return;
         }
         if (this.clickTimeout) {
+            // already waiting for 2nd click
             return;
         }
 
         this.clickTimeout = setTimeout(() => {
+            // navigate to record if timeout wasn't canceled by 2nd click
             this.clickTimeout = null;
             if (this.api.getSelectedRows().length === 0) {
                 this.props.onRowClick(params.data);
@@ -463,7 +466,7 @@ let AGGrid = React.createClass({
 
         headerCell.appendChild(checkbox);
         //ag-grid doesnt seem to allow react components sent into headerCellRender.
-        checkBoxCol.headerCellRenderer = function() {
+        checkBoxCol.headerCellRenderer = () => {
             return headerCell;
         };
         checkBoxCol.checkboxSelection = true;
@@ -524,6 +527,11 @@ let AGGrid = React.createClass({
 
     },
 
+    /**
+     * add a couple of extra rows which will be hidden to avoid
+     * clipping the row edit UI if it's at the bottom row
+     * @returns {*}
+     */
     getRecordsToRender() {
 
         let paddedRecords = this.props.records.slice(0);

@@ -13,6 +13,9 @@ const TextFormat = 1;
 const NumberFormat = 2;
 const DateFormat = 3;
 
+/**
+ * simple non-validating cell editor for now
+ */
 const CellEditor = React.createClass({
 
     onChange(ev) {
@@ -21,7 +24,6 @@ const CellEditor = React.createClass({
         this.props.onChange(newValue);
     },
     onBlur() {
-
     },
     render() {
         return <input ref="cellInput"
@@ -42,14 +44,12 @@ const CellFormatter = React.createClass({
     },
 
     getInitialState() {
-
         return {
             value: this.props.params.value
         };
     },
 
     renderCell() {
-
         switch (this.props.type) {
         case NumberFormat:
             return <span className="cellData">
@@ -68,11 +68,16 @@ const CellFormatter = React.createClass({
         }
     },
 
-
+    /**
+     * cell was edited, update the r/w and r/o value
+     * @param newValue
+     */
     cellEdited(newValue) {
         this.setState({value: newValue});
     },
+
     render: function() {
+        // render the cell value and editor (CSS will hide one or the other)
 
         return (<span className="cellWrapper">
                 {this.props.params.colDef && this.props.params.colDef.addEditActions &&

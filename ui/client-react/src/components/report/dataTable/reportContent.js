@@ -51,7 +51,7 @@ let ReportContent = React.createClass({
                 obj.cellClass = "gridCell";
                 obj.suppressResize = true;
                 obj.minWidth = 100;
-                obj.addEditActions = (index === 1);
+                obj.addEditActions = (index === 1); // EMPOWER: add the row edit component to column 1
 
                 if (obj.datatypeAttributes) {
                     var datatypeAttributes = obj.datatypeAttributes;
@@ -102,6 +102,8 @@ let ReportContent = React.createClass({
         }
         return [];
     },
+
+    // row was clicked once, navigate to record
     openRow(data) {
 
         const appId = this.props.appId;

@@ -18,6 +18,11 @@ $grid-group-expand-icon-size: 20px;
 $grid-default-group-padding: 7px;
 $grid-default-cell-padding: 8px;
 
+$row-bg-color: #fff;
+$row-border-color: #ddd;
+$row-box-shadow-color: #888;
+$cell-edit-background-edit: #f3f8fe;
+
 // override default font style
 .ag-font-style {
     font-size: $grid-font-size;
@@ -313,17 +318,19 @@ $grid-default-cell-padding: 8px;
     visibility: hidden;
 }
 
+/* hide row editing tools by default */
 .editTools {
     display:none;
 }
 
+/* last to rows are just for padding */
 .ag-row:nth-last-child(-n+2) {
     visibility:hidden;
 
 }
 .ag-body-container {
     .ag-row {
-        background-color: #fff;
+        background-color: $row-bg-color;
     }
     background-color:inherit !important;
 }
@@ -343,14 +350,14 @@ $grid-default-cell-padding: 8px;
         > .cellWrapper,.ag-cell-wrapper {
             padding:8px;
             position: absolute;
-            border-top:1px solid #ddd;
-            border-bottom:1px solid #ddd;
+            border-top:1px solid $row-border-color;
+            border-bottom:1px solid $row-border-color;
             top:-5px;
             left:-5px;
             right:-5px;
             bottom:-5px;
-            background-color: #f3f8fe;
-            box-shadow: 2px 2px 2px #888888;
+            background-color: $cell-edit-background-edit;
+            box-shadow: 2px 2px 2px $row-box-shadow-color;
             z-index:1;
             display:flex;
 
@@ -359,16 +366,16 @@ $grid-default-cell-padding: 8px;
             }
             input {
                 display:inline;
-                border:1px solid #ddd;
-                border-right:2px solid #ddd;
-                background: #fff;
+                border:1px solid $row-border-color;
+                border-right:2px solid $row-border-color;
+                background: $row-bg-color;
                 flex:1 1 auto;
                 padding:2px;
                 margin-right:2px;
             }
         }
         > .ag-cell-wrapper:first-child {
-            border-left:1px solid #ddd;
+            border-left:1px solid $row-border-color;
             left:0;
         }
     }
@@ -378,18 +385,18 @@ $grid-default-cell-padding: 8px;
         .editTools {
             display:block;
             flex: 0 0 auto;
-            background-color:#f3f8fe;
-            box-shadow: 2px 2px 2px #888888;
+            background-color:$cell-edit-background-edit;
+            box-shadow: 2px 2px 2px $row-box-shadow-color;
             position:absolute;
             top:100%;
             right:30px;
 
-            border-left: 1px solid #ddd;
-            border-right: 1px solid #ddd;
-            border-bottom:1px solid #ddd;
+            border-left: 1px solid $row-border-color;
+            border-right: 1px solid $row-border-color;
+            border-bottom:1px solid $row-border-color;
             button {
                 border:0;
-                background-color:#f3f8fe;
+                background-color:$cell-edit-background-edit;
                 margin-right:2px;
                 padding:6px 8px;
 
@@ -398,7 +405,6 @@ $grid-default-cell-padding: 8px;
                     font-size: 20px;
                     vertical-align:top;
                 }
-
                 .qbIcon.saveRecord {
                     color:green;
                     font-size:24px;

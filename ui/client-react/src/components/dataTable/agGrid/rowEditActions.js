@@ -3,6 +3,9 @@ import {Button, OverlayTrigger, Tooltip} from 'react-bootstrap';
 import QBIcon from '../../qbIcon/qbIcon';
 import {NotificationManager} from 'react-notifications';
 
+/**
+ * editing tools for the currently edited row
+ */
 const RowEditActions = React.createClass({
 
     onClickSave() {
@@ -10,13 +13,15 @@ const RowEditActions = React.createClass({
 
         const id = this.props.data["Record ID#"];
 
+        // EMPOWER
         setTimeout(()=> {
             NotificationManager.success('Record saved', 'Success', 1500);
         }, 1000);
     },
-    onClickOpen() {
-        this.props.onOpen(this.props.data);
-    },
+
+    /**
+     * delete icon is not included but may come back shortly
+     */
     onClickDelete() {
         const id = this.props.data["Record ID#"];
         this.props.api.deselectAll();
@@ -30,6 +35,10 @@ const RowEditActions = React.createClass({
         this.props.api.deselectAll();
         this.props.flux.actions.selectedRows([]);
     },
+
+    /**
+     * EMPOWER - add a new empty record to the store
+     */
     onClickAdd() {
         this.props.api.deselectAll();
         this.props.flux.actions.addReportRecord();
@@ -38,6 +47,7 @@ const RowEditActions = React.createClass({
             NotificationManager.success('Record created', 'Success', 1500);
         }, 1000);
     },
+
     render: function() {
         return (
             <span className="editTools">
@@ -55,6 +65,5 @@ const RowEditActions = React.createClass({
             </span>);
     }
 });
-
 
 export default RowEditActions;

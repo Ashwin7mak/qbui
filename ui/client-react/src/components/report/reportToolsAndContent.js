@@ -31,7 +31,6 @@ let ReportToolsAndContent = React.createClass({
 
     getReportToolbar() {
 
-
         let {appId, tblId, rptId,
             reportData:{selections, ...otherReportData}} = this.props;
 
@@ -64,8 +63,7 @@ let ReportToolsAndContent = React.createClass({
     },
 
     render() {
-        let {appId, tblId, rptId,
-             reportData:{selections, ...otherReportData}} = this.props;
+        let {appId, tblId, rptId, reportData:{selections, ...otherReportData}} = this.props;
         let toolbar = <ReportToolbar appId={appId}
                                      tblId={tblId}
                                      rptId={rptId}

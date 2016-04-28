@@ -126,6 +126,26 @@ let reportDataActions = {
         this.dispatch(actions.FILTER_SEARCH_PENDING, {string});
     },
 
+    /**
+     * rows were selected (toolbar etc cares about this)
+     * @param rows array of row objects
+     */
+    selectedRows(rows) {
+        this.dispatch(actions.SELECTED_ROWS, rows);
+    },
+
+    /**
+     * add a new record (EMPOWER)
+     */
+    addReportRecord() {
+        this.dispatch(actions.ADD_REPORT_RECORD);
+    },
+    /**
+     * delete a record (EMPOWER)
+     */
+    deleteReportRecord(id) {
+        this.dispatch(actions.DELETE_REPORT_RECORD, id);
+    },
     /* Action called to get a new set of records given a report.
      * Override params can override report's sortlist/query etc
      *
@@ -139,15 +159,6 @@ let reportDataActions = {
      * @param overrideQueryParams: {columns, sortlist, query}
      */
 
-    selectedRows(rows) {
-        this.dispatch(actions.SELECTED_ROWS, rows);
-    },
-    addReportRecord() {
-        this.dispatch(actions.ADD_REPORT_RECORD);
-    },
-    deleteReportRecord(id) {
-        this.dispatch(actions.DELETE_REPORT_RECORD, id);
-    },
 
     getFilteredRecords(appId, tblId, rptId, requiredQueryParams, filter, overrideQueryParams) {
 
