@@ -140,7 +140,6 @@
             }).then(function(filteredElement) {
                 filteredElement[0].click().then(function() {
                     return reportServicePage.waitForElement(reportServicePage.reportRecordsCount).then(function() {
-                        return expect(reportServicePage.reportRecordsCount.getAttribute('innerText')).toEqual('11 Records');
                     });
                 });
             });
