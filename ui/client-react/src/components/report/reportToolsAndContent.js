@@ -59,7 +59,7 @@ let ReportToolsAndContent = React.createClass({
             classes += " selectionActionsOpen";
         }
         return (<div className={classes}>
-                    {hasSelection? this.getSelectionActions() : this.getReportToolbar()}
+                    {hasSelection ? this.getSelectionActions() : this.getReportToolbar()}
                 </div>);
     },
 

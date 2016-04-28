@@ -224,7 +224,7 @@ let ReportDataStore = Fluxxor.createStore({
     },
 
     onSelectedRows(selectedRows) {
-      this.selectedRows = selectedRows;
+        this.selectedRows = selectedRows;
 
         this.emit('change');
     },

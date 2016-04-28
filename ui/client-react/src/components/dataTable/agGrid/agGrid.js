@@ -73,12 +73,7 @@ let AGGrid = React.createClass({
     gridOptions: {
         context: {}
     },
-    getInitialState() {
-        return {
-            allRowsSelected: false,
-            selectedRows: []
-        };
-    },
+
     onGridReady(params) {
         this.api = params.api;
         this.columnApi = params.columnApi;
@@ -312,13 +307,17 @@ let AGGrid = React.createClass({
      * Grid API - selectAll "selects" all rows.
      */
     selectAll() {
+        const flux = this.getFlux();
         this.api.selectAll();
+        flux.actions.selectedRows(this.getSelectedRows());
     },
     /**
      * Grid API - deselectAll "deselects" all rows.
      */
     deselectAll() {
+        const flux = this.getFlux();
         this.api.deselectAll();
+        flux.actions.selectedRows([]);
     },
     /**
      * Capture the row-click event. Send to record view on row-click
@@ -344,8 +343,7 @@ let AGGrid = React.createClass({
             clearTimeout(this.clickTimeout);
             this.clickTimeout = null;
             params.node.setSelected(true, true);
-            console.log('selectit');
-            flux.actions.selectedRows(this.api.getSelectedRows());
+            flux.actions.selectedRows(this.getSelectedRows());
             return;
         }
         if (this.clickTimeout) {
@@ -362,37 +360,18 @@ let AGGrid = React.createClass({
      * For some reason this doesnt seem to fire on deselectAll but doesnt matter for us.
      */
     onSelectionChanged() {
-        console.log('selection changed');
-
         let flux = this.getFlux();
-console.log(this.api.getSelectedRows());
-        flux.actions.selectedRows(this.api.getSelectedRows());
-        //console.log('selected  is now',this.api.getSelectedRows());
-        //this.setState({selectedRows: this.api.getSelectedRows()});
 
-
-        //this.updateAllCheckbox();
+        flux.actions.selectedRows(this.getSelectedRows());
     },
 
-    onRowSelected(row) {
-        //console.log('row selected',row.node.selected);
-
-
-    },
     /**
      * Helper method to flip the master checkbox if all rows are checked
      */
-    updateAllCheckbox() {
+    allRowsSelected() {
         let selectedRows = this.getSelectedRows().length;
 
-        let allRowsSelected = this.props.recordCount === selectedRows;
-
-        var newState = {
-            toolsMenuOpen: selectedRows > 0,
-            allRowsSelected: allRowsSelected
-        };
-
-        this.setState(newState);
+        return this.props.recordCount === selectedRows;
     },
     /**
      * Capture the event if all-select checkbox is clicked.
@@ -408,7 +387,7 @@ console.log(this.api.getSelectedRows());
         } else {
             this.deselectAll();
         }
-        this.updateAllCheckbox();
+
     },
 
     /**
@@ -468,7 +447,7 @@ console.log(this.api.getSelectedRows());
         var checkbox = document.createElement("input");
         checkbox.type = "checkbox";
         checkbox.className = "selectAllCheckbox";
-        checkbox.checked = this.state.allRowsSelected;
+        checkbox.checked = this.allRowsSelected();
         checkbox.onclick = (event) => {
             this.allCheckBoxSelected(event);
         };
@@ -563,7 +542,6 @@ console.log(this.api.getSelectedRows());
     },
 
     render() {
-//console.log('render all');
         let columnDefs = this.getColumns();
 
         let griddleWrapperClasses = this.getSelectedRows().length ? "griddleWrapper selectedRows" : "griddleWrapper";
