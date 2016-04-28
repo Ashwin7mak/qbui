@@ -31,6 +31,9 @@ let flux = {
     actions: {
         getFilteredRecords: function() {
             return;
+        },
+        selectedRows: function() {
+            return;
         }
     }
 };
@@ -251,8 +254,9 @@ describe('AGGrid functions', () => {
                 rowsSelected++;
             }
         }
-        //expect(rowsSelected).toEqual(fakeReportData_before.data.records.length);
-        //expect(selectAllCheckbox[0].checked).toEqual(true);
+        //we add a couple of hidden rows to avoid clipping the row editing ui elements
+        expect(rowsSelected).toEqual(fakeReportData_before.data.records.length + 2);
+        expect(selectAllCheckbox[0].checked).toEqual(true);
     });
     it('renders column menu', (done) => {
         AGGrid.__ResetDependency__('AgGridReact');
