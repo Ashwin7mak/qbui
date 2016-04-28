@@ -75,7 +75,6 @@ let AGGrid = React.createClass({
     },
     getInitialState() {
         return {
-            toolsMenuOpen: false,
             allRowsSelected: false,
             selectedRows: []
         };
@@ -345,6 +344,8 @@ let AGGrid = React.createClass({
             clearTimeout(this.clickTimeout);
             this.clickTimeout = null;
             params.node.setSelected(true, true);
+            console.log('selectit');
+            flux.actions.selectedRows(this.api.getSelectedRows());
             return;
         }
         if (this.clickTimeout) {
@@ -361,7 +362,11 @@ let AGGrid = React.createClass({
      * For some reason this doesnt seem to fire on deselectAll but doesnt matter for us.
      */
     onSelectionChanged() {
-        //console.log('selection changed');
+        console.log('selection changed');
+
+        let flux = this.getFlux();
+console.log(this.api.getSelectedRows());
+        flux.actions.selectedRows(this.api.getSelectedRows());
         //console.log('selected  is now',this.api.getSelectedRows());
         //this.setState({selectedRows: this.api.getSelectedRows()});
 
@@ -405,18 +410,7 @@ let AGGrid = React.createClass({
         }
         this.updateAllCheckbox();
     },
-    /**
-     * keep track of tools menu being open (need to change overflow css style)
-     */
-    onMenuEnter() {
-        this.setState({toolsMenuOpen: true});
-    },
-    /**
-     * keep track of tools menu being closed (need to change overflow css style)
-     */
-    onMenuExit() {
-        this.setState({toolsMenuOpen: false});
-    },
+
     /**
      * There seems to be bug in getSelectedRows callback of grid where
      * it also returns group header rows. This one weans those out to select
@@ -434,34 +428,7 @@ let AGGrid = React.createClass({
         }
         return rows;
     },
-    /**
-     * get table actions if we have them - render selectionActions prop if we have an active selection,
-     * otherwise the reportHeader prop (cloned with extra key prop for transition group, and selected rows
-     * for selectionActions component)
-     */
-    getTableActions() {
 
-        const selectedRows = this.getSelectedRows();
-        const hasSelection = selectedRows.length;
-
-        let classes = "tableActionsContainer secondaryBar";
-        if (this.state.toolsMenuOpen) {
-            classes += " toolsMenuOpen";
-        }
-        if (hasSelection) {
-            classes += " selectionActionsOpen";
-        }
-        return (this.props.reportHeader && this.props.selectionActions && (
-            <div className={classes}>{hasSelection ?
-                React.cloneElement(this.props.selectionActions, {key: "selectionActions", selection: selectedRows}) :
-                React.cloneElement(this.props.reportHeader, {
-                    key: "reportHeader",
-                    pageActions: this.props.pageActions,
-                    onMenuEnter: this.onMenuEnter,
-                    onMenuExit: this.onMenuExit
-                })}
-            </div>));
-    },
     /**
      * Callback - what to do when the master group expand/collapse is clicked
      * @param element
@@ -603,7 +570,6 @@ let AGGrid = React.createClass({
         return (
             <div className="reportTable">
 
-                {this.getTableActions()}
                 <div className={griddleWrapperClasses} ref="griddleWrapper">
                     <Loader loaded={!this.props.loading}>
                         {this.props.records && this.props.records.length > 0 ?

@@ -103,7 +103,7 @@ let ReportContent = React.createClass({
         return [];
     },
     openRow(data) {
-//console.log('go');
+
         const appId = this.props.appId;
         const tblId = this.props.tblId;
         var recId = data[this.props.uniqueIdentifier];
@@ -137,6 +137,8 @@ let ReportContent = React.createClass({
         }
 
     },
+
+
 
     /* TODO: paging component that has "next and previous tied to callbacks from the store to get new data set*/
     render: function() {
@@ -177,7 +179,8 @@ let ReportContent = React.createClass({
                                 uniqueIdentifier="Record ID#"
                                 reportHeader={this.props.reportHeader}
                                 selectionActions={<ReportActions />}
-                                onScroll={this.onScrollRecords}/>
+                                onScroll={this.onScrollRecords}
+                                selectedRows={this.props.selectedRows}/>
                         }
                     </div>
                 }

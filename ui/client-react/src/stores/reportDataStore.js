@@ -203,6 +203,7 @@ let ReportDataStore = Fluxxor.createStore({
         this.searchStringForFiltering = '' ;
         this.facetExpression = {};
         this.selections  = new FacetSelections();
+        this.selectedRows = [];
 
         this.bindActions(
             actions.LOAD_REPORT, this.onLoadReport,
@@ -215,10 +216,17 @@ let ReportDataStore = Fluxxor.createStore({
             actions.SHOW_FACET_MENU, this.onShowFacetMenu,
             actions.HIDE_FACET_MENU, this.onHideFacetMenu,
             actions.SEARCH_FOR, this.onSearchFor,
+            actions.SELECTED_ROWS, this.onSelectedRows,
 
             actions.ADD_REPORT_RECORD, this.onAddReportRecord, // for empower demo
             actions.DELETE_REPORT_RECORD, this.onDeleteReportRecord // for empower demo
         );
+    },
+
+    onSelectedRows(selectedRows) {
+      this.selectedRows = selectedRows;
+
+        this.emit('change');
     },
 
     onLoadReport(report) {
@@ -229,6 +237,7 @@ let ReportDataStore = Fluxxor.createStore({
         this.rptId = report.rptId;
         this.searchStringForFiltering = '' ;
         this.selections  = new FacetSelections();
+        this.selectedRows = [];
 
         this.emit('change');
     },
@@ -354,7 +363,8 @@ let ReportDataStore = Fluxxor.createStore({
             searchStringForFiltering: this.searchStringForFiltering,
             selections: this.selections,
             facetExpression: this.facetExpression,
-            nonFacetClicksEnabled : this.nonFacetClicksEnabled
+            nonFacetClicksEnabled : this.nonFacetClicksEnabled,
+            selectedRows: this.selectedRows
         };
     }
 

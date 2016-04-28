@@ -139,6 +139,9 @@ let reportDataActions = {
      * @param overrideQueryParams: {columns, sortlist, query}
      */
 
+    selectedRows(rows) {
+        this.dispatch(actions.SELECTED_ROWS, rows);
+    },
     addReportRecord() {
         this.dispatch(actions.ADD_REPORT_RECORD);
     },

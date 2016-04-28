@@ -202,6 +202,7 @@ const ReportRoute = React.createClass({
                                            clearSearchString : this.clearSearchString,
                                            clearAllFilters : this.clearAllFilters
                                        }}
+                                       selectedRows={this.props.reportData.selectedRows}
                                        history={this.props.history}
                 />
 
