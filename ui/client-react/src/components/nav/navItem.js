@@ -3,6 +3,7 @@ import {Tooltip, OverlayTrigger} from 'react-bootstrap';
 import {Link} from 'react-router';
 import {I18nMessage} from '../../utils/i18nMessage';
 import QBicon from '../qbIcon/qbIcon';
+import TableIcon from '../qbTableIcon/qbTableIcon';
 import A11Utils from '../../utils/a11yUtils';
 
 let NavItem = React.createClass({
@@ -59,7 +60,7 @@ let NavItem = React.createClass({
         }
         return (<li className={classes}>
             <Link className="leftNavLink" to={item.link} onClick={this.onClick} onKeyDown={this.onClick}>
-                <QBicon icon={item.icon}/> <span className={"leftNavLabel"}>{label}</span>
+                <TableIcon icon={item.icon}/> <span className={"leftNavLabel"}>{label}</span>
             </Link>
             { this.props.showSecondary && this.props.secondaryIcon &&
             <a href="#"
