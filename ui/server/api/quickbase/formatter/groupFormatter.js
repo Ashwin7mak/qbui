@@ -11,7 +11,6 @@
     var lodash = require('lodash');
     var groupUtils = require('../../../components/utility/groupUtils');
     var dateFormatter = require('../../../api/quickbase/formatter/dateTimeFormatter');
-    var numericFormatter = require('../../../api/quickbase/formatter/numericFormatter');
 
     var RAW_SUFFIX = '_raw_';
 
@@ -79,8 +78,8 @@
                     if (fld !== undefined) {
                         columns[fld.name] = column.display;
 
-                        //  If grouping on a numeric data type, add a temporary element to hold the raw data
-                        //  value.  This will be used in the groupByData function to determine the data range.
+                        //  If grouping on a numeric data type, add a temporary element to
+                        //  hold the raw data value that is used to calculate the range.
                         if (groupMap.get(column.id) !== undefined && isNumericDataType(fld.datatypeAttributes.type)) {
                             columns[fld.name + RAW_SUFFIX] = column.value;
                         }
