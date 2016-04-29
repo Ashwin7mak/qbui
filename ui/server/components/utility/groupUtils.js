@@ -330,7 +330,8 @@
 
                 var factor = Math.pow(10, scale - 1);
 
-                //  remove trailing zeros from input(if any) so that we can figure out the scale of the input value
+                //  remove trailing zeros(if any) after the decimal point from the input value
+                //   so that we can figure out the scal.  For example: 21.76000 --> 21.76
                 var value = (input * factor) / factor;
 
                 //  figure out the scale(if any) of the input value.  For example:

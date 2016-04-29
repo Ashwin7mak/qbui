@@ -92,7 +92,7 @@ describe('Validate Group Utility functions', function() {
 
     describe('validate random number generator', function() {
 
-        var testRuns = 5000000; // 5 million
+        var testRuns = 1000000; // 1 million
         var testFail = false;
 
         var min = 75;
@@ -161,25 +161,26 @@ describe('Validate Group Utility functions', function() {
         describe('validate numeric fractions - thousandth fractional tests', function() {
 
             var testCases = [];
+            var testScale = 4;
 
-            testCases.push({name: 'thousandth (76.12345)', input:76.12345, scale:4, expectation:{lower:'76.1230', upper:'76.1240'}});
-            testCases.push({name: 'thousandth (76.1234)', input:76.1234, scale:4, expectation:{lower:'76.1230', upper:'76.1240'}});
-            testCases.push({name: 'thousandth (76.123)', input:76.123, scale:4, expectation:{lower:'76.1230', upper:'76.1240'}});
-            testCases.push({name: 'thousandth (76.12)', input:76.12, scale:4, expectation:{lower:'76.1200', upper:'76.1210'}});
-            testCases.push({name: 'thousandth (76.1)', input:76.1, scale:4, expectation:{lower:'76.1000', upper:'76.1010'}});
-            testCases.push({name: 'thousandth (76)', input:76, scale:4, expectation:{lower:'76.0000', upper:'76.0010'}});
-            testCases.push({name: 'thousandth (.76)', input:.76, scale:4, expectation:{lower:'0.7600', upper:'0.7610'}});
-            testCases.push({name: 'thousandth (-.76)', input:-.76, scale:4, expectation:{lower:'-0.7600', upper:'-0.7590'}});
-            testCases.push({name: 'thousandth (-76)', input:-76, scale:4, expectation:{lower:'-76.0000', upper:'-75.9990'}});
-            testCases.push({name: 'thousandth (-76.1)', input:-76.1, scale:4, expectation:{lower:'-76.1000', upper:'-76.0990'}});
-            testCases.push({name: 'thousandth (-76.12)', input:-76.12, scale:4, expectation:{lower:'-76.1200', upper:'-76.1190'}});
-            testCases.push({name: 'thousandth (-76.123)', input:-76.123, scale:4, expectation:{lower:'-76.1230', upper:'-76.1220'}});
-            testCases.push({name: 'thousandth (-76.1234)', input:-76.1234, scale:4, expectation:{lower:'-76.1240', upper:'-76.1230'}});
-            testCases.push({name: 'thousandth (-76.12345)', input:-76.12345, scale:4, expectation:{lower:'-76.1240', upper:'-76.1230'}});
+            testCases.push({name: 'thousandth (76.12345)', input:76.12345, expectation:{lower:'76.1230', upper:'76.1240'}});
+            testCases.push({name: 'thousandth (76.1234)', input:76.1234, expectation:{lower:'76.1230', upper:'76.1240'}});
+            testCases.push({name: 'thousandth (76.123)', input:76.123, expectation:{lower:'76.1230', upper:'76.1240'}});
+            testCases.push({name: 'thousandth (76.12)', input:76.12, expectation:{lower:'76.1200', upper:'76.1210'}});
+            testCases.push({name: 'thousandth (76.1)', input:76.1, expectation:{lower:'76.1000', upper:'76.1010'}});
+            testCases.push({name: 'thousandth (76)', input:76, expectation:{lower:'76.0000', upper:'76.0010'}});
+            testCases.push({name: 'thousandth (.76)', input:.76, expectation:{lower:'0.7600', upper:'0.7610'}});
+            testCases.push({name: 'thousandth (-.76)', input:-.76, expectation:{lower:'-0.7600', upper:'-0.7590'}});
+            testCases.push({name: 'thousandth (-76)', input:-76, expectation:{lower:'-76.0000', upper:'-75.9990'}});
+            testCases.push({name: 'thousandth (-76.1)', input:-76.1, expectation:{lower:'-76.1000', upper:'-76.0990'}});
+            testCases.push({name: 'thousandth (-76.12)', input:-76.12, expectation:{lower:'-76.1200', upper:'-76.1190'}});
+            testCases.push({name: 'thousandth (-76.123)', input:-76.123, expectation:{lower:'-76.1230', upper:'-76.1220'}});
+            testCases.push({name: 'thousandth (-76.1234)', input:-76.1234, expectation:{lower:'-76.1240', upper:'-76.1230'}});
+            testCases.push({name: 'thousandth (-76.12345)', input:-76.12345, expectation:{lower:'-76.1240', upper:'-76.1230'}});
 
             testCases.forEach(function(test) {
                 it('Test case: ' + test.name, function() {
-                    assert.deepEqual(groupUtils.getRangeFraction(test.input, test.scale), test.expectation);
+                    assert.deepEqual(groupUtils.getRangeFraction(test.input, testScale), test.expectation);
                 });
             });
         });
@@ -187,25 +188,26 @@ describe('Validate Group Utility functions', function() {
         describe('validate numeric fractions - hundredth fractional tests', function() {
 
             var testCases = [];
+            var testScale = 3;
 
-            testCases.push({name: 'hundredth (76.12345)', input:76.12345, scale:3, expectation:{lower:'76.120', upper:'76.130'}});
-            testCases.push({name: 'hundredth (76.1234)', input:76.1234, scale:3, expectation:{lower:'76.120', upper:'76.130'}});
-            testCases.push({name: 'hundredth (76.123)', input:76.123, scale:3, expectation:{lower:'76.120', upper:'76.130'}});
-            testCases.push({name: 'hundredth (76.12)', input:76.12, scale:3, expectation:{lower:'76.120', upper:'76.130'}});
-            testCases.push({name: 'hundredth (76.1)', input:76.1, scale:3, expectation:{lower:'76.100', upper:'76.110'}});
-            testCases.push({name: 'hundredth (76)', input:76, scale:3, expectation:{lower:'76.000', upper:'76.010'}});
-            testCases.push({name: 'hundredth (.76)', input:.76, scale:3, expectation:{lower:'0.760', upper:'0.770'}});
-            testCases.push({name: 'hundredth (-.76)', input:-.76, scale:3, expectation:{lower:'-0.760', upper:'-0.750'}});
-            testCases.push({name: 'hundredth (-76)', input:-76, scale:3, expectation:{lower:'-76.000', upper:'-75.990'}});
-            testCases.push({name: 'hundredth (-76.1)', input:-76.1, scale:3, expectation:{lower:'-76.100', upper:'-76.090'}});
-            testCases.push({name: 'hundredth (-76.12)', input:-76.12, scale:3, expectation:{lower:'-76.120', upper:'-76.110'}});
-            testCases.push({name: 'hundredth (-76.123)', input:-76.123, scale:3, expectation:{lower:'-76.130', upper:'-76.120'}});
-            testCases.push({name: 'hundredth (-76.1234)', input:-76.1234, scale:3, expectation:{lower:'-76.130', upper:'-76.120'}});
-            testCases.push({name: 'hundredth (-76.12345)', input:-76.12345, scale:3, expectation:{lower:'-76.130', upper:'-76.120'}});
+            testCases.push({name: 'hundredth (76.12345)', input:76.12345, expectation:{lower:'76.120', upper:'76.130'}});
+            testCases.push({name: 'hundredth (76.1234)', input:76.1234, expectation:{lower:'76.120', upper:'76.130'}});
+            testCases.push({name: 'hundredth (76.123)', input:76.123, expectation:{lower:'76.120', upper:'76.130'}});
+            testCases.push({name: 'hundredth (76.12)', input:76.12, expectation:{lower:'76.120', upper:'76.130'}});
+            testCases.push({name: 'hundredth (76.1)', input:76.1, expectation:{lower:'76.100', upper:'76.110'}});
+            testCases.push({name: 'hundredth (76)', input:76, expectation:{lower:'76.000', upper:'76.010'}});
+            testCases.push({name: 'hundredth (.76)', input:.76, expectation:{lower:'0.760', upper:'0.770'}});
+            testCases.push({name: 'hundredth (-.76)', input:-.76, expectation:{lower:'-0.760', upper:'-0.750'}});
+            testCases.push({name: 'hundredth (-76)', input:-76, expectation:{lower:'-76.000', upper:'-75.990'}});
+            testCases.push({name: 'hundredth (-76.1)', input:-76.1, expectation:{lower:'-76.100', upper:'-76.090'}});
+            testCases.push({name: 'hundredth (-76.12)', input:-76.12, expectation:{lower:'-76.120', upper:'-76.110'}});
+            testCases.push({name: 'hundredth (-76.123)', input:-76.123, expectation:{lower:'-76.130', upper:'-76.120'}});
+            testCases.push({name: 'hundredth (-76.1234)', input:-76.1234, expectation:{lower:'-76.130', upper:'-76.120'}});
+            testCases.push({name: 'hundredth (-76.12345)', input:-76.12345, expectation:{lower:'-76.130', upper:'-76.120'}});
 
             testCases.forEach(function(test) {
                 it('Test case: ' + test.name, function() {
-                    assert.deepEqual(groupUtils.getRangeFraction(test.input, test.scale), test.expectation);
+                    assert.deepEqual(groupUtils.getRangeFraction(test.input, testScale), test.expectation);
                 });
             });
         });
@@ -213,44 +215,54 @@ describe('Validate Group Utility functions', function() {
         describe('validate numeric fractions - tens fractional tests', function() {
 
             var testCases = [];
-            testCases.push({name: 'tens (76.12345)', input:76.12345, scale:2, expectation:{lower:'76.10', upper:'76.20'}});
-            testCases.push({name: 'tens (76.1234)', input:76.1234, scale:2, expectation:{lower:'76.10', upper:'76.20'}});
-            testCases.push({name: 'tens (76.123)', input:76.123, scale:2, expectation:{lower:'76.10', upper:'76.20'}});
-            testCases.push({name: 'tens (76.12)', input:76.12, scale:2, expectation:{lower:'76.10', upper:'76.20'}});
-            testCases.push({name: 'tens (76.1)', input:76.1, scale:2, expectation:{lower:'76.10', upper:'76.20'}});
-            testCases.push({name: 'tens (76)', input:76, scale:2, expectation:{lower:'76.00', upper:'76.10'}});
-            testCases.push({name: 'tens (.76)', input:.76, scale:2, expectation:{lower:'0.70', upper:'0.80'}});
-            testCases.push({name: 'tens (-.76)', input:-.76, scale:2, expectation:{lower:'-0.80', upper:'-0.70'}});
-            testCases.push({name: 'tens (-76)', input:-76, scale:2, expectation:{lower:'-76.00', upper:'-75.90'}});
-            testCases.push({name: 'tens (-76.1)', input:-76.1, scale:2, expectation:{lower:'-76.10', upper:'-76.00'}});
-            testCases.push({name: 'tens (-76.12)', input:-76.12, scale:2, expectation:{lower:'-76.20', upper:'-76.10'}});
-            testCases.push({name: 'tens (-76.123)', input:-76.123, scale:2, expectation:{lower:'-76.20', upper:'-76.10'}});
-            testCases.push({name: 'tens (-76.1234)', input:-76.1234, scale:2, expectation:{lower:'-76.20', upper:'-76.10'}});
-            testCases.push({name: 'tens (-76.12345)', input:-76.12345, scale:2, expectation:{lower:'-76.20', upper:'-76.10'}});
+            var testScale = 2;
+
+            testCases.push({name: 'tens (76.12345)', input:76.12345, expectation:{lower:'76.10', upper:'76.20'}});
+            testCases.push({name: 'tens (76.1234)', input:76.1234, expectation:{lower:'76.10', upper:'76.20'}});
+            testCases.push({name: 'tens (76.123)', input:76.123, expectation:{lower:'76.10', upper:'76.20'}});
+            testCases.push({name: 'tens (76.12)', input:76.12, expectation:{lower:'76.10', upper:'76.20'}});
+            testCases.push({name: 'tens (76.1)', input:76.1, expectation:{lower:'76.10', upper:'76.20'}});
+            testCases.push({name: 'tens (76)', input:76, expectation:{lower:'76.00', upper:'76.10'}});
+            testCases.push({name: 'tens (.76)', input:.76, expectation:{lower:'0.70', upper:'0.80'}});
+            testCases.push({name: 'tens (-.76)', input:-.76, expectation:{lower:'-0.80', upper:'-0.70'}});
+            testCases.push({name: 'tens (-76)', input:-76, expectation:{lower:'-76.00', upper:'-75.90'}});
+            testCases.push({name: 'tens (-76.1)', input:-76.1, expectation:{lower:'-76.10', upper:'-76.00'}});
+            testCases.push({name: 'tens (-76.12)', input:-76.12, expectation:{lower:'-76.20', upper:'-76.10'}});
+            testCases.push({name: 'tens (-76.123)', input:-76.123, expectation:{lower:'-76.20', upper:'-76.10'}});
+            testCases.push({name: 'tens (-76.1234)', input:-76.1234, expectation:{lower:'-76.20', upper:'-76.10'}});
+            testCases.push({name: 'tens (-76.12345)', input:-76.12345, expectation:{lower:'-76.20', upper:'-76.10'}});
 
             testCases.forEach(function(test) {
                 it('Test case: ' + test.name + ':' + test.input, function() {
-                    assert.deepEqual(groupUtils.getRangeFraction(test.input, test.scale), test.expectation);
+                    assert.deepEqual(groupUtils.getRangeFraction(test.input, testScale), test.expectation);
                 });
             });
         });
 
-        describe('validate numeric fractions - ones fractional tests', function() {
+        describe('validate numeric fractions - ones tests', function() {
 
             var testCases = [];
+            var testScale = 1;
+
             for (var idx = 1; idx < 5; idx++) {
                 var lowerBound = getRandomNumber(-100, 100, 0);  // generate random number between 0 and 100
                 var upperBound = lowerBound + 1;
                 testCases.push({
                     name: 'ones scale ' + idx,
                     input: getRandomNumber(lowerBound, upperBound, idx),
-                    scale: 1,
                     expectation: {lower: lowerBound.toString(), upper: upperBound.toString()}
                 });
             }
 
-            testCases.push({name: 'ones pos fraction', input:getRandomNumber(0, 1, 2), scale:1, expectation:{lower:'0', upper:'1'}});
-            testCases.push({name: 'ones neg fraction', input:getRandomNumber(-1, 0, 2), scale:1, expectation:{lower:'-1', upper:'0'}});
+            testCases.push({name: 'ones pos fraction', input:getRandomNumber(0, 1, 2), expectation:{lower:'0', upper:'1'}});
+            testCases.push({name: 'ones neg fraction', input:getRandomNumber(-1, 0, 2), expectation:{lower:'-1', upper:'0'}});
+
+            testCases.forEach(function(test) {
+                it('Test case: ' + test.name, function() {
+                    assert.deepEqual(groupUtils.getRangeFraction(test.input, testScale), test.expectation);
+                    assert.deepEqual(groupUtils.getRangeWhole(test.input, testScale), test.expectation);
+                });
+            });
         });
 
         describe('validate numeric fractions - negative fractional tests', function() {

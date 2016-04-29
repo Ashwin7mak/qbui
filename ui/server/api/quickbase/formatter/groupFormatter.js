@@ -184,7 +184,7 @@
                 case groupTypes.NUMERIC.tenth:
                     return formatNumericRange(groupUtils.getRangeFraction(raw, 2));
                 case groupTypes.NUMERIC.one:
-                    return formatNumericRange(groupUtils.getRangeFraction(raw, 1));
+                    return formatNumericRange(groupUtils.getRangeWhole(raw, 1));
                 case groupTypes.NUMERIC.five:
                     return formatNumericRange(groupUtils.getRangeWhole(raw, 5));
                 case groupTypes.NUMERIC.ten:
