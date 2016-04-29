@@ -111,7 +111,7 @@ let reportModel = {
     setMetaData: function(reportMetaData) {
         this.model.name = reportMetaData.name;
         this.model.description = reportMetaData.description;
-        this.model.fids = reportMetaData.fids;
+        this.model.fids = reportMetaData.fids ? reportMetaData.fids : [];
         // in report's meta data sortlist is returned as an array of sort elements
         this.setSortFids(reportMetaData.sortList);
         this.setGroupElements(reportMetaData.sortList);
