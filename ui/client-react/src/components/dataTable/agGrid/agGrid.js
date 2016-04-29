@@ -326,7 +326,7 @@ let AGGrid = React.createClass({
             this.api.onGroupExpandedOrCollapsed();
             return;
         }
-        //For click on record action icons or input fieldsdo nothing
+        //For click on record action icons or input fields do nothing
         if (params.event.target &&
             params.event.target.className.indexOf("qbIcon") !== -1 ||
             params.event.target.className.indexOf("iconLink") !== -1 ||

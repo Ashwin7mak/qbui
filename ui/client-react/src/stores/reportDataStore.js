@@ -329,10 +329,16 @@ let ReportDataStore = Fluxxor.createStore({
     onAddReportRecord() {
         const model = this.reportModel.get();
 
+        const recordKey = "Record ID#";
+
         if (model.filteredRecords.length > 0) {
 
-            const lastRecord = model.filteredRecords[model.filteredRecords.length - 1];
-            const newRecord = _.mapValues(lastRecord, (obj) => {return null;});
+            // find record with greatest record ID (after converting to number) regardless of array order
+            const maxRecord = model.filteredRecords.reduce((last, record) => {
+                return (parseInt(last[recordKey]) > parseInt(record[recordKey])) ? last : record;
+            });
+
+            const newRecord = _.mapValues(maxRecord, (obj) => {return null;});
 
             const id = parseInt(lastRecord["Record ID#"]) + 1;
             newRecord["Record ID#"] = id;
