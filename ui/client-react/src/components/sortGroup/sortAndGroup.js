@@ -156,7 +156,7 @@ const SortAndGroup = React.createClass({
             answer = this.state.newSelectionsGroup;
         } else {
             // populate from report data
-            this.props.reportData.data.sortFids.map((fidInfo) => {
+            this.props.reportData.data.groupEls.map((fidInfo) => {
                 if (fidInfo.includes(ReportUtils.groupDelimiter)) {
                     //strip off fid part
                     let delimOffset = fidInfo.indexOf(ReportUtils.groupDelimiter);
