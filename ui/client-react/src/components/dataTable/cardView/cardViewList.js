@@ -2,13 +2,16 @@ import React from 'react';
 import {I18nMessage} from '../../../utils/i18nMessage';
 import CardView from './cardView';
 import Loader  from 'react-loader';
+import Fluxxor from 'fluxxor';
+
 import './cardViewList.scss';
 
+let FluxMixin = Fluxxor.FluxMixin(React);
 /**
  * A list of CardView items used to render a report at the small breakpoint
  */
 let CardViewList = React.createClass({
-
+    mixins: [FluxMixin],
     contextTypes: {
         history: React.PropTypes.object
     },
@@ -22,7 +25,6 @@ let CardViewList = React.createClass({
 
     getInitialState() {
         return {
-            selectedRows: [],
             allowCardSelection: false
         };
     },
@@ -41,8 +43,9 @@ let CardViewList = React.createClass({
     onToggleCardSelection(allow = true, rowData = null) {
         this.setState({allowCardSelection: allow});
 
+        const flux = this.getFlux();
         if (!allow) {
-            this.setState({selectedRows: []}); // reset selection
+            flux.actions.selectedRows([]);
         } else if (rowData) {
             this.onCardRowSelected(rowData); // pre-select the card that started selection
         }
@@ -52,7 +55,7 @@ let CardViewList = React.createClass({
      * is row selected callback
      */
     isRowSelected(row) {
-        return this.state.selectedRows.indexOf(row[this.props.uniqueIdentifier]) !== -1;
+        return this.props.selectedRows.indexOf(row[this.props.uniqueIdentifier]) !== -1;
     },
 
     /**
@@ -81,48 +84,25 @@ let CardViewList = React.createClass({
      */
     onCardRowSelected(row) {
 
+        const flux = this.getFlux();
+
         const id = row[this.props.uniqueIdentifier];
-        if (this.state.selectedRows.indexOf(id) === -1) {
+
+        let selectedRows = this.props.selectedRows;
+
+        if (selectedRows.indexOf(id) === -1) {
             // not already selected, add to selectedRows
-            this.state.selectedRows.push(row[this.props.uniqueIdentifier]);
-            this.setState({selectedRows: this.state.selectedRows});
+            selectedRows.push(row[this.props.uniqueIdentifier]);
         } else {
             // already selected, remove from selectedRows
-            this.setState({selectedRows: _.without(this.state.selectedRows, id)});
+            selectedRows = _.without(selectedRows, id);
         }
-    },
-
-    /**
-     * get table actions if we have them - render selectionActions prop if we have an active selection,
-     * otherwise the reportHeader prop (cloned with extra key prop for transition group, and selected rows
-     * for selectionActions component)
-     */
-    getTableActions() {
-
-        const hasSelection = this.state.selectedRows.length;
-
-        let classes = "tableActionsContainer secondaryBar";
-
-        if (hasSelection) {
-            classes += " selectionActionsOpen";
-        }
-        return (this.props.reportHeader && this.props.selectionActions && (
-            <div className={classes}>{hasSelection ?
-                React.cloneElement(this.props.selectionActions, {
-                    key: "selectionActions",
-                    selection: this.state.selectedRows
-                }) :
-                React.cloneElement(this.props.reportHeader, {
-                    key: "reportHeader",
-                    onMenuEnter: this.onMenuEnter,
-                    onMenuExit: this.onMenuExit
-                })}
-            </div>));
+        flux.actions.selectedRows(selectedRows);
     },
 
     getRows(results) {
 
-        let cardViewListClasses = this.state.selectedRows.length ? "cardViewList selectedRows" : "cardViewList";
+        let cardViewListClasses = this.props.selectedRows.length ? "cardViewList selectedRows" : "cardViewList";
         if (this.state.allowCardSelection) {
             cardViewListClasses += " allowCardSelection";
         }
@@ -166,8 +146,6 @@ let CardViewList = React.createClass({
 
         return (
             <div className="reportTable">
-
-                {this.getTableActions()}
 
                 <div className="tableLoaderContainer" ref="cardViewListWrapper">
                     <Loader loaded={!this.props.reportData.loading}>

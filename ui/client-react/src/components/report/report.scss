@@ -32,6 +32,7 @@
 .reportToolsAndContentContainer {
     display:flex;
     flex: 1 1 auto;
+    flex-direction:column;
 
     .tableActionsContainer {
         position: relative;
@@ -142,6 +143,7 @@
 
 .reportToolbarContainer {
     width: 100%;
+
 }
 .noData {
     padding-left: 1.5rem;

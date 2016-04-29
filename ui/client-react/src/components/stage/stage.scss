@@ -14,7 +14,8 @@ $breadCrumbsSeparatorColor: #c7c7c7;
         white-space: nowrap;
         overflow:hidden;
         .stageHeadline {
-
+            display:flex;
+            align-items:center;
         }
         .breadCrumbs {
             line-height:40px;
@@ -25,7 +26,6 @@ $breadCrumbsSeparatorColor: #c7c7c7;
             }
             > * {
                 flex: 0 0 auto;
-
             }
             > *:last-child {
                 flex: 0 1 auto;

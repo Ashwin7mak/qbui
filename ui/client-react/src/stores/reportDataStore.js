@@ -203,6 +203,7 @@ let ReportDataStore = Fluxxor.createStore({
         this.searchStringForFiltering = '' ;
         this.facetExpression = {};
         this.selections  = new FacetSelections();
+        this.selectedRows = [];
 
         this.bindActions(
             actions.LOAD_REPORT, this.onLoadReport,
@@ -214,8 +215,18 @@ let ReportDataStore = Fluxxor.createStore({
             actions.FILTER_SELECTIONS_PENDING, this.onFilterSelectionsPending,
             actions.SHOW_FACET_MENU, this.onShowFacetMenu,
             actions.HIDE_FACET_MENU, this.onHideFacetMenu,
-            actions.SEARCH_FOR, this.onSearchFor
+            actions.SEARCH_FOR, this.onSearchFor,
+            actions.SELECTED_ROWS, this.onSelectedRows,
+
+            actions.ADD_REPORT_RECORD, this.onAddReportRecord, // for empower demo
+            actions.DELETE_REPORT_RECORD, this.onDeleteReportRecord // for empower demo
         );
+    },
+
+    onSelectedRows(selectedRows) {
+        this.selectedRows = selectedRows;
+
+        this.emit('change');
     },
 
     onLoadReport(report) {
@@ -226,6 +237,7 @@ let ReportDataStore = Fluxxor.createStore({
         this.rptId = report.rptId;
         this.searchStringForFiltering = '' ;
         this.selections  = new FacetSelections();
+        this.selectedRows = [];
 
         this.emit('change');
     },
@@ -314,6 +326,40 @@ let ReportDataStore = Fluxxor.createStore({
         this.emit('change');
     },
 
+    onAddReportRecord() {
+        const model = this.reportModel.get();
+
+        const recordKey = "Record ID#";
+
+        if (model.filteredRecords.length > 0) {
+
+            // find record with greatest record ID (after converting to number) regardless of array order
+            const maxRecord = model.filteredRecords.reduce((last, record) => {
+                return (parseInt(last[recordKey]) > parseInt(record[recordKey])) ? last : record;
+            });
+
+            const newRecord = _.mapValues(maxRecord, (obj) => {return null;});
+
+            const id = parseInt(lastRecord["Record ID#"]) + 1;
+            newRecord["Record ID#"] = id;
+
+            const newRecords = model.filteredRecords.slice(0);
+            newRecords.push(newRecord);
+            model.filteredRecords = newRecords;
+            model.filteredRecordsCount++;
+
+            this.emit('change');
+        }
+    },
+    onDeleteReportRecord(id) {
+        const model = this.reportModel.get();
+
+        const index = _.findIndex(model.filteredRecords, {"Record ID#": id});
+
+        model.filteredRecords.splice(index, 1);
+        this.emit('change');
+    },
+
     getState() {
         return {
             loading: this.loading,
@@ -325,7 +371,8 @@ let ReportDataStore = Fluxxor.createStore({
             searchStringForFiltering: this.searchStringForFiltering,
             selections: this.selections,
             facetExpression: this.facetExpression,
-            nonFacetClicksEnabled : this.nonFacetClicksEnabled
+            nonFacetClicksEnabled : this.nonFacetClicksEnabled,
+            selectedRows: this.selectedRows
         };
     }
 

@@ -89,7 +89,7 @@ export default {
             newReport: "Nouveau",
             organizeReports: "Organiser",
             recordCount : "{recordCount} {nameForRecords} ",
-            searchPlaceHolder:  "Rechercher ces {nameForRecords} ...",
+            searchPlaceHolder:  "Rechercher ces",
             menu: {
                 sort: {
                     aToZ: "Trier A à Z",

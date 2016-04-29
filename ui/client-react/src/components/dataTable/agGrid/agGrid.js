@@ -58,7 +58,8 @@ let AGGrid = React.createClass({
         loading: React.PropTypes.bool,
         records: React.PropTypes.array,
         appId: React.PropTypes.string,
-        tblId: React.PropTypes.string
+        tblId: React.PropTypes.string,
+        onRowClick: React.PropTypes.func
     },
     contextTypes: {
         touch: React.PropTypes.bool,
@@ -72,12 +73,7 @@ let AGGrid = React.createClass({
     gridOptions: {
         context: {}
     },
-    getInitialState() {
-        return {
-            toolsMenuOpen: false,
-            allRowsSelected: false
-        };
-    },
+
     onGridReady(params) {
         this.api = params.api;
         this.columnApi = params.columnApi;
@@ -179,15 +175,15 @@ let AGGrid = React.createClass({
         }
     },
     onMenuClose() {
-        let self = this;
-        document.addEventListener("DOMNodeRemoved", function(ev) {
+
+        document.addEventListener("DOMNodeRemoved", (ev) => {
             if (ev.target && ev.target.className && ev.target.className.indexOf("ag-menu") !== -1) {
-                if (self.selectedColumnId.length) {
-                    let toRemove = self.selectedColumnId[0];
-                    let occurences = _.filter(self.selectedColumnId, function(column) {
+                if (this.selectedColumnId.length) {
+                    let toRemove = this.selectedColumnId[0];
+                    let occurences = _.filter(this.selectedColumnId, (column) => {
                         return column === toRemove;
                     });
-                    self.selectedColumnId = self.selectedColumnId.splice(1, self.selectedColumnId.length);
+                    this.selectedColumnId = this.selectedColumnId.splice(1, this.selectedColumnId.length);
                     let columnHeader = document.querySelectorAll('div.ag-header-cell[colId="' + toRemove + '"]');
                     if (occurences.length <= 1) {
                         columnHeader[0].classList.remove("selected");
@@ -278,10 +274,8 @@ let AGGrid = React.createClass({
 
     // Performance improvement - only update the component when certain state/props change
     // Since this is a heavy component we dont want this updating all times.
-    shouldComponentUpdate(nextProps, nextState) {
-        if (!_.isEqual(nextState, this.state)) {
-            return true;
-        }
+    shouldComponentUpdate(nextProps) {
+
         if (!_.isEqual(nextProps.loading, this.props.loading)) {
             return true;
         }
@@ -297,7 +291,7 @@ let AGGrid = React.createClass({
         var allColumnIds = [];
         if (this.columnApi) {
             if (this.props.columns) {
-                this.props.columns.forEach(function(columnDef) {
+                this.props.columns.forEach(columnDef => {
                     allColumnIds.push(columnDef.field);
                 });
                 this.columnApi.autoSizeColumns(allColumnIds);
@@ -308,58 +302,75 @@ let AGGrid = React.createClass({
      * Grid API - selectAll "selects" all rows.
      */
     selectAll() {
+        const flux = this.getFlux();
         this.api.selectAll();
+        flux.actions.selectedRows(this.getSelectedRows());
     },
     /**
      * Grid API - deselectAll "deselects" all rows.
      */
     deselectAll() {
+        const flux = this.getFlux();
         this.api.deselectAll();
+        flux.actions.selectedRows([]);
     },
     /**
      * Capture the row-click event. Send to record view on row-click
      * @param params
      */
     onRowClicked(params) {
+
         //For click on group, expand/collapse the group.
         if (params.node.field === "group") {
             params.node.expanded = !params.node.expanded;
             this.api.onGroupExpandedOrCollapsed();
             return;
         }
-        //For click on record action icons do nothing
+        //For click on record action icons or input fields do nothing
         if (params.event.target &&
             params.event.target.className.indexOf("qbIcon") !== -1 ||
-            params.event.target.className.indexOf("iconLink") !== -1) {
+            params.event.target.className.indexOf("iconLink") !== -1 ||
+            params.event.target.tagName === "INPUT") {
             return;
         }
 
-        const appId = this.props.appId;
-        const tblId = this.props.tblId;
-        var recId = params.data[this.props.uniqueIdentifier];
-        //create the link we want to send the user to and then send them on their way
-        const link = `/app/${appId}/table/${tblId}/record/${recId}`;
-        this.context.history.push(link);
+        // select row on doubleclick
+        if (params.event.detail === 2) {
+            clearTimeout(this.clickTimeout);
+            this.clickTimeout = null;
+            params.node.setSelected(true, true);
+            return;
+        }
+        if (this.clickTimeout) {
+            // already waiting for 2nd click
+            return;
+        }
+
+        this.clickTimeout = setTimeout(() => {
+            // navigate to record if timeout wasn't canceled by 2nd click
+            this.clickTimeout = null;
+            if (this.api.getSelectedRows().length === 0) {
+                this.props.onRowClick(params.data);
+            }
+        }, 500);
     },
     /**
      * Capture the row-selection/deselection change events.
      * For some reason this doesnt seem to fire on deselectAll but doesnt matter for us.
      */
     onSelectionChanged() {
-        this.updateAllCheckbox();
+        let flux = this.getFlux();
+
+        flux.actions.selectedRows(this.getSelectedRows());
     },
 
     /**
      * Helper method to flip the master checkbox if all rows are checked
      */
-    updateAllCheckbox() {
+    allRowsSelected() {
         let selectedRows = this.getSelectedRows().length;
-        let allRowsSelected = this.props.recordCount === selectedRows;
-        var newState = {
-            toolsMenuOpen: selectedRows > 0,
-            allRowsSelected: allRowsSelected
-        };
-        this.setState(newState);
+
+        return this.props.recordCount === selectedRows;
     },
     /**
      * Capture the event if all-select checkbox is clicked.
@@ -375,20 +386,9 @@ let AGGrid = React.createClass({
         } else {
             this.deselectAll();
         }
-        this.updateAllCheckbox();
+
     },
-    /**
-     * keep track of tools menu being open (need to change overflow css style)
-     */
-    onMenuEnter() {
-        this.setState({toolsMenuOpen: true});
-    },
-    /**
-     * keep track of tools menu being closed (need to change overflow css style)
-     */
-    onMenuExit() {
-        this.setState({toolsMenuOpen: false});
-    },
+
     /**
      * There seems to be bug in getSelectedRows callback of grid where
      * it also returns group header rows. This one weans those out to select
@@ -406,34 +406,7 @@ let AGGrid = React.createClass({
         }
         return rows;
     },
-    /**
-     * get table actions if we have them - render selectionActions prop if we have an active selection,
-     * otherwise the reportHeader prop (cloned with extra key prop for transition group, and selected rows
-     * for selectionActions component)
-     */
-    getTableActions() {
 
-        const selectedRows = this.getSelectedRows();
-        const hasSelection = selectedRows.length;
-
-        let classes = "tableActionsContainer secondaryBar";
-        if (this.state.toolsMenuOpen) {
-            classes += " toolsMenuOpen";
-        }
-        if (hasSelection) {
-            classes += " selectionActionsOpen";
-        }
-        return (this.props.reportHeader && this.props.selectionActions && (
-            <div className={classes}>{hasSelection ?
-                React.cloneElement(this.props.selectionActions, {key: "selectionActions", selection: selectedRows}) :
-                React.cloneElement(this.props.reportHeader, {
-                    key: "reportHeader",
-                    pageActions: this.props.pageActions,
-                    onMenuEnter: this.onMenuEnter,
-                    onMenuExit: this.onMenuExit
-                })}
-            </div>));
-    },
     /**
      * Callback - what to do when the master group expand/collapse is clicked
      * @param element
@@ -473,7 +446,7 @@ let AGGrid = React.createClass({
         var checkbox = document.createElement("input");
         checkbox.type = "checkbox";
         checkbox.className = "selectAllCheckbox";
-        checkbox.checked = this.state.allRowsSelected;
+        checkbox.checked = this.allRowsSelected();
         checkbox.onclick = (event) => {
             this.allCheckBoxSelected(event);
         };
@@ -493,7 +466,7 @@ let AGGrid = React.createClass({
 
         headerCell.appendChild(checkbox);
         //ag-grid doesnt seem to allow react components sent into headerCellRender.
-        checkBoxCol.headerCellRenderer = function() {
+        checkBoxCol.headerCellRenderer = () => {
             return headerCell;
         };
         checkBoxCol.checkboxSelection = true;
@@ -506,6 +479,7 @@ let AGGrid = React.createClass({
         } else {
             checkBoxCol.width = consts.DEFAULT_CHECKBOX_COL_WIDTH;
         }
+
         return checkBoxCol;
     },
     /**
@@ -524,12 +498,14 @@ let AGGrid = React.createClass({
             suppressResize: true
         };
     },
+
     /**
      * Add a couple of columns to the column definition sent through props -
      * add checkbox column to the beginning of the array and
      * add actions column to the end of the array.
      */
     getColumns() {
+
         if (!this.props.columns) {
             return;
         }
@@ -546,32 +522,45 @@ let AGGrid = React.createClass({
         if (columns.length > 0) {
             columns.push(this.getActionsColumn());
         }
+
         return columns;
+
+    },
+
+    /**
+     * add a couple of extra rows which will be hidden to avoid
+     * clipping the row edit UI if it's at the bottom row
+     * @returns {*}
+     */
+    getRecordsToRender() {
+
+        let paddedRecords = this.props.records.slice(0);
+        paddedRecords.push({});
+        paddedRecords.push({});
+        return paddedRecords;
     },
 
     render() {
         let columnDefs = this.getColumns();
+
         let griddleWrapperClasses = this.getSelectedRows().length ? "griddleWrapper selectedRows" : "griddleWrapper";
         return (
             <div className="reportTable">
 
-                {this.getTableActions()}
                 <div className={griddleWrapperClasses} ref="griddleWrapper">
                     <Loader loaded={!this.props.loading}>
                         {this.props.records && this.props.records.length > 0 ?
                             <div className="agGrid">
                                 <AgGridReact
                                     gridOptions={this.gridOptions}
-
                                     // listening for events
                                     onGridReady={this.onGridReady}
                                     onRowClicked={this.onRowClicked}
                                     onSelectionChanged={this.onSelectionChanged}
 
-
                                     // binding to array properties
                                     columnDefs={columnDefs}
-                                    rowData={this.props.records}
+                                    rowData={this.getRecordsToRender()}
 
                                     //default behavior properties
                                     rowSelection="multiple"

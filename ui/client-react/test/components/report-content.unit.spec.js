@@ -4,7 +4,7 @@ import ReportContent from '../../src/components/report/dataTable/reportContent';
 import CardViewList from '../../src/components/dataTable/cardView/cardViewList';
 import AGGrid  from '../../src/components/dataTable/agGrid/agGrid';
 import {reactCellRendererFactory} from 'ag-grid-react';
-import {NumericFormatter, DateFormatter} from '../../src/components/dataTable/griddleTable/formatters';
+import {NumericFormatter, DateFormatter} from '../../src/components/dataTable/agGrid/formatters';
 import _ from 'lodash';
 
 var NumericFormatterMock = function() {
