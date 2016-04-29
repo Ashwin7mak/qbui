@@ -240,7 +240,7 @@ $cell-edit-background-edit: #f3f8fe;
     .recordActions {
         padding: 0;
         height:100%;
-        width:240px;
+        width:200px;
 
         .actionIcons {
             display:flex;
@@ -251,11 +251,12 @@ $cell-edit-background-edit: #f3f8fe;
             .iconLink {
                 flex:1 1 auto;
                 height:100%;
+
                 position:relative;
                 .qbIcon {
                     position:absolute;
-                    top: calc(50% - 8px);
-                    left: calc(50% - 8px);
+                    top: calc(50% - 10px);
+                    left: calc(50% - 10px);
                 }
             }
         }
