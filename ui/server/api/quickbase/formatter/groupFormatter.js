@@ -64,8 +64,8 @@
                 map.set(field.id, field);
             });
 
-            groupFields.forEach((field) => {
-                groupMap.set(field.field.id, field.field);
+            groupFields.forEach((groupField) => {
+                groupMap.set(groupField.field.id, groupField.field);
             });
 
             //  Some prep work to organize the report data: for each row,
