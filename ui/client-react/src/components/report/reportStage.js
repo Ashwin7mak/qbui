@@ -23,18 +23,17 @@ const ReportStage = React.createClass({
     },
 
     render: function() {
-
-        const reportName = this.props.reportData && this.props.reportData.data ? this.props.reportData.data.name : "";
+        const reportDesc = this.props.reportData && this.props.reportData.data ? this.props.reportData.data.description : "";
 
         return (this.props.reportData && this.props.reportData.data ? (
             <div className="report-content">
             <div className="left">
                 <div className="content">
-                    <div className="stage-showHide-content"><I18nMessage message={'stage.content'}/></div>
+                    <div className="stage-showHide-content">{reportDesc}</div>
                 </div>
             </div>
          </div>) :
-        <div>empty</div>);
+         null);
 
     }
 });

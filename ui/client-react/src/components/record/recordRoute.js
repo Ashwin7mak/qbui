@@ -1,6 +1,7 @@
 import React from 'react';
 import Stage from '../stage/stage';
 import QBicon from '../qbIcon/qbIcon';
+import TableIcon from '../qbTableIcon/qbTableIcon';
 import IconActions from '../actions/iconActions';
 import {I18nMessage} from '../../utils/i18nMessage';
 import Record from './record';
@@ -63,8 +64,13 @@ var RecordRoute = React.createClass({
                     <a href="#" onClick={this.returnToReport}><I18nMessage message={'nav.backToReport'}/></a>
                 </div>
 
-                <div className="stageHeadline"><QBicon icon="report-table"/> <h3 className="breadCrumbs">
-                    Record {recordId}</h3></div>
+                <div className="stageHeadline">
+                    {this.props.selectedTable &&
+                    <h3 className="breadCrumbs"><TableIcon
+                        icon={this.props.selectedTable.icon}/>
+                        Eric Wright at Union University</h3>
+                    }
+                </div>
             </div>);
         } else {
             return "";
