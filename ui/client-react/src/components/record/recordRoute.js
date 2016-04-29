@@ -68,7 +68,7 @@ var RecordRoute = React.createClass({
                     {this.props.selectedTable &&
                     <h3 className="breadCrumbs"><TableIcon
                         icon={this.props.selectedTable.icon}/>
-                        Record {recordId}</h3>
+                        Eric Wright at Union University</h3>
                     }
                 </div>
             </div>);
