@@ -306,6 +306,15 @@
         },
 
         /**
+         * Return the lower and upper range bounds for the input value base
+         * on the supplied scale. This function is used when grouping numeric
+         * values where the range is less than or equal to 1.
+         *
+         * Scales map to grouping range ..for example:
+         *    4 --> thousandth   (2.0000 - 2.0010)
+         *    3 --> hundredth    (2.000 - 2.010)
+         *    2 --> tenth        (2.00 - 2.10)
+         *    1 --> integer      (2 - 3)
          *
          * @param input
          * @param scale
@@ -351,6 +360,14 @@
         },
 
         /**
+         * Return the lower and upper range bounds for the input value base
+         * on the supplied factor. This function is used when grouping numeric
+         * values where the range is greater than or equal to 1.
+         *
+         * Factors map to grouping ranges ..for example:
+         *    5   -->  0 - 5, 5 - 10, ..., 50 - 55
+         *    10  -->  0 - 10, 10 - 20, ..., 50 - 60
+         *    100 -->  0 - 100, 100 - 200, ..., 500 - 600
          *
          * @param input
          * @param factor

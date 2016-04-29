@@ -169,8 +169,9 @@
             case constants.CURRENCY:    // CURRENCY is a sub-type of NUMERIC
             case constants.PERCENT:     // PERCENT is a sub-type of NUMERIC
             case constants.RATING:      // RATING is a sub-type of NUMERIC
-                //  get the raw data value and use it to determine the range.  Remove
-                //  the element from the array as it's not needed beyond this function.
+                //  unlike other grouping fields, numeric data types use the raw data value
+                //  to determine the range.  Since it is used only in the range calculation
+                //  function, remove from the array once we have a reference to the raw value.
                 let raw = record[groupField.name + RAW_SUFFIX];
                 delete record[groupField.name + RAW_SUFFIX];
 
