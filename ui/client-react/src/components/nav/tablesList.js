@@ -80,6 +80,7 @@ let TablesList = React.createClass({
             return this.searchMatches(table.name) &&
                 <NavItem item={table}
                          key={table.id}
+                         tableIcon={true}
                          showSecondary={this.props.expanded}
                          secondaryIcon={"report-menu-3"}
                          secondaryOnSelect={this.props.showReports}
