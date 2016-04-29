@@ -340,7 +340,8 @@
                 var s = value.toString().split('.');
                 var valueScale = s.length > 1 ? s[1].length : 0;
 
-                //  ensure correct precision if the scale of the input number is less than what is requested
+                //  if the scale of the input number is less than the scale requested, we need to adjust the
+                //  value to match the requested scale to ensure correct precision with the returned range values
                 if (valueScale < scale) {
                     value = value + (1 / (factor * 10));
                 }
@@ -349,7 +350,7 @@
                 range.upper = (Math.ceil(value * factor) / factor).toFixed(scale);
                 range.lower = (Math.floor(value * factor) / factor).toFixed(scale);
 
-                //  for scale of 1, return the integer value.  IE:  76.0 --> 76
+                //  for scale of 1, adjust the ranges to return the integer value.  IE:  76.0 --> 76
                 if (scale === 1) {
                     range.upper = Number.parseFloat(range.upper).toFixed(0);
                     range.lower = Number.parseFloat(range.lower).toFixed(0);
@@ -365,9 +366,9 @@
          * values where the range is greater than or equal to 1.
          *
          * Factors map to grouping ranges ..for example:
-         *    5   -->  0 - 5, 5 - 10, ..., 50 - 55
-         *    10  -->  0 - 10, 10 - 20, ..., 50 - 60
-         *    100 -->  0 - 100, 100 - 200, ..., 500 - 600
+         *    5   -->  (0 - 5, 5 - 10, ..., 50 - 55)
+         *    10  -->  (0 - 10, 10 - 20, ..., 50 - 60)
+         *    100 -->  (0 - 100, 100 - 200, ..., 500 - 600)
          *
          * @param input
          * @param factor
