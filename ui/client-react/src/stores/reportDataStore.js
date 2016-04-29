@@ -9,6 +9,7 @@ let logger = new Logger();
 let reportModel = {
     model: {
         columns: null,
+        description: "",
         facets: null,
         filteredRecords: null,
         filteredRecordsCount: null,
@@ -37,10 +38,8 @@ let reportModel = {
                 let column = {};
                 column.order = index;
                 column.id = field.id;
-                column.headerName = field.name;     //for ag-grid
-                column.field = field.name;          //for ag-grid
-                column.columnName = field.name;     //for griddle
-                column.displayName = field.name;    //for griddle
+                column.headerName = field.name;
+                column.field = field.name;
                 column.fieldType = field.type;
                 column.builtIn = field.builtIn;
 
@@ -107,6 +106,7 @@ let reportModel = {
      */
     setMetaData: function(reportMetaData) {
         this.model.name = reportMetaData.name;
+        this.model.description = reportMetaData.description;
         // in report's meta data sortlist is returned as an array of sort elements
         this.setSortFids(reportMetaData.sortList);
         this.setGroupElements(reportMetaData.sortList);

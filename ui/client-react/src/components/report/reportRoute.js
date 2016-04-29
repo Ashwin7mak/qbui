@@ -3,6 +3,7 @@ import {I18nMessage} from '../../utils/i18nMessage';
 import Locale from '../../locales/locales';
 import Stage from '../stage/stage';
 import QBicon from '../qbIcon/qbIcon';
+import TableIcon from '../qbTableIcon/qbTableIcon';
 import ReportStage from './reportStage';
 import ReportHeader from './reportHeader';
 import IconActions from '../actions/iconActions';
@@ -104,7 +105,7 @@ const ReportRoute = React.createClass({
         let reportName = this.props.reportData && this.props.reportData.data && this.props.reportData.data.name;
 
         return (this.props.selectedTable &&
-        <h3 className="breadCrumbs"><QBicon icon="report-table"/>{this.props.selectedTable.name}
+        <h3 className="breadCrumbs"><TableIcon icon={this.props.selectedTable.icon}/>{this.props.selectedTable.name}
             <span className="breadCrumbsSeparator"> | </span>{reportName}</h3>);
 
     },
