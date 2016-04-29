@@ -84,14 +84,14 @@
         this.reportToolsAndContentEl = this.reportContainerEl.element(by.className('reportToolsAndContentContainer'));
         // Loaded Content Div
         this.loadedContentEl = this.reportToolsAndContentEl.all(by.className('loadedContent')).first();
-        // report table
+        // Report table
         this.reportTable = this.loadedContentEl.element(by.className('reportTable'));
         // Table actions container
         this.reportActionsContainerEl = this.reportTable.element(by.className('tableActionsContainer'));
         // Report toolbar
-        this.reportsToolBar = this.reportActionsContainerEl.element(by.className('reportToolbar'));
+        this.reportsToolBar = element(by.className('reportToolbar'));
         // Report records count
-        this.reportRecordsCount = this.reportsToolBar.element(by.className('recordsCount'));
+        this.reportRecordsCount = this.reportToolsAndContentEl.element(by.className('recordsCount'));
         // Report filter search Box
         this.reportFilterSearchBox = this.reportsToolBar.element(by.className('filterSearchBox'));
 
@@ -108,6 +108,41 @@
         this.agGridColHeaderElList = this.agGridHeaderEl.all(by.className('ag-header-cell'));
         this.agGridLastColHeaderEl = this.agGridColHeaderElList.last();
         this.agGridRecordElList = this.agGridBodyEl.all(by.className('ag-row'));
+        // Edit Record Menu
+        //TODO: We render an editTools element per row so create a element locator functions for that
+        this.agGridEditRecordMenu = this.agGridBodyEl.all(by.className('editTools')).first();
+        this.agGridEditRecordButtons = this.agGridEditRecordMenu.all(by.tagName('button'));
+        this.agGridSaveRecordButton = this.agGridEditRecordMenu.element(by.className('saveRecord'));
+        this.agGridCancelSelectionButton = this.agGridEditRecordMenu.element(by.className('cancelSelection'));
+        this.agGridAddRecordButton = this.agGridEditRecordMenu.element(by.className('addRecord'));
+
+        // Notification Container
+        this.notificationContainer = element(by.className('notification-container'));
+        this.editSuccessPopup = this.notificationContainer.element(by.className('notification-success'));
+
+        /**
+         * Given a record element that is being viewed in agGrid, return the cells for that row
+         * @param recordRowElement
+         */
+        this.getRecordRowCells = function(recordRowElement) {
+            return recordRowElement.all(by.className('ag-cell-no-focus'));
+        };
+
+        /**
+         * Given a record element in agGrid, click on the selection checkbox for that record to open the edit menu
+         * @param recordRowElement
+         */
+        this.openRecordEditMenu = function(recordRowElement) {
+            return recordRowElement.element(by.className('ag-selection-checkbox')).click();
+        };
+
+        /**
+         * Given a record element that is being edited in agGrid, return the input cells for that row
+         * @param recordRowElement
+         */
+        this.getRecordRowInputCells = function(recordRowElement) {
+            return recordRowElement.all(by.tagName('input'));
+        };
 
         /**
          * Given a table link element in the leftNav, open the reports menu for that table
