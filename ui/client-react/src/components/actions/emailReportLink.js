@@ -12,7 +12,7 @@ let EmailReportLink = React.createClass({
     getDefaultProps() {
         return {
             tipPlacement: "top"
-        }
+        };
     },
     propTypes: {
         subject:React.PropTypes.string,
