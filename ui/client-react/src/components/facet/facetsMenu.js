@@ -71,6 +71,7 @@ const FacetsMenu = React.createClass({
     },
 
     /**
+     *
      * Specifies what to use for the default collapse/expand mode to use for all the fields facets
      *
      * @returns {{allInitiallyCollapsed: boolean}}
@@ -191,24 +192,6 @@ const FacetsMenu = React.createClass({
         this.dontClose(e);
     },
 
-    isAllowedOutsideClick(evt) {
-        let answer = false;
-        // leave popover open when click outside is on the menu button or one of the selectedFacet tokens
-        let localButtonNode = this.refs.facetsMenuButton;
-        let localFacetSelections = this.refs.selectedFacets;
-        if (evt && evt.target && localButtonNode) {
-            let target = evt.target;
-            while (target.parentNode) {
-                answer = (target.parentNode === localButtonNode || target.parentNode  === localFacetSelections);
-                if (answer) {
-                    break;
-                }
-                //next parent
-                target = target.parentNode;
-            }
-        }
-        return answer;
-    },
 
     /**
      * render the selected facet value tokenized
@@ -263,8 +246,9 @@ const FacetsMenu = React.createClass({
             <div className="facetsMenuContainer">
 
                 {/* the filter icon button */}
-                <div className={"facetsMenuButton " +  (this.state.show ? "popoverShown " : "") +
-                  (hasSelections ? "withSelections " : "withoutSelections")}
+                <div className={"facetsMenuButton " +  (this.state.show ? "popoverShown" : "") +
+                  (hasSelections ? " withSelections " : " withoutSelections") +
+                  (this.state.show ? " ignore-react-onclickoutside" : "")}
                      ref="facetsMenuButton"
                      >
                     <span className="facetButtons" onClick={() => this.showMenu(!this.state.show)}>
@@ -280,7 +264,8 @@ const FacetsMenu = React.createClass({
                          show={this.state.show}
                          onHide={this.hideMenu}
                          onEntering={this.props.onMenuEnter} onExited={this.props.onMenuExit} >
-                                    <div className="facetsRelativePos" >
+                                    <div className={"facetsRelativePos" +
+                                                (this.state.show ? " ignore-react-onclickoutside" : "")}>
                                         <FacetsList
                                             ref="facetsPopover"
                                             key= {"FacetsList." + menuKey}
@@ -297,13 +282,12 @@ const FacetsMenu = React.createClass({
                                             selectedValues={this.props.selectedValues}
                                             reportData={this.props.reportData}
                                             onFacetSelect={this.props.onFacetSelect}
-                                            hideMenu={this.hideMenu}
-                                            isAllowedOutsideClick={this.isAllowedOutsideClick}
+                                            hideMenu={() => this.hideMenu()}
                                             onFacetDeselect={this.props.onFacetDeselect}
                                     /></div>
                 </Overlay>
                 {!this.context.touch &&
-                <div className="selectedFacets" ref="selectedFacets"
+                <div className="selectedFacets ignore-react-onclickoutside" ref="selectedFacets"
                      >{this.renderSelectedFacets()}</div>
                 }
 

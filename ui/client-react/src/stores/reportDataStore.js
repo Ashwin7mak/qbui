@@ -19,7 +19,8 @@ let reportModel = {
         records: null,
         recordsCount: null,
         sortFids: [],
-        groupEls: []
+        groupEls: [],
+        originalMetaData: null
     },
 
     /**
@@ -109,6 +110,10 @@ let reportModel = {
         // in report's meta data sortlist is returned as an array of sort elements
         this.setSortFids(reportMetaData.sortList);
         this.setGroupElements(reportMetaData.sortList);
+    },
+
+    setOriginalMetaData(reportOriginalMetaData) {
+        this.model.originalMetaData = _.cloneDeep(reportOriginalMetaData);
     },
 
     /**
@@ -240,6 +245,7 @@ let ReportDataStore = Fluxxor.createStore({
         this.error = false;
 
         this.reportModel = reportModel;
+        reportModel.setOriginalMetaData(response.metaData);
         reportModel.setMetaData(response.metaData);
         reportModel.setRecordData(response.recordData);
         reportModel.setFacetData(response.recordData);

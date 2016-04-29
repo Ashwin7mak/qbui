@@ -9,57 +9,57 @@ let TestComponent = React.createClass({
     }
 });
 
+describe('onclickoutside hoc', function() {
 
-describe('catchClickOutside functions', () => {
-    'use strict';
+    var Component = React.createClass({
+        getInitialState: function() {
+            return {
+                clickOutsideHandled: false
+            };
+        },
 
-    let component;
+        handleClickOutside: function() {
+            this.setState({
+                clickOutsideHandled: true
+            });
+        },
 
-    it('test render with catchClickOutside', () => {
-        const WrappedComponent =  catchClickOutside(TestComponent);
-        component = TestUtils.renderIntoDocument(<WrappedComponent />);
-        expect(TestUtils.isCompositeComponent(component)).toBeTruthy();
+        render: function() {
+            return React.createElement('div');
+        }
+    });
+
+    var WrappedComponent = catchClickOutside(Component);
+
+    // tests
+
+    it('should call handleClickOutside when clicking the document', function() {
+        var element = React.createElement(WrappedComponent);
+        expect(element).toBeTruthy();
+        var component = TestUtils.renderIntoDocument(element);
+        expect(component).toBeTruthy();
+        var event = document.createEvent('MouseEvents');
+        event.initMouseEvent('mousedown', true, true, window, 1, 0, 0);
+        document.dispatchEvent(event);
+        var instance = component.getInstance();
+        expect(instance.state.clickOutsideHandled).toBeTruthy();
     });
 
 
-    it('test render catchClickOutside catchClick', () => {
-        let handled = false;
-
-        var callbacks = {
-            handleClick: function(e) {
-                handled = true;
+    it('should throw an error when a component without handleClickOutside(evt) is wrapped', function() {
+        var BadComponent = React.createClass({
+            render: function() {
+                return React.createElement('div');
             }
-        };
+        });
 
-        let mountPoint;
-        mountPoint = document.createElement('div');
-        document.body.appendChild(mountPoint);
-        mountPoint.className = "outer";
-
-        spyOn(callbacks, 'handleClick').and.callThrough();
-
-        const WrappedComponent =  catchClickOutside(TestComponent,
-                                    callbacks.handleClick);
-
-
-        component = ReactDOM.render(
-               <WrappedComponent/>, mountPoint);
-
-        expect(TestUtils.isCompositeComponent(component)).toBeTruthy();
-
-        //let outer = document.getElementsByClassName("outer");
-        // create a mouse click
-        var event = document.createEvent('MouseEvents');
-        event.initMouseEvent('click', true, true, window, 1, 0, 0);
-
-        // send click to outer
-        mountPoint.dispatchEvent(event);
-
-        expect(callbacks.handleClick).toHaveBeenCalled();
-        expect(handled).toBe(true);
-        ReactDOM.unmountComponentAtNode(mountPoint);
-        document.body.removeChild(mountPoint);
-
+        try {
+            var bad = catchClickOutside(BadComponent);
+            var component = TestUtils.renderIntoDocument(React.createElement(bad));
+            expect(component).toBeFalsy(); // "component was wrapped, despite not implementing handleClickOutside(evt)");
+        } catch (e) {
+            expect(e).toBeTruthy();// "component was not wrapped");
+        }
     });
 });
 

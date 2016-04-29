@@ -25,7 +25,7 @@ const FieldChoice = React.createClass({
         let byMessage = this.props.then ?
             "report.sortAndGroup.thenBy" : "report.sortAndGroup.by";
         return (
-            (<div className={"fieldChoice " + this.props.type + isEmpty} tabIndex="0">
+            (<div className={"fieldChoice " + this.props.type + isEmpty} tabIndex="0" onClick={!hasField ? this.props.onShowFields : null}>
                     <div className="fieldChoiceLeft">
                         <span className="prefix">
                           <I18nMessage message={byMessage}/>
@@ -35,17 +35,20 @@ const FieldChoice = React.createClass({
                     </div>
                     <div>
                         { order &&
-                            <span className={"sortOrderIcon " + order} tabIndex="0" >
+                            <span className={"sortOrderIcon " + order} tabIndex="0"
+                                  onClick={() => this.props.onSetOrder(this.props.type, this.props.index,
+                                                            !this.props.field.decendOrder, this.props.field)} >
                                   <QBicon icon={"return"} />
                             </span>
                         }
                         <span>
                         { hasField ?
-                            <span className="groupFieldDeleteIcon" tabIndex="0">
+                            <span className="groupFieldDeleteIcon" tabIndex="0"
+                                onClick={() => this.props.onRemoveField(this.props.type, this.props.index, this.props.field)} >
                                 <QBicon className="groupFieldDelete"
                                     icon="clear-mini"/>
                             </span> :
-                            <span className="groupFieldOpenIcon" tabIndex="0" onClick={this.props.onShowFields}>
+                            <span className="groupFieldOpenIcon" tabIndex="0" >
                                 <QBicon className="groupFieldOpen" icon="icon_caretfilledright"/>
                             </span>
                         }

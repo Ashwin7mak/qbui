@@ -21,7 +21,9 @@ const FieldChoiceList = React.createClass({
         let listOfSelected = this.props.fields &&
             this.props.fields.map((field, index) =>  {
                 return (<FieldChoice type={this.props.type} key={this.props.type + field.name + index} field={field}
-                                     then={!!index} />);
+                                     then={!!index} index={index} onSetOrder={this.props.onSetOrder}
+                                     onRemoveField={this.props.onRemoveField}
+                        />);
             });
 
         // not if there are existing settings or if this is the first for

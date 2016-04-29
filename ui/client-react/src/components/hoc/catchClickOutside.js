@@ -1,78 +1,219 @@
-import React from 'react';
-import ReactDOM from 'react-dom';
+/**
+ *
+ *  A higher-order-component for handling onClickOutside for React components.
+ * catchClickOutside
+ * This higher-order component (HoC) captures clicks outside component and calls the handler
+ * passed in when such an event occurs. Optionally specify a isException callback function
+ * that if true is returned it allow the event to continue and does not call the callback handler for intercepting it.
+ *
+ * A higher-order component is just a function that takes an existing component and returns
+ * another component that wraps it.
+ **/
 
-/*
- This higher-order component (HoC) captures clicks outside component and calls the handler
- passed in when such an event occurs. Optionally specify a isException callback function
- that if true is returned it allow the event to continue and does not call the callback handler for intercepting it.
+    // administrative
+    var registeredComponents = [];
+    var handlers = [];
+    var IGNORE_CLASS = 'ignore-react-onclickoutside';
 
- A higher-order component is just a function that takes an existing component and returns
- another component that wraps it.
+    /**
+     * Check whether some DOM node is our Component's node.
+     */
+    var isNodeFound = function(current, componentNode, ignoreClass) {
+        if (current === componentNode) {
+            return true;
+        }
+        // SVG <use/> elements do not technically reside in the rendered DOM, so
+        // they do not have classList directly, but they offer a link to their
+        // corresponding element, which can have classList. This extra check is for
+        // that case.
+        // See: http://www.w3.org/TR/SVG11/struct.html#InterfaceSVGUseElement
+        // Discussion: https://github.com/Pomax/react-onclickoutside/pull/17
+        if (current.correspondingElement) {
+            return current.correspondingElement.classList.contains(ignoreClass);
+        }
+        return current.classList.contains(ignoreClass);
+    };
 
-*/
-
-var catchClicksOutsideWrapper = (Component, handler, isException) => {
-
-    const CatchClicksOutside = React.createClass({
-
-        displayName: 'clicksOutside_' + Component.displayName,
-        wrapped  : Component,
-        localNode: null,
-
-        catchClick(evt) {
-            var source = evt.target;
-            var found = false;
-            // if source=local then this event came from "somewhere" inside
-            // and should be ignored.
-            if (this.localNode === null) {
-                this.localNode =  ReactDOM.findDOMNode(this);
+    /**
+     * Generate the event handler that checks whether a clicked DOM node
+     * is inside of, or lives outside of, our Component's node tree.
+     */
+    var generateOutsideCheck = function(componentNode, eventHandler, ignoreClass, preventDefault, stopPropagation) {
+        return function(evt) {
+            if (preventDefault) {
+                evt.preventDefault();
             }
-            while (source) {
-                found = (source === this.localNode);
+            if (stopPropagation) {
+                evt.stopPropagation();
+                if (evt.stopImmediatePropagation) {
+                    evt.stopImmediatePropagation();
+                }
+            }
+
+            var current = evt.target;
+            var found = false;
+            // If source=local then this event came from "somewhere"
+            // inside and should be ignored. We could handle this with
+            // a layered approach, too, but that requires going back to
+            // thinking in terms of Dom node nesting, running counter
+            // to React's "you shouldn't care about the DOM" philosophy.
+            while (current.parentNode) {
+                found = isNodeFound(current, componentNode, ignoreClass);
                 if (found) {
                     return;
                 }
-                source = source.parentNode;
+                current = current.parentNode;
             }
-            // check exceptions to the click outside
-            // check if the outside click is on an element that should be allowed
-            if (isException && isException(evt)) {
+            // If element is in a detached DOM, consider it "not clicked
+            // outside", as it cannot be known whether it was outside.
+            if (current !== document) {
                 return;
             }
-            // not found: genuine outside event. Handle it.
-            handler(evt, this);
-        },
+            eventHandler(evt);
+        };
+    };
 
-        componentWillUnmount() {
-            if (window && window.removeEventListener) {
-                window.removeEventListener("click", (e) => this.catchClick(e));
-            }
-            this.localNode = null;
-        },
 
-        componentDidMount() {
-            if (!handler) {
-                return;
-            }
-            if (window && window.addEventListener) {
-                this.localNode =  ReactDOM.findDOMNode(this);
+    /**
+     * This function generates the HOC function that you'll use
+     * in order to impart onOutsideClick listening to an
+     * arbitrary component.
+     */
+    function setupHOC(React, ReactDOM) {
 
-                window.addEventListener("click", (e) => this.catchClick(e), true);
-                // true param on addEventListener binds the listener to the capture phase
-                // and executes this function before anything else gets executed
-            }
-        },
+        // The actual Component-wrapping HOC:
+        return function(Component) {
+            var wrapComponentWithOnClickOutsideHandling = React.createClass({
+                statics: {
+                    /**
+                     * Access the wrapped Component's class.
+                     */
+                    getClass: function() {
+                        if (Component.getClass) {
+                            return Component.getClass();
+                        }
+                        return Component;
+                    }
+                },
 
-        render() {
-            return (
-                     <Component
-                         {...this.props}
-                         {...this.state}
-                    />);
+                /**
+                 * Access the wrapped Component's instance.
+                 */
+                getInstance: function() {
+                    return this.refs.instance;
+                },
+
+                // this is given meaning in componentDidMount
+                __outsideClickHandler: function(evt) {},
+
+                /**
+                 * Add click listeners to the current document,
+                 * linked to this component's state.
+                 */
+                componentDidMount: function() {
+                    var instance = this.getInstance();
+
+                    if (typeof instance.handleClickOutside !== "function") {
+                        throw new Error("Component lacks a handleClickOutside(event) function for processing outside click events.");
+                    }
+
+                    var fn = this.__outsideClickHandler = generateOutsideCheck(
+                        ReactDOM.findDOMNode(instance),
+                        instance.handleClickOutside,//.bind(instance),
+                        this.props.outsideClickIgnoreClass || IGNORE_CLASS,
+                        this.props.preventDefault || false,
+                        this.props.stopPropagation || false
+                    );
+
+                    var pos = registeredComponents.length;
+                    registeredComponents.push(this);
+                    handlers[pos] = fn;
+
+                    // If there is a truthy disableOnClickOutside property for this
+                    // component, don't immediately start listening for outside events.
+                    if (!this.props.disableOnClickOutside) {
+                        this.enableOnClickOutside();
+                    }
+                },
+
+                /**
+                 * Remove the document's event listeners
+                 */
+                componentWillUnmount: function() {
+                    this.disableOnClickOutside();
+                    this.__outsideClickHandler = false;
+                    var pos = registeredComponents.indexOf(this);
+                    if (pos > -1) {
+                        // clean up so we don't leak memory
+                        if (handlers[pos]) {handlers.splice(pos, 1);}
+                        registeredComponents.splice(pos, 1);
+                    }
+                },
+
+                /**
+                 * Can be called to explicitly enable event listening
+                 * for clicks and touches outside of this element.
+                 */
+                enableOnClickOutside: function() {
+                    var fn = this.__outsideClickHandler;
+                    if (typeof document !== "undefined") {
+                        document.addEventListener("mousedown", fn, true);
+                        document.addEventListener("touchstart", fn, true);
+                    }
+                },
+
+                /**
+                 * Can be called to explicitly disable event listening
+                 * for clicks and touches outside of this element.
+                 */
+                disableOnClickOutside: function() {
+                    var fn = this.__outsideClickHandler;
+                    if (typeof document !== "undefined") {
+                        document.removeEventListener("mousedown", fn);
+                        document.removeEventListener("touchstart", fn);
+                    }
+                },
+
+                /**
+                 * Pass-through render
+                 */
+                render: function() {
+                    var passedProps = this.props;
+                    var props = {ref: 'instance'};
+                    Object.keys(this.props).forEach(function(key) {
+                        props[key] = passedProps[key];
+                    });
+                    return React.createElement(Component,  props);
+                }
+            });
+
+            return wrapComponentWithOnClickOutsideHandling;
+        };
+    }
+
+    /**
+     * This function sets up the library in ways that
+     * work with the various modulde loading solutions
+     * used in JavaScript land today.
+     */
+    function setupBinding(factory) {
+        if (typeof define === 'function' && define.amd) {
+            // AMD. Register as an anonymous module.
+            define(['react', 'react-dom'], function(React, ReactDom) {
+                return factory(React, ReactDom);
+            });
+        } else if (typeof exports === 'object') {
+            // Node. Note that this does not work with strict
+            // CommonJS, but only CommonJS-like environments
+            // that support module.exports
+            module.exports = factory(require('react'), require('react-dom'));
+        } else {
+            // Browser globals (this is window)
+            onClickOutside = factory(React, ReactDOM);
         }
-    });
+    }
 
-    return CatchClicksOutside;
-};
-export default catchClicksOutsideWrapper;
+    // Make it all happen
+    setupBinding(setupHOC);
+
 

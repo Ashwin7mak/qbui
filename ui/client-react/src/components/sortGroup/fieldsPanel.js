@@ -33,10 +33,18 @@ const FieldsPanel = React.createClass({
         };
     },
 
-    renderField(field, selected, type) {
+    selectField(fieldId, type) {
+        this.props.onSelectField(fieldId, type);
+        this.props.onHideFields();
+    },
+
+    renderField(field, selected) {
         return (
-            <ListGroupItem id={field.id}  key={field.id} className={selected ? "selected" : ""} onClick={() => this.props.onSelectField(field.id, type)}>
-                <QBicon className={this.props.isSelected  ? "checkMark-selected" : "checkMark"} icon="check" />
+            <ListGroupItem id={field.id}  key={field.id}
+                           className={selected ? "selected" : ""}
+                           onClick={() => this.selectField(this.props.fieldsForType, field.id)}>
+                <QBicon className={this.props.isSelected  ? "checkMark-selected" : "checkMark"}
+                        icon="check" />
                 {field.name}</ListGroupItem>
         );
     },
@@ -140,7 +148,7 @@ const FieldsPanel = React.createClass({
                 </div>
                 {(
                     (window.location.search.includes('mockSort')) ?
-                        renderMockList() :
+                        this.renderMockList() :
                         this.renderList(orderList, currentList, this.props.fieldsForType)
                 )}
             </Panel> :

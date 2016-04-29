@@ -9,6 +9,8 @@ import OverlayDialogHeader from '../overLay/overlayDialogHeader';
 import FieldSettings from './fieldSettings';
 import FieldsPanel from './fieldsPanel';
 
+import thwartClicksWrapper from '../hoc/thwartClicksWrapper';
+import closeOnEscape from '../hoc/catchEscapeKey';
 
 import './sortAndGroup.scss';
 
@@ -17,7 +19,8 @@ let logger = new Logger();
 var SortAndGroupDialog = React.createClass({
 
     propTypes: {
-        onClose  : React.PropTypes.func
+        onClose  : React.PropTypes.func,
+        handleClickOutside : React.PropTypes.func,
     },
 
     renderFieldSettings(maxLength, type, fields) {
@@ -26,9 +29,16 @@ var SortAndGroupDialog = React.createClass({
                               type={type} fields={fields}
                               onShowFields={this.props.onShowFields}
                               onHideFields={this.props.onHideFields}
+                              onRemoveField={this.props.onRemoveField}
+                              onSetOrder={this.props.onSetOrder}
               />
           );
     },
+
+    handleClickOutside(evt) {
+        this.props.handleClickOutside(evt);
+    },
+
     /*
      props to receive report data which has the currentSortGroupInfo
      copied from loadedReport manipulated by dialog
@@ -54,21 +64,26 @@ var SortAndGroupDialog = React.createClass({
 
      */
     render() {
+        // wrap the sort dialog in additional functionality to close the dialog on escape
+        // and to not handle any outside clicks while the dialog is open
+        const SortAndGroupPopover = React.createClass({
+            render() {
+                return <Popover
+                    {...this.props}
+                    {...this.state}
+                />;
+            }
+        });
+        let SortAndGroupDialogWrapped = closeOnEscape(thwartClicksWrapper(SortAndGroupPopover));
+
         return (
             this.props.show ? (
-            <Popover container={this} id="sortAndGroupDialog"
+            <SortAndGroupDialogWrapped container={this} id="sortAndGroupDialog"
                      className="sortAndGroupDialog"
+                     preventDefault={true}
+                     stopPropagation={true}
                      placement="bottom">
                     <div>
-                        <FieldsPanel onHideFields={this.props.onHideFields}
-                                     showFields={this.props.showFields}
-                                     fields={this.props.fields}
-                                     reportColumns={this.props.reportData.data.columns}
-                                     fieldsLoading={this.props.fieldsLoading}
-                                     sortByFields={this.props.sortByFields}
-                                     groupByFields={this.props.groupByFields}
-                                     onSelectField={this.props.onSelectField}
-                                     fieldsForType={this.props.fieldsForType}/>
                         <div className={"settingsDialog" + (this.props.showFields ? ' fieldsShown' : '')} >
                             <div className="dialogTop">
                                 <OverlayDialogHeader
@@ -86,11 +101,12 @@ var SortAndGroupDialog = React.createClass({
                              </div>
                             <div className="dialogBottom">
                                 <div className="dialogButtons">
-                                     <span className="reset" tabIndex="0">
+                                     <span className="reset" tabIndex="0" onClick={this.props.onReset}>
                                         <I18nMessage message="report.sortAndGroup.reset"/>
                                      </span>
-                                     <Button className={"apply " + this.props.dirty}  bsStyle="primary">
-                                         <I18nMessage message="apply" onClick={this.props.onApplyChanges}/>
+                                     <Button className={"apply " + this.props.dirty}  bsStyle="primary"
+                                             onClick={this.props.onApplyChanges}>
+                                         <I18nMessage message="apply"/>
                                      </Button>
                                  </div>
                                 <div className="dialogBand">
@@ -100,8 +116,18 @@ var SortAndGroupDialog = React.createClass({
                                 </div>
                             </div>
                         </div>
+                        <FieldsPanel onHideFields={this.props.onHideFields}
+                                     showFields={this.props.showFields}
+                                     fields={this.props.fields}
+                                     reportColumns={this.props.reportData.data.columns}
+                                     fieldsLoading={this.props.fieldsLoading}
+                                     sortByFields={this.props.sortByFields}
+                                     groupByFields={this.props.groupByFields}
+                                     onSelectField={this.props.onSelectField}
+                                     fieldsForType={this.props.fieldsForType}
+                        />
                     </div>
-            </Popover>) :
+            </SortAndGroupDialogWrapped>) :
             null
         );
     }

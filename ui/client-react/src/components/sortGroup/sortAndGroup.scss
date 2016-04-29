@@ -145,6 +145,8 @@
 .fieldsPanel {
   position: absolute;
   width: 98%;
+  top:0;
+  left:0;
   &.notShown {
     display: none;
   }
@@ -168,7 +170,7 @@
     }
   }
   .list-group {
-    max-height: 360px;
+    max-height: 260px;
     overflow: auto;
   }
   .list-group-item {
