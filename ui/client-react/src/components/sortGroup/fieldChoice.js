@@ -25,7 +25,8 @@ const FieldChoice = React.createClass({
         let byMessage = this.props.then ?
             "report.sortAndGroup.thenBy" : "report.sortAndGroup.by";
         return (
-            (<div className={"fieldChoice " + this.props.type + isEmpty} tabIndex="0" onClick={!hasField ? this.props.onShowFields : null}>
+            (<div className={"fieldChoice " + this.props.type + isEmpty} tabIndex="0" 
+                  onClick={!hasField ? this.props.onShowFields : null}>
                     <div className="fieldChoiceLeft">
                         <span className="prefix">
                           <I18nMessage message={byMessage}/>

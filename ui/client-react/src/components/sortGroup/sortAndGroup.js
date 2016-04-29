@@ -64,7 +64,12 @@ const SortAndGroup = React.createClass({
             newSelectionsSort:[],
             fieldsForType:null,
             dirty : false,
+            showNotVisible :false
         });
+    },
+
+    showMoreFields(type) {
+        this.setState({showNotVisible : true});
     },
 
     toggleShow() {
@@ -221,6 +226,17 @@ const SortAndGroup = React.createClass({
         //console.log('clicked outside on' + evt.target);
     },
 
+
+    getFieldsNotYetUsed(fields, groups, sorts) {
+        // return the list of fields that are not yet used in either sort or groups
+        let answer = [];
+        if (fields && groups && sorts) {
+            answer = _.differenceBy(fields, groups, 'id');
+            answer = _.differenceBy(answer, sorts, 'id');
+        }
+        return answer;
+    },
+
     getStateFromFlux() {
         //let flux = this.getFlux();
         //return flux.store('SortAndGroupStore').getState();
@@ -325,6 +341,8 @@ const SortAndGroup = React.createClass({
         return answer;
     },
 
+
+
     /**
      * Prepares the menu button used to show/hide the dialog of sort and group options when clicked
      *
@@ -337,6 +355,7 @@ const SortAndGroup = React.createClass({
         let fieldsLoading = this.state.show && this.props.fields && this.props.fields.fieldsLoading;
         let sortByFields = this.state.show ? this.getSortFields(fields) : [];
         let groupByFields = this.state.show ? this.getGroupFields(fields) : [];
+        let fieldChoiceList = this.getFieldsNotYetUsed(fields, groupByFields, sortByFields);
 
         return (
             <div ref="sortAndGroupContainer" className="sortAndGroupContainer">
@@ -366,8 +385,11 @@ const SortAndGroup = React.createClass({
                                                             sortByFields={sortByFields}
                                                             groupByFields={groupByFields}
                                                             fieldsForType={this.state.fieldsForType}
+                                                            fieldChoiceList={fieldChoiceList}
                                                             dirty={this.state.dirty}
                                                             reportData={this.props.reportData}
+                                                            showNotVisible={this.state.showNotVisible}
+                                                            showMoreFields={(type) => this.showMoreFields(type)}
                                                             onShowFields={(type) => this.showFields(type)}
                                                             onHideFields={() => this.hideFields()}
                                                             onSelectField={(type, fieldId) => this.handleSelectField(type, fieldId)}

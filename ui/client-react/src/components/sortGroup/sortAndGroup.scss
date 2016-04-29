@@ -147,6 +147,10 @@
   width: 98%;
   top:0;
   left:0;
+  &.animated{
+    -webkit-animation-duration:500ms;
+    animation-duration:500ms;
+  }
   &.notShown {
     display: none;
   }
@@ -160,6 +164,10 @@
       padding-right: 10px;
       color:$icon-color;
     }
+  }
+  .fieldItem.animated {
+      -webkit-animation-duration:400ms;
+      animation-duration:400ms;
   }
   .panel {
     box-shadow : none;

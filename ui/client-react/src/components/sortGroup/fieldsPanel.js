@@ -18,30 +18,16 @@ const FieldsPanel = React.createClass({
         });
     },
 
-    showMoreFields(type) {
-        let showNotVisible = {};
-        showNotVisible[type] = true;
-        this.setState({showNotVisible});
-    },
-
-    getInitialState() {
-        return {
-            showNotVisible : {
-                group: false,
-                sort: false
-            }
-        };
-    },
 
     selectField(fieldId, type) {
         this.props.onSelectField(fieldId, type);
         this.props.onHideFields();
     },
 
-    renderField(field, selected) {
+    renderField(field, selected, notInReport) {
         return (
             <ListGroupItem id={field.id}  key={field.id}
-                           className={selected ? "selected" : ""}
+                           className={"fieldItem" + (notInReport ?  " animated slideInDown notInReport" : "")}
                            onClick={() => this.selectField(this.props.fieldsForType, field.id)}>
                 <QBicon className={this.props.isSelected  ? "checkMark-selected" : "checkMark"}
                         icon="check" />
@@ -53,12 +39,12 @@ const FieldsPanel = React.createClass({
         let restOfFields = null;
         // show "more fields..." for viewing any remaining fields not in report
         if (orderList && orderList.notInReport && orderList.notInReport.length) {
-            if (this.state.showNotVisible && this.state.showNotVisible[type]) {
+            if (this.props.showNotVisible) {
                 restOfFields = orderList.notInReport.map((field) => {
-                    return this.renderField(field, this.isSelected(field.id, list), type);
+                    return this.renderField(field, this.isSelected(field.id, list), true);
                 });
             } else {
-                restOfFields = (<ListGroupItem><span onClick={()=>this.showMoreFields(type)} >
+                restOfFields = (<ListGroupItem className="moreFields"><span onClick={()=>this.props.showMoreFields(type)} >
                                     <I18nMessage message={"report.sortAndGroup.moreFields"}/>
                                 </span></ListGroupItem>);
             }
@@ -68,7 +54,7 @@ const FieldsPanel = React.createClass({
                 <ListGroup>
                     {(orderList.inReport &&
                             orderList.inReport.map((field) => {
-                                return this.renderField(field, this.isSelected(field.id, list));
+                                return this.renderField(field, this.isSelected(field.id, list), false);
                             }))
                     }
                     {restOfFields}
@@ -94,16 +80,6 @@ const FieldsPanel = React.createClass({
                 <ListGroupItem>Item 12</ListGroupItem>
                 <ListGroupItem>...</ListGroupItem>
             </ListGroup>);
-    },
-
-    getFieldsNotYetUsed(fields, groups, sorts) {
-        // return the list of fields that are not yet used in either sort or groups
-        let answer = [];
-        if (fields && groups && sorts) {
-            answer = _.differenceBy(fields, groups, 'id');
-            answer = _.differenceBy(answer, sorts, 'id');
-        }
-        return answer;
     },
 
     getFieldsInReportOrder(choicesList, usedInReport) {
@@ -134,10 +110,10 @@ const FieldsPanel = React.createClass({
     render() {
         let shownClass = this.props.showFields ? '' : 'notShown';
         let currentList =  this.props.fieldsForType === 'group' ? this.props.groupByFields : this.props.sortByFields;
-        let choiceList = this.getFieldsNotYetUsed(this.props.fields, this.props.groupByFields, this.props.sortByFields);
+        let choiceList = this.props.fieldChoiceList;
         let orderList = this.getFieldsInReportOrder(choiceList, this.props.reportColumns);
         return (this.props.showFields ?
-            <Panel className={"fieldsPanel " + shownClass}>
+            <Panel className={"fieldsPanel animated slideInRight" + shownClass}>
                 <div className="fieldPanelHeader">
                     <span className="cancel" tabIndex="0" onClick={this.props.onHideFields}>
                         <I18nMessage message="cancel"/>

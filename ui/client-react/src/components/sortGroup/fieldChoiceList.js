@@ -15,6 +15,12 @@ const FieldChoiceList = React.createClass({
         let showMore = this.props.fields &&
             (this.props.fields.length < this.props.maxLength);
 
+        // if all the fields id have been used for sorting or grouping
+        // don't allow adding a new one
+        if (!this.props.fieldChoiceList.length && showMore) {
+            showMore = false;
+        }
+
         // the list of selected choices to render
         // items read: by X; then by Y; then by Z
         // 'then' is added on all but first (0 index)

@@ -13,7 +13,7 @@ import thwartClicksWrapper from '../hoc/thwartClicksWrapper';
 import closeOnEscape from '../hoc/catchEscapeKey';
 
 import './sortAndGroup.scss';
-
+import '../../assets/css/animate.min.css';
 let logger = new Logger();
 
 var SortAndGroupDialog = React.createClass({
@@ -31,6 +31,7 @@ var SortAndGroupDialog = React.createClass({
                               onHideFields={this.props.onHideFields}
                               onRemoveField={this.props.onRemoveField}
                               onSetOrder={this.props.onSetOrder}
+                              fieldChoiceList={this.props.fieldChoiceList}
               />
           );
     },
@@ -50,10 +51,10 @@ var SortAndGroupDialog = React.createClass({
 
      actions
      actions to add a sort field / remove a sort field / toggle order of a sort field
-     action to add a group field and how to group enum / remove a group field / toggle order of a group field
+     action to add a group field  / remove a group field / toggle order of a group field
      action to apply the edited groups/sorts
      action to cancel the edits
-     later? action to order the items in sort/grouplist
+     later story action to order the items in sort/grouplist dnd
 
      states to maintain
      dialog hidden shown
@@ -119,11 +120,14 @@ var SortAndGroupDialog = React.createClass({
                         <FieldsPanel onHideFields={this.props.onHideFields}
                                      showFields={this.props.showFields}
                                      fields={this.props.fields}
+                                     fieldChoiceList={this.props.fieldChoiceList}
                                      reportColumns={this.props.reportData.data.columns}
                                      fieldsLoading={this.props.fieldsLoading}
                                      sortByFields={this.props.sortByFields}
                                      groupByFields={this.props.groupByFields}
                                      onSelectField={this.props.onSelectField}
+                                     showMoreFields={this.props.showMoreFields}
+                                     showNotVisible={this.props.showNotVisible}
                                      fieldsForType={this.props.fieldsForType}
                         />
                     </div>
