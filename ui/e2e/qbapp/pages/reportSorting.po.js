@@ -6,6 +6,7 @@
     var e2ePageBase = require('./../../common/e2ePageBase');
     var ReportServicePage = requirePO('reportService');
     var reportServicePage = new ReportServicePage();
+    var SHOW_POPUP_LIST_LIMIT = 5;
 
 
     var ReportSortingPage = function() {
@@ -16,10 +17,66 @@
         this.reportSortAndGroupBtn = this.reportSortingGroupingContainer.element(by.className('sortAndGroupButton '));
         //sorting/grouping popup
         this.reportSortAndGroupDialogue = this.reportSortingGroupingContainer.element(by.id('sortAndGroupDialog'));
+        //Apply button
+        this.sortAndGrpDialogueApplyBtn = this.reportSortAndGroupDialogue.element(by.className('apply'));
+        //resest button
+        this.sortAndGrpDialogueResetBtn = this.reportSortAndGroupDialogue.element(by.className('reset'));
         //sorting/grouping popup title
         this.reportSortAndGroupTitle = this.reportSortingGroupingContainer.element(by.className('overlayTitle'));
         //sorting/grouping close button
         this.reportSortAndGroupCloseBtn = this.reportSortingGroupingContainer.element(by.className('overlayRight'));
+        //group By settings
+        this.reportGroupByContainer = this.reportSortingGroupingContainer.element(by.className('groupBySettings'));
+        //group By title
+        this.reportGroupByContainerTitle = this.reportGroupByContainer.element(by.className('title'));
+        //group by field Selector
+        this.reportGroupByFieldSelector = this.reportGroupByContainer.element(by.className('fieldChoice'));
+        //field prefix
+        this.GroupByFieldPrefix = this.reportGroupByFieldSelector.element(by.className('prefix'));
+        //group by Open
+        this.reportGroupByIcon = this.reportGroupByFieldSelector.element(by.className('groupFieldOpen'));
+        //field Name
+        this.reportGroupByFieldName = this.reportGroupByFieldSelector.element(by.className('fieldName'));
+
+        //field panel
+        this.GroupByFieldPanel = this.reportSortAndGroupDialogue.element(by.className('panel-body'));
+        //Field panel header
+        this.GroupByFieldPanelHeader = this.GroupByFieldPanel.element(by.className('fieldPanelHeader'));
+        //cancel button in field panel
+        this.GroupByCancelBtn = this.GroupByFieldPanel.element(by.className('cancel'));
+        //GroupBy list items
+        this.GroupByListItem = this.GroupByFieldPanel.all(by.className('list-group'));
+
+
+
+        //sort By settings
+        this.reportSortByContainer = this.reportSortingGroupingContainer.element(by.className('sortBySettings'));
+        //group By title
+        this.reportSortByContainerTitle = this.reportSortByContainer.element(by.className('title'));
+
+        ////sort by field Selector
+        //this.reportSortByFieldSelector = this.reportSortByContainer.element(by.className('fieldSelector'));
+        //field choice
+        this.reportSortByFieldSelector = this.reportSortByContainer.element(by.className('fieldChoice'));
+        //field prefix
+        this.SortByFieldPrefix = this.reportSortByFieldSelector.element(by.className('prefix'));
+        //sort by Open
+        this.reportSortByIcon = this.reportSortByFieldSelector.element(by.className('groupFieldOpenIcon'));
+        //field name
+        this.reportSortByFieldName = this.reportSortByFieldSelector.element(by.className('fieldName'));
+        //Sort order Icon
+        this.reportSortOrderIcon = this.reportSortByFieldSelector.element(by.className('sortOrderIcon'));
+        //Sort Field Delete Icon
+        this.sortBySortFieldDeleteIcon = this.reportSortByFieldSelector.element(by.className('groupFieldDeleteIcon'));
+
+        //field panel
+        this.SortByFieldPanel = this.reportSortAndGroupDialogue.element(by.className('panel-body'));
+        //Field panel header
+        this.SortByFieldPanelHeader = this.SortByFieldPanel.element(by.className('fieldPanelHeader'));
+        //cancel button in field panel
+        this.SortByCancelBtn = this.SortByFieldPanel.element(by.className('cancel'));
+        //GroupBy list items
+        this.SortByListItem = this.SortByFieldPanel.all(by.className('list-group'));
 
         /*
          * Function will open the column headers popUp menu
@@ -83,7 +140,6 @@
             }).then(function(filteredElement) {
                 filteredElement[0].click().then(function() {
                     return reportServicePage.waitForElement(reportServicePage.reportRecordsCount).then(function() {
-                        return expect(reportServicePage.reportRecordsCount.getAttribute('innerText')).toEqual('11 Records');
                     });
                 });
             });
@@ -187,6 +243,69 @@
                 //finally clean both arrays
                 actualColumnRecords = [];
                 sortedColumnRecords = [];
+            });
+        };
+
+        /*
+         * Function to select group By Items
+         */
+        this.selectGroupByItems = function(itemToSelect) {
+            var self = this;
+            //Click on field selector
+            e2ePageBase.waitForElementToBeClickable(self.reportGroupByIcon).then(function() {
+                return self.reportGroupByIcon.click().then(function() {
+                    reportServicePage.waitForElement(self.GroupByFieldPanel).then(function() {
+                        //verify the title of groupBy list
+                        expect(self.GroupByFieldPanelHeader.getText()).toEqual('Cancel\nChoose Field for grouping');
+                        //select the groupBy item
+                        var items = self.GroupByFieldPanel.all(by.className('list-group-item'));
+                        return items.filter(function(elm, index) {
+                            return elm.getText().then(function(text) {
+                                return text === itemToSelect;
+                            });
+                        }).then(function(filteredElement) {
+                            filteredElement[0].click();
+
+                        }).then(function() {
+                            //cancel the popup and verify the item selected
+                            self.GroupByCancelBtn.click().then(function() {
+                                expect(self.reportSortAndGroupTitle.getAttribute('innerText')).toEqual('Sort & Group');
+                                //verify the item selected
+                            });
+                        });
+                    });
+                });
+            });
+        };
+
+        /*
+         * Function to select sort By Items
+         */
+        this.selectSortByItems = function(itemToSelect) {
+            var self = this;
+            //Click on field selector
+            e2ePageBase.waitForElementToBeClickable(self.reportSortByIcon).then(function() {
+                return self.reportSortByIcon.click().then(function() {
+                    reportServicePage.waitForElement(self.SortByFieldPanel).then(function() {
+                        //verify the title of groupBy list
+                        expect(self.SortByFieldPanelHeader.getText()).toEqual('Cancel\nChoose Field for sorting');
+                        //select the groupBy item
+                        var items = self.SortByFieldPanel.all(by.className('list-group-item'));
+                        return items.filter(function(elm) {
+                            return elm.getText().then(function(text) {
+                                return text === itemToSelect;
+                            });
+                        }).then(function(filteredElement) {
+                            filteredElement[0].click();
+                        }).then(function() {
+                            //cancel the popup and verify the item selected
+                            self.SortByCancelBtn.click().then(function() {
+                                expect(self.reportSortAndGroupTitle.getAttribute('innerText')).toEqual('Sort & Group');
+                                //verify the item selected
+                            });
+                        });
+                    });
+                });
             });
         };
 
