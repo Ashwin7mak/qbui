@@ -19,8 +19,8 @@ const FieldsPanel = React.createClass({
     },
 
 
-    selectField(fieldId, type) {
-        this.props.onSelectField(fieldId, type);
+    selectField(type, field) {
+        this.props.onSelectField(type, field);
         this.props.onHideFields();
     },
 
@@ -28,7 +28,7 @@ const FieldsPanel = React.createClass({
         return (
             <ListGroupItem id={field.id}  key={field.id}
                            className={"fieldItem" + (notInReport ?  " animated slideInDown notInReport" : "")}
-                           onClick={() => this.selectField(this.props.fieldsForType, field.id)}>
+                           onClick={() => this.selectField(this.props.fieldsForType, field)}>
                 <QBicon className={this.props.isSelected  ? "checkMark-selected" : "checkMark"}
                         icon="check" />
                 {field.name}</ListGroupItem>

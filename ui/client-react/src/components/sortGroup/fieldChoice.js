@@ -20,12 +20,12 @@ const FieldChoice = React.createClass({
         if (hasField) {
             name = this.props.field.name;
             isEmpty = ' notEmpty';
-            order =  (this.props.field.decendOrder && this.props.field.decendOrder === true) ? 'down' : 'up';
+            order =  (this.props.field.descendOrder && this.props.field.descendOrder === true) ? 'down' : 'up';
         }
         let byMessage = this.props.then ?
             "report.sortAndGroup.thenBy" : "report.sortAndGroup.by";
         return (
-            (<div className={"fieldChoice " + this.props.type + isEmpty} tabIndex="0" 
+            (<div className={"fieldChoice " + this.props.type + isEmpty} tabIndex="0"
                   onClick={!hasField ? this.props.onShowFields : null}>
                     <div className="fieldChoiceLeft">
                         <span className="prefix">
@@ -38,7 +38,7 @@ const FieldChoice = React.createClass({
                         { order &&
                             <span className={"sortOrderIcon " + order} tabIndex="0"
                                   onClick={() => this.props.onSetOrder(this.props.type, this.props.index,
-                                                            !this.props.field.decendOrder, this.props.field)} >
+                                                            !this.props.field.descendOrder, this.props.field)} >
                                   <QBicon icon={"return"} />
                             </span>
                         }

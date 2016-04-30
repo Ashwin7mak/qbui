@@ -14,6 +14,7 @@ import './sortAndGroup.scss';
 
 import SortAndGroupDialog from './sortAndGroupDialog';
 import ReportUtils from '../../utils/reportUtils';
+import * as GroupTypes from '../../constants/groupTypes';
 import MockData from '../../mocks/sortGroup';
 import * as query from '../../constants/query';
 
@@ -30,6 +31,13 @@ let StoreWatchMixin = Fluxxor.StoreWatchMixin;
  *  When the panel is shown and the trigger button is clicked again it hides the panel.
  *
 **/
+
+let KIND = {
+    GROUP : 'group',
+    SORT :'sort'
+};
+
+
 const SortAndGroup = React.createClass({
     mixins: [FluxMixin],
     //mixins: [FluxMixin, StoreWatchMixin('SortAndGroupStore')],
@@ -60,10 +68,21 @@ const SortAndGroup = React.createClass({
         return _.clone({
             show: false,
             showFields: false,
+            //state object for sort and group have array of objects containing
+            // type - sort or group
+            // name - fieldName
+            // id - fieldId
+            // unparsedVal - unparsed value i.e. -5:V or -6
+            // descendOrder - true or false
+            // howToGroup - "V" for now see list of possible grouping types
+            //}
             newSelectionsGroup :[],
             newSelectionsSort:[],
+            // when showing the fields select panel whether its for sorting or grouping
             fieldsForType:null,
+            // ad hoc changes to sort/group were initiated and not applied
             dirty : false,
+            // whether we are showing the remaining fields not visible in the table or see more.. link
             showNotVisible :false
         });
     },
@@ -113,11 +132,27 @@ const SortAndGroup = React.createClass({
             let flux = this.getFlux();
             let overrideParams = {};
 
-            let sortList = ReportUtils.getListString(this.state.newSelectionsSort);
-            let groupList = ReportUtils.getListString(this.state.newSelectionsGroup);
-            overrideParams[query.SORT_LIST_PARAM] = sortList;
-            overrideParams[query.GLIST_PARAM] = groupList;
+            // get the group string and the sort string from state
+            let sortKeys = _.map(this.state.newSelectionsSort, 'unparsedVal');
+            let groupKeys = _.map(this.state.newSelectionsGroup, 'unparsedVal');
+            let sortList = ReportUtils.getListString(sortKeys);
+            let groupList = ReportUtils.getListString(groupKeys);
 
+            let sortGroupString = "";
+            if (groupKeys.length) {
+               sortGroupString += groupList;
+            }
+            if (sortList.length) {
+                if (sortGroupString.length) {
+                    sortGroupString += ReportUtils.listDelimiter
+                }
+                sortGroupString += sortList;
+            }
+
+            if (sortGroupString.length) {
+                overrideParams[query.SORT_LIST_PARAM] = sortGroupString;
+                overrideParams[query.GLIST_PARAM] = sortGroupString
+            }
             flux.actions.getFilteredRecords(this.props.appId,
                 this.props.tblId,
                 this.props.rptId, {format:true}, this.props.filter, overrideParams);
@@ -143,82 +178,96 @@ const SortAndGroup = React.createClass({
 
     getSortState() {
         let answer = [];
-        if (this.state.dirty) {
-            //populate from pending settings
-            answer = this.state.newSelectionsSort;
-        } else {
-            // populate from report data
-            this.props.reportData.data.sortFids.map((originalVal) => {
-                answer.push(Number(originalVal));
-            });
-        }
+        answer = this.state.dirty ? this.state.newSelectionsSort : this.getSortFields(this.props.fields.fields.data);
         return answer;
     },
 
     getGroupState() {
         let answer = [];
-        if (this.state.dirty) {
-            answer = this.state.newSelectionsGroup;
+        answer = this.state.dirty ? this.state.newSelectionsGroup : this.getGroupFields(this.props.fields.fields.data);
+        return answer;
+    },
+
+    prepStateArrays() {
+        //returns a new object of current sort and group settings
+        return {
+            newSelectionsGroup :  this.state.dirty ?  _.clone(this.state.newSelectionsGroup)  : this.getGroupState(),
+            newSelectionsSort  :  this.state.dirty ?  _.clone(this.state.newSelectionsSort) : this.getSortState()
+        };
+    },
+
+    getUnparsedVal(item, type) {
+        let answer = "";
+        if (type === KIND.GROUP) {
+            answer =  ReportUtils.getGroupString(item.id, !item.descendOrder, item.howToGroup);
         } else {
-            // populate from report data
-            this.props.reportData.data.groupEls.map((fidInfo) => {
-                if (fidInfo.includes(ReportUtils.groupDelimiter)) {
-                    //strip off fid part
-                    let delimOffset = fidInfo.indexOf(ReportUtils.groupDelimiter);
-                    let justFid = fidInfo.substr(0, delimOffset);
-                    answer.push(Number(justFid));
-                }
-            });
+            answer = (item.descendOrder ? '-' : '') + item.id;
         }
         return answer;
     },
 
-    getNewOrderState(origState, index, field, isDescending) {
-        let newGroup = _.clone(origState);
+
+    getNewOrderState(origStateArray, index, field, isDescending, type) {
+        //returns modified array
+        let newGroup = _.clone(origStateArray);
         if (newGroup && newGroup[index] && field) {
-            newGroup[index] = isDescending ? -field.id : field.id;
+            let editEntry = newGroup[index]; // modifies the entry at index's sort order
+            editEntry.descendOrder = isDescending;
+            editEntry.unparsedVal = this.getUnparsedVal(editEntry, type);
         }
         return newGroup;
     },
 
+
     handleSetOrder(type, index, isDescending, field) {
         // set state to the change in order
-        if (type === 'group') {
-            let currGroupState = this.getGroupState();
-            let newGrouping = this.getNewOrderState(currGroupState, index, field, isDescending);
-            this.setState({newSelectionsGroup : newGrouping, dirty: true});
+        // newSelectionsGroup newSelectionsSort state is set when edits are made
+        let editArrays = this.prepStateArrays();
+        if (type === KIND.GROUP) {
+            editArrays.newSelectionsGroup = this.getNewOrderState(editArrays.newSelectionsGroup, index, field, isDescending, KIND.GROUP);
         } else {
-            let currSortState = this.getSortState();
-            let newSort = this.getNewOrderState(currSortState, index, field, isDescending);
-            this.setState({newSelectionsSort : newSort, dirty: true});
+            editArrays.newSelectionsSort = this.getNewOrderState(editArrays.newSelectionsSort, index, field, isDescending, KIND.SORT);
         }
+        this.setState({newSelectionsGroup:editArrays.newSelectionsGroup,
+                        newSelectionsSort:editArrays.newSelectionsSort,
+                        dirty: true});
     },
 
-    handleSelectField(type, fid) {
+    handleAddField(type, field) {
         // set state to add a field to the sort or grouping using ascending order default
-        if (type === 'group') {
-            let newGroup = _.clone(this.getGroupState());
-            newGroup.push(fid);
-            this.setState({newSelectionsGroup :  newGroup, dirty: true});
+        let item = {};
+        item.id = field.id;
+        item.decendOrder = false;
+        item.type = type;
+        item.howToGroup = GroupTypes.COMMON.equals;
+        item.unparsedVal = this.getUnparsedVal(item, type);
+        item.name = field.name;
+
+        let editArrays = this.prepStateArrays();
+        if (type === KIND.GROUP) {
+            editArrays.newSelectionsGroup.push(item);
         } else {
-            let newSort = _.clone(this.getSortState());
-            newSort.push(fid);
-            this.setState({newSelectionsSort :  newSort, dirty: true});
+            editArrays.newSelectionsSort.push(item);
         }
+        this.setState({newSelectionsGroup: editArrays.newSelectionsGroup,
+                       newSelectionsSort:editArrays.newSelectionsSort,
+                       dirty: true});
     },
 
 
     handleRemoveField(type, index, fid) {
-        // set state to add a field to the sort or grouping using ascending order default
-        if (type === 'group') {
-            let newGroup = _.clone(this.getGroupState());
-            let removed = newGroup.splice(index, 1);
-            this.setState({newSelectionsGroup : newGroup, dirty: true});
+        // remove a field from the list of type and index specified
+        let editArrays = this.prepStateArrays();
+
+        if (type === KIND.GROUP) {
+            let removed = editArrays.newSelectionsGroup.splice(index, 1);
         } else {
-            let newSort = _.clone(this.getSortState());
-            let removed = newSort.splice(index, 1);
-            this.setState({newSelectionsSort : newSort, dirty: true});
+            let removed = editArrays.newSelectionsSort.splice(index, 1);
         }
+        this.setState({newSelectionsGroup: editArrays.newSelectionsGroup,
+            newSelectionsSort:editArrays.newSelectionsSort,
+            dirty: true});
+
     },
 
     handleClickOutside(evt) {
@@ -245,99 +294,154 @@ const SortAndGroup = React.createClass({
 
 
     getField(fid, fields) {
-        let index = _.findIndex(fields, function(f) {
-            return (f.id === fid);
-        });
-        return (index !== -1) ? fields[index] : null;
+        return fields.find((field) => (field.id === fid));
+    },
 
+
+    parseSortItem(originalVal, fields) {
+        let sortItem = {unparsedVal : originalVal} ;
+        let fid = Number(originalVal);
+
+        sortItem.id = Math.abs(fid);
+        // ascending or descending
+        sortItem.descendOrder = fid < 0;
+        sortItem.type = KIND.SORT;
+
+        //get field name from fields list
+        let field = this.getField(sortItem.id, fields);
+        if (field) {
+            sortItem.name = field.name;
+            return sortItem;
+        }
+        return null;
+    },
+
+    parseGroupItem(originalVal, fields) {
+        if (ReportUtils.hasGroupingFids(originalVal)) {
+            let groupItem = {unparsedVal : originalVal};
+
+            //strip off fid part
+            let groupInfo = originalVal.split(ReportUtils.groupDelimiter);
+
+            var justFid = groupInfo[0];
+            let fid = Number(justFid);
+            groupItem.id = Math.abs(fid);
+            groupItem.type = KIND.GROUP;
+
+            // ascending or descending
+            groupItem.descendOrder = fid < 0;
+
+            groupItem.howToGroup = GroupTypes.COMMON.equals; //for default group by equal values
+            if (groupInfo.length > 1) {
+                groupItem.howToGroup = groupInfo[1];
+            }
+
+            //get field name from fields list
+            let field = this.getField(fid, fields);
+            if (field) {
+                groupItem.name = field.name;
+                return groupItem;
+            }
+        }
+        return null;
     },
 
     getSortFields(fields) {
+        /**
+         * the information about current state of sort to show in the dialog depends on whether
+         * the user had made edits in the sort/group popover that are not yet applied
+         * so we set the settings from the popover state info
+         * or
+         * the report has adhoc sort and grouping setting applied via menus or prior apply from the popover
+         * so we get the settings from the reportdata prop
+         * or
+         * the is report was freshly loaded and no adhoc sort/grouping is in effect
+         * so we get the settings from the report meta data
+         *
+         * returns and {Array} of group item settings
+         */
         let answer = [];
 
         if (window.location.search.includes('mockSort')) {
-            //just show some static info
+            //just show some static dummy sort info
             answer = MockData.SORT;
-        } else if (this.state.dirty) {
-            // use the non applied values
-            this.state.newSelectionsSort.forEach((fid) => {
-                let sortItem = {originalVal : fid};
-                sortItem.id = Math.abs(fid);
-                sortItem.decendOrder = fid < 0;
-                //get field name from fields list
-                let field = this.getField(sortItem.id, fields);
-                if (field) {
-                    sortItem.name = field.name;
+        } else if (this.state.dirty && this.state.newSelectionsSort) {
+            //..or use the non applied values
+            this.state.newSelectionsSort.forEach((sortItem) => {
+                if (sortItem) {
                     answer.push(sortItem);
                 }
             });
-        } else {
-            // get the sort info from the props
+        } else if (this.props.reportData.data && this.props.reportData.data.sortFids &&
+                   this.props.reportData.data.sortFids.length) {
+            // .. or get the sort info from the record data props
             this.props.reportData.data.sortFids.map((originalVal) => {
-                let sortItem = {originalVal : originalVal} ;
-                let fid = Number(originalVal);
-
-                sortItem.id = Math.abs(fid);
-                // ascending or descending
-                sortItem.decendOrder = fid < 0;
-
-                //get field name from fields list
-                let field = this.getField(sortItem.id, fields);
-                if (field) {
-                    sortItem.name = field.name;
+                let sortItem = this.parseSortItem(originalVal, fields);
+                if (sortItem) {
+                    answer.push(sortItem);
+                }
+            });
+        } else if (this.props.reportData.data && this.props.reportData.data.originalMetaData &&
+            this.props.reportData.data.originalMetaData.sortList &&
+            this.props.reportData.data.originalMetaData.sortList.length) {
+            // .. or get the sort info from the original report meta data
+            let sorts = ReportUtils.getSortFidsOnly(this.props.reportData.data.originalMetaData.sortList);
+            sorts.map((originalVal) => {
+                let sortItem = this.parseSortItem(originalVal, fields);
+                if (sortItem) {
                     answer.push(sortItem);
                 }
             });
         }
-
         return answer;
-
     },
 
     getGroupFields(fields) {
+        /**
+         * the information about current state of grouping to show in the dialog depends on whether
+         * the user had made edits in the sort/group popover that are not yet applied
+         * so we set the settings from the popover state info
+         * or
+         * the report has adhoc sort and grouping setting applied via menus or prior apply from the popover
+         * so we get the settings from the reportdata prop
+         * or
+         * the is report was freshly loaded and no adhoc sort/grouping is in effect
+         * so we get the settings from the report meta data
+         *
+         * returns and {Array} of group item settings
+         */
         let answer = [];
-        //get groupFields from reportdata prop
+        //get groupFields from report data prop
         if (window.location.search.includes('mockSort')) {
-            //just show some static info
+            //just show some static dummy grouping info
             answer =  MockData.GROUP;
         } else if (this.state.dirty) {
             // use the non applied values
-            this.state.newSelectionsGroup.forEach((fid) => {
-                let groupItem = {originalVal : fid};
-                groupItem.howToGroup = "V"; //for now group by equal values
-                groupItem.id = Math.abs(fid);
-                groupItem.decendOrder = fid < 0;
-                //get field name from fields list
-                let field = this.getField(groupItem.id, fields);
-                if (field) {
-                    groupItem.name = field.name;
+            this.state.newSelectionsGroup.forEach((groupItem) => {
+                if (groupItem) {
                     answer.push(groupItem);
                 }
             });
-        } else {
-            // get the sort info from the props
+        } else if (this.props.reportData.data.groupEls && this.props.reportData.data.groupEls.length) {
+            // get the group info from the report data
             this.props.reportData.data.groupEls.map((fidInfo) => {
-                if (fidInfo.includes(ReportUtils.groupDelimiter)) {
-                    let groupItem = {originalVal : fidInfo};
-                    //strip off fid part
-                    let delimOffset = fidInfo.indexOf(ReportUtils.groupDelimiter);
-                    let justFid = fidInfo.substr(0, delimOffset);
-                    let fid = Number(justFid);
-                    groupItem.howToGroup = fidInfo.substr(delimOffset + 1);
-                    groupItem.id = Math.abs(fid);
-                    // ascending or descending
-                    groupItem.decendOrder = fid < 0;
-
-                    //get field name from fields list
-                    let field = this.getField(fid, fields);
-                    if (field) {
-                        groupItem.name = field.name;
-                        answer.push(groupItem);
-                    }
+                let groupItem = this.parseGroupItem(fidInfo, fields);
+                if (groupItem) {
+                    answer.push(groupItem);
                 }
             });
-        }
+        } else if (this.props.reportData.data && this.props.reportData.data.originalMetaData &&
+            this.props.reportData.data.originalMetaData.sortList &&
+            this.props.reportData.data.originalMetaData.sortList.length) {
+            // get the group info from the original meta data
+            this.props.reportData.data.groupEls.map((fidInfo) => {
+                let groupItem = this.parseGroupItem(fidInfo, fields);
+                if (groupItem) {
+                    answer.push(groupItem);
+                }
+            });
 
+        }
         return answer;
     },
 
@@ -392,7 +496,7 @@ const SortAndGroup = React.createClass({
                                                             showMoreFields={(type) => this.showMoreFields(type)}
                                                             onShowFields={(type) => this.showFields(type)}
                                                             onHideFields={() => this.hideFields()}
-                                                            onSelectField={(type, fieldId) => this.handleSelectField(type, fieldId)}
+                                                            onSelectField={(type, field) => this.handleAddField(type, field)}
                                                             onRemoveField={(type, index, fieldId) => this.handleRemoveField(type, index, fieldId)}
                                                             onSetOrder={this.handleSetOrder}
                                                             onReset={this.resetAndHide}
