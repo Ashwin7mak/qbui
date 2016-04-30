@@ -27,16 +27,22 @@
         this.reportSortAndGroupCloseBtn = this.reportSortingGroupingContainer.element(by.className('overlayRight'));
         //group By settings
         this.reportGroupByContainer = this.reportSortingGroupingContainer.element(by.className('groupBySettings'));
+        //group field selector container
+        this.groupByFieldSelectorCnt = this.reportGroupByContainer.element(by.className('fieldSelectorContainer'));
         //group By title
         this.reportGroupByContainerTitle = this.reportGroupByContainer.element(by.className('title'));
         //group by field Selector
-        this.reportGroupByFieldSelector = this.reportGroupByContainer.element(by.className('fieldChoice'));
+        this.reportGroupByFieldSelector = this.reportGroupByContainer.element(by.className('empty'));
         //field prefix
         this.GroupByFieldPrefix = this.reportGroupByFieldSelector.element(by.className('prefix'));
         //group by Open
         this.reportGroupByIcon = this.reportGroupByFieldSelector.element(by.className('groupFieldOpen'));
         //field Name
         this.reportGroupByFieldName = this.reportGroupByFieldSelector.element(by.className('fieldName'));
+        //field delete button
+        this.groupByFieldDeleteBtn = this.reportGroupByFieldSelector.element(by.className('groupFieldDelete'));
+        //field sort Order button
+        this.groupBySortOrderBtn = this.reportGroupByFieldSelector.element(by.className('sortOrderIcon'));
 
         //field panel
         this.GroupByFieldPanel = this.reportSortAndGroupDialogue.element(by.className('panel-body'));
@@ -44,8 +50,6 @@
         this.GroupByFieldPanelHeader = this.GroupByFieldPanel.element(by.className('fieldPanelHeader'));
         //cancel button in field panel
         this.GroupByCancelBtn = this.GroupByFieldPanel.element(by.className('cancel'));
-        //GroupBy list items
-        this.GroupByListItem = this.GroupByFieldPanel.all(by.className('list-group'));
 
 
 
@@ -57,7 +61,7 @@
         ////sort by field Selector
         //this.reportSortByFieldSelector = this.reportSortByContainer.element(by.className('fieldSelector'));
         //field choice
-        this.reportSortByFieldSelector = this.reportSortByContainer.element(by.className('fieldChoice'));
+        this.reportSortByFieldSelector = this.reportSortByContainer.element(by.className('empty'));
         //field prefix
         this.SortByFieldPrefix = this.reportSortByFieldSelector.element(by.className('prefix'));
         //sort by Open
@@ -249,28 +253,27 @@
         /*
          * Function to select group By Items
          */
-        this.selectGroupByItems = function(itemToSelect) {
+        this.selectGroupByItems = function(itemsToSelect) {
             var self = this;
-            //Click on field selector
-            e2ePageBase.waitForElementToBeClickable(self.reportGroupByIcon).then(function() {
-                return self.reportGroupByIcon.click().then(function() {
-                    reportServicePage.waitForElement(self.GroupByFieldPanel).then(function() {
-                        //verify the title of groupBy list
-                        expect(self.GroupByFieldPanelHeader.getText()).toEqual('Cancel\nChoose Field for grouping');
-                        //select the groupBy item
-                        var items = self.GroupByFieldPanel.all(by.className('list-group-item'));
-                        return items.filter(function(elm, index) {
-                            return elm.getText().then(function(text) {
-                                return text === itemToSelect;
-                            });
-                        }).then(function(filteredElement) {
-                            filteredElement[0].click();
-
-                        }).then(function() {
-                            //cancel the popup and verify the item selected
-                            self.GroupByCancelBtn.click().then(function() {
-                                expect(self.reportSortAndGroupTitle.getAttribute('innerText')).toEqual('Sort & Group');
-                                //verify the item selected
+            return reportServicePage.waitForElement(self.reportGroupByContainer).then(function() {
+                //Verify title of sortBy
+                expect(self.reportGroupByContainerTitle.getText()).toEqual('Group');
+                //Click on field selector
+                return e2ePageBase.waitForElementToBeClickable(self.reportGroupByIcon).then(function() {
+                    return self.reportGroupByIcon.click().then(function() {
+                        return reportServicePage.waitForElement(self.GroupByFieldPanel).then(function() {
+                            //verify the title of groupBy list
+                            expect(self.GroupByFieldPanelHeader.getText()).toEqual('Cancel\nChoose Field for grouping');
+                            //select the groupBy item
+                            var items = self.GroupByFieldPanel.all(by.className('list-group-item'));
+                            return items.filter(function(elm) {
+                                return elm.getText().then(function(text) {
+                                    return text === itemsToSelect;
+                                });
+                            }).then(function(filteredElement) {
+                                e2ePageBase.waitForElementToBeClickable(filteredElement[0]).then(function() {
+                                    return filteredElement[0].click();
+                                });
                             });
                         });
                     });
@@ -279,29 +282,62 @@
         };
 
         /*
+         * Function to verify group By Items selected in popUp
+         */
+        this.verifySelectedGroupByFields = function(fieldsToVerify) {
+            var self = this;
+            var items = self.reportGroupByContainer.all(by.className('notEmpty'));
+            for (var i = 0; i < fieldsToVerify.length; i++) {
+                items.filter(function(elm) {
+                    elm(by.className('fieldName')).getText().then(function(text) {
+                        //verify the field names
+                        console.log("Verify fied name is: " + text);
+                        expect(text).toEqual(fieldsToVerify[i]);
+                    }).then(function() {
+                        //verify the prefix
+                        elm(by.className('prefix')).getText().then(function(prefix) {
+                            console.log("Verify prefix is: " + prefix);
+                            if (i === 0) {
+                                expect(prefix).toEqual('by');
+                            } else {
+                                expect(prefix).toEqual('then by');
+                            }
+                        });
+                    }).then(function() {
+                        //verify the delete button in each non empty field
+                        expect(elm(by.className('groupFieldDeleteIcon')).isDisplayed()).toBeTruthy();
+                        //verify the sort order button in each non empty field
+                        expect(elm(by.className('sortOrderIcon')).isDisplayed()).toBeTruthy();
+
+                    });
+                });
+            }
+        };
+
+        /*
          * Function to select sort By Items
          */
-        this.selectSortByItems = function(itemToSelect) {
+        this.selectSortByItems = function(itemsToSelect) {
             var self = this;
-            //Click on field selector
-            e2ePageBase.waitForElementToBeClickable(self.reportSortByIcon).then(function() {
-                return self.reportSortByIcon.click().then(function() {
-                    reportServicePage.waitForElement(self.SortByFieldPanel).then(function() {
-                        //verify the title of groupBy list
-                        expect(self.SortByFieldPanelHeader.getText()).toEqual('Cancel\nChoose Field for sorting');
-                        //select the groupBy item
-                        var items = self.SortByFieldPanel.all(by.className('list-group-item'));
-                        return items.filter(function(elm) {
-                            return elm.getText().then(function(text) {
-                                return text === itemToSelect;
-                            });
-                        }).then(function(filteredElement) {
-                            filteredElement[0].click();
-                        }).then(function() {
-                            //cancel the popup and verify the item selected
-                            self.SortByCancelBtn.click().then(function() {
-                                expect(self.reportSortAndGroupTitle.getAttribute('innerText')).toEqual('Sort & Group');
-                                //verify the item selected
+            return reportServicePage.waitForElement(self.reportSortByContainer).then(function() {
+                //Verify title of sortBy
+                expect(self.reportSortByContainerTitle.getText()).toEqual('Sort');
+                //Click on field selector
+                return e2ePageBase.waitForElementToBeClickable(self.reportSortByIcon).then(function() {
+                    return self.reportSortByIcon.click().then(function() {
+                        return reportServicePage.waitForElement(self.SortByFieldPanel).then(function() {
+                            //verify the title of groupBy list
+                            expect(self.SortByFieldPanelHeader.getText()).toEqual('Cancel\nChoose Field for sorting');
+                            //select the groupBy item
+                            var items = self.SortByFieldPanel.all(by.className('list-group-item'));
+                            return items.filter(function(elm) {
+                                return elm.getText().then(function(text) {
+                                    return text === itemsToSelect;
+                                });
+                            }).then(function(filteredElement) {
+                                e2ePageBase.waitForElementToBeClickable(filteredElement[0]).then(function() {
+                                    return filteredElement[0].click();
+                                });
                             });
                         });
                     });
@@ -309,6 +345,36 @@
             });
         };
 
+        /*
+         * Function to verify sort By Items selected in popUp
+         */
+        this.verifySelectedSortByFields = function(fieldsToVerify) {
+            var self = this;
+            var items = self.reportSortByContainer.all(by.className('notEmpty'));
+            for (var i = 0; i < fieldsToVerify.length; i++) {
+                items.filter(function(elm) {
+                    elm(by.className('fieldName')).getText().then(function(text) {
+                        //verify the field names
+                        expect(text).toEqual(fieldsToVerify[i]);
+                    }).then(function() {
+                        //verify the prefix
+                        elm(by.className('prefix')).getText().then(function(prefix) {
+                            if (i === 0) {
+                                expect(prefix).toEqual('by');
+                            } else {
+                                expect(prefix).toEqual('then by');
+                            }
+                        });
+                    }).then(function() {
+                        //verify the delete button in each non empty field
+                        expect(elm(by.className('groupFieldDeleteIcon')).isDisplayed()).toBeTruthy();
+                        //verify the sort order button in each non empty field
+                        expect(elm(by.className('sortOrderIcon')).isDisplayed()).toBeTruthy();
+
+                    });
+                });
+            }
+        };
     };
     ReportSortingPage.prototype = e2ePageBase;
     module.exports = ReportSortingPage;
