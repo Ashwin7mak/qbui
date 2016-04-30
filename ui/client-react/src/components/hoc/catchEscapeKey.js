@@ -24,15 +24,16 @@ var catchEscapeKeyWrapper = (Component) =>{
                 this.props.onClose();
             }
         },
+
         componentWillMount() {
-            if (window && window.removeEventListener) {
-                window.addEventListener("keydown", (e) => this.handleKey(e), false);
+            if (document && document.addEventListener) {
+                document.addEventListener("keydown", this.handleKey, false);
             }
         },
 
         componentWillUnmount() {
-            if (window && window.removeEventListener) {
-                window.removeEventListener("keydown", (e) => this.handleKey(e), false);
+            if (document && document.removeEventListener) {
+                document.removeEventListener("keydown", this.handleKey, false);
             }
         },
 

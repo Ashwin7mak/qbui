@@ -13,6 +13,7 @@ import QBicon from '../qbIcon/qbIcon';
 import simpleStringify from '../../../../common/src/simpleStringify';
 import * as schemaConsts from '../../constants/schema.js';
 import thwartClicksWrapper from '../hoc/thwartClicksWrapper';
+import closeOnEscape from '../hoc/catchEscapeKey';
 
 import './facet.scss';
 import _ from 'lodash';
@@ -153,19 +154,18 @@ var FacetsList = React.createClass({
                 />;
             }
         });
-        let PopoverWrapped = thwartClicksWrapper(FacetPopover);
+        let PopoverWrapped = closeOnEscape(thwartClicksWrapper(FacetPopover));
 
         //TODO get xd specific for handle no facet info returned from server see https://jira.intuit.com/browse/QBSE-19865
         return (
             <PopoverWrapped id={this.props.popoverId}
-                     preventDefault={true}
-                     stopPropagation={true}
                      handleClickOutside={this.props.hideMenu}
+                     onClose={this.props.hideMenu}
+                     outsideClickIgnoreClass="facetsMenuContainer"
                      arrowOffsetLeft={28}
                      placement="bottom"
                      className="facetMenuPopup"
                      ref="facetMenuPopup"
-                     //ref={(thisComponent) => this._facetMenuArea = thisComponent}
                      showMenu={this.props.showMenu}
             >
                     {this.props.reportData && this.props.reportData.data  &&

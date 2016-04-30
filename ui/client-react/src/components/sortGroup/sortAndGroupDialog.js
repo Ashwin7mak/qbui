@@ -75,14 +75,15 @@ var SortAndGroupDialog = React.createClass({
                 />;
             }
         });
-        let SortAndGroupDialogWrapped = closeOnEscape(thwartClicksWrapper(SortAndGroupPopover));
+        let SortAndGroupDialogWrapped = thwartClicksWrapper(closeOnEscape(SortAndGroupPopover));
 
         return (
             this.props.show ? (
             <SortAndGroupDialogWrapped container={this} id="sortAndGroupDialog"
                      className="sortAndGroupDialog"
-                     preventDefault={true}
-                     stopPropagation={true}
+                     outsideClickIgnoreClass="sortAndGroupContainer"
+                     handleClickOutside={this.handleClickOutside}
+                     onClose={this.props.onClose}
                      placement="bottom">
                     <div>
                         <div className={"settingsDialog" + (this.props.showFields ? ' fieldsShown' : '')} >

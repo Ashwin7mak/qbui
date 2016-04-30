@@ -109,8 +109,6 @@ const SortAndGroup = React.createClass({
         if (this.state.dirty) {
             this.applyChanges();
         }
-
-        //closes popover
         this.hide();
     },
 
@@ -153,9 +151,11 @@ const SortAndGroup = React.createClass({
                 overrideParams[query.SORT_LIST_PARAM] = sortGroupString;
                 overrideParams[query.GLIST_PARAM] = sortGroupString;
             }
+
             flux.actions.getFilteredRecords(this.props.appId,
                 this.props.tblId,
                 this.props.rptId, {format:true}, this.props.filter, overrideParams);
+
         }
 
     },
@@ -446,7 +446,6 @@ const SortAndGroup = React.createClass({
     },
 
 
-
     /**
      * Prepares the menu button used to show/hide the dialog of sort and group options when clicked
      *
@@ -463,19 +462,14 @@ const SortAndGroup = React.createClass({
 
         return (
             <div ref="sortAndGroupContainer" className="sortAndGroupContainer">
-
                 {/* the sort/group icon button */}
-                <div className={"sortAndGroupButton " +
-                            (this.state.show ? "shown " : "") +
-                            (this.state.show ? " ignore-react-onclickoutside" : "")}
+                <div className={"sortAndGroupButton " + (this.state.show ? "shown " : "") }
                      ref="SortAndGroupButton"
-
                      >
                     <span className="sortButtonSpan" tabIndex="0"  onClick={() => this.toggleShow()}>
                         <QBicon className="sortButton" icon="sort-az" />
                     </span>
                 </div>
-
 
                 {/* options shown when icon clicked */}
                 <Overlay container={this} placement="bottom"

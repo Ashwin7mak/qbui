@@ -28,7 +28,6 @@ let fieldsActions = {
 
                 fieldsService.getFields(appId, tblId).then(
                     (response) => {
-                        logger.debug('FieldsService getFields success:' + JSON.stringify(response));
                         this.dispatch(actions.LOAD_FIELDS_SUCCESS, {appId, tblId, data: response.data});
                         resolve();
                     },
