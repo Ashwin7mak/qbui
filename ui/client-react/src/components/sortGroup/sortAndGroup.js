@@ -140,18 +140,18 @@ const SortAndGroup = React.createClass({
 
             let sortGroupString = "";
             if (groupKeys.length) {
-               sortGroupString += groupList;
+                sortGroupString += groupList;
             }
             if (sortList.length) {
                 if (sortGroupString.length) {
-                    sortGroupString += ReportUtils.listDelimiter
+                    sortGroupString += ReportUtils.listDelimiter;
                 }
                 sortGroupString += sortList;
             }
 
             if (sortGroupString.length) {
                 overrideParams[query.SORT_LIST_PARAM] = sortGroupString;
-                overrideParams[query.GLIST_PARAM] = sortGroupString
+                overrideParams[query.GLIST_PARAM] = sortGroupString;
             }
             flux.actions.getFilteredRecords(this.props.appId,
                 this.props.tblId,
