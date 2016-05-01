@@ -8,7 +8,7 @@ let Record = React.createClass({
 
     render: function() {
         return (
-            <div>
+            <div className="formContainer">
                 <QBForm></QBForm>
             </div>
         );

@@ -11,6 +11,7 @@ let reportModel = {
         columns: null,
         description: "",
         facets: null,
+        fids: [],
         filteredRecords: null,
         filteredRecordsCount: null,
         groupingFields: null,
@@ -33,18 +34,22 @@ let reportModel = {
         let columns = [];
 
         if (fields) {
-            fields.forEach(function(field, index) {
-                let column = {};
-                column.order = index;
-                column.id = field.id;
-                column.headerName = field.name;
-                column.field = field.name;
-                column.fieldType = field.type;
-                column.builtIn = field.builtIn;
+            fields.forEach((field, index) => {
+                if (this.model.fids.length && (this.model.fids.indexOf(field.id) === -1)) {
+                    //skip this field since its not on report's column list
+                } else {
+                    let column = {};
+                    column.order = index;
+                    column.id = field.id;
+                    column.headerName = field.name;
+                    column.field = field.name;
+                    column.fieldType = field.type;
+                    column.builtIn = field.builtIn;
 
-                //  client side attributes..
-                column.datatypeAttributes = field.datatypeAttributes;
-                columns.push(column);
+                    //  client side attributes..
+                    column.datatypeAttributes = field.datatypeAttributes;
+                    columns.push(column);
+                }
             });
         }
         return columns;
@@ -106,6 +111,7 @@ let reportModel = {
     setMetaData: function(reportMetaData) {
         this.model.name = reportMetaData.name;
         this.model.description = reportMetaData.description;
+        this.model.fids = reportMetaData.fids ? reportMetaData.fids : [];
         // in report's meta data sortlist is returned as an array of sort elements
         this.setSortFids(reportMetaData.sortList);
         this.setGroupElements(reportMetaData.sortList);
