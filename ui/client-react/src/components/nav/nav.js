@@ -13,8 +13,10 @@ import TableIcon from '../qbTableIcon/qbTableIcon';
 import GlobalActions from '../actions/globalActions';
 import Loader  from 'react-loader';
 import Breakpoints from '../../utils/breakpoints';
+import {NotificationContainer} from 'react-notifications';
 
 import './nav.scss';
+import 'react-notifications/lib/notifications.css';
 import '../../assets/css/animate.min.css';
 
 let FluxMixin = Fluxxor.FluxMixin(React);
@@ -175,6 +177,7 @@ var Nav = React.createClass({
                         showOnSmall = {this.state.nav.showTopNav}/>
                 {this.props.children &&
                     <div className="mainContent" >
+                        <NotificationContainer/>
                         {/* insert the component passed in by the router */}
                         {React.cloneElement(this.props.children, {
                             key: this.props.location ? this.props.location.pathname : "",

@@ -18,6 +18,11 @@ $grid-group-expand-icon-size: 20px;
 $grid-default-group-padding: 7px;
 $grid-default-cell-padding: 8px;
 
+$row-bg-color: #fff;
+$row-border-color: #ddd;
+$row-box-shadow-color: #888;
+$cell-edit-background-edit: #f3f8fe;
+
 // override default font style
 .ag-font-style {
     font-size: $grid-font-size;
@@ -235,7 +240,7 @@ $grid-default-cell-padding: 8px;
     .recordActions {
         padding: 0;
         height:100%;
-        width:240px;
+        width:200px;
 
         .actionIcons {
             display:flex;
@@ -246,11 +251,12 @@ $grid-default-cell-padding: 8px;
             .iconLink {
                 flex:1 1 auto;
                 height:100%;
+
                 position:relative;
                 .qbIcon {
                     position:absolute;
-                    top: calc(50% - 8px);
-                    left: calc(50% - 8px);
+                    top: calc(50% - 10px);
+                    left: calc(50% - 10px);
                 }
             }
         }
@@ -312,4 +318,110 @@ $grid-default-cell-padding: 8px;
 .selectedRows .ag-row:hover .ag-cell.actions > div {
     visibility: hidden;
 }
+
+/* hide row editing tools by default */
+.editTools {
+    display:none;
+}
+
+/* last to rows are just for padding */
+.ag-row:nth-last-child(-n+2) {
+    visibility:hidden;
+
+}
+.ag-body-container {
+    .ag-row {
+        background-color: $row-bg-color;
+    }
+    background-color:inherit !important;
+}
+.ag-row .gridCell input.cellData {
+     display:none;
+}
+
+.ag-row.ag-row-selected {
+
+    .ag-cell.gridCell {
+
+        overflow:visible;
+        padding: 0;
+        margin: 0;
+
+
+        > .cellWrapper,.ag-cell-wrapper {
+            padding:8px;
+            position: absolute;
+            border-top:1px solid $row-border-color;
+            border-bottom:1px solid $row-border-color;
+            top:-5px;
+            left:-5px;
+            right:-5px;
+            bottom:-5px;
+            background-color: $cell-edit-background-edit;
+            box-shadow: 2px 2px 2px $row-box-shadow-color;
+            z-index:1;
+            display:flex;
+
+            span.cellData {
+                display:none;
+            }
+            input {
+                display:inline;
+                border:1px solid $row-border-color;
+                border-right:2px solid $row-border-color;
+                background: $row-bg-color;
+                flex:1 1 auto;
+                padding:2px;
+                margin-right:2px;
+            }
+        }
+        > .ag-cell-wrapper:first-child {
+            border-left:1px solid $row-border-color;
+            left:0;
+        }
+    }
+
+    .gridCell {
+
+        .editTools {
+            display:block;
+            flex: 0 0 auto;
+            background-color:$cell-edit-background-edit;
+            box-shadow: 2px 2px 2px $row-box-shadow-color;
+            position:absolute;
+            top:100%;
+            right:30px;
+
+            border-left: 1px solid $row-border-color;
+            border-right: 1px solid $row-border-color;
+            border-bottom:1px solid $row-border-color;
+            button {
+                border:0;
+                background-color:$cell-edit-background-edit;
+                margin-right:2px;
+                padding:6px 8px;
+
+                .qbIcon {
+                    width:20px;
+                    font-size: 20px;
+                    vertical-align:top;
+                }
+                .qbIcon.saveRecord {
+                    color:green;
+                    font-size:24px;
+                }
+                .qbIcon.cancelSelection {
+                    color:$icon-color;
+                }
+                .qbIcon.deleteRecord {
+                    color:red;
+                }
+                .qbIcon.addRecord {
+                    color:$icon-color;
+                }
+            }
+        }
+    }
+}
+
 

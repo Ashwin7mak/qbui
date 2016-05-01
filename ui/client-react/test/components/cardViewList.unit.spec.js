@@ -27,6 +27,17 @@ const fakeReportData_valid = {
     }
 };
 
+let flux = {
+    actions: {
+        getFilteredRecords: function() {
+            return;
+        },
+        selectedRows: function() {
+            return;
+        }
+    }
+};
+
 const CardViewMock = React.createClass({
     render: function() {
         let allowSelection = this.props.allowCardSelection();
@@ -61,7 +72,7 @@ describe('CardViewList functions', () => {
 
     it('test render of loading component', () => {
 
-        component = TestUtils.renderIntoDocument(<CardViewList reportData={fakeReportData_loading}/>);
+        component = TestUtils.renderIntoDocument(<CardViewList flux={flux} selectedRows={[]} reportData={fakeReportData_loading}/>);
 
         expect(TestUtils.isCompositeComponent(component)).toBeTruthy();
 
@@ -71,7 +82,7 @@ describe('CardViewList functions', () => {
 
     it('test render of empty component', () => {
 
-        component = TestUtils.renderIntoDocument(<CardViewList reportData={fakeReportData_empty}/>);
+        component = TestUtils.renderIntoDocument(<CardViewList flux={flux} selectedRows={[]} reportData={fakeReportData_empty}/>);
 
         expect(TestUtils.isCompositeComponent(component)).toBeTruthy();
 
@@ -92,7 +103,7 @@ describe('CardViewList functions', () => {
                 };
             },
             render() {
-                return <CardViewList ref="cardViewList" reportData={fakeReportData_valid}
+                return <CardViewList flux={flux} selectedRows={[]} ref="cardViewList" reportData={fakeReportData_valid}
                                      uniqueId="col_num"/>;
             }
         }));

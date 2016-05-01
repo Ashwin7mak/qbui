@@ -9,8 +9,10 @@ import {Tooltip, OverlayTrigger} from 'react-bootstrap';
  */
 let EmailReportLink = React.createClass({
 
-    defaultProps: {
-        tipPlacement: "top"
+    getDefaultProps() {
+        return {
+            tipPlacement: "top"
+        };
     },
     propTypes: {
         subject:React.PropTypes.string,
