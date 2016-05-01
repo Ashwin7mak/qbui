@@ -92,6 +92,7 @@ const SortAndGroup = React.createClass({
     },
 
     toggleShow() {
+        //TODO:move state to flux action & store
         //let flux = this.getFlux();
         //flux.actions.showSortAndGroup({show:!this.state.show});
         return this.state.show ? this.hide() : this.show();
@@ -337,7 +338,7 @@ const SortAndGroup = React.createClass({
             }
 
             //get field name from fields list
-            let field = this.getField(fid, fields);
+            let field = this.getField(groupItem.id, fields);
             if (field) {
                 groupItem.name = field.name;
                 return groupItem;
