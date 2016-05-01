@@ -32,8 +32,8 @@
         };
         var user2 = {
             id: null,
-            firstName: 'Gregory',
-            lastName: 'Baxter',
+            firstName: 'Chris',
+            lastName: 'Baker',
             screenName: 'Gregory_Baxter@example.com',
             email: 'Gregory_Baxter@example.com',
             challengeQuestion: 'who is your favorite scrum team?',
@@ -92,11 +92,11 @@
                     return e2eBase.recordService.addRecords(app, app.tables[e2eConsts.TABLE1], testRecord2);
                 });
                 e2eBase.recordBase.apiBase.createSpecificUser(user3).then(function(userResponse) {
-                    testRecord3 = [[{'id': 6, 'value': JSON.parse(userResponse.body).id}, {'id': 7, 'value': 'Planning'}, {'id': 8, 'value': 'Workstation purchase'}, {'id': 9, 'value': '2009-03-21'}, {'id': 10, 'value': '2009-04-10'}, {'id': 11, 'value': +durationMin}, {'id': 12, 'value': 0.74765432}]];
+                    testRecord3 = [[{'id': 6, 'value': JSON.parse(userResponse.body).id}, {'id': 7, 'value': 'Planning'}, {'id': 8, 'value': 'Workstation purchase'}, {'id': 9, 'value': '2009-03-21'}, {'id': 10, 'value': '2009-04-10'}, {'id': 11, 'value': +durationMin}, {'id': 12, 'value': 99}]];
                     return e2eBase.recordService.addRecords(app, app.tables[e2eConsts.TABLE1], testRecord3);
                 });
                 e2eBase.recordBase.apiBase.createSpecificUser(user4).then(function(userResponse) {
-                    testRecord4 = [[{'id': 6, 'value': JSON.parse(userResponse.body).id}, {'id': 7, 'value': 'Development'}, {'id': 8, 'value': 'Install latest software'}, {'id': 9, 'value': '2009-03-31'}, {'id': 10, 'value': '2009-04-28'}, {'id': 11, 'value': 0.345678}, {'id': 12, 'value': 100}]];
+                    testRecord4 = [[{'id': 6, 'value': JSON.parse(userResponse.body).id}, {'id': 7, 'value': 'Development'}, {'id': 8, 'value': 'Install latest software'}, {'id': 9, 'value': '2009-03-31'}, {'id': 10, 'value': '2009-04-28'}, {'id': 11, 'value': +durationMin}, {'id': 12, 'value': 100}]];
                     return e2eBase.recordService.addRecords(app, app.tables[e2eConsts.TABLE1], testRecord4);
                 });
 
@@ -126,37 +126,16 @@
         /*
          * Grouping/Sorting Test Cases
          */
-        describe('Report Grouping and Sorting Tests', function() {
-            var tableResultsBeforeSortOrGrp = [];
-            var tableResultsAfterSortOrGrp = [];
+        describe('Report Grouping and Sorting Tests via PopUp', function() {
 
-            beforeAll(function(done) {
-                //go to report page directly
+            /**
+             * Before each test starts just make sure the table list div has loaded
+             */
+            beforeEach(function(done) {
+                    //go to report page directly. Adding this extra step to avoid any leftover errors at the end of each test and also to avoid stale element error.
                 RequestAppsPage.get(e2eBase.getRequestReportsPageEndpoint(realmName, app.id, app.tables[e2eConsts.TABLE1].id, '1'));
-                reportServicePage.waitForElement(reportServicePage.loadedContentEl).then(function() {
-                    reportServicePage.waitForElement(reportServicePage.griddleWrapperEl).then(function() {
-                        reportServicePage.waitForElement(reportServicePage.agGridBodyEl).then(function() {
-                            // Get all records from table before filter applied
-                            reportServicePage.agGridRecordElList.map(function(row) {
-                                return {
-                                    'User Name': row.all(by.className('ag-cell-no-focus')).get(2).getText(),
-                                    'Project Phase': row.all(by.className('ag-cell-no-focus')).get(3).getText(),
-                                    'Task Name': row.all(by.className('ag-cell-no-focus')).get(4).getText(),
-                                    'Start Date': row.all(by.className('ag-cell-no-focus')).get(5).getText(),
-                                    'Finish Date': row.all(by.className('ag-cell-no-focus')).get(6).getText(),
-                                    'Duration Taken': row.all(by.className('ag-cell-no-focus')).get(7).getText(),
-                                    '% Completed': row.all(by.className('ag-cell-no-focus')).get(8).getText()
-                                };
-                            }).then(function(results) {
-                                for (var i = 0; i < results.length; i++) {
-                                    tableResultsBeforeSortOrGrp.push(results[i]);
-                                }
-                                console.log("the actual table results are: " + JSON.stringify(tableResultsBeforeSortOrGrp));
-                                done();
-                            });
-                        });
-                    });
-                });
+                reportServicePage.waitForElement(reportServicePage.loadedContentEl);
+                done();
             });
 
             /**
@@ -165,78 +144,140 @@
             function TestCases() {
                 return [
                     {
-                        message: 'GroupBy Text field and SortBy User Field',
+                        message: 'Only Sort By Date(Start Date)',
+                        groupBy: [],
+                        sortBy: ['Start Date'],
+                        flag: 'sortOnly',
+                        expectedTableResults: [
+                            ['Chris Baker', 'Planning', 'Server purchase', '3/16/2009', '4/10/2009', '-15250284452.47152052910053 weeks', '100.00000000000000%'],
+                            ['Chris Baker', 'Development', 'Upgrade DBMS', '3/19/2009', '4/28/2009', '0.0020410978836 weeks', '99.00000000000000%'],
+                            ['Angela Leon', 'Planning', 'Workstation purchase', '3/21/2009', '4/10/2009', '15250284452.47152052910053 weeks', '99.00000000000000%'],
+                            ['Jon Neil', 'Development', 'Install latest software', '3/31/2009', '4/28/2009', '15250284452.47152052910053 weeks', '100.00000000000000%']
+                        ]
+                    },
+                    {
+                        message: 'Only Group By User Field(User Name)',
+                        groupBy: ['User Name'],
+                        sortBy: [],
+                        flag: 'groupOnly',
+                        expectedTableResults: [
+                            ['', '', '', '', '', ''],
+                            ['', '', '', '', '', ''],
+                            ['', '', '', '', '', ''],
+                            ['Development', 'Install latest software', '3/31/2009', '4/28/2009', '15250284452.47152052910053 weeks', '100.00000000000000%'],
+                            ['Development', 'Upgrade DBMS', '3/19/2009', '4/28/2009', '0.0020410978836 weeks', '99.00000000000000%'],
+                            ['Planning', 'Server purchase', '3/16/2009', '4/10/2009', '-15250284452.47152052910053 weeks', '100.00000000000000%'],
+                            ['Planning', 'Workstation purchase', '3/21/2009', '4/10/2009', '15250284452.47152052910053 weeks', '99.00000000000000%']
+                        ]
+                    },
+                    {
+                        message: 'Single Field - GroupBy Text field(Project Phase) and SortBy Numeric(% Completed) ',
                         groupBy: ['Project Phase'],
-                        sortBy: ['User Name']
+                        sortBy: ['% Completed'],
+                        flag: 'sortAndGrp',
+                        expectedTableResults: [
+                            ['', '', '', '', '', ''],
+                            ['Chris Baker', 'Upgrade DBMS', '3/19/2009', '4/28/2009', '0.0020410978836 weeks', '99.00000000000000%'],
+                            ['Jon Neil', 'Install latest software', '3/31/2009', '4/28/2009', '15250284452.47152052910053 weeks', '100.00000000000000%'],
+                            ['', '', '', '', '', ''],
+                            ['Angela Leon', 'Workstation purchase', '3/21/2009', '4/10/2009', '15250284452.47152052910053 weeks', '99.00000000000000%'],
+                            ['Chris Baker', 'Server purchase', '3/16/2009', '4/10/2009', '-15250284452.47152052910053 weeks', '100.00000000000000%']
+                        ]
                     },
                     {
-                        message: 'GroupBy Text and Date fields then SortBy Date field',
-                        groupBy: ['Project Phase', 'Start Date'],
-                        sortBy: ['Start Date']
-                    },
-                    {
-                        message: 'GroupBy Numeric and Duration fields then sort by Duration and Text fields',
-                        groupBy: ['% Completed', 'Duration Taken'],
-                        sortBy: ['Duration Taken', 'Project Phase']
-                    },
-                    {
-                        message: 'GroupBy Date field and Sort by User and Numeric field',
-                        groupBy: ['Finish Date'],
-                        sortBy: ['User Name', '% Completed']
+                        message: 'Multiple Fields - GroupBy Duration field and user field  and SortBy Numeric(% Completed) and Text field(Project Phase)',
+                        groupBy: ["Project Phase", "% Completed"],
+                        sortBy: ["Duration Taken", "Start Date"],
+                        flag: 'sortAndGrp',
+                        expectedTableResults: [
+                            ['', '', '', '', '', ''],
+                            ['', '', '', '', '', ''],
+                            ['Chris Baker', 'Upgrade DBMS', '3/19/2009', '4/28/2009', '0.0020410978836 weeks', ''],
+                            ['', '', '', '', '', ''],
+                            ['Jon Neil', 'Install latest software', '3/31/2009', '4/28/2009', '15250284452.47152052910053 weeks', ''],
+                            ['', '', '', '', '', ''],
+                            ['', '', '', '', '', ''],
+                            ['Chris Baker', 'Server purchase', '3/16/2009', '4/10/2009', '-15250284452.47152052910053 weeks', ''],
+                            ['', '', '', '', '', ''],
+                            ['Angela Leon', 'Workstation purchase', '3/21/2009', '4/10/2009', '15250284452.47152052910053 weeks', '']
+                        ]
                     }
+
                 ];
             }
 
             TestCases().forEach(function(testCase) {
                 it('' + testCase.message, function(done) {
-                    var groupResults = [];
-                    var sortResults = [];
-                    //RequestAppsPage.get(e2eBase.getRequestReportsPageEndpoint(realmName, app.id, app.tables[e2eConsts.TABLE1].id, '1'));
+                    //go to report page directly
                     reportServicePage.waitForElement(reportSortingPage.reportSortingGroupingContainer).then(function() {
                         reportServicePage.waitForElementToBeClickable(reportSortingPage.reportSortAndGroupBtn).then(function() {
-                            reportSortingPage.reportSortAndGroupBtn.click().then(function() {
-                                //Verify grouping/sorting popOver
-                                expect(reportSortingPage.reportSortAndGroupDialogue.isDisplayed()).toBeTruthy();
+                            reportSortingPage.reportSortAndGroupBtn.click();
+                            // Sleep needed for animation of drop down
+                            e2eBase.sleep(browser.params.smallSleep);
+                            //Verify grouping/sorting popOver
+                            reportServicePage.waitForElement(reportSortingPage.sortAndGrpDialogueResetBtn).then(function() {
                                 //Verify the title
                                 expect(reportSortingPage.reportSortAndGroupTitle.getAttribute('innerText')).toEqual('Sort & Group');
                                 //Verify title of groupBy
                                 expect(reportSortingPage.reportGroupByContainerTitle.getText()).toEqual('Group');
-                                //Verify prefix of field choice
-                                expect(reportSortingPage.GroupByFieldPrefix.getText()).toEqual('by');
-                                //Verify title of sortBy
-                                expect(reportSortingPage.reportSortByContainerTitle.getText()).toEqual('Sort');
-                                //Verify prefix of field choice
-                                expect(reportSortingPage.SortByFieldPrefix.getText()).toEqual('by');
-                            }).then(function() {
-                                //Select sort By items
-                                for (var j = 0; j < testCase.sortBy.length; j++) {
-                                    reportSortingPage.selectSortByItems(testCase.sortBy[j]);
-                                    //sort by the actual results array
-                                    sortResults = _.sortBy(tableResultsBeforeSortOrGrp, testCase.sortBy[j].toString());
-                                    console.log("The actual results array after sorting is: " + JSON.stringify(sortResults));
-                                }
                             }).then(function() {
                                 //Select group By items
                                 for (var i = 0; i < testCase.groupBy.length; i++) {
                                     reportSortingPage.selectGroupByItems(testCase.groupBy[i]);
-                                    //take the sorted results and group them
-                                    groupResults = _.groupBy(sortResults, testCase.groupBy[i].toString());
-                                    console.log("The actual results array after grouping is: " + JSON.stringify(groupResults));
                                 }
+                                //verify the field name, delete button, sort button and prefix
+                                reportSortingPage.verifySelectedGroupByFields(testCase.groupBy);
+
                             }).then(function() {
-                                //Click reset button
-                                reportSortingPage.sortAndGrpDialogueResetBtn.click();
-                                //Close the popup
-                                reportSortingPage.reportSortAndGroupCloseBtn.click();
-
-                                //Just to shift focus
-                                reportServicePage.reportRecordsCount.click();
-                                //clean the array
-                                groupResults = [];
-                                sortResults = [];
-                                done();
+                                //Select sort By items
+                                for (var i = 0; i < testCase.sortBy.length; i++) {
+                                    reportSortingPage.selectSortByItems(testCase.sortBy[i]);
+                                }
+                                //verify the field name, delete button, sort button and prefix
+                                reportSortingPage.verifySelectedSortByFields(testCase.sortBy);
+                            }).then(function() {
+                                //Click apply button
+                                reportSortingPage.sortAndGrpDialogueApplyBtn.click();
+                                reportServicePage.waitForElement(reportServicePage.loadedContentEl);
+                            }).then(function() {
+                                // Get all records from table before filter applied
+                                reportServicePage.agGridRecordElList.map(function(row) {
+                                    if (testCase.flag.includes("sortOnly")) {
+                                        //return all 8 columns
+                                        return [
+                                            row.all(by.className('ag-cell-no-focus')).get(2).getText(),
+                                            row.all(by.className('ag-cell-no-focus')).get(3).getText(),
+                                            row.all(by.className('ag-cell-no-focus')).get(4).getText(),
+                                            row.all(by.className('ag-cell-no-focus')).get(5).getText(),
+                                            row.all(by.className('ag-cell-no-focus')).get(6).getText(),
+                                            row.all(by.className('ag-cell-no-focus')).get(7).getText(),
+                                            row.all(by.className('ag-cell-no-focus')).get(8).getText()
+                                        ];
+                                    } else {
+                                        //return only 7 rows because the grouped row will be removed in the UI
+                                        return [
+                                            row.all(by.className('ag-cell-no-focus')).get(2).getText(),
+                                            row.all(by.className('ag-cell-no-focus')).get(3).getText(),
+                                            row.all(by.className('ag-cell-no-focus')).get(4).getText(),
+                                            row.all(by.className('ag-cell-no-focus')).get(5).getText(),
+                                            row.all(by.className('ag-cell-no-focus')).get(6).getText(),
+                                            row.all(by.className('ag-cell-no-focus')).get(7).getText()
+                                        ];
+                                    }
+                                }).then(function(groupingSortingTableResults) {
+                                    console.log("the results are: " + groupingSortingTableResults);
+                                    //verify the sorting/grouping results with expected
+                                    if (testCase.flag.includes("sortOnly") || testCase.flag.includes("sortAndGrp")) {
+                                        //results are already sorted
+                                        expect(groupingSortingTableResults).toEqual(testCase.expectedTableResults);
+                                    }
+                                    if (testCase.flag.includes("groupOnly")) {
+                                        //for group only they are not sorted
+                                        expect(groupingSortingTableResults.sort()).toEqual(testCase.expectedTableResults.sort());
+                                    }
+                                    done();
+                                });
                             });
-
                         });
                     });
                 });
