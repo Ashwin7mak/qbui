@@ -45,6 +45,7 @@
             height:32px;
             width:32px;
             margin:0;
+
         }
 
         div.dropdown {
@@ -139,6 +140,10 @@
 }
 .reportActions {
     font-size:20px;
+
+    .actionIcons a.iconLink .qbIcon {
+        line-height:32px;
+    }
 }
 .recordActions {
     font-size:16px;
@@ -146,15 +151,15 @@
 
 /* The table should not move when report Actions are shown/hidden. Because the height of actions is smaller than search bar - set a min height on bar
  TODO: what happens when no table actions bar is present. */
-$tableActionsContainerMinHeight: 50px;
+$tableActionsContainerMinHeight: 61px;
 
 @include not-small-breakpoint {
     .tableActionsContainer {
         min-height: $tableActionsContainerMinHeight;
     }
     .reportActions {
-        //line-height: $tableActionsContainerMinHeight;
-        vertical-align: middle;
+        line-height: $tableActionsContainerMinHeight;
+        align-items:center;
     }
 
 }

@@ -16,7 +16,7 @@ const TAGS_TO_ICONS_MAP =  {
     "Appointments": "Schedule",
     "Student": "add-person",
     "Feedback": "Hand_Thumbs-up",
-    "Financial Aid Applications": "Currency_Sign"
+    "Financial Aid Applications": "Currency_Sign_Dollar2"
 };
 const Tags = _.keys(TAGS_TO_ICONS_MAP);
 class TableIconUtils {

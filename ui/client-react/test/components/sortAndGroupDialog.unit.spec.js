@@ -62,19 +62,9 @@ describe('SortAndGroupDialog functions', () => {
     });
 
     it('test contains FieldSettings', () => {
-
-        let dumpComponent = function(testName) {
-            let node =  ReactDOM.findDOMNode(component);
-            if (testName) {
-                console.log('===' + testName + '===');
-            }
-            console.log(console.log(node.outerHTML) + '\n\n');
-        };
-
         component = TestUtils.renderIntoDocument(< SortAndGroupDialog show="true"/>);
-        // var _FieldsPanel = TestUtils.scryRenderedComponentsWithType(component, FieldsPanelMock);
-        // expect(_FieldsPanel.length).toEqual(1);
-        dumpComponent()
+        var _FieldSettings = TestUtils.scryRenderedComponentsWithType(component, FieldSettingsMock);
+        expect(_FieldSettings.length).toEqual(2);
     });
 
 });

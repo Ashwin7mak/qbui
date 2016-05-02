@@ -2,22 +2,6 @@
 	"name": "QuickBase",
 	"version": "0.0.0",
 	"main": "server/app.js",
-	"scripts": {
-		"webpack": "webpack --config webpack.config.js",
-		"watch": "webpack --config webpack.config.js --watch",
-		"hotload": "node_modules/grunt-nodemon/node_modules/.bin/nodemon --watch server --watch common server/app.js",
-		"clean": "rm -r client-react/dist",
-		"start": "node server/app.js",
-		"mockServer": "node_modules/grunt-nodemon/node_modules/.bin/nodemon --watch server/mockserver -e js,json server/mockserver/mocker.js",
-		"prodStart": "node dist/server/app.js",
-		"lint": "node_modules/eslint/bin/eslint.js --ext .js --ext .jsx --format 'node_modules/eslint-friendly-formatter' .",
-		"lintFix": "node_modules/eslint/bin/eslint.js --ext .js --ext .jsx --format 'node_modules/eslint-friendly-formatter' --fix .",
-		"test": "grunt test",
-		"testClient": "karma start",
-		"testServer": "grunt test:server",
-		"testIntegration": "grunt test:integration",
-		"update-webdriver": "node node_modules/grunt-protractor-runner/node_modules/protractor/bin/webdriver-manager update"
-	},
 	"dependencies": {
 		"ag-grid": "~4.0.5",
 		"ag-grid-enterprise": "~4.0.7",
@@ -53,11 +37,13 @@
 		"rc-tabs": "~5.5.0",
 		"react": "0.14.3",
 		"react-addons": "^0.9.0",
+        "react-addons-css-transition-group": "0.14.0",
 		"react-bootstrap": "^0.27.0",
 		"react-cookie": "^0.3.4",
 		"react-dom": "0.14.0",
 		"react-intl": "1.2.0",
 		"react-loader": "^2.0.0",
+        "react-notifications": "^1.2.0",
 		"react-router": "1.0.2",
 		"react-swipeable": "3.1.0",
 		"request": "^2.53.0",
@@ -170,5 +156,21 @@
 	"engines": {
 		"node": ">=0.10.0"
 	},
+  "scripts": {
+    "webpack": "webpack --config webpack.config.js",
+    "watch": "webpack --config webpack.config.js --watch",
+    "hotload": "node_modules/grunt-nodemon/node_modules/.bin/nodemon --watch server --watch common server/app.js",
+    "clean": "rm -r client-react/dist",
+    "start": "node server/app.js",
+    "mockServer": "node_modules/grunt-nodemon/node_modules/.bin/nodemon --watch server/mockserver -e js,json server/mockserver/mocker.js",
+    "prodStart": "node dist/server/app.js",
+    "lint": "node_modules/eslint/bin/eslint.js --ext .js --ext .jsx --format 'node_modules/eslint-friendly-formatter' .",
+    "lintFix": "node_modules/eslint/bin/eslint.js --ext .js --ext .jsx --format 'node_modules/eslint-friendly-formatter' --fix .",
+    "test": "grunt test",
+    "testClient": "karma start",
+    "testServer": "grunt test:server",
+    "testIntegration": "grunt test:integration",
+    "update-webdriver": "node node_modules/grunt-protractor-runner/node_modules/protractor/bin/webdriver-manager update"
+  },
 	"private": true
 }

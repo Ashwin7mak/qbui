@@ -4,7 +4,8 @@ import GriddleTable  from '../../../components/dataTable/griddleTable/griddleTab
 import CardViewList from '../../../components/dataTable/cardView/cardViewList';
 import AGGrid  from '../../../components/dataTable/agGrid/agGrid';
 import {reactCellRendererFactory} from 'ag-grid-react';
-import {DateFormatter, NumericFormatter}  from '../../../components/dataTable/griddleTable/formatters';
+import {DateFormatter, NumericFormatter, TextFormatter}  from '../../../components/dataTable/agGrid/formatters';
+
 import ReportActions from '../../actions/reportActions';
 import Fluxxor from 'fluxxor';
 
@@ -15,6 +16,9 @@ const resultsPerPage = 1000; //assume that this is the constant number of record
 let ReportContent = React.createClass({
     mixins: [FluxMixin],
 
+    contextTypes: {
+        history: React.PropTypes.object
+    },
     getInitialState: function() {
         return {
             showSelectionColumn: false
@@ -39,30 +43,37 @@ let ReportContent = React.createClass({
         if (!columns) {
             columns = this.props.reportData.data.columns;
         }
+
+
         if (columns) {
-            var columnsData = columns.map((obj) => {
+            let columnsData = columns.map((obj, index) => {
                 obj.headerClass = "gridHeaderCell";
                 obj.cellClass = "gridCell";
                 obj.suppressResize = true;
                 obj.minWidth = 100;
+                obj.addEditActions = (index === 1); // EMPOWER: add the row edit component to column 1
+
                 if (obj.datatypeAttributes) {
                     var datatypeAttributes = obj.datatypeAttributes;
                     for (var attr in datatypeAttributes) {
                         switch (attr) {
-                        case 'type':
-                            {
-                                switch (datatypeAttributes[attr]) {
-                                case "NUMERIC" :
-                                    this.setCSSClass_helper(obj, "AlignRight");
-                                    obj.cellRenderer = reactCellRendererFactory(NumericFormatter);
-                                    obj.customComponent = NumericFormatter;
-                                    break;
-                                case "DATE" :
-                                    obj.cellRenderer = reactCellRendererFactory(DateFormatter);
-                                    obj.customComponent = DateFormatter;
-                                    break;
-                                }
+                        case 'type': {
+                            switch (datatypeAttributes[attr]) {
+                            case "NUMERIC" :
+                                this.setCSSClass_helper(obj, "AlignRight");
+                                obj.cellRenderer = reactCellRendererFactory(NumericFormatter);
+                                obj.customComponent = NumericFormatter;
+                                break;
+                            case "DATE" :
+                                obj.cellRenderer = reactCellRendererFactory(DateFormatter);
+                                obj.customComponent = DateFormatter;
+                                break;
+                            default:
+                                obj.cellRenderer = reactCellRendererFactory(TextFormatter);
+                                obj.customComponent = TextFormatter;
+                                break;
                             }
+                        }
                         }
                     }
 
@@ -91,6 +102,19 @@ let ReportContent = React.createClass({
         }
         return [];
     },
+
+    // row was clicked once, navigate to record
+    openRow(data) {
+
+        const appId = this.props.appId;
+        const tblId = this.props.tblId;
+        var recId = data[this.props.uniqueIdentifier];
+        //create the link we want to send the user to and then send them on their way
+        const link = `/app/${appId}/table/${tblId}/record/${recId}`;
+
+        this.props.history.pushState(null, link);
+    },
+
     /**
      * when we scroll the grid wrapper, hide the add record
      * icon for a bit
@@ -116,10 +140,13 @@ let ReportContent = React.createClass({
 
     },
 
+
+
     /* TODO: paging component that has "next and previous tied to callbacks from the store to get new data set*/
     render: function() {
         let isTouch = this.context.touch;
         let columnsDef = this.getColumnProps();
+
         let recordCount = 0;
         if (this.props.reportData.data) {
             recordCount = this.props.reportData.data.filteredRecordsCount ? this.props.reportData.data.filteredRecordsCount : this.props.reportData.data.recordsCount;
@@ -141,6 +168,7 @@ let ReportContent = React.createClass({
                                     pageActions={this.props.pageActions}
                                     selectionActions={<ReportActions />}
                                     onScroll={this.onScrollRecords}
+                                    onRowClick={this.openRow}
                                     showGrouping={this.props.reportData.data.hasGrouping}
                                     recordCount={recordCount}
                                     groupLevel={this.props.reportData.data ? this.props.reportData.data.groupLevel : 0}
@@ -153,7 +181,8 @@ let ReportContent = React.createClass({
                                 uniqueIdentifier="Record ID#"
                                 reportHeader={this.props.reportHeader}
                                 selectionActions={<ReportActions />}
-                                onScroll={this.onScrollRecords}/>
+                                onScroll={this.onScrollRecords}
+                                selectedRows={this.props.selectedRows}/>
                         }
                     </div>
                 }

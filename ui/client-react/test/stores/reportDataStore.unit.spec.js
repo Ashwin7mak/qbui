@@ -122,6 +122,7 @@ describe('Test ReportData Store', () => {
         let payload = {
             metaData: {
                 name: 'report_name',
+                fids: [],
                 sortList: "1:V"
             },
             recordData: {

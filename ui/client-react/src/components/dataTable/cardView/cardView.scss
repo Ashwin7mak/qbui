@@ -34,6 +34,7 @@ $chevron_closed_icon: url('../../../../src/assets/images/chevron_closed.svg');
     padding: 5px 5px 15px 10px;
     background: $card-expanded-background-color;
     margin-bottom: 5px;
+    overflow:hidden;
     cursor:pointer;
     .card {
         flex: 1;

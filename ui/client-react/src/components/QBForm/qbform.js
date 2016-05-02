@@ -63,7 +63,7 @@ class QBForm extends React.Component {
         }
         rows.push(this.createRow(fields));
         return (
-            <QBPanel title={curSection.title} key={curSection.id} isOpen={false} panelNum={curSection.id}>
+            <QBPanel title={curSection.title} key={curSection.id} isOpen={true} panelNum={curSection.id}>
                 {rows}
             </QBPanel>
         );

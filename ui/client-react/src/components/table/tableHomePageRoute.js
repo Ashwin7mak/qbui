@@ -62,8 +62,7 @@ let TableHomePageRoute = React.createClass({
     getStageHeadline() {
         return (this.props.selectedTable &&
             <div className="stageHeadline">
-                <QBicon icon="favicon"/>
-                <h3 className="tableName">{this.props.selectedTable.name}</h3>
+                <h3 className="tableName breadCrumbs"><QBicon icon="favicon"/> {this.props.selectedTable.name}</h3>
             </div>
         );
     },

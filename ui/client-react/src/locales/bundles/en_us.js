@@ -92,7 +92,7 @@ export default {
             newReport: "New",
             organizeReports: "Organize",
             recordCount : "{recordCount} {nameForRecords} ",
-            searchPlaceHolder:  "Search these {nameForRecords} ...",
+            searchPlaceHolder:  "Search these",
             sortAndGroup : {
                 by: "by",
                 chooseFields :  {
