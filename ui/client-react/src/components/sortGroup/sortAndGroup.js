@@ -54,6 +54,10 @@ const SortAndGroup = React.createClass({
          *  and a function to call when a sort group options are applied
          **/
         reportData: React.PropTypes.object,
+        appId: React.PropTypes.string,
+        tblId: React.PropTypes.string,
+        rptId: React.PropTypes.string,
+        filter: React.PropTypes.object,
         fields:  React.PropTypes.object,
         onSortGroupApply : React.PropTypes.func,
         onMenuEnter : React.PropTypes.func,
