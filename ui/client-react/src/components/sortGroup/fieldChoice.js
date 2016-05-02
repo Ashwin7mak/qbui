@@ -34,7 +34,7 @@ const FieldChoice = React.createClass({
 
                         <span className="fieldName">{name}</span>
                     </div>
-                    <div>
+                    <div className="fieldChoiceActions">
                         { order &&
                             <span className={"sortOrderIcon " + order} tabIndex="0"
                                   onClick={() => this.props.onSetOrder(this.props.type, this.props.index,

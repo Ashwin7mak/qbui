@@ -26,7 +26,7 @@ const FieldChoiceList = React.createClass({
         // 'then' is added on all but first (0 index)
         let listOfSelected = this.props.fields &&
             this.props.fields.map((field, index) =>  {
-                return (<FieldChoice type={this.props.type} key={this.props.type + field.name + index} field={field}
+                return (<FieldChoice type={this.props.type} key={this.props.type + '_fid' + field.id + '_' + field.name + '_' + index} field={field}
                                      then={!!index} index={index} onSetOrder={this.props.onSetOrder}
                                      onRemoveField={this.props.onRemoveField}
                         />);
