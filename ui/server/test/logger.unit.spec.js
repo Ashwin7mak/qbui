@@ -43,6 +43,47 @@ describe('Validate Logger', function() {
 
     });
 
+    describe('validate the performance logger help functions', function() {
+
+        var logger;
+        it('validate perf messages are logged', function(done) {
+            var logConfig = {
+                name  : 'qbse-local',
+                level : 'debug'
+            };
+            logger = initLoggerWithConfig(logConfig);
+
+            var stub = sinon.stub(logger, 'info');
+
+            logger.perf.start();
+            logger.perf.stop('some message and skip init', true);
+            logger.perf.stop('some message');
+            logger.perf.stop('some message not logged');
+
+            assert(stub.calledWith(sinon.match.any, 'PERF:'));
+            assert(stub.calledTwice);
+
+            stub.restore();
+            done();
+        });
+
+        it('validate perf message function without setting start timer', function(done) {
+            var logConfig = {
+                name  : 'qbse-local',
+                level : 'debug'
+            };
+            logger = initLoggerWithConfig(logConfig);
+
+            var stub = sinon.stub(logger, 'info');
+            logger.perf.stop('some message');
+
+            assert(!stub.called);
+
+            stub.restore();
+            done();
+        });
+    });
+
     describe('validate the default configuration of the logger', function() {
 
         it('validate a default logger is configured', function(done) {

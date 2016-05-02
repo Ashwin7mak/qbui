@@ -104,6 +104,29 @@
                 appLogger = logger.child({
                     // custom logger attributes go here..
                 });
+
+                appLogger.perf = {
+
+                    timer: null,
+
+                    start: function() {
+                        this.timer = new Date();
+                    },
+
+                    stop: function(msg, skipTimerInit) {
+                        if (this.timer && this.timer instanceof Date) {
+                            let ms = new Date().getTime() - this.timer.getTime();
+
+                            //  log as info message with a prefix for easier identification
+                            appLogger.info('%s ' + (msg ? msg : '') + ms + 'ms', 'PERF:');
+
+                            //  initialize the timer unless optional skipTimerInit is set to true
+                            if (skipTimerInit !== true) {
+                                this.timer = null;
+                            }
+                        }
+                    }
+                };
             }
 
             return appLogger;
