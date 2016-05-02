@@ -17,7 +17,7 @@ const FieldChoiceList = React.createClass({
 
         // if all the fields id have been used for sorting or grouping
         // don't allow adding a new one
-        if (!this.props.fieldChoiceList.length && showMore) {
+        if (showMore && (!this.props.fieldChoiceList || !this.props.fieldChoiceList.length)) {
             showMore = false;
         }
 
@@ -39,7 +39,7 @@ const FieldChoiceList = React.createClass({
         return (
             <div>
                 {listOfSelected}
-                {showMore ? <FieldChoice type={this.props.type} then={notOnlyOne}
+                {showMore && this.props.onShowFields ? <FieldChoice type={this.props.type} then={notOnlyOne}
                                     onShowFields={(type) => this.props.onShowFields(this.props.type)}/> :
                     null}
             </div>

@@ -373,8 +373,9 @@ const SortAndGroup = React.createClass({
                     answer.push(sortItem);
                 }
             });
-        } else if (this.props.reportData.data && this.props.reportData.data.sortFids &&
-                   this.props.reportData.data.sortFids.length) {
+        } else if (this.props.reportData &&
+                    this.props.reportData.data && this.props.reportData.data.sortFids &&
+                    this.props.reportData.data.sortFids.length) {
             // .. or get the sort info from the record data props
             this.props.reportData.data.sortFids.map((originalVal) => {
                 let sortItem = this.parseSortItem(originalVal, fields);
@@ -382,9 +383,10 @@ const SortAndGroup = React.createClass({
                     answer.push(sortItem);
                 }
             });
-        } else if (this.props.reportData.data && this.props.reportData.data.originalMetaData &&
-            this.props.reportData.data.originalMetaData.sortList &&
-            this.props.reportData.data.originalMetaData.sortList.length) {
+        } else if (this.props.reportData &&
+                this.props.reportData.data && this.props.reportData.data.originalMetaData &&
+                this.props.reportData.data.originalMetaData.sortList &&
+                this.props.reportData.data.originalMetaData.sortList.length) {
             // .. or get the sort info from the original report meta data
             let sorts = ReportUtils.getSortFidsOnly(this.props.reportData.data.originalMetaData.sortList);
             sorts.map((originalVal) => {
@@ -423,7 +425,8 @@ const SortAndGroup = React.createClass({
                     answer.push(groupItem);
                 }
             });
-        } else if (this.props.reportData.data.groupEls && this.props.reportData.data.groupEls.length) {
+        } else if (this.props.reportData && this.props.reportData.data &&
+                   this.props.reportData.data.groupEls && this.props.reportData.data.groupEls.length) {
             // get the group info from the report data
             this.props.reportData.data.groupEls.map((fidInfo) => {
                 let groupItem = this.parseGroupItem(fidInfo, fields);
@@ -431,9 +434,10 @@ const SortAndGroup = React.createClass({
                     answer.push(groupItem);
                 }
             });
-        } else if (this.props.reportData.data && this.props.reportData.data.originalMetaData &&
-            this.props.reportData.data.originalMetaData.sortList &&
-            this.props.reportData.data.originalMetaData.sortList.length) {
+        } else if (this.props.reportData &&
+                    this.props.reportData.data && this.props.reportData.data.originalMetaData &&
+                    this.props.reportData.data.originalMetaData.sortList &&
+                    this.props.reportData.data.originalMetaData.sortList.length) {
             // get the group info from the original meta data
             this.props.reportData.data.groupEls.map((fidInfo) => {
                 let groupItem = this.parseGroupItem(fidInfo, fields);

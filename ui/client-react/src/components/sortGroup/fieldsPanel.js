@@ -20,8 +20,12 @@ const FieldsPanel = React.createClass({
 
 
     selectField(type, field) {
-        this.props.onSelectField(type, field);
-        this.props.onHideFields();
+        if (this.props.onSelectField) {
+            this.props.onSelectField(type, field);
+        }
+        if (this.props.onHideFields) {
+            this.props.onHideFields();
+        }
     },
 
     renderField(field, selected, notInReport) {
@@ -44,9 +48,10 @@ const FieldsPanel = React.createClass({
                     return this.renderField(field, this.isSelected(field.id, list), true);
                 });
             } else {
-                restOfFields = (<ListGroupItem className="moreFields"><span onClick={()=>this.props.showMoreFields(type)} >
-                                    <I18nMessage message={"report.sortAndGroup.moreFields"}/>
-                                </span></ListGroupItem>);
+                restOfFields = (<ListGroupItem className="moreFields" onClick={this.props.showMoreFields}>
+                                    <span>
+                                        <I18nMessage message={"report.sortAndGroup.moreFields"}/>
+                                    </span></ListGroupItem>);
             }
         }
 

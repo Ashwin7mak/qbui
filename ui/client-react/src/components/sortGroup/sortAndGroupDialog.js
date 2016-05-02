@@ -37,7 +37,9 @@ var SortAndGroupDialog = React.createClass({
     },
 
     handleClickOutside(evt) {
-        this.props.handleClickOutside(evt);
+        if (this.props.handleClickOutside(evt)) {
+            this.props.handleClickOutside(evt);
+        }
     },
 
     /*
@@ -122,7 +124,8 @@ var SortAndGroupDialog = React.createClass({
                                      showFields={this.props.showFields}
                                      fields={this.props.fields}
                                      fieldChoiceList={this.props.fieldChoiceList}
-                                     reportColumns={this.props.reportData.data.columns}
+                                     reportColumns={this.props.reportData && this.props.reportData.data?
+                                        this.props.reportData.data.columns :  null}
                                      fieldsLoading={this.props.fieldsLoading}
                                      sortByFields={this.props.sortByFields}
                                      groupByFields={this.props.groupByFields}
