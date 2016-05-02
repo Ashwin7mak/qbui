@@ -118,7 +118,7 @@
                             let ms = new Date().getTime() - this.timer.getTime();
 
                             //  log as info message with a prefix for easier identification
-                            appLogger.info('%s ' + (msg ? msg : '') + ms + 'ms', 'PERF:');
+                            appLogger.info('%s ' + (msg ? msg + ' ' : '') + ms + 'ms', 'PERF:');
 
                             //  initialize the timer unless optional skipTimerInit is set to true
                             if (skipTimerInit !== true) {

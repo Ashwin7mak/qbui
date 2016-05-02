@@ -77,7 +77,7 @@
             });
 
             data = groupTheData(groupFields, reportData, 0);
-            log.perf.stop("Build groupBy.gridData array: ");
+            log.perf.stop("Build groupBy.gridData array:");
         }
 
         return data;
@@ -282,7 +282,7 @@
                     fields.forEach((field) => {
                         map.set(field.id, field);
                     });
-                    log.perf.stop("Build map for field grouping: ");
+                    log.perf.stop("Build map for field grouping:");
 
                     let groups = groupList.split(constants.REQUEST_PARAMETER.LIST_DELIMITER);
 
@@ -321,7 +321,7 @@
                             }
                         }
                     });
-                    log.perf.stop("Build groupBy.fields array: ");
+                    log.perf.stop("Build groupBy.fields array:");
 
                     // we have grouping if there are fields in groupBy.fields array.  Set the grouping flag
                     // to true and populate the grid columns and data arrays.
@@ -334,7 +334,7 @@
                                 groupBy.gridColumns.push(field);
                             }
                         });
-                        log.perf.stop("Build groupBy.gridColumns array: ");
+                        log.perf.stop("Build groupBy.gridColumns array:");
 
                         groupBy.hasGrouping = true;
                         groupBy.gridData = createGroupDataGrid(groupBy.fields, fields, records);
