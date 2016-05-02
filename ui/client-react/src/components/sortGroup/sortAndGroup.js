@@ -58,7 +58,7 @@ const SortAndGroup = React.createClass({
         tblId: React.PropTypes.string,
         rptId: React.PropTypes.string,
         filter: React.PropTypes.object,
-        fields:  React.PropTypes.object,
+        fields:  React.PropTypes.object.isRequired,
         onSortGroupApply : React.PropTypes.func,
         onMenuEnter : React.PropTypes.func,
         onMenuExit : React.PropTypes.func

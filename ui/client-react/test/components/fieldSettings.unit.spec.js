@@ -27,16 +27,6 @@ describe('FieldSettings functions', () => {
 
     let component;
 
-
-    let dumpComponent = function(testName) {
-        let node =  ReactDOM.findDOMNode(component);
-        if (testName) {
-            console.log('===' + testName + '===');
-        }
-        console.log(console.log(node.outerHTML) + '\n\n');
-    };
-
-
     beforeEach(() => {
         FieldSettings.__Rewire__('I18nMessage', I18nMessageMock);
         FieldSettings.__Rewire__('FieldChoiceList', MockFieldChoiceList);
