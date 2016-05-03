@@ -78,7 +78,7 @@
             });
 
             data = groupTheData(groupFields, reportData, 0);
-            perfTimer.stopAndLog();
+            perfTimer.log();
         }
 
         return data;
@@ -321,7 +321,7 @@
                             }
                         }
                     });
-                    perfTimer.stopAndLog();
+                    perfTimer.log();
 
                     // we have grouping if there are fields in groupBy.fields array.  Set the grouping flag
                     // to true and populate the grid columns and data arrays.
@@ -334,7 +334,7 @@
                                 groupBy.gridColumns.push(field);
                             }
                         });
-                        perfTimer.stopAndLog();
+                        perfTimer.log();
 
                         groupBy.hasGrouping = true;
                         groupBy.gridData = createGroupDataGrid(groupBy.fields, fields, records);

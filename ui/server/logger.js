@@ -87,7 +87,7 @@
             },
 
             //  log an info message with the elapsed time from when the start function was called
-            stopAndLog: function(skipTimerInit) {
+            log: function(skipTimerInit) {
                 if (timer) {
                     let ms = new Date().getTime() - timer.getTime();
 

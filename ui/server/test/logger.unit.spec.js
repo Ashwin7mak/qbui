@@ -58,9 +58,9 @@ describe('Validate Logger', function() {
             var perfTimer = logger.perf.getTimer('unitTest1');
             perfTimer.start();
 
-            perfTimer.stopAndLog(true);
-            perfTimer.stopAndLog('some message');
-            perfTimer.stopAndLog('some message logged again');
+            perfTimer.log(true);
+            perfTimer.log();
+            perfTimer.log();
 
             assert(stub.calledTwice);
 
@@ -80,9 +80,8 @@ describe('Validate Logger', function() {
             var perfTimer = logger.perf.getTimer('unitTest1');
             perfTimer.start();
 
-            perfTimer.stopAndLog();
-            perfTimer.stopAndLog('some message');
-            perfTimer.stopAndLog('some message not logged');
+            perfTimer.log();
+            perfTimer.log();
 
             assert(stub.calledOnce);
 
@@ -100,7 +99,7 @@ describe('Validate Logger', function() {
             var stub = sinon.stub(logger, 'info');
 
             var perfTimer = logger.perf.getTimer('unitTest1');
-            perfTimer.stopAndLog();
+            perfTimer.log();
 
             assert(!stub.called);
 
@@ -123,11 +122,11 @@ describe('Validate Logger', function() {
             perfTimer1.start();
             perfTimer2.start();
 
-            perfTimer1.stopAndLog();
+            perfTimer1.log();
             perfTimer1.start('unitTest1A');
 
-            perfTimer2.stopAndLog();
-            perfTimer1.stopAndLog();
+            perfTimer2.log();
+            perfTimer1.log();
             assert(stub.calledThrice);
 
             stub.restore();
