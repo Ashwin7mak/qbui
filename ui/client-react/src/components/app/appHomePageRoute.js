@@ -99,7 +99,7 @@ let AppHomePageRoute = React.createClass({
         //    </div>
         //    <div>App Dashboard goes here...</div>
         //</div>);
-        return <div className="imageContainer"><img className="image"/></div>;
+        return <div className="appHomePageImageContainer"><img className="appHomePageImage"/></div>;
     }
 });
 

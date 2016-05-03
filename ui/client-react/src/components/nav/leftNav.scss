@@ -48,14 +48,14 @@ $left-nav-horizontal-icon-border-color: $color32;
 }
 
 .leftNav .link.selected {
-    background-color: $left-nav-hover-bg-hover!important;
+    background-color: $left-nav-hover-bg-hover !important;
     a.leftNavLink {
         color: $selected-table-fg;
     }
     a.right {
         opacity: 1;
         color: $selected-table-fg;
-        border-left: 1px solid $right-icon-separator-color-hover!important;
+        border-left: 1px solid $right-icon-separator-color-hover !important;
     }
 }
 
@@ -369,9 +369,6 @@ div.leftNavTooltip {
                     flex: 0 0 auto;
                 }
             }
-        }
-        > li.link:hover {
-            //background-color: $left-nav-hover-bg;
         }
     }
 
