@@ -5,11 +5,20 @@ $report-group-bg: #fff;
 $report-icon-color: #f87878;
 $report-link-color: #404040;
 
-.reportsContainer {
+.reportsList {
+    display:flex;
+    flex-direction:column;
+    flex:1 1 auto;
+}
 
+.reportsContainer {
+    display:flex;
+    flex-direction:column;
+    flex: 1 1 auto;
     .reportsTop {
         background-color: $search-bar-bg;
         padding:15px 0 15px 16px;
+        flex: 0 0 auto;
 
         input {
             width:220px;
@@ -21,9 +30,10 @@ $report-link-color: #404040;
 }
 
 .reportGroups {
-    margin:16px;
-    max-height:60%;
-
+    flex:1 1 auto;
+    padding:16px;
+    overflow:auto;
+    -webkit-overflow-scrolling: touch;
     .qbPanel {
         width:100%;
     }
