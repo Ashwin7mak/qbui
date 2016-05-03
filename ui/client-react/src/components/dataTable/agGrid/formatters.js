@@ -61,10 +61,17 @@ const CellFormatter = React.createClass({
                 {this.state.value && <I18nDate value={this.state.value}></I18nDate>}
                 </span>;
 
-        default:
+        default: {
+            let val = this.state.value;
+
+            // convert booleans to strings until they have a dedicated renderer/editor
+            if (typeof val === "boolean")
+                val = val.toString();
+
             return <span className="cellData">
-                {this.state.value}
+                {val}
                 </span>;
+        }
         }
     },
 
