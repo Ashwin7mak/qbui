@@ -15,6 +15,9 @@ let logger = new Logger();
 let AppHomePageRoute = React.createClass({
     mixins: [FluxMixin],
 
+    contextTypes: {
+        touch: React.PropTypes.bool
+    },
     selectAppId(appId) {
         let flux = this.getFlux();
         flux.actions.selectAppId(appId);
@@ -83,6 +86,18 @@ let AppHomePageRoute = React.createClass({
             </div>);
     },
     render: function() {
+        let isTouch = this.context.touch;
+        return (
+            isTouch ?
+                <div className="appHomePageContainer">
+                    <div className="appHomePageActionsContainer secondaryBar">
+                        {this.getSecondaryBar()}
+                        {this.getPageActions(2)}
+                    </div>
+                    <div className="appHomePageImageContainer"><img className="appHomePageMobileImage"/></div>
+                </div>:
+                <div className="appHomePageImageContainer"><img className="appHomePageImage"/></div>
+        )
         //return (<div className="appHomePageContainer">
         //    <Stage stageHeadline={this.getStageHeadline()}
         //           pageActions={this.getPageActions(2)}>
@@ -99,7 +114,7 @@ let AppHomePageRoute = React.createClass({
         //    </div>
         //    <div>App Dashboard goes here...</div>
         //</div>);
-        return <div className="appHomePageImageContainer"><img className="appHomePageImage"/></div>;
+
     }
 });
 
