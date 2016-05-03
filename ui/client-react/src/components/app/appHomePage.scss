@@ -17,3 +17,22 @@
         padding: 0 10px;
     }
 }
+
+.appHomePageFillerImage {
+    background: url('./app_homePageR4_1280.png') 0 0 no-repeat;
+    width: 100%;
+    display: block;
+    background-size: contain;
+}
+
+.imageContainer {
+    display: flex;
+    flex: 1 1 auto;
+    overflow: auto;
+}
+
+.image {
+    content: url('./app_homePageR4_1280.png');
+    width: 100%;
+    height: 100%;
+}
