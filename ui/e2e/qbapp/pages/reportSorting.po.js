@@ -394,21 +394,23 @@
         this.verifySelectedSortByFields = function(fieldsToVerify) {
             var self = this;
             self.reportSortByContainer.all(by.className('notEmpty')).then(function (items) {
-                console.log("Items lengt is: "+items/length);
                 for (var i = 0; i < items.length; i++) {
                     items[i].filter(function (elm) {
+                        //verify the prefix
+                        elm(by.className('prefix')).getText().then(function (prefix) {
+                            console.log("Verify prefix is: " + prefix);
+                            if (i === 0) {
+                                expect(prefix).toEqual('by');
+                            } else {
+                                expect(prefix).toEqual('then by');
+                            }
+                        });
                         elm(by.className('fieldName')).getText().then(function (text) {
                             //verify the field names
-                            expect(text).toEqual(fieldsToVerify[i]);
-                        }).then(function () {
-                            //verify the prefix
-                            elm(by.className('prefix')).getText().then(function (prefix) {
-                                if (i === 0) {
-                                    expect(prefix).toEqual('by');
-                                } else {
-                                    expect(prefix).toEqual('then by');
-                                }
-                            });
+                            console.log("Verify field name is: " + text);
+                            for (var j = 0; j < fieldsToVerify.length; j++) {
+                                expect(text).toEqual(fieldsToVerify[j]);
+                            }
                         }).then(function () {
                             //verify the delete button in each non empty field
                             expect(elm(by.className('groupFieldDeleteIcon')).isDisplayed()).toBeTruthy();
@@ -417,7 +419,7 @@
 
                         });
                     });
-                }
+                };
             });
         };
 

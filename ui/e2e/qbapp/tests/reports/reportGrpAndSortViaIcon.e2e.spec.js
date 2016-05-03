@@ -207,7 +207,7 @@
             }
 
             TestCases().forEach(function(testCase) {
-                xit('' + testCase.message, function(done) {
+                it('' + testCase.message, function(done) {
                     //go to report page directly
                     reportServicePage.waitForElement(reportSortingPage.reportSortingGroupingContainer).then(function() {
                         reportServicePage.waitForElementToBeClickable(reportSortingPage.reportSortAndGroupBtn).then(function() {
