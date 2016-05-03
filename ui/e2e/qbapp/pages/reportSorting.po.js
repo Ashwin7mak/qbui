@@ -286,16 +286,11 @@
          */
         this.verifySelectedGroupByFields = function(fieldsToVerify) {
             var self = this;
-            var items = self.reportGroupByContainer.all(by.className('notEmpty'));
-            for (var i = 0; i < fieldsToVerify.length; i++) {
-                items.filter(function(elm) {
-                    elm(by.className('fieldName')).getText().then(function(text) {
-                        //verify the field names
-                        console.log("Verify fied name is: " + text);
-                        expect(text).toEqual(fieldsToVerify[i]);
-                    }).then(function() {
+            self.reportGroupByContainer.all(by.className('notEmpty')).then(function (items) {
+                for (var i = 0; i < items.length; i++) {
+                    items[i].filter(function (elm) {
                         //verify the prefix
-                        elm(by.className('prefix')).getText().then(function(prefix) {
+                        elm(by.className('prefix')).getText().then(function (prefix) {
                             console.log("Verify prefix is: " + prefix);
                             if (i === 0) {
                                 expect(prefix).toEqual('by');
@@ -303,15 +298,63 @@
                                 expect(prefix).toEqual('then by');
                             }
                         });
-                    }).then(function() {
-                        //verify the delete button in each non empty field
-                        expect(elm(by.className('groupFieldDeleteIcon')).isDisplayed()).toBeTruthy();
-                        //verify the sort order button in each non empty field
-                        expect(elm(by.className('sortOrderIcon')).isDisplayed()).toBeTruthy();
+                        elm(by.className('fieldName')).getText().then(function (text) {
+                            //verify the field names
+                            console.log("Verify field name is: " + text);
+                            for (var j = 0; j < fieldsToVerify.length; j++) {
+                                expect(text).toEqual(fieldsToVerify[j]);
+                            }
+                        }).then(function () {
+                            //verify the delete button in each non empty field
+                            expect(elm(by.className('groupFieldDeleteIcon')).isDisplayed()).toBeTruthy();
+                            //verify the sort order button in each non empty field
+                            expect(elm(by.className('sortOrderIcon')).isDisplayed()).toBeTruthy();
 
+                        });
                     });
+                };
+            });
+        };
+
+        /*
+         * Select sortByIcon in groupBy
+         */
+        this.selectSortByIconInGroupBy = function(field) {
+            var self = this;
+            return reportServicePage.waitForElement(self.reportGroupByContainer).then(function() {
+                self.reportGroupByContainer.all(by.className('notEmpty')).then(function (items) {
+                    console.log("items length is: " + items.length);
+                    for (var i = 0; i < items.length; i++) {
+                        items[i].element(by.className('fieldName')).getText().then(function (text) {
+                            if (text === field) {
+                                return element(by.className('sortOrderIcon')).click();
+                                return reportServicePage.waitForElement(element(by.className('down')));
+                            }
+                        });
+                    };
                 });
-            }
+            });
+        };
+
+        /*
+         * Delete sortBy fields
+         */
+        this.deleteFieldsInGroupBy = function(field) {
+            var self = this;
+            return reportServicePage.waitForElement(self.reportGroupByContainer).then(function() {
+                self.reportGroupByContainer.all(by.className('notEmpty')).then(function (items) {
+                    console.log("items length is: " + items.length);
+                    for (var i = 0; i < items.length; i++) {
+                        items[i].element(by.className('fieldName')).getText().then(function (text) {
+                            if (text === field) {
+                                console.log("Verify text name is: " + text);
+                                return element(by.className('groupFieldDeleteIcon')).click();
+                                expect(element(by.className('fieldName')).isPresent()).toBeFalsy();
+                            }
+                        });
+                    };
+                });
+            });
         };
 
         /*
@@ -350,31 +393,78 @@
          */
         this.verifySelectedSortByFields = function(fieldsToVerify) {
             var self = this;
-            var items = self.reportSortByContainer.all(by.className('notEmpty'));
-            for (var i = 0; i < fieldsToVerify.length; i++) {
-                items.filter(function(elm) {
-                    elm(by.className('fieldName')).getText().then(function(text) {
-                        //verify the field names
-                        expect(text).toEqual(fieldsToVerify[i]);
-                    }).then(function() {
-                        //verify the prefix
-                        elm(by.className('prefix')).getText().then(function(prefix) {
-                            if (i === 0) {
-                                expect(prefix).toEqual('by');
-                            } else {
-                                expect(prefix).toEqual('then by');
+            self.reportSortByContainer.all(by.className('notEmpty')).then(function (items) {
+                console.log("Items lengt is: "+items/length);
+                for (var i = 0; i < items.length; i++) {
+                    items[i].filter(function (elm) {
+                        elm(by.className('fieldName')).getText().then(function (text) {
+                            //verify the field names
+                            expect(text).toEqual(fieldsToVerify[i]);
+                        }).then(function () {
+                            //verify the prefix
+                            elm(by.className('prefix')).getText().then(function (prefix) {
+                                if (i === 0) {
+                                    expect(prefix).toEqual('by');
+                                } else {
+                                    expect(prefix).toEqual('then by');
+                                }
+                            });
+                        }).then(function () {
+                            //verify the delete button in each non empty field
+                            expect(elm(by.className('groupFieldDeleteIcon')).isDisplayed()).toBeTruthy();
+                            //verify the sort order button in each non empty field
+                            expect(elm(by.className('sortOrderIcon')).isDisplayed()).toBeTruthy();
+
+                        });
+                    });
+                }
+            });
+        };
+
+        /*
+         * Select sortByIcon in sortBy
+         */
+        this.selectSortByIconInSortBy = function(field) {
+            var self = this;
+            return reportServicePage.waitForElement(self.reportSortByContainer).then(function() {
+                self.reportSortByContainer.all(by.className('notEmpty')).then(function (items) {
+                    console.log("items length is: " + items.length);
+                    for (var i = 0; i < items.length; i++) {
+                        items[i].element(by.className('fieldName')).getText().then(function (text) {
+                            if (text === field) {
+                                console.log("Verify text name is: " + text);
+                                return element(by.className('sortOrderIcon')).click();
+                                return reportServicePage.waitForElement(element(by.className('down')));
                             }
                         });
-                    }).then(function() {
-                        //verify the delete button in each non empty field
-                        expect(elm(by.className('groupFieldDeleteIcon')).isDisplayed()).toBeTruthy();
-                        //verify the sort order button in each non empty field
-                        expect(elm(by.className('sortOrderIcon')).isDisplayed()).toBeTruthy();
-
-                    });
+                    };
                 });
-            }
+            });
         };
+
+        /*
+         * Delete sortBy fields
+         */
+        this.deleteFieldsInSortBy = function(field) {
+            var self = this;
+            return reportServicePage.waitForElement(self.reportSortByContainer).then(function() {
+                self.reportSortByContainer.all(by.className('notEmpty')).then(function (items) {
+                    console.log("items length is: " + items.length);
+                    for (var i = 0; i < items.length; i++) {
+                        items[i].element(by.className('fieldName')).getText().then(function (text) {
+                            if (text === field) {
+                                console.log("Verify text name is: " + text);
+                                return element(by.className('groupFieldDeleteIcon')).click();
+                                expect(element(by.className('fieldName')).isPresent()).toBeFalsy();
+                            }
+                        });
+                    };
+                });
+            });
+        };
+
+
+
     };
     ReportSortingPage.prototype = e2ePageBase;
     module.exports = ReportSortingPage;
