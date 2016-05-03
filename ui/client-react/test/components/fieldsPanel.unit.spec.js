@@ -173,7 +173,7 @@ describe('FieldsPanel functions', () => {
     it('test render mocklist  ', () => {
         component = TestUtils.renderIntoDocument(<FieldsPanel/>);
         //expect(TestUtils.isCompositeComponent(component)).toBeTruthy();
-        let mockComponent = component.renderMockList();
+        let mockComponent = component.renderMockList(13);
         expect(mockComponent.props.children.length).toBe(13);
     });
 });

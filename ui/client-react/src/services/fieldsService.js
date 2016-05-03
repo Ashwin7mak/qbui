@@ -1,6 +1,10 @@
 import constants from './constants';
 import BaseService from './baseService';
 
+/**
+ * Gets all the fields in an app/table via the api
+ * also has get for specific field id from a app/table
+ */
 class FieldsService extends BaseService {
 
     constructor() {

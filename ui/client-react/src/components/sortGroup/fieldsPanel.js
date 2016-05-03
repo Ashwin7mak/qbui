@@ -10,6 +10,16 @@ import './sortAndGroup.scss';
 
 let logger = new Logger();
 
+/**
+ * Renders a panel showing a list of field names, when one is clicked on the panel closes and the
+ * onSelectField callback is called if specified, also then calls the onHideFields callback
+ * allowing the user to click to select a field at a time
+ *
+ * The list will show the fields in the fieldChoiceList property that are not in either the groupByFields
+ * nor sortByFields list,
+ *
+ * @type {ClassicComponentClass<P>}
+ */
 const FieldsPanel = React.createClass({
 
     isSelected(id, list) {
@@ -20,7 +30,7 @@ const FieldsPanel = React.createClass({
 
 
     selectField(type, field) {
-        if (this.props.onSelectField) {
+        if (this.props.onSelectField && field) {
             this.props.onSelectField(type, field);
         }
         if (this.props.onHideFields) {
@@ -67,24 +77,20 @@ const FieldsPanel = React.createClass({
             );
     },
 
-    renderMockList() {
+    // for mocking data and seeing edge cases of renders
+    // add ?mockSort=true to the url to use mockSort data
+    renderMockList(count) {
+        function oneMockItem(owner, num) {
+            return (<ListGroupItem key={num} onClick={() => owner.selectField()}>Item {num}</ListGroupItem>);
+        }
+
+        let items = [];
+        for (let i = 1; i <= count; i++) {
+            items.push(oneMockItem(this, i));
+        }
         return (
-            <ListGroup>
-                <ListGroupItem>Item 1</ListGroupItem>
-                <ListGroupItem>Item 2</ListGroupItem>
-                <ListGroupItem>Item 3</ListGroupItem>
-                <ListGroupItem>Item 4</ListGroupItem>
-                <ListGroupItem>Item 5</ListGroupItem>
-                {/* */}
-                <ListGroupItem>Item 6</ListGroupItem>
-                <ListGroupItem>Item 7</ListGroupItem>
-                <ListGroupItem>Item 8</ListGroupItem>
-                <ListGroupItem>Item 9</ListGroupItem>
-                <ListGroupItem>Item 10</ListGroupItem>
-                <ListGroupItem>Item 11</ListGroupItem>
-                <ListGroupItem>Item 12</ListGroupItem>
-                <ListGroupItem>...</ListGroupItem>
-            </ListGroup>);
+            <ListGroup>{items}</ListGroup>
+           );
     },
 
     getFieldsInReportOrder(choicesList, usedInReport) {
@@ -129,7 +135,7 @@ const FieldsPanel = React.createClass({
                 </div>
                 {(
                     (window.location.search.includes('mockSort')) ?
-                        this.renderMockList() :
+                        this.renderMockList(12) :
                         this.renderList(orderList, currentList, this.props.fieldsForType)
                 )}
             </Panel> :

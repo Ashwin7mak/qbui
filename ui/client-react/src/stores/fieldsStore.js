@@ -4,6 +4,11 @@ import Fluxxor from 'fluxxor';
 import Logger from '../utils/logger';
 var logger = new Logger();
 
+
+/**
+ * FieldStore keeps the list of fields in a table since the sort and group feature (and others later) allow selecting a field that is not in the report for sorting/grouping.
+ * So we need to be able to access all the fields for the table. This store provide it.
+ */
 let FieldsStore = Fluxxor.createStore({
 
     initialize: function() {

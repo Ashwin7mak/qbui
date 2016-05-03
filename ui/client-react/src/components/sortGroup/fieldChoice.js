@@ -10,6 +10,13 @@ import './sortAndGroup.scss';
 
 let logger = new Logger();
 
+/**
+ * Renders an field entry in the sort and group popover used for either sort of group
+ * shows 1 field if any and action buttons to set ordering and button for delete
+ * if there is no field there is an action button to bring up the field select panel to add a field
+ *
+ * @type {ClassicComponentClass<P>}
+ */
 const FieldChoice = React.createClass({
     render() {
         let hasField = !!this.props.field;

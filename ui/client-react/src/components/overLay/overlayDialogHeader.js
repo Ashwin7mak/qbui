@@ -9,6 +9,12 @@ import './overlay.scss';
 let FluxMixin = Fluxxor.FluxMixin(React);
 let StoreWatchMixin = Fluxxor.StoreWatchMixin;
 
+
+/**
+ * Component for rendering the actions of a popover with apply/close/cancel
+ * layout for small and large/medium size form factors
+ * @type {ClassicComponentClass<P>}
+ */
 var OverlayDialogHeader = React.createClass({
 
     renderTitle() {

@@ -152,10 +152,8 @@ const SortAndGroup = React.createClass({
                 sortGroupString += sortList;
             }
 
-            if (sortGroupString.length) {
-                overrideParams[query.SORT_LIST_PARAM] = sortGroupString;
-                overrideParams[query.GLIST_PARAM] = sortGroupString;
-            }
+            overrideParams[query.SORT_LIST_PARAM] = sortGroupString;
+            overrideParams[query.GLIST_PARAM] = sortGroupString;
 
             flux.actions.getFilteredRecords(this.props.appId,
                 this.props.tblId,
@@ -378,8 +376,7 @@ const SortAndGroup = React.createClass({
                 }
             });
         } else if (this.props.reportData &&
-                    this.props.reportData.data && this.props.reportData.data.sortFids &&
-                    this.props.reportData.data.sortFids.length) {
+                    this.props.reportData.data && this.props.reportData.data.sortFids) {
             // .. or get the sort info from the record data props
             this.props.reportData.data.sortFids.map((originalVal) => {
                 let sortItem = this.parseSortItem(originalVal, fields);
@@ -389,8 +386,7 @@ const SortAndGroup = React.createClass({
             });
         } else if (this.props.reportData &&
                 this.props.reportData.data && this.props.reportData.data.originalMetaData &&
-                this.props.reportData.data.originalMetaData.sortList &&
-                this.props.reportData.data.originalMetaData.sortList.length) {
+                this.props.reportData.data.originalMetaData.sortList) {
             // .. or get the sort info from the original report meta data
             let sorts = ReportUtils.getSortFidsOnly(this.props.reportData.data.originalMetaData.sortList);
             sorts.map((originalVal) => {
@@ -430,7 +426,7 @@ const SortAndGroup = React.createClass({
                 }
             });
         } else if (this.props.reportData && this.props.reportData.data &&
-                   this.props.reportData.data.groupEls && this.props.reportData.data.groupEls.length) {
+                   this.props.reportData.data.groupEls) {
             // get the group info from the report data
             this.props.reportData.data.groupEls.map((fidInfo) => {
                 let groupItem = this.parseGroupItem(fidInfo, fields);
@@ -440,10 +436,9 @@ const SortAndGroup = React.createClass({
             });
         } else if (this.props.reportData &&
                     this.props.reportData.data && this.props.reportData.data.originalMetaData &&
-                    this.props.reportData.data.originalMetaData.sortList &&
-                    this.props.reportData.data.originalMetaData.sortList.length) {
+                    this.props.reportData.data.originalMetaData.sortList) {
             // get the group info from the original meta data
-            this.props.reportData.data.groupEls.map((fidInfo) => {
+            this.props.reportData.data.originalMetaData.sortList.map((fidInfo) => {
                 let groupItem = this.parseGroupItem(fidInfo, fields);
                 if (groupItem) {
                     answer.push(groupItem);
@@ -483,7 +478,7 @@ const SortAndGroup = React.createClass({
                 {/* options shown when icon clicked */}
                 <Overlay container={this} placement="bottom"
                          show={this.state.show}
-                         onClose={() => this.hide()}
+                         onClose={this.hide}
                          onEntering={this.props.onMenuEnter} onExited={this.props.onMenuExit} >
                                 <SortAndGroupDialog  show={this.state.show}
                                                             fields={fields}
@@ -496,16 +491,16 @@ const SortAndGroup = React.createClass({
                                                             dirty={this.state.dirty}
                                                             reportData={this.props.reportData}
                                                             showNotVisible={this.state.showNotVisible}
-                                                            showMoreFields={(type) => this.showMoreFields(type)}
-                                                            onShowFields={(type) => this.showFields(type)}
-                                                            onHideFields={() => this.hideFields()}
-                                                            onSelectField={(type, field) => this.handleAddField(type, field)}
-                                                            onRemoveField={(type, index, fieldId) => this.handleRemoveField(type, index, fieldId)}
+                                                            showMoreFields={this.showMoreFields}
+                                                            onShowFields={this.showFields}
+                                                            onHideFields={this.hideFields}
+                                                            onSelectField={this.handleAddField}
+                                                            onRemoveField={this.handleRemoveField}
                                                             onSetOrder={this.handleSetOrder}
                                                             onReset={this.resetAndHide}
-                                                            onApplyChanges={() => this.applyAndHide()}
-                                                            handleClickOutside={(evt) => this.handleClickOutside(evt)}
-                                                            onClose={() => this.hide()}/>
+                                                            onApplyChanges={this.applyAndHide}
+                                                            handleClickOutside={this.handleClickOutside}
+                                                            onClose={this.hide}/>
                 </Overlay>
             </div>
         );

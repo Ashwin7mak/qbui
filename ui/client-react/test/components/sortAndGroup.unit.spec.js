@@ -50,4 +50,14 @@ describe('SortAndGroup functions', () => {
 
     });
 
+    it('test click sortButtonSpan button', () => {
+        component = TestUtils.renderIntoDocument(<SortAndGroup flux={flux}/>);
+        let sortButtonSpan = TestUtils.scryRenderedDOMComponentsWithClass(component, "sortButtonSpan");
+        expect(sortButtonSpan.length).toEqual(1);
+        TestUtils.Simulate.click(sortButtonSpan[0]);
+        expect(component.state.show).toBeTruthy();
+        TestUtils.Simulate.click(sortButtonSpan[0]);
+        expect(component.state.show).toBeFalsy();
+    })
+
 });

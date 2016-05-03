@@ -129,7 +129,7 @@ var FacetsList = React.createClass({
                 handleSelectValue: this.props.onFacetSelect,
                 handleToggleCollapse: this.props.handleToggleCollapse,
                 handleClearFieldSelects: this.props.onFacetClearFieldSelects,
-                handleRevealMore: this.props.handleRevealMore,
+                handleRevealMore: this.props.handleRevealMore
             };
 
             if (this.props.selectedValues && this.props.selectedValues.getFieldSelections) {

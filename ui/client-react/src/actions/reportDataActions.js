@@ -176,7 +176,7 @@ let reportDataActions = {
             if (reportMetaData && reportMetaData.data) {
                 overrideQueryParams = overrideQueryParams || {};
 
-                if (overrideQueryParams[query.COLUMNS_PARAM]) {
+                if (overrideQueryParams.hasOwnProperty(query.COLUMNS_PARAM)) {
                     queryParams[query.COLUMNS_PARAM] = overrideQueryParams[query.COLUMNS_PARAM];
                 } else {
                     if (reportMetaData.data && reportMetaData.data.fids) {
@@ -193,7 +193,7 @@ let reportDataActions = {
                 //  NOTE: the optional gList parameter is used by the node layer only;  it is ignored on the api server.
                 //
                 let groupList = '';
-                if (overrideQueryParams[query.SORT_LIST_PARAM]) {
+                if (overrideQueryParams.hasOwnProperty(query.SORT_LIST_PARAM)) {
                     let sortList = ReportUtils.getSortFids(overrideQueryParams[query.SORT_LIST_PARAM]);
                     queryParams[query.SORT_LIST_PARAM] = ReportUtils.getSortListString(sortList);
                     groupList = overrideQueryParams[query.SORT_LIST_PARAM];
@@ -208,7 +208,7 @@ let reportDataActions = {
                     queryParams[query.GLIST_PARAM] = groupList;
                 }
 
-                if (overrideQueryParams[query.QUERY_PARAM]) {
+                if (overrideQueryParams.hasOwnProperty(query.QUERY_PARAM)) {
                     queryParams[query.QUERY_PARAM] = overrideQueryParams[query.QUERY_PARAM];
                 } else {
                     //  Concatenate facet expression(if any) and search filter(if any) into single query expression

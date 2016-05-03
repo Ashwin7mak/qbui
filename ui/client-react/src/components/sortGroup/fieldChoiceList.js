@@ -9,6 +9,24 @@ import './sortAndGroup.scss';
 
 let logger = new Logger();
 
+/**
+ * Renders a list of field choices(FieldChoice child component) for sort of group settings for the ordering of a table.
+ * It expects the props of the list of field the maxLengh allowed so you can add additional fields to the list up to the
+ * max specified. Each field in the list has its field id and field name.
+ *
+ * The fields available for selection for new items is specified in the fieldChoiceList prop
+ *
+ * The field is presented with prefix then the field name then the action buttons. When there is only one item the field
+ * has the prefix by e.g.:
+ * 'by XXXX'
+ * where XXX is the field name if there are more fields after that they are prefixed by
+ * 'then by ZZZ'
+ *
+ * if the maxLength is not already reached given the fields list, and single additional blank entry is added to the end
+ * of the list with action button for bringing up a fieldselector to add another field to the ordered list
+ *
+ * @type {ClassicComponentClass<P>}
+ */
 const FieldChoiceList = React.createClass({
     render() {
         //note whether we are at max or not to show and additional blank item
@@ -26,7 +44,7 @@ const FieldChoiceList = React.createClass({
         // 'then' is added on all but first (0 index)
         let listOfSelected = this.props.fields &&
             this.props.fields.map((field, index) =>  {
-                return (<FieldChoice type={this.props.type} key={this.props.type + '_fid' + field.id + '_' + field.name + '_' + index} field={field}
+                return (<FieldChoice type={this.props.type} key={this.props.type + '_fid' + field.id + '_' + index + '_' + field.name} field={field}
                                      then={!!index} index={index} onSetOrder={this.props.onSetOrder}
                                      onRemoveField={this.props.onRemoveField}
                         />);
@@ -39,8 +57,10 @@ const FieldChoiceList = React.createClass({
         return (
             <div>
                 {listOfSelected}
-                {showMore && this.props.onShowFields ? <FieldChoice type={this.props.type} then={notOnlyOne}
-                                    onShowFields={(type) => this.props.onShowFields(this.props.type)}/> :
+                {showMore && this.props.onShowFields ?
+                    <FieldChoice type={this.props.type} then={notOnlyOne} key={this.props.type + '_fid0_'}
+                                    onShowFields={(type) => this.props.onShowFields(this.props.type)}
+                    /> :
                     null}
             </div>
         );

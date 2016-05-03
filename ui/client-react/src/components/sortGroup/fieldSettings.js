@@ -10,9 +10,15 @@ import './sortAndGroup.scss';
 
 let logger = new Logger();
 
+/**
+ * Renders a section of chosen fields for ordering a report in the sort/group dialog
+ * @type {ClassicComponentClass<P>}
+ */
 const FieldSettings = React.createClass({
 
     propTypes: {
+        type: React.PropTypes.string, //sort or group
+
     },
 
     render() {

@@ -74,6 +74,7 @@ var Nav = React.createClass({
         }
         flux.actions.showTrowser();
         flux.actions.loadReports(this.state.apps.selectedAppId, tableId);
+        //Whenever we change tables /via change report we get the set of fields in the table
         flux.actions.loadFields(this.state.apps.selectedAppId, tableId);
     },
 

@@ -1,10 +1,14 @@
 /**
  *
- *  A higher-order-component for handling onClickOutside for React components.
  * catchClickOutside
- * This higher-order component (HoC) captures clicks outside component and calls the handler
- * passed in when such an event occurs. Optionally specify a isException callback function
- * that if true is returned it allow the event to continue and does not call the callback handler for intercepting it.
+ * A higher-order-component for handling onClickOutside for React components.
+ * This higher-order component (HoC) captures clicks outside component and calls the handler (handleClickOutside
+ * passed in as a required prop) when such an event occurs. Optionally specify a outsideClickIgnoreClass property
+ * that if the element outside being clicked has that class it does not call the callback handler for
+ * intercepting it.
+ * Also preventDefault and stopPropagation properties can also be defined on the component
+ * being wrapped if you want it to stop bubbling up the event or prevent default browser handling
+ * of the click.
  *
  * A higher-order component is just a function that takes an existing component and returns
  * another component that wraps it.
