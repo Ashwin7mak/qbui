@@ -12,6 +12,8 @@
     var groupUtils = require('../../../components/utility/groupUtils');
     var dateFormatter = require('../../../api/quickbase/formatter/dateTimeFormatter');
 
+    var RAW_SUFFIX = '_raw_';
+
     //  TODO: refactor into a shared module
     var startDate;
     function perfStart() {
@@ -24,6 +26,21 @@
             log.debug((trackingMsg ? trackingMsg : 'Elapsed: ') + ms + 'ms');
             startDate = null;
         }
+    }
+
+    //  Temporary function to format numeric ranges for UI display.
+    //  TODO: Node should only return an object structure to the client
+    //  TODO: and have it determine how to format and render the content
+    //  TODO: based on localization expectation.
+    function formatNumericRange(range) {
+        return range.lower + ' to ' + range.upper;
+    }
+
+    function isNumericDataType(dataType) {
+        return dataType === constants.NUMERIC ||
+               dataType === constants.CURRENCY ||
+               dataType === constants.PERCENT ||
+               dataType === constants.RATING;
     }
 
     /**
@@ -40,10 +57,15 @@
 
         if (groupFields && fields && records) {
             let map = new Map();
+            let groupMap = new Map();
             let reportData = [];
 
             fields.forEach((field) => {
                 map.set(field.id, field);
+            });
+
+            groupFields.forEach((groupField) => {
+                groupMap.set(groupField.field.id, groupField.field);
             });
 
             //  Some prep work to organize the report data: for each row,
@@ -53,7 +75,15 @@
                 let columns = {};
                 record.forEach((column) => {
                     let fld = map.get(column.id);
-                    columns[fld.name] = column.display;
+                    if (fld !== undefined) {
+                        columns[fld.name] = column.display;
+
+                        //  If grouping on a numeric data type, add a temporary element to
+                        //  hold the raw data value that is used to calculate the range.
+                        if (groupMap.get(column.id) !== undefined && isNumericDataType(fld.datatypeAttributes.type)) {
+                            columns[fld.name + RAW_SUFFIX] = column.value;
+                        }
+                    }
                 });
                 reportData.push(columns);
             });
@@ -138,22 +168,37 @@
             case constants.CURRENCY:    // CURRENCY is a sub-type of NUMERIC
             case constants.PERCENT:     // PERCENT is a sub-type of NUMERIC
             case constants.RATING:      // RATING is a sub-type of NUMERIC
+                //  unlike other grouping fields, numeric data types use the raw data value
+                //  to determine the range.  Since it is used only in the range calculation
+                //  function, remove from the array once we have a reference to the raw value.
+                let raw = record[groupField.name + RAW_SUFFIX];
+                delete record[groupField.name + RAW_SUFFIX];
+
                 switch (groupType) {
                 case groupTypes.NUMERIC.equals:
                     return dataValue;
-                //jira: qbse-21427
-                //case groupTypes.NUMERIC.range:
-                //case groupTypes.NUMERIC.thousandth:
-                //case groupTypes.NUMERIC.hundredth:
-                //case groupTypes.NUMERIC.tenth:
-                //case groupTypes.NUMERIC.one:
-                //case groupTypes.NUMERIC.five:
-                //case groupTypes.NUMERIC.ten:
-                //case groupTypes.NUMERIC.hundred:
-                //case groupTypes.NUMERIC.one_k:
-                //case groupTypes.NUMERIC.ten_k:
-                //case groupTypes.NUMERIC.hundred_k:
-                //case groupTypes.NUMERIC.million:
+                case groupTypes.NUMERIC.thousandth:
+                    return formatNumericRange(groupUtils.getRangeFraction(raw, 4));
+                case groupTypes.NUMERIC.hundredth:
+                    return formatNumericRange(groupUtils.getRangeFraction(raw, 3));
+                case groupTypes.NUMERIC.tenth:
+                    return formatNumericRange(groupUtils.getRangeFraction(raw, 2));
+                case groupTypes.NUMERIC.one:
+                    return formatNumericRange(groupUtils.getRangeWhole(raw, 1));
+                case groupTypes.NUMERIC.five:
+                    return formatNumericRange(groupUtils.getRangeWhole(raw, 5));
+                case groupTypes.NUMERIC.ten:
+                    return formatNumericRange(groupUtils.getRangeWhole(raw, 10));
+                case groupTypes.NUMERIC.hundred:
+                    return formatNumericRange(groupUtils.getRangeWhole(raw, 100));
+                case groupTypes.NUMERIC.one_k:
+                    return formatNumericRange(groupUtils.getRangeWhole(raw, 1000));
+                case groupTypes.NUMERIC.ten_k:
+                    return formatNumericRange(groupUtils.getRangeWhole(raw, 10000));
+                case groupTypes.NUMERIC.hundred_k:
+                    return formatNumericRange(groupUtils.getRangeWhole(raw, 100000));
+                case groupTypes.NUMERIC.million:
+                    return formatNumericRange(groupUtils.getRangeWhole(raw, 1000000));
                 }
                 break;
             case constants.TEXT:

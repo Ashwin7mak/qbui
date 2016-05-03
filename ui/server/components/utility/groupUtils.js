@@ -303,6 +303,92 @@
                 }
             }
             return '';
+        },
+
+        /**
+         * Return the lower and upper range bounds for the input value base
+         * on the supplied scale. This function is used when grouping numeric
+         * values where the range is less than or equal to 1.
+         *
+         * Scales map to grouping range ..for example:
+         *    4 --> thousandth   (2.0000 - 2.0010)
+         *    3 --> hundredth    (2.000 - 2.010)
+         *    2 --> tenth        (2.00 - 2.10)
+         *    1 --> integer      (2 - 3)
+         *
+         * @param input
+         * @param scale
+         * @returns {{lower: null, upper: null}}
+         */
+        getRangeFraction: function(input, scale) {
+            var range = {
+                lower: null,
+                upper: null
+            };
+
+            if (typeof input === 'number' && typeof scale === 'number') {
+
+                var factor = Math.pow(10, scale - 1);
+
+                //  remove trailing zeros(if any) after the decimal point from the input value
+                //   so that we can figure out the scal.  For example: 21.76000 --> 21.76
+                var value = (input * factor) / factor;
+
+                //  figure out the scale(if any) of the input value.  For example:
+                //      20.39  ==> scale of 2
+                //      20.4  ==> scale of 1
+                //      20     ==> scale of 0
+                var s = value.toString().split('.');
+                var valueScale = s.length > 1 ? s[1].length : 0;
+
+                //  if the scale of the input number is less than the scale requested, we need to adjust the
+                //  value to match the requested scale to ensure correct precision with the returned range values
+                if (valueScale < scale) {
+                    value = value + (1 / (factor * 10));
+                }
+
+                //  calculate the upper and lower boundary ranges based on the requested scale
+                range.upper = (Math.ceil(value * factor) / factor).toFixed(scale);
+                range.lower = (Math.floor(value * factor) / factor).toFixed(scale);
+
+                //  for scale of 1, adjust the ranges to return the integer value.  IE:  76.0 --> 76
+                if (scale === 1) {
+                    range.upper = Number.parseFloat(range.upper).toFixed(0);
+                    range.lower = Number.parseFloat(range.lower).toFixed(0);
+                }
+            }
+
+            return range;
+        },
+
+        /**
+         * Return the lower and upper range bounds for the input value base
+         * on the supplied factor. This function is used when grouping numeric
+         * values where the range is greater than or equal to 1.
+         *
+         * Factors map to grouping ranges ..for example:
+         *    5   -->  (0 - 5, 5 - 10, ..., 50 - 55)
+         *    10  -->  (0 - 10, 10 - 20, ..., 50 - 60)
+         *    100 -->  (0 - 100, 100 - 200, ..., 500 - 600)
+         *
+         * @param input
+         * @param factor
+         * @returns {{lower: null, upper: null}}
+         */
+        getRangeWhole: function(input, factor) {
+            var range = {
+                lower: null,
+                upper: null
+            };
+
+            if (typeof input === 'number' && typeof factor === 'number') {
+                if (factor !== 0) {
+                    range.lower = factor * (Math.floor(input / factor));
+                    range.upper = range.lower + factor;
+                }
+            }
+
+            return range;
         }
 
     };

@@ -145,7 +145,18 @@ describe('Validate GroupFormatter unit tests', function() {
             {message: 'DATE_TIME: fiscalYr grouping', numFields: 5, numRecords: 2, gList: '1:FY', dataType: constants.DATE_TIME},
             {message: 'DATE_TIME: decade grouping', numFields: 5, numRecords: 2, gList: '1:T', dataType: constants.DATE_TIME},
             //  NUMERIC data type
-            {message: 'NUMERIC: multiple grouping against same fid', numFields: 5, numRecords: 2, gList: '1:V', dataType: constants.NUMERIC}
+            {message: 'NUMERIC: equals grouping', numFields: 5, numRecords: 2, gList: '1:V', dataType: constants.NUMERIC},
+            {message: 'NUMERIC: thousandth grouping', numFields: 5, numRecords: 2, gList: '1:K', dataType: constants.NUMERIC},
+            {message: 'NUMERIC: hundredth grouping', numFields: 5, numRecords: 2, gList: '1:H', dataType: constants.NUMERIC},
+            {message: 'NUMERIC: tenth grouping', numFields: 5, numRecords: 2, gList: '1:A', dataType: constants.NUMERIC},
+            {message: 'NUMERIC: one grouping', numFields: 5, numRecords: 2, gList: '1:0', dataType: constants.NUMERIC},
+            {message: 'NUMERIC: five grouping', numFields: 5, numRecords: 2, gList: '1:B', dataType: constants.NUMERIC},
+            {message: 'NUMERIC: ten grouping', numFields: 5, numRecords: 2, gList: '1:1', dataType: constants.NUMERIC},
+            {message: 'NUMERIC: hundred grouping', numFields: 5, numRecords: 2, gList: '1:2', dataType: constants.NUMERIC},
+            {message: 'NUMERIC: one_k grouping', numFields: 5, numRecords: 2, gList: '1:3', dataType: constants.NUMERIC},
+            {message: 'NUMERIC: ten_k grouping', numFields: 5, numRecords: 2, gList: '1:4', dataType: constants.NUMERIC},
+            {message: 'NUMERIC: hundred_k grouping', numFields: 5, numRecords: 2, gList: '1:5', dataType: constants.NUMERIC},
+            {message: 'NUMERIC: million grouping', numFields: 5, numRecords: 2, gList: '1:6', dataType: constants.NUMERIC}
         ];
 
         testCases.forEach(function(testCase) {
