@@ -42,7 +42,8 @@
         let data = [];
 
         if (groupFields && fields && records) {
-            log.perf.start();
+            var perfTimer = log.perf.getTimer('createGroupDataGrid');
+            perfTimer.start();
 
             let map = new Map();
             let groupMap = new Map();
@@ -77,7 +78,7 @@
             });
 
             data = groupTheData(groupFields, reportData, 0);
-            log.perf.stop("Build groupBy.gridData array:");
+            perfTimer.stopAndLog();
         }
 
         return data;
@@ -276,20 +277,19 @@
                 if (groupList) {
                     log.debug("Build grouping for groupList: " + groupList + "; Number of fields: " + fields.length + "; Number of records: " + records.length);
 
-                    log.perf.start();
                     //  build a fields map for quick field access when looping through the groups list.
                     let map = new Map();
                     fields.forEach((field) => {
                         map.set(field.id, field);
                     });
-                    log.perf.stop("Build map for field grouping:");
 
                     let groups = groupList.split(constants.REQUEST_PARAMETER.LIST_DELIMITER);
 
                     // Loop through the list of groups and determine whether we have any grouping requirements.
                     // Fields that are to be grouped are added to the groupBy.fields array in the same order
                     // as the groups array.  This is to ensure proper order of precedence.
-                    log.perf.start();
+                    var perfTimer = log.perf.getTimer('Build groupBy.fields array');
+                    perfTimer.start();
                     groups.forEach((group) => {
                         if (group) {
                             //  must have a fid and group type element
@@ -321,20 +321,20 @@
                             }
                         }
                     });
-                    log.perf.stop("Build groupBy.fields array:");
+                    perfTimer.stopAndLog();
 
                     // we have grouping if there are fields in groupBy.fields array.  Set the grouping flag
                     // to true and populate the grid columns and data arrays.
                     if (groupBy.fields.length > 0) {
                         //  Business rule is to not include grouped fields in the grid.  So, add to the gridColumns
                         //  array the fields NOT designated to be grouped.
-                        log.perf.start();
+                        perfTimer.start('Build groupBy.gridColumns array');
                         fields.forEach(function(field) {
                             if (!field.grouped) {
                                 groupBy.gridColumns.push(field);
                             }
                         });
-                        log.perf.stop("Build groupBy.gridColumns array:");
+                        perfTimer.stopAndLog();
 
                         groupBy.hasGrouping = true;
                         groupBy.gridData = createGroupDataGrid(groupBy.fields, fields, records);

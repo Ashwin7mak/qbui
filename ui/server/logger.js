@@ -66,6 +66,48 @@
         };
     }
 
+    /**
+     * Log performance timing events to the logger
+     *
+     * @param tag
+     * @returns {{start: start, stop: stop}}
+     * @constructor
+     */
+    function PerfTimer(tag) {
+        var timer;
+        var logTag = tag ? tag : '';
+
+        return {
+            // start the timer.  Can override/reset the tag
+            start: function(startTag) {
+                timer = new Date();
+                if (startTag) {
+                    logTag = startTag;
+                }
+            },
+
+            //  log an info message with the elapsed time from when the start function was called
+            stopAndLog: function(skipTimerInit) {
+                if (timer) {
+                    let ms = new Date().getTime() - timer.getTime();
+
+                    //  log as info message
+                    var msg = {
+                        type: 'PERF',
+                        tag: logTag,
+                        elaspedTime: ms + 'ms'
+                    };
+                    appLogger.info(msg);
+
+                    //  initialize the timer unless optional skipTimerInit is set to true
+                    if (skipTimerInit !== true) {
+                        timer = null;
+                    }
+                }
+            }
+        };
+    }
+
     module.exports = {
 
         /**
@@ -106,27 +148,11 @@
                 });
 
                 appLogger.perf = {
-
-                    timer: null,
-
-                    start: function() {
-                        this.timer = new Date();
-                    },
-
-                    stop: function(msg, skipTimerInit) {
-                        if (this.timer && this.timer instanceof Date) {
-                            let ms = new Date().getTime() - this.timer.getTime();
-
-                            //  log as info message with a prefix for easier identification
-                            appLogger.info('%s ' + (msg ? msg + ' ' : '') + ms + 'ms', 'PERF:');
-
-                            //  initialize the timer unless optional skipTimerInit is set to true
-                            if (skipTimerInit !== true) {
-                                this.timer = null;
-                            }
-                        }
+                    getTimer: function(tag) {
+                        return new PerfTimer(tag);
                     }
                 };
+
             }
 
             return appLogger;

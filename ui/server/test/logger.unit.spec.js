@@ -46,7 +46,7 @@ describe('Validate Logger', function() {
     describe('validate the performance logger help functions', function() {
 
         var logger;
-        it('validate perf messages are logged', function(done) {
+        it('validate perf messages are logged without resetting timer', function(done) {
             var logConfig = {
                 name  : 'qbse-local',
                 level : 'debug'
@@ -55,13 +55,36 @@ describe('Validate Logger', function() {
 
             var stub = sinon.stub(logger, 'info');
 
-            logger.perf.start();
-            logger.perf.stop('some message and skip init', true);
-            logger.perf.stop('some message');
-            logger.perf.stop('some message not logged');
+            var perfTimer = logger.perf.getTimer('unitTest1');
+            perfTimer.start();
 
-            assert(stub.calledWith(sinon.match.any, 'PERF:'));
+            perfTimer.stopAndLog(true);
+            perfTimer.stopAndLog('some message');
+            perfTimer.stopAndLog('some message logged again');
+
             assert(stub.calledTwice);
+
+            stub.restore();
+            done();
+        });
+
+        it('validate perf messages are logged and resetting timer', function(done) {
+            var logConfig = {
+                name  : 'qbse-local',
+                level : 'debug'
+            };
+            logger = initLoggerWithConfig(logConfig);
+
+            var stub = sinon.stub(logger, 'info');
+
+            var perfTimer = logger.perf.getTimer('unitTest1');
+            perfTimer.start();
+
+            perfTimer.stopAndLog();
+            perfTimer.stopAndLog('some message');
+            perfTimer.stopAndLog('some message not logged');
+
+            assert(stub.calledOnce);
 
             stub.restore();
             done();
@@ -75,13 +98,42 @@ describe('Validate Logger', function() {
             logger = initLoggerWithConfig(logConfig);
 
             var stub = sinon.stub(logger, 'info');
-            logger.perf.stop('some message');
+
+            var perfTimer = logger.perf.getTimer('unitTest1');
+            perfTimer.stopAndLog();
 
             assert(!stub.called);
 
             stub.restore();
             done();
         });
+
+        it('validate perf message function with multiple instances', function(done) {
+            var logConfig = {
+                name  : 'qbse-local',
+                level : 'debug'
+            };
+            logger = initLoggerWithConfig(logConfig);
+
+            var stub = sinon.stub(logger, 'info');
+
+            var perfTimer1 = logger.perf.getTimer('unitTest1');
+            var perfTimer2 = logger.perf.getTimer('unitTest2');
+
+            perfTimer1.start();
+            perfTimer2.start();
+
+            perfTimer1.stopAndLog();
+            perfTimer1.start('unitTest1A');
+
+            perfTimer2.stopAndLog();
+            perfTimer1.stopAndLog();
+            assert(stub.calledThrice);
+
+            stub.restore();
+            done();
+        });
+
     });
 
     describe('validate the default configuration of the logger', function() {
