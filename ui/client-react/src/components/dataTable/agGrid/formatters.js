@@ -65,8 +65,9 @@ const CellFormatter = React.createClass({
             let val = this.state.value;
 
             // convert booleans to strings until they have a dedicated renderer/editor
-            if (typeof val === "boolean")
+            if (typeof val === "boolean") {
                 val = val.toString();
+            }
 
             return <span className="cellData">
                 {val}
