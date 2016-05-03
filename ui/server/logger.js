@@ -95,7 +95,7 @@
                     var msg = {
                         type: 'PERF',
                         tag: logTag,
-                        elaspedTime: ms + 'ms'
+                        elapsedTime: ms + 'ms'
                     };
                     appLogger.info(msg);
 
