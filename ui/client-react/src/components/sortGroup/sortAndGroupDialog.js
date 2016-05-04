@@ -1,9 +1,6 @@
 import React from 'react';
 import {I18nMessage} from '../../utils/i18nMessage';
 import {Button} from 'react-bootstrap';
-import Logger from '../../utils/logger';
-import Locale from '../../locales/locales';
-import StringUtils from '../../utils/stringUtils';
 import {Popover} from 'react-bootstrap';
 import OverlayDialogHeader from '../overLay/overlayDialogHeader';
 import FieldSettings from './fieldSettings';
@@ -14,7 +11,6 @@ import closeOnEscape from '../hoc/catchEscapeKey';
 
 import './sortAndGroup.scss';
 import '../../assets/css/animate.min.css';
-let logger = new Logger();
 
 var SortAndGroupDialog = React.createClass({
 
@@ -56,7 +52,7 @@ var SortAndGroupDialog = React.createClass({
      action to add a group field  / remove a group field / toggle order of a group field
      action to apply the edited groups/sorts
      action to cancel the edits
-     later story action to order the items in sort/grouplist dnd
+     later story action to order the items in sort/group list dnd
 
      states to maintain
      dialog hidden shown

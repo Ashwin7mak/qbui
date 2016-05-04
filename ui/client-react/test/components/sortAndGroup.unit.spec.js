@@ -58,6 +58,6 @@ describe('SortAndGroup functions', () => {
         expect(component.state.show).toBeTruthy();
         TestUtils.Simulate.click(sortButtonSpan[0]);
         expect(component.state.show).toBeFalsy();
-    })
+    });
 
 });
