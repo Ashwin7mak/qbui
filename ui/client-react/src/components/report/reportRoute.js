@@ -13,7 +13,7 @@ import simpleStringify from '../../../../common/src/simpleStringify';
 import Fluxxor from 'fluxxor';
 import _ from 'lodash';
 import './report.scss';
-import ReportToolbarAndContent from '../report/ReportToolbarAndContent';
+import ReportToolbarAndContent from '../report/reportToolbarAndContent';
 
 let logger = new Logger();
 let FluxMixin = Fluxxor.FluxMixin(React);
