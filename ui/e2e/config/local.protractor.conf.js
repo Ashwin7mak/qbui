@@ -17,7 +17,7 @@
             baseE2EPath + 'qbapp/tests/reports/reportGrpAndSortViaIcon.e2e.spec.js'
         ],
         // Patterns to exclude.
-        exclude: [],
+        exclude: [baseE2EPath + 'qbapp/tests/reports/reportSearch.e2e.spec.js'],
         // ----- Capabilities to be passed to the webdriver instance ----
         //
         // For a full list of available capabilities, see
