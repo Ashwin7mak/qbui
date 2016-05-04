@@ -8,6 +8,7 @@
     var constants = require('../../constants');
     var groupTypes = require('../../groupTypes');
     var log = require('../../../logger').getLogger();
+    var perfLogger = require('../../../perfLogger').getInstance();
     var lodash = require('lodash');
     var groupUtils = require('../../../components/utility/groupUtils');
     var dateFormatter = require('../../../api/quickbase/formatter/dateTimeFormatter');
@@ -42,8 +43,7 @@
         let data = [];
 
         if (groupFields && fields && records) {
-            var perfTimer = log.perf.getTimer('createGroupDataGrid');
-            perfTimer.start();
+            perfLogger.start('createGroupDataGrid');
 
             let map = new Map();
             let groupMap = new Map();
@@ -78,7 +78,7 @@
             });
 
             data = groupTheData(groupFields, reportData, 0);
-            perfTimer.log();
+            perfLog.log();
         }
 
         return data;
@@ -275,7 +275,7 @@
                 //
                 let groupList = req.param(constants.REQUEST_PARAMETER.GROUP_LIST);
                 if (groupList) {
-                    log.debug("Build grouping for groupList: " + groupList + "; Number of fields: " + fields.length + "; Number of records: " + records.length);
+                    perfLog.start("Build groupList: " + groupList + "; Number of fields: " + fields.length + "; Number of records: " + records.length);
 
                     //  build a fields map for quick field access when looping through the groups list.
                     let map = new Map();
@@ -288,8 +288,6 @@
                     // Loop through the list of groups and determine whether we have any grouping requirements.
                     // Fields that are to be grouped are added to the groupBy.fields array in the same order
                     // as the groups array.  This is to ensure proper order of precedence.
-                    var perfTimer = log.perf.getTimer('Build groupBy.fields array');
-                    perfTimer.start();
                     groups.forEach((group) => {
                         if (group) {
                             //  must have a fid and group type element
@@ -321,20 +319,20 @@
                             }
                         }
                     });
-                    perfTimer.log();
+                    perfLog.log('Build groupBy.fields array');
 
                     // we have grouping if there are fields in groupBy.fields array.  Set the grouping flag
                     // to true and populate the grid columns and data arrays.
                     if (groupBy.fields.length > 0) {
                         //  Business rule is to not include grouped fields in the grid.  So, add to the gridColumns
                         //  array the fields NOT designated to be grouped.
-                        perfTimer.start('Build groupBy.gridColumns array');
+                        perfLog.start('groupBy.fields size:' + groupBy.fields.length);
                         fields.forEach(function(field) {
                             if (!field.grouped) {
                                 groupBy.gridColumns.push(field);
                             }
                         });
-                        perfTimer.log();
+                        perfLog.log('Build groupBy.gridColumns array');
 
                         groupBy.hasGrouping = true;
                         groupBy.gridData = createGroupDataGrid(groupBy.fields, fields, records);
