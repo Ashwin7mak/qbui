@@ -182,9 +182,9 @@ const ReportToolbar = React.createClass({
 
                         {recordCount &&
                             <SortAndGroup  {...this.props}
-                                filter={{selections: this.props.reportData.selections,
+                                filter={{selections: this.props.selections,
                                         facet: this.props.reportData.facetExpression,
-                                        search: this.props.reportData.searchStringForFiltering}}
+                                        search: this.props.searchStringForFiltering}}
                             />
                         }
 

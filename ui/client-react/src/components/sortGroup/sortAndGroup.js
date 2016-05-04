@@ -153,18 +153,20 @@ const SortAndGroup = React.createClass({
             flux.actions.getFilteredRecords(this.props.appId,
                 this.props.tblId,
                 this.props.rptId, {format:true}, this.props.filter, overrideParams);
-
         }
 
     },
 
     reset() {
-        //reload data using report with no overrides
+        //reload data using report with original sort/group overrides & keep filter settings
         let flux = this.getFlux();
-        flux.actions.loadReport(this.props.appId, this.props.tblId, this.props.rptId, true);
-        flux.actions.loadFields(this.props.appId, this.props.tblId);
+        let overrideParams = {};
+
+        let sortGroupString = ReportUtils.getGListString(this.props.reportData.data.originalMetaData.sortList);
+        overrideParams[query.SORT_LIST_PARAM] = sortGroupString;
+        overrideParams[query.GLIST_PARAM] = sortGroupString;
         flux.actions.getFilteredRecords(this.props.appId, this.props.tblId,
-                    this.props.rptId, {format:true}, this.props.filter, null);
+                    this.props.rptId, {format:true}, this.props.filter, overrideParams);
     },
 
     resetAndHide() {
@@ -360,7 +362,7 @@ const SortAndGroup = React.createClass({
 
         if (window.location.search.includes('mockSort')) {
             //just show some static dummy sort info
-           return MockData.SORT;
+            return MockData.SORT;
         }
 
         if (this.state.dirty && this.state.newSelectionsSort) {
