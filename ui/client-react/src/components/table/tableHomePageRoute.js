@@ -1,66 +1,14 @@
 import React from 'react';
 import Stage from '../stage/stage';
 import QBicon from '../qbIcon/qbIcon';
-import ReportRoute from '../report/reportRoute';
 import IconActions from '../actions/iconActions';
 import ReportToolbarAndContent from '../report/reportToolbarAndContent';
 import Fluxxor from 'fluxxor';
 let FluxMixin = Fluxxor.FluxMixin(React);
-import _ from 'lodash';
-import Logger from '../../utils/logger';
-let logger = new Logger();
-
 import './tableHomePage.scss';
 
 let TableHomePageRoute = React.createClass({
     mixins: [FluxMixin],
-
-    selectTableId(tblId) {
-        let flux = this.getFlux();
-        flux.actions.selectTableId(tblId);
-        //flux.actions.loadReports(this.props.params.appId, tblId);
-    },
-    selectAppId(appId) {
-        let flux = this.getFlux();
-        flux.actions.selectAppId(appId);
-        //flux.actions.loadReports(this.props.params.appId, tblId);
-        //flux.actions.loadReports(this.props.params.appId, tblId);
-    },
-
-    loadReportsFromParams(params, checkParams) {
-
-        let flux = this.getFlux();
-
-        if (params) {
-            let appId = params.appId;
-            let tblId = params.tblId;
-
-            // VERY IMPORTANT: check URL params against props to prevent cycles
-
-            if (appId === this.props.reportData.appId &&
-                tblId === this.props.reportData.tblId) {
-                return;
-            }
-
-            if (checkParams) {
-                if (appId === this.props.params.appId &&
-                    tblId === this.props.params.tblId) {
-                    return;
-                }
-            }
-
-            if (appId && tblId) {
-                logger.debug('Loading reports. AppId:' + appId + ' ;tblId:' + tblId);
-
-                this.selectTableId(tblId);
-            }
-        }
-    },
-    componentDidMount() {
-        //let flux = this.getFlux();
-        //flux.actions.showTopNav();
-        //flux.actions.setTopTitle();
-    },
 
     getStageHeadline() {
         return (this.props.selectedTable &&
@@ -69,6 +17,7 @@ let TableHomePageRoute = React.createClass({
             </div>
         );
     },
+
     getPageActions(maxButtonsBeforeMenu = 0) {
         const actions = [
             {msg: 'pageActions.addRecord', icon:'add'},
