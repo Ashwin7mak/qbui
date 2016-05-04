@@ -57,6 +57,7 @@ let TableHomePageRoute = React.createClass({
                 searchStringForFiltering={this.props.searchStringForFiltering}
                 selectedRows={this.props.selectedRows}
                 scrollingReport={this.props.scrollingReport}
+                history={this.props.history}
                 rptId={'1'} />
         </div>);
     }

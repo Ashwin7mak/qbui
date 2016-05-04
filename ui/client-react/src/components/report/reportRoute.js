@@ -93,7 +93,8 @@ const ReportRoute = React.createClass({
                     selectedAppId={this.props.selectedAppId}
                     searchStringForFiltering={this.props.searchStringForFiltering}
                     selectedRows={this.props.selectedRows}
-                    scrollingReport={this.props.scrollingReport} />
+                    scrollingReport={this.props.scrollingReport}
+                    history={this.props.history}/>
             </div>);
         }
     }

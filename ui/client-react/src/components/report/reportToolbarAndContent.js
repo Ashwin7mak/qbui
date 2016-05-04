@@ -197,7 +197,10 @@ let ReportToolbarAndContent = React.createClass({
             return (
                 <div className="reportToolsAndContentContainer">
                     {this.getTableActions()}
-                    <ReportContent  reportData={this.props.reportData}
+                    <ReportContent  appId={this.props.params.appId}
+                                    tblId={this.props.params.tblId}
+                                    rptId={typeof this.props.rptId !== "undefined" ? this.props.rptId : this.props.params.rptId}
+                                    reportData={this.props.reportData}
                                     reportHeader={toolbar}
                                     uniqueIdentifier="Record ID#"
                                     flux={this.getFlux()}
