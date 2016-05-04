@@ -1,13 +1,9 @@
 import React from 'react';
-import Fluxxor from 'fluxxor';
-import {I18nMessage} from '../../utils/i18nMessage';
-import Locale from '../../locales/locales';
 import Logger from '../../utils/logger';
 import FieldChoice from './fieldChoice';
 
 import './sortAndGroup.scss';
 
-let logger = new Logger();
 
 /**
  * Renders a list of field choices(FieldChoice child component) for sort of group settings for the ordering of a table.

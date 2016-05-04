@@ -4,11 +4,7 @@ import ReactDOM from 'react-dom';
 import {Overlay} from 'react-bootstrap';
 
 import Logger from '../../utils/logger';
-import {I18nMessage} from '../../utils/i18nMessage';
-import StringUtils from '../../utils/stringUtils';
-
 import QBicon from '../qbIcon/qbIcon';
-import LimitConstants from './../../../../common/src/limitConstants';
 
 import './sortAndGroup.scss';
 
@@ -21,7 +17,6 @@ import * as query from '../../constants/query';
 import _ from 'lodash';
 import Fluxxor from 'fluxxor';
 
-let logger = new Logger();
 let FluxMixin = Fluxxor.FluxMixin(React);
 let StoreWatchMixin = Fluxxor.StoreWatchMixin;
 
@@ -91,7 +86,7 @@ const SortAndGroup = React.createClass({
         });
     },
 
-    showMoreFields(type) {
+    showMoreFields() {
         this.setState({showNotVisible : true});
     },
 
@@ -166,10 +161,10 @@ const SortAndGroup = React.createClass({
     reset() {
         //reload data using report with no overrides
         let flux = this.getFlux();
-
-        flux.actions.getFilteredRecords(this.props.appId,
-            this.props.tblId,
-            this.props.rptId, {format:true}, this.props.filter, null);
+        flux.actions.loadReport(this.props.appId, this.props.tblId, this.props.rptId, true);
+        flux.actions.loadFields(this.props.appId, this.props.tblId);
+        flux.actions.getFilteredRecords(this.props.appId, this.props.tblId,
+                    this.props.rptId, {format:true}, this.props.filter, null);
     },
 
     resetAndHide() {
@@ -180,14 +175,12 @@ const SortAndGroup = React.createClass({
     },
 
     getSortState() {
-        let answer = [];
-        answer = this.state.dirty ? this.state.newSelectionsSort : this.getSortFields(this.props.fields.fields.data);
+        let answer = this.state.dirty ? this.state.newSelectionsSort : this.getSortFields(this.props.fields.fields.data);
         return answer;
     },
 
     getGroupState() {
-        let answer = [];
-        answer = this.state.dirty ? this.state.newSelectionsGroup : this.getGroupFields(this.props.fields.fields.data);
+        let answer = this.state.dirty ? this.state.newSelectionsGroup : this.getGroupFields(this.props.fields.fields.data);
         return answer;
     },
 
@@ -258,7 +251,7 @@ const SortAndGroup = React.createClass({
     },
 
 
-    handleRemoveField(type, index, fid) {
+    handleRemoveField(type, index) {
         // remove a field from the list of type and index specified
         let editArrays = this.prepStateArrays();
 
@@ -273,7 +266,7 @@ const SortAndGroup = React.createClass({
 
     },
 
-    handleClickOutside(evt) {
+    handleClickOutside() {
         this.applyAndHide();
         //console.log('clicked outside on' + evt.target);
     },
@@ -356,7 +349,7 @@ const SortAndGroup = React.createClass({
          * so we set the settings from the popover state info
          * or
          * the report has adhoc sort and grouping setting applied via menus or prior apply from the popover
-         * so we get the settings from the reportdata prop
+         * so we get the settings from the reportData prop
          * or
          * the is report was freshly loaded and no adhoc sort/grouping is in effect
          * so we get the settings from the report meta data
@@ -367,8 +360,10 @@ const SortAndGroup = React.createClass({
 
         if (window.location.search.includes('mockSort')) {
             //just show some static dummy sort info
-            answer = MockData.SORT;
-        } else if (this.state.dirty && this.state.newSelectionsSort) {
+           return MockData.SORT;
+        }
+
+        if (this.state.dirty && this.state.newSelectionsSort) {
             //..or use the non applied values
             this.state.newSelectionsSort.forEach((sortItem) => {
                 if (sortItem) {
@@ -406,7 +401,7 @@ const SortAndGroup = React.createClass({
          * so we set the settings from the popover state info
          * or
          * the report has adhoc sort and grouping setting applied via menus or prior apply from the popover
-         * so we get the settings from the reportdata prop
+         * so we get the settings from the reportData prop
          * or
          * the is report was freshly loaded and no adhoc sort/grouping is in effect
          * so we get the settings from the report meta data
@@ -417,8 +412,10 @@ const SortAndGroup = React.createClass({
         //get groupFields from report data prop
         if (window.location.search.includes('mockSort')) {
             //just show some static dummy grouping info
-            answer =  MockData.GROUP;
-        } else if (this.state.dirty) {
+            return MockData.GROUP;
+        }
+
+        if (this.state.dirty) {
             // use the non applied values
             this.state.newSelectionsGroup.forEach((groupItem) => {
                 if (groupItem) {
@@ -455,8 +452,6 @@ const SortAndGroup = React.createClass({
      *
      **/
     render() {
-
-        let flux = this.getFlux();
 
         let fields = this.state.show && this.props.fields && this.props.fields.fields ? this.props.fields.fields.data : [];
         let fieldsLoading = this.state.show && this.props.fields && this.props.fields.fieldsLoading;

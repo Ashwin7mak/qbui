@@ -1,14 +1,11 @@
 import React from 'react';
 import {I18nMessage} from '../../utils/i18nMessage';
 import _ from 'lodash';
-import Locale from '../../locales/locales';
 import Logger from '../../utils/logger';
-import StringUtils from '../../utils/stringUtils';
 import {ListGroup, ListGroupItem, Panel} from 'react-bootstrap';
 import QBicon from '../qbIcon/qbIcon';
 import './sortAndGroup.scss';
 
-let logger = new Logger();
 
 /**
  * Renders a panel showing a list of field names, when one is clicked on the panel closes and the
@@ -43,13 +40,13 @@ const FieldsPanel = React.createClass({
             <ListGroupItem id={field.id}  key={field.id}
                            className={"fieldItem" + (notInReport ?  " animated slideInDown notInReport" : "")}
                            onClick={() => this.selectField(this.props.fieldsForType, field)}>
-                <QBicon className={this.props.isSelected  ? "checkMark-selected" : "checkMark"}
+                <QBicon className={selected ? "checkMark-selected" : "checkMark"}
                         icon="check" />
                 {field.name}</ListGroupItem>
         );
     },
 
-    renderList(orderList, list, type) {
+    renderList(orderList, list) {
         let restOfFields = null;
         // show "more fields..." for viewing any remaining fields not in report
         if (orderList && orderList.notInReport && orderList.notInReport.length) {

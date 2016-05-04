@@ -1,14 +1,10 @@
 import React from 'react';
-import Fluxxor from 'fluxxor';
 import {I18nMessage} from '../../utils/i18nMessage';
-import Locale from '../../locales/locales';
 import QBicon from '../qbIcon/qbIcon';
 import Logger from '../../utils/logger';
-import StringUtils from '../../utils/stringUtils';
 
 import './sortAndGroup.scss';
 
-let logger = new Logger();
 
 /**
  * Renders an field entry in the sort and group popover used for either sort of group
