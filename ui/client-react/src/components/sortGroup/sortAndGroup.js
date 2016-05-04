@@ -102,7 +102,7 @@ const SortAndGroup = React.createClass({
     },
 
     hide() {
-        this.setState(this.initialState());
+        this.setState( this.initialState() )
     },
 
     applyAndHide() {
