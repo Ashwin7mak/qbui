@@ -3,7 +3,7 @@ import Stage from '../stage/stage';
 import QBicon from '../qbIcon/qbIcon';
 import ReportRoute from '../report/reportRoute';
 import IconActions from '../actions/iconActions';
-import ReportToolbarAndContent from '../report/ReportToolbarAndContent';
+import ReportToolbarAndContent from '../report/reportToolbarAndContent';
 import Fluxxor from 'fluxxor';
 let FluxMixin = Fluxxor.FluxMixin(React);
 import _ from 'lodash';
