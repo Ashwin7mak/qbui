@@ -1,17 +1,18 @@
-/ui/.sass-cache
 # gitignore file for quickbase-ui project
 
 # IDE files #
 ######################
 .idea/
 *.iml
-
+/buildSrc/.gradle
 .gradle/
 
 # Miscellaneous files to not track #
 ######################
 atlassian-ide-plugin.xml
 npm-debug.log
+/ui/.sass-cache
+
 
 # OS generated files #
 ######################
@@ -27,3 +28,4 @@ Thumbs.db
 ######################
 ui/client/quickbase/assets/css
 ui/client/quickbase/assets/*.map
+/buildSrc/build
