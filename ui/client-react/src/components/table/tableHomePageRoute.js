@@ -11,9 +11,12 @@ let TableHomePageRoute = React.createClass({
     mixins: [FluxMixin],
 
     getStageHeadline() {
+        let reportName = this.props.reportData && this.props.reportData.data && this.props.reportData.data.name;
+
         return (this.props.selectedTable &&
             <div className="stageHeadline">
-                <h3 className="tableName breadCrumbs"><QBicon icon="favicon"/> {this.props.selectedTable.name}</h3>
+                <h3 className="tableName breadCrumbs"><QBicon icon="favicon"/> {this.props.selectedTable.name}
+                    <span className="breadCrumbsSeparator"> | </span>{reportName}</h3>
             </div>
         );
     },
@@ -39,9 +42,6 @@ let TableHomePageRoute = React.createClass({
     render() {
         return (<div className="tableHomepageContainer">
             <Stage stageHeadline={this.getStageHeadline()} pageActions={this.getPageActions(5)}>
-                <div className="table-content">
-                    Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
-                </div>
             </Stage>
 
             <div className="tableHomePageActionsContainer secondaryBar">

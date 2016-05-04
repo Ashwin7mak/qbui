@@ -20,20 +20,12 @@ let FluxMixin = Fluxxor.FluxMixin(React);
 
 const ReportRoute = React.createClass({
     mixins: [FluxMixin],
-    facetFields : {},
-    debounceInputMillis: 700, // a key send delay
     nameForRecords: "Records",  // get from table meta data
-
-    componentDidMount() {
-        //const flux = this.getFlux();
-        //flux.actions.hideTopNav();
-    },
 
     getHeader() {
         return (
             <ReportHeader reportData={this.props.reportData}
                           nameForRecords={this.nameForRecords}
-                          searchTheString={this.searchTheString}
                           clearSearchString={this.clearSearchString}
             />);
     },

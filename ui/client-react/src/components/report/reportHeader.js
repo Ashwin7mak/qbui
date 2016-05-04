@@ -19,7 +19,6 @@ var ReportHeader = React.createClass({
     propTypes: {
         reportData: React.PropTypes.object,
         nameForRecords: React.PropTypes.string,
-        searchTheString: React.PropTypes.func,
         clearSearchString: React.PropTypes.func,
     },
     getInitialState() {
@@ -32,11 +31,14 @@ var ReportHeader = React.createClass({
         let flux = this.getFlux();
         flux.actions.toggleLeftNav();
     },
-
+    searchTheString(searchTxt) {
+        this.getFlux().actions.filterSearchPending(searchTxt);
+        this.filterOnSearch(searchTxt);
+    },
     handleSearchChange(e) {
-        if (this.props.searchTheString) {
+        if (this.searchTheString) {
             var searchTxt = e.target.value;
-            this.props.searchTheString(searchTxt);
+            this.searchTheString(searchTxt);
         }
     },
     // show the search elements
