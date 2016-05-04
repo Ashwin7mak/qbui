@@ -93,11 +93,13 @@
             /**
              * Layout test. Verify report actions are displayed above the report content
              */
-            it(testcase.breakpointSize + ' breakpoint: verify table actions Layout container is on top of report griddle container', function() {
-                e2eBase.resizeBrowser(testcase.browserWidth, e2eConsts.DEFAULT_HEIGHT).then(function() {
-                    reportServicePage.isElementOnTop(reportServicePage.tableActionsContainerEl, reportServicePage.agGridContainerEl);
+            if (testcase.breakpointSize !== 'small') {
+                it(testcase.breakpointSize + ' breakpoint: verify table actions Layout container is on top of report container', function() {
+                    e2eBase.resizeBrowser(testcase.browserWidth, e2eConsts.DEFAULT_HEIGHT).then(function() {
+                        reportServicePage.isElementOnTop(reportServicePage.reportToolbarContainerEl, reportServicePage.agGridContainerEl);
+                    });
                 });
-            });
+            }
 
             /**
              * Layout test. Verify stage is displayed above the report actions container
@@ -105,11 +107,11 @@
             if (testcase.breakpointSize !== 'small') {
                 it(testcase.breakpointSize + ' breakpoint: verify report Stage Layout container is on top of table actions container', function() {
                     e2eBase.resizeBrowser(testcase.browserWidth, e2eConsts.DEFAULT_HEIGHT).then(function() {
-                        reportServicePage.isElementOnTop(reportServicePage.reportStageContentEl, reportServicePage.tableActionsContainerEl);
+                        reportServicePage.isElementOnTop(reportServicePage.reportStageContentEl, reportServicePage.reportToolbarContainerEl);
                     });
                 });
             }
-            //TODO: Test for small breakpoint size
+            //TODO: Tests for small breakpoint size
 
         });
 
