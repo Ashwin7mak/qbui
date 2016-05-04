@@ -26,10 +26,11 @@
         var headers = req.headers || {};
         var agent = req.useragent || {};
         var body = req.body || {};
+        var ip = '';
 
         //  try to get the ip address
         if (req.headers) {
-            var ip = req.headers['x-forwarded-for'];
+            ip = req.headers['x-forwarded-for'];
         }
         if (!ip) {
             if (req.connection) {
@@ -67,41 +68,42 @@
     }
 
     /**
-     * Log performance timing events to the logger
+     * Simple implementation for performance monitoring to log
+     * the duration (in ms) of an event as an info message.
      *
      * @param tag
-     * @returns {{start: start, stop: stop}}
+     * @returns {{start: function(ev), log: log(skipTimerInit}}
      * @constructor
      */
-    function PerfTimer(tag) {
-        var timer;
-        var logTag = tag ? tag : '';
+    function PerfTimer(event) {
+        var perfTimer;
+        var perfEvent = event ? event : '';
 
         return {
             // start the timer.  Can override/reset the tag
-            start: function(startTag) {
-                timer = new Date();
-                if (startTag) {
-                    logTag = startTag;
+            start: function(ev) {
+                perfTimer = new Date();
+                if (ev) {
+                    perfEvent = ev;
                 }
             },
 
             //  log an info message with the elapsed time from when the start function was called
             log: function(skipTimerInit) {
-                if (timer) {
-                    let ms = new Date().getTime() - timer.getTime();
+                if (perfTimer) {
+                    let ms = new Date().getTime() - perfTimer.getTime();
 
                     //  log as info message
                     var msg = {
                         type: 'PERF',
-                        tag: logTag,
+                        event: perfEvent,
                         elapsedTime: ms + 'ms'
                     };
                     appLogger.info(msg);
 
                     //  initialize the timer unless optional skipTimerInit is set to true
                     if (skipTimerInit !== true) {
-                        timer = null;
+                        perfTimer = null;
                     }
                 }
             }
@@ -157,7 +159,8 @@
 
             return appLogger;
 
-        }
+        },
+
     };
 
     /**
