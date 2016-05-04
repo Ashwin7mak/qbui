@@ -1,6 +1,8 @@
 import React from 'react';
 import {I18nMessage} from '../../utils/i18nMessage';
 import QBicon from '../qbIcon/qbIcon';
+import TableIcon from '../qbTableIcon/qbTableIcon';
+
 import Logger from '../../utils/logger';
 
 import './sortAndGroup.scss';
@@ -42,7 +44,7 @@ const FieldChoice = React.createClass({
                             <span className={"sortOrderIcon " + order} tabIndex="0"
                                   onClick={() => this.props.onSetOrder(this.props.type, this.props.index,
                                                             !this.props.field.descendOrder, this.props.field)} >
-                                  <QBicon icon={"return"} />
+                                  <TableIcon icon={"icon-TableIcons_sturdy_arrow" + order}/>
                             </span>
                         }
                         <span>
