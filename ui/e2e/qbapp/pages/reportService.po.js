@@ -87,7 +87,7 @@
         // Report table
         this.reportTable = this.loadedContentEl.element(by.className('reportTable'));
         // Table actions container
-        this.reportActionsContainerEl = this.reportTable.element(by.className('tableActionsContainer'));
+        this.reportToolbarContainerEl = this.reportToolsAndContentEl.element(by.className('reportToolbarContainer'));
         // Report toolbar
         this.reportsToolBar = element(by.className('reportToolbar'));
         // Report records count
@@ -107,7 +107,12 @@
         // All column headers from agGrid including first checkbox and last hidden actions column
         this.agGridColHeaderElList = this.agGridHeaderEl.all(by.className('ag-header-cell'));
         this.agGridLastColHeaderEl = this.agGridColHeaderElList.last();
-        this.agGridRecordElList = this.agGridBodyEl.all(by.className('ag-row'));
+        this.agGridRecordElList = this.agGridBodyEl.all(by.className('ag-row')).filter(function(elem) {
+            // Return records that are being shown in the grid
+            return elem.getCssValue('visibility').then(function(visible) {
+                return visible === 'visible';
+            });
+        });
         // Edit Record Menu
         //TODO: We render an editTools element per row so create a element locator functions for that
         this.agGridEditRecordMenu = this.agGridBodyEl.all(by.className('editTools')).first();

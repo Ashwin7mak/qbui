@@ -196,8 +196,6 @@
                             e2eBase.sleep(browser.params.smallSleep);
                         });
                     }
-                }).then(function() {
-                    e2ePageBase.waitForElementToBeStale(element(by.className('facetSelections')));
                 });
             });
         };
