@@ -33,7 +33,6 @@ var ReportHeader = React.createClass({
     },
     searchTheString(searchTxt) {
         this.getFlux().actions.filterSearchPending(searchTxt);
-        this.filterOnSearch(searchTxt);
     },
     handleSearchChange(e) {
         if (this.searchTheString) {
