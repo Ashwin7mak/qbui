@@ -26,7 +26,7 @@
         var headers = req.headers || {};
         var agent = req.useragent || {};
         var body = req.body || {};
-        var ip = '';
+        var ip;
 
         //  try to get the ip address
         if (req.headers) {
