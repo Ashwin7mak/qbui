@@ -3,14 +3,6 @@ import ReactDOM from 'react-dom';
 import TestUtils from 'react-addons-test-utils';
 import FieldChoiceList  from '../../src/components/sortGroup/fieldChoiceList';
 
-var I18nMessageMock = React.createClass({
-    render: function() {
-        return (
-            <div>test</div>
-        );
-    }
-});
-
 
 var FieldChoice = React.createClass({
     render: function() {
@@ -57,12 +49,10 @@ describe('FieldChoiceList functions', () => {
         };
         spyOn(mockCallbacks, 'showFields').and.callThrough();
 
-        FieldChoiceList.__Rewire__('I18nMessage', I18nMessageMock);
         FieldChoiceList.__Rewire__('FieldChoice', FieldChoice);
     });
 
     afterEach(() => {
-        FieldChoiceList.__ResetDependency__('I18nMessage');
         FieldChoiceList.__ResetDependency__('FieldChoice');
     });
 

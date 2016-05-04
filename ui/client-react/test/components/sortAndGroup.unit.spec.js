@@ -5,15 +5,7 @@ import SortAndGroup  from '../../src/components/sortGroup/sortAndGroup';
 
 import TestUtils from 'react-addons-test-utils';
 
-var I18nMessageMock = React.createClass({
-    render: function() {
-        return (
-            <div>test</div>
-        );
-    }
-});
-
-var SortAndGroupDialogMock = React.createClass({
+let SortAndGroupDialogMock = React.createClass({
     render: function() {
         return (
             <div>SortAndGroupDialogMock</div>
@@ -28,12 +20,10 @@ describe('SortAndGroup functions', () => {
     let flux = {
     };
     beforeEach(() => {
-        SortAndGroup.__Rewire__('I18nMessage', I18nMessageMock);
         SortAndGroup.__Rewire__('SortAndGroupDialog', SortAndGroupDialogMock);
     });
 
     afterEach(() => {
-        SortAndGroup.__ResetDependency__('I18nMessage');
         SortAndGroup.__ResetDependency__('SortAndGroupDialog');
     });
 

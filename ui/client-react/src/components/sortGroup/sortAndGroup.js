@@ -465,7 +465,7 @@ const SortAndGroup = React.createClass({
                 <div className={"sortAndGroupButton " + (this.state.show ? "shown " : "") }
                      ref="SortAndGroupButton"
                      >
-                    <span className="sortButtonSpan" tabIndex="0"  onClick={() => this.toggleShow()}>
+                    <span className="sortButtonSpan" tabIndex="0"  onClick={this.toggleShow}>
                         <QBicon className="sortButton" icon="sort-az" />
                     </span>
                 </div>

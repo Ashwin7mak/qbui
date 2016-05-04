@@ -282,7 +282,7 @@ const FacetsMenu = React.createClass({
                                             selectedValues={this.props.selectedValues}
                                             reportData={this.props.reportData}
                                             onFacetSelect={this.props.onFacetSelect}
-                                            hideMenu={() => this.hideMenu()}
+                                            hideMenu={this.hideMenu}
                                             onFacetDeselect={this.props.onFacetDeselect}
                                     /></div>
                 </Overlay>

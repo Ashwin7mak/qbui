@@ -78,7 +78,7 @@ const FieldsPanel = React.createClass({
     // add ?mockSort=true to the url to use mockSort data
     renderMockList(count) {
         function oneMockItem(owner, num) {
-            return (<ListGroupItem key={num} onClick={() => owner.selectField()}>Item {num}</ListGroupItem>);
+            return (<ListGroupItem key={num} onClick={owner.selectField}>Item {num}</ListGroupItem>);
         }
 
         let items = [];
