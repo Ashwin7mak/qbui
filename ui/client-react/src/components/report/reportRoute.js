@@ -86,7 +86,14 @@ const ReportRoute = React.createClass({
 
                 {this.getHeader()}
 
-                <ReportToolbarAndContent {...this.props} />
+                <ReportToolbarAndContent
+                    params={this.props.params}
+                    reportData={this.props.reportData}
+                    routeParams={this.props.routeParams}
+                    selectedAppId={this.props.selectedAppId}
+                    searchStringForFiltering={this.props.searchStringForFiltering}
+                    selectedRows={this.props.selectedRows}
+                    scrollingReport={this.props.scrollingReport} />
             </div>);
         }
     }

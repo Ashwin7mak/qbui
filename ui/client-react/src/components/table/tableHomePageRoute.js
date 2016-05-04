@@ -88,7 +88,6 @@ let TableHomePageRoute = React.createClass({
     },
 
     render() {
-
         return (<div className="tableHomepageContainer">
             <Stage stageHeadline={this.getStageHeadline()} pageActions={this.getPageActions(5)}>
                 <div className="table-content">
@@ -101,10 +100,16 @@ let TableHomePageRoute = React.createClass({
                 {this.getPageActions()}
             </div>
 
-            <ReportToolbarAndContent {...this.props} rptId={'1'} />
+            <ReportToolbarAndContent
+                params={this.props.params}
+                reportData={this.props.reportData}
+                routeParams={this.props.routeParams}
+                selectedAppId={this.props.selectedAppId}
+                searchStringForFiltering={this.props.searchStringForFiltering}
+                selectedRows={this.props.selectedRows}
+                scrollingReport={this.props.scrollingReport}
+                rptId={'1'} />
         </div>);
-
-        //return React.createElement(ReportRoute, _.assign({}, this.props, {"rptId": '1'}));
     }
 });
 
