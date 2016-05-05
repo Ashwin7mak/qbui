@@ -67,49 +67,6 @@
         };
     }
 
-    /**
-     * Simple implementation for performance monitoring to log
-     * the duration (in ms) of an event as an info message.
-     *
-     * @param tag
-     * @returns {{start: function(ev), log: log(skipTimerInit}}
-     * @constructor
-     */
-    function PerfTimer(event) {
-        var perfTimer;
-        var perfEvent = event ? event : '';
-
-        return {
-            // start the timer.  Can override/reset the tag
-            start: function(ev) {
-                perfTimer = new Date();
-                if (ev) {
-                    perfEvent = ev;
-                }
-            },
-
-            //  log an info message with the elapsed time from when the start function was called
-            log: function(skipTimerInit) {
-                if (perfTimer) {
-                    let ms = new Date().getTime() - perfTimer.getTime();
-
-                    //  log as info message
-                    var msg = {
-                        type: 'PERF',
-                        event: perfEvent,
-                        elapsedTime: ms + 'ms'
-                    };
-                    appLogger.info(msg);
-
-                    //  initialize the timer unless optional skipTimerInit is set to true
-                    if (skipTimerInit !== true) {
-                        perfTimer = null;
-                    }
-                }
-            }
-        };
-    }
-
     module.exports = {
 
         /**
@@ -148,12 +105,6 @@
                 appLogger = logger.child({
                     // custom logger attributes go here..
                 });
-
-                appLogger.perf = {
-                    getTimer: function(tag) {
-                        return new PerfTimer(tag);
-                    }
-                };
 
             }
 
