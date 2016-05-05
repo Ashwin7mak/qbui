@@ -146,7 +146,12 @@ var Nav = React.createClass({
     render() {
         const flux = this.getFlux();
 
-        return (<div className="navShell">
+        let classes = "navShell";
+        if (this.state.nav.leftNavVisible) {
+            classes += " leftNavOpen";
+        }
+
+        return (<div className={classes}>
 
             <Trowser position={"top"}
                      visible={this.state.nav.trowserOpen}

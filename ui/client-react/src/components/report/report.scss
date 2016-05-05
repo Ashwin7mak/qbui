@@ -5,7 +5,9 @@
     flex-direction: column;
     flex: 1 1 auto;
     min-width: 0;
-    background: $report-container-bg;
+    @include not-small-breakpoint {
+        background: $report-container-bg;
+    }
     .layout-stage {
         flex:0 0 auto;
     }

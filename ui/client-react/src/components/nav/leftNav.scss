@@ -88,7 +88,7 @@ $left-nav-horizontal-icon-border-color: $color32;
     .leftNav.open {
         max-width: calc(100% - 36px);
         width: 300px;
-        transition: width 100ms ease;
+        transition: all 100ms ease;
         .topLinks .leftNavLink {
             padding: 10px 0;
             .qbIcon {
@@ -429,7 +429,7 @@ div.leftNavTooltip {
         margin: 0;
         height: 100%;
         width: 0;
-        transition:width 100ms ease;
+        transition:all 100ms ease;
         z-index: 9999;
 
         .branding {
@@ -451,12 +451,7 @@ div.leftNavTooltip {
         }
         .main {
             position: absolute;
-        }
-        .mainContent, .topNav {
-            opacity: .1;
-            transition: opacity 250ms ease-in-out;
-            -moz-transition: opacity 250ms ease-in-out;
-            -webkit-transition: opacity 250ms ease-in-out;
+            width: 100%;
         }
 
         transform: translate3d(300px, 0, 0);
