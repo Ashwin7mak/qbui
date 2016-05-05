@@ -66,18 +66,21 @@ $left-nav-horizontal-icon-border-color: $color32;
 @include medium-breakpoint {
     .leftNav.expanded {
         width: 200px;
+        transition:width 100ms ease;
     }
 }
 
 @include large-breakpoint {
     .leftNav.expanded {
         width: 220px;
+        transition:width 100ms ease;
     }
 }
 
 @include xlarge-breakpoint {
     .leftNav.expanded {
         width: 300px;
+
     }
 }
 
@@ -117,6 +120,7 @@ div.leftNavTooltip {
 @include not-small-breakpoint {
     .leftNav.collapsed {
         width: 40px;
+        transition:width 100ms ease;
         .branding {
 
             .logo, .appsToggle .navLabel, .appsToggleIcon {
@@ -277,8 +281,7 @@ div.leftNavTooltip {
         }
     }
     .transitionGroup {
-        flex: 1;
-        overflow: visible;
+        flex: 1 0 auto;
         z-index: 1;
     }
 
