@@ -20,43 +20,43 @@ describe('Validate Performance Logger', function() {
         stubLog.restore();
     });
 
-    function getPerfLoggerInstance(event) {
+    function getPerfLoggerInstance(logMsg) {
         var perfLog = perfLogger.getInstance();
-        if (event) {
-            perfLog.start(event);
+        if (logMsg) {
+            perfLog.init(logMsg);
         }
         return perfLog;
     }
 
-    function assertLoggerTrue(perfLog, event, init) {
-        perfLog.logAndStop(init);
-        assert(stubLog.calledWith(sinon.match.any, event), 'Error logging PerfLog message.  Test Event: ' + event);
+    function assertLoggerTrue(perfLog, logMsg) {
+        perfLog.log();
+        assert(stubLog.calledWith(sinon.match.any, logMsg), 'Error logging PerfLog message.  Test message: ' + logMsg);
         stubLog.reset();
     }
 
-    function assertLoggerFalse(perfLog, event, init) {
-        perfLog.logAndStop(init);
-        assert(!stubLog.called, 'PerfLog unexpectedly logging message.  Test Event: ' + event);
+    function assertLoggerFalse(perfLog, logMsg) {
+        perfLog.log();
+        assert(!stubLog.called, 'PerfLog unexpectedly logging message.  Test message: ' + logMsg);
         stubLog.reset();
     }
 
     describe('validate perf instance message', function() {
 
         describe('validate single perf logger instantiation', function() {
-            var event = 'SINGLE_INSTANCE';
-            var perfLog = getPerfLoggerInstance(event);
+            var logMsg = 'SINGLE_INSTANCE';
+            var perfLog = getPerfLoggerInstance(logMsg);
 
             var testCases = [
-                {test: 'Log event after start is called', perfLog: getPerfLoggerInstance(event), event: event, expectation: true},
-                {test: 'Log event w/o start called', perfLog: getPerfLoggerInstance(), event: event, expectation: false}
+                {test: 'Log message after init is called', perfLog: getPerfLoggerInstance(logMsg), logMsg: logMsg, expectation: true},
+                {test: 'Log message w/o init called', perfLog: getPerfLoggerInstance(), logMsg: logMsg, expectation: false}
             ];
 
             testCases.forEach(function(testCase) {
                 it('Test case: ' + testCase.test, function(done) {
                     if (testCase.expectation === true) {
-                        assertLoggerTrue(testCase.perfLog, testCase.event);
+                        assertLoggerTrue(testCase.perfLog, testCase.logMsg);
                     } else {
-                        assertLoggerFalse(testCase.perfLog, testCase.event);
+                        assertLoggerFalse(testCase.perfLog, testCase.logMsg);
                     }
                     done();
                 });
@@ -66,68 +66,44 @@ describe('Validate Performance Logger', function() {
 
         describe('validate multiple perf instance message is logged', function() {
 
-            var event1 = 'MULTI_INSTANCE_1';
-            var event2 = 'MULTI_INSTANCE_2';
+            var logMsg1 = 'MULTI_INSTANCE_1';
+            var logMsg2 = 'MULTI_INSTANCE_2';
 
             var testCases = [
-                {test: 'Perf instance ' + event1, perfLog: getPerfLoggerInstance(event1), event: event1},
-                {test: 'Perf instance ' + event2, perfLog: getPerfLoggerInstance(event2), event: event2}
+                {test: 'Perf instance ' + logMsg1, perfLog: getPerfLoggerInstance(logMsg1), logMsg: logMsg1},
+                {test: 'Perf instance ' + logMsg2, perfLog: getPerfLoggerInstance(logMsg2), logMsg: logMsg2}
             ];
 
             testCases.forEach(function(testCase) {
                 it('Test case: ' + testCase.test, function(done) {
-                    assertLoggerTrue(testCase.perfLog, testCase.event);
+                    assertLoggerTrue(testCase.perfLog, testCase.logMsg);
                     done();
                 });
             });
         });
 
-        describe('validate skipInit flag', function() {
-            var testCases = [
-                {test: 'Log event1 with init flag true', init: true, expectation: true},
-                {test: 'Log event2 with init flag false', init: false, expectation: true},
-                {test: 'Log event3 with init flag false', init: false, expectation: false}
-            ];
-
-            var event = 'SINGLE_INSTANCE_SKIPINIT';
-            var perfLog = getPerfLoggerInstance(event);
-
-            testCases.forEach(function(testCase) {
-                it('Test case: ' + testCase.test, function(done) {
-                    if (testCase.expectation === true) {
-                        assertLoggerTrue(perfLog, event, testCase.init);
-                    } else {
-                        assertLoggerFalse(perfLog, event, testCase.init);
-                    }
-                    done();
-                });
-            });
-        });
-
-
-
-        describe('validate perf instance message is logged with various event messages', function() {
+        describe('validate perf instance message is logged with various messages', function() {
 
             var testCases = [
-                {test: 'Log event with setEvent called in start', event:'TEST1', setPerfEvent: false, init: false, logEvent:'TEST1'},
-                {test: 'Log event with setEvent called explicitly', event:'TEST2', setPerfEvent: true, init: false, logEvent:'TEST2'},
-                {test: 'Log event with setEvent called with null input', event:null, setPerfEvent: true, init: false, logEvent:''},
-                {test: 'Log event with setEvent called with empty input', event:'', setPerfEvent: true, init: false, logEvent:''},
-                {test: 'Log event with setEvent called with invalid input', event:new Date(), setPerfEvent: true, init: false, logEvent:''}
+                {test: 'Log with setMessage called in init', msg:'TEST1', setPerfMsg: false, logMsg:'TEST1'},
+                {test: 'Log with setMessage called explicitly', msg:'TEST2', setPerfMsg: true, logMsg:'TEST2'},
+                {test: 'Log with setMessage called with null input', msg:null, setPerfMsg: true, logMsg:''},
+                {test: 'Log with setMessage called with empty input', msg:'', setPerfMsg: true, logMsg:''},
+                {test: 'Log with setMessage called with invalid input', msg:new Date(), setPerfMsg: true, logMsg:''}
             ];
 
             testCases.forEach(function(testCase) {
                 it('Test case: ' + testCase.test, function(done) {
                     var perfLog = getPerfLoggerInstance();
 
-                    if (testCase.setPerfEvent === true) {
-                        perfLog.start();
-                        perfLog.setEvent(testCase.event);
+                    if (testCase.setPerfMsg === true) {
+                        perfLog.init();
+                        perfLog.setMessage(testCase.msg);
                     } else {
-                        perfLog.start(testCase.event);
+                        perfLog.init(testCase.msg);
                     }
 
-                    assertLoggerTrue(perfLog, testCase.logEvent, testCase.init);
+                    assertLoggerTrue(perfLog, testCase.logMsg);
 
                     done();
                 });

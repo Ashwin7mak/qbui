@@ -44,7 +44,7 @@
 
         if (groupFields && fields && records) {
             let perfLog = perfLogger.getInstance();
-            perfLog.start('createGroupDataGrid');
+            perfLog.init('Time to createGroupDataGrid');
 
             let map = new Map();
             let groupMap = new Map();
@@ -79,7 +79,7 @@
             });
 
             data = groupTheData(groupFields, reportData, 0);
-            perfLog.logAndStop();
+            perfLog.log();
         }
 
         return data;
@@ -277,7 +277,7 @@
                 let groupList = req.param(constants.REQUEST_PARAMETER.GROUP_LIST);
                 if (groupList) {
                     let perfLog = perfLogger.getInstance();
-                    perfLog.start("Build groupList: " + groupList + "; Number of fields: " + fields.length + "; Number of records: " + records.length);
+                    perfLog.init("Time to build groupList: " + groupList + "; Number of fields: " + fields.length + "; Number of records: " + records.length);
 
                     //  build a fields map for quick field access when looping through the groups list.
                     let map = new Map();
@@ -341,7 +341,7 @@
                             groupBy.totalRows = records.length;
                         }
                     }
-                    perfLog.logAndStop();
+                    perfLog.log();
                 }
             }
 
