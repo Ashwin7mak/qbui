@@ -25,6 +25,10 @@ import './sortAndGroup.scss';
  */
 const FieldChoiceList = React.createClass({
     render() {
+        if (!this.props.fields) {
+            return null;
+        }
+        
         //note whether we are at max or not to show and additional blank item
         let showMore = this.props.fields &&
             (this.props.fields.length < this.props.maxLength);

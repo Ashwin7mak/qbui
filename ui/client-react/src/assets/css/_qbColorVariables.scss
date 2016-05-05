@@ -1,4 +1,10 @@
 /* This file should contain ALL the colors used in QuickBase. This may be used to create themes in future. */
+/* per our discussion around color we will keep the 2 levels of indirection on color. So that if we change the value
+ * of $colorx we are replacing every use of it with a new color(i.e colorblind can't see $colorx, or for theme usage).
+ * If we want to modify a category of colors use we will change the semantic category
+ * ie from $icon_background: $colorx to $icon_background:$colory
+ * and the scss for color will refer to the semantic category not the color number
+*/
 /* see http://quickbase.design/colors/ */
 
 $color1:    #f3f8fe; // wispy-water
@@ -85,6 +91,11 @@ $facetMenu-showMoreColor:               $color8;
 $facetMenu-facetTokenTextColor:         $color20;
 $facetMenu-facetTokenBackgroundColor:   $color7;
 $facetMenu-itemHoverColor:              rgba($color4, 0.5);
+
+//===Sort & Group Popover
+$popover-text : $color11;
+$popover-title :$popover-text;
+$popover-background: $color2;
 
 //==report icon colors
 $report-icon-table-color: #f87878;

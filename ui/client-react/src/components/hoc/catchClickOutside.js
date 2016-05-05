@@ -180,11 +180,11 @@ let wrapper = function(Component) {
          */
         render: function() {
             var passedProps = this.props;
-            var props = {ref: 'instance'};
+            var instance = {ref: 'instance'};
             Object.keys(this.props).forEach(function(key) {
-                props[key] = passedProps[key];
+                instance[key] = passedProps[key];
             });
-            return React.createElement(Component,  props);
+            return React.createElement(Component,  instance);
         }
     });
 

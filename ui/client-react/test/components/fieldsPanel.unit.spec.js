@@ -113,7 +113,7 @@ describe('FieldsPanel functions', () => {
                                                               fieldChoiceList={fieldsThree()}
                                                               reportColumns={fieldsUsed()}
                                                               showNotVisible={false}
-                                                              showMoreFields={mockCallbacks.showMoreFields}
+                                                              onShowMoreFields={mockCallbacks.showMoreFields}
         />);
         expect(TestUtils.isCompositeComponent(component)).toBeTruthy();
         let moreFields = TestUtils.scryRenderedDOMComponentsWithClass(component, "moreFields");

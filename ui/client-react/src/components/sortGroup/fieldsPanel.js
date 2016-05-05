@@ -55,7 +55,7 @@ const FieldsPanel = React.createClass({
                     return this.renderField(field, this.isSelected(field.id, list), true);
                 });
             } else {
-                restOfFields = (<ListGroupItem className="moreFields" onClick={this.props.showMoreFields}>
+                restOfFields = (<ListGroupItem className="moreFields" onClick={this.props.onShowMoreFields}>
                                     <span>
                                         <I18nMessage message={"report.sortAndGroup.moreFields"}/>
                                     </span></ListGroupItem>);

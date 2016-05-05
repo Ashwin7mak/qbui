@@ -90,6 +90,10 @@ const SortAndGroup = React.createClass({
         this.setState({showNotVisible : true});
     },
 
+    hideMoreFields() {
+        this.setState({showNotVisible : false});
+    },
+
     toggleShow() {
         //TODO:move state to flux action & store
         //let flux = this.getFlux();
@@ -488,7 +492,8 @@ const SortAndGroup = React.createClass({
                                                             dirty={this.state.dirty}
                                                             reportData={this.props.reportData}
                                                             showNotVisible={this.state.showNotVisible}
-                                                            showMoreFields={this.showMoreFields}
+                                                            onShowMoreFields={this.showMoreFields}
+                                                            onHideMoreFields={this.hideMoreFields}
                                                             onShowFields={this.showFields}
                                                             onHideFields={this.hideFields}
                                                             onSelectField={this.handleAddField}

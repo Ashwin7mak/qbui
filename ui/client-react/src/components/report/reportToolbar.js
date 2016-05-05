@@ -155,7 +155,7 @@ const ReportToolbar = React.createClass({
                     filteredRecordCount =  this.props.reportData.data.filteredRecordsCount;
                 }
                 if (this.props.reportData.data.records) {
-                    recordCount =  this.props.reportData.data.recordsCount;
+                    recordCount = this.props.reportData.data.recordsCount;
                 }
                 if (this.props.reportData.data.facets &&
                     (this.props.reportData.data.facets.length > 0)) {
@@ -173,24 +173,26 @@ const ReportToolbar = React.createClass({
 
                         {/*TODO : check if searchBox is enabled for this report,
                          if has facets has search too, eg no facets without searchBox */}
-                        {recordCount &&
-                            <FilterSearchBox onChange={this.handleSearchChange}
+                        {recordCount ?
+                            (<FilterSearchBox onChange={this.handleSearchChange}
                                              nameForRecords={this.props.nameForRecords}
                                              searchBoxKey="reportToolBar"
-                                {...this.props} />
+                                {...this.props} />) :
+                            null
                         }
 
-                        {recordCount &&
-                            <SortAndGroup  {...this.props}
+                        {recordCount ?
+                            (<SortAndGroup  {...this.props}
                                 filter={{selections: this.props.selections,
                                         facet: this.props.reportData.facetExpression,
                                         search: this.props.searchStringForFiltering}}
-                            />
+                            />) :
+                            null
                         }
 
                         {/* check if facets is enabled for this report,
                          also hide Facets Menu Button if facets disabled  */}
-                        {(recordCount && hasFacets) &&
+                        {(recordCount && hasFacets) ?
                             (<FacetsMenu className="facetMenu"
                                 {...this.props}
                                          isLoading={isLoading}
@@ -198,19 +200,20 @@ const ReportToolbar = React.createClass({
                                          onFacetSelect={this.handleFacetSelect}
                                          onFacetDeselect={this.handleFacetDeselect}
                                          onFacetClearFieldSelects={this.handleFacetClearFieldSelects}
-                            />)
+                            />) :
+                            null
                         }
                     </div>
 
 
-                    {!isLoading &&
-                        <RecordsCount recordCount={recordCount}
+                    {(!isLoading && recordCount) ?
+                        (<RecordsCount recordCount={recordCount}
                               isFiltered={this.isFiltered() && (!_.isUndefined(this.props.reportData))}
-                              isLoading={isLoading}
                               filteredRecordCount={filteredRecordCount}
                               nameForRecords={this.props.nameForRecords}
                               clearAllFilters={this.props.clearAllFilters}
-                        />
+                        />) :
+                        null
                     }
 
                 {this.props.pageActions}

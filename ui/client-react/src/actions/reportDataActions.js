@@ -193,6 +193,12 @@ let reportDataActions = {
                 //  NOTE: the optional gList parameter is used by the node layer only;  it is ignored on the api server.
                 //
                 let groupList = '';
+
+                // if the report started out with sort/group settings defined and you removed them via the sort/group popover
+                // to modify the sort/group settings adhoc, it should use the empty sort/group param and not fall
+                // thru to use the original report settings. So here we test for hasOwnProperty since an empty value in the property
+                // means to overide the sort/group with no sort/grouping. if the property is excluded only then do we default to the
+                // original report settings for sort/group
                 if (overrideQueryParams.hasOwnProperty(query.SORT_LIST_PARAM)) {
                     let sortList = ReportUtils.getSortFids(overrideQueryParams[query.SORT_LIST_PARAM]);
                     queryParams[query.SORT_LIST_PARAM] = ReportUtils.getSortListString(sortList);
