@@ -106,26 +106,28 @@ describe('Validate Performance Logger', function() {
 
 
 
-        describe('validate perf instance message is logged without various event messages', function() {
+        describe('validate perf instance message is logged with various event messages', function() {
 
-            var msg1 = 'TEST1';
             var testCases = [
-                {test: 'Log message1 with event set in start method', msg:msg1, setPerfMsg: false, init: true, expectation: true},
-                {test: 'Log message1 with event set called', msg:'TEST2', setPerfMsg: true, init: false, expectation: true},
-                {test: 'Log message1 without set event called', msg:'TEST3', setPerfMsg: true, init: false, expectation: false}
+                {test: 'Log message1 with event set in start method', msg:'TEST1', setPerfMsg: false, init: false, logMsg:'TEST1'},
+                {test: 'Log message1 with event set called', msg:'TEST2', setPerfMsg: true, init: false, logMsg:'TEST2'},
+                {test: 'Log message1 without set event called', msg:'TEST3', setPerfMsg: true, init: false, logMsg:'TEST3'},
+                {test: 'Log message1 with set event called with null input', msg:null, setPerfMsg: true, init: false, logMsg:''},
+                {test: 'Log message1 with set event called with empty input', msg:'', setPerfMsg: true, init: false, logMsg:''},
+                {test: 'Log message1 with set event called with invalid input', msg:new Date(), setPerfMsg: true, init: false, logMsg:''}
             ];
 
-            var perfLog = getPerfLoggerInstance(msg1);
             testCases.forEach(function(testCase) {
                 it('Test case: ' + testCase.test, function(done) {
+                    var perfLog = getPerfLoggerInstance();
+                    perfLog.start(testCase.msg);
+
                     if (testCase.setPerfMsg === true) {
                         perfLog.setEvent(testCase.msg);
                     }
-                    if (testCase.expectation === true) {
-                        assertLoggerTrue(perfLog, testCase.msg, testCase.init);
-                    } else {
-                        assertLoggerFalse(perfLog, testCase.msg, testCase.init);
-                    }
+
+                    assertLoggerTrue(perfLog, testCase.logMsg, testCase.init);
+
                     done();
                 });
             });
