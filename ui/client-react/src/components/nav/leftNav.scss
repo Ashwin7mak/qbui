@@ -2,19 +2,21 @@
 
 /*left nav vars */
 $left-nav-padding: 15px;
-$left-nav-fg: #fff;
-$left-nav-link-fg: #7090ab;
-$left-nav-link-hover-fg: #fff;
-$left-nav-heading-bg: #002b48;
-$left-nav-input-fg: #555;
+$left-nav-fg: $color2;
+$left-nav-link-fg: $color23;
+$left-nav-link-hover-fg: $color2;
+$left-nav-heading-bg: $color24;
+$left-nav-input-fg: $color25;
 
-$left-nav-hover-bg: #00b0c2;
-$left-nav-heading-bg: #264a6d;
-$left-nav-heading-fg: #bfcfe3;
-$left-nav-bg: #193048;
-$selected-table-fg: #fff;
-$right-icon-separator-color: #13dbf1;
-$left-nav-horizontal-icon-border-color: #131f2b;
+$left-nav-hover-bg: $color26;
+$left-nav-hover-bg-hover: $color27;
+$left-nav-heading-bg: $color28;
+$left-nav-heading-fg: $color29;
+$left-nav-bg: $color30;
+$selected-table-fg: $color2;
+$right-icon-separator-color: $color3;
+$right-icon-separator-color-hover: $color31;
+$left-nav-horizontal-icon-border-color: $color32;
 
 .leftNav.expanded {
     overflow: visible;
@@ -46,13 +48,14 @@ $left-nav-horizontal-icon-border-color: #131f2b;
 }
 
 .leftNav .link.selected {
+    background-color: $left-nav-hover-bg-hover !important;
     a.leftNavLink {
         color: $selected-table-fg;
     }
     a.right {
         opacity: 1;
         color: $selected-table-fg;
-        background-color: $left-nav-hover-bg;
+        border-left: 1px solid $right-icon-separator-color-hover !important;
     }
 }
 
@@ -105,21 +108,8 @@ div.leftNavTooltip {
         display: block;
     }
 }
-.branding .appsToggle {
-    text-overflow:ellipsis;
-    overflow:hidden;
-    padding-right:25px;
-    color: $left-nav-fg;
-    height:40px;
-    border: 0;
-    border-radius:0;
-    margin:0;
-    text-align:left;
-    width:100%;
-}
-.branding .appsToggle::hover {
-    color: $left-nav-fg;
-}
+
+
 
 /* collapsed nav overrides */
 @include not-small-breakpoint {
@@ -206,7 +196,7 @@ div.leftNavTooltip {
             overflow: hidden;
             text-overflow: ellipsis;
         }
-        .appsToggle {
+        button.appsToggle {
             text-overflow:ellipsis;
             overflow:hidden;
             padding-right:25px;
@@ -217,12 +207,11 @@ div.leftNavTooltip {
             margin:0;
             text-align:left;
             width:100%;
-
             padding-left: 8px;
             position: relative;
             white-space: nowrap;
             cursor: pointer;
-            background-color: $left-nav-hover-bg;
+            background-color: $left-nav-hover-bg-hover;
             .qbIcon {
                 width: 28px;
                 vertical-align: middle;
@@ -306,7 +295,7 @@ div.leftNavTooltip {
         margin: 0;
         > li {
             position: relative;
-            > a, .globalActionLink {
+            a, .globalActionLink {
 
                 line-height: 40px;
                 padding-left: 8px;
@@ -356,7 +345,8 @@ div.leftNavTooltip {
                 vertical-align: middle;
                 line-height: 40px;
                 width: 200px;
-                background: $left-nav-hover-bg;
+
+                background-color: $left-nav-hover-bg;
                 a {
                     flex: 1;
                     opacity: 1;
@@ -364,7 +354,11 @@ div.leftNavTooltip {
                 }
                 a.right {
                     flex: 0 0 auto;
+                    border-left: 1px solid $right-icon-separator-color;
                 }
+            }
+            &.selected .hoverComponent {
+                background-color: $left-nav-hover-bg-hover;
             }
         }
     }

@@ -23,9 +23,19 @@ $color19:   #c7c7c7; // porpoise
 $color20:   #486c8f; // dull-sapphire
 $color21:   #b8b8b8; //ghost
 $color22:   #56b349; //fiddlehead
+$color23:   #7090ab; // dragon-foot
+$color24:   #002b48;
+$color25:   #555555;
+$color26:   #254a6d;
+$color27:   #00b0c2;
+$color28:   #264a6d;
+$color29:   #bfcfe3;
+$color30:   #193048;
+$color31:   #13dbf1;
+$color32:   #131f2b;
 
-$left-nav-bg: #193048; // deep-sea
-$icon-color: #7090ab; // dragon-foot
+$left-nav-bg: $color30; // deep-sea
+$icon-color: $color23;
 $icon-color-hover: #0098cd; // caribbean
 $topnav-icon-color: $icon-color;
 
@@ -40,7 +50,7 @@ $report-container-bg: $color2;
 $tabsUnderLine: #365ebf;
 
 $icon-badge-color: #2d6c92;
-$icon-edit-color: #00b0c2;
+$icon-edit-color: $color27;
 $icon-print-color: #2ca01c;
 $icon-mail-color: #f7a21a;
 $icon-duplicate-color: #c75ac2;
@@ -83,7 +93,7 @@ $report-icon-grid-edit-color: #c72f79;
 $report-icon-timeline-color: #e77700;
 $report-icon-map-color: #00c4d8;
 
-$search-input-fg: #555555;
+$search-input-fg: $color25;
 $popup-fg: #404040;
 
 $top-nav-title-icon-color: #009AAE;

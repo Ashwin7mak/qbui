@@ -41,6 +41,7 @@ $page-actions-background-color: #486c8f;
     .secondaryBar {
         display: flex;
         flex-direction: row;
+        flex: 0 0 auto;
         justify-content:space-between;
         height:40px;
         background-color: $secondary-bar-bg;
