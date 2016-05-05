@@ -6,12 +6,12 @@
     var RequestAppsPage = requirePO('requestApps');
     var RequestSessionTicketPage = requirePO('requestSessionTicket');
     var ReportSortingPage = requirePO('reportSorting');
+    var ReportFacetsPage = requirePO('reportFacets');
     var reportServicePage = new ReportServicePage();
     var reportSortingPage = new ReportSortingPage();
-    //include underScore js
-    var _ = require('underscore');
+    var reportFacetsPage = new ReportFacetsPage();
 
-    describe('Report Grouping and Sorting SetUp', function() {
+    describe('Report Grouping and Sorting Via Icon Tests', function() {
         var realmName;
         var realmId;
         var app;
@@ -101,12 +101,11 @@
                 });
 
             }).then(function() {
-                //Create a report with sorting and grouping
-                //return e2eBase.reportService.createReportWithSortAndGroup(app.id, app.tables[e2eConsts.TABLE1].id, ['-7', '6:V']);
-
+                //Create a report with sorting and grouping (Sort startDate asc and group by User Name)
+                return e2eBase.reportService.createReportWithSortAndGroup(app.id, app.tables[e2eConsts.TABLE1].id, ["-9", "6:V"]);
             }).then(function() {
                 //Create a report with facets [text field and checkbox field]
-                return e2eBase.reportService.createReportWithFacets(app.id, app.tables[e2eConsts.TABLE1].id, [6, 7]);
+                return e2eBase.reportService.createReportWithFacetsAndSortLists(app.id, app.tables[e2eConsts.TABLE1].id, [7, 8], ["6:V", "7:V", "12:V", "9", "-11"]);
             }).then(function() {
                 // Get a session ticket for that subdomain and realmId (stores it in the browser)
                 realmName = e2eBase.recordBase.apiBase.realm.subdomain;
@@ -128,33 +127,26 @@
         });
 
         /*
-         * Grouping/Sorting Via PopUp Test Cases using No FIDS,SortList setup in reports
+         * XLARGE BREAKPOINT - Grouping/Sorting Via PopUp Test Cases using No FIDS,SortList setup in reports
          */
-        describe('Report Grouping and Sorting Tests via PopUp', function() {
+        describe('XLARGE: Report Settings: No Facets or sortLists', function() {
 
             beforeAll(function(done) {
                 e2eBase.resizeBrowser(e2eConsts.XLARGE_BP_WIDTH, e2eConsts.DEFAULT_HEIGHT).then(function() {
+                    //go to report page directly
+                    RequestAppsPage.get(e2eBase.getRequestReportsPageEndpoint(realmName, app.id, app.tables[e2eConsts.TABLE1].id, '1'));
+                    reportServicePage.waitForElement(reportServicePage.loadedContentEl);
                     done();
                 });
             });
 
             /**
-             * Before each test starts just make sure the table list div has loaded
-             */
-            beforeEach(function(done) {
-                //go to report page directly. Adding this extra step to avoid any leftover errors at the end of each test and also to avoid stale element error.
-                RequestAppsPage.get(e2eBase.getRequestReportsPageEndpoint(realmName, app.id, app.tables[e2eConsts.TABLE1].id, '1'));
-                reportServicePage.waitForElement(reportServicePage.loadedContentEl);
-                done();
-            });
-
-            /**
-             * Data Provider for reports and faceting results.
+             * Data Provider for sortBy/GrpBy.
              */
             function TestCases() {
                 return [
                     {
-                        message: 'Only Sort By Date(Start Date)',
+                        message: 'Sort Only By Start Date',
                         groupBy: [],
                         sortBy: ['Start Date'],
                         flag: 'sortOnly',
@@ -166,7 +158,7 @@
                         ]
                     },
                     {
-                        message: 'Only Group By User Field(User Name)',
+                        message: 'Group Only By User Field',
                         groupBy: ['User Name'],
                         sortBy: [],
                         flag: 'groupOnly',
@@ -181,7 +173,7 @@
                         ]
                     },
                     {
-                        message: 'Single Field - GroupBy Text field(Project Phase) and SortBy Numeric(% Completed) ',
+                        message: 'GroupBy Text field(Project Phase) and SortBy Numeric(% Completed) ',
                         groupBy: ['Project Phase'],
                         sortBy: ['% Completed'],
                         flag: 'sortAndGrp',
@@ -195,7 +187,7 @@
                         ]
                     },
                     {
-                        message: 'Multiple Fields - GroupBy Duration field and user field  and SortBy Numeric(% Completed) and Text field(Project Phase)',
+                        message: 'GroupBy Duration field and user field  and SortBy Numeric(% Completed) and Text field(Project Phase)',
                         groupBy: ["Project Phase", "% Completed"],
                         sortBy: ["Duration Taken", "Start Date"],
                         flag: 'sortAndGrp',
@@ -218,7 +210,6 @@
 
             TestCases().forEach(function(testCase) {
                 it('' + testCase.message, function(done) {
-                    //go to report page directly
                     reportServicePage.waitForElement(reportSortingPage.reportSortingGroupingContainer).then(function() {
                         reportServicePage.waitForElementToBeClickable(reportSortingPage.reportSortAndGroupBtn).then(function() {
                             reportSortingPage.reportSortAndGroupBtn.click();
@@ -258,7 +249,6 @@
                                     var cellValues = [];
                                     //need this because for grouping the selected columns will be deleted in table grid
                                     var cellCount = 8 - (testCase.groupBy.length);
-                                    console.log("the cell count is: " + cellCount);
                                     for (var i = 2; i <= cellCount; i++) {
                                         cellValues.push(row.all(by.className('ag-cell-no-focus')).get(i).getText());
                                     }
@@ -273,6 +263,9 @@
                                         //for group only they are not sorted
                                         expect(groupingSortingTableResults.sort()).toEqual(testCase.expectedTableResults.sort());
                                     }
+                                }).then(function() {
+                                    //finally reset
+                                    reportSortingPage.verifyGrpSortPopUpReset();
                                     done();
                                 });
                             });
@@ -281,211 +274,164 @@
                 });
             });
 
-            describe('Report sortOrderIcon tests via Grp/Sort PopUp', function() {
-                beforeAll(function(done) {
-                    e2eBase.resizeBrowser(e2eConsts.LARGE_BP_WIDTH, e2eConsts.DEFAULT_HEIGHT).then(function() {
-                        done();
+            it('Verify you can add not more than 3 fields in GrpBy and not more than 5 in SortBy', function(done) {
+                var grpFields = ["Project Phase", "% Completed", "User Name"];
+                var sortFields = ["Start Date", "Finish Date", "Duration Taken", "Task Name", "Record ID#"];
+                reportServicePage.waitForElement(reportSortingPage.reportSortingGroupingContainer).then(function() {
+                    reportServicePage.waitForElementToBeClickable(reportSortingPage.reportSortAndGroupBtn).then(function() {
+                        reportSortingPage.reportSortAndGroupBtn.click();
+                        // Sleep needed for animation of drop down
+                        e2eBase.sleep(browser.params.smallSleep);
+                        //Verify grouping/sorting popOver
+                        reportServicePage.waitForElement(reportSortingPage.sortAndGrpDialogueResetBtn).then(function() {
+                            //Verify the title
+                            expect(reportSortingPage.reportSortAndGroupTitle.getAttribute('innerText')).toEqual('Sort & Group');
+                            //Verify title of groupBy
+                            expect(reportSortingPage.reportGroupByContainerTitle.getText()).toEqual('Group');
+                        }).then(function() {
+                            //Select group By items
+                            for (var i = 0; i < grpFields.length; i++) {
+                                reportSortingPage.selectGroupByItems(grpFields[i]);
+                            }
+                        }).then(function() {
+                            //Select sort By items
+                            for (var i = 0; i < sortFields.length; i++) {
+                                reportSortingPage.selectSortByItems(sortFields[i]);
+                            }
+                        }).then(function() {
+                            //Verify no more fields can be added after 3 fields in GrpBy
+                            reportSortingPage.reportGroupByContainer.all(by.className('empty')).then(function(grpItems) {
+                                expect(grpItems.length).toBe(0);
+                            });
+
+                        }).then(function() {
+                            //Verify no more fields can be added after 3 fields in sortBy
+                            reportSortingPage.reportSortByContainer.all(by.className('empty')).then(function(sortItems) {
+                                expect(sortItems.length).toBe(0);
+                                done();
+                            });
+                        });
                     });
                 });
+            });
+        }); //XLARGE describe block
 
-                /**
-                 * Before each test starts just make sure the table list div has loaded
-                 */
-                beforeEach(function(done) {
-                    //go to report page directly. Adding this extra step to avoid any leftover errors at the end of each test and also to avoid stale element error.
+        /*
+         * LARGE BREAKPOINT - Grouping/Sorting Via PopUp Test Cases using No FIDS,SortList setup in reports
+         */
+        describe('LARGE : Report Settings : No facets or sortLists: ', function() {
+            beforeAll(function(done) {
+                e2eBase.resizeBrowser(e2eConsts.LARGE_BP_WIDTH, e2eConsts.DEFAULT_HEIGHT).then(function() {
+                    //go to report page directly
                     RequestAppsPage.get(e2eBase.getRequestReportsPageEndpoint(realmName, app.id, app.tables[e2eConsts.TABLE1].id, '1'));
                     reportServicePage.waitForElement(reportServicePage.loadedContentEl);
                     done();
                 });
-
-                /**
-                 * Data Provider for reports and faceting results.
-                 */
-                function sortIconTestCases() {
-                    return [
-                        {
-                            message: 'Only SortBy field with descending via sortOrderIcon',
-                            groupBy: [],
-                            sortBy: ['Start Date'],
-                            sortOrderIconInGrpBy: [],
-                            sortOrderIconInSortBy: [{fieldIndex:0, sortOrder:'desc'}],
-                            expectedTableResults: [
-                                ['Jon Neil', 'Development', 'Install latest software', '3/31/2009', '4/28/2009', '15250284452.47152052910053 weeks', '100.00000000000000%'],
-                                ['Angela Leon', 'Planning', 'Workstation purchase', '3/21/2009', '4/10/2009', '15250284452.47152052910053 weeks', '99.00000000000000%'],
-                                ['Chris Baker', 'Development', 'Upgrade DBMS', '3/19/2009', '4/28/2009', '0.0020410978836 weeks', '99.00000000000000%'],
-                                ['Chris Baker', 'Planning', 'Server purchase', '3/16/2009', '4/10/2009', '-15250284452.47152052910053 weeks', '100.00000000000000%']
-                            ]
-                        },
-                        {
-                            message: 'Only Group By field with descending via sortOrderIcon',
-                            groupBy: ['User Name'],
-                            sortBy: [],
-                            sortOrderIconInGrpBy: [{fieldIndex:0, sortOrder:'desc'}],
-                            sortOrderIconInSortBy: [],
-                            expectedTableResults: [
-                                ['', '', '', '', '', ''],
-                                ['Development', 'Install latest software', '3/31/2009', '4/28/2009', '15250284452.47152052910053 weeks', '100.00000000000000%'],
-                                ['', '', '', '', '', ''],
-                                ['Development', 'Upgrade DBMS', '3/19/2009', '4/28/2009', '0.0020410978836 weeks', '99.00000000000000%'],
-                                ['Planning', 'Server purchase', '3/16/2009', '4/10/2009', '-15250284452.47152052910053 weeks', '100.00000000000000%'],
-                                ['', '', '', '', '', ''],
-                                ['Planning', 'Workstation purchase', '3/21/2009', '4/10/2009', '15250284452.47152052910053 weeks', '99.00000000000000%']
-                            ]
-                        },
-                        {
-                            message: 'Multiple field Sorting Only SortBy field with descending via sortOrderIcon',
-                            groupBy: ['User Name', 'Project Phase'],
-                            sortBy: ['Start Date', '% Completed'],
-                            sortOrderIconInGrpBy: [{fieldIndex:0, sortOrder:'asc'}, {fieldIndex:1, sortOrder:'desc'}],
-                            sortOrderIconInSortBy: [{fieldIndex:1, sortOrder:'desc'}],
-                            expectedTableResults: [
-                                ['Jon Neil', 'Development', 'Install latest software', '3/31/2009', '4/28/2009', '15250284452.47152052910053 weeks', '100.00000000000000%'],
-                                ['Angela Leon', 'Planning', 'Workstation purchase', '3/21/2009', '4/10/2009', '15250284452.47152052910053 weeks', '99.00000000000000%'],
-                                ['Chris Baker', 'Development', 'Upgrade DBMS', '3/19/2009', '4/28/2009', '0.0020410978836 weeks', '99.00000000000000%'],
-                                ['Chris Baker', 'Planning', 'Server purchase', '3/16/2009', '4/10/2009', '-15250284452.47152052910053 weeks', '100.00000000000000%']
-                            ]
-                        },
-                    ];
-                }
-
-                sortIconTestCases().forEach(function(testCase) {
-                    it('' + testCase.message, function(done) {
-                        //go to report page directly
-                        reportServicePage.waitForElement(reportSortingPage.reportSortingGroupingContainer).then(function() {
-                            reportServicePage.waitForElementToBeClickable(reportSortingPage.reportSortAndGroupBtn).then(function() {
-                                reportSortingPage.reportSortAndGroupBtn.click();
-                                // Sleep needed for animation of drop down
-                                e2eBase.sleep(browser.params.smallSleep);
-                                //Verify grouping/sorting popOver
-                                reportServicePage.waitForElement(reportSortingPage.sortAndGrpDialogueResetBtn).then(function() {
-                                }).then(function() {
-                                    //Select group By items
-                                    for (var i = 0; i < testCase.groupBy.length; i++) {
-                                        reportSortingPage.selectGroupByItems(testCase.groupBy[i]);
-                                    }
-                                }).then(function() {
-                                    //Select sort By items
-                                    for (var i = 0; i < testCase.sortBy.length; i++) {
-                                        reportSortingPage.selectSortByItems(testCase.sortBy[i]);
-                                    }
-                                }).then(function() {
-                                    for (var i = 0; i < testCase.sortOrderIconInGrpBy.length; i++) {
-                                        console.log("the length is: " + testCase.sortOrderIconInGrpBy.length);
-                                        console.log("the index is: " + testCase.sortOrderIconInGrpBy[i].sortOrder);
-                                        // Click on sortOrderIcon in GroupBy Fields
-                                        reportSortingPage.selectSortByIconInGroupBy(testCase.sortOrderIconInGrpBy[i].fieldIndex, testCase.sortOrderIconInGrpBy[i].sortOrder);
-                                    }
-                                    for (var j = 0; j < testCase.sortOrderIconInSortBy.length; j++) {
-                                        //Click on sortOrderIcon in SortBy Fields
-                                        reportSortingPage.selectSortByIconInSortBy(testCase.sortOrderIconInSortBy[j].fieldIndex, testCase.sortOrderIconInSortBy[j].sortOrder);
-                                    }
-                                }).then(function() {
-                                    //Click apply button
-                                    reportSortingPage.sortAndGrpDialogueApplyBtn.click();
-                                    reportServicePage.waitForElement(reportServicePage.loadedContentEl);
-                                }).then(function() {
-                                    // Get all records from table after grp/sort
-                                    reportServicePage.agGridRecordElList.map(function(row) {
-                                        var cellValues = [];
-                                        //need this because for grouping the selected columns will be deleted in table grid
-                                        var cellCount = 8 - (testCase.groupBy.length);
-                                        for (var i = 2; i <= cellCount; i++) {
-                                            cellValues.push(row.all(by.className('ag-cell-no-focus')).get(i).getText());
-                                        }
-                                        return cellValues;
-                                    }).then(function(groupingSortingTableResults) {
-                                        //Verify the results
-                                        expect(groupingSortingTableResults).toEqual(testCase.expectedTableResults);
-                                        done();
-                                    });
-                                });
-                            });
-                        });
-                    });
-                });
-
             });
 
-            describe('Report deleteIcon tests via Grp/Sort PopUp', function() {
 
-                beforeAll(function(done) {
-                    e2eBase.resizeBrowser(e2eConsts.MEDIUM_BP_WIDTH, e2eConsts.DEFAULT_HEIGHT).then(function() {
-                        RequestAppsPage.get(e2eBase.getRequestReportsPageEndpoint(realmName, app.id, app.tables[e2eConsts.TABLE1].id, '2'));
-                        reportServicePage.waitForElement(reportServicePage.loadedContentEl);
-                        done();
-                    });
-                });
+            /**
+             * Data Provider for reports and faceting results.
+             */
+            function sortIconTestCases() {
+                return [
+                    {
+                        message: 'SortBy field with descending via sortOrderIcon',
+                        groupBy: [],
+                        sortBy: ['Start Date'],
+                        sortOrderIconInGrpBy: [],
+                        sortOrderIconInSortBy: [{fieldIndex:0, sortOrder:'desc'}],
+                        expectedTableResults: [
+                            ['Jon Neil', 'Development', 'Install latest software', '3/31/2009', '4/28/2009', '15250284452.47152052910053 weeks', '100.00000000000000%'],
+                            ['Angela Leon', 'Planning', 'Workstation purchase', '3/21/2009', '4/10/2009', '15250284452.47152052910053 weeks', '99.00000000000000%'],
+                            ['Chris Baker', 'Development', 'Upgrade DBMS', '3/19/2009', '4/28/2009', '0.0020410978836 weeks', '99.00000000000000%'],
+                            ['Chris Baker', 'Planning', 'Server purchase', '3/16/2009', '4/10/2009', '-15250284452.47152052910053 weeks', '100.00000000000000%']
+                        ]
+                    },
+                    {
+                        message: 'GroupBy field with descending via sortOrderIcon',
+                        groupBy: ['% Completed'],
+                        sortBy: ['Start Date'],
+                        sortOrderIconInGrpBy: [{fieldIndex:0, sortOrder:'desc'}],
+                        sortOrderIconInSortBy: [{fieldIndex:0, sortOrder:'desc'}],
+                        expectedTableResults: [
+                            ['', '', '', '', '', ''],
+                            ['Jon Neil', 'Development', 'Install latest software', '3/31/2009', '4/28/2009', '15250284452.47152052910053 weeks'],
+                            ['Chris Baker', 'Planning', 'Server purchase', '3/16/2009', '4/10/2009', '-15250284452.47152052910053 weeks'],
+                            ['', '', '', '', '', ''],
+                            ['Angela Leon', 'Planning', 'Workstation purchase', '3/21/2009', '4/10/2009', '15250284452.47152052910053 weeks'],
+                            ['Chris Baker', 'Development', 'Upgrade DBMS', '3/19/2009', '4/28/2009', '0.0020410978836 weeks']
+                        ]
+                    },
+                    {
+                        message: 'SortBy field with descending and GroupBy with ascending via sortOrderIcon',
+                        groupBy: ['Project Phase'],
+                        sortBy: ['Start Date', '% Completed'],
+                        sortOrderIconInGrpBy: [{fieldIndex:0, sortOrder:'desc'}],
+                        sortOrderIconInSortBy: [{fieldIndex:1, sortOrder:'desc'}],
+                        expectedTableResults: [
+                            ['', '', '', '', '', ''],
+                            ['Chris Baker', 'Server purchase', '3/16/2009', '4/10/2009', '-15250284452.47152052910053 weeks', '100.00000000000000%'],
+                            ['Angela Leon', 'Workstation purchase', '3/21/2009', '4/10/2009', '15250284452.47152052910053 weeks', '99.00000000000000%'],
+                            ['', '', '', '', '', ''],
+                            ['Chris Baker', 'Upgrade DBMS', '3/19/2009', '4/28/2009', '0.0020410978836 weeks', '99.00000000000000%'],
+                            ['Jon Neil', 'Install latest software', '3/31/2009', '4/28/2009', '15250284452.47152052910053 weeks', '100.00000000000000%']
+                        ]
+                    },
+                ];
+            }
 
-                /**
-                 * Data Provider for reports and faceting results.
-                 */
-                function deleteIconTestCases() {
-                    return [
-                        {
-                            message: 'Delete Sort and Grp Fields',
-                            groupBy: ['User Name', 'Project Phase', '% Completed'],
-                            sortBy: ['Start Date', 'Duration Taken'],
-                            deleteIconInGrpBy: [{fieldIndex: 2}, {fieldIndex: 1}, {fieldIndex: 0}],
-                            deleteIconInSortBy: [{fieldIndex: 1}],
-                            expectedTableResultsAfterDelete: [
-                                ['Chris Baker', 'Planning', 'Server purchase', '3/16/2009', '4/10/2009', '-15250284452.47152052910053 weeks', '100.00000000000000%'],
-                                ['Chris Baker', 'Development', 'Upgrade DBMS', '3/19/2009', '4/28/2009', '0.0020410978836 weeks', '99.00000000000000%'],
-                                ['Angela Leon', 'Planning', 'Workstation purchase', '3/21/2009', '4/10/2009', '15250284452.47152052910053 weeks', '99.00000000000000%'],
-                                ['Jon Neil', 'Development', 'Install latest software', '3/31/2009', '4/28/2009', '15250284452.47152052910053 weeks', '100.00000000000000%']
-                            ]
-                        },
-                    ];
-                }
-
-                deleteIconTestCases().forEach(function(testCase) {
-                    it('' + testCase.message, function(done) {
-                        //go to report page directly
-                        reportServicePage.waitForElement(reportSortingPage.reportSortingGroupingContainer).then(function() {
-                            reportServicePage.waitForElementToBeClickable(reportSortingPage.reportSortAndGroupBtn).then(function() {
-                                reportSortingPage.reportSortAndGroupBtn.click();
-                                // Sleep needed for animation of drop down
-                                e2eBase.sleep(browser.params.smallSleep);
-                                //Verify grouping/sorting popOver
-                                reportServicePage.waitForElement(reportSortingPage.sortAndGrpDialogueResetBtn).then(function() {
-                                }).then(function() {
-                                    //Select group By items
-                                    for (var i = 0; i < testCase.groupBy.length; i++) {
-                                        reportSortingPage.selectGroupByItems(testCase.groupBy[i]);
+            sortIconTestCases().forEach(function(testCase) {
+                it('' + testCase.message, function(done) {
+                    reportServicePage.waitForElement(reportSortingPage.reportSortingGroupingContainer).then(function() {
+                        reportServicePage.waitForElementToBeClickable(reportSortingPage.reportSortAndGroupBtn).then(function() {
+                            reportSortingPage.reportSortAndGroupBtn.click();
+                            // Sleep needed for animation of drop down
+                            e2eBase.sleep(browser.params.smallSleep);
+                            //Verify grouping/sorting popOver
+                            reportServicePage.waitForElement(reportSortingPage.sortAndGrpDialogueResetBtn).then(function() {
+                            }).then(function() {
+                                //Select group By items
+                                for (var i = 0; i < testCase.groupBy.length; i++) {
+                                    reportSortingPage.selectGroupByItems(testCase.groupBy[i]);
+                                }
+                            }).then(function() {
+                                //Select sort By items
+                                for (var i = 0; i < testCase.sortBy.length; i++) {
+                                    reportSortingPage.selectSortByItems(testCase.sortBy[i]);
+                                }
+                            }).then(function() {
+                                for (var i = 0; i < testCase.sortOrderIconInGrpBy.length; i++) {
+                                    // Click on sortOrderIcon in GroupBy Fields
+                                    reportSortingPage.selectSortByIconInGroupBy(testCase.sortOrderIconInGrpBy[i].fieldIndex, testCase.sortOrderIconInGrpBy[i].sortOrder);
+                                }
+                            }).then(function() {
+                                for (var j = 0; j < testCase.sortOrderIconInSortBy.length; j++) {
+                                    //Click on sortOrderIcon in SortBy Fields
+                                    reportSortingPage.selectSortByIconInSortBy(testCase.sortOrderIconInSortBy[j].fieldIndex, testCase.sortOrderIconInSortBy[j].sortOrder);
+                                }
+                            }).then(function() {
+                                //Click apply button
+                                reportSortingPage.sortAndGrpDialogueApplyBtn.click();
+                                reportServicePage.waitForElement(reportServicePage.loadedContentEl);
+                            }).then(function() {
+                                // Get all records from table after grp/sort
+                                reportServicePage.agGridRecordElList.map(function(row) {
+                                    var cellValues = [];
+                                    //need this because for grouping the selected columns will be deleted in table grid
+                                    var cellCount = 8 - (testCase.groupBy.length);
+                                    for (var i = 2; i <= cellCount; i++) {
+                                        cellValues.push(row.all(by.className('ag-cell-no-focus')).get(i).getText());
                                     }
-                                }).then(function() {
-                                    //Select sort By items
-                                    for (var i = 0; i < testCase.sortBy.length; i++) {
-                                        reportSortingPage.selectSortByItems(testCase.sortBy[i]);
-                                    }
-                                }).then(function() {
-                                    //delete fields in Grp By
-                                    for (var i = 0; i < testCase.deleteIconInGrpBy.length; i++) {
-                                        reportSortingPage.deleteFieldsInGroupBy(testCase.deleteIconInGrpBy[i].fieldIndex, testCase.groupBy);
-                                    }
-                                }).then(function() {
-                                    //delete fields in sort By
-                                    for (var j = 0; j < testCase.deleteIconInSortBy.length; j++) {
-                                        reportSortingPage.deleteFieldsInSortBy(testCase.deleteIconInSortBy[j].fieldIndex, testCase.sortBy);
-                                    }
+                                    return cellValues;
+                                }).then(function(groupingSortingTableResults) {
+                                    //Verify the results
+                                    expect(groupingSortingTableResults).toEqual(testCase.expectedTableResults);
 
                                 }).then(function() {
-                                    //Click apply button
-                                    reportSortingPage.sortAndGrpDialogueApplyBtn.click();
-                                    reportServicePage.waitForElement(reportServicePage.loadedContentEl);
-                                }).then(function() {
-                                    // Get all records from table after grp/sort
-                                    reportServicePage.agGridRecordElList.map(function(row) {
-                                        var cellValues = [];
-                                        //need this because for grouping the selected columns will be deleted in table grid
-                                        for (var i = 2; i <= 8; i++) {
-                                            cellValues.push(row.all(by.className('ag-cell-no-focus')).get(i).getText());
-                                        }
-                                        return cellValues;
-                                    }).then(function(groupingSortingTableResults) {
-                                        //Verify the results
-                                        expect(groupingSortingTableResults).toEqual(testCase.expectedTableResultsAfterDelete);
-                                        done();
-                                    });
+                                    //finally reset
+                                    reportSortingPage.verifyGrpSortPopUpReset();
+                                    done();
                                 });
                             });
                         });
@@ -493,14 +439,273 @@
                 });
             });
 
+            it('Report Settings: with sortLists no Facets : Verify the Sort & Group popup respects the report settings', function(done) {
+                //go to report with sortLists page directly
+                RequestAppsPage.get(e2eBase.getRequestReportsPageEndpoint(realmName, app.id, app.tables[e2eConsts.TABLE1].id, '2'));
+                reportServicePage.waitForElement(reportServicePage.loadedContentEl);
+                //Verify that popup respects the sortList set in report while loading
+                reportServicePage.waitForElement(reportSortingPage.reportSortingGroupingContainer).then(function() {
+                    reportServicePage.waitForElementToBeClickable(reportSortingPage.reportSortAndGroupBtn).then(function() {
+                        reportSortingPage.reportSortAndGroupBtn.click();
+                        // Sleep needed for animation of drop down
+                        e2eBase.sleep(browser.params.smallSleep);
+                        //Verify grouping/sorting popOver
+                        reportServicePage.waitForElement(reportSortingPage.sortAndGrpDialogueResetBtn).then(function() {
+                        }).then(function() {
+                            //Verify GrpBy has UserName and is in ascending Order
+                            reportSortingPage.reportGroupByContainer.all(by.className('notEmpty')).map(function(elm, index) {
+                                //verify the sortOrder is ascending
+                                expect(elm.element(by.className('sortOrderIcon')).getAttribute('className')).toEqual('sortOrderIcon up');
+                                //verify the field Name is 'User Name
+                                elm.element(by.className('fieldName')).getText().then(function(selectedFieldText) {
+                                    expect(selectedFieldText).toEqual('User Name');
+                                });
+                            });
+                        }).then(function() {
+                            //Verify SryBy has StartDate and is in descending Order
+                            reportSortingPage.reportSortByContainer.all(by.className('notEmpty')).map(function(elm, index) {
+                                //verify the sortOrder is ascending
+                                expect(elm.element(by.className('sortOrderIcon')).getAttribute('className')).toEqual('sortOrderIcon down');
+                                //verify the field Name is 'User Name
+                                elm.element(by.className('fieldName')).getText().then(function(selectedFieldText) {
+                                    expect(selectedFieldText).toEqual('Start Date');
+                                });
+                            });
+                            done();
+                        });
+                    });
+                });
+
+            });
+
+        }); //large breakpoints describe block end
+
+        /*
+         * MEDIUM BREAKPOINT - Use Report with facets - deleteIcon Via PopUp Test Cases
+         */
+
+        describe('MEDIUM: Report Settings: with Facets and sortLists: ', function() {
+
+            beforeAll(function(done) {
+                e2eBase.resizeBrowser(e2eConsts.MEDIUM_BP_WIDTH, e2eConsts.DEFAULT_HEIGHT).then(function() {
+                    //go to report with facets page directly
+                    RequestAppsPage.get(e2eBase.getRequestReportsPageEndpoint(realmName, app.id, app.tables[e2eConsts.TABLE1].id, '3'));
+                    reportServicePage.waitForElement(reportServicePage.loadedContentEl);
+                    done();
+                });
+            });
+
+            it('Verify the popUp respects report settings', function(done) {
+                reportServicePage.waitForElement(reportSortingPage.reportSortingGroupingContainer).then(function() {
+                    reportServicePage.waitForElementToBeClickable(reportSortingPage.reportSortAndGroupBtn).then(function() {
+                        reportSortingPage.reportSortAndGroupBtn.click();
+                        // Sleep needed for animation of drop down
+                        e2eBase.sleep(browser.params.smallSleep);
+                        //Verify grouping/sorting popOver
+                        reportServicePage.waitForElement(reportSortingPage.sortAndGrpDialogueResetBtn).then(function() {
+                        }).then(function() {
+                            //verify the sort and grp fields
+                            //verify the field name, delete button, sort button and prefix
+                            reportSortingPage.verifySelectedGroupByFields(['User Name', 'Project Phase', '% Completed']);
+                        }).then(function() {
+                            //verify the field name, delete button, sort button and prefix
+                            reportSortingPage.verifySelectedSortByFields(['Start Date', 'Duration Taken']);
+                        }).then(function() {
+                            //close the sort/Grp popUp
+                            reportSortingPage.reportSortAndGroupCloseBtn.click();
+                        }).then(function() {
+                            //verify facet Items
+                            // Click on facet carat
+                            reportFacetsPage.reportFacetFilterBtnCaret.click().then(function() {
+                                //Verify the popup menu is displayed
+                                expect(reportFacetsPage.reportFacetPopUpMenu.isDisplayed()).toBeTruthy();
+                            }).then(function() {
+                                reportFacetsPage.unselectedFacetGroupsElList.map(function(elm) {
+                                    return elm.getText();
+                                }).then(function(expectedFacets) {
+                                    expect(expectedFacets).toEqual(['Project Phase', 'Task Name']);
+                                    done();
+                                });
+
+                            });
+                        });
+
+                    });
+                });
+            });
+
+            /**
+             * Data Provider for delete Icon Tests
+             */
+            function deleteIconTestCases() {
+                return [
+                    {
+                        message: 'Delete Sort and Grp Fields via DeleteIcon',
+                        groupBy: ['User Name', 'Project Phase', '% Completed'],
+                        sortBy: ['Start Date', 'Duration Taken'],
+                        deleteIconInGrpBy: [{fieldIndex: 2}, {fieldIndex: 1}, {fieldIndex: 0}],
+                        deleteIconInSortBy: [{fieldIndex: 1}],
+                        expectedTableResultsAfterDelete: [
+                            ['Chris Baker', 'Planning', 'Server purchase', '3/16/2009', '4/10/2009', '-15250284452.47152052910053 weeks', '100.00000000000000%'],
+                            ['Chris Baker', 'Development', 'Upgrade DBMS', '3/19/2009', '4/28/2009', '0.0020410978836 weeks', '99.00000000000000%'],
+                            ['Angela Leon', 'Planning', 'Workstation purchase', '3/21/2009', '4/10/2009', '15250284452.47152052910053 weeks', '99.00000000000000%'],
+                            ['Jon Neil', 'Development', 'Install latest software', '3/31/2009', '4/28/2009', '15250284452.47152052910053 weeks', '100.00000000000000%']
+                        ]
+                    },
+                ];
+            }
+
+            deleteIconTestCases().forEach(function(testCase) {
+                it('' + testCase.message, function(done) {
+                    reportServicePage.waitForElement(reportSortingPage.reportSortingGroupingContainer).then(function() {
+                        reportServicePage.waitForElementToBeClickable(reportSortingPage.reportSortAndGroupBtn).then(function() {
+                            reportSortingPage.reportSortAndGroupBtn.click();
+                            // Sleep needed for animation of drop down
+                            e2eBase.sleep(browser.params.smallSleep);
+                            //Verify grouping/sorting popOver
+                            reportServicePage.waitForElement(reportSortingPage.sortAndGrpDialogueResetBtn).then(function() {
+                            }).then(function() {
+                                //delete fields in Grp By
+                                for (var i = 0; i < testCase.deleteIconInGrpBy.length; i++) {
+                                    reportSortingPage.deleteFieldsInGroupBy(testCase.deleteIconInGrpBy[i].fieldIndex, testCase.groupBy);
+                                }
+                            }).then(function() {
+                                //delete fields in sort By
+                                for (var j = 0; j < testCase.deleteIconInSortBy.length; j++) {
+                                    reportSortingPage.deleteFieldsInSortBy(testCase.deleteIconInSortBy[j].fieldIndex, testCase.sortBy);
+                                }
+
+                            }).then(function() {
+                                //Click apply button
+                                reportSortingPage.sortAndGrpDialogueApplyBtn.click();
+                                reportServicePage.waitForElement(reportServicePage.loadedContentEl);
+                            }).then(function() {
+                                // Get all records from table after grp/sort
+                                reportServicePage.agGridRecordElList.map(function(row) {
+                                    var cellValues = [];
+                                    //need this because for grouping the selected columns will be deleted in table grid
+                                    for (var i = 2; i <= 8; i++) {
+                                        cellValues.push(row.all(by.className('ag-cell-no-focus')).get(i).getText());
+                                    }
+                                    return cellValues;
+                                }).then(function(groupingSortingTableResults) {
+                                    //Verify the results
+                                    expect(groupingSortingTableResults).toEqual(testCase.expectedTableResultsAfterDelete);
+                                    done();
+                                });
+                            });
+                        });
+                    });
+                });
+            });
+        }); //medium breakpoints describe block end
+
+        /*
+         * SMALL BREAKPOINT - Use Reports without facets or sortLists
+         */
+
+        describe('SMALL: Report Settings: No Facets No sortLists', function() {
+
+            beforeAll(function(done) {
+                e2eBase.resizeBrowser(e2eConsts.SMALL_BP_WIDTH, e2eConsts.DEFAULT_HEIGHT).then(function() {
+                    //go to report page directly
+                    RequestAppsPage.get(e2eBase.getRequestReportsPageEndpoint(realmName, app.id, app.tables[e2eConsts.TABLE1].id, '1'));
+                    reportServicePage.waitForElement(reportServicePage.loadedContentEl);
+                    done();
+                });
+            });
 
 
-        }); //test cases describe block
+            it('Verify Apply and Reset button locations ', function(done) {
+                reportServicePage.waitForElement(reportSortingPage.reportSortingGroupingContainer).then(function() {
+                    reportServicePage.waitForElementToBeClickable(reportSortingPage.reportSortAndGroupBtn).then(function() {
+                        reportSortingPage.reportSortAndGroupBtn.click();
+                        // Sleep needed for animation of drop down
+                        e2eBase.sleep(browser.params.smallSleep);
+                        //Verify grouping/sorting popOver
+                        reportServicePage.waitForElement(reportSortingPage.sortAndGrpDialogueSBRestBtn).then(function() {
+                        }).then(function() {
+                            //Verify apply button on top
+                            expect(reportSortingPage.sortAndGrpDialogueSBApplyBtn.getAttribute('scrollTop')).toEqual('0');
+                            expect(reportSortingPage.sortAndGrpDialogueSBApplyBtn.getAttribute('clientTop')).toEqual('0');
+                            //Verify Reset is at the bottom.
+                            expect(reportSortingPage.sortAndGrpDialogueSBRestBtn.getAttribute('clientTop')).toEqual('0');
+                            expect(reportSortingPage.sortAndGrpDialogueSBRestBtn.getAttribute('clientLeft')).toEqual('0');
+                            done();
+                        });
+                    });
+                });
+            });
+
+            /**
+             * Data Provider for more Fields Tests
+             */
+            function moreFieldsTestCases() {
+                return [
+                    {
+                        message: 'Select more Fields link and select items below that',
+                        groupBy: ['more fields...', 'Date Created'],
+                        sortBy: ['Date Modified', 'Last Modified By']
+                    },
+                ];
+            }
+
+            moreFieldsTestCases().forEach(function(testCase) {
+                it('Verify clicking on more fields link in GrpBy and sortBy', function(done) {
+                    RequestAppsPage.get(e2eBase.getRequestReportsPageEndpoint(realmName, app.id, app.tables[e2eConsts.TABLE1].id, '1'));
+                    reportServicePage.waitForElementToBeClickable(reportSortingPage.reportSortAndGroupBtn).then(function() {
+                        reportSortingPage.reportSortAndGroupBtn.click();
+                        // Sleep needed for animation of drop down
+                        e2eBase.sleep(browser.params.smallSleep);
+                        //Verify grouping/sorting popOver
+                        reportServicePage.waitForElement(reportSortingPage.sortAndGrpDialogueContentSB).then(function() {
+                        }).then(function() {
+                            for (var i = 0; i < testCase.groupBy.length; i++) {
+                                reportSortingPage.selectGroupByItems(testCase.groupBy[i]);
+                            }
+                        }).then(function() {
+                            reportSortingPage.verifySelectedGroupByFields(['Date Created']);
+                        }).then(function() {
+                            for (var j = 0; j < testCase.sortBy.length; j++) {
+                                //select sortBy fields
+                                reportSortingPage.selectSortByItems(testCase.sortBy[j]);
+                            }
+                        }).then(function() {
+                            //verify sortBy fields
+                            reportSortingPage.verifySelectedSortByFields(testCase.sortBy);
+                        }).then(function() {
+                            //hit Reset
+                            reportSortingPage.sortAndGrpDialogueSBRestBtn.click();
+                            reportServicePage.waitForElement(reportServicePage.loadedContentEl);
+                        }).then(function() {
+                            reportServicePage.waitForElementToBeClickable(reportSortingPage.reportSortAndGroupBtn).then(function() {
+                                //verify all cleared after reset
+                                reportSortingPage.reportSortAndGroupBtn.click().then(function() {
+                                    //verify all cleared in grpBy
+                                    reportSortingPage.reportGroupByContainer.all(by.className('notEmpty')).then(function(grpItems) {
+                                        expect(grpItems.length).toBe(0);
+                                    }).then(function() {
+                                        //verify all cleared in sortBy
+                                        reportSortingPage.reportSortByContainer.all(by.className('notEmpty')).then(function(sortItems) {
+                                            expect(sortItems.length).toBe(0);
+                                            done();
+                                        });
+                                    });
+                                });
+                            });
+                        });
+
+                    });
+                });
+            });
+        }); //small breakpoints describe block end.
+
         /**
          * After all tests are done, run the cleanup function in the base class
          */
         afterAll(function(done) {
             e2eBase.cleanup(done);
         });
+
     }); //topmost setup describe block
 }());

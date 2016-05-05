@@ -11,11 +11,12 @@
     //include underScore js
     var _ = require('underscore');
 
-    describe('Report Grouping and Sorting SetUp', function() {
+    describe('Report Grouping and Sorting Via ColumnHeader', function() {
         var realmName;
         var realmId;
         var app;
         var recordList;
+        var groupedTableResults = [];
 
         var durationMax = '9223372036854775807';
         var durationMin = '-9223372036854775807';
@@ -123,6 +124,31 @@
             });
         });
 
+        var getGroupedTableRows = (function() {
+            // Get all records from table before filter applied
+            reportServicePage.waitForElement(reportServicePage.griddleWrapperEl).then(function() {
+                //sleep for loading of table to finish
+                e2eBase.sleep(browser.params.smallSleep);
+                reportServicePage.waitForElement(reportServicePage.agGridContainerEl).then(function() {
+                    reportServicePage.agGridRecordElList.map(function(row) {
+                        //only 7 rows because the grouped row will be removed in the UI
+                        return [
+                            row.all(by.className('ag-cell-no-focus')).get(2).getText(),
+                            row.all(by.className('ag-cell-no-focus')).get(3).getText(),
+                            row.all(by.className('ag-cell-no-focus')).get(4).getText(),
+                            row.all(by.className('ag-cell-no-focus')).get(5).getText(),
+                            row.all(by.className('ag-cell-no-focus')).get(6).getText(),
+                            row.all(by.className('ag-cell-no-focus')).get(7).getText()
+                        ];
+                    }).then(function(results) {
+                        for (var i = 0; i < results.length; i++) {
+                            groupedTableResults.push(results[i]);
+                        }
+                    });
+                });
+            });
+        });
+
         /**
          * Data Provider for reports grouping testCases.
          * ['Record ID#', 'User Name Field', 'Text Field', 'Date Field', 'Duration Field',
@@ -209,33 +235,30 @@
         }
 
         describe('Report Grouping Tests without Facets', function() {
+
+            beforeAll(function(done) {
+                //go to reports page directly
+                RequestAppsPage.get(e2eBase.getRequestReportsPageEndpoint(realmName, app.id, app.tables[e2eConsts.TABLE1].id, '1'));
+                done();
+            });
             /*
              * Ascending Testcases
              */
             groupingTestCases().forEach(function(groupingTestcase) {
                 it('Ascending : Group ' + groupingTestcase.message, function(done) {
-                    RequestAppsPage.get(e2eBase.getRequestReportsPageEndpoint(realmName, app.id, app.tables[e2eConsts.TABLE1].id, '1'));
                     reportServicePage.waitForElement(reportServicePage.loadedContentEl).then(function() {
                         //expand column header menu and select the Item
                         reportSortingPage.expandColumnHeaderMenuAndSelectItem(groupingTestcase.ColumnName, groupingTestcase.GroupAscItemText);
                     }).then(function() {
                         // Get all records from table before filter applied
-                        reportServicePage.agGridRecordElList.map(function(row) {
-                            //only 7 rows because the grouped row will be removed in the UI
-                            return [
-                                row.all(by.className('ag-cell-no-focus')).get(2).getText(),
-                                row.all(by.className('ag-cell-no-focus')).get(3).getText(),
-                                row.all(by.className('ag-cell-no-focus')).get(4).getText(),
-                                row.all(by.className('ag-cell-no-focus')).get(5).getText(),
-                                row.all(by.className('ag-cell-no-focus')).get(6).getText(),
-                                row.all(by.className('ag-cell-no-focus')).get(7).getText(),
-                            ];
-                        }).then(function(groupingTableResults) {
-                            console.log("the results are: " + groupingTableResults);
-                            //finally verify both the arrays
-                            expect(groupingTableResults.sort()).toEqual(groupingTestcase.expectedTableResults.sort());
-                            done();
-                        });
+                        getGroupedTableRows();
+                    }).then(function() {
+                        //finally verify both the arrays
+                        expect(groupedTableResults.sort()).toEqual(groupingTestcase.expectedTableResults.sort());
+                    }).then(function() {
+                        //clear the array
+                        groupedTableResults = [];
+                        done();
                     });
                 });
             });
@@ -245,95 +268,74 @@
              */
             groupingTestCases().forEach(function(groupingTestcase) {
                 it('Descending : Group ' + groupingTestcase.message, function(done) {
-                    RequestAppsPage.get(e2eBase.getRequestReportsPageEndpoint(realmName, app.id, app.tables[e2eConsts.TABLE1].id, '1'));
                     reportServicePage.waitForElement(reportServicePage.loadedContentEl).then(function() {
                         //expand column header menu and select the Item
                         reportSortingPage.expandColumnHeaderMenuAndSelectItem(groupingTestcase.ColumnName, groupingTestcase.GroupDescItemText);
                     }).then(function() {
                         // Get all records from table before filter applied
-                        reportServicePage.agGridRecordElList.map(function(row) {
-                            //only 7 rows because the grouped row will be removed in the UI
-                            return [
-                                row.all(by.className('ag-cell-no-focus')).get(2).getText(),
-                                row.all(by.className('ag-cell-no-focus')).get(3).getText(),
-                                row.all(by.className('ag-cell-no-focus')).get(4).getText(),
-                                row.all(by.className('ag-cell-no-focus')).get(5).getText(),
-                                row.all(by.className('ag-cell-no-focus')).get(6).getText(),
-                                row.all(by.className('ag-cell-no-focus')).get(7).getText(),
-                            ];
-                        }).then(function(groupingTableResults) {
-                            console.log("the results are: " + groupingTableResults);
-                            //finally verify both the arrays
-                            expect(groupingTableResults.sort()).toEqual(groupingTestcase.expectedTableResults.sort());
-                            done();
-                        });
+                        getGroupedTableRows();
+                    }).then(function() {
+                        //finally verify both the arrays
+                        expect(groupedTableResults.sort()).toEqual(groupingTestcase.expectedTableResults.sort());
+                    }).then(function() {
+                        //clear the array
+                        groupedTableResults = [];
+                        done();
                     });
                 });
+
             });
 
-        });
+            describe('Report Grouping Tests with Facets', function() {
 
-        describe('Report Grouping Tests with Facets', function() {
-            /*
-             * Ascending Testcases
-             */
-            groupingTestCases().forEach(function(groupingTestcase) {
-                it('Ascending : Group ' + groupingTestcase.message, function(done) {
+                beforeAll(function(done) {
                     RequestAppsPage.get(e2eBase.getRequestReportsPageEndpoint(realmName, app.id, app.tables[e2eConsts.TABLE1].id, '2'));
-                    reportServicePage.waitForElement(reportServicePage.loadedContentEl).then(function() {
-                        //expand column header menu and select the Item
-                        reportSortingPage.expandColumnHeaderMenuAndSelectItem(groupingTestcase.ColumnName, groupingTestcase.GroupAscItemText);
-                    }).then(function() {
-                        // Get all records from table before filter applied
-                        reportServicePage.agGridRecordElList.map(function(row) {
-                            //only 7 rows because the grouped row will be removed in the UI
-                            return [
-                                row.all(by.className('ag-cell-no-focus')).get(2).getText(),
-                                row.all(by.className('ag-cell-no-focus')).get(3).getText(),
-                                row.all(by.className('ag-cell-no-focus')).get(4).getText(),
-                                row.all(by.className('ag-cell-no-focus')).get(5).getText(),
-                                row.all(by.className('ag-cell-no-focus')).get(6).getText(),
-                                row.all(by.className('ag-cell-no-focus')).get(7).getText(),
-                            ];
-                        }).then(function(groupingTableResults) {
-                            console.log("the results are: " + groupingTableResults);
+                    done();
+                });
+                /*
+                 * Ascending Testcases
+                 */
+                groupingTestCases().forEach(function(groupingTestcase) {
+                    it('Ascending : Group ' + groupingTestcase.message, function(done) {
+                        reportServicePage.waitForElement(reportServicePage.loadedContentEl).then(function() {
+                            //expand column header menu and select the Item
+                            reportSortingPage.expandColumnHeaderMenuAndSelectItem(groupingTestcase.ColumnName, groupingTestcase.GroupAscItemText);
+                        }).then(function() {
+                            // Get all records from table before filter applied
+                            getGroupedTableRows();
+                        }).then(function() {
                             //finally verify both the arrays
-                            expect(groupingTableResults.sort()).toEqual(groupingTestcase.expectedTableResults.sort());
+                            expect(groupedTableResults.sort()).toEqual(groupingTestcase.expectedTableResults.sort());
+                        }).then(function() {
+                            //clear the array
+                            groupedTableResults = [];
                             done();
                         });
                     });
                 });
-            });
 
-            /*
-             * Descending Testcases
-             */
-            groupingTestCases().forEach(function(groupingTestcase) {
-                it('Descending : Group ' + groupingTestcase.message, function(done) {
-                    RequestAppsPage.get(e2eBase.getRequestReportsPageEndpoint(realmName, app.id, app.tables[e2eConsts.TABLE1].id, '2'));
-                    reportServicePage.waitForElement(reportServicePage.loadedContentEl).then(function() {
-                        //expand column header menu and select the Item
-                        reportSortingPage.expandColumnHeaderMenuAndSelectItem(groupingTestcase.ColumnName, groupingTestcase.GroupDescItemText);
-                    }).then(function() {
-                        // Get all records from table before filter applied
-                        reportServicePage.agGridRecordElList.map(function(row) {
-                            //only 7 rows because the grouped row will be removed in the UI
-                            return [
-                                row.all(by.className('ag-cell-no-focus')).get(2).getText(),
-                                row.all(by.className('ag-cell-no-focus')).get(3).getText(),
-                                row.all(by.className('ag-cell-no-focus')).get(4).getText(),
-                                row.all(by.className('ag-cell-no-focus')).get(5).getText(),
-                                row.all(by.className('ag-cell-no-focus')).get(6).getText(),
-                                row.all(by.className('ag-cell-no-focus')).get(7).getText(),
-                            ];
-                        }).then(function(groupingTableResults) {
-                            console.log("the results are: " + groupingTableResults);
+                /*
+                 * Descending Testcases
+                 */
+                groupingTestCases().forEach(function(groupingTestcase) {
+                    it('Descending : Group ' + groupingTestcase.message, function(done) {
+                        reportServicePage.waitForElement(reportServicePage.loadedContentEl).then(function() {
+                            //expand column header menu and select the Item
+                            reportSortingPage.expandColumnHeaderMenuAndSelectItem(groupingTestcase.ColumnName, groupingTestcase.GroupDescItemText);
+                        }).then(function() {
+                            // Get all records from table before filter applied
+                            getGroupedTableRows();
+                        }).then(function() {
                             //finally verify both the arrays
-                            expect(groupingTableResults.sort()).toEqual(groupingTestcase.expectedTableResults.sort());
+                            expect(groupedTableResults.sort()).toEqual(groupingTestcase.expectedTableResults.sort());
+                        }).then(function() {
+                            //clear the array
+                            groupedTableResults = [];
                             done();
                         });
                     });
                 });
+
             });
 
         });

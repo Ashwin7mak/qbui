@@ -6,7 +6,6 @@
     var e2ePageBase = require('./../../common/e2ePageBase');
     var ReportServicePage = requirePO('reportService');
     var reportServicePage = new ReportServicePage();
-    var SHOW_POPUP_LIST_LIMIT = 5;
 
 
     var ReportSortingPage = function() {
@@ -20,11 +19,12 @@
         //Apply button
         this.sortAndGrpDialogueApplyBtn = this.reportSortAndGroupDialogue.element(by.className('apply'));
         //resest button
-        this.sortAndGrpDialogueResetBtn = this.reportSortAndGroupDialogue.element(by.className('reset'));
+        this.sortAndGrpDialogueResetBtn = this.reportSortAndGroupDialogue.all(by.className('reset')).first();
         //sorting/grouping popup title
-        this.reportSortAndGroupTitle = this.reportSortingGroupingContainer.element(by.className('overlayTitle'));
+        this.reportSortAndGroupTitle = this.reportSortingGroupingContainer.all(by.className('overlayTitle')).first();
         //sorting/grouping close button
-        this.reportSortAndGroupCloseBtn = this.reportSortingGroupingContainer.element(by.className('overlayRight'));
+        this.reportSortAndGroupCloseBtn = this.reportSortingGroupingContainer.all(by.className('overlayRight')).first();
+
         //group By settings
         this.reportGroupByContainer = this.reportSortingGroupingContainer.element(by.className('groupBySettings'));
         //group field selector container
@@ -81,6 +81,19 @@
         this.SortByCancelBtn = this.SortByFieldPanel.element(by.className('cancel'));
         //GroupBy list items
         this.SortByListItem = this.SortByFieldPanel.all(by.className('list-group'));
+
+        //small breakpoint Apply button
+        //top
+        this.sortAndGrpDialogueTopSB = this.reportSortAndGroupDialogue.element(by.className('dialogTop'));
+        //dialogContent
+        this.sortAndGrpDialogueContentSB = this.reportSortAndGroupDialogue.element(by.className('dialogContent'));
+        //dialogue Bottom
+        this.sortAndGrpDialogueBottomSB = this.reportSortAndGroupDialogue.element(by.className('dialogBand'));
+
+        this.sortAndGrpDialogueSBApplyBtn = this.sortAndGrpDialogueTopSB.element(by.className('btn'));
+        //reset button
+        this.sortAndGrpDialogueSBRestBtn = this.sortAndGrpDialogueBottomSB.element(by.className('reset'));
+
 
         /*
          * Function will open the column headers popUp menu
@@ -143,8 +156,7 @@
                 });
             }).then(function(filteredElement) {
                 filteredElement[0].click().then(function() {
-                    return reportServicePage.waitForElement(reportServicePage.reportRecordsCount).then(function() {
-                    });
+                    return reportServicePage.waitForElement(reportServicePage.reportRecordsCount);
                 });
             });
 
@@ -271,9 +283,23 @@
                                     return text === itemsToSelect;
                                 });
                             }).then(function(filteredElement) {
-                                e2ePageBase.waitForElementToBeClickable(filteredElement[0]).then(function() {
-                                    return filteredElement[0].click();
-                                });
+                                if (itemsToSelect === 'more fields...') {
+                                    // Click on more fields link
+                                    e2ePageBase.waitForElementToBeClickable(self.GroupByFieldPanel.element(by.className('moreFields'))).then(function() {
+                                        return self.GroupByFieldPanel.element(by.className('moreFields')).click().then(function() {
+                                            // Sleep needed for animation of drop down
+                                            e2eBase.sleep(browser.params.smallSleep);
+                                            //Click cancel button and verify the panel not displayed
+                                            return self.GroupByCancelBtn.click().then(function() {
+                                                expect(self.reportSortAndGroupTitle.getAttribute('innerText')).toEqual('Sort & Group');
+                                            });
+                                        });
+                                    });
+                                } else {
+                                    e2ePageBase.waitForElementToBeClickable(filteredElement[0]).then(function() {
+                                        return filteredElement[0].click();
+                                    });
+                                }
                             });
                         });
                     });
@@ -286,28 +312,23 @@
          */
         this.verifySelectedGroupByFields = function(fieldsToVerify) {
             var self = this;
-            self.reportGroupByContainer.all(by.className('notEmpty')).then(function(items) {
-                if (items.length > 0) {
-                    for (var i = 0; i < items.length; i++) {
-                        //verify the delete button and sortOrder button
-                        expect(items[i].element(by.className('groupFieldDeleteIcon')).isDisplayed()).toBeTruthy();
-                        expect(items[i].element(by.className('sortOrderIcon')).isDisplayed()).toBeTruthy();
-                        //verify the prefix
-                        items[i].element(by.className('prefix')).getText().then(function(prefix) {
-                            if (items[0]) {
-                                expect(prefix).toEqual('by');
-                            } else {
-                                expect(prefix).toEqual('then by');
-                            }
-                        });
-                        items[i].element(by.className('fieldName')).getText().then(function(text) {
-                            //verify the field names
-                            for (var j = 0; j < fieldsToVerify.length; j++) {
-                                expect(text).toEqual(fieldsToVerify[j]);
-                            }
-                        });
-                    }
+            self.reportGroupByContainer.all(by.className('notEmpty')).map(function(elm, index) {
+                //verify the delete button and sortOrder button
+                expect(elm.element(by.className('groupFieldDeleteIcon')).isDisplayed()).toBeTruthy();
+                expect(elm.element(by.className('sortOrderIcon')).isDisplayed()).toBeTruthy();
+
+                //verify the prefix
+                if (index === 0) {
+                    expect(elm.element(by.className('prefix')).getText()).toEqual('by');
+                } else {
+                    expect(elm.element(by.className('prefix')).getText()).toEqual('then by');
                 }
+
+                //verify the field Name
+                elm.element(by.className('fieldName')).getText().then(function(selectedFieldText) {
+                    expect(selectedFieldText).toEqual(fieldsToVerify[index]);
+                });
+
             });
         };
 
@@ -315,18 +336,15 @@
          * Select sortByIcon in groupBy
          */
         this.selectSortByIconInGroupBy = function(fieldIndex, sortorder) {
-            console.log("The sort order is: " + sortorder);
             var self = this;
             return reportServicePage.waitForElement(self.reportGroupByContainer).then(function() {
                 self.reportGroupByContainer.all(by.className('notEmpty')).then(function(items) {
                     if (items.length > 0) {
                         for (var i = 0; i < items.length; i++) {
                             if (sortorder === 'asc') { //if ascending don't click the icon
-                                console.log("ascending");
                                 reportServicePage.waitForElement(items[fieldIndex].element(by.className('up')));
                             }
                             if (sortorder === 'desc') { //if descending
-                                console.log("descending");
                                 return items[fieldIndex].element(by.className('sortOrderIcon')).click().then(function() {
                                     //TODO: Figure out how to handle with sleeps (waiting for element to be stale doesn't seem to work)
                                     e2eBase.sleep(browser.params.smallSleep);
@@ -346,7 +364,6 @@
             var self = this;
             return reportServicePage.waitForElement(self.reportGroupByContainer).then(function() {
                 self.reportGroupByContainer.all(by.className('notEmpty')).then(function(items) {
-                    console.log("items length is: " + items.length);
                     if (items.length > 0) {
                         for (var i = 0; i < items.length; i++) {
                             return items[fieldIndex].element(by.className('groupFieldDelete')).click();
@@ -403,30 +420,22 @@
          */
         this.verifySelectedSortByFields = function(fieldsToVerify) {
             var self = this;
-            self.reportSortByContainer.all(by.className('notEmpty')).then(function(items) {
-                if (items.length > 0) {
-                    for (var i = 0; i < items.length; i++) {
-                        //verify the delete button and sortOrder button
-                        expect(items[i].element(by.className('groupFieldDeleteIcon')).isDisplayed()).toBeTruthy();
-                        expect(items[i].element(by.className('sortOrderIcon')).isDisplayed()).toBeTruthy();
-                        //verify the prefix
-                        items[i].element(by.className('prefix')).getText().then(function(prefix) {
-                            console.log("Verify prefix is: " + prefix);
-                            if (items[0]) {
-                                expect(prefix).toEqual('by');
-                            } else {
-                                expect(prefix).toEqual('then by');
-                            }
-                        });
-                        items[i].element(by.className('fieldName')).getText().then(function(text) {
-                            //verify the field names
-                            console.log("Verify field name is: " + text);
-                            for (var j = 0; j < fieldsToVerify.length; j++) {
-                                expect(text).toEqual(fieldsToVerify[j]);
-                            }
-                        });
-                    }
+            self.reportSortByContainer.all(by.className('notEmpty')).map(function(elm, index) {
+                //verify the delete button and sortOrder button
+                expect(elm.element(by.className('groupFieldDeleteIcon')).isDisplayed()).toBeTruthy();
+                expect(elm.element(by.className('sortOrderIcon')).isDisplayed()).toBeTruthy();
+
+                //verify the prefix
+                if (index === 0) {
+                    expect(elm.element(by.className('prefix')).getText()).toEqual('by');
+                } else {
+                    expect(elm.element(by.className('prefix')).getText()).toEqual('then by');
                 }
+
+                //verify the field Name
+                elm.element(by.className('fieldName')).getText().then(function(selectedFieldText) {
+                    expect(selectedFieldText).toEqual(fieldsToVerify[index]);
+                });
             });
         };
 
@@ -434,21 +443,20 @@
          * Select sortByIcon in sortBy
          */
         this.selectSortByIconInSortBy = function(fieldIndex, sortorder) {
-            console.log("The sort order is: " + sortorder);
             var self = this;
             return reportServicePage.waitForElement(self.reportGroupByContainer).then(function() {
                 self.reportSortByContainer.all(by.className('notEmpty')).then(function(items) {
                     if (items.length > 0) {
                         for (var i = 0; i < items.length; i++) {
                             if (sortorder === 'asc') {
-                                console.log("ascending");
-                                return items[fieldIndex].element(by.className('sortOrderIcon')).click().then(function() {
-                                    //TODO: Figure out how to handle with sleeps (waiting for element to be stale doesn't seem to work)
-                                    e2eBase.sleep(browser.params.smallSleep);
-                                    //reportServicePage.waitForElement(items[fieldIndex].element(by.className('down')));
-                                });
+                                //don't click on anything
+                                reportServicePage.waitForElement(items[fieldIndex].element(by.className('down')));
+                                //return items[fieldIndex].element(by.className('sortOrderIcon')).click().then(function() {
+                                //    //TODO: Figure out how to handle with sleeps (waiting for element to be stale doesn't seem to work)
+                                //    e2eBase.sleep(browser.params.smallSleep);
+                                //    //reportServicePage.waitForElement(items[fieldIndex].element(by.className('down')));
+                                //});
                             } else if (sortorder === 'desc') {
-                                console.log("descending");
                                 return items[fieldIndex].element(by.className('sortOrderIcon')).click().then(function() {
                                     //TODO: Figure out how to handle with sleeps (waiting for element to be stale doesn't seem to work)
                                     e2eBase.sleep(browser.params.smallSleep);
@@ -468,7 +476,6 @@
             var self = this;
             return reportServicePage.waitForElement(self.reportSortByContainer).then(function() {
                 self.reportSortByContainer.all(by.className('notEmpty')).then(function(items) {
-                    console.log("items length in sort is: " + items.length);
                     if (items.length > 0) {
                         for (var i = 0; i < items.length; i++) {
                             return items[fieldIndex].element(by.className('groupFieldDelete')).click();
@@ -489,6 +496,41 @@
             });
         };
 
+        /*
+         * Verify Reset functionality
+         */
+
+        this.verifyGrpSortPopUpReset = function() {
+            var self = this;
+            reportServicePage.waitForElementToBeClickable(self.reportSortAndGroupBtn).then(function() {
+                return self.reportSortAndGroupBtn.click();
+            }).then(function() {
+                // Sleep needed for animation of drop down
+                e2eBase.sleep(browser.params.smallSleep);
+                //hit Reset
+                return self.sortAndGrpDialogueResetBtn.click();
+            }).then(function() {
+                reportServicePage.waitForElement(reportServicePage.loadedContentEl);
+                //verify all cleared after reset
+                return self.reportSortAndGroupBtn.click().then(function() {
+                    //verify all cleared in grpBy
+                    return self.reportGroupByContainer.all(by.className('notEmpty')).then(function(grpItems) {
+                        expect(grpItems.length).toBe(0);
+                    }).then(function() {
+                        //verify all cleared in sortBy
+                        return self.reportSortByContainer.all(by.className('notEmpty')).then(function(sortItems) {
+                            expect(sortItems.length).toBe(0);
+                        }).then(function() {
+                            //collapse the popup by clicking on X on popup
+                            return self.reportSortAndGroupCloseBtn.click().then(function() {
+                                reportServicePage.reportFilterSearchBox.click();
+                                return reportServicePage.waitForElementToBeClickable(self.reportSortAndGroupBtn);
+                            });
+                        });
+                    });
+                });
+            });
+        };
 
 
     };
