@@ -4,6 +4,7 @@ import {I18nMessage} from '../../utils/i18nMessage';
 import Locale from '../../locales/locales';
 import './facet.scss';
 import Fluxxor from 'fluxxor';
+import SearchBox from '../search/searchBox';
 
 let logger = new Logger();
 
@@ -33,12 +34,12 @@ const FilterSearchBox = React.createClass({
 
         logger.debug('rendering search box with:' + this.state.searchStringInput);
         return (<div className="filterSearchBoxContainer">
-                    <input className="filterSearchBox" type="text"
-                           key={"filterSearchBox_" + this.props.searchBoxKey}
-                           value={this.state.searchStringInput}
-                           onChange={this.props.onChange}
-                           onDoubleClick={this.props.clearSearchString} // till we get the icon
-                           placeholder={placeMsg}/>
+                    <SearchBox className="filterSearchBox" key={"filterSearchBox_" + this.props.searchBoxKey}
+                               value={this.state.searchStringInput}
+                               onChange={this.props.onChange}
+                               onDoubleClick={this.props.clearSearchString}
+                               onClearSearch={this.props.clearSearchString}
+                               placeholder={placeMsg} />
                 </div>
         );
     }

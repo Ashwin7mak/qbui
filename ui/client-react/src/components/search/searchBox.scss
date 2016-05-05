@@ -1,0 +1,23 @@
+@import '../../assets/css/qbVariables';
+
+.searchInputBox {
+  position: relative;
+  background-color: #fff;
+
+  .searchInput {
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    padding: .8rem 30px .8rem 5px;
+    font-style: italic;
+    color: $search-input-fg;
+    text-overflow: ellipsis;
+    width:100%;
+  }
+  .searchIcon {
+    position: absolute;
+    right: 5px;
+    top: 12px;
+    font-size: $font-size-base !important;
+    width: 14px !important;
+  }
+}

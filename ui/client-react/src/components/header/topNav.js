@@ -7,6 +7,7 @@ import Fluxxor from 'fluxxor';
 import QBicon from '../qbIcon/qbIcon';
 let FluxMixin = Fluxxor.FluxMixin(React);
 import {OverlayTrigger, Popover, ButtonGroup, Button, Input} from 'react-bootstrap';
+import SearchBox from '../search/searchBox';
 
 import './topNav.scss';
 
@@ -19,11 +20,20 @@ var TopNav = React.createClass({
         onNavClick: React.PropTypes.func,
         globalActions: React.PropTypes.element
     },
+    getInitialState() {
+        return {
+            searchText:""
+        };
+    },
 
     searchChanged: function(ev) {
         const text = ev.target.value;
-        let flux = this.getFlux();
-        flux.actions.searchFor(text);
+        this.setState({searchText: text});
+        //let flux = this.getFlux();
+        //flux.actions.searchFor(text);
+    },
+    searchCleared: function() {
+        this.setState({searchText: ""});
     },
 
     getTopTitle() {
@@ -57,13 +67,13 @@ var TopNav = React.createClass({
 
                             <OverlayTrigger trigger="click" rootClose placement="bottom" overlay={
                                 <Popover id={0} className={'searchPopover'}  title="Search">
-                                    <Input className="searchInput"
-                                           key={'searchInput'}
-                                           standalone
-                                           type="text"
-                                           placeholder={Locale.getMessage('nav.searchRecordsPlaceholder')}
-                                           onChange={this.searchChanged} />
+                                    <SearchBox className="searchPopover"
+                                           value={this.state.searchText}
+                                           onChange={this.searchChanged}
+                                           onClearSearch={this.searchCleared}
+                                           placeholder={Locale.getMessage('nav.searchRecordsPlaceholder')} />
                                 </Popover>}>
+
 
                                 <Button tabIndex="2"><QBicon icon="search" /></Button>
                             </OverlayTrigger>
