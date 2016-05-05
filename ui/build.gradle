@@ -379,6 +379,7 @@ task gruntBuildNoColor(type: GruntTask) {
 }
 
 task gruntUnitTestsNoColor(type: GruntTask) {
+    tasks.npmRunLint.execute()
     args = ["ciTest", "--no-color"]
 }
 
