@@ -8,7 +8,7 @@
     var constants = require('../../constants');
     var groupTypes = require('../../groupTypes');
     var log = require('../../../logger').getLogger();
-    var perfLogger = require('../../../perfLogger').getInstance();
+    var perfLogger = require('../../../perfLogger');
     var lodash = require('lodash');
     var groupUtils = require('../../../components/utility/groupUtils');
     var dateFormatter = require('../../../api/quickbase/formatter/dateTimeFormatter');
@@ -43,7 +43,8 @@
         let data = [];
 
         if (groupFields && fields && records) {
-            perfLogger.start('createGroupDataGrid');
+            let perfLog = perfLogger.getInstance();
+            perfLog.start('createGroupDataGrid');
 
             let map = new Map();
             let groupMap = new Map();
@@ -275,6 +276,7 @@
                 //
                 let groupList = req.param(constants.REQUEST_PARAMETER.GROUP_LIST);
                 if (groupList) {
+                    let perfLog = perfLogger.getInstance();
                     perfLog.start("Build groupList: " + groupList + "; Number of fields: " + fields.length + "; Number of records: " + records.length);
 
                     //  build a fields map for quick field access when looping through the groups list.
@@ -319,20 +321,17 @@
                             }
                         }
                     });
-                    perfLog.log('Build groupBy.fields array');
 
                     // we have grouping if there are fields in groupBy.fields array.  Set the grouping flag
                     // to true and populate the grid columns and data arrays.
                     if (groupBy.fields.length > 0) {
                         //  Business rule is to not include grouped fields in the grid.  So, add to the gridColumns
                         //  array the fields NOT designated to be grouped.
-                        perfLog.start('groupBy.fields size:' + groupBy.fields.length);
                         fields.forEach(function(field) {
                             if (!field.grouped) {
                                 groupBy.gridColumns.push(field);
                             }
                         });
-                        perfLog.log('Build groupBy.gridColumns array');
 
                         groupBy.hasGrouping = true;
                         groupBy.gridData = createGroupDataGrid(groupBy.fields, fields, records);
@@ -342,6 +341,7 @@
                             groupBy.totalRows = records.length;
                         }
                     }
+                    perfLog.log();
                 }
             }
 

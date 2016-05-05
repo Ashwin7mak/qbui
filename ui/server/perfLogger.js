@@ -1,54 +1,54 @@
 (function() {
-    /*
-     * Simple implementation for performance monitoring to log
-     * the duration (in ms) of an event as an info message.
-     */
 
     'use strict';
-
-    var logger = require('./logger').getLogger();
+    var log = require('./logger').getLogger();
 
     /**
      * Simple implementation for performance monitoring to log
-     * the duration (in ms) of an event as an info message.
+     * the duration (in ms) of an event as an info message
      *
-     * @param tag
-     * @returns {{start: function(ev), log: log(skipTimerInit}}
+     * @returns {{start: function(event), log: log(skipInit}}
      * @constructor
      */
-    function PerfLogger(ev) {
-        var perfTimer;
-        var perfEvent = setEvent(ev);
-
-        function setEvent(event) {
-            if (event && event instanceof String) {
-                perfEvent = event;
-            }
-        }
+    function PerfLogger() {
+        let perfStartTime = null;
+        let perfEvent = '';
 
         return {
-            // start the timer.  Can override/reset the tag
-            start: function(e) {
-                perfTimer = new Date();
-                setEvent(e);
+            // Start the perf event by setting a start time.  Can override/reset the event message
+            start: function(event) {
+                perfStartTime = new Date();
+                if (event) {
+                    this.setEvent(event);
+                }
             },
 
-            //  log an event with the elapsed time from when the start function was called
+            // Set the message event
+            setEvent: function(event) {
+                if (event && typeof event === 'string') {
+                    perfEvent = event;
+                } else {
+                    perfEvent = '';
+                }
+            },
+
+            //  Log an event with the elapsed time from when the start function was called.
+            //  Set skipInit parameter to true to NOT clear the perf event start time and event message.
             log: function(skipInit) {
-                if (perfTimer) {
-                    let ms = new Date().getTime() - perfTimer.getTime();
+                if (perfStartTime) {
+                    let elapsedTime = new Date().getTime() - perfStartTime.getTime();
 
                     //  log as info message
-                    var msg = {
+                    let params = {
                         type: 'PERF',
-                        event: perfEvent,
-                        elapsedTime: ms + 'ms'
+                        elapsedTime: elapsedTime + 'ms'
                     };
-                    appLogger.info(msg);
+                    log.info(params, perfEvent);
 
-                    //  initialize the timer unless optional skipTimerInit is set to true
+                    //  initialize the perf info unless optional skipInit parameter is set to true
                     if (skipInit !== true) {
-                        perfTimer = null;
+                        perfStartTime = null;
+                        perfEvent = '';
                     }
                 }
             }
@@ -60,44 +60,6 @@
             return new PerfLogger(tag);
         }
     };
-
-    //module.exports = {
-    //
-    //    perfStart: null,
-    //
-    //    /**
-    //     * Start the perf timer and set the event tag(if supplied)
-    //     */
-    //    start: function() {
-    //        this.perfStart = new Date();
-    //    },
-    //
-    //    /**
-    //     * log an event with the elapsed time from when the perf timer was set
-    //     *
-    //     * @param event - string event to log with the info log message
-    //     * @param skipInit - set to true to not initialize the timer
-    //     */
-    //    log: function(event, skipInit) {
-    //        if (this.perfStart && this.perfStart instanceof Date) {
-    //
-    //            let ms = new Date().getTime() - this.perfStart.getTime();
-    //
-    //            //  log as info message
-    //            var msg = {
-    //                type: 'PERF',
-    //                event: (event && event instanceof String ? event : ''),
-    //                elapsedTime: ms + 'ms'
-    //            };
-    //            logger.info(msg);
-    //
-    //            //  initialize the timer unless optional skipTimerInit is set to true
-    //            if (skipInit !== true) {
-    //                this.perfStart = null;
-    //            }
-    //        }
-    //    }
-    //};
 
 }());
 
