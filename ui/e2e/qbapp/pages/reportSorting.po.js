@@ -314,24 +314,23 @@
          */
         this.verifySelectedGroupByFields = function(fieldsToVerify) {
             var self = this;
-            self.reportGroupByContainer.all(by.className('notEmpty')).then(function(items, index) {
-                if (items > 0) {
-                    //verify the delete button and sortOrder button
-                    expect(items[index].element(by.className('groupFieldDeleteIcon')).isDisplayed()).toBeTruthy();
-                    expect(items[index].element(by.className('sortOrderIcon')).isDisplayed()).toBeTruthy();
+            self.reportGroupByContainer.all(by.className('notEmpty')).map(function(elm, index) {
+                //verify the delete button and sortOrder button
+                expect(elm.element(by.className('groupFieldDeleteIcon')).isDisplayed()).toBeTruthy();
+                expect(elm.element(by.className('sortOrderIcon')).isDisplayed()).toBeTruthy();
 
-                    //verify the field Name
-                    items[index].element(by.className('fieldName')).getText().then(function(selectedFieldText) {
-                        expect(selectedFieldText).toEqual(fieldsToVerify[index]);
-                    });
-
-                    //verify the prefix
-                    if (index === 0) {
-                        expect(items[index].element(by.className('prefix')).getText()).toEqual('by');
-                    } else {
-                        expect(items[index].element(by.className('prefix')).getText()).toEqual('then by');
-                    }
+                //verify the prefix
+                if (index === 0) {
+                    expect(elm.element(by.className('prefix')).getText()).toEqual('by');
+                } else {
+                    expect(elm.element(by.className('prefix')).getText()).toEqual('then by');
                 }
+
+                //verify the field Name
+                elm.element(by.className('fieldName')).getText().then(function(selectedFieldText) {
+                    expect(selectedFieldText).toEqual(fieldsToVerify[index]);
+                });
+
             });
         };
 
@@ -423,24 +422,22 @@
          */
         this.verifySelectedSortByFields = function(fieldsToVerify) {
             var self = this;
-            self.reportSortByContainer.all(by.className('notEmpty')).then(function(items, index) {
-                if (items > 0) {
-                    //verify the delete button and sortOrder button
-                    expect(items[index].element(by.className('groupFieldDeleteIcon')).isDisplayed()).toBeTruthy();
-                    expect(items[index].element(by.className('sortOrderIcon')).isDisplayed()).toBeTruthy();
+            self.reportSortByContainer.all(by.className('notEmpty')).map(function(elm, index) {
+                //verify the delete button and sortOrder button
+                expect(elm.element(by.className('groupFieldDeleteIcon')).isDisplayed()).toBeTruthy();
+                expect(elm.element(by.className('sortOrderIcon')).isDisplayed()).toBeTruthy();
 
-                    //verify the field Name
-                    items[index].element(by.className('fieldName')).getText().then(function(selectedFieldText) {
-                        expect(selectedFieldText).toEqual(fieldsToVerify[index]);
-                    });
-
-                    //verify the prefix
-                    if (index === 0) {
-                        expect(items[index].element(by.className('prefix')).getText()).toEqual('by');
-                    } else {
-                        expect(items[index].element(by.className('prefix')).getText()).toEqual('then by');
-                    }
+                //verify the prefix
+                if (index === 0) {
+                    expect(elm.element(by.className('prefix')).getText()).toEqual('by');
+                } else {
+                    expect(elm.element(by.className('prefix')).getText()).toEqual('then by');
                 }
+
+                //verify the field Name
+                elm.element(by.className('fieldName')).getText().then(function(selectedFieldText) {
+                    expect(selectedFieldText).toEqual(fieldsToVerify[index]);
+                });
             });
         };
 
