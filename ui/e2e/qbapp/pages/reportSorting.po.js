@@ -511,20 +511,24 @@
                 return self.sortAndGrpDialogueResetBtn.click();
             }).then(function() {
                 reportServicePage.waitForElement(reportServicePage.loadedContentEl);
-                //verify all cleared after reset
-                return self.reportSortAndGroupBtn.click().then(function() {
-                    //verify all cleared in grpBy
-                    return self.reportGroupByContainer.all(by.className('notEmpty')).then(function(grpItems) {
-                        expect(grpItems.length).toBe(0);
-                    }).then(function() {
-                        //verify all cleared in sortBy
-                        return self.reportSortByContainer.all(by.className('notEmpty')).then(function(sortItems) {
-                            expect(sortItems.length).toBe(0);
-                        }).then(function() {
-                            //collapse the popup by clicking on X on popup
-                            return self.reportSortAndGroupCloseBtn.click().then(function() {
-                                reportServicePage.reportFilterSearchBox.click();
-                                return reportServicePage.waitForElementToBeClickable(self.reportSortAndGroupBtn);
+                reportServicePage.waitForElement(self.reportSortingGroupingContainer).then(function() {
+                    reportServicePage.waitForElementToBeClickable(self.reportSortAndGroupBtn).then(function() {
+                        //verify all cleared after reset
+                        return self.reportSortAndGroupBtn.click().then(function() {
+                            //verify all cleared in grpBy
+                            return self.reportGroupByContainer.all(by.className('notEmpty')).then(function(grpItems) {
+                                expect(grpItems.length).toBe(0);
+                            }).then(function() {
+                                //verify all cleared in sortBy
+                                return self.reportSortByContainer.all(by.className('notEmpty')).then(function(sortItems) {
+                                    expect(sortItems.length).toBe(0);
+                                }).then(function() {
+                                    //collapse the popup by clicking on X on popup
+                                    return self.reportSortAndGroupCloseBtn.click().then(function() {
+                                        reportServicePage.reportFilterSearchBox.click();
+                                        return reportServicePage.waitForElementToBeClickable(self.reportSortAndGroupBtn);
+                                    });
+                                });
                             });
                         });
                     });

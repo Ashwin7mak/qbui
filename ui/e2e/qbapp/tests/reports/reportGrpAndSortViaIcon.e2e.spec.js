@@ -140,6 +140,15 @@
                 });
             });
 
+            beforeEach(function(done) {
+                reportServicePage.waitForElement(reportServicePage.loadedContentEl).then(function() {
+                    reportServicePage.waitForElement(reportServicePage.griddleWrapperEl).then(function() {
+                        reportServicePage.waitForElement(reportServicePage.agGridBodyEl);
+                        done();
+                    });
+                });
+            });
+
             /**
              * Data Provider for sortBy/GrpBy.
              */
@@ -329,6 +338,14 @@
                 });
             });
 
+            beforeEach(function(done) {
+                reportServicePage.waitForElement(reportServicePage.loadedContentEl).then(function() {
+                    reportServicePage.waitForElement(reportServicePage.griddleWrapperEl).then(function() {
+                        reportServicePage.waitForElement(reportServicePage.agGridBodyEl);
+                        done();
+                    });
+                });
+            });
 
             /**
              * Data Provider for reports and faceting results.
@@ -495,6 +512,15 @@
                 });
             });
 
+            beforeEach(function(done) {
+                reportServicePage.waitForElement(reportServicePage.loadedContentEl).then(function() {
+                    reportServicePage.waitForElement(reportServicePage.griddleWrapperEl).then(function() {
+                        reportServicePage.waitForElement(reportServicePage.agGridBodyEl);
+                        done();
+                    });
+                });
+            });
+
             it('Verify the popUp respects report settings', function(done) {
                 reportServicePage.waitForElement(reportSortingPage.reportSortingGroupingContainer).then(function() {
                     reportServicePage.waitForElementToBeClickable(reportSortingPage.reportSortAndGroupBtn).then(function() {
@@ -612,6 +638,15 @@
                     RequestAppsPage.get(e2eBase.getRequestReportsPageEndpoint(realmName, app.id, app.tables[e2eConsts.TABLE1].id, '1'));
                     reportServicePage.waitForElement(reportServicePage.loadedContentEl);
                     done();
+                });
+            });
+
+            beforeEach(function(done) {
+                reportServicePage.waitForElement(reportServicePage.loadedContentEl).then(function() {
+                    reportServicePage.waitForElement(reportServicePage.griddleWrapperEl).then(function() {
+                        reportServicePage.waitForElement(reportServicePage.agGridBodyEl);
+                        done();
+                    });
                 });
             });
 
