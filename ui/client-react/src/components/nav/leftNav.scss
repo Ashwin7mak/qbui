@@ -86,6 +86,7 @@ $left-nav-horizontal-icon-border-color: $color32;
         display: block;
     }
     .leftNav.open {
+        max-width: calc(100% - 36px);
         width: 300px;
         transition: width 100ms ease;
         .topLinks .leftNavLink {
@@ -93,6 +94,7 @@ $left-nav-horizontal-icon-border-color: $color32;
             .qbIcon {
                 display: inline-block;
                 width: auto;
+                margin-right:4px;
             }
         }
     }
@@ -447,10 +449,6 @@ div.leftNavTooltip {
                 padding-right: 24px;
             }
         }
-        .tablesList li.horizontal {
-            min-width:300px;
-        }
-
     }
 
     .navShell.leftNavOpen {
