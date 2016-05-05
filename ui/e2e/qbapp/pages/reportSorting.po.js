@@ -6,7 +6,6 @@
     var e2ePageBase = require('./../../common/e2ePageBase');
     var ReportServicePage = requirePO('reportService');
     var reportServicePage = new ReportServicePage();
-    var SHOW_POPUP_LIST_LIMIT = 5;
 
 
     var ReportSortingPage = function() {
@@ -24,7 +23,7 @@
         //sorting/grouping popup title
         this.reportSortAndGroupTitle = this.reportSortingGroupingContainer.all(by.className('overlayTitle')).first();
         //sorting/grouping close button
-        this.reportSortAndGroupCloseBtn = this.reportSortingGroupingContainer.element(by.className('overlayRight'));
+        this.reportSortAndGroupCloseBtn = this.reportSortingGroupingContainer.all(by.className('overlayRight')).first();
 
         //group By settings
         this.reportGroupByContainer = this.reportSortingGroupingContainer.element(by.className('groupBySettings'));
@@ -157,8 +156,7 @@
                 });
             }).then(function(filteredElement) {
                 filteredElement[0].click().then(function() {
-                    return reportServicePage.waitForElement(reportServicePage.reportRecordsCount).then(function() {
-                    });
+                    return reportServicePage.waitForElement(reportServicePage.reportRecordsCount);
                 });
             });
 

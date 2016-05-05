@@ -6,12 +6,12 @@
     var RequestAppsPage = requirePO('requestApps');
     var RequestSessionTicketPage = requirePO('requestSessionTicket');
     var ReportSortingPage = requirePO('reportSorting');
+    var ReportFacetsPage = requirePO('reportFacets');
     var reportServicePage = new ReportServicePage();
     var reportSortingPage = new ReportSortingPage();
-    //include underScore js
-    var _ = require('underscore');
+    var reportFacetsPage = new ReportFacetsPage();
 
-    describe('Report Grouping and Sorting Vis Icon Tests', function() {
+    describe('Report Grouping and Sorting Via Icon Tests', function() {
         var realmName;
         var realmId;
         var app;
@@ -101,12 +101,11 @@
                 });
 
             }).then(function() {
-                //Create a report with sorting and grouping
-                //return e2eBase.reportService.createReportWithSortAndGroup(app.id, app.tables[e2eConsts.TABLE1].id, ['-7', '6:V']);
-
+                //Create a report with sorting and grouping (Sort startDate asc and group by User Name)
+                return e2eBase.reportService.createReportWithSortAndGroup(app.id, app.tables[e2eConsts.TABLE1].id, ["-9", "6:V"]);
             }).then(function() {
                 //Create a report with facets [text field and checkbox field]
-                return e2eBase.reportService.createReportWithFacets(app.id, app.tables[e2eConsts.TABLE1].id, [6, 7]);
+                return e2eBase.reportService.createReportWithFacetsAndSortLists(app.id, app.tables[e2eConsts.TABLE1].id, [7, 8], ["6:V", "7:V", "12:V", "9", "-11"]);
             }).then(function() {
                 // Get a session ticket for that subdomain and realmId (stores it in the browser)
                 realmName = e2eBase.recordBase.apiBase.realm.subdomain;
@@ -130,7 +129,7 @@
         /*
          * XLARGE BREAKPOINT - Grouping/Sorting Via PopUp Test Cases using No FIDS,SortList setup in reports
          */
-        describe('XLARGE - Report withouts filters or sortLists set', function() {
+        describe('XLARGE: Report Settings: No Facets or sortLists', function() {
 
             beforeAll(function(done) {
                 e2eBase.resizeBrowser(e2eConsts.XLARGE_BP_WIDTH, e2eConsts.DEFAULT_HEIGHT).then(function() {
@@ -147,7 +146,7 @@
             function TestCases() {
                 return [
                     {
-                        message: 'Only Sort By Date(Start Date)',
+                        message: 'Sort Only By Start Date',
                         groupBy: [],
                         sortBy: ['Start Date'],
                         flag: 'sortOnly',
@@ -159,7 +158,7 @@
                         ]
                     },
                     {
-                        message: 'Only Group By User Field(User Name)',
+                        message: 'Group Only By User Field',
                         groupBy: ['User Name'],
                         sortBy: [],
                         flag: 'groupOnly',
@@ -174,7 +173,7 @@
                         ]
                     },
                     {
-                        message: 'Single Field - GroupBy Text field(Project Phase) and SortBy Numeric(% Completed) ',
+                        message: 'GroupBy Text field(Project Phase) and SortBy Numeric(% Completed) ',
                         groupBy: ['Project Phase'],
                         sortBy: ['% Completed'],
                         flag: 'sortAndGrp',
@@ -188,7 +187,7 @@
                         ]
                     },
                     {
-                        message: 'Multiple Fields - GroupBy Duration field and user field  and SortBy Numeric(% Completed) and Text field(Project Phase)',
+                        message: 'GroupBy Duration field and user field  and SortBy Numeric(% Completed) and Text field(Project Phase)',
                         groupBy: ["Project Phase", "% Completed"],
                         sortBy: ["Duration Taken", "Start Date"],
                         flag: 'sortAndGrp',
@@ -278,7 +277,6 @@
             it('Verify you can add not more than 3 fields in GrpBy and not more than 5 in SortBy', function(done) {
                 var grpFields = ["Project Phase", "% Completed", "User Name"];
                 var sortFields = ["Start Date", "Finish Date", "Duration Taken", "Task Name", "Record ID#"];
-
                 reportServicePage.waitForElement(reportSortingPage.reportSortingGroupingContainer).then(function() {
                     reportServicePage.waitForElementToBeClickable(reportSortingPage.reportSortAndGroupBtn).then(function() {
                         reportSortingPage.reportSortAndGroupBtn.click();
@@ -319,9 +317,9 @@
         }); //XLARGE describe block
 
         /*
-         * LARGE BREAKPOINT - Use Reports without facets or sortLists - SortOrderIcon Test Cases
+         * LARGE BREAKPOINT - Grouping/Sorting Via PopUp Test Cases using No FIDS,SortList setup in reports
          */
-        describe('LARGE - Report without filters or sortLists set - sortOrderIcon tests via Grp/Sort PopUp', function() {
+        describe('LARGE : Report Settings : No facets or sortLists: ', function() {
             beforeAll(function(done) {
                 e2eBase.resizeBrowser(e2eConsts.LARGE_BP_WIDTH, e2eConsts.DEFAULT_HEIGHT).then(function() {
                     //go to report page directly
@@ -338,7 +336,7 @@
             function sortIconTestCases() {
                 return [
                     {
-                        message: 'Only SortBy field with descending via sortOrderIcon',
+                        message: 'SortBy field with descending via sortOrderIcon',
                         groupBy: [],
                         sortBy: ['Start Date'],
                         sortOrderIconInGrpBy: [],
@@ -351,7 +349,7 @@
                         ]
                     },
                     {
-                        message: 'Only Group By field with descending via sortOrderIcon',
+                        message: 'GroupBy field with descending via sortOrderIcon',
                         groupBy: ['% Completed'],
                         sortBy: ['Start Date'],
                         sortOrderIconInGrpBy: [{fieldIndex:0, sortOrder:'desc'}],
@@ -366,7 +364,7 @@
                         ]
                     },
                     {
-                        message: 'Multiple field Sorting Only SortBy field with descending via sortOrderIcon',
+                        message: 'SortBy field with descending and GroupBy with ascending via sortOrderIcon',
                         groupBy: ['Project Phase'],
                         sortBy: ['Start Date', '% Completed'],
                         sortOrderIconInGrpBy: [{fieldIndex:0, sortOrder:'desc'}],
@@ -441,20 +439,98 @@
                 });
             });
 
+            it('Report Settings: with sortLists no Facets : Verify the Sort & Group popup respects the report settings', function(done) {
+                //go to report with sortLists page directly
+                RequestAppsPage.get(e2eBase.getRequestReportsPageEndpoint(realmName, app.id, app.tables[e2eConsts.TABLE1].id, '2'));
+                reportServicePage.waitForElement(reportServicePage.loadedContentEl);
+                //Verify that popup respects the sortList set in report while loading
+                reportServicePage.waitForElement(reportSortingPage.reportSortingGroupingContainer).then(function() {
+                    reportServicePage.waitForElementToBeClickable(reportSortingPage.reportSortAndGroupBtn).then(function() {
+                        reportSortingPage.reportSortAndGroupBtn.click();
+                        // Sleep needed for animation of drop down
+                        e2eBase.sleep(browser.params.smallSleep);
+                        //Verify grouping/sorting popOver
+                        reportServicePage.waitForElement(reportSortingPage.sortAndGrpDialogueResetBtn).then(function() {
+                        }).then(function() {
+                            //Verify GrpBy has UserName and is in ascending Order
+                            reportSortingPage.reportGroupByContainer.all(by.className('notEmpty')).map(function(elm, index) {
+                                //verify the sortOrder is ascending
+                                expect(elm.element(by.className('sortOrderIcon')).getAttribute('className')).toEqual('sortOrderIcon up');
+                                //verify the field Name is 'User Name
+                                elm.element(by.className('fieldName')).getText().then(function(selectedFieldText) {
+                                    expect(selectedFieldText).toEqual('User Name');
+                                });
+                            });
+                        }).then(function() {
+                            //Verify SryBy has StartDate and is in descending Order
+                            reportSortingPage.reportSortByContainer.all(by.className('notEmpty')).map(function(elm, index) {
+                                //verify the sortOrder is ascending
+                                expect(elm.element(by.className('sortOrderIcon')).getAttribute('className')).toEqual('sortOrderIcon down');
+                                //verify the field Name is 'User Name
+                                elm.element(by.className('fieldName')).getText().then(function(selectedFieldText) {
+                                    expect(selectedFieldText).toEqual('Start Date');
+                                });
+                            });
+                            done();
+                        });
+                    });
+                });
+
+            });
+
         }); //large breakpoints describe block end
 
         /*
          * MEDIUM BREAKPOINT - Use Report with facets - deleteIcon Via PopUp Test Cases
          */
 
-        describe('MEDIUM - Report with Facets - deleteIcon tests via Grp/Sort PopUp', function() {
+        describe('MEDIUM: Report Settings: with Facets and sortLists: ', function() {
 
             beforeAll(function(done) {
                 e2eBase.resizeBrowser(e2eConsts.MEDIUM_BP_WIDTH, e2eConsts.DEFAULT_HEIGHT).then(function() {
                     //go to report with facets page directly
-                    RequestAppsPage.get(e2eBase.getRequestReportsPageEndpoint(realmName, app.id, app.tables[e2eConsts.TABLE1].id, '2'));
+                    RequestAppsPage.get(e2eBase.getRequestReportsPageEndpoint(realmName, app.id, app.tables[e2eConsts.TABLE1].id, '3'));
                     reportServicePage.waitForElement(reportServicePage.loadedContentEl);
                     done();
+                });
+            });
+
+            it('Verify the popUp respects report settings', function(done) {
+                reportServicePage.waitForElement(reportSortingPage.reportSortingGroupingContainer).then(function() {
+                    reportServicePage.waitForElementToBeClickable(reportSortingPage.reportSortAndGroupBtn).then(function() {
+                        reportSortingPage.reportSortAndGroupBtn.click();
+                        // Sleep needed for animation of drop down
+                        e2eBase.sleep(browser.params.smallSleep);
+                        //Verify grouping/sorting popOver
+                        reportServicePage.waitForElement(reportSortingPage.sortAndGrpDialogueResetBtn).then(function() {
+                        }).then(function() {
+                            //verify the sort and grp fields
+                            //verify the field name, delete button, sort button and prefix
+                            reportSortingPage.verifySelectedGroupByFields(['User Name', 'Project Phase', '% Completed']);
+                        }).then(function() {
+                            //verify the field name, delete button, sort button and prefix
+                            reportSortingPage.verifySelectedSortByFields(['Start Date', 'Duration Taken']);
+                        }).then(function() {
+                            //close the sort/Grp popUp
+                            reportSortingPage.reportSortAndGroupCloseBtn.click();
+                        }).then(function() {
+                            //verify facet Items
+                            // Click on facet carat
+                            reportFacetsPage.reportFacetFilterBtnCaret.click().then(function() {
+                                //Verify the popup menu is displayed
+                                expect(reportFacetsPage.reportFacetPopUpMenu.isDisplayed()).toBeTruthy();
+                            }).then(function() {
+                                reportFacetsPage.unselectedFacetGroupsElList.map(function(elm) {
+                                    return elm.getText();
+                                }).then(function(expectedFacets) {
+                                    expect(expectedFacets).toEqual(['Project Phase', 'Task Name']);
+                                    done();
+                                });
+
+                            });
+                        });
+
+                    });
                 });
             });
 
@@ -464,7 +540,7 @@
             function deleteIconTestCases() {
                 return [
                     {
-                        message: 'Delete Sort and Grp Fields',
+                        message: 'Delete Sort and Grp Fields via DeleteIcon',
                         groupBy: ['User Name', 'Project Phase', '% Completed'],
                         sortBy: ['Start Date', 'Duration Taken'],
                         deleteIconInGrpBy: [{fieldIndex: 2}, {fieldIndex: 1}, {fieldIndex: 0}],
@@ -488,16 +564,6 @@
                             e2eBase.sleep(browser.params.smallSleep);
                             //Verify grouping/sorting popOver
                             reportServicePage.waitForElement(reportSortingPage.sortAndGrpDialogueResetBtn).then(function() {
-                            }).then(function() {
-                                //Select group By items
-                                for (var i = 0; i < testCase.groupBy.length; i++) {
-                                    reportSortingPage.selectGroupByItems(testCase.groupBy[i]);
-                                }
-                            }).then(function() {
-                                //Select sort By items
-                                for (var i = 0; i < testCase.sortBy.length; i++) {
-                                    reportSortingPage.selectSortByItems(testCase.sortBy[i]);
-                                }
                             }).then(function() {
                                 //delete fields in Grp By
                                 for (var i = 0; i < testCase.deleteIconInGrpBy.length; i++) {
@@ -538,7 +604,7 @@
          * SMALL BREAKPOINT - Use Reports without facets or sortLists
          */
 
-        describe('SMALL BREAKPOINT TESTS', function() {
+        describe('SMALL: Report Settings: No Facets No sortLists', function() {
 
             beforeAll(function(done) {
                 e2eBase.resizeBrowser(e2eConsts.SMALL_BP_WIDTH, e2eConsts.DEFAULT_HEIGHT).then(function() {
@@ -585,7 +651,7 @@
             }
 
             moreFieldsTestCases().forEach(function(testCase) {
-                it('Verify clicking on more fields link in Grp/sort popup ', function(done) {
+                it('Verify clicking on more fields link in GrpBy and sortBy', function(done) {
                     RequestAppsPage.get(e2eBase.getRequestReportsPageEndpoint(realmName, app.id, app.tables[e2eConsts.TABLE1].id, '1'));
                     reportServicePage.waitForElementToBeClickable(reportSortingPage.reportSortAndGroupBtn).then(function() {
                         reportSortingPage.reportSortAndGroupBtn.click();
