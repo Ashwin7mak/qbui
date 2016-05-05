@@ -95,9 +95,9 @@ let AppHomePageRoute = React.createClass({
                         {this.getPageActions(2)}
                     </div>
                     <div className="appHomePageImageContainer"><img className="appHomePageMobileImage"/></div>
-                </div>:
+                </div> :
                 <div className="appHomePageImageContainer"><img className="appHomePageImage"/></div>
-        )
+        );
         //return (<div className="appHomePageContainer">
         //    <Stage stageHeadline={this.getStageHeadline()}
         //           pageActions={this.getPageActions(2)}>

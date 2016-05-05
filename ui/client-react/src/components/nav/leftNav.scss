@@ -110,21 +110,8 @@ div.leftNavTooltip {
         display: block;
     }
 }
-.branding .appsToggle {
-    text-overflow:ellipsis;
-    overflow:hidden;
-    padding-right:25px;
-    color: $left-nav-fg;
-    height:40px;
-    border: 0;
-    border-radius:0;
-    margin:0;
-    text-align:left;
-    width:100%;
-}
-.branding .appsToggle::hover {
-    color: $left-nav-fg;
-}
+
+
 
 /* collapsed nav overrides */
 @include not-small-breakpoint {
@@ -211,7 +198,7 @@ div.leftNavTooltip {
             overflow: hidden;
             text-overflow: ellipsis;
         }
-        .appsToggle {
+        button.appsToggle {
             text-overflow:ellipsis;
             overflow:hidden;
             padding-right:25px;
@@ -222,7 +209,6 @@ div.leftNavTooltip {
             margin:0;
             text-align:left;
             width:100%;
-
             padding-left: 8px;
             position: relative;
             white-space: nowrap;
@@ -311,7 +297,7 @@ div.leftNavTooltip {
         margin: 0;
         > li {
             position: relative;
-            > a, .globalActionLink {
+            a, .globalActionLink {
 
                 line-height: 40px;
                 padding-left: 8px;
@@ -361,7 +347,8 @@ div.leftNavTooltip {
                 vertical-align: middle;
                 line-height: 40px;
                 width: 200px;
-                background: $left-nav-hover-bg-hover;
+
+                background-color: $left-nav-hover-bg;
                 a {
                     flex: 1;
                     opacity: 1;
@@ -369,7 +356,11 @@ div.leftNavTooltip {
                 }
                 a.right {
                     flex: 0 0 auto;
+                    border-left: 1px solid $right-icon-separator-color;
                 }
+            }
+            &.selected .hoverComponent {
+                background-color: $left-nav-hover-bg-hover;
             }
         }
     }
