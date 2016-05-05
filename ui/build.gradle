@@ -379,7 +379,6 @@ task gruntBuildNoColor(type: GruntTask) {
 }
 
 task gruntUnitTestsNoColor(type: GruntTask) {
-    tasks.npmRunLint.execute()
     args = ["ciTest", "--no-color"]
 }
 
@@ -465,7 +464,7 @@ task installExpress(type: NpmTask) {
 zip.dependsOn clean, npmInstallProduction
 build.dependsOn clean, grunt_build
 clean.dependsOn grunt_clean, cleanBuildDir
-test.dependsOn clean, gruntUnitTestsNoColor
+test.dependsOn clean, npmRunLint, gruntUnitTestsNoColor
 npmInstallProduction.dependsOn grunt_build, dumpSys
 
 
