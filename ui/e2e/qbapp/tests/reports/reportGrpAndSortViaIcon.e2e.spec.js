@@ -612,16 +612,18 @@
                             reportSortingPage.sortAndGrpDialogueSBRestBtn.click();
                             reportServicePage.waitForElement(reportServicePage.loadedContentEl);
                         }).then(function() {
-                            //verify all cleared after reset
-                            reportSortingPage.reportSortAndGroupBtn.click().then(function() {
-                                //verify all cleared in grpBy
-                                reportSortingPage.reportGroupByContainer.all(by.className('notEmpty')).then(function(grpItems) {
-                                    expect(grpItems.length).toBe(0);
-                                }).then(function() {
-                                    //verify all cleared in sortBy
-                                    reportSortingPage.reportSortByContainer.all(by.className('notEmpty')).then(function(sortItems) {
-                                        expect(sortItems.length).toBe(0);
-                                        done();
+                            reportServicePage.waitForElementToBeClickable(reportSortingPage.reportSortAndGroupBtn).then(function() {
+                                //verify all cleared after reset
+                                reportSortingPage.reportSortAndGroupBtn.click().then(function() {
+                                    //verify all cleared in grpBy
+                                    reportSortingPage.reportGroupByContainer.all(by.className('notEmpty')).then(function(grpItems) {
+                                        expect(grpItems.length).toBe(0);
+                                    }).then(function() {
+                                        //verify all cleared in sortBy
+                                        reportSortingPage.reportSortByContainer.all(by.className('notEmpty')).then(function(sortItems) {
+                                            expect(sortItems.length).toBe(0);
+                                            done();
+                                        });
                                     });
                                 });
                             });

@@ -20,9 +20,9 @@
         //Apply button
         this.sortAndGrpDialogueApplyBtn = this.reportSortAndGroupDialogue.element(by.className('apply'));
         //resest button
-        this.sortAndGrpDialogueResetBtn = this.reportSortAndGroupDialogue.element(by.className('dialogBottom')).element(by.className('reset'));
+        this.sortAndGrpDialogueResetBtn = this.reportSortAndGroupDialogue.all(by.className('reset')).first();
         //sorting/grouping popup title
-        this.reportSortAndGroupTitle = this.reportSortingGroupingContainer.element(by.className('dialogTop')).element(by.className('overlayTitle'));
+        this.reportSortAndGroupTitle = this.reportSortingGroupingContainer.all(by.className('overlayTitle')).first();
         //sorting/grouping close button
         this.reportSortAndGroupCloseBtn = this.reportSortingGroupingContainer.element(by.className('overlayRight'));
 
@@ -286,7 +286,6 @@
                                 });
                             }).then(function(filteredElement) {
                                 if (itemsToSelect === 'more fields...') {
-                                    console.log("entered to select MORE fields ****");
                                     // Click on more fields link
                                     e2ePageBase.waitForElementToBeClickable(self.GroupByFieldPanel.element(by.className('moreFields'))).then(function() {
                                         return self.GroupByFieldPanel.element(by.className('moreFields')).click().then(function() {
@@ -323,8 +322,6 @@
 
                     //verify the field Name
                     items[index].element(by.className('fieldName')).getText().then(function(selectedFieldText) {
-                        console.log("the text is : " + selectedFieldText);
-                        console.log("the parameter is : " + fieldsToVerify[index]);
                         expect(selectedFieldText).toEqual(fieldsToVerify[index]);
                     });
 
@@ -351,7 +348,6 @@
                                 reportServicePage.waitForElement(items[fieldIndex].element(by.className('up')));
                             }
                             if (sortorder === 'desc') { //if descending
-                                console.log("Item index is: " + fieldIndex);
                                 return items[fieldIndex].element(by.className('sortOrderIcon')).click().then(function() {
                                     //TODO: Figure out how to handle with sleeps (waiting for element to be stale doesn't seem to work)
                                     e2eBase.sleep(browser.params.smallSleep);
@@ -435,8 +431,6 @@
 
                     //verify the field Name
                     items[index].element(by.className('fieldName')).getText().then(function(selectedFieldText) {
-                        console.log("the text is : " + selectedFieldText);
-                        console.log("the parameter is : " + fieldsToVerify[index]);
                         expect(selectedFieldText).toEqual(fieldsToVerify[index]);
                     });
 
@@ -468,7 +462,6 @@
                                 //    //reportServicePage.waitForElement(items[fieldIndex].element(by.className('down')));
                                 //});
                             } else if (sortorder === 'desc') {
-                                console.log("Its DESCENDING");
                                 return items[fieldIndex].element(by.className('sortOrderIcon')).click().then(function() {
                                     //TODO: Figure out how to handle with sleeps (waiting for element to be stale doesn't seem to work)
                                     e2eBase.sleep(browser.params.smallSleep);
