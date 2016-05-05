@@ -79,7 +79,7 @@
             });
 
             data = groupTheData(groupFields, reportData, 0);
-            perfLog.log();
+            perfLog.logAndStop();
         }
 
         return data;
@@ -341,7 +341,7 @@
                             groupBy.totalRows = records.length;
                         }
                     }
-                    perfLog.log();
+                    perfLog.logAndStop();
                 }
             }
 

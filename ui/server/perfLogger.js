@@ -32,9 +32,10 @@
                 }
             },
 
-            //  Log an event with the elapsed time from when the start function was called.
-            //  Set skipInit parameter to true to NOT clear the perf event start time and event message.
-            log: function(skipInit) {
+            //  Log an event with the elapsed time from when the start function was called and
+            //  by default, clear the start time and perfEvent message.  Set the skipStop parameter
+            //  to true to NOT clear out the start time and perfEvent.
+            logAndStop: function(skipStop) {
                 if (perfStartTime) {
                     let elapsedTime = new Date().getTime() - perfStartTime.getTime();
 
@@ -46,7 +47,7 @@
                     log.info(params, perfEvent);
 
                     //  initialize the perf info unless optional skipInit parameter is set to true
-                    if (skipInit !== true) {
+                    if (skipStop !== true) {
                         perfStartTime = null;
                         perfEvent = '';
                     }

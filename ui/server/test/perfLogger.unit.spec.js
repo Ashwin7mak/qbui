@@ -29,13 +29,13 @@ describe('Validate Performance Logger', function() {
     }
 
     function assertLoggerTrue(perfLog, event, init) {
-        perfLog.log(init);
+        perfLog.logAndStop(init);
         assert(stubLog.calledWith(sinon.match.any, event), 'Error logging PerfLog message.  Test Event: ' + event);
         stubLog.reset();
     }
 
     function assertLoggerFalse(perfLog, event, init) {
-        perfLog.log(init);
+        perfLog.logAndStop(init);
         assert(!stubLog.called, 'PerfLog unexpectedly logging message.  Test Event: ' + event);
         stubLog.reset();
     }
