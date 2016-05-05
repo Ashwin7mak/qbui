@@ -126,7 +126,7 @@ var SortAndGroupDialog = React.createClass({
                                      sortByFields={this.props.sortByFields}
                                      groupByFields={this.props.groupByFields}
                                      onSelectField={this.props.onSelectField}
-                                     showMoreFields={this.props.showMoreFields}
+                                     onShowMoreFields={this.props.onShowMoreFields}
                                      showNotVisible={this.props.showNotVisible}
                                      fieldsForType={this.props.fieldsForType}
                         />
