@@ -135,11 +135,6 @@
                             let responseObject = result[0];
                             responseObject[FACETS] = [];
 
-                            var xxx;
-                            if (xxx.test === 'bad') {
-                                xxx = 'badness';
-                            }
-
                             /*eslint no-lonely-if:0 */
                             if (result[1]) {
                                 //  check for any facet error...if one found, return the error object to the client
