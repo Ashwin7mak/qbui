@@ -119,6 +119,11 @@
             width: 100%;
         }
     }
+    .filterSearchBox {
+        .searchInput {
+            border: none;
+        }
+    }
 }
 
 @include medium-breakpoint {

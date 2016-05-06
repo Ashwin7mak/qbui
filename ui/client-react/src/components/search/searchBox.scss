@@ -13,11 +13,12 @@
     color: $search-input-fg;
     text-overflow: ellipsis;
     width:100%;
+    height: 100%;
   }
   .searchIcon {
     position: absolute;
     right: 5px;
-    top: 12px;
+    top: calc(50% - #{$font-size-base/2});
     font-size: $font-size-base !important;
     width: 14px !important;
   }
