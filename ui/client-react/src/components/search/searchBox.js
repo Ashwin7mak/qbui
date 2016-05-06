@@ -27,7 +27,7 @@ const SearchBox = React.createClass({
                    placeholder={this.props.placeholder}>
                 </input>
                 {this.props.value && this.props.value.length && !this.props.hideClearIcon ?
-                    <a onClick={this.props.onClearSearch}>
+                    <a className="clearSearch" onClick={this.props.onClearSearch}>
                         <QBicon icon="clear-mini" className="searchIcon"/>
                     </a> :
                     null
