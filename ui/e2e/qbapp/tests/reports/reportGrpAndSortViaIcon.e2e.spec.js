@@ -159,13 +159,13 @@
 
             beforeAll(function(done) {
                 e2eBase.resizeBrowser(e2eConsts.XLARGE_BP_WIDTH, e2eConsts.DEFAULT_HEIGHT).then(function() {
-                    //go to report page directly
-                    RequestAppsPage.get(e2eBase.getRequestReportsPageEndpoint(realmName, app.id, app.tables[e2eConsts.TABLE1].id, '1'));
                     done();
                 });
             });
 
             beforeEach(function(done) {
+                //go to report page directly
+                RequestAppsPage.get(e2eBase.getRequestReportsPageEndpoint(realmName, app.id, app.tables[e2eConsts.TABLE1].id, '1'));
                 reportServicePage.waitForElement(reportServicePage.loadedContentEl).then(function() {
                     reportServicePage.waitForElement(reportSortingPage.reportSortingGroupingContainer);
                     done();
@@ -279,10 +279,6 @@
                             // Verify table results with expected
                             verifyTableResults(testCase.groupBy.length, false, testCase.expectedTableResults);
                         }
-
-                    }).then(function() {
-                        //finally reset
-                        reportSortingPage.verifyGrpSortPopUpReset();
                         done();
                     });
                 });
@@ -325,13 +321,13 @@
         describe('LARGE : Report Settings : No facets or sortLists: ', function() {
             beforeAll(function(done) {
                 e2eBase.resizeBrowser(e2eConsts.LARGE_BP_WIDTH, e2eConsts.DEFAULT_HEIGHT).then(function() {
-                    //go to report page directly
-                    RequestAppsPage.get(e2eBase.getRequestReportsPageEndpoint(realmName, app.id, app.tables[e2eConsts.TABLE1].id, '1'));
                     done();
                 });
             });
 
             beforeEach(function(done) {
+                //go to report page directly
+                RequestAppsPage.get(e2eBase.getRequestReportsPageEndpoint(realmName, app.id, app.tables[e2eConsts.TABLE1].id, '1'));
                 reportServicePage.waitForElement(reportServicePage.loadedContentEl).then(function() {
                     reportServicePage.waitForElement(reportSortingPage.reportSortingGroupingContainer);
                     done();
@@ -420,9 +416,6 @@
                     }).then(function() {
                         //verify the sorting/grouping results with expected
                         verifyTableResults(testCase.groupBy.length, false, testCase.expectedTableResults);
-                    }).then(function() {
-                        //finally reset
-                        reportSortingPage.verifyGrpSortPopUpReset();
                         done();
                     });
                 });
@@ -603,7 +596,12 @@
                         //Verify Reset is at the bottom.
                         expect(reportSortingPage.sortAndGrpDialogueSBRestBtn.getAttribute('clientTop')).toEqual('0');
                         expect(reportSortingPage.sortAndGrpDialogueSBRestBtn.getAttribute('clientLeft')).toEqual('0');
-                        done();
+                    }).then(function() {
+                        //close the popup
+                        reportSortingPage.reportSortAndGroupSBCloseBtn.click().then(function() {
+                            reportServicePage.waitForElementToBeClickable(reportSortingPage.reportSortAndGroupBtn);
+                            done();
+                        });
                     });
                 });
             });
@@ -623,7 +621,6 @@
 
             moreFieldsTestCases().forEach(function(testCase) {
                 it('Verify clicking on more fields link in GrpBy and sortBy', function(done) {
-                    RequestAppsPage.get(e2eBase.getRequestReportsPageEndpoint(realmName, app.id, app.tables[e2eConsts.TABLE1].id, '1'));
                     reportServicePage.waitForElementToBeClickable(reportSortingPage.reportSortAndGroupBtn).then(function() {
                         //click on sort/grp Icon
                         reportSortingPage.reportSortAndGroupBtn.click().then(function() {
