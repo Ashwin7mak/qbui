@@ -127,6 +127,32 @@
         });
 
         /*
+         * Funstion to get the sorted/grouped table results
+         * @Param:groupArrayLength (no of group fields)
+         */
+        var verifyTableResults = function(NoOfGroupFields, groupOnlySort, expectedResults) {
+            // Get all records from table after grp/sort
+            reportServicePage.agGridRecordElList.map(function(row) {
+                var cellValues = [];
+                //need this because for grouping the selected columns will be deleted in table grid
+                var cellCount = 8 - (NoOfGroupFields);
+                for (var i = 2; i <= cellCount; i++) {
+                    cellValues.push(row.all(by.className('ag-cell-no-focus')).get(i).getText());
+                }
+                return cellValues;
+            }).then(function(groupingSortingTableResults) {
+                if (groupOnlySort === true) {
+                    //sort the arrays and compare
+                    expect(groupingSortingTableResults.sort()).toEqual(expectedResults.sort());
+                } else {
+                    //the arrays are already sorted
+                    //verify the sorting/grouping results with expected
+                    expect(groupingSortingTableResults).toEqual(expectedResults);
+                }
+            });
+        };
+
+        /*
          * XLARGE BREAKPOINT - Grouping/Sorting Via PopUp Test Cases using No FIDS,SortList setup in reports
          */
         describe('XLARGE: Report Settings: No Facets or sortLists', function() {
@@ -141,12 +167,8 @@
 
             beforeEach(function(done) {
                 reportServicePage.waitForElement(reportServicePage.loadedContentEl).then(function() {
-                    reportServicePage.waitForElement(reportServicePage.griddleWrapperEl).then(function() {
-                        reportServicePage.waitForElement(reportServicePage.agGridBodyEl).then(function() {
-                            reportServicePage.waitForElement(reportSortingPage.reportSortingGroupingContainer);
-                            done();
-                        });
-                    });
+                    reportServicePage.waitForElement(reportSortingPage.reportSortingGroupingContainer);
+                    done();
                 });
             });
 
@@ -220,66 +242,48 @@
 
             TestCases().forEach(function(testCase) {
                 it('' + testCase.message, function(done) {
-                    reportServicePage.waitForElement(reportSortingPage.reportSortingGroupingContainer).then(function() {
-                        reportServicePage.waitForElementToBeClickable(reportSortingPage.reportSortAndGroupBtn).then(function() {
-                            reportSortingPage.reportSortAndGroupBtn.click();
-                            // Sleep needed for animation of drop down
-                            e2eBase.sleep(browser.params.smallSleep);
-                            //Verify grouping/sorting popOver
-                            reportServicePage.waitForElement(reportSortingPage.sortAndGrpDialogueResetBtn).then(function() {
-                                //Verify the title
-                                expect(reportSortingPage.reportSortAndGroupTitle.getAttribute('innerText')).toEqual('Sort & Group');
-                                //Verify title of groupBy
-                                expect(reportSortingPage.reportGroupByContainerTitle.getText()).toEqual('Group');
-                            }).then(function() {
-                                //Select group By items
-                                for (var i = 0; i < testCase.groupBy.length; i++) {
-                                    reportSortingPage.selectGroupByItems(testCase.groupBy[i]);
-                                }
+                    reportServicePage.waitForElementToBeClickable(reportSortingPage.reportSortAndGroupBtn).then(function() {
+                        //click on sort/grp Icon
+                        reportSortingPage.clickSortAndGroupIcon();
+                    }).then(function() {
+                        //Verify the title
+                        expect(reportSortingPage.reportSortAndGroupTitle.getAttribute('innerText')).toEqual('Sort & Group');
+                        //Verify title of groupBy
+                        expect(reportSortingPage.reportGroupByContainerTitle.getText()).toEqual('Group');
+                    }).then(function() {
+                        //Select group By items
+                        for (var i = 0; i < testCase.groupBy.length; i++) {
+                            reportSortingPage.selectGroupByItems(testCase.groupBy[i]);
+                        }
+                    }).then(function() {
+                        //Select sort By items
+                        for (var i = 0; i < testCase.sortBy.length; i++) {
+                            reportSortingPage.selectSortByItems(testCase.sortBy[i]);
+                        }
+                    }).then(function() {
+                        //verify the grpBy fields
+                        //verify the field name, delete button, sort button and prefix
+                        reportSortingPage.verifySelectedGroupByFields(testCase.groupBy);
+                    }).then(function() {
+                        //Verify the sortBy fields
+                        //verify the field name, delete button, sort button and prefix
+                        reportSortingPage.verifySelectedSortByFields(testCase.sortBy);
+                    }).then(function() {
+                        //Click apply button
+                        reportSortingPage.clickApply();
+                    }).then(function() {
+                        //verify the sorting/grouping results with expected
+                        if (testCase.flag.includes("groupOnly")) {
+                            verifyTableResults(testCase.groupBy.length, true, testCase.expectedTableResults);
+                        } else {
+                            // Verify table results with expected
+                            verifyTableResults(testCase.groupBy.length, false, testCase.expectedTableResults);
+                        }
 
-                            }).then(function() {
-                                //Select sort By items
-                                for (var i = 0; i < testCase.sortBy.length; i++) {
-                                    reportSortingPage.selectSortByItems(testCase.sortBy[i]);
-                                }
-                            }).then(function() {
-                                //verify the sort and grp fields
-                                //verify the field name, delete button, sort button and prefix
-                                reportSortingPage.verifySelectedGroupByFields(testCase.groupBy);
-                            }).then(function() {
-                                //verify the field name, delete button, sort button and prefix
-                                reportSortingPage.verifySelectedSortByFields(testCase.sortBy);
-                            }).then(function() {
-                                //Click apply button
-                                reportSortingPage.sortAndGrpDialogueApplyBtn.click();
-                                reportServicePage.waitForElement(reportServicePage.loadedContentEl);
-                            }).then(function() {
-                                // Get all records from table after grp/sort
-                                reportServicePage.agGridRecordElList.map(function(row) {
-                                    var cellValues = [];
-                                    //need this because for grouping the selected columns will be deleted in table grid
-                                    var cellCount = 8 - (testCase.groupBy.length);
-                                    for (var i = 2; i <= cellCount; i++) {
-                                        cellValues.push(row.all(by.className('ag-cell-no-focus')).get(i).getText());
-                                    }
-                                    return cellValues;
-                                }).then(function(groupingSortingTableResults) {
-                                    //verify the sorting/grouping results with expected
-                                    if (testCase.flag.includes("sortOnly") || testCase.flag.includes("sortAndGrp")) {
-                                        //results are already sorted
-                                        expect(groupingSortingTableResults).toEqual(testCase.expectedTableResults);
-                                    }
-                                    if (testCase.flag.includes("groupOnly")) {
-                                        //for group only they are not sorted
-                                        expect(groupingSortingTableResults.sort()).toEqual(testCase.expectedTableResults.sort());
-                                    }
-                                }).then(function() {
-                                    //finally reset
-                                    reportSortingPage.verifyGrpSortPopUpReset();
-                                    done();
-                                });
-                            });
-                        });
+                    }).then(function() {
+                        //finally reset
+                        reportSortingPage.verifyGrpSortPopUpReset();
+                        done();
                     });
                 });
             });
@@ -287,40 +291,29 @@
             it('Verify you can add not more than 3 fields in GrpBy and not more than 5 in SortBy', function(done) {
                 var grpFields = ["Project Phase", "% Completed", "User Name"];
                 var sortFields = ["Start Date", "Finish Date", "Duration Taken", "Task Name", "Record ID#"];
-                reportServicePage.waitForElement(reportSortingPage.reportSortingGroupingContainer).then(function() {
-                    reportServicePage.waitForElementToBeClickable(reportSortingPage.reportSortAndGroupBtn).then(function() {
-                        reportSortingPage.reportSortAndGroupBtn.click();
-                        // Sleep needed for animation of drop down
-                        e2eBase.sleep(browser.params.smallSleep);
-                        //Verify grouping/sorting popOver
-                        reportServicePage.waitForElement(reportSortingPage.sortAndGrpDialogueResetBtn).then(function() {
-                            //Verify the title
-                            expect(reportSortingPage.reportSortAndGroupTitle.getAttribute('innerText')).toEqual('Sort & Group');
-                            //Verify title of groupBy
-                            expect(reportSortingPage.reportGroupByContainerTitle.getText()).toEqual('Group');
-                        }).then(function() {
-                            //Select group By items
-                            for (var i = 0; i < grpFields.length; i++) {
-                                reportSortingPage.selectGroupByItems(grpFields[i]);
-                            }
-                        }).then(function() {
-                            //Select sort By items
-                            for (var i = 0; i < sortFields.length; i++) {
-                                reportSortingPage.selectSortByItems(sortFields[i]);
-                            }
-                        }).then(function() {
-                            //Verify no more fields can be added after 3 fields in GrpBy
-                            reportSortingPage.reportGroupByContainer.all(by.className('empty')).then(function(grpItems) {
-                                expect(grpItems.length).toBe(0);
-                            });
-
-                        }).then(function() {
-                            //Verify no more fields can be added after 3 fields in sortBy
-                            reportSortingPage.reportSortByContainer.all(by.className('empty')).then(function(sortItems) {
-                                expect(sortItems.length).toBe(0);
-                                done();
-                            });
-                        });
+                reportServicePage.waitForElementToBeClickable(reportSortingPage.reportSortAndGroupBtn).then(function() {
+                    //click on sort/grp Icon
+                    reportSortingPage.clickSortAndGroupIcon();
+                }).then(function() {
+                    //Select group By items
+                    for (var i = 0; i < grpFields.length; i++) {
+                        reportSortingPage.selectGroupByItems(grpFields[i]);
+                    }
+                }).then(function() {
+                    //Select sort By items
+                    for (var i = 0; i < sortFields.length; i++) {
+                        reportSortingPage.selectSortByItems(sortFields[i]);
+                    }
+                }).then(function() {
+                    //Verify no more fields can be added after 3 fields in GrpBy
+                    reportSortingPage.reportGroupByContainer.all(by.className('empty')).then(function(grpItems) {
+                        expect(grpItems.length).toBe(0);
+                    });
+                }).then(function() {
+                    //Verify no more fields can be added after 3 fields in sortBy
+                    reportSortingPage.reportSortByContainer.all(by.className('empty')).then(function(sortItems) {
+                        expect(sortItems.length).toBe(0);
+                        done();
                     });
                 });
             });
@@ -340,12 +333,8 @@
 
             beforeEach(function(done) {
                 reportServicePage.waitForElement(reportServicePage.loadedContentEl).then(function() {
-                    reportServicePage.waitForElement(reportServicePage.griddleWrapperEl).then(function() {
-                        reportServicePage.waitForElement(reportServicePage.agGridBodyEl).then(function() {
-                            reportServicePage.waitForElement(reportSortingPage.reportSortingGroupingContainer);
-                            done();
-                        });
-                    });
+                    reportServicePage.waitForElement(reportSortingPage.reportSortingGroupingContainer);
+                    done();
                 });
             });
 
@@ -402,58 +391,39 @@
 
             sortIconTestCases().forEach(function(testCase) {
                 it('' + testCase.message, function(done) {
-                    reportServicePage.waitForElement(reportSortingPage.reportSortingGroupingContainer).then(function() {
-                        reportServicePage.waitForElementToBeClickable(reportSortingPage.reportSortAndGroupBtn).then(function() {
-                            reportSortingPage.reportSortAndGroupBtn.click();
-                            // Sleep needed for animation of drop down
-                            e2eBase.sleep(browser.params.smallSleep);
-                            //Verify grouping/sorting popOver
-                            reportServicePage.waitForElement(reportSortingPage.sortAndGrpDialogueResetBtn).then(function() {
-                            }).then(function() {
-                                //Select group By items
-                                for (var i = 0; i < testCase.groupBy.length; i++) {
-                                    reportSortingPage.selectGroupByItems(testCase.groupBy[i]);
-                                }
-                            }).then(function() {
-                                //Select sort By items
-                                for (var i = 0; i < testCase.sortBy.length; i++) {
-                                    reportSortingPage.selectSortByItems(testCase.sortBy[i]);
-                                }
-                            }).then(function() {
-                                for (var i = 0; i < testCase.sortOrderIconInGrpBy.length; i++) {
-                                    // Click on sortOrderIcon in GroupBy Fields
-                                    reportSortingPage.selectSortByIconInGroupBy(testCase.sortOrderIconInGrpBy[i].fieldIndex, testCase.sortOrderIconInGrpBy[i].sortOrder);
-                                }
-                            }).then(function() {
-                                for (var j = 0; j < testCase.sortOrderIconInSortBy.length; j++) {
-                                    //Click on sortOrderIcon in SortBy Fields
-                                    reportSortingPage.selectSortByIconInSortBy(testCase.sortOrderIconInSortBy[j].fieldIndex, testCase.sortOrderIconInSortBy[j].sortOrder);
-                                }
-                            }).then(function() {
-                                //Click apply button
-                                reportSortingPage.sortAndGrpDialogueApplyBtn.click();
-                                reportServicePage.waitForElement(reportServicePage.loadedContentEl);
-                            }).then(function() {
-                                // Get all records from table after grp/sort
-                                reportServicePage.agGridRecordElList.map(function(row) {
-                                    var cellValues = [];
-                                    //need this because for grouping the selected columns will be deleted in table grid
-                                    var cellCount = 8 - (testCase.groupBy.length);
-                                    for (var i = 2; i <= cellCount; i++) {
-                                        cellValues.push(row.all(by.className('ag-cell-no-focus')).get(i).getText());
-                                    }
-                                    return cellValues;
-                                }).then(function(groupingSortingTableResults) {
-                                    //Verify the results
-                                    expect(groupingSortingTableResults).toEqual(testCase.expectedTableResults);
-
-                                }).then(function() {
-                                    //finally reset
-                                    reportSortingPage.verifyGrpSortPopUpReset();
-                                    done();
-                                });
-                            });
-                        });
+                    reportServicePage.waitForElementToBeClickable(reportSortingPage.reportSortAndGroupBtn).then(function() {
+                        //click on sort/grp Icon
+                        reportSortingPage.clickSortAndGroupIcon();
+                    }).then(function() {
+                        //Select group By items
+                        for (var i = 0; i < testCase.groupBy.length; i++) {
+                            reportSortingPage.selectGroupByItems(testCase.groupBy[i]);
+                        }
+                    }).then(function() {
+                        //Select sort By items
+                        for (var i = 0; i < testCase.sortBy.length; i++) {
+                            reportSortingPage.selectSortByItems(testCase.sortBy[i]);
+                        }
+                    }).then(function() {
+                        for (var i = 0; i < testCase.sortOrderIconInGrpBy.length; i++) {
+                            // Click on sortOrderIcon in GroupBy Fields
+                            reportSortingPage.selectSortByIconInGroupBy(testCase.sortOrderIconInGrpBy[i].fieldIndex, testCase.sortOrderIconInGrpBy[i].sortOrder);
+                        }
+                    }).then(function() {
+                        for (var j = 0; j < testCase.sortOrderIconInSortBy.length; j++) {
+                            //Click on sortOrderIcon in SortBy Fields
+                            reportSortingPage.selectSortByIconInSortBy(testCase.sortOrderIconInSortBy[j].fieldIndex, testCase.sortOrderIconInSortBy[j].sortOrder);
+                        }
+                    }).then(function() {
+                        //Click apply button
+                        reportSortingPage.clickApply();
+                    }).then(function() {
+                        //verify the sorting/grouping results with expected
+                        verifyTableResults(testCase.groupBy.length, false, testCase.expectedTableResults);
+                    }).then(function() {
+                        //finally reset
+                        reportSortingPage.verifyGrpSortPopUpReset();
+                        done();
                     });
                 });
             });
@@ -462,45 +432,37 @@
                 //go to report with sortLists page directly
                 RequestAppsPage.get(e2eBase.getRequestReportsPageEndpoint(realmName, app.id, app.tables[e2eConsts.TABLE1].id, '2'));
                 reportServicePage.waitForElement(reportServicePage.loadedContentEl).then(function() {
-                    reportServicePage.waitForElement(reportServicePage.griddleWrapperEl).then(function() {
-                        reportServicePage.waitForElement(reportServicePage.agGridBodyEl).then(function() {
-                            //Verify that popup respects the sortList set in report while loading
-                            reportServicePage.waitForElement(reportSortingPage.reportSortingGroupingContainer).then(function() {
-                                reportServicePage.waitForElementToBeClickable(reportSortingPage.reportSortAndGroupBtn).then(function() {
-                                    reportSortingPage.reportSortAndGroupBtn.click();
-                                    // Sleep needed for animation of drop down
-                                    e2eBase.sleep(browser.params.smallSleep);
-                                    //Verify grouping/sorting popOver
-                                    reportServicePage.waitForElement(reportSortingPage.sortAndGrpDialogueResetBtn).then(function() {
-                                    }).then(function() {
-                                        //Verify GrpBy has UserName and is in ascending Order
-                                        reportSortingPage.reportGroupByContainer.all(by.className('notEmpty')).map(function(elm, index) {
-                                            //verify the sortOrder is ascending
-                                            expect(elm.element(by.className('sortOrderIcon')).getAttribute('className')).toEqual('sortOrderIcon up');
-                                            //verify the field Name is 'User Name
-                                            elm.element(by.className('fieldName')).getText().then(function(selectedFieldText) {
-                                                expect(selectedFieldText).toEqual('User Name');
-                                            });
-                                        });
-                                    }).then(function() {
-                                        //Verify SryBy has StartDate and is in descending Order
-                                        reportSortingPage.reportSortByContainer.all(by.className('notEmpty')).map(function(elm, index) {
-                                            //verify the sortOrder is ascending
-                                            expect(elm.element(by.className('sortOrderIcon')).getAttribute('className')).toEqual('sortOrderIcon down');
-                                            //verify the field Name is 'User Name
-                                            elm.element(by.className('fieldName')).getText().then(function(selectedFieldText) {
-                                                expect(selectedFieldText).toEqual('Start Date');
-                                            });
-                                        });
-                                        done();
-                                    });
+                    //Verify that popup respects the sortList set in report while loading
+                    reportServicePage.waitForElement(reportSortingPage.reportSortingGroupingContainer).then(function() {
+                        reportServicePage.waitForElementToBeClickable(reportSortingPage.reportSortAndGroupBtn).then(function() {
+                            //click on sort/grp Icon
+                            reportSortingPage.clickSortAndGroupIcon();
+                        }).then(function() {
+                            //Verify GrpBy has UserName and is in ascending Order
+                            reportSortingPage.reportGroupByContainer.all(by.className('notEmpty')).map(function(elm, index) {
+                                //verify the sortOrder is ascending
+                                expect(elm.element(by.className('sortOrderIcon')).getAttribute('className')).toEqual('sortOrderIcon up');
+                                //verify the field Name is 'User Name
+                                elm.element(by.className('fieldName')).getText().then(function(selectedFieldText) {
+                                    expect(selectedFieldText).toEqual('User Name');
+                                });
+                            });
+                        }).then(function() {
+                            //Verify SryBy has StartDate and is in descending Order
+                            reportSortingPage.reportSortByContainer.all(by.className('notEmpty')).map(function(elm, index) {
+                                //verify the sortOrder is ascending
+                                expect(elm.element(by.className('sortOrderIcon')).getAttribute('className')).toEqual('sortOrderIcon down');
+                                //verify the field Name is 'User Name
+                                elm.element(by.className('fieldName')).getText().then(function(selectedFieldText) {
+                                    expect(selectedFieldText).toEqual('Start Date');
+                                    done();
                                 });
                             });
                         });
                     });
                 });
-
             });
+
 
         }); //large breakpoints describe block end
 
@@ -520,50 +482,38 @@
 
             beforeEach(function(done) {
                 reportServicePage.waitForElement(reportServicePage.loadedContentEl).then(function() {
-                    reportServicePage.waitForElement(reportServicePage.griddleWrapperEl).then(function() {
-                        reportServicePage.waitForElement(reportServicePage.agGridBodyEl).then(function() {
-                            reportServicePage.waitForElement(reportSortingPage.reportSortingGroupingContainer);
-                            done();
-                        });
-                    });
+                    reportServicePage.waitForElement(reportSortingPage.reportSortingGroupingContainer);
+                    done();
                 });
             });
 
             it('Verify the popUp respects report settings', function(done) {
-                reportServicePage.waitForElement(reportSortingPage.reportSortingGroupingContainer).then(function() {
-                    reportServicePage.waitForElementToBeClickable(reportSortingPage.reportSortAndGroupBtn).then(function() {
-                        reportSortingPage.reportSortAndGroupBtn.click();
-                        // Sleep needed for animation of drop down
-                        e2eBase.sleep(browser.params.smallSleep);
-                        //Verify grouping/sorting popOver
-                        reportServicePage.waitForElement(reportSortingPage.sortAndGrpDialogueResetBtn).then(function() {
-                        }).then(function() {
-                            //verify the sort and grp fields
-                            //verify the field name, delete button, sort button and prefix
-                            reportSortingPage.verifySelectedGroupByFields(['User Name', 'Project Phase', '% Completed']);
-                        }).then(function() {
-                            //verify the field name, delete button, sort button and prefix
-                            reportSortingPage.verifySelectedSortByFields(['Start Date', 'Duration Taken']);
-                        }).then(function() {
-                            //close the sort/Grp popUp
-                            reportSortingPage.reportSortAndGroupCloseBtn.click();
-                        }).then(function() {
-                            //verify facet Items
-                            // Click on facet carat
-                            reportFacetsPage.reportFacetFilterBtnCaret.click().then(function() {
-                                //Verify the popup menu is displayed
-                                expect(reportFacetsPage.reportFacetPopUpMenu.isDisplayed()).toBeTruthy();
-                            }).then(function() {
-                                reportFacetsPage.unselectedFacetGroupsElList.map(function(elm) {
-                                    return elm.getText();
-                                }).then(function(expectedFacets) {
-                                    expect(expectedFacets).toEqual(['Project Phase', 'Task Name']);
-                                    done();
-                                });
-
-                            });
-                        });
-
+                reportServicePage.waitForElementToBeClickable(reportSortingPage.reportSortAndGroupBtn).then(function() {
+                    //click on sort/grp Icon
+                    reportSortingPage.clickSortAndGroupIcon();
+                }).then(function() {
+                    //verify the sort and grp fields
+                    //verify the field name, delete button, sort button and prefix
+                    reportSortingPage.verifySelectedGroupByFields(['User Name', 'Project Phase', '% Completed']);
+                }).then(function() {
+                    //verify the field name, delete button, sort button and prefix
+                    reportSortingPage.verifySelectedSortByFields(['Start Date', 'Duration Taken']);
+                }).then(function() {
+                    //close the sort/Grp popUp
+                    reportSortingPage.reportSortAndGroupCloseBtn.click();
+                }).then(function() {
+                    //verify facet Items
+                    // Click on facet carat
+                    reportFacetsPage.reportFacetFilterBtnCaret.click().then(function() {
+                        //Verify the popup menu is displayed
+                        expect(reportFacetsPage.reportFacetPopUpMenu.isDisplayed()).toBeTruthy();
+                    });
+                }).then(function() {
+                    reportFacetsPage.unselectedFacetGroupsElList.map(function(elm) {
+                        return elm.getText();
+                    }).then(function(expectedFacets) {
+                        expect(expectedFacets).toEqual(['Project Phase', 'Task Name']);
+                        done();
                     });
                 });
             });
@@ -591,44 +541,27 @@
 
             deleteIconTestCases().forEach(function(testCase) {
                 it('' + testCase.message, function(done) {
-                    reportServicePage.waitForElement(reportSortingPage.reportSortingGroupingContainer).then(function() {
-                        reportServicePage.waitForElementToBeClickable(reportSortingPage.reportSortAndGroupBtn).then(function() {
-                            reportSortingPage.reportSortAndGroupBtn.click();
-                            // Sleep needed for animation of drop down
-                            e2eBase.sleep(browser.params.smallSleep);
-                            //Verify grouping/sorting popOver
-                            reportServicePage.waitForElement(reportSortingPage.sortAndGrpDialogueResetBtn).then(function() {
-                            }).then(function() {
-                                //delete fields in Grp By
-                                for (var i = 0; i < testCase.deleteIconInGrpBy.length; i++) {
-                                    reportSortingPage.deleteFieldsInGroupBy(testCase.deleteIconInGrpBy[i].fieldIndex, testCase.groupBy);
-                                }
-                            }).then(function() {
-                                //delete fields in sort By
-                                for (var j = 0; j < testCase.deleteIconInSortBy.length; j++) {
-                                    reportSortingPage.deleteFieldsInSortBy(testCase.deleteIconInSortBy[j].fieldIndex, testCase.sortBy);
-                                }
-
-                            }).then(function() {
-                                //Click apply button
-                                reportSortingPage.sortAndGrpDialogueApplyBtn.click();
-                                reportServicePage.waitForElement(reportServicePage.loadedContentEl);
-                            }).then(function() {
-                                // Get all records from table after grp/sort
-                                reportServicePage.agGridRecordElList.map(function(row) {
-                                    var cellValues = [];
-                                    //need this because for grouping the selected columns will be deleted in table grid
-                                    for (var i = 2; i <= 8; i++) {
-                                        cellValues.push(row.all(by.className('ag-cell-no-focus')).get(i).getText());
-                                    }
-                                    return cellValues;
-                                }).then(function(groupingSortingTableResults) {
-                                    //Verify the results
-                                    expect(groupingSortingTableResults).toEqual(testCase.expectedTableResultsAfterDelete);
-                                    done();
-                                });
-                            });
-                        });
+                    reportServicePage.waitForElementToBeClickable(reportSortingPage.reportSortAndGroupBtn).then(function() {
+                        //click on sort/grp Icon
+                        reportSortingPage.clickSortAndGroupIcon();
+                    }).then(function() {
+                        //delete fields in Grp By
+                        for (var i = 0; i < testCase.deleteIconInGrpBy.length; i++) {
+                            reportSortingPage.deleteFieldsInGroupBy(testCase.deleteIconInGrpBy[i].fieldIndex, testCase.groupBy);
+                        }
+                    }).then(function() {
+                        //delete fields in sort By
+                        for (var j = 0; j < testCase.deleteIconInSortBy.length; j++) {
+                            reportSortingPage.deleteFieldsInSortBy(testCase.deleteIconInSortBy[j].fieldIndex, testCase.sortBy);
+                        }
+                    }).then(function() {
+                        //Click apply button
+                        reportSortingPage.clickApply();
+                    }).then(function() {
+                        // Verify table results with expected
+                        //passing group by length is 0 to below method because I am deleting all grp by fields in this testcase
+                        verifyTableResults(0, false, testCase.expectedTableResultsAfterDelete);
+                        done();
                     });
                 });
             });
@@ -650,33 +583,27 @@
 
             beforeEach(function(done) {
                 reportServicePage.waitForElement(reportServicePage.loadedContentEl).then(function() {
-                    reportServicePage.waitForElement(reportServicePage.griddleWrapperEl).then(function() {
-                        reportServicePage.waitForElement(reportServicePage.agGridBodyEl).then(function() {
-                            reportServicePage.waitForElement(reportSortingPage.reportSortingGroupingContainer);
-                            done();
-                        });
-                    });
+                    reportServicePage.waitForElement(reportSortingPage.reportSortingGroupingContainer);
+                    done();
                 });
             });
 
 
             it('Verify Apply and Reset button locations ', function(done) {
-                reportServicePage.waitForElement(reportSortingPage.reportSortingGroupingContainer).then(function() {
-                    reportServicePage.waitForElementToBeClickable(reportSortingPage.reportSortAndGroupBtn).then(function() {
-                        reportSortingPage.reportSortAndGroupBtn.click();
+                reportServicePage.waitForElementToBeClickable(reportSortingPage.reportSortAndGroupBtn).then(function() {
+                    //click on sort/grp Icon
+                    reportSortingPage.reportSortAndGroupBtn.click().then(function() {
                         // Sleep needed for animation of drop down
                         e2eBase.sleep(browser.params.smallSleep);
-                        //Verify grouping/sorting popOver
-                        reportServicePage.waitForElement(reportSortingPage.sortAndGrpDialogueSBRestBtn).then(function() {
-                        }).then(function() {
-                            //Verify apply button on top
-                            expect(reportSortingPage.sortAndGrpDialogueSBApplyBtn.getAttribute('scrollTop')).toEqual('0');
-                            expect(reportSortingPage.sortAndGrpDialogueSBApplyBtn.getAttribute('clientTop')).toEqual('0');
-                            //Verify Reset is at the bottom.
-                            expect(reportSortingPage.sortAndGrpDialogueSBRestBtn.getAttribute('clientTop')).toEqual('0');
-                            expect(reportSortingPage.sortAndGrpDialogueSBRestBtn.getAttribute('clientLeft')).toEqual('0');
-                            done();
-                        });
+                        reportServicePage.waitForElement(reportSortingPage.sortAndGrpDialogueSBApplyBtn);
+                    }).then(function() {
+                        //Verify apply button on top
+                        expect(reportSortingPage.sortAndGrpDialogueSBApplyBtn.getAttribute('scrollTop')).toEqual('0');
+                        expect(reportSortingPage.sortAndGrpDialogueSBApplyBtn.getAttribute('clientTop')).toEqual('0');
+                        //Verify Reset is at the bottom.
+                        expect(reportSortingPage.sortAndGrpDialogueSBRestBtn.getAttribute('clientTop')).toEqual('0');
+                        expect(reportSortingPage.sortAndGrpDialogueSBRestBtn.getAttribute('clientLeft')).toEqual('0');
+                        done();
                     });
                 });
             });
@@ -698,11 +625,11 @@
                 it('Verify clicking on more fields link in GrpBy and sortBy', function(done) {
                     RequestAppsPage.get(e2eBase.getRequestReportsPageEndpoint(realmName, app.id, app.tables[e2eConsts.TABLE1].id, '1'));
                     reportServicePage.waitForElementToBeClickable(reportSortingPage.reportSortAndGroupBtn).then(function() {
-                        reportSortingPage.reportSortAndGroupBtn.click();
-                        // Sleep needed for animation of drop down
-                        e2eBase.sleep(browser.params.smallSleep);
-                        //Verify grouping/sorting popOver
-                        reportServicePage.waitForElement(reportSortingPage.sortAndGrpDialogueContentSB).then(function() {
+                        //click on sort/grp Icon
+                        reportSortingPage.reportSortAndGroupBtn.click().then(function() {
+                            // Sleep needed for animation of drop down
+                            e2eBase.sleep(browser.params.smallSleep);
+                            reportServicePage.waitForElement(reportSortingPage.sortAndGrpDialogueSBApplyBtn);
                         }).then(function() {
                             for (var i = 0; i < testCase.groupBy.length; i++) {
                                 reportSortingPage.selectGroupByItems(testCase.groupBy[i]);
@@ -724,21 +651,26 @@
                         }).then(function() {
                             reportServicePage.waitForElementToBeClickable(reportSortingPage.reportSortAndGroupBtn).then(function() {
                                 //verify all cleared after reset
-                                reportSortingPage.reportSortAndGroupBtn.click().then(function() {
-                                    //verify all cleared in grpBy
-                                    reportSortingPage.reportGroupByContainer.all(by.className('notEmpty')).then(function(grpItems) {
-                                        expect(grpItems.length).toBe(0);
-                                    }).then(function() {
-                                        //verify all cleared in sortBy
-                                        reportSortingPage.reportSortByContainer.all(by.className('notEmpty')).then(function(sortItems) {
-                                            expect(sortItems.length).toBe(0);
-                                            done();
-                                        });
-                                    });
-                                });
+                                //click on sort/grp Icon
+                                reportSortingPage.reportSortAndGroupBtn.click();
+                                e2eBase.sleep(browser.params.smallSleep);
+                                reportServicePage.waitForElement(reportSortingPage.sortAndGrpDialogueSBApplyBtn);
                             });
+                        }).then(function() {
+                            //verify all cleared in grpBy
+                            reportSortingPage.reportGroupByContainer.all(by.className('notEmpty')).then(function(grpItems) {
+                                expect(grpItems.length).toBe(0);
+                            });
+                        }).then(function() {
+                            //verify all cleared in sortBy
+                            reportSortingPage.reportSortByContainer.all(by.className('notEmpty')).then(function(sortItems) {
+                                expect(sortItems.length).toBe(0);
+                            });
+                        }).then(function() {
+                            //finally close the popup
+                            reportSortingPage.reportSortAndGroupSBCloseBtn.click();
+                            done();
                         });
-
                     });
                 });
             });

@@ -24,6 +24,8 @@
         this.reportSortAndGroupTitle = this.reportSortingGroupingContainer.all(by.className('overlayTitle')).first();
         //sorting/grouping close button
         this.reportSortAndGroupCloseBtn = this.reportSortingGroupingContainer.all(by.className('overlayRight')).first();
+        //Small breakpoint sorting/grouping close button
+        this.reportSortAndGroupSBCloseBtn = this.reportSortingGroupingContainer.all(by.className('overlayLeft')).first();
 
         //group By settings
         this.reportGroupByContainer = this.reportSortingGroupingContainer.element(by.className('groupBySettings'));
@@ -128,10 +130,10 @@
          */
         this.getColumnRecords = function(columnId) {
             var actualTableResults = [];
-            return reportServicePage.waitForElement(reportServicePage.loadedContentEl).then(function() {
-                return reportServicePage.waitForElement(reportServicePage.griddleWrapperEl).then(function() {
-                    return reportServicePage.waitForElement(reportServicePage.agGridBodyEl).then(function() {
-                        return reportServicePage.waitForElement(reportServicePage.reportRecordsCount).then(function() {
+            return e2ePageBase.waitForElement(reportServicePage.loadedContentEl).then(function() {
+                return e2ePageBase.waitForElement(reportServicePage.griddleWrapperEl).then(function() {
+                    return e2ePageBase.waitForElement(reportServicePage.agGridBodyEl).then(function() {
+                        return e2ePageBase.waitForElement(reportServicePage.reportRecordsCount).then(function() {
                             // Get all records from table before filter applied
                             return reportServicePage.agGridRecordElList.map(function(row) {
                                 return row.all(by.className('ag-cell-no-focus')).get(columnId).getText();
@@ -156,7 +158,7 @@
                 });
             }).then(function(filteredElement) {
                 filteredElement[0].click().then(function() {
-                    return reportServicePage.waitForElement(reportServicePage.reportRecordsCount);
+                    return e2ePageBase.waitForElement(reportServicePage.reportRecordsCount);
                 });
             });
 
@@ -167,11 +169,11 @@
          */
         this.expandColumnHeaderMenuAndSelectItem = function(columnName, itemToSelect) {
             var self = this;
-            return reportServicePage.waitForElement(reportServicePage.loadedContentEl).then(function() {
+            return e2ePageBase.waitForElement(reportServicePage.loadedContentEl).then(function() {
                 //open the Column Header PopUp Menu
                 return self.openColumnHeaderMenu(columnName);
             }).then(function() {
-                return reportServicePage.waitForElement(element(by.className('ag-menu-list'))).then(function() {
+                return e2ePageBase.waitForElement(element(by.className('ag-menu-list'))).then(function() {
                     //Select the sort order Item to be Ascending (eg:A to Z , small to Large, lower to highest etc)
                     return self.selectItems(itemToSelect);
                 });
@@ -182,7 +184,7 @@
          * Function to verify ascending of column Records
          */
         this.verifyAscending = function(columnName, actualColumnRecords, sortedColumnRecords) {
-            reportServicePage.waitForElement(reportServicePage.loadedContentEl).then(function() {
+            e2ePageBase.waitForElement(reportServicePage.loadedContentEl).then(function() {
                 //Finally verify both the arrays
                 if (columnName.includes("Numeric Field")) {
                     actualColumnRecords.sort(function(a, b) {return (a) - (b);});
@@ -223,7 +225,7 @@
          * Function to verify descending of column Records
          */
         this.verifyDescending = function(columnName, actualColumnRecords, sortedColumnRecords) {
-            reportServicePage.waitForElement(reportServicePage.loadedContentEl).then(function() {
+            e2ePageBase.waitForElement(reportServicePage.loadedContentEl).then(function() {
                 //Finally verify both the arrays
                 if (columnName.includes("Numeric Field")) {
                     actualColumnRecords.sort(function(a, b) {return (b) - (a);});
@@ -267,13 +269,13 @@
          */
         this.selectGroupByItems = function(itemsToSelect) {
             var self = this;
-            return reportServicePage.waitForElement(self.reportGroupByContainer).then(function() {
+            return e2ePageBase.waitForElement(self.reportGroupByContainer).then(function() {
                 //Verify title of sortBy
                 expect(self.reportGroupByContainerTitle.getText()).toEqual('Group');
                 //Click on field selector
                 return e2ePageBase.waitForElementToBeClickable(self.reportGroupByIcon).then(function() {
                     return self.reportGroupByIcon.click().then(function() {
-                        return reportServicePage.waitForElement(self.GroupByFieldPanel).then(function() {
+                        return e2ePageBase.waitForElement(self.GroupByFieldPanel).then(function() {
                             //verify the title of groupBy list
                             expect(self.GroupByFieldPanelHeader.getText()).toEqual('Cancel\nChoose Field for grouping');
                             //select the groupBy item
@@ -308,6 +310,38 @@
         };
 
         /*
+         * Function to click on sortGrpButton on container
+         */
+        this.clickSortAndGroupIcon = function() {
+            var self = this;
+            return self.reportSortAndGroupBtn.click().then(function() {
+               // Sleep needed for animation of drop down
+                e2eBase.sleep(browser.params.smallSleep);
+                return e2ePageBase.waitForElement(self.sortAndGrpDialogueApplyBtn);
+            });
+        };
+
+        /*
+         * Function to click on Apply button
+         */
+        this.clickApply = function() {
+            var self = this;
+            return self.sortAndGrpDialogueApplyBtn.click().then(function() {
+                return e2ePageBase.waitForElement(self.reportSortingGroupingContainer);
+            });
+        };
+
+        /*
+         * Function to click on Apply button
+         */
+        this.clickReset = function() {
+            var self = this;
+            self.sortAndGrpDialogueResetBtn.click().then(function() {
+                return e2ePageBase.waitForElement(self.reportSortingGroupingContainer);
+            });
+        };
+
+        /*
          * Function to verify group By Items selected in popUp
          */
         this.verifySelectedGroupByFields = function(fieldsToVerify) {
@@ -337,18 +371,18 @@
          */
         this.selectSortByIconInGroupBy = function(fieldIndex, sortorder) {
             var self = this;
-            return reportServicePage.waitForElement(self.reportGroupByContainer).then(function() {
+            return e2ePageBase.waitForElement(self.reportGroupByContainer).then(function() {
                 self.reportGroupByContainer.all(by.className('notEmpty')).then(function(items) {
                     if (items.length > 0) {
                         for (var i = 0; i < items.length; i++) {
                             if (sortorder === 'asc') { //if ascending don't click the icon
-                                reportServicePage.waitForElement(items[fieldIndex].element(by.className('up')));
+                                e2ePageBase.waitForElement(items[fieldIndex].element(by.className('up')));
                             }
                             if (sortorder === 'desc') { //if descending
                                 return items[fieldIndex].element(by.className('sortOrderIcon')).click().then(function() {
                                     //TODO: Figure out how to handle with sleeps (waiting for element to be stale doesn't seem to work)
                                     e2eBase.sleep(browser.params.smallSleep);
-                                    //reportServicePage.waitForElement(items[fieldIndex].element(by.className('down')));
+                                    //e2ePageBase.waitForElement(items[fieldIndex].element(by.className('down')));
                                 });
                             }
                         }
@@ -362,7 +396,7 @@
          */
         this.deleteFieldsInGroupBy = function(fieldIndex, fieldName) {
             var self = this;
-            return reportServicePage.waitForElement(self.reportGroupByContainer).then(function() {
+            return e2ePageBase.waitForElement(self.reportGroupByContainer).then(function() {
                 self.reportGroupByContainer.all(by.className('notEmpty')).then(function(items) {
                     if (items.length > 0) {
                         for (var i = 0; i < items.length; i++) {
@@ -389,13 +423,13 @@
          */
         this.selectSortByItems = function(itemsToSelect) {
             var self = this;
-            return reportServicePage.waitForElement(self.reportSortByContainer).then(function() {
+            return e2ePageBase.waitForElement(self.reportSortByContainer).then(function() {
                 //Verify title of sortBy
                 expect(self.reportSortByContainerTitle.getText()).toEqual('Sort');
                 //Click on field selector
                 return e2ePageBase.waitForElementToBeClickable(self.reportSortByIcon).then(function() {
                     return self.reportSortByIcon.click().then(function() {
-                        return reportServicePage.waitForElement(self.SortByFieldPanel).then(function() {
+                        return e2ePageBase.waitForElement(self.SortByFieldPanel).then(function() {
                             //verify the title of groupBy list
                             expect(self.SortByFieldPanelHeader.getText()).toEqual('Cancel\nChoose Field for sorting');
                             //select the groupBy item
@@ -444,23 +478,23 @@
          */
         this.selectSortByIconInSortBy = function(fieldIndex, sortorder) {
             var self = this;
-            return reportServicePage.waitForElement(self.reportGroupByContainer).then(function() {
+            return e2ePageBase.waitForElement(self.reportGroupByContainer).then(function() {
                 self.reportSortByContainer.all(by.className('notEmpty')).then(function(items) {
                     if (items.length > 0) {
                         for (var i = 0; i < items.length; i++) {
                             if (sortorder === 'asc') {
                                 //don't click on anything
-                                reportServicePage.waitForElement(items[fieldIndex].element(by.className('down')));
+                                e2ePageBase.waitForElement(items[fieldIndex].element(by.className('down')));
                                 //return items[fieldIndex].element(by.className('sortOrderIcon')).click().then(function() {
                                 //    //TODO: Figure out how to handle with sleeps (waiting for element to be stale doesn't seem to work)
                                 //    e2eBase.sleep(browser.params.smallSleep);
-                                //    //reportServicePage.waitForElement(items[fieldIndex].element(by.className('down')));
+                                //    //e2ePageBase.waitForElement(items[fieldIndex].element(by.className('down')));
                                 //});
                             } else if (sortorder === 'desc') {
                                 return items[fieldIndex].element(by.className('sortOrderIcon')).click().then(function() {
                                     //TODO: Figure out how to handle with sleeps (waiting for element to be stale doesn't seem to work)
                                     e2eBase.sleep(browser.params.smallSleep);
-                                    //reportServicePage.waitForElement(items[fieldIndex].element(by.className('up')));
+                                    //e2ePageBase.waitForElement(items[fieldIndex].element(by.className('up')));
                                 });
                             }
                         }
@@ -474,7 +508,7 @@
          */
         this.deleteFieldsInSortBy = function(fieldIndex, fieldName) {
             var self = this;
-            return reportServicePage.waitForElement(self.reportSortByContainer).then(function() {
+            return e2ePageBase.waitForElement(self.reportSortByContainer).then(function() {
                 self.reportSortByContainer.all(by.className('notEmpty')).then(function(items) {
                     if (items.length > 0) {
                         for (var i = 0; i < items.length; i++) {
@@ -502,36 +536,29 @@
 
         this.verifyGrpSortPopUpReset = function() {
             var self = this;
-            reportServicePage.waitForElementToBeClickable(self.reportSortAndGroupBtn).then(function() {
-                return self.reportSortAndGroupBtn.click();
+            e2ePageBase.waitForElementToBeClickable(self.reportSortAndGroupBtn).then(function() {
+                //click on sort/grp Icon
+                return self.clickSortAndGroupIcon();
             }).then(function() {
-                // Sleep needed for animation of drop down
-                e2eBase.sleep(browser.params.smallSleep);
-                //hit Reset
-                return self.sortAndGrpDialogueResetBtn.click();
+                return self.clickReset();
             }).then(function() {
-                reportServicePage.waitForElement(reportServicePage.loadedContentEl);
-                reportServicePage.waitForElement(self.reportSortingGroupingContainer).then(function() {
-                    reportServicePage.waitForElementToBeClickable(self.reportSortAndGroupBtn).then(function() {
-                        //verify all cleared after reset
-                        return self.reportSortAndGroupBtn.click().then(function() {
-                            //verify all cleared in grpBy
-                            return self.reportGroupByContainer.all(by.className('notEmpty')).then(function(grpItems) {
-                                expect(grpItems.length).toBe(0);
-                            }).then(function() {
-                                //verify all cleared in sortBy
-                                return self.reportSortByContainer.all(by.className('notEmpty')).then(function(sortItems) {
-                                    expect(sortItems.length).toBe(0);
-                                }).then(function() {
-                                    //collapse the popup by clicking on X on popup
-                                    return self.reportSortAndGroupCloseBtn.click().then(function() {
-                                        reportServicePage.reportFilterSearchBox.click();
-                                        return reportServicePage.waitForElementToBeClickable(self.reportSortAndGroupBtn);
-                                    });
-                                });
-                            });
-                        });
-                    });
+                //click on sort/grp Icon
+                return self.clickSortAndGroupIcon();
+            }).then(function() {
+                //verify all cleared in grpBy
+                return self.reportGroupByContainer.all(by.className('notEmpty')).then(function(grpItems) {
+                    expect(grpItems.length).toBe(0);
+                });
+            }).then(function() {
+                //verify all cleared in sortBy
+                return self.reportSortByContainer.all(by.className('notEmpty')).then(function(sortItems) {
+                    expect(sortItems.length).toBe(0);
+                });
+            }).then(function() {
+                //collapse the popup by clicking on X on popup
+                return self.reportSortAndGroupCloseBtn.click().then(function() {
+                    e2ePageBase.waitForElementToBeClickable(self.reportSortAndGroupBtn);
+                    return reportServicePage.reportFilterSearchBox.click();
                 });
             });
         };
