@@ -67,7 +67,7 @@ var TopNav = React.createClass({
 
                             <OverlayTrigger trigger="click" rootClose placement="bottom" overlay={
                                 <Popover id={0} className={'searchPopover'}  title="Search">
-                                    <SearchBox className="searchPopover"
+                                    <SearchBox
                                            value={this.state.searchText}
                                            onChange={this.searchChanged}
                                            onClearSearch={this.searchCleared}
