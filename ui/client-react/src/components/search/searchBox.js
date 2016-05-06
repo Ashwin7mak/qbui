@@ -12,7 +12,6 @@ const SearchBox = React.createClass({
         placeholder: React.PropTypes.string,
         hideClearIcon: React.PropTypes.bool, //if the box chooses to not render clear icon
         onChange: React.PropTypes.func,
-        onDoubleClick: React.PropTypes.func,
         onClearSearch: React.PropTypes.func,
         value: React.PropTypes.string
     },
@@ -25,7 +24,6 @@ const SearchBox = React.createClass({
                    key={this.props.key}
                    value={this.props.value}
                    onChange={this.props.onChange}
-                   onDoubleClick={this.props.onDoubleClick}
                    placeholder={this.props.placeholder}>
                 </input>
                 {this.props.value && this.props.value.length && !this.props.hideClearIcon ?

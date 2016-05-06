@@ -37,7 +37,6 @@ const FilterSearchBox = React.createClass({
                     <SearchBox className="filterSearchBox" key={"filterSearchBox_" + this.props.searchBoxKey}
                                value={this.state.searchStringInput}
                                onChange={this.props.onChange}
-                               onDoubleClick={this.props.clearSearchString}
                                onClearSearch={this.props.clearSearchString}
                                placeholder={placeMsg} />
                 </div>
