@@ -78,6 +78,7 @@ input.searchInput {
         min-width: 0;
 
         .topNav {
+            min-width: 200px;
             flex: 0 0 auto;
             flex-basis: $top-nav-height;
             display: flex;

@@ -93,6 +93,7 @@ $left-nav-horizontal-icon-border-color: $color32;
             .qbIcon {
                 display: inline-block;
                 width: auto;
+                padding-right:4px;
             }
         }
     }
@@ -149,6 +150,10 @@ div.leftNavTooltip {
         }
         .leftNavLabel {
             display:none;
+        }
+
+        .transitionGroup .tablesHeadingAndList .tablesList {
+            overflow:visible;
         }
     }
 }
@@ -275,9 +280,30 @@ div.leftNavTooltip {
         }
     }
     .transitionGroup {
-        flex: 1;
+        flex: 1 1 auto;
         overflow: visible;
         z-index: 1;
+        display:flex;
+        .appsList {
+            width:100%;
+        }
+        .tablesHeadingAndList {
+            flex:1 1 auto;
+            width: 100%;
+            display:flex;
+            flex-direction:column;
+
+            .tablesHeading {
+                width:100%;
+                flex: 0 0 auto;
+            }
+            .tablesList {
+                flex: 1 1 auto;
+                width: 100%;
+                overflow:auto;
+            }
+        }
+
     }
 
     ul {
@@ -290,13 +316,12 @@ div.leftNavTooltip {
     ul.globalActionsList>li {
         height:auto;
     }
-    ul.topLinks, ul.tablesList, ul.appsList, ul.globalActionsList {
+    ul.topLinks, ul.tablesHeading, ul.tablesList, ul.appsList, ul.globalActionsList {
         padding: 0;
         margin: 0;
         > li {
             position: relative;
-            a, .globalActionLink {
-
+            a.leftNavLink, a.right, .hoverComponent>a, .globalActionLink {
                 line-height: 40px;
                 padding-left: 8px;
                 color: $left-nav-link-fg;
@@ -307,7 +332,6 @@ div.leftNavTooltip {
                 width: 28px;
                 vertical-align: middle;
             }
-
         }
         > li.link:hover {
             background-color: $left-nav-hover-bg;
@@ -325,9 +349,9 @@ div.leftNavTooltip {
         }
     }
 
-    ul.tablesList {
+    ul.tablesList, ul.tablesHeading {
 
-        > li {
+         li {
 
             a.right {
                 opacity: 0;
@@ -397,7 +421,7 @@ div.leftNavTooltip {
     }
 }
 
-.leftNav .tablesList li.horizontal {
+.leftNav .tablesHeading li.horizontal {
     border-bottom: 1px solid $left-nav-horizontal-icon-border-color;
 }
 
@@ -438,7 +462,7 @@ div.leftNavTooltip {
                 padding-right: 24px;
             }
         }
-        .tablesList li.horizontal {
+        .tablesHeading li.horizontal {
             min-width:300px;
         }
 
@@ -498,11 +522,11 @@ $travel-distance: 15;
     transition: all $transition-time ease-in;
 }
 
-.leftNavList-enter.tablesList li {
+.leftNavList-enter.tablesList li, .leftNavList-enter.tablesHeadomg li {
     margin-top: #{$travel-distance}px;
 }
 
-.leftNavList-enter-active.tablesList li {
+.leftNavList-enter-active.tablesList li, .leftNavList-enter-active.tablesHeading li  {
     margin-top: 0;
     transition: all $transition-time ease-in;
 }
