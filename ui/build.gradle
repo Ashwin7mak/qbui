@@ -16,7 +16,6 @@ description = "Package for Node.js application and UI files"
 //******************************************************
 apply plugin: 'com.moowork.grunt'
 apply plugin: 'com.moowork.node'
-apply plugin: 'sonar-runner'
 apply plugin: 'org.sonarqube'
 apply plugin: 'sonarBuildBreak'
 apply plugin: 'com.bmuschko.cargo'
@@ -522,60 +521,6 @@ uploadArchives {
 //******************************************************
 // Sonar task that performs coverage and analysis of the ui project
 //******************************************************
-
-sonarRunner {
-    //Resolve the executing user's name
-    def user = System.getProperty("user.name")
-    //Resolve the branch name
-    def proc = "git rev-parse --abbrev-ref HEAD".execute()
-    proc.waitFor()
-    def branchName = proc.in.text.replace("\n", "").replace("\r", "").trim()
-    def gitBranch = branchName;
-    println 'gitBranch:' + gitBranch;
-
-    if (paramBranch) {
-        println 'paramBranch:' + paramBranch;
-        branchName = paramBranch;
-    }
-    //Resolve the git revision
-    def procrev = "git rev-parse  HEAD".execute()
-    procrev.waitFor()
-    def gitRevision = procrev.in.text.replace("\n", "").replace("\r", "").trim()
-    println 'gitRevision:' + gitRevision;
-
-    sonarProperties{
-        // the user name becomes part of the project key, this way Jenkins builds are separated from the commoners, meaning you...
-        // for UI we analyse the react client and the nodejs server as 2 modules
-        // see: http://docs.codehaus.org/display/SONAR/Analyzing+with+SonarQube+Runner#AnalyzingwithSonarQubeRunner-Multi-moduleProject
-        property "sonar.projectKey", "ui:${branchName}:${user}"
-        property "sonar.projectVersion", "0.1"
-        property "sonar.projectName", "${user}:ui:${branchName}"
-        property "sonar.qualitygate", "Sonar%20way%20with%20Findbugs%20-%20reactjs"
-        property "sonar.host.url", "http://pppdc9prd01j:9000/"
-        property "sonar.jdbc.url", "jdbc:mysql://pppdc9prd01j:3306/sonar?autoReconnect=true&useUnicode=true&characterEncoding=utf8"
-        property "sonar.language", "js"
-        property "sonar.jdbc.username", "sonar"
-        property "sonar.jdbc.password", "sonar"
-        property "sonar.sources", "."
-        property "sonar.modules", "client-react,server"
-        property "sonar.coverage.exclusions", "**/*.spec.js"
-        property "client-react.sonar.projectName", "${user}:ui:${branchName}:client"
-        property "client-react.sonar.sources", "$projectDir/client-react/src"
-        property "client-react.sonar.exclusions", "**/assets/**,**/constants/**,**/locales/bundles/**"
-
-        //  import the ui LCOV coverage report
-        property "client-react.sonar.javascript.lcov.reportPath","${projectDir}/build/reports/client/coverage/lcov.info"
-
-        property "server.sonar.projectName", "${user}:ui:${branchName}:server"
-        property "server.sonar.sources", "$projectDir/server"
-        property "server.sonar.exclusions", "**/test/**,**/config/environment/**,**/mockserver/**"
-        //  import the ui LCOV coverage report
-        property "server.sonar.javascript.lcov.reportPath","${projectDir}/build/reports/server/coverage/lcov.info"
-
-        // Can be added back in for debugging purposes
-        //property "sonar.verbose", "true"
-    }
-}
 
 // sonarRunner is being depricated and sonarqube is the replacement
 sonarqube {
