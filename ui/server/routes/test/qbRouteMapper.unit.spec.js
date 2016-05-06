@@ -94,7 +94,7 @@ describe('Qb Route Mapper Unit Test', function() {
 
                 var method = entry.method;
                 var expectedDefined = entry.expectedDefined;
-                
+
                 requestStub.yields(null, {statusCode: 200}, {login: 'cleo'});
 
                 if (expectedDefined) {
