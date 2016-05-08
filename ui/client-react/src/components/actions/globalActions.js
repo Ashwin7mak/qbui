@@ -74,7 +74,7 @@ let GlobalActions = React.createClass({
                 </Button>
 
                 <Dropdown.Menu>
-                    <MenuItem href="/user" eventKey={eventKeyIdx++}><I18nMessage
+                    <MenuItem eventKey={eventKeyIdx++}><I18nMessage
                         message={'header.menu.preferences'}/></MenuItem>
                     <MenuItem divider/>
 
@@ -85,7 +85,7 @@ let GlobalActions = React.createClass({
                     }) : null}
                     {supportedLocales.length > 1 ? <MenuItem divider/> : null}
 
-                    <MenuItem href="/signout" eventKey={eventKeyIdx++}><I18nMessage
+                    <MenuItem eventKey={eventKeyIdx++}><I18nMessage
                         message={'header.menu.sign_out'}/></MenuItem>
                 </Dropdown.Menu>
             </Dropdown>);
