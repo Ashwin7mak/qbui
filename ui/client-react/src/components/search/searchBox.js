@@ -5,7 +5,6 @@ import QBicon from '../qbIcon/qbIcon';
  * Generic component that renders a search box
  */
 const SearchBox = React.createClass({
-    debounceInputMillis: 700,
     propTypes: {
         className: React.PropTypes.string,
         key: React.PropTypes.string,
