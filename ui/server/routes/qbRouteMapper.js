@@ -187,7 +187,12 @@
                 },
                 function(response) {
                     log.error({req:req, res:response}, 'FetchSingleRecord API ERROR');
-                    res.status(response.statusCode).send(response);
+                    //  client needs a status code to respond..make sure one is always returned
+                    if (response && response.statusCode) {
+                        res.status(response.statusCode).send(response);
+                    } else {
+                        res.status(500).send(response);
+                    }
                 });
         });
 
@@ -209,7 +214,12 @@
                 },
                 function(response) {
                     log.error({req:req, res:response}, 'FetchAllRecords API ERROR');
-                    res.status(response.statusCode).send(response);
+                    //  client needs a status code to respond..make sure one is always returned
+                    if (response && response.statusCode) {
+                        res.status(response.statusCode).send(response);
+                    } else {
+                        res.status(500).send(response);
+                    }
                 });
         });
     }
@@ -231,7 +241,12 @@
                 },
                 function(response) {
                     log.error({req:req, res:response}, 'fetchReportComponents API ERROR');
-                    res.status(response.statusCode).send(response);
+                    //  client needs a status code to respond..make sure one is always returned
+                    if (response && response.statusCode) {
+                        res.status(response.statusCode).send(response);
+                    } else {
+                        res.status(500).send(response);
+                    }
                 });
         });
     }
@@ -254,7 +269,12 @@
                 },
                 function(response) {
                     log.error({req:req, res:response}, 'FetchReportData API ERROR');
-                    res.status(response.statusCode).send(response);
+                    //  client needs a status code to respond..make sure one is always returned
+                    if (response && response.statusCode) {
+                        res.status(response.statusCode).send(response);
+                    } else {
+                        res.status(500).send(response);
+                    }
                 });
         });
     }
