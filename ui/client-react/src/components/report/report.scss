@@ -76,8 +76,7 @@
         }
         .filterSearchBoxContainer {
             flex-shrink: 0;
-            input {
-                width:100%;
+            .filterSearchBox {
                 min-width: 60px;
                 max-width: 180px;
             }
@@ -117,6 +116,11 @@
         }
         .report-content .left {
             width: 100%;
+        }
+    }
+    .filterSearchBox {
+        .searchInput {
+            border: none;
         }
     }
 }
