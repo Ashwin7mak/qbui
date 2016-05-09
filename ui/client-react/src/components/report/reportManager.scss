@@ -17,15 +17,8 @@ $report-link-color: #404040;
     flex: 1 1 auto;
     .reportsTop {
         background-color: $search-bar-bg;
-        padding:15px 0 15px 16px;
+        padding: 15px 16px;
         flex: 0 0 auto;
-
-        input {
-            width:220px;
-            padding-left:10px;
-            height:34px;
-            font-style:italic;
-        }
     }
 }
 

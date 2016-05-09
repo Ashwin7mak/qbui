@@ -101,15 +101,15 @@ describe('TopNav functions', () => {
         expect(flux.actions.changeLocale).toHaveBeenCalledWith(localeoption.title);
     });
 
-    it('test search on change of searchtext', () => {
+    it('test global search renders', () => {
         let searchInputContainer = TestUtils.scryRenderedDOMComponentsWithClass(component, "iconssturdy-search");
         expect(searchInputContainer.length).toEqual(1);
         TestUtils.Simulate.click(searchInputContainer[0]);
 
-        let searchInputBox = document.querySelector(".searchPopover .searchInput");
-        searchInputBox.value = "value";
-        TestUtils.Simulate.change(searchInputBox);
-        expect(flux.actions.searchFor).toHaveBeenCalledWith(searchInputBox.value);
+        let searchPopOver = document.querySelectorAll(".searchPopover");
+        expect(searchPopOver.length).toEqual(1);
+        let searchInputBox = searchPopOver[0].querySelectorAll(".searchInput");
+        expect(searchInputBox.length).toEqual(1);
     });
 
 });

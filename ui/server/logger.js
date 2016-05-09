@@ -26,10 +26,11 @@
         var headers = req.headers || {};
         var agent = req.useragent || {};
         var body = req.body || {};
+        var ip;
 
         //  try to get the ip address
         if (req.headers) {
-            var ip = req.headers['x-forwarded-for'];
+            ip = req.headers['x-forwarded-for'];
         }
         if (!ip) {
             if (req.connection) {
@@ -104,11 +105,13 @@
                 appLogger = logger.child({
                     // custom logger attributes go here..
                 });
+
             }
 
             return appLogger;
 
         }
+
     };
 
     /**
