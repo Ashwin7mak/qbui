@@ -37,7 +37,6 @@
     .tableActionsContainer {
         position: relative;
         padding-left: 10px;
-        padding-top: 10px; // space after stage
         @include small-breakpoint {
             padding-top: 0px; // no stage so to need add space after
             &:not(.selectionActionsOpen) {
@@ -77,8 +76,7 @@
         }
         .filterSearchBoxContainer {
             flex-shrink: 0;
-            input {
-                width:100%;
+            .filterSearchBox {
                 min-width: 60px;
                 max-width: 180px;
             }
@@ -118,6 +116,11 @@
         }
         .report-content .left {
             width: 100%;
+        }
+    }
+    .filterSearchBox {
+        .searchInput {
+            border: none;
         }
     }
 }

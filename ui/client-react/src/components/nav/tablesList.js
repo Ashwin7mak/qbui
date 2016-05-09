@@ -6,6 +6,8 @@ import NavItem from './navItem';
 import Locale from '../../locales/locales';
 import {I18nMessage} from '../../utils/i18nMessage';
 import TableIconUtils from '../../utils/tableIconUtils';
+import SearchBox from '../search/searchBox';
+
 
 let TablesList = React.createClass({
 
@@ -32,6 +34,12 @@ let TablesList = React.createClass({
      */
     onChangeSearch(ev) {
         this.setState({searchText: ev.target.value});
+    },
+    /**
+     * Clear search text
+     */
+    onClearSearch() {
+        this.setState({searchText:""});
     },
     /**
      * check for table name matching search text
@@ -122,13 +130,16 @@ let TablesList = React.createClass({
                              secondaryIcon={"search"}
                              onClick={this.onClickTables} open={true} />
                     <li className={this.state.searching ? "search open" : "search"}>
-                        <input type="text" className={"searchInput"} placeholder={Locale.getMessage('nav.searchTablesPlaceholder')} value={this.state.searchText} onChange={this.onChangeSearch}/>
-                    </li>
+                        <SearchBox value={this.state.searchText}
+                                   onChange={this.onChangeSearch}
+                                   onClearSearch={this.onClearSearch}
+                                   placeholder={Locale.getMessage('nav.searchTablesPlaceholder')} />                    </li>
                 </ul>
                 <ul className="tablesList">
                     {this.tablesList()}
                 </ul>
             </div>
+
         );
     }
 });

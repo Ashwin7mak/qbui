@@ -7,6 +7,7 @@ import IconActions from '../../src/components/actions/iconActions';
 import ReportToolbar  from '../../src/components/report/reportToolbar';
 import FacetSelections  from '../../src/components/facet/facetSelections';
 import facetMenuActions from '../../src/actions/facetMenuActions';
+import SearchBox from '../../src/components/search/searchBox';
 
 describe('ReportToolbar functions', () => {
     'use strict';
@@ -287,17 +288,18 @@ describe('ReportToolbar functions', () => {
                                                                 reportData={fakeReportData_simple}/>);
 
         // check for the search box shows up
-        let filterSearchBox = TestUtils.scryRenderedDOMComponentsWithClass(component, "filterSearchBox");
-        expect(filterSearchBox.length).toEqual(1);
+        let filterSearchBox = TestUtils.scryRenderedComponentsWithType(component, SearchBox);
+
+        let searchInputBox = TestUtils.scryRenderedDOMComponentsWithClass(filterSearchBox[0], "searchInput");
+        expect(searchInputBox.length).toEqual(1);
 
         // check that search input is debounced
-        var searchInput = filterSearchBox[0];
+        var searchInput = searchInputBox[0];
         var testValue = 'xxx';
 
         //simulate search string was input
         TestUtils.Simulate.change(searchInput, {target: {value: testValue}});
         expect(callBacks.searchTheString).toHaveBeenCalled();
-
     });
 
     it('test render reportToolbar with search text', (done) => {
@@ -307,9 +309,14 @@ describe('ReportToolbar functions', () => {
                                                                 pageActions={pageActions} />);
 
         // check for the search box shows up
-        let filterSearchBox = TestUtils.scryRenderedDOMComponentsWithClass(component, "filterSearchBox");
-        expect(filterSearchBox.length).toEqual(1);
-        expect(filterSearchBox[0].value).toEqual("abc");
+        let filterSearchBox = TestUtils.scryRenderedComponentsWithType(component, SearchBox);
+
+        let searchInputBox = TestUtils.scryRenderedDOMComponentsWithClass(filterSearchBox[0], "searchInput");
+        expect(searchInputBox.length).toEqual(1);
+
+        // check that search input is debounced
+        var searchInput = searchInputBox[0];
+        expect(searchInput.value).toEqual("abc");
 
         // check that report is considered filter
         expect(component.isFiltered()).toBeTruthy();
