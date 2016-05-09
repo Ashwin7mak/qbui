@@ -11,6 +11,7 @@ export const HIDE_REPORTS = 'HIDE_REPORTS';
 export const TOGGLE_SEARCH = 'TOGGLE_SEARCH';
 export const SEARCH_FOR = 'SEARCH_FOR';
 export const SEARCHING = 'SEARCH';
+export const FILTER_REPORTS_BY_NAME = 'FILTER_REPORTS_BY_NAME';
 
 export const SHOW_NEW_ITEMS = 'SHOW_NEW_ITEMS';
 export const LOAD_APPS = 'LOAD_APPS';

@@ -63,6 +63,7 @@ var Nav = React.createClass({
     },
     hideTrowser() {
         let flux = this.getFlux();
+        flux.actions.filterReportsByName("");
         flux.actions.hideTrowser();
     },
     onSelectTableReports(tableId) {
@@ -128,8 +129,10 @@ var Nav = React.createClass({
                 this.context.history.pushState(null, report.link);
             });
         };
+
         return <ReportManager reportsData={this.state.reportsData}
-                              onSelectReport={selectReport}/>;
+                              onSelectReport={selectReport}
+                              filterReportsName={this.state.nav.filterReportsName} />;
     },
 
     /* toggle apps list - if on collapsed nav, open left nav and display apps */

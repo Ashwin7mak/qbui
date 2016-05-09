@@ -30,6 +30,9 @@ let navActions = {
     setSearching(searching) {
         this.dispatch(actions.SEARCHING, searching);
     },
+    filterReportsByName(text) {
+        this.dispatch(actions.FILTER_REPORTS_BY_NAME, text);
+    },
     /**
      * set a top nav title
      * @param title a react node (or null to omit one)
