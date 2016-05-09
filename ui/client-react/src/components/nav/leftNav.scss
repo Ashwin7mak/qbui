@@ -124,6 +124,9 @@ div.leftNavTooltip {
 
         li.horizontal, .globalActions {
             ul {
+                li {
+                    border-right:0;
+                }
                 flex-direction: column;
             }
         }
