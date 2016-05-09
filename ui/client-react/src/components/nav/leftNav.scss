@@ -66,18 +66,21 @@ $left-nav-horizontal-icon-border-color: $color32;
 @include medium-breakpoint {
     .leftNav.expanded {
         width: 200px;
+        transition:width 100ms ease;
     }
 }
 
 @include large-breakpoint {
     .leftNav.expanded {
         width: 220px;
+        transition:width 100ms ease;
     }
 }
 
 @include xlarge-breakpoint {
     .leftNav.expanded {
         width: 300px;
+        transition:width 100ms ease;
     }
 }
 
@@ -86,13 +89,15 @@ $left-nav-horizontal-icon-border-color: $color32;
         display: block;
     }
     .leftNav.open {
+        max-width: calc(100% - 36px);
         width: 300px;
-        transition: width 100ms ease;
+        transition: all 100ms ease;
         .topLinks .leftNavLink {
             padding: 10px 0;
             .qbIcon {
                 display: inline-block;
                 width: auto;
+                padding-right:4px;
             }
         }
     }
@@ -115,6 +120,7 @@ div.leftNavTooltip {
 @include not-small-breakpoint {
     .leftNav.collapsed {
         width: 40px;
+        transition:width 100ms ease;
         .branding {
 
             .logo, .appsToggle .navLabel, .appsToggleIcon {
@@ -152,6 +158,10 @@ div.leftNavTooltip {
         }
         .leftNavLabel {
             display:none;
+        }
+
+        .transitionGroup .tablesHeadingAndList .tablesList {
+            overflow:visible;
         }
     }
 }
@@ -271,9 +281,30 @@ div.leftNavTooltip {
         }
     }
     .transitionGroup {
-        flex: 1;
+        flex: 1 1 auto;
         overflow: visible;
         z-index: 1;
+        display:flex;
+        .appsList {
+            width:100%;
+        }
+        .tablesHeadingAndList {
+            flex:1 1 auto;
+            width: 100%;
+            display:flex;
+            flex-direction:column;
+
+            .tablesHeading {
+                width:100%;
+                flex: 0 0 auto;
+            }
+            .tablesList {
+                flex: 1 1 auto;
+                width: 100%;
+                overflow:auto;
+            }
+        }
+
     }
 
     ul {
@@ -286,13 +317,12 @@ div.leftNavTooltip {
     ul.globalActionsList>li {
         height:auto;
     }
-    ul.topLinks, ul.tablesList, ul.appsList, ul.globalActionsList {
+    ul.topLinks, ul.tablesHeading, ul.tablesList, ul.appsList, ul.globalActionsList {
         padding: 0;
         margin: 0;
         > li {
             position: relative;
-            a, .globalActionLink {
-
+            a.leftNavLink, a.right, .hoverComponent>a, .globalActionLink {
                 line-height: 40px;
                 padding-left: 8px;
                 color: $left-nav-link-fg;
@@ -303,7 +333,6 @@ div.leftNavTooltip {
                 width: 28px;
                 vertical-align: middle;
             }
-
         }
         > li.link:hover {
             background-color: $left-nav-hover-bg;
@@ -321,9 +350,9 @@ div.leftNavTooltip {
         }
     }
 
-    ul.tablesList {
+    ul.tablesList, ul.tablesHeading {
 
-        > li {
+         li {
 
             a.right {
                 opacity: 0;
@@ -393,7 +422,7 @@ div.leftNavTooltip {
     }
 }
 
-.leftNav .tablesList li.horizontal {
+.leftNav .tablesHeading li.horizontal {
     border-bottom: 1px solid $left-nav-horizontal-icon-border-color;
 }
 
@@ -434,10 +463,6 @@ div.leftNavTooltip {
                 padding-right: 24px;
             }
         }
-        .tablesList li.horizontal {
-            min-width:300px;
-        }
-
     }
 
     .navShell.leftNavOpen {
@@ -449,12 +474,6 @@ div.leftNavTooltip {
         }
         .main {
             position: absolute;
-        }
-        .mainContent, .topNav {
-            opacity: .1;
-            transition: opacity 250ms ease-in-out;
-            -moz-transition: opacity 250ms ease-in-out;
-            -webkit-transition: opacity 250ms ease-in-out;
         }
 
         transform: translate3d(300px, 0, 0);
@@ -494,11 +513,11 @@ $travel-distance: 15;
     transition: all $transition-time ease-in;
 }
 
-.leftNavList-enter.tablesList li {
+.leftNavList-enter.tablesList li, .leftNavList-enter.tablesHeadomg li {
     margin-top: #{$travel-distance}px;
 }
 
-.leftNavList-enter-active.tablesList li {
+.leftNavList-enter-active.tablesList li, .leftNavList-enter-active.tablesHeading li  {
     margin-top: 0;
     transition: all $transition-time ease-in;
 }

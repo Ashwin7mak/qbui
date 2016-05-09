@@ -300,6 +300,10 @@ task npmUpdateWebdriver(type: NpmTask) {
     args = ['run', 'update-webdriver']
 }
 
+task npmRunLint(type: NpmTask) {
+    args = ['run', 'lint']
+}
+
 task npmInstallProduction (type: NpmTask) {
     args = ['install', '--production']
     execOverrides {

@@ -121,21 +121,25 @@ let TablesList = React.createClass({
 
     render() {
         return (
-            <ul className="tablesList">
-                {this.getTopLinksItem()}
+            <div className="tablesHeadingAndList">
+                <ul className="tablesHeading">
+                    {this.getTopLinksItem()}
 
-                <NavItem item={{msg: 'nav.tablesHeading'}}
-                         isHeading={true}
-                         secondaryIcon={"search"}
-                         onClick={this.onClickTables} open={true} />
-                <li className={this.state.searching ? "search open" : "search"}>
-                    <SearchBox value={this.state.searchText}
-                               onChange={this.onChangeSearch}
-                               onClearSearch={this.onClearSearch}
-                               placeholder={Locale.getMessage('nav.searchTablesPlaceholder')} />
-                </li>
-                {this.tablesList()}
-            </ul>
+                    <NavItem item={{msg: 'nav.tablesHeading'}}
+                             isHeading={true}
+                             secondaryIcon={"search"}
+                             onClick={this.onClickTables} open={true} />
+                    <li className={this.state.searching ? "search open" : "search"}>
+                        <SearchBox value={this.state.searchText}
+                                   onChange={this.onChangeSearch}
+                                   onClearSearch={this.onClearSearch}
+                                   placeholder={Locale.getMessage('nav.searchTablesPlaceholder')} />                    </li>
+                </ul>
+                <ul className="tablesList">
+                    {this.tablesList()}
+                </ul>
+            </div>
+
         );
     }
 });

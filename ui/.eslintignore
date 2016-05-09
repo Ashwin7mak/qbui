@@ -3,3 +3,4 @@ build/*
 coverage/*
 dist/*
 client-react/dist/*
+nodejs/*
