@@ -66,18 +66,21 @@ $left-nav-horizontal-icon-border-color: $color32;
 @include medium-breakpoint {
     .leftNav.expanded {
         width: 200px;
+        transition:width 100ms ease;
     }
 }
 
 @include large-breakpoint {
     .leftNav.expanded {
         width: 220px;
+        transition:width 100ms ease;
     }
 }
 
 @include xlarge-breakpoint {
     .leftNav.expanded {
         width: 300px;
+
     }
 }
 
@@ -86,13 +89,15 @@ $left-nav-horizontal-icon-border-color: $color32;
         display: block;
     }
     .leftNav.open {
+        max-width: calc(100% - 36px);
         width: 300px;
-        transition: width 100ms ease;
+        transition: all 100ms ease;
         .topLinks .leftNavLink {
             padding: 10px 0;
             .qbIcon {
                 display: inline-block;
                 width: auto;
+                margin-right:4px;
             }
         }
     }
@@ -115,6 +120,7 @@ div.leftNavTooltip {
 @include not-small-breakpoint {
     .leftNav.collapsed {
         width: 40px;
+        transition:width 100ms ease;
         .branding {
 
             .logo, .appsToggle .navLabel, .appsToggleIcon {
@@ -268,8 +274,7 @@ div.leftNavTooltip {
         }
     }
     .transitionGroup {
-        flex: 1;
-        overflow: visible;
+        flex: 1 0 auto;
         z-index: 1;
     }
 
@@ -375,7 +380,7 @@ div.leftNavTooltip {
             flex: 1 0 auto;
             border-right: 1px solid $left-nav-horizontal-icon-border-color;
             > a.leftNavLink, .globalActionLink {
-                padding: 5px 0;
+                padding: 8px 0 5px 0;
                 text-align: center;
                 line-height: 20px;
                 border-radius:0;
@@ -420,7 +425,7 @@ div.leftNavTooltip {
         margin: 0;
         height: 100%;
         width: 0;
-        transition:width 100ms ease;
+        transition:all 100ms ease;
         z-index: 9999;
 
         .branding {
@@ -431,10 +436,6 @@ div.leftNavTooltip {
                 padding-right: 24px;
             }
         }
-        .tablesList li.horizontal {
-            min-width:300px;
-        }
-
     }
 
     .navShell.leftNavOpen {
@@ -446,12 +447,7 @@ div.leftNavTooltip {
         }
         .main {
             position: absolute;
-        }
-        .mainContent, .topNav {
-            opacity: .1;
-            transition: opacity 250ms ease-in-out;
-            -moz-transition: opacity 250ms ease-in-out;
-            -webkit-transition: opacity 250ms ease-in-out;
+            width: 100%;
         }
 
         transform: translate3d(300px, 0, 0);
