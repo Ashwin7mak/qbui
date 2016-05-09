@@ -8,7 +8,8 @@ import './style.css';
 const QBicon = React.createClass({
     propTypes: {
         icon: React.PropTypes.string.isRequired,
-        className: React.PropTypes.string
+        className: React.PropTypes.string,
+        onClick: React.PropTypes.func
     },
     getDefaultProps() {
         return {
@@ -19,7 +20,7 @@ const QBicon = React.createClass({
         let className = this.props.className + ' qbIcon iconssturdy-' + this.props.icon;
 
         return (
-            <span className={className}>
+            <span className={className} onClick={this.props.onClick}>
                 {this.props.children}
             </span>
         );

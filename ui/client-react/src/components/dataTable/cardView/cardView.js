@@ -41,9 +41,9 @@ let CardView = React.createClass({
     },
     createTopField(firstFieldValue) {
         return (
-            <div className="top-card-row field" onClick={this.handleMoreCard}>
+            <div className="top-card-row field">
                 <strong>{firstFieldValue}</strong>
-                <div className="card-expander" >
+                <div className="card-expander" onClick={this.handleMoreCard}>
                     <QBicon icon="caret-right" className={this.state.showMoreCards ? "qbPanelHeaderIcon rotateDown" : "qbPanelHeaderIcon rotateUp"}/>
                 </div>
             </div>

@@ -69,9 +69,8 @@ body.touch {
         position:relative;
         display: flex;
         flex-direction: column;
-        flex: 1;
-        min-width: 0;
-
+        flex: 1 1 auto;
+        min-width:0px; //wtf?
         .topNav {
             min-width: 200px;
             flex: 0 0 auto;
@@ -85,7 +84,7 @@ body.touch {
                 display: flex;
                 flex-basis: $top-nav-height;
                 font-size: 14px;
-                //min-width: 300px;
+                min-width: 300px;
             }
 
             .navGroup.left, .navGroup.right {
@@ -145,7 +144,7 @@ body.touch {
         .mainContent {
             display: flex;
             order: 2;
-            flex: 1;
+            flex: 1 1 auto;
             min-width: 0;
             // Enable momentum scrolling on iOS devices
             -webkit-overflow-scrolling: touch;
