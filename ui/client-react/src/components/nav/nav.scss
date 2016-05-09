@@ -72,6 +72,7 @@ body.touch {
         flex: 1 1 auto;
         min-width:0px; //wtf?
         .topNav {
+            min-width: 200px;
             flex: 0 0 auto;
             flex-basis: $top-nav-height;
             display: flex;

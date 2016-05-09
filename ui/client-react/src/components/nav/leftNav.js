@@ -75,12 +75,12 @@ let LeftNav = React.createClass({
             <Swipeable className={classes} onSwipedLeft={this.swipedLeft}>
                 {this.createBranding()}
 
-                <ReactCSSTransitionGroup transitionName="leftNavList" component="div" className={"transitionGroup"} transitionEnterTimeout={300} transitionLeaveTimeout={300}>
+                <div className={"transitionGroup"}>
                     {!this.props.selectedAppId || this.props.appsListOpen ?
                         <AppsList key={"apps"} {...this.props} onSelectApp={this.onSelectApp}  /> :
                         <TablesList key={"tables"} expanded={this.props.expanded} showReports={(id)=>{this.props.onSelectReports(id);} } getAppTables={this.getAppTables} {...this.props} /> }
 
-                </ReactCSSTransitionGroup>
+                </div>
 
                 {this.props.globalActions}
             </Swipeable>
