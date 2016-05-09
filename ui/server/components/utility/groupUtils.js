@@ -397,7 +397,7 @@
          * Example:  getEmailName(johnSmith@test.com) ==> johnSmith
          *
          * @param emailAddr
-         * @returns {*}
+         * @returns {*} email name segment of the email address
          */
         getEmailName: function(emailAddr) {
             if (emailAddr) {
@@ -414,7 +414,7 @@
          * Example:  getEmailDomain(johnSmith@test.com) ==> test.com
          *
          * @param emailAddr
-         * @returns {*}
+         * @returns {*} email domain segment of the email address
          */
         getEmailDomain: function(emailAddr) {
             if (emailAddr) {
@@ -431,7 +431,7 @@
          * Example:  getEmailDomainTopLevel(johnSmith@test.com) ==> com
          *
          * @param emailAddr
-         * @returns {*}
+         * @returns {*} top level segment of the email address domain
          */
         getEmailDomainTopLevel: function(emailAddr) {
             if (emailAddr) {
