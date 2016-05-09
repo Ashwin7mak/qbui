@@ -30,6 +30,7 @@ export const GROUP_TYPE = {
         day: COMMON.day
     },
     email: {
+        equals: COMMON.equals,
         name: 'N',
         domain: 'O',
         domain_topLevel: 'C'

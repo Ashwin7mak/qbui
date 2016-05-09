@@ -400,6 +400,66 @@ describe('Validate Group Utility functions', function() {
             });
         });
 
+        describe('validate getEmailName tests', function() {
+            var testCases = [
+                {name: 'valid email address1', emailAddress: 'johnSmith@test.com', expectation: 'johnSmith'},
+                {name: 'valid email address3', emailAddress: 'john.smith@test.ma.com', expectation: 'john.smith'},
+                {name: 'valid email address2', emailAddress: 'johnsmith@com', expectation: 'johnsmith'},
+                {name: 'empty email address', emailAddress: '', expectation: ''},
+                {name: 'null email address', emailAddress: null, expectation: ''},
+                {name: 'invalid email address - numeric input', emailAddress: 12345, expectation: ''},
+                {name: 'invalid email address - invalid object', emailAddress: new Date(), expectation: ''},
+                {name: 'invalid email address - invalid format', emailAddress: 'johnsmith@johnSmith@test.com', expectation: ''},
+                {name: 'invalid email address - invalid format2', emailAddress: 'johnsmith.com', expectation: ''}
+            ];
+
+            testCases.forEach(function(test) {
+                it('Test case: ' + test.name, function() {
+                    assert.equal(groupUtils.getEmailName(test.emailAddress), test.expectation);
+                });
+            });
+        });
+
+        describe('validate getEmailDomain tests', function() {
+            var testCases = [
+                {name: 'valid email address1', emailAddress: 'johnSmith@test.com', expectation: 'test.com'},
+                {name: 'valid email address3', emailAddress: 'john.smith@test.ma.com', expectation: 'test.ma.com'},
+                {name: 'valid email address2', emailAddress: 'johnsmith@com', expectation: 'com'},
+                {name: 'empty email address', emailAddress: '', expectation: ''},
+                {name: 'null email address', emailAddress: null, expectation: ''},
+                {name: 'invalid email address - numeric input', emailAddress: 12345, expectation: ''},
+                {name: 'invalid email address - invalid object', emailAddress: new Date(), expectation: ''},
+                {name: 'invalid email address - invalid format', emailAddress: 'johnsmith@johnSmith@test.com', expectation: ''},
+                {name: 'invalid email address - invalid format2', emailAddress: 'johnsmith.com', expectation: ''}
+            ];
+
+            testCases.forEach(function(test) {
+                it('Test case: ' + test.name, function() {
+                    assert.equal(groupUtils.getEmailDomain(test.emailAddress), test.expectation);
+                });
+            });
+        });
+
+        describe('validate getEmailDomainTopLevel tests', function() {
+            var testCases = [
+                {name: 'valid email address1', emailAddress: 'johnSmith@test.com', expectation: 'com'},
+                {name: 'valid email address3', emailAddress: 'john.smith@test.ma.com', expectation: 'com'},
+                {name: 'valid email address2', emailAddress: 'johnsmith@com', expectation: 'com'},
+                {name: 'empty email address', emailAddress: '', expectation: ''},
+                {name: 'null email address', emailAddress: null, expectation: ''},
+                {name: 'invalid email address - numeric input', emailAddress: 12345, expectation: ''},
+                {name: 'invalid email address - invalid object', emailAddress: new Date(), expectation: ''},
+                {name: 'invalid email address - invalid format', emailAddress: 'johnsmith@johnSmith@test.com', expectation: ''},
+                {name: 'invalid email address - invalid format2', emailAddress: 'johnsmith.com', expectation: ''}
+            ];
+
+            testCases.forEach(function(test) {
+                it('Test case: ' + test.name, function() {
+                    assert.equal(groupUtils.getEmailDomainTopLevel(test.emailAddress), test.expectation);
+                });
+            });
+        });
+
         describe('validate negative test cases against date functions', function() {
             //  negative test cases against all of the implemented date functions
             var testCases = generateDateGroupingTestCases(false);
@@ -508,6 +568,7 @@ describe('Validate Group Utility functions', function() {
 
         describe('validate EMAIL group types', function() {
             var validGroupTypeTestCases = [
+                {name: 'email name', dataType: constants.EMAIL_ADDRESS, groupType: groupTypes.EMAIL_ADDRESS.equals, expectation: true},
                 {name: 'email domain', dataType: constants.EMAIL_ADDRESS, groupType: groupTypes.EMAIL_ADDRESS.domain, expectation: true},
                 {name: 'email domain_toplevel', dataType: constants.EMAIL_ADDRESS, groupType: groupTypes.EMAIL_ADDRESS.domain_topLevel, expectation: true},
                 {name: 'email name', dataType: constants.EMAIL_ADDRESS, groupType: groupTypes.EMAIL_ADDRESS.name, expectation: true}
