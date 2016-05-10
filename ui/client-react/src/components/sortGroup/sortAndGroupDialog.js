@@ -2,7 +2,7 @@ import React from 'react';
 import {I18nMessage} from '../../utils/i18nMessage';
 import {Button} from 'react-bootstrap';
 import {Popover} from 'react-bootstrap';
-import OverlayDialogHeader from '../overlayx/overlayDialogHeader';
+import OverlayDialogHeader from '../overlay/overlayDialogHeader';
 import FieldSettings from './fieldSettings';
 import FieldsPanel from './fieldsPanel';
 import sortGroupFieldShape from './sortGroupProp';
