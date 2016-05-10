@@ -161,6 +161,10 @@ let wrapper = function(Component) {
                 this.props.stopPropagation || false
             );
 
+            // This wrapper has a list of registered components and their handlers,
+            // whenever we wrap a component in catchClickOutside it adds to the list,
+            // so that when the component will unmount its listeners gets removed so
+            // there is no leaking of event listeners.
             var pos = registeredComponents.length;
             registeredComponents.push(this);
             handlers[pos] = fn;

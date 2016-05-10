@@ -117,8 +117,15 @@ let reportModel = {
         this.setSortFids(reportMetaData.sortList);
         this.setGroupElements(reportMetaData.sortList);
     },
-
+    /**
+     * Set the reports original meta data
+     * @param reportOriginalMetaData
+     */
     setOriginalMetaData(reportOriginalMetaData) {
+        // clones the meta data to allow for adhoc updates to sort/group or other
+        // report metadata values, and still be able to access the original
+        // report settings for resetting feature in sort group dialog and later
+        // for cancel adhoc edits to a report
         this.model.originalMetaData = _.cloneDeep(reportOriginalMetaData);
     },
 
