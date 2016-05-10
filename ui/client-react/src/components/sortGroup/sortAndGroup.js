@@ -166,9 +166,9 @@ const SortAndGroup = React.createClass({
             overrideParams[query.SORT_LIST_PARAM] = sortGroupString;
             overrideParams[query.GLIST_PARAM] = sortGroupString;
 
-            flux.actions.getFilteredRecords(this.props.appId,
+            flux.actions.loadReport(this.props.appId,
                 this.props.tblId,
-                this.props.rptId, {format:true}, this.props.filter, overrideParams);
+                this.props.rptId, true, null, null, overrideParams[query.SORT_LIST_PARAM]);
         }
 
     },
@@ -181,8 +181,9 @@ const SortAndGroup = React.createClass({
         let sortGroupString = ReportUtils.getGListString(this.props.reportData.data.originalMetaData.sortList);
         overrideParams[query.SORT_LIST_PARAM] = sortGroupString;
         overrideParams[query.GLIST_PARAM] = sortGroupString;
-        flux.actions.getFilteredRecords(this.props.appId, this.props.tblId,
-                    this.props.rptId, {format:true}, this.props.filter, overrideParams);
+        flux.actions.loadReport(this.props.appId,
+            this.props.tblId,
+            this.props.rptId, true, null, null, sortGroupString);
     },
 
     resetAndHide() {

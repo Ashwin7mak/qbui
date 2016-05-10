@@ -155,9 +155,7 @@ let AGGrid = React.createClass({
 
         // AG-grid has a bug where on re-render it doesnt call groupRenderer
         // And hence doesnt render group headers.
-        // To get around that, on grouping destry the grid and rebuild the whole report
-        this.api.destroy();
-
+        // To get around that, on grouping rebuild the whole report
         flux.actions.loadReport(this.props.appId,
             this.props.tblId,
             this.props.rptId, true, null, null, sortList_param);

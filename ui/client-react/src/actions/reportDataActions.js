@@ -49,7 +49,7 @@ function buildRequestQuery(reportMetaData, requiredQueryParams, overrideQueryPar
     if (reportMetaData && reportMetaData.data) {
         overrideQueryParams = overrideQueryParams || {};
 
-        if (overrideQueryParams[query.COLUMNS_PARAM]) {
+        if (overrideQueryParams.hasOwnProperty(query.COLUMNS_PARAM)) {
             queryParams[query.COLUMNS_PARAM] = overrideQueryParams[query.COLUMNS_PARAM];
         } else {
             if (reportMetaData.data && reportMetaData.data.fids) {
@@ -66,7 +66,13 @@ function buildRequestQuery(reportMetaData, requiredQueryParams, overrideQueryPar
         //  NOTE: the optional gList parameter is used by the node layer only;  it is ignored on the api server.
         //
         let groupList = '';
-        if (overrideQueryParams[query.SORT_LIST_PARAM]) {
+
+        // if the report started out with sort/group settings defined and you removed them via the sort/group popover
+        // to modify the sort/group settings adhoc, it should use the empty sort/group param and not fall
+        // thru to use the original report settings. So here we test for hasOwnProperty since an empty value in the property
+        // means to overide the sort/group with no sort/grouping. if the property is excluded only then do we default to the
+        // original report settings for sort/group
+        if (overrideQueryParams.hasOwnProperty(query.SORT_LIST_PARAM)) {
             let sortList = ReportUtils.getSortFids(overrideQueryParams[query.SORT_LIST_PARAM]);
             queryParams[query.SORT_LIST_PARAM] = ReportUtils.getSortListString(sortList);
             groupList = overrideQueryParams[query.SORT_LIST_PARAM];
@@ -81,7 +87,7 @@ function buildRequestQuery(reportMetaData, requiredQueryParams, overrideQueryPar
             queryParams[query.GLIST_PARAM] = groupList;
         }
 
-        if (overrideQueryParams[query.QUERY_PARAM]) {
+        if (overrideQueryParams.hasOwnProperty(query.QUERY_PARAM)) {
             queryParams[query.QUERY_PARAM] = overrideQueryParams[query.QUERY_PARAM];
         } else {
             //  Concatenate facet expression(if any) and search filter(if any) into single query expression
@@ -136,7 +142,9 @@ let reportDataActions = {
                         requiredParams[query.OFFSET_PARAM] = offset;
                         requiredParams[query.NUMROWS_PARAM] = rows;
                         let overrideQueryParams = {};
-                        overrideQueryParams[query.SORT_LIST_PARAM] = sortList;
+                        if (sortList !== undefined) {
+                            overrideQueryParams[query.SORT_LIST_PARAM] = sortList;
+                        }
 
                         var queryParams = buildRequestQuery(reportMetaData, requiredParams, overrideQueryParams);
 
