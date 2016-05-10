@@ -2,6 +2,7 @@ import React from 'react';
 
 import Locale from '../../locales/locales';
 import NavItem from './navItem';
+import SearchBox from '../search/searchBox';
 
 let AppsList = React.createClass({
 
@@ -16,6 +17,12 @@ let AppsList = React.createClass({
         };
     },
 
+    /**
+     * Clear search text
+     */
+    onClearSearch() {
+        this.setState({searchText:""});
+    },
     onChangeSearch(ev) {
         this.setState({searchText: ev.target.value});
     },
@@ -52,11 +59,10 @@ let AppsList = React.createClass({
                          open={true} />
 
                 <li className={this.state.searching ? "search open" : "search"}>
-                    <input type="text"
-                           className={"searchInput"}
-                           placeholder={Locale.getMessage('nav.searchAppsPlaceholder')}
-                           value={this.state.searchText}
-                           onChange={this.onChangeSearch}/>
+                    <SearchBox value={this.state.searchText}
+                               onChange={this.onChangeSearch}
+                               onClearSearch={this.onClearSearch}
+                               placeholder={Locale.getMessage('nav.searchAppsPlaceholder')} />
                 </li>
 
                 {this.appList()}

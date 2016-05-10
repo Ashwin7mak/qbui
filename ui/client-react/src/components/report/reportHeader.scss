@@ -12,10 +12,14 @@
 
     background-color: #fff !important;
 
-    a.iconLink {
+    .iconLink {
         font-size:22px;
     }
-    a {
+    .textLink {
+        border-left: 1px solid #ccc;
+        padding-left: 4px;
+    }
+    .textLink, .iconLink {
         margin-right:4px;
         &:hover {
             text-decoration: none;
@@ -31,9 +35,6 @@
     .left {
         flex: 0 0 auto;
         margin-left:5px;
-        a.toggleNavButton {
-            font-size:14px;
-        }
     }
     .center {
         font-size:18px;
@@ -60,14 +61,7 @@
     }
     .center.searchElements {
         font-size: 14px;
-
         width:100%;
-        input.filterSearchBox {
-            margin-left:4px;
-            line-height:20px;
-            padding: .4rem;
-            width:100%;
-        }
 
     }
     .right {

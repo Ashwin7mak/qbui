@@ -5,7 +5,9 @@
     flex-direction: column;
     flex: 1 1 auto;
     min-width: 0;
-    background: $report-container-bg;
+    @include not-small-breakpoint {
+        background: $report-container-bg;
+    }
     .layout-stage {
         flex:0 0 auto;
     }
@@ -37,7 +39,6 @@
     .tableActionsContainer {
         position: relative;
         padding-left: 10px;
-        padding-top: 10px; // space after stage
         @include small-breakpoint {
             padding-top: 0px; // no stage so to need add space after
             &:not(.selectionActionsOpen) {
@@ -77,8 +78,7 @@
         }
         .filterSearchBoxContainer {
             flex-shrink: 0;
-            input {
-                width:100%;
+            .filterSearchBox {
                 min-width: 60px;
                 max-width: 180px;
             }
@@ -120,6 +120,11 @@
             width: 100%;
         }
     }
+    .filterSearchBox {
+        .searchInput {
+            border: none;
+        }
+    }
 }
 
 @include medium-breakpoint {
@@ -153,6 +158,29 @@
     display:none;
 }
 
+.sortAndGroupPopoverContainer {
+    margin-left: 10px;
+}
+
+.sortButtonSpan  {
+    display: inline-block;
+    cursor: pointer;
+    margin-top: 14px;
+    margin-bottom: 4px;
+    color: $icon-color;
+        @include small-breakpoint {
+            color:$secondary-bar-fg;
+        }
+
+    .sortButton {
+        font-size: 20px;
+        &.qbIcon {
+            display: inline;
+        }
+    }
+}
+
+
 $add-record-fg: #fff;
 $add-record-bg: #a52363;
 $add-record-radius: 20px;
@@ -161,6 +189,11 @@ $add-record-radius: 20px;
     .reportContainer .reportToolsAndContentContainer .reportToolbar {
         color:$secondary-bar-fg;
         justify-content:space-between;
+
+        .popover-content {
+            color:$icon-color;
+            max-height: 100%;
+        }
     }
     .reportContainer .reportToolsAndContentContainer .loadedContent {
         margin:0;

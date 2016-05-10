@@ -21,7 +21,7 @@ describe('Report functions', () => {
 
     let reportDataSearchStore = Fluxxor.createStore({
         getState() {
-            return {searchStringInput :''};
+            return {searchStringInput: ''};
         }
     });
 
@@ -35,7 +35,8 @@ describe('Report functions', () => {
         loadReport() {return;},
         selectTableId() {return;},
         getFilteredRecords() {return;},
-        hideTopNav() {return;}
+        hideTopNav() {return;},
+        loadFields() {return;}
     };
 
     let ReportStageMock = React.createClass({

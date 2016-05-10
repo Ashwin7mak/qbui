@@ -3,6 +3,7 @@ import TestUtils from 'react-addons-test-utils';
 import ReportHeader  from '../../src/components/report/reportHeader';
 import FacetSelections  from '../../src/components/facet/facetSelections';
 import Fluxxor from 'fluxxor';
+import SearchBox from '../../src/components/search/searchBox';
 
 describe('ReportHeader functions', () => {
     'use strict';
@@ -82,7 +83,6 @@ describe('ReportHeader functions', () => {
     });
 
     it('test perform search', () => {
-
         let toggleNav = TestUtils.findRenderedDOMComponentWithClass(component, "toggleNavButton");
         TestUtils.Simulate.click(toggleNav);
 

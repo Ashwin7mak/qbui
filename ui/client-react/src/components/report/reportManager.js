@@ -3,6 +3,7 @@ import React from 'react';
 import Locale from '../../locales/locales';
 import ReportGroup from './reportGroup';
 import './reportManager.scss';
+import SearchBox from '../search/searchBox';
 
 let ReportManager = React.createClass({
 
@@ -17,6 +18,9 @@ let ReportManager = React.createClass({
     },
     onChangeSearch(ev) {
         this.setState({searchText: ev.target.value});
+    },
+    clearSearch() {
+        this.setState({searchText: ""});
     },
     searchMatches(name) {
         return name.toLowerCase().indexOf(this.state.searchText.toLowerCase()) !== -1;
@@ -36,7 +40,11 @@ let ReportManager = React.createClass({
                     <div className={"reportsTop"}>
 
                         <div className="searchReports">
-                            <input autoFocus tabIndex="0" type="text" placeholder={Locale.getMessage('nav.searchReportsPlaceholder')} value={this.state.searchText} onChange={this.onChangeSearch}/>
+                            <SearchBox tabIndex="0"
+                                       value={this.state.searchText}
+                                       onChange={this.onChangeSearch}
+                                       onClearSearch={this.clearSearch}
+                                       placeholder={Locale.getMessage('nav.searchReportsPlaceholder')}/>
                         </div>
 
                     </div>

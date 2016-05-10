@@ -40,6 +40,7 @@ let ReportToolsAndContent = React.createClass({
                               reportData={otherReportData}
                               selections={selections}
                               searchStringForFiltering={this.props.searchStringForFiltering}
+                              fields={this.props.fields}
                               pageActions={this.props.pageActions}
                               nameForRecords={this.props.nameForRecords}
             {...this.props.callbacks} />;
@@ -57,12 +58,18 @@ let ReportToolsAndContent = React.createClass({
         if (hasSelection) {
             classes += " selectionActionsOpen";
         }
+
         return (<div className={classes}>
                     {hasSelection ? this.getSelectionActions() : this.getReportToolbar()}
                 </div>);
     },
 
     render() {
+        let classes = "reportToolsAndContentContainer";
+        if (this.props.selectedRows && (this.props.selectedRows.length === 1)) {
+            classes += " singleSelection";
+        }
+
         let {appId, tblId, rptId, reportData:{selections, ...otherReportData}} = this.props;
         let toolbar = <ReportToolbar appId={appId}
                                      tblId={tblId}
@@ -70,11 +77,12 @@ let ReportToolsAndContent = React.createClass({
                                      reportData={otherReportData}
                                      selections={selections}
                                      searchStringForFiltering={this.props.searchStringForFiltering}
+                                     fields={this.props.fields}
                                      pageActions={this.props.pageActions}
                                      nameForRecords={this.props.nameForRecords}
                                      {...this.props.callbacks} />;
 
-        return (<div className="reportToolsAndContentContainer">
+        return (<div className={classes}>
                     {this.getTableActions()}
                     <ReportContent  reportData={this.props.reportData}
                                     reportHeader={toolbar}

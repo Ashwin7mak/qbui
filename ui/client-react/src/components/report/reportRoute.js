@@ -68,7 +68,6 @@ const ReportRoute = React.createClass({
             logger.info("the necessary params were not specified to reportRoute render params=" + simpleStringify(this.props.params));
             return null;
         } else {
-
             return (<div className="reportContainer">
                 <Stage stageHeadline={this.getStageHeadline()}
                        pageActions={this.getPageActions(5)}>
@@ -84,6 +83,8 @@ const ReportRoute = React.createClass({
                     routeParams={this.props.routeParams}
                     selectedAppId={this.props.selectedAppId}
                     searchStringForFiltering={this.props.searchStringForFiltering}
+                    pageActions={this.getPageActions(0)}
+                    nameForRecords={this.nameForRecords}
                     selectedRows={this.props.selectedRows}
                     scrollingReport={this.props.scrollingReport}
                     history={this.props.history}/>

@@ -90,6 +90,19 @@ export default {
             organizeReports: "Organiser",
             recordCount : "{recordCount} {nameForRecords} ",
             searchPlaceHolder:  "Rechercher ces",
+            sortAndGroup : {
+                by: "par",
+                chooseFields :  {
+                    group: "Choisir un champ pour le groupement",
+                    sort: "Choisir un champ pour le tri",
+                },
+                group: "Groupe",
+                header : "Trier & Groupe",
+                moreFields : "plus de champs ...",
+                reset: "Réinitialiser",
+                sort:   "Trier",
+                thenBy: "puis par",
+            },
             menu: {
                 sort: {
                     aToZ: "Trier A à Z",
@@ -119,6 +132,7 @@ export default {
                 fieldProps: "Propriétés de champ"
             }
         },
-        cancel: "Annuler"
+        cancel: "Annuler",
+        apply: "Aappliquer"
     }
 };

@@ -14,16 +14,12 @@ let FluxMixin = Fluxxor.FluxMixin(React);
 var RecordsCount = React.createClass({
     propTypes: {
         isFiltered : React.PropTypes.bool,
-        isLoading : React.PropTypes.bool,
         recordCount : React.PropTypes.number,
         filteredRecordCount : React.PropTypes.number,
         nameForRecords : React.PropTypes.string,
         clearAllFilters : React.PropTypes.func,
     },
 
-    shouldComponentUpdate(nextProps, nextState) {
-        return (this.props.isLoading !== nextProps.isLoading) && (!nextProps.isLoading);
-    },
 
     /**
      * renders the record count

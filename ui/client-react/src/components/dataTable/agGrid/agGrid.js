@@ -334,6 +334,12 @@ let AGGrid = React.createClass({
             return;
         }
 
+        //Click on checkbox column should select the row instead of going to a form.
+        if (params.event.target && (params.event.target.getAttribute("colid") === "checkbox")) {
+            params.node.setSelected(true, true);
+            return;
+        }
+
         // select row on doubleclick
         if (params.event.detail === 2) {
             clearTimeout(this.clickTimeout);
