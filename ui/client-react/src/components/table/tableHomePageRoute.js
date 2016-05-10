@@ -2,7 +2,7 @@ import React from 'react';
 import Stage from '../stage/stage';
 import QBicon from '../qbIcon/qbIcon';
 import IconActions from '../actions/iconActions';
-import ReportToolsAndContent from '../report/ReportToolsAndContent';
+import ReportToolsAndContent from '../report/reportToolsAndContent';
 import Fluxxor from 'fluxxor';
 let FluxMixin = Fluxxor.FluxMixin(React);
 import './tableHomePage.scss';
