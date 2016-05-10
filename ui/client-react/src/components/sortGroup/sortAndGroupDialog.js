@@ -30,9 +30,6 @@ var SortAndGroupDialog = React.createClass({
         // the report data model
         reportData:  React.PropTypes.object,
 
-        // the fields in the reports table
-        fields:  React.PropTypes.object.isRequired,
-
         // the list of field settings to use in grouping
         groupByFields: React.PropTypes.arrayOf(sortGroupFieldShape),
 
@@ -180,7 +177,6 @@ var SortAndGroupDialog = React.createClass({
                         </div>
                         <FieldsPanel onHideFields={this.props.onHideFields}
                                      showFields={this.props.showFields}
-                                     fields={this.props.fields}
                                      fieldChoiceList={this.props.fieldChoiceList}
                                      reportColumns={this.props.reportData && this.props.reportData.data ?
                                         this.props.reportData.data.columns :  null}

@@ -500,7 +500,6 @@ const SortAndGroup = React.createClass({
                          onClose={this.hide}
                          onEntering={this.props.onMenuEnter} onExited={this.props.onMenuExit} >
                                 <SortAndGroupDialog  show={this.state.show}
-                                                            fields={fields}
                                                             showFields={this.state.showFields}
                                                             sortByFields={sortByFields}
                                                             groupByFields={groupByFields}

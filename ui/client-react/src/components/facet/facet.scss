@@ -1,5 +1,6 @@
 @import '../../assets/css/qbVariables';
 
+
 .facetsMenuContainer {
   margin-left: 10px;
 
@@ -215,6 +216,15 @@
     }
   }
 }
+
+
+@include medium-breakpoint {
+  .filterSearchBoxContainer .searchInputBox .searchInput {
+    padding-right: 5px;
+  }
+}
+
+
 
 @include small-breakpoint {
     .selectedFacets {
