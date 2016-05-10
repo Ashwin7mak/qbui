@@ -23,7 +23,7 @@ let FluxMixin = Fluxxor.FluxMixin(React);
 let StoreWatchMixin = Fluxxor.StoreWatchMixin;
 
 var Nav = React.createClass({
-    mixins: [FluxMixin, StoreWatchMixin('NavStore', 'AppsStore', 'ReportsStore', 'ReportDataStore')],
+    mixins: [FluxMixin, StoreWatchMixin('NavStore', 'AppsStore', 'ReportsStore', 'ReportDataStore', 'FieldsStore')],
 
     contextTypes: {
         touch: React.PropTypes.bool,
@@ -36,7 +36,8 @@ var Nav = React.createClass({
             nav: flux.store('NavStore').getState(),
             apps: flux.store('AppsStore').getState(),
             reportsData: flux.store('ReportsStore').getState(),
-            reportData: flux.store('ReportDataStore').getState()
+            reportData: flux.store('ReportDataStore').getState(),
+            fields: flux.store('FieldsStore').getState(),
         };
     },
 
@@ -73,6 +74,8 @@ var Nav = React.createClass({
         }
         flux.actions.showTrowser();
         flux.actions.loadReports(this.state.apps.selectedAppId, tableId);
+        //Whenever we change tables /via change report we get the set of fields in the table
+        flux.actions.loadFields(this.state.apps.selectedAppId, tableId);
     },
 
     getSelectedApp() {
@@ -188,6 +191,7 @@ var Nav = React.createClass({
                             key: this.props.location ? this.props.location.pathname : "",
                             selectedAppId: this.state.apps.selectedAppId,
                             reportData: this.state.reportData,
+                            fields: this.state.fields,
                             selectedApp: this.getSelectedApp(),
                             selectedTable: this.getSelectedTable(),
                             scrollingReport: this.state.nav.scrollingReport,

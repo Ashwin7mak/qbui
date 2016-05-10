@@ -40,7 +40,7 @@
             var routeEnabled = true;
 
             _.forEach(disabledRoutes, function(disabledRoute) {
-                if (route === disabledRoute.route && _.contains(disabledRoute.methods, method.toUpperCase(), 0)) {
+                if (route === disabledRoute.route && _.includes(disabledRoute.methods, method.toUpperCase(), 0)) {
                     routeEnabled = false;
                 }
             });

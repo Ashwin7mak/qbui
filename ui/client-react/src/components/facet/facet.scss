@@ -1,10 +1,11 @@
 @import '../../assets/css/qbVariables';
 
+
 .facetsMenuContainer {
   margin-left: 10px;
 
-  //the generated wrapper on facetMenuPopup
-  > div:not(.facetsMenuButton) > div:first-child {
+  //under the generated wrapper on facetMenuPopup
+  > div:not(.facetsMenuButton) > div.facetsRelativePos {
     position: relative;
   }
 }
@@ -163,7 +164,7 @@
     }
 
     .checkMark-selected {
-      color: $facetSelected-color;
+      color: $selected-check-color;
       padding-right: 5px;
     }
 
@@ -215,6 +216,15 @@
     }
   }
 }
+
+
+@include medium-breakpoint {
+  .filterSearchBoxContainer .searchInputBox .searchInput {
+    padding-right: 5px;
+  }
+}
+
+
 
 @include small-breakpoint {
     .selectedFacets {

@@ -22,7 +22,8 @@ describe('Report functions', () => {
             loadReport() {return;},
             selectTableId() {return;},
             getFilteredRecords() {return;},
-            hideTopNav() {return;}
+            hideTopNav() {return;},
+            loadFields() {return;}
         }
     };
 

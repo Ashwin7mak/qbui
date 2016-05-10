@@ -52,7 +52,7 @@
          * Function will get you all the facet selections (buttons) for a facet group element
          */
         this.getAvailableFacetGroupSelections = function(facetGroupElement) {
-            return facetGroupElement.all(by.tagName('button'));
+            return facetGroupElement.all(by.className('list-group-item'));
         };
 
 
@@ -117,38 +117,26 @@
          */
         this.selectFacets = function(facetGroupElement, facetIndexes) {
             var self = this;
-            // First check to see click on more options link if items to select is greater than 5
+            //select the items
             facetIndexes.forEach(function(facetIndex) {
-                if (facetIndex >= SHOW_POPUP_LIST_LIMIT) {
-                    // Click on more options link
-                    e2ePageBase.waitForElementToBeClickable(facetGroupElement.element(by.className('listMore'))).then(function() {
-                        facetGroupElement.element(by.className('listMore')).click();
-                    });
-                }
-            });
-
-            // Select the facet Items
-            self.getAvailableFacetGroupSelections(facetGroupElement).then(function(buttons) {
-                facetIndexes.forEach(function(facetIndex) {
-                    for (var i = 0; i < buttons.length; i++) {
-                        // Click the facet item that matches the test argument value
-                        if (i === facetIndex) {
-                            var buttonEl = buttons[i];
-                            // If the facet is not already selected then click
-                            e2ePageBase.waitForElementToBeClickable(buttonEl).then(function() {
-                                buttonEl.element(by.className('checkMark-selected')).isPresent().then(function(present) {
-                                    if (!present) {
-                                        // Click the item
-                                        e2ePageBase.waitForElementToBeClickable(buttonEl).then(function() {
-                                            buttonEl.click().then(function() {
-                                                e2ePageBase.waitForElementToBeStale(buttonEl.element(by.className('checkMark')));
-                                            });
-                                        });
-                                    }
-                                });
-                            });
-                        }
+                var items = self.unselectedFacetGroupsElList.all(by.className('list-group-item'));
+                return items.filter(function(elm, index) {
+                    return index === facetIndex;
+                }).then(function(filteredElement) {
+                    if (facetIndex >= SHOW_POPUP_LIST_LIMIT) {
+                        // Click on more fields link
+                        expect(filteredElement[0].getText()).toEqual('more...');
+                        return filteredElement[0].click();
                     }
+                    e2ePageBase.waitForElementToBeClickable(filteredElement[0]).then(function() {
+                        filteredElement[0].element(by.className('checkMark-selected')).isPresent().then(function(present) {
+                            if (!present) {
+                                return filteredElement[0].click().then(function() {
+                                    expect(present).toBeFalsy();
+                                });
+                            }
+                        });
+                    });
                 });
             });
         };

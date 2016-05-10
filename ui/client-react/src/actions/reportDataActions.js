@@ -176,7 +176,7 @@ let reportDataActions = {
             if (reportMetaData && reportMetaData.data) {
                 overrideQueryParams = overrideQueryParams || {};
 
-                if (overrideQueryParams[query.COLUMNS_PARAM]) {
+                if (overrideQueryParams.hasOwnProperty(query.COLUMNS_PARAM)) {
                     queryParams[query.COLUMNS_PARAM] = overrideQueryParams[query.COLUMNS_PARAM];
                 } else {
                     if (reportMetaData.data && reportMetaData.data.fids) {
@@ -193,7 +193,13 @@ let reportDataActions = {
                 //  NOTE: the optional gList parameter is used by the node layer only;  it is ignored on the api server.
                 //
                 let groupList = '';
-                if (overrideQueryParams[query.SORT_LIST_PARAM]) {
+
+                // if the report started out with sort/group settings defined and you removed them via the sort/group popover
+                // to modify the sort/group settings adhoc, it should use the empty sort/group param and not fall
+                // thru to use the original report settings. So here we test for hasOwnProperty since an empty value in the property
+                // means to overide the sort/group with no sort/grouping. if the property is excluded only then do we default to the
+                // original report settings for sort/group
+                if (overrideQueryParams.hasOwnProperty(query.SORT_LIST_PARAM)) {
                     let sortList = ReportUtils.getSortFids(overrideQueryParams[query.SORT_LIST_PARAM]);
                     queryParams[query.SORT_LIST_PARAM] = ReportUtils.getSortListString(sortList);
                     groupList = overrideQueryParams[query.SORT_LIST_PARAM];
@@ -208,7 +214,7 @@ let reportDataActions = {
                     queryParams[query.GLIST_PARAM] = groupList;
                 }
 
-                if (overrideQueryParams[query.QUERY_PARAM]) {
+                if (overrideQueryParams.hasOwnProperty(query.QUERY_PARAM)) {
                     queryParams[query.QUERY_PARAM] = overrideQueryParams[query.QUERY_PARAM];
                 } else {
                     //  Concatenate facet expression(if any) and search filter(if any) into single query expression

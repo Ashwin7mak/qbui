@@ -91,6 +91,19 @@ export default {
             organizeReports: "Organisieren",
             recordCount : "{recordCount} {nameForRecords} ",
             searchPlaceHolder:  "Suchen Sie diese",
+            sortAndGroup : {
+                by: "nach",
+                chooseFields :  {
+                    group: "Wählen Sie Feld für die Gruppierung",
+                    sort: "Wählen Sie für die Sortierung",
+                },
+                group: "Gruppen",
+                header : "Sortieren & Gruppen",
+                moreFields : "mehr Felder ...",
+                reset: "Zurückstellen",
+                sort:   "Sortieren",
+                thenBy: "dann durch",
+            },
             menu: {
                 sort: {
                     aToZ: "Sortieren von A bis Z",
@@ -120,6 +133,8 @@ export default {
                 fieldProps: "Feldeigenschaften"
             }
         },
-        cancel: "Stornieren"
+        cancel: "Stornieren",
+        apply: "Anwenden"
+
     }
 };

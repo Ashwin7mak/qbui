@@ -1,0 +1,279 @@
+@import '../../assets/css/qbVariables';
+
+.sortAndGroupContainer {
+  margin-left: 10px;
+
+  //the generated wrapper on sortAndGroupDialog
+  > div:not(.sortAndGroupButton)  {
+    position: relative;
+  }
+
+  .popover.bottom {
+    margin-left: -12px;
+    margin-top: -39px;
+    overflow-y: hidden;
+    border-radius: 0;
+    padding: 0;
+    > .arrow {
+      display: none;
+    }
+  }
+
+  .sortAndGroupButton .sortButtonSpan:hover {
+    color: $icon-color-hover;
+  }
+}
+
+.sortAndGroupDialog {
+  overflow: auto;
+  width: 440px;
+  background-color: $popover-background;
+  z-index: $zindex-popover;
+  -webkit-box-shadow: 0px 4px 15px 0px rgba(70,66,66,0.15);
+  -moz-box-shadow: 0px 4px 15px 0px rgba(70,66,66,0.15);
+  box-shadow: 0px 4px 15px 0px rgba(70,66,66,0.15);
+
+  .sortButtonSpan.btn.btn-default {
+    margin-top: 0;
+    margin-bottom: 0;
+    color: $icon-color-hover;
+  }
+  .popover-content {
+    padding: 0;
+  }
+  .settingsDialog{
+    padding: 10px;
+    display: flex;
+    flex-direction: column;
+    max-height: 550px;
+    justify-content: space-between;
+    visibility: visible;
+  }
+
+  .settingsDialog.fieldsShown {
+    visibility: hidden;
+  }
+
+  .dialogContent {
+    max-height: 450px;
+    overflow: auto;
+  }
+
+  .fieldSelectorContainer {
+
+    .fieldSelector {
+      width: 100%;
+    }
+    .fieldName {
+      color: $popover-text;
+      width: 122px;
+      text-overflow: ellipsis;
+      overflow: hidden;
+      white-space: nowrap;
+    }
+    .sortOrderIcon {
+      margin-right: 10px;
+    }
+
+  }
+
+  .title {
+    color: $popover-title;
+    margin-bottom: 6px;
+  }
+
+  .sortBySettings {
+    margin-top: 20px;
+    margin-left : 10px;
+
+    .fieldChoice {
+      background-color: $color12;
+      border-top : 3px solid $color4;
+    }
+  }
+
+  .groupBySettings {
+    margin-top: 20px;
+
+    .fieldChoice {
+      background-color: $color1;
+      border-top : 3px solid $color7;
+    }
+  }
+  .groupFieldOpen.qbIcon {
+    font-size: 22px;
+  }
+
+  .fieldChoice {
+    padding : 10px;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    margin-bottom: 2px;
+
+    .fieldChoiceLeft {
+      display: flex;
+      flex-direction: row;
+      justify-content: flex-start;
+    }
+    .prefix {
+      color: $color9;
+      flex-grow: 1;
+      padding-right: 5px;
+    }
+  }
+
+
+  .dialogButtons {
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-end;
+    align-items: center;
+    margin-top: auto;
+    padding: 20px 0 5px 0;
+    .reset {
+      margin-right : 10px;
+    }
+  }
+  .dialogBand {
+      display: none;
+  }
+}
+
+.fieldsPanel {
+  position: absolute;
+  width: 100%;
+  top:0;
+  left:0;
+  &.animated{
+    -webkit-animation-duration:500ms;
+    animation-duration:500ms;
+  }
+  &.notShown {
+    display: none;
+  }
+  .fieldPanelHeader {
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-start;
+    padding: 10px;
+    color:$color11;
+    .cancel  {
+      padding-right: 10px;
+      color:$icon-color;
+    }
+  }
+  .fieldItem.animated {
+      -webkit-animation-duration:400ms;
+      animation-duration:400ms;
+  }
+  .panel {
+    box-shadow : none;
+    width: 100%;
+    border : 1px solid $color4;
+    .list-group-item:first-child {
+      border-radius : 0;
+    }
+  }
+  .list-group {
+    max-height: 248px;
+    overflow: auto;
+    margin-bottom: 0;
+  }
+  .list-group-item {
+    color:$color11;
+    width: 100%;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    white-space: nowrap;
+    border: 1px solid $color4;
+    border-right: none;
+    border-left: none;
+  }
+  .list-group-item:first-child,
+  .list-group-item:last-child {
+    border-radius: 0;
+  }
+
+  .list-group-item .checkMark {
+    margin-left: auto;
+  }
+
+  .checkMark {
+    color: transparent;
+    padding-right: 5px;
+  }
+
+  .checkMark-selected {
+    color: $selected-check-color;
+    padding-right: 5px;
+  }
+  .moreFields {
+    color:$icon-color;
+  }
+
+}
+
+$dialog-max-height-small : 475px;
+@include small-breakpoint {
+  .reportContainer .reportToolsAndContentContainer .reportToolbar
+
+  .sortAndGroupDialog {
+    position: fixed;
+    top: 0px;
+    left: 0px;
+    margin-top: 0;
+    margin-left: 0;
+    width: 100%;
+    max-width: $small-breakpoint-width;
+    max-height: $dialog-max-height-small;
+
+
+    .dialogContent {
+      max-height: $dialog-max-height-small - 89;
+      overflow: auto;
+    }
+
+    .groupBySettings {
+      margin-top: 10px;
+      .fieldChoice {
+        background-color: $color1;
+        border-top-width: 3px;
+      }
+    }
+    .sortBySettings {
+      .fieldChoice {
+        border-top-width: 3px;
+      }
+    }
+
+    .settingsDialog {
+      padding: 5px 0 0;
+
+      .overlayDialogHeader {
+        border-bottom: 1px solid $color21;
+        padding: 0 10px 10px;
+      }
+      .title {
+        padding: 0 10px;
+      }
+    }
+
+    .fieldName {
+      width: 167px;
+    }
+
+    .dialogButtons {
+      display: none;
+    }
+    .dialogBand {
+      background-color: $color12;
+      display:flex;
+      padding: 15px;
+      justify-content: center;
+    }
+
+
+  }
+
+}
