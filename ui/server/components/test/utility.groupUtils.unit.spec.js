@@ -532,7 +532,6 @@ describe('Validate Group Utility functions', function() {
         describe('validate NUMERIC group types', function() {
             var validGroupTypeTestCases = [
                 {name: 'numeric equals', dataType: constants.NUMERIC, groupType: groupTypes.NUMERIC.equals, expectation: true},
-                {name: 'numeric range', dataType: constants.NUMERIC, groupType: groupTypes.NUMERIC.range, expectation: true},
                 {name: 'numeric thousandth', dataType: constants.NUMERIC, groupType: groupTypes.NUMERIC.thousandth, expectation: true},
                 {name: 'numeric hundredth', dataType: constants.NUMERIC, groupType: groupTypes.NUMERIC.hundredth, expectation: true},
                 {name: 'numeric tenth', dataType: constants.NUMERIC, groupType: groupTypes.NUMERIC.tenth, expectation: true},

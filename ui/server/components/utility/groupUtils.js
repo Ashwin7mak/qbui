@@ -55,7 +55,6 @@
             case constants.NUMERIC:
                 switch (groupType) {
                 case groupTypes.NUMERIC.equals: return true;
-                case groupTypes.NUMERIC.range: return true;
                 case groupTypes.NUMERIC.thousandth: return true;
                 case groupTypes.NUMERIC.hundredth: return true;
                 case groupTypes.NUMERIC.tenth: return true;

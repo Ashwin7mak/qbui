@@ -1,11 +1,5 @@
 @import '../../assets/css/qbVariables';
 
-
-.filterSearchBox { /* input box for filtering records containing the string */
-  padding: .8rem;
-  min-width: 172px;
-}
-
 .facetsMenuContainer {
   margin-left: 10px;
 
@@ -50,8 +44,7 @@
 .facetsMenuContainer .facetMenuPopup.popover {
     border-radius: 3px;
     border-color : $facetMenu-BorderColor;
-    min-width: 300px;
-    max-width: 98%;
+    width: 300px;
     position: absolute;
     margin-left: -29px;
     > .arrow {
@@ -127,6 +120,7 @@
       overflow: hidden;
       text-overflow: ellipsis;
       padding-left: 15px;
+      padding-right: 5px;
     }
 
     .panel-default {
