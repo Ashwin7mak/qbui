@@ -152,7 +152,6 @@ let reportDataActions = {
                             function(reportData) {
                                 logger.debug('ReportDataAndFacets service call successful');
                                 var model = reportModel.set(reportMetaData, reportData);
-                                sortList = sortList || "";
                                 _.extend(model, {sortList: sortList});
                                 this.dispatch(actions.LOAD_REPORT_SUCCESS, model);
                                 resolve();
