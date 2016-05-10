@@ -138,34 +138,14 @@ let reportDataActions = {
                         let overrideQueryParams = {};
                         overrideQueryParams[query.SORT_LIST_PARAM] = sortList;
 
-                        var queryParams = buildRequestQuery(reportMetaData, requiredParams, overrideQueryParams, null);
-                        //  Optional parameter used by the Node layer to return the result set in grouping order for
-                        //  easier client rendering of the result set.  The input sortList is a string array of
-                        //  fids/grouptype, delimited by ':'.  The groupList parameter converts the array
-                        //  into a string, with each individual entry separated by a '.' and included on the request
-                        //  as a query parameter.  Example:
-                        //
-                        //      sortList: ['2', '1:V', '33:C']
-                        //      glist: '2.1:V.33:C'
-                        //
-                        //  NOTE: the gList parameter is used by the node layer only;  it is ignored on the api server.
-                        //
-                        //if (reportMetaData.data) {
-                        //    let groupList = ReportUtils.getSortListString(reportMetaData.data.sortList);
-                        //    if (ReportUtils.hasGroupingFids(groupList)) {
-                        //        queryParams[query.GLIST_PARAM] = groupList;
-                        //    }
-                        //}
-                        //
+                        var queryParams = buildRequestQuery(reportMetaData, requiredParams, overrideQueryParams);
 
                         reportService.getReportDataAndFacets(appId, tblId, rptId, queryParams).then(
                             function(reportData) {
                                 logger.debug('ReportDataAndFacets service call successful');
                                 var model = reportModel.set(reportMetaData, reportData);
                                 sortList = sortList || "";
-                                if (sortList) {
-                                    _.extend(model, {sortList: sortList});
-                                }
+                                _.extend(model, {sortList: sortList});
                                 this.dispatch(actions.LOAD_REPORT_SUCCESS, model);
                                 resolve();
                             }.bind(this),
