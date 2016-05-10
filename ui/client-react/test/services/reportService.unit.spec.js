@@ -230,6 +230,21 @@ describe('ReportService functions', () => {
         expect(BaseService.prototype.get).toHaveBeenCalledWith(url, {params:params});
     });
 
+    it('test getReport and facets function with sortlist', () => {
+        var appId = 1;
+        var tblId = 2;
+        var rptId = 3;
+        var url = reportService.constructUrl(reportService.API.GET_REPORT_COMPONENTS, [appId, tblId, rptId]);
+
+        var queryParams = {};
+        queryParams[query.SORT_LIST_PARAM] = "6:V";
+        reportService.getReportDataAndFacets(appId, tblId, rptId, queryParams);
+
+        var params = {};
+        params[query.SORT_LIST_PARAM] = queryParams[query.SORT_LIST_PARAM];
+        expect(BaseService.prototype.get).toHaveBeenCalledWith(url, {params:params});
+    });
+
     it('test getReport and facets function with no parameters', () => {
         var appId = 1;
         var tblId = 2;
