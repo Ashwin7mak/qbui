@@ -167,7 +167,10 @@ class ReportService extends BaseService {
                 params[query.OFFSET_PARAM] = queryParams[query.OFFSET_PARAM];
                 params[query.NUMROWS_PARAM] = queryParams[query.NUMROWS_PARAM];
             }
-
+            // Is there a sorList override
+            if (StringUtils.isNonEmptyString(queryParams[query.SORT_LIST_PARAM])) {
+                params[query.SORT_LIST_PARAM] = queryParams[query.SORT_LIST_PARAM];
+            }
             //  Is there report grouping
             if (StringUtils.isNonEmptyString(queryParams[query.GLIST_PARAM])) {
                 params[query.GLIST_PARAM] = queryParams[query.GLIST_PARAM];

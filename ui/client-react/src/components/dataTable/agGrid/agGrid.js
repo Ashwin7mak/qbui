@@ -147,18 +147,20 @@ let AGGrid = React.createClass({
     groupReport(column, asc) {
         let flux = this.getFlux();
 
-        let queryParams = {};
         //for on-the-fly grouping, forget the previous group and go with the selection but add the previous sort fids.
-        //TODO: how to pass back grouping info?
         let sortFid = column.id.toString();
         let groupString = ReportUtils.getGroupString(sortFid, asc, GroupTypes.GROUP_TYPE.text.equals);
         let sortList = ReportUtils.getSortListString(this.props.sortFids);
-        queryParams[query.SORT_LIST_PARAM] = ReportUtils.prependSortFidToList(sortList, groupString);
-        queryParams[query.GLIST_PARAM] = ReportUtils.prependSortFidToList(sortList, groupString);
+        let sortList_param = ReportUtils.prependSortFidToList(sortList, groupString);
 
-        flux.actions.getFilteredRecords(this.props.appId,
+        // AG-grid has a bug where on re-render it doesnt call groupRenderer
+        // And hence doesnt render group headers.
+        // To get around that, on grouping destry the grid and rebuild the whole report
+        this.api.destroy();
+
+        flux.actions.loadReport(this.props.appId,
             this.props.tblId,
-            this.props.rptId, {format:true}, this.props.filter, queryParams);
+            this.props.rptId, true, null, null, sortList_param);
     },
     /**
      * AG-grid doesnt fire any events or add any classes to the column for which menu has been opened

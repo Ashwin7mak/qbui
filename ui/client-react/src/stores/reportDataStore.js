@@ -189,12 +189,16 @@ let reportModel = {
     },
 
     setSortFids: function(sortList) {
-        this.model.sortFids = ReportUtils.getSortFidsOnly(sortList);
+        if (sortList) {
+            this.model.sortFids = ReportUtils.getSortFidsOnly(sortList);
+        }
     },
 
     setGroupElements: function(sortList) {
-        this.model.groupEls = ReportUtils.getGroupElements(sortList);
-        this.model.groupLevel = this.model.groupEls.length;
+        if (sortList) {
+            this.model.groupEls = ReportUtils.getGroupElements(sortList);
+            this.model.groupLevel = this.model.groupEls.length;
+        }
     }
 };
 
@@ -221,7 +225,7 @@ let ReportDataStore = Fluxxor.createStore({
             actions.FILTER_SELECTIONS_PENDING, this.onFilterSelectionsPending,
             actions.SHOW_FACET_MENU, this.onShowFacetMenu,
             actions.HIDE_FACET_MENU, this.onHideFacetMenu,
-            actions.SEARCH_FOR, this.onSearchFor,
+           // actions.SEARCH_FOR, this.onSearchFor,
             actions.SELECTED_ROWS, this.onSelectedRows,
 
             actions.ADD_REPORT_RECORD, this.onAddReportRecord, // for empower demo
@@ -260,6 +264,8 @@ let ReportDataStore = Fluxxor.createStore({
         this.reportModel = reportModel;
         reportModel.setMetaData(response.metaData);
         reportModel.setRecordData(response.recordData);
+        reportModel.setSortFids(response.sortList);
+        reportModel.setGroupElements(response.sortList);
         reportModel.setFacetData(response.recordData);
         this.emit('change');
     },
@@ -297,30 +303,30 @@ let ReportDataStore = Fluxxor.createStore({
         this.emit('change');
     },
 
-    onSearchFor(text) {
-        // placeholder which will be obsolete
-        // when other searches from global are supported
-        let filteredRecords = [];
-        let records = this.reportModel.getRecords();
-        if (records) {
-            records.forEach((record) => {
-
-                let match = false;
-                let lText = text.toLowerCase();
-                _.values(record).forEach((val) => {
-                    if (val && val.toString().toLowerCase(lText).indexOf() !== -1) {
-                        match = true;
-                    }
-                });
-                if (match) {
-                    filteredRecords.push(record);
-                }
-
-            });
-        }
-        this.reportModel.setFilteredRecords(filteredRecords);
-        this.emit('change');
-    },
+    //onSearchFor(text) {
+    //    // placeholder which will be obsolete
+    //    // when other searches from global are supported
+    //    let filteredRecords = [];
+    //    let records = this.reportModel.getRecords();
+    //    if (records) {
+    //        records.forEach((record) => {
+    //
+    //            let match = false;
+    //            let lText = text.toLowerCase();
+    //            _.values(record).forEach((val) => {
+    //                if (val && val.toString().toLowerCase(lText).indexOf() !== -1) {
+    //                    match = true;
+    //                }
+    //            });
+    //            if (match) {
+    //                filteredRecords.push(record);
+    //            }
+    //
+    //        });
+    //    }
+    //    this.reportModel.setFilteredRecords(filteredRecords);
+    //    this.emit('change');
+    //},
 
     onShowFacetMenu() {
         this.nonFacetClicksEnabled = false;
