@@ -2,7 +2,7 @@ import React from 'react';
 import Stage from '../stage/stage';
 import QBicon from '../qbIcon/qbIcon';
 import IconActions from '../actions/iconActions';
-import ReportToolbarAndContent from '../report/reportToolbarAndContent';
+import ReportToolsAndContent from '../report/ReportToolsAndContent';
 import Fluxxor from 'fluxxor';
 let FluxMixin = Fluxxor.FluxMixin(React);
 import './tableHomePage.scss';
@@ -49,11 +49,12 @@ let TableHomePageRoute = React.createClass({
                 {this.getPageActions()}
             </div>
 
-            <ReportToolbarAndContent
+            <ReportToolsAndContent
                 params={this.props.params}
                 reportData={this.props.reportData}
                 routeParams={this.props.routeParams}
                 selectedAppId={this.props.selectedAppId}
+                fields={this.props.fields}
                 searchStringForFiltering={this.props.searchStringForFiltering}
                 selectedRows={this.props.selectedRows}
                 scrollingReport={this.props.scrollingReport}

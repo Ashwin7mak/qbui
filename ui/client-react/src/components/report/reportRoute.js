@@ -13,7 +13,7 @@ import simpleStringify from '../../../../common/src/simpleStringify';
 import Fluxxor from 'fluxxor';
 import _ from 'lodash';
 import './report.scss';
-import ReportToolbarAndContent from '../report/reportToolbarAndContent';
+import ReportToolsAndContent from '../report/ReportToolsAndContent';
 
 let logger = new Logger();
 let FluxMixin = Fluxxor.FluxMixin(React);
@@ -77,7 +77,7 @@ const ReportRoute = React.createClass({
 
                 {this.getHeader()}
 
-                <ReportToolbarAndContent
+                <ReportToolsAndContent
                     params={this.props.params}
                     reportData={this.props.reportData}
                     routeParams={this.props.routeParams}

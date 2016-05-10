@@ -27,6 +27,9 @@ describe('TableHomePage functions', () => {
         loadReport() {
             return;
         },
+        loadFields() {
+            return;
+        },
         showTopNav() {
             return;
         },
@@ -40,11 +43,13 @@ describe('TableHomePage functions', () => {
 
     beforeEach(() => {
         spyOn(flux.actions, 'loadReport');
+        spyOn(flux.actions, 'loadFields');
         spyOn(flux.actions, 'selectTableId');
     });
 
     afterEach(() => {
         flux.actions.loadReport.calls.reset();
+        flux.actions.loadFields.calls.reset();
         flux.actions.selectTableId.calls.reset();
     });
 
