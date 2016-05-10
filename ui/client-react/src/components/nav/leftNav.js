@@ -36,7 +36,7 @@ let LeftNav = React.createClass({
      * create a branding section (logo with an apps toggle if an app is selected)
      */
     createBranding() {
-        let app = _.findWhere(this.props.apps, {id: this.props.selectedAppId});
+        let app = _.find(this.props.apps, {id: this.props.selectedAppId});
         return (<div className="branding">
                     <h2 className={"logo"}>QuickBase</h2>
                     {this.props.selectedAppId &&
@@ -50,7 +50,7 @@ let LeftNav = React.createClass({
     },
 
     getAppTables(appId) {
-        let app = _.findWhere(this.props.apps, {id: appId});
+        let app = _.find(this.props.apps, {id: appId});
 
         return app ? app.tables : [];
     },

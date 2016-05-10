@@ -1,4 +1,5 @@
 import React from 'react';
+import ReactDOM from 'react-dom';
 import {Overlay} from 'react-bootstrap';
 
 import Logger from '../../utils/logger';
@@ -70,6 +71,7 @@ const FacetsMenu = React.createClass({
     },
 
     /**
+     *
      * Specifies what to use for the default collapse/expand mode to use for all the fields facets
      *
      * @returns {{allInitiallyCollapsed: boolean}}
@@ -164,8 +166,8 @@ const FacetsMenu = React.createClass({
     },
 
     /**
-     * Don't handle other listeners i.e. avoid closing facet window on this event
-     * rootClose will close any click out side popover
+     * Don't handle other listeners i.e. avoid closing facet window on this click
+     * outside event
      * (we want to keep open on facet selections clicks)
      * @param e
      */
@@ -189,6 +191,7 @@ const FacetsMenu = React.createClass({
         }
         this.dontClose(e);
     },
+
 
     /**
      * render the selected facet value tokenized
@@ -220,23 +223,35 @@ const FacetsMenu = React.createClass({
         return components;
     },
 
+    hideMenu() {
+        this.showMenu(false);
+    },
+
+    showMenu(newState) {
+        let flux = this.getFlux();
+        if (flux && flux.actions && flux.actions.showFacetMenu) {
+            flux.actions.showFacetMenu({show: newState});
+        }
+    },
+
     /**
      * Prepares the facet menu button used to show/hide the popover menu of field facet groups when clicked
      *
      **/
     render() {
         let menuKey =  this.props.rptId;
-        let flux = this.getFlux();
         let hasSelections = this.props.selectedValues && this.props.selectedValues.hasAnySelections();
+
         return (
             <div className="facetsMenuContainer">
 
                 {/* the filter icon button */}
-                <div className={"facetsMenuButton " +  (this.state.show ? "popoverShown " : "") +
-                  (hasSelections ? "withSelections " : "withoutSelections")}
+                <div className={"facetsMenuButton " +  (this.state.show ? "popoverShown" : "") +
+                  (hasSelections ? " withSelections " : " withoutSelections") +
+                  (this.state.show ? " ignore-react-onclickoutside" : "")}
                      ref="facetsMenuButton"
                      >
-                    <span className="facetButtons" onClick={() => flux.actions.showFacetMenu({show:!this.state.show})}>
+                    <span className="facetButtons" onClick={() => this.showMenu(!this.state.show)}>
                         <QBicon className="filterButton" icon={(hasSelections) ?
                                     "filter-status" : "filter-tool"} />
                         <QBicon className="filterButtonCaret" icon="caret-filled-down" />
@@ -245,30 +260,35 @@ const FacetsMenu = React.createClass({
 
                 {/* list of facet options shown when filter icon clicked */}
                 <Overlay container={this} placement="bottom"
-                         ref="facetOverlayTrigger" rootClose={true}
+                         ref="facetOverlayTrigger"
                          show={this.state.show}
-                         onHide={() => flux.actions.showFacetMenu({show:false})}
+                         onHide={this.hideMenu}
                          onEntering={this.props.onMenuEnter} onExited={this.props.onMenuExit} >
-                                    <FacetsList
-                                        key= {"FacetsList." + menuKey}
-                                        popoverId={menuKey || 1}
-                                        isCollapsed={this.isCollapsed}
-                                        handleToggleCollapse={this.handleToggleCollapse}
-                                        isRevealed={this.isRevealed}
-                                        handleRevealMore={this.handleRevealMore}
-                                        maxInitRevealed={this.props.maxInitRevealed}
-                                        menuButton={this.refs.facetsMenuButton}
-                                        expandedFacetFields={this.state.expandedFacetFields}
-                                        moreRevealedFacetFields={this.state.moreRevealedFacetFields}
-                                        onFacetClearFieldSelects={this.props.onFacetClearFieldSelects}
-                                        selectedValues={this.props.selectedValues}
-                                        reportData={this.props.reportData}
-                                        onFacetSelect={this.props.onFacetSelect}
-                                        onFacetDeselect={this.props.onFacetDeselect}
-                                    />
+                                    <div className={"facetsRelativePos" +
+                                                (this.state.show ? " ignore-react-onclickoutside" : "")}>
+                                        <FacetsList
+                                            ref="facetsPopover"
+                                            key= {"FacetsList." + menuKey}
+                                            popoverId={menuKey || 1}
+                                            isCollapsed={this.isCollapsed}
+                                            handleToggleCollapse={this.handleToggleCollapse}
+                                            isRevealed={this.isRevealed}
+                                            handleRevealMore={this.handleRevealMore}
+                                            maxInitRevealed={this.props.maxInitRevealed}
+                                            menuButton={this.refs.facetsMenuButton}
+                                            expandedFacetFields={this.state.expandedFacetFields}
+                                            moreRevealedFacetFields={this.state.moreRevealedFacetFields}
+                                            onFacetClearFieldSelects={this.props.onFacetClearFieldSelects}
+                                            selectedValues={this.props.selectedValues}
+                                            reportData={this.props.reportData}
+                                            onFacetSelect={this.props.onFacetSelect}
+                                            hideMenu={this.hideMenu}
+                                            onFacetDeselect={this.props.onFacetDeselect}
+                                    /></div>
                 </Overlay>
                 {!this.context.touch &&
-                <div className="selectedFacets" onClick={e => this.dontClose(e)}>{this.renderSelectedFacets()}</div>
+                <div className="selectedFacets ignore-react-onclickoutside" ref="selectedFacets"
+                     >{this.renderSelectedFacets()}</div>
                 }
 
             </div>
