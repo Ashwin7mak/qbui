@@ -32,7 +32,6 @@ let KIND = {
     SORT :'sort'
 };
 
-
 const SortAndGroup = React.createClass({
     mixins: [FluxMixin],
     //mixins: [FluxMixin, StoreWatchMixin('SortAndGroupStore')],
@@ -41,21 +40,34 @@ const SortAndGroup = React.createClass({
     contextTypes: {
         touch: React.PropTypes.bool
     },
-    buttonNode : null,
 
     propTypes: {
         /**
          *  Takes in for properties the reportData which includes the list of fields
          *  and a function to call when a sort group options are applied
          **/
-        reportData: React.PropTypes.object,
+        // the app id of the current report
         appId: React.PropTypes.string,
+
+        // the table id of the current report
         tblId: React.PropTypes.string,
+
+        // the report id of the current report
         rptId: React.PropTypes.string,
+
+        // the report data
+        reportData: React.PropTypes.object,
+
+        // the adhoc filter information selected facets and search
         filter: React.PropTypes.object,
+
+        // the fields in the table
         fields:  React.PropTypes.object.isRequired,
-        onSortGroupApply : React.PropTypes.func,
+
+        // the callback to call when the sort group dialog in shown
         onMenuEnter : React.PropTypes.func,
+
+        // the callback to call when the sort group dialog in exited
         onMenuExit : React.PropTypes.func
     },
 
@@ -226,9 +238,11 @@ const SortAndGroup = React.createClass({
         // newSelectionsGroup newSelectionsSort state is set when edits are made
         let editArrays = this.prepStateArrays();
         if (type === KIND.GROUP) {
-            editArrays.newSelectionsGroup = this.getNewOrderState(editArrays.newSelectionsGroup, index, field, isDescending, KIND.GROUP);
+            editArrays.newSelectionsGroup = this.getNewOrderState(editArrays.newSelectionsGroup,
+                                    index, field, isDescending, KIND.GROUP);
         } else {
-            editArrays.newSelectionsSort = this.getNewOrderState(editArrays.newSelectionsSort, index, field, isDescending, KIND.SORT);
+            editArrays.newSelectionsSort = this.getNewOrderState(editArrays.newSelectionsSort,
+                                    index, field, isDescending, KIND.SORT);
         }
         this.setState({newSelectionsGroup:editArrays.newSelectionsGroup,
                         newSelectionsSort:editArrays.newSelectionsSort,
@@ -376,8 +390,7 @@ const SortAndGroup = React.createClass({
                     answer.push(sortItem);
                 }
             });
-        } else if (this.props.reportData &&
-                    this.props.reportData.data && this.props.reportData.data.sortFids) {
+        } else if (_.has(this.props, 'reportData.data.sortFids')) {
             // .. or get the sort info from the record data props
             this.props.reportData.data.sortFids.map((originalVal) => {
                 let sortItem = this.parseSortItem(originalVal, fields);
@@ -385,9 +398,7 @@ const SortAndGroup = React.createClass({
                     answer.push(sortItem);
                 }
             });
-        } else if (this.props.reportData &&
-                this.props.reportData.data && this.props.reportData.data.originalMetaData &&
-                this.props.reportData.data.originalMetaData.sortList) {
+        } else if (_.has(this.props, 'reportData.data.originalMetaData.sortList')) {
             // .. or get the sort info from the original report meta data
             let sorts = ReportUtils.getSortFidsOnly(this.props.reportData.data.originalMetaData.sortList);
             sorts.map((originalVal) => {
@@ -428,8 +439,7 @@ const SortAndGroup = React.createClass({
                     answer.push(groupItem);
                 }
             });
-        } else if (this.props.reportData && this.props.reportData.data &&
-                   this.props.reportData.data.groupEls) {
+        } else if (_.has(this.props, 'reportData.data.groupEls')) {
             // get the group info from the report data
             this.props.reportData.data.groupEls.map((fidInfo) => {
                 let groupItem = this.parseGroupItem(fidInfo, fields);
@@ -437,9 +447,7 @@ const SortAndGroup = React.createClass({
                     answer.push(groupItem);
                 }
             });
-        } else if (this.props.reportData &&
-                    this.props.reportData.data && this.props.reportData.data.originalMetaData &&
-                    this.props.reportData.data.originalMetaData.sortList) {
+        } else if (_.has(this.props, 'reportData.data.originalMetaData.sortList')) {
             // get the group info from the original meta data
             this.props.reportData.data.originalMetaData.sortList.map((fidInfo) => {
                 let groupItem = this.parseGroupItem(fidInfo, fields);
@@ -452,6 +460,16 @@ const SortAndGroup = React.createClass({
         return answer;
     },
 
+    getVisGroupEls(els, fields) {
+        let answer = [];
+        ReportUtils.getGroupElements(els).map((item) => {
+            let groupItem = this.parseGroupItem(item, fields);
+            if (groupItem) {
+                answer.push(this.getField(groupItem.id, fields));
+            }
+        });
+        return answer;
+    },
 
     /**
      * Prepares the menu button used to show/hide the dialog of sort and group options when clicked
@@ -459,12 +477,12 @@ const SortAndGroup = React.createClass({
      **/
     render() {
 
-        let fields = this.state.show && this.props.fields && this.props.fields.fields ? this.props.fields.fields.data : [];
-        let fieldsLoading = this.state.show && this.props.fields && this.props.fields.fieldsLoading;
+        let fields = this.state.show &&  _.has(this.props, 'fields.fields.data') ? this.props.fields.fields.data : [];
         let sortByFields = this.state.show ? this.getSortFields(fields) : [];
         let groupByFields = this.state.show ? this.getGroupFields(fields) : [];
         let fieldChoiceList = this.getFieldsNotYetUsed(fields, groupByFields, sortByFields);
-
+        let visGroupEls = _.has(this.props, 'reportData.data.groupEls') ?
+                            this.getVisGroupEls(this.props.reportData.data.groupEls, fields) :  [];
         return (
             <div ref="sortAndGroupContainer" className="sortAndGroupContainer">
                 {/* the sort/group icon button */}
@@ -483,13 +501,13 @@ const SortAndGroup = React.createClass({
                          onEntering={this.props.onMenuEnter} onExited={this.props.onMenuExit} >
                                 <SortAndGroupDialog  show={this.state.show}
                                                             fields={fields}
-                                                            fieldsLoading={fieldsLoading}
                                                             showFields={this.state.showFields}
                                                             sortByFields={sortByFields}
                                                             groupByFields={groupByFields}
                                                             fieldsForType={this.state.fieldsForType}
                                                             fieldChoiceList={fieldChoiceList}
                                                             dirty={this.state.dirty}
+                                                            visGroupEls={visGroupEls}
                                                             reportData={this.props.reportData}
                                                             showNotVisible={this.state.showNotVisible}
                                                             onShowMoreFields={this.showMoreFields}

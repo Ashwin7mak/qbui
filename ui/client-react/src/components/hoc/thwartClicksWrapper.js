@@ -5,6 +5,12 @@ var thwartClicksWrapper = (Component) => {
 
     const OutsideClickWrapped = React.createClass({
 
+        propTypes :  {
+            // optionally specify the callback to call when user clicks outside
+            // the component to process the outside click events
+            handleClickOutside: React.PropTypes.func,
+        },
+
         handleClickOutside(evt) {
             if (this.props.handleClickOutside) {
                 this.props.handleClickOutside(evt);

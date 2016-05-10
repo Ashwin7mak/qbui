@@ -19,6 +19,47 @@ import './sortAndGroup.scss';
  */
 const FieldsPanel = React.createClass({
 
+    propTypes : {
+        //sort or group
+        fieldsForType:React.PropTypes.string,
+
+        //boolean for whether this panel should show or not
+        showFields:React.PropTypes.bool,
+
+        // the list of fields already in use in group by
+        groupByFields:React.PropTypes.array,
+
+        // the list of fields already in use in sort by
+        sortByFields:React.PropTypes.array,
+
+        // the remaining list of fields available to choice from'
+        // per spec if field is already in use for sorting or for grouping its not
+        // able to be reselected for sort of group
+        fieldChoiceList:React.PropTypes.array,
+
+        // the list of fields visible as columns in the report
+        // we use to show the fields list of visible fields first before fields not show in report
+        reportColumns:React.PropTypes.array,
+
+        // the list of fields visible as groups in the report
+        // we use to show the fields list of visible fields first before fields not show in report
+        visGroupEls:React.PropTypes.array,
+
+        //if true show fields that are not visible in the report,
+        //if false use 'see more' for fields that are not in the report
+        showNotVisible:React.PropTypes.bool,
+
+        // the callback that is used when a field is selected to add to the list for sort or grouping
+        // new selection, pass type string 'sort' or 'group' parameter
+        onSelectField:React.PropTypes.func,
+
+        // the callback that is used when ready to close/hide the fields list after selecting a field
+        onHideFields:React.PropTypes.func,
+
+        // the callback used to show the fields not visible in the report
+        onShowMoreFields:React.PropTypes.func,
+    },
+
     isSelected(id, list) {
         _.find(list, (field) => {
             return field.id === id;
@@ -119,7 +160,9 @@ const FieldsPanel = React.createClass({
         let shownClass = this.props.showFields ? '' : 'notShown';
         let currentList =  this.props.fieldsForType === 'group' ? this.props.groupByFields : this.props.sortByFields;
         let choiceList = this.props.fieldChoiceList;
-        let orderList = this.getFieldsInReportOrder(choiceList, this.props.reportColumns);
+        //add group by fields to fields used in report columns
+        let visibleFields = _.unionBy(this.props.visGroupEls, this.props.reportColumns, 'id');
+        let orderList = this.getFieldsInReportOrder(choiceList, visibleFields);
         return (this.props.showFields ?
             <Panel className={"fieldsPanel animated slideInRight" + shownClass}>
                 <div className="fieldPanelHeader">
@@ -127,13 +170,14 @@ const FieldsPanel = React.createClass({
                         <I18nMessage message="cancel"/>
                     </span>
                     <span>
-                        <I18nMessage message={"report.sortAndGroup.chooseFields." + this.props.fieldsForType}/>
+                        <I18nMessage message={"report.sortAndGroup.chooseFields." +
+                                    this.props.fieldsForType}/>
                     </span>
                 </div>
                 {(
                     (window.location.search.includes('mockSort')) ?
                         this.renderMockList(12) :
-                        this.renderList(orderList, currentList, this.props.fieldsForType)
+                        this.renderList(orderList, currentList)
                 )}
             </Panel> :
                 null

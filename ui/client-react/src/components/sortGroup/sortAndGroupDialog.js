@@ -2,10 +2,10 @@ import React from 'react';
 import {I18nMessage} from '../../utils/i18nMessage';
 import {Button} from 'react-bootstrap';
 import {Popover} from 'react-bootstrap';
-import OverlayDialogHeader from '../overLay/overlayDialogHeader';
+import OverlayDialogHeader from '../overlay/overlayDialogHeader';
 import FieldSettings from './fieldSettings';
 import FieldsPanel from './fieldsPanel';
-
+import sortGroupFieldShape from './sortGroupProp';
 import thwartClicksWrapper from '../hoc/thwartClicksWrapper';
 import closeOnEscape from '../hoc/catchEscapeKey';
 
@@ -15,8 +15,70 @@ import '../../assets/css/animate.min.css';
 var SortAndGroupDialog = React.createClass({
 
     propTypes: {
-        onClose  : React.PropTypes.func,
-        handleClickOutside : React.PropTypes.func,
+        // whether to show this popover sort/group dialog or not
+        show: React.PropTypes.bool,
+
+        // whether to show the fields list to select from or not
+        showFields: React.PropTypes.bool,
+
+        // whether to list the fields that are not in the report or not
+        showNotVisible: React.PropTypes.bool,
+
+        // when showing the fields list to select from whether it's for sort or group
+        fieldsForType: React.PropTypes.string,
+
+        // the report data model
+        reportData:  React.PropTypes.object,
+
+        // the fields in the reports table
+        fields:  React.PropTypes.object.isRequired,
+
+        // the list of field settings to use in grouping
+        groupByFields: React.PropTypes.arrayOf(sortGroupFieldShape),
+
+        // the list of field settings to use in sorting
+        sortByFields: React.PropTypes.arrayOf(sortGroupFieldShape),
+
+        // the list of fields available to select from for sorting or grouping
+        // per design spec only fields not yet used already in sort or group
+        // are available, fields not visible in report are also available for selection
+        fieldChoiceList: React.PropTypes.array,
+
+        // the visiable fields in the reports table groups
+        visGroupEls: React.PropTypes.array,
+
+        // the callback that is used when ready to close/hide this popover
+        onClose: React.PropTypes.func,
+
+        // the callback that is used when any adhoc sort/group should be cancelled
+        // and revert back to the original reports sort/group settings
+        onReset: React.PropTypes.func,
+
+        // the callback that is used when any adhoc sort/group should be applied and
+        // the report updated
+        onApplyChanges: React.PropTypes.func,
+
+        // the callback that is used when click outside this popover occurred
+        handleClickOutside: React.PropTypes.func,
+
+        // the callback that is used when the list of fields avail to chose from should show
+        onShowFields: React.PropTypes.func,
+
+        // the callback that is used when the list of fields avail to chose from should hide
+        onHideFields: React.PropTypes.func,
+
+        // the callback that is used to remove a selected field
+        onRemoveField: React.PropTypes.func,
+
+        // the callback that is used to change the fields order ascending / descending
+        onSetOrder: React.PropTypes.func,
+
+        // the callback that is used when selecting a field to add for sortibg/grouping
+        onSelectField: React.PropTypes.func,
+
+        // the callback that is used when showing the fields that are not visible in the report
+        // for selection
+        onShowMoreFields: React.PropTypes.func,
     },
 
     renderFieldSettings(maxLength, type, fields) {
@@ -122,7 +184,7 @@ var SortAndGroupDialog = React.createClass({
                                      fieldChoiceList={this.props.fieldChoiceList}
                                      reportColumns={this.props.reportData && this.props.reportData.data ?
                                         this.props.reportData.data.columns :  null}
-                                     fieldsLoading={this.props.fieldsLoading}
+                                     visGroupEls={this.props.visGroupEls}
                                      sortByFields={this.props.sortByFields}
                                      groupByFields={this.props.groupByFields}
                                      onSelectField={this.props.onSelectField}
@@ -132,7 +194,7 @@ var SortAndGroupDialog = React.createClass({
                         />
                     </div>
             </SortAndGroupDialogWrapped>) :
-            null
+                null
         );
     }
 });

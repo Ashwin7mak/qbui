@@ -16,6 +16,34 @@ import './sortAndGroup.scss';
  * @type {ClassicComponentClass<P>}
  */
 const FieldChoice = React.createClass({
+    propTypes: {
+        // the selected field to show in the sort or group setting popover
+        // or  null for empty not set place for new entry
+        field:React.PropTypes.object,
+
+        // the prefix message for the field: true it's 'then by'
+        // if false it's just 'by'
+        then:React.PropTypes.bool,
+
+        // the type string either sort or group
+        type:React.PropTypes.string,
+
+        // the index into the list of sort or group fields
+        index:React.PropTypes.number,
+
+        // the callback that is used when the field list should show for adding an
+        // new selection, pass type string 'sort' or 'group' parameter
+        onShowFields: React.PropTypes.func,
+
+        // the callback that is used to change the fields order ascending / descending
+        // passes in type, field index, isAscending bool, field object
+        onSetOrder: React.PropTypes.func,
+
+        // the callback that is used  to remove a selected field
+        // passes in type field indx, field object
+        onRemoveField: React.PropTypes.func
+    },
+
     render() {
         let hasField = !!this.props.field;
         let name =  '';
@@ -50,7 +78,8 @@ const FieldChoice = React.createClass({
                         <span>
                         { hasField ?
                             <span className="groupFieldDeleteIcon" tabIndex="0"
-                                onClick={() => this.props.onRemoveField(this.props.type, this.props.index, this.props.field)} >
+                                onClick={() => this.props.onRemoveField(this.props.type,
+                                            this.props.index, this.props.field)} >
                                 <QBicon className="groupFieldDelete"
                                     icon="clear-mini"/>
                             </span> :

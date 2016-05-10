@@ -17,6 +17,33 @@ let StoreWatchMixin = Fluxxor.StoreWatchMixin;
  */
 var OverlayDialogHeader = React.createClass({
 
+    propTypes: {
+        //key to lookup globalized title for the modal dialog
+        dialogTitleI18N: React.PropTypes.string,
+
+        //callback it is to use when cancelling out of the modal dialog
+        onCancel: React.PropTypes.func,
+
+        //callback it is to use when applying changes from modal dialog
+        onApply: React.PropTypes.func,
+
+        //string to add to the apply button class to indicate the settings
+        //in the dialog are not yet applied (dirty)
+        dirty: React.PropTypes.string,
+
+        // the class name for button to use in the upper left title of the
+        // modal in non small, usually same icon as used to launch
+        // the dialog for cancelling - see xd spec sort&group
+        iconName: React.PropTypes.string,
+
+        // the name of the icon of button to use in the upper left title of the
+        // modal in non small, usually same icon as used to launch
+        // the dialog for cancelling - see xd spec sort&group
+        icon: React.PropTypes.string
+
+    },
+
+
     renderTitle() {
         return (
         <h5 className="overlayTitle overlayCenter">

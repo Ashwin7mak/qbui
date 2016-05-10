@@ -2,10 +2,14 @@
  *
  * catchClickOutside
  * A higher-order-component for handling onClickOutside for React components.
- * This higher-order component (HoC) captures clicks outside component and calls the handler (handleClickOutside
- * passed in as a required prop) when such an event occurs. Optionally specify a outsideClickIgnoreClass property
+ *
+ * This higher-order component (HoC) captures clicks outside component and calls the handler (handleClickOutside)
+ * a REQUIRED member of the component object) when such an event occurs.
+ *
+ * Optionally specify a outsideClickIgnoreClass property
  * that if the element outside being clicked has that class it does not call the callback handler for
  * intercepting it.
+ *
  * Also preventDefault and stopPropagation properties can also be defined on the component
  * being wrapped if you want it to stop bubbling up the event or prevent default browser handling
  * of the click.
@@ -84,11 +88,13 @@ var generateOutsideCheck = function(componentNode, eventHandler, ignoreClass, pr
 // The actual Component-wrapping HOC:
 let wrapper = function(Component) {
     var wrapComponentWithOnClickOutsideHandling = React.createClass({
+
+
         statics: {
             /**
              * Access the wrapped Component's class.
              */
-            getClass: function() {
+            getClass() {
                 if (Component.getClass) {
                     return Component.getClass();
                 }
@@ -96,21 +102,51 @@ let wrapper = function(Component) {
             }
         },
 
+        propTypes: {
+            //Optionally specify a outsideClickIgnoreClass property whose value is a classname
+            // that if the element outside being clicked has that class it does not call
+            // the callback handler for intercepting it.
+            // default uses 'ignore-react-onclickoutside' for classname to ignore
+            outsideClickIgnoreClass : React.PropTypes.string,
+
+            //preventDefault can be defined on the component
+            //being wrapped to prevent default browser handling of the outside click.
+            // by default it does not prevent default browser handling
+            preventDefault:  React.PropTypes.bool,
+
+            //stopPropagation property can also be defined on the component
+            //being wrapped if you want it to stop bubbling up the event of the outside click.
+            //will also stopImmediatePropagation if true
+            //by default it does not stop bubbling
+            stopPropagation:  React.PropTypes.bool,
+
+
+            //optionally provide a function to call to disable the click outside handling
+            //if not specified by default it will disable the mousedown and touchstart listeners
+            //when the component unmounts, if a function is provided the default listenters
+            // for mousedown and touchstart will not automatically be setup when the component mounts
+            // the user controll the add/remove of the listerns by calling enableOnClickOutside/disableOnClickOutside
+            // when they wish.
+            disableOnClickOutside: React.PropTypes.func
+        },
+
         /**
          * Access the wrapped Component's instance.
          */
-        getInstance: function() {
+        getInstance() {
             return this.refs.instance;
         },
 
         // this is given meaning in componentDidMount
-        __outsideClickHandler: function(evt) {},
+        __outsideClickHandler: function(evt) {
+
+        },
 
         /**
          * Add click listeners to the current document,
          * linked to this component's state.
          */
-        componentDidMount: function() {
+        componentDidMount() {
             var instance = this.getInstance();
 
             if (typeof instance.handleClickOutside !== "function") {
@@ -139,7 +175,7 @@ let wrapper = function(Component) {
         /**
          * Remove the document's event listeners
          */
-        componentWillUnmount: function() {
+        componentWillUnmount() {
             this.disableOnClickOutside();
             this.__outsideClickHandler = false;
             var pos = registeredComponents.indexOf(this);
@@ -155,7 +191,7 @@ let wrapper = function(Component) {
          * Can be called to explicitly enable event listening
          * for clicks and touches outside of this element.
          */
-        enableOnClickOutside: function() {
+        enableOnClickOutside() {
             var fn = this.__outsideClickHandler;
             if (typeof document !== "undefined") {
                 document.addEventListener("mousedown", fn, true);
@@ -167,7 +203,7 @@ let wrapper = function(Component) {
          * Can be called to explicitly disable event listening
          * for clicks and touches outside of this element.
          */
-        disableOnClickOutside: function() {
+        disableOnClickOutside() {
             var fn = this.__outsideClickHandler;
             if (typeof document !== "undefined") {
                 document.removeEventListener("mousedown", fn, true);
@@ -178,7 +214,7 @@ let wrapper = function(Component) {
         /**
          * Pass-through render
          */
-        render: function() {
+        render() {
             var passedProps = this.props;
             var instance = {ref: 'instance'};
             Object.keys(this.props).forEach(function(key) {
