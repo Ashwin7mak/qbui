@@ -274,6 +274,7 @@
      * @returns {*}
      */
     function generateTableWithFieldMap(fieldNameToTypeMap) {
+        var field;
         var builderInstance = getTableBuilderWithName();
 
         var fieldNameKeys = Object.keys(fieldNameToTypeMap);
@@ -285,7 +286,12 @@
             var fieldBuilder = fieldGenerator.getFieldBuilder();
             var dataTypeAttributeBuilder = fieldGenerator.getDataTypeBuilder();
             var dataTypeAttributes = dataTypeAttributeBuilder.withType(dataType).build();
-            var field = fieldBuilder.withName(fieldName).withFieldType(fieldType).withDataTypeAttributes(dataTypeAttributes).build();
+            if (fieldName.includes('User')) {
+                field = fieldBuilder.withName(fieldName).withFieldType(fieldType).withDataTypeAttributes(dataTypeAttributes).build();
+                field.indexed = true;
+            } else {
+                field = fieldBuilder.withName(fieldName).withFieldType(fieldType).withDataTypeAttributes(dataTypeAttributes).build();
+            }
             builderInstance.withField(field);
         });
 

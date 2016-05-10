@@ -18,6 +18,11 @@ class QBPanel extends React.Component {
         this.state = {
             open: this.props.isOpen
         };
+        this.toggleOpen = this.toggleOpen.bind(this);
+    }
+
+    toggleOpen() {
+        this.setState({open: !this.state.open});
     }
 
     render() {
@@ -25,10 +30,10 @@ class QBPanel extends React.Component {
 
         return (
             <div className={"qbPanel " + (this.props.iconRight ? "iconRight" : "iconLeft") } id={panelId}>
-                <div className="qbPanelHeader" onClick={ ()=> this.setState({open: !this.state.open})}>
+                <div className="qbPanelHeader" >
                     <h3 className="qbPanelHeaderTitle">
                         <div className="qbPanelHeaderTitleText">{this.props.title}</div>
-                        <QBicon icon="caret-right"className={this.state.open ? "qbPanelHeaderIcon rotateDown" : "qbPanelHeaderIcon rotateUp"}/>
+                        <QBicon icon="caret-right" onClick={this.toggleOpen} className={this.state.open ? "qbPanelHeaderIcon rotateDown" : "qbPanelHeaderIcon rotateUp"}/>
                     </h3>
                 </div>
                 <Panel collapsible expanded={this.state.open}>

@@ -21,7 +21,8 @@ let reportModel = {
         records: null,
         recordsCount: null,
         sortFids: [],
-        groupEls: []
+        groupEls: [],
+        originalMetaData: null
     },
 
     /**
@@ -116,6 +117,17 @@ let reportModel = {
         this.setSortFids(reportMetaData.sortList);
         this.setGroupElements(reportMetaData.sortList);
     },
+    /**
+     * Set the reports original meta data
+     * @param reportOriginalMetaData
+     */
+    setOriginalMetaData(reportOriginalMetaData) {
+        // clones the meta data to allow for adhoc updates to sort/group or other
+        // report metadata values, and still be able to access the original
+        // report settings for resetting feature in sort group dialog and later
+        // for cancel adhoc edits to a report
+        this.model.originalMetaData = _.cloneDeep(reportOriginalMetaData);
+    },
 
     /**
      * Set all records related state
@@ -161,6 +173,7 @@ let reportModel = {
             this.model.filteredRecords = recordData.groups.gridData;
             this.model.filteredRecordsCount = recordData.groups.totalRows;
         } else {
+            this.model.columns = this.getReportColumns(recordData.fields);
             this.model.filteredRecords = this.getReportData(recordData.fields, recordData.records);
             this.model.filteredRecordsCount = recordData.records.length;
         }
@@ -262,6 +275,7 @@ let ReportDataStore = Fluxxor.createStore({
         this.error = false;
 
         this.reportModel = reportModel;
+        reportModel.setOriginalMetaData(response.metaData);
         reportModel.setMetaData(response.metaData);
         reportModel.setRecordData(response.recordData);
         reportModel.setSortFids(response.sortList);

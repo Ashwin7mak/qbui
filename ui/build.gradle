@@ -262,8 +262,13 @@ zip.doFirst {
     println( "Branch : " + getProjectArchive() )
 }
 
-task clean_node_modules(type: Delete) {
+task clean_dist_node_modules(type: Delete) {
     delete 'dist/node_modules'
+}
+
+
+task delete_node_modules(type: Delete) {
+    delete 'node_modules'
 }
 
 npm_install {
@@ -298,6 +303,10 @@ task npmPruneProduction (type: NpmTask) {
 
 task npmUpdateWebdriver(type: NpmTask) {
     args = ['run', 'update-webdriver']
+}
+
+task npmRunLint(type: NpmTask) {
+    args = ['run', 'lint']
 }
 
 task npmInstallProduction (type: NpmTask) {
