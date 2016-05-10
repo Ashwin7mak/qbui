@@ -157,5 +157,24 @@ describe('FacetList functions', () => {
     });
 
 
+    it('test render FacetsList with outer component', () => {
+        let selected = new FacetSelections();
+        selected.addSelection(1, 'Development');
+        var ListOuter = React.createClass({
+            render() {
+                return (
+                    <div clasName="Outer">the outside</div>
+                );
+            }
+        });
+        component = TestUtils.renderIntoDocument(<ListOuter>
+                                                    <FacetsList popoverId={1}
+                                                             selectedValues={selected}
+                                                             reportData={fakeReportData_simple}/>
+                                                </ListOuter>);
+
+        expect(TestUtils.isCompositeComponent(component)).toBeTruthy();
+    });
+
 });
 

@@ -40,6 +40,7 @@ let ReportToolsAndContent = React.createClass({
                               reportData={otherReportData}
                               selections={selections}
                               searchStringForFiltering={this.props.searchStringForFiltering}
+                              fields={this.props.fields}
                               pageActions={this.props.pageActions}
                               nameForRecords={this.props.nameForRecords}
             {...this.props.callbacks} />;
@@ -76,6 +77,7 @@ let ReportToolsAndContent = React.createClass({
                                      reportData={otherReportData}
                                      selections={selections}
                                      searchStringForFiltering={this.props.searchStringForFiltering}
+                                     fields={this.props.fields}
                                      pageActions={this.props.pageActions}
                                      nameForRecords={this.props.nameForRecords}
                                      {...this.props.callbacks} />;

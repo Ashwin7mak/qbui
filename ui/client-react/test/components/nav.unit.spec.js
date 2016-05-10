@@ -46,11 +46,17 @@ describe('Nav functions', () => {
             return [];
         }
     });
+    let fieldsStore = Fluxxor.createStore({
+        getState: function() {
+            return [];
+        }
+    });
     let stores = {
         NavStore: new navStore(),
         AppsStore: new appStore(),
         ReportsStore: new reportsStore(),
-        ReportDataStore: new reportDataStore()
+        ReportDataStore: new reportDataStore(),
+        FieldsStore : new fieldsStore()
     };
     let flux = new Fluxxor.Flux(stores);
     flux.addActions({

@@ -1,5 +1,5 @@
 
-let COMMON = {
+export const COMMON = {
     equals: 'V',
     firstLetter: 'F',
     firstWord: 'I',

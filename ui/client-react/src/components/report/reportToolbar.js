@@ -8,6 +8,9 @@ import FilterSearchBox from '../facet/filterSearchBox';
 import FacetsMenu from '../facet/facetsMenu';
 import FacetSelections from '../facet/facetSelections';
 import RecordsCount from './recordsCount';
+import SortAndGroup from '../sortGroup/sortAndGroup';
+import mockFacets from '../../mocks/facets';
+import _ from 'lodash';
 
 let FluxMixin = Fluxxor.FluxMixin(React);
 
@@ -124,31 +127,10 @@ const ReportToolbar = React.createClass({
         }
     },
 
-    dummyFacetsWithValueObjects: [
-            {id : 101, name : "Types", type: "TEXT", mockFilter: true, blanks: true,
-                values : [{value:"Design"}, {value:"Development"}, {value:"Planning"}, {value:"Test"}]},
-            {id : 102, name : "Names", type: "TEXT", mockFilter: true, blanks: false,
-                values : [
-                {value: "Aditi Goel"}, {value: "Christopher Deery"}, {value: "Claire Martinez"}, {value: "Claude Keswani"}, {value: "Deborah Pontes"},
-                {value: "Donald Hatch"}, {value: "Drew Stevens"}, {value: "Erica Rodrigues"}, {value: "Kana Eiref"},
-                {value: "Ken LaBak"}, {value: "Lakshmi Kamineni"}, {value: "Lisa Davidson"}, {value: "Marc Labbe"},
-                {value: "Matthew Saforrian"}, {value: "Micah Zimring"}, {value: "Rick Beyer"}, {value: "Sam Jones"}, {value: "XJ He"}
-                ]},
-            {id : 103, name : "Status", type: "TEXT", mockFilter: true, blanks: false,
-                values : [{value: "No Started"}, {value: "In Progress"}, {value: "Blocked"}, {value: "Completed"}]},
-            {id : 104, name : "Flag", type: "CHECKBOX", mockFilter: true,  blanks: false,
-                values : [{value: "No"}, {value: "Yes"}]},
-            {id : 105, name : "Companies", type: "TEXT", mockFilter: true,  blanks: false,
-                    // TODO: support date ranges in filtering see https://jira.intuit.com/browse/QBSE-20422
-                values : []}, // too many values for facets example
-            //Date facets yet supported
-            //{id : 4, name : "Dates", type: "date",  mockFilter: true, blanks: false,
-                //    values[{range: {start: 1, end: 2}}],
-    ],
 
     populateDummyFacets() {
         if (this.props.reportData && this.props.reportData.data && this.props.reportData.data.facets && !this.props.reportData.data.facets.appendedMockFilter)  {
-            this.props.reportData.data.facets = [...this.props.reportData.data.facets, ...this.dummyFacetsWithValueObjects];
+            this.props.reportData.data.facets = [...this.props.reportData.data.facets, ...mockFacets];
             this.props.reportData.data.facets.appendedMockFilter = true;
         }
     },
@@ -173,9 +155,10 @@ const ReportToolbar = React.createClass({
                     filteredRecordCount =  this.props.reportData.data.filteredRecordsCount;
                 }
                 if (this.props.reportData.data.records) {
-                    recordCount =  this.props.reportData.data.recordsCount;
+                    recordCount = this.props.reportData.data.recordsCount;
                 }
-                if (this.props.reportData.data.facets && (this.props.reportData.data.facets.length > 0)) {
+                if (this.props.reportData.data.facets &&
+                    (this.props.reportData.data.facets.length > 0)) {
                     hasFacets =  this.props.reportData.data.facets[0].values;
                 }
             }
@@ -190,16 +173,26 @@ const ReportToolbar = React.createClass({
 
                         {/*TODO : check if searchBox is enabled for this report,
                          if has facets has search too, eg no facets without searchBox */}
-                        {recordCount &&
-                            <FilterSearchBox onChange={this.handleSearchChange}
+                        {recordCount ?
+                            (<FilterSearchBox onChange={this.handleSearchChange}
                                              nameForRecords={this.props.nameForRecords}
                                              searchBoxKey="reportToolBar"
-                                {...this.props} />
+                                {...this.props} />) :
+                            null
+                        }
+
+                        {recordCount ?
+                            (<SortAndGroup  {...this.props}
+                                filter={{selections: this.props.selections,
+                                        facet: this.props.reportData.facetExpression,
+                                        search: this.props.searchStringForFiltering}}
+                            />) :
+                            null
                         }
 
                         {/* check if facets is enabled for this report,
                          also hide Facets Menu Button if facets disabled  */}
-                        {(recordCount && hasFacets) &&
+                        {(recordCount && hasFacets) ?
                             (<FacetsMenu className="facetMenu"
                                 {...this.props}
                                          isLoading={isLoading}
@@ -207,18 +200,21 @@ const ReportToolbar = React.createClass({
                                          onFacetSelect={this.handleFacetSelect}
                                          onFacetDeselect={this.handleFacetDeselect}
                                          onFacetClearFieldSelects={this.handleFacetClearFieldSelects}
-                            />)
+                            />) :
+                            null
                         }
                     </div>
 
 
-                    <RecordsCount recordCount={recordCount}
-                          isFiltered={this.isFiltered() && this.props.reportData && !this.props.reportData.loading}
-                          isLoading={isLoading}
-                          filteredRecordCount={filteredRecordCount}
-                          nameForRecords={this.props.nameForRecords}
-                          clearAllFilters={this.props.clearAllFilters}
-                    />
+                    {(!isLoading && recordCount) ?
+                        (<RecordsCount recordCount={recordCount}
+                              isFiltered={this.isFiltered() && (!_.isUndefined(this.props.reportData))}
+                              filteredRecordCount={filteredRecordCount}
+                              nameForRecords={this.props.nameForRecords}
+                              clearAllFilters={this.props.clearAllFilters}
+                        />) :
+                        null
+                    }
 
                 {this.props.pageActions}
 

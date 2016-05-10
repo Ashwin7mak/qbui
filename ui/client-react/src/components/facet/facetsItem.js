@@ -173,6 +173,7 @@ class FacetsItem extends Component {
     render() {
         let seeMore = "report.facets.seeMore";
 
+
         return (
             <Panel fill collapsible defaultExpanded {...this.props}
                    key = {"panel." + this.props.popoverId + "." + this.props.facet.id}
