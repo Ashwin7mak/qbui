@@ -156,21 +156,21 @@
 	"engines": {
 		"node": ">=0.10.0"
 	},
-  "scripts": {
-    "webpack": "webpack --config webpack.config.js",
-    "watch": "webpack --config webpack.config.js --watch",
-    "hotload": "node_modules/grunt-nodemon/node_modules/.bin/nodemon --watch server --watch common server/app.js",
-    "clean": "rm -r client-react/dist",
-    "start": "node server/app.js",
-    "mockServer": "node_modules/grunt-nodemon/node_modules/.bin/nodemon --watch server/mockserver -e js,json server/mockserver/mocker.js",
-    "prodStart": "node dist/server/app.js",
-    "lint": "node_modules/eslint/bin/eslint.js --ext .js --ext .jsx --format 'node_modules/eslint-friendly-formatter' .",
-    "lintFix": "node_modules/eslint/bin/eslint.js --ext .js --ext .jsx --format 'node_modules/eslint-friendly-formatter' --fix .",
-    "test": "grunt test",
-    "testClient": "karma start",
-    "testServer": "grunt test:server",
-    "testIntegration": "grunt test:integration",
-    "update-webdriver": "node node_modules/grunt-protractor-runner/node_modules/protractor/bin/webdriver-manager update"
-  },
-	"private": true
+    "scripts": {
+        "webpack": "webpack --config webpack.config.js",
+        "watch": "webpack --config webpack.config.js --watch",
+        "hotload": "node_modules/grunt-nodemon/node_modules/.bin/nodemon --watch server --watch common server/app.js",
+        "clean": "rm -r client-react/dist",
+        "start": "node server/app.js",
+        "mockServer": "node_modules/grunt-nodemon/node_modules/.bin/nodemon --watch server/mockserver -e js,json server/mockserver/mocker.js",
+        "prodStart": "node dist/server/app.js",
+        "lint": "node_modules/eslint/bin/eslint.js --ext .js --ext .jsx --format 'node_modules/eslint-friendly-formatter' .",
+        "lintFix": "node_modules/eslint/bin/eslint.js --ext .js --ext .jsx --format 'node_modules/eslint-friendly-formatter' --fix .",
+        "test": "grunt test",
+        "testClient": "karma start",
+        "testServer": "grunt test:server",
+        "testIntegration": "grunt test:integration",
+        "update-webdriver": "node node_modules/grunt-protractor-runner/node_modules/protractor/bin/webdriver-manager update"
+    }, 
+    "private": true
 }
