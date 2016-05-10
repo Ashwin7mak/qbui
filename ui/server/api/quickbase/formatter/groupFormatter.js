@@ -148,12 +148,16 @@
                 //}
                 break;
             case constants.EMAIL_ADDRESS:
-                //jira: qbse-21438
-                //switch (groupType) {
-                //case groupTypes.EMAIL_ADDRESS.domain:
-                //case groupTypes.EMAIL_ADDRESS.domain_topLevel:
-                //case groupTypes.EMAIL_ADDRESS.name:
-                //}
+                switch (groupType) {
+                case groupTypes.EMAIL_ADDRESS.equals:
+                    return dataValue;
+                case groupTypes.EMAIL_ADDRESS.domain:
+                    return groupUtils.getEmailDomain(dataValue);
+                case groupTypes.EMAIL_ADDRESS.domain_topLevel:
+                    return groupUtils.getEmailDomainTopLevel(dataValue);
+                case groupTypes.EMAIL_ADDRESS.name:
+                    return groupUtils.getEmailName(dataValue);
+                }
                 break;
             case constants.NUMERIC:
             case constants.CURRENCY:    // CURRENCY is a sub-type of NUMERIC

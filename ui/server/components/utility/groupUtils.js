@@ -4,6 +4,7 @@
     var constants = require('../../api/constants');
     var groupTypes = require('../../api/groupTypes');
     var moment = require('moment');
+    var emailAddress = require('email-addresses');
 
     module.exports = {
 
@@ -44,6 +45,7 @@
                 return false;
             case constants.EMAIL_ADDRESS:
                 switch (groupType) {
+                case groupTypes.EMAIL_ADDRESS.equals: return true;
                 case groupTypes.EMAIL_ADDRESS.domain: return true;
                 case groupTypes.EMAIL_ADDRESS.domain_topLevel: return true;
                 case groupTypes.EMAIL_ADDRESS.name: return true;
@@ -388,6 +390,60 @@
             }
 
             return range;
+        },
+
+        /**
+         * Extract the email name portion from an email address.
+         * Example:  getEmailName(johnSmith@test.com) ==> johnSmith
+         *
+         * @param emailAddr
+         * @returns {*} email name segment of the email address
+         */
+        getEmailName: function(emailAddr) {
+            if (emailAddr) {
+                let parts = emailAddress.parseOneAddress(emailAddr);
+                if (parts) {
+                    return parts.local;
+                }
+            }
+            return '';
+        },
+
+        /**
+         * Extract the domain portion from an email address.
+         * Example:  getEmailDomain(johnSmith@test.com) ==> test.com
+         *
+         * @param emailAddr
+         * @returns {*} email domain segment of the email address
+         */
+        getEmailDomain: function(emailAddr) {
+            if (emailAddr) {
+                let parts = emailAddress.parseOneAddress(emailAddr);
+                if (parts) {
+                    return parts.domain;
+                }
+            }
+            return '';
+        },
+
+        /**
+         * Extract the domain topLevel portion from an email address.
+         * Example:  getEmailDomainTopLevel(johnSmith@test.com) ==> com
+         *
+         * @param emailAddr
+         * @returns {*} top level segment of the email address domain
+         */
+        getEmailDomainTopLevel: function(emailAddr) {
+            if (emailAddr) {
+                let parts = emailAddress.parseOneAddress(emailAddr);
+                if (parts && parts.domain) {
+                    let domainParts = parts.domain.split('.');
+                    if (domainParts.length > 0) {
+                        return domainParts[domainParts.length - 1];
+                    }
+                }
+            }
+            return '';
         }
 
     };
