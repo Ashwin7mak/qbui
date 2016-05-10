@@ -467,13 +467,13 @@
 
             beforeAll(function(done) {
                 e2eBase.resizeBrowser(e2eConsts.MEDIUM_BP_WIDTH, e2eConsts.DEFAULT_HEIGHT).then(function() {
-                    //go to report with facets page directly
-                    RequestAppsPage.get(e2eBase.getRequestReportsPageEndpoint(realmName, app.id, app.tables[e2eConsts.TABLE1].id, '3'));
                     done();
                 });
             });
 
             beforeEach(function(done) {
+                //go to report with facets page directly
+                RequestAppsPage.get(e2eBase.getRequestReportsPageEndpoint(realmName, app.id, app.tables[e2eConsts.TABLE1].id, '3'));
                 reportServicePage.waitForElement(reportServicePage.loadedContentEl).then(function() {
                     reportServicePage.waitForElement(reportSortingPage.reportSortingGroupingContainer);
                     done();

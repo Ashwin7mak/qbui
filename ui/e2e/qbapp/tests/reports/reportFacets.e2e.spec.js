@@ -376,21 +376,17 @@
                                     }).then(function(selections) {
                                         // Sort each array before comparing
                                         expect(selections.sort()).toEqual(facetSelections.sort());
+                                    }).then(function() {
+                                        //remove facets by clicking on clear (X) in popup beside Text Field and verify all tokens removed
+                                        reportFacetsPage.waitForElementToBeClickable(reportFacetsPage.reportFacetFilterBtnCaret).then(function() {
+                                            reportFacetsPage.clearFacetTokensFromContainer().then(function() {
+                                                expect(reportServicePage.reportRecordsCount.getAttribute('innerText')).toEqual('6 Records');
+                                                done();
+                                            });
+                                        });
                                     });
                                 }
                             });
-                        }).then(function() {
-                            if (testBreakpoints.breakpointSize !== 'small') { //There wont be facet tokens displayed for small breakpoint
-                                //remove facets by clicking on clear (X) in popup beside Text Field and verify all tokens removed
-                                reportFacetsPage.waitForElementToBeClickable(reportFacetsPage.reportFacetFilterBtnCaret).then(function() {
-                                    reportFacetsPage.reportFacetFilterBtnCaret.click().then(function() {
-                                        reportFacetsPage.clearFacetTokensFromContainer().then(function() {
-                                            expect(reportServicePage.reportRecordsCount.getAttribute('innerText')).toEqual('6 Records');
-                                            done();
-                                        });
-                                    });
-                                });
-                            }
                         });
 
                     });
