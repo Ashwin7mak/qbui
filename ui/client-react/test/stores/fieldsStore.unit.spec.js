@@ -3,7 +3,7 @@ import * as actions from '../../src/constants/actions';
 import Store from '../../src/stores/fieldsStore';
 import Fluxxor from 'fluxxor';
 
-fdescribe('Test Fields Store', () => {
+describe('Test Fields Store', () => {
     'use strict';
 
     let store;
