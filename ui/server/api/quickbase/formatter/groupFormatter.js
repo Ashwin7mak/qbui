@@ -145,10 +145,10 @@
                     return groupUtils.getDurationInMinutes(dataValue);
                 case groupTypes.DURATION.hour:
                     return groupUtils.getDurationInHours(dataValue);
-                case groupTypes.DURATION.week:
-                    return groupUtils.getDurationInWeeks(dataValue);
                 case groupTypes.DURATION.day:
                     return groupUtils.getDurationInDays(dataValue);
+                case groupTypes.DURATION.week:
+                    return groupUtils.getDurationInWeeks(dataValue);
                 }
                 break;
             case constants.EMAIL_ADDRESS:

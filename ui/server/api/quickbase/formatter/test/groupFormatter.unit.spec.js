@@ -17,7 +17,7 @@ describe('Validate GroupFormatter unit tests', function() {
         if (dataType === constants.EMAIL_ADDRESS) {
             return (0 | Math.random() * 9e6).toString(36) + '@test.com';
         }
-        if (dataType === constants.NUMERIC || constants.DURATION) {
+        if (dataType === constants.NUMERIC || dataType === constants.DURATION) {
             return (0 | Math.random() * 10000000);
         }
         if (dataType === constants.DATE || dataType === constants.DATE_TIME) {
