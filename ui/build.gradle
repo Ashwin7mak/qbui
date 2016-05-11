@@ -551,7 +551,7 @@ sonarqube {
         property "sonar.projectKey", "ui:${branchName}:${user}"
         property "sonar.projectVersion", "0.1"
         property "sonar.projectName", "${user}:ui:${branchName}"
-        //property "sonar.qualitygate", "Sonar%20way%20with%20Findbugs%20-%20reactjs"
+        property "sonar.qualitygate", "Sonar%20way%20with%20Findbugs%20-%20reactjs"
         property "sonar.host.url", "https://sonar1.ci.quickbaserocks.com/"
         property "sonar.login", "quickbase"
         property "sonar.password", "blue"

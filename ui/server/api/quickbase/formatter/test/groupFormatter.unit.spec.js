@@ -11,8 +11,11 @@ var dateUtils = require('../../../../components/utility/dateUtils');
 describe('Validate GroupFormatter unit tests', function() {
 
     function generateData(dataType) {
-        if (dataType === constants.TEXT || dataType === constants.USER || dataType === constants.EMAIL_ADDRESS) {
+        if (dataType === constants.TEXT || dataType === constants.USER) {
             return (0 | Math.random() * 9e6).toString(36);
+        }
+        if (dataType === constants.EMAIL_ADDRESS) {
+            return (0 | Math.random() * 9e6).toString(36) + '@test.com';
         }
         if (dataType === constants.NUMERIC) {
             return (0 | Math.random() * 10000000);
@@ -124,6 +127,11 @@ describe('Validate GroupFormatter unit tests', function() {
             {message: 'USER: first word grouping', numFields: 5, numRecords: 2, gList: '1:I', dataType: constants.USER},
             {message: 'USER: first letter grouping', numFields: 5, numRecords: 2, gList: '1:F.2:F.3:F', dataType: constants.USER},
             {message: 'USER: multiple grouping against same fid', numFields: 5, numRecords: 2, gList: '1:I.1:V', dataType: constants.USER},
+            //  EMAIL_ADDRESS data type
+            {message: 'EMAIL_ADDRESS: equals grouping', numFields: 5, numRecords: 2, gList: '1:V', dataType: constants.EMAIL_ADDRESS},
+            {message: 'EMAIL_ADDRESS: name grouping', numFields: 5, numRecords: 2, gList: '1:N', dataType: constants.EMAIL_ADDRESS},
+            {message: 'EMAIL_ADDRESS: domain grouping', numFields: 5, numRecords: 2, gList: '1:O', dataType: constants.EMAIL_ADDRESS},
+            {message: 'EMAIL_ADDRESS: domainTopLevel grouping', numFields: 5, numRecords: 2, gList: '1:C', dataType: constants.EMAIL_ADDRESS},
             //  DATE data type
             {message: 'DATE: equals grouping', numFields: 5, numRecords: 2, gList: '1:V', dataType: constants.DATE},
             {message: 'DATE: day grouping', numFields: 5, numRecords: 2, gList: '1:D', dataType: constants.DATE},
