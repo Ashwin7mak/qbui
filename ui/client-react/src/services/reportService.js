@@ -153,27 +153,29 @@ class ReportService extends BaseService {
      * @param includeFacets - include facet data in result
      * @returns promise
      */
-    getReportData(appId, tableId, reportId, queryParams, includeFacets) {
+    getReportData(appId, tableId, reportId, optionalparams, includeFacets) {
         let params = {};
 
         //  is the result set returned formatted/organized for UI display or in 'raw' un-edited format
-        if (queryParams) {
-            if (queryParams[query.FORMAT_PARAM] === true) {
+        if (optionalparams) {
+            if (optionalparams[query.FORMAT_PARAM] === true) {
                 params[query.FORMAT_PARAM] = query.DISPLAY_FORMAT;
             }
-
-            //  if both offset and numRows parameter is supplied, will included on the request
-            if (NumberUtils.isInt(queryParams[query.OFFSET_PARAM]) && NumberUtils.isInt(queryParams[query.NUMROWS_PARAM])) {
-                params[query.OFFSET_PARAM] = queryParams[query.OFFSET_PARAM];
-                params[query.NUMROWS_PARAM] = queryParams[query.NUMROWS_PARAM];
+            if (StringUtils.isNonEmptyString(optionalparams[query.QUERY_PARAM])) {
+                params[query.QUERY_PARAM] = optionalparams[query.QUERY_PARAM];
             }
-            // Is there a sorList override
-            if (StringUtils.isNonEmptyString(queryParams[query.SORT_LIST_PARAM])) {
-                params[query.SORT_LIST_PARAM] = queryParams[query.SORT_LIST_PARAM];
+            if (StringUtils.isNonEmptyString(optionalparams[query.COLUMNS_PARAM])) {
+                params[query.COLUMNS_PARAM] = optionalparams[query.COLUMNS_PARAM];
             }
-            //  Is there report grouping
-            if (StringUtils.isNonEmptyString(queryParams[query.GLIST_PARAM])) {
-                params[query.GLIST_PARAM] = queryParams[query.GLIST_PARAM];
+            if (StringUtils.isNonEmptyString(optionalparams[query.SORT_LIST_PARAM])) {
+                params[query.SORT_LIST_PARAM] = optionalparams[query.SORT_LIST_PARAM];
+            }
+            if (StringUtils.isNonEmptyString(optionalparams[query.GLIST_PARAM])) {
+                params[query.GLIST_PARAM] = optionalparams[query.GLIST_PARAM];
+            }
+            if (NumberUtils.isInt(optionalparams[query.OFFSET_PARAM]) && NumberUtils.isInt(optionalparams[query.NUMROWS_PARAM])) {
+                params[query.OFFSET_PARAM] = optionalparams[query.OFFSET_PARAM];
+                params[query.NUMROWS_PARAM] = optionalparams[query.NUMROWS_PARAM];
             }
         }
 
