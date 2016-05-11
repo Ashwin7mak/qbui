@@ -4,7 +4,7 @@ import GriddleTable  from '../../../components/dataTable/griddleTable/griddleTab
 import CardViewList from '../../../components/dataTable/cardView/cardViewList';
 import AGGrid  from '../../../components/dataTable/agGrid/agGrid';
 import {reactCellRendererFactory} from 'ag-grid-react';
-import {DateFormatter, NumericFormatter, TextFormatter}  from '../../../components/dataTable/agGrid/formatters';
+import {DateFormatter, DateTimeFormatter, TimeFormatter, NumericFormatter, TextFormatter, CheckBoxFormatter}  from '../../../components/dataTable/agGrid/formatters';
 
 import ReportActions from '../../actions/reportActions';
 import Fluxxor from 'fluxxor';
@@ -57,6 +57,7 @@ let ReportContent = React.createClass({
                     var datatypeAttributes = obj.datatypeAttributes;
                     for (var attr in datatypeAttributes) {
                         switch (attr) {
+
                         case 'type': {
                             switch (datatypeAttributes[attr]) {
                             case "NUMERIC" :
@@ -67,6 +68,18 @@ let ReportContent = React.createClass({
                             case "DATE" :
                                 obj.cellRenderer = reactCellRendererFactory(DateFormatter);
                                 obj.customComponent = DateFormatter;
+                                break;
+                            case "DATE_TIME" :
+                                obj.cellRenderer = reactCellRendererFactory(DateTimeFormatter);
+                                obj.customComponent = DateTimeFormatter;
+                                break;
+                            case "TIME_OF_DAY" :
+                                obj.cellRenderer = reactCellRendererFactory(TimeFormatter);
+                                obj.customComponent = TimeFormatter;
+                                break;
+                            case "CHECKBOX" :
+                                obj.cellRenderer = reactCellRendererFactory(CheckBoxFormatter);
+                                obj.customComponent = CheckBoxFormatter;
                                 break;
                             default:
                                 obj.cellRenderer = reactCellRendererFactory(TextFormatter);

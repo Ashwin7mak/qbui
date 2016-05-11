@@ -76,7 +76,7 @@ let reportModel = {
                 let columns = {};
                 record.forEach((column) => {
                     let fld = map.get(column.id);
-                    columns[fld.name] = column.display;
+                    columns[fld.name] = column.value;
                 });
                 columns.actions = record.id;
                 reportData.push(columns);
@@ -275,6 +275,7 @@ let ReportDataStore = Fluxxor.createStore({
         reportModel.setMetaData(response.metaData);
         reportModel.setRecordData(response.recordData);
         reportModel.setFacetData(response.recordData);
+
         this.emit('change');
     },
 
