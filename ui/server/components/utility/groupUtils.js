@@ -445,6 +445,22 @@
             return '';
         },
 
+        /**
+         * Determine which group is appropriate for the given duration value and
+         * return the grouping value based on the duration.
+         *
+         * For example, the smallest group that the duration qualifies for is outputted:
+         *      - duration of < 1 minute belongs in the seconds group;
+         *      - duration of < 1 hour belongs in the minute group
+         *      - duration of < 1 day belongs in the hour group
+         *      - duration of < 1 week belongs in the day group
+         *      - duration of >= 1 week belongs in the week group
+         *
+         * Negative durations are supported by testing against the absolute value.
+         *
+         * @param duration (ms)
+         * @returns {*}
+         */
         getDurationEquals: function(duration) {
 
             let seconds = this.convertDuration(duration, constants.GROUPING.SECOND);
@@ -475,6 +491,12 @@
             return '';
         },
 
+        /**
+         * Return the duration in seconds.  Fractional seconds are rounded down.
+         *
+         * @param duration (ms)
+         * @returns {*}
+         */
         getDurationInSeconds: function(duration) {
             let seconds = this.convertDuration(duration, constants.GROUPING.SECOND, true);
             if (seconds !== null) {
@@ -483,6 +505,13 @@
             return '';
         },
 
+        /**
+         * Return the duration in minutes.  Fractional minutes are round down to the largest integer less
+         * than or equal to the given number.
+         *
+         * @param duration (ms)
+         * @returns {*}
+         */
         getDurationInMinutes: function(duration) {
             let minutes = this.convertDuration(duration, constants.GROUPING.MINUTE, true);
             if (minutes !== null) {
@@ -491,6 +520,13 @@
             return '';
         },
 
+        /**
+         * Return the duration in hours.  Fractional hours are rounded down to the largest integer less
+         * than or equal to the given number.
+         *
+         * @param duration (ms)
+         * @returns {*}
+         */
         getDurationInHours: function(duration) {
             let hours = this.convertDuration(duration, constants.GROUPING.HOUR, true);
             if (hours !== null) {
@@ -499,6 +535,13 @@
             return '';
         },
 
+        /**
+         * Return the duration in days.  Fractional days are rounded down to the largest integer less
+         * than or equal to the given number.
+         *
+         * @param duration (ms)
+         * @returns {*}
+         */
         getDurationInDays: function(duration) {
             let days = this.convertDuration(duration, constants.GROUPING.DAY, true);
             if (days !== null) {
@@ -507,6 +550,13 @@
             return '';
         },
 
+        /**
+         * Return the duration in weeks.  Fractional weeks are rounded down to the largest integer less
+         * than or equal to the given number.
+         *
+         * @param duration (ms)
+         * @returns {*}
+         */
         getDurationInWeeks: function(duration) {
             let weeks = this.convertDuration(duration, constants.GROUPING.WEEK, true);
             if (weeks !== null) {
@@ -515,6 +565,14 @@
             return '';
         },
 
+        /**
+         * Convert the duration(ms) to the given precision(hours, minutes, seconds, days, weeks).
+         *
+         * @param duration (ms)
+         * @param precision - the conversion percision (hours, minutes, seconds, days, weeks)
+         * @param rounded - are fractional values rounded down to the largest integer less than or equal to the value
+         * @returns {*}
+         */
         convertDuration: function(duration, precision, rounded) {
             let value = null;
             if (typeof duration === 'number') {
