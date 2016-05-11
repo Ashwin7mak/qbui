@@ -168,14 +168,20 @@ const SortAndGroup = React.createClass({
 
             //if report was grouped in the last render and is grouped in this render
             // or was ungrouped in last and this render no need to re-load report.
-            if (this.props.reportData.data && this.props.reportData.data.groupEls &&
-                ((this.props.reportData.data.groupEls.length && groupKeys.length) ||
-                (this.props.reportData.data.groupEls.length === 0 && groupKeys.length === 0))) {
-                flux.actions.getFilteredRecords(this.props.appId, this.props.tblId, this.props.rptId, {format:true}, this.props.filter, overrideParams);
-            } else {
+            let changedGroupingStyle = true;
+            if (this.props.reportData.data && this.props.reportData.data.groupEls) {
+                if ((this.props.reportData.data.groupEls.length && groupKeys.length) || //report was grouped before and after
+                    (this.props.reportData.data.groupEls.length === 0 && groupKeys.length === 0)) { //report was ungrouped before and after
+                    changedGroupingStyle = false;
+                }
+            }
+
+            if (changedGroupingStyle) {
                 flux.actions.loadReport(this.props.appId,
                     this.props.tblId,
                     this.props.rptId, true, null, null, overrideParams[query.SORT_LIST_PARAM]);
+            } else {
+                flux.actions.getFilteredRecords(this.props.appId, this.props.tblId, this.props.rptId, {format:true}, this.props.filter, overrideParams);
             }
         }
 
