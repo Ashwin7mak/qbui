@@ -1,4 +1,5 @@
 import React from 'react';
+import ReactDOM from 'react-dom';
 import {Tooltip, OverlayTrigger} from 'react-bootstrap';
 import {Link} from 'react-router';
 import QBicon from '../qbIcon/qbIcon';
@@ -51,11 +52,11 @@ let TablesList = React.createClass({
      * toggle search tables list
      */
     onClickTables() {
-        const wasSearching = this.state.searching;
-        this.setState({searching: !this.state.searching});
-
-        if (!wasSearching) {
-            this.setState({searchText: ""});
+        if (this.state.searching) {
+            this.setState({searching: false});
+        } else {
+            this.setState({searching: true, searchText: ""},
+                () => {setTimeout(() => ReactDOM.findDOMNode(this.refs.tablesSearchBox).querySelector("input.searchInput").focus(), 200);});
         }
     },
 
@@ -130,7 +131,8 @@ let TablesList = React.createClass({
                              secondaryIcon={"search"}
                              onClick={this.onClickTables} open={true} />
                     <li className={this.state.searching ? "search open" : "search"}>
-                        <SearchBox value={this.state.searchText}
+                        <SearchBox ref="tablesSearchBox" key="tablesSearchBox"
+                                   value={this.state.searchText}
                                    onChange={this.onChangeSearch}
                                    onClearSearch={this.onClearSearch}
                                    placeholder={Locale.getMessage('nav.searchTablesPlaceholder')} />                    </li>
