@@ -166,9 +166,17 @@ const SortAndGroup = React.createClass({
             overrideParams[query.SORT_LIST_PARAM] = sortGroupString;
             overrideParams[query.GLIST_PARAM] = sortGroupString;
 
-            flux.actions.loadReport(this.props.appId,
-                this.props.tblId,
-                this.props.rptId, true, null, null, overrideParams[query.SORT_LIST_PARAM]);
+            //if report was grouped in the last render and is grouped in this render
+            // or was ungrouped in last and this render no need to re-load report.
+            if (this.props.reportData.data && this.props.reportData.data.groupEls &&
+                ((this.props.reportData.data.groupEls.length && groupKeys.length) ||
+                (this.props.reportData.data.groupEls.length === 0 && groupKeys.length === 0))) {
+                flux.actions.getFilteredRecords(this.props.appId, this.props.tblId, this.props.rptId, {format:true}, this.props.filter, overrideParams);
+            } else {
+                flux.actions.loadReport(this.props.appId,
+                    this.props.tblId,
+                    this.props.rptId, true, null, null, overrideParams[query.SORT_LIST_PARAM]);
+            }
         }
 
     },
@@ -178,12 +186,22 @@ const SortAndGroup = React.createClass({
         let flux = this.getFlux();
         let overrideParams = {};
 
+        let groupKeys = _.map(this.state.newSelectionsGroup, 'unparsedVal');
         let sortGroupString = ReportUtils.getGListString(this.props.reportData.data.originalMetaData.sortList);
         overrideParams[query.SORT_LIST_PARAM] = sortGroupString;
         overrideParams[query.GLIST_PARAM] = sortGroupString;
-        flux.actions.loadReport(this.props.appId,
-            this.props.tblId,
-            this.props.rptId, true, null, null, sortGroupString);
+
+        //if report was grouped in the last render and is grouped in this render
+        // or was ungrouped in last and this render no need to re-load report.
+        if (this.props.reportData.data && this.props.reportData.data.groupEls &&
+            ((this.props.reportData.data.groupEls.length && groupKeys.length) ||
+            (this.props.reportData.data.groupEls.length === 0 && groupKeys.length === 0))) {
+            flux.actions.getFilteredRecords(this.props.appId, this.props.tblId, this.props.rptId, {format:true}, this.props.filter, overrideParams);
+        } else {
+            flux.actions.loadReport(this.props.appId,
+                this.props.tblId,
+                this.props.rptId, true, null, null, sortGroupString);
+        }
     },
 
     resetAndHide() {

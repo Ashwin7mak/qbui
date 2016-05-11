@@ -245,6 +245,78 @@ describe('ReportService functions', () => {
         expect(BaseService.prototype.get).toHaveBeenCalledWith(url, {params:params});
     });
 
+    it('test getReport and facets function with invalid sortlist', () => {
+        var appId = 1;
+        var tblId = 2;
+        var rptId = 3;
+        var url = reportService.constructUrl(reportService.API.GET_REPORT_COMPONENTS, [appId, tblId, rptId]);
+
+        var queryParams = {};
+        queryParams[query.SORT_LIST_PARAM] = null;
+        reportService.getReportDataAndFacets(appId, tblId, rptId, queryParams);
+
+        var params = {};
+        expect(BaseService.prototype.get).toHaveBeenCalledWith(url, {params:params});
+    });
+
+    it('test getReport and facets function with columns', () => {
+        var appId = 1;
+        var tblId = 2;
+        var rptId = 3;
+        var url = reportService.constructUrl(reportService.API.GET_REPORT_COMPONENTS, [appId, tblId, rptId]);
+
+        var queryParams = {};
+        queryParams[query.COLUMNS_PARAM] = "6.7";
+        reportService.getReportDataAndFacets(appId, tblId, rptId, queryParams);
+
+        var params = {};
+        params[query.COLUMNS_PARAM] = queryParams[query.COLUMNS_PARAM];
+        expect(BaseService.prototype.get).toHaveBeenCalledWith(url, {params:params});
+    });
+
+    it('test getReport and facets function with invalid columns', () => {
+        var appId = 1;
+        var tblId = 2;
+        var rptId = 3;
+        var url = reportService.constructUrl(reportService.API.GET_REPORT_COMPONENTS, [appId, tblId, rptId]);
+
+        var queryParams = {};
+        queryParams[query.COLUMNS_PARAM] = "";
+        reportService.getReportDataAndFacets(appId, tblId, rptId, queryParams);
+
+        var params = {};
+        expect(BaseService.prototype.get).toHaveBeenCalledWith(url, {params:params});
+    });
+
+    it('test getReport and facets function with query', () => {
+        var appId = 1;
+        var tblId = 2;
+        var rptId = 3;
+        var url = reportService.constructUrl(reportService.API.GET_REPORT_COMPONENTS, [appId, tblId, rptId]);
+
+        var queryParams = {};
+        queryParams[query.QUERY_PARAM] = "'6'.EX.'7'";
+        reportService.getReportDataAndFacets(appId, tblId, rptId, queryParams);
+
+        var params = {};
+        params[query.QUERY_PARAM] = queryParams[query.QUERY_PARAM];
+        expect(BaseService.prototype.get).toHaveBeenCalledWith(url, {params:params});
+    });
+
+    it('test getReport and facets function with invalid query', () => {
+        var appId = 1;
+        var tblId = 2;
+        var rptId = 3;
+        var url = reportService.constructUrl(reportService.API.GET_REPORT_COMPONENTS, [appId, tblId, rptId]);
+
+        var queryParams = {};
+        queryParams[query.QUERY_PARAM] = [];
+        reportService.getReportDataAndFacets(appId, tblId, rptId, queryParams);
+
+        var params = {};
+        expect(BaseService.prototype.get).toHaveBeenCalledWith(url, {params:params});
+    });
+
     it('test getReport and facets function with no parameters', () => {
         var appId = 1;
         var tblId = 2;
