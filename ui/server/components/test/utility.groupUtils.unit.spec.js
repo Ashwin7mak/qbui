@@ -546,21 +546,31 @@ describe('Validate Group Utility functions', function() {
 
                     {name: 'second', duration: constants.MILLI.ONE_SECOND, expectation: '1 ' + constants.GROUPING.SECOND},
                     {name: 'seconds', duration: constants.MILLI.ONE_SECOND * 55, expectation: '55 ' + constants.GROUPING.SECONDS},
+                    {name: 'second negative', duration: constants.MILLI.ONE_SECOND * -1, expectation: '-1 ' + constants.GROUPING.SECOND},
+                    {name: 'seconds negative', duration: constants.MILLI.ONE_SECOND * -55, expectation: '-55 ' + constants.GROUPING.SECONDS},
 
                     {name: 'minute', duration: constants.MILLI.ONE_MINUTE, expectation: '1 ' + constants.GROUPING.MINUTE},
                     {name: 'minutes', duration: constants.MILLI.ONE_MINUTE * 5, expectation: '5 ' + constants.GROUPING.MINUTES},
                     {name: 'minutes2', duration: (constants.MILLI.ONE_MINUTE * 5) + (constants.MILLI.ONE_SECOND * 30), expectation: '5.5 ' + constants.GROUPING.MINUTES},
+                    {name: 'minute negative', duration: constants.MILLI.ONE_MINUTE * -1, expectation: '-1 ' + constants.GROUPING.MINUTE},
+                    {name: 'minutes negative', duration: constants.MILLI.ONE_MINUTE * -5, expectation: '-5 ' + constants.GROUPING.MINUTES},
 
                     {name: 'hour', duration: constants.MILLI.ONE_HOUR, expectation: '1 ' + constants.GROUPING.HOUR},
                     {name: 'hours', duration: constants.MILLI.ONE_HOUR * 4, expectation: '4 ' + constants.GROUPING.HOURS},
                     {name: 'hours2', duration: (constants.MILLI.ONE_HOUR * 4) + (constants.MILLI.ONE_MINUTE * 15), expectation: '4.25 ' + constants.GROUPING.HOURS},
+                    {name: 'hour negative', duration: constants.MILLI.ONE_HOUR * -1, expectation: '-1 ' + constants.GROUPING.HOUR},
+                    {name: 'hours negative', duration: constants.MILLI.ONE_HOUR * -4, expectation: '-4 ' + constants.GROUPING.HOURS},
 
-                    {name: 'days', duration: constants.MILLI.ONE_DAY, expectation: '1 ' + constants.GROUPING.DAY},
+                    {name: 'day', duration: constants.MILLI.ONE_DAY, expectation: '1 ' + constants.GROUPING.DAY},
                     {name: 'days', duration: constants.MILLI.ONE_DAY * 3, expectation: '3 ' + constants.GROUPING.DAYS},
                     {name: 'days2', duration: (constants.MILLI.ONE_DAY * 3) + (constants.MILLI.ONE_HOUR * 18), expectation: '3.75 ' + constants.GROUPING.DAYS},
+                    {name: 'day negative', duration: constants.MILLI.ONE_DAY * -1, expectation: '-1 ' + constants.GROUPING.DAY},
+                    {name: 'days negative', duration: constants.MILLI.ONE_DAY * -3, expectation: '-3 ' + constants.GROUPING.DAYS},
 
-                    {name: 'weeks', duration: (constants.MILLI.ONE_WEEK), expectation: '1 ' + constants.GROUPING.WEEK},
-                    {name: 'weeks', duration: (constants.MILLI.ONE_WEEK * 10), expectation: '10 ' + constants.GROUPING.WEEKS}
+                    {name: 'week', duration: (constants.MILLI.ONE_WEEK), expectation: '1 ' + constants.GROUPING.WEEK},
+                    {name: 'weeks', duration: (constants.MILLI.ONE_WEEK * 10), expectation: '10 ' + constants.GROUPING.WEEKS},
+                    {name: 'week negative', duration: (constants.MILLI.ONE_WEEK) * -1, expectation: '-1 ' + constants.GROUPING.WEEK},
+                    {name: 'weeks negative', duration: (constants.MILLI.ONE_WEEK * -10), expectation: '-10 ' + constants.GROUPING.WEEKS}
                 ];
 
                 equalTestCases.forEach(function(test) {

@@ -449,27 +449,27 @@
 
             let seconds = this.convertDuration(duration, constants.GROUPING.SECOND);
             if (seconds !== null && Math.abs(seconds) < 60) {
-                return seconds + ' ' + (seconds === 1 ? constants.GROUPING.SECOND : constants.GROUPING.SECONDS);
+                return seconds + ' ' + (Math.abs(seconds) === 1 ? constants.GROUPING.SECOND : constants.GROUPING.SECONDS);
             }
 
             let minutes = this.convertDuration(duration, constants.GROUPING.MINUTE);
             if (minutes !== null && Math.abs(minutes) < 60) {
-                return minutes + ' ' + (minutes === 1 ? constants.GROUPING.MINUTE : constants.GROUPING.MINUTES);
+                return minutes + ' ' + (Math.abs(minutes) === 1 ? constants.GROUPING.MINUTE : constants.GROUPING.MINUTES);
             }
 
             let hours = this.convertDuration(duration, constants.GROUPING.HOUR);
             if (hours !== null && Math.abs(hours) < 24) {
-                return hours + ' ' + (hours === 1 ? constants.GROUPING.HOUR : constants.GROUPING.HOURS);
+                return hours + ' ' + (Math.abs(hours) === 1 ? constants.GROUPING.HOUR : constants.GROUPING.HOURS);
             }
 
             let days = this.convertDuration(duration, constants.GROUPING.DAY);
             if (days !== null && Math.abs(days) < 7) {
-                return days + ' ' + (days === 1 ? constants.GROUPING.DAY : constants.GROUPING.DAYS);
+                return days + ' ' + (Math.abs(days) === 1 ? constants.GROUPING.DAY : constants.GROUPING.DAYS);
             }
 
             let weeks = this.convertDuration(duration, constants.GROUPING.WEEK);
             if (weeks !== null) {
-                return weeks + ' ' + (weeks === 1 ? constants.GROUPING.WEEK : constants.GROUPING.WEEKS);
+                return weeks + ' ' + (Math.abs(weeks) === 1 ? constants.GROUPING.WEEK : constants.GROUPING.WEEKS);
             }
 
             return '';
@@ -478,7 +478,7 @@
         getDurationInSeconds: function(duration) {
             let seconds = this.convertDuration(duration, constants.GROUPING.SECOND, true);
             if (seconds !== null) {
-                return seconds + ' ' + (seconds === 1 ? constants.GROUPING.SECOND : constants.GROUPING.SECONDS);
+                return seconds + ' ' + (Math.abs(seconds) === 1 ? constants.GROUPING.SECOND : constants.GROUPING.SECONDS);
             }
             return '';
         },
@@ -486,7 +486,7 @@
         getDurationInMinutes: function(duration) {
             let minutes = this.convertDuration(duration, constants.GROUPING.MINUTE, true);
             if (minutes !== null) {
-                return minutes + ' ' + (minutes === 1 ? constants.GROUPING.MINUTE : constants.GROUPING.MINUTES);
+                return minutes + ' ' + (Math.abs(minutes) === 1 ? constants.GROUPING.MINUTE : constants.GROUPING.MINUTES);
             }
             return '';
         },
@@ -494,7 +494,7 @@
         getDurationInHours: function(duration) {
             let hours = this.convertDuration(duration, constants.GROUPING.HOUR, true);
             if (hours !== null) {
-                return hours + ' ' + (hours === 1 ? constants.GROUPING.HOUR : constants.GROUPING.HOURS);
+                return hours + ' ' + (Math.abs(hours) === 1 ? constants.GROUPING.HOUR : constants.GROUPING.HOURS);
             }
             return '';
         },
@@ -502,7 +502,7 @@
         getDurationInDays: function(duration) {
             let days = this.convertDuration(duration, constants.GROUPING.DAY, true);
             if (days !== null) {
-                return days + ' ' + (days === 1 ? constants.GROUPING.DAY : constants.GROUPING.DAYS);
+                return days + ' ' + (Math.abs(days) === 1 ? constants.GROUPING.DAY : constants.GROUPING.DAYS);
             }
             return '';
         },
@@ -510,7 +510,7 @@
         getDurationInWeeks: function(duration) {
             let weeks = this.convertDuration(duration, constants.GROUPING.WEEK, true);
             if (weeks !== null) {
-                return weeks + ' ' + (weeks === 1 ? constants.GROUPING.WEEK : constants.GROUPING.WEEKS);
+                return weeks + ' ' + (Math.abs(weeks) === 1 ? constants.GROUPING.WEEK : constants.GROUPING.WEEKS);
             }
             return '';
         },
