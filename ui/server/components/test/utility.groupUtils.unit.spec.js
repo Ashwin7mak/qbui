@@ -460,107 +460,6 @@ describe('Validate Group Utility functions', function() {
             });
         });
 
-        describe('validate duration seconds tests', function() {
-            var testCases = [
-                {name: 'null input', duration: null, expectation: ''},
-                {name: 'string input', duration: 'something', expectation: ''},
-                {name: '-3 second', duration: constants.MILLI.ONE_SECOND * -3, expectation: '-3 ' + constants.GROUPING.SECONDS},
-                {name: '-2.5 second', duration: constants.MILLI.ONE_SECOND * -2.5, expectation: '-3 ' + constants.GROUPING.SECONDS},
-                {name: '0.5 second', duration: constants.MILLI.ONE_SECOND * 0.5, expectation: '0 ' + constants.GROUPING.SECONDS},
-                {name: '1 second', duration: constants.MILLI.ONE_SECOND, expectation: '1 ' + constants.GROUPING.SECOND},
-                {name: '10 seconds', duration: constants.MILLI.ONE_SECOND * 10, expectation: '10 ' + constants.GROUPING.SECONDS},
-                {name: '10.75 seconds', duration: (constants.MILLI.ONE_SECOND * 10) + (constants.MILLI.ONE_SECOND * .75), expectation: '10 ' + constants.GROUPING.SECONDS},
-                {name: '75 seconds', duration: constants.MILLI.ONE_SECOND * 75, expectation: '75 ' + constants.GROUPING.SECONDS}
-            ];
-
-            testCases.forEach(function(test) {
-                it('Test case: ' + test.name, function() {
-                    assert.equal(groupUtils.getDurationInSeconds(test.duration), test.expectation);
-                });
-            });
-        });
-
-        describe('validate duration minutes tests', function() {
-            var testCases = [
-                {name: 'null input', duration: null, expectation: ''},
-                {name: 'string input', duration: 'something', expectation: ''},
-                {name: '-3 minutes', duration: constants.MILLI.ONE_MINUTE * -3, expectation: '-3 ' + constants.GROUPING.MINUTES},
-                {name: '-2.5 minutes', duration: constants.MILLI.ONE_MINUTE * -2.5, expectation: '-3 ' + constants.GROUPING.MINUTES},
-                {name: '0.5 minutes', duration: constants.MILLI.ONE_MINUTE * 0.5, expectation: '0 ' + constants.GROUPING.MINUTES},
-                {name: '1 minute', duration: constants.MILLI.ONE_MINUTE, expectation: '1 ' + constants.GROUPING.MINUTE},
-                {name: '10 minutes', duration: constants.MILLI.ONE_MINUTE * 10, expectation: '10 ' + constants.GROUPING.MINUTES},
-                {name: '10.75 minutes', duration: (constants.MILLI.ONE_MINUTE * 10) + (constants.MILLI.ONE_MINUTE * .75), expectation: '10 ' + constants.GROUPING.MINUTES},
-                {name: '75 minutes', duration: constants.MILLI.ONE_MINUTE * 75, expectation: '75 ' + constants.GROUPING.MINUTES}
-            ];
-
-            testCases.forEach(function(test) {
-                it('Test case: ' + test.name, function() {
-                    assert.equal(groupUtils.getDurationInMinutes(test.duration), test.expectation);
-                });
-            });
-        });
-
-        describe('validate duration hours tests', function() {
-            var ONE_HOUR = 1000 * 60 * 60;
-            var testCases = [
-                {name: 'null input', duration: null, expectation: ''},
-                {name: 'string input', duration: 'something', expectation: ''},
-                {name: '-3 hours', duration: constants.MILLI.ONE_HOUR * -3, expectation: '-3 ' + constants.GROUPING.HOURS},
-                {name: '-2.5 hours', duration: constants.MILLI.ONE_HOUR * -2.5, expectation: '-3 ' + constants.GROUPING.HOURS},
-                {name: '0.5 hour', duration: constants.MILLI.ONE_HOUR * 0.5, expectation: '0 ' + constants.GROUPING.HOURS},
-                {name: '1 hour', duration: constants.MILLI.ONE_HOUR, expectation: '1 ' + constants.GROUPING.HOUR},
-                {name: '10 hours', duration: constants.MILLI.ONE_HOUR * 10, expectation: '10 ' + constants.GROUPING.HOURS},
-                {name: '10.75 hours', duration: (constants.MILLI.ONE_HOUR * 10) + (constants.MILLI.ONE_HOUR * .75), expectation: '10 ' + constants.GROUPING.HOURS},
-                {name: '30 hours', duration: (constants.MILLI.ONE_HOUR * 30), expectation: '30 ' + constants.GROUPING.HOURS}
-            ];
-
-            testCases.forEach(function(test) {
-                it('Test case: ' + test.name, function() {
-                    assert.equal(groupUtils.getDurationInHours(test.duration), test.expectation);
-                });
-            });
-        });
-
-        describe('validate duration day tests', function() {
-            var testCases = [
-                {name: 'null input', duration: null, expectation: ''},
-                {name: 'string input', duration: 'something', expectation: ''},
-                {name: '-3 days', duration: constants.MILLI.ONE_DAY * -3, expectation: '-3 ' + constants.GROUPING.DAYS},
-                {name: '-2.5 days', duration: constants.MILLI.ONE_DAY * -2.5, expectation: '-3 ' + constants.GROUPING.DAYS},
-                {name: '0.5 day', duration: constants.MILLI.ONE_DAY * 0.5, expectation: '0 ' + constants.GROUPING.DAYS},
-                {name: '1 day', duration: constants.MILLI.ONE_DAY, expectation: '1 ' + constants.GROUPING.DAY},
-                {name: '10 days', duration: constants.MILLI.ONE_DAY * 10, expectation: '10 ' + constants.GROUPING.DAYS},
-                {name: '10.75 days', duration: (constants.MILLI.ONE_DAY * 10) + (constants.MILLI.ONE_DAY * .75), expectation: '10 ' + constants.GROUPING.DAYS},
-                {name: '30 days', duration: (constants.MILLI.ONE_DAY * 30), expectation: '30 ' + constants.GROUPING.DAYS}
-            ];
-
-            testCases.forEach(function(test) {
-                it('Test case: ' + test.name, function() {
-                    assert.equal(groupUtils.getDurationInDays(test.duration), test.expectation);
-                });
-            });
-        });
-
-        describe('validate duration week tests', function() {
-            var testCases = [
-                {name: 'null input', duration: null, expectation: ''},
-                {name: 'string input', duration: 'something', expectation: ''},
-                {name: '-3 weeks', duration: constants.MILLI.ONE_WEEK * -3, expectation: '-3 ' + constants.GROUPING.WEEKS},
-                {name: '-2.5 weeks', duration: constants.MILLI.ONE_WEEK * -2.5, expectation: '-3 ' + constants.GROUPING.WEEKS},
-                {name: '0.5 week', duration: constants.MILLI.ONE_WEEK * 0.5, expectation: '0 ' + constants.GROUPING.WEEKS},
-                {name: '1 week', duration: constants.MILLI.ONE_WEEK, expectation: '1 ' + constants.GROUPING.WEEK},
-                {name: '10 weeks', duration: constants.MILLI.ONE_WEEK * 10, expectation: '10 ' + constants.GROUPING.WEEKS},
-                {name: '10.75 weeks', duration: (constants.MILLI.ONE_WEEK * 10) + (constants.MILLI.ONE_DAY * .75), expectation: '10 ' + constants.GROUPING.WEEKS},
-                {name: '30 weeks', duration: (constants.MILLI.ONE_WEEK * 30), expectation: '30 ' + constants.GROUPING.WEEKS}
-            ];
-
-            testCases.forEach(function(test) {
-                it('Test case: ' + test.name, function() {
-                    assert.equal(groupUtils.getDurationInWeeks(test.duration), test.expectation);
-                });
-            });
-        });
-
         describe('duration tests', function() {
             var testCases = [
                 {name: 'null input', duration: null, expectation: ''},
@@ -638,6 +537,32 @@ describe('Validate Group Utility functions', function() {
                     });
                 });
             });
+
+            //describe('validate duration equals tests', function() {
+            //
+            //    var testCases = [
+            //        {name: 'null input', duration: null, expectation: ''},
+            //        {name: 'string input', duration: 'something', expectation: ''},
+            //        {name: 'seconds', duration: 55, expectation: 55},
+            //        {name: 'minutes', duration: 300, expectation: 5},
+            //        {name: 'minutes2', duration: 330, expectation: 5.5},
+            //        {name: 'hours', duration: 0.5, expectation: 0},
+            //        {name: 'days', duration: 1, expectation: 1},
+            //        {name: 'weeks', duration: 10, expectation: 10}
+            //    ];
+            //
+            //    testCases.forEach(function(test) {
+            //        it('Test case: ' + test.name, function() {
+            //            var duration = typeof test.duration === 'number' ? constants.MILLI.ONE_WEEK * test.duration : test.duration;
+            //            var expectation = test.expectation;
+            //            if (test.expectation !== '') {
+            //                expectation += ' ' + (test.expectation === 1 ? constants.GROUPING.WEEK : constants.GROUPING.WEEKS);
+            //            }
+            //            assert.equal(groupUtils.getDurationInWeeks(duration), expectation);
+            //        });
+            //    });
+            //});
+
         });
 
 
