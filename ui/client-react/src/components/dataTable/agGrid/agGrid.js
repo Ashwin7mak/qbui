@@ -153,12 +153,22 @@ let AGGrid = React.createClass({
         let sortList = ReportUtils.getSortListString(this.props.sortFids);
         let sortList_param = ReportUtils.prependSortFidToList(sortList, groupString);
 
-        // AG-grid has a bug where on re-render it doesnt call groupRenderer
-        // And hence doesnt render group headers.
-        // To get around that, on grouping rebuild the whole report
-        flux.actions.loadReport(this.props.appId,
-            this.props.tblId,
-            this.props.rptId, true, null, null, sortList_param);
+        /** AG-grid has a bug where on re-render it doesnt call groupRenderer
+         And hence doesnt render group headers.
+         To get around that, on grouping rebuild the whole report
+         If the report was grouped on the previous render then groupRender was already called so no need to re-load everything.
+         So optimize for that case..
+        */
+        if (this.props.groupEls.length) {
+            let queryParams = {};
+            queryParams[query.SORT_LIST_PARAM] = sortList_param;
+            queryParams[query.GLIST_PARAM] = sortList_param;
+            flux.actions.getFilteredRecords(this.props.appId, this.props.tblId, this.props.rptId, {format:true}, this.props.filter, queryParams);
+        } else {
+            flux.actions.loadReport(this.props.appId,
+                this.props.tblId,
+                this.props.rptId, true, null, null, sortList_param);
+        }
     },
     /**
      * AG-grid doesnt fire any events or add any classes to the column for which menu has been opened
