@@ -2,7 +2,7 @@ import React from 'react';
 
 import Logger from '../../utils/logger';
 let logger = new Logger();
-
+import ReportActions from '../actions/reportActions';
 import ReportToolbar from './reportToolbar';
 import ReportContent from './dataTable/reportContent';
 import QBicon from '../qbIcon/qbIcon';
@@ -167,11 +167,17 @@ let ReportToolsAndContent = React.createClass({
         if (hasSelection) {
             classes += " selectionActionsOpen";
         }
+
         return (<div className={classes}>
             {hasSelection ? this.getSelectionActions() : this.getReportToolbar()}
         </div>);
     },
     render() {
+        let classes = "reportToolsAndContentContainer";
+        if (this.props.selectedRows && (this.props.selectedRows.length === 1)) {
+            classes += " singleSelection";
+        }
+
         let {appId, tblId, rptId, reportData:{selections, ...otherReportData}} = this.props;
 
         if (_.isUndefined(this.props.params) ||
@@ -197,7 +203,7 @@ let ReportToolsAndContent = React.createClass({
                                          clearAllFilters={this.clearAllFilters}/>;
 
             return (
-                <div className="reportToolsAndContentContainer">
+                <div className={classes}>
                     {this.getTableActions()}
                     <ReportContent  appId={this.props.params.appId}
                                     tblId={this.props.params.tblId}
