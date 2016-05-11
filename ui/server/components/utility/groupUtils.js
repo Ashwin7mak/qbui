@@ -38,7 +38,6 @@
                 case groupTypes.DURATION.second: return true;
                 case groupTypes.DURATION.minute: return true;
                 case groupTypes.DURATION.hour: return true;
-                case groupTypes.DURATION.am_pm: return true;
                 case groupTypes.DURATION.week: return true;
                 case groupTypes.DURATION.day: return true;
                 }
@@ -444,6 +443,103 @@
                 }
             }
             return '';
+        },
+
+        getDurationEquals: function(duration) {
+
+            let seconds = this.convertDuration(duration, constants.GROUPING.SECOND);
+            if (seconds !== null && Math.abs(seconds) < 60) {
+                return seconds + ' ' + (seconds === 1 ? constants.GROUPING.SECOND : constants.GROUPING.SECONDS);
+            }
+
+            let minutes = this.convertDuration(duration, constants.GROUPING.MINUTE);
+            if (minutes !== null && Math.abs(minutes) < 60) {
+                return minutes + ' ' + (minutes === 1 ? constants.GROUPING.MINUTE : constants.GROUPING.MINUTES);
+            }
+
+            let hours = this.convertDuration(duration, constants.GROUPING.HOUR);
+            if (hours !== null && Math.abs(hours) < 24) {
+                return hours + ' ' + (hours === 1 ? constants.GROUPING.HOUR : constants.GROUPING.HOURS);
+            }
+
+            let days = this.convertDuration(duration, constants.GROUPING.DAY);
+            if (days !== null && Math.abs(days) < 7) {
+                return days + ' ' + (days === 1 ? constants.GROUPING.DAY : constants.GROUPING.DAYS);
+            }
+
+            let weeks = this.convertDuration(duration, constants.GROUPING.WEEK);
+            if (weeks !== null) {
+                return weeks + ' ' + (weeks === 1 ? constants.GROUPING.WEEK : constants.GROUPING.WEEKS);
+            }
+
+            return '';
+        },
+
+        getDurationInSeconds: function(duration) {
+            let seconds = this.convertDuration(duration, constants.GROUPING.SECOND, true);
+            if (seconds !== null) {
+                return seconds + ' ' + (seconds === 1 ? constants.GROUPING.SECOND : constants.GROUPING.SECONDS);
+            }
+            return '';
+        },
+
+        getDurationInMinutes: function(duration) {
+            let minutes = this.convertDuration(duration, constants.GROUPING.MINUTE, true);
+            if (minutes !== null) {
+                return minutes + ' ' + (minutes === 1 ? constants.GROUPING.MINUTE : constants.GROUPING.MINUTES);
+            }
+            return '';
+        },
+
+        getDurationInHours: function(duration) {
+            let hours = this.convertDuration(duration, constants.GROUPING.HOUR, true);
+            if (hours !== null) {
+                return hours + ' ' + (hours === 1 ? constants.GROUPING.HOUR : constants.GROUPING.HOURS);
+            }
+            return '';
+        },
+
+        getDurationInDays: function(duration) {
+            let days = this.convertDuration(duration, constants.GROUPING.DAY, true);
+            if (days !== null) {
+                return days + ' ' + (days === 1 ? constants.GROUPING.DAY : constants.GROUPING.DAYS);
+            }
+            return '';
+        },
+
+        getDurationInWeeks: function(duration) {
+            let weeks = this.convertDuration(duration, constants.GROUPING.WEEK, true);
+            if (weeks !== null) {
+                return weeks + ' ' + (weeks === 1 ? constants.GROUPING.WEEK : constants.GROUPING.WEEKS);
+            }
+            return '';
+        },
+
+        convertDuration: function(duration, precision, rounded) {
+            let value = null;
+            if (typeof duration === 'number') {
+                switch (precision) {
+                case constants.GROUPING.SECOND:
+                    value = duration / constants.MILLI.ONE_SECOND;
+                    break;
+                case constants.GROUPING.MINUTE:
+                    value = duration / constants.MILLI.ONE_MINUTE;
+                    break;
+                case constants.GROUPING.HOUR:
+                    value = duration / constants.MILLI.ONE_HOUR;
+                    break;
+                case constants.GROUPING.DAY:
+                    value = duration / constants.MILLI.ONE_DAY;
+                    break;
+                case constants.GROUPING.WEEK:
+                    value = duration / constants.MILLI.ONE_WEEK;
+                    break;
+                }
+                if (typeof value === 'number' && rounded === true) {
+                    value = Math.floor(value);
+                }
+            }
+            return value;
         }
 
     };

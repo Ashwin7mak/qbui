@@ -17,7 +17,7 @@ describe('Validate GroupFormatter unit tests', function() {
         if (dataType === constants.EMAIL_ADDRESS) {
             return (0 | Math.random() * 9e6).toString(36) + '@test.com';
         }
-        if (dataType === constants.NUMERIC) {
+        if (dataType === constants.NUMERIC || constants.DURATION) {
             return (0 | Math.random() * 10000000);
         }
         if (dataType === constants.DATE || dataType === constants.DATE_TIME) {
@@ -132,6 +132,13 @@ describe('Validate GroupFormatter unit tests', function() {
             {message: 'EMAIL_ADDRESS: name grouping', numFields: 5, numRecords: 2, gList: '1:N', dataType: constants.EMAIL_ADDRESS},
             {message: 'EMAIL_ADDRESS: domain grouping', numFields: 5, numRecords: 2, gList: '1:O', dataType: constants.EMAIL_ADDRESS},
             {message: 'EMAIL_ADDRESS: domainTopLevel grouping', numFields: 5, numRecords: 2, gList: '1:C', dataType: constants.EMAIL_ADDRESS},
+            //  DURATION data type
+            {message: 'DURATION: equals grouping', numFields: 5, numRecords: 2, gList: '1:V', dataType: constants.DURATION},
+            {message: 'DURATION: second grouping', numFields: 5, numRecords: 2, gList: '1:s', dataType: constants.DURATION},
+            {message: 'DURATION: minute grouping', numFields: 5, numRecords: 2, gList: '1:m', dataType: constants.DURATION},
+            {message: 'DURATION: hour grouping', numFields: 5, numRecords: 2, gList: '1:h', dataType: constants.DURATION},
+            {message: 'DURATION: week grouping', numFields: 5, numRecords: 2, gList: '1:W', dataType: constants.DURATION},
+            {message: 'DURATION: day grouping', numFields: 5, numRecords: 2, gList: '1:D', dataType: constants.DURATION},
             //  DATE data type
             {message: 'DATE: equals grouping', numFields: 5, numRecords: 2, gList: '1:V', dataType: constants.DATE},
             {message: 'DATE: day grouping', numFields: 5, numRecords: 2, gList: '1:D', dataType: constants.DATE},

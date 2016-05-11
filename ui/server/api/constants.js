@@ -56,10 +56,26 @@
 
         GROUPING : {
             QUARTER: 'Q',
-            FISCAL_YR: 'FY'
+            FISCAL_YR: 'FY',
+            SECOND: 'second',
+            SECONDS: 'seconds',
+            MINUTE: 'minute',
+            MINUTES: 'minutes',
+            DAY: 'day',
+            DAYS: 'days',
+            HOUR: 'hour',
+            HOURS: 'hours',
+            WEEK: 'week',
+            WEEKS: 'weeks'
+        },
+
+        MILLI : {
+            ONE_SECOND: 1000,
+            ONE_MINUTE: 1000 * 60,
+            ONE_HOUR: 1000 * 60 * 60,
+            ONE_DAY: 1000 * 60 * 60 * 24,
+            ONE_WEEK: 1000 * 60 * 60 * 24 * 7
         }
-
-
     });
 
 }());

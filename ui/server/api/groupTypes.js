@@ -26,7 +26,6 @@
             second: 's',
             minute: 'm',
             hour: 'h',
-            am_pm: 'a',
             week: COMMON.week,
             day: COMMON.day
         },
