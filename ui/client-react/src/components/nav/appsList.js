@@ -1,5 +1,5 @@
 import React from 'react';
-
+import ReactDOM from 'react-dom';
 import Locale from '../../locales/locales';
 import NavItem from './navItem';
 import SearchBox from '../search/searchBox';
@@ -41,11 +41,11 @@ let AppsList = React.createClass({
         });
     },
     onClickApps() {
-        const wasSearching = this.state.searching;
-        this.setState({searching: !this.state.searching});
-
-        if (!wasSearching) {
-            this.setState({searchText: ""});
+        if (this.state.searching) {
+            this.setState({searching: false});
+        } else {
+            this.setState({searching: true, searchText: ""},
+                () => {setTimeout(() => ReactDOM.findDOMNode(this.refs.appsSearchBox).querySelector("input.searchInput").focus(), 200);});
         }
     },
     render() {
@@ -59,7 +59,8 @@ let AppsList = React.createClass({
                          open={true} />
 
                 <li className={this.state.searching ? "search open" : "search"}>
-                    <SearchBox value={this.state.searchText}
+                    <SearchBox ref="appsSearchBox"
+                               value={this.state.searchText}
                                onChange={this.onChangeSearch}
                                onClearSearch={this.onClearSearch}
                                placeholder={Locale.getMessage('nav.searchAppsPlaceholder')} />

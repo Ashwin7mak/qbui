@@ -25,7 +25,6 @@ export const GROUP_TYPE = {
         second: 's',
         minute: 'm',
         hour: 'h',
-        am_pm: 'a',
         week: COMMON.week,
         day: COMMON.day
     },

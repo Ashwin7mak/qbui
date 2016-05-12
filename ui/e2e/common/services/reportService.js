@@ -73,10 +73,10 @@
              * will generate a 'list all' report. Returns a promise.
              */
             // TODO: QBSE-13518 Write a report generator in the test_generators package
-            createReportWithSortAndGroup: function(appId, tableId, fids, query) {
+            createReportWithSortAndGroup: function(appId, tableId, fids, query, reportName) {
                 var deferred = promise.pending();
                 var reportJSON = {
-                    name      : 'Report With Sorting And Grouping',
+                    name      : reportName || 'Report With Sorting And Grouping',
                     type      : 'TABLE',
                     sortList  : fids,
                     ownerId   : '10000',
@@ -130,10 +130,10 @@
              * will generate a 'list all' report. Returns a promise.
              */
             // TODO: QBSE-13518 Write a report generator in the test_generators package
-            createReportWithFacets: function(appId, tableId, fids, query) {
+            createReportWithFacets: function(appId, tableId, fids, query, reportName) {
                 var deferred = promise.pending();
                 var reportJSON = {
-                    name      : 'Report With Facets',
+                    name      : reportName || 'Report With Facets',
                     type      : 'TABLE',
                     facetFids : fids,
                     ownerId   : '10000',
@@ -158,10 +158,10 @@
              * will generate a 'list all' report. Returns a promise.
              */
             // TODO: QBSE-13518 Write a report generator in the test_generators package
-            createReportWithFidsAndFacetsAndSortLists: function(appId, tableId, fids, facetFids, sortFids, query) {
+            createReportWithFidsAndFacetsAndSortLists: function(appId, tableId, fids, facetFids, sortFids, query, reportName) {
                 var deferred = promise.pending();
                 var reportJSON = {
-                    name      : 'Report With Facets',
+                    name      : reportName || 'Report With Facets',
                     type      : 'TABLE',
                     fids      : fids,
                     facetFids : facetFids,
