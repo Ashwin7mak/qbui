@@ -333,7 +333,7 @@
                                 //      7.8:V.9:V      ==>  no grouping
                                 //      7:V.8:V        ==>  group by fid 7, then fid 8
                                 //      7:V.8.9.10:V   ==>  group by fid 7 only
-                                //      7:V.8:V.9.10:V ==>  group by fid 7, then fid 8
+                                //      7:V.8:V.9.10:V ==>  group by fid 7, then fid 8 only
                                 //
                                 //  NOTE: The builder on the new stack UI should restrict this behavior, but we could
                                 //  run into this scenario when migrating old stack data.
