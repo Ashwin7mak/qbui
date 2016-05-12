@@ -19,7 +19,7 @@ let TableHomePageRoute = React.createClass({
         return (
             <ReportHeader reportData={this.props.reportData}
                           nameForRecords={this.nameForRecords}
-                          clearSearchString={this.clearSearchString} rptId={'1'} {...this.props}
+                          rptId={'1'} {...this.props}
             />);
     },
 

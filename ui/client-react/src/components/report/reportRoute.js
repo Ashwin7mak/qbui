@@ -26,7 +26,7 @@ const ReportRoute = React.createClass({
         return (
             <ReportHeader reportData={this.props.reportData}
                           nameForRecords={this.nameForRecords}
-                          clearSearchString={this.clearSearchString}
+                {...this.props}
             />);
     },
 
