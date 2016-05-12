@@ -289,6 +289,7 @@
                         map.set(field.id, field);
                     });
 
+                    let sortFidWithNoGroupingFound = false;
                     let groups = groupList.split(constants.REQUEST_PARAMETER.LIST_DELIMITER);
 
                     // Loop through the list of groups and determine whether we have any grouping requirements.
@@ -298,7 +299,7 @@
                         if (group) {
                             //  must have a fid and group type element
                             let el = group.split(constants.REQUEST_PARAMETER.GROUP_DELIMITER, 2);
-                            if (el.length === 2) {
+                            if (el.length === 2 && sortFidWithNoGroupingFound === false) {
                                 let groupFidId = el[0];
                                 let groupType = el[1];
 
@@ -322,6 +323,17 @@
                                 } else {
                                     log.warn("Invalid field for grouping.  FieldId: " + groupFidId + "; GroupType: " + groupType);
                                 }
+                            } else {
+                                //  Once we find a sortList entry defined without grouping, any subsequent grouping fids
+                                //  found in the groupList parameter are ignored.  For example:
+                                //      7.8:V.9:V      ==>  no grouping
+                                //      7:V.8:V        ==>  group by fid 7, then fid 8
+                                //      7:V.8.9.10:V   ==>  group by fid 7 only
+                                //      7:V.8:V.9.10:V ==>  group by fid 7, then fid 8
+                                //
+                                //  NOTE: The builder on the new stack UI should restrict this behavior, but we could
+                                //  run into this scenario when migrating old stack data.
+                                sortFidWithNoGroupingFound = true;
                             }
                         }
                     });
