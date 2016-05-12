@@ -141,11 +141,34 @@ const SortAndGroup = React.createClass({
         this.setState({showFields: false, fieldsForType:null});
     },
 
+    updateRecords(sortGroupString) {
+        let flux = this.getFlux();
+        let overrideParams = {};
+        //if report was grouped in the last render and is grouped in this render
+        // or was ungrouped in last and this render no need to re-load report.
+        let groupKeys = _.map(this.state.newSelectionsGroup, 'unparsedVal');
+        let changedGroupingStyle = true;
+        if (this.props.reportData && this.props.reportData.data && this.props.reportData.data.groupEls) {
+            if ((this.props.reportData.data.groupEls.length && groupKeys.length) || //report was grouped before and after
+                (this.props.reportData.data.groupEls.length === 0 && groupKeys.length === 0)) { //report was ungrouped before and after
+                changedGroupingStyle = false;
+            }
+        }
+
+        if (changedGroupingStyle) {
+            flux.actions.loadReport(this.props.appId,
+                this.props.tblId,
+                this.props.rptId, true, null, null, sortGroupString);
+        } else {
+            overrideParams[query.SORT_LIST_PARAM] = sortGroupString;
+            overrideParams[query.GLIST_PARAM] = sortGroupString;
+            flux.actions.getFilteredRecords(this.props.appId, this.props.tblId, this.props.rptId, {format:true}, this.props.filter, overrideParams);
+        }
+    },
+
     applyChanges() {
         if (!WindowLocationUtils.searchIncludes('mockSort')) {
             //reload data using the adhoc sort values
-            let flux = this.getFlux();
-            let overrideParams = {};
 
             // get the group string and the sort string from state
             let sortKeys = _.map(this.state.newSelectionsSort, 'unparsedVal');
@@ -163,28 +186,16 @@ const SortAndGroup = React.createClass({
                 }
                 sortGroupString += sortList;
             }
-
-            overrideParams[query.SORT_LIST_PARAM] = sortGroupString;
-            overrideParams[query.GLIST_PARAM] = sortGroupString;
-
-            flux.actions.getFilteredRecords(this.props.appId,
-                this.props.tblId,
-                this.props.rptId, {format:true}, this.props.filter, overrideParams);
+            this.updateRecords(sortGroupString);
         }
 
     },
 
     reset() {
         //reload data using report with original sort/group overrides & keep filter settings
-        let flux = this.getFlux();
-        let overrideParams = {};
-
         if (_.has(this.props, 'reportData.data.originalMetaData.sortList')) {
             let sortGroupString = ReportUtils.getGListString(this.props.reportData.data.originalMetaData.sortList);
-            overrideParams[query.SORT_LIST_PARAM] = sortGroupString;
-            overrideParams[query.GLIST_PARAM] = sortGroupString;
-            flux.actions.getFilteredRecords(this.props.appId, this.props.tblId,
-                this.props.rptId, {format: true}, this.props.filter, overrideParams);
+            this.updateRecords(sortGroupString);
         }
     },
 

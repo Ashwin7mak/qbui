@@ -3,6 +3,7 @@ import reportDataActions from '../../src/actions/reportDataActions';
 import * as actions from '../../src/constants/actions';
 import * as query from '../../src/constants/query';
 import Promise from 'bluebird';
+import ReportUtils from '../../src/utils/reportUtils';
 
 describe('Report Data Actions success -- ', () => {
     'use strict';
@@ -77,6 +78,31 @@ describe('Report Data Actions success -- ', () => {
             () => {
                 expect(mockReportService.prototype.getReport).toHaveBeenCalled();
                 expect(mockReportService.prototype.getReportDataAndFacets).toHaveBeenCalled();
+                expect(flux.dispatchBinder.dispatch.calls.count()).toEqual(2);
+                expect(flux.dispatchBinder.dispatch.calls.argsFor(0)).toEqual([actions.LOAD_REPORT, loadReportInputs]);
+                expect(flux.dispatchBinder.dispatch.calls.argsFor(1)).toEqual([actions.LOAD_REPORT_SUCCESS, jasmine.any(Object)]);
+                done();
+            },
+            () => {
+                expect(true).toBe(false);
+                done();
+            }
+        );
+    });
+
+    it('test load report action with sortlist', (done) => {
+        let sortList = "6:V.-7";
+        let queryParams = {};
+        queryParams[query.OFFSET_PARAM] = 0;
+        queryParams[query.NUMROWS_PARAM] = 0;
+        queryParams[query.FORMAT_PARAM] = true;
+        queryParams[query.SORT_LIST_PARAM] = ReportUtils.getSortListString(ReportUtils.getSortFids(sortList));
+        queryParams[query.GLIST_PARAM] = sortList;
+        queryParams[query.QUERY_PARAM] = '';
+        flux.actions.loadReport(appId, tblId, rptId, true, 0, 0, sortList).then(
+            () => {
+                expect(mockReportService.prototype.getReport).toHaveBeenCalled();
+                expect(mockReportService.prototype.getReportDataAndFacets).toHaveBeenCalledWith(appId, tblId, rptId, queryParams);
                 expect(flux.dispatchBinder.dispatch.calls.count()).toEqual(2);
                 expect(flux.dispatchBinder.dispatch.calls.argsFor(0)).toEqual([actions.LOAD_REPORT, loadReportInputs]);
                 expect(flux.dispatchBinder.dispatch.calls.argsFor(1)).toEqual([actions.LOAD_REPORT_SUCCESS, jasmine.any(Object)]);

@@ -45,7 +45,6 @@ describe('Test ReportData Store', () => {
         expect(flux.store(STORE_NAME).__actions__.FILTER_SELECTIONS_PENDING).toBeDefined();
         expect(flux.store(STORE_NAME).__actions__.SHOW_FACET_MENU).toBeDefined();
         expect(flux.store(STORE_NAME).__actions__.HIDE_FACET_MENU).toBeDefined();
-        expect(flux.store(STORE_NAME).__actions__.SEARCH_FOR).toBeDefined();
     });
 
     it('test load reports action', () => {
@@ -169,6 +168,59 @@ describe('Test ReportData Store', () => {
         expect(flux.store(STORE_NAME).emit.calls.count()).toBe(1);
     });
 
+    it('test load reports success action with sortlist data', () => {
+
+        let payload = {
+            metaData: {
+                name: 'report_name',
+                fids: [],
+                sortList: ""
+            },
+            recordData: {
+                fields: [],
+                records: [],
+                facets: [],
+                groups: {
+                    hasGrouping: true,
+                    fields: [{
+                        field: [{
+                            id: 1,
+                            name: 'group-field1'
+                        }],
+                        groupType: 'V'
+                    }],
+                    gridColumns: [{
+                        id: 2,
+                        name: 'grid-field2'
+                    }],
+                    gridData: [{
+                        id: 2,
+                        value: 'grid-data2'
+                    }],
+                    totalRows: 1
+                }
+            },
+            sortList: "1:V"
+        };
+
+        let action = {
+            type: actions.LOAD_REPORT_SUCCESS,
+            payload: payload
+        };
+
+        flux.dispatcher.dispatch(action);
+
+        expect(flux.store(STORE_NAME).reportModel.model.name).toBe(payload.metaData.name);
+        expect(flux.store(STORE_NAME).reportModel.model.columns).toBeDefined();
+        expect(flux.store(STORE_NAME).reportModel.model.records).toBe(payload.recordData.groups.gridData);
+        expect(flux.store(STORE_NAME).reportModel.model.hasGrouping).toBe(true);
+        expect(flux.store(STORE_NAME).reportModel.model.groupLevel).toBe(1);
+
+        //  ensure the output of each report row includes an id, name and link
+        expect(flux.store(STORE_NAME).emit).toHaveBeenCalledWith('change');
+        expect(flux.store(STORE_NAME).emit.calls.count()).toBe(1);
+    });
+
 
     it('test getState function', () => {
 
@@ -200,17 +252,6 @@ describe('Test ReportData Store', () => {
         expect(state.tblId).toBeDefined(tblId);
         expect(state.rptId).toBeDefined(rptId);
     });
-
-    it('test search', () => {
-        let searchForAction = {
-            type: actions.SEARCH_FOR,
-            payload: ''
-        };
-        flux.dispatcher.dispatch(searchForAction);
-        expect(flux.store(STORE_NAME).emit).toHaveBeenCalledWith('change');
-    });
-
-
 
     it('test getReportData function', () => {
 

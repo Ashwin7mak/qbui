@@ -244,11 +244,23 @@
             fetchRecords: function(req) {
                 var opts = requestHelper.setOptions(req);
                 opts.headers[CONTENT_TYPE] = APPLICATION_JSON;
-                let inputUrl = opts.url.toLowerCase();
+
+                let inputUrl = opts.url; //JAVA api is case sensitive so dont loose camel case here.
+                let inputUrl_toLower = opts.url.toLowerCase(); // but for convinience of string matches convert to lower case
+
                 //the request came in for report/{reportId}/results.
                 // Convert that to report/{reportId}/facets/results to get facets data
-                if (inputUrl.indexOf(REPORTCOMPONENTS) !== -1) {
-                    opts.url = inputUrl.substring(0, inputUrl.indexOf(REPORTCOMPONENTS)) + RESULTS;
+                if (inputUrl_toLower.indexOf(REPORTCOMPONENTS) !== -1) {
+                    // this bypass is for grouping but in ag-grid
+                    // change url from .../reports/<id>/reportcomponents?sortList=..
+                    // to .../records?sortList=.. because /reports/results api does not support sortList param.
+                    if (inputUrl_toLower.indexOf(constants.REQUEST_PARAMETER.SORT_LIST) !== -1) {
+                        let reportIndex = inputUrl_toLower.indexOf(REPORTS);
+                        let paramsIndex = inputUrl_toLower.indexOf("?"); // get the index for url params starting after ?
+                        opts.url = inputUrl.substring(0, reportIndex) + RECORDS + inputUrl.substring(paramsIndex);
+                    } else {
+                        opts.url = inputUrl.substring(0, inputUrl_toLower.indexOf(REPORTCOMPONENTS)) + RESULTS;
+                    }
                 }
 
                 return requestHelper.executeRequest(req, opts);

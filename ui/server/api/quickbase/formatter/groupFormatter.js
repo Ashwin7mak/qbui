@@ -136,16 +136,20 @@
                 }
                 break;
             case constants.DURATION:
-                //jira: qbse-21438
-                //switch (groupType) {
-                //case groupTypes.DURATION.equals:
-                //case groupTypes.DURATION.second:
-                //case groupTypes.DURATION.minute:
-                //case groupTypes.DURATION.hour:
-                //case groupTypes.DURATION.am_pm:
-                //case groupTypes.DURATION.week:
-                //case groupTypes.DURATION.day:
-                //}
+                switch (groupType) {
+                case groupTypes.DURATION.equals:
+                    return groupUtils.getDurationEquals(dataValue);
+                case groupTypes.DURATION.second:
+                    return groupUtils.getDurationInSeconds(dataValue);
+                case groupTypes.DURATION.minute:
+                    return groupUtils.getDurationInMinutes(dataValue);
+                case groupTypes.DURATION.hour:
+                    return groupUtils.getDurationInHours(dataValue);
+                case groupTypes.DURATION.day:
+                    return groupUtils.getDurationInDays(dataValue);
+                case groupTypes.DURATION.week:
+                    return groupUtils.getDurationInWeeks(dataValue);
+                }
                 break;
             case constants.EMAIL_ADDRESS:
                 switch (groupType) {
