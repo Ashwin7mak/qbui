@@ -36,7 +36,7 @@ let CardViewList = React.createClass({
                 return <CardViewList key={index} node={node}
                                          allowCardSelection={this.props.allowCardSelection}
                                          onToggleCardSelection={this.props.onToggleCardSelection}
-                                         onRowSelected={this.props.onCardRowSelected}
+                                         onRowSelected={this.props.onRowSelected}
                                          onRowClicked={this.props.onRowClicked}
                                          isRowSelected={this.props.isRowSelected}/>;
             });
@@ -53,7 +53,7 @@ let CardViewList = React.createClass({
                                   data={this.props.node}
                                   allowCardSelection={this.props.allowCardSelection}
                                   onToggleCardSelection={this.props.onToggleCardSelection}
-                                  onRowSelected={this.props.onCardRowSelected}
+                                  onRowSelected={this.props.onRowSelected}
                                   onRowClicked={this.props.onRowClicked}
                                   isRowSelected={this.props.isRowSelected}
                                   metadataColumns={["actions"]}>
