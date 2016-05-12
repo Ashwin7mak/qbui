@@ -1,53 +1,64 @@
 import React from 'react';
 import Stage from '../stage/stage';
+import ReportStage from '../report/reportStage';
+import ReportHeader from '../report/reportHeader';
 import QBicon from '../qbIcon/qbIcon';
+import TableIcon from '../qbTableIcon/qbTableIcon';
 import IconActions from '../actions/iconActions';
 import ReportToolsAndContent from '../report/reportToolsAndContent';
 import Fluxxor from 'fluxxor';
 let FluxMixin = Fluxxor.FluxMixin(React);
 import './tableHomePage.scss';
+import '../report/report.scss';
 
 let TableHomePageRoute = React.createClass({
     mixins: [FluxMixin],
+    nameForRecords: "Records",
 
-    getStageHeadline() {
+    getHeader() {
+        return (
+            <ReportHeader reportData={this.props.reportData}
+                          nameForRecords={this.nameForRecords}
+                          clearSearchString={this.clearSearchString} rptId={'1'} {...this.props}
+            />);
+    },
+
+    getPageActions(maxButtonsBeforeMenu) {
+        const actions = [
+            {msg: 'pageActions.addRecord', icon:'add'},
+            {msg: 'pageActions.favorite', icon:'star'},
+            {msg: 'pageActions.gridEdit', icon:'report-grid-edit'},
+            {msg: 'pageActions.email', icon:'mail'},
+            {msg: 'pageActions.print', icon:'print'},
+            {msg: 'pageActions.customizeReport', icon:'settings-hollow'},
+        ];
+        return (<IconActions className="pageActions" actions={actions} maxButtonsBeforeMenu={maxButtonsBeforeMenu}/>);
+    },
+
+    getBreadcrumbs() {
         let reportName = this.props.reportData && this.props.reportData.data && this.props.reportData.data.name;
 
         return (this.props.selectedTable &&
+        <h3 className="breadCrumbs"><TableIcon icon={this.props.selectedTable.icon}/>{this.props.selectedTable.name}
+            <span className="breadCrumbsSeparator"> | </span>{reportName}</h3>);
+
+    },
+
+    getStageHeadline() {
+        return (
             <div className="stageHeadline">
-                <h3 className="tableName breadCrumbs"><QBicon icon="favicon"/> {this.props.selectedTable.name}
-                    <span className="breadCrumbsSeparator"> | </span>{reportName}</h3>
+                {this.getBreadcrumbs()}
             </div>
         );
     },
 
-    getPageActions(maxButtonsBeforeMenu = 0) {
-        const actions = [
-            {msg: 'pageActions.addRecord', icon:'add'},
-            {msg: 'pageActions.gridEdit', icon:'report-grid-edit'},
-            {msg: 'pageActions.email', icon:'mail'},
-            {msg: 'pageActions.print', icon:'print'},
-            {msg: 'pageActions.customizePage', icon:'settings-hollow'}
-        ];
-        return (<IconActions className="pageActions" actions={actions} maxButtonsBeforeMenu={maxButtonsBeforeMenu} {...this.props}/>);
-    },
-
-    getSecondaryBar() {
-        return (
-            <div className="secondaryTableHomePageActions">
-                {/* todo */}
-            </div>);
-    },
-
     render() {
-        return (<div className="tableHomepageContainer">
+        return (<div className="reportContainer">
             <Stage stageHeadline={this.getStageHeadline()} pageActions={this.getPageActions(5)}>
+                <ReportStage reportData={this.props.reportData} />
             </Stage>
 
-            <div className="tableHomePageActionsContainer secondaryBar">
-                {this.getSecondaryBar()}
-                {this.getPageActions()}
-            </div>
+            {this.getHeader()}
 
             <ReportToolsAndContent
                 params={this.props.params}

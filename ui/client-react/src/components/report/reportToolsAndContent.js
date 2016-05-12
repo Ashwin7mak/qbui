@@ -173,6 +173,7 @@ let ReportToolsAndContent = React.createClass({
         </div>);
     },
     render() {
+
         let classes = "reportToolsAndContentContainer";
         if (this.props.selectedRows && (this.props.selectedRows.length === 1)) {
             classes += " singleSelection";
