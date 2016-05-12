@@ -38,6 +38,7 @@
 
         p {
             margin : 1em 0;
+            text-align: center;
         }
 
         ul {
@@ -67,10 +68,14 @@
 <div class="container">
     <h1>You have successfully logged out of QuickBase</h1>
 
-    <img class="lol" src="http://i.imgur.com/iOYaPo0.gif"></img>
-    <p>Please click <a href="https://www.quickbase.com/db/main?a=SignIn">here</a> to return to
+    <p>Please click <a id="signin" href="#">here</a> to return to
         QuickBase.</p>
 </div>
 </body>
+<script type="text/javascript">
+    var currentStackDomain = window.location.hostname.replace(".newstack", "");
+    var currentStackSignIn=  "https://" + currentStackDomain + "/db/main?a=SignIn";
+    document.getElementById("signin").href = currentStackSignIn;
+</script>
 
 </html>
