@@ -113,6 +113,8 @@ let CardViewListHolder = React.createClass({
         return (
             <div className={cardViewListClasses} ref="cardViewList">
                 <CardViewList node={recordNodes}
+                              groupId=""
+                              groupLevel={-1}
                               allowCardSelection={this.allowCardSelection}
                               onToggleCardSelection={this.onToggleCardSelection}
                               onRowSelected={this.onCardRowSelected}

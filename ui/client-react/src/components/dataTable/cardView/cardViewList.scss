@@ -1,6 +1,9 @@
 @import '../../../../src/assets/css/qbVariables';
 
 $margin-spacer: 10px;
+$grid-default-cell-padding: 10px;
+$grid-group-expand-icon-size: 18px;
+$grid-default-group-padding: 0px;
 
 .tableLoaderContainer {
     flex: 1 1 auto;
@@ -10,6 +13,50 @@ $margin-spacer: 10px;
     display: block !important;
     width: inherit !important;
     margin-bottom: $margin-spacer;
+
+    .group-header {
+        line-height: 30px;
+        background-color: $grid-group-row-header-bkgrd-color;
+        > span {
+            display: inline-block;
+            vertical-align: middle;
+        }
+    }
+    .group-level--1 {
+        >.group-header {
+            display: none;
+        }
+    }
+    .qbIcon {
+        &.iconssturdy-caret-filled-down,
+        &.iconssturdy-icon_caretfilledright {
+            font-size: $grid-group-expand-icon-size;
+        }
+    }
+    .group-header::before {
+        border-top: 1px solid $grid-group-row-header-divider;
+        position: absolute;
+        top: -1px;
+        bottom: 0;
+        right: 0;
+        left: 0;
+        content: " ";
+    }
+    .group-level-0 {
+        border-top: 4px solid $grid-group-row-header-border-top;
+        >.group-header::before {
+            border-top: 0;
+        }
+    }
+
+    @for $i from 0 through 5 {
+        .group-level-#{$i}{
+            position: relative;
+            >.group-header, .custom-row-card {
+                padding-left: $grid-default-cell-padding + $i*($grid-default-group-padding+$grid-group-expand-icon-size/2) !important;
+            }
+        }
+    }
 }
 
 .cardViewList.allowCardSelection {

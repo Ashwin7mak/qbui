@@ -5,6 +5,7 @@ import Loader  from 'react-loader';
 import Fluxxor from 'fluxxor';
 import {Collapse} from 'react-bootstrap';
 import './cardViewList.scss';
+import QBicon from '../../qbIcon/qbIcon';
 
 let FluxMixin = Fluxxor.FluxMixin(React);
 /**
@@ -33,7 +34,12 @@ let CardViewList = React.createClass({
         let childNodes;
         if (this.props.node.children) {
             childNodes = this.props.node.children.map((node, index) =>{
-                return <CardViewList key={index} node={node}
+                let groupId = index.toString();
+                if (this.props.groupId !== "") {
+                    groupId = this.props.groupId + "." + index;
+                }
+                let groupLevel = groupId.split(".").length - 1;
+                return <CardViewList key={index} groupId={groupId} groupLevel={groupLevel} node={node}
                                          allowCardSelection={this.props.allowCardSelection}
                                          onToggleCardSelection={this.props.onToggleCardSelection}
                                          onRowSelected={this.props.onRowSelected}
@@ -42,29 +48,32 @@ let CardViewList = React.createClass({
             });
         }
 
+        let className = "group-level-" + this.props.groupLevel;
+        let groupIcon = this.state.open ? "caret-filled-down" : "icon_caretfilledright";
         return (
             <div>
-                <h5 onClick={()=>this.setState({open: !this.state.open})}>
-                    {
-                        this.props.node.group || this.props.node.children && this.props.node.children.length ?
-                        this.props.node.group :
-                        <CardView key={this.props.node[this.props.uniqueIdentifier]}
-                                  rowId={this.props.node[this.props.uniqueIdentifier]}
-                                  data={this.props.node}
-                                  allowCardSelection={this.props.allowCardSelection}
-                                  onToggleCardSelection={this.props.onToggleCardSelection}
-                                  onRowSelected={this.props.onRowSelected}
-                                  onRowClicked={this.props.onRowClicked}
-                                  isRowSelected={this.props.isRowSelected}
-                                  metadataColumns={["actions"]}>
-                        </CardView>
-                    }
-                </h5>
-                <Collapse in={this.state.open}>
-                    <div>
-                        {childNodes}
-                    </div>
-                </Collapse>
+                {this.props.node.group || this.props.node.children && this.props.node.children.length ?
+                    <div className={className}>
+                        <div className="group-header" onClick={()=>this.setState({open: !this.state.open})}>
+                            <QBicon icon={groupIcon} /> {this.props.node.group}
+                        </div>
+                        <Collapse in={this.state.open}>
+                            <div>
+                                {childNodes}
+                            </div>
+                        </Collapse>
+                    </div> :
+                    <CardView key={this.props.node[this.props.uniqueIdentifier]}
+                              rowId={this.props.node[this.props.uniqueIdentifier]}
+                              data={this.props.node}
+                              allowCardSelection={this.props.allowCardSelection}
+                              onToggleCardSelection={this.props.onToggleCardSelection}
+                              onRowSelected={this.props.onRowSelected}
+                              onRowClicked={this.props.onRowClicked}
+                              isRowSelected={this.props.isRowSelected}
+                              metadataColumns={["actions"]}>
+                    </CardView>
+                }
             </div>
         );
     },
