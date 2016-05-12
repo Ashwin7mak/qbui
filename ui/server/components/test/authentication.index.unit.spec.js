@@ -38,7 +38,7 @@ describe('Validate https response authentication functions', function() {
 
         authentication.signout(mockReq, mockRes);
 
-        // expect the http status to be 403, the json to be added to the response
+        // expect the http status to be 200, the json to be added to the response
         // and the logger to have been called
         assert.equal(mockRes.httpStatus, 200);
         assert(stubLog.calledOnce);
@@ -53,7 +53,7 @@ describe('Validate https response authentication functions', function() {
 
         authentication.signout(mockReq, mockRes);
 
-        // expect the http status to be 403, the json to be added to the response
+        // expect the http status to be 200, the json to be added to the response
         // and the logger to have been called
         assert.equal(mockRes.httpStatus, 200);
         assert(stubLog.calledOnce);
@@ -68,7 +68,7 @@ describe('Validate https response authentication functions', function() {
 
         authentication.signin(mockReq, mockRes);
 
-        // expect the http status to be 403, the json to be added to the response
+        // expect the http status to be 200, the json to be added to the response
         // and the logger to have been called
         assert.equal(mockRes.httpStatus, 200);
         assert(stubLog.calledOnce);
@@ -83,7 +83,7 @@ describe('Validate https response authentication functions', function() {
 
         authentication.signin(mockReq, mockRes);
 
-        // expect the http status to be 403, the json to be added to the response
+        // expect the http status to be 200, the json to be added to the response
         // and the logger to have been called
         assert.equal(mockRes.httpStatus, 200);
         assert(stubLog.calledOnce);
