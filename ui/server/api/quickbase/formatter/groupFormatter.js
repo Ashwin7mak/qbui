@@ -301,8 +301,9 @@
                     // as the groups array.  This is to ensure proper order of precedence.
                     groups.forEach((group) => {
                         if (group) {
-                            //  must have a fid and group type element
                             let el = group.split(constants.REQUEST_PARAMETER.GROUP_DELIMITER, 2);
+
+                            //  must have a fid with a group type AND no prior entry in list that is sort only
                             if (el.length === 2 && sortFidWithNoGroupingFound === false) {
                                 let groupFidId = el[0];
                                 let groupType = el[1];
