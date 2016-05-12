@@ -171,7 +171,11 @@ describe('Validate GroupFormatter unit tests', function() {
             {message: 'NUMERIC: one_k grouping', numFields: 5, numRecords: 2, gList: '1:3', dataType: constants.NUMERIC},
             {message: 'NUMERIC: ten_k grouping', numFields: 5, numRecords: 2, gList: '1:4', dataType: constants.NUMERIC},
             {message: 'NUMERIC: hundred_k grouping', numFields: 5, numRecords: 2, gList: '1:5', dataType: constants.NUMERIC},
-            {message: 'NUMERIC: million grouping', numFields: 5, numRecords: 2, gList: '1:6', dataType: constants.NUMERIC}
+            {message: 'NUMERIC: million grouping', numFields: 5, numRecords: 2, gList: '1:6', dataType: constants.NUMERIC},
+            //  NUMERIC sub_type
+            {message: 'NUMERIC: equals grouping', numFields: 5, numRecords: 2, gList: '1:V', dataType: constants.CURRENCY},
+            {message: 'NUMERIC: equals grouping', numFields: 5, numRecords: 2, gList: '1:V', dataType: constants.PERCENT},
+            {message: 'NUMERIC: equals grouping', numFields: 5, numRecords: 2, gList: '1:V', dataType: constants.RATING}
         ];
 
         testCases.forEach(function(testCase) {
