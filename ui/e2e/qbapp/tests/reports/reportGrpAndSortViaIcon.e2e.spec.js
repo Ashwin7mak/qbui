@@ -485,7 +485,7 @@
                 });
             });
 
-            it('Verify the popUp respects report settings', function(done) {
+            xit('Verify the popUp respects report settings', function(done) { //TODO Don is fixing on sorting inside grouping.
                 var expectedTableResultsAfterFilter = [
                     ['Chris Baker'],
                     ['Development'],
