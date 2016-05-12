@@ -31,7 +31,7 @@ describe('Validate https response authentication functions', function() {
         spyRender.restore();
     });
 
-    it('validate http response 200 json request', function() {
+    it('validate http response 200 json request for signout', function() {
         mockReq.headers = {
             accept: consts.APPLICATION_JSON
         };
@@ -46,12 +46,42 @@ describe('Validate https response authentication functions', function() {
         assert(spyRender.callCount === 0, true);
     });
 
-    it('validate http response 200 xml request', function() {
+    it('validate http response 200 xml request for signout', function() {
         mockReq.headers = {
             accept: consts.APPLICATION_XML
         };
 
         authentication.signout(mockReq, mockRes);
+
+        // expect the http status to be 403, the json to be added to the response
+        // and the logger to have been called
+        assert.equal(mockRes.httpStatus, 200);
+        assert(stubLog.calledOnce);
+        assert(stubMockJson.callCount === 0, true);
+        assert(spyRender.calledOnce);
+    });
+
+    it('validate http response 200 json request for signin', function() {
+        mockReq.headers = {
+            accept: consts.APPLICATION_JSON
+        };
+
+        authentication.signin(mockReq, mockRes);
+
+        // expect the http status to be 403, the json to be added to the response
+        // and the logger to have been called
+        assert.equal(mockRes.httpStatus, 200);
+        assert(stubLog.calledOnce);
+        assert(stubMockJson.calledOnce);
+        assert(spyRender.callCount === 0, true);
+    });
+
+    it('validate http response 200 xml request for signin', function() {
+        mockReq.headers = {
+            accept: consts.APPLICATION_XML
+        };
+
+        authentication.signin(mockReq, mockRes);
 
         // expect the http status to be 403, the json to be added to the response
         // and the logger to have been called

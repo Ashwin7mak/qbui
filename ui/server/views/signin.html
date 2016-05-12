@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>Sign In</title>
+    <style>
+        html {
+            padding                  : 30px 10px;
+            font-size                : 16px;
+            line-height              : 1.4;
+            color                    : #737373;
+            background               : #f0f0f0;
+            -webkit-text-size-adjust : 100%;
+            -ms-text-size-adjust     : 100%;
+        }
+
+        html,
+        input {
+            font-family : "Helvetica Neue", Helvetica, Arial, sans-serif;
+        }
+
+        body {
+            max-width     : 500px;
+            width         : 500px;
+            padding       : 30px 20px 50px;
+            border        : 1px solid #b3b3b3;
+            border-radius : 4px;
+            margin        : 0 auto;
+            box-shadow    : 0 1px 10px #a7a7a7, inset 0 1px 0 #fff;
+            background    : #fcfcfc;
+        }
+
+        h1 {
+            margin     : 0 10px;
+            font-size  : 24px;
+            text-align : center;
+        }
+
+        p {
+            margin : 1em 0;
+            text-align: center;
+        }
+
+        ul {
+            padding : 0 0 0 40px;
+            margin  : 1em 0;
+        }
+
+        a {
+            cursor : pointer;
+            color  : #365ebf;
+        }
+
+        .container {
+            max-width : 425px;
+            width     : 425px;
+            margin    : 0 auto;
+        }
+    </style>
+</head>
+
+<body>
+<div class="container">
+    <h1>Sign In placeholder for QuickBase</h1>
+
+    <p>Please click <a id="signin" href="#">here</a> to sign into
+        QuickBase.</p>
+</div>
+</body>
+<script type="text/javascript">
+    var currentStackSignInUrl = "/db/main?a=nsredirect&nsurl=";
+    var newStackDestination = window.location.href.replace("/signin","/apps");
+    var currentStackDomain = window.location.hostname.replace(".newstack", "");
+    currentStackSignInUrl = "https://" + currentStackDomain + currentStackSignInUrl + newStackDestination;
+    document.getElementById("signin").href = currentStackSignInUrl;
+</script>
+
+</html>

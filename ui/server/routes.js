@@ -117,6 +117,9 @@
         require('./routes/qbClientRoutes')(app, config);
         require('./routes/qbApiRoutes')(app, config, routeMapper);
 
+        app.route('/signin')
+            .get(authentication.signin);
+
         app.route('/signout')
                 .get(authentication.signout);
 

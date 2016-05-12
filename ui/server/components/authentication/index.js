@@ -10,7 +10,16 @@
         var viewFilePath = 'signout.html';
         var statusCode = 200;
         var message = "User is signing out";
-        res.clearCookie('ticket',  {path: '/api/api/v1'});
+        res.clearCookie('ticket',  {path: '/'});
+        processAuthentication(req, res, viewFilePath, statusCode, message);
+    };
+
+    module.exports.signin = function signin(req, res) {
+        var viewFilePath = 'signin.html';
+        var statusCode = 200;
+        var message = "User is signing in";
+        //TODO: when signin is implemented on newstack, update this to create cookie
+        //res.cookie('ticket',  {path: '/'});
         processAuthentication(req, res, viewFilePath, statusCode, message);
     };
 
