@@ -18,7 +18,8 @@ let NavStore = Fluxxor.createStore({
             searching:false,
             trowserOpen: false,
             topTitle: null,
-            scrollingReport: false
+            scrollingReport: false,
+            filterReportsName: ''
         };
 
         this.setLocaleBundle();
@@ -35,7 +36,8 @@ let NavStore = Fluxxor.createStore({
             actions.SHOW_TOP_NAV, this.onShowTopNav,
             actions.HIDE_TOP_NAV, this.onHideTopNav,
             actions.SET_TOP_TITLE, this.onSetTopTitle,
-            actions.SCROLLING_REPORT, this.onScrollingReport
+            actions.SCROLLING_REPORT, this.onScrollingReport,
+            actions.FILTER_REPORTS_BY_NAME, this.onFilterReportsByName
         );
     },
 
@@ -72,7 +74,10 @@ let NavStore = Fluxxor.createStore({
         this.state.searching = searching;
         this.emit('change');
     },
-
+    onFilterReportsByName(name) {
+        this.state.filterReportsName = name;
+        this.emit('change');
+    },
     /*
      * toggle left nav visible (small breakpoint state)
      * @param visible force visible/hidden
