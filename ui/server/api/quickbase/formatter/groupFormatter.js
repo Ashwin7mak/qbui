@@ -328,15 +328,15 @@
                                     log.warn("Invalid field for grouping.  FieldId: " + groupFidId + "; GroupType: " + groupType);
                                 }
                             } else {
-                                //  Once we find a sortList entry defined without grouping, any subsequent grouping fids
-                                //  found in the groupList parameter are ignored.  For example:
-                                //      7.8:V.9:V      ==>  no grouping
+                                //  Once we find a sortList entry defined without grouping, any subsequent grouping fid
+                                //  found in the groupList parameter is ignored.  For example:
+                                //      7.8:V.9:V      ==>  no grouping as 1st element is a sort only fid
                                 //      7:V.8:V        ==>  group by fid 7, then fid 8
-                                //      7:V.8.9.10:V   ==>  group by fid 7 only
-                                //      7:V.8:V.9.10:V ==>  group by fid 7, then fid 8 only
+                                //      7:V.8.9.10:V   ==>  group by fid 7 only as 2nd element is a sort only fid
+                                //      7:V.8:V.9.10:V ==>  group by fid 7, fid 8 only as 3rd element is a sort only fid
                                 //
-                                //  NOTE: The builder on the new stack UI should restrict this behavior, but we could
-                                //  run into this scenario when migrating old stack data.
+                                //  NOTE: The builder on the new stack UI should restrict the possibility of this
+                                //  behavior, but we could run into this scenario when migrating old stack data.
                                 sortFidWithNoGroupingFound = true;
                             }
                         }
