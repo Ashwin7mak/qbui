@@ -86,7 +86,7 @@ var ReportHeader = React.createClass({
                 <FilterSearchBox onChange={this.handleSearchChange}
                                  nameForRecords={this.props.nameForRecords}
                                  searchBoxKey="reportHeader"
-                                 onClearSearch={this.clearSearchString}
+                                 clearSearchString={this.clearSearchString}
                                 {...this.props} />
                 <a className="textLink" href="#" onClick={this.cancelSearch}>
                     <I18nMessage message="cancel"/>
