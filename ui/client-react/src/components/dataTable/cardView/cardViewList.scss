@@ -4,6 +4,7 @@ $margin-spacer: 10px;
 $grid-default-cell-padding: 10px;
 $grid-group-expand-icon-size: 18px;
 $grid-default-group-padding: 0px;
+$table-actions-container-bg: #fff;
 
 .tableLoaderContainer {
     flex: 1 1 auto;
@@ -14,6 +15,11 @@ $grid-default-group-padding: 0px;
     width: inherit !important;
     margin-bottom: $margin-spacer;
 
+    &.allowCardSelection {
+        .custom-row-card .card-expander {
+            display:none;
+        }
+    }
     .group-header {
         line-height: 30px;
         background-color: $grid-group-row-header-bkgrd-color;
@@ -59,8 +65,13 @@ $grid-default-group-padding: 0px;
     }
 }
 
-.cardViewList.allowCardSelection {
-    .custom-row-card .card-expander {
-        display:none;
+.tableActionsContainer {
+    flex: 0 0 auto;
+    position: relative;
+    @include small-breakpoint {
+        background-color: $table-actions-container-bg;
+        &:not(.selectionActionsOpen) {
+            background-color: $secondary-bar-bg;
+        }
     }
 }
