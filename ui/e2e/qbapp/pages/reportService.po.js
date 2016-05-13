@@ -30,6 +30,9 @@
         // App Search
         this.searchAppsDivEl = this.appsListDivEl.element(by.className('search'));
         this.searchAppsInputEl = this.searchAppsDivEl.element(by.tagName('input'));
+        // Home and User links
+        this.topLinksEl = element(by.className('topLinks'));
+        this.topLinksElList = this.topLinksEl.all(by.className('link'));
         // Tables List
         this.tablesListDivEl = element(by.className('tablesList'));
         this.tableLinksElList = this.tablesListDivEl.all(by.className('link'));
