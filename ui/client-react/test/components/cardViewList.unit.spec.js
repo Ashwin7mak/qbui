@@ -26,17 +26,6 @@ const multiNodeTreeData = {
     ]
 };
 
-let flux = {
-    actions: {
-        getFilteredRecords: function() {
-            return;
-        },
-        selectedRows: function() {
-            return;
-        }
-    }
-};
-
 const CardViewMock = React.createClass({
     render: function() {
         return (

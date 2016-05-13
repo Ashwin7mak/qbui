@@ -111,8 +111,8 @@ let CardViewListHolder = React.createClass({
         recordNodes.children = records;
 
         return (
-            <div className={cardViewListClasses} ref="cardViewList">
-                <CardViewList node={recordNodes}
+            <div className={cardViewListClasses}>
+                <CardViewList ref="cardViewList" node={recordNodes}
                               groupId=""
                               groupLevel={-1}
                               allowCardSelection={this.allowCardSelection}

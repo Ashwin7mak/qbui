@@ -15,23 +15,21 @@ const fakeReportData_empty = {
     }
 };
 
+const singleNodeTreeData = [{
+    group:"group1",
+    children: [{col_num: 1,
+                col_text: "abc",
+                col_date: "01-01-2015"}]
+}];
 const fakeReportData_valid = {
     loading:false,
     data: {
-        filteredRecords: [
-            {
-                col_num: 1,
-                col_text: "abc",
-                col_date: "01-01-2015"
-            }]
+        filteredRecords: singleNodeTreeData
     }
 };
 
 let flux = {
     actions: {
-        getFilteredRecords: function() {
-            return;
-        },
         selectedRows: function() {
             return;
         }
@@ -43,8 +41,18 @@ const CardViewListMock = React.createClass({
         return (
             <div className="cardViewList">test</div>
         );
+    },
+    simulateSwipeRightForSelection: function() {
+        this.props.onToggleCardSelection(true, this.props.node);
+    },
+    simulateSwipeLeftInSelection() {
+        this.props.onToggleCardSelection(false);
+    },
+    simulateClick() {
+        this.props.onRowClicked(this.props.node);
     }
 });
+
 
 describe('CardViewListHolder functions', () => {
     'use strict';
@@ -60,9 +68,7 @@ describe('CardViewListHolder functions', () => {
     });
 
     it('test render of loading component', () => {
-
         component = TestUtils.renderIntoDocument(<CardViewListHolder flux={flux} selectedRows={[]} reportData={fakeReportData_loading}/>);
-
         expect(TestUtils.isCompositeComponent(component)).toBeTruthy();
 
         let cards = TestUtils.scryRenderedDOMComponentsWithClass(component, "cardViewList");
@@ -70,9 +76,7 @@ describe('CardViewListHolder functions', () => {
     });
 
     it('test render of empty component', () => {
-
         component = TestUtils.renderIntoDocument(<CardViewListHolder flux={flux} selectedRows={[]} reportData={fakeReportData_empty}/>);
-
         expect(TestUtils.isCompositeComponent(component)).toBeTruthy();
 
         let cards = TestUtils.scryRenderedDOMComponentsWithClass(component, "cardViewList");
@@ -82,7 +86,6 @@ describe('CardViewListHolder functions', () => {
     it('test render of single cardview component', () => {
 
         var TestParent = React.createFactory(React.createClass({
-
             childContextTypes: {
                 history: React.PropTypes.object
             },
@@ -107,5 +110,75 @@ describe('CardViewListHolder functions', () => {
 
         let cardlist = TestUtils.findRenderedComponentWithType(component, CardViewListMock);
         expect(TestUtils.isCompositeComponent(cardlist)).toBeTruthy();
+    });
+
+    it('test selectrow callback', () => {
+        spyOn(flux.actions, 'selectedRows');
+        var TestParent = React.createFactory(React.createClass({
+            render() {
+                return <CardViewListHolder flux={flux} selectedRows={[]} ref="cardViewListholder" reportData={fakeReportData_valid}
+                                           uniqueId="col_num"/>;
+            }
+        }));
+        var parent = TestUtils.renderIntoDocument(TestParent());
+        component = parent.refs.cardViewListholder;
+        let cardlist = TestUtils.findRenderedComponentWithType(component, CardViewListMock);
+        expect(TestUtils.isCompositeComponent(cardlist)).toBeTruthy();
+
+        cardlist.simulateSwipeRightForSelection();
+        expect(flux.actions.selectedRows).toHaveBeenCalled();
+        flux.actions.selectedRows.calls.reset();
+    });
+
+    it('test unselectrow callback', () => {
+        spyOn(flux.actions, 'selectedRows');
+        var TestParent = React.createFactory(React.createClass({
+            render() {
+                return <CardViewListHolder flux={flux} selectedRows={[]} ref="cardViewListholder" reportData={fakeReportData_valid}
+                                           uniqueId="col_num"/>;
+            }
+        }));
+        var parent = TestUtils.renderIntoDocument(TestParent());
+        component = parent.refs.cardViewListholder;
+        let cardlist = TestUtils.findRenderedComponentWithType(component, CardViewListMock);
+        expect(TestUtils.isCompositeComponent(cardlist)).toBeTruthy();
+
+        cardlist.simulateSwipeLeftInSelection();
+        expect(flux.actions.selectedRows).toHaveBeenCalled();
+        flux.actions.selectedRows.calls.reset();
+    });
+
+    it('test rowClick callback', () => {
+        var TestParent = React.createFactory(React.createClass({
+            getInitialState() {
+                return {
+                    history: ""
+                };
+            },
+            childContextTypes: {
+                history: React.PropTypes.object
+            },
+            getChildContext: function() {
+                let self = this;
+                return {
+                    history: {
+                        push(a) {
+                            self.setState({history: "history"});
+                        }
+                    }
+                };
+            },
+            render() {
+                return <CardViewListHolder flux={flux} selectedRows={[]} ref="cardViewListholder" reportData={fakeReportData_valid}
+                                           uniqueId="col_num"/>;
+            }
+        }));
+        var parent = TestUtils.renderIntoDocument(TestParent());
+        component = parent.refs.cardViewListholder;
+        let cardlist = TestUtils.findRenderedComponentWithType(component, CardViewListMock);
+        expect(TestUtils.isCompositeComponent(cardlist)).toBeTruthy();
+
+        cardlist.simulateClick();
+        expect(parent.state.history).toEqual("history");
     });
 });
