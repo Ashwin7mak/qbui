@@ -2,20 +2,14 @@ import React from 'react';
 import {I18nMessage} from '../../../utils/i18nMessage';
 import CardView from './cardView';
 import Loader  from 'react-loader';
-import Fluxxor from 'fluxxor';
 import {Collapse} from 'react-bootstrap';
 import './cardViewList.scss';
 import QBicon from '../../qbIcon/qbIcon';
 
-let FluxMixin = Fluxxor.FluxMixin(React);
 /**
  * A list of CardView items used to render a report at the small breakpoint
  */
 let CardViewList = React.createClass({
-    mixins: [FluxMixin],
-    contextTypes: {
-        history: React.PropTypes.object
-    },
     propTypes: {
         allowCardSelection: React.PropTypes.func,
         onToggleCardSelection: React.PropTypes.func,
@@ -48,7 +42,7 @@ let CardViewList = React.createClass({
             });
         }
 
-        let className = "group-level-" + this.props.groupLevel;
+        let className = "cardViewList group-level-" + this.props.groupLevel;
         let groupIcon = this.state.open ? "caret-filled-down" : "icon_caretfilledright";
         return (
             <div>
@@ -80,7 +74,7 @@ let CardViewList = React.createClass({
 
     render() {
         return (
-            this.getRows()
+            this.props.node ? this.getRows() : null
         );
     }
 });

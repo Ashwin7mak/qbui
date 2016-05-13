@@ -1,6 +1,5 @@
 import React from 'react';
 import {I18nMessage} from '../../../utils/i18nMessage';
-import CardView from './cardView';
 import Loader  from 'react-loader';
 import Fluxxor from 'fluxxor';
 import CardViewList from './cardViewList';
@@ -107,6 +106,7 @@ let CardViewListHolder = React.createClass({
             cardViewListClasses += " allowCardSelection";
         }
         const records = this.props.reportData.data ? this.props.reportData.data.filteredRecords : [];
+        //introduce a top level group to normalize tree data.
         let recordNodes = {};
         recordNodes.children = records;
 
