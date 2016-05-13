@@ -31,6 +31,9 @@ describe('ReportHeader functions', () => {
         },
         filterReport() {
             return;
+        },
+        filterSearchPending() {
+            return;
         }
     };
     let selections = new FacetSelections();
@@ -80,21 +83,11 @@ describe('ReportHeader functions', () => {
     });
 
     it('test perform search', () => {
-
         let toggleNav = TestUtils.findRenderedDOMComponentWithClass(component, "toggleNavButton");
         TestUtils.Simulate.click(toggleNav);
 
-        let filterSearchBox = TestUtils.scryRenderedComponentsWithType(component, SearchBox);
-
-        let searchInputBox = TestUtils.scryRenderedDOMComponentsWithClass(filterSearchBox[0], "searchInput");
-        expect(searchInputBox.length).toEqual(1);
-
-        var searchInput = searchInputBox[0];
-        var testValue = 'xxx';
-
-        //simulate search string was input
-        TestUtils.Simulate.change(searchInput, {target: {value: testValue}});
-        expect(mockCallbacks.searchHappened).toHaveBeenCalled();
+        let filterSearchBox = TestUtils.scryRenderedDOMComponentsWithClass(component, "filterSearchBox");
+        expect(filterSearchBox.length).toEqual(1);
     });
 
 });
