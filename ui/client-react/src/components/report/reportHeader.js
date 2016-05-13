@@ -5,6 +5,8 @@ import FilterSearchBox from '../facet/filterSearchBox';
 import {I18nMessage} from '../../utils/i18nMessage';
 import _ from 'lodash';
 import FilterUtils from '../../utils/filterUtils';
+import * as query from '../../constants/query';
+import ReportUtils from '../../utils/reportUtils';
 import './reportHeader.scss';
 
 let FluxMixin = Fluxxor.FluxMixin(React);
@@ -15,12 +17,11 @@ let FluxMixin = Fluxxor.FluxMixin(React);
  */
 var ReportHeader = React.createClass({
     mixins: [FluxMixin],
+    facetFields : {},
 
     propTypes: {
         reportData: React.PropTypes.object,
         nameForRecords: React.PropTypes.string,
-        searchTheString: React.PropTypes.func,
-        clearSearchString: React.PropTypes.func,
     },
     getInitialState() {
         return {
@@ -32,11 +33,28 @@ var ReportHeader = React.createClass({
         let flux = this.getFlux();
         flux.actions.toggleLeftNav();
     },
+    searchTheString(searchTxt) {
+        this.getFlux().actions.filterSearchPending(searchTxt);
+        this.filterReport(searchTxt, this.props.reportData.selections);
+    },
+    clearSearchString() {
+        this.getFlux().actions.filterSearchPending('');
+        this.filterReport('', this.props.reportData.selections);
+    },
+    filterReport(searchString, selections) {
+        const filter = FilterUtils.getFilter(searchString, selections, this.facetFields);
 
+        let queryParams = {};
+        queryParams[query.SORT_LIST_PARAM] = ReportUtils.getGListString(this.props.reportData.data.sortFids, this.props.reportData.data.groupEls);
+        queryParams[query.GLIST_PARAM] = ReportUtils.getGListString(this.props.reportData.data.sortFids, this.props.reportData.data.groupEls);
+        this.getFlux().actions.getFilteredRecords(this.props.selectedAppId,
+            this.props.routeParams.tblId,
+            typeof this.props.rptId !== "undefined" ? this.props.rptId : this.props.routeParams.rptId, {format:true}, filter, queryParams);
+    },
     handleSearchChange(e) {
-        if (this.props.searchTheString) {
+        if (this.searchTheString) {
             var searchTxt = e.target.value;
-            this.props.searchTheString(searchTxt);
+            this.searchTheString(searchTxt);
         }
     },
     // show the search elements
@@ -68,6 +86,7 @@ var ReportHeader = React.createClass({
                 <FilterSearchBox onChange={this.handleSearchChange}
                                  nameForRecords={this.props.nameForRecords}
                                  searchBoxKey="reportHeader"
+                                 clearSearchString={this.clearSearchString}
                                 {...this.props} />
                 <a className="textLink" href="#" onClick={this.cancelSearch}>
                     <I18nMessage message="cancel"/>

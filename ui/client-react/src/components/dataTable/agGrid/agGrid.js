@@ -91,6 +91,7 @@ let AGGrid = React.createClass({
         case "CHECKBOX": message =  "uncheckedToChecked"; break;
         case "TEXT":
         case "URL":
+        case "USER":
         case "EMAIL_ADDRESS": message =  "aToZ"; break;
         case "DATE":
         case "DATE_TIME": message =  "oldToNew"; break;
@@ -106,6 +107,7 @@ let AGGrid = React.createClass({
         case "CHECKBOX": message =  "checkedToUnchecked"; break;
         case "TEXT":
         case "URL":
+        case "USER":
         case "EMAIL_ADDRESS": message =  "zToA"; break;
         case "DATE":
         case "DATE_TIME": message =  "newToOld"; break;
@@ -221,7 +223,7 @@ let AGGrid = React.createClass({
             {"name": this.getSortDescText(params.column.colDef, "sort"), "icon": isFieldSorted && !isSortedAsc ? gridIcons.check : "", action: () => this.sortReport(params.column.colDef, false, isFieldSorted && !isSortedAsc)}];
         menuItems.push("separator");
         menuItems.push({"name": this.getSortAscText(params.column.colDef, "group"), action: () => this.groupReport(params.column.colDef, true)},
-            {"name": this.getSortDescText(params.column.colDef, "group"), action: () => this.groupReport(params.column.colDef)});
+            {"name": this.getSortDescText(params.column.colDef, "group"), action: () => this.groupReport(params.column.colDef, false)});
         menuItems.push("separator");
         menuItems.push({"name": Locale.getMessage("report.menu.addColumnBefore")},
             {"name": Locale.getMessage("report.menu.addColumnAfter")},

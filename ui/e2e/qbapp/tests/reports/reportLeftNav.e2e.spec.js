@@ -147,9 +147,13 @@
                             }
                         });
                     }
-                    reportServicePage.tableLinksElList.then(function(links) {
-                        // Check we have the base links and two table links present
-                        expect(links.length).toBe(6);
+                    reportServicePage.tableLinksElList.then(function(tableLinks) {
+                        // Assert the home and user top links are present
+                        reportServicePage.topLinksElList.then(function(topLinks) {
+                            expect(topLinks.length).toBe(2);
+                        });
+                        // Check we have four table links present
+                        expect(tableLinks.length).toBe(4);
                         reportServicePage.clickAppToggle();
                         // Check that the app search widget is hidden
                         expect(reportServicePage.searchAppsDivEl.isDisplayed()).toBeFalsy();
@@ -183,8 +187,12 @@
                     }
                     reportServicePage.waitForElement(reportServicePage.navMenuEl).then(function() {
                         reportServicePage.tableLinksElList.then(function(links) {
-                            // Check we have the 3 base links and two table links present on left Nav
-                            expect(links.length).toBe(6);
+                            // Assert the home and user top links are present
+                            reportServicePage.topLinksElList.then(function(topLinks) {
+                                expect(topLinks.length).toBe(2);
+                            });
+                            // Check we have the four table links present on left Nav
+                            expect(links.length).toBe(4);
                             for (var i = 0; i < links.length; i++) {
                                 expect(links[i].isDisplayed()).toBe(true);
                                 done();
@@ -204,9 +212,9 @@
                             reportServicePage.waitForElementToBeClickable(reportServicePage.topNavToggleHamburgerEl).then(function() {
                                 reportServicePage.topNavToggleHamburgerEl.click();
                                 // Hover over the table link icon in leftNav
-                                browser.actions().mouseMove(reportServicePage.tableLinksElList.get(3)).perform();
+                                browser.actions().mouseMove(reportServicePage.tableLinksElList.get(0)).perform();
                                 // Open the reportsMenu
-                                reportServicePage.openReportsMenu(reportServicePage.tableLinksElList.get(3));
+                                reportServicePage.openReportsMenu(reportServicePage.tableLinksElList.get(0));
                                 // Load report
                                 // Wait for the report list to load
                                 reportServicePage.waitForElement(reportServicePage.reportGroupsDivEl).then(function() {

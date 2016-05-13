@@ -13,6 +13,7 @@ import ReportUtils from '../../utils/reportUtils';
 import * as GroupTypes from '../../constants/groupTypes';
 import MockData from '../../mocks/sortGroup';
 import * as query from '../../constants/query';
+import WindowLocationUtils from '../../utils/windowLocationUtils';
 
 import _ from 'lodash';
 import Fluxxor from 'fluxxor';
@@ -79,7 +80,7 @@ const SortAndGroup = React.createClass({
         return _.clone({
             show: false,
             showFields: false,
-            //state object for sort and group have array of objects containing
+            //field object for newSelectionsSort and group have array of objects containing
             // type - sort or group
             // name - fieldName
             // id - fieldId
@@ -140,11 +141,34 @@ const SortAndGroup = React.createClass({
         this.setState({showFields: false, fieldsForType:null});
     },
 
+    updateRecords(sortGroupString) {
+        let flux = this.getFlux();
+        let overrideParams = {};
+        //if report was grouped in the last render and is grouped in this render
+        // or was ungrouped in last and this render no need to re-load report.
+        let groupKeys = _.map(this.state.newSelectionsGroup, 'unparsedVal');
+        let changedGroupingStyle = true;
+        if (this.props.reportData && this.props.reportData.data && this.props.reportData.data.groupEls) {
+            if ((this.props.reportData.data.groupEls.length && groupKeys.length) || //report was grouped before and after
+                (this.props.reportData.data.groupEls.length === 0 && groupKeys.length === 0)) { //report was ungrouped before and after
+                changedGroupingStyle = false;
+            }
+        }
+
+        if (changedGroupingStyle) {
+            flux.actions.loadReport(this.props.appId,
+                this.props.tblId,
+                this.props.rptId, true, null, null, sortGroupString);
+        } else {
+            overrideParams[query.SORT_LIST_PARAM] = sortGroupString;
+            overrideParams[query.GLIST_PARAM] = sortGroupString;
+            flux.actions.getFilteredRecords(this.props.appId, this.props.tblId, this.props.rptId, {format:true}, this.props.filter, overrideParams);
+        }
+    },
+
     applyChanges() {
-        if (!window.location.search.includes('mockSort')) {
+        if (!WindowLocationUtils.searchIncludes('mockSort')) {
             //reload data using the adhoc sort values
-            let flux = this.getFlux();
-            let overrideParams = {};
 
             // get the group string and the sort string from state
             let sortKeys = _.map(this.state.newSelectionsSort, 'unparsedVal');
@@ -162,45 +186,16 @@ const SortAndGroup = React.createClass({
                 }
                 sortGroupString += sortList;
             }
-
-            overrideParams[query.SORT_LIST_PARAM] = sortGroupString;
-            overrideParams[query.GLIST_PARAM] = sortGroupString;
-
-            //if report was grouped in the last render and is grouped in this render
-            // or was ungrouped in last and this render no need to re-load report.
-            if (this.props.reportData.data && this.props.reportData.data.groupEls &&
-                ((this.props.reportData.data.groupEls.length && groupKeys.length) ||
-                (this.props.reportData.data.groupEls.length === 0 && groupKeys.length === 0))) {
-                flux.actions.getFilteredRecords(this.props.appId, this.props.tblId, this.props.rptId, {format:true}, this.props.filter, overrideParams);
-            } else {
-                flux.actions.loadReport(this.props.appId,
-                    this.props.tblId,
-                    this.props.rptId, true, null, null, overrideParams[query.SORT_LIST_PARAM]);
-            }
+            this.updateRecords(sortGroupString);
         }
 
     },
 
     reset() {
         //reload data using report with original sort/group overrides & keep filter settings
-        let flux = this.getFlux();
-        let overrideParams = {};
-
-        let groupKeys = _.map(this.state.newSelectionsGroup, 'unparsedVal');
-        let sortGroupString = ReportUtils.getGListString(this.props.reportData.data.originalMetaData.sortList);
-        overrideParams[query.SORT_LIST_PARAM] = sortGroupString;
-        overrideParams[query.GLIST_PARAM] = sortGroupString;
-
-        //if report was grouped in the last render and is grouped in this render
-        // or was ungrouped in last and this render no need to re-load report.
-        if (this.props.reportData.data && this.props.reportData.data.groupEls &&
-            ((this.props.reportData.data.groupEls.length && groupKeys.length) ||
-            (this.props.reportData.data.groupEls.length === 0 && groupKeys.length === 0))) {
-            flux.actions.getFilteredRecords(this.props.appId, this.props.tblId, this.props.rptId, {format:true}, this.props.filter, overrideParams);
-        } else {
-            flux.actions.loadReport(this.props.appId,
-                this.props.tblId,
-                this.props.rptId, true, null, null, sortGroupString);
+        if (_.has(this.props, 'reportData.data.originalMetaData.sortList')) {
+            let sortGroupString = ReportUtils.getGListString(this.props.reportData.data.originalMetaData.sortList);
+            this.updateRecords(sortGroupString);
         }
     },
 
@@ -274,7 +269,9 @@ const SortAndGroup = React.createClass({
         item.id = field.id;
         item.decendOrder = false;
         item.type = type;
-        item.howToGroup = GroupTypes.COMMON.equals;
+        if (type === KIND.GROUP) {
+            item.howToGroup = GroupTypes.COMMON.equals;
+        }
         item.unparsedVal = this.getUnparsedVal(item, type);
         item.name = field.name;
 
@@ -397,7 +394,7 @@ const SortAndGroup = React.createClass({
          */
         let answer = [];
 
-        if (window.location.search.includes('mockSort')) {
+        if (WindowLocationUtils.searchIncludes('mockSort')) {
             //just show some static dummy sort info
             return MockData.SORT;
         }
@@ -446,7 +443,7 @@ const SortAndGroup = React.createClass({
          */
         let answer = [];
         //get groupFields from report data prop
-        if (window.location.search.includes('mockSort')) {
+        if (WindowLocationUtils.searchIncludes('mockSort')) {
             //just show some static dummy grouping info
             return MockData.GROUP;
         }
@@ -496,7 +493,8 @@ const SortAndGroup = React.createClass({
      **/
     render() {
 
-        let fields = this.state.show &&  _.has(this.props, 'fields.fields.data') ? this.props.fields.fields.data : [];
+        let fields = this.state.show &&  _.has(this.props, 'fields.fields.data') ?
+                                this.props.fields.fields.data : [];
         let sortByFields = this.state.show ? this.getSortFields(fields) : [];
         let groupByFields = this.state.show ? this.getGroupFields(fields) : [];
         let fieldChoiceList = this.getFieldsNotYetUsed(fields, groupByFields, sortByFields);

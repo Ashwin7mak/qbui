@@ -245,7 +245,7 @@ describe('ReportService functions', () => {
         expect(BaseService.prototype.get).toHaveBeenCalledWith(url, {params:params});
     });
 
-    it('test getReport and facets function with invalid sortlist', () => {
+    it('test getReport and facets function with null sortlist', () => {
         var appId = 1;
         var tblId = 2;
         var rptId = 3;
@@ -274,7 +274,7 @@ describe('ReportService functions', () => {
         expect(BaseService.prototype.get).toHaveBeenCalledWith(url, {params:params});
     });
 
-    it('test getReport and facets function with invalid columns', () => {
+    it('test getReport and facets function with empty columns', () => {
         var appId = 1;
         var tblId = 2;
         var rptId = 3;
@@ -303,7 +303,7 @@ describe('ReportService functions', () => {
         expect(BaseService.prototype.get).toHaveBeenCalledWith(url, {params:params});
     });
 
-    it('test getReport and facets function with invalid query', () => {
+    it('test getReport and facets function with no query', () => {
         var appId = 1;
         var tblId = 2;
         var rptId = 3;

@@ -136,7 +136,6 @@ let reportDataActions = {
                 //  query for the report meta data
                 reportService.getReport(appId, tblId, rptId).then(
                     (reportMetaData) => {
-                        ////  Node query parameters which are all optional and could be null/undefined
                         let requiredParams = {};
                         requiredParams[query.FORMAT_PARAM] = format;
                         requiredParams[query.OFFSET_PARAM] = offset;
