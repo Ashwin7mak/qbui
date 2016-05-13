@@ -85,7 +85,7 @@
         return data;
     }
 
-    function extractGroupedField(groupType, groupField, dataValue) {
+    function extractGroupedField(groupType, groupField, dataValue, rawDataValue) {
         //
         //  Extract the grouping header based on the request group type, field type and data value
         //
@@ -146,37 +146,31 @@
         case constants.CURRENCY:    // CURRENCY is a sub-type of NUMERIC
         case constants.PERCENT:     // PERCENT is a sub-type of NUMERIC
         case constants.RATING:      // RATING is a sub-type of NUMERIC
-            //  unlike other grouping fields, numeric data types use the raw data value
-            //  to determine the range.  Since it is used only in the range calculation
-            //  function, remove from the array once we have a reference to the raw value.
-            let raw = record[groupField.name + RAW_SUFFIX];
-            delete record[groupField.name + RAW_SUFFIX];
-
             switch (groupType) {
             case groupTypes.NUMERIC.equals:
                 return JSON.stringify({key:dataValue});
             case groupTypes.NUMERIC.thousandth:
-                return formatNumericRange(groupUtils.getRangeFraction(raw, 4));
+                return formatNumericRange(groupUtils.getRangeFraction(rawDataValue, 4));
             case groupTypes.NUMERIC.hundredth:
-                return formatNumericRange(groupUtils.getRangeFraction(raw, 3));
+                return formatNumericRange(groupUtils.getRangeFraction(rawDataValue, 3));
             case groupTypes.NUMERIC.tenth:
-                return formatNumericRange(groupUtils.getRangeFraction(raw, 2));
+                return formatNumericRange(groupUtils.getRangeFraction(rawDataValue, 2));
             case groupTypes.NUMERIC.one:
-                return formatNumericRange(groupUtils.getRangeWhole(raw, 1));
+                return formatNumericRange(groupUtils.getRangeWhole(rawDataValue, 1));
             case groupTypes.NUMERIC.five:
-                return formatNumericRange(groupUtils.getRangeWhole(raw, 5));
+                return formatNumericRange(groupUtils.getRangeWhole(rawDataValue, 5));
             case groupTypes.NUMERIC.ten:
-                return formatNumericRange(groupUtils.getRangeWhole(raw, 10));
+                return formatNumericRange(groupUtils.getRangeWhole(rawDataValue, 10));
             case groupTypes.NUMERIC.hundred:
-                return formatNumericRange(groupUtils.getRangeWhole(raw, 100));
+                return formatNumericRange(groupUtils.getRangeWhole(rawDataValue, 100));
             case groupTypes.NUMERIC.one_k:
-                return formatNumericRange(groupUtils.getRangeWhole(raw, 1000));
+                return formatNumericRange(groupUtils.getRangeWhole(rawDataValue, 1000));
             case groupTypes.NUMERIC.ten_k:
-                return formatNumericRange(groupUtils.getRangeWhole(raw, 10000));
+                return formatNumericRange(groupUtils.getRangeWhole(rawDataValue, 10000));
             case groupTypes.NUMERIC.hundred_k:
-                return formatNumericRange(groupUtils.getRangeWhole(raw, 100000));
+                return formatNumericRange(groupUtils.getRangeWhole(rawDataValue, 100000));
             case groupTypes.NUMERIC.million:
-                return formatNumericRange(groupUtils.getRangeWhole(raw, 1000000));
+                return formatNumericRange(groupUtils.getRangeWhole(rawDataValue, 1000000));
             }
             break;
         case constants.TEXT:
@@ -229,7 +223,15 @@
             //  the data value to group by
             let dataValue = record[groupField.name];
 
-            let groupedValue = extractGroupedField(groupType, groupField, dataValue);
+            //  If a raw value is defined(currently only numeric data types have this need),
+            //  set a local variable and remove from the array once we have that reference.
+            let rawDataValue = null;
+            if (record.hasOwnProperty(groupField.name + RAW_SUFFIX)) {
+                rawDataValue = record[groupField.name + RAW_SUFFIX];
+                delete record[groupField.name + RAW_SUFFIX];
+            }
+
+            let groupedValue = extractGroupedField(groupType, groupField, dataValue, rawDataValue);
 
             //  The lodash groupBy function uses the groupedValue as the key to an
             //  associative array.  If the groupedValue is numeric, javascript adds
