@@ -263,7 +263,7 @@
             }
 
             //  the groups are JSON, which is known only to this function.  Parse into an object and
-            //  extract out the key, which is the grouping data that is consumable by the client.
+            //  extract out the key, which is the grouping data that we want to expose to the client.
             let obj = JSON.parse(group);
             data.push({group: obj.key, children: children});
         }
