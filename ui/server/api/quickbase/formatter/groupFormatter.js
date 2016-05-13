@@ -85,6 +85,127 @@
         return data;
     }
 
+    function extractGroupedField(groupType, groupField, dataValue) {
+        //
+        //  Extract the grouping header based on the request group type, field type and data value
+        //
+        switch (groupField.datatypeAttributes.type) {
+        case constants.DATE_TIME:   // DATE_TIME and DATE are treated the same for grouping
+        case constants.DATE:
+            let dateFormat = dateFormatter.generateFormat({dateFormat: groupField.datatypeAttributes.dateFormat});
+            switch (groupType) {
+            case groupTypes.DATE.equals:
+                return dataValue;
+            case groupTypes.DATE.day:
+                return dataValue;
+            case groupTypes.DATE.week:
+                return groupUtils.getFirstDayOfWeek(dataValue, dateFormat);
+            case groupTypes.DATE.month:
+                return groupUtils.getMonth(dataValue, dateFormat);
+            case groupTypes.DATE.year:
+                return groupUtils.getYear(dataValue, dateFormat);
+            case groupTypes.DATE.quarter:
+                return groupUtils.getQuarter(dataValue, dateFormat);
+            case groupTypes.DATE.fiscalQuarter:
+                return groupUtils.getFiscalQuarter(dataValue, dateFormat);
+            case groupTypes.DATE.fiscalYear:
+                return groupUtils.getFiscalYear(dataValue, dateFormat);
+            case groupTypes.DATE.decade:
+                return groupUtils.getDecade(dataValue, dateFormat);
+            }
+            break;
+        case constants.DURATION:
+            switch (groupType) {
+            case groupTypes.DURATION.equals:
+                return groupUtils.getDurationEquals(dataValue);
+            case groupTypes.DURATION.second:
+                return groupUtils.getDurationInSeconds(dataValue);
+            case groupTypes.DURATION.minute:
+                return groupUtils.getDurationInMinutes(dataValue);
+            case groupTypes.DURATION.hour:
+                return groupUtils.getDurationInHours(dataValue);
+            case groupTypes.DURATION.day:
+                return groupUtils.getDurationInDays(dataValue);
+            case groupTypes.DURATION.week:
+                return groupUtils.getDurationInWeeks(dataValue);
+            }
+            break;
+        case constants.EMAIL_ADDRESS:
+            switch (groupType) {
+            case groupTypes.EMAIL_ADDRESS.equals:
+                return dataValue;
+            case groupTypes.EMAIL_ADDRESS.domain:
+                return groupUtils.getEmailDomain(dataValue);
+            case groupTypes.EMAIL_ADDRESS.domain_topLevel:
+                return groupUtils.getEmailDomainTopLevel(dataValue);
+            case groupTypes.EMAIL_ADDRESS.name:
+                return groupUtils.getEmailName(dataValue);
+            }
+            break;
+        case constants.NUMERIC:
+        case constants.CURRENCY:    // CURRENCY is a sub-type of NUMERIC
+        case constants.PERCENT:     // PERCENT is a sub-type of NUMERIC
+        case constants.RATING:      // RATING is a sub-type of NUMERIC
+            //  unlike other grouping fields, numeric data types use the raw data value
+            //  to determine the range.  Since it is used only in the range calculation
+            //  function, remove from the array once we have a reference to the raw value.
+            let raw = record[groupField.name + RAW_SUFFIX];
+            delete record[groupField.name + RAW_SUFFIX];
+
+            switch (groupType) {
+            case groupTypes.NUMERIC.equals:
+                return JSON.stringify({key:dataValue});
+            case groupTypes.NUMERIC.thousandth:
+                return formatNumericRange(groupUtils.getRangeFraction(raw, 4));
+            case groupTypes.NUMERIC.hundredth:
+                return formatNumericRange(groupUtils.getRangeFraction(raw, 3));
+            case groupTypes.NUMERIC.tenth:
+                return formatNumericRange(groupUtils.getRangeFraction(raw, 2));
+            case groupTypes.NUMERIC.one:
+                return formatNumericRange(groupUtils.getRangeWhole(raw, 1));
+            case groupTypes.NUMERIC.five:
+                return formatNumericRange(groupUtils.getRangeWhole(raw, 5));
+            case groupTypes.NUMERIC.ten:
+                return formatNumericRange(groupUtils.getRangeWhole(raw, 10));
+            case groupTypes.NUMERIC.hundred:
+                return formatNumericRange(groupUtils.getRangeWhole(raw, 100));
+            case groupTypes.NUMERIC.one_k:
+                return formatNumericRange(groupUtils.getRangeWhole(raw, 1000));
+            case groupTypes.NUMERIC.ten_k:
+                return formatNumericRange(groupUtils.getRangeWhole(raw, 10000));
+            case groupTypes.NUMERIC.hundred_k:
+                return formatNumericRange(groupUtils.getRangeWhole(raw, 100000));
+            case groupTypes.NUMERIC.million:
+                return formatNumericRange(groupUtils.getRangeWhole(raw, 1000000));
+            }
+            break;
+        case constants.TEXT:
+            switch (groupType) {
+            case groupTypes.TEXT.equals:
+                return dataValue;
+            case groupTypes.TEXT.firstLetter:
+                return groupUtils.getFirstLetter(dataValue);
+            case groupTypes.TEXT.firstWord:
+                return groupUtils.getFirstWord(dataValue);
+            }
+            break;
+        case constants.USER:
+            switch (groupType) {
+            case groupTypes.USER.equals:
+                return dataValue;
+            case groupTypes.USER.firstLetter:
+                return groupUtils.getFirstLetter(dataValue);
+            case groupTypes.USER.firstWord:
+                return groupUtils.getFirstWord(dataValue);
+            }
+            break;
+        default:
+            // unsupported data type or grouping option
+            log.warn("Unsupported grouping option.  FieldId: " + groupField.id + "; name: " + groupField.name + "; DataType: " + groupField.datatypeAttributes.type + "; GroupType: " + groupType);
+        }
+        return '';
+    }
+
     /**
      * For each group field, group the supplied report data according to the business
      * rules defined for each field type and group type combination.
@@ -108,124 +229,17 @@
             //  the data value to group by
             let dataValue = record[groupField.name];
 
-            //  Group the data based on the data type.  Grouping is supported
-            //  for DATE, DURATION, EMAIL, NUMERIC, TEXT and USER data types.
-            switch (groupField.datatypeAttributes.type) {
-            case constants.DATE_TIME:   // DATE_TIME and DATE are treated the same for grouping
-            case constants.DATE:
-                let dateFormat = dateFormatter.generateFormat({dateFormat: groupField.datatypeAttributes.dateFormat});
-                switch (groupType) {
-                case groupTypes.DATE.equals:
-                    return dataValue;
-                case groupTypes.DATE.day:
-                    return dataValue;
-                case groupTypes.DATE.week:
-                    return groupUtils.getFirstDayOfWeek(dataValue, dateFormat);
-                case groupTypes.DATE.month:
-                    return groupUtils.getMonth(dataValue, dateFormat);
-                case groupTypes.DATE.year:
-                    return groupUtils.getYear(dataValue, dateFormat);
-                case groupTypes.DATE.quarter:
-                    return groupUtils.getQuarter(dataValue, dateFormat);
-                case groupTypes.DATE.fiscalQuarter:
-                    return groupUtils.getFiscalQuarter(dataValue, dateFormat);
-                case groupTypes.DATE.fiscalYear:
-                    return groupUtils.getFiscalYear(dataValue, dateFormat);
-                case groupTypes.DATE.decade:
-                    return groupUtils.getDecade(dataValue, dateFormat);
-                }
-                break;
-            case constants.DURATION:
-                switch (groupType) {
-                case groupTypes.DURATION.equals:
-                    return groupUtils.getDurationEquals(dataValue);
-                case groupTypes.DURATION.second:
-                    return groupUtils.getDurationInSeconds(dataValue);
-                case groupTypes.DURATION.minute:
-                    return groupUtils.getDurationInMinutes(dataValue);
-                case groupTypes.DURATION.hour:
-                    return groupUtils.getDurationInHours(dataValue);
-                case groupTypes.DURATION.day:
-                    return groupUtils.getDurationInDays(dataValue);
-                case groupTypes.DURATION.week:
-                    return groupUtils.getDurationInWeeks(dataValue);
-                }
-                break;
-            case constants.EMAIL_ADDRESS:
-                switch (groupType) {
-                case groupTypes.EMAIL_ADDRESS.equals:
-                    return dataValue;
-                case groupTypes.EMAIL_ADDRESS.domain:
-                    return groupUtils.getEmailDomain(dataValue);
-                case groupTypes.EMAIL_ADDRESS.domain_topLevel:
-                    return groupUtils.getEmailDomainTopLevel(dataValue);
-                case groupTypes.EMAIL_ADDRESS.name:
-                    return groupUtils.getEmailName(dataValue);
-                }
-                break;
-            case constants.NUMERIC:
-            case constants.CURRENCY:    // CURRENCY is a sub-type of NUMERIC
-            case constants.PERCENT:     // PERCENT is a sub-type of NUMERIC
-            case constants.RATING:      // RATING is a sub-type of NUMERIC
-                //  unlike other grouping fields, numeric data types use the raw data value
-                //  to determine the range.  Since it is used only in the range calculation
-                //  function, remove from the array once we have a reference to the raw value.
-                let raw = record[groupField.name + RAW_SUFFIX];
-                delete record[groupField.name + RAW_SUFFIX];
+            let groupedValue = extractGroupedField(groupType, groupField, dataValue);
 
-                switch (groupType) {
-                case groupTypes.NUMERIC.equals:
-                    return dataValue;
-                case groupTypes.NUMERIC.thousandth:
-                    return formatNumericRange(groupUtils.getRangeFraction(raw, 4));
-                case groupTypes.NUMERIC.hundredth:
-                    return formatNumericRange(groupUtils.getRangeFraction(raw, 3));
-                case groupTypes.NUMERIC.tenth:
-                    return formatNumericRange(groupUtils.getRangeFraction(raw, 2));
-                case groupTypes.NUMERIC.one:
-                    return formatNumericRange(groupUtils.getRangeWhole(raw, 1));
-                case groupTypes.NUMERIC.five:
-                    return formatNumericRange(groupUtils.getRangeWhole(raw, 5));
-                case groupTypes.NUMERIC.ten:
-                    return formatNumericRange(groupUtils.getRangeWhole(raw, 10));
-                case groupTypes.NUMERIC.hundred:
-                    return formatNumericRange(groupUtils.getRangeWhole(raw, 100));
-                case groupTypes.NUMERIC.one_k:
-                    return formatNumericRange(groupUtils.getRangeWhole(raw, 1000));
-                case groupTypes.NUMERIC.ten_k:
-                    return formatNumericRange(groupUtils.getRangeWhole(raw, 10000));
-                case groupTypes.NUMERIC.hundred_k:
-                    return formatNumericRange(groupUtils.getRangeWhole(raw, 100000));
-                case groupTypes.NUMERIC.million:
-                    return formatNumericRange(groupUtils.getRangeWhole(raw, 1000000));
-                }
-                break;
-            case constants.TEXT:
-                switch (groupType) {
-                case groupTypes.TEXT.equals:
-                    return dataValue;
-                case groupTypes.TEXT.firstLetter:
-                    return groupUtils.getFirstLetter(dataValue);
-                case groupTypes.TEXT.firstWord:
-                    return groupUtils.getFirstWord(dataValue);
-                }
-                break;
-            case constants.USER:
-                switch (groupType) {
-                case groupTypes.USER.equals:
-                    return dataValue;
-                case groupTypes.USER.firstLetter:
-                    return groupUtils.getFirstLetter(dataValue);
-                case groupTypes.USER.firstWord:
-                    return groupUtils.getFirstWord(dataValue);
-                }
-                break;
-            default:
-                // unsupported data type or grouping option
-                log.warn("Unsupported grouping option.  FieldId: " + groupField.id + "; name: " + groupField.name + "; DataType: " + groupField.datatypeAttributes.type + "; GroupType: " + groupType);
-            }
-
-            return [];
+            //  The lodash groupBy function uses the groupedValue as the key to an
+            //  associative array.  If the groupedValue is numeric, javascript adds
+            //  the entry as an index(this is expected behavior), which means it
+            //  inserts that entry at the index and not as the next entry in the array.
+            //  This causes problems when requesting a descending order sort.  To
+            //  workaround this problem, we'll create a simple object with a key element,
+            //  stringify it into JSON, and use that as the named key value.  This ensures
+            //  we'll have no numeric key values added to the array.
+            return JSON.stringify({key:groupedValue});
         });
 
         //  We've grouped the data for this field based on it's grouping requirement.  To support
@@ -245,7 +259,11 @@
             } else {
                 children = groupedData[group];
             }
-            data.push({group: group, children: children});
+
+            //  the groups are JSON, which is known only to this function.  Parse into an object and
+            //  extract out the key, which is the grouping data that is consumable by the client.
+            let obj = JSON.parse(group);
+            data.push({group: obj.key, children: children});
         }
         return data;
 
