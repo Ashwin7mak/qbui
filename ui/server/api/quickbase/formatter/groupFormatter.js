@@ -241,7 +241,15 @@
             //  workaround this problem, we'll create a simple object with a key element,
             //  stringify it into JSON, and use that as the named key value.  This ensures
             //  we'll have no numeric key values added to the array.
-            return JSON.stringify({key:groupedValue});
+            if (idx === 0) {
+                return JSON.stringify({key:groupedValue});
+            }
+
+            //  when idx is > 0, we're dealing with a secondary grouping request..which means
+            //  the data was already 'stringified' its first pass through; when idx === 0.
+            //  Just return the groupedValue as it's already in json format.
+            return groupedValue;
+
         });
 
         //  We've grouped the data for this field based on it's grouping requirement.  To support
