@@ -110,6 +110,28 @@ describe('Validate GroupFormatter unit tests', function() {
         });
     });
 
+    describe('test grouping with mixture of sort only fids and grouping fids', function() {
+
+        var testCases = [
+            {message: 'Sort fid is first element in group list', sortList:'3.1:V', expectation: 0},
+            {message: 'Sort fid is first element in group list', sortList:'1:V.3', expectation: 1},
+            {message: 'Sort fid is first element in group list', sortList:'1:V.2.3:V', expectation: 1},
+            {message: 'Sort fid is first element in group list', sortList:'1:V.2:V.3.4', expectation: 2},
+            {message: 'Sort fid is first element in group list', sortList:'1:V.2:V.3.4.5:V', expectation: 2}
+        ];
+
+        testCases.forEach(function(testCase) {
+            it('Test case: ' + testCase.message, function(done) {
+                var setup = setupRecords(5, 5, constants.TEXT, testCase.sortList);
+                var groupData = groupFormatter.group(setup.req, setup.fields, setup.records);
+
+                assert.equal(groupData.hasGrouping, testCase.expectation > 0);
+                assert.equal(groupData.fields.length, testCase.expectation);
+                done();
+            });
+        });
+    });
+
     describe('Valid grouping tests', function() {
         var testCases = [
             //  TEXT data type
