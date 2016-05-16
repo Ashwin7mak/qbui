@@ -234,7 +234,6 @@ let ReportDataStore = Fluxxor.createStore({
             actions.FILTER_SELECTIONS_PENDING, this.onFilterSelectionsPending,
             actions.SHOW_FACET_MENU, this.onShowFacetMenu,
             actions.HIDE_FACET_MENU, this.onHideFacetMenu,
-            actions.SEARCH_FOR, this.onSearchFor,
             actions.SELECTED_ROWS, this.onSelectedRows,
 
             actions.ADD_REPORT_RECORD, this.onAddReportRecord, // for empower demo
@@ -274,6 +273,10 @@ let ReportDataStore = Fluxxor.createStore({
         reportModel.setOriginalMetaData(response.metaData);
         reportModel.setMetaData(response.metaData);
         reportModel.setRecordData(response.recordData);
+        if (response.sortList !== undefined) {
+            reportModel.setSortFids(response.sortList);
+            reportModel.setGroupElements(response.sortList);
+        }
         reportModel.setFacetData(response.recordData);
         this.emit('change');
     },
@@ -308,31 +311,6 @@ let ReportDataStore = Fluxxor.createStore({
     onLoadRecordsFailed() {
         this.loading = false;
         this.error = true;
-        this.emit('change');
-    },
-
-    onSearchFor(text) {
-        // placeholder which will be obsolete
-        // when other searches from global are supported
-        let filteredRecords = [];
-        let records = this.reportModel.getRecords();
-        if (records) {
-            records.forEach((record) => {
-
-                let match = false;
-                let lText = text.toLowerCase();
-                _.values(record).forEach((val) => {
-                    if (val && val.toString().toLowerCase(lText).indexOf() !== -1) {
-                        match = true;
-                    }
-                });
-                if (match) {
-                    filteredRecords.push(record);
-                }
-
-            });
-        }
-        this.reportModel.setFilteredRecords(filteredRecords);
         this.emit('change');
     },
 

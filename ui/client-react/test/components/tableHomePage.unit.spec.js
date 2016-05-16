@@ -1,35 +1,56 @@
 import React from 'react';
 import TestUtils from 'react-addons-test-utils';
+import Fluxxor from 'fluxxor';
 import TableHomePage  from '../../src/components/table/tableHomePageRoute';
-
-//TODO this is a placeholder file to add tests as table home page gets built out
+import FacetSelections  from '../../src/components/facet/facetSelections';
 
 describe('TableHomePage functions', () => {
     'use strict';
 
     let component;
-    let flux = {
-        actions:{
-            selectTableId: function() {return;},
-            loadReports: function() {return;},
-            showTopNav: function() {return;},
-            setTopTitle: function() {return;}
+    let reportDataSearchStore = Fluxxor.createStore({
+        getState() {
+            return {searchStringInput :''};
+        }
+    });
+
+    let stores = {
+        ReportDataSearchStore: new reportDataSearchStore()
+    };
+
+    let flux = new Fluxxor.Flux(stores);
+
+    flux.actions = {
+        selectTableId() {
+            return;
+        },
+        loadReport() {
+            return;
+        },
+        loadFields() {
+            return;
+        },
+        showTopNav() {
+            return;
+        },
+        setTopTitle() {
+            return;
+        },
+        hideTopNav() {
+            return;
         }
     };
 
     beforeEach(() => {
-        spyOn(flux.actions, 'loadReports');
+        spyOn(flux.actions, 'loadReport');
+        spyOn(flux.actions, 'loadFields');
         spyOn(flux.actions, 'selectTableId');
     });
 
     afterEach(() => {
-        flux.actions.loadReports.calls.reset();
+        flux.actions.loadReport.calls.reset();
+        flux.actions.loadFields.calls.reset();
         flux.actions.selectTableId.calls.reset();
-    });
-
-    it('test render of component', () => {
-        component = TestUtils.renderIntoDocument(<TableHomePage flux={flux}/>);
-        expect(TestUtils.isCompositeComponent(component)).toBeTruthy();
     });
 
     it('test render of component with url params', () => {
@@ -42,7 +63,28 @@ describe('TableHomePage functions', () => {
         let oldProps = {
             reportData: {
                 appId: 0,
-                tblId: 0
+                tblId: 0,
+                selections: new FacetSelections(),
+                data: {
+                    name: "test",
+                    filteredRecords: [{
+                        col_num: 1,
+                        col_text: "abc",
+                        col_date: "01-01-2015"
+                    }],
+                    columns: [{
+                        field: "col_num",
+                        headerName: "col_num"
+                    },
+                        {
+                            field: "col_text",
+                            headerName: "col_text"
+                        },
+                        {
+                            field: "col_date",
+                            headerName: "col_date"
+                        }]
+                }
             }
         };
         component = TestUtils.renderIntoDocument(<TableHomePage params={params} {...oldProps} flux={flux}/>);
@@ -59,7 +101,27 @@ describe('TableHomePage functions', () => {
                 };
                 let reportData = {
                     appId: 1,
-                    tblId: 1
+                    tblId: 1,
+                    data: {
+                        name: "test",
+                        filteredRecords: [{
+                            col_num: 1,
+                            col_text: "abc",
+                            col_date: "01-01-2015"
+                        }],
+                        columns: [{
+                            field: "col_num",
+                            headerName: "col_num"
+                        },
+                            {
+                                field: "col_text",
+                                headerName: "col_text"
+                            },
+                            {
+                                field: "col_date",
+                                headerName: "col_date"
+                            }]
+                    }
                 };
                 return {params, reportData};
             },

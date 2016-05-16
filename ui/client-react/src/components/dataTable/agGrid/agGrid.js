@@ -91,6 +91,7 @@ let AGGrid = React.createClass({
         case "CHECKBOX": message =  "uncheckedToChecked"; break;
         case "TEXT":
         case "URL":
+        case "USER":
         case "EMAIL_ADDRESS": message =  "aToZ"; break;
         case "DATE":
         case "DATE_TIME": message =  "oldToNew"; break;
@@ -106,6 +107,7 @@ let AGGrid = React.createClass({
         case "CHECKBOX": message =  "checkedToUnchecked"; break;
         case "TEXT":
         case "URL":
+        case "USER":
         case "EMAIL_ADDRESS": message =  "zToA"; break;
         case "DATE":
         case "DATE_TIME": message =  "newToOld"; break;
@@ -147,18 +149,28 @@ let AGGrid = React.createClass({
     groupReport(column, asc) {
         let flux = this.getFlux();
 
-        let queryParams = {};
         //for on-the-fly grouping, forget the previous group and go with the selection but add the previous sort fids.
-        //TODO: how to pass back grouping info?
         let sortFid = column.id.toString();
         let groupString = ReportUtils.getGroupString(sortFid, asc, GroupTypes.GROUP_TYPE.text.equals);
         let sortList = ReportUtils.getSortListString(this.props.sortFids);
-        queryParams[query.SORT_LIST_PARAM] = ReportUtils.prependSortFidToList(sortList, groupString);
-        queryParams[query.GLIST_PARAM] = ReportUtils.prependSortFidToList(sortList, groupString);
+        let sortList_param = ReportUtils.prependSortFidToList(sortList, groupString);
 
-        flux.actions.getFilteredRecords(this.props.appId,
-            this.props.tblId,
-            this.props.rptId, {format:true}, this.props.filter, queryParams);
+        /** AG-grid has a bug where on re-render it doesnt call groupRenderer
+         And hence doesnt render group headers.
+         To get around that, on grouping rebuild the whole report
+         If the report was grouped on the previous render then groupRender was already called so no need to re-load everything.
+         So optimize for that case..
+        */
+        if (this.props.groupEls.length) {
+            let queryParams = {};
+            queryParams[query.SORT_LIST_PARAM] = sortList_param;
+            queryParams[query.GLIST_PARAM] = sortList_param;
+            flux.actions.getFilteredRecords(this.props.appId, this.props.tblId, this.props.rptId, {format:true}, this.props.filter, queryParams);
+        } else {
+            flux.actions.loadReport(this.props.appId,
+                this.props.tblId,
+                this.props.rptId, true, null, null, sortList_param);
+        }
     },
     /**
      * AG-grid doesnt fire any events or add any classes to the column for which menu has been opened
@@ -211,7 +223,7 @@ let AGGrid = React.createClass({
             {"name": this.getSortDescText(params.column.colDef, "sort"), "icon": isFieldSorted && !isSortedAsc ? gridIcons.check : "", action: () => this.sortReport(params.column.colDef, false, isFieldSorted && !isSortedAsc)}];
         menuItems.push("separator");
         menuItems.push({"name": this.getSortAscText(params.column.colDef, "group"), action: () => this.groupReport(params.column.colDef, true)},
-            {"name": this.getSortDescText(params.column.colDef, "group"), action: () => this.groupReport(params.column.colDef)});
+            {"name": this.getSortDescText(params.column.colDef, "group"), action: () => this.groupReport(params.column.colDef, false)});
         menuItems.push("separator");
         menuItems.push({"name": Locale.getMessage("report.menu.addColumnBefore")},
             {"name": Locale.getMessage("report.menu.addColumnAfter")},

@@ -128,14 +128,6 @@ let NavWrapper = React.createClass({
     }
 });
 
-let TableHomePageWrapper = function(Component, newprops) {
-    return React.createClass({
-        render: function() {
-            return React.createElement(Component, _.assign({}, this.props, newprops));
-        }
-    });
-};
-
 let Apps = React.createClass({
     render: function() {
         return <AppsHome flux={flux} />;
@@ -155,7 +147,7 @@ render((
 
         <Route path="app/:appId" component={NavWrapper} >
             <IndexRoute component={AppHomePageRoute} />
-            <Route path="table/:tblId" component={TableHomePageWrapper(ReportRoute, {"rptId": '1'})} />
+            <Route path="table/:tblId" component={TableHomePageRoute} />
             <Route path="table/:tblId/report/:rptId" component={ReportRoute} />
             <Route path="table/:tblId/record/:recordId" component={RecordRoute} />
         </Route>
