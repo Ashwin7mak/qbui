@@ -16,9 +16,7 @@
     var RAW_SUFFIX = '_raw_';
 
     //  Temporary function to format numeric ranges for UI display.
-    //  TODO: Node should only return an object structure to the client
-    //  TODO: and have it determine how to format and render the content
-    //  TODO: based on localization expectation.
+    //  TODO: JIRA-21803 -- Node should only return an object structure to the client
     function formatNumericRange(range) {
         if (range.lower === null && range.upper === null) {
             return '';
@@ -235,6 +233,8 @@
             }
 
             let groupedValue = extractGroupedField(groupType, groupField, dataValue, rawDataValue);
+
+            //  TODO: JIRA-21803 -- Node should only return an object structure to the client
             if (groupedValue === '') {
                 groupedValue = '(Empty)';
             }
