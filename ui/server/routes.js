@@ -6,6 +6,7 @@
     'use strict';
 
     var errors = require('./components/errors');
+    var authentication = require('./components/authentication');
     var log = require('./logger').getLogger();
 
     module.exports = function(app, config) {
@@ -115,6 +116,12 @@
 
         require('./routes/qbClientRoutes')(app, config);
         require('./routes/qbApiRoutes')(app, config, routeMapper);
+
+        app.route('/signin')
+            .get(authentication.signin);
+
+        app.route('/signout')
+                .get(authentication.signout);
 
         // unauthorized
         app.route('/unauthorized*')

@@ -13,11 +13,21 @@ var requestHelper = require('./../requestHelper')(config);
 var should = require('should');
 var assert = require('assert');
 var sinon = require('sinon');
+var log = require('./../../../logger').getLogger();
 
 /**
  * Unit tests for User field formatting
  */
 describe('Validate RequestHelper unit tests', function() {
+
+    var stubLog;
+
+    beforeEach(function() {
+        stubLog = sinon.stub(log, 'error').returns(true);
+    });
+    afterEach(function() {
+        stubLog.restore();
+    });
 
     /**
      * Unit test the helper methods
@@ -260,6 +270,29 @@ describe('Validate RequestHelper unit tests', function() {
             );
             done();
         });
+    });
+
+    describe('validate logUnexpected Error function', function() {
+        var error = {
+            message: 'error message',
+            stack: 'stack trace'
+        };
+
+        var testCases = [
+            {name: 'log standard error exception', func: 'function name', error: error, includeStackTrace: true},
+            {name: 'log standard error exception -- null input', func: 'function name', error: null, includeStackTrace: null},
+            {name: 'log standard error exception -- no error obj', func: 'function name', error: '', includeStackTrace: false},
+            {name: 'missing error block', function: 'function name', error: null, includeStackTrace: true}
+        ];
+
+        testCases.forEach(function(testCase) {
+            it('Test case: ' + testCase.name, function(done) {
+                requestHelper.logUnexpectedError(testCase.func, testCase.error, testCase.includeStackTrace);
+                assert(stubLog.called, 'Error logging unexpected error message.');
+                done();
+            });
+        });
+
     });
 
 });
