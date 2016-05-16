@@ -299,7 +299,6 @@
             //      totalRows: total number of data rows in the grid
             let groupBy = {
                 hasGrouping: false,
-                groupFields: [],
                 fields: [],
                 gridColumns: [],
                 gridData: [],
@@ -375,12 +374,9 @@
                     // we have grouping if there are fields in groupBy.fields array.  Set the grouping flag
                     // to true and populate the grid columns and data arrays.
                     if (groupBy.fields.length > 0) {
-                        //  Business rule is to not include grouped fields in the grid.  Will create to 2 arrays; one
-                        //  to hold the grouped fields and other for the grid columns(without grouped fields).
+                        //  Business rule is to not include grouped fields in the grid.
                         fields.forEach(function(field) {
-                            if (field.grouped) {
-                                groupBy.groupFields.push(field);
-                            } else {
+                            if (!field.grouped) {
                                 groupBy.gridColumns.push(field);
                             }
                         });

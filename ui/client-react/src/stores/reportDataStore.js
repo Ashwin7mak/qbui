@@ -143,7 +143,7 @@ let reportModel = {
         if (this.model.hasGrouping === true) {
             this.model.columns = this.getReportColumns(recordData.groups.gridColumns);
             this.model.records = recordData.groups.gridData;
-            this.model.groupFields = recordData.groups.groupFields;
+            this.model.groupFields = recordData.groups.fields;
             //  TODO: with paging, this count is flawed...
             this.model.recordsCount = recordData.groups.totalRows;
         } else {
@@ -175,7 +175,7 @@ let reportModel = {
             this.model.columns = this.getReportColumns(recordData.groups.gridColumns);
             this.model.filteredRecords = recordData.groups.gridData;
             this.model.filteredRecordsCount = recordData.groups.totalRows;
-            this.model.filteredGroupFields = recordData.groups.groupFields;
+            this.model.filteredGroupFields = recordData.groups.fields;
         } else {
             this.model.columns = this.getReportColumns(recordData.fields);
             this.model.filteredRecords = this.getReportData(recordData.fields, recordData.records);
