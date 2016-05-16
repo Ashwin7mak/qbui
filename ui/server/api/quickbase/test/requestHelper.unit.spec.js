@@ -275,7 +275,6 @@ describe('Validate RequestHelper unit tests', function() {
     describe('validate logUnexpected Error function', function() {
         var error = {
             message: 'error message',
-            message: 'error message',
             stack: 'stack trace'
         };
 

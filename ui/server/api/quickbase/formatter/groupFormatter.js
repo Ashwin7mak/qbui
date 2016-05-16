@@ -20,6 +20,9 @@
     //  TODO: and have it determine how to format and render the content
     //  TODO: based on localization expectation.
     function formatNumericRange(range) {
+        if (range.lower === null && range.upper === null) {
+            return '';
+        }
         return range.lower + ' to ' + range.upper;
     }
 
@@ -232,6 +235,9 @@
             }
 
             let groupedValue = extractGroupedField(groupType, groupField, dataValue, rawDataValue);
+            if (groupedValue === '') {
+                groupedValue = '(Empty)';
+            }
 
             //  The lodash groupBy function uses the groupedValue as the key to an
             //  associative array.  If the groupedValue is numeric, javascript adds
