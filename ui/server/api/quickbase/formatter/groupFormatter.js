@@ -148,7 +148,7 @@
         case constants.RATING:      // RATING is a sub-type of NUMERIC
             switch (groupType) {
             case groupTypes.NUMERIC.equals:
-                return JSON.stringify({key:dataValue});
+                return dataValue;
             case groupTypes.NUMERIC.thousandth:
                 return formatNumericRange(groupUtils.getRangeFraction(rawDataValue, 4));
             case groupTypes.NUMERIC.hundredth:
@@ -241,9 +241,9 @@
             //  workaround this problem, we'll create a simple object with a key element,
             //  stringify it into JSON, and use that as the named key value.  This ensures
             //  we'll have no numeric key values added to the array.
-            if (idx === 0) {
+            //if (idx === 0) {
                 return JSON.stringify({key:groupedValue});
-            }
+            //}
 
             //  when idx is > 0, we're dealing with a secondary grouping request..which means
             //  the data was already 'stringified' its first pass through; when idx === 0.
@@ -274,6 +274,8 @@
             //  extract out the key, which is the grouping data that we want to expose to the client.
             let obj = JSON.parse(group);
             data.push({group: obj.key, children: children});
+
+            //data.push({group: group, children: children});
         }
         return data;
 

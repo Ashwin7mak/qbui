@@ -168,7 +168,7 @@
                             reject(response);
                         }
                     ).catch(function(error) {
-                        log.error("Caught unexpected error in fetchSingleRecordAndFields: " + JSON.stringify(error));
+                        requestHelper.logUnexpectedError('recordsAPI..fetchSingleRecordAndFields', error, true);
                         reject(error);
                     });
                 }.bind(this));
@@ -228,7 +228,7 @@
                             reject(response);
                         }
                     ).catch(function(error) {
-                        log.error("Caught unexpected error in fetchRecordsAndFields: " + JSON.stringify(error));
+                        requestHelper.logUnexpectedError('recordsAPI..fetchRecordsAndFields', error, true);
                         reject(error);
                     });
                 }.bind(this));
