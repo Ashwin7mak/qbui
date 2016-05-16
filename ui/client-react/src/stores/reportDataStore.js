@@ -13,6 +13,7 @@ let reportModel = {
         facets: null,
         fids: [],
         filteredRecords: null,
+        filteredGroupFields: null,
         filteredRecordsCount: null,
         groupingFields: null,
         groupLevel: 0,
@@ -142,11 +143,13 @@ let reportModel = {
         if (this.model.hasGrouping === true) {
             this.model.columns = this.getReportColumns(recordData.groups.gridColumns);
             this.model.records = recordData.groups.gridData;
+            this.model.groupFields = recordData.groups.groupFields;
             //  TODO: with paging, this count is flawed...
             this.model.recordsCount = recordData.groups.totalRows;
         } else {
             this.model.columns = this.getReportColumns(recordData.fields);
             this.model.records = this.getReportData(recordData.fields, recordData.records);
+            this.model.groupFields = null;
 
             //  TODO: with paging, this count is flawed...
             this.model.recordsCount = recordData.records.length;
@@ -172,11 +175,14 @@ let reportModel = {
             this.model.columns = this.getReportColumns(recordData.groups.gridColumns);
             this.model.filteredRecords = recordData.groups.gridData;
             this.model.filteredRecordsCount = recordData.groups.totalRows;
+            this.model.filteredGroupFields = recordData.groups.groupFields;
         } else {
             this.model.columns = this.getReportColumns(recordData.fields);
             this.model.filteredRecords = this.getReportData(recordData.fields, recordData.records);
             this.model.filteredRecordsCount = recordData.records.length;
+            this.model.filteredGroupFields = null;
         }
+
     },
     /**
      * Set facets data(if any) from response
