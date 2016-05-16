@@ -1,0 +1,8 @@
+<p>Please click <a id="signin" href="#">here</a> to return to
+    QuickBase.</p>
+
+<script type="text/javascript">
+var currentStackDomain = window.location.hostname.replace(".newstack", "");
+var currentStackSignIn=  "https://" + currentStackDomain + "/db/main?a=SignIn";
+document.getElementById("signin").href = currentStackSignIn;
+</script>

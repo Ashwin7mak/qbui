@@ -69,14 +69,9 @@
         <li>a mistyped or unsupported address</li>
         <li>an out-of-date link</li>
     </ul>
-    <p>Please check your page link or click <a id="signin" href="#">here</a> to return to
-        QuickBase.</p>
+    <% include ./assets/csLogin.ejs %>
+
 </div>
-</body>
-<script type="text/javascript">
-    var currentStackDomain = window.location.hostname.replace(".newstack", "");
-    var currentStackSignIn=  "https://" + currentStackDomain + "/db/main?a=SignIn";
-    document.getElementById("signin").href = currentStackSignIn;
-</script>
+</bs %>
 
 </html>
