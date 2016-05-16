@@ -161,6 +161,21 @@
                         });
                     }
                 });
+            },
+
+            /**
+             * Log unexpected errors.
+             *
+             * @param func
+             * @param error
+             * @param includeStackTrace
+             */
+            logUnexpectedError: function(func, error, includeStackTrace) {
+                if (error) {
+                    log.error("Caught unexpected error in " + func + "; Error Message: " + error.message + (includeStackTrace ? "; Stack Trace:" + error.stack : ''));
+                } else {
+                    log.error("Caught unexpected error in " + func + "\nError Message: Unknown error...no error object defined");
+                }
             }
         };
 
