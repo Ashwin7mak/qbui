@@ -20,14 +20,24 @@
                 description: 'Set host',
                 default: '0.0.0.0'
             },
+            file: {
+                alias: 'f',
+                description: 'Set db file',
+                default: 'db.json'
+            },
         })
         .example('$0 -p9090', '')
         .argv;
 
     var port = process.env.PORT || argv.port;
-
+    var infile = argv.file;
 // use the db.json file copy from sample if it doesn't exist
-    var dbfile = path.join(__dirname, 'db.json');
+    var dbfile;
+    if (infile && fs.existsSync(infile)) {
+        dbfile = infile;
+    } else {
+        dbfile = path.join(__dirname, 'db.json');
+    }
     var dbSamplefile = path.join(__dirname, 'db.json.sample');
     if (!fs.existsSync(dbfile) && fs.existsSync(dbSamplefile)) {
         //copy sample file
@@ -38,6 +48,12 @@
 
 // Returns an Express server
     var server = jsonServer.create();
+
+    server.use(function(req, res, next) {
+        delete req.query.query;
+        delete req.query.format;
+        next();
+    });
 
 // Set default middlewares (logger, static, cors and no-cache)
     server.use(jsonServer.defaults());
@@ -50,6 +66,20 @@
 
 // Returns an Express router
     var router = jsonServer.router(dbfile);
+
+//post process response special treatment
+//     router.render = function(req, res) {
+//         if (res.locals.data.code) {
+//             // treat code in db files as error
+//             res.status(500).jsonp({
+//                 error: res.locals.data.message,
+//                 code: res.locals.data.code,
+//             });
+//         } else {
+//             res.jsonp(res.locals.data);
+//         }
+//     };
+
     server.use(router);
 
     server.listen(port, argv.host);
