@@ -95,6 +95,10 @@
                     headers     : req.headers
                 };
 
+                if (config.isMockServer) {
+                    opts.gzip = false;
+                    opts.headers["accept-encoding"] = "";
+                }
                 if (config.proxyHost) {
                     opts.host = config.proxyHost;
                     if (config.proxyPort) {

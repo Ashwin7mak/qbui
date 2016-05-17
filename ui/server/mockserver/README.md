@@ -7,9 +7,11 @@ node server/mockserver/mocker.js
 ```
 
 
-* add `-p _nnnn_` to specify a port number other than the default 3030
+* add `-p<_nnnn_>` to specify a port number other than the default 3030
 
-* add `-h nameofhost` to specify a host name other than localhost
+* add `-h<nameofhost>` to specify a host name other than localhost
+
+* add `-f<filename>` to specify a file name of mock data other than db.json
 
 * To run serve with reload of server on changes to db file or mocker.js use
 `npm run mockServer 
