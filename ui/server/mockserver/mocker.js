@@ -67,22 +67,9 @@
 // Returns an Express router
     var router = jsonServer.router(dbfile);
 
-//post process response special treatment
-//     router.render = function(req, res) {
-//         if (res.locals.data.code) {
-//             // treat code in db files as error
-//             res.status(500).jsonp({
-//                 error: res.locals.data.message,
-//                 code: res.locals.data.code,
-//             });
-//         } else {
-//             res.jsonp(res.locals.data);
-//         }
-//     };
-
     server.use(router);
 
     server.listen(port, argv.host);
-    console.log("Mock backend listening on port " + port + " - http://" + argv.host + ":" + port +  "  \ndbfile : "+ dbfile);
+    console.log("Mock backend listening on port " + port + " - http://" + argv.host + ":" + port +  "  \ndbfile : " + dbfile);
 }());
 
