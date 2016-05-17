@@ -8,7 +8,7 @@ import DateTimeField from 'react-bootstrap-datetimepicker';
 export const DefaultCellEditor = React.createClass({
 
     propTypes: {
-        value: React.PropTypes.string,
+        value: React.PropTypes.oneOfType([React.PropTypes.string, React.PropTypes.number]),
         onChange: React.PropTypes.func
     },
 
@@ -113,7 +113,7 @@ export const DateTimeCellEditor = React.createClass({
     render() {
         return <div className="cellEdit dateTimeField">
             <DateTimeField dateTime={this.props.value}
-                           format="YYYY-MM-DDThh:mm:ss"
+                           format="YYYY-MM-DDThh:mm:ss A"
                            inputFormat="MM/DD/YYYY hh:mm:ss A"
                            onChange={this.onChange}
                            mode="datetime"/>
@@ -134,8 +134,9 @@ export const TimeCellEditor = React.createClass({
         this.props.onChange(newValue);
     },
     render() {
+
         return <div className="cellEdit dateTimeField">
-            <DateTimeField dateTime={this.props.value} format="YYYY-MM-DDThh:mm:ss" inputFormat="hh:mm:ss A"
+            <DateTimeField dateTime={this.props.value} format="YYYY-MM-DDThh:mm:ss A" inputFormat="h:mm:ss A"
                            onChange={this.onChange} mode="time"/>
         </div>;
     }

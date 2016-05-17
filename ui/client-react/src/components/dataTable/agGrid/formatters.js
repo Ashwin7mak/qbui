@@ -68,7 +68,7 @@ const CellFormatter = React.createClass({
                 </span>;
 
         case DateTimeFormat: {
-            let dateTime = formatDate(this.state.value, "MM/DD/YY H:mm A");
+            let dateTime = formatDate(this.state.value, "MM/DD/YY h:mm:ss A");
 
             return <span className="cellData">
                 {this.state.value && dateTime}
@@ -76,7 +76,7 @@ const CellFormatter = React.createClass({
         }
 
         case TimeFormat: {
-            let time = formatDate(this.state.value, "H:mm A");
+            let time = formatDate(this.state.value, "h:mm:ss A");
             return <span className="cellData">
                 {this.state.value && time}
                 </span>;
@@ -107,12 +107,12 @@ const CellFormatter = React.createClass({
             return <DateCellEditor value={formatted} onChange={this.cellEdited}/>;
         }
         case DateTimeFormat: {
-            let formatted = this.state.value ? formatDate(this.state.value, "YYYY-MM-DDThh:mm:ss") : "" ;
+            let formatted = this.state.value ? formatDate(this.state.value, "YYYY-MM-DDThh:mm:ss A") : "" ;
             return <DateTimeCellEditor value={formatted} onChange={this.cellEdited}/>;
         }
         case TimeFormat: {
-            let formatted = this.state.value ? formatDate(this.state.value, "HH:mm") : "" ;
-            formatted = this.state.value ? formatDate(this.state.value, "YYYY-MM-DDThh:mm:ss") : "" ;
+            let formatted = this.state.value ? formatDate(this.state.value, "YYYY-MM-DDThh:mm:ss A") : "" ;
+
             return <TimeCellEditor value={formatted} onChange={this.cellEdited}/>;
         }
         default: {
@@ -134,14 +134,14 @@ const CellFormatter = React.createClass({
     cellEdited(value) {
         let newValue = value;
         switch (this.props.type) {
-        case TimeFormat: {
-            let parts = value.split(/\:|\-/g);
-            let time = moment(0).local();
-            time.hours(parseInt(parts[0]), 'h');
-            time.minutes(parseInt(parts[1]), 'm');
+        case TimeFormat:
+        case DateTimeFormat: {
+            let time = moment(value, "YYYY-MM-DDThh:mm:ss A");
+            time.seconds(0);
             newValue = time.utc().format();
         }
         }
+
         this.setState({value: newValue});
     },
 
