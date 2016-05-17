@@ -325,7 +325,7 @@ $cell-edit-background-edit: #f3f8fe;
 }
 
 /* last to rows are just for padding */
-.ag-row:nth-last-child(-n+2) {
+.ag-row:nth-last-child(-n+8) {
     visibility:hidden;
 
 }

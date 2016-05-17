@@ -552,9 +552,12 @@ let AGGrid = React.createClass({
      */
     getRecordsToRender() {
 
+        const extraHiddenRows = 8; // don't forget to update the corresponding CSS!
         let paddedRecords = this.props.records.slice(0);
-        paddedRecords.push({});
-        paddedRecords.push({});
+
+        for (let i = 0; i < extraHiddenRows; i++) {
+            paddedRecords.push({});
+        }
         return paddedRecords;
     },
 

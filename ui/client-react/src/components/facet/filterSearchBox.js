@@ -33,7 +33,7 @@ const FilterSearchBox = React.createClass({
 
         let placeMsg = Locale.getMessage("report.searchPlaceHolder") + " " + Locale.getMessage("records.plural") + "...";
 
-        logger.debug('rendering search box with:' + this.state.searchStringInput);
+        //logger.debug('rendering search box with:' + this.state.searchStringInput);
         return (<div className="filterSearchBoxContainer">
                     <SearchBox className="filterSearchBox" key={"filterSearchBox_" + this.props.searchBoxKey}
                                value={this.state.searchStringInput}

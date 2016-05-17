@@ -5,11 +5,11 @@
 * */
 import React from 'react';
 import ReactDOM from 'react-dom';
-import {I18nDate, I18nTime, I18nNumber} from '../../../utils/i18nMessage';
-import {Input, InputGroup, FormControl, MenuItem, FormGroup, DropdownButton} from 'react-bootstrap';
-import DateTimeField from 'react-bootstrap-datetimepicker';
-import RowEditActions from './rowEditActions';
 import moment from 'moment';
+import {I18nDate, I18nTime, I18nNumber} from '../../../utils/i18nMessage';
+import RowEditActions from './rowEditActions';
+import {DefaultCellEditor, ComboBoxCellEditor, DateCellEditor, DateTimeCellEditor, TimeCellEditor, CheckBoxEditor} from './cellEditors';
+
 import 'react-bootstrap-datetimepicker/css/bootstrap-datetimepicker.css';
 
 const TextFormat = 1;
@@ -20,119 +20,24 @@ const TimeFormat = 5;
 const CheckBoxFormat = 6;
 
 /**
- * simple non-validating cell editor for now
+ * helper function to format date
+ * @param dateStr raw date string, empty string for current dateTime
+ * @param format moment.js format
+ * @returns moment.js formatted date
  */
-const DefaultCellEditor = React.createClass({
+function formatDate(dateStr, format) {
 
-    onChange(ev) {
-        const newValue = ev.target.value;
-
-        this.props.onChange(newValue);
-    },
-    render() {
-        return <input ref="cellInput"
-                      onChange={this.onChange}
-                      tabIndex="0"
-                      className="cellEdit"
-                      type="text"
-                      value={this.props.value}/>;
+    if (dateStr) {
+        const fixedDate = dateStr.replace(/(\[.*?\])/, ''); // remove [utc] suffix if present
+        return moment(fixedDate).format(format);
     }
-});
+    return moment().format(format);
+}
 
-const ComboBoxCellEditor = React.createClass({
-    onChange(ev) {
-        const newValue = ev.target.value;
 
-        this.props.onChange(newValue);
-    },
-    onSelect(choice) {
-        this.props.onChange(choice);
-    },
-    render() {
-        return (
-            <InputGroup className="cellEdit">
-                <FormControl type="text" value={this.props.value} onChange={this.onChange}/>
-                <DropdownButton pullRight={true}
-                    componentClass={InputGroup.Button}
-                    id="input-dropdown-addon" title="">
-
-                        {this.props.choices.map((choice, i) => {
-                            return (<MenuItem key={i} onSelect={() => {this.onSelect(choice.displayValue);}}>{choice.displayValue}</MenuItem>);
-                        })
-                    }
-
-                </DropdownButton>
-            </InputGroup>
-        );
-    }
-});
-
-const DateCellEditor = React.createClass({
-    onChange(ev) {
-        const newValue = ev.target.value;
-
-        this.props.onChange(newValue);
-    },
-    render() {
-        return <div className="cellEdit dateTimeField"><DateTimeField /></div>;
-        //return <input ref="cellInput"
-        //              onChange={this.onChange}
-        //              tabIndex="0"
-        //              className="cellEdit"
-        //              type="date"
-        //              value={this.props.value}/>;
-    }
-});
-
-const DateTimeCellEditor = React.createClass({
-    onChange(ev) {
-        const newValue = ev.target.value;
-
-        this.props.onChange(newValue);
-    },
-    render() {
-        return <input ref="cellInput"
-                      onChange={this.onChange}
-                      tabIndex="0"
-                      className="cellEdit"
-                      type="datetime-local"
-                      value={this.props.value}/>;
-    }
-});
-
-const TimeCellEditor = React.createClass({
-    onChange(ev) {
-        const newValue = ev.target.value;
-
-        this.props.onChange(newValue);
-    },
-    render() {
-        return <input ref="cellInput"
-                      onChange={this.onChange}
-                      tabIndex="0"
-                      className="cellEdit"
-                      type="time"
-                      value={this.props.value}/>;
-    }
-});
-
-const CheckBoxEditor = React.createClass({
-    onChange(ev) {
-        const newValue = ev.target.checked;
-        this.props.onChange(newValue);
-    },
-    render() {
-
-        return <input ref="cellInput"
-                      onChange={this.onChange}
-                      tabIndex="0"
-                      className="cellEdit"
-                      defaultChecked={this.props.value}
-                      type="checkbox"
-                      />;
-    }
-});
-
+/**
+ * cell formatter (renderer)
+ */
 const CellFormatter = React.createClass({
 
     propTypes: {
@@ -146,7 +51,10 @@ const CellFormatter = React.createClass({
         };
     },
 
-    getCellRenderer() {
+    /**
+     * render the cell value (read-only, hidden when row is in edit mode)
+     */
+    renderCellValue() {
 
         switch (this.props.type) {
         case NumberFormat:
@@ -160,14 +68,15 @@ const CellFormatter = React.createClass({
                 </span>;
 
         case DateTimeFormat: {
-            let dateTime = moment(this.state.value).format("MM/DD/YY H:mm A");
+            let dateTime = formatDate(this.state.value, "MM/DD/YY H:mm A");
+
             return <span className="cellData">
                 {this.state.value && dateTime}
                 </span>;
         }
 
         case TimeFormat: {
-            let time = moment(this.state.value).format("H:mm A");
+            let time = formatDate(this.state.value, "H:mm A");
             return <span className="cellData">
                 {this.state.value && time}
                 </span>;
@@ -184,22 +93,27 @@ const CellFormatter = React.createClass({
         }
         }
     },
-    getCellEditor() {
+
+    /**
+     * render the cell editor (hidden when row is NOT in edit mode)
+     */
+    renderCellEditor() {
         switch (this.props.type) {
         case CheckBoxFormat:
             return <CheckBoxEditor value={this.state.value} onChange={this.cellEdited} />;
 
-        case DateFormat:
-            return <DateCellEditor value={this.state.value} onChange={this.cellEdited} />;
-
+        case DateFormat: {
+            let formatted = this.state.value ? formatDate(this.state.value, "YYYY-MM-DD") : "";
+            return <DateCellEditor value={formatted} onChange={this.cellEdited}/>;
+        }
         case DateTimeFormat: {
-            let dateTime = this.state.value ? moment(this.state.value) : moment();
-            let formatted = dateTime.format("YYYY-MM-DDThh:mm:ss");
+            let formatted = this.state.value ? formatDate(this.state.value, "YYYY-MM-DDThh:mm:ss") : "" ;
             return <DateTimeCellEditor value={formatted} onChange={this.cellEdited}/>;
         }
         case TimeFormat: {
-            let time = this.state.value ? moment(this.state.value) : moment();
-            return <TimeCellEditor value={time.format("HH:mm")} onChange={this.cellEdited}/>;
+            let formatted = this.state.value ? formatDate(this.state.value, "HH:mm") : "" ;
+            formatted = this.state.value ? formatDate(this.state.value, "YYYY-MM-DDThh:mm:ss") : "" ;
+            return <TimeCellEditor value={formatted} onChange={this.cellEdited}/>;
         }
         default: {
 
@@ -236,15 +150,13 @@ const CellFormatter = React.createClass({
 
         return (<span className="cellWrapper">
                 {this.props.params.colDef && this.props.params.colDef.addEditActions &&
-                <RowEditActions flux={this.props.params.context.flux}
-                                api={this.props.params.api}
-                                data={this.props.params.data}
-
-                />}
-                {this.getCellRenderer()}
-                {this.getCellEditor()}
+                    <RowEditActions flux={this.props.params.context.flux}
+                                    api={this.props.params.api}
+                                    data={this.props.params.data} />
+                }
+                {this.renderCellValue()}
+                {this.renderCellEditor()}
                 </span>);
-
     }
 });
 
