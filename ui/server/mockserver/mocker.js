@@ -83,6 +83,6 @@
     server.use(router);
 
     server.listen(port, argv.host);
-    console.log("Mock backend listening on port " + port + " - http://" + argv.host + ":" + port);
+    console.log("Mock backend listening on port " + port + " - http://" + argv.host + ":" + port +  "  \ndbfile : "+ dbfile);
 }());
 
