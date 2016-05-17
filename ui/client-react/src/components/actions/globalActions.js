@@ -56,9 +56,9 @@ let GlobalActions = React.createClass({
         };
     },
 
-    onSelect: function(ev) {
+    changeLocale: function(locale) {
         let flux = this.getFlux();
-        flux.actions.changeLocale(ev.currentTarget.title);
+        flux.actions.changeLocale(locale);
     },
     getGlobalDropdown() {
         let supportedLocales = Locale.getSupportedLocales();
@@ -79,7 +79,7 @@ let GlobalActions = React.createClass({
                     <MenuItem divider/>
 
                     {supportedLocales.length > 1 ? supportedLocales.map((locale) => {
-                        return <MenuItem href="#" className="localeLink" onSelect={this.onSelect} title={locale}
+                        return <MenuItem href="#" className="localeLink" onSelect={() => this.changeLocale(locale)} title={locale}
                                          key={eventKeyIdx} eventKey={eventKeyIdx++}><I18nMessage
                             message={'header.menu.locale.' + locale}/></MenuItem>;
                     }) : null}

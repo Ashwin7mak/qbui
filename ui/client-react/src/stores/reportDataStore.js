@@ -47,6 +47,9 @@ let reportModel = {
                     column.fieldType = field.type;
                     column.builtIn = field.builtIn;
 
+                    if (field.multiChoiceSourceAllowed) {
+                        column.choices = field.multipleChoice.choices;
+                    }
                     //  client side attributes..
                     column.datatypeAttributes = field.datatypeAttributes;
                     columns.push(column);

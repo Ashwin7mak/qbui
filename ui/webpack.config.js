@@ -88,7 +88,8 @@ var config = {
                 include: [
                     path.resolve(__dirname, 'client-react/src'),
                     path.resolve(__dirname, 'node_modules/ag-grid'),
-                    path.resolve(__dirname, 'node_modules/react-notifications')
+                    path.resolve(__dirname, 'node_modules/react-notifications'),
+                    path.resolve(__dirname, 'node_modules/react-bootstrap-datetimepicker')
                 ],
                 loader: 'style!css'
             },
