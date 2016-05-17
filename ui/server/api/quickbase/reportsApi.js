@@ -74,7 +74,7 @@
                             reject(error);
                         }
                     ).catch((ex) => {
-                        log.error("Caught unexpected error getting report results in fetchReportResults: " + ex.message);
+                        requestHelper.logUnexpectedError('reportsAPI..fetchReportResults', ex, true);
                         reject1(ex);
                     });
                 });
@@ -96,7 +96,7 @@
                             reject1(error);
                         }
                     ).catch((ex) => {
-                        log.error("Caught unexpected error getting report results in fetchReportComponents: " + ex.message);
+                        requestHelper.logUnexpectedError('reportsAPI..fetchReportComponents in fetchReportComponents', ex, true);
                         reject1(ex);
                     });
                 });
@@ -117,7 +117,7 @@
                             resolve2(errorObj);
                         }
                     ).catch((ex) => {
-                        log.error("Caught unexpected error getting facets in fetchReportComponents: " + ex.message);
+                        requestHelper.logUnexpectedError('reportsAPI..fetchFacetResults in fetchReportComponents', ex, true);
                         var errorObj = {id: null, errorCode: errorCodes.UNKNOWN};
                         resolve2(errorObj);
                     });
@@ -158,7 +158,7 @@
                             reject(error);
                         }
                     ).catch((ex) => {
-                        log.error("Caught unexpected error processing promise result in fetchReportComponents: " + ex.message);
+                        requestHelper.logUnexpectedError('reportsAPI..fetchReportComponents', ex, true);
                         reject(ex);
                     });
                 });

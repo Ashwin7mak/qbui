@@ -11,10 +11,13 @@ var dateUtils = require('../../../../components/utility/dateUtils');
 describe('Validate GroupFormatter unit tests', function() {
 
     function generateData(dataType) {
-        if (dataType === constants.TEXT || dataType === constants.USER || dataType === constants.EMAIL_ADDRESS) {
+        if (dataType === constants.TEXT || dataType === constants.USER) {
             return (0 | Math.random() * 9e6).toString(36);
         }
-        if (dataType === constants.NUMERIC) {
+        if (dataType === constants.EMAIL_ADDRESS) {
+            return (0 | Math.random() * 9e6).toString(36) + '@test.com';
+        }
+        if (dataType === constants.NUMERIC || dataType === constants.DURATION) {
             return (0 | Math.random() * 10000000);
         }
         if (dataType === constants.DATE || dataType === constants.DATE_TIME) {
@@ -107,6 +110,28 @@ describe('Validate GroupFormatter unit tests', function() {
         });
     });
 
+    describe('test grouping with mixture of sort only fids and grouping fids', function() {
+
+        var testCases = [
+            {message: 'Sort fid is first element in group list', sortList:'3.1:V', expectation: 0},
+            {message: 'Sort fid is first element in group list', sortList:'1:V.3', expectation: 1},
+            {message: 'Sort fid is first element in group list', sortList:'1:V.2.3:V', expectation: 1},
+            {message: 'Sort fid is first element in group list', sortList:'1:V.2:V.3.4', expectation: 2},
+            {message: 'Sort fid is first element in group list', sortList:'1:V.2:V.3.4.5:V', expectation: 2}
+        ];
+
+        testCases.forEach(function(testCase) {
+            it('Test case: ' + testCase.message, function(done) {
+                var setup = setupRecords(5, 5, constants.TEXT, testCase.sortList);
+                var groupData = groupFormatter.group(setup.req, setup.fields, setup.records);
+
+                assert.equal(groupData.hasGrouping, testCase.expectation > 0);
+                assert.equal(groupData.fields.length, testCase.expectation);
+                done();
+            });
+        });
+    });
+
     describe('Valid grouping tests', function() {
         var testCases = [
             //  TEXT data type
@@ -124,6 +149,18 @@ describe('Validate GroupFormatter unit tests', function() {
             {message: 'USER: first word grouping', numFields: 5, numRecords: 2, gList: '1:I', dataType: constants.USER},
             {message: 'USER: first letter grouping', numFields: 5, numRecords: 2, gList: '1:F.2:F.3:F', dataType: constants.USER},
             {message: 'USER: multiple grouping against same fid', numFields: 5, numRecords: 2, gList: '1:I.1:V', dataType: constants.USER},
+            //  EMAIL_ADDRESS data type
+            {message: 'EMAIL_ADDRESS: equals grouping', numFields: 5, numRecords: 2, gList: '1:V', dataType: constants.EMAIL_ADDRESS},
+            {message: 'EMAIL_ADDRESS: name grouping', numFields: 5, numRecords: 2, gList: '1:N', dataType: constants.EMAIL_ADDRESS},
+            {message: 'EMAIL_ADDRESS: domain grouping', numFields: 5, numRecords: 2, gList: '1:O', dataType: constants.EMAIL_ADDRESS},
+            {message: 'EMAIL_ADDRESS: domainTopLevel grouping', numFields: 5, numRecords: 2, gList: '1:C', dataType: constants.EMAIL_ADDRESS},
+            //  DURATION data type
+            {message: 'DURATION: equals grouping', numFields: 5, numRecords: 2, gList: '1:V', dataType: constants.DURATION},
+            {message: 'DURATION: second grouping', numFields: 5, numRecords: 2, gList: '1:s', dataType: constants.DURATION},
+            {message: 'DURATION: minute grouping', numFields: 5, numRecords: 2, gList: '1:m', dataType: constants.DURATION},
+            {message: 'DURATION: hour grouping', numFields: 5, numRecords: 2, gList: '1:h', dataType: constants.DURATION},
+            {message: 'DURATION: week grouping', numFields: 5, numRecords: 2, gList: '1:W', dataType: constants.DURATION},
+            {message: 'DURATION: day grouping', numFields: 5, numRecords: 2, gList: '1:D', dataType: constants.DURATION},
             //  DATE data type
             {message: 'DATE: equals grouping', numFields: 5, numRecords: 2, gList: '1:V', dataType: constants.DATE},
             {message: 'DATE: day grouping', numFields: 5, numRecords: 2, gList: '1:D', dataType: constants.DATE},
@@ -156,7 +193,11 @@ describe('Validate GroupFormatter unit tests', function() {
             {message: 'NUMERIC: one_k grouping', numFields: 5, numRecords: 2, gList: '1:3', dataType: constants.NUMERIC},
             {message: 'NUMERIC: ten_k grouping', numFields: 5, numRecords: 2, gList: '1:4', dataType: constants.NUMERIC},
             {message: 'NUMERIC: hundred_k grouping', numFields: 5, numRecords: 2, gList: '1:5', dataType: constants.NUMERIC},
-            {message: 'NUMERIC: million grouping', numFields: 5, numRecords: 2, gList: '1:6', dataType: constants.NUMERIC}
+            {message: 'NUMERIC: million grouping', numFields: 5, numRecords: 2, gList: '1:6', dataType: constants.NUMERIC},
+            //  NUMERIC sub_type
+            {message: 'NUMERIC: equals grouping', numFields: 5, numRecords: 2, gList: '1:V', dataType: constants.CURRENCY},
+            {message: 'NUMERIC: equals grouping', numFields: 5, numRecords: 2, gList: '1:V', dataType: constants.PERCENT},
+            {message: 'NUMERIC: equals grouping', numFields: 5, numRecords: 2, gList: '1:V', dataType: constants.RATING}
         ];
 
         testCases.forEach(function(testCase) {

@@ -20,7 +20,8 @@ const FilterSearchBox = React.createClass({
 
     displayName: 'FilterSearchBox',
     propTypes: {
-        onChange : React.PropTypes.func
+        onChange : React.PropTypes.func,
+        clearSearchString : React.PropTypes.func,
     },
 
     getStateFromFlux() {

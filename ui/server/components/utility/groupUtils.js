@@ -4,6 +4,7 @@
     var constants = require('../../api/constants');
     var groupTypes = require('../../api/groupTypes');
     var moment = require('moment');
+    var emailAddress = require('email-addresses');
 
     module.exports = {
 
@@ -37,13 +38,13 @@
                 case groupTypes.DURATION.second: return true;
                 case groupTypes.DURATION.minute: return true;
                 case groupTypes.DURATION.hour: return true;
-                case groupTypes.DURATION.am_pm: return true;
                 case groupTypes.DURATION.week: return true;
                 case groupTypes.DURATION.day: return true;
                 }
                 return false;
             case constants.EMAIL_ADDRESS:
                 switch (groupType) {
+                case groupTypes.EMAIL_ADDRESS.equals: return true;
                 case groupTypes.EMAIL_ADDRESS.domain: return true;
                 case groupTypes.EMAIL_ADDRESS.domain_topLevel: return true;
                 case groupTypes.EMAIL_ADDRESS.name: return true;
@@ -388,6 +389,215 @@
             }
 
             return range;
+        },
+
+        /**
+         * Extract the email name portion from an email address.
+         * Example:  getEmailName(johnSmith@test.com) ==> johnSmith
+         *
+         * @param emailAddr
+         * @returns {*} email name segment of the email address
+         */
+        getEmailName: function(emailAddr) {
+            if (emailAddr) {
+                let parts = emailAddress.parseOneAddress(emailAddr);
+                if (parts) {
+                    return parts.local;
+                }
+            }
+            return '';
+        },
+
+        /**
+         * Extract the domain portion from an email address.
+         * Example:  getEmailDomain(johnSmith@test.com) ==> test.com
+         *
+         * @param emailAddr
+         * @returns {*} email domain segment of the email address
+         */
+        getEmailDomain: function(emailAddr) {
+            if (emailAddr) {
+                let parts = emailAddress.parseOneAddress(emailAddr);
+                if (parts) {
+                    return parts.domain;
+                }
+            }
+            return '';
+        },
+
+        /**
+         * Extract the domain topLevel portion from an email address.
+         * Example:  getEmailDomainTopLevel(johnSmith@test.com) ==> com
+         *
+         * @param emailAddr
+         * @returns {*} top level segment of the email address domain
+         */
+        getEmailDomainTopLevel: function(emailAddr) {
+            if (emailAddr) {
+                let parts = emailAddress.parseOneAddress(emailAddr);
+                if (parts && parts.domain) {
+                    let domainParts = parts.domain.split('.');
+                    if (domainParts.length > 0) {
+                        return domainParts[domainParts.length - 1];
+                    }
+                }
+            }
+            return '';
+        },
+
+        /**
+         * Determine which group is appropriate for the given duration value and
+         * return the grouping value based on the duration.
+         *
+         * For example, the smallest group that the duration qualifies for is outputted:
+         *      - duration of < 1 minute belongs in the seconds group;
+         *      - duration of < 1 hour belongs in the minute group
+         *      - duration of < 1 day belongs in the hour group
+         *      - duration of < 1 week belongs in the day group
+         *      - duration of >= 1 week belongs in the week group
+         *
+         * Negative durations are supported by testing against the absolute value.
+         *
+         * @param duration (ms)
+         * @returns {*}
+         */
+        getDurationEquals: function(duration) {
+
+            let seconds = this.convertDuration(duration, constants.GROUPING.SECOND);
+            if (seconds !== null && Math.abs(seconds) < 60) {
+                return seconds + ' ' + (Math.abs(seconds) === 1 ? constants.GROUPING.SECOND : constants.GROUPING.SECONDS);
+            }
+
+            let minutes = this.convertDuration(duration, constants.GROUPING.MINUTE);
+            if (minutes !== null && Math.abs(minutes) < 60) {
+                return minutes + ' ' + (Math.abs(minutes) === 1 ? constants.GROUPING.MINUTE : constants.GROUPING.MINUTES);
+            }
+
+            let hours = this.convertDuration(duration, constants.GROUPING.HOUR);
+            if (hours !== null && Math.abs(hours) < 24) {
+                return hours + ' ' + (Math.abs(hours) === 1 ? constants.GROUPING.HOUR : constants.GROUPING.HOURS);
+            }
+
+            let days = this.convertDuration(duration, constants.GROUPING.DAY);
+            if (days !== null && Math.abs(days) < 7) {
+                return days + ' ' + (Math.abs(days) === 1 ? constants.GROUPING.DAY : constants.GROUPING.DAYS);
+            }
+
+            let weeks = this.convertDuration(duration, constants.GROUPING.WEEK);
+            if (weeks !== null) {
+                return weeks + ' ' + (Math.abs(weeks) === 1 ? constants.GROUPING.WEEK : constants.GROUPING.WEEKS);
+            }
+
+            return '';
+        },
+
+        /**
+         * Return the duration in seconds.  Fractional seconds are rounded down.
+         *
+         * @param duration (ms)
+         * @returns {*}
+         */
+        getDurationInSeconds: function(duration) {
+            let seconds = this.convertDuration(duration, constants.GROUPING.SECOND, true);
+            if (seconds !== null) {
+                return seconds + ' ' + (Math.abs(seconds) === 1 ? constants.GROUPING.SECOND : constants.GROUPING.SECONDS);
+            }
+            return '';
+        },
+
+        /**
+         * Return the duration in minutes.  Fractional minutes are round down to the largest integer less
+         * than or equal to the given number.
+         *
+         * @param duration (ms)
+         * @returns {*}
+         */
+        getDurationInMinutes: function(duration) {
+            let minutes = this.convertDuration(duration, constants.GROUPING.MINUTE, true);
+            if (minutes !== null) {
+                return minutes + ' ' + (Math.abs(minutes) === 1 ? constants.GROUPING.MINUTE : constants.GROUPING.MINUTES);
+            }
+            return '';
+        },
+
+        /**
+         * Return the duration in hours.  Fractional hours are rounded down to the largest integer less
+         * than or equal to the given number.
+         *
+         * @param duration (ms)
+         * @returns {*}
+         */
+        getDurationInHours: function(duration) {
+            let hours = this.convertDuration(duration, constants.GROUPING.HOUR, true);
+            if (hours !== null) {
+                return hours + ' ' + (Math.abs(hours) === 1 ? constants.GROUPING.HOUR : constants.GROUPING.HOURS);
+            }
+            return '';
+        },
+
+        /**
+         * Return the duration in days.  Fractional days are rounded down to the largest integer less
+         * than or equal to the given number.
+         *
+         * @param duration (ms)
+         * @returns {*}
+         */
+        getDurationInDays: function(duration) {
+            let days = this.convertDuration(duration, constants.GROUPING.DAY, true);
+            if (days !== null) {
+                return days + ' ' + (Math.abs(days) === 1 ? constants.GROUPING.DAY : constants.GROUPING.DAYS);
+            }
+            return '';
+        },
+
+        /**
+         * Return the duration in weeks.  Fractional weeks are rounded down to the largest integer less
+         * than or equal to the given number.
+         *
+         * @param duration (ms)
+         * @returns {*}
+         */
+        getDurationInWeeks: function(duration) {
+            let weeks = this.convertDuration(duration, constants.GROUPING.WEEK, true);
+            if (weeks !== null) {
+                return weeks + ' ' + (Math.abs(weeks) === 1 ? constants.GROUPING.WEEK : constants.GROUPING.WEEKS);
+            }
+            return '';
+        },
+
+        /**
+         * Convert the duration(ms) to the given precision(hours, minutes, seconds, days, weeks).
+         *
+         * @param duration (ms)
+         * @param precision - the conversion percision (hours, minutes, seconds, days, weeks)
+         * @param rounded - are fractional values rounded down to the largest integer less than or equal to the value
+         * @returns {*}
+         */
+        convertDuration: function(duration, precision, rounded) {
+            let value = null;
+            if (typeof duration === 'number') {
+                switch (precision) {
+                case constants.GROUPING.SECOND:
+                    value = duration / constants.MILLI.ONE_SECOND;
+                    break;
+                case constants.GROUPING.MINUTE:
+                    value = duration / constants.MILLI.ONE_MINUTE;
+                    break;
+                case constants.GROUPING.HOUR:
+                    value = duration / constants.MILLI.ONE_HOUR;
+                    break;
+                case constants.GROUPING.DAY:
+                    value = duration / constants.MILLI.ONE_DAY;
+                    break;
+                case constants.GROUPING.WEEK:
+                    value = duration / constants.MILLI.ONE_WEEK;
+                    break;
+                }
+                if (typeof value === 'number' && rounded === true) {
+                    value = Math.floor(value);
+                }
+            }
+            return value;
         }
 
     };

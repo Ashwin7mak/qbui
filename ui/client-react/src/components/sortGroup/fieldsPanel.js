@@ -3,6 +3,7 @@ import {I18nMessage} from '../../utils/i18nMessage';
 import _ from 'lodash';
 import Logger from '../../utils/logger';
 import {ListGroup, ListGroupItem, Panel} from 'react-bootstrap';
+import WindowLocationUtils from '../../utils/windowLocationUtils';
 import QBicon from '../qbIcon/qbIcon';
 import './sortAndGroup.scss';
 
@@ -175,7 +176,7 @@ const FieldsPanel = React.createClass({
                     </span>
                 </div>
                 {(
-                    (window.location.search.includes('mockSort')) ?
+                    (WindowLocationUtils.searchIncludes('mockSort')) ?
                         this.renderMockList(12) :
                         this.renderList(orderList, currentList)
                 )}

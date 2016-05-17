@@ -26,11 +26,11 @@
             second: 's',
             minute: 'm',
             hour: 'h',
-            am_pm: 'a',
             week: COMMON.week,
             day: COMMON.day
         },
         EMAIL_ADDRESS: {
+            equals: COMMON.equals,
             name: 'N',
             domain: 'O',
             domain_topLevel: 'C'

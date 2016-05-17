@@ -400,6 +400,189 @@ describe('Validate Group Utility functions', function() {
             });
         });
 
+        describe('validate getEmailName tests', function() {
+            var testCases = [
+                {name: 'valid email address1', emailAddress: 'johnSmith@test.com', expectation: 'johnSmith'},
+                {name: 'valid email address3', emailAddress: 'john.smith@test.ma.com', expectation: 'john.smith'},
+                {name: 'valid email address2', emailAddress: 'johnsmith@com', expectation: 'johnsmith'},
+                {name: 'empty email address', emailAddress: '', expectation: ''},
+                {name: 'null email address', emailAddress: null, expectation: ''},
+                {name: 'invalid email address - numeric input', emailAddress: 12345, expectation: ''},
+                {name: 'invalid email address - invalid object', emailAddress: new Date(), expectation: ''},
+                {name: 'invalid email address - invalid format', emailAddress: 'johnsmith@johnSmith@test.com', expectation: ''},
+                {name: 'invalid email address - invalid format2', emailAddress: 'johnsmith.com', expectation: ''}
+            ];
+
+            testCases.forEach(function(test) {
+                it('Test case: ' + test.name, function() {
+                    assert.equal(groupUtils.getEmailName(test.emailAddress), test.expectation);
+                });
+            });
+        });
+
+        describe('validate getEmailDomain tests', function() {
+            var testCases = [
+                {name: 'valid email address1', emailAddress: 'johnSmith@test.com', expectation: 'test.com'},
+                {name: 'valid email address3', emailAddress: 'john.smith@test.ma.com', expectation: 'test.ma.com'},
+                {name: 'valid email address2', emailAddress: 'johnsmith@com', expectation: 'com'},
+                {name: 'empty email address', emailAddress: '', expectation: ''},
+                {name: 'null email address', emailAddress: null, expectation: ''},
+                {name: 'invalid email address - numeric input', emailAddress: 12345, expectation: ''},
+                {name: 'invalid email address - invalid object', emailAddress: new Date(), expectation: ''},
+                {name: 'invalid email address - invalid format', emailAddress: 'johnsmith@johnSmith@test.com', expectation: ''},
+                {name: 'invalid email address - invalid format2', emailAddress: 'johnsmith.com', expectation: ''}
+            ];
+
+            testCases.forEach(function(test) {
+                it('Test case: ' + test.name, function() {
+                    assert.equal(groupUtils.getEmailDomain(test.emailAddress), test.expectation);
+                });
+            });
+        });
+
+        describe('validate getEmailDomainTopLevel tests', function() {
+            var testCases = [
+                {name: 'valid email address1', emailAddress: 'johnSmith@test.com', expectation: 'com'},
+                {name: 'valid email address3', emailAddress: 'john.smith@test.ma.com', expectation: 'com'},
+                {name: 'valid email address2', emailAddress: 'johnsmith@com', expectation: 'com'},
+                {name: 'empty email address', emailAddress: '', expectation: ''},
+                {name: 'null email address', emailAddress: null, expectation: ''},
+                {name: 'invalid email address - numeric input', emailAddress: 12345, expectation: ''},
+                {name: 'invalid email address - invalid object', emailAddress: new Date(), expectation: ''},
+                {name: 'invalid email address - invalid format', emailAddress: 'johnsmith@johnSmith@test.com', expectation: ''},
+                {name: 'invalid email address - invalid format2', emailAddress: 'johnsmith.com', expectation: ''}
+            ];
+
+            testCases.forEach(function(test) {
+                it('Test case: ' + test.name, function() {
+                    assert.equal(groupUtils.getEmailDomainTopLevel(test.emailAddress), test.expectation);
+                });
+            });
+        });
+
+        describe('duration tests', function() {
+            var testCases = [
+                {name: 'null input', duration: null, expectation: ''},
+                {name: 'string input', duration: 'something', expectation: ''},
+                {name: '-3', duration: -3, expectation: -3},
+                {name: '-2.5', duration: -2.5, expectation: -3},
+                {name: '0.5', duration: 0.5, expectation: 0},
+                {name: '1', duration: 1, expectation: 1},
+                {name: '10', duration: 10, expectation: 10},
+                {name: '10.75', duration: 10.75, expectation: 10},
+                {name: '30', duration: 30, expectation: 30}
+            ];
+
+            describe('validate duration second tests', function() {
+                testCases.forEach(function(test) {
+                    it('Test case: ' + test.name, function() {
+                        var duration = typeof test.duration === 'number' ? constants.MILLI.ONE_SECOND * test.duration : test.duration;
+                        var expectation = test.expectation;
+                        if (test.expectation !== '') {
+                            expectation += ' ' + (test.expectation === 1 ? constants.GROUPING.SECOND : constants.GROUPING.SECONDS);
+                        }
+                        assert.equal(groupUtils.getDurationInSeconds(duration), expectation);
+                    });
+                });
+            });
+
+            describe('validate duration minute tests', function() {
+                testCases.forEach(function(test) {
+                    it('Test case: ' + test.name, function() {
+                        var duration = typeof test.duration === 'number' ? constants.MILLI.ONE_MINUTE * test.duration : test.duration;
+                        var expectation = test.expectation;
+                        if (test.expectation !== '') {
+                            expectation += ' ' + (test.expectation === 1 ? constants.GROUPING.MINUTE : constants.GROUPING.MINUTES);
+                        }
+                        assert.equal(groupUtils.getDurationInMinutes(duration), expectation);
+                    });
+                });
+            });
+
+            describe('validate duration hour tests', function() {
+                testCases.forEach(function(test) {
+                    it('Test case: ' + test.name, function() {
+                        var duration = typeof test.duration === 'number' ? constants.MILLI.ONE_HOUR * test.duration : test.duration;
+                        var expectation = test.expectation;
+                        if (test.expectation !== '') {
+                            expectation += ' ' + (test.expectation === 1 ? constants.GROUPING.HOUR : constants.GROUPING.HOURS);
+                        }
+                        assert.equal(groupUtils.getDurationInHours(duration), expectation);
+                    });
+                });
+            });
+
+            describe('validate duration day tests', function() {
+                testCases.forEach(function(test) {
+                    it('Test case: ' + test.name, function() {
+                        var duration = typeof test.duration === 'number' ? constants.MILLI.ONE_DAY * test.duration : test.duration;
+                        var expectation = test.expectation;
+                        if (test.expectation !== '') {
+                            expectation += ' ' + (test.expectation === 1 ? constants.GROUPING.DAY : constants.GROUPING.DAYS);
+                        }
+                        assert.equal(groupUtils.getDurationInDays(duration), expectation);
+                    });
+                });
+            });
+
+            describe('validate duration week tests', function() {
+                testCases.forEach(function(test) {
+                    it('Test case: ' + test.name, function() {
+                        var duration = typeof test.duration === 'number' ? constants.MILLI.ONE_WEEK * test.duration : test.duration;
+                        var expectation = test.expectation;
+                        if (test.expectation !== '') {
+                            expectation += ' ' + (test.expectation === 1 ? constants.GROUPING.WEEK : constants.GROUPING.WEEKS);
+                        }
+                        assert.equal(groupUtils.getDurationInWeeks(duration), expectation);
+                    });
+                });
+            });
+
+            describe('validate duration equals tests', function() {
+
+                var equalTestCases = [
+                    {name: 'null input', duration: null, expectation: ''},
+                    {name: 'string input', duration: 'something', expectation: ''},
+
+                    {name: 'second', duration: constants.MILLI.ONE_SECOND, expectation: '1 ' + constants.GROUPING.SECOND},
+                    {name: 'seconds', duration: constants.MILLI.ONE_SECOND * 55, expectation: '55 ' + constants.GROUPING.SECONDS},
+                    {name: 'second negative', duration: constants.MILLI.ONE_SECOND * -1, expectation: '-1 ' + constants.GROUPING.SECOND},
+                    {name: 'seconds negative', duration: constants.MILLI.ONE_SECOND * -55, expectation: '-55 ' + constants.GROUPING.SECONDS},
+
+                    {name: 'minute', duration: constants.MILLI.ONE_MINUTE, expectation: '1 ' + constants.GROUPING.MINUTE},
+                    {name: 'minutes', duration: constants.MILLI.ONE_MINUTE * 5, expectation: '5 ' + constants.GROUPING.MINUTES},
+                    {name: 'minutes2', duration: (constants.MILLI.ONE_MINUTE * 5) + (constants.MILLI.ONE_SECOND * 30), expectation: '5.5 ' + constants.GROUPING.MINUTES},
+                    {name: 'minute negative', duration: constants.MILLI.ONE_MINUTE * -1, expectation: '-1 ' + constants.GROUPING.MINUTE},
+                    {name: 'minutes negative', duration: constants.MILLI.ONE_MINUTE * -5, expectation: '-5 ' + constants.GROUPING.MINUTES},
+
+                    {name: 'hour', duration: constants.MILLI.ONE_HOUR, expectation: '1 ' + constants.GROUPING.HOUR},
+                    {name: 'hours', duration: constants.MILLI.ONE_HOUR * 4, expectation: '4 ' + constants.GROUPING.HOURS},
+                    {name: 'hours2', duration: (constants.MILLI.ONE_HOUR * 4) + (constants.MILLI.ONE_MINUTE * 15), expectation: '4.25 ' + constants.GROUPING.HOURS},
+                    {name: 'hour negative', duration: constants.MILLI.ONE_HOUR * -1, expectation: '-1 ' + constants.GROUPING.HOUR},
+                    {name: 'hours negative', duration: constants.MILLI.ONE_HOUR * -4, expectation: '-4 ' + constants.GROUPING.HOURS},
+
+                    {name: 'day', duration: constants.MILLI.ONE_DAY, expectation: '1 ' + constants.GROUPING.DAY},
+                    {name: 'days', duration: constants.MILLI.ONE_DAY * 3, expectation: '3 ' + constants.GROUPING.DAYS},
+                    {name: 'days2', duration: (constants.MILLI.ONE_DAY * 3) + (constants.MILLI.ONE_HOUR * 18), expectation: '3.75 ' + constants.GROUPING.DAYS},
+                    {name: 'day negative', duration: constants.MILLI.ONE_DAY * -1, expectation: '-1 ' + constants.GROUPING.DAY},
+                    {name: 'days negative', duration: constants.MILLI.ONE_DAY * -3, expectation: '-3 ' + constants.GROUPING.DAYS},
+
+                    {name: 'week', duration: (constants.MILLI.ONE_WEEK), expectation: '1 ' + constants.GROUPING.WEEK},
+                    {name: 'weeks', duration: (constants.MILLI.ONE_WEEK * 10), expectation: '10 ' + constants.GROUPING.WEEKS},
+                    {name: 'week negative', duration: (constants.MILLI.ONE_WEEK) * -1, expectation: '-1 ' + constants.GROUPING.WEEK},
+                    {name: 'weeks negative', duration: (constants.MILLI.ONE_WEEK * -10), expectation: '-10 ' + constants.GROUPING.WEEKS}
+                ];
+
+                equalTestCases.forEach(function(test) {
+                    it('Test case: ' + test.name, function() {
+                        assert.equal(groupUtils.getDurationEquals(test.duration), test.expectation);
+                    });
+                });
+            });
+
+        });
+
+
         describe('validate negative test cases against date functions', function() {
             //  negative test cases against all of the implemented date functions
             var testCases = generateDateGroupingTestCases(false);
@@ -485,7 +668,6 @@ describe('Validate Group Utility functions', function() {
                 {name: 'duration second', dataType: constants.DURATION, groupType: groupTypes.DURATION.second, expectation: true},
                 {name: 'duration minute', dataType: constants.DURATION, groupType: groupTypes.DURATION.minute, expectation: true},
                 {name: 'duration hour', dataType: constants.DURATION, groupType: groupTypes.DURATION.hour, expectation: true},
-                {name: 'duration am_pm', dataType: constants.DURATION, groupType: groupTypes.DURATION.am_pm, expectation: true},
                 {name: 'duration week', dataType: constants.DURATION, groupType: groupTypes.DURATION.week, expectation: true},
                 {name: 'duration day', dataType: constants.DURATION, groupType: groupTypes.DURATION.day, expectation: true}
             ];
@@ -508,6 +690,7 @@ describe('Validate Group Utility functions', function() {
 
         describe('validate EMAIL group types', function() {
             var validGroupTypeTestCases = [
+                {name: 'email name', dataType: constants.EMAIL_ADDRESS, groupType: groupTypes.EMAIL_ADDRESS.equals, expectation: true},
                 {name: 'email domain', dataType: constants.EMAIL_ADDRESS, groupType: groupTypes.EMAIL_ADDRESS.domain, expectation: true},
                 {name: 'email domain_toplevel', dataType: constants.EMAIL_ADDRESS, groupType: groupTypes.EMAIL_ADDRESS.domain_topLevel, expectation: true},
                 {name: 'email name', dataType: constants.EMAIL_ADDRESS, groupType: groupTypes.EMAIL_ADDRESS.name, expectation: true}

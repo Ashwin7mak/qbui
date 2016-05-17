@@ -16,6 +16,7 @@
         var realmId;
         var app;
         var recordList;
+        var groupedTableResults = [];
 
         var durationMax = '9223372036854775807';
         var durationMin = '-9223372036854775807';
@@ -99,13 +100,15 @@
                     testRecord4 = [[{'id': 6, 'value': JSON.parse(userResponse.body).id}, {'id': 7, 'value': 'Development'}, {'id': 8, 'value': 'Install latest software'}, {'id': 9, 'value': '2009-03-31'}, {'id': 10, 'value': '2009-04-28'}, {'id': 11, 'value': +durationMin}, {'id': 12, 'value': 100}]];
                     return e2eBase.recordService.addRecords(app, app.tables[e2eConsts.TABLE1], testRecord4);
                 });
-
+            }).then(function() {
+                //Create a report with sorting and grouping (Sort startDate asc)
+                return e2eBase.reportService.createReportWithFids(app.id, app.tables[e2eConsts.TABLE1].id, [6, 7, 8, 9, 10, 11, 12]);
             }).then(function() {
                 //Create a report with sorting and grouping (Sort startDate asc and group by User Name)
                 return e2eBase.reportService.createReportWithSortAndGroup(app.id, app.tables[e2eConsts.TABLE1].id, ["-9", "6:V"]);
             }).then(function() {
                 //Create a report with facets [text field and checkbox field]
-                return e2eBase.reportService.createReportWithFacetsAndSortLists(app.id, app.tables[e2eConsts.TABLE1].id, [7, 8], ["6:V", "7:V", "12:V", "9", "-11"]);
+                return e2eBase.reportService.createReportWithFidsAndFacetsAndSortLists(app.id, app.tables[e2eConsts.TABLE1].id, [6, 7, 8, 9, 10, 11, 12], [7, 8], ["6:V", "7:V", "12:V", "9", "-11"]);
             }).then(function() {
                 // Get a session ticket for that subdomain and realmId (stores it in the browser)
                 realmName = e2eBase.recordBase.apiBase.realm.subdomain;
@@ -130,32 +133,34 @@
          * Funstion to get the sorted/grouped table results
          * @Param:groupArrayLength (no of group fields)
          */
-        var verifyTableResults = function(NoOfGroupFields, groupOnlySort, expectedResults) {
+        var verifyTableResults = function(groupOnlySort, expectedResults) {
             // Get all records from table after grp/sort
-            reportServicePage.agGridRecordElList.map(function(row) {
-                var cellValues = [];
-                //need this because for grouping the selected columns will be deleted in table grid
-                var cellCount = 8 - (NoOfGroupFields);
-                for (var i = 2; i <= cellCount; i++) {
-                    cellValues.push(row.all(by.className('ag-cell-no-focus')).get(i).getText());
-                }
-                return cellValues;
-            }).then(function(groupingSortingTableResults) {
+            reportServicePage.waitForElement(reportServicePage.agGridContainerEl).then(function() {
+                reportServicePage.agGridRecordElList.map(function(row) {
+                    return row.getText().then(function(text) {
+                        groupedTableResults.push([text.replace(/\n/g, ",")]);
+                    });
+                });
+            }).then(function() {
                 if (groupOnlySort === true) {
+                    console.log("the grouped results are: " + groupedTableResults);
                     //sort the arrays and compare
-                    expect(groupingSortingTableResults.sort()).toEqual(expectedResults.sort());
+                    expect(groupedTableResults.sort()).toEqual(expectedResults.sort());
                 } else {
                     //the arrays are already sorted
                     //verify the sorting/grouping results with expected
-                    expect(groupingSortingTableResults).toEqual(expectedResults);
+                    expect(groupedTableResults).toEqual(expectedResults);
                 }
+            }).then(function() {
+                //clean up the array
+                groupedTableResults = [];
             });
         };
 
         /*
-         * XLARGE BREAKPOINT - Grouping/Sorting Via PopUp Test Cases using No FIDS,SortList setup in reports
+         * XLARGE BREAKPOINT - Grouping/Sorting Via PopUp Test Cases using No-Facets No-Groups/Sorts Yes-Fids setup in reports
          */
-        describe('XLARGE: Report Settings: No Facets or sortLists', function() {
+        describe('XLARGE: Report Settings: No-Facets No-Groups/Sorts Yes-Fids', function() {
 
             beforeAll(function(done) {
                 e2eBase.resizeBrowser(e2eConsts.XLARGE_BP_WIDTH, e2eConsts.DEFAULT_HEIGHT).then(function() {
@@ -165,7 +170,7 @@
 
             beforeEach(function(done) {
                 //go to report page directly
-                RequestAppsPage.get(e2eBase.getRequestReportsPageEndpoint(realmName, app.id, app.tables[e2eConsts.TABLE1].id, '1'));
+                RequestAppsPage.get(e2eBase.getRequestReportsPageEndpoint(realmName, app.id, app.tables[e2eConsts.TABLE1].id, '2'));
                 reportServicePage.waitForElement(reportServicePage.loadedContentEl).then(function() {
                     reportServicePage.waitForElement(reportSortingPage.reportSortingGroupingContainer);
                     done();
@@ -183,10 +188,10 @@
                         sortBy: ['Start Date'],
                         flag: 'sortOnly',
                         expectedTableResults: [
-                            ['Chris Baker', 'Planning', 'Server purchase', '3/16/2009', '4/10/2009', '-15250284452.47152052910053 weeks', '100.00000000000000%'],
-                            ['Chris Baker', 'Development', 'Upgrade DBMS', '3/19/2009', '4/28/2009', '0.0020410978836 weeks', '99.00000000000000%'],
-                            ['Angela Leon', 'Planning', 'Workstation purchase', '3/21/2009', '4/10/2009', '15250284452.47152052910053 weeks', '99.00000000000000%'],
-                            ['Jon Neil', 'Development', 'Install latest software', '3/31/2009', '4/28/2009', '15250284452.47152052910053 weeks', '100.00000000000000%']
+                            ['Chris Baker,Planning,Server purchase,3/16/2009,4/10/2009,-15250284452.47152052910053 weeks,100.00000000000000%'],
+                            ['Chris Baker,Development,Upgrade DBMS,3/19/2009,4/28/2009,0.0020410978836 weeks,99.00000000000000%'],
+                            ['Angela Leon,Planning,Workstation purchase,3/21/2009,4/10/2009,15250284452.47152052910053 weeks,99.00000000000000%'],
+                            ['Jon Neil,Development,Install latest software,3/31/2009,4/28/2009,15250284452.47152052910053 weeks,100.00000000000000%']
                         ]
                     },
                     {
@@ -195,13 +200,13 @@
                         sortBy: [],
                         flag: 'groupOnly',
                         expectedTableResults: [
-                            ['', '', '', '', '', ''],
-                            ['', '', '', '', '', ''],
-                            ['', '', '', '', '', ''],
-                            ['Development', 'Install latest software', '3/31/2009', '4/28/2009', '15250284452.47152052910053 weeks', '100.00000000000000%'],
-                            ['Development', 'Upgrade DBMS', '3/19/2009', '4/28/2009', '0.0020410978836 weeks', '99.00000000000000%'],
-                            ['Planning', 'Server purchase', '3/16/2009', '4/10/2009', '-15250284452.47152052910053 weeks', '100.00000000000000%'],
-                            ['Planning', 'Workstation purchase', '3/21/2009', '4/10/2009', '15250284452.47152052910053 weeks', '99.00000000000000%']
+                            ['Chris Baker'],
+                            ['Development,Upgrade DBMS,3/19/2009,4/28/2009,0.0020410978836 weeks,99.00000000000000%'],
+                            ['Planning,Server purchase,3/16/2009,4/10/2009,-15250284452.47152052910053 weeks,100.00000000000000%'],
+                            ['Jon Neil'],
+                            ['Development,Install latest software,3/31/2009,4/28/2009,15250284452.47152052910053 weeks,100.00000000000000%'],
+                            ['Angela Leon'],
+                            ['Planning,Workstation purchase,3/21/2009,4/10/2009,15250284452.47152052910053 weeks,99.00000000000000%']
                         ]
                     },
                     {
@@ -210,12 +215,12 @@
                         sortBy: ['% Completed'],
                         flag: 'sortAndGrp',
                         expectedTableResults: [
-                            ['', '', '', '', '', ''],
-                            ['Chris Baker', 'Upgrade DBMS', '3/19/2009', '4/28/2009', '0.0020410978836 weeks', '99.00000000000000%'],
-                            ['Jon Neil', 'Install latest software', '3/31/2009', '4/28/2009', '15250284452.47152052910053 weeks', '100.00000000000000%'],
-                            ['', '', '', '', '', ''],
-                            ['Angela Leon', 'Workstation purchase', '3/21/2009', '4/10/2009', '15250284452.47152052910053 weeks', '99.00000000000000%'],
-                            ['Chris Baker', 'Server purchase', '3/16/2009', '4/10/2009', '-15250284452.47152052910053 weeks', '100.00000000000000%']
+                            ['Development'],
+                            ['Chris Baker,Upgrade DBMS,3/19/2009,4/28/2009,0.0020410978836 weeks,99.00000000000000%'],
+                            ['Jon Neil,Install latest software,3/31/2009,4/28/2009,15250284452.47152052910053 weeks,100.00000000000000%'],
+                            ['Planning'],
+                            ['Angela Leon,Workstation purchase,3/21/2009,4/10/2009,15250284452.47152052910053 weeks,99.00000000000000%'],
+                            ['Chris Baker,Server purchase,3/16/2009,4/10/2009,-15250284452.47152052910053 weeks,100.00000000000000%']
                         ]
                     },
                     {
@@ -224,16 +229,16 @@
                         sortBy: ["Duration Taken", "Start Date"],
                         flag: 'sortAndGrp',
                         expectedTableResults: [
-                            ['', '', '', '', ''],
-                            ['', '', '', '', ''],
-                            ['Chris Baker', 'Upgrade DBMS', '3/19/2009', '4/28/2009', '0.0020410978836 weeks'],
-                            ['', '', '', '', ''],
-                            ['Jon Neil', 'Install latest software', '3/31/2009', '4/28/2009', '15250284452.47152052910053 weeks'],
-                            ['', '', '', '', ''],
-                            ['', '', '', '', ''],
-                            ['Chris Baker', 'Server purchase', '3/16/2009', '4/10/2009', '-15250284452.47152052910053 weeks'],
-                            ['', '', '', '', ''],
-                            ['Angela Leon', 'Workstation purchase', '3/21/2009', '4/10/2009', '15250284452.47152052910053 weeks']
+                            ['Development'],
+                            ['99.00000000000000%'],
+                            ['Chris Baker,Upgrade DBMS,3/19/2009,4/28/2009,0.0020410978836 weeks'],
+                            ['100.00000000000000%'],
+                            ['Jon Neil,Install latest software,3/31/2009,4/28/2009,15250284452.47152052910053 weeks'],
+                            ['Planning'],
+                            ['100.00000000000000%'],
+                            ['Chris Baker,Server purchase,3/16/2009,4/10/2009,-15250284452.47152052910053 weeks'],
+                            ['99.00000000000000%'],
+                            ['Angela Leon,Workstation purchase,3/21/2009,4/10/2009,15250284452.47152052910053 weeks']
                         ]
                     }
 
@@ -274,10 +279,10 @@
                     }).then(function() {
                         //verify the sorting/grouping results with expected
                         if (testCase.flag.includes("groupOnly")) {
-                            verifyTableResults(testCase.groupBy.length, true, testCase.expectedTableResults);
+                            verifyTableResults(true, testCase.expectedTableResults);
                         } else {
                             // Verify table results with expected
-                            verifyTableResults(testCase.groupBy.length, false, testCase.expectedTableResults);
+                            verifyTableResults(false, testCase.expectedTableResults);
                         }
                         done();
                     });
@@ -285,8 +290,8 @@
             });
 
             it('Verify you can add not more than 3 fields in GrpBy and not more than 5 in SortBy', function(done) {
-                var grpFields = ["Project Phase", "% Completed", "User Name"];
-                var sortFields = ["Start Date", "Finish Date", "Duration Taken", "Task Name", "Record ID#"];
+                var grpFields = ["Project Phase", "% Completed", "more fields...", "Date Created"];
+                var sortFields = ["Start Date", "Finish Date", "Duration Taken", "Task Name", "User Name"];
                 reportServicePage.waitForElementToBeClickable(reportSortingPage.reportSortAndGroupBtn).then(function() {
                     //click on sort/grp Icon
                     reportSortingPage.clickSortAndGroupIcon();
@@ -316,9 +321,9 @@
         }); //XLARGE describe block
 
         /*
-         * LARGE BREAKPOINT - Grouping/Sorting Via PopUp Test Cases using No FIDS,SortList setup in reports
+         * LARGE BREAKPOINT - Grouping/Sorting Via PopUp Test Cases using No-Facets No-Groups/Sorts Yes-Fids setup in reports
          */
-        describe('LARGE : Report Settings : No facets or sortLists: ', function() {
+        describe('LARGE : Report Settings : No-Facets No-Groups/Sorts Yes-Fids ', function() {
             beforeAll(function(done) {
                 e2eBase.resizeBrowser(e2eConsts.LARGE_BP_WIDTH, e2eConsts.DEFAULT_HEIGHT).then(function() {
                     done();
@@ -327,7 +332,7 @@
 
             beforeEach(function(done) {
                 //go to report page directly
-                RequestAppsPage.get(e2eBase.getRequestReportsPageEndpoint(realmName, app.id, app.tables[e2eConsts.TABLE1].id, '1'));
+                RequestAppsPage.get(e2eBase.getRequestReportsPageEndpoint(realmName, app.id, app.tables[e2eConsts.TABLE1].id, '2'));
                 reportServicePage.waitForElement(reportServicePage.loadedContentEl).then(function() {
                     reportServicePage.waitForElement(reportSortingPage.reportSortingGroupingContainer);
                     done();
@@ -346,10 +351,10 @@
                         sortOrderIconInGrpBy: [],
                         sortOrderIconInSortBy: [{fieldIndex:0, sortOrder:'desc'}],
                         expectedTableResults: [
-                            ['Jon Neil', 'Development', 'Install latest software', '3/31/2009', '4/28/2009', '15250284452.47152052910053 weeks', '100.00000000000000%'],
-                            ['Angela Leon', 'Planning', 'Workstation purchase', '3/21/2009', '4/10/2009', '15250284452.47152052910053 weeks', '99.00000000000000%'],
-                            ['Chris Baker', 'Development', 'Upgrade DBMS', '3/19/2009', '4/28/2009', '0.0020410978836 weeks', '99.00000000000000%'],
-                            ['Chris Baker', 'Planning', 'Server purchase', '3/16/2009', '4/10/2009', '-15250284452.47152052910053 weeks', '100.00000000000000%']
+                            ['Jon Neil,Development,Install latest software,3/31/2009,4/28/2009,15250284452.47152052910053 weeks,100.00000000000000%'],
+                            ['Angela Leon,Planning,Workstation purchase,3/21/2009,4/10/2009,15250284452.47152052910053 weeks,99.00000000000000%'],
+                            ['Chris Baker,Development,Upgrade DBMS,3/19/2009,4/28/2009,0.0020410978836 weeks,99.00000000000000%'],
+                            ['Chris Baker,Planning,Server purchase,3/16/2009,4/10/2009,-15250284452.47152052910053 weeks,100.00000000000000%'],
                         ]
                     },
                     {
@@ -359,12 +364,12 @@
                         sortOrderIconInGrpBy: [{fieldIndex:0, sortOrder:'desc'}],
                         sortOrderIconInSortBy: [{fieldIndex:0, sortOrder:'desc'}],
                         expectedTableResults: [
-                            ['', '', '', '', '', ''],
-                            ['Jon Neil', 'Development', 'Install latest software', '3/31/2009', '4/28/2009', '15250284452.47152052910053 weeks'],
-                            ['Chris Baker', 'Planning', 'Server purchase', '3/16/2009', '4/10/2009', '-15250284452.47152052910053 weeks'],
-                            ['', '', '', '', '', ''],
-                            ['Angela Leon', 'Planning', 'Workstation purchase', '3/21/2009', '4/10/2009', '15250284452.47152052910053 weeks'],
-                            ['Chris Baker', 'Development', 'Upgrade DBMS', '3/19/2009', '4/28/2009', '0.0020410978836 weeks']
+                            ['100.00000000000000%'],
+                            ['Jon Neil,Development,Install latest software,3/31/2009,4/28/2009,15250284452.47152052910053 weeks'],
+                            ['Chris Baker,Planning,Server purchase,3/16/2009,4/10/2009,-15250284452.47152052910053 weeks'],
+                            ['99.00000000000000%'],
+                            ['Angela Leon,Planning,Workstation purchase,3/21/2009,4/10/2009,15250284452.47152052910053 weeks'],
+                            ['Chris Baker,Development,Upgrade DBMS,3/19/2009,4/28/2009,0.0020410978836 weeks']
                         ]
                     },
                     {
@@ -374,12 +379,12 @@
                         sortOrderIconInGrpBy: [{fieldIndex:0, sortOrder:'desc'}],
                         sortOrderIconInSortBy: [{fieldIndex:1, sortOrder:'desc'}],
                         expectedTableResults: [
-                            ['', '', '', '', '', ''],
-                            ['Chris Baker', 'Server purchase', '3/16/2009', '4/10/2009', '-15250284452.47152052910053 weeks', '100.00000000000000%'],
-                            ['Angela Leon', 'Workstation purchase', '3/21/2009', '4/10/2009', '15250284452.47152052910053 weeks', '99.00000000000000%'],
-                            ['', '', '', '', '', ''],
-                            ['Chris Baker', 'Upgrade DBMS', '3/19/2009', '4/28/2009', '0.0020410978836 weeks', '99.00000000000000%'],
-                            ['Jon Neil', 'Install latest software', '3/31/2009', '4/28/2009', '15250284452.47152052910053 weeks', '100.00000000000000%']
+                            ['Planning'],
+                            ['Chris Baker,Server purchase,3/16/2009,4/10/2009,-15250284452.47152052910053 weeks,100.00000000000000%'],
+                            ['Angela Leon,Workstation purchase,3/21/2009,4/10/2009,15250284452.47152052910053 weeks,99.00000000000000%'],
+                            ['Development'],
+                            ['Chris Baker,Upgrade DBMS,3/19/2009,4/28/2009,0.0020410978836 weeks,99.00000000000000%'],
+                            ['Jon Neil,Install latest software,3/31/2009,4/28/2009,15250284452.47152052910053 weeks,100.00000000000000%']
                         ]
                     },
                 ];
@@ -415,7 +420,7 @@
                         reportSortingPage.clickApply();
                     }).then(function() {
                         //verify the sorting/grouping results with expected
-                        verifyTableResults(testCase.groupBy.length, false, testCase.expectedTableResults);
+                        verifyTableResults(false, testCase.expectedTableResults);
                         done();
                     });
                 });
@@ -423,7 +428,7 @@
 
             it('Report Settings: with sortLists no Facets : Verify the Sort & Group popup respects the report settings', function(done) {
                 //go to report with sortLists page directly
-                RequestAppsPage.get(e2eBase.getRequestReportsPageEndpoint(realmName, app.id, app.tables[e2eConsts.TABLE1].id, '2'));
+                RequestAppsPage.get(e2eBase.getRequestReportsPageEndpoint(realmName, app.id, app.tables[e2eConsts.TABLE1].id, '3'));
                 reportServicePage.waitForElement(reportServicePage.loadedContentEl).then(function() {
                     //Verify that popup respects the sortList set in report while loading
                     reportServicePage.waitForElement(reportSortingPage.reportSortingGroupingContainer).then(function() {
@@ -473,14 +478,25 @@
 
             beforeEach(function(done) {
                 //go to report with facets page directly
-                RequestAppsPage.get(e2eBase.getRequestReportsPageEndpoint(realmName, app.id, app.tables[e2eConsts.TABLE1].id, '3'));
+                RequestAppsPage.get(e2eBase.getRequestReportsPageEndpoint(realmName, app.id, app.tables[e2eConsts.TABLE1].id, '4'));
                 reportServicePage.waitForElement(reportServicePage.loadedContentEl).then(function() {
                     reportServicePage.waitForElement(reportSortingPage.reportSortingGroupingContainer);
                     done();
                 });
             });
 
-            it('Verify the popUp respects report settings', function(done) {
+            xit('Verify the popUp respects report settings', function(done) { //TODO Don is fixing on sorting inside grouping.
+                var expectedTableResultsAfterFilter = [
+                    ['Chris Baker'],
+                    ['Development'],
+                    ['99.00000000000000%'],
+                    ['Upgrade DBMS,3/19/2009,4/28/2009,0.0020410978836 weeks'],
+                    ['Jon Neil'],
+                    ['Development'],
+                    ['100.00000000000000%'],
+                    ['Install latest software,3/31/2009,4/28/2009,15250284452.47152052910053 weeks']
+                ];
+
                 reportServicePage.waitForElementToBeClickable(reportSortingPage.reportSortAndGroupBtn).then(function() {
                     //click on sort/grp Icon
                     reportSortingPage.clickSortAndGroupIcon();
@@ -506,7 +522,20 @@
                         return elm.getText();
                     }).then(function(expectedFacets) {
                         expect(expectedFacets).toEqual(['Project Phase', 'Task Name']);
-                        done();
+
+                    }).then(function() {
+                        //apply the filter and verify the results
+                        reportFacetsPage.selectGroupAndFacetItems("Project Phase", [0]).then(function() {
+                            //click outside to collapse the popup.
+                            reportServicePage.reportFilterSearchBox.click().then(function() {
+                                //sleep for loading of table to finish
+                                e2eBase.sleep(browser.params.smallSleep);
+                                //verify the filtered results (filter by Project Phase - > Development)
+                                //passing group by length is 0 to below method because I am deleting all grp by fields in this testcase
+                                verifyTableResults(false, expectedTableResultsAfterFilter);
+                                done();
+                            });
+                        });
                     });
                 });
             });
@@ -523,10 +552,10 @@
                         deleteIconInGrpBy: [{fieldIndex: 2}, {fieldIndex: 1}, {fieldIndex: 0}],
                         deleteIconInSortBy: [{fieldIndex: 1}],
                         expectedTableResultsAfterDelete: [
-                            ['Chris Baker', 'Planning', 'Server purchase', '3/16/2009', '4/10/2009', '-15250284452.47152052910053 weeks', '100.00000000000000%'],
-                            ['Chris Baker', 'Development', 'Upgrade DBMS', '3/19/2009', '4/28/2009', '0.0020410978836 weeks', '99.00000000000000%'],
-                            ['Angela Leon', 'Planning', 'Workstation purchase', '3/21/2009', '4/10/2009', '15250284452.47152052910053 weeks', '99.00000000000000%'],
-                            ['Jon Neil', 'Development', 'Install latest software', '3/31/2009', '4/28/2009', '15250284452.47152052910053 weeks', '100.00000000000000%']
+                            ['Chris Baker,Planning,Server purchase,3/16/2009,4/10/2009,-15250284452.47152052910053 weeks,100.00000000000000%'],
+                            ['Chris Baker,Development,Upgrade DBMS,3/19/2009,4/28/2009,0.0020410978836 weeks,99.00000000000000%'],
+                            ['Angela Leon,Planning,Workstation purchase,3/21/2009,4/10/2009,15250284452.47152052910053 weeks,99.00000000000000%'],
+                            ['Jon Neil,Development,Install latest software,3/31/2009,4/28/2009,15250284452.47152052910053 weeks,100.00000000000000%']
                         ]
                     },
                 ];
@@ -553,8 +582,16 @@
                     }).then(function() {
                         // Verify table results with expected
                         //passing group by length is 0 to below method because I am deleting all grp by fields in this testcase
-                        verifyTableResults(0, false, testCase.expectedTableResultsAfterDelete);
-                        done();
+                        verifyTableResults(false, testCase.expectedTableResultsAfterDelete);
+                    }).then(function() {
+                        reportServicePage.waitForElementToBeClickable(reportSortingPage.reportSortAndGroupBtn).then(function() {
+                            //click on sort/grp Icon
+                            reportSortingPage.clickSortAndGroupIcon();
+                        }).then(function() {
+                            //Verify that you can add back the deleted field
+                            reportSortingPage.selectGroupByItems("User Name");
+                            done();
+                        });
                     });
                 });
             });
