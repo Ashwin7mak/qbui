@@ -61,7 +61,7 @@ var OverlayDialogHeader = React.createClass({
                 {this.renderTitle()}
 
                 <div className="overlayLeft">
-                    <Button className={this.props.dirty} onClick={this.props.onApply}>
+                    <Button className={this.props.dirty} onClick={this.props.onApplyChanges}>
                     <I18nMessage message="apply"/>
                     </Button>
                 </div>
