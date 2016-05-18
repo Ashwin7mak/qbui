@@ -108,7 +108,7 @@
       border-top : 3px solid $color7;
     }
   }
-  .groupFieldOpen.qbIcon {
+  .fieldOpen.qbIcon {
     font-size: 22px;
   }
 
@@ -287,17 +287,18 @@ $dialog-max-height-small : 475px;
       justify-content: center;
     }
 
-
-    .sortAndGroupButton .sortButtonSpan {
+    .sortAndGroupButton .sortButtonSpan { //icon in popover
       margin-top: 8px;
       &:hover {
         color: $secondary-bar-fg;
       }
     }
   }
-  .sortAndGroupContainer {
-    .sortAndGroupButton .sortButtonSpan:hover {
-      color: $secondary-bar-fg;
-    }
+
+  .sortAndGroupContainer .sortAndGroupButton .sortButtonSpan {//icon in toolbar
+      margin-top: 8px;
+      &:hover {
+        color: $secondary-bar-fg;
+      }
   }
 }

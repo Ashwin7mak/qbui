@@ -76,14 +76,14 @@ const FieldChoice = React.createClass({
                         }
                         <span>
                         { hasField ?
-                            <span className="action groupFieldDeleteIcon" tabIndex="0"
+                            <span className="action fieldDeleteIcon" tabIndex="0"
                                 onClick={() => this.props.onRemoveField(this.props.type,
                                             this.props.index, this.props.field)} >
-                                <QBicon className="groupFieldDelete"
+                                <QBicon className="fieldDelete"
                                     icon="clear-mini"/>
                             </span> :
-                            <span className="action groupFieldOpenIcon" tabIndex="0" >
-                                <QBicon className="groupFieldOpen" icon="icon_caretfilledright"/>
+                            <span className="action fieldOpenIcon" tabIndex="0" >
+                                <QBicon className="fieldOpen" icon="icon_caretfilledright"/>
                             </span>
                         }
                         </span>

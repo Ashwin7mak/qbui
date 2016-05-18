@@ -76,7 +76,7 @@ describe('FieldChoice functions', () => {
         let sortIcon = TestUtils.scryRenderedDOMComponentsWithClass(component, "sortOrderIcon");
         expect(sortIcon.length).toEqual(0);
         let deleteIcon = TestUtils.scryRenderedDOMComponentsWithClass(component,
-                                    "groupFieldDeleteIcon");
+                                    "fieldDeleteIcon");
         expect(sortIcon.length).toEqual(0);
 
     });
@@ -141,7 +141,7 @@ describe('FieldChoice functions', () => {
                                                               onRemoveField={mockCallbacks.removeField}
                                                               field={field_valid()}/>);
         expect(TestUtils.isCompositeComponent(component)).toBeTruthy();
-        let deleteIcon = TestUtils.findRenderedDOMComponentWithClass(component, "groupFieldDeleteIcon");
+        let deleteIcon = TestUtils.findRenderedDOMComponentWithClass(component, "fieldDeleteIcon");
         TestUtils.Simulate.click(deleteIcon);
         expect(mockCallbacks.removeField).toHaveBeenCalled();
     });
