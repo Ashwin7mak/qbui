@@ -3,7 +3,7 @@ import fieldsActions from '../../src/actions/fieldsActions';
 import * as actions from '../../src/constants/actions';
 import Promise from 'bluebird';
 
-describe('Fields Actions functions with Tables', () => {
+describe('Fields Actions functions', () => {
     'use strict';
 
     let appId = 'appId';
