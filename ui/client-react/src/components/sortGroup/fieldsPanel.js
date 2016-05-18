@@ -80,7 +80,7 @@ const FieldsPanel = React.createClass({
     renderField(field, selected, notInReport) {
         return (
             <ListGroupItem id={field.id}  key={field.id}
-                           className={"fieldItem" + (notInReport ?  " animated slideInDown notInReport" : "")}
+                           className={"action fieldItem" + (notInReport ?  " animated slideInDown notInReport" : "")}
                            onClick={() => this.selectField(this.props.fieldsForType, field)}>
                 <QBicon className={selected ? "checkMark-selected" : "checkMark"}
                         icon="check" />
@@ -97,7 +97,7 @@ const FieldsPanel = React.createClass({
                     return this.renderField(field, this.isSelected(field.id, list), true);
                 });
             } else {
-                restOfFields = (<ListGroupItem className="moreFields" onClick={this.props.onShowMoreFields}>
+                restOfFields = (<ListGroupItem className="action moreFields" onClick={this.props.onShowMoreFields}>
                                     <span>
                                         <I18nMessage message={"report.sortAndGroup.moreFields"}/>
                                     </span></ListGroupItem>);
@@ -167,7 +167,7 @@ const FieldsPanel = React.createClass({
         return (this.props.showFields ?
             <Panel className={"fieldsPanel animated slideInRight" + shownClass}>
                 <div className="fieldPanelHeader">
-                    <span className="cancel" tabIndex="0" onClick={this.props.onHideFields}>
+                    <span className="action cancel" tabIndex="0" onClick={this.props.onHideFields}>
                         <I18nMessage message="cancel"/>
                     </span>
                     <span>

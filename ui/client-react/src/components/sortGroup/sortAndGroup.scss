@@ -1,7 +1,7 @@
 @import '../../assets/css/qbVariables';
 
 .sortAndGroupContainer {
-  margin-left: 10px;
+  margin-left: 9px;
 
   //the generated wrapper on sortAndGroupDialog
   > div:not(.sortAndGroupButton)  {
@@ -41,6 +41,14 @@
   .popover-content {
     padding: 0;
   }
+
+  .action {
+    cursor: pointer;
+    &:hover {
+      color: $icon-color-hover;
+    }
+  }
+
   .settingsDialog{
     padding: 10px;
     display: flex;
@@ -161,6 +169,13 @@
     .cancel  {
       padding-right: 10px;
       color:$icon-color;
+
+      &.action {
+        cursor: pointer;
+        &:hover {
+          color: $icon-color-hover;
+        }
+      }
     }
   }
   .fieldItem.animated {
@@ -217,7 +232,6 @@
 $dialog-max-height-small : 475px;
 @include small-breakpoint {
   .reportContainer .reportToolsAndContentContainer .reportToolbar
-
   .sortAndGroupDialog {
     position: fixed;
     top: 0px;
@@ -274,6 +288,16 @@ $dialog-max-height-small : 475px;
     }
 
 
+    .sortAndGroupButton .sortButtonSpan {
+      margin-top: 8px;
+      &:hover {
+        color: $secondary-bar-fg;
+      }
+    }
   }
-
+  .sortAndGroupContainer {
+    .sortAndGroupButton .sortButtonSpan:hover {
+      color: $secondary-bar-fg;
+    }
+  }
 }

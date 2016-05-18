@@ -7,7 +7,7 @@
     justify-content : space-between;
     color: $icon-color;
 
-    .action {
+    .btn.btn-default.action {
         cursor: pointer;
         &:hover {
             color: $icon-color-hover;

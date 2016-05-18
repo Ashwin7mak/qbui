@@ -2,7 +2,7 @@ import React from 'react';
 import {I18nMessage} from '../../utils/i18nMessage';
 import QBicon from '../qbIcon/qbIcon';
 import TableIcon from '../qbTableIcon/qbTableIcon';
-
+import {OverlayTrigger} from 'react-bootstrap';
 import Logger from '../../utils/logger';
 
 import './sortAndGroup.scss';
@@ -69,7 +69,7 @@ const FieldChoice = React.createClass({
                     </div>
                     <div className="fieldChoiceActions">
                         { order &&
-                            <span className={"sortOrderIcon " + order} tabIndex="0"
+                            <span className={"action sortOrderIcon " + order} tabIndex="0"
                                   onClick={() => this.props.onSetOrder(this.props.type, this.props.index,
                                                             !this.props.field.descendOrder, this.props.field)} >
                                   <TableIcon icon={"icon-TableIcons_sturdy_arrow" + order}/>
@@ -77,13 +77,13 @@ const FieldChoice = React.createClass({
                         }
                         <span>
                         { hasField ?
-                            <span className="groupFieldDeleteIcon" tabIndex="0"
+                            <span className="action groupFieldDeleteIcon" tabIndex="0"
                                 onClick={() => this.props.onRemoveField(this.props.type,
                                             this.props.index, this.props.field)} >
                                 <QBicon className="groupFieldDelete"
                                     icon="clear-mini"/>
                             </span> :
-                            <span className="groupFieldOpenIcon" tabIndex="0" >
+                            <span className="action groupFieldOpenIcon" tabIndex="0" >
                                 <QBicon className="groupFieldOpen" icon="icon_caretfilledright"/>
                             </span>
                         }
