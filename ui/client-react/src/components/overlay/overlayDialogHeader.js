@@ -52,6 +52,7 @@ var OverlayDialogHeader = React.createClass({
         );
     },
     smallHeaderRender() {
+        let buttonClassName = this.props.dirty ? "applyButton " + this.props.dirty : "applyButton";
         return (
             <div className="overlayDialogHeader smallHeader">
                 <div className="overlayLeft">
@@ -61,7 +62,7 @@ var OverlayDialogHeader = React.createClass({
                 {this.renderTitle()}
 
                 <div className="overlayLeft">
-                    <Button className={this.props.dirty} onClick={this.props.onApply}>
+                    <Button className={buttonClassName} onClick={this.props.onApplyChanges}>
                     <I18nMessage message="apply"/>
                     </Button>
                 </div>
