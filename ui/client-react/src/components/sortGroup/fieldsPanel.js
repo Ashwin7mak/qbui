@@ -82,8 +82,6 @@ const FieldsPanel = React.createClass({
             <ListGroupItem id={field.id}  key={field.id}
                            className={"action fieldItem" + (notInReport ?  " animated slideInDown notInReport" : "")}
                            onClick={() => this.selectField(this.props.fieldsForType, field)}>
-                <QBicon className={selected ? "checkMark-selected" : "checkMark"}
-                        icon="check" />
                 {field.name}</ListGroupItem>
         );
     },
@@ -159,20 +157,22 @@ const FieldsPanel = React.createClass({
 
     render() {
         let shownClass = this.props.showFields ? '' : 'notShown';
-        let currentList =  this.props.fieldsForType === 'group' ? this.props.groupByFields : this.props.sortByFields;
+        let type = this.props.fieldsForType ? this.props.fieldsForType : 'group';
+        let currentList =  type === 'group' ? this.props.groupByFields : this.props.sortByFields;
         let choiceList = this.props.fieldChoiceList;
+
         //add group by fields to fields used in report columns
         let visibleFields = _.unionBy(this.props.visGroupEls, this.props.reportColumns, 'id');
         let orderList = this.getFieldsInReportOrder(choiceList, visibleFields);
         return (this.props.showFields ?
-            <Panel className={"fieldsPanel animated slideInRight" + shownClass}>
+            <Panel className={"fieldsPanel animated slideInRight" + shownClass} key={"fieldsPanel" + this.props.showFields}>
                 <div className="fieldPanelHeader">
                     <span className="action cancel" tabIndex="0" onClick={this.props.onHideFields}>
                         <I18nMessage message="cancel"/>
                     </span>
                     <span>
                         <I18nMessage message={"report.sortAndGroup.chooseFields." +
-                                    this.props.fieldsForType}/>
+                                    type}/>
                     </span>
                 </div>
                 {(

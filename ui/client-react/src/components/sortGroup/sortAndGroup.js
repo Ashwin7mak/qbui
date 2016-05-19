@@ -80,7 +80,7 @@ const SortAndGroup = React.createClass({
         return _.clone({
             show: false,
             showFields: false,
-            //field object for newSelectionsSort and group have array of objects containing
+            //field for newSelectionsSort and group have array of objects containing
             // type - sort or group
             // name - fieldName
             // id - fieldId
@@ -97,6 +97,20 @@ const SortAndGroup = React.createClass({
             // whether we are showing the remaining fields not visible in the table or see more.. link
             showNotVisible :false
         });
+    },
+    shouldComponentUpdate(nextProps, nextState) {
+
+        let answer = false;
+
+        if (this.props !== nextProps) {
+            answer = true;
+        }
+
+        if (this.state !== nextState) {
+            answer = true;
+        }
+
+        return answer;
     },
 
     showMoreFields() {
@@ -516,7 +530,9 @@ const SortAndGroup = React.createClass({
                          show={this.state.show}
                          onClose={this.hide}
                          onEntering={this.props.onMenuEnter} onExited={this.props.onMenuExit} >
-                                <SortAndGroupDialog  show={this.state.show}
+                                <SortAndGroupDialog         key={"SortGroupPopover" +
+                                                                this.props.rptId}
+                                                            show={this.state.show}
                                                             showFields={this.state.showFields}
                                                             sortByFields={sortByFields}
                                                             groupByFields={groupByFields}

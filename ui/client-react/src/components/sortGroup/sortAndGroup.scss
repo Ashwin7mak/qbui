@@ -8,30 +8,21 @@
     position: relative;
   }
 
-  .popover.bottom {
-    margin-left: -12px;
-    margin-top: -39px;
-    overflow-y: hidden;
-    border-radius: 0;
-    padding: 0;
-    > .arrow {
-      display: none;
-    }
-  }
-
   .sortAndGroupButton .sortButtonSpan:hover {
     color: $icon-color-hover;
   }
 }
 
 .sortAndGroupDialog {
-  overflow: auto;
-  width: 440px;
+  width: 360px;
   background-color: $popover-background;
   z-index: $zindex-popover;
   -webkit-box-shadow: 0px 4px 15px 0px rgba(70,66,66,0.15);
   -moz-box-shadow: 0px 4px 15px 0px rgba(70,66,66,0.15);
   box-shadow: 0px 4px 15px 0px rgba(70,66,66,0.15);
+  top: -37px;
+  left: -10px;
+  position: absolute;
 
   .sortButtonSpan.btn.btn-default {
     margin-top: 0;
@@ -190,8 +181,12 @@
       border-radius : 0;
     }
   }
+  .panel-body {
+    display: flex;
+    flex-direction: column;
+  }
   .list-group {
-    max-height: 248px;
+    max-height: 440px;
     overflow: auto;
     margin-bottom: 0;
   }
@@ -229,7 +224,7 @@
 
 }
 
-$dialog-max-height-small : 475px;
+$dialog-max-height-small : 483px;
 @include small-breakpoint {
   .reportContainer .reportToolsAndContentContainer .reportToolbar
   .sortAndGroupDialog {
@@ -242,6 +237,21 @@ $dialog-max-height-small : 475px;
     max-width: $small-breakpoint-width;
     max-height: $dialog-max-height-small;
 
+
+    .action {
+      cursor: pointer;
+      color: $icon-color;
+      &:hover {
+        color: $icon-color-hover;
+      }
+    }
+
+    .action.fieldItem {
+      color: $popover-text;
+      &:hover {
+        color: $icon-color-hover;
+      }
+    }
 
     .dialogContent {
       max-height: $dialog-max-height-small - 89;
@@ -265,6 +275,7 @@ $dialog-max-height-small : 475px;
       padding: 5px 0 0;
 
       .overlayDialogHeader {
+        border-bottom: 1px solid $color21;
         border-bottom: 1px solid $color21;
         padding: 0 10px 10px;
       }
@@ -293,7 +304,9 @@ $dialog-max-height-small : 475px;
         color: $secondary-bar-fg;
       }
     }
-  }
+
+
+}
 
   .sortAndGroupContainer .sortAndGroupButton .sortButtonSpan {//icon in toolbar
       margin-top: 8px;

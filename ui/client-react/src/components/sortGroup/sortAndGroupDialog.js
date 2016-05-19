@@ -1,7 +1,6 @@
 import React from 'react';
 import {I18nMessage} from '../../utils/i18nMessage';
 import {Button} from 'react-bootstrap';
-import {Popover} from 'react-bootstrap';
 import OverlayDialogHeader from '../overlay/overlayDialogHeader';
 import FieldSettings from './fieldSettings';
 import FieldsPanel from './fieldsPanel';
@@ -87,6 +86,7 @@ var SortAndGroupDialog = React.createClass({
                               onRemoveField={this.props.onRemoveField}
                               onSetOrder={this.props.onSetOrder}
                               fieldChoiceList={this.props.fieldChoiceList}
+                              key={type + "Settings"}
               />
           );
     },
@@ -95,6 +95,21 @@ var SortAndGroupDialog = React.createClass({
         if (this.props.handleClickOutside(evt)) {
             this.props.handleClickOutside(evt);
         }
+    },
+
+    shouldComponentUpdate(nextProps, nextState) {
+
+        let answer = false;
+
+        if (this.props !== nextProps) {
+            answer = true;
+        }
+
+        if (this.state !== nextState) {
+            answer = true;
+        }
+
+        return answer;
     },
 
     /*
@@ -126,10 +141,9 @@ var SortAndGroupDialog = React.createClass({
         // and to not handle any outside clicks while the dialog is open
         const SortAndGroupPopover = React.createClass({
             render() {
-                return <Popover
-                    {...this.props}
-                    {...this.state}
-                />;
+                return <div key="sng"
+                    {...this.props}>
+                </div>;
             }
         });
         let SortAndGroupDialogWrapped = thwartClicksWrapper(closeOnEscape(SortAndGroupPopover));
@@ -142,8 +156,8 @@ var SortAndGroupDialog = React.createClass({
                      handleClickOutside={this.handleClickOutside}
                      onClose={this.props.onClose}
                      placement="bottom">
-                    <div>
-                        <div className={"settingsDialog" + (this.props.showFields ? ' fieldsShown' : '')} >
+
+                        <div className={"settingsDialog" + (this.props.showFields ? ' fieldsShown' : '')} key="sgSettings">
                             <div className="dialogTop">
                                 <OverlayDialogHeader
                                     iconName="sortButton"
@@ -187,8 +201,9 @@ var SortAndGroupDialog = React.createClass({
                                      onShowMoreFields={this.props.onShowMoreFields}
                                      showNotVisible={this.props.showNotVisible}
                                      fieldsForType={this.props.fieldsForType}
+                                     key={'fieldsPanel'}
                         />
-                    </div>
+
             </SortAndGroupDialogWrapped>) :
                 null
         );
