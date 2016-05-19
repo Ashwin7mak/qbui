@@ -92,7 +92,7 @@
         //dialogue Bottom
         this.sortAndGrpDialogueBottomSB = this.reportSortAndGroupDialogue.element(by.className('dialogBand'));
 
-        this.sortAndGrpDialogueSBApplyBtn = this.sortAndGrpDialogueTopSB.all(by.className('btn')).first();
+        this.sortAndGrpDialogueSBApplyBtn = this.sortAndGrpDialogueTopSB.element(by.className('applyButton'));
         //reset button
         this.sortAndGrpDialogueSBRestBtn = this.sortAndGrpDialogueBottomSB.element(by.className('reset'));
 

@@ -76,6 +76,11 @@ $stage-headline-icon-color: #009aad;
 //== Report
 $report-backgroundColor:          $color13;
 
+//== Report grouped headers
+$grid-group-row-header-bkgrd-color: $color1;
+$grid-group-row-header-border-top: $color7;
+$grid-group-row-header-divider: $color21;
+
 //== Report Toolbar
 $toolBar-borderColor:              $color7;
 $toolBar-backgroundColor:          $color15;
@@ -113,3 +118,6 @@ $top-nav-title-icon-color: #009AAE;
 $secondary-bar-fg: #fff;
 $secondary-bar-bg: #009AAE;
 $secondary-bar-page-actions-bg: #476B90;
+
+//== Field labels used on report card view and forms
+$fieldLabel-color: $color3;
