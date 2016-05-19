@@ -30,28 +30,14 @@
      */
     function convertDuration(duration, precision, rounded) {
         let value = null;
+
         if (typeof duration === 'number') {
-            switch (precision) {
-            case constants.GROUPING.SECOND:
-                value = duration / constants.MILLI.ONE_SECOND;
-                break;
-            case constants.GROUPING.MINUTE:
-                value = duration / constants.MILLI.ONE_MINUTE;
-                break;
-            case constants.GROUPING.HOUR:
-                value = duration / constants.MILLI.ONE_HOUR;
-                break;
-            case constants.GROUPING.DAY:
-                value = duration / constants.MILLI.ONE_DAY;
-                break;
-            case constants.GROUPING.WEEK:
-                value = duration / constants.MILLI.ONE_WEEK;
-                break;
-            }
-            if (typeof value === 'number' && rounded === true) {
+            value = duration / precision;
+            if (rounded === true) {
                 value = Math.floor(value);
             }
         }
+
         return value;
     }
 
@@ -514,27 +500,27 @@
          */
         getDurationEquals: function(duration) {
 
-            let seconds = convertDuration(duration, constants.GROUPING.SECOND);
+            let seconds = convertDuration(duration, constants.MILLI.ONE_SECOND);
             if (seconds !== null && Math.abs(seconds) < 60) {
                 return seconds + groupTypes.delimiter + groupTypes.DURATION.second;
             }
 
-            let minutes = convertDuration(duration, constants.GROUPING.MINUTE);
+            let minutes = convertDuration(duration, constants.MILLI.ONE_MINUTE);
             if (minutes !== null && Math.abs(minutes) < 60) {
                 return minutes + groupTypes.delimiter + groupTypes.DURATION.minute;
             }
 
-            let hours = convertDuration(duration, constants.GROUPING.HOUR);
+            let hours = convertDuration(duration, constants.MILLI.ONE_HOUR);
             if (hours !== null && Math.abs(hours) < 24) {
                 return hours + groupTypes.delimiter + groupTypes.DURATION.hour;
             }
 
-            let days = convertDuration(duration, constants.GROUPING.DAY);
+            let days = convertDuration(duration, constants.MILLI.ONE_DAY);
             if (days !== null && Math.abs(days) < 7) {
                 return days + groupTypes.delimiter + groupTypes.DURATION.day;
             }
 
-            let weeks = convertDuration(duration, constants.GROUPING.WEEK);
+            let weeks = convertDuration(duration, constants.MILLI.ONE_WEEK);
             if (weeks !== null) {
                 return weeks + groupTypes.delimiter + groupTypes.DURATION.week;
             }
@@ -549,7 +535,7 @@
          * @returns {*}
          */
         getDurationInSeconds: function(duration) {
-            let seconds = convertDuration(duration, constants.GROUPING.SECOND, true);
+            let seconds = convertDuration(duration, constants.MILLI.ONE_SECOND, true);
             if (seconds !== null) {
                 return seconds;
             }
@@ -564,7 +550,7 @@
          * @returns {*}
          */
         getDurationInMinutes: function(duration) {
-            let minutes = convertDuration(duration, constants.GROUPING.MINUTE, true);
+            let minutes = convertDuration(duration, constants.MILLI.ONE_MINUTE, true);
             if (minutes !== null) {
                 return minutes;
             }
@@ -579,7 +565,7 @@
          * @returns {*}
          */
         getDurationInHours: function(duration) {
-            let hours = convertDuration(duration, constants.GROUPING.HOUR, true);
+            let hours = convertDuration(duration, constants.MILLI.ONE_HOUR, true);
             if (hours !== null) {
                 return hours;
             }
@@ -594,7 +580,7 @@
          * @returns {*}
          */
         getDurationInDays: function(duration) {
-            let days = convertDuration(duration, constants.GROUPING.DAY, true);
+            let days = convertDuration(duration, constants.MILLI.ONE_DAY, true);
             if (days !== null) {
                 return days;
             }
@@ -609,7 +595,7 @@
          * @returns {*}
          */
         getDurationInWeeks: function(duration) {
-            let weeks = convertDuration(duration, constants.GROUPING.WEEK, true);
+            let weeks = convertDuration(duration, constants.MILLI.ONE_WEEK, true);
             if (weeks !== null) {
                 return weeks;
             }
