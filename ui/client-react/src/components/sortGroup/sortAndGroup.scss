@@ -18,7 +18,7 @@ $shadow :   0px 4px 15px 0px rgba(70,66,66,0.15);
 .sortAndGroupDialog {
   width: 360px;
   min-width: 290px;
-
+  overflow: hidden;
   background-color: $popover-background;
   z-index: $zindex-popover;
   top: -37px;
@@ -246,6 +246,7 @@ $shadow :   0px 4px 15px 0px rgba(70,66,66,0.15);
     margin-left: 0;
     width: 100%;
     max-width: $small-breakpoint-width;
+
 
 
     .action {
