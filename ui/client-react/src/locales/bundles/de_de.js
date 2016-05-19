@@ -133,6 +133,83 @@ export default {
                 fieldProps: "Feldeigenschaften"
             }
         },
+        month: {
+            jan: {
+                short: "Jän",
+                full: "Januar"
+            },
+            feb: {
+                short: "Feb",
+                full: "Februar"
+            },
+            mar: {
+                short: "März",
+                full: "März"
+            },
+            apr: {
+                short: "Apr",
+                full: "April"
+            },
+            may: {
+                short: "Mai",
+                full: "Mai"
+            },
+            jun: {
+                short: "Juni",
+                full: "Juni"
+            },
+            jul: {
+                short: "Juli",
+                full: "Juli"
+            },
+            aug: {
+                short: "Aug",
+                full: "August"
+            },
+            sep: {
+                short: "Sept",
+                full: "September"
+            },
+            oct: {
+                short: "Okt",
+                full: "Oktober"
+            },
+            nov: {
+                short: "Nov",
+                full: "November"
+            },
+            dec: {
+                short: "Dez",
+                full: "Dezember"
+            }
+        },
+        groupHeader: {
+            empty: "(Leer)",
+            abbr: {
+                quarter: "Q",
+                fiscalYear: "FY"
+            },
+            numeric: {
+                range: "{lower} bis {upper}"
+            },
+            duration: {
+                second: "zweite",
+                seconds: "sekunden",
+                minute: "minute",
+                minutes: "protokoll",
+                hour: "stunde",
+                hours: "stunden",
+                day: "tag",
+                days: "tage",
+                week: "woche",
+                weeks: "wochen"
+            },
+            date: {
+                week: "Woche {date}",
+                month: "{month} {year}",
+                quarter: "{quarter} {year}"
+            }
+        },
         cancel: "Stornieren",
         apply: "Anwenden"
 

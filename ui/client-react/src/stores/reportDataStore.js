@@ -13,9 +13,8 @@ let reportModel = {
         facets: null,
         fids: [],
         filteredRecords: null,
-        filteredGroupFields: null,
         filteredRecordsCount: null,
-        groupingFields: null,
+        groupFields: null,
         groupLevel: 0,
         hasGrouping: false,
         name: null,
@@ -144,7 +143,7 @@ let reportModel = {
             this.model.columns = this.getReportColumns(recordData.groups.gridColumns);
             this.model.records = recordData.groups.gridData;
             this.model.groupFields = recordData.groups.fields;
-            //  TODO: with paging, this count is flawed...
+                //  TODO: with paging, this count is flawed...
             this.model.recordsCount = recordData.groups.totalRows;
         } else {
             this.model.columns = this.getReportColumns(recordData.fields);
@@ -175,12 +174,12 @@ let reportModel = {
             this.model.columns = this.getReportColumns(recordData.groups.gridColumns);
             this.model.filteredRecords = recordData.groups.gridData;
             this.model.filteredRecordsCount = recordData.groups.totalRows;
-            this.model.filteredGroupFields = recordData.groups.fields;
+            this.model.groupFields = recordData.groups.fields;
         } else {
             this.model.columns = this.getReportColumns(recordData.fields);
             this.model.filteredRecords = this.getReportData(recordData.fields, recordData.records);
             this.model.filteredRecordsCount = recordData.records.length;
-            this.model.filteredGroupFields = null;
+            this.model.groupFields = null;
         }
 
     },

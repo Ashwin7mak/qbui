@@ -168,7 +168,8 @@
             if (displayDate) {
                 let momentDate = moment(displayDate, format, true);
                 if (momentDate.isValid()) {
-                    return momentDate.format('MMM YYYY');
+                    let monthYear = momentDate.format('MMM YYYY');
+                    return monthYear.replace(" ", groupTypes.delimiter);
                 }
             }
             return '';
@@ -220,7 +221,8 @@
             if (displayDate) {
                 let momentDate = moment(displayDate, format, true);
                 if (momentDate.isValid()) {
-                    return constants.GROUPING.QUARTER + momentDate.quarter() + ' ' + momentDate.format('YYYY');
+                    //return constants.GROUPING.QUARTER + momentDate.quarter() + ' ' + momentDate.format('YYYY');
+                    return momentDate.quarter() + groupTypes.delimiter + momentDate.format('YYYY');
                 }
             }
             return '';
@@ -246,7 +248,8 @@
             if (displayDate) {
                 let momentDate = moment(displayDate, format, true);
                 if (momentDate.isValid()) {
-                    return constants.GROUPING.QUARTER + momentDate.quarter() + ' ' + constants.GROUPING.FISCAL_YR + momentDate.format('YYYY');
+                    //return constants.GROUPING.QUARTER + momentDate.quarter() + ' ' + constants.GROUPING.FISCAL_YR + momentDate.format('YYYY');
+                    return momentDate.quarter() + groupTypes.delimiter + momentDate.format('YYYY');
                 }
             }
             return '';
@@ -272,7 +275,8 @@
             if (displayDate) {
                 let momentDate = moment(displayDate, format, true);
                 if (momentDate.isValid()) {
-                    return constants.GROUPING.FISCAL_YR + momentDate.format('YYYY');
+                    //return constants.GROUPING.FISCAL_YR + momentDate.format('YYYY');
+                    return momentDate.format('YYYY');
                 }
             }
             return '';
@@ -465,27 +469,32 @@
 
             let seconds = this.convertDuration(duration, constants.GROUPING.SECOND);
             if (seconds !== null && Math.abs(seconds) < 60) {
-                return seconds + ' ' + (Math.abs(seconds) === 1 ? constants.GROUPING.SECOND : constants.GROUPING.SECONDS);
+                //return seconds + ' ' + (Math.abs(seconds) === 1 ? constants.GROUPING.SECOND : constants.GROUPING.SECONDS);
+                return seconds + groupTypes.delimiter + groupTypes.DURATION.second;
             }
 
             let minutes = this.convertDuration(duration, constants.GROUPING.MINUTE);
             if (minutes !== null && Math.abs(minutes) < 60) {
-                return minutes + ' ' + (Math.abs(minutes) === 1 ? constants.GROUPING.MINUTE : constants.GROUPING.MINUTES);
+                //return minutes + ' ' + (Math.abs(minutes) === 1 ? constants.GROUPING.MINUTE : constants.GROUPING.MINUTES);
+                return minutes + groupTypes.delimiter + groupTypes.DURATION.minute;
             }
 
             let hours = this.convertDuration(duration, constants.GROUPING.HOUR);
             if (hours !== null && Math.abs(hours) < 24) {
-                return hours + ' ' + (Math.abs(hours) === 1 ? constants.GROUPING.HOUR : constants.GROUPING.HOURS);
+                //return hours + ' ' + (Math.abs(hours) === 1 ? constants.GROUPING.HOUR : constants.GROUPING.HOURS);
+                return hours + groupTypes.delimiter + groupTypes.DURATION.hour;
             }
 
             let days = this.convertDuration(duration, constants.GROUPING.DAY);
             if (days !== null && Math.abs(days) < 7) {
-                return days + ' ' + (Math.abs(days) === 1 ? constants.GROUPING.DAY : constants.GROUPING.DAYS);
+                //return days + ' ' + (Math.abs(days) === 1 ? constants.GROUPING.DAY : constants.GROUPING.DAYS);
+                return days + groupTypes.delimiter + groupTypes.DURATION.day;
             }
 
             let weeks = this.convertDuration(duration, constants.GROUPING.WEEK);
             if (weeks !== null) {
-                return weeks + ' ' + (Math.abs(weeks) === 1 ? constants.GROUPING.WEEK : constants.GROUPING.WEEKS);
+                //return weeks + ' ' + (Math.abs(weeks) === 1 ? constants.GROUPING.WEEK : constants.GROUPING.WEEKS);
+                return weeks + groupTypes.delimiter + groupTypes.DURATION.week;
             }
 
             return '';
@@ -500,7 +509,7 @@
         getDurationInSeconds: function(duration) {
             let seconds = this.convertDuration(duration, constants.GROUPING.SECOND, true);
             if (seconds !== null) {
-                return seconds + ' ' + (Math.abs(seconds) === 1 ? constants.GROUPING.SECOND : constants.GROUPING.SECONDS);
+                return seconds;// + ' ' + (Math.abs(seconds) === 1 ? constants.GROUPING.SECOND : constants.GROUPING.SECONDS);
             }
             return '';
         },
@@ -515,7 +524,7 @@
         getDurationInMinutes: function(duration) {
             let minutes = this.convertDuration(duration, constants.GROUPING.MINUTE, true);
             if (minutes !== null) {
-                return minutes + ' ' + (Math.abs(minutes) === 1 ? constants.GROUPING.MINUTE : constants.GROUPING.MINUTES);
+                return minutes;// + ' ' + (Math.abs(minutes) === 1 ? constants.GROUPING.MINUTE : constants.GROUPING.MINUTES);
             }
             return '';
         },
@@ -530,7 +539,7 @@
         getDurationInHours: function(duration) {
             let hours = this.convertDuration(duration, constants.GROUPING.HOUR, true);
             if (hours !== null) {
-                return hours + ' ' + (Math.abs(hours) === 1 ? constants.GROUPING.HOUR : constants.GROUPING.HOURS);
+                return hours;// + ' ' + (Math.abs(hours) === 1 ? constants.GROUPING.HOUR : constants.GROUPING.HOURS);
             }
             return '';
         },
@@ -545,7 +554,7 @@
         getDurationInDays: function(duration) {
             let days = this.convertDuration(duration, constants.GROUPING.DAY, true);
             if (days !== null) {
-                return days + ' ' + (Math.abs(days) === 1 ? constants.GROUPING.DAY : constants.GROUPING.DAYS);
+                return days;// + ' ' + (Math.abs(days) === 1 ? constants.GROUPING.DAY : constants.GROUPING.DAYS);
             }
             return '';
         },
@@ -560,7 +569,7 @@
         getDurationInWeeks: function(duration) {
             let weeks = this.convertDuration(duration, constants.GROUPING.WEEK, true);
             if (weeks !== null) {
-                return weeks + ' ' + (Math.abs(weeks) === 1 ? constants.GROUPING.WEEK : constants.GROUPING.WEEKS);
+                return weeks;// + ' ' + (Math.abs(weeks) === 1 ? constants.GROUPING.WEEK : constants.GROUPING.WEEKS);
             }
             return '';
         },

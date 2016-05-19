@@ -135,6 +135,83 @@ export default {
                 fieldProps: "Field properties"
             }
         },
+        month: {
+            jan: {
+                short: "Jan",
+                full: "January"
+            },
+            feb: {
+                short: "Feb",
+                full: "February"
+            },
+            mar: {
+                short: "Mar",
+                full: "March"
+            },
+            apr: {
+                short: "Apr",
+                full: "April"
+            },
+            may: {
+                short: "May",
+                full: "May"
+            },
+            jun: {
+                short: "Jun",
+                full: "June"
+            },
+            jul: {
+                short: "Jul",
+                full: "July"
+            },
+            aug: {
+                short: "Aug",
+                full: "August"
+            },
+            sep: {
+                short: "Sep",
+                full: "September"
+            },
+            oct: {
+                short: "Oct",
+                full: "October"
+            },
+            nov: {
+                short: "Nov",
+                full: "November"
+            },
+            dec: {
+                short: "Dec",
+                full: "December"
+            }
+        },
+        groupHeader: {
+            empty: "(Empty)",
+            abbr: {
+                quarter: "Q",
+                fiscalYear: "FY"
+            },
+            numeric: {
+                range: "{lower} to {upper}"
+            },
+            duration: {
+                second: "second",
+                seconds: "seconds",
+                minute: "minute",
+                minutes: "minutes",
+                hour: "hour",
+                hours: "hours",
+                day: "day",
+                days: "days",
+                week: "week",
+                weeks: "weeks"
+            },
+            date: {
+                week: "Week of {date}",
+                month: "{month} {year}",
+                quarter: "{quarter} {year}"
+            }
+        },
         cancel: "Cancel",
         apply: "Apply"
     }

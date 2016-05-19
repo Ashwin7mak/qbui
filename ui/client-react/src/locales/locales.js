@@ -1,6 +1,7 @@
 
 import Logger from '../utils/logger';
 import config from '../config/app.config';
+import StringUtils from '../utils/stringUtils';
 
 let logger = new Logger();
 
@@ -56,12 +57,16 @@ class Locale {
     }
 
     // return message in bundle.messages object by dot-separated path
-    static getMessage(msgPath) {
+    static getMessage(msgPath, tokens) {
         var messages =  Locale.getI18nBundle().messages;
 
         let message = msgPath.split('.').reduce((obj, pathPart) => {
             return obj[pathPart];
         }, messages);
+
+        if (tokens) {
+            message = StringUtils.format(message, tokens);
+        }
 
         return message;
     }

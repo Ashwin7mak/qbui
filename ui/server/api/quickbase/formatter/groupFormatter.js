@@ -21,7 +21,7 @@
         if (range.lower === null && range.upper === null) {
             return '';
         }
-        return range.lower + ' to ' + range.upper;
+        return range.lower + groupTypes.delimiter + range.upper;
     }
 
     function isNumericDataType(dataType) {
@@ -234,9 +234,8 @@
 
             let groupedValue = extractGroupedField(groupType, groupField, dataValue, rawDataValue);
 
-            //  TODO: JIRA-21803 -- Node should only return an object structure to the client
             if (groupedValue === '') {
-                groupedValue = '(Empty)';
+                groupedValue = null;
             }
 
             //  The lodash groupBy function uses the groupedValue as the key to an
@@ -374,7 +373,8 @@
                     // we have grouping if there are fields in groupBy.fields array.  Set the grouping flag
                     // to true and populate the grid columns and data arrays.
                     if (groupBy.fields.length > 0) {
-                        //  Business rule is to not include grouped fields in the grid.
+                        //  Business rule is to not include grouped fields in the grid.  So, add to the gridColumns
+                        //  array the fields NOT designated to be grouped.
                         fields.forEach(function(field) {
                             if (!field.grouped) {
                                 groupBy.gridColumns.push(field);

@@ -132,6 +132,83 @@ export default {
                 fieldProps: "Propriétés de champ"
             }
         },
+        month: {
+            jan: {
+                short: "Janv",
+                full: "Janvier"
+            },
+            feb: {
+                short: "Fébr",
+                full: "Février"
+            },
+            mar: {
+                short: "Mars",
+                full: "Mars"
+            },
+            apr: {
+                short: "Avril",
+                full: "Avril"
+            },
+            may: {
+                short: "Mai",
+                full: "Mai"
+            },
+            jun: {
+                short: "Juin",
+                full: "Juin"
+            },
+            jul: {
+                short: "Juil",
+                full: "Juillet"
+            },
+            aug: {
+                short: "Août",
+                full: "Août"
+            },
+            sep: {
+                short: "Sept",
+                full: "Septembre"
+            },
+            oct: {
+                short: "Oct",
+                full: "Octobre"
+            },
+            nov: {
+                short: "Nov",
+                full: "Novembre"
+            },
+            dec: {
+                short: "Déc",
+                full: "Décembre"
+            }
+        },
+        groupHeader: {
+            empty: "(Vide)",
+            abbr: {
+                quarter: "Q",
+                fiscalYear: "FY"
+            },
+            numeric: {
+                range: "{lower} à {upper}"
+            },
+            duration: {
+                second: "seconde",
+                seconds: "secondes",
+                minute: "minute",
+                minutes: "minutes",
+                hour: "heure",
+                hours: "heures",
+                day: "journée",
+                days: "journées",
+                week: "semaine",
+                weeks: "semaines"
+            },
+            date: {
+                week: "Semaine du {date}",
+                month: "{month} {year}",
+                quarter: "{quarter} {year}"
+            }
+        },
         cancel: "Annuler",
         apply: "Aappliquer"
     }
