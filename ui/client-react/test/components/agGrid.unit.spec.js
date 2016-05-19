@@ -57,12 +57,8 @@ var CellFormatterMock =  React.createClass({
 
 let flux = {
     actions: {
-        getFilteredRecords: function() {
-            return;
-        },
-        selectedRows: function() {
-            return;
-        }
+        getFilteredRecords: ()=>{},
+        selectedRows: ()=>{}
     }
 };
 
@@ -403,36 +399,41 @@ describe('AGGrid functions', () => {
         expect(menuoptions[3].innerHTML).toEqual(Locale.getMessage("report.menu.group.checkedToUnchecked"));
     });
 
-    //it('test edit cells visible based on selection ', () => {
-    //    AGGrid.__ResetDependency__('AgGridReact');
-    //
-    //    var TestParent = React.createFactory(React.createClass({
-    //
-    //        render() {
-    //            return (<div className="reportToolsAndContentContainer singleSelection">
-    //                <AGGrid ref="grid"
-    //                        actions={TableActionsMock}
-    //                        records={fakeReportData_before.data.records}
-    //                        columns={fakeReportData_before.data.columns}
-    //                        flux={flux}/>
-    //            </div>);
-    //        }
-    //    }));
-    //    let parent = TestUtils.renderIntoDocument(TestParent());
-    //
-    //    expect(TestUtils.isCompositeComponent(parent)).toBeTruthy();
-    //
-    //    let selected = TestUtils.scryRenderedDOMComponentsWithClass(parent, "ag-row-selected");
-    //
-    //    expect(selected.length).toBe(0);
-    //
-    //    // select a row via double click
-    //    let rows = TestUtils.scryRenderedDOMComponentsWithClass(parent, "ag-row");
-    //    expect(rows.length).toBeGreaterThan(0);
-    //
-    //    mouseclick(rows[0], 2);
-    //    selected = TestUtils.scryRenderedDOMComponentsWithClass(parent.refs.grid, "ag-row-selected");
-    //    expect(selected.length).toBe(1);
-    //
-    //});
+    it('test edit cells visible based on selection ', (done) => {
+        AGGrid.__ResetDependency__('AgGridReact');
+
+        var TestParent = React.createFactory(React.createClass({
+
+            render() {
+                return (<div className="reportToolsAndContentContainer singleSelection">
+                    <AGGrid ref="grid"
+                            flux={flux}
+                            actions={TableActionsMock}
+                            records={fakeReportData_before.data.records}
+                            columns={fakeReportData_before.data.columns}
+                            loading={false}
+                            />
+                </div>);
+            }
+        }));
+        let parent = TestUtils.renderIntoDocument(TestParent());
+        let grid = TestUtils.findRenderedComponentWithType(parent, AGGrid);
+
+        let rows = ReactDOM.findDOMNode(grid).getElementsByClassName("ag-row");
+        expect(rows.length).toBe(fakeReportData_before.data.records.length + 1);
+
+        let selected = TestUtils.scryRenderedDOMComponentsWithClass(grid, "ag-row-selected");
+        expect(selected.length).toBe(0);
+
+        // select a row via double click
+
+        mouseclick(rows[0], 2);
+
+        window.setTimeout(function() {
+            selected = TestUtils.scryRenderedDOMComponentsWithClass(grid, "ag-row-selected");
+            expect(selected.length).toBe(2);
+            done();
+        }, 1000);
+
+    });
 });
