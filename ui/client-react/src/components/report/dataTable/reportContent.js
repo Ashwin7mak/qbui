@@ -251,6 +251,10 @@ let ReportContent = React.createClass({
                         }
 
                         if (groupField.datatypeAttributes.type === DataTypes.DURATION) {
+                            //  With duration of equals, the groupType is unknown as that is determined based
+                            //  on the most reasonable grouping bucket for the given duration.  For example,
+                            //  20 seconds --> seconds bucket; 200 seconds --> minute bucket; etc.  The returned
+                            //  include 2 pieces of information;  1st is the duration value; 2nd is the group type
                             if (groupType === GroupTypes.GROUP_TYPE.duration.equals) {
                                 durationPart = groupData.group.split(GroupTypes.GROUP_TYPE.delimiter);
                                 if (durationPart.length > 1) {

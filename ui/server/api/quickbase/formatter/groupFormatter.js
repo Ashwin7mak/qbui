@@ -15,15 +15,6 @@
 
     var RAW_SUFFIX = '_raw_';
 
-    //  Temporary function to format numeric ranges for UI display.
-    //  TODO: JIRA-21803 -- Node should only return an object structure to the client
-    function formatNumericRange(range) {
-        if (range.lower === null && range.upper === null) {
-            return '';
-        }
-        return range.lower + groupTypes.delimiter + range.upper;
-    }
-
     function isNumericDataType(dataType) {
         return dataType === constants.NUMERIC ||
                dataType === constants.CURRENCY ||
@@ -151,27 +142,27 @@
             case groupTypes.NUMERIC.equals:
                 return dataValue;
             case groupTypes.NUMERIC.thousandth:
-                return formatNumericRange(groupUtils.getRangeFraction(rawDataValue, 4));
+                return groupUtils.getRangeFraction(rawDataValue, 4);
             case groupTypes.NUMERIC.hundredth:
-                return formatNumericRange(groupUtils.getRangeFraction(rawDataValue, 3));
+                return groupUtils.getRangeFraction(rawDataValue, 3);
             case groupTypes.NUMERIC.tenth:
-                return formatNumericRange(groupUtils.getRangeFraction(rawDataValue, 2));
+                return groupUtils.getRangeFraction(rawDataValue, 2);
             case groupTypes.NUMERIC.one:
-                return formatNumericRange(groupUtils.getRangeWhole(rawDataValue, 1));
+                return groupUtils.getRangeWhole(rawDataValue, 1);
             case groupTypes.NUMERIC.five:
-                return formatNumericRange(groupUtils.getRangeWhole(rawDataValue, 5));
+                return groupUtils.getRangeWhole(rawDataValue, 5);
             case groupTypes.NUMERIC.ten:
-                return formatNumericRange(groupUtils.getRangeWhole(rawDataValue, 10));
+                return groupUtils.getRangeWhole(rawDataValue, 10);
             case groupTypes.NUMERIC.hundred:
-                return formatNumericRange(groupUtils.getRangeWhole(rawDataValue, 100));
+                return groupUtils.getRangeWhole(rawDataValue, 100);
             case groupTypes.NUMERIC.one_k:
-                return formatNumericRange(groupUtils.getRangeWhole(rawDataValue, 1000));
+                return groupUtils.getRangeWhole(rawDataValue, 1000);
             case groupTypes.NUMERIC.ten_k:
-                return formatNumericRange(groupUtils.getRangeWhole(rawDataValue, 10000));
+                return groupUtils.getRangeWhole(rawDataValue, 10000);
             case groupTypes.NUMERIC.hundred_k:
-                return formatNumericRange(groupUtils.getRangeWhole(rawDataValue, 100000));
+                return groupUtils.getRangeWhole(rawDataValue, 100000);
             case groupTypes.NUMERIC.million:
-                return formatNumericRange(groupUtils.getRangeWhole(rawDataValue, 1000000));
+                return groupUtils.getRangeWhole(rawDataValue, 1000000);
             }
             break;
         case constants.TEXT:
