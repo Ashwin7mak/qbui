@@ -40,7 +40,7 @@ var SortAndGroupDialog = React.createClass({
         // are available, fields not visible in report are also available for selection
         fieldChoiceList: React.PropTypes.array,
 
-        // the visiable fields in the reports table groups
+        // the visible fields in the reports table groups
         visGroupEls: React.PropTypes.array,
 
         // the callback that is used when ready to close/hide this popover
@@ -96,6 +96,7 @@ var SortAndGroupDialog = React.createClass({
             this.props.handleClickOutside(evt);
         }
     },
+
 
     shouldComponentUpdate(nextProps, nextState) {
 
@@ -192,7 +193,8 @@ var SortAndGroupDialog = React.createClass({
                         <FieldsPanel onHideFields={this.props.onHideFields}
                                      showFields={this.props.showFields}
                                      fieldChoiceList={this.props.fieldChoiceList}
-                                     reportColumns={this.props.reportData && this.props.reportData.data ?
+                                     reportColumns={this.props.reportData &&
+                                        this.props.reportData.data ?
                                         this.props.reportData.data.columns :  null}
                                      visGroupEls={this.props.visGroupEls}
                                      sortByFields={this.props.sortByFields}
@@ -201,9 +203,8 @@ var SortAndGroupDialog = React.createClass({
                                      onShowMoreFields={this.props.onShowMoreFields}
                                      showNotVisible={this.props.showNotVisible}
                                      fieldsForType={this.props.fieldsForType}
-                                     key={'fieldsPanel'}
+                                     key="fieldsPanel"
                         />
-
             </SortAndGroupDialogWrapped>) :
                 null
         );

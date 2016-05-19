@@ -111,7 +111,9 @@ const FieldsPanel = React.createClass({
                     }
                     {restOfFields}
                 </ListGroup>
-            );
+
+
+        );
     },
 
     // for mocking data and seeing edge cases of renders
@@ -165,7 +167,8 @@ const FieldsPanel = React.createClass({
         let visibleFields = _.unionBy(this.props.visGroupEls, this.props.reportColumns, 'id');
         let orderList = this.getFieldsInReportOrder(choiceList, visibleFields);
         return (this.props.showFields ?
-            <Panel className={"fieldsPanel animated slideInRight" + shownClass} key={"fieldsPanel" + this.props.showFields}>
+            <Panel className={"fieldsPanel animated slideInRight" + shownClass}
+                   ref="fieldsPanel" key={"fieldsPanel" + this.props.showFields}>
                 <div className="fieldPanelHeader">
                     <span className="action cancel" tabIndex="0" onClick={this.props.onHideFields}>
                         <I18nMessage message="cancel"/>
