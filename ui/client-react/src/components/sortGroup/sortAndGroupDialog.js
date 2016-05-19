@@ -141,10 +141,16 @@ var SortAndGroupDialog = React.createClass({
     render() {
         // wrap the sort dialog in additional functionality to close the dialog on escape
         // and to not handle any outside clicks while the dialog is open
-        let dhieght = this.props.combinedHeight
+        let dlghieght = this.props.combinedHeight;
+
         const SortAndGroupPopover = React.createClass({
             render() {
-                return <div key="sng" style={{height:dhieght }}
+                let addedStyle = {};
+                if (dlghieght) {
+                    addedStyle.style = {height:dlghieght};
+                }
+                return <div key="sng"
+                    {...addedStyle}
                     {...this.props}>
                 </div>;
             }
