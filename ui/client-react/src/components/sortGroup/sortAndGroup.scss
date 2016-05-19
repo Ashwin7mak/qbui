@@ -17,6 +17,8 @@ $shadow :   0px 4px 15px 0px rgba(70,66,66,0.15);
 
 .sortAndGroupDialog {
   width: 360px;
+  min-width: 290px;
+
   background-color: $popover-background;
   z-index: $zindex-popover;
   top: -37px;
@@ -40,13 +42,20 @@ $shadow :   0px 4px 15px 0px rgba(70,66,66,0.15);
     }
   }
 
+
   .settingsDialog{
     padding: 10px;
     display: flex;
     flex-direction: column;
-    max-height: 550px;
+    height:100%;
     justify-content: space-between;
     visibility: visible;
+  }
+
+  .settingsDialogTopContainer {
+    display: flex;
+    justify-content: space-between;
+    flex-direction: column;
   }
 
   .settingsDialog.fieldsShown {
@@ -56,7 +65,6 @@ $shadow :   0px 4px 15px 0px rgba(70,66,66,0.15);
   }
 
   .dialogContent {
-    max-height: 450px;
     overflow: auto;
   }
 
@@ -190,7 +198,6 @@ $shadow :   0px 4px 15px 0px rgba(70,66,66,0.15);
     flex-direction: column;
   }
   .list-group {
-    max-height: 440px;
     min-height: 244px;
     overflow: auto;
     margin-bottom: 0;
@@ -229,7 +236,6 @@ $shadow :   0px 4px 15px 0px rgba(70,66,66,0.15);
 
 }
 
-$dialog-max-height-small : 483px;
 @include small-breakpoint {
   .reportContainer .reportToolsAndContentContainer .reportToolbar
   .sortAndGroupDialog {
@@ -240,7 +246,6 @@ $dialog-max-height-small : 483px;
     margin-left: 0;
     width: 100%;
     max-width: $small-breakpoint-width;
-    max-height: $dialog-max-height-small;
 
 
     .action {
@@ -259,7 +264,6 @@ $dialog-max-height-small : 483px;
     }
 
     .dialogContent {
-      max-height: $dialog-max-height-small - 89;
       overflow: auto;
     }
 
@@ -278,6 +282,7 @@ $dialog-max-height-small : 483px;
 
     .settingsDialog {
       padding: 5px 0 0;
+      height: 100%;
 
       .overlayDialogHeader {
         border-bottom: 1px solid $color21;
@@ -309,8 +314,6 @@ $dialog-max-height-small : 483px;
         color: $secondary-bar-fg;
       }
     }
-
-
 }
 
   .sortAndGroupContainer .sortAndGroupButton .sortButtonSpan {//icon in toolbar

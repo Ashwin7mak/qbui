@@ -14,6 +14,7 @@ import * as GroupTypes from '../../constants/groupTypes';
 import MockData from '../../mocks/sortGroup';
 import * as query from '../../constants/query';
 import WindowLocationUtils from '../../utils/windowLocationUtils';
+import Breakpoints from '../../utils/breakpoints';
 
 import _ from 'lodash';
 import Fluxxor from 'fluxxor';
@@ -501,6 +502,38 @@ const SortAndGroup = React.createClass({
         return answer;
     },
 
+    calcDialogHeight(sortListLen, groupListLen, fieldsChoiceLen) {
+        // space needed for empty settings
+        let settingsBaseHeight = 286;
+        // space needed for just field panel heading and see more
+        let fieldsPanelBaseHeight = 80;
+        // space needed for each selected sort or group item
+        let selFieldHeight = 52;
+        // space needed for each field name in choice list
+        let fieldsFieldHeight = 40;
+        // the minimum height on small
+        let smallestIPhone = 480;
+        // the max height on non small
+        let largestHeightOnNonSmall = 530;
+        // the height of the device/window
+
+        var viewPortHeight = Math.max(document.documentElement.clientHeight, window.innerHeight || 0);
+        // small breakpoints use the device height as max, non small use the most needed to render settings (largestHeightOnNonSmall)
+        let biggestSettings = (Breakpoints.isSmallBreakpoint()) ?
+            Math.max(viewPortHeight, smallestIPhone) : largestHeightOnNonSmall;
+
+        // estimate the height of the settings panel, base + group field settings height + sort fields settings height
+        let settingsPanelHeight = settingsBaseHeight +
+                                ((sortListLen - 1) * selFieldHeight) +
+                                ((groupListLen - 1) * selFieldHeight);
+
+        //estimate the height of the fields panel as base + fields height
+        let fieldsPanelHeight = fieldsPanelBaseHeight + (fieldsChoiceLen * fieldsFieldHeight);
+
+        // call height as the larger of the panels up to the physical max
+        return Math.min(Math.max(settingsPanelHeight, fieldsPanelHeight), biggestSettings);
+    },
+
     /**
      * Prepares the menu button used to show/hide the dialog of sort and group options when clicked
      *
@@ -514,6 +547,11 @@ const SortAndGroup = React.createClass({
         let fieldChoiceList = this.getFieldsNotYetUsed(fields, groupByFields, sortByFields);
         let visGroupEls = _.has(this.props, 'reportData.data.groupEls') ?
                             this.getVisGroupEls(this.props.reportData.data.groupEls, fields) :  [];
+        let reportColumns =  _.has(this.props,'reportData.data.columns') ?
+                            this.props.reportData.data.columns : [];
+        let visibleFields = _.unionBy(visGroupEls, reportColumns, 'id');
+        let combinedHeight = this.calcDialogHeight(sortByFields.length, groupByFields.length,
+                        Math.max(fieldChoiceList.length, visibleFields.length));
         return (
             <div ref="sortAndGroupContainer" className="sortAndGroupContainer">
                 {/* the sort/group icon button */}
@@ -552,6 +590,7 @@ const SortAndGroup = React.createClass({
                                                             onReset={this.resetAndHide}
                                                             onApplyChanges={this.applyAndHide}
                                                             handleClickOutside={this.handleClickOutside}
+                                                            combinedHeight={combinedHeight}
                                                             onClose={this.hide}/>
                 </Overlay>
             </div>

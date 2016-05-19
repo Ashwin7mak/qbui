@@ -140,9 +140,10 @@ var SortAndGroupDialog = React.createClass({
     render() {
         // wrap the sort dialog in additional functionality to close the dialog on escape
         // and to not handle any outside clicks while the dialog is open
+        let dhieght = this.props.combinedHeight
         const SortAndGroupPopover = React.createClass({
             render() {
-                return <div key="sng"
+                return <div key="sng" style={{height:dhieght }}
                     {...this.props}>
                 </div>;
             }
@@ -159,6 +160,7 @@ var SortAndGroupDialog = React.createClass({
                      placement="bottom">
 
                         <div className={"settingsDialog" + (this.props.showFields ? ' fieldsShown' : '')} key="sgSettings">
+                            <div>
                             <div className="dialogTop">
                                 <OverlayDialogHeader
                                     iconName="sortButton"
@@ -173,6 +175,7 @@ var SortAndGroupDialog = React.createClass({
                                  {this.renderFieldSettings(3, "group", this.props.groupByFields)}
                                  {this.renderFieldSettings(5, "sort", this.props.sortByFields)}
                              </div>
+                            </div>
                             <div className="dialogBottom">
                                 <div className="dialogButtons">
                                      <span className="action reset" tabIndex="0" onClick={this.props.onReset}>
@@ -204,6 +207,7 @@ var SortAndGroupDialog = React.createClass({
                                      showNotVisible={this.props.showNotVisible}
                                      fieldsForType={this.props.fieldsForType}
                                      key="fieldsPanel"
+                                     combinedHeight={this.props.combinedHeight}
                         />
             </SortAndGroupDialogWrapped>) :
                 null
