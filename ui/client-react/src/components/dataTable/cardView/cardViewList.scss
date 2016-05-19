@@ -55,7 +55,7 @@ $table-actions-container-bg: #fff;
             }
             .custom-row-card {
                 border-top: 1px solid #dcdcdc;
-                padding-left: $grid-default-cell-padding + 5 + $i*($grid-default-group-padding+$grid-group-expand-icon-size/2) !important;
+                padding-left: $grid-default-cell-padding + 2 + $grid-group-expand-icon-size + $i*($grid-default-group-padding+$grid-group-expand-icon-size/2) !important;
                 margin-bottom: 0;
                 &.expanded {
                   box-shadow: none;
