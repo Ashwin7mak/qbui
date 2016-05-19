@@ -16,6 +16,10 @@ class Locale {
         return locale;
     }
 
+    static getCurrencyCode() {
+        return Locale.getI18nBundle().currencyCode;
+    }
+
     static getI18nBundle() {
         let bundle = "";
 

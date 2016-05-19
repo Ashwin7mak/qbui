@@ -166,129 +166,154 @@ let ReportContent = React.createClass({
 
     },
 
+    isNumericDataType(dataType) {
+        return dataType === DataTypes.NUMERIC ||
+            dataType === DataTypes.CURRENCY ||
+            dataType === DataTypes.PERCENT ||
+            dataType === DataTypes.RATING;
+    },
+
     localizeGroupingHeaders(groupedFields, groupedData, lvl) {
 
-        if (groupedFields && groupedData) {
-            if (groupedFields.length > lvl) {
-                //  get the current group by field and grouping type
-                let groupField = groupedFields[lvl].field;
-                let groupType = groupedFields[lvl].groupType;
+        if (!groupedFields || !groupedData) {
+            return;
+        }
 
-                for (let group in groupedData) {
+        if (groupedFields.length > lvl) {
+            //  get the current group by field and grouping type
+            let groupField = groupedFields[lvl].field;
+            let groupType = groupedFields[lvl].groupType;
 
-                    //  Recursive call get to the last grouping field, and then update the grouping
-                    //  labels as we work our way back to the top of the stack.
-                    if (lvl < groupedFields.length - 1) {
-                        this.localizeGroupingHeaders(groupedFields, groupedData[group].children, lvl + 1);
+            for (let group in groupedData) {
+
+                //  Recursive call get to the last grouping field, and then update the grouping
+                //  labels as we work our way back to the top of the stack.
+                if (lvl < groupedFields.length - 1) {
+                    this.localizeGroupingHeaders(groupedFields, groupedData[group].children, lvl + 1);
+                }
+
+                let groupData = groupedData[group];
+
+                // unlikely, but possible that groupData is empty
+                if (groupData && !groupData.localized) {
+
+                    groupData.localized = true;
+
+                    //  If no grouping header, use the empty label
+                    if (groupData.group === null || groupData.group === '') {
+                        groupData.group = Locales.getMessage('groupHeader.empty');
+                        continue;
                     }
 
-                    let groupData = groupedData[group];
+                    //  Apply locale specific formatting against certain data types.  Note all data types may
+                    //  drop through the conditional blocks.  That's okay as some grouping options will not
+                    //  have any localization requirements.
+                    if (this.isNumericDataType(groupField.datatypeAttributes.type)) {
+                        let range = groupData.group.split(GroupTypes.GROUP_TYPE.delimiter);
+                        if (range.length > 1) {
+                            groupData.group = Locales.getMessage('groupHeader.numeric.range', {lower:range[0], upper:range[1]});
+                        } else {
+                            /*eslint no-lonely-if:0*/
+                            if (groupType === GroupTypes.COMMON.equals) {
+                                //  On old stack, only group type=equals includes the associated symbol..
+                                //  For now, will mirror that behavior
+                                if (groupField.datatypeAttributes.type === DataTypes.CURRENCY) {
+                                    groupData.group = this.localizeCurrency(range[0]);
+                                } else {
+                                    if (groupField.datatypeAttributes.type === DataTypes.PERCENT) {
+                                        groupData.group = this.localizePercent(range[0]);
+                                    } else {
+                                        groupData.group = this.localizeNumber(range[0]);
+                                    }
+                                }
+                            }
+                        }
+                        continue;
+                    }
 
-                    // unlikely, but possible that groupData is empty
-                    if (groupData && !groupData.localized) {
+                    if (groupField.datatypeAttributes.type === DataTypes.DATE || groupField.datatypeAttributes.type === DataTypes.DATE_TIME) {
+                        let datePart = groupData.group.split(GroupTypes.GROUP_TYPE.delimiter);
+                        if (datePart.length > 1) {
+                            if (groupType === GroupTypes.GROUP_TYPE.date.month) {
+                                let month = Locales.getMessage('month.' + datePart[0].toLowerCase());
+                                groupData.group = Locales.getMessage('groupHeader.date.month', {month:month, year:datePart[1]});
+                            }
+                            if (groupType === GroupTypes.GROUP_TYPE.date.quarter) {
+                                let abbrQuarter = Locales.getMessage('groupHeader.abbr.quarter') + datePart[0];
+                                groupData.group = Locales.getMessage('groupHeader.date.quarter', {quarter:abbrQuarter, year:datePart[1]});
+                            }
+                            if (groupType === GroupTypes.GROUP_TYPE.date.fiscalQuarter) {
+                                let abbrQuarter = Locales.getMessage('groupHeader.abbr.quarter') + datePart[0];
+                                let abbrFiscalYr = Locales.getMessage('groupHeader.abbr.fiscalYear') + datePart[1];
+                                groupData.group = Locales.getMessage('groupHeader.date.quarter', {quarter:abbrQuarter, year:abbrFiscalYr});
+                            }
+                        } else {
+                            if (groupType === GroupTypes.GROUP_TYPE.date.fiscalYear) {
+                                groupData.group = Locales.getMessage('groupHeader.abbr.fiscalYear') + datePart[0];
+                            }
+                            if (groupType === GroupTypes.GROUP_TYPE.date.week) {
+                                let localizedDate = this.localizeDate(datePart[0]);
+                                groupData.group = Locales.getMessage('groupHeader.date.week', {date:localizedDate});
+                            }
+                            if (groupType === GroupTypes.GROUP_TYPE.date.equals || groupType === GroupTypes.GROUP_TYPE.date.day) {
+                                groupData.group = this.localizeDate(datePart[0]);
+                            }
+                        }
+                        continue;
+                    }
 
-                        groupData.localized = true;
-
-                        //  If no grouping header, use the empty label
-                        if (groupData.group === null || groupData.group === '') {
-                            groupData.group = Locales.getMessage('groupHeader.empty');
-                            continue;
+                    if (groupField.datatypeAttributes.type === DataTypes.DURATION) {
+                        //  With duration of equals, the groupType is unknown as that is determined based
+                        //  on the most reasonable grouping bucket for the given duration.  For example,
+                        //  20 seconds --> seconds bucket; 200 seconds --> minute bucket; etc.  The returned
+                        //  include 2 pieces of information;  1st is the duration value; 2nd is the group type
+                        if (groupType === GroupTypes.GROUP_TYPE.duration.equals) {
+                            durationPart = groupData.group.split(GroupTypes.GROUP_TYPE.delimiter);
+                            if (durationPart.length > 1) {
+                                groupData.group = durationPart[0];
+                                groupType = durationPart[1];
+                            }
                         }
 
-                        //  Apply locale specific formatting against certain data types
-                        // TODO: currency, ratings, percent
-                        if (groupField.datatypeAttributes.type === DataTypes.NUMERIC) {
-                            let range = groupData.group.split(GroupTypes.GROUP_TYPE.delimiter);
-                            if (range.length > 1) {
-                                groupData.group = Locales.getMessage('groupHeader.numeric.range', {
-                                    lower: range[0],
-                                    upper: range[1]
-                                });
-                            }
-                            continue;
+                        let messageKey = '';
+                        if (groupType === GroupTypes.GROUP_TYPE.duration.second) {
+                            messageKey = Math.abs(groupData.group) === 1 ? 'groupHeader.duration.second' : 'groupHeader.duration.seconds';
+                        }
+                        if (groupType === GroupTypes.GROUP_TYPE.duration.minute) {
+                            messageKey = Math.abs(groupData.group) === 1 ? 'groupHeader.duration.minute' : 'groupHeader.duration.minutes';
+                        }
+                        if (groupType === GroupTypes.GROUP_TYPE.duration.hour) {
+                            messageKey = Math.abs(groupData.group) === 1 ? 'groupHeader.duration.hour' : 'groupHeader.duration.hours';
+                        }
+                        if (groupType === GroupTypes.GROUP_TYPE.duration.week) {
+                            messageKey = Math.abs(groupData.group) === 1 ? 'groupHeader.duration.week' : 'groupHeader.duration.weeks';
+                        }
+                        if (groupType === GroupTypes.GROUP_TYPE.duration.day) {
+                            messageKey = Math.abs(groupData.group) === 1 ? 'groupHeader.duration.day' : 'groupHeader.duration.days';
                         }
 
-                        if (groupField.datatypeAttributes.type === DataTypes.DATE || groupField.datatypeAttributes.type === DataTypes.DATE_TIME) {
-                            let datePart = groupData.group.split(GroupTypes.GROUP_TYPE.delimiter);
-                            if (datePart.length > 1) {
-                                if (groupType === GroupTypes.GROUP_TYPE.date.month) {
-                                    let month = Locales.getMessage('month.' + datePart[0].toLowerCase());
-                                    let year = datePart[1];
-                                    groupData.group = Locales.getMessage('groupHeader.date.month', {
-                                        month: month,
-                                        year: year
-                                    });
-                                }
-                                if (groupType === GroupTypes.GROUP_TYPE.date.quarter) {
-                                    let abbrQuarter = Locales.getMessage('groupHeader.abbr.quarter');
-                                    groupData.group = Locales.getMessage('groupHeader.date.quarter', {
-                                        quarter: abbrQuarter + datePart[0],
-                                        year: datePart[1]
-                                    });
-                                }
-                                if (groupType === GroupTypes.GROUP_TYPE.date.fiscalQuarter) {
-                                    let abbrQuarter = Locales.getMessage('groupHeader.abbr.quarter');
-                                    let abbrFiscalYr = Locales.getMessage('groupHeader.abbr.fiscalYear');
-                                    groupData.group = Locales.getMessage('groupHeader.date.quarter', {
-                                        quarter: abbrQuarter + datePart[0],
-                                        year: abbrFiscalYr + datePart[1]
-                                    });
-                                }
-                            } else {
-                                if (groupType === GroupTypes.GROUP_TYPE.date.fiscalYear) {
-                                    groupData.group = Locales.getMessage('groupHeader.abbr.fiscalYear') + datePart[0];
-                                }
-
-                                if (groupType === GroupTypes.GROUP_TYPE.date.week) {
-                                    groupData.group = Locales.getMessage('groupHeader.date.week') + this.localizeDate(datePart[0]);
-                                }
-
-                                if (groupType === GroupTypes.GROUP_TYPE.date.equals || groupType === GroupTypes.GROUP_TYPE.date.day) {
-                                    groupData.group = this.localizeDate(datePart[0]);
-                                }
-                            }
-                            continue;
-                        }
-
-                        if (groupField.datatypeAttributes.type === DataTypes.DURATION) {
-                            //  With duration of equals, the groupType is unknown as that is determined based
-                            //  on the most reasonable grouping bucket for the given duration.  For example,
-                            //  20 seconds --> seconds bucket; 200 seconds --> minute bucket; etc.  The returned
-                            //  include 2 pieces of information;  1st is the duration value; 2nd is the group type
-                            if (groupType === GroupTypes.GROUP_TYPE.duration.equals) {
-                                durationPart = groupData.group.split(GroupTypes.GROUP_TYPE.delimiter);
-                                if (durationPart.length > 1) {
-                                    groupData.group = durationPart[0];
-                                    groupType = durationPart[1];
-                                }
-                            }
-
-                            if (groupType === GroupTypes.GROUP_TYPE.duration.second) {
-                                let messageKey = Math.abs(groupData.group) === 1 ? 'groupHeader.duration.second' : 'groupHeader.duration.seconds';
-                                groupData.group += ' ' + Locales.getMessage(messageKey);
-                            }
-                            if (groupType === GroupTypes.GROUP_TYPE.duration.minute) {
-                                let messageKey = Math.abs(groupData.group) === 1 ? 'groupHeader.duration.minute' : 'groupHeader.duration.minutes';
-                                groupData.group += ' ' + Locales.getMessage(messageKey);
-                            }
-                            if (groupType === GroupTypes.GROUP_TYPE.duration.hour) {
-                                let messageKey = Math.abs(groupData.group) === 1 ? 'groupHeader.duration.hour' : 'groupHeader.duration.hours';
-                                groupData.group += ' ' + Locales.getMessage(messageKey);
-                            }
-                            if (groupType === GroupTypes.GROUP_TYPE.duration.week) {
-                                let messageKey = Math.abs(groupData.group) === 1 ? 'groupHeader.duration.week' : 'groupHeader.duration.weeks';
-                                groupData.group += ' ' + Locales.getMessage(messageKey);
-                            }
-                            if (groupType === GroupTypes.GROUP_TYPE.duration.day) {
-                                let messageKey = Math.abs(groupData.group) === 1 ? 'groupHeader.duration.day' : 'groupHeader.duration.days';
-                                groupData.group += ' ' + Locales.getMessage(messageKey);
-                            }
-                            continue;
+                        // this should not happen, but in the event messageKey is empty(meaning bad duration data),
+                        // the original content will be used as the grouping header.
+                        if (messageKey) {
+                            groupData.group = Locales.getMessage(messageKey, {duration:groupData.group});
                         }
                     }
                 }
             }
         }
+    },
+
+    localizeCurrency: function(currency) {
+        return this.localizeNumber(currency, {style: "currency", currency: Locales.getCurrencyCode()});
+    },
+
+    localizePercent: function(percentage) {
+        return this.localizeNumber(percentage, {style: "percent"});
+    },
+
+    localizeNumber: function(value, opts) {
+        this.context.locales = Locales.getLocale();
+        return this.formatNumber(value, opts);
     },
 
     localizeDate: function(date) {

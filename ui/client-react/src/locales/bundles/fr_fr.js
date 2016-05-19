@@ -1,5 +1,6 @@
 export default {
     locales: "fr-fr",
+    currencyCode: "eur",
 
     messages: {
         apps: {
@@ -192,16 +193,16 @@ export default {
                 range: "{lower} à {upper}"
             },
             duration: {
-                second: "seconde",
-                seconds: "secondes",
-                minute: "minute",
-                minutes: "minutes",
-                hour: "heure",
-                hours: "heures",
-                day: "journée",
-                days: "journées",
-                week: "semaine",
-                weeks: "semaines"
+                second: "{duration} seconde",
+                seconds: "{duration} secondes",
+                minute: "{duration} minute",
+                minutes: "{duration} minutes",
+                hour: "{duration} heure",
+                hours: "{duration} heures",
+                day: "{duration} journée",
+                days: "{duration} journées",
+                week: "{duration} semaine",
+                weeks: "{duration} semaines"
             },
             date: {
                 week: "Semaine du {date}",

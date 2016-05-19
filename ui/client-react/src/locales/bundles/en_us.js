@@ -1,5 +1,6 @@
 export default {
     locales: "en-us",
+    currencyCode: "usd",
 
     messages: {
         test: {
@@ -195,16 +196,16 @@ export default {
                 range: "{lower} to {upper}"
             },
             duration: {
-                second: "second",
-                seconds: "seconds",
-                minute: "minute",
-                minutes: "minutes",
-                hour: "hour",
-                hours: "hours",
-                day: "day",
-                days: "days",
-                week: "week",
-                weeks: "weeks"
+                second: "{duration} second",
+                seconds: "{duration} seconds",
+                minute: "{duration} minute",
+                minutes: "{duration} minutes",
+                hour: "{duration} hour",
+                hours: "{duration} hours",
+                day: "{duration} day",
+                days: "{duration} days",
+                week: "{duration} week",
+                weeks: "{duration} weeks"
             },
             date: {
                 week: "Week of {date}",
