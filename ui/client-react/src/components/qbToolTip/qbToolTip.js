@@ -2,7 +2,7 @@ import React from 'react';
 import {I18nMessage} from '../../utils/i18nMessage';
 import {OverlayTrigger, Tooltip} from 'react-bootstrap';
 
-const QBToolTipWrapper = React.createClass({
+const QBToolTip = React.createClass({
     propTypes: {
         // optional name to use in classname
         tipId:  React.PropTypes.string,
@@ -38,5 +38,5 @@ const QBToolTipWrapper = React.createClass({
     }
 });
 
-export default QBToolTipWrapper;
+export default QBToolTip;
 

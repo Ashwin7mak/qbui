@@ -1,6 +1,6 @@
 import React from 'react';
 import TestUtils from 'react-addons-test-utils';
-import QBToolTip  from '../../src/components/toolTip/toolTipper';
+import QBToolTip  from '../../src/components/qbToolTip/qbToolTip';
 
 var I18nMessageMock = React.createClass({
     render: function() {
@@ -10,9 +10,7 @@ var I18nMessageMock = React.createClass({
     }
 });
 
-/* TODO: When the expand/collapse behavior is added, add related tests */
-
-fdescribe('QBToolTip functions', () => {
+describe('QBToolTip functions', () => {
     'use strict';
 
     beforeEach(() => {
@@ -43,9 +41,15 @@ fdescribe('QBToolTip functions', () => {
         expect(TestUtils.isCompositeComponent(component)).toBeTruthy();
     });
 
-
     it('test render of component with i18nMessageKey', () => {
         let component = TestUtils.renderIntoDocument(<QBToolTip i18nMessageKey="test"><span>something here</span></QBToolTip>);
+        expect(TestUtils.isCompositeComponent(component)).toBeTruthy();
+    });
+
+
+    it('test render of component with delay', () => {
+        let component = TestUtils.renderIntoDocument(<QBToolTip delayStart={0} i18nMessageKey="test">
+            <span>something here</span></QBToolTip>);
         expect(TestUtils.isCompositeComponent(component)).toBeTruthy();
     });
 

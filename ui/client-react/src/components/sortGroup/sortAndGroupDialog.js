@@ -7,7 +7,7 @@ import FieldsPanel from './fieldsPanel';
 import sortGroupFieldShape from './sortGroupProp';
 import thwartClicksWrapper from '../hoc/thwartClicksWrapper';
 import closeOnEscape from '../hoc/catchEscapeKey';
-import QBToolTip from '../toolTip/toolTipper';
+import QBToolTip from '../qbToolTip/qbToolTip';
 
 import './sortAndGroup.scss';
 import '../../assets/css/animate.min.css';

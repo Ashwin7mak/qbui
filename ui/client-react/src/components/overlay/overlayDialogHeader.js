@@ -4,7 +4,7 @@ import Fluxxor from 'fluxxor';
 import {I18nMessage} from '../../utils/i18nMessage';
 import Button from 'react-bootstrap/lib/Button';
 import QBicon from '../qbIcon/qbIcon';
-import QBToolTip from '../toolTip/toolTipper';
+import QBToolTip from '../qbToolTip/qbToolTip';
 import './overlay.scss';
 
 let FluxMixin = Fluxxor.FluxMixin(React);

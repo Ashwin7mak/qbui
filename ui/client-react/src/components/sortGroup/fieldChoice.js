@@ -2,7 +2,7 @@ import React from 'react';
 import {I18nMessage} from '../../utils/i18nMessage';
 import QBicon from '../qbIcon/qbIcon';
 import TableIcon from '../qbTableIcon/qbTableIcon';
-import QBToolTip from '../toolTip/toolTipper';
+import QBToolTip from '../qbToolTip/qbToolTip';
 import Logger from '../../utils/logger';
 
 import './sortAndGroup.scss';
