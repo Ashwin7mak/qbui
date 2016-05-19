@@ -4,7 +4,7 @@ import {OverlayTrigger, Tooltip} from 'react-bootstrap';
 
 const QBToolTipWrapper = React.createClass({
     propTypes: {
-        tipId:  React.PropTypes.string, // optional name to use in classname; 
+        tipId:  React.PropTypes.string, // optional name to use in classname;
         plainMessage:  React.PropTypes.string, //message to render use if string has already been localized
         i18nMessageKey:  React.PropTypes.string, //messageId to lookup in resource bundle for message to render
     },
