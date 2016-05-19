@@ -97,9 +97,7 @@
         this.reportRecordsCount = this.reportToolsAndContentEl.element(by.className('recordsCount'));
         // Report filter search Box
         this.reportFilterSearchBox = this.reportsToolBar.element(by.className('searchInput'));
-
-        // Loaded Content Div
-        //this.loadedContentEl = this.reportContainerEl.all(by.className('loadedContent')).first();
+        
         // Table actions container
         this.tableActionsContainerEl = this.loadedContentEl.element(by.className('tableActionsContainer'));
         // agGrid table
