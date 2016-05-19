@@ -18,6 +18,7 @@ let FluxMixin = Fluxxor.FluxMixin(React);
 
 import '../../../../../node_modules/ag-grid/dist/styles/ag-grid.css';
 import './agGrid.scss';
+import '../gridWrapper.scss';
 
 
 /**
@@ -278,10 +279,10 @@ let AGGrid = React.createClass({
         this.gridOptions.context.flux = this.getFlux();
         this.gridOptions.getNodeChildDetails = this.getNodeChildDetails;
 
-        this.refs.griddleWrapper.addEventListener("scroll", this.props.onScroll);
+        this.refs.gridWrapper.addEventListener("scroll", this.props.onScroll);
     },
     componentWillUnmount() {
-        this.refs.griddleWrapper.removeEventListener("scroll", this.props.onScroll);
+        this.refs.gridWrapper.removeEventListener("scroll", this.props.onScroll);
     },
 
     // Performance improvement - only update the component when certain state/props change
@@ -505,9 +506,8 @@ let AGGrid = React.createClass({
      */
     getActionsColumn() {
         return {
-            headerName: "", //for ag-grid
-            field: "actions",      //for ag-grid
-            columnName: "actions", //for griddle
+            headerName: "",
+            field: "actions",
             cellRenderer: reactCellRendererFactory(ActionsColumn),
             cellClass: "gridCell actions",
             headerClass: "gridHeaderCell",
@@ -561,11 +561,11 @@ let AGGrid = React.createClass({
     render() {
         let columnDefs = this.getColumns();
 
-        let griddleWrapperClasses = this.getSelectedRows().length ? "griddleWrapper selectedRows" : "griddleWrapper";
+        let gridWrapperClasses = this.getSelectedRows().length ? "gridWrapper selectedRows" : "gridWrapper";
         return (
             <div className="reportTable">
 
-                <div className={griddleWrapperClasses} ref="griddleWrapper">
+                <div className={gridWrapperClasses} ref="gridWrapper">
                     <Loader loaded={!this.props.loading}>
                         {this.props.records && this.props.records.length > 0 ?
                             <div className="agGrid">

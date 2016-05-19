@@ -1,7 +1,6 @@
 import React from 'react';
 
-import GriddleTable  from '../../../components/dataTable/griddleTable/griddleTable';
-import CardViewList from '../../../components/dataTable/cardView/cardViewList';
+import CardViewListHolder from '../../../components/dataTable/cardView/cardViewListHolder';
 import AGGrid  from '../../../components/dataTable/agGrid/agGrid';
 import {reactCellRendererFactory} from 'ag-grid-react';
 import {DateFormatter, NumericFormatter, TextFormatter}  from '../../../components/dataTable/agGrid/formatters';
@@ -10,8 +9,6 @@ import ReportActions from '../../actions/reportActions';
 import Fluxxor from 'fluxxor';
 
 let FluxMixin = Fluxxor.FluxMixin(React);
-
-const resultsPerPage = 1000; //assume that this is the constant number of records per page. This can be passed in as a prop for diff reports
 
 let ReportContent = React.createClass({
     mixins: [FluxMixin],
@@ -177,7 +174,7 @@ let ReportContent = React.createClass({
                                     filter={{selections: this.props.reportData.selections,
                                         facet: this.props.reportData.facetExpression,
                                         search: this.props.reportData.searchStringForFiltering}} /> :
-                            <CardViewList reportData={this.props.reportData}
+                            <CardViewListHolder reportData={this.props.reportData}
                                 uniqueIdentifier="Record ID#"
                                 reportHeader={this.props.reportHeader}
                                 selectionActions={<ReportActions />}

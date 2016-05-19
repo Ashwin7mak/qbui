@@ -47,7 +47,7 @@ $chevron_closed_icon: url('../../../../src/assets/images/chevron_closed.svg');
         flex-direction: row;
     }
     .fieldRow.collapsed {
-        max-height: 35px;
+        max-height: 25px;
         -moz-transition: .35s;
         -ms-transition: .35s;
         -webkit-transition: .35s;
@@ -71,6 +71,12 @@ $chevron_closed_icon: url('../../../../src/assets/images/chevron_closed.svg');
     }
     .field {
         flex: 1 1 50%;
+        padding: 0 35px 10px 0;
+        .fieldLabel {
+            color: $fieldLabel-color;
+            padding-bottom: 2px;
+            display: block;
+        }
         .fieldValue {
             overflow: hidden;
             text-overflow: ellipsis;
@@ -155,3 +161,46 @@ $chevron_closed_icon: url('../../../../src/assets/images/chevron_closed.svg');
         }
     }
 }
+
+.rowActions {
+    height: 100%;
+    top: 0;
+    right: 0;
+    overflow-x: hidden;
+
+    white-space: nowrap;
+    position: absolute;
+
+    .recordActions {
+        padding: 0;
+        height: 100%;
+        width: 240px;
+
+        .actionIcons {
+            display: flex;
+            flex-direction: row;
+            width: 100%;
+            height: 100%;
+
+            .iconLink {
+                flex: 1 1 auto;
+                height: 100%;
+                position: relative;
+                .qbIcon {
+                    position: absolute;
+                    top: calc(50% - 8px);
+                    left: calc(50% - 8px);
+                }
+            }
+        }
+    }
+    &.closed {
+        transition: width 100ms ease-in;
+        width: 0;
+    }
+    &.open {
+        transition: width 100ms ease-in;
+        width: 240px;
+    }
+}
+
