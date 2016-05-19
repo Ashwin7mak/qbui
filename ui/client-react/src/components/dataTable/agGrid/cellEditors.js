@@ -8,8 +8,14 @@ import DateTimeField from 'react-bootstrap-datetimepicker';
 export const DefaultCellEditor = React.createClass({
 
     propTypes: {
-        value: React.PropTypes.oneOfType([React.PropTypes.string, React.PropTypes.number]),
+        value: React.PropTypes.oneOfType([React.PropTypes.string, React.PropTypes.number, React.PropTypes.object]),
         onChange: React.PropTypes.func
+    },
+
+    getDefaultProps() {
+        return {
+            value: ""
+        };
     },
 
     onChange(ev) {

@@ -325,10 +325,11 @@ $cell-edit-background-edit: #f3f8fe;
 }
 
 /* last to rows are just for padding */
-.ag-row:nth-last-child(-n+8) {
+.ag-row:last-child {
     visibility:hidden;
 
 }
+
 .ag-body-container {
     .ag-row {
         background-color: $row-bg-color;
@@ -391,7 +392,6 @@ $cell-edit-background-edit: #f3f8fe;
                     }
                 }
                 &.input-group {
-                    //border:0;
                     flex: 1 1 auto;
                     display:flex;
                     flex-direction: row;

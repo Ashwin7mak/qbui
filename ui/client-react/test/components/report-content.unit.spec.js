@@ -7,13 +7,6 @@ import {reactCellRendererFactory} from 'ag-grid-react';
 import {NumericFormatter, DateFormatter} from '../../src/components/dataTable/agGrid/formatters';
 import _ from 'lodash';
 
-var NumericFormatterMock = function() {
-    return "mock numeric";
-};
-var DateFormatterMock = function() {
-    return "mock date";
-};
-
 var AGGridMock = React.createClass({
     render: function() {
         return <div>mock aggrid</div>;
@@ -28,9 +21,6 @@ var CardViewListMock = React.createClass({
     }
 });
 
-var reactCellRendererFactoryMock = function(component) {
-    return component;
-};
 
 const header_empty = <div>nothing</div>;
 
@@ -177,65 +167,6 @@ describe('ReportContent functions', () => {
         agGrid = agGrid[0];
         expect(agGrid.props.records.length).toEqual(fakeReportData_simple.data.filteredRecords.length);
         expect(_.intersection(agGrid.props.columns, fakeReportData_simple.data.columns).length).toEqual(fakeReportData_simple.data.columns.length);
-    });
-
-    it('test render of data with numeric field', () => {
-        ReportContent.__Rewire__('NumericFormatter', NumericFormatterMock);
-        ReportContent.__Rewire__('reactCellRendererFactory', reactCellRendererFactoryMock);
-
-        fakeReportData_attributes.data.columns = cols_with_numeric_field;
-        component = TestUtils.renderIntoDocument(<ReportContent flux={flux}
-                                                                reportData={fakeReportData_attributes}
-                                                                reportHeader={header_empty}/>);
-        var agGrid = TestUtils.scryRenderedComponentsWithType(component, AGGridMock);
-        expect(agGrid.length).toEqual(1);
-
-        var col = cols_with_numeric_field[0];
-        expect(col.cellClass).toMatch('AlignRight');
-        expect(col.cellRenderer).toEqual(reactCellRendererFactoryMock(NumericFormatterMock));
-
-        ReportContent.__ResetDependency__('NumericFormatter');
-        ReportContent.__ResetDependency__('reactCellRendererFactory');
-    });
-
-    it('test render of data with date field', () => {
-        ReportContent.__Rewire__('DateFormatter', DateFormatterMock);
-        ReportContent.__Rewire__('reactCellRendererFactory', reactCellRendererFactoryMock);
-
-        fakeReportData_attributes.data.columns = cols_with_date_field;
-        component = TestUtils.renderIntoDocument(<ReportContent flux={flux}
-            reportData={fakeReportData_attributes} reportHeader={header_empty}/>);
-        var agGrid = TestUtils.scryRenderedComponentsWithType(component, AGGridMock);
-        expect(agGrid.length).toEqual(1);
-
-        var col = cols_with_date_field[2];
-        expect(col.cellRenderer).toBe(reactCellRendererFactoryMock(DateFormatterMock));
-
-        ReportContent.__ResetDependency__('DateFormatter');
-        ReportContent.__ResetDependency__('reactCellRendererFactory');
-    });
-
-
-    it('test render of data with bold attribute', () => {
-        fakeReportData_attributes.data.columns = cols_with_bold_attrs;
-        component = TestUtils.renderIntoDocument(<ReportContent flux={flux}
-            reportData={fakeReportData_attributes} reportHeader={header_empty}/>);
-        var agGrid = TestUtils.scryRenderedComponentsWithType(component, AGGridMock);
-        expect(agGrid.length).toEqual(1);
-
-        var col = cols_with_bold_attrs[0];
-        expect(col.cellClass).toMatch('Bold');
-    });
-
-    it('test render of data with nowrap attribute', () => {
-        fakeReportData_attributes.data.columns = cols_with_nowrap_attrs;
-        component = TestUtils.renderIntoDocument(<ReportContent flux={flux}
-            reportData={fakeReportData_attributes} reportHeader={header_empty}/>);
-        var agGrid = TestUtils.scryRenderedComponentsWithType(component, AGGridMock);
-        expect(agGrid.length).toEqual(1);
-
-        var col = cols_with_nowrap_attrs[0];
-        expect(col.cellClass).toMatch('NoWrap');
     });
 
     it('test render of CardViewListMock for touch context', () => {

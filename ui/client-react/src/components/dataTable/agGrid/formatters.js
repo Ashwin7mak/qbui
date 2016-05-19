@@ -160,40 +160,42 @@ const CellFormatter = React.createClass({
     }
 });
 
-export const DateFormatter = React.createClass({
+const DateFormatter = React.createClass({
     render: function() {
         return  <CellFormatter type={DateFormat} params={this.props.params} />;
     }
 });
 
-export const DateTimeFormatter = React.createClass({
+const DateTimeFormatter = React.createClass({
     render: function() {
         return  <CellFormatter type={DateTimeFormat} params={this.props.params} />;
     }
 });
 
-export const TimeFormatter = React.createClass({
+const TimeFormatter = React.createClass({
     render: function() {
         return  <CellFormatter type={TimeFormat} params={this.props.params} />;
     }
 });
 
-export const NumericFormatter = React.createClass({
+const NumericFormatter = React.createClass({
     render: function() {
         return  <CellFormatter type={NumberFormat} params={this.props.params}/>;
     }
 });
 
-export const TextFormatter = React.createClass({
+const TextFormatter = React.createClass({
 
     render: function() {
         return  <CellFormatter type={TextFormat} params={this.props.params} />;
     }
 });
 
-export const CheckBoxFormatter = React.createClass({
+const CheckBoxFormatter = React.createClass({
 
     render: function() {
         return  <CellFormatter type={CheckBoxFormat} params={this.props.params} />;
     }
 });
+
+export {DateFormatter, DateTimeFormatter, TimeFormatter, NumericFormatter, TextFormatter, CheckBoxFormatter};

@@ -3,9 +3,28 @@ import TestUtils from 'react-addons-test-utils';
 import ReactDOM from 'react-dom';
 import AGGrid  from '../../src/components/dataTable/agGrid/agGrid';
 import AGGridReact from 'ag-grid-react';
+
+import DateTimeFormatter from '../../src/components/dataTable/agGrid/formatters';
+import TimeFormatter from '../../src/components/dataTable/agGrid/formatters';
+import NumericFormatter from '../../src/components/dataTable/agGrid/formatters';
+import TextFormatter from '../../src/components/dataTable/agGrid/formatters';
+import CheckboxFormatter from '../../src/components/dataTable/agGrid/formatters';
+
 import Loader  from 'react-loader';
 import * as query from '../../src/constants/query';
 import Locale from '../../src/locales/locales';
+
+var NumericFormatterMock = function() {
+    return "mock numeric";
+};
+var DateFormatterMock = function() {
+    return "mock date";
+};
+
+var reactCellRendererFactoryMock = function(component) {
+    return component;
+};
+
 
 var AGGridMock = React.createClass({
     render() {
@@ -26,6 +45,15 @@ var I18nMessageMock = React.createClass({
         );
     }
 });
+
+var CellFormatterMock =  React.createClass({
+    render: function() {
+        return (
+            <div>I18Mock</div>
+        );
+    }
+});
+
 
 let flux = {
     actions: {
@@ -110,7 +138,6 @@ const fakeReportData_after = {
     }
 };
 
-
 function mouseclick(element) {
     // create a mouse click event
     var event = document.createEvent('MouseEvents');
@@ -119,6 +146,7 @@ function mouseclick(element) {
     // send click to element
     element.dispatchEvent(event);
 }
+
 describe('AGGrid functions', () => {
     'use strict';
 
@@ -127,12 +155,14 @@ describe('AGGrid functions', () => {
     beforeEach(() => {
         AGGrid.__Rewire__('AgGridReact', AGGridMock);
         AGGrid.__Rewire__('I18nMessage', I18nMessageMock);
+        NumericFormatter.__Rewire__('CellFormatter', CellFormatterMock);
         spyOn(flux.actions, 'getFilteredRecords');
     });
 
     afterEach(() => {
         AGGrid.__ResetDependency__('AgGridReact');
         AGGrid.__ResetDependency__('I18nMessage');
+        NumericFormatter.__ResetDependency__('CellFormatter');
         flux.actions.getFilteredRecords.calls.reset();
     });
 
@@ -254,8 +284,8 @@ describe('AGGrid functions', () => {
                 rowsSelected++;
             }
         }
-        //we add a couple of hidden rows to avoid clipping the row editing ui elements
-        expect(rowsSelected).toEqual(fakeReportData_before.data.records.length + 2);
+        //we add a hidden row to avoid clipping the row editing ui elements
+        expect(rowsSelected).toEqual(fakeReportData_before.data.records.length + 1);
         expect(selectAllCheckbox[0].checked).toEqual(true);
     });
     it('renders column menu', (done) => {
@@ -371,5 +401,38 @@ describe('AGGrid functions', () => {
         expect(menuoptions[1].innerHTML).toEqual(Locale.getMessage("report.menu.sort.checkedToUnchecked"));
         expect(menuoptions[2].innerHTML).toEqual(Locale.getMessage("report.menu.group.uncheckedToChecked"));
         expect(menuoptions[3].innerHTML).toEqual(Locale.getMessage("report.menu.group.checkedToUnchecked"));
+    });
+
+    it('test edit cells visible based on selection ', () => {
+        AGGrid.__ResetDependency__('AgGridReact');
+
+        var TestParent = React.createFactory(React.createClass({
+
+            render() {
+                return (<div className="reportToolsAndContentContainer singleSelection">
+                    <AGGrid ref="grid"
+                            actions={TableActionsMock}
+                            records={fakeReportData_before.data.records}
+                            columns={fakeReportData_before.data.columns}
+                            flux={flux}/>
+                </div>);
+            }
+        }));
+        let parent = TestUtils.renderIntoDocument(TestParent());
+
+        expect(TestUtils.isCompositeComponent(parent)).toBeTruthy();
+
+        let selected = TestUtils.scryRenderedDOMComponentsWithClass(parent, "ag-row-selected");
+
+        expect(selected.length).toBe(0);
+
+        // select a row via double click
+        let rows = TestUtils.scryRenderedDOMComponentsWithClass(parent, "ag-row");
+        expect(rows.length).toBeGreaterThan(0);
+
+        mouseclick(rows[0], 2);
+        selected = TestUtils.scryRenderedDOMComponentsWithClass(parent.refs.grid, "ag-row-selected");
+        expect(selected.length).toBe(1);
+
     });
 });

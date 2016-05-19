@@ -12,6 +12,8 @@ import Loader  from 'react-loader';
 import Fluxxor from 'fluxxor';
 import * as query from '../../../constants/query';
 import ReportUtils from '../../../utils/reportUtils';
+
+import {DateFormatter, DateTimeFormatter, TimeFormatter, NumericFormatter, TextFormatter, CheckBoxFormatter}  from './formatters';
 import * as GroupTypes from '../../../constants/groupTypes';
 
 let FluxMixin = Fluxxor.FluxMixin(React);
@@ -44,7 +46,8 @@ let consts = {
     DEFAULT_CHECKBOX_COL_WIDTH: 30,
     GROUP_ICON_PADDING: 10,
     DEFAULT_CELL_PADDING: 8,
-    FONT_SIZE: 20
+    FONT_SIZE: 20,
+    HIDDEN_LAST_ROW_HEIGHT:270 // tall enough to accomodate date pickers etc.
 };
 
 let AGGrid = React.createClass({
@@ -257,7 +260,10 @@ let AGGrid = React.createClass({
         }
     },
     getRowHeight(rowItem) {
-        if (rowItem.node.field === "group") {
+        if (rowItem.data.isHiddenLastRow) {
+            // in in selection mode set the height of the hidden last row to make space for datepickers etc.
+            return consts.HIDDEN_LAST_ROW_HEIGHT;
+        } else if (rowItem.node.field === "group") {
             return consts.GROUP_HEADER_HEIGHT;
         } else {
             return consts.ROW_HEIGHT;
@@ -292,6 +298,9 @@ let AGGrid = React.createClass({
             return true;
         }
         if (!_.isEqual(nextProps.records, this.props.records)) {
+            return true;
+        }
+        if (!_.isEqual(nextProps.columns, this.props.columns)) {
             return true;
         }
         return false;
@@ -516,19 +525,108 @@ let AGGrid = React.createClass({
             suppressResize: true
         };
     },
+    setCSSClass_helper: function(obj, classname) {
+        if (typeof (obj.cellClass) === 'undefined') {
+            obj.cellClass = classname;
+        } else {
+            obj.cellClass += " " + classname;
+        }
+        if (typeof (obj.headerClass) === 'undefined') {
+            obj.headerClass = classname;
+        } else {
+            obj.headerClass += " " + classname;
+        }
+    },
+    /* for each field attribute that has some presentation effect convert that to a css class before passing to the grid.*/
+    getColumnProps: function() {
+        let columns = this.props.columns;
 
+        if (columns) {
+            /*eslint-disable*/
+            //console.log('initially', columns);
+            /*eslint-enable*/
+            let columnsData = columns.map((obj, index) => {
+                obj.headerClass = "gridHeaderCell";
+                obj.cellClass = "gridCell";
+                obj.suppressResize = true;
+                obj.minWidth = 100;
+                obj.addEditActions = (index === 1); // EMPOWER: add the row edit component to column 1
+
+                if (obj.datatypeAttributes) {
+                    var datatypeAttributes = obj.datatypeAttributes;
+                    for (var attr in datatypeAttributes) {
+                        switch (attr) {
+
+                        case 'type': {
+                            switch (datatypeAttributes[attr]) {
+                            case "NUMERIC" :
+                                this.setCSSClass_helper(obj, "AlignRight");
+                                obj.cellRenderer = reactCellRendererFactory(NumericFormatter);
+                                obj.customComponent = NumericFormatter;
+                                break;
+                            case "DATE" :
+                                obj.cellRenderer = reactCellRendererFactory(DateFormatter);
+                                obj.customComponent = DateFormatter;
+                                break;
+                            case "DATE_TIME" :
+                                obj.cellRenderer = reactCellRendererFactory(DateTimeFormatter);
+                                obj.customComponent = DateTimeFormatter;
+                                break;
+                            case "TIME_OF_DAY" :
+                                obj.cellRenderer = reactCellRendererFactory(TimeFormatter);
+                                obj.customComponent = TimeFormatter;
+                                break;
+                            case "CHECKBOX" :
+                                obj.cellRenderer = reactCellRendererFactory(CheckBoxFormatter);
+                                obj.customComponent = CheckBoxFormatter;
+                                break;
+                            default:
+                                obj.cellRenderer = reactCellRendererFactory(TextFormatter);
+                                obj.customComponent = TextFormatter;
+                                break;
+                            }
+                        }
+                        }
+                    }
+
+                    if (datatypeAttributes.clientSideAttributes) {
+                        var clientSideAttributes = datatypeAttributes.clientSideAttributes;
+                        for (var cattr in clientSideAttributes) {
+                            switch (cattr) {
+                            case 'bold':
+                                if (clientSideAttributes[cattr]) {
+                                    this.setCSSClass_helper(obj, "Bold");
+                                }
+                                break;
+                            case 'word-wrap':
+                                if (clientSideAttributes[cattr]) {
+                                    this.setCSSClass_helper(obj, "NoWrap");
+                                }
+                                break;
+                            }
+                        }
+                    }
+                }
+                return obj;
+            });
+            /*eslint-disable*/
+            //console.log("columnProps=",columnsData);
+            /*eslint-enable*/
+
+            return columnsData;
+        }
+        return [];
+    },
     /**
      * Add a couple of columns to the column definition sent through props -
      * add checkbox column to the beginning of the array and
      * add actions column to the end of the array.
      */
     getColumns() {
+        let columnProps = this.getColumnProps();
 
-        if (!this.props.columns) {
-            return;
-        }
 
-        let columns = this.props.columns.slice(0);
+        let columns = columnProps.slice(0);
 
         //This should be based on perms -- something like if(this.props.allowMultiSelection)
         columns.unshift(this.getCheckBoxColumn(this.props.showGrouping));
@@ -542,7 +640,6 @@ let AGGrid = React.createClass({
         }
 
         return columns;
-
     },
 
     /**
@@ -555,9 +652,8 @@ let AGGrid = React.createClass({
         const extraHiddenRows = 8; // don't forget to update the corresponding CSS!
         let paddedRecords = this.props.records.slice(0);
 
-        for (let i = 0; i < extraHiddenRows; i++) {
-            paddedRecords.push({});
-        }
+        paddedRecords.push({isHiddenLastRow:true});
+
         return paddedRecords;
     },
 

@@ -4,7 +4,6 @@ import GriddleTable  from '../../../components/dataTable/griddleTable/griddleTab
 import CardViewList from '../../../components/dataTable/cardView/cardViewList';
 import AGGrid  from '../../../components/dataTable/agGrid/agGrid';
 import {reactCellRendererFactory} from 'ag-grid-react';
-import {DateFormatter, DateTimeFormatter, TimeFormatter, NumericFormatter, TextFormatter, CheckBoxFormatter}  from '../../../components/dataTable/agGrid/formatters';
 
 import ReportActions from '../../actions/reportActions';
 import Fluxxor from 'fluxxor';
@@ -23,97 +22,6 @@ let ReportContent = React.createClass({
         return {
             showSelectionColumn: false
         };
-    },
-
-    setCSSClass_helper: function(obj, classname) {
-        if (typeof (obj.cellClass) === 'undefined') {
-            obj.cellClass = classname;
-        } else {
-            obj.cellClass += " " + classname;
-        }
-        if (typeof (obj.headerClass) === 'undefined') {
-            obj.headerClass = classname;
-        } else {
-            obj.headerClass += " " + classname;
-        }
-    },
-
-    /* for each field attribute that has some presentation effect convert that to a css class before passing to the grid.*/
-    getColumnProps: function(columns) {
-        if (!columns) {
-            columns = this.props.reportData.data.columns;
-        }
-
-
-        if (columns) {
-            let columnsData = columns.map((obj, index) => {
-                obj.headerClass = "gridHeaderCell";
-                obj.cellClass = "gridCell";
-                obj.suppressResize = true;
-                obj.minWidth = 100;
-                obj.addEditActions = (index === 1); // EMPOWER: add the row edit component to column 1
-
-                if (obj.datatypeAttributes) {
-                    var datatypeAttributes = obj.datatypeAttributes;
-                    for (var attr in datatypeAttributes) {
-                        switch (attr) {
-
-                        case 'type': {
-                            switch (datatypeAttributes[attr]) {
-                            case "NUMERIC" :
-                                this.setCSSClass_helper(obj, "AlignRight");
-                                obj.cellRenderer = reactCellRendererFactory(NumericFormatter);
-                                obj.customComponent = NumericFormatter;
-                                break;
-                            case "DATE" :
-                                obj.cellRenderer = reactCellRendererFactory(DateFormatter);
-                                obj.customComponent = DateFormatter;
-                                break;
-                            case "DATE_TIME" :
-                                obj.cellRenderer = reactCellRendererFactory(DateTimeFormatter);
-                                obj.customComponent = DateTimeFormatter;
-                                break;
-                            case "TIME_OF_DAY" :
-                                obj.cellRenderer = reactCellRendererFactory(TimeFormatter);
-                                obj.customComponent = TimeFormatter;
-                                break;
-                            case "CHECKBOX" :
-                                obj.cellRenderer = reactCellRendererFactory(CheckBoxFormatter);
-                                obj.customComponent = CheckBoxFormatter;
-                                break;
-                            default:
-                                obj.cellRenderer = reactCellRendererFactory(TextFormatter);
-                                obj.customComponent = TextFormatter;
-                                break;
-                            }
-                        }
-                        }
-                    }
-
-                    if (datatypeAttributes.clientSideAttributes) {
-                        var clientSideAttributes = datatypeAttributes.clientSideAttributes;
-                        for (var cattr in clientSideAttributes) {
-                            switch (cattr) {
-                            case 'bold':
-                                if (clientSideAttributes[cattr]) {
-                                    this.setCSSClass_helper(obj, "Bold");
-                                }
-                                break;
-                            case 'word-wrap':
-                                if (clientSideAttributes[cattr]) {
-                                    this.setCSSClass_helper(obj, "NoWrap");
-                                }
-                                break;
-                            }
-                        }
-                    }
-                }
-                return obj;
-            });
-
-            return columnsData;
-        }
-        return [];
     },
 
     // row was clicked once, navigate to record
@@ -153,12 +61,9 @@ let ReportContent = React.createClass({
 
     },
 
-
-
     /* TODO: paging component that has "next and previous tied to callbacks from the store to get new data set*/
     render: function() {
         let isTouch = this.context.touch;
-        let columnsDef = this.getColumnProps();
 
         let recordCount = 0;
         if (this.props.reportData.data) {
@@ -172,7 +77,7 @@ let ReportContent = React.createClass({
                         {!isTouch ?
                             <AGGrid loading={this.props.reportData.loading}
                                     records={this.props.reportData.data ? this.props.reportData.data.filteredRecords : []}
-                                    columns={columnsDef}
+                                    columns={this.props.reportData.data.columns}
                                     uniqueIdentifier="Record ID#"
                                     appId={this.props.reportData.appId}
                                     tblId={this.props.reportData.tblId}
