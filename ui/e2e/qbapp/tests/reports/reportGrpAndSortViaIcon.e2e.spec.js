@@ -439,7 +439,7 @@
                             //Verify GrpBy has UserName and is in ascending Order
                             reportSortingPage.reportGroupByContainer.all(by.className('notEmpty')).map(function(elm, index) {
                                 //verify the sortOrder is ascending
-                                expect(elm.element(by.className('sortOrderIcon')).getAttribute('className')).toEqual('sortOrderIcon up');
+                                expect(elm.element(by.className('sortOrderIcon')).getAttribute('className')).toEqual('action sortOrderIcon up');
                                 //verify the field Name is 'User Name
                                 elm.element(by.className('fieldName')).getText().then(function(selectedFieldText) {
                                     expect(selectedFieldText).toEqual('User Name');
@@ -449,7 +449,7 @@
                             //Verify SryBy has StartDate and is in descending Order
                             reportSortingPage.reportSortByContainer.all(by.className('notEmpty')).map(function(elm, index) {
                                 //verify the sortOrder is ascending
-                                expect(elm.element(by.className('sortOrderIcon')).getAttribute('className')).toEqual('sortOrderIcon down');
+                                expect(elm.element(by.className('sortOrderIcon')).getAttribute('className')).toEqual('action sortOrderIcon down');
                                 //verify the field Name is 'User Name
                                 elm.element(by.className('fieldName')).getText().then(function(selectedFieldText) {
                                     expect(selectedFieldText).toEqual('Start Date');

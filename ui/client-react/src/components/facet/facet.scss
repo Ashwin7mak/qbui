@@ -133,6 +133,11 @@
     .list-group-item {
       font-family: $font-family;
       padding-top: 4px;
+      display: flex;
+      flex-direction: row;
+      flex-wrap: nowrap;
+      align-items: center;
+      justify-content: flex-start
     }
 
     .list-group-item:hover {
@@ -142,10 +147,6 @@
     .list-group-item:focus {
       outline: none;
       background-color: $facetMenu-backgroundColor;
-    }
-
-    .list-group-item .checkMark {
-      margin-left: auto;
     }
 
     .listMore {
@@ -205,6 +206,7 @@
     .selectedTokenName {
       white-space: normal;
       padding: 2px 3px;
+      cursor: pointer;
 
       span {
         white-space: nowrap;
