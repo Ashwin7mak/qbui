@@ -52,16 +52,18 @@ var OverlayDialogHeader = React.createClass({
         );
     },
     smallHeaderRender() {
+        let buttonClassName =  "action applyButton";
+        buttonClassName += (this.props.dirty ? " dirty" : "");
         return (
             <div className="overlayDialogHeader smallHeader">
                 <div className="overlayLeft">
-                    <Button onClick={this.props.onCancel}><QBicon icon={"close"}/></Button>
+                    <Button onClick={this.props.onCancel} className="action"><QBicon icon={"close"}/></Button>
                 </div>
 
                 {this.renderTitle()}
 
                 <div className="overlayLeft">
-                    <Button className={this.props.dirty} onClick={this.props.onApply}>
+                    <Button className={buttonClassName} onClick={this.props.onApplyChanges}>
                     <I18nMessage message="apply"/>
                     </Button>
                 </div>
@@ -75,7 +77,7 @@ var OverlayDialogHeader = React.createClass({
                 <div className="overlayLeft">
                             <Button className={this.props.iconName + "Span" }
                                     onClick={this.props.onCancel}>
-                                <QBicon className={this.props.iconName}
+                                <QBicon className={this.props.iconName + " action"}
                                         icon={this.props.icon}  />
                             </Button>
                 </div>
@@ -83,7 +85,7 @@ var OverlayDialogHeader = React.createClass({
                 {this.renderTitle()}
 
                 <div className="overlayRight">
-                    <Button onClick={this.props.onCancel}><QBicon icon={"close"}/></Button>
+                    <Button onClick={this.props.onCancel} ><QBicon icon={"close"} className="action"/></Button>
                 </div>
             </div>
         );

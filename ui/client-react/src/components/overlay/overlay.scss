@@ -6,6 +6,14 @@
     align-items: center;
     justify-content : space-between;
     color: $icon-color;
+
+    .btn.btn-default.action {
+        cursor: pointer;
+        &:hover {
+            color: $icon-color-hover;
+        }
+    }
+
     &.smallHeader {
         display: none;
     }

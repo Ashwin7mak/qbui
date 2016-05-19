@@ -186,9 +186,7 @@ const FacetsMenu = React.createClass({
      * @param value
      */
     clearSelect(e, facet, value) {
-        if (e.target.classList.contains('clearFacet')) {
-            this.props.onFacetDeselect(e, facet, value);
-        }
+        this.props.onFacetDeselect(e, facet, value);
         this.dontClose(e);
     },
 
@@ -208,8 +206,8 @@ const FacetsMenu = React.createClass({
             if (selections.hasAnySelectionsForField(facet.id)) {
                 let kids = (selections.getFieldSelections(facet.id).map((value) => {
                     return (<span key={'token.' + facet.name + '.' + value}
-                                  className="selectedToken">
-                                 <span className="selectedTokenName"  onClick={(e) => self.clearSelect(e, facet, value)}>
+                                  className="selectedToken" onClick={(e) => self.clearSelect(e, facet, value)}>
+                                 <span className="selectedTokenName">
                                       {value}
                                     <QBicon className="clearFacet" icon="clear-mini"/>
                                  </span>

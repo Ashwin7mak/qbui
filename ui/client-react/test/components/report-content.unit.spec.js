@@ -1,7 +1,7 @@
 import React from 'react';
 import TestUtils from 'react-addons-test-utils';
 import ReportContent from '../../src/components/report/dataTable/reportContent';
-import CardViewList from '../../src/components/dataTable/cardView/cardViewList';
+import CardViewListHolder from '../../src/components/dataTable/cardView/cardViewListHolder';
 import AGGrid  from '../../src/components/dataTable/agGrid/agGrid';
 import {reactCellRendererFactory} from 'ag-grid-react';
 import {NumericFormatter, DateFormatter} from '../../src/components/dataTable/agGrid/formatters';
@@ -13,10 +13,10 @@ var AGGridMock = React.createClass({
     }
 });
 
-var CardViewListMock = React.createClass({
+var CardViewListHolderMock = React.createClass({
     render() {
         return (
-            <div>mock CardViewListMock</div>
+            <div>mock CardViewListHolderMock</div>
         );
     }
 });
@@ -169,8 +169,9 @@ describe('ReportContent functions', () => {
         expect(_.intersection(agGrid.props.columns, fakeReportData_simple.data.columns).length).toEqual(fakeReportData_simple.data.columns.length);
     });
 
-    it('test render of CardViewListMock for touch context', () => {
-        ReportContent.__Rewire__('CardViewList', CardViewListMock);
+    it('test render of CardViewListHolder for touch context', () => {
+        ReportContent.__Rewire__('CardViewListHolder', CardViewListHolderMock);
+
         var TestParent = React.createFactory(React.createClass({
 
             childContextTypes: {
@@ -193,9 +194,9 @@ describe('ReportContent functions', () => {
             reportHeader: header_empty
         });
 
-        var cardViewListMock = TestUtils.scryRenderedComponentsWithType(parent.refs.refReportContent, CardViewListMock);
+        var cardViewListMock = TestUtils.scryRenderedComponentsWithType(parent.refs.refReportContent, CardViewListHolderMock);
         expect(cardViewListMock.length).toEqual(1);
-        ReportContent.__ResetDependency__('CardViewList');
+        ReportContent.__ResetDependency__('CardViewListHolder');
     });
 
 

@@ -439,7 +439,7 @@
                             //Verify GrpBy has UserName and is in ascending Order
                             reportSortingPage.reportGroupByContainer.all(by.className('notEmpty')).map(function(elm, index) {
                                 //verify the sortOrder is ascending
-                                expect(elm.element(by.className('sortOrderIcon')).getAttribute('className')).toEqual('sortOrderIcon up');
+                                expect(elm.element(by.className('sortOrderIcon')).getAttribute('className')).toEqual('action sortOrderIcon up');
                                 //verify the field Name is 'User Name
                                 elm.element(by.className('fieldName')).getText().then(function(selectedFieldText) {
                                     expect(selectedFieldText).toEqual('User Name');
@@ -449,7 +449,7 @@
                             //Verify SryBy has StartDate and is in descending Order
                             reportSortingPage.reportSortByContainer.all(by.className('notEmpty')).map(function(elm, index) {
                                 //verify the sortOrder is ascending
-                                expect(elm.element(by.className('sortOrderIcon')).getAttribute('className')).toEqual('sortOrderIcon down');
+                                expect(elm.element(by.className('sortOrderIcon')).getAttribute('className')).toEqual('action sortOrderIcon down');
                                 //verify the field Name is 'User Name
                                 elm.element(by.className('fieldName')).getText().then(function(selectedFieldText) {
                                     expect(selectedFieldText).toEqual('Start Date');
@@ -485,7 +485,7 @@
                 });
             });
 
-            xit('Verify the popUp respects report settings', function(done) { //TODO Don is fixing on sorting inside grouping.
+            it('Verify the popUp respects report settings', function(done) { //TODO Don is fixing on sorting inside grouping.
                 var expectedTableResultsAfterFilter = [
                     ['Chris Baker'],
                     ['Development'],
@@ -708,6 +708,43 @@
                     });
                 });
             });
+
+            it('Verify the small breakpoint grid contains Group Name displayed', function(done) {
+                //go to report page directly
+                RequestAppsPage.get(e2eBase.getRequestReportsPageEndpoint(realmName, app.id, app.tables[e2eConsts.TABLE1].id, '2'));
+                var expectedTableResults = [
+                    ['100.00000000000000%'],
+                    ['Chris Baker,Planning,Server purchase,3/16/2009,4/10/2009,-15250284452.47152052910053 weeks'],
+                    ['Jon Neil,Development,Install latest software,3/31/2009,4/28/2009,15250284452.47152052910053 weeks'],
+                    ['99.00000000000000%'],
+                    ['Chris Baker,Development,Upgrade DBMS,3/19/2009,4/28/2009,0.0020410978836 weeks'],
+                    ['Angela Leon,Planning,Workstation purchase,3/21/2009,4/10/2009,15250284452.47152052910053 weeks'],
+                ];
+
+                reportServicePage.waitForElementToBeClickable(reportSortingPage.reportSortAndGroupBtn).then(function() {
+                    //click on sort/grp Icon
+                    reportSortingPage.reportSortAndGroupBtn.click().then(function() {
+                        // Sleep needed for animation of drop down
+                        e2eBase.sleep(browser.params.smallSleep);
+                        reportServicePage.waitForElement(reportSortingPage.sortAndGrpDialogueSBApplyBtn);
+                    }).then(function() {
+                        //Select group By items
+                        reportSortingPage.selectGroupByItems('% Completed');
+                    }).then(function() {
+                        //Select sort By items
+                        reportSortingPage.selectSortByItems('Start Date');
+                    }).then(function() {
+                        //Click apply button
+                        reportSortingPage.sortAndGrpDialogueSBApplyBtn.click();
+                        reportServicePage.waitForElement(reportSortingPage.reportSortingGroupingContainer);
+                    }).then(function() {
+                        //verify the sorting/grouping results with expected
+                        verifyTableResults(false, expectedTableResults);
+                        done();
+                    });
+                });
+            });
+
         }); //small breakpoints describe block end.
 
         /**

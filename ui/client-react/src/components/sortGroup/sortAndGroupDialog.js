@@ -160,7 +160,7 @@ var SortAndGroupDialog = React.createClass({
                              </div>
                             <div className="dialogBottom">
                                 <div className="dialogButtons">
-                                     <span className="reset" tabIndex="0" onClick={this.props.onReset}>
+                                     <span className="action reset" tabIndex="0" onClick={this.props.onReset}>
                                         <I18nMessage message="report.sortAndGroup.reset"/>
                                      </span>
                                      <Button className={"apply " + this.props.dirty}  bsStyle="primary"
@@ -169,7 +169,7 @@ var SortAndGroupDialog = React.createClass({
                                      </Button>
                                  </div>
                                 <div className="dialogBand">
-                                    <div className="reset" tabIndex="0" onClick={this.props.onReset}>
+                                    <div className="action reset" tabIndex="0" onClick={this.props.onReset}>
                                         <I18nMessage message="report.sortAndGroup.reset"/>
                                     </div>
                                 </div>
