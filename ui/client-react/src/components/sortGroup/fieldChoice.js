@@ -2,8 +2,7 @@ import React from 'react';
 import {I18nMessage} from '../../utils/i18nMessage';
 import QBicon from '../qbIcon/qbIcon';
 import TableIcon from '../qbTableIcon/qbTableIcon';
-import ToolTip from '../toolTip/toolTipper';
-import {OverlayTrigger} from 'react-bootstrap';
+import QBToolTip from '../toolTip/toolTipper';
 import Logger from '../../utils/logger';
 
 import './sortAndGroup.scss';
@@ -70,30 +69,30 @@ const FieldChoice = React.createClass({
                     </div>
                     <div className="fieldChoiceActions">
                         { order ? (
-                        <ToolTip location="top" tipId="orderIcon" plainMessage="change order">
+                        <QBToolTip location="top" tipId="orderIcon" i18nMessageKey="report.sortAndGroup.changeOrder">
                             <span className={"action sortOrderIcon " + order} tabIndex="0"
                                   onClick={() => this.props.onSetOrder(this.props.type, this.props.index,
                                                             !this.props.field.descendOrder, this.props.field)} >
                                   <TableIcon icon={"icon-TableIcons_sturdy_arrow" + order}/>
                             </span>
-                        </ToolTip>) :
+                        </QBToolTip>) :
                             null
                         }
                         <span>
                         { hasField ?
-                            <ToolTip location="top" tipId="removeIcon" plainMessage={this.props.type === 'group' ? 'stop grouping by' : 'stop sorting by'}>
+                            <QBToolTip location="top" tipId="removeIcon" i18nMessageKey={this.props.type === 'group' ? 'report.sortAndGroup.stopGroupingBy' : 'report.sortAndGroup.stopSortingBy'}>
                                 <span className="action fieldDeleteIcon" tabIndex="0"
                                      onClick={() => this.props.onRemoveField(this.props.type,
                                                 this.props.index, this.props.field)} >
                                     <QBicon className="fieldDelete"
                                             icon="clear-mini"/>
                                 </span>
-                            </ToolTip>  :
-                            <ToolTip location="top" tipId="addIcon" plainMessage="add field">
+                            </QBToolTip>  :
+                            <QBToolTip location="top" tipId="addIcon" i18nMessageKey="report.sortAndGroup.addField">
                                 <span className="action fieldOpenIcon" tabIndex="0" >
                                     <QBicon className="fieldOpen" icon="icon_caretfilledright"/>
                                 </span>
-                            </ToolTip>
+                            </QBToolTip>
                         }
                         </span>
                     </div>

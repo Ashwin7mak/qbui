@@ -7,6 +7,7 @@ import FieldsPanel from './fieldsPanel';
 import sortGroupFieldShape from './sortGroupProp';
 import thwartClicksWrapper from '../hoc/thwartClicksWrapper';
 import closeOnEscape from '../hoc/catchEscapeKey';
+import QBToolTip from '../toolTip/toolTipper';
 
 import './sortAndGroup.scss';
 import '../../assets/css/animate.min.css';
@@ -178,18 +179,25 @@ var SortAndGroupDialog = React.createClass({
                             </div>
                             <div className="dialogBottom">
                                 <div className="dialogButtons">
-                                     <span className="action reset" tabIndex="0" onClick={this.props.onReset}>
-                                        <I18nMessage message="report.sortAndGroup.reset"/>
-                                     </span>
-                                     <Button className={"apply " + this.props.dirty}  bsStyle="primary"
-                                             onClick={this.props.onApplyChanges}>
-                                         <I18nMessage message="apply"/>
-                                     </Button>
+                                    <QBToolTip location="top" tipId="resetSrtGrpIcon" i18nMessageKey="report.sortAndGroup.resetTip">
+                                         <span className="action reset" tabIndex="0" onClick={this.props.onReset}>
+                                            <I18nMessage message="report.sortAndGroup.reset"/>
+                                         </span>
+                                    </QBToolTip>
+                                    <QBToolTip location="top" tipId="applySrtGrpIcon"
+                                               i18nMessageKey="applyTip">
+                                         <Button className={"apply " + this.props.dirty}  bsStyle="primary"
+                                                 onClick={this.props.onApplyChanges}>
+                                             <I18nMessage message="apply"/>
+                                         </Button>
+                                    </QBToolTip>
                                  </div>
                                 <div className="dialogBand">
-                                    <div className="action reset" tabIndex="0" onClick={this.props.onReset}>
-                                        <I18nMessage message="report.sortAndGroup.reset"/>
-                                    </div>
+                                    <QBToolTip location="top" tipId="resetSrtGrpIcon" i18nMessageKey="report.sortAndGroup.resetTip">
+                                        <div className="action reset" tabIndex="0" onClick={this.props.onReset}>
+                                            <I18nMessage message="report.sortAndGroup.reset"/>
+                                        </div>
+                                    </QBToolTip>
                                 </div>
                             </div>
                         </div>

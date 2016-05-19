@@ -94,7 +94,9 @@ export default {
             recordCount : "{recordCount} {nameForRecords} ",
             searchPlaceHolder:  "Search these",
             sortAndGroup : {
+                addField: "add field",
                 by: "by",
+                changeOrder: "change order",
                 chooseFields :  {
                     group: "Choose Field for grouping",
                     sort: "Choose Field for sorting",
@@ -103,7 +105,10 @@ export default {
                 header : "Sort & Group",
                 moreFields : "more fields...",
                 reset: "Reset",
+                resetTip : "Exit and restore to orginal report sort and group settings",
                 sort:   "Sort",
+                stopGroupingBy: "stop grouping by",
+                stopSortingBy: "stop sorting by",
                 thenBy: "then by",
             },
             menu: {
@@ -136,6 +141,8 @@ export default {
             }
         },
         cancel: "Cancel",
-        apply: "Apply"
+        cancelTip: "Exit and discard any changes",
+        apply: "Apply",
+        applyTip: "Exit and apply any changes"
     }
 };
