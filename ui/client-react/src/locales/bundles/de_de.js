@@ -92,7 +92,9 @@ export default {
             recordCount : "{recordCount} {nameForRecords} ",
             searchPlaceHolder:  "Suchen Sie diese",
             sortAndGroup : {
+                addField: "Feld hinzufügen",
                 by: "nach",
+                changeOrder: "Austausch bestellen",
                 chooseFields :  {
                     group: "Wählen Sie Feld für die Gruppierung",
                     sort: "Wählen Sie für die Sortierung",
@@ -101,7 +103,10 @@ export default {
                 header : "Sortieren & Gruppen",
                 moreFields : "mehr Felder ...",
                 reset: "Zurückstellen",
+                resetTip : "Verlassen und Wiederherstellung des ursprünglichen Berichts zu sortieren und zu Gruppeneinstellungen",
                 sort:   "Sortieren",
+                stopGroupingBy: "stoppen Gruppierung von",
+                stopSortingBy: "stoppen die Sortierung nach",
                 thenBy: "dann durch",
             },
             menu: {
@@ -134,7 +139,9 @@ export default {
             }
         },
         cancel: "Stornieren",
-        apply: "Anwenden"
+        cancelTip: "Beenden und verwerfen alle Änderungen",
+        apply: "Anwenden",
+        applyTip: "Beenden und gelten alle Änderungen"
 
     }
 };
