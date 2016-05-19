@@ -2,7 +2,8 @@ import React from 'react';
 import {I18nMessage} from '../../utils/i18nMessage';
 import QBicon from '../qbIcon/qbIcon';
 import TableIcon from '../qbTableIcon/qbTableIcon';
-import {OverlayTrigger, Tooltip} from 'react-bootstrap';
+import ToolTip from '../toolTip/toolTipper';
+import {OverlayTrigger} from 'react-bootstrap';
 import Logger from '../../utils/logger';
 
 import './sortAndGroup.scss';
@@ -44,15 +45,6 @@ const FieldChoice = React.createClass({
         onRemoveField: React.PropTypes.func
     },
 
-    toolTipIt(tooltipId, plainMessage, i18nMessageKey) {
-        let label = plainMessage;
-        if (i18nMessageKey) {
-            label = (<I18nMessage message={i18nMessageKey}/>);
-        }
-        return (
-            <Tooltip className={tooltipId + "tooltip"} id={tooltipId}>{label}</Tooltip>
-        );
-    },
     render() {
         let hasField = !!this.props.field;
         let name =  '';
@@ -78,30 +70,30 @@ const FieldChoice = React.createClass({
                     </div>
                     <div className="fieldChoiceActions">
                         { order ? (
-                        <OverlayTrigger placement="top" overlay={this.toolTipIt('orderIcon', 'change order')}>
+                        <ToolTip location="top" tipId="orderIcon" plainMessage="change order">
                             <span className={"action sortOrderIcon " + order} tabIndex="0"
                                   onClick={() => this.props.onSetOrder(this.props.type, this.props.index,
                                                             !this.props.field.descendOrder, this.props.field)} >
                                   <TableIcon icon={"icon-TableIcons_sturdy_arrow" + order}/>
                             </span>
-                        </OverlayTrigger>) :
+                        </ToolTip>) :
                             null
                         }
                         <span>
                         { hasField ?
-                            <OverlayTrigger placement="top" overlay={this.toolTipIt('removeIcon', this.props.type === 'group' ? 'stop grouping by' : 'stop sorting by')}>
+                            <ToolTip location="top" tipId="removeIcon" plainMessage={this.props.type === 'group' ? 'stop grouping by' : 'stop sorting by'}>
                                 <span className="action fieldDeleteIcon" tabIndex="0"
                                      onClick={() => this.props.onRemoveField(this.props.type,
                                                 this.props.index, this.props.field)} >
                                     <QBicon className="fieldDelete"
                                             icon="clear-mini"/>
                                 </span>
-                            </OverlayTrigger>  :
-                            <OverlayTrigger placement="top" overlay={this.toolTipIt('addIcon', 'add')}>
+                            </ToolTip>  :
+                            <ToolTip location="top" tipId="addIcon" plainMessage="add field">
                                 <span className="action fieldOpenIcon" tabIndex="0" >
                                     <QBicon className="fieldOpen" icon="icon_caretfilledright"/>
                                 </span>
-                            </OverlayTrigger>
+                            </ToolTip>
                         }
                         </span>
                     </div>
