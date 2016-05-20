@@ -98,20 +98,6 @@ const SortAndGroup = React.createClass({
             showNotVisible :false
         });
     },
-    shouldComponentUpdate(nextProps, nextState) {
-
-        let answer = false;
-
-        if (this.props !== nextProps) {
-            answer = true;
-        }
-
-        if (this.state !== nextState) {
-            answer = true;
-        }
-
-        return answer;
-    },
 
     showMoreFields() {
         this.setState({showNotVisible : true});

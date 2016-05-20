@@ -14,7 +14,7 @@ const QBToolTip = React.createClass({
         // override the default delay millisecond s for tooltip help
         delayShow: React.PropTypes.number // options
     },
-    defaultDelayShow: 500,
+    defaultDelayShow: 300,
 
     toolTipIt(tooltipId, plainMessage, i18nMessageKey) {
         let label = plainMessage ? plainMessage : '...';

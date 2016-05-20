@@ -98,22 +98,6 @@ var SortAndGroupDialog = React.createClass({
         }
     },
 
-
-    shouldComponentUpdate(nextProps, nextState) {
-
-        let answer = false;
-
-        if (this.props !== nextProps) {
-            answer = true;
-        }
-
-        if (this.state !== nextState) {
-            answer = true;
-        }
-
-        return answer;
-    },
-
     /*
      props to receive report data which has the currentSortGroupInfo
      copied from loadedReport manipulated by dialog

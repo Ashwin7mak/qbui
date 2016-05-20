@@ -298,6 +298,10 @@ $shadow :   0px 4px 15px 0px rgba(70,66,66,0.15);
       height: 100%;
       max-height: 100%;
 
+      .overlayDialogHeader {
+        border-bottom: 1px solid $color19;
+        padding: 0 10px 10px;
+      }
       .dialogUpper {
         height: 100%;
         max-height: 100%;
