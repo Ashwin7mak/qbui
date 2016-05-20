@@ -141,21 +141,14 @@ var SortAndGroupDialog = React.createClass({
     render() {
         // wrap the sort dialog in additional functionality to close the dialog on escape
         // and to not handle any outside clicks while the dialog is open
-        let dlghieght = this.props.combinedHeight;
-
-        const SortAndGroupPopover = React.createClass({
+        const SortAndGroupWrapper = React.createClass({
             render() {
-                let addedStyle = {};
-                if (dlghieght) {
-                    addedStyle.style = {height:dlghieght};
-                }
                 return <div key="sng"
-                    {...addedStyle}
                     {...this.props}>
                 </div>;
             }
         });
-        let SortAndGroupDialogWrapped = thwartClicksWrapper(closeOnEscape(SortAndGroupPopover));
+        let SortAndGroupDialogWrapped = thwartClicksWrapper(closeOnEscape(SortAndGroupWrapper));
 
         return (
             this.props.show ? (
@@ -167,21 +160,21 @@ var SortAndGroupDialog = React.createClass({
                      placement="bottom">
 
                         <div className={"settingsDialog" + (this.props.showFields ? ' fieldsShown' : '')} key="sgSettings">
-                            <div>
-                            <div className="dialogTop">
-                                <OverlayDialogHeader
-                                    iconName="sortButton"
-                                    icon="sort-az"
-                                    dialogTitleI18N="report.sortAndGroup.header"
-                                    onCancel={this.props.onClose}
-                                    onApplyChanges={this.props.onApplyChanges}
-                                    onReset={this.props.onReset}
-                                />
-                            </div>
-                             <div className="dialogContent">
-                                 {this.renderFieldSettings(3, "group", this.props.groupByFields)}
-                                 {this.renderFieldSettings(5, "sort", this.props.sortByFields)}
-                             </div>
+                            <div className="dialogUpper">
+                                <div className="dialogTop">
+                                    <OverlayDialogHeader
+                                        iconName="sortButton"
+                                        icon="sort-az"
+                                        dialogTitleI18N="report.sortAndGroup.header"
+                                        onCancel={this.props.onClose}
+                                        onApplyChanges={this.props.onApplyChanges}
+                                        onReset={this.props.onReset}
+                                    />
+                                </div>
+                                 <div className="dialogContent">
+                                     {this.renderFieldSettings(3, "group", this.props.groupByFields)}
+                                     {this.renderFieldSettings(5, "sort", this.props.sortByFields)}
+                                 </div>
                             </div>
                             <div className="dialogBottom">
                                 <div className="dialogButtons">
@@ -221,7 +214,6 @@ var SortAndGroupDialog = React.createClass({
                                      showNotVisible={this.props.showNotVisible}
                                      fieldsForType={this.props.fieldsForType}
                                      key="fieldsPanel"
-                                     combinedHeight={this.props.combinedHeight}
                         />
             </SortAndGroupDialogWrapped>) :
                 null

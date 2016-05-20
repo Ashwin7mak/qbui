@@ -16,6 +16,7 @@ $shadow :   0px 4px 15px 0px rgba(70,66,66,0.15);
 }
 
 .sortAndGroupDialog {
+  height: 530px;
   width: 360px;
   min-width: 290px;
   overflow: hidden;
@@ -50,6 +51,7 @@ $shadow :   0px 4px 15px 0px rgba(70,66,66,0.15);
     height:100%;
     justify-content: space-between;
     visibility: visible;
+
   }
 
   .settingsDialogTopContainer {
@@ -163,12 +165,15 @@ $shadow :   0px 4px 15px 0px rgba(70,66,66,0.15);
   &.notShown {
     display: none;
   }
+
   .fieldPanelHeader {
     display: flex;
     flex-direction: row;
     justify-content: flex-start;
     padding: 10px;
     color:$color11;
+    border-bottom: 1px solid $color19;
+
     .cancel  {
       padding-right: 10px;
       color:$icon-color;
@@ -198,6 +203,7 @@ $shadow :   0px 4px 15px 0px rgba(70,66,66,0.15);
     flex-direction: column;
   }
   .list-group {
+    height: 490px;
     min-height: 244px;
     overflow: auto;
     margin-bottom: 0;
@@ -211,6 +217,9 @@ $shadow :   0px 4px 15px 0px rgba(70,66,66,0.15);
     border: 1px solid $color4;
     border-right: none;
     border-left: none;
+  }
+  .list-group-item:first-child {
+    border-top: none;
   }
   .list-group-item:first-child,
   .list-group-item:last-child {
@@ -243,12 +252,12 @@ $shadow :   0px 4px 15px 0px rgba(70,66,66,0.15);
     top: 0;
     left: 0;
     right: 0;
-    left: 0;
     margin-top: 0;
     margin-left: 0;
     width: 100%;
     max-width: $small-breakpoint-width;
     height:100%;
+    max-height: 100%;
 
 
     .action {
@@ -265,6 +274,7 @@ $shadow :   0px 4px 15px 0px rgba(70,66,66,0.15);
         color: $icon-color-hover;
       }
     }
+
 
     .dialogContent {
       overflow: auto;
@@ -286,17 +296,35 @@ $shadow :   0px 4px 15px 0px rgba(70,66,66,0.15);
     .settingsDialog {
       padding: 5px 0 0;
       height: 100%;
+      max-height: 100%;
 
-      .overlayDialogHeader {
-        border-bottom: 1px solid $color21;
-        border-bottom: 1px solid $color21;
-        padding: 0 10px 10px;
+      .dialogUpper {
+        height: 100%;
+        max-height: 100%;
       }
+
+      .dialogContent {
+        max-height: 80%;
+      }
+
       .title {
         padding: 0 10px;
       }
     }
+    .fieldsPanel {
+      max-height: 100%;
+      height: 100%;
 
+      .panel-body {
+        max-height: 100%;
+        height: 100%;
+
+        .list-group {
+          height: 100%;
+          max-height: 100%;
+        }
+      }
+    }
     .fieldName {
       width: 167px;
     }
@@ -309,6 +337,7 @@ $shadow :   0px 4px 15px 0px rgba(70,66,66,0.15);
       display:flex;
       padding: 15px;
       justify-content: center;
+      border-top: 1px solid $color19;
     }
 
     .sortAndGroupButton .sortButtonSpan { //icon in popover

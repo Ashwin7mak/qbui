@@ -86,7 +86,6 @@ const FieldsPanel = React.createClass({
         );
     },
 
-
     renderList(orderList, list) {
         let restOfFields = null;
         // show "more fields..." for viewing any remaining fields not in report
@@ -104,7 +103,7 @@ const FieldsPanel = React.createClass({
         }
 
         return (
-                <ListGroup   style={{height:this.props.combinedHeight-40}}>
+                <ListGroup>
                     {(orderList.inReport &&
                             orderList.inReport.map((field) => {
                                 return this.renderField(field, this.isSelected(field.id, list), false);
@@ -169,8 +168,7 @@ const FieldsPanel = React.createClass({
         let orderList = this.getFieldsInReportOrder(choiceList, visibleFields);
         return (this.props.showFields ?
             <Panel className={"fieldsPanel animated slideInRight" + shownClass}
-                   ref="fieldsPanel" key={"fieldsPanel" + this.props.showFields}
-                  >
+                   ref="fieldsPanel" key={"fieldsPanel" + this.props.showFields}>
                 <div className="fieldPanelHeader">
                     <span className="action cancel" tabIndex="0" onClick={this.props.onHideFields}>
                         <I18nMessage message="cancel"/>
