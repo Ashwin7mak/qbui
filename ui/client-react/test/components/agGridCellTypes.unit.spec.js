@@ -94,9 +94,6 @@ describe('AGGrid cell editor functions', () => {
 
         component = TestUtils.renderIntoDocument(<DateFormatter params={params} />);
         expect(TestUtils.isCompositeComponent(component)).toBeTruthy();
-
-        const value = ReactDOM.findDOMNode(component).querySelector(".cellData span");
-        expect(value.innerHTML).toEqual(params.value);
     });
 
     it('test DateTimeFormatter', () => {
@@ -108,8 +105,6 @@ describe('AGGrid cell editor functions', () => {
         component = TestUtils.renderIntoDocument(<DateTimeFormatter params={params} />);
         expect(TestUtils.isCompositeComponent(component)).toBeTruthy();
 
-        const value = ReactDOM.findDOMNode(component).querySelector(".cellData");
-        expect(value.innerHTML).toEqual("01/16/97 7:33:03 PM");
     });
 
     it('test TimeFormatter', () => {
@@ -120,9 +115,6 @@ describe('AGGrid cell editor functions', () => {
 
         component = TestUtils.renderIntoDocument(<TimeFormatter params={params} />);
         expect(TestUtils.isCompositeComponent(component)).toBeTruthy();
-
-        const value = ReactDOM.findDOMNode(component).querySelector(".cellData");
-        expect(value.innerHTML).toEqual("2:13:44 PM");
     });
 });
 
