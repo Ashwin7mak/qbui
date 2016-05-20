@@ -9,12 +9,14 @@ export const DefaultCellEditor = React.createClass({
 
     propTypes: {
         value: React.PropTypes.oneOfType([React.PropTypes.string, React.PropTypes.number, React.PropTypes.object]),
+        type: React.PropTypes.string,
         onChange: React.PropTypes.func
     },
 
     getDefaultProps() {
         return {
-            value: ""
+            value: "",
+            type: "text"
         };
     },
 
@@ -27,7 +29,7 @@ export const DefaultCellEditor = React.createClass({
                       onChange={this.onChange}
                       tabIndex="0"
                       className="cellEdit"
-                      type="text"
+                      type={this.props.type}
                       value={this.props.value}/>;
     }
 });

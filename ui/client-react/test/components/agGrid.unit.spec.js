@@ -4,11 +4,9 @@ import ReactDOM from 'react-dom';
 import AGGrid  from '../../src/components/dataTable/agGrid/agGrid';
 import AGGridReact from 'ag-grid-react';
 
-import DateTimeFormatter from '../../src/components/dataTable/agGrid/formatters';
-import TimeFormatter from '../../src/components/dataTable/agGrid/formatters';
-import NumericFormatter from '../../src/components/dataTable/agGrid/formatters';
-import TextFormatter from '../../src/components/dataTable/agGrid/formatters';
-import CheckboxFormatter from '../../src/components/dataTable/agGrid/formatters';
+import Formatters from '../../src/components/dataTable/agGrid/formatters';
+import {DateFormatter, DateTimeFormatter, TimeFormatter, NumericFormatter, TextFormatter, CheckBoxFormatter} from '../../src/components/dataTable/agGrid/formatters';
+
 
 import Loader  from 'react-loader';
 import * as query from '../../src/constants/query';
@@ -151,14 +149,14 @@ describe('AGGrid functions', () => {
     beforeEach(() => {
         AGGrid.__Rewire__('AgGridReact', AGGridMock);
         AGGrid.__Rewire__('I18nMessage', I18nMessageMock);
-        NumericFormatter.__Rewire__('CellFormatter', CellFormatterMock);
+        Formatters.__Rewire__('CellFormatter', CellFormatterMock);
         spyOn(flux.actions, 'getFilteredRecords');
     });
 
     afterEach(() => {
         AGGrid.__ResetDependency__('AgGridReact');
         AGGrid.__ResetDependency__('I18nMessage');
-        NumericFormatter.__ResetDependency__('CellFormatter');
+        Formatters.__ResetDependency__('CellFormatter');
         flux.actions.getFilteredRecords.calls.reset();
     });
 

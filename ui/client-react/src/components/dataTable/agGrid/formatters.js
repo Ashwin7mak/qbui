@@ -115,6 +115,11 @@ const CellFormatter = React.createClass({
 
             return <TimeCellEditor value={formatted} onChange={this.cellEdited}/>;
         }
+        case NumberFormat: {
+            return <DefaultCellEditor value={this.state.value}
+                                      type="number"
+                                      onChange={this.cellEdited}/>;
+        }
         default: {
 
             if (this.props.params.colDef.choices) {
