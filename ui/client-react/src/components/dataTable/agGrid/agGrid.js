@@ -377,7 +377,7 @@ let AGGrid = React.createClass({
         this.clickTimeout = setTimeout(() => {
             // navigate to record if timeout wasn't canceled by 2nd click
             this.clickTimeout = null;
-            if (this.api.getSelectedRows().length === 0) {
+            if (this.props.onRowClick && (this.api.getSelectedRows().length === 0)) {
                 this.props.onRowClick(params.data);
             }
         }, 500);
