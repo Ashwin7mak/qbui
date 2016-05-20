@@ -20,7 +20,7 @@
     var appGenerator = require('../../../test_generators/app.generator.js');
     var recordGenerator = require('../../../test_generators/record.generator.js');
 
-    describe.only('API - Validate report sorting and grouping execution', function() {
+    describe('API - Validate report sorting and grouping execution', function() {
         // Set global timeout for all tests in the spec file
         this.timeout(testConsts.INTEGRATION_TIMEOUT);
 
@@ -155,6 +155,18 @@
                 nonBuiltInFields = getNonBuiltInFields(app.tables[0]);
                 // Generate some record JSON objects to add to the app
                 generatedRecords = generateRecords(nonBuiltInFields, 10);
+                // Duplicate and edit one of the records to have one field be different in value
+                // This will actually create you a new object with cloned object values (not just references to the original array)
+                var clonedArray = JSON.parse(JSON.stringify(generatedRecords));
+                var dupRecord = clonedArray[0];
+                // Edit the numeric field so we can check the second level sort (ex: 6.7)
+                dupRecord.forEach(function(field) {
+                    if (field.id === '7') {
+                        field.value = 1;
+                    }
+                });
+                // Add the new record back in to create
+                generatedRecords.push(dupRecord);
                 // Add the records to the app
                 addRecords(app, app.tables[0], generatedRecords).then(function(returnedRecords) {
                     // Push the created records into an array (the add record call also returns the fields used)
@@ -188,7 +200,9 @@
                     sortList: ['6:V'],
                     sortFids: [sortByTextFid]
                 },
-                // TODO: The Reports API accepts the below sortLists but returns them empty
+                // TODO: The Java Reports API accepts the below sortLists but returns them empty (Bug)
+                // TODO: Java core does throw an exception when trying to parse the sortList
+                // TODO: "message":"Invalid sList entry when parsing fid.
                 //{
                 //    message: 'Sort by Text field, then by Numeric field',
                 //    sortList: ['6.7'],
@@ -207,7 +221,7 @@
              * Test to create a report with a sortList param via the Reports API (contains the sort order and groupBy properties for the report)
              * Verify the report properties after creating, then run the report and verify that the report results are sorted.
              */
-            it('Should create a report: ' + testcase.message +
+            it('Reports API - Create a report: ' + testcase.message +
                 ' , execute the report, and validate the resulting record sort', function(done) {
 
                 var reportEndpoint = recordBase.apiBase.resolveReportsEndpoint(app.id, app.tables[0].id);
@@ -254,8 +268,12 @@
 
         /**
          * Negative test to create a report with an sortList param against the Reports API
+         * We currently do not thrown a response error during the create request
+         *
+         * Java core does throw an exception when trying to parse the sortList
+         * "message":"Invalid sList entry when parsing fid.  sList: adg!@s3.
          */
-        it('Should return an empty sortList when creating a report with an invalid sortList', function(done) {
+        it('Reports API - Should return an empty sortList when creating a report with an invalid sortList', function(done) {
 
             var reportEndpoint = recordBase.apiBase.resolveReportsEndpoint(app.id, app.tables[0].id);
             var reportToCreate = {
@@ -287,7 +305,62 @@
                 done(error);
             });
         });
-        
+
+        /**
+         * Test to validate sorting by calling the Records API endpoint
+         */
+        it('Records API - Should return sorted records when calling the endpoint with a sortList param', function(done) {
+
+            var recordEndpoint = recordBase.apiBase.resolveRecordsEndpoint(app.id, app.tables[0].id);
+
+            // Params to add to the record GET request
+            var sortList = '6.7';
+            // Fid order to sort the expected records by
+            var sortFids = [sortByTextFid, sortByNumFid];
+
+            // Query the records API with a supplied sortList, then verify sorting of the returned value
+            recordBase.apiBase.executeRequest(recordEndpoint, consts.GET, null, null, '?sortList=' + sortList).then(function(recordGetResult) {
+                var recordResult = JSON.parse(recordGetResult.body);
+                // Sort the expected records by text field (id 6)
+                var sortedExpectedRecords = sortRecords(sortFids, records);
+                // Verify sorted records
+                verifyRecords(recordResult.records, sortedExpectedRecords);
+                // Everything passed (here and in the above async call)
+                done();
+            }).done(null, function(error) {
+                // the then block threw an error
+                // so forward that error to Mocha
+                // same as calling .done(null, done)
+                done(error);
+            });
+        });
+
+        /**
+         * Negative Test to validate 400 error when calling the Records API endpoint with invalid sortList param
+         */
+        it('Records API - Should return 400 error when calling the endpoint with an invalid sortList param', function(done) {
+
+            var recordEndpoint = recordBase.apiBase.resolveRecordsEndpoint(app.id, app.tables[0].id);
+
+            // Invalid param to add to the record GET request
+            var sortList = 'int!';
+
+            // Query the records API with a supplied sortList, then verify sorting of the returned value
+            recordBase.apiBase.executeRequest(recordEndpoint, consts.GET, null, null, '?sortList=' + sortList).then(function(recordGetError) {
+                var requestResult = JSON.parse(recordGetError.body);
+                assert.strictEqual(requestResult.statusCode, '400', 'Unexpected status code returned');
+                assert.strictEqual(requestResult.body.httpStatus, 'BAD_REQUEST', 'Unexpected http status returned');
+                assert.strictEqual(requestResult.body.message, 'The field as specified ' + sortList + ' cannot be resolved by either name or field ID.',
+                    'Unexpected error message returned');
+                done();
+            }).done(null, function(error) {
+                // the then block threw an error
+                // so forward that error to Mocha
+                // same as calling .done(null, done)
+                done(error);
+            });
+        });
+
         // Cleanup the test realm after all tests in the block
         after(function(done) {
             recordBase.apiBase.cleanup().then(function() {
