@@ -77,7 +77,8 @@ $shadow :   0px 4px 15px 0px rgba(70,66,66,0.15);
     }
     .fieldName {
       color: $popover-text;
-      width: 122px;
+      max-width: 100%;
+      width: 100%;
       text-overflow: ellipsis;
       overflow: hidden;
       white-space: nowrap;
@@ -126,11 +127,16 @@ $shadow :   0px 4px 15px 0px rgba(70,66,66,0.15);
       display: flex;
       flex-direction: row;
       justify-content: flex-start;
+      width: 88%;
+      max-width: 88%;
     }
     .prefix {
       color: $color9;
-      flex-grow: 1;
       padding-right: 5px;
+      white-space: nowrap;
+    }
+    .fieldChoiceActions {
+      white-space: nowrap;
     }
   }
 
@@ -329,9 +335,7 @@ $shadow :   0px 4px 15px 0px rgba(70,66,66,0.15);
         }
       }
     }
-    .fieldName {
-      width: 167px;
-    }
+
 
     .dialogButtons {
       display: none;

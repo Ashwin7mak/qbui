@@ -48,12 +48,14 @@ const FieldChoice = React.createClass({
         let hasField = !!this.props.field;
         let name =  '';
         let order = '';
+        let fid = '';
         let isEmpty = ' empty';
 
         if (hasField) {
             name = this.props.field.name;
             isEmpty = ' notEmpty';
             order =  (this.props.field.descendOrder && this.props.field.descendOrder === true) ? 'down' : 'up';
+            fid = " fid:" + this.props.field.id;
         }
         let byMessage = this.props.then ?
             "report.sortAndGroup.thenBy" : "report.sortAndGroup.by";
@@ -64,8 +66,9 @@ const FieldChoice = React.createClass({
                         <span className="prefix">
                           <I18nMessage message={byMessage}/>
                         </span>
-
-                        <span className="fieldName">{name}</span>
+                        <QBToolTip location="top" tipId="fieldName" plainMessage={name + fid}>
+                            <span className="fieldName">{name}</span>
+                        </QBToolTip>
                     </div>
                     <div className="fieldChoiceActions">
                         { order ? (

@@ -500,9 +500,6 @@ const SortAndGroup = React.createClass({
         let fieldChoiceList = this.getFieldsNotYetUsed(fields, groupByFields, sortByFields);
         let visGroupEls = _.has(this.props, 'reportData.data.groupEls') ?
                             this.getVisGroupEls(this.props.reportData.data.groupEls, fields) :  [];
-        let reportColumns =  _.has(this.props,'reportData.data.columns') ?
-                            this.props.reportData.data.columns : [];
-        let visibleFields = _.unionBy(visGroupEls, reportColumns, 'id');
         return (
             <div ref="sortAndGroupContainer" className="sortAndGroupContainer">
                 {/* the sort/group icon button */}

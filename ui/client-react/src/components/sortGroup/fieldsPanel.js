@@ -3,6 +3,7 @@ import {I18nMessage} from '../../utils/i18nMessage';
 import _ from 'lodash';
 import Logger from '../../utils/logger';
 import {ListGroup, ListGroupItem, Panel} from 'react-bootstrap';
+import QBToolTip from '../qbToolTip/qbToolTip';
 import WindowLocationUtils from '../../utils/windowLocationUtils';
 import QBicon from '../qbIcon/qbIcon';
 import './sortAndGroup.scss';
@@ -82,7 +83,10 @@ const FieldsPanel = React.createClass({
             <ListGroupItem id={field.id}  key={field.id}
                            className={"action fieldItem" + (notInReport ?  " animated slideInDown notInReport" : "")}
                            onClick={() => this.selectField(this.props.fieldsForType, field)}>
-                {field.name}</ListGroupItem>
+                <QBToolTip location="bottom" tipId="fieldName" delayShow={500} plainMessage={field.name + " fid:" + field.id}>
+                    <span className="fieldName">{field.name}</span>
+                </QBToolTip>
+            </ListGroupItem>
         );
     },
 

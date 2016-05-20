@@ -94,9 +94,9 @@ export default {
             recordCount : "{recordCount} {nameForRecords} ",
             searchPlaceHolder:  "Search these",
             sortAndGroup : {
-                addField: "add field",
+                addField: "Add a field",
                 by: "by",
-                changeOrder: "change order",
+                changeOrder: "Change order",
                 chooseFields :  {
                     group: "Choose Field for grouping",
                     sort: "Choose Field for sorting",
@@ -107,8 +107,8 @@ export default {
                 reset: "Reset",
                 resetTip : "Exit and restore to orginal report sort and group settings",
                 sort:   "Sort",
-                stopGroupingBy: "stop grouping by",
-                stopSortingBy: "stop sorting by",
+                stopGroupingBy: "Stop grouping by",
+                stopSortingBy: "Stop sorting by",
                 thenBy: "then by",
             },
             menu: {

@@ -105,8 +105,8 @@ export default {
                 reset: "Zurückstellen",
                 resetTip : "Verlassen und Wiederherstellung des ursprünglichen Berichts zu sortieren und zu Gruppeneinstellungen",
                 sort:   "Sortieren",
-                stopGroupingBy: "stoppen Gruppierung von",
-                stopSortingBy: "stoppen die Sortierung nach",
+                stopGroupingBy: "Stoppen Gruppierung von",
+                stopSortingBy: "Stoppen die Sortierung nach",
                 thenBy: "dann durch",
             },
             menu: {
