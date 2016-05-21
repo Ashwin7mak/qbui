@@ -139,7 +139,9 @@ $shadow :   0px 4px 15px 0px rgba(70,66,66,0.15);
       white-space: nowrap;
     }
   }
-
+  .empty .fieldChoiceActions {
+    margin: -4px 0; //adjusts for icon height differences for empty state vs field state
+  }
 
   .dialogButtons {
     display: flex;
@@ -249,6 +251,16 @@ $shadow :   0px 4px 15px 0px rgba(70,66,66,0.15);
     color:$icon-color;
   }
 
+}
+@include medium-breakpoint {
+  .reportContainer .reportToolsAndContentContainer .reportToolbar
+  .sortAndGroupDialog {
+    width: 323px;
+    .fieldChoice .fieldChoiceLeft {
+        width: 86%;
+        max-width: 86%;
+      }
+  }
 }
 
 @include small-breakpoint {

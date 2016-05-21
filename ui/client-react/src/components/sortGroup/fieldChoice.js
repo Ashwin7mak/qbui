@@ -83,7 +83,8 @@ const FieldChoice = React.createClass({
                         }
                         <span>
                         { hasField ?
-                            <QBToolTip location="top" tipId="removeIcon" i18nMessageKey={this.props.type === 'group' ? 'report.sortAndGroup.stopGroupingBy' : 'report.sortAndGroup.stopSortingBy'}>
+                            <QBToolTip location="top" tipId="removeIcon"
+                                       i18nMessageKey={this.props.type === 'group' ? 'report.sortAndGroup.stopGroupingBy' : 'report.sortAndGroup.stopSortingBy'}>
                                 <span className="action fieldDeleteIcon" tabIndex="0"
                                      onClick={() => this.props.onRemoveField(this.props.type,
                                                 this.props.index, this.props.field)} >
