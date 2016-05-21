@@ -4,6 +4,7 @@ import Fluxxor from 'fluxxor';
 import {I18nMessage} from '../../utils/i18nMessage';
 import Button from 'react-bootstrap/lib/Button';
 import QBicon from '../qbIcon/qbIcon';
+import QBToolTip from '../qbToolTip/qbToolTip';
 import './overlay.scss';
 
 let FluxMixin = Fluxxor.FluxMixin(React);
@@ -39,7 +40,10 @@ var OverlayDialogHeader = React.createClass({
         // the name of the icon of button to use in the upper left title of the
         // modal in non small, usually same icon as used to launch
         // the dialog for cancelling - see xd spec sort&group
-        icon: React.PropTypes.string
+        icon: React.PropTypes.string,
+
+        // message to use for icon tootip
+        iconI18nMessageKey: React.PropTypes.string
 
     },
 
@@ -57,15 +61,23 @@ var OverlayDialogHeader = React.createClass({
         return (
             <div className="overlayDialogHeader smallHeader">
                 <div className="overlayLeft">
-                    <Button onClick={this.props.onCancel} className="action"><QBicon icon={"close"}/></Button>
+                    <QBToolTip location="bottom" tipId="cancelSrtGrpIcon"
+                               i18nMessageKey="cancelTip">
+                        <Button onClick={this.props.onCancel}
+                                className="action"><QBicon icon={"close"}/>
+                        </Button>
+                    </QBToolTip>
                 </div>
 
                 {this.renderTitle()}
 
                 <div className="overlayLeft">
-                    <Button className={buttonClassName} onClick={this.props.onApplyChanges}>
-                    <I18nMessage message="apply"/>
-                    </Button>
+                    <QBToolTip location="bottom" tipId="applySrtGrpIcon"
+                               i18nMessageKey="applyTip">
+                            <Button className={buttonClassName} onClick={this.props.onApplyChanges}>
+                        <I18nMessage message="apply"/>
+                        </Button>
+                    </QBToolTip>
                 </div>
             </div>
         );
@@ -75,17 +87,23 @@ var OverlayDialogHeader = React.createClass({
         return (
             <div className="overlayDialogHeader nonSmallHeader">
                 <div className="overlayLeft">
+                    <QBToolTip location="top" tipId="cancelSrtGrpIcon"
+                               i18nMessageKey="cancelTip">
                             <Button className={this.props.iconName + "Span" }
                                     onClick={this.props.onCancel}>
                                 <QBicon className={this.props.iconName + " action"}
                                         icon={this.props.icon}  />
                             </Button>
+                    </QBToolTip>
                 </div>
 
                 {this.renderTitle()}
 
                 <div className="overlayRight">
+                    <QBToolTip location="top" tipId="cancelSrtGrpIcon"
+                               i18nMessageKey="cancelTip">
                     <Button onClick={this.props.onCancel} ><QBicon icon={"close"} className="action"/></Button>
+                    </QBToolTip>
                 </div>
             </div>
         );
