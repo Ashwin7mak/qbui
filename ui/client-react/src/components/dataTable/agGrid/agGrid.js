@@ -542,9 +542,6 @@ let AGGrid = React.createClass({
         let columns = this.props.columns;
 
         if (columns) {
-            /*eslint-disable*/
-            //console.log('initially', columns);
-            /*eslint-enable*/
             let columnsData = columns.map((obj, index) => {
                 obj.headerClass = "gridHeaderCell";
                 obj.cellClass = "gridCell";
