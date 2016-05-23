@@ -1,22 +1,13 @@
 @import '../../assets/css/qbVariables';
 
+$shadow :   0px 4px 15px 0px rgba(70,66,66,0.15);
+
 .sortAndGroupContainer {
-  margin-left: 10px;
+  margin-left: 9px;
 
   //the generated wrapper on sortAndGroupDialog
   > div:not(.sortAndGroupButton)  {
     position: relative;
-  }
-
-  .popover.bottom {
-    margin-left: -12px;
-    margin-top: -39px;
-    overflow-y: hidden;
-    border-radius: 0;
-    padding: 0;
-    > .arrow {
-      display: none;
-    }
   }
 
   .sortAndGroupButton .sortButtonSpan:hover {
@@ -25,13 +16,16 @@
 }
 
 .sortAndGroupDialog {
-  overflow: auto;
-  width: 440px;
+  height: 530px;
+  width: 360px;
+  min-width: 290px;
+  overflow: hidden;
   background-color: $popover-background;
   z-index: $zindex-popover;
-  -webkit-box-shadow: 0px 4px 15px 0px rgba(70,66,66,0.15);
-  -moz-box-shadow: 0px 4px 15px 0px rgba(70,66,66,0.15);
-  box-shadow: 0px 4px 15px 0px rgba(70,66,66,0.15);
+  top: -37px;
+  left: -10px;
+  position: absolute;
+  box-shadow: $shadow;
 
   .sortButtonSpan.btn.btn-default {
     margin-top: 0;
@@ -41,21 +35,38 @@
   .popover-content {
     padding: 0;
   }
+
+  .action {
+    cursor: pointer;
+    &:hover {
+      color: $icon-color-hover;
+    }
+  }
+
+
   .settingsDialog{
     padding: 10px;
     display: flex;
     flex-direction: column;
-    max-height: 550px;
+    height:100%;
     justify-content: space-between;
     visibility: visible;
+
+  }
+
+  .settingsDialogTopContainer {
+    display: flex;
+    justify-content: space-between;
+    flex-direction: column;
   }
 
   .settingsDialog.fieldsShown {
-    visibility: hidden;
+    .dialogTop, .dialogContent, .dialogBottom {
+      visibility: hidden;
+    }
   }
 
   .dialogContent {
-    max-height: 450px;
     overflow: auto;
   }
 
@@ -66,7 +77,8 @@
     }
     .fieldName {
       color: $popover-text;
-      width: 122px;
+      max-width: 100%;
+      width: 100%;
       text-overflow: ellipsis;
       overflow: hidden;
       white-space: nowrap;
@@ -100,7 +112,7 @@
       border-top : 3px solid $color7;
     }
   }
-  .groupFieldOpen.qbIcon {
+  .fieldOpen.qbIcon {
     font-size: 22px;
   }
 
@@ -115,14 +127,21 @@
       display: flex;
       flex-direction: row;
       justify-content: flex-start;
+      width: 88%;
+      max-width: 88%;
     }
     .prefix {
       color: $color9;
-      flex-grow: 1;
       padding-right: 5px;
+      white-space: nowrap;
+    }
+    .fieldChoiceActions {
+      white-space: nowrap;
     }
   }
-
+  .empty .fieldChoiceActions {
+    margin: -4px 0; //adjusts for icon height differences for empty state vs field state
+  }
 
   .dialogButtons {
     display: flex;
@@ -145,22 +164,34 @@
   width: 100%;
   top:0;
   left:0;
+
   &.animated{
     -webkit-animation-duration:500ms;
     animation-duration:500ms;
+    box-shadow: $shadow;
   }
   &.notShown {
     display: none;
   }
+
   .fieldPanelHeader {
     display: flex;
     flex-direction: row;
     justify-content: flex-start;
     padding: 10px;
     color:$color11;
+    border-bottom: 1px solid $color19;
+
     .cancel  {
       padding-right: 10px;
       color:$icon-color;
+
+      &.action {
+        cursor: pointer;
+        &:hover {
+          color: $icon-color-hover;
+        }
+      }
     }
   }
   .fieldItem.animated {
@@ -175,8 +206,13 @@
       border-radius : 0;
     }
   }
+  .panel-body {
+    display: flex;
+    flex-direction: column;
+  }
   .list-group {
-    max-height: 248px;
+    height: 490px;
+    min-height: 244px;
     overflow: auto;
     margin-bottom: 0;
   }
@@ -189,6 +225,9 @@
     border: 1px solid $color4;
     border-right: none;
     border-left: none;
+  }
+  .list-group-item:first-child {
+    border-top: none;
   }
   .list-group-item:first-child,
   .list-group-item:last-child {
@@ -213,24 +252,49 @@
   }
 
 }
+@include medium-breakpoint {
+  .reportContainer .reportToolsAndContentContainer .reportToolbar
+  .sortAndGroupDialog {
+    width: 323px;
+    .fieldChoice .fieldChoiceLeft {
+        width: 86%;
+        max-width: 86%;
+      }
+  }
+}
 
-$dialog-max-height-small : 475px;
 @include small-breakpoint {
   .reportContainer .reportToolsAndContentContainer .reportToolbar
-
   .sortAndGroupDialog {
     position: fixed;
-    top: 0px;
-    left: 0px;
+    top: 0;
+    left: 0;
+    right: 0;
     margin-top: 0;
     margin-left: 0;
     width: 100%;
     max-width: $small-breakpoint-width;
-    max-height: $dialog-max-height-small;
+    height:100%;
+    max-height: 100%;
+
+
+    .action {
+      cursor: pointer;
+      color: $icon-color;
+      &:hover {
+        color: $icon-color-hover;
+      }
+    }
+
+    .action.fieldItem {
+      color: $popover-text;
+      &:hover {
+        color: $icon-color-hover;
+      }
+    }
 
 
     .dialogContent {
-      max-height: $dialog-max-height-small - 89;
       overflow: auto;
     }
 
@@ -249,19 +313,41 @@ $dialog-max-height-small : 475px;
 
     .settingsDialog {
       padding: 5px 0 0;
+      height: 100%;
+      max-height: 100%;
 
       .overlayDialogHeader {
-        border-bottom: 1px solid $color21;
+        border-bottom: 1px solid $color19;
         padding: 0 10px 10px;
       }
+      .dialogUpper {
+        height: 100%;
+        max-height: 100%;
+      }
+
+      .dialogContent {
+        max-height: 80%;
+      }
+
       .title {
         padding: 0 10px;
       }
     }
+    .fieldsPanel {
+      max-height: 100%;
+      height: 100%;
 
-    .fieldName {
-      width: 167px;
+      .panel-body {
+        max-height: 100%;
+        height: 100%;
+
+        .list-group {
+          height: 100%;
+          max-height: 100%;
+        }
+      }
     }
+
 
     .dialogButtons {
       display: none;
@@ -271,9 +357,21 @@ $dialog-max-height-small : 475px;
       display:flex;
       padding: 15px;
       justify-content: center;
+      border-top: 1px solid $color19;
     }
 
+    .sortAndGroupButton .sortButtonSpan { //icon in popover
+      margin-top: 8px;
+      &:hover {
+        color: $secondary-bar-fg;
+      }
+    }
+}
 
+  .sortAndGroupContainer .sortAndGroupButton .sortButtonSpan {//icon in toolbar
+      margin-top: 8px;
+      &:hover {
+        color: $secondary-bar-fg;
+      }
   }
-
 }

@@ -38,11 +38,11 @@
         //field prefix
         this.GroupByFieldPrefix = this.reportGroupByFieldSelector.element(by.className('prefix'));
         //group by Open
-        this.reportGroupByIcon = this.reportGroupByFieldSelector.element(by.className('groupFieldOpen'));
+        this.reportGroupByIcon = this.reportGroupByFieldSelector.element(by.className('fieldOpen'));
         //field Name
         this.reportGroupByFieldName = this.reportGroupByFieldSelector.element(by.className('fieldName'));
         //field delete button
-        this.groupByFieldDeleteBtn = this.reportGroupByFieldSelector.element(by.className('groupFieldDelete'));
+        this.groupByFieldDeleteBtn = this.reportGroupByFieldSelector.element(by.className('fieldDelete'));
         //field sort Order button
         this.groupBySortOrderBtn = this.reportGroupByFieldSelector.element(by.className('sortOrderIcon'));
 
@@ -67,13 +67,13 @@
         //field prefix
         this.SortByFieldPrefix = this.reportSortByFieldSelector.element(by.className('prefix'));
         //sort by Open
-        this.reportSortByIcon = this.reportSortByFieldSelector.element(by.className('groupFieldOpenIcon'));
+        this.reportSortByIcon = this.reportSortByFieldSelector.element(by.className('fieldOpenIcon'));
         //field name
         this.reportSortByFieldName = this.reportSortByFieldSelector.element(by.className('fieldName'));
         //Sort order Icon
         this.reportSortOrderIcon = this.reportSortByFieldSelector.element(by.className('sortOrderIcon'));
         //Sort Field Delete Icon
-        this.sortBySortFieldDeleteIcon = this.reportSortByFieldSelector.element(by.className('groupFieldDeleteIcon'));
+        this.sortBySortFieldDeleteIcon = this.reportSortByFieldSelector.element(by.className('fieldDeleteIcon'));
 
         //field panel
         this.SortByFieldPanel = this.reportSortAndGroupDialogue.element(by.className('panel-body'));
@@ -92,7 +92,7 @@
         //dialogue Bottom
         this.sortAndGrpDialogueBottomSB = this.reportSortAndGroupDialogue.element(by.className('dialogBand'));
 
-        this.sortAndGrpDialogueSBApplyBtn = this.sortAndGrpDialogueTopSB.all(by.className('btn')).first();
+        this.sortAndGrpDialogueSBApplyBtn = this.sortAndGrpDialogueTopSB.element(by.className('applyButton'));
         //reset button
         this.sortAndGrpDialogueSBRestBtn = this.sortAndGrpDialogueBottomSB.element(by.className('reset'));
 
@@ -348,7 +348,7 @@
             var self = this;
             self.reportGroupByContainer.all(by.className('notEmpty')).map(function(elm, index) {
                 //verify the delete button and sortOrder button
-                expect(elm.element(by.className('groupFieldDeleteIcon')).isDisplayed()).toBeTruthy();
+                expect(elm.element(by.className('fieldDeleteIcon')).isDisplayed()).toBeTruthy();
                 expect(elm.element(by.className('sortOrderIcon')).isDisplayed()).toBeTruthy();
 
                 //verify the prefix
@@ -400,7 +400,7 @@
                 self.reportGroupByContainer.all(by.className('notEmpty')).then(function(items) {
                     if (items.length > 0) {
                         for (var i = 0; i < items.length; i++) {
-                            return items[fieldIndex].element(by.className('groupFieldDelete')).click();
+                            return items[fieldIndex].element(by.className('fieldDelete')).click();
                         }
                     }
                 }).then(function() {
@@ -456,7 +456,7 @@
             var self = this;
             self.reportSortByContainer.all(by.className('notEmpty')).map(function(elm, index) {
                 //verify the delete button and sortOrder button
-                expect(elm.element(by.className('groupFieldDeleteIcon')).isDisplayed()).toBeTruthy();
+                expect(elm.element(by.className('fieldDeleteIcon')).isDisplayed()).toBeTruthy();
                 expect(elm.element(by.className('sortOrderIcon')).isDisplayed()).toBeTruthy();
 
                 //verify the prefix
@@ -512,7 +512,7 @@
                 self.reportSortByContainer.all(by.className('notEmpty')).then(function(items) {
                     if (items.length > 0) {
                         for (var i = 0; i < items.length; i++) {
-                            return items[fieldIndex].element(by.className('groupFieldDelete')).click();
+                            return items[fieldIndex].element(by.className('fieldDelete')).click();
                         }
                     }
                 }).then(function() {

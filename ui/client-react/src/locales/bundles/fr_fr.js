@@ -91,7 +91,9 @@ export default {
             recordCount : "{recordCount} {nameForRecords} ",
             searchPlaceHolder:  "Rechercher ces",
             sortAndGroup : {
+                addField: "Ajouter le champ",
                 by: "par",
+                changeOrder: "ordre de changement",
                 chooseFields :  {
                     group: "Choisir un champ pour le groupement",
                     sort: "Choisir un champ pour le tri",
@@ -100,7 +102,10 @@ export default {
                 header : "Trier & Groupe",
                 moreFields : "plus de champs ...",
                 reset: "Réinitialiser",
+                resetTip : "Sortir et restaurer à l'original tri du rapport et les paramètres du groupe",
                 sort:   "Trier",
+                stopGroupingBy: "Arrêter le regroupement par",
+                stopSortingBy: "Arrêter le tri par",
                 thenBy: "puis par",
             },
             menu: {
@@ -133,6 +138,9 @@ export default {
             }
         },
         cancel: "Annuler",
-        apply: "Aappliquer"
+        cancelTip: "Quitter et ignorer les modifications",
+        apply: "Aappliquer",
+        applyTip: "Sortez et appliquer les modifications"
+
     }
 };

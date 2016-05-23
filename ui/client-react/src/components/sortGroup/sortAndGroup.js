@@ -80,7 +80,7 @@ const SortAndGroup = React.createClass({
         return _.clone({
             show: false,
             showFields: false,
-            //field object for newSelectionsSort and group have array of objects containing
+            //field for newSelectionsSort and group have array of objects containing
             // type - sort or group
             // name - fieldName
             // id - fieldId
@@ -516,7 +516,9 @@ const SortAndGroup = React.createClass({
                          show={this.state.show}
                          onClose={this.hide}
                          onEntering={this.props.onMenuEnter} onExited={this.props.onMenuExit} >
-                                <SortAndGroupDialog  show={this.state.show}
+                                <SortAndGroupDialog         key={"SortGroupPopover" +
+                                                                this.props.rptId}
+                                                            show={this.state.show}
                                                             showFields={this.state.showFields}
                                                             sortByFields={sortByFields}
                                                             groupByFields={groupByFields}
