@@ -20,6 +20,33 @@
     var appGenerator = require('../../../test_generators/app.generator.js');
     var recordGenerator = require('../../../test_generators/record.generator.js');
 
+    /*
+     * Sorting and Grouping overview:
+     *
+     * In order to handle sorting and grouping for the client, Node uses BOTH the Reports and Records Java API endpoints (not just Records).
+     * It uses the Java Reports API in order to store and get the report's metadata containing the sortList parameter (also known as slist in Java)
+     * This parameter holds both the group by and sort by data for the set of fid (or fids).
+     * sortList (in this context) is an array that contains a string (or strings) and is in the following format: ['6:V']
+     * Node will use this endpoint to gather the metadata of the report, then query the Java Records API endpoint to get a sorted list of records.
+     * Node will then take this record list and use the gathered report metadata to do the actual grouping of records.
+     * It then returns this to the client ui.
+     *
+     * It's important to note that NO grouping is done on the Java side (only storing of the group by value).
+     *
+     * When accepting custom client side requests for sorting / grouping (example changing it via the UI), Node does not use the Java Reports endpoint
+     * to query for the record set to present to the client UI (as in running the actual report). This is because the Java Reports API does not accept
+     * overrides with custom parameters (like query, clist for example).
+     *
+     * Node calls the Java Records API to get a record set back and will supply its own sortList parameter to have Java return the sorted record list.
+     * It's important to note here that here the sortList parameter is only a string of fids separated by the dot character .
+     * This parameter knows nothing about grouping and is in the format '6.7.8'
+     *
+     * The tests below are integration tests for how Node uses these Java API endpoints. It can be argued that we could separate them into two files
+     * but for now I'll leave them here as a feature set for clarity sake. When / if there is more error checking implemented on the Java Reports API for
+     * the sortList parameters (see below) and the test case number increases we can break them up into separate spec files.
+     *
+     * - klabak
+     */
     describe('API - Validate report sorting and grouping execution', function() {
         // Set global timeout for all tests in the spec file
         this.timeout(testConsts.INTEGRATION_TIMEOUT);
@@ -268,7 +295,7 @@
 
         /**
          * Negative test to create a report with an sortList param against the Reports API
-         * We currently do not thrown a response error during the create request
+         * We currently do not thrown a response error during the create request. Most likely needs to be fixed.
          *
          * Java core does throw an exception when trying to parse the sortList
          * "message":"Invalid sList entry when parsing fid.  sList: adg!@s3.
