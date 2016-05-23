@@ -342,7 +342,7 @@ let ReportDataStore = Fluxxor.createStore({
 
             const newRecord = _.mapValues(maxRecord, (obj) => {return null;});
 
-            const id = parseInt(lastRecord["Record ID#"]) + 1;
+            const id = parseInt(maxRecord["Record ID#"]) + 1;
             newRecord["Record ID#"] = id;
 
             const newRecords = model.filteredRecords.slice(0);
