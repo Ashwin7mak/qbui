@@ -1,5 +1,4 @@
 import React from 'react';
-import ReactDOM from 'react-dom';
 import ReactIntl from 'react-intl';
 
 import CardViewListHolder from '../../../components/dataTable/cardView/cardViewListHolder';

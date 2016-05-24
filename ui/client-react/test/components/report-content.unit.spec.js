@@ -1,5 +1,4 @@
 import React from 'react';
-import ReactDOM from 'react-dom';
 import TestUtils from 'react-addons-test-utils';
 import ReportContent from '../../src/components/report/dataTable/reportContent';
 import CardViewListHolder from '../../src/components/dataTable/cardView/cardViewListHolder';
