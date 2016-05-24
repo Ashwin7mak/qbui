@@ -47,6 +47,9 @@ let reportModel = {
                     column.fieldType = field.type;
                     column.builtIn = field.builtIn;
 
+                    if (field.multiChoiceSourceAllowed && field.multipleChoice) {
+                        column.choices = field.multipleChoice.choices;
+                    }
                     //  client side attributes..
                     column.datatypeAttributes = field.datatypeAttributes;
                     columns.push(column);
@@ -76,7 +79,7 @@ let reportModel = {
                 let columns = {};
                 record.forEach((column) => {
                     let fld = map.get(column.id);
-                    columns[fld.name] = column.display;
+                    columns[fld.name] = column.value;
                 });
                 columns.actions = record.id;
                 reportData.push(columns);
@@ -278,6 +281,7 @@ let ReportDataStore = Fluxxor.createStore({
             reportModel.setGroupElements(response.sortList);
         }
         reportModel.setFacetData(response.recordData);
+
         this.emit('change');
     },
 
@@ -338,7 +342,7 @@ let ReportDataStore = Fluxxor.createStore({
 
             const newRecord = _.mapValues(maxRecord, (obj) => {return null;});
 
-            const id = parseInt(lastRecord["Record ID#"]) + 1;
+            const id = parseInt(maxRecord["Record ID#"]) + 1;
             newRecord["Record ID#"] = id;
 
             const newRecords = model.filteredRecords.slice(0);

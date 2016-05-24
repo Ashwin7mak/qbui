@@ -3,9 +3,26 @@ import TestUtils from 'react-addons-test-utils';
 import ReactDOM from 'react-dom';
 import AGGrid  from '../../src/components/dataTable/agGrid/agGrid';
 import AGGridReact from 'ag-grid-react';
+
+import Formatters from '../../src/components/dataTable/agGrid/formatters';
+import {DateFormatter, DateTimeFormatter, TimeFormatter, NumericFormatter, TextFormatter, CheckBoxFormatter} from '../../src/components/dataTable/agGrid/formatters';
+
+
 import Loader  from 'react-loader';
 import * as query from '../../src/constants/query';
 import Locale from '../../src/locales/locales';
+
+var NumericFormatterMock = function() {
+    return "mock numeric";
+};
+var DateFormatterMock = function() {
+    return "mock date";
+};
+
+var reactCellRendererFactoryMock = function(component) {
+    return component;
+};
+
 
 var AGGridMock = React.createClass({
     render() {
@@ -27,14 +44,19 @@ var I18nMessageMock = React.createClass({
     }
 });
 
+var CellFormatterMock =  React.createClass({
+    render: function() {
+        return (
+            <div>I18Mock</div>
+        );
+    }
+});
+
+
 let flux = {
     actions: {
-        getFilteredRecords: function() {
-            return;
-        },
-        selectedRows: function() {
-            return;
-        }
+        getFilteredRecords: ()=>{},
+        selectedRows: ()=>{}
     }
 };
 
@@ -110,15 +132,15 @@ const fakeReportData_after = {
     }
 };
 
-
-function mouseclick(element) {
+function mouseclick(element, clickCount = 1) {
     // create a mouse click event
     var event = document.createEvent('MouseEvents');
-    event.initMouseEvent('click', true, true, window, 1, 0, 0);
+    event.initMouseEvent('click', true, true, window, clickCount, 0, 0);
 
     // send click to element
     element.dispatchEvent(event);
 }
+
 describe('AGGrid functions', () => {
     'use strict';
 
@@ -127,12 +149,14 @@ describe('AGGrid functions', () => {
     beforeEach(() => {
         AGGrid.__Rewire__('AgGridReact', AGGridMock);
         AGGrid.__Rewire__('I18nMessage', I18nMessageMock);
+        Formatters.__Rewire__('CellFormatter', CellFormatterMock);
         spyOn(flux.actions, 'getFilteredRecords');
     });
 
     afterEach(() => {
         AGGrid.__ResetDependency__('AgGridReact');
         AGGrid.__ResetDependency__('I18nMessage');
+        Formatters.__ResetDependency__('CellFormatter');
         flux.actions.getFilteredRecords.calls.reset();
     });
 
@@ -254,8 +278,8 @@ describe('AGGrid functions', () => {
                 rowsSelected++;
             }
         }
-        //we add a couple of hidden rows to avoid clipping the row editing ui elements
-        expect(rowsSelected).toEqual(fakeReportData_before.data.records.length + 2);
+        //we add a hidden row to avoid clipping the row editing ui elements
+        expect(rowsSelected).toEqual(fakeReportData_before.data.records.length + 1);
         expect(selectAllCheckbox[0].checked).toEqual(true);
     });
     it('renders column menu', (done) => {
@@ -371,5 +395,42 @@ describe('AGGrid functions', () => {
         expect(menuoptions[1].innerHTML).toEqual(Locale.getMessage("report.menu.sort.checkedToUnchecked"));
         expect(menuoptions[2].innerHTML).toEqual(Locale.getMessage("report.menu.group.uncheckedToChecked"));
         expect(menuoptions[3].innerHTML).toEqual(Locale.getMessage("report.menu.group.checkedToUnchecked"));
+    });
+
+    it('test edit cells visible based on selection ', () => {
+        AGGrid.__ResetDependency__('AgGridReact');
+
+        const TestParent = React.createFactory(React.createClass({
+
+            // wrap the grid in a container with styles needed to render editing UI
+            render() {
+                return (<div className="reportToolsAndContentContainer singleSelection">
+                    <AGGrid ref="grid"
+                            flux={flux}
+                            actions={TableActionsMock}
+                            records={fakeReportData_before.data.records}
+                            columns={fakeReportData_before.data.columns}
+                            loading={false}
+                            />
+                </div>);
+            }
+        }));
+        const parent = TestUtils.renderIntoDocument(TestParent());
+        const grid = parent.refs.grid;
+
+        // find the checkboxes (ag-grid renders a bunch of hidden ag-row elements)
+        const checkBoxes = ReactDOM.findDOMNode(grid).querySelectorAll(".gridCell:first-child");
+        expect(checkBoxes.length).toBe(fakeReportData_before.data.records.length + 1);
+
+        const selected = TestUtils.scryRenderedDOMComponentsWithClass(grid, "ag-row-selected");
+        expect(selected.length).toBe(0);
+
+        // select a row via double click
+        const firstRow = checkBoxes[0].parentElement;
+        mouseclick(firstRow, 2);
+
+        // look for newly selected row (element with ag-row-selected class containing grid cells)
+        const selectedAfterDblClick = ReactDOM.findDOMNode(grid).querySelectorAll(".ag-row-selected .gridCell:first-child");
+        expect(selectedAfterDblClick.length).toBe(1);
     });
 });
