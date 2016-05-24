@@ -212,15 +212,15 @@ const SelectionColumnCheckBoxFormatter = React.createClass({
 
     getRecordActions() {
         const actions = [
-            {msg: 'selection.edit', icon:'edit'},
+            {msg: 'selection.edit', className:'edit', icon:'edit'},
 
-            {msg: 'selection.print', icon:'print'},
-            {msg: 'selection.email', icon:'mail'},
-            {msg: 'selection.copy', icon:'duplicate'},
-            {msg: 'selection.delete', icon:'delete'}
+            {msg: 'selection.print', className:'print', icon:'print'},
+            {msg: 'selection.email', className:'email', icon:'mail'},
+            {msg: 'selection.copy', className:'duplicate', icon:'duplicate'},
+            {msg: 'selection.delete', className:'delete', icon:'delete'}
         ];
 
-        return (<IconActions className="recordActions" actions={actions} maxButtonsBeforeMenu={1} />);
+        return (<IconActions className="recordActions" pullRight={false} menuIcons actions={actions} maxButtonsBeforeMenu={1} />);
     },
 
     render() {

@@ -35,12 +35,16 @@ let IconActions = React.createClass({
             className: React.PropTypes.string
         })).isRequired,
         maxButtonsBeforeMenu: React.PropTypes.number, // show action in dropdown after this,
-        className: React.PropTypes.string
+        className: React.PropTypes.string,
+        pullRight: React.PropTypes.bool,
+        menuIcons: React.PropTypes.bool
 
     },
     getDefaultProps() {
         return {
-            maxButtonsBeforeMenu: Number.MAX_VALUE
+            maxButtonsBeforeMenu: Number.MAX_VALUE,
+            pullRight: true,
+            menuIcons: false
         };
     },
     /**
@@ -68,15 +72,20 @@ let IconActions = React.createClass({
      * get dropdown containing remaining actions (after maxButtonsBeforeMenu index)
      */
     getActionsMenu() {
+
+        const classes = this.props.menuIcons ? "menuIcons" : "";
         return (
-            <Dropdown id="nav-right-dropdown" onToggle={this.onToggleMenu} onClose={this.onCloseMenu}>
+            <Dropdown className={classes} id="nav-right-dropdown" pullRight={this.props.pullRight} onToggle={this.onToggleMenu} onClose={this.onCloseMenu}>
 
                 <Button tabIndex="0" bsRole="toggle" className={"dropdownToggle iconActionButton"}><QBicon icon="fries"/> </Button>
 
                 <Dropdown.Menu onEntering={this.props.onMenuEnter} onExited={this.props.onMenuExit}>
                     {this.props.actions.map((action, index) => {
                         if (index >= this.props.maxButtonsBeforeMenu) {
-                            return <MenuItem key={action.msg} href="#"><I18nMessage message={action.msg} /></MenuItem>;
+                            return <MenuItem key={action.msg} href="#">
+                                      {this.props.menuIcons && <QBicon className={action.className} icon={action.icon}/>}
+                                       <I18nMessage message={action.msg} />
+                                   </MenuItem>;
                         }
                     })}
                 </Dropdown.Menu>

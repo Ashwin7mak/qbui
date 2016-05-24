@@ -121,15 +121,48 @@ $cell-edit-background-edit: #f3f8fe;
         .ag-cell-value {
             padding: 0;
             position: absolute;
-            left: 25px;
-            top: 0;
-            //line-height:32px;
+            left: 30px;
+            top: 1px;
+
             .iconActions {
+
                 line-height: inherit;
+                .dropdown-menu a {
+
+                    padding-left:8px;
+                    .qbIcon {
+                        margin-right:6px;
+                        vertical-align:middle;
+                    }
+                }
                 .iconActionButton {
-                    height: 32px;
+                    opacity: .2;
+                    transition: opacity 200ms ease-in-out;
+
+                    height: 30px;
+                    width: auto;
+                    background: inherit;
+                    &:hover {
+                        color: $topnav-icon-color;
+                    }
+                }
+                .qbIcon.print {
+                    color: $icon-print-color;
+                }
+                .qbIcon.mail {
+                    color: $icon-mail-color;
+                }
+                .qbIcon.duplicate {
+                    color: $icon-duplicate-color;
+                }
+                .qbIcon.delete {
+                    color: $icon-delete-color;
                 }
             }
+        }
+        &:hover .ag-cell-value .iconActions .iconActionButton {
+            transition: opacity 200ms ease-in-out;
+            opacity:1;
         }
     }
 
@@ -193,7 +226,7 @@ $cell-edit-background-edit: #f3f8fe;
         position: absolute;
         margin:0;
         left: $grid-default-group-padding + 1;
-        top: $grid-default-group-padding + 1
+        top: $grid-default-group-padding + 3
     }
 
     .ag-menu-list {
@@ -364,6 +397,9 @@ $cell-edit-background-edit: #f3f8fe;
 
 .reportToolsAndContentContainer.singleSelection .ag-row.ag-row-selected {
 
+    .gridCell.selectionCell .ag-cell-value {
+        display:none; /* hide icons in 1st col */
+    }
     .ag-cell.gridCell {
 
         overflow:visible;
@@ -451,7 +487,7 @@ $cell-edit-background-edit: #f3f8fe;
         }
     }
 
-    .gridCell {
+    .gridCell:hover {
 
         .editTools {
             display:block;

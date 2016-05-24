@@ -26,15 +26,6 @@ import './agGrid.scss';
 import '../gridWrapper.scss';
 
 
-/**
- * Renderer component for record-actions column.
- */
-let ActionsColumn = React.createClass({
-    render() {
-        return (<div><RecordActions {...this.props}/></div>);
-    }
-});
-
 function buildIconElement(icon) {
     return "<span class='qbIcon iconssturdy-" + icon + "'></span>";
 }
@@ -513,21 +504,7 @@ let AGGrid = React.createClass({
 
         return checkBoxCol;
     },
-    /**
-     * Builder for record actions column for the grid.
-     */
-    getActionsColumn() {
-        return {
-            headerName: "",
-            field: "actions",
-            cellRenderer: reactCellRendererFactory(ActionsColumn),
-            cellClass: "gridCell actions",
-            headerClass: "gridHeaderCell",
-            width: 1,
-            suppressMenu: true,
-            suppressResize: true
-        };
-    },
+
     setCSSClass_helper: function(obj, classname) {
         if (typeof (obj.cellClass) === 'undefined') {
             obj.cellClass = classname;
@@ -550,7 +527,7 @@ let AGGrid = React.createClass({
                 obj.cellClass = "gridCell";
                 obj.suppressResize = true;
                 obj.minWidth = 100;
-                obj.addEditActions = (index === 1); // EMPOWER: add the row edit component to column 1
+                obj.addEditActions = true;//(index === 1); // EMPOWER: add the row edit component to column 1
 
                 if (obj.datatypeAttributes) {
                     var datatypeAttributes = obj.datatypeAttributes;
@@ -626,14 +603,6 @@ let AGGrid = React.createClass({
 
         //This should be based on perms -- something like if(this.props.allowMultiSelection)
         columns.unshift(this.getCheckBoxColumn(this.props.showGrouping));
-
-        // Add Actions column. Put this as the last column in the grid and then make the column 1px wide so it doesnt really "show".
-        // CSS takes care of positioning the content of this column over the previous columns so it looks like an overlay.
-
-        // todo: optimize/refactor actions hover for performance
-        if (columns.length > 0) {
-            columns.push(this.getActionsColumn());
-        }
 
         return columns;
     },

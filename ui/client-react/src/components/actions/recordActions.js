@@ -7,7 +7,7 @@ import {MenuItem, Dropdown, Input} from 'react-bootstrap';
 import ActionIcon from './actionIcon';
 import EmailReportLink from './emailReportLink';
 
-import './reportActions.scss';
+import './recordActions.scss';
 /**
  * a set of record-level action icons
  */
