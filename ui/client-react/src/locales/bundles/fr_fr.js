@@ -95,14 +95,14 @@ export default {
                 by: "par",
                 chooseFields :  {
                     group: "Choisir un champ pour le groupement",
-                    sort: "Choisir un champ pour le tri",
+                    sort: "Choisir un champ pour le tri"
                 },
                 group: "Groupe",
                 header : "Trier & Groupe",
                 moreFields : "plus de champs ...",
                 reset: "Réinitialiser",
                 sort:   "Trier",
-                thenBy: "puis par",
+                thenBy: "puis par"
             },
             menu: {
                 sort: {

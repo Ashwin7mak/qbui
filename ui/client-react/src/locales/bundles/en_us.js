@@ -98,14 +98,14 @@ export default {
                 by: "by",
                 chooseFields :  {
                     group: "Choose Field for grouping",
-                    sort: "Choose Field for sorting",
+                    sort: "Choose Field for sorting"
                 },
                 group: "Group",
                 header : "Sort & Group",
                 moreFields : "more fields...",
                 reset: "Reset",
                 sort:   "Sort",
-                thenBy: "then by",
+                thenBy: "then by"
             },
             menu: {
                 sort: {

@@ -96,14 +96,14 @@ export default {
                 by: "nach",
                 chooseFields :  {
                     group: "Wählen Sie Feld für die Gruppierung",
-                    sort: "Wählen Sie für die Sortierung",
+                    sort: "Wählen Sie für die Sortierung"
                 },
                 group: "Gruppen",
                 header : "Sortieren & Gruppen",
                 moreFields : "mehr Felder ...",
                 reset: "Zurückstellen",
                 sort:   "Sortieren",
-                thenBy: "dann durch",
+                thenBy: "dann durch"
             },
             menu: {
                 sort: {

@@ -8,6 +8,9 @@ import AGGrid  from '../../../components/dataTable/agGrid/agGrid';
 import {reactCellRendererFactory} from 'ag-grid-react';
 import {DateFormatter, NumericFormatter, TextFormatter}  from '../../../components/dataTable/agGrid/formatters';
 
+import Logger from '../../../utils/logger';
+let logger = new Logger();
+
 import ReportActions from '../../actions/reportActions';
 import Fluxxor from 'fluxxor';
 
@@ -31,24 +34,6 @@ let ReportContent = React.createClass({
         return {
             showSelectionColumn: false
         };
-    },
-
-    componentDidMount() {
-        if (this.props.reportData) {
-            let reportData = this.props.reportData.data;
-            if (reportData) {
-                this.localizeGroupingHeaders(reportData.groupFields, reportData.filteredRecords, 0);
-            }
-        }
-    },
-
-    componentWillUpdate() {
-        if (this.props.reportData) {
-            let reportData = this.props.reportData.data;
-            if (reportData) {
-                this.localizeGroupingHeaders(reportData.groupFields, reportData.filteredRecords, 0);
-            }
-        }
     },
 
     setCSSClass_helper: function(obj, classname) {
@@ -173,26 +158,26 @@ let ReportContent = React.createClass({
             dataType === DataTypes.RATING;
     },
 
-    localizeGroupingHeaders(groupedFields, groupedData, lvl) {
+    localizeGroupingHeaders(groupFields, groupDataRecords, lvl) {
 
-        if (!groupedFields || !groupedData) {
+        if (!groupFields || !groupDataRecords) {
             return;
         }
 
-        if (groupedFields.length > lvl) {
+        if (groupFields.length > lvl) {
             //  get the current group by field and grouping type
-            let groupField = groupedFields[lvl].field;
-            let groupType = groupedFields[lvl].groupType;
+            let groupField = groupFields[lvl].field;
+            let groupType = groupFields[lvl].groupType;
 
-            for (let group in groupedData) {
+            for (let group in groupDataRecords) {
 
                 //  Recursive call get to the last grouping field, and then update the grouping
                 //  labels as we work our way back to the top of the stack.
-                if (lvl < groupedFields.length - 1) {
-                    this.localizeGroupingHeaders(groupedFields, groupedData[group].children, lvl + 1);
+                if (lvl < groupFields.length - 1) {
+                    this.localizeGroupingHeaders(groupFields, groupDataRecords[group].children, lvl + 1);
                 }
 
-                let groupData = groupedData[group];
+                let groupData = groupDataRecords[group];
 
                 // unlikely, but possible that groupData is empty
                 if (groupData && !groupData.localized) {
@@ -268,7 +253,7 @@ let ReportContent = React.createClass({
                         //  20 seconds --> seconds bucket; 200 seconds --> minute bucket; etc.  The returned
                         //  include 2 pieces of information;  1st is the duration value; 2nd is the group type
                         if (groupType === GroupTypes.GROUP_TYPE.duration.equals) {
-                            durationPart = groupData.group.split(GroupTypes.GROUP_TYPE.delimiter);
+                            let durationPart = groupData.group.split(GroupTypes.GROUP_TYPE.delimiter);
                             if (durationPart.length > 1) {
                                 groupData.group = durationPart[0];
                                 groupType = durationPart[1];
@@ -312,13 +297,23 @@ let ReportContent = React.createClass({
     },
 
     localizeNumber: function(value, opts) {
-        this.context.locales = Locales.getLocale();
-        return this.formatNumber(value, opts);
+        try {
+            this.context.locales = Locales.getLocale();
+            return this.formatNumber(value, opts);
+        } catch (e) {
+            logger.warn("Error attempting to localize a numbered group.  Group value: " + value);
+            return value;
+        }
     },
 
     localizeDate: function(date) {
-        this.context.locales = Locales.getLocale();
-        return this.formatDate(date);
+        try {
+            this.context.locales = Locales.getLocale();
+            return this.formatDate(date);
+        } catch (e) {
+            logger.warn("Error attempting to localize a date group.  Group value: " + date);
+            return date;
+        }
     },
 
     /* TODO: paging component that has "next and previous tied to callbacks from the store to get new data set*/
@@ -327,8 +322,12 @@ let ReportContent = React.createClass({
         let columnsDef = this.getColumnProps();
 
         let recordCount = 0;
-        if (this.props.reportData.data) {
-            recordCount = this.props.reportData.data.filteredRecordsCount ? this.props.reportData.data.filteredRecordsCount : this.props.reportData.data.recordsCount;
+        if (this.props.reportData) {
+            let reportData = this.props.reportData.data;
+            if (reportData) {
+                recordCount = reportData.filteredRecordsCount ? reportData.filteredRecordsCount : reportData.recordsCount;
+                this.localizeGroupingHeaders(reportData.groupFields, reportData.filteredRecords, 0);
+            }
         }
 
         return (<div className="loadedContent">
