@@ -13,7 +13,10 @@ import Fluxxor from 'fluxxor';
 import * as query from '../../../constants/query';
 import ReportUtils from '../../../utils/reportUtils';
 
-import {DateFormatter, DateTimeFormatter, TimeFormatter, NumericFormatter, TextFormatter, CheckBoxFormatter}  from './formatters';
+import {DateFormatter, DateTimeFormatter, TimeFormatter,
+        NumericFormatter, TextFormatter, CheckBoxFormatter,
+        SelectionColumnCheckBoxFormatter}  from './formatters';
+
 import * as GroupTypes from '../../../constants/groupTypes';
 
 let FluxMixin = Fluxxor.FluxMixin(React);
@@ -44,7 +47,7 @@ let gridIcons = {
 let consts = {
     GROUP_HEADER_HEIGHT: 41,
     ROW_HEIGHT: 32,
-    DEFAULT_CHECKBOX_COL_WIDTH: 30,
+    DEFAULT_CHECKBOX_COL_WIDTH: 80,
     GROUP_ICON_PADDING: 10,
     DEFAULT_CELL_PADDING: 8,
     FONT_SIZE: 20,
@@ -499,14 +502,14 @@ let AGGrid = React.createClass({
         };
         checkBoxCol.checkboxSelection = true;
         checkBoxCol.headerClass = "gridHeaderCell";
-        checkBoxCol.cellClass = "gridCell";
+        checkBoxCol.cellClass = "gridCell selectionCell";
         checkBoxCol.suppressMenu = true;
         checkBoxCol.suppressResize = true;
-        if (this.props.showGrouping) {
-            checkBoxCol.width = this.getCheckBoxColumnGroupedHeaderWidth();
-        } else {
-            checkBoxCol.width = consts.DEFAULT_CHECKBOX_COL_WIDTH;
-        }
+
+        checkBoxCol.width = consts.DEFAULT_CHECKBOX_COL_WIDTH;
+
+        //checkBoxCol.template = '<span>WTF</span>';
+        checkBoxCol.cellRenderer = reactCellRendererFactory(SelectionColumnCheckBoxFormatter);
 
         return checkBoxCol;
     },

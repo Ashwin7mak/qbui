@@ -1,6 +1,6 @@
 @import '../../assets/css/qbVariables';
 
-.reportActions,.recordActions {
+.reportActions {
     display:flex;
 
     margin-left:8px;
@@ -55,7 +55,7 @@
     }
 
 }
-.reportActions,.recordActions {
+.reportActions {
     a.iconLink.icon-badge {
         color: $icon-badge-color;
     }

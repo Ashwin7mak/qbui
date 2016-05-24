@@ -69,7 +69,7 @@ let IconActions = React.createClass({
      */
     getActionsMenu() {
         return (
-            <Dropdown id="nav-right-dropdown" pullRight onToggle={this.onToggleMenu} onClose={this.onCloseMenu}>
+            <Dropdown id="nav-right-dropdown" onToggle={this.onToggleMenu} onClose={this.onCloseMenu}>
 
                 <Button tabIndex="0" bsRole="toggle" className={"dropdownToggle iconActionButton"}><QBicon icon="fries"/> </Button>
 

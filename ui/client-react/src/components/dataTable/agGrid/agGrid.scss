@@ -54,6 +54,10 @@ $cell-edit-background-edit: #f3f8fe;
         background-color: $header-cell-background-color;
         text-align: left;
 
+        .collapser {
+            position: absolute;
+            right: $grid-default-group-padding - $grid-default-group-padding;
+        }
         .ag-header-cell-label {
             padding: 4px $grid-default-cell-padding 3px $grid-default-cell-padding;
         }
@@ -112,6 +116,22 @@ $cell-edit-background-edit: #f3f8fe;
     .gridHeaderCell.AlignRight, .gridCell.AlignRight {
         text-align: right;
     }
+    .gridCell.selectionCell {
+        overflow:visible;
+        .ag-cell-value {
+            padding: 0;
+            position: absolute;
+            left: 25px;
+            top: 0;
+            //line-height:32px;
+            .iconActions {
+                line-height: inherit;
+                .iconActionButton {
+                    height: 32px;
+                }
+            }
+        }
+    }
 
     .qbIcon {
         font-size: $grid-group-expand-icon-size;
@@ -167,11 +187,13 @@ $cell-edit-background-edit: #f3f8fe;
     }
     .selectAllCheckbox {
         position: absolute;
-        right: $grid-default-group-padding - $grid-default-group-padding;
+        left: $grid-default-group-padding - $grid-default-group-padding;
     }
     .ag-selection-checkbox {
         position: absolute;
-        right: $grid-default-group-padding + 1;
+        margin:0;
+        left: $grid-default-group-padding + 1;
+        top: $grid-default-group-padding + 1
     }
 
     .ag-menu-list {

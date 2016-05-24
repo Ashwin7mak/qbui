@@ -9,6 +9,7 @@ import moment from 'moment';
 import {I18nDate, I18nTime, I18nNumber} from '../../../utils/i18nMessage';
 import RowEditActions from './rowEditActions';
 import {DefaultCellEditor, ComboBoxCellEditor, DateCellEditor, DateTimeCellEditor, TimeCellEditor, CheckBoxEditor} from './cellEditors';
+import IconActions from '../../actions/iconActions';
 
 import 'react-bootstrap-datetimepicker/css/bootstrap-datetimepicker.css';
 
@@ -203,4 +204,24 @@ const CheckBoxFormatter = React.createClass({
     }
 });
 
-export {DateFormatter, DateTimeFormatter, TimeFormatter, NumericFormatter, TextFormatter, CheckBoxFormatter};
+const SelectionColumnCheckBoxFormatter = React.createClass({
+
+    getRecordActions() {
+        const actions = [
+            {msg: 'selection.edit', icon:'edit'},
+
+            {msg: 'selection.print', icon:'print'},
+            {msg: 'selection.email', icon:'mail'},
+            {msg: 'selection.copy', icon:'duplicate'},
+            {msg: 'selection.delete', icon:'delete'}
+        ];
+
+        return (<IconActions className="recordActions" actions={actions} maxButtonsBeforeMenu={1} />);
+    },
+
+    render() {
+        return this.getRecordActions();
+    }
+});
+
+export {DateFormatter, DateTimeFormatter, TimeFormatter, NumericFormatter, TextFormatter, CheckBoxFormatter, SelectionColumnCheckBoxFormatter};
