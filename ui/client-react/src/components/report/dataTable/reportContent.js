@@ -15,8 +15,8 @@ import Fluxxor from 'fluxxor';
 import * as DataTypes from '../../../constants/schema';
 import * as GroupTypes from '../../../constants/groupTypes';
 import Locales from '../../../locales/locales';
-var IntlMixin = ReactIntl.IntlMixin;
 
+let IntlMixin = ReactIntl.IntlMixin;
 let FluxMixin = Fluxxor.FluxMixin(React);
 
 let ReportContent = React.createClass({
@@ -76,6 +76,16 @@ let ReportContent = React.createClass({
             dataType === DataTypes.RATING;
     },
 
+    splitGroup(group) {
+        try {
+            return group.split(GroupTypes.GROUP_TYPE.delimiter);
+        } catch (e) {
+            // any problems splitting, log a warning and return the original
+            logger.warn("Error splitting grouing header.  Group: " + group + "; error" + e);
+            return group;
+        }
+    },
+
     localizeGroupingHeaders(groupFields, groupDataRecords, lvl) {
 
         if (!groupFields || !groupDataRecords) {
@@ -112,7 +122,7 @@ let ReportContent = React.createClass({
                     //  drop through the conditional blocks.  That's okay as some grouping options will not
                     //  have any localization requirements.
                     if (this.isNumericDataType(groupField.datatypeAttributes.type)) {
-                        let range = groupData.group.split(GroupTypes.GROUP_TYPE.delimiter);
+                        let range = this.splitGroup(groupData.group);
                         if (range.length > 1) {
                             groupData.group = Locales.getMessage('groupHeader.numeric.range', {lower:range[0], upper:range[1]});
                         } else {
@@ -135,7 +145,7 @@ let ReportContent = React.createClass({
                     }
 
                     if (groupField.datatypeAttributes.type === DataTypes.DATE || groupField.datatypeAttributes.type === DataTypes.DATE_TIME) {
-                        let datePart = groupData.group.split(GroupTypes.GROUP_TYPE.delimiter);
+                        let datePart = this.splitGroup(groupData.group);
                         if (datePart.length > 1) {
                             if (groupType === GroupTypes.GROUP_TYPE.date.month) {
                                 let month = Locales.getMessage('month.' + datePart[0].toLowerCase());
@@ -171,7 +181,7 @@ let ReportContent = React.createClass({
                         //  20 seconds --> seconds bucket; 200 seconds --> minute bucket; etc.  The returned
                         //  include 2 pieces of information;  1st is the duration value; 2nd is the group type
                         if (groupType === GroupTypes.GROUP_TYPE.duration.equals) {
-                            let durationPart = groupData.group.split(GroupTypes.GROUP_TYPE.delimiter);
+                            let durationPart = this.splitGroup(groupData.group);
                             if (durationPart.length > 1) {
                                 groupData.group = durationPart[0];
                                 groupType = durationPart[1];

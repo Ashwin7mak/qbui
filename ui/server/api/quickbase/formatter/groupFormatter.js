@@ -140,7 +140,7 @@
         case constants.RATING:      // RATING is a sub-type of NUMERIC
             switch (groupType) {
             case groupTypes.NUMERIC.equals:
-                return dataValue;
+                return rawDataValue;
             case groupTypes.NUMERIC.thousandth:
                 return groupUtils.getRangeFraction(rawDataValue, 4);
             case groupTypes.NUMERIC.hundredth:
@@ -224,9 +224,14 @@
             }
 
             let groupedValue = extractGroupedField(groupType, groupField, dataValue, rawDataValue);
-
+            //  Convert empty strings into null as both are treated the same by the client.
             if (groupedValue === '') {
                 groupedValue = null;
+            }
+
+            //  for non-null headers, convert into a string
+            if (groupedValue !== null) {
+                groupedValue = groupedValue.toString();
             }
 
             //  The lodash groupBy function uses the groupedValue as the key to an
